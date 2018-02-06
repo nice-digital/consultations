@@ -6,9 +6,9 @@ namespace Comments.Test
     public class UnitTest1
     {
         [Fact]
-        public void Test1()
+        public void True_is_true()
         {
-
+            Assert.True(true);
         }
     }
 }

@@ -1,0 +1,13 @@
+C:\_src\consultations\Comments.Test\bin\Debug\netcoreapp2.0\xunit.runner.visualstudio.dotnetcore.testadapter.dll
+C:\_src\consultations\Comments.Test\bin\Debug\netcoreapp2.0\xunit.runner.reporters.netcoreapp10.dll
+C:\_src\consultations\Comments.Test\bin\Debug\netcoreapp2.0\xunit.runner.utility.netcoreapp10.dll
+C:\_src\consultations\Comments.Test\bin\Debug\netcoreapp2.0\Comments.Test.deps.json
+C:\_src\consultations\Comments.Test\bin\Debug\netcoreapp2.0\Comments.Test.runtimeconfig.json
+C:\_src\consultations\Comments.Test\bin\Debug\netcoreapp2.0\Comments.Test.runtimeconfig.dev.json
+C:\_src\consultations\Comments.Test\bin\Debug\netcoreapp2.0\Comments.Test.dll
+C:\_src\consultations\Comments.Test\bin\Debug\netcoreapp2.0\Comments.Test.pdb
+C:\_src\consultations\Comments.Test\obj\Debug\netcoreapp2.0\Comments.Test.csproj.CoreCompileInputs.cache
+C:\_src\consultations\Comments.Test\obj\Debug\netcoreapp2.0\Comments.Test.AssemblyInfoInputs.cache
+C:\_src\consultations\Comments.Test\obj\Debug\netcoreapp2.0\Comments.Test.AssemblyInfo.cs
+C:\_src\consultations\Comments.Test\obj\Debug\netcoreapp2.0\Comments.Test.dll
+C:\_src\consultations\Comments.Test\obj\Debug\netcoreapp2.0\Comments.Test.pdb
