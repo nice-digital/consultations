@@ -1,18 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Comments.Models
 {
-    public class ConsultationsContext : DbContext
-    {
-        public ConsultationsContext(DbContextOptions<ConsultationsContext> options) : base(options) {}
-
-        public DbSet<Consultation> Consultations { get; set; }
-    }
-
     public class Consultation
     {
         public int ConsultationId { get; set; }

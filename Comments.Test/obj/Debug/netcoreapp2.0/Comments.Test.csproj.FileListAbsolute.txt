@@ -11,3 +11,6 @@ C:\_src\consultations\Comments.Test\obj\Debug\netcoreapp2.0\Comments.Test.Assemb
 C:\_src\consultations\Comments.Test\obj\Debug\netcoreapp2.0\Comments.Test.AssemblyInfo.cs
 C:\_src\consultations\Comments.Test\obj\Debug\netcoreapp2.0\Comments.Test.dll
 C:\_src\consultations\Comments.Test\obj\Debug\netcoreapp2.0\Comments.Test.pdb
+C:\_src\consultations\Comments.Test\obj\Debug\netcoreapp2.0\Comments.Test.csprojResolveAssemblyReference.cache
+C:\_src\consultations\Comments.Test\bin\Debug\netcoreapp2.0\Comments.dll
+C:\_src\consultations\Comments.Test\bin\Debug\netcoreapp2.0\Comments.pdb
