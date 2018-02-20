@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Comments.Models;
+using Comments.ViewModels;
 
 namespace Comments.Services
 {
@@ -15,14 +13,14 @@ namespace Comments.Services
             _consultationsContext = consultationsContext;
         }
 
-        public List<Consultation> GetAllConsultations()
+        public DocumentViewModel GetAllComments()
         {
-            return _consultationsContext.Consultations.ToList();
+            return new DocumentViewModel(_consultationsContext.Comment.ToList());
         }
     }
 
     public interface IConsultationService
     {
-        List<Consultation> GetAllConsultations();
+        DocumentViewModel GetAllComments();
     }
 }

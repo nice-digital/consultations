@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Comments.Services;
+using Comments.ViewModels;
+using Microsoft.CodeAnalysis;
 using Xunit;
 
 namespace Comments.Test
@@ -23,7 +25,7 @@ namespace Comments.Test
         {
             using (var consultationsContext = new ConsultationsContext(_options))
             {
-                consultationsContext.Consultations.Add(new Consultation(guidanceReference, DateTime.MinValue, DateTime.MaxValue, "title"));
+                consultationsContext.Comment.Add(new Comment{CommentText = guidanceReference});
                 consultationsContext.SaveChanges();
             }
         }
@@ -34,14 +36,14 @@ namespace Comments.Test
             var guidanceReference = Guid.NewGuid().ToString();
             AddConsultationData(guidanceReference);
 
-            List<Consultation> consultations;
+            DocumentViewModel viewModel;
             using (var consultationsContext = new ConsultationsContext(_options))
             {
                 var consultationService = new ConsultationService(consultationsContext);
-                consultations = consultationService.GetAllConsultations();
+                viewModel = consultationService.GetAllComments();
             }
 
-            Assert.Equal(consultations.Single().GuidanceReference, guidanceReference);
+            Assert.Equal(viewModel.Comments.Single().CommentText, guidanceReference);
         }
     }
 }
