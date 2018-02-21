@@ -1,19 +1,21 @@
-using Comments.Models;
+﻿using Comments.Models;
 using Comments.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
-using Microsoft.AspNetCore.StaticFiles.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace comments
+namespace Comments.Test.Infrastructure
 {
-    public class Startup
+    /// <summary>
+    /// TODO: delete this file and use mocking.
+    /// </summary>
+    public class TestStartup
     {
-        public Startup(IConfiguration configuration)
+        public TestStartup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
@@ -24,7 +26,7 @@ namespace comments
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ConsultationsContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseInMemoryDatabase(databaseName: "test_db"));
 
             services.AddMvc();
 

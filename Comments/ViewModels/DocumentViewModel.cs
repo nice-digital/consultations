@@ -1,18 +1,18 @@
-﻿using System;
+﻿using Comments.Models;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Comments.Models;
 
 namespace Comments.ViewModels
 {
     public class DocumentViewModel
     {
-        public DocumentViewModel(IEnumerable<Comment> comments)
+        public DocumentViewModel(string title, IEnumerable<Location> locations)
         {
-            Comments = comments;
+            Title = title;
+            Locations = locations;
         }
 
-        public IEnumerable<Comment> Comments { get; set; }
+        public string Title { get; private set; }
+
+        public IEnumerable<Location> Locations{ get; private set; }
     }
 }
