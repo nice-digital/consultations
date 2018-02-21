@@ -1,14 +1,20 @@
 import React, { Component } from 'react';
+import { Helmet } from "react-helmet";
 
 export class Home extends Component {
   displayName = Home.name
 
   render() {
     return (
-      <div>
+        <div>
+            <Helmet>
+                <title>Homepage title rendered with helmet</title>
+                <meta name="description" content="This is a meta description render" />
+            </Helmet>
         <h1>Hello, world!</h1>
         <p>Welcome to your new single-page application, built with:</p>
         <ul>
+            <li><a href='/broken'>A broken link</a> to handle 404 errors</li>
           <li><a href='https://get.asp.net/'>ASP.NET Core</a> and <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>C#</a> for cross-platform server-side code</li>
           <li><a href='https://facebook.github.io/react/'>React</a> for client-side code</li>
           <li><a href='http://getbootstrap.com/'>Bootstrap</a> for layout and styling</li>

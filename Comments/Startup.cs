@@ -30,10 +30,10 @@ namespace comments
             services.AddTransient<IConsultationService, ConsultationService>();
 
             // In production, the React files will be served from this directory
-            services.AddSpaStaticFiles(configuration =>
+            /*services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/build";
-            });
+            });*/
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,7 +50,7 @@ namespace comments
 
             //app.UsePathBase("/consultations");
             app.UseStaticFiles(); //"/consultations"
-            app.UseSpaStaticFiles();
+            //app.UseSpaStaticFiles();
 
             app.UseMvc(routes =>
             {
@@ -61,16 +61,18 @@ namespace comments
 
             app.UseSpa(spa =>
             {
+                //spa.UseReactDevelopmentServer()
                 spa.Options.SourcePath = "ClientApp";
 
-                //spa.UseSpaPrerendering(options =>
-                //{
-                //    options.BootModulePath = $"{spa.Options.SourcePath}/dist-server/main.bundle.js";
-                //    options.BootModuleBuilder = env.IsDevelopment()
-                //        ? new AngularCliBuilder(npmScript: "build:ssr")
-                //        : null;
-                //    options.ExcludeUrls = new[] { "/sockjs-node" };
-                //});
+                spa.UseSpaPrerendering(options =>
+                {
+                    //options.BootModulePath
+                    options.BootModulePath = $"{spa.Options.SourcePath}/server/index.js";
+                    /*options.BootModuleBuilder = env.IsDevelopment()
+                        ? new AngularCliBuilder(npmScript: "build:ssr")
+                        : null;*/
+                    //options.ExcludeUrls = new[] { "/sockjs-node" };
+                });
 
 
                 if (env.IsDevelopment())

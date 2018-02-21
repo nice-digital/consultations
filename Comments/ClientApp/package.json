@@ -7,18 +7,35 @@
     "react": "^16.0.0",
     "react-bootstrap": "^0.31.5",
     "react-dom": "^16.0.0",
+    "react-helmet": "^5.2.0",
     "react-router-bootstrap": "^0.24.4",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.0.17",
     "rimraf": "^2.6.2"
   },
   "scripts": {
-    "start": "rimraf ./build && react-scripts start",
+    "start": "rimraf ./build && npm-run-all -p sass:watch start-js",
+    "start-js": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "// CRA+SASS": "https://github.com/facebook/create-react-app/tree/master/packages/react-scripts/template#adding-a-css-preprocessor-sass-less-etc",
+    "sass:build": "npm-run-all -p sass:compile sass:post",
+    "sass:compile": "node-sass-chokidar --include-path ./node_modules/@nice-digital/design-system/src/stylesheets --include-path ./node_modules/@nice-digital/icons/dist --source-map true src/stylesheets -o public",
+    "sass:post": "postcss public/*.css --use autoprefixer -d public",
+    "sass:watch": "npm run sass:build && chokidar \"./src/stylesheets/**/*.scss\" -c \"npm run sass:build\""
   },
   "devDependencies": {
-    "babel-register": "^6.26.0"
+    "@nice-digital/design-system": "^0.4.2",
+    "@nice-digital/icons": "^1.4.3",
+    "aspnet-prerendering": "^3.0.1",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react-app": "^3.1.1",
+    "babel-register": "^6.26.0",
+    "chokidar-cli": "^1.2.0",
+    "ignore-styles": "^5.0.1",
+    "node-sass-chokidar": "0.0.3",
+    "npm-run-all": "^4.1.2",
+    "postcss-cli": "^5.0.0"
   }
 }
