@@ -11,12 +11,14 @@
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.0.17",
     "rimraf": "^2.6.2"
+    "flow-bin": "^0.66.0"
   },
   "scripts": {
     "start": "rimraf ./build && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+    "flow": "flow"
   },
   "devDependencies": {
     "babel-register": "^6.26.0"
