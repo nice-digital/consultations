@@ -24,18 +24,19 @@ namespace Comments.Controllers
         // GET: DBTest
         public ActionResult Index()
         {
-            return Json(_consultationService.GetAllConsultations());
+            return Json(_consultationService.GetAllComments());
         }
 
         //// GET: DBTest/Create
         public ActionResult Create()
         {
-            _consultationsContext.Consultations.Add(
-                new Consultation("some ref", DateTime.Now.AddDays(-1), DateTime.Now.AddDays(30), "some title"));
+            _consultationsContext.Comment.Add(
+                new Comment(){ CommentText = "some comment"});
+                //new OldConsultation("some ref", DateTime.Now.AddDays(-1), DateTime.Now.AddDays(30), "some title"));
 
             _consultationsContext.SaveChanges();
 
-            return Content(_consultationsContext.Consultations.Count() + " rows");
+            return Content(_consultationsContext.Comment.Count() + " rows");
         }
 
        

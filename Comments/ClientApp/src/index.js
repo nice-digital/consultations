@@ -1,3 +1,7 @@
+
+//require("babel-register");
+//require("babel-core").transform("code");
+
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 import './index.css';
