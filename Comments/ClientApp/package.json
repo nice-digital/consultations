@@ -22,10 +22,14 @@
     "rimraf": "^2.6.2"
   },
   "scripts": {
-    "start": "rimraf ./build && react-scripts start",
-    "build": "react-scripts build",
+    "start": "rimraf ./build && npm run modernizr && react-scripts start",
+    "build": "npm run modernizr && react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "flow": "flow"
+    "flow": "flow",
+    "modernizr": "modernizr -c modernizr-config.json -d ./public/modernizr-custom.js"
+  },
+  "devDependencies": {
+    "modernizr": "^3.5.0"
   }
 }
