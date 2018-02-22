@@ -35,6 +35,7 @@ namespace Comments.Test
 
             // Assert
             responseString.ShouldBe("{\"title\":\"todo: title (and a bunch of other data) comes from the indev consultation feed\",\"locations\":[]}");
+            //responseString.ShouldMatchApproved();
         }
     }
 }
