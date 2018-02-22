@@ -21,7 +21,11 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>comments</title>
-    <script src="modernizr-custom.js"></script>
+    <script src="vendor/modernizr-custom.js"></script>
+    <!--[if lt IE 9]>
+      <script src="vendor/respond.min.js"></script>
+      <script src="vendor/html5shiv.js"></script>
+    <![endif]-->
   </head>
   <body>
     <noscript>

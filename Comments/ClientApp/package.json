@@ -27,7 +27,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "flow": "flow",
-    "modernizr": "modernizr -c modernizr-config.json -d ./public/modernizr-custom.js"
+    "modernizr": "modernizr -c modernizr-config.json -d ./public/vendor/modernizr-custom.js"
   },
   "devDependencies": {
     "modernizr": "^3.5.0"
