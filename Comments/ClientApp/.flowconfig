@@ -5,13 +5,10 @@ node_modules/
 src/
 
 [libs]
-./flow-typed/
+flow-typed/
 
 [lints]
 
 [options]
-suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
 module.system.node.resolve_dirname=node_modules
 module.system.node.resolve_dirname=src
-module.file_ext=.jsx
-module.file_ext=.js

@@ -9,5 +9,8 @@
     "react",
     "jsx-a11y",
     "import"
-  ]
+  ],
+  "rules": {
+    "react/no-unescaped-entities": 0
+  }
 }
