@@ -1,26 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using comments;
-using Comments.Test.Infrastructure;
+﻿using comments;
+using Comments.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Comments.Test
 {
-    public class IntegrationTests : DatabaseSetup
+    public class IntegrationTests 
     {
         private readonly TestServer _server;
         private readonly HttpClient _client;
         public IntegrationTests()
         {
             // Arrange
-            _server = new TestServer(new WebHostBuilder()
-                .UseStartup<TestStartup>()); //todo: use proper startup with some mocking.
+            var builder = new WebHostBuilder()
+                .ConfigureServices(services => {
+                    services.AddDbContext<ConsultationsContext>(options =>
+                        options.UseInMemoryDatabase(databaseName: "test_db"));
+                }).UseStartup(typeof(Startup));
+            _server = new TestServer(builder);
             _client = _server.CreateClient();
         }
 
@@ -35,7 +38,6 @@ namespace Comments.Test
 
             // Assert
             responseString.ShouldBe("{\"title\":\"todo: title (and a bunch of other data) comes from the indev consultation feed\",\"locations\":[]}");
-            //responseString.ShouldMatchApproved();
         }
     }
 }

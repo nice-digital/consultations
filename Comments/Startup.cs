@@ -1,3 +1,4 @@
+using System;
 using Comments.Models;
 using Comments.Services;
 using Microsoft.AspNetCore.Builder;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.StaticFiles.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
 
@@ -29,7 +31,7 @@ namespace comments
 
             services.AddMvc();
 
-            services.AddTransient<IConsultationService, ConsultationService>();
+            services.TryAddTransient<IConsultationService, ConsultationService>();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -83,5 +85,6 @@ namespace comments
                 }
             });
         }
+
     }
 }
