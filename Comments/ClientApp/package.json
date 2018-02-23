@@ -21,6 +21,9 @@
     "react-scripts": "1.0.17",
     "rimraf": "^2.6.2"
   },
+  "jest": {
+    "testResultsProcessor": "jest-teamcity-reporter"
+  },
   "scripts": {
     "start": "rimraf ./build && npm run modernizr && react-scripts start",
     "build": "npm run modernizr && react-scripts build",
