@@ -14,7 +14,9 @@ export default class App extends Component {
   render() {
     return (
         <Layout>
-            <Helmet titleTemplate="%s | Consultations | NICE" />
+            <Helmet titleTemplate="%s | Consultations | NICE">
+                <html lang="en-GB" />
+            </Helmet>
             <Switch>
                 <Route exact path='/' component={Home} />
                 <Route path='/counter' component={Counter} />
