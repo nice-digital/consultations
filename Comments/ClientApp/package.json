@@ -25,11 +25,16 @@
     "start": "rimraf ./build && npm run modernizr && react-scripts start",
     "build": "npm run modernizr && react-scripts build",
     "test": "react-scripts test --env=jsdom",
+    "test:ci": "cross-env CI=true react-scripts test --env=jsdom --testResultsProcessor=jest-teamcity-reporter",
+    "test:ci:coverage": "npm run test:ci -- --coverage ",
     "eject": "react-scripts eject",
     "flow": "flow",
     "modernizr": "modernizr -c modernizr-config.json -d ./public/vendor/modernizr-custom.js"
   },
   "devDependencies": {
+    "babel-register": "^6.26.0",
+    "cross-env": "^5.1.3",
+    "jest-teamcity-reporter": "^0.9.0",
     "modernizr": "^3.5.0"
   }
 }

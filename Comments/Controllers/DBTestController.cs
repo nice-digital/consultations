@@ -7,6 +7,7 @@ using Comments.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Comments.Controllers
 {
@@ -14,18 +15,20 @@ namespace Comments.Controllers
     {
         private readonly ConsultationsContext _consultationsContext;
         private readonly IConsultationService _consultationService;
+        private readonly ILogger _logger;
 
-        public DBTestController(ConsultationsContext consultationsContext, IConsultationService consultationService)
+        public DBTestController(ConsultationsContext consultationsContext, IConsultationService consultationService, ILogger<DBTestController> logger)
         {
             _consultationsContext = consultationsContext;
             _consultationService = consultationService;
+            _logger = logger;
         }
 
         // GET: DBTest
-        public ActionResult Index()
-        {
-            return Json(_consultationService.GetAllComments());
-        }
+        //public ActionResult Index()
+        //{
+        //    return Json(_consultationService.GetAllComments());
+        //}
 
         //// GET: DBTest/Create
         public ActionResult Create()
