@@ -21,15 +21,12 @@
     "react-scripts": "1.0.17",
     "rimraf": "^2.6.2"
   },
-  "jest": {
-    "testResultsProcessor": "jest-teamcity-reporter"
-  },
   "scripts": {
     "start": "rimraf ./build && npm run modernizr && react-scripts start",
     "build": "npm run modernizr && react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "test:ci": "cross-env CI=true react-scripts test --env=jsdom",
-    "test:ci:coverage": "npm run test -- --coverage",
+    "test:ci": "cross-env CI=true react-scripts test --env=jsdom --testResultsProcessor=jest-teamcity-reporter",
+    "test:ci:coverage": "npm run test:ci -- --coverage ",
     "eject": "react-scripts eject",
     "flow": "flow",
     "modernizr": "modernizr -c modernizr-config.json -d ./public/vendor/modernizr-custom.js"
