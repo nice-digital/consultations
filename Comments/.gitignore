@@ -232,3 +232,7 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+
+# ClientApp
+ClientApp/public/*.css
+ClientApp/public/*.css.map
