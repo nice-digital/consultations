@@ -3,15 +3,16 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import { MemoryRouter } from 'react-router-dom';
 
-describe('Client Unit Tests', ()=>{
-  describe('App', ()=>{
-    it('Renders without crashing', () => {
+describe('[ClientApp] ', ()=>{
+  describe('App ', ()=>{
+    it('renders without crashing', () => {
       const div = document.createElement('div');
-      ReactDOM.render(<MemoryRouter><App /></MemoryRouter>, div);
-    });
-    it('Really does render without crashing', () => {
-      const div = document.createElement('div');
-      ReactDOM.render(<MemoryRouter><App /></MemoryRouter>, div);
-    });
-  })  
-})
+      ReactDOM.render(
+        <MemoryRouter>
+          <App />
+        </MemoryRouter>,
+      div);
+      });
+    })  
+  })
+  
