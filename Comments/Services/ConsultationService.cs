@@ -3,6 +3,7 @@ using Comments.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using ConsultationsContext = Comments.Models.ConsultationsContext;
 
 namespace Comments.Services
 {

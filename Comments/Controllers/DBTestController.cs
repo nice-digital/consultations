@@ -31,16 +31,16 @@ namespace Comments.Controllers
         //}
 
         //// GET: DBTest/Create
-        public ActionResult Create()
-        {
-            _consultationsContext.Comment.Add(
-                new Comment(){ CommentText = "some comment"});
-                //new OldConsultation("some ref", DateTime.Now.AddDays(-1), DateTime.Now.AddDays(30), "some title"));
+        //public ActionResult Create()
+        //{
+        //    _consultationsContext.Comment.Add(
+        //        new Comment(){ CommentText = "some comment"});
+        //        //new OldConsultation("some ref", DateTime.Now.AddDays(-1), DateTime.Now.AddDays(30), "some title"));
 
-            _consultationsContext.SaveChanges();
+        //    _consultationsContext.SaveChanges();
 
-            return Content(_consultationsContext.Comment.Count() + " rows");
-        }
+        //    return Content(_consultationsContext.Comment.Count() + " rows");
+        //}
 
        
     }

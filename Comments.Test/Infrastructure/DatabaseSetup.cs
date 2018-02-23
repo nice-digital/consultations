@@ -2,6 +2,7 @@
 using Comments.Models;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace Comments.Test.Infrastructure
 {
     public class DatabaseSetup
@@ -23,63 +24,65 @@ namespace Comments.Test.Infrastructure
             }
         }
 
-        protected int AddLocation(Guid consultationId, Guid documentId, int locationId = 1)
+        protected int AddLocation(Guid consultationId, Guid documentId)
         {
+            var location = new Location(consultationId, documentId, null, null, null, null, null, null, null, null, null);
             using (var context = new ConsultationsContext(_options))
             {
-                context.Location.Add(new Models.Location
-                {
-                    LocationId = locationId,
-                    ConsultationId = consultationId,
-                    DocumentId = documentId
-                });
+                context.Location.Add(location);
                 context.SaveChanges();
             }
-            return locationId;
+            return location.LocationId;
         }
 
-        protected void AddComment(int locationId, string commentText)
+        protected int AddComment(int locationId, string commentText)
         {
+            var comment = new Comment(locationId, Guid.Empty, commentText, DateTime.Now, null);
             using (var context = new ConsultationsContext(_options))
             {
-                context.Comment.Add(new Comment { LocationId = locationId, CommentText = commentText });
+                context.Comment.Add(comment);
                 context.SaveChanges();
             }
+            return comment.CommentId;
         }
-        protected int AddQuestionType(int locationId, string description, bool hasBooleanAnswer, bool hasTextAnswer, int questionTypeId = 1)
+        protected int AddQuestionType(string description, bool hasBooleanAnswer, bool hasTextAnswer, int questionTypeId = 1)
         {
+            var questionType = new QuestionType(description, hasTextAnswer, hasBooleanAnswer, null);
             using (var context = new ConsultationsContext(_options))
             {
-                context.QuestionType.Add(new QuestionType { QuestionTypeId = questionTypeId, Description = description, HasBooleanAnswer = hasBooleanAnswer, HasTextAnswer = hasTextAnswer });
+                context.QuestionType.Add(questionType);
                 context.SaveChanges();
             }
-            return questionTypeId;
+            return questionType.QuestionTypeId;
         }
 
         protected int AddQuestion(int locationId, int questionTypeId, string questionText, int questionId = 1)
         {
+            var question = new Question(locationId, questionText, questionTypeId, null, null, null, null);
             using (var context = new ConsultationsContext(_options))
             {
-                context.Question.Add(new Question {QuestionId = 1, LocationId = locationId, QuestionTypeId = questionTypeId, QuestionText = questionText });
+                context.Question.Add(question);
                 context.SaveChanges();
             }
-            return questionId;
+            return question.QuestionId;
         }
 
-        protected void AddAnswer(int questionId, Guid userId, string answerText)
+        protected int AddAnswer(int questionId, Guid userId, string answerText)
         {
+            var answer = new Answer(questionId, userId, answerText, null, DateTime.Now, null);
             using (var context = new ConsultationsContext(_options))
             {
-                context.Answer.Add(new Answer{ QuestionId = questionId, UserId = userId, AnswerText = answerText});
+                context.Answer.Add(answer);
                 context.SaveChanges();
             }
+            return answer.AnswerId;
         }
 
         protected void AddCommentsAndQuestionsAndAnswers(Guid consultationId, Guid documentId, string commentText, string questionText, string answerText)
         {
             var locationId = AddLocation(consultationId, documentId);
             AddComment(locationId, commentText);
-            var questionTypeId = AddQuestionType(locationId, description: "text", hasBooleanAnswer: false, hasTextAnswer: true);
+            var questionTypeId = AddQuestionType(description: "text", hasBooleanAnswer: false, hasTextAnswer: true);
             var questionId = AddQuestion(locationId, questionTypeId, questionText);
             AddAnswer(questionId, Guid.Empty, answerText);
         }

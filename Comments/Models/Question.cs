@@ -5,19 +5,16 @@ namespace Comments.Models
 {
     public partial class Question
     {
-        public Question()
+        public Question(int locationId, string questionText, int questionTypeId, byte? questionOrder, Location location,
+            QuestionType questionType, ICollection<Answer> answer)
         {
-            Answer = new HashSet<Answer>();
+            LocationId = locationId;
+            QuestionText = questionText ?? throw new ArgumentNullException(nameof(questionText));
+            QuestionTypeId = questionTypeId;
+            QuestionOrder = questionOrder;
+            Location = location;
+            QuestionType = questionType;
+            Answer = answer;
         }
-
-        public int QuestionId { get; set; }
-        public int LocationId { get; set; }
-        public string QuestionText { get; set; }
-        public int QuestionTypeId { get; set; }
-        public byte? QuestionOrder { get; set; }
-
-        public Location Location { get; set; }
-        public QuestionType QuestionType { get; set; }
-        public ICollection<Answer> Answer { get; set; }
     }
 }

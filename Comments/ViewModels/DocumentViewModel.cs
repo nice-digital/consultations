@@ -1,5 +1,6 @@
 ﻿using Comments.Models;
 using System.Collections.Generic;
+using Location = Comments.Models.Location;
 
 namespace Comments.ViewModels
 {

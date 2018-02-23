@@ -5,16 +5,13 @@ namespace Comments.Models
 {
     public partial class QuestionType
     {
-        public QuestionType()
+        public QuestionType(string description, bool hasTextAnswer, bool hasBooleanAnswer,
+            ICollection<Question> question)
         {
-            Question = new HashSet<Question>();
+            Description = description ?? throw new ArgumentNullException(nameof(description));
+            HasTextAnswer = hasTextAnswer;
+            HasBooleanAnswer = hasBooleanAnswer;
+            Question = question;
         }
-
-        public int QuestionTypeId { get; set; }
-        public string Description { get; set; }
-        public bool HasTextAnswer { get; set; }
-        public bool HasBooleanAnswer { get; set; }
-
-        public ICollection<Question> Question { get; set; }
     }
 }

@@ -6,6 +6,7 @@ using System.Linq;
 using Comments.Test.Infrastructure;
 using Xunit;
 using Shouldly;
+using ConsultationsContext = Comments.Models.ConsultationsContext;
 
 namespace Comments.Test
 {

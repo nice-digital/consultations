@@ -5,24 +5,21 @@ namespace Comments.Models
 {
     public partial class Location
     {
-        public Location()
+        public Location(Guid consultationId, Guid? documentId, string chapterSlug, string sectionSlug,
+            string rangeStart, int? rangeStartOffset, string rangeEnd, int? rangeEndOffset, string quote,
+            ICollection<Comment> comment, ICollection<Question> question)
         {
-            Comment = new HashSet<Comment>();
-            Question = new HashSet<Question>();
+            ConsultationId = consultationId;
+            DocumentId = documentId;
+            ChapterSlug = chapterSlug;
+            SectionSlug = sectionSlug;
+            RangeStart = rangeStart;
+            RangeStartOffset = rangeStartOffset;
+            RangeEnd = rangeEnd;
+            RangeEndOffset = rangeEndOffset;
+            Quote = quote;
+            Comment = comment;
+            Question = question;
         }
-
-        public int LocationId { get; set; }
-        public Guid ConsultationId { get; set; }
-        public Guid? DocumentId { get; set; }
-        public string ChapterSlug { get; set; }
-        public string SectionSlug { get; set; }
-        public string RangeStart { get; set; }
-        public int? RangeStartOffset { get; set; }
-        public string RangeEnd { get; set; }
-        public int? RangeEndOffset { get; set; }
-        public string Quote { get; set; }
-
-        public ICollection<Comment> Comment { get; set; }
-        public ICollection<Question> Question { get; set; }
     }
 }

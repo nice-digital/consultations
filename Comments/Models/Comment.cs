@@ -5,13 +5,16 @@ namespace Comments.Models
 {
     public partial class Comment
     {
-        public int CommentId { get; set; }
-        public int LocationId { get; set; }
-        public Guid UserId { get; set; }
-        public string CommentText { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime LastModifiedDate { get; set; }
+        private Comment() {} //Just for EF
 
-        public Location Location { get; set; }
+        public Comment(int locationId, Guid userId, string commentText, DateTime lastModifiedDate,
+            Location location)
+        {
+            LocationId = locationId;
+            UserId = userId;
+            CommentText = commentText ?? throw new ArgumentNullException(nameof(commentText));
+            LastModifiedDate = lastModifiedDate;
+            Location = location;
+        }
     }
 }
