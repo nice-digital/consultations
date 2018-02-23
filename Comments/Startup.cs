@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.StaticFiles.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace comments
 {
@@ -29,11 +30,11 @@ namespace comments
 
             services.AddTransient<IConsultationService, ConsultationService>();
 
-            // In production, the React files will be served from this directory
-            /*services.AddSpaStaticFiles(configuration =>
+            // In production, static files are served from the pre-built files, rather than proxied via react dev server
+            services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/build";
-            });*/
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,9 +46,11 @@ namespace comments
             }
             else
             {
+                // TODO: Proper error handling URL
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            // TODO Which of these paths do we need?
             //app.UsePathBase("/consultations");
             app.UseStaticFiles(); //"/consultations"
             //app.UseSpaStaticFiles();
@@ -57,26 +60,34 @@ namespace comments
                 routes.MapRoute(
                     name: "default",
                     template: "{controller}/{action=Index}/{id?}");
+
+                // TODO Do we need routes.MapSpaFallbackRoute?
             });
 
             app.UseSpa(spa =>
             {
-                //spa.UseReactDevelopmentServer()
                 spa.Options.SourcePath = "ClientApp";
-
+                
                 spa.UseSpaPrerendering(options =>
                 {
-                    //options.BootModulePath
+                    // Pass data in from .NET into the SSR. These come through as `params` within `createServerRenderer` within the server side JS code.
+                    // See https://docs.microsoft.com/en-us/aspnet/core/spa/angular?tabs=visual-studio#pass-data-from-net-code-into-typescript-code
+                    options.SupplyData = (context, data) => {
+                        data["isHttpsRequest"] = context.Request.IsHttps;
+                        // Pass further data in e.g. user/authentication data
+                    };
                     options.BootModulePath = $"{spa.Options.SourcePath}/server/index.js";
-                    /*options.BootModuleBuilder = env.IsDevelopment()
-                        ? new AngularCliBuilder(npmScript: "build:ssr")
-                        : null;*/
-                    //options.ExcludeUrls = new[] { "/sockjs-node" };
                 });
-
 
                 if (env.IsDevelopment())
                 {
+                    // Default timeout is 30 seconds so extend it in dev mode because sometimes the react server can take a while to start up
+                    spa.Options.StartupTimeout = TimeSpan.FromMinutes(1);
+
+                    // If you have trouble with the react server in dev mode, then swap the two lines below.
+                    // This proxies to a manual CRA server (run `npm start`) instead of DotNetCore launching one automatically.
+                    // This can be quicker. See https://docs.microsoft.com/en-us/aspnet/core/spa/react?tabs=visual-studio#run-the-cra-server-independently
+                    //spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
