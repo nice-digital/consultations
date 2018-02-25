@@ -1,4 +1,11 @@
 {
+  "env": {
+		"browser": true,
+		"node": true,
+		"mocha": true,
+		"es6": true,
+		"jasmine": true
+	},
   "extends": [
     "@nice-digital/eslint-config/es6-flow",
     "plugin:react/recommended",
