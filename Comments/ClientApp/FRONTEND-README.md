@@ -1,7 +1,13 @@
 # Front End Readme
 
-### Modernizr
+## Browser support additions (Modernizr etc)
 
-`npm run modernizr` will build a file `modernizr-custom.js` into the `public/vendor` folder, based on the settings in `modernizr-config.json` in the root of `ClientApp`.
+Running `npm run supporting-js` will do two things:
 
-The resultant file `public/vendor/modernizr-custom.js` is excluded from version control and is generated at each `npm start` or `npm run build`.
+- It will build a file `modernizr-custom.js` into the `public/vendor` folder, based on the settings in `modernizr-config.json` in the root of `ClientApp`. 
+- It will run `browser-support.js` which will concat the minified versions of:
+    - HTML5Shiv
+    - Respond.js
+    - ES5 Shim / Sham into `public/vendor/browser-support.js`.
+    
+This runs as part of both `npm start` and `npm run build`.
