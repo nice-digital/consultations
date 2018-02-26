@@ -240,3 +240,7 @@ netcoreapp2.0/*
 *.suo
 
 
+
+# ClientApp
+ClientApp/public/*.css
+ClientApp/public/*.css.map
