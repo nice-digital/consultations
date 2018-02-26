@@ -25,3 +25,7 @@ yarn-error.log*
 
 # Generated vendor files
 /public/vendor/modernizr-custom.js
+
+# Generated css
+/public/*.css
+/public/*.css.map 
