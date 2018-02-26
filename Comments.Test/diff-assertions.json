@@ -1,0 +1,17 @@
+﻿{
+  //The path to the test project root folder, example: "C:\\Repos\\MyProject\\Tests"
+  "RootFolder": "C:\\_src\\consultations\\Comments.Test",
+
+  //Identifier for the test framework you are using
+  //Available: xUnit2, MsTest and nUnit
+  "TestFramework": "xUnit2",
+
+  //The path to the diff tool you want to use.
+  //Example, using Visual Studio as diff tool (default setting is to use WinMerge http://winmerge.org/)
+  //"C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Professional\\Common7\\IDE\\devenv.exe"
+  "DiffTool": "C:\\Program Files\\KDiff3\\kdiff3.exe",
+
+  //The format for calling the diff tool with the two arguments (the expected file will be the left argument)
+  //Example, command line arguments for calling Visual Studio: "/diff {0} {1}"
+  "DiffToolArgsFormat": "{0} {1} -m -o {0}"
+}

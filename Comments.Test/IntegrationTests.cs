@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Comments.Test.Infrastructure;
 using Xunit;
 
 namespace Comments.Test
@@ -19,10 +20,13 @@ namespace Comments.Test
         {
             // Arrange
             var builder = new WebHostBuilder()
+                .UseContentRoot("../../../../Comments")
                 .ConfigureServices(services => {
                     services.AddDbContext<ConsultationsContext>(options =>
                         options.UseInMemoryDatabase(databaseName: "test_db"));
-                }).UseStartup(typeof(Startup));
+                })
+                .UseEnvironment("Production")
+                .UseStartup(typeof(Startup));
             _server = new TestServer(builder);
             _client = _server.CreateClient();
         }
@@ -38,6 +42,19 @@ namespace Comments.Test
 
             // Assert
             responseString.ShouldBe("{\"title\":\"todo: title (and a bunch of other data) comes from the indev consultation feed\",\"locations\":[]}");
+        }
+
+        [Fact]
+        public async Task GetConsultationHomepage()
+        {
+            // Act
+            var response = await _client.GetAsync("/consultations");
+            response.EnsureSuccessStatusCode();
+
+            var responseString = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            responseString.ShouldMatchApproved();
         }
     }
 }

@@ -16,8 +16,8 @@ namespace Comments.Test
         public void Comments_CanBeRead()
         {
             ReinitialiseDatabase();
-            var consultationId = Guid.NewGuid();
-            var documentId = Guid.NewGuid();
+            var consultationId = RandomNumber();
+            var documentId = RandomNumber();
             var commentText = Guid.NewGuid().ToString();
 
             var locationId = AddLocation(consultationId, documentId);
@@ -36,8 +36,8 @@ namespace Comments.Test
         public void CommentsQuestionsAndAnswers_CanBeRead()
         {
             ReinitialiseDatabase();
-            var consultationId = Guid.NewGuid();
-            var documentId = Guid.NewGuid();
+            var consultationId = RandomNumber();
+            var documentId = RandomNumber();
             var commentText = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
             var answerText = Guid.NewGuid().ToString();

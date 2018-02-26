@@ -24,9 +24,9 @@ namespace Comments.Controllers.Api
             _logger = logger;
         }
 
-        // GET: eg. api/Document?consultationId=00000000-0000-0000-0000-000000000000&documentId=00000000-0000-0000-0000-000000000000
+        // GET: eg. api/Document?consultationId=1&documentId=1
         [HttpGet]
-        public DocumentViewModel Get(Guid consultationId, Guid documentId)
+        public DocumentViewModel Get(int consultationId, int documentId)
         {
             return _consultationService.GetAllCommentsAndQuestionsForDocument(consultationId, documentId);
         }
