@@ -22,19 +22,24 @@
     "rimraf": "^2.6.2"
   },
   "scripts": {
-    "start": "rimraf ./build && npm run modernizr && react-scripts start",
-    "build": "npm run modernizr && react-scripts build",
+    "start": "rimraf ./build && npm run supporting-js && react-scripts start",
+    "build": "npm run supporting-js && react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "test:ci": "cross-env CI=true react-scripts test --env=jsdom --testResultsProcessor=jest-teamcity-reporter",
     "test:ci:coverage": "npm run test:ci -- --coverage ",
     "eject": "react-scripts eject",
     "flow": "flow",
-    "modernizr": "modernizr -c modernizr-config.json -d ./public/vendor/modernizr-custom.js"
+    "//": "see FRONTEND_README.MD for details on the below",
+    "supporting-js": "modernizr -c modernizr-config.json -d ./public/vendor/modernizr-custom.js && node browser-support"
   },
   "devDependencies": {
     "babel-register": "^6.26.0",
+    "concat-files": "^0.1.1",
     "cross-env": "^5.1.3",
+    "es5-shim": "^4.5.10",
+    "html5shiv": "^3.7.3",
     "jest-teamcity-reporter": "^0.9.0",
-    "modernizr": "^3.5.0"
+    "modernizr": "^3.5.0",
+    "respond.js": "^1.4.2"
   }
 }

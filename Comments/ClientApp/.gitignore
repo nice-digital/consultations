@@ -23,5 +23,6 @@ yarn-error.log*
 # jetbrains IDE workspace settings
 /.idea
 
-# Generated vendor files
+# Generated supporting files
+/public/vendor/browser-support.js
 /public/vendor/modernizr-custom.js
