@@ -7,16 +7,18 @@ using Moq;
 
 namespace Comments.Test.Infrastructure
 {
-    public class DatabaseSetup
+    public class TestBase
     {
         protected readonly DbContextOptions<ConsultationsContext> _options;
 
-        public DatabaseSetup()
+        public TestBase()
         {
             _options = new DbContextOptionsBuilder<ConsultationsContext>()
                 .UseInMemoryDatabase(databaseName: "test_db")
                 .Options;
         }
+
+        #region database stuff
 
         protected void ReinitialiseDatabase()
         {
@@ -25,7 +27,6 @@ namespace Comments.Test.Infrastructure
                 context.Database.EnsureDeleted();
             }
         }
-
         protected int AddLocation(Guid consultationId, Guid documentId)
         {
             var location = new Location(consultationId, documentId, null, null, null, null, null, null, null, null, null);
@@ -36,7 +37,6 @@ namespace Comments.Test.Infrastructure
             }
             return location.LocationId;
         }
-
         protected int AddComment(int locationId, string commentText)
         {
             var comment = new Comment(locationId, Guid.Empty, commentText, DateTime.Now, null);
@@ -57,7 +57,6 @@ namespace Comments.Test.Infrastructure
             }
             return questionType.QuestionTypeId;
         }
-
         protected int AddQuestion(int locationId, int questionTypeId, string questionText, int questionId = 1)
         {
             var question = new Question(locationId, questionText, questionTypeId, null, null, null, null);
@@ -68,7 +67,6 @@ namespace Comments.Test.Infrastructure
             }
             return question.QuestionId;
         }
-
         protected int AddAnswer(int questionId, Guid userId, string answerText)
         {
             var answer = new Answer(questionId, userId, answerText, null, DateTime.Now, null);
@@ -79,7 +77,6 @@ namespace Comments.Test.Infrastructure
             }
             return answer.AnswerId;
         }
-
         protected void AddCommentsAndQuestionsAndAnswers(Guid consultationId, Guid documentId, string commentText, string questionText, string answerText)
         {
             var locationId = AddLocation(consultationId, documentId);
@@ -88,5 +85,9 @@ namespace Comments.Test.Infrastructure
             var questionId = AddQuestion(locationId, questionTypeId, questionText);
             AddAnswer(questionId, Guid.Empty, answerText);
         }
+
+        #endregion database stuff
+
+        
     }
 }

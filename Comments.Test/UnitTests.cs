@@ -10,7 +10,7 @@ using ConsultationsContext = Comments.Models.ConsultationsContext;
 
 namespace Comments.Test
 {
-    public class UnitTests : DatabaseSetup
+    public class UnitTests : TestBase
     {
         [Fact]
         public void Comments_CanBeRead()
@@ -29,10 +29,8 @@ namespace Comments.Test
                 var consultationService = new ConsultationService(consultationsContext);
                 viewModel = consultationService.GetAllCommentsAndQuestionsForDocument(consultationId, documentId);
             }
-
             viewModel.Locations.Single().Comment.Single().CommentText.ShouldBe(commentText);
         }
-
 
         [Fact]
         public void CommentsQuestionsAndAnswers_CanBeRead()
