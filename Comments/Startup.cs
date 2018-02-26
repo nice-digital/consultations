@@ -79,7 +79,7 @@ namespace comments
                         data["isHttpsRequest"] = context.Request.IsHttps;
                         // Pass further data in e.g. user/authentication data
                     };
-                    options.BootModulePath = $"{spa.Options.SourcePath}/server/index.js";
+                    options.BootModulePath = $"{spa.Options.SourcePath}/src/server/index.js";
                 });
 
                 if (env.IsDevelopment())
