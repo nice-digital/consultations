@@ -1,0 +1,23 @@
+{
+  "env": {
+		"browser": true,
+		"node": true,
+		"mocha": true,
+		"es6": true,
+		"jasmine": true
+	},
+  "extends": [
+    "@nice-digital/eslint-config/es6-flow",
+    "plugin:react/recommended",
+    "plugin:jsx-a11y/recommended",
+    "plugin:import/recommended"
+  ],
+  "plugins": [
+    "react",
+    "jsx-a11y",
+    "import"
+  ],
+  "rules": {
+    "react/no-unescaped-entities": 0
+  }
+}

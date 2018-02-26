@@ -22,3 +22,6 @@ yarn-error.log*
 
 # jetbrains IDE workspace settings
 /.idea
+
+# Generated vendor files
+/public/vendor/modernizr-custom.js
