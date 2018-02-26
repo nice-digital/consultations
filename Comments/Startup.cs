@@ -87,11 +87,12 @@ namespace comments
                     // Default timeout is 30 seconds so extend it in dev mode because sometimes the react server can take a while to start up
                     spa.Options.StartupTimeout = TimeSpan.FromMinutes(1);
 
-                    // If you have trouble with the react server in dev mode, then swap the two lines below.
-                    // This proxies to a manual CRA server (run `npm start`) instead of DotNetCore launching one automatically.
+                    // If you have trouble with the react server in dev mode (sometime in can be slow and you get timeout error, then use
+                    // `UseProxyToSpaDevelopmentServer` below rather than `UseReactDevelopmentServer`.
+                    // This proxies to a manual CRA server (run `npm start` from the ClientApp folder) instead of DotNetCore launching one automatically.
                     // This can be quicker. See https://docs.microsoft.com/en-us/aspnet/core/spa/react?tabs=visual-studio#run-the-cra-server-independently
-                    //spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");
-                    spa.UseReactDevelopmentServer(npmScript: "start");
+                    spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");
+                    //spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
         }
