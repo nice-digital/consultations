@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Comments.Controllers
 {
-    [Route("razortest")]
-    public class RazorTestController : Controller
+    [Route("consultations")]
+    public class ConsultationsController : Controller
     {
         public IActionResult Index()
         {

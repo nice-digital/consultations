@@ -1,28 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Comments.Models;
+using Comments.ViewModels;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
-using System.Threading.Tasks;
-using Comments.Models;
+using ConsultationsContext = Comments.Models.ConsultationsContext;
 
 namespace Comments.Services
 {
     public class ConsultationService : IConsultationService
     {
-        private readonly ConsultationsContext _consultationsContext;
+        private readonly ConsultationsContext _context;
 
         public ConsultationService(ConsultationsContext consultationsContext)
         {
-            _consultationsContext = consultationsContext;
+            _context = consultationsContext;
         }
 
-        public List<Consultation> GetAllConsultations()
+        public DocumentViewModel GetAllCommentsAndQuestionsForDocument(Guid consultationId, Guid documentId)
         {
-            return _consultationsContext.Consultations.ToList();
+            var title = "todo: title (and a bunch of other data) comes from the indev consultation feed";
+
+            var consultationsData = _context.Location.Where(l => l.ConsultationId.Equals(consultationId) &&
+                                                     (!l.DocumentId.HasValue || l.DocumentId.Equals(documentId)))
+                                        .Include(l => l.Comment)
+                                        .Include(l => l.Question)
+                                            .ThenInclude(q => q.QuestionType)
+                                        .Include(l => l.Question)
+                                            .ThenInclude(q => q.Answer)
+                                        .ToList();
+
+            return new DocumentViewModel(title, consultationsData);
         }
     }
 
     public interface IConsultationService
     {
-        List<Consultation> GetAllConsultations();
+        DocumentViewModel GetAllCommentsAndQuestionsForDocument(Guid consultationId, Guid documentId);
     }
 }
