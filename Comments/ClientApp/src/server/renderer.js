@@ -6,13 +6,13 @@ import React from "react";
 import { renderToString  } from "react-dom/server";
 import { StaticRouter } from "react-router";
 import { Helmet } from "react-helmet";
-import * as fs from "fs";
 
 import { processHtml } from "./html-processor";
 
 import App from "./../App";
 
-const IsProduction: boolean = process.env.NODE_ENV === "production";
+// currently unused
+// const IsProduction = process.env.NODE_ENV === "production";
 
 // Returns a promise that resolves to an object containing the HTML to be rendered.
 // The params contains properties e.g.
@@ -20,10 +20,10 @@ const IsProduction: boolean = process.env.NODE_ENV === "production";
 // origin, url, baseUrl, absoluteUrl, domainTasks: { }, data: { originalHtml: "", ... }
 // The `params.data` property contains properties set in `SupplyData` in Startup.cs.
 export const serverRenderer = (params): Promise => {
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve) => {
 
 		// Context object that Routes can use to pass properties 'out'. Primarily used for status code.
-		// E.g. 
+		// E.g.
 		//  <Route render={({ staticContext }) => {
 		//      if (staticContext) staticContext.status = 404;
 		//      return null; }} />
