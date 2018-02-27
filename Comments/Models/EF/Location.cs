@@ -12,8 +12,8 @@ namespace Comments.Models
         }
 
         public int LocationId { get; set; }
-        public Guid ConsultationId { get; set; }
-        public Guid? DocumentId { get; set; }
+        public int ConsultationId { get; set; }
+        public int? DocumentId { get; set; }
         public string ChapterSlug { get; set; }
         public string SectionSlug { get; set; }
         public string RangeStart { get; set; }

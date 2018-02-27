@@ -244,3 +244,4 @@ netcoreapp2.0/*
 # ClientApp
 ClientApp/public/*.css
 ClientApp/public/*.css.map
+/.idea/.idea.Consultations

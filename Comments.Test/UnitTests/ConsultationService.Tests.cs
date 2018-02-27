@@ -1,23 +1,22 @@
-using Comments.Models;
-using Comments.Services;
-using Comments.ViewModels;
 using System;
 using System.Linq;
+using Comments.Models;
+using Comments.Services;
 using Comments.Test.Infrastructure;
-using Xunit;
+using Comments.ViewModels;
 using Shouldly;
-using ConsultationsContext = Comments.Models.ConsultationsContext;
+using Xunit;
 
-namespace Comments.Test
+namespace Comments.Test.UnitTests
 {
-    public class UnitTests : TestBase
+    public class UnitUnitTests : UnitTestBase
     {
         [Fact]
         public void Comments_CanBeRead()
         {
             ReinitialiseDatabase();
-            var consultationId = Guid.NewGuid();
-            var documentId = Guid.NewGuid();
+            var consultationId = RandomNumber();
+            var documentId = RandomNumber();
             var commentText = Guid.NewGuid().ToString();
 
             var locationId = AddLocation(consultationId, documentId);
@@ -36,8 +35,8 @@ namespace Comments.Test
         public void CommentsQuestionsAndAnswers_CanBeRead()
         {
             ReinitialiseDatabase();
-            var consultationId = Guid.NewGuid();
-            var documentId = Guid.NewGuid();
+            var consultationId = RandomNumber();
+            var documentId = RandomNumber();
             var commentText = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
             var answerText = Guid.NewGuid().ToString();
