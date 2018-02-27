@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Comments.Models
 {
@@ -34,7 +32,7 @@ namespace Comments.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Answer_Question");
 
-                entity.HasQueryFilter(e => !e.IsDeleted);
+                entity.HasQueryFilter(e => !e.IsDeleted); //JW. automatically filter out deleted rows. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
             });
 
             modelBuilder.Entity<Comment>(entity =>
@@ -59,7 +57,7 @@ namespace Comments.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Comment_Location");
 
-                entity.HasQueryFilter(e => !e.IsDeleted);
+                entity.HasQueryFilter(e => !e.IsDeleted); //JW. automatically filter out deleted rows. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
             });
 
             modelBuilder.Entity<Location>(entity =>
@@ -99,7 +97,7 @@ namespace Comments.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Question_QuestionType");
 
-                entity.HasQueryFilter(e => !e.IsDeleted);
+                entity.HasQueryFilter(e => !e.IsDeleted); //JW. automatically filter out deleted rows. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
             });
 
             modelBuilder.Entity<QuestionType>(entity =>
