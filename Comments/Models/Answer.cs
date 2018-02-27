@@ -7,13 +7,12 @@ namespace Comments.Models
     {
         private Answer() { } //just for EF
 
-        public Answer(int questionId, Guid userId, string answerText, bool? answerBoolean, DateTime lastModifiedDate, Question question)
+        public Answer(int questionId, Guid userId, string answerText, bool? answerBoolean, Question question)
         {
             QuestionId = questionId;
             UserId = userId;
             AnswerText = answerText ?? throw new ArgumentNullException(nameof(answerText));
             AnswerBoolean = answerBoolean;
-            LastModifiedDate = lastModifiedDate;
             Question = question;
         }
     }

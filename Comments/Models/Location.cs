@@ -5,7 +5,7 @@ namespace Comments.Models
 {
     public partial class Location
     {
-        public Location(Guid consultationId, Guid? documentId, string chapterSlug, string sectionSlug,
+        public Location(int consultationId, int? documentId, string chapterSlug, string sectionSlug,
             string rangeStart, int? rangeStartOffset, string rangeEnd, int? rangeEndOffset, string quote,
             ICollection<Comment> comment, ICollection<Question> question)
         {

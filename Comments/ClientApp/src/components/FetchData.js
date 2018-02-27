@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import fetch from "isomorphic-fetch";
 
 export class FetchData extends Component {
 	displayName = FetchData.name;

@@ -16,7 +16,7 @@ namespace Comments.Services
             _context = consultationsContext;
         }
 
-        public DocumentViewModel GetAllCommentsAndQuestionsForDocument(Guid consultationId, Guid documentId)
+        public DocumentViewModel GetAllCommentsAndQuestionsForDocument(int consultationId, int documentId)
         {
             var title = "todo: title (and a bunch of other data) comes from the indev consultation feed";
 
@@ -35,6 +35,6 @@ namespace Comments.Services
 
     public interface IConsultationService
     {
-        DocumentViewModel GetAllCommentsAndQuestionsForDocument(Guid consultationId, Guid documentId);
+        DocumentViewModel GetAllCommentsAndQuestionsForDocument(int consultationId, int documentId);
     }
 }

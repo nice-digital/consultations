@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using Comments.Models;
+﻿using Comments.Models;
 using Microsoft.EntityFrameworkCore;
-using Moq;
+using System;
 
 
 namespace Comments.Test.Infrastructure
 {
-    public class TestBase
+    public class UnitTestBase
     {
         protected readonly DbContextOptions<ConsultationsContext> _options;
 
-        public TestBase()
+        public UnitTestBase()
         {
             _options = new DbContextOptionsBuilder<ConsultationsContext>()
                 .UseInMemoryDatabase(databaseName: "test_db")
@@ -27,7 +25,7 @@ namespace Comments.Test.Infrastructure
                 context.Database.EnsureDeleted();
             }
         }
-        protected int AddLocation(Guid consultationId, Guid documentId)
+        protected int AddLocation(int consultationId, int documentId)
         {
             var location = new Location(consultationId, documentId, null, null, null, null, null, null, null, null, null);
             using (var context = new ConsultationsContext(_options))
@@ -69,15 +67,16 @@ namespace Comments.Test.Infrastructure
         }
         protected int AddAnswer(int questionId, Guid userId, string answerText)
         {
-            var answer = new Answer(questionId, userId, answerText, null, DateTime.Now, null);
+            var answer = new Answer(questionId, userId, answerText, null, null);
             using (var context = new ConsultationsContext(_options))
             {
+                answer.LastModifiedDate = DateTime.Now;
                 context.Answer.Add(answer);
                 context.SaveChanges();
             }
             return answer.AnswerId;
         }
-        protected void AddCommentsAndQuestionsAndAnswers(Guid consultationId, Guid documentId, string commentText, string questionText, string answerText)
+        protected void AddCommentsAndQuestionsAndAnswers(int consultationId, int documentId, string commentText, string questionText, string answerText)
         {
             var locationId = AddLocation(consultationId, documentId);
             AddComment(locationId, commentText);
@@ -88,6 +87,14 @@ namespace Comments.Test.Infrastructure
 
         #endregion database stuff
 
-        
+        #region Helpers
+
+        protected int RandomNumber()
+        {
+            var rnd = new Random();
+            return rnd.Next(1, int.MaxValue);
+        }
+
+        #endregion Helpers
     }
 }
