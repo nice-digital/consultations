@@ -1,7 +1,5 @@
-﻿using Comments.Models;
-using Comments.ViewModels;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using Comments.ViewModels;
+using System.Collections.Generic;
 using System.Linq;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
 
@@ -19,17 +17,20 @@ namespace Comments.Services
         public DocumentViewModel GetAllCommentsAndQuestionsForDocument(int consultationId, int documentId)
         {
             var title = "todo: title (and a bunch of other data) comes from the indev consultation feed";
+            var consultation = new Consultation(consultationId, title, null);
 
-            var consultationsData = _context.Location.Where(l => l.ConsultationId.Equals(consultationId) &&
-                                                     (!l.DocumentId.HasValue || l.DocumentId.Equals(documentId)))
-                                        .Include(l => l.Comment)
-                                        .Include(l => l.Question)
-                                            .ThenInclude(q => q.QuestionType)
-                                        .Include(l => l.Question)
-                                            .ThenInclude(q => q.Answer)
-                                        .ToList();
 
-            return new DocumentViewModel(title, consultationsData);
+            var locations = _context.GetAllCommentsAndQuestionsForDocument(consultationId, documentId);
+
+            var commentsData = new List<ViewModels.Comment>();
+            var questionsData = new List<ViewModels.Question>();
+            foreach (var location in locations)
+            {
+                commentsData.AddRange(location.Comment.Select(comment => new ViewModels.Comment(location, comment)));
+                questionsData.AddRange(location.Question.Select(question => new ViewModels.Question(location, question)));
+            }
+
+            return new DocumentViewModel(consultation, commentsData, questionsData);
         }
     }
 

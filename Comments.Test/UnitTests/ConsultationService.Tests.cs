@@ -28,7 +28,7 @@ namespace Comments.Test.UnitTests
                 var consultationService = new ConsultationService(consultationsContext);
                 viewModel = consultationService.GetAllCommentsAndQuestionsForDocument(consultationId, documentId);
             }
-            viewModel.Locations.Single().Comment.Single().CommentText.ShouldBe(commentText);
+            viewModel.Comments.Single().CommentText.ShouldBe(commentText);
         }
 
         [Fact]
@@ -50,11 +50,10 @@ namespace Comments.Test.UnitTests
                 viewModel = consultationService.GetAllCommentsAndQuestionsForDocument(consultationId, documentId);
             }
 
-            var location = viewModel.Locations.Single();
-            location.Comment.Single().CommentText.ShouldBe(commentText);
-            var question = location.Question.Single();
+            viewModel.Comments.Single().CommentText.ShouldBe(commentText);
+            var question = viewModel.Questions.Single();
             question.QuestionText.ShouldBe(questionText);
-            question.Answer.Single().AnswerText.ShouldBe(answerText);
+            question.Answers.Single().AnswerText.ShouldBe(answerText);
         }
     }
 }
