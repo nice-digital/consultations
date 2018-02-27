@@ -18,6 +18,10 @@
     "import"
   ],
   "rules": {
-    "react/no-unescaped-entities": 0
+    "react/no-unescaped-entities": 0,
+    "max-len": 0,
+    "//": "below not necessary as we're using flow",
+    "react/prop-types": 0,
+    "import/unambiguous": 0
   }
 }
