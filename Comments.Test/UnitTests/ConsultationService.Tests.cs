@@ -1,16 +1,15 @@
-using Comments.Models;
-using Comments.Services;
-using Comments.ViewModels;
 using System;
 using System.Linq;
+using Comments.Models;
+using Comments.Services;
 using Comments.Test.Infrastructure;
-using Xunit;
+using Comments.ViewModels;
 using Shouldly;
-using ConsultationsContext = Comments.Models.ConsultationsContext;
+using Xunit;
 
-namespace Comments.Test
+namespace Comments.Test.UnitTests
 {
-    public class UnitTests : TestBase
+    public class UnitUnitTests : UnitTestBase
     {
         [Fact]
         public void Comments_CanBeRead()

@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using Comments.Models;
+﻿using Comments.Models;
 using Microsoft.EntityFrameworkCore;
-using Moq;
+using System;
 
 
 namespace Comments.Test.Infrastructure
 {
-    public class TestBase
+    public class UnitTestBase
     {
         protected readonly DbContextOptions<ConsultationsContext> _options;
 
-        public TestBase()
+        public UnitTestBase()
         {
             _options = new DbContextOptionsBuilder<ConsultationsContext>()
                 .UseInMemoryDatabase(databaseName: "test_db")
