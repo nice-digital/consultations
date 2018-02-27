@@ -245,3 +245,4 @@ netcoreapp2.0/*
 ClientApp/public/*.css
 ClientApp/public/*.css.map
 /.idea/.idea.Consultations
+/ConsultationsDatabase/ConsultationsDatabase.refactorlog
