@@ -12,21 +12,21 @@ namespace Comments.Models
         public virtual DbSet<Question> Question { get; set; }
         public virtual DbSet<QuestionType> QuestionType { get; set; }
 
-
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Answer>(entity =>
             {
                 entity.Property(e => e.AnswerId).HasColumnName("AnswerID");
 
+                entity.Property(e => e.CreatedByUserId).HasColumnName("CreatedByUserID");
+
                 entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.LastModifiedByUserId).HasColumnName("LastModifiedByUserID");
 
                 entity.Property(e => e.LastModifiedDate).HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.QuestionId).HasColumnName("QuestionID");
-
-                entity.Property(e => e.UserId).HasColumnName("UserID");
 
                 entity.HasOne(d => d.Question)
                     .WithMany(p => p.Answer)
@@ -41,13 +41,15 @@ namespace Comments.Models
 
                 entity.Property(e => e.CommentText).IsRequired();
 
+                entity.Property(e => e.CreatedByUserId).HasColumnName("CreatedByUserID");
+
                 entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.LastModifiedByUserId).HasColumnName("LastModifiedByUserID");
 
                 entity.Property(e => e.LastModifiedDate).HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.LocationId).HasColumnName("LocationID");
-
-                entity.Property(e => e.UserId).HasColumnName("UserID");
 
                 entity.HasOne(d => d.Location)
                     .WithMany(p => p.Comment)
@@ -68,6 +70,12 @@ namespace Comments.Models
             modelBuilder.Entity<Question>(entity =>
             {
                 entity.Property(e => e.QuestionId).HasColumnName("QuestionID");
+
+                entity.Property(e => e.CreatedByUserId).HasColumnName("CreatedByUserID");
+
+                entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.LastModifiedByUserId).HasColumnName("LastModifiedByUserID");
 
                 entity.Property(e => e.LocationId).HasColumnName("LocationID");
 

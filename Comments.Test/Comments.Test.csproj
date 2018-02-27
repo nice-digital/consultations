@@ -39,9 +39,6 @@
     <None Update="diff-assertions.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="IntegrationTests.GetConsultationHomepage.txt.expected.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="IntegrationTests\ApiTests.GetDocumentReturnsFullFeed.txt.expected.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

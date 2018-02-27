@@ -7,13 +7,12 @@ namespace Comments.Models
     {
         private Comment() {} //Just for EF
 
-        public Comment(int locationId, Guid userId, string commentText, DateTime lastModifiedDate,
-            Location location)
+        public Comment(int locationId, Guid createdByUserId, string commentText, Location location, Guid lastModifiedByUserId)
         {
             LocationId = locationId;
-            UserId = userId;
+            CreatedByUserId = createdByUserId;
+            LastModifiedByUserId = lastModifiedByUserId;
             CommentText = commentText ?? throw new ArgumentNullException(nameof(commentText));
-            LastModifiedDate = lastModifiedDate;
             Location = location;
         }
     }

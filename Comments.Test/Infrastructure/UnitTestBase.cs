@@ -37,7 +37,7 @@ namespace Comments.Test.Infrastructure
         }
         protected int AddComment(int locationId, string commentText)
         {
-            var comment = new Comment(locationId, Guid.Empty, commentText, DateTime.Now, null);
+            var comment = new Comment(locationId, Guid.Empty, commentText, null, Guid.Empty);
             using (var context = new ConsultationsContext(_options))
             {
                 context.Comment.Add(comment);
