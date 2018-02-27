@@ -89,7 +89,7 @@ namespace Comments.Test.Infrastructure
 
         #endregion database stuff
 
-        #region Helper
+        #region Helpers
 
         protected int RandomNumber()
         {
@@ -97,6 +97,6 @@ namespace Comments.Test.Infrastructure
             return rnd.Next(1, int.MaxValue);
         }
 
-        #endregion Helper
+        #endregion Helpers
     }
 }
