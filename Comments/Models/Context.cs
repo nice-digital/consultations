@@ -20,6 +20,7 @@ namespace Comments.Models
                                             .Include(l => l.Question)
                                                 .ThenInclude(q => q.Answer)
                                             .ToList();
+
         }
     }
 }

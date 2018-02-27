@@ -35,9 +35,10 @@ namespace Comments.Test.Infrastructure
             }
             return location.LocationId;
         }
-        protected int AddComment(int locationId, string commentText)
+        protected int AddComment(int locationId, string commentText, bool isDeleted)
         {
             var comment = new Comment(locationId, Guid.Empty, commentText, null, Guid.Empty);
+            comment.IsDeleted = isDeleted;
             using (var context = new ConsultationsContext(_options))
             {
                 context.Comment.Add(comment);
@@ -79,7 +80,7 @@ namespace Comments.Test.Infrastructure
         protected void AddCommentsAndQuestionsAndAnswers(int consultationId, int documentId, string commentText, string questionText, string answerText)
         {
             var locationId = AddLocation(consultationId, documentId);
-            AddComment(locationId, commentText);
+            AddComment(locationId, commentText, isDeleted: false);
             var questionTypeId = AddQuestionType(description: "text", hasBooleanAnswer: false, hasTextAnswer: true);
             var questionId = AddQuestion(locationId, questionTypeId, questionText);
             AddAnswer(questionId, Guid.Empty, answerText);

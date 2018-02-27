@@ -1,10 +1,15 @@
-﻿using Comments.ViewModels;
+﻿using Comments.Models;
+using Comments.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
-using ConsultationsContext = Comments.Models.ConsultationsContext;
 
 namespace Comments.Services
 {
+    public interface IConsultationService
+    {
+        DocumentViewModel GetAllCommentsAndQuestionsForDocument(int consultationId, int documentId);
+    }
+
     public class ConsultationService : IConsultationService
     {
         private readonly ConsultationsContext _context;
@@ -16,7 +21,7 @@ namespace Comments.Services
 
         public DocumentViewModel GetAllCommentsAndQuestionsForDocument(int consultationId, int documentId)
         {
-            var title = "todo: title (and a bunch of other data) comes from the indev consultation feed";
+            var title = "todo: title (and a bunch of other data) comes from the deserialised indev consultation feed";
             var consultation = new Consultation(consultationId, title, null);
 
 
@@ -32,10 +37,5 @@ namespace Comments.Services
 
             return new DocumentViewModel(consultation, commentsData, questionsData);
         }
-    }
-
-    public interface IConsultationService
-    {
-        DocumentViewModel GetAllCommentsAndQuestionsForDocument(int consultationId, int documentId);
     }
 }

@@ -13,27 +13,32 @@ namespace Comments.Test.UnitTests
     {
         [Fact]
         public void Comments_CanBeRead()
-        {
+        { 
+            // Arrange
             ReinitialiseDatabase();
             var consultationId = RandomNumber();
             var documentId = RandomNumber();
             var commentText = Guid.NewGuid().ToString();
 
             var locationId = AddLocation(consultationId, documentId);
-            AddComment(locationId, commentText);
+            AddComment(locationId, commentText, isDeleted: false);
 
+            // Act
             DocumentViewModel viewModel;
             using (var consultationsContext = new ConsultationsContext(_options))
             {
                 var consultationService = new ConsultationService(consultationsContext);
                 viewModel = consultationService.GetAllCommentsAndQuestionsForDocument(consultationId, documentId);
             }
+
+            //Assert
             viewModel.Comments.Single().CommentText.ShouldBe(commentText);
         }
 
         [Fact]
         public void CommentsQuestionsAndAnswers_CanBeRead()
         {
+            // Arrange
             ReinitialiseDatabase();
             var consultationId = RandomNumber();
             var documentId = RandomNumber();
@@ -43,6 +48,7 @@ namespace Comments.Test.UnitTests
 
             AddCommentsAndQuestionsAndAnswers(consultationId, documentId, commentText, questionText, answerText);
 
+            // Act
             DocumentViewModel viewModel;
             using (var consultationsContext = new ConsultationsContext(_options))
             {
@@ -50,6 +56,7 @@ namespace Comments.Test.UnitTests
                 viewModel = consultationService.GetAllCommentsAndQuestionsForDocument(consultationId, documentId);
             }
 
+            //Assert
             viewModel.Comments.Single().CommentText.ShouldBe(commentText);
             var question = viewModel.Questions.Single();
             question.QuestionText.ShouldBe(questionText);
