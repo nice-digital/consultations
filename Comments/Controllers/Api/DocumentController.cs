@@ -15,12 +15,12 @@ namespace Comments.Controllers.Api
     [Route("api/Document")]
     public class DocumentController : Controller
     {
-        private readonly IConsultationService _consultationService;
+        private readonly ICommentService _commentService;
         private readonly ILogger<DocumentController> _logger;
 
-        public DocumentController(IConsultationService consultationService, ILogger<DocumentController> logger)
+        public DocumentController(ICommentService commentService, ILogger<DocumentController> logger)
         {
-            _consultationService = consultationService;
+            _commentService = commentService;
             _logger = logger;
         }
 
@@ -28,7 +28,7 @@ namespace Comments.Controllers.Api
         [HttpGet]
         public DocumentViewModel Get(int consultationId, int documentId)
         {
-            return _consultationService.GetAllCommentsAndQuestionsForDocument(consultationId, documentId);
+            return _commentService.GetAllCommentsAndQuestionsForDocument(consultationId, documentId);
         }
 
         //// GET: api/Document/5

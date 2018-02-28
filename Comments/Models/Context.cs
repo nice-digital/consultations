@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
 
 namespace Comments.Models
 {
@@ -21,6 +21,11 @@ namespace Comments.Models
                                                 .ThenInclude(q => q.Answer)
                                             .ToList();
 
+        }
+
+        public Comment GetComment(int commentId)
+        {
+            return Comment.FirstOrDefault(c => c.CommentId.Equals(commentId));
         }
     }
 }

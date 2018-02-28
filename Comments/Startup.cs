@@ -29,7 +29,7 @@ namespace comments
 
             services.AddMvc();
 
-            services.TryAddTransient<IConsultationService, ConsultationService>();
+            services.TryAddTransient<ICommentService, CommentService>();
 
             // In production, static files are served from the pre-built files, rather than proxied via react dev server
             services.AddSpaStaticFiles(configuration =>

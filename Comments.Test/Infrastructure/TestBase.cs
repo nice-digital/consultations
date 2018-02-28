@@ -1,24 +1,47 @@
-﻿using Comments.Models;
+﻿using comments;
+using Comments.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System;
-
+using System.Net.Http;
 
 namespace Comments.Test.Infrastructure
 {
-    public class UnitTestBase
+    public class TestBase
     {
+        protected const string DatabaseName = "testDB";
         protected readonly DbContextOptions<ConsultationsContext> _options;
 
-        public UnitTestBase()
+        protected readonly TestServer _server;
+        protected readonly HttpClient _client;
+        public TestBase()
         {
+            // Arrange
             _options = new DbContextOptionsBuilder<ConsultationsContext>()
-                .UseInMemoryDatabase(databaseName: "test_db")
-                .Options;
+                    .UseInMemoryDatabase(databaseName: DatabaseName)
+                    .Options;
+
+            var builder = new WebHostBuilder()
+                .UseContentRoot("../../../../Comments")
+                .ConfigureServices(services =>
+                {
+                    services.AddEntityFrameworkSqlite();
+                    services.AddDbContext<ConsultationsContext>(options => 
+                        options.UseInMemoryDatabase(DatabaseName
+                            //, optionsBuilder => { optionsBuilder.use }
+                            ));
+                })
+                .UseEnvironment("Production")
+                .UseStartup(typeof(Startup));
+            _server = new TestServer(builder);
+            _client = _server.CreateClient();
         }
 
         #region database stuff
 
-        protected void ReinitialiseDatabase()
+        protected void ResetDatabase()
         {
             using (var context = new ConsultationsContext(_options))
             {
@@ -37,7 +60,7 @@ namespace Comments.Test.Infrastructure
         }
         protected int AddComment(int locationId, string commentText, bool isDeleted)
         {
-            var comment = new Comment(locationId, Guid.Empty, commentText, null, Guid.Empty);
+            var comment = new Comment(locationId, Guid.Empty, commentText, Guid.Empty, location: null);
             comment.IsDeleted = isDeleted;
             using (var context = new ConsultationsContext(_options))
             {

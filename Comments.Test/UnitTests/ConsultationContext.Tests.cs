@@ -8,13 +8,13 @@ using Xunit;
 
 namespace Comments.Test.UnitTests
 {
-    public class ConsultationContext : UnitTestBase
+    public class ConsultationContext : TestBase
     {
         [Fact]
         public void Comments_IsDeleted_Flag_Filtering_is_working_in_the_context()
         {
             // Arrange
-            ReinitialiseDatabase();
+            ResetDatabase();
             var consultationId = RandomNumber();
             var documentId = RandomNumber();
             var commentText = Guid.NewGuid().ToString();

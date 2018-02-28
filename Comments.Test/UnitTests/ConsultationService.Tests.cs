@@ -9,13 +9,13 @@ using Xunit;
 
 namespace Comments.Test.UnitTests
 {
-    public class UnitUnitTests : UnitTestBase
+    public class Tests : TestBase
     {
         [Fact]
         public void Comments_CanBeRead()
         { 
             // Arrange
-            ReinitialiseDatabase();
+            ResetDatabase();
             var consultationId = RandomNumber();
             var documentId = RandomNumber();
             var commentText = Guid.NewGuid().ToString();
@@ -27,7 +27,7 @@ namespace Comments.Test.UnitTests
             DocumentViewModel viewModel;
             using (var consultationsContext = new ConsultationsContext(_options))
             {
-                var consultationService = new ConsultationService(consultationsContext);
+                var consultationService = new CommentService(consultationsContext);
                 viewModel = consultationService.GetAllCommentsAndQuestionsForDocument(consultationId, documentId);
             }
 
@@ -39,7 +39,7 @@ namespace Comments.Test.UnitTests
         public void CommentsQuestionsAndAnswers_CanBeRead()
         {
             // Arrange
-            ReinitialiseDatabase();
+            ResetDatabase();
             var consultationId = RandomNumber();
             var documentId = RandomNumber();
             var commentText = Guid.NewGuid().ToString();
@@ -52,7 +52,7 @@ namespace Comments.Test.UnitTests
             DocumentViewModel viewModel;
             using (var consultationsContext = new ConsultationsContext(_options))
             {
-                var consultationService = new ConsultationService(consultationsContext);
+                var consultationService = new CommentService(consultationsContext);
                 viewModel = consultationService.GetAllCommentsAndQuestionsForDocument(consultationId, documentId);
             }
 
