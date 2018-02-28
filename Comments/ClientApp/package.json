@@ -51,5 +51,7 @@
     "react-scripts": "1.0.17",
     "rimraf": "^2.6.2"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "isomorphic-fetch": "^2.2.1"
+  }
 }
