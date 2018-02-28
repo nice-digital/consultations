@@ -1,15 +1,12 @@
-// @flow
-
-import { fetch } from "isomorphic-fetch";
-import Promise from "es6-promise";
-
-Promise.polyfill();
+import axios from "axios";
 
 const fetchData = async () => {
-	// const response = await fetch("/api/SampleData/WeatherForecasts/");
-	const response = await fetch("/api/SampleData/WeatherForecasts/");
-	console.log({ response });
-	return await response.json();
+	try {
+		const response = await axios("/api/SampleData/WeatherForecasts/");
+		return response.data;
+	} catch (err) {
+		throw new Error(err);
+	}
 };
 
 export default fetchData;

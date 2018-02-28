@@ -1,9 +1,7 @@
 import React, { Component } from "react";
-import { NavMenu } from "./NavMenu";
+import NavMenu from "./NavMenu/NavMenu";
 
-export class Layout extends Component {
-	displayName = Layout.name;
-
+export default class Layout extends Component {
 	render() {
 		return (
 			<div className="container">

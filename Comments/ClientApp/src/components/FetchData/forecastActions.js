@@ -11,10 +11,10 @@ const didGetForecast = data => ({
 
 export const fetchForecastData = () => async (dispatch) => {
 	dispatch(willGetForecast());
-	// try {
-		const data = await fetchData(); // go and get the data
-		dispatch(didGetForecast(data)); // dispatch an action with the data inside it
-	// } catch (error) {
-	// 	throw new Error(error);
-	// }
+	try {
+		const data = await fetchData();
+		dispatch(didGetForecast(data));
+	} catch (error) {
+		throw new Error(error);
+	}
 };

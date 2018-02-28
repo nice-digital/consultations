@@ -4,12 +4,12 @@
 import { createServerRenderer } from "aspnet-prerendering";
 import React from "react";
 import { renderToString  } from "react-dom/server";
-import { StaticRouter } from "react-router";
+import { StaticRouter } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
 import { processHtml } from "./html-processor";
 
-import App from "./../App";
+import App from "../components/App/App";
 
 // currently unused
 // const IsProduction = process.env.NODE_ENV === "production";

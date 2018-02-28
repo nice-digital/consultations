@@ -1,13 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Helmet } from "react-helmet";
+
 import { fetchForecastData } from "./forecastActions";
 
-// import fetch from "isomorphic-fetch";
-// todo: move to the forecast actions
-
 class FetchData extends Component {
-	displayName = FetchData.name;
-
 	componentWillMount() {
 		this.props.fetchForecastData();
 	}
@@ -15,6 +12,9 @@ class FetchData extends Component {
 	renderForecastsTable = () => {
 		return (
 			<table className="table">
+				<Helmet>
+					<title>Weather Forecast</title>
+				</Helmet>
 				<thead>
 					<tr>
 						<th>Date</th>

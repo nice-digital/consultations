@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import { Helmet } from "react-helmet";
 
-export class Counter extends Component {
-	displayName = Counter.name;
-
+export default class Counter extends Component {
 	constructor() {
 		super();
 		this.state = { currentCount: 0 };
