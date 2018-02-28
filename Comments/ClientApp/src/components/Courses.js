@@ -42,7 +42,7 @@ class Course extends Component {
 				<h1>Course page</h1>
 
 				<hr />
-				{/* {this.props.courses.map(this.courseRow)} */}
+				{this.props.courses.map(this.courseRow)}
 				<hr />
 
 				<input type="text" onChange={this.onTitleChange} defaultValue={this.state.course.title} />
@@ -55,7 +55,7 @@ class Course extends Component {
 function mapStateToProps(state, ownProps) {
 	// this will return the properties we'd like to see exposed as props on our component
 	return {
-		courses: state.courses
+		courses: state.course
 	};
 }
 

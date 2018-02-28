@@ -1,60 +1,66 @@
 import React, { Component } from "react";
-import fetch from "isomorphic-fetch";
+import { connect } from "react-redux";
+import { fetchForecastData } from "./../actions/forecastActions";
 
-export class FetchData extends Component {
+// import fetch from "isomorphic-fetch";
+// todo: move to the forecast actions
+
+class FetchData extends Component {
 	displayName = FetchData.name;
 
-	constructor() {
-		super();
-		this.state = { forecasts: [], loading: true };
-
-		fetch("api/SampleData/WeatherForecasts")
-			.then(response => response.json())
-			.then(data => {
-				this.setState({ forecasts: data, loading: false });
-			});
+	componentWillMount() {
+		this.props.fetchForecastData();
 	}
 
-	static renderForecastsTable(forecasts) {
+	renderForecastsTable = () => {
 		return (
 			<table className="table">
 				<thead>
 					<tr>
 						<th>Date</th>
 						<th>Temp. (C)</th>
-						<th>Temp. (F)</th>
-						<th>Summary</th>
+						{/* <th>Temp. (F)</th>
+						<th>Summary</th> */}
 					</tr>
 				</thead>
 				<tbody>
-					{forecasts.map(forecast => (
-						<tr key={forecast.dateFormatted}>
-							<td>{forecast.dateFormatted}</td>
-							<td>{forecast.temperatureC}</td>
-							<td>{forecast.temperatureF}</td>
-							<td>{forecast.summary}</td>
+					{this.props.forecastData.map(forecast => (
+						<tr key={forecast.id}>
+							<td>{forecast.id}</td>
+							<td>{forecast.title}</td>
+							{/* <td>{forecast.body}</td>
+							<td>{forecast.summary}</td> */}
 						</tr>
 					))}
 				</tbody>
 			</table>
 		);
-	}
+	};
 
 	render() {
-		let contents = this.state.loading ? (
-			<p>
-				<em>Loading...</em>
-			</p>
-		) : (
-			FetchData.renderForecastsTable(this.state.forecasts)
-		);
-
+		const { forecastData } = this.props;
+		if (!forecastData) return null;
 		return (
 			<div>
 				<h1>Weather forecast</h1>
 				<p>This component demonstrates fetching data from the server.</p>
-				{contents}
+				{this.renderForecastsTable()}
 			</div>
 		);
 	}
 }
+
+function mapDispatchToProps(dispatch) {
+	return {
+		fetchForecastData: () => dispatch(fetchForecastData())
+	};
+}
+
+function mapStateToProps(state) {
+	return {
+		forecastStatus: state.forecast.status,
+		forecastData: state.forecast.data
+	};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(FetchData);

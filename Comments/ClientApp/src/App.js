@@ -4,7 +4,7 @@ import { Helmet } from "react-helmet";
 
 import { Layout } from "./components/Layout";
 import { Home } from "./components/Home";
-import { FetchData } from "./components/FetchData";
+import FetchData from "./components/FetchData";
 import { Counter } from "./components/Counter";
 import Courses from "./components/Courses";
 import { NotFound } from "./components/NotFound";
