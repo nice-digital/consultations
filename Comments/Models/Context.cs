@@ -18,14 +18,15 @@ namespace Comments.Models
                                             .Include(l => l.Question)
                                                 .ThenInclude(q => q.QuestionType)
                                             .Include(l => l.Question)
-                                                .ThenInclude(q => q.Answer)
-                                            .ToList();
-
+                                                .ThenInclude(q => q.Answer);
+                                            //.ToList();
         }
 
         public Comment GetComment(int commentId)
         {
-            return Comment.FirstOrDefault(c => c.CommentId.Equals(commentId));
+            return Comment.Where(c => c.CommentId.Equals(commentId))
+                    .Include(c => c.Location)
+                    .FirstOrDefault();
         }
     }
 }

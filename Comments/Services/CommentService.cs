@@ -27,7 +27,7 @@ namespace Comments.Services
         public ViewModels.Comment GetComment(int commentId)
         {
             var comment = _context.GetComment(commentId);
-            return (comment == null) ? null : new ViewModels.Comment(comment.Location, comment);
+            return (comment == null) ? null : new ViewModels.Comment(comment.Location, comment); 
         }
 
         public int EditComment(int commentId, ViewModels.Comment comment)
