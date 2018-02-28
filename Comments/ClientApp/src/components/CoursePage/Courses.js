@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Helmet } from "react-helmet";
 
-import { createCourse } from "./../actions/courseActions";
+import { createCourse } from "./courseActions";
 
 class Course extends Component {
 	displayName = Course.name;
@@ -52,7 +52,7 @@ class Course extends Component {
 	}
 }
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
 	// this will return the properties we'd like to see exposed as props on our component
 	return {
 		courses: state.course

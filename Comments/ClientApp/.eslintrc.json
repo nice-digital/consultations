@@ -20,7 +20,6 @@
     "react/no-unescaped-entities": 0,
     "//": "below not necessary as we're using flow",
     "react/prop-types": 0,
-    "function-paren-newline": ["error", { "minItems": 2 }],
     "object-property-newline": 2
   }
 }

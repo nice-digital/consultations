@@ -4,9 +4,9 @@ import { Helmet } from "react-helmet";
 
 import { Layout } from "./components/Layout";
 import { Home } from "./components/Home";
-import FetchData from "./components/FetchData";
+import FetchData from "./components/FetchData/FetchData";
 import { Counter } from "./components/Counter";
-import Courses from "./components/Courses";
+import Courses from "./components/CoursePage/Courses";
 import { NotFound } from "./components/NotFound";
 
 export default class App extends Component {
