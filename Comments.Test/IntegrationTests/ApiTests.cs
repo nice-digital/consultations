@@ -5,6 +5,7 @@ using Shouldly;
 using Shouldly.ShouldlyExtensionMethods;
 using System;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,11 +29,15 @@ namespace Comments.Test.IntegrationTests
             responseString.ShouldMatchApproved();
         }
 
-        [Fact]
-        public async Task CreateComment()
+        [Theory]
+        [InlineData(1, 1, null)]
+        [InlineData(1, 1, 1)]
+        [InlineData(int.MaxValue, int.MaxValue, null)]
+        [InlineData(int.MaxValue, int.MaxValue, 1)]
+        public async Task CreateComment(int locationId, int consultationId, int? documentId)
         {
             //Arrange
-            var comment = new ViewModels.Comment(1, 1, null, null, null, null, null, null, null, null, 1, DateTime.Now, Guid.Empty, "comment text");
+            var comment = new ViewModels.Comment(locationId, consultationId, documentId, null, null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty, "comment text");
             var content = new StringContent(JsonConvert.SerializeObject(comment), Encoding.UTF8, "application/json");
 
             // Act
@@ -41,21 +46,33 @@ namespace Comments.Test.IntegrationTests
             var responseString = await response.Content.ReadAsStringAsync();
 
             // Assert
-            responseString.ShouldMatchApproved();
+            response.StatusCode.ShouldBe(HttpStatusCode.Created);
+            var deserialisedComment = JsonConvert.DeserializeObject<ViewModels.Comment>(responseString);
+            deserialisedComment.CommentId.ShouldBeGreaterThan(0);
         }
 
         [Fact]
-        public async Task GetComment()
+        public async Task Insert_Multiple_Comments_And_Read_Them()
         {
             //Arrange
-            await CreateComment();
+            ResetDatabase();
+            const int locationId = 1;
+            const int consultationId = 1;
+            const int documentId = 1;
+            await CreateComment(locationId, consultationId, documentId);
+            await CreateComment(locationId, consultationId, documentId); //duplicate comment. totally valid.
+            await CreateComment(2, consultationId, documentId); //different location id, this should be in the result set
+            await CreateComment(locationId, 2, documentId); //different consultation id, this shouldn't be in the result set
+            await CreateComment(locationId, consultationId, 2); //different document id, this shouldn't be in the result set
 
             // Act
-            var response = await _client.GetAsync("api/Comment/1");
+            var response = await _client.GetAsync($"/api/Document?consultationId={consultationId}&documentId={documentId}");
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
 
             // Assert
+            var deserialisedResponse = JsonConvert.DeserializeObject<DocumentViewModel>(responseString);
+            deserialisedResponse.Comments.Count().ShouldBe(3);
             responseString.ShouldMatchApproved();
         }
 
@@ -63,7 +80,7 @@ namespace Comments.Test.IntegrationTests
         public async Task GetDocumentReturnsPopulatedFeed()
         {
             // Arrange
-            //ResetDatabase();
+            ResetDatabase();
             var consultationId = 1;
             var documentId = 1;
             var commentText = Guid.NewGuid().ToString();
@@ -81,8 +98,8 @@ namespace Comments.Test.IntegrationTests
             responseString.ShouldMatchApproved();
             //todo: get the below all working:
 
-            var deserialisedResponse = JsonConvert.DeserializeObject<DocumentViewModel>(responseString);
-            deserialisedResponse.Comments.Single().CommentText.ShouldBe(commentText);
+            //var deserialisedResponse = JsonConvert.DeserializeObject<DocumentViewModel>(responseString);
+            //deserialisedResponse.Comments.Single().CommentText.ShouldBe(commentText);
             //deserialisedResponse.Questions.Single().QuestionText.ShouldBe(questionText);
             //deserialisedResponse.Questions.Single().Answers.Single().AnswerText.ShouldBe(answerText);
         }
