@@ -28,7 +28,8 @@ export const parseClassAttribute = (htmlAttributes: string): string => {
 
 	let attrs: string = htmlAttributes.replace(ClassAttributeRegex, "").trim();
 
-	return { htmlAttributes: attrs, className: className };
+	return { htmlAttributes: attrs,
+		className: className };
 };
 
 // Replaces the html tag with the given html attributes.
@@ -56,7 +57,10 @@ export const processHtml = (html: string, { title, metas, links, scripts, htmlAt
 	html = replaceOpeningHtmlTag(html, htmlAttributes);
 	html = replaceOpeningBodyTag(html, bodyAttributes);
 	html = replaceRootContent(html, rootContent);
-	html = prepHead(html, { title, metas, links, scripts });
+	html = prepHead(html, { title,
+		metas,
+		links,
+		scripts });
 	return html;
 };
 

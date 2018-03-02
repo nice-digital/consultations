@@ -49,7 +49,8 @@ export const serverRenderer = (params): Promise => {
 			scripts: helmet.script.toString()
 		});
 
-		resolve({ html: html, statusCode: context.status || 200 });
+		resolve({ html: html,
+			statusCode: context.status || 200 });
 	});
 };
 
