@@ -1,6 +1,23 @@
+// @flow
+
 import React from "react";
 
-function StackedNav(props) {
+type RootType = {
+	label: string,
+	url: string
+};
+
+type PropType = {
+	root: RootType,
+	links: [
+		{
+			label: string,
+			url: string
+		}
+	]
+};
+
+function StackedNav(props: PropType) {
 	const { root, links } = props.links;
 	return (
 		<nav className="stacked-nav" aria-label="{root.label}">
@@ -18,14 +35,14 @@ function StackedNav(props) {
 	);
 }
 
-function rootLabel(root) {
+function rootLabel(root: RootType) {
 	if (root.label) {
 		return <h2 className="stacked-nav__root">{rootLink(root)}</h2>;
 	}
 	return null;
 }
 
-function rootLink(root) {
+function rootLink(root: RootType) {
 	if (root.url) {
 		return <a href={root.url}>{root.label}</a>;
 	} else {
