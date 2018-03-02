@@ -1,29 +1,65 @@
+// @flow
+
 import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
-import Layout from "../Layout";
+import DemoPage from "../DemoPage";
+import FullPage from "../FullPage";
 import Home from "../Home/Home";
-import FetchData from "../FetchData/FetchData";
 import Counter from "../Counter/Counter";
+import FetchData from "../FetchData/FetchData";
 import BasicForm from "../BasicForm/BasicForm";
+import Document from "../Document/Document";
 import NotFound from "../NotFound/NotFound";
 
 export default class App extends Component {
 	render() {
 		return (
-			<Layout>
+			<div>
 				<Helmet titleTemplate="%s | Consultations | NICE">
 					<html lang="en-GB" />
 				</Helmet>
 				<Switch>
-					<Route exact path="/" component={Home} />
-					<Route path="/counter" component={Counter} />
-					<Route path="/fetchdata" component={FetchData} />
-					<Route path="/basic-form" component={BasicForm} />
+					{/*home*/}
+					<Route exact path="/">
+						<DemoPage>
+							<Home />
+						</DemoPage>
+					</Route>
+
+					{/*counter*/}
+					<Route path="/counter">
+						<DemoPage>
+							<Counter />
+						</DemoPage>
+					</Route>
+
+					{/*fetch-data*/}
+					<Route path="/fetchdata">
+						<DemoPage>
+							<FetchData />
+						</DemoPage>
+					</Route>
+
+					{/*basic-form*/}
+					<Route path="/basic-form">
+						<DemoPage>
+							<BasicForm />
+						</DemoPage>
+					</Route>
+
+					{/*document*/}
+					<Route path="/document">
+						<FullPage>
+							<Document />
+						</FullPage>
+					</Route>
+
+					{/*404*/}
 					<Route component={NotFound} />
 				</Switch>
-			</Layout>
+			</div>
 		);
 	}
 }
