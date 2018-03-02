@@ -9,12 +9,17 @@ const didGetForecast = data => ({
 	data
 });
 
+const cantGetForecast = data => ({
+	type: "CANT_GET_FORECAST",
+	data
+});
+
 export const fetchForecastData = () => async (dispatch) => {
 	dispatch(willGetForecast());
 	try {
 		const data = await fetchData();
 		dispatch(didGetForecast(data));
 	} catch (error) {
-		throw new Error(error);
+		dispatch(cantGetForecast(error));
 	}
 };

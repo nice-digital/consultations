@@ -38,15 +38,24 @@ class FetchData extends Component {
 	};
 
 	render() {
-		const { forecastData } = this.props;
-		if (!forecastData) return null;
-		return (
-			<div>
-				<h1>Weather forecast</h1>
-				<p>This component demonstrates fetching data from the server.</p>
-				{this.renderForecastsTable()}
-			</div>
-		);
+		const { forecastData, forecastStatus } = this.props;
+		if (!forecastStatus) return null;
+		if (forecastStatus === "failed")
+			return (
+				<div>
+					<h1>Request Failed</h1>
+					<pre>{forecastData.toString()}</pre>
+				</div>
+			);
+		if (forecastStatus === "complete")
+			return (
+				<div>
+					<h1>Weather forecast</h1>
+					<p>This component demonstrates fetching data from the server.</p>
+					{this.renderForecastsTable()}
+				</div>
+			);
+		return <h1><i>Loading...</i></h1>;
 	}
 }
 

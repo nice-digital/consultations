@@ -7,6 +7,11 @@ export default function forecastReducer(state = { status: "idle" }, action) {
 				status: "complete",
 				data: action.data
 			};
+		case "CANT_GET_FORECAST":
+			return {
+				status: "failed",
+				data: action.data
+			};
 		default:
 			return state;
 	}
