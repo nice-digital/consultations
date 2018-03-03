@@ -24,11 +24,11 @@ namespace Comments.Controllers.Api
             _logger = logger;
         }
 
-        // GET: eg. api/Document?consultationId=1&documentId=1
+        // GET: eg. api/Document?consultationId=1&documentId=1&chapterSlug=chapter-slug
         [HttpGet]
-        public DocumentViewModel Get(int consultationId, int documentId)
+        public DocumentViewModel Get(int consultationId, int documentId, string chapterSlug)
         {
-            return _commentService.GetAllCommentsAndQuestionsForDocument(consultationId, documentId);
+            return _commentService.GetAllCommentsAndQuestionsForDocument(consultationId, documentId, chapterSlug);
         }
 
         //// GET: api/Document/5

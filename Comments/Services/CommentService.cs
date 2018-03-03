@@ -3,12 +3,13 @@ using Comments.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NICE.Feeds;
 
 namespace Comments.Services
 {
     public interface ICommentService
     {
-        DocumentViewModel GetAllCommentsAndQuestionsForDocument(int consultationId, int documentId);
+        DocumentViewModel GetAllCommentsAndQuestionsForDocument(int consultationId, int documentId, string chapterSlug);
         ViewModels.Comment GetComment(int commentId);
         int EditComment(int commentId, ViewModels.Comment comment);
         ViewModels.Comment CreateComment(ViewModels.Comment comment);
@@ -61,11 +62,11 @@ namespace Comments.Services
             return _context.SaveChanges();
         }
 
-        public DocumentViewModel GetAllCommentsAndQuestionsForDocument(int consultationId, int documentId)
+        public DocumentViewModel GetAllCommentsAndQuestionsForDocument(int consultationId, int documentId, string chapterSlug)
         {
-            var title = "todo: title (and a bunch of other data) comes from the deserialised indev consultation feed";
-            var consultation = new Consultation(consultationId, title, null);
-
+            var feedService = new FeedConverterConverterService(new FeedReaderService());
+            var consultation = new ViewModels.Consultation(feedService.ConvertConsultationDetail(consultationId));
+            var chapterWithHTML = new ViewModels.ChapterWithHTML(feedService.ConvertConsultationChapter(consultationId, documentId, chapterSlug));
 
             var locations = _context.GetAllCommentsAndQuestionsForDocument(consultationId, documentId);
 
@@ -77,7 +78,7 @@ namespace Comments.Services
                 questionsData.AddRange(location.Question.Select(question => new ViewModels.Question(location, question)));
             }
 
-            return new DocumentViewModel(consultation, commentsData, questionsData);
+            return new DocumentViewModel(consultation, chapterWithHTML, commentsData, questionsData);
         }
     }
 }

@@ -28,7 +28,7 @@ namespace Comments.Test.UnitTests
             using (var consultationsContext = new ConsultationsContext(_options))
             {
                 var consultationService = new CommentService(consultationsContext);
-                viewModel = consultationService.GetAllCommentsAndQuestionsForDocument(consultationId, documentId);
+                viewModel = consultationService.GetAllCommentsAndQuestionsForDocument(consultationId, documentId, "chapter-slug");
             }
 
             //Assert
@@ -53,7 +53,7 @@ namespace Comments.Test.UnitTests
             using (var consultationsContext = new ConsultationsContext(_options))
             {
                 var consultationService = new CommentService(consultationsContext);
-                viewModel = consultationService.GetAllCommentsAndQuestionsForDocument(consultationId, documentId);
+                viewModel = consultationService.GetAllCommentsAndQuestionsForDocument(consultationId, documentId, "chapter-slug");
             }
 
             //Assert
