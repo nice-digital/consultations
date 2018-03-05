@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +14,7 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.6.0" />
     <PackageReference Include="Moq" Version="4.8.1" />
     <PackageReference Include="Shouldly" Version="3.0.0" />
+    <PackageReference Include="TestHelpers.DiffAssertions" Version="1.0.0-CI-20180222-091008" />
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.runner.console" Version="2.3.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
@@ -33,4 +35,28 @@
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="diff-assertions.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="IntegrationTests\WebTests.GetConsultationHomepage.txt.expected.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <!-- https://github.com/NuGet/Home/issues/4412 -->
+    <Target Name="CopyDepsFiles" AfterTargets="Build" Condition="'$(TargetFramework)'!=''">
+       <ItemGroup>
+          <DepsFilePaths Include="$([System.IO.Path]::ChangeExtension('%(_ResolvedProjectReferencePaths.FullPath)', '.deps.json'))" />
+        </ItemGroup>
+        <Copy SourceFiles="%(DepsFilePaths.FullPath)" DestinationFolder="$(OutputPath)" Condition="Exists('%(DepsFilePaths.FullPath)')" />
+  </Target>
+
+  <!-- https://github.com/NuGet/Home/issues/4412 -->
+  <Target Name="CopyDiffAssertionsFile" AfterTargets="Build" Condition="'$(TargetFramework)'!=''">
+    <ItemGroup>
+      <DiffAssertionsFilePath Include="$([System.IO.Path]::ChangeExtension('%(_ResolvedProjectReferencePaths.FullPath)', 'diff-assertions.json'))" />
+    </ItemGroup>
+    <Copy SourceFiles="%(DiffAssertionsFilePath.FullPath)" DestinationFolder="$(OutputPath)" Condition="Exists('%(DiffAssertionsFilePath.FullPath)')" />
+  </Target>
 </Project>

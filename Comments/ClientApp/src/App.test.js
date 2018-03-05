@@ -1,18 +1,17 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
-import { MemoryRouter } from 'react-router-dom';
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./App";
+import { MemoryRouter } from "react-router-dom";
 
-describe('[ClientApp] ', ()=>{
-  describe('App ', ()=>{
-    it('renders without crashing', () => {
-      const div = document.createElement('div');
-      ReactDOM.render(
-        <MemoryRouter>
-          <App />
-        </MemoryRouter>,
-      div);
-      });
-    })  
-  })
-  
+describe("[ClientApp] ", ()=>{
+	describe("App ", ()=>{
+		it("renders without crashing", () => {
+			const div = document.createElement("div");
+			ReactDOM.render(
+				<MemoryRouter>
+					<App />
+				</MemoryRouter>,
+				div);
+		});
+	});
+});

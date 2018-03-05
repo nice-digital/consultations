@@ -1,33 +1,54 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using comments;
 using Comments.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
-using Moq;
-
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Net.Http;
 
 namespace Comments.Test.Infrastructure
 {
     public class TestBase
     {
+        protected const string DatabaseName = "testDB";
         protected readonly DbContextOptions<ConsultationsContext> _options;
 
+        protected readonly TestServer _server;
+        protected readonly HttpClient _client;
         public TestBase()
         {
+            // Arrange
             _options = new DbContextOptionsBuilder<ConsultationsContext>()
-                .UseInMemoryDatabase(databaseName: "test_db")
-                .Options;
+                    .UseInMemoryDatabase(databaseName: DatabaseName)
+                    .Options;
+
+            var builder = new WebHostBuilder()
+                .UseContentRoot("../../../../Comments")
+                .ConfigureServices(services =>
+                {
+                    services.AddEntityFrameworkSqlite();
+                    services.AddDbContext<ConsultationsContext>(options => 
+                        options.UseInMemoryDatabase(DatabaseName
+                            //, optionsBuilder => { optionsBuilder.use }
+                            ));
+                })
+                .UseEnvironment("Production")
+                .UseStartup(typeof(Startup));
+            _server = new TestServer(builder);
+            _client = _server.CreateClient();
         }
 
         #region database stuff
 
-        protected void ReinitialiseDatabase()
+        protected void ResetDatabase()
         {
             using (var context = new ConsultationsContext(_options))
             {
                 context.Database.EnsureDeleted();
             }
         }
-        protected int AddLocation(Guid consultationId, Guid documentId)
+        protected int AddLocation(int consultationId, int documentId)
         {
             var location = new Location(consultationId, documentId, null, null, null, null, null, null, null, null, null);
             using (var context = new ConsultationsContext(_options))
@@ -37,9 +58,10 @@ namespace Comments.Test.Infrastructure
             }
             return location.LocationId;
         }
-        protected int AddComment(int locationId, string commentText)
+        protected int AddComment(int locationId, string commentText, bool isDeleted)
         {
-            var comment = new Comment(locationId, Guid.Empty, commentText, DateTime.Now, null);
+            var comment = new Comment(locationId, Guid.Empty, commentText, Guid.Empty, location: null);
+            comment.IsDeleted = isDeleted;
             using (var context = new ConsultationsContext(_options))
             {
                 context.Comment.Add(comment);
@@ -69,18 +91,19 @@ namespace Comments.Test.Infrastructure
         }
         protected int AddAnswer(int questionId, Guid userId, string answerText)
         {
-            var answer = new Answer(questionId, userId, answerText, null, DateTime.Now, null);
+            var answer = new Answer(questionId, userId, answerText, null, null);
             using (var context = new ConsultationsContext(_options))
             {
+                answer.LastModifiedDate = DateTime.Now;
                 context.Answer.Add(answer);
                 context.SaveChanges();
             }
             return answer.AnswerId;
         }
-        protected void AddCommentsAndQuestionsAndAnswers(Guid consultationId, Guid documentId, string commentText, string questionText, string answerText)
+        protected void AddCommentsAndQuestionsAndAnswers(int consultationId, int documentId, string commentText, string questionText, string answerText)
         {
             var locationId = AddLocation(consultationId, documentId);
-            AddComment(locationId, commentText);
+            AddComment(locationId, commentText, isDeleted: false);
             var questionTypeId = AddQuestionType(description: "text", hasBooleanAnswer: false, hasTextAnswer: true);
             var questionId = AddQuestion(locationId, questionTypeId, questionText);
             AddAnswer(questionId, Guid.Empty, answerText);
@@ -88,6 +111,14 @@ namespace Comments.Test.Infrastructure
 
         #endregion database stuff
 
-        
+        #region Helpers
+
+        protected int RandomNumber()
+        {
+            var rnd = new Random();
+            return rnd.Next(1, int.MaxValue);
+        }
+
+        #endregion Helpers
     }
 }

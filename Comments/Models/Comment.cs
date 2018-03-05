@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Comments.Models
 {
@@ -7,14 +6,24 @@ namespace Comments.Models
     {
         private Comment() {} //Just for EF
 
-        public Comment(int locationId, Guid userId, string commentText, DateTime lastModifiedDate,
-            Location location)
+        public Comment(int locationId, Guid createdByUserId, string commentText, Guid lastModifiedByUserId, Location location)
         {
             LocationId = locationId;
-            UserId = userId;
+            CreatedByUserId = createdByUserId;
+            LastModifiedByUserId = lastModifiedByUserId;
             CommentText = commentText ?? throw new ArgumentNullException(nameof(commentText));
-            LastModifiedDate = lastModifiedDate;
             Location = location;
+        }
+
+        public Comment(ViewModels.Comment comment, Guid createdByUserId) : this(comment.LocationId, createdByUserId, comment.CommentText, comment.LastModifiedByUserId, location: null)
+        { }
+
+        public void UpdateFromViewModel(ViewModels.Comment comment)
+        {
+            LocationId = comment.LocationId;
+            LastModifiedByUserId = comment.LastModifiedByUserId;
+            CommentText = comment.CommentText ?? throw new ArgumentNullException(nameof(comment.CommentText));
+            Location.UpdateFromViewModel(comment as ViewModels.Location);
         }
     }
 }

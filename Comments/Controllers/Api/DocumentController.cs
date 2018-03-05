@@ -15,20 +15,20 @@ namespace Comments.Controllers.Api
     [Route("api/Document")]
     public class DocumentController : Controller
     {
-        private readonly IConsultationService _consultationService;
+        private readonly ICommentService _commentService;
         private readonly ILogger<DocumentController> _logger;
 
-        public DocumentController(IConsultationService consultationService, ILogger<DocumentController> logger)
+        public DocumentController(ICommentService commentService, ILogger<DocumentController> logger)
         {
-            _consultationService = consultationService;
+            _commentService = commentService;
             _logger = logger;
         }
 
-        // GET: eg. api/Document?consultationId=00000000-0000-0000-0000-000000000000&documentId=00000000-0000-0000-0000-000000000000
+        // GET: eg. api/Document?consultationId=1&documentId=1&chapterSlug=chapter-slug
         [HttpGet]
-        public DocumentViewModel Get(Guid consultationId, Guid documentId)
+        public DocumentViewModel Get(int consultationId, int documentId, string chapterSlug)
         {
-            return _consultationService.GetAllCommentsAndQuestionsForDocument(consultationId, documentId);
+            return _commentService.GetAllCommentsAndQuestionsForDocument(consultationId, documentId, chapterSlug);
         }
 
         //// GET: api/Document/5

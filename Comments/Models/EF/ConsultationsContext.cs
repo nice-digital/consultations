@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Comments.Models
 {
@@ -12,27 +10,29 @@ namespace Comments.Models
         public virtual DbSet<Question> Question { get; set; }
         public virtual DbSet<QuestionType> QuestionType { get; set; }
 
-
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Answer>(entity =>
             {
                 entity.Property(e => e.AnswerId).HasColumnName("AnswerID");
 
+                entity.Property(e => e.CreatedByUserId).HasColumnName("CreatedByUserID");
+
                 entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.LastModifiedByUserId).HasColumnName("LastModifiedByUserID");
 
                 entity.Property(e => e.LastModifiedDate).HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.QuestionId).HasColumnName("QuestionID");
-
-                entity.Property(e => e.UserId).HasColumnName("UserID");
 
                 entity.HasOne(d => d.Question)
                     .WithMany(p => p.Answer)
                     .HasForeignKey(d => d.QuestionId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Answer_Question");
+
+                entity.HasQueryFilter(e => !e.IsDeleted); //JW. automatically filter out deleted rows. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
             });
 
             modelBuilder.Entity<Comment>(entity =>
@@ -41,19 +41,23 @@ namespace Comments.Models
 
                 entity.Property(e => e.CommentText).IsRequired();
 
+                entity.Property(e => e.CreatedByUserId).HasColumnName("CreatedByUserID");
+
                 entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.LastModifiedByUserId).HasColumnName("LastModifiedByUserID");
 
                 entity.Property(e => e.LastModifiedDate).HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.LocationId).HasColumnName("LocationID");
-
-                entity.Property(e => e.UserId).HasColumnName("UserID");
 
                 entity.HasOne(d => d.Location)
                     .WithMany(p => p.Comment)
                     .HasForeignKey(d => d.LocationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Comment_Location");
+
+                entity.HasQueryFilter(e => !e.IsDeleted); //JW. automatically filter out deleted rows. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
             });
 
             modelBuilder.Entity<Location>(entity =>
@@ -68,6 +72,12 @@ namespace Comments.Models
             modelBuilder.Entity<Question>(entity =>
             {
                 entity.Property(e => e.QuestionId).HasColumnName("QuestionID");
+
+                entity.Property(e => e.CreatedByUserId).HasColumnName("CreatedByUserID");
+
+                entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.LastModifiedByUserId).HasColumnName("LastModifiedByUserID");
 
                 entity.Property(e => e.LocationId).HasColumnName("LocationID");
 
@@ -86,6 +96,8 @@ namespace Comments.Models
                     .HasForeignKey(d => d.QuestionTypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Question_QuestionType");
+
+                entity.HasQueryFilter(e => !e.IsDeleted); //JW. automatically filter out deleted rows. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
             });
 
             modelBuilder.Entity<QuestionType>(entity =>
