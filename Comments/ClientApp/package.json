@@ -14,9 +14,9 @@
     "modernizr": "modernizr -c modernizr-config.json -d ./public/vendor/modernizr-custom.js",
     "// CRA+SASS": "https://github.com/facebook/create-react-app/tree/master/packages/react-scripts/template#adding-a-css-preprocessor-sass-less-etc",
     "sass:build": "npm-run-all -p sass:compile sass:post",
-    "sass:compile": "node-sass-chokidar --include-path ./node_modules/@nice-digital/design-system/src/stylesheets --include-path ./node_modules/@nice-digital/icons/dist --source-map true src/main.scss -o public",
+    "sass:compile": "node-sass-chokidar --include-path ./node_modules/@nice-digital/design-system/src/stylesheets --include-path ./node_modules/@nice-digital/icons/dist --source-map true src/stylesheets -o public",
     "sass:post": "postcss public/*.css --use autoprefixer -d public",
-    "sass:watch": "npm run sass:build && chokidar \"./src/**/*.scss\" -c \"npm run sass:build\""
+    "sass:watch": "npm run sass:build && chokidar \"./src/stylesheets/**/*.scss\" -c \"npm run sass:build\""
   },
   "dependencies": {
     "@nice-digital/design-system": "^0.4.2",
@@ -38,6 +38,7 @@
     "eslint-plugin-react": "^7.7.0",
     "flow-bin": "^0.66.0",
     "ignore-styles": "^5.0.1",
+    "isomorphic-fetch": "^2.2.1",
     "jest-teamcity-reporter": "^0.9.0",
     "modernizr": "^3.5.0",
     "node-sass-chokidar": "0.0.3",
@@ -57,8 +58,5 @@
   "devDependencies": {
     "@nice-digital/browserslist-config": "^1.0.0",
     "prettier-eslint": "^8.8.1"
-  },
-  "browserslist": [
-    "extends @nice-digital/browserslist-config"
-  ]
+  }
 }
