@@ -10,16 +10,10 @@ export default class NavMenu extends Component {
 				</h2>
 				<ul className="stacked-nav__list">
 					<li className="stacked-nav__list-item">
-						<NavLink to={"/counter"}>Counter</NavLink>
-					</li>
-					<li className="stacked-nav__list-item">
 						<NavLink to={"/fetchdata"}>Fetch Data</NavLink>
 					</li>
 					<li className="stacked-nav__list-item">
-						<NavLink to={"/basic-form"}>Basic Form</NavLink>
-					</li>
-					<li className="stacked-nav__list-item">
-						<NavLink to={"/document"}>Document</NavLink>
+						<NavLink to={"/document"}>Document View</NavLink>
 					</li>
 				</ul>
 			</nav>

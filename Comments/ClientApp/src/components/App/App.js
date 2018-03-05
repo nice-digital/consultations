@@ -7,9 +7,7 @@ import { Helmet } from "react-helmet";
 import DemoPage from "../DemoPage";
 import FullPage from "../FullPage";
 import Home from "../Home/Home";
-import Counter from "../Counter/Counter";
 import FetchData from "../FetchData/FetchData";
-import BasicForm from "../BasicForm/BasicForm";
 import Document from "../Document/Document";
 import NotFound from "../NotFound/NotFound";
 
@@ -28,24 +26,10 @@ export default class App extends Component {
 						</DemoPage>
 					</Route>
 
-					{/*counter*/}
-					<Route path="/counter">
-						<DemoPage>
-							<Counter />
-						</DemoPage>
-					</Route>
-
 					{/*fetch-data*/}
 					<Route path="/fetchdata">
 						<DemoPage>
 							<FetchData />
-						</DemoPage>
-					</Route>
-
-					{/*basic-form*/}
-					<Route path="/basic-form">
-						<DemoPage>
-							<BasicForm />
 						</DemoPage>
 					</Route>
 

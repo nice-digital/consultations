@@ -10,7 +10,7 @@ import * as fs from "fs";
 
 import { processHtml } from "./html-processor";
 
-import App from "./../App";
+import App from "./../components/App/App";
 
 const IsProduction: boolean = process.env.NODE_ENV === "production";
 
@@ -64,7 +64,7 @@ export const serverRenderer = (params): Promise => {
 			resolve({ html: html, statusCode: context.status || 200 });
 		});
 
-		
+
 	});
 };
 

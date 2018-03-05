@@ -44,7 +44,7 @@ export const preload = (staticContext, endpoint) => {
 	console.log(`Data with key '${endpoint}' loaded async from server`);
 	staticContext.preload.data[endpoint] = data;
 
-	// Track promises on the static context so that we can wait for all of them to resolve before 
+	// Track promises on the static context so that we can wait for all of them to resolve before
 	staticContext.preload.loaders.push(promise);
 	return null;
 }

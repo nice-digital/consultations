@@ -1,75 +1,84 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Helmet } from "react-helmet";
+import React, { Component } from 'react';
+import { withRouter } from 'react-router';
 
-import { fetchForecastData } from "./forecastActions";
+import preload from "./../../data/pre-loader";
+import load from "./../../data/loader";
 
-class FetchData extends Component {
-	componentWillMount() {
-		this.props.fetchForecastData();
+export class FetchData extends Component {
+	displayName = FetchData.name
+
+	constructor(props) {
+		super(props);
+
+		this.state = { forecasts: [], loading: true, date: new Date() };
+
+		const preloaded = preload(this.props.staticContext, "weather");
+
+		if (preloaded) {
+			this.state = { forecasts: preloaded, loading: false, date: new Date() };
+		}
+
+		this.handleReload = this.handleReload.bind(this);
 	}
 
-	renderForecastsTable = () => {
+	componentDidMount() {
+		if (this.state.forecasts.length === 0) {
+			load("weather")
+				.then((data) => {
+					this.setState({ forecasts: data, loading: false, date: new Date() });
+				});
+		}
+	}
+
+	handleReload() {
+		load("weather")
+			.then((data) => {
+				this.setState({ forecasts: data, loading: false, date: new Date() });
+			});
+	}
+
+	static renderForecastsTable(forecasts) {
 		return (
-			<table className="table">
-				<Helmet>
-					<title>Weather Forecast</title>
-				</Helmet>
+			<table className='table'>
 				<thead>
-					<tr>
-						<th>Date</th>
-						<th>Temp. (C)</th>
-						<th>Temp. (F)</th>
-						<th>Summary</th>
-					</tr>
+				<tr>
+					<th>Date</th>
+					<th>Temp. (C)</th>
+					<th>Temp. (F)</th>
+					<th>Summary</th>
+				</tr>
 				</thead>
 				<tbody>
-					{this.props.forecastData.map(forecast => (
-						<tr key={forecast.dateFormatted}>
-							<td>{forecast.dateFormatted}</td>
-							<td>{forecast.temperatureC}</td>
-							<td>{forecast.temperatureF}</td>
-							<td>{forecast.summary}</td>
-						</tr>
-					))}
+				{forecasts.map(forecast =>
+					<tr key={forecast.dateFormatted}>
+						<td>{forecast.dateFormatted}</td>
+						<td>{forecast.temperatureC}</td>
+						<td>{forecast.temperatureF}</td>
+						<td>{forecast.summary}</td>
+					</tr>
+				)}
 				</tbody>
 			</table>
 		);
-	};
+	}
 
 	render() {
-		const { forecastData, forecastStatus } = this.props;
-		if (!forecastStatus) return null;
-		if (forecastStatus === "failed")
-			return (
-				<div>
-					<h1>Request Failed</h1>
-					<pre>{forecastData.toString()}</pre>
-				</div>
-			);
-		if (forecastStatus === "complete")
-			return (
-				<div>
-					<h1>Weather forecast</h1>
-					<p>This component demonstrates fetching data from the server.</p>
-					{this.renderForecastsTable()}
-				</div>
-			);
-		return <h1><i>Loading...</i></h1>;
+		let contents = this.state.loading
+			? <p><em>Loading...</em></p>
+			: FetchData.renderForecastsTable(this.state.forecasts);
+
+		console.log(`FetchData: Render ${this.state.forecasts.length}`);
+
+		return (
+			<div>
+				<h1>Weather forecast</h1>
+				<p>{this.state.date.toString()}</p>
+				<p>This component demonstrates fetching data from the server.</p>
+				{contents}
+				<button onClick={this.handleReload}>Reload</button>
+			</div>
+		);
 	}
 }
 
-function mapDispatchToProps(dispatch) {
-	return {
-		fetchForecastData: () => dispatch(fetchForecastData())
-	};
-}
-
-function mapStateToProps(state) {
-	return {
-		forecastStatus: state.forecast.status,
-		forecastData: state.forecast.data
-	};
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(FetchData);
+export default withRouter(FetchData);
