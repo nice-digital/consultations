@@ -1,8 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
-using NICE.Feeds.Models.Indev;
 
 namespace Comments.ViewModels
 {
@@ -81,97 +80,5 @@ namespace Comments.ViewModels
         }
 
         public IList<Document> Documents { get; set; }
-    }
-
-    public class Document
-    {
-        [JsonConstructor]
-        public Document(int documentId, bool supportsComments, bool isSupportingDocument, string title, IEnumerable<Chapter> chapters)
-        {
-            DocumentId = documentId;
-            SupportsComments = supportsComments;
-            IsSupportingDocument = isSupportingDocument;
-            Title = title;
-            Chapters = chapters;
-        }
-        public Document(Resource resource)
-        {
-            DocumentId = resource.ConsultationDocumentId;
-            SupportsComments = resource.IsConsultationCommentsDocument;
-
-            IsSupportingDocument = resource.ConsultationDocumentId < 0;
-
-            if (resource.Document != null)
-            {
-                Title = resource.Document.Title;
-                if (resource.Document.Chapters != null)
-                {
-                    Chapters = resource.Document.Chapters.Select(c => new Chapter(c));
-                }
-            }
-        }
-
-        public int DocumentId { get; private set; }
-        public bool SupportsComments { get; private set; }
-        public bool IsSupportingDocument { get; private set; }
-        public string Title { get; private set; }
-        public IEnumerable<Chapter> Chapters { get; private set; }
-    }
-
-    public class Chapter
-    {
-        [JsonConstructor]
-        public Chapter(string slug, string title)
-        {
-            Slug = slug;
-            Title = title;
-        }
-        public Chapter(ChapterInfo chapter)
-        {
-            Slug = chapter.Slug;
-            Title = chapter.Title;
-        }
-        
-        public string Slug { get; protected set; }
-        public string Title { get; protected set; }
-        
-    }
-
-    public class ChapterWithHTML : Chapter
-    {
-        [JsonConstructor]
-        public ChapterWithHTML(string slug, string title, string content, IEnumerable<ChapterSection> sections) : base(slug, title)
-        {
-            Content = content;
-            Sections = sections;
-        }
-
-        public ChapterWithHTML(ConsultationChapter chapter) : base(chapter.Slug, chapter.Title)
-        {
-            Content = chapter.Content;
-            Sections = chapter.Sections?.Select(s => new ChapterSection(s));
-        }
-
-        public string Content { get; set; }
-        public IEnumerable<ChapterSection> Sections { get; set; }
-    }
-
-    public class ChapterSection
-    {
-        [JsonConstructor]
-        public ChapterSection(string slug, string title)
-        {
-            Slug = slug;
-            Title = title;
-        }
-
-        public ChapterSection(ChapterSections section)
-        {
-            Slug = section.Slug;
-            Title = section.Title;
-        }
-
-        public string Slug { get; private set; }
-        public string Title { get; private set; }
     }
 }

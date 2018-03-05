@@ -16,7 +16,7 @@ namespace Comments.Test.IntegrationTests
     public class ApiTests : TestBase
     {
         [Fact]
-        public async Task GetDocumentReturnsEmptyFeedIII()
+        public async Task GetDocumentReturnsEmptyFeed()
         {
             //Arrange (in the base constructor for this one.)
 

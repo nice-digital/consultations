@@ -39,9 +39,6 @@
     <None Update="diff-assertions.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="IntegrationTests\WebTests.GetConsultationHomepage.txt.expected.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
   <!-- https://github.com/NuGet/Home/issues/4412 -->
