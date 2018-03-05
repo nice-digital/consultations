@@ -8,7 +8,7 @@ import { HashLink } from "react-router-hash-link";
 
 type PropsType = {};
 
-class FetchData extends Component<PropsType> {
+class Document extends Component<PropsType> {
 
 	render() {
 		const breadcrumbs = [
@@ -170,4 +170,4 @@ class FetchData extends Component<PropsType> {
 	}
 }
 
-export default FetchData;
+export default Document;
