@@ -2,22 +2,17 @@
 
 import React from "react";
 
-type RootType = {
+type LinkType = {|
 	label: string,
 	url: string
-};
+|};
 
-type PropType = {
-	root: RootType,
-	links: [
-		{
-			label: string,
-			url: string
-		}
-	]
-};
+type PropsType = {|
+	root: LinkType,
+	links: Array<LinkType>
+|};
 
-function StackedNav(props: PropType) {
+function StackedNav(props: PropsType) {
 	const { root, links } = props.links;
 	return (
 		<nav className="stacked-nav" aria-label="{root.label}">
@@ -35,14 +30,14 @@ function StackedNav(props: PropType) {
 	);
 }
 
-function rootLabel(root: RootType) {
+function rootLabel(root: LinkType) {
 	if (root.label) {
 		return <h2 className="stacked-nav__root">{rootLink(root)}</h2>;
 	}
 	return null;
 }
 
-function rootLink(root: RootType) {
+function rootLink(root: LinkType) {
 	if (root.url) {
 		return <a href={root.url}>{root.label}</a>;
 	} else {
