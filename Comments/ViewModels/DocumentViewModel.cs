@@ -1,18 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Comments.ViewModels
 {
     public class DocumentViewModel
     {
-        public DocumentViewModel(Consultation consultation, ChapterWithHTML chapterHtml, IEnumerable<Comment> comments, IEnumerable<Question> questions)
+        public DocumentViewModel(ConsultationDetail consultation, int selectedConsultationDocumentId, ChapterWithHTML chapterHtml, IEnumerable<Comment> comments, IEnumerable<Question> questions)
         {
             Consultation = consultation;
+            SelectedConsultationDocumentId = selectedConsultationDocumentId;
             ChapterHTML = chapterHtml;
             Comments = comments;
             Questions = questions;
         }
 
-        public Consultation Consultation { get; private set; }
+        public ConsultationDetail Consultation { get; private set; }
+
+        public int SelectedConsultationDocumentId { get; private set; }
 
         public ChapterWithHTML ChapterHTML { get; private set; }
 

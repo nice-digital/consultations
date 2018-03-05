@@ -11,7 +11,7 @@ namespace Comments.Test.Infrastructure
         {
             var expectedFilePath = Path.GetDirectoryName(sourceFilePath);
             var callingFileNameWithoutExtension = Path.GetFileNameWithoutExtension(sourceFilePath); //usually also the class name of the caller.
-            var expectedFileName = $"{callingFileNameWithoutExtension}.{memberName}.txt";
+            var expectedFileName = $"{callingFileNameWithoutExtension}.{memberName}";
 
             var fileToOpen = Path.Combine(expectedFilePath, expectedFileName);
 
