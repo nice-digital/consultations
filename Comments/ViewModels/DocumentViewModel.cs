@@ -1,19 +1,23 @@
-﻿using Comments.Models;
-using System.Collections.Generic;
-using Location = Comments.Models.Location;
+﻿using System.Collections.Generic;
 
 namespace Comments.ViewModels
 {
     public class DocumentViewModel
     {
-        public DocumentViewModel(string title, IEnumerable<Location> locations)
+        public DocumentViewModel(Consultation consultation, ChapterWithHTML chapterHtml, IEnumerable<Comment> comments, IEnumerable<Question> questions)
         {
-            Title = title;
-            Locations = locations;
+            Consultation = consultation;
+            ChapterHTML = chapterHtml;
+            Comments = comments;
+            Questions = questions;
         }
 
-        public string Title { get; private set; }
+        public Consultation Consultation { get; private set; }
 
-        public IEnumerable<Location> Locations{ get; private set; }
+        public ChapterWithHTML ChapterHTML { get; private set; }
+
+        public IEnumerable<ViewModels.Comment> Comments { get; private set; }
+
+        public IEnumerable<ViewModels.Question> Questions { get; private set; }
     }
 }

@@ -9,32 +9,37 @@ using Xunit;
 
 namespace Comments.Test.UnitTests
 {
-    public class UnitUnitTests : UnitTestBase
+    public class Tests : TestBase
     {
         [Fact]
         public void Comments_CanBeRead()
-        {
-            ReinitialiseDatabase();
+        { 
+            // Arrange
+            ResetDatabase();
             var consultationId = RandomNumber();
             var documentId = RandomNumber();
             var commentText = Guid.NewGuid().ToString();
 
             var locationId = AddLocation(consultationId, documentId);
-            AddComment(locationId, commentText);
+            AddComment(locationId, commentText, isDeleted: false);
 
+            // Act
             DocumentViewModel viewModel;
             using (var consultationsContext = new ConsultationsContext(_options))
             {
-                var consultationService = new ConsultationService(consultationsContext);
-                viewModel = consultationService.GetAllCommentsAndQuestionsForDocument(consultationId, documentId);
+                var consultationService = new CommentService(consultationsContext);
+                viewModel = consultationService.GetAllCommentsAndQuestionsForDocument(consultationId, documentId, "chapter-slug");
             }
-            viewModel.Locations.Single().Comment.Single().CommentText.ShouldBe(commentText);
+
+            //Assert
+            viewModel.Comments.Single().CommentText.ShouldBe(commentText);
         }
 
         [Fact]
         public void CommentsQuestionsAndAnswers_CanBeRead()
         {
-            ReinitialiseDatabase();
+            // Arrange
+            ResetDatabase();
             var consultationId = RandomNumber();
             var documentId = RandomNumber();
             var commentText = Guid.NewGuid().ToString();
@@ -43,18 +48,19 @@ namespace Comments.Test.UnitTests
 
             AddCommentsAndQuestionsAndAnswers(consultationId, documentId, commentText, questionText, answerText);
 
+            // Act
             DocumentViewModel viewModel;
             using (var consultationsContext = new ConsultationsContext(_options))
             {
-                var consultationService = new ConsultationService(consultationsContext);
-                viewModel = consultationService.GetAllCommentsAndQuestionsForDocument(consultationId, documentId);
+                var consultationService = new CommentService(consultationsContext);
+                viewModel = consultationService.GetAllCommentsAndQuestionsForDocument(consultationId, documentId, "chapter-slug");
             }
 
-            var location = viewModel.Locations.Single();
-            location.Comment.Single().CommentText.ShouldBe(commentText);
-            var question = location.Question.Single();
+            //Assert
+            viewModel.Comments.Single().CommentText.ShouldBe(commentText);
+            var question = viewModel.Questions.Single();
             question.QuestionText.ShouldBe(questionText);
-            question.Answer.Single().AnswerText.ShouldBe(answerText);
+            question.Answers.Single().AnswerText.ShouldBe(answerText);
         }
     }
 }

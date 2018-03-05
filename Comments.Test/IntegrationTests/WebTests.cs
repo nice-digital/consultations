@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Comments.Test.IntegrationTests
 {
-    public class WebTests : IntegrationTestBase
+    public class WebTests : TestBase
     {
         [Fact]
         public async Task GetConsultationHomepage()
