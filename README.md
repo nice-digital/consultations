@@ -23,6 +23,7 @@
   - [In-dev integration](#in-dev-integration)
 - [Set up](#set-up)
   - [Gotchas](#gotchas)
+- [Tests](#tests)
 - [Good to know](#good-to-know)
   - [Environments](#environments)
 
@@ -93,10 +94,11 @@ Consultations sits below [Varnish](https://github.com/nhsevidence/varnish) so is
 
 ### Technical stack
 - [Varnish](https://varnish-cache.org/) for infrastructure-level routing
-- [.NET Core](https://github.com/dotnet/core) on the server
+- [.NET Core 2](https://github.com/dotnet/core) on the server
     - [xUnit.net](https://xunit.github.io/) for .NET unit tests
-    - [Shouldly](https://github.com/shouldly/shouldly) for .NET assertions
     - [Moq](https://github.com/moq/moq4) for mocking in .NET
+    - [Shouldly](https://github.com/shouldly/shouldly) for .NET assertions
+    - [KDiff](http://kdiff3.sourceforge.net/) for diffing approvals tests
 - [SQL Server](https://www.microsoft.com/en-gb/sql-server/sql-server-2017) as our database
     - [Entity Framework Core](https://github.com/aspnet/EntityFrameworkCore) as an ORM
     - [EF Core In-Memory Database Provider](https://docs.microsoft.com/en-us/ef/core/providers/in-memory/) for integration tests
@@ -116,17 +118,27 @@ Consultations sits below [Varnish](https://github.com/nhsevidence/varnish) so is
 TODO
   
 ## Set up
-1. Clone the project `git clone git@github.com:nhsevidence/consultations.git`
-2. Open *Consultations.sln*
-3. Press F5 to run the project in debug mode
-4. Dependencies will download (npm and NuGet) so be patient on first run
-5. The app will run in IIS Express on http://localhost:52679/
-6. cd into *consultations\Comments\ClientApp* and run `npm start` if Startup is using `UseProxyToSpaDevelopmentServer`. This runs a react dev server on http://localhost:3000/.
-7. Run `npm test` in a separate window to run client side tests in watch mode
+1. Install [KDiff](http://kdiff3.sourceforge.net/) to be able see diffs from integration tests
+2. Clone the project `git clone git@github.com:nhsevidence/consultations.git`
+3. Open *Consultations.sln*
+4. Press F5 to run the project in debug mode
+5. Dependencies will download (npm and NuGet) so be patient on first run
+6. The app will run in IIS Express on http://localhost:52679/
+7. cd into *consultations\Comments\ClientApp* and run `npm start` if Startup is using `UseProxyToSpaDevelopmentServer`. This runs a react dev server on http://localhost:3000/.
+8. Run `npm test` in a separate window to run client side tests in watch mode
 
 ### Gotchas
 - `spa.UseReactDevelopmentServer` can be slow so try using `spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");` instead within [Startup.cs](Comments/Startup.cs).
-  
+
+## Tests
+
+The project uses serveral layers of tests:
+
+- C# low-level unit tests, run via xUnit, asserted with Shouldly. See [Comments.Test/UnitTests](Comments.Test/UnitTests).
+- C# 'integration' tests (approval based of server rendered HTML), run via xUnit, asserted with Shouldly, diffed with Kdiff. See [Comments.Test/IntegrationTests](Comments.Test/IntegrationTests).
+- JavaScript unit tests via jest. See [Comments/ClientApp/src](Comments/ClientApp/src).
+- Functional high-level tests, via webdriver.io.
+
 ## Good to know
 
 ### Environments
