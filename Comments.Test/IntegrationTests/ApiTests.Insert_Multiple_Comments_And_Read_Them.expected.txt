@@ -1,1 +1,194 @@
-{"consultation":{"documents":[{"documentId":2,"supportsComments":false,"isSupportingDocument":false,"title":null,"chapters":null},{"documentId":2,"supportsComments":true,"isSupportingDocument":false,"title":"Unstable angina and NSTEMI","chapters":[{"slug":"introduction","title":"Introduction"},{"slug":"patient-centred-care","title":"Patient-centred care"},{"slug":"key-priorities-for-implementation","title":"Key priorities for implementation"},{"slug":"guidance","title":"1 Guidance"},{"slug":"notes-on-the-scope-of-the-guidance","title":"2 Notes on the scope of the guidance"},{"slug":"implementation","title":"3 Implementation"},{"slug":"research-recommendations","title":"4 Research recommendations"},{"slug":"other-versions-of-this-guideline","title":"5 Other versions of this guideline"},{"slug":"related-nice-guidance","title":"6 Related NICE guidance"},{"slug":"updating-the-guideline","title":"7 Updating the guideline"},{"slug":"appendix-a-the-guideline-development-group-and-nice-project-team","title":"Appendix A: The Guideline Development Group and NICE project team"},{"slug":"appendix-b-the-guideline-review-panel","title":"Appendix B: The Guideline Review Panel"},{"slug":"appendix-c-the-algorithm","title":"Appendix C: The algorithm"},{"slug":"changes-after-publication","title":"Changes after publication"},{"slug":"about-this-guideline","title":"About this guideline"}]},{"documentId":2,"supportsComments":false,"isSupportingDocument":false,"title":null,"chapters":null},{"documentId":2,"supportsComments":true,"isSupportingDocument":false,"title":"Sinusitis (acute): antimicrobial prescribing","chapters":[{"slug":"overview","title":"Overview"},{"slug":"background","title":"Background"},{"slug":"recommendations","title":"Recommendations"},{"slug":"symptoms-and-signs","title":"Symptoms and signs"},{"slug":"summary-of-the-evidence","title":"Summary of the evidence"},{"slug":"other-considerations","title":"Other considerations"}]}],"reference":"GID-TA10232","title":"For consultation comments","consultationName":"Appraisal consultation","startDate":"2018-04-01T00:00:00","endDate":"2018-05-31T17:00:00","consultationType":"Appraisal consultation","resourceTitleId":null,"projectType":"TA","productTypeName":"Technology appraisal guidance","developedAs":null,"relevantTo":null,"consultationId":1,"process":"TAG","allowConsultationComments":true,"partiallyUpdatedProjectReference":null,"origProjectReference":null},"selectedConsultationDocumentId":1,"chapterHTML":{"content":null,"sections":null,"slug":null,"title":"For consultation comments"},"comments":[{"commentId":1,"lastModifiedDate":"0001-01-01T00:00:00","lastModifiedByUserId":"00000000-0000-0000-0000-000000000000","commentText":"comment text","locationId":1,"consultationId":1,"documentId":1,"chapterSlug":"chapter-slug","sectionSlug":null,"rangeStart":null,"rangeStartOffset":null,"rangeEnd":null,"rangeEndOffset":null,"quote":null},{"commentId":2,"lastModifiedDate":"0001-01-01T00:00:00","lastModifiedByUserId":"00000000-0000-0000-0000-000000000000","commentText":"comment text","locationId":2,"consultationId":1,"documentId":1,"chapterSlug":"chapter-slug","sectionSlug":null,"rangeStart":null,"rangeStartOffset":null,"rangeEnd":null,"rangeEndOffset":null,"quote":null},{"commentId":3,"lastModifiedDate":"0001-01-01T00:00:00","lastModifiedByUserId":"00000000-0000-0000-0000-000000000000","commentText":"comment text","locationId":3,"consultationId":1,"documentId":1,"chapterSlug":"chapter-slug","sectionSlug":null,"rangeStart":null,"rangeStartOffset":null,"rangeEnd":null,"rangeEndOffset":null,"quote":null}],"questions":[]}
+{
+  "consultation": {
+    "documents": [
+      {
+        "documentId": 2,
+        "supportsComments": false,
+        "isSupportingDocument": false,
+        "title": null,
+        "chapters": null
+      },
+      {
+        "documentId": 2,
+        "supportsComments": true,
+        "isSupportingDocument": false,
+        "title": "Unstable angina and NSTEMI",
+        "chapters": [
+          {
+            "slug": "introduction",
+            "title": "Introduction"
+          },
+          {
+            "slug": "patient-centred-care",
+            "title": "Patient-centred care"
+          },
+          {
+            "slug": "key-priorities-for-implementation",
+            "title": "Key priorities for implementation"
+          },
+          {
+            "slug": "guidance",
+            "title": "1 Guidance"
+          },
+          {
+            "slug": "notes-on-the-scope-of-the-guidance",
+            "title": "2 Notes on the scope of the guidance"
+          },
+          {
+            "slug": "implementation",
+            "title": "3 Implementation"
+          },
+          {
+            "slug": "research-recommendations",
+            "title": "4 Research recommendations"
+          },
+          {
+            "slug": "other-versions-of-this-guideline",
+            "title": "5 Other versions of this guideline"
+          },
+          {
+            "slug": "related-nice-guidance",
+            "title": "6 Related NICE guidance"
+          },
+          {
+            "slug": "updating-the-guideline",
+            "title": "7 Updating the guideline"
+          },
+          {
+            "slug": "appendix-a-the-guideline-development-group-and-nice-project-team",
+            "title": "Appendix A: The Guideline Development Group and NICE project team"
+          },
+          {
+            "slug": "appendix-b-the-guideline-review-panel",
+            "title": "Appendix B: The Guideline Review Panel"
+          },
+          {
+            "slug": "appendix-c-the-algorithm",
+            "title": "Appendix C: The algorithm"
+          },
+          {
+            "slug": "changes-after-publication",
+            "title": "Changes after publication"
+          },
+          {
+            "slug": "about-this-guideline",
+            "title": "About this guideline"
+          }
+        ]
+      },
+      {
+        "documentId": 2,
+        "supportsComments": false,
+        "isSupportingDocument": false,
+        "title": null,
+        "chapters": null
+      },
+      {
+        "documentId": 2,
+        "supportsComments": true,
+        "isSupportingDocument": false,
+        "title": "Sinusitis (acute): antimicrobial prescribing",
+        "chapters": [
+          {
+            "slug": "overview",
+            "title": "Overview"
+          },
+          {
+            "slug": "background",
+            "title": "Background"
+          },
+          {
+            "slug": "recommendations",
+            "title": "Recommendations"
+          },
+          {
+            "slug": "symptoms-and-signs",
+            "title": "Symptoms and signs"
+          },
+          {
+            "slug": "summary-of-the-evidence",
+            "title": "Summary of the evidence"
+          },
+          {
+            "slug": "other-considerations",
+            "title": "Other considerations"
+          }
+        ]
+      }
+    ],
+    "reference": "GID-TA10232",
+    "title": "For consultation comments",
+    "consultationName": "Appraisal consultation",
+    "startDate": "2018-04-01T00:00:00",
+    "endDate": "2018-05-31T17:00:00",
+    "consultationType": "Appraisal consultation",
+    "resourceTitleId": null,
+    "projectType": "TA",
+    "productTypeName": "Technology appraisal guidance",
+    "developedAs": null,
+    "relevantTo": null,
+    "consultationId": 1,
+    "process": "TAG",
+    "allowConsultationComments": true,
+    "partiallyUpdatedProjectReference": null,
+    "origProjectReference": null
+  },
+  "selectedConsultationDocumentId": 1,
+  "chapterHTML": {
+    "content": null,
+    "sections": null,
+    "slug": null,
+    "title": "For consultation comments"
+  },
+  "comments": [
+    {
+      "commentId": 1,
+      "lastModifiedDate": "0001-01-01T00:00:00",
+      "lastModifiedByUserId": "00000000-0000-0000-0000-000000000000",
+      "commentText": "comment text",
+      "locationId": 1,
+      "consultationId": 1,
+      "documentId": 1,
+      "chapterSlug": "chapter-slug",
+      "sectionSlug": null,
+      "rangeStart": null,
+      "rangeStartOffset": null,
+      "rangeEnd": null,
+      "rangeEndOffset": null,
+      "quote": null
+    },
+    {
+      "commentId": 2,
+      "lastModifiedDate": "0001-01-01T00:00:00",
+      "lastModifiedByUserId": "00000000-0000-0000-0000-000000000000",
+      "commentText": "comment text",
+      "locationId": 2,
+      "consultationId": 1,
+      "documentId": 1,
+      "chapterSlug": "chapter-slug",
+      "sectionSlug": null,
+      "rangeStart": null,
+      "rangeStartOffset": null,
+      "rangeEnd": null,
+      "rangeEndOffset": null,
+      "quote": null
+    },
+    {
+      "commentId": 3,
+      "lastModifiedDate": "0001-01-01T00:00:00",
+      "lastModifiedByUserId": "00000000-0000-0000-0000-000000000000",
+      "commentText": "comment text",
+      "locationId": 3,
+      "consultationId": 1,
+      "documentId": 1,
+      "chapterSlug": "chapter-slug",
+      "sectionSlug": null,
+      "rangeStart": null,
+      "rangeStartOffset": null,
+      "rangeEnd": null,
+      "rangeEndOffset": null,
+      "quote": null
+    }
+  ],
+  "questions": []
+}
