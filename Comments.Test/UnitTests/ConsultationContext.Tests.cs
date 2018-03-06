@@ -25,12 +25,10 @@ namespace Comments.Test.UnitTests
             // Act
             using (var consultationsContext = new ConsultationsContext(_options))
             {
-
                 var filteredLocations = consultationsContext.Location.Where(l =>
                         l.ConsultationId.Equals(consultationId) &&
                         (!l.DocumentId.HasValue || l.DocumentId.Equals(documentId)))
                     .Include(l => l.Comment);
-
 
                 var unfilteredLocations = consultationsContext.Location.Where(l =>
                         l.ConsultationId.Equals(consultationId) &&
@@ -38,13 +36,10 @@ namespace Comments.Test.UnitTests
                     .Include(l => l.Comment)
                     .IgnoreQueryFilters();
 
-
                 //Assert
                 filteredLocations.Single().Comment.Count.ShouldBe(0);
                 unfilteredLocations.Single().Comment.Count.ShouldBe(1);
             }
         }
-
-
     }
 }
