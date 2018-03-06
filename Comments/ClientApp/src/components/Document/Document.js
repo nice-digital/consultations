@@ -4,7 +4,7 @@ import React, { Component } from "react";
 import { Helmet } from "react-helmet";
 import Breadcrumbs from "./../Breadcrumbs/Breadcrumbs";
 import StackedNav from "./../StackedNav/StackedNav";
-import { HashLinkTop } from "./../component_helpers";
+import { HashLinkTop } from "./../../helpers/component_helpers";
 import axios from "axios";
 
 type PropsType = {};
@@ -24,7 +24,6 @@ class Document extends Component<PropsType, StateType> {
 
 	componentDidMount() {
 		axios("http://127.0.0.1:1234/sample.json").then(response => {
-			console.log(response);
 			this.setState({
 				document: response.data
 			});
@@ -43,11 +42,15 @@ class Document extends Component<PropsType, StateType> {
 		if (this.state.document) {
 			const { sections } = this.state.document.chapterHTML;
 			return (
-				<ul>
+				<ol className="in-page-nav__list" aria-hidden="false" role="menubar">
 					{sections.map(item => {
-						return <li key={item.title}>{HashLinkTop(item.title, `#${item.slug}`, true)}</li>;
+						return (
+							<li className="in-page-nav__item" key={item.title}>
+								{HashLinkTop(item.title, `#${item.slug}`, "smooth", "start")}
+							</li>
+						);
 					})}
-				</ul>
+				</ol>
 			);
 		}
 	};
@@ -111,7 +114,14 @@ class Document extends Component<PropsType, StateType> {
 							<div dangerouslySetInnerHTML={this.renderHTML()} />
 						</div>
 					</div>
-					<div data-g="12 md:3">{this.renderInPageNav()}</div>
+					<div data-g="12 md:3">
+						<nav className="in-page-nav" aria-labelledby="inpagenav-title">
+							<h2 id="inpagenav-title" className="in-page-nav__title">
+								On this page
+							</h2>
+							{this.renderInPageNav()}
+						</nav>
+					</div>
 				</div>
 			</div>
 		);
