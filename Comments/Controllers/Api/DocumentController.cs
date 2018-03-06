@@ -24,9 +24,15 @@ namespace Comments.Controllers.Api
             _logger = logger;
         }
 
-        // GET: eg. api/Document?consultationId=1&documentId=1&chapterSlug=chapter-slug
+        /// <summary>
+        /// GET: eg. api/Document?consultationId=1&documentId=1&chapterSlug=chapter-slug
+        /// </summary>
+        /// <param name="consultationId"></param>
+        /// <param name="documentId">nullable. if null, show first commentable document.</param>
+        /// <param name="chapterSlug">nullable. if not, show first chapter.</param>
+        /// <returns></returns>
         [HttpGet]
-        public DocumentViewModel Get(int consultationId, int documentId, string chapterSlug)
+        public DocumentViewModel Get(int consultationId, int? documentId, string chapterSlug)
         {
             return _commentService.GetAllCommentsAndQuestionsForDocument(consultationId, documentId, chapterSlug);
         }

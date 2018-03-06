@@ -1,6 +1,8 @@
 using Comments.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.NodeServices;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -14,12 +16,15 @@ namespace comments
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
+            Environment = env;
         }
 
         public IConfiguration Configuration { get; }
+
+        public IHostingEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -36,6 +41,15 @@ namespace comments
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            if (Environment.IsDevelopment())
+            {
+                services.AddNodeServices(options =>
+                {
+                    options.LaunchWithDebugging = true;
+                    options.DebuggingPort = 9229;
+                });
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,6 +79,17 @@ namespace comments
                     template: "{controller}/{action=Index}/{id?}");
 
                 // TODO Do we need routes.MapSpaFallbackRoute?
+            });
+
+            // DotNetCore SpaServices requires RawTarget property, which isn't set on a TestServer.
+            // So set it here to allow integration tests to work with SSR via SpaServices
+            app.Use(async (context, next) => {
+                var httpRequestFeature = context.Features.Get<IHttpRequestFeature>();
+
+                if (string.IsNullOrEmpty(httpRequestFeature.RawTarget))
+                    httpRequestFeature.RawTarget = httpRequestFeature.Path;
+
+                await next.Invoke();
             });
 
             app.UseSpa(spa =>

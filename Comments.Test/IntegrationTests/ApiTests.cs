@@ -21,7 +21,7 @@ namespace Comments.Test.IntegrationTests
             //Arrange (in the base constructor for this one.)
 
             // Act
-            var response = await _client.GetAsync("/api/Document?consultationId=1&documentId=1");
+            var response = await _client.GetAsync("/api/Document?consultationId=1&documentId=1&chapterSlug=some-chapter");
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
 
@@ -37,7 +37,7 @@ namespace Comments.Test.IntegrationTests
         public async Task CreateComment(int locationId, int consultationId, int? documentId)
         {
             //Arrange
-            var comment = new ViewModels.Comment(locationId, consultationId, documentId, null, null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty, "comment text");
+            var comment = new ViewModels.Comment(locationId, consultationId, documentId, "chapter-slug", null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty, "comment text");
             var content = new StringContent(JsonConvert.SerializeObject(comment), Encoding.UTF8, "application/json");
 
             // Act
