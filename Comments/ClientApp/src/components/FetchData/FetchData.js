@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import { withRouter } from 'react-router';
+import React, { Component } from "react";
+import { withRouter } from "react-router";
 
 import preload from "./../../data/pre-loader";
 import load from "./../../data/loader";
 
-export class FetchData extends Component {
-	displayName = FetchData.name
+class FetchData extends Component {
+	displayName = FetchData.name;
 
 	constructor(props) {
 		super(props);
@@ -23,49 +23,51 @@ export class FetchData extends Component {
 
 	componentDidMount() {
 		if (this.state.forecasts.length === 0) {
-			load("weather")
-				.then((data) => {
-					this.setState({ forecasts: data, loading: false, date: new Date() });
-				});
+			load("weather").then(data => {
+				this.setState({ forecasts: data, loading: false, date: new Date() });
+			});
 		}
 	}
 
 	handleReload() {
-		load("weather")
-			.then((data) => {
-				this.setState({ forecasts: data, loading: false, date: new Date() });
-			});
+		load("weather").then(data => {
+			this.setState({ forecasts: data, loading: false, date: new Date() });
+		});
 	}
 
 	static renderForecastsTable(forecasts) {
 		return (
-			<table className='table'>
+			<table className="table">
 				<thead>
-				<tr>
-					<th>Date</th>
-					<th>Temp. (C)</th>
-					<th>Temp. (F)</th>
-					<th>Summary</th>
-				</tr>
+					<tr>
+						<th>Date</th>
+						<th>Temp. (C)</th>
+						<th>Temp. (F)</th>
+						<th>Summary</th>
+					</tr>
 				</thead>
 				<tbody>
-				{forecasts.map(forecast =>
-					<tr key={forecast.dateFormatted}>
-						<td>{forecast.dateFormatted}</td>
-						<td>{forecast.temperatureC}</td>
-						<td>{forecast.temperatureF}</td>
-						<td>{forecast.summary}</td>
-					</tr>
-				)}
+					{forecasts.map(forecast => (
+						<tr key={forecast.dateFormatted}>
+							<td>{forecast.dateFormatted}</td>
+							<td>{forecast.temperatureC}</td>
+							<td>{forecast.temperatureF}</td>
+							<td>{forecast.summary}</td>
+						</tr>
+					))}
 				</tbody>
 			</table>
 		);
 	}
 
 	render() {
-		let contents = this.state.loading
-			? <p><em>Loading...</em></p>
-			: FetchData.renderForecastsTable(this.state.forecasts);
+		let contents = this.state.loading ? (
+			<p>
+				<em>Loading...</em>
+			</p>
+		) : (
+			FetchData.renderForecastsTable(this.state.forecasts)
+		);
 
 		console.log(`FetchData: Render ${this.state.forecasts.length}`);
 
