@@ -13,5 +13,5 @@
 
   //The format for calling the diff tool with the two arguments (the expected file will be the left argument)
   //Example, command line arguments for calling Visual Studio: "/diff {0} {1}"
-  "DiffToolArgsFormat": "{0} {1} -m -o {0}"
+  "DiffToolArgsFormat": "{0} {1} -m -o {0} --cs \"CreateBakFiles=0\""
 }
