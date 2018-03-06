@@ -8,11 +8,10 @@ namespace Comments.ViewModels
     public class Document
     {
         [JsonConstructor]
-        public Document(int documentId, bool supportsComments, bool isSupportingDocument, string title, IEnumerable<Chapter> chapters)
+        public Document(int documentId, bool supportsComments, string title, IEnumerable<Chapter> chapters)
         {
             DocumentId = documentId;
             SupportsComments = supportsComments;
-            IsSupportingDocument = isSupportingDocument;
             Title = title;
             Chapters = chapters;
         }
@@ -20,8 +19,6 @@ namespace Comments.ViewModels
         {
             DocumentId = resource.ConsultationDocumentId;
             SupportsComments = resource.IsConsultationCommentsDocument;
-
-            IsSupportingDocument = resource.ConsultationDocumentId < 0;
 
             if (resource.Document != null)
             {
@@ -35,7 +32,6 @@ namespace Comments.ViewModels
 
         public int DocumentId { get; private set; }
         public bool SupportsComments { get; private set; }
-        public bool IsSupportingDocument { get; private set; }
         public string Title { get; private set; }
         public IEnumerable<Chapter> Chapters { get; private set; }
     }

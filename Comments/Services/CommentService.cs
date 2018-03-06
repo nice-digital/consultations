@@ -15,7 +15,7 @@ namespace Comments.Services
         int EditComment(int commentId, ViewModels.Comment comment);
         ViewModels.Comment CreateComment(ViewModels.Comment comment);
         int DeleteComment(int commentId);
-        bool EnsureDocumentAndChapterAreValidWithinConsultation(ConsultationDetail consultation, ref int? documentId, ref string chapterSlug);
+        void EnsureDocumentAndChapterAreValidWithinConsultation(ConsultationDetail consultation, ref int? documentId, ref string chapterSlug);
     }
 
     public class CommentService : ICommentService
@@ -94,17 +94,26 @@ namespace Comments.Services
         /// <param name="documentId"></param>
         /// <param name="chapterSlug"></param>
         /// <returns></returns>
-        public bool EnsureDocumentAndChapterAreValidWithinConsultation(ConsultationDetail consultation, ref int? documentId, ref string chapterSlug)
+        public void EnsureDocumentAndChapterAreValidWithinConsultation(ConsultationDetail consultation, ref int? documentId, ref string chapterSlug)
         {
+            if (consultation.Documents == null || !consultation.Documents.Any())
+            {
+                throw new Exception("No documents found on consultation"); 
+            }
+            
             if (!documentId.HasValue)
             {
-                documentId = 1;
+                //documentId = consultation.Documents.OrderBy(d => d.SupportsComments)
             }
+
+
+
+
             if (string.IsNullOrEmpty(chapterSlug))
             {
                 chapterSlug = "some chapter";
             }
-            return true;
+            
         }
     }
 }

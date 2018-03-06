@@ -4,14 +4,12 @@
       {
         "documentId": 2,
         "supportsComments": false,
-        "isSupportingDocument": false,
         "title": null,
         "chapters": null
       },
       {
         "documentId": 2,
         "supportsComments": true,
-        "isSupportingDocument": false,
         "title": "Unstable angina and NSTEMI",
         "chapters": [
           {
@@ -79,14 +77,12 @@
       {
         "documentId": 2,
         "supportsComments": false,
-        "isSupportingDocument": false,
         "title": null,
         "chapters": null
       },
       {
         "documentId": 2,
         "supportsComments": true,
-        "isSupportingDocument": false,
         "title": "Sinusitis (acute): antimicrobial prescribing",
         "chapters": [
           {
