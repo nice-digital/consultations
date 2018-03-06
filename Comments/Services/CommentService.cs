@@ -69,8 +69,8 @@ namespace Comments.Services
             var feedService = new FeedConverterConverterService(new FeedReader(Feed.ConsultationCommentsListDetailMulitpleDoc)); //TODO: remove this reliance on the NICE.FeedTest nuget package.
             var consultation = new ViewModels.ConsultationDetail(feedService.ConvertConsultationDetail(consultationId));
             EnsureDocumentAndChapterAreValidWithinConsultation(consultation, ref documentId, ref chapterSlug);
-            
 
+            feedService = new FeedConverterConverterService(new FeedReader(Feed.ConsultationCommentsChapter)); //TODO: remove this
             var chapterWithHTML = new ViewModels.ChapterWithHTML(feedService.ConvertConsultationChapter(consultationId, documentId.Value, chapterSlug));
 
             var locations = _context.GetAllCommentsAndQuestionsForDocument(consultationId, documentId.Value);
