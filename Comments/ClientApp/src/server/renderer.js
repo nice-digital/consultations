@@ -6,13 +6,13 @@ import React from "react";
 import { renderToString  } from "react-dom/server";
 import { StaticRouter } from "react-router";
 import { Helmet } from "react-helmet";
+import * as fs from "fs";
 
 import { processHtml } from "./html-processor";
 
 import App from "./../App";
 
-// currently unused
-// const IsProduction = process.env.NODE_ENV === "production";
+const IsProduction: boolean = process.env.NODE_ENV === "production";
 
 // Returns a promise that resolves to an object containing the HTML to be rendered.
 // The params contains properties e.g.
@@ -20,36 +20,51 @@ import App from "./../App";
 // origin, url, baseUrl, absoluteUrl, domainTasks: { }, data: { originalHtml: "", ... }
 // The `params.data` property contains properties set in `SupplyData` in Startup.cs.
 export const serverRenderer = (params): Promise => {
-	return new Promise((resolve) => {
-
-		// Context object that Routes can use to pass properties 'out'. Primarily used for status code.
-		// E.g.
+	return new Promise((resolve, reject) => {
+		console.log("Server");
+		// Context object that Routes can use to pass properties 'out'. Primarily used for status code. E.g.:
 		//  <Route render={({ staticContext }) => {
 		//      if (staticContext) staticContext.status = 404;
 		//      return null; }} />
-		let context = {};
+		let context = {
+			preload: {
+				data: {}, // Key value pairs of preloaded data sets
+				loaders: [] // List of promises where we track preloading data
+			}
+		};
 
-		const rootContent = renderToString(
+		var app = (
 			<StaticRouter location={params.url} context={context}>
 				<App />
-			</StaticRouter>
-		);
+			</StaticRouter>);
 
-		const helmet = Helmet.renderStatic();
+		// First render: this trigger any data preloaders to fire
+		let rootContent = renderToString(app);
 
-		let html = params.data.originalHtml;
+		// Wait for all preloaders to have loaded before re-rendering the app
+		Promise.all(context.preload.loaders).then(function (values) {
 
-		html = processHtml(html, {
-			htmlAttributes: helmet.htmlAttributes.toString(),
-			bodyAttributes: helmet.bodyAttributes.toString(),
-			rootContent: rootContent,
-			title: helmet.title.toString(),
-			metas: helmet.meta.toString(),
-			links: helmet.link.toString(),
-			scripts: helmet.script.toString()
+			// Second render now that all the data preloaders have finished so we can render with data on the server
+			rootContent = renderToString(app);
+
+			const helmet = Helmet.renderStatic();
+
+			const clientPreloadedData = `\r\n<script>window.__PRELOADED__=${JSON.stringify(context.preload.data)};</script>\r\n`;
+
+			const html = processHtml(params.data.originalHtml, {
+				htmlAttributes: helmet.htmlAttributes.toString(),
+				bodyAttributes: helmet.bodyAttributes.toString(),
+				rootContent: rootContent,
+				title: helmet.title.toString(),
+				metas: helmet.meta.toString(),
+				links: helmet.link.toString(),
+				scripts: clientPreloadedData + helmet.script.toString()
+			});
+
+			resolve({ html: html, statusCode: context.status || 200 });
 		});
 
-		resolve({ html: html, statusCode: context.status || 200 });
+		
 	});
 };
 
