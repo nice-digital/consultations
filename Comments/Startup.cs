@@ -10,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using System;
+using System.IO;
+using Microsoft.Extensions.FileProviders;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
 
 namespace comments
@@ -71,7 +73,12 @@ namespace comments
 
             // TODO Which of these paths do we need?
             //app.UsePathBase("/consultations");
-            app.UseStaticFiles(); //"/consultations"
+            app.UseStaticFiles(); //this enables the wwwroot folder. 
+            //app.UseStaticFiles(new StaticFileOptions
+            //{
+            //    FileProvider = new PhysicalFileProvider(
+            //        Path.Combine(Directory.GetCurrentDirectory())), RequestPath = "/status.html"
+            //}); //"/consultations"
             //app.UseSpaStaticFiles();
 
             app.UseMvc(routes =>
