@@ -50,6 +50,8 @@ namespace comments
                     options.DebuggingPort = 9229;
                 });
             }
+
+            services.AddCors(); //adding CORS for Warren. todo: maybe move this into the isDevelopment block..
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
