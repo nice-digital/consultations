@@ -7,10 +7,10 @@ namespace Comments.Test.IntegrationTests
     public class WebTests : TestBase
     {
         [Fact]
-        public async Task GetConsultationHomepage()
+        public async Task Get_Consultations_Homepage()
         {
             // Act
-            var response = await _client.GetAsync("/consultations");
+            var response = await _client.GetAsync("/consultations"); //this route is temporary.
             response.EnsureSuccessStatusCode();
 
             var responseString = await response.Content.ReadAsStringAsync();
@@ -20,10 +20,10 @@ namespace Comments.Test.IntegrationTests
         }
 
         [Fact]
-        public async Task GetReactHomepage()
+        public async Task Get_React_Document_Page()
         {
             // Act
-            var response = await _client.GetAsync("/");
+            var response = await _client.GetAsync("/consultations/1/1/introduction");
             response.EnsureSuccessStatusCode();
 
             var responseString = await response.Content.ReadAsStringAsync();
