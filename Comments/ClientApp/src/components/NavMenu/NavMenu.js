@@ -13,7 +13,7 @@ export default class NavMenu extends Component {
 						<NavLink to={"/fetchdata"}>Fetch Data</NavLink>
 					</li>
 					<li className="stacked-nav__list-item">
-						<NavLink to={"/document"}>Document View</NavLink>
+						<NavLink to={"/1/1/introduction"}>Document View</NavLink>
 					</li>
 				</ul>
 			</nav>
