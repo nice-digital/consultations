@@ -1,7 +1,7 @@
 ﻿import React, { Component } from "react";
-import { Route } from "react-router";
+import { Route } from "react-router-dom";
 
-export class NotFound extends Component {
+export default class NotFound extends Component {
 	render() {
 		return (
 			<div>

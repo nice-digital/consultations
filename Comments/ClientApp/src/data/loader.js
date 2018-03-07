@@ -1,8 +1,9 @@
 import Endpoints from "./endpoints";
+import axios from "axios";
 
-export const load = (endpoint) => {
-	return fetch("http://localhost:52679/" + Endpoints[endpoint])
-		.then(response => response.json());
+const load = (endpoint) => {
+	return axios("http://localhost:52679/" + Endpoints[endpoint])
+		.then(response => response.data);
 };
 
 export default load;

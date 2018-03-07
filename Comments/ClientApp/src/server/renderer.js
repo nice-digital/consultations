@@ -6,13 +6,12 @@ import React from "react";
 import { renderToString  } from "react-dom/server";
 import { StaticRouter } from "react-router";
 import { Helmet } from "react-helmet";
-import * as fs from "fs";
 
 import { processHtml } from "./html-processor";
 
-import App from "./../App";
+import App from "./../components/App/App";
 
-const IsProduction: boolean = process.env.NODE_ENV === "production";
+// const IsProduction: boolean = process.env.NODE_ENV === "production";
 
 // Returns a promise that resolves to an object containing the HTML to be rendered.
 // The params contains properties e.g.
@@ -20,7 +19,7 @@ const IsProduction: boolean = process.env.NODE_ENV === "production";
 // origin, url, baseUrl, absoluteUrl, domainTasks: { }, data: { originalHtml: "", ... }
 // The `params.data` property contains properties set in `SupplyData` in Startup.cs.
 export const serverRenderer = (params): Promise => {
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve) => {
 		console.log("Server");
 		// Context object that Routes can use to pass properties 'out'. Primarily used for status code. E.g.:
 		//  <Route render={({ staticContext }) => {
@@ -42,7 +41,7 @@ export const serverRenderer = (params): Promise => {
 		let rootContent = renderToString(app);
 
 		// Wait for all preloaders to have loaded before re-rendering the app
-		Promise.all(context.preload.loaders).then(function (values) {
+		Promise.all(context.preload.loaders).then(function () {
 
 			// Second render now that all the data preloaders have finished so we can render with data on the server
 			rootContent = renderToString(app);
@@ -64,7 +63,7 @@ export const serverRenderer = (params): Promise => {
 			resolve({ html: html, statusCode: context.status || 200 });
 		});
 
-		
+
 	});
 };
 
