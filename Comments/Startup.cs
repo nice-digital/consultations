@@ -70,8 +70,8 @@ namespace comments
             }
 
             // TODO Which of these paths do we need?
-            app.UsePathBase("/consultations");
-            app.UseStaticFiles("/consultations");
+            //app.UsePathBase("/consultations");
+            app.UseStaticFiles(); //"/consultations"
             //app.UseSpaStaticFiles();
 
             app.UseMvc(routes =>

@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 namespace Comments.Controllers.Api
 {
     [Produces("application/json")]
-    [Route("api/Document")]
+    [Route("consultations/api/Document")]
     public class DocumentController : Controller
     {
         private readonly ICommentService _commentService;

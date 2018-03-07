@@ -21,7 +21,7 @@ namespace Comments.Test.IntegrationTests
             //Arrange (in the base constructor for this one.)
 
             // Act
-            var response = await _client.GetAsync("/api/Document?consultationId=1&documentId=1&chapterSlug=some-chapter");
+            var response = await _client.GetAsync("/consultations/api/Document?consultationId=1&documentId=1&chapterSlug=some-chapter");
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
 
@@ -41,7 +41,7 @@ namespace Comments.Test.IntegrationTests
             var content = new StringContent(JsonConvert.SerializeObject(comment), Encoding.UTF8, "application/json");
 
             // Act
-            var response = await _client.PostAsync("api/Comment", content);
+            var response = await _client.PostAsync("/consultations/api/Comment", content);
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
 
@@ -66,7 +66,7 @@ namespace Comments.Test.IntegrationTests
             await CreateComment(locationId, consultationId, 2); //different document id, this shouldn't be in the result set
 
             // Act
-            var response = await _client.GetAsync($"/api/Document?consultationId={consultationId}&documentId={documentId}");
+            var response = await _client.GetAsync($"/consultations/api/Document?consultationId={consultationId}&documentId={documentId}");
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
 
@@ -90,7 +90,7 @@ namespace Comments.Test.IntegrationTests
             AddCommentsAndQuestionsAndAnswers(consultationId, documentId, commentText, questionText, answerText);
             
             // Act
-            var response = await _client.GetAsync($"/api/Document?consultationId={consultationId}&documentId={documentId}");
+            var response = await _client.GetAsync($"/consultations/api/Document?consultationId={consultationId}&documentId={documentId}");
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
 
