@@ -19,6 +19,23 @@ type StateType = {
 					title: string
 				}
 			]
+		},
+		consultation: {
+			documents: [
+				{
+					documentId: number,
+					title: string,
+					chapters: [
+						{
+							slug: string,
+							title: string
+						}
+					]
+				}
+			],
+			title: string,
+			endDate: string,
+			reference: string
 		}
 	}
 };
@@ -72,39 +89,55 @@ class Document extends Component<PropsType, StateType> {
 				</ol>
 			);
 		}
-	}
+	};
+
+	renderSupportingDocumentLinks = () => {
+		if (this.state.document) {
+			const { documents } = this.state.document.consultation;
+
+			let documentList = [];
+
+			for (const document of documents) {
+				if (document.title && document.documentId) {
+					documentList.push({
+						label: document.title,
+						url: `/1/${document.documentId}/${document.chapters[0].slug}`
+					});
+				}
+			}
+
+			const links = {
+				root: {
+					label: "Additional documents to comment on",
+					url: "#"
+				},
+				links: documentList
+			};
+
+			return <StackedNav links={links} />;
+		}
+	};
 
 	render() {
 		const breadcrumbs = [
 			{ label: "Home", url: "/document" },
-			{ label: "NICE Guidance", url: null },
-			{ label: "In Consulation", url: null },
-			{ label: "Document title", url: null }
+			{ label: "NICE Guidance", url: "#" },
+			{ label: "In Consulation", url: "#" },
+			{ label: "Document title", url: "#" }
 		];
 
 		const chapterLinks = {
 			root: { label: "Chapters in this document", url: "#" },
 			links: [
-				{ label: "Key priorities for implementation", url: null },
-				{ label: "Recommendations", url: null },
+				{ label: "Key priorities for implementation", url: "#" },
+				{ label: "Recommendations", url: "#" },
 				{
 					label:
 						"Intravenous fluid therapy in children and young people in hospital",
-					url: null
+					url: "#"
 				},
-				{ label: "Context", url: null },
-				{ label: "Recommendations for research", url: null }
-			]
-		};
-
-		const additionalDocuments = {
-			root: { label: "Additional documents to comment on", url: "#" },
-			links: [
-				{
-					label:
-						"Intravenous fluid therapy in children and young people in hospital - Short Guideline",
-					url: null
-				}
+				{ label: "Context", url: "#" },
+				{ label: "Recommendations for research", url: "#" }
 			]
 		};
 
@@ -126,7 +159,7 @@ class Document extends Component<PropsType, StateType> {
 				<div className="grid">
 					<div data-g="12 md:3">
 						<StackedNav links={chapterLinks} />
-						<StackedNav links={additionalDocuments} />
+						{this.renderSupportingDocumentLinks()}
 					</div>
 					<div data-g="12 md:6">
 						<div className="document-comment-container">

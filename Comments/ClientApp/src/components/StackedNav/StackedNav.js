@@ -1,11 +1,12 @@
 // @flow
 
 import React from "react";
+import { Link } from "react-router-dom";
 
-type LinkType = {|
+type LinkType = {
 	label: string,
-	url: string | null
-|};
+	url: string
+};
 
 type PropsType = {
 	links: {
@@ -18,33 +19,30 @@ function StackedNav(props: PropsType) {
 	const { root, links } = props.links;
 	return (
 		<nav className="stacked-nav" aria-label="{root.label}">
-			{rootLabel(root)}
+			<RootLink {...root} />
 			<ul className="stacked-nav__list">
-				{links.map((item) => {
-					return (
-						<li key={item.label} className="stacked-nav__list-item">
-							<a href={item.url}>{item.label}</a>
-						</li>
-					);
-				})}
+				{links.map(item => <ListLink key={item.url} {...item} />)}
 			</ul>
 		</nav>
 	);
 }
 
-function rootLabel(root: LinkType) {
-	if (root.label) {
-		return <h2 className="stacked-nav__root">{rootLink(root)}</h2>;
-	}
-	return null;
-}
+const RootLink = (props: LinkType) => {
+	const { label, url } = props;
+	return (
+		<h2 className="stacked-nav__root">
+			<Link to={url}>{label}</Link>
+		</h2>
+	);
+};
 
-function rootLink(root: LinkType) {
-	if (root.url) {
-		return <a href={root.url}>{root.label}</a>;
-	} else {
-		return root.label;
-	}
-}
+const ListLink = (props: LinkType) => {
+	const { label, url } = props;
+	return (
+		<li key={label} className="stacked-nav__list-item">
+			<Link to={url}>{label}</Link>
+		</li>
+	);
+};
 
 export default StackedNav;
