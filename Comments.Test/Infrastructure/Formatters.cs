@@ -120,7 +120,7 @@ namespace Comments.Test.Infrastructure
                     return writer.ToString();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Log("Unable to format html. " + ex.Message);
                 return original;
