@@ -43,6 +43,7 @@ namespace Comments.Test.Infrastructure
         }
 
 
+        private const string EnvironmentNewLine = "\r\n"; //using Environment.NewLine on the build server uses "\r" and the tests break.
         private const string INDENT_STRING = "    ";
         private static string FormatJson(string json)
         {
@@ -52,9 +53,9 @@ namespace Comments.Test.Infrastructure
             var result =
                 from ch in json
                 let quotes = ch == '"' ? quoteCount++ : quoteCount
-                let lineBreak = ch == ',' && quotes % 2 == 0 ? ch + Environment.NewLine + String.Concat(Enumerable.Repeat(INDENT_STRING, indentation)) : null
-                let openChar = ch == '{' || ch == '[' ? ch + Environment.NewLine + String.Concat(Enumerable.Repeat(INDENT_STRING, ++indentation)) : ch.ToString()
-                let closeChar = ch == '}' || ch == ']' ? Environment.NewLine + String.Concat(Enumerable.Repeat(INDENT_STRING, --indentation)) + ch : ch.ToString()
+                let lineBreak = ch == ',' && quotes % 2 == 0 ? ch + EnvironmentNewLine + String.Concat(Enumerable.Repeat(INDENT_STRING, indentation)) : null
+                let openChar = ch == '{' || ch == '[' ? ch + EnvironmentNewLine + String.Concat(Enumerable.Repeat(INDENT_STRING, ++indentation)) : ch.ToString()
+                let closeChar = ch == '}' || ch == ']' ? EnvironmentNewLine + String.Concat(Enumerable.Repeat(INDENT_STRING, --indentation)) + ch : ch.ToString()
                 select lineBreak == null
                     ? openChar.Length > 1
                         ? openChar
@@ -143,7 +144,7 @@ namespace Comments.Test.Infrastructure
                         if (!string.IsNullOrEmpty(snippet.Trim()))
                         {
                             //Debug.WriteLine(snippet);
-                            writer.Write(Environment.NewLine);
+                            writer.Write(EnvironmentNewLine);
                             if (depth > 0) writer.Write(new String(' ', depth)); // add the indentation 
                             writer.Write(snippet);
                         }
