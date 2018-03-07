@@ -1,150 +1,160 @@
 {
-  "consultation": {
-    "documents": [
-      {
-        "documentId": 2,
-        "supportsComments": false,
-        "title": null,
-        "chapters": null
-      },
-      {
-        "documentId": 2,
-        "supportsComments": true,
-        "title": "Unstable angina and NSTEMI",
-        "chapters": [
-          {
-            "slug": "introduction",
-            "title": "Introduction"
-          },
-          {
-            "slug": "patient-centred-care",
-            "title": "Patient-centred care"
-          },
-          {
-            "slug": "key-priorities-for-implementation",
-            "title": "Key priorities for implementation"
-          },
-          {
-            "slug": "guidance",
-            "title": "1 Guidance"
-          },
-          {
-            "slug": "notes-on-the-scope-of-the-guidance",
-            "title": "2 Notes on the scope of the guidance"
-          },
-          {
-            "slug": "implementation",
-            "title": "3 Implementation"
-          },
-          {
-            "slug": "research-recommendations",
-            "title": "4 Research recommendations"
-          },
-          {
-            "slug": "other-versions-of-this-guideline",
-            "title": "5 Other versions of this guideline"
-          },
-          {
-            "slug": "related-nice-guidance",
-            "title": "6 Related NICE guidance"
-          },
-          {
-            "slug": "updating-the-guideline",
-            "title": "7 Updating the guideline"
-          },
-          {
-            "slug": "appendix-a-the-guideline-development-group-and-nice-project-team",
-            "title": "Appendix A: The Guideline Development Group and NICE project team"
-          },
-          {
-            "slug": "appendix-b-the-guideline-review-panel",
-            "title": "Appendix B: The Guideline Review Panel"
-          },
-          {
-            "slug": "appendix-c-the-algorithm",
-            "title": "Appendix C: The algorithm"
-          },
-          {
-            "slug": "changes-after-publication",
-            "title": "Changes after publication"
-          },
-          {
-            "slug": "about-this-guideline",
-            "title": "About this guideline"
-          }
-        ]
-      },
-      {
-        "documentId": 2,
-        "supportsComments": false,
-        "title": null,
-        "chapters": null
-      },
-      {
-        "documentId": 2,
-        "supportsComments": true,
-        "title": "Sinusitis (acute): antimicrobial prescribing",
-        "chapters": [
-          {
-            "slug": "overview",
-            "title": "Overview"
-          },
-          {
-            "slug": "background",
-            "title": "Background"
-          },
-          {
-            "slug": "recommendations",
-            "title": "Recommendations"
-          },
-          {
-            "slug": "symptoms-and-signs",
-            "title": "Symptoms and signs"
-          },
-          {
-            "slug": "summary-of-the-evidence",
-            "title": "Summary of the evidence"
-          },
-          {
-            "slug": "other-considerations",
-            "title": "Other considerations"
-          }
-        ]
-      }
+    "consultation":{
+        "documents":[
+            {
+                "documentId":2,
+                "supportsComments":false,
+                "title":null,
+                "chapters":null
+            },
+            {
+                "documentId":2,
+                "supportsComments":true,
+                "title":"Unstable angina and NSTEMI",
+                "chapters":[
+                    {
+                        "slug":"introduction",
+                        "title":"Introduction"
+                    },
+                    {
+                        "slug":"patient-centred-care",
+                        "title":"Patient-centred care"
+                    },
+                    {
+                        "slug":"key-priorities-for-implementation",
+                        "title":"Key priorities for implementation"
+                    },
+                    {
+                        "slug":"guidance",
+                        "title":"1 Guidance"
+                    },
+                    {
+                        "slug":"notes-on-the-scope-of-the-guidance",
+                        "title":"2 Notes on the scope of the guidance"
+                    },
+                    {
+                        "slug":"implementation",
+                        "title":"3 Implementation"
+                    },
+                    {
+                        "slug":"research-recommendations",
+                        "title":"4 Research recommendations"
+                    },
+                    {
+                        "slug":"other-versions-of-this-guideline",
+                        "title":"5 Other versions of this guideline"
+                    },
+                    {
+                        "slug":"related-nice-guidance",
+                        "title":"6 Related NICE guidance"
+                    },
+                    {
+                        "slug":"updating-the-guideline",
+                        "title":"7 Updating the guideline"
+                    },
+                    {
+                        "slug":"appendix-a-the-guideline-development-group-and-nice-project-team",
+                        "title":"Appendix A: The Guideline Development Group and NICE project team"
+                    },
+                    {
+                        "slug":"appendix-b-the-guideline-review-panel",
+                        "title":"Appendix B: The Guideline Review Panel"
+                    },
+                    {
+                        "slug":"appendix-c-the-algorithm",
+                        "title":"Appendix C: The algorithm"
+                    },
+                    {
+                        "slug":"changes-after-publication",
+                        "title":"Changes after publication"
+                    },
+                    {
+                        "slug":"about-this-guideline",
+                        "title":"About this guideline"
+                    }
+                ]
+            },
+            {
+                "documentId":2,
+                "supportsComments":false,
+                "title":null,
+                "chapters":null
+            },
+            {
+                "documentId":2,
+                "supportsComments":true,
+                "title":"Sinusitis (acute): antimicrobial prescribing",
+                "chapters":[
+                    {
+                        "slug":"overview",
+                        "title":"Overview"
+                    },
+                    {
+                        "slug":"background",
+                        "title":"Background"
+                    },
+                    {
+                        "slug":"recommendations",
+                        "title":"Recommendations"
+                    },
+                    {
+                        "slug":"symptoms-and-signs",
+                        "title":"Symptoms and signs"
+                    },
+                    {
+                        "slug":"summary-of-the-evidence",
+                        "title":"Summary of the evidence"
+                    },
+                    {
+                        "slug":"other-considerations",
+                        "title":"Other considerations"
+                    }
+                ]
+            }
+        ],
+        "reference":"GID-TA10232",
+        "title":"For consultation comments",
+        "consultationName":"Appraisal consultation",
+        "startDate":"2018-04-01T00:00:00",
+        "endDate":"2018-05-31T17:00:00",
+        "consultationType":"Appraisal consultation",
+        "resourceTitleId":null,
+        "projectType":"TA",
+        "productTypeName":"Technology appraisal guidance",
+        "developedAs":null,
+        "relevantTo":null,
+        "consultationId":1,
+        "process":"TAG",
+        "allowConsultationComments":true,
+        "partiallyUpdatedProjectReference":null,
+        "origProjectReference":null
+    },
+    "selectedConsultationDocumentId":1,
+    "chapterHTML":{
+        "content":"<div class=\"chapter\" title=\"4 Research recommendations\" xmlns=\"http://www.w3.org/1999/xhtml\">\r\n  <h2 class=\"title\">\r\n    <a id=\"research-recommendations\" style=\"position:relative\" class=\"annotator-chapter\" data-heading-type=\"chapter\" title=\"Comment on chapter\" xmlns=\"\">4 Research recommendations<span class=\"annotator-adder\" /></a>\r\n  </h2>\r\n  <p>The Guideline Development Group has made the following recommendations for research, based on its review of evidence, to improve NICE guidance and patient care in the future. The Guideline Development Group's full set of research recommendations is detailed in the full guideline (see section 5).</p>\r\n  <div class=\"section\" title=\"4.1 Testing for ischaemia\">\r\n    <h3 class=\"title\">\r\n      <a id=\"testing-for-ischaemia\" style=\"position:relative\" class=\"annotator-chapter\" data-heading-type=\"section\" title=\"Comment on section\" xmlns=\"\">4.1 Testing for ischaemia<span class=\"annotator-adder\" /></a>\r\n    </h3>\r\n    <p class=\"numbered-paragraph\">\r\n      <span class=\"paragraph-number\">4.1.1 </span>What is the role of ischaemia testing in people after an acute coronary syndrome and what is the comparative efficacy and cost effectiveness of the different non-invasive tests (for example, stress ECG, echocardiography, radionuclide scanning and magnetic resonance imaging)?<!--[
+            W
+        ] - Warning: Paragraph outline level has been set manually and is different from the paragraph's style--></p>\r\n    <p>\r\n      <strong>Why this is important</strong>\r\n    </p>\r\n    <p>An increasing number of non-invasive tests are now available for the investigation of suspected myocardial ischaemia. These tests need different equipment, different clinical expertise, come at different costs and may differ in their ability to detect and quantify myocardial ischaemia. Their place in the routine investigation of patients admitted with unstable angina and NSTEMI (particularly those who have not undergone angiography), as opposed to their selective use, is not clear. Management of unstable angina and NSTEMI would be enhanced if the relative place of these investigations was better understood and an assessment of their cost effectiveness made.</p>\r\n  </div>\r\n  <div class=\"section\" title=\"4.2 Risk assessment\">\r\n    <h3 class=\"title\">\r\n      <a id=\"risk-assessment\" style=\"position:relative\" class=\"annotator-chapter\" data-heading-type=\"section\" title=\"Comment on section\" xmlns=\"\">4.2 Risk assessment<span class=\"annotator-adder\" /></a>\r\n    </h3>\r\n    <p class=\"numbered-paragraph\">\r\n      <span class=\"paragraph-number\">4.2.1 </span>What is the clinical and cost effectiveness of the systematic use of risk scoring systems (in addition to clinical assessment) for ischaemic outcomes and bleeding complications in the management of unstable angina and NSTEMI (at all levels of risk) compared with clinical assessment alone?<!--[
+            W
+        ] - Warning: Paragraph outline level has been set manually and is different from the paragraph's style--></p>\r\n    <p>\r\n      <strong>Why this is important</strong>\r\n    </p>\r\n    <p>Most risk scoring systems currently predict the likelihood of mortality or ischaemic cardiovascular events at various times after a patient's admission to hospital with an acute coronary syndrome. A number of interventions (such as drugs and revascularisation procedures) have been shown to reduce these adverse outcomes. This effect tends to be greatest in patients at highest risk. However, as a broad generalisation patients who are at highest ischaemic risk are also those who are at higher risk of bleeding complications associated with the use of multiple antiplatelet and antithrombin agents. There are fewer scoring systems that predict bleeding risk, but we know that bleeding complications are associated with a significantly worse outcome. Using a combination of scoring systems assessing ischaemic and bleeding risk when evaluating data from randomised trials and registries may help to determine where the net clinical benefit (reduction in ischaemic risk minus any increase in bleeding risk) lies.</p>\r\n    <p class=\"numbered-paragraph\">\r\n      <span class=\"paragraph-number\">4.2.2 </span>For patients with unstable angina and NSTEMI (at differing levels of risk), how do clinical outcome data (adverse cardiovascular events and bleeding complications) collected in cardiac registries compare with data derived from randomised clinical trials (RCTs).<!--[
+            W
+        ] - Warning: Paragraph outline level has been set manually and is different from the paragraph's style--></p>\r\n    <p>\r\n      <strong>Why this is important</strong>\r\n    </p>\r\n    <p>Patients recruited to participate in clinical trials are often highly selected; trials tend not to include patients who are very elderly, are at high risk, or have significant comorbidity. On the other hand, good registry data include information on all patients, but are observational and not randomised. Often there is uncertainty about how the outcome data from RCTs can be applied to the much larger unselected population of patients admitted to UK hospitals with unstable angina or NSTEMI. A greater understanding of the differences between RCT and registry populations, and their levels of ischaemic and bleeding risk would help inform future management. Collection of well-validated registry data is essential if conclusions from RCTs are to be applied appropriately to all patients with unstable angina and NSTEMI, not just to patients who are comparable to trial populations.</p>\r\n  </div>\r\n</div>",
+        "sections":[
+            {
+                "slug":"testing-for-ischaemia",
+                "title":"4.1 Testing for ischaemia"
+            },
+            {
+                "slug":"risk-assessment",
+                "title":"4.2 Risk assessment"
+            }
+        ],
+        "slug":"research-recommendations",
+        "title":"4 Research recommendations"
+    },
+    "comments":[
+        
     ],
-    "reference": "GID-TA10232",
-    "title": "For consultation comments",
-    "consultationName": "Appraisal consultation",
-    "startDate": "2018-04-01T00:00:00",
-    "endDate": "2018-05-31T17:00:00",
-    "consultationType": "Appraisal consultation",
-    "resourceTitleId": null,
-    "projectType": "TA",
-    "productTypeName": "Technology appraisal guidance",
-    "developedAs": null,
-    "relevantTo": null,
-    "consultationId": 1,
-    "process": "TAG",
-    "allowConsultationComments": true,
-    "partiallyUpdatedProjectReference": null,
-    "origProjectReference": null
-  },
-  "selectedConsultationDocumentId": 1,
-  "chapterHTML": {
-    "content": "<div class=\"chapter\" title=\"4 Research recommendations\" xmlns=\"http://www.w3.org/1999/xhtml\">\r\n  <h2 class=\"title\">\r\n    <a id=\"research-recommendations\" style=\"position:relative\" class=\"annotator-chapter\" data-heading-type=\"chapter\" title=\"Comment on chapter\" xmlns=\"\">4 Research recommendations<span class=\"annotator-adder\" /></a>\r\n  </h2>\r\n  <p>The Guideline Development Group has made the following recommendations for research, based on its review of evidence, to improve NICE guidance and patient care in the future. The Guideline Development Group's full set of research recommendations is detailed in the full guideline (see section 5).</p>\r\n  <div class=\"section\" title=\"4.1 Testing for ischaemia\">\r\n    <h3 class=\"title\">\r\n      <a id=\"testing-for-ischaemia\" style=\"position:relative\" class=\"annotator-chapter\" data-heading-type=\"section\" title=\"Comment on section\" xmlns=\"\">4.1 Testing for ischaemia<span class=\"annotator-adder\" /></a>\r\n    </h3>\r\n    <p class=\"numbered-paragraph\">\r\n      <span class=\"paragraph-number\">4.1.1 </span>What is the role of ischaemia testing in people after an acute coronary syndrome and what is the comparative efficacy and cost effectiveness of the different non-invasive tests (for example, stress ECG, echocardiography, radionuclide scanning and magnetic resonance imaging)?<!--[W] - Warning: Paragraph outline level has been set manually and is different from the paragraph's style--></p>\r\n    <p>\r\n      <strong>Why this is important</strong>\r\n    </p>\r\n    <p>An increasing number of non-invasive tests are now available for the investigation of suspected myocardial ischaemia. These tests need different equipment, different clinical expertise, come at different costs and may differ in their ability to detect and quantify myocardial ischaemia. Their place in the routine investigation of patients admitted with unstable angina and NSTEMI (particularly those who have not undergone angiography), as opposed to their selective use, is not clear. Management of unstable angina and NSTEMI would be enhanced if the relative place of these investigations was better understood and an assessment of their cost effectiveness made.</p>\r\n  </div>\r\n  <div class=\"section\" title=\"4.2 Risk assessment\">\r\n    <h3 class=\"title\">\r\n      <a id=\"risk-assessment\" style=\"position:relative\" class=\"annotator-chapter\" data-heading-type=\"section\" title=\"Comment on section\" xmlns=\"\">4.2 Risk assessment<span class=\"annotator-adder\" /></a>\r\n    </h3>\r\n    <p class=\"numbered-paragraph\">\r\n      <span class=\"paragraph-number\">4.2.1 </span>What is the clinical and cost effectiveness of the systematic use of risk scoring systems (in addition to clinical assessment) for ischaemic outcomes and bleeding complications in the management of unstable angina and NSTEMI (at all levels of risk) compared with clinical assessment alone?<!--[W] - Warning: Paragraph outline level has been set manually and is different from the paragraph's style--></p>\r\n    <p>\r\n      <strong>Why this is important</strong>\r\n    </p>\r\n    <p>Most risk scoring systems currently predict the likelihood of mortality or ischaemic cardiovascular events at various times after a patient's admission to hospital with an acute coronary syndrome. A number of interventions (such as drugs and revascularisation procedures) have been shown to reduce these adverse outcomes. This effect tends to be greatest in patients at highest risk. However, as a broad generalisation patients who are at highest ischaemic risk are also those who are at higher risk of bleeding complications associated with the use of multiple antiplatelet and antithrombin agents. There are fewer scoring systems that predict bleeding risk, but we know that bleeding complications are associated with a significantly worse outcome. Using a combination of scoring systems assessing ischaemic and bleeding risk when evaluating data from randomised trials and registries may help to determine where the net clinical benefit (reduction in ischaemic risk minus any increase in bleeding risk) lies.</p>\r\n    <p class=\"numbered-paragraph\">\r\n      <span class=\"paragraph-number\">4.2.2 </span>For patients with unstable angina and NSTEMI (at differing levels of risk), how do clinical outcome data (adverse cardiovascular events and bleeding complications) collected in cardiac registries compare with data derived from randomised clinical trials (RCTs).<!--[W] - Warning: Paragraph outline level has been set manually and is different from the paragraph's style--></p>\r\n    <p>\r\n      <strong>Why this is important</strong>\r\n    </p>\r\n    <p>Patients recruited to participate in clinical trials are often highly selected; trials tend not to include patients who are very elderly, are at high risk, or have significant comorbidity. On the other hand, good registry data include information on all patients, but are observational and not randomised. Often there is uncertainty about how the outcome data from RCTs can be applied to the much larger unselected population of patients admitted to UK hospitals with unstable angina or NSTEMI. A greater understanding of the differences between RCT and registry populations, and their levels of ischaemic and bleeding risk would help inform future management. Collection of well-validated registry data is essential if conclusions from RCTs are to be applied appropriately to all patients with unstable angina and NSTEMI, not just to patients who are comparable to trial populations.</p>\r\n  </div>\r\n</div>",
-    "sections": [
-      {
-        "slug": "testing-for-ischaemia",
-        "title": "4.1 Testing for ischaemia"
-      },
-      {
-        "slug": "risk-assessment",
-        "title": "4.2 Risk assessment"
-      }
-    ],
-    "slug": "research-recommendations",
-    "title": "4 Research recommendations"
-  },
-  "comments": [],
-  "questions": []
+    "questions":[
+        
+    ]
 }
