@@ -10,7 +10,17 @@ import axios from "axios";
 type PropsType = {};
 
 type StateType = {
-	document: any
+	document: null | {
+		chapterHTML: {
+			content: string,
+			sections: [
+				{
+					slug: string,
+					title: string
+				}
+			]
+		}
+	}
 };
 
 class Document extends Component<PropsType, StateType> {
@@ -23,7 +33,10 @@ class Document extends Component<PropsType, StateType> {
 	}
 
 	componentDidMount() {
-		axios("/sample.json").then(response => {
+		type ResponseType = {
+			data: Object
+		};
+		axios("/sample.json").then((response: ResponseType) => {
 			this.setState({
 				document: response.data
 			});
@@ -43,15 +56,15 @@ class Document extends Component<PropsType, StateType> {
 			const { sections } = this.state.document.chapterHTML;
 			return (
 				<ol className="in-page-nav__list" aria-hidden="false" role="menubar">
-					{sections.map(item => {
+					{sections.map((item, index) => {
 						const props = {
-							label: item.label,
-							destination: item.url,
-							behavior: "instant",
+							label: item.title,
+							to: item.slug,
+							behavior: "smooth",
 							block: "start"
 						};
 						return (
-							<li className="in-page-nav__item" key={item.title}>
+							<li className="in-page-nav__item" key={index}>
 								<HashLinkTop {...props} />
 							</li>
 						);
@@ -59,7 +72,7 @@ class Document extends Component<PropsType, StateType> {
 				</ol>
 			);
 		}
-	};
+	}
 
 	render() {
 		const breadcrumbs = [
