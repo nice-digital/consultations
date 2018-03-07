@@ -195,7 +195,7 @@
                                                     </div>
                                                     <script src="//cdn.nice.org.uk/V3.1/Scripts/nice/NICE.TopHat.min.js">
                                                     </script>
-                                                    <script type="text/javascript" src="/static/js/main.e0327ac6.js">
+                                                    <script type="text/javascript" src="/static/js/main.js">
                                                     </script>
                                                   </body>
                                                 </html>
