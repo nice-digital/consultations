@@ -248,3 +248,4 @@ ClientApp/public/*.css.map
 /ConsultationsDatabase/ConsultationsDatabase.refactorlog
 *.jfm
 *.orig
+.DS_Store
