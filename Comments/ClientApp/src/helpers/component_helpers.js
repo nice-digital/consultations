@@ -1,18 +1,23 @@
 // @flow
 
 import React from "react";
-import { HashLink } from "react-router-hash-link";
+import { NavHashLink } from "react-router-hash-link";
 
-export const HashLinkTop = (
+type HashLinkTopType = {
 	label: string,
-	destination: string,
-	behavior: string = "instant",
-	block: string = "start") => {
-	return (
-		<HashLink
-			to={destination}
-			scroll={el => el.scrollIntoView({ behavior, block })}>
-			{label}
-		</HashLink>
-	);
+	to: string,
+	behavior: string,
+	block: string
 };
+
+export function HashLinkTop(props: HashLinkTopType) {
+	const { label, to, behavior, block } = props;
+	return (
+		<NavHashLink
+			to={`#${to}`}
+			scroll={el => el.scrollIntoView({behavior, block})}
+		>
+			{label}
+		</NavHashLink>
+	);
+}

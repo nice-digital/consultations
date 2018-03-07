@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from "react";
+import React from "react";
 import { Route, Switch } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
@@ -11,40 +11,40 @@ import FetchData from "../FetchData/FetchData";
 import Document from "../Document/Document";
 import NotFound from "../NotFound/NotFound";
 
-export default class App extends Component {
-	render() {
-		return (
-			<div>
-				<Helmet titleTemplate="%s | Consultations | NICE">
-					<html lang="en-GB" />
-				</Helmet>
+const App = () => {
+	return (
+		<div>
+			<Helmet titleTemplate="%s | Consultations | NICE">
+				<html lang="en-GB" />
+			</Helmet>
 
-				<Switch>
-					{/*home*/}
-					<Route exact path="/">
-						<DemoPage>
-							<Home />
-						</DemoPage>
-					</Route>
+			<Switch>
+				{/*home*/}
+				<Route exact path="/">
+					<DemoPage>
+						<Home />
+					</DemoPage>
+				</Route>
 
-					{/*fetch-data*/}
-					<Route path="/fetchdata">
-						<DemoPage>
-							<FetchData />
-						</DemoPage>
-					</Route>
+				{/*fetch-data*/}
+				<Route path="/fetchdata">
+					<DemoPage>
+						<FetchData />
+					</DemoPage>
+				</Route>
 
-					{/*document*/}
-					<Route path="/:consulationID/:documentID/:chapterSlug">
-						<FullPage>
-							<Document />
-						</FullPage>
-					</Route>
+				{/*document*/}
+				<Route path="/:consulationID/:documentID/:chapterSlug">
+					<FullPage>
+						<Document />
+					</FullPage>
+				</Route>
 
-					{/*404*/}
-					<Route component={NotFound} />
-				</Switch>
-			</div>
-		);
-	}
-}
+				{/*404*/}
+				<Route component={NotFound} />
+			</Switch>
+		</div>
+	);
+};
+
+export default App;
