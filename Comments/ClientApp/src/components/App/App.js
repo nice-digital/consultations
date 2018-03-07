@@ -18,6 +18,7 @@ export default class App extends Component {
 				<Helmet titleTemplate="%s | Consultations | NICE">
 					<html lang="en-GB" />
 				</Helmet>
+
 				<Switch>
 					{/*home*/}
 					<Route exact path="/">
@@ -34,7 +35,7 @@ export default class App extends Component {
 					</Route>
 
 					{/*document*/}
-					<Route path="/document">
+					<Route path="/:consulationID/:documentID/:chapterSlug">
 						<FullPage>
 							<Document />
 						</FullPage>
