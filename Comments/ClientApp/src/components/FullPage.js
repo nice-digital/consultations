@@ -1,3 +1,5 @@
+// @flow
+
 import React, { Component } from "react";
 
 export default class Layout extends Component {
@@ -11,8 +13,15 @@ export default class Layout extends Component {
 								<span className="tag tag--impact tag--alpha">Alpha</span>
 							</span>
 							<span className="phase-banner__label">
-								NICE Consulations is in development. This means it is not feature complete and there may be issues. Find
-								any? <a href="https://github.com/nhsevidence/consultations" rel="noopener noreferrer" target="_blank">Please, let us know!</a>
+								NICE Consulations is in development. This means it is not
+								feature complete and there may be issues. Find any?{" "}
+								<a
+									href="https://github.com/nhsevidence/consultations"
+									rel="noopener noreferrer"
+									target="_blank"
+								>
+									Please, let us know!
+								</a>
 							</span>
 						</p>
 					</div>

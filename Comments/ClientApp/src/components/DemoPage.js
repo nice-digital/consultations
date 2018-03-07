@@ -1,3 +1,5 @@
+// @flow
+
 import React, { Component } from "react";
 import NavMenu from "./NavMenu/NavMenu";
 

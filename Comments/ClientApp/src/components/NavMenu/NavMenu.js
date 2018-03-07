@@ -1,4 +1,6 @@
-﻿import React, { Component } from "react";
+﻿// @flow
+
+import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 
 export default class NavMenu extends Component {

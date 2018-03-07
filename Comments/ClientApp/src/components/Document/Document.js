@@ -1,11 +1,12 @@
 // @flow
 
 import React, { Component } from "react";
+import axios from "axios";
+import Moment from "react-moment";
 import { Helmet } from "react-helmet";
 import Breadcrumbs from "./../Breadcrumbs/Breadcrumbs";
 import StackedNav from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "./../../helpers/component_helpers";
-import axios from "axios";
 
 type PropsType = {};
 
@@ -53,6 +54,7 @@ class Document extends Component<PropsType, StateType> {
 		type ResponseType = {
 			data: Object
 		};
+		// todo: separate this into the shared loader
 		axios("/sample.json").then((response: ResponseType) => {
 			this.setState({
 				document: response.data
@@ -60,7 +62,7 @@ class Document extends Component<PropsType, StateType> {
 		});
 	}
 
-	renderHTML = () => {
+	renderDocumentHtml = () => {
 		if (this.state.document) {
 			return { __html: this.state.document.chapterHTML.content };
 		} else {
@@ -118,7 +120,31 @@ class Document extends Component<PropsType, StateType> {
 		}
 	};
 
+	// todo: will these need to be manually extracted from the consultation.documents array?
+	renderThisDocumentChapterLinks = () => {
+		if (this.state.document) {
+			const links = {
+				root: {
+					label: "Chapters in this document",
+					url: "#"
+				},
+				links: [
+					{
+						label: "this is a sample label",
+						url: "#"
+					}
+				]
+			};
+			return <StackedNav links={links} />;
+		}
+	};
+
 	render() {
+		if (!this.state.document) {
+			return null;
+		}
+
+		// todo: where are the breadcrumbs going to come from?
 		const breadcrumbs = [
 			{ label: "Home", url: "/document" },
 			{ label: "NICE Guidance", url: "#" },
@@ -126,20 +152,7 @@ class Document extends Component<PropsType, StateType> {
 			{ label: "Document title", url: "#" }
 		];
 
-		const chapterLinks = {
-			root: { label: "Chapters in this document", url: "#" },
-			links: [
-				{ label: "Key priorities for implementation", url: "#" },
-				{ label: "Recommendations", url: "#" },
-				{
-					label:
-						"Intravenous fluid therapy in children and young people in hospital",
-					url: "#"
-				},
-				{ label: "Context", url: "#" },
-				{ label: "Recommendations for research", url: "#" }
-			]
-		};
+		const { title, endDate, reference } = this.state.document.consultation;
 
 		return (
 			<div>
@@ -148,22 +161,19 @@ class Document extends Component<PropsType, StateType> {
 				</Helmet>
 				<Breadcrumbs segments={breadcrumbs} />
 				<div className="page-header">
-					<h1 className="page-header__heading">
-						Intravenous fluid therapy in children and young people in hospital :
-						Consultation
-					</h1>
+					<h1 className="page-header__heading">{title}</h1>
 					<p className="page-header__lead">
-						In development [NG29] Expected publication date TBC
+						[{reference}] Open until <Moment format="DD-MM-YYYY" date={endDate} />
 					</p>
 				</div>
 				<div className="grid">
 					<div data-g="12 md:3">
-						<StackedNav links={chapterLinks} />
+						{this.renderThisDocumentChapterLinks()}
 						{this.renderSupportingDocumentLinks()}
 					</div>
 					<div data-g="12 md:6">
 						<div className="document-comment-container">
-							<div dangerouslySetInnerHTML={this.renderHTML()} />
+							<div dangerouslySetInnerHTML={this.renderDocumentHtml()} />
 						</div>
 					</div>
 					<div data-g="12 md:3">
