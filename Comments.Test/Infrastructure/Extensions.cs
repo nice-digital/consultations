@@ -43,7 +43,7 @@ namespace Comments.Test.Infrastructure
         }
 
 
-        private const string EnvironmentNewLine = "\r\n"; //using Environment.NewLine on the build server uses "\r" and the tests break.
+        private const string EnvironmentNewLine = "\n"; //using Environment.NewLine on the build server uses "\r" and the tests break.
         private const string INDENT_STRING = "    ";
         private static string FormatJson(string json)
         {
