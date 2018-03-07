@@ -4,13 +4,15 @@ import React from "react";
 
 type LinkType = {|
 	label: string,
-	url: string
+	url: string | null
 |};
 
-type PropsType = {|
-	root: LinkType,
-	links: Array<LinkType>
-|};
+type PropsType = {
+	links: {
+		root: LinkType,
+		links: Array<LinkType>
+	}
+};
 
 function StackedNav(props: PropsType) {
 	const { root, links } = props.links;
@@ -18,9 +20,9 @@ function StackedNav(props: PropsType) {
 		<nav className="stacked-nav" aria-label="{root.label}">
 			{rootLabel(root)}
 			<ul className="stacked-nav__list">
-				{links.map((item, index) => {
+				{links.map((item) => {
 					return (
-						<li key={`${item.url}${index}`} className="stacked-nav__list-item">
+						<li key={item.label} className="stacked-nav__list-item">
 							<a href={item.url}>{item.label}</a>
 						</li>
 					);

@@ -44,9 +44,15 @@ class Document extends Component<PropsType, StateType> {
 			return (
 				<ol className="in-page-nav__list" aria-hidden="false" role="menubar">
 					{sections.map(item => {
+						const props = {
+							label: item.label,
+							destination: item.url,
+							behavior: "instant",
+							block: "start"
+						};
 						return (
 							<li className="in-page-nav__item" key={item.title}>
-								{HashLinkTop(item.title, `#${item.slug}`, "smooth", "start")}
+								<HashLinkTop {...props} />
 							</li>
 						);
 					})}
