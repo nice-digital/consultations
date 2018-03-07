@@ -26,17 +26,20 @@ describe("HTML processor", () => {
 	describe("parseClassAttribute", () => {
 		it("returns empty attributes as-is", () => {
 			let result = parseClassAttribute("");
-			expect(result).toEqual({ htmlAttributes: "", className: "" });
+			expect(result).toEqual({ htmlAttributes: "",
+				className: "" });
 		});
 
 		it("returns attributes as-is without class", () => {
 			let result = parseClassAttribute("a=\"b\" c=\"d\"");
-			expect(result).toEqual({ htmlAttributes: "a=\"b\" c=\"d\"", className: "" });
+			expect(result).toEqual({ htmlAttributes: "a=\"b\" c=\"d\"",
+				className: "" });
 		});
 
 		it("strips the class attribute", () => {
 			let result = parseClassAttribute("a=\"b\" class=\"alpha beta\"");
-			expect(result).toEqual({ htmlAttributes: "a=\"b\"", className: "alpha beta" });
+			expect(result).toEqual({ htmlAttributes: "a=\"b\"",
+				className: "alpha beta" });
 		});
 	});
 

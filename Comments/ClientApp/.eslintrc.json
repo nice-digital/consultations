@@ -1,27 +1,25 @@
 {
-  "env": {
+	"env": {
 		"browser": true,
 		"node": true,
 		"mocha": true,
 		"es6": true,
 		"jasmine": true
 	},
-  "extends": [
-    "@nice-digital/eslint-config/es6-flow",
-    "plugin:react/recommended",
-    "plugin:jsx-a11y/recommended",
-    "plugin:import/recommended"
-  ],
-  "plugins": [
-    "react",
-    "jsx-a11y",
-    "import"
-  ],
-  "rules": {
-    "react/no-unescaped-entities": 0,
-    "max-len": 0,
-    "//": "below not necessary as we're using flow",
-    "react/prop-types": 0,
-    "import/unambiguous": 0
-  }
+	"extends": [
+		"@nice-digital/eslint-config/es6-flow",
+		"plugin:react/recommended",
+		"plugin:jsx-a11y/recommended",
+		"plugin:import/recommended"
+	],
+	"plugins": ["react", "jsx-a11y", "import"],
+	"rules": {
+		"import/unambiguous": 0,
+		"max-len": 0,
+		"no-case-declarations": 0,
+		"react/no-unescaped-entities": 0,
+		"//": "below not necessary as we're using flow",
+		"react/prop-types": 0,
+		"object-property-newline": ["error", { "allowAllPropertiesOnSameLine": true }]
+	}
 }

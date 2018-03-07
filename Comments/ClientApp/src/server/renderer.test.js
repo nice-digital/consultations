@@ -7,7 +7,8 @@ Helmet.canUseDOM = false;
 describe("Server renderer", () => {
 	describe("serverRenderer", () => {
 		it("returns a promise that resolves with correct html", () => {
-			var result = serverRenderer({ url: "/", data: { originalHtml: "<div>test-html</div>" } });
+			var result = serverRenderer({ url: "/",
+				data: { originalHtml: "<div>test-html</div>" } });
 			return expect(result).resolves.toHaveProperty("html", "<div>test-html</div>");
 		});
 	});

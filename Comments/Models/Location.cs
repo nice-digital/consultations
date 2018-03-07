@@ -21,5 +21,23 @@ namespace Comments.Models
             Comment = comment;
             Question = question;
         }
+
+        public Location(ViewModels.Location location) : this(location.ConsultationId, location.DocumentId, location.ChapterSlug, location.SectionSlug, 
+            location.RangeStart, location.RangeStartOffset, location.RangeEnd, location.RangeEndOffset, location.Quote, null, null)
+        {
+        }
+
+        public void UpdateFromViewModel(ViewModels.Location location)
+        {
+            ConsultationId = location.ConsultationId;
+            DocumentId = location.DocumentId;
+            ChapterSlug = location.ChapterSlug;
+            SectionSlug = location.SectionSlug;
+            RangeStart = location.RangeStart;
+            RangeStartOffset = location.RangeStartOffset;
+            RangeEnd = location.RangeEnd;
+            RangeEndOffset = location.RangeEndOffset;
+            Quote = location.Quote;
+        }
     }
 }

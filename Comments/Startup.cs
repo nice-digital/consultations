@@ -1,6 +1,8 @@
 using Comments.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.NodeServices;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -14,12 +16,15 @@ namespace comments
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
+            Environment = env;
         }
 
         public IConfiguration Configuration { get; }
+
+        public IHostingEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -29,13 +34,24 @@ namespace comments
 
             services.AddMvc();
 
-            services.TryAddTransient<IConsultationService, ConsultationService>();
+            services.TryAddTransient<ICommentService, CommentService>();
 
             // In production, static files are served from the pre-built files, rather than proxied via react dev server
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            if (Environment.IsDevelopment())
+            {
+                services.AddNodeServices(options =>
+                {
+                    options.LaunchWithDebugging = true;
+                    options.DebuggingPort = 9229;
+                });
+            }
+
+            services.AddCors(); //adding CORS for Warren. todo: maybe move this into the isDevelopment block..
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,6 +83,17 @@ namespace comments
                 // TODO Do we need routes.MapSpaFallbackRoute?
             });
 
+            // DotNetCore SpaServices requires RawTarget property, which isn't set on a TestServer.
+            // So set it here to allow integration tests to work with SSR via SpaServices
+            app.Use(async (context, next) => {
+                var httpRequestFeature = context.Features.Get<IHttpRequestFeature>();
+
+                if (string.IsNullOrEmpty(httpRequestFeature.RawTarget))
+                    httpRequestFeature.RawTarget = httpRequestFeature.Path;
+
+                await next.Invoke();
+            });
+
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "ClientApp";
@@ -91,8 +118,8 @@ namespace comments
                     // `UseProxyToSpaDevelopmentServer` below rather than `UseReactDevelopmentServer`.
                     // This proxies to a manual CRA server (run `npm start` from the ClientApp folder) instead of DotNetCore launching one automatically.
                     // This can be quicker. See https://docs.microsoft.com/en-us/aspnet/core/spa/react?tabs=visual-studio#run-the-cra-server-independently
-                    spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");
-                    //spa.UseReactDevelopmentServer(npmScript: "start");
+                    //spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");
+                    spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
         }

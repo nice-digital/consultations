@@ -6,6 +6,7 @@ namespace Comments.ViewModels
 {
     public class Location
     {
+        public Location() { } //only here for model binding. don't use it in code.
         public Location(int locationId, int consultationId, int? documentId, string chapterSlug, string sectionSlug, string rangeStart, int? rangeStartOffset, string rangeEnd, int? rangeEndOffset, string quote)
         {
             LocationId = locationId;
@@ -20,20 +21,30 @@ namespace Comments.ViewModels
             Quote = quote;
         }
 
-        public int LocationId { get; private set; }
-        public int ConsultationId { get; private set; }
-        public int? DocumentId { get; private set; }
-        public string ChapterSlug { get; private set; }
-        public string SectionSlug { get; private set; }
-        public string RangeStart { get; private set; }
-        public int? RangeStartOffset { get; private set; }
-        public string RangeEnd { get; private set; }
-        public int? RangeEndOffset { get; private set; }
-        public string Quote { get; private set; }
+        public int LocationId { get; set; }
+        public int ConsultationId { get; set; }
+        public int? DocumentId { get; set; }
+        public string ChapterSlug { get; set; }
+        public string SectionSlug { get; set; }
+        public string RangeStart { get; set; }
+        public int? RangeStartOffset { get; set; }
+        public string RangeEnd { get; set; }
+        public int? RangeEndOffset { get; set; }
+        public string Quote { get; set; }
     }
 
     public class Comment : Location
     {
+        public Comment() { } //only here for model binding. don't use it in code.
+
+        public Comment(int locationId, int consultationId, int? documentId, string chapterSlug, string sectionSlug, string rangeStart, int? rangeStartOffset, string rangeEnd, int? rangeEndOffset, string quote, int commentId, DateTime lastModifiedDate, Guid lastModifiedByUserId, string commentText) : base(locationId, consultationId, documentId, chapterSlug, sectionSlug, rangeStart, rangeStartOffset, rangeEnd, rangeEndOffset, quote)
+        {
+            CommentId = commentId;
+            LastModifiedDate = lastModifiedDate;
+            LastModifiedByUserId = lastModifiedByUserId;
+            CommentText = commentText;
+        }
+
         public Comment(Models.Location location, Models.Comment comment) : base(location.LocationId, location.ConsultationId, location.DocumentId, location.ChapterSlug, location.SectionSlug, 
             location.RangeStart, location.RangeStartOffset, location.RangeEnd, location.RangeEndOffset, location.Quote)
         {
@@ -43,14 +54,15 @@ namespace Comments.ViewModels
             CommentText = comment.CommentText;
         }
 
-        public int CommentId { get; private set; }
-        public DateTime LastModifiedDate { get; private set; }
-        public Guid LastModifiedByUserId { get; private set; }
-        public string CommentText { get; private set; }
+        public int CommentId { get; set; }
+        public DateTime LastModifiedDate { get; set; }
+        public Guid LastModifiedByUserId { get; set; }
+        public string CommentText { get; set; }
     }
 
     public class Question : Location
     {
+        public Question() { } //only here for model binding. don't use it in code.
         public Question(Models.Location location, Models.Question question) : base(location.LocationId, location.ConsultationId, location.DocumentId, location.ChapterSlug, location.SectionSlug,
             location.RangeStart, location.RangeStartOffset, location.RangeEnd, location.RangeEndOffset, location.Quote)
         {
@@ -64,18 +76,19 @@ namespace Comments.ViewModels
             Answers = question.Answer.Select(answer => new Answer(answer)).ToList();
         }
 
-        public int QuestionId { get; private set; }
-        public string QuestionText { get; private set; }
-        public byte? QuestionOrder { get; private set; }
-        public Guid LastModifiedByUserId { get; private set; }
-        public DateTime LastModifiedDate { get; private set; }
+        public int QuestionId { get; set; }
+        public string QuestionText { get; set; }
+        public byte? QuestionOrder { get; set; }
+        public Guid LastModifiedByUserId { get; set; }
+        public DateTime LastModifiedDate { get; set; }
 
-        public ViewModels.QuestionType QuestionType { get; private set; }
-        public IEnumerable<ViewModels.Answer> Answers { get; private set; }
+        public ViewModels.QuestionType QuestionType { get; set; }
+        public IEnumerable<ViewModels.Answer> Answers { get; set; }
     }
 
     public class QuestionType
     {
+        public QuestionType() { } //only here for model binding. don't use it in code.
         public QuestionType(Models.QuestionType questionType)
         {
             Description = questionType.Description;
@@ -83,13 +96,14 @@ namespace Comments.ViewModels
             HasBooleanAnswer = questionType.HasBooleanAnswer;
         }
 
-        public string Description { get; private set; }
-        public bool HasTextAnswer { get; private set; }
-        public bool HasBooleanAnswer { get; private set; }
+        public string Description { get; set; }
+        public bool HasTextAnswer { get; set; }
+        public bool HasBooleanAnswer { get; set; }
     }
 
     public class Answer
     {
+        public Answer() { } //only here for model binding. don't use it in code.
         public Answer(Models.Answer answer)
         {
             AnswerId = answer.AnswerId;
@@ -99,10 +113,10 @@ namespace Comments.ViewModels
             LastModifiedByUserId = answer.LastModifiedByUserId;
         }
 
-        public int AnswerId { get; private set; }
-        public string AnswerText { get; private set; }
-        public bool? AnswerBoolean { get; private set; }
-        public DateTime LastModifiedDate { get; private set; }
-        public Guid LastModifiedByUserId { get; private set; }
+        public int AnswerId { get; set; }
+        public string AnswerText { get; set; }
+        public bool? AnswerBoolean { get; set; }
+        public DateTime LastModifiedDate { get; set; }
+        public Guid LastModifiedByUserId { get; set; }
     }
 }
