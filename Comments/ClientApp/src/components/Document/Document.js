@@ -23,7 +23,7 @@ class Document extends Component<PropsType, StateType> {
 	}
 
 	componentDidMount() {
-		axios("http://127.0.0.1:1234/sample.json").then(response => {
+		axios("/sample.json").then(response => {
 			this.setState({
 				document: response.data
 			});
