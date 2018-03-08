@@ -1,8 +1,8 @@
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
-import { shallow, mount } from "enzyme";
+import { mount } from "enzyme";
 
-import { StackedNav, RootLink, ListLink } from "./StackedNav";
+import { StackedNav } from "./StackedNav";
 
 describe("[ClientApp] ", () => {
 	describe("StackedNav ", () => {
