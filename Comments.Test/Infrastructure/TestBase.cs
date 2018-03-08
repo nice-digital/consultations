@@ -6,6 +6,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net.Http;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
 
 namespace Comments.Test.Infrastructure
 {
@@ -32,6 +36,11 @@ namespace Comments.Test.Infrastructure
                         options.UseInMemoryDatabase(DatabaseName
                             //, optionsBuilder => { optionsBuilder.use }
                             ));
+                    services.TryAddSingleton<ISeriLogger, FakeSerilogger>();
+                })
+                .Configure(app =>
+                {
+                    app.UseStaticFiles();
                 })
                 .UseEnvironment("Production")
                 .UseStartup(typeof(Startup));
@@ -120,5 +129,12 @@ namespace Comments.Test.Infrastructure
         }
 
         #endregion Helpers
+    }
+
+    internal class FakeSerilogger : ISeriLogger
+    {
+        public void Configure(ILoggerFactory loggerFactory, IConfiguration configuration, IApplicationLifetime appLifetime,
+            IHostingEnvironment env)
+        {}
     }
 }

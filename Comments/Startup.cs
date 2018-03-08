@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
+using Comments;
+using Comments.Configuration;
 using Microsoft.Extensions.FileProviders;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
 
@@ -36,6 +38,7 @@ namespace comments
 
             services.AddMvc();
 
+            services.TryAddSingleton<ISeriLogger, SeriLogger>();
             services.TryAddTransient<ICommentService, CommentService>();
 
             // In production, static files are served from the pre-built files, rather than proxied via react dev server
@@ -53,12 +56,19 @@ namespace comments
                 });
             }
 
+            
             services.AddCors(); //adding CORS for Warren. todo: maybe move this into the isDevelopment block..
+            services.AddOptions();
+            AppSettings.Configure(services, Configuration);
         }
 
+        
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ISeriLogger seriLogger, IApplicationLifetime appLifetime)
         {
+            seriLogger.Configure(loggerFactory, Configuration, appLifetime, env);
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -73,13 +83,25 @@ namespace comments
 
             // TODO Which of these paths do we need?
             //app.UsePathBase("/consultations");
-            app.UseStaticFiles(); //this enables the wwwroot folder. 
-            //app.UseStaticFiles(new StaticFileOptions
-            //{
-            //    FileProvider = new PhysicalFileProvider(
-            //        Path.Combine(Directory.GetCurrentDirectory())), RequestPath = "/status.html"
-            //}); //"/consultations"
+           // app.UseStaticFiles(); //this enables the wwwroot folder. 
             //app.UseSpaStaticFiles();
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(env.ContentRootPath, "ClientApp/public")),
+                RequestPath = ""
+            });
+
+            var buildFolder = Path.Combine(env.ContentRootPath, "ClientApp/build");
+            if (env.IsProduction() && Directory.Exists(buildFolder)) //maybe this should throw errors if it doesn't exist in production...
+            {
+                app.UseStaticFiles(new StaticFileOptions
+                {
+                    FileProvider = new PhysicalFileProvider(buildFolder),
+                    RequestPath = ""
+                });
+            }
 
             app.UseMvc(routes =>
             {
@@ -87,8 +109,18 @@ namespace comments
                     name: "default",
                     template: "{controller}/{action=Index}/{id?}");
 
-                // TODO Do we need routes.MapSpaFallbackRoute?
             });
+
+            //// here you can see we make sure it doesn't start with /api, if it does, it'll 404 within .NET if it can't be found
+            //app.MapWhen(x => !x.Request.Path.Value.StartsWith("/consultations/api", StringComparison.OrdinalIgnoreCase), builder =>
+            //{
+            //    builder.UseMvc(routes =>
+            //    {
+            //        routes.MapSpaFallbackRoute(
+            //            name: "spa-fallback",
+            //            defaults: new { controller = "Error", action = "Index" });
+            //    });
+            //});
 
             // DotNetCore SpaServices requires RawTarget property, which isn't set on a TestServer.
             // So set it here to allow integration tests to work with SSR via SpaServices
@@ -125,8 +157,8 @@ namespace comments
                     // `UseProxyToSpaDevelopmentServer` below rather than `UseReactDevelopmentServer`.
                     // This proxies to a manual CRA server (run `npm start` from the ClientApp folder) instead of DotNetCore launching one automatically.
                     // This can be quicker. See https://docs.microsoft.com/en-us/aspnet/core/spa/react?tabs=visual-studio#run-the-cra-server-independently
-                    //spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");
-                    spa.UseReactDevelopmentServer(npmScript: "start");
+                    spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");
+                    //spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
         }
