@@ -1,4 +1,6 @@
-﻿import React, { Component } from "react";
+﻿// @flow
+
+import React, { Component } from "react";
 import { Route } from "react-router-dom";
 
 export default class NotFound extends Component {
