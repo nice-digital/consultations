@@ -45,128 +45,23 @@
                                                         </span>
                                                       </span>
                                                       <span class="phase-banner__label">
-                                                        NICE Consulations is in development. This means it is not feature complete and there may be issues. Find any? 
-                                                        <a href="https://github.com/nhsevidence/consultations" rel="noopener noreferrer" target="_blank">
-                                                          Please, let us know!
-                                                        </a>
-                                                      </span>
-                                                    </p>
-                                                  </div>
-                                                  <div data-g="12">
-                                                    <div>
-                                                      <nav aria-label="Breadcrumbs">
-                                                        <p class="visually-hidden">
-                                                          You are here:
-                                                        </p>
-                                                        <ol class="breadcrumbs" aria-labelledby="breadcrumb-label" itemscope="" itemType="http://schema.org/BreadcrumbList">
-                                                          <li class="breadcrumbs__crumb" itemProp="itemListElement" itemscope="" itemType="http://schema.org/ListItem">
-                                                            <a href="/document" itemProp="name">
-                                                              Home
-                                                            </a>
-                                                            <meta itemProp="position" content="0"/>
-                                                          </li>
-                                                          <li class="breadcrumbs__crumb" itemProp="itemListElement" itemscope="" itemType="http://schema.org/ListItem">
-                                                            <a itemProp="name">
-                                                              NICE Guidance
-                                                            </a>
-                                                            <meta itemProp="position" content="1"/>
-                                                          </li>
-                                                          <li class="breadcrumbs__crumb" itemProp="itemListElement" itemscope="" itemType="http://schema.org/ListItem">
-                                                            <a itemProp="name">
-                                                              In Consulation
-                                                            </a>
-                                                            <meta itemProp="position" content="2"/>
-                                                          </li>
-                                                          <li class="breadcrumbs__crumb" itemProp="itemListElement" itemscope="" itemType="http://schema.org/ListItem">
-                                                            <a itemProp="name">
-                                                              Document title
-                                                            </a>
-                                                            <meta itemProp="position" content="3"/>
-                                                          </li>
-                                                        </ol>
-                                                      </nav>
-                                                      <div class="page-header">
-                                                        <h1 class="page-header__heading">
-                                                          Intravenous fluid therapy in children and young people in hospital : Consultation
-                                                        </h1>
-                                                        <p class="page-header__lead">
-                                                          In development [NG29] Expected publication date TBC
-                                                        </p>
-                                                      </div>
-                                                      <div class="grid">
-                                                        <div data-g="12 md:3">
-                                                          <nav class="stacked-nav" aria-label="{root.label}">
-                                                            <h2 class="stacked-nav__root">
-                                                              <a href="#">
-                                                                Chapters in this document
-                                                              </a>
-                                                            </h2>
-                                                            <ul class="stacked-nav__list">
-                                                              <li class="stacked-nav__list-item">
-                                                                <a>
-                                                                  Key priorities for implementation
-                                                                </a>
-                                                              </li>
-                                                              <li class="stacked-nav__list-item">
-                                                                <a>
-                                                                  Recommendations
-                                                                </a>
-                                                              </li>
-                                                              <li class="stacked-nav__list-item">
-                                                                <a>
-                                                                  Intravenous fluid therapy in children and young people in hospital
-                                                                </a>
-                                                              </li>
-                                                              <li class="stacked-nav__list-item">
-                                                                <a>
-                                                                  Context
-                                                                </a>
-                                                              </li>
-                                                              <li class="stacked-nav__list-item">
-                                                                <a>
-                                                                  Recommendations for research
-                                                                </a>
-                                                              </li>
-                                                            </ul>
-                                                          </nav>
-                                                          <nav class="stacked-nav" aria-label="{root.label}">
-                                                            <h2 class="stacked-nav__root">
-                                                              <a href="#">
-                                                                Additional documents to comment on
-                                                              </a>
-                                                            </h2>
-                                                            <ul class="stacked-nav__list">
-                                                              <li class="stacked-nav__list-item">
-                                                                <a>
-                                                                  Intravenous fluid therapy in children and young people in hospital - Short Guideline
-                                                                </a>
-                                                              </li>
-                                                            </ul>
-                                                          </nav>
-                                                        </div>
-                                                        <div data-g="12 md:6">
-                                                          <div class="document-comment-container">
-                                                            <div>
-                                                            </div>
-                                                          </div>
-                                                        </div>
-                                                        <div data-g="12 md:3">
-                                                          <nav class="in-page-nav" aria-labelledby="inpagenav-title">
-                                                            <h2 id="inpagenav-title" class="in-page-nav__title">
-                                                              On this page
-                                                            </h2>
-                                                          </nav>
-                                                        </div>
-                                                      </div>
+                                                        NICE Consulations is in development. This means it is not feature complete and there may be issues. Find any?
+                                                        <!-- -->
+                                                          <a href="https://github.com/nhsevidence/consultations" rel="noopener noreferrer" target="_blank">
+                                                            Please, let us know!
+                                                          </a>
+                                                        </span>
+                                                      </p>
+                                                    </div>
+                                                    <div data-g="12">
                                                     </div>
                                                   </div>
                                                 </div>
                                               </div>
                                             </div>
-                                          </div>
-                                          <script src="//cdn.nice.org.uk/V3.1/Scripts/nice/NICE.TopHat.min.js">
-                                          </script>
-                                          <script type="text/javascript" src="/static/js/main.js">
-                                          </script>
-                                        </body>
-                                      </html>
+                                            <script src="//cdn.nice.org.uk/V3.1/Scripts/nice/NICE.TopHat.min.js">
+                                            </script>
+                                            <script type="text/javascript" src="/static/js/main.js">
+                                            </script>
+                                          </body>
+                                        </html>

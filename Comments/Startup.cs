@@ -84,7 +84,7 @@ namespace comments
             // TODO Which of these paths do we need?
             //app.UsePathBase("/consultations");
            // app.UseStaticFiles(); //this enables the wwwroot folder. 
-            //app.UseSpaStaticFiles();
+            app.UseSpaStaticFiles();
 
             app.UseStaticFiles(new StaticFileOptions
             {
@@ -94,7 +94,8 @@ namespace comments
             });
 
             var buildFolder = Path.Combine(env.ContentRootPath, "ClientApp/build");
-            if (env.IsProduction() && Directory.Exists(buildFolder)) //maybe this should throw errors if it doesn't exist in production...
+            //env.IsProduction()
+            if (Directory.Exists(buildFolder)) //maybe this should throw errors if it doesn't exist in production...
             {
                 app.UseStaticFiles(new StaticFileOptions
                 {
@@ -124,7 +125,8 @@ namespace comments
 
             // DotNetCore SpaServices requires RawTarget property, which isn't set on a TestServer.
             // So set it here to allow integration tests to work with SSR via SpaServices
-            app.Use(async (context, next) => {
+            app.Use(async (context, next) =>
+            {
                 var httpRequestFeature = context.Features.Get<IHttpRequestFeature>();
 
                 if (string.IsNullOrEmpty(httpRequestFeature.RawTarget))
