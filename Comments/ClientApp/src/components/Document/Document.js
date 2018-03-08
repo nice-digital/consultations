@@ -73,77 +73,69 @@ class Document extends Component<PropsType, StateType> {
 	};
 
 	renderInPageNav = () => {
-		if (this.state.document) {
-			const { sections } = this.state.document.chapterHTML;
-			return (
-				<nav className="in-page-nav" aria-labelledby="inpagenav-title">
-					<h2 id="inpagenav-title" className="in-page-nav__title">
-						On this page
-					</h2>
-					<ol className="in-page-nav__list" aria-hidden="false" role="menubar">
-						{sections.map((item, index) => {
-							const props = {
-								label: item.title,
-								to: item.slug,
-								behavior: "smooth",
-								block: "start"
-							};
-							return (
-								<li className="in-page-nav__item" key={index}>
-									<HashLinkTop {...props} />
-								</li>
-							);
-						})}
-					</ol>
-				</nav>
-			);
-		}
+		const { sections } = this.state.document.chapterHTML;
+		return (
+			<nav className="in-page-nav" aria-labelledby="inpagenav-title">
+				<h2 id="inpagenav-title" className="in-page-nav__title">
+					On this page
+				</h2>
+				<ol className="in-page-nav__list" aria-hidden="false" role="menubar">
+					{sections.map((item, index) => {
+						const props = {
+							label: item.title,
+							to: item.slug,
+							behavior: "smooth",
+							block: "start"
+						};
+						return (
+							<li className="in-page-nav__item" key={index}>
+								<HashLinkTop {...props} />
+							</li>
+						);
+					})}
+				</ol>
+			</nav>
+		);
 	};
 
+	// todo: change this function so it only returns the data
 	renderSupportingDocumentLinks = () => {
-		if (this.state.document) {
-			const { documents } = this.state.document.consultation;
+		const { documents } = this.state.document.consultation;
 
-			let documentList = [];
+		const isValidDocument = d => d.title && d.documentId;
 
-			for (const document of documents) {
-				if (document.title && document.documentId) {
-					documentList.push({
-						label: document.title,
-						url: `/1/${document.documentId}/${document.chapters[0].slug}`
-					});
-				}
-			}
+		const mapDocToLink = d => ({
+			label: d.title,
+			url: `/1/${d.documentId}/${d.chapters[0].slug}`
+		});
 
-			const links = {
-				root: {
-					label: "Additional documents to comment on",
-					url: "#"
-				},
-				links: documentList
-			};
+		const links = {
+			root: {
+				label: "Additional documents to comment on",
+				url: "#"
+			},
+			links: documents.filter(isValidDocument).map(mapDocToLink)
+		};
 
-			return <StackedNav links={links} />;
-		}
+		return <StackedNav links={links} />;
 	};
 
 	// todo: will these need to be manually extracted from the consultation.documents array?
+	// todo: change this function so it only returns the data
 	renderThisDocumentChapterLinks = () => {
-		if (this.state.document) {
-			const links = {
-				root: {
-					label: "Chapters in this document",
+		const links = {
+			root: {
+				label: "Chapters in this document",
+				url: "#"
+			},
+			links: [
+				{
+					label: "this is a sample label",
 					url: "#"
-				},
-				links: [
-					{
-						label: "this is a sample label",
-						url: "#"
-					}
-				]
-			};
-			return <StackedNav links={links} />;
-		}
+				}
+			]
+		};
+		return <StackedNav links={links} />;
 	};
 
 	render() {

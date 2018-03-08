@@ -35,9 +35,7 @@ const App = () => {
 
 				{/*document*/}
 				<Route path="/:consulationID/:documentID/:chapterSlug">
-					<FullPage>
-						<Document />
-					</FullPage>
+					<Document />
 				</Route>
 
 				{/*404*/}
