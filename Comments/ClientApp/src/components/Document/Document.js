@@ -4,6 +4,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import Moment from "react-moment";
 import { Helmet } from "react-helmet";
+import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
 import Breadcrumbs from "./../Breadcrumbs/Breadcrumbs";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "./../../helpers/component_helpers";
@@ -166,25 +167,32 @@ class Document extends Component<PropsType, StateType> {
 					<title>Comment on Document</title>
 				</Helmet>
 				<CommentPanel />
-				<Breadcrumbs segments={breadcrumbs} />
-				<div className="page-header">
-					<h1 className="page-header__heading">{title}</h1>
-					<p className="page-header__lead">
-						[{reference}] Open until{" "}
-						<Moment format="DD-MM-YYYY" date={endDate} />
-					</p>
-				</div>
-				<div className="grid">
-					<div data-g="12 md:3">
-						{this.renderThisDocumentChapterLinks()}
-						{this.renderSupportingDocumentLinks()}
-					</div>
-					<div data-g="12 md:6">
-						<div className="document-comment-container">
-							<div dangerouslySetInnerHTML={this.renderDocumentHtml()} />
+				<div className="container">
+					<div className="grid">
+						<div data-g="12">
+							<PhaseBanner />
+							<Breadcrumbs segments={breadcrumbs} />
+							<div className="page-header">
+								<h1 className="page-header__heading">{title}</h1>
+								<p className="page-header__lead">
+									[{reference}] Open until{" "}
+									<Moment format="DD-MM-YYYY" date={endDate} />
+								</p>
+							</div>
+							<div className="grid">
+								<div data-g="12 md:3">
+									{this.renderThisDocumentChapterLinks()}
+									{this.renderSupportingDocumentLinks()}
+								</div>
+								<div data-g="12 md:6">
+									<div className="document-comment-container">
+										<div dangerouslySetInnerHTML={this.renderDocumentHtml()} />
+									</div>
+								</div>
+								<div data-g="12 md:3">{this.renderInPageNav()}</div>
+							</div>
 						</div>
 					</div>
-					<div data-g="12 md:3">{this.renderInPageNav()}</div>
 				</div>
 			</div>
 		);
