@@ -5,8 +5,9 @@ import axios from "axios";
 import Moment from "react-moment";
 import { Helmet } from "react-helmet";
 import Breadcrumbs from "./../Breadcrumbs/Breadcrumbs";
-import StackedNav from "./../StackedNav/StackedNav";
+import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "./../../helpers/component_helpers";
+import CommentPanel from "../CommentPanel/CommentPanel";
 
 type PropsType = {};
 
@@ -74,21 +75,26 @@ class Document extends Component<PropsType, StateType> {
 		if (this.state.document) {
 			const { sections } = this.state.document.chapterHTML;
 			return (
-				<ol className="in-page-nav__list" aria-hidden="false" role="menubar">
-					{sections.map((item, index) => {
-						const props = {
-							label: item.title,
-							to: item.slug,
-							behavior: "smooth",
-							block: "start"
-						};
-						return (
-							<li className="in-page-nav__item" key={index}>
-								<HashLinkTop {...props} />
-							</li>
-						);
-					})}
-				</ol>
+				<nav className="in-page-nav" aria-labelledby="inpagenav-title">
+					<h2 id="inpagenav-title" className="in-page-nav__title">
+						On this page
+					</h2>
+					<ol className="in-page-nav__list" aria-hidden="false" role="menubar">
+						{sections.map((item, index) => {
+							const props = {
+								label: item.title,
+								to: item.slug,
+								behavior: "smooth",
+								block: "start"
+							};
+							return (
+								<li className="in-page-nav__item" key={index}>
+									<HashLinkTop {...props} />
+								</li>
+							);
+						})}
+					</ol>
+				</nav>
 			);
 		}
 	};
@@ -159,11 +165,13 @@ class Document extends Component<PropsType, StateType> {
 				<Helmet>
 					<title>Comment on Document</title>
 				</Helmet>
+				<CommentPanel />
 				<Breadcrumbs segments={breadcrumbs} />
 				<div className="page-header">
 					<h1 className="page-header__heading">{title}</h1>
 					<p className="page-header__lead">
-						[{reference}] Open until <Moment format="DD-MM-YYYY" date={endDate} />
+						[{reference}] Open until{" "}
+						<Moment format="DD-MM-YYYY" date={endDate} />
 					</p>
 				</div>
 				<div className="grid">
@@ -176,14 +184,7 @@ class Document extends Component<PropsType, StateType> {
 							<div dangerouslySetInnerHTML={this.renderDocumentHtml()} />
 						</div>
 					</div>
-					<div data-g="12 md:3">
-						<nav className="in-page-nav" aria-labelledby="inpagenav-title">
-							<h2 id="inpagenav-title" className="in-page-nav__title">
-								On this page
-							</h2>
-							{this.renderInPageNav()}
-						</nav>
-					</div>
+					<div data-g="12 md:3">{this.renderInPageNav()}</div>
 				</div>
 			</div>
 		);
