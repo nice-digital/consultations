@@ -29,7 +29,8 @@ export const serverRenderer = (params): Promise => {
 			preload: {
 				data: {}, // Key value pairs of preloaded data sets
 				loaders: [] // List of promises where we track preloading data
-			}
+			},
+			rootUrl: params.origin
 		};
 
 		var app = (
