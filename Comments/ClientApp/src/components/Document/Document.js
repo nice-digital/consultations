@@ -126,12 +126,14 @@ class Document extends Component<PropsType, StateType> {
 		const links = {
 			root: {
 				label: "Chapters in this document",
-				url: "#"
+				url: "#",
+				current: true
 			},
 			links: [
 				{
 					label: "this is a sample label",
-					url: "#"
+					url: "#",
+					current: true
 				}
 			]
 		};
