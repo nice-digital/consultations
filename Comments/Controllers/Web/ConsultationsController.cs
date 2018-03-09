@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Comments.Controllers.Web
 {
-    [Route("consultations")]
+    [Route("consultations/test")]
     public class ConsultationsController : Controller
     {
         private readonly ILogger<ConsultationsController> _logger;
