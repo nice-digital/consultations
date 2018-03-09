@@ -11,7 +11,7 @@ import { processHtml } from "./html-processor";
 
 import App from "./../components/App/App";
 
-// const IsProduction: boolean = process.env.NODE_ENV === "production";
+const BaseUrlRelative: string = "/consultations";
 
 // Returns a promise that resolves to an object containing the HTML to be rendered.
 // The params contains properties e.g.
@@ -20,7 +20,7 @@ import App from "./../components/App/App";
 // The `params.data` property contains properties set in `SupplyData` in Startup.cs.
 export const serverRenderer = (params): Promise => {
 	return new Promise((resolve) => {
-		console.log("Server");
+
 		// Context object that Routes can use to pass properties 'out'. Primarily used for status code. E.g.:
 		//  <Route render={({ staticContext }) => {
 		//      if (staticContext) staticContext.status = 404;
@@ -29,11 +29,12 @@ export const serverRenderer = (params): Promise => {
 			preload: {
 				data: {}, // Key value pairs of preloaded data sets
 				loaders: [] // List of promises where we track preloading data
-			}
+			},
+			baseUrl: params.origin + BaseUrlRelative
 		};
 
 		var app = (
-			<StaticRouter location={params.url} context={context}>
+			<StaticRouter basename={BaseUrlRelative} location={params.url} context={context}>
 				<App />
 			</StaticRouter>);
 
@@ -48,7 +49,11 @@ export const serverRenderer = (params): Promise => {
 
 			const helmet = Helmet.renderStatic();
 
-			const clientPreloadedData = `\r\n<script>window.__PRELOADED__=${JSON.stringify(context.preload.data)};</script>\r\n`;
+			let clientPreloadedData = `<script>window.__PRELOADED__=${JSON.stringify(context.preload.data)};</script>`;
+
+			if (process.env.NODE_ENV === "development") {
+				clientPreloadedData = `\r\n\r\n${clientPreloadedData}\r\n\r\n`;
+			}
 
 			const html = processHtml(params.data.originalHtml, {
 				htmlAttributes: helmet.htmlAttributes.toString(),
@@ -62,8 +67,6 @@ export const serverRenderer = (params): Promise => {
 
 			resolve({ html: html, statusCode: context.status || 200 });
 		});
-
-
 	});
 };
 
