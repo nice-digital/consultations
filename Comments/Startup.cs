@@ -86,23 +86,23 @@ namespace comments
            // app.UseStaticFiles(); //this enables the wwwroot folder. 
             app.UseSpaStaticFiles();
 
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(
-                    Path.Combine(env.ContentRootPath, "ClientApp/public")),
-                RequestPath = ""
-            });
+            //app.UseStaticFiles(new StaticFileOptions
+            //{
+            //    FileProvider = new PhysicalFileProvider(
+            //        Path.Combine(env.ContentRootPath, "ClientApp/public")),
+            //    RequestPath = ""
+            //});
 
-            var buildFolder = Path.Combine(env.ContentRootPath, "ClientApp/build");
-            //env.IsProduction()
-            if (Directory.Exists(buildFolder)) //maybe this should throw errors if it doesn't exist in production...
-            {
-                app.UseStaticFiles(new StaticFileOptions
-                {
-                    FileProvider = new PhysicalFileProvider(buildFolder),
-                    RequestPath = ""
-                });
-            }
+            //var buildFolder = Path.Combine(env.ContentRootPath, "ClientApp/build");
+            ////env.IsProduction()
+            //if (Directory.Exists(buildFolder)) //maybe this should throw errors if it doesn't exist in production...
+            //{
+            //    app.UseStaticFiles(new StaticFileOptions
+            //    {
+            //        FileProvider = new PhysicalFileProvider(buildFolder),
+            //        RequestPath = ""
+            //    });
+            //}
 
             app.UseMvc(routes =>
             {
