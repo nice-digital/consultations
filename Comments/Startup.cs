@@ -141,6 +141,7 @@ namespace comments
                 
                 spa.UseSpaPrerendering(options =>
                 {
+                    options.ExcludeUrls = new[] { "/sockjs-node" };
                     // Pass data in from .NET into the SSR. These come through as `params` within `createServerRenderer` within the server side JS code.
                     // See https://docs.microsoft.com/en-us/aspnet/core/spa/angular?tabs=visual-studio#pass-data-from-net-code-into-typescript-code
                     options.SupplyData = (context, data) => {
