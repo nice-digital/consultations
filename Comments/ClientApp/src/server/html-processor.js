@@ -8,10 +8,10 @@ const OpeningHtmlTagRegex: RegExp = /<html[^>]*>/g,
 // Replace placeholders and tokens in the static html layout file.
 export const prepHead = (html: string, { title, metas, links, scripts }): string => {
 	return html
-		.replace("<!-- title -->", title)
-		.replace("<!-- metas -->", metas)
-		.replace("<!-- links -->", links)
-		.replace("<!-- scripts -->", scripts);
+		.replace("<!--! title -->", title)
+		.replace("<!--! metas -->", metas)
+		.replace("<!--! links -->", links)
+		.replace("<!--! scripts -->", scripts);
 };
 
 // Removes the class attribute from the given html attributes.
@@ -53,6 +53,11 @@ export const replaceRootContent = (html: string, rootContent: string): string =>
 	return html.replace("<div id=\"root\"></div>", `<div id="root">${rootContent}</div>`);
 };
 
+// Replaces non consultation paths
+export const replaceRelativePaths = (html: string): string => {
+	return html.replace(/"(\/(?:[^\/].*)?)"/g, "\"/consultations$1\"");
+};
+
 export const processHtml = (html: string, { title, metas, links, scripts, htmlAttributes, bodyAttributes, rootContent }): string => {
 	html = replaceOpeningHtmlTag(html, htmlAttributes);
 	html = replaceOpeningBodyTag(html, bodyAttributes);
@@ -60,7 +65,14 @@ export const processHtml = (html: string, { title, metas, links, scripts, htmlAt
 	html = prepHead(html, { title,
 		metas,
 		links,
-		scripts });
+		scripts
+	});
+
+	// In dev mode we proxy requests to react dev server, which runs in the root. So we prepend relative URLs.
+	// We don't need to do this in production because we use PUBLIC_URL=/consultations with `npm run build`.
+	if (process.env.NODE_ENV === "development")
+		html = replaceRelativePaths(html);
+
 	return html;
 };
 
