@@ -86,23 +86,23 @@ namespace comments
            // app.UseStaticFiles(); //this enables the wwwroot folder. 
             app.UseSpaStaticFiles();
 
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(
-                    Path.Combine(env.ContentRootPath, "ClientApp/public")),
-                RequestPath = ""
-            });
+            //app.UseStaticFiles(new StaticFileOptions
+            //{
+            //    FileProvider = new PhysicalFileProvider(
+            //        Path.Combine(env.ContentRootPath, "ClientApp/public")),
+            //    RequestPath = ""
+            //});
 
-            var buildFolder = Path.Combine(env.ContentRootPath, "ClientApp/build");
-            //env.IsProduction()
-            if (Directory.Exists(buildFolder)) //maybe this should throw errors if it doesn't exist in production...
-            {
-                app.UseStaticFiles(new StaticFileOptions
-                {
-                    FileProvider = new PhysicalFileProvider(buildFolder),
-                    RequestPath = ""
-                });
-            }
+            //var buildFolder = Path.Combine(env.ContentRootPath, "ClientApp/build");
+            ////env.IsProduction()
+            //if (Directory.Exists(buildFolder)) //maybe this should throw errors if it doesn't exist in production...
+            //{
+            //    app.UseStaticFiles(new StaticFileOptions
+            //    {
+            //        FileProvider = new PhysicalFileProvider(buildFolder),
+            //        RequestPath = ""
+            //    });
+            //}
 
             app.UseMvc(routes =>
             {
@@ -141,6 +141,7 @@ namespace comments
                 
                 spa.UseSpaPrerendering(options =>
                 {
+                    options.ExcludeUrls = new[] { "/sockjs-node" };
                     // Pass data in from .NET into the SSR. These come through as `params` within `createServerRenderer` within the server side JS code.
                     // See https://docs.microsoft.com/en-us/aspnet/core/spa/angular?tabs=visual-studio#pass-data-from-net-code-into-typescript-code
                     options.SupplyData = (context, data) => {
