@@ -41,6 +41,10 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="IntegrationTests\API\Chapter\" />
+  </ItemGroup>
+
   <!-- https://github.com/NuGet/Home/issues/4412 -->
     <Target Name="CopyDepsFiles" AfterTargets="Build" Condition="'$(TargetFramework)'!=''">
        <ItemGroup>

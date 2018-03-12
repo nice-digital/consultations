@@ -20,7 +20,7 @@ namespace Comments.Controllers.Api
         }
 
         /// <summary>
-        /// GET: eg. consultaitons/api/Chapter?consultationId=1&documentId=2&chapterSlug=introduction
+        /// GET: eg. consultations/api/Chapter?consultationId=1&documentId=2&chapterSlug=introduction
         /// </summary>
         /// <param name="consultationId">int</param>
         /// <param name="documentId">int</param>
