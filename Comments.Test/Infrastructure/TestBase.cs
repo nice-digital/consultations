@@ -1,5 +1,4 @@
-﻿using comments;
-using Comments.Models;
+﻿using Comments.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;

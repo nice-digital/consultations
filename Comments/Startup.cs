@@ -17,7 +17,7 @@ using Microsoft.Extensions.FileProviders;
 using NICE.Feeds;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
 
-namespace comments
+namespace Comments
 {
     public class Startup
     {
