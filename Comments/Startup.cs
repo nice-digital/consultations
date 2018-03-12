@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using NICE.Feeds;
 using System;
+using System.IO;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
 using Microsoft.AspNetCore.StaticFiles.Infrastructure;
 using Microsoft.AspNetCore.SpaServices;
