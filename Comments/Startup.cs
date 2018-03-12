@@ -1,20 +1,15 @@
+using Comments.Configuration;
 using Comments.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.NodeServices;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
-using System;
-using System.IO;
-using Comments;
-using Comments.Configuration;
-using Microsoft.Extensions.FileProviders;
 using NICE.Feeds;
+using System;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
 
 namespace Comments
@@ -42,7 +37,7 @@ namespace Comments
             services.TryAddSingleton<ISeriLogger, SeriLogger>();
             services.TryAddTransient<ICommentService, CommentService>();
             services.TryAddTransient<IConsultationService, ConsultationService>();
-            services.TryAddTransient<IFeedReaderService, NICE.Feeds.FeedReaderService>();
+            services.TryAddTransient<IFeedReaderService, FakeFeedReaderService>(); //TODO: replace with: NICE.Feeds.FeedReaderService
 
             // In production, static files are served from the pre-built files, rather than proxied via react dev server
             services.AddSpaStaticFiles(configuration =>
