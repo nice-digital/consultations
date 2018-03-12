@@ -5,7 +5,6 @@ import { Route, Switch } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
 import DemoPage from "../DemoPage";
-import FullPage from "../FullPage";
 import Home from "../Home/Home";
 import FetchData from "../FetchData/FetchData";
 import Document from "../Document/Document";
@@ -35,9 +34,7 @@ const App = () => {
 
 				{/*document*/}
 				<Route path="/:consulationID/:documentID/:chapterSlug">
-					<FullPage>
-						<Document />
-					</FullPage>
+					<Document />
 				</Route>
 
 				{/*404*/}

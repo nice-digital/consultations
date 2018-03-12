@@ -4,9 +4,11 @@ import React, { Component } from "react";
 import axios from "axios";
 import Moment from "react-moment";
 import { Helmet } from "react-helmet";
+import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
 import Breadcrumbs from "./../Breadcrumbs/Breadcrumbs";
-import StackedNav from "./../StackedNav/StackedNav";
+import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "./../../helpers/component_helpers";
+import CommentPanel from "../CommentPanel/CommentPanel";
 
 type PropsType = {};
 
@@ -71,9 +73,12 @@ class Document extends Component<PropsType, StateType> {
 	};
 
 	renderInPageNav = () => {
-		if (this.state.document) {
-			const { sections } = this.state.document.chapterHTML;
-			return (
+		const { sections } = this.state.document.chapterHTML;
+		return (
+			<nav className="in-page-nav" aria-labelledby="inpagenav-title">
+				<h2 id="inpagenav-title" className="in-page-nav__title">
+					On this page
+				</h2>
 				<ol className="in-page-nav__list" aria-hidden="false" role="menubar">
 					{sections.map((item, index) => {
 						const props = {
@@ -89,54 +94,50 @@ class Document extends Component<PropsType, StateType> {
 						);
 					})}
 				</ol>
-			);
-		}
+			</nav>
+		);
 	};
 
+	// todo: change this function so it only returns the data
 	renderSupportingDocumentLinks = () => {
-		if (this.state.document) {
-			const { documents } = this.state.document.consultation;
+		const { documents } = this.state.document.consultation;
 
-			let documentList = [];
+		const isValidDocument = d => d.title && d.documentId;
 
-			for (const document of documents) {
-				if (document.title && document.documentId) {
-					documentList.push({
-						label: document.title,
-						url: `/1/${document.documentId}/${document.chapters[0].slug}`
-					});
-				}
-			}
+		const mapDocToLink = d => ({
+			label: d.title,
+			url: `/1/${d.documentId}/${d.chapters[0].slug}`
+		});
 
-			const links = {
-				root: {
-					label: "Additional documents to comment on",
-					url: "#"
-				},
-				links: documentList
-			};
+		const links = {
+			root: {
+				label: "Additional documents to comment on",
+				url: "#"
+			},
+			links: documents.filter(isValidDocument).map(mapDocToLink)
+		};
 
-			return <StackedNav links={links} />;
-		}
+		return <StackedNav links={links} />;
 	};
 
 	// todo: will these need to be manually extracted from the consultation.documents array?
+	// todo: change this function so it only returns the data
 	renderThisDocumentChapterLinks = () => {
-		if (this.state.document) {
-			const links = {
-				root: {
-					label: "Chapters in this document",
-					url: "#"
-				},
-				links: [
-					{
-						label: "this is a sample label",
-						url: "#"
-					}
-				]
-			};
-			return <StackedNav links={links} />;
-		}
+		const links = {
+			root: {
+				label: "Chapters in this document",
+				url: "#",
+				current: true
+			},
+			links: [
+				{
+					label: "this is a sample label",
+					url: "#",
+					current: true
+				}
+			]
+		};
+		return <StackedNav links={links} />;
 	};
 
 	render() {
@@ -159,30 +160,32 @@ class Document extends Component<PropsType, StateType> {
 				<Helmet>
 					<title>Comment on Document</title>
 				</Helmet>
-				<Breadcrumbs segments={breadcrumbs} />
-				<div className="page-header">
-					<h1 className="page-header__heading">{title}</h1>
-					<p className="page-header__lead">
-						[{reference}] Open until <Moment format="DD-MM-YYYY" date={endDate} />
-					</p>
-				</div>
-				<div className="grid">
-					<div data-g="12 md:3">
-						{this.renderThisDocumentChapterLinks()}
-						{this.renderSupportingDocumentLinks()}
-					</div>
-					<div data-g="12 md:6">
-						<div className="document-comment-container">
-							<div dangerouslySetInnerHTML={this.renderDocumentHtml()} />
+				<CommentPanel />
+				<div className="container">
+					<div className="grid">
+						<div data-g="12">
+							<PhaseBanner />
+							<Breadcrumbs segments={breadcrumbs} />
+							<div className="page-header">
+								<h1 className="page-header__heading">{title}</h1>
+								<p className="page-header__lead">
+									[{reference}] Open until{" "}
+									<Moment format="DD-MM-YYYY" date={endDate} />
+								</p>
+							</div>
+							<div className="grid">
+								<div data-g="12 md:3">
+									{this.renderThisDocumentChapterLinks()}
+									{this.renderSupportingDocumentLinks()}
+								</div>
+								<div data-g="12 md:6">
+									<div className="document-comment-container">
+										<div dangerouslySetInnerHTML={this.renderDocumentHtml()} />
+									</div>
+								</div>
+								<div data-g="12 md:3">{this.renderInPageNav()}</div>
+							</div>
 						</div>
-					</div>
-					<div data-g="12 md:3">
-						<nav className="in-page-nav" aria-labelledby="inpagenav-title">
-							<h2 id="inpagenav-title" className="in-page-nav__title">
-								On this page
-							</h2>
-							{this.renderInPageNav()}
-						</nav>
 					</div>
 				</div>
 			</div>
