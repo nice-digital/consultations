@@ -57,7 +57,7 @@ class Document extends Component<PropsType, StateType> {
 			data: Object
 		};
 		// todo: separate this into the shared loader
-		axios("/sample.json").then((response: ResponseType) => {
+		axios("sample.json").then((response: ResponseType) => {
 			this.setState({
 				document: response.data
 			});
