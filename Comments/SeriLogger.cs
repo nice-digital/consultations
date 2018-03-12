@@ -23,61 +23,42 @@ namespace Comments
             loggerFactory.AddConsole(logCfg); // add provider to send logs to System.Console.WriteLine()
             loggerFactory.AddDebug(); // add provider to send logs to System.Diagnostics.Debug.WriteLine()
 
-            var useRabbit = bool.Parse(logCfg["UseRabbit"]);
-            var useFile = bool.Parse(logCfg["UseFile"]);
+            var rabbitSettingsFound = int.TryParse(logCfg["RabbitMQPort"], out var rPort);
+            bool.TryParse(logCfg["UseRabbit"], out var useRabbit);
+            string logFilePath = logCfg["LogFilePath"]; ;
 
-            int.TryParse(logCfg["RabbitMQPort"], out var rPort);
-            var rHost = logCfg["RabbitMQHost"];
-            var logFilePath = logCfg["LogFilePath"];
-            var environment = AppSettings.Environment.Name;
-
-            var formatter = new NiceSerilogFormatter(environment, "Consultations");
-
-            var rabbit = new RabbitMQConfiguration {
-                Hostname = rHost,
-                Port = rPort,
-                Protocol = RabbitMQ.Client.Protocols.AMQP_0_9_1,
-                Exchange = "logging.application.serilog",
-                ExchangeType = "topic"
-            };
-
+            var formatter = new NiceSerilogFormatter(AppSettings.Environment.Name, "Consultations");
             var logConfig = new LoggerConfiguration()
                 .MinimumLevel
                 .Warning();
 
-            if (useRabbit)
-                logConfig.WriteTo.RabbitMQ(rabbit, formatter);
+            if (rabbitSettingsFound && useRabbit)
+            {
+                var rHost = logCfg["RabbitMQHost"];
+             
+                var rabbit = new RabbitMQConfiguration {
+                    Hostname = rHost,
+                    Port = rPort,
+                    Protocol = RabbitMQ.Client.Protocols.AMQP_0_9_1,
+                    Exchange = "logging.application.serilog",
+                    ExchangeType = "topic"
+                };
 
-            if (useFile)
-                logConfig.WriteTo.RollingFile(formatter, logFilePath, fileSizeLimitBytes: 5000000);
+                logConfig.WriteTo.RabbitMQ(rabbit, formatter);
+            }
+
+            bool.TryParse(logCfg["UseFile"], out var useFile);
+
+            if (useFile) //probably dev only
+                logConfig.WriteTo.RollingFile(formatter, logFilePath, fileSizeLimitBytes: 5000000, retainedFileCountLimit: 5, flushToDiskInterval: TimeSpan.FromSeconds(20));
 
             Log.Logger = logConfig.CreateLogger();
 
             // add serilog provider (this is the hook)
             loggerFactory.AddSerilog();
 
-
-                //var useFile = bool.Parse(logCfg["UseFile"]);
-
-                //Log.Logger = GetFileLogger(logFilePath, formatter);
-                //loggerFactory.AddSerilog();
-
-                //var logger = loggerFactory.CreateLogger<SeriLogger>();
-                //logger.LogError($"Could not connect to RabbitMQ. Hostname:{rHost} Port:{rPort}, Exception: {ex.Message}");
-            
-
             // clean up on shutdown
             appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);
-        }
-
-
-        private static Serilog.ILogger GetFileLogger(string logFilePath, NiceSerilogFormatter formatter)
-        {
-            return new LoggerConfiguration()
-            .MinimumLevel
-            .Warning()
-            .WriteTo.RollingFile(formatter, logFilePath, fileSizeLimitBytes: 5000000)
-            .CreateLogger();
         }
     }
 }
