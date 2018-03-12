@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-// import stickybits from "stickybits";
 
 class CommentPanel extends Component {
 	state = {
@@ -14,13 +13,10 @@ class CommentPanel extends Component {
 		});
 	};
 
-	componentDidMount() {
-		// stickybits(".js-CommentPanel");
-	}
-
 	render() {
 		return (
 			<div
+				style={this.props.style}
 				className={
 					"CommentPanel js-CommentPanel " +
 					(this.state.panelActive ? "active" : "inactive")

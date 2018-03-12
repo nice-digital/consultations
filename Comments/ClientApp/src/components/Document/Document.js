@@ -4,11 +4,13 @@ import React, { Component } from "react";
 import axios from "axios";
 import Moment from "react-moment";
 import { Helmet } from "react-helmet";
+import { StickyContainer, Sticky } from "react-sticky";
+
 import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
 import Breadcrumbs from "./../Breadcrumbs/Breadcrumbs";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "./../../helpers/component_helpers";
-import CommentPanel from "../CommentPanel/CommentPanel";
+import CommentPanel from "./../CommentPanel/CommentPanel";
 
 type PropsType = {};
 
@@ -135,7 +137,6 @@ class Document extends Component<PropsType, StateType> {
 				<Helmet>
 					<title>Comment on Document</title>
 				</Helmet>
-				<CommentPanel />
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">
@@ -148,7 +149,7 @@ class Document extends Component<PropsType, StateType> {
 									<Moment format="D MMMM YYYY" date={endDate} />
 								</p>
 							</div>
-							<div className="grid">
+							<StickyContainer className="grid">
 								<div data-g="12 md:3">
 									<StackedNav links={this.getDocumentChapterLinks()} />
 									<StackedNav links={this.getSupportingDocumentLinks()} />
@@ -159,6 +160,9 @@ class Document extends Component<PropsType, StateType> {
 									</div>
 								</div>
 								<div data-g="12 md:3">
+									<Sticky>
+										{({ style }) => <CommentPanel style={style} />}
+									</Sticky>
 									<nav
 										className="in-page-nav"
 										aria-labelledby="inpagenav-title"
@@ -187,7 +191,7 @@ class Document extends Component<PropsType, StateType> {
 										</ol>
 									</nav>
 								</div>
-							</div>
+							</StickyContainer>
 						</div>
 					</div>
 				</div>
