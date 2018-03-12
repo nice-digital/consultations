@@ -56,7 +56,7 @@ class Document extends Component<PropsType, StateType> {
 		type ResponseType = {
 			data: Object
 		};
-		// todo: separate this into the shared loader
+		// TODO: separate this into the shared loader
 		axios("/sample.json").then((response: ResponseType) => {
 			this.setState({
 				document: response.data
@@ -98,7 +98,7 @@ class Document extends Component<PropsType, StateType> {
 		);
 	};
 
-	// todo: change this function so it only returns the data
+	// TODO: change this function so it only returns the data
 	renderSupportingDocumentLinks = () => {
 		const { documents } = this.state.document.consultation;
 
@@ -120,8 +120,8 @@ class Document extends Component<PropsType, StateType> {
 		return <StackedNav links={links} />;
 	};
 
-	// todo: will these need to be manually extracted from the consultation.documents array?
-	// todo: change this function so it only returns the data
+	// TODO: will these need to be manually extracted from the consultation.documents array?
+	// TODO: change this function so it only returns the data
 	renderThisDocumentChapterLinks = () => {
 		const links = {
 			root: {
@@ -145,7 +145,7 @@ class Document extends Component<PropsType, StateType> {
 			return null;
 		}
 
-		// todo: where are the breadcrumbs going to come from?
+		// TODO: where are the breadcrumbs going to come from?
 		const breadcrumbs = [
 			{ label: "Home", url: "/document" },
 			{ label: "NICE Guidance", url: "#" },
