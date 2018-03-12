@@ -53,16 +53,20 @@ class Document extends Component<PropsType, StateType> {
 	}
 
 	componentDidMount() {
+		this.getSampleDocument();
+	}
+
+	getSampleDocument = () => {
 		type ResponseType = {
 			data: Object
 		};
-		// TODO: separate this into the shared loader
+
 		axios("/sample.json").then((response: ResponseType) => {
 			this.setState({
 				document: response.data
 			});
 		});
-	}
+	};
 
 	renderDocumentHtml = () => {
 		if (this.state.document) {
@@ -72,58 +76,27 @@ class Document extends Component<PropsType, StateType> {
 		}
 	};
 
-	renderInPageNav = () => {
-		const { sections } = this.state.document.chapterHTML;
-		return (
-			<nav className="in-page-nav" aria-labelledby="inpagenav-title">
-				<h2 id="inpagenav-title" className="in-page-nav__title">
-					On this page
-				</h2>
-				<ol className="in-page-nav__list" aria-hidden="false" role="menubar">
-					{sections.map((item, index) => {
-						const props = {
-							label: item.title,
-							to: item.slug,
-							behavior: "smooth",
-							block: "start"
-						};
-						return (
-							<li className="in-page-nav__item" key={index}>
-								<HashLinkTop {...props} />
-							</li>
-						);
-					})}
-				</ol>
-			</nav>
-		);
-	};
-
-	// TODO: change this function so it only returns the data
-	renderSupportingDocumentLinks = () => {
+	getSupportingDocumentLinks = () => {
 		const { documents } = this.state.document.consultation;
 
 		const isValidDocument = d => d.title && d.documentId;
 
-		const mapDocToLink = d => ({
+		const mapDocumentToLink = d => ({
 			label: d.title,
 			url: `/1/${d.documentId}/${d.chapters[0].slug}`
 		});
 
-		const links = {
+		return {
 			root: {
 				label: "Additional documents to comment on",
 				url: "#"
 			},
-			links: documents.filter(isValidDocument).map(mapDocToLink)
+			links: documents.filter(isValidDocument).map(mapDocumentToLink)
 		};
-
-		return <StackedNav links={links} />;
 	};
 
-	// TODO: will these need to be manually extracted from the consultation.documents array?
-	// TODO: change this function so it only returns the data
-	renderThisDocumentChapterLinks = () => {
-		const links = {
+	getDocumentChapterLinks = () => {
+		return {
 			root: {
 				label: "Chapters in this document",
 				url: "#",
@@ -137,7 +110,15 @@ class Document extends Component<PropsType, StateType> {
 				}
 			]
 		};
-		return <StackedNav links={links} />;
+	};
+
+	getBreadcrumbs = () => {
+		return [
+			{ label: "Home", url: "/document" },
+			{ label: "NICE Guidance", url: "#" },
+			{ label: "In Consulation", url: "#" },
+			{ label: "Document title", url: "#" }
+		];
 	};
 
 	render() {
@@ -145,15 +126,9 @@ class Document extends Component<PropsType, StateType> {
 			return null;
 		}
 
-		// TODO: where are the breadcrumbs going to come from?
-		const breadcrumbs = [
-			{ label: "Home", url: "/document" },
-			{ label: "NICE Guidance", url: "#" },
-			{ label: "In Consulation", url: "#" },
-			{ label: "Document title", url: "#" }
-		];
-
 		const { title, endDate, reference } = this.state.document.consultation;
+
+		const { sections } = this.state.document.chapterHTML;
 
 		return (
 			<div>
@@ -165,25 +140,53 @@ class Document extends Component<PropsType, StateType> {
 					<div className="grid">
 						<div data-g="12">
 							<PhaseBanner />
-							<Breadcrumbs segments={breadcrumbs} />
+							<Breadcrumbs segments={this.getBreadcrumbs()} />
 							<div className="page-header">
 								<h1 className="page-header__heading">{title}</h1>
 								<p className="page-header__lead">
 									[{reference}] Open until{" "}
-									<Moment format="DD-MM-YYYY" date={endDate} />
+									<Moment format="D MMMM YYYY" date={endDate} />
 								</p>
 							</div>
 							<div className="grid">
 								<div data-g="12 md:3">
-									{this.renderThisDocumentChapterLinks()}
-									{this.renderSupportingDocumentLinks()}
+									<StackedNav links={this.getDocumentChapterLinks()} />
+									<StackedNav links={this.getSupportingDocumentLinks()} />
 								</div>
 								<div data-g="12 md:6">
 									<div className="document-comment-container">
 										<div dangerouslySetInnerHTML={this.renderDocumentHtml()} />
 									</div>
 								</div>
-								<div data-g="12 md:3">{this.renderInPageNav()}</div>
+								<div data-g="12 md:3">
+									<nav
+										className="in-page-nav"
+										aria-labelledby="inpagenav-title"
+									>
+										<h2 id="inpagenav-title" className="in-page-nav__title">
+											On this page
+										</h2>
+										<ol
+											className="in-page-nav__list"
+											aria-hidden="false"
+											role="menubar"
+										>
+											{sections.map((item, index) => {
+												const props = {
+													label: item.title,
+													to: item.slug,
+													behavior: "smooth",
+													block: "start"
+												};
+												return (
+													<li className="in-page-nav__item" key={index}>
+														<HashLinkTop {...props} />
+													</li>
+												);
+											})}
+										</ol>
+									</nav>
+								</div>
 							</div>
 						</div>
 					</div>
