@@ -59,6 +59,11 @@ export const replaceRelativePaths = (html: string): string => {
 };
 
 export const processHtml = (html: string, { title, metas, links, scripts, htmlAttributes, bodyAttributes, rootContent }): string => {
+	// In dev mode we proxy requests to react dev server, which runs in the root. So we prepend relative URLs.
+	// We don't need to do this in production because we use PUBLIC_URL=/consultations with `npm run build`.
+	if (process.env.NODE_ENV === "development")
+		html = replaceRelativePaths(html);
+
 	html = replaceOpeningHtmlTag(html, htmlAttributes);
 	html = replaceOpeningBodyTag(html, bodyAttributes);
 	html = replaceRootContent(html, rootContent);
@@ -67,12 +72,6 @@ export const processHtml = (html: string, { title, metas, links, scripts, htmlAt
 		links,
 		scripts
 	});
-
-	// In dev mode we proxy requests to react dev server, which runs in the root. So we prepend relative URLs.
-	// We don't need to do this in production because we use PUBLIC_URL=/consultations with `npm run build`.
-	if (process.env.NODE_ENV === "development")
-		html = replaceRelativePaths(html);
-
 	return html;
 };
 

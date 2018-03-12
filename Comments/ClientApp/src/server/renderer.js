@@ -7,11 +7,23 @@ import { renderToString  } from "react-dom/server";
 import { StaticRouter } from "react-router";
 import { Helmet } from "react-helmet";
 
-import { processHtml } from "./html-processor";
+import { processHtml, replaceRelativePaths } from "./html-processor";
 
 import App from "./../components/App/App";
 
 const BaseUrlRelative: string = "/consultations";
+
+// Returns a script tag with the stringified data for loading on the client
+const getPreloadedDataHtml = (data): string => {
+	let scriptTag: string = `<script>window.__PRELOADED__=${JSON.stringify(data)};</script>`;
+
+	// Wrap new lines in dev mode so it's easier to scan over html source for debugging purposes
+	if (process.env.NODE_ENV === "development") {
+		scriptTag = `\r\n\r\n${scriptTag}\r\n\r\n`;
+	}
+
+	return scriptTag;
+};
 
 // Returns a promise that resolves to an object containing the HTML to be rendered.
 // The params contains properties e.g.
@@ -19,22 +31,24 @@ const BaseUrlRelative: string = "/consultations";
 // origin, url, baseUrl, absoluteUrl, domainTasks: { }, data: { originalHtml: "", ... }
 // The `params.data` property contains properties set in `SupplyData` in Startup.cs.
 export const serverRenderer = (params): Promise => {
-	return new Promise((resolve) => {
+	return new Promise((resolve, reject) => {
 
-		// Context object that Routes can use to pass properties 'out'. Primarily used for status code. E.g.:
+		// Context object that Routes can use to pass properties 'out'. Primarily used for status code.
+		// See https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/api/StaticRouter.md#context-object
+		// E.g.:
 		//  <Route render={({ staticContext }) => {
 		//      if (staticContext) staticContext.status = 404;
 		//      return null; }} />
-		let context = {
+		let staticContext = {
 			preload: {
 				data: {}, // Key value pairs of preloaded data sets
 				loaders: [] // List of promises where we track preloading data
 			},
-			baseUrl: params.origin + BaseUrlRelative
+			baseUrl: params.origin + BaseUrlRelative // Base url is used for 'server' ajax requests so we can hit the .NET instance from the Node process
 		};
 
 		var app = (
-			<StaticRouter basename={BaseUrlRelative} location={params.url} context={context}>
+			<StaticRouter basename={BaseUrlRelative} location={params.url} context={staticContext}>
 				<App />
 			</StaticRouter>);
 
@@ -42,18 +56,12 @@ export const serverRenderer = (params): Promise => {
 		let rootContent = renderToString(app);
 
 		// Wait for all preloaders to have loaded before re-rendering the app
-		Promise.all(context.preload.loaders).then(function () {
+		Promise.all(staticContext.preload.loaders).then(() => {
 
 			// Second render now that all the data preloaders have finished so we can render with data on the server
 			rootContent = renderToString(app);
 
 			const helmet = Helmet.renderStatic();
-
-			let clientPreloadedData = `<script>window.__PRELOADED__=${JSON.stringify(context.preload.data)};</script>`;
-
-			if (process.env.NODE_ENV === "development") {
-				clientPreloadedData = `\r\n\r\n${clientPreloadedData}\r\n\r\n`;
-			}
 
 			const html = processHtml(params.data.originalHtml, {
 				htmlAttributes: helmet.htmlAttributes.toString(),
@@ -62,10 +70,12 @@ export const serverRenderer = (params): Promise => {
 				title: helmet.title.toString(),
 				metas: helmet.meta.toString(),
 				links: helmet.link.toString(),
-				scripts: clientPreloadedData + helmet.script.toString()
+				scripts: getPreloadedDataHtml(staticContext.preload.data) + helmet.script.toString()
 			});
 
-			resolve({ html: html, statusCode: context.status || 200 });
+			resolve({ html: html, statusCode: staticContext.status || 200 });
+		}).catch((error) => {
+			reject(error);
 		});
 	});
 };
