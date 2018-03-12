@@ -1,8 +1,8 @@
 import Endpoints from "./endpoints";
 import axios from "axios";
 
-const load = (endpoint, root = "") => {
-	return axios(root + Endpoints[endpoint])
+const load = (endpoint, baseUrl = "/consultations") => {
+	return axios(baseUrl + Endpoints[endpoint])
 		.then(response => response.data);
 };
 

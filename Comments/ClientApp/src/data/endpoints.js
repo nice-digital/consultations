@@ -1,5 +1,5 @@
 const Endpoints = {
-	weather: "api/SampleData/WeatherForecasts"
+	weather: "/api/SampleData/WeatherForecasts"
 };
 
 export default Endpoints;

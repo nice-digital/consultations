@@ -11,6 +11,8 @@ using Microsoft.Extensions.Logging;
 using NICE.Feeds;
 using System;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
+using Microsoft.AspNetCore.StaticFiles.Infrastructure;
+using Microsoft.AspNetCore.SpaServices;
 
 namespace Comments
 {
@@ -45,28 +47,28 @@ namespace Comments
                 configuration.RootPath = "ClientApp/build";
             });
 
-            if (Environment.IsDevelopment())
-            {
-                services.AddNodeServices(options =>
-                {
-                    options.LaunchWithDebugging = true;
-                    options.DebuggingPort = 9229;
-                });
-            }
+            // Uncomment this if you want to debug server node
+            //if (Environment.IsDevelopment())
+            //{
+            //    services.AddNodeServices(options =>
+            //    {
+            //        options.LaunchWithDebugging = true;
+            //        options.DebuggingPort = 9229;
+            //    });
+            //}
 
-            
             services.AddCors(); //adding CORS for Warren. todo: maybe move this into the isDevelopment block..
             services.AddOptions();
             AppSettings.Configure(services, Configuration);
         }
 
-        
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ISeriLogger seriLogger, IApplicationLifetime appLifetime)
         {
             seriLogger.Configure(loggerFactory, Configuration, appLifetime, env);
-            
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -79,28 +81,30 @@ namespace Comments
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            // TODO Which of these paths do we need?
-            //app.UsePathBase("/consultations");
-           // app.UseStaticFiles(); //this enables the wwwroot folder. 
-            app.UseSpaStaticFiles();
+            // Because in dev mode we proxy to a react dev server (which has to run in the root e.g. http://localhost:3000)
+            // we re-write paths for static files to map them to the root
+            if (env.IsDevelopment())
+            {
+                app.Use((context, next) =>
+                {
+                    var reqPath = context.Request.Path;
+                    if (reqPath.HasValue && reqPath.Value.Contains("."))
+                    {
+                        // Map static files paths to the root, for use within the 
+                        if (reqPath.Value.Contains("/consultations"))
+                            context.Request.Path = reqPath.Value.Replace("/consultations", "");
+                        else
+                        {
+                            context.Response.StatusCode = 404;
+                            throw new FileNotFoundException($"Path {reqPath.Value} could not be found. Did you mean to load '/consultations{context.Request.Path.Value  }' instead?");
+                        }
+                    }
 
-            //app.UseStaticFiles(new StaticFileOptions
-            //{
-            //    FileProvider = new PhysicalFileProvider(
-            //        Path.Combine(env.ContentRootPath, "ClientApp/public")),
-            //    RequestPath = ""
-            //});
+                    return next();
+                });
+            }
 
-            //var buildFolder = Path.Combine(env.ContentRootPath, "ClientApp/build");
-            ////env.IsProduction()
-            //if (Directory.Exists(buildFolder)) //maybe this should throw errors if it doesn't exist in production...
-            //{
-            //    app.UseStaticFiles(new StaticFileOptions
-            //    {
-            //        FileProvider = new PhysicalFileProvider(buildFolder),
-            //        RequestPath = ""
-            //    });
-            //}
+            app.UseSpaStaticFiles(new StaticFileOptions { RequestPath = "/consultations" });
 
             app.UseMvc(routes =>
             {
@@ -123,26 +127,27 @@ namespace Comments
 
             // DotNetCore SpaServices requires RawTarget property, which isn't set on a TestServer.
             // So set it here to allow integration tests to work with SSR via SpaServices
-            app.Use(async (context, next) =>
+            app.Use((context, next) =>
             {
                 var httpRequestFeature = context.Features.Get<IHttpRequestFeature>();
 
-                if (string.IsNullOrEmpty(httpRequestFeature.RawTarget))
+                if (httpRequestFeature != null && string.IsNullOrEmpty(httpRequestFeature.RawTarget))
                     httpRequestFeature.RawTarget = httpRequestFeature.Path;
 
-                await next.Invoke();
+                return next();
             });
 
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "ClientApp";
-                
+
                 spa.UseSpaPrerendering(options =>
                 {
                     options.ExcludeUrls = new[] { "/sockjs-node" };
                     // Pass data in from .NET into the SSR. These come through as `params` within `createServerRenderer` within the server side JS code.
                     // See https://docs.microsoft.com/en-us/aspnet/core/spa/angular?tabs=visual-studio#pass-data-from-net-code-into-typescript-code
-                    options.SupplyData = (context, data) => {
+                    options.SupplyData = (context, data) =>
+                    {
                         data["isHttpsRequest"] = context.Request.IsHttps;
                         // Pass further data in e.g. user/authentication data
                     };
