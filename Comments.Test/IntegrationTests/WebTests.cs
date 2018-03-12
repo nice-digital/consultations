@@ -10,7 +10,7 @@ namespace Comments.Test.IntegrationTests
         public async Task Get_Consultations_Homepage()
         {
             // Act
-            var response = await _client.GetAsync("/consultations"); //this route is temporary.
+            var response = await _client.GetAsync("/consultations/test"); //this route is temporary.
             response.EnsureSuccessStatusCode();
 
             var responseString = await response.Content.ReadAsStringAsync();

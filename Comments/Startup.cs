@@ -14,6 +14,7 @@ using System.IO;
 using Comments;
 using Comments.Configuration;
 using Microsoft.Extensions.FileProviders;
+using NICE.Feeds;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
 
 namespace comments
@@ -40,6 +41,8 @@ namespace comments
 
             services.TryAddSingleton<ISeriLogger, SeriLogger>();
             services.TryAddTransient<ICommentService, CommentService>();
+            services.TryAddTransient<IConsultationService, ConsultationService>();
+            services.TryAddTransient<IFeedReaderService, NICE.Feeds.FeedReaderService>();
 
             // In production, static files are served from the pre-built files, rather than proxied via react dev server
             services.AddSpaStaticFiles(configuration =>

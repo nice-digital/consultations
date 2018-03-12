@@ -5,13 +5,13 @@ using Microsoft.Extensions.Logging;
 namespace Comments.Controllers.Api
 {
     [Produces("application/json")]
-    [Route("consultations/api/Comment")]
+    [Route("consultations/api/[controller]")]
     public class CommentController : Controller
     {
         private readonly ICommentService _commentService;
-        private readonly ILogger<DocumentController> _logger;
+        private readonly ILogger<CommentsController> _logger;
 
-        public CommentController(ICommentService commentService, ILogger<DocumentController> logger)
+        public CommentController(ICommentService commentService, ILogger<CommentsController> logger)
         {
             _commentService = commentService;
             _logger = logger;

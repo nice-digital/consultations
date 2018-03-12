@@ -24,16 +24,16 @@ namespace Comments.ViewModels
         
     }
 
-    public class ChapterWithHTML : Chapter
+    public class ChapterContent : Chapter
     {
         [JsonConstructor]
-        public ChapterWithHTML(string slug, string title, string content, IEnumerable<ChapterSection> sections) : base(slug, title)
+        public ChapterContent(string slug, string title, string content, IEnumerable<ChapterSection> sections) : base(slug, title)
         {
             Content = content;
             Sections = sections;
         }
 
-        public ChapterWithHTML(ConsultationChapter chapter) : base(chapter.Slug, chapter.Title)
+        public ChapterContent(ConsultationChapter chapter) : base(chapter.Slug, chapter.Title)
         {
             Content = chapter.Content;
             Sections = chapter.Sections?.Select(s => new ChapterSection(s));

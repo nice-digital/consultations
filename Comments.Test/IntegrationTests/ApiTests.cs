@@ -21,7 +21,7 @@ namespace Comments.Test.IntegrationTests
             //Arrange (in the base constructor for this one.)
 
             // Act
-            var response = await _client.GetAsync("/consultations/api/Document?consultationId=1&documentId=1&chapterSlug=some-chapter");
+            var response = await _client.GetAsync("/consultations/api/Comments?consultationId=1&documentId=1&chapterSlug=some-chapter");
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
 
@@ -58,22 +58,22 @@ namespace Comments.Test.IntegrationTests
             ResetDatabase();
             const int locationId = 1;
             const int consultationId = 1;
-            const int documentId = 1;
+            const int documentId = 2;
             await CreateComment(locationId, consultationId, documentId);
             await CreateComment(locationId, consultationId, documentId); //duplicate comment. totally valid.
             await CreateComment(2, consultationId, documentId); //different location id, this should be in the result set
             await CreateComment(locationId, 2, documentId); //different consultation id, this shouldn't be in the result set
-            await CreateComment(locationId, consultationId, 2); //different document id, this shouldn't be in the result set
+            await CreateComment(locationId, consultationId, 3); //different document id, this shouldn't be in the result set
 
             // Act
-            var response = await _client.GetAsync($"/consultations/api/Document?consultationId={consultationId}&documentId={documentId}");
+            var response = await _client.GetAsync($"/consultations/api/Comments?consultationId={consultationId}&documentId={documentId}&chapterSlug=introduction");
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
 
             // Assert
-            var deserialisedResponse = JsonConvert.DeserializeObject<DocumentViewModel>(responseString);
-            deserialisedResponse.Comments.Count().ShouldBe(3);
             responseString.ShouldMatchApproved();
+            var deserialisedResponse = JsonConvert.DeserializeObject<CommentsAndQuestions>(responseString);
+            deserialisedResponse.Comments.Count().ShouldBe(3);
         }
 
         [Fact]
@@ -90,7 +90,7 @@ namespace Comments.Test.IntegrationTests
             AddCommentsAndQuestionsAndAnswers(consultationId, documentId, commentText, questionText, answerText);
             
             // Act
-            var response = await _client.GetAsync($"/consultations/api/Document?consultationId={consultationId}&documentId={documentId}");
+            var response = await _client.GetAsync($"/consultations/api/Comments?consultationId={consultationId}&documentId={documentId}&chapterSlug=introduction");
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
 
@@ -98,7 +98,7 @@ namespace Comments.Test.IntegrationTests
             responseString.ShouldMatchApproved();
             //todo: get the below all working:
 
-            //var deserialisedResponse = JsonConvert.DeserializeObject<DocumentViewModel>(responseString);
+            //var deserialisedResponse = JsonConvert.DeserializeObject<CommentsAndQuestions>(responseString);
             //deserialisedResponse.Comments.Single().CommentText.ShouldBe(commentText);
             //deserialisedResponse.Questions.Single().QuestionText.ShouldBe(questionText);
             //deserialisedResponse.Questions.Single().Answers.Single().AnswerText.ShouldBe(answerText);

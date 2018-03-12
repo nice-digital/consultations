@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using NICE.Feeds;
 
 namespace Comments.Test.Infrastructure
 {
@@ -37,6 +38,7 @@ namespace Comments.Test.Infrastructure
                             //, optionsBuilder => { optionsBuilder.use }
                             ));
                     services.TryAddSingleton<ISeriLogger, FakeSerilogger>();
+                    services.TryAddTransient<IFeedReaderService, FakeFeedReaderService>();
                 })
                 .Configure(app =>
                 {
