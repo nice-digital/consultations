@@ -1,4 +1,4 @@
-import { Endpoints }  from "./endpoints";
+import { baseUrl, Endpoints } from "./endpoints";
 import axios from "axios";
 import { objectToQueryString } from "./../helpers/utils";
 
@@ -9,7 +9,13 @@ import { objectToQueryString } from "./../helpers/utils";
  * @param baseUrl - the root url segment that's prepended to the query
  * @param query - the data to be serialised into query string
  * @returns {*|PromiseLike<T>|Promise<T>} - returns a promise with the data
+ *
+ * Example usage:
+ * load("chapter", "/consultations", { consultationId: 1, documentId: 2, chapterSlug: "risk-assessment" });
+ * ...would result in...
+ * axios("/consultations/api/Chapter?consultationId=1&documentId=2&chapterSlug=risk-assessment").then(res => res.data);
  */
+
 const load = (endpoint, baseUrl = "/consultations", query = {}) => {
 	// see if you're passing an endpoint that's in our Endpoints list of shortcuts
 	if (Endpoints[endpoint]) {
