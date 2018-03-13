@@ -6,7 +6,7 @@
 		"start": "rimraf ./build && npm run modernizr && npm-run-all -p sass:watch start-js",
 		"start-js": "react-scripts start",
 		"build": "npm run modernizr && react-scripts build",
-		"test": "react-scripts test --env=jsdom",
+		"test": "react-scripts test --env=jsdom --testEnvironment=node",
 		"eslint": "node node_modules/eslint/bin/eslint src/**/*.js",
 		"test:ci": "cross-env CI=true react-scripts test --env=jsdom --testResultsProcessor=jest-teamcity-reporter",
 		"test:ci:coverage": "npm run test:ci -- --coverage ",
@@ -64,6 +64,7 @@
 		"rimraf": "^2.6.2"
 	},
 	"devDependencies": {
+		"axios-mock-adapter": "^1.14.1",
 		"prettier-eslint": "^8.8.1"
 	}
 }
