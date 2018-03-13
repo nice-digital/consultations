@@ -2,10 +2,14 @@
 
 import React from "react";
 
-type PropsType = {|
+type PropsType = {
+	links: Array<LinksType>
+};
+
+type LinksType = {
 	label: string,
 	url: string
-|};
+};
 
 const BreadCrumbs = (props: PropsType) => {
 	return (
@@ -17,7 +21,7 @@ const BreadCrumbs = (props: PropsType) => {
 				itemScope
 				itemType="http://schema.org/BreadcrumbList"
 			>
-				{props.segments.map((segment, index) => {
+				{props.links.map((segment, index) => {
 					const { label, url } = segment;
 					return (
 						<li
@@ -25,7 +29,8 @@ const BreadCrumbs = (props: PropsType) => {
 							className="breadcrumbs__crumb"
 							itemProp="itemListElement"
 							itemScope
-							itemType="http://schema.org/ListItem">
+							itemType="http://schema.org/ListItem"
+						>
 							<a href={url} itemProp="name">
 								{label}
 							</a>

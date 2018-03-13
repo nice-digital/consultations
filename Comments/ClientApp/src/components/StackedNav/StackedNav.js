@@ -10,13 +10,14 @@ type LinkType = {
 };
 
 type PropsType = {
-	links: {
+	links: ?{
 		root: LinkType,
 		links: Array<LinkType>
 	}
 };
 
 export const StackedNav = (props: PropsType) => {
+	if (!props.links) return null;
 	const { root, links } = props.links;
 	return (
 		<nav className="stacked-nav" aria-label="{root.label}">

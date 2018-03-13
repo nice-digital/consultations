@@ -15,7 +15,7 @@ import CommentPanel from "./../CommentPanel/CommentPanel";
 type PropsType = {};
 
 type StateType = {
-	document: null | {
+	document: ?{
 		chapterHTML: {
 			content: string,
 			sections: [
@@ -71,14 +71,12 @@ class Document extends Component<PropsType, StateType> {
 	};
 
 	renderDocumentHtml = () => {
-		if (this.state.document) {
-			return { __html: this.state.document.chapterHTML.content };
-		} else {
-			return null;
-		}
+		if (!this.state.document) return null;
+		return { __html: this.state.document.chapterHTML.content };
 	};
 
 	getSupportingDocumentLinks = () => {
+		if (!this.state.document) return null;
 		const { documents } = this.state.document.consultation;
 
 		const isValidDocument = d => d.title && d.documentId;
@@ -124,9 +122,7 @@ class Document extends Component<PropsType, StateType> {
 	};
 
 	render() {
-		if (!this.state.document) {
-			return null;
-		}
+		if (!this.state.document) return null;
 
 		const { title, endDate, reference } = this.state.document.consultation;
 
@@ -137,12 +133,11 @@ class Document extends Component<PropsType, StateType> {
 				<Helmet>
 					<title>Comment on Document</title>
 				</Helmet>
-				<CommentPanel />
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">
 							<PhaseBanner />
-							<Breadcrumbs segments={this.getBreadcrumbs()} />
+							<Breadcrumbs links={this.getBreadcrumbs()} />
 							<div className="page-header">
 								<h1 className="page-header__heading">{title}</h1>
 								<p className="page-header__lead">
