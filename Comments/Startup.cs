@@ -11,9 +11,11 @@ using Microsoft.Extensions.Logging;
 using NICE.Feeds;
 using System;
 using System.IO;
+using Microsoft.AspNetCore.Mvc;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
 using Microsoft.AspNetCore.StaticFiles.Infrastructure;
 using Microsoft.AspNetCore.SpaServices;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 
 namespace Comments
 {
@@ -57,6 +59,14 @@ namespace Comments
             //        options.DebuggingPort = 9229;
             //    });
             //}
+
+            if (!Environment.IsDevelopment())
+            {
+                services.Configure<MvcOptions>(options =>
+                {
+                    options.Filters.Add(new RequireHttpsAttribute());
+                });
+            }
 
             services.AddCors(); //adding CORS for Warren. todo: maybe move this into the isDevelopment block..
             services.AddOptions();
@@ -164,8 +174,8 @@ namespace Comments
                     // `UseProxyToSpaDevelopmentServer` below rather than `UseReactDevelopmentServer`.
                     // This proxies to a manual CRA server (run `npm start` from the ClientApp folder) instead of DotNetCore launching one automatically.
                     // This can be quicker. See https://docs.microsoft.com/en-us/aspnet/core/spa/react?tabs=visual-studio#run-the-cra-server-independently
-                    spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");
-                    //spa.UseReactDevelopmentServer(npmScript: "start");
+                   // spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");
+                    spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
         }
