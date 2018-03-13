@@ -13,10 +13,10 @@ using Xunit;
 
 namespace Comments.Test.IntegrationTests
 {
-    public class ApiTests : TestBase
+    public class CommentTests : TestBase
     {
         [Fact]
-        public async Task GetDocumentReturnsEmptyFeed()
+        public async Task Get_Chapter_Feed_ReturnsEmptyFeed()
         {
             //Arrange (in the base constructor for this one.)
 

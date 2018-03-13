@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Comments.Controllers.Api
 {
-    [Route("api/[controller]")]
+    [Route("consultations/api/[controller]")]
     public class SampleDataController : Controller
     {
         private static string[] Summaries = new[]

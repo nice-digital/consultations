@@ -17,7 +17,7 @@ namespace Comments.Controllers.Api
             _logger = logger;
         }
 
-        // GET: api/Comment/5
+        // GET: api/Comment/5 
         [HttpGet("{commentId}")]
         public IActionResult GetComment([FromRoute] int commentId)
         {

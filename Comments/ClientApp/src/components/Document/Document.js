@@ -62,8 +62,8 @@ class Document extends Component<PropsType, StateType> {
 		type ResponseType = {
 			data: Object
 		};
-
-		axios("/sample.json").then((response: ResponseType) => {
+		// todo: separate this into the shared loader
+		axios("sample.json").then((response: ResponseType) => {
 			this.setState({
 				document: response.data
 			});
@@ -137,6 +137,7 @@ class Document extends Component<PropsType, StateType> {
 				<Helmet>
 					<title>Comment on Document</title>
 				</Helmet>
+				<CommentPanel />
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">

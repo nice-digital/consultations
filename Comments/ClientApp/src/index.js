@@ -6,7 +6,7 @@ import registerServiceWorker from "./registerServiceWorker";
 
 import App from "./components/App/App";
 
-const baseUrl = document.getElementsByTagName("base")[0].getAttribute("href");
+const baseUrl = document.getElementsByTagName("base")[0].getAttribute("href").replace(/\/$/, "");
 const rootElement = document.getElementById("root");
 
 ReactDOM.hydrate(
