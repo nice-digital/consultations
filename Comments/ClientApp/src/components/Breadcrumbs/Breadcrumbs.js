@@ -11,7 +11,7 @@ type PropsType = {
 	links: Array<LinksType>
 };
 
-const BreadCrumbs = (props: PropsType) => {
+export const BreadCrumbs = (props: PropsType) => {
 	return (
 		<nav aria-label="Breadcrumbs">
 			<p className="visually-hidden">You are here:</p>
@@ -42,5 +42,3 @@ const BreadCrumbs = (props: PropsType) => {
 		</nav>
 	);
 };
-
-export default BreadCrumbs;

@@ -22,5 +22,3 @@ export const PhaseBanner = () => {
 		</p>
 	);
 };
-
-export default PhaseBanner;

@@ -1,16 +1,16 @@
 // @flow
 
 import React, { Component } from "react";
-import axios from "axios";
 import Moment from "react-moment";
 import { Helmet } from "react-helmet";
 import { StickyContainer, Sticky } from "react-sticky";
 
 import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
-import Breadcrumbs from "./../Breadcrumbs/Breadcrumbs";
+import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
 import { StackedNav } from "./../StackedNav/StackedNav";
-import { HashLinkTop } from "./../../helpers/component_helpers";
+import { HashLinkTop } from "../../helpers/component-helpers";
 import CommentPanel from "./../CommentPanel/CommentPanel";
+import load from "../../data/loader";
 
 type PropsType = {};
 
@@ -23,7 +23,7 @@ type StateType = {
 					slug: string,
 					title: string
 				}
-			]
+				]
 		},
 		consultation: {
 			documents: [
@@ -35,15 +35,21 @@ type StateType = {
 							slug: string,
 							title: string
 						}
-					]
+						]
 				}
-			],
+				],
 			title: string,
 			endDate: string,
 			reference: string
 		}
 	}
 };
+
+type DataType = any;
+
+type DocumentsType = any;
+
+type ChaptersType = any;
 
 class Document extends Component<PropsType, StateType> {
 	constructor() {
@@ -59,43 +65,33 @@ class Document extends Component<PropsType, StateType> {
 	}
 
 	getSampleDocument = () => {
-		type ResponseType = {
-			data: Object
-		};
-		// todo: separate this into the shared loader
-		axios("sample.json").then((response: ResponseType) => {
-			this.setState({
-				document: response.data
-			});
-		});
+		load("sample.json")
+			.then(data  => this.setState({
+				document: data
+			}));
 	};
 
-	renderDocumentHtml = () => {
-		if (!this.state.document) return null;
-		return { __html: this.state.document.chapterHTML.content };
+	renderDocumentHtml = (data: DataType) => {
+		return { __html: data };
 	};
 
-	getSupportingDocumentLinks = () => {
-		if (!this.state.document) return null;
-		const { documents } = this.state.document.consultation;
-
+	getSupportingDocumentLinks = (documents: DocumentsType) => {
 		const isValidDocument = d => d.title && d.documentId;
-
-		const mapDocumentToLink = d => ({
+		const documentToLinkObject = d => ({
 			label: d.title,
 			url: `/1/${d.documentId}/${d.chapters[0].slug}`
 		});
-
 		return {
 			root: {
 				label: "Additional documents to comment on",
 				url: "#"
 			},
-			links: documents.filter(isValidDocument).map(mapDocumentToLink)
+			links: documents.filter(isValidDocument).map(documentToLinkObject)
 		};
 	};
 
-	getDocumentChapterLinks = () => {
+	getDocumentChapterLinks = (chapters: ChaptersType) => {
+		if (chapters) throw new Error("Need to add chapters to getDocumentChapterLinks");
 		return {
 			root: {
 				label: "Chapters in this document",
@@ -114,19 +110,31 @@ class Document extends Component<PropsType, StateType> {
 
 	getBreadcrumbs = () => {
 		return [
-			{ label: "Home", url: "/document" },
-			{ label: "NICE Guidance", url: "#" },
-			{ label: "In Consulation", url: "#" },
-			{ label: "Document title", url: "#" }
+			{
+				label: "Home",
+				url: "/document"
+			},
+			{
+				label: "NICE Guidance",
+				url: "#"
+			},
+			{
+				label: "In Consulation",
+				url: "#"
+			},
+			{
+				label: "Document title",
+				url: "#"
+			}
 		];
 	};
 
 	render() {
 		if (!this.state.document) return null;
 
-		const { title, endDate, reference } = this.state.document.consultation;
+		const { title, endDate, reference, documents } = this.state.document.consultation;
 
-		const { sections } = this.state.document.chapterHTML;
+		const { sections, content } = this.state.document.chapterHTML;
 
 		return (
 			<div>
@@ -136,28 +144,28 @@ class Document extends Component<PropsType, StateType> {
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">
-							<PhaseBanner />
-							<Breadcrumbs links={this.getBreadcrumbs()} />
+							<PhaseBanner/>
+							<BreadCrumbs links={this.getBreadcrumbs()}/>
 							<div className="page-header">
 								<h1 className="page-header__heading">{title}</h1>
 								<p className="page-header__lead">
 									[{reference}] Open until{" "}
-									<Moment format="D MMMM YYYY" date={endDate} />
+									<Moment format="D MMMM YYYY" date={endDate}/>
 								</p>
 							</div>
 							<StickyContainer className="grid">
 								<div data-g="12 md:3">
-									<StackedNav links={this.getDocumentChapterLinks()} />
-									<StackedNav links={this.getSupportingDocumentLinks()} />
+									<StackedNav links={this.getDocumentChapterLinks()}/>
+									<StackedNav links={this.getSupportingDocumentLinks(documents)}/>
 								</div>
 								<div data-g="12 md:6">
 									<div className="document-comment-container">
-										<div dangerouslySetInnerHTML={this.renderDocumentHtml()} />
+										<div dangerouslySetInnerHTML={this.renderDocumentHtml(content)}/>
 									</div>
 								</div>
 								<div data-g="12 md:3">
 									<Sticky>
-										{({ style }) => <CommentPanel style={style} />}
+										{({ style }) => <CommentPanel style={style}/>}
 									</Sticky>
 									<nav
 										className="in-page-nav"
