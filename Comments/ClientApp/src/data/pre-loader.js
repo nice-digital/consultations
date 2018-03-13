@@ -12,9 +12,13 @@ const preload = (staticContext, endpoint) => {
 		console.info(
 			`Found preloaded data on the client with an endpoint key of ${endpoint}`
 		);
-		data = window.__PRELOADED__[endpoint];
-		delete window.__PRELOADED__[endpoint];
-		return data;
+		if (window.__PRELOADED__) {
+			data = window.__PRELOADED__[endpoint];
+			delete window.__PRELOADED__[endpoint];
+			return data;
+		} else {
+			return null;
+		}
 	}
 
 	// There should always be a static context on the server but check anyway
@@ -34,12 +38,11 @@ const preload = (staticContext, endpoint) => {
 	// Load fresh data on the server
 	console.log(`Data with key '${endpoint}' isn't loaded, making request`);
 
-	var promise = load(endpoint, staticContext.baseUrl)
-		.then(response => {
-			console.log(`Data with key '${endpoint}' loaded async from server`);
-			staticContext.preload.data[endpoint] = response;
-			return response;
-		});
+	var promise = load(endpoint, staticContext.baseUrl).then(response => {
+		console.log(`Data with key '${endpoint}' loaded async from server`);
+		staticContext.preload.data[endpoint] = response;
+		return response;
+	});
 
 	console.log(`Data with key '${endpoint}' loaded async from server`);
 	staticContext.preload.data[endpoint] = data;
