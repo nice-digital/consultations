@@ -2,13 +2,13 @@
 
 import React from "react";
 
-type PropsType = {
-	links: Array<LinksType>
-};
-
 type LinksType = {
 	label: string,
 	url: string
+};
+
+type PropsType = {
+	links: Array<LinksType>
 };
 
 const BreadCrumbs = (props: PropsType) => {
