@@ -1,10 +1,10 @@
 import { defineSupportCode } from "cucumber";
 
+import openUrl from '../support/action/openUrl';
+
 defineSupportCode(({ Given }) => {
     Given(
-        /^I am on the homepage$/,
-        () => {
-            browser.url("");
-        }
+        /^I open the page "([^"]*)?"$/,
+        openUrl
     );
 });

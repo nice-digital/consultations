@@ -1,10 +1,10 @@
 import { defineSupportCode } from "cucumber";
 
+import checkContainsText from '../support/check/checkContainsText';
+
 defineSupportCode(({ Then }) => {
     Then(
-        /^I should see weather forecast$/,
-        () => {
-            $("h1='Weather forecast'").should.not.be.undefined;
-        }
+        /^I expect that (button|element) "([^"]*)?"( not)* matches the text "([^"]*)?"$/,
+        checkContainsText
     );
 });

@@ -2,7 +2,9 @@ Feature: Consultations homepage feature
   As a user of consultations
   I want to be able to use navigation
 
+  Background:
+    Given I open the page ""
+
   Scenario: Load home page 
-    Given I am on the homepage 
-    When I click on Fetch Data in the nav
-    Then I should see weather forecast
+    When I click on text "Fetch Data" in ".stacked-nav"
+    Then I expect that element "h1" matches the text "Weather forecast"
