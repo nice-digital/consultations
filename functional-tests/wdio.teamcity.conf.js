@@ -1,15 +1,25 @@
+// wdio config for docker/teamcity
+
 var config = require("./wdio.conf.js").config;
 
-// Assume Chrome installed on TC agent
-config.port = "9515";
-config.path = "/";
-config.services = ["chromedriver"];
+config.services = [];
+
+// Run headless on TeamCity
 config.capabilities = [
     {
-        browserName: "chrome"
+        browserName: "chrome",
+        chromeOptions: {
+            args: ["--headless", "--window-size=1366,768"]
+        }
+    },
+    {
+        browserName: "firefox",
+        "moz:firefoxOptions": {
+            args: ["-headless"]
+        }
     }
 ];
 
-config.reporters = ["teamcity"];
+config.reporters = ["spec", "teamcity"];
 
 exports.config = config;
