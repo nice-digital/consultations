@@ -43,6 +43,8 @@ namespace Comments
             services.TryAddTransient<ICommentService, CommentService>();
             services.TryAddTransient<IConsultationService, ConsultationService>();
             services.TryAddTransient<IFeedReaderService, FakeFeedReaderService>(); //TODO: replace with: NICE.Feeds.FeedReaderService
+            services.TryAddTransient<IFeedConverterService, FeedConverterConverterService>(); //todo: fix the duplication in name in NICE.Feeds
+            
 
             // In production, static files are served from the pre-built files, rather than proxied via react dev server
             services.AddSpaStaticFiles(configuration =>
@@ -51,22 +53,22 @@ namespace Comments
             });
 
             // Uncomment this if you want to debug server node
-            //if (Environment.IsDevelopment())
-            //{
-            //    services.AddNodeServices(options =>
-            //    {
-            //        options.LaunchWithDebugging = true;
-            //        options.DebuggingPort = 9229;
-            //    });
-            //}
-
-            if (!Environment.IsDevelopment())
+            if (Environment.IsDevelopment())
             {
-                services.Configure<MvcOptions>(options =>
+                services.AddNodeServices(options =>
                 {
-                    options.Filters.Add(new RequireHttpsAttribute());
+                    options.LaunchWithDebugging = true;
+                    options.DebuggingPort = 9229;
                 });
             }
+
+            //if (!Environment.IsDevelopment()) //this breaks the tests.
+            //{
+            //    services.Configure<MvcOptions>(options =>
+            //    {
+            //        options.Filters.Add(new RequireHttpsAttribute());
+            //    });
+            //}
 
             services.AddCors(); //adding CORS for Warren. todo: maybe move this into the isDevelopment block..
             services.AddOptions();
@@ -174,8 +176,8 @@ namespace Comments
                     // `UseProxyToSpaDevelopmentServer` below rather than `UseReactDevelopmentServer`.
                     // This proxies to a manual CRA server (run `npm start` from the ClientApp folder) instead of DotNetCore launching one automatically.
                     // This can be quicker. See https://docs.microsoft.com/en-us/aspnet/core/spa/react?tabs=visual-studio#run-the-cra-server-independently
-                   // spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");
-                    spa.UseReactDevelopmentServer(npmScript: "start");
+                    spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");
+                   // spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
         }

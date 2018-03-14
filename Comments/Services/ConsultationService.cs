@@ -16,22 +16,24 @@ namespace Comments.Services
     {
 
         private readonly IFeedReaderService _feedReaderService;
+        private readonly IFeedConverterService _feedConverterService;
 
-        public ConsultationService(IFeedReaderService feedReaderService)
+        public ConsultationService(IFeedReaderService feedReaderService, IFeedConverterService feedConverterService)
         {
             _feedReaderService = feedReaderService;
+            _feedConverterService = feedConverterService;
         }
 
         public ConsultationDetail GetConsultationDetail(int consultationId)
         {
-            var feedService = new FeedConverterConverterService(_feedReaderService); 
-            return new ViewModels.ConsultationDetail(feedService.ConvertConsultationDetail(consultationId));
+//               var feedService = new FeedConverterConverterService(_feedReaderService); 
+            return new ViewModels.ConsultationDetail(_feedConverterService.ConvertConsultationDetail(consultationId));
         }
 
         public ChapterContent GetChapterContent(int consultationId, int documentId, string chapterSlug)
         {
-            var feedService = new FeedConverterConverterService(_feedReaderService); 
-            return new ViewModels.ChapterContent(feedService.ConvertConsultationChapter(consultationId, documentId, chapterSlug));
+            //var feedService = new FeedConverterConverterService(_feedReaderService); 
+            return new ViewModels.ChapterContent(_feedConverterService.ConvertConsultationChapter(consultationId, documentId, chapterSlug));
         }
 
         /// <summary>

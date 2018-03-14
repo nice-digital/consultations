@@ -5,6 +5,7 @@ using Comments.Models;
 using Comments.Services;
 using Comments.Test.Infrastructure;
 using Comments.ViewModels;
+using NICE.Feeds;
 using NICE.Feeds.Tests.Infrastructure;
 using Shouldly;
 using Xunit;
@@ -24,7 +25,8 @@ namespace Comments.Test.UnitTests
 
             var locationId = AddLocation(consultationId, documentId);
             AddComment(locationId, commentText, isDeleted: false);
-            var commentService = new CommentService(new ConsultationsContext(_options), new ConsultationService(new FakeFeedReaderService(Feed.ConsultationCommentsListDetailMulitpleDoc)));
+            var feedReaderService = new FakeFeedReaderService(Feed.ConsultationCommentsListDetailMulitpleDoc);
+            var commentService = new CommentService(new ConsultationsContext(_options), new ConsultationService(feedReaderService, new FeedConverterConverterService(feedReaderService)));
             
             // Act
             var viewModel = commentService.GetCommentsAndQuestions(consultationId, documentId, "chapter-slug");
@@ -45,7 +47,8 @@ namespace Comments.Test.UnitTests
             var answerText = Guid.NewGuid().ToString();
 
             AddCommentsAndQuestionsAndAnswers(consultationId, documentId, commentText, questionText, answerText);
-            var commentService = new CommentService(new ConsultationsContext(_options), new ConsultationService(new FakeFeedReaderService(Feed.ConsultationCommentsListDetailMulitpleDoc)));
+            var feedReaderService = new FakeFeedReaderService(Feed.ConsultationCommentsListDetailMulitpleDoc);
+            var commentService = new CommentService(new ConsultationsContext(_options), new ConsultationService(feedReaderService, new FeedConverterConverterService(feedReaderService)));
 
             // Act    
             var viewModel = commentService.GetCommentsAndQuestions(consultationId, documentId, "chapter-slug");
@@ -84,9 +87,10 @@ namespace Comments.Test.UnitTests
                         new Chapter("second-document-first-chapter-slug", "second-document-first-chapter-title")
                     })
                 });
+            var feedReaderService = new FakeFeedReaderService(Feed.ConsultationCommentsListDetailMulitpleDoc);
+            var consultationService = new ConsultationService(feedReaderService, new FeedConverterConverterService(feedReaderService));
 
             // Act
-            var consultationService = new ConsultationService(new FakeFeedReaderService(Feed.ConsultationCommentsListDetailMulitpleDoc));
             var (validatedDocumentId, validatedChapterSlug) = consultationService.ValidateDocumentAndChapterWithinConsultation(consultation, documentIdIn, chapterSlugIn);
 
             //Assert
