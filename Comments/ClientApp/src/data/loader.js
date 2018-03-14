@@ -1,4 +1,4 @@
-import { baseUrl, Endpoints } from "./endpoints";
+import { Endpoints } from "./endpoints";
 import axios from "axios";
 import { objectToQueryString } from "./../helpers/utils";
 
