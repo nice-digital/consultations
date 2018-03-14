@@ -14,14 +14,11 @@ exports.config = {
     // Assume user has Chrome and Firefox installed.
     capabilities: [
         {
-            browserName: "chrome",
-            chromeOptions: {
-                args: [/*'--headless', */'--window-size=1366,768']
-            }
-        }/*,
+            browserName: "chrome"
+        },
         {
             browserName: "firefox"
-        }*/
+        }
     ],
 
     logLevel: "verbose",

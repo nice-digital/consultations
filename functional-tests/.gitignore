@@ -64,3 +64,6 @@ typings/
 
 # Captured screenshot errors from webdriver.io
 errorShots
+
+# Screenshots copied from inside a docker container
+errorShots_docker
