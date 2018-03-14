@@ -4,13 +4,15 @@ import React, { Component } from "react";
 import Moment from "react-moment";
 import { Helmet } from "react-helmet";
 import { StickyContainer, Sticky } from "react-sticky";
+import axios from "axios";
 
 import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
 import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
-import CommentPanel from "./../CommentPanel/CommentPanel";
-import load from "../../data/loader";
+import { CommentPanel } from "./../CommentPanel/CommentPanel";
+import load from "./../../data/loader";
+
 
 type PropsType = {};
 
@@ -58,18 +60,17 @@ class Document extends Component<PropsType, StateType> {
 		this.state = {
 			document: null
 		};
-	}
 
-	componentDidMount() {
-		this.getSampleDocument();
+		// TODO: change back to loader when tests are passing
+		axios("sample.json")
+			.then(res  => {
+				this.setState({
+					document: res.data
+				});
+			})
+			// TODO: explore why this is logging in testing
+			.catch(err => console.log("💔 Problem with load", err));
 	}
-
-	getSampleDocument = () => {
-		load("sample.json")
-			.then(data  => this.setState({
-				document: data
-			}));
-	};
 
 	renderDocumentHtml = (data: DataType) => {
 		return { __html: data };
@@ -130,7 +131,7 @@ class Document extends Component<PropsType, StateType> {
 	};
 
 	render() {
-		if (!this.state.document) return null;
+		if (!this.state.document) return <h1>Loading...</h1>;
 
 		const { title, endDate, reference, documents } = this.state.document.consultation;
 

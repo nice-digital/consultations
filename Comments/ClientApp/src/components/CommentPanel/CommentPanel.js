@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-class CommentPanel extends Component {
+export class CommentPanel extends Component {
 	state = {
 		panelActive: true
 	};
@@ -39,5 +39,3 @@ class CommentPanel extends Component {
 		);
 	}
 }
-
-export default CommentPanel;
