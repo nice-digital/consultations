@@ -64,9 +64,8 @@ namespace Comments.Models
             {
                 entity.Property(e => e.LocationId).HasColumnName("LocationID");
 
-                entity.Property(e => e.ConsultationId).HasColumnName("ConsultationID");
+                entity.Property(e => e.SourceURL).HasColumnName("SourceURL");
 
-                entity.Property(e => e.DocumentId).HasColumnName("DocumentID");
             });
 
             modelBuilder.Entity<Question>(entity =>

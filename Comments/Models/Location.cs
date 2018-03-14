@@ -5,14 +5,11 @@ namespace Comments.Models
 {
     public partial class Location
     {
-        public Location(int consultationId, int? documentId, string chapterSlug, string sectionSlug,
-            string rangeStart, int? rangeStartOffset, string rangeEnd, int? rangeEndOffset, string quote,
-            ICollection<Comment> comment, ICollection<Question> question)
+        public Location(int locationId, string sourceUrl, string htmlElementId, string rangeStart, int? rangeStartOffset, string rangeEnd, int? rangeEndOffset, string quote, ICollection<Comment> comment, ICollection<Question> question)
         {
-            ConsultationId = consultationId;
-            DocumentId = documentId;
-            ChapterSlug = chapterSlug;
-            SectionSlug = sectionSlug;
+            LocationId = locationId;
+            SourceURL = sourceUrl;
+            HtmlElementID = htmlElementId;
             RangeStart = rangeStart;
             RangeStartOffset = rangeStartOffset;
             RangeEnd = rangeEnd;
@@ -22,17 +19,15 @@ namespace Comments.Models
             Question = question;
         }
 
-        public Location(ViewModels.Location location) : this(location.ConsultationId, location.DocumentId, location.ChapterSlug, location.SectionSlug, 
+        public Location(ViewModels.Location location) : this(location.LocationId, location.SourceURL, location.HtmlElementID, 
             location.RangeStart, location.RangeStartOffset, location.RangeEnd, location.RangeEndOffset, location.Quote, null, null)
         {
         }
 
         public void UpdateFromViewModel(ViewModels.Location location)
         {
-            ConsultationId = location.ConsultationId;
-            DocumentId = location.DocumentId;
-            ChapterSlug = location.ChapterSlug;
-            SectionSlug = location.SectionSlug;
+            SourceURL = location.SourceURL;
+            HtmlElementID = location.HtmlElementID;
             RangeStart = location.RangeStart;
             RangeStartOffset = location.RangeStartOffset;
             RangeEnd = location.RangeEnd;

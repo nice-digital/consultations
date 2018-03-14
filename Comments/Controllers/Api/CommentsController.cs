@@ -20,19 +20,17 @@ namespace Comments.Controllers.Api
         }
 
         /// <summary>
-        /// GET: eg. consultations/api/Comments?consultationId=1&documentId=1&chapterSlug=chapter-slug
+        /// GET: eg. consultations/api/Comments?sourceURL=http%3A%2F%2Fwww.nice.org.uk%2Fconsultations%2F1%2F1%2Fchapter-slug
         /// </summary>
-        /// <param name="consultationId"></param>
-        /// <param name="documentId">if null, show first commentable document.</param>
-        /// <param name="chapterSlug">nullable. if not, show first chapter.</param>
+        /// <param name="sourceURL"></param>
         /// <returns></returns>
         [HttpGet]
-        public CommentsAndQuestions Get(int consultationId, int documentId, string chapterSlug)
+        public CommentsAndQuestions Get(string sourceURL)
         {
-            if (string.IsNullOrWhiteSpace(chapterSlug))
-                throw new ArgumentNullException(nameof(chapterSlug));
+            if (string.IsNullOrWhiteSpace(sourceURL))
+                throw new ArgumentNullException(nameof(sourceURL));
 
-            return _commentService.GetCommentsAndQuestions(consultationId, documentId, chapterSlug);
+            return _commentService.GetCommentsAndQuestions(sourceURL);
         }
     }
 }
