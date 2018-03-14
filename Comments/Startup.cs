@@ -53,15 +53,15 @@ namespace Comments
             });
 
             // Uncomment this if you want to debug server node
-            if (Environment.IsDevelopment())
-            {
-                services.AddNodeServices(options =>
-                {
-                    options.LaunchWithDebugging = true;
-                    options.DebuggingPort = 9229;
-                });
-            }
-
+            //if (Environment.IsDevelopment())
+            //{
+            //    services.AddNodeServices(options =>
+            //    {
+            //        options.LaunchWithDebugging = true;
+            //        options.DebuggingPort = 9229;
+            //    });
+            //}
+             
             //if (!Environment.IsDevelopment()) //this breaks the tests.
             //{
             //    services.Configure<MvcOptions>(options =>

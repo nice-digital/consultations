@@ -15,26 +15,23 @@ namespace Comments.Test.UnitTests
         {
             // Arrange
             ResetDatabase();
-            var consultationId = RandomNumber();
-            var documentId = RandomNumber();
+            var sourceURL = "/consultations/1/1/introduction";
             var commentText = Guid.NewGuid().ToString();
 
-            var locationId = AddLocation(consultationId, documentId);
+            var locationId = AddLocation(sourceURL);
             AddComment(locationId, commentText, true);
 
             // Act
             using (var consultationsContext = new ConsultationsContext(_options))
             {
                 var filteredLocations = consultationsContext.Location.Where(l =>
-                        l.ConsultationId.Equals(consultationId) &&
-                        (!l.DocumentId.HasValue || l.DocumentId.Equals(documentId)))
-                    .Include(l => l.Comment);
+                        l.SourceURL.Equals(sourceURL))
+                            .Include(l => l.Comment);
 
                 var unfilteredLocations = consultationsContext.Location.Where(l =>
-                        l.ConsultationId.Equals(consultationId) &&
-                        (!l.DocumentId.HasValue || l.DocumentId.Equals(documentId)))
-                    .Include(l => l.Comment)
-                    .IgnoreQueryFilters();
+                        l.SourceURL.Equals(sourceURL))
+                            .Include(l => l.Comment)
+                            .IgnoreQueryFilters();
 
                 //Assert
                 filteredLocations.Single().Comment.Count.ShouldBe(0);

@@ -6,6 +6,8 @@ const OpeningHtmlTagRegex: RegExp = /<html[^>]*>/g,
 	ClassAttributeRegex: RegExp = /class=['"]([^"]*)['"]/;
 
 // Replace placeholders and tokens in the static html layout file.
+
+console.log("hi there");
 export const prepHead = (html: string, { title, metas, links, scripts }): string => {
 	return html
 		.replace("<!--! title -->", title)

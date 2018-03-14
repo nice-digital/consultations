@@ -9,6 +9,7 @@ using Comments.ViewModels;
 using Newtonsoft.Json;
 using Shouldly;
 using Xunit;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace Comments.Test.IntegrationTests.API.Comments
 {
@@ -29,14 +30,14 @@ namespace Comments.Test.IntegrationTests.API.Comments
         }
 
         [Theory]
-        [InlineData(1, 1, null)]
-        [InlineData(1, 1, 1)]
-        [InlineData(int.MaxValue, int.MaxValue, null)]
-        [InlineData(int.MaxValue, int.MaxValue, 1)]
-        public async Task Create_Comment(int locationId, int consultationId, int? documentId)
+        [InlineData(1, null)]
+        [InlineData(1, "/some-url")]
+        [InlineData(int.MaxValue, null)]
+        [InlineData(int.MaxValue, "/some-url")]
+        public async Task Create_Comment(int locationId, string sourceURL)
         {
             //Arrange
-            var comment = new ViewModels.Comment(locationId, consultationId, documentId, "chapter-slug", null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty, "comment text");
+            var comment = new ViewModels.Comment(locationId, sourceURL, null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty, "comment text");
             var content = new StringContent(JsonConvert.SerializeObject(comment), Encoding.UTF8, "application/json");
 
             // Act
@@ -56,16 +57,15 @@ namespace Comments.Test.IntegrationTests.API.Comments
             //Arrange
             ResetDatabase();
             const int locationId = 1;
-            const int consultationId = 1;
-            const int documentId = 2;
-            await Create_Comment(locationId, consultationId, documentId);
-            await Create_Comment(locationId, consultationId, documentId); //duplicate comment. totally valid.
-            await Create_Comment(2, consultationId, documentId); //different location id, this should be in the result set
-            await Create_Comment(locationId, 2, documentId); //different consultation id, this shouldn't be in the result set
-            await Create_Comment(locationId, consultationId, 3); //different document id, this shouldn't be in the result set
+            const string sourceURL = "/consultations/1/1/introduction";
+            await Create_Comment(locationId, sourceURL);
+            await Create_Comment(locationId, sourceURL); //duplicate comment. totally valid.
+            await Create_Comment(2, sourceURL); //different location id, this should be in the result set
+            //await Create_Comment(locationId, sourceURL); //different consultation id, this shouldn't be in the result set
+            //await Create_Comment(locationId, sourceURL); //different document id, this shouldn't be in the result set
 
             // Act
-            var response = await _client.GetAsync($"/consultations/api/Comments?consultationId={consultationId}&documentId={documentId}&chapterSlug=introduction");
+            var response = await _client.GetAsync($"/consultations/api/Comments?sourceURL={WebUtility.UrlEncode(sourceURL)}");
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
 

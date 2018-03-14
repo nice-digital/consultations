@@ -19,17 +19,16 @@ namespace Comments.Test.UnitTests
         { 
             // Arrange
             ResetDatabase();
-            var consultationId = 1;
-            var documentId = 2;
+            var sourceURL = "/consultations/1/1/introduction";
             var commentText = Guid.NewGuid().ToString();
 
-            var locationId = AddLocation(consultationId, documentId);
+            var locationId = AddLocation(sourceURL);
             AddComment(locationId, commentText, isDeleted: false);
             var feedReaderService = new FakeFeedReaderService(Feed.ConsultationCommentsListDetailMulitpleDoc);
             var commentService = new CommentService(new ConsultationsContext(_options), new ConsultationService(feedReaderService, new FeedConverterConverterService(feedReaderService)));
             
             // Act
-            var viewModel = commentService.GetCommentsAndQuestions(consultationId, documentId, "chapter-slug");
+            var viewModel = commentService.GetCommentsAndQuestions(sourceURL);
 
             //Assert
             viewModel.Comments.Single().CommentText.ShouldBe(commentText);
@@ -40,18 +39,17 @@ namespace Comments.Test.UnitTests
         {
             // Arrange
             ResetDatabase();
-            var consultationId = 1;
-            var documentId = 2;
+            var sourceURL = "/consultations/1/1/introduction";
             var commentText = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
             var answerText = Guid.NewGuid().ToString();
 
-            AddCommentsAndQuestionsAndAnswers(consultationId, documentId, commentText, questionText, answerText);
+            AddCommentsAndQuestionsAndAnswers(sourceURL, commentText, questionText, answerText);
             var feedReaderService = new FakeFeedReaderService(Feed.ConsultationCommentsListDetailMulitpleDoc);
             var commentService = new CommentService(new ConsultationsContext(_options), new ConsultationService(feedReaderService, new FeedConverterConverterService(feedReaderService)));
 
             // Act    
-            var viewModel = commentService.GetCommentsAndQuestions(consultationId, documentId, "chapter-slug");
+            var viewModel = commentService.GetCommentsAndQuestions(sourceURL);
 
             //Assert
             viewModel.Comments.Single().CommentText.ShouldBe(commentText);
