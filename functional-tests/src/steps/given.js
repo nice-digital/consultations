@@ -1,10 +1,8 @@
-import { defineSupportCode } from "cucumber";
+import { Given } from "cucumber";
 
 import openUrl from '../support/action/openUrl';
 
-defineSupportCode(({ Given }) => {
-    Given(
-        /^I open the page "([^"]*)?"$/,
-        openUrl
-    );
-});
+Given(
+    /^I open the page "([^"]*)?"$/,
+    openUrl
+);
