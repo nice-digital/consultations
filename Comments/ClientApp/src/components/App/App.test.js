@@ -1,17 +1,15 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { shallow } from "enzyme";
 import { MemoryRouter } from "react-router-dom";
 import App from "./App";
 
-describe("[ClientApp] ", ()=>{
-	describe("App ", ()=>{
+describe("[ClientApp] ", () => {
+	describe("App ", () => {
 		it("renders without crashing", () => {
-			const div = document.createElement("div");
-			ReactDOM.render(
+			shallow(
 				<MemoryRouter>
 					<App />
-				</MemoryRouter>,
-				div);
+				</MemoryRouter>);
 		});
 	});
 });
