@@ -16,17 +16,17 @@ namespace Comments.Test.Infrastructure
 
         public string GetConsultationList()
         {
-            return new FeedReader(_feed).GetConsultationList();
+            return new FeedReader(Feed.ConsultationCommentsListMultiple).GetConsultationList();
         }
 
         public string GetConsultationChapter(int consultationId, int documentId, string chapterSlug)
         {
-            return new FeedReader(_feed).GetConsultationList();
+            return new FeedReader(Feed.ConsultationCommentsChapter).GetConsultationList();
         }
 
         public string GetConsultationDetail(int consultationId)
         {
-            return new FeedReader(_feed).GetConsultationList();
+            return new FeedReader(Feed.ConsultationCommentsListDetailMulitpleDoc).GetConsultationList();
         }
     }
 }

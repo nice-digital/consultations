@@ -42,7 +42,7 @@ namespace Comments
             services.TryAddSingleton<ISeriLogger, SeriLogger>();
             services.TryAddTransient<ICommentService, CommentService>();
             services.TryAddTransient<IConsultationService, ConsultationService>();
-            services.TryAddTransient<IFeedReaderService, FakeFeedReaderService>(); //TODO: replace with: NICE.Feeds.FeedReaderService
+           // services.TryAddTransient<IFeedReaderService, FakeFeedReaderService>(); //TODO: replace with: NICE.Feeds.FeedReaderService
             services.TryAddTransient<IFeedConverterService, FeedConverterConverterService>(); //todo: fix the duplication in name in NICE.Feeds
             
 
