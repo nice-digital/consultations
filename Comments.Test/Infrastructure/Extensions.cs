@@ -14,7 +14,7 @@ namespace Comments.Test.Infrastructure
         {
 
             //prettifying.
-            if (stringIn.StartsWith("{")) //we'll assume it's JSON.
+            if (stringIn.StartsWith("{") || stringIn.StartsWith("[{")) //we'll assume it's JSON.
             {
                 try
                 {

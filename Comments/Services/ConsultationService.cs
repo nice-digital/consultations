@@ -1,6 +1,7 @@
 ﻿using Comments.ViewModels;
 using NICE.Feeds;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 
@@ -10,6 +11,7 @@ namespace Comments.Services
     {
         ConsultationDetail GetConsultationDetail(int consultationId);
         ChapterContent GetChapterContent(int consultationId, int documentId, string chapterSlug);
+        IEnumerable<Document> GetDocuments(int consultationId);
         (int validDocumentId, string validChapterSlug) ValidateDocumentAndChapterWithinConsultation(ConsultationDetail consultation, int documentId, string chapterSlug);
     }
 
@@ -46,6 +48,21 @@ namespace Comments.Services
             {
                 return new ViewModels.ChapterContent(
                     _feedConverterService.ConvertConsultationChapter(consultationId, documentId, chapterSlug));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "NICE.Feeds returned error:" + ex.ToString());
+                throw;
+            }
+        }
+
+
+        public IEnumerable<Document> GetDocuments(int consultationId)
+        {
+            try
+            {
+                var consultationDetail = _feedConverterService.ConvertConsultationDetail(consultationId);
+                return consultationDetail.Resources.Select(r => new ViewModels.Document(r)).ToList();
             }
             catch (Exception ex)
             {
