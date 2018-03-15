@@ -27,7 +27,7 @@ namespace Comments.Test.IntegrationTests.API.Consultation
         }
 
         [Fact]
-        public async Task Get_Documents_Feed_Returns_Populated_Feed()
+        public async Task Get_Consultation_Feed_Returns_Populated_Feed()
         {
             //Arrange (in base constructor)
 
