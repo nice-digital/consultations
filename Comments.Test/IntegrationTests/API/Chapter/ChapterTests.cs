@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Shouldly;
 using Xunit;
+using FluentAssertions;
 
 namespace Comments.Test.IntegrationTests.API.Chapter
 {
@@ -21,15 +22,19 @@ namespace Comments.Test.IntegrationTests.API.Chapter
         [InlineData(1, 0, "introduction")]
         [InlineData(1, -1, "introduction")]
         [InlineData(1, -1, "")]
-        public async Task Get_Chapter_Feed_Using_Invalid_Ids_Returns_Empty_Feed(int consultationId, int documentId, string chapterSlug)
+        public async Task Get_Chapter_Feed_Using_Invalid_Ids_Throws_error(int consultationId, int documentId, string chapterSlug)
         {
-            //Arrange (in the base constructor for this one.)
+            //Arrange
+            Func<Task> response;
 
             // Act
-            var response = await _client.GetAsync($"/consultations/api/Chapter?consultationId={consultationId}&documentId={documentId}&chapterSlug={chapterSlug}");
+            response = async () =>
+            {
+                await _client.GetAsync($"/consultations/api/Chapter?consultationId={consultationId}&documentId={documentId}&chapterSlug={chapterSlug}");
+            };
 
             // Assert
-            response.StatusCode.ShouldBe(HttpStatusCode.NotFound); //maybe should be a 500?
+            response.ShouldThrow<ArgumentException>();
         }
 
         [Theory]
@@ -38,17 +43,20 @@ namespace Comments.Test.IntegrationTests.API.Chapter
         [InlineData("  ")]
         public async Task Get_Chapter_Feed_Using_Chapter_Slug_Throws_Error(string chapterSlug)
         {
-            //Arrange (in the base constructor for this one.)
+            //Arrange
+            Func<Task> response;
 
             // Act
-            var response = await _client.GetAsync($"/consultations/api/Chapter?consultationId=1&documentId=2&chapterSlug={chapterSlug}");
-           // response.EnsureSuccessStatusCode();
-            var responseString = await response.Content.ReadAsStringAsync();
+            response = async () =>
+            {
+                await _client.GetAsync($"/consultations/api/Chapter?consultationId=1&documentId=2&chapterSlug={chapterSlug}");
+            };
 
             // Assert
-            //var deserialisedResponse = JsonConvert.DeserializeObject<JObject>(responseString);
-            //deserialisedResponse.
-            responseString.ShouldMatchApproved();
+            response.ShouldThrow<ArgumentNullException>();
+
+            //the above in a non-AAA one-liner:
+            // await Assert.ThrowsAsync<ArgumentNullException>(nameof(chapterSlug), () => _client.GetAsync($"/consultations/api/Chapter?consultationId=1&documentId=2&chapterSlug={chapterSlug}"));
         }
 
         [Fact]

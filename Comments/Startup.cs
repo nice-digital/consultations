@@ -37,7 +37,10 @@ namespace Comments
             services.AddDbContext<ConsultationsContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddMvc();
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(new ResponseCacheAttribute() { NoStore = true, Location = ResponseCacheLocation.None });
+            });
 
             services.TryAddSingleton<ISeriLogger, SeriLogger>();
             services.TryAddTransient<ICommentService, CommentService>();
@@ -91,7 +94,7 @@ namespace Comments
             else
             {
                 // TODO: Proper error handling URL
-                app.UseExceptionHandler("/Home/Error");
+               // app.UseExceptionHandler("/Home/Error");
             }
 
             // Because in dev mode we proxy to a react dev server (which has to run in the root e.g. http://localhost:3000)

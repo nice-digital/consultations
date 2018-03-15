@@ -11,7 +11,32 @@ namespace Comments.Test.UnitTests
     public class ConsultationContext : TestBase
     {
         [Fact]
-        public void Comments_IsDeleted_Flag_Filtering_is_working_in_the_context()
+        public void Comments_IsDeleted_Flag_is_not_Filtering_in_the_context()
+        {
+            // Arrange
+            ResetDatabase();
+            var sourceURL = "/consultations/1/1/introduction";
+            var commentText = Guid.NewGuid().ToString();
+
+            var locationId = AddLocation(sourceURL);
+            AddComment(locationId, commentText, true);
+
+            // Act
+            using (var consultationsContext = new ConsultationsContext(_options))
+            {
+                var unfilteredLocations = consultationsContext.Location.Where(l =>
+                        l.SourceURL.Equals(sourceURL))
+                    .Include(l => l.Comment)
+                    .IgnoreQueryFilters()
+                    .ToList();
+
+                //Assert
+                unfilteredLocations.First().Comment.Count.ShouldBe(1);
+            }
+        }
+
+        [Fact]
+        public void Comments_IsDeleted_Flag_is_Filtering_in_the_context()
         {
             // Arrange
             ResetDatabase();
@@ -26,16 +51,11 @@ namespace Comments.Test.UnitTests
             {
                 var filteredLocations = consultationsContext.Location.Where(l =>
                         l.SourceURL.Equals(sourceURL))
-                            .Include(l => l.Comment);
-
-                var unfilteredLocations = consultationsContext.Location.Where(l =>
-                        l.SourceURL.Equals(sourceURL))
                             .Include(l => l.Comment)
-                            .IgnoreQueryFilters();
+                            .ToList();
 
                 //Assert
                 filteredLocations.Single().Comment.Count.ShouldBe(0);
-                unfilteredLocations.Single().Comment.Count.ShouldBe(1);
             }
         }
     }

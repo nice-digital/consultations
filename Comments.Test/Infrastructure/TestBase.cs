@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net.Http;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
@@ -42,6 +43,17 @@ namespace Comments.Test.Infrastructure
                 .Configure(app =>
                 {
                     app.UseStaticFiles();
+
+                    app.Use((context, next) =>
+                    {
+                        var httpRequestFeature = context.Features.Get<IHttpRequestFeature>();
+
+                        if (httpRequestFeature != null && string.IsNullOrEmpty(httpRequestFeature.RawTarget))
+                            httpRequestFeature.RawTarget = httpRequestFeature.Path;
+
+                        return next();
+                    });
+
                 })
                 .UseEnvironment("Production")
                 .UseStartup(typeof(Startup));

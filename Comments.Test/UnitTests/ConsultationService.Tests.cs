@@ -25,7 +25,7 @@ namespace Comments.Test.UnitTests
             var locationId = AddLocation(sourceURL);
             AddComment(locationId, commentText, isDeleted: false);
             var feedReaderService = new FakeFeedReaderService(Feed.ConsultationCommentsListDetailMulitpleDoc);
-            var commentService = new CommentService(new ConsultationsContext(_options), new ConsultationService(feedReaderService, new FeedConverterConverterService(feedReaderService)));
+            var commentService = new CommentService(new ConsultationsContext(_options), new ConsultationService(feedReaderService, new FeedConverterConverterService(feedReaderService), new FakeLogger<ConsultationService>()));
             
             // Act
             var viewModel = commentService.GetCommentsAndQuestions(sourceURL);
@@ -46,7 +46,7 @@ namespace Comments.Test.UnitTests
 
             AddCommentsAndQuestionsAndAnswers(sourceURL, commentText, questionText, answerText);
             var feedReaderService = new FakeFeedReaderService(Feed.ConsultationCommentsListDetailMulitpleDoc);
-            var commentService = new CommentService(new ConsultationsContext(_options), new ConsultationService(feedReaderService, new FeedConverterConverterService(feedReaderService)));
+            var commentService = new CommentService(new ConsultationsContext(_options), new ConsultationService(feedReaderService, new FeedConverterConverterService(feedReaderService), new FakeLogger<ConsultationService>()));
 
             // Act    
             var viewModel = commentService.GetCommentsAndQuestions(sourceURL);
@@ -86,7 +86,7 @@ namespace Comments.Test.UnitTests
                     })
                 });
             var feedReaderService = new FakeFeedReaderService(Feed.ConsultationCommentsListDetailMulitpleDoc);
-            var consultationService = new ConsultationService(feedReaderService, new FeedConverterConverterService(feedReaderService));
+            var consultationService = new ConsultationService(feedReaderService, new FeedConverterConverterService(feedReaderService), new FakeLogger<ConsultationService>());
 
             // Act
             var (validatedDocumentId, validatedChapterSlug) = consultationService.ValidateDocumentAndChapterWithinConsultation(consultation, documentIdIn, chapterSlugIn);

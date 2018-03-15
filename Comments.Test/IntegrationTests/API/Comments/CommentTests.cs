@@ -21,7 +21,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
             //Arrange (in the base constructor for this one.)
 
             // Act
-            var response = await _client.GetAsync("/consultations/api/Comments?consultationId=1&documentId=1&chapterSlug=some-chapter");
+            var response = await _client.GetAsync("/consultations/api/Comments?sourceURL=a-url-with-no-comments-associated");
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
 

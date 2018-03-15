@@ -2,6 +2,7 @@
 using NICE.Feeds;
 using System;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 
 namespace Comments.Services
 {
@@ -17,23 +18,40 @@ namespace Comments.Services
 
         private readonly IFeedReaderService _feedReaderService;
         private readonly IFeedConverterService _feedConverterService;
+        private readonly ILogger<ConsultationService> _logger;
 
-        public ConsultationService(IFeedReaderService feedReaderService, IFeedConverterService feedConverterService)
+        public ConsultationService(IFeedReaderService feedReaderService, IFeedConverterService feedConverterService, ILogger<ConsultationService> logger)
         {
             _feedReaderService = feedReaderService;
             _feedConverterService = feedConverterService;
+            _logger = logger;
         }
 
         public ConsultationDetail GetConsultationDetail(int consultationId)
         {
-//               var feedService = new FeedConverterConverterService(_feedReaderService); 
-            return new ViewModels.ConsultationDetail(_feedConverterService.ConvertConsultationDetail(consultationId));
+            try
+            {
+                return new ViewModels.ConsultationDetail(_feedConverterService.ConvertConsultationDetail(consultationId));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "NICE.Feeds returned error:" + ex.ToString());
+                throw;
+            }
         }
 
         public ChapterContent GetChapterContent(int consultationId, int documentId, string chapterSlug)
         {
-            //var feedService = new FeedConverterConverterService(_feedReaderService); 
-            return new ViewModels.ChapterContent(_feedConverterService.ConvertConsultationChapter(consultationId, documentId, chapterSlug));
+            try
+            {
+                return new ViewModels.ChapterContent(
+                    _feedConverterService.ConvertConsultationChapter(consultationId, documentId, chapterSlug));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "NICE.Feeds returned error:" + ex.ToString());
+                throw;
+            }
         }
 
         /// <summary>
