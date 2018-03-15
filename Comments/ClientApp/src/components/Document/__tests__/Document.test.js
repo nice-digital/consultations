@@ -1,19 +1,19 @@
 import React from "react";
 import { mount, shallow } from "enzyme";
 import { MemoryRouter } from "react-router-dom";
-import Document from "./Document";
-import sampleData from "./sample";
 import axios from "axios";
-
 import MockAdapter from "axios-mock-adapter";
+
+import Document from "./../Document";
+import sampleData from "./sample";
+import { nextTick } from "./../../../helpers/utils";
+
+
+
 const mock = new MockAdapter(axios);
 
 
-const nextTick = async () => {
-	return new Promise((resolve) => {
-		setTimeout(resolve, 0);
-	});
-};
+
 
 describe("[ClientApp] ", () => {
 	afterEach(()=>{
@@ -37,11 +37,7 @@ describe("[ClientApp] ", () => {
 		expect(wrapper.find("h1").text()).toEqual("For consultation comments");
 	});
 
-	// describe("Document ", () => {
-	// 	it("should show loading message before the content has been received", () => {
-	// 		const wrapper = shallow(<Document />);
-	// 		expect(wrapper.find("h1").length).toEqual(1);
-	// 	});
+
 	//
 	// 	it("renderDocumentHtml method", () => {
 	// 		const wrapper = shallow(<Document/>);
