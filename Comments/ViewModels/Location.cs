@@ -4,10 +4,10 @@
     {
         public Location() { } //only here for model binding. don't use it in code.
 
-        public Location(int locationId, string sourceUrl, string htmlElementId, string rangeStart, int? rangeStartOffset, string rangeEnd, int? rangeEndOffset, string quote)
+        public Location(int locationId, string sourceUri, string htmlElementId, string rangeStart, int? rangeStartOffset, string rangeEnd, int? rangeEndOffset, string quote)
         {
             LocationId = locationId;
-            SourceURL = sourceUrl;
+            SourceURI = sourceUri;
             HtmlElementID = htmlElementId;
             RangeStart = rangeStart;
             RangeStartOffset = rangeStartOffset;
@@ -17,7 +17,7 @@
         }
         public int LocationId { get; set; }
 
-        public string SourceURL { get; set; }
+        public string SourceURI { get; set; }
         public string HtmlElementID { get; set; }
 
         //public int ConsultationId { get; set; }

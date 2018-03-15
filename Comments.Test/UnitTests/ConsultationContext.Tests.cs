@@ -15,17 +15,17 @@ namespace Comments.Test.UnitTests
         {
             // Arrange
             ResetDatabase();
-            var sourceURL = "/consultations/1/1/introduction";
+            var sourceURI = "/consultations/1/1/introduction";
             var commentText = Guid.NewGuid().ToString();
 
-            var locationId = AddLocation(sourceURL);
+            var locationId = AddLocation(sourceURI);
             AddComment(locationId, commentText, true);
 
             // Act
             using (var consultationsContext = new ConsultationsContext(_options))
             {
                 var unfilteredLocations = consultationsContext.Location.Where(l =>
-                        l.SourceURL.Equals(sourceURL))
+                        l.SourceURI.Equals(sourceURI))
                     .Include(l => l.Comment)
                     .IgnoreQueryFilters()
                     .ToList();
@@ -40,17 +40,17 @@ namespace Comments.Test.UnitTests
         {
             // Arrange
             ResetDatabase();
-            var sourceURL = "/consultations/1/1/introduction";
+            var sourceURI = "/consultations/1/1/introduction";
             var commentText = Guid.NewGuid().ToString();
 
-            var locationId = AddLocation(sourceURL);
+            var locationId = AddLocation(sourceURI);
             AddComment(locationId, commentText, true);
 
             // Act
             using (var consultationsContext = new ConsultationsContext(_options))
             {
                 var filteredLocations = consultationsContext.Location.Where(l =>
-                        l.SourceURL.Equals(sourceURL))
+                        l.SourceURI.Equals(sourceURI))
                             .Include(l => l.Comment)
                             .ToList();
 

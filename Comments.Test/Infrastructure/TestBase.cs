@@ -70,9 +70,9 @@ namespace Comments.Test.Infrastructure
                 context.Database.EnsureDeleted();
             }
         }
-        protected int AddLocation(string sourceURL)
+        protected int AddLocation(string sourceURI)
         {
-            var location = new Location(sourceURL, null, null, null, null, null, null, null, null);
+            var location = new Location(sourceURI, null, null, null, null, null, null, null, null);
             using (var context = new ConsultationsContext(_options))
             {
                 context.Location.Add(location);
@@ -122,9 +122,9 @@ namespace Comments.Test.Infrastructure
             }
             return answer.AnswerId;
         }
-        protected void AddCommentsAndQuestionsAndAnswers(string sourceURL, string commentText, string questionText, string answerText)
+        protected void AddCommentsAndQuestionsAndAnswers(string sourceURI, string commentText, string questionText, string answerText)
         {
-            var locationId = AddLocation(sourceURL);
+            var locationId = AddLocation(sourceURI);
             AddComment(locationId, commentText, isDeleted: false);
             var questionTypeId = AddQuestionType(description: "text", hasBooleanAnswer: false, hasTextAnswer: true);
             var questionId = AddQuestion(locationId, questionTypeId, questionText);

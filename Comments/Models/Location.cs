@@ -5,9 +5,9 @@ namespace Comments.Models
 {
     public partial class Location
     {
-        public Location(string sourceUrl, string htmlElementId, string rangeStart, int? rangeStartOffset, string rangeEnd, int? rangeEndOffset, string quote, ICollection<Comment> comment, ICollection<Question> question)
+        public Location(string sourceUri, string htmlElementId, string rangeStart, int? rangeStartOffset, string rangeEnd, int? rangeEndOffset, string quote, ICollection<Comment> comment, ICollection<Question> question)
         {
-            SourceURL = sourceUrl;
+            SourceURI = sourceUri;
             HtmlElementID = htmlElementId;
             RangeStart = rangeStart;
             RangeStartOffset = rangeStartOffset;
@@ -18,14 +18,14 @@ namespace Comments.Models
             Question = question;
         }
 
-        public Location(ViewModels.Location location) : this(location.SourceURL, location.HtmlElementID, 
+        public Location(ViewModels.Location location) : this(location.SourceURI, location.HtmlElementID, 
             location.RangeStart, location.RangeStartOffset, location.RangeEnd, location.RangeEndOffset, location.Quote, null, null)
         {
         }
 
         public void UpdateFromViewModel(ViewModels.Location location)
         {
-            SourceURL = location.SourceURL;
+            SourceURI = location.SourceURI;
             HtmlElementID = location.HtmlElementID;
             RangeStart = location.RangeStart;
             RangeStartOffset = location.RangeStartOffset;

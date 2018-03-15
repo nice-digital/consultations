@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Location] (
     [LocationID]       INT              IDENTITY (1, 1) NOT NULL,
-    [SourceURL]   NVARCHAR(MAX) NOT NULL,
+    [SourceURI]   NVARCHAR(MAX) NOT NULL,
     [HtmlElementID]      NVARCHAR (MAX)   NULL,
     [RangeStart]       NVARCHAR (MAX)   NULL,
     [RangeStartOffset] INT              NULL,

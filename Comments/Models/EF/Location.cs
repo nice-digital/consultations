@@ -12,7 +12,7 @@ namespace Comments.Models
         }
 
         public int LocationId { get; set; }
-        public string SourceURL { get; set; }
+        public string SourceURI { get; set; }
         public string HtmlElementID { get; set; }
         public string RangeStart { get; set; }
         public int? RangeStartOffset { get; set; }

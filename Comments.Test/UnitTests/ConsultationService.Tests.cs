@@ -19,16 +19,16 @@ namespace Comments.Test.UnitTests
         { 
             // Arrange
             ResetDatabase();
-            var sourceURL = "/consultations/1/1/introduction";
+            var sourceURI = "/consultations/1/1/introduction";
             var commentText = Guid.NewGuid().ToString();
 
-            var locationId = AddLocation(sourceURL);
+            var locationId = AddLocation(sourceURI);
             AddComment(locationId, commentText, isDeleted: false);
             var feedReaderService = new FakeFeedReaderService(Feed.ConsultationCommentsListDetailMulitpleDoc);
             var commentService = new CommentService(new ConsultationsContext(_options), new ConsultationService(feedReaderService, new FeedConverterConverterService(feedReaderService), new FakeLogger<ConsultationService>()));
             
             // Act
-            var viewModel = commentService.GetCommentsAndQuestions(sourceURL);
+            var viewModel = commentService.GetCommentsAndQuestions(sourceURI);
 
             //Assert
             viewModel.Comments.Single().CommentText.ShouldBe(commentText);
@@ -39,17 +39,17 @@ namespace Comments.Test.UnitTests
         {
             // Arrange
             ResetDatabase();
-            var sourceURL = "/consultations/1/1/introduction";
+            var sourceURI = "/consultations/1/1/introduction";
             var commentText = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
             var answerText = Guid.NewGuid().ToString();
 
-            AddCommentsAndQuestionsAndAnswers(sourceURL, commentText, questionText, answerText);
+            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText);
             var feedReaderService = new FakeFeedReaderService(Feed.ConsultationCommentsListDetailMulitpleDoc);
             var commentService = new CommentService(new ConsultationsContext(_options), new ConsultationService(feedReaderService, new FeedConverterConverterService(feedReaderService), new FakeLogger<ConsultationService>()));
 
             // Act    
-            var viewModel = commentService.GetCommentsAndQuestions(sourceURL);
+            var viewModel = commentService.GetCommentsAndQuestions(sourceURI);
 
             //Assert
             viewModel.Comments.Single().CommentText.ShouldBe(commentText);

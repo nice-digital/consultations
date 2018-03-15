@@ -10,9 +10,9 @@ namespace Comments.Models
         {
         }
 
-        public IEnumerable<Location> GetAllCommentsAndQuestionsForDocument(string sourceURL)
+        public IEnumerable<Location> GetAllCommentsAndQuestionsForDocument(string sourceURI)
         {
-            return Location.Where(l => l.SourceURL.Equals(sourceURL))
+            return Location.Where(l => l.SourceURI.Equals(sourceURI))
                             .Include(l => l.Comment)
                             .Include(l => l.Question)
                                 .ThenInclude(q => q.QuestionType)

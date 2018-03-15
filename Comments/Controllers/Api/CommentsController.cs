@@ -20,17 +20,17 @@ namespace Comments.Controllers.Api
         }
 
         /// <summary>
-        /// GET: eg. consultations/api/Comments?sourceURL=http%3A%2F%2Fwww.nice.org.uk%2Fconsultations%2F1%2F1%2Fchapter-slug
+        /// GET: eg. consultations/api/Comments?sourceURI=http%3A%2F%2Fwww.nice.org.uk%2Fconsultations%2F1%2F1%2Fchapter-slug
         /// </summary>
-        /// <param name="sourceURL"></param>
+        /// <param name="sourceURI"></param>
         /// <returns></returns>
         [HttpGet]
-        public CommentsAndQuestions Get(string sourceURL)
+        public CommentsAndQuestions Get(string sourceURI)
         {
-            if (string.IsNullOrWhiteSpace(sourceURL))
-                throw new ArgumentNullException(nameof(sourceURL));
+            if (string.IsNullOrWhiteSpace(sourceURI))
+                throw new ArgumentNullException(nameof(sourceURI));
 
-            return _commentService.GetCommentsAndQuestions(sourceURL);
+            return _commentService.GetCommentsAndQuestions(sourceURI);
         }
     }
 }
