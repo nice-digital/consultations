@@ -12,3 +12,14 @@ export function objectToQueryString(obj) {
 	if (str.length) return "?" + str.join("&");
 	return "";
 }
+
+/**
+ * Resolve a promise on the next tick - used in testing
+ * @see https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick/#process-nexttick
+ * @returns {Promise<any>}
+ */
+export const nextTick = async () => {
+	return new Promise((resolve) => {
+		setTimeout(resolve, 0);
+	});
+};

@@ -1,9 +1,9 @@
-import { objectToQueryString} from "./utils";
+import { objectToQueryString, nextTick } from "./utils";
 
-describe("[ClientApp] ", ()=>{
-	describe("Utils ", ()=> {
-		describe("objectToQueryString", ()=>{
-			it("should take an object and create a query string", ()=>{
+describe("[ClientApp] ", () => {
+	describe("Utils ", () => {
+		describe("objectToQueryString", () => {
+			it("should take an object and create a query string", () => {
 				expect(objectToQueryString({
 					value1: "aValue",
 					value2: "anotherValue"
@@ -14,5 +14,12 @@ describe("[ClientApp] ", ()=>{
 				expect(objectToQueryString()).toEqual("");
 			});
 		});
+
+		describe("nextTick", () => {
+			it("should return a resolved promise", (done) => {
+				expect(nextTick().then( () => done() ).catch( () => done.fail()));
+			});
+		});
+
 	});
 });
