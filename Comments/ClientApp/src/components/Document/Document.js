@@ -13,7 +13,6 @@ import { HashLinkTop } from "../../helpers/component-helpers";
 import { CommentPanel } from "./../CommentPanel/CommentPanel";
 import load from "./../../data/loader";
 
-
 type PropsType = {};
 
 type StateType = {
@@ -61,15 +60,14 @@ class Document extends Component<PropsType, StateType> {
 			document: null
 		};
 
-		// TODO: change back to loader when tests are passing
 		axios("sample.json")
-			.then(res  => {
+			.then(response  => {
 				this.setState({
-					document: res.data
+					document: response.data
 				});
 			})
-			// TODO: explore why this is logging in testing
-			.catch(err => console.log("💔 Problem with load", err));
+		// TODO: explore why this is logging in testing
+			.catch(err => console.log("💔 Problem with load"));
 	}
 
 	renderDocumentHtml = (data: DataType) => {

@@ -16,15 +16,19 @@ import { objectToQueryString } from "./../helpers/utils";
  * axios("/consultations/api/Chapter?consultationId=1&documentId=2&chapterSlug=risk-assessment").then(res => res.data);
  */
 
-const load = (endpoint, baseUrl = "/consultations", query = {}) => {
-	// see if you're passing an endpoint that's in our Endpoints list of shortcuts
+export const generateUrl = (endpoint, baseUrl = "/consultations", query = {}) => {
 	if (Endpoints[endpoint]) {
-		return axios(baseUrl + Endpoints[endpoint] + objectToQueryString(query))
-			.then(response => response.data);
-	} else {
-		// if not, pass the string through as is
-		return axios(endpoint).then(response => response.data);
+		return baseUrl + Endpoints[endpoint] + objectToQueryString(query);
 	}
+	return endpoint;
+};
+
+export const load = (endpoint, baseUrl = "/consultations", query = {}) => {
+	return axios(generateUrl(endpoint, baseUrl, query))
+		.then(response => response.data)
+		.catch(err => {
+			throw new Error(err);
+		});
 };
 
 export default load;

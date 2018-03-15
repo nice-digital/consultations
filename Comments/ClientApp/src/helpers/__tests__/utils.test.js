@@ -1,4 +1,4 @@
-import { objectToQueryString, nextTick } from "./utils";
+import { objectToQueryString, nextTick } from "../utils";
 
 describe("[ClientApp] ", () => {
 	describe("Utils ", () => {
@@ -16,7 +16,7 @@ describe("[ClientApp] ", () => {
 		});
 
 		describe("nextTick", () => {
-			it("should return a resolved promise", (done) => {
+			it("should return a resolved promise object", (done) => {
 				expect(nextTick().then( () => done() ).catch( () => done.fail()));
 			});
 		});
