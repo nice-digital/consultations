@@ -9,29 +9,29 @@ namespace Comments.Controllers.Api
 {
     [Produces("application/json")]
     [Route("consultations/api/[controller]")]
-    public class DocumentsController : Controller
+    public class ConsultationController : Controller
     {
         private readonly IConsultationService _consultationService;
-        private readonly ILogger<DocumentsController> _logger;
+        private readonly ILogger<ConsultationController> _logger;
 
-        public DocumentsController(IConsultationService consultationService, ILogger<DocumentsController> logger)
+        public ConsultationController(IConsultationService consultationService, ILogger<ConsultationController> logger)
         {
             _consultationService = consultationService;
             _logger = logger;
         }
 
         /// <summary>
-        /// GET: eg. consultations/api/Comments?sourceURI=http%3A%2F%2Fwww.nice.org.uk%2Fconsultations%2F1%2F1%2Fchapter-slug
+        /// GET: eg. consultations/api/Consultation?consultationId=1
         /// </summary>
         /// <param name="consultationId"></param>
         /// <returns></returns>
         [HttpGet]
-        public IEnumerable<Document> Get(int consultationId)
+        public ViewModels.Consultation Get(int consultationId)
         {
             if (consultationId < 1)
                 throw new ArgumentException(nameof(consultationId));
 
-            return _consultationService.GetDocuments(consultationId);
+            return _consultationService.GetConsultation(consultationId);
         }
     }
 }

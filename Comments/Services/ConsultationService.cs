@@ -12,6 +12,7 @@ namespace Comments.Services
         ConsultationDetail GetConsultationDetail(int consultationId);
         ChapterContent GetChapterContent(int consultationId, int documentId, string chapterSlug);
         IEnumerable<Document> GetDocuments(int consultationId);
+        ViewModels.Consultation GetConsultation(int consultationId);
         (int validDocumentId, string validChapterSlug) ValidateDocumentAndChapterWithinConsultation(ConsultationDetail consultation, int documentId, string chapterSlug);
     }
 
@@ -31,44 +32,28 @@ namespace Comments.Services
 
         public ConsultationDetail GetConsultationDetail(int consultationId)
         {
-            try
-            {
-                return new ViewModels.ConsultationDetail(_feedConverterService.ConvertConsultationDetail(consultationId));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "NICE.Feeds returned error:" + ex.ToString());
-                throw;
-            }
+            return new ViewModels.ConsultationDetail(
+                _feedConverterService.ConvertConsultationDetail(consultationId));
+
         }
 
         public ChapterContent GetChapterContent(int consultationId, int documentId, string chapterSlug)
         {
-            try
-            {
-                return new ViewModels.ChapterContent(
-                    _feedConverterService.ConvertConsultationChapter(consultationId, documentId, chapterSlug));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "NICE.Feeds returned error:" + ex.ToString());
-                throw;
-            }
+            return new ViewModels.ChapterContent(
+                _feedConverterService.ConvertConsultationChapter(consultationId, documentId, chapterSlug));
         }
 
 
         public IEnumerable<Document> GetDocuments(int consultationId)
         {
-            try
-            {
-                var consultationDetail = _feedConverterService.ConvertConsultationDetail(consultationId);
-                return consultationDetail.Resources.Select(r => new ViewModels.Document(r)).ToList();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "NICE.Feeds returned error:" + ex.ToString());
-                throw;
-            }
+            var consultationDetail = _feedConverterService.ConvertConsultationDetail(consultationId);
+            return consultationDetail.Resources.Select(r => new ViewModels.Document(r)).ToList();
+        }
+
+        public ViewModels.Consultation GetConsultation(int consultationId)
+        {
+            var consultation = _feedConverterService.ConvertConsultationDetail(consultationId);
+            return new ViewModels.Consultation(consultation);
         }
 
         /// <summary>
