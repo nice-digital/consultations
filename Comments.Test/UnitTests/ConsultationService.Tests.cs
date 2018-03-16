@@ -6,13 +6,14 @@ using Comments.Services;
 using Comments.Test.Infrastructure;
 using Comments.ViewModels;
 using NICE.Feeds;
+using NICE.Feeds.Configuration;
 using NICE.Feeds.Tests.Infrastructure;
 using Shouldly;
 using Xunit;
 
 namespace Comments.Test.UnitTests
 {
-    public class Tests : TestBase
+    public class Tests : Comments.Test.Infrastructure.TestBase
     {
         [Fact]
         public void Comments_CanBeRead()
@@ -24,8 +25,8 @@ namespace Comments.Test.UnitTests
 
             var locationId = AddLocation(sourceURI);
             AddComment(locationId, commentText, isDeleted: false);
-            var feedReaderService = new FakeFeedReaderService(Feed.ConsultationCommentsListDetailMulitpleDoc);
-            var commentService = new CommentService(new ConsultationsContext(_options), new ConsultationService(feedReaderService, new FeedConverterConverterService(feedReaderService), new FakeLogger<ConsultationService>()));
+            var feedReaderService = new FeedReader(Feed.ConsultationCommentsListDetailMulitpleDoc);
+            var commentService = new CommentService(new ConsultationsContext(_options), new ConsultationService(new FeedConverterService(feedReaderService), new FakeLogger<ConsultationService>()));
             
             // Act
             var viewModel = commentService.GetCommentsAndQuestions(sourceURI);
@@ -45,8 +46,8 @@ namespace Comments.Test.UnitTests
             var answerText = Guid.NewGuid().ToString();
 
             AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText);
-            var feedReaderService = new FakeFeedReaderService(Feed.ConsultationCommentsListDetailMulitpleDoc);
-            var commentService = new CommentService(new ConsultationsContext(_options), new ConsultationService(feedReaderService, new FeedConverterConverterService(feedReaderService), new FakeLogger<ConsultationService>()));
+            var feedReaderService = new FeedReader(Feed.ConsultationCommentsListDetailMulitpleDoc);
+            var commentService = new CommentService(new ConsultationsContext(_options), new ConsultationService(new FeedConverterService(feedReaderService), new FakeLogger<ConsultationService>()));
 
             // Act    
             var viewModel = commentService.GetCommentsAndQuestions(sourceURI);
@@ -85,8 +86,8 @@ namespace Comments.Test.UnitTests
                         new Chapter("second-document-first-chapter-slug", "second-document-first-chapter-title")
                     })
                 });
-            var feedReaderService = new FakeFeedReaderService(Feed.ConsultationCommentsListDetailMulitpleDoc);
-            var consultationService = new ConsultationService(feedReaderService, new FeedConverterConverterService(feedReaderService), new FakeLogger<ConsultationService>());
+            var feedReaderService = new FeedReader(Feed.ConsultationCommentsListDetailMulitpleDoc);
+            var consultationService = new ConsultationService(new FeedConverterService(feedReaderService), new FakeLogger<ConsultationService>());
 
             // Act
             var (validatedDocumentId, validatedChapterSlug) = consultationService.ValidateDocumentAndChapterWithinConsultation(consultation, documentIdIn, chapterSlugIn);

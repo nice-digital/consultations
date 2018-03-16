@@ -19,13 +19,11 @@ namespace Comments.Services
     public class ConsultationService : IConsultationService
     {
 
-        private readonly IFeedReaderService _feedReaderService;
         private readonly IFeedConverterService _feedConverterService;
         private readonly ILogger<ConsultationService> _logger;
 
-        public ConsultationService(IFeedReaderService feedReaderService, IFeedConverterService feedConverterService, ILogger<ConsultationService> logger)
+        public ConsultationService(IFeedConverterService feedConverterService, ILogger<ConsultationService> logger)
         {
-            _feedReaderService = feedReaderService;
             _feedConverterService = feedConverterService;
             _logger = logger;
         }
