@@ -1,16 +1,16 @@
-import { load, generateUrl } from "../loader";
-import * as api from "../loader";
+import * as loader from "../loader";
 import axios from "axios";
-import MockAdapater from "axios-mock-adapter";
+import MockAdapter from "axios-mock-adapter";
+import { nextTick } from "../../helpers/utils";
 
-
+const mock = new MockAdapter(axios);
 
 describe("[ClientApp] ", () => {
 	describe("loader.js", () => {
 		describe("generateUrl function", () => {
 
 			it("should produce a string that only passes endpoint if it doesn't match a shortcut", () => {
-				const url  = generateUrl(
+				const url  = loader.generateUrl(
 					"myEndpoint",
 					"baseUrl",
 					{
@@ -24,7 +24,7 @@ describe("[ClientApp] ", () => {
 			});
 
 			it("should produce a string that ends on a query of the supplied parameters", () => {
-				const url  = generateUrl(
+				const url  = loader.generateUrl(
 					"chapter",
 					"/testing",
 					{
@@ -38,7 +38,7 @@ describe("[ClientApp] ", () => {
 			});
 
 			it("should only return an appended query string if the parameters are supplied", () => {
-				const url  = generateUrl(
+				const url  = loader.generateUrl(
 					"chapter"
 				);
 				expect(url)
@@ -47,34 +47,38 @@ describe("[ClientApp] ", () => {
 
 		});
 
-		describe("axios function should be called with the correct url", () => {
+		describe("load function", () => {
 
-			// const mock = new MockAdapater(axios);
+			beforeEach(() => {
+
+			});
 
 			const options = [
 				"chapter",
-				"myBaseUrl",
+				"/myBaseUrl",
 				{
 					value1: "value1",
 					value2: 2
 				}
 			];
 
-			it("should work", async () => {
-				// arrange
+			// TODO: this test is polluting the next one
+			// it("should be called once with supplied options", () => {
+			// 	const spy = loader.load = jest.fn();
+			// 	loader.load(options);
+			// 	expect(spy).toHaveBeenCalledTimes(1);
+			// 	expect(spy).toHaveBeenLastCalledWith(options);
+			// });
 
-				// const thing = load(options.endpoint, options.baseUrl, options.params);
-
-				// const spy = jest.spyOn(api, "load");
-				// expect(spy).toHaveBeenCalled();
-				// const spy = jest.spyOn(api, load);
-				const makeRequest = await load(...options);
-				// console.log(spy);
-				// expect(spy).toHaveBeenCalled();
-				// console.log(makeRequest);
-				// act
-				// assert
+			it("axios should be called with the generated url", () => {
+				expect.assertions(1);
+				mock.onAny().reply(200, {});
+				return loader.load(...options).then(response => {
+					expect(response.config.url)
+						.toBe("/myBaseUrl/api/Chapter?value1=value1&value2=2");
+				});
 			});
 		});
+
 	});
 });

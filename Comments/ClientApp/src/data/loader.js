@@ -24,11 +24,15 @@ export const generateUrl = (endpoint, baseUrl = "/consultations", query = {}) =>
 };
 
 export const load = (endpoint, baseUrl = "/consultations", query = {}) => {
-	return axios(generateUrl(endpoint, baseUrl, query))
-		.then(response => response.data)
-		.catch(err => {
-			throw new Error(err);
-		});
+	return new Promise((resolve, reject) => {
+		axios(generateUrl(endpoint, baseUrl, query))
+			.then(response => {
+				resolve(response);
+			})
+			.catch(err => {
+				reject(err);
+			});
+	});
 };
 
 export default load;

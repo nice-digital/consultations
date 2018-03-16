@@ -4,14 +4,13 @@ import React, { Component } from "react";
 import Moment from "react-moment";
 import { Helmet } from "react-helmet";
 import { StickyContainer, Sticky } from "react-sticky";
-import axios from "axios";
 
 import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
 import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
 import { CommentPanel } from "./../CommentPanel/CommentPanel";
-import load from "./../../data/loader";
+import { load } from "./../../data/loader";
 
 type PropsType = {};
 
@@ -60,7 +59,7 @@ class Document extends Component<PropsType, StateType> {
 			document: null
 		};
 
-		axios("sample.json")
+		load("sample.json")
 			.then(response  => {
 				this.setState({
 					document: response.data
