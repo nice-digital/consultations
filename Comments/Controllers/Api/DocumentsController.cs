@@ -21,7 +21,7 @@ namespace Comments.Controllers.Api
         }
 
         /// <summary>
-        /// GET: eg. consultations/api/Comments?sourceURI=http%3A%2F%2Fwww.nice.org.uk%2Fconsultations%2F1%2F1%2Fchapter-slug
+        /// GET: eg. consultations/api/Documents?consultationId=1
         /// </summary>
         /// <param name="consultationId"></param>
         /// <returns></returns>
