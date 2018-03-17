@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using NICE.Feeds;
+using NICE.Feeds.Tests.Infrastructure;
 
 namespace Comments.Test.Infrastructure
 {
