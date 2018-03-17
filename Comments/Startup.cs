@@ -11,11 +11,13 @@ using Microsoft.Extensions.Logging;
 using NICE.Feeds;
 using System;
 using System.IO;
+using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
 using Microsoft.AspNetCore.StaticFiles.Infrastructure;
 using Microsoft.AspNetCore.SpaServices;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using NICE.Feeds.Configuration;
 
 namespace Comments
 {
@@ -42,11 +44,12 @@ namespace Comments
                 options.Filters.Add(new ResponseCacheAttribute() { NoStore = true, Location = ResponseCacheLocation.None });
             });
 
+            AppSettings.Configure(services, Configuration);
             services.TryAddSingleton<ISeriLogger, SeriLogger>();
             services.TryAddTransient<ICommentService, CommentService>();
             services.TryAddTransient<IConsultationService, ConsultationService>();
-            //services.TryAddTransient<IFeedReaderService, FakeFeedReaderService>(); //TODO: replace with: NICE.Feeds.FeedReaderService
-            services.TryAddTransient<IFeedConverterService, FeedConverterService>(); //todo: fix the duplication in name in NICE.Feeds
+            services.TryAddTransient<IFeedReaderService>(provider => new FeedReaderService(new RemoteSystemReader(new HttpClient()), AppSettings.Feed)); //todo: remove httpclient from here. needs a change in the nuget package.
+            services.TryAddTransient<IFeedConverterService, FeedConverterService>(); 
             
 
             // In production, static files are served from the pre-built files, rather than proxied via react dev server
@@ -75,7 +78,7 @@ namespace Comments
 
             services.AddCors(); //adding CORS for Warren. todo: maybe move this into the isDevelopment block..
             services.AddOptions();
-            AppSettings.Configure(services, Configuration);
+            
         }
 
 
