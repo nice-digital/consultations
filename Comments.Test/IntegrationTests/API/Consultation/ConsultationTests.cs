@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Comments.Test.Infrastructure;
+using NICE.Feeds.Tests.Infrastructure;
 using Shouldly;
 using Xunit;
+using TestBase = Comments.Test.Infrastructure.TestBase;
 
 namespace Comments.Test.IntegrationTests.API.Consultation
 {
     public class ConsultationTests : TestBase
     {
+        public ConsultationTests() : base(Feed.ConsultationCommentsListDetailMulitpleDoc) {}
+
         [Theory]
         [InlineData(0)]
         [InlineData(-1)]

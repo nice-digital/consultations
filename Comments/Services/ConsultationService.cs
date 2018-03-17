@@ -13,6 +13,7 @@ namespace Comments.Services
         ChapterContent GetChapterContent(int consultationId, int documentId, string chapterSlug);
         IEnumerable<Document> GetDocuments(int consultationId);
         ViewModels.Consultation GetConsultation(int consultationId);
+        IEnumerable<ViewModels.Consultation> GetConsultations();
         (int validDocumentId, string validChapterSlug) ValidateDocumentAndChapterWithinConsultation(ConsultationDetail consultation, int documentId, string chapterSlug);
     }
 
@@ -54,6 +55,12 @@ namespace Comments.Services
         {
             var consultation = _feedConverterService.ConvertConsultationDetail(consultationId);
             return new ViewModels.Consultation(consultation);
+        }
+
+        public IEnumerable<ViewModels.Consultation> GetConsultations()
+        {
+            var consultations = _feedConverterService.ConvertConsultationList();
+            return consultations.Select(c => new ViewModels.Consultation(c)).ToList();
         }
 
         /// <summary>

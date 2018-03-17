@@ -1,21 +1,17 @@
-﻿using System;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using Comments.Test.Infrastructure;
-using Comments.ViewModels;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Comments.Test.Infrastructure;
+using NICE.Feeds.Tests.Infrastructure;
 using Shouldly;
+using System;
+using System.Threading.Tasks;
 using Xunit;
-using FluentAssertions;
+using TestBase = Comments.Test.Infrastructure.TestBase;
 
 namespace Comments.Test.IntegrationTests.API.Chapter
 {
     public class ChapterTests : TestBase
     {
+        public ChapterTests() : base(Feed.ConsultationCommentsChapter) {}
+
         [Theory]
         [InlineData(-1, 1, "introduction")]
         [InlineData(0, 1, "introduction")]

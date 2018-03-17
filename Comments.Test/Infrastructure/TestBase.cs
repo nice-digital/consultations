@@ -21,6 +21,13 @@ namespace Comments.Test.Infrastructure
 
         protected readonly TestServer _server;
         protected readonly HttpClient _client;
+
+        protected readonly Feed FeedToUse = Feed.ConsultationCommentsListDetailMulitpleDoc;
+        public TestBase(Feed feed) : this()
+        {
+            FeedToUse = feed;
+        }
+
         public TestBase()
         {
             // Arrange
@@ -38,7 +45,8 @@ namespace Comments.Test.Infrastructure
                             //, optionsBuilder => { optionsBuilder.use }
                             ));
                     services.TryAddSingleton<ISeriLogger, FakeSerilogger>();
-                    services.TryAddTransient<IFeedReaderService, FakeFeedReaderService>();
+                    //services.TryAddTransient<IFeedReaderService, FeedReader>();
+                    services.TryAddTransient<IFeedReaderService>(provider => new FeedReader(FeedToUse));
                 })
                 .Configure(app =>
                 {
