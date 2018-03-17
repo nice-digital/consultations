@@ -10,13 +10,16 @@ namespace Comments.Configuration
         // (i.e. to stop us having to pass IOptions<SomeConfig> through the stack)
 
         public static EnvironmentConfig Environment { get; private set; }
+        public static FeedConfig Feed { get; private set; }
 
         public static void Configure(IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<EnvironmentConfig>(configuration.GetSection("AppSettings:Environment"));
-            
+            services.Configure<FeedConfig>(configuration.GetSection("Feeds")); //needs work
+
             var sp = services.BuildServiceProvider();
             Environment = sp.GetService<IOptions<EnvironmentConfig>>().Value;
+            Feed = sp.GetService<IOptions<FeedConfig>>().Value;
         }
     }
 }

@@ -55,18 +55,18 @@ namespace Comments.Test.IntegrationTests.API.Chapter
             // await Assert.ThrowsAsync<ArgumentNullException>(nameof(chapterSlug), () => _client.GetAsync($"/consultations/api/Chapter?consultationId=1&documentId=2&chapterSlug={chapterSlug}"));
         }
 
-        [Fact]
-        public async Task Get_Chapter_Feed_Returns_Populated_Feed()
-        {
-            //Arrange (in the base constructor for this one.)
+        //[Fact]
+        //public async Task Get_Chapter_Feed_Returns_Populated_Feed()
+        //{
+        //    //Arrange (in the base constructor for this one.)
 
-            // Act
-            var response = await _client.GetAsync("/consultations/api/Chapter?consultationId=1&documentId=2&chapterSlug=introduction");
-            response.EnsureSuccessStatusCode();
-            var responseString = await response.Content.ReadAsStringAsync();
+        //    // Act
+        //    var response = await _client.GetAsync("/consultations/api/Chapter?consultationId=1&documentId=2&chapterSlug=introduction");
+        //    response.EnsureSuccessStatusCode();
+        //    var responseString = await response.Content.ReadAsStringAsync();
 
-            // Assert
-            responseString.ShouldMatchApproved();
-        }
+        //    // Assert
+        //    responseString.ShouldMatchApproved();
+        //}
     }
 }
