@@ -11,6 +11,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using NICE.Feeds;
+using NICE.Feeds.Configuration;
+using NICE.Feeds.Tests.Infrastructure;
 
 namespace Comments.Test.Infrastructure
 {
@@ -21,6 +23,7 @@ namespace Comments.Test.Infrastructure
 
         protected readonly TestServer _server;
         protected readonly HttpClient _client;
+        protected IFeedConfig _feedConfig;
         public TestBase()
         {
             // Arrange
@@ -38,7 +41,8 @@ namespace Comments.Test.Infrastructure
                             //, optionsBuilder => { optionsBuilder.use }
                             ));
                     services.TryAddSingleton<ISeriLogger, FakeSerilogger>();
-                    services.TryAddTransient<IFeedReaderService, FakeFeedReaderService>();
+                    //services.TryAddTransient<IFeedReaderService, FeedReader>();
+                    services.TryAddTransient<IFeedReaderService>(provider => new FeedReader(Feed.ConsultationCommentsListDetailMulitpleDoc));
                 })
                 .Configure(app =>
                 {
@@ -59,6 +63,16 @@ namespace Comments.Test.Infrastructure
                 .UseStartup(typeof(Startup));
             _server = new TestServer(builder);
             _client = _server.CreateClient();
+
+            _feedConfig = new FeedConfig()
+            {
+                AppCacheTimeSeconds = 30,
+                ApiKey = "api key goes here",
+                BasePath = new Uri("http://test-indev.nice.org.uk"),
+                Chapter = "consultation-comments/{0}/document/{1}/chapter-slug/{2}",
+                Detail = "consultation-comments/{0}",
+                List = "consultation-comments-list"
+            };
         }
 
         #region database stuff
