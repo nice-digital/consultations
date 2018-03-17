@@ -48,7 +48,7 @@ namespace Comments
             services.TryAddSingleton<ISeriLogger, SeriLogger>();
             services.TryAddTransient<ICommentService, CommentService>();
             services.TryAddTransient<IConsultationService, ConsultationService>();
-            services.TryAddTransient<IFeedReaderService>(provider => new FeedReaderService(new RemoteSystemReader(new HttpClient()), AppSettings.Feed)); //todo: remove httpclient from here. needs a change in the nuget package.
+            services.TryAddTransient<IFeedReaderService>(provider => new FeedReaderService(new RemoteSystemReader(null), AppSettings.Feed)); 
             services.TryAddTransient<IFeedConverterService, FeedConverterService>(); 
             
 
