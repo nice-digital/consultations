@@ -44,15 +44,9 @@ describe("[ClientApp] ", () => {
 				expect(url)
 					.toEqual("/consultations/api/Chapter");
 			});
-
 		});
 
 		describe("load function", () => {
-
-			beforeEach(() => {
-
-			});
-
 			const options = [
 				"chapter",
 				"/myBaseUrl",
@@ -61,14 +55,6 @@ describe("[ClientApp] ", () => {
 					value2: 2
 				}
 			];
-
-			// TODO: this test is polluting the next one
-			// it("should be called once with supplied options", () => {
-			// 	const spy = loader.load = jest.fn();
-			// 	loader.load(options);
-			// 	expect(spy).toHaveBeenCalledTimes(1);
-			// 	expect(spy).toHaveBeenLastCalledWith(options);
-			// });
 
 			it("axios should be called with the generated url", () => {
 				expect.assertions(1);
@@ -79,6 +65,5 @@ describe("[ClientApp] ", () => {
 				});
 			});
 		});
-
 	});
 });
