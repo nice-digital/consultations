@@ -12,6 +12,7 @@ using NICE.Feeds;
 using System;
 using System.IO;
 using System.Net.Http;
+using Comments.Auth;
 using Microsoft.AspNetCore.Mvc;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
 using Microsoft.AspNetCore.StaticFiles.Infrastructure;
@@ -36,15 +37,30 @@ namespace Comments
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            AppSettings.Configure(services, Configuration);
+
             services.AddDbContext<ConsultationsContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            // Add authentication 
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = AuthOptions.DefaultScheme;
+                options.DefaultChallengeScheme = AuthOptions.DefaultScheme;
+            })
+            // Call custom authentication extension method
+            .AddAuth(options =>
+            {
+                // Configure single or multiple passwords for authentication
+                //options.AuthKey = "custom auth key";
+            });
 
             services.AddMvc(options =>
             {
                 options.Filters.Add(new ResponseCacheAttribute() { NoStore = true, Location = ResponseCacheLocation.None });
             });
 
-            AppSettings.Configure(services, Configuration);
+            
             services.TryAddSingleton<ISeriLogger, SeriLogger>();
             services.TryAddTransient<ICommentService, CommentService>();
             services.TryAddTransient<IConsultationService, ConsultationService>();
@@ -123,6 +139,7 @@ namespace Comments
                 });
             }
 
+            app.UseAuthentication();
             app.UseSpaStaticFiles(new StaticFileOptions { RequestPath = "/consultations" });
 
             app.UseMvc(routes =>
