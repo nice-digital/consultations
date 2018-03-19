@@ -11,34 +11,51 @@ namespace Comments.Test.UnitTests
     public class ConsultationContext : TestBase
     {
         [Fact]
-        public void Comments_IsDeleted_Flag_Filtering_is_working_in_the_context()
+        public void Comments_IsDeleted_Flag_is_not_Filtering_in_the_context()
         {
             // Arrange
             ResetDatabase();
-            var consultationId = RandomNumber();
-            var documentId = RandomNumber();
+            var sourceURI = "/consultations/1/1/introduction";
             var commentText = Guid.NewGuid().ToString();
 
-            var locationId = AddLocation(consultationId, documentId);
+            var locationId = AddLocation(sourceURI);
+            AddComment(locationId, commentText, true);
+
+            // Act
+            using (var consultationsContext = new ConsultationsContext(_options))
+            {
+                var unfilteredLocations = consultationsContext.Location.Where(l =>
+                        l.SourceURI.Equals(sourceURI))
+                    .Include(l => l.Comment)
+                    .IgnoreQueryFilters()
+                    .ToList();
+
+                //Assert
+                unfilteredLocations.First().Comment.Count.ShouldBe(1);
+            }
+        }
+
+        [Fact]
+        public void Comments_IsDeleted_Flag_is_Filtering_in_the_context()
+        {
+            // Arrange
+            ResetDatabase();
+            var sourceURI = "/consultations/1/1/introduction";
+            var commentText = Guid.NewGuid().ToString();
+
+            var locationId = AddLocation(sourceURI);
             AddComment(locationId, commentText, true);
 
             // Act
             using (var consultationsContext = new ConsultationsContext(_options))
             {
                 var filteredLocations = consultationsContext.Location.Where(l =>
-                        l.ConsultationId.Equals(consultationId) &&
-                        (!l.DocumentId.HasValue || l.DocumentId.Equals(documentId)))
-                    .Include(l => l.Comment);
-
-                var unfilteredLocations = consultationsContext.Location.Where(l =>
-                        l.ConsultationId.Equals(consultationId) &&
-                        (!l.DocumentId.HasValue || l.DocumentId.Equals(documentId)))
-                    .Include(l => l.Comment)
-                    .IgnoreQueryFilters();
+                        l.SourceURI.Equals(sourceURI))
+                            .Include(l => l.Comment)
+                            .ToList();
 
                 //Assert
                 filteredLocations.Single().Comment.Count.ShouldBe(0);
-                unfilteredLocations.Single().Comment.Count.ShouldBe(1);
             }
         }
     }

@@ -17,7 +17,7 @@ namespace Comments.Controllers.Api
             _logger = logger;
         }
 
-        // GET: api/Comment/5 
+        // GET: consultations/api/Comment/5 
         [HttpGet("{commentId}")]
         public IActionResult GetComment([FromRoute] int commentId)
         {
@@ -36,7 +36,7 @@ namespace Comments.Controllers.Api
             return Ok(comment);
         }
 
-        // PUT: api/Comment/5
+        // PUT: consultations/api/Comment/5
         [HttpPut("{commentId}")]
         public IActionResult PutComment([FromRoute] int commentId, [FromBody] ViewModels.Comment comment)
         {
@@ -60,7 +60,7 @@ namespace Comments.Controllers.Api
             return NotFound();
         }
 
-        // POST: api/Comment
+        // POST: consultations/api/Comment
         [HttpPost]
         public IActionResult PostComment([FromBody] ViewModels.Comment comment)
         {
@@ -74,7 +74,7 @@ namespace Comments.Controllers.Api
             return CreatedAtAction("GetComment", new { id = savedComment.CommentId }, savedComment);
         }
 
-        // DELETE: api/Comment/5
+        // DELETE: consultations/api/Comment/5
         [HttpDelete("{commentId}")]
         public IActionResult DeleteComment([FromRoute] int commentId)
         {

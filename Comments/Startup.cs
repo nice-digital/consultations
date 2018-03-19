@@ -11,11 +11,13 @@ using Microsoft.Extensions.Logging;
 using NICE.Feeds;
 using System;
 using System.IO;
+using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
 using Microsoft.AspNetCore.StaticFiles.Infrastructure;
 using Microsoft.AspNetCore.SpaServices;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using NICE.Feeds.Configuration;
 
 namespace Comments
 {
@@ -37,12 +39,18 @@ namespace Comments
             services.AddDbContext<ConsultationsContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddMvc();
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(new ResponseCacheAttribute() { NoStore = true, Location = ResponseCacheLocation.None });
+            });
 
+            AppSettings.Configure(services, Configuration);
             services.TryAddSingleton<ISeriLogger, SeriLogger>();
             services.TryAddTransient<ICommentService, CommentService>();
             services.TryAddTransient<IConsultationService, ConsultationService>();
-            services.TryAddTransient<IFeedReaderService, FakeFeedReaderService>(); //TODO: replace with: NICE.Feeds.FeedReaderService
+            services.TryAddTransient<IFeedReaderService>(provider => new FeedReaderService(new RemoteSystemReader(null), AppSettings.Feed)); 
+            services.TryAddTransient<IFeedConverterService, FeedConverterService>(); 
+            
 
             // In production, static files are served from the pre-built files, rather than proxied via react dev server
             services.AddSpaStaticFiles(configuration =>
@@ -59,18 +67,18 @@ namespace Comments
             //        options.DebuggingPort = 9229;
             //    });
             //}
-
-            if (!Environment.IsDevelopment())
-            {
-                services.Configure<MvcOptions>(options =>
-                {
-                    options.Filters.Add(new RequireHttpsAttribute());
-                });
-            }
+             
+            //if (!Environment.IsDevelopment()) //this breaks the tests.
+            //{
+            //    services.Configure<MvcOptions>(options =>
+            //    {
+            //        options.Filters.Add(new RequireHttpsAttribute());
+            //    });
+            //}
 
             services.AddCors(); //adding CORS for Warren. todo: maybe move this into the isDevelopment block..
             services.AddOptions();
-            AppSettings.Configure(services, Configuration);
+            
         }
 
 
@@ -89,7 +97,7 @@ namespace Comments
             else
             {
                 // TODO: Proper error handling URL
-                app.UseExceptionHandler("/Home/Error");
+               // app.UseExceptionHandler("/Home/Error");
             }
 
             // Because in dev mode we proxy to a react dev server (which has to run in the root e.g. http://localhost:3000)
@@ -174,8 +182,8 @@ namespace Comments
                     // `UseProxyToSpaDevelopmentServer` below rather than `UseReactDevelopmentServer`.
                     // This proxies to a manual CRA server (run `npm start` from the ClientApp folder) instead of DotNetCore launching one automatically.
                     // This can be quicker. See https://docs.microsoft.com/en-us/aspnet/core/spa/react?tabs=visual-studio#run-the-cra-server-independently
-                   spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");
-                    // spa.UseReactDevelopmentServer(npmScript: "start");
+                    spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");
+                   // spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
         }

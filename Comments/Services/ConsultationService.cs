@@ -1,7 +1,9 @@
 ﻿using Comments.ViewModels;
 using NICE.Feeds;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 
 namespace Comments.Services
 {
@@ -9,29 +11,54 @@ namespace Comments.Services
     {
         ConsultationDetail GetConsultationDetail(int consultationId);
         ChapterContent GetChapterContent(int consultationId, int documentId, string chapterSlug);
+        IEnumerable<Document> GetDocuments(int consultationId);
+        ViewModels.Consultation GetConsultation(int consultationId);
+        IEnumerable<ViewModels.Consultation> GetConsultations();
         (int validDocumentId, string validChapterSlug) ValidateDocumentAndChapterWithinConsultation(ConsultationDetail consultation, int documentId, string chapterSlug);
     }
 
     public class ConsultationService : IConsultationService
     {
 
-        private readonly IFeedReaderService _feedReaderService;
+        private readonly IFeedConverterService _feedConverterService;
+        private readonly ILogger<ConsultationService> _logger;
 
-        public ConsultationService(IFeedReaderService feedReaderService)
+        public ConsultationService(IFeedConverterService feedConverterService, ILogger<ConsultationService> logger)
         {
-            _feedReaderService = feedReaderService;
+            _feedConverterService = feedConverterService;
+            _logger = logger;
         }
 
         public ConsultationDetail GetConsultationDetail(int consultationId)
         {
-            var feedService = new FeedConverterConverterService(_feedReaderService); 
-            return new ViewModels.ConsultationDetail(feedService.ConvertConsultationDetail(consultationId));
+            return new ViewModels.ConsultationDetail(
+                _feedConverterService.ConvertConsultationDetail(consultationId));
+
         }
 
         public ChapterContent GetChapterContent(int consultationId, int documentId, string chapterSlug)
         {
-            var feedService = new FeedConverterConverterService(_feedReaderService); 
-            return new ViewModels.ChapterContent(feedService.ConvertConsultationChapter(consultationId, documentId, chapterSlug));
+            return new ViewModels.ChapterContent(
+                _feedConverterService.ConvertConsultationChapter(consultationId, documentId, chapterSlug));
+        }
+
+
+        public IEnumerable<Document> GetDocuments(int consultationId)
+        {
+            var consultationDetail = _feedConverterService.ConvertConsultationDetail(consultationId);
+            return consultationDetail.Resources.Select(r => new ViewModels.Document(r)).ToList();
+        }
+
+        public ViewModels.Consultation GetConsultation(int consultationId)
+        {
+            var consultation = _feedConverterService.ConvertConsultationDetail(consultationId);
+            return new ViewModels.Consultation(consultation);
+        }
+
+        public IEnumerable<ViewModels.Consultation> GetConsultations()
+        {
+            var consultations = _feedConverterService.ConvertConsultationList();
+            return consultations.Select(c => new ViewModels.Consultation(c)).ToList();
         }
 
         /// <summary>

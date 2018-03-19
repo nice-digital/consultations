@@ -6,10 +6,13 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net.Http;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using NICE.Feeds;
+using NICE.Feeds.Configuration;
+using NICE.Feeds.Tests.Infrastructure;
 
 namespace Comments.Test.Infrastructure
 {
@@ -20,6 +23,15 @@ namespace Comments.Test.Infrastructure
 
         protected readonly TestServer _server;
         protected readonly HttpClient _client;
+        protected IFeedConfig _feedConfig;
+
+        protected readonly Feed FeedToUse = Feed.ConsultationCommentsListDetailMulitpleDoc;
+        public TestBase(Feed feed) : this()
+        {
+            FeedToUse = feed;
+        }
+
+
         public TestBase()
         {
             // Arrange
@@ -37,16 +49,38 @@ namespace Comments.Test.Infrastructure
                             //, optionsBuilder => { optionsBuilder.use }
                             ));
                     services.TryAddSingleton<ISeriLogger, FakeSerilogger>();
-                    services.TryAddTransient<IFeedReaderService, FakeFeedReaderService>();
+                    //services.TryAddTransient<IFeedReaderService, FeedReader>();
+                   services.TryAddTransient<IFeedReaderService>(provider => new FeedReader(FeedToUse));;
                 })
                 .Configure(app =>
                 {
                     app.UseStaticFiles();
+
+                    app.Use((context, next) =>
+                    {
+                        var httpRequestFeature = context.Features.Get<IHttpRequestFeature>();
+
+                        if (httpRequestFeature != null && string.IsNullOrEmpty(httpRequestFeature.RawTarget))
+                            httpRequestFeature.RawTarget = httpRequestFeature.Path;
+
+                        return next();
+                    });
+
                 })
                 .UseEnvironment("Production")
                 .UseStartup(typeof(Startup));
             _server = new TestServer(builder);
             _client = _server.CreateClient();
+
+            _feedConfig = new FeedConfig()
+            {
+                AppCacheTimeSeconds = 30,
+                ApiKey = "api key goes here",
+                BasePath = new Uri("http://test-indev.nice.org.uk"),
+                Chapter = "consultation-comments/{0}/document/{1}/chapter-slug/{2}",
+                Detail = "consultation-comments/{0}",
+                List = "consultation-comments-list"
+            };
         }
 
         #region database stuff
@@ -58,9 +92,9 @@ namespace Comments.Test.Infrastructure
                 context.Database.EnsureDeleted();
             }
         }
-        protected int AddLocation(int consultationId, int documentId)
+        protected int AddLocation(string sourceURI)
         {
-            var location = new Location(consultationId, documentId, null, null, null, null, null, null, null, null, null);
+            var location = new Location(sourceURI, null, null, null, null, null, null, null, null);
             using (var context = new ConsultationsContext(_options))
             {
                 context.Location.Add(location);
@@ -110,9 +144,9 @@ namespace Comments.Test.Infrastructure
             }
             return answer.AnswerId;
         }
-        protected void AddCommentsAndQuestionsAndAnswers(int consultationId, int documentId, string commentText, string questionText, string answerText)
+        protected void AddCommentsAndQuestionsAndAnswers(string sourceURI, string commentText, string questionText, string answerText)
         {
-            var locationId = AddLocation(consultationId, documentId);
+            var locationId = AddLocation(sourceURI);
             AddComment(locationId, commentText, isDeleted: false);
             var questionTypeId = AddQuestionType(description: "text", hasBooleanAnswer: false, hasTextAnswer: true);
             var questionId = AddQuestion(locationId, questionTypeId, questionText);

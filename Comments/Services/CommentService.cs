@@ -8,7 +8,7 @@ namespace Comments.Services
 {
     public interface ICommentService
     {
-        CommentsAndQuestions GetCommentsAndQuestions(int consultationId, int documentId, string chapterSlug);
+        CommentsAndQuestions GetCommentsAndQuestions(string sourceURI);
         ViewModels.Comment GetComment(int commentId);
         int EditComment(int commentId, ViewModels.Comment comment);
         ViewModels.Comment CreateComment(ViewModels.Comment comment);
@@ -63,12 +63,12 @@ namespace Comments.Services
             return _context.SaveChanges();
         }
 
-        public CommentsAndQuestions GetCommentsAndQuestions(int consultationId, int documentId, string chapterSlug)
+        public CommentsAndQuestions GetCommentsAndQuestions(string sourceURI)
         {
-            var consultation = _consultationService.GetConsultationDetail(consultationId);
-            var(validatedDocumentId, validatedChapterSlug) = _consultationService.ValidateDocumentAndChapterWithinConsultation(consultation, documentId, chapterSlug);
+            //var consultation = _consultationService.GetConsultationDetail(consultationId);
+            //var(validatedDocumentId, validatedChapterSlug) = _consultationService.ValidateDocumentAndChapterWithinConsultation(consultation, documentId, chapterSlug);
 
-            var locations = _context.GetAllCommentsAndQuestionsForDocument(consultationId, validatedDocumentId);
+            var locations = _context.GetAllCommentsAndQuestionsForDocument(sourceURI);
 
             var commentsData = new List<ViewModels.Comment>();
             var questionsData = new List<ViewModels.Question>();

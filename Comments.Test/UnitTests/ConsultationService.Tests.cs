@@ -5,29 +5,31 @@ using Comments.Models;
 using Comments.Services;
 using Comments.Test.Infrastructure;
 using Comments.ViewModels;
+using NICE.Feeds;
+using NICE.Feeds.Configuration;
 using NICE.Feeds.Tests.Infrastructure;
 using Shouldly;
 using Xunit;
 
 namespace Comments.Test.UnitTests
 {
-    public class Tests : TestBase
+    public class Tests : Comments.Test.Infrastructure.TestBase
     {
         [Fact]
         public void Comments_CanBeRead()
         { 
             // Arrange
             ResetDatabase();
-            var consultationId = 1;
-            var documentId = 2;
+            var sourceURI = "/consultations/1/1/introduction";
             var commentText = Guid.NewGuid().ToString();
 
-            var locationId = AddLocation(consultationId, documentId);
+            var locationId = AddLocation(sourceURI);
             AddComment(locationId, commentText, isDeleted: false);
-            var commentService = new CommentService(new ConsultationsContext(_options), new ConsultationService(new FakeFeedReaderService(Feed.ConsultationCommentsListDetailMulitpleDoc)));
+            var feedReaderService = new FeedReader(Feed.ConsultationCommentsListDetailMulitpleDoc);
+            var commentService = new CommentService(new ConsultationsContext(_options), new ConsultationService(new FeedConverterService(feedReaderService), new FakeLogger<ConsultationService>()));
             
             // Act
-            var viewModel = commentService.GetCommentsAndQuestions(consultationId, documentId, "chapter-slug");
+            var viewModel = commentService.GetCommentsAndQuestions(sourceURI);
 
             //Assert
             viewModel.Comments.Single().CommentText.ShouldBe(commentText);
@@ -38,17 +40,17 @@ namespace Comments.Test.UnitTests
         {
             // Arrange
             ResetDatabase();
-            var consultationId = 1;
-            var documentId = 2;
+            var sourceURI = "/consultations/1/1/introduction";
             var commentText = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
             var answerText = Guid.NewGuid().ToString();
 
-            AddCommentsAndQuestionsAndAnswers(consultationId, documentId, commentText, questionText, answerText);
-            var commentService = new CommentService(new ConsultationsContext(_options), new ConsultationService(new FakeFeedReaderService(Feed.ConsultationCommentsListDetailMulitpleDoc)));
+            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText);
+            var feedReaderService = new FeedReader(Feed.ConsultationCommentsListDetailMulitpleDoc);
+            var commentService = new CommentService(new ConsultationsContext(_options), new ConsultationService(new FeedConverterService(feedReaderService), new FakeLogger<ConsultationService>()));
 
             // Act    
-            var viewModel = commentService.GetCommentsAndQuestions(consultationId, documentId, "chapter-slug");
+            var viewModel = commentService.GetCommentsAndQuestions(sourceURI);
 
             //Assert
             viewModel.Comments.Single().CommentText.ShouldBe(commentText);
@@ -84,14 +86,16 @@ namespace Comments.Test.UnitTests
                         new Chapter("second-document-first-chapter-slug", "second-document-first-chapter-title")
                     })
                 });
+            var feedReaderService = new FeedReader(Feed.ConsultationCommentsListDetailMulitpleDoc);
+            var consultationService = new ConsultationService(new FeedConverterService(feedReaderService), new FakeLogger<ConsultationService>());
 
             // Act
-            var consultationService = new ConsultationService(new FakeFeedReaderService(Feed.ConsultationCommentsListDetailMulitpleDoc));
             var (validatedDocumentId, validatedChapterSlug) = consultationService.ValidateDocumentAndChapterWithinConsultation(consultation, documentIdIn, chapterSlugIn);
 
             //Assert
             validatedDocumentId.ShouldBe(documentIdOut);
             validatedChapterSlug.ShouldBe(chapterSlugOut);
         }
+
     }
 }

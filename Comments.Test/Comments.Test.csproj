@@ -8,11 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="5.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.0.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.6.0" />
     <PackageReference Include="Moq" Version="4.8.1" />
+    <PackageReference Include="NICE.Feeds.Tests" Version="1.0.39" />
     <PackageReference Include="Shouldly" Version="3.0.0" />
     <PackageReference Include="TestHelpers.DiffAssertions" Version="1.0.0-CI-20180222-091008" />
     <PackageReference Include="xunit" Version="2.3.1" />
@@ -39,10 +41,6 @@
     <None Update="diff-assertions.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="IntegrationTests\API\Chapter\" />
   </ItemGroup>
 
   <!-- https://github.com/NuGet/Home/issues/4412 -->

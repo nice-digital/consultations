@@ -19,17 +19,17 @@ namespace Comments.Test.IntegrationTests
             responseString.ShouldMatchApproved();
         }
 
-        [Fact]
-        public async Task Get_React_Document_Page()
-        {
-            // Act
-            var response = await _client.GetAsync("/consultations/1/1/introduction");
-            response.EnsureSuccessStatusCode();
+        //[Fact]
+        //public async Task Get_React_Document_Page()
+        //{
+        //    // Act
+        //    var response = await _client.GetAsync("/consultations/1/1/introduction");
+        //    response.EnsureSuccessStatusCode();
 
-            var responseString = await response.Content.ReadAsStringAsync();
+        //    var responseString = await response.Content.ReadAsStringAsync();
 
-            // Assert
-            responseString.ShouldMatchApproved();
-        }
+        //    // Assert
+        //    responseString.ShouldMatchApproved();
+        //}
     }
 }
