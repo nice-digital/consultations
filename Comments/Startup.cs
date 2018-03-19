@@ -13,11 +13,15 @@ using System;
 using System.IO;
 using System.Net.Http;
 using Comments.Auth;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
 using Microsoft.AspNetCore.StaticFiles.Infrastructure;
 using Microsoft.AspNetCore.SpaServices;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using NICE.Auth.Interfaces;
+using NICE.Auth.Services;
 using NICE.Feeds.Configuration;
 
 namespace Comments
@@ -42,31 +46,31 @@ namespace Comments
             services.AddDbContext<ConsultationsContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+           
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.TryAddSingleton<ISeriLogger, SeriLogger>();
+          //  services.TryAddTransient<IFederatedSignIn, FederatedSignIn>();
+            services.TryAddTransient<IAuthHelper, AuthHelper>();
+            services.TryAddTransient<ICommentService, CommentService>();
+            services.TryAddTransient<IConsultationService, ConsultationService>();
+            services.TryAddTransient<IFeedReaderService>(provider => new FeedReaderService(new RemoteSystemReader(null), AppSettings.Feed));
+            services.TryAddTransient<IFeedConverterService, FeedConverterService>();
+            
             // Add authentication 
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = AuthOptions.DefaultScheme;
                 options.DefaultChallengeScheme = AuthOptions.DefaultScheme;
             })
-            // Call custom authentication extension method
-            .AddAuth(options =>
+            .AddNICEAuth(options =>
             {
-                // Configure single or multiple passwords for authentication
-                //options.AuthKey = "custom auth key";
+                // todo: Configure options here from AppSettings
             });
 
             services.AddMvc(options =>
             {
                 options.Filters.Add(new ResponseCacheAttribute() { NoStore = true, Location = ResponseCacheLocation.None });
             });
-
-            
-            services.TryAddSingleton<ISeriLogger, SeriLogger>();
-            services.TryAddTransient<ICommentService, CommentService>();
-            services.TryAddTransient<IConsultationService, ConsultationService>();
-            services.TryAddTransient<IFeedReaderService>(provider => new FeedReaderService(new RemoteSystemReader(null), AppSettings.Feed)); 
-            services.TryAddTransient<IFeedConverterService, FeedConverterService>(); 
-            
 
             // In production, static files are served from the pre-built files, rather than proxied via react dev server
             services.AddSpaStaticFiles(configuration =>
@@ -94,10 +98,7 @@ namespace Comments
 
             services.AddCors(); //adding CORS for Warren. todo: maybe move this into the isDevelopment block..
             services.AddOptions();
-            
         }
-
-
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ISeriLogger seriLogger, IApplicationLifetime appLifetime)

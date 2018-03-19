@@ -8,7 +8,7 @@ namespace Comments.Auth
 {
     public static class AuthenticationBuilderExtensions
     {
-        public static AuthenticationBuilder AddAuth(this AuthenticationBuilder builder, Action<AuthOptions> configureOptions)
+        public static AuthenticationBuilder AddNICEAuth(this AuthenticationBuilder builder, Action<AuthOptions> configureOptions)
         {
             return builder.AddScheme<AuthOptions, AuthHandler>(AuthOptions.DefaultScheme, configureOptions);
         }
