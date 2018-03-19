@@ -59,7 +59,7 @@ class Document extends Component<PropsType, StateType> {
 
 		this.state = { document: null, loading: true };
 
-		const preloaded = preload(this.props.staticContext, "http://localhost:5000/consultations/sample.json");
+		const preloaded = preload(this.props.staticContext, "sample");
 
 		if (preloaded) {
 			this.state = { document: preloaded, loading: false };
@@ -68,7 +68,7 @@ class Document extends Component<PropsType, StateType> {
 
 	componentDidMount() {
 		if (!this.state.document) {
-			load("http://localhost:5000/consultations/sample.json")
+			load("sample")
 				.then(response => {
 					this.setState({
 						document: response,
