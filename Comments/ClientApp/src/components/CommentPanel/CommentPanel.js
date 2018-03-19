@@ -22,12 +22,11 @@ export class CommentPanel extends Component {
 					(this.state.panelActive ? "active" : "inactive")
 				}
 			>
-				{/*<button*/}
-					{/*onClick={this.toggleCommentBox}*/}
-					{/*className="CommentPanel__toggle js-CommentPanel__toggle"*/}
-				{/*>*/}
-					{/*{this.state.panelActive ? <span>&raquo;</span> : <span>&laquo;</span>}*/}
-				{/*</button>*/}
+				<button
+					onClick={this.toggleCommentBox}
+					className="CommentPanel__toggle js-CommentPanel__toggle">
+					{this.state.panelActive ? <span>&raquo;</span> : <span>&laquo;</span>}
+				</button>
 				<p>
 					<b>Comment Panel</b>
 				</p>

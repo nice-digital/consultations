@@ -1,10 +1,8 @@
 import Enzyme from "enzyme";
 import EnzymeAdapter from "enzyme-adapter-react-16";
 
-
 // Setup enzyme's react adapter
 Enzyme.configure({ adapter: new EnzymeAdapter() });
-
 
 // Set up the virtual DOM cos we're using "node" for the test environment
 const { JSDOM } = require("jsdom");

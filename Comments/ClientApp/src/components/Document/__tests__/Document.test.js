@@ -1,6 +1,5 @@
 import React from "react";
-import { mount, shallow } from "enzyme";
-import { MemoryRouter } from "react-router-dom";
+import { shallow } from "enzyme";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 
