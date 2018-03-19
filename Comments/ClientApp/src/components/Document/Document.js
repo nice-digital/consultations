@@ -11,12 +11,13 @@ import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
 import { CommentPanel } from "./../CommentPanel/CommentPanel";
-import { load } from "./../../data/loader";
+import load from "./../../data/loader";
 import preload from "../../data/pre-loader";
 
 type PropsType = {
 	staticContext: any
 };
+
 type StateType = {
 	loading: boolean,
 	document: ?{
@@ -58,8 +59,7 @@ class Document extends Component<PropsType, StateType> {
 
 		this.state = { document: null, loading: true };
 
-		// TODO: url for the loaded doc - come from route?
-		const preloaded = preload(this.props.staticContext, "sample.json");
+		const preloaded = preload(this.props.staticContext, "http://localhost:5000/consultations/sample.json");
 
 		if (preloaded) {
 			this.state = { document: preloaded, loading: false };
@@ -68,10 +68,10 @@ class Document extends Component<PropsType, StateType> {
 
 	componentDidMount() {
 		if (!this.state.document) {
-			load("sample.json")
+			load("http://localhost:5000/consultations/sample.json")
 				.then(response => {
 					this.setState({
-						document: response.data,
+						document: response,
 						loading: false
 					});
 				})
@@ -139,7 +139,7 @@ class Document extends Component<PropsType, StateType> {
 	};
 
 	render() {
-		if (!this.state.document) return <h1>Loading...</h1>;
+		if (this.state.loading) return <h1>Loading...</h1>;
 
 		const { title, endDate, reference, documents } = this.state.document.consultation;
 

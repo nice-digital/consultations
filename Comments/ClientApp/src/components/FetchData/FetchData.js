@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 
 import preload from "./../../data/pre-loader";
-import { load } from "./../../data/loader";
+import load from "./../../data/loader";
 
 class FetchData extends Component {
 	constructor(props) {
