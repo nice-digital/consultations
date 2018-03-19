@@ -11,7 +11,7 @@ import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
 import { CommentPanel } from "./../CommentPanel/CommentPanel";
-import load from "./../../data/loader";
+import { load } from "./../../data/loader";
 import preload from "../../data/pre-loader";
 
 type PropsType = {

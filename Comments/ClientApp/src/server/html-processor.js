@@ -60,7 +60,9 @@ export const replaceRelativePaths = (html: string): string => {
 	/* eslint-enable no-useless-escape */
 };
 
-export const processHtml = (html: string, { title, metas, links, scripts, htmlAttributes, bodyAttributes, rootContent }): string => {
+export const processHtml = (html: string, {
+	title, metas, links, scripts, htmlAttributes, bodyAttributes, rootContent
+}): string => {
 	// In dev mode we proxy requests to react dev server, which runs in the root. So we prepend relative URLs.
 	// We don't need to do this in production because we use PUBLIC_URL=/consultations with `npm run build`.
 	if (process.env.NODE_ENV === "development")

@@ -1,4 +1,4 @@
-import load from "./loader";
+import { load } from "./loader";
 
 // Returns data if it's available or a promise that resolves with the data
 // when it's loaded async.
