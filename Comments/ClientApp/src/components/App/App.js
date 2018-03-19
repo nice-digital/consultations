@@ -4,7 +4,7 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
-import DemoPage from "../DemoPage";
+import LayoutTwoCol from "../LayoutTwoColumn";
 import Home from "../Home/Home";
 import WeatherForecast from "../WeatherForecast/WeatherForecast";
 import Document from "../Document/Document";
@@ -20,16 +20,16 @@ const App = () => {
 			<Switch>
 				{/*home*/}
 				<Route exact path="/">
-					<DemoPage>
+					<LayoutTwoCol>
 						<Home />
-					</DemoPage>
+					</LayoutTwoCol>
 				</Route>
 
 				{/*fetch-data*/}
 				<Route path="/weather-forecast">
-					<DemoPage>
+					<LayoutTwoCol>
 						<WeatherForecast />
-					</DemoPage>
+					</LayoutTwoCol>
 				</Route>
 
 				{/*document*/}
