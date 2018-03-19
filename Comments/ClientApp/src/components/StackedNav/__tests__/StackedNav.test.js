@@ -2,7 +2,7 @@ import React from "react";
 import { MemoryRouter } from "react-router-dom";
 import { mount } from "enzyme";
 
-import { StackedNav } from "./StackedNav";
+import { StackedNav } from "../StackedNav";
 
 describe("[ClientApp] ", () => {
 	describe("StackedNav ", () => {

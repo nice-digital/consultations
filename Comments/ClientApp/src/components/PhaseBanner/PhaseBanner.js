@@ -6,7 +6,7 @@ export const PhaseBanner = () => {
 	return (
 		<p className="phase-banner">
 			<span className="phase-banner__tag">
-				<span className="tag tag--impact tag--alpha">Alpha</span>
+				<span className="tag tag--impact tag--beta">Beta</span>
 			</span>
 			<span className="phase-banner__label">
 				NICE Consulations is in development. This means it is not feature
@@ -22,5 +22,3 @@ export const PhaseBanner = () => {
 		</p>
 	);
 };
-
-export default PhaseBanner;

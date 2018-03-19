@@ -1,4 +1,9 @@
-import { prepHead, parseClassAttribute, replaceOpeningHtmlTag, replaceOpeningBodyTag, replaceRootContent, replaceRelativePaths } from "./html-processor";
+import { prepHead,
+	parseClassAttribute,
+	replaceOpeningHtmlTag,
+	replaceOpeningBodyTag,
+	replaceRootContent,
+	replaceRelativePaths } from "./html-processor";
 
 describe("HTML processor", () => {
 	describe("prepHead", () => {

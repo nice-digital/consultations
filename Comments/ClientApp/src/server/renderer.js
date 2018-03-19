@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 // See https://medium.com/@cereallarceny/server-side-rendering-with-create-react-app-fiber-react-router-v4-helmet-redux-and-thunk-275cb25ca972
 // and https://github.com/cereallarceny/cra-ssr/blob/master/server/universal.js
 
@@ -7,7 +8,7 @@ import { renderToString  } from "react-dom/server";
 import { StaticRouter } from "react-router";
 import { Helmet } from "react-helmet";
 
-import { processHtml, replaceRelativePaths } from "./html-processor";
+import { processHtml } from "./html-processor";
 
 import App from "./../components/App/App";
 
@@ -34,6 +35,7 @@ export const serverRenderer = (params): Promise => {
 	return new Promise((resolve, reject) => {
 
 		// Context object that Routes can use to pass properties 'out'. Primarily used for status code.
+		// eslint-disable-next-line
 		// See https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/api/StaticRouter.md#context-object
 		// E.g.:
 		//  <Route render={({ staticContext }) => {
@@ -44,7 +46,8 @@ export const serverRenderer = (params): Promise => {
 				data: {}, // Key value pairs of preloaded data sets
 				loaders: [] // List of promises where we track preloading data
 			},
-			baseUrl: params.origin + BaseUrlRelative // Base url is used for 'server' ajax requests so we can hit the .NET instance from the Node process
+			baseUrl: params.origin + BaseUrlRelative
+			// Base url is used for 'server' ajax requests so we can hit the .NET instance from the Node process
 		};
 
 		var app = (

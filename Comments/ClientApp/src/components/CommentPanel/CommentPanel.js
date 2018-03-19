@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-// import stickybits from "stickybits";
 
-class CommentPanel extends Component {
+export class CommentPanel extends Component {
 	state = {
 		panelActive: true
 	};
@@ -14,13 +13,10 @@ class CommentPanel extends Component {
 		});
 	};
 
-	componentDidMount() {
-		// stickybits(".js-CommentPanel");
-	}
-
 	render() {
 		return (
 			<div
+				style={this.props.style}
 				className={
 					"CommentPanel js-CommentPanel " +
 					(this.state.panelActive ? "active" : "inactive")
@@ -28,8 +24,7 @@ class CommentPanel extends Component {
 			>
 				<button
 					onClick={this.toggleCommentBox}
-					className="CommentPanel__toggle js-CommentPanel__toggle"
-				>
+					className="CommentPanel__toggle js-CommentPanel__toggle">
 					{this.state.panelActive ? <span>&raquo;</span> : <span>&laquo;</span>}
 				</button>
 				<p>
@@ -43,5 +38,3 @@ class CommentPanel extends Component {
 		);
 	}
 }
-
-export default CommentPanel;

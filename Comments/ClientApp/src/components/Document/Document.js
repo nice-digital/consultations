@@ -1,129 +1,79 @@
 // @flow
 
 import React, { Component } from "react";
-import axios from "axios";
 import Moment from "react-moment";
 import { Helmet } from "react-helmet";
+import { StickyContainer, Sticky } from "react-sticky";
+import { withRouter } from "react-router-dom";
+
 import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
-import Breadcrumbs from "./../Breadcrumbs/Breadcrumbs";
+import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
 import { StackedNav } from "./../StackedNav/StackedNav";
-import { HashLinkTop } from "./../../helpers/component_helpers";
-import CommentPanel from "../CommentPanel/CommentPanel";
+import { HashLinkTop } from "../../helpers/component-helpers";
+import { CommentPanel } from "./../CommentPanel/CommentPanel";
+import { load } from "./../../data/loader";
+import preload from "../../data/pre-loader";
 
-type PropsType = {};
-
-type StateType = {
-	document: null | {
-		chapterHTML: {
-			content: string,
-			sections: [
-				{
-					slug: string,
-					title: string
-				}
-			]
-		},
-		consultation: {
-			documents: [
-				{
-					documentId: number,
-					title: string,
-					chapters: [
-						{
-							slug: string,
-							title: string
-						}
-					]
-				}
-			],
-			title: string,
-			endDate: string,
-			reference: string
-		}
-	}
+type PropsType = {
+	staticContext: any
 };
+type StateType = {
+	loading: boolean,
+	document: any
+};
+type DataType = any;
+type DocumentsType = any;
+type ChaptersType = any;
 
-class Document extends Component<PropsType, StateType> {
-	constructor() {
-		super();
+export class Document extends Component<PropsType, StateType> {
+	constructor(props) {
+		super(props);
 
-		this.state = {
-			document: null
-		};
+		this.state = { document: null, loading: true };
+
+		const preloaded = preload(this.props.staticContext, "sample");
+
+		if (preloaded) {
+			this.state = { document: preloaded, loading: false };
+		}
 	}
 
 	componentDidMount() {
-		type ResponseType = {
-			data: Object
-		};
-		// todo: separate this into the shared loader
-		axios("sample.json").then((response: ResponseType) => {
-			this.setState({
-				document: response.data
-			});
-		});
+		if (!this.state.document) {
+			load("sample")
+				.then(response => {
+					this.setState({
+						document: response.data,
+						loading: false
+					});
+				})
+				// TODO: explore why this is logging in testing
+				.catch(() => console.log("💔 Problem with load"));
+		}
 	}
 
-	renderDocumentHtml = () => {
-		if (this.state.document) {
-			return { __html: this.state.document.chapterHTML.content };
-		} else {
-			return null;
-		}
+	renderDocumentHtml = (data: DataType) => {
+		return { __html: data };
 	};
 
-	renderInPageNav = () => {
-		const { sections } = this.state.document.chapterHTML;
-		return (
-			<nav className="in-page-nav" aria-labelledby="inpagenav-title">
-				<h2 id="inpagenav-title" className="in-page-nav__title">
-					On this page
-				</h2>
-				<ol className="in-page-nav__list" aria-hidden="false" role="menubar">
-					{sections.map((item, index) => {
-						const props = {
-							label: item.title,
-							to: item.slug,
-							behavior: "smooth",
-							block: "start"
-						};
-						return (
-							<li className="in-page-nav__item" key={index}>
-								<HashLinkTop {...props} />
-							</li>
-						);
-					})}
-				</ol>
-			</nav>
-		);
-	};
-
-	// todo: change this function so it only returns the data
-	renderSupportingDocumentLinks = () => {
-		const { documents } = this.state.document.consultation;
-
+	getSupportingDocumentLinks = (documents: DocumentsType) => {
 		const isValidDocument = d => d.title && d.documentId;
-
-		const mapDocToLink = d => ({
+		const documentToLinkObject = d => ({
 			label: d.title,
 			url: `/1/${d.documentId}/${d.chapters[0].slug}`
 		});
-
-		const links = {
+		return {
 			root: {
 				label: "Additional documents to comment on",
 				url: "#"
 			},
-			links: documents.filter(isValidDocument).map(mapDocToLink)
+			links: documents.filter(isValidDocument).map(documentToLinkObject)
 		};
-
-		return <StackedNav links={links} />;
 	};
 
-	// todo: will these need to be manually extracted from the consultation.documents array?
-	// todo: change this function so it only returns the data
-	renderThisDocumentChapterLinks = () => {
-		const links = {
+	getDocumentChapterLinks = (chapters: ChaptersType) => {
+		if (chapters) throw new Error("Need to add chapters to getDocumentChapterLinks");
+		return {
 			root: {
 				label: "Chapters in this document",
 				url: "#",
@@ -137,54 +87,119 @@ class Document extends Component<PropsType, StateType> {
 				}
 			]
 		};
-		return <StackedNav links={links} />;
+	};
+
+	getBreadcrumbs = () => {
+		return [
+			{
+				label: "Home",
+				url: "/document"
+			},
+			{
+				label: "NICE Guidance",
+				url: "#"
+			},
+			{
+				label: "In Consulation",
+				url: "#"
+			},
+			{
+				label: "Document title",
+				url: "#"
+			}
+		];
+	};
+
+	temporaryNavForConvenience = () => {
+		return {
+			root: {
+				label: "Temporary nav for convenience",
+				url: "#"
+			},
+			links: [
+				{
+					label: "home page",
+					url: "/"
+				},
+				{
+					label: "weather forecast",
+					url: "/weather-forecast",
+				},
+				{
+					label: "document view",
+					url: "/1/1/introduction",
+				}
+			]
+		};
 	};
 
 	render() {
-		if (!this.state.document) {
-			return null;
-		}
+		if (!this.state.document) return <h1>Loading...</h1>;
 
-		// todo: where are the breadcrumbs going to come from?
-		const breadcrumbs = [
-			{ label: "Home", url: "/document" },
-			{ label: "NICE Guidance", url: "#" },
-			{ label: "In Consulation", url: "#" },
-			{ label: "Document title", url: "#" }
-		];
-
-		const { title, endDate, reference } = this.state.document.consultation;
+		const { title, endDate, reference, documents } = this.state.document.consultation;
+		const { sections, content } = this.state.document.chapterHTML;
 
 		return (
 			<div>
 				<Helmet>
 					<title>Comment on Document</title>
 				</Helmet>
-				<CommentPanel />
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">
-							<PhaseBanner />
-							<Breadcrumbs segments={breadcrumbs} />
+							<PhaseBanner/>
+							<BreadCrumbs links={this.getBreadcrumbs()}/>
 							<div className="page-header">
 								<h1 className="page-header__heading">{title}</h1>
 								<p className="page-header__lead">
 									[{reference}] Open until{" "}
-									<Moment format="DD-MM-YYYY" date={endDate} />
+									<Moment format="D MMMM YYYY" date={endDate}/>
 								</p>
 							</div>
-							<div className="grid">
+							<StickyContainer className="grid">
 								<div data-g="12 md:3">
-									{this.renderThisDocumentChapterLinks()}
-									{this.renderSupportingDocumentLinks()}
+									<StackedNav links={this.getDocumentChapterLinks()}/>
+									<StackedNav links={this.getSupportingDocumentLinks(documents)}/>
+									<StackedNav links={this.temporaryNavForConvenience()}/>
 								</div>
 								<div data-g="12 md:6">
 									<div className="document-comment-container">
-										<div dangerouslySetInnerHTML={this.renderDocumentHtml()} />
+										<div dangerouslySetInnerHTML={this.renderDocumentHtml(content)}/>
 									</div>
 								</div>
-								<div data-g="12 md:3">{this.renderInPageNav()}</div>
-							</div>
+								<div data-g="12 md:3">
+									<Sticky>
+										{({ style }) => <CommentPanel style={style}/>}
+									</Sticky>
+									<nav
+										className="in-page-nav"
+										aria-labelledby="inpagenav-title"
+									>
+										<h2 id="inpagenav-title" className="in-page-nav__title">
+											On this page
+										</h2>
+										<ol
+											className="in-page-nav__list"
+											aria-hidden="false"
+											role="menubar"
+										>
+											{sections.map((item, index) => {
+												const props = {
+													label: item.title,
+													to: item.slug,
+													behavior: "smooth",
+													block: "start"
+												};
+												return (
+													<li className="in-page-nav__item" key={index}>
+														<HashLinkTop {...props} />
+													</li>
+												);
+											})}
+										</ol>
+									</nav>
+								</div>
+							</StickyContainer>
 						</div>
 					</div>
 				</div>
@@ -193,4 +208,4 @@ class Document extends Component<PropsType, StateType> {
 	}
 }
 
-export default Document;
+export default withRouter(Document);

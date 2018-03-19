@@ -10,6 +10,7 @@ type HashLinkTopType = {
 	block: string
 };
 
+// TODO: write test for HashLinkTop
 export function HashLinkTop(props: HashLinkTopType) {
 	const { label, to, behavior, block } = props;
 	return (

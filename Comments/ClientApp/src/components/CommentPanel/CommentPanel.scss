@@ -1,31 +1,14 @@
 .CommentPanel {
   background: #eee;
-  position: fixed;
-  right: 0;
-  top: 0;
-  width: 30vw;
-  z-index: 1;
-  height: 100vh;
   padding: rem($spacing-medium);
   &.inactive {
-    transform: translateX(30vw);
-    transition: transform 0.2s ease-out;
+    transform: translateX(240px) !important;
+    transition: all 0.3s ease-in-out;
+    opacity: 0.1;
   }
   &.active {
-    transform: translateX(0vw);
-    transition: transform 0.2s ease-in;
-  }
-  &__toggle {
-    border: none;
-    background: green;
-    width: 50px;
-    height: 50px;
-    line-height: 50px;
-    color: white;
-    text-align: center;
-    font-size: 24px;
-    font-weight: bold;
-    transform: translateX(-50px);
-    cursor: pointer;
+    transform: translateX(0) !important;
+    transition: all 0.3s ease-in-out;
+    opacity: 1;
   }
 }
