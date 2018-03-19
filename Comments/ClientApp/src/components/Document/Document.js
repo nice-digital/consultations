@@ -4,6 +4,7 @@ import React, { Component } from "react";
 import Moment from "react-moment";
 import { Helmet } from "react-helmet";
 import { StickyContainer, Sticky } from "react-sticky";
+import { withRouter } from "react-router-dom";
 
 import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
 import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
@@ -11,10 +12,13 @@ import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
 import { CommentPanel } from "./../CommentPanel/CommentPanel";
 import { load } from "./../../data/loader";
+import preload from "../../data/pre-loader";
 
-type PropsType = {};
-
+type PropsType = {
+	staticContext: any
+};
 type StateType = {
+	loading: boolean,
 	document: ?{
 		chapterHTML: {
 			content: string,
@@ -44,29 +48,36 @@ type StateType = {
 		}
 	}
 };
-
 type DataType = any;
-
 type DocumentsType = any;
-
 type ChaptersType = any;
 
 class Document extends Component<PropsType, StateType> {
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
 
-		this.state = {
-			document: null
-		};
+		this.state = { document: null, loading: true };
 
-		load("sample.json")
-			.then(response  => {
-				this.setState({
-					document: response.data
-				});
-			})
-		// TODO: explore why this is logging in testing
-			.catch(err => console.log("💔 Problem with load"));
+		// TODO: url for the loaded doc - come from route?
+		const preloaded = preload(this.props.staticContext, "sample.json");
+
+		if (preloaded) {
+			this.state = { document: preloaded, loading: false };
+		}
+	}
+
+	componentDidMount() {
+		if (!this.state.document) {
+			load("sample.json")
+				.then(response => {
+					this.setState({
+						document: response.data,
+						loading: false
+					});
+				})
+				// TODO: explore why this is logging in testing
+				.catch(() => console.log("💔 Problem with load"));
+		}
 	}
 
 	renderDocumentHtml = (data: DataType) => {
@@ -202,4 +213,4 @@ class Document extends Component<PropsType, StateType> {
 	}
 }
 
-export default Document;
+export default withRouter(Document);

@@ -1,12 +1,10 @@
 import React, { Component } from "react";
-import { withRouter } from "react-router";
+import { withRouter } from "react-router-dom";
 
 import preload from "./../../data/pre-loader";
-import load from "./../../data/loader";
+import { load } from "./../../data/loader";
 
 class FetchData extends Component {
-	displayName = FetchData.name;
-
 	constructor(props) {
 		super(props);
 
@@ -36,6 +34,7 @@ class FetchData extends Component {
 	}
 
 	static renderForecastsTable(forecasts) {
+		if (!forecasts) return null;
 		return (
 			<table className="table">
 				<thead>
