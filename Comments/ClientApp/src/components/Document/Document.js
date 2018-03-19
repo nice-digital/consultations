@@ -17,37 +17,9 @@ import preload from "../../data/pre-loader";
 type PropsType = {
 	staticContext: any
 };
-
 type StateType = {
 	loading: boolean,
-	document: ?{
-		chapterHTML: {
-			content: string,
-			sections: [
-				{
-					slug: string,
-					title: string
-				}
-				]
-		},
-		consultation: {
-			documents: [
-				{
-					documentId: number,
-					title: string,
-					chapters: [
-						{
-							slug: string,
-							title: string
-						}
-						]
-				}
-				],
-			title: string,
-			endDate: string,
-			reference: string
-		}
-	}
+	document: any
 };
 type DataType = any;
 type DocumentsType = any;
@@ -138,11 +110,33 @@ class Document extends Component<PropsType, StateType> {
 		];
 	};
 
+	temporaryNavForConvenience = () => {
+		return {
+			root: {
+				label: "Temporary nav for convenience",
+				url: "#"
+			},
+			links: [
+				{
+					label: "home page",
+					url: "/"
+				},
+				{
+					label: "weather forecast",
+					url: "/weather-forecast",
+				},
+				{
+					label: "document view",
+					url: "/1/1/introduction",
+				}
+			]
+		};
+	};
+
 	render() {
 		if (this.state.loading) return <h1>Loading...</h1>;
 
 		const { title, endDate, reference, documents } = this.state.document.consultation;
-
 		const { sections, content } = this.state.document.chapterHTML;
 
 		return (
@@ -166,6 +160,7 @@ class Document extends Component<PropsType, StateType> {
 								<div data-g="12 md:3">
 									<StackedNav links={this.getDocumentChapterLinks()}/>
 									<StackedNav links={this.getSupportingDocumentLinks(documents)}/>
+									<StackedNav links={this.temporaryNavForConvenience()}/>
 								</div>
 								<div data-g="12 md:6">
 									<div className="document-comment-container">

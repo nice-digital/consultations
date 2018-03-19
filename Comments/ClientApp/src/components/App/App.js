@@ -6,7 +6,7 @@ import { Helmet } from "react-helmet";
 
 import DemoPage from "../DemoPage";
 import Home from "../Home/Home";
-import FetchData from "../FetchData/FetchData";
+import WeatherForecast from "../WeatherForecast/WeatherForecast";
 import Document from "../Document/Document";
 import NotFound from "../NotFound/NotFound";
 
@@ -26,9 +26,9 @@ const App = () => {
 				</Route>
 
 				{/*fetch-data*/}
-				<Route path="/fetchdata">
+				<Route path="/weather-forecast">
 					<DemoPage>
-						<FetchData />
+						<WeatherForecast />
 					</DemoPage>
 				</Route>
 

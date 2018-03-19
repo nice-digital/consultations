@@ -11,7 +11,7 @@ export default function NavMenu() {
 			</h2>
 			<ul className="stacked-nav__list">
 				<li className="stacked-nav__list-item">
-					<NavLink to={"/fetchdata"}>Fetch Data</NavLink>
+					<NavLink to={"/weather-forecast"}>Weather</NavLink>
 				</li>
 				<li className="stacked-nav__list-item">
 					<NavLink to={"/1/1/introduction"}>Document View</NavLink>
