@@ -28,7 +28,7 @@ export const load = (endpoint, baseUrl = "/consultations", query = {}) => {
 	return new Promise((resolve, reject) => {
 		axios(generateUrl(endpoint, baseUrl, query))
 			.then(response => {
-				resolve(response.data);
+				resolve(response);
 			})
 			.catch(err => {
 				reject(err);

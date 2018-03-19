@@ -25,7 +25,7 @@ type DataType = any;
 type DocumentsType = any;
 type ChaptersType = any;
 
-class Document extends Component<PropsType, StateType> {
+export class Document extends Component<PropsType, StateType> {
 	constructor(props) {
 		super(props);
 
@@ -43,7 +43,7 @@ class Document extends Component<PropsType, StateType> {
 			load("sample")
 				.then(response => {
 					this.setState({
-						document: response,
+						document: response.data,
 						loading: false
 					});
 				})
@@ -134,7 +134,7 @@ class Document extends Component<PropsType, StateType> {
 	};
 
 	render() {
-		if (this.state.loading) return <h1>Loading...</h1>;
+		if (!this.state.document) return <h1>Loading...</h1>;
 
 		const { title, endDate, reference, documents } = this.state.document.consultation;
 		const { sections, content } = this.state.document.chapterHTML;

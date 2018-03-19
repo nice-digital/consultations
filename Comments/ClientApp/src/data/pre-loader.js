@@ -38,8 +38,8 @@ const preload = (staticContext, endpoint) => {
 	var promise = load(endpoint, staticContext.baseUrl)
 		.then(response => {
 			console.log(`Data with key '${endpoint}' loaded async from server`);
-			staticContext.preload.data[endpoint] = response;
-			return response;
+			staticContext.preload.data[endpoint] = response.data;
+			return response.data;
 		});
 
 	console.log(`Data with key '${endpoint}' loaded async from server`);

@@ -4,7 +4,7 @@ import { MemoryRouter } from "react-router-dom";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 
-import Document from "../Document";
+import { Document } from "../Document";
 import sampleData from "./sample";
 import { nextTick } from "../../../helpers/utils";
 
@@ -20,12 +20,8 @@ describe("[ClientApp] ", () => {
 		});
 
 		it("should render the component with the supplied data", async () => {
-			const wrapper = mount(
-				<MemoryRouter>
-					<Document />
-				</MemoryRouter>
-			);
-			mock.onGet("sample.json").reply(200, sampleData);
+			const wrapper = shallow(<Document />);
+			mock.onGet().reply(200, sampleData);
 			await nextTick();
 			wrapper.update();
 			expect(wrapper.find("h1").text()).toEqual("For consultation comments");

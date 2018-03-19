@@ -1,7 +1,6 @@
 import * as loader from "../loader";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { nextTick } from "../../helpers/utils";
 
 const mock = new MockAdapter(axios);
 
@@ -10,7 +9,7 @@ describe("[ClientApp] ", () => {
 		describe("generateUrl function", () => {
 
 			it("should produce a string that only passes endpoint if it doesn't match a shortcut", () => {
-				const url  = loader.generateUrl(
+				const url = loader.generateUrl(
 					"myEndpoint",
 					"baseUrl",
 					{
