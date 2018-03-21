@@ -6,5 +6,5 @@ Feature: Consultations homepage feature
     Given I open the page ""
 
   Scenario: Load home page 
-    When I click on text "Fetch Data" in ".stacked-nav"
-    Then I expect that element "h1" matches the text "Weather forecast"
+    When I click on text "Document View" in ".stacked-nav"
+    Then I expect that element "h1" matches the text "For consultation comments"
