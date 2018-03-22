@@ -1,0 +1,24 @@
+{
+  "name": "functional-tests",
+  "version": "1.0.0",
+  "description": "Automated browser-driven functional tests for Consultation Comments",
+  "main": "index.js",
+  "scripts": {
+    "test": "node node_modules/webdriverio/bin/wdio",
+    "test:teamcity": "node node_modules/webdriverio/bin/wdio wdio.teamcity.conf.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-preset-env": "^1.6.1",
+    "babel-register": "^6.26.0",
+    "chai": "^4.1.2",
+    "node": "^8.10.0",
+    "wdio-chromedriver-service": "^0.1.2",
+    "wdio-cucumber-framework": "^1.1.0",
+    "wdio-selenium-standalone-service": "0.0.10",
+    "wdio-spec-reporter": "^0.1.4",
+    "wdio-teamcity-reporter": "^1.1.1",
+    "webdriverio": "^4.12.0"
+  }
+}
