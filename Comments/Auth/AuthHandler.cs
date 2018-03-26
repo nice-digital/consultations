@@ -23,8 +23,10 @@ namespace Comments.Auth
 
             //return Task.FromResult(AuthenticateResult.Fail("this returns a 401"));
 
-            var identities = new List<ClaimsIdentity> { new ClaimsIdentity(AuthOptions.DefaultScheme) };
-            var ticket = new AuthenticationTicket(new ClaimsPrincipal(identities), Options.Scheme);
+            //var identities = new List<ClaimsIdentity> { new ClaimsIdentity(AuthOptions.DefaultScheme) };
+            //var ticket = new AuthenticationTicket(new ClaimsPrincipal(identities), Options.Scheme);
+
+            var ticket = new AuthenticationTicket(new ClaimsPrincipal(), Options.Scheme);
 
             return Task.FromResult(AuthenticateResult.Success(ticket));
         }

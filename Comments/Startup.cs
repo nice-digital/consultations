@@ -20,8 +20,6 @@ using ConsultationsContext = Comments.Models.ConsultationsContext;
 using Microsoft.AspNetCore.StaticFiles.Infrastructure;
 using Microsoft.AspNetCore.SpaServices;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
-using NICE.Auth.Interfaces;
-using NICE.Auth.Services;
 using NICE.Feeds.Configuration;
 
 namespace Comments
@@ -50,7 +48,6 @@ namespace Comments
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.TryAddSingleton<ISeriLogger, SeriLogger>();
           //  services.TryAddTransient<IFederatedSignIn, FederatedSignIn>();
-            services.TryAddTransient<IAuthHelper, AuthHelper>();
             services.TryAddTransient<ICommentService, CommentService>();
             services.TryAddTransient<IConsultationService, ConsultationService>();
             services.TryAddTransient<IFeedReaderService>(provider => new FeedReaderService(new RemoteSystemReader(null), AppSettings.Feed));
