@@ -26,7 +26,7 @@ type DocumentsType = any;
 type ChaptersType = any;
 
 export class Document extends Component<PropsType, StateType> {
-	constructor(props) {
+	constructor(props: PropsType) {
 		super(props);
 
 		this.state = { document: null, loading: true };
