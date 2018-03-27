@@ -1,11 +1,10 @@
 // @flow
 
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
 import LayoutTwoCol from "../LayoutTwoColumn";
-import Home from "../Home/Home";
 import WeatherForecast from "../WeatherForecast/WeatherForecast";
 import DocumentWithRouter from "../Document/Document";
 import NotFound from "../NotFound/NotFound";
@@ -20,12 +19,10 @@ const App = () => {
 			<Switch>
 				{/*home*/}
 				<Route exact path="/">
-					<LayoutTwoCol>
-						<Home />
-					</LayoutTwoCol>
+					<Redirect to="/1/1/introduction" />
 				</Route>
 
-				{/*fetch-data*/}
+				{/*weather-forecast*/}
 				<Route path="/weather-forecast">
 					<LayoutTwoCol>
 						<WeatherForecast />

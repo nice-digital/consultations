@@ -14,4 +14,11 @@
     float: left;
     margin-left: rem(-$spacing-xx-large);
   }
+  table {
+    td {
+      padding: rem($spacing-small);
+    }
+    margin-bottom: rem($spacing-medium);
+  }
+
 }

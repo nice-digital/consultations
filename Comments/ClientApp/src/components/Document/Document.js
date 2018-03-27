@@ -177,24 +177,10 @@ export class Document extends Component<PropsType, StateType> {
 		];
 	};
 
-	temporaryNavForConvenience = () => {
-		return {
-			title: "Temporary nav for convenience",
-			links: [
-				{
-					label: "home page",
-					url: "/"
-				},
-				{
-					label: "weather forecast",
-					url: "/weather-forecast",
-				},
-				{
-					label: "document view",
-					url: "/1/1/introduction",
-				}
-			]
-		};
+	getCurrentDocumentTitle = (documents: Object, documentId: string) => {
+		const matchCurrentDocument = d => d.documentId === parseInt(documentId, 0);
+		const currentDocumentDetails = documents.filter(matchCurrentDocument)[0];
+		return currentDocumentDetails.title;
 	};
 
 	render() {
@@ -217,6 +203,7 @@ export class Document extends Component<PropsType, StateType> {
 							<BreadCrumbs links={this.getBreadcrumbs()}/>
 							<div className="page-header">
 								<h1 className="page-header__heading">{title}</h1>
+								<h2>{this.getCurrentDocumentTitle(documentsData, this.props.match.params.documentId)}</h2>
 								<p className="page-header__lead">
 									[{reference}] Open until{" "}
 									<Moment format="D MMMM YYYY" date={endDate}/>
@@ -226,7 +213,6 @@ export class Document extends Component<PropsType, StateType> {
 								<div data-g="12 md:3">
 									<StackedNav links={this.getDocumentChapterLinks(this.props.match.params.documentId)}/>
 									<StackedNav links={this.getSupportingDocumentLinks(documentsData)}/>
-									<StackedNav links={this.temporaryNavForConvenience()}/>
 								</div>
 								<div data-g="12 md:6">
 									<div className="document-comment-container">
