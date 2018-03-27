@@ -1,21 +1,4 @@
 .stacked-nav {
-  a {
-    &[aria-current='true'] {
-      background: $colour-nice-grey-3;
-      font-weight: bold;
-
-      &:before {
-        background: $colour-icons;
-        content: '';
-        display: block;
-        height: 100%;
-        left: 0;
-        position: absolute;
-        top: 0;
-        width: em($spacing-x-small);
-      }
-    }
-  }
   &__root {
     color: $colour-text;
     display: block;

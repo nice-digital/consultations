@@ -96,7 +96,7 @@ export class Document extends Component<PropsType, StateType> {
 		}
 	}
 
-	componentDidUpdate(prevProps, prevState){
+	componentDidUpdate(prevProps: PropsType){
 		const oldRoute = prevProps.location.pathname;
 		const newRoute = this.props.location.pathname;
 		if (oldRoute !== newRoute) {
@@ -109,8 +109,6 @@ export class Document extends Component<PropsType, StateType> {
 					console.log(this.state);
 				})
 				.catch();
-		} else {
-			console.log("Route is the same!");
 		}
 	}
 
@@ -121,17 +119,18 @@ export class Document extends Component<PropsType, StateType> {
 	getSupportingDocumentLinks = (documents: DocumentsType) => {
 		if (!documents) return null;
 		const isValidDocument = d => d.title && d.documentId;
+		const isCurrentDocument = documentId => documentId === parseInt(this.props.match.params.documentId, 0);
 		const documentToLinkObject = d => ({
 			label: d.title,
-			url: `/${this.props.match.params.consultationId}/${d.documentId}/${d.chapters[0].slug}`
+			url: `/${this.props.match.params.consultationId}/${d.documentId}/${d.chapters[0].slug}`,
+			current: isCurrentDocument(d.documentId),
 		});
+
 		const filteredDocuments = documents.filter(isValidDocument).map(documentToLinkObject);
+
 		return {
-			root: {
-				label: "Documents in this Consultation",
-				current: false,
-			},
-			links: filteredDocuments
+			title: "Documents in this Consultation",
+			links: filteredDocuments,
 		};
 	};
 
@@ -146,7 +145,7 @@ export class Document extends Component<PropsType, StateType> {
 			return {
 				label: chapter.title,
 				url: `/${this.props.match.params.consultationId}/${this.props.match.params.documentId}/${chapter.slug}`,
-				current: isCurrentChapter(chapter.slug)
+				current: isCurrentChapter(chapter.slug),
 			};
 		};
 
@@ -155,11 +154,8 @@ export class Document extends Component<PropsType, StateType> {
 		const currentDocument = documents.filter(isCurrentDocument);
 
 		return {
-			root: {
-				label: "Chapters in this document",
-				current: false,
-			},
-			links: currentDocument[0].chapters.map(createChapterLink)
+			title: "Chapters in this document",
+			links: currentDocument[0].chapters.map(createChapterLink),
 		};
 	};
 
@@ -186,10 +182,7 @@ export class Document extends Component<PropsType, StateType> {
 
 	temporaryNavForConvenience = () => {
 		return {
-			root: {
-				label: "Temporary nav for convenience",
-				url: "#"
-			},
+			title: "Temporary nav for convenience",
 			links: [
 				{
 					label: "home page",
