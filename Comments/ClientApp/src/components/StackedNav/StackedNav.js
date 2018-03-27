@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 type LinkType = {
 	label: string,
-	url?: string,
+	url: string,
 	current?: boolean
 };
 
@@ -21,9 +21,7 @@ export const StackedNav = (props: PropsType) => {
 	const { title, links } = props.links;
 	return (
 		<nav className="stacked-nav" aria-label="{root.label}">
-			<h2 className="stacked-nav__root">
-				{title}
-			</h2>
+			<h2 className="stacked-nav__root">{title}</h2>
 			<ul className="stacked-nav__list">
 				{links.map(item => (
 					<li key={item.label} className="stacked-nav__list-item">

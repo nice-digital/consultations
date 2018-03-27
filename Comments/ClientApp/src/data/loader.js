@@ -1,4 +1,4 @@
-import { Endpoints, BaseUrl } from "./endpoints";
+import { Endpoints, ApiRootUrl } from "./endpoints";
 import axios from "axios";
 import { objectToQueryString } from "./../helpers/utils";
 
@@ -17,14 +17,14 @@ import { objectToQueryString } from "./../helpers/utils";
  * axios("/consultations/api/Chapter?consultationId=1&documentId=2&chapterSlug=risk-assessment").then(res => res.data);
  */
 
-export const generateUrl = (endpoint, baseUrl = BaseUrl, query = {}) => {
+export const generateUrl = (endpoint, baseUrl = ApiRootUrl, query = {}) => {
 	if (Endpoints[endpoint]) {
 		return baseUrl + Endpoints[endpoint] + objectToQueryString(query);
 	}
 	return endpoint;
 };
 
-export const load = (endpoint, baseUrl = BaseUrl, query = {}) => {
+export const load = (endpoint, baseUrl = ApiRootUrl, query = {}) => {
 	return new Promise((resolve, reject) => {
 		axios(generateUrl(endpoint, baseUrl, query))
 			.then(response => {

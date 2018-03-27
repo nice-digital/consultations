@@ -1,6 +1,6 @@
-import * as packagejson from "../../package.json";
+// import * as packagejson from "./../../package.json";
 
-export const BaseUrl  = packagejson.appSettings.baseUrl;
+export const ApiRootUrl  = "https://test.nice.org.uk/consultations/";
 
 export const Endpoints = {
 	weather: "api/SampleData/WeatherForecasts",

@@ -4,19 +4,19 @@ import React, { Component } from "react";
 import Moment from "react-moment";
 import { Helmet } from "react-helmet";
 import { StickyContainer, Sticky } from "react-sticky";
-import { withRouter } from "react-router-dom";
+import { withRouter } from "react-router";
 
 import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
 import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
-import { CommentPanel } from "./../CommentPanel/CommentPanel";
+// import { CommentPanel } from "./../CommentPanel/CommentPanel";
 import { load } from "./../../data/loader";
 
 // import preload from "../../data/pre-loader";
 
 type PropsType = {
-	staticContext: any,
+	staticContext?: any,
 	match: any,
 	location: any,
 };
@@ -38,7 +38,6 @@ export class Document extends Component<PropsType, StateType> {
 			documentsData: null,
 			consultationData: null,
 			loading: true,
-			path: this.props.location.pathname,
 		};
 
 		// const preloaded = preload(this.props.staticContext, "sample", this.props.match.params);
