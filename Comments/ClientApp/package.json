@@ -70,7 +70,5 @@
 	"devDependencies": {
 		"prettier-eslint": "^8.8.1"
 	},
-  "appSettings": {
-    "ApiRootUrl": "https://test.nice.org.uk/consultations/"
-  }
+  "proxy": "https://test.nice.org.uk"
 }

@@ -1,7 +1,7 @@
 import * as loader from "../loader";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { ApiRootUrl } from "../endpoints";
+import { BaseUrl } from "../endpoints";
 
 const mock = new MockAdapter(axios);
 
@@ -12,7 +12,7 @@ describe("[ClientApp] ", () => {
 			it("should produce a string that only passes endpoint if it doesn't match a shortcut", () => {
 				const url = loader.generateUrl(
 					"myEndpoint",
-					"baseUrl/",
+					"baseUrl",
 					{
 						value1: "value1",
 						value2: 2,
@@ -26,7 +26,7 @@ describe("[ClientApp] ", () => {
 			it("should produce a string that ends on a query of the supplied parameters", () => {
 				const url  = loader.generateUrl(
 					"chapter",
-					"testing/",
+					"testing",
 					{
 						value1: "value1",
 						value2: 2,
@@ -42,14 +42,14 @@ describe("[ClientApp] ", () => {
 					"chapter"
 				);
 				expect(url)
-					.toEqual(ApiRootUrl + "api/Chapter");
+					.toEqual(BaseUrl + "/api/Chapter");
 			});
 		});
 
 		describe("load function", () => {
 			const options = [
 				"chapter",
-				"myBaseUrl/",
+				"myBaseUrl",
 				{
 					value1: "value1",
 					value2: 2
