@@ -13,7 +13,7 @@ import { HashLinkTop } from "../../helpers/component-helpers";
 import { CommentPanel } from "./../CommentPanel/CommentPanel";
 import { load } from "./../../data/loader";
 
-import preload from "../../data/pre-loader";
+// import preload from "../../data/pre-loader";
 
 type PropsType = {
 	staticContext: any,
@@ -28,7 +28,6 @@ type StateType = {
 };
 type DataType = any;
 type DocumentsType = any;
-type ChaptersType = any;
 
 export class Document extends Component<PropsType, StateType> {
 	constructor(props: PropsType) {
@@ -106,7 +105,6 @@ export class Document extends Component<PropsType, StateType> {
 						...data,
 						loading: false,
 					});
-					console.log(this.state);
 				})
 				.catch();
 		}
@@ -216,7 +214,6 @@ export class Document extends Component<PropsType, StateType> {
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">
-							<p>{this.props.location.pathname}</p>
 							<PhaseBanner/>
 							<BreadCrumbs links={this.getBreadcrumbs()}/>
 							<div className="page-header">
@@ -242,7 +239,6 @@ export class Document extends Component<PropsType, StateType> {
 										{({ style }) =>
 
 											<div style={style}>
-												<CommentPanel />
 												<nav
 													className="in-page-nav"
 													aria-labelledby="inpagenav-title"
