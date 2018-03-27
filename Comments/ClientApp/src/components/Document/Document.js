@@ -239,34 +239,39 @@ export class Document extends Component<PropsType, StateType> {
 										{({ style }) =>
 
 											<div style={style}>
-												<nav
-													className="in-page-nav"
-													aria-labelledby="inpagenav-title"
-												>
-													<h2 id="inpagenav-title" className="in-page-nav__title">
-													On this page
-													</h2>
-													<ol
-														className="in-page-nav__list"
-														aria-hidden="false"
-														role="menubar"
+
+												{ sections.length ?
+													<nav
+														className="in-page-nav"
+														aria-labelledby="inpagenav-title"
 													>
-														{ sections ?
-															sections.map((item, index) => {
-																const props = {
-																	label: item.title,
-																	to: item.slug,
-																	behavior: "smooth",
-																	block: "start"
-																};
-																return (
-																	<li className="in-page-nav__item" key={index}>
-																		<HashLinkTop {...props} />
-																	</li>
-																);
-															}) : null }
-													</ol>
-												</nav>
+														<h2 id="inpagenav-title" className="in-page-nav__title">
+													On this page
+														</h2>
+														<ol
+															className="in-page-nav__list"
+															aria-hidden="false"
+															role="menubar"
+														>
+															{
+																sections.map((item, index) => {
+																	const props = {
+																		label: item.title,
+																		to: item.slug,
+																		behavior: "smooth",
+																		block: "start"
+																	};
+																	return (
+																		<li className="in-page-nav__item" key={index}>
+																			<HashLinkTop {...props} />
+																		</li>
+																	);
+																})
+															}
+														</ol>
+													</nav>
+													: null }
+
 											</div>
 										}
 
