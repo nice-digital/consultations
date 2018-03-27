@@ -12,14 +12,19 @@ import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
 import { CommentPanel } from "./../CommentPanel/CommentPanel";
 import { load } from "./../../data/loader";
+
 import preload from "../../data/pre-loader";
 
 type PropsType = {
-	staticContext: any
+	staticContext: any,
+	match: any,
+	location: any,
 };
 type StateType = {
 	loading: boolean,
-	document: any
+	documentsData: any, // the list of other documents in this consultation
+	chapterData: any, // the current chapter's details - markup and sections,
+	consultationData: any, // the top level info - title etc
 };
 type DataType = any;
 type DocumentsType = any;
@@ -29,26 +34,83 @@ export class Document extends Component<PropsType, StateType> {
 	constructor(props: PropsType) {
 		super(props);
 
-		this.state = { document: null, loading: true };
+		this.state = {
+			chapterData: null,
+			documentsData: null,
+			consultationData: null,
+			loading: true,
+			path: this.props.location.pathname,
+		};
 
-		const preloaded = preload(this.props.staticContext, "sample");
+		// const preloaded = preload(this.props.staticContext, "sample", this.props.match.params);
 
-		if (preloaded) {
-			this.state = { document: preloaded, loading: false };
+		// const preloadConsultation = preload(this.props.staticContext, "consultation", this.props.match.params);
+
+		// if (preloaded) {
+		// 	this.state = { document: preloaded, loading: false };
+		// }
+	}
+
+	// TODO: separate this into a utility
+	gatherData = async () => {
+		const documentsData =
+			await load("documents", undefined, {consultationId: this.props.match.params.consultationId})
+				.then(response => response.data)
+				.catch();
+
+		const chapterData =
+			await load("chapter", undefined, {
+				consultationId: this.props.match.params.consultationId,
+				documentId: this.props.match.params.documentId,
+				chapterSlug: this.props.match.params.chapterSlug
+			})
+				.then(response => response.data)
+				.catch();
+
+		const consultationData =
+			await load("consultation", undefined, {
+				consultationId: this.props.match.params.consultationId
+			})
+				.then(response => response.data)
+				.catch();
+
+		return {
+			consultationData,
+			documentsData,
+			chapterData
+		};
+	};
+
+	componentDidMount() {
+
+		if (!this.state.documentsData && !this.state.chapterData) {
+
+			this.gatherData()
+				.then( data =>{
+					this.setState({
+						...data,
+						loading: false,
+					});
+				})
+				.catch();
 		}
 	}
 
-	componentDidMount() {
-		if (!this.state.document) {
-			load("sample")
-				.then(response => {
+	componentDidUpdate(prevProps, prevState){
+		const oldRoute = prevProps.location.pathname;
+		const newRoute = this.props.location.pathname;
+		if (oldRoute !== newRoute) {
+			this.gatherData()
+				.then( data =>{
 					this.setState({
-						document: response.data,
-						loading: false
+						...data,
+						loading: false,
 					});
+					console.log(this.state);
 				})
-				// TODO: explore why this is logging in testing
-				.catch(() => console.log("💔 Problem with load"));
+				.catch();
+		} else {
+			console.log("Route is the same!");
 		}
 	}
 
@@ -57,35 +119,47 @@ export class Document extends Component<PropsType, StateType> {
 	};
 
 	getSupportingDocumentLinks = (documents: DocumentsType) => {
+		if (!documents) return null;
 		const isValidDocument = d => d.title && d.documentId;
 		const documentToLinkObject = d => ({
 			label: d.title,
-			url: `/1/${d.documentId}/${d.chapters[0].slug}`
+			url: `/${this.props.match.params.consultationId}/${d.documentId}/${d.chapters[0].slug}`
 		});
+		const filteredDocuments = documents.filter(isValidDocument).map(documentToLinkObject);
 		return {
 			root: {
-				label: "Additional documents to comment on",
-				url: "#"
+				label: "Documents in this Consultation",
+				current: false,
 			},
-			links: documents.filter(isValidDocument).map(documentToLinkObject)
+			links: filteredDocuments
 		};
 	};
 
-	getDocumentChapterLinks = (chapters: ChaptersType) => {
-		if (chapters) throw new Error("Need to add chapters to getDocumentChapterLinks");
+	getDocumentChapterLinks = (documentId: string) => {
+		if (!documentId) return null;
+
+		const isCurrentDocument = d => d.documentId === parseInt(documentId, 0);
+
+		const isCurrentChapter = slug => slug === this.props.match.params.chapterSlug;
+
+		const createChapterLink = chapter => {
+			return {
+				label: chapter.title,
+				url: `/${this.props.match.params.consultationId}/${this.props.match.params.documentId}/${chapter.slug}`,
+				current: isCurrentChapter(chapter.slug)
+			};
+		};
+
+		const documents = this.state.documentsData;
+
+		const currentDocument = documents.filter(isCurrentDocument);
+
 		return {
 			root: {
 				label: "Chapters in this document",
-				url: "#",
-				current: true
+				current: false,
 			},
-			links: [
-				{
-					label: "this is a sample label",
-					url: "#",
-					current: true
-				}
-			]
+			links: currentDocument[0].chapters.map(createChapterLink)
 		};
 	};
 
@@ -100,7 +174,7 @@ export class Document extends Component<PropsType, StateType> {
 				url: "#"
 			},
 			{
-				label: "In Consulation",
+				label: "In Consultation",
 				url: "#"
 			},
 			{
@@ -134,10 +208,12 @@ export class Document extends Component<PropsType, StateType> {
 	};
 
 	render() {
-		if (!this.state.document) return <h1>Loading...</h1>;
 
-		const { title, endDate, reference, documents } = this.state.document.consultation;
-		const { sections, content } = this.state.document.chapterHTML;
+		if (this.state.loading) return <h1>Loading...</h1>;
+
+		const { title, reference, endDate } = this.state.consultationData;
+		const { documentsData } = this.state;
+		const { sections, content } = this.state.chapterData;
 
 		return (
 			<div>
@@ -147,6 +223,7 @@ export class Document extends Component<PropsType, StateType> {
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">
+							<p>{this.props.location.pathname}</p>
 							<PhaseBanner/>
 							<BreadCrumbs links={this.getBreadcrumbs()}/>
 							<div className="page-header">
@@ -158,8 +235,8 @@ export class Document extends Component<PropsType, StateType> {
 							</div>
 							<StickyContainer className="grid">
 								<div data-g="12 md:3">
-									<StackedNav links={this.getDocumentChapterLinks()}/>
-									<StackedNav links={this.getSupportingDocumentLinks(documents)}/>
+									<StackedNav links={this.getDocumentChapterLinks(this.props.match.params.documentId)}/>
+									<StackedNav links={this.getSupportingDocumentLinks(documentsData)}/>
 									<StackedNav links={this.temporaryNavForConvenience()}/>
 								</div>
 								<div data-g="12 md:6">
@@ -169,35 +246,42 @@ export class Document extends Component<PropsType, StateType> {
 								</div>
 								<div data-g="12 md:3">
 									<Sticky>
-										{({ style }) => <CommentPanel style={style}/>}
+										{({ style }) =>
+
+											<div style={style}>
+												<CommentPanel />
+												<nav
+													className="in-page-nav"
+													aria-labelledby="inpagenav-title"
+												>
+													<h2 id="inpagenav-title" className="in-page-nav__title">
+													On this page
+													</h2>
+													<ol
+														className="in-page-nav__list"
+														aria-hidden="false"
+														role="menubar"
+													>
+														{ sections ?
+															sections.map((item, index) => {
+																const props = {
+																	label: item.title,
+																	to: item.slug,
+																	behavior: "smooth",
+																	block: "start"
+																};
+																return (
+																	<li className="in-page-nav__item" key={index}>
+																		<HashLinkTop {...props} />
+																	</li>
+																);
+															}) : null }
+													</ol>
+												</nav>
+											</div>
+										}
+
 									</Sticky>
-									<nav
-										className="in-page-nav"
-										aria-labelledby="inpagenav-title"
-									>
-										<h2 id="inpagenav-title" className="in-page-nav__title">
-											On this page
-										</h2>
-										<ol
-											className="in-page-nav__list"
-											aria-hidden="false"
-											role="menubar"
-										>
-											{sections.map((item, index) => {
-												const props = {
-													label: item.title,
-													to: item.slug,
-													behavior: "smooth",
-													block: "start"
-												};
-												return (
-													<li className="in-page-nav__item" key={index}>
-														<HashLinkTop {...props} />
-													</li>
-												);
-											})}
-										</ol>
-									</nav>
 								</div>
 							</StickyContainer>
 						</div>

@@ -69,5 +69,8 @@
 	},
 	"devDependencies": {
 		"prettier-eslint": "^8.8.1"
-	}
+	},
+  "appSettings": {
+    "baseUrl" : "https://test.nice.org.uk/consultations/"
+  }
 }

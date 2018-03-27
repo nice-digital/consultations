@@ -7,7 +7,7 @@ import { Helmet } from "react-helmet";
 import LayoutTwoCol from "../LayoutTwoColumn";
 import Home from "../Home/Home";
 import WeatherForecast from "../WeatherForecast/WeatherForecast";
-import Document from "../Document/Document";
+import DocumentWithRouter from "../Document/Document";
 import NotFound from "../NotFound/NotFound";
 
 const App = () => {
@@ -33,8 +33,8 @@ const App = () => {
 				</Route>
 
 				{/*document*/}
-				<Route path="/:consulationID/:documentID/:chapterSlug">
-					<Document />
+				<Route path="/:consultationId/:documentId/:chapterSlug">
+					<DocumentWithRouter />
 				</Route>
 
 				{/*404*/}

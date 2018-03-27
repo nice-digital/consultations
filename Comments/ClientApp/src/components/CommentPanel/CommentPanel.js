@@ -31,7 +31,7 @@ export class CommentPanel extends Component {
 					<b>Comment Panel</b>
 				</p>
 				<p>Comment on this document</p>
-				<textarea name="comment" id="comment" cols="30" rows="10" />
+				<textarea name="comment" id="comment" rows="3" />
 				<br />
 				<button className="btn btn-primary">Add comment</button>
 			</div>
