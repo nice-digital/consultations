@@ -5,6 +5,7 @@ import Moment from "react-moment";
 import { Helmet } from "react-helmet";
 import { StickyContainer, Sticky } from "react-sticky";
 import { withRouter } from "react-router";
+import Scrollspy from "react-scrollspy";
 
 import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
 import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
@@ -183,6 +184,10 @@ export class Document extends Component<PropsType, StateType> {
 		return currentDocumentDetails.title;
 	};
 
+	generateScrollspy = (sections) => {
+		return sections.map(section => section.slug);
+	};
+
 	render() {
 
 		if (this.state.loading) return <h1>Loading...</h1>;
@@ -233,27 +238,29 @@ export class Document extends Component<PropsType, StateType> {
 														<h2 id="inpagenav-title" className="in-page-nav__title">
 													On this page
 														</h2>
-														<ol
+														<Scrollspy
+															componentTag="ol"
+															items={this.generateScrollspy(sections)}
+															currentClassName="is-current"
 															className="in-page-nav__list"
-															aria-hidden="false"
+															currentAriaRole="location"
 															role="menubar"
+															onUpdate={(a) => console.log(a)}
 														>
-															{
-																sections.map((item, index) => {
-																	const props = {
-																		label: item.title,
-																		to: item.slug,
-																		behavior: "smooth",
-																		block: "start"
-																	};
-																	return (
-																		<li className="in-page-nav__item" key={index}>
-																			<HashLinkTop {...props} />
-																		</li>
-																	);
-																})
-															}
-														</ol>
+															{sections.map((item, index) => {
+																const props = {
+																	label: item.title,
+																	to: item.slug,
+																	behavior: "smooth",
+																	block: "start"
+																};
+																return (
+																	<li role="presentation" className="in-page-nav__item" key={index}>
+																		<HashLinkTop {...props} />
+																	</li>
+																);
+															})}
+														</Scrollspy>
 													</nav>
 													: null }
 

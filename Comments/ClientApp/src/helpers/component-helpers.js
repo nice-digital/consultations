@@ -15,6 +15,7 @@ export function HashLinkTop(props: HashLinkTopType) {
 	const { label, to, behavior, block } = props;
 	return (
 		<NavHashLink
+			role="menuitem"
 			to={`#${to}`}
 			scroll={el => el.scrollIntoView({behavior, block})}
 		>
