@@ -7,12 +7,13 @@ import { StickyContainer, Sticky } from "react-sticky";
 import { withRouter } from "react-router";
 import Scrollspy from "react-scrollspy";
 
+import { load } from "./../../data/loader";
 import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
 import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
 // import { CommentPanel } from "./../CommentPanel/CommentPanel";
-import { load } from "./../../data/loader";
+
 
 // import preload from "../../data/pre-loader";
 
@@ -26,6 +27,7 @@ type StateType = {
 	documentsData: any, // the list of other documents in this consultation
 	chapterData: any, // the current chapter's details - markup and sections,
 	consultationData: any, // the top level info - title etc
+	currentInPageNavItem: null | string
 };
 type DataType = any;
 type DocumentsType = any;
@@ -39,6 +41,7 @@ export class Document extends Component<PropsType, StateType> {
 			documentsData: null,
 			consultationData: null,
 			loading: true,
+			currentInPageNavItem: null
 		};
 
 		// const preloaded = preload(this.props.staticContext, "sample", this.props.match.params);
@@ -188,6 +191,12 @@ export class Document extends Component<PropsType, StateType> {
 		return sections.map(section => section.slug);
 	};
 
+	inPageNav = (e) => {
+		if (!e) return null;
+		const currentInPageNavItem = e.getAttribute("id");
+		this.setState({ currentInPageNavItem });
+	};
+
 	render() {
 
 		if (this.state.loading) return <h1>Loading...</h1>;
@@ -243,9 +252,8 @@ export class Document extends Component<PropsType, StateType> {
 															items={this.generateScrollspy(sections)}
 															currentClassName="is-current"
 															className="in-page-nav__list"
-															currentAriaRole="location"
 															role="menubar"
-															onUpdate={(a) => console.log(a)}
+															onUpdate={(e)=> { this.inPageNav(e); }}
 														>
 															{sections.map((item, index) => {
 																const props = {
@@ -256,17 +264,15 @@ export class Document extends Component<PropsType, StateType> {
 																};
 																return (
 																	<li role="presentation" className="in-page-nav__item" key={index}>
-																		<HashLinkTop {...props} />
+																		<HashLinkTop {...props} currentNavItem={this.state.currentInPageNavItem}/>
 																	</li>
 																);
 															})}
 														</Scrollspy>
 													</nav>
 													: null }
-
 											</div>
 										}
-
 									</Sticky>
 								</div>
 							</StickyContainer>
