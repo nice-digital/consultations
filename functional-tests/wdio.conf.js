@@ -16,9 +16,9 @@ exports.config = {
         {
             browserName: "chrome"
         },
-        {
-            browserName: "firefox"
-        }
+       // {
+         //   browserName: "firefox"
+        //}
     ],
 
     logLevel: "verbose",
