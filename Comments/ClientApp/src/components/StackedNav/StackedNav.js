@@ -23,8 +23,8 @@ export const StackedNav = (props: PropsType) => {
 		<nav className="stacked-nav" aria-label="{root.label}">
 			<h2 className="stacked-nav__root">{title}</h2>
 			<ul className="stacked-nav__list">
-				{links.map(item => (
-					<li key={item.label} className="stacked-nav__list-item">
+				{links.map((item, index) => (
+					<li key={`${item.label}${index}`} className="stacked-nav__list-item">
 						<Link to={item.url} aria-current={item.current ? "page" : "false"}>
 							{item.label}
 						</Link>
