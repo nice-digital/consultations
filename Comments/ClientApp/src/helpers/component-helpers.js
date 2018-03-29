@@ -7,7 +7,8 @@ type HashLinkTopType = {
 	label: string,
 	to: string,
 	behavior: string,
-	block: string
+	block: string,
+	currentNavItem: null | string
 };
 
 // TODO: write test for HashLinkTop

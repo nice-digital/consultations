@@ -14,7 +14,6 @@ import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
 // import { CommentPanel } from "./../CommentPanel/CommentPanel";
 
-
 // import preload from "../../data/pre-loader";
 
 type PropsType = {
@@ -30,7 +29,7 @@ type StateType = {
 	currentInPageNavItem: null | string
 };
 type DataType = any;
-type DocumentsType = any;
+type DocumentsType = Array<Object>;
 
 export class Document extends Component<PropsType, StateType> {
 	constructor(props: PropsType) {
@@ -187,11 +186,11 @@ export class Document extends Component<PropsType, StateType> {
 		return currentDocumentDetails.title;
 	};
 
-	generateScrollspy = (sections) => {
+	generateScrollspy = (sections: Array<Object>) => {
 		return sections.map(section => section.slug);
 	};
 
-	inPageNav = (e) => {
+	inPageNav = (e: HTMLElement) => {
 		if (!e) return null;
 		const currentInPageNavItem = e.getAttribute("id");
 		this.setState({ currentInPageNavItem });
