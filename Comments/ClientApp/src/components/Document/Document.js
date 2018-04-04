@@ -1,5 +1,4 @@
 // @flow
-
 import React, { Component } from "react";
 import Moment from "react-moment";
 import { Helmet } from "react-helmet";
@@ -54,38 +53,29 @@ export class Document extends Component<PropsType, StateType> {
 
 	// TODO: separate this into a utility
 	gatherData = async () => {
+		const { consultationId, documentId, chapterSlug } = this.props.match.params;
 		const documentsData =
-			await load("documents", undefined, {consultationId: this.props.match.params.consultationId})
-				.then(response => response.data)
-				.catch();
+			await load("documents", undefined, {
+				consultationId
+			}).then(response => response.data).catch(err => { throw new Error("arrrggghhhhh 1 " + err); });
 
 		const chapterData =
 			await load("chapter", undefined, {
-				consultationId: this.props.match.params.consultationId,
-				documentId: this.props.match.params.documentId,
-				chapterSlug: this.props.match.params.chapterSlug
-			})
-				.then(response => response.data)
-				.catch();
+				consultationId,
+				documentId,
+				chapterSlug
+			}).then(response => response.data).catch(err => { throw new Error("arrrggghhhhh 2 " + err); });
 
 		const consultationData =
 			await load("consultation", undefined, {
-				consultationId: this.props.match.params.consultationId
-			})
-				.then(response => response.data)
-				.catch();
+				consultationId
+			}).then(response => response.data).catch(err => { throw new Error("arrrggghhhhh 3 " + err); });
 
-		return {
-			consultationData,
-			documentsData,
-			chapterData
-		};
+		return { consultationData, documentsData, chapterData };
 	};
 
 	componentDidMount() {
-
-		if (!this.state.documentsData && !this.state.chapterData) {
-
+		if (!this.haveAllData) {
 			this.gatherData()
 				.then( data =>{
 					this.setState({
@@ -93,7 +83,7 @@ export class Document extends Component<PropsType, StateType> {
 						loading: false,
 					});
 				})
-				.catch();
+				.catch(err => { throw new Error("gatherData in componentDidMount failed " + err);});
 		}
 	}
 
@@ -101,6 +91,9 @@ export class Document extends Component<PropsType, StateType> {
 		const oldRoute = prevProps.location.pathname;
 		const newRoute = this.props.location.pathname;
 		if (oldRoute !== newRoute) {
+			this.setState({
+				loading: true
+			});
 			this.gatherData()
 				.then( data =>{
 					this.setState({
@@ -108,7 +101,7 @@ export class Document extends Component<PropsType, StateType> {
 						loading: false,
 					});
 				})
-				.catch();
+				.catch(err => { throw new Error("gatherData in componentDidUpdate failed " + err);});
 		}
 	}
 
@@ -116,13 +109,13 @@ export class Document extends Component<PropsType, StateType> {
 		return { __html: data };
 	};
 
-	getSupportingDocumentLinks = (documents: DocumentsType) => {
+	getSupportingDocumentLinks = (documents: DocumentsType, currentDocumentFromRoute: number, currentConsultationFromRoute: number) => {
 		if (!documents) return null;
 		const isValidDocument = d => d.title && d.documentId;
-		const isCurrentDocument = documentId => documentId === parseInt(this.props.match.params.documentId, 0);
+		const isCurrentDocument = documentId => documentId === currentDocumentFromRoute;
 		const documentToLinkObject = d => ({
 			label: d.title,
-			url: `/${this.props.match.params.consultationId}/${d.documentId}/${d.chapters[0].slug}`,
+			url: `/${currentConsultationFromRoute}/${d.documentId}/${d.chapters[0].slug}`,
 			current: isCurrentDocument(d.documentId),
 		});
 
@@ -196,14 +189,16 @@ export class Document extends Component<PropsType, StateType> {
 		this.setState({ currentInPageNavItem });
 	};
 
-	render() {
+	haveAllData = () => this.state.consultationData && this.state.documentsData && this.state.chapterData;
 
-		if (this.state.loading) return <h1>Loading...</h1>;
+	render() {
+		if (!this.haveAllData()) return <h1>Loading...</h1>;
 
 		const { title, reference, endDate } = this.state.consultationData;
 		const { documentsData } = this.state;
 		const { sections, content } = this.state.chapterData;
-
+		const consultationId = parseInt(this.props.match.params.consultationId, 0);
+		const documentId = parseInt(this.props.match.params.documentId, 0);
 		return (
 			<div>
 				<Helmet>
@@ -216,19 +211,19 @@ export class Document extends Component<PropsType, StateType> {
 							<BreadCrumbs links={this.getBreadcrumbs()}/>
 							<div className="page-header">
 								<h1 className="page-header__heading">{title}</h1>
-								<h2>{this.getCurrentDocumentTitle(documentsData, this.props.match.params.documentId)}</h2>
 								<p className="page-header__lead">
 									[{reference}] Open until{" "}
 									<Moment format="D MMMM YYYY" date={endDate}/>
 								</p>
+								<h2>{this.getCurrentDocumentTitle(documentsData, documentId)}</h2>
 							</div>
 							<StickyContainer className="grid">
 								<div data-g="12 md:3">
-									<StackedNav links={this.getDocumentChapterLinks(this.props.match.params.documentId)}/>
-									<StackedNav links={this.getSupportingDocumentLinks(documentsData)}/>
+									<StackedNav links={this.getDocumentChapterLinks(documentId)}/>
+									<StackedNav links={this.getSupportingDocumentLinks(documentsData, documentId, consultationId)}/>
 								</div>
 								<div data-g="12 md:6">
-									<div className="document-comment-container">
+									<div className={`document-comment-container ${this.state.loading ? "loading" : "loaded"}`}>
 										<div dangerouslySetInnerHTML={this.renderDocumentHtml(content)}/>
 									</div>
 								</div>
@@ -244,7 +239,7 @@ export class Document extends Component<PropsType, StateType> {
 														aria-labelledby="inpagenav-title"
 													>
 														<h2 id="inpagenav-title" className="in-page-nav__title">
-													On this page
+																On this page
 														</h2>
 														<Scrollspy
 															componentTag="ol"
@@ -280,6 +275,7 @@ export class Document extends Component<PropsType, StateType> {
 				</div>
 			</div>
 		);
+
 	}
 }
 
