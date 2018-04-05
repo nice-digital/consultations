@@ -20,6 +20,7 @@ using ConsultationsContext = Comments.Models.ConsultationsContext;
 using Microsoft.AspNetCore.StaticFiles.Infrastructure;
 using Microsoft.AspNetCore.SpaServices;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using NICE.Auth.NetCore.Services;
 using NICE.Feeds.Configuration;
 
 namespace Comments
@@ -39,15 +40,21 @@ namespace Comments
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            AppSettings.Configure(services, Configuration);
-
+            if (Environment.IsDevelopment())
+            {
+                AppSettings.Configure(services, Configuration, @"c:\");
+            }
+            else
+            {
+                AppSettings.Configure(services, Configuration, Environment.ContentRootPath);
+            }
+            
             services.AddDbContext<ConsultationsContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
-           
+            
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.TryAddSingleton<ISeriLogger, SeriLogger>();
-          //  services.TryAddTransient<IFederatedSignIn, FederatedSignIn>();
+            services.TryAddSingleton<IAuthenticateService>(new AuthenticateService(AppSettings.GilliamConfig));
             services.TryAddTransient<ICommentService, CommentService>();
             services.TryAddTransient<IConsultationService, ConsultationService>();
             services.TryAddTransient<IFeedReaderService>(provider => new FeedReaderService(new RemoteSystemReader(null), AppSettings.Feed));
