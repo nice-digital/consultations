@@ -1,4 +1,11 @@
 .document-comment-container {
+  &.loading {
+    opacity: 0.3;
+    transition: opacity 0.1s;
+  }
+  &.loaded {
+    opacity: 1;
+  }
   h1, h2, h3, h4, h5 h6 {
     margin-top: 0;
     a {
@@ -14,4 +21,11 @@
     float: left;
     margin-left: rem(-$spacing-xx-large);
   }
+  table {
+    td {
+      padding: rem($spacing-small);
+    }
+    margin-bottom: rem($spacing-medium);
+  }
+
 }

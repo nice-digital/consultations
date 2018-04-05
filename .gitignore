@@ -250,3 +250,4 @@ ClientApp/public/*.css.map
 *.orig
 .DS_Store
 /Comments/Serilog-*.json
+/Comments/ClientApp/.idea.bak
