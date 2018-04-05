@@ -18,7 +18,7 @@ import { HashLinkTop } from "../../helpers/component-helpers";
 type PropsType = {
 	staticContext?: any,
 	match: any,
-	location: any,
+	location: any
 };
 type StateType = {
 	loading: boolean,
@@ -54,22 +54,23 @@ export class Document extends Component<PropsType, StateType> {
 	// TODO: separate this into a utility
 	gatherData = async () => {
 		const { consultationId, documentId, chapterSlug } = this.props.match.params;
+
 		const documentsData =
 			await load("documents", undefined, {
 				consultationId
-			}).then(response => response.data).catch(err => { throw new Error("arrrggghhhhh 1 " + err); });
+			}).then(response => response.data).catch(err => { throw new Error("1 " + err); });
+
+		const consultationData =
+			await load("consultation", undefined, {
+				consultationId
+			}).then(response => response.data).catch(err => { throw new Error("2 " + err); });
 
 		const chapterData =
 			await load("chapter", undefined, {
 				consultationId,
 				documentId,
 				chapterSlug
-			}).then(response => response.data).catch(err => { throw new Error("arrrggghhhhh 2 " + err); });
-
-		const consultationData =
-			await load("consultation", undefined, {
-				consultationId
-			}).then(response => response.data).catch(err => { throw new Error("arrrggghhhhh 3 " + err); });
+			}).then(response => response.data).catch(err => { throw new Error("3 " + err); });
 
 		return { consultationData, documentsData, chapterData };
 	};
@@ -80,7 +81,7 @@ export class Document extends Component<PropsType, StateType> {
 				.then( data =>{
 					this.setState({
 						...data,
-						loading: false,
+						loading: false
 					});
 				})
 				.catch(err => { throw new Error("gatherData in componentDidMount failed " + err);});
@@ -98,7 +99,7 @@ export class Document extends Component<PropsType, StateType> {
 				.then( data =>{
 					this.setState({
 						...data,
-						loading: false,
+						loading: false
 					});
 				})
 				.catch(err => { throw new Error("gatherData in componentDidUpdate failed " + err);});
@@ -116,14 +117,14 @@ export class Document extends Component<PropsType, StateType> {
 		const documentToLinkObject = d => ({
 			label: d.title,
 			url: `/${currentConsultationFromRoute}/${d.documentId}/${d.chapters[0].slug}`,
-			current: isCurrentDocument(d.documentId),
+			current: isCurrentDocument(d.documentId)
 		});
 
 		const filteredDocuments = documents.filter(isValidDocument).map(documentToLinkObject);
 
 		return {
 			title: "Documents in this Consultation",
-			links: filteredDocuments,
+			links: filteredDocuments
 		};
 	};
 
@@ -138,7 +139,7 @@ export class Document extends Component<PropsType, StateType> {
 			return {
 				label: chapter.title,
 				url: `/${this.props.match.params.consultationId}/${this.props.match.params.documentId}/${chapter.slug}`,
-				current: isCurrentChapter(chapter.slug),
+				current: isCurrentChapter(chapter.slug)
 			};
 		};
 
@@ -148,7 +149,7 @@ export class Document extends Component<PropsType, StateType> {
 
 		return {
 			title: "Chapters in this document",
-			links: currentDocument[0].chapters.map(createChapterLink),
+			links: currentDocument[0].chapters.map(createChapterLink)
 		};
 	};
 

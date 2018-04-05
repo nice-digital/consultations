@@ -6,5 +6,5 @@ export const Endpoints = {
 	consultation: "/api/Consultation",
 	consultations: "/api/Consultations",
 	documents: "/api/Documents",
-	chapter: "/api/Chapter",
+	chapter: "/api/Chapter"
 };
