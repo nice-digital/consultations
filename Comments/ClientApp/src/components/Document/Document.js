@@ -75,7 +75,7 @@ export class Document extends Component<PropsType, StateType> {
 	};
 
 	componentDidMount() {
-		if (!this.haveAllData) {
+		if (!this.haveAllData()) {
 			this.gatherData()
 				.then( data =>{
 					this.setState({
