@@ -26,13 +26,19 @@ namespace Comments.Auth
             var httpContext = _httpContextAccessor.HttpContext;
             if (httpContext != null)
             {
-                var authenticated = _authenticateService.Authenticate(httpContext, out var redirectURL);
+                var authenticated = httpContext.User?.Identity != null && httpContext.User.Identity.IsAuthenticated;
+
+                if (!authenticated)
+                {
+                    authenticated = _authenticateService.Authenticate(httpContext, out var redirectURL);
+                    if (authenticated && !string.IsNullOrWhiteSpace(redirectURL))
+                    {
+                        //  httpContext.Response.Redirect(redirectURL);                        
+                    }
+                }
+                    
                 if (authenticated)
                 {
-                    if (!string.IsNullOrWhiteSpace(redirectURL))
-                    {
-                        httpContext.Response.Redirect(redirectURL);
-                    }
                     var principal = httpContext.User;
                     var ticket = new AuthenticationTicket(principal, Options.Scheme);
                     return Task.FromResult(AuthenticateResult.Success(ticket));
