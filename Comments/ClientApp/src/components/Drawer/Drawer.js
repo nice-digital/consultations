@@ -34,6 +34,8 @@ export class Drawer extends Component<PropsType, StateType> {
 					drawerOpen: !this.state.drawerOpen
 				});
 				break;
+			default:
+				return;
 		}
 	};
 
@@ -41,16 +43,14 @@ export class Drawer extends Component<PropsType, StateType> {
 		return (
 			<div className={this.drawerClassnames()}>
 				<div className="Drawer__controls">
-					<button className="Drawer__toggleOpen" onClick={()=>this.handleClick("toggleOpen")}>&laquo;</button>
+					<button className="Drawer__toggleOpen" onClick={()=>this.handleClick("toggleOpen")}>
+						<span className={`icon ${this.state.drawerOpen ? "icon--chevron-right" : "icon--chevron-left"}`} aria-hidden="true" />
+					</button>
 				</div>
 				<div className="Drawer__main">
-					<button name="toggleWidth" onClick={()=>this.handleClick("toggleWidth")}>Toggle Width</button>
-					<h1>Drawer</h1>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur, at aut commodi dolor dolorum ea
-						eius ex fugiat ipsa iure, libero maxime molestiae obcaecati quidem repellat vero voluptates? Ipsam,
-						libero.</p>
-					<textarea name="monkey" id="monkey" defaultValue="I have an insightful comment I wish to add"/>
-					<button className="btn">Submit</button>
+					<button name="toggleWidth" onClick={()=>this.handleClick("toggleWidth")}>
+						<span className={`icon ${this.state.drawerExpandedWidth ? "icon--minus" : "icon--plus"}`} aria-hidden="true" />
+					</button>
 				</div>
 			</div>
 		);

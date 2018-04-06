@@ -18,10 +18,15 @@
     background: green;
     color: white;
     border: none;
+    //&:before {
+    //  @include nice-icon(chevron-left);
+    //  display: block;
+    //}
   }
   &__main {
     background: red;
     height: 100vh;
+    overflow-y: scroll;
   }
   &--open {
     transform: translateX(0);
@@ -36,8 +41,5 @@
   &--wide {
     transition: all 0.3s ease-in-out;
     width: 60vw;
-  }
-  &__controls {
-
   }
 }
