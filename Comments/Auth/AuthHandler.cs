@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Options;
 using NICE.Auth.NetCore.Services;
 using NICE.Auth.NetCore.Helpers;
 using System.Text.Encodings.Web;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Comments.Auth
@@ -15,6 +17,18 @@ namespace Comments.Auth
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IAuthenticateService _authenticateService;
+
+        /// <summary>
+        /// This is a list of paths which should authenticate. That just means that it will check for the nice accounts cookie. it doesn't mean they require authourisation, i.e. they're not protected by auth.
+        /// if no cookie is found, that's fine. no redirects or anything, just no user details in the data.
+        /// 
+        /// I suspect this will need to change..
+        /// </summary>
+        private readonly List<Regex> _pathsToAuthenticate = new List<Regex>
+        {
+            new Regex(@"^\/?consultations\/api\/.+$", RegexOptions.IgnoreCase),
+            new Regex(@"^\/?$")
+        };
 
         public AuthHandler(IOptionsMonitor<AuthOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock, IHttpContextAccessor httpContextAccessor, IAuthenticateService authenticateService)
             : base(options, logger, encoder, clock)
@@ -29,7 +43,7 @@ namespace Comments.Auth
             if (httpContext != null)
             {
                 var requestPath = httpContext.Request.Path.HasValue ? httpContext.Request.Path.Value : null;
-                if (requestPath == null || requestPath.IndexOf("/api/", StringComparison.OrdinalIgnoreCase) == -1)
+                if (!ShouldAuthenticatePath(requestPath))
                     return Task.FromResult(AuthenticateResult.NoResult());
 
                 var authenticated = httpContext.User?.Identity != null && httpContext.User.Identity.IsAuthenticated;
@@ -64,6 +78,18 @@ namespace Comments.Auth
                 httpContext.Response.Redirect(redirectUrl);
             }
             return Task.CompletedTask;
+        }
+
+        private bool ShouldAuthenticatePath(string requestPath)
+        {
+            foreach (var regex in _pathsToAuthenticate)
+            {
+                if (regex.IsMatch(requestPath))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
