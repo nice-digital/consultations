@@ -15,5 +15,9 @@
     "allowConsultationComments":true,
     "partiallyUpdatedProjectReference":null,
     "origProjectReference":null,
-    "user":null
+    "user":{
+        "isLoggedIn":false,
+        "displayName":null,
+        "userId":null
+    }
 }

@@ -22,18 +22,19 @@ namespace Comments.Services
 
         private readonly IFeedConverterService _feedConverterService;
         private readonly ILogger<ConsultationService> _logger;
+        private readonly IUserService _userService;
 
-        public ConsultationService(IFeedConverterService feedConverterService, ILogger<ConsultationService> logger)
+        public ConsultationService(IFeedConverterService feedConverterService, ILogger<ConsultationService> logger, IUserService userService)
         {
             _feedConverterService = feedConverterService;
             _logger = logger;
+            _userService = userService;
         }
 
         public ConsultationDetail GetConsultationDetail(int consultationId)
         {
-            return new ViewModels.ConsultationDetail(
-                _feedConverterService.ConvertConsultationDetail(consultationId), null); 
-
+            var user = _userService.GetCurrentUser();
+            return new ViewModels.ConsultationDetail(_feedConverterService.ConvertConsultationDetail(consultationId), user); 
         }
 
         public ChapterContent GetChapterContent(int consultationId, int documentId, string chapterSlug)
@@ -41,7 +42,6 @@ namespace Comments.Services
             return new ViewModels.ChapterContent(
                 _feedConverterService.ConvertConsultationChapter(consultationId, documentId, chapterSlug));
         }
-
 
         public IEnumerable<Document> GetDocuments(int consultationId)
         {
@@ -51,14 +51,16 @@ namespace Comments.Services
 
         public ViewModels.Consultation GetConsultation(int consultationId)
         {
+            var user = _userService.GetCurrentUser();
             var consultation = _feedConverterService.ConvertConsultationDetail(consultationId);
-            return new ViewModels.Consultation(consultation, null);
+            return new ViewModels.Consultation(consultation, user);
         }
 
         public IEnumerable<ViewModels.Consultation> GetConsultations()
         {
+            var user = _userService.GetCurrentUser();
             var consultations = _feedConverterService.ConvertConsultationList();
-            return consultations.Select(c => new ViewModels.Consultation(c, null)).ToList();
+            return consultations.Select(c => new ViewModels.Consultation(c, user)).ToList();
         }
 
         /// <summary>

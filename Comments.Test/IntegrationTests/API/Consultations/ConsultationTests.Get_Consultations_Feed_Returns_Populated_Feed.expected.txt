@@ -16,7 +16,11 @@
         "allowConsultationComments":true,
         "partiallyUpdatedProjectReference":null,
         "origProjectReference":null,
-        "user":null
+        "user":{
+            "isLoggedIn":false,
+            "displayName":null,
+            "userId":null
+        }
     },
     {
         "reference":"GID-IPG10038",
@@ -35,6 +39,10 @@
         "allowConsultationComments":true,
         "partiallyUpdatedProjectReference":null,
         "origProjectReference":null,
-        "user":null
+        "user":{
+            "isLoggedIn":false,
+            "displayName":null,
+            "userId":null
+        }
     }
 ]
