@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net.Http;
+using Comments.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Configuration;
@@ -27,11 +28,21 @@ namespace Comments.Test.Infrastructure
         protected IFeedConfig _feedConfig;
 
         protected readonly Feed FeedToUse = Feed.ConsultationCommentsListDetailMulitpleDoc;
+        private readonly bool _authenticated;
+        private readonly string _displayName;
+        private readonly Guid? _userId;
+
         public TestBase(Feed feed) : this()
         {
             FeedToUse = feed;
         }
-
+        public TestBase(Feed feed, bool authenticated, string displayName = null, Guid? userId = null) : this()
+        {
+            FeedToUse = feed;
+            _authenticated = authenticated;
+            _displayName = displayName;
+            _userId = userId;
+        }
 
         public TestBase()
         {
@@ -51,7 +62,7 @@ namespace Comments.Test.Infrastructure
                             ));
                     services.TryAddSingleton<ISeriLogger, FakeSerilogger>();
                     services.TryAddSingleton<IAuthenticateService, FakeAuthenticateService>();
-                    //services.TryAddTransient<IFeedReaderService, FeedReader>();
+                    services.TryAddTransient<IUserService>(provider => FakeUserService.Get(_authenticated, _displayName, _userId));
                     services.TryAddTransient<IFeedReaderService>(provider => new FeedReader(FeedToUse));;
                 })
                 .Configure(app =>
