@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using NICE.Auth.NetCore.Services;
 using NICE.Feeds;
 using NICE.Feeds.Configuration;
 using NICE.Feeds.Tests.Infrastructure;
@@ -49,8 +50,9 @@ namespace Comments.Test.Infrastructure
                             //, optionsBuilder => { optionsBuilder.use }
                             ));
                     services.TryAddSingleton<ISeriLogger, FakeSerilogger>();
+                    services.TryAddSingleton<IAuthenticateService, FakeAuthenticateService>();
                     //services.TryAddTransient<IFeedReaderService, FeedReader>();
-                   services.TryAddTransient<IFeedReaderService>(provider => new FeedReader(FeedToUse));;
+                    services.TryAddTransient<IFeedReaderService>(provider => new FeedReader(FeedToUse));;
                 })
                 .Configure(app =>
                 {

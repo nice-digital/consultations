@@ -85,7 +85,7 @@ namespace Comments.Test.UnitTests
                     {
                         new Chapter("second-document-first-chapter-slug", "second-document-first-chapter-title")
                     })
-                });
+                }, null);
             var feedReaderService = new FeedReader(Feed.ConsultationCommentsListDetailMulitpleDoc);
             var consultationService = new ConsultationService(new FeedConverterService(feedReaderService), new FakeLogger<ConsultationService>());
 

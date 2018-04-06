@@ -32,7 +32,7 @@ namespace Comments.Services
         public ConsultationDetail GetConsultationDetail(int consultationId)
         {
             return new ViewModels.ConsultationDetail(
-                _feedConverterService.ConvertConsultationDetail(consultationId));
+                _feedConverterService.ConvertConsultationDetail(consultationId), null); 
 
         }
 
@@ -52,13 +52,13 @@ namespace Comments.Services
         public ViewModels.Consultation GetConsultation(int consultationId)
         {
             var consultation = _feedConverterService.ConvertConsultationDetail(consultationId);
-            return new ViewModels.Consultation(consultation);
+            return new ViewModels.Consultation(consultation, null);
         }
 
         public IEnumerable<ViewModels.Consultation> GetConsultations()
         {
             var consultations = _feedConverterService.ConvertConsultationList();
-            return consultations.Select(c => new ViewModels.Consultation(c)).ToList();
+            return consultations.Select(c => new ViewModels.Consultation(c, null)).ToList();
         }
 
         /// <summary>

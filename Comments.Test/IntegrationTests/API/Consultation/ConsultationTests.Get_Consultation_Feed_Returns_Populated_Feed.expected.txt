@@ -14,5 +14,6 @@
     "process":"TAG",
     "allowConsultationComments":true,
     "partiallyUpdatedProjectReference":null,
-    "origProjectReference":null
+    "origProjectReference":null,
+    "user":null
 }

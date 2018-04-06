@@ -15,7 +15,8 @@
         "process":"TAG",
         "allowConsultationComments":true,
         "partiallyUpdatedProjectReference":null,
-        "origProjectReference":null
+        "origProjectReference":null,
+        "user":null
     },
     {
         "reference":"GID-IPG10038",
@@ -33,6 +34,7 @@
         "process":"IP",
         "allowConsultationComments":true,
         "partiallyUpdatedProjectReference":null,
-        "origProjectReference":null
+        "origProjectReference":null,
+        "user":null
     }
 ]

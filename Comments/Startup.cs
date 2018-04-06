@@ -54,7 +54,7 @@ namespace Comments
             
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.TryAddSingleton<ISeriLogger, SeriLogger>();
-            services.TryAddSingleton<IAuthenticateService>(new AuthenticateService(AppSettings.GilliamConfig));
+            services.TryAddSingleton<IAuthenticateService, AuthService>();
             services.TryAddTransient<ICommentService, CommentService>();
             services.TryAddTransient<IConsultationService, ConsultationService>();
             services.TryAddTransient<IFeedReaderService>(provider => new FeedReaderService(new RemoteSystemReader(null), AppSettings.Feed));
@@ -197,6 +197,7 @@ namespace Comments
                     options.SupplyData = (context, data) =>
                     {
                         data["isHttpsRequest"] = context.Request.IsHttps;
+                        //data["user"] = context.User; - possible security implications here, surfacing claims to the front end. might be ok, if just server-side.
                         // Pass further data in e.g. user/authentication data
                     };
                     options.BootModulePath = $"{spa.Options.SourcePath}/src/server/index.js";

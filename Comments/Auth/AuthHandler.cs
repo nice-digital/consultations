@@ -1,9 +1,11 @@
-﻿using Microsoft.ApplicationInsights.AspNetCore.Extensions;
+﻿using System;
+using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NICE.Auth.NetCore.Services;
+using NICE.Auth.NetCore.Helpers;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
@@ -26,14 +28,19 @@ namespace Comments.Auth
             var httpContext = _httpContextAccessor.HttpContext;
             if (httpContext != null)
             {
+                var requestPath = httpContext.Request.Path.HasValue ? httpContext.Request.Path.Value : null;
+                if (requestPath == null || requestPath.IndexOf("/api/", StringComparison.OrdinalIgnoreCase) == -1)
+                    return Task.FromResult(AuthenticateResult.NoResult());
+
                 var authenticated = httpContext.User?.Identity != null && httpContext.User.Identity.IsAuthenticated;
 
-                if (!authenticated)
+                if (!authenticated && !httpContext.Items.ContainsKey(Constants.ItemsAuthAttempted))
                 {
                     authenticated = _authenticateService.Authenticate(httpContext, out var redirectURL);
+                    httpContext.Items[Constants.ItemsAuthAttempted] = true;
                     if (authenticated && !string.IsNullOrWhiteSpace(redirectURL))
                     {
-                        //  httpContext.Response.Redirect(redirectURL);                        
+                        //httpContext.Response.Redirect(redirectURL);                        
                     }
                 }
                     
