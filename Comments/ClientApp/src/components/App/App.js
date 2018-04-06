@@ -1,13 +1,12 @@
 // @flow
 
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router";
 import { Helmet } from "react-helmet";
 
-import DemoPage from "../DemoPage";
-import Home from "../Home/Home";
-import FetchData from "../FetchData/FetchData";
-import Document from "../Document/Document";
+import LayoutTwoCol from "../LayoutTwoColumn";
+import WeatherForecast from "../WeatherForecast/WeatherForecast";
+import DocumentWithRouter from "../Document/Document";
 import NotFound from "../NotFound/NotFound";
 
 const App = () => {
@@ -20,21 +19,19 @@ const App = () => {
 			<Switch>
 				{/*home*/}
 				<Route exact path="/">
-					<DemoPage>
-						<Home />
-					</DemoPage>
+					<Redirect to="/1/1/introduction" />
 				</Route>
 
-				{/*fetch-data*/}
-				<Route path="/fetchdata">
-					<DemoPage>
-						<FetchData />
-					</DemoPage>
+				{/*weather-forecast*/}
+				<Route path="/weather-forecast">
+					<LayoutTwoCol>
+						<WeatherForecast />
+					</LayoutTwoCol>
 				</Route>
 
 				{/*document*/}
-				<Route path="/:consulationID/:documentID/:chapterSlug">
-					<Document />
+				<Route path="/:consultationId/:documentId/:chapterSlug">
+					<DocumentWithRouter />
 				</Route>
 
 				{/*404*/}

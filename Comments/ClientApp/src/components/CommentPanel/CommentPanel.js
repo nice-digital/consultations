@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-// import stickybits from "stickybits";
 
-class CommentPanel extends Component {
+export class CommentPanel extends Component {
 	state = {
 		panelActive: true
 	};
@@ -14,13 +13,10 @@ class CommentPanel extends Component {
 		});
 	};
 
-	componentDidMount() {
-		// stickybits(".js-CommentPanel");
-	}
-
 	render() {
 		return (
 			<div
+				style={this.props.style}
 				className={
 					"CommentPanel js-CommentPanel " +
 					(this.state.panelActive ? "active" : "inactive")
@@ -28,20 +24,17 @@ class CommentPanel extends Component {
 			>
 				<button
 					onClick={this.toggleCommentBox}
-					className="CommentPanel__toggle js-CommentPanel__toggle"
-				>
+					className="CommentPanel__toggle js-CommentPanel__toggle">
 					{this.state.panelActive ? <span>&raquo;</span> : <span>&laquo;</span>}
 				</button>
 				<p>
 					<b>Comment Panel</b>
 				</p>
 				<p>Comment on this document</p>
-				<textarea name="comment" id="comment" cols="30" rows="10" />
+				<textarea name="comment" id="comment" rows="3" />
 				<br />
 				<button className="btn btn-primary">Add comment</button>
 			</div>
 		);
 	}
 }
-
-export default CommentPanel;

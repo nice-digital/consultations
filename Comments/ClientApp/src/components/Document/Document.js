@@ -1,196 +1,283 @@
 // @flow
-
 import React, { Component } from "react";
-import axios from "axios";
 import Moment from "react-moment";
 import { Helmet } from "react-helmet";
+import { StickyContainer, Sticky } from "react-sticky";
+import { withRouter } from "react-router";
+import Scrollspy from "react-scrollspy";
+
+import { load } from "./../../data/loader";
 import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
-import Breadcrumbs from "./../Breadcrumbs/Breadcrumbs";
+import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
 import { StackedNav } from "./../StackedNav/StackedNav";
-import { HashLinkTop } from "./../../helpers/component_helpers";
-import CommentPanel from "../CommentPanel/CommentPanel";
+import { HashLinkTop } from "../../helpers/component-helpers";
+// import { CommentPanel } from "./../CommentPanel/CommentPanel";
 
-type PropsType = {};
+// import preload from "../../data/pre-loader";
 
-type StateType = {
-	document: null | {
-		chapterHTML: {
-			content: string,
-			sections: [
-				{
-					slug: string,
-					title: string
-				}
-			]
-		},
-		consultation: {
-			documents: [
-				{
-					documentId: number,
-					title: string,
-					chapters: [
-						{
-							slug: string,
-							title: string
-						}
-					]
-				}
-			],
-			title: string,
-			endDate: string,
-			reference: string
-		}
-	}
+type PropsType = {
+	staticContext?: any,
+	match: any,
+	location: any
 };
+type StateType = {
+	loading: boolean,
+	documentsData: any, // the list of other documents in this consultation
+	chapterData: any, // the current chapter's details - markup and sections,
+	consultationData: any, // the top level info - title etc
+	currentInPageNavItem: null | string
+};
+type DataType = any;
+type DocumentsType = Array<Object>;
 
-class Document extends Component<PropsType, StateType> {
-	constructor() {
-		super();
+export class Document extends Component<PropsType, StateType> {
+	constructor(props: PropsType) {
+		super(props);
 
 		this.state = {
-			document: null
+			chapterData: null,
+			documentsData: null,
+			consultationData: null,
+			loading: true,
+			currentInPageNavItem: null
 		};
+
+		// const preloaded = preload(this.props.staticContext, "sample", this.props.match.params);
+
+		// const preloadConsultation = preload(this.props.staticContext, "consultation", this.props.match.params);
+
+		// if (preloaded) {
+		// 	this.state = { document: preloaded, loading: false };
+		// }
 	}
+
+	// TODO: separate this into a utility
+	gatherData = async () => {
+		const { consultationId, documentId, chapterSlug } = this.props.match.params;
+
+		const documentsData =
+			await load("documents", undefined, {
+				consultationId
+			}).then(response => response.data).catch(err => { throw new Error("1 " + err); });
+
+		const consultationData =
+			await load("consultation", undefined, {
+				consultationId
+			}).then(response => response.data).catch(err => { throw new Error("2 " + err); });
+
+		const chapterData =
+			await load("chapter", undefined, {
+				consultationId,
+				documentId,
+				chapterSlug
+			}).then(response => response.data).catch(err => { throw new Error("3 " + err); });
+
+		return { consultationData, documentsData, chapterData };
+	};
 
 	componentDidMount() {
-		type ResponseType = {
-			data: Object
-		};
-		// todo: separate this into the shared loader
-		axios("sample.json").then((response: ResponseType) => {
-			this.setState({
-				document: response.data
-			});
-		});
+		if (!this.haveAllData()) {
+			this.gatherData()
+				.then( data =>{
+					this.setState({
+						...data,
+						loading: false
+					});
+				})
+				.catch(err => { throw new Error("gatherData in componentDidMount failed " + err);});
+		}
 	}
 
-	renderDocumentHtml = () => {
-		if (this.state.document) {
-			return { __html: this.state.document.chapterHTML.content };
-		} else {
-			return null;
+	componentDidUpdate(prevProps: PropsType){
+		const oldRoute = prevProps.location.pathname;
+		const newRoute = this.props.location.pathname;
+		if (oldRoute !== newRoute) {
+			this.setState({
+				loading: true
+			});
+			this.gatherData()
+				.then( data =>{
+					this.setState({
+						...data,
+						loading: false
+					});
+				})
+				.catch(err => { throw new Error("gatherData in componentDidUpdate failed " + err);});
 		}
+	}
+
+	renderDocumentHtml = (data: DataType) => {
+		return { __html: data };
 	};
 
-	renderInPageNav = () => {
-		const { sections } = this.state.document.chapterHTML;
-		return (
-			<nav className="in-page-nav" aria-labelledby="inpagenav-title">
-				<h2 id="inpagenav-title" className="in-page-nav__title">
-					On this page
-				</h2>
-				<ol className="in-page-nav__list" aria-hidden="false" role="menubar">
-					{sections.map((item, index) => {
-						const props = {
-							label: item.title,
-							to: item.slug,
-							behavior: "smooth",
-							block: "start"
-						};
-						return (
-							<li className="in-page-nav__item" key={index}>
-								<HashLinkTop {...props} />
-							</li>
-						);
-					})}
-				</ol>
-			</nav>
-		);
-	};
-
-	// todo: change this function so it only returns the data
-	renderSupportingDocumentLinks = () => {
-		const { documents } = this.state.document.consultation;
-
+	getSupportingDocumentLinks = (documents: DocumentsType, currentDocumentFromRoute: number, currentConsultationFromRoute: number) => {
+		if (!documents) return null;
 		const isValidDocument = d => d.title && d.documentId;
-
-		const mapDocToLink = d => ({
+		const isCurrentDocument = documentId => documentId === currentDocumentFromRoute;
+		const documentToLinkObject = d => ({
 			label: d.title,
-			url: `/1/${d.documentId}/${d.chapters[0].slug}`
+			url: `/${currentConsultationFromRoute}/${d.documentId}/${d.chapters[0].slug}`,
+			current: isCurrentDocument(d.documentId)
 		});
 
-		const links = {
-			root: {
-				label: "Additional documents to comment on",
+		const filteredDocuments = documents.filter(isValidDocument).map(documentToLinkObject);
+
+		return {
+			title: "Documents in this Consultation",
+			links: filteredDocuments
+		};
+	};
+
+	getDocumentChapterLinks = (documentId: string) => {
+		if (!documentId) return null;
+
+		const isCurrentDocument = d => d.documentId === parseInt(documentId, 0);
+
+		const isCurrentChapter = slug => slug === this.props.match.params.chapterSlug;
+
+		const createChapterLink = chapter => {
+			return {
+				label: chapter.title,
+				url: `/${this.props.match.params.consultationId}/${this.props.match.params.documentId}/${chapter.slug}`,
+				current: isCurrentChapter(chapter.slug)
+			};
+		};
+
+		const documents = this.state.documentsData;
+
+		const currentDocument = documents.filter(isCurrentDocument);
+
+		return {
+			title: "Chapters in this document",
+			links: currentDocument[0].chapters.map(createChapterLink)
+		};
+	};
+
+	getBreadcrumbs = () => {
+		return [
+			{
+				label: "Home",
+				url: "/document"
+			},
+			{
+				label: "NICE Guidance",
 				url: "#"
 			},
-			links: documents.filter(isValidDocument).map(mapDocToLink)
-		};
-
-		return <StackedNav links={links} />;
-	};
-
-	// todo: will these need to be manually extracted from the consultation.documents array?
-	// todo: change this function so it only returns the data
-	renderThisDocumentChapterLinks = () => {
-		const links = {
-			root: {
-				label: "Chapters in this document",
-				url: "#",
-				current: true
+			{
+				label: "In Consultation",
+				url: "#"
 			},
-			links: [
-				{
-					label: "this is a sample label",
-					url: "#",
-					current: true
-				}
-			]
-		};
-		return <StackedNav links={links} />;
+			{
+				label: "Document title",
+				url: "#"
+			}
+		];
 	};
+
+	getCurrentDocumentTitle = (documents: Object, documentId: string) => {
+		const matchCurrentDocument = d => d.documentId === parseInt(documentId, 0);
+		const currentDocumentDetails = documents.filter(matchCurrentDocument)[0];
+		return currentDocumentDetails.title;
+	};
+
+	generateScrollspy = (sections: Array<Object>) => {
+		return sections.map(section => section.slug);
+	};
+
+	inPageNav = (e: HTMLElement) => {
+		if (!e) return null;
+		const currentInPageNavItem = e.getAttribute("id");
+		this.setState({ currentInPageNavItem });
+	};
+
+	haveAllData = () => this.state.consultationData && this.state.documentsData && this.state.chapterData;
 
 	render() {
-		if (!this.state.document) {
-			return null;
-		}
+		if (!this.haveAllData()) return <h1>Loading...</h1>;
 
-		// todo: where are the breadcrumbs going to come from?
-		const breadcrumbs = [
-			{ label: "Home", url: "/document" },
-			{ label: "NICE Guidance", url: "#" },
-			{ label: "In Consulation", url: "#" },
-			{ label: "Document title", url: "#" }
-		];
-
-		const { title, endDate, reference } = this.state.document.consultation;
-
+		const { title, reference, endDate } = this.state.consultationData;
+		const { documentsData } = this.state;
+		const { sections, content } = this.state.chapterData;
+		const consultationId = parseInt(this.props.match.params.consultationId, 0);
+		const documentId = parseInt(this.props.match.params.documentId, 0);
 		return (
 			<div>
 				<Helmet>
 					<title>Comment on Document</title>
 				</Helmet>
-				<CommentPanel />
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">
-							<PhaseBanner />
-							<Breadcrumbs segments={breadcrumbs} />
+							<PhaseBanner/>
+							<BreadCrumbs links={this.getBreadcrumbs()}/>
 							<div className="page-header">
 								<h1 className="page-header__heading">{title}</h1>
 								<p className="page-header__lead">
 									[{reference}] Open until{" "}
-									<Moment format="DD-MM-YYYY" date={endDate} />
+									<Moment format="D MMMM YYYY" date={endDate}/>
 								</p>
+								<h2>{this.getCurrentDocumentTitle(documentsData, documentId)}</h2>
 							</div>
-							<div className="grid">
+							<StickyContainer className="grid">
 								<div data-g="12 md:3">
-									{this.renderThisDocumentChapterLinks()}
-									{this.renderSupportingDocumentLinks()}
+									<StackedNav links={this.getDocumentChapterLinks(documentId)}/>
+									<StackedNav links={this.getSupportingDocumentLinks(documentsData, documentId, consultationId)}/>
 								</div>
 								<div data-g="12 md:6">
-									<div className="document-comment-container">
-										<div dangerouslySetInnerHTML={this.renderDocumentHtml()} />
+									<div className={`document-comment-container ${this.state.loading ? "loading" : "loaded"}`}>
+										<div dangerouslySetInnerHTML={this.renderDocumentHtml(content)}/>
 									</div>
 								</div>
-								<div data-g="12 md:3">{this.renderInPageNav()}</div>
-							</div>
+								<div data-g="12 md:3">
+									<Sticky>
+										{({ style }) =>
+
+											<div style={style}>
+
+												{ sections.length ?
+													<nav
+														className="in-page-nav"
+														aria-labelledby="inpagenav-title"
+													>
+														<h2 id="inpagenav-title" className="in-page-nav__title">
+																On this page
+														</h2>
+														<Scrollspy
+															componentTag="ol"
+															items={this.generateScrollspy(sections)}
+															currentClassName="is-current"
+															className="in-page-nav__list"
+															role="menubar"
+															onUpdate={(e)=> { this.inPageNav(e); }}
+														>
+															{sections.map((item, index) => {
+																const props = {
+																	label: item.title,
+																	to: item.slug,
+																	behavior: "smooth",
+																	block: "start"
+																};
+																return (
+																	<li role="presentation" className="in-page-nav__item" key={index}>
+																		<HashLinkTop {...props} currentNavItem={this.state.currentInPageNavItem}/>
+																	</li>
+																);
+															})}
+														</Scrollspy>
+													</nav>
+													: null }
+											</div>
+										}
+									</Sticky>
+								</div>
+							</StickyContainer>
 						</div>
 					</div>
 				</div>
 			</div>
 		);
+
 	}
 }
 
-export default Document;
+export default withRouter(Document);

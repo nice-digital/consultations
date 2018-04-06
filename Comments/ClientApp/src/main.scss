@@ -2,7 +2,10 @@
 
 @import "nice-design-system";
 
-// Component folder structure imports here
+// Design System Overrides
+@import "./components/StackedNav/StackedNav";
 
+// Component folder structure imports here
 @import "./components/App/App";
 @import "./components/CommentPanel/CommentPanel";
+@import "./components/Document/Document";

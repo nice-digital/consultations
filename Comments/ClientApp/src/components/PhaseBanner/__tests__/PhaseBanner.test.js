@@ -1,11 +1,11 @@
 import React from "react";
 import { shallow } from "enzyme";
 
-import { PhaseBanner } from "./PhaseBanner";
+import { PhaseBanner } from "../PhaseBanner";
 
 describe("[ClientApp] ", () => {
 	describe("PhaseBanner ", () => {
-		it("Renders", () => {
+		it("Renders with correct link", () => {
 			const wrapper = shallow(
 				<PhaseBanner />
 			);

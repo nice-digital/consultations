@@ -10,25 +10,22 @@ type LinkType = {
 };
 
 type PropsType = {
-	links: {
-		root: LinkType,
+	links: ?{
+		title: string,
 		links: Array<LinkType>
 	}
 };
 
 export const StackedNav = (props: PropsType) => {
-	const { root, links } = props.links;
+	if (!props.links) return null;
+	const { title, links } = props.links;
 	return (
 		<nav className="stacked-nav" aria-label="{root.label}">
-			<h2 className="stacked-nav__root">
-				<Link to={root.url} aria-current={root.current ? true : false}>
-					{root.label}
-				</Link>
-			</h2>
+			<h2 className="stacked-nav__root">{title}</h2>
 			<ul className="stacked-nav__list">
-				{links.map(item => (
-					<li key={item.label} className="stacked-nav__list-item">
-						<Link to={item.url} aria-current={item.current ? true : false}>
+				{links.map((item, index) => (
+					<li key={`${item.label}${index}`} className="stacked-nav__list-item">
+						<Link to={item.url} aria-current={item.current ? "page" : "false"}>
 							{item.label}
 						</Link>
 					</li>

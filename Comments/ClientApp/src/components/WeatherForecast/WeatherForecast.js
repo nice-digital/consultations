@@ -1,41 +1,46 @@
 import React, { Component } from "react";
-import { withRouter } from "react-router";
+import { withRouter } from "react-router-dom";
 
 import preload from "./../../data/pre-loader";
-import load from "./../../data/loader";
+import { load } from "./../../data/loader";
 
-class FetchData extends Component {
-	displayName = FetchData.name;
-
+class WeatherForecast extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = { forecasts: [], loading: true, date: new Date() };
+		this.state = {
+			forecasts: [],
+			loading: true,
+			date: new Date()
+		};
 
 		const preloaded = preload(this.props.staticContext, "weather");
 
 		if (preloaded) {
-			this.state = { forecasts: preloaded, loading: false, date: new Date() };
+			this.state = {
+				forecasts: preloaded,
+				loading: false,
+				date: new Date()
+			};
 		}
-
-		this.handleReload = this.handleReload.bind(this);
 	}
 
 	componentDidMount() {
 		if (this.state.forecasts.length === 0) {
-			load("weather").then(data => {
-				this.setState({ forecasts: data, loading: false, date: new Date() });
+			load("weather").then(response => {
+				this.setState({ forecasts: response.data, loading: false, date: new Date() });
 			});
 		}
 	}
 
-	handleReload() {
-		load("weather").then(data => {
-			this.setState({ forecasts: data, loading: false, date: new Date() });
+	handleReload = () => {
+		load("weather").then(response => {
+			this.setState({ forecasts: response.data, loading: false, date: new Date() });
 		});
-	}
+	};
 
 	static renderForecastsTable(forecasts) {
+		if (!forecasts) return null;
 		return (
 			<table className="table">
 				<thead>
@@ -66,10 +71,10 @@ class FetchData extends Component {
 				<em>Loading...</em>
 			</p>
 		) : (
-			FetchData.renderForecastsTable(this.state.forecasts)
+			WeatherForecast.renderForecastsTable(this.state.forecasts)
 		);
 
-		console.log(`FetchData: Render ${this.state.forecasts.length}`);
+		console.log(`WeatherForecast: Render ${this.state.forecasts.length}`);
 
 		return (
 			<div>
@@ -83,4 +88,4 @@ class FetchData extends Component {
 	}
 }
 
-export default withRouter(FetchData);
+export default withRouter(WeatherForecast);
