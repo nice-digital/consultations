@@ -5,6 +5,7 @@ import { Route, Switch, Redirect } from "react-router";
 import { Helmet } from "react-helmet";
 
 import DocumentWithRouter from "../Document/Document";
+import { Drawer } from "../Drawer/Drawer";
 import NotFound from "../NotFound/NotFound";
 
 const App = () => (
@@ -21,7 +22,10 @@ const App = () => (
 
 			{/*Document View*/}
 			<Route path="/:consultationId/:documentId/:chapterSlug">
-				<DocumentWithRouter />
+				<div>
+					<Drawer />
+					<DocumentWithRouter />
+				</div>
 			</Route>
 
 			{/*404*/}

@@ -200,10 +200,11 @@ export class Document extends Component<PropsType, StateType> {
 		const { sections, content } = this.state.chapterData;
 		const consultationId = parseInt(this.props.match.params.consultationId, 0);
 		const documentId = parseInt(this.props.match.params.documentId, 0);
+		const chapterSlug = this.props.match.params.chapterSlug;
 		return (
 			<div>
 				<Helmet>
-					<title>Comment on Document</title>
+					<title>{`${consultationId},${documentId},${chapterSlug}`}</title>
 				</Helmet>
 				<div className="container">
 					<div className="grid">

@@ -1,0 +1,43 @@
+.Drawer {
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  box-shadow: -10px 0 10px rgba(0,0,0,0.1);
+  &__controls {
+    width: 40px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateX(-40px);
+  }
+  &__toggleOpen {
+    height: 40px;
+    width: 40px;
+    background: green;
+    color: white;
+    border: none;
+  }
+  &__main {
+    background: red;
+    height: 100vh;
+  }
+  &--open {
+    transform: translateX(0);
+  }
+  &--closed {
+    transform: translateX(100%);
+  }
+  &--narrow {
+    transition: all 0.3s ease-in-out;
+    width: 300px;
+  }
+  &--wide {
+    transition: all 0.3s ease-in-out;
+    width: 60vw;
+  }
+  &__controls {
+
+  }
+}

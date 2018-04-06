@@ -1,6 +1,17 @@
+// @flow
+
 import React, { Component } from "react";
 
-export class CommentPanel extends Component {
+type PropsType = {
+
+}
+
+type StateType = {
+
+}
+
+export class CommentPanel extends Component<PropsType, StateType> {
+
 	state = {
 		panelActive: true
 	};
@@ -15,21 +26,15 @@ export class CommentPanel extends Component {
 
 	render() {
 		return (
-			<div
-				style={this.props.style}
-				className={
-					"CommentPanel js-CommentPanel " +
+			<div className={
+				"CommentPanel js-CommentPanel " +
 					(this.state.panelActive ? "active" : "inactive")
-				}
-			>
+			}>
 				<button
 					onClick={this.toggleCommentBox}
 					className="CommentPanel__toggle js-CommentPanel__toggle">
 					{this.state.panelActive ? <span>&raquo;</span> : <span>&laquo;</span>}
 				</button>
-				<p>
-					<b>Comment Panel</b>
-				</p>
 				<p>Comment on this document</p>
 				<textarea name="comment" id="comment" rows="3" />
 				<br />
