@@ -5,11 +5,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net.Http;
+using Comments.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using NICE.Auth.NetCore.Services;
 using NICE.Feeds;
 using NICE.Feeds.Configuration;
 using NICE.Feeds.Tests.Infrastructure;
@@ -26,11 +28,21 @@ namespace Comments.Test.Infrastructure
         protected IFeedConfig _feedConfig;
 
         protected readonly Feed FeedToUse = Feed.ConsultationCommentsListDetailMulitpleDoc;
+        private readonly bool _authenticated = true;
+        private readonly string _displayName = "Benjamin Button";
+        private readonly Guid? _userId = Guid.Empty;
+
         public TestBase(Feed feed) : this()
         {
             FeedToUse = feed;
         }
-
+        public TestBase(Feed feed, bool authenticated, string displayName = null, Guid? userId = null) : this()
+        {
+            FeedToUse = feed;
+            _authenticated = authenticated;
+            _displayName = displayName;
+            _userId = userId;
+        }
 
         public TestBase()
         {
@@ -49,8 +61,9 @@ namespace Comments.Test.Infrastructure
                             //, optionsBuilder => { optionsBuilder.use }
                             ));
                     services.TryAddSingleton<ISeriLogger, FakeSerilogger>();
-                    //services.TryAddTransient<IFeedReaderService, FeedReader>();
-                   services.TryAddTransient<IFeedReaderService>(provider => new FeedReader(FeedToUse));;
+                    services.TryAddSingleton<IAuthenticateService, FakeAuthenticateService>();
+                    services.TryAddTransient<IUserService>(provider => FakeUserService.Get(_authenticated, _displayName, _userId));
+                    services.TryAddTransient<IFeedReaderService>(provider => new FeedReader(FeedToUse));;
                 })
                 .Configure(app =>
                 {
@@ -102,9 +115,9 @@ namespace Comments.Test.Infrastructure
             }
             return location.LocationId;
         }
-        protected int AddComment(int locationId, string commentText, bool isDeleted)
+        protected int AddComment(int locationId, string commentText, bool isDeleted, Guid createdByUserId)
         {
-            var comment = new Comment(locationId, Guid.Empty, commentText, Guid.Empty, location: null);
+            var comment = new Comment(locationId, createdByUserId, commentText, Guid.Empty, location: null);
             comment.IsDeleted = isDeleted;
             using (var context = new ConsultationsContext(_options))
             {
@@ -144,13 +157,13 @@ namespace Comments.Test.Infrastructure
             }
             return answer.AnswerId;
         }
-        protected void AddCommentsAndQuestionsAndAnswers(string sourceURI, string commentText, string questionText, string answerText)
+        protected void AddCommentsAndQuestionsAndAnswers(string sourceURI, string commentText, string questionText, string answerText, Guid createdByUserId)
         {
             var locationId = AddLocation(sourceURI);
-            AddComment(locationId, commentText, isDeleted: false);
+            AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId);
             var questionTypeId = AddQuestionType(description: "text", hasBooleanAnswer: false, hasTextAnswer: true);
             var questionId = AddQuestion(locationId, questionTypeId, questionText);
-            AddAnswer(questionId, Guid.Empty, answerText);
+            AddAnswer(questionId, createdByUserId, answerText);
         }
 
         #endregion database stuff

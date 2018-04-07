@@ -17,9 +17,10 @@ namespace Comments.Test.UnitTests
             ResetDatabase();
             var sourceURI = "/consultations/1/1/introduction";
             var commentText = Guid.NewGuid().ToString();
+            var createdByUserId = Guid.NewGuid();
 
             var locationId = AddLocation(sourceURI);
-            AddComment(locationId, commentText, true);
+            AddComment(locationId, commentText, true, createdByUserId);
 
             // Act
             using (var consultationsContext = new ConsultationsContext(_options))
@@ -42,17 +43,17 @@ namespace Comments.Test.UnitTests
             ResetDatabase();
             var sourceURI = "/consultations/1/1/introduction";
             var commentText = Guid.NewGuid().ToString();
+            var createdByUserId = Guid.NewGuid();
 
             var locationId = AddLocation(sourceURI);
-            AddComment(locationId, commentText, true);
+            AddComment(locationId, commentText, true, createdByUserId);
 
             // Act
             using (var consultationsContext = new ConsultationsContext(_options))
             {
-                var filteredLocations = consultationsContext.Location.Where(l =>
-                        l.SourceURI.Equals(sourceURI))
-                            .Include(l => l.Comment)
-                            .ToList();
+                var filteredLocations = consultationsContext.Location.Where(l => l.SourceURI.Equals(sourceURI))
+                    .Include(l => l.Comment)
+                    .ToList();
 
                 //Assert
                 filteredLocations.Single().Comment.Count.ShouldBe(0);
