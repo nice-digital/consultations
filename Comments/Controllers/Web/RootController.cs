@@ -11,7 +11,7 @@ namespace Comments.Controllers.Web
     /// 
     /// the reason for that is that nice accounts posts to the root of the website after logging in, then redirects after that. 
     /// </summary>
-    [Route("")]
+    [Route("temp")]
     public class RootController : Controller
     {
         private readonly ILogger<RootController> _logger;
@@ -24,8 +24,8 @@ namespace Comments.Controllers.Web
         public IActionResult Index()
         {
             _logger.LogWarning("Hitting the root controller. this should only occur locally.");
-
-            return Redirect("/consultations/1/1/introduction");
+            return Content("root controller hit");
+            //return Redirect("/consultations/1/1/introduction");
         }
     }
 }
