@@ -25,8 +25,7 @@ namespace Comments.Test.UnitTests
 
             var locationId = AddLocation(sourceURI);
             AddComment(locationId, commentText, isDeleted: false);
-            var feedReaderService = new FeedReader(Feed.ConsultationCommentsListDetailMulitpleDoc);
-            var commentService = new CommentService(new ConsultationsContext(_options), new ConsultationService(new FeedConverterService(feedReaderService), new FakeLogger<ConsultationService>(), FakeUserService.Get(false)));
+            var commentService = new CommentService(new ConsultationsContext(_options), FakeUserService.Get(false));
             
             // Act
             var viewModel = commentService.GetCommentsAndQuestions(sourceURI);
@@ -46,8 +45,7 @@ namespace Comments.Test.UnitTests
             var answerText = Guid.NewGuid().ToString();
 
             AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText);
-            var feedReaderService = new FeedReader(Feed.ConsultationCommentsListDetailMulitpleDoc);
-            var commentService = new CommentService(new ConsultationsContext(_options), new ConsultationService(new FeedConverterService(feedReaderService), new FakeLogger<ConsultationService>(), FakeUserService.Get(false)));
+            var commentService = new CommentService(new ConsultationsContext(_options), FakeUserService.Get(false));
 
             // Act    
             var viewModel = commentService.GetCommentsAndQuestions(sourceURI);

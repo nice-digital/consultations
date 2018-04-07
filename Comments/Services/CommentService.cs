@@ -3,6 +3,8 @@ using Comments.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Comment = Comments.ViewModels.Comment;
+using Question = Comments.ViewModels.Question;
 
 namespace Comments.Services
 {
@@ -18,12 +20,12 @@ namespace Comments.Services
     public class CommentService : ICommentService
     {
         private readonly ConsultationsContext _context;
-        private readonly IConsultationService _consultationService;
+        private readonly IUserService _userService;
 
-        public CommentService(ConsultationsContext consultationsContext, IConsultationService consultationService)
+        public CommentService(ConsultationsContext consultationsContext, IUserService userService)
         {
             _context = consultationsContext;
-            _consultationService = consultationService;
+            _userService = userService;
         }
 
         public ViewModels.Comment GetComment(int commentId)
@@ -65,8 +67,10 @@ namespace Comments.Services
 
         public CommentsAndQuestions GetCommentsAndQuestions(string sourceURI)
         {
-            //var consultation = _consultationService.GetConsultationDetail(consultationId);
-            //var(validatedDocumentId, validatedChapterSlug) = _consultationService.ValidateDocumentAndChapterWithinConsultation(consultation, documentId, chapterSlug);
+            var user = _userService.GetCurrentUser();
+
+            if (!user.IsLoggedIn) 
+                return new CommentsAndQuestions(new List<Comment>(), new List<Question>(), user.IsLoggedIn);
 
             var locations = _context.GetAllCommentsAndQuestionsForDocument(sourceURI);
 
@@ -78,7 +82,7 @@ namespace Comments.Services
                 questionsData.AddRange(location.Question.Select(question => new ViewModels.Question(location, question)));
             }
 
-            return new CommentsAndQuestions(commentsData, questionsData);
+            return new CommentsAndQuestions(commentsData, questionsData, user.IsLoggedIn);
         }
     }
 }

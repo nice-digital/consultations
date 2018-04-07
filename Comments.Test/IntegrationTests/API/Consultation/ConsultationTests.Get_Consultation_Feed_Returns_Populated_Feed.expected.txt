@@ -18,6 +18,6 @@
     "user":{
         "isLoggedIn":true,
         "displayName":"Benjamin Button",
-        "userId":"fb02531a-8972-44f9-a7d4-35da83f9e007"
+        "userId":"00000000-0000-0000-0000-000000000000"
     }
 }

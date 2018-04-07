@@ -10,7 +10,7 @@ namespace Comments.Test.IntegrationTests.API.Consultation
 {
     public class ConsultationTests : TestBase
     {
-        public ConsultationTests() : base(Feed.ConsultationCommentsListDetailMulitpleDoc, true, "Benjamin Button", Guid.NewGuid()) {}
+        public ConsultationTests() : base(Feed.ConsultationCommentsListDetailMulitpleDoc, true, "Benjamin Button", Guid.Empty) {}
 
         [Theory]
         [InlineData(0)]
