@@ -44,7 +44,7 @@ namespace Comments.Test.UnitTests
             var commentText = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
             var answerText = Guid.NewGuid().ToString();
-            var createdByUserId = Guid.NewGuid();
+            var createdByUserId = Guid.Empty;
 
             AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, createdByUserId);
             var commentService = new CommentService(new ConsultationsContext(_options), FakeUserService.Get(true, "Benjamin Button", createdByUserId));
