@@ -48,16 +48,18 @@ namespace Comments
             {
                 AppSettings.Configure(services, Configuration, Environment.ContentRootPath);
             }
-            
-            services.AddDbContext<ConsultationsContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            
+
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.TryAddSingleton<ISeriLogger, SeriLogger>();
             services.TryAddSingleton<IAuthenticateService, AuthService>();
+            services.TryAddTransient<IUserService, UserService>();
+
+            services.AddDbContext<ConsultationsContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            
             services.TryAddTransient<ICommentService, CommentService>();
             services.TryAddTransient<IConsultationService, ConsultationService>();
-            services.TryAddTransient<IUserService, UserService>();
+            
             services.TryAddTransient<IFeedReaderService>(provider => new FeedReaderService(new RemoteSystemReader(null), AppSettings.Feed));
             services.TryAddTransient<IFeedConverterService, FeedConverterService>();
             

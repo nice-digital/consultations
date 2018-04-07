@@ -1,14 +1,22 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Comments.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace Comments.Models
 {
     public partial class ConsultationsContext : DbContext
     {
+        private readonly IUserService _userService;
         public virtual DbSet<Answer> Answer { get; set; }
         public virtual DbSet<Comment> Comment { get; set; }
         public virtual DbSet<Location> Location { get; set; }
         public virtual DbSet<Question> Question { get; set; }
         public virtual DbSet<QuestionType> QuestionType { get; set; }
+
+        protected ConsultationsContext(IUserService userService)
+        {
+            _userService = userService;
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,6 +39,10 @@ namespace Comments.Models
                     .HasForeignKey(d => d.QuestionId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Answer_Question");
+
+                //modelBuilder.Entity<Answer>().Property<Guid>("CreatedByUserID").HasField("_createdByUserID");
+
+                modelBuilder.Entity<Answer>().HasQueryFilter(b => EF.Property<Guid>(b, "CreatedByUserID") == _userService.GetCurrentUser().UserId);
 
                 entity.HasQueryFilter(e => !e.IsDeleted); //JW. automatically filter out deleted rows. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
             });
@@ -56,6 +68,8 @@ namespace Comments.Models
                     .HasForeignKey(d => d.LocationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Comment_Location");
+
+                modelBuilder.Entity<Comment>().HasQueryFilter(b => EF.Property<Guid>(b, "CreatedByUserID") == _userService.GetCurrentUser().UserId);
 
                 entity.HasQueryFilter(e => !e.IsDeleted); //JW. automatically filter out deleted rows. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
             });

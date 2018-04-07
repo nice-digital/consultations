@@ -17,9 +17,9 @@
         "partiallyUpdatedProjectReference":null,
         "origProjectReference":null,
         "user":{
-            "isLoggedIn":false,
-            "displayName":null,
-            "userId":null
+            "isLoggedIn":true,
+            "displayName":"Benjamin Button",
+            "userId":"00000000-0000-0000-0000-000000000000"
         }
     },
     {
@@ -40,9 +40,9 @@
         "partiallyUpdatedProjectReference":null,
         "origProjectReference":null,
         "user":{
-            "isLoggedIn":false,
-            "displayName":null,
-            "userId":null
+            "isLoggedIn":true,
+            "displayName":"Benjamin Button",
+            "userId":"00000000-0000-0000-0000-000000000000"
         }
     }
 ]

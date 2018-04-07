@@ -28,9 +28,9 @@ namespace Comments.Test.Infrastructure
         protected IFeedConfig _feedConfig;
 
         protected readonly Feed FeedToUse = Feed.ConsultationCommentsListDetailMulitpleDoc;
-        private readonly bool _authenticated;
-        private readonly string _displayName;
-        private readonly Guid? _userId;
+        private readonly bool _authenticated = true;
+        private readonly string _displayName = "Benjamin Button";
+        private readonly Guid? _userId = Guid.Empty;
 
         public TestBase(Feed feed) : this()
         {
@@ -115,9 +115,9 @@ namespace Comments.Test.Infrastructure
             }
             return location.LocationId;
         }
-        protected int AddComment(int locationId, string commentText, bool isDeleted)
+        protected int AddComment(int locationId, string commentText, bool isDeleted, Guid createdByUserId)
         {
-            var comment = new Comment(locationId, Guid.Empty, commentText, Guid.Empty, location: null);
+            var comment = new Comment(locationId, createdByUserId, commentText, Guid.Empty, location: null);
             comment.IsDeleted = isDeleted;
             using (var context = new ConsultationsContext(_options))
             {
@@ -157,13 +157,13 @@ namespace Comments.Test.Infrastructure
             }
             return answer.AnswerId;
         }
-        protected void AddCommentsAndQuestionsAndAnswers(string sourceURI, string commentText, string questionText, string answerText)
+        protected void AddCommentsAndQuestionsAndAnswers(string sourceURI, string commentText, string questionText, string answerText, Guid createdByUserId)
         {
             var locationId = AddLocation(sourceURI);
-            AddComment(locationId, commentText, isDeleted: false);
+            AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId);
             var questionTypeId = AddQuestionType(description: "text", hasBooleanAnswer: false, hasTextAnswer: true);
             var questionId = AddQuestion(locationId, questionTypeId, questionText);
-            AddAnswer(questionId, Guid.Empty, answerText);
+            AddAnswer(questionId, createdByUserId, answerText);
         }
 
         #endregion database stuff
