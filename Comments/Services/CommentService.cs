@@ -2,6 +2,7 @@
 using Comments.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Comments.Services
 {
@@ -16,13 +17,14 @@ namespace Comments.Services
 
     public class CommentService : ICommentService
     {
+        private readonly IDbContextOptions _contextOptions;
         private readonly ConsultationsContext _context;
         private readonly IUserService _userService;
         private readonly User _currentUser;
 
-        public CommentService(ConsultationsContext consultationsContext, IUserService userService)
+        public CommentService(ConsultationsContext context, IUserService userService)
         {
-            _context = consultationsContext;
+            _context = context;
             _userService = userService;
             _currentUser = _userService.GetCurrentUser();
         }

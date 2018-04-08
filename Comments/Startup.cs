@@ -20,6 +20,7 @@ using ConsultationsContext = Comments.Models.ConsultationsContext;
 using Microsoft.AspNetCore.StaticFiles.Infrastructure;
 using Microsoft.AspNetCore.SpaServices;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using NICE.Auth.NetCore.Services;
 using NICE.Feeds.Configuration;
 
@@ -54,9 +55,13 @@ namespace Comments
             services.TryAddSingleton<IAuthenticateService, AuthService>();
             services.TryAddTransient<IUserService, UserService>();
 
+            //var contextOptionsBuilder = new DbContextOptionsBuilder<ConsultationsContext>();
+            //contextOptionsBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            //services.TryAddSingleton<IDbContextOptions>(contextOptionsBuilder.Options);
+
             services.AddDbContext<ConsultationsContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            
+
             services.TryAddTransient<ICommentService, CommentService>();
             services.TryAddTransient<IConsultationService, ConsultationService>();
             

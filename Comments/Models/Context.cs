@@ -22,7 +22,11 @@ namespace Comments.Models
         /// <param name="sourceURI"></param>
         /// <returns></returns>
         public IEnumerable<Location> GetAllCommentsAndQuestionsForDocument(string sourceURI)
-        {           
+        {
+
+            if (!_userService.GetCurrentUser().IsLoggedIn)
+                throw new Exception("trying to return comments and questions when not logged in. it shouldn't have gone this far.");
+
             var data = Location.Where(l => l.SourceURI.Equals(sourceURI))
                         .Include(l => l.Comment)
                         .Include(l => l.Question)

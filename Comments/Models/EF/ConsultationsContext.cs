@@ -15,11 +15,11 @@ namespace Comments.Models
         public virtual DbSet<QuestionType> QuestionType { get; set; }
 
         private Guid? _currentUserId;
-        protected ConsultationsContext(IUserService userService)
-        {
-            _userService = userService;
-            _currentUserId = _userService.GetCurrentUser().UserId;
-        }
+        //protected ConsultationsContext(IUserService userService)
+        //{
+        //    _userService = userService;
+        //    _currentUserId = _userService.GetCurrentUser().UserId;
+        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
