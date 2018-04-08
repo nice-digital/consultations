@@ -17,7 +17,7 @@ namespace Comments.Test.UnitTests
         {
             // Arrange
             ResetDatabase();
-            var commentService = new CommentService(new ConsultationsContext(_options), FakeUserService.Get(isAuthenticated: false));
+            var commentService = new CommentService(new ConsultationsContext(_options, _fakeUserService), FakeUserService.Get(isAuthenticated: false));
 
             // Act
             var viewModel = commentService.GetCommentsAndQuestions("/consultations/1/1/introduction");
@@ -35,7 +35,8 @@ namespace Comments.Test.UnitTests
             ResetDatabase();
             var userId = Guid.NewGuid();
             var sourceURI = "/consultations/1/1/introduction";
-            var commentService = new CommentService(new ConsultationsContext(_options), FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId));
+            var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService);
             var locationId = AddLocation(sourceURI);
 
             var expectedCommentId = AddComment(locationId, "current user's comment", isDeleted: false, createdByUserId: userId);

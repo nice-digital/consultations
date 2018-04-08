@@ -15,6 +15,7 @@ using NICE.Auth.NetCore.Services;
 using NICE.Feeds;
 using NICE.Feeds.Configuration;
 using NICE.Feeds.Tests.Infrastructure;
+using Microsoft.Data.Sqlite;
 
 namespace Comments.Test.Infrastructure
 {
@@ -28,13 +29,15 @@ namespace Comments.Test.Infrastructure
         protected IFeedConfig _feedConfig;
 
         protected readonly Feed FeedToUse = Feed.ConsultationCommentsListDetailMulitpleDoc;
-        private readonly bool _authenticated = true;
-        private readonly string _displayName = "Benjamin Button";
-        private readonly Guid? _userId = Guid.Empty;
+        protected readonly bool _authenticated = true;
+        protected readonly string _displayName = "Benjamin Button";
+        protected readonly Guid? _userId = Guid.Empty;
+        protected readonly IUserService _fakeUserService;
 
         public TestBase(Feed feed) : this()
         {
             FeedToUse = feed;
+            _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
         }
         public TestBase(Feed feed, bool authenticated, string displayName = null, Guid? userId = null) : this()
         {
@@ -42,13 +45,19 @@ namespace Comments.Test.Infrastructure
             _authenticated = authenticated;
             _displayName = displayName;
             _userId = userId;
+            _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
         }
 
         public TestBase()
         {
             // Arrange
+            _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
+
+            //var connection = new SqliteConnection("Data Source=" + DatabaseName + ";"); //"BinaryGuid=False"); //Version=3;
+
             _options = new DbContextOptionsBuilder<ConsultationsContext>()
                     .UseInMemoryDatabase(databaseName: DatabaseName)
+                    //.UseSqlite(connection)
                     .Options;
 
             var builder = new WebHostBuilder()
@@ -56,13 +65,13 @@ namespace Comments.Test.Infrastructure
                 .ConfigureServices(services =>
                 {
                     services.AddEntityFrameworkSqlite();
-                    services.AddDbContext<ConsultationsContext>(options => 
-                        options.UseInMemoryDatabase(DatabaseName
-                            //, optionsBuilder => { optionsBuilder.use }
-                            ));
+                    services.AddDbContext<ConsultationsContext>(options =>
+                        options.UseInMemoryDatabase(DatabaseName)
+                        //options.UseSqlite(connection)
+                        );
                     services.TryAddSingleton<ISeriLogger, FakeSerilogger>();
                     services.TryAddSingleton<IAuthenticateService, FakeAuthenticateService>();
-                    services.TryAddTransient<IUserService>(provider => FakeUserService.Get(_authenticated, _displayName, _userId));
+                    services.TryAddTransient<IUserService>(provider => _fakeUserService);
                     services.TryAddTransient<IFeedReaderService>(provider => new FeedReader(FeedToUse));;
                 })
                 .Configure(app =>
@@ -100,7 +109,7 @@ namespace Comments.Test.Infrastructure
 
         protected void ResetDatabase()
         {
-            using (var context = new ConsultationsContext(_options))
+            using (var context = new ConsultationsContext(_options, _fakeUserService))
             {
                 context.Database.EnsureDeleted();
             }
@@ -108,7 +117,7 @@ namespace Comments.Test.Infrastructure
         protected int AddLocation(string sourceURI)
         {
             var location = new Location(sourceURI, null, null, null, null, null, null, null, null);
-            using (var context = new ConsultationsContext(_options))
+            using (var context = new ConsultationsContext(_options, _fakeUserService))
             {
                 context.Location.Add(location);
                 context.SaveChanges();
@@ -119,7 +128,7 @@ namespace Comments.Test.Infrastructure
         {
             var comment = new Comment(locationId, createdByUserId, commentText, Guid.Empty, location: null);
             comment.IsDeleted = isDeleted;
-            using (var context = new ConsultationsContext(_options))
+            using (var context = new ConsultationsContext(_options, _fakeUserService))
             {
                 context.Comment.Add(comment);
                 context.SaveChanges();
@@ -129,7 +138,7 @@ namespace Comments.Test.Infrastructure
         protected int AddQuestionType(string description, bool hasBooleanAnswer, bool hasTextAnswer, int questionTypeId = 1)
         {
             var questionType = new QuestionType(description, hasTextAnswer, hasBooleanAnswer, null);
-            using (var context = new ConsultationsContext(_options))
+            using (var context = new ConsultationsContext(_options, _fakeUserService))
             {
                 context.QuestionType.Add(questionType);
                 context.SaveChanges();
@@ -139,7 +148,7 @@ namespace Comments.Test.Infrastructure
         protected int AddQuestion(int locationId, int questionTypeId, string questionText, int questionId = 1)
         {
             var question = new Question(locationId, questionText, questionTypeId, null, null, null, null);
-            using (var context = new ConsultationsContext(_options))
+            using (var context = new ConsultationsContext(_options, _fakeUserService))
             {
                 context.Question.Add(question);
                 context.SaveChanges();
@@ -149,7 +158,7 @@ namespace Comments.Test.Infrastructure
         protected int AddAnswer(int questionId, Guid userId, string answerText)
         {
             var answer = new Answer(questionId, userId, answerText, null, null);
-            using (var context = new ConsultationsContext(_options))
+            using (var context = new ConsultationsContext(_options, _fakeUserService))
             {
                 answer.LastModifiedDate = DateTime.Now;
                 context.Answer.Add(answer);

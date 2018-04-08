@@ -23,7 +23,7 @@ namespace Comments.Test.UnitTests
             AddComment(locationId, commentText, true, createdByUserId);
 
             // Act
-            using (var consultationsContext = new ConsultationsContext(_options))
+            using (var consultationsContext = new ConsultationsContext(_options, _fakeUserService))
             {
                 var unfilteredLocations = consultationsContext.Location.Where(l =>
                         l.SourceURI.Equals(sourceURI))
@@ -49,7 +49,7 @@ namespace Comments.Test.UnitTests
             AddComment(locationId, commentText, true, createdByUserId);
 
             // Act
-            using (var consultationsContext = new ConsultationsContext(_options))
+            using (var consultationsContext = new ConsultationsContext(_options, _fakeUserService))
             {
                 var filteredLocations = consultationsContext.Location.Where(l => l.SourceURI.Equals(sourceURI))
                     .Include(l => l.Comment)

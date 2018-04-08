@@ -14,17 +14,17 @@ namespace Comments.Models
         public virtual DbSet<Question> Question { get; set; }
         public virtual DbSet<QuestionType> QuestionType { get; set; }
 
-        private readonly Guid _currentUserId;
+        private Guid? _currentUserId;
         protected ConsultationsContext(IUserService userService)
         {
             _userService = userService;
-            if (!_userService.GetCurrentUser().UserId.HasValue)
-                throw new Exception("hello");
-            _currentUserId = _userService.GetCurrentUser().UserId ?? Guid.Empty; //todo: fix.
+            _currentUserId = _userService.GetCurrentUser().UserId;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            _currentUserId = _userService.GetCurrentUser().UserId;
+
             modelBuilder.Entity<Answer>(entity =>
             {
                 entity.Property(e => e.AnswerId).HasColumnName("AnswerID");
