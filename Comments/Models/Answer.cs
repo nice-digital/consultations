@@ -5,7 +5,7 @@ namespace Comments.Models
 {
     public partial class Answer
     {
-        public Guid _createdByUserId;
+        public string _currentUserId;
         private Answer() { } //just for EF
 
         public Answer(int questionId, Guid createdByUserId, string answerText, bool? answerBoolean, Question question)

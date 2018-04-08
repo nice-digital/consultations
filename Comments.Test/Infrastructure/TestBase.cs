@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Data.SQLite;
 using System.Net.Http;
 using Comments.Services;
 using Microsoft.AspNetCore.Builder;
@@ -52,11 +53,27 @@ namespace Comments.Test.Infrastructure
         {
             // Arrange
             _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
+            var databaseName = DatabaseName + Guid.NewGuid();
 
-            //var connection = new SqliteConnection("Data Source=" + DatabaseName + ";"); //"BinaryGuid=False"); //Version=3;
+            //SQLiteConnectionStringBuilder sqLiteConnectionStringBuilder = new SQLiteConnectionStringBuilder()
+            //{
+            //    DataSource = "my.db",
+
+            //    // from doc : Determines how GUIDs are stored. 
+            //    // If true - GUID columns are stored in binary form, 
+            //    // If false - GUID columns are stored as text
+            //    BinaryGUID = true
+            //};
+            
+            //using (System.Data.IDbConnection db = new Microsoft.Data.Sqlite.SqliteConnection(sqLiteConnectionStringBuilder))
+            //{
+            //    var result = connection.Query<MyObject>("the query", theFilter());
+            //}
+
+            //var connection = new SqliteConnection(sqLiteConnectionStringBuilder.ConnectionString); //"Data Source=" + DatabaseName + ";"); //"BinaryGuid=False"); //Version=3;
 
             _options = new DbContextOptionsBuilder<ConsultationsContext>()
-                    .UseInMemoryDatabase(databaseName: DatabaseName)
+                    .UseInMemoryDatabase(databaseName)
                     //.UseSqlite(connection)
                     .Options;
 
@@ -66,7 +83,7 @@ namespace Comments.Test.Infrastructure
                 {
                     services.AddEntityFrameworkSqlite();
                     services.AddDbContext<ConsultationsContext>(options =>
-                        options.UseInMemoryDatabase(DatabaseName)
+                        options.UseInMemoryDatabase(databaseName)
                         //options.UseSqlite(connection)
                         );
                     services.TryAddSingleton<ISeriLogger, FakeSerilogger>();
@@ -112,6 +129,8 @@ namespace Comments.Test.Infrastructure
             using (var context = new ConsultationsContext(_options, _fakeUserService))
             {
                 context.Database.EnsureDeleted();
+                //context.Database.CloseConnection();
+                //context.Database.OpenConnection();
             }
         }
         protected int AddLocation(string sourceURI)

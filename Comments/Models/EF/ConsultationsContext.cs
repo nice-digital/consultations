@@ -45,9 +45,9 @@ namespace Comments.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Answer_Question");
 
-                modelBuilder.Entity<Answer>().Property<Guid>("CreatedByUserId").HasField("_currentUserId");
+                //modelBuilder.Entity<Answer>().Property(a => a.CreatedByUserId).HasField("_currentUserId");
 
-                modelBuilder.Entity<Answer>().HasQueryFilter(b => EF.Property<Guid>(b, "CreatedByUserID") == _currentUserId);
+                entity.HasQueryFilter(b => EF.Property<Guid>(b, "CreatedByUserID") == _currentUserId);
 
                 entity.HasQueryFilter(e => !e.IsDeleted); //JW. automatically filter out deleted rows. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
             });
@@ -74,9 +74,9 @@ namespace Comments.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Comment_Location");
 
-                modelBuilder.Entity<Comment>().Property<Guid>("CreatedByUserId").HasField("_currentUserId");
+                //entity.Property(c => c.CreatedByUserId).HasField("_currentUserId");
 
-                modelBuilder.Entity<Comment>().HasQueryFilter(b => EF.Property<Guid>(b, "CreatedByUserID") == _currentUserId);
+                entity.HasQueryFilter(b => EF.Property<Guid>(b, "CreatedByUserID") == _currentUserId);
 
                 entity.HasQueryFilter(e => !e.IsDeleted); //JW. automatically filter out deleted rows. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
             });
@@ -130,18 +130,18 @@ namespace Comments.Models
             });
         }
 
-        public override int SaveChanges()
-        {
-            ChangeTracker.DetectChanges();
+        //public override int SaveChanges()
+        //{
+        //    ChangeTracker.DetectChanges();
 
-            foreach (var item in ChangeTracker.Entries().Where(
-                e =>
-                    e.State == EntityState.Added && e.Metadata.GetProperties().Any(p => p.Name == "CreatedByUserId")))
-            {
-                item.CurrentValues["CreatedByUserId"] = _currentUserId;
-            }
+        //    foreach (var item in ChangeTracker.Entries().Where(
+        //        e =>
+        //            e.State == EntityState.Added && e.Metadata.GetProperties().Any(p => p.Name == "CreatedByUserId")))
+        //    {
+        //        item.CurrentValues["CreatedByUserId"] = _currentUserId;
+        //    }
 
-            return base.SaveChanges();
-        }
+        //    return base.SaveChanges();
+        //}
     }
 }

@@ -4,6 +4,7 @@ namespace Comments.Models
 {
     public partial class Comment
     {
+        private string _currentUserId;
         private Comment() {} //Just for EF
 
         public Comment(int locationId, Guid createdByUserId, string commentText, Guid lastModifiedByUserId, Location location)
