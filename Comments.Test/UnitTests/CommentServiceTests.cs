@@ -27,6 +27,26 @@ namespace Comments.Test.UnitTests
             viewModel.Comments.Count().ShouldBe(0);
             viewModel.Questions.Count().ShouldBe(0);
         }
+
+        [Fact]
+        public void Only_own_Comments_returned_when_logged_in()
+        {
+            // Arrange
+            ResetDatabase();
+            var userId = Guid.NewGuid();
+            var sourceURI = "/consultations/1/1/introduction";
+            var commentService = new CommentService(new ConsultationsContext(_options), FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId));
+            var locationId = AddLocation(sourceURI);
+
+            var expectedCommentId = AddComment(locationId, "current user's comment", isDeleted: false, createdByUserId: userId);
+            var anotherPersonsCommentId = AddComment(locationId, "another user's comment", isDeleted: false, createdByUserId: Guid.NewGuid());
+
+            // Act
+            var viewModel = commentService.GetCommentsAndQuestions("/consultations/1/1/introduction");
+
+            //Assert
+            viewModel.Comments.Single().CommentId.ShouldBe(expectedCommentId);
+        }
     }
 }
 

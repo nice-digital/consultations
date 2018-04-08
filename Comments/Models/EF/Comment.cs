@@ -5,6 +5,7 @@ namespace Comments.Models
 {
     public partial class Comment
     {
+        private readonly Guid? _currentUserId;
         public int CommentId { get; set; }
         public int LocationId { get; set; }
         public Guid CreatedByUserId { get; set; }

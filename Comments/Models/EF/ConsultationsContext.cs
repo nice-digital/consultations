@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Comments.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,9 +14,13 @@ namespace Comments.Models
         public virtual DbSet<Question> Question { get; set; }
         public virtual DbSet<QuestionType> QuestionType { get; set; }
 
+        private readonly Guid _currentUserId;
         protected ConsultationsContext(IUserService userService)
         {
             _userService = userService;
+            if (!_userService.GetCurrentUser().UserId.HasValue)
+                throw new Exception("hello");
+            _currentUserId = _userService.GetCurrentUser().UserId ?? Guid.Empty; //todo: fix.
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -40,9 +45,9 @@ namespace Comments.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Answer_Question");
 
-                //modelBuilder.Entity<Answer>().Property<Guid>("CreatedByUserID").HasField("_createdByUserID");
+                modelBuilder.Entity<Answer>().Property<Guid>("CreatedByUserId").HasField("_currentUserId");
 
-                modelBuilder.Entity<Answer>().HasQueryFilter(b => EF.Property<Guid>(b, "CreatedByUserID") == _userService.GetCurrentUser().UserId);
+                modelBuilder.Entity<Answer>().HasQueryFilter(b => EF.Property<Guid>(b, "CreatedByUserID") == _currentUserId);
 
                 entity.HasQueryFilter(e => !e.IsDeleted); //JW. automatically filter out deleted rows. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
             });
@@ -69,7 +74,9 @@ namespace Comments.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Comment_Location");
 
-                modelBuilder.Entity<Comment>().HasQueryFilter(b => EF.Property<Guid>(b, "CreatedByUserID") == _userService.GetCurrentUser().UserId);
+                modelBuilder.Entity<Comment>().Property<Guid>("CreatedByUserId").HasField("_currentUserId");
+
+                modelBuilder.Entity<Comment>().HasQueryFilter(b => EF.Property<Guid>(b, "CreatedByUserID") == _currentUserId);
 
                 entity.HasQueryFilter(e => !e.IsDeleted); //JW. automatically filter out deleted rows. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
             });
@@ -121,6 +128,20 @@ namespace Comments.Models
                     .IsRequired()
                     .HasMaxLength(100);
             });
+        }
+
+        public override int SaveChanges()
+        {
+            ChangeTracker.DetectChanges();
+
+            foreach (var item in ChangeTracker.Entries().Where(
+                e =>
+                    e.State == EntityState.Added && e.Metadata.GetProperties().Any(p => p.Name == "CreatedByUserId")))
+            {
+                item.CurrentValues["CreatedByUserId"] = _currentUserId;
+            }
+
+            return base.SaveChanges();
         }
     }
 }

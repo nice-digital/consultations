@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\comments\Comments.csproj" />
+    <ProjectReference Include="..\Comments\Comments.csproj" />
   </ItemGroup>
 
   <ItemGroup>
