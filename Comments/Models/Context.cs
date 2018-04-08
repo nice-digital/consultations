@@ -11,7 +11,7 @@ namespace Comments.Models
         public ConsultationsContext(DbContextOptions options, IUserService userService) : base(options)
         {
             _userService = userService;
-            _currentUserId = _userService.GetCurrentUser().UserId;
+            _createdByUserID = _userService.GetCurrentUser().UserId;
         }
 
         /// <summary>

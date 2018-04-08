@@ -41,6 +41,7 @@ namespace Comments.Test.UnitTests
 
             var expectedCommentId = AddComment(locationId, "current user's comment", isDeleted: false, createdByUserId: userId);
             var anotherPersonsCommentId = AddComment(locationId, "another user's comment", isDeleted: false, createdByUserId: Guid.NewGuid());
+            var ownDeletedCommentId = AddComment(locationId, "current user's deleted comment", isDeleted: true, createdByUserId: userId);
 
             // Act
             var viewModel = commentService.GetCommentsAndQuestions("/consultations/1/1/introduction");
