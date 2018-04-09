@@ -17,7 +17,7 @@ namespace Comments.Auth
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IAuthenticateService _authenticateService;
-
+        private readonly ILogger _logger;
         /// <summary>
         /// This is a list of paths which should authenticate. That just means that it will check for the nice accounts cookie. it doesn't mean they require authourisation, i.e. they're not protected by auth.
         /// if no cookie is found, that's fine. no redirects or anything, just no user details in the data.
@@ -35,6 +35,7 @@ namespace Comments.Auth
         {
             _httpContextAccessor = httpContextAccessor;
             _authenticateService = authenticateService;
+            _logger = logger.CreateLogger(this.GetType());
         }
 
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
