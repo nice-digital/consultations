@@ -17,6 +17,7 @@
   &__toggleOpen,
   &__toggleWidth {
     @extend %ui-button;
+    margin-right: rem($spacing-small);
   }
   &__main {
     height: 100vh;
@@ -25,9 +26,15 @@
   }
   &__mainControls {
     float: right;
+    padding: rem($spacing-small);
+    // todo: take this out after demo
+    img {
+      margin-left: 10px;
+    }
   }
   &--open {
     transform: translateX(0);
+
   }
   &--closed {
     transform: translateX(100%);

@@ -1,7 +1,10 @@
 // @flow
 
-import React, {Component} from "react";
+import React, {Component, Fragment} from "react";
 import { mobileWidth } from "../../constants";
+
+import iconDockExtended from "./icon-dock-extended.svg";
+import iconDockSmall from "./icon-dock-small.svg";
 
 type PropsType = {}
 
@@ -31,8 +34,11 @@ export class Drawer extends Component<PropsType, StateType> {
 
 	handleClick = (event) => {
 		switch (event) {
-			case "toggleWidth":
-				this.setState(prevState => ({ drawerExpandedWidth: !prevState.drawerExpandedWidth }));
+			case "toggleWidth--narrow":
+				this.setState({ drawerExpandedWidth: false });
+				break;
+			case "toggleWidth--wide":
+				this.setState({ drawerExpandedWidth: true });
 				break;
 			case "toggleOpen":
 				this.setState(prevState => ({ drawerOpen: !prevState.drawerOpen }));
@@ -53,9 +59,20 @@ export class Drawer extends Component<PropsType, StateType> {
 				<div className="Drawer__main">
 					<div className="Drawer__mainControls">
 						{ !this.isMobile() ?
-							<button className="Drawer__toggleWidth" name="toggleWidth" onClick={()=>this.handleClick("toggleWidth")}>
-								<span className={`icon ${this.state.drawerExpandedWidth ? "icon--minus" : "icon--plus"}`} aria-hidden="true" />
-							</button>
+							<Fragment>
+								{/*<button className="Drawer__toggleWidth Drawer__toggleWidth--narrow" name="toggleWidth" onClick={()=>this.handleClick("toggleWidth--narrow")}>
+									<span className="icon icon--dock-right-small" aria-hidden="true" />
+									<img src={iconDockSmall} alt="Icon Dock Small" />
+								</button>
+								<button className="Drawer__toggleWidth Drawer__toggleWidth--expanded" name="toggleWidth" onClick={()=>this.handleClick("toggleWidth--expanded")}>
+									<span className="icon icon--dock-right-large" aria-hidden="true" />
+									<img src={iconDockExtended} alt="Icon Dock Extended"/>
+								</button>*/}
+								<img style={this.state.drawerExpandedWidth ? {"opacity": "1"} : {"opacity": "0.3"} }
+									src={iconDockSmall} alt="Icon Dock Small" width="40" onClick={()=>this.handleClick("toggleWidth--narrow")}/>
+								<img style={this.state.drawerExpandedWidth ? {"opacity": "0.3"} : {"opacity": "1"} }
+									src={iconDockExtended} alt="Icon Dock Extended" width="40" onClick={()=>this.handleClick("toggleWidth--wide")}/>
+							</Fragment>
 							: null }
 					</div>
 				</div>
