@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using NICE.Auth.NETCore.WebTest.Configuration;
 
 namespace Comments.Configuration
 {

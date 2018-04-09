@@ -41,14 +41,14 @@ namespace Comments
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //if (Environment.IsDevelopment())
-            //{
-                AppSettings.Configure(services, Configuration, @"c:\");
-            //}
-            //else
-            //{
-            //    AppSettings.Configure(services, Configuration, Environment.ContentRootPath);
-            //}
+            if (Environment.IsDevelopment())
+            {
+                AppSettings.Configure(services, Configuration, @"c:\"); 
+            }
+            else
+            {
+                AppSettings.Configure(services, Configuration, Environment.ContentRootPath);
+            }
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.TryAddSingleton<ISeriLogger, SeriLogger>();
