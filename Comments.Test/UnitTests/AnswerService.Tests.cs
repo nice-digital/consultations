@@ -30,7 +30,8 @@ namespace Comments.Test.UnitTests
             var questionId = AddQuestion(locationId, questionType, questionText);
             var answerId = AddAnswer(questionId, userId, answerText);
 
-            var answerService = new AnswerService(new ConsultationsContext(_options));
+            var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+            var answerService = new AnswerService(new ConsultationsContext(_options, userService));
 
             //Act
             var viewModel = answerService.GetAnswer(answerId);
@@ -55,7 +56,8 @@ namespace Comments.Test.UnitTests
             var questionId = AddQuestion(locationId, questionType, questionText);
             var answerId = AddAnswer(questionId, userId, answerText);
 
-            var answerService = new AnswerService(new ConsultationsContext(_options));
+            var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+            var answerService = new AnswerService(new ConsultationsContext(_options, userService));
             var viewModel = answerService.GetAnswer(answerId);
 
             var updatedAnswerText = Guid.NewGuid().ToString();
@@ -85,7 +87,8 @@ namespace Comments.Test.UnitTests
             var questionType = AddQuestionType(description, false, true);
             var questionId = AddQuestion(locationId, questionType, questionText);
             var answerId = AddAnswer(questionId, userId, answerText);
-            var answerService = new AnswerService(new ConsultationsContext(_options));
+            var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+            var answerService = new AnswerService(new ConsultationsContext(_options, userService));
 
             //Act
             var result = answerService.DeleteAnswer(answerId);
@@ -102,7 +105,9 @@ namespace Comments.Test.UnitTests
             //Arrange
             ResetDatabase();
             var answerId = 1;
-            var answerService = new AnswerService(new ConsultationsContext(_options));
+            var userId = Guid.NewGuid();
+            var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+            var answerService = new AnswerService(new ConsultationsContext(_options, userService));
 
             //Act
             var result = answerService.DeleteAnswer(answerId);
@@ -133,7 +138,8 @@ namespace Comments.Test.UnitTests
             var answer = new Answer(questionId, userId, answerText, false, question);
             var viewModel = new ViewModels.Answer(answer);
 
-            var answerService = new AnswerService(new ConsultationsContext(_options));
+            var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+            var answerService = new AnswerService(new ConsultationsContext(_options, userService));
 
             //Act
             var result = answerService.CreateAnswer(viewModel, questionId);

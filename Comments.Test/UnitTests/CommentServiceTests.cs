@@ -10,7 +10,7 @@ using Xunit;
 
 namespace Comments.Test.UnitTests
 {
-    public class CommentServiceTests : TestBase
+    public class CommentServiceTests1 : TestBase
     {
         [Fact]
         public void No_Comments_returned_when_not_logged_in()

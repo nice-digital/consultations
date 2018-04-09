@@ -4,6 +4,7 @@ using Comments.Services;
 using Shouldly;
 using Xunit;
 using Comments.Models;
+using Comments.Test.Infrastructure;
 
 namespace Comments.Test.UnitTests
 {
@@ -17,12 +18,14 @@ namespace Comments.Test.UnitTests
             var sourceURI = "/consultations/1/1/introduction";
             var description = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
+            var userId = Guid.NewGuid();
 
             var locationId = AddLocation(sourceURI);
             var questionTypeId = AddQuestionType(description, false, true);
             var questionId = AddQuestion(locationId, questionTypeId, questionText);
 
-            var questionService = new QuestionService(new ConsultationsContext(_options));
+            var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+            var questionService = new QuestionService(new ConsultationsContext(_options, userService));
 
             //Act
             var viewModel = questionService.GetQuestion(questionId);
@@ -39,11 +42,13 @@ namespace Comments.Test.UnitTests
             var sourceURI = "/consultations/1/1/introduction";
             var description = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
+            var userId = Guid.NewGuid();
 
             var locationId = AddLocation(sourceURI);
             var questionTypeId = AddQuestionType(description, false, true);
             var questionId = AddQuestion(locationId, questionTypeId, questionText);
-            var questionService = new QuestionService(new ConsultationsContext(_options));
+            var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+            var questionService = new QuestionService(new ConsultationsContext(_options, userService));
 
             var viewModel = questionService.GetQuestion(questionId);
             var updatedQuestionText = Guid.NewGuid().ToString();
@@ -67,11 +72,13 @@ namespace Comments.Test.UnitTests
             var sourceURI = "/consultations/1/1/introduction";
             var description = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
+            var userId = Guid.NewGuid();
 
             var locationId = AddLocation(sourceURI);
             var questionTypeId = AddQuestionType(description, false, true);
             var questionId = AddQuestion(locationId, questionTypeId, questionText);
-            var questionService = new QuestionService(new ConsultationsContext(_options));
+            var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+            var questionService = new QuestionService(new ConsultationsContext(_options, userService));
 
             //Act
             var result = questionService.DeleteQuestion(questionId);
@@ -86,7 +93,9 @@ namespace Comments.Test.UnitTests
             //Arrange
             ResetDatabase();
             var questionId = 1;
-            var questionService = new QuestionService(new ConsultationsContext(_options));
+            var userId = Guid.NewGuid();
+            var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+            var questionService = new QuestionService(new ConsultationsContext(_options, userService));
 
             //Act
             var result = questionService.DeleteQuestion(questionId);
@@ -103,10 +112,12 @@ namespace Comments.Test.UnitTests
             var sourceURI = "/consultations/1/1/introduction";
             var description = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
+            var userId = Guid.NewGuid();
 
             var locationId = AddLocation(sourceURI);
             var questionTypeId = AddQuestionType(description, false, true);
-            var questionService = new QuestionService(new ConsultationsContext(_options));
+            var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+            var questionService = new QuestionService(new ConsultationsContext(_options, userService));
 
             var location = new Location(sourceURI, null, null, null, null, null, null, null, null);
             var questionType = new QuestionType(description, false, true, null);
