@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Data.Edm.Expressions;
 
 namespace Comments.ViewModels
 {
@@ -17,7 +18,8 @@ namespace Comments.ViewModels
             LastModifiedDate = question.LastModifiedDate;
 
             QuestionType = new QuestionType(question.QuestionType);
-            Answers = question.Answer.Select(answer => new Answer(answer)).ToList();
+            if (!(question.Answer is null))
+                Answers = question.Answer.Select(answer => new Answer(answer)).ToList();
         }
 
         public int QuestionId { get; set; }
@@ -27,7 +29,7 @@ namespace Comments.ViewModels
         public DateTime LastModifiedDate { get; set; }
 
         public ViewModels.QuestionType QuestionType { get; set; }
-        public IEnumerable<ViewModels.Answer> Answers { get; set; }
+        public IEnumerable<ViewModels.Answer>Answers { get; set; }
     }
 
     public class QuestionType
@@ -48,6 +50,15 @@ namespace Comments.ViewModels
     public class Answer
     {
         public Answer() { } //only here for model binding. don't use it in code.
+        public Answer(int answerId, string answerText, bool answerBoolean, DateTime lastModifiedDate, Guid lastModifiedByUserId)
+        {
+            AnswerId = answerId;
+            AnswerText = answerText;
+            AnswerBoolean = answerBoolean;
+            LastModifiedDate = lastModifiedDate;
+            LastModifiedByUserId = lastModifiedByUserId;
+        }
+
         public Answer(Models.Answer answer)
         {
             AnswerId = answer.AnswerId;

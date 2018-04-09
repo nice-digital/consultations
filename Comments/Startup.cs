@@ -50,6 +50,8 @@ namespace Comments
             services.TryAddTransient<IConsultationService, ConsultationService>();
             services.TryAddTransient<IFeedReaderService>(provider => new FeedReaderService(new RemoteSystemReader(null), AppSettings.Feed)); 
             services.TryAddTransient<IFeedConverterService, FeedConverterService>(); 
+            services.TryAddTransient<IAnswerService, AnswerService>();
+            services.TryAddTransient<IQuestionService, QuestionService>();
             
 
             // In production, static files are served from the pre-built files, rather than proxied via react dev server

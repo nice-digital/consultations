@@ -6,7 +6,6 @@ using Comments.Services;
 using Comments.Test.Infrastructure;
 using Comments.ViewModels;
 using NICE.Feeds;
-using NICE.Feeds.Configuration;
 using NICE.Feeds.Tests.Infrastructure;
 using Shouldly;
 using Xunit;
@@ -58,6 +57,8 @@ namespace Comments.Test.UnitTests
             question.QuestionText.ShouldBe(questionText);
             question.Answers.Single().AnswerText.ShouldBe(answerText);
         }
+
+        
 
         [Theory]
         [InlineData(1, 1, null, null)]

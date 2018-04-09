@@ -34,5 +34,19 @@ namespace Comments.Models
                     .Include(c => c.Location)
                     .FirstOrDefault();
         }
+
+        public Answer GetAnswer(int answerId)
+        {
+            return Answer
+                .FirstOrDefault(a => a.AnswerId.Equals(answerId));
+        }
+
+        public Question GetQuestion(int questionId)
+        {
+            return Question.Where(q => q.QuestionId.Equals(questionId))
+                .Include(q => q.Location)
+                .Include(q => q.QuestionType)
+                .FirstOrDefault();
+        }
     }
 }

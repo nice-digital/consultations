@@ -152,7 +152,7 @@ namespace Comments.Test.Infrastructure
             var questionId = AddQuestion(locationId, questionTypeId, questionText);
             AddAnswer(questionId, Guid.Empty, answerText);
         }
-
+        
         #endregion database stuff
 
         #region Helpers
