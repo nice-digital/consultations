@@ -1,5 +1,6 @@
 ﻿using Comments.Services;
 using Comments.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -8,6 +9,7 @@ namespace Comments.Controllers.Api
 {
     [Produces("application/json")]
     [Route("consultations/api/[controller]")]
+    //[Authorize]
     public class CommentsController : Controller
     {
         private readonly ICommentService _commentService;
@@ -20,7 +22,7 @@ namespace Comments.Controllers.Api
         }
 
         /// <summary>
-        /// GET: eg. consultations/api/Comments?sourceURI=http%3A%2F%2Fwww.nice.org.uk%2Fconsultations%2F1%2F1%2Fchapter-slug
+        /// GET: eg. consultations/api/Comments?sourceURI=%2Fconsultations%2F1%2F1%2Fchapter-slug
         /// </summary>
         /// <param name="sourceURI"></param>
         /// <returns></returns>

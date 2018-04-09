@@ -1,5 +1,6 @@
 ﻿using Comments.Services;
 using Comments.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -7,6 +8,7 @@ namespace Comments.Controllers.Api
 {
     [Produces("application/json")]
     [Route("consultations/api/[controller]")]
+    //[Authorize]
     public class CommentController : Controller
     {
         private readonly ICommentService _commentService;
