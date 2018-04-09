@@ -42,9 +42,9 @@ namespace Comments.Auth
             var httpContext = _httpContextAccessor.HttpContext;
             if (httpContext != null)
             {
-                //var requestPath = httpContext.Request.Path.HasValue ? httpContext.Request.Path.Value : null;
-                //if (!ShouldAuthenticatePath(requestPath))
-                //    return Task.FromResult(AuthenticateResult.NoResult());
+                var requestPath = httpContext.Request.Path.HasValue ? httpContext.Request.Path.Value : null;
+                if (!ShouldAuthenticatePath(requestPath))
+                    return Task.FromResult(AuthenticateResult.NoResult());
 
                 var authenticated = httpContext.User?.Identity != null && httpContext.User.Identity.IsAuthenticated;
 
