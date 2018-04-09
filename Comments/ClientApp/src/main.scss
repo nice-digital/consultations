@@ -6,6 +6,9 @@
 // Design System Overrides
 @import "./components/StackedNav/StackedNav";
 
+// Project variables
+@import "variables";
+
 // Component folder structure imports here
 @import "./components/App/App";
 @import "./components/CommentPanel/CommentPanel";

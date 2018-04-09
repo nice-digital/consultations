@@ -1,6 +1,7 @@
 // @flow
 
 import React, {Component} from "react";
+import { mobileWidth } from "../../constants";
 
 type PropsType = {}
 
@@ -12,27 +13,29 @@ export class Drawer extends Component<PropsType, StateType> {
 		super(props);
 		this.state = {
 			drawerExpandedWidth: false,
-			drawerOpen: true
+			drawerOpen: false,
+			drawerMobile: this.isMobile()
 		};
 	}
+
+	// todo: this only works on component initialsation at the moment
+	isMobile = () => window.innerWidth <= mobileWidth;
 
 	drawerClassnames = () => {
 		const width = this.state.drawerExpandedWidth ? "Drawer--wide" : "Drawer--narrow";
 		const open = this.state.drawerOpen ? "Drawer--open" : "Drawer--closed";
-		return `Drawer ${width} ${open}`;
+		const mobile = this.state.drawerMobile ? "Drawer--mobile" : "Drawer--desktop";
+		return `Drawer ${width} ${open} ${mobile}`;
 	};
+
 
 	handleClick = (event) => {
 		switch (event) {
 			case "toggleWidth":
-				this.setState({
-					drawerExpandedWidth: !this.state.drawerExpandedWidth
-				});
+				this.setState(prevState => ({ drawerExpandedWidth: !prevState.drawerExpandedWidth }));
 				break;
 			case "toggleOpen":
-				this.setState({
-					drawerOpen: !this.state.drawerOpen
-				});
+				this.setState(prevState => ({ drawerOpen: !prevState.drawerOpen }));
 				break;
 			default:
 				return;
@@ -48,9 +51,13 @@ export class Drawer extends Component<PropsType, StateType> {
 					</button>
 				</div>
 				<div className="Drawer__main">
-					<button name="toggleWidth" onClick={()=>this.handleClick("toggleWidth")}>
-						<span className={`icon ${this.state.drawerExpandedWidth ? "icon--minus" : "icon--plus"}`} aria-hidden="true" />
-					</button>
+					<div className="Drawer__mainControls">
+						{ !this.isMobile() ?
+							<button className="Drawer__toggleWidth" name="toggleWidth" onClick={()=>this.handleClick("toggleWidth")}>
+								<span className={`icon ${this.state.drawerExpandedWidth ? "icon--minus" : "icon--plus"}`} aria-hidden="true" />
+							</button>
+							: null }
+					</div>
 				</div>
 			</div>
 		);

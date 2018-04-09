@@ -1,0 +1,16 @@
+// Project Variables
+// Depending on their specificity to this project they may be moved into the design system
+
+%left-drop-shadow {
+  box-shadow: -10px 0 10px rgba(0,0,0,0.1);
+}
+
+%transition-default {
+  transition: all 0.3s ease-in-out;
+}
+
+%ui-button {
+  width: 40px;
+  height: 40px;
+  border: 2px solid black;
+}
