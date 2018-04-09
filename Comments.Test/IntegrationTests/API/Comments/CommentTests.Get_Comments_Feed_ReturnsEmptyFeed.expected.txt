@@ -4,5 +4,6 @@
     ],
     "questions":[
         
-    ]
+    ],
+    "isAuthenticated":true
 }

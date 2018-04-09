@@ -8,7 +8,7 @@
 		"build": "npm run modernizr && react-scripts build",
 		"test": "react-scripts test --env=node",
 		"eslint": "node node_modules/eslint/bin/eslint 'src/'",
-    "esw": "node node_modules/eslint-watch/bin/esw 'src/' --watch",
+		"esw": "node node_modules/eslint-watch/bin/esw 'src/' --watch",
 		"test:ci": "cross-env CI=true react-scripts test --env=jsdom --testResultsProcessor=jest-teamcity-reporter",
 		"test:ci:coverage": "npm run test:ci -- --coverage ",
 		"eject": "react-scripts eject",
@@ -74,5 +74,5 @@
 		"eslint-watch": "^3.1.4",
 		"prettier-eslint": "^8.8.1"
 	},
-	"proxy": "https://test.nice.org.uk"
+	"proxy": "http://niceorg"
 }

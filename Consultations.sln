@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Comments", "comments\Comments.csproj", "{222AED41-3F65-415F-9C6E-F4124638890C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Comments", "Comments\Comments.csproj", "{222AED41-3F65-415F-9C6E-F4124638890C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Comments.Test", "Comments.Test\Comments.Test.csproj", "{16435EA8-8B15-4F8F-9E08-85D527872DAD}"
 EndProject
