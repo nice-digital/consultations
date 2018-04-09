@@ -24,8 +24,8 @@ namespace Comments.Controllers.Web
         public IActionResult Index()
         {
             _logger.LogWarning("Hitting the root controller. this should only occur locally.");
-            //return Content("root controller hit");
-            return Redirect("/consultations/1/1/introduction");
+            return Content("root controller hit");
+            //return Redirect("/consultations/1/1/introduction");
         }
     }
 }
