@@ -14,5 +14,10 @@
     "process":"TAG",
     "allowConsultationComments":true,
     "partiallyUpdatedProjectReference":null,
-    "origProjectReference":null
+    "origProjectReference":null,
+    "user":{
+        "isLoggedIn":true,
+        "displayName":"Benjamin Button",
+        "userId":"00000000-0000-0000-0000-000000000000"
+    }
 }

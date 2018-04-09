@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using NICE.Auth.NETCore.WebTest.Configuration;
 
 namespace Comments.Configuration
 {
@@ -11,15 +12,19 @@ namespace Comments.Configuration
 
         public static EnvironmentConfig Environment { get; private set; }
         public static FeedConfig Feed { get; private set; }
+        public static GilliamConfig GilliamConfig { get; private set; }
 
-        public static void Configure(IServiceCollection services, IConfiguration configuration)
+        public static void Configure(IServiceCollection services, IConfiguration configuration, string contentRootPath)
         {
             services.Configure<EnvironmentConfig>(configuration.GetSection("AppSettings:Environment"));
-            services.Configure<FeedConfig>(configuration.GetSection("Feeds")); //needs work
+            services.Configure<FeedConfig>(configuration.GetSection("Feeds")); 
+            services.Configure<GilliamConfig>(configuration.GetSection("Gilliam"));
 
             var sp = services.BuildServiceProvider();
             Environment = sp.GetService<IOptions<EnvironmentConfig>>().Value;
             Feed = sp.GetService<IOptions<FeedConfig>>().Value;
+            GilliamConfig = sp.GetService<IOptions<GilliamConfig>>().Value;
+            GilliamConfig.ContentRootPath = contentRootPath;
         }
     }
 }

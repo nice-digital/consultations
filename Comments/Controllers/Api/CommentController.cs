@@ -1,4 +1,5 @@
 ﻿using Comments.Services;
+using Comments.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -26,14 +27,10 @@ namespace Comments.Controllers.Api
                 return BadRequest(ModelState);
             }
 
-            var comment = _commentService.GetComment(commentId);
+            var result = _commentService.GetComment(commentId);
 
-            if (comment == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(comment);
+            var invalidResult = Validate(result.validate);
+            return invalidResult ?? Ok(result.comment);
         }
 
         // PUT: consultations/api/Comment/5
@@ -50,14 +47,10 @@ namespace Comments.Controllers.Api
                 return BadRequest();
             }
 
-            var rowsUpdated = _commentService.EditComment(commentId, comment);
+            var result = _commentService.EditComment(commentId, comment);
+            var invalidResult = Validate(result.validate);
 
-            if (rowsUpdated > 0)
-            {
-                return NoContent();
-            }
-
-            return NotFound();
+            return invalidResult ?? Ok(result.rowsUpdated);
         }
 
         // POST: consultations/api/Comment
@@ -69,9 +62,10 @@ namespace Comments.Controllers.Api
                 return BadRequest(ModelState);
             }
 
-            var savedComment = _commentService.CreateComment(comment);
+            var result = _commentService.CreateComment(comment);
+            var invalidResult = Validate(result.validate);
 
-            return CreatedAtAction("GetComment", new { id = savedComment.CommentId }, savedComment);
+            return invalidResult ?? CreatedAtAction("GetComment", new { id = result.comment.CommentId }, result.comment);
         }
 
         // DELETE: consultations/api/Comment/5
@@ -83,14 +77,26 @@ namespace Comments.Controllers.Api
                 return BadRequest(ModelState);
             }
 
-            var rowsUpdated = _commentService.DeleteComment(commentId);
-            
-            if (rowsUpdated < 1)
-            {
-                return NotFound();
-            }
+            var result = _commentService.DeleteComment(commentId);
+            var invalidResult = Validate(result.validate);
 
-            return Ok();
+            return invalidResult ?? Ok(result.rowsUpdated);
+        }
+
+        private IActionResult Validate(Validate validate)
+        {
+            if (validate == null || validate.Valid)
+                return null;
+
+            _logger.LogWarning(validate.Message);
+
+            if (validate.Unauthorised)
+                return Unauthorized();
+
+            if (validate.NotFound)
+                return NotFound();
+
+            return BadRequest();
         }
     }
 }

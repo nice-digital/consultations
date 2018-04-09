@@ -21,11 +21,12 @@ namespace Comments.Test.UnitTests
             ResetDatabase();
             var sourceURI = "/consultations/1/1/introduction";
             var commentText = Guid.NewGuid().ToString();
+            var createdByUserId = Guid.NewGuid();
 
             var locationId = AddLocation(sourceURI);
-            AddComment(locationId, commentText, isDeleted: false);
-            var feedReaderService = new FeedReader(Feed.ConsultationCommentsListDetailMulitpleDoc);
-            var commentService = new CommentService(new ConsultationsContext(_options), new ConsultationService(new FeedConverterService(feedReaderService), new FakeLogger<ConsultationService>()));
+            AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId);
+            var userService = FakeUserService.Get(true, "Benjamin Button", createdByUserId);
+            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService);
             
             // Act
             var viewModel = commentService.GetCommentsAndQuestions(sourceURI);
@@ -43,10 +44,10 @@ namespace Comments.Test.UnitTests
             var commentText = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
             var answerText = Guid.NewGuid().ToString();
+            var createdByUserId = Guid.Empty;
 
-            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText);
-            var feedReaderService = new FeedReader(Feed.ConsultationCommentsListDetailMulitpleDoc);
-            var commentService = new CommentService(new ConsultationsContext(_options), new ConsultationService(new FeedConverterService(feedReaderService), new FakeLogger<ConsultationService>()));
+            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, createdByUserId);
+            var commentService = new CommentService(new ConsultationsContext(_options, _fakeUserService), _fakeUserService);
 
             // Act    
             var viewModel = commentService.GetCommentsAndQuestions(sourceURI);
@@ -86,9 +87,10 @@ namespace Comments.Test.UnitTests
                     {
                         new Chapter("second-document-first-chapter-slug", "second-document-first-chapter-title")
                     })
-                });
+                }, 
+                user: null);
             var feedReaderService = new FeedReader(Feed.ConsultationCommentsListDetailMulitpleDoc);
-            var consultationService = new ConsultationService(new FeedConverterService(feedReaderService), new FakeLogger<ConsultationService>());
+            var consultationService = new ConsultationService(new FeedConverterService(feedReaderService), new FakeLogger<ConsultationService>(), FakeUserService.Get(false));
 
             // Act
             var (validatedDocumentId, validatedChapterSlug) = consultationService.ValidateDocumentAndChapterWithinConsultation(consultation, documentIdIn, chapterSlugIn);

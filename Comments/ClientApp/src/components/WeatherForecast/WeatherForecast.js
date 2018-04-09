@@ -27,15 +27,15 @@ class WeatherForecast extends Component {
 
 	componentDidMount() {
 		if (this.state.forecasts.length === 0) {
-			load("weather").then(data => {
-				this.setState({ forecasts: data, loading: false, date: new Date() });
+			load("weather").then(response => {
+				this.setState({ forecasts: response.data, loading: false, date: new Date() });
 			});
 		}
 	}
 
 	handleReload = () => {
-		load("weather").then(data => {
-			this.setState({ forecasts: data, loading: false, date: new Date() });
+		load("weather").then(response => {
+			this.setState({ forecasts: response.data, loading: false, date: new Date() });
 		});
 	};
 

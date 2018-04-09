@@ -1,7 +1,10 @@
-export const baseUrl  = "/consultations";
+export const BaseUrl  = "/consultations";
 
 export const Endpoints = {
 	weather: "/api/SampleData/WeatherForecasts",
-	chapter: "/api/Chapter",
-	sample: "/sample.json"
+	sample: "/sample.json",
+	consultation: "/api/Consultation",
+	consultations: "/api/Consultations",
+	documents: "/api/Documents",
+	chapter: "/api/Chapter"
 };
