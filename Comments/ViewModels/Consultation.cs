@@ -7,7 +7,7 @@ namespace Comments.ViewModels
 {
     public class Consultation
     {
-        public Consultation(NICE.Feeds.Models.Indev.Consultation consultation)
+        public Consultation(NICE.Feeds.Models.Indev.Consultation consultation, User user)
         {
             Reference = consultation.Reference;
             Title = consultation.Title;
@@ -24,10 +24,11 @@ namespace Comments.ViewModels
             AllowConsultationComments = consultation.AllowConsultationComments;
             PartiallyUpdatedProjectReference = consultation.PartiallyUpdatedProjectReference;
             OrigProjectReference = consultation.OrigProjectReference;
+            User = user;
         }
 
         [JsonConstructor]
-        public Consultation(string reference, string title, string consultationName, DateTime startDate, DateTime endDate, string consultationType, string resourceTitleId, string projectType, string productTypeName, string developedAs, string relevantTo, int consultationId, string process, bool allowConsultationComments, string partiallyUpdatedProjectReference, string origProjectReference)
+        public Consultation(string reference, string title, string consultationName, DateTime startDate, DateTime endDate, string consultationType, string resourceTitleId, string projectType, string productTypeName, string developedAs, string relevantTo, int consultationId, string process, bool allowConsultationComments, string partiallyUpdatedProjectReference, string origProjectReference, User user)
         {
             Reference = reference;
             Title = title;
@@ -45,6 +46,7 @@ namespace Comments.ViewModels
             AllowConsultationComments = allowConsultationComments;
             PartiallyUpdatedProjectReference = partiallyUpdatedProjectReference;
             OrigProjectReference = origProjectReference;
+            User = user;
         }
 
         public string Reference { get; private set; }
@@ -63,18 +65,21 @@ namespace Comments.ViewModels
         public bool AllowConsultationComments { get; private set; }
         public string PartiallyUpdatedProjectReference { get; private set; } //not needed?
         public string OrigProjectReference { get; private set; }
+
+        public ViewModels.User User { get; private set; }
     }
 
     public class ConsultationDetail : Consultation
     {
         [JsonConstructor]
-        public ConsultationDetail(string reference, string title, string consultationName, DateTime startDate, DateTime endDate, string consultationType, string resourceTitleId, string projectType, string productTypeName, string developedAs, string relevantTo, int consultationId, string process, bool allowConsultationComments, string partiallyUpdatedProjectReference, string origProjectReference, IList<Document> documents) : base(reference, title, consultationName, startDate, endDate, consultationType, resourceTitleId, projectType, productTypeName, developedAs, relevantTo, consultationId, process, allowConsultationComments, partiallyUpdatedProjectReference, origProjectReference)
+        public ConsultationDetail(string reference, string title, string consultationName, DateTime startDate, DateTime endDate, string consultationType, string resourceTitleId, string projectType, string productTypeName, string developedAs, string relevantTo, int consultationId, string process, bool allowConsultationComments, string partiallyUpdatedProjectReference, string origProjectReference, IList<Document> documents, User user) 
+            : base(reference, title, consultationName, startDate, endDate, consultationType, resourceTitleId, projectType, productTypeName, developedAs, relevantTo, consultationId, process, allowConsultationComments, partiallyUpdatedProjectReference, origProjectReference, user)
         {
             Documents = documents;
         }
         
 
-        public ConsultationDetail(NICE.Feeds.Models.Indev.ConsultationDetail consultation) : base(consultation)
+        public ConsultationDetail(NICE.Feeds.Models.Indev.ConsultationDetail consultation, User user) : base(consultation, user)
         {
             Documents = consultation.Resources?.Select(r => new Document(r)).ToList();
         }

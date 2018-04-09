@@ -1,17 +1,30 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Linq;
+using Comments.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace Comments.Models
 {
     public partial class ConsultationsContext : DbContext
     {
+        private readonly IUserService _userService;
         public virtual DbSet<Answer> Answer { get; set; }
         public virtual DbSet<Comment> Comment { get; set; }
         public virtual DbSet<Location> Location { get; set; }
         public virtual DbSet<Question> Question { get; set; }
         public virtual DbSet<QuestionType> QuestionType { get; set; }
 
+        private Guid? _createdByUserID;
+        //protected ConsultationsContext(IUserService userService)
+        //{
+        //    _userService = userService;
+        //    _currentUserId = _userService.GetCurrentUser().UserId;
+        //}
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            _createdByUserID = _userService.GetCurrentUser().UserId;
+
             modelBuilder.Entity<Answer>(entity =>
             {
                 entity.Property(e => e.AnswerId).HasColumnName("AnswerID");
@@ -32,7 +45,9 @@ namespace Comments.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Answer_Question");
 
-                entity.HasQueryFilter(e => !e.IsDeleted); //JW. automatically filter out deleted rows. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
+                //JW. automatically filter out deleted rows and other people's comments. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
+                //note: only 1 filter is supported. you must combine the logic into one expression.
+                entity.HasQueryFilter(c => !c.IsDeleted && c.CreatedByUserId == _createdByUserID);
             });
 
             modelBuilder.Entity<Comment>(entity =>
@@ -57,7 +72,9 @@ namespace Comments.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Comment_Location");
 
-                entity.HasQueryFilter(e => !e.IsDeleted); //JW. automatically filter out deleted rows. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
+                //JW. automatically filter out deleted rows and other people's comments. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
+                //note: only 1 filter is supported. you must combine the logic into one expression.
+                entity.HasQueryFilter(c => !c.IsDeleted && c.CreatedByUserId == _createdByUserID); 
             });
 
             modelBuilder.Entity<Location>(entity =>
@@ -108,5 +125,19 @@ namespace Comments.Models
                     .HasMaxLength(100);
             });
         }
+
+        //public override int SaveChanges()
+        //{
+        //    ChangeTracker.DetectChanges();
+
+        //    foreach (var item in ChangeTracker.Entries().Where(
+        //        e =>
+        //            e.State == EntityState.Added && e.Metadata.GetProperties().Any(p => p.Name == "CreatedByUserId")))
+        //    {
+        //        item.CurrentValues["CreatedByUserId"] = _currentUserId;
+        //    }
+
+        //    return base.SaveChanges();
+        //}
     }
 }

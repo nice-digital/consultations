@@ -18,7 +18,7 @@ namespace Comments.Test.IntegrationTests.API.Chapter
         [InlineData(1, 0, "introduction")]
         [InlineData(1, -1, "introduction")]
         [InlineData(1, -1, "")]
-        public async Task Get_Chapter_Feed_Using_Invalid_Ids_Throws_error(int consultationId, int documentId, string chapterSlug)
+        public void Get_Chapter_Feed_Using_Invalid_Ids_Throws_error(int consultationId, int documentId, string chapterSlug)
         {
             //Arrange
             Func<Task> response;
@@ -37,7 +37,7 @@ namespace Comments.Test.IntegrationTests.API.Chapter
         [InlineData(null)]
         [InlineData("")]
         [InlineData("  ")]
-        public async Task Get_Chapter_Feed_Using_Chapter_Slug_Throws_Error(string chapterSlug)
+        public void Get_Chapter_Feed_Using_Chapter_Slug_Throws_Error(string chapterSlug)
         {
             //Arrange
             Func<Task> response;
