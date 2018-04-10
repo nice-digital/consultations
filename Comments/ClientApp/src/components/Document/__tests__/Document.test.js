@@ -10,6 +10,7 @@ import ChapterData from "./Chapter";
 import ConsultationData from "./Consultation";
 import DocumentsData from "./Documents";
 import { nextTick} from "../../../helpers/utils";
+import toJson from "enzyme-to-json";
 
 // import { generateUrl } from "./../../../data/loader";
 
@@ -76,7 +77,12 @@ describe("[ClientApp] ", () => {
 			]).then( async ()=>{
 				await nextTick();
 				wrapper.update();
-				expect(JSON.stringify(wrapper.html())).toMatchSnapshot();
+				await nextTick();
+				wrapper.update();
+				expect(toJson(wrapper, {
+					noKey: true,
+					mode: "deep"
+				})).toMatchSnapshot();
 			});
 
 		});
