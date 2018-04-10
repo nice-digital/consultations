@@ -9,8 +9,7 @@ $nice-font-base-path: "fonts/";
 
 %transition-default {
   transition: all 0.3s ease-in-out;
-  transition-property: transform, width;
-
+  transition-property: transform;
 }
 
 %ui-button {

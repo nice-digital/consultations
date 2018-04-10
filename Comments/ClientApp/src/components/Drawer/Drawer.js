@@ -21,7 +21,6 @@ export class Drawer extends Component<PropsType, StateType> {
 		};
 	}
 
-	// todo: this only works on component initialsation at the moment
 	isMobile = () => {
 		if  (window) {
 			return window.innerWidth <= mobileWidth;

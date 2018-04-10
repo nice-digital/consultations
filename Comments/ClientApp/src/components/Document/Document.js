@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import Moment from "react-moment";
 import { Helmet } from "react-helmet";
 import { StickyContainer, Sticky } from "react-sticky";
@@ -199,7 +199,7 @@ export class Document extends Component<PropsType, StateType> {
 		const documentId = parseInt(this.props.match.params.documentId, 0);
 		const chapterSlug = this.props.match.params.chapterSlug;
 		return (
-			<div>
+			<Fragment>
 				<Helmet>
 					<title>{`${consultationId},${documentId},${chapterSlug}`}</title>
 				</Helmet>
@@ -262,7 +262,7 @@ export class Document extends Component<PropsType, StateType> {
 						</div>
 					</div>
 				</div>
-			</div>
+			</Fragment>
 		);
 	}
 }

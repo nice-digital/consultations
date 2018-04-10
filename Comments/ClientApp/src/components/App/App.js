@@ -1,6 +1,6 @@
 // @flow
 
-import React from "react";
+import React, { Fragment } from "react";
 import { Route, Switch, Redirect } from "react-router";
 import { Helmet } from "react-helmet";
 
@@ -9,7 +9,7 @@ import { Drawer } from "../Drawer/Drawer";
 import NotFound from "../NotFound/NotFound";
 
 const App = () => (
-	<div>
+	<Fragment>
 		<Helmet titleTemplate="%s | Consultations | NICE">
 			<html lang="en-GB" />
 		</Helmet>
@@ -22,16 +22,16 @@ const App = () => (
 
 			{/*Document View*/}
 			<Route path="/:consultationId/:documentId/:chapterSlug">
-				<div>
+				<Fragment>
 					<Drawer />
 					<DocumentWithRouter />
-				</div>
+				</Fragment>
 			</Route>
 
 			{/*404*/}
 			<Route component={NotFound} />
 		</Switch>
-	</div>
+	</Fragment>
 );
 
 export default App;
