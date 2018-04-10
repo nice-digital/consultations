@@ -83,6 +83,9 @@ namespace Comments.Auth
 
         private bool ShouldAuthenticatePath(string requestPath)
         {
+            if (requestPath == null)
+                return true;
+
             foreach (var regex in _pathsToAuthenticate)
             {
                 if (regex.IsMatch(requestPath))
