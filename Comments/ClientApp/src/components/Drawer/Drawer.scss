@@ -7,6 +7,12 @@
   right: 0;
   z-index: 1;
   @extend %left-drop-shadow;
+
+  // default closed state
+  transform: translateX(100%);
+  @extend %transition-default;
+  width: 300px;
+
   &__controls {
     width: 40px;
     position: absolute;
@@ -34,21 +40,11 @@
   }
   &--open {
     transform: translateX(0);
-
-  }
-  &--closed {
-    transform: translateX(100%);
-  }
-  &--narrow {
-    @extend %transition-default;
-    width: 300px;
   }
   &--wide {
-    @extend %transition-default;
     width: 60vw;
   }
   &--mobile {
-    @extend %transition-default;
     width: calc(100% - 40px);
   }
 }

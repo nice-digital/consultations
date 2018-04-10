@@ -22,15 +22,19 @@ export class Drawer extends Component<PropsType, StateType> {
 	}
 
 	// todo: this only works on component initialsation at the moment
-	isMobile = () => window.innerWidth <= mobileWidth;
-
-	drawerClassnames = () => {
-		const width = this.state.drawerExpandedWidth ? "Drawer--wide" : "Drawer--narrow";
-		const open = this.state.drawerOpen ? "Drawer--open" : "Drawer--closed";
-		const mobile = this.state.drawerMobile ? "Drawer--mobile" : "Drawer--desktop";
-		return `Drawer ${width} ${open} ${mobile}`;
+	isMobile = () => {
+		if  (window) {
+			return window.innerWidth <= mobileWidth;
+		}
+		return false;
 	};
 
+	drawerClassnames = () => {
+		const width = this.state.drawerExpandedWidth ? "Drawer--wide" : "";
+		const open = this.state.drawerOpen ? "Drawer--open" : "";
+		const mobile = this.state.drawerMobile ? "Drawer--mobile" : "";
+		return `Drawer ${width} ${open} ${mobile}`;
+	};
 
 	handleClick = (event) => {
 		switch (event) {
@@ -58,7 +62,7 @@ export class Drawer extends Component<PropsType, StateType> {
 				</div>
 				<div className="Drawer__main">
 					<div className="Drawer__mainControls">
-						{ !this.isMobile() ?
+						{ !this.state.drawerMobile ?
 							<Fragment>
 								{/*<button className="Drawer__toggleWidth Drawer__toggleWidth--narrow" name="toggleWidth" onClick={()=>this.handleClick("toggleWidth--narrow")}>
 									<span className="icon icon--dock-right-small" aria-hidden="true" />
