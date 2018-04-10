@@ -36,9 +36,10 @@ export class Document extends Component<PropsType, StateType> {
 
 		this.state = {
 			chapterData: null,
-			documentsData: null,
+			documentsData: [],
 			consultationData: null,
 			loading: true,
+			hasInitialData: false,
 			currentInPageNavItem: null
 		};
 
@@ -55,33 +56,31 @@ export class Document extends Component<PropsType, StateType> {
 	gatherData = async () => {
 		const { consultationId, documentId, chapterSlug } = this.props.match.params;
 
-		const documentsData =
-			await load("documents", undefined, {
-				consultationId
-			}).then(response => response.data).catch(err => { throw new Error("1 " + err); });
+		const chapterData = load("chapter", undefined, { consultationId, documentId, chapterSlug })
+			.then(response => response.data).catch(err => { throw new Error("3 " + err); });
 
-		const consultationData =
-			await load("consultation", undefined, {
-				consultationId
-			}).then(response => response.data).catch(err => { throw new Error("2 " + err); });
+		const documentsData = load("documents", undefined, { consultationId })
+			.then(response => response.data).catch(err => { throw new Error("1 " + err); });
 
-		const chapterData =
-			await load("chapter", undefined, {
-				consultationId,
-				documentId,
-				chapterSlug
-			}).then(response => response.data).catch(err => { throw new Error("3 " + err); });
+		const consultationData = load("consultation", undefined, { consultationId })
+			.then(response => response.data).catch(err => { throw new Error("2 " + err); });
 
-		return { consultationData, documentsData, chapterData };
+		return {
+			chapterData: await chapterData,
+			documentsData: await documentsData,
+			consultationData: await consultationData
+		};
+
 	};
 
 	componentDidMount() {
-		if (!this.haveAllData()) {
+		if (!this.state.hasInitialData) {
 			this.gatherData()
 				.then( data =>{
 					this.setState({
 						...data,
-						loading: false
+						loading: false,
+						hasInitialData: true
 					});
 				})
 				.catch(err => { throw new Error("gatherData in componentDidMount failed " + err);});
@@ -190,10 +189,8 @@ export class Document extends Component<PropsType, StateType> {
 		this.setState({ currentInPageNavItem });
 	};
 
-	haveAllData = () => this.state.consultationData && this.state.documentsData && this.state.chapterData;
-
 	render() {
-		if (!this.haveAllData()) return <h1>Loading...</h1>;
+		if (!this.state.hasInitialData) return <h1>Loading...</h1>;
 
 		const { title, reference, endDate } = this.state.consultationData;
 		const { documentsData } = this.state;
