@@ -445,7 +445,89 @@ Array [
                                     "transform": "translateZ(0)",
                                   }
                             }
-                        />
+                        >
+                            <nav
+                                aria-labelledby="inpagenav-title"
+                                className="in-page-nav"
+                            >
+                                <h2
+                                    className="in-page-nav__title"
+                                    id="inpagenav-title"
+                                >
+                                    On this page
+                                </h2>
+                                <ol
+                                    className="in-page-nav__list"
+                                    style={Object {}}
+                                >
+                                    <li
+                                        className="in-page-nav__item"
+                                        role="presentation"
+                                    >
+                                        <a
+                                            aria-current="false"
+                                            href="#provision-of-information"
+                                            onClick={[Function]}
+                                            role="menuitem"
+                                        >
+                                            1.1 Provision of information
+                                        </a>
+                                    </li>
+                                    <li
+                                        className="in-page-nav__item"
+                                        role="presentation"
+                                    >
+                                        <a
+                                            aria-current="false"
+                                            href="#assessment-of-a-patients-risk-of-future-adverse-cardiovascular-events"
+                                            onClick={[Function]}
+                                            role="menuitem"
+                                        >
+                                            1.2 Assessment of a patient's risk of future adverse cardiovascular events
+                                        </a>
+                                    </li>
+                                    <li
+                                        className="in-page-nav__item"
+                                        role="presentation"
+                                    >
+                                        <a
+                                            aria-current="false"
+                                            href="#antiplatelet-therapy"
+                                            onClick={[Function]}
+                                            role="menuitem"
+                                        >
+                                            1.3 Antiplatelet therapy
+                                        </a>
+                                    </li>
+                                    <li
+                                        className="in-page-nav__item"
+                                        role="presentation"
+                                    >
+                                        <a
+                                            aria-current="false"
+                                            href="#antithrombin-therapy"
+                                            onClick={[Function]}
+                                            role="menuitem"
+                                        >
+                                            1.4 Antithrombin therapy
+                                        </a>
+                                    </li>
+                                    <li
+                                        className="in-page-nav__item"
+                                        role="presentation"
+                                    >
+                                        <a
+                                            aria-current="false"
+                                            href="#management-strategies"
+                                            onClick={[Function]}
+                                            role="menuitem"
+                                        >
+                                            1.5 Management strategies
+                                        </a>
+                                    </li>
+                                </ol>
+                            </nav>
+                        </div>
                     </div>
                 </div>
             </div>

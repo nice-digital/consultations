@@ -2,6 +2,9 @@
 	"name": "comments",
 	"version": "0.1.0",
 	"private": true,
+  "browserslist": [
+    "extends @nice-digital/browserslist-config"
+  ],
 	"scripts": {
 		"start": "rimraf ./build && npm run modernizr && npm-run-all -p sass:watch start-js",
 		"start-js": "react-scripts start",
