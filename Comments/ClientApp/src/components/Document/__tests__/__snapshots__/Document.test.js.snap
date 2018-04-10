@@ -388,7 +388,7 @@ Array [
                     data-g="12 md:6"
                 >
                     <div
-                        className="document-comment-container loaded"
+                        className="document-comment-container "
                     >
                         <div
                             dangerouslySetInnerHTML={
@@ -440,11 +440,7 @@ Array [
                     <div>
                         <div />
                         <div
-                            style={
-                                Object {
-                                    "transform": "translateZ(0)",
-                                  }
-                            }
+                            style={Object {}}
                         >
                             <nav
                                 aria-labelledby="inpagenav-title"

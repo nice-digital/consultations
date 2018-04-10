@@ -222,7 +222,7 @@ export class Document extends Component<PropsType, StateType> {
 									<StackedNav links={this.getSupportingDocumentLinks(documentsData, documentId, consultationId)}/>
 								</div>
 								<div data-g="12 md:6">
-									<div className={`document-comment-container ${this.state.loading ? "loading" : "loaded"}`}>
+									<div className={`document-comment-container ${this.state.loading ? "loading" : ""}`}>
 										<div dangerouslySetInnerHTML={this.renderDocumentHtml(content)}/>
 									</div>
 								</div>
