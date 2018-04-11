@@ -75,5 +75,5 @@
 		"eslint-watch": "^3.1.4",
 		"prettier-eslint": "^8.8.1"
 	},
-	"proxy": "http://niceorg"
+	"proxy": "https://test.nice.org.uk"
 }
