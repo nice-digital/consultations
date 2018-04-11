@@ -227,36 +227,38 @@ export class Document extends Component<PropsType, StateType> {
 									</div>
 								</div>
 								<div data-g="12 md:3">
-									<Sticky>
-										{({ style }) =>
-											<div style={style ? style : null}>
-												{ sections.length ?
-													<nav className="in-page-nav" aria-labelledby="inpagenav-title">
-														<h2 id="inpagenav-title" className="in-page-nav__title">On this page</h2>
-														<Scrollspy componentTag="ol"
-															items={this.generateScrollspy(sections)}
-															currentClassName="is-current"
-															className="in-page-nav__list"
-															role="menubar"
-															onUpdate={(e)=> { this.inPageNav(e); }}>
-															{sections.map((item, index) => {
-																const props = {
-																	label: item.title,
-																	to: item.slug,
-																	behavior: "smooth",
-																	block: "start"
-																};
-																return (
-																	<li role="presentation" className="in-page-nav__item" key={index}>
-																		<HashLinkTop {...props} currentNavItem={this.state.currentInPageNavItem}/>
-																	</li>
-																);
-															})}
-														</Scrollspy>
-													</nav> : null }
-											</div>
-										}
-									</Sticky>
+									<div className="triggerHardwareAcceleration">
+										<Sticky disableHardwareAcceleration>
+											{({ style }) =>
+												<div style={style}>
+													{ sections.length ?
+														<nav className="in-page-nav" aria-labelledby="inpagenav-title">
+															<h2 id="inpagenav-title" className="in-page-nav__title">On this page</h2>
+															<Scrollspy componentTag="ol"
+																items={this.generateScrollspy(sections)}
+																currentClassName="is-current"
+																className="in-page-nav__list"
+																role="menubar"
+																onUpdate={(e)=> { this.inPageNav(e); }}>
+																{sections.map((item, index) => {
+																	const props = {
+																		label: item.title,
+																		to: item.slug,
+																		behavior: "smooth",
+																		block: "start"
+																	};
+																	return (
+																		<li role="presentation" className="in-page-nav__item" key={index}>
+																			<HashLinkTop {...props} currentNavItem={this.state.currentInPageNavItem}/>
+																		</li>
+																	);
+																})}
+															</Scrollspy>
+														</nav> : null }
+												</div>
+											}
+										</Sticky>
+									</div>
 								</div>
 							</StickyContainer>
 						</div>

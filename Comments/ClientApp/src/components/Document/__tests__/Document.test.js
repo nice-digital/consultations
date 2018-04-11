@@ -3,9 +3,8 @@ import { shallow, mount } from "enzyme";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { MemoryRouter } from "react-router";
-import renderer from "react-test-renderer";
 
-import DocumentWithRouter, {Document} from "../Document";
+import { Document } from "../Document";
 import ChapterData from "./Chapter";
 import ConsultationData from "./Consultation";
 import DocumentsData from "./Documents";
