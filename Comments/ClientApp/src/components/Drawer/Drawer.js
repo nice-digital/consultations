@@ -56,8 +56,7 @@ export class Drawer extends Component<PropsType, StateType> {
 			<div className={this.drawerClassnames()}>
 				<div className="Drawer__controls">
 					<button className="Drawer__toggleOpen" onClick={() => this.handleClick("toggleOpen")}>
-						<span className={`icon ${this.state.drawerOpen ? "icon--chevron-right" : "icon--chevron-left"}`}
-							  aria-hidden="true"/>
+						<span className={`icon ${this.state.drawerOpen ? "icon--chevron-right" : "icon--chevron-left"}`} aria-hidden="true"/>
 					</button>
 				</div>
 				<div className="Drawer__main">
