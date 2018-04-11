@@ -77,8 +77,6 @@ describe("[ClientApp] ", () => {
 			]).then( async ()=>{
 				await nextTick();
 				wrapper.update();
-				await nextTick();
-				wrapper.update();
 				expect(toJson(wrapper, {
 					noKey: true,
 					mode: "deep"
