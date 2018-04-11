@@ -22,10 +22,15 @@ export class Drawer extends Component<PropsType, StateType> {
 	}
 
 	isMobile = () => {
-		if  (window) {
-			return window.innerWidth <= mobileWidth;
+		try {
+			if (window) {
+				return window.innerWidth <= mobileWidth;
+			}
 		}
-		return false;
+		catch(err) {
+			console.log(err);
+			return false;
+		}
 	};
 
 	drawerClassnames = () => {
