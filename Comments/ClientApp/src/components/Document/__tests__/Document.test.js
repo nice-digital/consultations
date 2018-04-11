@@ -39,6 +39,12 @@ describe("[ClientApp] ", () => {
 		it("should match snapshot with supplied data", () => {
 			const mock = new MockAdapter(axios);
 
+			const wrapper = mount(
+				<MemoryRouter>
+					<Document {...fakeProps} />
+				</MemoryRouter>
+			);
+
 			// TODO: refactor this!
 			let documentsPromise = new Promise(function(resolve){
 				mock.onGet("/consultations/api/Documents?consultationId=1")
@@ -63,12 +69,6 @@ describe("[ClientApp] ", () => {
 						return [200, ChapterData];
 					});
 			});
-
-			const wrapper = mount(
-				<MemoryRouter>
-					<Document {...fakeProps} />
-				</MemoryRouter>
-			);
 
 			return Promise.all([
 				documentsPromise,
