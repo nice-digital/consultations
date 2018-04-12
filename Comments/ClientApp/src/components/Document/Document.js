@@ -6,13 +6,14 @@ import { StickyContainer, Sticky } from "react-sticky";
 import { withRouter } from "react-router";
 import Scrollspy from "react-scrollspy";
 
+import preload from "../../data/pre-loader";
 import { load } from "./../../data/loader";
 import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
 import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
 // import { CommentPanel } from "./../CommentPanel/CommentPanel";
-
+//import stringifyObject from "stringify-object";
 // import preload from "../../data/pre-loader";
 
 type PropsType = {
@@ -43,13 +44,21 @@ export class Document extends Component<PropsType, StateType> {
 			currentInPageNavItem: null
 		};
 
-		// const preloaded = preload(this.props.staticContext, "sample", this.props.match.params);
+		const preloadedChapter = preload(this.props.staticContext, "chapter", {...this.props.match.params});
+		const preloadedDocuments = preload(this.props.staticContext, "documents", { consultationId: this.props.match.params.consultationId });
+		const preloadedConsultation = preload(this.props.staticContext, "consultation", { consultationId: this.props.match.params.consultationId });
 
-		// const preloadConsultation = preload(this.props.staticContext, "consultation", this.props.match.params);
-
-		// if (preloaded) {
-		// 	this.state = { document0: preloaded, loading: false };
-		// }
+		if (preloadedChapter && preloadedDocuments && preloadedConsultation) {
+			this.state = {
+				chapterData: preloadedChapter,
+				documentsData: preloadedDocuments,
+				consultationData: preloadedConsultation,
+				loading: false,
+				hasInitialData: true,
+				currentInPageNavItem: null
+			};
+			//console.log(`preloaded chapter data: ${stringifyObject(preloadedChapter)}`);
+		}
 	}
 
 	// TODO: separate this into a utility

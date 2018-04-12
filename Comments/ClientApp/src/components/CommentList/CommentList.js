@@ -5,7 +5,7 @@ import sampleData from "./sample";
 import { load } from "./../../data/loader";
 import preload from "../../data/pre-loader";
 
-import stringifyObject from "stringify-object";
+//import stringifyObject from "stringify-object";
 
 type PropsType = {
 	staticContext?: any,
@@ -44,7 +44,7 @@ export class CommentList extends Component<PropsType, StateType> {
 
 		if (preloaded) {
 			// console.log(`setting comments to: ${preloaded}`);
-			console.log(`data is: ${stringifyObject(preloaded)}`);
+			//console.log(`data is: ${stringifyObject(preloaded)}`);
 			this.state = { comments: preloaded.comments, loading: false };
 		}
 	}
