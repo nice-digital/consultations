@@ -1,11 +1,8 @@
-﻿
-using System;
+﻿using System;
 using Comments.Models;
 using Comments.Services;
 using Comments.Test.Infrastructure;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
-using NICE.Feeds;
-using NICE.Feeds.Tests.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using Shouldly;
 using Xunit;
 using TestBase = Comments.Test.Infrastructure.TestBase;
@@ -19,22 +16,21 @@ namespace Comments.Test.UnitTests
         {
             //Arrange
             ResetDatabase();
+
+            var userId = Guid.NewGuid();
+            var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+            var context = new ConsultationsContext(_options, userService);
+
             var sourceURI = "/consultations/1/1/introduction";
+            var commentText = Guid.NewGuid().ToString();
             var answerText = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
-            var description = Guid.NewGuid().ToString();
-            var userId = Guid.NewGuid();
-
-            var locationId = AddLocation(sourceURI);
-            var questionType = AddQuestionType(description, false, true);
-            var questionId = AddQuestion(locationId, questionType, questionText);
-            var answerId = AddAnswer(questionId, userId, answerText);
-
-            var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var answerService = new AnswerService(new ConsultationsContext(_options, userService));
+            var answerId = 1;
+            
+            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId, context);
 
             //Act
-            var viewModel = answerService.GetAnswer(answerId);
+            var viewModel = new AnswerService(context).GetAnswer(answerId);
 
             //Assert
             viewModel.AnswerText.ShouldBe(answerText);
@@ -46,18 +42,17 @@ namespace Comments.Test.UnitTests
             //Arrange
             ResetDatabase();
             var sourceURI = "/consultations/1/1/introduction";
+            var commentText = Guid.NewGuid().ToString();
             var answerText = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
-            var description = Guid.NewGuid().ToString();
             var userId = Guid.NewGuid();
-
-            var locationId = AddLocation(sourceURI);
-            var questionType = AddQuestionType(description, false, true);
-            var questionId = AddQuestion(locationId, questionType, questionText);
-            var answerId = AddAnswer(questionId, userId, answerText);
+            var answerId = 1;
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var answerService = new AnswerService(new ConsultationsContext(_options, userService));
+            var context = new ConsultationsContext(_options, userService);
+            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId, context);
+            
+            var answerService = new AnswerService(context);
             var viewModel = answerService.GetAnswer(answerId);
 
             var updatedAnswerText = Guid.NewGuid().ToString();
@@ -78,17 +73,17 @@ namespace Comments.Test.UnitTests
             //Arrange
             ResetDatabase();
             var sourceURI = "/consultations/1/1/introduction";
+            var commentText = Guid.NewGuid().ToString();
             var answerText = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
-            var description = Guid.NewGuid().ToString();
             var userId = Guid.NewGuid();
+            var answerId = 1;
 
-            var locationId = AddLocation(sourceURI);
-            var questionType = AddQuestionType(description, false, true);
-            var questionId = AddQuestion(locationId, questionType, questionText);
-            var answerId = AddAnswer(questionId, userId, answerText);
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var answerService = new AnswerService(new ConsultationsContext(_options, userService));
+            var context = new ConsultationsContext(_options, userService);
+            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId, context);
+            
+            var answerService = new AnswerService(context);
 
             //Act
             var result = answerService.DeleteAnswer(answerId);
@@ -142,7 +137,7 @@ namespace Comments.Test.UnitTests
             var answerService = new AnswerService(new ConsultationsContext(_options, userService));
 
             //Act
-            var result = answerService.CreateAnswer(viewModel, questionId);
+            var result = answerService.CreateAnswer(viewModel, question.QuestionId);
 
             //Assert
             result.AnswerId.ShouldBe(1);

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using Comments.Services;
+using Remotion.Linq.Clauses;
 
 namespace Comments.Models
 {
@@ -48,6 +49,12 @@ namespace Comments.Models
 
         public Answer GetAnswer(int answerId)
         {
+            //var question = Question.Where(q => q.QuestionId.Equals(1))
+            //    .Include(q => q.Answer)
+            //    .Select(q => q.Answer == q.Answer.AnswerId.E);
+
+            
+
             return Answer
                 .FirstOrDefault(a => a.AnswerId.Equals(answerId));
         }

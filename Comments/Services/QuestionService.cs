@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Comments.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using SQLitePCL;
 
 namespace Comments.Services
@@ -17,15 +19,26 @@ namespace Comments.Services
     public class QuestionService : IQuestionService
     {
         private readonly ConsultationsContext _context;
-        public QuestionService(ConsultationsContext consultationsContext)
+
+        private readonly IUserService _userService;
+        private readonly IDbContextOptions _options;
+        private readonly IDbContextOptionsBuilderInfrastructure _builderInfrastructure;
+        public QuestionService(ConsultationsContext consultationsContext, IUserService userService, IDbContextOptions options, IDbContextOptionsBuilderInfrastructure builderInfrastructure)
         {
             _context = consultationsContext;
+            _userService = userService;
+            _options = options;
+            _builderInfrastructure = builderInfrastructure;
         }
 
         public ViewModels.Question GetQuestion(int questionId)
         {
-            var question = _context.GetQuestion(questionId);
-            return (question == null) ? null : new ViewModels.Question(question.Location, question);
+            var options = _builderInfrastructure as DbContextOptionsBuilder<ConsultationsContext>;
+            using (var context = new ConsultationsContext(options.Options, _userService))
+            {
+                var question = _context.GetQuestion(questionId);
+                return (question == null) ? null : new ViewModels.Question(question.Location, question);
+            }
         }
 
         public int EditQuestion(int questionId, ViewModels.Question question)

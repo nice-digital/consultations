@@ -55,9 +55,9 @@ namespace Comments
             services.TryAddSingleton<IAuthenticateService, AuthService>();
             services.TryAddTransient<IUserService, UserService>();
 
-            //var contextOptionsBuilder = new DbContextOptionsBuilder<ConsultationsContext>();
+            var contextOptionsBuilder = new DbContextOptionsBuilder<ConsultationsContext>();
             //contextOptionsBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-            //services.TryAddSingleton<IDbContextOptions>(contextOptionsBuilder.Options);
+            services.TryAddSingleton<IDbContextOptionsBuilderInfrastructure>(contextOptionsBuilder);
 
             services.AddDbContext<ConsultationsContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));

@@ -75,32 +75,34 @@ namespace Comments.Test.IntegrationTests.API.Comments
             deserialisedResponse.Comments.Count().ShouldBe(3);
         }
 
-        //[Fact]
-        //public async Task Get_Comments_Feed_Returns_Populated_Feed()
-        //{
-        //    // Arrange
-        //    ResetDatabase();
-        //    var consultationId = 1;
-        //    var documentId = 2;
-        //    var commentText = Guid.NewGuid().ToString();
-        //    var questionText = Guid.NewGuid().ToString();
-        //    var answerText = Guid.NewGuid().ToString();
+        [Fact]
+        public async Task Get_Comments_Feed_Returns_Populated_Feed()
+        {
+            // Arrange
+            ResetDatabase();
+            const string sourceURI = "/consultations/1/1/introduction";
+            var consultationId = 1;
+            var documentId = 2;
+            var commentText = Guid.NewGuid().ToString();
+            var questionText = Guid.NewGuid().ToString();
+            var answerText = Guid.NewGuid().ToString();
+            var userId = Guid.NewGuid();
 
-        //    AddCommentsAndQuestionsAndAnswers(consultationId, documentId, commentText, questionText, answerText);
-            
-        //    // Act
-        //    var response = await _client.GetAsync($"/consultations/api/Comments?consultationId={consultationId}&documentId={documentId}&chapterSlug=introduction");
-        //    response.EnsureSuccessStatusCode();
-        //    var responseString = await response.Content.ReadAsStringAsync();
+            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId);
 
-        //    // Assert
-        //    responseString.ShouldMatchApproved();
-        //    //todo: get the below all working:
+            // Act
+            var response = await _client.GetAsync($"/consultations/api/Comments?consultationId={consultationId}&documentId={documentId}&chapterSlug=introduction");
+            response.EnsureSuccessStatusCode();
+            var responseString = await response.Content.ReadAsStringAsync();
 
-        //    //var deserialisedResponse = JsonConvert.DeserializeObject<CommentsAndQuestions>(responseString);
-        //    //deserialisedResponse.Comments.Single().CommentText.ShouldBe(commentText);
-        //    //deserialisedResponse.Questions.Single().QuestionText.ShouldBe(questionText);
-        //    //deserialisedResponse.Questions.Single().Answers.Single().AnswerText.ShouldBe(answerText);
-        //}
+            // Assert
+            responseString.ShouldMatchApproved();
+            //    //todo: get the below all working:
+
+            //    //var deserialisedResponse = JsonConvert.DeserializeObject<CommentsAndQuestions>(responseString);
+            //    //deserialisedResponse.Comments.Single().CommentText.ShouldBe(commentText);
+            //    //deserialisedResponse.Questions.Single().QuestionText.ShouldBe(questionText);
+            //    //deserialisedResponse.Questions.Single().Answers.Single().AnswerText.ShouldBe(answerText);
+        }
     }
 }

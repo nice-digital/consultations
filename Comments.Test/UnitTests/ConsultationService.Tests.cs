@@ -1,14 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using Comments.Models;
 using Comments.Services;
 using Comments.Test.Infrastructure;
 using Comments.ViewModels;
+using Newtonsoft.Json;
 using NICE.Feeds;
 using NICE.Feeds.Tests.Infrastructure;
 using Shouldly;
 using Xunit;
+using Question = Comments.Models.Question;
 
 namespace Comments.Test.UnitTests
 {
@@ -36,7 +39,7 @@ namespace Comments.Test.UnitTests
         }
 
         [Fact]
-        public void CommentsQuestionsAndAnswers_CanBeRead()
+        public async void CommentsQuestionsAndAnswers_CanBeRead()
         {
             // Arrange
             ResetDatabase();
@@ -47,7 +50,8 @@ namespace Comments.Test.UnitTests
             var createdByUserId = Guid.Empty;
 
             AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, createdByUserId);
-            var commentService = new CommentService(new ConsultationsContext(_options, _fakeUserService), _fakeUserService);
+            //var commentService = new CommentService(new ConsultationsContext(_options, _fakeUserService), _fakeUserService);
+            var commentService = new CommentService(_context, _fakeUserService);
 
             // Act    
             var viewModel = commentService.GetCommentsAndQuestions(sourceURI);
@@ -57,6 +61,16 @@ namespace Comments.Test.UnitTests
             var question = viewModel.Questions.Single();
             question.QuestionText.ShouldBe(questionText);
             question.Answers.Single().AnswerText.ShouldBe(answerText);
+
+
+            //sample code:
+            
+            var resp = await _client.GetAsync($"/consultations/api/Comments?sourceURI={WebUtility.UrlEncode(sourceURI)}");
+            resp.EnsureSuccessStatusCode();
+            var responseString = await resp.Content.ReadAsStringAsync();
+            var anotherQuestion = JsonConvert.DeserializeObject<CommentsAndQuestions>(responseString);
+            anotherQuestion.Questions.Single().Answers.Single().AnswerText.ShouldBe(answerText);
+            
         }
 
         

@@ -25,7 +25,7 @@ namespace Comments.Test.UnitTests
             var questionId = AddQuestion(locationId, questionTypeId, questionText);
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var questionService = new QuestionService(new ConsultationsContext(_options, userService));
+            var questionService = new QuestionService(new ConsultationsContext(_options, userService), userService, _options, _contextOptions);
 
             //Act
             var viewModel = questionService.GetQuestion(questionId);
@@ -48,7 +48,7 @@ namespace Comments.Test.UnitTests
             var questionTypeId = AddQuestionType(description, false, true);
             var questionId = AddQuestion(locationId, questionTypeId, questionText);
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var questionService = new QuestionService(new ConsultationsContext(_options, userService));
+            var questionService = new QuestionService(new ConsultationsContext(_options, userService), userService, _options, _contextOptions);
 
             var viewModel = questionService.GetQuestion(questionId);
             var updatedQuestionText = Guid.NewGuid().ToString();
@@ -78,7 +78,7 @@ namespace Comments.Test.UnitTests
             var questionTypeId = AddQuestionType(description, false, true);
             var questionId = AddQuestion(locationId, questionTypeId, questionText);
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var questionService = new QuestionService(new ConsultationsContext(_options, userService));
+            var questionService = new QuestionService(new ConsultationsContext(_options, userService), userService, _options, _contextOptions);
 
             //Act
             var result = questionService.DeleteQuestion(questionId);
@@ -95,7 +95,7 @@ namespace Comments.Test.UnitTests
             var questionId = 1;
             var userId = Guid.NewGuid();
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var questionService = new QuestionService(new ConsultationsContext(_options, userService));
+            var questionService = new QuestionService(new ConsultationsContext(_options, userService), userService, _options, _contextOptions);
 
             //Act
             var result = questionService.DeleteQuestion(questionId);
@@ -117,7 +117,7 @@ namespace Comments.Test.UnitTests
             var locationId = AddLocation(sourceURI);
             var questionTypeId = AddQuestionType(description, false, true);
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var questionService = new QuestionService(new ConsultationsContext(_options, userService));
+            var questionService = new QuestionService(new ConsultationsContext(_options, userService), userService, _options, _contextOptions);
 
             var location = new Location(sourceURI, null, null, null, null, null, null, null, null);
             var questionType = new QuestionType(description, false, true, null);

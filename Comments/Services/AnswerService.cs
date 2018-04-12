@@ -4,6 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Comments.ViewModels;
 using Comments.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using SQLitePCL;
 
 namespace Comments.Services
 {
@@ -17,6 +20,7 @@ namespace Comments.Services
     public class AnswerService : IAnswerService
     {
         private readonly ConsultationsContext _context;
+
         public AnswerService(ConsultationsContext consultationsContext)
         {
             _context = consultationsContext;
@@ -46,11 +50,13 @@ namespace Comments.Services
 
         public ViewModels.Answer CreateAnswer(ViewModels.Answer answer, int questionId)
         {
+
             var currentlyLoggedOnUserId = Guid.NewGuid();
-            var answerToSave = new Models.Answer(questionId, currentlyLoggedOnUserId,answer.AnswerText, answer.AnswerBoolean, null);
+            var answerToSave = new Models.Answer(questionId, currentlyLoggedOnUserId, answer.AnswerText, answer.AnswerBoolean, null);
 
             _context.Answer.Add(answerToSave);
             _context.SaveChanges();
+
             return new ViewModels.Answer(answerToSave);
         }
     }

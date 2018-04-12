@@ -2,11 +2,11 @@
 using Comments.Models;
 using Comments.Services;
 using Comments.Test.Infrastructure;
-using NICE.Feeds;
-using NICE.Feeds.Tests.Infrastructure;
 using Xunit;
 using Shouldly;
 using System.Linq;
+using Comment = Comments.Models.Comment;
+using Location = Comments.Models.Location;
 
 namespace Comments.Test.UnitTests
 {
@@ -31,7 +31,6 @@ namespace Comments.Test.UnitTests
 
             //Assert
             viewModel.comment.CommentText.ShouldBe(commentText);
-            //viewModel.CommentText.ShouldBe(commentText);
         }
 
         [Fact]
@@ -80,7 +79,8 @@ namespace Comments.Test.UnitTests
             var viewModel = commentService.GetComment(commentId);
 
             //Assert
-            viewModel.ShouldBeNull();
+            viewModel.comment.ShouldBeNull();
+            viewModel.validate.NotFound.ShouldBeTrue();
         }
 
         [Fact]

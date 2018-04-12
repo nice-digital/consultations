@@ -44,7 +44,7 @@ namespace Comments.Controllers.Api
                 return BadRequest(ModelState);
             }
 
-            var savedComment = _answerService.CreateAnswer(answer, 0);
+            var savedComment = _answerService.CreateAnswer(answer, 1); //TODO: Remove hardcoded QuestionID
 
             return CreatedAtAction("GetAnswer", new { id = savedComment.AnswerId }, savedComment);
         }
