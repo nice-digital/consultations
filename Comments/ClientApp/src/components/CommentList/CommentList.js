@@ -36,7 +36,12 @@ export default class CommentList extends Component<PropsType, StateType> {
 	}
 
 	componentDidMount() {
-		load("comments", undefined, { sourceURI: this.props.match.url });
+		load("comments", undefined, { monkey: true });
+		// load("comments", undefined, { sourceURI: "monkey" });
+		// axios.get('/comments')
+		// .then(function(response) {
+		// 	console.log(response);p
+		// });
 	}
 	
 	render() {
