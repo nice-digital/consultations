@@ -5,8 +5,6 @@ import sampleData from "./sample";
 import { load } from "./../../data/loader";
 import preload from "../../data/pre-loader";
 
-//import stringifyObject from "stringify-object";
-
 type PropsType = {
 	staticContext?: any,
 	match: {
@@ -43,8 +41,6 @@ export class CommentList extends Component<PropsType, StateType> {
 		const preloaded = preload(this.props.staticContext, "comments", { sourceURI: this.props.match.url });
 
 		if (preloaded) {
-			// console.log(`setting comments to: ${preloaded}`);
-			//console.log(`data is: ${stringifyObject(preloaded)}`);
 			this.state = { comments: preloaded.comments, loading: false };
 		}
 	}
