@@ -48,7 +48,7 @@ export class Document extends Component<PropsType, StateType> {
 		// const preloadConsultation = preload(this.props.staticContext, "consultation", this.props.match.params);
 
 		// if (preloaded) {
-		// 	this.state = { document: preloaded, loading: false };
+		// 	this.state = { document0: preloaded, loading: false };
 		// }
 	}
 

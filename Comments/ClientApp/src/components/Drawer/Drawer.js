@@ -2,9 +2,11 @@
 
 import React, {Component, Fragment} from "react";
 import {mobileWidth} from "../../constants";
+import CommentList from "../CommentList/CommentList";
 
 import iconDockExtended from "./icon-dock-extended.svg";
 import iconDockSmall from "./icon-dock-small.svg";
+
 
 type PropsType = {}
 
@@ -63,6 +65,7 @@ export class Drawer extends Component<PropsType, StateType> {
 					<div className="Drawer__mainControls">
 						{!this.state.drawerMobile ?
 							<Fragment>
+								<CommentList />
 								{/*<button className="Drawer__toggleWidth Drawer__toggleWidth--narrow" name="toggleWidth" onClick={()=>this.handleClick("toggleWidth--narrow")}>
 									<span className="icon icon--dock-right-small" aria-hidden="true" />
 									<img src={iconDockSmall} alt="Icon Dock Small" />

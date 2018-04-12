@@ -1,16 +1,18 @@
 // @flow
 import React, { Component, Fragment } from "react";
+import { withRouter } from "react-router-dom";
 import sampleData from "./sample";
 import { load } from "./../../data/loader";
+import preload from "../../data/pre-loader";
+
+import stringifyObject from "stringify-object";
 
 type PropsType = {
+	staticContext?: any,
 	match: {
-		url: string
+		url: string,
+		params: any
 	}
-};
-
-type StateType = {
-	comments: Array<CommentType>
 };
 type CommentType = {
 	commentId: number,
@@ -26,20 +28,42 @@ type CommentType = {
 	rangeEndOffset: string,
 	quote: string
 };
+type StateType = {
+	comments: Array<CommentType>,
+	loading: boolean
+};
 
-export default class CommentList extends Component<PropsType, StateType> {
-	constructor() {
-		super();
+export class CommentList extends Component<PropsType, StateType> {
+	constructor(props) {
+		super(props);
 		this.state = {
-			comments: sampleData.comments
+			comments: [],
+			loading: true
 		};
+		const preloaded = preload(this.props.staticContext, "comments", { sourceURI: this.props.match.url });
+
+		if (preloaded) {
+			// console.log(`setting comments to: ${preloaded}`);
+			console.log(`data is: ${stringifyObject(preloaded)}`);
+			this.state = { comments: preloaded.comments, loading: false };
+		}
 	}
 
 	componentDidMount() {
-		load("comments", undefined, { sourceURI: this.props.match.url });
+		if (this.state.comments.length === 0){
+			load("comments", undefined, { sourceURI: this.props.match.url })
+				.then(res=>{
+					this.setState({
+						comments: res.data.comments,
+						loading: false
+					});
+				});
+		}
 	}
 	
 	render() {
+		if (this.state.loading) return <p>loading!!!</p>;
+		if (this.state.comments.length === 0) return <p>No comments in array</p>;
 		return (
 			<Fragment>
 				<ul>
@@ -58,3 +82,5 @@ const Comment = (props) => {
 	const comment = props.comment;
 	return <li>{comment.commentId}</li>;
 };
+
+export default withRouter(CommentList);
