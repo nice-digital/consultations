@@ -33,43 +33,17 @@ describe("[ClientApp] ", () => {
 			expect(Array.isArray(state.comments)).toEqual(true);
 		});
 		
-		it("log", ()=>{
+		it("the api url call hits the correct endpoint", ()=>{
 			mock.reset();
 
-			const url = generateUrl("comments", undefined, { monkey: true });
+			const url = generateUrl("comments", undefined, { sourceURI: fakeProps.match.url });
 			
 			mock.onGet(url).reply((config)=>{
-				console.log(config);
-				console.log("inside mock reply");
-				return [ 200, {
-					monkey: false,
-					hello: true
-				} ];
+				expect(config.url).toEqual("/consultations/api/Comments?sourceURI=%2F1%2F1%2Fintroduction");
+				return [200, {}];
 			});
 
-			const wrapper = mount(				
-				<CommentList {...fakeProps}/>
-			);
-
-			console.log(wrapper.html());
-			// var url = generateUrl("comments");
-			// console.log("mocking: " + url);
-			
-			// mock.onGet(/.*/).reply((config)=> {
-			// 	console.log("hit our mock");
-			// 	console.log(config);
-			// 	return [200, {}];
-			// });
-
-			// axios.get('/users')
-			// .then(function(response) {
-			// 	console.log("hello");
-			// });			
-			
-			
-
-			
-
+			mount(<CommentList {...fakeProps}/>);
 		});
 		
 	});
