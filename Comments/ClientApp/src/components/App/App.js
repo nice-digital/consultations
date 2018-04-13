@@ -6,7 +6,7 @@ import { Helmet } from "react-helmet";
 
 import DocumentWithRouter from "../Document/Document";
 import { Drawer } from "../Drawer/Drawer";
-import CommentList from "../CommentList/CommentList";
+import CommentListWithRouter from "../CommentList/CommentList";
 import NotFound from "../NotFound/NotFound";
 
 const App = () => (
@@ -31,7 +31,7 @@ const App = () => (
 
 			<Route path="/commentlist">
 				<Fragment>
-					<CommentList />
+					<CommentListWithRouter />
 				</Fragment>
 			</Route>
 
