@@ -44,20 +44,21 @@ export class Document extends Component<PropsType, StateType> {
 			currentInPageNavItem: null
 		};
 
-		const preloadedChapter = preload(this.props.staticContext, "chapter", {...this.props.match.params});
-		const preloadedDocuments = preload(this.props.staticContext, "documents", { consultationId: this.props.match.params.consultationId });
-		const preloadedConsultation = preload(this.props.staticContext, "consultation", { consultationId: this.props.match.params.consultationId });
+		if (this.props) {
+			const preloadedChapter = preload(this.props.staticContext, "chapter", {...this.props.match.params});
+			const preloadedDocuments = preload(this.props.staticContext, "documents", { consultationId: this.props.match.params.consultationId });
+			const preloadedConsultation = preload(this.props.staticContext, "consultation", { consultationId: this.props.match.params.consultationId });
 
-		if (preloadedChapter && preloadedDocuments && preloadedConsultation) {
-			this.state = {
-				chapterData: preloadedChapter,
-				documentsData: preloadedDocuments,
-				consultationData: preloadedConsultation,
-				loading: false,
-				hasInitialData: true,
-				currentInPageNavItem: null
-			};
-			//console.log(`preloaded chapter data: ${stringifyObject(preloadedChapter)}`);
+			if (preloadedChapter && preloadedDocuments && preloadedConsultation) {
+				this.state = {
+					chapterData: preloadedChapter,
+					documentsData: preloadedDocuments,
+					consultationData: preloadedConsultation,
+					loading: false,
+					hasInitialData: true,
+					currentInPageNavItem: null
+				};
+			}
 		}
 	}
 
@@ -66,13 +67,22 @@ export class Document extends Component<PropsType, StateType> {
 		const { consultationId, documentId, chapterSlug } = this.props.match.params;
 
 		const chapterData = load("chapter", undefined, { consultationId, documentId, chapterSlug })
-			.then(response => response.data).catch(err => { throw new Error("3 " + err); });
+			.then(response => response.data)
+			.catch(err => {
+				throw new Error("chapterData " + err);
+			});
 
 		const documentsData = load("documents", undefined, { consultationId })
-			.then(response => response.data).catch(err => { throw new Error("1 " + err); });
+			.then(response => response.data)
+			.catch(err => {
+				throw new Error("documentsData " + err);
+			});
 
 		const consultationData = load("consultation", undefined, { consultationId })
-			.then(response => response.data).catch(err => { throw new Error("2 " + err); });
+			.then(response => response.data)
+			.catch(err => {
+				throw new Error("consultationData " + err);
+			});
 
 		return {
 			chapterData: await chapterData,
@@ -92,7 +102,9 @@ export class Document extends Component<PropsType, StateType> {
 						hasInitialData: true
 					});
 				})
-				.catch(err => { throw new Error("gatherData in componentDidMount failed " + err);});
+				.catch(err => {
+					throw new Error("gatherData in componentDidMount failed " + err);
+				});
 		}
 	}
 

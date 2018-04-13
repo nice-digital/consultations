@@ -11,7 +11,7 @@
   // default closed state
   transform: translateX(100%);
   @extend %transition-default;
-  width: 300px;
+  width: 500px;
 
   &__controls {
     width: 40px;
@@ -32,9 +32,6 @@
   }
   &--open {
     transform: translateX(0);
-  }
-  &--wide {
-    width: 60vw;
   }
   &--mobile {
     width: calc(100% - 40px);

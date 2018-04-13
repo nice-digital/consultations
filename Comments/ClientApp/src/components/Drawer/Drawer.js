@@ -1,11 +1,8 @@
 // @flow
 
-import React, {Component, Fragment} from "react";
+import React, { Component } from "react";
 import {mobileWidth} from "../../constants";
 import CommentListWithRouter from "../CommentList/CommentList";
-
-import iconDockExtended from "./icon-dock-extended.svg";
-import iconDockSmall from "./icon-dock-small.svg";
 
 type PropsType = {}
 

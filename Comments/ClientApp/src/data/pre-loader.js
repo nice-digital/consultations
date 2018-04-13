@@ -23,23 +23,15 @@ const preload = (staticContext, endpoint, query) => {
 
 	// Data with that key already preloaded on the server
 	if (staticContext.preload.data[endpoint]) {
-		console.log(
-			`Data with key '${endpoint}' has already been preloaded on the server`
-		);
 		return staticContext.preload.data[endpoint];
 	}
 
 	// Load fresh data on the server
-	console.log(`Data with key '${endpoint}' isn't loaded, making request`);
-
 	var promise = load(endpoint, staticContext.baseUrl, query)
 		.then(response => {
-			console.log(`Data with key '${endpoint}' loaded async from server`);
 			staticContext.preload.data[endpoint] = response.data;
 			return response.data;
 		});
-
-	console.log(`Data with key '${endpoint}' loaded async from server`);
 	staticContext.preload.data[endpoint] = data;
 
 	// Track promises on the static context so that we can wait for all of them to resolve before

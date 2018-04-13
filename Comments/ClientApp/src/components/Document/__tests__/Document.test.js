@@ -8,7 +8,7 @@ import { Document } from "../Document";
 import ChapterData from "./Chapter";
 import ConsultationData from "./Consultation";
 import DocumentsData from "./Documents";
-import { nextTick} from "../../../helpers/utils";
+import { nextTick } from "../../../helpers/utils";
 import toJson from "enzyme-to-json";
 
 // import { generateUrl } from "./../../../data/loader";
