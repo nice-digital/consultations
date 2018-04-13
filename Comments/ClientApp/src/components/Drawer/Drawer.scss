@@ -30,14 +30,6 @@
     overflow-y: scroll;
     background-color: $colour-nice-white;
   }
-  &__mainControls {
-    float: right;
-    padding: rem($spacing-small);
-    // todo: take this out after demo
-    img {
-      margin-left: 10px;
-    }
-  }
   &--open {
     transform: translateX(0);
   }

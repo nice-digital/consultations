@@ -2,11 +2,10 @@
 
 import React, {Component, Fragment} from "react";
 import {mobileWidth} from "../../constants";
-import CommentList from "../CommentList/CommentList";
+import CommentListWithRouter from "../CommentList/CommentList";
 
 import iconDockExtended from "./icon-dock-extended.svg";
 import iconDockSmall from "./icon-dock-small.svg";
-
 
 type PropsType = {}
 
@@ -62,27 +61,7 @@ export class Drawer extends Component<PropsType, StateType> {
 					</button>
 				</div>
 				<div className="Drawer__main">
-					<div className="Drawer__mainControls">
-						{!this.state.drawerMobile ?
-							<Fragment>
-								<CommentList />
-								{/*<button className="Drawer__toggleWidth Drawer__toggleWidth--narrow" name="toggleWidth" onClick={()=>this.handleClick("toggleWidth--narrow")}>
-									<span className="icon icon--dock-right-small" aria-hidden="true" />
-									<img src={iconDockSmall} alt="Icon Dock Small" />
-								</button>
-								<button className="Drawer__toggleWidth Drawer__toggleWidth--expanded" name="toggleWidth" onClick={()=>this.handleClick("toggleWidth--expanded")}>
-									<span className="icon icon--dock-right-large" aria-hidden="true" />
-									<img src={iconDockExtended} alt="Icon Dock Extended"/>
-								</button>*/}
-								<img style={this.state.drawerExpandedWidth ? {"opacity": "1"} : {"opacity": "0.3"}}
-									 src={iconDockSmall} alt="Icon Dock Small" width="40"
-									 onClick={() => this.handleClick("toggleWidth--narrow")}/>
-								<img style={this.state.drawerExpandedWidth ? {"opacity": "0.3"} : {"opacity": "1"}}
-									 src={iconDockExtended} alt="Icon Dock Extended" width="40"
-									 onClick={() => this.handleClick("toggleWidth--wide")}/>
-							</Fragment>
-							: null}
-					</div>
+					<CommentListWithRouter />
 				</div>
 			</div>
 		);
