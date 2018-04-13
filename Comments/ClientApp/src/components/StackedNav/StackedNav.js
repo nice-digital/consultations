@@ -20,7 +20,7 @@ export const StackedNav = (props: PropsType) => {
 	if (!props.links) return null;
 	const { title, links } = props.links;
 	return (
-		<nav className="stacked-nav" aria-label="{root.label}">
+		<nav className="stacked-nav" aria-label={title}>
 			<h2 className="stacked-nav__root">{title}</h2>
 			<ul className="stacked-nav__list">
 				{links.map((item, index) => (
