@@ -27,6 +27,8 @@
   }
   &__main {
     height: 100vh;
+    padding-left: rem($spacing-medium);
+    padding-right: rem($spacing-medium);
     overflow-y: scroll;
     background-color: $colour-nice-white;
   }
