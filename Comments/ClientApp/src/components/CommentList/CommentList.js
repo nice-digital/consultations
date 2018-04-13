@@ -1,7 +1,6 @@
 // @flow
 import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router-dom";
-import sampleData from "./sample";
 import { load } from "./../../data/loader";
 import preload from "../../data/pre-loader";
 
@@ -56,18 +55,18 @@ export class CommentList extends Component<PropsType, StateType> {
 				});
 		}
 	}
-	
+
 	render() {
-		if (this.state.loading) return <p>loading!!!</p>;
-		if (this.state.comments.length === 0) return <p>No comments in array</p>;
+		if (this.state.loading) return <p>Loading</p>;
+		if (!this.state.loading && (this.state.comments.length === 0)) return <p>No comments in array</p>;
 		return (
 			<Fragment>
 				<ul>
-					{this.state.comments.map((comment) => {														
+					{this.state.comments.map((comment) => {
 						return (
 							<Comment key={comment.commentId} comment={comment} />
 						);
-					})}	
+					})}
 				</ul>
 			</Fragment>
 		);
