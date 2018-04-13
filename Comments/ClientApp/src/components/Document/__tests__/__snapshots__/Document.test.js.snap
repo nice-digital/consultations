@@ -27,14 +27,14 @@ Array [
                 <span
                     className="phase-banner__label"
                 >
-                    NICE Consultations is in development. This means it is not feature complete and there may be issues. Find any?
+                    NICE Consultations is in development. This means it is not feature complete and there may be issues.
                      
                     <a
                         href="https://github.com/nhsevidence/consultations"
                         rel="noopener noreferrer"
                         target="_blank"
                     >
-                        Please, let us know!
+                        Visit this page if you wish to report an issue.
                     </a>
                 </span>
             </p>
@@ -158,7 +158,7 @@ Array [
                     data-g="12 md:3"
                 >
                     <nav
-                        aria-label="{root.label}"
+                        aria-label="Chapters in this document"
                         className="stacked-nav"
                     >
                         <h2
@@ -337,7 +337,7 @@ Array [
                         </ul>
                     </nav>
                     <nav
-                        aria-label="{root.label}"
+                        aria-label="Documents in this Consultation"
                         className="stacked-nav"
                     >
                         <h2
