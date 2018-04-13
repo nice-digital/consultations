@@ -24,14 +24,14 @@ namespace Comments.Controllers.Api
                 return BadRequest(ModelState);
             }
 
-            var comment = _answerService.GetAnswer(answerId);
+            var result = _answerService.GetAnswer(answerId);
 
-            if (comment == null)
+            if (result.answer == null)
             {
                 return NotFound();
             }
 
-            return Ok(comment);
+            return Ok(result);
         }
 
         // POST: consultations/api/Answer

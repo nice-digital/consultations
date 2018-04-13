@@ -12,7 +12,7 @@ namespace Comments.Services
 {
     public interface IAnswerService
     {
-        ViewModels.Answer GetAnswer(int answerId);
+        (ViewModels.Answer answer, Validate validate) GetAnswer(int answerId);
         int EditAnswer(int answerId, ViewModels.Answer answer);
         int DeleteAnswer(int answerId);
         ViewModels.Answer CreateAnswer(ViewModels.Answer answer, int questionId);
@@ -20,15 +20,23 @@ namespace Comments.Services
     public class AnswerService : IAnswerService
     {
         private readonly ConsultationsContext _context;
+        private readonly IUserService _userService;
+        private readonly User _currentUser;
 
-        public AnswerService(ConsultationsContext consultationsContext)
+        public AnswerService(ConsultationsContext consultationsContext, IUserService userService)
         {
             _context = consultationsContext;
+            _userService = userService;
+            _currentUser = _userService.GetCurrentUser();
         }
-        public ViewModels.Answer GetAnswer(int answerId)
+        public (ViewModels.Answer answer, Validate validate) GetAnswer(int answerId)
         {
-            var answer = _context.GetAnswer(answerId);
-            return (answer == null) ? null : new ViewModels.Answer(answer);
+            if (!_currentUser.IsLoggedIn)
+                return (answer: null, validate: new Validate(valid: false, unauthorised: true, message: $"Not logged in accessing answer id:{answerId}"));
+
+            var answerInDatabase = _context.GetAnswer(answerId);
+
+            return (answer: (answerInDatabase == null) ? null : new ViewModels.Answer(answerInDatabase), validate: null);
         }
 
         public int EditAnswer(int answerId, ViewModels.Answer answer)

@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Linq;
 using Comments.Models;
 using Comments.Services;
 using Comments.Test.Infrastructure;
-using Microsoft.EntityFrameworkCore;
 using Shouldly;
 using Xunit;
 using TestBase = Comments.Test.Infrastructure.TestBase;
@@ -30,10 +30,10 @@ namespace Comments.Test.UnitTests
             AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId, context);
 
             //Act
-            var viewModel = new AnswerService(context).GetAnswer(answerId);
+            var viewModel = new AnswerService(context, userService).GetAnswer(answerId);
 
             //Assert
-            viewModel.AnswerText.ShouldBe(answerText);
+            viewModel.answer.AnswerText.ShouldBe(answerText);
         }
 
         [Fact]
@@ -52,19 +52,19 @@ namespace Comments.Test.UnitTests
             var context = new ConsultationsContext(_options, userService);
             AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId, context);
             
-            var answerService = new AnswerService(context);
+            var answerService = new AnswerService(context, userService);
             var viewModel = answerService.GetAnswer(answerId);
 
             var updatedAnswerText = Guid.NewGuid().ToString();
-            viewModel.AnswerText = updatedAnswerText;
+            viewModel.answer.AnswerText = updatedAnswerText;
 
             //Act
-            var result = answerService.EditAnswer(answerId, viewModel);
+            var result = answerService.EditAnswer(answerId, viewModel.answer);
             viewModel = answerService.GetAnswer(answerId);
 
             //Assert
             result.ShouldBe(1);
-            viewModel.AnswerText.ShouldBe(updatedAnswerText);
+            viewModel.answer.AnswerText.ShouldBe(updatedAnswerText);
         }
 
         [Fact]
@@ -83,7 +83,7 @@ namespace Comments.Test.UnitTests
             var context = new ConsultationsContext(_options, userService);
             AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId, context);
             
-            var answerService = new AnswerService(context);
+            var answerService = new AnswerService(context, userService);
 
             //Act
             var result = answerService.DeleteAnswer(answerId);
@@ -91,7 +91,7 @@ namespace Comments.Test.UnitTests
 
             //Assert
             result.ShouldBe(1);
-            viewModel.ShouldBeNull();
+            viewModel.answer.ShouldBeNull();
         }
 
         [Fact]
@@ -102,7 +102,7 @@ namespace Comments.Test.UnitTests
             var answerId = 1;
             var userId = Guid.Empty;
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var answerService = new AnswerService(new ConsultationsContext(_options, userService));
+            var answerService = new AnswerService(new ConsultationsContext(_options, userService), userService);
 
             //Act
             var result = answerService.DeleteAnswer(answerId);
@@ -134,7 +134,7 @@ namespace Comments.Test.UnitTests
             var viewModel = new ViewModels.Answer(answer);
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var answerService = new AnswerService(new ConsultationsContext(_options, userService));
+            var answerService = new AnswerService(new ConsultationsContext(_options, userService), userService);
 
             //Act
             var result = answerService.CreateAnswer(viewModel, question.QuestionId);
@@ -143,6 +143,60 @@ namespace Comments.Test.UnitTests
             result.AnswerId.ShouldBe(1);
             result.AnswerText.ShouldBe(answerText);
             result.AnswerBoolean.ShouldBe(false);
+        }
+
+        [Fact]
+        public void No_Answers_returned_when_not_logged_in()
+        {
+            // Arrange
+            ResetDatabase();
+            var sourceURI = "/consultations/1/1/introduction";
+            var commentText = Guid.NewGuid().ToString();
+            var answerText = Guid.NewGuid().ToString();
+            var questionText = Guid.NewGuid().ToString();
+            var userId = Guid.Empty;
+
+            var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+            var context = new ConsultationsContext(_options, userService);
+            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId, context);
+
+            // Act
+            var viewModel = new AnswerService(new ConsultationsContext(_options, _fakeUserService), FakeUserService.Get(isAuthenticated: false)).GetAnswer(1);
+
+            //Assert
+            viewModel.validate.Unauthorised.ShouldBeTrue();
+            viewModel.answer.ShouldBeNull();
+        }
+
+        [Fact]
+        public void Only_own_Answers_returned_when_logged_in()
+        {
+            //Arrange
+            ResetDatabase();
+            var sourceURI = "/consultations/1/1/introduction";
+            var commentText = Guid.NewGuid().ToString();
+            var answerText = Guid.NewGuid().ToString();
+            var questionText = Guid.NewGuid().ToString();
+            var userId = Guid.NewGuid();
+
+            var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+            var context = new ConsultationsContext(_options, userService);
+            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId, context);
+
+            var expectedAnswerId = AddAnswer(1, userId, "current user's answer");
+            var anotherPersonsAnswerId = AddAnswer(1, Guid.NewGuid(), "another user's answer");
+            
+            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService);
+
+            // Act
+            var viewModel = commentService.GetCommentsAndQuestions(sourceURI);
+            var t = viewModel.Questions.SingleOrDefault(q => q.QuestionId.Equals(1));
+            var myAnswer = t.Answers.SingleOrDefault(a => a.AnswerId.Equals(expectedAnswerId));
+            var otherAnswer = t.Answers.SingleOrDefault(a => a.AnswerId.Equals(anotherPersonsAnswerId));
+
+            //Assert
+            myAnswer.AnswerId.ShouldBe(expectedAnswerId);
+            otherAnswer.ShouldBeNull();
         }
     }
 }
