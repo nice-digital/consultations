@@ -9,9 +9,6 @@ const preload = (staticContext, endpoint, query) => {
 
 	// Client - get data from global var
 	if (typeof window !== "undefined") {
-		console.info(
-			`Found preloaded data on the client with an endpoint key of ${endpoint}`
-		);
 		if (!window.__PRELOADED__) return null;
 		data = window.__PRELOADED__[endpoint];
 		delete window.__PRELOADED__[endpoint];
