@@ -36,7 +36,7 @@ describe("[ClientApp] ", () => {
 			const wrapper = mount(<CommentList {...fakeProps}/>);
 			await nextTick();
 			wrapper.update();
-			expect(wrapper.find("p").text()).toEqual("No comments in array");
+			expect(wrapper.find("p").text()).toEqual("No comments");
 		});
 
 		it("has state with an empty array of comments", () => {

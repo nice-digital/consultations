@@ -56,9 +56,26 @@ export class CommentList extends Component<PropsType, StateType> {
 		}
 	}
 
+	componentDidUpdate(prevProps) {
+		const oldRoute = prevProps.location.pathname;
+		const newRoute = this.props.location.pathname;
+		if (oldRoute !== newRoute) {
+			this.setState({
+				loading: true
+			});
+			load("comments", undefined, { sourceURI: this.props.match.url })
+				.then(res=>{
+					this.setState({
+						comments: res.data.comments,
+						loading: false
+					});
+				});
+		}
+	}
+
 	render() {
 		if (this.state.loading) return <p>Loading</p>;
-		if (!this.state.loading && (this.state.comments.length === 0)) return <p>No comments in array</p>;
+		if (!this.state.loading && (this.state.comments.length === 0)) return <p>No comments</p>;
 		return (
 			<Fragment>
 				<ul>
@@ -75,7 +92,7 @@ export class CommentList extends Component<PropsType, StateType> {
 
 const Comment = (props) => {
 	const comment = props.comment;
-	return <li>{comment.commentId}</li>;
+	return <li>{comment.commentText}</li>;
 };
 
 export default withRouter(CommentList);
