@@ -8,8 +8,6 @@ using Shouldly;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using Comments.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace Comments.Test.IntegrationTests.API.Questions
 {
@@ -21,13 +19,13 @@ namespace Comments.Test.IntegrationTests.API.Questions
             //Arrange
             ResetDatabase();
 
-            const string sourceURI = "/consultations/1/1/introduction";
+            const string sourceUri = "/consultations/1/1/introduction";
             var commentText = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
             var answerText = Guid.NewGuid().ToString();
-            var userId = Guid.NewGuid();
+            var userId = Guid.Empty;
             
-            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId, _context);
+            AddCommentsAndQuestionsAndAnswers(sourceUri, commentText, questionText, answerText, userId, _context);
 
             //Act
             var response = await _client.GetAsync($"consultations/api/question/1");

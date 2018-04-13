@@ -19,7 +19,7 @@ namespace Comments.Test.UnitTests
             ResetDatabase();
             var sourceURI = "/consultations/1/1/introduction";
             var commentText = Guid.NewGuid().ToString();
-            var userId = Guid.NewGuid();
+            var userId = Guid.Empty;
 
             var locationId = AddLocation(sourceURI);
             var commentId = AddComment(locationId, commentText, isDeleted: false, createdByUserId: userId);
@@ -40,7 +40,7 @@ namespace Comments.Test.UnitTests
             ResetDatabase();
             var sourceURI = "/consultations/1/1/introduction";
             var commentText = Guid.NewGuid().ToString();
-            var userId = Guid.NewGuid();
+            var userId = Guid.Empty;
 
             var locationId = AddLocation(sourceURI);
             var commentId = AddComment(locationId, commentText, isDeleted: false, createdByUserId: userId);
@@ -67,7 +67,7 @@ namespace Comments.Test.UnitTests
             ResetDatabase();
             var sourceURI = "/consultations/1/1/introduction";
             var commentText = Guid.NewGuid().ToString();
-            var userId = Guid.NewGuid();
+            var userId = Guid.Empty;
 
             var locationId = AddLocation(sourceURI);
             var commentId = AddComment(locationId, commentText, isDeleted: false, createdByUserId: userId);
@@ -90,7 +90,7 @@ namespace Comments.Test.UnitTests
             ResetDatabase();
             var sourceURI = "/consultations/1/1/introduction";
             var locationId = AddLocation(sourceURI);
-            var userId = Guid.NewGuid();
+            var userId = Guid.Empty;
             var commentText = Guid.NewGuid().ToString();
             var location = new Location(sourceURI, null, null, null, null, null, null, null, null);
             var comment = new Comment(locationId, userId, commentText, userId, location);

@@ -17,7 +17,7 @@ namespace Comments.Test.UnitTests
             //Arrange
             ResetDatabase();
 
-            var userId = Guid.NewGuid();
+            var userId = Guid.Empty;
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
             var context = new ConsultationsContext(_options, userService);
 
@@ -45,7 +45,7 @@ namespace Comments.Test.UnitTests
             var commentText = Guid.NewGuid().ToString();
             var answerText = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
-            var userId = Guid.NewGuid();
+            var userId = Guid.Empty;
             var answerId = 1;
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
@@ -76,7 +76,7 @@ namespace Comments.Test.UnitTests
             var commentText = Guid.NewGuid().ToString();
             var answerText = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
-            var userId = Guid.NewGuid();
+            var userId = Guid.Empty;
             var answerId = 1;
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
@@ -100,7 +100,7 @@ namespace Comments.Test.UnitTests
             //Arrange
             ResetDatabase();
             var answerId = 1;
-            var userId = Guid.NewGuid();
+            var userId = Guid.Empty;
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
             var answerService = new AnswerService(new ConsultationsContext(_options, userService));
 
@@ -120,7 +120,7 @@ namespace Comments.Test.UnitTests
             var answerText = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
             var description = Guid.NewGuid().ToString();
-            var userId = Guid.NewGuid();
+            var userId = Guid.Empty;
 
             var locationId = AddLocation(sourceURI);
             var questionTypeId = AddQuestionType(description, false, true);

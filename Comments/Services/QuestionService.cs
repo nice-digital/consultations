@@ -33,12 +33,8 @@ namespace Comments.Services
 
         public ViewModels.Question GetQuestion(int questionId)
         {
-            var options = _builderInfrastructure as DbContextOptionsBuilder<ConsultationsContext>;
-            using (var context = new ConsultationsContext(options.Options, _userService))
-            {
-                var question = _context.GetQuestion(questionId);
-                return (question == null) ? null : new ViewModels.Question(question.Location, question);
-            }
+            var question = _context.GetQuestion(questionId);
+            return (question == null) ? null : new ViewModels.Question(question.Location, question);
         }
 
         public int EditQuestion(int questionId, ViewModels.Question question)

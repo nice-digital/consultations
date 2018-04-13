@@ -228,9 +228,9 @@ namespace Comments.Test.Infrastructure
 
             return question.QuestionId;
         }
-        protected int AddAnswer(Question question, Guid userId, string answerText, ConsultationsContext passedInContext = null)
+        protected int AddAnswer(int questionId, Guid userId, string answerText, ConsultationsContext passedInContext = null)
         {
-            var answer = new Answer(question.QuestionId, userId, answerText, null, question);
+            var answer = new Answer(questionId, userId, answerText, null, null);
             answer.LastModifiedDate = DateTime.Now;
             if (passedInContext != null)
             {
