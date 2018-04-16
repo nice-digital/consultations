@@ -4,11 +4,16 @@ import { withRouter } from "react-router-dom";
 import { load } from "./../../data/loader";
 import preload from "../../data/pre-loader";
 
+import CommentBox from "../CommentBox/CommentBox";
+
 type PropsType = {
 	staticContext?: any,
 	match: {
 		url: string,
 		params: any
+	},
+	location: {
+		pathname: string
 	}
 };
 type CommentType = {
@@ -44,32 +49,30 @@ export class CommentList extends Component<PropsType, StateType> {
 		}
 	}
 
+	loadComments(){
+		load("comments", undefined, [], { sourceURI: this.props.match.url })
+			.then(res=>{
+				this.setState({
+					comments: res.data.comments,
+					loading: false
+				});
+			});
+	}
+
 	componentDidMount() {
 		if (this.state.comments.length === 0){
-			load("comments", undefined, { sourceURI: this.props.match.url })
-				.then(res=>{
-					this.setState({
-						comments: res.data.comments,
-						loading: false
-					});
-				});
+			this.loadComments();
 		}
 	}
 
-	componentDidUpdate(prevProps) {
+	componentDidUpdate(prevProps: PropsType) {
 		const oldRoute = prevProps.location.pathname;
 		const newRoute = this.props.location.pathname;
 		if (oldRoute !== newRoute) {
 			this.setState({
 				loading: true
 			});
-			load("comments", undefined, { sourceURI: this.props.match.url })
-				.then(res=>{
-					this.setState({
-						comments: res.data.comments,
-						loading: false
-					});
-				});
+			this.loadComments();
 		}
 	}
 
@@ -81,7 +84,7 @@ export class CommentList extends Component<PropsType, StateType> {
 				<ul>
 					{this.state.comments.map((comment) => {
 						return (
-							<Comment key={comment.commentId} comment={comment} />
+							<CommentBox key={comment.commentId} comment={comment} />
 						);
 					})}
 				</ul>
@@ -90,9 +93,9 @@ export class CommentList extends Component<PropsType, StateType> {
 	}
 }
 
-const Comment = (props) => {
-	const comment = props.comment;
-	return <li>{comment.commentText}</li>;
-};
+// const CommentBox = (props) => {
+// 	const comment = props.comment;
+// 	return <li>{comment.commentText}</li>;
+// };
 
 export default withRouter(CommentList);

@@ -1,0 +1,20 @@
+{
+  "comments": [
+    {
+      "commentId": 1002,
+      "lastModifiedDate": "2018-04-09T12:02:40.0333333",
+      "lastModifiedByUserId": "00000000-0000-0000-0000-000000000000",
+      "commentText": "authenticated comment insert",
+      "locationId": 1002,
+      "sourceURI": "/consultations/1/1/introduction",
+      "htmlElementID": null,
+      "rangeStart": null,
+      "rangeStartOffset": null,
+      "rangeEnd": null,
+      "rangeEndOffset": null,
+      "quote": null
+    }
+  ],
+  "questions": [],
+  "isAuthenticated": true
+}

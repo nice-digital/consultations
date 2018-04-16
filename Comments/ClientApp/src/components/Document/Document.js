@@ -66,19 +66,19 @@ export class Document extends Component<PropsType, StateType> {
 	gatherData = async () => {
 		const { consultationId, documentId, chapterSlug } = this.props.match.params;
 
-		const chapterData = load("chapter", undefined, { consultationId, documentId, chapterSlug })
+		const chapterData = load("chapter", undefined, [], { consultationId, documentId, chapterSlug })
 			.then(response => response.data)
 			.catch(err => {
 				throw new Error("chapterData " + err);
 			});
 
-		const documentsData = load("documents", undefined, { consultationId })
+		const documentsData = load("documents", undefined, [], { consultationId })
 			.then(response => response.data)
 			.catch(err => {
 				throw new Error("documentsData " + err);
 			});
 
-		const consultationData = load("consultation", undefined, { consultationId })
+		const consultationData = load("consultation", undefined, [], { consultationId })
 			.then(response => response.data)
 			.catch(err => {
 				throw new Error("consultationData " + err);

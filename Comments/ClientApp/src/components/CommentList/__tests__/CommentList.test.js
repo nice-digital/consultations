@@ -19,6 +19,9 @@ describe("[ClientApp] ", () => {
 			},
 			location: {
 				pathname: ""
+			},
+			comment: {
+				commentId: 1
 			}
 		};
 
@@ -27,7 +30,7 @@ describe("[ClientApp] ", () => {
 		});
 
 		it("should render a li tag with sample data ID", async () => {
-			mock.onGet(generateUrl("comments", undefined, { sourceURI: fakeProps.match.url })).reply(200, sampleComment);
+			mock.onGet(generateUrl("comments", undefined, [], { sourceURI: fakeProps.match.url })).reply(200, sampleComment);
 			const wrapper = mount(<CommentList {...fakeProps}/>);
 			await nextTick();
 			wrapper.update();
@@ -51,7 +54,7 @@ describe("[ClientApp] ", () => {
 
 		it("should make an api call with the correct path and query string", ()=>{
 			mock.reset();
-			mock.onGet(generateUrl("comments", undefined, { sourceURI: fakeProps.match.url })).reply((config)=>{
+			mock.onGet(generateUrl("comments", undefined, [], { sourceURI: fakeProps.match.url })).reply((config)=>{
 				expect(config.url).toEqual("/consultations/api/Comments?sourceURI=%2F1%2F1%2Fintroduction");
 				return [200, {comments: []}];
 			});

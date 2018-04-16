@@ -1,6 +1,6 @@
-import { Endpoints, BaseUrl } from "./endpoints";
+import {Endpoints, BaseUrl} from "./endpoints";
 import axios from "axios";
-import { objectToQueryString } from "./../helpers/utils";
+import {objectToQueryString, replaceFormat} from "./../helpers/utils";
 
 /**
  * Load data using Axios
@@ -17,16 +17,24 @@ import { objectToQueryString } from "./../helpers/utils";
  * axios("/consultations/api/Chapter?consultationId=1&documentId=2&chapterSlug=risk-assessment").then(res => res.data);
  */
 
-export const generateUrl = (endpoint, baseUrl = BaseUrl, query = {}) => {
-	if (Endpoints[endpoint]) {
-		return baseUrl + Endpoints[endpoint] + objectToQueryString(query);
-	}
-	return endpoint;
+
+export const generateUrl = (endpoint, baseUrl = BaseUrl, urlParameters = [], query = {}) => {
+	const lookedUpEndpoint = Endpoints[endpoint];
+
+	if (!lookedUpEndpoint) return endpoint;
+
+//	const appendedEndpoint = lookedUpEndpoint.replaceFormat(query.replaceValue);
+
+	return baseUrl + lookedUpEndpoint + objectToQueryString(query);
+
 };
 
-export const load = (endpoint, baseUrl = BaseUrl, query = {}) => {
+export const load = (endpoint, baseUrl = BaseUrl, urlParameters = [],  query = {}) => {
 	return new Promise((resolve, reject) => {
-		axios(generateUrl(endpoint, baseUrl, query))
+
+		console.log(`load: ${generateUrl(endpoint, baseUrl, urlParameters, query)}`);
+
+		axios(generateUrl(endpoint, baseUrl, urlParameters, query))
 			.then(response => {
 				resolve(response);
 			})
