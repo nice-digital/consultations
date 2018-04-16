@@ -16,6 +16,9 @@ describe("[ClientApp] ", () => {
 		const fakeProps = {
 			match: {
 				url: "/1/1/introduction"
+			},
+			location: {
+				pathname: ""
 			}
 		};
 
@@ -28,7 +31,7 @@ describe("[ClientApp] ", () => {
 			const wrapper = mount(<CommentList {...fakeProps}/>);
 			await nextTick();
 			wrapper.update();
-			expect(wrapper.find("li").text()).toEqual("1002");
+			expect(wrapper.find("li").text()).toEqual("authenticated comment insert");
 		});
 
 		it("renders the 'no comments' message if the comments array is empty", async () => {
