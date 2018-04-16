@@ -40,8 +40,7 @@ namespace Comments.Test.IntegrationTests.API.Answers
             ResetDatabase();
             var answerText = Guid.NewGuid().ToString();
             var userId = Guid.Empty; 
-
-            //AddCommentsAndQuestionsAndAnswers(sourceUri, commentText, questionText, answerText, userId, _context);
+            
             var answerId = AddAnswer(1, userId, answerText, _context);
             
             // Act
@@ -53,6 +52,7 @@ namespace Comments.Test.IntegrationTests.API.Answers
             // Assert
             response.StatusCode.ShouldBe(HttpStatusCode.OK);
             deserialisedAnswer.AnswerId.ShouldBeGreaterThan(0);
+            deserialisedAnswer.AnswerText.ShouldBe(answerText);
         }
 
         [Fact]
@@ -76,9 +76,12 @@ namespace Comments.Test.IntegrationTests.API.Answers
             var response = await _client.PutAsync($"consultations/api/answer/{answerId}", content);
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
-            
+            var result = answerService.GetAnswer(answerId);
+
             //Assert
             responseString.ShouldBe("1");
+            result.answer.AnswerText.ShouldBe(updatedAnswerText);
+
         }
 
         [Fact]

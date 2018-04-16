@@ -47,10 +47,6 @@ namespace Comments.Controllers.Api
                 return BadRequest(ModelState);
             }
 
-            //var savedComment = _answerService.CreateAnswer(answer);
-
-            //return CreatedAtAction("GetAnswer", new { id = savedComment.AnswerId }, savedComment);
-
             var result = _answerService.CreateAnswer(answer);
             var invalidResult = Validate(result.validate);
 

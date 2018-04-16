@@ -84,9 +84,10 @@ namespace Comments.Services
 
         public (ViewModels.Answer answer, Validate validate) CreateAnswer(ViewModels.Answer answer)
         {
-            var currentlyLoggedOnUserId = Guid.NewGuid();
-            var answerToSave = new Models.Answer(answer.QuestionId, currentlyLoggedOnUserId, answer.AnswerText, answer.AnswerBoolean, null);
+            if (!_currentUser.IsLoggedIn)
+                return (answer: null, validate: new Validate(valid: false, unauthorised: true, message: "Not logged in creating answer"));
 
+            var answerToSave = new Models.Answer(answer.QuestionId, _currentUser.UserId.Value, answer.AnswerText, answer.AnswerBoolean, null);
             _context.Answer.Add(answerToSave);
             _context.SaveChanges();
 

@@ -1,4 +1,5 @@
 ﻿using Comments.Services;
+using Comments.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -24,14 +25,11 @@ namespace Comments.Controllers.Api
                 return BadRequest(ModelState);
             }
 
-            var comment = _questionService.GetQuestion(questionId);
+            var result = _questionService.GetQuestion(questionId);
 
-            if (comment == null)
-            {
-                return NotFound();
-            }
+            var invalidResult = Validate(result.validate);
 
-            return Ok(comment);
+            return invalidResult ?? Ok(result.question);
         }
 
         // POST: consultations/api/Question
@@ -40,13 +38,62 @@ namespace Comments.Controllers.Api
         {
             if (!ModelState.IsValid)
             {
-
                 return BadRequest(ModelState);
             }
 
-            var savedComment = _questionService.CreateQuestion(question);
+            var savedQuestion = _questionService.CreateQuestion(question);
 
-            return CreatedAtAction("GetQuestion", new { id = savedComment.QuestionId }, savedComment);
+            return CreatedAtAction("GetQuestion", new { id = savedQuestion.QuestionId }, savedQuestion);
+        }
+
+        // PUT: consultations/api/Question/5
+        [HttpPut("{questionId}")]
+        public IActionResult PutQuestion([FromRoute] int questionId, [FromBody] ViewModels.Question question)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (questionId != question.QuestionId)
+            {
+                return BadRequest();
+            }
+
+            var result = _questionService.EditQuestion(questionId, question);
+
+            return Ok(result);
+        }
+
+        // DELETE: consultations/api/Question/5
+        [HttpDelete("{QuestionId}")]
+        public IActionResult DeleteComment([FromRoute] int questionId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = _questionService.DeleteQuestion(questionId);
+            var invalidResult = Validate(result.validate);
+
+            return invalidResult ?? Ok(result.rowsUpdated);
+        }
+
+        private IActionResult Validate(Validate validate) //TODO: Move this out, repeatedCode
+        {
+            if (validate == null || validate.Valid)
+                return null;
+
+            _logger.LogWarning(validate.Message);
+
+            if (validate.Unauthorised)
+                return Unauthorized();
+
+            if (validate.NotFound)
+                return NotFound();
+
+            return BadRequest();
         }
     }
 

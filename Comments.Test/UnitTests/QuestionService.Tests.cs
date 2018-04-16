@@ -21,7 +21,6 @@ namespace Comments.Test.UnitTests
             var userId = Guid.Empty;
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var context = new ConsultationsContext(_options, userService);
 
             var locationId = AddLocation(sourceUri);
             var questionTypeId = AddQuestionType(description, false, true, 1, _context);
@@ -34,7 +33,7 @@ namespace Comments.Test.UnitTests
             var viewModel = questionService.GetQuestion(questionId);
 
             //Assert
-            viewModel.QuestionText.ShouldBe(questionText);
+            viewModel.question.QuestionText.ShouldBe(questionText);
         }
 
         [Fact]
@@ -56,15 +55,15 @@ namespace Comments.Test.UnitTests
             var viewModel = questionService.GetQuestion(questionId);
             var updatedQuestionText = Guid.NewGuid().ToString();
 
-            viewModel.QuestionText = updatedQuestionText;
+            viewModel.question.QuestionText = updatedQuestionText;
 
             //Act
-            var result = questionService.EditQuestion(questionId, viewModel);
+            var result = questionService.EditQuestion(questionId, viewModel.question);
             viewModel = questionService.GetQuestion(questionId);
 
             //Assert
             result.ShouldBe(1);
-            viewModel.QuestionText.ShouldBe(updatedQuestionText);
+            viewModel.question.QuestionText.ShouldBe(updatedQuestionText);
         }
 
         [Fact]
@@ -87,10 +86,11 @@ namespace Comments.Test.UnitTests
             var questionService = new QuestionService(context, userService);
 
             //Act
-            questionService.DeleteQuestion(questionId);
+            var result = questionService.DeleteQuestion(questionId);
             var viewModel = questionService.GetQuestion(questionId);
 
             //Assert
+            result.rowsUpdated.ShouldBe(1);
             viewModel.ShouldBeNull();
         }
 
@@ -108,7 +108,7 @@ namespace Comments.Test.UnitTests
             var result = questionService.DeleteQuestion(questionId);
 
             //Assert
-            result.ShouldBe(0);
+            result.validate.NotFound.ShouldBeTrue();
         }
 
         [Fact]

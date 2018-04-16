@@ -12,9 +12,9 @@ namespace Comments.Services
 {
     public interface IQuestionService
     {
-        ViewModels.Question GetQuestion(int questionId);
+        (ViewModels.Question question, Validate validate) GetQuestion(int questionId);
         int EditQuestion(int questionId, ViewModels.Question question);
-        int DeleteQuestion(int questionId);
+        (int rowsUpdated, Validate validate) DeleteQuestion(int questionId);
         ViewModels.Question CreateQuestion(ViewModels.Question question);
     }
     public class QuestionService : IQuestionService
@@ -28,10 +28,15 @@ namespace Comments.Services
             _userService = userService;
         }
 
-        public ViewModels.Question GetQuestion(int questionId)
+        public (ViewModels.Question question, Validate validate) GetQuestion(int questionId)
         {
-            var question = _context.GetQuestion(questionId);
-            return (question == null) ? null : new ViewModels.Question(question.Location, question);
+            var questionInDatabase = _context.GetQuestion(questionId);
+
+            if (questionInDatabase == null)
+                return (question: null, validate: new Validate(valid: false, notFound: true, message: $"Question id:{questionId} not found trying to get question"));
+
+
+            return (question: (questionInDatabase == null) ? null : new ViewModels.Question(questionInDatabase.Location, questionInDatabase), validate: null);
         }
 
         public int EditQuestion(int questionId, ViewModels.Question question)
@@ -41,14 +46,15 @@ namespace Comments.Services
             return _context.SaveChanges();
         }
 
-        public int DeleteQuestion(int questionId)
+        public (int rowsUpdated, Validate validate) DeleteQuestion(int questionId)
         {
-            var question = _context.GetQuestion(questionId);
-            if (question == null)
-                return 0;
+            var questionInDatabase = _context.GetQuestion(questionId);
 
-            question.IsDeleted = true;
-            return _context.SaveChanges();
+            if (questionInDatabase == null)
+                return (rowsUpdated: 0, validate: new Validate(valid: false, notFound: true, message: $"Question id:{questionId} not found trying to delete question"));
+            
+            questionInDatabase.IsDeleted = true;
+            return (rowsUpdated: _context.SaveChanges(), validate: null);
         }
 
         public ViewModels.Question CreateQuestion(ViewModels.Question question) 
