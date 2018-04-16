@@ -24,11 +24,11 @@ namespace Comments.Test.UnitTests
             var context = new ConsultationsContext(_options, userService);
 
             var locationId = AddLocation(sourceUri);
-            var questionTypeId = AddQuestionType(description, false, true, 1, context);
-            var questionId = AddQuestion(locationId, questionTypeId, questionText, context);
+            var questionTypeId = AddQuestionType(description, false, true, 1, _context);
+            var questionId = AddQuestion(locationId, questionTypeId, questionText, _context);
 
             
-            var questionService = new QuestionService(context, userService);
+            var questionService = new QuestionService(_context, userService);
 
             //Act
             var viewModel = questionService.GetQuestion(questionId);

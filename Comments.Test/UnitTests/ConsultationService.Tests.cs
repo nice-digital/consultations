@@ -30,9 +30,9 @@ namespace Comments.Test.UnitTests
             var context = new ConsultationsContext(_options, userService);
 
             var locationId = AddLocation(sourceURI, context);
-            AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId, passedInContext: context);
+            AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId, passedInContext: _context);
             
-            var commentService = new CommentService(context, userService);
+            var commentService = new CommentService(_context, userService);
             
             // Act
             var viewModel = commentService.GetCommentsAndQuestions(sourceURI);

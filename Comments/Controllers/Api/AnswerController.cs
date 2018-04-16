@@ -2,6 +2,7 @@
 using Comments.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Comments.ViewModels;
 
 namespace Comments.Controllers.Api
 {
@@ -32,7 +33,8 @@ namespace Comments.Controllers.Api
                 return NotFound();
             }
 
-            return Ok(result);
+            var invalidResult = Validate(result.validate);
+            return invalidResult ?? Ok(result.answer);
         }
 
         // POST: consultations/api/Answer
@@ -45,9 +47,30 @@ namespace Comments.Controllers.Api
                 return BadRequest(ModelState);
             }
 
-            var savedComment = _answerService.CreateAnswer(answer);
+            //var savedComment = _answerService.CreateAnswer(answer);
 
-            return CreatedAtAction("GetAnswer", new { id = savedComment.AnswerId }, savedComment);
+            //return CreatedAtAction("GetAnswer", new { id = savedComment.AnswerId }, savedComment);
+
+            var result = _answerService.CreateAnswer(answer);
+            var invalidResult = Validate(result.validate);
+
+            return invalidResult ?? CreatedAtAction("GetAnswer", new { id = result.answer.AnswerId }, result.answer);
+        }
+
+        private IActionResult Validate(Validate validate)
+        {
+            if (validate == null || validate.Valid)
+                return null;
+
+            _logger.LogWarning(validate.Message);
+
+            if (validate.Unauthorised)
+                return Unauthorized();
+
+            if (validate.NotFound)
+                return NotFound();
+
+            return BadRequest();
         }
     }
 }

@@ -22,10 +22,10 @@ namespace Comments.Test.UnitTests
             var context = new ConsultationsContext(_options, userService);
             
             var answerText = Guid.NewGuid().ToString();
-            var answerId = AddAnswer(1, userId, answerText, context);
+            var answerId = AddAnswer(1, userId, answerText, _context);
 
             //Act
-            var viewModel = new AnswerService(context, userService).GetAnswer(answerId);
+            var viewModel = new AnswerService(_context, userService).GetAnswer(answerId);
 
             //Assert
             viewModel.answer.AnswerText.ShouldBe(answerText);
@@ -127,9 +127,9 @@ namespace Comments.Test.UnitTests
             var result = answerService.CreateAnswer(viewModel);
 
             //Assert
-            result.AnswerId.ShouldBeGreaterThan(0);
-            result.AnswerText.ShouldBe(answerText);
-            result.AnswerBoolean.ShouldBe(false);
+            result.answer.AnswerId.ShouldBeGreaterThan(0);
+            result.answer.AnswerText.ShouldBe(answerText);
+            result.answer.AnswerBoolean.ShouldBe(false);
         }
 
         [Fact]
@@ -168,12 +168,12 @@ namespace Comments.Test.UnitTests
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
             var context = new ConsultationsContext(_options, userService);
-            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId, context);
+            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId, _context);
 
-            var expectedAnswerId = AddAnswer(1, userId, "current user's answer", context);
-            var anotherPersonsAnswerId = AddAnswer(1, Guid.NewGuid(), "another user's answer", context);
+            var expectedAnswerId = AddAnswer(1, userId, "current user's answer", _context);
+            var anotherPersonsAnswerId = AddAnswer(1, Guid.NewGuid(), "another user's answer", _context);
             
-            var commentService = new CommentService(context, userService);
+            var commentService = new CommentService(_context, userService);
 
             // Act
             var viewModel = commentService.GetCommentsAndQuestions(sourceURI);
