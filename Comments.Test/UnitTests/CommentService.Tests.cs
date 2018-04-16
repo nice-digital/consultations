@@ -137,12 +137,12 @@ namespace Comments.Test.UnitTests
             var sourceURI = "/consultations/1/1/introduction";
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
             var context = new ConsultationsContext(_options, userService);
-            var commentService = new CommentService(_context, userService);
+            var commentService = new CommentService(context, userService);
             var locationId = AddLocation(sourceURI, _context);
 
-            var expectedCommentId = AddComment(locationId, "current user's comment", isDeleted: false, createdByUserId: userId, passedInContext: _context);
-            var anotherPersonsCommentId = AddComment(locationId, "another user's comment", isDeleted: false, createdByUserId: Guid.NewGuid(), passedInContext: _context);
-            var ownDeletedCommentId = AddComment(locationId, "current user's deleted comment", isDeleted: true, createdByUserId: userId, passedInContext: _context);
+            var expectedCommentId = AddComment(locationId, "current user's comment", isDeleted: false, createdByUserId: userId, passedInContext: context);
+            var anotherPersonsCommentId = AddComment(locationId, "another user's comment", isDeleted: false, createdByUserId: Guid.NewGuid(), passedInContext: context);
+            var ownDeletedCommentId = AddComment(locationId, "current user's deleted comment", isDeleted: true, createdByUserId: userId, passedInContext: context);
 
             // Act
             var viewModel = commentService.GetCommentsAndQuestions("/consultations/1/1/introduction");

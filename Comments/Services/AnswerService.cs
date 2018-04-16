@@ -13,7 +13,7 @@ namespace Comments.Services
     public interface IAnswerService
     {
         (ViewModels.Answer answer, Validate validate) GetAnswer(int answerId);
-        int EditAnswer(int answerId, ViewModels.Answer answer);
+        (int rowsUpdated, Validate validate) EditAnswer(int answerId, ViewModels.Answer answer);
         int DeleteAnswer(int answerId);
         (ViewModels.Answer answer, Validate validate) CreateAnswer(ViewModels.Answer answer);
     }
@@ -36,14 +36,33 @@ namespace Comments.Services
 
             var answerInDatabase = _context.GetAnswer(answerId);
 
+            if (answerInDatabase == null)
+                return (answer: null, validate: new Validate(valid: false, notFound: true, message: $"Answer id:{answerId} not found trying to get answer for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
+
+            if (!answerInDatabase.CreatedByUserId.Equals(_currentUser.UserId.Value))
+                return (answer: null, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to access answer id: {answerId}, but it's not their answer"));
+
+
             return (answer: (answerInDatabase == null) ? null : new ViewModels.Answer(answerInDatabase), validate: null);
         }
 
-        public int EditAnswer(int answerId, ViewModels.Answer answer)
+        public (int rowsUpdated, Validate validate) EditAnswer(int answerId, ViewModels.Answer answer)
         {
+            if (!_currentUser.IsLoggedIn)
+                return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"Not logged in editing answer id:{answerId}"));
+
             var answerInDatabase = _context.GetAnswer(answerId);
+
+            if (answerInDatabase == null)
+                return (rowsUpdated: 0, validate: new Validate(valid: false, notFound: true, message: $"Answer id:{answerId} not found trying to edit answer for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
+
+            if (!answerInDatabase.CreatedByUserId.Equals(_currentUser.UserId.Value))
+                return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to edit answer id: {answerId}, but it's not their answer"));
+
+
             answerInDatabase.UpdateFromViewModel(answer);
-            return _context.SaveChanges();
+
+            return (rowsUpdated: _context.SaveChanges(), validate: null);
         }
 
         public int DeleteAnswer(int answerId)

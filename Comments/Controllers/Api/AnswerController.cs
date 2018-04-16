@@ -57,6 +57,26 @@ namespace Comments.Controllers.Api
             return invalidResult ?? CreatedAtAction("GetAnswer", new { id = result.answer.AnswerId }, result.answer);
         }
 
+        // PUT: consultations/api/Answer/5
+        [HttpPut("{answerId}")]
+        public IActionResult PutAnswer([FromRoute] int answerId, [FromBody] ViewModels.Answer answer)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (answerId != answer.AnswerId)
+            {
+                return BadRequest();
+            }
+
+            var result = _answerService.EditAnswer(answerId, answer);
+            var invalidResult = Validate(result.validate);
+
+            return invalidResult ?? Ok(result.rowsUpdated);
+        }
+
         private IActionResult Validate(Validate validate)
         {
             if (validate == null || validate.Valid)

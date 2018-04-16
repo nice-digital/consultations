@@ -55,7 +55,7 @@ namespace Comments.Test.UnitTests
             viewModel = answerService.GetAnswer(answerId);
 
             //Assert
-            result.ShouldBe(1);
+            result.rowsUpdated.ShouldBe(1);
             viewModel.answer.AnswerText.ShouldBe(updatedAnswerText);
         }
 

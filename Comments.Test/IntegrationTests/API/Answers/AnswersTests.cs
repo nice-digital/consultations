@@ -38,9 +38,6 @@ namespace Comments.Test.IntegrationTests.API.Answers
         {
             // Arrange
             ResetDatabase();
-            const string sourceUri = "/consultations/1/1/introduction";
-            var commentText = Guid.NewGuid().ToString();
-            var questionText = Guid.NewGuid().ToString();
             var answerText = Guid.NewGuid().ToString();
             var userId = Guid.Empty; 
 
@@ -68,21 +65,20 @@ namespace Comments.Test.IntegrationTests.API.Answers
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
             var answerService = new AnswerService(_context, userService);
-            var answer = answerService.GetAnswer(answerId);
+            var viewModel = answerService.GetAnswer(answerId);
 
             var updatedAnswerText = Guid.NewGuid().ToString();
-            answer.answer.AnswerText = updatedAnswerText;
+            viewModel.answer.AnswerText = updatedAnswerText;
 
-            var content = new StringContent(JsonConvert.SerializeObject(answer), Encoding.UTF8, "application/json");
+            var content = new StringContent(JsonConvert.SerializeObject(viewModel.answer), Encoding.UTF8, "application/json");
 
             //Act
-            var response = await _client.PutAsync("/consultations/api/answer/1", content);
+            var response = await _client.PutAsync($"consultations/api/answer/{answerId}", content);
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
-            var deserialisedAnswer = JsonConvert.DeserializeObject<ViewModels.Answer>(responseString);
-
+            
             //Assert
-            deserialisedAnswer.AnswerText.ShouldBe(updatedAnswerText);
+            responseString.ShouldBe("1");
         }
     }
 }
