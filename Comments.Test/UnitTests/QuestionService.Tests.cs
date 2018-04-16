@@ -20,12 +20,15 @@ namespace Comments.Test.UnitTests
             var questionText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
 
-            var locationId = AddLocation(sourceUri);
-            var questionTypeId = AddQuestionType(description, false, true);
-            var questionId = AddQuestion(locationId, questionTypeId, questionText, _context);
-
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var questionService = new QuestionService(new ConsultationsContext(_options, userService), userService);
+            var context = new ConsultationsContext(_options, userService);
+
+            var locationId = AddLocation(sourceUri);
+            var questionTypeId = AddQuestionType(description, false, true, 1, context);
+            var questionId = AddQuestion(locationId, questionTypeId, questionText, context);
+
+            
+            var questionService = new QuestionService(context, userService);
 
             //Act
             var viewModel = questionService.GetQuestion(questionId);
@@ -74,17 +77,21 @@ namespace Comments.Test.UnitTests
             var questionText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
 
-            var locationId = AddLocation(sourceURI);
-            var questionTypeId = AddQuestionType(description, false, true);
-            var questionId = AddQuestion(locationId, questionTypeId, questionText);
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var questionService = new QuestionService(new ConsultationsContext(_options, userService), userService);
+            var context = new ConsultationsContext(_options, userService);
+
+            var locationId = AddLocation(sourceURI, context);
+            var questionTypeId = AddQuestionType(description, false, true, 1, context);
+            var questionId = AddQuestion(locationId, questionTypeId, questionText, context);
+            
+            var questionService = new QuestionService(context, userService);
 
             //Act
-            var result = questionService.DeleteQuestion(questionId);
+            questionService.DeleteQuestion(questionId);
+            var viewModel = questionService.GetQuestion(questionId);
 
             //Assert
-            result.ShouldBe(1);
+            viewModel.ShouldBeNull();
         }
 
         [Fact]
@@ -121,14 +128,14 @@ namespace Comments.Test.UnitTests
 
             var location = new Location(sourceURI, null, null, null, null, null, null, null, null);
             var questionType = new QuestionType(description, false, true, null);
-            var question = new Question(locationId, questionText,questionTypeId, null, null, questionType, new List<Answer>());
+            var question = new Question(locationId, questionText, questionTypeId, null, null, questionType, new List<Answer>());
             var viewModel = new ViewModels.Question(location, question);
 
             //Act
-            var result = questionService.CreateQuestion(viewModel, questionTypeId);
+            var result = questionService.CreateQuestion(viewModel);
 
             //Assert
-            result.QuestionId.ShouldBe(1);
+            result.QuestionText.ShouldBe(questionText);
         }
     }
 }

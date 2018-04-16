@@ -15,21 +15,17 @@ namespace Comments.Services
         ViewModels.Question GetQuestion(int questionId);
         int EditQuestion(int questionId, ViewModels.Question question);
         int DeleteQuestion(int questionId);
-        ViewModels.Question CreateQuestion(ViewModels.Question question, int questionTypeId);
+        ViewModels.Question CreateQuestion(ViewModels.Question question);
     }
     public class QuestionService : IQuestionService
     {
         private readonly ConsultationsContext _context;
-
         private readonly IUserService _userService;
-        //private readonly IDbContextOptions _options;
-        //private readonly IDbContextOptionsBuilderInfrastructure _builderInfrastructure;
-        public QuestionService(ConsultationsContext consultationsContext, IUserService userService)//, IDbContextOptions options, IDbContextOptionsBuilderInfrastructure builderInfrastructure)
+
+        public QuestionService(ConsultationsContext consultationsContext, IUserService userService)
         {
             _context = consultationsContext;
             _userService = userService;
-            //_options = options;
-            //_builderInfrastructure = builderInfrastructure;
         }
 
         public ViewModels.Question GetQuestion(int questionId)
@@ -55,13 +51,13 @@ namespace Comments.Services
             return _context.SaveChanges();
         }
 
-        public ViewModels.Question CreateQuestion(ViewModels.Question question, int questionTypeId) //TODO: Where does questionTypeId come from?
+        public ViewModels.Question CreateQuestion(ViewModels.Question question) 
         {
             var locationToSave = new Models.Location(question as ViewModels.Location);
             _context.Location.Add(locationToSave);
 
             var questionTypeToSave = new Models.QuestionType(question.QuestionType.Description, question.QuestionType.HasTextAnswer, question.QuestionType.HasBooleanAnswer, null);
-            var questionToSave = new Models.Question(question.LocationId, question.QuestionText, questionTypeId, question.QuestionOrder, locationToSave, questionTypeToSave, null);
+            var questionToSave = new Models.Question(question.LocationId, question.QuestionText, question.QuestionTypeId, question.QuestionOrder, locationToSave, questionTypeToSave, null);
 
             _context.Question.Add(questionToSave);
             _context.SaveChanges();

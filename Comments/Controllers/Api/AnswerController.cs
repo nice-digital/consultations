@@ -1,4 +1,5 @@
-﻿using Comments.Services;
+﻿using System;
+using Comments.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -36,7 +37,7 @@ namespace Comments.Controllers.Api
 
         // POST: consultations/api/Answer
         [HttpPost]
-        public IActionResult PostAnswer([FromBody] ViewModels.Answer answer)
+        public IActionResult PostAnswer([FromBody] ViewModels.Answer answer) 
         {
             if (!ModelState.IsValid)
             {
@@ -44,7 +45,7 @@ namespace Comments.Controllers.Api
                 return BadRequest(ModelState);
             }
 
-            var savedComment = _answerService.CreateAnswer(answer, 1); //TODO: Remove hardcoded QuestionID
+            var savedComment = _answerService.CreateAnswer(answer);
 
             return CreatedAtAction("GetAnswer", new { id = savedComment.AnswerId }, savedComment);
         }

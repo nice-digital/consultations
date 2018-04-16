@@ -15,7 +15,7 @@ namespace Comments.Services
         (ViewModels.Answer answer, Validate validate) GetAnswer(int answerId);
         int EditAnswer(int answerId, ViewModels.Answer answer);
         int DeleteAnswer(int answerId);
-        ViewModels.Answer CreateAnswer(ViewModels.Answer answer, int questionId);
+        ViewModels.Answer CreateAnswer(ViewModels.Answer answer);
     }
     public class AnswerService : IAnswerService
     {
@@ -56,11 +56,10 @@ namespace Comments.Services
             return _context.SaveChanges();
         }
 
-        public ViewModels.Answer CreateAnswer(ViewModels.Answer answer, int questionId)
+        public ViewModels.Answer CreateAnswer(ViewModels.Answer answer)
         {
-
             var currentlyLoggedOnUserId = Guid.NewGuid();
-            var answerToSave = new Models.Answer(questionId, currentlyLoggedOnUserId, answer.AnswerText, answer.AnswerBoolean, null);
+            var answerToSave = new Models.Answer(answer.QuestionId, currentlyLoggedOnUserId, answer.AnswerText, answer.AnswerBoolean, null);
 
             _context.Answer.Add(answerToSave);
             _context.SaveChanges();

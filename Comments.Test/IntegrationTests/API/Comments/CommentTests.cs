@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Comments.Models;
 using Comments.Test.Infrastructure;
 using Comments.ViewModels;
 using Newtonsoft.Json;
@@ -88,7 +89,10 @@ namespace Comments.Test.IntegrationTests.API.Comments
             var answerText = Guid.NewGuid().ToString();
             var userId = Guid.NewGuid();
 
-            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId);
+            var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+            var context = new ConsultationsContext(_options, userService);
+
+            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId, context);
 
             // Act
             var response = await _client.GetAsync($"/consultations/api/Comments?consultationId={consultationId}&documentId={documentId}&chapterSlug=introduction");

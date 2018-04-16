@@ -43,8 +43,8 @@ namespace Comments.Test.IntegrationTests.API.Questions
         public async Task Create_Question()
         {
             // Arrange
-            var answer = new ViewModels.Question();
-            var content = new StringContent(JsonConvert.SerializeObject(answer), Encoding.UTF8, "application/json");
+            var question = new ViewModels.Question();
+            var content = new StringContent(JsonConvert.SerializeObject(question), Encoding.UTF8, "application/json");
 
             // Act
             var response = await _client.PostAsync("/consultations/api/question", content);

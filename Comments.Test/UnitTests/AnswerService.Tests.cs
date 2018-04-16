@@ -20,14 +20,9 @@ namespace Comments.Test.UnitTests
             var userId = Guid.Empty;
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
             var context = new ConsultationsContext(_options, userService);
-
-            var sourceURI = "/consultations/1/1/introduction";
-            var commentText = Guid.NewGuid().ToString();
-            var answerText = Guid.NewGuid().ToString();
-            var questionText = Guid.NewGuid().ToString();
-            var answerId = 1;
             
-            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId, context);
+            var answerText = Guid.NewGuid().ToString();
+            var answerId = AddAnswer(1, userId, answerText, context);
 
             //Act
             var viewModel = new AnswerService(context, userService).GetAnswer(answerId);
@@ -41,17 +36,14 @@ namespace Comments.Test.UnitTests
         {
             //Arrange
             ResetDatabase();
-            var sourceURI = "/consultations/1/1/introduction";
-            var commentText = Guid.NewGuid().ToString();
             var answerText = Guid.NewGuid().ToString();
-            var questionText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
-            var answerId = 1;
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
             var context = new ConsultationsContext(_options, userService);
-            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId, context);
-            
+
+            var answerId = AddAnswer(1, userId, answerText, context);
+
             var answerService = new AnswerService(context, userService);
             var viewModel = answerService.GetAnswer(answerId);
 
@@ -72,25 +64,20 @@ namespace Comments.Test.UnitTests
         {
             //Arrange
             ResetDatabase();
-            var sourceURI = "/consultations/1/1/introduction";
-            var commentText = Guid.NewGuid().ToString();
             var answerText = Guid.NewGuid().ToString();
-            var questionText = Guid.NewGuid().ToString();
-            var userId = Guid.Empty;
-            var answerId = 1;
+            var userId = Guid.Empty;;
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
             var context = new ConsultationsContext(_options, userService);
-            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId, context);
-            
+            var answerId = AddAnswer(1, userId, answerText, context);
+
             var answerService = new AnswerService(context, userService);
 
             //Act
-            var result = answerService.DeleteAnswer(answerId);
+            answerService.DeleteAnswer(answerId);
             var viewModel = answerService.GetAnswer(answerId);
 
             //Assert
-            result.ShouldBe(1);
             viewModel.answer.ShouldBeNull();
         }
 
@@ -137,10 +124,10 @@ namespace Comments.Test.UnitTests
             var answerService = new AnswerService(new ConsultationsContext(_options, userService), userService);
 
             //Act
-            var result = answerService.CreateAnswer(viewModel, question.QuestionId);
+            var result = answerService.CreateAnswer(viewModel);
 
             //Assert
-            result.AnswerId.ShouldBe(1);
+            result.AnswerId.ShouldBeGreaterThan(0);
             result.AnswerText.ShouldBe(answerText);
             result.AnswerBoolean.ShouldBe(false);
         }
@@ -183,16 +170,16 @@ namespace Comments.Test.UnitTests
             var context = new ConsultationsContext(_options, userService);
             AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId, context);
 
-            var expectedAnswerId = AddAnswer(1, userId, "current user's answer");
-            var anotherPersonsAnswerId = AddAnswer(1, Guid.NewGuid(), "another user's answer");
+            var expectedAnswerId = AddAnswer(1, userId, "current user's answer", context);
+            var anotherPersonsAnswerId = AddAnswer(1, Guid.NewGuid(), "another user's answer", context);
             
-            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService);
+            var commentService = new CommentService(context, userService);
 
             // Act
             var viewModel = commentService.GetCommentsAndQuestions(sourceURI);
-            var t = viewModel.Questions.SingleOrDefault(q => q.QuestionId.Equals(1));
-            var myAnswer = t.Answers.SingleOrDefault(a => a.AnswerId.Equals(expectedAnswerId));
-            var otherAnswer = t.Answers.SingleOrDefault(a => a.AnswerId.Equals(anotherPersonsAnswerId));
+            var questionViewModel = viewModel.Questions.SingleOrDefault(q => q.QuestionId.Equals(1));
+            var myAnswer = questionViewModel.Answers.SingleOrDefault(a => a.AnswerId.Equals(expectedAnswerId));
+            var otherAnswer = questionViewModel.Answers.SingleOrDefault(a => a.AnswerId.Equals(anotherPersonsAnswerId));
 
             //Assert
             myAnswer.AnswerId.ShouldBe(expectedAnswerId);

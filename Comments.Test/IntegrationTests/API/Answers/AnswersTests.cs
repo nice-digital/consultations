@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Comments.Models;
 using Comments.Test.Infrastructure;
 using Newtonsoft.Json;
 using Shouldly;
@@ -17,7 +18,7 @@ namespace Comments.Test.IntegrationTests.API.Answers
         public async Task Create_Answer()
         {
             // Arrange
-            var answer = new ViewModels.Answer(0, "answer text", false, DateTime.Now, Guid.Empty);  //TODO: Not sure about AnswerID
+            var answer = new ViewModels.Answer(0, "answer text", false, DateTime.Now, Guid.Empty, 1);
             var content = new StringContent(JsonConvert.SerializeObject(answer), Encoding.UTF8, "application/json");
 
             // Act

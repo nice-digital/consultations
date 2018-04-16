@@ -13,6 +13,7 @@ namespace Comments.ViewModels
         {
             QuestionId = question.QuestionId;
             QuestionText = question.QuestionText;
+            QuestionTypeId = question.QuestionTypeId;
             QuestionOrder = question.QuestionOrder;
             LastModifiedByUserId = question.LastModifiedByUserId;
             LastModifiedDate = question.LastModifiedDate;
@@ -24,6 +25,7 @@ namespace Comments.ViewModels
 
         public int QuestionId { get; set; }
         public string QuestionText { get; set; }
+        public int QuestionTypeId { get; set; }
         public byte? QuestionOrder { get; set; }
         public Guid LastModifiedByUserId { get; set; }
         public DateTime LastModifiedDate { get; set; }
@@ -50,11 +52,12 @@ namespace Comments.ViewModels
     public class Answer
     {
         public Answer() { } //only here for model binding. don't use it in code.
-        public Answer(int answerId, string answerText, bool answerBoolean, DateTime lastModifiedDate, Guid lastModifiedByUserId)
+        public Answer(int answerId, string answerText, bool answerBoolean, DateTime lastModifiedDate, Guid lastModifiedByUserId, int questionId)
         {
             AnswerId = answerId;
             AnswerText = answerText;
             AnswerBoolean = answerBoolean;
+            QuestionId = questionId;
             LastModifiedDate = lastModifiedDate;
             LastModifiedByUserId = lastModifiedByUserId;
         }
@@ -64,6 +67,7 @@ namespace Comments.ViewModels
             AnswerId = answer.AnswerId;
             AnswerText = answer.AnswerText;
             AnswerBoolean = answer.AnswerBoolean;
+            QuestionId = answer.QuestionId;
             LastModifiedDate = answer.LastModifiedDate;
             LastModifiedByUserId = answer.LastModifiedByUserId;
         }
@@ -71,6 +75,8 @@ namespace Comments.ViewModels
         public int AnswerId { get; set; }
         public string AnswerText { get; set; }
         public bool? AnswerBoolean { get; set; }
+
+        public int QuestionId { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public Guid LastModifiedByUserId { get; set; }
     }

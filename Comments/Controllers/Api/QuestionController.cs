@@ -33,5 +33,22 @@ namespace Comments.Controllers.Api
 
             return Ok(comment);
         }
+
+        // POST: consultations/api/Question
+        [HttpPost]
+        public IActionResult PostQuestion([FromBody] ViewModels.Question question)
+        {
+            if (!ModelState.IsValid)
+            {
+
+                return BadRequest(ModelState);
+            }
+
+            var savedComment = _questionService.CreateQuestion(question);
+
+            return CreatedAtAction("GetQuestion", new { id = savedComment.QuestionId }, savedComment);
+        }
     }
+
+
 }

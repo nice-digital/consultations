@@ -26,10 +26,13 @@ namespace Comments.Test.UnitTests
             var commentText = Guid.NewGuid().ToString();
             var createdByUserId = Guid.NewGuid();
 
-            var locationId = AddLocation(sourceURI);
-            AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId);
             var userService = FakeUserService.Get(true, "Benjamin Button", createdByUserId);
-            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService);
+            var context = new ConsultationsContext(_options, userService);
+
+            var locationId = AddLocation(sourceURI, context);
+            AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId, passedInContext: context);
+            
+            var commentService = new CommentService(context, userService);
             
             // Act
             var viewModel = commentService.GetCommentsAndQuestions(sourceURI);
@@ -49,8 +52,7 @@ namespace Comments.Test.UnitTests
             var answerText = Guid.NewGuid().ToString();
             var createdByUserId = Guid.Empty;
 
-            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, createdByUserId);
-            //var commentService = new CommentService(new ConsultationsContext(_options, _fakeUserService), _fakeUserService);
+            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, createdByUserId, _context);
             var commentService = new CommentService(_context, _fakeUserService);
 
             // Act    
