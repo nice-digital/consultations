@@ -16,6 +16,8 @@ export class CommentBox extends Component {
 		 	//throw new Error();
 	}
 
+
+
 	// loadComments(){
 	// 	load("comments", undefined, { sourceURI: this.props.match.url })
 	// 		.then(res=>{
@@ -26,7 +28,11 @@ export class CommentBox extends Component {
 	// 		});
 	// }
 
+	// todo: create a new comment
+
 	componentDidMount() {
+		//todo: load comment details from endpoint
+
 		// load("comment", undefined, [this.props.comment.commentId], {})
 		// 	.then(response =>{
 		// 		console.log(response);

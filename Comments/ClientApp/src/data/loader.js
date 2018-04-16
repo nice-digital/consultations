@@ -23,6 +23,7 @@ export const generateUrl = (endpoint, baseUrl = BaseUrl, urlParameters = [], que
 
 	if (!lookedUpEndpoint) return endpoint;
 
+	// todo: string replace test etc
 //	const appendedEndpoint = lookedUpEndpoint.replaceFormat(query.replaceValue);
 
 	return baseUrl + lookedUpEndpoint + objectToQueryString(query);
