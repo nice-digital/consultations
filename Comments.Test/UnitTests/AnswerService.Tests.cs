@@ -74,10 +74,11 @@ namespace Comments.Test.UnitTests
             var answerService = new AnswerService(context, userService);
 
             //Act
-            answerService.DeleteAnswer(answerId);
+            var result = answerService.DeleteAnswer(answerId);
             var viewModel = answerService.GetAnswer(answerId);
 
             //Assert
+            result.rowsUpdated.ShouldBe(1);
             viewModel.answer.ShouldBeNull();
         }
 
@@ -95,7 +96,7 @@ namespace Comments.Test.UnitTests
             var result = answerService.DeleteAnswer(answerId);
 
             //Assert
-            result.ShouldBe(0);
+            result.validate.NotFound.ShouldBeTrue();
         }
 
         [Fact]

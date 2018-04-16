@@ -14,7 +14,7 @@ namespace Comments.Services
     {
         (ViewModels.Answer answer, Validate validate) GetAnswer(int answerId);
         (int rowsUpdated, Validate validate) EditAnswer(int answerId, ViewModels.Answer answer);
-        int DeleteAnswer(int answerId);
+        (int rowsUpdated, Validate validate) DeleteAnswer(int answerId);
         (ViewModels.Answer answer, Validate validate) CreateAnswer(ViewModels.Answer answer);
     }
     public class AnswerService : IAnswerService
@@ -65,14 +65,21 @@ namespace Comments.Services
             return (rowsUpdated: _context.SaveChanges(), validate: null);
         }
 
-        public int DeleteAnswer(int answerId)
+        public (int rowsUpdated, Validate validate) DeleteAnswer(int answerId)
         {
-            var answer = _context.GetAnswer(answerId);
-            if (answer == null)
-                return 0;
+            if (!_currentUser.IsLoggedIn)
+                return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"Not logged in deleting answer id:{answerId}"));
 
-            answer.IsDeleted = true;
-            return _context.SaveChanges();
+            var answerInDatabase = _context.GetAnswer(answerId);
+
+            if (answerInDatabase == null)
+                return (rowsUpdated: 0, validate: new Validate(valid: false, notFound: true, message: $"Answer id:{answerId} not found trying to delete answer for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
+
+            if (!answerInDatabase.CreatedByUserId.Equals(_currentUser.UserId.Value))
+                return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to delete answer id: {answerId}, but it's not their answer"));
+
+            answerInDatabase.IsDeleted = true;
+            return (rowsUpdated: _context.SaveChanges(), validate: null);
         }
 
         public (ViewModels.Answer answer, Validate validate) CreateAnswer(ViewModels.Answer answer)

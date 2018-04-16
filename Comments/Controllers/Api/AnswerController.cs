@@ -77,6 +77,21 @@ namespace Comments.Controllers.Api
             return invalidResult ?? Ok(result.rowsUpdated);
         }
 
+        // DELETE: consultations/api/Answer/5
+        [HttpDelete("{answerId}")]
+        public IActionResult DeleteAnswer([FromRoute] int answerId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = _answerService.DeleteAnswer(answerId);
+            var invalidResult = Validate(result.validate);
+
+            return invalidResult ?? Ok(result.rowsUpdated);
+        }
+
         private IActionResult Validate(Validate validate)
         {
             if (validate == null || validate.Valid)

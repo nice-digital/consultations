@@ -80,5 +80,26 @@ namespace Comments.Test.IntegrationTests.API.Answers
             //Assert
             responseString.ShouldBe("1");
         }
+
+        [Fact]
+        public async Task Delete_Answer()
+        {
+            //Arrange
+            var userId = Guid.Empty;
+            var answerText = Guid.NewGuid().ToString();
+            var answerId = AddAnswer(1, userId, answerText, _context);
+
+            var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+            var answerService = new AnswerService(_context, userService);
+
+            //Act
+            var response = await _client.DeleteAsync($"consultations/api/answer/{answerId}");
+            response.EnsureSuccessStatusCode();
+
+            var result =  answerService.GetAnswer(answerId);
+           
+            //Assert
+            result.validate.NotFound.ShouldBeTrue();
+        }
     }
 }
