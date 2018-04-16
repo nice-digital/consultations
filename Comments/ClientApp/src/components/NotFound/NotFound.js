@@ -1,10 +1,10 @@
-﻿import React, { Component } from "react";
+﻿import React, { Component, Fragment } from "react";
 import { Route } from "react-router-dom";
 
 export default class NotFound extends Component {
 	render() {
 		return (
-			<div>
+			<Fragment>
 				<Route render={({ staticContext }) => {
 					if (staticContext)
 						staticContext.status = 404;
@@ -13,7 +13,7 @@ export default class NotFound extends Component {
 				<h1>Not found</h1>
 
 				<p>Sorry that page could not be found.</p>
-			</div>
+			</Fragment>
 		);
 	}
 }

@@ -1,44 +1,44 @@
 // @flow
 
-import React from "react";
+import React, { Fragment } from "react";
 import { Route, Switch, Redirect } from "react-router";
 import { Helmet } from "react-helmet";
 
-import LayoutTwoCol from "../LayoutTwoColumn";
-import WeatherForecast from "../WeatherForecast/WeatherForecast";
 import DocumentWithRouter from "../Document/Document";
+import { Drawer } from "../Drawer/Drawer";
+import CommentListWithRouter from "../CommentList/CommentList";
 import NotFound from "../NotFound/NotFound";
 
-const App = () => {
-	return (
-		<div>
-			<Helmet titleTemplate="%s | Consultations | NICE">
-				<html lang="en-GB" />
-			</Helmet>
+const App = () => (
+	<Fragment>
+		<Helmet titleTemplate="%s | Consultations | NICE">
+			<html lang="en-GB" />
+		</Helmet>
 
-			<Switch>
-				{/*home*/}
-				<Route exact path="/">
-					<Redirect to="/1/1/introduction" />
-				</Route>
+		<Switch>
+			{/*Home*/}
+			<Route exact path="/">
+				<Redirect to="/1/1/introduction" />
+			</Route>
 
-				{/*weather-forecast*/}
-				<Route path="/weather-forecast">
-					<LayoutTwoCol>
-						<WeatherForecast />
-					</LayoutTwoCol>
-				</Route>
-
-				{/*document*/}
-				<Route path="/:consultationId/:documentId/:chapterSlug">
+			{/*Document View*/}
+			<Route path="/:consultationId/:documentId/:chapterSlug">
+				<Fragment>
+					<Drawer />
 					<DocumentWithRouter />
-				</Route>
+				</Fragment>
+			</Route>
 
-				{/*404*/}
-				<Route component={NotFound} />
-			</Switch>
-		</div>
-	);
-};
+			<Route path="/commentlist">
+				<Fragment>
+					<CommentListWithRouter />
+				</Fragment>
+			</Route>
+
+			{/*404*/}
+			<Route component={NotFound} />
+		</Switch>
+	</Fragment>
+);
 
 export default App;

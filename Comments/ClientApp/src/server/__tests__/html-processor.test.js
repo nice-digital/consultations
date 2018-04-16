@@ -3,7 +3,7 @@ import { prepHead,
 	replaceOpeningHtmlTag,
 	replaceOpeningBodyTag,
 	replaceRootContent,
-	replaceRelativePaths } from "./html-processor";
+	replaceRelativePaths } from "../html-processor";
 
 describe("HTML processor", () => {
 	describe("prepHead", () => {

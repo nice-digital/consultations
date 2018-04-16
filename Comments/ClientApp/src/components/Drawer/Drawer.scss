@@ -1,0 +1,41 @@
+@import "../../../node_modules/@nice-digital/design-system/src/stylesheets/nice-design-system";
+
+.Drawer {
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  @extend %left-drop-shadow;
+
+  // default closed state
+  transform: translateX(100%);
+  @extend %transition-default;
+  width: 500px;
+
+  &__controls {
+    width: 40px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateX(-40px);
+  }
+  &__toggleOpen,
+  &__toggleWidth {
+    @extend %ui-button;
+    margin-right: rem($spacing-small);
+  }
+  &__main {
+    height: 100vh;
+    padding-left: rem($spacing-medium);
+    padding-right: rem($spacing-medium);
+    overflow-y: scroll;
+    background-color: $colour-nice-white;
+  }
+  &--open {
+    transform: translateX(0);
+  }
+  &--mobile {
+    width: calc(100% - 40px);
+  }
+}
