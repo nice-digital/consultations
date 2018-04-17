@@ -27,7 +27,7 @@ const preload = (staticContext, endpoint, query) => {
 	}
 
 	// Load fresh data on the server
-	var promise = load(endpoint, staticContext.baseUrl, query)
+	var promise = load(endpoint, staticContext.baseUrl, [], query)
 		.then(response => {
 			staticContext.preload.data[endpoint] = response.data;
 			return response.data;

@@ -34,7 +34,7 @@ describe("[ClientApp] ", () => {
 			 const wrapper = mount(<CommentList {...fakeProps}/>);
 			 await nextTick();
 			 wrapper.update();
-			 expect(wrapper.find("li").text()).toEqual("authenticated comment insert");
+			 expect(wrapper.find("li").length).toEqual(2);
 		});
 
 		it("renders the 'no comments' message if the comments array is empty", async () => {

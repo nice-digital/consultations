@@ -3,6 +3,7 @@ import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import { load } from "./../../data/loader";
 import preload from "../../data/pre-loader";
+import CommentBox from "../CommentBox/CommentBox";
 
 type PropsType = {
 	staticContext?: any,
@@ -82,7 +83,7 @@ export class CommentList extends Component<PropsType, StateType> {
 				<ul>
 					{this.state.comments.map((comment) => {
 						return (
-							<Comment key={comment.commentId} comment={comment} />
+							<CommentBox key={comment.commentId} comment={comment} />
 						);
 					})}
 				</ul>
@@ -91,9 +92,9 @@ export class CommentList extends Component<PropsType, StateType> {
 	}
 }
 
-const Comment = (props) => {
-	const comment = props.comment;
-	return <li>{comment.commentText}</li>;
-};
+// const Comment = (props) => {
+// 	const comment = props.comment;
+// 	return <li>{comment.commentText}</li>;
+// };
 
 export default withRouter(CommentList);

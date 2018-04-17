@@ -25,10 +25,17 @@ export const generateUrl = (endpointName, baseUrl = BaseUrl, urlParameters = [],
 	return baseUrl + replaceFormat(endpoint, urlParameters) + objectToQueryString(query);
 };
 
-export const load = (endpoint, baseUrl = BaseUrl, urlParameters = [],  query = {}) => {
+export const load = (endpoint, baseUrl = BaseUrl, urlParameters = [],  query = {}, method = "GET", data = {}, isJson = false) => {
 	return new Promise((resolve, reject) => {
-		//console.log(`load: ${generateUrl(endpoint, baseUrl, urlParameters, query)}`);
-		axios(generateUrl(endpoint, baseUrl, urlParameters, query))
+		// console.log(`load: ${generateUrl(endpoint, baseUrl, urlParameters, query, method, data)}`);
+		const headers = isJson ? { "Content-Type" : "application/json"} : {};
+
+		axios({
+			url: generateUrl(endpoint, baseUrl, urlParameters, query),
+			data,
+			method,
+			headers
+		})
 			.then(response => {
 				resolve(response);
 			})
