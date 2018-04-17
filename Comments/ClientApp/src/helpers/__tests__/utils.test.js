@@ -21,5 +21,13 @@ describe("[ClientApp] ", () => {
 			});
 		});
 
+		describe("nextTick", () => {
+			it("should produce a string that contains multiple replaced values in endpoint", () => {
+			
+				expect(replaceFormat("replace string", []))
+					.toEqual("consultations/testRoute/1/2");
+			});
+		});
+
 	});
 });

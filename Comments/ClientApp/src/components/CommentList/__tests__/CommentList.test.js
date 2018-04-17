@@ -30,11 +30,11 @@ describe("[ClientApp] ", () => {
 		});
 
 		it("should render a li tag with sample data ID", async () => {
-			mock.onGet(generateUrl("comments", undefined, [], { sourceURI: fakeProps.match.url })).reply(200, sampleComment);
-			const wrapper = mount(<CommentList {...fakeProps}/>);
-			await nextTick();
-			wrapper.update();
-			expect(wrapper.find("li").text()).toEqual("authenticated comment insert");
+			 mock.onGet(generateUrl("comments", undefined, [], { sourceURI: fakeProps.match.url })).reply(200, sampleComment);
+			 const wrapper = mount(<CommentList {...fakeProps}/>);
+			 await nextTick();
+			 wrapper.update();
+			 expect(wrapper.find("li").text()).toEqual("authenticated comment insert");
 		});
 
 		it("renders the 'no comments' message if the comments array is empty", async () => {

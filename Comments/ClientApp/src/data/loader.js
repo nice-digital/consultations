@@ -5,7 +5,7 @@ import {objectToQueryString, replaceFormat} from "./../helpers/utils";
 /**
  * Load data using Axios
  * @see https://github.com/axios/axios
- * @param endpoint - can be either the shortcut of an endpoint as
+ * @param endpointName - can be either the shortcut of an endpoint as
  * specified in the Endpoints collection, or a URL / file path
  * @param baseUrl - the root url segment that's prepended to the query
  * @param query - the data to be serialised into query string
@@ -18,23 +18,16 @@ import {objectToQueryString, replaceFormat} from "./../helpers/utils";
  */
 
 
-export const generateUrl = (endpoint, baseUrl = BaseUrl, urlParameters = [], query = {}) => {
-	const lookedUpEndpoint = Endpoints[endpoint];
+export const generateUrl = (endpointName, baseUrl = BaseUrl, urlParameters = [], query = {}) => {
+	var endpoint = Endpoints[endpointName];
+	if (!endpoint) return endpointName;
 
-	if (!lookedUpEndpoint) return endpoint;
-
-	// todo: string replace test etc
-//	const appendedEndpoint = lookedUpEndpoint.replaceFormat(query.replaceValue);
-
-	return baseUrl + lookedUpEndpoint + objectToQueryString(query);
-
+	return baseUrl + replaceFormat(endpoint, urlParameters) + objectToQueryString(query);
 };
 
 export const load = (endpoint, baseUrl = BaseUrl, urlParameters = [],  query = {}) => {
 	return new Promise((resolve, reject) => {
-
-		console.log(`load: ${generateUrl(endpoint, baseUrl, urlParameters, query)}`);
-
+		//console.log(`load: ${generateUrl(endpoint, baseUrl, urlParameters, query)}`);
 		axios(generateUrl(endpoint, baseUrl, urlParameters, query))
 			.then(response => {
 				resolve(response);

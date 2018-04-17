@@ -24,8 +24,8 @@ export const nextTick = async () => {
 	});
 };
 
-export function replaceFormat(args) {
-	return this.replace(/{(\d+)}/g, function(match, number) {
+export function replaceFormat(stringToReplace, args) {
+	return stringToReplace.replace(/{(\d+)}/g, function(match, number) {
 		return typeof args[number] !== "undefined"
 			? args[number]
 			: match;

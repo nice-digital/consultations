@@ -34,18 +34,6 @@ describe("[ClientApp] ", () => {
 					.toEqual("consultations/api/Comment/1");
 			});
 
-			it("should produce a string that contains replaced value in endpoint", () => {
-				Endpoints.testRoute = "route/{0}/{1}";
-				const url = loader.generateUrl(
-					"testRoute",
-					"consultations",
-					[ 1, 2 ]
-				);
-				expect(url)
-					.toEqual("consultations/testRoute/1/2");
-			});
-
-
 			it("should produce a string that ends on a query of the supplied parameters", () => {
 				const url  = loader.generateUrl(
 					"chapter",

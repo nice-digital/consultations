@@ -4,8 +4,6 @@ import { withRouter } from "react-router-dom";
 import { load } from "./../../data/loader";
 import preload from "../../data/pre-loader";
 
-import CommentBox from "../CommentBox/CommentBox";
-
 type PropsType = {
 	staticContext?: any,
 	match: {
@@ -19,7 +17,7 @@ type PropsType = {
 type CommentType = {
 	commentId: number,
 	lastModifiedDate: Date,
-	lastModifiedByUserId: string, //guid..
+	lastModifiedByUserId: string, //really a guid
 	commentText: string,
 	locationId: number,
 	sourceURI: string,
@@ -36,7 +34,7 @@ type StateType = {
 };
 
 export class CommentList extends Component<PropsType, StateType> {
-	constructor(props) {
+	constructor(props: PropsType) {
 		super(props);
 		this.state = {
 			comments: [],
@@ -84,7 +82,7 @@ export class CommentList extends Component<PropsType, StateType> {
 				<ul>
 					{this.state.comments.map((comment) => {
 						return (
-							<CommentBox key={comment.commentId} comment={comment} />
+							<Comment key={comment.commentId} comment={comment} />
 						);
 					})}
 				</ul>
@@ -93,9 +91,9 @@ export class CommentList extends Component<PropsType, StateType> {
 	}
 }
 
-// const CommentBox = (props) => {
-// 	const comment = props.comment;
-// 	return <li>{comment.commentText}</li>;
-// };
+const Comment = (props) => {
+	const comment = props.comment;
+	return <li>{comment.commentText}</li>;
+};
 
 export default withRouter(CommentList);
