@@ -1,4 +1,4 @@
-import { objectToQueryString, nextTick } from "../utils";
+import { objectToQueryString, nextTick, replaceFormat } from "../utils";
 
 describe("[ClientApp] ", () => {
 	describe("Utils ", () => {
@@ -21,13 +21,26 @@ describe("[ClientApp] ", () => {
 			});
 		});
 
-		describe("nextTick", () => {
-			it("should produce a string that contains multiple replaced values in endpoint", () => {
-			
-				expect(replaceFormat("replace string", []))
-					.toEqual("consultations/testRoute/1/2");
+		describe("replaceFormat", () => {
+			var stringWithNoReplaceableValues = "/consultations/api/comment";
+			var stringWithOneReplaceableValue = "/consultations/api/comment/{0}";
+			var stringWithTwoReplaceableValues = "/consultations/api/comment/{0}/{1}";
+
+			it("should return string unchanged with null passed", () => {
+				expect(replaceFormat(stringWithNoReplaceableValues, null)).toEqual(stringWithNoReplaceableValues);
+			});
+			it("should return string unchanged with undefined passed", () => {
+				expect(replaceFormat(stringWithNoReplaceableValues, undefined)).toEqual(stringWithNoReplaceableValues);
+			});
+			it("should return string unchanged with object passed", () => {
+				expect(replaceFormat(stringWithNoReplaceableValues, {notvalid: true})).toEqual(stringWithNoReplaceableValues);
+			});
+			it("should return replaced string with one value passed", () => {
+				expect(replaceFormat(stringWithOneReplaceableValue, [100])).toEqual("/consultations/api/comment/100");
+			});			
+			it("should return replaced string with two values passed", () => {
+				expect(replaceFormat(stringWithTwoReplaceableValues, [1001, 2002])).toEqual("/consultations/api/comment/1001/2002");
 			});
 		});
-
 	});
 });
