@@ -39,7 +39,8 @@ export class CommentBox extends Component {
 		});
 	};
 
-	formSubmitHandler = (comment) => {
+	formSubmitHandler = (e, comment) => {
+		e.preventDefault();
 		load("comment", undefined, [comment.commentId], {}, "PUT", comment);
 			//.then(
 			//	res => console.log({res})
@@ -56,10 +57,10 @@ export class CommentBox extends Component {
 		return (
 			<Fragment>
 				<li>
-					<form onSubmit={()=>this.formSubmitHandler(this.state.comment)}>
+					<form onSubmit={(e)=>this.formSubmitHandler(e, this.state.comment)}>
 						<textarea name="1" id={comment.commentId} cols="10" rows="10"
 								  value={comment.commentText}
-								  onChange={() => this.commentChangeHandler(this.state.comment)}/>
+								  onChange={this.commentChangeHandler}/>
 
 						<input type="submit" value="Save"/>
 					</form>
