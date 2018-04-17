@@ -93,7 +93,7 @@ namespace Comments.Test.IntegrationTests.API.Questions
             var updatedQuestionText = Guid.NewGuid().ToString();
             viewModel.question.QuestionText = updatedQuestionText;
 
-            var content = new StringContent(JsonConvert.SerializeObject(viewModel), Encoding.UTF8, "application/json");
+            var content = new StringContent(JsonConvert.SerializeObject(viewModel.question), Encoding.UTF8, "application/json");
 
             //Act
             var response = await _client.PutAsync($"/consultations/api/question/{questionId}", content);

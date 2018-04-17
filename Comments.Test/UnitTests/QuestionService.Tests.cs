@@ -91,7 +91,8 @@ namespace Comments.Test.UnitTests
 
             //Assert
             result.rowsUpdated.ShouldBe(1);
-            viewModel.ShouldBeNull();
+            viewModel.question.ShouldBeNull();
+            viewModel.validate.NotFound.ShouldBeTrue();
         }
 
         [Fact]

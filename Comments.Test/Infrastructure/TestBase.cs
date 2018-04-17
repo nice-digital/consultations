@@ -58,7 +58,7 @@ namespace Comments.Test.Infrastructure
         {
             // Arrange
             _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
-            var databaseName = DatabaseName; //+ Guid.NewGuid();
+            var databaseName = DatabaseName + Guid.NewGuid();
 
             //SQLiteConnectionStringBuilder sqLiteConnectionStringBuilder = new SQLiteConnectionStringBuilder()
             //{
@@ -145,6 +145,16 @@ namespace Comments.Test.Infrastructure
         protected void ResetDatabase()
         {
             using (var context = new ConsultationsContext(_options, _fakeUserService))
+            {
+                context.Database.EnsureDeleted();
+                //context.Database.CloseConnection();
+                //context.Database.OpenConnection();
+            }
+        }
+
+        protected void ResetDatabase(IUserService userService)
+        {
+            using (var context = new ConsultationsContext(_options, userService))
             {
                 context.Database.EnsureDeleted();
                 //context.Database.CloseConnection();

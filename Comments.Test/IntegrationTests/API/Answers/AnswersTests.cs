@@ -59,6 +59,7 @@ namespace Comments.Test.IntegrationTests.API.Answers
         public async Task Edit_Answer()
         {
             //Arrange
+            ResetDatabase();
             var userId = Guid.Empty;
             var answerText = Guid.NewGuid().ToString();
             var answerId =  AddAnswer(1, userId, answerText, _context);

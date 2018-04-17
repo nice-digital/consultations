@@ -169,22 +169,22 @@ namespace Comments.Test.UnitTests
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
             var context = new ConsultationsContext(_options, userService);
-            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId, _context);
+            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId, context);
 
-            var expectedAnswerId = AddAnswer(1, userId, "current user's answer", _context);
-            var anotherPersonsAnswerId = AddAnswer(1, Guid.NewGuid(), "another user's answer", _context);
+            var expectedAnswerId = AddAnswer(1, userId, "current user's answer", context);
+            var anotherPersonsAnswerId = AddAnswer(1, Guid.NewGuid(), "another user's answer", context);
             
-            var commentService = new CommentService(_context, userService);
+            var commentService = new CommentService(context, userService);
 
             // Act
             var viewModel = commentService.GetCommentsAndQuestions(sourceURI);
             var questionViewModel = viewModel.Questions.SingleOrDefault(q => q.QuestionId.Equals(1));
-            var myAnswer = questionViewModel.Answers.SingleOrDefault(a => a.AnswerId.Equals(expectedAnswerId));
-            var otherAnswer = questionViewModel.Answers.SingleOrDefault(a => a.AnswerId.Equals(anotherPersonsAnswerId));
+            var currentUsersAnswer = questionViewModel.Answers.SingleOrDefault(a => a.AnswerId.Equals(expectedAnswerId));
+            var otherUsersAnswer = questionViewModel.Answers.SingleOrDefault(a => a.AnswerId.Equals(anotherPersonsAnswerId));
 
             //Assert
-            myAnswer.AnswerId.ShouldBe(expectedAnswerId);
-            otherAnswer.ShouldBeNull();
+            currentUsersAnswer.AnswerId.ShouldBe(expectedAnswerId);
+            otherUsersAnswer.ShouldBeNull();
         }
     }
 }

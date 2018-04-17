@@ -132,13 +132,15 @@ namespace Comments.Test.UnitTests
         public void Only_own_Comments_returned_when_logged_in()
         {
             // Arrange
-            ResetDatabase();
+            
             var userId = Guid.NewGuid();
             var sourceURI = "/consultations/1/1/introduction";
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+            ResetDatabase(userService);
             var context = new ConsultationsContext(_options, userService);
+
             var commentService = new CommentService(context, userService);
-            var locationId = AddLocation(sourceURI, _context);
+            var locationId = AddLocation(sourceURI, context);
 
             var expectedCommentId = AddComment(locationId, "current user's comment", isDeleted: false, createdByUserId: userId, passedInContext: context);
             var anotherPersonsCommentId = AddComment(locationId, "another user's comment", isDeleted: false, createdByUserId: Guid.NewGuid(), passedInContext: context);
@@ -147,7 +149,12 @@ namespace Comments.Test.UnitTests
             // Act
             var viewModel = commentService.GetCommentsAndQuestions("/consultations/1/1/introduction");
 
+           // var comment = commentService.GetComment(anotherPersonsCommentId);
+
             //Assert
+
+           // comment.validate.NotFound.ShouldBeTrue();
+
             viewModel.Comments.Single().CommentId.ShouldBe(expectedCommentId);
         }
     }
