@@ -19,13 +19,12 @@ namespace Comments.Test.UnitTests
 
             var userId = Guid.Empty;
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var context = new ConsultationsContext(_options, userService);
             
             var answerText = Guid.NewGuid().ToString();
-            var answerId = AddAnswer(1, userId, answerText, _context);
+            var answerId = AddAnswer(1, userId, answerText);
 
             //Act
-            var viewModel = new AnswerService(_context, userService).GetAnswer(answerId);
+            var viewModel = new AnswerService(new ConsultationsContext(_options, userService), userService).GetAnswer(answerId);
 
             //Assert
             viewModel.answer.AnswerText.ShouldBe(answerText);
@@ -40,11 +39,10 @@ namespace Comments.Test.UnitTests
             var userId = Guid.Empty;
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var context = new ConsultationsContext(_options, userService);
 
-            var answerId = AddAnswer(1, userId, answerText, context);
+            var answerId = AddAnswer(1, userId, answerText);
 
-            var answerService = new AnswerService(context, userService);
+            var answerService = new AnswerService(new ConsultationsContext(_options, userService), userService);
             var viewModel = answerService.GetAnswer(answerId);
 
             var updatedAnswerText = Guid.NewGuid().ToString();
@@ -65,13 +63,12 @@ namespace Comments.Test.UnitTests
             //Arrange
             ResetDatabase();
             var answerText = Guid.NewGuid().ToString();
-            var userId = Guid.Empty;;
+            var userId = Guid.Empty;
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var context = new ConsultationsContext(_options, userService);
-            var answerId = AddAnswer(1, userId, answerText, context);
+            var answerId = AddAnswer(1, userId, answerText);
 
-            var answerService = new AnswerService(context, userService);
+            var answerService = new AnswerService(new ConsultationsContext(_options, userService), userService);
 
             //Act
             var result = answerService.DeleteAnswer(answerId);
@@ -145,8 +142,7 @@ namespace Comments.Test.UnitTests
             var userId = Guid.Empty;
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var context = new ConsultationsContext(_options, userService);
-            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId, context);
+            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId);
 
             // Act
             var viewModel = new AnswerService(new ConsultationsContext(_options, _fakeUserService), FakeUserService.Get(isAuthenticated: false)).GetAnswer(1);
@@ -162,29 +158,25 @@ namespace Comments.Test.UnitTests
             //Arrange
             ResetDatabase();
             var sourceURI = "/consultations/1/1/introduction";
-            var commentText = Guid.NewGuid().ToString();
-            var answerText = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
             var userId = Guid.NewGuid();
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var context = new ConsultationsContext(_options, userService);
-            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId, context);
 
-            var expectedAnswerId = AddAnswer(1, userId, "current user's answer", context);
-            var anotherPersonsAnswerId = AddAnswer(1, Guid.NewGuid(), "another user's answer", context);
+            var locationId = AddLocation(sourceURI);
+            var questionTypeId = AddQuestionType(Guid.NewGuid().ToString(), false, true);
+            var questionId = AddQuestion(locationId, questionTypeId, questionText);
+            var expectedAnswerId = AddAnswer(questionId, userId, "current user's answer");
+            var anotherPersonsAnswerId = AddAnswer(questionId, Guid.NewGuid(), "another user's answer");
             
-            var commentService = new CommentService(context, userService);
+            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService);
 
             // Act
             var viewModel = commentService.GetCommentsAndQuestions(sourceURI);
-            var questionViewModel = viewModel.Questions.SingleOrDefault(q => q.QuestionId.Equals(1));
-            var currentUsersAnswer = questionViewModel.Answers.SingleOrDefault(a => a.AnswerId.Equals(expectedAnswerId));
-            var otherUsersAnswer = questionViewModel.Answers.SingleOrDefault(a => a.AnswerId.Equals(anotherPersonsAnswerId));
+            var questionViewModel = viewModel.Questions.SingleOrDefault(q => q.QuestionId.Equals(questionId));
 
             //Assert
-            currentUsersAnswer.AnswerId.ShouldBe(expectedAnswerId);
-            otherUsersAnswer.ShouldBeNull();
+            questionViewModel.Answers.Single().AnswerId.ShouldBe(expectedAnswerId);
         }
     }
 }

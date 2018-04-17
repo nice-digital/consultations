@@ -26,9 +26,9 @@ namespace Comments.Test.IntegrationTests.API.Questions
             var description = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
 
-            var locationId = AddLocation(sourceURI, _context);
-            var questionTypeId = AddQuestionType(description, false, true, 1, _context);
-            var questionId = AddQuestion(locationId, questionTypeId, questionText, _context);
+            var locationId = AddLocation(sourceURI);
+            var questionTypeId = AddQuestionType(description, false, true, 1);
+            var questionId = AddQuestion(locationId, questionTypeId, questionText);
 
             //Act
             var response = await _client.GetAsync($"consultations/api/question/{questionId}");
@@ -116,12 +116,12 @@ namespace Comments.Test.IntegrationTests.API.Questions
             var description = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
 
-            var locationId = AddLocation(sourceURI, _context);
-            var questionTypeId = AddQuestionType(description, false, true, 1, _context);
-            var questionId = AddQuestion(locationId, questionTypeId, questionText, _context);
+            var locationId = AddLocation(sourceURI);
+            var questionTypeId = AddQuestionType(description, false, true, 1);
+            var questionId = AddQuestion(locationId, questionTypeId, questionText);
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var questionService = new QuestionService(_context, userService);
+            var questionService = new QuestionService(new ConsultationsContext(_options, userService), userService);
 
             //Act
             var response = await _client.DeleteAsync($"consultations/api/question/{questionId}");

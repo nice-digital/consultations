@@ -23,11 +23,11 @@ namespace Comments.Test.UnitTests
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
             var locationId = AddLocation(sourceUri);
-            var questionTypeId = AddQuestionType(description, false, true, 1, _context);
-            var questionId = AddQuestion(locationId, questionTypeId, questionText, _context);
+            var questionTypeId = AddQuestionType(description, false, true, 1);
+            var questionId = AddQuestion(locationId, questionTypeId, questionText);
 
             
-            var questionService = new QuestionService(_context, userService);
+            var questionService = new QuestionService(new ConsultationsContext(_options, userService), userService);
 
             //Act
             var viewModel = questionService.GetQuestion(questionId);
@@ -77,13 +77,12 @@ namespace Comments.Test.UnitTests
             var userId = Guid.Empty;
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var context = new ConsultationsContext(_options, userService);
 
-            var locationId = AddLocation(sourceURI, context);
-            var questionTypeId = AddQuestionType(description, false, true, 1, context);
-            var questionId = AddQuestion(locationId, questionTypeId, questionText, context);
+            var locationId = AddLocation(sourceURI);
+            var questionTypeId = AddQuestionType(description, false, true, 1);
+            var questionId = AddQuestion(locationId, questionTypeId, questionText);
             
-            var questionService = new QuestionService(context, userService);
+            var questionService = new QuestionService(new ConsultationsContext(_options, userService), userService);
 
             //Act
             var result = questionService.DeleteQuestion(questionId);

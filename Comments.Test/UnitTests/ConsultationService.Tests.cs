@@ -27,12 +27,11 @@ namespace Comments.Test.UnitTests
             var createdByUserId = Guid.NewGuid();
 
             var userService = FakeUserService.Get(true, "Benjamin Button", createdByUserId);
-            var context = new ConsultationsContext(_options, userService);
 
-            var locationId = AddLocation(sourceURI, context);
-            AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId, passedInContext: _context);
+            var locationId = AddLocation(sourceURI);
+            AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId);
             
-            var commentService = new CommentService(_context, userService);
+            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService);
             
             // Act
             var viewModel = commentService.GetCommentsAndQuestions(sourceURI);

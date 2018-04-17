@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Comments.Models;
+using Comments.Services;
 using Comments.Test.Infrastructure;
 using Comments.ViewModels;
 using Newtonsoft.Json;
@@ -22,7 +23,8 @@ namespace Comments.Test.IntegrationTests.API.Comments
             //Arrange (in the base constructor for this one.)
 
             // Act
-            var response = await _client.GetAsync("/consultations/api/Comments?sourceURI=a-url-with-no-comments-associated");
+            var response =
+                await _client.GetAsync("/consultations/api/Comments?sourceURI=a-url-with-no-comments-associated");
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
 
@@ -38,7 +40,8 @@ namespace Comments.Test.IntegrationTests.API.Comments
         public async Task Create_Comment(int locationId, string sourceURI)
         {
             //Arrange
-            var comment = new ViewModels.Comment(locationId, sourceURI, null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty, "comment text");
+            var comment = new ViewModels.Comment(locationId, sourceURI, null, null, null, null, null, null, 0,
+                DateTime.Now, Guid.Empty, "comment text");
             var content = new StringContent(JsonConvert.SerializeObject(comment), Encoding.UTF8, "application/json");
 
             // Act
@@ -59,6 +62,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
             ResetDatabase();
             const int locationId = 1;
             const string sourceURI = "/consultations/1/1/introduction";
+
             await Create_Comment(locationId, sourceURI);
             await Create_Comment(locationId, sourceURI); //duplicate comment. totally valid.
             await Create_Comment(2, sourceURI); //different location id, this should be in the result set
@@ -88,15 +92,12 @@ namespace Comments.Test.IntegrationTests.API.Comments
             var questionText = Guid.NewGuid().ToString();
             var answerText = Guid.NewGuid().ToString();
             var userId = Guid.NewGuid();
-
-            var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var context = new ConsultationsContext(_options, userService);
-
-            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId, context);
+           
+            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId);
 
             // Act
-            var response = await _client.GetAsync($"/consultations/api/Comments?sourceURI={WebUtility.UrlEncode(sourceURI)}");
-            //var response = await _client.GetAsync($"/consultations/api/Comments?consultationId={consultationId}&documentId={documentId}&chapterSlug=introduction");
+            //var response = await _client.GetAsync($"/consultations/api/Comments?sourceURI={WebUtility.UrlEncode(sourceURI)}");
+            var response = await _client.GetAsync($"/consultations/api/Comments?consultationId={consultationId}&documentId={documentId}&chapterSlug=introduction");
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
 
@@ -104,10 +105,32 @@ namespace Comments.Test.IntegrationTests.API.Comments
             //responseString.ShouldMatchApproved();
             //    //todo: get the below all working:
 
-            //    //var deserialisedResponse = JsonConvert.DeserializeObject<CommentsAndQuestions>(responseString);
+            var deserialisedResponse = JsonConvert.DeserializeObject<CommentsAndQuestions>(responseString);
             //    //deserialisedResponse.Comments.Single().CommentText.ShouldBe(commentText);
             //    //deserialisedResponse.Questions.Single().QuestionText.ShouldBe(questionText);
             //    //deserialisedResponse.Questions.Single().Answers.Single().AnswerText.ShouldBe(answerText);
+        }
+
+        [Fact]
+        public async Task Delete_Comment()
+        {
+            //Arrange
+            var commentText = Guid.NewGuid().ToString();
+            var userId = Guid.NewGuid();
+
+            var commentId = AddComment(1, commentText, false, userId);
+
+            var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService);
+
+            //Act
+            var response = await _client.DeleteAsync($"consultations/api/Comment/{commentId}");
+            response.EnsureSuccessStatusCode();
+
+            var result = commentService.GetComment(commentId);
+
+            //Assert
+            result.validate.NotFound.ShouldBeTrue();
         }
     }
 }

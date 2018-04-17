@@ -41,7 +41,7 @@ namespace Comments.Test.IntegrationTests.API.Answers
             var answerText = Guid.NewGuid().ToString();
             var userId = Guid.Empty; 
             
-            var answerId = AddAnswer(1, userId, answerText, _context);
+            var answerId = AddAnswer(1, userId, answerText);
             
             // Act
             var response = await _client.GetAsync($"consultations/api/answer/{answerId}");
@@ -59,12 +59,13 @@ namespace Comments.Test.IntegrationTests.API.Answers
         public async Task Edit_Answer()
         {
             //Arrange
-            ResetDatabase();
             var userId = Guid.Empty;
             var answerText = Guid.NewGuid().ToString();
-            var answerId =  AddAnswer(1, userId, answerText, _context);
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+
+            var answerId =  AddAnswer(1, userId, answerText, _context);
+            
             var answerService = new AnswerService(_context, userService);
             var viewModel = answerService.GetAnswer(answerId);
 
@@ -91,10 +92,10 @@ namespace Comments.Test.IntegrationTests.API.Answers
             //Arrange
             var userId = Guid.Empty;
             var answerText = Guid.NewGuid().ToString();
-            var answerId = AddAnswer(1, userId, answerText, _context);
+            var answerId = AddAnswer(1, userId, answerText);
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var answerService = new AnswerService(_context, userService);
+            var answerService = new AnswerService(new ConsultationsContext(_options, userService), userService);
 
             //Act
             var response = await _client.DeleteAsync($"consultations/api/answer/{answerId}");
