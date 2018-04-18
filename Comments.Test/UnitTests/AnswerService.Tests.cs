@@ -31,6 +31,40 @@ namespace Comments.Test.UnitTests
         }
 
         [Fact]
+        public void Answer_Get_Record_Not_Found()
+        {
+            //Arrange
+            ResetDatabase();
+
+            var userId = Guid.Empty;
+            var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+
+            var answerService = new AnswerService(new ConsultationsContext(_options, userService), userService);
+
+            //Act
+            var viewModel = answerService.GetAnswer(1);
+
+            //Assert
+            viewModel.validate.NotFound.ShouldBeTrue();
+            viewModel.answer.ShouldBeNull();
+        }
+
+        [Fact]
+        public void Answer_Get_Record_Not_Logged_In()
+        {
+            //Arrange
+            ResetDatabase();
+            
+            var userService = FakeUserService.Get(isAuthenticated: false);
+
+            //Act
+            var viewModel = new AnswerService(new ConsultationsContext(_options, userService), userService).GetAnswer(1);
+
+            //Assert
+            viewModel.validate.Unauthorised.ShouldBeTrue();
+        }
+
+        [Fact]
         public void Answer_CanBeEdited()
         {
             //Arrange

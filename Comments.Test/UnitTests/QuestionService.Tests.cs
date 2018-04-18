@@ -37,6 +37,25 @@ namespace Comments.Test.UnitTests
         }
 
         [Fact]
+        public void Question_Get_Record_Not_Found()
+        {
+            //Arrange
+            ResetDatabase();
+
+            var userId = Guid.Empty;
+            var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+            
+            var questionService = new QuestionService(new ConsultationsContext(_options, userService), userService);
+
+            //Act
+            var viewModel = questionService.GetQuestion(1);
+
+            //Assert
+            viewModel.validate.NotFound.ShouldBeTrue();
+            viewModel.question.ShouldBeNull();
+        }
+
+        [Fact]
         public void Question_CanBeEdited()
         {
             //Arrange

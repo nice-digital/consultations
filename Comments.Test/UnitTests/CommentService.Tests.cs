@@ -36,6 +36,25 @@ namespace Comments.Test.UnitTests
         }
 
         [Fact]
+        public void Comments_Get_Record_Not_Found()
+        {
+            // Arrange
+            ResetDatabase();
+
+            var userId = Guid.Empty;
+            var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+
+            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService);
+
+            // Act
+            var viewModel = commentService.GetComment(1);
+
+            //Assert
+            viewModel.validate.NotFound.ShouldBeTrue();
+            viewModel.comment.ShouldBeNull();
+        }
+
+        [Fact]
         public void Comments_CanBeEdited()
         {
             //Arrange
