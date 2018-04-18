@@ -1,7 +1,7 @@
 import {Endpoints, BaseUrl} from "./endpoints";
 import axios from "axios";
 import {objectToQueryString, replaceFormat} from "./../helpers/utils";
-
+import stringifyObject from "stringify-object";
 /**
  * Load data using Axios
  * @see https://github.com/axios/axios
@@ -27,18 +27,20 @@ export const generateUrl = (endpointName, baseUrl = BaseUrl, urlParameters = [],
 
 export const load = (endpoint, baseUrl = BaseUrl, urlParameters = [],  query = {}, method = "GET", data = {}, isJson = false) => {
 	return new Promise((resolve, reject) => {
-		// console.log(`load: ${generateUrl(endpoint, baseUrl, urlParameters, query, method, data)}`);
+		const url = generateUrl(endpoint, baseUrl, urlParameters, query);
 		const headers = isJson ? { "Content-Type" : "application/json"} : {};
 
-		axios({
-			url: generateUrl(endpoint, baseUrl, urlParameters, query),
-			data,
-			method,
-			headers
-		})
+		console.log(`loader.js: ${url} method: ${method}`);
+
+		axios({url, data, method, headers})
 			.then(response => {
 				resolve(response);
 			})
+			// .then((response )=>{
+			// 	if (endpoint === "comment"){
+			// 		console.log(`load endpoint ${endpoint} response:${stringifyObject(response)}`);
+			// 	}
+			// })
 			.catch(err => {
 				reject(err);
 			});

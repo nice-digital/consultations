@@ -45,9 +45,9 @@ export class Document extends Component<PropsType, StateType> {
 		};
 
 		if (this.props) {
-			const preloadedChapter = preload(this.props.staticContext, "chapter", {...this.props.match.params});
-			const preloadedDocuments = preload(this.props.staticContext, "documents", { consultationId: this.props.match.params.consultationId });
-			const preloadedConsultation = preload(this.props.staticContext, "consultation", { consultationId: this.props.match.params.consultationId });
+			const preloadedChapter = preload(this.props.staticContext, "chapter", [], {...this.props.match.params});
+			const preloadedDocuments = preload(this.props.staticContext, "documents", [], { consultationId: this.props.match.params.consultationId });
+			const preloadedConsultation = preload(this.props.staticContext, "consultation", [], { consultationId: this.props.match.params.consultationId });
 
 			if (preloadedChapter && preloadedDocuments && preloadedConsultation) {
 				this.state = {
@@ -93,38 +93,38 @@ export class Document extends Component<PropsType, StateType> {
 	};
 
 	componentDidMount() {
-		if (!this.state.hasInitialData) {
-			this.gatherData()
-				.then( data =>{
-					this.setState({
-						...data,
-						loading: false,
-						hasInitialData: true
-					});
-				})
-				.catch(err => {
-					throw new Error("gatherData in componentDidMount failed " + err);
-				});
-		}
+		// if (!this.state.hasInitialData) {
+		// 	this.gatherData()
+		// 		.then( data =>{
+		// 			this.setState({
+		// 				...data,
+		// 				loading: false,
+		// 				hasInitialData: true
+		// 			});
+		// 		})
+		// 		.catch(err => {
+		// 			throw new Error("gatherData in componentDidMount failed " + err);
+		// 		});
+		// }
 	}
 
-	componentDidUpdate(prevProps: PropsType){
-		const oldRoute = prevProps.location.pathname;
-		const newRoute = this.props.location.pathname;
-		if (oldRoute !== newRoute) {
-			this.setState({
-				loading: true
-			});
-			this.gatherData()
-				.then( data =>{
-					this.setState({
-						...data,
-						loading: false
-					});
-				})
-				.catch(err => { throw new Error("gatherData in componentDidUpdate failed " + err);});
-		}
-	}
+	// componentDidUpdate(prevProps: PropsType){
+	// 	const oldRoute = prevProps.location.pathname;
+	// 	const newRoute = this.props.location.pathname;
+	// 	if (oldRoute !== newRoute) {
+	// 		this.setState({
+	// 			loading: true
+	// 		});
+	// 		this.gatherData()
+	// 			.then( data =>{
+	// 				this.setState({
+	// 					...data,
+	// 					loading: false
+	// 				});
+	// 			})
+	// 			.catch(err => { throw new Error("gatherData in componentDidUpdate failed " + err);});
+	// 	}
+	// }
 
 	renderDocumentHtml = (data: DataType) => {
 		return { __html: data };
