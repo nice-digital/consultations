@@ -93,38 +93,38 @@ export class Document extends Component<PropsType, StateType> {
 	};
 
 	componentDidMount() {
-		if (!this.state.hasInitialData) {
-			this.gatherData()
-				.then( data =>{
-					this.setState({
-						...data,
-						loading: false,
-						hasInitialData: true
-					});
-				})
-				.catch(err => {
-					throw new Error("gatherData in componentDidMount failed " + err);
-				});
-		}
+		// if (!this.state.hasInitialData) {
+		// 	this.gatherData()
+		// 		.then( data =>{
+		// 			this.setState({
+		// 				...data,
+		// 				loading: false,
+		// 				hasInitialData: true
+		// 			});
+		// 		})
+		// 		.catch(err => {
+		// 			throw new Error("gatherData in componentDidMount failed " + err);
+		// 		});
+		// }
 	}
 
-	componentDidUpdate(prevProps: PropsType){
-		const oldRoute = prevProps.location.pathname;
-		const newRoute = this.props.location.pathname;
-		if (oldRoute !== newRoute) {
-			this.setState({
-				loading: true
-			});
-			this.gatherData()
-				.then( data =>{
-					this.setState({
-						...data,
-						loading: false
-					});
-				})
-				.catch(err => { throw new Error("gatherData in componentDidUpdate failed " + err);});
-		}
-	}
+	// componentDidUpdate(prevProps: PropsType){
+	// 	const oldRoute = prevProps.location.pathname;
+	// 	const newRoute = this.props.location.pathname;
+	// 	if (oldRoute !== newRoute) {
+	// 		this.setState({
+	// 			loading: true
+	// 		});
+	// 		this.gatherData()
+	// 			.then( data =>{
+	// 				this.setState({
+	// 					...data,
+	// 					loading: false
+	// 				});
+	// 			})
+	// 			.catch(err => { throw new Error("gatherData in componentDidUpdate failed " + err);});
+	// 	}
+	// }
 
 	renderDocumentHtml = (data: DataType) => {
 		return { __html: data };

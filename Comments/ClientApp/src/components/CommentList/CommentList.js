@@ -36,7 +36,10 @@ export class CommentList extends Component<PropsType, StateType> {
 		const preloaded = preload(this.props.staticContext, "comments", [], { sourceURI: this.props.match.url });
 
 		if (preloaded) {
-			this.state = { comments: preloaded.comments, loading: false };
+			this.state = {
+				comments: preloaded.comments,
+				loading: false
+			};
 		}
 	}
 
@@ -73,6 +76,7 @@ export class CommentList extends Component<PropsType, StateType> {
 
 		return (
 			<Fragment>
+				<button onClick={this.addCommentHandler} >Add comment</button>
 				<ul>
 					{this.state.comments.map((comment) => {
 						const props = {

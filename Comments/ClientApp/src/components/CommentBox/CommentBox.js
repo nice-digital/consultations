@@ -1,9 +1,10 @@
 // @flow
 
 import React, {Component, Fragment} from "react";
-import { withRouter } from "react-router";
+import { withRouter } from "react-router-dom";
 import {load} from "../../data/loader";
 import preload from "../../data/pre-loader";
+import stringifyObject from "stringify-object";
 
 type PropsType = {
 	staticContext?: any,
@@ -11,7 +12,7 @@ type PropsType = {
 	commentId: number
 }
 
-type CommentType = {
+type CommentType = null | {
 	commentId: number,
 	lastModifiedDate: Date,
 	lastModifiedByUserId: string, //really a guid
@@ -39,24 +40,30 @@ export class CommentBox extends Component<PropsType, StateType> {
 		this.state = {
 			loading: true,
 			saving: false,
-			comment: null
-		};
-
-		console.log('preloading');
-		const preloaded = preload(this.props.staticContext, "comment", [this.props.commentId]);
-
-		if (preloaded) {
-			this.state = {
-				comment: preloaded,
-				loading: false
-			};
+			comment: {}
 		}
+		;
+
+		// const preloaded = preload(this.props.staticContext, "comment", [1], {});
+		// const preloaded = preload(this.props.staticContext, "comments", [], { sourceURI: this.props.match.url });
+
+		// if (preloaded) {
+		//
+		// 	// console.log(`preloaded: ${stringifyObject(preloaded)}`);
+		// 	// console.log('setting loading to false');
+		//
+		// 	this.state = {
+		// 		comment: preloaded,
+		// 		loading: false,
+		// 		saving: false
+		// 	};
+		// }
 	}
 
 	// todo: create a new comment
 
 	componentDidMount() {
-		if (!this.state.comment) {
+		// if (!this.state.comment) {
 			load("comment", undefined, [this.props.commentId])
 				.then(response => {
 					this.setState({
@@ -64,7 +71,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 						loading: false
 					});
 				});
-		}
+		// }
 	}
 
 	commentChangeHandler = e => {
@@ -84,20 +91,14 @@ export class CommentBox extends Component<PropsType, StateType> {
 	};
 
 	render() {
-		const {comment} = this.state;
-
-		if (!comment) {
-			return <li>loading comment</li>;
-		}
-
+		if (this.state.loading) return <p>Loading</p>;
 		return (
 			<Fragment>
 				<li>
 					<form onSubmit={(e) => this.formSubmitHandler(e, this.state.comment)}>
-						<textarea name="1" id={comment.commentId} cols="10" rows="10"
-								  value={comment.commentText}
+						<textarea name="1" id={this.state.comment.commentId} cols="10" rows="10"
+								  value={this.state.comment.commentText}
 								  onChange={this.commentChangeHandler}/>
-
 						<input type="submit" value="Save"/>
 					</form>
 				</li>
