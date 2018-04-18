@@ -21,11 +21,11 @@ namespace Comments.Test.UnitTests
             var commentText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
 
-            var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
             var locationId = AddLocation(sourceURI);
             var commentId = AddComment(locationId, commentText, isDeleted: false, createdByUserId: userId);
-            
+
+            var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
             var commentService = new CommentService(new ConsultationsContext(_options, userService), userService);
 
             // Act
@@ -158,8 +158,8 @@ namespace Comments.Test.UnitTests
             var locationId = AddLocation(sourceURI);
 
             var expectedCommentId = AddComment(locationId, "current user's comment", isDeleted: false, createdByUserId: userId);
-            var anotherPersonsCommentId = AddComment(locationId, "another user's comment", isDeleted: false, createdByUserId: Guid.NewGuid());
-            var ownDeletedCommentId = AddComment(locationId, "current user's deleted comment", isDeleted: true, createdByUserId: userId);
+            AddComment(locationId, "another user's comment", isDeleted: false, createdByUserId: Guid.NewGuid());
+            AddComment(locationId, "current user's deleted comment", isDeleted: true, createdByUserId: userId);
 
             // Act
             var viewModel = commentService.GetCommentsAndQuestions("/consultations/1/1/introduction");

@@ -1,5 +1,4 @@
 ﻿using Comments.Services;
-using Comments.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -7,7 +6,7 @@ namespace Comments.Controllers.Api
 {
     [Produces("application/json")]
     [Route("consultations/api/[controller]")]
-    public class QuestionController : Controller
+    public class QuestionController : ControllerBase
     {
         private readonly IQuestionService _questionService;
         private readonly ILogger<QuestionController> _logger;
@@ -16,6 +15,7 @@ namespace Comments.Controllers.Api
             _questionService = questionService;
             _logger = logger;
         }
+
         // GET: consultations/api/Question/5 
         [HttpGet("{questionId}")]
         public IActionResult GetQuestion([FromRoute] int questionId)
@@ -27,7 +27,7 @@ namespace Comments.Controllers.Api
 
             var result = _questionService.GetQuestion(questionId);
 
-            var invalidResult = Validate(result.validate);
+            var invalidResult = Validate(result.validate, _logger);
 
             return invalidResult ?? Ok(result.question);
         }
@@ -42,7 +42,7 @@ namespace Comments.Controllers.Api
             }
 
             var result = _questionService.CreateQuestion(question);
-            var invalidResult = Validate(result.validate);
+            var invalidResult = Validate(result.validate, _logger);
 
             return invalidResult ?? CreatedAtAction("GetQuestion", new { id = result.question.QuestionId }, result.question);
         }
@@ -62,7 +62,7 @@ namespace Comments.Controllers.Api
             }
 
             var result = _questionService.EditQuestion(questionId, question);
-            var invalidResult = Validate(result.validate);
+            var invalidResult = Validate(result.validate, _logger);
 
 
             return invalidResult ?? Ok(result.rowsUpdated);
@@ -78,27 +78,9 @@ namespace Comments.Controllers.Api
             }
 
             var result = _questionService.DeleteQuestion(questionId);
-            var invalidResult = Validate(result.validate);
+            var invalidResult = Validate(result.validate, _logger);
 
             return invalidResult ?? Ok(result.rowsUpdated);
         }
-
-        private IActionResult Validate(Validate validate) //TODO: Move this out, repeatedCode
-        {
-            if (validate == null || validate.Valid)
-                return null;
-
-            _logger.LogWarning(validate.Message);
-
-            if (validate.Unauthorised)
-                return Unauthorized();
-
-            if (validate.NotFound)
-                return NotFound();
-
-            return BadRequest();
-        }
     }
-
-
 }

@@ -201,16 +201,13 @@ namespace Comments.Test.UnitTests
             var questionTypeId = AddQuestionType(Guid.NewGuid().ToString(), false, true);
             var questionId = AddQuestion(locationId, questionTypeId, questionText);
             var expectedAnswerId = AddAnswer(questionId, userId, "current user's answer");
-            var anotherPersonsAnswerId = AddAnswer(questionId, Guid.NewGuid(), "another user's answer");
+            AddAnswer(questionId, Guid.NewGuid(), "another user's answer");
             
             var commentService = new CommentService(new ConsultationsContext(_options, userService), userService);
 
             // Act
             var viewModel = commentService.GetCommentsAndQuestions(sourceURI);
             var questionViewModel = viewModel.Questions.SingleOrDefault(q => q.QuestionId.Equals(questionId));
-
-            var answerService = new AnswerService(new ConsultationsContext(_options, userService), userService);
-            var getOtherComment = answerService.GetAnswer(anotherPersonsAnswerId);
 
             //Assert
             questionViewModel.Answers.Single().AnswerId.ShouldBe(expectedAnswerId);

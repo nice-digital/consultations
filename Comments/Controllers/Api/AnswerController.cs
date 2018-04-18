@@ -1,13 +1,12 @@
 ﻿using Comments.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Comments.ViewModels;
 
 namespace Comments.Controllers.Api
 {
     [Produces("application/json")]
     [Route("consultations/api/[controller]")]
-    public class AnswerController : Controller
+    public class AnswerController : ControllerBase
     {
         private readonly IAnswerService _answerService;
         private readonly ILogger<AnswerController> _logger;
@@ -33,7 +32,7 @@ namespace Comments.Controllers.Api
                 return NotFound();
             }
 
-            var invalidResult = Validate(result.validate);
+            var invalidResult = Validate(result.validate, _logger);
             return invalidResult ?? Ok(result.answer);
         }
 
@@ -48,7 +47,7 @@ namespace Comments.Controllers.Api
             }
 
             var result = _answerService.CreateAnswer(answer);
-            var invalidResult = Validate(result.validate);
+            var invalidResult = Validate(result.validate, _logger);
 
             return invalidResult ?? CreatedAtAction("GetAnswer", new { id = result.answer.AnswerId }, result.answer);
         }
@@ -68,7 +67,7 @@ namespace Comments.Controllers.Api
             }
 
             var result = _answerService.EditAnswer(answerId, answer);
-            var invalidResult = Validate(result.validate);
+            var invalidResult = Validate(result.validate, _logger);
 
             return invalidResult ?? Ok(result.rowsUpdated);
         }
@@ -83,25 +82,9 @@ namespace Comments.Controllers.Api
             }
             
             var result = _answerService.DeleteAnswer(answerId);
-            var invalidResult = Validate(result.validate);
+            var invalidResult = Validate(result.validate, _logger);
 
             return invalidResult ?? Ok(result.rowsUpdated);
-        }
-
-        private IActionResult Validate(Validate validate)
-        {
-            if (validate == null || validate.Valid)
-                return null;
-
-            _logger.LogWarning(validate.Message);
-
-            if (validate.Unauthorised)
-                return Unauthorized();
-
-            if (validate.NotFound)
-                return NotFound();
-
-            return BadRequest();
         }
     }
 }
