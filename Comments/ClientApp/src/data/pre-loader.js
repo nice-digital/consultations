@@ -4,7 +4,7 @@ import { load } from "./loader";
 // when it's loaded async.
 // This assumes the app will be rendered twice on the server: once for
 // requests to fire and once when all the data has loaded
-const preload = (staticContext, endpoint, query) => {
+const preload = (staticContext, endpoint,  urlParameters = [], query = {}) => {
 	let data = null;
 
 	// Client - get data from global var
@@ -27,7 +27,7 @@ const preload = (staticContext, endpoint, query) => {
 	}
 
 	// Load fresh data on the server
-	var promise = load(endpoint, staticContext.baseUrl, [], query)
+	var promise = load(endpoint, staticContext.baseUrl, urlParameters, query)
 		.then(response => {
 			staticContext.preload.data[endpoint] = response.data;
 			return response.data;

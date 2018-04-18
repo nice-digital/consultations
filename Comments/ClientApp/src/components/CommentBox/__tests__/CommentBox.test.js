@@ -1,5 +1,6 @@
 import React from "react";
 import {shallow} from "enzyme";
+// import {MemoryRouter} from "react-router";
 import {CommentBox} from "../CommentBox";
 import sampleComment from "./sample";
 import axios from "axios";
@@ -15,9 +16,7 @@ describe("[ClientApp] ", () => {
 		it("makes correct request to the api based on comment ID", (done) => {
 			mock.reset();
 			const fakeProps = {
-				comment: {
-					commentId: sampleComment.commentId
-				}
+				commentId: sampleComment.commentId
 			};
 			mock.onAny().reply(config => {
 				expect(config.url).toEqual("/consultations/api/Comment/" + sampleComment.commentId);
@@ -32,9 +31,7 @@ describe("[ClientApp] ", () => {
 		it("save handler posts to the api with valid message", async (done) => {
 			mock.reset();
 			const fakeProps = {
-				comment: {
-					commentId: sampleComment.commentId
-				}
+				commentId: sampleComment.commentId
 			};
 			mock.onGet("/consultations/api/Comment/" + sampleComment.commentId).reply(200, sampleComment);
 
@@ -47,11 +44,8 @@ describe("[ClientApp] ", () => {
 			const wrapper = shallow(<CommentBox {...fakeProps} />);
 			await nextTick();
 			wrapper.update();
-			console.log(wrapper.html());
-
 			const commentBoxClass = wrapper.instance();
-
-			commentBoxClass.formSubmitHandler(sampleComment);
+			commentBoxClass.formSubmitHandler(new Event("click"), sampleComment);
 		});
 
 	});

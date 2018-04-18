@@ -1,5 +1,6 @@
 import React from "react";
 import { mount } from "enzyme";
+import { MemoryRouter } from "react-router";
 import { CommentList } from "../CommentList";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
@@ -31,7 +32,11 @@ describe("[ClientApp] ", () => {
 
 		it("should render a li tag with sample data ID", async () => {
 			 mock.onGet(generateUrl("comments", undefined, [], { sourceURI: fakeProps.match.url })).reply(200, sampleComment);
-			 const wrapper = mount(<CommentList {...fakeProps}/>);
+			 const wrapper = mount(
+			 	<MemoryRouter>
+			 		<CommentList {...fakeProps}/>
+				</MemoryRouter>
+			 );
 			 await nextTick();
 			 wrapper.update();
 			 expect(wrapper.find("li").length).toEqual(2);

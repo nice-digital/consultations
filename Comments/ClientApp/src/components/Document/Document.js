@@ -45,9 +45,9 @@ export class Document extends Component<PropsType, StateType> {
 		};
 
 		if (this.props) {
-			const preloadedChapter = preload(this.props.staticContext, "chapter", {...this.props.match.params});
-			const preloadedDocuments = preload(this.props.staticContext, "documents", { consultationId: this.props.match.params.consultationId });
-			const preloadedConsultation = preload(this.props.staticContext, "consultation", { consultationId: this.props.match.params.consultationId });
+			const preloadedChapter = preload(this.props.staticContext, "chapter", [], {...this.props.match.params});
+			const preloadedDocuments = preload(this.props.staticContext, "documents", [], { consultationId: this.props.match.params.consultationId });
+			const preloadedConsultation = preload(this.props.staticContext, "consultation", [], { consultationId: this.props.match.params.consultationId });
 
 			if (preloadedChapter && preloadedDocuments && preloadedConsultation) {
 				this.state = {

@@ -27,7 +27,7 @@ export const generateUrl = (endpointName, baseUrl = BaseUrl, urlParameters = [],
 
 export const load = (endpoint, baseUrl = BaseUrl, urlParameters = [],  query = {}, method = "GET", data = {}, isJson = false) => {
 	return new Promise((resolve, reject) => {
-		// console.log(`load: ${generateUrl(endpoint, baseUrl, urlParameters, query, method, data)}`);
+		console.log(`loader.js: ${generateUrl(endpoint, baseUrl, urlParameters, query, method, data)} method: ${method}`);
 		const headers = isJson ? { "Content-Type" : "application/json"} : {};
 
 		axios({
