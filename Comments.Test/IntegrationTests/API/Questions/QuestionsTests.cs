@@ -68,9 +68,9 @@ namespace Comments.Test.IntegrationTests.API.Questions
 
             // Assert
             response.StatusCode.ShouldBe(HttpStatusCode.Created);
-            var deserialisedAnswer = JsonConvert.DeserializeObject<ViewModels.Question>(responseString);
-            deserialisedAnswer.QuestionId.ShouldBeGreaterThan(0);
-            deserialisedAnswer.QuestionText.ShouldBe(questionText);
+            var deserialisedQuestion = JsonConvert.DeserializeObject<ViewModels.Question>(responseString);
+            deserialisedQuestion.QuestionId.ShouldBeGreaterThan(0);
+            deserialisedQuestion.QuestionText.ShouldBe(questionText);
         }
 
         [Fact]

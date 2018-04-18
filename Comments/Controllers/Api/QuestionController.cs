@@ -41,9 +41,10 @@ namespace Comments.Controllers.Api
                 return BadRequest(ModelState);
             }
 
-            var savedQuestion = _questionService.CreateQuestion(question);
+            var result = _questionService.CreateQuestion(question);
+            var invalidResult = Validate(result.validate);
 
-            return CreatedAtAction("GetQuestion", new { id = savedQuestion.QuestionId }, savedQuestion);
+            return invalidResult ?? CreatedAtAction("GetQuestion", new { id = result.question.QuestionId }, result.question);
         }
 
         // PUT: consultations/api/Question/5
@@ -61,8 +62,10 @@ namespace Comments.Controllers.Api
             }
 
             var result = _questionService.EditQuestion(questionId, question);
+            var invalidResult = Validate(result.validate);
 
-            return Ok(result);
+
+            return invalidResult ?? Ok(result.rowsUpdated);
         }
 
         // DELETE: consultations/api/Question/5

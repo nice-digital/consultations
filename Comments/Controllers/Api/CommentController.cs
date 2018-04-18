@@ -83,7 +83,7 @@ namespace Comments.Controllers.Api
             return invalidResult ?? Ok(result.rowsUpdated);
         }
 
-        private IActionResult Validate(Validate validate)
+        public IActionResult Validate(Validate validate)
         {
             if (validate == null || validate.Valid)
                 return null;

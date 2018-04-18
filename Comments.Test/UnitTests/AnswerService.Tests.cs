@@ -175,6 +175,9 @@ namespace Comments.Test.UnitTests
             var viewModel = commentService.GetCommentsAndQuestions(sourceURI);
             var questionViewModel = viewModel.Questions.SingleOrDefault(q => q.QuestionId.Equals(questionId));
 
+            var answerService = new AnswerService(new ConsultationsContext(_options, userService), userService);
+            var getOtherComment = answerService.GetAnswer(anotherPersonsAnswerId);
+
             //Assert
             questionViewModel.Answers.Single().AnswerId.ShouldBe(expectedAnswerId);
         }

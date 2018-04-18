@@ -13,19 +13,21 @@ namespace Comments.Services
     public interface IQuestionService
     {
         (ViewModels.Question question, Validate validate) GetQuestion(int questionId);
-        int EditQuestion(int questionId, ViewModels.Question question);
+        (int rowsUpdated, Validate validate) EditQuestion(int questionId, ViewModels.Question question);
         (int rowsUpdated, Validate validate) DeleteQuestion(int questionId);
-        ViewModels.Question CreateQuestion(ViewModels.Question question);
+        (ViewModels.Question question, Validate validate) CreateQuestion(ViewModels.Question question);
     }
     public class QuestionService : IQuestionService
     {
         private readonly ConsultationsContext _context;
         private readonly IUserService _userService;
+        private readonly User _currentUser;
 
         public QuestionService(ConsultationsContext consultationsContext, IUserService userService)
         {
             _context = consultationsContext;
             _userService = userService;
+            _currentUser = _userService.GetCurrentUser();
         }
 
         public (ViewModels.Question question, Validate validate) GetQuestion(int questionId)
@@ -35,19 +37,28 @@ namespace Comments.Services
             if (questionInDatabase == null)
                 return (question: null, validate: new Validate(valid: false, notFound: true, message: $"Question id:{questionId} not found trying to get question"));
 
-
             return (question: (questionInDatabase == null) ? null : new ViewModels.Question(questionInDatabase.Location, questionInDatabase), validate: null);
         }
 
-        public int EditQuestion(int questionId, ViewModels.Question question)
+        public (int rowsUpdated, Validate validate) EditQuestion(int questionId, ViewModels.Question question)
         {
+            if (!_currentUser.IsLoggedIn)
+                return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"Not logged in editing question id:{questionId}"));
+
             var questionInDatabase = _context.GetQuestion(questionId);
+
+            if (questionInDatabase == null)
+                return (rowsUpdated: 0, validate: new Validate(valid: false, notFound: true, message: $"Question id:{questionId} not found trying to edit question for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
+
             questionInDatabase.UpdateFromViewModel(question);
-            return _context.SaveChanges();
+            return (rowsUpdated: _context.SaveChanges(), validate: null);
         }
 
         public (int rowsUpdated, Validate validate) DeleteQuestion(int questionId)
         {
+            if (!_currentUser.IsLoggedIn)
+                return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"Not logged in deleting question id:{questionId}"));
+
             var questionInDatabase = _context.GetQuestion(questionId);
 
             if (questionInDatabase == null)
@@ -57,8 +68,11 @@ namespace Comments.Services
             return (rowsUpdated: _context.SaveChanges(), validate: null);
         }
 
-        public ViewModels.Question CreateQuestion(ViewModels.Question question) 
+        public (ViewModels.Question question, Validate validate) CreateQuestion(ViewModels.Question question) 
         {
+            if (!_currentUser.IsLoggedIn)
+                return (question: null, validate: new Validate(valid: false, unauthorised: true, message: "Not logged in creating question"));
+
             var locationToSave = new Models.Location(question as ViewModels.Location);
             _context.Location.Add(locationToSave);
 
@@ -67,7 +81,8 @@ namespace Comments.Services
 
             _context.Question.Add(questionToSave);
             _context.SaveChanges();
-            return new ViewModels.Question(locationToSave, questionToSave);
+            
+            return (question: new ViewModels.Question(locationToSave, questionToSave), validate: null);
         }
     }
 }

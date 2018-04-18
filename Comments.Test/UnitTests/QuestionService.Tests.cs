@@ -62,7 +62,7 @@ namespace Comments.Test.UnitTests
             viewModel = questionService.GetQuestion(questionId);
 
             //Assert
-            result.ShouldBe(1);
+            result.rowsUpdated.ShouldBe(1);
             viewModel.question.QuestionText.ShouldBe(updatedQuestionText);
         }
 
@@ -135,7 +135,7 @@ namespace Comments.Test.UnitTests
             var result = questionService.CreateQuestion(viewModel);
 
             //Assert
-            result.QuestionText.ShouldBe(questionText);
+            result.question.QuestionText.ShouldBe(questionText);
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using Comments.Services;
+﻿using Comments.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Comments.ViewModels;
@@ -17,6 +16,7 @@ namespace Comments.Controllers.Api
             _answerService = answerService;
             _logger = logger;
         }
+
         // GET: consultations/api/Answer/5 
         [HttpGet("{answerId}")]
         public IActionResult GetAnswer([FromRoute] int answerId)
@@ -81,7 +81,7 @@ namespace Comments.Controllers.Api
             {
                 return BadRequest(ModelState);
             }
-
+            
             var result = _answerService.DeleteAnswer(answerId);
             var invalidResult = Validate(result.validate);
 
