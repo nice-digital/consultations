@@ -1,11 +1,11 @@
 {
     "comments":[
         {
-            "commentId":1,
+            "commentId":20,
             "lastModifiedDate":"0001-01-01T00:00:00",
             "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
             "commentText":"comment text",
-            "locationId":1,
+            "locationId":31,
             "sourceURI":"/consultations/1/1/introduction",
             "htmlElementID":null,
             "rangeStart":null,
@@ -15,11 +15,11 @@
             "quote":null
         },
         {
-            "commentId":2,
+            "commentId":21,
             "lastModifiedDate":"0001-01-01T00:00:00",
             "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
             "commentText":"comment text",
-            "locationId":2,
+            "locationId":31,
             "sourceURI":"/consultations/1/1/introduction",
             "htmlElementID":null,
             "rangeStart":null,
@@ -29,11 +29,11 @@
             "quote":null
         },
         {
-            "commentId":3,
+            "commentId":22,
             "lastModifiedDate":"0001-01-01T00:00:00",
             "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
             "commentText":"comment text",
-            "locationId":3,
+            "locationId":32,
             "sourceURI":"/consultations/1/1/introduction",
             "htmlElementID":null,
             "rangeStart":null,

@@ -34,9 +34,7 @@ namespace Comments.Models
                             .ThenInclude(q => q.QuestionType)
                         .Include(l => l.Question)
                             .ThenInclude(q => q.Answer);
-
-            var comment = Comment;
-
+            
             return data;
         }
 
