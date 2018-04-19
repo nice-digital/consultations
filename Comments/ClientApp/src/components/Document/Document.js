@@ -1,4 +1,5 @@
 // @flow
+
 import React, { Component, Fragment } from "react";
 import Moment from "react-moment";
 import { Helmet } from "react-helmet";
@@ -12,23 +13,24 @@ import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
 import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
-// import { CommentPanel } from "./../CommentPanel/CommentPanel";
-//import stringifyObject from "stringify-object";
-// import preload from "../../data/pre-loader";
 
 type PropsType = {
 	staticContext?: any,
 	match: any,
 	location: any
 };
+
 type StateType = {
 	loading: boolean,
 	documentsData: any, // the list of other documents in this consultation
 	chapterData: any, // the current chapter's details - markup and sections,
 	consultationData: any, // the top level info - title etc
-	currentInPageNavItem: null | string
+	currentInPageNavItem: null | string,
+	hasInitialData: boolean
 };
+
 type DataType = any;
+
 type DocumentsType = Array<Object>;
 
 export class Document extends Component<PropsType, StateType> {
@@ -62,7 +64,6 @@ export class Document extends Component<PropsType, StateType> {
 		}
 	}
 
-	// TODO: separate this into a utility
 	gatherData = async () => {
 		const { consultationId, documentId, chapterSlug } = this.props.match.params;
 
@@ -74,9 +75,7 @@ export class Document extends Component<PropsType, StateType> {
 
 		const documentsData = load("documents", undefined, [], { consultationId })
 			.then(response => response.data)
-			.catch(err => {
-				throw new Error("documentsData " + err);
-			});
+			.catch(err => { throw new Error("documentsData " + err); });
 
 		const consultationData = load("consultation", undefined, [], { consultationId })
 			.then(response => response.data)
@@ -93,38 +92,38 @@ export class Document extends Component<PropsType, StateType> {
 	};
 
 	componentDidMount() {
-		// if (!this.state.hasInitialData) {
-		// 	this.gatherData()
-		// 		.then( data =>{
-		// 			this.setState({
-		// 				...data,
-		// 				loading: false,
-		// 				hasInitialData: true
-		// 			});
-		// 		})
-		// 		.catch(err => {
-		// 			throw new Error("gatherData in componentDidMount failed " + err);
-		// 		});
-		// }
+		if (!this.state.hasInitialData) {
+			this.gatherData()
+				.then( data =>{
+					this.setState({
+						...data,
+						loading: false,
+						hasInitialData: true
+					});
+				})
+				.catch(err => {
+					throw new Error("gatherData in componentDidMount failed " + err);
+				});
+		}
 	}
 
-	// componentDidUpdate(prevProps: PropsType){
-	// 	const oldRoute = prevProps.location.pathname;
-	// 	const newRoute = this.props.location.pathname;
-	// 	if (oldRoute !== newRoute) {
-	// 		this.setState({
-	// 			loading: true
-	// 		});
-	// 		this.gatherData()
-	// 			.then( data =>{
-	// 				this.setState({
-	// 					...data,
-	// 					loading: false
-	// 				});
-	// 			})
-	// 			.catch(err => { throw new Error("gatherData in componentDidUpdate failed " + err);});
-	// 	}
-	// }
+	componentDidUpdate(prevProps: PropsType){
+		const oldRoute = prevProps.location.pathname;
+		const newRoute = this.props.location.pathname;
+		if (oldRoute !== newRoute) {
+			this.setState({
+				loading: true
+			});
+			this.gatherData()
+				.then( data =>{
+					this.setState({
+						...data,
+						loading: false
+					});
+				})
+				.catch(err => { throw new Error("gatherData in componentDidUpdate failed " + err);});
+		}
+	}
 
 	renderDocumentHtml = (data: DataType) => {
 		return { __html: data };

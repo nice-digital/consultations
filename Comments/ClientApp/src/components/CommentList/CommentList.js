@@ -1,9 +1,10 @@
 // @flow
+
 import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import { load } from "./../../data/loader";
 import preload from "../../data/pre-loader";
-import CommentBoxWithRouter from "../CommentBox/CommentBox";
+import { CommentBox } from "../CommentBox/CommentBox";
 
 type PropsType = {
 	staticContext?: any,
@@ -33,7 +34,9 @@ export class CommentList extends Component<PropsType, StateType> {
 			comments: [],
 			loading: true
 		};
-		const preloaded = preload(this.props.staticContext, "comments", [], { sourceURI: this.props.match.url });
+		const preloaded = preload(this.props.staticContext, "comments", [], {
+			sourceURI: this.props.match.url
+		});
 
 		if (preloaded) {
 			this.state = {
@@ -43,18 +46,19 @@ export class CommentList extends Component<PropsType, StateType> {
 		}
 	}
 
-	loadComments(){
-		load("comments", undefined, [], { sourceURI: this.props.match.url })
-			.then(res=>{
+	loadComments() {
+		load("comments", undefined, [], { sourceURI: this.props.match.url }).then(
+			res => {
 				this.setState({
 					comments: res.data.comments,
 					loading: false
 				});
-			});
+			}
+		);
 	}
 
 	componentDidMount() {
-		if (this.state.comments.length === 0){
+		if (this.state.comments.length === 0) {
 			this.loadComments();
 		}
 	}
@@ -70,21 +74,27 @@ export class CommentList extends Component<PropsType, StateType> {
 		}
 	}
 
+	commentChangeHandler(index, comment) {
+
+	}
+
 	render() {
 		if (this.state.loading) return <p>Loading</p>;
-		if (!this.state.loading && (this.state.comments.length === 0)) return <p>No comments</p>;
+		if (!this.state.loading && this.state.comments.length === 0)
+			return <p>No comments</p>;
 
 		return (
 			<Fragment>
-				<button onClick={this.addCommentHandler} >Add comment</button>
+				{/*<button onClick={this.addCommentHandler} >Add comment</button>*/}
 				<ul>
-					{this.state.comments.map((comment) => {
-						const props = {
-							commentType: "comment",
-							commentId: comment.commentId
-						};
+					{this.state.comments.map(comment => {
 						return (
-							<CommentBoxWithRouter key={comment.commentId} {...props} />
+							<CommentBox
+								key={comment.commentId}
+								index={comment.commentId}
+								comment={comment}
+								commentChangeHandler={this.commentChangeHandler}
+							/>
 						);
 					})}
 				</ul>
@@ -92,10 +102,5 @@ export class CommentList extends Component<PropsType, StateType> {
 		);
 	}
 }
-
-// const Comment = (props) => {
-// 	const comment = props.comment;
-// 	return <li>{comment.commentText}</li>;
-// };
 
 export default withRouter(CommentList);

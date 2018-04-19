@@ -1,7 +1,7 @@
 import {Endpoints, BaseUrl} from "./endpoints";
 import axios from "axios";
 import {objectToQueryString, replaceFormat} from "./../helpers/utils";
-import stringifyObject from "stringify-object";
+
 /**
  * Load data using Axios
  * @see https://github.com/axios/axios
@@ -17,7 +17,6 @@ import stringifyObject from "stringify-object";
  * axios("/consultations/api/Chapter?consultationId=1&documentId=2&chapterSlug=risk-assessment").then(res => res.data);
  */
 
-
 export const generateUrl = (endpointName, baseUrl = BaseUrl, urlParameters = [], query = {}) => {
 	var endpoint = Endpoints[endpointName];
 	if (!endpoint) return endpointName;
@@ -29,9 +28,7 @@ export const load = (endpoint, baseUrl = BaseUrl, urlParameters = [],  query = {
 	return new Promise((resolve, reject) => {
 		const url = generateUrl(endpoint, baseUrl, urlParameters, query);
 		const headers = isJson ? { "Content-Type" : "application/json"} : {};
-
 		console.log(`loader.js: ${url} method: ${method}`);
-
 		axios({url, data, method, headers})
 			.then(response => {
 				resolve(response);

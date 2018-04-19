@@ -10,11 +10,11 @@ type StateType = {}
 
 export class Drawer extends Component<PropsType, StateType> {
 
-	constructor(props) {
+	constructor(props: PropsType) {
 		super(props);
 		this.state = {
 			drawerExpandedWidth: false,
-			drawerOpen: false,
+			drawerOpen: true,
 			drawerMobile: this.isMobile()
 		};
 	}
