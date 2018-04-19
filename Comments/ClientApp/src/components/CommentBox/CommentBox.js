@@ -1,5 +1,4 @@
-
-import React, { Component, Fragment } from "react";
+import React, {Component, Fragment} from "react";
 // import { load } from "../../data/loader";
 
 type CommentType = {
@@ -41,7 +40,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 	// 	load("comment", undefined, [comment.commentId], {}, "PUT", comment);
 	// };
 
-	constructor(){
+	constructor() {
 		super();
 		this.state = {
 			comment: {},
@@ -68,28 +67,30 @@ export class CommentBox extends Component<PropsType, StateType> {
 		});
 	};
 
-	static getDerivedStateFromProps(nextProps, prevState){
+	static getDerivedStateFromProps(nextProps, prevState) {
+		console.log("received new props")
 		return {
 			ui: {
-				unsavedChanges : false
+				unsavedChanges: false
 			},
 			comment: nextProps.comment
 		};
 	}
 
 	render() {
-		const { commentText } = this.state.comment;
+		if (!this.state.comment) return null;
+		const {commentText} = this.state.comment;
 		return (
 			<Fragment>
 				<li>
 					<small>{this.state.ui.unsavedChanges ? "unsaved" : ""}</small>
-					<form onSubmit={() => this.props.saveHandler(this.state.comment)}>
+					<form onSubmit={(e) => this.props.saveHandler(e, this.state.comment)}>
 						<textarea
 							rows="2"
 							value={commentText}
 							onChange={this.textareaChangeHandler}
 						/>
-						<input type="submit" value="Save" />
+						<input type="submit" value="Save"/>
 					</form>
 				</li>
 			</Fragment>

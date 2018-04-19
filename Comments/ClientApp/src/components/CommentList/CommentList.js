@@ -84,11 +84,17 @@ export class CommentList extends Component<PropsType, StateType> {
 		}
 	}
 
-	saveComment = (comment: CommentType) => {
-
-		load("comment", undefined, [comment.commentId], {}, "PUT", comment, true);
-			//.then();
-
+	saveComment = (e: Event, comment: CommentType) => {
+		e.preventDefault();
+		load("comment", undefined, [comment.commentId], {}, "PUT", comment, true)
+			.then((res)=>{
+				const index = this.state.comments.map(function(c) {return c.commentId; }).indexOf(comment.commentId);
+				const comments = this.state.comments;
+				comments[index] = res.data;
+				this.setState({
+					comments
+				});
+			});
 	}
 
 	render() {
@@ -100,11 +106,10 @@ export class CommentList extends Component<PropsType, StateType> {
 			<Fragment>
 				{/*<button onClick={this.addCommentHandler} >Add comment</button>*/}
 				<ul>
-					{this.state.comments.map(comment => {
+					{this.state.comments.map((comment, index) => {
 						return (
 							<CommentBox
-								key={comment.commentId}
-								index={comment.commentId}
+								key={`comment${index}`}
 								comment={comment}
 								saveHandler={this.saveComment}
 							/>

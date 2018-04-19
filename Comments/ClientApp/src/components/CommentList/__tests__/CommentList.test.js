@@ -80,7 +80,22 @@ describe("[ClientApp] ", () => {
 
 			const wrapper = mount(<CommentList {...fakeProps}/>);
 			wrapper.instance().saveComment(commentToUpdate);			;
+		});
 
+		it("save handler updates the correct item in the comments array once the api has returned new data", async ()=>{
+			mock.reset();
+			const commentToUpdate = sampleComments.comments[1];
+			mock.onPut("/consultations/api/Comment/" + commentToUpdate.commentId).reply(() => {
+				const sampleCommentsUpdated = sampleComments;
+				sampleCommentsUpdated.comments[1].commentText = "New updated text";
+				return [200, sampleCommentsUpdated.comments[1]];
+			});
+			mock.onGet(generateUrl("comments", undefined, [], { sourceURI: fakeProps.match.url })).reply(200, sampleComments);
+			const wrapper = mount(<CommentList {...fakeProps}/>);
+			wrapper.instance().saveComment(commentToUpdate);
+			await nextTick();
+			wrapper.update();
+			expect(wrapper.state().comments[1].commentText).toEqual("New updated text");
 		});
 
 	});

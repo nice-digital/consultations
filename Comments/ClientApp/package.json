@@ -79,5 +79,5 @@
 		"prettier-eslint": "^8.8.1",
 		"stringify-object": "^3.2.2"
 	},
-	"proxy": "http://test.nice.org.uk"
+	"proxy": "http://niceorg"
 }
