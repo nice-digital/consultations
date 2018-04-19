@@ -41,18 +41,51 @@ export class CommentBox extends Component<PropsType, StateType> {
 	// 	load("comment", undefined, [comment.commentId], {}, "PUT", comment);
 	// };
 
+	constructor(){
+		super();
+		this.state = {
+			comment: {},
+			ui: {
+				unsavedChanges: false
+			}
+		};
+	}
+
+	componentDidMount() {
+		this.setState({
+			comment: this.props.comment
+		});
+	}
+
+	textareaChangeHandler = e => {
+		const comment = this.state.comment;
+		comment.commentText = e.target.value;
+		this.setState({
+			comment,
+			ui: {
+				unsavedChanges: true
+			}
+		});
+	};
+
+	getDerivedStateFromProps(nextProps, prevState){
+		this.setState({
+			ui: {
+				unsavedChanges : true
+			}
+		});
+	}
+
 	render() {
-		const { commentId, commentText } = this.props.comment;
-		const { index } = this.props;
+		const { commentText } = this.state.comment;
 		return (
 			<Fragment>
 				<li>
-					<form>
+					<form onSubmit={() => this.props.saveHandler(this.state.comment)}>
 						<textarea
-							id={index}
 							rows="2"
 							value={commentText}
-							onChange={e=>this.props.commentChangeHandler(index, this.props.comment)}
+							onChange={this.textareaChangeHandler}
 						/>
 						<input type="submit" value="Save" />
 					</form>

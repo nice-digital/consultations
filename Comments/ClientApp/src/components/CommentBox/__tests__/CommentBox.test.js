@@ -1,5 +1,5 @@
 import React from "react";
-import {shallow} from "enzyme";
+import {shallow, mount} from "enzyme";
 // import {MemoryRouter} from "react-router";
 import {CommentBox} from "../CommentBox";
 import sampleComment from "./sample";
@@ -13,40 +13,74 @@ describe("[ClientApp] ", () => {
 
 	describe("CommentBox Component", () => {
 
-		it("makes correct request to the api based on comment ID", (done) => {
-			mock.reset();
-			const fakeProps = {
-				commentId: sampleComment.commentId
-			};
-			mock.onAny().reply(config => {
-				expect(config.url).toEqual("/consultations/api/Comment/" + sampleComment.commentId);
-				done();
-				return [200, sampleComment];
-			});
+		const fakeProps = {
+			comment: {
+				commentId: sampleComment.commentId,
+				commentText: "a comment"
+			}
+		};
 
-			shallow(<CommentBox {...fakeProps} />);
+		it("sets text area with comment text correctly", () => {
+			var wrapper = shallow(<CommentBox {...fakeProps} />);
+
+			expect(wrapper.find("textarea").length).toEqual(1);
+			expect(wrapper.find("textarea").props().value).toEqual("a comment");
 
 		});
 
-		it("save handler posts to the api with valid message", async (done) => {
-			mock.reset();
-			const fakeProps = {
-				commentId: sampleComment.commentId
-			};
-			mock.onGet("/consultations/api/Comment/" + sampleComment.commentId).reply(200, sampleComment);
+		it("unsaved changes state is updated correctly on text area change", () => {
 
-			mock.onPut("/consultations/api/Comment/" + sampleComment.commentId).reply(config => {
-				expect(JSON.parse(config.data)).toEqual(sampleComment);
-				done();
-				return [200, sampleComment];
+			var wrapper = mount(<CommentBox {...fakeProps} />);
+
+			expect(wrapper.state().ui.unsavedChanges).toEqual(false);
+			const textArea = wrapper.find("textarea");
+			textArea.simulate("change", {
+				target: {
+					value: "an updated comment"
+				}
 			});
+			expect(wrapper.state().comment.commentText).toEqual("an updated comment");
+			expect(wrapper.state().ui.unsavedChanges).toEqual(true);
 
-			const wrapper = shallow(<CommentBox {...fakeProps} />);
-			await nextTick();
-			wrapper.update();
-			const commentBoxClass = wrapper.instance();
-			commentBoxClass.formSubmitHandler(new Event("click"), sampleComment);
 		});
+
+
+
+		it("marks state as unchanged after comment is saved", () => {
+			const wrapper = mount(<CommentBox {...fakeProps} />);
+			wrapper.setState({ui: {unsavedChanges: true}});
+			// var updatedProps = fakeProps;
+			// updatedProps.comment.commentText = "an updated comment";
+			wrapper.setProps({});
+
+			// expect(wrapper.state().comment.commentText).toEqual("an updated comment");
+			expect(wrapper.state().ui.unsavedChanges).toEqual(false);
+		});
+
+
+
+
+		// it("save handler posts to the api with valid message", async (done) => {
+		// 	mock.reset();
+		// 	const fakeProps = {
+		// 		comment: {
+		// 			commentId: sampleComment.commentId
+		// 		}
+		// 	};
+		// 	mock.onGet("/consultations/api/Comment/" + sampleComment.commentId).reply(200, sampleComment);
+		//
+		// 	mock.onPut("/consultations/api/Comment/" + sampleComment.commentId).reply(config => {
+		// 		expect(JSON.parse(config.data)).toEqual(sampleComment);
+		// 		done();
+		// 		return [200, sampleComment];
+		// 	});
+		//
+		// 	const wrapper = shallow(<CommentBox {...fakeProps} />);
+		// 	await nextTick();
+		// 	wrapper.update();
+		// 	const commentBoxClass = wrapper.instance();
+		// 	commentBoxClass.formSubmitHandler(new Event("click"), sampleComment);
+		// });
 
 	});
 });

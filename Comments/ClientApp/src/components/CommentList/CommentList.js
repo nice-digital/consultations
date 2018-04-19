@@ -19,7 +19,17 @@ type PropsType = {
 
 type CommentType = {
 	commentId: number,
-	type: string
+	lastModifiedDate: Date,
+	lastModifiedByUserId: string, //really a guid
+	commentText: string,
+	locationId: number,
+	sourceURI: string,
+	htmlElementID: string,
+	rangeStart: string,
+	rangeStartOffset: string,
+	rangeEnd: string,
+	rangeEndOffset: string,
+	quote: string
 };
 
 type StateType = {
@@ -74,7 +84,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		}
 	}
 
-	commentChangeHandler(index, comment) {
+	saveComment = (comment: CommentType) => {
 
 	}
 
@@ -93,7 +103,7 @@ export class CommentList extends Component<PropsType, StateType> {
 								key={comment.commentId}
 								index={comment.commentId}
 								comment={comment}
-								commentChangeHandler={this.commentChangeHandler}
+								saveHandler={this.saveComment}
 							/>
 						);
 					})}
