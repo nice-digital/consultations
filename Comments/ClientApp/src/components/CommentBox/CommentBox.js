@@ -68,12 +68,13 @@ export class CommentBox extends Component<PropsType, StateType> {
 		});
 	};
 
-	getDerivedStateFromProps(nextProps, prevState){
-		this.setState({
+	static getDerivedStateFromProps(nextProps, prevState){
+		return {
 			ui: {
-				unsavedChanges : true
-			}
-		});
+				unsavedChanges : false
+			},
+			comment: nextProps.comment
+		};
 	}
 
 	render() {
@@ -81,6 +82,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 		return (
 			<Fragment>
 				<li>
+					<small>{this.state.ui.unsavedChanges ? "unsaved" : ""}</small>
 					<form onSubmit={() => this.props.saveHandler(this.state.comment)}>
 						<textarea
 							rows="2"

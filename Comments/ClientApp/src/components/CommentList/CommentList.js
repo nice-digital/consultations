@@ -86,6 +86,9 @@ export class CommentList extends Component<PropsType, StateType> {
 
 	saveComment = (comment: CommentType) => {
 
+		load("comment", undefined, [comment.commentId], {}, "PUT", comment, true);
+			//.then();
+
 	}
 
 	render() {

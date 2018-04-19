@@ -21,17 +21,14 @@ describe("[ClientApp] ", () => {
 		};
 
 		it("sets text area with comment text correctly", () => {
-			var wrapper = shallow(<CommentBox {...fakeProps} />);
-
+			const wrapper = shallow(<CommentBox {...fakeProps} />);
 			expect(wrapper.find("textarea").length).toEqual(1);
 			expect(wrapper.find("textarea").props().value).toEqual("a comment");
 
 		});
 
-		it("unsaved changes state is updated correctly on text area change", () => {
-
-			var wrapper = mount(<CommentBox {...fakeProps} />);
-
+		it("unsavedChanges state is updated correctly on text area change", () => {
+			const wrapper = mount(<CommentBox {...fakeProps} />);
 			expect(wrapper.state().ui.unsavedChanges).toEqual(false);
 			const textArea = wrapper.find("textarea");
 			textArea.simulate("change", {
@@ -44,43 +41,46 @@ describe("[ClientApp] ", () => {
 
 		});
 
-
-
-		it("marks state as unchanged after comment is saved", () => {
+		it("marks state as unchanged after props are updated", () => {
 			const wrapper = mount(<CommentBox {...fakeProps} />);
 			wrapper.setState({ui: {unsavedChanges: true}});
-			// var updatedProps = fakeProps;
-			// updatedProps.comment.commentText = "an updated comment";
 			wrapper.setProps({});
-
-			// expect(wrapper.state().comment.commentText).toEqual("an updated comment");
 			expect(wrapper.state().ui.unsavedChanges).toEqual(false);
 		});
 
+		it("updated comment text in state after new props received", () => {
+			const wrapper = mount(<CommentBox {...fakeProps} />);
+			const updatedProps = {
+				comment: {
+					commentId: sampleComment.commentId,
+					commentText: "an updated comment"
+				}
+			};
+			wrapper.setProps(updatedProps);
+			expect(wrapper.state().comment.commentText).toEqual("an updated comment");
+		});
 
-
-
-		// it("save handler posts to the api with valid message", async (done) => {
-		// 	mock.reset();
+		// it.only("updated comment text in state after comment is saved", () => {
 		// 	const fakeProps = {
 		// 		comment: {
-		// 			commentId: sampleComment.commentId
+		// 			commentId: 0,
+		// 			commentText: "a comment"
 		// 		}
 		// 	};
-		// 	mock.onGet("/consultations/api/Comment/" + sampleComment.commentId).reply(200, sampleComment);
 		//
-		// 	mock.onPut("/consultations/api/Comment/" + sampleComment.commentId).reply(config => {
-		// 		expect(JSON.parse(config.data)).toEqual(sampleComment);
-		// 		done();
-		// 		return [200, sampleComment];
-		// 	});
-		//
-		// 	const wrapper = shallow(<CommentBox {...fakeProps} />);
-		// 	await nextTick();
-		// 	wrapper.update();
-		// 	const commentBoxClass = wrapper.instance();
-		// 	commentBoxClass.formSubmitHandler(new Event("click"), sampleComment);
+		// 	const wrapper = mount(<CommentBox {...fakeProps} />);
+		// 	var updatedProps = {
+		// 		comment: {
+		// 			commentId: sampleComments.commentId,
+		// 			commentText: "an updated comment"
+		// 		}
+		// 	};
+		// 	wrapper.setProps(updatedProps);
+		// 	expect(wrapper.state().comment.commentText).toEqual("an updated comment");
 		// });
+
+
+
 
 	});
 });

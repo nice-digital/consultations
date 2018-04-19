@@ -5,7 +5,7 @@ import { CommentList } from "../CommentList";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { generateUrl } from "../../../data/loader";
-import sampleComment from "./sample";
+import sampleComments from "./sample";
 import { nextTick } from "../../../helpers/utils";
 
 const mock = new MockAdapter(axios);
@@ -24,6 +24,7 @@ describe("[ClientApp] ", () => {
 			comment: {
 				commentId: 1
 			}
+			//staticContext: {}
 		};
 
 		afterEach(()=>{
@@ -31,7 +32,7 @@ describe("[ClientApp] ", () => {
 		});
 
 		it("should render a li tag with sample data ID", async () => {
-			 mock.onGet(generateUrl("comments", undefined, [], { sourceURI: fakeProps.match.url })).reply(200, sampleComment);
+			 mock.onGet(generateUrl("comments", undefined, [], { sourceURI: fakeProps.match.url })).reply(200, sampleComments);
 			 const wrapper = mount(
 			 	<MemoryRouter>
 			 		<CommentList {...fakeProps}/>
@@ -64,6 +65,22 @@ describe("[ClientApp] ", () => {
 				return [200, {comments: []}];
 			});
 			mount(<CommentList {...fakeProps}/>);
+		});
+
+		it("save handler posts to the api with updated comment from state", async (done) => {
+			mock.reset();
+			const commentToUpdate = sampleComments.comments[0];
+			mock.onPut("/consultations/api/Comment/" + commentToUpdate.commentId).reply(config => {
+				expect(JSON.parse(config.data)).toEqual(commentToUpdate);
+				done();
+				return [200, sampleComments];
+			});
+
+			mock.onGet(generateUrl("comments", undefined, [], { sourceURI: fakeProps.match.url })).reply(200, sampleComments);
+
+			const wrapper = mount(<CommentList {...fakeProps}/>);
+			wrapper.instance().saveComment(commentToUpdate);			;
+
 		});
 
 	});
