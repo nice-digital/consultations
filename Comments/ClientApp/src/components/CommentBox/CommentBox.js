@@ -68,7 +68,6 @@ export class CommentBox extends Component<PropsType, StateType> {
 	};
 
 	static getDerivedStateFromProps(nextProps, prevState) {
-		console.log("received new props")
 		return {
 			ui: {
 				unsavedChanges: false
