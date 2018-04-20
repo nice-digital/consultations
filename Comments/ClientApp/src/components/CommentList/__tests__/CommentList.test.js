@@ -79,7 +79,9 @@ describe("[ClientApp] ", () => {
 			mock.onGet(generateUrl("comments", undefined, [], { sourceURI: fakeProps.match.url })).reply(200, sampleComments);
 
 			const wrapper = mount(<CommentList {...fakeProps}/>);
-			wrapper.instance().saveComment(commentToUpdate);			;
+			wrapper.instance().saveComment(
+				new Event("click"),
+				commentToUpdate);
 		});
 
 		it("save handler updates the correct item in the comments array once the api has returned new data", async ()=>{
@@ -92,7 +94,9 @@ describe("[ClientApp] ", () => {
 			});
 			mock.onGet(generateUrl("comments", undefined, [], { sourceURI: fakeProps.match.url })).reply(200, sampleComments);
 			const wrapper = mount(<CommentList {...fakeProps}/>);
-			wrapper.instance().saveComment(commentToUpdate);
+			wrapper.instance().saveComment(
+				new Event("click"),
+				commentToUpdate);
 			await nextTick();
 			wrapper.update();
 			expect(wrapper.state().comments[1].commentText).toEqual("New updated text");
