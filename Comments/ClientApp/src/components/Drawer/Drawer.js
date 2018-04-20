@@ -12,7 +12,6 @@ export class Drawer extends Component<PropsType, StateType> {
 
 	constructor(props: PropsType) {
 		super(props);
-		//this.commentList = React.createRef();
 		this.state = {
 			drawerExpandedWidth: false,
 			drawerOpen: true,
@@ -20,13 +19,9 @@ export class Drawer extends Component<PropsType, StateType> {
 		};
 	}
 
-
-
+	// This isn't called in this file - this is the method called from DocumentView
 	newComment(message){
-		console.log('in drawer');
-
-
-		//this.clickChild(message);
+		// and what we're calling is newComment from inside <CommentList />
 		this.commentList.newComment({commentText: message.placeholder});
 	}
 
@@ -70,7 +65,8 @@ export class Drawer extends Component<PropsType, StateType> {
 					</button>
 				</div>
 				<div className="Drawer__main">
-					<CommentListWithRouter wrappedComponentRef={c => this.commentList = c} />
+					{/*wrappedComponentRef exposes the underlying, unwrapped component*/}
+					<CommentListWithRouter wrappedComponentRef={component => this.commentList = component} />
 				</div>
 			</div>
 		);
