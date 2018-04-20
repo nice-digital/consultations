@@ -10,8 +10,8 @@ namespace Comments.Models
     {
         public ConsultationsContext(DbContextOptions options, IUserService userService) : base(options)
         {
-            _userService = userService;
-            _createdByUserID = _userService.GetCurrentUser().UserId;
+            //_userService = userService;
+            //_createdByUserID = _userService.GetCurrentUser().UserId;
         }
 
         /// <summary>
