@@ -3,10 +3,8 @@
 import React, { Fragment } from "react";
 import { Route, Switch, Redirect } from "react-router";
 import { Helmet } from "react-helmet";
-
-import DocumentWithRouter from "../Document/Document";
-import { Drawer } from "../Drawer/Drawer";
 import CommentListWithRouter from "../CommentList/CommentList";
+import DocumentView from "../DocumentView/DocumentView";
 import NotFound from "../NotFound/NotFound";
 
 const App = () => (
@@ -23,10 +21,7 @@ const App = () => (
 
 			{/*Document View*/}
 			<Route path="/:consultationId/:documentId/:chapterSlug">
-				<Fragment>
-					<Drawer />
-					<DocumentWithRouter />
-				</Fragment>
+				<DocumentView />
 			</Route>
 
 			<Route path="/commentlist">

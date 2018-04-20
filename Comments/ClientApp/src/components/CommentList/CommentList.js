@@ -76,6 +76,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		if (this.state.comments.length === 0) {
 			this.loadComments();
 		}
+		this.props.setClick(this.newComment.bind(this));
 	}
 
 	componentDidUpdate(prevProps: PropsType) {
@@ -90,14 +91,17 @@ export class CommentList extends Component<PropsType, StateType> {
 	}
 
 	newComment(newComment: NewCommentType){
-		const comments = this.state.comments;
+		console.log('in new comment');
+		let comments = this.state.comments;
 
 		//negative ids are unsaved / new comments
 		let idToUseForNewBox = -1;
-		if (comments.length) {
+		if (comments && comments.length) {
 			const existingIds = comments.map(c => c.commentId);
 			const lowestExistingId = Math.min.apply(Math, existingIds);
 			idToUseForNewBox = (lowestExistingId >= 0) ? -1 : lowestExistingId - 1;
+		} else{
+			comments = [];
 		}
 		const generatedComment = Object.assign({}, newComment, {commentId: idToUseForNewBox});
 		comments.unshift(generatedComment);

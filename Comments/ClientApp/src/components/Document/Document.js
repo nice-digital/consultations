@@ -230,6 +230,7 @@ export class Document extends Component<PropsType, StateType> {
 							<BreadCrumbs links={this.getBreadcrumbs()}/>
 							<div className="page-header">
 								<h1 className="page-header__heading">{title}</h1>
+								<button onClick={e=>this.props.onNewCommentClick({placeholder: "Con Com Innit"})}>Comment on this consultation</button>
 								<p className="page-header__lead">
 									[{reference}] Open until{" "}
 									<Moment format="D MMMM YYYY" date={endDate}/>

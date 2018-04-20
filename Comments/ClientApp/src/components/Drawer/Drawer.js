@@ -12,11 +12,18 @@ export class Drawer extends Component<PropsType, StateType> {
 
 	constructor(props: PropsType) {
 		super(props);
+		this.commentList = React.createRef();
 		this.state = {
 			drawerExpandedWidth: false,
 			drawerOpen: true,
 			drawerMobile: this.isMobile()
 		};
+	}
+
+	newComment(message){
+		console.log(message.placeholder);
+		this.clickChild(message);
+		//this.commentList.current.newComment({commentText: message});
 	}
 
 	isMobile = () => {
@@ -59,7 +66,11 @@ export class Drawer extends Component<PropsType, StateType> {
 					</button>
 				</div>
 				<div className="Drawer__main">
-					<CommentListWithRouter  />
+					<CommentListWithRouter setClick={
+						(click) => {
+							this.clickChild = click
+						}
+					} />
 				</div>
 			</div>
 		);
