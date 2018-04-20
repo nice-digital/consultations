@@ -76,7 +76,6 @@ export class CommentList extends Component<PropsType, StateType> {
 		if (this.state.comments.length === 0) {
 			this.loadComments();
 		}
-		this.props.setClick(this.newComment.bind(this));
 	}
 
 	componentDidUpdate(prevProps: PropsType) {
@@ -91,7 +90,6 @@ export class CommentList extends Component<PropsType, StateType> {
 	}
 
 	newComment(newComment: NewCommentType){
-		console.log('in new comment');
 		let comments = this.state.comments;
 
 		//negative ids are unsaved / new comments
@@ -130,7 +128,6 @@ export class CommentList extends Component<PropsType, StateType> {
 
 		return (
 			<Fragment>
-				<button onClick={() => this.newComment({})} >Add comment</button>
 				<ul>
 					{this.state.comments.map((comment) => {
 						return (

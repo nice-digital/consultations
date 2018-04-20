@@ -12,7 +12,7 @@ export class Drawer extends Component<PropsType, StateType> {
 
 	constructor(props: PropsType) {
 		super(props);
-		this.commentList = React.createRef();
+		//this.commentList = React.createRef();
 		this.state = {
 			drawerExpandedWidth: false,
 			drawerOpen: true,
@@ -20,10 +20,14 @@ export class Drawer extends Component<PropsType, StateType> {
 		};
 	}
 
+
+
 	newComment(message){
-		console.log(message.placeholder);
-		this.clickChild(message);
-		//this.commentList.current.newComment({commentText: message});
+		console.log('in drawer');
+
+
+		//this.clickChild(message);
+		this.commentList.newComment({commentText: message.placeholder});
 	}
 
 	isMobile = () => {
@@ -66,11 +70,7 @@ export class Drawer extends Component<PropsType, StateType> {
 					</button>
 				</div>
 				<div className="Drawer__main">
-					<CommentListWithRouter setClick={
-						(click) => {
-							this.clickChild = click
-						}
-					} />
+					<CommentListWithRouter wrappedComponentRef={c => this.commentList = c} />
 				</div>
 			</div>
 		);

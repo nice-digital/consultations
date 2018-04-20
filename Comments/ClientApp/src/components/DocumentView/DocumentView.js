@@ -12,7 +12,6 @@ export class DocumentView extends Component {
 	}
 
 	newCommentHandler = (incomingComment) => {
-		console.log('about to call new comment');
 		this.drawer.current.newComment(incomingComment);
 	};
 
