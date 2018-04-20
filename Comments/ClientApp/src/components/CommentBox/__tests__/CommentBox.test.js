@@ -1,18 +1,16 @@
 import React from "react";
-import {shallow, mount} from "enzyme";
+import { shallow, mount } from "enzyme";
 // import {MemoryRouter} from "react-router";
-import {CommentBox} from "../CommentBox";
+import { CommentBox } from "../CommentBox";
 import sampleComment from "./sample";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import {nextTick} from "../../../helpers/utils";
+import { nextTick } from "../../../helpers/utils";
 
 const mock = new MockAdapter(axios);
 
 describe("[ClientApp] ", () => {
-
 	describe("CommentBox Component", () => {
-
 		const fakeProps = {
 			comment: {
 				commentId: sampleComment.commentId,
@@ -24,7 +22,6 @@ describe("[ClientApp] ", () => {
 			const wrapper = shallow(<CommentBox {...fakeProps} />);
 			expect(wrapper.find("textarea").length).toEqual(1);
 			expect(wrapper.find("textarea").props().value).toEqual("a comment");
-
 		});
 
 		it("unsavedChanges state is updated correctly on text area change", () => {
@@ -38,12 +35,11 @@ describe("[ClientApp] ", () => {
 			});
 			expect(wrapper.state().comment.commentText).toEqual("an updated comment");
 			expect(wrapper.state().ui.unsavedChanges).toEqual(true);
-
 		});
 
 		it("marks state as unchanged after props are updated", () => {
 			const wrapper = mount(<CommentBox {...fakeProps} />);
-			wrapper.setState({ui: {unsavedChanges: true}});
+			wrapper.setState({ ui: { unsavedChanges: true } });
 			wrapper.setProps({});
 			expect(wrapper.state().ui.unsavedChanges).toEqual(false);
 		});
@@ -78,9 +74,5 @@ describe("[ClientApp] ", () => {
 		// 	wrapper.setProps(updatedProps);
 		// 	expect(wrapper.state().comment.commentText).toEqual("an updated comment");
 		// });
-
-
-
-
 	});
 });

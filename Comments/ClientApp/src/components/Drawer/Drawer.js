@@ -1,15 +1,20 @@
 // @flow
 
 import React, { Component } from "react";
-import {mobileWidth} from "../../constants";
+import { mobileWidth } from "../../constants";
 import CommentListWithRouter from "../CommentList/CommentList";
 
-type PropsType = {}
+type PropsType = {
+	commentList: Function
+};
 
-type StateType = {}
+type StateType = {
+	drawerExpandedWidth: boolean,
+	drawerOpen: boolean,
+	drawerMobile: boolean
+};
 
 export class Drawer extends Component<PropsType, StateType> {
-
 	constructor(props: PropsType) {
 		super(props);
 		this.state = {
@@ -20,14 +25,17 @@ export class Drawer extends Component<PropsType, StateType> {
 	}
 
 	// This isn't called in this file - this is the method called from DocumentView
-	newComment(message){
+	newComment(comment: Object) {
 		// and what we're calling is newComment from inside <CommentList />
-		this.commentList.newComment({commentText: message.placeholder});
+		// $FlowIgnore | this is bound by wrappedComponentRef in CommentListWithRouter
+		this.commentList.newComment(comment);
 	}
 
 	isMobile = () => {
 		if (typeof document !== "undefined") {
-			return document.getElementsByTagName("body")[0].offsetWidth <= mobileWidth;
+			return (
+				document.getElementsByTagName("body")[0].offsetWidth <= mobileWidth
+			);
 		}
 		return false;
 	};
@@ -39,16 +47,16 @@ export class Drawer extends Component<PropsType, StateType> {
 		return `Drawer ${width} ${open} ${mobile}`;
 	};
 
-	handleClick = (event) => {
+	handleClick = (event: string) => {
 		switch (event) {
 			case "toggleWidth--narrow":
-				this.setState({drawerExpandedWidth: false});
+				this.setState({ drawerExpandedWidth: false });
 				break;
 			case "toggleWidth--wide":
-				this.setState({drawerExpandedWidth: true});
+				this.setState({ drawerExpandedWidth: true });
 				break;
 			case "toggleOpen":
-				this.setState(prevState => ({drawerOpen: !prevState.drawerOpen}));
+				this.setState(prevState => ({ drawerOpen: !prevState.drawerOpen }));
 				break;
 			default:
 				return;
@@ -57,16 +65,36 @@ export class Drawer extends Component<PropsType, StateType> {
 
 	render() {
 		return (
-			<div className={this.drawerClassnames()} aria-expanded={this.state.drawerOpen}>
+			<div
+				className={this.drawerClassnames()}
+				aria-expanded={this.state.drawerOpen}
+			>
 				<div className="Drawer__controls">
-					<button className="Drawer__toggleOpen" onClick={() => this.handleClick("toggleOpen")}>
-						<span className="visually-hidden">{this.state.drawerOpen ? "Close the commenting panel" : "Open the commenting panel"}</span>
-						<span className={`icon ${this.state.drawerOpen ? "icon--chevron-right" : "icon--chevron-left"}`} aria-hidden="true"/>
+					<button
+						className="Drawer__toggleOpen"
+						onClick={() => this.handleClick("toggleOpen")}
+					>
+						<span className="visually-hidden">
+							{this.state.drawerOpen
+								? "Close the commenting panel"
+								: "Open the commenting panel"}
+						</span>
+						<span
+							className={`icon ${
+								this.state.drawerOpen
+									? "icon--chevron-right"
+									: "icon--chevron-left"
+							}`}
+							aria-hidden="true"
+						/>
 					</button>
 				</div>
 				<div className="Drawer__main">
 					{/*wrappedComponentRef exposes the underlying, unwrapped component*/}
-					<CommentListWithRouter wrappedComponentRef={component => this.commentList = component} />
+					<CommentListWithRouter
+						// $FlowIgnore | this.commentList is bound to this below
+						wrappedComponentRef={component => (this.commentList = component)}
+					/>
 				</div>
 			</div>
 		);

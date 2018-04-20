@@ -16,11 +16,6 @@ type PropsType = {
 		pathname: string
 	}
 };
-type NewCommentType = {
-		type: string,
-		//location: "",
-		placeholderText: string
-}
 
 type CommentType = {
 	commentId: number,
@@ -89,37 +84,48 @@ export class CommentList extends Component<PropsType, StateType> {
 		}
 	}
 
-	newComment(newComment: NewCommentType){
+	newComment(newComment: CommentType) {
 		let comments = this.state.comments;
-
 		//negative ids are unsaved / new comments
 		let idToUseForNewBox = -1;
 		if (comments && comments.length) {
 			const existingIds = comments.map(c => c.commentId);
 			const lowestExistingId = Math.min.apply(Math, existingIds);
-			idToUseForNewBox = (lowestExistingId >= 0) ? -1 : lowestExistingId - 1;
-		} else{
+			idToUseForNewBox = lowestExistingId >= 0 ? -1 : lowestExistingId - 1;
+		} else {
 			comments = [];
 		}
-		const generatedComment = Object.assign({}, newComment, {commentId: idToUseForNewBox});
+		const generatedComment = Object.assign({}, newComment, {
+			commentId: idToUseForNewBox
+		});
 		comments.unshift(generatedComment);
 		this.setState({ comments });
 	}
 
 	saveComment = (e: Event, comment: CommentType) => {
 		e.preventDefault();
-		//if commentId < 0 - POST
-
-		load("comment", undefined, [comment.commentId], {}, "PUT", comment, true)
-			.then((res)=>{
-				const index = this.state.comments.map(function(c) {return c.commentId; }).indexOf(comment.commentId);
-				const comments = this.state.comments;
-				comments[index] = res.data;
-				this.setState({
-					comments
-				});
+		// todo: if (commentId < 0) CREATE POST
+		load(
+			"comment",
+			undefined,
+			[comment.commentId],
+			{},
+			"PUT",
+			comment,
+			true
+		).then(res => {
+			const index = this.state.comments
+				.map(function(comment) {
+					return comment.commentId;
+				})
+				.indexOf(comment.commentId);
+			const comments = this.state.comments;
+			comments[index] = res.data;
+			this.setState({
+				comments
 			});
-	}
+		});
+	};
 
 	render() {
 		if (this.state.loading) return <p>Loading</p>;
@@ -129,7 +135,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		return (
 			<Fragment>
 				<ul>
-					{this.state.comments.map((comment) => {
+					{this.state.comments.map(comment => {
 						return (
 							<CommentBox
 								key={comment.commentId}

@@ -4,7 +4,7 @@ import React, { Fragment } from "react";
 import { Route, Switch, Redirect } from "react-router";
 import { Helmet } from "react-helmet";
 import CommentListWithRouter from "../CommentList/CommentList";
-import DocumentView from "../DocumentView/DocumentView";
+import { DocumentView } from "../DocumentView/DocumentView";
 import NotFound from "../NotFound/NotFound";
 
 const App = () => (

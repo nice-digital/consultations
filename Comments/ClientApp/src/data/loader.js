@@ -9,6 +9,7 @@ import {objectToQueryString, replaceFormat} from "./../helpers/utils";
  * @param endpointName - can be either the shortcut of an endpoint as
  * specified in the Endpoints collection, or a URL / file path
  * @param baseUrl - the root url segment that's prepended to the query
+ * @param urlParameters - an array of url segment numbers e.g. [1, 2] -> "/1/2"
  * @param query - the data to be serialised into query string
  * @returns {*|PromiseLike<T>|Promise<T>} - returns a promise with the data
  *
@@ -19,7 +20,7 @@ import {objectToQueryString, replaceFormat} from "./../helpers/utils";
  */
 
 export const generateUrl = (endpointName, baseUrl = BaseUrl, urlParameters = [], query = {}) => {
-	var endpoint = Endpoints[endpointName];
+	const endpoint = Endpoints[endpointName];
 	if (!endpoint) return endpointName;
 
 	return baseUrl + replaceFormat(endpoint, urlParameters) + objectToQueryString(query);
@@ -29,12 +30,7 @@ export const load = (endpoint, baseUrl = BaseUrl, urlParameters = [],  query = {
 	return new Promise((resolve, reject) => {
 		const url = generateUrl(endpoint, baseUrl, urlParameters, query);
 		const headers = isJson ? { "Content-Type" : "application/json"} : {};
-		const httpsAgent = (baseUrl.indexOf("https") != -1) ? new https.Agent({ rejectUnauthorized: false }) : {};
-
-		//baseUrl = "https://test.nice.org.uk/consultations";
-		//https.globalAgent.options.rejectUnauthorized = false;
-		//const httpsAgent = {}; //new https.Agent({ rejectUnauthorized: false });
-
+		const httpsAgent = (baseUrl.indexOf("https") !== -1) ? new https.Agent({ rejectUnauthorized: false }) : {};
 		//console.log(`loader.js: ${url} method: ${method}`);
 		axios({url, data, method, headers, httpsAgent})
 			.then(response => {

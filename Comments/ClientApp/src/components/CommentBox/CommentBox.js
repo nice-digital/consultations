@@ -1,24 +1,7 @@
-import React, {Component, Fragment} from "react";
-// import { load } from "../../data/loader";
-
-type CommentType = {
-	commentId: number,
-	lastModifiedDate: Date,
-	lastModifiedByUserId: string, //really a guid
-	commentText: string,
-	locationId: number,
-	sourceURI: string,
-	htmlElementID: string,
-	rangeStart: string,
-	rangeStartOffset: string,
-	rangeEnd: string,
-	rangeEndOffset: string,
-	quote: string
-};
+import React, { Component, Fragment } from "react";
 
 type PropsType = {
-	staticContext?: any,
-	comment: CommentType
+	staticContext?: any
 };
 
 type StateType = {
@@ -27,18 +10,6 @@ type StateType = {
 };
 
 export class CommentBox extends Component<PropsType, StateType> {
-	// commentChangeHandler = e => {
-	// 	const comment = this.state.comment;
-	// 	comment.commentText = e.target.value;
-	// 	this.setState({
-	// 		comment
-	// 	});
-	// };
-
-	// formSubmitHandler = (e, comment) => {
-	// 	e.preventDefault();
-	// 	load("comment", undefined, [comment.commentId], {}, "PUT", comment);
-	// };
 
 	constructor() {
 		super();
@@ -67,7 +38,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 		});
 	};
 
-	static getDerivedStateFromProps(nextProps, prevState) {
+	static getDerivedStateFromProps(nextProps) {
 		return {
 			ui: {
 				unsavedChanges: false
@@ -78,18 +49,18 @@ export class CommentBox extends Component<PropsType, StateType> {
 
 	render() {
 		if (!this.state.comment) return null;
-		const {commentText} = this.state.comment;
+		const { commentText } = this.state.comment;
 		return (
 			<Fragment>
 				<li>
 					<small>{this.state.ui.unsavedChanges ? "unsaved" : ""}</small>
-					<form onSubmit={(e) => this.props.saveHandler(e, this.state.comment)}>
+					<form onSubmit={e => this.props.saveHandler(e, this.state.comment)}>
 						<textarea
 							rows="2"
 							value={commentText}
 							onChange={this.textareaChangeHandler}
 						/>
-						<input type="submit" value="Save"/>
+						<input type="submit" value="Save" />
 					</form>
 				</li>
 			</Fragment>
