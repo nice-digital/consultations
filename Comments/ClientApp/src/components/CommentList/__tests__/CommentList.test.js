@@ -70,14 +70,15 @@ describe("[ClientApp] ", () => {
 		it("save handler posts to the api with updated comment from state", async (done) => {
 			mock.reset();
 			const commentToUpdate = sampleComments.comments[0];
+
 			mock.onPut("/consultations/api/Comment/" + commentToUpdate.commentId).reply(config => {
 				expect(JSON.parse(config.data)).toEqual(commentToUpdate);
 				done();
-				return [200, sampleComments];
+				return [200, commentToUpdate];
 			});
 
 			mock.onGet(generateUrl("comments", undefined, [], { sourceURI: fakeProps.match.url })).reply(200, sampleComments);
-
+			//console.log(sampleComments);
 			const wrapper = mount(<CommentList {...fakeProps}/>);
 			wrapper.instance().saveComment(
 				new Event("click"),
@@ -114,11 +115,23 @@ describe("[ClientApp] ", () => {
 			expect(wrapper.state().comments[0].commentId).toEqual(-1);
 		});
 
-		it.only("2 new comments should decrement the negative commentId without conflicting", ()=>{
+		it("2 new comments should decrement the negative commentId without conflicting", ()=>{
 			mock.reset();
 			mock.onAny().reply((config)=>{
 				return [200, {comments: []}];
 			});
+			const wrapper = mount(<CommentList {...fakeProps}/>);
+			expect(wrapper.state().comments.length).toEqual(0);
+			wrapper.instance().newComment({});
+			wrapper.instance().newComment({});
+			expect(wrapper.state().comments.length).toEqual(2);
+			expect(wrapper.state().comments[0].commentId).toEqual(-2);
+			expect(wrapper.state().comments[1].commentId).toEqual(-1);
+		});
+
+		it("where there are existing comments in the array, inserting 2 new comments should still decrement the negative commentId without conflicting", ()=>{
+			mock.reset();
+			mock.onGet(generateUrl("comments", undefined, [], { sourceURI: fakeProps.match.url })).reply(200, sampleComments);
 			const wrapper = mount(<CommentList {...fakeProps}/>);
 			expect(wrapper.state().comments.length).toEqual(0);
 			wrapper.instance().newComment({});

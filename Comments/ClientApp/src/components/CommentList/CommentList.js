@@ -91,15 +91,23 @@ export class CommentList extends Component<PropsType, StateType> {
 
 	newComment(newComment: NewCommentType){
 		const comments = this.state.comments;
+
 		//negative ids are unsaved / new comments
-		let lowestId = comments.length === 0 ? -1 : comments.reduce((a,b) => Math.min(a.commentId, b.commentId)).commentId - 1;
-		const generatedComment = Object.assign({}, newComment, {commentId: lowestId});
+		let idToUseForNewBox = -1;
+		if (comments.length) {
+			const existingIds = comments.map(c => c.commentId);
+			const lowestExistingId = Math.min.apply(Math, existingIds);
+			idToUseForNewBox = (lowestExistingId >= 0) ? -1 : lowestExistingId - 1;
+		}
+		const generatedComment = Object.assign({}, newComment, {commentId: idToUseForNewBox});
 		comments.unshift(generatedComment);
 		this.setState({ comments });
 	}
 
 	saveComment = (e: Event, comment: CommentType) => {
 		e.preventDefault();
+		//if commentId < 0 - POST
+
 		load("comment", undefined, [comment.commentId], {}, "PUT", comment, true)
 			.then((res)=>{
 				const index = this.state.comments.map(function(c) {return c.commentId; }).indexOf(comment.commentId);
@@ -118,7 +126,7 @@ export class CommentList extends Component<PropsType, StateType> {
 
 		return (
 			<Fragment>
-				{/*<button onClick={this.addCommentHandler} >Add comment</button>*/}
+				<button onClick={() => this.newComment({})} >Add comment</button>
 				<ul>
 					{this.state.comments.map((comment) => {
 						return (

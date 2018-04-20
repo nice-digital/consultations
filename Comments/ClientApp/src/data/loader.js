@@ -35,7 +35,7 @@ export const load = (endpoint, baseUrl = BaseUrl, urlParameters = [],  query = {
 		//https.globalAgent.options.rejectUnauthorized = false;
 		//const httpsAgent = {}; //new https.Agent({ rejectUnauthorized: false });
 
-		console.log(`loader.js: ${url} method: ${method}`);
+		//console.log(`loader.js: ${url} method: ${method}`);
 		axios({url, data, method, headers, httpsAgent})
 			.then(response => {
 				resolve(response);

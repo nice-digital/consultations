@@ -59,7 +59,7 @@ export class Drawer extends Component<PropsType, StateType> {
 					</button>
 				</div>
 				<div className="Drawer__main">
-					<CommentListWithRouter />
+					<CommentListWithRouter  />
 				</div>
 			</div>
 		);
