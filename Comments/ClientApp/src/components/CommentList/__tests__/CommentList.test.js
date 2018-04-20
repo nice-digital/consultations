@@ -102,5 +102,31 @@ describe("[ClientApp] ", () => {
 			expect(wrapper.state().comments[1].commentText).toEqual("New updated text");
 		});
 
+		it("new comment should add an entry in the array with negative id", ()=>{
+			mock.reset();
+			mock.onAny().reply((config)=>{
+				return [200, {comments: []}];
+			});
+			const wrapper = mount(<CommentList {...fakeProps}/>);
+			expect(wrapper.state().comments.length).toEqual(0);
+			wrapper.instance().newComment({});
+			expect(wrapper.state().comments.length).toEqual(1);
+			expect(wrapper.state().comments[0].commentId).toEqual(-1);
+		});
+
+		it.only("2 new comments should decrement the negative commentId without conflicting", ()=>{
+			mock.reset();
+			mock.onAny().reply((config)=>{
+				return [200, {comments: []}];
+			});
+			const wrapper = mount(<CommentList {...fakeProps}/>);
+			expect(wrapper.state().comments.length).toEqual(0);
+			wrapper.instance().newComment({});
+			wrapper.instance().newComment({});
+			expect(wrapper.state().comments.length).toEqual(2);
+			expect(wrapper.state().comments[0].commentId).toEqual(-2);
+			expect(wrapper.state().comments[1].commentId).toEqual(-1);
+		});
+
 	});
 });

@@ -221,7 +221,7 @@ export class Document extends Component<PropsType, StateType> {
 		return (
 			<Fragment>
 				<Helmet>
-					<title>{`${consultationId},${documentId},${chapterSlug}`}</title>
+					<title>{title}</title>
 				</Helmet>
 				<div className="container">
 					<div className="grid">

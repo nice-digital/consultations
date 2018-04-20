@@ -30,7 +30,7 @@ const preload = (staticContext, endpoint,  urlParameters = [], query = {}) => {
 		});
 
 	//staticContext.preload.data[endpoint] = data;
-	
+
 	// Track promises on the static context so that we can wait for all of them to resolve before
 	staticContext.preload.loaders.push(promise);
 	return null;

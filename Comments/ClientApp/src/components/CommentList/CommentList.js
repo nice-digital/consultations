@@ -16,6 +16,11 @@ type PropsType = {
 		pathname: string
 	}
 };
+type NewCommentType = {
+		type: string,
+		//location: "",
+		placeholderText: string
+}
 
 type CommentType = {
 	commentId: number,
@@ -84,6 +89,15 @@ export class CommentList extends Component<PropsType, StateType> {
 		}
 	}
 
+	newComment(newComment: NewCommentType){
+		const comments = this.state.comments;
+		//negative ids are unsaved / new comments
+		let lowestId = comments.length === 0 ? -1 : comments.reduce((a,b) => Math.min(a.commentId, b.commentId)).commentId - 1;
+		const generatedComment = Object.assign({}, newComment, {commentId: lowestId});
+		comments.unshift(generatedComment);
+		this.setState({ comments });
+	}
+
 	saveComment = (e: Event, comment: CommentType) => {
 		e.preventDefault();
 		load("comment", undefined, [comment.commentId], {}, "PUT", comment, true)
@@ -106,10 +120,10 @@ export class CommentList extends Component<PropsType, StateType> {
 			<Fragment>
 				{/*<button onClick={this.addCommentHandler} >Add comment</button>*/}
 				<ul>
-					{this.state.comments.map((comment, index) => {
+					{this.state.comments.map((comment) => {
 						return (
 							<CommentBox
-								key={`comment${index}`}
+								key={comment.commentId}
 								comment={comment}
 								saveHandler={this.saveComment}
 							/>

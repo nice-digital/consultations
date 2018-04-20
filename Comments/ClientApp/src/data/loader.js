@@ -33,7 +33,7 @@ export const load = (endpoint, baseUrl = BaseUrl, urlParameters = [],  query = {
 
 		//baseUrl = "https://test.nice.org.uk/consultations";
 		//https.globalAgent.options.rejectUnauthorized = false;
-		//const httpsAgent = new https.Agent({ rejectUnauthorized: false });
+		//const httpsAgent = {}; //new https.Agent({ rejectUnauthorized: false });
 
 		console.log(`loader.js: ${url} method: ${method}`);
 		axios({url, data, method, headers, httpsAgent})
