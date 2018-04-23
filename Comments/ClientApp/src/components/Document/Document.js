@@ -269,7 +269,8 @@ export class Document extends Component<PropsType, StateType> {
 								<button
 									onClick={e =>
 										this.props.onNewCommentClick({
-											placeholder: "Con Com Innit"
+											placeholder: "Con Com Innit",
+											sourceURI: this.props.match.url
 										})
 									}
 								>

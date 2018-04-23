@@ -105,31 +105,30 @@ export class CommentList extends Component<PropsType, StateType> {
 	saveCommentHandler = (e: Event, comment: CommentType) => {
 		e.preventDefault();
 
-		const isANewComment = (comment.commentId < 0);
+		const isANewComment = comment.commentId < 0;
 		const method = isANewComment ? "POST" : "PUT";
 		const urlParameters = isANewComment ? [] : [comment.commentId];
-		const endpoint = isANewComment ? "newcomment" : "editcomment";
+		const endpointName = isANewComment ? "newcomment" : "editcomment";
 
-		load(
-			endpoint,
-			undefined,
-			urlParameters,
-			{},
-			method,
-			comment,
-			true
-		).then(res => {
-			const index = this.state.comments
-				.map(function(comment) {
-					return comment.commentId;
-				})
-				.indexOf(comment.commentId);
-			const comments = this.state.comments;
-			comments[index] = res.data;
-			this.setState({
-				comments
+		load(endpointName, undefined, urlParameters, {}, method, comment, true)
+			.then(res => {
+				//todo: check success
+
+				console.log(res);
+				const index = this.state.comments
+					.map(function(comment) {
+						return comment.commentId;
+					})
+					.indexOf(comment.commentId);
+				const comments = this.state.comments;
+				comments[index] = res.data;
+				this.setState({
+					comments
+				});
+			})
+			.catch(err => {
+				alert(err.response.statusText);
 			});
-		});
 	};
 
 	render() {
