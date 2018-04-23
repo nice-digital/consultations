@@ -10,8 +10,8 @@ namespace Comments.Models
     {
         public ConsultationsContext(DbContextOptions options, IUserService userService) : base(options)
         {
-            //_userService = userService;
-            //_createdByUserID = _userService.GetCurrentUser().UserId;
+            _userService = userService;
+            _createdByUserID = _userService.GetCurrentUser().UserId;
         }
 
         /// <summary>
@@ -24,8 +24,8 @@ namespace Comments.Models
         public IEnumerable<Location> GetAllCommentsAndQuestionsForDocument(string sourceURI)
         {
 
-            //if (!_userService.GetCurrentUser().IsLoggedIn)
-            //    throw new Exception("trying to return comments and questions when not logged in. it shouldn't have gone this far.");
+            if (!_userService.GetCurrentUser().IsLoggedIn)
+                throw new Exception("trying to return comments and questions when not logged in. it shouldn't have gone this far.");
 
             var data = Location.Where(l => l.SourceURI.Equals(sourceURI))
                         .Include(l => l.Comment)
