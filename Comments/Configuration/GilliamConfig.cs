@@ -1,7 +1,7 @@
-﻿using NICE.Auth.NetCore.Configuration;
-using System;
+﻿using System;
+using NICE.Auth.NetCore.Configuration;
 
-namespace NICE.Auth.NETCore.WebTest.Configuration
+namespace Comments.Configuration
 {
     public class GilliamConfig : IGilliamConfig
     {
@@ -15,5 +15,6 @@ namespace NICE.Auth.NETCore.WebTest.Configuration
         public int MaxClockSkewSeconds { get; set; }
         public TimeSpan MaxClockSkew => TimeSpan.FromSeconds(MaxClockSkewSeconds);
         public int CookieDurationMinutes { get; set; }
+        public string GilliamClientCertificateBase64 { get; set; }
     }
 }

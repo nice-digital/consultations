@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet";
-import { serverRenderer } from "./renderer";
+import { serverRenderer } from "../renderer";
 
 // To avoid "Error: You may ony call rewind() on the server. Call peek() to read the current state."
 Helmet.canUseDOM = false;

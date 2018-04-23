@@ -98,8 +98,8 @@ namespace Comments.Services
         {
             var user = _userService.GetCurrentUser();
 
-            if (!user.IsLoggedIn) 
-                return new CommentsAndQuestions(new List<ViewModels.Comment>(), new List<ViewModels.Question>(), user.IsLoggedIn);
+            //if (!user.IsLoggedIn) 
+            //    return new CommentsAndQuestions(new List<ViewModels.Comment>(), new List<ViewModels.Question>(), user.IsLoggedIn);
 
             var locations = _context.GetAllCommentsAndQuestionsForDocument(sourceURI);
 

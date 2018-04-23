@@ -13,6 +13,7 @@ describe("[ClientApp] ", () => {
 				const url = loader.generateUrl(
 					"myEndpoint",
 					"baseUrl",
+					null,
 					{
 						value1: "value1",
 						value2: 2,
@@ -27,6 +28,7 @@ describe("[ClientApp] ", () => {
 				const url  = loader.generateUrl(
 					"chapter",
 					"testing",
+					[],
 					{
 						value1: "value1",
 						value2: 2,
@@ -50,6 +52,7 @@ describe("[ClientApp] ", () => {
 			const options = [
 				"chapter",
 				"myBaseUrl",
+				[],
 				{
 					value1: "value1",
 					value2: 2
