@@ -6,6 +6,7 @@ import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { generateUrl } from "../../../data/loader";
 import sampleComments from "./sample";
+import EmptyCommentsResponse from "./EmptyCommentsResponse";
 import { nextTick } from "../../../helpers/utils";
 
 const mock = new MockAdapter(axios);
@@ -79,7 +80,7 @@ describe("[ClientApp] ", () => {
 			mount(<CommentList {...fakeProps} />);
 		});
 
-		it("save handler posts to the api with updated comment from state", async done => {
+		it("save handler put's to the api with updated comment from state", async done => {
 			mock.reset();
 			const commentToUpdate = sampleComments.comments[0];
 
@@ -171,6 +172,34 @@ describe("[ClientApp] ", () => {
 			expect(wrapper.state().comments.length).toEqual(2);
 			expect(wrapper.state().comments[0].commentId).toEqual(-2);
 			expect(wrapper.state().comments[1].commentId).toEqual(-1);
+		});
+
+		it("save handler posts to the api with new comment", async done => {
+			mock.reset();
+			const commentToInsert = {
+				commentId: -1,
+				commentText: "a newly created comment"
+			};
+			mock
+				.onGet(
+					generateUrl("comments", undefined, [], {
+						sourceURI: fakeProps.match.url
+					})
+				)
+				.reply(200, EmptyCommentsResponse);
+
+			mock
+				.onPut("/consultations/api/Comment/" + commentToUpdate.commentId)
+				.reply(config => {
+					expect(JSON.parse(config.data)).toEqual(commentToUpdate);
+					done();
+					return [200, commentToUpdate];
+				});
+
+
+			//console.log(sampleComments);
+			const wrapper = mount(<CommentList {.../} />);
+			wrapper.instance().saveComment(new Event("click"), commentToUpdate);
 		});
 	});
 });
