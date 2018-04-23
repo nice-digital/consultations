@@ -49,7 +49,7 @@ namespace Comments.Models
 
                 //JW. automatically filter out deleted rows and other people's comments. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
                 //note: only 1 filter is supported. you must combine the logic into one expression.
-                //entity.HasQueryFilter(c => !c.IsDeleted && c.CreatedByUserId == _createdByUserID);
+                entity.HasQueryFilter(c => !c.IsDeleted && c.CreatedByUserId == _createdByUserID);
             });
 
             modelBuilder.Entity<Comment>(entity =>
@@ -78,7 +78,7 @@ namespace Comments.Models
 
                 //JW. automatically filter out deleted rows and other people's comments. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
                 //note: only 1 filter is supported. you must combine the logic into one expression.
-                //entity.HasQueryFilter(c => !c.IsDeleted && c.CreatedByUserId == _createdByUserID); 
+                entity.HasQueryFilter(c => !c.IsDeleted && c.CreatedByUserId == _createdByUserID); 
             });
 
             modelBuilder.Entity<Location>(entity =>
@@ -118,7 +118,7 @@ namespace Comments.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Question_QuestionType");
 
-                //entity.HasQueryFilter(e => !e.IsDeleted); //JW. automatically filter out deleted rows. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
+                entity.HasQueryFilter(e => !e.IsDeleted); //JW. automatically filter out deleted rows. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
             });
 
             modelBuilder.Entity<QuestionType>(entity =>
