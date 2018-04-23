@@ -1,51 +1,71 @@
-// @flow
-
 import React, { Component, Fragment } from "react";
-import {load} from "../../data/loader";
 
-export class CommentBox extends Component {
+type PropsType = {
+	staticContext?: any
+};
 
-	state = {
-		comment: {}
-	};
+type StateType = {
+	commentId: number,
+	commentText: string
+};
+
+export class CommentBox extends Component<PropsType, StateType> {
 
 	constructor() {
 		super();
-		// if (typeof(this.props.comment) === undefined)
-		 //	console.log("error");
-		 	//throw new Error();
+		this.state = {
+			comment: {},
+			ui: {
+				unsavedChanges: false
+			}
+		};
 	}
 
-	// loadComments(){
-	// 	load("comments", undefined, { sourceURI: this.props.match.url })
-	// 		.then(res=>{
-	// 			this.setState({
-	// 				comments: res.data.comments,
-	// 				loading: false
-	// 			});
-	// 		});
-	// }
-
 	componentDidMount() {
-		// load("comment", undefined, [this.props.comment.commentId], {})
-		// 	.then(response =>{
-		// 		console.log(response);
-		// 	});
+		this.setState({
+			comment: this.props.comment
+		});
+	}
+
+	textareaChangeHandler = e => {
+		const comment = this.state.comment;
+		comment.commentText = e.target.value;
+		this.setState({
+			comment,
+			ui: {
+				unsavedChanges: true
+			}
+		});
+	};
+
+	static getDerivedStateFromProps(nextProps) {
+		return {
+			ui: {
+				unsavedChanges: false
+			},
+			comment: nextProps.comment
+		};
 	}
 
 	render() {
+		if (!this.state.comment) return null;
+		const { commentText } = this.state.comment;
 		return (
 			<Fragment>
 				<li>
-					authenticated comment insert
+					<small>{this.state.ui.unsavedChanges ? "unsaved" : ""}</small>
+					<form onSubmit={e => this.props.saveHandler(e, this.state.comment)}>
+						<textarea
+							rows="2"
+							value={commentText}
+							onChange={this.textareaChangeHandler}
+						/>
+						<input type="submit" value="Save" />
+					</form>
 				</li>
 			</Fragment>
-			// <textarea name="1" id={this.props.comment.commentId} cols="10" rows="10"
-			// 		  defaultValue={this.props.comment.commentText}/>
-
 		);
 	}
-
 }
 
 export default CommentBox;

@@ -130,6 +130,11 @@ Array [
                 >
                     Unstable angina and NSTEMI: early management
                 </h1>
+                <button
+                    onClick={[Function]}
+                >
+                    Comment on this consultation
+                </button>
                 <p
                     className="page-header__lead"
                 >

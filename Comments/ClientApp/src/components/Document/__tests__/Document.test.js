@@ -14,9 +14,7 @@ import toJson from "enzyme-to-json";
 // import { generateUrl } from "./../../../data/loader";
 
 describe("[ClientApp] ", () => {
-
 	describe("Document Component", () => {
-
 		const fakeProps = {
 			location: {},
 			match: {
@@ -45,24 +43,29 @@ describe("[ClientApp] ", () => {
 			);
 
 			// TODO: refactor this!
-			let documentsPromise = new Promise(function(resolve){
-				mock.onGet("/consultations/api/Documents?consultationId=1")
+			let documentsPromise = new Promise(function(resolve) {
+				mock
+					.onGet("/consultations/api/Documents?consultationId=1")
 					.reply(() => {
 						resolve();
 						return [200, DocumentsData];
 					});
 			});
 
-			let consulatationPromise = new Promise(function(resolve){
-				mock.onGet("/consultations/api/Consultation?consultationId=1")
+			let consulatationPromise = new Promise(function(resolve) {
+				mock
+					.onGet("/consultations/api/Consultation?consultationId=1")
 					.reply(() => {
 						resolve();
 						return [200, ConsultationData];
 					});
 			});
 
-			let chapterPromise = new Promise(function(resolve){
-				mock.onGet("/consultations/api/Chapter?consultationId=1&documentId=1&chapterSlug=introduction")
+			let chapterPromise = new Promise(function(resolve) {
+				mock
+					.onGet(
+						"/consultations/api/Chapter?consultationId=1&documentId=1&chapterSlug=introduction"
+					)
 					.reply(() => {
 						resolve();
 						return [200, ChapterData];
@@ -73,60 +76,62 @@ describe("[ClientApp] ", () => {
 				documentsPromise,
 				consulatationPromise,
 				chapterPromise
-			]).then( async ()=>{
+			]).then(async () => {
 				await nextTick();
 				wrapper.update();
-				expect(toJson(wrapper, {
-					noKey: true,
-					mode: "deep"
-				})).toMatchSnapshot();
+				expect(
+					toJson(wrapper, {
+						noKey: true,
+						mode: "deep"
+					})
+				).toMatchSnapshot();
 			});
-
 		});
 
 		it("renderDocumentHtml method", () => {
 			const html = `	<h1>Testing</h1>
 							<span> &amp; </span>
 							<p>...the HTML</p>`;
-			const document = new Document;
-			expect(document.renderDocumentHtml(html))
-				.toHaveProperty("__html",
-					"\t<h1>Testing</h1>\n\t\t\t\t\t\t\t<span> &amp; </span>\n\t\t\t\t\t\t\t<p>...the HTML</p>");
+			const document = new Document();
+			expect(document.renderDocumentHtml(html)).toHaveProperty(
+				"__html",
+				"\t<h1>Testing</h1>\n\t\t\t\t\t\t\t<span> &amp; </span>\n\t\t\t\t\t\t\t<p>...the HTML</p>"
+			);
 		});
 
 		it("getSupportingDocumentLinks method", () => {
-			const documents = [{
-				title: "Document One",
-				documentId: 1,
-				chapters: [{slug: "chapter-one-slug"}]
-			},
-			{
-				title: "",
-				documentId: 2,
-				chapters: [{slug: "chapter-two-slug"}]
-			},
-			{
-				title: "Document Three",
-				documentId: 3,
-				chapters: [{slug: "chapter-three-slug"}]
-			}];
-			const document = new Document;
+			const documents = [
+				{
+					title: "Document One",
+					documentId: 1,
+					chapters: [{ slug: "chapter-one-slug" }]
+				},
+				{
+					title: "",
+					documentId: 2,
+					chapters: [{ slug: "chapter-two-slug" }]
+				},
+				{
+					title: "Document Three",
+					documentId: 3,
+					chapters: [{ slug: "chapter-three-slug" }]
+				}
+			];
+			const document = new Document();
 			expect(
-				document.getSupportingDocumentLinks(documents, 1, 1))
-				.toHaveProperty("links",
-					[
-						{
-							current: true,
-							label: "Document One",
-							url: "/1/1/chapter-one-slug"
-						},
-						{
-							current: false,
-							label: "Document Three",
-							url: "/1/3/chapter-three-slug"
-						}
-					]);
+				document.getSupportingDocumentLinks(documents, 1, 1)
+			).toHaveProperty("links", [
+				{
+					current: true,
+					label: "Document One",
+					url: "/1/1/chapter-one-slug"
+				},
+				{
+					current: false,
+					label: "Document Three",
+					url: "/1/3/chapter-three-slug"
+				}
+			]);
 		});
-
 	});
 });

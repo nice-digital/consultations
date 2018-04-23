@@ -31,32 +31,32 @@ namespace Comments.Services
 
         public (ViewModels.Comment comment, Validate validate) GetComment(int commentId)
         {
-            if (!_currentUser.IsLoggedIn)
-                return (comment: null, validate: new Validate(valid: false, unauthorised: true, message: $"Not logged in accessing comment id:{commentId}"));
+            //if (!_currentUser.IsLoggedIn)
+            //    return (comment: null, validate: new Validate(valid: false, unauthorised: true, message: $"Not logged in accessing comment id:{commentId}"));
 
             var commentInDatabase = _context.GetComment(commentId);
 
             if (commentInDatabase == null)
                 return (comment: null, validate: new Validate(valid: false, notFound: true, message: $"Comment id:{commentId} not found trying to get comment for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
 
-            if (!commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId.Value))
-                return (comment: null, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to access comment id: {commentId}, but it's not their comment"));
+            //if (!commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId.Value))
+            //    return (comment: null, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to access comment id: {commentId}, but it's not their comment"));
 
             return (comment: new ViewModels.Comment(commentInDatabase.Location, commentInDatabase), validate: null); 
         }
 
         public (int rowsUpdated, Validate validate) EditComment(int commentId, ViewModels.Comment comment)
         {
-            if (!_currentUser.IsLoggedIn)
-                return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"Not logged in editing comment id:{commentId}"));
+            //if (!_currentUser.IsLoggedIn)
+            //    return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"Not logged in editing comment id:{commentId}"));
 
             var commentInDatabase = _context.GetComment(commentId);
 
             if (commentInDatabase == null)
                 return (rowsUpdated: 0, validate: new Validate(valid: false, notFound: true, message: $"Comment id:{commentId} not found trying to edit comment for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
 
-            if (!commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId.Value))
-                return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to edit comment id: {commentId}, but it's not their comment"));
+            //if (!commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId.Value))
+            //    return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to edit comment id: {commentId}, but it's not their comment"));
             
             commentInDatabase.UpdateFromViewModel(comment);
             return (rowsUpdated: _context.SaveChanges(), validate: null);
