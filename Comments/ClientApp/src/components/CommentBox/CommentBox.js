@@ -50,6 +50,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 	render() {
 		if (!this.state.comment) return null;
 		const { commentText } = this.state.comment;
+		const placeholder = this.state.comment.placeholder ? this.state.comment.placeholder : "Enter your comment here";
 		return (
 			<Fragment>
 				<li>
@@ -59,6 +60,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 							rows="2"
 							value={commentText}
 							onChange={this.textareaChangeHandler}
+							placeholder={placeholder}
 						/>
 						<input type="submit" value="Save" />
 					</form>

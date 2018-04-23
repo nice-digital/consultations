@@ -24,6 +24,7 @@
   &__toggleWidth {
     @extend %ui-button;
     margin-right: rem($spacing-small);
+    background-color: $colour-nice-white;
   }
   &__main {
     height: 100vh;

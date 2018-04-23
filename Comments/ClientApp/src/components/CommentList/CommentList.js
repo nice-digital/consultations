@@ -134,7 +134,7 @@ export class CommentList extends Component<PropsType, StateType> {
 
 		return (
 			<Fragment>
-				<ul>
+				<ul className="list--unstyled">
 					{this.state.comments.map(comment => {
 						return (
 							<CommentBox
