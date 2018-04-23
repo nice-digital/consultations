@@ -102,15 +102,20 @@ export class CommentList extends Component<PropsType, StateType> {
 		this.setState({ comments });
 	}
 
-	saveComment = (e: Event, comment: CommentType) => {
+	saveCommentHandler = (e: Event, comment: CommentType) => {
 		e.preventDefault();
-		// todo: if (commentId < 0) CREATE POST
+
+		const isANewComment = (comment.commentId < 0);
+		const method = isANewComment ? "POST" : "PUT";
+		const urlParameters = isANewComment ? [] : [comment.commentId];
+		const endpoint = isANewComment ? "newcomment" : "editcomment";
+
 		load(
-			"comment",
+			endpoint,
 			undefined,
-			[comment.commentId],
+			urlParameters,
 			{},
-			"PUT",
+			method,
 			comment,
 			true
 		).then(res => {
@@ -140,7 +145,7 @@ export class CommentList extends Component<PropsType, StateType> {
 							<CommentBox
 								key={comment.commentId}
 								comment={comment}
-								saveHandler={this.saveComment}
+								saveHandler={this.saveCommentHandler}
 							/>
 						);
 					})}
