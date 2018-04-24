@@ -1,10 +1,10 @@
 import { load } from "./loader";
-
+//import stringifyObject from "stringify-object";
 // Returns data if it's available or a promise that resolves with the data
 // when it's loaded async.
 // This assumes the app will be rendered twice on the server: once for
 // requests to fire and once when all the data has loaded
-const preload = (staticContext, endpoint,  urlParameters = [], query = {}) => {
+const preload = (staticContext, endpoint,  urlParameters = [], query = {}, preloadData = {}) => {
 	let data = null;
 	// Client - get data from global var
 	if (typeof window !== "undefined") {
@@ -22,8 +22,12 @@ const preload = (staticContext, endpoint,  urlParameters = [], query = {}) => {
 	if (staticContext.preload.data[endpoint]) {
 		return staticContext.preload.data[endpoint];
 	}
+	let cookies = "";
+	if (preloadData && preloadData.cookies) {
+		cookies = preloadData.cookies;
+	}
 	// Load fresh data on the server
-	const promise = load(endpoint, staticContext.baseUrl, urlParameters, query)
+	const promise = load(endpoint, staticContext.baseUrl, urlParameters, query,  "GET", {}, false, cookies)
 		.then(response => {
 			staticContext.preload.data[endpoint] = response.data;
 			return response.data;

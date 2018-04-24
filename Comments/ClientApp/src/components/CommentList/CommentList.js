@@ -5,6 +5,7 @@ import { withRouter } from "react-router-dom";
 import { load } from "./../../data/loader";
 import preload from "../../data/pre-loader";
 import { CommentBox } from "../CommentBox/CommentBox";
+//import stringifyObject from "stringify-object";
 
 type PropsType = {
 	staticContext?: any,
@@ -44,9 +45,14 @@ export class CommentList extends Component<PropsType, StateType> {
 			comments: [],
 			loading: true
 		};
+		let preloadedData = {};
+		if (this.props.staticContext && this.props.staticContext.preload){
+			preloadedData = this.props.staticContext.preload.data;
+		}
+
 		const preloaded = preload(this.props.staticContext, "comments", [], {
 			sourceURI: this.props.match.url
-		});
+		}, preloadedData);
 
 		if (preloaded) {
 			this.state = {
