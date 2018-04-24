@@ -125,16 +125,25 @@ Array [
             <div
                 className="page-header"
             >
+                <p
+                    className="mb--0"
+                >
+                    Consultation |
+                     
+                    <a
+                        href="#comment-on-whole-consultation"
+                        onClick={[Function]}
+                        role="button"
+                        tabIndex={0}
+                    >
+                        Comment on whole consultation
+                    </a>
+                </p>
                 <h1
-                    className="page-header__heading"
+                    className="page-header__heading mt--0"
                 >
                     Unstable angina and NSTEMI: early management
                 </h1>
-                <button
-                    onClick={[Function]}
-                >
-                    Comment on this consultation
-                </button>
                 <p
                     className="page-header__lead"
                 >
@@ -148,7 +157,23 @@ Array [
                         31 May 2018
                     </time>
                 </p>
-                <h2>
+                <p
+                    className="mb--0"
+                >
+                    Document |
+                     
+                    <a
+                        href="#comment-on-this-document"
+                        onClick={[Function]}
+                        role="button"
+                        tabIndex={0}
+                    >
+                        Comment on this document
+                    </a>
+                </p>
+                <h2
+                    className="mt--0"
+                >
                     Unstable angina and NSTEMI
                 </h2>
             </div>
