@@ -45,7 +45,7 @@ describe("[ClientApp] ", () => {
 			);
 			await nextTick();
 			wrapper.update();
-			expect(wrapper.find("li").length).toEqual(2);
+			expect(wrapper.find("li").length).toEqual(5);
 		});
 
 		it("renders the 'no comments' message if the comments array is empty", async () => {
