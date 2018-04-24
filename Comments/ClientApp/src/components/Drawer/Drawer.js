@@ -24,8 +24,17 @@ export class Drawer extends Component<PropsType, StateType> {
 		};
 	}
 
+	pullFocus = () => {
+		document.getElementById("js-drawer-toggleopen").focus();
+	};
+
 	// This isn't called in this file - this is the method called from DocumentView
 	newComment(comment: Object) {
+		// make sure the drawer is open once we've clicked a new comment
+		this.setState({
+			drawerOpen: true
+		});
+		this.pullFocus();
 		// and what we're calling is newComment from inside <CommentList />
 		// $FlowIgnore | this is bound by wrappedComponentRef in CommentListWithRouter
 		this.commentList.newComment(comment);
@@ -57,6 +66,7 @@ export class Drawer extends Component<PropsType, StateType> {
 				break;
 			case "toggleOpen":
 				this.setState(prevState => ({ drawerOpen: !prevState.drawerOpen }));
+				this.pullFocus();
 				break;
 			default:
 				return;
@@ -71,8 +81,11 @@ export class Drawer extends Component<PropsType, StateType> {
 			>
 				<div className="Drawer__controls">
 					<button
+						id="js-drawer-toggleopen"
 						className="Drawer__toggleOpen"
 						onClick={() => this.handleClick("toggleOpen")}
+						aria-controls="sidebar-panel"
+						aria-haspopup="true"
 					>
 						<span className="visually-hidden">
 							{this.state.drawerOpen
@@ -89,9 +102,10 @@ export class Drawer extends Component<PropsType, StateType> {
 						/>
 					</button>
 				</div>
-				<div className="Drawer__main">
+				<div id="sidebar-panel" className="Drawer__main">
 					{/*wrappedComponentRef exposes the underlying, unwrapped component*/}
 					<CommentListWithRouter
+						drawerOpen={this.state.drawerOpen}
 						// $FlowIgnore | this.commentList is bound to this below
 						wrappedComponentRef={component => (this.commentList = component)}
 					/>

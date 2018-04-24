@@ -11,7 +11,7 @@
   // default closed state
   transform: translateX(100%);
   @extend %transition-default;
-  width: 500px;
+  width: 430px;
 
   &__controls {
     width: 40px;
@@ -28,9 +28,11 @@
   }
   &__main {
     height: 100vh;
-    padding-left: rem($spacing-medium);
-    padding-right: rem($spacing-medium);
+    padding-left: rem($spacing-small);
+    padding-right: rem($spacing-small);
     overflow-y: scroll;
+    overflow-scrolling: touch;
+    -webkit-overflow-scrolling: touch;
     background-color: $colour-nice-white;
   }
   &--open {
