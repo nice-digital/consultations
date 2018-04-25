@@ -8,7 +8,7 @@ namespace Comments.Controllers.Api
 {
     [Produces("application/json")]
     [Route("consultations/api/[controller]")]
-    //[Authorize]
+    [Authorize]
     public class CommentController : Controller
     {
         private readonly ICommentService _commentService;

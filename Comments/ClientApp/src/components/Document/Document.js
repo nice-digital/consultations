@@ -274,13 +274,13 @@ export class Document extends Component<PropsType, StateType> {
 										href="#comment-on-whole-consultation"
 										onClick={e => {
 											e.preventDefault();
-											this.props.onNewCommentClick({
+										this.props.onNewCommentClick({
 												placeholder: "Comment on this whole consultation",
 												sourceURI: this.props.match.url,
 												commentText: ""
 											});
 										}}
-									>
+								>
 										Comment on whole consultation
 									</a>
 								</p>

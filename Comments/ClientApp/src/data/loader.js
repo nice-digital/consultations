@@ -2,6 +2,7 @@ import {Endpoints, BaseUrl} from "./endpoints";
 import axios from "axios";
 import https from "https";
 import {objectToQueryString, replaceFormat} from "./../helpers/utils";
+//import stringifyObject from "stringify-object";
 
 /**
  * Load data using Axios
@@ -26,13 +27,17 @@ export const generateUrl = (endpointName, baseUrl = BaseUrl, urlParameters = [],
 	return baseUrl + replaceFormat(endpoint, urlParameters) + objectToQueryString(query);
 };
 
-export const load = (endpoint, baseUrl = BaseUrl, urlParameters = [],  query = {}, method = "GET", data = {}, isJson = false) => {
+export const load = (endpoint, baseUrl = BaseUrl, urlParameters = [],  query = {}, method = "GET", data = {}, isJson = false, cookie = "") => {
 	return new Promise((resolve, reject) => {
 		const url = generateUrl(endpoint, baseUrl, urlParameters, query);
-		const headers = isJson ? { "Content-Type" : "application/json"} : {};
+		let headers = isJson ? { "Content-Type" : "application/json"} : {};
+		if (cookie !== ""){
+		 	headers = Object.assign({"Cookie": cookie}, headers);
+		}
 		const httpsAgent = (baseUrl.indexOf("https") !== -1) ? new https.Agent({ rejectUnauthorized: false }) : {};
+
 		//console.log(`loader.js: ${url} method: ${method}`);
-		axios({url, data, method, headers, httpsAgent})
+		axios({url, data, method, headers, httpsAgent}) //, withCredentials: true
 			.then(response => {
 				resolve(response);
 			})
