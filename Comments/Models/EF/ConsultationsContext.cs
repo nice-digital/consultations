@@ -15,16 +15,9 @@ namespace Comments.Models
         public virtual DbSet<QuestionType> QuestionType { get; set; }
 
         private Guid? _createdByUserID;
-        //protected ConsultationsContext(IUserService userService)
-        //{
-        //    _userService = userService;
-        //    _currentUserId = _userService.GetCurrentUser().UserId;
-        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            _createdByUserID = _userService.GetCurrentUser().UserId;
-
             modelBuilder.Entity<Answer>(entity =>
             {
                 entity.Property(e => e.AnswerId).HasColumnName("AnswerID");
@@ -130,19 +123,5 @@ namespace Comments.Models
                     .HasMaxLength(100);
             });
         }
-
-        //public override int SaveChanges()
-        //{
-        //    ChangeTracker.DetectChanges();
-
-        //    foreach (var item in ChangeTracker.Entries().Where(
-        //        e =>
-        //            e.State == EntityState.Added && e.Metadata.GetProperties().Any(p => p.Name == "CreatedByUserId")))
-        //    {
-        //        item.CurrentValues["CreatedByUserId"] = _currentUserId;
-        //    }
-
-        //    return base.SaveChanges();
-        //}
     }
 }

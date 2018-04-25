@@ -52,7 +52,7 @@ namespace Comments.Controllers.Api
             var result = _commentService.EditComment(commentId, comment);
             var invalidResult = Validate(result.validate, _logger);
 
-            return invalidResult ?? Ok(result.rowsUpdated);
+            return invalidResult ?? Ok(comment);
         }
 
         // POST: consultations/api/Comment

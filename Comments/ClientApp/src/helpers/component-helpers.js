@@ -11,7 +11,6 @@ type HashLinkTopType = {
 	currentNavItem: null | string
 };
 
-// TODO: write test for HashLinkTop
 export function HashLinkTop(props: HashLinkTopType) {
 	const { label, to, behavior, block, currentNavItem } = props;
 	return (

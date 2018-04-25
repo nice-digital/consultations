@@ -56,7 +56,7 @@ namespace Comments.Services
 
             if (!commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId.Value))
                 return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to edit comment id: {commentId}, but it's not their comment"));
-            
+
             commentInDatabase.UpdateFromViewModel(comment);
             return (rowsUpdated: _context.SaveChanges(), validate: null);
         }
