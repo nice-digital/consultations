@@ -224,6 +224,11 @@ namespace Comments
                    // spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
+
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                serviceScope.ServiceProvider.GetService<ConsultationsContext>().Database.Migrate();
+            }
         }
     }
 }

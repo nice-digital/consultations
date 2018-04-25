@@ -55,27 +55,29 @@ namespace Comments.Test.Infrastructure
             _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
             var databaseName = DatabaseName + Guid.NewGuid();
 
-            //SQLiteConnectionStringBuilder sqLiteConnectionStringBuilder = new SQLiteConnectionStringBuilder()
-            //{
-            //    DataSource = "my.db",
+            SQLiteConnectionStringBuilder sqLiteConnectionStringBuilder = new SQLiteConnectionStringBuilder()
+            {
+                DataSource = "my.db",
 
-            //    // from doc : Determines how GUIDs are stored. 
-            //    // If true - GUID columns are stored in binary form, 
-            //    // If false - GUID columns are stored as text
-            //    BinaryGUID = true
-            //};
-            
+                // from doc : Determines how GUIDs are stored. 
+                // If true - GUID columns are stored in binary form, 
+                // If false - GUID columns are stored as text
+                //BinaryGUID = true
+            };
+
             //using (System.Data.IDbConnection db = new Microsoft.Data.Sqlite.SqliteConnection(sqLiteConnectionStringBuilder))
             //{
             //    var result = connection.Query<MyObject>("the query", theFilter());
             //}
 
-            //var connection = new SqliteConnection(sqLiteConnectionStringBuilder.ConnectionString); //"Data Source=" + DatabaseName + ";"); //"BinaryGuid=False"); //Version=3;
+            var connection = new SqliteConnection(sqLiteConnectionStringBuilder.ConnectionString); //"Data Source=" + DatabaseName + ";"); //"BinaryGuid=False"); //Version=3;
 
             _options = new DbContextOptionsBuilder<ConsultationsContext>()
-                    .UseInMemoryDatabase(databaseName)
-                    //.UseSqlite(connection)
+                    //.UseInMemoryDatabase(databaseName)
+                    .UseSqlite(connection)
                     .Options;
+
+            
 
             var builder = new WebHostBuilder()
                 .UseContentRoot("../../../../Comments")
@@ -83,8 +85,8 @@ namespace Comments.Test.Infrastructure
                 {
                     services.AddEntityFrameworkSqlite();
                     services.AddDbContext<ConsultationsContext>(options =>
-                        options.UseInMemoryDatabase(databaseName)
-                        //options.UseSqlite(connection)
+                        //options.UseInMemoryDatabase(databaseName)
+                        options.UseSqlite(connection)
                         );
                     services.TryAddSingleton<ISeriLogger, FakeSerilogger>();
                     services.TryAddSingleton<IAuthenticateService, FakeAuthenticateService>();
