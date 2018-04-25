@@ -19,13 +19,13 @@ export class Drawer extends Component<PropsType, StateType> {
 		super(props);
 		this.state = {
 			drawerExpandedWidth: false,
-			drawerOpen: true,
+			drawerOpen: false,
 			drawerMobile: this.isMobile()
 		};
 	}
 
 	pullFocus = () => {
-		document.getElementById("js-drawer-toggleopen").focus();
+		window.document.getElementById("js-drawer-toggleopen").focus();
 	};
 
 	// This isn't called in this file - this is the method called from DocumentView

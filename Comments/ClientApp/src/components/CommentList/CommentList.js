@@ -5,7 +5,6 @@ import { withRouter } from "react-router-dom";
 import { load } from "./../../data/loader";
 import preload from "../../data/pre-loader";
 import { CommentBox } from "../CommentBox/CommentBox";
-import sampleComments from "./__tests__/sample";
 
 type PropsType = {
 	staticContext?: any,
@@ -135,11 +134,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			return (
 				<Fragment>
 					<p>No comments</p>
-					<button onClick={()=>this.setState({comments: sampleComments.comments})}>
-						Import sample comments
-					</button>
 				</Fragment>
-
 			);
 
 		return (

@@ -276,7 +276,8 @@ export class Document extends Component<PropsType, StateType> {
 											e.preventDefault();
 											this.props.onNewCommentClick({
 												placeholder: "Comment on this whole consultation",
-												sourceURI: this.props.match.url
+												sourceURI: this.props.match.url,
+												commentText: ""
 											});
 										}}
 									>
@@ -298,7 +299,8 @@ export class Document extends Component<PropsType, StateType> {
 											e.preventDefault();
 											this.props.onNewCommentClick({
 												placeholder: "Comment on this document",
-												sourceURI: this.props.match.url
+												sourceURI: this.props.match.url,
+												commentText: ""
 											});
 										}}
 									>

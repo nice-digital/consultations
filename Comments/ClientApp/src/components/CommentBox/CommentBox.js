@@ -58,9 +58,6 @@ export class CommentBox extends Component<PropsType, StateType> {
 		return (
 			<Fragment>
 				<li className="CommentBox">
-					<small className="CommentBox__unsavedIndicator">
-						{this.state.ui.unsavedChanges ? "unsaved" : ""}
-					</small>
 					<form onSubmit={e => this.props.saveHandler(e, this.state.comment)}>
 						<div className="form__group form__group--textarea mb--0">
 							<label className="form__label visually-hidden" htmlFor="textarea">
@@ -76,8 +73,19 @@ export class CommentBox extends Component<PropsType, StateType> {
 								value={commentText}
 							/>
 						</div>
-						<input tabIndex={tabIndex} className="btn ml--0" type="submit" value="Save draft" />
-						<button tabIndex={tabIndex} className="btn mr--0 right CommentBox__deleteButton">
+						{this.state.comment.commentText.length > 0 && (
+							<input
+								tabIndex={tabIndex}
+								className="btn ml--0"
+								type="submit"
+								value={this.state.ui.unsavedChanges ? "Save draft" : "Saved"}
+								disabled={!this.state.ui.unsavedChanges}
+								// below is for testing the save button if you can't post to the server
+								// onClick={()=>this.setState({ui:{unsavedChanges: false}})}
+								//
+							/>
+						)}
+						<button tabIndex={tabIndex} className="btn mr--0 right">
 							<span className="visually-hidden">Delete this comment</span>
 							<span className="icon icon--trash" aria-hidden="true" />
 						</button>
