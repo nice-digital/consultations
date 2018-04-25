@@ -36,7 +36,8 @@ exports.config = {
             "./src/steps/when.js",
             "./src/steps/then.js"
         ],
-        tagExpression: "not @pending" // See https://docs.cucumber.io/tag-expressions/
+        tagExpression: "not @pending", // See https://docs.cucumber.io/tag-expressions/
+        timeout: 300000,
     },
 
     // Set up global asssertion libraries
