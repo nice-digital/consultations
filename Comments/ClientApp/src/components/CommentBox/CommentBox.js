@@ -15,7 +15,9 @@ export class CommentBox extends Component<PropsType, StateType> {
 		super();
 		this.state = {
 			tabIndex: "-1",
-			comment: {},
+			comment: {
+				commentText: ""
+			},
 			ui: {
 				unsavedChanges: false
 			}
