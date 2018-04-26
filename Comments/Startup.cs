@@ -56,9 +56,9 @@ namespace Comments
             services.TryAddSingleton<IAuthenticateService, AuthService>();
             services.TryAddTransient<IUserService, UserService>();
 
-            //var contextOptionsBuilder = new DbContextOptionsBuilder<ConsultationsContext>();
+            var contextOptionsBuilder = new DbContextOptionsBuilder<ConsultationsContext>();
             //contextOptionsBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-            //services.TryAddSingleton<IDbContextOptions>(contextOptionsBuilder.Options);
+            services.TryAddSingleton<IDbContextOptionsBuilderInfrastructure>(contextOptionsBuilder);
 
             services.AddDbContext<ConsultationsContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -68,6 +68,8 @@ namespace Comments
             
             services.TryAddTransient<IFeedReaderService>(provider => new FeedReaderService(new RemoteSystemReader(null), AppSettings.Feed));
             services.TryAddTransient<IFeedConverterService, FeedConverterService>();
+            services.TryAddTransient<IAnswerService, AnswerService>();
+            services.TryAddTransient<IQuestionService, QuestionService>();
             
             // Add authentication 
             services.AddAuthentication(options =>
