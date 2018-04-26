@@ -161,7 +161,6 @@ namespace Comments.Test.IntegrationTests.API.Comments
             var result = commentService.GetComment(commentId);
 
             //Assert
-            responseString.ShouldBe("1");
             result.comment.CommentText.ShouldBe(updatedCommentText);
         }
     }
