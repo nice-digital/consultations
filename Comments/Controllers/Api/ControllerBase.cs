@@ -1,0 +1,25 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Comments.ViewModels;
+
+namespace Comments.Controllers.Api
+{
+    public class ControllerBase : Controller
+    {
+        protected IActionResult Validate<T>(Validate validate, ILogger<T> logger)
+        {
+            if (validate == null || validate.Valid)
+                return null;
+
+            logger.LogWarning(validate.Message);
+
+            if (validate.Unauthorised)
+                return Unauthorized();
+
+            if (validate.NotFound)
+                return NotFound();
+
+            return BadRequest();
+        }
+    }
+}

@@ -17,7 +17,6 @@ namespace Comments.Services
 
     public class CommentService : ICommentService
     {
-        private readonly IDbContextOptions _contextOptions;
         private readonly ConsultationsContext _context;
         private readonly IUserService _userService;
         private readonly User _currentUser;
