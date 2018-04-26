@@ -15,5 +15,12 @@ namespace Comments.Models
             AnswerBoolean = answerBoolean;
             Question = question;
         }
+
+        public void UpdateFromViewModel(ViewModels.Answer answer)
+        {
+            LastModifiedByUserId = answer.LastModifiedByUserId;
+            AnswerText = answer.AnswerText ?? throw new ArgumentNullException(nameof(answer.AnswerText)); 
+            AnswerBoolean = answer.AnswerBoolean;
+        }
     }
 }

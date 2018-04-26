@@ -9,7 +9,7 @@ namespace Comments.Controllers.Api
     [Produces("application/json")]
     [Route("consultations/api/[controller]")]
     //[Authorize]
-    public class CommentController : Controller
+    public class CommentController : ControllerBase
     {
         private readonly ICommentService _commentService;
         private readonly ILogger<CommentsController> _logger;
@@ -31,7 +31,7 @@ namespace Comments.Controllers.Api
 
             var result = _commentService.GetComment(commentId);
 
-            var invalidResult = Validate(result.validate);
+            var invalidResult = Validate(result.validate, _logger);
             return invalidResult ?? Ok(result.comment);
         }
 
@@ -50,7 +50,7 @@ namespace Comments.Controllers.Api
             }
 
             var result = _commentService.EditComment(commentId, comment);
-            var invalidResult = Validate(result.validate);
+            var invalidResult = Validate(result.validate, _logger);
 
             return invalidResult ?? Ok(comment);
         }
@@ -65,7 +65,7 @@ namespace Comments.Controllers.Api
             }
 
             var result = _commentService.CreateComment(comment);
-            var invalidResult = Validate(result.validate);
+            var invalidResult = Validate(result.validate, _logger);
 
             return invalidResult ?? CreatedAtAction("GetComment", new { id = result.comment.CommentId }, result.comment);
         }
@@ -80,25 +80,9 @@ namespace Comments.Controllers.Api
             }
 
             var result = _commentService.DeleteComment(commentId);
-            var invalidResult = Validate(result.validate);
+            var invalidResult = Validate(result.validate, _logger);
 
             return invalidResult ?? Ok(result.rowsUpdated);
-        }
-
-        private IActionResult Validate(Validate validate)
-        {
-            if (validate == null || validate.Valid)
-                return null;
-
-            _logger.LogWarning(validate.Message);
-
-            if (validate.Unauthorised)
-                return Unauthorized();
-
-            if (validate.NotFound)
-                return NotFound();
-
-            return BadRequest();
         }
     }
 }
