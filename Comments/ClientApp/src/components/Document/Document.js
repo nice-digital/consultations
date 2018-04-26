@@ -13,6 +13,7 @@ import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
 import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
+import { projectInformation } from "../../constants";
 
 type PropsType = {
 	staticContext?: any,
@@ -263,7 +264,7 @@ export class Document extends Component<PropsType, StateType> {
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">
-							<PhaseBanner />
+							<PhaseBanner phase={projectInformation.phase} name={projectInformation.name} repo={projectInformation.repo} />
 							<BreadCrumbs links={this.getBreadcrumbs()} />
 							<div className="page-header">
 								<p className="mb--0">
