@@ -24,13 +24,11 @@ namespace Comments.Models
 
                 entity.Property(e => e.CreatedByUserId).HasColumnName("CreatedByUserID");
 
-                //entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
-                entity.Property(e => e.CreatedDate).HasDefaultValueSql("date('now')");
+                entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.LastModifiedByUserId).HasColumnName("LastModifiedByUserID");
 
-                //entity.Property(e => e.LastModifiedDate).HasDefaultValueSql("(getdate())");
-                entity.Property(e => e.LastModifiedDate).HasDefaultValueSql("date('now')");
+                entity.Property(e => e.LastModifiedDate).HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.QuestionId).HasColumnName("QuestionID");
 
@@ -53,13 +51,11 @@ namespace Comments.Models
 
                 entity.Property(e => e.CreatedByUserId).HasColumnName("CreatedByUserID");
 
-                //entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
-                entity.Property(e => e.CreatedDate).HasDefaultValueSql("date('now')");
+                entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.LastModifiedByUserId).HasColumnName("LastModifiedByUserID");
 
-                //entity.Property(e => e.LastModifiedDate).HasDefaultValueSql("(getdate())");
-                entity.Property(e => e.LastModifiedDate).HasDefaultValueSql("date('now')");
+                entity.Property(e => e.LastModifiedDate).HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.LocationId).HasColumnName("LocationID");
 
@@ -88,8 +84,7 @@ namespace Comments.Models
 
                 entity.Property(e => e.CreatedByUserId).HasColumnName("CreatedByUserID");
 
-                //entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
-                entity.Property(e => e.CreatedDate).HasDefaultValueSql("date('now')");
+                entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.LastModifiedByUserId).HasColumnName("LastModifiedByUserID");
 

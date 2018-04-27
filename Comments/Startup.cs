@@ -11,19 +11,12 @@ using Microsoft.Extensions.Logging;
 using NICE.Feeds;
 using System;
 using System.IO;
-using System.Net.Http;
 using Comments.Auth;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
-using Microsoft.AspNetCore.StaticFiles.Infrastructure;
-using Microsoft.AspNetCore.SpaServices;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using NICE.Auth.NetCore.Services;
-using NICE.Feeds.Configuration;
-using System.Collections.Generic;
 
 namespace Comments
 {
@@ -57,7 +50,6 @@ namespace Comments
             services.TryAddTransient<IUserService, UserService>();
 
             var contextOptionsBuilder = new DbContextOptionsBuilder<ConsultationsContext>();
-            //contextOptionsBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             services.TryAddSingleton<IDbContextOptionsBuilderInfrastructure>(contextOptionsBuilder);
 
             services.AddDbContext<ConsultationsContext>(options =>
@@ -236,11 +228,6 @@ namespace Comments
                    // spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
-
-            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            {
-                serviceScope.ServiceProvider.GetService<ConsultationsContext>().Database.Migrate();
-            }
         }
     }
 }
