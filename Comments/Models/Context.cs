@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using Comments.Services;
+using Remotion.Linq.Clauses;
 
 namespace Comments.Models
 {
@@ -25,7 +26,7 @@ namespace Comments.Models
         {
 
             if (!_userService.GetCurrentUser().IsLoggedIn)
-                throw new Exception("trying to return comments and questions when not logged in. it shouldn't have gone this far.");
+                throw new Exception("trying to return comments and questions when not logged in. this should have been trapped in the service.");
 
             var data = Location.Where(l => l.SourceURI.Equals(sourceURI))
                         .Include(l => l.Comment)
@@ -33,7 +34,7 @@ namespace Comments.Models
                             .ThenInclude(q => q.QuestionType)
                         .Include(l => l.Question)
                             .ThenInclude(q => q.Answer);
-
+            
             return data;
         }
 
@@ -44,6 +45,20 @@ namespace Comments.Models
                             .FirstOrDefault();
 
             return comment;
+        }
+
+        public Answer GetAnswer(int answerId)
+        {
+            return Answer
+                .FirstOrDefault(a => a.AnswerId.Equals(answerId));
+        }
+
+        public Question GetQuestion(int questionId)
+        {
+            return Question.Where(q => q.QuestionId.Equals(questionId))
+                .Include(q => q.Location)
+                .Include(q => q.QuestionType)
+                .FirstOrDefault();
         }
     }
 }

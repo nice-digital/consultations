@@ -16,5 +16,13 @@ namespace Comments.Models
             QuestionType = questionType;
             Answer = answer;
         }
+
+        public void UpdateFromViewModel(ViewModels.Question question)
+        {
+            LastModifiedByUserId = question.LastModifiedByUserId;
+            QuestionText = question.QuestionText ?? throw new ArgumentNullException(nameof(question.QuestionText));
+            QuestionOrder = question.QuestionOrder;
+            Location.UpdateFromViewModel(question as ViewModels.Location);
+        }
     }
 }

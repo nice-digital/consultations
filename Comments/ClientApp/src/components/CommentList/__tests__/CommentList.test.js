@@ -45,7 +45,7 @@ describe("[ClientApp] ", () => {
 			);
 			await nextTick();
 			wrapper.update();
-			expect(wrapper.find("li").length).toEqual(2);
+			expect(wrapper.find("li").length).toEqual(5);
 		});
 
 		it("renders the 'no comments' message if the comments array is empty", async () => {
@@ -83,7 +83,6 @@ describe("[ClientApp] ", () => {
 		it("save handler put's to the api with updated comment from state", async done => {
 			mock.reset();
 			const commentToUpdate = sampleComments.comments[0];
-
 			mock
 				.onPut("/consultations/api/Comment/" + commentToUpdate.commentId)
 				.reply(config => {
@@ -101,7 +100,7 @@ describe("[ClientApp] ", () => {
 				.reply(200, sampleComments);
 			//console.log(sampleComments);
 			const wrapper = mount(<CommentList {...fakeProps} />);
-			wrapper.instance().saveComment(new Event("click"), commentToUpdate);
+			wrapper.instance().saveCommentHandler(new Event("click"), commentToUpdate);
 		});
 
 		it("save handler updates the correct item in the comments array once the api has returned new data", async () => {
@@ -122,7 +121,7 @@ describe("[ClientApp] ", () => {
 				)
 				.reply(200, sampleComments);
 			const wrapper = mount(<CommentList {...fakeProps} />);
-			wrapper.instance().saveComment(new Event("click"), commentToUpdate);
+			wrapper.instance().saveCommentHandler(new Event("click"), commentToUpdate);
 			await nextTick();
 			wrapper.update();
 			expect(wrapper.state().comments[1].commentText).toEqual(
@@ -174,32 +173,31 @@ describe("[ClientApp] ", () => {
 			expect(wrapper.state().comments[1].commentId).toEqual(-1);
 		});
 
-		// it("save handler posts to the api with new comment", async done => {
-		// 	mock.reset();
-		// 	const commentToInsert = {
-		// 		commentId: -1,
-		// 		commentText: "a newly created comment"
-		// 	};
-		// 	mock
-		// 		.onGet(
-		// 			generateUrl("comments", undefined, [], {
-		// 				sourceURI: fakeProps.match.url
-		// 			})
-		// 		)
-		// 		.reply(200, EmptyCommentsResponse);
-		//
-		// 	mock
-		// 		.onPut("/consultations/api/Comment/" + commentToUpdate.commentId)
-		// 		.reply(config => {
-		// 			expect(JSON.parse(config.data)).toEqual(commentToUpdate);
-		// 			done();
-		// 			return [200, commentToUpdate];
-		// 		});
-		//
-		//
-		// 	//console.log(sampleComments);
-		// 	const wrapper = mount(<CommentList {.../} />);
-		// 	wrapper.instance().saveComment(new Event("click"), commentToUpdate);
-		// });
+		it("save handler posts to the api with new comment", async done => {
+			mock.reset();
+			const commentToInsert = {
+				commentId: -1,
+				commentText: "a newly created comment"
+			};
+			mock
+				.onGet(
+					generateUrl("comments", undefined, [], {
+						sourceURI: fakeProps.match.url
+					})
+				)
+				.reply(200, EmptyCommentsResponse);
+			mock
+				.onPost(
+					generateUrl("newcomment")
+				)
+				.reply(config => {
+					expect(config.url).toEqual("/consultations/api/Comment");
+					done();
+					return [200, commentToInsert];
+				});
+
+			const wrapper = mount(<CommentList {...fakeProps} />);
+			wrapper.instance().saveCommentHandler(new Event("click"), commentToInsert);
+		});
 	});
 });

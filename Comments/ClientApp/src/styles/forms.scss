@@ -1,0 +1,146 @@
+////
+/// @group components
+////
+
+// sass-lint:disable class-name-format
+
+.form {
+  &__fieldset {
+    margin-bottom: rem($spacing-medium);
+    padding: rem($spacing-small);
+    border: rem($spacing-xx-small) solid $colour-border;
+  }
+
+  &__legend {
+    @include font-size(h3);
+    font-weight: bold;
+    margin-bottom: rem($spacing-small);
+  }
+
+  &__group {
+    margin-bottom: rem($spacing-medium);
+    &:last-of-type {
+      margin-bottom: rem($spacing-medium);
+    }
+
+    &--error {
+      .form__input,
+      .form__radioCheck {
+        background-color: $colour-error-background;
+        border-color: $colour-nice-white;
+        outline: $colour-error rem($spacing-x-small) solid;
+      }
+
+      .form__label {
+        color: $colour-error;
+        font-weight: bold;
+      }
+
+      .form__hint {
+        color: $colour-error;
+      }
+    }
+
+    &--checkbox {
+
+    }
+
+    &--radio {
+      clear: left;
+      display: block;
+      padding-left: rem($spacing-x-large);
+      position: relative;
+      @include clearfix();
+    }
+
+    &--inline {
+      display: inline-block;
+      margin-right: rem($spacing-medium);
+
+      input {
+        margin-right: rem($spacing-x-small);
+      }
+    }
+
+    &--stacked {
+      margin-bottom: rem($spacing-x-small);
+    }
+  }
+
+  &__input {
+    border: rem($spacing-xx-small) solid $colour-border;
+    padding: rem($spacing-small);
+    width: 100%;
+
+    &:focus {
+      outline: $colour-focus rem($spacing-x-small) solid;
+    }
+
+    &--file,
+    &--range {
+      border: 0;
+      padding: 0;
+    }
+
+    &--textarea {
+      height: 8rem;
+    }
+  }
+
+  // this is the radio / check equivalent of form__input
+  &__radioCheck {
+    &--radio {
+      height: rem($spacing-medium * 2);
+      left: 0;
+      margin: 0;
+      opacity: 0;
+      position: absolute;
+      top: 0;
+      width: rem($spacing-medium * 2);
+      &:checked + label:after {
+        opacity: 1;
+      }
+    }
+  }
+
+  &__label {
+    @include font-size(p);
+    display: block;
+    margin-bottom: rem($spacing-x-small);
+
+    &--radio {
+      cursor: pointer;
+      float: left;
+      padding: rem($spacing-small) 0;
+      // main circle border
+      &::before {
+        background: transparent;
+        border: 2px solid $colour-nice-black;
+        border-radius: 50%;
+        content: '';
+        height: rem($spacing-medium * 2);
+        left: 0;
+        position: absolute;
+        top: rem($spacing-medium / 4);
+        width: rem($spacing-medium * 2);
+      }
+      // dot inside the label
+      &::after {
+        border: rem($spacing-medium / 2) solid $colour-nice-black;
+        border-radius: 50%;
+        content: '';
+        height: 0;
+        left: rem($spacing-medium / 2);
+        opacity: 0;
+        position: absolute;
+        top: rem($spacing-medium / 1.3);
+        width: 0;
+      }
+    }
+  }
+
+  &__hint {
+    color: $colour-nice-dark-grey;
+    margin-top: rem($spacing-x-small);
+  }
+}
