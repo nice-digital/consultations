@@ -9,7 +9,7 @@ namespace Comments.Test.Infrastructure
     public static class Extensions
     {
         public static void ShouldMatchApproved(this string stringIn,
-                Func<string, string>[] scrubbers = null, //sadly this can't use params since the following parameters are optional.
+                Func<string, string>[] scrubbers = null, //sadly we can't use params and stick it on the end since the following parameters need to be optional.
                 [System.Runtime.CompilerServices.CallerMemberName] string memberName = null,
                 [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = null)
         {
