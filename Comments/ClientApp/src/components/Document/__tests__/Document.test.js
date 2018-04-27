@@ -42,8 +42,7 @@ describe("[ClientApp] ", () => {
 				</MemoryRouter>
 			);
 
-			// TODO: refactor this!
-			let documentsPromise = new Promise(function(resolve) {
+			let documentsPromise = new Promise(resolve => {
 				mock
 					.onGet("/consultations/api/Documents?consultationId=1")
 					.reply(() => {
@@ -52,7 +51,7 @@ describe("[ClientApp] ", () => {
 					});
 			});
 
-			let consulatationPromise = new Promise(function(resolve) {
+			let consulatationPromise = new Promise(resolve => {
 				mock
 					.onGet("/consultations/api/Consultation?consultationId=1")
 					.reply(() => {
@@ -61,7 +60,7 @@ describe("[ClientApp] ", () => {
 					});
 			});
 
-			let chapterPromise = new Promise(function(resolve) {
+			let chapterPromise = new Promise(resolve => {
 				mock
 					.onGet(
 						"/consultations/api/Chapter?consultationId=1&documentId=1&chapterSlug=introduction"

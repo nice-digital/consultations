@@ -8,6 +8,7 @@ using System.Data.SQLite;
 using System.Net.Http;
 using Comments.Services;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -35,6 +36,8 @@ namespace Comments.Test.Infrastructure
         protected readonly string _displayName = "Benjamin Button";
         protected readonly Guid? _userId = Guid.Empty;
         protected readonly IUserService _fakeUserService;
+        protected readonly IHttpContextAccessor _fakeHttpContextAccessor;
+
 
         protected readonly DbContextOptionsBuilder<ConsultationsContext> _contextOptions;
 
@@ -58,6 +61,7 @@ namespace Comments.Test.Infrastructure
         {
             // Arrange
             _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
+            _fakeHttpContextAccessor = FakeHttpContextAccessor.Get(_authenticated, _displayName, _userId);
             var databaseName = DatabaseName + Guid.NewGuid();
 
             //SQLiteConnectionStringBuilder sqLiteConnectionStringBuilder = new SQLiteConnectionStringBuilder()
@@ -104,6 +108,7 @@ namespace Comments.Test.Infrastructure
                     //    );
                     services.TryAddSingleton<ISeriLogger, FakeSerilogger>();
                     services.TryAddSingleton<IAuthenticateService, FakeAuthenticateService>();
+                    services.TryAddSingleton<IHttpContextAccessor>(provider => _fakeHttpContextAccessor);
                     services.TryAddTransient<IUserService>(provider => _fakeUserService);
                     services.TryAddTransient<IFeedReaderService>(provider => new FeedReader(FeedToUse));
 

@@ -5,6 +5,7 @@ import { withRouter } from "react-router-dom";
 import { load } from "./../../data/loader";
 import preload from "../../data/pre-loader";
 import { CommentBox } from "../CommentBox/CommentBox";
+//import stringifyObject from "stringify-object";
 
 type PropsType = {
 	staticContext?: any,
@@ -14,13 +15,14 @@ type PropsType = {
 	},
 	location: {
 		pathname: string
-	}
+	},
+	drawerOpen: boolean
 };
 
 type CommentType = {
 	commentId: number,
 	lastModifiedDate: Date,
-	lastModifiedByUserId: string, //really a guid
+	lastModifiedByUserId: string,
 	commentText: string,
 	locationId: number,
 	sourceURI: string,
@@ -44,9 +46,14 @@ export class CommentList extends Component<PropsType, StateType> {
 			comments: [],
 			loading: true
 		};
+		let preloadedData = {};
+		if (this.props.staticContext && this.props.staticContext.preload){
+			preloadedData = this.props.staticContext.preload.data;
+		}
+
 		const preloaded = preload(this.props.staticContext, "comments", [], {
 			sourceURI: this.props.match.url
-		});
+		}, preloadedData);
 
 		if (preloaded) {
 			this.state = {
@@ -102,45 +109,54 @@ export class CommentList extends Component<PropsType, StateType> {
 		this.setState({ comments });
 	}
 
-	saveComment = (e: Event, comment: CommentType) => {
+	saveCommentHandler = (e: Event, comment: CommentType) => {
 		e.preventDefault();
-		// todo: if (commentId < 0) CREATE POST
-		load(
-			"comment",
-			undefined,
-			[comment.commentId],
-			{},
-			"PUT",
-			comment,
-			true
-		).then(res => {
-			const index = this.state.comments
-				.map(function(comment) {
-					return comment.commentId;
-				})
-				.indexOf(comment.commentId);
-			const comments = this.state.comments;
-			comments[index] = res.data;
-			this.setState({
-				comments
+
+		const isANewComment = comment.commentId < 0;
+		const method = isANewComment ? "POST" : "PUT";
+		const urlParameters = isANewComment ? [] : [comment.commentId];
+		const endpointName = isANewComment ? "newcomment" : "editcomment";
+
+		load(endpointName, undefined, urlParameters, {}, method, comment, true)
+			.then(res => {
+				//todo: check success
+
+				//console.log(res);
+				const index = this.state.comments
+					.map(function(comment) {
+						return comment.commentId;
+					})
+					.indexOf(comment.commentId);
+				const comments = this.state.comments;
+				comments[index] = res.data;
+				this.setState({
+					comments
+				});
+			})
+			.catch(err => {
+				alert(err.response.statusText);
 			});
-		});
 	};
 
 	render() {
 		if (this.state.loading) return <p>Loading</p>;
 		if (!this.state.loading && this.state.comments.length === 0)
-			return <p>No comments</p>;
+			return (
+				<Fragment>
+					<p>No comments</p>
+				</Fragment>
+			);
 
 		return (
 			<Fragment>
-				<ul>
+				<ul className="CommentList list--unstyled">
 					{this.state.comments.map(comment => {
 						return (
 							<CommentBox
+								drawerOpen={this.props.drawerOpen}
 								key={comment.commentId}
 								comment={comment}
-								saveHandler={this.saveComment}
+								saveHandler={this.saveCommentHandler}
 							/>
 						);
 					})}

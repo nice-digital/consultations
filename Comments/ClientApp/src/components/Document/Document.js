@@ -13,6 +13,7 @@ import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
 import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
+import { projectInformation } from "../../constants";
 
 type PropsType = {
 	staticContext?: any,
@@ -254,6 +255,7 @@ export class Document extends Component<PropsType, StateType> {
 		const { sections, content } = this.state.chapterData;
 		const consultationId = parseInt(this.props.match.params.consultationId, 0);
 		const documentId = parseInt(this.props.match.params.documentId, 0);
+
 		return (
 			<Fragment>
 				<Helmet>
@@ -262,24 +264,51 @@ export class Document extends Component<PropsType, StateType> {
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">
-							<PhaseBanner />
+							<PhaseBanner phase={projectInformation.phase} name={projectInformation.name} repo={projectInformation.repo} />
 							<BreadCrumbs links={this.getBreadcrumbs()} />
 							<div className="page-header">
-								<h1 className="page-header__heading">{title}</h1>
-								<button
-									onClick={e =>
-										this.props.onNewCommentClick({
-											placeholder: "Con Com Innit"
-										})
-									}
-								>
-									Comment on this consultation
-								</button>
+								<p className="mb--0">
+									Consultation |{" "}
+									<a
+										tabIndex={0}
+										role="button"
+										href="#comment-on-whole-consultation"
+										onClick={e => {
+											e.preventDefault();
+											this.props.onNewCommentClick({
+												placeholder: "Comment on this whole consultation",
+												sourceURI: this.props.match.url,
+												commentText: ""
+											});
+										}}
+									>
+										Comment on whole consultation
+									</a>
+								</p>
+								<h1 className="page-header__heading mt--0">{title}</h1>
 								<p className="page-header__lead">
 									[{reference}] Open until{" "}
 									<Moment format="D MMMM YYYY" date={endDate} />
 								</p>
-								<h2>
+								<p className="mb--0">
+									Document |{" "}
+									<a
+										tabIndex={0}
+										role="button"
+										href="#comment-on-this-document"
+										onClick={e => {
+											e.preventDefault();
+											this.props.onNewCommentClick({
+												placeholder: "Comment on this document",
+												sourceURI: this.props.match.url,
+												commentText: ""
+											});
+										}}
+									>
+										Comment on this document
+									</a>
+								</p>
+								<h2 className="mt--0">
 									{this.getCurrentDocumentTitle(documentsData, documentId)}
 								</h2>
 							</div>

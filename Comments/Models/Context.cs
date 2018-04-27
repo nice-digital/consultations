@@ -26,7 +26,7 @@ namespace Comments.Models
         {
 
             if (!_userService.GetCurrentUser().IsLoggedIn)
-                throw new Exception("trying to return comments and questions when not logged in. it shouldn't have gone this far.");
+                throw new Exception("trying to return comments and questions when not logged in. this should have been trapped in the service.");
 
             var data = Location.Where(l => l.SourceURI.Equals(sourceURI))
                         .Include(l => l.Comment)

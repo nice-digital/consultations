@@ -1,0 +1,7 @@
+.CommentBox {
+  @include clearfix;
+  margin-bottom: rem($spacing-small);
+  padding: rem($spacing-small);
+  padding-bottom: 0;
+  border: rem($spacing-xx-small) solid $colour-border;
+}

@@ -26,7 +26,7 @@ describe("[ClientApp] ", () => {
 
 			it("should produce a string that contains replaced value in endpoint", () => {
 				const url = loader.generateUrl(
-					"comment",
+					"editcomment",
 					"consultations",
 					[ 1 ]
 				);

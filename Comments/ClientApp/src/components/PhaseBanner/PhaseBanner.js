@@ -2,17 +2,24 @@
 
 import React from "react";
 
-export const PhaseBanner = () => {
+type PropsType = {
+	phase: string,
+	name: string,
+	repo: string
+}
+
+export const PhaseBanner = (props: PropsType) => {
+	const { phase, name, repo } = props;
 	return (
 		<p className="phase-banner">
 			<span className="phase-banner__tag">
-				<span className="tag tag--impact tag--beta">Beta</span>
+				<span className={`tag tag--impact tag--${phase}`}>{phase}</span>
 			</span>
 			<span className="phase-banner__label">
-				NICE Consultations is in development. This means it is not feature
+				{name} is in development. This means it is not feature
 				complete and there may be issues.{" "}
 				<a
-					href="https://github.com/nhsevidence/consultations"
+					href={repo}
 					rel="noopener noreferrer"
 					target="_blank"
 				>

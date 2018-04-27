@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using NICE.Auth.NetCore.Services;
 using NICE.Feeds.Configuration;
+using System.Collections.Generic;
 
 namespace Comments
 {
@@ -201,12 +202,21 @@ namespace Comments
 
                 spa.UseSpaPrerendering(options =>
                 {
+
+                    
+
                     options.ExcludeUrls = new[] { "/sockjs-node" };
                     // Pass data in from .NET into the SSR. These come through as `params` within `createServerRenderer` within the server side JS code.
                     // See https://docs.microsoft.com/en-us/aspnet/core/spa/angular?tabs=visual-studio#pass-data-from-net-code-into-typescript-code
                     options.SupplyData = (context, data) =>
                     {
                         data["isHttpsRequest"] = context.Request.IsHttps;
+                        //data["cookies"] = new Dictionary<string, string>{{NICE.Auth.NetCore.Helpers.Constants.DefaultCookieName, context.Request.Cookies[NICE.Auth.NetCore.Helpers.Constants.DefaultCookieName] }};
+                        var cookieForSSR = context.Request.Cookies[NICE.Auth.NetCore.Helpers.Constants.DefaultCookieName];
+                        if (cookieForSSR != null)
+                        {
+                            data["cookies"] = $"{NICE.Auth.NetCore.Helpers.Constants.DefaultCookieName}={cookieForSSR}";
+                        }
                         //data["user"] = context.User; - possible security implications here, surfacing claims to the front end. might be ok, if just server-side.
                         // Pass further data in e.g. user/authentication data
                     };

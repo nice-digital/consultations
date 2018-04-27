@@ -7,10 +7,12 @@ import React from "react";
 import { renderToString  } from "react-dom/server";
 import { StaticRouter } from "react-router";
 import { Helmet } from "react-helmet";
+//import stringifyObject from "stringify-object";
 
 import { processHtml } from "./html-processor";
 
 import App from "./../components/App/App";
+
 
 const BaseUrlRelative: string = "/consultations";
 
@@ -43,7 +45,7 @@ export const serverRenderer = (params): Promise => {
 		//      return null; }} />
 		let staticContext = {
 			preload: {
-				data: {}, // Key value pairs of preloaded data sets
+				data: { cookies: params.data.cookies }, // Key value pairs of preloaded data sets
 				loaders: [] // List of promises where we track preloading data
 			},
 			baseUrl: params.origin + BaseUrlRelative
