@@ -24,7 +24,7 @@ exports.config = {
     logLevel: "verbose",
     coloredLogs: true,
     screenshotPath: "./errorShots/",
-    baseUrl: "https://test.nice.org.uk/consultations",
+    baseUrl: "https://test.nice.org.uk/consultations/",
     reporters: ["spec"],
 
     // Use BDD with Cucumber
