@@ -104,6 +104,10 @@ namespace Comments.Services
             if (!user.IsLoggedIn)
                 return new CommentsAndQuestions(new List<ViewModels.Comment>(), new List<ViewModels.Question>(), user.IsLoggedIn);
 
+            //convert sourceURI into a real source URI here.
+
+
+
             var locations = _context.GetAllCommentsAndQuestionsForDocument(sourceURI);
 
             var commentsData = new List<ViewModels.Comment>();

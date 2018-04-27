@@ -27,5 +27,7 @@ namespace Comments.ViewModels
         public DateTime LastModifiedDate { get; set; }
         public Guid LastModifiedByUserId { get; set; }
         public string CommentText { get; set; }
+
+        public string CommentOn => Common.UriHelpers.GetCommentOn(SourceURI);
     }
 }
