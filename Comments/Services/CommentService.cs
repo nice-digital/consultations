@@ -1,4 +1,5 @@
-﻿using Comments.Models;
+﻿using System;
+using Comments.Models;
 using Comments.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,7 +58,7 @@ namespace Comments.Services
             if (!commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId.Value))
                 return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to edit comment id: {commentId}, but it's not their comment"));
 
-            commentInDatabase.UpdateFromViewModel(comment);
+            commentInDatabase.UpdateFromViewModel(comment, _currentUser.UserId.Value);
             return (rowsUpdated: _context.SaveChanges(), validate: null);
         }
 
@@ -70,7 +71,7 @@ namespace Comments.Services
             var locationToSave = new Models.Location(comment as ViewModels.Location);
             _context.Location.Add(locationToSave);
             
-            var commentToSave = new Models.Comment(comment.LocationId, _currentUser.UserId.Value, comment.CommentText, comment.LastModifiedByUserId, locationToSave);
+            var commentToSave = new Models.Comment(comment.LocationId, _currentUser.UserId.Value, comment.CommentText, _currentUser.UserId.Value, locationToSave);
             _context.Comment.Add(commentToSave);
             _context.SaveChanges();
 
@@ -91,6 +92,8 @@ namespace Comments.Services
                 return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to delete comment id: {commentId}, but it's not their comment"));
 
             commentInDatabase.IsDeleted = true;
+            commentInDatabase.LastModifiedDate = DateTime.UtcNow;
+            commentInDatabase.LastModifiedByUserId = _currentUser.UserId.Value;
             return (rowsUpdated: _context.SaveChanges(), validate: null);
         }
 

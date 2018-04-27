@@ -79,7 +79,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
             var responseString = await response.Content.ReadAsStringAsync();
 
             // Assert
-            responseString.ShouldMatchApproved();
+            responseString.ShouldMatchApproved(new Func<string, string>[]{Scrubbers.ScrubLastModifiedDate});
             var deserialisedResponse = JsonConvert.DeserializeObject<CommentsAndQuestions>(responseString);
             deserialisedResponse.Comments.Count().ShouldBe(3);
         }
