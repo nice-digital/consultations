@@ -121,7 +121,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			.then(res => {
 				//todo: check success
 
-				console.log(res);
+				//console.log(res);
 				const index = this.state.comments
 					.map(function(comment) {
 						return comment.commentId;
