@@ -14,6 +14,7 @@ import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
 import { projectInformation } from "../../constants";
+import { renderDocumentHtml } from "../../helpers/render-document-html";
 
 type PropsType = {
 	staticContext?: any,
@@ -151,10 +152,6 @@ export class Document extends Component<PropsType, StateType> {
 		}
 	}
 
-	renderDocumentHtml = (data: DataType) => {
-		return { __html: data };
-	};
-
 	getSupportingDocumentLinks = (
 		documents: DocumentsType,
 		currentDocumentFromRoute: number,
@@ -264,7 +261,11 @@ export class Document extends Component<PropsType, StateType> {
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">
-							<PhaseBanner phase={projectInformation.phase} name={projectInformation.name} repo={projectInformation.repo} />
+							<PhaseBanner
+								phase={projectInformation.phase}
+								name={projectInformation.name}
+								repo={projectInformation.repo}
+							/>
 							<BreadCrumbs links={this.getBreadcrumbs()} />
 							<div className="page-header">
 								<p className="mb--0">
@@ -331,9 +332,7 @@ export class Document extends Component<PropsType, StateType> {
 											this.state.loading ? "loading" : ""
 										}`}
 									>
-										<div
-											dangerouslySetInnerHTML={this.renderDocumentHtml(content)}
-										/>
+										{renderDocumentHtml(content)}
 									</div>
 								</div>
 								<div data-g="12 md:3">
