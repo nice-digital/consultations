@@ -31,7 +31,8 @@ type CommentType = {
 	rangeStartOffset: string,
 	rangeEnd: string,
 	rangeEndOffset: string,
-	quote: string
+	quote: string,
+	commentOn: string
 };
 
 type StateType = {

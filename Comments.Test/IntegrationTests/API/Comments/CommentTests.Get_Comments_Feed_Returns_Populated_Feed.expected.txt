@@ -19,7 +19,7 @@
                 
             ],
             "locationId":28,
-            "sourceURI":"/consultations/1/1/introduction",
+            "sourceURI":"consultations://./consultation/1/document/1/chapter/introduction",
             "htmlElementID":null,
             "rangeStart":null,
             "rangeStartOffset":null,

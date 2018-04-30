@@ -10,7 +10,7 @@ namespace Comments.Test.Infrastructure
         private readonly string _loginURL;
         private readonly string _logoutURL;
 
-        public FakeAuthenticateService(bool authenticated = true, string redirectURL = "/consultations/1/1/introduction", 
+        public FakeAuthenticateService(bool authenticated = true, string redirectURL = "consultations://./consultation/1/document/1/chapter/introduction", 
             string loginURL = "/signin?returnURL=/", string logoutURL = "/signout?returnURL=/")
         {
             _authenticated = authenticated;

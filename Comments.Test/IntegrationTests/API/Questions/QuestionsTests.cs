@@ -22,7 +22,7 @@ namespace Comments.Test.IntegrationTests.API.Questions
             //Arrange
             ResetDatabase();
 
-            const string sourceURI = "/consultations/1/1/introduction";
+            const string sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var description = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
 
@@ -47,7 +47,7 @@ namespace Comments.Test.IntegrationTests.API.Questions
         {
             // Arrange
             ResetDatabase();
-            var sourceURI = "/consultations/1/1/introduction";
+            var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var description = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
 
@@ -77,7 +77,7 @@ namespace Comments.Test.IntegrationTests.API.Questions
         public async Task Edit_Question()
         {
             //Arrange
-            const string sourceURI = "/consultations/1/1/introduction";
+            const string sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var description = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
@@ -112,7 +112,7 @@ namespace Comments.Test.IntegrationTests.API.Questions
         {
             //Arrange
             var userId = Guid.Empty;
-            const string sourceURI = "/consultations/1/1/introduction";
+            const string sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var description = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
 
