@@ -32,8 +32,6 @@ type StateType = {
 	hasInitialData: boolean
 };
 
-type DataType = any;
-
 type DocumentsType = Array<Object>;
 
 export class Document extends Component<PropsType, StateType> {
@@ -334,7 +332,11 @@ export class Document extends Component<PropsType, StateType> {
 											this.state.loading ? "loading" : ""
 										}`}
 									>
-										{renderDocumentHtml(content)}
+										{renderDocumentHtml(
+											content,
+											this.props.onNewCommentClick,
+											this.props.match.url
+										)}
 									</div>
 								</div>
 								<div data-g="12 md:3">

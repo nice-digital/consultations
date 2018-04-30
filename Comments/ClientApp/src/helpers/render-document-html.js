@@ -1,42 +1,47 @@
-import React from "react";
-import ReactHtmlParser from "react-html-parser";
+import React, { Fragment } from "react";
+import ReactHtmlParser, { convertNodeToElement } from "react-html-parser";
 
-const sectionCommmentButton = () => {
-	return <button>Comment on this section</button>;
-};
+// const SectionCommentButton = () => {
+// 	return <button>Comment on this section</button>;
+// };
 
-export const renderDocumentHtml = (incomingHtml) => {
+// onNewCommentClick passed through from <Document />
+export const renderDocumentHtml = (incomingHtml, onNewCommentClick, sourceURI) => {
 
-	function myTransformFunction(incomingTree){
-
-		console.log({incomingTree});
-		const descendants = incomingTree[0].children;
-		const outgoingTree = descendants.map(node => {
-			console.log(node);
-			if (node && node.attribs && node.attribs.class === "section") {
-				const firstChild = node.children[1]; // this is the h3.title
-				const sectionCommmentButton = {
-					type: "tag",
-					name: "button",
-					attribs: {},
-					children: [
-						{
-							type: "text",
-							data: "Whooooooooooooooo"
-						}
-					]
-				};
-
-				firstChild.children.unshift(sectionCommmentButton);
-			}
-			return node;
-		});
-		console.log({outgoingTree});
-		return outgoingTree;
+	function addSectionCommentButtons(node) {
+		// find the "sections" - anchors with a data-heading-type of "section"
+		// and render them verbatim with a button before them
+		if (
+			node.name === "a" &&
+			node.attribs &&
+			node.attribs["data-heading-type"] === "section"
+		) {
+			const sectionName = node.children[0].data;
+			return (
+				<Fragment>
+					<button
+						tabIndex={0}
+						href={`${sectionName}`}
+						onClick={e => {
+							e.preventDefault();
+							onNewCommentClick({
+								placeholder: `Comment on ${sectionName}`,
+								sourceURI: sourceURI,
+								commentText: "",
+								commentOn: "Section"
+							});
+						}}
+					>
+						Comment on section: {`${sectionName}`}
+					</button>
+					{/* this is the original DOM node, rendered */}
+					{convertNodeToElement(node)}
+				</Fragment>
+			);
+		}
 	}
 
 	return ReactHtmlParser(incomingHtml, {
-		preprocessNodes: myTransformFunction
+		transform: addSectionCommentButtons
 	});
-
 };
