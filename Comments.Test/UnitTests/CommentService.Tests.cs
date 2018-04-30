@@ -111,7 +111,7 @@ namespace Comments.Test.UnitTests
         {
             //Arrange
             ResetDatabase();
-            var sourceURI = "/consultations/1/1/introduction";
+            var sourceURI = "/1/1/introduction";
             var locationId = AddLocation(sourceURI);
             var userId = Guid.Empty;
             var commentText = Guid.NewGuid().ToString();

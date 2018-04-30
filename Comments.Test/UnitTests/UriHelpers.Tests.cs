@@ -16,11 +16,8 @@ namespace Comments.Test.UnitTests
         [InlineData("consultations://./consultation/1/document/1/chapter/introduction", "sectionHtmlElementId", null, "Section")]
         public void GetCommentOnParsesCorrectly(string sourceUri, string htmlElementId, string rangeStart, string commentOn)
         {
-            //Arrange
-            var location = new Location(sourceUri, htmlElementId, rangeStart, null, null, null, null, null, null);
-
-            //Act
-            var commentOnString = Common.UriHelpers.GetCommentOn(location);
+            //Arrange + Act
+            var commentOnString = Common.UriHelpers.GetCommentOn(sourceUri, rangeStart, htmlElementId);
 
             //Assert
             commentOnString.ShouldBe(commentOn);
@@ -39,6 +36,17 @@ namespace Comments.Test.UnitTests
             consultationsUriElements.ConsultationId.ShouldBe(consultationId);
             consultationsUriElements.DocumentId.ShouldBe(documentId);
             consultationsUriElements.ChapterSlug.ShouldBe(chapterSlug);
+        }
+
+        [Theory]
+        [InlineData("/1/1/introduction", "consultations://./consultation/1/document/1/chapter/introduction")]
+        public void ConvertToConsultationsUri(string relativeURL, string consultationsUri)
+        {
+            //Arrange + Act
+            var uri = Common.UriHelpers.ConsultationsUri.ConvertToConsultationsUri(relativeURL);
+
+            //Assert
+            uri.ShouldBe(consultationsUri);
         }
 
     }

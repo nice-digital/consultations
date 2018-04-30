@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
 using Comments.Models;
@@ -32,10 +33,8 @@ namespace Comments.Test.IntegrationTests.API.Comments
         }
 
         [Theory]
-        [InlineData(1, null)]
-        [InlineData(1, "/some-url")]
-        [InlineData(int.MaxValue, null)]
-        [InlineData(int.MaxValue, "/some-url")]
+        [InlineData(1, "/1/1/introduction")]
+        [InlineData(int.MaxValue, "/1/1/introduction")]
         public async Task Create_Comment(int locationId, string sourceURI)
         {
             //Arrange
@@ -53,12 +52,36 @@ namespace Comments.Test.IntegrationTests.API.Comments
             deserialisedComment.CommentId.ShouldBeGreaterThan(0);
         }
 
+        [Theory]
+        [InlineData(1, null)]
+        [InlineData(int.MaxValue, null)]
+        public async Task Comment_ViewModel_Fails_To_Serialise_With_Invalid_SourceURI(int locationId, string sourceURI)
+        {
+            //Arrange
+            var comment = new ViewModels.Comment(locationId, sourceURI, null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty, "comment text");
+            Exception _ex = null;
+
+            // Act
+            try
+            {
+                new StringContent(JsonConvert.SerializeObject(comment), Encoding.UTF8, "application/json");
+            }
+            catch (Exception ex)
+            {
+                _ex = ex;
+            }
+            
+            // Assert
+            _ex.ShouldNotBeNull();
+            _ex.Message.ShouldBe("Error getting value from 'CommentOn' on 'Comments.ViewModels.Comment'.");
+        }
+
         [Fact]
         public async Task Insert_Multiple_Comments_And_Read_Them()
         {
             //Arrange
             ResetDatabase();
-            string sourceURI = "/consultations/1/1/introduction";
+            string sourceURI = "/1/1/introduction";
 
             var locationId = AddLocation(sourceURI);
             AddComment(locationId, "comment text", false, Guid.Empty);
@@ -67,10 +90,10 @@ namespace Comments.Test.IntegrationTests.API.Comments
             locationId = AddLocation(sourceURI);
             AddComment(locationId, "comment text", false, Guid.Empty); //different location id, same sourceURI, this should be in the result set
             
-            locationId = AddLocation("/consultations/2/1/introduction");
+            locationId = AddLocation("/2/1/introduction");
             AddComment(locationId, "comment text", false, Guid.Empty); //different consultation id, this shouldn't be in the result set
             
-            locationId = AddLocation("/consultations/1/2/introduction");
+            locationId = AddLocation("/1/2/introduction");
             AddComment(locationId, "comment text", false, Guid.Empty); //different document id, this shouldn't be in the result set
             
             // Act
@@ -89,7 +112,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
         {
             // Arrange
             ResetDatabase();
-            const string sourceURI = "/consultations/1/2/introduction";
+            const string sourceURI = "/1/2/introduction";
             var commentText = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
             var answerText = Guid.NewGuid().ToString();
@@ -138,7 +161,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
         {
             //Arrange
             ResetDatabase();
-            const string sourceURI = "/consultations/1/1/introduction";
+            const string sourceURI = "/1/1/introduction";
             var commentText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
             var locationId = AddLocation(sourceURI, _context);

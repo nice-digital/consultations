@@ -12,9 +12,9 @@ namespace Comments.Common
         public static class ConsultationsUri
         {
             public const string Scheme = "consultations:";
-            public const string ConsultationUriFormat = Scheme + "//./consultatation/{0}";
-            public const string DocumentUriFormat = ConsultationUriFormat + "document/{1}";
-            public const string ChapterUriFormat = DocumentUriFormat + "chapter/{2}";
+            public const string ConsultationUriFormat = Scheme + "//./consultation/{0}";
+            public const string DocumentUriFormat = ConsultationUriFormat + "/document/{1}";
+            public const string ChapterUriFormat = DocumentUriFormat + "/chapter/{2}";
 
             public const string ConsultationsUriRegEx =
                     "^consultations:\\/\\/.+\\/consultation\\/(?<consultationId>\\d+)(\\/document\\/)?(?<documentId>\\d?)(\\/chapter\\/)?(?<chapterSlug>.*)$";
@@ -39,6 +39,27 @@ namespace Comments.Common
 
                 return GetElementsFromRegExGroups(groups);
             }
+
+            public static string ConvertToConsultationsUri(string relativeURL)
+            {
+                ConsultationsUriElements uriElements;
+                if (relativeURL.StartsWith(Scheme))
+                {
+                    uriElements = ParseConsultationsUri(relativeURL);
+                }
+                else if (relativeURL.StartsWith("/"))
+                {
+                    uriElements = ParseRelativeUrl(relativeURL);
+                }
+                else
+                {
+                    throw new Exception("Unknown uri format");
+                }
+
+                return string.Format(ChapterUriFormat, uriElements.ConsultationId, uriElements.DocumentId,
+                    uriElements.ChapterSlug);
+            }
+
         }
 
         private static ConsultationsUriElements GetElementsFromRegExGroups(GroupCollection groups)
@@ -80,21 +101,16 @@ namespace Comments.Common
         }
 
 
-        /// <summary>
-        /// returns if the 
-        /// </summary>
-        /// <param name="sourceURI"></param>
-        /// <returns></returns>
-        public static string GetCommentOn(Location location)
+        public static string GetCommentOn(string sourceURI, string rangeStart, string htmlElementId)
         {
             ConsultationsUriElements consultationsUriParts;
-            if (location.SourceURI.StartsWith(ConsultationsUri.Scheme))
+            if (sourceURI.StartsWith(ConsultationsUri.Scheme))
             {
-                consultationsUriParts = ConsultationsUri.ParseConsultationsUri(location.SourceURI);
+                consultationsUriParts = ConsultationsUri.ParseConsultationsUri(sourceURI);
             }
-            else if (location.SourceURI.StartsWith("/")) 
+            else if (sourceURI.StartsWith("/")) 
             {
-                consultationsUriParts = ConsultationsUri.ParseRelativeUrl(location.SourceURI);
+                consultationsUriParts = ConsultationsUri.ParseRelativeUrl(sourceURI);
             }
             else
             {
@@ -103,10 +119,10 @@ namespace Comments.Common
 
             if (consultationsUriParts.IsChapterLevel())
             {
-                if (!string.IsNullOrWhiteSpace(location.RangeStart))
+                if (!string.IsNullOrWhiteSpace(rangeStart))
                     return "Text selection";
 
-                if (!string.IsNullOrWhiteSpace(location.HtmlElementID))
+                if (!string.IsNullOrWhiteSpace(htmlElementId))
                     return "Section";
                 
                 return "Chapter";

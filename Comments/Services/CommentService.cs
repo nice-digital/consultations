@@ -3,6 +3,7 @@ using Comments.Models;
 using Comments.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
+using Comments.Common;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Comments.Services
@@ -69,6 +70,7 @@ namespace Comments.Services
 
             
             var locationToSave = new Models.Location(comment as ViewModels.Location);
+            locationToSave.SourceURI = UriHelpers.ConsultationsUri.ConvertToConsultationsUri(comment.SourceURI);
             _context.Location.Add(locationToSave);
             
             var commentToSave = new Models.Comment(comment.LocationId, _currentUser.UserId.Value, comment.CommentText, _currentUser.UserId.Value, locationToSave);
