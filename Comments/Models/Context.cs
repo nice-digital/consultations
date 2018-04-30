@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Comments.Services;
 using Remotion.Linq.Clauses;
+using Comments.Common;
 
 namespace Comments.Models
 {
@@ -33,7 +34,9 @@ namespace Comments.Models
                         .Include(l => l.Question)
                             .ThenInclude(q => q.QuestionType)
                         .Include(l => l.Question)
-                            .ThenInclude(q => q.Answer);
+                            .ThenInclude(q => q.Answer)
+                        .OrderByDescending(l => l.Comment
+                            .OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault()); 
 
             return data;
         }
