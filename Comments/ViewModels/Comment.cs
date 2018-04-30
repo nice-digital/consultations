@@ -28,6 +28,18 @@ namespace Comments.ViewModels
         public Guid LastModifiedByUserId { get; set; }
         public string CommentText { get; set; }
 
-        public string CommentOn => Common.UriHelpers.GetCommentOn(SourceURI, HtmlElementID, RangeStart);
+        private string _commentOn = null;
+        public string CommentOn
+        {
+            get
+            {
+                if (_commentOn == null)
+                {
+                    _commentOn = Common.UriHelpers.GetCommentOn(SourceURI, HtmlElementID, RangeStart);
+                }
+                return _commentOn;
+            }
+            set => _commentOn = value;
+        }
     }
 }

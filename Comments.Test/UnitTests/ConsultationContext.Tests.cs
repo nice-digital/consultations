@@ -15,7 +15,7 @@ namespace Comments.Test.UnitTests
         {
             // Arrange
             ResetDatabase();
-            var sourceURI = "/consultations/1/1/introduction";
+            var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var commentText = Guid.NewGuid().ToString();
             var createdByUserId = Guid.NewGuid();
 
@@ -41,7 +41,7 @@ namespace Comments.Test.UnitTests
         {
             // Arrange
             ResetDatabase();
-            var sourceURI = "/consultations/1/1/introduction";
+            var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var commentText = Guid.NewGuid().ToString();
             var createdByUserId = Guid.NewGuid();
 

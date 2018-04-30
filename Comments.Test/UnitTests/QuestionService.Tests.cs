@@ -15,7 +15,7 @@ namespace Comments.Test.UnitTests
         {
             //Arrange
             ResetDatabase();
-            var sourceUri = "/consultations/1/1/introduction";
+            var sourceUri = "consultations://./consultation/1/document/1/chapter/introduction";
             var description = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
@@ -60,7 +60,7 @@ namespace Comments.Test.UnitTests
         {
             //Arrange
             ResetDatabase();
-            var sourceURI = "/consultations/1/1/introduction";
+            var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var description = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
@@ -90,7 +90,7 @@ namespace Comments.Test.UnitTests
         {
             //Arrange
             ResetDatabase();
-            var sourceURI = "/consultations/1/1/introduction";
+            var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var description = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
@@ -135,7 +135,7 @@ namespace Comments.Test.UnitTests
         {
             //Arrange
             ResetDatabase();
-            var sourceURI = "/consultations/1/1/introduction";
+            var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var description = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;

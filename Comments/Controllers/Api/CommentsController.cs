@@ -24,7 +24,7 @@ namespace Comments.Controllers.Api
         /// <summary>
         /// GET: eg. consultations/api/Comments?sourceURI=%2Fconsultations%2F1%2F1%2Fchapter-slug
         /// </summary>
-        /// <param name="sourceURI"></param>
+        /// <param name="sourceURI">this is really the relativeURL eg "/1/1/introduction"</param>
         /// <returns></returns>
         [HttpGet]
         public CommentsAndQuestions Get(string sourceURI)
@@ -32,7 +32,7 @@ namespace Comments.Controllers.Api
             if (string.IsNullOrWhiteSpace(sourceURI))
                 throw new ArgumentNullException(nameof(sourceURI));
 
-            return _commentService.GetCommentsAndQuestions(sourceURI);
+            return _commentService.GetCommentsAndQuestions(relativeURL: sourceURI);
         }
     }
 }

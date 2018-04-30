@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.ComponentModel;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Comments.Models;
 
 namespace Comments.Common
 {
+    /// <summary>
+    /// TODO: move this stuff around.
+    /// </summary>
     public static class UriHelpers
     {
         public static class ConsultationsUri
@@ -40,7 +40,7 @@ namespace Comments.Common
                 return GetElementsFromRegExGroups(groups);
             }
 
-            public static string ConvertToConsultationsUri(string relativeURL)
+            public static string ConvertToConsultationsUri(string relativeURL, string commentOn)
             {
                 ConsultationsUriElements uriElements;
                 if (relativeURL.StartsWith(Scheme))
@@ -55,6 +55,12 @@ namespace Comments.Common
                 {
                     throw new Exception("Unknown uri format");
                 }
+
+                if (commentOn.Equals(CommentOn.Consultation.Description(), StringComparison.OrdinalIgnoreCase))
+                    return string.Format(ConsultationUriFormat, uriElements.ConsultationId);
+
+                if (commentOn.Equals(CommentOn.Document.Description(), StringComparison.OrdinalIgnoreCase))
+                    return string.Format(DocumentUriFormat, uriElements.ConsultationId, uriElements.DocumentId);
 
                 return string.Format(ChapterUriFormat, uriElements.ConsultationId, uriElements.DocumentId,
                     uriElements.ChapterSlug);
@@ -100,6 +106,15 @@ namespace Comments.Common
             }
         }
 
+        public enum CommentOn
+        {
+            Consultation,
+            Document,
+            Chapter,
+            Section, //aka html element id..?
+            [Description("Text selection")] //this is here due to the space in the name and mixed case.
+            TextSelection
+        }
 
         public static string GetCommentOn(string sourceURI, string rangeStart, string htmlElementId)
         {
@@ -120,20 +135,20 @@ namespace Comments.Common
             if (consultationsUriParts.IsChapterLevel())
             {
                 if (!string.IsNullOrWhiteSpace(rangeStart))
-                    return "Text selection";
+                    return CommentOn.TextSelection.Description();
 
                 if (!string.IsNullOrWhiteSpace(htmlElementId))
-                    return "Section";
+                    return CommentOn.Section.Description();
                 
-                return "Chapter";
+                return CommentOn.Chapter.Description();
 
             }
 
             if (consultationsUriParts.IsDocumentLevel())
-                return "Document";
+                return CommentOn.Document.Description();
 
             if (consultationsUriParts.IsConsultationLevel())
-                return "Consultation";
+                return CommentOn.Consultation.Description();
             
             throw new Exception("Unknown level");
         }

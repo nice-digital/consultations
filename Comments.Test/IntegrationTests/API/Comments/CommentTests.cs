@@ -24,7 +24,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
             //Arrange (in the base constructor for this one.)
 
             // Act
-            var response = await _client.GetAsync("/consultations/api/Comments?sourceURI=a-url-with-no-comments-associated");
+            var response = await _client.GetAsync("/consultations/api/Comments?sourceURI=%2f1%2f1%2fintroduction");
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
 
@@ -33,8 +33,8 @@ namespace Comments.Test.IntegrationTests.API.Comments
         }
 
         [Theory]
-        [InlineData(1, "/1/1/introduction")]
-        [InlineData(int.MaxValue, "/1/1/introduction")]
+        [InlineData(1, "consultations://./consultation/1/document/1/chapter/introduction")]
+        [InlineData(int.MaxValue, "consultations://./consultation/1/document/1/chapter/introduction")]
         public async Task Create_Comment(int locationId, string sourceURI)
         {
             //Arrange
@@ -81,7 +81,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
         {
             //Arrange
             ResetDatabase();
-            string sourceURI = "/1/1/introduction";
+            string sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 
             var locationId = AddLocation(sourceURI);
             AddComment(locationId, "comment text", false, Guid.Empty);
@@ -112,7 +112,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
         {
             // Arrange
             ResetDatabase();
-            const string sourceURI = "/1/2/introduction";
+            const string sourceURI = "consultations://./consultation/1/document/2/chapter/introduction";
             var commentText = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
             var answerText = Guid.NewGuid().ToString();
@@ -121,7 +121,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
             AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId, _context);
 
             // Act
-            var response = await _client.GetAsync($"/consultations/api/Comments?sourceURI={WebUtility.UrlEncode(sourceURI)}");
+            var response = await _client.GetAsync($"/consultations/api/Comments?sourceURI={WebUtility.UrlEncode("/1/2/introduction")}");
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
 
@@ -137,7 +137,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
         {
             //Arrange
             ResetDatabase();
-            const string sourceURI = "/consultations/1/1/introduction";
+            const string sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var commentText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
             var locationId = AddLocation(sourceURI);
@@ -161,7 +161,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
         {
             //Arrange
             ResetDatabase();
-            const string sourceURI = "/1/1/introduction";
+            const string sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var commentText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
             var locationId = AddLocation(sourceURI, _context);

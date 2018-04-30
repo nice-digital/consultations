@@ -10,7 +10,7 @@ namespace Comments.Services
 {
     public interface ICommentService
     {
-        CommentsAndQuestions GetCommentsAndQuestions(string sourceURI);
+        CommentsAndQuestions GetCommentsAndQuestions(string relativeURL);
         (ViewModels.Comment comment, Validate validate) GetComment(int commentId);
         (int rowsUpdated, Validate validate) EditComment(int commentId, ViewModels.Comment comment);
         (ViewModels.Comment comment, Validate validate) CreateComment(ViewModels.Comment comment);
@@ -70,7 +70,7 @@ namespace Comments.Services
 
             
             var locationToSave = new Models.Location(comment as ViewModels.Location);
-            locationToSave.SourceURI = UriHelpers.ConsultationsUri.ConvertToConsultationsUri(comment.SourceURI);
+            locationToSave.SourceURI = UriHelpers.ConsultationsUri.ConvertToConsultationsUri(comment.SourceURI, comment.CommentOn);
             _context.Location.Add(locationToSave);
             
             var commentToSave = new Models.Comment(comment.LocationId, _currentUser.UserId.Value, comment.CommentText, _currentUser.UserId.Value, locationToSave);
@@ -99,18 +99,21 @@ namespace Comments.Services
             return (rowsUpdated: _context.SaveChanges(), validate: null);
         }
 
-        public CommentsAndQuestions GetCommentsAndQuestions(string sourceURI)
+        public CommentsAndQuestions GetCommentsAndQuestions(string relativeURL)
         {
             var user = _userService.GetCurrentUser();
 
             if (!user.IsLoggedIn)
                 return new CommentsAndQuestions(new List<ViewModels.Comment>(), new List<ViewModels.Question>(), user.IsLoggedIn);
 
-            //convert sourceURI into a real source URI here.
+            var sourceURIs = new List<string>
+            {
+                UriHelpers.ConsultationsUri.ConvertToConsultationsUri(relativeURL, UriHelpers.CommentOn.Consultation.Description()),
+                UriHelpers.ConsultationsUri.ConvertToConsultationsUri(relativeURL, UriHelpers.CommentOn.Document.Description()),
+                UriHelpers.ConsultationsUri.ConvertToConsultationsUri(relativeURL, UriHelpers.CommentOn.Chapter.Description())
+            };
 
-
-
-            var locations = _context.GetAllCommentsAndQuestionsForDocument(sourceURI);
+            var locations = _context.GetAllCommentsAndQuestionsForDocument(sourceURIs);
 
             var commentsData = new List<ViewModels.Comment>();
             var questionsData = new List<ViewModels.Question>();

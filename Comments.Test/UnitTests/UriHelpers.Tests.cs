@@ -8,7 +8,7 @@ namespace Comments.Test.UnitTests
     public class UriHelpers : TestBase
     {
         [Theory]
-        [InlineData("/1/1/introduction", null, null, "Chapter")]
+        [InlineData("consultations://./consultation/1/document/1/chapter/introduction", null, null, "Chapter")]
         [InlineData("consultations://./consultation/1/document/1/chapter/introduction", null, null, "Chapter")]
         [InlineData("consultations://./consultation/1/document/1", null, null, "Document")]
         [InlineData("consultations://./consultation/1", null, null, "Consultation")]
@@ -39,11 +39,15 @@ namespace Comments.Test.UnitTests
         }
 
         [Theory]
-        [InlineData("/1/1/introduction", "consultations://./consultation/1/document/1/chapter/introduction")]
-        public void ConvertToConsultationsUri(string relativeURL, string consultationsUri)
+        [InlineData("consultations://./consultation/1/document/1/chapter/introduction", "Consultation", "consultations://./consultation/1")]
+        [InlineData("consultations://./consultation/1/document/1/chapter/introduction", "Document", "consultations://./consultation/1/document/1")]
+        [InlineData("consultations://./consultation/1/document/1/chapter/introduction", "Chapter", "consultations://./consultation/1/document/1/chapter/introduction")]
+        [InlineData("consultations://./consultation/1/document/1/chapter/introduction", "Section", "consultations://./consultation/1/document/1/chapter/introduction")]
+        [InlineData("consultations://./consultation/1/document/1/chapter/introduction", "Text selection", "consultations://./consultation/1/document/1/chapter/introduction")]
+        public void ConvertToConsultationsUri(string relativeURL, string commentOn, string consultationsUri)
         {
             //Arrange + Act
-            var uri = Common.UriHelpers.ConsultationsUri.ConvertToConsultationsUri(relativeURL);
+            var uri = Common.UriHelpers.ConsultationsUri.ConvertToConsultationsUri(relativeURL, commentOn);
 
             //Assert
             uri.ShouldBe(consultationsUri);
