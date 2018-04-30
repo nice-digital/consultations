@@ -23,7 +23,7 @@ namespace Comments.Test.IntegrationTests
         //public async Task Get_React_Document_Page()
         //{
         //    // Act
-        //    var response = await _client.GetAsync("/consultations/1/1/introduction");
+        //    var response = await _client.GetAsync("consultations://./consultation/1/document/1/chapter/introduction");
         //    response.EnsureSuccessStatusCode();
 
         //    var responseString = await response.Content.ReadAsStringAsync();

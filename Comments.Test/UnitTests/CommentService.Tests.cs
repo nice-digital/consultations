@@ -17,7 +17,7 @@ namespace Comments.Test.UnitTests
         {
             // Arrange
             ResetDatabase();
-            var sourceURI = "/consultations/1/1/introduction";
+            var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var commentText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
 
@@ -59,7 +59,7 @@ namespace Comments.Test.UnitTests
         {
             //Arrange
             ResetDatabase();
-            var sourceURI = "/consultations/1/1/introduction";
+            var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var commentText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
 
@@ -86,7 +86,7 @@ namespace Comments.Test.UnitTests
         {
             //Arrange
             ResetDatabase();
-            var sourceURI = "/consultations/1/1/introduction";
+            var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var commentText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
 
@@ -111,7 +111,7 @@ namespace Comments.Test.UnitTests
         {
             //Arrange
             ResetDatabase();
-            var sourceURI = "/consultations/1/1/introduction";
+            var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var locationId = AddLocation(sourceURI);
             var userId = Guid.Empty;
             var commentText = Guid.NewGuid().ToString();
@@ -137,7 +137,7 @@ namespace Comments.Test.UnitTests
             var commentService = new CommentService(new ConsultationsContext(_options, _fakeUserService), FakeUserService.Get(isAuthenticated: false));
 
             // Act
-            var viewModel = commentService.GetCommentsAndQuestions("/consultations/1/1/introduction");
+            var viewModel = commentService.GetCommentsAndQuestions("consultations://./consultation/1/document/1/chapter/introduction");
 
             //Assert
             viewModel.IsAuthenticated.ShouldBeFalse();
@@ -151,7 +151,7 @@ namespace Comments.Test.UnitTests
             // Arrange
             ResetDatabase();
             var userId = Guid.NewGuid();
-            var sourceURI = "/consultations/1/1/introduction";
+            var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
             
             var commentService = new CommentService(new ConsultationsContext(_options, userService), userService);
@@ -162,7 +162,7 @@ namespace Comments.Test.UnitTests
             AddComment(locationId, "current user's deleted comment", isDeleted: true, createdByUserId: userId);
 
             // Act
-            var viewModel = commentService.GetCommentsAndQuestions("/consultations/1/1/introduction");
+            var viewModel = commentService.GetCommentsAndQuestions("consultations://./consultation/1/document/1/chapter/introduction");
 
             //Assert
             viewModel.Comments.Single().CommentId.ShouldBe(expectedCommentId);

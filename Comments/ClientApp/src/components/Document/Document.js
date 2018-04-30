@@ -279,7 +279,8 @@ export class Document extends Component<PropsType, StateType> {
 											this.props.onNewCommentClick({
 												placeholder: "Comment on this whole consultation",
 												sourceURI: this.props.match.url,
-												commentText: ""
+												commentText: "",
+												commentOn: "Consultation"
 											});
 										}}
 									>
@@ -302,7 +303,8 @@ export class Document extends Component<PropsType, StateType> {
 											this.props.onNewCommentClick({
 												placeholder: "Comment on this document",
 												sourceURI: this.props.match.url,
-												commentText: ""
+												commentText: "",
+												commentOn: "Document"
 											});
 										}}
 									>
