@@ -35,7 +35,7 @@ namespace Comments.ViewModels
             {
                 if (_commentOn == null)
                 {
-                    _commentOn = Common.UriHelpers.GetCommentOn(SourceURI, HtmlElementID, RangeStart);
+                    _commentOn = Common.UriHelpers.GetCommentOn(SourceURI, RangeStart, HtmlElementID);
                 }
                 return _commentOn;
             }
