@@ -199,5 +199,67 @@ describe("[ClientApp] ", () => {
 			const wrapper = mount(<CommentList {...fakeProps} />);
 			wrapper.instance().saveCommentHandler(new Event("click"), commentToInsert);
 		});
+
+		it("delete handler called with negative number removes item from array", async () => {
+			mock.reset();
+			mock
+				.onGet(
+					generateUrl("comments", undefined, [], {
+						sourceURI: fakeProps.match.url
+					})
+				)
+				.reply(200, sampleComments);
+
+			const wrapper = mount(<CommentList {...fakeProps} />);
+			await nextTick();
+			wrapper.update();
+
+			const state = wrapper.state();
+			expect(state.comments.length).toEqual(5);
+
+			wrapper.instance().newComment({
+				sourceURI: "/1/1/introduction",
+				commentText: ""
+			});
+			await nextTick();
+			wrapper.update();
+
+			expect(state.comments.length).toEqual(6);
+
+			wrapper.instance().deleteCommentHandler(new Event("click"), -1);
+
+			expect(state.comments.length).toEqual(5);
+		});
+
+		it("delete handler called with positive number hits the correct delete endpoint", async () => {
+			mock.reset();
+			mock
+				.onGet(
+					generateUrl("comments", undefined, [], {
+						sourceURI: fakeProps.match.url
+					})
+				)
+				.reply(200, sampleComments);
+			mock
+				.onDelete(
+					generateUrl("editcomment", undefined, [1004])
+				)
+				.reply(config => {
+					expect(config.url).toEqual("/consultations/api/Comment/1004");
+					return [200, {}];
+				});
+
+			const wrapper = mount(<CommentList {...fakeProps} />);
+			await nextTick();
+			wrapper.update();
+
+			expect(wrapper.state().comments.length).toEqual(5);
+			wrapper.instance().deleteCommentHandler(new Event("click"), 1004);
+
+			await nextTick();
+			wrapper.update();
+			expect(wrapper.state().comments.length).toEqual(4);
+		});
+
 	});
 });
