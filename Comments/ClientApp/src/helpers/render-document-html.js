@@ -21,7 +21,6 @@ export const renderDocumentHtml = (
 			node.attribs &&
 			node.attribs["data-heading-type"] === "section"
 		) {
-
 			const isTypeText = child => child.type === "text";
 
 			const childrenThatHaveTypeOfText = node.children.filter(isTypeText);
@@ -33,6 +32,7 @@ export const renderDocumentHtml = (
 			return (
 				<Fragment key={0}>
 					<button
+						className="document-comment-container__commentButton"
 						tabIndex={0}
 						onClick={e => {
 							e.preventDefault();
@@ -45,7 +45,10 @@ export const renderDocumentHtml = (
 							});
 						}}
 					>
-						Comment on section: {sectionName}
+						<span className="icon icon--comment" aria-hidden="true" />
+						<span className="visually-hidden">
+							Comment on section: {sectionName}
+						</span>
 					</button>
 					{convertNodeToElement(node)}
 				</Fragment>
