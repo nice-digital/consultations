@@ -127,10 +127,10 @@ namespace Comments
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ISeriLogger seriLogger, IApplicationLifetime appLifetime)
         {
             seriLogger.Configure(loggerFactory, Configuration, appLifetime, env);
-
+            
+            app.UseDeveloperExceptionPage();
             if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
+            {                
                 loggerFactory.AddConsole(Configuration.GetSection("Logging"));
                 loggerFactory.AddDebug();
             }
