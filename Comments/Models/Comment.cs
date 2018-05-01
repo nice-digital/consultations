@@ -20,11 +20,11 @@ namespace Comments.Models
         public Comment(ViewModels.Comment comment, Guid createdByUserId) : this(comment.LocationId, createdByUserId, comment.CommentText, comment.LastModifiedByUserId, location: null)
         { }
 
-        public void UpdateFromViewModel(ViewModels.Comment comment, Guid currentUserId)
+        public void UpdateFromViewModel(ViewModels.Comment comment)
         {
             LocationId = comment.LocationId;
-            LastModifiedByUserId = currentUserId;
-            LastModifiedDate = DateTime.UtcNow;
+            LastModifiedByUserId = comment.LastModifiedByUserId;
+            LastModifiedDate = comment.LastModifiedDate;
             CommentText = comment.CommentText ?? throw new ArgumentNullException(nameof(comment.CommentText));
             Location.UpdateFromViewModel(comment as ViewModels.Location);
         }
