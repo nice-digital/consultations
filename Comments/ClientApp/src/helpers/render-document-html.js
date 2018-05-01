@@ -9,14 +9,25 @@ import ReactHtmlParser, { convertNodeToElement } from "react-html-parser";
 export const renderDocumentHtml = (incomingHtml, onNewCommentClick, sourceURI) => {
 
 	function addSectionCommentButtons(node) {
+		// console.log(node);
 		// find the "sections" - anchors with a data-heading-type of "section"
 		// and render them verbatim with a button before them
+
 		if (
 			node.name === "a" &&
 			node.attribs &&
 			node.attribs["data-heading-type"] === "section"
 		) {
-			const sectionName = node.children[0].data;
+			console.log(node);
+
+			const isTypeText = (child) => child.type === "text";
+
+			const childrenThatHaveTypeOfText = node.children.filter(isTypeText);
+
+			const sectionName = childrenThatHaveTypeOfText[0].data;
+
+			const elementId = node.attribs.id;
+
 			return (
 				<Fragment>
 					<button
@@ -28,7 +39,8 @@ export const renderDocumentHtml = (incomingHtml, onNewCommentClick, sourceURI) =
 								placeholder: `Comment on ${sectionName}`,
 								sourceURI: sourceURI,
 								commentText: "",
-								commentOn: "Section"
+								commentOn: "Section",
+								htmlElementID: elementId
 							});
 						}}
 					>
