@@ -28,7 +28,8 @@ export const renderDocumentHtml = (incomingHtml, onNewCommentClick, sourceURI) =
 								placeholder: `Comment on ${sectionName}`,
 								sourceURI: sourceURI,
 								commentText: "",
-								commentOn: "Section"
+								commentOn: "Section",
+								htmlElementID: "todo:some section id"
 							});
 						}}
 					>
