@@ -20,7 +20,7 @@ namespace Comments.Models
         public Comment(ViewModels.Comment comment, Guid createdByUserId) : this(comment.LocationId, createdByUserId, comment.CommentText, comment.LastModifiedByUserId, location: null)
         { }
 
-        public void UpdateFromViewModel(ViewModels.Comment comment, Guid currentUserId)
+        public void UpdateFromViewModel(ViewModels.Comment comment)
         {
             LocationId = comment.LocationId;
             LastModifiedByUserId = comment.LastModifiedByUserId;
