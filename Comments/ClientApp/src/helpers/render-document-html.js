@@ -6,8 +6,11 @@ import ReactHtmlParser, { convertNodeToElement } from "react-html-parser";
 // };
 
 // onNewCommentClick passed through from <Document />
-export const renderDocumentHtml = (incomingHtml, onNewCommentClick, sourceURI) => {
-
+export const renderDocumentHtml = (
+	incomingHtml,
+	onNewCommentClick,
+	sourceURI
+) => {
 	function addSectionCommentButtons(node) {
 		// console.log(node);
 		// find the "sections" - anchors with a data-heading-type of "section"
@@ -18,9 +21,8 @@ export const renderDocumentHtml = (incomingHtml, onNewCommentClick, sourceURI) =
 			node.attribs &&
 			node.attribs["data-heading-type"] === "section"
 		) {
-			console.log(node);
 
-			const isTypeText = (child) => child.type === "text";
+			const isTypeText = child => child.type === "text";
 
 			const childrenThatHaveTypeOfText = node.children.filter(isTypeText);
 
@@ -29,10 +31,9 @@ export const renderDocumentHtml = (incomingHtml, onNewCommentClick, sourceURI) =
 			const elementId = node.attribs.id;
 
 			return (
-				<Fragment>
+				<Fragment key={0}>
 					<button
 						tabIndex={0}
-						href={`${sectionName}`}
 						onClick={e => {
 							e.preventDefault();
 							onNewCommentClick({
@@ -44,9 +45,8 @@ export const renderDocumentHtml = (incomingHtml, onNewCommentClick, sourceURI) =
 							});
 						}}
 					>
-						Comment on section: {`${sectionName}`}
+						Comment on section: {sectionName}
 					</button>
-					{/* this is the original DOM node, rendered */}
 					{convertNodeToElement(node)}
 				</Fragment>
 			);
