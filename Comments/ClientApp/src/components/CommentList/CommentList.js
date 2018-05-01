@@ -139,6 +139,29 @@ export class CommentList extends Component<PropsType, StateType> {
 			});
 	};
 
+	deleteCommentHandler = (e: Event, commentId: number) => {
+		e.preventDefault();
+		if (commentId < 0){
+			this.removeCommentFromState(commentId);
+		} else{
+			//todo: comment needs to be removed from database first., then call removeCommentFromState after that promise is resolved.
+			load("editcomment", undefined, [commentId], {}, "DELETE")
+				.then(res => {
+					//todo: check success
+					this.removeCommentFromState(commentId);
+				})
+				.catch(err => {
+					alert(err.response.statusText);
+				});
+		}
+	}
+
+	removeCommentFromState = (commentId:number) =>{
+		let comments = this.state.comments;
+		comments = comments.filter(comment => comment.commentId != commentId);
+		this.setState({comments});
+	}
+
 	render() {
 		if (this.state.loading) return <p>Loading</p>;
 		if (!this.state.loading && this.state.comments.length === 0)
@@ -158,6 +181,7 @@ export class CommentList extends Component<PropsType, StateType> {
 								key={comment.commentId}
 								comment={comment}
 								saveHandler={this.saveCommentHandler}
+								deleteHandler={this.deleteCommentHandler}
 							/>
 						);
 					})}
