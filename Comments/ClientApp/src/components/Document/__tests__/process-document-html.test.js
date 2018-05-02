@@ -13,7 +13,7 @@ describe("[ClientApp]", () => {
 
 		it("renders a button if the html contains an anchor with a type of 'section'", () => {
 			const wrapper = mount(
-				<Fragment>{processDocumentHtml(html, clickFunction, URI)}</Fragment>
+				<div>{processDocumentHtml(html, clickFunction, URI)}</div>
 			);
 
 			expect(wrapper.find("button").text()).toEqual("Comment on section: Foo");
@@ -21,7 +21,7 @@ describe("[ClientApp]", () => {
 
 		it("fires passed function with expected object", () => {
 			const wrapper = mount(
-				<Fragment>{processDocumentHtml(html, clickFunction, URI)}</Fragment>
+				<div>{processDocumentHtml(html, clickFunction, URI)}</div>
 			);
 
 			wrapper.find("button").simulate("click");
