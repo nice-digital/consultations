@@ -200,7 +200,7 @@ describe("[ClientApp] ", () => {
 			wrapper.instance().saveCommentHandler(new Event("click"), commentToInsert);
 		});
 
-		it("delete handler called with negative number removes item from array", async () => {
+		it.only("delete handler called with negative number removes item from array", async () => {
 			mock.reset();
 			mock
 				.onGet(
@@ -215,12 +215,14 @@ describe("[ClientApp] ", () => {
 			wrapper.update();
 
 			const state = wrapper.state();
+
 			expect(state.comments.length).toEqual(5);
 
 			wrapper.instance().newComment({
 				sourceURI: "/1/1/introduction",
 				commentText: ""
 			});
+
 			await nextTick();
 			wrapper.update();
 
@@ -228,7 +230,9 @@ describe("[ClientApp] ", () => {
 
 			wrapper.instance().deleteCommentHandler(new Event("click"), -1);
 
-			expect(state.comments.length).toEqual(5);
+			const updatedState = wrapper.state();
+
+			expect(updatedState.comments.length).toEqual(5);
 		});
 
 		it("delete handler called with positive number hits the correct delete endpoint", async () => {

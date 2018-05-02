@@ -48,13 +48,19 @@ export class CommentList extends Component<PropsType, StateType> {
 			loading: true
 		};
 		let preloadedData = {};
-		if (this.props.staticContext && this.props.staticContext.preload){
+		if (this.props.staticContext && this.props.staticContext.preload) {
 			preloadedData = this.props.staticContext.preload.data;
 		}
 
-		const preloaded = preload(this.props.staticContext, "comments", [], {
-			sourceURI: this.props.match.url
-		}, preloadedData);
+		const preloaded = preload(
+			this.props.staticContext,
+			"comments",
+			[],
+			{
+				sourceURI: this.props.match.url
+			},
+			preloadedData
+		);
 
 		if (preloaded) {
 			this.state = {
@@ -141,9 +147,9 @@ export class CommentList extends Component<PropsType, StateType> {
 
 	deleteCommentHandler = (e: Event, commentId: number) => {
 		e.preventDefault();
-		if (commentId < 0){
+		if (commentId < 0) {
 			this.removeCommentFromState(commentId);
-		} else{
+		} else {
 			//todo: comment needs to be removed from database first., then call removeCommentFromState after that promise is resolved.
 			load("editcomment", undefined, [commentId], {}, "DELETE")
 				.then(res => {
@@ -154,13 +160,13 @@ export class CommentList extends Component<PropsType, StateType> {
 					alert(err.response.statusText);
 				});
 		}
-	}
+	};
 
-	removeCommentFromState = (commentId:number) =>{
+	removeCommentFromState = (commentId: number) => {
 		let comments = this.state.comments;
-		comments = comments.filter(comment => comment.commentId != commentId);
-		this.setState({comments});
-	}
+		comments = comments.filter(comment => comment.commentId !== commentId);
+		this.setState({ comments });
+	};
 
 	render() {
 		if (this.state.loading) return <p>Loading</p>;
