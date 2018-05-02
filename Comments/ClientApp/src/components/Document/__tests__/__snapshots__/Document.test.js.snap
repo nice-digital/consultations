@@ -429,6 +429,24 @@ Array [
                             <h2
                                 className="title"
                             >
+                                <button
+                                    className="document-comment-container__commentButton"
+                                    onClick={[Function]}
+                                    tabIndex={0}
+                                >
+                                    <span
+                                        aria-hidden="true"
+                                        className="icon icon--comment"
+                                    />
+                                    <span
+                                        className="visually-hidden"
+                                    >
+                                        Comment on 
+                                        chapter
+                                        : 
+                                        Introduction 
+                                    </span>
+                                </button>
                                 <a
                                     className="annotator-chapter"
                                     data-heading-type="chapter"

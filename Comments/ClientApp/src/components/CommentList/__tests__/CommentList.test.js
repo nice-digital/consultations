@@ -200,7 +200,7 @@ describe("[ClientApp] ", () => {
 			wrapper.instance().saveCommentHandler(new Event("click"), commentToInsert);
 		});
 
-		it.only("delete handler called with negative number removes item from array", async () => {
+		it("delete handler called with negative number removes item from array", async () => {
 			mock.reset();
 			mock
 				.onGet(
