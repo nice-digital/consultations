@@ -18,6 +18,7 @@ $nice-font-base-path: "fonts/";
   border: 2px solid black;
 }
 
+// Applied to <button />s that we don't want to have styling
 %unstyled-button {
   position: absolute;
   border: none;

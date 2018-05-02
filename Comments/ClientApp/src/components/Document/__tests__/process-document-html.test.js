@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import { renderDocumentHtml } from "../render-document-html";
+import { processDocumentHtml } from "../process-document-html";
 import React, { Fragment } from "react";
 import { mount } from "enzyme";
 
@@ -13,7 +13,7 @@ describe("[ClientApp]", () => {
 
 		it("renders a button if the html contains an anchor with a type of 'section'", () => {
 			const wrapper = mount(
-				<Fragment>{renderDocumentHtml(html, clickFunction, URI)}</Fragment>
+				<Fragment>{processDocumentHtml(html, clickFunction, URI)}</Fragment>
 			);
 
 			expect(wrapper.find("button").text()).toEqual("Comment on section: Foo");
@@ -21,7 +21,7 @@ describe("[ClientApp]", () => {
 
 		it("fires passed function with expected object", () => {
 			const wrapper = mount(
-				<Fragment>{renderDocumentHtml(html, clickFunction, URI)}</Fragment>
+				<Fragment>{processDocumentHtml(html, clickFunction, URI)}</Fragment>
 			);
 
 			wrapper.find("button").simulate("click");

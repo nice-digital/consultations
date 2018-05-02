@@ -77,7 +77,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 								value={commentText}
 							/>
 						</div>
-						{this.state.comment.commentText.length > 0 && (
+						{this.state.comment.commentText && this.state.comment.commentText.length > 0 && (
 							<input
 								tabIndex={tabIndex}
 								className="btn ml--0"

@@ -6,7 +6,7 @@ import ReactHtmlParser, { convertNodeToElement } from "react-html-parser";
 // };
 
 // onNewCommentClick passed through from <Document />
-export const renderDocumentHtml = (
+export const processDocumentHtml = (
 	incomingHtml,
 	onNewCommentClick,
 	sourceURI

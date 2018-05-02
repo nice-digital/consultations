@@ -14,7 +14,7 @@ import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
 import { projectInformation } from "../../constants";
-import { renderDocumentHtml } from "../../helpers/render-document-html";
+import { processDocumentHtml } from "./process-document-html";
 
 type PropsType = {
 	staticContext?: any,
@@ -332,7 +332,7 @@ export class Document extends Component<PropsType, StateType> {
 											this.state.loading ? "loading" : ""
 										}`}
 									>
-										{renderDocumentHtml(
+										{processDocumentHtml(
 											content,
 											this.props.onNewCommentClick,
 											this.props.match.url
