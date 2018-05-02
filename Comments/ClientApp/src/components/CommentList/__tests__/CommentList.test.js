@@ -211,6 +211,7 @@ describe("[ClientApp] ", () => {
 				.reply(200, sampleComments);
 
 			const wrapper = mount(<CommentList {...fakeProps} />);
+
 			await nextTick();
 			wrapper.update();
 
@@ -222,9 +223,6 @@ describe("[ClientApp] ", () => {
 				sourceURI: "/1/1/introduction",
 				commentText: ""
 			});
-
-			await nextTick();
-			wrapper.update();
 
 			expect(state.comments.length).toEqual(6);
 
