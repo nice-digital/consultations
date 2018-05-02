@@ -230,7 +230,7 @@ describe("[ClientApp] ", () => {
 
 			const updatedState = wrapper.state();
 
-			expect(updatedState.comments.length).toEqual(5);
+			expect(wrapper.state().comments.length).toEqual(5);
 		});
 
 		it("delete handler called with positive number hits the correct delete endpoint", async () => {
