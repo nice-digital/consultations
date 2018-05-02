@@ -150,14 +150,15 @@ export class CommentList extends Component<PropsType, StateType> {
 		if (commentId < 0) {
 			this.removeCommentFromState(commentId);
 		} else {
-			//todo: comment needs to be removed from database first., then call removeCommentFromState after that promise is resolved.
 			load("editcomment", undefined, [commentId], {}, "DELETE")
 				.then(res => {
-					//todo: check success
-					this.removeCommentFromState(commentId);
+					if(res.status === 200){
+						this.removeCommentFromState(commentId);
+					}
 				})
 				.catch(err => {
-					alert(err.response.statusText);
+					console.log(err);
+					if (err.response) alert(err.response.statusText);
 				});
 		}
 	};
