@@ -31,3 +31,10 @@ services:
     build: .
     links:
       - hub
+  dotnet:
+    image: microsoft/dotnet:2.0-runtime
+    container_name: dotnet
+    ports:
+      - "8080:8080"
+    expose: 
+      - "8080"
