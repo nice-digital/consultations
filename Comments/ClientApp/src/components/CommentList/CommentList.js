@@ -126,19 +126,18 @@ export class CommentList extends Component<PropsType, StateType> {
 
 		load(endpointName, undefined, urlParameters, {}, method, comment, true)
 			.then(res => {
-				//todo: check success
-
-				//console.log(res);
-				const index = this.state.comments
-					.map(function(comment) {
-						return comment.commentId;
-					})
-					.indexOf(comment.commentId);
-				const comments = this.state.comments;
-				comments[index] = res.data;
-				this.setState({
-					comments
-				});
+				if (res.status === 201) {
+					const index = this.state.comments
+						.map(function(comment) {
+							return comment.commentId;
+						})
+						.indexOf(comment.commentId);
+					const comments = this.state.comments;
+					comments[index] = res.data;
+					this.setState({
+						comments
+					});
+				}
 			})
 			.catch(err => {
 				alert(err.response.statusText);
@@ -152,7 +151,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		} else {
 			load("editcomment", undefined, [commentId], {}, "DELETE")
 				.then(res => {
-					if(res.status === 200){
+					if (res.status === 200) {
 						this.removeCommentFromState(commentId);
 					}
 				})

@@ -1,4 +1,4 @@
-// TODO: consider feeding these changes back to the design system
+// todo: Styling to promote to the design system
 
 [data-g] {
   position: static;
@@ -7,6 +7,12 @@
 .grid {
   letter-spacing: 0;
   position: relative;
+}
+
+%unstyled-button {
+  position: absolute;
+  border: none;
+  background: none;
 }
 
 // ------------------------------------------------ //

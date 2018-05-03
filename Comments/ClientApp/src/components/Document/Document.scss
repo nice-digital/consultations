@@ -1,6 +1,5 @@
 .document-comment-container {
   &__commentButton {
-    // todo: move "unstyled button" to design system
     margin-left: rem(-42px);
     @extend %unstyled-button;
   }
