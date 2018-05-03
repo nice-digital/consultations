@@ -69,9 +69,11 @@
   "react-router-hash-link": "^1.2.0",
   "react-scripts": "1.1.4",
   "react-scrollspy": "^3.3.5",
+  "react-selection": "^0.1.0",
   "react-sticky": "^6.0.1",
   "rimraf": "^2.6.2",
-  "stringify-object": "^3.2.2"
+  "stringify-object": "^3.2.2",
+  "xpath-range": "0.0.5"
  },
  "proxy": "https://test.nice.org.uk"
 }
