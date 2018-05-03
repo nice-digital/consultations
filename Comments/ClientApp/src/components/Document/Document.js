@@ -251,7 +251,7 @@ export class Document extends Component<PropsType, StateType> {
 		const { sections, content } = this.state.chapterData;
 		const consultationId = parseInt(this.props.match.params.consultationId, 0);
 		const documentId = parseInt(this.props.match.params.documentId, 0);
-
+		
 		return (
 			<Fragment>
 				<Helmet>
@@ -333,7 +333,7 @@ export class Document extends Component<PropsType, StateType> {
 										className={`document-comment-container ${
 											this.state.loading ? "loading" : ""
 										}`}>	
-										<Selection>
+										<Selection newCommentFunc={this.props.onNewCommentClick}>
 											{processDocumentHtml(
 												content,
 												this.props.onNewCommentClick,

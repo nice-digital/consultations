@@ -2,16 +2,15 @@ import React, { Component } from "react";
 import xpathRange from "xpath-range";
 
 type PropsType = {
-	
+	newCommentFunc: Function
 };
 
-type StateType = {
-	
+type StateType = {	
 };
 
 export class Selection extends Component<PropsType, StateType> {
-	constructor() {
-		super();
+	constructor(props: PropsType) {
+		super(props);
 		this.state = {
 		};
 	}
@@ -66,13 +65,15 @@ export class Selection extends Component<PropsType, StateType> {
 				rangeEndOffset: firstRange.endOffset };
 
 			console.log(comment);
+			console.log(this.props.newCommentFunc);
+			this.props.newCommentFunc(comment);
 		}		
 	}	
 
 	// trim strips whitespace from either end of a string.
 	//
 	// This usually exists in native code, but not in IE8.
-	trim(s: string) {
+	trim = (s: string) => {
 		if (typeof String.prototype.trim === "function") {
 			return String.prototype.trim.call(s);
 		} else {
@@ -80,10 +81,7 @@ export class Selection extends Component<PropsType, StateType> {
 		}
 	}
 
-	
-
 	render() {
-		
 		return (
 			<span onMouseUp={this.onMouseUp}>
 				{this.props.children}
