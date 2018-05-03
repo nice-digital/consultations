@@ -1,0 +1,9 @@
+.stacked-nav {
+  &__root {
+    color: $colour-text;
+    display: block;
+    padding: 0.5em;
+    position: relative;
+    text-decoration: none;
+  }
+}

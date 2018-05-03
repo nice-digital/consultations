@@ -245,9 +245,10 @@ netcoreapp2.0/*
 ClientApp/public/*.css
 ClientApp/public/*.css.map
 /.idea/.idea.Consultations
+.idea/
 /ConsultationsDatabase/ConsultationsDatabase.refactorlog
 *.jfm
 *.orig
 .DS_Store
 /Comments/Serilog-*.json
-published-app
+/Comments/ClientApp/.idea.bak

@@ -1,8 +1,12 @@
+import "core-js/es6/map";
+import "core-js/es6/set";
+import "raf/polyfill";
+
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 
-import registerServiceWorker from "./registerServiceWorker";
+// import registerServiceWorker from "./registerServiceWorker";
 
 import App from "./components/App/App";
 
@@ -16,4 +20,4 @@ ReactDOM.hydrate(
 	rootElement
 );
 
-registerServiceWorker();
+// registerServiceWorker();

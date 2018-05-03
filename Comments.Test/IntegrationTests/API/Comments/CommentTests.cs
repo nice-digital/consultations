@@ -2,8 +2,11 @@
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
+using Comments.Models;
+using Comments.Services;
 using Comments.Test.Infrastructure;
 using Comments.ViewModels;
 using Newtonsoft.Json;
@@ -21,7 +24,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
             //Arrange (in the base constructor for this one.)
 
             // Act
-            var response = await _client.GetAsync("/consultations/api/Comments?sourceURI=a-url-with-no-comments-associated");
+            var response = await _client.GetAsync("/consultations/api/Comments?sourceURI=%2f1%2f1%2fintroduction");
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
 
@@ -30,10 +33,8 @@ namespace Comments.Test.IntegrationTests.API.Comments
         }
 
         [Theory]
-        [InlineData(1, null)]
-        [InlineData(1, "/some-url")]
-        [InlineData(int.MaxValue, null)]
-        [InlineData(int.MaxValue, "/some-url")]
+        [InlineData(1, "consultations://./consultation/1/document/1/chapter/introduction")]
+        [InlineData(int.MaxValue, "consultations://./consultation/1/document/1/chapter/introduction")]
         public async Task Create_Comment(int locationId, string sourceURI)
         {
             //Arrange
@@ -51,56 +52,139 @@ namespace Comments.Test.IntegrationTests.API.Comments
             deserialisedComment.CommentId.ShouldBeGreaterThan(0);
         }
 
+        [Theory]
+        [InlineData(1, null)]
+        [InlineData(int.MaxValue, null)]
+        public async Task Comment_ViewModel_Fails_To_Serialise_With_Invalid_SourceURI(int locationId, string sourceURI)
+        {
+            //Arrange
+            var comment = new ViewModels.Comment(locationId, sourceURI, null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty, "comment text");
+            Exception _ex = null;
+
+            // Act
+            try
+            {
+                new StringContent(JsonConvert.SerializeObject(comment), Encoding.UTF8, "application/json");
+            }
+            catch (Exception ex)
+            {
+                _ex = ex;
+            }
+            
+            // Assert
+            _ex.ShouldNotBeNull();
+            _ex.Message.ShouldBe("Error getting value from 'CommentOn' on 'Comments.ViewModels.Comment'.");
+        }
+
         [Fact]
         public async Task Insert_Multiple_Comments_And_Read_Them()
         {
             //Arrange
             ResetDatabase();
-            const int locationId = 1;
-            const string sourceURI = "/consultations/1/1/introduction";
-            await Create_Comment(locationId, sourceURI);
-            await Create_Comment(locationId, sourceURI); //duplicate comment. totally valid.
-            await Create_Comment(2, sourceURI); //different location id, this should be in the result set
-            //await Create_Comment(locationId, sourceURI); //different consultation id, this shouldn't be in the result set
-            //await Create_Comment(locationId, sourceURI); //different document id, this shouldn't be in the result set
+            string sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 
+            var locationId = AddLocation(sourceURI);
+            AddComment(locationId, "comment text", false, Guid.Empty);
+            AddComment(locationId, "comment text", false, Guid.Empty); //duplicate comment. totally valid.
+
+            locationId = AddLocation(sourceURI);
+            AddComment(locationId, "comment text", false, Guid.Empty); //different location id, same sourceURI, this should be in the result set
+            
+            locationId = AddLocation("/2/1/introduction");
+            AddComment(locationId, "comment text", false, Guid.Empty); //different consultation id, this shouldn't be in the result set
+            
+            locationId = AddLocation("/1/2/introduction");
+            AddComment(locationId, "comment text", false, Guid.Empty); //different document id, this shouldn't be in the result set
+            
             // Act
             var response = await _client.GetAsync($"/consultations/api/Comments?sourceURI={WebUtility.UrlEncode(sourceURI)}");
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
 
             // Assert
-            responseString.ShouldMatchApproved();
+            responseString.ShouldMatchApproved(new Func<string, string>[]{Scrubbers.ScrubLastModifiedDate});
             var deserialisedResponse = JsonConvert.DeserializeObject<CommentsAndQuestions>(responseString);
             deserialisedResponse.Comments.Count().ShouldBe(3);
         }
 
-        //[Fact]
-        //public async Task Get_Comments_Feed_Returns_Populated_Feed()
-        //{
-        //    // Arrange
-        //    ResetDatabase();
-        //    var consultationId = 1;
-        //    var documentId = 2;
-        //    var commentText = Guid.NewGuid().ToString();
-        //    var questionText = Guid.NewGuid().ToString();
-        //    var answerText = Guid.NewGuid().ToString();
+        [Fact]
+        public async Task Get_Comments_Feed_Returns_Populated_Feed()
+        {
+            // Arrange
+            ResetDatabase();
+            const string sourceURI = "consultations://./consultation/1/document/2/chapter/introduction";
+            var commentText = Guid.NewGuid().ToString();
+            var questionText = Guid.NewGuid().ToString();
+            var answerText = Guid.NewGuid().ToString();
+            var userId = Guid.NewGuid();
+           
+            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId, _context);
 
-        //    AddCommentsAndQuestionsAndAnswers(consultationId, documentId, commentText, questionText, answerText);
-            
-        //    // Act
-        //    var response = await _client.GetAsync($"/consultations/api/Comments?consultationId={consultationId}&documentId={documentId}&chapterSlug=introduction");
-        //    response.EnsureSuccessStatusCode();
-        //    var responseString = await response.Content.ReadAsStringAsync();
+            // Act
+            var response = await _client.GetAsync($"/consultations/api/Comments?sourceURI={WebUtility.UrlEncode("/1/2/introduction")}");
+            response.EnsureSuccessStatusCode();
+            var responseString = await response.Content.ReadAsStringAsync();
 
-        //    // Assert
-        //    responseString.ShouldMatchApproved();
-        //    //todo: get the below all working:
+            // Assert
+            var deserialisedResponse = JsonConvert.DeserializeObject<CommentsAndQuestions>(responseString);
+            deserialisedResponse.Comments.Single().CommentText.ShouldBe(commentText);
+            deserialisedResponse.Questions.Single().QuestionText.ShouldBe(questionText);
+            deserialisedResponse.Questions.Single().Answers.Single().AnswerText.ShouldBe(answerText);
+        }
 
-        //    //var deserialisedResponse = JsonConvert.DeserializeObject<CommentsAndQuestions>(responseString);
-        //    //deserialisedResponse.Comments.Single().CommentText.ShouldBe(commentText);
-        //    //deserialisedResponse.Questions.Single().QuestionText.ShouldBe(questionText);
-        //    //deserialisedResponse.Questions.Single().Answers.Single().AnswerText.ShouldBe(answerText);
-        //}
+        [Fact]
+        public async Task Delete_Comment()
+        {
+            //Arrange
+            ResetDatabase();
+            const string sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+            var commentText = Guid.NewGuid().ToString();
+            var userId = Guid.Empty;
+            var locationId = AddLocation(sourceURI);
+            var commentId = AddComment(locationId, commentText, false, userId);
+
+            var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService);
+
+            //Act
+            var response = await _client.DeleteAsync($"consultations/api/Comment/{commentId}");
+            response.EnsureSuccessStatusCode();
+
+            var result = commentService.GetComment(commentId);
+
+            //Assert
+            result.validate.NotFound.ShouldBeTrue();
+        }
+
+        [Fact]
+        public async Task Edit_Comment()
+        {
+            //Arrange
+            ResetDatabase();
+            const string sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+            var commentText = Guid.NewGuid().ToString();
+            var userId = Guid.Empty;
+            var locationId = AddLocation(sourceURI, _context);
+            var commentId = AddComment(locationId, commentText, false, userId, _context);
+
+            var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+            var commentService = new CommentService(_context, userService);
+
+            var viewModel = commentService.GetComment(commentId);
+
+            var updatedCommentText = Guid.NewGuid().ToString();
+            viewModel.comment.CommentText = updatedCommentText;
+
+            var content = new StringContent(JsonConvert.SerializeObject(viewModel.comment), Encoding.UTF8, "application/json");
+
+            //Act
+            var response = await _client.PutAsync($"consultations/api/Comment/{commentId}", content);
+            response.EnsureSuccessStatusCode();
+            var responseString = await response.Content.ReadAsStringAsync();
+            var result = commentService.GetComment(commentId);
+
+            //Assert
+            result.comment.CommentText.ShouldBe(updatedCommentText);
+        }
     }
 }

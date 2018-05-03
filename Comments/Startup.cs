@@ -12,12 +12,18 @@ using NICE.Feeds;
 using System;
 using System.IO;
 using System.Net.Http;
+using Comments.Auth;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
 using Microsoft.AspNetCore.StaticFiles.Infrastructure;
 using Microsoft.AspNetCore.SpaServices;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using NICE.Auth.NetCore.Services;
 using NICE.Feeds.Configuration;
+using System.Collections.Generic;
 
 namespace Comments
 {
@@ -36,21 +42,50 @@ namespace Comments
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            if (Environment.IsDevelopment())
+            {
+                AppSettings.Configure(services, Configuration, @"c:\"); 
+            }
+            else
+            {
+                AppSettings.Configure(services, Configuration, Environment.ContentRootPath);
+            }
+
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.TryAddSingleton<ISeriLogger, SeriLogger>();
+            services.TryAddSingleton<IAuthenticateService, AuthService>();
+            services.TryAddTransient<IUserService, UserService>();
+
+            var contextOptionsBuilder = new DbContextOptionsBuilder<ConsultationsContext>();
+            //contextOptionsBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            services.TryAddSingleton<IDbContextOptionsBuilderInfrastructure>(contextOptionsBuilder);
+
             services.AddDbContext<ConsultationsContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.TryAddTransient<ICommentService, CommentService>();
+            services.TryAddTransient<IConsultationService, ConsultationService>();
+            
+            services.TryAddTransient<IFeedReaderService>(provider => new FeedReaderService(new RemoteSystemReader(null), AppSettings.Feed));
+            services.TryAddTransient<IFeedConverterService, FeedConverterService>();
+            services.TryAddTransient<IAnswerService, AnswerService>();
+            services.TryAddTransient<IQuestionService, QuestionService>();
+            
+            // Add authentication 
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = AuthOptions.DefaultScheme;
+                options.DefaultChallengeScheme = AuthOptions.DefaultScheme;
+            })
+            .AddNICEAuth(options =>
+            {
+                // todo: Configure options here from AppSettings
+            });
 
             services.AddMvc(options =>
             {
                 options.Filters.Add(new ResponseCacheAttribute() { NoStore = true, Location = ResponseCacheLocation.None });
             });
-
-            AppSettings.Configure(services, Configuration);
-            services.TryAddSingleton<ISeriLogger, SeriLogger>();
-            services.TryAddTransient<ICommentService, CommentService>();
-            services.TryAddTransient<IConsultationService, ConsultationService>();
-            services.TryAddTransient<IFeedReaderService>(provider => new FeedReaderService(new RemoteSystemReader(null), AppSettings.Feed)); 
-            services.TryAddTransient<IFeedConverterService, FeedConverterService>(); 
-            
 
             // In production, static files are served from the pre-built files, rather than proxied via react dev server
             services.AddSpaStaticFiles(configuration =>
@@ -85,10 +120,8 @@ namespace Comments
                         .AllowCredentials());
             }); //adding CORS for Warren. todo: maybe move this into the isDevelopment block..
             
-            // services.AddOptions();
+            services.AddOptions();
         }
-
-
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ISeriLogger seriLogger, IApplicationLifetime appLifetime)
@@ -127,6 +160,7 @@ namespace Comments
                 });
             }
 
+            app.UseAuthentication();
             app.UseSpaStaticFiles(new StaticFileOptions { RequestPath = "/consultations" });
 
             
@@ -168,12 +202,22 @@ namespace Comments
 
                 spa.UseSpaPrerendering(options =>
                 {
+
+                    
+
                     options.ExcludeUrls = new[] { "/sockjs-node" };
                     // Pass data in from .NET into the SSR. These come through as `params` within `createServerRenderer` within the server side JS code.
                     // See https://docs.microsoft.com/en-us/aspnet/core/spa/angular?tabs=visual-studio#pass-data-from-net-code-into-typescript-code
                     options.SupplyData = (context, data) =>
                     {
                         data["isHttpsRequest"] = context.Request.IsHttps;
+                        //data["cookies"] = new Dictionary<string, string>{{NICE.Auth.NetCore.Helpers.Constants.DefaultCookieName, context.Request.Cookies[NICE.Auth.NetCore.Helpers.Constants.DefaultCookieName] }};
+                        var cookieForSSR = context.Request.Cookies[NICE.Auth.NetCore.Helpers.Constants.DefaultCookieName];
+                        if (cookieForSSR != null)
+                        {
+                            data["cookies"] = $"{NICE.Auth.NetCore.Helpers.Constants.DefaultCookieName}={cookieForSSR}";
+                        }
+                        //data["user"] = context.User; - possible security implications here, surfacing claims to the front end. might be ok, if just server-side.
                         // Pass further data in e.g. user/authentication data
                     };
                     options.BootModulePath = $"{spa.Options.SourcePath}/src/server/index.js";

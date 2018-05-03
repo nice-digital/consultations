@@ -1,14 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Linq;
+using Comments.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace Comments.Models
 {
     public partial class ConsultationsContext : DbContext
     {
+        private readonly IUserService _userService;
         public virtual DbSet<Answer> Answer { get; set; }
         public virtual DbSet<Comment> Comment { get; set; }
         public virtual DbSet<Location> Location { get; set; }
         public virtual DbSet<Question> Question { get; set; }
         public virtual DbSet<QuestionType> QuestionType { get; set; }
+
+        private Guid? _createdByUserID;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -18,11 +24,13 @@ namespace Comments.Models
 
                 entity.Property(e => e.CreatedByUserId).HasColumnName("CreatedByUserID");
 
-                entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
+                //entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.CreatedDate).HasDefaultValueSql("date('now')");
 
                 entity.Property(e => e.LastModifiedByUserId).HasColumnName("LastModifiedByUserID");
 
-                entity.Property(e => e.LastModifiedDate).HasDefaultValueSql("(getdate())");
+                //entity.Property(e => e.LastModifiedDate).HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.LastModifiedDate).HasDefaultValueSql("date('now')");
 
                 entity.Property(e => e.QuestionId).HasColumnName("QuestionID");
 
@@ -32,7 +40,9 @@ namespace Comments.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Answer_Question");
 
-                entity.HasQueryFilter(e => !e.IsDeleted); //JW. automatically filter out deleted rows. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
+                //JW. automatically filter out deleted rows and other people's comments. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
+                //note: only 1 filter is supported. you must combine the logic into one expression.
+                entity.HasQueryFilter(c => !c.IsDeleted && c.CreatedByUserId == _createdByUserID);
             });
 
             modelBuilder.Entity<Comment>(entity =>
@@ -43,11 +53,13 @@ namespace Comments.Models
 
                 entity.Property(e => e.CreatedByUserId).HasColumnName("CreatedByUserID");
 
-                entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
+                //entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.CreatedDate).HasDefaultValueSql("date('now')");
 
                 entity.Property(e => e.LastModifiedByUserId).HasColumnName("LastModifiedByUserID");
 
-                entity.Property(e => e.LastModifiedDate).HasDefaultValueSql("(getdate())");
+                //entity.Property(e => e.LastModifiedDate).HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.LastModifiedDate).HasDefaultValueSql("date('now')");
 
                 entity.Property(e => e.LocationId).HasColumnName("LocationID");
 
@@ -57,7 +69,9 @@ namespace Comments.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Comment_Location");
 
-                entity.HasQueryFilter(e => !e.IsDeleted); //JW. automatically filter out deleted rows. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
+                //JW. automatically filter out deleted rows and other people's comments. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
+                //note: only 1 filter is supported. you must combine the logic into one expression.
+                entity.HasQueryFilter(c => !c.IsDeleted && c.CreatedByUserId == _createdByUserID); 
             });
 
             modelBuilder.Entity<Location>(entity =>
@@ -74,7 +88,8 @@ namespace Comments.Models
 
                 entity.Property(e => e.CreatedByUserId).HasColumnName("CreatedByUserID");
 
-                entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
+                //entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.CreatedDate).HasDefaultValueSql("date('now')");
 
                 entity.Property(e => e.LastModifiedByUserId).HasColumnName("LastModifiedByUserID");
 

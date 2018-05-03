@@ -1,4 +1,6 @@
 ﻿using Comments.Services;
+using Comments.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -6,7 +8,8 @@ namespace Comments.Controllers.Api
 {
     [Produces("application/json")]
     [Route("consultations/api/[controller]")]
-    public class CommentController : Controller
+    [Authorize]
+    public class CommentController : ControllerBase
     {
         private readonly ICommentService _commentService;
         private readonly ILogger<CommentsController> _logger;
@@ -26,14 +29,10 @@ namespace Comments.Controllers.Api
                 return BadRequest(ModelState);
             }
 
-            var comment = _commentService.GetComment(commentId);
+            var result = _commentService.GetComment(commentId);
 
-            if (comment == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(comment);
+            var invalidResult = Validate(result.validate, _logger);
+            return invalidResult ?? Ok(result.comment);
         }
 
         // PUT: consultations/api/Comment/5
@@ -50,14 +49,10 @@ namespace Comments.Controllers.Api
                 return BadRequest();
             }
 
-            var rowsUpdated = _commentService.EditComment(commentId, comment);
+            var result = _commentService.EditComment(commentId, comment);
+            var invalidResult = Validate(result.validate, _logger);
 
-            if (rowsUpdated > 0)
-            {
-                return NoContent();
-            }
-
-            return NotFound();
+            return invalidResult ?? Ok(comment);
         }
 
         // POST: consultations/api/Comment
@@ -69,9 +64,10 @@ namespace Comments.Controllers.Api
                 return BadRequest(ModelState);
             }
 
-            var savedComment = _commentService.CreateComment(comment);
+            var result = _commentService.CreateComment(comment);
+            var invalidResult = Validate(result.validate, _logger);
 
-            return CreatedAtAction("GetComment", new { id = savedComment.CommentId }, savedComment);
+            return invalidResult ?? CreatedAtAction("GetComment", new { id = result.comment.CommentId }, result.comment);
         }
 
         // DELETE: consultations/api/Comment/5
@@ -83,14 +79,10 @@ namespace Comments.Controllers.Api
                 return BadRequest(ModelState);
             }
 
-            var rowsUpdated = _commentService.DeleteComment(commentId);
-            
-            if (rowsUpdated < 1)
-            {
-                return NotFound();
-            }
+            var result = _commentService.DeleteComment(commentId);
+            var invalidResult = Validate(result.validate, _logger);
 
-            return Ok();
+            return invalidResult ?? Ok(result.rowsUpdated);
         }
     }
 }

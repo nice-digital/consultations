@@ -4,10 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
-using ConsultationsContext = Comments.Models.ConsultationsContext;
 
 namespace Comments.Migrations
 {
@@ -18,25 +15,192 @@ namespace Comments.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.0-rtm-26452")
+                .HasAnnotation("ProductVersion", "2.0.2-rtm-10011")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Comments.Models.Consultation", b =>
+            modelBuilder.Entity("Comments.Models.Answer", b =>
                 {
-                    b.Property<int>("ConsultationId")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("AnswerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("AnswerID");
 
-                    b.Property<DateTime>("EndDate");
+                    b.Property<bool?>("AnswerBoolean");
 
-                    b.Property<string>("GuidanceReference");
+                    b.Property<string>("AnswerText");
 
-                    b.Property<DateTime>("StartDate");
+                    b.Property<Guid>("CreatedByUserId")
+                        .HasColumnName("CreatedByUserID");
 
-                    b.Property<string>("Title");
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("(getdate())");
 
-                    b.HasKey("ConsultationId");
+                    b.Property<bool>("IsDeleted");
 
-                    b.ToTable("Consultations");
+                    b.Property<Guid>("LastModifiedByUserId")
+                        .HasColumnName("LastModifiedByUserID");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnName("QuestionID");
+
+                    b.HasKey("AnswerId");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("Answer");
+                });
+
+            modelBuilder.Entity("Comments.Models.Comment", b =>
+                {
+                    b.Property<int>("CommentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("CommentID");
+
+                    b.Property<string>("CommentText")
+                        .IsRequired();
+
+                    b.Property<Guid>("CreatedByUserId")
+                        .HasColumnName("CreatedByUserID");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<Guid>("LastModifiedByUserId")
+                        .HasColumnName("LastModifiedByUserID");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<int>("LocationId")
+                        .HasColumnName("LocationID");
+
+                    b.HasKey("CommentId");
+
+                    b.HasIndex("LocationId");
+
+                    b.ToTable("Comment");
+                });
+
+            modelBuilder.Entity("Comments.Models.Location", b =>
+                {
+                    b.Property<int>("LocationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("LocationID");
+
+                    b.Property<string>("HtmlElementID");
+
+                    b.Property<string>("Quote");
+
+                    b.Property<string>("RangeEnd");
+
+                    b.Property<int?>("RangeEndOffset");
+
+                    b.Property<string>("RangeStart");
+
+                    b.Property<int?>("RangeStartOffset");
+
+                    b.Property<string>("SourceURI")
+                        .HasColumnName("SourceURI");
+
+                    b.HasKey("LocationId");
+
+                    b.ToTable("Location");
+                });
+
+            modelBuilder.Entity("Comments.Models.Question", b =>
+                {
+                    b.Property<int>("QuestionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("QuestionID");
+
+                    b.Property<Guid>("CreatedByUserId")
+                        .HasColumnName("CreatedByUserID");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<Guid>("LastModifiedByUserId")
+                        .HasColumnName("LastModifiedByUserID");
+
+                    b.Property<DateTime>("LastModifiedDate");
+
+                    b.Property<int>("LocationId")
+                        .HasColumnName("LocationID");
+
+                    b.Property<byte?>("QuestionOrder");
+
+                    b.Property<string>("QuestionText")
+                        .IsRequired();
+
+                    b.Property<int>("QuestionTypeId")
+                        .HasColumnName("QuestionTypeID");
+
+                    b.HasKey("QuestionId");
+
+                    b.HasIndex("LocationId");
+
+                    b.HasIndex("QuestionTypeId");
+
+                    b.ToTable("Question");
+                });
+
+            modelBuilder.Entity("Comments.Models.QuestionType", b =>
+                {
+                    b.Property<int>("QuestionTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("QuestionTypeID");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<bool>("HasBooleanAnswer");
+
+                    b.Property<bool>("HasTextAnswer");
+
+                    b.HasKey("QuestionTypeId");
+
+                    b.ToTable("QuestionType");
+                });
+
+            modelBuilder.Entity("Comments.Models.Answer", b =>
+                {
+                    b.HasOne("Comments.Models.Question", "Question")
+                        .WithMany("Answer")
+                        .HasForeignKey("QuestionId")
+                        .HasConstraintName("FK_Answer_Question");
+                });
+
+            modelBuilder.Entity("Comments.Models.Comment", b =>
+                {
+                    b.HasOne("Comments.Models.Location", "Location")
+                        .WithMany("Comment")
+                        .HasForeignKey("LocationId")
+                        .HasConstraintName("FK_Comment_Location");
+                });
+
+            modelBuilder.Entity("Comments.Models.Question", b =>
+                {
+                    b.HasOne("Comments.Models.Location", "Location")
+                        .WithMany("Question")
+                        .HasForeignKey("LocationId")
+                        .HasConstraintName("FK_Question_Location");
+
+                    b.HasOne("Comments.Models.QuestionType", "QuestionType")
+                        .WithMany("Question")
+                        .HasForeignKey("QuestionTypeId")
+                        .HasConstraintName("FK_Question_QuestionType");
                 });
 #pragma warning restore 612, 618
         }

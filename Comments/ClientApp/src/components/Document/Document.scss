@@ -1,17 +1,32 @@
 .document-comment-container {
-  h1, h2, h3, h4, h5 h6 {
+  &.loading {
+    opacity: 0.3;
+    transition: opacity 0.1s;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 h6 {
     margin-top: 0;
     a {
       text-decoration: none;
       color: inherit;
     }
   }
-  .itemizedlist.indented, .numbered-paragraph {
+  .itemizedlist.indented,
+  .numbered-paragraph {
     margin-left: rem($spacing-xx-large);
   }
   .itemizedlist.indented .paragraph-number,
   .numbered-paragraph .paragraph-number {
     float: left;
     margin-left: rem(-$spacing-xx-large);
+  }
+  table {
+    td {
+      padding: rem($spacing-small);
+    }
+    margin-bottom: rem($spacing-medium);
   }
 }

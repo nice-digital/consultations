@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:52679/consultations/1/1/introduction",
+      "applicationUrl": "http://niceorg/",
       "sslPort": 0
     }
   },
@@ -11,6 +11,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
+      "launchUrl": "consultations/1/1/introduction",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

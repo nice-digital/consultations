@@ -1,0 +1,9 @@
+// All .scss imported into here as a single point for compiling
+
+@import "nice-design-system";
+
+// Component folder structure imports here
+
+@import "./components/App/App";
+@import "./components/CommentPanel/CommentPanel";
+@import "./components/Document/Document";

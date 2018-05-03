@@ -23,3 +23,20 @@ export const nextTick = async () => {
 		setTimeout(resolve, 0);
 	});
 };
+
+/**
+ * Format a string by replacing {0} with arguments passed in
+ * @see https://stackoverflow.com/a/4673436
+ * @returns {String}
+ */
+export function replaceFormat(stringToReplace, args) {
+	if (typeof(stringToReplace) === undefined || stringToReplace === null)
+		return stringToReplace;
+
+	return stringToReplace.replace(/{(\d+)}/g, function(match, number) {
+		return typeof args[number] !== undefined
+			? args[number]
+			: match
+		;
+	});
+}
