@@ -126,7 +126,7 @@ export class CommentList extends Component<PropsType, StateType> {
 
 		load(endpointName, undefined, urlParameters, {}, method, comment, true)
 			.then(res => {
-				if (res.status === 201) {
+				if (res.status === 201 || res.status === 200) {
 					const index = this.state.comments
 						.map(function(comment) {
 							return comment.commentId;
@@ -140,7 +140,8 @@ export class CommentList extends Component<PropsType, StateType> {
 				}
 			})
 			.catch(err => {
-				alert(err.response.statusText);
+				console.log(err);
+				if (err.response) alert(err.response.statusText);
 			});
 	};
 

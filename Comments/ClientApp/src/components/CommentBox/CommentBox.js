@@ -42,14 +42,21 @@ export class CommentBox extends Component<PropsType, StateType> {
 		});
 	};
 
-	static getDerivedStateFromProps(nextProps) {
-		return {
-			ui: {
-				// todo: revisit this - can't presume that an updated comment list means everything's saved
-				unsavedChanges: false
-			},
-			comment: nextProps.comment
-		};
+	static getDerivedStateFromProps(nextProps, prevState) {
+		console.log({ nextProps }, { prevState });
+		const prevTimestamp = prevState.comment.lastModifiedDate;
+		const nextTimestamp = nextProps.comment.lastModifiedDate;
+		const hasCommentBeenUpdated = () => prevTimestamp !== nextTimestamp;
+
+		if (hasCommentBeenUpdated()) {
+			console.log("found an updated comment!");
+			return {
+				comment: nextProps.comment,
+				ui:{
+					unsavedChanges: false
+				}
+			};
+		}
 	}
 
 	render() {
@@ -99,8 +106,6 @@ export class CommentBox extends Component<PropsType, StateType> {
 									type="submit"
 									value={this.state.ui.unsavedChanges ? "Save draft" : "Saved"}
 									disabled={!this.state.ui.unsavedChanges}
-									// below is for testing the save button if you can't post to the server
-									// onClick={()=>this.setState({ui:{unsavedChanges: false}})}
 									//
 								/>
 							)}
