@@ -43,13 +43,10 @@ export class CommentBox extends Component<PropsType, StateType> {
 	};
 
 	static getDerivedStateFromProps(nextProps, prevState) {
-		console.log({ nextProps }, { prevState });
 		const prevTimestamp = prevState.comment.lastModifiedDate;
 		const nextTimestamp = nextProps.comment.lastModifiedDate;
 		const hasCommentBeenUpdated = () => prevTimestamp !== nextTimestamp;
-
 		if (hasCommentBeenUpdated()) {
-			console.log("found an updated comment!");
 			return {
 				comment: nextProps.comment,
 				ui:{
@@ -57,6 +54,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 				}
 			};
 		}
+		return null;
 	}
 
 	render() {
