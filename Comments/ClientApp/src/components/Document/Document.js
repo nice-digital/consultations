@@ -6,7 +6,6 @@ import { Helmet } from "react-helmet";
 import { StickyContainer, Sticky } from "react-sticky";
 import { withRouter } from "react-router";
 import Scrollspy from "react-scrollspy";
-import xpathRange from "xpath-range";
 
 import preload from "../../data/pre-loader";
 import { load } from "./../../data/loader";
@@ -16,7 +15,7 @@ import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
 import { projectInformation } from "../../constants";
 import { processDocumentHtml } from "./process-document-html";
-
+import Selection from "../Selection/Selection";
 
 type PropsType = {
 	staticContext?: any,
@@ -244,76 +243,6 @@ export class Document extends Component<PropsType, StateType> {
 		this.setState({ currentInPageNavItem });
 	};
 
-	onMouseUpInDocument = (event: Event) =>{
-		if (window && window.getSelection){
-			let ranges = [], rangesToIgnore = [];
-			let selection = window.getSelection();
-			
-			if (selection.isCollapsed){ //isCollapsed is true when there's no text selected.
-				return;
-			}
-			//console.log(e);
-
-			for (let i = 0; i < selection.rangeCount; i++) {
-				let r = selection.getRangeAt(i);
-				let browserRange = new xpathRange.Range.BrowserRange(r);
-				let normedRange = browserRange.normalize().limit(event.currentTarget);
-		
-				// If the new range falls fully outside our this.element, we should
-				// add it back to the document but not return it from this method.
-				if (normedRange === null) {
-					rangesToIgnore.push(r);
-				} else {
-					ranges.push(normedRange);
-				}
-			}
-
-			if (ranges.length === 0){
-				return;
-			}
-
-			console.log(ranges);			
-			var annotation = this.serialiseRange(ranges, ".annotator-hl");
-			console.log(annotation);			
-
-			let serialisedRange = this.serialiseRange(ranges, event.currentTarget);
-			
-			console.log(serialisedRange);
-
-		}
-		
-	}
-
-	serialiseRange = (ranges: any, limitingElement: any) => {
-		let text = [],
-			serializedRanges = [];
-
-		for (var i = 0, len = ranges.length; i < len; i++) {
-			var r = ranges[i];
-			text.push(this.trim(r.text()));
-			serializedRanges.push(r.serialize(limitingElement, ""));
-		}
-
-		return {
-			quote: text.join(" / "),
-			ranges: serializedRanges
-		};
-	}
-	
-
-	// trim strips whitespace from either end of a string.
-	//
-	// This usually exists in native code, but not in IE8.
-	trim(s: string) {
-		if (typeof String.prototype.trim === "function") {
-			return String.prototype.trim.call(s);
-		} else {
-			return s.replace(/^[\s\xA0]+|[\s\xA0]+$/g, '');
-		}
-	}
-
-	
-
 	render() {
 		if (!this.state.hasInitialData) return <h1>Loading...</h1>;
 
@@ -399,17 +328,19 @@ export class Document extends Component<PropsType, StateType> {
 									/>
 								</div>
 								<div data-g="12 md:6">
+										
 									<div
 										className={`document-comment-container ${
 											this.state.loading ? "loading" : ""
-										}`}
-										onMouseUp={this.onMouseUpInDocument}>	
-										{processDocumentHtml(
-											content,
-											this.props.onNewCommentClick,
-											this.props.match.url
-										)}
-										</div>
+										}`}>	
+										<Selection>
+											{processDocumentHtml(
+												content,
+												this.props.onNewCommentClick,
+												this.props.match.url
+											)}
+										</Selection>
+									</div>
 								</div>
 								<div data-g="12 md:3">
 									<Sticky disableHardwareAcceleration>
