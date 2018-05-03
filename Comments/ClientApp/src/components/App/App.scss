@@ -10,9 +10,25 @@
 }
 
 %unstyled-button {
-  position: absolute;
   border: none;
-  background: none;
+  background: transparent;
+  font-size: inherit;
+  padding: 0;
 }
+
+// Darkened var to meet AA contrast requirement
+$color-agile-phase: #007AB8;
+
+.buttonAsLink {
+  @extend %unstyled-button;
+  text-decoration: underline;
+  color: $colour-link;
+  cursor: pointer;
+  &:hover {
+    color: $colour-link-hover;
+  }
+}
+
+
 
 // ------------------------------------------------ //
