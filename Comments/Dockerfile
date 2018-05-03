@@ -18,7 +18,7 @@ RUN npm -v
 
 # Install frontend packages with node
 COPY ./published-app/ClientApp/package.json ./app/ClientApp/
-COPY ./published-app/ClientApp/package-lock.json ./app/ClientApp/
+#COPY ./published-app/ClientApp/package-lock.json ./app/ClientApp/
 WORKDIR /app/ClientApp
 RUN npm i --production
 

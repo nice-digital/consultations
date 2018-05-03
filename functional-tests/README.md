@@ -50,4 +50,11 @@ Or in PowerShell:
 ```sh
 cmd /c "run"
 ```
+###Docker Dev
+
+First build and publish the .net application by using the following command:
+
+```sh
+dotnet publish -c Release -o published-app /property:PublishWithAspNetCoreTargetManifest="false"
+```
 

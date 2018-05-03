@@ -252,3 +252,5 @@ ClientApp/public/*.css.map
 .DS_Store
 /Comments/Serilog-*.json
 /Comments/ClientApp/.idea.bak
+
+/Comments/published-app
