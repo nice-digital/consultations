@@ -278,7 +278,8 @@ export class Document extends Component<PropsType, StateType> {
 													placeholder: "Comment on this whole consultation",
 													sourceURI: this.props.match.url,
 													commentText: "",
-													commentOn: "Consultation"
+													commentOn: "Consultation",
+													quote: title
 												});
 											}}
 										>
@@ -301,7 +302,8 @@ export class Document extends Component<PropsType, StateType> {
 													placeholder: "Comment on this document",
 													sourceURI: this.props.match.url,
 													commentText: "",
-													commentOn: "Document"
+													commentOn: "Document",
+													quote: this.getCurrentDocumentTitle(documentsData, documentId)
 												});
 											}}
 										>

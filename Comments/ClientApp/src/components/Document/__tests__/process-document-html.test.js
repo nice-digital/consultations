@@ -49,7 +49,8 @@ describe("[ClientApp]", () => {
 				sourceURI: "/1/1/guidance",
 				commentText: "",
 				commentOn: "section",
-				htmlElementID: "bar"
+				htmlElementID: "bar",
+				quote: "Foo"
 			});
 		});
 	});

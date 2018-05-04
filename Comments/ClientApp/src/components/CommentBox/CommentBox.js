@@ -59,7 +59,12 @@ export class CommentBox extends Component<PropsType, StateType> {
 
 	render() {
 		if (!this.state.comment) return null;
-		const { commentText, commentOn, lastModifiedDate } = this.state.comment;
+		const {
+			commentText,
+			commentOn,
+			lastModifiedDate,
+			quote
+		} = this.state.comment;
 		const placeholder = this.state.comment.placeholder
 			? this.state.comment.placeholder
 			: null;
@@ -68,24 +73,20 @@ export class CommentBox extends Component<PropsType, StateType> {
 			<Fragment>
 				<li className="CommentBox">
 					<form onSubmit={e => this.props.saveHandler(e, this.state.comment)}>
-						<div className="grid">
-							<div data-g="6 push:6">Comment on: {commentOn}</div>
-						</div>
-						<div className="grid">
-							<div data-g="6 push:6">
-								<Moment format="D/M/YYYY - h:mma" date={lastModifiedDate} />
-							</div>
+						<div>Comment on: {commentOn}</div>
+						<div>Quote: {quote}</div>
+						<div>
+							Last Modified Date:{" "}
+							<Moment format="D/M/YYYY - h:mma" date={lastModifiedDate} />
 						</div>
 						<div className="form__group form__group--textarea mb--0">
-							<label className="form__label" htmlFor={this.props.unique}>
-								{placeholder ? placeholder : "Comment"}
-							</label>
+							<label className="form__label" htmlFor={this.props.unique}>Comment</label>
 							<textarea
 								id={this.props.unique}
 								tabIndex={tabIndex}
 								className="form__input form__input--textarea"
 								onChange={this.textareaChangeHandler}
-								placeholder={placeholder}
+								placeholder="Enter your comment here"
 								value={commentText}
 							/>
 						</div>
