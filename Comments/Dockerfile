@@ -1,6 +1,9 @@
+# Runs the Comment Collection webapp.
+# Assumes you've published the app to ./published-app
+
 FROM microsoft/aspnetcore:2.0
 
-ENV ASPNETCORE_URLS http://+:80
+ENV ASPNETCORE_URLS http://+:8081
 
 # Install node and npm
 # Latest Nodejs LTS as of 03/05/2018
@@ -16,6 +19,10 @@ RUN curl -SL "$NODE_DOWNLOAD_URL" --output nodejs.tar.gz \
 RUN node -v
 RUN npm -v
 
+# Install jq for JSON file replacement
+RUN apt-get update && apt-get install -y jq \
+  && rm -rf /var/lib/apt/lists/*
+
 # Install frontend packages with node
 COPY ./published-app/ClientApp/package.json ./app/ClientApp/
 #COPY ./published-app/ClientApp/package-lock.json ./app/ClientApp/
@@ -26,6 +33,7 @@ RUN npm i --production
 WORKDIR /app
 COPY ./published-app ./
 
+EXPOSE 8081
+
 # Run .net app
-ENTRYPOINT ["dotnet", "Comments.dll"]
-#EXPOSE 5000
+ENTRYPOINT ["./run.sh"]
