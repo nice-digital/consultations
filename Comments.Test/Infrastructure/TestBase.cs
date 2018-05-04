@@ -16,6 +16,8 @@ using NICE.Auth.NetCore.Services;
 using NICE.Feeds;
 using NICE.Feeds.Configuration;
 using NICE.Feeds.Tests.Infrastructure;
+using Microsoft.Data.Sqlite;
+using System.Data.SQLite;
 
 namespace Comments.Test.Infrastructure
 {
@@ -61,7 +63,15 @@ namespace Comments.Test.Infrastructure
             _fakeHttpContextAccessor = FakeHttpContextAccessor.Get(_authenticated, _displayName, _userId);
             var databaseName = DatabaseName + Guid.NewGuid();
 
+            SQLiteConnectionStringBuilder sqLiteConnectionStringBuilder = new SQLiteConnectionStringBuilder()
+            {	       
+                DataSource = "my.db",
+            };
+
+        var connection = new SqliteConnection(sqLiteConnectionStringBuilder.ConnectionString); //"Data Source=" + DatabaseName + ";"); //"BinaryGuid=False"); //Version=3;
+
             _options = new DbContextOptionsBuilder<ConsultationsContext>()
+                    //.UseSqlite(connection)
                     .UseInMemoryDatabase(databaseName)
                     .Options;
 

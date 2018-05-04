@@ -126,8 +126,8 @@ namespace Comments
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-                //loggerFactory.AddDebug();
+                loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+                loggerFactory.AddDebug();
             }
 
             app.UseCors("CorsPolicy");
@@ -232,11 +232,11 @@ namespace Comments
                 }
             });
 
-            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            {
-                serviceScope.ServiceProvider.GetService<ConsultationsContext>().Database.Migrate();
-                
-            }
+            //using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            //{
+            //    serviceScope.ServiceProvider.GetService<ConsultationsContext>().Database.Migrate();
+
+            //}
         }
     }
 }
