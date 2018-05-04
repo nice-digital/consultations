@@ -74,5 +74,5 @@
     "rimraf": "^2.6.2",
     "stringify-object": "^3.2.2"
   },
-  "proxy": "https://dev-web01-consultations.nice.org.uk"
+  "proxy": "https://test.nice.org.uk"
 }
