@@ -11,30 +11,26 @@ using Microsoft.Extensions.Logging;
 using NICE.Feeds;
 using System;
 using System.IO;
-using System.Net.Http;
 using Comments.Auth;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
-using Microsoft.AspNetCore.StaticFiles.Infrastructure;
-using Microsoft.AspNetCore.SpaServices;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using NICE.Auth.NetCore.Services;
-using NICE.Feeds.Configuration;
-using System.Collections.Generic;
 
 namespace Comments
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration, IHostingEnvironment env)
+        ILogger _logger;
+
+        public Startup(IConfiguration configuration, IHostingEnvironment env, ILogger<Startup> logger)
         {
             Configuration = configuration;
             Environment = env;
+            _logger = logger;
         }
-
+        
         public IConfiguration Configuration { get; }
 
         public IHostingEnvironment Environment { get; }
@@ -57,7 +53,6 @@ namespace Comments
             services.TryAddTransient<IUserService, UserService>();
 
             var contextOptionsBuilder = new DbContextOptionsBuilder<ConsultationsContext>();
-            //contextOptionsBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             services.TryAddSingleton<IDbContextOptionsBuilderInfrastructure>(contextOptionsBuilder);
 
             services.AddDbContext<ConsultationsContext>(options =>
@@ -125,7 +120,7 @@ namespace Comments
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ISeriLogger seriLogger, IApplicationLifetime appLifetime)
-        {
+        {           
             seriLogger.Configure(loggerFactory, Configuration, appLifetime, env);
 
             if (env.IsDevelopment())
@@ -236,6 +231,12 @@ namespace Comments
                    // spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
+
+            //using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            //{
+            //    serviceScope.ServiceProvider.GetService<ConsultationsContext>().Database.Migrate();
+
+            //}
         }
     }
 }
