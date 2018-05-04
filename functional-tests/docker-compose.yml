@@ -31,10 +31,17 @@ services:
     build: .
     links:
       - hub
-  dotnet:
-    image: microsoft/dotnet:2.0-runtime
-    container_name: dotnet
-    ports:
-      - "8080:8080"
-    expose: 
-      - "8080"
+    
+  comments:
+    build: ./../Comments/
+    environment:
+      - DEFAULT_CONNECTION
+      - FEEDS_APIKEY
+      - FEEDS_BASEPATH
+      - FEEDS_CHAPTER
+      - FEEDS_DETAIL
+      - FEEDS_LIST
+      - GILLIAM_CLIENT_CERTIFICATE_BASE64
+      - GILLIAM_BASE_PATH
+      - GILLIAM_GET_CLAIMS_URL
+      - GILLIAM_REALM
