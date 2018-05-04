@@ -1,4 +1,4 @@
-// TODO: consider feeding these changes back to the design system
+// todo: Styling to promote to the design system
 
 [data-g] {
   position: static;
@@ -8,5 +8,27 @@
   letter-spacing: 0;
   position: relative;
 }
+
+%unstyled-button {
+  border: none;
+  background: transparent;
+  font-size: inherit;
+  padding: 0;
+}
+
+// Darkened var to meet AA contrast requirement
+$color-agile-phase: #007AB8;
+
+.buttonAsLink {
+  @extend %unstyled-button;
+  text-decoration: underline;
+  color: $colour-link;
+  cursor: pointer;
+  &:hover {
+    color: $colour-link-hover;
+  }
+}
+
+
 
 // ------------------------------------------------ //

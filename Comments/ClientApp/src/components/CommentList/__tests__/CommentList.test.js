@@ -211,24 +211,26 @@ describe("[ClientApp] ", () => {
 				.reply(200, sampleComments);
 
 			const wrapper = mount(<CommentList {...fakeProps} />);
+
 			await nextTick();
 			wrapper.update();
 
 			const state = wrapper.state();
+
 			expect(state.comments.length).toEqual(5);
 
 			wrapper.instance().newComment({
 				sourceURI: "/1/1/introduction",
 				commentText: ""
 			});
-			await nextTick();
-			wrapper.update();
 
 			expect(state.comments.length).toEqual(6);
 
 			wrapper.instance().deleteCommentHandler(new Event("click"), -1);
 
-			expect(state.comments.length).toEqual(5);
+			const updatedState = wrapper.state();
+
+			expect(wrapper.state().comments.length).toEqual(5);
 		});
 
 		it("delete handler called with positive number hits the correct delete endpoint", async () => {

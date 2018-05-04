@@ -1,4 +1,10 @@
 .document-comment-container {
+  &__commentButton {
+    margin-left: rem(-40px);
+    position: absolute;
+    @extend %unstyled-button;
+  }
+  padding-left: rem($spacing-large);
   &.loading {
     opacity: 0.3;
     transition: opacity 0.1s;
