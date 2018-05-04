@@ -10,6 +10,8 @@ namespace Comments.Models
         {
             LocationId = locationId;
             CreatedByUserId = createdByUserId;
+            CreatedDate = DateTime.UtcNow;
+            LastModifiedDate = DateTime.UtcNow;
             LastModifiedByUserId = lastModifiedByUserId;
             CommentText = commentText ?? throw new ArgumentNullException(nameof(commentText));
             Location = location;
@@ -22,6 +24,7 @@ namespace Comments.Models
         {
             LocationId = comment.LocationId;
             LastModifiedByUserId = comment.LastModifiedByUserId;
+            LastModifiedDate = comment.LastModifiedDate;
             CommentText = comment.CommentText ?? throw new ArgumentNullException(nameof(comment.CommentText));
             Location.UpdateFromViewModel(comment as ViewModels.Location);
         }

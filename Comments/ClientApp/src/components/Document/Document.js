@@ -14,6 +14,7 @@ import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
 import { projectInformation } from "../../constants";
+import { processDocumentHtml } from "./process-document-html";
 
 type PropsType = {
 	staticContext?: any,
@@ -30,8 +31,6 @@ type StateType = {
 	currentInPageNavItem: null | string,
 	hasInitialData: boolean
 };
-
-type DataType = any;
 
 type DocumentsType = Array<Object>;
 
@@ -151,10 +150,6 @@ export class Document extends Component<PropsType, StateType> {
 		}
 	}
 
-	renderDocumentHtml = (data: DataType) => {
-		return { __html: data };
-	};
-
 	getSupportingDocumentLinks = (
 		documents: DocumentsType,
 		currentDocumentFromRoute: number,
@@ -264,133 +259,143 @@ export class Document extends Component<PropsType, StateType> {
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">
-							<PhaseBanner phase={projectInformation.phase} name={projectInformation.name} repo={projectInformation.repo} />
+							<PhaseBanner
+								phase={projectInformation.phase}
+								name={projectInformation.name}
+								repo={projectInformation.repo}
+							/>
 							<BreadCrumbs links={this.getBreadcrumbs()} />
-							<div className="page-header">
-								<p className="mb--0">
-									Consultation |{" "}
-									<a
-										tabIndex={0}
-										role="button"
-										href="#comment-on-whole-consultation"
-										onClick={e => {
-											e.preventDefault();
-											this.props.onNewCommentClick({
-												placeholder: "Comment on this whole consultation",
-												sourceURI: this.props.match.url,
-												commentText: ""
-											});
-										}}
-									>
-										Comment on whole consultation
-									</a>
-								</p>
-								<h1 className="page-header__heading mt--0">{title}</h1>
-								<p className="page-header__lead">
-									[{reference}] Open until{" "}
-									<Moment format="D MMMM YYYY" date={endDate} />
-								</p>
-								<p className="mb--0">
-									Document |{" "}
-									<a
-										tabIndex={0}
-										role="button"
-										href="#comment-on-this-document"
-										onClick={e => {
-											e.preventDefault();
-											this.props.onNewCommentClick({
-												placeholder: "Comment on this document",
-												sourceURI: this.props.match.url,
-												commentText: ""
-											});
-										}}
-									>
-										Comment on this document
-									</a>
-								</p>
-								<h2 className="mt--0">
-									{this.getCurrentDocumentTitle(documentsData, documentId)}
-								</h2>
-							</div>
-							<StickyContainer className="grid">
-								<div data-g="12 md:3">
-									<StackedNav
-										links={this.getDocumentChapterLinks(documentId)}
-									/>
-									<StackedNav
-										links={this.getSupportingDocumentLinks(
-											documentsData,
-											documentId,
-											consultationId
-										)}
-									/>
+							<main role="main">
+								<div className="page-header">
+									<p className="mb--0">
+										Consultation |{" "}
+										<button
+											className="buttonAsLink"
+											tabIndex={0}
+											onClick={e => {
+												e.preventDefault();
+												this.props.onNewCommentClick({
+													placeholder: "Comment on this whole consultation",
+													sourceURI: this.props.match.url,
+													commentText: "",
+													commentOn: "Consultation",
+													quote: title
+												});
+											}}
+										>
+											Comment on whole consultation
+										</button>
+									</p>
+									<h1 className="page-header__heading mt--0">{title}</h1>
+									<p className="page-header__lead">
+										[{reference}] Open until{" "}
+										<Moment format="D MMMM YYYY" date={endDate} />
+									</p>
+									<p className="mb--0">
+										Document |{" "}
+										<button
+											className="buttonAsLink"
+											tabIndex={0}
+											onClick={e => {
+												e.preventDefault();
+												this.props.onNewCommentClick({
+													placeholder: "Comment on this document",
+													sourceURI: this.props.match.url,
+													commentText: "",
+													commentOn: "Document",
+													quote: this.getCurrentDocumentTitle(documentsData, documentId)
+												});
+											}}
+										>
+											Comment on this document
+										</button>
+									</p>
+									<h2 className="mt--0">
+										{this.getCurrentDocumentTitle(documentsData, documentId)}
+									</h2>
 								</div>
-								<div data-g="12 md:6">
-									<div
-										className={`document-comment-container ${
-											this.state.loading ? "loading" : ""
-										}`}
-									>
-										<div
-											dangerouslySetInnerHTML={this.renderDocumentHtml(content)}
+								<StickyContainer className="grid">
+									<div data-g="12 md:3">
+										<StackedNav
+											links={this.getDocumentChapterLinks(documentId)}
+										/>
+										<StackedNav
+											links={this.getSupportingDocumentLinks(
+												documentsData,
+												documentId,
+												consultationId
+											)}
 										/>
 									</div>
-								</div>
-								<div data-g="12 md:3">
-									<Sticky disableHardwareAcceleration>
-										{({ style }) => (
-											<div style={style}>
-												{sections.length ? (
-													<nav
-														className="in-page-nav"
-														aria-labelledby="inpagenav-title"
-													>
-														<h2
-															id="inpagenav-title"
-															className="in-page-nav__title"
+									<div data-g="12 md:6">
+										<div
+											className={`document-comment-container ${
+												this.state.loading ? "loading" : ""
+											}`}
+										>
+											{processDocumentHtml(
+												content,
+												this.props.onNewCommentClick,
+												this.props.match.url
+											)}
+										</div>
+									</div>
+									<div data-g="12 md:3">
+										<Sticky disableHardwareAcceleration>
+											{({ style }) => (
+												<div style={style}>
+													{sections.length ? (
+														<nav
+															className="in-page-nav"
+															aria-labelledby="inpagenav-title"
 														>
-															On this page
-														</h2>
-														<Scrollspy
-															componentTag="ol"
-															items={this.generateScrollspy(sections)}
-															currentClassName="is-current"
-															className="in-page-nav__list"
-															role="menubar"
-															onUpdate={e => {
-																this.inPageNav(e);
-															}}
-														>
-															{sections.map((item, index) => {
-																const props = {
-																	label: item.title,
-																	to: item.slug,
-																	behavior: "smooth",
-																	block: "start"
-																};
-																return (
-																	<li
-																		role="presentation"
-																		className="in-page-nav__item"
-																		key={index}
-																	>
-																		<HashLinkTop
-																			{...props}
-																			currentNavItem={
-																				this.state.currentInPageNavItem
-																			}
-																		/>
-																	</li>
-																);
-															})}
-														</Scrollspy>
-													</nav>
-												) : null}
-											</div>
-										)}
-									</Sticky>
-								</div>
-							</StickyContainer>
+															<h2
+																id="inpagenav-title"
+																className="in-page-nav__title"
+															>
+																On this page
+															</h2>
+															<Scrollspy
+																componentTag="ol"
+																items={this.generateScrollspy(sections)}
+																currentClassName="is-current"
+																className="in-page-nav__list"
+																role="menubar"
+																onUpdate={e => {
+																	this.inPageNav(e);
+																}}
+															>
+																{sections.map((item, index) => {
+																	const props = {
+																		label: item.title,
+																		to: item.slug,
+																		behavior: "smooth",
+																		block: "start"
+																	};
+																	return (
+																		<li
+																			role="presentation"
+																			className="in-page-nav__item"
+																			key={index}
+																		>
+																			<HashLinkTop
+																				{...props}
+																				currentNavItem={
+																					this.state.currentInPageNavItem
+																				}
+																			/>
+																		</li>
+																	);
+																})}
+															</Scrollspy>
+														</nav>
+													) : null}
+												</div>
+											)}
+										</Sticky>
+									</div>
+								</StickyContainer>
+							</main>
 						</div>
 					</div>
 				</div>

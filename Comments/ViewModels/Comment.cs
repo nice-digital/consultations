@@ -1,4 +1,6 @@
 ﻿using System;
+using Comments.Common;
+using Microsoft.AspNetCore.Http.Extensions;
 
 namespace Comments.ViewModels
 {
@@ -27,5 +29,25 @@ namespace Comments.ViewModels
         public DateTime LastModifiedDate { get; set; }
         public Guid LastModifiedByUserId { get; set; }
         public string CommentText { get; set; }
+
+        private CommentOn? _commentOn = null;
+        public string CommentOn
+        {
+            get
+            {
+                if (_commentOn == null)
+                {
+                    _commentOn = CommentOnHelpers.GetCommentOn(SourceURI, RangeStart, HtmlElementID);
+                }
+                return _commentOn.HasValue ? Enum.GetName(typeof(CommentOn), _commentOn.Value) : null;
+            }
+            set
+            {
+                if (!string.IsNullOrWhiteSpace(value) && Enum.TryParse(value, out CommentOn parsedEnum))
+                {
+                    _commentOn = parsedEnum;
+                }
+            }
+        }
     }
 }

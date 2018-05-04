@@ -14,7 +14,8 @@ describe("[ClientApp] ", () => {
 		const fakeProps = {
 			comment: {
 				commentId: sampleComment.commentId,
-				commentText: "a comment"
+				commentText: "a comment",
+				lastModifiedDate: new Date("01/04/2018").toISOString()
 			}
 		};
 
@@ -37,11 +38,25 @@ describe("[ClientApp] ", () => {
 			expect(wrapper.state().ui.unsavedChanges).toEqual(true);
 		});
 
-		it("marks state as unchanged after props are updated", () => {
+		it("should update UnsavedChanges if lastupdateddate has changed", () => {
 			const wrapper = mount(<CommentBox {...fakeProps} />);
-			wrapper.setState({ ui: { unsavedChanges: true } });
-			wrapper.setProps({});
+			wrapper.setState({ui:{unsavedChanges: true}});
+			const updatedProps = {
+				comment: {
+					commentId: sampleComment.commentId,
+					commentText: "an updated comment",
+					lastModifiedDate: new Date("02/04/2018").toISOString()
+				}
+			};
+			wrapper.setProps(updatedProps);
 			expect(wrapper.state().ui.unsavedChanges).toEqual(false);
+		});
+
+		it("should not update UnsavedChanges if lastupdateddate has not changed", () => {
+			const wrapper = mount(<CommentBox {...fakeProps} />);
+			wrapper.setState({ui:{unsavedChanges: true}});
+			wrapper.setProps(fakeProps);
+			expect(wrapper.state().ui.unsavedChanges).toEqual(true);
 		});
 
 		it("updated comment text in state after new props received", () => {

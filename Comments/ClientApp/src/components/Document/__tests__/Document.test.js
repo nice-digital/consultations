@@ -87,17 +87,6 @@ describe("[ClientApp] ", () => {
 			});
 		});
 
-		it("renderDocumentHtml method", () => {
-			const html = `	<h1>Testing</h1>
-							<span> &amp; </span>
-							<p>...the HTML</p>`;
-			const document = new Document();
-			expect(document.renderDocumentHtml(html)).toHaveProperty(
-				"__html",
-				"\t<h1>Testing</h1>\n\t\t\t\t\t\t\t<span> &amp; </span>\n\t\t\t\t\t\t\t<p>...the HTML</p>"
-			);
-		});
-
 		it("getSupportingDocumentLinks method", () => {
 			const documents = [
 				{

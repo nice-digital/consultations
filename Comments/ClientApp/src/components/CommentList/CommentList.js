@@ -31,7 +31,8 @@ type CommentType = {
 	rangeStartOffset: string,
 	rangeEnd: string,
 	rangeEndOffset: string,
-	quote: string
+	quote: string,
+	commentOn: string
 };
 
 type StateType = {
@@ -47,13 +48,19 @@ export class CommentList extends Component<PropsType, StateType> {
 			loading: true
 		};
 		let preloadedData = {};
-		if (this.props.staticContext && this.props.staticContext.preload){
+		if (this.props.staticContext && this.props.staticContext.preload) {
 			preloadedData = this.props.staticContext.preload.data;
 		}
 
-		const preloaded = preload(this.props.staticContext, "comments", [], {
-			sourceURI: this.props.match.url
-		}, preloadedData);
+		const preloaded = preload(
+			this.props.staticContext,
+			"comments",
+			[],
+			{
+				sourceURI: this.props.match.url
+			},
+			preloadedData
+		);
 
 		if (preloaded) {
 			this.state = {
@@ -119,23 +126,47 @@ export class CommentList extends Component<PropsType, StateType> {
 
 		load(endpointName, undefined, urlParameters, {}, method, comment, true)
 			.then(res => {
-				//todo: check success
-
-				//console.log(res);
-				const index = this.state.comments
-					.map(function(comment) {
-						return comment.commentId;
-					})
-					.indexOf(comment.commentId);
-				const comments = this.state.comments;
-				comments[index] = res.data;
-				this.setState({
-					comments
-				});
+				if (res.status === 201 || res.status === 200) {
+					const index = this.state.comments
+						.map(function(comment) {
+							return comment.commentId;
+						})
+						.indexOf(comment.commentId);
+					const comments = this.state.comments;
+					comments[index] = res.data;
+					this.setState({
+						comments
+					});
+				}
 			})
 			.catch(err => {
-				alert(err.response.statusText);
+				console.log(err);
+				if (err.response) alert(err.response.statusText);
 			});
+	};
+
+	deleteCommentHandler = (e: Event, commentId: number) => {
+		e.preventDefault();
+		if (commentId < 0) {
+			this.removeCommentFromState(commentId);
+		} else {
+			load("editcomment", undefined, [commentId], {}, "DELETE")
+				.then(res => {
+					if (res.status === 200) {
+						this.removeCommentFromState(commentId);
+					}
+				})
+				.catch(err => {
+					console.log(err);
+					if (err.response) alert(err.response.statusText);
+				});
+		}
+	};
+
+	removeCommentFromState = (commentId: number) => {
+		let comments = this.state.comments;
+		comments = comments.filter(comment => comment.commentId !== commentId);
+		this.setState({ comments });
 	};
 
 	render() {
@@ -150,13 +181,15 @@ export class CommentList extends Component<PropsType, StateType> {
 		return (
 			<Fragment>
 				<ul className="CommentList list--unstyled">
-					{this.state.comments.map(comment => {
+					{this.state.comments.map((comment, idx) => {
 						return (
 							<CommentBox
 								drawerOpen={this.props.drawerOpen}
 								key={comment.commentId}
+								unique={`Comment${idx}`}
 								comment={comment}
 								saveHandler={this.saveCommentHandler}
+								deleteHandler={this.deleteCommentHandler}
 							/>
 						);
 					})}

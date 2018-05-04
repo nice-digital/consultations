@@ -1,14 +1,15 @@
-﻿using Comments.Models;
+﻿using Comments.Common;
+using Comments.Models;
 using Comments.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Comments.Services
 {
     public interface ICommentService
     {
-        CommentsAndQuestions GetCommentsAndQuestions(string sourceURI);
+        CommentsAndQuestions GetCommentsAndQuestions(string relativeURL);
         (ViewModels.Comment comment, Validate validate) GetComment(int commentId);
         (int rowsUpdated, Validate validate) EditComment(int commentId, ViewModels.Comment comment);
         (ViewModels.Comment comment, Validate validate) CreateComment(ViewModels.Comment comment);
@@ -57,6 +58,8 @@ namespace Comments.Services
             if (!commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId.Value))
                 return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to edit comment id: {commentId}, but it's not their comment"));
 
+            comment.LastModifiedByUserId = _currentUser.UserId.Value;
+            comment.LastModifiedDate = DateTime.UtcNow;
             commentInDatabase.UpdateFromViewModel(comment);
             return (rowsUpdated: _context.SaveChanges(), validate: null);
         }
@@ -68,9 +71,10 @@ namespace Comments.Services
 
             
             var locationToSave = new Models.Location(comment as ViewModels.Location);
+            locationToSave.SourceURI = ConsultationsUri.ConvertToConsultationsUri(comment.SourceURI, CommentOnHelpers.GetCommentOn(comment.CommentOn));
             _context.Location.Add(locationToSave);
             
-            var commentToSave = new Models.Comment(comment.LocationId, _currentUser.UserId.Value, comment.CommentText, comment.LastModifiedByUserId, locationToSave);
+            var commentToSave = new Models.Comment(comment.LocationId, _currentUser.UserId.Value, comment.CommentText, _currentUser.UserId.Value, locationToSave);
             _context.Comment.Add(commentToSave);
             _context.SaveChanges();
 
@@ -91,17 +95,26 @@ namespace Comments.Services
                 return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to delete comment id: {commentId}, but it's not their comment"));
 
             commentInDatabase.IsDeleted = true;
+            commentInDatabase.LastModifiedDate = DateTime.UtcNow;
+            commentInDatabase.LastModifiedByUserId = _currentUser.UserId.Value;
             return (rowsUpdated: _context.SaveChanges(), validate: null);
         }
 
-        public CommentsAndQuestions GetCommentsAndQuestions(string sourceURI)
+        public CommentsAndQuestions GetCommentsAndQuestions(string relativeURL)
         {
             var user = _userService.GetCurrentUser();
 
             if (!user.IsLoggedIn)
                 return new CommentsAndQuestions(new List<ViewModels.Comment>(), new List<ViewModels.Question>(), user.IsLoggedIn);
 
-            var locations = _context.GetAllCommentsAndQuestionsForDocument(sourceURI);
+            var sourceURIs = new List<string>
+            {
+                ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Consultation),
+                ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Document),
+                ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Chapter)
+            };
+
+            var locations = _context.GetAllCommentsAndQuestionsForDocument(sourceURIs);
 
             var commentsData = new List<ViewModels.Comment>();
             var questionsData = new List<ViewModels.Question>();

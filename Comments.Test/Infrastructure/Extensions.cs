@@ -9,17 +9,15 @@ namespace Comments.Test.Infrastructure
     public static class Extensions
     {
         public static void ShouldMatchApproved(this string stringIn,
-                [System.Runtime.CompilerServices.CallerMemberName] string memberName = "",
-                [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = "")
+                Func<string, string>[] scrubbers = null, //sadly we can't use params and stick it on the end since the following parameters need to be optional.
+                [System.Runtime.CompilerServices.CallerMemberName] string memberName = null,
+                [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = null)
         {
-
             //prettifying.
             if (stringIn.StartsWith("{") || stringIn.StartsWith("[{")) //we'll assume it's JSON.
             {
                 try
                 {
-                    //var parsedJson = JsonConvert.DeserializeObject(stringIn);
-                    //stringIn = JsonConvert.SerializeObject(parsedJson, Formatting.Indented);
                     stringIn = Formatters.FormatJson(stringIn);
                 }
                 catch (Exception) {}
@@ -32,6 +30,15 @@ namespace Comments.Test.Infrastructure
                     stringIn = Formatters.FormatHtml(stringIn);
                 }
                 catch (Exception) { }
+            }
+
+            //scrubbing changing data such as the current time etc.
+            if (scrubbers != null)
+            {
+                foreach (var scrub in scrubbers)
+                {
+                    stringIn = scrub(stringIn);
+                }
             }
 
             var expectedFilePath = Path.GetDirectoryName(sourceFilePath);
