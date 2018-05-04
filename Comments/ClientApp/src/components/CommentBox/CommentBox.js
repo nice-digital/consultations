@@ -49,7 +49,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 		if (hasCommentBeenUpdated()) {
 			return {
 				comment: nextProps.comment,
-				ui:{
+				ui: {
 					unsavedChanges: false
 				}
 			};
@@ -59,7 +59,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 
 	render() {
 		if (!this.state.comment) return null;
-		const { commentText } = this.state.comment;
+		const { commentText, commentOn, lastModifiedDate } = this.state.comment;
 		const placeholder = this.state.comment.placeholder
 			? this.state.comment.placeholder
 			: null;
@@ -69,28 +69,21 @@ export class CommentBox extends Component<PropsType, StateType> {
 				<li className="CommentBox">
 					<form onSubmit={e => this.props.saveHandler(e, this.state.comment)}>
 						<div className="grid">
-							<div data-g="6 push:6">
-								Comment on: {this.state.comment.commentOn}
-							</div>
+							<div data-g="6 push:6">Comment on: {commentOn}</div>
 						</div>
-
 						<div className="grid">
 							<div data-g="6 push:6">
-								<Moment
-									format="D/M/YYYY - h:mma"
-									date={this.state.comment.lastModifiedDate}
-								/>
+								<Moment format="D/M/YYYY - h:mma" date={lastModifiedDate} />
 							</div>
 						</div>
 						<div className="form__group form__group--textarea mb--0">
-							<label className="form__label" htmlFor="textarea">
-								{placeholder}
+							<label className="form__label" htmlFor={this.props.unique}>
+								{placeholder ? placeholder : "Comment"}
 							</label>
 							<textarea
+								id={this.props.unique}
 								tabIndex={tabIndex}
 								className="form__input form__input--textarea"
-								id="textarea"
-								name="textarea"
 								onChange={this.textareaChangeHandler}
 								placeholder={placeholder}
 								value={commentText}

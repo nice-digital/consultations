@@ -628,7 +628,6 @@ Array [
                                 <nav
                                     aria-labelledby="inpagenav-title"
                                     className="in-page-nav"
-                                    role="menu"
                                 >
                                     <h2
                                         className="in-page-nav__title"

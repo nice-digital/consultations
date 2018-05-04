@@ -181,11 +181,12 @@ export class CommentList extends Component<PropsType, StateType> {
 		return (
 			<Fragment>
 				<ul className="CommentList list--unstyled">
-					{this.state.comments.map(comment => {
+					{this.state.comments.map((comment, idx) => {
 						return (
 							<CommentBox
 								drawerOpen={this.props.drawerOpen}
 								key={comment.commentId}
+								unique={`Comment${idx}`}
 								comment={comment}
 								saveHandler={this.saveCommentHandler}
 								deleteHandler={this.deleteCommentHandler}

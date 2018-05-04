@@ -346,7 +346,6 @@ export class Document extends Component<PropsType, StateType> {
 														<nav
 															className="in-page-nav"
 															aria-labelledby="inpagenav-title"
-															role="menu"
 														>
 															<h2
 																id="inpagenav-title"
