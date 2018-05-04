@@ -22,12 +22,15 @@ namespace Comments
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration, IHostingEnvironment env)
+        ILogger _logger;
+
+        public Startup(IConfiguration configuration, IHostingEnvironment env, ILogger<Startup> logger)
         {
             Configuration = configuration;
             Environment = env;
+            _logger = logger;
         }
-
+        
         public IConfiguration Configuration { get; }
 
         public IHostingEnvironment Environment { get; }
@@ -117,14 +120,14 @@ namespace Comments
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ISeriLogger seriLogger, IApplicationLifetime appLifetime)
-        {
+        {           
             seriLogger.Configure(loggerFactory, Configuration, appLifetime, env);
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-                loggerFactory.AddDebug();
+                //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+                //loggerFactory.AddDebug();
             }
 
             app.UseCors("CorsPolicy");
@@ -228,6 +231,12 @@ namespace Comments
                    // spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
+
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                serviceScope.ServiceProvider.GetService<ConsultationsContext>().Database.Migrate();
+                
+            }
         }
     }
 }
