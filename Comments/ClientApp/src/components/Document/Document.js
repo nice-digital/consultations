@@ -333,7 +333,7 @@ export class Document extends Component<PropsType, StateType> {
 										className={`document-comment-container ${
 											this.state.loading ? "loading" : ""
 										}`}>	
-										<Selection newCommentFunc={this.props.onNewCommentClick}>
+										<Selection newCommentFunc={this.props.onNewCommentClick} sourceURI={this.props.match.url}>
 											{processDocumentHtml(
 												content,
 												this.props.onNewCommentClick,

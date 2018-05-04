@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import xpathRange from "xpath-range";
 
 type PropsType = {
-	newCommentFunc: Function
+	newCommentFunc: Function,
+	sourceURI: string
 };
 
 type StateType = {	
@@ -58,15 +59,15 @@ export class Selection extends Component<PropsType, StateType> {
 			
 			const firstRange = serialisedRange.ranges.pop();
 			
-			const comment = { quote: serialisedRange.quote,
+			this.props.newCommentFunc({ quote: serialisedRange.quote,
 				rangeStart: firstRange.start,
 				rangeStartOffset: firstRange.startOffset,
 				rangeEnd: firstRange.end,
-				rangeEndOffset: firstRange.endOffset };
-
-			console.log(comment);
-			console.log(this.props.newCommentFunc);
-			this.props.newCommentFunc(comment);
+				rangeEndOffset: firstRange.endOffset,
+				sourceURI: this.props.sourceURI,
+				placeholder: "Comment on this selected text",
+				commentText: "",
+				commentOn: "Selection" });
 		}		
 	}	
 

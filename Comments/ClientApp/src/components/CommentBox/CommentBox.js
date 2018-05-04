@@ -62,8 +62,13 @@ export class CommentBox extends Component<PropsType, StateType> {
 				<li className="CommentBox">
 					<form onSubmit={e => this.props.saveHandler(e, this.state.comment)}>
 						<div className="form__group form__group--textarea mb--0">
-							<p>Comment on: {this.state.comment.commentOn}</p>
-							<p>last modified date: {this.state.comment.lastModifiedDate}</p>
+							<div>Comment on: {this.state.comment.commentOn}</div>
+							{(this.state.comment.lastModifiedDate != null) &&
+								<div>last modified date: {this.state.comment.lastModifiedDate}</div>
+							}							
+							{(this.state.comment.quote != null) &&
+								<div>Quote: {this.state.comment.quote}</div>
+							}
 							<label className="form__label visually-hidden" htmlFor="textarea">
 								{placeholder}
 							</label>
