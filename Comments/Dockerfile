@@ -31,6 +31,7 @@ RUN npm i --production
 
 # Copy .net app to a location on container and run application 
 WORKDIR /app
+COPY ./run.sh ./
 COPY ./published-app ./
 
 EXPOSE 8081

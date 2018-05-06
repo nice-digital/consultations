@@ -30,3 +30,6 @@ jq \
     && mv _appsettings.json appsettings.json
 
 dotnet Comments.dll
+
+# See https://stackoverflow.com/questions/39082768/what-does-set-e-and-exec-do-for-docker-entrypoint-scripts
+exec "$@"
