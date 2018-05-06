@@ -254,3 +254,5 @@ ClientApp/public/*.css.map
 /Comments/ClientApp/.idea.bak
 
 /Comments/published-app
+
+.vscode
