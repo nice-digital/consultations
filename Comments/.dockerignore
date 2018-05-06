@@ -1,3 +1,13 @@
-bin\
-obj\
+.dockerignore
+.env
+.git
+.gitignore
+.vs
+.vscode
+docker-compose.yml
+docker-compose.*.yml
+*/bin
+*/obj
+!obj/Docker/publish/*
+!obj/Docker/empty/
 ClientApp\node_modules\
