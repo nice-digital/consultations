@@ -12,4 +12,4 @@ docker-compose.*.yml
 !obj/Docker/empty/
 node_modules
 docker-run.sh
-errorShots
+errorShots_docker
