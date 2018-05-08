@@ -132,7 +132,7 @@ docker build . -t comments
 Run the image, passing in the environment variable names:
 
 ```sh
-MSYS_NO_PATHCONV=1 docker run --name comments --rm -p 8081:8081 \
+MSYS_NO_PATHCONV=1 docker run --name comments --rm -p 8081:80 \
     -e DEFAULT_CONNECTION \
     -e FEEDS_APIKEY \
     -e FEEDS_BASEPATH \
