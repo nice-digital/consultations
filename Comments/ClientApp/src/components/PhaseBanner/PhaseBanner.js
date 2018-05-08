@@ -11,9 +11,9 @@ type PropsType = {
 export const PhaseBanner = (props: PropsType) => {
 	const { phase, name, repo } = props;
 	return (
-		<p className="phase-banner">
+		<aside className="phase-banner">
 			<span className="phase-banner__tag">
-				<span className={`tag tag--impact tag--${phase}`}>{phase}</span>
+				<span className="tag tag--impact tag--agile">{phase}</span>
 			</span>
 			<span className="phase-banner__label">
 				{name} is in development. This means it is not feature
@@ -26,6 +26,6 @@ export const PhaseBanner = (props: PropsType) => {
 					Visit this page if you wish to report an issue.
 				</a>
 			</span>
-		</p>
+		</aside>
 	);
 };

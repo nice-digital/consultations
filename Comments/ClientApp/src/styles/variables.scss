@@ -4,7 +4,7 @@
 $nice-font-base-path: "fonts/";
 
 %left-drop-shadow {
-  box-shadow: -10px 0 10px rgba(0,0,0,0.1);
+  box-shadow: -10px 0 10px rgba(0, 0, 0, 0.1);
 }
 
 %transition-default {
@@ -17,3 +17,5 @@ $nice-font-base-path: "fonts/";
   height: 40px;
   border: 2px solid black;
 }
+
+$colour-agile-phase: #007AB8;

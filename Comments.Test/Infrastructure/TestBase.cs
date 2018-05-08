@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Data.SQLite;
 using System.Net.Http;
 using Comments.Services;
 using Microsoft.AspNetCore.Builder;
@@ -18,7 +17,7 @@ using NICE.Feeds;
 using NICE.Feeds.Configuration;
 using NICE.Feeds.Tests.Infrastructure;
 using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore.Infrastructure;
+using System.Data.SQLite;
 
 namespace Comments.Test.Infrastructure
 {
@@ -64,32 +63,17 @@ namespace Comments.Test.Infrastructure
             _fakeHttpContextAccessor = FakeHttpContextAccessor.Get(_authenticated, _displayName, _userId);
             var databaseName = DatabaseName + Guid.NewGuid();
 
-            //SQLiteConnectionStringBuilder sqLiteConnectionStringBuilder = new SQLiteConnectionStringBuilder()
-            //{
-            //    DataSource = "my.db",
+            SQLiteConnectionStringBuilder sqLiteConnectionStringBuilder = new SQLiteConnectionStringBuilder()
+            {	       
+                DataSource = "my.db",
+            };
 
-            //    // from doc : Determines how GUIDs are stored. 
-            //    // If true - GUID columns are stored in binary form, 
-            //    // If false - GUID columns are stored as text
-            //    BinaryGUID = true
-            //};
-
-            //using (System.Data.IDbConnection db = new Microsoft.Data.Sqlite.SqliteConnection(sqLiteConnectionStringBuilder))
-            //{
-            //    var result = connection.Query<MyObject>("the query", theFilter());
-            //}
-
-            //var connection = new SqliteConnection(sqLiteConnectionStringBuilder.ConnectionString); //"Data Source=" + DatabaseName + ";"); //"BinaryGuid=False"); //Version=3;
-            //var connection = new SqliteConnection("DataSource=:memory:;cache=shared;");
-            //connection.Open();
+        var connection = new SqliteConnection(sqLiteConnectionStringBuilder.ConnectionString); //"Data Source=" + DatabaseName + ";"); //"BinaryGuid=False"); //Version=3;
 
             _options = new DbContextOptionsBuilder<ConsultationsContext>()
-                    .UseInMemoryDatabase(databaseName)
                     //.UseSqlite(connection)
+                    .UseInMemoryDatabase(databaseName)
                     .Options;
-
-            //_contextOptions = new DbContextOptionsBuilder<ConsultationsContext>();
-            //_contextOptions.UseSqlite(connection);
 
             _context = new ConsultationsContext(_options, _fakeUserService);
 
@@ -100,19 +84,11 @@ namespace Comments.Test.Infrastructure
                     services.AddEntityFrameworkSqlite();
 
                     services.TryAddSingleton<ConsultationsContext>(_context);
-
-                    //services.AddDbContext<ConsultationsContext>(options =>
-                    //    //options.UseInMemoryDatabase(databaseName)
-                    //    options.UseSqlite(connection)
-                        
-                    //    );
                     services.TryAddSingleton<ISeriLogger, FakeSerilogger>();
                     services.TryAddSingleton<IAuthenticateService, FakeAuthenticateService>();
                     services.TryAddSingleton<IHttpContextAccessor>(provider => _fakeHttpContextAccessor);
                     services.TryAddTransient<IUserService>(provider => _fakeUserService);
                     services.TryAddTransient<IFeedReaderService>(provider => new FeedReader(FeedToUse));
-
-                    //services.TryAddSingleton<IDbContextOptionsBuilderInfrastructure>(_contextOptions);
                 })
                 .Configure(app =>
                 {

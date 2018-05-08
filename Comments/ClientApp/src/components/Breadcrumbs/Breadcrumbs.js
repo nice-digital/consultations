@@ -17,7 +17,6 @@ export const BreadCrumbs = (props: PropsType) => {
 			<p className="visually-hidden">You are here:</p>
 			<ol
 				className="breadcrumbs"
-				aria-labelledby="breadcrumb-label"
 				itemScope
 				itemType="http://schema.org/BreadcrumbList"
 			>

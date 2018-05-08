@@ -75,7 +75,7 @@ export class Drawer extends Component<PropsType, StateType> {
 
 	render() {
 		return (
-			<div
+			<section aria-labelledby="commenting-panel"
 				className={this.drawerClassnames()}
 				aria-expanded={this.state.drawerOpen}
 			>
@@ -103,6 +103,7 @@ export class Drawer extends Component<PropsType, StateType> {
 					</button>
 				</div>
 				<div id="sidebar-panel" className="Drawer__main">
+					<h1 id="commenting-panel" className="visually-hidden">Commenting Panel</h1>
 					{/*wrappedComponentRef exposes the underlying, unwrapped component*/}
 					<CommentListWithRouter
 						drawerOpen={this.state.drawerOpen}
@@ -110,7 +111,7 @@ export class Drawer extends Component<PropsType, StateType> {
 						wrappedComponentRef={component => (this.commentList = component)}
 					/>
 				</div>
-			</div>
+			</section>
 		);
 	}
 }
