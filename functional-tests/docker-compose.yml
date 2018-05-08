@@ -2,7 +2,8 @@
 version: '2'
 services:
   firefox:
-    image: selenium/node-firefox:3.11.0-antimony
+    image: selenium/node-firefox:3.11.0-dysprosium
+    # See https://github.com/SeleniumHQ/docker-selenium#running-the-images
     volumes:
       - /dev/shm:/dev/shm
     depends_on:
@@ -11,7 +12,7 @@ services:
       HUB_HOST: hub
 
   chrome:
-    image: selenium/node-chrome:3.11.0-antimony
+    image: selenium/node-chrome:3.11.0-dysprosium
     volumes:
       - /dev/shm:/dev/shm
     depends_on:
@@ -19,21 +20,25 @@ services:
     environment:
       HUB_HOST: hub
 
+  # Selenium Grid/Hub
   hub:
-    image: selenium/hub:3.11.0-antimony
+    image: selenium/hub:3.11.0-dysprosium
     container_name: selenium_hub
-    ports:
-      - "4444:4444"
-    expose:
-      - "4444"
 
+  # The tests themselves
   tests:
     build: .
     links:
       - hub
+      - comments
     
+  # Comment Collection dotnet core web app
   comments:
     build: ./../Comments/
+    links:
+      - database
+    ports:
+        - 8081:80
     environment:
       - DEFAULT_CONNECTION
       - FEEDS_APIKEY
@@ -45,3 +50,11 @@ services:
       - GILLIAM_BASE_PATH
       - GILLIAM_GET_CLAIMS_URL
       - GILLIAM_REALM
+
+  # MS SQL Server database
+  database:
+    image: microsoft/mssql-server-linux:2017-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=Express
+      - MSSQL_SA_PASSWORD
