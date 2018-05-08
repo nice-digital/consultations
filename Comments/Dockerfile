@@ -3,7 +3,7 @@
 
 FROM microsoft/aspnetcore:2.0
 
-ENV ASPNETCORE_URLS http://+:80
+ENV ASPNETCORE_URLS http://+:8081
 
 # Install node and npm
 # Latest Nodejs LTS as of 03/05/2018
@@ -34,7 +34,7 @@ WORKDIR /app
 COPY ./run.sh ./
 COPY ./published-app ./
 
-EXPOSE 80
+EXPOSE 8081
 
 # Run .net app
 ENTRYPOINT ["./run.sh"]
