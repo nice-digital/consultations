@@ -37,10 +37,15 @@ services:
     build: ./../Comments/
     links:
       - database
-    ports:
-        - 8081:80
+    # Uncomment this to enable browsing from the host machine on http://localhost:8081/consultations
+    #ports:
+        #- 8081:8081
     environment:
       - DEFAULT_CONNECTION
+      - LOGGING_LOG_FILE_PATH=logs/Serilog-{Date}.json
+      - APPSETTINGS_ENVIRONMENT_NAME=DockerTests
+      - APPSETTINGS_ENVIRONMENT_SECURESITE=false
+      - APPSETTINGS_ENVIRONMENT_REALM=niceorg
       - FEEDS_APIKEY
       - FEEDS_BASEPATH
       - FEEDS_CHAPTER

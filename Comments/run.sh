@@ -5,6 +5,10 @@
 
 jq \
     --arg defaultConnection "$DEFAULT_CONNECTION" \
+    --arg loggingLogFilePath "$LOGGING_LOG_FILE_PATH" \
+    --arg appSettingsEnvironmentName "$APPSETTINGS_ENVIRONMENT_NAME" \
+    --arg appSettingsEnvironmentSecureSite "$APPSETTINGS_ENVIRONMENT_SECURESITE" \
+    --arg appSettingsEnvironmentRealm "$APPSETTINGS_ENVIRONMENT_REALM" \
     --arg feedsApikey "$FEEDS_APIKEY" \
     --arg feedsBasePath "$FEEDS_BASEPATH" \
     --arg feedsChapter "$FEEDS_CHAPTER" \
@@ -16,6 +20,10 @@ jq \
     --arg gilliamRealm "$GILLIAM_REALM" \
     '
     .ConnectionStrings.DefaultConnection = $defaultConnection |
+    .Logging.LogFilePath = $loggingLogFilePath |
+    .AppSettings.Environment.Name = $appSettingsEnvironmentName |
+    .AppSettings.Environment.SecureSite = $appSettingsEnvironmentSecureSite |
+    .AppSettings.Environment.Realm = $appSettingsEnvironmentRealm |
     .Feeds.ApiKey = $feedsApikey |
     .Feeds.BasePath = $feedsBasePath |
     .Feeds.Chapter = $feedsChapter |
@@ -28,6 +36,8 @@ jq \
     '\
     appsettings.json > _appsettings.json \
     && mv _appsettings.json appsettings.json
+
+# TODO: Wait for SQL to be available before running e.g. https://docs.docker.com/compose/startup-order/
 
 dotnet Comments.dll
 
