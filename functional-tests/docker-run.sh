@@ -7,7 +7,7 @@ export COMPOSE_CONVERT_WINDOWS_PATHS=1
 docker-compose down --remove-orphans && docker-compose rm -vf
 docker-compose build && docker-compose up -d
 
-docker-compose run tests npm run test:teamcity -- --host hub -b http://comments:8081/consultations/
+docker-compose run tests ./docker-wait.sh
 exitCode=$?
 
 docker cp functional-tests_tests_run_1:/tests/errorShots ./errorShots_docker

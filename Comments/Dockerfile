@@ -19,8 +19,8 @@ RUN curl -SL "$NODE_DOWNLOAD_URL" --output nodejs.tar.gz \
 RUN node -v
 RUN npm -v
 
-# Install jq for JSON file replacement
-RUN apt-get update && apt-get install -y jq \
+# Install jq for JSON file replacement and nc for checking sql port is available
+RUN apt-get update && apt-get install jq netcat-openbsd -y \
   && rm -rf /var/lib/apt/lists/*
 
 # Install frontend packages with node

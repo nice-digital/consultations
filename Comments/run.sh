@@ -37,7 +37,15 @@ jq \
     appsettings.json > _appsettings.json \
     && mv _appsettings.json appsettings.json
 
-# TODO: Wait for SQL to be available before running e.g. https://docs.docker.com/compose/startup-order/
+# Wait for SQL container to be available before running e.g. https://docs.docker.com/compose/startup-order/
+i=0
+until nc -z -w30 database 1433
+do
+    printf "Waiting for database connection (%ss)…\n" "$i"
+    sleep 1
+    i=$((i + 1))
+done
+echo "SQL Server available at 'database,1433'. Running dotnet core webapp…"
 
 dotnet Comments.dll
 

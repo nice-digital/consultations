@@ -101,19 +101,7 @@ We use [Docker Compose](https://docs.docker.com/compose/) to create all of the c
 The following command create a network, builds images and runs all the containers, then runs the tests against Chrome and Firefox, via the selenium grid:
 
 ```sh
-./run.sh
-```
-
-Or in CMD on Windows:
-
-```sh
-run
-```
-
-Or in PowerShell:
-
-```sh
-cmd /c "run"
+./docker-run.sh
 ```
 
 ### Docker single container
