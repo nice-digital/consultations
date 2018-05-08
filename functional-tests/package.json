@@ -13,6 +13,11 @@
     "Ian Routledge <ian@ediblecode.com>"
   ],
   "license": "MIT",
+  "private": true,
+  "engines": {
+    "node": ">=8.11.1",
+    "npm": ">=5.6.0"
+  },
   "devDependencies": {
     "babel-preset-env": "^1.6.1",
     "babel-register": "^6.26.0",

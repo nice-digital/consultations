@@ -20,7 +20,7 @@ Loosley based on the [WebdriverIO Cucumber Boilerplate](https://github.com/webdr
 
 ## Required software
 
-- Node <INSERT VERSION HERE>
+- Node >= 8.11.1 (latest LTS as of May 2018) and npm >= 5.6.0
 - Chrome, any version
 - Firefox, optional, any versoin
 
@@ -68,7 +68,7 @@ dotnet publish -c Release -o published-app /property:PublishWithAspNetCoreTarget
 
 ### Environment variables
 
-When we deploy the webapp with Octo we use variable substitution to change settings in [appsettings.json](Comments/appsettings.json). When we're running via Docker, we don't have this luxury. So we have to use environment variables when we run the container(s) to pass in these settings. Run the following from your terminal:
+When we deploy the webapp with Octo we use variable substitution to change settings in [appsettings.json](Comments/appsettings.json). When we're running via Docker, we don't have this luxury. So we have to use environment variables when we run the container(s) to pass in these settings. Run the following, with the correct values, from your terminal:
 
 ```sh
 export DEFAULT_CONNECTION=""
@@ -81,6 +81,7 @@ export GILLIAM_CLIENT_CERTIFICATE_BASE64=""
 export GILLIAM_BASE_PATH=""
 export GILLIAM_GET_CLAIMS_URL=""
 export GILLIAM_REALM=""
+export MSSQL_SA_PASSWORD=""
 ```
 
 > Note: you can get the values from your local User Secrets in Visual Studio.
