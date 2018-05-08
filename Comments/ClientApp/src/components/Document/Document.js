@@ -275,7 +275,6 @@ export class Document extends Component<PropsType, StateType> {
 											onClick={e => {
 												e.preventDefault();
 												this.props.onNewCommentClick({
-													placeholder: "Comment on this whole consultation",
 													sourceURI: this.props.match.url,
 													commentText: "",
 													commentOn: "Consultation",
@@ -299,7 +298,6 @@ export class Document extends Component<PropsType, StateType> {
 											onClick={e => {
 												e.preventDefault();
 												this.props.onNewCommentClick({
-													placeholder: "Comment on this document",
 													sourceURI: this.props.match.url,
 													commentText: "",
 													commentOn: "Document",

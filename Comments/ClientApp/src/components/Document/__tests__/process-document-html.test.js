@@ -45,7 +45,6 @@ describe("[ClientApp]", () => {
 			);
 			instance.wrapper.find("button").simulate("click");
 			expect(instance.clickFunction).toHaveBeenCalledWith({
-				placeholder: "Comment on Foo",
 				sourceURI: "/1/1/guidance",
 				commentText: "",
 				commentOn: "section",

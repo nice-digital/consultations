@@ -26,7 +26,6 @@ export const processDocumentHtml = (
 						onClick={e => {
 							e.preventDefault();
 							onNewCommentClick({
-								placeholder: `Comment on ${elementName}`,
 								sourceURI: sourceURI,
 								commentText: "",
 								commentOn: elementType,
