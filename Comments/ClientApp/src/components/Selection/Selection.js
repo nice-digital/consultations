@@ -22,6 +22,7 @@ export class Selection extends Component<PropsType, StateType> {
 			comment: {},
 			position: {}
 		};
+		this.selectionContainer = React.createRef();
 	}
 	
 	getCommentForRange = (limitingElement: any, selection: any) =>{
@@ -56,11 +57,20 @@ export class Selection extends Component<PropsType, StateType> {
 			let comment = this.getCommentForRange(event.currentTarget, selection);
 
 			let position = { x: event.pageX, y: event.pageY };
-			console.log(position);
+			
 			let elem = document.getElementById("surface");
-			let newpos = this.getElementOffset(elem);
-			console.log(newpos);
-			position = { x: newpos.left, y: newpos.top };
+
+			var rect = elem.getBoundingClientRect();
+			var j =
+			{
+			  top: rect.top + document.documentElement.scrollTop,
+			  left: rect.left + document.documentElement.scrollLeft
+			};
+
+			console.log(position);
+			position.x = position.x - j.left;
+			position.y = position.y - j.top;
+			console.log(position);
 
 
 			//console.log(`position: ${stringifyObject(position)}`);
@@ -112,12 +122,10 @@ export class Selection extends Component<PropsType, StateType> {
 					trigger="click"
 					overlay={<button onClick={this.onButtonClick}>i'm a button</button>}> */}
 				
-				<span onMouseUp={this.onMouseUp} id="surface">
-					<MyToolTip visible={this.state.toolTipVisible} onButtonClick={this.onButtonClick} position={this.state.position}>
-						
-					</MyToolTip>
+				<div onMouseUp={this.onMouseUp} id="surface" ref={this.selectionContainer}>
+					<MyToolTip visible={this.state.toolTipVisible} onButtonClick={this.onButtonClick} position={this.state.position}/>						
 					{this.props.children}
-				</span> 
+				</div> 
 			</Fragment>
 		);
 	}
@@ -139,7 +147,7 @@ export const MyToolTip = (props = ToolTipPropsType) => {
 	};
 	return (
 		<div id="results" style={contentMenuStyle}>
-			<button onClick={onButtonClick}>Click me</button>
+			<button onClick={onButtonClick}>Comment</button>
 		</div>
 	);
 };
