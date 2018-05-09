@@ -1,6 +1,27 @@
 @import "../../../node_modules/@nice-digital/design-system/src/stylesheets/nice-design-system";
 
+$arrow-size: 0.8em;
+
 .selection-container {
   position: absolute; 
   z-index: 99999;
+
+  button::after{
+    content: "";
+    position: absolute;
+    height: 0;
+    width: 0;
+    left: 50%;
+    top: 0;
+    margin-top: -$arrow-size;
+    margin-left: -$arrow-size;
+    border: $arrow-size solid transparent;
+    border-top: none;
+    border-bottom-color: $colour-btn-primary;
+  }
+  button:hover::after{
+    border-bottom-color: $colour-btn-primary-hover;
+  }
+
 }
+
