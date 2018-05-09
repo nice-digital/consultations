@@ -37,8 +37,6 @@ jq \
     appsettings.json > _appsettings.json \
     && mv _appsettings.json appsettings.json
 
-# TODO: Wait for SQL to be available before running e.g. https://docs.docker.com/compose/startup-order/
-
 dotnet Comments.dll
 
 # See https://stackoverflow.com/questions/39082768/what-does-set-e-and-exec-do-for-docker-entrypoint-scripts

@@ -37,9 +37,9 @@ services:
     build: ./../Comments/
     links:
       - database
-    # Uncomment this to enable browsing from the host machine on http://localhost:8081/consultations
-    #ports:
-        #- 8081:8081
+    # Enable browsing from the host machine on http://localhost:8080/consultations
+    ports:
+        - 8080:8080
     environment:
       - DEFAULT_CONNECTION
       - LOGGING_LOG_FILE_PATH=logs/Serilog-{Date}.json
@@ -55,6 +55,10 @@ services:
       - GILLIAM_BASE_PATH
       - GILLIAM_GET_CLAIMS_URL
       - GILLIAM_REALM
+    networks:
+      default:
+        aliases:
+          - niceorg
 
   # MS SQL Server database
   database:

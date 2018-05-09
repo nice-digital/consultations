@@ -72,6 +72,10 @@ When we deploy the webapp with Octo we use variable substitution to change setti
 
 ```sh
 export DEFAULT_CONNECTION=""
+export LOGGING_LOG_FILE_PATH=""
+export APPSETTINGS_ENVIRONMENT_NAME=""
+export APPSETTINGS_ENVIRONMENT_SECURESITE=""
+export APPSETTINGS_ENVIRONMENT_REALM=""
 export FEEDS_APIKEY=""
 export FEEDS_BASEPATH=""
 export FEEDS_CHAPTER=""
@@ -101,19 +105,7 @@ We use [Docker Compose](https://docs.docker.com/compose/) to create all of the c
 The following command create a network, builds images and runs all the containers, then runs the tests against Chrome and Firefox, via the selenium grid:
 
 ```sh
-./run.sh
-```
-
-Or in CMD on Windows:
-
-```sh
-run
-```
-
-Or in PowerShell:
-
-```sh
-cmd /c "run"
+./docker-run.sh
 ```
 
 ### Docker single container
@@ -132,8 +124,12 @@ docker build . -t comments
 Run the image, passing in the environment variable names:
 
 ```sh
-MSYS_NO_PATHCONV=1 docker run --name comments --rm -p 8081:80 \
+MSYS_NO_PATHCONV=1 docker run --name comments --rm -p 8080:8080 \
     -e DEFAULT_CONNECTION \
+    -e LOGGING_LOG_FILE_PATH \
+    -e APPSETTINGS_ENVIRONMENT_NAME \
+    -e APPSETTINGS_ENVIRONMENT_SECURESITE \
+    -e APPSETTINGS_ENVIRONMENT_REALM \
     -e FEEDS_APIKEY \
     -e FEEDS_BASEPATH \
     -e FEEDS_CHAPTER \
@@ -146,7 +142,7 @@ MSYS_NO_PATHCONV=1 docker run --name comments --rm -p 8081:80 \
     comments
 ```
 
-Then browser to http://localhost:8081 on your host machine.
+Then browser to http://localhost:8080 on your host machine.
 
 #### Stopping the container
 
