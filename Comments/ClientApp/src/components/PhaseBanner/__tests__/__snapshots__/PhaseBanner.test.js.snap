@@ -1,14 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`[ClientApp]  PhaseBanner  Matches snapshot 1`] = `
-<p
+<aside
   className="phase-banner"
 >
   <span
     className="phase-banner__tag"
   >
     <span
-      className="tag tag--impact tag--delta"
+      className="tag tag--impact tag--agile"
     >
       delta
     </span>
@@ -27,5 +27,5 @@ exports[`[ClientApp]  PhaseBanner  Matches snapshot 1`] = `
       Visit this page if you wish to report an issue.
     </a>
   </span>
-</p>
+</aside>
 `;
