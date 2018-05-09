@@ -48,32 +48,20 @@ export class Selection extends Component<PropsType, StateType> {
 
 	onMouseUp = (event: Event) => {
 
-		console.log("mouse up");
 		if (window && window.getSelection){
-			let selection = window.getSelection();
+			const selection = window.getSelection();
 			if (selection.isCollapsed || selection.rangeCount < 1){ //isCollapsed is true when there's no text selected.
 				return;
 			}			
-			let comment = this.getCommentForRange(event.currentTarget, selection);
-
-			let position = { x: event.pageX, y: event.pageY };
+			const comment = this.getCommentForRange(event.currentTarget, selection);
 			
-			let elem = document.getElementById("surface");
-
-			var rect = elem.getBoundingClientRect();
-			var j =
+			const boundingRectOfContainer = this.selectionContainer.current.getBoundingClientRect();
+			const position =
 			{
-			  top: rect.top + document.documentElement.scrollTop,
-			  left: rect.left + document.documentElement.scrollLeft
+				x: event.pageX - (boundingRectOfContainer.left + document.documentElement.scrollLeft),
+			  	y: event.pageY - (boundingRectOfContainer.top + document.documentElement.scrollTop)			  
 			};
 
-			console.log(position);
-			position.x = position.x - j.left;
-			position.y = position.y - j.top;
-			console.log(position);
-
-
-			//console.log(`position: ${stringifyObject(position)}`);
 			this.setState({ comment, position, toolTipVisible: true });
 		}		
 	}	
@@ -122,7 +110,7 @@ export class Selection extends Component<PropsType, StateType> {
 					trigger="click"
 					overlay={<button onClick={this.onButtonClick}>i'm a button</button>}> */}
 				
-				<div onMouseUp={this.onMouseUp} id="surface" ref={this.selectionContainer}>
+				<div onMouseUp={this.onMouseUp} ref={this.selectionContainer}>
 					<MyToolTip visible={this.state.toolTipVisible} onButtonClick={this.onButtonClick} position={this.state.position}/>						
 					{this.props.children}
 				</div> 
