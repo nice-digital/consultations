@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import xpathRange from "xpath-range";
-import Tooltip from "rc-tooltip";
-import stringifyObject from "stringify-object";
+//import Tooltip from "rc-tooltip";
+//import stringifyObject from "stringify-object";
 
 type PropsType = {
 	newCommentFunc: Function,
@@ -101,20 +101,10 @@ export class Selection extends Component<PropsType, StateType> {
 
 	render() {
 		return (
-			<Fragment>
-
-				{/* <Tooltip
-					visible={this.state.toolTipVisible}
-					animation="zoom"
-					onVisibleChange={this.onVisibleChange}
-					trigger="click"
-					overlay={<button onClick={this.onButtonClick}>i'm a button</button>}> */}
-				
-				<div onMouseUp={this.onMouseUp} ref={this.selectionContainer}>
-					<MyToolTip visible={this.state.toolTipVisible} onButtonClick={this.onButtonClick} position={this.state.position}/>						
-					{this.props.children}
-				</div> 
-			</Fragment>
+			<div onMouseUp={this.onMouseUp} ref={this.selectionContainer}>
+				<MyToolTip visible={this.state.toolTipVisible} onButtonClick={this.onButtonClick} position={this.state.position}/>						
+				{this.props.children}
+			</div> 
 		);
 	}
 }
@@ -128,13 +118,12 @@ export const MyToolTip = (props = ToolTipPropsType) => {
 	const { position, visible, onButtonClick } = props;
 	var contentMenuStyle = {
 		display: visible ? "block" : "none",
-		position: "absolute", 
 		left: position.x,
-		top: position.y,
-		zIndex: 99999
+		top: position.y
 	};
 	return (
-		<div id="results" style={contentMenuStyle}>
+		<div className="selection-container" style={contentMenuStyle}>			
+			<span className="icon icon--comment" aria-hidden="true"></span>
 			<button onClick={onButtonClick}>Comment</button>
 		</div>
 	);
