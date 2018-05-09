@@ -3,7 +3,7 @@
 
 FROM microsoft/aspnetcore:2.0
 
-ENV ASPNETCORE_URLS http://+:8081
+ENV ASPNETCORE_URLS http://+:8080
 
 # Install node and npm
 # Latest Nodejs LTS as of 03/05/2018
@@ -31,10 +31,19 @@ RUN npm i --production
 
 # Copy .net app to a location on container and run application 
 WORKDIR /app
+
+# Script for waiting for SQL https://github.com/vishnubob/wait-for-it
+COPY ./wait-for-it.sh ./
+RUN chmod +x ./wait-for-it.sh
+
+# Script for running the dotnet app and setting appsettings.json values
 COPY ./run.sh ./
+RUN chmod +x ./run.sh
+
+# Assume dotner core app's already been published...
 COPY ./published-app ./
 
-EXPOSE 8081
+EXPOSE 8080
 
-# Run .net app
-ENTRYPOINT ["./run.sh"]
+# Wait for SQL Server to be available before running the dotnet app
+ENTRYPOINT ["./wait-for-it.sh", "-t", "60", "--strict", "database:1433", "--", "./run.sh"]
