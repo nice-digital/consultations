@@ -51,6 +51,7 @@ export class Selection extends Component<PropsType, StateType> {
 		if (window && window.getSelection){
 			const selection = window.getSelection();
 			if (selection.isCollapsed || selection.rangeCount < 1){ //isCollapsed is true when there's no text selected.
+				this.setState({ toolTipVisible: false });
 				return;
 			}			
 			const comment = this.getCommentForRange(event.currentTarget, selection);
@@ -63,6 +64,8 @@ export class Selection extends Component<PropsType, StateType> {
 			};
 
 			this.setState({ comment, position, toolTipVisible: true });
+		} else{
+			this.setState({ toolTipVisible: false });
 		}		
 	}	
 
@@ -123,8 +126,7 @@ export const MyToolTip = (props = ToolTipPropsType) => {
 	};
 	return (
 		<div className="selection-container" style={contentMenuStyle}>			
-			<span className="icon icon--comment" aria-hidden="true"></span>
-			<button onClick={onButtonClick}>Comment</button>
+			<button onClick={onButtonClick} className="btn"><span className="icon icon--comment" aria-hidden="true"></span>&nbsp;&nbsp;Comment</button>
 		</div>
 	);
 };
