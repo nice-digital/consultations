@@ -125,8 +125,8 @@ export const MyToolTip = (props = ToolTipPropsType) => {
 		top: position.y
 	};
 	return (
-		<div className="selection-container" style={contentMenuStyle}>			
-			<button onClick={onButtonClick} className="btn"><span className="icon icon--comment" aria-hidden="true"></span>&nbsp;&nbsp;Comment</button>
+		<div className="selection-container unselectable" style={contentMenuStyle}>			
+			<button onClick={onButtonClick} className="btn"><span className="icon icon--comment unselectable" aria-hidden="true"></span>&nbsp;&nbsp;Comment</button>
 		</div>
 	);
 };
