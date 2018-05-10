@@ -30,7 +30,7 @@ namespace Comments.Test.Infrastructure
         protected readonly HttpClient _client;
         protected IFeedConfig _feedConfig;
 
-        protected readonly Feed FeedToUse = Feed.ConsultationCommentsListDetailMulitpleDoc;
+        protected readonly Feed FeedToUse = Feed.ConsultationCommentsPublishedDetailMulitpleDoc;
         protected readonly bool _authenticated = true;
         protected readonly string _displayName = "Benjamin Button";
         protected readonly Guid? _userId = Guid.Empty;

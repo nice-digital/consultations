@@ -10,7 +10,7 @@ namespace Comments.Test.IntegrationTests.API.Chapter
 {
     public class ChapterTests : TestBase
     {
-        public ChapterTests() : base(Feed.ConsultationCommentsChapter) {}
+        public ChapterTests() : base(Feed.ConsultationCommentsPublishedChapter) {}
 
         [Theory]
         [InlineData(-1, 1, "introduction")]
