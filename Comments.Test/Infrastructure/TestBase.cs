@@ -113,12 +113,18 @@ namespace Comments.Test.Infrastructure
             _feedConfig = new FeedConfig()
             {
                 AppCacheTimeSeconds = 30,
-                ApiKey = "api key goes here",
-                BasePath = new Uri("http://test-indev.nice.org.uk"),
-                Chapter = "consultation-comments/{0}/document/{1}/chapter-slug/{2}",
-                Detail = "consultation-comments/{0}",
-                List = "consultation-comments-list"
-            };
+                IndevApiKey = "api key goes here",
+                IndevBasePath = new Uri("http://test-indev.nice.org.uk"),
+                //Chapter = "consultation-comments/{0}/document/{1}/chapter-slug/{2}",
+                //Detail = "consultation-comments/{0}",
+                IndevListFeedPath = "consultation-comments-list",
+
+                IndevPublishedChapterFeedPath = "consultation-comments/{0}/document/{1}/chapter-slug/{2}",
+                IndevDraftPreviewChapterFeedPath = "",
+                IndevPublishedDetailFeedPath = "consultation-comments/{0}",
+                IndevDraftPreviewDetailFeedPath = "",
+                IndevPublishedPreviewDetailFeedPath = ""
+    };
         }
 
         #region database stuff

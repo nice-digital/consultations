@@ -2,6 +2,7 @@
 using System.Linq;
 using Newtonsoft.Json;
 using NICE.Feeds.Models.Indev;
+using NICE.Feeds.Models.Indev.Detail;
 
 namespace Comments.ViewModels
 {
@@ -15,7 +16,7 @@ namespace Comments.ViewModels
             Title = title;
             Chapters = chapters;
         }
-        public Document(Resource resource)
+        public Document(Resource<DetailCommentDocument> resource)
         {
             DocumentId = resource.ConsultationDocumentId;
             SupportsComments = resource.IsConsultationCommentsDocument;
@@ -28,11 +29,15 @@ namespace Comments.ViewModels
                     Chapters = resource.Document.Chapters.Select(c => new Chapter(c));
                 }
             }
+
+            HREF = resource.File.Href;
         }
 
         public int DocumentId { get; private set; }
         public bool SupportsComments { get; private set; }
         public string Title { get; private set; }
         public IEnumerable<Chapter> Chapters { get; private set; }
+
+        public string HREF { get; private set; }
     }
 }

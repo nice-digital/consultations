@@ -62,7 +62,7 @@ namespace Comments
             services.TryAddTransient<IConsultationService, ConsultationService>();
             
             services.TryAddTransient<IFeedReaderService>(provider => new FeedReaderService(new RemoteSystemReader(null), AppSettings.Feed));
-            services.TryAddTransient<IFeedConverterService, FeedConverterService>();
+            services.TryAddTransient<IFeedService, FeedService>();
             services.TryAddTransient<IAnswerService, AnswerService>();
             services.TryAddTransient<IQuestionService, QuestionService>();
             
