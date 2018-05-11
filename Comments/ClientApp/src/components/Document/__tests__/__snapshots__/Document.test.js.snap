@@ -368,13 +368,60 @@ Array [
                             </ul>
                         </nav>
                         <nav
-                            aria-label="Documents in this Consultation"
+                            aria-label="Commentable documents"
                             className="stacked-nav"
                         >
                             <h2
                                 className="stacked-nav__root"
                             >
-                                Documents in this Consultation
+                                Commentable documents
+                            </h2>
+                            <ul
+                                className="stacked-nav__list"
+                            >
+                                <li
+                                    className="stacked-nav__list-item"
+                                >
+                                    <a
+                                        aria-current="page"
+                                        href="/1/1/introduction"
+                                        onClick={[Function]}
+                                    >
+                                        Unstable angina and NSTEMI
+                                    </a>
+                                </li>
+                                <li
+                                    className="stacked-nav__list-item"
+                                >
+                                    <a
+                                        aria-current="false"
+                                        href="/1/2/overview"
+                                        onClick={[Function]}
+                                    >
+                                        Sinusitis (acute): antimicrobial prescribing
+                                    </a>
+                                </li>
+                                <li
+                                    className="stacked-nav__list-item"
+                                >
+                                    <a
+                                        aria-current="false"
+                                        href="/1/5/introduction"
+                                        onClick={[Function]}
+                                    >
+                                        Unstable angina and NSTEMI
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <nav
+                            aria-label="Supporting documents and downloads"
+                            className="stacked-nav"
+                        >
+                            <h2
+                                className="stacked-nav__root"
+                            >
+                                Supporting documents and downloads
                             </h2>
                             <ul
                                 className="stacked-nav__list"

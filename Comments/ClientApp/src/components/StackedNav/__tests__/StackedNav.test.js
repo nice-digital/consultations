@@ -53,5 +53,7 @@ describe("[ClientApp] ", () => {
 			const el = wrapper.find("ul li a").first();
 			expect(el.prop("aria-current")).toEqual("page");
 		});
+
+		// TODO: write a test for the new <link> <a> switching
 	});
 });

@@ -65,9 +65,6 @@ export class CommentBox extends Component<PropsType, StateType> {
 			lastModifiedDate,
 			quote
 		} = this.state.comment;
-		const placeholder = this.state.comment.placeholder
-			? this.state.comment.placeholder
-			: null;
 		const tabIndex = this.props.drawerOpen ? "0" : "-1";
 		return (
 			<Fragment>

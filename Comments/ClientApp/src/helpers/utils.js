@@ -40,3 +40,11 @@ export function replaceFormat(stringToReplace, args) {
 		;
 	});
 }
+
+// TODO: need to write test for this
+/**
+ * @param String The string in which you want to check for the presence of "http"
+ * Detects link that starts with "http"
+ * @returns {Boolean}
+ */
+export const isExternalLink = (link) => link.indexOf("http", 0) > -1;
