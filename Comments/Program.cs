@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using System.IO;
+using Microsoft.Extensions.Configuration;
 
 namespace Comments
 {
@@ -13,22 +15,7 @@ namespace Comments
         public static void Main(string[] args)
         {
             var host = BuildWebHost(args);
-            using (var scope = host.Services.CreateScope())
-                {
-                    var services = scope.ServiceProvider;
-                
-                    try
-                    {
-                        var context = services.GetService<ConsultationsContext>();
-                        context.Database.Migrate();
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e);  //TODO: Logging	
-                        throw;
-                    }
-                }
-                host.Run();
+            host.Run();
         }
 
         public static IWebHost BuildWebHost(string[] args) 
@@ -37,5 +24,6 @@ namespace Comments
             .UseStartup<Startup>()
             .Build();
         }
+        
     }
 }

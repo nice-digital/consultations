@@ -108,11 +108,11 @@ namespace Comments.Test.UnitTests
             var consultationService = new ConsultationService(new FeedService(feedReaderService), new FakeLogger<ConsultationService>(), FakeUserService.Get(false));
 
             // Act
-            var (validatedDocumentId, validatedChapterSlug) = consultationService.ValidateDocumentAndChapterWithinConsultation(consultation, 1, null);
+            var (validatedDocumentId, validatedChapterSlug) = consultationService.ValidateDocumentAndChapterWithinConsultation(consultation, documentIdIn, chapterSlugIn);
 
             //Assert
-            validatedDocumentId.ShouldBe(1);
-            validatedChapterSlug.ShouldBe(null);
+            validatedDocumentId.ShouldBe(documentIdOut);
+            validatedChapterSlug.ShouldBe(chapterSlugOut);
         }
 
     }

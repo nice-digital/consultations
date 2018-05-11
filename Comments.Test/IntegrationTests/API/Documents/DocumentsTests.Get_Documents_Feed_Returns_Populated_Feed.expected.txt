@@ -70,7 +70,7 @@
     {
         "documentId":2,
         "supportsComments":false,
-        "title":null,
+        "title":"Committee papers",
         "chapters":null,
         "href":"/guidance/GID-TA10232/documents/committee-papers"
     },

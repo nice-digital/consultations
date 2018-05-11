@@ -123,12 +123,16 @@ namespace Comments
         {           
             seriLogger.Configure(loggerFactory, Configuration, appLifetime, env);
 
+            var startupLogger = loggerFactory.CreateLogger("MyLogger");
+            startupLogger.LogInformation("Test logging");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 loggerFactory.AddConsole(Configuration.GetSection("Logging"));
                 loggerFactory.AddDebug();
             }
+           
 
             app.UseCors("CorsPolicy");
 
@@ -232,11 +236,11 @@ namespace Comments
                 }
             });
 
-            //using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            //{
-            //    serviceScope.ServiceProvider.GetService<ConsultationsContext>().Database.Migrate();
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                serviceScope.ServiceProvider.GetService<ConsultationsContext>().Database.Migrate();
 
-            //}
+            }
         }
     }
 }

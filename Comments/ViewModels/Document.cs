@@ -29,6 +29,10 @@ namespace Comments.ViewModels
                     Chapters = resource.Document.Chapters.Select(c => new Chapter(c));
                 }
             }
+            else
+            {
+                Title = resource.Title ?? resource.File.FileName;
+            }
 
             HREF = resource.File.Href;
         }
