@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NICE.Auth.NetCore.Helpers;
 using NICE.Auth.NetCore.Services;
+using System;
 
 namespace Comments.Controllers.Web
 {
@@ -34,7 +35,8 @@ namespace Comments.Controllers.Web
 
             var user = _httpContextAccessor.HttpContext.User;
             var isLoggedOn = (user != null && user.Identity.IsAuthenticated);
-            var signInUrl = _authenticateService.GetLoginURL(Request.GetUri().PathAndQuery);
+            var xReferer = Request.GetUri().GetComponents(UriComponents.Scheme | UriComponents.Host, UriFormat.UriEscaped);
+            var signInUrl = _authenticateService.GetLoginURL(Request.GetUri().PathAndQuery, xReferer);
             var signOutUrl = _authenticateService.GetLogoutURL(Request.GetUri().PathAndQuery);
 
             SecureTestViewModel model;

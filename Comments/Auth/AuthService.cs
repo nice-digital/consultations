@@ -22,9 +22,9 @@ namespace Comments.Auth
             return _authenticateService.Authenticate(httpContext, out redirectURL);
         }
 
-        public string GetLoginURL(string returnURL = null)
+        public string GetLoginURL(string returnURL = null, string xReferer = null)
         {
-            return _authenticateService.GetLoginURL(returnURL);
+            return _authenticateService.GetLoginURL(returnURL, xReferer);
         }
 
         public string GetLogoutURL(string returnURL = null)
