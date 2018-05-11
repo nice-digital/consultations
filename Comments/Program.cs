@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using System.IO;
+using Microsoft.Extensions.Configuration;
 
 namespace Comments
 {
@@ -24,7 +26,7 @@ namespace Comments
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(e);  //TODO: Logging	
+                        //TODO: Logging	
                         throw;
                     }
                 }
@@ -37,5 +39,6 @@ namespace Comments
             .UseStartup<Startup>()
             .Build();
         }
+        
     }
 }
