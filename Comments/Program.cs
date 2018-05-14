@@ -16,22 +16,21 @@ namespace Comments
         {
             var host = BuildWebHost(args);
             using (var scope = host.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+
+                try
                 {
-                    var services = scope.ServiceProvider;
-                
-                    try
-                    {
-                        var context = services.GetService<ConsultationsContext>();
-                        context.Database.Migrate();
-                    }
-                    catch (Exception e)
-                    {
-                        //TODO: Logging	
-                        throw;
-                    }
+                    var context = services.GetService<ConsultationsContext>();
+                    context.Database.Migrate();
+                }
+                catch (Exception e)
+                {
+                    //TODO: Logging	
+                    throw;
                 }
             }
-                host.Run();
+            host.Run();
         }
 
         public static IWebHost BuildWebHost(string[] args) 
