@@ -16,18 +16,18 @@ namespace Comments
             using (var scope = host.Services.CreateScope())
                 {
                     var services = scope.ServiceProvider;
-                
-                    //try
-                    //{
-                    //    var context = services.GetService<ConsultationsContext>();
-                    //    context.Database.Migrate();
-                    //}
-                    //catch (Exception e)
-                    //{
-                    //    Console.WriteLine(e);  //TODO: Logging	
-                    //    throw;
-                    //}
+
+                try
+                {
+                    var context = services.GetService<ConsultationsContext>();
+                    context.Database.Migrate();
                 }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);  //TODO: Logging	
+                    throw;
+                }
+            }
                 host.Run();
         }
 

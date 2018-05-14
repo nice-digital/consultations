@@ -144,7 +144,8 @@ namespace Comments.Test.IntegrationTests.API.Comments
             var commentId = AddComment(locationId, commentText, false, userId);
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService);
+            var authenticateService = new FakeAuthenticateService(authenticated: true);
+            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService, authenticateService);
 
             //Act
             var response = await _client.DeleteAsync($"consultations/api/Comment/{commentId}");
@@ -168,7 +169,8 @@ namespace Comments.Test.IntegrationTests.API.Comments
             var commentId = AddComment(locationId, commentText, false, userId, _context);
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var commentService = new CommentService(_context, userService);
+            var authenticateService = new FakeAuthenticateService(authenticated: true);
+            var commentService = new CommentService(_context, userService, authenticateService);
 
             var viewModel = commentService.GetComment(commentId);
 
