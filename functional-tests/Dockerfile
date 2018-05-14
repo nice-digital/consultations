@@ -25,3 +25,5 @@ COPY package-lock.json /tests
 RUN npm i
 
 COPY . /tests
+
+CMD npm run test:teamcity

@@ -24,6 +24,8 @@ services:
   hub:
     image: selenium/hub:3.11.0-dysprosium
     container_name: selenium_hub
+    ports: 
+      - 4444:4444
 
   # The tests themselves
   tests:
