@@ -2,7 +2,9 @@
 using Shouldly;
 using System;
 using System.Threading.Tasks;
+using NICE.Feeds.Tests.Infrastructure;
 using Xunit;
+using TestBase = Comments.Test.Infrastructure.TestBase;
 
 namespace Comments.Test.IntegrationTests.API.Documents
 {
@@ -32,12 +34,28 @@ namespace Comments.Test.IntegrationTests.API.Documents
             //Arrange (in base constructor)
 
             // Act
-            var response = await _client.GetAsync("/consultations/api/Documents?consultationId=1");
+            var response = await _client.GetAsync("/consultations/api/Documents?consultationId=54");
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
 
             // Assert
             responseString.ShouldMatchApproved();
         }
+
+        [Fact]
+        public async Task Get_Documents_Feed_Fills_In_Blank_Document_Titles()
+        {
+            //Arrange (in base constructor)
+            FeedToUse = Feed.ConsultationCommentsPublishedDetailNoTitle;
+
+            // Act
+            var response = await _client.GetAsync("/consultations/api/Documents?consultationId=54");
+            response.EnsureSuccessStatusCode();
+            var responseString = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            responseString.ShouldMatchApproved();
+        }
+
     }
 }

@@ -7,7 +7,7 @@ namespace Comments.ViewModels
 {
     public class Consultation
     {
-        public Consultation(NICE.Feeds.Models.Indev.Consultation consultation, User user)
+        public Consultation(NICE.Feeds.Models.Indev.List.ConsultationBase consultation, User user)
         {
             Reference = consultation.Reference;
             Title = consultation.Title;
@@ -79,7 +79,7 @@ namespace Comments.ViewModels
         }
         
 
-        public ConsultationDetail(NICE.Feeds.Models.Indev.ConsultationDetail consultation, User user) : base(consultation, user)
+        public ConsultationDetail(NICE.Feeds.Models.Indev.Detail.ConsultationDetail consultation, User user) : base(consultation, user)
         {
             Documents = consultation.Resources?.Select(r => new Document(r)).ToList();
         }
