@@ -62,7 +62,7 @@ namespace Comments
             services.TryAddTransient<IConsultationService, ConsultationService>();
             
             services.TryAddTransient<IFeedReaderService>(provider => new FeedReaderService(new RemoteSystemReader(null), AppSettings.Feed));
-            services.TryAddTransient<IFeedConverterService, FeedConverterService>();
+            services.TryAddTransient<IFeedService, FeedService>();
             services.TryAddTransient<IAnswerService, AnswerService>();
             services.TryAddTransient<IQuestionService, QuestionService>();
             
@@ -123,12 +123,16 @@ namespace Comments
         {           
             seriLogger.Configure(loggerFactory, Configuration, appLifetime, env);
 
+            var startupLogger = loggerFactory.CreateLogger("MyLogger");
+            startupLogger.LogInformation("Test logging");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 loggerFactory.AddConsole(Configuration.GetSection("Logging"));
                 loggerFactory.AddDebug();
             }
+           
 
             app.UseCors("CorsPolicy");
 
