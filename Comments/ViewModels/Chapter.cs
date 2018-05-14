@@ -2,6 +2,8 @@
 using System.Linq;
 using Newtonsoft.Json;
 using NICE.Feeds.Models.Indev;
+using NICE.Feeds.Models.Indev.Chapter;
+using NICE.Feeds.Models.Indev.Detail;
 
 namespace Comments.ViewModels
 {
@@ -33,7 +35,7 @@ namespace Comments.ViewModels
             Sections = sections;
         }
 
-        public ChapterContent(ConsultationChapter chapter) : base(chapter.Slug, chapter.Title)
+        public ChapterContent(ConsultationPublishedChapter chapter) : base(chapter.Slug, chapter.Title)
         {
             Content = chapter.Content;
             Sections = chapter.Sections?.Select(s => new ChapterSection(s));

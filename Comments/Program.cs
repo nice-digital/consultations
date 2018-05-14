@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using System.IO;
+using Microsoft.Extensions.Configuration;
 
 namespace Comments
 {
@@ -16,16 +18,17 @@ namespace Comments
             using (var scope = host.Services.CreateScope())
                 {
                     var services = scope.ServiceProvider;
-
-                try
-                {
-                    var context = services.GetService<ConsultationsContext>();
-                    context.Database.Migrate();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);  //TODO: Logging	
-                    throw;
+                
+                    try
+                    {
+                        var context = services.GetService<ConsultationsContext>();
+                        context.Database.Migrate();
+                    }
+                    catch (Exception e)
+                    {
+                        //TODO: Logging	
+                        throw;
+                    }
                 }
             }
                 host.Run();
@@ -37,5 +40,6 @@ namespace Comments
             .UseStartup<Startup>()
             .Build();
         }
+        
     }
 }

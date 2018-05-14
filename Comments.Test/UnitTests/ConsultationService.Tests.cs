@@ -106,8 +106,8 @@ namespace Comments.Test.UnitTests
                     })
                 }, 
                 user: null);
-            var feedReaderService = new FeedReader(Feed.ConsultationCommentsListDetailMulitpleDoc);
-            var consultationService = new ConsultationService(new FeedConverterService(feedReaderService), new FakeLogger<ConsultationService>(), FakeUserService.Get(false));
+            var feedReaderService = new FeedReader(Feed.ConsultationCommentsPublishedDetailMulitpleDoc);
+            var consultationService = new ConsultationService(new FeedService(feedReaderService), new FakeLogger<ConsultationService>(), FakeUserService.Get(false));
 
             // Act
             var (validatedDocumentId, validatedChapterSlug) = consultationService.ValidateDocumentAndChapterWithinConsultation(consultation, documentIdIn, chapterSlugIn);

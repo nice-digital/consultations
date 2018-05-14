@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from "react";
 import Moment from "react-moment";
+import LinesEllipsis from "react-lines-ellipsis";
 
 type PropsType = {
 	staticContext?: any,
@@ -21,7 +22,8 @@ export class CommentBox extends Component<PropsType, StateType> {
 			},
 			ui: {
 				unsavedChanges: false
-			}
+			},
+			useEllipsis: true
 		};
 	}
 
@@ -41,6 +43,17 @@ export class CommentBox extends Component<PropsType, StateType> {
 			}
 		});
 	};
+
+	viewAllQuoteClick = e => {
+		e.preventDefault();
+		this.setState({useEllipsis: false});
+	}
+
+	viewAllQuoteKeyDown = e => {
+		if (e.keyCode === 13) {
+			this.viewAllQuoteClick(e);
+		}
+	}
 
 	static getDerivedStateFromProps(nextProps, prevState) {
 		const prevTimestamp = prevState.comment.lastModifiedDate;
@@ -69,12 +82,28 @@ export class CommentBox extends Component<PropsType, StateType> {
 			? this.state.comment.placeholder
 			: null;
 		const tabIndex = this.props.drawerOpen ? "0" : "-1";
+		const useEllipsis = this.state.useEllipsis;
 		return (
 			<Fragment>
 				<li className="CommentBox">
 					<form onSubmit={e => this.props.saveHandler(e, this.state.comment)}>
 						<div>Comment on: {commentOn}</div>
-						<div>Quote: {quote}</div>
+						{quote && 
+							<div>Quote:
+							{useEllipsis ? (
+								<div onClick={this.viewAllQuoteClick} onKeyDown={this.viewAllQuoteKeyDown} tabIndex="0">
+									<LinesEllipsis
+										text={quote}
+										maxLine='3'
+										ellipsis='... view all'
+										trimRight
+										basedOn='letters' />
+								</div>
+							) : (
+								<span>{quote}</span>
+							)}
+							</div>
+						}
 						<div>
 							Last Modified Date:{" "}
 							<Moment format="D/M/YYYY - h:mma" date={lastModifiedDate} />
