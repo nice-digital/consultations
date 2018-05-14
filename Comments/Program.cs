@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using Microsoft.Extensions.Configuration;
+using Serilog;
 
 namespace Comments
 {
@@ -15,30 +16,22 @@ namespace Comments
         public static void Main(string[] args)
         {
             var host = BuildWebHost(args);
-            using (var scope = host.Services.CreateScope())
-                {
-                    var services = scope.ServiceProvider;
-                
-                    try
-                    {
-                        var context = services.GetService<ConsultationsContext>();
-                        context.Database.Migrate();
-                    }
-                    catch (Exception e)
-                    {
-                        //TODO: Logging	
-                        throw;
-                    }
-                }
-                host.Run();
+            host.Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) 
+        public static IWebHost BuildWebHost(string[] args)
         {
             return WebHost.CreateDefaultBuilder(args)
-            .UseStartup<Startup>()
-            .Build();
+                .ConfigureLogging(ConfigureLogger)
+                .UseStartup<Startup>()
+                .Build();
         }
-        
+
+        static void ConfigureLogger(WebHostBuilderContext ctx, ILoggingBuilder logging)
+        {
+            logging.AddConfiguration(ctx.Configuration.GetSection("Logging"));
+            logging.AddConsole();
+            logging.AddDebug();
+        }
     }
 }
