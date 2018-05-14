@@ -15,6 +15,8 @@ import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
 import { projectInformation } from "../../constants";
 import { processDocumentHtml } from "./process-document-html";
+import { LoginBanner } from "./../LoginBanner/LoginBanner";
+import { UserContext } from "../../context/UserContext";
 
 type PropsType = {
 	staticContext?: any,
@@ -256,6 +258,9 @@ export class Document extends Component<PropsType, StateType> {
 				<Helmet>
 					<title>{title}</title>
 				</Helmet>
+				<UserContext.Consumer>
+					{ value => !value.isAuthorised ? <LoginBanner signinButton={false} signinUrl="#" registerUrl="#"/> : null }
+				</UserContext.Consumer>
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">

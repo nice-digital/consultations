@@ -5,7 +5,8 @@ import { withRouter } from "react-router-dom";
 import { load } from "./../../data/loader";
 import preload from "../../data/pre-loader";
 import { CommentBox } from "../CommentBox/CommentBox";
-//import stringifyObject from "stringify-object";
+import { LoginBanner } from "./../LoginBanner/LoginBanner";
+import { UserContext } from "../../context/UserContext";
 
 type PropsType = {
 	staticContext?: any,
@@ -170,31 +171,33 @@ export class CommentList extends Component<PropsType, StateType> {
 	};
 
 	render() {
-		if (this.state.loading) return <p>Loading</p>;
-		if (!this.state.loading && this.state.comments.length === 0)
-			return (
-				<Fragment>
-					<p>No comments</p>
-				</Fragment>
-			);
-
 		return (
-			<Fragment>
-				<ul className="CommentList list--unstyled">
-					{this.state.comments.map((comment, idx) => {
+			<UserContext.Consumer>
+				{ value => {
+					if (this.state.loading) return <p>Loading</p>;
+					if (value.isAuthorised) {
+						if (this.state.comments.length === 0) return <p>No comments yet</p>;
 						return (
-							<CommentBox
-								drawerOpen={this.props.drawerOpen}
-								key={comment.commentId}
-								unique={`Comment${idx}`}
-								comment={comment}
-								saveHandler={this.saveCommentHandler}
-								deleteHandler={this.deleteCommentHandler}
-							/>
+							<ul className="CommentList list--unstyled">
+								{this.state.comments.map((comment, idx) => {
+									return (
+										<CommentBox
+											drawerOpen={this.props.drawerOpen}
+											key={comment.commentId}
+											unique={`Comment${idx}`}
+											comment={comment}
+											saveHandler={this.saveCommentHandler}
+											deleteHandler={this.deleteCommentHandler}
+										/>
+									);
+								})}
+							</ul>
 						);
-					})}
-				</ul>
-			</Fragment>
+					} else {
+						return <LoginBanner signinButton={true} signinUrl="#" registerUrl="#"/>;
+					}
+				}}
+			</UserContext.Consumer>
 		);
 	}
 }
