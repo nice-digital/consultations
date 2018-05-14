@@ -368,13 +368,13 @@ Array [
                             </ul>
                         </nav>
                         <nav
-                            aria-label="Commentable documents"
+                            aria-label="Other commentable documents in this consultation"
                             className="stacked-nav"
                         >
                             <h2
                                 className="stacked-nav__root"
                             >
-                                Commentable documents
+                                Other commentable documents in this consultation
                             </h2>
                             <ul
                                 className="stacked-nav__list"
@@ -406,22 +406,66 @@ Array [
                                 >
                                     <a
                                         aria-current="false"
+                                        href="/1/3/product-intros-056fc427-7484-4d78-8d55-0070aaa12061-2-2docx"
+                                        onClick={[Function]}
+                                    >
+                                        Download Document
+                                    </a>
+                                </li>
+                                <li
+                                    className="stacked-nav__list-item"
+                                >
+                                    <a
+                                        aria-current="false"
+                                        href="/1/4/messaging-service-restartdocx"
+                                        onClick={[Function]}
+                                    >
+                                        Download Document
+                                    </a>
+                                </li>
+                                <li
+                                    className="stacked-nav__list-item"
+                                >
+                                    <a
+                                        aria-current="false"
                                         href="/1/5/introduction"
                                         onClick={[Function]}
                                     >
                                         Unstable angina and NSTEMI
+                                    </a>
+                                </li>
+                                <li
+                                    className="stacked-nav__list-item"
+                                >
+                                    <a
+                                        aria-current="false"
+                                        href="/1/6/messaging-service-restartdocx"
+                                        onClick={[Function]}
+                                    >
+                                        Download Document
+                                    </a>
+                                </li>
+                                <li
+                                    className="stacked-nav__list-item"
+                                >
+                                    <a
+                                        aria-current="false"
+                                        href="/1/7/supervisor-self-service-nice-guide-2018docx"
+                                        onClick={[Function]}
+                                    >
+                                        Download Document
                                     </a>
                                 </li>
                             </ul>
                         </nav>
                         <nav
-                            aria-label="Supporting documents and downloads"
+                            aria-label="Supporting documents"
                             className="stacked-nav"
                         >
                             <h2
                                 className="stacked-nav__root"
                             >
-                                Supporting documents and downloads
+                                Supporting documents
                             </h2>
                             <ul
                                 className="stacked-nav__list"
@@ -430,33 +474,33 @@ Array [
                                     className="stacked-nav__list-item"
                                 >
                                     <a
-                                        aria-current="page"
-                                        href="/1/1/introduction"
-                                        onClick={[Function]}
+                                        href="https://test.nice.org.ukundefined"
+                                        rel="noopener"
+                                        target="_blank"
                                     >
-                                        Unstable angina and NSTEMI
+                                        Download Document
                                     </a>
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
                                 >
                                     <a
-                                        aria-current="false"
-                                        href="/1/2/overview"
-                                        onClick={[Function]}
+                                        href="https://test.nice.org.ukundefined"
+                                        rel="noopener"
+                                        target="_blank"
                                     >
-                                        Sinusitis (acute): antimicrobial prescribing
+                                        Download Document
                                     </a>
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
                                 >
                                     <a
-                                        aria-current="false"
-                                        href="/1/5/introduction"
-                                        onClick={[Function]}
+                                        href="https://test.nice.org.ukundefined"
+                                        rel="noopener"
+                                        target="_blank"
                                     >
-                                        Unstable angina and NSTEMI
+                                        Download Document
                                     </a>
                                 </li>
                             </ul>

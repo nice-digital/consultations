@@ -22,6 +22,10 @@ describe("[ClientApp] ", () => {
 					{
 						label: "Sub Link 3 Label",
 						url: "sub-link-3-url"
+					},
+					{
+						label: "External Link",
+						url: "https://external-link.com"
 					}
 				]
 			}
@@ -44,9 +48,9 @@ describe("[ClientApp] ", () => {
 
 		it("should render the number of links supplied in props with anchors that match", () => {
 			const el = wrapper.find("ul li a");
-			expect(el.length).toEqual(3);
+			expect(el.length).toEqual(4);
 			expect(el.first().prop("href")).toEqual("sub-link-1-url");
-			expect(el.last().text()).toEqual("Sub Link 3 Label");
+			expect(el.at(2).text()).toEqual("Sub Link 3 Label");
 		});
 
 		it("should render a link with aria-current attribute set if link is current", () => {
@@ -54,6 +58,9 @@ describe("[ClientApp] ", () => {
 			expect(el.prop("aria-current")).toEqual("page");
 		});
 
-		// TODO: write a test for the new <link> <a> switching
+		it("should render a standard anchor tag if the destination contains http", () => {
+			const el = wrapper.find("ul li a");
+			expect(el.last().prop("target")).toEqual("_blank");
+		});
 	});
 });

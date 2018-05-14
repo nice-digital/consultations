@@ -4,14 +4,13 @@ import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { MemoryRouter } from "react-router";
 
+import { fileDownloadBasepath } from "../../../constants";
 import { Document } from "../Document";
 import ChapterData from "./Chapter";
 import ConsultationData from "./Consultation";
 import DocumentsData from "./Documents";
 import { nextTick } from "../../../helpers/utils";
 import toJson from "enzyme-to-json";
-
-// import { generateUrl } from "./../../../data/loader";
 
 describe("[ClientApp] ", () => {
 	describe("Document Component", () => {
@@ -145,12 +144,12 @@ describe("[ClientApp] ", () => {
 					{
 						current: true,
 						label: "Document One",
-						url: "/guidance/one/123"
+						url: fileDownloadBasepath + "/guidance/one/123"
 					},
 					{
 						current: false,
 						label: "Document Three",
-						url: "/guidance/three/123"
+						url: fileDownloadBasepath + "/guidance/three/123"
 					}
 				]);
 			});
