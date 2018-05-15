@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import xpathRange from "xpath-range";
 //import Tooltip from "rc-tooltip";
 //import stringifyObject from "stringify-object";
@@ -8,7 +8,7 @@ type PropsType = {
 	sourceURI: string
 };
 
-type StateType = {	
+type StateType = {
 	toolTipVisible: boolean,
 	comment: any,
 	position: any
@@ -24,15 +24,15 @@ export class Selection extends Component<PropsType, StateType> {
 		};
 		this.selectionContainer = React.createRef();
 	}
-	
+
 	getCommentForRange = (limitingElement: any, selection: any) =>{
 		let selectionRange = selection.getRangeAt(0);
 		let browserRange = new xpathRange.Range.BrowserRange(selectionRange);
 		let normedRange = browserRange.normalize().limit(limitingElement); //restrict the range to the current limiting area.
-		
+
 		let quote = this.trim(normedRange.text());
 		let serialisedRange = normedRange.serialize(limitingElement, "");
-		
+
 		let comment = { quote: quote,
 			rangeStart: serialisedRange.start,
 			rangeStartOffset: serialisedRange.startOffset,
@@ -53,21 +53,21 @@ export class Selection extends Component<PropsType, StateType> {
 			if (selection.isCollapsed || selection.rangeCount < 1){ //isCollapsed is true when there's no text selected.
 				this.setState({ toolTipVisible: false });
 				return;
-			}			
+			}
 			const comment = this.getCommentForRange(event.currentTarget, selection);
-			
+
 			const boundingRectOfContainer = this.selectionContainer.current.getBoundingClientRect();
 			const position =
 			{
 				x: event.pageX - (boundingRectOfContainer.left + document.documentElement.scrollLeft),
-			  	y: event.pageY - (boundingRectOfContainer.top + document.documentElement.scrollTop)			  
+			  	y: event.pageY - (boundingRectOfContainer.top + document.documentElement.scrollTop)
 			};
 
 			this.setState({ comment, position, toolTipVisible: true });
 		} else{
 			this.setState({ toolTipVisible: false });
-		}		
-	}	
+		}
+	}
 
 	getElementOffset = (element:any) => {
 
@@ -105,16 +105,16 @@ export class Selection extends Component<PropsType, StateType> {
 	render() {
 		return (
 			<div onMouseUp={this.onMouseUp} ref={this.selectionContainer}>
-				<MyToolTip visible={this.state.toolTipVisible} onButtonClick={this.onButtonClick} position={this.state.position}/>						
+				<MyToolTip visible={this.state.toolTipVisible} onButtonClick={this.onButtonClick} position={this.state.position}/>
 				{this.props.children}
-			</div> 
+			</div>
 		);
 	}
 }
 
 type ToolTipPropsType = {
 	position: any,
-	visible: boolean,	
+	visible: boolean,
 	onButtonClick: any
 }
 export const MyToolTip = (props = ToolTipPropsType) => {
@@ -125,7 +125,7 @@ export const MyToolTip = (props = ToolTipPropsType) => {
 		top: position.y
 	};
 	return (
-		<div className="selection-container unselectable" style={contentMenuStyle}>			
+		<div className="selection-container unselectable" style={contentMenuStyle}>
 			<button onClick={onButtonClick} className="btn"><span className="icon icon--comment unselectable" aria-hidden="true"></span>&nbsp;&nbsp;Comment</button>
 		</div>
 	);

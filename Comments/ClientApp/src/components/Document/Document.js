@@ -17,6 +17,8 @@ import { projectInformation, fileDownloadBasepath } from "../../constants";
 import { processDocumentHtml } from "./process-document-html";
 import { LoginBanner } from "./../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
+import { Selection } from "../Selection/Selection";
+import stringifyObject from "stringify-object";
 
 type PropsType = {
 	staticContext?: any,

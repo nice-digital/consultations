@@ -7,6 +7,7 @@ import preload from "../../data/pre-loader";
 import { CommentBox } from "../CommentBox/CommentBox";
 import { LoginBanner } from "./../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
+// import stringifyObject from "stringify-object";
 
 type PropsType = {
 	staticContext?: any,
@@ -82,7 +83,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			};
 			//console.log('server side: ' + preloadedData.isAuthorised);
 		}
-		
+
 	}
 
 	loadComments() {
