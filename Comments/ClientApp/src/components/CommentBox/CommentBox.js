@@ -125,25 +125,11 @@ export class CommentBox extends Component<PropsType, StateType> {
 								</label>
 								<textarea
 									id={this.props.unique}
-
-
-
-
-
-
-
-
-
-
-
-
-
 									tabIndex={tabIndex}
 									className="form__input form__input--textarea"
 									onChange={this.textareaChangeHandler}
 									placeholder="Enter your comment here"
 									value={commentText}
-
 								/>
 							</div>
 							{this.state.comment.commentText &&
