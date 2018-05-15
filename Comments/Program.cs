@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using Microsoft.Extensions.Configuration;
-using Serilog;
 
 namespace Comments
 {
@@ -22,16 +21,8 @@ namespace Comments
         public static IWebHost BuildWebHost(string[] args)
         {
             return WebHost.CreateDefaultBuilder(args)
-                .ConfigureLogging(ConfigureLogger)
                 .UseStartup<Startup>()
                 .Build();
-        }
-
-        static void ConfigureLogger(WebHostBuilderContext ctx, ILoggingBuilder logging)
-        {
-            logging.AddConfiguration(ctx.Configuration.GetSection("Logging"));
-            logging.AddConsole();
-            logging.AddDebug();
         }
     }
 }

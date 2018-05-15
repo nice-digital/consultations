@@ -198,6 +198,7 @@ namespace Comments.Test.UnitTests
             var userId = Guid.NewGuid();
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+            var authenticateService = new FakeAuthenticateService(authenticated: true);
 
             var locationId = AddLocation(sourceURI);
             var questionTypeId = AddQuestionType(Guid.NewGuid().ToString(), false, true);
@@ -205,7 +206,7 @@ namespace Comments.Test.UnitTests
             var expectedAnswerId = AddAnswer(questionId, userId, "current user's answer");
             AddAnswer(questionId, Guid.NewGuid(), "another user's answer");
             
-            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService);
+            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService, authenticateService);
 
             // Act
             var viewModel = commentService.GetCommentsAndQuestions(sourceURI);

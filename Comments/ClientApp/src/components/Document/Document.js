@@ -15,6 +15,7 @@ import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
 import { projectInformation } from "../../constants";
 import { processDocumentHtml } from "./process-document-html";
+import { Selection } from "../Selection/Selection";
 
 type PropsType = {
 	staticContext?: any,
@@ -284,7 +285,8 @@ export class Document extends Component<PropsType, StateType> {
 											}}
 										>
 											Comment on whole consultation
-										</button>
+										</button>&nbsp;&nbsp;
+										<a href="/secure">secure</a>
 									</p>
 									<h1 className="page-header__heading mt--0">{title}</h1>
 									<p className="page-header__lead">
@@ -333,11 +335,13 @@ export class Document extends Component<PropsType, StateType> {
 												this.state.loading ? "loading" : ""
 											}`}
 										>
-											{processDocumentHtml(
-												content,
-												this.props.onNewCommentClick,
-												this.props.match.url
-											)}
+											<Selection newCommentFunc={this.props.onNewCommentClick} sourceURI={this.props.match.url}>
+												{processDocumentHtml(
+													content,
+													this.props.onNewCommentClick,
+													this.props.match.url
+												)}
+											</Selection>
 										</div>
 									</div>
 									<div data-g="12 md:3">

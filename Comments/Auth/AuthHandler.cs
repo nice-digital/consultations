@@ -75,6 +75,7 @@ namespace Comments.Auth
             if (httpContext != null)
             {
                 var returnURL = httpContext.Request.GetUri();
+                //var xReferer = returnURL.GetComponents(UriComponents.Scheme | UriComponents.Host, UriFormat.UriEscaped);
                 var redirectUrl = _authenticateService.GetLoginURL(returnURL.AbsoluteUri);
                 httpContext.Response.Redirect(redirectUrl);
             }
