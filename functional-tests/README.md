@@ -169,3 +169,7 @@ If you get errors like "Cannot start service...Error starting userland proxy: mk
 #### bad interpreter: No such file or directory
 
 If you get errors like "/bin/bash^M: bad interpreter: No such file or directory" or "exited with code 126" then check that your .sh files use LF (and not CRLF) line endings
+
+#### Unknown locator strategy id
+
+If you get errors like "Unknown locator strategy id" in Firefox, using ID's as selectors, see https://github.com/aerokube/selenoid/issues/261. Firefox (Gecko driver) doesn't support IDs and requires CSS selectors, so you can get round it with "body #id".
