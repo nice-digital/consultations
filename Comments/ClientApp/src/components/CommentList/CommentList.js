@@ -5,7 +5,7 @@ import { withRouter } from "react-router-dom";
 import { load } from "./../../data/loader";
 import preload from "../../data/pre-loader";
 import { CommentBox } from "../CommentBox/CommentBox";
-//import stringifyObject from "stringify-object";
+import stringifyObject from "stringify-object";
 
 type PropsType = {
 	staticContext?: any,
@@ -37,21 +37,30 @@ type CommentType = {
 
 type StateType = {
 	comments: Array<CommentType>,
-	loading: boolean
+	loading: boolean,
+	isAuthorised: boolean
 };
 
 export class CommentList extends Component<PropsType, StateType> {
 	constructor(props: PropsType) {
+
 		super(props);
 		this.state = {
 			comments: [],
-			loading: true
+			questions: [],
+			loading: true,
+			isAuthorised: false,
+			signInURL: ""
 		};
 		let preloadedData = {};
 		if (this.props.staticContext && this.props.staticContext.preload) {
 			preloadedData = this.props.staticContext.preload.data;
+
+			//console.log('setting is authorised to:' + preloadedData.isAuthorised);
+			this.state.isAuthorised = preloadedData.isAuthorised;
 		}
 
+		//console.log(`preloadedData: ${stringifyObject(preloadedData)}`);
 		const preloaded = preload(
 			this.props.staticContext,
 			"comments",
@@ -65,9 +74,14 @@ export class CommentList extends Component<PropsType, StateType> {
 		if (preloaded) {
 			this.state = {
 				comments: preloaded.comments,
-				loading: false
+				loading: false,
+				questions: preloaded.questions,
+				isAuthorised: preloadedData.isAuthorised,
+				signInURL: preloadedData.signInURL
 			};
+			//console.log('server side: ' + preloadedData.isAuthorised);
 		}
+		
 	}
 
 	loadComments() {
@@ -75,7 +89,10 @@ export class CommentList extends Component<PropsType, StateType> {
 			res => {
 				this.setState({
 					comments: res.data.comments,
-					loading: false
+					questions: res.data.questions,
+					loading: false,
+					isAuthorised: res.data.isAuthorised,
+					signInURL: res.data.signInURL
 				});
 			}
 		);
@@ -171,7 +188,16 @@ export class CommentList extends Component<PropsType, StateType> {
 
 	render() {
 		if (this.state.loading) return <p>Loading</p>;
-		if (!this.state.loading && this.state.comments.length === 0)
+
+		if (this.state.isAuthorised === false)
+			return (
+				<Fragment>
+					<p>Sign in message goes here.</p>
+					<a href={this.state.signInURL}>Sign in</a>
+				</Fragment>
+			);
+
+		if (this.state.comments.length === 0)
 			return (
 				<Fragment>
 					<p>No comments</p>

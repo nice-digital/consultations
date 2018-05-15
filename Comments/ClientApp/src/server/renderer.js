@@ -45,7 +45,11 @@ export const serverRenderer = (params): Promise => {
 		//      return null; }} />
 		let staticContext = {
 			preload: {
-				data: { cookies: params.data.cookies }, // Key value pairs of preloaded data sets
+				data: {
+					cookies: params.data.cookies,
+					isAuthorised: params.data.isAuthorised,
+					signInURL: params.data.signInURL
+				}, // Key value pairs of preloaded data sets
 				loaders: [] // List of promises where we track preloading data
 			},
 			baseUrl: params.origin + BaseUrlRelative

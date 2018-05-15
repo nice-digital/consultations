@@ -10,6 +10,7 @@ using NICE.Auth.NetCore.Helpers;
 using System.Text.Encodings.Web;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Comments.Common;
 
 namespace Comments.Auth
 {
@@ -49,13 +50,13 @@ namespace Comments.Auth
 
                 var authenticated = httpContext.User?.Identity != null && httpContext.User.Identity.IsAuthenticated;
 
-                if (!authenticated && !httpContext.Items.ContainsKey(Constants.ItemsAuthAttempted))
+                if (!authenticated && !httpContext.Items.ContainsKey(NICE.Auth.NetCore.Helpers.Constants.ItemsAuthAttempted))
                 {
                     authenticated = _authenticateService.Authenticate(httpContext, out var redirectURL);
-                    httpContext.Items[Constants.ItemsAuthAttempted] = true;
+                    httpContext.Items[NICE.Auth.NetCore.Helpers.Constants.ItemsAuthAttempted] = true;
                     if (authenticated && !string.IsNullOrWhiteSpace(redirectURL))
                     {
-                        //httpContext.Response.Redirect(redirectURL);                        
+                        httpContext.Response.Redirect(redirectURL);                        
                     }
                 }
                     
@@ -75,7 +76,7 @@ namespace Comments.Auth
             if (httpContext != null)
             {
                 var returnURL = httpContext.Request.GetUri();
-                var redirectUrl = _authenticateService.GetLoginURL(returnURL.AbsoluteUri);
+                var redirectUrl = _authenticateService.GetLoginURL(returnURL.AbsoluteUri.ToHTTPS());
                 httpContext.Response.Redirect(redirectUrl);
             }
             return Task.CompletedTask;

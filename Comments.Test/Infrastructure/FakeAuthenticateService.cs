@@ -25,6 +25,11 @@ namespace Comments.Test.Infrastructure
             return _authenticated;
         }
 
+        public string GetLoginURL(string returnURL = null, string xReferer = null)
+        {
+            return _loginURL;
+        }
+
         public string GetLoginURL(string returnURL = null)
         {
             return _loginURL;
