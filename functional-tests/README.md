@@ -9,12 +9,20 @@ Loosley based on the [WebdriverIO Cucumber Boilerplate](https://github.com/webdr
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Required software](#required-software)
-- [Commands](#commands)
+- [Running locally](#running-locally)
   - [Excluding tests](#excluding-tests)
+  - [Run a single test](#run-a-single-test)
 - [Docker](#docker)
-  - [Docker Dev](#docker-dev)
-    - [Running locally](#running-locally)
+  - [Publish](#publish)
+  - [Environment variables](#environment-variables)
+  - [Docker Compose](#docker-compose)
+  - [Docker single container](#docker-single-container)
+    - [Build the image](#build-the-image)
+    - [Running the image](#running-the-image)
     - [Stopping the container](#stopping-the-container)
+  - [Troubleshooting and gotchas](#troubleshooting-and-gotchas)
+    - [Error starting userland proxy](#error-starting-userland-proxy)
+    - [bad interpreter: No such file or directory](#bad-interpreter-no-such-file-or-directory)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -149,3 +157,15 @@ Then browser to http://localhost:8080 on your host machine.
 ```sh
 docker stop comments
 ```
+
+### Troubleshooting and gotchas
+
+Solutions to common gotchas.
+
+#### Error starting userland proxy
+
+If you get errors like "Cannot start service...Error starting userland proxy: mkdir", try disabling Experimental features in Docker for Windows. See https://github.com/docker/for-win/issues/573#issuecomment-288940904
+
+#### bad interpreter: No such file or directory
+
+If you get errors like "/bin/bash^M: bad interpreter: No such file or directory" or "exited with code 126" then check that your .sh files use LF (and not CRLF) line endings
