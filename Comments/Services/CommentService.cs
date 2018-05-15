@@ -106,7 +106,7 @@ namespace Comments.Services
         public CommentsAndQuestions GetCommentsAndQuestions(string relativeURL)
         {
             var user = _userService.GetCurrentUser();
-            var signInURL = _authenticateService.GetLoginURL(relativeURL);
+            var signInURL = _authenticateService.GetLoginURL(relativeURL.ToConsultationsRelativeUrl());
 
             if (!user.IsLoggedIn)
                 return new CommentsAndQuestions(new List<ViewModels.Comment>(), new List<ViewModels.Question>(), user.IsLoggedIn, signInURL);

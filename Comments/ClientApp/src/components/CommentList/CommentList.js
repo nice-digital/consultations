@@ -43,7 +43,7 @@ type StateType = {
 
 export class CommentList extends Component<PropsType, StateType> {
 	constructor(props: PropsType) {
-		console.log('in constructor');
+		//console.log('in constructor');
 		super(props);
 		this.state = {
 			comments: [],
