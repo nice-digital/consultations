@@ -85,11 +85,11 @@ export LOGGING_LOG_FILE_PATH=""
 export APPSETTINGS_ENVIRONMENT_NAME=""
 export APPSETTINGS_ENVIRONMENT_SECURESITE=""
 export APPSETTINGS_ENVIRONMENT_REALM=""
-export FEEDS_APIKEY=""
-export FEEDS_BASEPATH=""
-export FEEDS_CHAPTER=""
-export FEEDS_DETAIL=""
-export FEEDS_LIST=""
+export INDEV_APIKEY=""
+export INDEV_BASEPATH=""
+export INDEV_CHAPTER=""
+export INDEV_DETAIL=""
+export INDEV_LIST=""
 export GILLIAM_CLIENT_CERTIFICATE_BASE64=""
 export GILLIAM_BASE_PATH=""
 export GILLIAM_GET_CLAIMS_URL=""
@@ -116,6 +116,21 @@ The following command create a network, builds images and runs all the container
 ```sh
 ./docker-run.sh
 ```
+### Developing in Docker
+
+We have set up a way of creating and running up the containers in docker so that we can develop and run the tests within a running docker environment. This also mounts a volume on the tests container so that any changes made locally in the test project is instantly available within the running container.
+
+First, the following script will set up the docker containers needed for testing, mount a volume on the tests container and leave the user in the container ready to run the tests:
+
+```sh
+./docker-dev.sh
+```
+You will now notice you have started up the docker environment and you appear on the command line within the tests container. To run the tests run the following:
+
+```sh
+npm run test:teamcity -- --host hub -b http://niceorg:8080/consultations/
+```
+Now, if you make a change to the tests locally, you have a way of testing the change within docker giving you more confidence that it will run in the teamcity build agent when you push it up. 
 
 ### Docker single container
 
@@ -139,11 +154,11 @@ MSYS_NO_PATHCONV=1 docker run --name comments --rm -p 8080:8080 \
     -e APPSETTINGS_ENVIRONMENT_NAME \
     -e APPSETTINGS_ENVIRONMENT_SECURESITE \
     -e APPSETTINGS_ENVIRONMENT_REALM \
-    -e FEEDS_APIKEY \
-    -e FEEDS_BASEPATH \
-    -e FEEDS_CHAPTER \
-    -e FEEDS_DETAIL \
-    -e FEEDS_LIST \
+    -e INDEV_APIKEY \
+    -e INDEV_BASEPATH \
+    -e INDEV_CHAPTER \
+    -e INDEV_DETAIL \
+    -e INDEV_LIST \
     -e GILLIAM_CLIENT_CERTIFICATE_BASE64 \
     -e GILLIAM_BASE_PATH \
     -e GILLIAM_GET_CLAIMS_URL \
