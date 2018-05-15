@@ -27,7 +27,7 @@ describe("[ClientApp] ", () => {
 
 		it("unsavedChanges state is updated correctly on text area change", () => {
 			const wrapper = mount(<CommentBox {...fakeProps} />);
-			expect(wrapper.state().ui.unsavedChanges).toEqual(false);
+			expect(wrapper.state().unsavedChanges).toEqual(false);
 			const textArea = wrapper.find("textarea");
 			textArea.simulate("change", {
 				target: {
@@ -35,12 +35,12 @@ describe("[ClientApp] ", () => {
 				}
 			});
 			expect(wrapper.state().comment.commentText).toEqual("an updated comment");
-			expect(wrapper.state().ui.unsavedChanges).toEqual(true);
+			expect(wrapper.state().unsavedChanges).toEqual(true);
 		});
 
 		it("should update UnsavedChanges if lastupdateddate has changed", () => {
 			const wrapper = mount(<CommentBox {...fakeProps} />);
-			wrapper.setState({ui:{unsavedChanges: true}});
+			wrapper.setState({unsavedChanges: true});
 			const updatedProps = {
 				comment: {
 					commentId: sampleComment.commentId,
@@ -49,14 +49,14 @@ describe("[ClientApp] ", () => {
 				}
 			};
 			wrapper.setProps(updatedProps);
-			expect(wrapper.state().ui.unsavedChanges).toEqual(false);
+			expect(wrapper.state().unsavedChanges).toEqual(false);
 		});
 
 		it("should not update UnsavedChanges if lastupdateddate has not changed", () => {
 			const wrapper = mount(<CommentBox {...fakeProps} />);
-			wrapper.setState({ui:{unsavedChanges: true}});
+			wrapper.setState({unsavedChanges: true});
 			wrapper.setProps(fakeProps);
-			expect(wrapper.state().ui.unsavedChanges).toEqual(true);
+			expect(wrapper.state().unsavedChanges).toEqual(true);
 		});
 
 		it("updated comment text in state after new props received", () => {
