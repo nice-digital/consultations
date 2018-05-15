@@ -11,11 +11,11 @@ jq \
     --arg appSettingsEnvironmentName "$APPSETTINGS_ENVIRONMENT_NAME" \
     --arg appSettingsEnvironmentSecureSite "$APPSETTINGS_ENVIRONMENT_SECURESITE" \
     --arg appSettingsEnvironmentRealm "$APPSETTINGS_ENVIRONMENT_REALM" \
-    --arg IndevApiKey "$INDEV_APIKEY" \
-    --arg IndevBasePath "$INDEV_BASEPATH" \
-    --arg IndevPublishedChapterFeedPath "$INDEV_CHAPTER" \
-    --arg IndevPublishedDetailFeedPath "$INDEV_DETAIL" \
-    --arg IndevListFeedPath "$INDEV_LIST" \
+    --arg indevApiKey "$INDEV_APIKEY" \
+    --arg indevBasePath "$INDEV_BASEPATH" \
+    --arg indevPublishedChapterFeedPath "$INDEV_CHAPTER" \
+    --arg indevPublishedDetailFeedPath "$INDEV_DETAIL" \
+    --arg indevListFeedPath "$INDEV_LIST" \
     --arg gilliamClientCertificateBase64 "$GILLIAM_CLIENT_CERTIFICATE_BASE64" \
     --arg gilliamBasePath "$GILLIAM_BASE_PATH" \
     --arg gilliamGetClaimsUrl "$GILLIAM_GET_CLAIMS_URL" \
@@ -26,11 +26,11 @@ jq \
     .AppSettings.Environment.Name = $appSettingsEnvironmentName |
     .AppSettings.Environment.SecureSite = $appSettingsEnvironmentSecureSite |
     .AppSettings.Environment.Realm = $appSettingsEnvironmentRealm |
-    .Feeds.ApiKey = $IndevApiKey |
-    .Feeds.BasePath = $IndevBasePath |
-    .Feeds.Chapter = $IndevPublishedChapterFeedPath |
-    .Feeds.Detail = $IndevPublishedDetailFeedPath |
-    .Feeds.List = $IndevListFeedPath |
+    .Feeds.IndevApiKey = $indevApiKey |
+    .Feeds.IndevBasePath = $indevBasePath |
+    .Feeds.IndevPublishedChapterFeedPath = $indevPublishedChapterFeedPath |
+    .Feeds.IndevPublishedDetailFeedPath = $indevPublishedDetailFeedPath |
+    .Feeds.IndevListFeedPath = $indevListFeedPath |
     .Gilliam.GilliamBasePath = $gilliamBasePath |
     .Gilliam.GetClaimsUrl = $gilliamGetClaimsUrl |
     .Gilliam.Realm = $gilliamRealm |
