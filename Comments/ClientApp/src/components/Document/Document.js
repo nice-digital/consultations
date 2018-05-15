@@ -13,7 +13,7 @@ import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
 import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
-import { projectInformation } from "../../constants";
+import { projectInformation, fileDownloadBasepath } from "../../constants";
 import { processDocumentHtml } from "./process-document-html";
 import { LoginBanner } from "./../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
@@ -152,29 +152,52 @@ export class Document extends Component<PropsType, StateType> {
 		}
 	}
 
-	getSupportingDocumentLinks = (
+	getDocumentLinks = (
+		getCommentable: boolean,
+		title: string,
 		documents: DocumentsType,
 		currentDocumentFromRoute: number,
 		currentConsultationFromRoute: number
 	) => {
 		if (!documents) return null;
-		const isValidDocument = d => d.title && d.documentId;
+
 		const isCurrentDocument = documentId =>
 			documentId === currentDocumentFromRoute;
-		const documentToLinkObject = d => ({
-			label: d.title,
-			url: `/${currentConsultationFromRoute}/${d.documentId}/${
-				d.chapters[0].slug
-			}`,
-			current: isCurrentDocument(d.documentId)
-		});
+		const isCommentable = d => d.supportsComments;
+		const isSupporting = d => !d.supportsComments;
 
-		const filteredDocuments: DocumentsType = documents
-			.filter(isValidDocument)
-			.map(documentToLinkObject);
+		const documentToLinkObject = d => {
+			const label = d.title || "Download Document";
+			// If it's a commentable document, get the link of the first chapter in the document, else use the href and provide a download link
+			let url: string = "";
+			if (d.supportsComments){
+				url = d.supportsComments ? `/${currentConsultationFromRoute}/${d.documentId}/${d.chapters[0].slug}`	: fileDownloadBasepath + d.href;
+			} else {
+				url = fileDownloadBasepath + d.href;
+			}
+
+			const current = isCurrentDocument(d.documentId);
+			return {
+				label,
+				url,
+				current
+			};
+		};
+
+		let filteredDocuments: DocumentsType = [];
+
+		if (getCommentable) {
+			filteredDocuments = documents
+				.filter(isCommentable)
+				.map(documentToLinkObject);
+		} else {
+			filteredDocuments = documents
+				.filter(isSupporting)
+				.map(documentToLinkObject);
+		}
 
 		return {
-			title: "Documents in this Consultation",
+			title,
 			links: filteredDocuments
 		};
 	};
@@ -280,7 +303,7 @@ export class Document extends Component<PropsType, StateType> {
 											onClick={e => {
 												e.preventDefault();
 												this.props.onNewCommentClick({
-													placeholder: "Comment on this whole consultation",
+
 													sourceURI: this.props.match.url,
 													commentText: "",
 													commentOn: "Consultation",
@@ -289,7 +312,7 @@ export class Document extends Component<PropsType, StateType> {
 											}}
 										>
 											Comment on whole consultation
-										</button>
+										</button>&nbsp;&nbsp;
 									</p>
 									<h1 className="page-header__heading mt--0">{title}</h1>
 									<p className="page-header__lead">
@@ -304,11 +327,14 @@ export class Document extends Component<PropsType, StateType> {
 											onClick={e => {
 												e.preventDefault();
 												this.props.onNewCommentClick({
-													placeholder: "Comment on this document",
+
 													sourceURI: this.props.match.url,
 													commentText: "",
 													commentOn: "Document",
-													quote: this.getCurrentDocumentTitle(documentsData, documentId)
+													quote: this.getCurrentDocumentTitle(
+														documentsData,
+														documentId
+													)
 												});
 											}}
 										>
@@ -325,7 +351,18 @@ export class Document extends Component<PropsType, StateType> {
 											links={this.getDocumentChapterLinks(documentId)}
 										/>
 										<StackedNav
-											links={this.getSupportingDocumentLinks(
+											links={this.getDocumentLinks(
+												true,
+												"Other commentable documents in this consultation",
+												documentsData,
+												documentId,
+												consultationId
+											)}
+										/>
+										<StackedNav
+											links={this.getDocumentLinks(
+												false,
+												"Supporting documents",
 												documentsData,
 												documentId,
 												consultationId
@@ -338,11 +375,13 @@ export class Document extends Component<PropsType, StateType> {
 												this.state.loading ? "loading" : ""
 											}`}
 										>
-											{processDocumentHtml(
-												content,
-												this.props.onNewCommentClick,
-												this.props.match.url
-											)}
+											<Selection newCommentFunc={this.props.onNewCommentClick} sourceURI={this.props.match.url}>
+												{processDocumentHtml(
+													content,
+													this.props.onNewCommentClick,
+													this.props.match.url
+												)}
+											</Selection>
 										</div>
 									</div>
 									<div data-g="12 md:3">

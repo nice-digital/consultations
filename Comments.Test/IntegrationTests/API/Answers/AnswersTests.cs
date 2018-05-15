@@ -19,6 +19,7 @@ namespace Comments.Test.IntegrationTests.API.Answers
         public async Task Create_Answer()
         {
             // Arrange
+            SetupTestDataInDB();
             var answer = new ViewModels.Answer(0, "answer text", false, DateTime.Now, Guid.Empty, 1);
             var content = new StringContent(JsonConvert.SerializeObject(answer), Encoding.UTF8, "application/json");
 
@@ -39,8 +40,9 @@ namespace Comments.Test.IntegrationTests.API.Answers
             // Arrange
             ResetDatabase();
             var answerText = Guid.NewGuid().ToString();
-            var userId = Guid.Empty; 
-            
+            var userId = Guid.Empty;
+
+            SetupTestDataInDB();
             var answerId = AddAnswer(1, userId, answerText);
             
             // Act
@@ -64,6 +66,7 @@ namespace Comments.Test.IntegrationTests.API.Answers
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
+            SetupTestDataInDB();
             var answerId =  AddAnswer(1, userId, answerText, _context);
             
             var answerService = new AnswerService(_context, userService);
@@ -92,6 +95,7 @@ namespace Comments.Test.IntegrationTests.API.Answers
             //Arrange
             var userId = Guid.Empty;
             var answerText = Guid.NewGuid().ToString();
+            SetupTestDataInDB();
             var answerId = AddAnswer(1, userId, answerText);
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);

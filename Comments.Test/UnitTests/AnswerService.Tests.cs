@@ -17,10 +17,11 @@ namespace Comments.Test.UnitTests
             //Arrange
             ResetDatabase();
 
+            var answerText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            
-            var answerText = Guid.NewGuid().ToString();
+
+            SetupTestDataInDB();
             var answerId = AddAnswer(1, userId, answerText);
 
             //Act
@@ -71,9 +72,9 @@ namespace Comments.Test.UnitTests
             ResetDatabase();
             var answerText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
-
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
+            SetupTestDataInDB();
             var answerId = AddAnswer(1, userId, answerText);
 
             var answerService = new AnswerService(new ConsultationsContext(_options, userService), userService);
@@ -98,8 +99,9 @@ namespace Comments.Test.UnitTests
             ResetDatabase();
             var answerText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
-
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+            
+            SetupTestDataInDB();
             var answerId = AddAnswer(1, userId, answerText);
 
             var answerService = new AnswerService(new ConsultationsContext(_options, userService), userService);
@@ -196,6 +198,7 @@ namespace Comments.Test.UnitTests
             var userId = Guid.NewGuid();
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+            var authenticateService = new FakeAuthenticateService(authenticated: true);
 
             var locationId = AddLocation(sourceURI);
             var questionTypeId = AddQuestionType(Guid.NewGuid().ToString(), false, true);
@@ -203,7 +206,7 @@ namespace Comments.Test.UnitTests
             var expectedAnswerId = AddAnswer(questionId, userId, "current user's answer");
             AddAnswer(questionId, Guid.NewGuid(), "another user's answer");
             
-            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService);
+            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService, authenticateService);
 
             // Act
             var viewModel = commentService.GetCommentsAndQuestions(sourceURI);

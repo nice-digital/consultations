@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from "react";
 import Moment from "react-moment";
+import LinesEllipsis from "react-lines-ellipsis";
 
 type PropsType = {
 	staticContext?: any,
@@ -15,13 +16,14 @@ export class CommentBox extends Component<PropsType, StateType> {
 	constructor() {
 		super();
 		this.state = {
-			tabIndex: "-1",
+
 			comment: {
 				commentText: ""
 			},
-			ui: {
-				unsavedChanges: false
-			}
+			unsavedChanges: false,
+
+
+			useEllipsis: true
 		};
 	}
 
@@ -36,11 +38,24 @@ export class CommentBox extends Component<PropsType, StateType> {
 		comment.commentText = e.target.value;
 		this.setState({
 			comment,
-			ui: {
-				unsavedChanges: true
-			}
+			unsavedChanges: true
+
+
 		});
 	};
+
+	viewAllQuoteClick = e => {
+		e.preventDefault();
+		this.setState({
+			useEllipsis: false
+		});
+	}
+
+	viewAllQuoteKeyDown = e => {
+		if (e.keyCode === 13) {
+			this.viewAllQuoteClick(e);
+		}
+	}
 
 	static getDerivedStateFromProps(nextProps, prevState) {
 		const prevTimestamp = prevState.comment.lastModifiedDate;
@@ -49,9 +64,9 @@ export class CommentBox extends Component<PropsType, StateType> {
 		if (hasCommentBeenUpdated()) {
 			return {
 				comment: nextProps.comment,
-				ui: {
-					unsavedChanges: false
-				}
+				unsavedChanges: false
+
+
 			};
 		}
 		return null;
@@ -65,53 +80,84 @@ export class CommentBox extends Component<PropsType, StateType> {
 			lastModifiedDate,
 			quote
 		} = this.state.comment;
-		const placeholder = this.state.comment.placeholder
-			? this.state.comment.placeholder
-			: null;
+
 		const tabIndex = this.props.drawerOpen ? "0" : "-1";
+		const useEllipsis = this.state.useEllipsis;
+
+
 		return (
 			<Fragment>
 				<li className="CommentBox">
-					<form onSubmit={e => this.props.saveHandler(e, this.state.comment)}>
-						<div>Comment on: {commentOn}</div>
-						<div>Quote: {quote}</div>
-						<div>
-							Last Modified Date:{" "}
-							<Moment format="D/M/YYYY - h:mma" date={lastModifiedDate} />
-						</div>
-						<div className="form__group form__group--textarea mb--0">
-							<label className="form__label" htmlFor={this.props.unique}>Comment</label>
-							<textarea
-								id={this.props.unique}
-								tabIndex={tabIndex}
-								className="form__input form__input--textarea"
-								onChange={this.textareaChangeHandler}
-								placeholder="Enter your comment here"
-								value={commentText}
-							/>
-						</div>
-						{this.state.comment.commentText &&
-							this.state.comment.commentText.length > 0 && (
-								<input
+					<section>
+						<h1 className="CommentBox__title mt--0">
+							Comment on: <span className="text-capitalize">{commentOn}</span>
+
+
+						</h1>
+						{quote &&
+							<div className="CommentBox__quote">
+								{useEllipsis ? (
+									<span role="button" onClick={this.viewAllQuoteClick} onKeyDown={this.viewAllQuoteKeyDown} tabIndex={tabIndex}>
+										<LinesEllipsis
+											text={quote}
+											maxLine="3"
+											ellipsis=" ...view all"
+											trimRight
+											basedOn="letters" />
+									</span> ) : ( <span>{quote}</span>
+								)}
+							</div>
+						}
+						{lastModifiedDate ? (
+							<div className="CommentBox__datestamp pb--d font-weight-bold">
+								Last Modified Date:{" "}
+								<Moment format="D/M/YYYY - h:mma" date={lastModifiedDate} />
+							</div>
+						) : null}
+
+						<form onSubmit={e => this.props.saveHandler(e, this.state.comment)}>
+							<div className="form__group form__group--textarea mb--0">
+								<label
+									className="form__label visually-hidden"
+									htmlFor={this.props.unique}
+								>
+									Comment
+								</label>
+								<textarea
+									id={this.props.unique}
 									tabIndex={tabIndex}
-									className="btn ml--0"
-									type="submit"
-									value={this.state.ui.unsavedChanges ? "Save draft" : "Saved"}
-									disabled={!this.state.ui.unsavedChanges}
-									//
+									className="form__input form__input--textarea"
+									onChange={this.textareaChangeHandler}
+									placeholder="Enter your comment here"
+									value={commentText}
+
 								/>
-							)}
-						<button
-							tabIndex={tabIndex}
-							className="btn mr--0 right"
-							onClick={e =>
-								this.props.deleteHandler(e, this.state.comment.commentId)
-							}
-						>
-							<span className="visually-hidden">Delete this comment</span>
-							<span className="icon icon--trash" aria-hidden="true" />
-						</button>
-					</form>
+							</div>
+							{this.state.comment.commentText &&
+								this.state.comment.commentText.length > 0 && (
+									<input
+										tabIndex={tabIndex}
+										className="btn ml--0"
+										type="submit"
+										value={
+											this.state.unsavedChanges ? "Save draft" : "Saved"
+										}
+										disabled={!this.state.unsavedChanges}
+
+									/>
+								)}
+							<button
+								tabIndex={tabIndex}
+								className="btn mr--0 right"
+								onClick={e =>
+									this.props.deleteHandler(e, this.state.comment.commentId)
+								}
+							>
+								<span className="visually-hidden">Delete this comment</span>
+								<span className="icon icon--trash" aria-hidden="true" />
+							</button>
+						</form>
+					</section>
 				</li>
 			</Fragment>
 		);

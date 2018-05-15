@@ -4,4 +4,24 @@
   padding: rem($spacing-small);
   padding-bottom: 0;
   border: rem($spacing-xx-small) solid $colour-border;
+  &__title{
+    @include font-size(0);
+  }
+  &__datestamp{
+    // border-top: solid 1px $colour-border;
+  }
+  &__quote {
+    font-style: italic;
+    margin-bottom: rem($spacing-medium);
+
+  }
 }
+
+.LinesEllipsis-ellipsis {
+  color: $colour-link;
+  text-decoration: underline;
+}
+
+
+
+

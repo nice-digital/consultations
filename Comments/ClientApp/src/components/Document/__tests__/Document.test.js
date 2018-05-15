@@ -4,14 +4,13 @@ import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { MemoryRouter } from "react-router";
 
+import { fileDownloadBasepath } from "../../../constants";
 import { Document } from "../Document";
 import ChapterData from "./Chapter";
 import ConsultationData from "./Consultation";
 import DocumentsData from "./Documents";
 import { nextTick } from "../../../helpers/utils";
 import toJson from "enzyme-to-json";
-
-// import { generateUrl } from "./../../../data/loader";
 
 describe("[ClientApp] ", () => {
 	describe("Document Component", () => {
@@ -87,39 +86,73 @@ describe("[ClientApp] ", () => {
 			});
 		});
 
-		it("getSupportingDocumentLinks method", () => {
+		describe("getDocumentLinks method", () => {
 			const documents = [
 				{
 					title: "Document One",
 					documentId: 1,
-					chapters: [{ slug: "chapter-one-slug" }]
+					supportsComments: false,
+					href: "/guidance/one/123",
+					chapters: null
 				},
 				{
 					title: "",
 					documentId: 2,
-					chapters: [{ slug: "chapter-two-slug" }]
+					chapters: [{ slug: "chapter-two-slug" }],
+					supportsComments: true,
+					href: "/guidance/two/123"
 				},
 				{
 					title: "Document Three",
 					documentId: 3,
-					chapters: [{ slug: "chapter-three-slug" }]
-				}
-			];
-			const document = new Document();
-			expect(
-				document.getSupportingDocumentLinks(documents, 1, 1)
-			).toHaveProperty("links", [
-				{
-					current: true,
-					label: "Document One",
-					url: "/1/1/chapter-one-slug"
+					supportsComments: false,
+					href: "/guidance/three/123",
+					chapters: null
 				},
 				{
-					current: false,
-					label: "Document Three",
-					url: "/1/3/chapter-three-slug"
+					title: "Document Four",
+					documentId: 4,
+					supportsComments: true,
+					href: "/guidance/four/123",
+					chapters: [{ slug: "chapter-two-slug" }]
 				}
-			]);
+			];
+
+			it("getDocumentLinks for Commentable documents", () => {
+				const document = new Document();
+				expect(
+					document.getDocumentLinks(true, "This is the title", documents, 1, 1)
+				).toHaveProperty("links", [
+					{
+						current: false,
+						label: "Download Document",
+						url: "/1/2/chapter-two-slug"
+					},
+					{
+						current: false,
+						label: "Document Four",
+						url: "/1/4/chapter-two-slug"
+					}
+				]);
+			});
+
+			it("getDocumentLinks for Supporting documents", () => {
+				const document = new Document();
+				expect(
+					document.getDocumentLinks(false, "This is the title", documents, 1, 1)
+				).toHaveProperty("links", [
+					{
+						current: true,
+						label: "Document One",
+						url: fileDownloadBasepath + "/guidance/one/123"
+					},
+					{
+						current: false,
+						label: "Document Three",
+						url: fileDownloadBasepath + "/guidance/three/123"
+					}
+				]);
+			});
 		});
 	});
 });
