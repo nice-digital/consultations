@@ -5,7 +5,7 @@ import { withRouter } from "react-router-dom";
 import { load } from "./../../data/loader";
 import preload from "../../data/pre-loader";
 import { CommentBox } from "../CommentBox/CommentBox";
-import stringifyObject from "stringify-object";
+//import stringifyObject from "stringify-object";
 
 type PropsType = {
 	staticContext?: any,
@@ -56,11 +56,11 @@ export class CommentList extends Component<PropsType, StateType> {
 		if (this.props.staticContext && this.props.staticContext.preload) {
 			preloadedData = this.props.staticContext.preload.data;
 
-			console.log('setting is authorised to:' + preloadedData.isAuthorised);
+			//console.log('setting is authorised to:' + preloadedData.isAuthorised);
 			this.state.isAuthorised = preloadedData.isAuthorised;
 		}
 
-		console.log(`preloadedData: ${stringifyObject(preloadedData)}`);
+		//console.log(`preloadedData: ${stringifyObject(preloadedData)}`);
 		const preloaded = preload(
 			this.props.staticContext,
 			"comments",
@@ -79,7 +79,7 @@ export class CommentList extends Component<PropsType, StateType> {
 				isAuthorised: preloadedData.isAuthorised,
 				signInURL: preloadedData.signInURL
 			};
-			console.log('server side: ' + preloadedData.isAuthorised);
+			//console.log('server side: ' + preloadedData.isAuthorised);
 		}
 		
 	}
