@@ -286,7 +286,6 @@ export class Document extends Component<PropsType, StateType> {
 										>
 											Comment on whole consultation
 										</button>&nbsp;&nbsp;
-										<a href="/secure">secure</a>
 									</p>
 									<h1 className="page-header__heading mt--0">{title}</h1>
 									<p className="page-header__lead">
