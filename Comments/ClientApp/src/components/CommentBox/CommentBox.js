@@ -16,13 +16,13 @@ export class CommentBox extends Component<PropsType, StateType> {
 	constructor() {
 		super();
 		this.state = {
-			tabIndex: "-1",
+
 			comment: {
 				commentText: ""
 			},
-			ui: {
-				unsavedChanges: false
-			},
+			unsavedChanges: false,
+
+
 			useEllipsis: true
 		};
 	}
@@ -38,15 +38,17 @@ export class CommentBox extends Component<PropsType, StateType> {
 		comment.commentText = e.target.value;
 		this.setState({
 			comment,
-			ui: {
-				unsavedChanges: true
-			}
+			unsavedChanges: true
+
+
 		});
 	};
 
 	viewAllQuoteClick = e => {
 		e.preventDefault();
-		this.setState({useEllipsis: false});
+		this.setState({
+			useEllipsis: false
+		});
 	}
 
 	viewAllQuoteKeyDown = e => {
@@ -62,9 +64,9 @@ export class CommentBox extends Component<PropsType, StateType> {
 		if (hasCommentBeenUpdated()) {
 			return {
 				comment: nextProps.comment,
-				ui: {
-					unsavedChanges: false
-				}
+				unsavedChanges: false
+
+
 			};
 		}
 		return null;
@@ -79,19 +81,33 @@ export class CommentBox extends Component<PropsType, StateType> {
 			quote
 		} = this.state.comment;
 
-
-
 		const tabIndex = this.props.drawerOpen ? "0" : "-1";
 		const useEllipsis = this.state.useEllipsis;
+
+
 		return (
 			<Fragment>
 				<li className="CommentBox">
 					<section>
 						<h1 className="CommentBox__title mt--0">
 							Comment on: <span className="text-capitalize">{commentOn}</span>
-							<br />
-							{quote}
+
+
 						</h1>
+						{quote &&
+							<div className="CommentBox__quote">
+								{useEllipsis ? (
+									<span role="button" onClick={this.viewAllQuoteClick} onKeyDown={this.viewAllQuoteKeyDown} tabIndex={tabIndex}>
+										<LinesEllipsis
+											text={quote}
+											maxLine="3"
+											ellipsis=" ...view all"
+											trimRight
+											basedOn="letters" />
+									</span> ) : ( <span>{quote}</span>
+								)}
+							</div>
+						}
 						{lastModifiedDate ? (
 							<div className="CommentBox__datestamp pv--d font-weight-bold">
 								Last Modified Date:{" "}
@@ -137,10 +153,10 @@ export class CommentBox extends Component<PropsType, StateType> {
 										className="btn ml--0"
 										type="submit"
 										value={
-											this.state.ui.unsavedChanges ? "Save draft" : "Saved"
+											this.state.unsavedChanges ? "Save draft" : "Saved"
 										}
-										disabled={!this.state.ui.unsavedChanges}
-										//
+										disabled={!this.state.unsavedChanges}
+
 									/>
 								)}
 							<button

@@ -8,8 +8,16 @@
     @include font-size(0);
   }
   &__datestamp{
-    border-top: solid 1px $colour-border;
+    // border-top: solid 1px $colour-border;
   }
+  &__quote {
+    font-style: italic;
+  }
+}
+
+.LinesEllipsis-ellipsis {
+  color: $colour-link;
+  text-decoration: underline;
 }
 
 
