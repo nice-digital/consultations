@@ -9,9 +9,6 @@ import NotFound from "../NotFound/NotFound";
 import UserProvider from "../../context/UserContext";
 
 class App extends Component {
-	constructor() {
-		super();
-	}
 
 	render() {
 		return (
