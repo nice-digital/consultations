@@ -24,12 +24,14 @@ services:
   hub:
     image: selenium/hub:3.11.0-dysprosium
     container_name: selenium_hub
-    ports: 
-      - 4444:4444
+#    ports: 
+#      - 4444:4444
 
   # The tests themselves
   tests:
     build: .
+#    volumes:
+#      - ./:/tests
     links:
       - hub
       - comments
@@ -48,11 +50,11 @@ services:
       - APPSETTINGS_ENVIRONMENT_NAME=DockerTests
       - APPSETTINGS_ENVIRONMENT_SECURESITE=false
       - APPSETTINGS_ENVIRONMENT_REALM=niceorg
-      - FEEDS_APIKEY
-      - FEEDS_BASEPATH
-      - FEEDS_CHAPTER
-      - FEEDS_DETAIL
-      - FEEDS_LIST
+      - INDEV_APIKEY
+      - INDEV_BASEPATH
+      - INDEV_CHAPTER
+      - INDEV_DETAIL
+      - INDEV_LIST
       - GILLIAM_CLIENT_CERTIFICATE_BASE64
       - GILLIAM_BASE_PATH
       - GILLIAM_GET_CLAIMS_URL
