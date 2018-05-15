@@ -26,4 +26,4 @@ RUN npm i
 
 COPY . /tests
 
-CMD npm run test:teamcity
+CMD tail -f /dev/null
