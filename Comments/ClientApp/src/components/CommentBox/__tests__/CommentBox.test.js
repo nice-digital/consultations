@@ -70,24 +70,5 @@ describe("[ClientApp] ", () => {
 			wrapper.setProps(updatedProps);
 			expect(wrapper.state().comment.commentText).toEqual("an updated comment");
 		});
-
-		// it.only("updated comment text in state after comment is saved", () => {
-		// 	const fakeProps = {
-		// 		comment: {
-		// 			commentId: 0,
-		// 			commentText: "a comment"
-		// 		}
-		// 	};
-		//
-		// 	const wrapper = mount(<CommentBox {...fakeProps} />);
-		// 	var updatedProps = {
-		// 		comment: {
-		// 			commentId: sampleComments.commentId,
-		// 			commentText: "an updated comment"
-		// 		}
-		// 	};
-		// 	wrapper.setProps(updatedProps);
-		// 	expect(wrapper.state().comment.commentText).toEqual("an updated comment");
-		// });
 	});
 });

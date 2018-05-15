@@ -16,13 +16,10 @@ export class CommentBox extends Component<PropsType, StateType> {
 	constructor() {
 		super();
 		this.state = {
-
 			comment: {
 				commentText: ""
 			},
 			unsavedChanges: false,
-
-
 			useEllipsis: true
 		};
 	}
@@ -39,8 +36,6 @@ export class CommentBox extends Component<PropsType, StateType> {
 		this.setState({
 			comment,
 			unsavedChanges: true
-
-
 		});
 	};
 
@@ -49,13 +44,13 @@ export class CommentBox extends Component<PropsType, StateType> {
 		this.setState({
 			useEllipsis: false
 		});
-	}
+	};
 
 	viewAllQuoteKeyDown = e => {
 		if (e.keyCode === 13) {
 			this.viewAllQuoteClick(e);
 		}
-	}
+	};
 
 	static getDerivedStateFromProps(nextProps, prevState) {
 		const prevTimestamp = prevState.comment.lastModifiedDate;
@@ -65,8 +60,6 @@ export class CommentBox extends Component<PropsType, StateType> {
 			return {
 				comment: nextProps.comment,
 				unsavedChanges: false
-
-
 			};
 		}
 		return null;
@@ -84,15 +77,12 @@ export class CommentBox extends Component<PropsType, StateType> {
 		const tabIndex = this.props.drawerOpen ? "0" : "-1";
 		const useEllipsis = this.state.useEllipsis;
 
-
 		return (
 			<Fragment>
 				<li className="CommentBox">
 					<section>
 						<h1 className="CommentBox__title mt--0">
 							Comment on: <span className="text-capitalize">{commentOn}</span>
-
-
 						</h1>
 						{quote &&
 							<div className="CommentBox__quote">
@@ -128,6 +118,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 									tabIndex={tabIndex}
 									className="form__input form__input--textarea"
 									onChange={this.textareaChangeHandler}
+									onInput={this.textareaChangeHandler}
 									placeholder="Enter your comment here"
 									value={commentText}
 

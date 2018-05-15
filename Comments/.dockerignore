@@ -10,6 +10,4 @@ docker-compose.*.yml
 */obj
 !obj/Docker/publish/*
 !obj/Docker/empty/
-node_modules
-docker-run.sh
-docker-output
+ClientApp\node_modules\
