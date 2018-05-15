@@ -27,11 +27,12 @@ namespace Comments.Test.UnitTests
             var createdByUserId = Guid.NewGuid();
 
             var userService = FakeUserService.Get(true, "Benjamin Button", createdByUserId);
+            var authenticateService = new FakeAuthenticateService(authenticated: true);
 
             var locationId = AddLocation(sourceURI);
             AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId);
             
-            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService);
+            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService, authenticateService);
             
             // Act
             var viewModel = commentService.GetCommentsAndQuestions(sourceURI);
@@ -50,9 +51,10 @@ namespace Comments.Test.UnitTests
             var questionText = Guid.NewGuid().ToString();
             var answerText = Guid.NewGuid().ToString();
             var createdByUserId = Guid.Empty;
+            var authenticateService = new FakeAuthenticateService(authenticated: true);
 
             AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, createdByUserId, _context);
-            var commentService = new CommentService(_context, _fakeUserService);
+            var commentService = new CommentService(_context, _fakeUserService, authenticateService);
 
             // Act    
             var viewModel = commentService.GetCommentsAndQuestions(sourceURI);
@@ -104,8 +106,8 @@ namespace Comments.Test.UnitTests
                     })
                 }, 
                 user: null);
-            var feedReaderService = new FeedReader(Feed.ConsultationCommentsListDetailMulitpleDoc);
-            var consultationService = new ConsultationService(new FeedConverterService(feedReaderService), new FakeLogger<ConsultationService>(), FakeUserService.Get(false));
+            var feedReaderService = new FeedReader(Feed.ConsultationCommentsPublishedDetailMulitpleDoc);
+            var consultationService = new ConsultationService(new FeedService(feedReaderService), new FakeLogger<ConsultationService>(), FakeUserService.Get(false));
 
             // Act
             var (validatedDocumentId, validatedChapterSlug) = consultationService.ValidateDocumentAndChapterWithinConsultation(consultation, documentIdIn, chapterSlugIn);

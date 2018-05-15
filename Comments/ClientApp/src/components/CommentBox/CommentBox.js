@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from "react";
 import Moment from "react-moment";
+import LinesEllipsis from "react-lines-ellipsis";
 
 type PropsType = {
 	staticContext?: any,
@@ -21,7 +22,8 @@ export class CommentBox extends Component<PropsType, StateType> {
 			},
 			ui: {
 				unsavedChanges: false
-			}
+			},
+			useEllipsis: true
 		};
 	}
 
@@ -41,6 +43,17 @@ export class CommentBox extends Component<PropsType, StateType> {
 			}
 		});
 	};
+
+	viewAllQuoteClick = e => {
+		e.preventDefault();
+		this.setState({useEllipsis: false});
+	}
+
+	viewAllQuoteKeyDown = e => {
+		if (e.keyCode === 13) {
+			this.viewAllQuoteClick(e);
+		}
+	}
 
 	static getDerivedStateFromProps(nextProps, prevState) {
 		const prevTimestamp = prevState.comment.lastModifiedDate;
@@ -65,7 +78,11 @@ export class CommentBox extends Component<PropsType, StateType> {
 			lastModifiedDate,
 			quote
 		} = this.state.comment;
+
+
+
 		const tabIndex = this.props.drawerOpen ? "0" : "-1";
+		const useEllipsis = this.state.useEllipsis;
 		return (
 			<Fragment>
 				<li className="CommentBox">
@@ -92,11 +109,25 @@ export class CommentBox extends Component<PropsType, StateType> {
 								</label>
 								<textarea
 									id={this.props.unique}
+
+
+
+
+
+
+
+
+
+
+
+
+
 									tabIndex={tabIndex}
 									className="form__input form__input--textarea"
 									onChange={this.textareaChangeHandler}
 									placeholder="Enter your comment here"
 									value={commentText}
+
 								/>
 							</div>
 							{this.state.comment.commentText &&

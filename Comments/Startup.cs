@@ -62,7 +62,7 @@ namespace Comments
             services.TryAddTransient<IConsultationService, ConsultationService>();
             
             services.TryAddTransient<IFeedReaderService>(provider => new FeedReaderService(new RemoteSystemReader(null), AppSettings.Feed));
-            services.TryAddTransient<IFeedConverterService, FeedConverterService>();
+            services.TryAddTransient<IFeedService, FeedService>();
             services.TryAddTransient<IAnswerService, AnswerService>();
             services.TryAddTransient<IQuestionService, QuestionService>();
             
@@ -119,9 +119,10 @@ namespace Comments
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ISeriLogger seriLogger, IApplicationLifetime appLifetime)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ISeriLogger seriLogger, IApplicationLifetime appLifetime, IAuthenticateService authenticateService)
         {           
             seriLogger.Configure(loggerFactory, Configuration, appLifetime, env);
+            var startupLogger = loggerFactory.CreateLogger<Startup>();
 
             if (env.IsDevelopment())
             {
@@ -129,6 +130,7 @@ namespace Comments
                 loggerFactory.AddConsole(Configuration.GetSection("Logging"));
                 loggerFactory.AddDebug();
             }
+           
 
             app.UseCors("CorsPolicy");
 
@@ -212,6 +214,8 @@ namespace Comments
                         {
                             data["cookies"] = $"{NICE.Auth.NetCore.Helpers.Constants.DefaultCookieName}={cookieForSSR}";
                         }
+                        data["isAuthorised"] = context.User.Identity.IsAuthenticated;
+                        data["signInURL"] = authenticateService.GetLoginURL(context.Request.Path);
                         //data["user"] = context.User; - possible security implications here, surfacing claims to the front end. might be ok, if just server-side.
                         // Pass further data in e.g. user/authentication data
                     };
@@ -231,12 +235,18 @@ namespace Comments
                    // spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
-
-            //using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            //{
-            //    serviceScope.ServiceProvider.GetService<ConsultationsContext>().Database.Migrate();
-
-            //}
+            
+            try
+            {
+                using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+                {
+                     serviceScope.ServiceProvider.GetService<ConsultationsContext>().Database.Migrate();
+                }
+            }
+            catch(Exception ex)
+            {
+                startupLogger.LogError(String.Format("EF Migrations Error: {0}", ex));
+            }
         }
     }
 }
