@@ -24,18 +24,19 @@ services:
   hub:
     image: selenium/hub:3.11.0-dysprosium
     container_name: selenium_hub
-#    ports: 
+#    ports:
 #      - 4444:4444
 
   # The tests themselves
   tests:
     build: .
-#    volumes:
-#      - ./:/tests
+    volumes:
+      - ./:/tests
+      - /tests/node_modules
     links:
       - hub
       - comments
-    
+
   # Comment Collection dotnet core web app
   comments:
     build: ./../Comments/

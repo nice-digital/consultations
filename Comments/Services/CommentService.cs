@@ -4,6 +4,7 @@ using Comments.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NICE.Auth.NetCore.Services;
 
 namespace Comments.Services
 {
@@ -20,12 +21,14 @@ namespace Comments.Services
     {
         private readonly ConsultationsContext _context;
         private readonly IUserService _userService;
+        private readonly IAuthenticateService _authenticateService;
         private readonly User _currentUser;
 
-        public CommentService(ConsultationsContext context, IUserService userService)
+        public CommentService(ConsultationsContext context, IUserService userService, IAuthenticateService authenticateService)
         {
             _context = context;
             _userService = userService;
+            _authenticateService = authenticateService;
             _currentUser = _userService.GetCurrentUser();
         }
 
@@ -103,9 +106,10 @@ namespace Comments.Services
         public CommentsAndQuestions GetCommentsAndQuestions(string relativeURL)
         {
             var user = _userService.GetCurrentUser();
+            var signInURL = _authenticateService.GetLoginURL(relativeURL.ToConsultationsRelativeUrl());
 
             if (!user.IsLoggedIn)
-                return new CommentsAndQuestions(new List<ViewModels.Comment>(), new List<ViewModels.Question>(), user.IsLoggedIn);
+                return new CommentsAndQuestions(new List<ViewModels.Comment>(), new List<ViewModels.Question>(), user.IsLoggedIn, signInURL);
 
             var sourceURIs = new List<string>
             {
@@ -124,7 +128,7 @@ namespace Comments.Services
                 questionsData.AddRange(location.Question.Select(question => new ViewModels.Question(location, question)));
             }
 
-            return new CommentsAndQuestions(commentsData, questionsData, user.IsLoggedIn);
+            return new CommentsAndQuestions(commentsData, questionsData, user.IsLoggedIn, signInURL);
         }
     }
 }

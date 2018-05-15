@@ -8,7 +8,7 @@
   "scripts": {
     "start": "rimraf ./build && npm run modernizr && npm-run-all -p sass:watch start-js",
     "start-js": "react-scripts start",
-    "build": "npm run modernizr && react-scripts build",
+    "build": "npm run modernizr && npm run sass:build && react-scripts build",
     "test": "react-scripts test --env=node",
     "eslint": "node node_modules/eslint/bin/eslint 'src/'",
     "esw": "node node_modules/eslint-watch/bin/esw 'src/' --watch",
@@ -17,7 +17,7 @@
     "eject": "react-scripts eject",
     "flow": "flow",
     "modernizr": "modernizr -c modernizr-config.json -d ./public/vendor/modernizr-custom.js",
-    "sass:build": "npm-run-all -p sass:compile sass:post",
+    "sass:build": "npm run sass:compile && npm run sass:post",
     "sass:compile": "node-sass-chokidar --include-path ./node_modules/@nice-digital/design-system/src/stylesheets --include-path ./node_modules/@nice-digital/icons/dist --source-map true src/main.scss -o public",
     "sass:post": "postcss public/*.css --use autoprefixer -d public",
     "sass:watch": "npm run sass:build && chokidar \"./src/**/*.scss\" -c \"npm run sass:build\""
@@ -31,16 +31,19 @@
     "babel-register": "^6.26.0",
     "ignore-styles": "^5.0.1",
     "moment": "^2.21.0",
+    "rc-tooltip": "^3.7.2",
+    "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-helmet": "^5.2.0",
     "react-html-parser": "^2.0.2",
+    "react-lines-ellipsis": "^0.10.2",
     "react-moment": "^0.7.0",
+    "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "react-router-hash-link": "^1.2.0",
-    "react-router": "^4.2.0",
     "react-scrollspy": "^3.3.5",
     "react-sticky": "^6.0.1",
-    "react": "^16.3.2"
+    "xpath-range": "0.0.5"
   },
   "devDependencies": {
     "@nice-digital/browserslist-config": "^1.0.0",

@@ -31,7 +31,6 @@ namespace Comments.Test.Infrastructure
         protected IFeedConfig _feedConfig;
 
         protected Feed FeedToUse = Feed.ConsultationCommentsPublishedDetailMulitpleDoc;
-
         protected readonly bool _authenticated = true;
         protected readonly string _displayName = "Benjamin Button";
         protected readonly Guid? _userId = Guid.Empty;
@@ -69,14 +68,18 @@ namespace Comments.Test.Infrastructure
                 DataSource = "my.db",
             };
 
-        var connection = new SqliteConnection(sqLiteConnectionStringBuilder.ConnectionString); //"Data Source=" + DatabaseName + ";"); //"BinaryGuid=False"); //Version=3;
+        // var connection = new SqliteConnection(sqLiteConnectionStringBuilder.ConnectionString); //"Data Source=" + DatabaseName + ";"); //"BinaryGuid=False"); //Version=3;
+        var connection = new SqliteConnection("DataSource=:memory:");
+
+            connection.Open();
 
             _options = new DbContextOptionsBuilder<ConsultationsContext>()
-                    //.UseSqlite(connection)
-                    .UseInMemoryDatabase(databaseName)
+                    .UseSqlite(connection)
+                    //.UseInMemoryDatabase(databaseName)
                     .Options;
 
             _context = new ConsultationsContext(_options, _fakeUserService);
+            _context.Database.EnsureCreatedAsync();
 
             var builder = new WebHostBuilder()
                 .UseContentRoot("../../../../Comments")
@@ -116,16 +119,10 @@ namespace Comments.Test.Infrastructure
                 AppCacheTimeSeconds = 30,
                 IndevApiKey = "api key goes here",
                 IndevBasePath = new Uri("http://test-indev.nice.org.uk"),
-                //Chapter = "consultation-comments/{0}/document/{1}/chapter-slug/{2}",
-                //Detail = "consultation-comments/{0}",
-                IndevListFeedPath = "consultation-comments-list",
-
                 IndevPublishedChapterFeedPath = "consultation-comments/{0}/document/{1}/chapter-slug/{2}",
-                IndevDraftPreviewChapterFeedPath = "",
                 IndevPublishedDetailFeedPath = "consultation-comments/{0}",
-                IndevDraftPreviewDetailFeedPath = "",
-                IndevPublishedPreviewDetailFeedPath = ""
-    };
+                IndevListFeedPath = "consultation-comments-list"
+            };
         }
 
         #region database stuff
@@ -254,7 +251,18 @@ namespace Comments.Test.Infrastructure
             var questionId = AddQuestion(locationId, questionTypeId, questionText, passedInContext);
             AddAnswer(questionId, createdByUserId, answerText, passedInContext);
         }
-        
+
+        protected void SetupTestDataInDB()
+        {
+            var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+            var answerText = Guid.NewGuid().ToString();
+            var commentText = Guid.NewGuid().ToString();
+            var questionText = Guid.NewGuid().ToString();
+            var userId = Guid.NewGuid();
+
+            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId); //Add records for Foreign key constraints
+        }
+
         #endregion database stuff
 
         #region Helpers

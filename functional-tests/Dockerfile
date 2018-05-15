@@ -2,8 +2,6 @@ FROM node:8.11.1
 
 RUN mkdir -p /tests
 
-RUN echo "Path $PATH"
-
 # Download wait-for-it as binary waitforit, see  https://github.com/vishnubob/wait-for-it
 ENV WAITFORIT_VERSION db04971
 ENV WAITFORIT_DOWNLOAD_SHA dd7511b88c5eaf3f8953167ab498f66589143649142a9a2f49a8f33e08584aaf
@@ -26,4 +24,4 @@ RUN npm i
 
 COPY . /tests
 
-CMD npm run test:teamcity
+CMD tail -f /dev/null
