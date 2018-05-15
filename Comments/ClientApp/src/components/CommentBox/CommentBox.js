@@ -109,7 +109,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 							</div>
 						}
 						{lastModifiedDate ? (
-							<div className="CommentBox__datestamp pv--d font-weight-bold">
+							<div className="CommentBox__datestamp pb--d font-weight-bold">
 								Last Modified Date:{" "}
 								<Moment format="D/M/YYYY - h:mma" date={lastModifiedDate} />
 							</div>
