@@ -1,7 +1,6 @@
 import {Endpoints, BaseUrl} from "./endpoints";
 import axios from "axios";
 import https from "https";
-import qs from "qs";
 
 import {objectToQueryString, replaceFormat} from "./../helpers/utils";
 //import stringifyObject from "stringify-object";

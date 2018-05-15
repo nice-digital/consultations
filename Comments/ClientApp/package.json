@@ -32,7 +32,6 @@
     "ignore-styles": "^5.0.1",
     "moment": "^2.21.0",
     "rc-tooltip": "^3.7.2",
-    "qs": "^6.5.2",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-helmet": "^5.2.0",
@@ -78,5 +77,5 @@
     "rimraf": "^2.6.2",
     "stringify-object": "^3.2.2"
   },
-  "proxy": "http://niceorg"
+  "proxy": "https://test.nice.org.uk"
 }
