@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
+import { isExternalLink } from "../../helpers/utils";
 
 type LinkType = {
 	label: string,
@@ -25,9 +26,13 @@ export const StackedNav = (props: PropsType) => {
 			<ul className="stacked-nav__list">
 				{links.map((item, index) => (
 					<li key={`${item.label}${index}`} className="stacked-nav__list-item">
-						<Link to={item.url} aria-current={item.current ? "page" : "false"}>
-							{item.label}
-						</Link>
+						{/* Return a standard <a> if the link starts with 'http' */}
+						{isExternalLink(item.url) ?
+							<a href={item.url} target="_blank" rel="noopener">{item.label}</a> :
+							<Link to={item.url} aria-current={item.current ? "page" : "false"}>
+								{item.label}
+							</Link>
+						}
 					</li>
 				))}
 			</ul>
