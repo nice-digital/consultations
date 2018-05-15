@@ -23,6 +23,7 @@ Loosley based on the [WebdriverIO Cucumber Boilerplate](https://github.com/webdr
   - [Troubleshooting and gotchas](#troubleshooting-and-gotchas)
     - [Error starting userland proxy](#error-starting-userland-proxy)
     - [bad interpreter: No such file or directory](#bad-interpreter-no-such-file-or-directory)
+    - [Unknown locator strategy id](#unknown-locator-strategy-id)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
