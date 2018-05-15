@@ -256,3 +256,4 @@ ClientApp/public/*.css.map
 /Comments/published-app
 
 .vscode
+/Comments/ClientApp/.vscode
