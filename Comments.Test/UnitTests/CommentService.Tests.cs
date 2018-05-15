@@ -26,7 +26,8 @@ namespace Comments.Test.UnitTests
             var commentId = AddComment(locationId, commentText, isDeleted: false, createdByUserId: userId);
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService);
+            var authenticateService = new FakeAuthenticateService(authenticated: true);
+            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService, authenticateService);
 
             // Act
             var viewModel = commentService.GetComment(commentId);
@@ -43,8 +44,9 @@ namespace Comments.Test.UnitTests
 
             var userId = Guid.Empty;
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+            var authenticateService = new FakeAuthenticateService(authenticated: true);
 
-            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService);
+            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService, authenticateService);
 
             // Act
             var viewModel = commentService.GetComment(1);
@@ -66,7 +68,8 @@ namespace Comments.Test.UnitTests
             var locationId = AddLocation(sourceURI);
             var commentId = AddComment(locationId, commentText, isDeleted: false, createdByUserId: userId);
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService);
+            var authenticateService = new FakeAuthenticateService(authenticated: true);
+            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService, authenticateService);
 
             var viewModel = commentService.GetComment(commentId);
             var updatedCommentText = Guid.NewGuid().ToString();
@@ -91,11 +94,12 @@ namespace Comments.Test.UnitTests
             var userId = Guid.Empty;
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+            var authenticateService = new FakeAuthenticateService(authenticated: true);
 
             var locationId = AddLocation(sourceURI);
             var commentId = AddComment(locationId, commentText, isDeleted: false, createdByUserId: userId);
             
-            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService);
+            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService, authenticateService);
 
             //Act
             commentService.DeleteComment(commentId);
@@ -120,7 +124,8 @@ namespace Comments.Test.UnitTests
             var viewModel = new ViewModels.Comment(location, comment);
             
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService);
+            var authenticateService = new FakeAuthenticateService(authenticated: true);
+            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService, authenticateService);
 
             //Act
             var result = commentService.CreateComment(viewModel);
@@ -134,13 +139,14 @@ namespace Comments.Test.UnitTests
         {
             // Arrange
             ResetDatabase();
-            var commentService = new CommentService(new ConsultationsContext(_options, _fakeUserService), FakeUserService.Get(isAuthenticated: false));
+            var authenticateService = new FakeAuthenticateService(authenticated: false);
+            var commentService = new CommentService(new ConsultationsContext(_options, _fakeUserService), FakeUserService.Get(isAuthenticated: false), authenticateService);
 
             // Act
             var viewModel = commentService.GetCommentsAndQuestions("consultations://./consultation/1/document/1/chapter/introduction");
 
             //Assert
-            viewModel.IsAuthenticated.ShouldBeFalse();
+            viewModel.IsAuthorised.ShouldBeFalse();
             viewModel.Comments.Count().ShouldBe(0);
             viewModel.Questions.Count().ShouldBe(0);
         }
@@ -153,8 +159,9 @@ namespace Comments.Test.UnitTests
             var userId = Guid.NewGuid();
             var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            
-            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService);
+            var authenticateService = new FakeAuthenticateService(authenticated: true);
+
+            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService, authenticateService);
             var locationId = AddLocation(sourceURI);
 
             var expectedCommentId = AddComment(locationId, "current user's comment", isDeleted: false, createdByUserId: userId);

@@ -119,7 +119,7 @@ namespace Comments
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ISeriLogger seriLogger, IApplicationLifetime appLifetime)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ISeriLogger seriLogger, IApplicationLifetime appLifetime, IAuthenticateService authenticateService)
         {           
             seriLogger.Configure(loggerFactory, Configuration, appLifetime, env);
 
@@ -216,6 +216,8 @@ namespace Comments
                         {
                             data["cookies"] = $"{NICE.Auth.NetCore.Helpers.Constants.DefaultCookieName}={cookieForSSR}";
                         }
+                        data["isAuthorised"] = context.User.Identity.IsAuthenticated;
+                        data["signInURL"] = authenticateService.GetLoginURL(context.Request.Path);
                         //data["user"] = context.User; - possible security implications here, surfacing claims to the front end. might be ok, if just server-side.
                         // Pass further data in e.g. user/authentication data
                     };

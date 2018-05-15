@@ -49,5 +49,6 @@
     "questions":[
         
     ],
-    "isAuthenticated":true
+    "isAuthorised":true,
+    "signInURL":"/signin?returnURL=/"
 }
