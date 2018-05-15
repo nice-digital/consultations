@@ -21,5 +21,19 @@ namespace Comments.Test.UnitTests
             //Assert
             actualConsultationsRelativeUrl.ShouldBe(expectedConsultationsRelativeUrl);
         }
+
+        [Theory]
+        [InlineData("http://www.nice.org.uk/1/1/introduction", "https://www.nice.org.uk/1/1/introduction")]
+        [InlineData("hTtP://www.nice.org.uk/1/1/introduction", "https://www.nice.org.uk/1/1/introduction")]
+        [InlineData("https://www.nice.org.uk/1/1/introduction", "https://www.nice.org.uk/1/1/introduction")]
+        [InlineData("hTtPs://www.nice.org.uk/1/1/introduction", "hTtPs://www.nice.org.uk/1/1/introduction")]
+        public void ToHTTPSReturnsValidResults(string urlIn, string expectedUrl)
+        {
+            //Arrange + Act
+            var actualUrl = urlIn.ToHTTPS();
+
+            //Assert
+            actualUrl.ShouldBe(expectedUrl);
+        }
     }
 }

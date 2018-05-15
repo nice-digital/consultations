@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace Comments.Common
 {
@@ -37,6 +38,18 @@ namespace Comments.Common
             url2 = url2.TrimStart('/', '\\');
 
             return string.Format("{0}/{1}", url1, url2);
+        }
+
+        /// <summary>
+        /// Swaps out http:// for https:// in a url string.
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public static string ToHTTPS(this string url)
+        {
+            return (url.StartsWith("http://", StringComparison.OrdinalIgnoreCase))
+                ? url.Replace("http://", "https://", StringComparison.OrdinalIgnoreCase)
+                : url;
         }
     }
 }
