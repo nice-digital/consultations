@@ -1,4 +1,5 @@
-import { When } from "cucumber";
+import "@nice-digital/wdio-cucumber-steps/lib/when";
+/*import { When } from "cucumber";
 
 import clickElement from "../support/action/clickElement";
 
@@ -6,4 +7,4 @@ import clickElement from "../support/action/clickElement";
 When(
     /^I (click|doubleclick) on (text|element) "([^"]*)?"(?: in ?"([^"]*)?")?$/,
     clickElement
-);
+);*/
