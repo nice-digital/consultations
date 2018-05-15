@@ -32,48 +32,27 @@ export const generateUrl = (endpointName, baseUrl = BaseUrl, urlParameters = [],
 export const load = (endpoint, baseUrl = BaseUrl, urlParameters = [],  query = {}, method = "GET", data = {}, isJson = false, cookie = "") => {
 	return new Promise((resolve, reject) => {
 		const url = generateUrl(endpoint, baseUrl, urlParameters, query);
-		let headers = isJson ? { "Content-Type": "application/json" } : {};
-		//let headers = isJson ? { "Content-Type": "application/json", "Accept": "text/html" } : { "Accept": "text/html"};
+		let headers = isJson ? { "Content-Type": "application/json"} : {}; 
+		//let headers = isJson ? { "Accept": "text/html" } : { "Accept": "text/html"};
 		if (cookie !== ""){
 		 	headers = Object.assign({"Cookie": cookie}, headers);
 		}
 		const httpsAgent = (baseUrl.indexOf("https") !== -1) ? new https.Agent({ rejectUnauthorized: false }) : {};
 
-		//console.log(`loader.js: ${url} method: ${method}`);
-		//if (method === "POST"){
-		//	const stringifiedData = qs.stringify(data);
-		//	console.log(`stringifiedData: ${stringifiedData}`);
-		//	axios.post(url,
-		//		stringifiedData,
-		//		{
-		//			headers,
-		//			httpsAgent,
-		//			withCredentials: true
-		//		})
-		//		.then(response => {
-		//			resolve(response);
-		//		})
-		//		.catch(err => {
-		//			reject(err);
-		//		});
-
-		//} else {
-
-			axios({
-				url,
-				data,
-				method,
-				headers,
-				httpsAgent,
-				withCredentials: true
-			}) //
-				.then(response => {
-					resolve(response);
-				})
-				.catch(err => {
-					reject(err);
-				});
-		//}
+		axios({
+			url,
+			data,
+			method,
+			headers,
+			httpsAgent,
+			maxRedirects: 0
+		}) //withCredentials: true
+		.then(response => {
+			resolve(response);
+		})
+		.catch(err => {
+			reject(err);
+		});
 	});
 };
 
