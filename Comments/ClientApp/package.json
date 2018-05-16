@@ -6,7 +6,7 @@
     "extends @nice-digital/browserslist-config"
   ],
   "scripts": {
-    "start": "rimraf ./build && npm run modernizr && npm-run-all -p sass:watch start-js",
+    "start": "rimraf ./build && npm run modernizr && npm run sass:watch && npm run start-js",
     "start-js": "react-scripts start",
     "build": "npm run modernizr && npm run sass:build && react-scripts build",
     "test": "react-scripts test --env=node",
