@@ -6,9 +6,12 @@ class UserProvider extends React.Component {
 	constructor(props) {
 		super(props);
 
+		// todo: get authorisation here?
 		this.state = {
-			isAuthorised: true,
-			userName: "Bob"
+			isAuthorised: false,
+			userName: "Bob",
+			signInLink: "",
+			registerLink: ""
 		};
 	}
 

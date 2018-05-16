@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { load } from "./../../data/loader";
 import preload from "../../data/pre-loader";
@@ -45,7 +45,6 @@ type StateType = {
 
 export class CommentList extends Component<PropsType, StateType> {
 	constructor(props: PropsType) {
-
 		super(props);
 		this.state = {
 			comments: [],
@@ -189,23 +188,6 @@ export class CommentList extends Component<PropsType, StateType> {
 	};
 
 	render() {
-		if (this.state.loading) return <p>Loading</p>;
-
-		if (this.state.isAuthorised === false)
-			return (
-				<Fragment>
-					<p>Sign in message goes here.</p>
-					<a href={this.state.signInURL}>Sign in</a>
-				</Fragment>
-			);
-
-		if (this.state.comments.length === 0)
-			return (
-				<Fragment>
-					<p>No comments</p>
-				</Fragment>
-			);
-
 		return (
 			<UserContext.Consumer>
 				{ value => {
@@ -229,7 +211,7 @@ export class CommentList extends Component<PropsType, StateType> {
 							</ul>
 						);
 					} else {
-						return <LoginBanner signinButton={true} signinUrl="#" registerUrl="#"/>;
+						return <LoginBanner signinButton={true} signinUrl={this.state.signInURL} registerUrl="#"/>;
 					}
 				}}
 			</UserContext.Consumer>
