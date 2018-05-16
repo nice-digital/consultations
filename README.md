@@ -145,5 +145,5 @@ The project uses serveral layers of tests:
   
 | Environment |  URL  |
 | ----------- | :---: |
-| Dev         | https://dev-consultations.nice.org.uk |
-| Test        | https://test-consultations.nice.org.uk |
+| Dev         | https://dev.nice.org.uk/consultations/ |
+| Test        | https://test.nice.org.uk/consultations/ |
