@@ -102,6 +102,7 @@ export class Drawer extends Component<PropsType, StateType> {
 						/>
 					</button>
 				</div>
+				{/* #sidebar-panel necessary here for pulling keyboard focus */}
 				<div id="sidebar-panel" className="Drawer__main">
 					<h1 id="commenting-panel" className="visually-hidden">Commenting Panel</h1>
 					{/*wrappedComponentRef exposes the underlying, unwrapped component*/}

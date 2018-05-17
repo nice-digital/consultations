@@ -1,11 +1,13 @@
 // @flow
 
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { load } from "./../../data/loader";
 import preload from "../../data/pre-loader";
 import { CommentBox } from "../CommentBox/CommentBox";
-//import stringifyObject from "stringify-object";
+import { LoginBanner } from "./../LoginBanner/LoginBanner";
+import { UserContext } from "../../context/UserContext";
+// import stringifyObject from "stringify-object";
 
 type PropsType = {
 	staticContext?: any,
@@ -37,27 +39,26 @@ type CommentType = {
 
 type StateType = {
 	comments: Array<CommentType>,
-	loading: boolean,
-	isAuthorised: boolean
+	questions: any,
+	loading: boolean
 };
 
 export class CommentList extends Component<PropsType, StateType> {
 	constructor(props: PropsType) {
-
 		super(props);
 		this.state = {
 			comments: [],
 			questions: [],
-			loading: true,
-			isAuthorised: false,
-			signInURL: ""
+			loading: true
+			// isAuthorised: false,
+			// signInURL: ""
 		};
 		let preloadedData = {};
 		if (this.props.staticContext && this.props.staticContext.preload) {
 			preloadedData = this.props.staticContext.preload.data;
 
 			//console.log('setting is authorised to:' + preloadedData.isAuthorised);
-			this.state.isAuthorised = preloadedData.isAuthorised;
+			// this.state.isAuthorised = preloadedData.isAuthorised;
 		}
 
 		//console.log(`preloadedData: ${stringifyObject(preloadedData)}`);
@@ -75,13 +76,13 @@ export class CommentList extends Component<PropsType, StateType> {
 			this.state = {
 				comments: preloaded.comments,
 				loading: false,
-				questions: preloaded.questions,
-				isAuthorised: preloadedData.isAuthorised,
-				signInURL: preloadedData.signInURL
+				questions: preloaded.questions
+				// isAuthorised: preloadedData.isAuthorised,
+				// signInURL: preloadedData.signInURL
 			};
 			//console.log('server side: ' + preloadedData.isAuthorised);
 		}
-		
+
 	}
 
 	loadComments() {
@@ -90,9 +91,9 @@ export class CommentList extends Component<PropsType, StateType> {
 				this.setState({
 					comments: res.data.comments,
 					questions: res.data.questions,
-					loading: false,
-					isAuthorised: res.data.isAuthorised,
-					signInURL: res.data.signInURL
+					loading: false
+					// isAuthorised: res.data.isAuthorised,
+					// signInURL: res.data.signInURL
 				});
 			}
 		);
@@ -187,40 +188,33 @@ export class CommentList extends Component<PropsType, StateType> {
 	};
 
 	render() {
-		if (this.state.loading) return <p>Loading</p>;
-
-		if (this.state.isAuthorised === false)
-			return (
-				<Fragment>
-					<p>Sign in message goes here.</p>
-					<a href={this.state.signInURL}>Sign in</a>
-				</Fragment>
-			);
-
-		if (this.state.comments.length === 0)
-			return (
-				<Fragment>
-					<p>No comments</p>
-				</Fragment>
-			);
-
 		return (
-			<Fragment>
-				<ul className="CommentList list--unstyled">
-					{this.state.comments.map((comment, idx) => {
+			<UserContext.Consumer>
+				{ contextValue => {
+					if (this.state.loading) return <p>Loading</p>;
+					if (contextValue.isAuthorised) {
+						if (this.state.comments.length === 0) return <p>No comments yet</p>;
 						return (
-							<CommentBox
-								drawerOpen={this.props.drawerOpen}
-								key={comment.commentId}
-								unique={`Comment${idx}`}
-								comment={comment}
-								saveHandler={this.saveCommentHandler}
-								deleteHandler={this.deleteCommentHandler}
-							/>
+							<ul className="CommentList list--unstyled">
+								{this.state.comments.map((comment, idx) => {
+									return (
+										<CommentBox
+											drawerOpen={this.props.drawerOpen}
+											key={comment.commentId}
+											unique={`Comment${idx}`}
+											comment={comment}
+											saveHandler={this.saveCommentHandler}
+											deleteHandler={this.deleteCommentHandler}
+										/>
+									);
+								})}
+							</ul>
 						);
-					})}
-				</ul>
-			</Fragment>
+					} else {
+						return <LoginBanner signInButton={true} currentURL={this.props.match.url} signInURL={contextValue.signInURL} registerURL={contextValue.registerURL}/>;
+					}
+				}}
+			</UserContext.Consumer>
 		);
 	}
 }

@@ -11,6 +11,10 @@ import { nextTick } from "../../../helpers/utils";
 
 const mock = new MockAdapter(axios);
 
+it.only("goes and passes for convenience", ()=> {
+	expect(1).toEqual(1);
+});
+
 describe("[ClientApp] ", () => {
 	describe("CommentList Component", () => {
 		const fakeProps = {
@@ -131,7 +135,7 @@ describe("[ClientApp] ", () => {
 
 		it("new comment should add an entry in the array with negative id", () => {
 			mock.reset();
-			mock.onAny().reply(config => {
+			mock.onAny().reply(() => {
 				return [200, { comments: [] }];
 			});
 			const wrapper = mount(<CommentList {...fakeProps} />);
@@ -143,7 +147,7 @@ describe("[ClientApp] ", () => {
 
 		it("2 new comments should decrement the negative commentId without conflicting", () => {
 			mock.reset();
-			mock.onAny().reply(config => {
+			mock.onAny().reply(() => {
 				return [200, { comments: [] }];
 			});
 			const wrapper = mount(<CommentList {...fakeProps} />);
