@@ -5,7 +5,7 @@ import { withRouter } from "react-router-dom";
 import { load } from "./../../data/loader";
 import preload from "../../data/pre-loader";
 import { CommentBox } from "../CommentBox/CommentBox";
-import stringifyObject from "stringify-object";
+//import stringifyObject from "stringify-object";
 
 type PropsType = {
 	staticContext?: any,

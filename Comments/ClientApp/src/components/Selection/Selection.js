@@ -23,44 +23,63 @@ export class Selection extends Component<PropsType, StateType> {
 			position: {}
 		};
 		this.selectionContainer = React.createRef();
+		
 	}
-	
+
+	componentDidMount = () =>
+	{
+		//document.addEventListener("selectionchange", this.onMouseUp);
+	}
+
 	getCommentForRange = (limitingElement: any, selection: any) =>{
 		let selectionRange = selection.getRangeAt(0);
-		let browserRange = new xpathRange.Range.BrowserRange(selectionRange);
-		let normedRange = browserRange.normalize().limit(limitingElement); //restrict the range to the current limiting area.
-		
-		let quote = this.trim(normedRange.text());
-		let serialisedRange = normedRange.serialize(limitingElement, "");
-		
-		let comment = { quote: quote,
-			rangeStart: serialisedRange.start,
-			rangeStartOffset: serialisedRange.startOffset,
-			rangeEnd: serialisedRange.end,
-			rangeEndOffset: serialisedRange.endOffset,
-			sourceURI: this.props.sourceURI,
-			placeholder: "Comment on this selected text",
-			commentText: "",
-			commentOn: "Selection" };
 
+		let comment = null;
+		try {
+			let browserRange = new xpathRange.Range.BrowserRange(selectionRange);
+			let normedRange = browserRange.normalize().limit(limitingElement); //restrict the range to the current limiting area.
+
+			let quote = this.trim(normedRange.text());
+			let serialisedRange = normedRange.serialize(limitingElement, "");
+
+			comment = {
+				quote: quote,
+				rangeStart: serialisedRange.start,
+				rangeStartOffset: serialisedRange.startOffset,
+				rangeEnd: serialisedRange.end,
+				rangeEndOffset: serialisedRange.endOffset,
+				sourceURI: this.props.sourceURI,
+				placeholder: "Comment on this selected text",
+				commentText: "",
+				commentOn: "Selection"
+			};
+		} catch (error) {
+			console.error(error);
+		}
 		return(comment);
 	}
 
 	onMouseUp = (event: Event) => {
 
-		if (window && window.getSelection){
+		if (window && window.getSelection) {
+			const arrowSize = 10; //this must match the size in $arrow-size in Selection.scss
 			const selection = window.getSelection();
 			if (selection.isCollapsed || selection.rangeCount < 1){ //isCollapsed is true when there's no text selected.
 				this.setState({ toolTipVisible: false });
 				return;
 			}			
 			const comment = this.getCommentForRange(event.currentTarget, selection);
-			
+			if (comment === null) {
+				this.setState({ toolTipVisible: false });
+			}
+
+			const scrollTop = "pageYOffset" in window ? window.pageYOffset : document.documentElement.scrollTop;
+			const scrollLeft = "pageXOffset" in window ? window.pageXOffset : document.documentElement.scrollLeft;
 			const boundingRectOfContainer = this.selectionContainer.current.getBoundingClientRect();
 			const position =
 			{
-				x: event.pageX - (boundingRectOfContainer.left + document.documentElement.scrollLeft),
-			  	y: event.pageY - (boundingRectOfContainer.top + document.documentElement.scrollTop)			  
+				x: event.pageX - (boundingRectOfContainer.left + scrollLeft) - arrowSize,
+				y: event.pageY - (boundingRectOfContainer.top + scrollTop) + arrowSize		  
 			};
 
 			this.setState({ comment, position, toolTipVisible: true });
@@ -69,14 +88,14 @@ export class Selection extends Component<PropsType, StateType> {
 		}		
 	}	
 
-	getElementOffset = (element:any) => {
+	//getElementOffset = (element:any) => {
 
-		var de = document.documentElement;
-		var box = element.getBoundingClientRect();
-		var top = box.top + window.pageYOffset - de.clientTop;
-		var left = box.left + window.pageXOffset - de.clientLeft;
-		return { top: top, left: left };
-	}
+	//	var de = document.documentElement;
+	//	var box = element.getBoundingClientRect();
+	//	var top = box.top + window.pageYOffset - de.clientTop;
+	//	var left = box.left + window.pageXOffset - de.clientLeft;
+	//	return { top: top, left: left };
+	//}
 
 
 	onButtonClick = (event: Event ) => {
