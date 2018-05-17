@@ -1,39 +1,44 @@
 // @flow
 
-import React, { Fragment } from "react";
+import React, { Fragment, Component } from "react";
 import { Route, Switch, Redirect } from "react-router";
 import { Helmet } from "react-helmet";
 import CommentListWithRouter from "../CommentList/CommentList";
 import { DocumentView } from "../DocumentView/DocumentView";
 import NotFound from "../NotFound/NotFound";
+import UserProviderWithRouter from "../../context/UserContext";
 
-const App = () => (
-	<Fragment>
-		<Helmet titleTemplate="%s | Consultations | NICE">
-			<html lang="en-GB" />
-		</Helmet>
+class App extends Component {
+	render() {
+		return (
+			<UserProviderWithRouter>
+				<Helmet titleTemplate="%s | Consultations | NICE">
+					<html lang="en-GB" />
+				</Helmet>
 
-		<Switch>
-			{/*Home*/}
-			<Route exact path="/">
-				<Redirect to="/1/1/introduction" />
-			</Route>
+				<Switch>
+					{/*Home*/}
+					<Route exact path="/">
+						<Redirect to="/1/1/introduction" />
+					</Route>
 
-			{/*Document View*/}
-			<Route path="/:consultationId/:documentId/:chapterSlug">
-				<DocumentView />
-			</Route>
+					{/*Document View*/}
+					<Route path="/:consultationId/:documentId/:chapterSlug">
+						<DocumentView />
+					</Route>
 
-			<Route path="/commentlist">
-				<Fragment>
-					<CommentListWithRouter />
-				</Fragment>
-			</Route>
+					<Route path="/commentlist">
+						<Fragment>
+							<CommentListWithRouter />
+						</Fragment>
+					</Route>
 
-			{/*404*/}
-			<Route component={NotFound} />
-		</Switch>
-	</Fragment>
-);
+					{/*404*/}
+					<Route component={NotFound} />
+				</Switch>
+			</UserProviderWithRouter>
+		);
+	}
+}
 
 export default App;

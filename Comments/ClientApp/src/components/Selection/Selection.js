@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import xpathRange from "xpath-range";
 //import Tooltip from "rc-tooltip";
 //import stringifyObject from "stringify-object";
@@ -8,7 +8,7 @@ type PropsType = {
 	sourceURI: string
 };
 
-type StateType = {	
+type StateType = {
 	toolTipVisible: boolean,
 	comment: any,
 	position: any
@@ -33,6 +33,21 @@ export class Selection extends Component<PropsType, StateType> {
 
 	getCommentForRange = (limitingElement: any, selection: any) =>{
 		let selectionRange = selection.getRangeAt(0);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 		let comment = null;
 		try {
@@ -67,7 +82,7 @@ export class Selection extends Component<PropsType, StateType> {
 			if (selection.isCollapsed || selection.rangeCount < 1){ //isCollapsed is true when there's no text selected.
 				this.setState({ toolTipVisible: false });
 				return;
-			}			
+			}
 			const comment = this.getCommentForRange(event.currentTarget, selection);
 			if (comment === null) {
 				this.setState({ toolTipVisible: false });
@@ -85,8 +100,8 @@ export class Selection extends Component<PropsType, StateType> {
 			this.setState({ comment, position, toolTipVisible: true });
 		} else{
 			this.setState({ toolTipVisible: false });
-		}		
-	}	
+		}
+	}
 
 	//getElementOffset = (element:any) => {
 
@@ -124,16 +139,16 @@ export class Selection extends Component<PropsType, StateType> {
 	render() {
 		return (
 			<div onMouseUp={this.onMouseUp} ref={this.selectionContainer}>
-				<MyToolTip visible={this.state.toolTipVisible} onButtonClick={this.onButtonClick} position={this.state.position}/>						
+				<MyToolTip visible={this.state.toolTipVisible} onButtonClick={this.onButtonClick} position={this.state.position}/>
 				{this.props.children}
-			</div> 
+			</div>
 		);
 	}
 }
 
 type ToolTipPropsType = {
 	position: any,
-	visible: boolean,	
+	visible: boolean,
 	onButtonClick: any
 }
 export const MyToolTip = (props = ToolTipPropsType) => {
@@ -144,7 +159,7 @@ export const MyToolTip = (props = ToolTipPropsType) => {
 		top: position.y
 	};
 	return (
-		<div className="selection-container unselectable" style={contentMenuStyle}>			
+		<div className="selection-container unselectable" style={contentMenuStyle}>
 			<button onClick={onButtonClick} className="btn"><span className="icon icon--comment unselectable" aria-hidden="true"></span>&nbsp;&nbsp;Comment</button>
 		</div>
 	);

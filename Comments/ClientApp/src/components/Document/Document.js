@@ -15,7 +15,10 @@ import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
 import { projectInformation, fileDownloadBasepath } from "../../constants";
 import { processDocumentHtml } from "./process-document-html";
+import { LoginBanner } from "./../LoginBanner/LoginBanner";
+import { UserContext } from "../../context/UserContext";
 import { Selection } from "../Selection/Selection";
+// import stringifyObject from "stringify-object";
 
 type PropsType = {
 	staticContext?: any,
@@ -280,6 +283,9 @@ export class Document extends Component<PropsType, StateType> {
 				<Helmet>
 					<title>{title}</title>
 				</Helmet>
+				<UserContext.Consumer>
+					{ contextValue => !contextValue.isAuthorised ? <LoginBanner signinButton={false} currentURL={this.props.match.url} signInURL={contextValue.signInURL} registerURL={contextValue.registerURL}/> : null }
+				</UserContext.Consumer>
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">
@@ -299,6 +305,7 @@ export class Document extends Component<PropsType, StateType> {
 											onClick={e => {
 												e.preventDefault();
 												this.props.onNewCommentClick({
+
 													sourceURI: this.props.match.url,
 													commentText: "",
 													commentOn: "Consultation",
@@ -322,6 +329,7 @@ export class Document extends Component<PropsType, StateType> {
 											onClick={e => {
 												e.preventDefault();
 												this.props.onNewCommentClick({
+
 													sourceURI: this.props.match.url,
 													commentText: "",
 													commentOn: "Document",
