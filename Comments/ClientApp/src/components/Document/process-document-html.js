@@ -29,7 +29,7 @@ export const processDocumentHtml = (
 								sourceURI: sourceURI,
 								commentText: "",
 								commentOn: elementType,
-								htmlElementID: elementId, // TODO: only send this on section
+								htmlElementID: elementType === "section" ? elementType : "",
 								quote: elementName
 							});
 						}}
