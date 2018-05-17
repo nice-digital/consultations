@@ -7,6 +7,7 @@ import CommentListWithRouter from "../CommentList/CommentList";
 import { DocumentView } from "../DocumentView/DocumentView";
 import NotFound from "../NotFound/NotFound";
 import UserProviderWithRouter from "../../context/UserContext";
+import { ReviewPage} from "../ReviewPage/ReviewPage";
 
 class App extends Component {
 	render() {
@@ -25,6 +26,11 @@ class App extends Component {
 					{/*Document View*/}
 					<Route path="/:consultationId/:documentId/:chapterSlug">
 						<DocumentView />
+					</Route>
+
+					{/*Review Page*/}
+					<Route path="/:consultationId/review">
+						<ReviewPage />
 					</Route>
 
 					<Route path="/commentlist">

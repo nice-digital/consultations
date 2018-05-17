@@ -4,6 +4,7 @@ using Comments.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Http.Extensions;
 using NICE.Auth.NetCore.Services;
 
 namespace Comments.Services
@@ -11,7 +12,7 @@ namespace Comments.Services
     public interface ICommentService
     {
         CommentsAndQuestions GetCommentsAndQuestions(string relativeURL);
-	    CommentsAndQuestions GetUsersCommentsAndQuestionsForConsultation(string relativeURL);
+	    CommentsAndQuestions GetUsersCommentsAndQuestionsForConsultation(int consultationId);
 		(ViewModels.Comment comment, Validate validate) GetComment(int commentId);
         (int rowsUpdated, Validate validate) EditComment(int commentId, ViewModels.Comment comment);
         (ViewModels.Comment comment, Validate validate) CreateComment(ViewModels.Comment comment);
@@ -132,17 +133,17 @@ namespace Comments.Services
             return new CommentsAndQuestions(commentsData, questionsData, user.IsLoggedIn, signInURL);
         }
 
-        public CommentsAndQuestions GetUsersCommentsAndQuestionsForConsultation(string relativeURL)
+        public CommentsAndQuestions GetUsersCommentsAndQuestionsForConsultation(int constulationId)
         {
             var user = _userService.GetCurrentUser();
-            var signInURL = _authenticateService.GetLoginURL(relativeURL);
 
             if (!user.IsLoggedIn)
-                return new CommentsAndQuestions(new List<ViewModels.Comment>(), new List<ViewModels.Question>(), user.IsLoggedIn, signInURL);
+                return new CommentsAndQuestions(new List<ViewModels.Comment>(), new List<ViewModels.Question>(), user.IsLoggedIn, null);
 
-            var sourceURI = ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Consultation);
-                
-            var locations = _context.GetAllCommentsAndQuestionsForConsultation(sourceURI);
+	        var sourceURI = ConsultationsUri.CreateConsultationURI(constulationId);
+
+
+			var locations = _context.GetAllCommentsAndQuestionsForConsultation(sourceURI);
 
             var commentsData = new List<ViewModels.Comment>();
             var questionsData = new List<ViewModels.Question>();
@@ -152,7 +153,7 @@ namespace Comments.Services
                 questionsData.AddRange(location.Question.Select(question => new ViewModels.Question(location, question)));
             }
 
-            return new CommentsAndQuestions(commentsData, questionsData, user.IsLoggedIn, signInURL);
+            return new CommentsAndQuestions(commentsData, questionsData, user.IsLoggedIn, null);
         }
     }
 }

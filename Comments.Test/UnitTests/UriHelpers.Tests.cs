@@ -1,4 +1,4 @@
-﻿using Comments.Models;
+using Comments.Models;
 using Comments.ViewModels;
 using Comments.Common;
 using Comments.Test.Infrastructure;
@@ -53,6 +53,17 @@ namespace Comments.Test.UnitTests
             //Assert
             uri.ShouldBe(consultationsUri);
         }
+
+	    [Fact]
+	    public void CreateConsultationsURIFromConstulationId()
+	    {
+		    //Arrange + Act
+		    var consultationId = 1;
+		    var uri = ConsultationsUri.CreateConsultationURI(consultationId);
+
+		    //Assert
+		    uri.ShouldBe("consultations://./consultation/1");
+		}
 
     }
 }

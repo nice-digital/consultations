@@ -1,4 +1,4 @@
-﻿using Comments.Services;
+using Comments.Services;
 using Comments.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -20,18 +20,18 @@ namespace Comments.Controllers.Api
             _logger = logger;
         }
 
-        /// <summary>
-        /// GET: eg. consultations/api/Review?sourceURI=%2Fconsultations%2F1%2F1%2Fchapter-slug
-        /// </summary>
-        /// <param name="sourceURI">this is really the relativeURL eg "/1/1/introduction"</param>
-        /// <returns></returns>
-        [HttpGet]
-        public CommentsAndQuestions Get(string sourceURI)
+	    /// <summary>
+	    /// GET: eg. consultations/api/Review/1
+	    /// </summary>
+	    /// <param name="consultationId">id of the consultation eg "1"</param>
+	    /// <returns></returns>
+	    [HttpGet("{consultationId}")]
+	    public CommentsAndQuestions Get([FromRoute] int consultationId)
         {
-            if (string.IsNullOrWhiteSpace(sourceURI))
-                throw new ArgumentNullException(nameof(sourceURI));
+            if (consultationId < 1)
+                throw new ArgumentNullException(nameof(consultationId));
 
-            return _commentService.GetUsersCommentsAndQuestionsForConsultation(relativeURL: sourceURI);
+            return _commentService.GetUsersCommentsAndQuestionsForConsultation(consultationId);
         }
     }
 }

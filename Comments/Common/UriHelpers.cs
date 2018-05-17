@@ -1,4 +1,4 @@
-﻿using Comments.Models;
+using Comments.Models;
 using Comments.ViewModels;
 using System;
 using System.Text.RegularExpressions;
@@ -75,5 +75,10 @@ namespace Comments.Common
 
             return new ConsultationsUriElements(consultationId, documentId, chapterSlug);
         }
+
+	    public static string CreateConsultationURI(int consultationId)
+	    {
+			return string.Format(ConsultationUriFormat, consultationId);
+		}
     }
 }

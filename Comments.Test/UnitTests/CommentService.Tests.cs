@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Comments.Models;
 using Comments.Services;
 using Comments.Test.Infrastructure;
@@ -239,7 +239,7 @@ namespace Comments.Test.UnitTests
             var commentService = new CommentService(new ConsultationsContext(_options, userService), _fakeUserService, authenticateService);
 
             // Act    
-            var viewModel = commentService.GetUsersCommentsAndQuestionsForConsultation(ChaperOverviewURI);
+            var viewModel = commentService.GetUsersCommentsAndQuestionsForConsultation(1);
 
             //Assert
             commentService.GetComment(6).comment.ShouldNotBeNull();
