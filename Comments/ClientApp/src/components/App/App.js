@@ -9,7 +9,6 @@ import NotFound from "../NotFound/NotFound";
 import UserProviderWithRouter from "../../context/UserContext";
 
 class App extends Component {
-
 	render() {
 		return (
 			<UserProviderWithRouter>

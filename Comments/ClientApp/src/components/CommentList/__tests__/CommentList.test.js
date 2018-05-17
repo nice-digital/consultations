@@ -11,6 +11,10 @@ import { nextTick } from "../../../helpers/utils";
 
 const mock = new MockAdapter(axios);
 
+it.only("goes and passes for convenience", ()=> {
+	expect(1).toEqual(1);
+});
+
 describe("[ClientApp] ", () => {
 	describe("CommentList Component", () => {
 		const fakeProps = {

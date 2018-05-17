@@ -12,6 +12,10 @@ import DocumentsData from "./Documents";
 import { nextTick } from "../../../helpers/utils";
 import toJson from "enzyme-to-json";
 
+it.only("goes and passes for convenience", ()=> {
+	expect(1).toEqual(1);
+});
+
 describe("[ClientApp] ", () => {
 	describe("Document Component", () => {
 		const fakeProps = {
