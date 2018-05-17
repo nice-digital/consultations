@@ -11,7 +11,8 @@ namespace Comments.Services
     public interface ICommentService
     {
         CommentsAndQuestions GetCommentsAndQuestions(string relativeURL);
-        (ViewModels.Comment comment, Validate validate) GetComment(int commentId);
+	    CommentsAndQuestions GetUsersCommentsAndQuestionsForConsultation(string relativeURL);
+		(ViewModels.Comment comment, Validate validate) GetComment(int commentId);
         (int rowsUpdated, Validate validate) EditComment(int commentId, ViewModels.Comment comment);
         (ViewModels.Comment comment, Validate validate) CreateComment(ViewModels.Comment comment);
         (int rowsUpdated, Validate validate) DeleteComment(int commentId);
@@ -119,6 +120,29 @@ namespace Comments.Services
             };
 
             var locations = _context.GetAllCommentsAndQuestionsForDocument(sourceURIs);
+
+            var commentsData = new List<ViewModels.Comment>();
+            var questionsData = new List<ViewModels.Question>();
+            foreach (var location in locations)
+            {
+                commentsData.AddRange(location.Comment.Select(comment => new ViewModels.Comment(location, comment)));
+                questionsData.AddRange(location.Question.Select(question => new ViewModels.Question(location, question)));
+            }
+
+            return new CommentsAndQuestions(commentsData, questionsData, user.IsLoggedIn, signInURL);
+        }
+
+        public CommentsAndQuestions GetUsersCommentsAndQuestionsForConsultation(string relativeURL)
+        {
+            var user = _userService.GetCurrentUser();
+            var signInURL = _authenticateService.GetLoginURL(relativeURL);
+
+            if (!user.IsLoggedIn)
+                return new CommentsAndQuestions(new List<ViewModels.Comment>(), new List<ViewModels.Question>(), user.IsLoggedIn, signInURL);
+
+            var sourceURI = ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Consultation);
+                
+            var locations = _context.GetAllCommentsAndQuestionsForConsultation(sourceURI);
 
             var commentsData = new List<ViewModels.Comment>();
             var questionsData = new List<ViewModels.Question>();

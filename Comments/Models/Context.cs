@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using Comments.Services;
-using Remotion.Linq.Clauses;
-using Comments.Common;
 
 namespace Comments.Models
 {
@@ -21,7 +19,7 @@ namespace Comments.Models
         /// for the IsDeleted flag and the CreatedByUserId. So, this is only going to return data that isn't deleted and belongs to the current user.
         /// This behaviour can be overridden with the IgnoreQueryFilters command. See the ConsultationContext.Tests for example usage.
         /// </summary>
-        /// <param name="sourceURI"></param>
+        /// <param name="sourceURIs"></param>
         /// <returns></returns>
         public IEnumerable<Location> GetAllCommentsAndQuestionsForDocument(IEnumerable<string> sourceURIs)
         {
@@ -30,13 +28,30 @@ namespace Comments.Models
                 throw new Exception("trying to return comments and questions when not logged in. this should have been trapped in the service.");
             
             var data = Location.Where(l => sourceURIs.Contains(l.SourceURI))
-                        .Include(l => l.Comment)
-                        .Include(l => l.Question)
-                            .ThenInclude(q => q.QuestionType)
-                        .Include(l => l.Question)
-                            .ThenInclude(q => q.Answer)
-                        .OrderByDescending(l => l.Comment
-                            .OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault()); 
+                .Include(l => l.Comment)
+                .Include(l => l.Question)
+                .ThenInclude(q => q.QuestionType)
+                .Include(l => l.Question)
+                .ThenInclude(q => q.Answer)
+                .OrderByDescending(l => l.Comment
+                    .OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault());
+
+            return data;
+        }
+
+        public IEnumerable<Location> GetAllCommentsAndQuestionsForConsultation(string sourceURI)
+        {
+            if (!_userService.GetCurrentUser().IsLoggedIn)
+                throw new Exception("trying to return comments and questions when not logged in. this should have been trapped in the service.");
+
+            var data = Location.Where(l => l.SourceURI.Contains(sourceURI))
+                .Include(l => l.Comment)
+                .Include(l => l.Question)
+                .ThenInclude(q => q.QuestionType)
+                .Include(l => l.Question)
+                .ThenInclude(q => q.Answer)
+                .OrderByDescending(l => l.Comment
+                    .OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault());
 
             return data;
         }

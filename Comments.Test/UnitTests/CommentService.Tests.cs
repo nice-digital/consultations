@@ -174,5 +174,77 @@ namespace Comments.Test.UnitTests
             //Assert
             viewModel.Comments.Single().CommentId.ShouldBe(expectedCommentId);
         }
+
+        [Fact]
+        public void CommentsQuestionsAndAnswers_OnlyReturnOwnComments()
+        {
+            // Arrange
+            ResetDatabase();
+            var URI = "consultations://./consultation/1/document/1/chapter/intro";
+
+            var someText = Guid.NewGuid().ToString();
+            var createdByUserId = Guid.Empty;
+            var anotherUserId = Guid.NewGuid();
+
+            var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: createdByUserId);
+            var authenticateService = new FakeAuthenticateService(authenticated: true);
+
+            AddCommentsAndQuestionsAndAnswers(URI, "My Comment", someText, someText, createdByUserId, _context);
+            AddCommentsAndQuestionsAndAnswers(URI, "Another Users Comment", someText, someText, anotherUserId, _context);
+
+            var commentService = new CommentService(new ConsultationsContext(_options, userService), _fakeUserService, authenticateService);
+
+            // Act    
+            var viewModel = commentService.GetCommentsAndQuestions(URI);
+
+            //Assert
+            commentService.GetComment(1).comment.CommentText.ShouldBe("My Comment");
+            commentService.GetComment(2).validate.NotFound.ShouldBeTrue();
+            viewModel.Comments.Count().ShouldBe(1);
+        }
+
+        [Fact]
+        public void CommentsQuestionsAndAnswers_ReturnAllOwnCommentsForConsultation()
+        {
+            // Arrange
+            ResetDatabase();
+            var ChapterIntroURI = "consultations://./consultation/1/document/1/chapter/introduction";
+            var ChaperOverviewURI = "consultations://./consultation/1/document/1/chapter/overview";
+
+            var DocumentOneURI = "consultations://./consultation/1/document/1";
+            var DocumentTwoURI = "consultations://./consultation/1/document/2/chapter/guidelines";
+
+            var ConsultationOneURI = "consultations://./consultation/1";
+            var ConsultationTwoURI = "consultations://./consultation/2/document/1/chapter/ERROR";
+
+            var ConsultationUserError = "consultations://./consultation/1/document/1/chapter/USERERROR";
+
+            var commentText = Guid.NewGuid().ToString();
+            var questionText = Guid.NewGuid().ToString();
+            var answerText = Guid.NewGuid().ToString();
+            var createdByUserId = Guid.Empty;
+            var anotherUserId = Guid.NewGuid();
+
+            var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: createdByUserId);
+            var authenticateService = new FakeAuthenticateService(authenticated: true);
+
+            AddCommentsAndQuestionsAndAnswers(ChapterIntroURI, commentText, questionText, answerText, createdByUserId, _context);
+            AddCommentsAndQuestionsAndAnswers(ChaperOverviewURI, commentText, questionText, answerText, createdByUserId, _context);
+            AddCommentsAndQuestionsAndAnswers(DocumentOneURI, commentText, questionText, answerText, createdByUserId, _context);
+            AddCommentsAndQuestionsAndAnswers(ConsultationOneURI, commentText, questionText, answerText, createdByUserId, _context);
+            AddCommentsAndQuestionsAndAnswers(DocumentTwoURI, commentText, questionText, answerText, createdByUserId, _context);
+            AddCommentsAndQuestionsAndAnswers(ConsultationTwoURI, commentText, questionText, answerText, createdByUserId, _context);
+            AddCommentsAndQuestionsAndAnswers(ChaperOverviewURI, "Another Users Comment", questionText, answerText, anotherUserId, _context);
+
+            var commentService = new CommentService(new ConsultationsContext(_options, userService), _fakeUserService, authenticateService);
+
+            // Act    
+            var viewModel = commentService.GetUsersCommentsAndQuestionsForConsultation(ChaperOverviewURI);
+
+            //Assert
+            commentService.GetComment(6).comment.ShouldNotBeNull();
+            commentService.GetComment(7).validate.NotFound.ShouldBeTrue();
+            viewModel.Comments.Count().ShouldBe(5);
+        }
     }
 }
