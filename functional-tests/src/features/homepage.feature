@@ -29,5 +29,5 @@ Feature: Consultations homepage feature
     When I wait on element ".page-header" to exist
     When I click on the button "body #js-drawer-toggleopen"
     #When I set a cookie "__nrpa_2.2" with the content "SJQxrQET32KYHUYHY6eOSLldyy87hHkQpuxX9Sh/Z3k+V2UENlYwe4T5i5CDTf4Ltn2I35Yen+unTSHs08TXcg=="
-    Then I expect that element "body #sidebar-panel" contains the text "No comments"
+    Then I expect that element "body #sidebar-panel" contains the text "Sign in message goes here."
 

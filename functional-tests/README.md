@@ -189,3 +189,11 @@ If you get errors like "/bin/bash^M: bad interpreter: No such file or directory"
 #### Unknown locator strategy id
 
 If you get errors like "Unknown locator strategy id" in Firefox, using ID's as selectors, see https://github.com/aerokube/selenoid/issues/261. Firefox (Gecko driver) doesn't support IDs and requires CSS selectors, so you can get round it with "body #id".
+
+#### Drive has not been shared
+
+If you get the following error:
+
+ERROR: for tests  Cannot create container for service tests: b'Drive has not been shared'
+
+Navigate to docker settings and in the "Shared Drives" section tick the C drive option and click Apply

@@ -1,3 +1,5 @@
+/* global jest */
+
 import React from "react";
 import { shallow, mount } from "enzyme";
 import axios from "axios";
@@ -12,8 +14,16 @@ import DocumentsData from "./Documents";
 import { nextTick } from "../../../helpers/utils";
 import toJson from "enzyme-to-json";
 
-it.only("goes and passes for convenience", ()=> {
-	expect(1).toEqual(1);
+jest.mock("../../../context/UserContext", () => {
+	return {
+		UserContext: {
+			Consumer: (props) => {
+				return props.children({
+					isAuthorised: true
+				});
+			}
+		}
+	};
 });
 
 describe("[ClientApp] ", () => {
