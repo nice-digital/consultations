@@ -284,7 +284,7 @@ export class Document extends Component<PropsType, StateType> {
 					<title>{title}</title>
 				</Helmet>
 				<UserContext.Consumer>
-					{ value => !value.isAuthorised ? <LoginBanner signinButton={false} signinUrl="#" registerUrl="#"/> : null }
+					{ contextValue => !contextValue.isAuthorised ? <LoginBanner signinButton={false} currentURL={this.props.match.url} signInURL={contextValue.signInURL} registerURL={contextValue.registerURL}/> : null }
 				</UserContext.Consumer>
 				<div className="container">
 					<div className="grid">

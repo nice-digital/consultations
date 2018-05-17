@@ -6,13 +6,13 @@ import { Helmet } from "react-helmet";
 import CommentListWithRouter from "../CommentList/CommentList";
 import { DocumentView } from "../DocumentView/DocumentView";
 import NotFound from "../NotFound/NotFound";
-import UserProvider from "../../context/UserContext";
+import UserProviderWithRouter from "../../context/UserContext";
 
 class App extends Component {
 
 	render() {
 		return (
-			<UserProvider>
+			<UserProviderWithRouter>
 				<Helmet titleTemplate="%s | Consultations | NICE">
 					<html lang="en-GB" />
 				</Helmet>
@@ -37,8 +37,7 @@ class App extends Component {
 					{/*404*/}
 					<Route component={NotFound} />
 				</Switch>
-
-			</UserProvider>
+			</UserProviderWithRouter>
 		);
 	}
 }
