@@ -18,7 +18,8 @@ type PropsType = {
 	location: {
 		pathname: string
 	},
-	drawerOpen: boolean
+	drawerOpen: boolean,
+	isReviewPage: boolean
 };
 
 type CommentType = {
@@ -53,56 +54,68 @@ export class CommentList extends Component<PropsType, StateType> {
 			// isAuthorised: false,
 			// signInURL: ""
 		};
-		let preloadedData = {};
-		if (this.props.staticContext && this.props.staticContext.preload) {
-			preloadedData = this.props.staticContext.preload.data;
+		// let preloadedData = {};
+		// if (this.props.staticContext && this.props.staticContext.preload) {
+		// 	preloadedData = this.props.staticContext.preload.data;
 
-			//console.log('setting is authorised to:' + preloadedData.isAuthorised);
-			// this.state.isAuthorised = preloadedData.isAuthorised;
-		}
+		// 	//console.log('setting is authorised to:' + preloadedData.isAuthorised);
+		// 	// this.state.isAuthorised = preloadedData.isAuthorised;
+		// }
 
-		//console.log(`preloadedData: ${stringifyObject(preloadedData)}`);
-		const preloaded = preload(
-			this.props.staticContext,
-			"comments",
-			[],
-			{
-				sourceURI: this.props.match.url
-			},
-			preloadedData
-		);
+		// //console.log(`preloadedData: ${stringifyObject(preloadedData)}`);
+		// const preloaded = preload(
+		// 	this.props.staticContext,
+		// 	"comments",
+		// 	[],
+		// 	{
+		// 		sourceURI: this.props.match.url
+		// 	},
+		// 	preloadedData
+		// );
 
-		if (preloaded) {
-			this.state = {
-				comments: preloaded.comments,
-				loading: false,
-				questions: preloaded.questions
-				// isAuthorised: preloadedData.isAuthorised,
-				// signInURL: preloadedData.signInURL
-			};
-			//console.log('server side: ' + preloadedData.isAuthorised);
-		}
+		// if (preloaded) {
+		// 	this.state = {
+		// 		comments: preloaded.comments,
+		// 		loading: false,
+		// 		questions: preloaded.questions
+		// 		// isAuthorised: preloadedData.isAuthorised,
+		// 		// signInURL: preloadedData.signInURL
+		// 	};
+		// 	//console.log('server side: ' + preloadedData.isAuthorised);
+		// }
 
 	}
 
 	loadComments() {
-		load("comments", undefined, [], { sourceURI: this.props.match.url }).then(
-			res => {
-				this.setState({
-					comments: res.data.comments,
-					questions: res.data.questions,
-					loading: false
-					// isAuthorised: res.data.isAuthorised,
-					// signInURL: res.data.signInURL
-				});
-			}
-		);
+		console.log(this.props.isReviewPage);
+		 //if (this.props.isReviewPage){
+		 	load("review", undefined, [1], { sourceURI: this.props.match.url }).then(
+		 		res => {
+		 			this.blah(res);
+		 		});
+		//  } else{
+		// 	load("comments", undefined, [], { sourceURI: this.props.match.url }).then(
+		// 		res => {
+		// 			this.blah(res);
+		// 		});
+		// }
+	}
+
+	
+	blah = (response: any) => {
+		this.setState({
+			comments: response.data.comments,
+			questions: response.data.questions,
+			loading: false
+			// isAuthorised: res.data.isAuthorised,
+			// signInURL: res.data.signInURL
+		});
 	}
 
 	componentDidMount() {
-		if (this.state.comments.length === 0) {
-			this.loadComments();
-		}
+		//if (this.state.comments.length === 0) {
+		this.loadComments();
+		//}
 	}
 
 	componentDidUpdate(prevProps: PropsType) {

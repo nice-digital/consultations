@@ -277,5 +277,39 @@ describe("[ClientApp] ", () => {
 			expect(wrapper.state().comments.length).toEqual(4);
 		});
 
+		it("should make an api call to review endpoint with the correct path and query string", () => {
+			mock.reset();
+			mock
+				.onGet(
+					generateUrl("review", undefined, [1], {})
+				)
+				.reply(config => {
+					expect(config.url).toEqual(
+						"/consultations/api/Review/1"
+					);
+					return [200, { comments: [] }];
+				});
+			mount(<CommentList {...fakeProps} />);
+		});
+
+		it.only("when mounted with review property then the review endpoint is hit", () => {
+			 mock.reset();
+			 mock
+			 	.onGet(
+			 		generateUrl("review", undefined, [1], {})
+			 	)
+			 	.reply(config => {
+			 		expect(config.url).toEqual(
+			 			"/consultations/api/Review/1"
+			 		);
+			 		return [200, { comments: [] }];
+				 });
+			mock.onAny().reply(config => {
+				console.log(`config is: ${config}`);
+
+			});
+
+			 mount(<CommentList {...fakeProps} isReviewPage={true} />);
+		});
 	});
 });

@@ -11,7 +11,7 @@ export class ReviewPage extends Component {
 	render() {
 		return (
 			<Fragment>
-				<CommentListWithRouter
+				<CommentListWithRouter isReviewPage={true}
 					wrappedComponentRef={component => (this.commentList = component)}
 				/>
 			</Fragment>
