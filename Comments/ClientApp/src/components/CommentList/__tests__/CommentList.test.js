@@ -1,3 +1,5 @@
+/* global jest */
+
 import React from "react";
 import { mount } from "enzyme";
 import { MemoryRouter } from "react-router";
@@ -11,8 +13,16 @@ import { nextTick } from "../../../helpers/utils";
 
 const mock = new MockAdapter(axios);
 
-it.only("goes and passes for convenience", ()=> {
-	expect(1).toEqual(1);
+jest.mock("../../../context/UserContext", () => {
+	return {
+		UserContext: {
+			Consumer: (props) => {
+				return props.children({
+					isAuthorised: true
+				});
+			}
+		}
+	};
 });
 
 describe("[ClientApp] ", () => {
@@ -27,7 +37,6 @@ describe("[ClientApp] ", () => {
 			comment: {
 				commentId: 1
 			}
-			//staticContext: {}
 		};
 
 		afterEach(() => {
@@ -42,6 +51,7 @@ describe("[ClientApp] ", () => {
 					})
 				)
 				.reply(200, sampleComments);
+
 			const wrapper = mount(
 				<MemoryRouter>
 					<CommentList {...fakeProps} />
@@ -57,7 +67,7 @@ describe("[ClientApp] ", () => {
 			const wrapper = mount(<CommentList {...fakeProps} />);
 			await nextTick();
 			wrapper.update();
-			expect(wrapper.find("p").text()).toEqual("No comments");
+			expect(wrapper.find("p").text()).toEqual("No comments yet");
 		});
 
 		it("has state with an empty array of comments", () => {
