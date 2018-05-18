@@ -35,7 +35,7 @@ namespace Comments.Services
 			var user = GetCurrentUser();
 
 		    var signInURL = _authenticateService.GetLoginURL(returnURL.ToConsultationsRelativeUrl());
-		    var registerURL = "todo:register url"; //_authenticateService.GetRegisterURL(returnURL.ToConsultationsRelativeUrl());
+		    var registerURL = _authenticateService.GetRegisterURL(returnURL.ToConsultationsRelativeUrl());
 
 			return new SignInDetails(user, signInURL, registerURL);
 		}
