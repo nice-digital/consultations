@@ -1,10 +1,10 @@
 import React from "react";
-import {load} from "../data/loader";
+import { load } from "../data/loader";
 import { withRouter } from "react-router";
 
 export const UserContext = React.createContext();
 
-class UserProvider extends React.Component {
+export class UserProvider extends React.Component {
 	constructor(props) {
 		super(props);
 
@@ -27,7 +27,7 @@ class UserProvider extends React.Component {
 		);
 	}
 
-	componentDidUpdate(prevProps){
+	componentDidUpdate(prevProps) {
 		const oldRoute = prevProps.location.pathname;
 		const newRoute = this.props.location.pathname;
 		if (oldRoute !== newRoute) {

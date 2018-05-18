@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import Moment from "react-moment";
 import LinesEllipsis from "react-lines-ellipsis";
 
@@ -19,8 +19,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 			comment: {
 				commentText: ""
 			},
-			unsavedChanges: false,
-			useEllipsis: true
+			unsavedChanges: false
 		};
 	}
 
@@ -65,6 +64,8 @@ export class CommentBox extends Component<PropsType, StateType> {
 		return null;
 	}
 
+	isTextSelection = (comment) => comment.commentOn && comment.commentOn.toLowerCase() === "selection" && comment.quote;
+
 	render() {
 		if (!this.state.comment) return null;
 		const {
@@ -73,39 +74,40 @@ export class CommentBox extends Component<PropsType, StateType> {
 			lastModifiedDate,
 			quote
 		} = this.state.comment;
+		const comment = this.state.comment;
 
 		const tabIndex = this.props.drawerOpen ? "0" : "-1";
-		const useEllipsis = this.state.useEllipsis;
 
 		return (
 
 			<li className="CommentBox">
 				<section>
-					<h1 className="CommentBox__title mt--0">
-						Comment on: <span className="text-capitalize">{commentOn}</span>
-					</h1>
-					{quote &&
-					<div className="CommentBox__quote">
-						{useEllipsis ? (
-							<span role="button" onClick={this.viewAllQuoteClick} onKeyDown={this.viewAllQuoteKeyDown}
-								  tabIndex={tabIndex}>
-								<LinesEllipsis
-									text={quote}
-									maxLine="3"
-									ellipsis=" ...view all"
-									trimRight
-									basedOn="letters"/>
-							</span>) : (<span>{quote}</span>
-						)}
-					</div>
+
+					{!this.isTextSelection(comment) &&
+					<Fragment>
+						<h1 className="CommentBox__title mt--0 mb--d">
+							Comment on: <span className="text-capitalize">{commentOn}</span>
+							<br/>
+							{quote}
+						</h1>
+					</Fragment>
 					}
+
+					{this.isTextSelection(comment) &&
+					<Fragment>
+						<h1 className="CommentBox__title mt--0 mb--d">
+							Comment on: <span className="text-capitalize">{commentOn}</span>
+						</h1>
+						<div className="CommentBox__quote mb--d">{quote}</div>
+					</Fragment>
+					}
+
 					{lastModifiedDate ? (
-						<div className="CommentBox__datestamp pb--d font-weight-bold">
+						<div className="CommentBox__datestamp mb--d font-weight-bold">
 							Last Modified Date:{" "}
 							<Moment format="D/M/YYYY - h:mma" date={lastModifiedDate}/>
 						</div>
 					) : null}
-
 					<form onSubmit={e => this.props.saveHandler(e, this.state.comment)}>
 						<div className="form__group form__group--textarea mb--0">
 							<label
@@ -122,7 +124,6 @@ export class CommentBox extends Component<PropsType, StateType> {
 								onKeyUp={this.textareaChangeHandler}
 								placeholder="Enter your comment here"
 								value={commentText}
-
 							/>
 						</div>
 						{this.state.comment.commentText &&
