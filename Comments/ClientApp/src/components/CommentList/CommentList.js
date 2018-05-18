@@ -117,6 +117,7 @@ export class CommentList extends Component<PropsType, StateType> {
 	}
 
 	newComment(newComment: CommentType) {
+
 		let comments = this.state.comments;
 		//negative ids are unsaved / new comments
 		let idToUseForNewBox = -1;
