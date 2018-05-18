@@ -13,12 +13,12 @@ export const LoginBanner = (props: PropsType) => (
 			<div className="grid">
 				<div data-g="12">
 					<div className="LoginBanner">
-						To comment on this consultation,
+						To comment on this consultation,{" "}
 						<a href={props.signInURL} title="Sign in to your NICE account">
-							sign in to your NICE account
-						</a> or
+							sign in to your NICE account{" "}
+						</a> or{" "}
 						<a href={props.registerURL} title="Register for a NICE account">
-							register for a NICE account
+							register for a NICE account{" "}
 						</a> if you don't yet have one.
 					</div>
 					{props.signInButton ?

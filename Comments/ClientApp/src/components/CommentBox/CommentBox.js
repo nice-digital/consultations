@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import Moment from "react-moment";
 import LinesEllipsis from "react-lines-ellipsis";
 
@@ -19,8 +19,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 			comment: {
 				commentText: ""
 			},
-			unsavedChanges: false,
-			useEllipsis: true
+			unsavedChanges: false
 		};
 	}
 
@@ -75,7 +74,6 @@ export class CommentBox extends Component<PropsType, StateType> {
 		} = this.state.comment;
 
 		const tabIndex = this.props.drawerOpen ? "0" : "-1";
-		const useEllipsis = this.state.useEllipsis;
 
 		return (
 
@@ -86,17 +84,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 					</h1>
 					{quote &&
 					<div className="CommentBox__quote">
-						{useEllipsis ? (
-							<span role="button" onClick={this.viewAllQuoteClick} onKeyDown={this.viewAllQuoteKeyDown}
-								  tabIndex={tabIndex}>
-								<LinesEllipsis
-									text={quote}
-									maxLine="3"
-									ellipsis=" ...view all"
-									trimRight
-									basedOn="letters"/>
-							</span>) : (<span>{quote}</span>
-						)}
+						{quote}
 					</div>
 					}
 					{lastModifiedDate ? (
@@ -105,7 +93,6 @@ export class CommentBox extends Component<PropsType, StateType> {
 							<Moment format="D/M/YYYY - h:mma" date={lastModifiedDate}/>
 						</div>
 					) : null}
-
 					<form onSubmit={e => this.props.saveHandler(e, this.state.comment)}>
 						<div className="form__group form__group--textarea mb--0">
 							<label
@@ -122,7 +109,6 @@ export class CommentBox extends Component<PropsType, StateType> {
 								onKeyUp={this.textareaChangeHandler}
 								placeholder="Enter your comment here"
 								value={commentText}
-
 							/>
 						</div>
 						{this.state.comment.commentText &&
