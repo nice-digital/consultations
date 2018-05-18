@@ -6,7 +6,7 @@ export COMPOSE_CONVERT_WINDOWS_PATHS=1
 
 # Clean up before starting containers
 docker-compose down --remove-orphans && docker-compose rm -vf
-docker-compose build && docker-compose up -d
+docker-compose build && docker-compose up -d --force-recreate
 # Leave the user in the tests container once all containers are up and running
 
 docker-compose exec tests waitforit -t 120 --strict niceorg:8080 -- bash

@@ -16,6 +16,7 @@ Loosley based on the [WebdriverIO Cucumber Boilerplate](https://github.com/webdr
   - [Publish](#publish)
   - [Environment variables](#environment-variables)
   - [Docker Compose](#docker-compose)
+  - [Developing in Docker](#developing-in-docker)
   - [Docker single container](#docker-single-container)
     - [Build the image](#build-the-image)
     - [Running the image](#running-the-image)
@@ -24,6 +25,8 @@ Loosley based on the [WebdriverIO Cucumber Boilerplate](https://github.com/webdr
     - [Error starting userland proxy](#error-starting-userland-proxy)
     - [bad interpreter: No such file or directory](#bad-interpreter-no-such-file-or-directory)
     - [Unknown locator strategy id](#unknown-locator-strategy-id)
+    - [Drive has not been shared](#drive-has-not-been-shared)
+    - [error while creating mount source path](#error-while-creating-mount-source-path)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -197,3 +200,32 @@ If you get the following error:
 ERROR: for tests  Cannot create container for service tests: b'Drive has not been shared'
 
 Navigate to docker settings and in the "Shared Drives" section tick the C drive option and click Apply
+
+#### error while creating mount source path
+
+If when spinning up the containers in dev mode you get the following error:
+
+ERROR: for functional-tests_tests_1  Cannot start service tests: b"error while creating mount source path '/host_mnt/c/src/consultations/functional-tests': mkdir /host_mnt/c: file exists"
+
+This means that the mounted volume has gone stale and you need to reset it. This can be done with a few quick commands.
+
+First remove the offending container(in this case the testing container):
+
+```sh
+docker rm -vf functional-tests_tests_1
+```
+
+Make sure that the volumes are no longer hanging around:
+
+```sh
+docker volume ls
+```
+
+Then run the following command to remove any offending volume:
+
+```sh
+docker volume rm -f <volume>
+```
+At this point you will need to restart docker. Once Docker is restarted then run the "./docker-dev.sh" script and you should no longer see the error and be able to continue.
+
+
