@@ -292,8 +292,9 @@ describe("[ClientApp] ", () => {
 			mount(<CommentList {...fakeProps} />);
 		});
 
-		it.only("when mounted with review property then the review endpoint is hit", () => {
+		it("when mounted with review property then the review endpoint is hit", async done  => {
 			 mock.reset();
+			 console.log(generateUrl("review", undefined, [1], {}));
 			 mock
 			 	.onGet(
 			 		generateUrl("review", undefined, [1], {})
@@ -301,13 +302,14 @@ describe("[ClientApp] ", () => {
 			 	.reply(config => {
 			 		expect(config.url).toEqual(
 			 			"/consultations/api/Review/1"
-			 		);
+					 );
+					 done();
 			 		return [200, { comments: [] }];
 				 });
-			mock.onAny().reply(config => {
-				console.log(`config is: ${config}`);
+			 mock.onAny().reply(config => {
+			 	console.log(`config is: ${config}`);
 
-			});
+			 });
 
 			 mount(<CommentList {...fakeProps} isReviewPage={true} />);
 		});

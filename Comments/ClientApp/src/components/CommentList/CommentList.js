@@ -87,21 +87,20 @@ export class CommentList extends Component<PropsType, StateType> {
 	}
 
 	loadComments() {
-		console.log(this.props.isReviewPage);
-		 //if (this.props.isReviewPage){
-		 	load("review", undefined, [1], { sourceURI: this.props.match.url }).then(
+		 if (this.props.isReviewPage){
+			 load("review", undefined, [1], {})
+			 .then(				 
+		 	 	res => {
+		 	 		this.blah(res);
+				 });
+		} else{
+		 	load("comments", undefined, [], { sourceURI: this.props.match.url }).then(
 		 		res => {
 		 			this.blah(res);
 		 		});
-		//  } else{
-		// 	load("comments", undefined, [], { sourceURI: this.props.match.url }).then(
-		// 		res => {
-		// 			this.blah(res);
-		// 		});
-		// }
+		}
 	}
 
-	
 	blah = (response: any) => {
 		this.setState({
 			comments: response.data.comments,

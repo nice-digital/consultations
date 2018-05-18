@@ -17,7 +17,7 @@ class UserProvider extends React.Component {
 	}
 
 	getAuth() {
-		load("comments", undefined, [], { sourceURI: this.props.location.pathname }).then(
+		load("comments", undefined, [], { sourceURI: "/1/1/introduction" }).then(
 			res => {
 				this.setState({
 					isAuthorised: res.data.isAuthorised,
