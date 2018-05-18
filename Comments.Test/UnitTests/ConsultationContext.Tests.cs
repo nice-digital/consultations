@@ -57,7 +57,7 @@ namespace Comments.Test.UnitTests
 
                 //Assert
                 //removed while filtering is commented out.
-              //  filteredLocations.Single().Comment.Count.ShouldBe(0);
+                filteredLocations.Single().Comment.Count.ShouldBe(0);
             }
         }
     }
