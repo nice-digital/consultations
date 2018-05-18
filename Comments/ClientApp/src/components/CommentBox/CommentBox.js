@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from "react";
 import Moment from "react-moment";
-import LinesEllipsis from "react-lines-ellipsis";
 
 type PropsType = {
 	staticContext?: any,
@@ -36,19 +35,6 @@ export class CommentBox extends Component<PropsType, StateType> {
 			comment,
 			unsavedChanges: true
 		});
-	};
-
-	viewAllQuoteClick = e => {
-		e.preventDefault();
-		this.setState({
-			useEllipsis: false
-		});
-	};
-
-	viewAllQuoteKeyDown = e => {
-		if (e.keyCode === 13) {
-			this.viewAllQuoteClick(e);
-		}
 	};
 
 	static getDerivedStateFromProps(nextProps, prevState) {
