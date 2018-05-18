@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,14 +7,14 @@ namespace Comments.ViewModels
 {
     public class User
     {
-        public User(bool isLoggedIn, string displayName, Guid? userId)
+        public User(bool isAuthorised, string displayName, Guid? userId)
         {
-            IsLoggedIn = isLoggedIn;
+            IsAuthorised = isAuthorised;
             DisplayName = displayName;
             UserId = userId;
         }
 
-        public bool IsLoggedIn { get; private set; }
+        public bool IsAuthorised { get; private set; }
         public string DisplayName { get; private set; }
         public Guid? UserId { get; private set; }
     }

@@ -1,0 +1,7 @@
+{
+    "signInURL":"/signin?returnURL=/",
+    "registerURL":"todo:register url",
+    "isAuthorised":false,
+    "displayName":null,
+    "userId":null
+}
