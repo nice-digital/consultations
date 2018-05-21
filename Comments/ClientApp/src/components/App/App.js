@@ -7,44 +7,42 @@ import CommentListWithRouter from "../CommentList/CommentList";
 import { DocumentView } from "../DocumentView/DocumentView";
 import NotFound from "../NotFound/NotFound";
 import UserProviderWithRouter from "../../context/UserContext";
-import { ReviewPage} from "../ReviewPage/ReviewPage";
+import { ReviewPage } from "../ReviewPage/ReviewPage";
 
-class App extends Component {
-	render() {
-		return (
-			<UserProviderWithRouter>
-				<Helmet titleTemplate="%s | Consultations | NICE">
-					<html lang="en-GB" />
-				</Helmet>
+const App = () => {
+	return (
+		<UserProviderWithRouter>
+			<Helmet titleTemplate="%s | Consultations | NICE">
+				<html lang="en-GB"/>
+			</Helmet>
 
-				<Switch>
-					{/*Home*/}
-					<Route exact path="/">
-						<Redirect to="/1/1/introduction" />
-					</Route>
+			<Switch>
+				{/*Home*/}
+				<Route exact path="/">
+					<Redirect to="/1/1/introduction"/>
+				</Route>
 
-					{/*Document View*/}
-					<Route path="/:consultationId/:documentId/:chapterSlug">
-						<DocumentView />
-					</Route>
+				{/*Document View*/}
+				<Route path="/:consultationId/:documentId/:chapterSlug">
+					<DocumentView/>
+				</Route>
 
-					{/*Review Page*/}
-					<Route path="/:consultationId/review">
-						<ReviewPage />
-					</Route>
+				{/*Review Page*/}
+				<Route path="/:consultationId/review">
+					<ReviewPage/>
+				</Route>
 
-					<Route path="/commentlist">
-						<Fragment>
-							<CommentListWithRouter />
-						</Fragment>
-					</Route>
+				<Route path="/commentlist">
+					<Fragment>
+						<CommentListWithRouter/>
+					</Fragment>
+				</Route>
 
-					{/*404*/}
-					<Route component={NotFound} />
-				</Switch>
-			</UserProviderWithRouter>
-		);
-	}
-}
+				{/*404*/}
+				<Route component={NotFound}/>
+			</Switch>
+		</UserProviderWithRouter>
+	);
+};
 
 export default App;
