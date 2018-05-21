@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authentication;
@@ -52,7 +52,12 @@ namespace Comments.Auth
 
                 if (!authenticated && !httpContext.Items.ContainsKey(NICE.Auth.NetCore.Helpers.Constants.ItemsAuthAttempted))
                 {
-                    authenticated = _authenticateService.Authenticate(httpContext, out var redirectURL);
+                    authenticated = _authenticateService.Authenticate(httpContext, out var redirectURL, out var errorMessage);
+	                if (!string.IsNullOrWhiteSpace(errorMessage))
+	                {
+		                _logger.LogError(errorMessage);
+						throw new Exception(errorMessage); //debatable. should this throw?
+	                }
                     httpContext.Items[NICE.Auth.NetCore.Helpers.Constants.ItemsAuthAttempted] = true;
                     if (authenticated && !string.IsNullOrWhiteSpace(redirectURL))
                     {
