@@ -8,7 +8,7 @@ import { projectInformation } from "../../constants";
 import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
 import { StickyContainer } from "react-sticky";
 import { StackedNav } from "./../StackedNav/StackedNav";
-import { objectToQueryString } from "../../helpers/utils";
+import { queryStringToObject } from "../../helpers/utils";
 import queryString from "query-string";
 
 export class ReviewPage extends Component {
@@ -16,7 +16,8 @@ export class ReviewPage extends Component {
 		super();
 
 		this.state = {
-			documentsList: []
+			documentsList: [],
+			documentFilter: 1
 		};
 	}
 
@@ -37,7 +38,8 @@ export class ReviewPage extends Component {
 		load("documents", undefined, [], { consultationId: 1 })
 			.then(response => {
 				this.setState({
-					documentsList: response.data
+					documentsList: response.data,
+					documentFilter: this.getCurrentDocumentId()
 				});
 			})
 			.catch(err => {
@@ -46,13 +48,12 @@ export class ReviewPage extends Component {
 	}
 
 	generateDocumentList = (documentsList) =>{
-		let queryParams = queryString.parse(this.props.location.search);
 		const documentLinks = documentsList.map(
 			(document) => {
 				return {
 					label: document.title,
 					url: `${this.props.location.pathname}?documentId=${document.documentId}`,
-					current: queryParams.documentId == document.documentId ? true : false
+					current: this.getCurrentDocumentId() == document.documentId
 				};
 			}
 		);
@@ -66,6 +67,22 @@ export class ReviewPage extends Component {
 	componentDidMount(){
 		this.getData();
 	}
+
+	componentDidUpdate(prevProps){
+		const oldDocId = queryStringToObject(prevProps.location.search).documentId;
+		const newDocId = queryStringToObject(this.props.location.search).documentId;
+
+		if (oldDocId !== newDocId) {
+			this.setState({
+				documentFilter: newDocId
+			});
+		}
+	}
+
+	getCurrentDocumentId = () => {
+		const queryParams = queryStringToObject(this.props.location.search);
+		return queryParams.documentId;
+	};
 
 	getBreadcrumbs = () => {
 		return [
@@ -122,9 +139,7 @@ export class ReviewPage extends Component {
 											<StackedNav links={this.generateDocumentList(this.state.documentsList)}	/>
 										</div>
 										<div data-g="12 md:6">
-											<CommentListWithRouter isReviewPage={true}
-												wrappedComponentRef={component => (this.commentList = component)}
-											/>
+											<CommentListWithRouter isReviewPage={true} filterByDocument={this.state.documentFilter}/>
 										</div>
 										<div data-g="12 md:3">right</div>
 									</StickyContainer>

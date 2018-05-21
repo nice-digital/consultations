@@ -19,7 +19,8 @@ type PropsType = {
 		pathname: string
 	},
 	drawerOpen: boolean,
-	isReviewPage: boolean
+	isReviewPage: boolean,
+	filterByDocument: number
 };
 
 type CommentType = {
@@ -54,41 +55,42 @@ export class CommentList extends Component<PropsType, StateType> {
 			// isAuthorised: false,
 			// signInURL: ""
 		};
-		// let preloadedData = {};
-		// if (this.props.staticContext && this.props.staticContext.preload) {
-		// 	preloadedData = this.props.staticContext.preload.data;
+		let preloadedData = {};
+		if (this.props.staticContext && this.props.staticContext.preload) {
+			preloadedData = this.props.staticContext.preload.data;
 
-		// 	//console.log('setting is authorised to:' + preloadedData.isAuthorised);
-		// 	// this.state.isAuthorised = preloadedData.isAuthorised;
-		// }
+			//console.log('setting is authorised to:' + preloadedData.isAuthorised);
+			// this.state.isAuthorised = preloadedData.isAuthorised;
+		}
 
-		// //console.log(`preloadedData: ${stringifyObject(preloadedData)}`);
-		// const preloaded = preload(
-		// 	this.props.staticContext,
-		// 	"comments",
-		// 	[],
-		// 	{
-		// 		sourceURI: this.props.match.url
-		// 	},
-		// 	preloadedData
-		// );
+		//console.log(`preloadedData: ${stringifyObject(preloadedData)}`);
+		const preloaded = preload(
+			this.props.staticContext,
+			"comments",
+			[],
+			{
+				sourceURI: this.props.match.url
+			},
+			preloadedData
+		);
 
-		// if (preloaded) {
-		// 	this.state = {
-		// 		comments: preloaded.comments,
-		// 		loading: false,
-		// 		questions: preloaded.questions
-		// 		// isAuthorised: preloadedData.isAuthorised,
-		// 		// signInURL: preloadedData.signInURL
-		// 	};
-		// 	//console.log('server side: ' + preloadedData.isAuthorised);
-		// }
+		if (preloaded) {
+			this.state = {
+				comments: preloaded.comments,
+				loading: false,
+				questions: preloaded.questions
+				// isAuthorised: preloadedData.isAuthorised,
+				// signInURL: preloadedData.signInURL
+			};
+			//console.log('server side: ' + preloadedData.isAuthorised);
+		}
 
 	}
 
 	loadComments() {
+		console.log("LoadComments");
 		 if (this.props.isReviewPage){
-			 load("review", undefined, [1], {})
+			 load("review", undefined, [1], {}) // todo: get the consultation id from the route "[1]"
 			 .then(				 
 		 	 	res => {
 		 	 		this.blah(res);
@@ -118,13 +120,24 @@ export class CommentList extends Component<PropsType, StateType> {
 	}
 
 	componentDidUpdate(prevProps: PropsType) {
-		const oldRoute = prevProps.location.pathname;
-		const newRoute = this.props.location.pathname;
+		console.log("CDU in CommentList");
+
+		let comments = this.state.comments;
+		console.log(`consultations://./consultation/1/document/${this.props.filterByDocument}`);
+		const filteredComments = comments.filter(comments => comments.sourceURI === `consultations://./consultation/1/document/${this.props.filterByDocument}`);
+		
+		const oldRoute = prevProps.location.pathname + prevProps.location.search;
+		const newRoute = this.props.location.pathname + this.props.location.search;
+
 		if (oldRoute !== newRoute) {
 			this.setState({
-				loading: true
+				loading: true,
+				comments: filteredComments
 			});
-			this.loadComments();
+
+			if (!this.props.isReviewPage){
+				this.loadComments();
+			}
 		}
 	}
 
