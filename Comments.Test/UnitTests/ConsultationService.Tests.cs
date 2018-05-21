@@ -94,13 +94,13 @@ namespace Comments.Test.UnitTests
                 null, null, null,  1, null, true, null, null, 
                 new List<Document>
                 {
-                    new Document(1, false, "supporting document", null),
-                    new Document(2, true, "first commentable document", new List<Chapter>
+                    new Document(1, 1, false, "supporting document", null),
+                    new Document(1, 2, true, "first commentable document", new List<Chapter>
                     {
                         new Chapter("first-document-first-chapter-slug", "first-document-first-chapter-title"),
                         new Chapter("first-document-second-chapter-slug", "first-document-second-chapter-title")
                     }),
-                    new Document(3, true, "second commentable document", new List<Chapter>
+                    new Document(1, 3, true, "second commentable document", new List<Chapter>
                     {
                         new Chapter("second-document-first-chapter-slug", "second-document-first-chapter-title")
                     })

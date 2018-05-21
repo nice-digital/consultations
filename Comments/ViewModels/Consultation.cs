@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -81,7 +81,7 @@ namespace Comments.ViewModels
 
         public ConsultationDetail(NICE.Feeds.Models.Indev.Detail.ConsultationDetail consultation, User user) : base(consultation, user)
         {
-            Documents = consultation.Resources?.Select(r => new Document(r)).ToList();
+            Documents = consultation.Resources?.Select(r => new Document(consultation.ConsultationId, r)).ToList();
         }
 
         public IList<Document> Documents { get; set; }

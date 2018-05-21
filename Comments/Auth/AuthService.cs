@@ -17,9 +17,9 @@ namespace Comments.Auth
             _authenticateService = new AuthenticateService(AppSettings.GilliamConfig);
         }
 
-        public bool Authenticate(HttpContext httpContext, out string redirectURL)
+        public bool Authenticate(HttpContext httpContext, out string redirectURL, out string errorMessage)
         {
-            return _authenticateService.Authenticate(httpContext, out redirectURL);
+            return _authenticateService.Authenticate(httpContext, out redirectURL, out errorMessage);
         }
 
         public string GetLoginURL(string returnURL = null)

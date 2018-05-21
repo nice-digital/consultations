@@ -1,5 +1,6 @@
 [
     {
+        "consultationId":54,
         "documentId":1,
         "supportsComments":true,
         "title":"tophat_card.docx",
@@ -9,9 +10,11 @@
                 "title":"tophat_card.docx"
             }
         ],
-        "href":"/guidance/GID-NG10168/documents/accessible-version"
+        "href":"/guidance/GID-NG10168/documents/accessible-version",
+        "sourceURI":"consultations://./consultation/54/document/1"
     },
     {
+        "consultationId":54,
         "documentId":2,
         "supportsComments":true,
         "title":"Return to work form 2017.docx",
@@ -21,9 +24,11 @@
                 "title":"Return to work form 2017.docx"
             }
         ],
-        "href":"/guidance/GID-NG10168/documents/193"
+        "href":"/guidance/GID-NG10168/documents/193",
+        "sourceURI":"consultations://./consultation/54/document/2"
     },
     {
+        "consultationId":54,
         "documentId":3,
         "supportsComments":true,
         "title":"QA_checklist.docx",
@@ -33,48 +38,61 @@
                 "title":"QA_checklist.docx"
             }
         ],
-        "href":"/guidance/GID-NG10168/documents/193-2"
+        "href":"/guidance/GID-NG10168/documents/193-2",
+        "sourceURI":"consultations://./consultation/54/document/3"
     },
     {
+        "consultationId":54,
         "documentId":0,
         "supportsComments":false,
         "title":"Addendum to draft scope",
         "chapters":null,
-        "href":"/guidance/GID-NG10168/documents/addendum-to-draft-scope"
+        "href":"/guidance/GID-NG10168/documents/addendum-to-draft-scope",
+        "sourceURI":null
     },
     {
+        "consultationId":54,
         "documentId":0,
         "supportsComments":false,
         "title":"Addendum appendicies",
         "chapters":null,
-        "href":"/guidance/GID-NG10168/documents/addendum-appendicies"
+        "href":"/guidance/GID-NG10168/documents/addendum-appendicies",
+        "sourceURI":null
     },
     {
+        "consultationId":54,
         "documentId":0,
         "supportsComments":false,
         "title":"Draft scope",
         "chapters":null,
-        "href":"/guidance/GID-NG10168/documents/draft-scope"
+        "href":"/guidance/GID-NG10168/documents/draft-scope",
+        "sourceURI":null
     },
     {
+        "consultationId":54,
         "documentId":0,
         "supportsComments":false,
         "title":"Database of treatment effects user guide",
         "chapters":null,
-        "href":"/guidance/GID-NG10168/documents/database-of-treatment-effects-user-guide"
+        "href":"/guidance/GID-NG10168/documents/database-of-treatment-effects-user-guide",
+        "sourceURI":null
     },
     {
+        "consultationId":54,
         "documentId":0,
         "supportsComments":false,
         "title":"Database of treatment effects",
         "chapters":null,
-        "href":"/guidance/GID-NG10168/documents/database-of-treatment-effects"
+        "href":"/guidance/GID-NG10168/documents/database-of-treatment-effects",
+        "sourceURI":null
     },
     {
+        "consultationId":54,
         "documentId":0,
         "supportsComments":false,
         "title":"DOI",
         "chapters":null,
-        "href":"/guidance/GID-NG10168/documents/97"
+        "href":"/guidance/GID-NG10168/documents/97",
+        "sourceURI":null
     }
 ]

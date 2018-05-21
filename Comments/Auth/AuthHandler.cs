@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authentication;
@@ -20,7 +20,7 @@ namespace Comments.Auth
         private readonly IAuthenticateService _authenticateService;
         private readonly ILogger _logger;
         /// <summary>
-        /// This is a list of paths which should authenticate. That just means that it will check for the nice accounts cookie. it doesn't mean they require authourisation, i.e. they're not protected by auth.
+        /// This is a list of paths which should authenticate. That just means that it will check for the nice accounts cookie. it doesn't mean they require authorisation, i.e. they're not protected by auth.
         /// if no cookie is found, that's fine. no redirects or anything, just no user details in the data.
         /// 
         /// I suspect this will need to change..
@@ -52,7 +52,12 @@ namespace Comments.Auth
 
                 if (!authenticated && !httpContext.Items.ContainsKey(NICE.Auth.NetCore.Helpers.Constants.ItemsAuthAttempted))
                 {
-                    authenticated = _authenticateService.Authenticate(httpContext, out var redirectURL);
+                    authenticated = _authenticateService.Authenticate(httpContext, out var redirectURL, out var errorMessage);
+	                if (!string.IsNullOrWhiteSpace(errorMessage))
+	                {
+		                _logger.LogError(errorMessage);
+						throw new Exception(errorMessage); //debatable. should this throw?
+	                }
                     httpContext.Items[NICE.Auth.NetCore.Helpers.Constants.ItemsAuthAttempted] = true;
                     if (authenticated && !string.IsNullOrWhiteSpace(redirectURL))
                     {
