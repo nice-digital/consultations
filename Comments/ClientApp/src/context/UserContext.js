@@ -41,10 +41,10 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 
 		const preloaded = preload(
 			this.props.staticContext,
-			"comments",
+			"user",
 			[],
 			{
-				sourceURI: this.props.match.url
+				returnURL: this.props.match.url
 			},
 			preloadedData
 		);
