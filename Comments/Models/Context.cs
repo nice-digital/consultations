@@ -24,7 +24,7 @@ namespace Comments.Models
         public IEnumerable<Location> GetAllCommentsAndQuestionsForDocument(IEnumerable<string> sourceURIs)
         {
 
-            if (!_userService.GetCurrentUser().IsLoggedIn)
+            if (!_userService.GetCurrentUser().IsAuthorised)
                 throw new Exception("trying to return comments and questions when not logged in. this should have been trapped in the service.");
             
             var data = Location.Where(l => sourceURIs.Contains(l.SourceURI))
@@ -41,7 +41,7 @@ namespace Comments.Models
 
         public IEnumerable<Location> GetAllCommentsAndQuestionsForConsultation(string sourceURI)
         {
-            if (!_userService.GetCurrentUser().IsLoggedIn)
+            if (!_userService.GetCurrentUser().IsAuthorised)
                 throw new Exception("trying to return comments and questions when not logged in. this should have been trapped in the service.");
 
             var data = Location.Where(l => l.SourceURI.Contains(sourceURI))

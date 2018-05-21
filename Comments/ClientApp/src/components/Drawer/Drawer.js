@@ -104,7 +104,7 @@ export class Drawer extends Component<PropsType, StateType> {
 				</div>
 				{/* #sidebar-panel necessary here for pulling keyboard focus */}
 				<div id="sidebar-panel" className="Drawer__main">
-					<h1 id="commenting-panel" className="visually-hidden">Commenting Panel</h1>
+					<h1 id="commenting-panel" className="p mt--c mb--e">Comments Panel</h1>
 					{/*wrappedComponentRef exposes the underlying, unwrapped component*/}
 					<CommentListWithRouter isReviewPage={false}
 						drawerOpen={this.state.drawerOpen}

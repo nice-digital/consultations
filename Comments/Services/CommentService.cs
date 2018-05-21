@@ -1,4 +1,4 @@
-﻿using Comments.Common;
+using Comments.Common;
 using Comments.Models;
 using Comments.ViewModels;
 using System;
@@ -36,7 +36,7 @@ namespace Comments.Services
 
         public (ViewModels.Comment comment, Validate validate) GetComment(int commentId)
         {
-            if (!_currentUser.IsLoggedIn)
+            if (!_currentUser.IsAuthorised)
                 return (comment: null, validate: new Validate(valid: false, unauthorised: true, message: $"Not logged in accessing comment id:{commentId}"));
 
             var commentInDatabase = _context.GetComment(commentId);
@@ -52,7 +52,7 @@ namespace Comments.Services
 
         public (int rowsUpdated, Validate validate) EditComment(int commentId, ViewModels.Comment comment)
         {
-            if (!_currentUser.IsLoggedIn)
+            if (!_currentUser.IsAuthorised)
                 return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"Not logged in editing comment id:{commentId}"));
 
             var commentInDatabase = _context.GetComment(commentId);
@@ -71,7 +71,7 @@ namespace Comments.Services
 
         public (ViewModels.Comment comment, Validate validate) CreateComment(ViewModels.Comment comment)
         {
-            if (!_currentUser.IsLoggedIn)
+            if (!_currentUser.IsAuthorised)
                 return (comment: null, validate: new Validate(valid: false, unauthorised: true, message: "Not logged in creating comment"));
 
             
@@ -88,7 +88,7 @@ namespace Comments.Services
 
         public (int rowsUpdated, Validate validate) DeleteComment(int commentId)
         {
-            if (!_currentUser.IsLoggedIn)
+            if (!_currentUser.IsAuthorised)
                 return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"Not logged in deleting comment id:{commentId}"));
 
             var commentInDatabase = _context.GetComment(commentId);
@@ -110,8 +110,8 @@ namespace Comments.Services
             var user = _userService.GetCurrentUser();
             var signInURL = _authenticateService.GetLoginURL(relativeURL.ToConsultationsRelativeUrl());
 
-            if (!user.IsLoggedIn)
-                return new CommentsAndQuestions(new List<ViewModels.Comment>(), new List<ViewModels.Question>(), user.IsLoggedIn, signInURL);
+            if (!user.IsAuthorised)
+                return new CommentsAndQuestions(new List<ViewModels.Comment>(), new List<ViewModels.Question>(), user.IsAuthorised, signInURL);
 
             var sourceURIs = new List<string>
             {
@@ -130,15 +130,15 @@ namespace Comments.Services
                 questionsData.AddRange(location.Question.Select(question => new ViewModels.Question(location, question)));
             }
 
-            return new CommentsAndQuestions(commentsData, questionsData, user.IsLoggedIn, signInURL);
+            return new CommentsAndQuestions(commentsData, questionsData, user.IsAuthorised, signInURL);
         }
 
         public CommentsAndQuestions GetUsersCommentsAndQuestionsForConsultation(int constulationId)
         {
             var user = _userService.GetCurrentUser();
 
-            if (!user.IsLoggedIn)
-                return new CommentsAndQuestions(new List<ViewModels.Comment>(), new List<ViewModels.Question>(), user.IsLoggedIn, null);
+            if (!user.IsAuthorised)
+                return new CommentsAndQuestions(new List<ViewModels.Comment>(), new List<ViewModels.Question>(), user.IsAuthorised, null);
 
 	        var sourceURI = ConsultationsUri.CreateConsultationURI(constulationId);
 
@@ -153,7 +153,7 @@ namespace Comments.Services
                 questionsData.AddRange(location.Question.Select(question => new ViewModels.Question(location, question)));
             }
 
-            return new CommentsAndQuestions(commentsData, questionsData, user.IsLoggedIn, null);
+            return new CommentsAndQuestions(commentsData, questionsData, user.IsAuthorised, null);
         }
     }
 }
