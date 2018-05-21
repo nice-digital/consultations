@@ -8,6 +8,8 @@ import { projectInformation } from "../../constants";
 import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
 import { StickyContainer } from "react-sticky";
 import { StackedNav } from "./../StackedNav/StackedNav";
+import { objectToQueryString } from "../../helpers/utils";
+import queryString from "query-string";
 
 export class ReviewPage extends Component {
 	constructor() {
@@ -44,12 +46,13 @@ export class ReviewPage extends Component {
 	}
 
 	generateDocumentList = (documentsList) =>{
+		let queryParams = queryString.parse(this.props.location.search);
 		const documentLinks = documentsList.map(
 			(document) => {
 				return {
 					label: document.title,
 					url: `${this.props.location.pathname}?documentId=${document.documentId}`,
-					current: false // if this.searchstring.documentId === document.documentId return true
+					current: queryParams.documentId == document.documentId ? true : false
 				};
 			}
 		);
