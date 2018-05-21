@@ -340,7 +340,8 @@ export class Document extends Component<PropsType, StateType> {
 									</h2>
 								</div>
 								<StickyContainer className="grid">
-									<div data-g="12 md:3">
+									{/* .navColumn only present for reading mode demo */}
+									<div data-g="12 md:3" className="navigationColumn">
 										<StackedNav
 											links={this.getDocumentChapterLinks(documentId)}
 										/>
@@ -363,7 +364,7 @@ export class Document extends Component<PropsType, StateType> {
 											)}
 										/>
 									</div>
-									<div data-g="12 md:6">
+									<div data-g="12 md:6" className="documentColumn">
 										<div
 											className={`document-comment-container ${
 												this.state.loading ? "loading" : ""
@@ -378,7 +379,7 @@ export class Document extends Component<PropsType, StateType> {
 											</Selection>
 										</div>
 									</div>
-									<div data-g="12 md:3">
+									<div data-g="12 md:3" className="inPageNavColumn">
 										<Sticky disableHardwareAcceleration>
 											{({ style }) => (
 												<div style={style}>
