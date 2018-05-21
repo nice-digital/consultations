@@ -50,8 +50,6 @@ export class CommentList extends Component<PropsType, StateType> {
 			comments: [],
 			questions: [],
 			loading: true
-			// isAuthorised: false,
-			// signInURL: ""
 		};
 		let preloadedData = {};
 		if (this.props.staticContext && this.props.staticContext.preload) {
@@ -66,21 +64,16 @@ export class CommentList extends Component<PropsType, StateType> {
 			this.props.staticContext,
 			"comments",
 			[],
-			{
-				sourceURI: this.props.match.url
-			},
+			{ sourceURI: this.props.match.url },
 			preloadedData
 		);
 
 		if (preloaded) {
 			this.state = {
-				comments: preloaded.comments,
 				loading: false,
+				comments: preloaded.comments,
 				questions: preloaded.questions
-				// isAuthorised: preloadedData.isAuthorised,
-				// signInURL: preloadedData.signInURL
 			};
-			//console.log('server side: ' + preloadedData.isAuthorised);
 		}
 
 	}
@@ -92,8 +85,6 @@ export class CommentList extends Component<PropsType, StateType> {
 					comments: res.data.comments,
 					questions: res.data.questions,
 					loading: false
-					// isAuthorised: res.data.isAuthorised,
-					// signInURL: res.data.signInURL
 				});
 			}
 		);
