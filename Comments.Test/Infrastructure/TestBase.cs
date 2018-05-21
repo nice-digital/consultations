@@ -1,4 +1,4 @@
-﻿using Comments.Models;
+using Comments.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
@@ -56,7 +56,15 @@ namespace Comments.Test.Infrastructure
             _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
         }
 
-        public TestBase()
+	    public TestBase(bool authenticated, Guid? userId = null, string displayName = null) : this()
+	    {
+			_authenticated = authenticated;
+		    _displayName = displayName;
+		    _userId = userId;
+		    _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
+		}
+
+		public TestBase()
         {
             // Arrange
             _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);

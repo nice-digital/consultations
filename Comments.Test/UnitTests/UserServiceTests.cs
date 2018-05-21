@@ -19,7 +19,7 @@ namespace Comments.Test.UnitTests
             var currentUser = userService.GetCurrentUser();
 
             //Assert
-            currentUser.IsLoggedIn.ShouldBe(true);
+            currentUser.IsAuthorised.ShouldBe(true);
             currentUser.DisplayName.ShouldBe(displayName);
             currentUser.UserId.ShouldBe(userId);
         }
@@ -35,7 +35,7 @@ namespace Comments.Test.UnitTests
 
             //Assert
             currentUser.ShouldNotBeNull();
-            currentUser.IsLoggedIn.ShouldBe(false);
+            currentUser.IsAuthorised.ShouldBe(false);
             currentUser.DisplayName.ShouldBeNull();
             currentUser.UserId.ShouldBeNull();
         }
