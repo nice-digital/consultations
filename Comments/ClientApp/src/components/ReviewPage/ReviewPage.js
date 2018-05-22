@@ -39,7 +39,7 @@ export class ReviewPage extends Component {
 			.then(response => {
 				this.setState({
 					documentsList: response.data,
-					documentFilter: this.getCurrentDocumentId()
+					documentFilter: this.getCurrentSourceURI()
 				});
 			})
 			.catch(err => {
@@ -49,11 +49,11 @@ export class ReviewPage extends Component {
 
 	generateDocumentList = (documentsList) =>{
 		const documentLinks = documentsList.map(
-			(document) => {
+			(consultationDocument) => {
 				return {
-					label: document.title,
-					url: `${this.props.location.pathname}?documentId=${document.documentId}`,
-					current: this.getCurrentDocumentId() == document.documentId
+					label: consultationDocument.title,
+					url: `${this.props.location.pathname}?sourceURI=${consultationDocument.sourceURI}`,
+					current: this.getCurrentSourceURI() === consultationDocument.sourceURI
 				};
 			}
 		);
@@ -79,9 +79,9 @@ export class ReviewPage extends Component {
 		}
 	}
 
-	getCurrentDocumentId = () => {
+	getCurrentSourceURI = () => {
 		const queryParams = queryStringToObject(this.props.location.search);
-		return queryParams.documentId;
+		return queryParams.sourceURI;
 	};
 
 	getBreadcrumbs = () => {

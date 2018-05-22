@@ -8,6 +8,7 @@ import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { generateUrl } from "../../../data/loader";
 import sampleComments from "./sample";
+import reviewComments from "./reviewComments";
 import EmptyCommentsResponse from "./EmptyCommentsResponse";
 import { nextTick } from "../../../helpers/utils";
 
@@ -289,7 +290,7 @@ describe("[ClientApp] ", () => {
 					);
 					return [200, { comments: [] }];
 				});
-			mount(<CommentList {...fakeProps} />);
+			mount(<CommentList {...fakeProps} isReviewPage={true}  />);
 		});
 
 		it("when mounted with review property then the review endpoint is hit", async done  => {
@@ -312,6 +313,61 @@ describe("[ClientApp] ", () => {
 			 });
 
 			 mount(<CommentList {...fakeProps} isReviewPage={true} />);
+		});
+
+		const fakeReviewProps = {
+			match: {
+				url: "/1/1/introduction"
+			},
+			location: {
+				pathname: "1/review",
+				search: "?sourceURI=/consultations/1/1/guidance"
+			},
+			comment: {
+				commentId: 1
+			}
+		};
+
+
+		it.only("componentDidUpdate filters comments for review page", async () => {
+			mock.reset();
+			mock
+				.onGet(
+					generateUrl("comments", undefined, [], {
+						sourceURI: fakeReviewProps.match.url
+					})
+				)
+				.reply(200, reviewComments);
+
+			let prevProps = {
+				match: {
+					url: "/1/1/introduction"
+				},
+				location: {
+					pathname: "1/review",
+					search: "?sourceURI=notsure"
+				},
+				comment: {
+					commentId: 1
+				}				
+			};
+			let wrapper = mount(<CommentList {...prevProps} filterByDocument="mydocfilter"/>);
+
+			await nextTick();
+			wrapper.update();
+
+			const state = wrapper.state();
+
+			expect(state.comments.length).toEqual(6);
+
+			wrapper = mount(<CommentList {...fakeReviewProps} filterByDocument="mydocfilter"/>);
+
+			wrapper.setProps(fakeReviewProps);
+			//wrapper.setState({});
+			//wrapper.update();
+			//wrapper.instance().componentDidUpdate();
+
+			expect(state.comments.length).toEqual(1);
 		});
 	});
 });
