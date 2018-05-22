@@ -21,4 +21,5 @@ function toggleReadingMode(){
 
 $(document).on('click', '#js-reading-mode-toggle', function(){
 	toggleReadingMode();
+	window.scroll(0,0);
 });

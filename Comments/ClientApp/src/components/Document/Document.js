@@ -13,7 +13,7 @@ import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
 import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
-import { projectInformation, fileDownloadBasepath } from "../../constants";
+import { projectInformation } from "../../constants";
 import { processDocumentHtml } from "./process-document-html";
 import { LoginBanner } from "./../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
@@ -173,9 +173,9 @@ export class Document extends Component<PropsType, StateType> {
 			// If it's a commentable document, get the link of the first chapter in the document, else use the href and provide a download link
 			let url: string = "";
 			if (d.supportsComments){
-				url = d.supportsComments ? `/${currentConsultationFromRoute}/${d.documentId}/${d.chapters[0].slug}`	: fileDownloadBasepath + d.href;
+				url = d.supportsComments ? `/${currentConsultationFromRoute}/${d.documentId}/${d.chapters[0].slug}`	: d.href;
 			} else {
-				url = fileDownloadBasepath + d.href;
+				url = d.href;
 			}
 
 			const current = isCurrentDocument(d.documentId);
