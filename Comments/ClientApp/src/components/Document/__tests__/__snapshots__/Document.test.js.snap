@@ -443,9 +443,9 @@ Array [
                                     className="stacked-nav__list-item"
                                 >
                                     <a
-                                        href="https://test.nice.org.ukundefined"
-                                        rel="noopener"
-                                        target="_blank"
+                                        aria-current="false"
+                                        href="#"
+                                        onClick={[Function]}
                                     >
                                         Download Document
                                     </a>
@@ -454,9 +454,9 @@ Array [
                                     className="stacked-nav__list-item"
                                 >
                                     <a
-                                        href="https://test.nice.org.ukundefined"
-                                        rel="noopener"
-                                        target="_blank"
+                                        aria-current="false"
+                                        href="#"
+                                        onClick={[Function]}
                                     >
                                         Download Document
                                     </a>
@@ -465,9 +465,9 @@ Array [
                                     className="stacked-nav__list-item"
                                 >
                                     <a
-                                        href="https://test.nice.org.ukundefined"
-                                        rel="noopener"
-                                        target="_blank"
+                                        aria-current="false"
+                                        href="#"
+                                        onClick={[Function]}
                                     >
                                         Download Document
                                     </a>

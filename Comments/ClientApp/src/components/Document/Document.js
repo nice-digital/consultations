@@ -163,8 +163,7 @@ export class Document extends Component<PropsType, StateType> {
 	) => {
 		if (!documents) return null;
 
-		const isCurrentDocument = documentId =>
-			documentId === currentDocumentFromRoute;
+		const isCurrentDocument = documentId => documentId === currentDocumentFromRoute;
 		const isCommentable = d => d.supportsComments;
 		const isSupporting = d => !d.supportsComments;
 
@@ -172,13 +171,15 @@ export class Document extends Component<PropsType, StateType> {
 			const label = d.title || "Download Document";
 			// If it's a commentable document, get the link of the first chapter in the document, else use the href and provide a download link
 			let url: string = "";
+
 			if (d.supportsComments){
 				url = d.supportsComments ? `/${currentConsultationFromRoute}/${d.documentId}/${d.chapters[0].slug}`	: d.href;
 			} else {
-				url = d.href;
+				url = d.href || "#";
 			}
 
 			const current = isCurrentDocument(d.documentId);
+
 			return {
 				label,
 				url,
@@ -217,7 +218,7 @@ export class Document extends Component<PropsType, StateType> {
 				label: chapter.title,
 				url: `/${this.props.match.params.consultationId}/${
 					this.props.match.params.documentId
-				}/${chapter.slug}`,
+					}/${chapter.slug}`,
 				current: isCurrentChapter(chapter.slug)
 			};
 		};
@@ -368,7 +369,7 @@ export class Document extends Component<PropsType, StateType> {
 										<div
 											className={`document-comment-container ${
 												this.state.loading ? "loading" : ""
-											}`}
+												}`}
 										>
 											<Selection newCommentFunc={this.props.onNewCommentClick} sourceURI={this.props.match.url}>
 												{processDocumentHtml(
