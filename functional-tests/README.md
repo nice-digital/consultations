@@ -228,4 +228,6 @@ docker volume rm -f <volume>
 ```
 At this point you will need to restart docker. Once Docker is restarted then run the "./docker-dev.sh" script and you should no longer see the error and be able to continue.
 
+#### Debug dotnet app
 
+docker cp functional-tests_comments_1:/app/logs ./docker-output/logs
