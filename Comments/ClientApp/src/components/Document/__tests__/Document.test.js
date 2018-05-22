@@ -6,7 +6,6 @@ import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { MemoryRouter } from "react-router";
 
-import { fileDownloadBasepath } from "../../../constants";
 import { Document } from "../Document";
 import ChapterData from "./Chapter";
 import ConsultationData from "./Consultation";
@@ -158,12 +157,12 @@ describe("[ClientApp] ", () => {
 					{
 						current: true,
 						label: "Document One",
-						url: fileDownloadBasepath + "/guidance/one/123"
+						url: "/guidance/one/123"
 					},
 					{
 						current: false,
 						label: "Document Three",
-						url: fileDownloadBasepath + "/guidance/three/123"
+						url: "/guidance/three/123"
 					}
 				]);
 			});
