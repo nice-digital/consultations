@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Fragment, Component } from "react";
+import React, { Fragment } from "react";
 import { Route, Switch, Redirect } from "react-router";
 import { Helmet } from "react-helmet";
 import CommentListWithRouter from "../CommentList/CommentList";
@@ -27,10 +27,10 @@ const App = () => {
 					<DocumentView/>
 				</Route>
 
-					{/*Review Page*/}
-					<Route path="/:consultationId/review">
-						<ReviewPageWithRouter />
-					</Route>
+				{/*Review Page*/}
+				<Route path="/:consultationId/review">
+					<ReviewPageWithRouter/>
+				</Route>
 
 				<Route path="/commentlist">
 					<Fragment>

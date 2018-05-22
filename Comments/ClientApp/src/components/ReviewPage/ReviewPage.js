@@ -9,7 +9,6 @@ import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
 import { StickyContainer } from "react-sticky";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { queryStringToObject } from "../../helpers/utils";
-import queryString from "query-string";
 
 export class ReviewPage extends Component {
 	constructor() {
@@ -20,19 +19,6 @@ export class ReviewPage extends Component {
 			documentFilter: 1
 		};
 	}
-
-	// type LinkType = {
-	// 	label: string,
-	// 	url: string,
-	// 	current?: boolean
-	// };
-	
-	// type PropsType = {
-	// 	links: ?{
-	// 		title: string,
-	// 		links: Array<LinkType>
-	// 	}
-	// };
 
 	getData() {
 		load("documents", undefined, [], { consultationId: 1 })
@@ -59,10 +45,10 @@ export class ReviewPage extends Component {
 		);
 
 		return {
-			title: "All comments in this consultation:",
+			title: "View comments by document",
 			links: documentLinks
 		};
-	}
+	};
 
 	componentDidMount(){
 		this.getData();
@@ -107,7 +93,7 @@ export class ReviewPage extends Component {
 
 	onNewCommentClick = () => {
 		return null;
-	}
+	};
 
 	render() {
 		if (!this.state.documentsList) return <h1>Loading...</h1>;

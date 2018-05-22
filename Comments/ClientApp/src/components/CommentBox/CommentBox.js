@@ -72,7 +72,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 					{!this.isTextSelection(comment) &&
 					<Fragment>
 						<h1 className="CommentBox__title mt--0 mb--d">
-							Comment on: <span className="text-capitalize">{commentOn}</span>
+							Comment on: <span className="text-lowercase">{commentOn}</span>
 							<br/>
 							{quote}
 						</h1>
@@ -82,7 +82,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 					{this.isTextSelection(comment) &&
 					<Fragment>
 						<h1 className="CommentBox__title mt--0 mb--d">
-							Comment on: <span className="text-capitalize">{commentOn}</span>
+							Comment on: <span className="text-lowercase">{commentOn}</span>
 						</h1>
 						<div className="CommentBox__quote mb--d">{quote}</div>
 					</Fragment>
@@ -108,7 +108,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 								className="form__input form__input--textarea"
 								onChange={this.textareaChangeHandler}
 								onKeyUp={this.textareaChangeHandler}
-								placeholder="Enter your comment here"
+								placeholder="Enter your comment"
 								value={commentText}
 							/>
 						</div>
@@ -119,7 +119,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 								className="btn ml--0"
 								type="submit"
 								value={
-									this.state.unsavedChanges ? "Save draft" : "Saved"
+									this.state.unsavedChanges ? "Save comment" : "Saved"
 								}
 								disabled={!this.state.unsavedChanges}
 
