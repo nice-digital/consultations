@@ -112,7 +112,7 @@ export class Drawer extends Component<PropsType, StateType> {
 				<div id="sidebar-panel" className="Drawer__main">
 					<h1 id="commenting-panel" className="p mt--c mb--e">Comments Panel</h1>
 					{/*wrappedComponentRef exposes the underlying, unwrapped component*/}
-					<CommentListWithRouter
+					<CommentListWithRouter isReviewPage={false}
 						drawerOpen={this.state.drawerOpen}
 						// $FlowIgnore | this.commentList is bound to this below
 						wrappedComponentRef={component => (this.commentList = component)}

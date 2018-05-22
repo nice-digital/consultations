@@ -7,7 +7,7 @@ import CommentListWithRouter from "../CommentList/CommentList";
 import { DocumentView } from "../DocumentView/DocumentView";
 import NotFound from "../NotFound/NotFound";
 import UserProviderWithRouter from "../../context/UserContext";
-import { ReviewPage } from "../ReviewPage/ReviewPage";
+import ReviewPageWithRouter from "../ReviewPage/ReviewPage";
 
 const App = () => {
 	return (
@@ -27,10 +27,10 @@ const App = () => {
 					<DocumentView/>
 				</Route>
 
-				{/*Review Page*/}
-				<Route path="/:consultationId/review">
-					<ReviewPage/>
-				</Route>
+					{/*Review Page*/}
+					<Route path="/:consultationId/review">
+						<ReviewPageWithRouter />
+					</Route>
 
 				<Route path="/commentlist">
 					<Fragment>
