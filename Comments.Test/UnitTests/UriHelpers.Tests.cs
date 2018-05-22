@@ -55,7 +55,7 @@ namespace Comments.Test.UnitTests
         }
 
 	    [Fact]
-	    public void CreateConsultationsURIFromConstulationId()
+	    public void CreateConsultationsURI()
 	    {
 		    //Arrange + Act
 		    var consultationId = 1;
@@ -65,5 +65,15 @@ namespace Comments.Test.UnitTests
 		    uri.ShouldBe("consultations://./consultation/1");
 		}
 
-    }
+	    [Fact]
+	    public void CreateDocumentURI()
+	    {
+		    //Arrange + Act
+		    var uri = ConsultationsUri.CreateDocumentURI(10, 100);
+
+		    //Assert
+		    uri.ShouldBe("consultations://./consultation/10/document/100");
+	    }
+
+	}
 }
