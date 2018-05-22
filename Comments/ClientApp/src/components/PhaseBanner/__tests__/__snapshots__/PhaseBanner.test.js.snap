@@ -17,14 +17,14 @@ exports[`[ClientApp]  PhaseBanner  Matches snapshot 1`] = `
     className="phase-banner__label"
   >
     My Project
-     is in development. This means it is not feature complete and there may be issues.
+     is in development which means that some features may not work fully.
      
     <a
       href="http://mygitrepo.com"
       rel="noopener noreferrer"
       target="_blank"
     >
-      Visit this page if you wish to report an issue.
+      Report an issue
     </a>
   </span>
 </aside>
