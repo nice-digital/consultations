@@ -139,7 +139,7 @@ export class ReviewPage extends Component {
 											<StackedNav links={this.generateDocumentList(this.state.documentsList)}	/>
 										</div>
 										<div data-g="12 md:6">
-											<CommentListWithRouter isReviewPage={true} filterByDocument={this.state.documentFilter}/>
+											<CommentListWithRouter isReviewPage={true} />
 										</div>
 										<div data-g="12 md:3">right</div>
 									</StickyContainer>

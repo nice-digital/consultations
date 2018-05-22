@@ -92,6 +92,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		 	 	res => {
 		 	 		this.setCommentListState(res);
 					});
+			this.filterComments(this.props.location.search);
 		} else{
 			console.log("Not Review page");
 		 	load("comments", undefined, [], { sourceURI: this.props.match.url }).then(
@@ -124,8 +125,11 @@ export class CommentList extends Component<PropsType, StateType> {
 			this.setState({
 				loading: true
 			});
-		
-			this.loadComments();
+			if (this.props.isReviewPage){
+				this.filterComments(this.props.location.search);
+			} else{
+				this.loadComments();
+			}
 		}
 	}
 
@@ -134,8 +138,10 @@ export class CommentList extends Component<PropsType, StateType> {
 		const filter = queryStringToObject(newSourceURIToFilterBy);
 		const filteredComments = comments.filter(comment => comment.sourceURI === filter.sourceURI);
 
+		console.log(`filteredComments ${stringifyObject(filteredComments)}`);
+
 		this.setState({
-			loading: true,
+			loading: false,
 			filteredComments: filteredComments
 		});
 	}
