@@ -7,6 +7,7 @@ import preload from "../../data/pre-loader";
 import { CommentBox } from "../CommentBox/CommentBox";
 import { LoginBanner } from "./../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
+import { queryStringToObject } from "../../helpers/utils";
 import stringifyObject from "stringify-object";
 
 type PropsType = {
@@ -76,7 +77,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			this.state = {
 				loading: false,
 				comments: preloaded.comments,
-				filteredComments: null,
+				filteredComments: [],
 				questions: preloaded.questions
 			};
 		}
@@ -84,22 +85,25 @@ export class CommentList extends Component<PropsType, StateType> {
 	}
 
 	loadComments() {
-		console.log("LoadComments");
-		 if (this.props.isReviewPage){
-			 load("review", undefined, [1], {}) // todo: get the consultation id from the route "[1]"
-			 .then(				 
+		if (this.props.isReviewPage){
+			console.log("Is Review Page");
+			load("review", undefined, [1], {sourceURI: this.props.match.url}) // todo: get the consultation id from the route "[1]"
+		 	.then(				 
 		 	 	res => {
-		 	 		this.blah(res);
-				 });
+		 	 		this.setCommentListState(res);
+					});
 		} else{
+			console.log("Not Review page");
 		 	load("comments", undefined, [], { sourceURI: this.props.match.url }).then(
 		 		res => {
-		 			this.blah(res);
+		 			this.setCommentListState(res);
 		 		});
 		}
+		console.log(`loadComments ${this.state.comments}`);
 	}
 
-	blah = (response: any) => {
+	setCommentListState = (response: any) => {
+		console.log(`setCommentListState ${response.data.comments}`);
 		this.setState({
 			comments: response.data.comments,
 			questions: response.data.questions,
@@ -110,34 +114,30 @@ export class CommentList extends Component<PropsType, StateType> {
 	}
 
 	componentDidMount() {
-		//if (this.state.comments.length === 0) {
 		this.loadComments();
-		//}
 	}
 
 	componentDidUpdate(prevProps: PropsType) {
-		console.log("CDU in CommentList");
-console.log(`prevProps: ${stringifyObject(prevProps)}`);
-		let comments = this.state.comments;
-		const filteredComments = comments.filter(comments => comments.sourceURI === this.props.filterByDocument);
-		//console.log(`filter document: ${this.props.filterByDocument}`);
-		 const oldRoute = prevProps.location.pathname + prevProps.location.search;
-		 const newRoute = this.props.location.pathname + this.props.location.search;
-
-
-console.log(`oldRoute route: ${oldRoute}`);
-console.log(`newRoute route: ${newRoute}`);
-
+		const oldRoute = prevProps.location.pathname + prevProps.location.search;
+		const newRoute = this.props.location.pathname + this.props.location.search;
 		if (oldRoute !== newRoute) {
 			this.setState({
-				loading: true,
-				filteredComments: filteredComments
+				loading: true
 			});
-
-			if (!this.props.isReviewPage){
-				this.loadComments();
-			}
+		
+			this.loadComments();
 		}
+	}
+
+	filterComments = (newSourceURIToFilterBy: string) => {
+		const comments = this.state.comments;
+		const filter = queryStringToObject(newSourceURIToFilterBy);
+		const filteredComments = comments.filter(comment => comment.sourceURI === filter.sourceURI);
+
+		this.setState({
+			loading: true,
+			filteredComments: filteredComments
+		});
 	}
 
 	newComment(newComment: CommentType) {

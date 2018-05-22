@@ -3,7 +3,7 @@
 import React from "react";
 import { mount } from "enzyme";
 import { MemoryRouter } from "react-router";
-import { CommentList } from "../CommentList";
+import CommentListWithRouter, { CommentList } from "../CommentList";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { generateUrl } from "../../../data/loader";
@@ -315,59 +315,69 @@ describe("[ClientApp] ", () => {
 			 mount(<CommentList {...fakeProps} isReviewPage={true} />);
 		});
 
-		const fakeReviewProps = {
-			match: {
-				url: "/1/1/introduction"
-			},
-			location: {
-				pathname: "1/review",
-				search: "?sourceURI=/consultations/1/1/guidance"
-			},
-			comment: {
-				commentId: 1
-			}
-		};
-
-
 		it.only("componentDidUpdate filters comments for review page", async () => {
-			mock.reset();
-			mock
-				.onGet(
-					generateUrl("comments", undefined, [], {
-						sourceURI: fakeReviewProps.match.url
-					})
-				)
-				.reply(200, reviewComments);
-
-			let prevProps = {
+			
+			let firstProps = {
 				match: {
 					url: "/1/1/introduction"
 				},
 				location: {
 					pathname: "1/review",
-					search: "?sourceURI=notsure"
+					search: "?sourceURI=/consultations/1/1/introduction"
 				},
 				comment: {
 					commentId: 1
 				}				
 			};
-			let wrapper = mount(<CommentList {...prevProps} filterByDocument="mydocfilter"/>);
+
+			const secondProps = {
+				match: {
+					url: "/1/1/introduction"
+				},
+				location: {
+					pathname: "1/review",
+					search: "?sourceURI=/consultations/1/1/guidance"
+				},
+				comment: {
+					commentId: 1
+				}
+			};
+			
+			mock.reset();
+			mock
+				.onGet(
+					generateUrl("review", undefined, [1], {
+						sourceURI: secondProps.match.url
+					})
+				)
+				.reply(200, reviewComments);
+
+			let wrapper = mount(
+				<CommentList {...firstProps}  isReviewPage={true} />
+			);
+			
+			await nextTick();
+			wrapper.update();
+
+			expect(wrapper.state().comments.length).toEqual(6);
+
+			wrapper.instance().filterComments("?sourceURI=/consultations/1/1/guidance");
 
 			await nextTick();
 			wrapper.update();
 
-			const state = wrapper.state();
+			expect(wrapper.state().filteredComments.length).toEqual(1);
 
-			expect(state.comments.length).toEqual(6);
+			// expect(state.comments.length).toEqual(6);
 
-			wrapper = mount(<CommentList {...fakeReviewProps} filterByDocument="mydocfilter"/>);
+			// wrapper.setProps(secondProps); // this def works
 
-			wrapper.setProps(fakeReviewProps);
-			//wrapper.setState({});
-			//wrapper.update();
-			//wrapper.instance().componentDidUpdate();
+			// await nextTick();
+			// wrapper.update();
 
-			expect(state.comments.length).toEqual(1);
+			// console.log(state.filteredComments);
+
+			// expect(state.filteredComments.length).toEqual(1);
 		});
 	});
 });

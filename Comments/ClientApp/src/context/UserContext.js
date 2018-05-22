@@ -61,7 +61,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 	}
 
 	loadUser() {
-		load("user", undefined, [], { returnURL: this.props.location.pathname })
+		load("user", undefined, [], { sourceURI: this.props.location.pathname })
 			.then(
 				res => {
 					this.setState({
