@@ -1,4 +1,4 @@
-﻿using Comments.ViewModels;
+using Comments.ViewModels;
 using NICE.Feeds;
 using System;
 using System.Collections.Generic;
@@ -46,7 +46,7 @@ namespace Comments.Services
         public IEnumerable<Document> GetDocuments(int consultationId)
         {
             var consultationDetail = _feedConverterService.GetIndevConsultationDetailForPublishedProject(consultationId, PreviewState.NonPreview);
-            return consultationDetail.Resources.Select(r => new ViewModels.Document(r)).ToList();
+            return consultationDetail.Resources.Select(r => new ViewModels.Document(consultationId, r)).ToList();
         }
 
         public ViewModels.Consultation GetConsultation(int consultationId)

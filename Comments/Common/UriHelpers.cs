@@ -80,5 +80,10 @@ namespace Comments.Common
 	    {
 			return string.Format(ConsultationUriFormat, consultationId);
 		}
-    }
+
+	    public static string CreateDocumentURI(int consultationId, int documentId)
+	    {
+		    return string.Format(DocumentUriFormat, consultationId, documentId);
+	    }
+	}
 }

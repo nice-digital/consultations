@@ -154,6 +154,7 @@ Array [
                     onTouchStart={[Function]}
                 >
                     <div
+                        className="navigationColumn"
                         data-g="12 md:3"
                     >
                         <nav
@@ -475,6 +476,7 @@ Array [
                         </nav>
                     </div>
                     <div
+                        className="documentColumn"
                         data-g="12 md:6"
                     >
                         <div
@@ -702,6 +704,7 @@ Array [
                         </div>
                     </div>
                     <div
+                        className="inPageNavColumn"
                         data-g="12 md:3"
                     >
                         <div>
