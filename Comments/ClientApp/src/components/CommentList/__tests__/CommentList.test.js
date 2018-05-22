@@ -368,33 +368,33 @@ describe("[ClientApp] ", () => {
 			expect(wrapper.state().filteredComments.length).toEqual(1);
 		});
 
-		// it.only("componentDidUpdate filters comments for review page", async () => {
+		it.only("componentDidUpdate filters comments for review page", async () => {
 					
-		// 	mock.reset();
-		// 	mock
-		// 		.onGet(
-		// 			generateUrl("review", undefined, [1], {
-		// 			})
-		// 		)
-		// 		.reply(200, reviewComments);
+			mock.reset();
+			mock
+				.onGet(
+					generateUrl("review", undefined, [1], {
+					})
+				)
+				.reply(200, reviewComments);
 
-		// 	let wrapper = mount(
-		// 		<CommentList {...firstProps}  isReviewPage={true} />
-		// 	);
+			let wrapper = mount(
+				<CommentList {...firstProps}  isReviewPage={true} />
+			);
 			
-		// 	await nextTick();
-		// 	wrapper.update();
+			await nextTick();
+			wrapper.update();
 
-		// 	expect(wrapper.state().comments.length).toEqual(6);
-		// 	expect(wrapper.find("li").length).toEqual(6);
+			expect(wrapper.state().comments.length).toEqual(6);
+			expect(wrapper.find("li").length).toEqual(6);
 
-		// 	wrapper.instance().filterComments("?sourceURI=/consultations/1/1/guidance");
+			wrapper.instance().filterComments("?sourceURI=/consultations/1/1/guidance");
 
-		// 	await nextTick();
-		// 	wrapper.update();
+			await nextTick();
+			wrapper.update();
 
-		// 	expect(wrapper.state().filteredComments.length).toEqual(1);
-		// 	expect(wrapper.find("li").length).toEqual(1);
-		// });
+			expect(wrapper.state().filteredComments.length).toEqual(1);
+			//expect(wrapper.find("li").length).toEqual(1);
+		});
 	});
 });

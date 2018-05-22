@@ -218,6 +218,25 @@ export class CommentList extends Component<PropsType, StateType> {
 		this.setState({ comments });
 	};
 
+	loadCommentBox = (commentList: Array<CommentType>) => {
+		return (
+			<ul className="CommentList list--unstyled">
+				{commentList.map((comment, idx) => {
+					return (
+						<CommentBox
+							drawerOpen={this.props.drawerOpen}
+							key={comment.commentId}
+							unique={`Comment${idx}`}
+							comment={comment}
+							saveHandler={this.saveCommentHandler}
+							deleteHandler={this.deleteCommentHandler}
+						/>
+					);
+				})}
+			</ul>
+		);
+	}
+
 	render() {
 		return (
 			<UserContext.Consumer>
@@ -225,22 +244,11 @@ export class CommentList extends Component<PropsType, StateType> {
 					if (this.state.loading) return <p>Loading</p>;
 					if (contextValue.isAuthorised) {
 						if (this.state.comments.length === 0) return <p>No comments yet</p>;
-						return (
-							<ul className="CommentList list--unstyled">
-								{this.state.comments.map((comment, idx) => {
-									return (
-										<CommentBox
-											drawerOpen={this.props.drawerOpen}
-											key={comment.commentId}
-											unique={`Comment${idx}`}
-											comment={comment}
-											saveHandler={this.saveCommentHandler}
-											deleteHandler={this.deleteCommentHandler}
-										/>
-									);
-								})}
-							</ul>
-						);
+						if (this.state.filteredComments.length === 0) {
+							return this.loadCommentBox(this.state.comments);
+						} else {
+							return this.loadCommentBox(this.state.filteredComments);
+						}
 					} else {
 						return <LoginBanner signInButton={true} currentURL={this.props.match.url} signInURL={contextValue.signInURL} registerURL={contextValue.registerURL}/>;
 					}
