@@ -315,39 +315,38 @@ describe("[ClientApp] ", () => {
 			 mount(<CommentList {...fakeProps} isReviewPage={true} />);
 		});
 
-		it.only("componentDidUpdate filters comments for review page", async () => {
-			
-			let firstProps = {
-				match: {
-					url: "/1/1/introduction"
-				},
-				location: {
-					pathname: "1/review",
-					search: "?sourceURI=/consultations/1/1/introduction"
-				},
-				comment: {
-					commentId: 1
-				}				
-			};
+		const firstProps = {
+			match: {
+				url: "/1/1/introduction"
+			},
+			location: {
+				pathname: "1/review",
+				search: "?sourceURI=/consultations/1/1/introduction"
+			},
+			comment: {
+				commentId: 1
+			}				
+		};
 
-			const secondProps = {
-				match: {
-					url: "/1/1/introduction"
-				},
-				location: {
-					pathname: "1/review",
-					search: "?sourceURI=/consultations/1/1/guidance"
-				},
-				comment: {
-					commentId: 1
-				}
-			};
-			
+		const secondProps = {
+			match: {
+				url: "/1/1/introduction"
+			},
+			location: {
+				pathname: "1/review",
+				search: "?sourceURI=/consultations/1/1/guidance"
+			},
+			comment: {
+				commentId: 1
+			}
+		};
+
+		it("componentDidUpdate filters comments for review page", async () => {
+					
 			mock.reset();
 			mock
 				.onGet(
 					generateUrl("review", undefined, [1], {
-						sourceURI: secondProps.match.url
 					})
 				)
 				.reply(200, reviewComments);
@@ -367,17 +366,35 @@ describe("[ClientApp] ", () => {
 			wrapper.update();
 
 			expect(wrapper.state().filteredComments.length).toEqual(1);
-
-			// expect(state.comments.length).toEqual(6);
-
-			// wrapper.setProps(secondProps); // this def works
-
-			// await nextTick();
-			// wrapper.update();
-
-			// console.log(state.filteredComments);
-
-			// expect(state.filteredComments.length).toEqual(1);
 		});
+
+		// it.only("componentDidUpdate filters comments for review page", async () => {
+					
+		// 	mock.reset();
+		// 	mock
+		// 		.onGet(
+		// 			generateUrl("review", undefined, [1], {
+		// 			})
+		// 		)
+		// 		.reply(200, reviewComments);
+
+		// 	let wrapper = mount(
+		// 		<CommentList {...firstProps}  isReviewPage={true} />
+		// 	);
+			
+		// 	await nextTick();
+		// 	wrapper.update();
+
+		// 	expect(wrapper.state().comments.length).toEqual(6);
+		// 	expect(wrapper.find("li").length).toEqual(6);
+
+		// 	wrapper.instance().filterComments("?sourceURI=/consultations/1/1/guidance");
+
+		// 	await nextTick();
+		// 	wrapper.update();
+
+		// 	expect(wrapper.state().filteredComments.length).toEqual(1);
+		// 	expect(wrapper.find("li").length).toEqual(1);
+		// });
 	});
 });

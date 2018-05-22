@@ -87,7 +87,7 @@ export class CommentList extends Component<PropsType, StateType> {
 	loadComments() {
 		if (this.props.isReviewPage){
 			console.log("Is Review Page");
-			load("review", undefined, [1], {sourceURI: this.props.match.url}) // todo: get the consultation id from the route "[1]"
+			load("review", undefined, [1], {}) // todo: get the consultation id from the route "[1]"
 		 	.then(				 
 		 	 	res => {
 		 	 		this.setCommentListState(res);
