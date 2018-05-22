@@ -230,4 +230,10 @@ At this point you will need to restart docker. Once Docker is restarted then run
 
 #### Debug dotnet app
 
-docker cp functional-tests_comments_1:/app/logs ./docker-output/logs
+docker cp functional-tests_comments_1:/app/logs ./docker-output
+
+#### Connect to SQL server in docker
+
+### Reset credentials when password changes
+
+
