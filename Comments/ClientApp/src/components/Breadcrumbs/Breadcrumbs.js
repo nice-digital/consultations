@@ -1,6 +1,8 @@
 // @flow
 
 import React from "react";
+import { Link } from "react-router-dom";
+import { isHttpLink } from "../../helpers/utils";
 
 type LinksType = {
 	label: string,
@@ -30,9 +32,13 @@ export const BreadCrumbs = (props: PropsType) => {
 							itemScope
 							itemType="http://schema.org/ListItem"
 						>
-							<a href={url} itemProp="name">
-								{label}
-							</a>
+							{isHttpLink(url) ?
+								<a href={url}>{label}</a>
+								:
+								<Link to={url} itemProp="name">
+									{label}
+								</Link>
+							}
 							<meta itemProp="position" content={index} />
 						</li>
 					);

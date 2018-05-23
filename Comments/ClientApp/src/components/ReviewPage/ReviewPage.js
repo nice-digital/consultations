@@ -91,22 +91,21 @@ export class ReviewPage extends Component<PropsType> {
 	};
 
 	getBreadcrumbs = () => {
+		const { consultationId } = this.props.match.params;
+		const consultationsFirstDocument = this.state.documentsList[0].documentId;
+		const firstDocumentChapterSlug = this.state.documentsList[0].chapters[0].slug;
 		return [
 			{
-				label: "Home",
-				url: "/document"
+				label: "All Consultations",
+				url: "https://alpha.nice.org.uk/guidance/inconsultation" // todo: link to current consultation "consultation list page" on dev?
 			},
 			{
-				label: "NICE Guidance",
-				url: "#"
+				label: "Consultation", // todo: consultation overview link to come from API endpoint
+				url: "https://alpha.nice.org.uk/guidance/indevelopment/gid-dg10046/consultation/html-content" // todo: demo - hardcoded to jane's overview
 			},
 			{
-				label: "In Consultation",
-				url: "#"
-			},
-			{
-				label: "Document title",
-				url: "#"
+				label: "Documents",
+				url: `/${consultationId}/${consultationsFirstDocument}/${firstDocumentChapterSlug}`
 			}
 		];
 	};
@@ -116,7 +115,7 @@ export class ReviewPage extends Component<PropsType> {
 	};
 
 	render() {
-		if (!this.state.documentsList) return <h1>Loading...</h1>;
+		if (this.state.documentsList.length === 0) return <h1>Loading...</h1>;
 
 		return (
 			<Fragment>
@@ -138,8 +137,7 @@ export class ReviewPage extends Component<PropsType> {
 										onNewCommentClick={this.onNewCommentClick()}
 										url="1/1/Introduction"
 									/>
-									<span>Comments for review</span>
-
+									<span>Review your comments</span>
 									<StickyContainer className="grid">
 										<div data-g="12 md:3">
 											<StackedNav links={this.generateDocumentList(this.state.documentsList)}	/>
