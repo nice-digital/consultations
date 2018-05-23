@@ -8,7 +8,7 @@ import { CommentBox } from "../CommentBox/CommentBox";
 import { LoginBanner } from "./../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
 import { queryStringToObject } from "../../helpers/utils";
-import stringifyObject from "stringify-object";
+//import stringifyObject from "stringify-object";
 
 type PropsType = {
 	staticContext?: any,
@@ -138,7 +138,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		const filter = queryStringToObject(newSourceURIToFilterBy);
 		const filteredComments = comments.filter(comment => comment.sourceURI === filter.sourceURI);
 
-		console.log(`filteredComments ${stringifyObject(filteredComments)}`);
+		//console.log(`filteredComments ${stringifyObject(filteredComments)}`);
 
 		this.setState({
 			loading: false,
