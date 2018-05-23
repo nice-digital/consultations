@@ -10,9 +10,22 @@ import { StickyContainer } from "react-sticky";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { queryStringToObject } from "../../helpers/utils";
 
-export class ReviewPage extends Component {
-	constructor() {
-		super();
+type DocumentType = {
+	title: string,
+	sourceURI: string,
+	supportsComments: boolean
+};
+
+type PropsType = {
+	location: {
+		pathname: string,
+		search: string
+	}
+};
+
+export class ReviewPage extends Component<PropsType> {
+	constructor(props: PropsType) {
+		super(props);
 
 		this.state = {
 			documentsList: [],
@@ -33,16 +46,23 @@ export class ReviewPage extends Component {
 			});
 	}
 
-	generateDocumentList = (documentsList) =>{
-		const documentLinks = documentsList.map(
-			(consultationDocument) => {
-				return {
-					label: consultationDocument.title,
-					url: `${this.props.location.pathname}?sourceURI=${consultationDocument.sourceURI}`,
-					current: this.getCurrentSourceURI() === consultationDocument.sourceURI
-				};
-			}
-		);
+	generateDocumentList = (documentsList: Array<DocumentType>) =>{
+		//filter here maybe?
+		let documentLinks = documentsList.filter(docs => docs.supportsComments)
+			.map(
+				(consultationDocument) => {
+					return {
+						label: consultationDocument.title,
+						url: `${this.props.location.pathname}?sourceURI=${consultationDocument.sourceURI}`,
+						current: this.getCurrentSourceURI() === consultationDocument.sourceURI
+					};
+				}
+			);
+
+		documentLinks.unshift({
+			label: "All document comments",
+			url: this.props.location.pathname,
+			current: this.getCurrentSourceURI() == null});
 
 		return {
 			title: "View comments by document",
@@ -125,6 +145,7 @@ export class ReviewPage extends Component {
 											<StackedNav links={this.generateDocumentList(this.state.documentsList)}	/>
 										</div>
 										<div data-g="12 md:6">
+											<h2 className="title">Comments</h2>
 											<CommentListWithRouter isReviewPage={true} />
 										</div>
 										<div data-g="12 md:3">right</div>

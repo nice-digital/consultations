@@ -10,7 +10,7 @@ import { generateUrl } from "../../../data/loader";
 import sampleComments from "./sample";
 import reviewComments from "./reviewComments";
 import EmptyCommentsResponse from "./EmptyCommentsResponse";
-import { nextTick } from "../../../helpers/utils";
+import { nextTick, queryStringToObject } from "../../../helpers/utils";
 
 const mock = new MockAdapter(axios);
 
@@ -328,19 +328,6 @@ describe("[ClientApp] ", () => {
 			}				
 		};
 
-		const secondProps = {
-			match: {
-				url: "/1/1/introduction"
-			},
-			location: {
-				pathname: "1/review",
-				search: "?sourceURI=/consultations/1/1/guidance"
-			},
-			comment: {
-				commentId: 1
-			}
-		};
-
 		it("componentDidUpdate filters comments for review page", async () => {
 					
 			mock.reset();
@@ -359,6 +346,7 @@ describe("[ClientApp] ", () => {
 			wrapper.update();
 
 			expect(wrapper.state().comments.length).toEqual(6);
+			expect(wrapper.find("p").text()).toEqual("No comments yet"); //Fake props has sourceURI but filteredComments == 0
 
 			wrapper.instance().filterComments("?sourceURI=/consultations/1/1/guidance");
 
@@ -366,9 +354,10 @@ describe("[ClientApp] ", () => {
 			wrapper.update();
 
 			expect(wrapper.state().filteredComments.length).toEqual(1);
+			expect(wrapper.find("li").length).toEqual(1);
 		});
 
-		it.only("componentDidUpdate filters comments for review page", async () => {
+		it("componentDidUpdate filters by substring comments for review page", async () => {
 					
 			mock.reset();
 			mock
@@ -386,15 +375,82 @@ describe("[ClientApp] ", () => {
 			wrapper.update();
 
 			expect(wrapper.state().comments.length).toEqual(6);
-			expect(wrapper.find("li").length).toEqual(6);
+			expect(wrapper.find("p").text()).toEqual("No comments yet"); //Fake props has sourceURI but filteredComments == 0
 
-			wrapper.instance().filterComments("?sourceURI=/consultations/1/1/guidance");
+			wrapper.instance().filterComments("?sourceURI=/consultations/1/1");
 
 			await nextTick();
 			wrapper.update();
 
-			expect(wrapper.state().filteredComments.length).toEqual(1);
-			//expect(wrapper.find("li").length).toEqual(1);
+			expect(wrapper.state().filteredComments.length).toEqual(2);
+			expect(wrapper.find("li").length).toEqual(2);
+		});
+
+		it("renders 'no comments yet' if URI is supplied and filteredComments array is empty", async () => {
+
+			mock.reset();
+			mock
+				.onGet(
+					generateUrl("review", undefined, [1], {
+					})
+				)
+				.reply(200, reviewComments);
+
+			let wrapper = mount(
+				<CommentList {...firstProps}  isReviewPage={true} />
+			);
+			
+			await nextTick();
+			wrapper.update();
+
+			expect(wrapper.state().comments.length).toEqual(6);
+			expect(wrapper.find("p").text()).toEqual("No comments yet"); //Fake props has sourceURI but filteredComments == 0
+
+			wrapper.instance().filterComments("?sourceURI=/consultations/1/0");
+
+			await nextTick();
+			wrapper.update();
+
+			expect(wrapper.find("p").text()).toEqual("No comments yet");
+		});
+
+		it("list all comments if no sourceURI is given", async () => {
+			const firstProps = {
+				match: {
+					url: "/1/1/introduction"
+				},
+				location: {
+					pathname: "1/review",
+					search: ""
+				},
+				comment: {
+					commentId: 1
+				}				
+			};
+			
+			mock.reset();
+			mock
+				.onGet(
+					generateUrl("review", undefined, [1], {
+					})
+				)
+				.reply(200, reviewComments);
+
+			let wrapper = mount(
+				<CommentList {...firstProps}  isReviewPage={true} />
+			);
+			
+			await nextTick();
+			wrapper.update();
+
+			expect(wrapper.state().comments.length).toEqual(6);
+
+			wrapper.instance().filterComments(firstProps.location.search);
+
+			await nextTick();
+			wrapper.update();
+
+			expect(wrapper.find("li").length).toEqual(6);
 		});
 	});
 });

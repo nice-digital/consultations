@@ -86,7 +86,6 @@ export class CommentList extends Component<PropsType, StateType> {
 
 	loadComments() {
 		if (this.props.isReviewPage){
-			console.log("Is Review Page");
 			load("review", undefined, [1], {}) // todo: get the consultation id from the route "[1]"
 		 	.then(				 
 		 	 	res => {
@@ -94,17 +93,14 @@ export class CommentList extends Component<PropsType, StateType> {
 					});
 			this.filterComments(this.props.location.search);
 		} else{
-			console.log("Not Review page");
 		 	load("comments", undefined, [], { sourceURI: this.props.match.url }).then(
 		 		res => {
 		 			this.setCommentListState(res);
 		 		});
 		}
-		console.log(`loadComments ${this.state.comments}`);
 	}
 
 	setCommentListState = (response: any) => {
-		console.log(`setCommentListState ${response.data.comments}`);
 		this.setState({
 			comments: response.data.comments,
 			questions: response.data.questions,
@@ -136,9 +132,7 @@ export class CommentList extends Component<PropsType, StateType> {
 	filterComments = (newSourceURIToFilterBy: string) => {
 		const comments = this.state.comments;
 		const filter = queryStringToObject(newSourceURIToFilterBy);
-		const filteredComments = comments.filter(comment => comment.sourceURI === filter.sourceURI);
-
-		console.log(`filteredComments ${stringifyObject(filteredComments)}`);
+		const filteredComments = comments.filter(comment => comment.sourceURI.indexOf(filter.sourceURI) !== -1);
 
 		this.setState({
 			loading: false,
@@ -218,7 +212,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		this.setState({ comments });
 	};
 
-	loadCommentBox = (commentList: Array<CommentType>) => {
+	listCommentBoxes = (commentList: Array<CommentType>) => {
 		return (
 			<ul className="CommentList list--unstyled">
 				{commentList.map((comment, idx) => {
@@ -244,10 +238,12 @@ export class CommentList extends Component<PropsType, StateType> {
 					if (this.state.loading) return <p>Loading</p>;
 					if (contextValue.isAuthorised) {
 						if (this.state.comments.length === 0) return <p>No comments yet</p>;
-						if (this.state.filteredComments.length === 0) {
-							return this.loadCommentBox(this.state.comments);
+
+						if (queryStringToObject(this.props.location.search).sourceURI == null) {
+							return this.listCommentBoxes(this.state.comments);
 						} else {
-							return this.loadCommentBox(this.state.filteredComments);
+							if (this.state.filteredComments.length === 0) return <p>No comments yet</p>;
+							return this.listCommentBoxes(this.state.filteredComments);
 						}
 					} else {
 						return <LoginBanner signInButton={true} currentURL={this.props.match.url} signInURL={contextValue.signInURL} registerURL={contextValue.registerURL}/>;
