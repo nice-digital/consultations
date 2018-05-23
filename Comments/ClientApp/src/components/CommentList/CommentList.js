@@ -17,7 +17,8 @@ type PropsType = {
 		params: any
 	},
 	location: {
-		pathname: string
+		pathname: string,
+		search: string
 	},
 	drawerOpen: boolean,
 	isReviewPage: boolean,
@@ -88,7 +89,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		if (this.props.isReviewPage){
 			console.log("Is Review Page");
 			load("review", undefined, [1], {}) // todo: get the consultation id from the route "[1]"
-		 	.then(				 
+		 	.then(
 		 	 	res => {
 		 	 		this.setCommentListState(res);
 					});
@@ -100,7 +101,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		 			this.setCommentListState(res);
 		 		});
 		}
-		console.log(`loadComments ${this.state.comments}`);
+		console.log(`loadComments ${JSON.stringify(this.state.comments)}`);
 	}
 
 	setCommentListState = (response: any) => {
@@ -112,7 +113,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			// isAuthorised: res.data.isAuthorised,
 			// signInURL: res.data.signInURL
 		});
-	}
+	};
 
 	componentDidMount() {
 		this.loadComments();
@@ -144,7 +145,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			loading: false,
 			filteredComments: filteredComments
 		});
-	}
+	};
 
 	newComment(newComment: CommentType) {
 

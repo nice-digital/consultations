@@ -1,4 +1,4 @@
-import { objectToQueryString, nextTick, replaceFormat, isExternalLink } from "../utils";
+import { objectToQueryString, nextTick, replaceFormat, isHttpLink } from "../utils";
 
 describe("[ClientApp] ", () => {
 	describe("Utils ", () => {
@@ -43,12 +43,12 @@ describe("[ClientApp] ", () => {
 			});
 		});
 
-		describe("isExternalLink", () => {
+		describe("isHttpLink", () => {
 			it("should return true if the string supplied begins with 'http'", () => {
-				expect(isExternalLink("/an/internal/link")).toEqual(false);
-				expect(isExternalLink("http://external.com")).toEqual(true);
-				expect(isExternalLink("https://external.com")).toEqual(true);
-				expect(isExternalLink("www.http.horriblelink.com")).toEqual(false);
+				expect(isHttpLink("/an/internal/link")).toEqual(false);
+				expect(isHttpLink("http://external.com")).toEqual(true);
+				expect(isHttpLink("https://external.com")).toEqual(true);
+				expect(isHttpLink("www.http.horriblelink.com")).toEqual(false);
 			});
 		});
 	});

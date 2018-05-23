@@ -11,7 +11,7 @@ type PropsType = {
 export const PhaseBanner = (props: PropsType) => {
 	const { phase, name, repo } = props;
 	return (
-		<aside className="phase-banner">
+		<aside className="phase-banner mt--b">
 			<span className="phase-banner__tag">
 				<span className="tag tag--impact tag--agile">{phase}</span>
 			</span>

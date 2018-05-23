@@ -14,7 +14,7 @@ Array [
             data-g="12"
         >
             <aside
-                className="phase-banner"
+                className="phase-banner mt--b"
             >
                 <span
                     className="phase-banner__tag"
@@ -61,7 +61,6 @@ Array [
                     >
                         <a
                             href="https://alpha.nice.org.uk/guidance/inconsultation"
-                            itemProp="name"
                         >
                             All Consultations
                         </a>
@@ -78,7 +77,6 @@ Array [
                     >
                         <a
                             href="https://alpha.nice.org.uk/guidance/indevelopment/gid-dg10046/consultation/html-content"
-                            itemProp="name"
                         >
                             Consultation
                         </a>

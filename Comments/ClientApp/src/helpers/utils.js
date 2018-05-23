@@ -52,4 +52,4 @@ export function replaceFormat(stringToReplace, args) {
  * Detects link that starts with "http"
  * @returns {Boolean}
  */
-export const isExternalLink = link => link.indexOf("http") === 0;
+export const isHttpLink = link => link.indexOf("http") === 0;

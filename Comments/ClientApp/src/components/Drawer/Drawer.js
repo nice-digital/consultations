@@ -103,7 +103,7 @@ export class Drawer extends Component<PropsType, StateType> {
 					<button id="js-reading-mode-toggle"
 						title="Reading mode"
 						className="Drawer__toggleOpen"
-						style={{ "margin-top": "3px" }}
+						style={{ marginTop: "3px" }}
 						aria-haspopup="true">
 						<img alt="Enable or disable reading view" src="reading-view/icon.png" style={{position: "relative", top: "3px"}}/>
 					</button>
