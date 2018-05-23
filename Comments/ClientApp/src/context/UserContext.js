@@ -83,9 +83,9 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 	}
 
 	componentDidMount() {
-		if (!this.state.signInURL) {
+		//if (!this.state.signInURL) {
 			this.loadUser();
-		}
+		//}
 	}
 
 	render() {
