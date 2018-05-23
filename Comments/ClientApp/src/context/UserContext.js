@@ -3,7 +3,8 @@
 import React from "react";
 import { load } from "../data/loader";
 import { withRouter } from "react-router";
-import preload from "../data/pre-loader";
+//import preload from "../data/pre-loader";
+//import stringifyObject from "stringify-object";
 
 export const UserContext = React.createContext();
 
@@ -36,31 +37,43 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 
 		if (this.props.staticContext && this.props.staticContext.preload) {
 			preloadedData = this.props.staticContext.preload.data;
+
+
+			//console.log(`preloadedData: ${stringifyObject(preloadedData)}`);
+
 			this.state.isAuthorised = preloadedData.isAuthorised;
+			this.state.displayName = preloadedData.displayName;
+			this.state.signInURL = preloadedData.signInURL;
+			this.state.registerURL = preloadedData.registerURL;
 		}
 
-		const preloaded = preload(
-			this.props.staticContext,
-			"user",
-			[],
-			{
-				returnURL: this.props.match.url
-			},
-			preloadedData
-		);
 
-		if (preloaded) {
-			this.state = {
-				isAuthorised: preloadedData.isAuthorised,
-				displayName: preloadedData.displayName,
-				signInURL: preloadedData.signInURL,
-				registerURL: preloadedData.signInURL
-			};
-		}
+
+		//console.log('about to call user with url:' + this.props.match.url);
+		//const preloaded = preload(
+		//	this.props.staticContext,
+		//	"user",
+		//	[],
+		//	{
+		//		returnURL: this.props.match.url
+		//	},
+		//	preloadedData
+		//);
+		//console.log('in constructor');
+		//console.log('preloaded' + stringifyObject(preloaded));
+		//if (preloaded) {
+		//	console.log('setting state in context');
+		//	this.state = {
+		//		isAuthorised: preloadedData.isAuthorised,
+		//		displayName: preloadedData.displayName,
+		//		signInURL: preloadedData.signInURL,
+		//		registerURL: preloadedData.signInURL
+		//	};
+		//}
 
 	}
 
-	loadUser() {
+	loadUser = () => {
 		load("user", undefined, [], { returnURL: this.props.location.pathname })
 			.then(
 				res => {
@@ -83,9 +96,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 	}
 
 	componentDidMount() {
-		//if (!this.state.signInURL) {
-			this.loadUser();
-		//}
+		this.loadUser();
 	}
 
 	render() {
