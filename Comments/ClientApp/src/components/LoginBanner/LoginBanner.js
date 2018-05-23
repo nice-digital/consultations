@@ -8,7 +8,7 @@ type PropsType = {
 }
 
 export const LoginBanner = (props: PropsType) => (
-	<div className="panel panel--inverse mt--0">
+	<div className="panel panel--inverse mt--0 mb--0">
 		<div className="container">
 			<div className="grid">
 				<div data-g="12">
