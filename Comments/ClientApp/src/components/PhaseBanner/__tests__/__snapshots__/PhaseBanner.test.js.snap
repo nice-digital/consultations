@@ -2,7 +2,7 @@
 
 exports[`[ClientApp]  PhaseBanner  Matches snapshot 1`] = `
 <aside
-  className="phase-banner"
+  className="phase-banner mt--b"
 >
   <span
     className="phase-banner__tag"

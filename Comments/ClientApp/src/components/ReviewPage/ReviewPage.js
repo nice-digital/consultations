@@ -85,7 +85,7 @@ export class ReviewPage extends Component {
 			},
 			{
 				label: "Documents",
-				url: `${consultationId}/${consultationsFirstDocument}/${firstDocumentChapterSlug}`
+				url: `/${consultationId}/${consultationsFirstDocument}/${firstDocumentChapterSlug}`
 			}
 		];
 	};
