@@ -1,6 +1,22 @@
 import React, { Fragment } from "react";
 import ReactHtmlParser, { convertNodeToElement } from "react-html-parser";
 
+function nodeIsChapter(node){
+	return node.name === "a" && node.attribs && node.attribs["data-heading-type"] === "chapter";
+}
+
+function nodeIsSection(node) {
+	return node.name === "a" && node.attribs && node.attribs["data-heading-type"] === "section";
+}
+
+function nodeIsNumberedParagraph(node) {
+	return (node.name === "p") && (node.attribs) && (node.attribs["class"]) === "numbered-paragraph";
+}
+
+function nodeIsTypeText(node) {
+	return node.type === "text";
+}
+
 // onNewCommentClick passed through from <Document />
 export const processDocumentHtml = (
 	incomingHtml,
@@ -8,14 +24,21 @@ export const processDocumentHtml = (
 	sourceURI
 ) => {
 	function addButtons(node) {
+		const isChapter = nodeIsChapter(node);
+		const isSection = nodeIsSection(node);
+		const isNumberedParagraph = nodeIsNumberedParagraph(node);
 		if (
-			node.name === "a" &&
-			node.attribs &&
-			(node.attribs["data-heading-type"] === "chapter" || node.attribs["data-heading-type"] === "section")
+			isChapter || isSection || isNumberedParagraph
 		) {
-			const isTypeText = child => child.type === "text";
-			const elementType = node.attribs["data-heading-type"].toLowerCase();
-			const elementName = node.children.filter(isTypeText)[0].data;
+
+			let elementType = "";
+			if (isChapter || isSection) {
+				elementType = node.attribs["data-heading-type"].toLowerCase();
+			} else if (isNumberedParagraph) {
+				elementType = node.attribs["class"].toLowerCase();
+			}
+
+			const elementName = node.children.filter(nodeIsTypeText)[0].data;
 			const elementId = node.attribs.id;
 
 			return (
