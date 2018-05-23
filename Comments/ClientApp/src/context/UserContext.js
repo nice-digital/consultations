@@ -26,51 +26,19 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 	constructor(props: PropsType) {
 		super(props);
 
-		this.state = {
-			isAuthorised: false,
-			displayName: "",
-			signInURL: "",
-			registerURL: ""
-		};
-
-		let preloadedData = {};
-
-		if (this.props.staticContext && this.props.staticContext.preload) {
-			preloadedData = this.props.staticContext.preload.data;
-
-
-			//console.log(`preloadedData: ${stringifyObject(preloadedData)}`);
-
-			this.state.isAuthorised = preloadedData.isAuthorised;
-			this.state.displayName = preloadedData.displayName;
-			this.state.signInURL = preloadedData.signInURL;
-			this.state.registerURL = preloadedData.registerURL;
+		let preloadSource = {};
+		if (this.props.staticContext && this.props.staticContext.preload) { //server-side render
+			preloadSource = this.props.staticContext.preload.data;
+		} else { //client-side render
+			preloadSource = window.__PRELOADED__; //TODO: extract this nonsense out to (or near) the preload endpoint method.
 		}
 
-
-
-		//console.log('about to call user with url:' + this.props.match.url);
-		//const preloaded = preload(
-		//	this.props.staticContext,
-		//	"user",
-		//	[],
-		//	{
-		//		returnURL: this.props.match.url
-		//	},
-		//	preloadedData
-		//);
-		//console.log('in constructor');
-		//console.log('preloaded' + stringifyObject(preloaded));
-		//if (preloaded) {
-		//	console.log('setting state in context');
-		//	this.state = {
-		//		isAuthorised: preloadedData.isAuthorised,
-		//		displayName: preloadedData.displayName,
-		//		signInURL: preloadedData.signInURL,
-		//		registerURL: preloadedData.signInURL
-		//	};
-		//}
-
+		this.state = {
+			isAuthorised: preloadSource.isAuthorised,
+			displayName: preloadSource.displayName,
+			signInURL: preloadSource.signInURL,
+			registerURL: preloadSource.registerURL
+		};
 	}
 
 	loadUser = () => {
@@ -96,7 +64,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 	}
 
 	componentDidMount() {
-		this.loadUser();
+		//this.loadUser();
 	}
 
 	render() {
