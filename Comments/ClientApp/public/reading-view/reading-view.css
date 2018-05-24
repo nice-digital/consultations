@@ -5,17 +5,17 @@
 .readingMode .page-header .mb--0,
 .readingMode .page-header__lead,
 .readingMode .page-header__heading,
-/*.readingMode .document-comment-container__commentButton,*/
+.readingMode .document-comment-container__commentButton,
 .readingMode .navigationColumn,
-.readingMode .inPageNavColumn
-{
-  display: none;
+.readingMode .inPageNavColumn {
+	display: none;
 }
 
 .readingMode .page-header h2 {
-  font-size: 3rem;
-  padding: 2rem;
-  margin-bottom: -3rem;
+	font-size: 3rem;
+	padding: 2rem;
+	margin-bottom: -3rem;
+	line-height: 1em;
 }
 
 
