@@ -26,12 +26,8 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 	constructor(props: PropsType) {
 		super(props);
 
-		let preloadSource = {};
-		if (this.props.staticContext && this.props.staticContext.preload) { //server-side render
-			preloadSource = this.props.staticContext.preload.data;
-		} else { //client-side render
-			preloadSource = window.__PRELOADED__; //TODO: extract this nonsense out to (or near) the preload endpoint method.
-		}
+		const isServerSideRender = (this.props.staticContext && this.props.staticContext.preload);		
+		const preloadSource = isServerSideRender ? this.props.staticContext.preload.data : window.__PRELOADED__; //TODO: extract this preloaded line out to (or near) the preload endpoint method.
 
 		this.state = {
 			isAuthorised: preloadSource.isAuthorised,
