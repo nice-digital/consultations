@@ -214,11 +214,13 @@ namespace Comments
                         {
                             data["cookies"] = $"{NICE.Auth.NetCore.Helpers.Constants.DefaultCookieName}={cookieForSSR}";
                         }
-                        //data["isAuthorised"] = context.User.Identity.IsAuthenticated;
-                        //data["signInURL"] = authenticateService.GetLoginURL(context.Request.Path);
-                        //data["user"] = context.User; - possible security implications here, surfacing claims to the front end. might be ok, if just server-side.
-                        // Pass further data in e.g. user/authentication data
-                    };
+                        data["isAuthorised"] = context.User.Identity.IsAuthenticated;
+	                    data["displayName"] = context.User.Identity.Name;
+						data["signInURL"] = authenticateService.GetLoginURL(context.Request.Path);
+	                    data["registerURL"] = authenticateService.GetRegisterURL(context.Request.Path);
+						//data["user"] = context.User; - possible security implications here, surfacing claims to the front end. might be ok, if just server-side.
+						// Pass further data in e.g. user/authentication data
+					};
                     options.BootModulePath = $"{spa.Options.SourcePath}/src/server/index.js";
                 });
 

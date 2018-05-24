@@ -11,19 +11,18 @@ type PropsType = {
 export const PhaseBanner = (props: PropsType) => {
 	const { phase, name, repo } = props;
 	return (
-		<aside className="phase-banner">
+		<aside className="phase-banner mt--b">
 			<span className="phase-banner__tag">
 				<span className="tag tag--impact tag--agile">{phase}</span>
 			</span>
 			<span className="phase-banner__label">
-				{name} is in development. This means it is not feature
-				complete and there may be issues.{" "}
+				{name} is in development which means that some features may not work fully.{" "}
 				<a
 					href={repo}
 					rel="noopener noreferrer"
 					target="_blank"
 				>
-					Visit this page if you wish to report an issue.
+					Report an issue
 				</a>
 			</span>
 		</aside>

@@ -163,8 +163,7 @@ export class Document extends Component<PropsType, StateType> {
 	) => {
 		if (!documents) return null;
 
-		const isCurrentDocument = documentId =>
-			documentId === currentDocumentFromRoute;
+		const isCurrentDocument = documentId => documentId === currentDocumentFromRoute;
 		const isCommentable = d => d.supportsComments;
 		const isSupporting = d => !d.supportsComments;
 
@@ -172,13 +171,15 @@ export class Document extends Component<PropsType, StateType> {
 			const label = d.title || "Download Document";
 			// If it's a commentable document, get the link of the first chapter in the document, else use the href and provide a download link
 			let url: string = "";
-			if (d.supportsComments){
-				url = d.supportsComments ? `/${currentConsultationFromRoute}/${d.documentId}/${d.chapters[0].slug}`	: d.href;
+
+			if (d.supportsComments) {
+				url = d.supportsComments ? `/${currentConsultationFromRoute}/${d.documentId}/${d.chapters[0].slug}` : d.href;
 			} else {
-				url = d.href;
+				url = d.href || "#";
 			}
 
 			const current = isCurrentDocument(d.documentId);
+
 			return {
 				label,
 				url,
@@ -216,8 +217,7 @@ export class Document extends Component<PropsType, StateType> {
 			return {
 				label: chapter.title,
 				url: `/${this.props.match.params.consultationId}/${
-					this.props.match.params.documentId
-				}/${chapter.slug}`,
+					this.props.match.params.documentId}/${chapter.slug}`,
 				current: isCurrentChapter(chapter.slug)
 			};
 		};
@@ -276,7 +276,9 @@ export class Document extends Component<PropsType, StateType> {
 					<title>{title}</title>
 				</Helmet>
 				<UserContext.Consumer>
-					{ contextValue => !contextValue.isAuthorised ? <LoginBanner signInButton={false} currentURL={this.props.match.url} signInURL={contextValue.signInURL} registerURL={contextValue.registerURL}/> : null }
+					{contextValue => !contextValue.isAuthorised ?
+						<LoginBanner signInButton={false} currentURL={this.props.match.url}
+									 signInURL={contextValue.signInURL} registerURL={contextValue.registerURL}/> : null}
 				</UserContext.Consumer>
 				<div className="container">
 					<div className="grid">
@@ -286,7 +288,7 @@ export class Document extends Component<PropsType, StateType> {
 								name={projectInformation.name}
 								repo={projectInformation.repo}
 							/>
-							<BreadCrumbs links={this.getBreadcrumbs()} />
+							<BreadCrumbs links={this.getBreadcrumbs()}/>
 							<main role="main">
 								<div className="page-header">
 									<p className="mb--0">
@@ -306,12 +308,13 @@ export class Document extends Component<PropsType, StateType> {
 											}}
 										>
 											Comment on whole consultation
-										</button>&nbsp;&nbsp;
+										</button>
+										&nbsp;&nbsp;
 									</p>
 									<h1 className="page-header__heading mt--0">{title}</h1>
 									<p className="page-header__lead">
 										[{reference}] Open until{" "}
-										<Moment format="D MMMM YYYY" date={endDate} />
+										<Moment format="D MMMM YYYY" date={endDate}/>
 									</p>
 									<p className="mb--0">
 										Document |{" "}
@@ -367,10 +370,10 @@ export class Document extends Component<PropsType, StateType> {
 									<div data-g="12 md:6" className="documentColumn">
 										<div
 											className={`document-comment-container ${
-												this.state.loading ? "loading" : ""
-											}`}
+												this.state.loading ? "loading" : ""}`}
 										>
-											<Selection newCommentFunc={this.props.onNewCommentClick} sourceURI={this.props.match.url}>
+											<Selection newCommentFunc={this.props.onNewCommentClick}
+													   sourceURI={this.props.match.url}>
 												{processDocumentHtml(
 													content,
 													this.props.onNewCommentClick,

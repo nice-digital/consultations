@@ -103,16 +103,16 @@ export class Drawer extends Component<PropsType, StateType> {
 					<button id="js-reading-mode-toggle"
 						title="Reading mode"
 						className="Drawer__toggleOpen"
-						style={{ "margin-top": "3px" }}
+						style={{ marginTop: "3px" }}
 						aria-haspopup="true">
 						<img alt="Enable or disable reading view" src="reading-view/icon.png" style={{position: "relative", top: "3px"}}/>
 					</button>
 				</div>
 				{/* #sidebar-panel necessary here for pulling keyboard focus */}
 				<div id="sidebar-panel" className="Drawer__main">
-					<h1 id="commenting-panel" className="p mt--c mb--e">Comments Panel</h1>
+					<h1 id="commenting-panel" className="p mt--c mb--e">Comments panel</h1>
 					{/*wrappedComponentRef exposes the underlying, unwrapped component*/}
-					<CommentListWithRouter
+					<CommentListWithRouter isReviewPage={false}
 						drawerOpen={this.state.drawerOpen}
 						// $FlowIgnore | this.commentList is bound to this below
 						wrappedComponentRef={component => (this.commentList = component)}

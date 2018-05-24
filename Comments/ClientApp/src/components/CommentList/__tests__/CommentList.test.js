@@ -3,11 +3,12 @@
 import React from "react";
 import { mount } from "enzyme";
 import { MemoryRouter } from "react-router";
-import { CommentList } from "../CommentList";
+import CommentListWithRouter, { CommentList } from "../CommentList";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { generateUrl } from "../../../data/loader";
 import sampleComments from "./sample";
+import reviewComments from "./reviewComments";
 import EmptyCommentsResponse from "./EmptyCommentsResponse";
 import { nextTick } from "../../../helpers/utils";
 
@@ -277,5 +278,123 @@ describe("[ClientApp] ", () => {
 			expect(wrapper.state().comments.length).toEqual(4);
 		});
 
+		it("should make an api call to review endpoint with the correct path and query string", () => {
+			mock.reset();
+			mock
+				.onGet(
+					generateUrl("review", undefined, [1], {})
+				)
+				.reply(config => {
+					expect(config.url).toEqual(
+						"/consultations/api/Review/1"
+					);
+					return [200, { comments: [] }];
+				});
+			mount(<CommentList {...fakeProps} isReviewPage={true}  />);
+		});
+
+		it("when mounted with review property then the review endpoint is hit", async done  => {
+			 mock.reset();
+			 console.log(generateUrl("review", undefined, [1], {}));
+			 mock
+			 	.onGet(
+			 		generateUrl("review", undefined, [1], {})
+			 	)
+			 	.reply(config => {
+			 		expect(config.url).toEqual(
+			 			"/consultations/api/Review/1"
+					 );
+					 done();
+			 		return [200, { comments: [] }];
+				 });
+			 mock.onAny().reply(config => {
+			 	console.log(`config is: ${config}`);
+
+			 });
+
+			 mount(<CommentList {...fakeProps} isReviewPage={true} />);
+		});
+
+		const firstProps = {
+			match: {
+				url: "/1/1/introduction"
+			},
+			location: {
+				pathname: "1/review",
+				search: "?sourceURI=/consultations/1/1/introduction"
+			},
+			comment: {
+				commentId: 1
+			}				
+		};
+
+		const secondProps = {
+			match: {
+				url: "/1/1/introduction"
+			},
+			location: {
+				pathname: "1/review",
+				search: "?sourceURI=/consultations/1/1/guidance"
+			},
+			comment: {
+				commentId: 1
+			}
+		};
+
+		it("componentDidUpdate filters comments for review page", async () => {
+					
+			mock.reset();
+			mock
+				.onGet(
+					generateUrl("review", undefined, [1], {
+					})
+				)
+				.reply(200, reviewComments);
+
+			let wrapper = mount(
+				<CommentList {...firstProps}  isReviewPage={true} />
+			);
+			
+			await nextTick();
+			wrapper.update();
+
+			expect(wrapper.state().comments.length).toEqual(6);
+
+			wrapper.instance().filterComments("?sourceURI=/consultations/1/1/guidance");
+
+			await nextTick();
+			wrapper.update();
+
+			expect(wrapper.state().filteredComments.length).toEqual(1);
+		});
+
+		// it.only("componentDidUpdate filters comments for review page", async () => {
+					
+		// 	mock.reset();
+		// 	mock
+		// 		.onGet(
+		// 			generateUrl("review", undefined, [1], {
+		// 			})
+		// 		)
+		// 		.reply(200, reviewComments);
+
+		// 	let wrapper = mount(
+		// 		<CommentList {...firstProps}  isReviewPage={true} />
+		// 	);
+			
+		// 	await nextTick();
+		// 	wrapper.update();
+
+		// 	expect(wrapper.state().comments.length).toEqual(6);
+		// 	expect(wrapper.find("li").length).toEqual(6);
+
+		// 	wrapper.instance().filterComments("?sourceURI=/consultations/1/1/guidance");
+
+		// 	await nextTick();
+		// 	wrapper.update();
+
+		// 	expect(wrapper.state().filteredComments.length).toEqual(1);
+		// 	expect(wrapper.find("li").length).toEqual(1);
+		// });
 	});
 });

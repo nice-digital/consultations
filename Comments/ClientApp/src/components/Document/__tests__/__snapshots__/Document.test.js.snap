@@ -14,7 +14,7 @@ Array [
             data-g="12"
         >
             <aside
-                className="phase-banner"
+                className="phase-banner mt--b"
             >
                 <span
                     className="phase-banner__tag"
@@ -29,14 +29,14 @@ Array [
                     className="phase-banner__label"
                 >
                     NICE Consultations
-                     is in development. This means it is not feature complete and there may be issues.
+                     is in development which means that some features may not work fully.
                      
                     <a
                         href="https://github.com/nhsevidence/consultations"
                         rel="noopener noreferrer"
                         target="_blank"
                     >
-                        Visit this page if you wish to report an issue.
+                        Report an issue
                     </a>
                 </span>
             </aside>
@@ -61,7 +61,6 @@ Array [
                     >
                         <a
                             href="https://alpha.nice.org.uk/guidance/inconsultation"
-                            itemProp="name"
                         >
                             All Consultations
                         </a>
@@ -78,7 +77,6 @@ Array [
                     >
                         <a
                             href="https://alpha.nice.org.uk/guidance/indevelopment/gid-dg10046/consultation/html-content"
-                            itemProp="name"
                         >
                             Consultation
                         </a>
@@ -443,9 +441,9 @@ Array [
                                     className="stacked-nav__list-item"
                                 >
                                     <a
-                                        href="https://test.nice.org.ukundefined"
-                                        rel="noopener"
-                                        target="_blank"
+                                        aria-current="false"
+                                        href="#"
+                                        onClick={[Function]}
                                     >
                                         Download Document
                                     </a>
@@ -454,9 +452,9 @@ Array [
                                     className="stacked-nav__list-item"
                                 >
                                     <a
-                                        href="https://test.nice.org.ukundefined"
-                                        rel="noopener"
-                                        target="_blank"
+                                        aria-current="false"
+                                        href="#"
+                                        onClick={[Function]}
                                     >
                                         Download Document
                                     </a>
@@ -465,9 +463,9 @@ Array [
                                     className="stacked-nav__list-item"
                                 >
                                     <a
-                                        href="https://test.nice.org.ukundefined"
-                                        rel="noopener"
-                                        target="_blank"
+                                        aria-current="false"
+                                        href="#"
+                                        onClick={[Function]}
                                     >
                                         Download Document
                                     </a>

@@ -3,7 +3,8 @@
 import React from "react";
 import { load } from "../data/loader";
 import { withRouter } from "react-router";
-import preload from "../data/pre-loader";
+//import preload from "../data/pre-loader";
+//import stringifyObject from "stringify-object";
 
 export const UserContext = React.createContext();
 
@@ -25,42 +26,18 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 	constructor(props: PropsType) {
 		super(props);
 
+		const isServerSideRender = (this.props.staticContext && this.props.staticContext.preload);		
+		const preloadSource = isServerSideRender ? this.props.staticContext.preload.data : window.__PRELOADED__; //TODO: extract this preloaded line out to (or near) the preload endpoint method.
+
 		this.state = {
-			isAuthorised: false,
-			displayName: "",
-			signInURL: "",
-			registerURL: ""
+			isAuthorised: preloadSource.isAuthorised,
+			displayName: preloadSource.displayName,
+			signInURL: preloadSource.signInURL,
+			registerURL: preloadSource.registerURL
 		};
-
-		let preloadedData = {};
-
-		if (this.props.staticContext && this.props.staticContext.preload) {
-			preloadedData = this.props.staticContext.preload.data;
-			this.state.isAuthorised = preloadedData.isAuthorised;
-		}
-
-		const preloaded = preload(
-			this.props.staticContext,
-			"user",
-			[],
-			{
-				returnURL: this.props.match.url
-			},
-			preloadedData
-		);
-
-		if (preloaded) {
-			this.state = {
-				isAuthorised: preloadedData.isAuthorised,
-				displayName: preloadedData.displayName,
-				signInURL: preloadedData.signInURL,
-				registerURL: preloadedData.signInURL
-			};
-		}
-
 	}
 
-	loadUser() {
+	loadUser = () => {
 		load("user", undefined, [], { returnURL: this.props.location.pathname })
 			.then(
 				res => {
@@ -83,7 +60,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 	}
 
 	componentDidMount() {
-		if (!this.state.signInURL) {
+		if (!this.state.isAuthorised) {  //this shouldn't be needed..
 			this.loadUser();
 		}
 	}

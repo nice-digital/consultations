@@ -7,7 +7,8 @@ import preload from "../../data/pre-loader";
 import { CommentBox } from "../CommentBox/CommentBox";
 import { LoginBanner } from "./../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
-// import stringifyObject from "stringify-object";
+import { queryStringToObject } from "../../helpers/utils";
+//import stringifyObject from "stringify-object";
 
 type PropsType = {
 	staticContext?: any,
@@ -16,9 +17,12 @@ type PropsType = {
 		params: any
 	},
 	location: {
-		pathname: string
+		pathname: string,
+		search: string
 	},
-	drawerOpen: boolean
+	drawerOpen: boolean,
+	isReviewPage: boolean,
+	filterByDocument: number
 };
 
 type CommentType = {
@@ -39,6 +43,7 @@ type CommentType = {
 
 type StateType = {
 	comments: Array<CommentType>,
+	filteredComments: Array<CommentType>,
 	questions: any,
 	loading: boolean
 };
@@ -48,6 +53,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		super(props);
 		this.state = {
 			comments: [],
+			filteredComments: [],
 			questions: [],
 			loading: true
 		};
@@ -72,6 +78,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			this.state = {
 				loading: false,
 				comments: preloaded.comments,
+				filteredComments: [],
 				questions: preloaded.questions
 			};
 		}
@@ -79,33 +86,66 @@ export class CommentList extends Component<PropsType, StateType> {
 	}
 
 	loadComments() {
-		load("comments", undefined, [], { sourceURI: this.props.match.url }).then(
-			res => {
-				this.setState({
-					comments: res.data.comments,
-					questions: res.data.questions,
-					loading: false
-				});
-			}
-		);
+		if (this.props.isReviewPage){
+			console.log("Is Review Page");
+			load("review", undefined, [1], {}) // todo: get the consultation id from the route "[1]"
+		 	.then(
+		 	 	res => {
+		 	 		this.setCommentListState(res);
+					});
+			this.filterComments(this.props.location.search);
+		} else{
+			console.log("Not Review page");
+		 	load("comments", undefined, [], { sourceURI: this.props.match.url }).then(
+		 		res => {
+		 			this.setCommentListState(res);
+		 		});
+		}
+		console.log(`loadComments ${JSON.stringify(this.state.comments)}`);
 	}
 
+	setCommentListState = (response: any) => {
+		console.log(`setCommentListState ${response.data.comments}`);
+		this.setState({
+			comments: response.data.comments,
+			questions: response.data.questions,
+			loading: false
+			// isAuthorised: res.data.isAuthorised,
+			// signInURL: res.data.signInURL
+		});
+	};
+
 	componentDidMount() {
-		if (this.state.comments.length === 0) {
-			this.loadComments();
-		}
+		this.loadComments();
 	}
 
 	componentDidUpdate(prevProps: PropsType) {
-		const oldRoute = prevProps.location.pathname;
-		const newRoute = this.props.location.pathname;
+		const oldRoute = prevProps.location.pathname + prevProps.location.search;
+		const newRoute = this.props.location.pathname + this.props.location.search;
 		if (oldRoute !== newRoute) {
 			this.setState({
 				loading: true
 			});
-			this.loadComments();
+			if (this.props.isReviewPage){
+				this.filterComments(this.props.location.search);
+			} else{
+				this.loadComments();
+			}
 		}
 	}
+
+	filterComments = (newSourceURIToFilterBy: string) => {
+		const comments = this.state.comments;
+		const filter = queryStringToObject(newSourceURIToFilterBy);
+		const filteredComments = comments.filter(comment => comment.sourceURI === filter.sourceURI);
+
+		//console.log(`filteredComments ${stringifyObject(filteredComments)}`);
+
+		this.setState({
+			loading: false,
+			filteredComments: filteredComments
+		});
+	};
 
 	newComment(newComment: CommentType) {
 

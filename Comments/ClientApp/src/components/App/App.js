@@ -1,13 +1,13 @@
 // @flow
 
-import React, { Fragment, Component } from "react";
+import React, { Fragment } from "react";
 import { Route, Switch, Redirect } from "react-router";
 import { Helmet } from "react-helmet";
 import CommentListWithRouter from "../CommentList/CommentList";
 import { DocumentView } from "../DocumentView/DocumentView";
 import NotFound from "../NotFound/NotFound";
 import UserProviderWithRouter from "../../context/UserContext";
-import { ReviewPage } from "../ReviewPage/ReviewPage";
+import ReviewPageWithRouter from "../ReviewPage/ReviewPage";
 
 const App = () => {
 	return (
@@ -29,7 +29,7 @@ const App = () => {
 
 				{/*Review Page*/}
 				<Route path="/:consultationId/review">
-					<ReviewPage/>
+					<ReviewPageWithRouter/>
 				</Route>
 
 				<Route path="/commentlist">

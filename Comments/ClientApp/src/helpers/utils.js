@@ -1,3 +1,5 @@
+import queryString from "query-string";
+
 /**
  * Create a query string out of an object
  * @param obj the key-value pairs that you'd like to be turned into a querystring
@@ -11,6 +13,10 @@ export function objectToQueryString(obj) {
 		}
 	if (str.length) return "?" + str.join("&");
 	return "";
+}
+
+export function queryStringToObject(qryString) {
+	return queryString.parse(qryString);
 }
 
 /**
@@ -46,4 +52,4 @@ export function replaceFormat(stringToReplace, args) {
  * Detects link that starts with "http"
  * @returns {Boolean}
  */
-export const isExternalLink = link => link.indexOf("http") === 0;
+export const isHttpLink = link => link.indexOf("http") === 0;

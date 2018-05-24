@@ -43,8 +43,8 @@ export const load = (endpoint, baseUrl = BaseUrl, urlParameters = [],  query = {
 			data,
 			method,
 			headers,
-			httpsAgent,
-			maxRedirects: 0
+			httpsAgent//,
+			//maxRedirects: 0
 		}) //withCredentials: true
 		.then(response => {
 			resolve(response);

@@ -8,22 +8,21 @@ type PropsType = {
 }
 
 export const LoginBanner = (props: PropsType) => (
-	<div className="panel panel--inverse mt--0">
+	<div className="panel panel--inverse mt--0 mb--0">
 		<div className="container">
 			<div className="grid">
 				<div data-g="12">
 					<div className="LoginBanner">
-						To comment on this consultation,{" "}
 						<a href={props.signInURL} title="Sign in to your NICE account">
-							sign in to your NICE account{" "}
-						</a> or{" "}
+							Sign in to your NICE account</a> to comment on this consultation.{" "}
+							Don't have an account?{" "}
 						<a href={props.registerURL} title="Register for a NICE account">
-							register for a NICE account{" "}
-						</a> if you don't yet have one.
+							Register
+						</a>
 					</div>
 					{props.signInButton ?
 						<p>
-							<a className="btn btn--inverse" href={props.signInURL} title="Sign in to your NICE account">Sign In</a>
+							<a className="btn btn--inverse" href={props.signInURL} title="Sign in to your NICE account">Sign in</a>
 						</p>
 						:
 						null
