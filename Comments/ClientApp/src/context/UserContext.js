@@ -47,7 +47,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 	}
 
 	loadUser = () => {
-		load("user", undefined, [], { returnURL: this.props.location.pathname })
+		load("user", undefined, [], { returnURL: this.props.location.pathname, cachebust: new Date().getTime() })
 			.then(
 				res => {
 					this.setState({
@@ -69,9 +69,9 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 	}
 
 	componentDidMount() {
-		if (!this.state.isAuthorised) {  //this shouldn't be needed..
+		//if (!this.state.isAuthorised) {  //this shouldn't be needed..
 			this.loadUser();
-		}
+		//}
 	}
 
 	render() {
