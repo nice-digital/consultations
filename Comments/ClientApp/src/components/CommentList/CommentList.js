@@ -17,8 +17,7 @@ type PropsType = {
 		params: any
 	},
 	location: {
-		pathname: string,
-		search: string
+		pathname: string
 	},
 	drawerOpen: boolean,
 	isReviewPage: boolean,
@@ -38,12 +37,12 @@ type CommentType = {
 	rangeEnd: string,
 	rangeEndOffset: string,
 	quote: string,
-	commentOn: string
+	commentOn: string,
+	show: boolean
 };
 
 type StateType = {
 	comments: Array<CommentType>,
-	filteredComments: Array<CommentType>,
 	questions: any,
 	loading: boolean
 };
@@ -53,19 +52,14 @@ export class CommentList extends Component<PropsType, StateType> {
 		super(props);
 		this.state = {
 			comments: [],
-			filteredComments: [],
 			questions: [],
 			loading: true
 		};
 		let preloadedData = {};
 		if (this.props.staticContext && this.props.staticContext.preload) {
 			preloadedData = this.props.staticContext.preload.data;
-
-			//console.log('setting is authorised to:' + preloadedData.isAuthorised);
-			// this.state.isAuthorised = preloadedData.isAuthorised;
 		}
 
-		//console.log(`preloadedData: ${stringifyObject(preloadedData)}`);
 		const preloaded = preload(
 			this.props.staticContext,
 			"comments",
@@ -82,38 +76,34 @@ export class CommentList extends Component<PropsType, StateType> {
 				questions: preloaded.questions
 			};
 		}
-
 	}
 
 	loadComments() {
 		if (this.props.isReviewPage){
-			console.log("Is Review Page");
-			load("review", undefined, [1], {}) // todo: get the consultation id from the route "[1]"
-		 	.then(
+			load("review", undefined, [this.props.match.params.consultationId], {}) // todo: maybe this should us source URI instead of id... need to change feed to do this
+		 	.then(				 
 		 	 	res => {
 		 	 		this.setCommentListState(res);
-					});
-			this.filterComments(this.props.location.search);
+					});	
 		} else{
-			console.log("Not Review page");
 		 	load("comments", undefined, [], { sourceURI: this.props.match.url }).then(
 		 		res => {
 		 			this.setCommentListState(res);
 		 		});
 		}
-		console.log(`loadComments ${JSON.stringify(this.state.comments)}`);
 	}
 
 	setCommentListState = (response: any) => {
-		console.log(`setCommentListState ${response.data.comments}`);
+		
+		const comments = this.filterComments(this.props.location.search, response.data.comments );
 		this.setState({
-			comments: response.data.comments,
+			comments,
 			questions: response.data.questions,
 			loading: false
 			// isAuthorised: res.data.isAuthorised,
 			// signInURL: res.data.signInURL
 		});
-	};
+	}
 
 	componentDidMount() {
 		this.loadComments();
@@ -126,26 +116,22 @@ export class CommentList extends Component<PropsType, StateType> {
 			this.setState({
 				loading: true
 			});
-			if (this.props.isReviewPage){
-				this.filterComments(this.props.location.search);
-			} else{
-				this.loadComments();
-			}
+			this.loadComments();
 		}
 	}
 
-	filterComments = (newSourceURIToFilterBy: string) => {
-		const comments = this.state.comments;
-		const filter = queryStringToObject(newSourceURIToFilterBy);
-		const filteredComments = comments.filter(comment => comment.sourceURI === filter.sourceURI);
+	filterComments = (newSourceURIToFilterBy: string, comments: Array<CommentType>) => {
+		let filterBy = queryStringToObject(newSourceURIToFilterBy);
+		if (filterBy.sourceURI == null) filterBy = { sourceURI: "" };
+		const idsOfFilteredComments = comments.filter(comment => comment.sourceURI.indexOf(filterBy.sourceURI) !== -1).map(comment => comment.commentId);
 
-		//console.log(`filteredComments ${stringifyObject(filteredComments)}`);
-
-		this.setState({
-			loading: false,
-			filteredComments: filteredComments
+		const commentsWithFilteredAttr = comments.map(comment => {
+			comment.show = idsOfFilteredComments.includes(comment.commentId);
+			return comment;
 		});
-	};
+
+		return commentsWithFilteredAttr;
+	}
 
 	newComment(newComment: CommentType) {
 
@@ -220,15 +206,16 @@ export class CommentList extends Component<PropsType, StateType> {
 	};
 
 	render() {
+		const commentsToShow = this.state.comments.filter(comment => comment.show);
 		return (
-			<UserContext.Consumer>
+			<UserContext.Consumer>   
 				{ contextValue => {
 					if (this.state.loading) return <p>Loading</p>;
 					if (contextValue.isAuthorised) {
-						if (this.state.comments.length === 0) return <p>No comments yet</p>;
+						if (commentsToShow.length === 0) return <p>No comments yet</p>;
 						return (
 							<ul className="CommentList list--unstyled">
-								{this.state.comments.map((comment, idx) => {
+								{commentsToShow.map((comment, idx) => {
 									return (
 										<CommentBox
 											drawerOpen={this.props.drawerOpen}

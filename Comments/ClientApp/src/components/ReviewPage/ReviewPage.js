@@ -9,40 +9,71 @@ import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
 import { StickyContainer } from "react-sticky";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { queryStringToObject } from "../../helpers/utils";
+import { UserContext } from "../../context/UserContext";
 
-export class ReviewPage extends Component {
-	constructor() {
-		super();
+type DocumentType = {
+	title: string,
+	sourceURI: string,
+	supportsComments: boolean
+};
+
+type PropsType = {
+	location: {
+		pathname: string,
+		search: string
+	}
+};
+
+export class ReviewPage extends Component<PropsType> {
+	constructor(props: PropsType) {
+		super(props);
 
 		this.state = {
 			documentsList: [],
-			documentFilter: 1
+			consultationData: null
 		};
 	}
 
-	getData() {
-		load("documents", undefined, [], { consultationId: 1 })
-			.then(response => {
-				this.setState({
-					documentsList: response.data,
-					documentFilter: this.getCurrentSourceURI()
-				});
-			})
+
+	gatherData = async () => {
+		const consultationId = this.props.match.params.consultationId;
+
+		const documentsData = load("documents", undefined, [], { consultationId })
+			.then(response => response.data)
 			.catch(err => {
 				throw new Error("documentsData " + err);
 			});
-	}
 
-	generateDocumentList = (documentsList) =>{
-		const documentLinks = documentsList.map(
-			(consultationDocument) => {
-				return {
-					label: consultationDocument.title,
-					url: `${this.props.location.pathname}?sourceURI=${consultationDocument.sourceURI}`,
-					current: this.getCurrentSourceURI() === consultationDocument.sourceURI
-				};
-			}
-		);
+		const consultationData = load("consultation", undefined, [], {
+			consultationId
+		})
+			.then(response => response.data)
+			.catch(err => {
+				throw new Error("consultationData " + err);
+			});
+
+		return {
+			documentsList: await documentsData,
+			consultationData: await consultationData
+		};
+	};
+
+	generateDocumentList = (documentsList: Array<DocumentType>) =>{
+		let documentLinks = documentsList.filter(docs => docs.supportsComments)
+			.map(
+				(consultationDocument) => {
+					return {
+						label: consultationDocument.title,
+						url: `${this.props.location.pathname}?sourceURI=${consultationDocument.sourceURI}`,
+						current: this.getCurrentSourceURI() === consultationDocument.sourceURI
+					};
+				}
+			);
+
+		documentLinks.unshift({
+			label: "All document comments",
+			url: this.props.location.pathname,
+			current: this.getCurrentSourceURI() == null});
 
 		return {
 			title: "View comments by document",
@@ -50,19 +81,18 @@ export class ReviewPage extends Component {
 		};
 	};
 
-	componentDidMount(){
-		this.getData();
-	}
-
-	componentDidUpdate(prevProps){
-		const oldDocId = queryStringToObject(prevProps.location.search).documentId;
-		const newDocId = queryStringToObject(this.props.location.search).documentId;
-
-		if (oldDocId !== newDocId) {
-			this.setState({
-				documentFilter: newDocId
+	componentDidMount() {
+		// if (!this.state.hasInitialData) {
+		this.gatherData()
+			.then(data => {
+				this.setState({
+					...data
+				});
+			})
+			.catch(err => {
+				throw new Error("gatherData in componentDidMount failed " + err);
 			});
-		}
+		// }
 	}
 
 	getCurrentSourceURI = () => {
@@ -96,7 +126,7 @@ export class ReviewPage extends Component {
 
 	render() {
 		if (this.state.documentsList.length === 0) return <h1>Loading...</h1>;
-
+		const { title, reference, endDate } = this.state.consultationData;
 		return (
 			<Fragment>
 				<div className="container">
@@ -111,21 +141,42 @@ export class ReviewPage extends Component {
 							<main role="main">
 								<div className="page-header">
 									<Header
-										title="Unstable angina and NSTEMI: early management"
-										reference="GID-TA10232"
-										endDate="31 May 2018"
+										title={title}
+										reference={reference}
+										endDate={endDate}
 										onNewCommentClick={this.onNewCommentClick()}
 										url="1/1/Introduction"
 									/>
-									<span>Review your comments</span>
+									<h2 className="mt--0">Comments for review</h2>
 									<StickyContainer className="grid">
 										<div data-g="12 md:3">
 											<StackedNav links={this.generateDocumentList(this.state.documentsList)}	/>
 										</div>
 										<div data-g="12 md:6">
+											<h3 className="mt--0">Comments</h3>
 											<CommentListWithRouter isReviewPage={true} />
 										</div>
-										<div data-g="12 md:3">right</div>
+										<div data-g="12 md:3">
+											<UserContext.Consumer>   
+												{ contextValue => {
+													if (contextValue.isAuthorised) {
+														return (
+															<Fragment>
+																<h3 className="mt--0">Ready to submit</h3>
+																<button
+																	className="btn btn--cta">
+																	Submit your comments
+																</button>
+																<button
+																	className="btn btn--secondary">
+																	Download all comments
+																</button>
+															</Fragment>
+														);
+													} 
+												}}
+											</UserContext.Consumer>
+										</div>
 									</StickyContainer>
 								</div>
 							</ main>
