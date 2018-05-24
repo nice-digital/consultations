@@ -234,6 +234,8 @@ docker cp functional-tests_comments_1:/app/logs ./docker-output
 
 #### Connect to SQL server in docker
 
+when the docker containers are up and running you can connect to the db using sql server management studio
+
 ### Reset credentials when password changes
 
 

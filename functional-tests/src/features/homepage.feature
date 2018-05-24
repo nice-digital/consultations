@@ -35,6 +35,9 @@ Feature: Consultations homepage feature
 		And I add "martingmeta10@gmail.com" to the inputfield "body #Email"
 		And I add "abc123" to the inputfield "body #Password"
 		And I click on the button "body > div.container > div > div.span6.pull-right > div > div.panel-body > form:nth-child(1) > div:nth-child(10) > div > button"
+		Then I wait on element "body .page-header" for 10000ms to exist
+		And I click on the element "body #js-drawer-toggleopen"
+		Then I expect that element "body #sidebar-panel" contains the text "No comments yet"
 
 
 
