@@ -86,7 +86,7 @@ export class CommentList extends Component<PropsType, StateType> {
 
 	loadComments() {
 		if (this.props.isReviewPage){
-			load("review", undefined, [1], {}) // todo: get current consulation id
+			load("review", undefined, [this.props.match.params.consultationId], {}) // todo: maybe this should us source URI instead of id... need to change feed to do this
 		 	.then(				 
 		 	 	res => {
 		 	 		this.setCommentListState(res);
@@ -212,7 +212,7 @@ export class CommentList extends Component<PropsType, StateType> {
 	};
 
 	render() {
-		const commentsToShow = this.state.comments;
+		const commentsToShow = this.state.comments.filter(comment => comment.show);
 		return (
 			<UserContext.Consumer>   
 				{ contextValue => {
@@ -221,7 +221,7 @@ export class CommentList extends Component<PropsType, StateType> {
 						if (commentsToShow.length === 0) return <p>No comments yet</p>;
 						return (
 							<ul className="CommentList list--unstyled">
-								{commentsToShow.filter(comment => comment.show).map((comment, idx) => {
+								{commentsToShow.map((comment, idx) => {
 									return (
 										<CommentBox
 											drawerOpen={this.props.drawerOpen}

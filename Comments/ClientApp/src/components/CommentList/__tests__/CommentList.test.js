@@ -11,6 +11,7 @@ import sampleComments from "./sample";
 import reviewComments from "./reviewComments";
 import EmptyCommentsResponse from "./EmptyCommentsResponse";
 import { nextTick, queryStringToObject } from "../../../helpers/utils";
+//import stringifyObject from "stringify-object";
 
 const mock = new MockAdapter(axios);
 
@@ -30,7 +31,12 @@ describe("[ClientApp] ", () => {
 	describe("CommentList Component", () => {
 		const fakeProps = {
 			match: {
-				url: "/1/1/introduction"
+				url: "/1/1/introduction",
+				params: {
+					consultationId: 1,
+					documentId: 1,
+					chapterSlug: "introduction"
+				}
 			},
 			location: {
 				pathname: ""
@@ -295,7 +301,7 @@ describe("[ClientApp] ", () => {
 
 		it("when mounted with review property then the review endpoint is hit", async done  => {
 			 mock.reset();
-			 console.log(generateUrl("review", undefined, [1], {}));
+			 //console.log(generateUrl("review", undefined, [1], {}));
 			 mock
 			 	.onGet(
 			 		generateUrl("review", undefined, [1], {})
@@ -317,7 +323,12 @@ describe("[ClientApp] ", () => {
 
 		const firstProps = {
 			match: {
-				url: "/1/1/introduction"
+				url: "/1/1/introduction",
+				params: {
+					consultationId: 1,
+					documentId: 1,
+					chapterSlug: "introduction"
+				}
 			},
 			location: {
 				pathname: "1/review",
@@ -346,19 +357,34 @@ describe("[ClientApp] ", () => {
 			wrapper.update();
 
 			expect(wrapper.state().comments.length).toEqual(6);
-			expect(wrapper.find("p").text()).toEqual("No comments yet"); //Fake props has sourceURI but filteredComments == 0
 
-			wrapper.instance().filterComments("?sourceURI=/consultations/1/1/guidance");
+			wrapper.instance().filterComments("?sourceURI=/consultations/1/1/guidance", wrapper.state().comments);
 
 			await nextTick();
 			wrapper.update();
 
-			expect(wrapper.state().filteredComments.length).toEqual(1);
 			expect(wrapper.find("li").length).toEqual(1);
 		});
 
 		it("componentDidUpdate filters by substring comments for review page", async () => {
-					
+			const firstProps = {
+				match: {
+					url: "/1/1/introduction",
+					params: {
+						consultationId: 1,
+						documentId: 1,
+						chapterSlug: "introduction"
+					}
+				},
+				location: {
+					pathname: "1/review",
+					search: "?sourceURI=/consultations/1/1"
+				},
+				comment: {
+					commentId: 1
+				}				
+			};
+
 			mock.reset();
 			mock
 				.onGet(
@@ -375,18 +401,33 @@ describe("[ClientApp] ", () => {
 			wrapper.update();
 
 			expect(wrapper.state().comments.length).toEqual(6);
-			expect(wrapper.find("p").text()).toEqual("No comments yet"); //Fake props has sourceURI but filteredComments == 0
 
-			wrapper.instance().filterComments("?sourceURI=/consultations/1/1");
+			wrapper.instance().filterComments("?sourceURI=/consultations/1/1",  wrapper.state().comments);
 
 			await nextTick();
 			wrapper.update();
 
-			expect(wrapper.state().filteredComments.length).toEqual(2);
 			expect(wrapper.find("li").length).toEqual(2);
 		});
 
 		it("renders 'no comments yet' if URI is supplied and filteredComments array is empty", async () => {
+			const firstProps = {
+				match: {
+					url: "/1/1/introduction",
+					params: {
+						consultationId: 1,
+						documentId: 1,
+						chapterSlug: "introduction"
+					}
+				},
+				location: {
+					pathname: "1/review",
+					search: "?sourceURI=/consultations/1/0"
+				},
+				comment: {
+					commentId: 1
+				}				
+			};
 
 			mock.reset();
 			mock
@@ -404,9 +445,8 @@ describe("[ClientApp] ", () => {
 			wrapper.update();
 
 			expect(wrapper.state().comments.length).toEqual(6);
-			expect(wrapper.find("p").text()).toEqual("No comments yet"); //Fake props has sourceURI but filteredComments == 0
 
-			wrapper.instance().filterComments("?sourceURI=/consultations/1/0");
+			wrapper.instance().filterComments("?sourceURI=/consultations/1/0", wrapper.state().comments);
 
 			await nextTick();
 			wrapper.update();
@@ -417,7 +457,12 @@ describe("[ClientApp] ", () => {
 		it("list all comments if no sourceURI is given", async () => {
 			const firstProps = {
 				match: {
-					url: "/1/1/introduction"
+					url: "/1/1/introduction",
+					params: {
+						consultationId: 1,
+						documentId: 1,
+						chapterSlug: "introduction"
+					}
 				},
 				location: {
 					pathname: "1/review",
@@ -445,7 +490,7 @@ describe("[ClientApp] ", () => {
 
 			expect(wrapper.state().comments.length).toEqual(6);
 
-			wrapper.instance().filterComments(firstProps.location.search);
+			wrapper.instance().filterComments(firstProps.location.search, wrapper.state().comments);
 
 			await nextTick();
 			wrapper.update();

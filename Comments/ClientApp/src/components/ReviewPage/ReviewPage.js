@@ -29,12 +29,12 @@ export class ReviewPage extends Component<PropsType> {
 
 		this.state = {
 			documentsList: [],
-			documentFilter: 1
+			documentFilter: null
 		};
 	}
 
 	getData() {
-		load("documents", undefined, [], { consultationId: 1 })
+		load("documents", undefined, [], { consultationId: this.props.match.params.consultationId })
 			.then(response => {
 				this.setState({
 					documentsList: response.data,
