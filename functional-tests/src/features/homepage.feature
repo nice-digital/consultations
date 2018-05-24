@@ -29,7 +29,7 @@ Feature: Consultations homepage feature
     When I wait on element ".page-header" to exist
     When I click on the button "body #js-drawer-toggleopen"
     #When I set a cookie "__nrpa_2.2" with the content "SJQxrQET32KYHUYHY6eOSLldyy87hHkQpuxX9Sh/Z3k+V2UENlYwe4T5i5CDTf4Ltn2I35Yen+unTSHs08TXcg=="
-    Then I expect that element "body #sidebar-panel" contains the text "To comment on this consultation, sign in to your NICE account or register for a NICE account if you don't yet have one."
+    Then I expect that element "body #sidebar-panel" contains the text "Sign in to your NICE account to comment on this consultation. Don't have an account? Register"
 		When I click on the button "body #sidebar-panel > div > div > div > div > p > a"
 		And I wait on element "body #Email" to exist
 		And I add "martingmeta10@gmail.com" to the inputfield "body #Email"
