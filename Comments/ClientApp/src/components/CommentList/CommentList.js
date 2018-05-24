@@ -8,7 +8,7 @@ import { CommentBox } from "../CommentBox/CommentBox";
 import { LoginBanner } from "./../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
 import { queryStringToObject } from "../../helpers/utils";
-import stringifyObject from "stringify-object";
+//import stringifyObject from "stringify-object";
 
 type PropsType = {
 	staticContext?: any,
@@ -37,12 +37,12 @@ type CommentType = {
 	rangeEnd: string,
 	rangeEndOffset: string,
 	quote: string,
-	commentOn: string
+	commentOn: string,
+	show: boolean
 };
 
 type StateType = {
 	comments: Array<CommentType>,
-	filteredComments: Array<CommentType>,
 	questions: any,
 	loading: boolean
 };
@@ -52,7 +52,6 @@ export class CommentList extends Component<PropsType, StateType> {
 		super(props);
 		this.state = {
 			comments: [],
-			filteredComments: [],
 			questions: [],
 			loading: true
 		};
@@ -80,18 +79,18 @@ export class CommentList extends Component<PropsType, StateType> {
 				filteredComments: [],
 				questions: preloaded.questions
 			};
+			//console.log(`preloaded.comments: ${preloaded.comments}`);
 		}
 
 	}
 
 	loadComments() {
 		if (this.props.isReviewPage){
-			load("review", undefined, [1], {}) // todo: get the consultation id from the route "[1]"
+			load("review", undefined, [1], {}) // todo: get current consulation id
 		 	.then(				 
 		 	 	res => {
 		 	 		this.setCommentListState(res);
-					});
-			this.filterComments(this.props.location.search);
+					});	
 		} else{
 		 	load("comments", undefined, [], { sourceURI: this.props.match.url }).then(
 		 		res => {
@@ -101,8 +100,10 @@ export class CommentList extends Component<PropsType, StateType> {
 	}
 
 	setCommentListState = (response: any) => {
+		
+		const comments = this.filterComments(this.props.location.search, response.data.comments );
 		this.setState({
-			comments: response.data.comments,
+			comments,
 			questions: response.data.questions,
 			loading: false
 			// isAuthorised: res.data.isAuthorised,
@@ -121,23 +122,21 @@ export class CommentList extends Component<PropsType, StateType> {
 			this.setState({
 				loading: true
 			});
-			if (this.props.isReviewPage){
-				this.filterComments(this.props.location.search);
-			} else{
-				this.loadComments();
-			}
+			this.loadComments();
 		}
 	}
 
-	filterComments = (newSourceURIToFilterBy: string) => {
-		const comments = this.state.comments;
-		const filter = queryStringToObject(newSourceURIToFilterBy);
-		const filteredComments = comments.filter(comment => comment.sourceURI.indexOf(filter.sourceURI) !== -1);
+	filterComments = (newSourceURIToFilterBy: string, comments: Array<CommentType>) => {
+		let filterBy = queryStringToObject(newSourceURIToFilterBy);
+		if (filterBy.sourceURI == null) filterBy = { sourceURI: "" };
+		const idsOfFilteredComments = comments.filter(comment => comment.sourceURI.indexOf(filterBy.sourceURI) !== -1).map(comment => comment.commentId);
 
-		this.setState({
-			loading: false,
-			filteredComments: filteredComments
+		const commentsWithFilteredAttr = comments.map(comment => {
+			comment.show = idsOfFilteredComments.includes(comment.commentId);
+			return comment;
 		});
+
+		return commentsWithFilteredAttr;
 	}
 
 	newComment(newComment: CommentType) {
@@ -212,39 +211,30 @@ export class CommentList extends Component<PropsType, StateType> {
 		this.setState({ comments });
 	};
 
-	listCommentBoxes = (commentList: Array<CommentType>) => {
-		return (
-			<ul className="CommentList list--unstyled">
-				{commentList.map((comment, idx) => {
-					return (
-						<CommentBox
-							drawerOpen={this.props.drawerOpen}
-							key={comment.commentId}
-							unique={`Comment${idx}`}
-							comment={comment}
-							saveHandler={this.saveCommentHandler}
-							deleteHandler={this.deleteCommentHandler}
-						/>
-					);
-				})}
-			</ul>
-		);
-	}
-
 	render() {
+		const commentsToShow = this.state.comments;
 		return (
-			<UserContext.Consumer>
+			<UserContext.Consumer>   
 				{ contextValue => {
 					if (this.state.loading) return <p>Loading</p>;
 					if (contextValue.isAuthorised) {
-						if (this.state.comments.length === 0) return <p>No comments yet</p>;
-
-						if (queryStringToObject(this.props.location.search).sourceURI == null) {
-							return this.listCommentBoxes(this.state.comments);
-						} else {
-							if (this.state.filteredComments.length === 0) return <p>No comments yet</p>;
-							return this.listCommentBoxes(this.state.filteredComments);
-						}
+						if (commentsToShow.length === 0) return <p>No comments yet</p>;
+						return (
+							<ul className="CommentList list--unstyled">
+								{commentsToShow.filter(comment => comment.show).map((comment, idx) => {
+									return (
+										<CommentBox
+											drawerOpen={this.props.drawerOpen}
+											key={comment.commentId}
+											unique={`Comment${idx}`}
+											comment={comment}
+											saveHandler={this.saveCommentHandler}
+											deleteHandler={this.deleteCommentHandler}
+										/>
+									);
+								})}
+							</ul>
+						);
 					} else {
 						return <LoginBanner signInButton={true} currentURL={this.props.match.url} signInURL={contextValue.signInURL} registerURL={contextValue.registerURL}/>;
 					}

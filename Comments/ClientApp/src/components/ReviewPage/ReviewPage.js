@@ -47,7 +47,6 @@ export class ReviewPage extends Component<PropsType> {
 	}
 
 	generateDocumentList = (documentsList: Array<DocumentType>) =>{
-		//filter here maybe?
 		let documentLinks = documentsList.filter(docs => docs.supportsComments)
 			.map(
 				(consultationDocument) => {
@@ -133,7 +132,7 @@ export class ReviewPage extends Component<PropsType> {
 									<Header
 										title="Unstable angina and NSTEMI: early management"
 										reference="GID-TA10232"
-										endDate="31 May 2018"
+										endDate=""
 										onNewCommentClick={this.onNewCommentClick()}
 										url="1/1/Introduction"
 									/>
@@ -146,7 +145,17 @@ export class ReviewPage extends Component<PropsType> {
 											<h2 className="title">Comments</h2>
 											<CommentListWithRouter isReviewPage={true} />
 										</div>
-										<div data-g="12 md:3">right</div>
+										<div data-g="12 md:3">
+											<h3>Ready to submit</h3>
+											<button
+												className="btn btn--cta">
+												Submit your comments
+											</button>
+											<button
+												className="btn btn--secondary">
+												Download all comments
+											</button>
+										</div>
 									</StickyContainer>
 								</div>
 							</ main>
