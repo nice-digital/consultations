@@ -60,7 +60,9 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 	}
 
 	componentDidMount() {
-		//this.loadUser();
+		if (!this.state.isAuthorised) {  //this shouldn't be needed..
+			this.loadUser();
+		}
 	}
 
 	render() {
