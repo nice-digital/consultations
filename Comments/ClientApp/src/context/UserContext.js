@@ -26,15 +26,24 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 	constructor(props: PropsType) {
 		super(props);
 
+		this.state = {
+			isAuthorised: false,
+			displayName: "",
+			signInURL: "",
+			registerURL: ""
+		};
+
 		const isServerSideRender = (this.props.staticContext && this.props.staticContext.preload);		
 		const preloadSource = isServerSideRender ? this.props.staticContext.preload.data : window.__PRELOADED__; //TODO: extract this preloaded line out to (or near) the preload endpoint method.
 
-		this.state = {
-			isAuthorised: preloadSource.isAuthorised,
-			displayName: preloadSource.displayName,
-			signInURL: preloadSource.signInURL,
-			registerURL: preloadSource.registerURL
-		};
+		if (preloadSource){
+			this.state = {
+				isAuthorised: preloadSource.isAuthorised,
+				displayName: preloadSource.displayName,
+				signInURL: preloadSource.signInURL,
+				registerURL: preloadSource.registerURL
+			};
+		} 
 	}
 
 	loadUser = () => {

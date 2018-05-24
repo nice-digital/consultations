@@ -58,12 +58,8 @@ export class CommentList extends Component<PropsType, StateType> {
 		let preloadedData = {};
 		if (this.props.staticContext && this.props.staticContext.preload) {
 			preloadedData = this.props.staticContext.preload.data;
-
-			//console.log('setting is authorised to:' + preloadedData.isAuthorised);
-			// this.state.isAuthorised = preloadedData.isAuthorised;
 		}
 
-		//console.log(`preloadedData: ${stringifyObject(preloadedData)}`);
 		const preloaded = preload(
 			this.props.staticContext,
 			"comments",
@@ -79,9 +75,7 @@ export class CommentList extends Component<PropsType, StateType> {
 				filteredComments: [],
 				questions: preloaded.questions
 			};
-			//console.log(`preloaded.comments: ${preloaded.comments}`);
 		}
-
 	}
 
 	loadComments() {

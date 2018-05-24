@@ -30,23 +30,10 @@ export class ReviewPage extends Component<PropsType> {
 
 		this.state = {
 			documentsList: [],
-			documentFilter: null,
 			consultationData: null
 		};
 	}
 
-	getData() {
-		load("documents", undefined, [], { consultationId: this.props.match.params.consultationId })
-			.then(response => {
-				this.setState({
-					documentsList: response.data,
-					documentFilter: this.getCurrentSourceURI()
-				});
-			})
-			.catch(err => {
-				throw new Error("documentsData " + err);
-			});
-	}
 
 	gatherData = async () => {
 		const consultationId = this.props.match.params.consultationId;
@@ -94,34 +81,18 @@ export class ReviewPage extends Component<PropsType> {
 		};
 	};
 
-	// componentDidMount(){
-	// 	this.getData();
-	// }
-
 	componentDidMount() {
 		// if (!this.state.hasInitialData) {
 		this.gatherData()
 			.then(data => {
 				this.setState({
-					...data,
-					documentFilter: this.getCurrentSourceURI()
+					...data
 				});
 			})
 			.catch(err => {
 				throw new Error("gatherData in componentDidMount failed " + err);
 			});
 		// }
-	}
-
-	componentDidUpdate(prevProps){
-		const oldDocId = queryStringToObject(prevProps.location.search).documentId;
-		const newDocId = queryStringToObject(this.props.location.search).documentId;
-
-		if (oldDocId !== newDocId) {
-			this.setState({
-				documentFilter: newDocId
-			});
-		}
 	}
 
 	getCurrentSourceURI = () => {
