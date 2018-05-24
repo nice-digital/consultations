@@ -46,7 +46,8 @@ describe("[ClientApp] ", () => {
 
 			const returnValue = reviewPage.generateDocumentList(docTypesIn);
 
-			expect(returnValue.links.length).toEqual(2);				
+			//generateDocumentList unshifts 'All document comments' onto the array so result is docTypesIn + 1
+			expect(returnValue.links.length).toEqual(3);				
 		});
 
 		it("generateDocumentList filters out documents not supporting comments", async () => {
@@ -59,7 +60,7 @@ describe("[ClientApp] ", () => {
 
 			const returnValue = reviewPage.generateDocumentList(docTypesIn);
 
-			expect(returnValue.links.length).toEqual(1);				
+			expect(returnValue.links.length).toEqual(2);				
 		});
 	});
 });
