@@ -6,18 +6,21 @@ config.services = [];
 
 // Run headless on TeamCity
 config.capabilities = [
-    {
-        browserName: "chrome",
-        chromeOptions: {
-            args: ["--headless", "--window-size=1366,768"]
-        }
-    },
-    {
+     {
+         browserName: "chrome",
+         chromeOptions: {
+             args: ["--headless", "--window-size=1366,768"]
+         }
+     },
+    /* {
         browserName: "firefox",
         "moz:firefoxOptions": {
-            args: ["-headless"]
+			args: ["-headless"],
+			prefs: {
+				"security.warn_viewing_mixed": false
+			}
         }
-    }
+    } */
 ];
 
 config.reporters = ["spec", "teamcity"];
