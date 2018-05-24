@@ -17,7 +17,8 @@ type PropsType = {
 		params: any
 	},
 	location: {
-		pathname: string
+		pathname: string,
+		search: string
 	},
 	drawerOpen: boolean,
 	isReviewPage: boolean,
@@ -46,6 +47,8 @@ type StateType = {
 	questions: any,
 	loading: boolean
 };
+
+type ContextType = any;
 
 export class CommentList extends Component<PropsType, StateType> {
 	constructor(props: PropsType) {
@@ -208,8 +211,8 @@ export class CommentList extends Component<PropsType, StateType> {
 	render() {
 		const commentsToShow = this.state.comments.filter(comment => comment.show);
 		return (
-			<UserContext.Consumer>   
-				{ contextValue => {
+			<UserContext.Consumer>
+				{ (contextValue: ContextType) => {
 					if (this.state.loading) return <p>Loading</p>;
 					if (contextValue.isAuthorised) {
 						if (commentsToShow.length === 0) return <p>No comments yet</p>;

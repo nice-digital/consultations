@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 
 import DocumentWithRouter from "../Document/Document";
-import { Drawer } from "../Drawer/Drawer";
+import DrawerWithRouter from "../Drawer/Drawer";
 
 export class DocumentView extends Component {
 	constructor() {
@@ -20,7 +20,7 @@ export class DocumentView extends Component {
 		return (
 			<Fragment>
 				{/* "ref" ties the <Drawer /> component to React.createRef() above*/}
-				<Drawer ref={this.drawer} />
+				<DrawerWithRouter ref={this.drawer} />
 				{/* Passing the function we're using from <Drawer /> to DocWithRouter via props*/}
 				<DocumentWithRouter onNewCommentClick={this.newCommentHandler} />
 			</Fragment>
