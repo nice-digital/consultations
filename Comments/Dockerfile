@@ -19,6 +19,15 @@ RUN curl -SL "$NODE_DOWNLOAD_URL" --output nodejs.tar.gz \
 RUN node -v
 RUN npm -v
 
+RUN apt-get update
+RUN apt-get install -y openssl
+RUN openssl version
+RUN openssl genrsa -passout pass:x -out server.pass.key 2048
+RUN openssl rsa -passin pass:x -in server.pass.key -out server.key
+RUN	rm server.pass.key
+RUN	openssl req -new -key server.key -out server.csr -subj "/C=UK/ST=Warwickshire/L=Leamington/O=OrgName/OU=IT Department/CN=example.com"
+RUN openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
+
 # Install jq for JSON file replacement and nc for checking sql port is available
 RUN apt-get update && apt-get install jq -y \
   && rm -rf /var/lib/apt/lists/*
@@ -42,7 +51,7 @@ COPY ./published-app/ClientApp/package.json ./app/ClientApp/
 WORKDIR /app/ClientApp
 RUN npm i --production
 
-# Copy .net app to a location on container and run application 
+# Copy .net app to a location on container and run application
 WORKDIR /app
 
 # Script for running the dotnet app and setting appsettings.json values
