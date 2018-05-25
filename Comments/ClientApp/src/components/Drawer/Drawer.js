@@ -123,12 +123,6 @@ export class Drawer extends Component<PropsType, StateType> {
 				</div>
 				{/* #sidebar-panel necessary here for pulling keyboard focus */}
 				<div id="sidebar-panel" className="Drawer__main">
-					<div className="grid">
-						<h1 data-g="6" id="commenting-panel" className="p">Comments panel</h1>
-						<p data-g="6">
-							<Link to={`/${this.props.match.params.consultationId}/review`} className="right">Review all comments</Link>
-						</p>
-					</div>
 					{/*wrappedComponentRef exposes the underlying, unwrapped component*/}
 					<CommentListWithRouter isReviewPage={false}
 										   drawerOpen={this.state.drawerOpen}
@@ -141,4 +135,4 @@ export class Drawer extends Component<PropsType, StateType> {
 	}
 }
 
-export default withRouter(Drawer);
+export default Drawer;
