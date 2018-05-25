@@ -9,7 +9,7 @@ Background:
 Scenario: User not signed in signs in
     When I wait on element ".page-header" to exist
     When I click on the button "body #js-drawer-toggleopen"
-    Then I expect that element "body #sidebar-panel" contains the text "Sign in to your NICE account to comment on this consultation. Don't have an account? Register"
+    Then I expect that element "body #sidebar-panel" contains the text "nSign in to your NICE account to comment on this consultation. Don't have an account? Register"
 		When I click on the button "body #sidebar-panel > div > div > div > div > p > a"
 		And I wait on element "body #Email" to exist
 		And I add "martingmeta10@gmail.com" to the inputfield "body #Email"
