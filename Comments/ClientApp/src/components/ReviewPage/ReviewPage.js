@@ -64,7 +64,7 @@ export class ReviewPage extends Component<PropsType> {
 				(consultationDocument) => {
 					return {
 						label: consultationDocument.title,
-						url: `${this.props.location.pathname}?sourceURI=${consultationDocument.sourceURI}`,
+						url: `${this.props.location.pathname}?sourceURI=${encodeURIComponent(consultationDocument.sourceURI)}`,
 						current: this.getCurrentSourceURI() === consultationDocument.sourceURI
 					};
 				}
@@ -97,6 +97,7 @@ export class ReviewPage extends Component<PropsType> {
 
 	getCurrentSourceURI = () => {
 		const queryParams = queryStringToObject(this.props.location.search);
+		console.log(queryParams.sourceURI)
 		return queryParams.sourceURI;
 	};
 

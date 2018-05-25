@@ -38,8 +38,7 @@ type CommentType = {
 	rangeEnd: string,
 	rangeEndOffset: string,
 	quote: string,
-	commentOn: string,
-	show: boolean
+	commentOn: string
 };
 
 type StateType = {
@@ -107,8 +106,14 @@ export class CommentList extends Component<PropsType, StateType> {
 	}
 
 	setCommentListState = (response: any) => {
+		let unfilteredComments = response.data.comments;
+		unfilteredComments.map(comment => {
+			comment.show = true;
+			return comment;
+		});
 		
-		const comments = this.filterComments(this.props.location.search, response.data.comments );
+		const comments = this.filterComments(this.props.location.search, unfilteredComments);
+
 		this.setState({
 			comments,
 			questions: response.data.questions,
@@ -121,27 +126,32 @@ export class CommentList extends Component<PropsType, StateType> {
 	}
 
 	componentDidUpdate(prevProps: PropsType) {
-		const oldRoute = prevProps.location.pathname + prevProps.location.search;
-		const newRoute = this.props.location.pathname + this.props.location.search;
-		if (oldRoute !== newRoute) {
-			this.setState({
-				loading: true
-			});
-			this.loadComments();
+		const currentURL = prevProps.location.pathname + prevProps.location.search;
+		const newURL = this.props.location.pathname + this.props.location.search;
+
+		if (currentURL !== newURL) {
+			if (this.props.isReviewPage) {
+				this.setState({
+					comments: this.filterComments(this.props.location.search, this.state.comments)
+				});			
+			} else {
+				this.setState({
+					loading: true
+				});
+				this.loadComments();
+			}
 		}
 	}
 
 	filterComments = (newSourceURIToFilterBy: string, comments: Array<CommentType>) => {
 		let filterBy = queryStringToObject(newSourceURIToFilterBy);
 		if (filterBy.sourceURI == null) filterBy = { sourceURI: "" };
-		const idsOfFilteredComments = comments.filter(comment => comment.sourceURI.indexOf(filterBy.sourceURI) !== -1).map(comment => comment.commentId);
+		const idofCommentsToShow = comments.filter(comment => comment.sourceURI.indexOf(filterBy.sourceURI) !== -1).map(comment => comment.commentId);
 
-		const commentsWithFilteredAttr = comments.map(comment => {
-			comment.show = !idsOfFilteredComments.includes(comment.commentId);
+		return comments.map(comment => {
+			comment.show = idofCommentsToShow.includes(comment.commentId);
 			return comment;
 		});
-
-		return commentsWithFilteredAttr;
 	}
 
 	newComment(newComment: CommentType) {
@@ -158,7 +168,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		}
 		const generatedComment = Object.assign({}, newComment, {
 			commentId: idToUseForNewBox,
-			show: false
+			show: true
 		});
 		comments.unshift(generatedComment);
 		this.setState({ comments });
@@ -182,6 +192,7 @@ export class CommentList extends Component<PropsType, StateType> {
 						.indexOf(comment.commentId);
 					const comments = this.state.comments;
 					comments[index] = res.data;
+					comments[index].show = true;
 					this.setState({
 						comments
 					});
@@ -218,7 +229,7 @@ export class CommentList extends Component<PropsType, StateType> {
 	};
 
 	render() {
-		const commentsToShow = this.state.comments.filter(comment => !comment.show);
+		const commentsToShow = this.state.comments.filter(comment => comment.show);
 		return (
 			<UserContext.Consumer>
 				{ (contextValue: ContextType) => {
