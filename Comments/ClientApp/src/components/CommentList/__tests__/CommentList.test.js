@@ -1,7 +1,7 @@
 /* global jest */
 
 import React from "react";
-import { mount } from "enzyme";
+import { mount, shallow } from "enzyme";
 import { MemoryRouter } from "react-router";
 import CommentListWithRouter, { CommentList } from "../CommentList";
 import axios from "axios";
@@ -43,7 +43,8 @@ describe("[ClientApp] ", () => {
 			},
 			comment: {
 				commentId: 1
-			}
+			},
+			isReviewPage: false
 		};
 
 		afterEach(() => {
@@ -71,17 +72,16 @@ describe("[ClientApp] ", () => {
 
 		it("renders the 'no comments' message if the comments array is empty", async () => {
 			mock.onAny().reply(200, { comments: [] });
-			const wrapper = mount(<CommentList {...fakeProps} />);
+			const wrapper = mount(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>);
 			await nextTick();
 			wrapper.update();
-			expect(wrapper.find("p").text()).toEqual("No comments yet");
+			expect(wrapper.find("p").last().text()).toEqual("No comments yet");
 		});
 
 		it("has state with an empty array of comments", () => {
 			mock.onAny().reply(200, { comments: [] });
-			const wrapper = mount(<CommentList {...fakeProps} />);
-			const state = wrapper.state();
-			expect(Array.isArray(state.comments)).toEqual(true);
+			const wrapper = shallow(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>).find("CommentList").dive();
+			expect(Array.isArray(wrapper.state().comments)).toEqual(true);
 		});
 
 		it("should make an api call with the correct path and query string", () => {
@@ -98,7 +98,7 @@ describe("[ClientApp] ", () => {
 					);
 					return [200, { comments: [] }];
 				});
-			mount(<CommentList {...fakeProps} />);
+			mount(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>);
 		});
 
 		it("save handler put's to the api with updated comment from state", async done => {
@@ -120,8 +120,8 @@ describe("[ClientApp] ", () => {
 				)
 				.reply(200, sampleComments);
 			//console.log(sampleComments);
-			const wrapper = mount(<CommentList {...fakeProps} />);
-			wrapper.instance().saveCommentHandler(new Event("click"), commentToUpdate);
+			const wrapper = mount(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>);
+			wrapper.find("CommentList").instance().saveCommentHandler(new Event("click"), commentToUpdate);
 		});
 
 		it("save handler updates the correct item in the comments array once the api has returned new data", async () => {
@@ -141,7 +141,7 @@ describe("[ClientApp] ", () => {
 					})
 				)
 				.reply(200, sampleComments);
-			const wrapper = mount(<CommentList {...fakeProps} />);
+			const wrapper = shallow(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>).find("CommentList").dive();
 			wrapper.instance().saveCommentHandler(new Event("click"), commentToUpdate);
 			await nextTick();
 			wrapper.update();
@@ -155,7 +155,7 @@ describe("[ClientApp] ", () => {
 			mock.onAny().reply(() => {
 				return [200, { comments: [] }];
 			});
-			const wrapper = mount(<CommentList {...fakeProps} />);
+			const wrapper = shallow(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>).find("CommentList").dive();
 			expect(wrapper.state().comments.length).toEqual(0);
 			wrapper.instance().newComment({});
 			expect(wrapper.state().comments.length).toEqual(1);
@@ -167,7 +167,7 @@ describe("[ClientApp] ", () => {
 			mock.onAny().reply(() => {
 				return [200, { comments: [] }];
 			});
-			const wrapper = mount(<CommentList {...fakeProps} />);
+			const wrapper = shallow(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>).find("CommentList").dive();
 			expect(wrapper.state().comments.length).toEqual(0);
 			wrapper.instance().newComment({});
 			wrapper.instance().newComment({});
@@ -185,7 +185,7 @@ describe("[ClientApp] ", () => {
 					})
 				)
 				.reply(200, sampleComments);
-			const wrapper = mount(<CommentList {...fakeProps} />);
+			const wrapper = shallow(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>).find("CommentList").dive();
 			expect(wrapper.state().comments.length).toEqual(0);
 			wrapper.instance().newComment({});
 			wrapper.instance().newComment({});
@@ -217,8 +217,8 @@ describe("[ClientApp] ", () => {
 					return [200, commentToInsert];
 				});
 
-			const wrapper = mount(<CommentList {...fakeProps} />);
-			wrapper.instance().saveCommentHandler(new Event("click"), commentToInsert);
+			const wrapper = mount(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>);
+			wrapper.find("CommentList").instance().saveCommentHandler(new Event("click"), commentToInsert);
 		});
 
 		it("delete handler called with negative number removes item from array", async () => {
@@ -231,7 +231,7 @@ describe("[ClientApp] ", () => {
 				)
 				.reply(200, sampleComments);
 
-			const wrapper = mount(<CommentList {...fakeProps} />);
+			const wrapper = shallow(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>).find("CommentList").dive();
 
 			await nextTick();
 			wrapper.update();
@@ -272,7 +272,7 @@ describe("[ClientApp] ", () => {
 					return [200, {}];
 				});
 
-			const wrapper = mount(<CommentList {...fakeProps} />);
+			const wrapper = shallow(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>).find("CommentList").dive();
 			await nextTick();
 			wrapper.update();
 
@@ -358,7 +358,7 @@ describe("[ClientApp] ", () => {
 
 			expect(wrapper.state().comments.length).toEqual(6);
 
-			wrapper.instance().filterComments("?sourceURI=/consultations/1/1/guidance", wrapper.state().comments);
+			wrapper.find("CommentList").instance().filterComments("?sourceURI=/consultations/1/1/guidance", wrapper.state().comments);
 
 			await nextTick();
 			wrapper.update();
@@ -402,7 +402,7 @@ describe("[ClientApp] ", () => {
 
 			expect(wrapper.state().comments.length).toEqual(6);
 
-			wrapper.instance().filterComments("?sourceURI=/consultations/1/1",  wrapper.state().comments);
+			wrapper.find("CommentList").instance().filterComments("?sourceURI=/consultations/1/1",  wrapper.state().comments);
 
 			await nextTick();
 			wrapper.update();
@@ -446,7 +446,7 @@ describe("[ClientApp] ", () => {
 
 			expect(wrapper.state().comments.length).toEqual(6);
 
-			wrapper.instance().filterComments("?sourceURI=/consultations/1/0", wrapper.state().comments);
+			wrapper.find("CommentList").instance().filterComments("?sourceURI=/consultations/1/0", wrapper.state().comments);
 
 			await nextTick();
 			wrapper.update();
@@ -490,7 +490,7 @@ describe("[ClientApp] ", () => {
 
 			expect(wrapper.state().comments.length).toEqual(6);
 
-			wrapper.instance().filterComments(firstProps.location.search, wrapper.state().comments);
+			wrapper.find("CommentList").instance().filterComments(firstProps.location.search, wrapper.state().comments);
 
 			await nextTick();
 			wrapper.update();
