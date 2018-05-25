@@ -63,13 +63,23 @@ export class CommentList extends Component<PropsType, StateType> {
 			preloadedData = this.props.staticContext.preload.data;
 		}
 
-		const preloaded = preload(
-			this.props.staticContext,
-			"comments",
-			[],
-			{ sourceURI: this.props.match.url },
-			preloadedData
-		);
+		// if (this.props.isReviewPage){
+		// 	const preloaded = preload(
+		// 		this.props.staticContext,
+		// 		"review",
+		// 		[],
+		// 		{ sourceURI: this.props.match.url },
+		// 		preloadedData
+		// 	);
+		// } else{	
+			const preloaded = preload(
+				this.props.staticContext,
+				"comments",
+				[],
+				{ sourceURI: this.props.match.url },
+				preloadedData
+			);
+		// }
 
 		if (preloaded) {
 			this.state = {
@@ -103,8 +113,6 @@ export class CommentList extends Component<PropsType, StateType> {
 			comments,
 			questions: response.data.questions,
 			loading: false
-			// isAuthorised: res.data.isAuthorised,
-			// signInURL: res.data.signInURL
 		});
 	}
 
@@ -129,7 +137,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		const idsOfFilteredComments = comments.filter(comment => comment.sourceURI.indexOf(filterBy.sourceURI) !== -1).map(comment => comment.commentId);
 
 		const commentsWithFilteredAttr = comments.map(comment => {
-			comment.show = idsOfFilteredComments.includes(comment.commentId);
+			comment.show = !idsOfFilteredComments.includes(comment.commentId);
 			return comment;
 		});
 
@@ -149,7 +157,8 @@ export class CommentList extends Component<PropsType, StateType> {
 			comments = [];
 		}
 		const generatedComment = Object.assign({}, newComment, {
-			commentId: idToUseForNewBox
+			commentId: idToUseForNewBox,
+			show: false
 		});
 		comments.unshift(generatedComment);
 		this.setState({ comments });
@@ -209,7 +218,7 @@ export class CommentList extends Component<PropsType, StateType> {
 	};
 
 	render() {
-		const commentsToShow = this.state.comments.filter(comment => comment.show);
+		const commentsToShow = this.state.comments.filter(comment => !comment.show);
 		return (
 			<UserContext.Consumer>
 				{ (contextValue: ContextType) => {
