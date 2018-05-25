@@ -55,9 +55,15 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 						displayName: res.data.displayName,
 						signInURL: res.data.signInURL,
 						registerURL: res.data.registerURL
-					});
+					}, this.totalHack);
 				}
 			);
+	}
+
+	totalHack = () => {
+		if (!this.state.isAuthorised) {
+			setTimeout(this.loadUser, 1000);
+		}
 	}
 
 	componentDidUpdate(prevProps: PropsType) {
