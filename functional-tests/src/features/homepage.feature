@@ -21,7 +21,7 @@ Feature: Consultations homepage feature
 
   Scenario: Comment Panel can be rolled down
     When I wait on element ".page-header" to exist
-    Given I expect that element "body #sidebar-panel" is not visible
+    Given I expect that element "body #sidebar-panel" is not within the viewport
     When I click on the element "body #js-drawer-toggleopen"
     Then I expect that element "body #sidebar-panel" is visible
 
