@@ -223,7 +223,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			<UserContext.Consumer>
 				{ (contextValue: ContextType) => {
 					return (
-						<Fragment>
+						<div>
 
 							{!this.props.isReviewPage ? 
 								<div className="grid">
@@ -236,7 +236,7 @@ export class CommentList extends Component<PropsType, StateType> {
 								</div> : null
 							}
 
-							{this.state.loading ? <p>Loading...</p> : 
+							{this.state.loading ? <p>Loading...</p> :
 								
 								contextValue.isAuthorised ? 
 							
@@ -264,7 +264,8 @@ export class CommentList extends Component<PropsType, StateType> {
 										registerURL={contextValue.registerURL}
 									/>
 							}
-						</Fragment>
+
+						</div>
 					);
 				}}
 			</UserContext.Consumer>
