@@ -55,16 +55,16 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 						displayName: res.data.displayName,
 						signInURL: res.data.signInURL,
 						registerURL: res.data.registerURL
-					}, this.totalHack);
+					}); //, this.totalHack);
 				}
 			);
 	}
 
-	totalHack = () => { //this _shouldn't_ be needed any more..
-		if (!this.state.isAuthorised) {
-			setTimeout(this.loadUser, 3000);
-		}
-	}
+	//totalHack = () => { //this _shouldn't_ be needed any more..
+	//	if (!this.state.isAuthorised) {
+	//		setTimeout(this.loadUser, 3000);
+	//	}
+	//}
 
 	componentDidUpdate(prevProps: PropsType) {
 		const oldRoute = prevProps.location.pathname;
@@ -75,9 +75,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 	}
 
 	componentDidMount() {
-		//if (!this.state.isAuthorised) {  //this shouldn't be needed..
-			this.loadUser(); //this is currently needed as the sign in url isn't right on SSR.
-		//}
+		this.loadUser(); //this is currently only needed as the sign in url isn't right on SSR. TODO: fix SSR.
 	}
 
 	render() {
