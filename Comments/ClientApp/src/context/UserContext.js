@@ -60,9 +60,9 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 			);
 	}
 
-	totalHack = () => {
+	totalHack = () => { //this _shouldn't_ be needed any more..
 		if (!this.state.isAuthorised) {
-			setTimeout(this.loadUser, 1000);
+			setTimeout(this.loadUser, 3000);
 		}
 	}
 
@@ -76,7 +76,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 
 	componentDidMount() {
 		//if (!this.state.isAuthorised) {  //this shouldn't be needed..
-			this.loadUser();
+			this.loadUser(); //this is currently needed as the sign in url isn't right on SSR.
 		//}
 	}
 
