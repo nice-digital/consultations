@@ -107,11 +107,11 @@ export class ReviewPage extends Component<PropsType> {
 		return [
 			{
 				label: "All Consultations",
-				url: "https://alpha.nice.org.uk/guidance/inconsultation" // todo: link to current consultation "consultation list page" on dev?
+				url: "#"
 			},
 			{
-				label: "Consultation", // todo: consultation overview link to come from API endpoint
-				url: "https://alpha.nice.org.uk/guidance/indevelopment/gid-dg10046/consultation/html-content" // todo: demo - hardcoded to jane's overview
+				label: "Consultation",
+				url: "https://alpha.nice.org.uk/guidance/indevelopment/gid-ng10103/consultation/html-content"
 			},
 			{
 				label: "Documents",
@@ -157,7 +157,7 @@ export class ReviewPage extends Component<PropsType> {
 											<CommentListWithRouter isReviewPage={true} />
 										</div>
 										<div data-g="12 md:3">
-											<UserContext.Consumer>   
+											<UserContext.Consumer>
 												{ contextValue => {
 													if (contextValue.isAuthorised) {
 														return (
@@ -173,7 +173,7 @@ export class ReviewPage extends Component<PropsType> {
 																</button>
 															</Fragment>
 														);
-													} 
+													}
 												}}
 											</UserContext.Consumer>
 										</div>
