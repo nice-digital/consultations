@@ -116,10 +116,6 @@ export class ReviewPage extends Component<PropsType> {
 		];
 	};
 
-	onNewCommentClick = () => {
-		return null;
-	};
-
 	submitConsultation = () => {
 		this.setState({
 			isSubmitted: true
@@ -146,7 +142,6 @@ export class ReviewPage extends Component<PropsType> {
 										title={title}
 										reference={reference}
 										endDate={endDate}
-										onNewCommentClick={this.onNewCommentClick()}
 									/>
 									<h2 className="mt--0">Comments for review</h2>
 									<StickyContainer className="grid">
