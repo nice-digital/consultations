@@ -97,8 +97,9 @@ export class ReviewPage extends Component<PropsType> {
 
 	getBreadcrumbs = () => {
 		const { consultationId } = this.props.match.params;
-		const consultationsFirstDocument = this.state.documentsList[0].documentId;
-		const firstDocumentChapterSlug = this.state.documentsList[0].chapters[0].slug;
+		const firstCommentableDocument = this.state.documentsList.filter(doc => doc.supportsComments)[0]; //todo: this whole function needs to get it's content from the feed.
+		const consultationsFirstDocument = firstCommentableDocument.documentId;
+		const firstDocumentChapterSlug = firstCommentableDocument.chapters[0].slug;
 		return [
 			{
 				label: "All Consultations",
