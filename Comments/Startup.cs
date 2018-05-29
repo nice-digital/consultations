@@ -199,9 +199,6 @@ namespace Comments
 
                 spa.UseSpaPrerendering(options =>
                 {
-
-                    
-
                     options.ExcludeUrls = new[] { "/sockjs-node" };
                     // Pass data in from .NET into the SSR. These come through as `params` within `createServerRenderer` within the server side JS code.
                     // See https://docs.microsoft.com/en-us/aspnet/core/spa/angular?tabs=visual-studio#pass-data-from-net-code-into-typescript-code
@@ -216,11 +213,12 @@ namespace Comments
                         }
                         data["isAuthorised"] = context.User.Identity.IsAuthenticated;
 	                    data["displayName"] = context.User.Identity.Name;
-						data["signInURL"] = authenticateService.GetLoginURL(context.Request.Path);
-	                    data["registerURL"] = authenticateService.GetRegisterURL(context.Request.Path);
-						//data["user"] = context.User; - possible security implications here, surfacing claims to the front end. might be ok, if just server-side.
-						// Pass further data in e.g. user/authentication data
-					};
+	                    data["signInURL"] = authenticateService.GetLoginURL(); //context.Request.Path);
+	                    data["registerURL"] = authenticateService.GetRegisterURL(); //context.Request.Path);
+	                    data["requestURL"] = context.Request.Path;
+	                    //data["user"] = context.User; - possible security implications here, surfacing claims to the front end. might be ok, if just server-side.
+	                    // Pass further data in e.g. user/authentication data
+                    };
                     options.BootModulePath = $"{spa.Options.SourcePath}/src/server/index.js";
                 });
 
