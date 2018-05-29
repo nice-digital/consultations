@@ -50,7 +50,8 @@ export const serverRenderer = (params): Promise => {
 					isAuthorised: params.data.isAuthorised,
 					displayName: params.data.displayName,
 					signInURL: params.data.signInURL,
-					registerURL: params.data.registerURL
+					registerURL: params.data.registerURL,
+					requestURL: params.data.requestURL
 				}, // Key value pairs of preloaded data sets
 				loaders: [] // List of promises where we track preloading data
 			},
