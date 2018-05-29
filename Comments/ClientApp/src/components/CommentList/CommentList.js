@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { withRouter, Link } from "react-router-dom";
 import { load } from "./../../data/loader";
 import preload from "../../data/pre-loader";
@@ -8,7 +8,6 @@ import { CommentBox } from "../CommentBox/CommentBox";
 import { LoginBanner } from "./../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
 import { queryStringToObject } from "../../helpers/utils";
-import "core-js/fn/array/includes";
 //import stringifyObject from "stringify-object";
 
 type PropsType = {
@@ -139,7 +138,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		const idsOfFilteredComments = comments.filter(comment => comment.sourceURI.indexOf(filterBy.sourceURI) !== -1).map(comment => comment.commentId);
 
 		const commentsWithFilteredAttr = comments.map(comment => {
-			comment.show = !idsOfFilteredComments.coreIncludes(comment.commentId);
+			comment.show = !idsOfFilteredComments.includes(comment.commentId);
 			return comment;
 		});
 
