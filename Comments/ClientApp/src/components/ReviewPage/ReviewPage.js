@@ -64,7 +64,7 @@ export class ReviewPage extends Component<PropsType> {
 				(consultationDocument) => {
 					return {
 						label: consultationDocument.title,
-						url: `${this.props.location.pathname}?sourceURI=${consultationDocument.sourceURI}`,
+						url: `${this.props.location.pathname}?sourceURI=${encodeURIComponent(consultationDocument.sourceURI)}`,
 						current: this.getCurrentSourceURI() === consultationDocument.sourceURI
 					};
 				}
@@ -116,10 +116,6 @@ export class ReviewPage extends Component<PropsType> {
 		];
 	};
 
-	onNewCommentClick = () => {
-		return null;
-	};
-
 	submitConsultation = () => {
 		this.setState({
 			isSubmitted: true
@@ -146,7 +142,6 @@ export class ReviewPage extends Component<PropsType> {
 										title={title}
 										reference={reference}
 										endDate={endDate}
-										onNewCommentClick={this.onNewCommentClick()}
 									/>
 									<h2 className="mt--0">Comments for review</h2>
 									<StickyContainer className="grid">
