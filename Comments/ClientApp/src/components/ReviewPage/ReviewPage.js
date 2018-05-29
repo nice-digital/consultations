@@ -6,7 +6,7 @@ import { Header } from "../Header/Header";
 import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
 import { projectInformation } from "../../constants";
 import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
-import { StickyContainer } from "react-sticky";
+import { StickyContainer, Sticky } from "react-sticky";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { queryStringToObject } from "../../helpers/utils";
 import { UserContext } from "../../context/UserContext";
@@ -69,11 +69,6 @@ export class ReviewPage extends Component<PropsType> {
 					};
 				}
 			);
-
-		documentLinks.unshift({
-			label: "All document comments",
-			url: this.props.location.pathname,
-			current: this.getCurrentSourceURI() == null});
 
 		return {
 			title: "View comments by document",
@@ -150,32 +145,57 @@ export class ReviewPage extends Component<PropsType> {
 									<h2 className="mt--0">Comments for review</h2>
 									<StickyContainer className="grid">
 										<div data-g="12 md:3">
-											<StackedNav links={this.generateDocumentList(this.state.documentsList)}	/>
+											<Sticky disableHardwareAcceleration>
+												{({ style }) => (
+													<div style={style}>
+														<StackedNav links={
+															{
+																title: "All comments in this consultation",
+																links: [
+																	{
+																		label: title,
+																		url: this.props.location.pathname,
+																		current: this.getCurrentSourceURI() == null
+																	}
+																]
+															}
+														}/>
+														<StackedNav
+															links={this.generateDocumentList(this.state.documentsList)}/>
+													</div>
+												)}
+											</Sticky>
 										</div>
 										<div data-g="12 md:6">
 											<h3 className="mt--0">Comments</h3>
-											<CommentListWithRouter isReviewPage={true} />
+											<CommentListWithRouter isReviewPage={true}/>
 										</div>
 										<div data-g="12 md:3">
-											<UserContext.Consumer>
-												{ contextValue => {
-													if (contextValue.isAuthorised) {
-														return (
-															<Fragment>
-																<h3 className="mt--0">Ready to submit</h3>
-																<button
-																	className="btn btn--cta">
-																	Submit your comments
-																</button>
-																<button
-																	className="btn btn--secondary">
-																	Download all comments
-																</button>
-															</Fragment>
-														);
-													}
-												}}
-											</UserContext.Consumer>
+											<Sticky disableHardwareAcceleration>
+												{({ style }) => (
+													<div style={style}>
+														<UserContext.Consumer>
+															{contextValue => {
+																if (contextValue.isAuthorised) {
+																	return (
+																		<Fragment>
+																			<h3 className="mt--0">Ready to submit</h3>
+																			<button
+																				className="btn btn--cta">
+																				Submit your comments
+																			</button>
+																			<button
+																				className="btn btn--secondary">
+																				Download all comments
+																			</button>
+																		</Fragment>
+																	);
+																}
+															}}
+														</UserContext.Consumer>
+													</div>
+												)}
+											</Sticky>
 										</div>
 									</StickyContainer>
 								</div>

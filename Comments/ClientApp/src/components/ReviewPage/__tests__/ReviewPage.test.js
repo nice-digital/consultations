@@ -37,7 +37,7 @@ describe("[ClientApp] ", () => {
 		});
 
 		it("generateDocumentList doesn't filter out documents supporting comments", async () => {
-			
+
 			const docTypesIn = [
 				{title : "first doc title", sourceURI: "first source uri", supportsComments: true},
 				{title : "second doc title", sourceURI: "second source uri", supportsComments: true}];
@@ -46,12 +46,11 @@ describe("[ClientApp] ", () => {
 
 			const returnValue = reviewPage.generateDocumentList(docTypesIn);
 
-			//generateDocumentList unshifts 'All document comments' onto the array so result is docTypesIn + 1
-			expect(returnValue.links.length).toEqual(3);				
+			expect(returnValue.links.length).toEqual(2);
 		});
 
 		it("generateDocumentList filters out documents not supporting comments", async () => {
-			
+
 			const docTypesIn = [
 				{title : "first doc title", sourceURI: "first source uri", supportsComments: true},
 				{title : "second doc title", sourceURI: "second source uri", supportsComments: false}];
@@ -60,7 +59,7 @@ describe("[ClientApp] ", () => {
 
 			const returnValue = reviewPage.generateDocumentList(docTypesIn);
 
-			expect(returnValue.links.length).toEqual(2);				
+			expect(returnValue.links.length).toEqual(1);
 		});
 	});
 });
