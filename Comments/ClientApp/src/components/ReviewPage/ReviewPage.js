@@ -92,7 +92,6 @@ export class ReviewPage extends Component<PropsType> {
 
 	getCurrentSourceURI = () => {
 		const queryParams = queryStringToObject(this.props.location.search);
-		console.log(queryParams.sourceURI)
 		return queryParams.sourceURI;
 	};
 

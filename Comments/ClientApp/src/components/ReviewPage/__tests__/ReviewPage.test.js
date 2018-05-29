@@ -10,10 +10,7 @@ import { nextTick, queryStringToObject } from "../../../helpers/utils";
 import ReviewPageWithRouter, {ReviewPage} from "../ReviewPage";
 import ConsultationData from "./Consultation";
 import DocumentsData from "./Documents";
-import ChapterData from "./Chapter";
-import ReviewData from "./ReviewData";
-import toJson from "enzyme-to-json";
-import stringifyObject from "stringify-object";
+//import stringifyObject from "stringify-object";
 
 const mock = new MockAdapter(axios);
 
@@ -80,7 +77,7 @@ describe("[ClientApp] ", () => {
 			expect(returnValue.id).toEqual("bar");
 		});
 
-		it.only("should hit the endpoints successfully", async () => {
+		it("should hit the endpoints successfully", async () => {
 			const mock = new MockAdapter(axios);
 
 			mock
