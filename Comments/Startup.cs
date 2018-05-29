@@ -71,12 +71,13 @@ namespace Comments
             {
                 options.DefaultAuthenticateScheme = AuthOptions.DefaultScheme;
                 options.DefaultChallengeScheme = AuthOptions.DefaultScheme;
-            })
+				options.DefaultScheme = AuthOptions.DefaultScheme;
+			})
             .AddNICEAuth(options =>
             {
                 // todo: Configure options here from AppSettings
             })
-			.AddCookie();
+			.AddCookie(AuthOptions.DefaultScheme);
 
             services.AddMvc(options =>
             {
