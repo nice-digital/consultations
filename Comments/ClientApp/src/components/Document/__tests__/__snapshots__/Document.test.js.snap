@@ -60,7 +60,9 @@ Array [
                         itemType="http://schema.org/ListItem"
                     >
                         <a
-                            href="https://alpha.nice.org.uk/guidance/inconsultation"
+                            href="#"
+                            itemProp="name"
+                            onClick={[Function]}
                         >
                             All Consultations
                         </a>
@@ -76,7 +78,7 @@ Array [
                         itemType="http://schema.org/ListItem"
                     >
                         <a
-                            href="https://alpha.nice.org.uk/guidance/indevelopment/gid-dg10046/consultation/html-content"
+                            href="https://alpha.nice.org.uk/guidance/indevelopment/gid-ng10103/consultation/html-content"
                         >
                             Consultation
                         </a>

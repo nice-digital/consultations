@@ -1,7 +1,7 @@
 // @flow
 
-import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
+import React, { Component, Fragment } from "react";
+import { withRouter, Link } from "react-router-dom";
 import { load } from "./../../data/loader";
 import preload from "../../data/pre-loader";
 import { CommentBox } from "../CommentBox/CommentBox";
@@ -17,7 +17,8 @@ type PropsType = {
 		params: any
 	},
 	location: {
-		pathname: string
+		pathname: string,
+		search: string
 	},
 	drawerOpen: boolean,
 	isReviewPage: boolean,
@@ -47,6 +48,8 @@ type StateType = {
 	loading: boolean
 };
 
+type ContextType = any;
+
 export class CommentList extends Component<PropsType, StateType> {
 	constructor(props: PropsType) {
 		super(props);
@@ -60,6 +63,15 @@ export class CommentList extends Component<PropsType, StateType> {
 			preloadedData = this.props.staticContext.preload.data;
 		}
 
+		// if (this.props.isReviewPage){
+		// 	const preloaded = preload(
+		// 		this.props.staticContext,
+		// 		"review",
+		// 		[],
+		// 		{ sourceURI: this.props.match.url },
+		// 		preloadedData
+		// 	);
+		// } else{	
 		const preloaded = preload(
 			this.props.staticContext,
 			"comments",
@@ -67,6 +79,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			{ sourceURI: this.props.match.url },
 			preloadedData
 		);
+		// }
 
 		if (preloaded) {
 			this.state = {
@@ -100,8 +113,6 @@ export class CommentList extends Component<PropsType, StateType> {
 			comments,
 			questions: response.data.questions,
 			loading: false
-			// isAuthorised: res.data.isAuthorised,
-			// signInURL: res.data.signInURL
 		});
 	}
 
@@ -126,7 +137,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		const idsOfFilteredComments = comments.filter(comment => comment.sourceURI.indexOf(filterBy.sourceURI) !== -1).map(comment => comment.commentId);
 
 		const commentsWithFilteredAttr = comments.map(comment => {
-			comment.show = idsOfFilteredComments.includes(comment.commentId);
+			comment.show = !idsOfFilteredComments.includes(comment.commentId);
 			return comment;
 		});
 
@@ -146,7 +157,8 @@ export class CommentList extends Component<PropsType, StateType> {
 			comments = [];
 		}
 		const generatedComment = Object.assign({}, newComment, {
-			commentId: idToUseForNewBox
+			commentId: idToUseForNewBox,
+			show: false
 		});
 		comments.unshift(generatedComment);
 		this.setState({ comments });
@@ -206,32 +218,55 @@ export class CommentList extends Component<PropsType, StateType> {
 	};
 
 	render() {
-		const commentsToShow = this.state.comments.filter(comment => comment.show);
+		const commentsToShow = this.state.comments.filter(comment => !comment.show);
 		return (
-			<UserContext.Consumer>   
-				{ contextValue => {
-					if (this.state.loading) return <p>Loading</p>;
-					if (contextValue.isAuthorised) {
-						if (commentsToShow.length === 0) return <p>No comments yet</p>;
-						return (
-							<ul className="CommentList list--unstyled">
-								{commentsToShow.map((comment, idx) => {
-									return (
-										<CommentBox
-											drawerOpen={this.props.drawerOpen}
-											key={comment.commentId}
-											unique={`Comment${idx}`}
-											comment={comment}
-											saveHandler={this.saveCommentHandler}
-											deleteHandler={this.deleteCommentHandler}
-										/>
-									);
-								})}
-							</ul>
-						);
-					} else {
-						return <LoginBanner signInButton={true} currentURL={this.props.match.url} signInURL={contextValue.signInURL} registerURL={contextValue.registerURL}/>;
-					}
+			<UserContext.Consumer>
+				{ (contextValue: ContextType) => {
+					return (
+						<div>
+
+							{!this.props.isReviewPage ? 
+								<div className="grid">
+									<h1 data-g="6" id="commenting-panel" className="p">Comments panel</h1>
+									{contextValue.isAuthorised ? 
+										<p data-g="6">
+											<Link to={`/${this.props.match.params.consultationId}/review`} className="right">Review all comments</Link>
+										</p> : null
+									}
+								</div> : null
+							}
+
+							{this.state.loading ? <p>Loading...</p> :
+								
+								contextValue.isAuthorised ? 
+							
+									commentsToShow.length === 0 ? <p>No comments yet</p> :
+									
+										<ul className="CommentList list--unstyled">
+											{commentsToShow.map((comment, idx) => {
+												return (
+													<CommentBox
+														drawerOpen={this.props.drawerOpen}
+														key={comment.commentId}
+														unique={`Comment${idx}`}
+														comment={comment}
+														saveHandler={this.saveCommentHandler}
+														deleteHandler={this.deleteCommentHandler}
+													/>
+												);
+											})}
+										</ul> : 
+									
+									<LoginBanner 
+										signInButton={true}
+										currentURL={this.props.match.url}
+										signInURL={contextValue.signInURL}
+										registerURL={contextValue.registerURL}
+									/>
+							}
+
+						</div>
+					);
 				}}
 			</UserContext.Consumer>
 		);

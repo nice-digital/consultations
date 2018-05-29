@@ -1,11 +1,17 @@
 // @flow
 
 import React, { Component } from "react";
+import { withRouter, Link } from "react-router-dom";
 import { mobileWidth } from "../../constants";
 import CommentListWithRouter from "../CommentList/CommentList";
 
 type PropsType = {
-	commentList: Function
+	commentList: Function,
+	match: {
+		params: {
+			consultationId: number
+		}
+	}
 };
 
 type StateType = {
@@ -100,22 +106,28 @@ export class Drawer extends Component<PropsType, StateType> {
 							aria-hidden="true"
 						/>
 					</button>
+
+					{/* this button is in temporarily for user testing */}
 					<button id="js-reading-mode-toggle"
 						title="Reading mode"
 						className="Drawer__toggleOpen"
 						style={{ marginTop: "3px" }}
 						aria-haspopup="true">
-						<img alt="Enable or disable reading view" src="reading-view/icon.png" style={{position: "relative", top: "3px"}}/>
+						<img alt="Enable or disable reading view" src="reading-view/icon.png" style={{
+							position: "relative",
+							top: "3px"
+						}}/>
 					</button>
+					{/* / this button is in temporarily for user testing */}
+
 				</div>
 				{/* #sidebar-panel necessary here for pulling keyboard focus */}
 				<div id="sidebar-panel" className="Drawer__main">
-					<h1 id="commenting-panel" className="p mt--c mb--e">Comments panel</h1>
 					{/*wrappedComponentRef exposes the underlying, unwrapped component*/}
 					<CommentListWithRouter isReviewPage={false}
-						drawerOpen={this.state.drawerOpen}
+										   drawerOpen={this.state.drawerOpen}
 						// $FlowIgnore | this.commentList is bound to this below
-						wrappedComponentRef={component => (this.commentList = component)}
+										   wrappedComponentRef={component => (this.commentList = component)}
 					/>
 				</div>
 			</section>
