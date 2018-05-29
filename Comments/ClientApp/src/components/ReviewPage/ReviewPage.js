@@ -30,10 +30,10 @@ export class ReviewPage extends Component<PropsType> {
 
 		this.state = {
 			documentsList: [],
-			consultationData: null
+			consultationData: null,
+			isSubmitted: false
 		};
 	}
-
 
 	gatherData = async () => {
 		const consultationId = this.props.match.params.consultationId;
@@ -120,6 +120,12 @@ export class ReviewPage extends Component<PropsType> {
 		return null;
 	};
 
+	submitConsultation = () => {
+		this.setState({
+			isSubmitted: true
+		});
+	};
+
 	render() {
 		if (this.state.documentsList.length === 0) return <h1>Loading...</h1>;
 		const { title, reference, endDate } = this.state.consultationData;
@@ -141,7 +147,6 @@ export class ReviewPage extends Component<PropsType> {
 										reference={reference}
 										endDate={endDate}
 										onNewCommentClick={this.onNewCommentClick()}
-										url="1/1/Introduction"
 									/>
 									<h2 className="mt--0">Comments for review</h2>
 									<StickyContainer className="grid">
@@ -168,8 +173,8 @@ export class ReviewPage extends Component<PropsType> {
 											</Sticky>
 										</div>
 										<div data-g="12 md:6">
-											<h3 className="mt--0">Comments</h3>
-											<CommentListWithRouter isReviewPage={true}/>
+											<h3 className="mt--0">{this.state.isSubmitted ? "Comments submitted" : "Comments"}</h3>
+											<CommentListWithRouter isReviewPage={true} isSubmitted={this.state.isSubmitted}/>
 										</div>
 										<div data-g="12 md:3">
 											<Sticky disableHardwareAcceleration>
@@ -180,10 +185,13 @@ export class ReviewPage extends Component<PropsType> {
 																if (contextValue.isAuthorised) {
 																	return (
 																		<Fragment>
-																			<h3 className="mt--0">Ready to submit</h3>
+																			<h3 className="mt--0">Ready to submit?</h3>
 																			<button
-																				className="btn btn--cta">
-																				Submit your comments
+																				disabled={this.state.isSubmitted}
+																				className="btn btn--cta"
+																				onClick={this.submitConsultation}
+																			>
+																				{this.state.isSubmitted ? "Comments submitted": "Submit your comments"}
 																			</button>
 																			<button
 																				className="btn btn--secondary">
