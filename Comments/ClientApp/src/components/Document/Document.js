@@ -236,11 +236,11 @@ export class Document extends Component<PropsType, StateType> {
 		return [
 			{
 				label: "All Consultations",
-				url: "https://alpha.nice.org.uk/guidance/inconsultation" // todo: link to current consultation "consultation list page" on dev?
+				url: "#"
 			},
 			{
-				label: "Consultation", // todo: consultation overview link to come from API endpoint
-				url: "https://alpha.nice.org.uk/guidance/indevelopment/gid-dg10046/consultation/html-content" // todo: demo - hardcoded to jane's overview
+				label: "Consultation",
+				url: "https://alpha.nice.org.uk/guidance/indevelopment/gid-ng10103/consultation/html-content"
 			}
 		];
 	};

@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { withRouter, Link } from "react-router-dom";
 import { load } from "./../../data/loader";
 import preload from "../../data/pre-loader";
@@ -22,7 +22,8 @@ type PropsType = {
 	},
 	drawerOpen: boolean,
 	isReviewPage: boolean,
-	filterByDocument: number
+	filterByDocument: number,
+	isSubmmitted: boolean
 };
 
 type CommentType = {
@@ -71,7 +72,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		// 		{ sourceURI: this.props.match.url },
 		// 		preloadedData
 		// 	);
-		// } else{	
+		// } else{
 		const preloaded = preload(
 			this.props.staticContext,
 			"comments",
@@ -94,10 +95,10 @@ export class CommentList extends Component<PropsType, StateType> {
 	loadComments() {
 		if (this.props.isReviewPage){
 			load("review", undefined, [this.props.match.params.consultationId], {}) // todo: maybe this should us source URI instead of id... need to change feed to do this
-		 	.then(				 
+		 	.then(
 		 	 	res => {
 		 	 		this.setCommentListState(res);
-					});	
+					});
 		} else{
 		 	load("comments", undefined, [], { sourceURI: this.props.match.url }).then(
 		 		res => {
@@ -107,14 +108,14 @@ export class CommentList extends Component<PropsType, StateType> {
 	}
 
 	setCommentListState = (response: any) => {
-		
+
 		const comments = this.filterComments(this.props.location.search, response.data.comments );
 		this.setState({
 			comments,
 			questions: response.data.questions,
 			loading: false
 		});
-	}
+	};
 
 	componentDidMount() {
 		this.loadComments();
@@ -142,7 +143,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		});
 
 		return commentsWithFilteredAttr;
-	}
+	};
 
 	newComment(newComment: CommentType) {
 
@@ -225,10 +226,10 @@ export class CommentList extends Component<PropsType, StateType> {
 					return (
 						<div>
 
-							{!this.props.isReviewPage ? 
+							{!this.props.isReviewPage ?
 								<div className="grid">
 									<h1 data-g="6" id="commenting-panel" className="p">Comments panel</h1>
-									{contextValue.isAuthorised ? 
+									{contextValue.isAuthorised ?
 										<p data-g="6">
 											<Link to={`/${this.props.match.params.consultationId}/review`} className="right">Review all comments</Link>
 										</p> : null
@@ -237,15 +238,16 @@ export class CommentList extends Component<PropsType, StateType> {
 							}
 
 							{this.state.loading ? <p>Loading...</p> :
-								
-								contextValue.isAuthorised ? 
-							
+
+								contextValue.isAuthorised ?
+
 									commentsToShow.length === 0 ? <p>No comments yet</p> :
-									
+
 										<ul className="CommentList list--unstyled">
 											{commentsToShow.map((comment, idx) => {
 												return (
 													<CommentBox
+														readOnly={this.props.isSubmitted}
 														drawerOpen={this.props.drawerOpen}
 														key={comment.commentId}
 														unique={`Comment${idx}`}
@@ -255,9 +257,9 @@ export class CommentList extends Component<PropsType, StateType> {
 													/>
 												);
 											})}
-										</ul> : 
-									
-									<LoginBanner 
+										</ul> :
+
+									<LoginBanner
 										signInButton={true}
 										currentURL={this.props.match.url}
 										signInURL={contextValue.signInURL}

@@ -58,9 +58,12 @@ export class CommentBox extends Component<PropsType, StateType> {
 			commentText,
 			commentOn,
 			lastModifiedDate,
-			quote
+			quote,
+			commentId
 		} = this.state.comment;
+		const unsavedChanges = this.state.unsavedChanges;
 		const comment = this.state.comment;
+		const readOnly = this.props.readOnly;
 
 		const tabIndex = this.props.drawerOpen ? "0" : "-1";
 
@@ -94,7 +97,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 							<Moment format="D/M/YYYY - h:mma" date={lastModifiedDate}/>
 						</div>
 					) : null}
-					<form onSubmit={e => this.props.saveHandler(e, this.state.comment)}>
+					<form onSubmit={e => this.props.saveHandler(e, comment)}>
 						<div className="form__group form__group--textarea mb--0">
 							<label
 								className="form__label visually-hidden"
@@ -103,6 +106,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 								Comment
 							</label>
 							<textarea
+								disabled={readOnly}
 								id={this.props.unique}
 								tabIndex={tabIndex}
 								className="form__input form__input--textarea"
@@ -112,29 +116,25 @@ export class CommentBox extends Component<PropsType, StateType> {
 								value={commentText}
 							/>
 						</div>
-						{this.state.comment.commentText &&
-						this.state.comment.commentText.length > 0 && (
+						{!readOnly && commentText && commentText.length > 0 && (
 							<input
 								tabIndex={tabIndex}
 								className="btn ml--0"
 								type="submit"
-								value={
-									this.state.unsavedChanges ? "Save comment" : "Saved"
-								}
-								disabled={!this.state.unsavedChanges}
-
+								value={unsavedChanges ? "Save comment" : "Saved"}
+								disabled={!unsavedChanges}
 							/>
 						)}
+						{!readOnly &&
 						<button
 							tabIndex={tabIndex}
 							className="btn mr--0 right"
-							onClick={e =>
-								this.props.deleteHandler(e, this.state.comment.commentId)
-							}
+							onClick={e => this.props.deleteHandler(e, commentId)}
 						>
 							<span className="visually-hidden">Delete this comment</span>
 							<span className="icon icon--trash" aria-hidden="true"/>
 						</button>
+						}
 					</form>
 				</section>
 			</li>

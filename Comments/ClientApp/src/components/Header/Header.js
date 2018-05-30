@@ -7,8 +7,7 @@ type PropsType = {
 	title: string,
 	reference: string,
 	endDate: any,
-	match: any,
-	onNewCommentClick: Function
+	match: any
 }
 
 export const Header = (props: PropsType) => {

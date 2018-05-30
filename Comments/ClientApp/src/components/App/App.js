@@ -19,7 +19,7 @@ const App = () => {
 			<Switch>
 				{/*Home*/}
 				<Route exact path="/">
-					<Redirect to="/1/1/introduction"/>
+					<Redirect to="/10/5/overview"/>
 				</Route>
 
 				{/*Document View*/}
