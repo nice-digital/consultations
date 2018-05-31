@@ -10,7 +10,10 @@ type PropsType = {
 }
 
 const getBrowserInfo = () => {
-	return `${Bowser.name} ${Bowser.version} on ${Bowser.osname} ${Bowser.osversion}`;
+	if (window) {
+		return `${Bowser.name} ${Bowser.version} on ${Bowser.osname} ${Bowser.osversion}`;
+	}
+	return "";
 };
 
 export const PhaseBanner = (props: PropsType) => {
