@@ -10,7 +10,7 @@ type PropsType = {
 }
 
 const getBrowserInfo = () => {
-	if (window) {
+	if (typeof window !== "undefined") {
 		return `${Bowser.name} ${Bowser.version} on ${Bowser.osname} ${Bowser.osversion}`;
 	}
 	return "";
