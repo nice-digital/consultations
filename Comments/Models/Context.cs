@@ -1,16 +1,33 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using Comments.Services;
+using Microsoft.Extensions.Configuration;
 
 namespace Comments.Models
 {
     public partial class ConsultationsContext : DbContext
     {
-        public ConsultationsContext(DbContextOptions options, IUserService userService) : base(options)
+	    private readonly IConfiguration _configuration;
+
+		public ConsultationsContext(DbContextOptions options)
+			: base(options) {
+		    _createdByUserID = Guid.Empty;
+		}
+	    public ConsultationsContext() : base()
+	    {
+		    _createdByUserID = Guid.Empty;
+	    }
+	    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+	    {
+			optionsBuilder.UseSqlServer("[snip]");
+		}
+
+
+		public ConsultationsContext(DbContextOptions options, IUserService userService) : base(options)
         {
-            _userService = userService;
+	        _userService = userService;
             _createdByUserID = _userService.GetCurrentUser().UserId;
         }
 

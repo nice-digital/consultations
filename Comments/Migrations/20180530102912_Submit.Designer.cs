@@ -11,9 +11,10 @@ using System;
 namespace Comments.Migrations
 {
     [DbContext(typeof(ConsultationsContext))]
-    partial class ConsultationsContextModelSnapshot : ModelSnapshot
+    [Migration("20180530102912_Submit")]
+    partial class Submit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

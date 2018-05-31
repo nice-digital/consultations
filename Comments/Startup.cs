@@ -75,8 +75,7 @@ namespace Comments
             .AddNICEAuth(options =>
             {
                 // todo: Configure options here from AppSettings
-            })
-			.AddCookie();
+            });
 
             services.AddMvc(options =>
             {
