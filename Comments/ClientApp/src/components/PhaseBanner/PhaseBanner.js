@@ -9,11 +9,15 @@ type PropsType = {
 	repo: string
 }
 
+const getBrowserInfo = () => {
+	return `${Bowser.name} ${Bowser.version} on ${Bowser.osname} ${Bowser.osversion}`;
+};
+
 export const PhaseBanner = (props: PropsType) => {
 	const { phase, name, repo } = props;
 	return (
 		<aside className="phase-banner mt--b">
-			<span className="phase-banner__tag" role="button" onClick={()=>alert(`${Bowser.name} ${Bowser.version} on ${Bowser.osname} ${Bowser.osversion}`)}>
+			<span className="phase-banner__tag" role="button" onClick={()=>alert(getBrowserInfo())}>
 				<span className="tag tag--impact tag--agile">{phase}</span>
 			</span>
 			<span className="phase-banner__label">
