@@ -239,7 +239,7 @@ namespace Comments.Test.UnitTests
             var commentService = new CommentService(new ConsultationsContext(_options, userService), _fakeUserService, authenticateService);
 
             // Act    
-            var viewModel = commentService.GetUsersCommentsAndQuestionsForConsultation(1);
+            var viewModel = commentService.GetCommentsAndQuestions(ConsultationOneURI, true);
 
             //Assert
             commentService.GetComment(6).comment.ShouldNotBeNull();

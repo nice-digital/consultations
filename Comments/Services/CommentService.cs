@@ -11,8 +11,7 @@ namespace Comments.Services
 {
     public interface ICommentService
     {
-        CommentsAndQuestions GetCommentsAndQuestions(string relativeURL);
-	    CommentsAndQuestions GetUsersCommentsAndQuestionsForConsultation(int consultationId);
+	    CommentsAndQuestions GetCommentsAndQuestions(string relativeURL, bool isReview = false);
 		(ViewModels.Comment comment, Validate validate) GetComment(int commentId);
         (int rowsUpdated, Validate validate) EditComment(int commentId, ViewModels.Comment comment);
         (ViewModels.Comment comment, Validate validate) CreateComment(ViewModels.Comment comment);
@@ -105,55 +104,36 @@ namespace Comments.Services
             return (rowsUpdated: _context.SaveChanges(), validate: null);
         }
 
-        public CommentsAndQuestions GetCommentsAndQuestions(string relativeURL)
-        {
-            var user = _userService.GetCurrentUser();
-            var signInURL = _authenticateService.GetLoginURL(relativeURL.ToConsultationsRelativeUrl());
+	    public CommentsAndQuestions GetCommentsAndQuestions(string relativeURL, bool isReview = false)
+	    {
+		    var user = _userService.GetCurrentUser();
+		    var signInURL = _authenticateService.GetLoginURL(relativeURL.ToConsultationsRelativeUrl());
 
-            if (!user.IsAuthorised)
-                return new CommentsAndQuestions(new List<ViewModels.Comment>(), new List<ViewModels.Question>(), user.IsAuthorised, signInURL);
+		    if (!user.IsAuthorised)
+			    return new CommentsAndQuestions(new List<ViewModels.Comment>(), new List<ViewModels.Question>(), user.IsAuthorised, signInURL);
 
-            var sourceURIs = new List<string>
-            {
-                ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Consultation),
-                ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Document),
-                ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Chapter)
-            };
+			var sourceURIs = new List<string>
+			{
+				ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Consultation)
+			};
 
-            var locations = _context.GetAllCommentsAndQuestionsForDocument(sourceURIs);
+			if (!isReview)
+			{
+				sourceURIs.Add(ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Document));
+				sourceURIs.Add(ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Chapter));
+			}
 
-            var commentsData = new List<ViewModels.Comment>();
-            var questionsData = new List<ViewModels.Question>();
-            foreach (var location in locations)
-            {
-                commentsData.AddRange(location.Comment.Select(comment => new ViewModels.Comment(location, comment)));
-                questionsData.AddRange(location.Question.Select(question => new ViewModels.Question(location, question)));
-            }
+			var locations = _context.GetAllCommentsAndQuestionsForDocument(sourceURIs, isReview);
 
-            return new CommentsAndQuestions(commentsData, questionsData, user.IsAuthorised, signInURL);
-        }
+		    var commentsData = new List<ViewModels.Comment>();
+		    var questionsData = new List<ViewModels.Question>();
+		    foreach (var location in locations)
+		    {
+			    commentsData.AddRange(location.Comment.Select(comment => new ViewModels.Comment(location, comment)));
+			    questionsData.AddRange(location.Question.Select(question => new ViewModels.Question(location, question)));
+		    }
 
-        public CommentsAndQuestions GetUsersCommentsAndQuestionsForConsultation(int constulationId)
-        {
-            var user = _userService.GetCurrentUser();
-
-            if (!user.IsAuthorised)
-                return new CommentsAndQuestions(new List<ViewModels.Comment>(), new List<ViewModels.Question>(), user.IsAuthorised, null);
-
-	        var sourceURI = ConsultationsUri.CreateConsultationURI(constulationId);
-
-
-			var locations = _context.GetAllCommentsAndQuestionsForConsultation(sourceURI);
-
-            var commentsData = new List<ViewModels.Comment>();
-            var questionsData = new List<ViewModels.Question>();
-            foreach (var location in locations)
-            {
-                commentsData.AddRange(location.Comment.Select(comment => new ViewModels.Comment(location, comment)));
-                questionsData.AddRange(location.Question.Select(question => new ViewModels.Question(location, question)));
-            }
-
-            return new CommentsAndQuestions(commentsData, questionsData, user.IsAuthorised, null);
-        }
-    }
+		    return new CommentsAndQuestions(commentsData, questionsData, user.IsAuthorised, signInURL);
+	    }
+	}
 }

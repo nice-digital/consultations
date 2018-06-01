@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +39,41 @@ namespace Comments.Models
             return data;
         }
 
-        public IEnumerable<Location> GetAllCommentsAndQuestionsForConsultation(string sourceURI)
+	    public IEnumerable<Location> GetAllCommentsAndQuestionsForDocument(IEnumerable<string> sourceURIs, bool isReview)
+	    {
+
+		    if (!_userService.GetCurrentUser().IsAuthorised)
+			    throw new Exception("trying to return comments and questions when not logged in. this should have been trapped in the service.");
+
+		    if (isReview)
+		    {
+			    var data = Location.Where(l => l.SourceURI.Contains(sourceURIs.First()))
+				    .Include(l => l.Comment)
+				    .Include(l => l.Question)
+				    .ThenInclude(q => q.QuestionType)
+				    .Include(l => l.Question)
+				    .ThenInclude(q => q.Answer)
+				    .OrderByDescending(l => l.Comment
+					    .OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault());
+
+			    return data;
+			}
+		    else
+		    {
+				var data = Location.Where(l => sourceURIs.Contains(l.SourceURI))
+					.Include(l => l.Comment)
+					.Include(l => l.Question)
+					.ThenInclude(q => q.QuestionType)
+					.Include(l => l.Question)
+					.ThenInclude(q => q.Answer)
+					.OrderByDescending(l => l.Comment
+						.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault());
+
+			    return data;
+			}
+	    }
+
+		public IEnumerable<Location> GetAllCommentsAndQuestionsForConsultation(string sourceURI)
         {
             if (!_userService.GetCurrentUser().IsAuthorised)
                 throw new Exception("trying to return comments and questions when not logged in. this should have been trapped in the service.");

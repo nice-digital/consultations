@@ -1,4 +1,4 @@
-﻿using Comments.Services;
+using Comments.Services;
 using Comments.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,18 +21,19 @@ namespace Comments.Controllers.Api
             _logger = logger;
         }
 
-        /// <summary>
-        /// GET: eg. consultations/api/Comments?sourceURI=%2Fconsultations%2F1%2F1%2Fchapter-slug
-        /// </summary>
-        /// <param name="sourceURI">this is really the relativeURL eg "/1/1/introduction"</param>
-        /// <returns></returns>
-        [HttpGet]
-        public CommentsAndQuestions Get(string sourceURI)
+		/// <summary>
+		/// GET: eg. consultations/api/Comments?sourceURI=%2Fconsultations%2F1%2F1%2Fchapter-slug
+		/// </summary>
+		/// <param name="sourceURI">this is really the relativeURL eg "/1/1/introduction"</param>
+		/// <param name="isReview">boolean indicating if the feed isbeing accessed for reviewing purposes</param>
+		/// <returns></returns>
+		[HttpGet]
+        public CommentsAndQuestions Get(string sourceURI, bool isReview)
         {
             if (string.IsNullOrWhiteSpace(sourceURI))
                 throw new ArgumentNullException(nameof(sourceURI));
 
-            return _commentService.GetCommentsAndQuestions(relativeURL: sourceURI);
+            return _commentService.GetCommentsAndQuestions(relativeURL: sourceURI, isReview: isReview);
         }
     }
 }
