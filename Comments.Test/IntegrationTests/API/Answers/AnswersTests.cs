@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -20,7 +20,7 @@ namespace Comments.Test.IntegrationTests.API.Answers
         {
             // Arrange
             SetupTestDataInDB();
-            var answer = new ViewModels.Answer(0, "answer text", false, DateTime.Now, Guid.Empty, 1);
+            var answer = new ViewModels.Answer(0, "answer text", false, DateTime.Now, Guid.Empty, 1, "Draft");
             var content = new StringContent(JsonConvert.SerializeObject(answer), Encoding.UTF8, "application/json");
 
             // Act

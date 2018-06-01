@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Data.Edm.Expressions;
@@ -52,7 +52,7 @@ namespace Comments.ViewModels
     public class Answer
     {
         public Answer() { } //only here for model binding. don't use it in code.
-        public Answer(int answerId, string answerText, bool answerBoolean, DateTime lastModifiedDate, Guid lastModifiedByUserId, int questionId)
+        public Answer(int answerId, string answerText, bool answerBoolean, DateTime lastModifiedDate, Guid lastModifiedByUserId, int questionId, int statusId)
         {
             AnswerId = answerId;
             AnswerText = answerText;
@@ -60,7 +60,8 @@ namespace Comments.ViewModels
             QuestionId = questionId;
             LastModifiedDate = lastModifiedDate;
             LastModifiedByUserId = lastModifiedByUserId;
-        }
+			StatusId = statusId;
+		}
 
         public Answer(Models.Answer answer)
         {
@@ -70,6 +71,8 @@ namespace Comments.ViewModels
             QuestionId = answer.QuestionId;
             LastModifiedDate = answer.LastModifiedDate;
             LastModifiedByUserId = answer.LastModifiedByUserId;
+	        StatusId = answer.StatusId;
+	        Status = new Status(answer.Status);
         }
 
         public int AnswerId { get; set; }
@@ -79,5 +82,8 @@ namespace Comments.ViewModels
         public int QuestionId { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public Guid LastModifiedByUserId { get; set; }
-    }
+
+		public int StatusId { get; set; }
+	    public ViewModels.Status Status { get; set; }
+	}
 }
