@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import { load } from "./../../data/loader";
 import preload from "../../data/pre-loader";
 import { CommentBox } from "../CommentBox/CommentBox";
@@ -22,7 +22,8 @@ type PropsType = {
 	},
 	drawerOpen: boolean,
 	isReviewPage: boolean,
-	filterByDocument: number
+	filterByDocument: number,
+	isSubmmitted: boolean
 };
 
 type CommentType = {
@@ -38,34 +39,40 @@ type CommentType = {
 	rangeEnd: string,
 	rangeEndOffset: string,
 	quote: string,
-	commentOn: string
+	commentOn: string,
+	show: boolean
 };
 
 type StateType = {
 	comments: Array<CommentType>,
-	filteredComments: Array<CommentType>,
 	questions: any,
 	loading: boolean
 };
+
+type ContextType = any;
 
 export class CommentList extends Component<PropsType, StateType> {
 	constructor(props: PropsType) {
 		super(props);
 		this.state = {
 			comments: [],
-			filteredComments: [],
 			questions: [],
 			loading: true
 		};
 		let preloadedData = {};
 		if (this.props.staticContext && this.props.staticContext.preload) {
 			preloadedData = this.props.staticContext.preload.data;
-
-			//console.log('setting is authorised to:' + preloadedData.isAuthorised);
-			// this.state.isAuthorised = preloadedData.isAuthorised;
 		}
 
-		//console.log(`preloadedData: ${stringifyObject(preloadedData)}`);
+		// if (this.props.isReviewPage){
+		// 	const preloaded = preload(
+		// 		this.props.staticContext,
+		// 		"review",
+		// 		[],
+		// 		{ sourceURI: this.props.match.url },
+		// 		preloadedData
+		// 	);
+		// } else{
 		const preloaded = preload(
 			this.props.staticContext,
 			"comments",
@@ -73,6 +80,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			{ sourceURI: this.props.match.url },
 			preloadedData
 		);
+		// }
 
 		if (preloaded) {
 			this.state = {
@@ -82,36 +90,30 @@ export class CommentList extends Component<PropsType, StateType> {
 				questions: preloaded.questions
 			};
 		}
-
 	}
 
 	loadComments() {
 		if (this.props.isReviewPage){
-			console.log("Is Review Page");
-			load("review", undefined, [1], {}) // todo: get the consultation id from the route "[1]"
+			load("review", undefined, [this.props.match.params.consultationId], {}) // todo: maybe this should us source URI instead of id... need to change feed to do this
 		 	.then(
 		 	 	res => {
 		 	 		this.setCommentListState(res);
 					});
-			this.filterComments(this.props.location.search);
 		} else{
-			console.log("Not Review page");
 		 	load("comments", undefined, [], { sourceURI: this.props.match.url }).then(
 		 		res => {
 		 			this.setCommentListState(res);
 		 		});
 		}
-		console.log(`loadComments ${JSON.stringify(this.state.comments)}`);
 	}
 
 	setCommentListState = (response: any) => {
-		console.log(`setCommentListState ${response.data.comments}`);
+
+		const comments = this.filterComments(this.props.location.search, response.data.comments );
 		this.setState({
-			comments: response.data.comments,
+			comments,
 			questions: response.data.questions,
 			loading: false
-			// isAuthorised: res.data.isAuthorised,
-			// signInURL: res.data.signInURL
 		});
 	};
 
@@ -126,25 +128,21 @@ export class CommentList extends Component<PropsType, StateType> {
 			this.setState({
 				loading: true
 			});
-			if (this.props.isReviewPage){
-				this.filterComments(this.props.location.search);
-			} else{
-				this.loadComments();
-			}
+			this.loadComments();
 		}
 	}
 
-	filterComments = (newSourceURIToFilterBy: string) => {
-		const comments = this.state.comments;
-		const filter = queryStringToObject(newSourceURIToFilterBy);
-		const filteredComments = comments.filter(comment => comment.sourceURI === filter.sourceURI);
+	filterComments = (newSourceURIToFilterBy: string, comments: Array<CommentType>) => {
+		let filterBy = queryStringToObject(newSourceURIToFilterBy);
+		if (filterBy.sourceURI == null) filterBy = { sourceURI: "" };
+		const idsOfFilteredComments = comments.filter(comment => comment.sourceURI.indexOf(filterBy.sourceURI) !== -1).map(comment => comment.commentId);
 
-		//console.log(`filteredComments ${stringifyObject(filteredComments)}`);
-
-		this.setState({
-			loading: false,
-			filteredComments: filteredComments
+		const commentsWithFilteredAttr = comments.map(comment => {
+			comment.show = !idsOfFilteredComments.includes(comment.commentId);
+			return comment;
 		});
+
+		return commentsWithFilteredAttr;
 	};
 
 	newComment(newComment: CommentType) {
@@ -160,7 +158,8 @@ export class CommentList extends Component<PropsType, StateType> {
 			comments = [];
 		}
 		const generatedComment = Object.assign({}, newComment, {
-			commentId: idToUseForNewBox
+			commentId: idToUseForNewBox,
+			show: false
 		});
 		comments.unshift(generatedComment);
 		this.setState({ comments });
@@ -220,31 +219,56 @@ export class CommentList extends Component<PropsType, StateType> {
 	};
 
 	render() {
+		const commentsToShow = this.state.comments.filter(comment => !comment.show);
 		return (
 			<UserContext.Consumer>
-				{ contextValue => {
-					if (this.state.loading) return <p>Loading</p>;
-					if (contextValue.isAuthorised) {
-						if (this.state.comments.length === 0) return <p>No comments yet</p>;
-						return (
-							<ul className="CommentList list--unstyled">
-								{this.state.comments.map((comment, idx) => {
-									return (
-										<CommentBox
-											drawerOpen={this.props.drawerOpen}
-											key={comment.commentId}
-											unique={`Comment${idx}`}
-											comment={comment}
-											saveHandler={this.saveCommentHandler}
-											deleteHandler={this.deleteCommentHandler}
-										/>
-									);
-								})}
-							</ul>
-						);
-					} else {
-						return <LoginBanner signInButton={true} currentURL={this.props.match.url} signInURL={contextValue.signInURL} registerURL={contextValue.registerURL}/>;
-					}
+				{ (contextValue: ContextType) => {
+					return (
+						<div>
+
+							{!this.props.isReviewPage ?
+								<div className="grid">
+									<h1 data-g="6" id="commenting-panel" className="p">Comments panel</h1>
+									{contextValue.isAuthorised ?
+										<p data-g="6">
+											<Link to={`/${this.props.match.params.consultationId}/review`} className="right">Review all comments</Link>
+										</p> : null
+									}
+								</div> : null
+							}
+
+							{this.state.loading ? <p>Loading...</p> :
+
+								contextValue.isAuthorised ?
+
+									commentsToShow.length === 0 ? <p>No comments yet</p> :
+
+										<ul className="CommentList list--unstyled">
+											{commentsToShow.map((comment, idx) => {
+												return (
+													<CommentBox
+														readOnly={this.props.isSubmitted}
+														drawerOpen={this.props.drawerOpen}
+														key={comment.commentId}
+														unique={`Comment${idx}`}
+														comment={comment}
+														saveHandler={this.saveCommentHandler}
+														deleteHandler={this.deleteCommentHandler}
+													/>
+												);
+											})}
+										</ul> :
+
+									<LoginBanner
+										signInButton={true}
+										currentURL={this.props.match.url}
+										signInURL={contextValue.signInURL}
+										registerURL={contextValue.registerURL}
+									/>
+							}
+
+						</div>
+					);
 				}}
 			</UserContext.Consumer>
 		);

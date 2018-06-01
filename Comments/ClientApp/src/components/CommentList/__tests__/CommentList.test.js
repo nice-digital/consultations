@@ -1,7 +1,7 @@
 /* global jest */
 
 import React from "react";
-import { mount } from "enzyme";
+import { mount, shallow } from "enzyme";
 import { MemoryRouter } from "react-router";
 import CommentListWithRouter, { CommentList } from "../CommentList";
 import axios from "axios";
@@ -10,7 +10,8 @@ import { generateUrl } from "../../../data/loader";
 import sampleComments from "./sample";
 import reviewComments from "./reviewComments";
 import EmptyCommentsResponse from "./EmptyCommentsResponse";
-import { nextTick } from "../../../helpers/utils";
+import { nextTick, queryStringToObject } from "../../../helpers/utils";
+//import stringifyObject from "stringify-object";
 
 const mock = new MockAdapter(axios);
 
@@ -30,14 +31,20 @@ describe("[ClientApp] ", () => {
 	describe("CommentList Component", () => {
 		const fakeProps = {
 			match: {
-				url: "/1/1/introduction"
+				url: "/1/1/introduction",
+				params: {
+					consultationId: 1,
+					documentId: 1,
+					chapterSlug: "introduction"
+				}
 			},
 			location: {
 				pathname: ""
 			},
 			comment: {
 				commentId: 1
-			}
+			},
+			isReviewPage: false
 		};
 
 		afterEach(() => {
@@ -65,17 +72,16 @@ describe("[ClientApp] ", () => {
 
 		it("renders the 'no comments' message if the comments array is empty", async () => {
 			mock.onAny().reply(200, { comments: [] });
-			const wrapper = mount(<CommentList {...fakeProps} />);
+			const wrapper = mount(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>);
 			await nextTick();
 			wrapper.update();
-			expect(wrapper.find("p").text()).toEqual("No comments yet");
+			expect(wrapper.find("p").last().text()).toEqual("No comments yet");
 		});
 
 		it("has state with an empty array of comments", () => {
 			mock.onAny().reply(200, { comments: [] });
-			const wrapper = mount(<CommentList {...fakeProps} />);
-			const state = wrapper.state();
-			expect(Array.isArray(state.comments)).toEqual(true);
+			const wrapper = shallow(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>).find("CommentList").dive();
+			expect(Array.isArray(wrapper.state().comments)).toEqual(true);
 		});
 
 		it("should make an api call with the correct path and query string", () => {
@@ -92,7 +98,7 @@ describe("[ClientApp] ", () => {
 					);
 					return [200, { comments: [] }];
 				});
-			mount(<CommentList {...fakeProps} />);
+			mount(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>);
 		});
 
 		it("save handler put's to the api with updated comment from state", async done => {
@@ -114,8 +120,8 @@ describe("[ClientApp] ", () => {
 				)
 				.reply(200, sampleComments);
 			//console.log(sampleComments);
-			const wrapper = mount(<CommentList {...fakeProps} />);
-			wrapper.instance().saveCommentHandler(new Event("click"), commentToUpdate);
+			const wrapper = mount(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>);
+			wrapper.find("CommentList").instance().saveCommentHandler(new Event("click"), commentToUpdate);
 		});
 
 		it("save handler updates the correct item in the comments array once the api has returned new data", async () => {
@@ -135,7 +141,7 @@ describe("[ClientApp] ", () => {
 					})
 				)
 				.reply(200, sampleComments);
-			const wrapper = mount(<CommentList {...fakeProps} />);
+			const wrapper = shallow(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>).find("CommentList").dive();
 			wrapper.instance().saveCommentHandler(new Event("click"), commentToUpdate);
 			await nextTick();
 			wrapper.update();
@@ -149,7 +155,7 @@ describe("[ClientApp] ", () => {
 			mock.onAny().reply(() => {
 				return [200, { comments: [] }];
 			});
-			const wrapper = mount(<CommentList {...fakeProps} />);
+			const wrapper = shallow(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>).find("CommentList").dive();
 			expect(wrapper.state().comments.length).toEqual(0);
 			wrapper.instance().newComment({});
 			expect(wrapper.state().comments.length).toEqual(1);
@@ -161,7 +167,7 @@ describe("[ClientApp] ", () => {
 			mock.onAny().reply(() => {
 				return [200, { comments: [] }];
 			});
-			const wrapper = mount(<CommentList {...fakeProps} />);
+			const wrapper = shallow(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>).find("CommentList").dive();
 			expect(wrapper.state().comments.length).toEqual(0);
 			wrapper.instance().newComment({});
 			wrapper.instance().newComment({});
@@ -179,7 +185,7 @@ describe("[ClientApp] ", () => {
 					})
 				)
 				.reply(200, sampleComments);
-			const wrapper = mount(<CommentList {...fakeProps} />);
+			const wrapper = shallow(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>).find("CommentList").dive();
 			expect(wrapper.state().comments.length).toEqual(0);
 			wrapper.instance().newComment({});
 			wrapper.instance().newComment({});
@@ -211,8 +217,8 @@ describe("[ClientApp] ", () => {
 					return [200, commentToInsert];
 				});
 
-			const wrapper = mount(<CommentList {...fakeProps} />);
-			wrapper.instance().saveCommentHandler(new Event("click"), commentToInsert);
+			const wrapper = mount(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>);
+			wrapper.find("CommentList").instance().saveCommentHandler(new Event("click"), commentToInsert);
 		});
 
 		it("delete handler called with negative number removes item from array", async () => {
@@ -225,7 +231,7 @@ describe("[ClientApp] ", () => {
 				)
 				.reply(200, sampleComments);
 
-			const wrapper = mount(<CommentList {...fakeProps} />);
+			const wrapper = shallow(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>).find("CommentList").dive();
 
 			await nextTick();
 			wrapper.update();
@@ -266,7 +272,7 @@ describe("[ClientApp] ", () => {
 					return [200, {}];
 				});
 
-			const wrapper = mount(<CommentList {...fakeProps} />);
+			const wrapper = shallow(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>).find("CommentList").dive();
 			await nextTick();
 			wrapper.update();
 
@@ -295,7 +301,7 @@ describe("[ClientApp] ", () => {
 
 		it("when mounted with review property then the review endpoint is hit", async done  => {
 			 mock.reset();
-			 console.log(generateUrl("review", undefined, [1], {}));
+			 //console.log(generateUrl("review", undefined, [1], {}));
 			 mock
 			 	.onGet(
 			 		generateUrl("review", undefined, [1], {})
@@ -317,7 +323,12 @@ describe("[ClientApp] ", () => {
 
 		const firstProps = {
 			match: {
-				url: "/1/1/introduction"
+				url: "/1/1/introduction",
+				params: {
+					consultationId: 1,
+					documentId: 1,
+					chapterSlug: "introduction"
+				}
 			},
 			location: {
 				pathname: "1/review",
@@ -326,19 +337,6 @@ describe("[ClientApp] ", () => {
 			comment: {
 				commentId: 1
 			}				
-		};
-
-		const secondProps = {
-			match: {
-				url: "/1/1/introduction"
-			},
-			location: {
-				pathname: "1/review",
-				search: "?sourceURI=/consultations/1/1/guidance"
-			},
-			comment: {
-				commentId: 1
-			}
 		};
 
 		it("componentDidUpdate filters comments for review page", async () => {
@@ -360,41 +358,144 @@ describe("[ClientApp] ", () => {
 
 			expect(wrapper.state().comments.length).toEqual(6);
 
-			wrapper.instance().filterComments("?sourceURI=/consultations/1/1/guidance");
+			wrapper.find("CommentList").instance().filterComments("?sourceURI=/consultations/1/1/guidance", wrapper.state().comments);
 
 			await nextTick();
 			wrapper.update();
 
-			expect(wrapper.state().filteredComments.length).toEqual(1);
+			expect(wrapper.find("li").length).toEqual(1);
 		});
 
-		// it.only("componentDidUpdate filters comments for review page", async () => {
-					
-		// 	mock.reset();
-		// 	mock
-		// 		.onGet(
-		// 			generateUrl("review", undefined, [1], {
-		// 			})
-		// 		)
-		// 		.reply(200, reviewComments);
+		it("componentDidUpdate filters by substring comments for review page", async () => {
+			const firstProps = {
+				match: {
+					url: "/1/1/introduction",
+					params: {
+						consultationId: 1,
+						documentId: 1,
+						chapterSlug: "introduction"
+					}
+				},
+				location: {
+					pathname: "1/review",
+					search: "?sourceURI=/consultations/1/1"
+				},
+				comment: {
+					commentId: 1
+				}				
+			};
 
-		// 	let wrapper = mount(
-		// 		<CommentList {...firstProps}  isReviewPage={true} />
-		// 	);
+			mock.reset();
+			mock
+				.onGet(
+					generateUrl("review", undefined, [1], {
+					})
+				)
+				.reply(200, reviewComments);
+
+			let wrapper = mount(
+				<CommentList {...firstProps}  isReviewPage={true} />
+			);
 			
-		// 	await nextTick();
-		// 	wrapper.update();
+			await nextTick();
+			wrapper.update();
 
-		// 	expect(wrapper.state().comments.length).toEqual(6);
-		// 	expect(wrapper.find("li").length).toEqual(6);
+			expect(wrapper.state().comments.length).toEqual(6);
 
-		// 	wrapper.instance().filterComments("?sourceURI=/consultations/1/1/guidance");
+			wrapper.find("CommentList").instance().filterComments("?sourceURI=/consultations/1/1",  wrapper.state().comments);
 
-		// 	await nextTick();
-		// 	wrapper.update();
+			await nextTick();
+			wrapper.update();
 
-		// 	expect(wrapper.state().filteredComments.length).toEqual(1);
-		// 	expect(wrapper.find("li").length).toEqual(1);
-		// });
+			expect(wrapper.find("li").length).toEqual(2);
+		});
+
+		it("renders 'no comments yet' if URI is supplied and filteredComments array is empty", async () => {
+			const firstProps = {
+				match: {
+					url: "/1/1/introduction",
+					params: {
+						consultationId: 1,
+						documentId: 1,
+						chapterSlug: "introduction"
+					}
+				},
+				location: {
+					pathname: "1/review",
+					search: "?sourceURI=/consultations/1/0"
+				},
+				comment: {
+					commentId: 1
+				}				
+			};
+
+			mock.reset();
+			mock
+				.onGet(
+					generateUrl("review", undefined, [1], {
+					})
+				)
+				.reply(200, reviewComments);
+
+			let wrapper = mount(
+				<CommentList {...firstProps}  isReviewPage={true} />
+			);
+			
+			await nextTick();
+			wrapper.update();
+
+			expect(wrapper.state().comments.length).toEqual(6);
+
+			wrapper.find("CommentList").instance().filterComments("?sourceURI=/consultations/1/0", wrapper.state().comments);
+
+			await nextTick();
+			wrapper.update();
+
+			expect(wrapper.find("p").text()).toEqual("No comments yet");
+		});
+
+		it("list all comments if no sourceURI is given", async () => {
+			const firstProps = {
+				match: {
+					url: "/1/1/introduction",
+					params: {
+						consultationId: 1,
+						documentId: 1,
+						chapterSlug: "introduction"
+					}
+				},
+				location: {
+					pathname: "1/review",
+					search: ""
+				},
+				comment: {
+					commentId: 1
+				}				
+			};
+			
+			mock.reset();
+			mock
+				.onGet(
+					generateUrl("review", undefined, [1], {
+					})
+				)
+				.reply(200, reviewComments);
+
+			let wrapper = mount(
+				<CommentList {...firstProps}  isReviewPage={true} />
+			);
+			
+			await nextTick();
+			wrapper.update();
+
+			expect(wrapper.state().comments.length).toEqual(6);
+
+			wrapper.find("CommentList").instance().filterComments(firstProps.location.search, wrapper.state().comments);
+
+			await nextTick();
+			wrapper.update();
+
+			expect(wrapper.find("li").length).toEqual(6);
+		});
 	});
 });

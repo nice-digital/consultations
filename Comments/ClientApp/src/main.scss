@@ -1,8 +1,11 @@
 // Node imports
+$nice-font-base-path: "/consultations/fonts/";
+
 @import "nice-design-system";
 @import "nice-icons";
 
-// Design System Overrides
+
+  // Design System Overrides
 @import "./components/StackedNav/StackedNav";
 
 // Project variables

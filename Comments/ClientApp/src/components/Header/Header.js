@@ -7,8 +7,7 @@ type PropsType = {
 	title: string,
 	reference: string,
 	endDate: any,
-	match: any,
-	onNewCommentClick: Function
+	match: any
 }
 
 export const Header = (props: PropsType) => {
@@ -18,25 +17,6 @@ export const Header = (props: PropsType) => {
 
 	return (
 		<Fragment>
-			<p className="mb--0">
-				Consultation |{" "}
-				<button
-					className="buttonAsLink"
-					tabIndex={0}
-					onClick={e => {
-						e.preventDefault();
-						props.onNewCommentClick({
-							sourceURI: props.match.url,
-							commentText: "",
-							commentOn: "Consultation",
-							quote: title
-						});
-					}}
-				>
-					Comment on whole consultation
-				</button>&nbsp;&nbsp;
-			</p> 
-
 			<h1 className="page-header__heading mt--0">{title}</h1>
 			<p className="page-header__lead">
 				[{reference}] Open until{" "}

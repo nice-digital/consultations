@@ -6,43 +6,69 @@ import { Header } from "../Header/Header";
 import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
 import { projectInformation } from "../../constants";
 import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
-import { StickyContainer } from "react-sticky";
+import { StickyContainer, Sticky } from "react-sticky";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { queryStringToObject } from "../../helpers/utils";
+import { UserContext } from "../../context/UserContext";
 
-export class ReviewPage extends Component {
-	constructor() {
-		super();
+type DocumentType = {
+	title: string,
+	sourceURI: string,
+	supportsComments: boolean
+};
+
+type PropsType = {
+	location: {
+		pathname: string,
+		search: string
+	}
+};
+
+export class ReviewPage extends Component<PropsType> {
+	constructor(props: PropsType) {
+		super(props);
 
 		this.state = {
 			documentsList: [],
-			documentFilter: 1
+			consultationData: null,
+			isSubmitted: false
 		};
 	}
 
-	getData() {
-		load("documents", undefined, [], { consultationId: 1 })
-			.then(response => {
-				this.setState({
-					documentsList: response.data,
-					documentFilter: this.getCurrentSourceURI()
-				});
-			})
+	gatherData = async () => {
+		const consultationId = this.props.match.params.consultationId;
+
+		const documentsData = load("documents", undefined, [], { consultationId })
+			.then(response => response.data)
 			.catch(err => {
 				throw new Error("documentsData " + err);
 			});
-	}
 
-	generateDocumentList = (documentsList) =>{
-		const documentLinks = documentsList.map(
-			(consultationDocument) => {
-				return {
-					label: consultationDocument.title,
-					url: `${this.props.location.pathname}?sourceURI=${consultationDocument.sourceURI}`,
-					current: this.getCurrentSourceURI() === consultationDocument.sourceURI
-				};
-			}
-		);
+		const consultationData = load("consultation", undefined, [], {
+			consultationId
+		})
+			.then(response => response.data)
+			.catch(err => {
+				throw new Error("consultationData " + err);
+			});
+
+		return {
+			documentsList: await documentsData,
+			consultationData: await consultationData
+		};
+	};
+
+	generateDocumentList = (documentsList: Array<DocumentType>) =>{
+		let documentLinks = documentsList.filter(docs => docs.supportsComments)
+			.map(
+				(consultationDocument) => {
+					return {
+						label: consultationDocument.title,
+						url: `${this.props.location.pathname}?sourceURI=${encodeURIComponent(consultationDocument.sourceURI)}`,
+						current: this.getCurrentSourceURI() === consultationDocument.sourceURI
+					};
+				}
+			);
 
 		return {
 			title: "View comments by document",
@@ -50,19 +76,18 @@ export class ReviewPage extends Component {
 		};
 	};
 
-	componentDidMount(){
-		this.getData();
-	}
-
-	componentDidUpdate(prevProps){
-		const oldDocId = queryStringToObject(prevProps.location.search).documentId;
-		const newDocId = queryStringToObject(this.props.location.search).documentId;
-
-		if (oldDocId !== newDocId) {
-			this.setState({
-				documentFilter: newDocId
+	componentDidMount() {
+		// if (!this.state.hasInitialData) {
+		this.gatherData()
+			.then(data => {
+				this.setState({
+					...data
+				});
+			})
+			.catch(err => {
+				throw new Error("gatherData in componentDidMount failed " + err);
 			});
-		}
+		// }
 	}
 
 	getCurrentSourceURI = () => {
@@ -72,16 +97,17 @@ export class ReviewPage extends Component {
 
 	getBreadcrumbs = () => {
 		const { consultationId } = this.props.match.params;
-		const consultationsFirstDocument = this.state.documentsList[0].documentId;
-		const firstDocumentChapterSlug = this.state.documentsList[0].chapters[0].slug;
+		const firstCommentableDocument = this.state.documentsList.filter(doc => doc.supportsComments)[0]; //todo: this whole function needs to get it's content from the feed.
+		const consultationsFirstDocument = firstCommentableDocument.documentId;
+		const firstDocumentChapterSlug = firstCommentableDocument.chapters[0].slug;
 		return [
 			{
 				label: "All Consultations",
-				url: "https://alpha.nice.org.uk/guidance/inconsultation" // todo: link to current consultation "consultation list page" on dev?
+				url: "#"
 			},
 			{
-				label: "Consultation", // todo: consultation overview link to come from API endpoint
-				url: "https://alpha.nice.org.uk/guidance/indevelopment/gid-dg10046/consultation/html-content" // todo: demo - hardcoded to jane's overview
+				label: "Consultation",
+				url: "https://alpha.nice.org.uk/guidance/indevelopment/gid-ng10103/consultation/html-content"
 			},
 			{
 				label: "Documents",
@@ -90,13 +116,15 @@ export class ReviewPage extends Component {
 		];
 	};
 
-	onNewCommentClick = () => {
-		return null;
+	submitConsultation = () => {
+		this.setState({
+			isSubmitted: true
+		});
 	};
 
 	render() {
 		if (this.state.documentsList.length === 0) return <h1>Loading...</h1>;
-
+		const { title, reference, endDate } = this.state.consultationData;
 		return (
 			<Fragment>
 				<div className="container">
@@ -111,21 +139,68 @@ export class ReviewPage extends Component {
 							<main role="main">
 								<div className="page-header">
 									<Header
-										title="Unstable angina and NSTEMI: early management"
-										reference="GID-TA10232"
-										endDate="31 May 2018"
-										onNewCommentClick={this.onNewCommentClick()}
-										url="1/1/Introduction"
+										title={title}
+										reference={reference}
+										endDate={endDate}
 									/>
-									<span>Review your comments</span>
+									<h2 className="mt--0">Comments for review</h2>
 									<StickyContainer className="grid">
 										<div data-g="12 md:3">
-											<StackedNav links={this.generateDocumentList(this.state.documentsList)}	/>
+											<Sticky disableHardwareAcceleration>
+												{({ style }) => (
+													<div style={style}>
+														<StackedNav links={
+															{
+																title: "All comments in this consultation",
+																links: [
+																	{
+																		label: title,
+																		url: this.props.location.pathname,
+																		current: this.getCurrentSourceURI() == null
+																	}
+																]
+															}
+														}/>
+														<StackedNav
+															links={this.generateDocumentList(this.state.documentsList)}/>
+													</div>
+												)}
+											</Sticky>
 										</div>
 										<div data-g="12 md:6">
-											<CommentListWithRouter isReviewPage={true} />
+											<h3 className="mt--0">{this.state.isSubmitted ? "Comments submitted" : "Comments"}</h3>
+											<CommentListWithRouter isReviewPage={true} isSubmitted={this.state.isSubmitted}/>
 										</div>
-										<div data-g="12 md:3">right</div>
+										<div data-g="12 md:3">
+											<Sticky disableHardwareAcceleration>
+												{({ style }) => (
+													<div style={style}>
+														<UserContext.Consumer>
+															{contextValue => {
+																if (contextValue.isAuthorised) {
+																	return (
+																		<Fragment>
+																			<h3 className="mt--0">Ready to submit?</h3>
+																			<button
+																				disabled={this.state.isSubmitted}
+																				className="btn btn--cta"
+																				onClick={this.submitConsultation}
+																			>
+																				{this.state.isSubmitted ? "Comments submitted": "Submit your comments"}
+																			</button>
+																			<button
+																				className="btn btn--secondary">
+																				Download all comments
+																			</button>
+																		</Fragment>
+																	);
+																}
+															}}
+														</UserContext.Consumer>
+													</div>
+												)}
+											</Sticky>
+										</div>
 									</StickyContainer>
 								</div>
 							</ main>

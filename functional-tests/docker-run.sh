@@ -13,7 +13,8 @@ docker-compose run tests waitforit -t 120 --strict niceorg:8080 -- npm run test:
 
 # Copy error shots and logs to use as a TeamCity artifact for debugging purposes
 mkdir -p docker-output
-docker cp functional-tests_tests_run_1:/tests/errorShots ./docker-output/errorShots
+docker cp functional-tests_tests_1:/tests/errorShots ./docker-output/errorShots
+docker cp functional-tests_comments_1:/app/logs ./docker-output
 docker-compose logs > ./docker-output/logs.txt
 
 # Clean up

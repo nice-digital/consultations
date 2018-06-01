@@ -72,3 +72,5 @@ services:
       - ACCEPT_EULA=Y
       - MSSQL_PID=Express
       - MSSQL_SA_PASSWORD
+    ports:
+      - 1434:1433

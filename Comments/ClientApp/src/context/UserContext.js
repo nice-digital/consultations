@@ -33,48 +33,21 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 			registerURL: ""
 		};
 
-		let preloadedData = {};
+		const isServerSideRender = (this.props.staticContext && this.props.staticContext.preload);		
+		const preloadSource = isServerSideRender ? this.props.staticContext.preload.data : window.__PRELOADED__; //TODO: extract this preloaded line out to (or near) the preload endpoint method.
 
-		if (this.props.staticContext && this.props.staticContext.preload) {
-			preloadedData = this.props.staticContext.preload.data;
-
-
-			//console.log(`preloadedData: ${stringifyObject(preloadedData)}`);
-
-			this.state.isAuthorised = preloadedData.isAuthorised;
-			this.state.displayName = preloadedData.displayName;
-			this.state.signInURL = preloadedData.signInURL;
-			this.state.registerURL = preloadedData.registerURL;
-		}
-
-
-
-		//console.log('about to call user with url:' + this.props.match.url);
-		//const preloaded = preload(
-		//	this.props.staticContext,
-		//	"user",
-		//	[],
-		//	{
-		//		returnURL: this.props.match.url
-		//	},
-		//	preloadedData
-		//);
-		//console.log('in constructor');
-		//console.log('preloaded' + stringifyObject(preloaded));
-		//if (preloaded) {
-		//	console.log('setting state in context');
-		//	this.state = {
-		//		isAuthorised: preloadedData.isAuthorised,
-		//		displayName: preloadedData.displayName,
-		//		signInURL: preloadedData.signInURL,
-		//		registerURL: preloadedData.signInURL
-		//	};
-		//}
-
+		if (preloadSource){
+			this.state = {
+				isAuthorised: preloadSource.isAuthorised,
+				displayName: preloadSource.displayName,
+				signInURL: preloadSource.signInURL,
+				registerURL: preloadSource.registerURL
+			};
+		} 
 	}
 
 	loadUser = () => {
-		load("user", undefined, [], { returnURL: this.props.location.pathname })
+		load("user", undefined, [], { returnURL: this.props.location.pathname, cachebust: new Date().getTime() })
 			.then(
 				res => {
 					this.setState({
@@ -82,10 +55,16 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 						displayName: res.data.displayName,
 						signInURL: res.data.signInURL,
 						registerURL: res.data.registerURL
-					});
+					}); //, this.totalHack);
 				}
 			);
 	}
+
+	//totalHack = () => { //this _shouldn't_ be needed any more..
+	//	if (!this.state.isAuthorised) {
+	//		setTimeout(this.loadUser, 3000);
+	//	}
+	//}
 
 	componentDidUpdate(prevProps: PropsType) {
 		const oldRoute = prevProps.location.pathname;
@@ -96,7 +75,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 	}
 
 	componentDidMount() {
-		this.loadUser();
+		this.loadUser(); //this is currently only needed as the sign in url isn't right on SSR. TODO: fix SSR.
 	}
 
 	render() {

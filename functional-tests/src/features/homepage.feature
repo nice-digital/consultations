@@ -21,13 +21,9 @@ Feature: Consultations homepage feature
 
   Scenario: Comment Panel can be rolled down
     When I wait on element ".page-header" to exist
-    Given I expect that element "body #sidebar-panel" is not visible
+    Given I expect that element "body #sidebar-panel" is not within the viewport
     When I click on the element "body #js-drawer-toggleopen"
     Then I expect that element "body #sidebar-panel" is visible
 
-   Scenario: Get Cookie
-    When I wait on element ".page-header" to exist
-    When I click on the button "body #js-drawer-toggleopen"
-    #When I set a cookie "__nrpa_2.2" with the content "SJQxrQET32KYHUYHY6eOSLldyy87hHkQpuxX9Sh/Z3k+V2UENlYwe4T5i5CDTf4Ltn2I35Yen+unTSHs08TXcg=="
-    Then I expect that element "body #sidebar-panel" contains the text "Sign in message goes here."
+
 
