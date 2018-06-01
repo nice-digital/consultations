@@ -1,5 +1,6 @@
 using Comments.Services;
 using Comments.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -9,7 +10,8 @@ namespace Comments.Controllers.Api
 {
     [Produces("application/json")]
     [Route("consultations/api/[controller]")]
-    public class ReviewController : Controller
+    [Authorize]
+	public class ReviewController : Controller
     {
         private readonly ICommentService _commentService;
         private readonly ILogger<ConsultationController> _logger;
@@ -33,5 +35,21 @@ namespace Comments.Controllers.Api
 
             return _commentService.GetUsersCommentsAndQuestionsForConsultation(consultationId);
         }
-    }
+
+	    /// <summary>
+		/// POST: eg. consultations/api/Review/1
+		/// </summary>
+		/// <param name="comment"></param>
+		/// <returns></returns>
+	    [HttpPost("{consultationId}")]
+	    public IActionResult Post([FromRoute] int consultationId, [FromBody] ViewModels.CommentsAndAnswers commentsAndAnswers)
+	    {
+		    if (!ModelState.IsValid)
+		    {
+			    return BadRequest(ModelState);
+		    }
+
+		    return Content("hit the post");
+	    }
+	}
 }
