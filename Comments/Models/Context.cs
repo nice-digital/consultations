@@ -11,18 +11,20 @@ namespace Comments.Models
     {
 	    private readonly IConfiguration _configuration;
 
-		public ConsultationsContext(DbContextOptions options)
-			: base(options) {
-		    _createdByUserID = Guid.Empty;
-		}
-	    public ConsultationsContext() : base()
-	    {
-		    _createdByUserID = Guid.Empty;
-	    }
-	    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-	    {
-			optionsBuilder.UseSqlServer("[snip]");
-		}
+		//these commented out constructors are just here for use when creating scaffolding with EF core. without them it won't work.
+		//don't leave them in uncommented though. and don't set that connection string to a valid value and commit it.
+		//public ConsultationsContext(DbContextOptions options)
+		//	: base(options) {
+		//    _createdByUserID = Guid.Empty;
+		//}
+	 //   public ConsultationsContext() : base()
+	 //   {
+		//    _createdByUserID = Guid.Empty;
+	 //   }
+	 //   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+	 //   {
+		//	optionsBuilder.UseSqlServer("[snip]");
+		//}
 
 
 		public ConsultationsContext(DbContextOptions options, IUserService userService) : base(options)
