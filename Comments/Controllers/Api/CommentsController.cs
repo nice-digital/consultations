@@ -28,7 +28,7 @@ namespace Comments.Controllers.Api
 		/// <param name="isReview">boolean indicating if the feed isbeing accessed for reviewing purposes</param>
 		/// <returns></returns>
 		[HttpGet]
-        public CommentsAndQuestions Get(string sourceURI, bool isReview)
+        public CommentsAndQuestions Get(string sourceURI, bool isReview = false)
         {
             if (string.IsNullOrWhiteSpace(sourceURI))
                 throw new ArgumentNullException(nameof(sourceURI));
