@@ -3,6 +3,9 @@
     margin-left: rem(-40px);
     position: absolute;
     @extend %unstyled-button;
+    &:hover {
+      cursor: pointer;
+    }
   }
   padding-left: rem($spacing-large);
   &.loading {
@@ -13,7 +16,8 @@
   h2,
   h3,
   h4,
-  h5 h6 {
+  h5,
+  h6 {
     margin-top: 0;
     a {
       text-decoration: none;
