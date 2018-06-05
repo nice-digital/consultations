@@ -22,7 +22,7 @@ namespace Comments.ViewModels
         {
 	        ConsultationId = consultationId;
 			DocumentId = resource.ConsultationDocumentId;
-            SupportsComments = resource.IsConsultationCommentsDocument;
+            SupportsComments = resource.ConvertedDocument;
 
             if (resource.Document != null)
             {

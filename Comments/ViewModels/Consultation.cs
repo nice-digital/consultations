@@ -21,7 +21,7 @@ namespace Comments.ViewModels
             RelevantTo = consultation.RelevantTo;
             ConsultationId = consultation.ConsultationId;
             Process = consultation.Process;
-            AllowConsultationComments = consultation.AllowConsultationComments;
+            AllowConsultationComments = consultation.HasDocumentsWhichAllowConsultationComments;
             PartiallyUpdatedProjectReference = consultation.PartiallyUpdatedProjectReference;
             OrigProjectReference = consultation.OrigProjectReference;
             User = user;
