@@ -204,7 +204,7 @@ namespace Comments.Test.UnitTests
         }
 
         [Fact]
-        public void CommentsQuestionsAndAnswers_ReturnAllOwnCommentsForConsultation()
+        public void CommentsQuestionsAndAnswers_ReturnAllOwnCommentsForReviewingConsultation()
         {
             // Arrange
             ResetDatabase();
