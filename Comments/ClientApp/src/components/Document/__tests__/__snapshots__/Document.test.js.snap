@@ -18,6 +18,8 @@ Array [
             >
                 <span
                     className="phase-banner__tag"
+                    onClick={[Function]}
+                    role="button"
                 >
                     <span
                         className="tag tag--impact tag--agile"

@@ -13,6 +13,10 @@
     "consultationId":1,
     "process":"TAG",
     "allowConsultationComments":true,
+    "hasDocumentsWhichAllowConsultationComments":false,
+    "hasDocumentsWhichAllowConsultationQuestions":true,
+    "supportsQuestions":false,
+    "supportsComments":false,
     "partiallyUpdatedProjectReference":null,
     "origProjectReference":null,
     "user":{

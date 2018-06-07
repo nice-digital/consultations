@@ -1,6 +1,7 @@
 // @flow
 
 import React from "react";
+import * as Bowser from "bowser";
 
 type PropsType = {
 	phase: string,
@@ -8,11 +9,18 @@ type PropsType = {
 	repo: string
 }
 
+const getBrowserInfo = () => {
+	if (typeof window !== "undefined") {
+		return `${Bowser.name} ${Bowser.version} on ${Bowser.osname} ${Bowser.osversion}`;
+	}
+	return "";
+};
+
 export const PhaseBanner = (props: PropsType) => {
 	const { phase, name, repo } = props;
 	return (
 		<aside className="phase-banner mt--b">
-			<span className="phase-banner__tag">
+			<span className="phase-banner__tag" role="button" onClick={()=>alert(getBrowserInfo())}>
 				<span className="tag tag--impact tag--agile">{phase}</span>
 			</span>
 			<span className="phase-banner__label">
