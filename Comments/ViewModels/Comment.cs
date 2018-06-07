@@ -14,7 +14,7 @@ namespace Comments.ViewModels
             LastModifiedDate = lastModifiedDate;
             LastModifiedByUserId = lastModifiedByUserId;
             CommentText = commentText;
-	        Status = new Status(); statusId;
+	        StatusId = statusId;
         }
 
         public Comment(Models.Location location, Models.Comment comment) : base(location.LocationId, location.SourceURI, location.HtmlElementID,  
@@ -24,9 +24,9 @@ namespace Comments.ViewModels
             LastModifiedDate = comment.LastModifiedDate;
             LastModifiedByUserId = comment.LastModifiedByUserId;
             CommentText = comment.CommentText;
-	        Status = new Status(comment.Status);
-	        StatusId = comment.Status.StatusId;
-		}
+	        Status = null; //new Status(comment.Status);
+	        StatusId = 1; //comment.Status.StatusId;
+        }
 
         public int CommentId { get; set; }
         public DateTime LastModifiedDate { get; set; }
@@ -34,6 +34,7 @@ namespace Comments.ViewModels
         public string CommentText { get; set; }
 
 	    public ViewModels.Status Status { get; set; }
+		public int StatusId { get; set; }
 
 		private CommentOn? _commentOn = null;
         public string CommentOn

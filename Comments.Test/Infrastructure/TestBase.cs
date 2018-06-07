@@ -76,13 +76,13 @@ namespace Comments.Test.Infrastructure
             //};
 
         // var connection = new SqliteConnection(sqLiteConnectionStringBuilder.ConnectionString); //"Data Source=" + DatabaseName + ";"); //"BinaryGuid=False"); //Version=3;
-        var connection = new SqliteConnection("DataSource=:memory:");
+        //var connection = new SqliteConnection("DataSource=:memory:");
 
-            connection.Open();
+        //    connection.Open();
 
             _options = new DbContextOptionsBuilder<ConsultationsContext>()
-                    .UseSqlite(connection)
-                    //.UseInMemoryDatabase(databaseName)
+                    //.UseSqlite(connection)
+                    .UseInMemoryDatabase(databaseName)
                     .Options;
 
             _context = new ConsultationsContext(_options, _fakeUserService);
@@ -174,7 +174,7 @@ namespace Comments.Test.Infrastructure
         }
         protected int AddComment(int locationId, string commentText, bool isDeleted, Guid createdByUserId, ConsultationsContext passedInContext = null)
         {
-            var comment = new Comment(locationId, createdByUserId, commentText, Guid.Empty, location: null);
+            var comment = new Comment(locationId, createdByUserId, commentText, Guid.Empty, location: null, statusId: 1, status: null);
             comment.IsDeleted = isDeleted;
             if (passedInContext != null)
             {

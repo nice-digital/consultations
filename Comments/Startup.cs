@@ -236,17 +236,17 @@ namespace Comments
                 }
             });
             
-            try
-            {
-                using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-                {
-                     serviceScope.ServiceProvider.GetService<ConsultationsContext>().Database.Migrate();
-                }
-            }
-            catch(Exception ex)
-            {
-                startupLogger.LogError(String.Format("EF Migrations Error: {0}", ex));
-            }
+            //try
+            //{
+            //    using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            //    {
+            //         serviceScope.ServiceProvider.GetService<ConsultationsContext>().Database.Migrate();
+            //    }
+            //}
+            //catch(Exception ex)
+            //{
+            //    startupLogger.LogError(String.Format("EF Migrations Error: {0}", ex));
+            //}
         }
     }
 }

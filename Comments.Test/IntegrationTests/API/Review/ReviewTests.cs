@@ -47,7 +47,7 @@ namespace Comments.Test.IntegrationTests.API.Review
 	    public async Task Submit_Comments()
 	    {
 			//Arrange
-		    var comment = new ViewModels.Comment(1, "consultations://./consultation/1/document/1/chapter/introduction", null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty, "comment text", "Draft");
+		    var comment = new ViewModels.Comment(1, "consultations://./consultation/1/document/1/chapter/introduction", null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty, "comment text", 1);
 		    var commentsAndAnswers = new CommentsAndAnswers(comments: new List<Comment>{comment}, answers: new List<Answer>());
 		    var content = new StringContent(JsonConvert.SerializeObject(commentsAndAnswers), Encoding.UTF8, "application/json");
 

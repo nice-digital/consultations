@@ -20,7 +20,7 @@ namespace Comments.Test.IntegrationTests.API.Answers
         {
             // Arrange
             SetupTestDataInDB();
-            var answer = new ViewModels.Answer(0, "answer text", false, DateTime.Now, Guid.Empty, 1, "Draft");
+            var answer = new ViewModels.Answer(0, "answer text", false, DateTime.Now, Guid.Empty, 1, 1);
             var content = new StringContent(JsonConvert.SerializeObject(answer), Encoding.UTF8, "application/json");
 
             // Act
