@@ -22,6 +22,12 @@ const App = () => {
 					<Redirect to="/10/5/overview"/>
 				</Route>
 
+				{/*Preview View*/}
+				{/*Comes from indev - e.g. http://dev.nice.org.uk/preview/consultation/1/document/1*/}
+				<Route path="/preview/consultation/:consultationId/document/:documentId">
+					<DocumentView/>
+				</Route>
+
 				{/*Document View*/}
 				<Route path="/:consultationId/:documentId/:chapterSlug">
 					<DocumentView/>
