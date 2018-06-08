@@ -23,7 +23,7 @@ type PropsType = {
 	drawerOpen: boolean,
 	isReviewPage: boolean,
 	filterByDocument: number,
-	isSubmmitted: boolean
+	isSubmitted: boolean
 };
 
 type CommentType = {
@@ -137,12 +137,10 @@ export class CommentList extends Component<PropsType, StateType> {
 		if (filterBy.sourceURI == null) filterBy = { sourceURI: "" };
 		const idsOfFilteredComments = comments.filter(comment => comment.sourceURI.indexOf(filterBy.sourceURI) !== -1).map(comment => comment.commentId);
 
-		const commentsWithFilteredAttr = comments.map(comment => {
+		return comments.map(comment => {
 			comment.show = !idsOfFilteredComments.includes(comment.commentId);
 			return comment;
 		});
-
-		return commentsWithFilteredAttr;
 	};
 
 	newComment(newComment: CommentType) {

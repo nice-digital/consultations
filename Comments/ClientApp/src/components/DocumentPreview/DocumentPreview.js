@@ -4,21 +4,17 @@ import React, { Component, Fragment } from "react";
 import Moment from "react-moment";
 import { Helmet } from "react-helmet";
 import { StickyContainer, Sticky } from "react-sticky";
-import { withRouter } from "react-router";
 import Scrollspy from "react-scrollspy";
+import { withRouter } from "react-router";
+import ReactHtmlParser from "react-html-parser";
 
-import preload from "../../data/pre-loader";
+// import preload from "../../data/pre-loader";
 import { load } from "./../../data/loader";
 import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
-import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
 import { projectInformation } from "../../constants";
-import { processDocumentHtml } from "./process-document-html";
-import { LoginBanner } from "./../LoginBanner/LoginBanner";
-import { UserContext } from "../../context/UserContext";
-import { Selection } from "../Selection/Selection";
-// import stringifyObject from "stringify-object";
+// import { UserContext } from "../../context/UserContext";
 
 type PropsType = {
 	staticContext?: any,
@@ -36,16 +32,7 @@ type StateType = {
 	hasInitialData: boolean
 };
 
-type ContextType = {
-	isAuthorised: boolean,
-	registerURL: string,
-	signInURL: string,
-	children: any
-};
-
-type DocumentsType = Array<Object>;
-
-export class Document extends Component<PropsType, StateType> {
+export class DocumentPreview extends Component<PropsType, StateType> {
 	constructor(props: PropsType) {
 		super(props);
 
@@ -58,38 +45,40 @@ export class Document extends Component<PropsType, StateType> {
 			currentInPageNavItem: null
 		};
 
-		if (this.props) {
-			const preloadedChapter = preload(
-				this.props.staticContext,
-				"chapter",
-				[],
-				{ ...this.props.match.params }
-			);
-			const preloadedDocuments = preload(
-				this.props.staticContext,
-				"documents",
-				[],
-				{ consultationId: this.props.match.params.consultationId }
-			);
-			const preloadedConsultation = preload(
-				this.props.staticContext,
-				"consultation",
-				[],
-				{ consultationId: this.props.match.params.consultationId }
-			);
-
-			if (preloadedChapter && preloadedDocuments && preloadedConsultation) {
-				this.state = {
-					chapterData: preloadedChapter,
-					documentsData: preloadedDocuments,
-					consultationData: preloadedConsultation,
-					loading: false,
-					hasInitialData: true,
-					currentInPageNavItem: null
-				};
-			}
-		}
+		// if (this.props) {
+		// 	const preloadedChapter = preload(
+		// 		this.props.staticContext,
+		// 		"chapter",
+		// 		[],
+		// 		{ ...this.props.match.params }
+		// 	);
+		// 	const preloadedDocuments = preload(
+		// 		this.props.staticContext,
+		// 		"documents",
+		// 		[],
+		// 		{ consultationId: this.props.match.params.consultationId }
+		// 	);
+		// 	const preloadedConsultation = preload(
+		// 		this.props.staticContext,
+		// 		"consultation",
+		// 		[],
+		// 		{ consultationId: this.props.match.params.consultationId }
+		// 	);
+		//
+		// 	if (preloadedChapter && preloadedDocuments && preloadedConsultation) {
+		// 		this.state = {
+		// 			chapterData: preloadedChapter,
+		// 			documentsData: preloadedDocuments,
+		// 			consultationData: preloadedConsultation,
+		// 			loading: false,
+		// 			hasInitialData: true,
+		// 			currentInPageNavItem: null
+		// 		};
+		// 	}
+		// }
 	}
+
+	// todo: relying on the slug being in the URL?
 
 	gatherData = async () => {
 		const { consultationId, documentId, chapterSlug } = this.props.match.params;
@@ -97,7 +86,7 @@ export class Document extends Component<PropsType, StateType> {
 		const chapterData = load("chapter", undefined, [], {
 			consultationId,
 			documentId,
-			chapterSlug
+			chapterSlug: "introduction" //todo: carry on here
 		})
 			.then(response => response.data)
 			.catch(err => {
@@ -161,57 +150,6 @@ export class Document extends Component<PropsType, StateType> {
 		}
 	}
 
-	getDocumentLinks = (
-		getCommentable: boolean,
-		title: string,
-		documents: DocumentsType,
-		currentDocumentFromRoute: number,
-		currentConsultationFromRoute: number
-	) => {
-		if (!documents) return null;
-
-		const isCurrentDocument = documentId => documentId === currentDocumentFromRoute;
-		const isCommentable = d => d.supportsComments;
-		const isSupporting = d => !d.supportsComments;
-
-		const documentToLinkObject = d => {
-			const label = d.title || "Download Document";
-			// If it's a commentable document, get the link of the first chapter in the document, else use the href and provide a download link
-			let url: string = "";
-
-			if (d.supportsComments) {
-				url = d.supportsComments ? `/${currentConsultationFromRoute}/${d.documentId}/${d.chapters[0].slug}` : d.href;
-			} else {
-				url = d.href || "#";
-			}
-
-			const current = isCurrentDocument(d.documentId);
-
-			return {
-				label,
-				url,
-				current
-			};
-		};
-
-		let filteredDocuments: DocumentsType = [];
-
-		if (getCommentable) {
-			filteredDocuments = documents
-				.filter(isCommentable)
-				.map(documentToLinkObject);
-		} else {
-			filteredDocuments = documents
-				.filter(isSupporting)
-				.map(documentToLinkObject);
-		}
-
-		return {
-			title,
-			links: filteredDocuments
-		};
-	};
-
 	getDocumentChapterLinks = (documentId: number) => {
 		if (!documentId) return null;
 
@@ -237,19 +175,6 @@ export class Document extends Component<PropsType, StateType> {
 			title: "Chapters in this document",
 			links: currentDocument[0].chapters.map(createChapterLink)
 		};
-	};
-
-	getBreadcrumbs = () => {
-		return [
-			{
-				label: "All Consultations",
-				url: "#"
-			},
-			{
-				label: "Consultation",
-				url: "https://alpha.nice.org.uk/guidance/indevelopment/gid-ng10103/consultation/html-content"
-			}
-		];
 	};
 
 	getCurrentDocumentTitle = (documents: Object, documentId: number) => {
@@ -280,13 +205,8 @@ export class Document extends Component<PropsType, StateType> {
 		return (
 			<Fragment>
 				<Helmet>
-					<title>{title}</title>
+					<title>Preview - {title}</title>
 				</Helmet>
-				<UserContext.Consumer>
-					{(contextValue: ContextType) => !contextValue.isAuthorised ?
-						<LoginBanner signInButton={false} currentURL={this.props.match.url}
-									 signInURL={contextValue.signInURL} registerURL={contextValue.registerURL}/> : null}
-				</UserContext.Consumer>
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">
@@ -295,56 +215,11 @@ export class Document extends Component<PropsType, StateType> {
 								name={projectInformation.name}
 								repo={projectInformation.repo}
 							/>
-							<BreadCrumbs links={this.getBreadcrumbs()}/>
 							<main role="main">
 								<div className="page-header">
-									<p className="mb--0">
-										Consultation |{" "}
-										<button
-											className="buttonAsLink"
-											tabIndex={0}
-											onClick={e => {
-												e.preventDefault();
-												this.props.onNewCommentClick({
-
-													sourceURI: this.props.match.url,
-													commentText: "",
-													commentOn: "Consultation",
-													quote: title
-												});
-											}}
-										>
-											Comment on whole consultation
-										</button>
-										&nbsp;&nbsp;
-									</p>
+									<p className="mb--0">Consultation</p>
 									<h1 className="page-header__heading mt--0">{title}</h1>
-									<p className="page-header__lead">
-										[{reference}] Open until{" "}
-										<Moment format="D MMMM YYYY" date={endDate}/>
-									</p>
-									<p className="mb--0">
-										Document |{" "}
-										<button
-											className="buttonAsLink"
-											tabIndex={0}
-											onClick={e => {
-												e.preventDefault();
-												this.props.onNewCommentClick({
-
-													sourceURI: this.props.match.url,
-													commentText: "",
-													commentOn: "Document",
-													quote: this.getCurrentDocumentTitle(
-														documentsData,
-														documentId
-													)
-												});
-											}}
-										>
-											Comment on this document
-										</button>
-									</p>
+									<p className="mb--0">Document</p>
 									<h2 className="mt--0">
 										{this.getCurrentDocumentTitle(documentsData, documentId)}
 									</h2>
@@ -355,38 +230,13 @@ export class Document extends Component<PropsType, StateType> {
 										<StackedNav
 											links={this.getDocumentChapterLinks(documentId)}
 										/>
-										<StackedNav
-											links={this.getDocumentLinks(
-												true,
-												"Other commentable documents in this consultation",
-												documentsData,
-												documentId,
-												consultationId
-											)}
-										/>
-										<StackedNav
-											links={this.getDocumentLinks(
-												false,
-												"Supporting documents",
-												documentsData,
-												documentId,
-												consultationId
-											)}
-										/>
 									</div>
 									<div data-g="12 md:6" className="documentColumn">
 										<div
 											className={`document-comment-container ${
 												this.state.loading ? "loading" : ""}`}
 										>
-											<Selection newCommentFunc={this.props.onNewCommentClick}
-													   sourceURI={this.props.match.url}>
-												{processDocumentHtml(
-													content,
-													this.props.onNewCommentClick,
-													this.props.match.url
-												)}
-											</Selection>
+											{ReactHtmlParser(content)}
 										</div>
 									</div>
 									<div data-g="12 md:3" className="inPageNavColumn">
@@ -453,4 +303,4 @@ export class Document extends Component<PropsType, StateType> {
 	}
 }
 
-export default withRouter(Document);
+export default withRouter(DocumentPreview);
