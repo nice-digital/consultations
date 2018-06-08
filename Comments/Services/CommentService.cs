@@ -133,14 +133,14 @@ namespace Comments.Services
             return new CommentsAndQuestions(commentsData, questionsData, user.IsAuthorised, signInURL);
         }
 
-        public CommentsAndQuestions GetUsersCommentsAndQuestionsForConsultation(int constulationId)
+        public CommentsAndQuestions GetUsersCommentsAndQuestionsForConsultation(int consultationId)
         {
             var user = _userService.GetCurrentUser();
 
             if (!user.IsAuthorised)
                 return new CommentsAndQuestions(new List<ViewModels.Comment>(), new List<ViewModels.Question>(), user.IsAuthorised, null);
 
-	        var sourceURI = ConsultationsUri.CreateConsultationURI(constulationId);
+	        var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
 
 
 			var locations = _context.GetAllCommentsAndQuestionsForConsultation(sourceURI);
@@ -155,5 +155,27 @@ namespace Comments.Services
 
             return new CommentsAndQuestions(commentsData, questionsData, user.IsAuthorised, null);
         }
-    }
+
+		public CommentsAndAnswers GetUsersCommentsAndAnswersForConsultation(int consultationId)  //TODO: Can this be refactored with GetUsersCommentsAndQuestionsForConsultation? 
+		{
+			var user = _userService.GetCurrentUser();
+
+			if (!user.IsAuthorised)
+				return new CommentsAndAnswers(new List<ViewModels.Comment>(), new List<ViewModels.Answer>());
+
+			var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
+
+			var locations = _context.GetAllCommentsAndQuestionsForConsultation(sourceURI);
+
+			var commentsData = new List<ViewModels.Comment>();
+			var answersData = new List<ViewModels.Answer>();
+			foreach (var location in locations)
+			{
+				commentsData.AddRange(location.Comment.Select(comment => new ViewModels.Comment(location, comment)));
+				//answersData.AddRange(location.Question.Select(answer => new ViewModels.Answer(location, answer)));
+			}
+
+			return new CommentsAndAnswers(commentsData, answersData);
+		}
+	}
 }

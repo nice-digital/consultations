@@ -1,10 +1,13 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using Comments.Models;
 using Comments.Services;
 using Comments.Test.Infrastructure;
 using Xunit;
 using Shouldly;
 using System.Linq;
+using Comments.ViewModels;
 using Comment = Comments.Models.Comment;
 using Location = Comments.Models.Location;
 
@@ -246,5 +249,67 @@ namespace Comments.Test.UnitTests
             //commentService.GetComment(7).validate.NotFound.ShouldBeTrue();
             viewModel.Comments.Count().ShouldBe(5);
         }
-    }
+
+	    [Fact]
+	    public void Update_Comment_Status_To_Submitted()
+	    {
+			//Arrange
+		    ResetDatabase();
+		    var ChapterIntroURI = "consultations://./consultation/1/document/1/chapter/introduction";
+			var userId = Guid.NewGuid();
+		    var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+		    var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+		    var authenticateService = new FakeAuthenticateService(authenticated: true);
+
+		    var commentService = new CommentService(new ConsultationsContext(_options, userService), userService, authenticateService);
+		    var locationId = AddLocation(sourceURI);
+
+		    var commentId = AddComment(locationId, "current user's comment", isDeleted: false, createdByUserId: userId);
+		    var questionTypeId = AddQuestionType("Description", false, true);
+		    AddQuestion(locationId, questionTypeId, "My Question text");
+		    var comment = commentService.GetComment(commentId);
+
+		    AddCommentsAndQuestionsAndAnswers(ChapterIntroURI, "Comment Text", "Question Text", "Answer Text", userId, _context);
+		    AddCommentsAndQuestionsAndAnswers(ChapterIntroURI, "Comment Text", "Question Text", "Answer Text", userId, _context);
+
+			//Act
+			var submitService = new SubmitService(new ConsultationsContext(_options, userService), _fakeUserService, authenticateService);
+		    var commentsAndQuestions = commentService.GetUsersCommentsAndQuestionsForConsultation(1);
+		    IEnumerable<ViewModels.Comment> comments = commentsAndQuestions.Comments;
+			IEnumerable<ViewModels.Answer> answers = null;
+		    
+			var commentsAndAnswers = new CommentsAndAnswers(comments, answers);
+		    submitService.SubmitCommentsAndAnswers(commentsAndAnswers);
+		    var result = commentService.GetComment(commentId);
+
+			//Assert
+		    commentsAndAnswers.Comments.First().StatusId.ShouldBe(2);
+		    commentsAndAnswers.Comments.Last().StatusId.ShouldBe(2);
+		}
+
+	    [Fact]
+	    public void CommentsAndAnswers_ReturnAllOwnCommentsAndAnswersForConsultation()
+	    {
+		    //Arrange
+		    ResetDatabase();
+		    var userId = Guid.NewGuid();
+		    var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+		    var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+		    var authenticateService = new FakeAuthenticateService(authenticated: true);
+
+		    var commentService = new CommentService(new ConsultationsContext(_options, userService), userService, authenticateService);
+		   
+		    AddCommentsAndQuestionsAndAnswers(sourceURI, "Comment Text 1", "Question Text 1", "Answer Text 1", userId, _context);
+		    AddCommentsAndQuestionsAndAnswers(sourceURI, "Comment Text 2", "Question Text 2", "Answer Text 2", userId, _context);
+		    AddCommentsAndQuestionsAndAnswers(sourceURI, "Someone elses Comment Text", "Question Text 2", "Someone elese Answer Text ", Guid.NewGuid(), _context);
+
+			//Act
+			var result = commentService.GetUsersCommentsAndAnswersForConsultation(1);
+
+		    //Assert
+			//result.Answers.Count().ShouldBe(2);
+			result.Comments.Count().ShouldBe(2);
+	    }
+
+	}
 }
