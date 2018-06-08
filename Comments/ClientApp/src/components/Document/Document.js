@@ -410,7 +410,7 @@ export class Document extends Component<PropsType, StateType> {
 																{sections.map((item, index) => {
 																	const props = {
 																		label: item.title,
-																		to: item.slug,
+																		to: `#${item.slug}`,
 																		behavior: "smooth",
 																		block: "start"
 																	};
