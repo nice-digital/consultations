@@ -232,7 +232,7 @@ namespace Comments.Test.Infrastructure
         }
         protected int AddAnswer(int questionId, Guid userId, string answerText, ConsultationsContext passedInContext = null)
         {
-            var answer = new Answer(questionId, userId, answerText, null, null);
+            var answer = new Answer(questionId, userId, answerText, null, null, 1, null);
             answer.LastModifiedDate = DateTime.Now;
             if (passedInContext != null)
             {

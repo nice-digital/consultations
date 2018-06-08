@@ -27,7 +27,7 @@ namespace Comments.ViewModels
 			QuestionId = answer.QuestionId;
 			LastModifiedDate = answer.LastModifiedDate;
 			LastModifiedByUserId = answer.LastModifiedByUserId;
-			StatusId = 1; //answer.StatusId;
+			StatusId = answer.StatusId;
 			Status = null; //new Status(answer.Status);
 		}
 

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NICE.Auth.NetCore.Services;
 
 namespace Comments.Services
@@ -172,7 +173,11 @@ namespace Comments.Services
 			foreach (var location in locations)
 			{
 				commentsData.AddRange(location.Comment.Select(comment => new ViewModels.Comment(location, comment)));
-				//answersData.AddRange(location.Question.Select(answer => new ViewModels.Answer(location, answer)));
+
+				foreach (var question in location.Question)
+				{
+					answersData.AddRange(question.Answer.Select(answer => new ViewModels.Answer(answer)));
+				}
 			}
 
 			return new CommentsAndAnswers(commentsData, answersData);

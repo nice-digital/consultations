@@ -255,36 +255,32 @@ namespace Comments.Test.UnitTests
 	    {
 			//Arrange
 		    ResetDatabase();
-		    var ChapterIntroURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var userId = Guid.NewGuid();
 		    var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+
 		    var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 		    var authenticateService = new FakeAuthenticateService(authenticated: true);
+		    var consultationContext = new ConsultationsContext(_options, userService);
 
-		    var commentService = new CommentService(new ConsultationsContext(_options, userService), userService, authenticateService);
-		    var locationId = AddLocation(sourceURI);
+			var commentService = new CommentService(consultationContext, userService, authenticateService);
+		    var submitService = new SubmitService(consultationContext, userService, authenticateService);
 
-		    var commentId = AddComment(locationId, "current user's comment", isDeleted: false, createdByUserId: userId);
-		    var questionTypeId = AddQuestionType("Description", false, true);
-		    AddQuestion(locationId, questionTypeId, "My Question text");
-		    var comment = commentService.GetComment(commentId);
-
-		    AddCommentsAndQuestionsAndAnswers(ChapterIntroURI, "Comment Text", "Question Text", "Answer Text", userId, _context);
-		    AddCommentsAndQuestionsAndAnswers(ChapterIntroURI, "Comment Text", "Question Text", "Answer Text", userId, _context);
+		    AddCommentsAndQuestionsAndAnswers(sourceURI, "Comment Text", "Question Text", "Answer Text", userId);
+		    AddCommentsAndQuestionsAndAnswers(sourceURI, "Comment Text", "Question Text", "Answer Text", userId);
 
 			//Act
-			var submitService = new SubmitService(new ConsultationsContext(_options, userService), _fakeUserService, authenticateService);
-		    var commentsAndQuestions = commentService.GetUsersCommentsAndQuestionsForConsultation(1);
-		    IEnumerable<ViewModels.Comment> comments = commentsAndQuestions.Comments;
-			IEnumerable<ViewModels.Answer> answers = null;
-		    
-			var commentsAndAnswers = new CommentsAndAnswers(comments, answers);
-		    submitService.SubmitCommentsAndAnswers(commentsAndAnswers);
-		    var result = commentService.GetComment(commentId);
+		    var commentsAndAnswers = commentService.GetUsersCommentsAndAnswersForConsultation(1);
+		    var result = submitService.SubmitCommentsAndAnswers(commentsAndAnswers);
+		    var updatedCommentsAndAnswers = commentService.GetUsersCommentsAndAnswersForConsultation(1);
 
 			//Assert
-		    commentsAndAnswers.Comments.First().StatusId.ShouldBe(2);
-		    commentsAndAnswers.Comments.Last().StatusId.ShouldBe(2);
+			result.rowsUpdated.ShouldBe(4);
+
+		    updatedCommentsAndAnswers.Comments.First().StatusId.ShouldBe(2);
+		    updatedCommentsAndAnswers.Comments.Last().StatusId.ShouldBe(2);
+
+			updatedCommentsAndAnswers.Answers.First().StatusId.ShouldBe(2);
+			updatedCommentsAndAnswers.Comments.Last().StatusId.ShouldBe(2);
 		}
 
 	    [Fact]
@@ -307,7 +303,7 @@ namespace Comments.Test.UnitTests
 			var result = commentService.GetUsersCommentsAndAnswersForConsultation(1);
 
 		    //Assert
-			//result.Answers.Count().ShouldBe(2);
+			result.Answers.Count().ShouldBe(2);
 			result.Comments.Count().ShouldBe(2);
 	    }
 

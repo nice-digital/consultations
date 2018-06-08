@@ -27,15 +27,30 @@ namespace Comments.Services
 	    {
 		    if (!_currentUser.IsAuthorised)
 			    return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"Not logged in submitting comments and answers"));
-
-		    foreach (var comment in commentsAndAnswers.Comments)
+			
+			foreach (var comment in commentsAndAnswers.Comments)
 		    {
 			    comment.StatusId = 2;
 			    comment.LastModifiedByUserId = _currentUser.UserId.Value;
 			    comment.LastModifiedDate = DateTime.UtcNow;
+
+			    _context.GetComment(comment.CommentId).UpdateFromViewModel(comment);
 			}
 
-			//commentsAndAnswers.UpdateFromViewModel(comment);
+		    foreach (var answer in commentsAndAnswers.Answers)
+		    {
+			    answer.StatusId = 2;
+			    answer.LastModifiedByUserId = _currentUser.UserId.Value;
+			    answer.LastModifiedDate = DateTime.UtcNow;
+
+				_context.GetAnswer(answer.AnswerId).UpdateFromViewModel(answer);
+			}
+
+		//TODO: do I need to update context???
+		 //   var commentInDatabase = _context.GetComment(commentId);
+
+
+			//commentsAndAnswers.Comments.UpdateFromViewModel(comment);
 			return (rowsUpdated: _context.SaveChanges(), validate: null);
 		}
     }

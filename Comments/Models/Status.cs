@@ -11,5 +11,5 @@ namespace Comments.Models
 	        Comment = comment;
 	        Answer = answer;
         }
-    }
+	}
 }
