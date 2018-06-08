@@ -57,34 +57,28 @@ class App extends React.Component<PropsType, StateType> {
 					{/*404*/}
 					<Route component={NotFound}/>
 				</Switch>
-
-				<UserContext.Consumer>
-					{contextValue => contextValue.isAuthorised ?
-						<div style={{ "display": this.state.onboarded ? "none" : "block" }}
-							 className="onboarding"
-						>
-							<div className="onboarding__modal">
-								<button
-									className="onboarding__closeButton"
-									onClick={() => this.setState({ onboarded: true })}>
-									&times;
-								</button>
-								<h1>How to make comments</h1>
-								<div className="grid">
-									<div data-g="6">
-										<p><b>Click on the icon next to a heading to comment on the chapter or section</b></p>
-										<img src={CommentImg}/>
-									</div>
-									<div data-g="6">
-										<p><b>Highlight some text to make a comment on it</b></p>
-										<img src={SelectionImg}/>
-									</div>
-								</div>
+				<div style={{ "display": this.state.onboarded ? "none" : "block" }}
+					 className="onboarding"
+				>
+					<div className="onboarding__modal">
+						<button
+							className="onboarding__closeButton"
+							onClick={() => this.setState({ onboarded: true })}>
+							&times;
+						</button>
+						<h1>How to make comments</h1>
+						<div className="grid">
+							<div data-g="6">
+								<p><b>Click on the icon next to a heading to comment on the chapter or section</b></p>
+								<img src={CommentImg}/>
+							</div>
+							<div data-g="6">
+								<p><b>Highlight some text to make a comment on it</b></p>
+								<img src={SelectionImg}/>
 							</div>
 						</div>
-						:
-						null}
-				</UserContext.Consumer>
+					</div>
+				</div>
 			</UserProviderWithRouter>
 		);
 	}
