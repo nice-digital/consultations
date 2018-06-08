@@ -6,7 +6,7 @@ import { Helmet } from "react-helmet";
 import { StickyContainer, Sticky } from "react-sticky";
 import Scrollspy from "react-scrollspy";
 import { withRouter } from "react-router";
-import ReactHtmlParser from "react-html-parser";
+import { processDocumentHtml } from "../Document/process-document-html";
 
 // import preload from "../../data/pre-loader";
 import { load } from "./../../data/loader";
@@ -78,20 +78,13 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 		// }
 	}
 
-	// todo: relying on the slug being in the URL?
+	// getChapterData = (chapterSlug: string) => {
+	// 	const { consultationId, documentId } = this.props.match.params;
+	//
+	// };
 
 	gatherData = async () => {
-		const { consultationId, documentId, chapterSlug } = this.props.match.params;
-
-		const chapterData = load("chapter", undefined, [], {
-			consultationId,
-			documentId,
-			chapterSlug: "introduction" //todo: carry on here
-		})
-			.then(response => response.data)
-			.catch(err => {
-				throw new Error("chapterData " + err);
-			});
+		const { consultationId } = this.props.match.params;
 
 		const documentsData = load("documents", undefined, [], { consultationId })
 			.then(response => response.data)
@@ -99,25 +92,43 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 				throw new Error("documentsData " + err);
 			});
 
-		const consultationData = load("consultation", undefined, [], {
-			consultationId
-		})
+		const consultationData = load("consultation", undefined, [], { consultationId })
 			.then(response => response.data)
 			.catch(err => {
 				throw new Error("consultationData " + err);
 			});
 
 		return {
-			chapterData: await chapterData,
 			documentsData: await documentsData,
 			consultationData: await consultationData
 		};
+	};
+
+	getChapterData = (consultationId: number, documentId: number, chapterSlug: string) => {
+		load("chapter", undefined, [], {
+			consultationId,
+			documentId,
+			chapterSlug
+		})
+			.then(response => {
+				this.setState({
+					chapterData: response.data
+				});
+			})
+			.catch(err => {
+				throw new Error("chapterData " + err);
+			});
 	};
 
 	componentDidMount() {
 		if (!this.state.hasInitialData) {
 			this.gatherData()
 				.then(data => {
+					const documentId = parseInt(this.props.match.params.documentId, 0);
+					const consultationId = parseInt(this.props.match.params.consultationId, 0);
+					const isCurrentDocument = d => d.documentId === documentId;
+					const slug = data.documentsData.filter(isCurrentDocument)[0].chapters[0].slug;
+					this.getChapterData(documentId, consultationId, slug);
 					this.setState({
 						...data,
 						loading: false,
@@ -161,7 +172,7 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 		const createChapterLink = chapter => {
 			return {
 				label: chapter.title,
-				url: `/${this.props.match.params.consultationId}/${
+				url: `/preview/consultation/${this.props.match.params.consultationId}/${
 					this.props.match.params.documentId}/${chapter.slug}`,
 				current: isCurrentChapter(chapter.slug)
 			};
@@ -194,18 +205,16 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 	};
 
 	render() {
-		if (!this.state.hasInitialData) return <h1>Loading...</h1>;
-
-		const { title, reference, endDate } = this.state.consultationData;
+		if (!this.state.chapterData || !this.state.hasInitialData) return <h1>Loading...</h1>;
+		const { title } = this.state.consultationData;
 		const { documentsData } = this.state;
 		const { sections, content } = this.state.chapterData;
-		const consultationId = parseInt(this.props.match.params.consultationId, 0);
 		const documentId = parseInt(this.props.match.params.documentId, 0);
 
 		return (
 			<Fragment>
 				<Helmet>
-					<title>Preview - {title}</title>
+					<title>Preview of {title}</title>
 				</Helmet>
 				<div className="container">
 					<div className="grid">
@@ -236,7 +245,7 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 											className={`document-comment-container ${
 												this.state.loading ? "loading" : ""}`}
 										>
-											{ReactHtmlParser(content)}
+											{processDocumentHtml(content)}
 										</div>
 									</div>
 									<div data-g="12 md:3" className="inPageNavColumn">
