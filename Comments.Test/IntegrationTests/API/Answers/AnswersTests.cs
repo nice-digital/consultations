@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Comments.Models;
 using Comments.Services;
 using Comments.Test.Infrastructure;
+using Comments.ViewModels;
 using Newtonsoft.Json;
 using Shouldly;
 using Xunit;
@@ -20,7 +21,7 @@ namespace Comments.Test.IntegrationTests.API.Answers
         {
             // Arrange
             SetupTestDataInDB();
-            var answer = new ViewModels.Answer(0, "answer text", false, DateTime.Now, Guid.Empty, 1, 1);
+            var answer = new ViewModels.Answer(0, "answer text", false, DateTime.Now, Guid.Empty, 1, StatusName.Draft);
             var content = new StringContent(JsonConvert.SerializeObject(answer), Encoding.UTF8, "application/json");
 
             // Act

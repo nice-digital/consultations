@@ -40,6 +40,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\Api\ReviewController.cs" />
     <Compile Remove="Migrations\20180423091327_TestNewColumn.Designer.cs" />
     <Compile Remove="Migrations\20180423092925_TestRemoveColumn.Designer.cs" />
   </ItemGroup>

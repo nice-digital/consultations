@@ -5,7 +5,13 @@ using System.Threading.Tasks;
 
 namespace Comments.ViewModels
 {
-    public class Status
+	public static class StatusName
+	{
+		public const int Draft = 1;
+		public const int Submitted = 2;
+	}
+
+	public class Status
     {
 		//public Status() {}//only here for model binding. don't use it in code.
 

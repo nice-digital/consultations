@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net.Http;
 using Comments.Services;
+using Comments.ViewModels;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
@@ -17,6 +18,11 @@ using NICE.Feeds;
 using NICE.Feeds.Configuration;
 using NICE.Feeds.Tests.Infrastructure;
 using Microsoft.Data.Sqlite;
+using Answer = Comments.Models.Answer;
+using Comment = Comments.Models.Comment;
+using Location = Comments.Models.Location;
+using Question = Comments.Models.Question;
+using QuestionType = Comments.Models.QuestionType;
 
 namespace Comments.Test.Infrastructure
 {
@@ -232,7 +238,7 @@ namespace Comments.Test.Infrastructure
         }
         protected int AddAnswer(int questionId, Guid userId, string answerText, ConsultationsContext passedInContext = null)
         {
-            var answer = new Answer(questionId, userId, answerText, null, null, 1, null);
+            var answer = new Answer(questionId, userId, answerText, null, null, StatusName.Draft, null);
             answer.LastModifiedDate = DateTime.Now;
             if (passedInContext != null)
             {

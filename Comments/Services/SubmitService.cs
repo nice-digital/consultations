@@ -1,15 +1,15 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Comments.Models;
 using Comments.ViewModels;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NICE.Auth.NetCore.Services;
 
 namespace Comments.Services
 {
-    public class SubmitService
+	public interface ISubmitService
+	{
+		(int rowsUpdated, Validate validate) SubmitCommentsAndAnswers(CommentsAndAnswers commentsAndAnswers);
+	}
+	public class SubmitService
     {
 	    private readonly ConsultationsContext _context;
 	    private readonly IUserService _userService;
@@ -30,7 +30,7 @@ namespace Comments.Services
 			
 			foreach (var comment in commentsAndAnswers.Comments)
 		    {
-			    comment.StatusId = 2;
+			    comment.StatusId = StatusName.Submitted;
 			    comment.LastModifiedByUserId = _currentUser.UserId.Value;
 			    comment.LastModifiedDate = DateTime.UtcNow;
 
@@ -39,18 +39,13 @@ namespace Comments.Services
 
 		    foreach (var answer in commentsAndAnswers.Answers)
 		    {
-			    answer.StatusId = 2;
+			    answer.StatusId = StatusName.Submitted;
 			    answer.LastModifiedByUserId = _currentUser.UserId.Value;
 			    answer.LastModifiedDate = DateTime.UtcNow;
 
 				_context.GetAnswer(answer.AnswerId).UpdateFromViewModel(answer);
 			}
-
-		//TODO: do I need to update context???
-		 //   var commentInDatabase = _context.GetComment(commentId);
-
-
-			//commentsAndAnswers.Comments.UpdateFromViewModel(comment);
+			
 			return (rowsUpdated: _context.SaveChanges(), validate: null);
 		}
     }

@@ -251,12 +251,13 @@ namespace Comments.Test.UnitTests
         }
 
 	    [Fact]
-	    public void Update_Comment_Status_To_Submitted()
+	    public void Update_Status_To_Submitted()
 	    {
 			//Arrange
 		    ResetDatabase();
 			var userId = Guid.NewGuid();
 		    var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+		    var consultationId = 1;
 
 		    var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 		    var authenticateService = new FakeAuthenticateService(authenticated: true);
@@ -269,18 +270,18 @@ namespace Comments.Test.UnitTests
 		    AddCommentsAndQuestionsAndAnswers(sourceURI, "Comment Text", "Question Text", "Answer Text", userId);
 
 			//Act
-		    var commentsAndAnswers = commentService.GetUsersCommentsAndAnswersForConsultation(1);
+		    var commentsAndAnswers = commentService.GetUsersCommentsAndAnswersForConsultation(consultationId);
 		    var result = submitService.SubmitCommentsAndAnswers(commentsAndAnswers);
-		    var updatedCommentsAndAnswers = commentService.GetUsersCommentsAndAnswersForConsultation(1);
+		    var updatedCommentsAndAnswers = commentService.GetUsersCommentsAndAnswersForConsultation(consultationId);
 
 			//Assert
 			result.rowsUpdated.ShouldBe(4);
 
-		    updatedCommentsAndAnswers.Comments.First().StatusId.ShouldBe(2);
-		    updatedCommentsAndAnswers.Comments.Last().StatusId.ShouldBe(2);
+		    updatedCommentsAndAnswers.Comments.First().StatusId.ShouldBe(StatusName.Submitted);
+		    updatedCommentsAndAnswers.Comments.Last().StatusId.ShouldBe(StatusName.Submitted);
 
-			updatedCommentsAndAnswers.Answers.First().StatusId.ShouldBe(2);
-			updatedCommentsAndAnswers.Comments.Last().StatusId.ShouldBe(2);
+			updatedCommentsAndAnswers.Answers.First().StatusId.ShouldBe(StatusName.Submitted);
+			updatedCommentsAndAnswers.Comments.Last().StatusId.ShouldBe(StatusName.Submitted);
 		}
 
 	    [Fact]
@@ -292,15 +293,16 @@ namespace Comments.Test.UnitTests
 		    var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 		    var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 		    var authenticateService = new FakeAuthenticateService(authenticated: true);
+		    var consultationId = 1;
 
-		    var commentService = new CommentService(new ConsultationsContext(_options, userService), userService, authenticateService);
+			var commentService = new CommentService(new ConsultationsContext(_options, userService), userService, authenticateService);
 		   
 		    AddCommentsAndQuestionsAndAnswers(sourceURI, "Comment Text 1", "Question Text 1", "Answer Text 1", userId, _context);
 		    AddCommentsAndQuestionsAndAnswers(sourceURI, "Comment Text 2", "Question Text 2", "Answer Text 2", userId, _context);
 		    AddCommentsAndQuestionsAndAnswers(sourceURI, "Someone elses Comment Text", "Question Text 2", "Someone elese Answer Text ", Guid.NewGuid(), _context);
 
 			//Act
-			var result = commentService.GetUsersCommentsAndAnswersForConsultation(1);
+			var result = commentService.GetUsersCommentsAndAnswersForConsultation(consultationId);
 
 		    //Assert
 			result.Answers.Count().ShouldBe(2);

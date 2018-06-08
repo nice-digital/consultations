@@ -1,4 +1,4 @@
-﻿using Comments.Services;
+using Comments.Services;
 using Comments.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +10,7 @@ namespace Comments.Controllers.Api
     [Produces("application/json")]
     [Route("consultations/api/[controller]")]
    // [Authorize]
-    public class CommentsController : Controller
+    public class CommentsController : ControllerBase
     {
         private readonly ICommentService _commentService;
         private readonly ILogger<CommentsController> _logger;
@@ -34,5 +34,5 @@ namespace Comments.Controllers.Api
 
             return _commentService.GetCommentsAndQuestions(relativeURL: sourceURI);
         }
-    }
+	}
 }

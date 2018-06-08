@@ -1,14 +1,14 @@
 {
     "comments":[
         {
-            "commentId":39,
+            "commentId":44,
             "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
             "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
             "commentText":"comment text",
             "status":null,
             "statusId":1,
             "commentOn":"Chapter",
-            "locationId":49,
+            "locationId":54,
             "sourceURI":"consultations://./consultation/1/document/1/chapter/introduction",
             "htmlElementID":null,
             "rangeStart":null,
@@ -18,14 +18,14 @@
             "quote":null
         },
         {
-            "commentId":37,
+            "commentId":42,
             "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
             "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
             "commentText":"comment text",
             "status":null,
             "statusId":1,
             "commentOn":"Chapter",
-            "locationId":48,
+            "locationId":53,
             "sourceURI":"consultations://./consultation/1/document/1/chapter/introduction",
             "htmlElementID":null,
             "rangeStart":null,
@@ -35,14 +35,14 @@
             "quote":null
         },
         {
-            "commentId":38,
+            "commentId":43,
             "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
             "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
             "commentText":"comment text",
             "status":null,
             "statusId":1,
             "commentOn":"Chapter",
-            "locationId":48,
+            "locationId":53,
             "sourceURI":"consultations://./consultation/1/document/1/chapter/introduction",
             "htmlElementID":null,
             "rangeStart":null,
