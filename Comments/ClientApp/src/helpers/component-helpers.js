@@ -17,7 +17,7 @@ export function HashLinkTop(props: HashLinkTopType) {
 		<NavHashLink
 			aria-current={ currentNavItem === to ? "location" : "false"}
 			role="menuitem"
-			to={`#${to}`}
+			to={to}
 			scroll={el => el.scrollIntoView({behavior, block})}
 		>
 			{label}
