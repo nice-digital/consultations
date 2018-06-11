@@ -6,10 +6,8 @@ import { Helmet } from "react-helmet";
 import CommentListWithRouter from "../CommentList/CommentList";
 import { DocumentView } from "../DocumentView/DocumentView";
 import NotFound from "../NotFound/NotFound";
-import UserProviderWithRouter, { UserContext } from "../../context/UserContext";
 import ReviewPageWithRouter from "../ReviewPage/ReviewPage";
-import CommentImg from "../Document/img/comment-icon-helper.png";
-import SelectionImg from "../Document/img/selection-helper.png";
+import UserProviderWithRouter, { UserContext } from "../../context/UserContext";
 
 type PropsType = any;
 
@@ -57,28 +55,33 @@ class App extends React.Component<PropsType, StateType> {
 					{/*404*/}
 					<Route component={NotFound}/>
 				</Switch>
-				<div style={{ "display": this.state.onboarded ? "none" : "block" }}
-					 className="onboarding"
-				>
-					<div className="onboarding__modal">
-						<button
-							className="onboarding__closeButton"
-							onClick={() => this.setState({ onboarded: true })}>
-							&times;
-						</button>
-						<h1>How to make comments</h1>
-						<div className="grid">
-							<div data-g="6">
-								<p><b>Click on the icon next to a heading to comment on the chapter or section</b></p>
-								<img src={CommentImg}/>
-							</div>
-							<div data-g="6">
-								<p><b>Highlight some text to make a comment on it</b></p>
-								<img src={SelectionImg}/>
+				<UserContext.Consumer>
+					{contextValue => contextValue.isAuthorised ?
+						<div style={{ "display": this.state.onboarded ? "none" : "block" }}
+							 className="onboarding"
+						>
+							<div className="onboarding__modal">
+								<button
+									className="onboarding__closeButton"
+									onClick={() => this.setState({ onboarded: true })}>
+									&times;
+								</button>
+								<h1>How to make comments</h1>
+								<div className="grid">
+									<div data-g="6">
+										<p><b>Click on the icon next to a heading to comment on the chapter or section</b></p>
+										<img src="images/comment-icon-helper.png" alt="Diagram showing how to click the comment icon to comment on a section"/>
+									</div>
+									<div data-g="6">
+										<p><b>Highlight some text to make a comment on it</b></p>
+										<img src="images/selection-helper.png" alt="Diagram showing how to select some text and make a comment on it"/>
+									</div>
+								</div>
 							</div>
 						</div>
-					</div>
-				</div>
+						:
+						null}
+				</UserContext.Consumer>
 			</UserProviderWithRouter>
 		);
 	}
