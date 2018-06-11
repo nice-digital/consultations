@@ -104,6 +104,7 @@ Array [
                          
                         <button
                             className="buttonAsLink"
+                            data-qa-sel="comment-on-whole-consultation"
                             onClick={[Function]}
                             tabIndex={0}
                         >
@@ -136,6 +137,7 @@ Array [
                          
                         <button
                             className="buttonAsLink"
+                            data-qa-sel="comment-on-consultation-document"
                             onClick={[Function]}
                             tabIndex={0}
                         >
