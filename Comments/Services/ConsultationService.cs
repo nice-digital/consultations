@@ -80,11 +80,11 @@ namespace Comments.Services
 
             var document = consultation.Documents.FirstOrDefault(d => d.DocumentId.Equals(documentId));
             if (document == null)
-                document = consultation.Documents.FirstOrDefault(d => d.SupportsComments);
+                document = consultation.Documents.FirstOrDefault(d => d.ConvertedDocument);
             if (document == null)
                 document = consultation.Documents.First();
 
-            if (!document.SupportsComments)
+            if (!document.ConvertedDocument)
                 return (document.DocumentId, null);
 
             if (document.Chapters == null || !document.Chapters.Any())

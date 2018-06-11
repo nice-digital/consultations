@@ -1,51 +1,20 @@
-import React, { Fragment } from "react";
-import ReactHtmlParser, { convertNodeToElement } from "react-html-parser";
+import ReactHtmlParser from "react-html-parser";
+import { nodeIsChapter, nodeIsInternalLink, nodeIsSection } from "./html-transforms/types";
+import processChapterSection from "./html-transforms/chapter-section";
+import processInternalLink from "./html-transforms/internal-link";
 
 // onNewCommentClick passed through from <Document />
-export const processDocumentHtml = (
-	incomingHtml,
-	onNewCommentClick,
-	sourceURI
-) => {
-	function addButtons(node) {
-		if (
-			node.name === "a" &&
-			node.attribs &&
-			(node.attribs["data-heading-type"] === "chapter" || node.attribs["data-heading-type"] === "section")
-		) {
-			const isTypeText = child => child.type === "text";
-			const elementType = node.attribs["data-heading-type"].toLowerCase();
-			const elementName = node.children.filter(isTypeText)[0].data;
-			const elementId = node.attribs.id;
-
-			return (
-				<Fragment key={0}>
-					<button
-						className="document-comment-container__commentButton"
-						tabIndex={0}
-						onClick={e => {
-							e.preventDefault();
-							onNewCommentClick({
-								sourceURI: sourceURI,
-								commentText: "",
-								commentOn: elementType,
-								htmlElementID: elementType === "section" ? elementId : "",
-								quote: elementName
-							});
-						}}
-					>
-						<span className="icon icon--comment" aria-hidden="true" />
-						<span className="visually-hidden">
-							Comment on {elementType}: {elementName}
-						</span>
-					</button>
-					{convertNodeToElement(node)}
-				</Fragment>
-			);
+export const processDocumentHtml = (incomingHtml, onNewCommentClick, sourceURI) => {
+	function transformHtml(node) {
+		if (nodeIsChapter(node) || nodeIsSection(node)) {
+			return processChapterSection(node, incomingHtml, onNewCommentClick, sourceURI);
+		}
+		if (nodeIsInternalLink(node)) {
+			return processInternalLink(node);
 		}
 	}
 
 	return ReactHtmlParser(incomingHtml, {
-		transform: addButtons
+		transform: transformHtml
 	});
 };

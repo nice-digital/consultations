@@ -21,14 +21,17 @@ namespace Comments.ViewModels
             RelevantTo = consultation.RelevantTo;
             ConsultationId = consultation.ConsultationId;
             Process = consultation.Process;
-            AllowConsultationComments = consultation.AllowConsultationComments;
-            PartiallyUpdatedProjectReference = consultation.PartiallyUpdatedProjectReference;
+            AllowConsultationComments = consultation.HasDocumentsWhichAllowConsultationComments;
+	        HasDocumentsWhichAllowConsultationQuestions = consultation.HasDocumentsWhichAllowConsultationQuestions;
+	        SupportsComments = consultation.SupportsComments;
+	        SupportsQuestions = consultation.SupportsQuestions;
+			PartiallyUpdatedProjectReference = consultation.PartiallyUpdatedProjectReference;
             OrigProjectReference = consultation.OrigProjectReference;
             User = user;
         }
 
         [JsonConstructor]
-        public Consultation(string reference, string title, string consultationName, DateTime startDate, DateTime endDate, string consultationType, string resourceTitleId, string projectType, string productTypeName, string developedAs, string relevantTo, int consultationId, string process, bool allowConsultationComments, string partiallyUpdatedProjectReference, string origProjectReference, User user)
+        public Consultation(string reference, string title, string consultationName, DateTime startDate, DateTime endDate, string consultationType, string resourceTitleId, string projectType, string productTypeName, string developedAs, string relevantTo, int consultationId, string process, bool allowConsultationComments, bool allowConsultationQuestions, bool supportsComments, bool supportsQuestions, string partiallyUpdatedProjectReference, string origProjectReference, User user)
         {
             Reference = reference;
             Title = title;
@@ -44,7 +47,10 @@ namespace Comments.ViewModels
             ConsultationId = consultationId;
             Process = process;
             AllowConsultationComments = allowConsultationComments;
-            PartiallyUpdatedProjectReference = partiallyUpdatedProjectReference;
+	        HasDocumentsWhichAllowConsultationQuestions = allowConsultationQuestions;
+	        SupportsComments = supportsComments;
+	        SupportsQuestions = supportsQuestions;
+			PartiallyUpdatedProjectReference = partiallyUpdatedProjectReference;
             OrigProjectReference = origProjectReference;
             User = user;
         }
@@ -63,7 +69,11 @@ namespace Comments.ViewModels
         public int ConsultationId { get; private set; }
         public string Process { get; private set; }
         public bool AllowConsultationComments { get; private set; }
-        public string PartiallyUpdatedProjectReference { get; private set; } //not needed?
+	    public bool HasDocumentsWhichAllowConsultationComments { get; private set; }
+	    public bool HasDocumentsWhichAllowConsultationQuestions { get; private set; }
+	    public bool SupportsQuestions { get; private set; }
+	    public bool SupportsComments { get; private set; }
+		public string PartiallyUpdatedProjectReference { get; private set; } //not needed?
         public string OrigProjectReference { get; private set; }
 
         public ViewModels.User User { get; private set; }
@@ -72,8 +82,8 @@ namespace Comments.ViewModels
     public class ConsultationDetail : Consultation
     {
         [JsonConstructor]
-        public ConsultationDetail(string reference, string title, string consultationName, DateTime startDate, DateTime endDate, string consultationType, string resourceTitleId, string projectType, string productTypeName, string developedAs, string relevantTo, int consultationId, string process, bool allowConsultationComments, string partiallyUpdatedProjectReference, string origProjectReference, IList<Document> documents, User user) 
-            : base(reference, title, consultationName, startDate, endDate, consultationType, resourceTitleId, projectType, productTypeName, developedAs, relevantTo, consultationId, process, allowConsultationComments, partiallyUpdatedProjectReference, origProjectReference, user)
+        public ConsultationDetail(string reference, string title, string consultationName, DateTime startDate, DateTime endDate, string consultationType, string resourceTitleId, string projectType, string productTypeName, string developedAs, string relevantTo, int consultationId, string process, bool allowConsultationComments, bool allowConsultationQuestions, bool supportsComments, bool supportsQuestions, string partiallyUpdatedProjectReference, string origProjectReference, IList<Document> documents, User user) 
+            : base(reference, title, consultationName, startDate, endDate, consultationType, resourceTitleId, projectType, productTypeName, developedAs, relevantTo, consultationId, process, allowConsultationComments, allowConsultationQuestions, supportsComments, supportsQuestions, partiallyUpdatedProjectReference, origProjectReference, user)
         {
             Documents = documents;
         }

@@ -14,6 +14,10 @@
         "consultationId":1,
         "process":"TAG",
         "allowConsultationComments":true,
+        "hasDocumentsWhichAllowConsultationComments":false,
+        "hasDocumentsWhichAllowConsultationQuestions":true,
+        "supportsQuestions":false,
+        "supportsComments":false,
         "partiallyUpdatedProjectReference":null,
         "origProjectReference":null,
         "user":{
@@ -37,6 +41,10 @@
         "consultationId":2,
         "process":"IP",
         "allowConsultationComments":true,
+        "hasDocumentsWhichAllowConsultationComments":false,
+        "hasDocumentsWhichAllowConsultationQuestions":true,
+        "supportsQuestions":false,
+        "supportsComments":false,
         "partiallyUpdatedProjectReference":null,
         "origProjectReference":null,
         "user":{

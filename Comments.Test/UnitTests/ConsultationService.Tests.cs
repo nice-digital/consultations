@@ -91,7 +91,7 @@ namespace Comments.Test.UnitTests
         {
             // Arrange
             var consultation = new ConsultationDetail(null, null, null, DateTime.MinValue, DateTime.MaxValue, null, null, null,
-                null, null, null,  1, null, true, null, null, 
+                null, null, null,  1, null, true, true, true, true, null, null, 
                 new List<Document>
                 {
                     new Document(1, 1, false, "supporting document", null),
