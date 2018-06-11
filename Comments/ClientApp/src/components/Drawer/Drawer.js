@@ -1,7 +1,6 @@
 // @flow
 
 import React, { Component } from "react";
-import { withRouter, Link } from "react-router-dom";
 import { mobileWidth } from "../../constants";
 import CommentListWithRouter from "../CommentList/CommentList";
 
