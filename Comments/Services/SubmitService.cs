@@ -9,7 +9,7 @@ namespace Comments.Services
 	{
 		(int rowsUpdated, Validate validate) SubmitCommentsAndAnswers(CommentsAndAnswers commentsAndAnswers);
 	}
-	public class SubmitService
+	public class SubmitService : ISubmitService
     {
 	    private readonly ConsultationsContext _context;
 	    private readonly IUserService _userService;

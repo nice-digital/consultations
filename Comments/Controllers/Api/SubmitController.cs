@@ -7,7 +7,7 @@ namespace Comments.Controllers.Api
 {
 	[Produces("application/json")]
 	[Route("consultations/api/[controller]")]
-	[Authorize]
+	//[Authorize]
 	public class SubmitController : ControllerBase
 	{
 	    private readonly ISubmitService _submitService;
@@ -21,18 +21,18 @@ namespace Comments.Controllers.Api
 
 		// POST: consultations/api/submit
 		[HttpPost]
-	    public IActionResult PostSubmit([FromBody] ViewModels.CommentsAndAnswers commentsAndAnswers)
+	    public IActionResult Post([FromBody] ViewModels.CommentsAndAnswers commentsAndAnswers)
 	    {
 			//TODO: it should save any unsaved comments before submitting
-		    if (!ModelState.IsValid)
-		    {
-			    return BadRequest(ModelState);
-		    }
+			if (!ModelState.IsValid)
+			{
+				return BadRequest(ModelState);
+			}
 
-		    var result = _submitService.SubmitCommentsAndAnswers(commentsAndAnswers);
-		    var invalidResult = Validate(result.validate, _logger);
+			var result = _submitService.SubmitCommentsAndAnswers(commentsAndAnswers);
+			var invalidResult = Validate(result.validate, _logger);
 
-		    return invalidResult ?? Ok(result.rowsUpdated);
-		}
+			return invalidResult ?? Ok(result.rowsUpdated);
+	    }
 	}
 }

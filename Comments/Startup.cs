@@ -65,9 +65,10 @@ namespace Comments
             services.TryAddTransient<IFeedService, FeedService>();
             services.TryAddTransient<IAnswerService, AnswerService>();
             services.TryAddTransient<IQuestionService, QuestionService>();
-            
-            // Add authentication 
-            services.AddAuthentication(options =>
+	        services.TryAddTransient<ISubmitService, SubmitService>();
+
+			// Add authentication 
+			services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = AuthOptions.DefaultScheme;
                 options.DefaultChallengeScheme = AuthOptions.DefaultScheme;

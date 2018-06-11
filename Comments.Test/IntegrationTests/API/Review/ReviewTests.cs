@@ -33,7 +33,7 @@ namespace Comments.Test.IntegrationTests.API.Review
 	        AddCommentsAndQuestionsAndAnswers(sourceURI, "Another users Comment", questionText, answerText, Guid.NewGuid());
 
 			// Act
-			var response = await _client.GetAsync("/consultations/api/Review/1");
+			var response = await _client.GetAsync("/consultations/api/comments?sourceURI=/1/1/introduction");
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
             var deserialisedObject = JsonConvert.DeserializeObject<ViewModels.CommentsAndQuestions>(responseString);
@@ -43,21 +43,21 @@ namespace Comments.Test.IntegrationTests.API.Review
 			deserialisedObject.Comments.Count().ShouldBe(2);
 		}
 
-	    [Fact]
-	    public async Task Submit_Comments()
-	    {
-			//Arrange
-		    var comment = new ViewModels.Comment(1, "consultations://./consultation/1/document/1/chapter/introduction", null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty, "comment text", 1);
-		    var commentsAndAnswers = new CommentsAndAnswers(comments: new List<Comment>{comment}, answers: new List<Answer>());
-		    var content = new StringContent(JsonConvert.SerializeObject(commentsAndAnswers), Encoding.UTF8, "application/json");
+	  //  [Fact]
+	  //  public async Task Submit_Comments()
+	  //  {
+			////Arrange
+		 //   var comment = new ViewModels.Comment(1, "consultations://./consultation/1/document/1/chapter/introduction", null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty, "comment text", 1);
+		 //   var commentsAndAnswers = new CommentsAndAnswers(comments: new List<Comment>{comment}, answers: new List<Answer>());
+		 //   var content = new StringContent(JsonConvert.SerializeObject(commentsAndAnswers), Encoding.UTF8, "application/json");
 
-		    // Act
-		    var response = await _client.PostAsync("/consultations/api/Review/1", content);
-		    response.EnsureSuccessStatusCode();
-		    var responseString = await response.Content.ReadAsStringAsync();
+		 //   // Act
+		 //   var response = await _client.PostAsync("/consultations/api/Review/1", content);
+		 //   response.EnsureSuccessStatusCode();
+		 //   var responseString = await response.Content.ReadAsStringAsync();
 
-		    // Assert
-		    response.StatusCode.ShouldBe(HttpStatusCode.OK);
-	    }
+		 //   // Assert
+		 //   response.StatusCode.ShouldBe(HttpStatusCode.OK);
+	  //  }
 	}
 }
