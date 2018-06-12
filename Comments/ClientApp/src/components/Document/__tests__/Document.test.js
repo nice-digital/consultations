@@ -139,12 +139,14 @@ describe("[ClientApp] ", () => {
 					{
 						current: false,
 						label: "Download Document",
-						url: "/1/2/chapter-two-slug"
+						url: "/1/2/chapter-two-slug",
+						isReactRoute: true
 					},
 					{
 						current: false,
 						label: "Document Four",
-						url: "/1/4/chapter-two-slug"
+						url: "/1/4/chapter-two-slug",
+						isReactRoute: true
 					}
 				]);
 			});
@@ -157,12 +159,14 @@ describe("[ClientApp] ", () => {
 					{
 						current: true,
 						label: "Document One",
-						url: "/guidance/one/123"
+						url: "/guidance/one/123",
+						isReactRoute: false
 					},
 					{
 						current: false,
 						label: "Document Three",
-						url: "/guidance/three/123"
+						url: "/guidance/three/123",
+						isReactRoute: false
 					}
 				]);
 			});

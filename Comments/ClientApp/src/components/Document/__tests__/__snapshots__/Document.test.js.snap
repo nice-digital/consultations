@@ -440,41 +440,7 @@ Array [
                             </h2>
                             <ul
                                 className="stacked-nav__list"
-                            >
-                                <li
-                                    className="stacked-nav__list-item"
-                                >
-                                    <a
-                                        aria-current="false"
-                                        href="#"
-                                        onClick={[Function]}
-                                    >
-                                        Download Document
-                                    </a>
-                                </li>
-                                <li
-                                    className="stacked-nav__list-item"
-                                >
-                                    <a
-                                        aria-current="false"
-                                        href="#"
-                                        onClick={[Function]}
-                                    >
-                                        Download Document
-                                    </a>
-                                </li>
-                                <li
-                                    className="stacked-nav__list-item"
-                                >
-                                    <a
-                                        aria-current="false"
-                                        href="#"
-                                        onClick={[Function]}
-                                    >
-                                        Download Document
-                                    </a>
-                                </li>
-                            </ul>
+                            />
                         </nav>
                     </div>
                     <div

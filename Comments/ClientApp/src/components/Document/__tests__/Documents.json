@@ -1,11 +1,5 @@
 [
   {
-    "documentId": 0,
-    "convertedDocument": false,
-    "title": null,
-    "chapters": null
-  },
-  {
     "documentId": 1,
     "convertedDocument": true,
     "title": "Unstable angina and NSTEMI",
@@ -71,12 +65,6 @@
         "title": "About this guideline"
       }
     ]
-  },
-  {
-    "documentId": 0,
-    "convertedDocument": false,
-    "title": null,
-    "chapters": null
   },
   {
     "documentId": 2,
@@ -208,12 +196,6 @@
         "title": "messaging service restart.docx"
       }
     ]
-  },
-  {
-    "documentId": 0,
-    "convertedDocument": false,
-    "title": null,
-    "chapters": null
   },
   {
     "documentId": 7,

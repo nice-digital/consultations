@@ -180,10 +180,15 @@ export class Document extends Component<PropsType, StateType> {
 
 			const current = isCurrentDocument(d.documentId);
 
+			// isReactRoute: the "isReactRoute" attribute is telling the StackedNav component whether this item's link should be resolved by the react router or not
+			// If it's not a react route then the link should be warpped in a standard anchor tag
+			const isReactRoute = isCommentable(d);
+
 			return {
 				label,
 				url,
-				current
+				current,
+				isReactRoute
 			};
 		};
 
@@ -218,7 +223,8 @@ export class Document extends Component<PropsType, StateType> {
 				label: chapter.title,
 				url: `/${this.props.match.params.consultationId}/${
 					this.props.match.params.documentId}/${chapter.slug}`,
-				current: isCurrentChapter(chapter.slug)
+				current: isCurrentChapter(chapter.slug),
+				isReactRoute: true
 			};
 		};
 
