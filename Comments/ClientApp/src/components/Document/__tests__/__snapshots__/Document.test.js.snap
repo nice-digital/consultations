@@ -623,10 +623,12 @@ Array [
                                         <sup>
                                             [
                                             <a
+                                                aria-current={false}
                                                 className="footnote"
                                                 href="#ftn.footnote_1"
                                                 id="footnote_1"
                                                 name="footnote_1"
+                                                onClick={[Function]}
                                                 rel="internal"
                                             >
                                                 1
@@ -681,10 +683,12 @@ Array [
                                                 <sup>
                                                     [
                                                     <a
+                                                        aria-current={false}
                                                         className="para"
                                                         href="#footnote_1"
                                                         id="ftn.footnote_1"
                                                         name="ftn.footnote_1"
+                                                        onClick={[Function]}
                                                         rel="internal"
                                                     >
                                                         1
