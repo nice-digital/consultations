@@ -20,6 +20,8 @@ import { UserContext } from "../../context/UserContext";
 import { Selection } from "../Selection/Selection";
 // import stringifyObject from "stringify-object";
 
+
+
 type PropsType = {
 	staticContext?: any,
 	match: any,
@@ -33,7 +35,8 @@ type StateType = {
 	chapterData: any, // the current chapter's details - markup and sections,
 	consultationData: any, // the top level info - title etc
 	currentInPageNavItem: null | string,
-	hasInitialData: boolean
+	hasInitialData: boolean,
+	onboarded: boolean
 };
 
 type DocumentsType = Array<Object>;
@@ -48,7 +51,8 @@ export class Document extends Component<PropsType, StateType> {
 			consultationData: null,
 			loading: true,
 			hasInitialData: false,
-			currentInPageNavItem: null
+			currentInPageNavItem: null,
+			onboarded: false
 		};
 
 		if (this.props) {
@@ -78,7 +82,8 @@ export class Document extends Component<PropsType, StateType> {
 					consultationData: preloadedConsultation,
 					loading: false,
 					hasInitialData: true,
-					currentInPageNavItem: null
+					currentInPageNavItem: null,
+					onboarded: false
 				};
 			}
 		}
