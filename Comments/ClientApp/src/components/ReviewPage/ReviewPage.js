@@ -14,7 +14,7 @@ import { UserContext } from "../../context/UserContext";
 type DocumentType = {
 	title: string,
 	sourceURI: string,
-	supportsComments: boolean
+	convertedDocument: boolean
 };
 
 type PropsType = {
@@ -59,7 +59,7 @@ export class ReviewPage extends Component<PropsType> {
 	};
 
 	generateDocumentList = (documentsList: Array<DocumentType>) =>{
-		let documentLinks = documentsList.filter(docs => docs.supportsComments)
+		let documentLinks = documentsList.filter(docs => docs.convertedDocument)
 			.map(
 				(consultationDocument) => {
 					return {
@@ -97,7 +97,7 @@ export class ReviewPage extends Component<PropsType> {
 
 	getBreadcrumbs = () => {
 		const { consultationId } = this.props.match.params;
-		const firstCommentableDocument = this.state.documentsList.filter(doc => doc.supportsComments)[0]; //todo: this whole function needs to get it's content from the feed.
+		const firstCommentableDocument = this.state.documentsList.filter(doc => doc.convertedDocument)[0]; //todo: this whole function needs to get it's content from the feed.
 		const consultationsFirstDocument = firstCommentableDocument.documentId;
 		const firstDocumentChapterSlug = firstCommentableDocument.chapters[0].slug;
 		return [
