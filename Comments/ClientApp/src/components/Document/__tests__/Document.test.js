@@ -104,7 +104,7 @@ describe("[ClientApp] ", () => {
 				{
 					title: "Document One",
 					documentId: 1,
-					supportsComments: false,
+					convertedDocument: false,
 					href: "/guidance/one/123",
 					chapters: null
 				},
@@ -112,20 +112,20 @@ describe("[ClientApp] ", () => {
 					title: "",
 					documentId: 2,
 					chapters: [{ slug: "chapter-two-slug" }],
-					supportsComments: true,
+					convertedDocument: true,
 					href: "/guidance/two/123"
 				},
 				{
 					title: "Document Three",
 					documentId: 3,
-					supportsComments: false,
+					convertedDocument: false,
 					href: "/guidance/three/123",
 					chapters: null
 				},
 				{
 					title: "Document Four",
 					documentId: 4,
-					supportsComments: true,
+					convertedDocument: true,
 					href: "/guidance/four/123",
 					chapters: [{ slug: "chapter-two-slug" }]
 				}

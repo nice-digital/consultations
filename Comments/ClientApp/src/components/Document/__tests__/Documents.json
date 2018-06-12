@@ -1,13 +1,13 @@
 [
   {
     "documentId": 0,
-    "supportsComments": false,
+    "convertedDocument": false,
     "title": null,
     "chapters": null
   },
   {
     "documentId": 1,
-    "supportsComments": true,
+    "convertedDocument": true,
     "title": "Unstable angina and NSTEMI",
     "chapters": [
       {
@@ -51,10 +51,8 @@
         "title": "7 Updating the guideline"
       },
       {
-        "slug":
-          "appendix-a-the-guideline-development-group-and-nice-project-team",
-        "title":
-          "Appendix A: The Guideline Development Group and NICE project team"
+        "slug": "appendix-a-the-guideline-development-group-and-nice-project-team",
+        "title": "Appendix A: The Guideline Development Group and NICE project team"
       },
       {
         "slug": "appendix-b-the-guideline-review-panel",
@@ -76,13 +74,13 @@
   },
   {
     "documentId": 0,
-    "supportsComments": false,
+    "convertedDocument": false,
     "title": null,
     "chapters": null
   },
   {
     "documentId": 2,
-    "supportsComments": true,
+    "convertedDocument": true,
     "title": "Sinusitis (acute): antimicrobial prescribing",
     "chapters": [
       {
@@ -113,19 +111,18 @@
   },
   {
     "documentId": 3,
-    "supportsComments": true,
+    "convertedDocument": true,
     "title": "",
     "chapters": [
       {
         "slug": "product-intros-056fc427-7484-4d78-8d55-0070aaa12061-2-2docx",
-        "title":
-          "Product intros (056fc427-7484-4d78-8d55-0070aaa12061) (2) (2).docx"
+        "title": "Product intros (056fc427-7484-4d78-8d55-0070aaa12061) (2) (2).docx"
       }
     ]
   },
   {
     "documentId": 4,
-    "supportsComments": true,
+    "convertedDocument": true,
     "title": "",
     "chapters": [
       {
@@ -136,7 +133,7 @@
   },
   {
     "documentId": 5,
-    "supportsComments": true,
+    "convertedDocument": true,
     "title": "Unstable angina and NSTEMI",
     "chapters": [
       {
@@ -180,10 +177,8 @@
         "title": "7 Updating the guideline"
       },
       {
-        "slug":
-          "appendix-a-the-guideline-development-group-and-nice-project-team",
-        "title":
-          "Appendix A: The Guideline Development Group and NICE project team"
+        "slug": "appendix-a-the-guideline-development-group-and-nice-project-team",
+        "title": "Appendix A: The Guideline Development Group and NICE project team"
       },
       {
         "slug": "appendix-b-the-guideline-review-panel",
@@ -205,7 +200,7 @@
   },
   {
     "documentId": 6,
-    "supportsComments": true,
+    "convertedDocument": true,
     "title": "",
     "chapters": [
       {
@@ -216,13 +211,13 @@
   },
   {
     "documentId": 0,
-    "supportsComments": false,
+    "convertedDocument": false,
     "title": null,
     "chapters": null
   },
   {
     "documentId": 7,
-    "supportsComments": true,
+    "convertedDocument": true,
     "title": "",
     "chapters": [
       {
