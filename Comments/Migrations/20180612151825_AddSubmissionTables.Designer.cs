@@ -11,7 +11,7 @@ using System;
 namespace Comments.Migrations
 {
     [DbContext(typeof(ConsultationsContext))]
-    [Migration("20180612112529_AddSubmissionTables")]
+    [Migration("20180612151825_AddSubmissionTables")]
     partial class AddSubmissionTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -104,6 +104,60 @@ namespace Comments.Migrations
                     b.HasIndex("StatusId");
 
                     b.ToTable("Comment");
+                });
+
+            modelBuilder.Entity("Comments.Models.EF.Submission", b =>
+                {
+                    b.Property<int>("SubmissionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("SubmissionId");
+
+                    b.Property<Guid>("SubmissionByUserId")
+                        .HasColumnName("SubmissionByUserId");
+
+                    b.Property<DateTime>("SubmissionDateTime")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("date('now')");
+
+                    b.HasKey("SubmissionId");
+
+                    b.ToTable("Submission");
+                });
+
+            modelBuilder.Entity("Comments.Models.EF.SubmissionAnswer", b =>
+                {
+                    b.Property<int>("SubmissionAnswerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("SubmissionCommentId");
+
+                    b.Property<int>("AnswerId")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("AnswerId");
+
+                    b.Property<int>("SubmissionId")
+                        .HasColumnName("SubmissionId");
+
+                    b.HasKey("SubmissionAnswerId");
+
+                    b.ToTable("SubmissionAnswer");
+                });
+
+            modelBuilder.Entity("Comments.Models.EF.SubmissionComment", b =>
+                {
+                    b.Property<int>("SubmissionCommentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("SubmissionCommentId");
+
+                    b.Property<int>("CommentId")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("CommentId");
+
+                    b.Property<int>("SubmissionId")
+                        .HasColumnName("SubmissionId");
+
+                    b.HasKey("SubmissionCommentId");
+
+                    b.ToTable("SubmissionComment");
                 });
 
             modelBuilder.Entity("Comments.Models.Location", b =>

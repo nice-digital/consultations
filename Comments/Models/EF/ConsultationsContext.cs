@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Comments.Models.EF;
 using Comments.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -163,6 +164,33 @@ namespace Comments.Models
 				entity.Property(e => e.Name)
 					.IsRequired()
 					.HasMaxLength(100);
+			});
+
+			modelBuilder.Entity<Submission>(entity =>
+			{
+				entity.Property(e => e.SubmissionId).HasColumnName("SubmissionId");
+
+				entity.Property(e => e.SubmissionByUserId).HasColumnName("SubmissionByUserId");
+
+				entity.Property(e => e.SubmissionDateTime).HasDefaultValueSql("date(\'now\')");
+			});
+
+			modelBuilder.Entity<SubmissionComment>(entity =>
+			{
+				entity.Property(e => e.SubmissionCommentId).HasColumnName("SubmissionCommentId");
+
+				entity.Property(e => e.SubmissionId).HasColumnName("SubmissionId");
+				
+				entity.Property(e => e.CommentId).HasDefaultValueSql("CommentId");
+			});
+
+			modelBuilder.Entity<SubmissionAnswer>(entity =>
+			{
+				entity.Property(e => e.SubmissionAnswerId).HasColumnName("SubmissionCommentId");
+
+				entity.Property(e => e.SubmissionId).HasColumnName("SubmissionId");
+
+				entity.Property(e => e.AnswerId).HasDefaultValueSql("AnswerId");
 			});
 		}
 	}

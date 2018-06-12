@@ -4,6 +4,6 @@ namespace Comments.Models.EF
     {
 		public int SubmissionAnswerId { get; set; }
 		public int SubmissionId { get; set; }
-		public int CommentId { get; set; }
+		public int AnswerId { get; set; }
     }
 }

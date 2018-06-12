@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 using System.Collections.Generic;
 
@@ -30,6 +31,48 @@ namespace Comments.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Status", x => x.StatusID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Submission",
+                columns: table => new
+                {
+                    SubmissionId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    SubmissionByUserId = table.Column<Guid>(nullable: false),
+                    SubmissionDateTime = table.Column<DateTime>(nullable: false, defaultValueSql: "date('now')")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Submission", x => x.SubmissionId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SubmissionAnswer",
+                columns: table => new
+                {
+                    SubmissionCommentId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AnswerId = table.Column<int>(nullable: false, defaultValueSql: "AnswerId"),
+                    SubmissionId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubmissionAnswer", x => x.SubmissionCommentId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SubmissionComment",
+                columns: table => new
+                {
+                    SubmissionCommentId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CommentId = table.Column<int>(nullable: false, defaultValueSql: "CommentId"),
+                    SubmissionId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubmissionComment", x => x.SubmissionCommentId);
                 });
 
             migrationBuilder.CreateIndex(
@@ -71,6 +114,15 @@ namespace Comments.Migrations
 
             migrationBuilder.DropTable(
                 name: "Status");
+
+            migrationBuilder.DropTable(
+                name: "Submission");
+
+            migrationBuilder.DropTable(
+                name: "SubmissionAnswer");
+
+            migrationBuilder.DropTable(
+                name: "SubmissionComment");
 
             migrationBuilder.DropIndex(
                 name: "IX_Comment_StatusID",
