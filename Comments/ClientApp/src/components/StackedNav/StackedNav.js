@@ -26,7 +26,6 @@ export const StackedNav = (props: PropsType) => {
 			<ul className="stacked-nav__list">
 				{links.map((item, index) => (
 					<li key={`${item.label}${index}`} className="stacked-nav__list-item">
-						{/* Return a standard <a> if the link starts with 'http' */}
 						{item.isReactRoute ?
 							<Link to={item.url} aria-current={item.current ? "page" : "false"}>
 								{item.label}
