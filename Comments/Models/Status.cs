@@ -11,5 +11,10 @@ namespace Comments.Models
 	        Comment = comment;
 	        Answer = answer;
         }
+
+	    public void UpdateFromViewModel(ViewModels.Status status)
+	    {
+			Name = status.Name;
+		}
 	}
 }
