@@ -23,8 +23,9 @@ Scenario: User not signed in signs in
 Scenario: User makes a comment at consultation level
     When I log in to Accounts via TopHat with username "ACCOUNTS_EMAIL" and password "ACCOUNTS_PASSWORD"
 		When I wait on element ".page-header" to exist
+		And I pause for 100ms
 		When I click on the button "[data-qa-sel='comment-on-whole-consultation']"
-		And I pause for 1000ms
+		And I pause for 100ms
 		Then I wait on element "body .CommentBox__title" for 10000ms to exist
     Then I expect that element ".CommentBox__title" contains the text "Comment on:"
 		When I add "This is a Consultation comment" to the inputfield "#Comment0"
