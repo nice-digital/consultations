@@ -25,6 +25,9 @@
     @extend %ui-button;
     margin-right: rem($spacing-small);
     background-color: $colour-nice-white;
+    &:hover {
+      cursor: pointer;
+    }
   }
   &__main {
     height: 100vh;
