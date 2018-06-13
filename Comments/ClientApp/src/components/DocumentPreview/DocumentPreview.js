@@ -1,26 +1,18 @@
 // @flow
 
 import React, { Component, Fragment } from "react";
-import Moment from "react-moment";
 import { Helmet } from "react-helmet";
-import { StickyContainer, Sticky } from "react-sticky";
-import Scrollspy from "react-scrollspy";
-import { withRouter } from "react-router";
-import { processDocumentHtml } from "../Document/process-document-html";
-
-// import preload from "../../data/pre-loader";
+import { Redirect, withRouter } from "react-router";
+import { processPreviewHtml } from "../../document-processing/process-preview-html";
 import { load } from "./../../data/loader";
 import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
 import { StackedNav } from "./../StackedNav/StackedNav";
-import { HashLinkTop } from "../../helpers/component-helpers";
 import { projectInformation } from "../../constants";
-// import { UserContext } from "../../context/UserContext";
 
 type PropsType = {
 	staticContext?: any,
 	match: any,
 	location: any,
-	onNewCommentClick: Function
 };
 
 type StateType = {
@@ -28,7 +20,6 @@ type StateType = {
 	documentsData: any, // the list of other documents in this consultation
 	chapterData: any, // the current chapter's details - markup and sections,
 	consultationData: any, // the top level info - title etc
-	currentInPageNavItem: null | string,
 	hasInitialData: boolean
 };
 
@@ -111,6 +102,9 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 			chapterSlug
 		})
 			.then(response => {
+				console.log(`Setting chapter HTML for ${chapterSlug}`);
+				console.log(Redirect);
+				// Redirect();
 				this.setState({
 					chapterData: response.data
 				});
@@ -172,9 +166,10 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 		const createChapterLink = chapter => {
 			return {
 				label: chapter.title,
-				url: `/preview/consultation/${this.props.match.params.consultationId}/${
-					this.props.match.params.documentId}/${chapter.slug}`,
-				current: isCurrentChapter(chapter.slug)
+				url: `/preview/consultation/${this.props.match.params.consultationId}/document/${
+					this.props.match.params.documentId}/chapter/${chapter.slug}`,
+				current: isCurrentChapter(chapter.slug),
+				isReactRoute: true
 			};
 		};
 
@@ -208,7 +203,7 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 		if (!this.state.chapterData || !this.state.hasInitialData) return <h1>Loading...</h1>;
 		const { title } = this.state.consultationData;
 		const { documentsData } = this.state;
-		const { sections, content } = this.state.chapterData;
+		const { content } = this.state.chapterData;
 		const documentId = parseInt(this.props.match.params.documentId, 0);
 
 		return (
@@ -226,83 +221,23 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 							/>
 							<main role="main">
 								<div className="page-header">
-									<p className="mb--0">Consultation</p>
+									<p className="mb--0">Consultation <span className="tag">Preview</span></p>
 									<h1 className="page-header__heading mt--0">{title}</h1>
-									<p className="mb--0">Document</p>
+									<p className="mb--0">Document <span className="tag">Preview</span></p>
 									<h2 className="mt--0">
 										{this.getCurrentDocumentTitle(documentsData, documentId)}
 									</h2>
 								</div>
-								<StickyContainer className="grid">
-									{/* .navColumn only present for reading mode demo */}
-									<div data-g="12 md:3" className="navigationColumn">
-										<StackedNav
-											links={this.getDocumentChapterLinks(documentId)}
-										/>
+								<div className="grid">
+									<div data-g="12 md:3">
+										<StackedNav links={this.getDocumentChapterLinks(documentId)} />
 									</div>
 									<div data-g="12 md:6" className="documentColumn">
-										<div
-											className={`document-comment-container ${
-												this.state.loading ? "loading" : ""}`}
-										>
-											{processDocumentHtml(content)}
+										<div className={`document-comment-container ${this.state.loading ? "loading" : ""}`}>
+											{processPreviewHtml(content)}
 										</div>
 									</div>
-									<div data-g="12 md:3" className="inPageNavColumn">
-										<Sticky disableHardwareAcceleration>
-											{({ style }) => (
-												<div style={style}>
-													{sections.length ? (
-														<nav
-															className="in-page-nav"
-															aria-labelledby="inpagenav-title"
-														>
-															<h2
-																id="inpagenav-title"
-																className="in-page-nav__title"
-															>
-																On this page
-															</h2>
-															<Scrollspy
-																componentTag="ol"
-																items={this.generateScrollspy(sections)}
-																currentClassName="is-current"
-																className="in-page-nav__list"
-																role="menubar"
-																onUpdate={e => {
-																	this.inPageNav(e);
-																}}
-															>
-																{sections.map((item, index) => {
-																	const props = {
-																		label: item.title,
-																		to: item.slug,
-																		behavior: "smooth",
-																		block: "start"
-																	};
-																	return (
-																		<li
-																			role="presentation"
-																			className="in-page-nav__item"
-																			key={index}
-																		>
-																			<HashLinkTop
-																				{...props}
-																				currentNavItem={
-																					this.state.currentInPageNavItem
-																				}
-																			/>
-																		</li>
-																	);
-																})}
-															</Scrollspy>
-														</nav>
-													) : null}
-												</div>
-											)}
-										</Sticky>
-									</div>
-								</StickyContainer>
+								</div>
 							</main>
 						</div>
 					</div>

@@ -1,9 +1,8 @@
 // @flow
 
-import React, { Fragment } from "react";
+import React from "react";
 import { Route, Switch, Redirect } from "react-router";
 import { Helmet } from "react-helmet";
-import CommentListWithRouter from "../CommentList/CommentList";
 import { DocumentView } from "../DocumentView/DocumentView";
 import DocumentPreviewWithRouter from "../DocumentPreview/DocumentPreview";
 import NotFound from "../NotFound/NotFound";
@@ -21,7 +20,6 @@ type StateType = {
 class App extends React.Component<PropsType, StateType> {
 	constructor() {
 		super();
-
 	}
 
 	render() {
@@ -38,7 +36,7 @@ class App extends React.Component<PropsType, StateType> {
 					</Route>
 
 					{/*Document View*/}
-					<Route path="/:consultationId/:documentId/:chapterSlug">
+					<Route exact path="/:consultationId/:documentId/:chapterSlug">
 						<DocumentView/>
 					</Route>
 
@@ -49,14 +47,8 @@ class App extends React.Component<PropsType, StateType> {
 					</Route>
 
 					{/*Review Page*/}
-					<Route path="/:consultationId/review">
+					<Route exact path="/:consultationId/review">
 						<ReviewPageWithRouter/>
-					</Route>
-
-					<Route path="/commentlist">
-						<Fragment>
-							<CommentListWithRouter/>
-						</Fragment>
 					</Route>
 
 					{/*404*/}

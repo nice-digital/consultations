@@ -14,7 +14,7 @@ import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
 import { projectInformation } from "../../constants";
-import { processDocumentHtml } from "./process-document-html";
+import { processDocumentHtml } from "../../document-processing/process-document-html";
 import { LoginBanner } from "./../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
 import { Selection } from "../Selection/Selection";
