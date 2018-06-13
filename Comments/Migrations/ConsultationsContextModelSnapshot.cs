@@ -35,7 +35,7 @@ namespace Comments.Migrations
 
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("date('now')");
+                        .HasDefaultValueSql("(getdate())");
 
                     b.Property<bool>("IsDeleted");
 
@@ -44,7 +44,7 @@ namespace Comments.Migrations
 
                     b.Property<DateTime>("LastModifiedDate")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("date('now')");
+                        .HasDefaultValueSql("(getdate())");
 
                     b.Property<int>("QuestionId")
                         .HasColumnName("QuestionID");
@@ -77,7 +77,7 @@ namespace Comments.Migrations
 
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("date('now')");
+                        .HasDefaultValueSql("(getdate())");
 
                     b.Property<bool>("IsDeleted");
 
@@ -86,7 +86,7 @@ namespace Comments.Migrations
 
                     b.Property<DateTime>("LastModifiedDate")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("date('now')");
+                        .HasDefaultValueSql("(getdate())");
 
                     b.Property<int>("LocationId")
                         .HasColumnName("LocationID");
@@ -116,7 +116,7 @@ namespace Comments.Migrations
 
                     b.Property<DateTime>("SubmissionDateTime")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("date('now')");
+                        .HasDefaultValueSql("(getdate())");
 
                     b.HasKey("SubmissionId");
 
@@ -130,13 +130,16 @@ namespace Comments.Migrations
                         .HasColumnName("SubmissionCommentId");
 
                     b.Property<int>("AnswerId")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("AnswerId");
+                        .HasColumnName("AnswerId");
 
                     b.Property<int>("SubmissionId")
                         .HasColumnName("SubmissionId");
 
                     b.HasKey("SubmissionAnswerId");
+
+                    b.HasIndex("AnswerId");
+
+                    b.HasIndex("SubmissionId");
 
                     b.ToTable("SubmissionAnswer");
                 });
@@ -148,13 +151,16 @@ namespace Comments.Migrations
                         .HasColumnName("SubmissionCommentId");
 
                     b.Property<int>("CommentId")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("CommentId");
+                        .HasColumnName("CommentId");
 
                     b.Property<int>("SubmissionId")
                         .HasColumnName("SubmissionId");
 
                     b.HasKey("SubmissionCommentId");
+
+                    b.HasIndex("CommentId");
+
+                    b.HasIndex("SubmissionId");
 
                     b.ToTable("SubmissionComment");
                 });
@@ -197,7 +203,7 @@ namespace Comments.Migrations
 
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("date('now')");
+                        .HasDefaultValueSql("(getdate())");
 
                     b.Property<bool>("IsDeleted");
 
@@ -283,6 +289,32 @@ namespace Comments.Migrations
                         .WithMany("Comment")
                         .HasForeignKey("StatusId")
                         .HasConstraintName("FK_Comment_Status");
+                });
+
+            modelBuilder.Entity("Comments.Models.EF.SubmissionAnswer", b =>
+                {
+                    b.HasOne("Comments.Models.Answer", "Answer")
+                        .WithMany("SubmissionAnswer")
+                        .HasForeignKey("AnswerId")
+                        .HasConstraintName("FK_SubmissionAnswer_AnswerId");
+
+                    b.HasOne("Comments.Models.EF.Submission", "Submission")
+                        .WithMany("SubmissionAnswer")
+                        .HasForeignKey("SubmissionId")
+                        .HasConstraintName("FK_SubmissionAnswer_SubmissionId");
+                });
+
+            modelBuilder.Entity("Comments.Models.EF.SubmissionComment", b =>
+                {
+                    b.HasOne("Comments.Models.Comment", "Comment")
+                        .WithMany("SubmissionComment")
+                        .HasForeignKey("CommentId")
+                        .HasConstraintName("FK_SubmissionComment_CommentId");
+
+                    b.HasOne("Comments.Models.EF.Submission", "Submission")
+                        .WithMany("SubmissionComment")
+                        .HasForeignKey("SubmissionId")
+                        .HasConstraintName("FK_SubmissionComment_SubmissionId");
                 });
 
             modelBuilder.Entity("Comments.Models.Question", b =>

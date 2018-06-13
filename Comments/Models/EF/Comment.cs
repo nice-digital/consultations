@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Comments.Models.EF;
 
 namespace Comments.Models
 {
@@ -17,5 +18,7 @@ namespace Comments.Models
 
 		public Location Location { get; set; }
 		public Status Status { get; set; }
+
+		public ICollection<SubmissionComment> SubmissionComment { get; set; }
 	}
 }

@@ -11,5 +11,7 @@ namespace Comments.Models.EF
 		public DateTime SubmissionDateTime { get; set; }
 		public Guid SubmissionByUserId { get; set; }
 
-    }
+		public ICollection<SubmissionComment> SubmissionComment { get; set; }
+	    public ICollection<SubmissionAnswer> SubmissionAnswer { get; set; }
+	}
 }

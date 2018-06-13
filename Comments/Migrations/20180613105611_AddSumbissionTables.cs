@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Comments.Migrations
 {
-    public partial class AddSubmissionTables : Migration
+    public partial class AddSumbissionTables : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -40,7 +40,7 @@ namespace Comments.Migrations
                     SubmissionId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     SubmissionByUserId = table.Column<Guid>(nullable: false),
-                    SubmissionDateTime = table.Column<DateTime>(nullable: false, defaultValueSql: "date('now')")
+                    SubmissionDateTime = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())")
                 },
                 constraints: table =>
                 {
@@ -53,12 +53,24 @@ namespace Comments.Migrations
                 {
                     SubmissionCommentId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AnswerId = table.Column<int>(nullable: false, defaultValueSql: "AnswerId"),
+                    AnswerId = table.Column<int>(nullable: false),
                     SubmissionId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SubmissionAnswer", x => x.SubmissionCommentId);
+                    table.ForeignKey(
+                        name: "FK_SubmissionAnswer_AnswerId",
+                        column: x => x.AnswerId,
+                        principalTable: "Answer",
+                        principalColumn: "AnswerID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_SubmissionAnswer_SubmissionId",
+                        column: x => x.SubmissionId,
+                        principalTable: "Submission",
+                        principalColumn: "SubmissionId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -67,12 +79,24 @@ namespace Comments.Migrations
                 {
                     SubmissionCommentId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CommentId = table.Column<int>(nullable: false, defaultValueSql: "CommentId"),
+                    CommentId = table.Column<int>(nullable: false),
                     SubmissionId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SubmissionComment", x => x.SubmissionCommentId);
+                    table.ForeignKey(
+                        name: "FK_SubmissionComment_CommentId",
+                        column: x => x.CommentId,
+                        principalTable: "Comment",
+                        principalColumn: "CommentID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_SubmissionComment_SubmissionId",
+                        column: x => x.SubmissionId,
+                        principalTable: "Submission",
+                        principalColumn: "SubmissionId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -84,6 +108,26 @@ namespace Comments.Migrations
                 name: "IX_Answer_StatusID",
                 table: "Answer",
                 column: "StatusID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubmissionAnswer_AnswerId",
+                table: "SubmissionAnswer",
+                column: "AnswerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubmissionAnswer_SubmissionId",
+                table: "SubmissionAnswer",
+                column: "SubmissionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubmissionComment_CommentId",
+                table: "SubmissionComment",
+                column: "CommentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubmissionComment_SubmissionId",
+                table: "SubmissionComment",
+                column: "SubmissionId");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Answer_Status",
@@ -116,13 +160,13 @@ namespace Comments.Migrations
                 name: "Status");
 
             migrationBuilder.DropTable(
-                name: "Submission");
-
-            migrationBuilder.DropTable(
                 name: "SubmissionAnswer");
 
             migrationBuilder.DropTable(
                 name: "SubmissionComment");
+
+            migrationBuilder.DropTable(
+                name: "Submission");
 
             migrationBuilder.DropIndex(
                 name: "IX_Comment_StatusID",

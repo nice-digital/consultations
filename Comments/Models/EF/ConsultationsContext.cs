@@ -31,11 +31,11 @@ namespace Comments.Models
 
 				entity.Property(e => e.CreatedByUserId).HasColumnName("CreatedByUserID");
 
-				entity.Property(e => e.CreatedDate).HasDefaultValueSql("date(\'now\')");
+				entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
 
 				entity.Property(e => e.LastModifiedByUserId).HasColumnName("LastModifiedByUserID");
 
-				entity.Property(e => e.LastModifiedDate).HasDefaultValueSql("date(\'now\')");
+				entity.Property(e => e.LastModifiedDate).HasDefaultValueSql("(getdate())");
 
 				entity.Property(e => e.QuestionId).HasColumnName("QuestionID");
 
@@ -72,11 +72,11 @@ namespace Comments.Models
 
 				entity.Property(e => e.CreatedByUserId).HasColumnName("CreatedByUserID");
 
-				entity.Property(e => e.CreatedDate).HasDefaultValueSql("date(\'now\')");
+				entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
 
 				entity.Property(e => e.LastModifiedByUserId).HasColumnName("LastModifiedByUserID");
 
-				entity.Property(e => e.LastModifiedDate).HasDefaultValueSql("date(\'now\')");
+				entity.Property(e => e.LastModifiedDate).HasDefaultValueSql("(getdate())");
 
 				entity.Property(e => e.LocationId).HasColumnName("LocationID");
 
@@ -121,7 +121,7 @@ namespace Comments.Models
 
 				entity.Property(e => e.CreatedByUserId).HasColumnName("CreatedByUserID");
 
-				entity.Property(e => e.CreatedDate).HasDefaultValueSql("date(\'now\')");
+				entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
 
 				entity.Property(e => e.LastModifiedByUserId).HasColumnName("LastModifiedByUserID");
 
@@ -172,7 +172,7 @@ namespace Comments.Models
 
 				entity.Property(e => e.SubmissionByUserId).HasColumnName("SubmissionByUserId");
 
-				entity.Property(e => e.SubmissionDateTime).HasDefaultValueSql("date(\'now\')");
+				entity.Property(e => e.SubmissionDateTime).HasDefaultValueSql("(getdate())");
 			});
 
 			modelBuilder.Entity<SubmissionComment>(entity =>
@@ -181,7 +181,20 @@ namespace Comments.Models
 
 				entity.Property(e => e.SubmissionId).HasColumnName("SubmissionId");
 				
-				entity.Property(e => e.CommentId).HasDefaultValueSql("CommentId");
+				entity.Property(e => e.CommentId).HasColumnName("CommentId");
+				
+
+				entity.HasOne(d => d.Submission)
+					.WithMany(p => p.SubmissionComment)
+					.HasForeignKey(d => d.SubmissionId)
+					.OnDelete(DeleteBehavior.ClientSetNull)
+					.HasConstraintName("FK_SubmissionComment_SubmissionId");
+
+				entity.HasOne(d => d.Comment)
+					.WithMany(p => p.SubmissionComment)
+					.HasForeignKey(d => d.CommentId)
+					.OnDelete(DeleteBehavior.ClientSetNull)
+					.HasConstraintName("FK_SubmissionComment_CommentId");
 			});
 
 			modelBuilder.Entity<SubmissionAnswer>(entity =>
@@ -190,7 +203,19 @@ namespace Comments.Models
 
 				entity.Property(e => e.SubmissionId).HasColumnName("SubmissionId");
 
-				entity.Property(e => e.AnswerId).HasDefaultValueSql("AnswerId");
+				entity.Property(e => e.AnswerId).HasColumnName("AnswerId");
+
+				entity.HasOne(d => d.Submission)
+					.WithMany(p => p.SubmissionAnswer)
+					.HasForeignKey(d => d.SubmissionId)
+					.OnDelete(DeleteBehavior.ClientSetNull)
+					.HasConstraintName("FK_SubmissionAnswer_SubmissionId");
+
+				entity.HasOne(d => d.Answer)
+					.WithMany(p => p.SubmissionAnswer)
+					.HasForeignKey(d => d.AnswerId)
+					.OnDelete(DeleteBehavior.ClientSetNull)
+					.HasConstraintName("FK_SubmissionAnswer_AnswerId");
 			});
 		}
 	}
