@@ -86,6 +86,7 @@ export class Drawer extends Component<PropsType, StateType> {
 			>
 				<div className="Drawer__controls">
 					<button
+						data-qa-sel="open-commenting-panel"
 						id="js-drawer-toggleopen"
 						className="Drawer__toggleOpen"
 						onClick={() => this.handleClick("toggleOpen")}
