@@ -13,3 +13,7 @@ export function nodeIsInternalLink(node) {
 export function nodeIsTypeText(node) {
 	return node.type === "text";
 }
+
+export function nodeIsComment(node) {
+	return node.type === "comment";
+}

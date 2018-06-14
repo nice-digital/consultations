@@ -18,10 +18,6 @@ type StateType = {
 }
 
 class App extends React.Component<PropsType, StateType> {
-	constructor() {
-		super();
-	}
-
 	render() {
 		return (
 			<UserProviderWithRouter>
