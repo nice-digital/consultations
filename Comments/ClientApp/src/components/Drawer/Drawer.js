@@ -104,6 +104,7 @@ export class Drawer extends Component<PropsType, StateType> {
 									? "icon--chevron-right"
 									: "icon--chevron-left"}`}
 							aria-hidden="true"
+							data-qa-sel="close-commenting-panel"
 						/>
 					</button>
 
