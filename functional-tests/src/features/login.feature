@@ -13,7 +13,8 @@ Scenario: User not signed in signs in
     Then I expect that element "body #sidebar-panel" contains the text "Sign in to your NICE account to comment on this consultation. Don't have an account?"
 		When I click on the button "body [data-qa-sel='close-commenting-panel']"
 		And I pause for 1000ms
-		When I log in to Accounts via TopHat with username "ACCOUNTS_EMAIL" and password "ACCOUNTS_PASSWORD"
+		Given I am logged in to beta Accounts with username "ACCOUNTS_EMAIL" and password "ACCOUNTS_PASSWORD"
+		And I open the url "1/1/introduction"
 		Then I wait on element "body .page-header" for 10000ms to exist
 		When I click on the button "body [data-qa-sel='close-onboarding-modal']"
 		And I refresh
