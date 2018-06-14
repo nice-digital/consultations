@@ -10,7 +10,7 @@ Background:
 Scenario: User makes a comment at consultation level
     When I log in to Accounts via TopHat with username "ACCOUNTS_EMAIL" and password "ACCOUNTS_PASSWORD"
 		When I wait on element ".page-header" to exist
-		When I click on the button ".onboarding__closeButton"
+		When I click on the button "body [data-qa-sel='close-onboarding-modal']"
 		And I pause for 1000ms
 		When I click on the button "[data-qa-sel='comment-on-whole-consultation']"
 		And I pause for 1000ms
