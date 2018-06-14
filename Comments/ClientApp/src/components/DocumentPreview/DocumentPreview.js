@@ -2,12 +2,13 @@
 
 import React, { Component, Fragment } from "react";
 import { Helmet } from "react-helmet";
-import { Redirect, withRouter } from "react-router";
+import { withRouter } from "react-router";
 import { processPreviewHtml } from "../../document-processing/process-preview-html";
 import { load } from "./../../data/loader";
 import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { projectInformation } from "../../constants";
+import fakeChapterData from "./fake-chapter-data.json";
 
 type PropsType = {
 	staticContext?: any,
@@ -102,9 +103,6 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 			chapterSlug
 		})
 			.then(response => {
-				console.log(`Setting chapter HTML for ${chapterSlug}`);
-				console.log(Redirect);
-				// Redirect();
 				this.setState({
 					chapterData: response.data
 				});
@@ -203,7 +201,8 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 		if (!this.state.chapterData || !this.state.hasInitialData) return <h1>Loading...</h1>;
 		const { title } = this.state.consultationData;
 		const { documentsData } = this.state;
-		const { content } = this.state.chapterData;
+		// const { content } = this.state.chapterData; todo: put this back
+		const content = fakeChapterData.Content;
 		const documentId = parseInt(this.props.match.params.documentId, 0);
 
 		return (

@@ -1,13 +1,20 @@
 // @flow
 
 import ReactHtmlParser from "react-html-parser";
-import { nodeIsInternalLink } from "./transforms/types";
+import { nodeIsInternalLink, nodeIsComment } from "./transforms/types";
 import processInternalLink from "./transforms/internal-link";
+import processComment from "./transforms/comment";
 
 export const processPreviewHtml = (incomingHtml: string) => {
+
 	function transformHtml(node) {
 		if (nodeIsInternalLink(node)) {
 			return processInternalLink(node);
+		}
+
+		// see if we can discern a comment?
+		if (nodeIsComment(node)) {
+			return processComment(node);
 		}
 	}
 
