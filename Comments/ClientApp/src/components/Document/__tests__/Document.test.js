@@ -104,7 +104,7 @@ describe("[ClientApp] ", () => {
 				{
 					title: "Document One",
 					documentId: 1,
-					supportsComments: false,
+					convertedDocument: false,
 					href: "/guidance/one/123",
 					chapters: null
 				},
@@ -112,20 +112,20 @@ describe("[ClientApp] ", () => {
 					title: "",
 					documentId: 2,
 					chapters: [{ slug: "chapter-two-slug" }],
-					supportsComments: true,
+					convertedDocument: true,
 					href: "/guidance/two/123"
 				},
 				{
 					title: "Document Three",
 					documentId: 3,
-					supportsComments: false,
+					convertedDocument: false,
 					href: "/guidance/three/123",
 					chapters: null
 				},
 				{
 					title: "Document Four",
 					documentId: 4,
-					supportsComments: true,
+					convertedDocument: true,
 					href: "/guidance/four/123",
 					chapters: [{ slug: "chapter-two-slug" }]
 				}
@@ -139,12 +139,14 @@ describe("[ClientApp] ", () => {
 					{
 						current: false,
 						label: "Download Document",
-						url: "/1/2/chapter-two-slug"
+						url: "/1/2/chapter-two-slug",
+						isReactRoute: true
 					},
 					{
 						current: false,
 						label: "Document Four",
-						url: "/1/4/chapter-two-slug"
+						url: "/1/4/chapter-two-slug",
+						isReactRoute: true
 					}
 				]);
 			});
@@ -157,12 +159,14 @@ describe("[ClientApp] ", () => {
 					{
 						current: true,
 						label: "Document One",
-						url: "/guidance/one/123"
+						url: "/guidance/one/123",
+						isReactRoute: false
 					},
 					{
 						current: false,
 						label: "Document Three",
-						url: "/guidance/three/123"
+						url: "/guidance/three/123",
+						isReactRoute: false
 					}
 				]);
 			});
