@@ -19,4 +19,4 @@ Scenario: User not signed in signs in
 		Then I wait on element "body .page-header" for 10000ms to exist
 		# When I click on the button "body [data-qa-sel='close-onboarding-modal']"
 		#And I click on the element "body [data-qa-sel='open-commenting-panel']"
-		Then I expect that element "body [data-qa-sel='open-commenting-panel']" does not exist
+		Then I expect that element "body [data-qa-sel='sign-in-banner']" does not exist
