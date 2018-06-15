@@ -74,7 +74,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 
 					{!this.isTextSelection(comment) &&
 					<Fragment>
-						<h1 className="CommentBox__title mt--0 mb--d">
+						<h1 data-qa-sel="comment-box-title" className="CommentBox__title mt--0 mb--d">
 							Comment on: <span className="text-lowercase">{commentOn}</span>
 							<br/>
 							{quote}
@@ -84,7 +84,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 
 					{this.isTextSelection(comment) &&
 					<Fragment>
-						<h1 className="CommentBox__title mt--0 mb--d">
+						<h1 data-qa-sel="comment-box-title" className="CommentBox__title mt--0 mb--d">
 							Comment on: <span className="text-lowercase">{commentOn}</span>
 						</h1>
 						<div className="CommentBox__quote mb--d">{quote}</div>
@@ -106,6 +106,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 								Comment
 							</label>
 							<textarea
+								data-qa-sel="Comment-text-area"
 								disabled={readOnly}
 								id={this.props.unique}
 								tabIndex={tabIndex}
@@ -128,6 +129,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 						)}
 						{!readOnly &&
 						<button
+							data-qa-sel="delete-comment-button"
 							tabIndex={tabIndex}
 							className="btn mr--0 right"
 							onClick={e => this.props.deleteHandler(e, commentId)}
