@@ -36,6 +36,9 @@ services:
     links:
       - hub
       - comments
+    environment:
+      - ACCOUNTS_EMAIL
+      - ACCOUNTS_PASSWORD
 
   # Comment Collection dotnet core web app
   comments:

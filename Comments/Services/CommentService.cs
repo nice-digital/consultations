@@ -5,15 +5,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NICE.Auth.NetCore.Services;
 
 namespace Comments.Services
 {
     public interface ICommentService
     {
-        CommentsAndQuestions GetCommentsAndQuestions(string relativeURL);
-	    CommentsAndQuestions GetUsersCommentsAndQuestionsForConsultation(int consultationId);
+	    CommentsAndQuestions GetCommentsAndQuestions(string relativeURL, bool isReview = false);
 		(ViewModels.Comment comment, Validate validate) GetComment(int commentId);
         (int rowsUpdated, Validate validate) EditComment(int commentId, ViewModels.Comment comment);
         (ViewModels.Comment comment, Validate validate) CreateComment(ViewModels.Comment comment);
@@ -80,7 +78,7 @@ namespace Comments.Services
             locationToSave.SourceURI = ConsultationsUri.ConvertToConsultationsUri(comment.SourceURI, CommentOnHelpers.GetCommentOn(comment.CommentOn));
             _context.Location.Add(locationToSave);
             
-            var commentToSave = new Models.Comment(comment.LocationId, _currentUser.UserId.Value, comment.CommentText, _currentUser.UserId.Value, locationToSave, 1, null);
+            var commentToSave = new Models.Comment(comment.LocationId, _currentUser.UserId.Value, comment.CommentText, _currentUser.UserId.Value, locationToSave);
             _context.Comment.Add(commentToSave);
             _context.SaveChanges();
 
@@ -106,81 +104,36 @@ namespace Comments.Services
             return (rowsUpdated: _context.SaveChanges(), validate: null);
         }
 
-        public CommentsAndQuestions GetCommentsAndQuestions(string relativeURL)
-        {
-            var user = _userService.GetCurrentUser();
-            var signInURL = _authenticateService.GetLoginURL(relativeURL.ToConsultationsRelativeUrl());
+	    public CommentsAndQuestions GetCommentsAndQuestions(string relativeURL, bool isReview = false)
+	    {
+		    var user = _userService.GetCurrentUser();
+		    var signInURL = _authenticateService.GetLoginURL(relativeURL.ToConsultationsRelativeUrl());
 
-            if (!user.IsAuthorised)
-                return new CommentsAndQuestions(new List<ViewModels.Comment>(), new List<ViewModels.Question>(), user.IsAuthorised, signInURL);
+		    if (!user.IsAuthorised)
+			    return new CommentsAndQuestions(new List<ViewModels.Comment>(), new List<ViewModels.Question>(), user.IsAuthorised, signInURL);
 
-            var sourceURIs = new List<string>
-            {
-                ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Consultation),
-                ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Document),
-                ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Chapter)
-            };
-
-            var locations = _context.GetAllCommentsAndQuestionsForDocument(sourceURIs);
-
-            var commentsData = new List<ViewModels.Comment>();
-            var questionsData = new List<ViewModels.Question>();
-            foreach (var location in locations)
-            {
-                commentsData.AddRange(location.Comment.Select(comment => new ViewModels.Comment(location, comment)));
-                questionsData.AddRange(location.Question.Select(question => new ViewModels.Question(location, question)));
-            }
-
-            return new CommentsAndQuestions(commentsData, questionsData, user.IsAuthorised, signInURL);
-        }
-
-        public CommentsAndQuestions GetUsersCommentsAndQuestionsForConsultation(int consultationId)
-        {
-            var user = _userService.GetCurrentUser();
-
-            if (!user.IsAuthorised)
-                return new CommentsAndQuestions(new List<ViewModels.Comment>(), new List<ViewModels.Question>(), user.IsAuthorised, null);
-
-	        var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
-
-
-			var locations = _context.GetAllCommentsAndQuestionsForConsultation(sourceURI);
-
-            var commentsData = new List<ViewModels.Comment>();
-            var questionsData = new List<ViewModels.Question>();
-            foreach (var location in locations)
-            {
-                commentsData.AddRange(location.Comment.Select(comment => new ViewModels.Comment(location, comment)));
-                questionsData.AddRange(location.Question.Select(question => new ViewModels.Question(location, question)));
-            }
-
-            return new CommentsAndQuestions(commentsData, questionsData, user.IsAuthorised, null);
-        }
-
-		public CommentsAndAnswers GetUsersCommentsAndAnswersForConsultation(int consultationId)  //TODO: Can this be refactored with GetUsersCommentsAndQuestionsForConsultation? 
-		{
-			var user = _userService.GetCurrentUser();
-
-			if (!user.IsAuthorised)
-				return new CommentsAndAnswers(new List<ViewModels.Comment>(), new List<ViewModels.Answer>());
-
-			var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
-
-			var locations = _context.GetAllCommentsAndQuestionsForConsultation(sourceURI);
-
-			var commentsData = new List<ViewModels.Comment>();
-			var answersData = new List<ViewModels.Answer>();
-			foreach (var location in locations)
+			var sourceURIs = new List<string>
 			{
-				commentsData.AddRange(location.Comment.Select(comment => new ViewModels.Comment(location, comment)));
+				ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Consultation)
+			};
 
-				foreach (var question in location.Question)
-				{
-					answersData.AddRange(question.Answer.Select(answer => new ViewModels.Answer(answer)));
-				}
+			if (!isReview)
+			{
+				sourceURIs.Add(ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Document));
+				sourceURIs.Add(ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Chapter));
 			}
 
-			return new CommentsAndAnswers(commentsData, answersData);
-		}
+			var locations = _context.GetAllCommentsAndQuestionsForDocument(sourceURIs, isReview);
+
+		    var commentsData = new List<ViewModels.Comment>();
+		    var questionsData = new List<ViewModels.Question>();
+		    foreach (var location in locations)
+		    {
+			    commentsData.AddRange(location.Comment.Select(comment => new ViewModels.Comment(location, comment)));
+			    questionsData.AddRange(location.Question.Select(question => new ViewModels.Question(location, question)));
+		    }
+
+		    return new CommentsAndQuestions(commentsData, questionsData, user.IsAuthorised, signInURL);
+	    }
 	}
 }

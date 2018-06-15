@@ -300,12 +300,12 @@ export class Document extends Component<PropsType, StateType> {
 									<p className="mb--0">
 										Consultation |{" "}
 										<button
+											data-qa-sel="comment-on-whole-consultation"
 											className="buttonAsLink"
 											tabIndex={0}
 											onClick={e => {
 												e.preventDefault();
 												this.props.onNewCommentClick({
-
 													sourceURI: this.props.match.url,
 													commentText: "",
 													commentOn: "Consultation",
@@ -325,6 +325,7 @@ export class Document extends Component<PropsType, StateType> {
 									<p className="mb--0">
 										Document |{" "}
 										<button
+											data-qa-sel="comment-on-consultation-document"
 											className="buttonAsLink"
 											tabIndex={0}
 											onClick={e => {
