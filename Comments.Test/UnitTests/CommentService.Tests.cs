@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Comments.Models;
 using Comments.Services;
 using Comments.Test.Infrastructure;
@@ -8,6 +6,7 @@ using Xunit;
 using Shouldly;
 using System.Linq;
 using Comments.ViewModels;
+using Microsoft.EntityFrameworkCore;
 using Comment = Comments.Models.Comment;
 using Location = Comments.Models.Location;
 
@@ -250,41 +249,9 @@ namespace Comments.Test.UnitTests
             viewModel.Comments.Count().ShouldBe(5);
         }
 
-	    [Fact]
-	    public void Update_Status_To_Submitted()
-	    {
-			//Arrange
-		    ResetDatabase();
-			var userId = Guid.NewGuid();
-		    var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
-		    var consultationId = 1;
 
-		    var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-		    var authenticateService = new FakeAuthenticateService(authenticated: true);
-		    var consultationContext = new ConsultationsContext(_options, userService);
 
-			var commentService = new CommentService(consultationContext, userService, authenticateService);
-		    var submitService = new SubmitService(consultationContext, userService, authenticateService);
-
-		    AddCommentsAndQuestionsAndAnswers(sourceURI, "Comment Text", "Question Text", "Answer Text", userId);
-		    AddCommentsAndQuestionsAndAnswers(sourceURI, "Comment Text", "Question Text", "Answer Text", userId);
-
-			//Act
-		    var commentsAndAnswers = commentService.GetUsersCommentsAndAnswersForConsultation(consultationId);
-		    var result = submitService.SubmitCommentsAndAnswers(commentsAndAnswers);
-		    var updatedCommentsAndAnswers = commentService.GetUsersCommentsAndAnswersForConsultation(consultationId);
-
-			//Assert
-			result.rowsUpdated.ShouldBe(4);
-
-		    updatedCommentsAndAnswers.Comments.First().StatusId.ShouldBe(StatusName.Submitted);
-		    updatedCommentsAndAnswers.Comments.Last().StatusId.ShouldBe(StatusName.Submitted);
-
-			updatedCommentsAndAnswers.Answers.First().StatusId.ShouldBe(StatusName.Submitted);
-			updatedCommentsAndAnswers.Comments.Last().StatusId.ShouldBe(StatusName.Submitted);
-		}
-
-	    [Fact]
+		[Fact]
 	    public void CommentsAndAnswers_ReturnAllOwnCommentsAndAnswersForConsultation()
 	    {
 		    //Arrange
@@ -311,3 +278,4 @@ namespace Comments.Test.UnitTests
 
 	}
 }
+

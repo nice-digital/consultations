@@ -4,6 +4,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Comments
 {
@@ -24,9 +25,9 @@ namespace Comments
 			    }
 		        catch (Exception e)
 		        {
-			        //TODO: Logging	
-				    throw;
-			    }
+			        var logger = services.GetRequiredService<ILogger<Program>>();
+			        logger.LogError(e, "An error occurred while migrating the database.");
+				}
 		    }
 	        host.Run();
 		}

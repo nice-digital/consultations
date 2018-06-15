@@ -1,7 +1,7 @@
 
 using System.Collections.Generic;
 
-namespace Comments.Models.EF
+namespace Comments.Models
 {
     public partial class SubmissionComment
     {

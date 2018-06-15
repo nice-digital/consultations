@@ -1,9 +1,6 @@
 using System;
-using System.Linq;
-using Comments.Models.EF;
 using Comments.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Comments.Models
 {
@@ -16,6 +13,9 @@ namespace Comments.Models
 		public virtual DbSet<Question> Question { get; set; }
 		public virtual DbSet<QuestionType> QuestionType { get; set; }
 		public virtual DbSet<Status> Status { get; set; }
+		public virtual DbSet<Submission> Submission { get; set; }
+		public virtual DbSet<SubmissionAnswer> SubmissionAnswer { get; set; }
+		public virtual DbSet<SubmissionComment> SubmissionComment { get; set; }
 
 		private Guid? _createdByUserID;
 
@@ -168,54 +168,54 @@ namespace Comments.Models
 
 			modelBuilder.Entity<Submission>(entity =>
 			{
-				entity.Property(e => e.SubmissionId).HasColumnName("SubmissionId");
+				entity.Property(e => e.SubmissionId).HasColumnName("SubmissionID");
 
-				entity.Property(e => e.SubmissionByUserId).HasColumnName("SubmissionByUserId");
+				entity.Property(e => e.SubmissionByUserId).HasColumnName("SubmissionByUserID");
 
 				entity.Property(e => e.SubmissionDateTime).HasDefaultValueSql("(getdate())");
 			});
 
 			modelBuilder.Entity<SubmissionComment>(entity =>
 			{
-				entity.Property(e => e.SubmissionCommentId).HasColumnName("SubmissionCommentId");
+				entity.Property(e => e.SubmissionCommentId).HasColumnName("SubmissionCommentID");
 
-				entity.Property(e => e.SubmissionId).HasColumnName("SubmissionId");
+				entity.Property(e => e.SubmissionId).HasColumnName("SubmissionID");
 				
-				entity.Property(e => e.CommentId).HasColumnName("CommentId");
+				entity.Property(e => e.CommentId).HasColumnName("CommentID");
 				
 
 				entity.HasOne(d => d.Submission)
 					.WithMany(p => p.SubmissionComment)
 					.HasForeignKey(d => d.SubmissionId)
 					.OnDelete(DeleteBehavior.ClientSetNull)
-					.HasConstraintName("FK_SubmissionComment_SubmissionId");
+					.HasConstraintName("FK_SubmissionComment_SubmissionID");
 
 				entity.HasOne(d => d.Comment)
 					.WithMany(p => p.SubmissionComment)
 					.HasForeignKey(d => d.CommentId)
 					.OnDelete(DeleteBehavior.ClientSetNull)
-					.HasConstraintName("FK_SubmissionComment_CommentId");
+					.HasConstraintName("FK_SubmissionComment_CommentID");
 			});
 
 			modelBuilder.Entity<SubmissionAnswer>(entity =>
 			{
-				entity.Property(e => e.SubmissionAnswerId).HasColumnName("SubmissionCommentId");
+				entity.Property(e => e.SubmissionAnswerId).HasColumnName("SubmissionCommentID");
 
-				entity.Property(e => e.SubmissionId).HasColumnName("SubmissionId");
+				entity.Property(e => e.SubmissionId).HasColumnName("SubmissionID");
 
-				entity.Property(e => e.AnswerId).HasColumnName("AnswerId");
+				entity.Property(e => e.AnswerId).HasColumnName("AnswerID");
 
 				entity.HasOne(d => d.Submission)
 					.WithMany(p => p.SubmissionAnswer)
 					.HasForeignKey(d => d.SubmissionId)
 					.OnDelete(DeleteBehavior.ClientSetNull)
-					.HasConstraintName("FK_SubmissionAnswer_SubmissionId");
+					.HasConstraintName("FK_SubmissionAnswer_SubmissionID");
 
 				entity.HasOne(d => d.Answer)
 					.WithMany(p => p.SubmissionAnswer)
 					.HasForeignKey(d => d.AnswerId)
 					.OnDelete(DeleteBehavior.ClientSetNull)
-					.HasConstraintName("FK_SubmissionAnswer_AnswerId");
+					.HasConstraintName("FK_SubmissionAnswer_AnswerID");
 			});
 		}
 	}

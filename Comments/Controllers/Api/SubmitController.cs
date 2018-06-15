@@ -28,11 +28,11 @@ namespace Comments.Controllers.Api
 			{
 				return BadRequest(ModelState);
 			}
-
+			
 			var result = _submitService.SubmitCommentsAndAnswers(commentsAndAnswers);
 			var invalidResult = Validate(result.validate, _logger);
 
-			return invalidResult ?? Ok(result.rowsUpdated);
+			return invalidResult ?? Ok(commentsAndAnswers); //should return comments and answers, might need submission object too
 	    }
 	}
 }

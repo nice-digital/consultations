@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Comments.Models.EF
+namespace Comments.Models
 {
     public partial class Submission
     {

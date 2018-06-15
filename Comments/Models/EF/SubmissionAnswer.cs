@@ -1,4 +1,4 @@
-namespace Comments.Models.EF
+namespace Comments.Models
 {
     public partial class SubmissionAnswer
     {

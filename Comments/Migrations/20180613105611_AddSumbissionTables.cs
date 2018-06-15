@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 using System.Collections.Generic;
@@ -137,13 +137,13 @@ namespace Comments.Migrations
                 principalColumn: "StatusID",
                 onDelete: ReferentialAction.Restrict);
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Comment_Status",
-                table: "Comment",
-                column: "StatusID",
-                principalTable: "Status",
-                principalColumn: "StatusID",
-                onDelete: ReferentialAction.Restrict);
+            //migrationBuilder.AddForeignKey(
+            //    name: "FK_Comment_Status",
+            //    table: "Comment",
+            //    column: "StatusID",
+            //    principalTable: "Status",
+            //    principalColumn: "StatusID",
+            //    onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -152,9 +152,9 @@ namespace Comments.Migrations
                 name: "FK_Answer_Status",
                 table: "Answer");
 
-            migrationBuilder.DropForeignKey(
-                name: "FK_Comment_Status",
-                table: "Comment");
+            //migrationBuilder.DropForeignKey(
+            //    name: "FK_Comment_Status",
+            //    table: "Comment");
 
             migrationBuilder.DropTable(
                 name: "Status");

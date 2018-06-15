@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Comments.Migrations;
 using Comments.Models;
 using Comments.ViewModels;
 using NICE.Auth.NetCore.Services;
@@ -23,27 +25,37 @@ namespace Comments.Services
 		    _authenticateService = authenticateService;
 		    _currentUser = _userService.GetCurrentUser();
 	    }
+
 		public (int rowsUpdated, Validate validate) SubmitCommentsAndAnswers(CommentsAndAnswers commentsAndAnswers)
 	    {
 		    if (!_currentUser.IsAuthorised)
 			    return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"Not logged in submitting comments and answers"));
-			
-			foreach (var comment in commentsAndAnswers.Comments)
-		    {
-			    comment.StatusId = StatusName.Submitted;
-			    comment.LastModifiedByUserId = _currentUser.UserId.Value;
-			    comment.LastModifiedDate = DateTime.UtcNow;
 
-			    _context.GetComment(comment.CommentId).UpdateFromViewModel(comment);
+		    var submissionToSave = new Models.Submission(_currentUser.UserId.Value, DateTime.UtcNow);
+		    _context.Submission.Add(submissionToSave);
+
+			foreach (var comment in commentsAndAnswers.Comments)
+			{
+				comment.StatusId = StatusName.Submitted;
+				comment.LastModifiedByUserId = _currentUser.UserId.Value;
+				comment.LastModifiedDate = DateTime.UtcNow;
+
+				_context.GetComment(comment.CommentId).UpdateFromViewModel(comment);
+
+				var submissionCommentToSave = new Models.SubmissionComment(submissionToSave.SubmissionId, comment.CommentId);
+				_context.SubmissionComment.Add(submissionCommentToSave);
 			}
 
-		    foreach (var answer in commentsAndAnswers.Answers)
+			foreach (var answer in commentsAndAnswers.Answers)
 		    {
 			    answer.StatusId = StatusName.Submitted;
 			    answer.LastModifiedByUserId = _currentUser.UserId.Value;
 			    answer.LastModifiedDate = DateTime.UtcNow;
 
 				_context.GetAnswer(answer.AnswerId).UpdateFromViewModel(answer);
+
+			    var submissionAnswerToSave = new Models.SubmissionAnswer(submissionToSave.SubmissionId, answer.AnswerId);
+			    _context.SubmissionAnswer.Add(submissionAnswerToSave);
 			}
 			
 			return (rowsUpdated: _context.SaveChanges(), validate: null);
