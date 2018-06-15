@@ -486,6 +486,7 @@ Array [
                                     >
                                         <button
                                             className="document-comment-container__commentButton"
+                                            data-qa-sel="in-text-comment-button"
                                             onClick={[Function]}
                                             tabIndex={0}
                                         >
