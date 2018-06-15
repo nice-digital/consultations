@@ -118,6 +118,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 						</div>
 						{!readOnly && commentText && commentText.length > 0 && (
 							<input
+								data-qa-sel="submit-button"
 								tabIndex={tabIndex}
 								className="btn ml--0"
 								type="submit"
