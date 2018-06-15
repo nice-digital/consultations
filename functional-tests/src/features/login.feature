@@ -7,14 +7,16 @@ Background:
     And I refresh
 
 Scenario: User not signed in signs in
-    When I wait on element ".page-header" to exist
-    When I click on the button "body #js-drawer-toggleopen"
+    Given I am logged out of NICE accounts
+		When I wait on element ".page-header" to exist
+    When I click on the button "body [data-qa-sel='open-commenting-panel']"
     Then I expect that element "body #sidebar-panel" contains the text "Sign in to your NICE account to comment on this consultation. Don't have an account?"
-		When I click on the button "#sidebar-panel > div > div.panel.panel--inverse.mt--0.mb--0 > div > div > div > p > a"
-		And I wait on element "body #Email" to exist
-		And I add "martingmeta10@gmail.com" to the inputfield "body #Email"
-		And I add "abc123" to the inputfield "body #Password"
-		And I click on the button "body > div.container > div > div.span6.pull-right > div > div.panel-body > form:nth-child(1) > div:nth-child(10) > div > button"
+		And I pause for 1000ms
+		When I click on the button "body [data-qa-sel='open-commenting-panel']"
+		And I pause for 1000ms
+		When I log in to Accounts via TopHat with username "ACCOUNTS_EMAIL" and password "ACCOUNTS_PASSWORD"
+		And I pause for 1000ms
 		Then I wait on element "body .page-header" for 10000ms to exist
-		And I click on the element "body #js-drawer-toggleopen"
-		Then I expect that element "body #sidebar-panel" contains the text "No comments yet"
+		# When I click on the button "body [data-qa-sel='close-onboarding-modal']"
+		#And I click on the element "body [data-qa-sel='open-commenting-panel']"
+		Then I expect that element "body [data-qa-sel='sign-in-banner']" does not exist
