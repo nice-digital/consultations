@@ -29,7 +29,7 @@ namespace Comments.Test.UnitTests
 			var submitService = new SubmitService(consultationContext, userService, authenticateService);
 
 			var locationId = AddLocation(sourceURI, _context);
-			var commentId = AddComment(locationId, "Comment text", false, userId, _context);
+			var commentId = AddComment(locationId, "Comment text", false, userId, StatusName.Draft, _context);
 
 			//Act
 			var commentsAndAnswers = commentService.GetUsersCommentsAndAnswersForConsultation(consultationId);
@@ -85,6 +85,26 @@ namespace Comments.Test.UnitTests
 			//answerSubmissionData.SubmissionAnswerId.ShouldBe(1);
 			answerSubmissionData.AnswerId.ShouldBe(answerId);
 			answerSubmissionData.Submission.SubmissionByUserId.ShouldBe(userId);
+		}
+
+		[Fact]
+		public void Get_Users_Submission()
+		{
+			//Arrange
+			ResetDatabase();
+			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+			var userId = Guid.NewGuid();
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+			var consultationContext = new ConsultationsContext(_options, userService);
+			var authenticateService = new FakeAuthenticateService(authenticated: true);
+			var commentService = new CommentService(consultationContext, userService, authenticateService);
+
+			AddSubmittedCommentsAndAnswers(sourceURI, "Comment Text", "Question Text", "Answer Text", userId, consultationContext);
+
+			//Act
+
+			//Assert
+
 		}
 	}
 }

@@ -24,7 +24,7 @@ namespace Comments.Test.IntegrationTests.API.Submit
 		    var userId = Guid.Empty;
 		    var locationId = AddLocation(sourceURI, _context);
 
-			var commentId = AddComment(locationId, commentText, false, userId, _context);
+			var commentId = AddComment(locationId, commentText, false, userId, StatusName.Draft, _context);
 
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 		    var authenticateService = new FakeAuthenticateService(authenticated: true);
@@ -37,10 +37,13 @@ namespace Comments.Test.IntegrationTests.API.Submit
 		    //Act
 		    var response = await _client.PostAsync($"consultations/api/Submit", content);  
 		    response.EnsureSuccessStatusCode();
-		    var result = commentService.GetComment(commentId);
+		    var responseString = await response.Content.ReadAsStringAsync();
+			var result = commentService.GetComment(commentId);
+		    var deserialisedComment = JsonConvert.DeserializeObject<ViewModels.CommentsAndAnswers>(responseString);
 
 			//Assert
 			result.comment.StatusId.ShouldBe(StatusName.Submitted);
+		    
 		}
 	}
 }

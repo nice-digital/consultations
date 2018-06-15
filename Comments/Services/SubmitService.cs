@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Comments.Common;
 using Comments.Migrations;
 using Comments.Models;
 using Comments.ViewModels;

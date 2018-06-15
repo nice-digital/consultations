@@ -68,7 +68,7 @@ namespace Comments.Test.IntegrationTests.API.Answers
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
             SetupTestDataInDB();
-            var answerId =  AddAnswer(1, userId, answerText, _context);
+            var answerId =  AddAnswer(1, userId, answerText, StatusName.Draft, _context);
             
             var answerService = new AnswerService(_context, userService);
             var viewModel = answerService.GetAnswer(answerId);

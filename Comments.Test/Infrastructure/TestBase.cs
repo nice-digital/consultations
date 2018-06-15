@@ -178,9 +178,9 @@ namespace Comments.Test.Infrastructure
 
             return location.LocationId;
         }
-        protected int AddComment(int locationId, string commentText, bool isDeleted, Guid createdByUserId, ConsultationsContext passedInContext = null)
+        protected int AddComment(int locationId, string commentText, bool isDeleted, Guid createdByUserId, int status = StatusName.Draft, ConsultationsContext passedInContext = null)
         {
-            var comment = new Comment(locationId, createdByUserId, commentText, Guid.Empty, location: null, statusId: 1, status: null);
+            var comment = new Comment(locationId, createdByUserId, commentText, Guid.Empty, location: null, statusId: status, status: null);
             comment.IsDeleted = isDeleted;
             if (passedInContext != null)
             {
@@ -236,9 +236,9 @@ namespace Comments.Test.Infrastructure
 
             return question.QuestionId;
         }
-        protected int AddAnswer(int questionId, Guid userId, string answerText, ConsultationsContext passedInContext = null)
+        protected int AddAnswer(int questionId, Guid userId, string answerText, int status = StatusName.Draft, ConsultationsContext passedInContext = null)
         {
-            var answer = new Answer(questionId, userId, answerText, null, null, StatusName.Draft, null);
+            var answer = new Answer(questionId, userId, answerText, null, null, status, null);
             answer.LastModifiedDate = DateTime.Now;
             if (passedInContext != null)
             {
@@ -256,13 +256,13 @@ namespace Comments.Test.Infrastructure
             
             return answer.AnswerId;
         }
-        protected void AddCommentsAndQuestionsAndAnswers(string sourceURI, string commentText, string questionText, string answerText, Guid createdByUserId, ConsultationsContext passedInContext = null)
+        protected void AddCommentsAndQuestionsAndAnswers(string sourceURI, string commentText, string questionText, string answerText, Guid createdByUserId, int status = StatusName.Draft, ConsultationsContext passedInContext = null)
         {
             var locationId = AddLocation(sourceURI, passedInContext);
             AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId, passedInContext: passedInContext);
             var questionTypeId = AddQuestionType(description: "text", hasBooleanAnswer: false, hasTextAnswer: true, passedInContext: passedInContext);
             var questionId = AddQuestion(locationId, questionTypeId, questionText, passedInContext);
-            AddAnswer(questionId, createdByUserId, answerText, passedInContext);
+            AddAnswer(questionId, createdByUserId, answerText, status, passedInContext);
         }
 
         protected void SetupTestDataInDB()
@@ -276,11 +276,83 @@ namespace Comments.Test.Infrastructure
             AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId); //Add records for Foreign key constraints
         }
 
-        #endregion database stuff
+	    protected void AddSubmittedCommentsAndAnswers(string sourceURI, string commentText, string questionText, string answerText, Guid createdByUserId, ConsultationsContext passedInContext = null)
+	    {
+		    var locationId = AddLocation(sourceURI, passedInContext);
+		    var commentId = AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId, status: StatusName.Submitted, passedInContext: passedInContext);
+		    var questionTypeId = AddQuestionType(description: "text", hasBooleanAnswer: false, hasTextAnswer: true, passedInContext: passedInContext);
+		    var questionId = AddQuestion(locationId, questionTypeId, questionText, passedInContext);
+		    var answerId = AddAnswer(questionId, createdByUserId, answerText, StatusName.Submitted, passedInContext);
+			var submissionId = AddSubmission(createdByUserId, passedInContext);
+		    AddSubmissionComments(submissionId, commentId, passedInContext);
+		    AddSubmissionAnswers(submissionId, answerId, passedInContext);
+	    }
 
-        #region Helpers
+	    protected int AddSubmission(Guid userId, ConsultationsContext passedInContext = null)
+	    {
+			var submission = new Submission(userId, DateTime.Now);
+			if (passedInContext != null)
+			{
+				passedInContext.Submission.Add(submission);
+				passedInContext.SaveChanges();
+			}
+			else
+			{
+				using (var context = new ConsultationsContext(_options, _fakeUserService))
+				{
+					context.Submission.Add(submission);
+					context.SaveChanges();
+				}
+			}
 
-        protected int RandomNumber()
+			return submission.SubmissionId;
+		}
+
+	    protected int AddSubmissionComments(int submissionId, int commentId, ConsultationsContext passedInContext = null)
+	    {
+		    var submissionComment = new SubmissionComment(submissionId, commentId);
+		    if (passedInContext != null)
+		    {
+			    passedInContext.SubmissionComment.Add(submissionComment);
+			    passedInContext.SaveChanges();
+		    }
+		    else
+		    {
+			    using (var context = new ConsultationsContext(_options, _fakeUserService))
+			    {
+				    context.SubmissionComment.Add(submissionComment);
+				    context.SaveChanges();
+			    }
+		    }
+
+		    return submissionComment.SubmissionCommentId;
+	    }
+
+	    protected int AddSubmissionAnswers(int submissionId, int answerId, ConsultationsContext passedInContext = null)
+	    {
+		    var submissionAnswer = new SubmissionAnswer(submissionId, answerId);
+		    if (passedInContext != null)
+		    {
+			    passedInContext.SubmissionAnswer.Add(submissionAnswer);
+			    passedInContext.SaveChanges();
+		    }
+		    else
+		    {
+			    using (var context = new ConsultationsContext(_options, _fakeUserService))
+			    {
+				    context.SubmissionAnswer.Add(submissionAnswer);
+				    context.SaveChanges();
+			    }
+		    }
+
+		    return submissionAnswer.SubmissionAnswerId;
+	    }
+
+		#endregion database stuff
+
+		#region Helpers
+
+		protected int RandomNumber()
         {
             var rnd = new Random();
             return rnd.Next(1, int.MaxValue);

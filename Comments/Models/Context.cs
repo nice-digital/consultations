@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using Comments.Services;
+using Comments.ViewModels;
 using Microsoft.Extensions.Configuration;
 
 namespace Comments.Models
@@ -97,5 +98,5 @@ namespace Comments.Models
                 .Include(q => q.QuestionType)
                 .FirstOrDefault();
         }
-    }
+	}
 }
