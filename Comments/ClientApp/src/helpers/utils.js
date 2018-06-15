@@ -15,6 +15,11 @@ export function objectToQueryString(obj) {
 	return "";
 }
 
+/**
+ * Creates an object out of a querys tring
+ * 	@param {string} the querystring you'd like to be turned into an object
+ *  @returns obj
+ */
 export function queryStringToObject(qryString) {
 	return queryString.parse(qryString);
 }
