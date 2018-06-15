@@ -175,6 +175,7 @@ Array [
                             >
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="page"
@@ -186,6 +187,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -197,6 +199,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -208,6 +211,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -219,6 +223,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -230,6 +235,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -241,6 +247,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -252,6 +259,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -263,6 +271,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -274,6 +283,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -285,6 +295,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -296,6 +307,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -307,6 +319,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -318,6 +331,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -329,6 +343,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -354,6 +369,7 @@ Array [
                             >
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="page"
@@ -365,6 +381,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -376,6 +393,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -387,6 +405,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -398,6 +417,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -409,6 +429,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -420,6 +441,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
