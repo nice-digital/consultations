@@ -14,10 +14,10 @@ Scenario: User makes a comment at consultation level
 		And I pause for 1000ms
 		When I click on the button "[data-qa-sel='comment-on-whole-consultation']"
 		And I pause for 1000ms
-		Then I wait on element "body .CommentBox__title" for 10000ms to exist
-    Then I expect that element ".CommentBox__title" contains the text "Comment on:"
-		When I add "This is a Consultation comment" to the inputfield "#Comment0"
-		And I click on the button "#sidebar-panel > div > ul > li > section > form > input"
+		Then I wait on element "body [data-qa-sel='comment-box-title']" for 10000ms to exist
+    Then I expect that element "[data-qa-sel='comment-box-title']" contains the text "consultation"
+		When I add "This is a Consultation comment" to the inputfield "[data-qa-sel='Comment-text-area']"
+		And I click on the button "[data-qa-sel='submit-button']"
 		And I pause for 1000ms
-		Then I expect that element "#Comment0" contains the text "This is a Consultation comment"
-		Then I expect that element "#sidebar-panel > div > ul > li > section > form > input" contains the text "Saved"
+		Then I expect that element "[data-qa-sel='Comment-text-area']" contains the text "This is a Consultation comment"
+		Then I expect that element "[data-qa-sel='submit-button']" contains the text "Saved"
