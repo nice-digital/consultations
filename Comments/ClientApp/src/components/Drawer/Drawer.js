@@ -123,7 +123,7 @@ export class Drawer extends Component<PropsType, StateType> {
 
 				</div>
 				{/* #sidebar-panel necessary here for pulling keyboard focus */}
-				<div id="sidebar-panel" className="Drawer__main">
+				<div data-qa-sel="comment-panel" id="sidebar-panel" className="Drawer__main">
 					{/*wrappedComponentRef exposes the underlying, unwrapped component*/}
 					<CommentListWithRouter isReviewPage={false}
 										   drawerOpen={this.state.drawerOpen}
