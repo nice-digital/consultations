@@ -2,7 +2,7 @@
 
 import React, { Component, Fragment } from "react";
 import { Helmet } from "react-helmet";
-import { withRouter, Redirect } from "react-router";
+import { withRouter } from "react-router";
 import { processPreviewHtml } from "../../document-processing/process-preview-html";
 import { load } from "./../../data/loader";
 import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
