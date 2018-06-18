@@ -65,7 +65,8 @@ export class ReviewPage extends Component<PropsType> {
 					return {
 						label: consultationDocument.title,
 						url: `${this.props.location.pathname}?sourceURI=${encodeURIComponent(consultationDocument.sourceURI)}`,
-						current: this.getCurrentSourceURI() === consultationDocument.sourceURI
+						current: this.getCurrentSourceURI() === consultationDocument.sourceURI,
+						isReactRoute: true
 					};
 				}
 			);
@@ -156,7 +157,8 @@ export class ReviewPage extends Component<PropsType> {
 																	{
 																		label: title,
 																		url: this.props.location.pathname,
-																		current: this.getCurrentSourceURI() == null
+																		current: this.getCurrentSourceURI() == null,
+																		isReactRoute: true
 																	}
 																]
 															}
