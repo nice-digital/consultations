@@ -21,7 +21,7 @@
     "eject": "react-scripts eject",
     "flow": "flow",
     "modernizr": "modernizr -c modernizr-config.json -d ./public/vendor/modernizr-custom.js",
-    "sass:build": "npm-run-all -s sass:compile sass:post",
+    "sass:build": "npm-run-all -s sass:compile",
     "sass:compile": "node-sass-chokidar --include-path ./node_modules/@nice-digital/design-system/src/stylesheets --include-path ./node_modules/@nice-digital/icons/dist --source-map true src/main.scss -o public",
     "sass:post": "postcss public/*.css --use autoprefixer -d public",
     "sass:watch": "npm run sass:build && chokidar \"./src/**/*.scss\" -c \"npm run sass:build\""
@@ -49,6 +49,7 @@
     "react-router-hash-link": "^1.2.0",
     "react-scrollspy": "^3.3.5",
     "react-sticky": "^6.0.2",
+    "uuid": "^3.2.1",
     "xpath-range": "0.0.5"
   },
   "devDependencies": {
@@ -83,5 +84,5 @@
     "rimraf": "^2.6.2",
     "stringify-object": "^3.2.2"
   },
-  "proxy": "https://dev-web01-consultations.nice.org.uk"
+  "proxy": "https://alpha.nice.org.uk"
 }

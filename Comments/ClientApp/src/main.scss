@@ -22,3 +22,6 @@ $nice-font-base-path: "/consultations/fonts/";
 @import "./components/CommentBox/CommentBox";
 @import "./components/PhaseBanner/PhaseBanner";
 @import "./components/Selection/Selection";
+
+// Imports from the HTML transforms - addition of inline buttons etc
+@import "./document-processing/transforms/comment";

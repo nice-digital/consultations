@@ -62,7 +62,7 @@
     }
   }
   &__modal {
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    @extend %all-drop-shadow;
     padding: rem(20px);
     position: absolute;
     top: 50%;

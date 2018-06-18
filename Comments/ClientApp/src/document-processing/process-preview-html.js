@@ -12,7 +12,6 @@ export const processPreviewHtml = (incomingHtml: string) => {
 			return processInternalLink(node);
 		}
 
-		// see if we can discern a comment?
 		if (nodeIsComment(node)) {
 			return processComment(node);
 		}

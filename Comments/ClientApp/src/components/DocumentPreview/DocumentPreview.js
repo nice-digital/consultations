@@ -8,7 +8,10 @@ import { load } from "./../../data/loader";
 import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { projectInformation } from "../../constants";
-import fakeChapterData from "./fake-chapter-data.json";
+// import fakeData from "./fake-data/scope";
+import fakeData from "./fake-data/optimum-intervals-for-chronic-open-angle-glaucoma-3";
+// import fakeData from "./fake-data/increased-risk-of-conversion-to-coag-2";
+// import fakeData from "./fake-data/document1";
 
 type PropsType = {
 	staticContext?: any,
@@ -103,6 +106,7 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 			chapterSlug
 		})
 			.then(response => {
+				console.log(response);
 				this.setState({
 					chapterData: response.data
 				});
@@ -120,7 +124,7 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 					const consultationId = parseInt(this.props.match.params.consultationId, 0);
 					const isCurrentDocument = d => d.documentId === documentId;
 					const slug = data.documentsData.filter(isCurrentDocument)[0].chapters[0].slug;
-					this.getChapterData(documentId, consultationId, slug);
+					this.getChapterData(consultationId, documentId, slug);
 					this.setState({
 						...data,
 						loading: false,
@@ -187,22 +191,14 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 		return currentDocumentDetails.title;
 	};
 
-	generateScrollspy = (sections: Array<Object>): Array<Object> => {
-		return sections.map(section => section.slug);
-	};
 
-	inPageNav = (e: HTMLElement) => {
-		if (!e) return null;
-		const currentInPageNavItem = e.getAttribute("id");
-		this.setState({ currentInPageNavItem });
-	};
 
 	render() {
 		if (!this.state.chapterData || !this.state.hasInitialData) return <h1>Loading...</h1>;
 		const { title } = this.state.consultationData;
 		const { documentsData } = this.state;
 		// const { content } = this.state.chapterData; todo: put this back
-		const content = fakeChapterData.Content;
+		const content = fakeData.Content;
 		const documentId = parseInt(this.props.match.params.documentId, 0);
 
 		return (
@@ -231,7 +227,7 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 									<div data-g="12 md:3">
 										<StackedNav links={this.getDocumentChapterLinks(documentId)} />
 									</div>
-									<div data-g="12 md:6" className="documentColumn">
+									<div data-g="12 md:9" className="documentColumn">
 										<div className={`document-comment-container ${this.state.loading ? "loading" : ""}`}>
 											{processPreviewHtml(content)}
 										</div>
