@@ -38,6 +38,10 @@ class App extends React.Component<PropsType, StateType> {
 
 					{/*Preview View*/}
 					{/*Comes from indev - e.g. http://dev.nice.org.uk/preview/consultation/1/document/1*/}
+					<Route exact path="/preview/consultation/:consultationId/document/:documentId/chapter/:chapterSlug">
+						<DocumentPreviewWithRouter />
+					</Route>
+
 					<Route path="/preview/consultation/:consultationId/document/:documentId">
 						<DocumentPreviewWithRouter />
 					</Route>

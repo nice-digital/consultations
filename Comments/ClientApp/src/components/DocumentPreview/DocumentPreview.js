@@ -2,7 +2,7 @@
 
 import React, { Component, Fragment } from "react";
 import { Helmet } from "react-helmet";
-import { withRouter } from "react-router";
+import { withRouter, Redirect } from "react-router";
 import { processPreviewHtml } from "../../document-processing/process-preview-html";
 import { load } from "./../../data/loader";
 import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
@@ -17,6 +17,7 @@ type PropsType = {
 	staticContext?: any,
 	match: any,
 	location: any,
+	history: any
 };
 
 type StateType = {
@@ -39,6 +40,25 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 			hasInitialData: false,
 			currentInPageNavItem: null
 		};
+
+		// todo: this isn't going to stop anything happening after it :s
+		// Don't have a chapter yet? Let's go an get the first one and redirect to it
+		if (!this.props.match.params.chapterSlug) {
+			//	let's go and get the first chapter slug of the document we're looking at
+			const { consultationId, documentId } = this.props.match.params;
+			const isCurrentDocument = d => d.documentId === parseInt(documentId, 0);
+			load("documents", undefined, [], { consultationId })
+				.then(response => {
+					const documents = response.data;
+					//	get current document data
+					const currentDocument = documents.filter(isCurrentDocument)[0];
+					const firstChapterSlug = currentDocument.chapters[0].slug;
+					this.props.history.push(`${this.props.match.url}/chapter/${firstChapterSlug}`);
+				})
+				.catch(err => {
+					throw new Error("documentsData " + err);
+				});
+		}
 
 		// if (this.props) {
 		// 	const preloadedChapter = preload(
@@ -73,13 +93,10 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 		// }
 	}
 
-	// getChapterData = (chapterSlug: string) => {
-	// 	const { consultationId, documentId } = this.props.match.params;
-	//
-	// };
-
 	gatherData = async () => {
 		const { consultationId } = this.props.match.params;
+		const { documentId } = this.props.match.params;
+		const { chapterSlug } = this.props.match.params;
 
 		const documentsData = load("documents", undefined, [], { consultationId })
 			.then(response => response.data)
@@ -93,38 +110,27 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 				throw new Error("consultationData " + err);
 			});
 
-		return {
-			documentsData: await documentsData,
-			consultationData: await consultationData
-		};
-	};
-
-	getChapterData = (consultationId: number, documentId: number, chapterSlug: string) => {
-		load("chapter", undefined, [], {
+		const chapterData = load("chapter", undefined, [], {
 			consultationId,
 			documentId,
 			chapterSlug
 		})
-			.then(response => {
-				console.log(response);
-				this.setState({
-					chapterData: response.data
-				});
-			})
+			.then(response => response.data)
 			.catch(err => {
 				throw new Error("chapterData " + err);
 			});
+
+		return {
+			documentsData: await documentsData,
+			consultationData: await consultationData,
+			chapterData: await chapterData
+		};
 	};
 
 	componentDidMount() {
 		if (!this.state.hasInitialData) {
 			this.gatherData()
 				.then(data => {
-					const documentId = parseInt(this.props.match.params.documentId, 0);
-					const consultationId = parseInt(this.props.match.params.consultationId, 0);
-					const isCurrentDocument = d => d.documentId === documentId;
-					const slug = data.documentsData.filter(isCurrentDocument)[0].chapters[0].slug;
-					this.getChapterData(consultationId, documentId, slug);
 					this.setState({
 						...data,
 						loading: false,
@@ -132,7 +138,8 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 					});
 				})
 				.catch(err => {
-					throw new Error("gatherData in componentDidMount failed " + err);
+					// throw new Error("gatherData in componentDidMount failed " + err);
+					console.log(err);
 				});
 		}
 	}
@@ -141,9 +148,7 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 		const oldRoute = prevProps.location.pathname;
 		const newRoute = this.props.location.pathname;
 		if (oldRoute !== newRoute) {
-			this.setState({
-				loading: true
-			});
+			this.setState({ loading: true });
 			this.gatherData()
 				.then(data => {
 					this.setState({
@@ -159,12 +164,8 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 
 	getDocumentChapterLinks = (documentId: number) => {
 		if (!documentId) return null;
-
 		const isCurrentDocument = d => d.documentId === parseInt(documentId, 0);
-
-		const isCurrentChapter = slug =>
-			slug === this.props.match.params.chapterSlug;
-
+		const isCurrentChapter = slug => slug === this.props.match.params.chapterSlug;
 		const createChapterLink = chapter => {
 			return {
 				label: chapter.title,
@@ -174,11 +175,8 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 				isReactRoute: true
 			};
 		};
-
 		const documents = this.state.documentsData;
-
 		const currentDocument = documents.filter(isCurrentDocument);
-
 		return {
 			title: "Chapters in this document",
 			links: currentDocument[0].chapters.map(createChapterLink)
@@ -191,14 +189,12 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 		return currentDocumentDetails.title;
 	};
 
-
-
 	render() {
 		if (!this.state.chapterData || !this.state.hasInitialData) return <h1>Loading...</h1>;
 		const { title } = this.state.consultationData;
 		const { documentsData } = this.state;
-		// const { content } = this.state.chapterData; todo: put this back
-		const content = fakeData.Content;
+		const { content } = this.state.chapterData;
+		// const content = fakeData.Content;
 		const documentId = parseInt(this.props.match.params.documentId, 0);
 
 		return (
@@ -225,10 +221,11 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 								</div>
 								<div className="grid">
 									<div data-g="12 md:3">
-										<StackedNav links={this.getDocumentChapterLinks(documentId)} />
+										<StackedNav links={this.getDocumentChapterLinks(documentId)}/>
 									</div>
 									<div data-g="12 md:9" className="documentColumn">
-										<div className={`document-comment-container ${this.state.loading ? "loading" : ""}`}>
+										<div
+											className={`document-comment-container ${this.state.loading ? "loading" : ""}`}>
 											{processPreviewHtml(content)}
 										</div>
 									</div>
