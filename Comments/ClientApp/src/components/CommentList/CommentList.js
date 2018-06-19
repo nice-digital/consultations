@@ -113,7 +113,7 @@ export class CommentList extends Component<PropsType, StateType> {
 
 		}
 		// console.log(sourceURI);
-		 
+
 		load("comments", undefined, [], { sourceURI: sourceURI, isReview: this.props.isReviewPage }).then(
 			res => {
 				this.setCommentListState(res);
@@ -245,7 +245,7 @@ export class CommentList extends Component<PropsType, StateType> {
 									<h1 data-g="6" id="commenting-panel" className="p">Comments panel</h1>
 									{contextValue.isAuthorised ?
 										<p data-g="6">
-											<Link to={`/${this.props.match.params.consultationId}/review`} className="right">Review all comments</Link>
+											<Link to={`/${this.props.match.params.consultationId}/review`} data-qa-sel="review-all-comments" className="right">Review all comments</Link>
 										</p> : null
 									}
 								</div> : null
