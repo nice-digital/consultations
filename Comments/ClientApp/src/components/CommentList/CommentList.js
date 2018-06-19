@@ -113,7 +113,7 @@ export class CommentList extends Component<PropsType, StateType> {
 
 		}
 		// console.log(sourceURI);
-		 
+
 		load("comments", undefined, [], { sourceURI: sourceURI, isReview: this.props.isReviewPage }).then(
 			res => {
 				this.setCommentListState(res);
@@ -146,7 +146,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		}
 	}
 
-	filterComments = (newSourceURIToFilterBy: string, comments: Array<CommentType>) => {
+	filterComments = (newSourceURIToFilterBy: string, comments: Array<CommentType>): Array<CommentType> => {
 		let filterBy = queryStringToObject(newSourceURIToFilterBy);
 		if (filterBy.sourceURI == null) filterBy = { sourceURI: "" };
 		const idsOfFilteredComments = comments.filter(comment => comment.sourceURI.indexOf(filterBy.sourceURI) !== -1).map(comment => comment.commentId);
