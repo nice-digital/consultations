@@ -4,9 +4,8 @@ import React from "react";
 import { Route, Switch, Redirect } from "react-router";
 import { Helmet } from "react-helmet";
 import { DocumentView } from "../DocumentView/DocumentView";
-import DocumentPreviewWithRouter from "../DocumentPreview/DocumentPreview";
 import NotFound from "../NotFound/NotFound";
-import DocumentPreviewRedirectWithRouter from "../DocumentPreview/DocumentPreviewRedirect";
+import DocumentPreviewRedirectWithRouter from "../Document/DocumentPreviewRedirect";
 import ReviewPageWithRouter from "../ReviewPage/ReviewPage";
 import UserProviderWithRouter from "../../context/UserContext";
 import OnboardingModal from "../OnboardingModal/OnboardingModal";
@@ -18,6 +17,7 @@ type StateType = {
 }
 
 class App extends React.Component<PropsType, StateType> {
+	
 	render() {
 		return (
 			<UserProviderWithRouter>
@@ -31,23 +31,25 @@ class App extends React.Component<PropsType, StateType> {
 						<Redirect to="/10/5/overview"/>
 					</Route>
 
-					{/*Standard Document View*/}
+					{/*Document (Comment Layout)*/}
 					<Route exact path="/:consultationId/:documentId/:chapterSlug">
 						<DocumentView/>
 					</Route>
 
-					{/*Preview View*/}
-					{/*Comes from indev - e.g. http://dev.nice.org.uk/preview/consultation/1/document/1*/}
-					<Route exact path="/preview/consultation/:consultationId/document/:documentId/chapter/:chapterSlug">
-						<DocumentPreviewWithRouter/>
-					</Route>
+					<Switch>
+						{/*Document (Preview Layout)*/}
+						<Route path="/preview/consultation/:consultationId/document/:documentId/chapter/:chapterSlug">
+							<DocumentView/>
+						</Route>
 
-					{/*If we hit this we're coming in *without* a chapter slug,
-					so we need to get the first chapter of the current document and pass its slug into the URL
-					so it matches the route above*/}
-					<Route exact path="/preview/consultation/:consultationId/document/:documentId">
-						<DocumentPreviewRedirectWithRouter/>
-					</Route>
+						{/*	If we hit this we're coming in *without* a chapter slug,
+						so we need to get the first chapter of the current document
+						and pass its slug into the URL
+						so it matches the route above */}
+						<Route path="/preview/consultation/:consultationId/document/:documentId">
+							<DocumentPreviewRedirectWithRouter/> {/* This component only redirects to the above route */}
+						</Route>
+					</Switch>
 
 					{/*Review Page*/}
 					<Route exact path="/:consultationId/review">

@@ -2,7 +2,7 @@
 
 import React, { Component } from "react";
 import { withRouter, Redirect } from "react-router";
-import { load } from "./../../data/loader";
+import { load } from "../../data/loader";
 
 type StateType = {
 	redirectUrl: string | null
