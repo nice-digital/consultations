@@ -29,4 +29,10 @@ Scenario: User makes a multiple comments
 		Then I expect that element "#Comment0" contains the text "3"
 		And I expect that element "#Comment1" contains the text "2"
 		And I expect that element "#Comment2" contains the text "1"
+		Then I click on the button "body [data-qa-sel='delete-comment-button']"
+		And I pause for 1000ms
+		Then I click on the button "body [data-qa-sel='delete-comment-button']"
+		And I pause for 1000ms
+		Then I click on the button "body [data-qa-sel='delete-comment-button']"
+
 
