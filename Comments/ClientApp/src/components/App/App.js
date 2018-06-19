@@ -31,7 +31,7 @@ class App extends React.Component<PropsType, StateType> {
 						<Redirect to="/10/5/overview"/>
 					</Route>
 
-					{/*Document View*/}
+					{/*Standard Document View*/}
 					<Route exact path="/:consultationId/:documentId/:chapterSlug">
 						<DocumentView/>
 					</Route>
@@ -42,7 +42,9 @@ class App extends React.Component<PropsType, StateType> {
 						<DocumentPreviewWithRouter/>
 					</Route>
 
-					{/*If we hit this we're coming in without a chapter slug, so we need to get the first chapter of the current document and pass its slug into the URL so it matches the route above*/}
+					{/*If we hit this we're coming in *without* a chapter slug,
+					so we need to get the first chapter of the current document and pass its slug into the URL
+					so it matches the route above*/}
 					<Route exact path="/preview/consultation/:consultationId/document/:documentId">
 						<DocumentPreviewRedirectWithRouter/>
 					</Route>

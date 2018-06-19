@@ -5,6 +5,7 @@ import { Helmet } from "react-helmet";
 import { withRouter } from "react-router";
 import { processPreviewHtml } from "../../document-processing/process-preview-html";
 import { load } from "./../../data/loader";
+import preload from "../../data/pre-loader";
 import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { projectInformation } from "../../constants";
@@ -41,56 +42,37 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 			currentInPageNavItem: null
 		};
 
-		// todo: this isn't going to stop anything happening after it :s
-		// Don't have a chapter yet? Let's go an get the first one and redirect to it
-		if (!this.props.match.params.chapterSlug) {
-			//	let's go and get the first chapter slug of the document we're looking at
-			const { consultationId, documentId } = this.props.match.params;
-			const isCurrentDocument = d => d.documentId === parseInt(documentId, 0);
-			load("documents", undefined, [], { consultationId })
-				.then(response => {
-					const documents = response.data;
-					//	get current document data
-					const currentDocument = documents.filter(isCurrentDocument)[0];
-					const firstChapterSlug = currentDocument.chapters[0].slug;
-					this.props.history.push(`${this.props.match.url}/chapter/${firstChapterSlug}`);
-				})
-				.catch(err => {
-					throw new Error("documentsData " + err);
-				});
-		}
+		if (this.props) {
+			const preloadedChapter = preload(
+				this.props.staticContext,
+				"chapter",
+				[],
+				{ ...this.props.match.params }
+			);
+			const preloadedDocuments = preload(
+				this.props.staticContext,
+				"documents",
+				[],
+				{ consultationId: this.props.match.params.consultationId }
+			);
+			const preloadedConsultation = preload(
+				this.props.staticContext,
+				"consultation",
+				[],
+				{ consultationId: this.props.match.params.consultationId }
+			);
 
-		// if (this.props) {
-		// 	const preloadedChapter = preload(
-		// 		this.props.staticContext,
-		// 		"chapter",
-		// 		[],
-		// 		{ ...this.props.match.params }
-		// 	);
-		// 	const preloadedDocuments = preload(
-		// 		this.props.staticContext,
-		// 		"documents",
-		// 		[],
-		// 		{ consultationId: this.props.match.params.consultationId }
-		// 	);
-		// 	const preloadedConsultation = preload(
-		// 		this.props.staticContext,
-		// 		"consultation",
-		// 		[],
-		// 		{ consultationId: this.props.match.params.consultationId }
-		// 	);
-		//
-		// 	if (preloadedChapter && preloadedDocuments && preloadedConsultation) {
-		// 		this.state = {
-		// 			chapterData: preloadedChapter,
-		// 			documentsData: preloadedDocuments,
-		// 			consultationData: preloadedConsultation,
-		// 			loading: false,
-		// 			hasInitialData: true,
-		// 			currentInPageNavItem: null
-		// 		};
-		// 	}
-		// }
+			if (preloadedChapter && preloadedDocuments && preloadedConsultation) {
+				this.state = {
+					chapterData: preloadedChapter,
+					documentsData: preloadedDocuments,
+					consultationData: preloadedConsultation,
+					loading: false,
+					hasInitialData: true,
+					currentInPageNavItem: null
+				};
+			}
+		}
 	}
 
 	gatherData = async () => {
@@ -194,7 +176,6 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 		const { title } = this.state.consultationData;
 		const { documentsData } = this.state;
 		const { content } = this.state.chapterData;
-		// const content = fakeData.Content;
 		const documentId = parseInt(this.props.match.params.documentId, 0);
 
 		return (
@@ -226,7 +207,7 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 									<div data-g="12 md:9" className="documentColumn">
 										<div
 											className={`document-comment-container ${this.state.loading ? "loading" : ""}`}>
-											{processPreviewHtml(content)}
+											{processPreviewHtml(fakeData.Content)}
 										</div>
 									</div>
 								</div>

@@ -1,3 +1,5 @@
+// @flow
+
 import React, { Component, Fragment } from "react";
 import CommentListWithRouter from "../CommentList/CommentList";
 import { withRouter } from "react-router";
@@ -14,17 +16,26 @@ import { UserContext } from "../../context/UserContext";
 type DocumentType = {
 	title: string,
 	sourceURI: string,
-	convertedDocument: boolean
+	convertedDocument: boolean,
+	chapters: any,
+	documentId: string
 };
 
 type PropsType = {
 	location: {
 		pathname: string,
 		search: string
-	}
+	},
+	match: Object
 };
 
-export class ReviewPage extends Component<PropsType> {
+type StateType = {
+	documentsList: Array<DocumentType>,
+	consultationData: any,
+	isSubmitted: boolean
+};
+
+export class ReviewPage extends Component<PropsType, StateType> {
 	constructor(props: PropsType) {
 		super(props);
 
@@ -98,7 +109,7 @@ export class ReviewPage extends Component<PropsType> {
 
 	getBreadcrumbs = () => {
 		const { consultationId } = this.props.match.params;
-		const firstCommentableDocument = this.state.documentsList.filter(doc => doc.convertedDocument)[0]; //todo: this whole function needs to get it's content from the feed.
+		const firstCommentableDocument: DocumentType = this.state.documentsList.filter(doc => doc.convertedDocument)[0]; //todo: this whole function needs to get its content from the feed
 		const consultationsFirstDocument = firstCommentableDocument.documentId;
 		const firstDocumentChapterSlug = firstCommentableDocument.chapters[0].slug;
 		return [

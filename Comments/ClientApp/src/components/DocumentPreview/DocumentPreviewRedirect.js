@@ -1,8 +1,18 @@
+// @flow
+
 import React, { Component } from "react";
 import { withRouter, Redirect } from "react-router";
 import { load } from "./../../data/loader";
 
-export class DocumentPreviewRedirect extends Component {
+type StateType = {
+	redirectUrl: string | null
+};
+
+type PropsType = {
+	match: Object
+};
+
+export class DocumentPreviewRedirect extends Component<PropsType, StateType> {
 
 	constructor(){
 		super();
@@ -16,7 +26,7 @@ export class DocumentPreviewRedirect extends Component {
 		this.createRedirectUrl(consultationId, documentId);
 	}
 
-	createRedirectUrl = (consultationId, documentId) => {
+	createRedirectUrl = (consultationId: number, documentId: number) => {
 		load("documents", undefined, [], { consultationId })
 			.then(response => {
 				const documents = response.data;
