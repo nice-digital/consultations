@@ -110,7 +110,6 @@ Array [
                         >
                             Comment on whole consultation
                         </button>
-                          
                     </p>
                     <h1
                         className="page-header__heading mt--0"

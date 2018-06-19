@@ -34,7 +34,8 @@ describe("[ClientApp] ", () => {
 					consultationId: 1,
 					documentId: 1,
 					chapterSlug: "introduction"
-				}
+				},
+				url: "/1/1/introduction"
 			}
 		};
 
