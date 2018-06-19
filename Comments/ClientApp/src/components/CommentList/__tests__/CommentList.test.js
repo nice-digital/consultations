@@ -266,29 +266,14 @@ describe("[ClientApp] ", () => {
 			wrapper.update();
 			expect(wrapper.state().comments.length).toEqual(4);
 		});
-
-		it("should make an api call to review endpoint with the correct path and query string", () => {
-			mock.reset();
-			mock
-				.onGet(
-					generateUrl("comments", undefined, [], {})
-				)
-				.reply(config => {
-					expect(config.url).toEqual(
-						"/consultations/api/Comments"
-					);
-					return [200, { comments: [] }];
-				});
-			mount(<CommentList {...fakeProps} isReviewPage={true}  />);
-		});
-
+		
 		it("when mounted with review property then the review endpoint is hit", ()  => {
 			 mock.reset();
 			 mock
 			 	.onGet(
 					generateUrl("comments", undefined, [], {sourceURI: "/1/0/Review", isReview: true})
 			 	)
-			 	.reply(config => {	 
+			 	.reply(config => {
 			 		expect(config.url).toEqual(
 			 			"/consultations/api/Comments?sourceURI=%2F1%2F0%2FReview&isReview=true"
 					 );
@@ -297,7 +282,7 @@ describe("[ClientApp] ", () => {
 
 			 mount(<CommentList {...fakeProps} isReviewPage={true} />);
 		});
-		
+
 		//sourceURI: "/1/0/Review", isReview: true
 
 		const firstProps = {
@@ -315,11 +300,11 @@ describe("[ClientApp] ", () => {
 			},
 			comment: {
 				commentId: 1
-			}				
+			}
 		};
 
 		it("componentDidUpdate filters comments for review page", async () => {
-					
+
 			mock.reset();
 			mock
 				.onGet()
@@ -328,7 +313,7 @@ describe("[ClientApp] ", () => {
 			let wrapper = mount(
 				<CommentList {...firstProps}  isReviewPage={true} />
 			);
-			
+
 			await nextTick();
 			wrapper.update();
 
@@ -358,7 +343,7 @@ describe("[ClientApp] ", () => {
 				},
 				comment: {
 					commentId: 1
-				}				
+				}
 			};
 
 			mock.reset();
@@ -369,7 +354,7 @@ describe("[ClientApp] ", () => {
 			let wrapper = mount(
 				<CommentList {...firstProps}  isReviewPage={true} />
 			);
-			
+
 			await nextTick();
 			wrapper.update();
 
@@ -399,7 +384,7 @@ describe("[ClientApp] ", () => {
 				},
 				comment: {
 					commentId: 1
-				}				
+				}
 			};
 
 			mock.reset();
@@ -410,7 +395,7 @@ describe("[ClientApp] ", () => {
 			let wrapper = mount(
 				<CommentList {...firstProps}  isReviewPage={true} />
 			);
-			
+
 			await nextTick();
 			wrapper.update();
 
@@ -440,9 +425,9 @@ describe("[ClientApp] ", () => {
 				},
 				comment: {
 					commentId: 1
-				}				
+				}
 			};
-			
+
 			mock.reset();
 			mock
 				.onGet()
@@ -451,7 +436,7 @@ describe("[ClientApp] ", () => {
 			let wrapper = mount(
 				<CommentList {...firstProps}  isReviewPage={true} />
 			);
-			
+
 			await nextTick();
 			wrapper.update();
 
