@@ -18,6 +18,7 @@ class OnboardingModal extends Component {
 					>
 						<div className="onboarding__modal">
 							<button
+								data-qa-sel="close-onboarding-modal"
 								className="onboarding__closeButton"
 								onClick={() => this.setState({ onboarded: true })}>
 								&times;

@@ -10,6 +10,7 @@ export default function processChapterSection(node, incomingHtml, onNewCommentCl
 	return (
 		<Fragment key={0}>
 			<button
+				data-qa-sel="in-text-comment-button"
 				className="document-comment-container__commentButton"
 				tabIndex={0}
 				onClick={e => {

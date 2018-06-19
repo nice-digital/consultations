@@ -7,7 +7,7 @@ import preload from "../../data/pre-loader";
 import { CommentBox } from "../CommentBox/CommentBox";
 import { LoginBanner } from "./../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
-import { queryStringToObject } from "../../helpers/utils";
+import { queryStringToObject, replaceFormat } from "../../helpers/utils";
 //import stringifyObject from "stringify-object";
 
 type PropsType = {
@@ -93,18 +93,32 @@ export class CommentList extends Component<PropsType, StateType> {
 	}
 
 	loadComments() {
-		if (this.props.isReviewPage){
-			load("review", undefined, [this.props.match.params.consultationId], {}) // todo: maybe this should us source URI instead of id... need to change feed to do this
-		 	.then(
-		 	 	res => {
-		 	 		this.setCommentListState(res);
-					});
-		} else{
-		 	load("comments", undefined, [], { sourceURI: this.props.match.url }).then(
-		 		res => {
-		 			this.setCommentListState(res);
-		 		});
+		// if (this.props.isReviewPage){
+		// 	load("review", undefined, [this.props.match.params.consultationId], {}) // todo: maybe this should us source URI instead of id... need to change feed to do this
+		//  	.then(
+		//  	 	res => {
+		//  	 		this.setCommentListState(res);
+		// 			});
+		// } else{
+		//  	load("comments", undefined, [], { sourceURI: this.props.match.url }).then(
+		//  		res => {
+		//  			this.setCommentListState(res);
+		//  		});
+		// }
+
+		let sourceURI = this.props.match.url;
+		if (this.props.isReviewPage)
+		{
+			sourceURI = replaceFormat("/{0}/{1}/{2}", [this.props.match.params.consultationId, 0, "Review"]);
+
 		}
+		// console.log(sourceURI);
+		 
+		load("comments", undefined, [], { sourceURI: sourceURI, isReview: this.props.isReviewPage }).then(
+			res => {
+				this.setCommentListState(res);
+			})
+			.catch(err => console.log("load comments in commentlist " + err));
 	}
 
 	setCommentListState = (response: any) => {

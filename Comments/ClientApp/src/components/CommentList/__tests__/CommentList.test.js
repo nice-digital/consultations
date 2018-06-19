@@ -43,8 +43,7 @@ describe("[ClientApp] ", () => {
 			},
 			comment: {
 				commentId: 1
-			},
-			isReviewPage: false
+			}
 		};
 
 		afterEach(() => {
@@ -53,11 +52,7 @@ describe("[ClientApp] ", () => {
 
 		it("should render a li tag with sample data ID", async () => {
 			mock
-				.onGet(
-					generateUrl("comments", undefined, [], {
-						sourceURI: fakeProps.match.url
-					})
-				)
+				.onGet()
 				.reply(200, sampleComments);
 
 			const wrapper = mount(
@@ -71,7 +66,7 @@ describe("[ClientApp] ", () => {
 		});
 
 		it("renders the 'no comments' message if the comments array is empty", async () => {
-			mock.onAny().reply(200, { comments: [] });
+			mock.onGet().reply(200, { comments: [] });
 			const wrapper = mount(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>);
 			await nextTick();
 			wrapper.update();
@@ -79,7 +74,7 @@ describe("[ClientApp] ", () => {
 		});
 
 		it("has state with an empty array of comments", () => {
-			mock.onAny().reply(200, { comments: [] });
+			mock.onGet().reply(200, { comments: [] });
 			const wrapper = shallow(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>).find("CommentList").dive();
 			expect(Array.isArray(wrapper.state().comments)).toEqual(true);
 		});
@@ -135,11 +130,7 @@ describe("[ClientApp] ", () => {
 					return [200, sampleCommentsUpdated.comments[1]];
 				});
 			mock
-				.onGet(
-					generateUrl("comments", undefined, [], {
-						sourceURI: fakeProps.match.url
-					})
-				)
+				.onGet()
 				.reply(200, sampleComments);
 			const wrapper = shallow(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>).find("CommentList").dive();
 			wrapper.instance().saveCommentHandler(new Event("click"), commentToUpdate);
@@ -152,7 +143,7 @@ describe("[ClientApp] ", () => {
 
 		it("new comment should add an entry in the array with negative id", () => {
 			mock.reset();
-			mock.onAny().reply(() => {
+			mock.onGet().reply(() => {
 				return [200, { comments: [] }];
 			});
 			const wrapper = shallow(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>).find("CommentList").dive();
@@ -164,7 +155,7 @@ describe("[ClientApp] ", () => {
 
 		it("2 new comments should decrement the negative commentId without conflicting", () => {
 			mock.reset();
-			mock.onAny().reply(() => {
+			mock.onGet().reply(() => {
 				return [200, { comments: [] }];
 			});
 			const wrapper = shallow(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>).find("CommentList").dive();
@@ -224,11 +215,7 @@ describe("[ClientApp] ", () => {
 		it("delete handler called with negative number removes item from array", async () => {
 			mock.reset();
 			mock
-				.onGet(
-					generateUrl("comments", undefined, [], {
-						sourceURI: fakeProps.match.url
-					})
-				)
+				.onGet()
 				.reply(200, sampleComments);
 
 			const wrapper = shallow(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>).find("CommentList").dive();
@@ -251,17 +238,13 @@ describe("[ClientApp] ", () => {
 
 			const updatedState = wrapper.state();
 
-			expect(wrapper.state().comments.length).toEqual(5);
+			expect(updatedState.comments.length).toEqual(5);
 		});
 
 		it("delete handler called with positive number hits the correct delete endpoint", async () => {
 			mock.reset();
 			mock
-				.onGet(
-					generateUrl("comments", undefined, [], {
-						sourceURI: fakeProps.match.url
-					})
-				)
+				.onGet()
 				.reply(200, sampleComments);
 			mock
 				.onDelete(
@@ -288,38 +271,34 @@ describe("[ClientApp] ", () => {
 			mock.reset();
 			mock
 				.onGet(
-					generateUrl("review", undefined, [1], {})
+					generateUrl("comments", undefined, [], {})
 				)
 				.reply(config => {
 					expect(config.url).toEqual(
-						"/consultations/api/Review/1"
+						"/consultations/api/Comments"
 					);
 					return [200, { comments: [] }];
 				});
 			mount(<CommentList {...fakeProps} isReviewPage={true}  />);
 		});
 
-		it("when mounted with review property then the review endpoint is hit", async done  => {
+		it("when mounted with review property then the review endpoint is hit", ()  => {
 			 mock.reset();
-			 //console.log(generateUrl("review", undefined, [1], {}));
 			 mock
 			 	.onGet(
-			 		generateUrl("review", undefined, [1], {})
+					generateUrl("comments", undefined, [], {sourceURI: "/1/0/Review", isReview: true})
 			 	)
-			 	.reply(config => {
+			 	.reply(config => {	 
 			 		expect(config.url).toEqual(
-			 			"/consultations/api/Review/1"
+			 			"/consultations/api/Comments?sourceURI=%2F1%2F0%2FReview&isReview=true"
 					 );
-					 done();
 			 		return [200, { comments: [] }];
 				 });
-			 mock.onAny().reply(config => {
-			 	console.log(`config is: ${config}`);
-
-			 });
 
 			 mount(<CommentList {...fakeProps} isReviewPage={true} />);
 		});
+		
+		//sourceURI: "/1/0/Review", isReview: true
 
 		const firstProps = {
 			match: {
@@ -343,10 +322,7 @@ describe("[ClientApp] ", () => {
 					
 			mock.reset();
 			mock
-				.onGet(
-					generateUrl("review", undefined, [1], {
-					})
-				)
+				.onGet()
 				.reply(200, reviewComments);
 
 			let wrapper = mount(
@@ -366,7 +342,7 @@ describe("[ClientApp] ", () => {
 			expect(wrapper.find("li").length).toEqual(1);
 		});
 
-		it("componentDidUpdate filters by substring comments for review page", async () => {
+		it("componentDidUpdate filters comments by substring if isReviewPage set to true", async () => {
 			const firstProps = {
 				match: {
 					url: "/1/1/introduction",
@@ -387,10 +363,7 @@ describe("[ClientApp] ", () => {
 
 			mock.reset();
 			mock
-				.onGet(
-					generateUrl("review", undefined, [1], {
-					})
-				)
+				.onGet()
 				.reply(200, reviewComments);
 
 			let wrapper = mount(
@@ -431,10 +404,7 @@ describe("[ClientApp] ", () => {
 
 			mock.reset();
 			mock
-				.onGet(
-					generateUrl("review", undefined, [1], {
-					})
-				)
+				.onGet()
 				.reply(200, reviewComments);
 
 			let wrapper = mount(
@@ -475,10 +445,7 @@ describe("[ClientApp] ", () => {
 			
 			mock.reset();
 			mock
-				.onGet(
-					generateUrl("review", undefined, [1], {
-					})
-				)
+				.onGet()
 				.reply(200, reviewComments);
 
 			let wrapper = mount(

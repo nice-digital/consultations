@@ -85,6 +85,7 @@ export class Drawer extends Component<PropsType, StateType> {
 			>
 				<div className="Drawer__controls">
 					<button
+						data-qa-sel="open-commenting-panel"
 						id="js-drawer-toggleopen"
 						className="Drawer__toggleOpen"
 						onClick={() => this.handleClick("toggleOpen")}
@@ -102,6 +103,7 @@ export class Drawer extends Component<PropsType, StateType> {
 									? "icon--chevron-right"
 									: "icon--chevron-left"}`}
 							aria-hidden="true"
+							data-qa-sel="close-commenting-panel"
 						/>
 					</button>
 
@@ -120,7 +122,7 @@ export class Drawer extends Component<PropsType, StateType> {
 
 				</div>
 				{/* #sidebar-panel necessary here for pulling keyboard focus */}
-				<div id="sidebar-panel" className="Drawer__main">
+				<div data-qa-sel="comment-panel" id="sidebar-panel" className="Drawer__main">
 					{/*wrappedComponentRef exposes the underlying, unwrapped component*/}
 					<CommentListWithRouter isReviewPage={false}
 										   drawerOpen={this.state.drawerOpen}
