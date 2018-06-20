@@ -20,8 +20,6 @@ import { UserContext } from "../../context/UserContext";
 import { Selection } from "../Selection/Selection";
 // import stringifyObject from "stringify-object";
 
-
-
 type PropsType = {
 	staticContext?: any,
 	match: any,
@@ -317,7 +315,7 @@ export class Document extends Component<PropsType, StateType> {
 										</button>
 										&nbsp;&nbsp;
 									</p>
-									<h1 className="page-header__heading mt--0">{title}</h1>
+									<h1 tabIndex={-1} className="page-header__heading mt--0">{title}</h1>
 									<p className="page-header__lead">
 										[{reference}] Open until{" "}
 										<Moment format="D MMMM YYYY" date={endDate}/>
