@@ -25,7 +25,7 @@ export const StackedNav = (props: PropsType) => {
 			<h2 className="stacked-nav__root">{title}</h2>
 			<ul className="stacked-nav__list">
 				{links.map((item, index) => (
-					<li key={`${item.label}${index}`} className="stacked-nav__list-item">
+					<li key={`${item.label}${index}`} data-qa-sel="nav-list-item" className="stacked-nav__list-item">
 						{item.isReactRoute ?
 							<Link to={item.url} aria-current={item.current ? "page" : "false"}>
 								{item.label}
