@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using Comments.Common;
 using Comments.Models;
 using Comments.Services;
 using Comments.Test.Infrastructure;
@@ -32,7 +34,7 @@ namespace Comments.Test.UnitTests
 			var commentId = AddComment(locationId, "Comment text", false, userId, StatusName.Draft, _context);
 
 			//Act
-			var commentsAndAnswers = commentService.GetUsersCommentsAndAnswersForConsultation(consultationId);
+			var commentsAndAnswers = commentService.GetCommentsAndAnswers(sourceURI, true);
 			var result = submitService.SubmitCommentsAndAnswers(commentsAndAnswers);
 			var comment = commentService.GetComment(commentId);
 
@@ -71,7 +73,7 @@ namespace Comments.Test.UnitTests
 			var answerId = AddAnswer(questionId, userId, "Answer Text");
 
 			//Act
-			var commentsAndAnswers = commentService.GetUsersCommentsAndAnswersForConsultation(consultationId);
+			var commentsAndAnswers = commentService.GetCommentsAndAnswers(sourceURI, true);
 			var result = submitService.SubmitCommentsAndAnswers(commentsAndAnswers);
 			var answer = answerService.GetAnswer(answerId);
 
@@ -96,15 +98,19 @@ namespace Comments.Test.UnitTests
 			var userId = Guid.NewGuid();
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var consultationContext = new ConsultationsContext(_options, userService);
-			var authenticateService = new FakeAuthenticateService(authenticated: true);
-			var commentService = new CommentService(consultationContext, userService, authenticateService);
 
 			AddSubmittedCommentsAndAnswers(sourceURI, "Comment Text", "Question Text", "Answer Text", userId, consultationContext);
 
+			var sourceURIs = new List<string>
+			{
+				ConsultationsUri.ConvertToConsultationsUri("/1/0/Review", CommentOn.Consultation)
+			};
+
 			//Act
+			var results = consultationContext.GetAllCommentsAndQuestionsForDocument(sourceURIs, true);
 
 			//Assert
-
+			results.First().Comment.First().SubmissionComment.Count.ShouldBe(1);
 		}
 	}
 }

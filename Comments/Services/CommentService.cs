@@ -78,7 +78,7 @@ namespace Comments.Services
             locationToSave.SourceURI = ConsultationsUri.ConvertToConsultationsUri(comment.SourceURI, CommentOnHelpers.GetCommentOn(comment.CommentOn));
             _context.Location.Add(locationToSave);
             
-            var commentToSave = new Models.Comment(comment.LocationId, _currentUser.UserId.Value, comment.CommentText, _currentUser.UserId.Value, locationToSave);
+            var commentToSave = new Models.Comment(comment.LocationId, _currentUser.UserId.Value, comment.CommentText, _currentUser.UserId.Value, locationToSave, StatusName.Draft, null);
             _context.Comment.Add(commentToSave);
             _context.SaveChanges();
 
@@ -135,5 +135,35 @@ namespace Comments.Services
 
 		    return new CommentsAndQuestions(commentsData, questionsData, user.IsAuthorised, signInURL);
 	    }
+
+	    public CommentsAndAnswers GetCommentsAndAnswers(string relativeURL, bool isReview = false)  //TODO: Can this be refactored with GetUsersCommentsAndQuestionsForConsultation? 
+	    {
+		    var user = _userService.GetCurrentUser();
+
+		    if (!user.IsAuthorised)
+			    return new CommentsAndAnswers(new List<ViewModels.Comment>(), new List<ViewModels.Answer>());
+
+		    var sourceURIs = new List<string>
+		    {
+			    ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Consultation)
+			};
+
+			var locations = _context.GetAllCommentsAndQuestionsForDocument(sourceURIs, isReview);
+
+		    var commentsData = new List<ViewModels.Comment>();
+		    var answersData = new List<ViewModels.Answer>();
+		    foreach (var location in locations)
+		    {
+			    commentsData.AddRange(location.Comment.Select(comment => new ViewModels.Comment(location, comment)));
+
+			    foreach (var question in location.Question)
+			    {
+				    answersData.AddRange(question.Answer.Select(answer => new ViewModels.Answer(answer)));
+			    }
+		    }
+
+		    return new CommentsAndAnswers(commentsData, answersData);
+	    }
+
 	}
 }

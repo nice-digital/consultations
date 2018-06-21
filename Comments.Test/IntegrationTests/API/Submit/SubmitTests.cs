@@ -30,7 +30,7 @@ namespace Comments.Test.IntegrationTests.API.Submit
 		    var authenticateService = new FakeAuthenticateService(authenticated: true);
 			var commentService = new CommentService(_context, userService, authenticateService);
 
-		    var viewModel = commentService.GetUsersCommentsAndAnswersForConsultation(consultationId);
+		    var viewModel = commentService.GetCommentsAndAnswers(sourceURI, true);
 
 			var content = new StringContent(JsonConvert.SerializeObject(viewModel), Encoding.UTF8, "application/json");
 
