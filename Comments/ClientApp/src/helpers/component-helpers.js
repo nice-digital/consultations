@@ -13,7 +13,7 @@ type HashLinkTopType = {
 };
 
 export function HashLinkTop(props: HashLinkTopType) {
-	const { labael, to, behavior, block, currentNavItem } = props;
+	const { label, to, behavior, block, currentNavItem } = props;
 	return (
 		<NavHashLink
 			aria-current={currentNavItem === to ? "location" : "false"}
