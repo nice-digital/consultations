@@ -329,7 +329,6 @@ export class Document extends Component<PropsType, StateType> {
 											onClick={e => {
 												e.preventDefault();
 												this.props.onNewCommentClick({
-
 													sourceURI: this.props.match.url,
 													commentText: "",
 													commentOn: "Document",
@@ -349,45 +348,7 @@ export class Document extends Component<PropsType, StateType> {
 								</div>
 								<StickyContainer className="grid">
 									{/* .navColumn only present for reading mode demo */}
-									<div data-g="12 md:3" className="navigationColumn">
-										<StackedNav
-											links={this.getDocumentChapterLinks(documentId)}
-										/>
-										<StackedNav
-											links={this.getDocumentLinks(
-												true,
-												"Other commentable documents in this consultation",
-												documentsData,
-												documentId,
-												consultationId
-											)}
-										/>
-										<StackedNav
-											links={this.getDocumentLinks(
-												false,
-												"Supporting documents",
-												documentsData,
-												documentId,
-												consultationId
-											)}
-										/>
-									</div>
-									<div data-g="12 md:6" className="documentColumn">
-										<div
-											className={`document-comment-container ${
-												this.state.loading ? "loading" : ""}`}
-										>
-											<Selection newCommentFunc={this.props.onNewCommentClick}
-													   sourceURI={this.props.match.url}>
-												{processDocumentHtml(
-													content,
-													this.props.onNewCommentClick,
-													this.props.match.url
-												)}
-											</Selection>
-										</div>
-									</div>
-									<div data-g="12 md:3" className="inPageNavColumn">
+									<div data-g="12 md:3 md:push:9" className="inPageNavColumn">
 										<Sticky disableHardwareAcceleration>
 											{({ style }) => (
 												<div style={style}>
@@ -405,7 +366,7 @@ export class Document extends Component<PropsType, StateType> {
 															<Scrollspy
 																componentTag="ol"
 																items={this.generateScrollspy(sections)}
-																currentClassName="is-current"
+																currentClassName=""
 																className="in-page-nav__list"
 																role="menubar"
 																onUpdate={e => {
@@ -440,6 +401,44 @@ export class Document extends Component<PropsType, StateType> {
 												</div>
 											)}
 										</Sticky>
+									</div>
+									<div data-g="12 md:6" className="documentColumn">
+										<div
+											className={`document-comment-container ${
+												this.state.loading ? "loading" : ""}`}
+										>
+											<Selection newCommentFunc={this.props.onNewCommentClick}
+													   sourceURI={this.props.match.url}>
+												{processDocumentHtml(
+													content,
+													this.props.onNewCommentClick,
+													this.props.match.url
+												)}
+											</Selection>
+										</div>
+									</div>
+									<div data-g="12 md:3 md:pull:9" className="navigationColumn">
+										<StackedNav
+											links={this.getDocumentChapterLinks(documentId)}
+										/>
+										<StackedNav
+											links={this.getDocumentLinks(
+												true,
+												"Other commentable documents in this consultation",
+												documentsData,
+												documentId,
+												consultationId
+											)}
+										/>
+										<StackedNav
+											links={this.getDocumentLinks(
+												false,
+												"Supporting documents",
+												documentsData,
+												documentId,
+												consultationId
+											)}
+										/>
 									</div>
 								</StickyContainer>
 							</main>
