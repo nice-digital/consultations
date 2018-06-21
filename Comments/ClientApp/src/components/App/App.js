@@ -9,7 +9,7 @@ import NotFound from "../NotFound/NotFound";
 import ReviewPageWithRouter from "../ReviewPage/ReviewPage";
 import UserProviderWithRouter from "../../context/UserContext";
 import OnboardingModal from "../OnboardingModal/OnboardingModal";
-import { pullFocus } from "../../helpers/accessibility-helpers";
+import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
 
 type PropsType = any;
 
@@ -25,7 +25,7 @@ class App extends React.Component<PropsType, StateType> {
 					<html lang="en-GB"/>
 				</Helmet>
 
-				<button className="screenreader-button" onClick={() => pullFocus("main h1")}>Skip to Main Content</button>
+				<button className="screenreader-button" onClick={() => pullFocusByQuerySelector("main h1")}>Skip to Main Content</button>
 
 				<Switch>
 					{/*Home*/}

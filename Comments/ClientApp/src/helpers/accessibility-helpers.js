@@ -1,9 +1,21 @@
 /**
  * Pull focus to an element, principally for accessibility
- * @param {string} selection - The jQuery style selector for the thing you want to pull focus to. If it's not an interactive element, the target will need an attribute of "tabIndex={-1}"
+ * @param {string} selection - The ***ID ONLY*** If it's not an interactive element, the target will need an attribute of "tabIndex={-1}"
  */
 // todo: needs test
-export const pullFocus = (selection) => {
-	console.log(`Pulling focus to "${selection}"`);
-	document.querySelector(selection).focus();
+export const pullFocusByQuerySelector = selection => {
+	const el = document.querySelector(selection);
+	if (el.getAttribute("tabindex") === null) {
+		el.setAttribute("tabindex", "-1");
+	}
+	el.focus();
+};
+
+export const pullFocusById = selection => {
+	selection = selection.replace("#", ""); // make sure there's no # being passed into here
+	const el = document.getElementById(selection);
+	if (el.getAttribute("tabindex") === null) {
+		el.setAttribute("tabindex", "-1");
+	}
+	el.focus();
 };

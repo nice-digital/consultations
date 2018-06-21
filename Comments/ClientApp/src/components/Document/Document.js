@@ -18,6 +18,7 @@ import { processDocumentHtml } from "./process-document-html";
 import { LoginBanner } from "./../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
 import { Selection } from "../Selection/Selection";
+import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
 // import stringifyObject from "stringify-object";
 
 type PropsType = {
@@ -140,21 +141,33 @@ export class Document extends Component<PropsType, StateType> {
 	componentDidUpdate(prevProps: PropsType) {
 		const oldRoute = prevProps.location.pathname;
 		const newRoute = this.props.location.pathname;
-		if (oldRoute !== newRoute) {
-			this.setState({
-				loading: true
-			});
-			this.gatherData()
-				.then(data => {
-					this.setState({
-						...data,
-						loading: false
-					});
-				})
-				.catch(err => {
-					throw new Error("gatherData in componentDidUpdate failed " + err);
+		if (oldRoute === newRoute) return;
+
+		// if we're changing a route then this stuff always has to happen
+		this.setState({
+			loading: true
+		});
+		this.gatherData()
+			.then(data => {
+				this.setState({
+					...data,
+					loading: false
 				});
+				// once we've loaded, run the accessibility helpers to pull focus
+				accessibilityHelpers(this.props);
+			})
+			.catch(err => {
+				throw new Error("gatherData in componentDidUpdate failed " + err);
+			});
+
+		function accessibilityHelpers(currentProps){
+			// are we going to a new chapter in the same document?
+			// if so we want to pull focus to where the NEW content starts
+			if(currentProps.match.params.documentId === prevProps.match.params.documentId){
+				pullFocusByQuerySelector(".document-comment-container");
+			}
 		}
+
 	}
 
 	getDocumentLinks = (
@@ -406,6 +419,7 @@ export class Document extends Component<PropsType, StateType> {
 										<div
 											className={`document-comment-container ${
 												this.state.loading ? "loading" : ""}`}
+											tabIndex={-1}
 										>
 											<Selection newCommentFunc={this.props.onNewCommentClick}
 													   sourceURI={this.props.match.url}>
@@ -418,7 +432,7 @@ export class Document extends Component<PropsType, StateType> {
 										</div>
 									</div>
 									<div data-g="12 md:3 md:pull:9" className="navigationColumn">
-										<StackedNav
+										<StackedNav // "Chapters in this document"
 											links={this.getDocumentChapterLinks(documentId)}
 										/>
 										<StackedNav

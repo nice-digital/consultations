@@ -14,3 +14,8 @@
     z-index: 1;
   }
 }
+
+// this is just a helper while we're 'focussing' on accessibility... LOLZ
+*:focus {
+  background: #eee !important;
+}
