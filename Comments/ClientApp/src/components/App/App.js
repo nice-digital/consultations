@@ -25,7 +25,7 @@ class App extends React.Component<PropsType, StateType> {
 					<html lang="en-GB"/>
 				</Helmet>
 
-				<button className="skip-to-main" onClick={() => pullFocus("main h1")}>Skip to Main Content</button>
+				<button className="screenreader-button" onClick={() => pullFocus("main h1")}>Skip to Main Content</button>
 
 				<Switch>
 					{/*Home*/}
