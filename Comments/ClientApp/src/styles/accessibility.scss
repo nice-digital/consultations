@@ -1,0 +1,16 @@
+.screenreader-button {
+  position: absolute;
+  left: -9999em;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  z-index: -1;
+  &:focus, &:active {
+    position: absolute;
+    width: auto;
+    left: auto;
+    height: auto;
+    overflow: auto;
+    z-index: 1;
+  }
+}
