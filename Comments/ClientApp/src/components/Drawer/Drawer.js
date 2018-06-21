@@ -3,6 +3,7 @@
 import React, { Component } from "react";
 import { mobileWidth } from "../../constants";
 import CommentListWithRouter from "../CommentList/CommentList";
+import { pullFocusById } from "../../helpers/accessibility-helpers";
 
 type PropsType = {
 	commentList: Function,
@@ -29,17 +30,13 @@ export class Drawer extends Component<PropsType, StateType> {
 		};
 	}
 
-	pullFocus = () => {
-		window.document.getElementById("js-drawer-toggleopen").focus();
-	};
-
 	// This isn't called in this file - this is the method called from DocumentView
 	newComment(comment: Object) {
 		// make sure the drawer is open once we've clicked a new comment
 		this.setState({
 			drawerOpen: true
 		});
-		this.pullFocus();
+		pullFocusById("#js-drawer-toggleopen");
 		// and what we're calling is newComment from inside <CommentList />
 		// $FlowIgnore | this is bound by wrappedComponentRef in CommentListWithRouter
 		this.commentList.newComment(comment);
@@ -71,7 +68,7 @@ export class Drawer extends Component<PropsType, StateType> {
 				break;
 			case "toggleOpen":
 				this.setState(prevState => ({ drawerOpen: !prevState.drawerOpen }));
-				this.pullFocus();
+				pullFocusById("#js-drawer-toggleopen");
 				break;
 			default:
 				return;
@@ -109,7 +106,8 @@ export class Drawer extends Component<PropsType, StateType> {
 					</button>
 
 					{/* this button is in temporarily for user testing */}
-					<button id="js-reading-mode-toggle"
+					<button
+						id="js-reading-mode-toggle"
 						title="Reading mode"
 						className="Drawer__toggleOpen"
 						style={{ marginTop: "3px" }}

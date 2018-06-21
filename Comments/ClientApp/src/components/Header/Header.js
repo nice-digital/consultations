@@ -17,7 +17,7 @@ export const Header = (props: PropsType) => {
 
 	return (
 		<Fragment>
-			<h1 className="page-header__heading mt--0">{title}</h1>
+			<h1 tabIndex={-1} className="page-header__heading mt--0">{title}</h1>
 			<p className="page-header__lead">
 				[{reference}] Open until{" "}
 				<Moment format="D MMMM YYYY" date={endDate} />
@@ -25,3 +25,5 @@ export const Header = (props: PropsType) => {
 		</ Fragment>
 	);
 };
+
+// todo: this is only in one place! do we need it?
