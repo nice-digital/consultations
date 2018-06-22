@@ -93,8 +93,9 @@ namespace Comments.Test.Infrastructure
 
             _context = new ConsultationsContext(_options, _fakeUserService);
             _context.Database.EnsureCreatedAsync();
+			
 
-            var builder = new WebHostBuilder()
+			var builder = new WebHostBuilder()
                 .UseContentRoot("../../../../Comments")
                 .ConfigureServices(services =>
                 {
@@ -178,7 +179,27 @@ namespace Comments.Test.Infrastructure
 
             return location.LocationId;
         }
-        protected int AddComment(int locationId, string commentText, bool isDeleted, Guid createdByUserId, int status = StatusName.Draft, ConsultationsContext passedInContext = null)
+
+	    protected int AddStatus(string statusName, int statusIdId = StatusName.Draft, ConsultationsContext passedInContext = null)
+	    {
+		    var statusModel = new Models.Status("Draft", null, null);
+			if (passedInContext != null)
+		    {
+				passedInContext.Status.Add(statusModel);
+				passedInContext.SaveChanges();
+		    }
+		    else
+		    {
+			    using (var context = new ConsultationsContext(_options, _fakeUserService))
+			    {
+					context.Status.Add(statusModel);
+					context.SaveChanges();
+			    }
+		    }
+
+		    return statusModel.StatusId;
+	    }
+		protected int AddComment(int locationId, string commentText, bool isDeleted, Guid createdByUserId, int status = StatusName.Draft, ConsultationsContext passedInContext = null)
         {
             var comment = new Comment(locationId, createdByUserId, commentText, Guid.Empty, location: null, statusId: status, status: null);
             comment.IsDeleted = isDeleted;

@@ -31,7 +31,7 @@ namespace Comments.Controllers.Api
 			
 			var result = _submitService.SubmitCommentsAndAnswers(commentsAndAnswers);
 			var invalidResult = Validate(result.validate, _logger);
-
+			
 			return invalidResult ?? Ok(commentsAndAnswers); //should return comments and answers, might need submission object too
 	    }
 	}

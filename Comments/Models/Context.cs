@@ -49,13 +49,17 @@ namespace Comments.Models
 
 			var data = Location.Where(l => isReview ? l.SourceURI.Contains(sourceURIs.First()) : sourceURIs.Contains(l.SourceURI))
 				    .Include(l => l.Comment)
-					.ThenInclude(s => s.SubmissionComment)
-					.ThenInclude(s => s.Submission)
+						.ThenInclude(s => s.SubmissionComment)
+							.ThenInclude(s => s.Submission)
+
+					//.Include(l => l.Comment)
+					//	.ThenInclude(s => s.Status)
+
 					.Include(l => l.Question)
-				    .ThenInclude(q => q.QuestionType)
+						.ThenInclude(q => q.QuestionType)
 				    .Include(l => l.Question)
-				    .ThenInclude(q => q.Answer)
-					.ThenInclude(s => s.SubmissionAnswer)
+						.ThenInclude(q => q.Answer)
+							.ThenInclude(s => s.SubmissionAnswer)
 					.OrderByDescending(l => l.Comment
 					    .OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault());
 
@@ -66,6 +70,7 @@ namespace Comments.Models
         {
             var comment = Comment.Where(c => c.CommentId.Equals(commentId))
                             .Include(c => c.Location)
+							//.Include(s => s.Status)
                             .FirstOrDefault();
 
             return comment;

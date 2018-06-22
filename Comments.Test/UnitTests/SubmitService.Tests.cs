@@ -21,7 +21,6 @@ namespace Comments.Test.UnitTests
 			ResetDatabase();
 			var userId = Guid.NewGuid();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
-			var consultationId = 1;
 
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var authenticateService = new FakeAuthenticateService(authenticated: true);
@@ -34,8 +33,9 @@ namespace Comments.Test.UnitTests
 			var commentId = AddComment(locationId, "Comment text", false, userId, StatusName.Draft, _context);
 
 			//Act
-			var commentsAndAnswers = commentService.GetCommentsAndAnswers(sourceURI, true);
-			var result = submitService.SubmitCommentsAndAnswers(commentsAndAnswers);
+			var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI, true);
+			var result = submitService.SubmitCommentsAndAnswers(new CommentsAndAnswers(commentsAndQuestions.Comments, new List<ViewModels.Answer>()));
+
 			var comment = commentService.GetComment(commentId);
 
 			var commentsSubmissionData = _context.SubmissionComment.Where(s => s.CommentId == commentId)
@@ -44,8 +44,6 @@ namespace Comments.Test.UnitTests
 			//Assert
 			result.rowsUpdated.ShouldBe(3);
 			comment.comment.StatusId.ShouldBe(StatusName.Submitted);
-			//commentsSubmissionData.SubmissionId.ShouldBe(1);
-			//commentsSubmissionData.SubmissionCommentId.ShouldBe(1);
 			commentsSubmissionData.CommentId.ShouldBe(commentId);
 			commentsSubmissionData.Submission.SubmissionByUserId.ShouldBe(userId);
 		}
@@ -57,7 +55,6 @@ namespace Comments.Test.UnitTests
 			ResetDatabase();
 			var userId = Guid.NewGuid();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
-			var consultationId = 1;
 
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var authenticateService = new FakeAuthenticateService(authenticated: true);
@@ -73,8 +70,9 @@ namespace Comments.Test.UnitTests
 			var answerId = AddAnswer(questionId, userId, "Answer Text");
 
 			//Act
-			var commentsAndAnswers = commentService.GetCommentsAndAnswers(sourceURI, true);
-			var result = submitService.SubmitCommentsAndAnswers(commentsAndAnswers);
+			var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI, true);
+			var result = submitService.SubmitCommentsAndAnswers(new CommentsAndAnswers(new List<ViewModels.Comment>(), commentsAndQuestions.Questions.First().Answers));
+
 			var answer = answerService.GetAnswer(answerId);
 
 			var answerSubmissionData = _context.SubmissionAnswer.Where(s => s.AnswerId == answerId)
@@ -83,8 +81,6 @@ namespace Comments.Test.UnitTests
 			//Assert
 			result.rowsUpdated.ShouldBe(3);
 			answer.answer.StatusId.ShouldBe(StatusName.Submitted);
-			//answerSubmissionData.SubmissionId.ShouldBe(1);
-			//answerSubmissionData.SubmissionAnswerId.ShouldBe(1);
 			answerSubmissionData.AnswerId.ShouldBe(answerId);
 			answerSubmissionData.Submission.SubmissionByUserId.ShouldBe(userId);
 		}

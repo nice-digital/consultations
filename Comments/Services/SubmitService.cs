@@ -38,28 +38,22 @@ namespace Comments.Services
 			foreach (var comment in commentsAndAnswers.Comments)
 			{
 				comment.StatusId = StatusName.Submitted;
-				comment.LastModifiedByUserId = _currentUser.UserId.Value;
-				comment.LastModifiedDate = DateTime.UtcNow;
 
 				_context.GetComment(comment.CommentId).UpdateFromViewModel(comment);
-
-				var submissionCommentToSave = new Models.SubmissionComment(submissionToSave.SubmissionId, comment.CommentId);
-				_context.SubmissionComment.Add(submissionCommentToSave);
+				
+				_context.SubmissionComment.Add(new Models.SubmissionComment(submissionToSave.SubmissionId, comment.CommentId));
 			}
 
 			foreach (var answer in commentsAndAnswers.Answers)
 		    {
 			    answer.StatusId = StatusName.Submitted;
-			    answer.LastModifiedByUserId = _currentUser.UserId.Value;
-			    answer.LastModifiedDate = DateTime.UtcNow;
 
 				_context.GetAnswer(answer.AnswerId).UpdateFromViewModel(answer);
-
-			    var submissionAnswerToSave = new Models.SubmissionAnswer(submissionToSave.SubmissionId, answer.AnswerId);
-			    _context.SubmissionAnswer.Add(submissionAnswerToSave);
+				
+			    _context.SubmissionAnswer.Add(new Models.SubmissionAnswer(submissionToSave.SubmissionId, answer.AnswerId));
 			}
 			
-			return (rowsUpdated: _context.SaveChanges(), validate: null);
+		return (rowsUpdated: _context.SaveChanges(), validate: null);
 		}
-    }
+	}
 }

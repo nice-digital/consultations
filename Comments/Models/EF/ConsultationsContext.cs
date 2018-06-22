@@ -166,6 +166,10 @@ namespace Comments.Models
 					.HasMaxLength(100);
 			});
 
+			modelBuilder.Entity<Status>().HasData(
+				new {StatusId = 1, Name = "Draft"},
+				new {StatusId = 2, Name = "Submitted"});
+
 			modelBuilder.Entity<Submission>(entity =>
 			{
 				entity.Property(e => e.SubmissionId).HasColumnName("SubmissionID");

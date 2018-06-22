@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,7 +19,6 @@ namespace Comments.Test.IntegrationTests.API.Submit
 	    {
 		    //Arrange
 		    ResetDatabase();
-		    var consultationId = 1;
 		    const string sourceURI = "consultations://./consultation/1/document/2/chapter/introduction";
 		    var commentText = Guid.NewGuid().ToString();
 		    var userId = Guid.Empty;
@@ -30,8 +30,9 @@ namespace Comments.Test.IntegrationTests.API.Submit
 		    var authenticateService = new FakeAuthenticateService(authenticated: true);
 			var commentService = new CommentService(_context, userService, authenticateService);
 
-		    var viewModel = commentService.GetCommentsAndAnswers(sourceURI, true);
-
+		    var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI, true);
+			var viewModel = new CommentsAndAnswers(commentsAndQuestions.Comments, new List<ViewModels.Answer>());
+		
 			var content = new StringContent(JsonConvert.SerializeObject(viewModel), Encoding.UTF8, "application/json");
 
 		    //Act

@@ -14,7 +14,8 @@ namespace Comments
         {
 			var host = BuildWebHost(args);
 
-	        using (var scope = host.Services.CreateScope())
+
+			using (var scope = host.Services.CreateScope())
 		    {
 		        var services = scope.ServiceProvider;
 		        
@@ -22,7 +23,7 @@ namespace Comments
 		        {
 			        var context = services.GetService<ConsultationsContext>();
 			        context.Database.Migrate();
-			    }
+				}
 		        catch (Exception e)
 		        {
 			        var logger = services.GetRequiredService<ILogger<Program>>();
