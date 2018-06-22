@@ -295,7 +295,13 @@ export class Document extends Component<PropsType, StateType> {
 				<UserContext.Consumer>
 					{contextValue => !contextValue.isAuthorised ?
 						<LoginBanner signInButton={false} currentURL={this.props.match.url}
-									 signInURL={contextValue.signInURL} registerURL={contextValue.registerURL}/> : null}
+									 signInURL={contextValue.signInURL} registerURL={contextValue.registerURL}/>
+						:
+						<a data-qa-sel="sign-out-link" aria-hidden="true" className="temporary-sign-out-link"
+						   href={`https://beta-accounts.nice.org.uk/signout?returnURL=${this.props.match.url}`}
+						   title="Sign Out"
+						>Signout</a>
+					}
 				</UserContext.Consumer>
 				<div className="container">
 					<div className="grid">

@@ -3,7 +3,15 @@
 exports[`[ClientApp]  Document Component should match snapshot with supplied data 1`] = `
 Array [
   "",
-  "",
+  <a
+    aria-hidden="true"
+    className="temporary-sign-out-link"
+    data-qa-sel="sign-out-link"
+    href="https://beta-accounts.nice.org.uk/signout?returnURL=undefined"
+    title="Sign Out"
+>
+    Signout
+</a>,
   <div
     className="container"
 >
