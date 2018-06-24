@@ -143,31 +143,22 @@ export class Document extends Component<PropsType, StateType> {
 		const newRoute = this.props.location.pathname;
 		if (oldRoute === newRoute) return;
 
-		// if we're changing a route then this stuff always has to happen
 		this.setState({
 			loading: true
 		});
+
 		this.gatherData()
 			.then(data => {
 				this.setState({
 					...data,
 					loading: false
 				});
-				// once we've loaded, run the accessibility helpers to pull focus
-				accessibilityHelpers(this.props);
+				// once we've loaded, pull focus to the document container
+				pullFocusByQuerySelector(".document-comment-container");
 			})
 			.catch(err => {
 				throw new Error("gatherData in componentDidUpdate failed " + err);
 			});
-
-		function accessibilityHelpers(currentProps){
-			// are we going to a new chapter in the same document?
-			// if so we want to pull focus to where the NEW content starts
-			if(currentProps.match.params.documentId === prevProps.match.params.documentId){
-				pullFocusByQuerySelector(".document-comment-container");
-			}
-		}
-
 	}
 
 	getDocumentLinks = (
