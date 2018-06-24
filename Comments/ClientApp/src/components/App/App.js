@@ -25,6 +25,7 @@ class App extends React.Component<PropsType, StateType> {
 					<html lang="en-GB"/>
 				</Helmet>
 
+				{/*Skip to main content*/}
 				<button className="screenreader-button" onClick={() => pullFocusByQuerySelector("main h1")}>Skip to Main Content</button>
 
 				<Switch>

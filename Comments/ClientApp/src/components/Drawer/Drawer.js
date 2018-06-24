@@ -89,6 +89,7 @@ export class Drawer extends Component<PropsType, StateType> {
 						onClick={() => this.handleClick("toggleOpen")}
 						aria-controls="sidebar-panel"
 						aria-haspopup="true"
+						tabIndex="0"
 					>
 						<span className="visually-hidden">
 							{this.state.drawerOpen
@@ -107,6 +108,7 @@ export class Drawer extends Component<PropsType, StateType> {
 
 					{/* this button is in temporarily for user testing */}
 					<button
+						tabIndex="0"
 						id="js-reading-mode-toggle"
 						title="Reading mode"
 						className="Drawer__toggleOpen"
@@ -124,7 +126,7 @@ export class Drawer extends Component<PropsType, StateType> {
 				<div data-qa-sel="comment-panel" id="sidebar-panel" className="Drawer__main">
 					{/*wrappedComponentRef exposes the underlying, unwrapped component*/}
 					<CommentListWithRouter isReviewPage={false}
-										   drawerOpen={this.state.drawerOpen}
+										   isVisible={this.state.drawerOpen}
 						// $FlowIgnore | this.commentList is bound to this below
 										   wrappedComponentRef={component => (this.commentList = component)}
 					/>

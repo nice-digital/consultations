@@ -300,6 +300,7 @@ export class Document extends Component<PropsType, StateType> {
 						<a data-qa-sel="sign-out-link" aria-hidden="true" className="temporary-sign-out-link"
 						   href={`https://beta-accounts.nice.org.uk/signout?returnURL=${this.props.match.url}`}
 						   title="Sign Out"
+						   tabIndex="-1" // prevent tabbing at all for the time being as it's a temp link
 						>Signout</a>
 					}
 				</UserContext.Consumer>

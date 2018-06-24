@@ -9,6 +9,7 @@ export const pullFocusByQuerySelector = selection => {
 		el.setAttribute("tabindex", "-1");
 	}
 	el.focus();
+	console.log(`Pulling focus by querySelector to ${selection}`);
 };
 
 export const pullFocusById = selection => {
@@ -18,4 +19,5 @@ export const pullFocusById = selection => {
 		el.setAttribute("tabindex", "-1");
 	}
 	el.focus();
+	console.log(`Pulling focus by ID to ${selection}`);
 };

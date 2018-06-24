@@ -20,7 +20,7 @@ type PropsType = {
 		pathname: string,
 		search: string
 	},
-	drawerOpen: boolean,
+	isVisible: boolean,
 	isReviewPage: boolean,
 	filterByDocument: number,
 	isSubmmitted: boolean
@@ -57,7 +57,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		this.state = {
 			comments: [],
 			questions: [],
-			loading: true
+			loading: true,
 		};
 		let preloadedData = {};
 		if (this.props.staticContext && this.props.staticContext.preload) {
@@ -245,7 +245,11 @@ export class CommentList extends Component<PropsType, StateType> {
 									<h1 data-g="6" id="commenting-panel" className="p">Comments panel</h1>
 									{contextValue.isAuthorised ?
 										<p data-g="6">
-											<Link to={`/${this.props.match.params.consultationId}/review`} data-qa-sel="review-all-comments" className="right">Review all comments</Link>
+											<Link
+												tabIndex={this.props.isVisible ? "0" : "-1"}
+												to={`/${this.props.match.params.consultationId}/review`}
+												data-qa-sel="review-all-comments"
+												className="right">Review all comments</Link>
 										</p> : null
 									}
 								</div> : null
@@ -262,7 +266,7 @@ export class CommentList extends Component<PropsType, StateType> {
 												return (
 													<CommentBox
 														readOnly={this.props.isSubmitted}
-														drawerOpen={this.props.drawerOpen}
+														isVisible={this.props.isVisible}
 														key={comment.commentId}
 														unique={`Comment${idx}`}
 														comment={comment}
