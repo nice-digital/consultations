@@ -8,6 +8,7 @@ Array [
     className="temporary-sign-out-link"
     data-qa-sel="sign-out-link"
     href="https://beta-accounts.nice.org.uk/signout?returnURL=undefined"
+    tabIndex="-1"
     title="Sign Out"
 >
     Signout
