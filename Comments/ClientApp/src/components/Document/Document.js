@@ -18,9 +18,8 @@ import { processDocumentHtml } from "./process-document-html";
 import { LoginBanner } from "./../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
 import { Selection } from "../Selection/Selection";
+import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
 // import stringifyObject from "stringify-object";
-
-
 
 type PropsType = {
 	staticContext?: any,
@@ -142,21 +141,24 @@ export class Document extends Component<PropsType, StateType> {
 	componentDidUpdate(prevProps: PropsType) {
 		const oldRoute = prevProps.location.pathname;
 		const newRoute = this.props.location.pathname;
-		if (oldRoute !== newRoute) {
-			this.setState({
-				loading: true
-			});
-			this.gatherData()
-				.then(data => {
-					this.setState({
-						...data,
-						loading: false
-					});
-				})
-				.catch(err => {
-					throw new Error("gatherData in componentDidUpdate failed " + err);
+		if (oldRoute === newRoute) return;
+
+		this.setState({
+			loading: true
+		});
+
+		this.gatherData()
+			.then(data => {
+				this.setState({
+					...data,
+					loading: false
 				});
-		}
+				// once we've loaded, pull focus to the document container
+				pullFocusByQuerySelector(".document-comment-container");
+			})
+			.catch(err => {
+				throw new Error("gatherData in componentDidUpdate failed " + err);
+			});
 	}
 
 	getDocumentLinks = (
@@ -284,7 +286,14 @@ export class Document extends Component<PropsType, StateType> {
 				<UserContext.Consumer>
 					{contextValue => !contextValue.isAuthorised ?
 						<LoginBanner signInButton={false} currentURL={this.props.match.url}
-									 signInURL={contextValue.signInURL} registerURL={contextValue.registerURL}/> : null}
+									 signInURL={contextValue.signInURL} registerURL={contextValue.registerURL}/>
+						:
+						<a data-qa-sel="sign-out-link" aria-hidden="true" className="temporary-sign-out-link"
+						   href={`https://beta-accounts.nice.org.uk/signout?returnURL=${this.props.match.url}`}
+						   title="Sign Out"
+						   tabIndex="-1" // prevent tabbing at all for the time being as it's a temp link
+						>Signout</a>
+					}
 				</UserContext.Consumer>
 				<div className="container">
 					<div className="grid">
@@ -317,7 +326,7 @@ export class Document extends Component<PropsType, StateType> {
 										</button>
 										&nbsp;&nbsp;
 									</p>
-									<h1 className="page-header__heading mt--0">{title}</h1>
+									<h1 tabIndex={-1} className="page-header__heading mt--0">{title}</h1>
 									<p className="page-header__lead">
 										[{reference}] Open until{" "}
 										<Moment format="D MMMM YYYY" date={endDate}/>
@@ -331,7 +340,6 @@ export class Document extends Component<PropsType, StateType> {
 											onClick={e => {
 												e.preventDefault();
 												this.props.onNewCommentClick({
-
 													sourceURI: this.props.match.url,
 													commentText: "",
 													commentOn: "Document",
@@ -351,45 +359,7 @@ export class Document extends Component<PropsType, StateType> {
 								</div>
 								<StickyContainer className="grid">
 									{/* .navColumn only present for reading mode demo */}
-									<div data-g="12 md:3" className="navigationColumn">
-										<StackedNav
-											links={this.getDocumentChapterLinks(documentId)}
-										/>
-										<StackedNav
-											links={this.getDocumentLinks(
-												true,
-												"Other commentable documents in this consultation",
-												documentsData,
-												documentId,
-												consultationId
-											)}
-										/>
-										<StackedNav
-											links={this.getDocumentLinks(
-												false,
-												"Supporting documents",
-												documentsData,
-												documentId,
-												consultationId
-											)}
-										/>
-									</div>
-									<div data-g="12 md:6" className="documentColumn">
-										<div
-											className={`document-comment-container ${
-												this.state.loading ? "loading" : ""}`}
-										>
-											<Selection newCommentFunc={this.props.onNewCommentClick}
-													   sourceURI={this.props.match.url}>
-												{processDocumentHtml(
-													content,
-													this.props.onNewCommentClick,
-													this.props.match.url
-												)}
-											</Selection>
-										</div>
-									</div>
-									<div data-g="12 md:3" className="inPageNavColumn">
+									<div data-g="12 md:3 md:push:9" className="inPageNavColumn">
 										<Sticky disableHardwareAcceleration>
 											{({ style }) => (
 												<div style={style}>
@@ -407,7 +377,7 @@ export class Document extends Component<PropsType, StateType> {
 															<Scrollspy
 																componentTag="ol"
 																items={this.generateScrollspy(sections)}
-																currentClassName="is-current"
+																currentClassName=""
 																className="in-page-nav__list"
 																role="menubar"
 																onUpdate={e => {
@@ -442,6 +412,45 @@ export class Document extends Component<PropsType, StateType> {
 												</div>
 											)}
 										</Sticky>
+									</div>
+									<div data-g="12 md:6" className="documentColumn">
+										<div
+											className={`document-comment-container ${
+												this.state.loading ? "loading" : ""}`}
+											tabIndex={-1}
+										>
+											<Selection newCommentFunc={this.props.onNewCommentClick}
+													   sourceURI={this.props.match.url}>
+												{processDocumentHtml(
+													content,
+													this.props.onNewCommentClick,
+													this.props.match.url
+												)}
+											</Selection>
+										</div>
+									</div>
+									<div data-g="12 md:3 md:pull:9" className="navigationColumn">
+										<StackedNav // "Chapters in this document"
+											links={this.getDocumentChapterLinks(documentId)}
+										/>
+										<StackedNav
+											links={this.getDocumentLinks(
+												true,
+												"Other commentable documents in this consultation",
+												documentsData,
+												documentId,
+												consultationId
+											)}
+										/>
+										<StackedNav
+											links={this.getDocumentLinks(
+												false,
+												"Supporting documents",
+												documentsData,
+												documentId,
+												consultationId
+											)}
+										/>
 									</div>
 								</StickyContainer>
 							</main>

@@ -7,8 +7,9 @@ import CommentListWithRouter from "../CommentList/CommentList";
 import { DocumentView } from "../DocumentView/DocumentView";
 import NotFound from "../NotFound/NotFound";
 import ReviewPageWithRouter from "../ReviewPage/ReviewPage";
-import UserProviderWithRouter  from "../../context/UserContext";
+import UserProviderWithRouter from "../../context/UserContext";
 import OnboardingModal from "../OnboardingModal/OnboardingModal";
+import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
 
 type PropsType = any;
 
@@ -17,17 +18,15 @@ type StateType = {
 }
 
 class App extends React.Component<PropsType, StateType> {
-	constructor() {
-		super();
-
-	}
-
 	render() {
 		return (
 			<UserProviderWithRouter>
 				<Helmet titleTemplate="%s | Consultations | NICE">
 					<html lang="en-GB"/>
 				</Helmet>
+
+				{/*Skip to main content*/}
+				<button className="screenreader-button" onClick={() => pullFocusByQuerySelector("main h1")}>Skip to Main Content</button>
 
 				<Switch>
 					{/*Home*/}
@@ -54,7 +53,7 @@ class App extends React.Component<PropsType, StateType> {
 					{/*404*/}
 					<Route component={NotFound}/>
 				</Switch>
-				<OnboardingModal />
+				<OnboardingModal/>
 			</UserProviderWithRouter>
 		);
 	}

@@ -3,7 +3,7 @@ import Moment from "react-moment";
 
 type PropsType = {
 	staticContext?: any,
-	drawerOpen: boolean
+	isVisible: boolean
 };
 
 type StateType = {
@@ -65,7 +65,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 		const comment = this.state.comment;
 		const readOnly = this.props.readOnly;
 
-		const tabIndex = this.props.drawerOpen ? "0" : "-1";
+		const tabIndex = this.props.isVisible ? "0" : "-1";
 
 		return (
 
