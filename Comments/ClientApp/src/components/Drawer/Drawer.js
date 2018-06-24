@@ -36,7 +36,6 @@ export class Drawer extends Component<PropsType, StateType> {
 		this.setState({
 			drawerOpen: true
 		});
-		pullFocusById("#js-drawer-toggleopen");
 		// and what we're calling is newComment from inside <CommentList />
 		// $FlowIgnore | this is bound by wrappedComponentRef in CommentListWithRouter
 		this.commentList.newComment(comment);

@@ -8,6 +8,7 @@ import { CommentBox } from "../CommentBox/CommentBox";
 import { LoginBanner } from "./../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
 import { queryStringToObject, replaceFormat } from "../../helpers/utils";
+import {pullFocusById} from "../../helpers/accessibility-helpers";
 //import stringifyObject from "stringify-object";
 
 type PropsType = {
@@ -160,7 +161,6 @@ export class CommentList extends Component<PropsType, StateType> {
 	};
 
 	newComment(newComment: CommentType) {
-
 		let comments = this.state.comments;
 		//negative ids are unsaved / new comments
 		let idToUseForNewBox = -1;
@@ -177,6 +177,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		});
 		comments.unshift(generatedComment);
 		this.setState({ comments });
+		setTimeout(() => {pullFocusById(`Comment${idToUseForNewBox}`);}, 0);
 	}
 
 	saveCommentHandler = (e: Event, comment: CommentType) => {
@@ -262,13 +263,13 @@ export class CommentList extends Component<PropsType, StateType> {
 									commentsToShow.length === 0 ? <p>No comments yet</p> :
 
 										<ul className="CommentList list--unstyled">
-											{commentsToShow.map((comment, idx) => {
+											{commentsToShow.map((comment) => {
 												return (
 													<CommentBox
 														readOnly={this.props.isSubmitted}
 														isVisible={this.props.isVisible}
 														key={comment.commentId}
-														unique={`Comment${idx}`}
+														unique={`Comment${comment.commentId}`}
 														comment={comment}
 														saveHandler={this.saveCommentHandler}
 														deleteHandler={this.deleteCommentHandler}
