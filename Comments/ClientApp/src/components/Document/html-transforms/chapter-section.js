@@ -1,5 +1,4 @@
 import React, { Fragment } from "react";
-import { convertNodeToElement } from "react-html-parser";
 import { nodeIsTypeText } from "./types";
 
 export default function processChapterSection(node, incomingHtml, onNewCommentClick, sourceURI) {
@@ -28,7 +27,7 @@ export default function processChapterSection(node, incomingHtml, onNewCommentCl
 				<span className="icon icon--comment" aria-hidden="true" />
 				<span className="visually-hidden">Comment on {elementType}: {elementName}</span>
 			</button>
-			{convertNodeToElement(node)}
+			{elementName}
 		</Fragment>
 	);
 }

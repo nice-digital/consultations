@@ -320,23 +320,7 @@ Array [
                                                 Introduction 
                                             </span>
                                         </button>
-                                        <a
-                                            className="annotator-chapter"
-                                            data-heading-type="chapter"
-                                            id="introduction"
-                                            style={
-                                                Object {
-                                                    "position": "relative",
-                                                  }
-                                            }
-                                            title="Comment on chapter"
-                                            xmlns=""
-                                        >
-                                            Introduction 
-                                            <span
-                                                className="annotator-adder"
-                                            />
-                                        </a>
+                                        Introduction 
                                     </h2>
                                     <div
                                         className="informaltable"
