@@ -42,7 +42,7 @@ namespace Comments.Test.IntegrationTests.API.Submit
 		    response.EnsureSuccessStatusCode();
 		    var responseString = await response.Content.ReadAsStringAsync();
 			var result = commentService.GetComment(commentId);
-		    //var deserialisedComment = JsonConvert.DeserializeObject<ViewModels.CommentsAndAnswers>(responseString);
+		    var deserialisedComment = JsonConvert.DeserializeObject<ViewModels.CommentsAndAnswers>(responseString);
 
 			//Assert
 			result.comment.StatusId.ShouldBe(StatusName.Submitted);

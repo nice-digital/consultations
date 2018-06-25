@@ -78,8 +78,11 @@ namespace Comments.Models
 
         public Answer GetAnswer(int answerId)
         {
-            return Answer
-                .FirstOrDefault(a => a.AnswerId.Equals(answerId));
+	        var answer = Answer.Where(a => a.AnswerId.Equals(answerId))
+		        .Include(s => s.Status)
+		        .FirstOrDefault();
+
+	        return answer;
         }
 
         public Question GetQuestion(int questionId)

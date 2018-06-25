@@ -55,6 +55,8 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			ResetDatabase();
+			_context.Database.EnsureCreated();
+
 			var userId = Guid.NewGuid();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 

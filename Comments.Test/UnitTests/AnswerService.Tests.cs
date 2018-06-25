@@ -21,8 +21,9 @@ namespace Comments.Test.UnitTests
         {
             //Arrange
             ResetDatabase();
+	        _context.Database.EnsureCreated();
 
-            var answerText = Guid.NewGuid().ToString();
+			var answerText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
@@ -75,7 +76,9 @@ namespace Comments.Test.UnitTests
         {
             //Arrange
             ResetDatabase();
-            var answerText = Guid.NewGuid().ToString();
+	        _context.Database.EnsureCreated();
+
+			var answerText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
@@ -102,7 +105,9 @@ namespace Comments.Test.UnitTests
         {
             //Arrange
             ResetDatabase();
-            var answerText = Guid.NewGuid().ToString();
+	        _context.Database.EnsureCreated();
+
+			var answerText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
             

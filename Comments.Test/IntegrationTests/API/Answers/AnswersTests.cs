@@ -40,7 +40,9 @@ namespace Comments.Test.IntegrationTests.API.Answers
         {
             // Arrange
             ResetDatabase();
-            var answerText = Guid.NewGuid().ToString();
+	        _context.Database.EnsureCreated();
+
+			var answerText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
 
             SetupTestDataInDB();
