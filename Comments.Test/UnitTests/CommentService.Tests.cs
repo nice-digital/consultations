@@ -65,12 +65,15 @@ namespace Comments.Test.UnitTests
         {
             //Arrange
             ResetDatabase();
-            var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+	        _context.Database.EnsureCreated();
+
+			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var commentText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
 
             var locationId = AddLocation(sourceURI);
             var commentId = AddComment(locationId, commentText, isDeleted: false, createdByUserId: userId);
+
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
             var authenticateService = new FakeAuthenticateService(authenticated: true);
             var commentService = new CommentService(new ConsultationsContext(_options, userService), userService, authenticateService);
@@ -119,13 +122,14 @@ namespace Comments.Test.UnitTests
         {
             //Arrange
             ResetDatabase();
+	        _context.Database.EnsureCreated();
+
             var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var locationId = AddLocation(sourceURI);
             var userId = Guid.Empty;
             var commentText = Guid.NewGuid().ToString();
             var location = new Location(sourceURI, null, null, null, null, null, null, null, null);
-			var status = new Models.Status("draft", null, null);
-            var comment = new Comment(locationId, userId, commentText, userId, location, 1, status);
+            var comment = new Comment(locationId, userId, commentText, userId, location, 1, null);
             var viewModel = new ViewModels.Comment(location, comment);
             
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
@@ -161,7 +165,9 @@ namespace Comments.Test.UnitTests
         {
             // Arrange
             ResetDatabase();
-            var userId = Guid.NewGuid();
+	        _context.Database.EnsureCreated();
+
+			var userId = Guid.NewGuid();
             var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
             var authenticateService = new FakeAuthenticateService(authenticated: true);
@@ -185,6 +191,8 @@ namespace Comments.Test.UnitTests
         {
             // Arrange
             ResetDatabase();
+	        _context.Database.EnsureCreated();
+
             var URI = "consultations://./consultation/1/document/1/chapter/intro";
 
             var someText = Guid.NewGuid().ToString();
@@ -213,7 +221,9 @@ namespace Comments.Test.UnitTests
         {
             // Arrange
             ResetDatabase();
-            var ChapterIntroURI = "consultations://./consultation/1/document/1/chapter/introduction";
+	        _context.Database.EnsureCreated();
+
+			var ChapterIntroURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var ChaperOverviewURI = "consultations://./consultation/1/document/1/chapter/overview";
 
             var DocumentOneURI = "consultations://./consultation/1/document/1";

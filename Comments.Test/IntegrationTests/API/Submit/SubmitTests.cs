@@ -19,7 +19,9 @@ namespace Comments.Test.IntegrationTests.API.Submit
 	    {
 		    //Arrange
 		    ResetDatabase();
-		    const string sourceURI = "consultations://./consultation/1/document/2/chapter/introduction";
+		    _context.Database.EnsureCreated();
+
+			const string sourceURI = "consultations://./consultation/1/document/2/chapter/introduction";
 		    var commentText = Guid.NewGuid().ToString();
 		    var userId = Guid.Empty;
 		    var locationId = AddLocation(sourceURI, _context);

@@ -146,9 +146,9 @@ namespace Comments.Test.Infrastructure
             using (var context = new ConsultationsContext(_options, _fakeUserService))
             {
                 context.Database.EnsureDeleted();
-                //context.Database.CloseConnection();
-                //context.Database.OpenConnection();
-            }
+				//context.Database.CloseConnection();
+				//context.Database.OpenConnection();
+			}
         }
 
         protected void ResetDatabase(IUserService userService)

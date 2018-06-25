@@ -52,8 +52,8 @@ namespace Comments.Models
 						.ThenInclude(s => s.SubmissionComment)
 							.ThenInclude(s => s.Submission)
 
-					//.Include(l => l.Comment)
-					//	.ThenInclude(s => s.Status)
+					.Include(l => l.Comment)
+						.ThenInclude(s => s.Status)
 
 					.Include(l => l.Question)
 						.ThenInclude(q => q.QuestionType)
@@ -70,7 +70,7 @@ namespace Comments.Models
         {
             var comment = Comment.Where(c => c.CommentId.Equals(commentId))
                             .Include(c => c.Location)
-							//.Include(s => s.Status)
+							.Include(s => s.Status)
                             .FirstOrDefault();
 
             return comment;

@@ -81,7 +81,9 @@ namespace Comments.Test.IntegrationTests.API.Comments
         {
             //Arrange
             ResetDatabase();
-            string sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+	        _context.Database.EnsureCreated();
+
+			string sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 
             var locationId = AddLocation(sourceURI);
             AddComment(locationId, "comment text", false, Guid.Empty);
@@ -137,7 +139,9 @@ namespace Comments.Test.IntegrationTests.API.Comments
         {
             //Arrange
             ResetDatabase();
-            const string sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+	        _context.Database.EnsureCreated();
+
+			const string sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var commentText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
             var locationId = AddLocation(sourceURI);
@@ -162,7 +166,9 @@ namespace Comments.Test.IntegrationTests.API.Comments
         {
             //Arrange
             ResetDatabase();
-            const string sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+	        _context.Database.EnsureCreated();
+
+			const string sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var commentText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
             var locationId = AddLocation(sourceURI, _context);

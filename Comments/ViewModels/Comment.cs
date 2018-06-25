@@ -24,7 +24,8 @@ namespace Comments.ViewModels
             LastModifiedDate = comment.LastModifiedDate;
             LastModifiedByUserId = comment.LastModifiedByUserId;
             CommentText = comment.CommentText;
-	        Status = null; //new Status(comment.Status);
+	        if (!(comment.Status is null))
+		        Status = null;// new Status(comment.Status);
 	        StatusId = comment.StatusId;
         }
 

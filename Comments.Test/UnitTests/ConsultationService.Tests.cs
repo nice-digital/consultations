@@ -22,7 +22,9 @@ namespace Comments.Test.UnitTests
         { 
             // Arrange
             ResetDatabase();
-            var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+	        _context.Database.EnsureCreated();
+
+			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var commentText = Guid.NewGuid().ToString();
             var createdByUserId = Guid.NewGuid();
 

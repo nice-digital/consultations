@@ -5,7 +5,10 @@
             "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
             "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
             "commentText":"comment text",
-            "status":null,
+            "status":{
+                "statusId":1,
+                "name":"Draft"
+            },
             "statusId":1,
             "commentOn":"Chapter",
             "locationId":64,
@@ -22,7 +25,10 @@
             "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
             "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
             "commentText":"comment text",
-            "status":null,
+            "status":{
+                "statusId":1,
+                "name":"Draft"
+            },
             "statusId":1,
             "commentOn":"Chapter",
             "locationId":63,
@@ -39,7 +45,10 @@
             "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
             "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
             "commentText":"comment text",
-            "status":null,
+            "status":{
+                "statusId":1,
+                "name":"Draft"
+            },
             "statusId":1,
             "commentOn":"Chapter",
             "locationId":63,
