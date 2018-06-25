@@ -8,7 +8,6 @@ import { DocumentView } from "../DocumentView/DocumentView";
 import NotFound from "../NotFound/NotFound";
 import ReviewPageWithRouter from "../ReviewPage/ReviewPage";
 import UserProviderWithRouter from "../../context/UserContext";
-import OnboardingModal from "../OnboardingModal/OnboardingModal";
 import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
 
 type PropsType = any;
@@ -53,7 +52,6 @@ class App extends React.Component<PropsType, StateType> {
 					{/*404*/}
 					<Route component={NotFound}/>
 				</Switch>
-				<OnboardingModal/>
 			</UserProviderWithRouter>
 		);
 	}
