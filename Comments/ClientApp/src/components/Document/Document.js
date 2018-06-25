@@ -358,7 +358,6 @@ export class Document extends Component<PropsType, StateType> {
 									</h2>
 								</div>
 								<StickyContainer className="grid">
-									{/* .navColumn only present for reading mode demo */}
 									<div data-g="12 md:3 md:push:9" className="inPageNavColumn">
 										<Sticky disableHardwareAcceleration>
 											{({ style }) => (

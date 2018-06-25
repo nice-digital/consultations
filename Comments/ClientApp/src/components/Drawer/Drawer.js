@@ -104,22 +104,6 @@ export class Drawer extends Component<PropsType, StateType> {
 							data-qa-sel="close-commenting-panel"
 						/>
 					</button>
-
-					{/* this button is in temporarily for user testing */}
-					<button
-						tabIndex="0"
-						id="js-reading-mode-toggle"
-						title="Reading mode"
-						className="Drawer__toggleOpen"
-						style={{ marginTop: "3px" }}
-						aria-haspopup="true">
-						<img alt="Enable or disable reading view" src="reading-view/icon.png" style={{
-							position: "relative",
-							top: "3px"
-						}}/>
-					</button>
-					{/* / this button is in temporarily for user testing */}
-
 				</div>
 				{/* #sidebar-panel necessary here for pulling keyboard focus */}
 				<div data-qa-sel="comment-panel" id="sidebar-panel" className="Drawer__main">
