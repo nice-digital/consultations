@@ -89,5 +89,11 @@ namespace Comments.Models
                 .Include(q => q.QuestionType)
                 .FirstOrDefault();
         }
+
+	    public Status GetStatus(int statusId)
+	    {
+		    return Status
+			    .FirstOrDefault(a => a.StatusId.Equals(statusId));
+	    }
 	}
 }

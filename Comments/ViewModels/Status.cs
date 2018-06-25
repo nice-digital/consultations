@@ -13,7 +13,7 @@ namespace Comments.ViewModels
 
 	public class Status
     {
-		//public Status() {}//only here for model binding. don't use it in code.
+		public Status() {}//only here for model binding. don't use it in code.
 
 	    public Status(Models.Status status)
 	    {
