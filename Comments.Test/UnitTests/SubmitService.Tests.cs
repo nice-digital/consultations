@@ -44,8 +44,9 @@ namespace Comments.Test.UnitTests
 				.Include(s => s.Submission).First();
 
 			//Assert
-			result.rowsUpdated.ShouldBe(3);
+			result.rowsUpdated.ShouldBe(4);
 			comment.comment.StatusId.ShouldBe(StatusName.Submitted);
+			comment.comment.Status.StatusId.ShouldBe(StatusName.Submitted);
 			commentsSubmissionData.CommentId.ShouldBe(commentId);
 			commentsSubmissionData.Submission.SubmissionByUserId.ShouldBe(userId);
 		}
@@ -83,8 +84,9 @@ namespace Comments.Test.UnitTests
 				.Include(s => s.Submission).First();
 
 			//Assert
-			result.rowsUpdated.ShouldBe(3);
+			result.rowsUpdated.ShouldBe(4);
 			answer.answer.StatusId.ShouldBe(StatusName.Submitted);
+			answer.answer.Status.StatusId.ShouldBe(StatusName.Submitted);
 			answerSubmissionData.AnswerId.ShouldBe(answerId);
 			answerSubmissionData.Submission.SubmissionByUserId.ShouldBe(userId);
 		}

@@ -24,6 +24,7 @@ namespace Comments.Models
             AnswerText = answer.AnswerText ?? throw new ArgumentNullException(nameof(answer.AnswerText)); 
             AnswerBoolean = answer.AnswerBoolean;
 	        StatusId = answer.StatusId;
+			Status.UpdateFromViewModel(answer.Status);
         }
     }
 }
