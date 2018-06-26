@@ -35,9 +35,12 @@ namespace Comments.Services
 		    var submissionToSave = new Models.Submission(_currentUser.UserId.Value, DateTime.UtcNow);
 		    _context.Submission.Add(submissionToSave);
 
+		    var submittedStatus = _context.GetStatus(StatusName.Submitted);
+
 			foreach (var comment in commentsAndAnswers.Comments)
 			{
 				comment.StatusId = StatusName.Submitted;
+				comment.Status = new ViewModels.Status(submittedStatus);
 
 				_context.GetComment(comment.CommentId).UpdateFromViewModel(comment);
 				
@@ -47,6 +50,7 @@ namespace Comments.Services
 			foreach (var answer in commentsAndAnswers.Answers)
 		    {
 			    answer.StatusId = StatusName.Submitted;
+				answer.Status = new ViewModels.Status(submittedStatus);
 
 				_context.GetAnswer(answer.AnswerId).UpdateFromViewModel(answer);
 				

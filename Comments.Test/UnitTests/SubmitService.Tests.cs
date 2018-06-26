@@ -94,6 +94,7 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			ResetDatabase();
+			_context.Database.EnsureCreated();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var userId = Guid.NewGuid();
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
@@ -111,6 +112,7 @@ namespace Comments.Test.UnitTests
 
 			//Assert
 			results.First().Comment.First().SubmissionComment.Count.ShouldBe(1);
+			results.First().Comment.First().Status.ShouldNotBeNull();
 		}
 	}
 }

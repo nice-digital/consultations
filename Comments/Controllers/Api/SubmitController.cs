@@ -11,11 +11,13 @@ namespace Comments.Controllers.Api
 	public class SubmitController : ControllerBase
 	{
 	    private readonly ISubmitService _submitService;
+		private readonly ICommentService _commentService;
 	    private readonly ILogger<SubmitController> _logger;
 
-		public SubmitController(ISubmitService submitService, ILogger<SubmitController> logger)
+		public SubmitController(ISubmitService submitService, ICommentService commentService, ILogger<SubmitController> logger)
 	    {
 		    _submitService = submitService;
+		    _commentService = commentService;
 		    _logger = logger;
 		}
 
@@ -23,7 +25,6 @@ namespace Comments.Controllers.Api
 		[HttpPost]
 	    public IActionResult Post([FromBody] ViewModels.CommentsAndAnswers commentsAndAnswers)
 	    {
-			//TODO: it should save any unsaved comments before submitting
 			if (!ModelState.IsValid)
 			{
 				return BadRequest(ModelState);
@@ -31,6 +32,9 @@ namespace Comments.Controllers.Api
 			
 			var result = _submitService.SubmitCommentsAndAnswers(commentsAndAnswers);
 			var invalidResult = Validate(result.validate, _logger);
+
+			// need to get the updated commentsAndAnswers
+			//var updatedCommentsAndAnswers = _commentService.GetCommentsAndQuestions()
 			
 			return invalidResult ?? Ok(commentsAndAnswers); //should return comments and answers, might need submission object too
 	    }
