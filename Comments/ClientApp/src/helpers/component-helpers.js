@@ -25,7 +25,7 @@ export function HashLinkTop(props: HashLinkTopType) {
 					block
 				});
 				const element = el.attributes.id.value;
-				pullFocusById(element);
+				pullFocusById(element); // todo: this is upsetting our scroll to destination
 			}}
 		>
 			{label}

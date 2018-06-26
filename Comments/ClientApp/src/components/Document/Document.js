@@ -35,7 +35,11 @@ type StateType = {
 	consultationData: any, // the top level info - title etc
 	currentInPageNavItem: null | string,
 	hasInitialData: boolean,
-	onboarded: boolean
+	onboarded: boolean,
+	currentChapterDetails: {
+		title: string,
+		slug: string
+	}
 };
 
 type DocumentsType = Array<Object>;
@@ -131,6 +135,7 @@ export class Document extends Component<PropsType, StateType> {
 						loading: false,
 						hasInitialData: true
 					});
+					this.addChapterDetailsToSections(this.state.chapterData);
 				})
 				.catch(err => {
 					throw new Error("gatherData in componentDidMount failed " + err);
@@ -153,6 +158,7 @@ export class Document extends Component<PropsType, StateType> {
 					...data,
 					loading: false
 				});
+				this.addChapterDetailsToSections(this.state.chapterData);
 				// once we've loaded, pull focus to the document container
 				pullFocusByQuerySelector(".document-comment-container");
 			})
@@ -263,6 +269,13 @@ export class Document extends Component<PropsType, StateType> {
 		return sections.map(section => section.slug);
 	};
 
+	addChapterDetailsToSections = (chapterData) => {
+		const { title, slug } = this.state.chapterData;
+		const chapterDetails = { title, slug };
+		chapterData.sections.unshift(chapterDetails);
+		this.setState({ chapterData });
+	};
+
 	inPageNav = (e: HTMLElement) => {
 		if (!e) return null;
 		const currentInPageNavItem = e.getAttribute("id");
@@ -350,8 +363,7 @@ export class Document extends Component<PropsType, StateType> {
 													documentId
 												)
 											});
-										}}
-									>
+										}}>
 										Comment on this document
 									</button>
 
@@ -365,12 +377,10 @@ export class Document extends Component<PropsType, StateType> {
 													{sections.length ? (
 														<nav
 															className="in-page-nav"
-															aria-labelledby="inpagenav-title"
-														>
+															aria-labelledby="inpagenav-title">
 															<h2
 																id="inpagenav-title"
-																className="in-page-nav__title"
-															>
+																className="in-page-nav__title">
 																On this page
 															</h2>
 															<Scrollspy
@@ -381,8 +391,7 @@ export class Document extends Component<PropsType, StateType> {
 																role="menubar"
 																onUpdate={e => {
 																	this.inPageNav(e);
-																}}
-															>
+																}}>
 																{sections.map((item, index) => {
 																	const props = {
 																		label: item.title,
@@ -391,11 +400,9 @@ export class Document extends Component<PropsType, StateType> {
 																		block: "start"
 																	};
 																	return (
-																		<li
-																			role="presentation"
+																		<li role="presentation"
 																			className="in-page-nav__item"
-																			key={index}
-																		>
+																			key={index}>
 																			<HashLinkTop
 																				{...props}
 																				currentNavItem={
