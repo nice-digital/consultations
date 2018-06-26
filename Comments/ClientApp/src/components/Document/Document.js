@@ -248,7 +248,7 @@ export class Document extends Component<PropsType, StateType> {
 			},
 			{
 				label: "Consultation",
-				url: "https://alpha.nice.org.uk/guidance/indevelopment/gid-ng10103/consultation/html-content"
+				url: "https://alpha.nice.org.uk/guidance/indevelopment/gid-ng10107/consultation/html-content"
 			}
 		];
 	};

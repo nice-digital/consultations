@@ -89,7 +89,7 @@ Array [
                         itemType="http://schema.org/ListItem"
                     >
                         <a
-                            href="https://alpha.nice.org.uk/guidance/indevelopment/gid-ng10103/consultation/html-content"
+                            href="https://alpha.nice.org.uk/guidance/indevelopment/gid-ng10107/consultation/html-content"
                         >
                             Consultation
                         </a>
@@ -106,24 +106,9 @@ Array [
                 <div
                     className="page-header"
                 >
-                    <p
-                        className="mb--0"
-                    >
-                        Consultation |
-                         
-                        <button
-                            className="buttonAsLink"
-                            data-qa-sel="comment-on-whole-consultation"
-                            onClick={[Function]}
-                            tabIndex={0}
-                        >
-                            Comment on whole consultation
-                        </button>
-                          
-                    </p>
                     <h1
                         className="page-header__heading mt--0"
-                        tabIndex={-1}
+                        tabIndex="-1"
                     >
                         Unstable angina and NSTEMI: early management
                     </h1>
@@ -140,25 +125,27 @@ Array [
                             31 May 2018
                         </time>
                     </p>
-                    <p
-                        className="mb--0"
+                    <button
+                        className="btn btn--cta"
+                        data-qa-sel="comment-on-whole-consultation"
+                        onClick={[Function]}
+                        tabIndex={0}
                     >
-                        Document |
-                         
-                        <button
-                            className="buttonAsLink"
-                            data-qa-sel="comment-on-consultation-document"
-                            onClick={[Function]}
-                            tabIndex={0}
-                        >
-                            Comment on this document
-                        </button>
-                    </p>
+                        Comment on whole consultation
+                    </button>
                     <h2
-                        className="mt--0"
+                        className="mb--b"
                     >
                         Unstable angina and NSTEMI
                     </h2>
+                    <button
+                        className="btn btn--cta"
+                        data-qa-sel="comment-on-consultation-document"
+                        onClick={[Function]}
+                        tabIndex={0}
+                    >
+                        Comment on this document
+                    </button>
                 </div>
                 <div
                     className="grid"
