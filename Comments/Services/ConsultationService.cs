@@ -18,8 +18,11 @@ namespace Comments.Services
         IEnumerable<Document> GetDocuments(int consultationId);
         ViewModels.Consultation GetConsultation(int consultationId, bool isReview);
         IEnumerable<ViewModels.Consultation> GetConsultations();
+
+	    ChapterContent GetPreviewChapterContent(int consultationId, int documentId, string chapterSlug, string reference);
 	    ConsultationState GetConsultationState(string sourceURI, IEnumerable<Models.Location> locations = null, ConsultationDetail consultation = null);
 	    ConsultationState GetConsultationState(int consultationId, IEnumerable<Models.Location> locations = null, ConsultationDetail consultation = null);
+
 
 		bool HasSubmittedCommentsOrQuestions(string consultationSourceURI, Guid userId);
 	    IEnumerable<BreadcrumbLink> GetBreadcrumbs(ConsultationDetail consultation, bool isReview);
@@ -46,7 +49,13 @@ namespace Comments.Services
                 _feedConverterService.GetConsultationChapterForPublishedProject(consultationId, documentId, chapterSlug));
         }
 
-        public IEnumerable<Document> GetDocuments(int consultationId)
+	    public ChapterContent GetPreviewChapterContent(int consultationId, int documentId, string chapterSlug, string reference)
+	    {
+		    return new ViewModels.ChapterContent(
+			    _feedConverterService.GetIndevConsultationChapterForDraftProject(consultationId, documentId, chapterSlug, reference));
+	    }
+
+		public IEnumerable<Document> GetDocuments(int consultationId)
         {
             var consultationDetail = _feedConverterService.GetIndevConsultationDetailForPublishedProject(consultationId, PreviewState.NonPreview);
             return consultationDetail.Resources.Select(r => new ViewModels.Document(consultationId, r)).ToList();

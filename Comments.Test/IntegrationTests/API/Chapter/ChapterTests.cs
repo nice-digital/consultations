@@ -1,4 +1,4 @@
-﻿using Comments.Test.Infrastructure;
+using Comments.Test.Infrastructure;
 using NICE.Feeds.Tests.Infrastructure;
 using Shouldly;
 using System;
@@ -68,5 +68,19 @@ namespace Comments.Test.IntegrationTests.API.Chapter
             // Assert
             responseString.ShouldMatchApproved();
         }
-    }
+
+	    [Fact]
+	    public async Task Get_Preview_Chapter_Feed_Returns_Populated_Feed()
+	    {
+		    //Arrange (in the base constructor for this one.)
+
+		    // Act
+		    var response = await _client.GetAsync("/consultations/api/Chapter?consultationId=1&documentId=1&chapterSlug=introduction&reference=GID-TA10232");
+		    response.EnsureSuccessStatusCode();
+		    var responseString = await response.Content.ReadAsStringAsync();
+
+		    // Assert
+		    responseString.ShouldMatchApproved();
+	    }
+	}
 }
