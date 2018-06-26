@@ -101,8 +101,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 						<div className="form__group form__group--textarea mb--0">
 							<label
 								className="form__label visually-hidden"
-								htmlFor={this.props.unique}
-							>
+								htmlFor={this.props.unique}>
 								Comment
 							</label>
 							<textarea
@@ -112,10 +111,8 @@ export class CommentBox extends Component<PropsType, StateType> {
 								tabIndex={tabIndex}
 								className="form__input form__input--textarea"
 								onChange={this.textareaChangeHandler}
-								onKeyUp={this.textareaChangeHandler}
 								placeholder="Enter your comment"
-								value={commentText}
-							/>
+								value={commentText}/>
 						</div>
 						{!readOnly && commentText && commentText.length > 0 && (
 							<input
@@ -124,16 +121,14 @@ export class CommentBox extends Component<PropsType, StateType> {
 								className="btn ml--0"
 								type="submit"
 								value={unsavedChanges ? "Save comment" : "Saved"}
-								disabled={!unsavedChanges}
-							/>
+								disabled={!unsavedChanges}/>
 						)}
 						{!readOnly &&
 						<button
 							data-qa-sel="delete-comment-button"
 							tabIndex={tabIndex}
 							className="btn mr--0 right"
-							onClick={e => this.props.deleteHandler(e, commentId)}
-						>
+							onClick={e => this.props.deleteHandler(e, commentId)}>
 							<span className="visually-hidden">Delete this comment</span>
 							<span className="icon icon--trash" aria-hidden="true"/>
 						</button>
