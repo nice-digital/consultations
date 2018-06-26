@@ -38,6 +38,8 @@ export const load = (endpoint, baseUrl = BaseUrl, urlParameters = [],  query = {
 		}
 		const httpsAgent = (baseUrl.indexOf("https") !== -1) ? new https.Agent({ rejectUnauthorized: false }) : {};
 
+		console.log(`about to hit url:{url}`);
+		
 		axios({
 			url,
 			data,

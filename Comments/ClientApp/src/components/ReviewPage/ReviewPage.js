@@ -44,17 +44,17 @@ export class ReviewPage extends Component<PropsType> {
 				throw new Error("documentsData " + err);
 			});
 
-		const consultationData = load("consultation", undefined, [], {
-			consultationId
-		})
-			.then(response => response.data)
-			.catch(err => {
-				throw new Error("consultationData " + err);
-			});
+		// const consultationData = load("consultation", undefined, [], {
+		// 	consultationId
+		// })
+		// 	.then(response => response.data)
+		// 	.catch(err => {
+		// 		throw new Error("consultationData " + err);
+		// 	});
 
 		return {
-			documentsList: await documentsData,
-			consultationData: await consultationData
+			documentsList: await documentsData//,
+			//consultationData: await consultationData
 		};
 	};
 

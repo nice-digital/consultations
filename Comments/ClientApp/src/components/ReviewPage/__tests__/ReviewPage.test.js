@@ -92,5 +92,33 @@ describe("[ClientApp] ", () => {
 					return [200, ConsultationData];
 				});
 		});
+
+		it.only("should hit the submit endpoint successfully", async () => {
+			
+			const wrapper = mount(<ReviewPage {...fakeProps} />);
+			
+			const mock = new MockAdapter(axios);
+
+			mock
+				.onGet("/consultations/api/Documents?consultationId=1")
+				.reply(() => {
+					return [200, DocumentsData];
+				});
+
+			mock
+				.onGet("/consultations/api/Consultation?consultationId=1")
+				.reply(() => {
+					console.log(`hit something`);
+
+
+					return [200, ConsultationData];
+					//return [200, ConsultationData];
+				});
+
+			expect(wrapper.state().isSubmitted).toEqual(false);
+			wrapper.instance().submitConsultation();
+			expect(wrapper.state().isSubmitted).toEqual(true);
+
+		});
 	});
 });
