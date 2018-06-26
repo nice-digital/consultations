@@ -127,7 +127,8 @@ namespace Comments.Test.Infrastructure
                 IndevApiKey = "api key goes here",
                 IndevBasePath = new Uri("http://test-indev.nice.org.uk"),
                 IndevPublishedChapterFeedPath = "consultation-comments/{0}/document/{1}/chapter-slug/{2}",
-                IndevPublishedDetailFeedPath = "consultation-comments/{0}",
+	            IndevDraftPreviewChapterFeedPath = "preview/{0}/consultation/{1}/document/{2}/chapter-slug/{3}",
+				IndevPublishedDetailFeedPath = "consultation-comments/{0}",
                 IndevListFeedPath = "consultation-comments-list"
             };
         }
