@@ -14,7 +14,9 @@ namespace Comments.Services
         IEnumerable<Document> GetDocuments(int consultationId);
         ViewModels.Consultation GetConsultation(int consultationId);
         IEnumerable<ViewModels.Consultation> GetConsultations();
-        (int validDocumentId, string validChapterSlug) ValidateDocumentAndChapterWithinConsultation(ConsultationDetail consultation, int documentId, string chapterSlug);
+	    ChapterContent GetPreviewChapterContent(int consultationId, int documentId, string chapterSlug, string reference);
+
+		(int validDocumentId, string validChapterSlug) ValidateDocumentAndChapterWithinConsultation(ConsultationDetail consultation, int documentId, string chapterSlug);
     }
 
     public class ConsultationService : IConsultationService
@@ -43,7 +45,13 @@ namespace Comments.Services
                 _feedConverterService.GetConsultationChapterForPublishedProject(consultationId, documentId, chapterSlug));
         }
 
-        public IEnumerable<Document> GetDocuments(int consultationId)
+	    public ChapterContent GetPreviewChapterContent(int consultationId, int documentId, string chapterSlug, string reference)
+	    {
+		    return new ViewModels.ChapterContent(
+			    _feedConverterService.GetIndevConsultationChapterForDraftProject(consultationId, documentId, chapterSlug, reference));
+	    }
+
+		public IEnumerable<Document> GetDocuments(int consultationId)
         {
             var consultationDetail = _feedConverterService.GetIndevConsultationDetailForPublishedProject(consultationId, PreviewState.NonPreview);
             return consultationDetail.Resources.Select(r => new ViewModels.Document(consultationId, r)).ToList();
