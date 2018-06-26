@@ -306,57 +306,57 @@ export class Document extends Component<PropsType, StateType> {
 							<BreadCrumbs links={this.getBreadcrumbs()}/>
 							<main role="main">
 								<div className="page-header">
-									<p className="mb--0">
-										Consultation |{" "}
-										<button
-											data-qa-sel="comment-on-whole-consultation"
-											className="buttonAsLink"
-											tabIndex={0}
-											onClick={e => {
-												e.preventDefault();
-												this.props.onNewCommentClick({
-													sourceURI: this.props.match.url,
-													commentText: "",
-													commentOn: "Consultation",
-													quote: title
-												});
-											}}
-										>
-											Comment on whole consultation
-										</button>
-										&nbsp;&nbsp;
-									</p>
-									<h1 tabIndex={-1} className="page-header__heading mt--0">{title}</h1>
+
+									<h1 tabIndex="-1" className="page-header__heading mt--0">{title}</h1>
+
 									<p className="page-header__lead">
 										[{reference}] Open until{" "}
 										<Moment format="D MMMM YYYY" date={endDate}/>
 									</p>
-									<p className="mb--0">
-										Document |{" "}
-										<button
-											data-qa-sel="comment-on-consultation-document"
-											className="buttonAsLink"
-											tabIndex={0}
-											onClick={e => {
-												e.preventDefault();
-												this.props.onNewCommentClick({
-													sourceURI: this.props.match.url,
-													commentText: "",
-													commentOn: "Document",
-													quote: this.getCurrentDocumentTitle(
-														documentsData,
-														documentId
-													)
-												});
-											}}
-										>
-											Comment on this document
-										</button>
-									</p>
-									<h2 className="mt--0">
+
+									<button
+										data-qa-sel="comment-on-whole-consultation"
+										className="btn btn--cta"
+										tabIndex={0}
+										onClick={e => {
+											e.preventDefault();
+											this.props.onNewCommentClick({
+												sourceURI: this.props.match.url,
+												commentText: "",
+												commentOn: "Consultation",
+												quote: title
+											});
+										}}
+									>
+										Comment on whole consultation
+									</button>
+
+									<h2 className="mb--b">
 										{this.getCurrentDocumentTitle(documentsData, documentId)}
 									</h2>
+
+									<button
+										data-qa-sel="comment-on-consultation-document"
+										className="btn btn--cta"
+										tabIndex={0}
+										onClick={e => {
+											e.preventDefault();
+											this.props.onNewCommentClick({
+												sourceURI: this.props.match.url,
+												commentText: "",
+												commentOn: "Document",
+												quote: this.getCurrentDocumentTitle(
+													documentsData,
+													documentId
+												)
+											});
+										}}
+									>
+										Comment on this document
+									</button>
+
 								</div>
+
 								<StickyContainer className="grid">
 									<div data-g="12 md:3 md:push:9" className="inPageNavColumn">
 										<Sticky disableHardwareAcceleration>

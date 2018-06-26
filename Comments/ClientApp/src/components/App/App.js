@@ -30,7 +30,7 @@ class App extends React.Component<PropsType, StateType> {
 				<Switch>
 					{/*Home*/}
 					<Route exact path="/">
-						<Redirect to="/10/5/overview"/>
+						<Redirect to="/17/1/introduction"/>
 					</Route>
 
 					{/*Document View*/}
