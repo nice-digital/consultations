@@ -27,7 +27,7 @@ namespace Comments.Test.IntegrationTests.API.Submit
 		    var userId = Guid.Empty;
 		    var locationId = AddLocation(sourceURI, _context);
 
-			var commentId = AddComment(locationId, commentText, false, userId, StatusName.Draft, _context);
+			var commentId = AddComment(locationId, commentText, false, userId, (int)StatusName.Draft, _context);
 		    var questionTypeId = AddQuestionType("Question type description", false, true);
 		    var questionId = AddQuestion(locationId, questionTypeId, "Question Text");
 		    var answerId = AddAnswer(questionId, userId, "Answer Text");
@@ -49,11 +49,11 @@ namespace Comments.Test.IntegrationTests.API.Submit
 		    var deserialisedCommentsAndAnswers = JsonConvert.DeserializeObject<ViewModels.CommentsAndAnswers>(responseString);
 
 			//Assert
-			comment.comment.StatusId.ShouldBe(StatusName.Submitted);
-		    deserialisedCommentsAndAnswers.Comments.First().Status.Name.ShouldBe("Submitted");
-		    deserialisedCommentsAndAnswers.Comments.First().Status.StatusId.ShouldBe(StatusName.Submitted);
-		    deserialisedCommentsAndAnswers.Answers.First().Status.Name.ShouldBe("Submitted");
-		    deserialisedCommentsAndAnswers.Answers.First().Status.StatusId.ShouldBe(StatusName.Submitted);
+			comment.comment.StatusId.ShouldBe((int)StatusName.Submitted);
+		    deserialisedCommentsAndAnswers.Comments.First().Status.Name.ShouldBe(StatusName.Submitted.ToString());
+		    deserialisedCommentsAndAnswers.Comments.First().Status.StatusId.ShouldBe((int)StatusName.Submitted);
+		    deserialisedCommentsAndAnswers.Answers.First().Status.Name.ShouldBe(StatusName.Submitted.ToString());
+		    deserialisedCommentsAndAnswers.Answers.First().Status.StatusId.ShouldBe((int)StatusName.Submitted);
 		}
 	}
 }

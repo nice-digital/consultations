@@ -202,8 +202,8 @@ namespace Comments.Test.UnitTests
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: createdByUserId);
             var authenticateService = new FakeAuthenticateService(authenticated: true);
 
-            AddCommentsAndQuestionsAndAnswers(URI, "My Comment", someText, someText, createdByUserId, StatusName.Draft, _context);
-            AddCommentsAndQuestionsAndAnswers(URI, "Another Users Comment", someText, someText, anotherUserId, StatusName.Draft, _context);
+            AddCommentsAndQuestionsAndAnswers(URI, "My Comment", someText, someText, createdByUserId, (int)StatusName.Draft, _context);
+            AddCommentsAndQuestionsAndAnswers(URI, "Another Users Comment", someText, someText, anotherUserId, (int)StatusName.Draft, _context);
 
             var commentService = new CommentService(new ConsultationsContext(_options, userService), _fakeUserService, authenticateService);
 
@@ -243,13 +243,13 @@ namespace Comments.Test.UnitTests
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: createdByUserId);
             var authenticateService = new FakeAuthenticateService(authenticated: true);
 
-            AddCommentsAndQuestionsAndAnswers(ChapterIntroURI, commentText, questionText, answerText, createdByUserId, StatusName.Draft, _context);
-            AddCommentsAndQuestionsAndAnswers(ChaperOverviewURI, commentText, questionText, answerText, createdByUserId, StatusName.Draft, _context);
-            AddCommentsAndQuestionsAndAnswers(DocumentOneURI, commentText, questionText, answerText, createdByUserId, StatusName.Draft, _context);
-            AddCommentsAndQuestionsAndAnswers(ConsultationOneURI, commentText, questionText, answerText, createdByUserId, StatusName.Draft, _context);
-            AddCommentsAndQuestionsAndAnswers(DocumentTwoURI, commentText, questionText, answerText, createdByUserId, StatusName.Draft, _context);
-            AddCommentsAndQuestionsAndAnswers(ConsultationTwoURI, commentText, questionText, answerText, createdByUserId, StatusName.Draft, _context);
-            AddCommentsAndQuestionsAndAnswers(ChaperOverviewURI, "Another Users Comment", questionText, answerText, anotherUserId, StatusName.Draft, _context);
+            AddCommentsAndQuestionsAndAnswers(ChapterIntroURI, commentText, questionText, answerText, createdByUserId, (int)StatusName.Draft, _context);
+            AddCommentsAndQuestionsAndAnswers(ChaperOverviewURI, commentText, questionText, answerText, createdByUserId, (int)StatusName.Draft, _context);
+            AddCommentsAndQuestionsAndAnswers(DocumentOneURI, commentText, questionText, answerText, createdByUserId, (int)StatusName.Draft, _context);
+            AddCommentsAndQuestionsAndAnswers(ConsultationOneURI, commentText, questionText, answerText, createdByUserId, (int)StatusName.Draft, _context);
+            AddCommentsAndQuestionsAndAnswers(DocumentTwoURI, commentText, questionText, answerText, createdByUserId, (int)StatusName.Draft, _context);
+            AddCommentsAndQuestionsAndAnswers(ConsultationTwoURI, commentText, questionText, answerText, createdByUserId, (int)StatusName.Draft, _context);
+            AddCommentsAndQuestionsAndAnswers(ChaperOverviewURI, "Another Users Comment", questionText, answerText, anotherUserId, (int)StatusName.Draft, _context);
 
             var commentService = new CommentService(new ConsultationsContext(_options, userService), _fakeUserService, authenticateService);
 

@@ -120,7 +120,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
             var answerText = Guid.NewGuid().ToString();
             var userId = Guid.NewGuid();
            
-            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId, StatusName.Draft, _context);
+            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId, (int)StatusName.Draft, _context);
 
             // Act
             var response = await _client.GetAsync($"/consultations/api/Comments?sourceURI={WebUtility.UrlEncode("/1/2/introduction")}");
@@ -172,7 +172,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
             var commentText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
             var locationId = AddLocation(sourceURI, _context);
-            var commentId = AddComment(locationId, commentText, false, userId, StatusName.Draft, _context);
+            var commentId = AddComment(locationId, commentText, false, userId, (int)StatusName.Draft, _context);
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
             var authenticateService = new FakeAuthenticateService(authenticated: true);

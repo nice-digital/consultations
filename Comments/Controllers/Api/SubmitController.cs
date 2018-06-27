@@ -1,4 +1,5 @@
 using Comments.Services;
+using Comments.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -29,12 +30,9 @@ namespace Comments.Controllers.Api
 			{
 				return BadRequest(ModelState);
 			}
-			
+
 			var result = _submitService.SubmitCommentsAndAnswers(commentsAndAnswers);
 			var invalidResult = Validate(result.validate, _logger);
-
-			// need to get the updated commentsAndAnswers
-			//var updatedCommentsAndAnswers = _commentService.GetCommentsAndQuestions()
 			
 			return invalidResult ?? Ok(commentsAndAnswers); //should return comments and answers, might need submission object too
 	    }

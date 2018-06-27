@@ -30,7 +30,7 @@ namespace Comments.Models
             CommentText = comment.CommentText ?? throw new ArgumentNullException(nameof(comment.CommentText));
 	        StatusId = comment.StatusId;
 			Location.UpdateFromViewModel(comment as ViewModels.Location);
-	        Status.UpdateFromViewModel(comment.Status);
+	        //Status.UpdateFromViewModel(comment.Status);
         }
     }
 }

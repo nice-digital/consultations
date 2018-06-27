@@ -21,7 +21,7 @@ namespace Comments.Test.IntegrationTests.API.Answers
         {
             // Arrange
             SetupTestDataInDB();
-            var answer = new ViewModels.Answer(0, "answer text", false, DateTime.Now, Guid.Empty, 1, StatusName.Draft);
+            var answer = new ViewModels.Answer(0, "answer text", false, DateTime.Now, Guid.Empty, 1, (int)StatusName.Draft);
             var content = new StringContent(JsonConvert.SerializeObject(answer), Encoding.UTF8, "application/json");
 
             // Act
@@ -70,7 +70,7 @@ namespace Comments.Test.IntegrationTests.API.Answers
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
             SetupTestDataInDB();
-            var answerId =  AddAnswer(1, userId, answerText, StatusName.Draft, _context);
+            var answerId =  AddAnswer(1, userId, answerText, (int)StatusName.Draft, _context);
             
             var answerService = new AnswerService(_context, userService);
             var viewModel = answerService.GetAnswer(answerId);

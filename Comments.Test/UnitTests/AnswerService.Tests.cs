@@ -161,7 +161,7 @@ namespace Comments.Test.UnitTests
             var location = new Location(sourceURI, null, null, null, null, null, null, null, null);
             var question = new Question(locationId, questionText, questionTypeId, null, location, questionType, null);
 
-            var answer = new Answer(questionId, userId, answerText, false, question, StatusName.Draft, null);
+            var answer = new Answer(questionId, userId, answerText, false, question, (int)StatusName.Draft, null);
             var viewModel = new ViewModels.Answer(answer);
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);

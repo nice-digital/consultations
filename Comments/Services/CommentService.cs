@@ -78,7 +78,7 @@ namespace Comments.Services
             locationToSave.SourceURI = ConsultationsUri.ConvertToConsultationsUri(comment.SourceURI, CommentOnHelpers.GetCommentOn(comment.CommentOn));
             _context.Location.Add(locationToSave);
 			
-            var commentToSave = new Models.Comment(comment.LocationId, _currentUser.UserId.Value, comment.CommentText, _currentUser.UserId.Value, locationToSave, StatusName.Draft, null);
+            var commentToSave = new Models.Comment(comment.LocationId, _currentUser.UserId.Value, comment.CommentText, _currentUser.UserId.Value, locationToSave, (int)StatusName.Draft, null);
             _context.Comment.Add(commentToSave);
             _context.SaveChanges();
 

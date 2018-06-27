@@ -32,7 +32,7 @@ namespace Comments.Test.UnitTests
 			var submitService = new SubmitService(consultationContext, userService, authenticateService);
 
 			var locationId = AddLocation(sourceURI, _context);
-			var commentId = AddComment(locationId, "Comment text", false, userId, StatusName.Draft, _context);
+			var commentId = AddComment(locationId, "Comment text", false, userId, (int)StatusName.Draft, _context);
 
 			//Act
 			var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI, true);
@@ -44,9 +44,9 @@ namespace Comments.Test.UnitTests
 				.Include(s => s.Submission).First();
 
 			//Assert
-			result.rowsUpdated.ShouldBe(4);
-			comment.comment.StatusId.ShouldBe(StatusName.Submitted);
-			comment.comment.Status.StatusId.ShouldBe(StatusName.Submitted);
+			result.rowsUpdated.ShouldBe(3);
+			comment.comment.StatusId.ShouldBe((int)StatusName.Submitted);
+			comment.comment.Status.StatusId.ShouldBe((int)StatusName.Submitted);
 			commentsSubmissionData.CommentId.ShouldBe(commentId);
 			commentsSubmissionData.Submission.SubmissionByUserId.ShouldBe(userId);
 		}
@@ -84,9 +84,9 @@ namespace Comments.Test.UnitTests
 				.Include(s => s.Submission).First();
 
 			//Assert
-			result.rowsUpdated.ShouldBe(4);
-			answer.answer.StatusId.ShouldBe(StatusName.Submitted);
-			answer.answer.Status.StatusId.ShouldBe(StatusName.Submitted);
+			result.rowsUpdated.ShouldBe(3);
+			answer.answer.StatusId.ShouldBe((int)StatusName.Submitted);
+			answer.answer.Status.StatusId.ShouldBe((int)StatusName.Submitted);
 			answerSubmissionData.AnswerId.ShouldBe(answerId);
 			answerSubmissionData.Submission.SubmissionByUserId.ShouldBe(userId);
 		}

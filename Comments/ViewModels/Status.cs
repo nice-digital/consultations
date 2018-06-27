@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace Comments.ViewModels
 {
-	public static class StatusName
+	public enum StatusName
 	{
-		public const int Draft = 1;
-		public const int Submitted = 2;
+		Draft = 1,
+		Submitted
 	}
 
 	public class Status

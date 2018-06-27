@@ -55,7 +55,7 @@ namespace Comments.Test.UnitTests
             var createdByUserId = Guid.Empty;
             var authenticateService = new FakeAuthenticateService(authenticated: true);
 
-            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, createdByUserId, StatusName.Draft, _context);
+            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, createdByUserId, (int)StatusName.Draft, _context);
             var commentService = new CommentService(_context, _fakeUserService, authenticateService);
 
             // Act    

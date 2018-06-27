@@ -14,6 +14,7 @@ namespace Comments.Models
 
 	    public void UpdateFromViewModel(ViewModels.Status status)
 	    {
+		    StatusId = status.StatusId;
 			Name = status.Name;
 		}
 	}
