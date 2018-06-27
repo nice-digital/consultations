@@ -38,11 +38,25 @@ export class ReviewPage extends Component<PropsType> {
 	gatherData = async () => {
 		const consultationId = this.props.match.params.consultationId;
 
+
+
+
 		const documentsData = load("documents", undefined, [], { consultationId })
 			.then(response => response.data)
 			.catch(err => {
 				throw new Error("documentsData " + err);
 			});
+
+		const consultationData = load("consultation", undefined, [], {
+			consultationId
+		})
+			.then(response => response.data)
+			.catch(err => {
+				throw new Error("consultationData " + err);
+			});
+
+
+
 
 		// const consultationData = load("consultation", undefined, [], {
 		// 	consultationId
@@ -53,8 +67,8 @@ export class ReviewPage extends Component<PropsType> {
 		// 	});
 
 		return {
-			documentsList: await documentsData//,
-			//consultationData: await consultationData
+			documentsList: await documentsData,
+			consultationData: await consultationData
 		};
 	};
 

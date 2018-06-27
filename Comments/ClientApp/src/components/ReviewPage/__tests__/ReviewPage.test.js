@@ -5,12 +5,14 @@ import { mount, shallow } from "enzyme";
 import { MemoryRouter } from "react-router";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
+import toJson from "enzyme-to-json";
+
 import { generateUrl } from "../../../data/loader";
 import { nextTick, queryStringToObject } from "../../../helpers/utils";
 import ReviewPageWithRouter, {ReviewPage} from "../ReviewPage";
 import ConsultationData from "./Consultation";
 import DocumentsData from "./Documents";
-//import stringifyObject from "stringify-object";
+import stringifyObject from "stringify-object";
 
 const mock = new MockAdapter(axios);
 
@@ -93,32 +95,93 @@ describe("[ClientApp] ", () => {
 				});
 		});
 
-		it.only("should hit the submit endpoint successfully", async () => {
-			
-			const wrapper = mount(<ReviewPage {...fakeProps} />);
-			
+		it("should hit the submit endpoint successfully", () => {
+					
 			const mock = new MockAdapter(axios);
 
-			mock
-				.onGet("/consultations/api/Documents?consultationId=1")
-				.reply(() => {
-					return [200, DocumentsData];
-				});
+			const wrapper = mount(
+				<MemoryRouter>
+					<ReviewPage {...fakeProps} />
+				</MemoryRouter>
+			);
 
-			mock
-				.onGet("/consultations/api/Consultation?consultationId=1")
-				.reply(() => {
-					console.log(`hit something`);
+			let documentsPromise = new Promise(resolve => {
+				mock
+					.onGet("/consultations/api/Documents?consultationId=1")
+					.reply(() => {
+						resolve();
+						return [200, DocumentsData];
+					});
+			});
 
+			let consultationPromise = new Promise(resolve => {
+				mock
+					.onGet("/consultations/api/Consultation?consultationId=1")
+					.reply(() => {
+						resolve();
+						return [200, ConsultationData];
+					});
+			});
 
-					return [200, ConsultationData];
-					//return [200, ConsultationData];
-				});
+			return Promise.all([
+				documentsPromise,
+				consultationPromise
+			]).then(async () => {
+				await nextTick();
+				wrapper.update();
+				
+				
+				expect(wrapper.find(ReviewPage).instance().state.isSubmitted).toEqual(false);
 
-			expect(wrapper.state().isSubmitted).toEqual(false);
-			wrapper.instance().submitConsultation();
-			expect(wrapper.state().isSubmitted).toEqual(true);
+				wrapper.find(ReviewPage).instance().submitConsultation();
+				
+				expect(wrapper.find(ReviewPage).instance().state.isSubmitted).toEqual(true);			
+
+			});
 
 		});
+
+		it("should match snapshot with supplied data", () => {
+			const mock = new MockAdapter(axios);
+
+			const wrapper = mount(
+				<MemoryRouter>
+					<ReviewPage {...fakeProps} />
+				</MemoryRouter>
+			);
+
+			let documentsPromise = new Promise(resolve => {
+				mock
+					.onGet("/consultations/api/Documents?consultationId=1")
+					.reply(() => {
+						resolve();
+						return [200, DocumentsData];
+					});
+			});
+
+			let consultationPromise = new Promise(resolve => {
+				mock
+					.onGet("/consultations/api/Consultation?consultationId=1")
+					.reply(() => {
+						resolve();
+						return [200, ConsultationData];
+					});
+			});
+
+			return Promise.all([
+				documentsPromise,
+				consultationPromise
+			]).then(async () => {
+				await nextTick();
+				wrapper.update();
+				expect(
+					toJson(wrapper, {
+						noKey: true,
+						mode: "deep"
+					})
+				).toMatchSnapshot();
+			});
+		});
+
 	});
 });
