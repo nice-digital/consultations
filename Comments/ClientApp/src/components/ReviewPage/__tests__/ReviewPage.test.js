@@ -123,12 +123,12 @@ describe("[ClientApp] ", () => {
 					});
 			});
 
-			mock
-				.onPost("/consultations/api/Submit")
-				.reply(() => {
-					done();
+			// mock
+			// 	.onPost("/consultations/api/Submit")
+			// 	.reply(() => {
+			// 		done();
 					
-				});
+			// 	});
 			
 
 			return Promise.all([

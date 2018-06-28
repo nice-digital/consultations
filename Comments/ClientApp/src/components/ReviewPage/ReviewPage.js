@@ -135,18 +135,19 @@ export class ReviewPage extends Component<PropsType> {
 
 		let commentsAndAnswers = {}; //todo: populate this.
 
-		const submitResponse = load("submit", undefined, [], {}, "POST", commentsAndAnswers);
-			// .then(data => {
-				
-			// 	console.log('hit the endpoint successfully');
-			// 	this.setState({
-			// 		isSubmitted: true
-			// 	});
 
-			// })
-			// .catch(err => {
-			// 	throw new Error("submitResponse " + err);
-			// });
+
+		//const submitResponse = 
+		load("submit", undefined, [], {}, "POST", commentsAndAnswers, true)
+			.then(res => {
+				this.setState({
+					isSubmitted: true
+				});
+			})
+			.catch(err => {
+				console.log(err);
+				if (err.response) alert(err.response.statusText);
+			});		
 
 
 	};
