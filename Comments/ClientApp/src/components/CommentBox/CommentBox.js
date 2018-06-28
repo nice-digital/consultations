@@ -70,7 +70,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 		return (
 
 			<li className="CommentBox">
-				<section>
+				<section role="form">
 
 					{!this.isTextSelection(comment) &&
 					<Fragment>
@@ -93,7 +93,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 
 					{lastModifiedDate ? (
 						<div className="CommentBox__datestamp mb--d font-weight-bold">
-							Last Modified Date:{" "}
+							Last Modified:{" "}
 							<Moment format="D/M/YYYY - h:mma" date={lastModifiedDate}/>
 						</div>
 					) : null}
@@ -102,7 +102,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 							<label
 								className="form__label visually-hidden"
 								htmlFor={this.props.unique}>
-								Comment
+								Comment on {commentOn}, {quote}
 							</label>
 							<textarea
 								data-qa-sel="Comment-text-area"
@@ -111,7 +111,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 								tabIndex={tabIndex}
 								className="form__input form__input--textarea"
 								onChange={this.textareaChangeHandler}
-								placeholder="Enter your comment"
+								placeholder="Enter your comment here"
 								value={commentText}/>
 						</div>
 						{!readOnly && commentText && commentText.length > 0 && (
@@ -122,6 +122,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 								type="submit"
 								value={unsavedChanges ? "Save comment" : "Saved"}
 								disabled={!unsavedChanges}/>
+
 						)}
 						{!readOnly &&
 						<button
