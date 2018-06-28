@@ -9,12 +9,16 @@ function nodeIsSection(node) {
 	return node.name === "a" && node.attribs && node.attribs["data-heading-type"] === "section";
 }
 
-function nodeIsNumberedParagraph(node) {
-	return (node.name === "p") && (node.attribs) && (node.attribs["class"]) === "numbered-paragraph";
+function nodeIsSubsection(node) {
+	return node.name === "p" && node.attribs && node.attribs["data-heading-type"] === "numbered-paragraph";
 }
 
 function nodeIsTypeText(node) {
 	return node.type === "text";
+}
+
+function nodeIsSpanTag(node) {
+	return node.name === "span";
 }
 
 // onNewCommentClick passed through from <Document />
@@ -26,19 +30,18 @@ export const processDocumentHtml = (
 	function addButtons(node) {
 		const isChapter = nodeIsChapter(node);
 		const isSection = nodeIsSection(node);
-		const isNumberedParagraph = nodeIsNumberedParagraph(node);
+		const isSubsection = nodeIsSubsection(node);
 		if (
-			isChapter || isSection || isNumberedParagraph
+			isChapter || isSection || isSubsection
 		) {
+			const elementType = node.attribs["data-heading-type"].toLowerCase();
 
-			let elementType = "";
-			if (isChapter || isSection) {
-				elementType = node.attribs["data-heading-type"].toLowerCase();
-			} else if (isNumberedParagraph) {
-				elementType = node.attribs["class"].toLowerCase();
+			let elementName = node.children.filter(nodeIsTypeText)[0].data;
+
+			if (isSubsection) {
+				elementName = node.children.filter(nodeIsSpanTag)[0].children.filter(nodeIsTypeText)[0].data;
 			}
 
-			const elementName = node.children.filter(nodeIsTypeText)[0].data;
 			const elementId = node.attribs.id;
 
 			return (
@@ -52,7 +55,7 @@ export const processDocumentHtml = (
 								sourceURI: sourceURI,
 								commentText: "",
 								commentOn: elementType,
-								htmlElementID: elementType === "section" ? elementId : "",
+								htmlElementID: (elementType === "section" || elementType === "numbered-paragraph") ? elementId : "",
 								quote: elementName
 							});
 						}}

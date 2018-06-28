@@ -64,7 +64,6 @@ export class CommentBox extends Component<PropsType, StateType> {
 		const unsavedChanges = this.state.unsavedChanges;
 		const comment = this.state.comment;
 		const readOnly = this.props.readOnly;
-
 		const tabIndex = this.props.drawerOpen ? "0" : "-1";
 
 		return (
@@ -75,7 +74,9 @@ export class CommentBox extends Component<PropsType, StateType> {
 					{!this.isTextSelection(comment) &&
 					<Fragment>
 						<h1 className="CommentBox__title mt--0 mb--d">
-							Comment on: <span className="text-lowercase">{commentOn}</span>
+							Comment on: <span className="text-lowercase">
+								{commentOn === "numbered-paragraph" ? "Numbered paragraph" : commentOn}
+							</span>
 							<br/>
 							{quote}
 						</h1>
