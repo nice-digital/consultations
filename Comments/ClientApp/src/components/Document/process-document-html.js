@@ -34,15 +34,16 @@ export const processDocumentHtml = (
 		if (
 			isChapter || isSection || isSubsection
 		) {
-			const elementType = node.attribs["data-heading-type"].toLowerCase();
+			let elementType = node.attribs["data-heading-type"].toLowerCase();
 
 			let elementName = node.children.filter(nodeIsTypeText)[0].data;
 
 			if (isSubsection) {
 				elementName = node.children.filter(nodeIsSpanTag)[0].children.filter(nodeIsTypeText)[0].data;
+				elementType = "subsection";
 			}
 
-			const elementId = node.attribs.id;
+			const elementId = (elementType === "section" || elementType === "subsection") ? node.attribs.id : "";
 
 			return (
 				<Fragment key={0}>
@@ -55,7 +56,7 @@ export const processDocumentHtml = (
 								sourceURI: sourceURI,
 								commentText: "",
 								commentOn: elementType,
-								htmlElementID: (elementType === "section" || elementType === "numbered-paragraph") ? elementId : "",
+								htmlElementID: elementId,
 								quote: elementName
 							});
 						}}
