@@ -39,7 +39,7 @@ namespace Comments.Services
 			var submissionToSave = new Models.Submission(_currentUser.UserId.Value, DateTime.UtcNow);
 		    _context.Submission.Add(submissionToSave);
 
-		    var submittedStatus = _context.GetStatus((int)StatusName.Submitted);
+		    var submittedStatus = _context.GetStatus(StatusName.Submitted);
 			
 			UpdateCommentsModel(commentsAndAnswers, submissionToSave, submittedStatus);
 		    UpdateAnswersModel(commentsAndAnswers, submissionToSave, submittedStatus);
@@ -49,27 +49,33 @@ namespace Comments.Services
 
 	    public void UpdateCommentsModel(CommentsAndAnswers commentsAndAnswers, Submission submission, Models.Status status)
 	    {
-		    foreach (var comment in commentsAndAnswers.Comments)
-		    {
-			    comment.StatusId = (int)StatusName.Submitted;
-			    comment.Status = new ViewModels.Status(status);
-		    }
+		    //foreach (var comment in commentsAndAnswers.Comments)
+		    //{
+			   // comment.StatusId = status.StatusId;
+			   // comment.Status = new ViewModels.Status(status);
+		    //}
 
-		    var commentIds = commentsAndAnswers.Comments.Select(c => c.CommentId);
-			var dbComments = _context.Comment.Where(c => commentIds.Contains(c.CommentId));
+		    var commentIds = commentsAndAnswers.Comments.Select(c => c.CommentId).ToList();
 
-			foreach (var comment in dbComments)
-		    {
-			    var commentViewModel = commentsAndAnswers.Comments.Single(c => c.CommentId == comment.CommentId);
-			    comment.UpdateFromViewModel(commentViewModel);
+			_context.UpdateCommentsStatus(commentIds, status);
 
-			    comment.Status = status;
+			//var dbComments = _context.Comment.Where(c => commentIds.Contains(c.CommentId));
 
-			    _context.SubmissionComment.Add(new Models.SubmissionComment(submission.SubmissionId, comment.CommentId));
-		    }
+			//foreach (var comment in dbComments)
+			//   {
+			//    var commentViewModel = commentsAndAnswers.Comments.Single(c => c.CommentId == comment.CommentId);
+			//    comment.UpdateFromViewModel(commentViewModel);
+
+			//    comment.Status = status;
+
+			_context.AddSubmissionComments(commentIds, submission.SubmissionId);
+
+			
+			//    _context.SubmissionComment.Add(new Models.SubmissionComment(submission.SubmissionId, comment.CommentId));
+			//   }
 		}
 
-	    public void UpdateAnswersModel(CommentsAndAnswers commentsAndAnswers, Submission submission, Models.Status status)
+		public void UpdateAnswersModel(CommentsAndAnswers commentsAndAnswers, Submission submission, Models.Status status)
 	    {
 		    foreach (var answer in commentsAndAnswers.Answers)
 		    {
