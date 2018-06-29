@@ -3,6 +3,7 @@ using NICE.Feeds;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Razor.Language.Intermediate;
 using Microsoft.Extensions.Logging;
 
 namespace Comments.Services
@@ -12,7 +13,9 @@ namespace Comments.Services
         ConsultationDetail GetConsultationDetail(int consultationId);
         ChapterContent GetChapterContent(int consultationId, int documentId, string chapterSlug);
         IEnumerable<Document> GetDocuments(int consultationId);
-        ViewModels.Consultation GetConsultation(int consultationId);
+	    IEnumerable<Document> GetPreviewDraftDocuments(int consultationId, int documentId, string reference);
+	    IEnumerable<Document> GetPreviewPublishedDocuments(int consultationId, int documentId);
+		ViewModels.Consultation GetConsultation(int consultationId);
         IEnumerable<ViewModels.Consultation> GetConsultations();
 	    ChapterContent GetPreviewChapterContent(int consultationId, int documentId, string chapterSlug, string reference);
 
@@ -57,7 +60,19 @@ namespace Comments.Services
             return consultationDetail.Resources.Select(r => new ViewModels.Document(consultationId, r)).ToList();
         }
 
-        public ViewModels.Consultation GetConsultation(int consultationId)
+	    public IEnumerable<Document> GetPreviewPublishedDocuments(int consultationId, int documentId)
+	    {
+		    var consultationDetail = _feedConverterService.GetIndevConsultationDetailForPublishedProject(consultationId, PreviewState.Preview, documentId);
+		    return consultationDetail.Resources.Select(r => new ViewModels.Document(consultationId, r)).ToList();
+	    }
+
+		public IEnumerable<Document> GetPreviewDraftDocuments(int consultationId, int documentId, string reference)
+	    {
+		    var consultationDetail = _feedConverterService.GetIndevConsultationDetailForDraftProject(consultationId, documentId, reference);
+		    return consultationDetail.Resources.Select(r => new ViewModels.Document(consultationId, r)).ToList();
+	    }
+
+		public ViewModels.Consultation GetConsultation(int consultationId)
         {
             var user = _userService.GetCurrentUser();
             var consultation = _feedConverterService.GetIndevConsultationDetailForPublishedProject(consultationId, PreviewState.NonPreview);

@@ -1,0 +1,115 @@
+[
+    {
+        "consultationId":113,
+        "documentId":2,
+        "convertedDocument":true,
+        "title":"Unstable angina and NSTEMI",
+        "chapters":[
+            {
+                "slug":"introduction",
+                "title":"Introduction"
+            },
+            {
+                "slug":"patient-centred-care",
+                "title":"Patient-centred care"
+            },
+            {
+                "slug":"key-priorities-for-implementation",
+                "title":"Key priorities for implementation"
+            },
+            {
+                "slug":"guidance",
+                "title":"1 Guidance"
+            },
+            {
+                "slug":"notes-on-the-scope-of-the-guidance",
+                "title":"2 Notes on the scope of the guidance"
+            },
+            {
+                "slug":"implementation",
+                "title":"3 Implementation"
+            },
+            {
+                "slug":"research-recommendations",
+                "title":"4 Research recommendations"
+            },
+            {
+                "slug":"other-versions-of-this-guideline",
+                "title":"5 Other versions of this guideline"
+            },
+            {
+                "slug":"related-nice-guidance",
+                "title":"6 Related NICE guidance"
+            },
+            {
+                "slug":"updating-the-guideline",
+                "title":"7 Updating the guideline"
+            },
+            {
+                "slug":"appendix-a-the-guideline-development-group-and-nice-project-team",
+                "title":"Appendix A: The Guideline Development Group and NICE project team"
+            },
+            {
+                "slug":"appendix-b-the-guideline-review-panel",
+                "title":"Appendix B: The Guideline Review Panel"
+            },
+            {
+                "slug":"appendix-c-the-algorithm",
+                "title":"Appendix C: The algorithm"
+            },
+            {
+                "slug":"changes-after-publication",
+                "title":"Changes after publication"
+            },
+            {
+                "slug":"about-this-guideline",
+                "title":"About this guideline"
+            }
+        ],
+        "href":"/guidance/GID-TA10232/documents/193",
+        "sourceURI":"consultations://./consultation/113/document/2"
+    },
+    {
+        "consultationId":113,
+        "documentId":2,
+        "convertedDocument":false,
+        "title":"Committee papers",
+        "chapters":null,
+        "href":"/guidance/GID-TA10232/documents/committee-papers",
+        "sourceURI":null
+    },
+    {
+        "consultationId":113,
+        "documentId":2,
+        "convertedDocument":true,
+        "title":"Sinusitis (acute): antimicrobial prescribing",
+        "chapters":[
+            {
+                "slug":"overview",
+                "title":"Overview"
+            },
+            {
+                "slug":"background",
+                "title":"Background"
+            },
+            {
+                "slug":"recommendations",
+                "title":"Recommendations"
+            },
+            {
+                "slug":"symptoms-and-signs",
+                "title":"Symptoms and signs"
+            },
+            {
+                "slug":"summary-of-the-evidence",
+                "title":"Summary of the evidence"
+            },
+            {
+                "slug":"other-considerations",
+                "title":"Other considerations"
+            }
+        ],
+        "href":"/guidance/GID-TA10232/documents/193-2",
+        "sourceURI":"consultations://./consultation/113/document/2"
+    }
+]
