@@ -142,5 +142,12 @@ namespace Comments.Models
 		    SubmissionAnswer.AddRange(submissionAnswersToInsert);
 	    }
 
+	    public Submission InsertSubmission(Guid currentUser)
+	    {
+		    var submission = new Models.Submission(currentUser, DateTime.UtcNow);
+		    Submission.Add(submission);
+		    return submission;
+	    }
+
 	}
 }

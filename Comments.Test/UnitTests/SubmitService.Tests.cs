@@ -29,7 +29,7 @@ namespace Comments.Test.UnitTests
 			var consultationContext = new ConsultationsContext(_options, userService);
 
 			var commentService = new CommentService(consultationContext, userService, authenticateService);
-			var submitService = new SubmitService(consultationContext, userService, authenticateService);
+			var submitService = new SubmitService(consultationContext, userService);
 
 			var locationId = AddLocation(sourceURI, _context);
 			var commentId = AddComment(locationId, "Comment text", false, userId, (int)StatusName.Draft, _context);
@@ -67,7 +67,7 @@ namespace Comments.Test.UnitTests
 
 			var commentService = new CommentService(consultationContext, userService, authenticateService);
 			var answerService = new AnswerService(consultationContext, userService);
-			var submitService = new SubmitService(consultationContext, userService, authenticateService);
+			var submitService = new SubmitService(consultationContext, userService);
 
 			var locationId = AddLocation(sourceURI, _context);
 			var questionTypeId = AddQuestionType("Question Type", false, true);
