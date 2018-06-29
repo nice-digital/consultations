@@ -45,11 +45,11 @@ describe("[ClientApp] ", () => {
 			mock.reset();
 		});
 
-		it("generateDocumentList doesn't filter out documents supporting comments", async () => {
+		it("generateDocumentList doesn't filter out documents where convertedDocument is true", async () => {
 
 			const docTypesIn = [
-				{title : "first doc title", sourceURI: "first source uri", supportsComments: true},
-				{title : "second doc title", sourceURI: "second source uri", supportsComments: true}];
+				{ title: "first doc title", sourceURI: "first source uri", convertedDocument : true},
+				{ title: "second doc title", sourceURI: "second source uri", convertedDocument : true}];
 
 			const reviewPage = new ReviewPage(fakeProps);
 
@@ -58,11 +58,11 @@ describe("[ClientApp] ", () => {
 			expect(returnValue.links.length).toEqual(2);
 		});
 
-		it("generateDocumentList filters out documents not supporting comments", async () => {
+		it("generateDocumentList filters out documents where convertedDocument is false", async () => {
 
 			const docTypesIn = [
-				{title : "first doc title", sourceURI: "first source uri", supportsComments: true},
-				{title : "second doc title", sourceURI: "second source uri", supportsComments: false}];
+				{ title: "first doc title", sourceURI: "first source uri", convertedDocument : true},
+				{ title: "second doc title", sourceURI: "second source uri", convertedDocument : false}];
 
 			const reviewPage = new ReviewPage(fakeProps);
 

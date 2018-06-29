@@ -1,5 +1,7 @@
-import React, { Fragment } from "react";
-import ReactHtmlParser, { convertNodeToElement } from "react-html-parser";
+import ReactHtmlParser from "react-html-parser";
+import { nodeIsChapter, nodeIsInternalLink, nodeIsSection } from "./html-transforms/types";
+import processChapterSection from "./html-transforms/chapter-section";
+import processInternalLink from "./html-transforms/internal-link";
 
 function nodeIsChapter(node){
 	return node.name === "a" && node.attribs && node.attribs["data-heading-type"] === "chapter";
@@ -73,6 +75,6 @@ export const processDocumentHtml = (
 	}
 
 	return ReactHtmlParser(incomingHtml, {
-		transform: addButtons
+		transform: transformHtml
 	});
 };

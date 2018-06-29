@@ -31,7 +31,7 @@ namespace Comments.Test.IntegrationTests.API.Review
 	        AddCommentsAndQuestionsAndAnswers(sourceURI, "Another users Comment", questionText, answerText, Guid.NewGuid());
 
 			// Act
-			var response = await _client.GetAsync("/consultations/api/Review/1");
+			var response = await _client.GetAsync(string.Format("/consultations/api/Comments?sourceURI={0}", sourceURI ));
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
             var deserialisedObject = JsonConvert.DeserializeObject<ViewModels.CommentsAndQuestions>(responseString);

@@ -1,33 +1,36 @@
-﻿using System;
+using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using Newtonsoft.Json;
-using TestHelpers.DiffAssertions;
+using Shouldly;
+
 
 namespace Comments.Test.Infrastructure
 {
     public static class Extensions
     {
-        public static void ShouldMatchApproved(this string stringIn,
+        public static void ShouldMatchApproved(this string content,
                 Func<string, string>[] scrubbers = null, //sadly we can't use params and stick it on the end since the following parameters need to be optional.
                 [System.Runtime.CompilerServices.CallerMemberName] string memberName = null,
                 [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = null)
         {
             //prettifying.
-            if (stringIn.StartsWith("{") || stringIn.StartsWith("[{")) //we'll assume it's JSON.
+            if (content.StartsWith("{") || content.StartsWith("[{")) //we'll assume it's JSON.
             {
                 try
                 {
-                    stringIn = Formatters.FormatJson(stringIn);
+                    content = Formatters.FormatJson(content);
                 }
                 catch (Exception) {}
             }
-            else if (stringIn.StartsWith("<")) //we'll assume it's HTML. 
+            else if (content.StartsWith("<")) //we'll assume it's HTML. 
             {
                 try
                 {
-                    stringIn = Scrubbers.ScrubHashFromJavascriptFileName(stringIn);
-                    stringIn = Formatters.FormatHtml(stringIn);
+                    content = Scrubbers.ScrubHashFromJavascriptFileName(content);
+                    content = Formatters.FormatHtml(content);
                 }
                 catch (Exception) { }
             }
@@ -37,20 +40,49 @@ namespace Comments.Test.Infrastructure
             {
                 foreach (var scrub in scrubbers)
                 {
-                    stringIn = scrub(stringIn);
+                    content = scrub(content);
                 }
             }
 
-            var expectedFilePath = Path.GetDirectoryName(sourceFilePath);
-            var callingFileNameWithoutExtension = Path.GetFileNameWithoutExtension(sourceFilePath); //usually also the class name of the caller.
-            var expectedFileName = $"{callingFileNameWithoutExtension}.{memberName}";
+			var expectedFileDir = Path.GetDirectoryName(sourceFilePath);
+	        var callingFileNameWithoutExtension = Path.GetFileNameWithoutExtension(sourceFilePath);
+	        var expectedFileName = $"{callingFileNameWithoutExtension}.{memberName}.approved.txt";
 
-            var fileToOpen = Path.Combine(expectedFilePath, expectedFileName);
+	        var expectedFilePath = Path.Combine(expectedFileDir, expectedFileName);
 
-            DiffAssert.ThatExpectedFileContentsEqualsActualValue(fileToOpen, stringIn);
-        }
+	        if (File.Exists(expectedFilePath))
+	        {
+		        var expectedText = File.ReadAllText(expectedFilePath, Encoding.UTF8);
 
+		        var normalisedExpectedText = expectedText.Replace("\r", "");//normalising line endings.
+		        var normalisedContent = content.Replace("\r", "");
 
-        
+		        if (normalisedExpectedText.Equals(normalisedContent))
+		        { //this is the happy path. everything matches, so just exit without throwing and the test will be green.
+			        return;
+		        }
+	        }
+	        else
+	        {
+		        File.WriteAllText(expectedFilePath, "", Encoding.UTF8);
+	        }
+
+	        var actualFilePath = expectedFilePath.Replace(".approved.txt", ".actual.txt");
+	        File.WriteAllText(actualFilePath, content, Encoding.UTF8);
+
+	        var kDiffPath = "C:\\Program Files\\KDiff3\\kdiff3.exe";
+	        if (File.Exists(kDiffPath))
+	        {
+		        Process.Start(kDiffPath, string.Format("{0} {1} -m -o {0} --cs \"CreateBakFiles=0\"", expectedFilePath, actualFilePath));
+	        }
+	        else
+	        {
+		        var dir = Directory.GetCurrentDirectory();
+		        var vsDiffPath = Path.GetFullPath(Path.Combine(dir, "Difftools", "vsDiffMerge.exe"));
+		        Process.Start(vsDiffPath, string.Format("\"{0}\" \"{1}\" /t", expectedFilePath, actualFilePath));
+	        }
+
+	        throw new ShouldMatchApprovedException("String didn't match", actualFilePath, expectedFilePath);
+		}
     }
 }

@@ -20,6 +20,8 @@ import { UserContext } from "../../context/UserContext";
 import { Selection } from "../Selection/Selection";
 // import stringifyObject from "stringify-object";
 
+
+
 type PropsType = {
 	staticContext?: any,
 	match: any,
@@ -33,7 +35,8 @@ type StateType = {
 	chapterData: any, // the current chapter's details - markup and sections,
 	consultationData: any, // the top level info - title etc
 	currentInPageNavItem: null | string,
-	hasInitialData: boolean
+	hasInitialData: boolean,
+	onboarded: boolean
 };
 
 type DocumentsType = Array<Object>;
@@ -48,7 +51,8 @@ export class Document extends Component<PropsType, StateType> {
 			consultationData: null,
 			loading: true,
 			hasInitialData: false,
-			currentInPageNavItem: null
+			currentInPageNavItem: null,
+			onboarded: false
 		};
 
 		if (this.props) {
@@ -78,7 +82,8 @@ export class Document extends Component<PropsType, StateType> {
 					consultationData: preloadedConsultation,
 					loading: false,
 					hasInitialData: true,
-					currentInPageNavItem: null
+					currentInPageNavItem: null,
+					onboarded: false
 				};
 			}
 		}
@@ -164,26 +169,26 @@ export class Document extends Component<PropsType, StateType> {
 		if (!documents) return null;
 
 		const isCurrentDocument = documentId => documentId === currentDocumentFromRoute;
-		const isCommentable = d => d.supportsComments;
-		const isSupporting = d => !d.supportsComments;
+		const isCommentable = d => d.convertedDocument;
+		const isSupporting = d => !d.convertedDocument;
 
 		const documentToLinkObject = d => {
 			const label = d.title || "Download Document";
 			// If it's a commentable document, get the link of the first chapter in the document, else use the href and provide a download link
-			let url: string = "";
 
-			if (d.supportsComments) {
-				url = d.supportsComments ? `/${currentConsultationFromRoute}/${d.documentId}/${d.chapters[0].slug}` : d.href;
-			} else {
-				url = d.href || "#";
-			}
+			const url = isCommentable(d) ? `/${currentConsultationFromRoute}/${d.documentId}/${d.chapters[0].slug}` : d.href || "#";
 
 			const current = isCurrentDocument(d.documentId);
+
+			// isReactRoute: the "isReactRoute" attribute is telling the StackedNav component whether this item's link should be resolved by the react router or not
+			// If it's not a react route then the link should be warpped in a standard anchor tag
+			const isReactRoute = isCommentable(d);
 
 			return {
 				label,
 				url,
-				current
+				current,
+				isReactRoute
 			};
 		};
 
@@ -218,7 +223,8 @@ export class Document extends Component<PropsType, StateType> {
 				label: chapter.title,
 				url: `/${this.props.match.params.consultationId}/${
 					this.props.match.params.documentId}/${chapter.slug}`,
-				current: isCurrentChapter(chapter.slug)
+				current: isCurrentChapter(chapter.slug),
+				isReactRoute: true
 			};
 		};
 
@@ -294,12 +300,12 @@ export class Document extends Component<PropsType, StateType> {
 									<p className="mb--0">
 										Consultation |{" "}
 										<button
+											data-qa-sel="comment-on-whole-consultation"
 											className="buttonAsLink"
 											tabIndex={0}
 											onClick={e => {
 												e.preventDefault();
 												this.props.onNewCommentClick({
-
 													sourceURI: this.props.match.url,
 													commentText: "",
 													commentOn: "Consultation",
@@ -319,6 +325,7 @@ export class Document extends Component<PropsType, StateType> {
 									<p className="mb--0">
 										Document |{" "}
 										<button
+											data-qa-sel="comment-on-consultation-document"
 											className="buttonAsLink"
 											tabIndex={0}
 											onClick={e => {
@@ -410,7 +417,7 @@ export class Document extends Component<PropsType, StateType> {
 																{sections.map((item, index) => {
 																	const props = {
 																		label: item.title,
-																		to: item.slug,
+																		to: `#${item.slug}`,
 																		behavior: "smooth",
 																		block: "start"
 																	};

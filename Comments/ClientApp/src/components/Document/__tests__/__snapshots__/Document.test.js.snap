@@ -104,6 +104,7 @@ Array [
                          
                         <button
                             className="buttonAsLink"
+                            data-qa-sel="comment-on-whole-consultation"
                             onClick={[Function]}
                             tabIndex={0}
                         >
@@ -136,6 +137,7 @@ Array [
                          
                         <button
                             className="buttonAsLink"
+                            data-qa-sel="comment-on-consultation-document"
                             onClick={[Function]}
                             tabIndex={0}
                         >
@@ -173,6 +175,7 @@ Array [
                             >
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="page"
@@ -184,6 +187,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -195,6 +199,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -206,6 +211,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -217,6 +223,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -228,6 +235,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -239,6 +247,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -250,6 +259,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -261,6 +271,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -272,6 +283,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -283,6 +295,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -294,6 +307,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -305,6 +319,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -316,6 +331,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -327,6 +343,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -352,6 +369,7 @@ Array [
                             >
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="page"
@@ -363,6 +381,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -374,6 +393,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -385,6 +405,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -396,6 +417,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -407,6 +429,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -418,6 +441,7 @@ Array [
                                 </li>
                                 <li
                                     className="stacked-nav__list-item"
+                                    data-qa-sel="nav-list-item"
                                 >
                                     <a
                                         aria-current="false"
@@ -440,41 +464,7 @@ Array [
                             </h2>
                             <ul
                                 className="stacked-nav__list"
-                            >
-                                <li
-                                    className="stacked-nav__list-item"
-                                >
-                                    <a
-                                        aria-current="false"
-                                        href="#"
-                                        onClick={[Function]}
-                                    >
-                                        Download Document
-                                    </a>
-                                </li>
-                                <li
-                                    className="stacked-nav__list-item"
-                                >
-                                    <a
-                                        aria-current="false"
-                                        href="#"
-                                        onClick={[Function]}
-                                    >
-                                        Download Document
-                                    </a>
-                                </li>
-                                <li
-                                    className="stacked-nav__list-item"
-                                >
-                                    <a
-                                        aria-current="false"
-                                        href="#"
-                                        onClick={[Function]}
-                                    >
-                                        Download Document
-                                    </a>
-                                </li>
-                            </ul>
+                            />
                         </nav>
                     </div>
                     <div
@@ -518,6 +508,7 @@ Array [
                                     >
                                         <button
                                             className="document-comment-container__commentButton"
+                                            data-qa-sel="in-text-comment-button"
                                             onClick={[Function]}
                                             tabIndex={0}
                                         >
@@ -621,10 +612,12 @@ Array [
                                         <sup>
                                             [
                                             <a
+                                                aria-current={false}
                                                 className="footnote"
                                                 href="#ftn.footnote_1"
                                                 id="footnote_1"
                                                 name="footnote_1"
+                                                onClick={[Function]}
                                                 rel="internal"
                                             >
                                                 1
@@ -679,10 +672,12 @@ Array [
                                                 <sup>
                                                     [
                                                     <a
+                                                        aria-current={false}
                                                         className="para"
                                                         href="#footnote_1"
                                                         id="ftn.footnote_1"
                                                         name="ftn.footnote_1"
+                                                        onClick={[Function]}
                                                         rel="internal"
                                                     >
                                                         1

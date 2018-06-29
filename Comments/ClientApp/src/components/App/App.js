@@ -6,43 +6,58 @@ import { Helmet } from "react-helmet";
 import CommentListWithRouter from "../CommentList/CommentList";
 import { DocumentView } from "../DocumentView/DocumentView";
 import NotFound from "../NotFound/NotFound";
-import UserProviderWithRouter from "../../context/UserContext";
 import ReviewPageWithRouter from "../ReviewPage/ReviewPage";
+import UserProviderWithRouter  from "../../context/UserContext";
+import OnboardingModal from "../OnboardingModal/OnboardingModal";
 
-const App = () => {
-	return (
-		<UserProviderWithRouter>
-			<Helmet titleTemplate="%s | Consultations | NICE">
-				<html lang="en-GB"/>
-			</Helmet>
+type PropsType = any;
 
-			<Switch>
-				{/*Home*/}
-				<Route exact path="/">
-					<Redirect to="/10/5/overview"/>
-				</Route>
+type StateType = {
+	onboarded: boolean
+}
 
-				{/*Document View*/}
-				<Route path="/:consultationId/:documentId/:chapterSlug">
-					<DocumentView/>
-				</Route>
+class App extends React.Component<PropsType, StateType> {
+	constructor() {
+		super();
 
-				{/*Review Page*/}
-				<Route path="/:consultationId/review">
-					<ReviewPageWithRouter/>
-				</Route>
+	}
 
-				<Route path="/commentlist">
-					<Fragment>
-						<CommentListWithRouter/>
-					</Fragment>
-				</Route>
+	render() {
+		return (
+			<UserProviderWithRouter>
+				<Helmet titleTemplate="%s | Consultations | NICE">
+					<html lang="en-GB"/>
+				</Helmet>
 
-				{/*404*/}
-				<Route component={NotFound}/>
-			</Switch>
-		</UserProviderWithRouter>
-	);
-};
+				<Switch>
+					{/*Home*/}
+					<Route exact path="/">
+						<Redirect to="/10/5/overview"/>
+					</Route>
+
+					{/*Document View*/}
+					<Route path="/:consultationId/:documentId/:chapterSlug">
+						<DocumentView/>
+					</Route>
+
+					{/*Review Page*/}
+					<Route path="/:consultationId/review">
+						<ReviewPageWithRouter/>
+					</Route>
+
+					<Route path="/commentlist">
+						<Fragment>
+							<CommentListWithRouter/>
+						</Fragment>
+					</Route>
+
+					{/*404*/}
+					<Route component={NotFound}/>
+				</Switch>
+				<OnboardingModal />
+			</UserProviderWithRouter>
+		);
+	}
+}
 
 export default App;
