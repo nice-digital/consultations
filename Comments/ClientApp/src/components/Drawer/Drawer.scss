@@ -14,21 +14,26 @@
   width: 430px;
 
   &__controls {
-    width: 40px;
+    width: 120px;
     position: absolute;
-    top: 0;
+    top: 45%;
     left: 0;
-    transform: translateX(-40px);
+    transform: translateX(-120px);
   }
-  &__toggleOpen,
-  &__toggleWidth {
-    @extend %ui-button;
-    margin-right: rem($spacing-small);
-    background-color: $colour-nice-white;
+  &__toggleOpen {
+    background: $colour-btn-cta;
+    color: $colour-nice-white;
+    text-align: left;
+    border: none;
+    padding: rem($spacing-medium);
+    @extend .font-weight-bold;
+    line-height: 1.3;
+    border-radius: 10px 0 0 10px;
     &:hover {
       cursor: pointer;
     }
   }
+
   &__main {
     height: 100vh;
     padding-left: rem($spacing-small);

@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { mobileWidth } from "../../constants";
 import CommentListWithRouter from "../CommentList/CommentList";
 import { pullFocusById } from "../../helpers/accessibility-helpers";
@@ -32,7 +32,6 @@ export class Drawer extends Component<PropsType, StateType> {
 
 	// This isn't called in this file - this is the method called from DocumentView
 	newComment(comment: Object) {
-		// make sure the drawer is open once we've clicked a new comment
 		this.setState({
 			drawerOpen: true
 		});
@@ -80,33 +79,40 @@ export class Drawer extends Component<PropsType, StateType> {
 					 className={this.drawerClassnames()}>
 				<div className="Drawer__controls">
 					<button
+						tabIndex={0}
 						data-qa-sel="open-commenting-panel"
 						id="js-drawer-toggleopen"
 						className="Drawer__toggleOpen"
 						onClick={() => this.handleClick("toggleOpen")}
 						aria-controls="sidebar-panel"
 						aria-haspopup="true"
-						aria-label={this.state.drawerOpen ? "Close the commenting panel" : "Open the commenting panel"}
-					>
-						<span
-							className={`icon ${
-								this.state.drawerOpen
-									? "icon--chevron-right"
-									: "icon--chevron-left"}`}
-							aria-hidden="true"
-							data-qa-sel="close-commenting-panel"
-						/>
-
+						aria-label={this.state.drawerOpen ?
+							"Close the commenting panel" :
+							"Open the commenting panel"}>
+						{this.state.drawerMobile ?
+							<span
+								className={`icon ${
+									this.state.drawerOpen
+										? "icon--chevron-right"
+										: "icon--chevron-left"}`}
+								aria-hidden="true"
+								data-qa-sel="close-commenting-panel"/>
+							:
+							this.state.drawerOpen ?
+								<Fragment>Close comments</Fragment> :
+								<Fragment>Open comments</Fragment>}
 					</button>
 				</div>
-				{/* #sidebar-panel necessary here for pulling keyboard focus */}
-				<div aria-hidden={!this.state.drawerOpen} data-qa-sel="comment-panel" id="sidebar-panel" className="Drawer__main">
+				<div aria-hidden={!this.state.drawerOpen}
+					 data-qa-sel="comment-panel"
+					 id="sidebar-panel"
+					 className="Drawer__main">
 					{/*wrappedComponentRef exposes the underlying, unwrapped component*/}
-					<CommentListWithRouter isReviewPage={false}
-										   isVisible={this.state.drawerOpen}
+					<CommentListWithRouter
+						isReviewPage={false}
+						isVisible={this.state.drawerOpen}
 						// $FlowIgnore | this.commentList is bound to this below
-										   wrappedComponentRef={component => (this.commentList = component)}
-					/>
+						wrappedComponentRef={component => (this.commentList = component)}/>
 				</div>
 			</section>
 		);
