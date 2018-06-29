@@ -29,7 +29,7 @@ namespace Comments.Models
             LastModifiedDate = comment.LastModifiedDate;
             CommentText = comment.CommentText ?? throw new ArgumentNullException(nameof(comment.CommentText));
 	        StatusId = comment.StatusId;
-			Location.UpdateFromViewModel(comment as ViewModels.Location);
+	        Location?.UpdateFromViewModel(comment as ViewModels.Location);
 	        //Status.UpdateFromViewModel(comment.Status);
         }
     }

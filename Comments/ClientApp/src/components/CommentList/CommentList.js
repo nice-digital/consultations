@@ -23,7 +23,8 @@ type PropsType = {
 	drawerOpen: boolean,
 	isReviewPage: boolean,
 	filterByDocument: number,
-	isSubmmitted: boolean
+	isSubmmitted: boolean,
+	submittedHandler: any //func?
 };
 
 type CommentType = {
@@ -145,6 +146,25 @@ export class CommentList extends Component<PropsType, StateType> {
 			this.loadComments();
 		}
 	}
+
+	submitComments = () => {
+
+		console.log('submit comments in commentlist component called');
+
+		let commentsAndAnswers = {comments: this.state.comments, answers: null}; //todo: answers
+
+
+		// //const submitResponse = 
+		load("submit", undefined, [], {}, "POST", commentsAndAnswers, true)
+		.then(res => {
+			this.props.submittedHandler();
+		})
+		.catch(err => {
+			console.log(err);
+			if (err.response) alert(err.response.statusText);
+		});		
+	}
+
 
 	filterComments = (newSourceURIToFilterBy: string, comments: Array<CommentType>) => {
 		let filterBy = queryStringToObject(newSourceURIToFilterBy);

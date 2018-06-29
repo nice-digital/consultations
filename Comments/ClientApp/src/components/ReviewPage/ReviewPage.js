@@ -132,25 +132,19 @@ export class ReviewPage extends Component<PropsType> {
 	};
 
 	submitConsultation = () => {
+		console.log('about to call submit comments in commentlist');
+		this.commentList.submitComments();
 
-		let commentsAndAnswers = {}; //todo: populate this.
-
-
-
-		//const submitResponse = 
-		load("submit", undefined, [], {}, "POST", commentsAndAnswers, true)
-			.then(res => {
-				this.setState({
-					isSubmitted: true
-				});
-			})
-			.catch(err => {
-				console.log(err);
-				if (err.response) alert(err.response.statusText);
-			});		
-
-
+		
 	};
+
+	submittedHandler = () => {
+		this.setState({
+			isSubmitted: true
+		});
+		console.log('submittedHandler in review page called');
+	}
+
 
 	render() {
 		if (this.state.documentsList.length === 0) return <h1>Loading...</h1>;
@@ -200,7 +194,7 @@ export class ReviewPage extends Component<PropsType> {
 										</div>
 										<div data-g="12 md:6">
 											<h3 className="mt--0">{this.state.isSubmitted ? "Comments submitted" : "Comments"}</h3>
-											<CommentListWithRouter isReviewPage={true} isSubmitted={this.state.isSubmitted}/>
+											<CommentListWithRouter wrappedComponentRef={component => (this.commentList = component)} isReviewPage={true} isSubmitted={this.state.isSubmitted} submittedHandler={this.submittedHandler}/>
 										</div>
 										<div data-g="12 md:3">
 											<Sticky disableHardwareAcceleration>
