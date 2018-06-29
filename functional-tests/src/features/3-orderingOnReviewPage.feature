@@ -8,7 +8,6 @@ Background:
     And I refresh
 		When I log in to Accounts via TopHat with username "ACCOUNTS_EMAIL" and password "ACCOUNTS_PASSWORD"
 		When I wait on element ".page-header" to exist
-		When I click on the button "body [data-qa-sel='close-onboarding-modal']"
 		And I pause for 1000ms
 
 Scenario: User makes a multiple comments
