@@ -57,6 +57,11 @@ namespace Comments.ViewModels
             }
         }
 
+	    public void UpdateStatusFromDBModel(Models.Status status)
+	    {
+		    StatusId = status.StatusId;
+		    Status = new Status(status);
+	    }
 	    
     }
 }

@@ -6,14 +6,14 @@ namespace Comments.ViewModels
     {
 	    public CommentsAndAnswers() {} //this is here for the model binding.
 
-	    public CommentsAndAnswers(IEnumerable<Comment> comments, IEnumerable<Answer> answers)
+	    public CommentsAndAnswers(IList<Comment> comments, IList<Answer> answers)
 		{
 			_comments = comments;
 			_answers = answers;
 		}
 
-	    private IEnumerable<Comment> _comments = new List<Comment>();
-	    public IEnumerable<ViewModels.Comment> Comments {
+	    private IList<Comment> _comments = new List<Comment>();
+	    public IList<ViewModels.Comment> Comments {
 			get
 			{
 				if (_comments == null)
@@ -21,11 +21,11 @@ namespace Comments.ViewModels
 
 				return _comments;
 			}
-			set { _comments = value; }
-		}
+			set => _comments = value;
+	    }
 
-	    private IEnumerable<Answer> _answers = new List<Answer>();
-		public IEnumerable<ViewModels.Answer> Answers {
+	    private IList<Answer> _answers = new List<Answer>();
+		public IList<ViewModels.Answer> Answers {
 			get
 			{
 				if (_answers == null)
@@ -33,7 +33,7 @@ namespace Comments.ViewModels
 
 				return _answers;
 			}
-			set { _answers = value; }
+			set => _answers = value;
 		}
     }
 }

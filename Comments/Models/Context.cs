@@ -99,24 +99,48 @@ namespace Comments.Models
 			    .Single(s => s.Name.Equals(statusName.ToString(), StringComparison.OrdinalIgnoreCase));
 	    }
 
-	    public void UpdateCommentsStatus(IEnumerable<int> commentIds, Status status)
+	    public void UpdateCommentStatus(IEnumerable<int> commentIds, Status status)
 	    {
 		    var commentsToUpdate = Comment.Where(c => commentIds.Contains(c.CommentId)).ToList();
-		    commentsToUpdate.ForEach(c => c.StatusId = status.StatusId);
 
-			//should this savechanges?
+		    if (commentsToUpdate.Any(c => c.CreatedByUserId != _createdByUserID))
+			    throw new Exception("Attempt to update status of a comment which doesn't belong to the current user");
+
+		    commentsToUpdate.ForEach(c => c.StatusId = status.StatusId);
 		}
 
-	    public void AddSubmissionComments(IEnumerable<int> commentIds, int SubmissionId)
+	    public void AddSubmissionComments(IEnumerable<int> commentIds, int submissionId)
 	    {
 			//the extra DB hit here is to ensure that duplicate rows aren't inserted. currently, you should only be able to submit a comment once. in the future though that might change as resubmitting is on the cards, and the DB supports that now.
 		    var existingSubmissionCommentIdsForPassedInComments = SubmissionComment.Where(sc => commentIds.Contains(sc.CommentId)).Select(sc => sc.CommentId).ToList();
 
 		    var submissionCommentsToInsert = commentIds.Where(commentId =>
 				    !existingSubmissionCommentIdsForPassedInComments.Contains(commentId))
-			    .Select(commentId => new Models.SubmissionComment(SubmissionId, commentId)).ToList();
+			    .Select(commentId => new Models.SubmissionComment(submissionId, commentId)).ToList();
 
 			SubmissionComment.AddRange(submissionCommentsToInsert);
 		}
+		public void UpdateAnswerStatus(IEnumerable<int> answerIds, Status status)
+		{
+			var answersToUpdate = Answer.Where(a => answerIds.Contains(a.AnswerId)).ToList();
+
+			if (answersToUpdate.Any(a => a.CreatedByUserId != _createdByUserID))
+				throw new Exception("Attempt to update status of an answer which doesn't belong to the current user");
+
+			answersToUpdate.ForEach(c => c.StatusId = status.StatusId);
+		}
+
+	    public void AddSubmissionAnswers(IEnumerable<int> answerIds, int submissionId)
+	    {
+		    //the extra DB hit here is to ensure that duplicate rows aren't inserted. currently, you should only be able to submit a comment once. in the future though that might change as resubmitting is on the cards, and the DB supports that now.
+		    var existingSubmissionAnswerIdsForPassedInAnswers = SubmissionAnswer.Where(sa => answerIds.Contains(sa.AnswerId)).Select(sa => sa.AnswerId).ToList();
+
+		    var submissionAnswersToInsert = answerIds.Where(commentId =>
+				    !existingSubmissionAnswerIdsForPassedInAnswers.Contains(commentId))
+			    .Select(commentId => new Models.SubmissionAnswer(submissionId, commentId)).ToList();
+
+		    SubmissionAnswer.AddRange(submissionAnswersToInsert);
+	    }
+
 	}
 }

@@ -7,6 +7,8 @@ using Comments.Models;
 using Comments.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using NICE.Auth.NetCore.Services;
+using Answer = Comments.ViewModels.Answer;
+using Comment = Comments.ViewModels.Comment;
 
 namespace Comments.Services
 {
@@ -34,67 +36,43 @@ namespace Comments.Services
 		    if (!_currentUser.IsAuthorised || !_currentUser.UserId.HasValue)
 			    return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"Not logged in submitting comments and answers"));
 
-		    //TODO: check if user is submitting own comment, would mean hitting DB to get CreatedByUserId?
+		    //if a user is submitting a different users comment, the context will throw an exception.
 
 			var submissionToSave = new Models.Submission(_currentUser.UserId.Value, DateTime.UtcNow);
 		    _context.Submission.Add(submissionToSave);
 
 		    var submittedStatus = _context.GetStatus(StatusName.Submitted);
 			
-			UpdateCommentsModel(commentsAndAnswers, submissionToSave, submittedStatus);
-		    UpdateAnswersModel(commentsAndAnswers, submissionToSave, submittedStatus);
+			UpdateCommentsModel(commentsAndAnswers.Comments, submissionToSave, submittedStatus);
+		    UpdateAnswersModel(commentsAndAnswers.Answers, submissionToSave, submittedStatus);
 
 			return (rowsUpdated: _context.SaveChanges(), validate: null);
 		}
 
-	    public void UpdateCommentsModel(CommentsAndAnswers commentsAndAnswers, Submission submission, Models.Status status)
+	    public void UpdateCommentsModel(IList<Comment> comments, Submission submission, Models.Status status)
 	    {
-		    //foreach (var comment in commentsAndAnswers.Comments)
-		    //{
-			   // comment.StatusId = status.StatusId;
-			   // comment.Status = new ViewModels.Status(status);
-		    //}
+			var commentIds = comments.Select(c => c.CommentId).ToList();
+			_context.UpdateCommentStatus(commentIds, status);
 
-		    var commentIds = commentsAndAnswers.Comments.Select(c => c.CommentId).ToList();
-
-			_context.UpdateCommentsStatus(commentIds, status);
-
-			//var dbComments = _context.Comment.Where(c => commentIds.Contains(c.CommentId));
-
-			//foreach (var comment in dbComments)
-			//   {
-			//    var commentViewModel = commentsAndAnswers.Comments.Single(c => c.CommentId == comment.CommentId);
-			//    comment.UpdateFromViewModel(commentViewModel);
-
-			//    comment.Status = status;
-
-			_context.AddSubmissionComments(commentIds, submission.SubmissionId);
-
-			
-			//    _context.SubmissionComment.Add(new Models.SubmissionComment(submission.SubmissionId, comment.CommentId));
-			//   }
-		}
-
-		public void UpdateAnswersModel(CommentsAndAnswers commentsAndAnswers, Submission submission, Models.Status status)
-	    {
-		    foreach (var answer in commentsAndAnswers.Answers)
+		    foreach (var commentInViewModel in comments)
 		    {
-			    answer.StatusId = (int)StatusName.Submitted;
-			    answer.Status = new ViewModels.Status(status);
+			    commentInViewModel.UpdateStatusFromDBModel(status);
 		    }
 
-			var answerIds = commentsAndAnswers.Answers.Select(a => a.AnswerId);
-			var answerDbModel = _context.Answer.Where(a => answerIds.Contains(a.AnswerId));
+			_context.AddSubmissionComments(commentIds, submission.SubmissionId);
+		}
 
-			foreach (var answer in answerDbModel)
-			{
-				var answerViewModel = commentsAndAnswers.Answers.Single(c => c.AnswerId == answer.AnswerId);
-				answer.UpdateFromViewModel(answerViewModel);
+		public void UpdateAnswersModel(IList<Answer> answers, Submission submission, Models.Status status)
+	    {
+			var answerIds = answers.Select(a => a.AnswerId).ToList();
+			_context.UpdateAnswerStatus(answerIds, status);
 
-				answer.Status = status;
+		    foreach (var answerInViewModel in answers)
+		    {
+			    answerInViewModel.UpdateStatusFromDBModel(status);
+		    }
 
-				_context.SubmissionAnswer.Add(new Models.SubmissionAnswer(submission.SubmissionId, answer.AnswerId));
-			}
+		    _context.AddSubmissionAnswers(answerIds, submission.SubmissionId);
 		}
 	}
 }
