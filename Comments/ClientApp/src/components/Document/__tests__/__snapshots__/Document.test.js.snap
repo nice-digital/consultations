@@ -3,16 +3,6 @@
 exports[`[ClientApp]  Document Component should match snapshot with supplied data 1`] = `
 Array [
   "",
-  <a
-    aria-hidden="true"
-    className="temporary-sign-out-link"
-    data-qa-sel="sign-out-link"
-    href="https://beta-accounts.nice.org.uk/signout?returnURL=undefined"
-    tabIndex="-1"
-    title="Sign Out"
->
-    Signout
-</a>,
   <div
     className="container"
 >
@@ -108,7 +98,6 @@ Array [
                 >
                     <h1
                         className="page-header__heading mt--0"
-                        tabIndex="-1"
                     >
                         Unstable angina and NSTEMI: early management
                     </h1>
@@ -129,7 +118,6 @@ Array [
                         className="btn btn--cta"
                         data-qa-sel="comment-on-whole-consultation"
                         onClick={[Function]}
-                        tabIndex={0}
                     >
                         Comment on whole consultation
                     </button>
@@ -142,7 +130,6 @@ Array [
                         className="btn btn--cta"
                         data-qa-sel="comment-on-consultation-document"
                         onClick={[Function]}
-                        tabIndex={0}
                     >
                         Comment on this document
                     </button>
@@ -266,7 +253,6 @@ Array [
                     >
                         <div
                             className="document-comment-container "
-                            tabIndex={-1}
                         >
                             <div
                                 onMouseUp={[Function]}
@@ -305,7 +291,6 @@ Array [
                                             data-qa-sel="in-text-comment-button"
                                             id="introduction"
                                             onClick={[Function]}
-                                            tabIndex="0"
                                         >
                                             <span
                                                 aria-hidden="true"

@@ -11,7 +11,6 @@ export default function processChapterSection(node, incomingHtml, onNewCommentCl
 			<button
 				data-qa-sel="in-text-comment-button"
 				className="document-comment-container__commentButton"
-				tabIndex="0"
 				id={elementId}
 				onClick={e => {
 					e.preventDefault();

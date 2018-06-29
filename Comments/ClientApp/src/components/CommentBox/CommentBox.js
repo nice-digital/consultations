@@ -65,8 +65,6 @@ export class CommentBox extends Component<PropsType, StateType> {
 		const comment = this.state.comment;
 		const readOnly = this.props.readOnly;
 
-		const tabIndex = this.props.isVisible ? "0" : "-1";
-
 		return (
 
 			<li className="CommentBox">
@@ -108,7 +106,6 @@ export class CommentBox extends Component<PropsType, StateType> {
 								data-qa-sel="Comment-text-area"
 								disabled={readOnly}
 								id={this.props.unique}
-								tabIndex={tabIndex}
 								className="form__input form__input--textarea"
 								onChange={this.textareaChangeHandler}
 								placeholder="Enter your comment here"
@@ -117,7 +114,6 @@ export class CommentBox extends Component<PropsType, StateType> {
 						{!readOnly && commentText && commentText.length > 0 && (
 							<input
 								data-qa-sel="submit-button"
-								tabIndex={tabIndex}
 								className="btn ml--0"
 								type="submit"
 								value={unsavedChanges ? "Save comment" : "Saved"}
@@ -127,7 +123,6 @@ export class CommentBox extends Component<PropsType, StateType> {
 						{!readOnly &&
 						<button
 							data-qa-sel="delete-comment-button"
-							tabIndex={tabIndex}
 							className="btn mr--0 right"
 							onClick={e => this.props.deleteHandler(e, commentId)}>
 							<span className="visually-hidden">Delete this comment</span>

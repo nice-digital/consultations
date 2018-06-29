@@ -15,8 +15,6 @@ import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
 import { projectInformation } from "../../constants";
 import { processDocumentHtml } from "./process-document-html";
-import { LoginBanner } from "./../LoginBanner/LoginBanner";
-import { UserContext } from "../../context/UserContext";
 import { Selection } from "../Selection/Selection";
 import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
 // import stringifyObject from "stringify-object";
@@ -189,7 +187,7 @@ export class Document extends Component<PropsType, StateType> {
 			const current = isCurrentDocument(d.documentId);
 
 			// isReactRoute: the "isReactRoute" attribute is telling the StackedNav component whether this item's link should be resolved by the react router or not
-			// If it's not a react route then the link should be warpped in a standard anchor tag
+			// If it's not a react route then the link should be wrapped in a standard anchor tag
 			const isReactRoute = isCommentable(d);
 
 			return {
@@ -296,18 +294,6 @@ export class Document extends Component<PropsType, StateType> {
 				<Helmet>
 					<title>{title}</title>
 				</Helmet>
-				<UserContext.Consumer>
-					{contextValue => !contextValue.isAuthorised ?
-						<LoginBanner signInButton={false} currentURL={this.props.match.url}
-									 signInURL={contextValue.signInURL} registerURL={contextValue.registerURL}/>
-						:
-						<a data-qa-sel="sign-out-link" aria-hidden="true" className="temporary-sign-out-link"
-						   href={`https://beta-accounts.nice.org.uk/signout?returnURL=${this.props.match.url}`}
-						   title="Sign Out"
-						   tabIndex="-1" // prevent tabbing at all for the time being as it's a temp link
-						>Signout</a>
-					}
-				</UserContext.Consumer>
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">
@@ -320,7 +306,7 @@ export class Document extends Component<PropsType, StateType> {
 							<main role="main">
 								<div className="page-header">
 
-									<h1 tabIndex="-1" className="page-header__heading mt--0">{title}</h1>
+									<h1 className="page-header__heading mt--0">{title}</h1>
 
 									<p className="page-header__lead">
 										[{reference}] Open until{" "}
@@ -330,7 +316,6 @@ export class Document extends Component<PropsType, StateType> {
 									<button
 										data-qa-sel="comment-on-whole-consultation"
 										className="btn btn--cta"
-										tabIndex={0}
 										onClick={e => {
 											e.preventDefault();
 											this.props.onNewCommentClick({
@@ -351,7 +336,6 @@ export class Document extends Component<PropsType, StateType> {
 									<button
 										data-qa-sel="comment-on-consultation-document"
 										className="btn btn--cta"
-										tabIndex={0}
 										onClick={e => {
 											e.preventDefault();
 											this.props.onNewCommentClick({
@@ -423,7 +407,6 @@ export class Document extends Component<PropsType, StateType> {
 										<div
 											className={`document-comment-container ${
 												this.state.loading ? "loading" : ""}`}
-											tabIndex={-1}
 										>
 											<Selection newCommentFunc={this.props.onNewCommentClick}
 													   sourceURI={this.props.match.url}>
