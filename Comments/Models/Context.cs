@@ -93,10 +93,30 @@ namespace Comments.Models
                 .FirstOrDefault();
         }
 
-	    public Status GetStatus(int statusId)
+	    public Status GetStatus(StatusName statusName)
 	    {
 		    return Status
-			    .FirstOrDefault(a => a.StatusId.Equals(statusId));
+			    .Single(s => s.Name.Equals(statusName.ToString(), StringComparison.OrdinalIgnoreCase));
 	    }
+
+	    public void UpdateCommentsStatus(IEnumerable<int> commentIds, Status status)
+	    {
+		    var commentsToUpdate = Comment.Where(c => commentIds.Contains(c.CommentId)).ToList();
+		    commentsToUpdate.ForEach(c => c.StatusId = status.StatusId);
+
+			//should this savechanges?
+		}
+
+	    public void AddSubmissionComments(IEnumerable<int> commentIds, int SubmissionId)
+	    {
+			//the extra DB hit here is to ensure that duplicate rows aren't inserted. currently, you should only be able to submit a comment once. in the future though that might change as resubmitting is on the cards, and the DB supports that now.
+		    var existingSubmissionCommentIdsForPassedInComments = SubmissionComment.Where(sc => commentIds.Contains(sc.CommentId)).Select(sc => sc.CommentId).ToList();
+
+		    var submissionCommentsToInsert = commentIds.Where(commentId =>
+				    !existingSubmissionCommentIdsForPassedInComments.Contains(commentId))
+			    .Select(commentId => new Models.SubmissionComment(SubmissionId, commentId)).ToList();
+
+			SubmissionComment.AddRange(submissionCommentsToInsert);
+		}
 	}
 }
