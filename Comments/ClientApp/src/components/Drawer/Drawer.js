@@ -82,7 +82,7 @@ export class Drawer extends Component<PropsType, StateType> {
 						tabIndex={0}
 						data-qa-sel="open-commenting-panel"
 						id="js-drawer-toggleopen"
-						className="Drawer__toggleOpen"
+						className="Drawer__control Drawer__control--comments"
 						onClick={() => this.handleClick("toggleOpen")}
 						aria-controls="sidebar-panel"
 						aria-haspopup="true"
