@@ -87,6 +87,7 @@ export class Drawer extends Component<PropsType, StateType> {
 						aria-controls="sidebar-panel"
 						aria-haspopup="true"
 						aria-label={this.state.drawerOpen ? "Close the commenting panel" : "Open the commenting panel"}
+						tabIndex="0"
 					>
 						<span
 							className={`icon ${
