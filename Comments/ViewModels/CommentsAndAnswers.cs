@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Comments.ViewModels
 {
@@ -35,5 +36,15 @@ namespace Comments.ViewModels
 			}
 			set => _answers = value;
 		}
+
+	    public IList<string> SourceURIs
+	    {
+		    get
+		    {
+			    return Comments.Select(c => c.SourceURI).ToList();
+			    //var questionSourceURIs = Answers.Select(a => a. //TODO: question source uri
+			    //return commentSourceURIs.Concat(questionSourceURIs).ToList();
+		    }
+	    }
     }
 }

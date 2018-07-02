@@ -116,5 +116,83 @@ namespace Comments.Test.UnitTests
 			results.First().Comment.First().SubmissionComment.Count.ShouldBe(1);
 			results.First().Comment.First().Status.ShouldNotBeNull();
 		}
+
+		[Theory]
+		[InlineData(null, false)]
+		[InlineData("", false)]
+		[InlineData("  ", false)]
+		[InlineData("consultations://./consultation/1/document/1/chapter/introduction", true)]
+		[InlineData("consultations://./consultation/1/document/2/chapter/introduction", true)]
+		[InlineData("consultations://./consultation/1/document/1/chapter/anotherchaptertitle", true)]
+		[InlineData("consultations://./consultation/1/document/1", true)]
+		[InlineData("consultations://./consultation/1", true)]
+		[InlineData("consultations://./consultation/2", false)]
+		public void Has_Submitted_Comments_Or_Answers_For_Chapter_SourceURI(string consultationSourceURI, bool expectedResult)
+		{
+			//Arrange
+			var userId = Guid.NewGuid();
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+			var consultationContext = new ConsultationsContext(_options, userService);
+			AddSubmittedCommentsAndAnswers("consultations://./consultation/1/document/1/chapter/introduction", "Comment Text", "Question Text", "Answer Text", userId, consultationContext);
+			var submitService = new SubmitService(consultationContext, userService);
+
+			//Act
+			var actualResult = submitService.HasSubmittedCommentsOrQuestions(consultationSourceURI, userId);
+			
+			//Assert
+			actualResult.ShouldBe(expectedResult);
+		}
+
+		[Theory]
+		[InlineData(null, false)]
+		[InlineData("", false)]
+		[InlineData("  ", false)]
+		[InlineData("consultations://./consultation/1/document/1/chapter/introduction", true)]
+		[InlineData("consultations://./consultation/1/document/2/chapter/introduction", true)]
+		[InlineData("consultations://./consultation/1/document/1/chapter/anotherchaptertitle", true)]
+		[InlineData("consultations://./consultation/1/document/1", true)]
+		[InlineData("consultations://./consultation/1", true)]
+		[InlineData("consultations://./consultation/2", false)]
+		public void Has_Submitted_Comments_Or_Answers_For_Document_SourceURI(string consultationSourceURI, bool expectedResult)
+		{
+			//Arrange
+			var userId = Guid.NewGuid();
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+			var consultationContext = new ConsultationsContext(_options, userService);
+			AddSubmittedCommentsAndAnswers("consultations://./consultation/1/document/1", "Comment Text", "Question Text", "Answer Text", userId, consultationContext);
+			var submitService = new SubmitService(consultationContext, userService);
+
+			//Act
+			var actualResult = submitService.HasSubmittedCommentsOrQuestions(consultationSourceURI, userId);
+
+			//Assert
+			actualResult.ShouldBe(expectedResult);
+		}
+
+		[Theory]
+		[InlineData(null, false)]
+		[InlineData("", false)]
+		[InlineData("  ", false)]
+		[InlineData("consultations://./consultation/1/document/1/chapter/introduction", true)]
+		[InlineData("consultations://./consultation/1/document/2/chapter/introduction", true)]
+		[InlineData("consultations://./consultation/1/document/1/chapter/anotherchaptertitle", true)]
+		[InlineData("consultations://./consultation/1/document/1", true)]
+		[InlineData("consultations://./consultation/1", true)]
+		[InlineData("consultations://./consultation/2", false)]
+		public void Has_Submitted_Comments_Or_Answers_For_Consultation_SourceURI(string consultationSourceURI, bool expectedResult)
+		{
+			//Arrange
+			var userId = Guid.NewGuid();
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+			var consultationContext = new ConsultationsContext(_options, userService);
+			AddSubmittedCommentsAndAnswers("consultations://./consultation/1", "Comment Text", "Question Text", "Answer Text", userId, consultationContext);
+			var submitService = new SubmitService(consultationContext, userService);
+
+			//Act
+			var actualResult = submitService.HasSubmittedCommentsOrQuestions(consultationSourceURI, userId);
+
+			//Assert
+			actualResult.ShouldBe(expectedResult);
+		}
 	}
 }

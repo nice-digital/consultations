@@ -149,5 +149,32 @@ namespace Comments.Models
 		    return submission;
 	    }
 
+	    public bool HasSubmitted(string consultationSourceURI, Guid currentUser)
+	    {
+		    var submissions = Submission.Where(s => s.SubmissionByUserId.Equals(currentUser))
+			    .Include(s => s.SubmissionComment)
+					.ThenInclude(sc => sc.Comment)
+						.ThenInclude(c => c.Location)
+
+			    .Include(s => s.SubmissionAnswer)
+					.ThenInclude(sa => sa.Answer)
+						.ThenInclude(a => a.Question)
+							.ThenInclude(q => q.Location)
+
+				.ToList();
+
+
+		    var allQuestionSourceUrisForThisUser = submissions.SelectMany(s => s.SubmissionAnswer,
+			    ((submission, answer) => answer.Answer.Question.Location.SourceURI)).ToList();
+
+		    var allCommentSourceUrisForThisUser = submissions.SelectMany(s => s.SubmissionComment,
+			    ((submission, comment) => comment.Comment.Location.SourceURI)).ToList();
+
+		    var allSourceUris = allQuestionSourceUrisForThisUser.Concat(allCommentSourceUrisForThisUser).ToList();
+
+		    return allSourceUris.Any(sourceURI => sourceURI.StartsWith(consultationSourceURI, StringComparison.OrdinalIgnoreCase));
+
+	    }
+
 	}
 }

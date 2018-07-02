@@ -1,13 +1,16 @@
+using System;
 using Comments.Models;
 using Comments.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
+using Comments.Common;
 
 namespace Comments.Services
 {
 	public interface ISubmitService
 	{
 		(int rowsUpdated, Validate validate) SubmitCommentsAndAnswers(CommentsAndAnswers commentsAndAnswers);
+		bool HasSubmittedCommentsOrQuestions(string consultationSourceURI, Guid userId);
 	}
 	public class SubmitService : ISubmitService
     {
@@ -27,7 +30,15 @@ namespace Comments.Services
 
 		    //if a user is submitting a different users comment, the context will throw an exception.
 
-		    var submissionToSave = _context.InsertSubmission(_currentUser.UserId.Value);
+		    var anySourceURI = commentsAndAnswers.SourceURIs.FirstOrDefault();
+			if (anySourceURI == null)
+				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: $"Could not find SourceURI"));
+
+		    var hasSubmitted = HasSubmittedCommentsOrQuestions(anySourceURI, _currentUser.UserId.Value);
+			if (hasSubmitted)
+				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: $"User has already submitted."));
+
+			var submissionToSave = _context.InsertSubmission(_currentUser.UserId.Value);
 
 		    var submittedStatus = _context.GetStatus(StatusName.Submitted);
 			
@@ -62,5 +73,17 @@ namespace Comments.Services
 
 		    _context.AddSubmissionAnswers(answerIds, submission.SubmissionId);
 		}
-	}
+
+	    public bool HasSubmittedCommentsOrQuestions(string anySourceURI, Guid userId)
+	    {
+		    if (string.IsNullOrWhiteSpace(anySourceURI))
+			    return false;
+
+		    var consultationsUriElements = ConsultationsUri.ParseConsultationsUri(anySourceURI);
+
+		    var consultationSourceURI = ConsultationsUri.CreateConsultationURI(consultationsUriElements.ConsultationId);
+
+		    return _context.HasSubmitted(consultationSourceURI, userId);
+	    }
+    }
 }
