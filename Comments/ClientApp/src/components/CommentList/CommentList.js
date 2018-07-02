@@ -241,7 +241,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			<UserContext.Consumer>
 				{ (contextValue: ContextType) => {
 					return (
-						<div>
+						<div data-qa-sel="comment-list-wrapper">
 
 							{!this.props.isReviewPage ?
 								<div className="grid">
