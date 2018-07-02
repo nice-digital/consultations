@@ -76,10 +76,8 @@ export class Drawer extends Component<PropsType, StateType> {
 
 	render() {
 		return (
-			<section aria-labelledby="commenting-panel"
-					 className={this.drawerClassnames()}
-					 aria-expanded={this.state.drawerOpen}
-			>
+			<section aria-label="Commenting panel"
+					 className={this.drawerClassnames()}>
 				<div className="Drawer__controls">
 					<button
 						data-qa-sel="open-commenting-panel"
@@ -88,13 +86,9 @@ export class Drawer extends Component<PropsType, StateType> {
 						onClick={() => this.handleClick("toggleOpen")}
 						aria-controls="sidebar-panel"
 						aria-haspopup="true"
+						aria-label={this.state.drawerOpen ? "Close the commenting panel" : "Open the commenting panel"}
 						tabIndex="0"
 					>
-						<span className="visually-hidden">
-							{this.state.drawerOpen
-								? "Close the commenting panel"
-								: "Open the commenting panel"}
-						</span>
 						<span
 							className={`icon ${
 								this.state.drawerOpen
@@ -103,10 +97,11 @@ export class Drawer extends Component<PropsType, StateType> {
 							aria-hidden="true"
 							data-qa-sel="close-commenting-panel"
 						/>
+
 					</button>
 				</div>
 				{/* #sidebar-panel necessary here for pulling keyboard focus */}
-				<div data-qa-sel="comment-panel" id="sidebar-panel" className="Drawer__main">
+				<div aria-hidden={!this.state.drawerOpen} data-qa-sel="comment-panel" id="sidebar-panel" className="Drawer__main">
 					{/*wrappedComponentRef exposes the underlying, unwrapped component*/}
 					<CommentListWithRouter isReviewPage={false}
 										   isVisible={this.state.drawerOpen}

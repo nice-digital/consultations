@@ -245,11 +245,12 @@ export class CommentList extends Component<PropsType, StateType> {
 
 							{!this.props.isReviewPage ?
 								<div className="grid">
-									<h1 data-g="6" id="commenting-panel" className="p">Comments panel</h1>
+									<h1 data-g="6" id="commenting-panel" className="p">
+										Comments panel
+									</h1>
 									{contextValue.isAuthorised ?
 										<p data-g="6">
 											<Link
-												tabIndex={this.props.isVisible ? "0" : "-1"}
 												to={`/${this.props.match.params.consultationId}/review`}
 												data-qa-sel="review-all-comments"
 												className="right">Review all comments</Link>
