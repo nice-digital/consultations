@@ -45,10 +45,6 @@
     <Compile Remove="Migrations\20180423092925_TestRemoveColumn.Designer.cs" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\NICE.Feeds\NICE.Feeds\NICE.Feeds.csproj" />
-  </ItemGroup>
-
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->
     <Exec Command="node --version" ContinueOnError="true">
