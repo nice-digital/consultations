@@ -1,0 +1,7 @@
+﻿{
+    "signInURL":"/signin?returnURL=/",
+    "registerURL":"/register?returnURL=/",
+    "isAuthorised":false,
+    "displayName":null,
+    "userId":null
+}
