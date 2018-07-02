@@ -60,19 +60,38 @@ export class Document extends Component<PropsType, StateType> {
 		};
 
 		if (this.props) {
-			const preloadedChapter = preload(
-				this.props.staticContext,
-				"chapter",
-				[],
-				{ ...this.props.match.params }
-			);
-			const preloadedDocuments = preload(
-				this.props.staticContext,
-				"documents",
-				[],
-				{ consultationId: this.props.match.params.consultationId }
-			);
-			const preloadedConsultation = preload(
+
+			let preloadedChapter, preloadedDocuments, preloadedConsultation;
+
+			if (this.props.match.params.reference) {
+				preloadedChapter = preload(
+					this.props.staticContext,
+					"previewchapter",
+					[],
+					{ ...this.props.match.params }
+				);
+				preloadedDocuments = preload(
+					this.props.staticContext,
+					"previewdraftdocuments",
+					[],
+					{ ...this.props.match.params }
+				);
+			} else {
+				preloadedChapter = preload(
+					this.props.staticContext,
+					"chapter",
+					[],
+					{ ...this.props.match.params }
+				);
+				preloadedDocuments = preload(
+					this.props.staticContext,
+					"documents",
+					[],
+					{ consultationId: this.props.match.params.consultationId }
+				);
+			}
+
+			preloadedConsultation = preload(
 				this.props.staticContext,
 				"consultation",
 				[],
@@ -94,23 +113,49 @@ export class Document extends Component<PropsType, StateType> {
 	}
 
 	gatherData = async () => {
-		const { consultationId, documentId, chapterSlug } = this.props.match.params;
+		const { consultationId, documentId, chapterSlug, reference } = this.props.match.params;
 
-		const chapterData = load("chapter", undefined, [], {
-			consultationId,
-			documentId,
-			chapterSlug
-		})
-			.then(response => response.data)
-			.catch(err => {
-				throw new Error("chapterData " + err);
-			});
+		let chapterData;
+		let documentsData;
 
-		const documentsData = load("documents", undefined, [], { consultationId })
-			.then(response => response.data)
-			.catch(err => {
-				throw new Error("documentsData " + err);
-			});
+		if (reference) {
+			chapterData = load("previewchapter", undefined, [], {
+				consultationId,
+				documentId,
+				chapterSlug,
+				reference
+			})
+				.then(response => response.data)
+				.catch(err => {
+					throw new Error("previewChapterData " + err);
+				});
+
+			documentsData = load("previewdraftdocuments", undefined, [], {
+				consultationId,
+				documentId,
+				reference
+			})
+				.then(response => response.data)
+				.catch(err => {
+					throw new Error("previewdraftdocumentsData " + err);
+				});
+		} else {
+			chapterData = load("chapter", undefined, [], {
+				consultationId,
+				documentId,
+				chapterSlug
+			})
+				.then(response => response.data)
+				.catch(err => {
+					throw new Error("chapterData " + err);
+				});
+
+			documentsData = load("documents", undefined, [], { consultationId })
+				.then(response => response.data)
+				.catch(err => {
+					throw new Error("documentsData " + err);
+				});
+		}
 
 		const consultationData = load("consultation", undefined, [], {
 			consultationId
@@ -190,7 +235,7 @@ export class Document extends Component<PropsType, StateType> {
 		const createChapterLink = chapter => {
 			return {
 				label: chapter.title,
-				url: `/preview/consultation/${this.props.match.params.consultationId}/document/${
+				url: `/preview/${this.props.match.params.reference}/consultation/${this.props.match.params.consultationId}/document/${
 					this.props.match.params.documentId}/chapter/${chapter.slug}`,
 				current: isCurrentChapter(chapter.slug),
 				isReactRoute: true
@@ -305,7 +350,7 @@ export class Document extends Component<PropsType, StateType> {
 				<UserContext.Consumer>
 					{(contextValue: any) => !contextValue.isAuthorised ?
 						<LoginBanner signInButton={false} currentURL={this.props.match.url}
-									 signInURL={contextValue.signInURL} registerURL={contextValue.registerURL}/> : null}
+							signInURL={contextValue.signInURL} registerURL={contextValue.registerURL} /> : null}
 				</UserContext.Consumer>
 				<div className="container">
 					<div className="grid">
@@ -315,7 +360,7 @@ export class Document extends Component<PropsType, StateType> {
 								name={projectInformation.name}
 								repo={projectInformation.repo}
 							/>
-							<BreadCrumbs links={this.getBreadcrumbs()}/>
+							<BreadCrumbs links={this.getBreadcrumbs()} />
 							{this.props.match.url.indexOf("preview") === -1 ?
 								<main role="main">
 									<div className="page-header">
@@ -341,7 +386,7 @@ export class Document extends Component<PropsType, StateType> {
 										<h1 className="page-header__heading mt--0">{title}</h1>
 										<p className="page-header__lead">
 											[{reference}] Open until{" "}
-											<Moment format="D MMMM YYYY" date={endDate}/>
+											<Moment format="D MMMM YYYY" date={endDate} />
 										</p>
 										<p className="mb--0">
 											Document |{" "}
@@ -401,7 +446,7 @@ export class Document extends Component<PropsType, StateType> {
 													this.state.loading ? "loading" : ""}`}
 											>
 												<Selection newCommentFunc={this.props.onNewCommentClick}
-														   sourceURI={this.props.match.url}>
+													sourceURI={this.props.match.url}>
 													{processDocumentHtml(
 														content,
 														this.props.onNewCommentClick,
@@ -478,7 +523,7 @@ export class Document extends Component<PropsType, StateType> {
 									</div>
 									<div className="grid">
 										<div data-g="12 md:3">
-											<StackedNav links={this.getPreviewDocumentChapterLinks(documentId)}/>
+											<StackedNav links={this.getPreviewDocumentChapterLinks(documentId)} />
 										</div>
 										<div data-g="12 md:9" className="documentColumn">
 											<div

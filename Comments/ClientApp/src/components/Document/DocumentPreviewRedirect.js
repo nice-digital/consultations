@@ -22,12 +22,12 @@ export class DocumentPreviewRedirect extends Component<PropsType, StateType> {
 	}
 
 	componentDidMount(){
-		const { consultationId, documentId } = this.props.match.params;
-		this.createRedirectUrl(consultationId, documentId);
+		const { consultationId, documentId, reference } = this.props.match.params;
+		this.createRedirectUrl(consultationId, documentId, reference);
 	}
 
-	createRedirectUrl = (consultationId: number, documentId: number) => {
-		load("documents", undefined, [], { consultationId })
+	createRedirectUrl = (consultationId: number, documentId: number, reference: string) => {
+		load("previewdraftdocuments", undefined, [], { consultationId, documentId, reference })
 			.then(response => {
 				const documents = response.data;
 				//	get current document data

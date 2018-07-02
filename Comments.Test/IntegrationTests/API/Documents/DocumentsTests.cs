@@ -63,7 +63,7 @@ namespace Comments.Test.IntegrationTests.API.Documents
 		    //Arrange (in base constructor)
 
 		    // Act
-		    var response = await _client.GetAsync("/consultations/api/PreviewDraftDocuments?consultationId=1&documentId=1&reference=GID-TA10232");
+		    var response = await _client.GetAsync("/consultations/api/PreviewDraftDocuments?consultationId=113&documentId=1&reference=GID-NG10186");
 		    response.EnsureSuccessStatusCode();
 		    var responseString = await response.Content.ReadAsStringAsync();
 
