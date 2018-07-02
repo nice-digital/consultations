@@ -34,6 +34,22 @@ class App extends React.Component<PropsType, StateType> {
 						<DocumentViewWithRouter/>
 					</Route>
 
+					<Switch>
+						{/*Document (Preview Layout)*/}
+						<Route path="/preview/:reference/consultation/:consultationId/document/:documentId/chapter/:chapterSlug">
+							<DocumentView/>
+						</Route>
+
+						{/*	If we hit this we're coming in *without* a chapter slug,
+						so we need to get the first chapter of the current document
+						and pass its slug into the URL
+						so it matches the route above */}
+						<Route path="/preview/:reference/consultation/:consultationId/document/:documentId">
+							<DocumentPreviewRedirectWithRouter/>
+							 {/* This component only redirects to the above route */}
+						</Route>
+					</Switch>
+
 					{/*Review Page*/}
 					<Route path="/:consultationId/review">
 						<ReviewPageWithRouter/>
