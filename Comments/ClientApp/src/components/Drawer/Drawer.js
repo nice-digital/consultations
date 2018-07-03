@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { mobileWidth } from "../../constants";
 import CommentListWithRouter from "../CommentList/CommentList";
 import { pullFocusById } from "../../helpers/accessibility-helpers";
@@ -32,7 +32,7 @@ export class Drawer extends Component<PropsType, StateType> {
 
 	// This isn't called in this file - this is the method called from DocumentView
 	newComment(comment: Object) {
-		// make sure the drawer is open once we've clicked a new comment
+
 		this.setState({
 			drawerOpen: true
 		});
@@ -80,9 +80,10 @@ export class Drawer extends Component<PropsType, StateType> {
 					 className={this.drawerClassnames()}>
 				<div className="Drawer__controls">
 					<button
+						tabIndex={0}
 						data-qa-sel="open-commenting-panel"
 						id="js-drawer-toggleopen"
-						className="Drawer__toggleOpen"
+						className="Drawer__control Drawer__control--comments"
 						onClick={() => this.handleClick("toggleOpen")}
 						aria-controls="sidebar-panel"
 						aria-haspopup="true"
@@ -98,16 +99,22 @@ export class Drawer extends Component<PropsType, StateType> {
 							data-qa-sel="close-commenting-panel"
 						/>
 
+
+
+
 					</button>
 				</div>
-				{/* #sidebar-panel necessary here for pulling keyboard focus */}
-				<div aria-hidden={!this.state.drawerOpen} data-qa-sel="comment-panel" id="sidebar-panel" className="Drawer__main">
+				<div aria-hidden={!this.state.drawerOpen}
+					 data-qa-sel="comment-panel"
+					 id="sidebar-panel"
+					 className="Drawer__main">
 					{/*wrappedComponentRef exposes the underlying, unwrapped component*/}
-					<CommentListWithRouter isReviewPage={false}
-										   isVisible={this.state.drawerOpen}
+					<CommentListWithRouter
+						isReviewPage={false}
+						isVisible={this.state.drawerOpen}
 						// $FlowIgnore | this.commentList is bound to this below
-										   wrappedComponentRef={component => (this.commentList = component)}
-					/>
+						wrappedComponentRef={component => (this.commentList = component)}/>
+
 				</div>
 			</section>
 		);

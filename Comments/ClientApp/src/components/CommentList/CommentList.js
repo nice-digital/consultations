@@ -58,7 +58,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		this.state = {
 			comments: [],
 			questions: [],
-			loading: true,
+			loading: true
 		};
 		let preloadedData = {};
 		if (this.props.staticContext && this.props.staticContext.preload) {
@@ -136,7 +136,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		this.loadComments();
 	}
 
-	componentDidUpdate(prevProps: PropsType) {
+	componentDidUpdate(prevProps: PropsType, prevState: any, nextContent: any) {
 		const oldRoute = prevProps.location.pathname + prevProps.location.search;
 		const newRoute = this.props.location.pathname + this.props.location.search;
 		if (oldRoute !== newRoute) {
@@ -147,17 +147,15 @@ export class CommentList extends Component<PropsType, StateType> {
 		}
 	}
 
-	filterComments = (newSourceURIToFilterBy: string, comments: Array<CommentType>) => {
+	filterComments = (newSourceURIToFilterBy: string, comments: Array<CommentType>): Array<CommentType> => {
 		let filterBy = queryStringToObject(newSourceURIToFilterBy);
 		if (filterBy.sourceURI == null) filterBy = { sourceURI: "" };
 		const idsOfFilteredComments = comments.filter(comment => comment.sourceURI.indexOf(filterBy.sourceURI) !== -1).map(comment => comment.commentId);
 
-		const commentsWithFilteredAttr = comments.map(comment => {
+		return comments.map(comment => {
 			comment.show = !idsOfFilteredComments.includes(comment.commentId);
 			return comment;
 		});
-
-		return commentsWithFilteredAttr;
 	};
 
 	newComment(newComment: CommentType) {
@@ -269,7 +267,6 @@ export class CommentList extends Component<PropsType, StateType> {
 											{commentsToShow.map((comment) => {
 												return (
 													<CommentBox
-														readOnly={this.props.isSubmitted}
 														isVisible={this.props.isVisible}
 														key={comment.commentId}
 														unique={`Comment${comment.commentId}`}
