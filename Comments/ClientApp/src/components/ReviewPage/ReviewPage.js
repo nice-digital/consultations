@@ -10,6 +10,7 @@ import { StickyContainer, Sticky } from "react-sticky";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { queryStringToObject } from "../../helpers/utils";
 import { UserContext } from "../../context/UserContext";
+import { pullFocusById } from "../../helpers/accessibility-helpers";
 
 type DocumentType = {
 	title: string,
@@ -91,6 +92,13 @@ export class ReviewPage extends Component<PropsType> {
 		// }
 	}
 
+	componentDidUpdate(prevProps: PropsType) {
+		const oldQueryString = prevProps.location.search;
+		const newQueryString = this.props.location.search;
+		if (oldQueryString === newQueryString) return;
+		pullFocusById("comments-column");
+	}
+
 	getCurrentSourceURI = () => {
 		const queryParams = queryStringToObject(this.props.location.search);
 		return queryParams.sourceURI;
@@ -108,7 +116,7 @@ export class ReviewPage extends Component<PropsType> {
 			},
 			{
 				label: "Consultation",
-				url: "https://alpha.nice.org.uk/guidance/indevelopment/gid-ng10103/consultation/html-content"
+				url: "https://alpha.nice.org.uk/guidance/indevelopment/gid-ng10107/consultation/html-content"
 			},
 			{
 				label: "Documents",
@@ -142,11 +150,17 @@ export class ReviewPage extends Component<PropsType> {
 									<Header
 										title={title}
 										reference={reference}
-										endDate={endDate}
-									/>
+										endDate={endDate}/>
 									<h2 className="mt--0">Comments for review</h2>
 									<StickyContainer className="grid">
-										<div data-g="12 md:3">
+										<div data-g="12 md:6 md:push:3">
+											<h3 className="mt--0" id="comments-column">{this.state.isSubmitted ? "Comments submitted" : "Comments"}</h3>
+											<CommentListWithRouter
+												isReviewPage={true}
+												isVisible={true}
+												isSubmitted={this.state.isSubmitted}/>
+										</div>
+										<div data-g="12 md:3 md:pull:6">
 											<Sticky disableHardwareAcceleration>
 												{({ style }) => (
 													<div style={style}>
@@ -168,10 +182,6 @@ export class ReviewPage extends Component<PropsType> {
 													</div>
 												)}
 											</Sticky>
-										</div>
-										<div data-g="12 md:6">
-											<h3 className="mt--0">{this.state.isSubmitted ? "Comments submitted" : "Comments"}</h3>
-											<CommentListWithRouter isReviewPage={true} isSubmitted={this.state.isSubmitted}/>
 										</div>
 										<div data-g="12 md:3">
 											<Sticky disableHardwareAcceleration>

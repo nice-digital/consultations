@@ -1,9 +1,9 @@
 import "@nice-digital/wdio-cucumber-steps/lib/given";
-/*import { Given } from "cucumber";
+import { Given } from "cucumber";
 
-import openUrl from '../support/action/openUrl';
+import deleteComments from '../support/action/deleteComments';
 
 Given(
-    /^I open the page "([^"]*)?"$/,
-    openUrl
-);*/
+    /^I delete all comments on the page$/,
+    deleteComments
+);

@@ -3,7 +3,7 @@ import Moment from "react-moment";
 
 type PropsType = {
 	staticContext?: any,
-	drawerOpen: boolean
+	isVisible: boolean
 };
 
 type StateType = {
@@ -65,12 +65,10 @@ export class CommentBox extends Component<PropsType, StateType> {
 		const comment = this.state.comment;
 		const readOnly = this.props.readOnly;
 
-		const tabIndex = this.props.drawerOpen ? "0" : "-1";
-
 		return (
 
 			<li className="CommentBox">
-				<section>
+				<section role="form">
 
 					{!this.isTextSelection(comment) &&
 					<Fragment>
@@ -93,7 +91,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 
 					{lastModifiedDate ? (
 						<div className="CommentBox__datestamp mb--d font-weight-bold">
-							Last Modified Date:{" "}
+							Last Modified:{" "}
 							<Moment format="D/M/YYYY - h:mma" date={lastModifiedDate}/>
 						</div>
 					) : null}
@@ -101,39 +99,32 @@ export class CommentBox extends Component<PropsType, StateType> {
 						<div className="form__group form__group--textarea mb--0">
 							<label
 								className="form__label visually-hidden"
-								htmlFor={this.props.unique}
-							>
-								Comment
+								htmlFor={this.props.unique}>
+								Comment on {commentOn}, {quote}
 							</label>
 							<textarea
 								data-qa-sel="Comment-text-area"
 								disabled={readOnly}
 								id={this.props.unique}
-								tabIndex={tabIndex}
 								className="form__input form__input--textarea"
 								onChange={this.textareaChangeHandler}
-								onKeyUp={this.textareaChangeHandler}
-								placeholder="Enter your comment"
-								value={commentText}
-							/>
+								placeholder="Enter your comment here"
+								value={commentText}/>
 						</div>
 						{!readOnly && commentText && commentText.length > 0 && (
 							<input
 								data-qa-sel="submit-button"
-								tabIndex={tabIndex}
 								className="btn ml--0"
 								type="submit"
 								value={unsavedChanges ? "Save comment" : "Saved"}
-								disabled={!unsavedChanges}
-							/>
+								disabled={!unsavedChanges}/>
+
 						)}
 						{!readOnly &&
 						<button
 							data-qa-sel="delete-comment-button"
-							tabIndex={tabIndex}
 							className="btn mr--0 right"
-							onClick={e => this.props.deleteHandler(e, commentId)}
-						>
+							onClick={e => this.props.deleteHandler(e, commentId)}>
 							<span className="visually-hidden">Delete this comment</span>
 							<span className="icon icon--trash" aria-hidden="true"/>
 						</button>
