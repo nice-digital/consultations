@@ -1,15 +1,17 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title</title>
+	<link rel="stylesheet" href="/consultations/main.css" />
+	<link href="//fonts.googleapis.com/css?family=Lato:400,700,900" rel="stylesheet" type="text/css">
+	<meta name="viewport" content="width=device-width" />
+	<title>@ViewBag.Title</title>
 </head>
 <body>
-    <div>todo: tophat</div>
     <div>
         @RenderBody()
     </div>
-    <div>todo: footer</div>
+
+<script src="//cdn.nice.org.uk/V3.1/Scripts/nice/NICE.TopHat.min.js" data-environment="Beta" data-search="/search?q=%term" data-typeaheadtype="remote" data-typeaheadsource="/autocomplete?%query" data-search-placeholder="Search NICE..." data-cookie="true" async=""></script>
 </body>
 </html>
