@@ -1,0 +1,27 @@
+﻿{
+    "reference":"GID-TA10232",
+    "title":"For consultation comments",
+    "consultationName":"Appraisal consultation",
+    "startDate":"2018-04-01T00:00:00",
+    "endDate":"2018-05-31T17:00:00",
+    "consultationType":"Appraisal consultation",
+    "resourceTitleId":null,
+    "projectType":"TA",
+    "productTypeName":"Technology appraisal guidance",
+    "developedAs":null,
+    "relevantTo":null,
+    "consultationId":1,
+    "process":"TAG",
+    "allowConsultationComments":true,
+    "hasDocumentsWhichAllowConsultationComments":false,
+    "hasDocumentsWhichAllowConsultationQuestions":true,
+    "supportsQuestions":false,
+    "supportsComments":false,
+    "partiallyUpdatedProjectReference":null,
+    "origProjectReference":null,
+    "user":{
+        "isAuthorised":true,
+        "displayName":"Benjamin Button",
+        "userId":"00000000-0000-0000-0000-000000000000"
+    }
+}

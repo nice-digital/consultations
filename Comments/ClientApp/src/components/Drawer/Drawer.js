@@ -32,6 +32,7 @@ export class Drawer extends Component<PropsType, StateType> {
 
 	// This isn't called in this file - this is the method called from DocumentView
 	newComment(comment: Object) {
+
 		this.setState({
 			drawerOpen: true
 		});
@@ -86,21 +87,21 @@ export class Drawer extends Component<PropsType, StateType> {
 						onClick={() => this.handleClick("toggleOpen")}
 						aria-controls="sidebar-panel"
 						aria-haspopup="true"
-						aria-label={this.state.drawerOpen ?
-							"Close the commenting panel" :
-							"Open the commenting panel"}>
-						{this.state.drawerMobile ?
-							<span
-								className={`icon ${
-									this.state.drawerOpen
-										? "icon--chevron-right"
-										: "icon--chevron-left"}`}
-								aria-hidden="true"
-								data-qa-sel="close-commenting-panel"/>
-							:
-							this.state.drawerOpen ?
-								<Fragment>Close comments</Fragment> :
-								<Fragment>Open comments</Fragment>}
+						aria-label={this.state.drawerOpen ? "Close the commenting panel" : "Open the commenting panel"}
+						tabIndex="0"
+					>
+						<span
+							className={`icon ${
+								this.state.drawerOpen
+									? "icon--chevron-right"
+									: "icon--chevron-left"}`}
+							aria-hidden="true"
+							data-qa-sel="close-commenting-panel"
+						/>
+
+
+
+
 					</button>
 				</div>
 				<div aria-hidden={!this.state.drawerOpen}
@@ -113,6 +114,7 @@ export class Drawer extends Component<PropsType, StateType> {
 						isVisible={this.state.drawerOpen}
 						// $FlowIgnore | this.commentList is bound to this below
 						wrappedComponentRef={component => (this.commentList = component)}/>
+
 				</div>
 			</section>
 		);
