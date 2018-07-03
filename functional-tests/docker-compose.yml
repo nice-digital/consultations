@@ -38,6 +38,7 @@ services:
       - comments
     environment:
       - ACCOUNTS_EMAIL
+      - ACCOUNTS_EMAIL2
       - ACCOUNTS_PASSWORD
 
   # Comment Collection dotnet core web app
