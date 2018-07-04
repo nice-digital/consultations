@@ -42,16 +42,18 @@ namespace Comments.Test.Infrastructure
         protected readonly IUserService _fakeUserService;
         protected readonly IHttpContextAccessor _fakeHttpContextAccessor;
 
-
+	    protected readonly IConsultationService _consultationService;
         protected readonly DbContextOptionsBuilder<ConsultationsContext> _contextOptions;
 
         protected readonly ConsultationsContext _context;
+	    protected readonly bool _useFakeConsultationService = false;
 
-        public TestBase(Feed feed) : this()
+		public TestBase(Feed feed) : this()
         {
             FeedToUse = feed;
             _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
-        }
+	        _consultationService = new FakeConsultationService();
+		}
         public TestBase(Feed feed, bool authenticated, Guid userId, string displayName = null) : this()
         {
             FeedToUse = feed;
@@ -59,7 +61,8 @@ namespace Comments.Test.Infrastructure
             _displayName = displayName;
             _userId = Guid.Empty;
             _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
-        }
+	        _consultationService = new FakeConsultationService();
+		}
 
 	    public TestBase(bool authenticated, Guid? userId = null, string displayName = null) : this()
 	    {
@@ -69,12 +72,15 @@ namespace Comments.Test.Infrastructure
 		    _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
 		}
 
-		public TestBase()
+
+		public TestBase(bool useFakeConsultationService = false)
         {
             // Arrange
             _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
             _fakeHttpContextAccessor = FakeHttpContextAccessor.Get(_authenticated, _displayName, _userId);
-            var databaseName = DatabaseName + Guid.NewGuid();
+	        _consultationService = new FakeConsultationService();
+	        _useFakeConsultationService = useFakeConsultationService;
+			var databaseName = DatabaseName + Guid.NewGuid();
 
             //SQLiteConnectionStringBuilder sqLiteConnectionStringBuilder = new SQLiteConnectionStringBuilder()
             //{	       
@@ -107,6 +113,10 @@ namespace Comments.Test.Infrastructure
                     services.TryAddSingleton<IHttpContextAccessor>(provider => _fakeHttpContextAccessor);
                     services.TryAddTransient<IUserService>(provider => _fakeUserService);
                     services.TryAddTransient<IFeedReaderService>(provider => new FeedReader(FeedToUse));
+
+					if (_useFakeConsultationService)
+						services.TryAddTransient<IConsultationService>(provider => _consultationService);
+
                 })
                 .Configure(app =>
                 {

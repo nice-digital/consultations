@@ -3,6 +3,7 @@ using NICE.Feeds;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Comments.Common;
 using Microsoft.Extensions.Logging;
 
 namespace Comments.Services
@@ -14,6 +15,7 @@ namespace Comments.Services
         IEnumerable<Document> GetDocuments(int consultationId);
         ViewModels.Consultation GetConsultation(int consultationId);
         IEnumerable<ViewModels.Consultation> GetConsultations();
+	    bool ConsultationIsOpen(string sourceURI);
     }
 
     public class ConsultationService : IConsultationService
@@ -62,9 +64,14 @@ namespace Comments.Services
             return consultations.Select(c => new ViewModels.Consultation(c, user)).ToList();
         }
 
-	    //public bool ConsultationIsOpen()
-	    //{
-		    
-	    //}
-    }
+		public bool ConsultationIsOpen(string sourceURI)
+		{
+			var consultationsUriElements = ConsultationsUri.ParseConsultationsUri(sourceURI);
+			var consultationDetail = GetConsultationDetail(consultationsUriElements.ConsultationId);
+
+			var now = DateTime.Now; //note, not a UTC date as indev uses local time.
+
+			return (now >= consultationDetail.StartDate && now <= consultationDetail.EndDate);
+		}
+	}
 }

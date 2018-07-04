@@ -15,11 +15,13 @@ namespace Comments.Services
 	public class SubmitService : ISubmitService
     {
 	    private readonly ConsultationsContext _context;
+	    private readonly IConsultationService _consultationService;
 	    private readonly User _currentUser;
 
-	    public SubmitService(ConsultationsContext context, IUserService userService)
+	    public SubmitService(ConsultationsContext context, IUserService userService, IConsultationService consultationService)
 	    {
 		    _context = context;
+		    _consultationService = consultationService;
 		    _currentUser = userService.GetCurrentUser();
 	    }
 
@@ -28,15 +30,18 @@ namespace Comments.Services
 		    if (!_currentUser.IsAuthorised || !_currentUser.UserId.HasValue)
 			    return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"Not logged in submitting comments and answers"));
 
-		    //if a user is submitting a different users comment, the context will throw an exception.
+			//if a user is submitting a different users comment, the context will throw an exception.
 
-		 //   var anySourceURI = commentsAndAnswers.SourceURIs.FirstOrDefault();
-			//if (anySourceURI == null)
-			//	return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: $"Could not find SourceURI"));
+			var anySourceURI = commentsAndAnswers.SourceURIs.FirstOrDefault();
+			if (anySourceURI == null)
+				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "Could not find SourceURI"));
 
-		 //   var hasSubmitted = HasSubmittedCommentsOrQuestions(anySourceURI, _currentUser.UserId.Value);
-			//if (hasSubmitted)
-			//	return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: $"User has already submitted."));
+			if (!_consultationService.ConsultationIsOpen(anySourceURI))
+				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "Consultation is not open for submissions"));
+
+			var hasSubmitted = HasSubmittedCommentsOrQuestions(anySourceURI, _currentUser.UserId.Value);
+			if (hasSubmitted)
+				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "User has already submitted."));
 
 			var submissionToSave = _context.InsertSubmission(_currentUser.UserId.Value);
 

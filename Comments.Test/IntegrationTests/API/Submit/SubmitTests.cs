@@ -15,6 +15,8 @@ namespace Comments.Test.IntegrationTests.API.Submit
 {
     public class SubmitTests: TestBase
     {
+	    public SubmitTests() : base(useFakeConsultationService:true) {}
+
 	    [Fact]
 	    public async Task Submit_Comment_And_Answers()
 	    {
