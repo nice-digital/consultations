@@ -1,21 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using Comments.Models;
 using Comments.Services;
 using Comments.Test.Infrastructure;
 using Comments.ViewModels;
 using Newtonsoft.Json;
-using NICE.Feeds;
-using NICE.Feeds.Tests.Infrastructure;
 using Shouldly;
+using System;
+using System.Linq;
+using System.Net;
 using Xunit;
-using Question = Comments.Models.Question;
 
 namespace Comments.Test.UnitTests
 {
-    public class Tests : Comments.Test.Infrastructure.TestBase
+	public class Tests : Comments.Test.Infrastructure.TestBase
     {
         [Fact]
         public void Comments_CanBeRead()
@@ -34,7 +30,7 @@ namespace Comments.Test.UnitTests
             var locationId = AddLocation(sourceURI);
             AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId);
             
-            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService, authenticateService);
+            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService, authenticateService, _consultationService);
             
             // Act
             var viewModel = commentService.GetCommentsAndQuestions(sourceURI);
@@ -56,7 +52,7 @@ namespace Comments.Test.UnitTests
             var authenticateService = new FakeAuthenticateService(authenticated: true);
 
             AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, createdByUserId, (int)StatusName.Draft, _context);
-            var commentService = new CommentService(_context, _fakeUserService, authenticateService);
+            var commentService = new CommentService(_context, _fakeUserService, authenticateService, _consultationService);
 
             // Act    
             var viewModel = commentService.GetCommentsAndQuestions(sourceURI);

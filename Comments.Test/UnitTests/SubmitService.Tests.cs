@@ -27,15 +27,14 @@ namespace Comments.Test.UnitTests
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var authenticateService = new FakeAuthenticateService(authenticated: true);
 			var consultationContext = new ConsultationsContext(_options, userService);
-			var commentService = new CommentService(consultationContext, userService, authenticateService);
-			var submitService = new SubmitService(consultationContext, userService, _consultationService);
+			var commentService = new CommentService(consultationContext, userService, authenticateService, _consultationService);
 
 			var locationId = AddLocation(sourceURI, _context);
 			var commentId = AddComment(locationId, "Comment text", false, userId, (int)StatusName.Draft, _context);
 
 			//Act
 			var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI, true);
-			var result = submitService.SubmitCommentsAndAnswers(new CommentsAndAnswers(commentsAndQuestions.Comments, new List<ViewModels.Answer>()));
+			var result = _consultationService.SubmitCommentsAndAnswers(new CommentsAndAnswers(commentsAndQuestions.Comments, new List<ViewModels.Answer>()));
 
 			var comment = commentService.GetComment(commentId);
 
@@ -64,9 +63,8 @@ namespace Comments.Test.UnitTests
 			var authenticateService = new FakeAuthenticateService(authenticated: true);
 			var consultationContext = new ConsultationsContext(_options, userService);
 
-			var commentService = new CommentService(consultationContext, userService, authenticateService);
+			var commentService = new CommentService(consultationContext, userService, authenticateService, _consultationService);
 			var answerService = new AnswerService(consultationContext, userService);
-			var submitService = new SubmitService(consultationContext, userService, _consultationService);
 
 			var locationId = AddLocation(sourceURI, _context);
 			var questionTypeId = AddQuestionType("Question Type", false, true);
@@ -75,7 +73,7 @@ namespace Comments.Test.UnitTests
 
 			//Act
 			var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI, true);
-			var result = submitService.SubmitCommentsAndAnswers(new CommentsAndAnswers(new List<ViewModels.Comment>(), commentsAndQuestions.Questions.First().Answers));
+			var result = _consultationService.SubmitCommentsAndAnswers(new CommentsAndAnswers(new List<ViewModels.Comment>(), commentsAndQuestions.Questions.First().Answers));
 
 			var answer = answerService.GetAnswer(answerId);
 
@@ -133,10 +131,9 @@ namespace Comments.Test.UnitTests
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var consultationContext = new ConsultationsContext(_options, userService);
 			AddSubmittedCommentsAndAnswers("consultations://./consultation/1/document/1/chapter/introduction", "Comment Text", "Question Text", "Answer Text", userId, consultationContext);
-			var submitService = new SubmitService(consultationContext, userService, _consultationService);
 
 			//Act
-			var actualResult = submitService.HasSubmittedCommentsOrQuestions(consultationSourceURI, userId);
+			var actualResult = _consultationService.HasSubmittedCommentsOrQuestions(consultationSourceURI, userId);
 			
 			//Assert
 			actualResult.ShouldBe(expectedResult);
@@ -159,10 +156,9 @@ namespace Comments.Test.UnitTests
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var consultationContext = new ConsultationsContext(_options, userService);
 			AddSubmittedCommentsAndAnswers("consultations://./consultation/1/document/1", "Comment Text", "Question Text", "Answer Text", userId, consultationContext);
-			var submitService = new SubmitService(consultationContext, userService, _consultationService);
 
 			//Act
-			var actualResult = submitService.HasSubmittedCommentsOrQuestions(consultationSourceURI, userId);
+			var actualResult = _consultationService.HasSubmittedCommentsOrQuestions(consultationSourceURI, userId);
 
 			//Assert
 			actualResult.ShouldBe(expectedResult);
@@ -185,10 +181,9 @@ namespace Comments.Test.UnitTests
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var consultationContext = new ConsultationsContext(_options, userService);
 			AddSubmittedCommentsAndAnswers("consultations://./consultation/1", "Comment Text", "Question Text", "Answer Text", userId, consultationContext);
-			var submitService = new SubmitService(consultationContext, userService, _consultationService);
 
 			//Act
-			var actualResult = submitService.HasSubmittedCommentsOrQuestions(consultationSourceURI, userId);
+			var actualResult = _consultationService.HasSubmittedCommentsOrQuestions(consultationSourceURI, userId);
 
 			//Assert
 			actualResult.ShouldBe(expectedResult);

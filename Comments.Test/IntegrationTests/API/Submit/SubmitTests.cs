@@ -36,7 +36,7 @@ namespace Comments.Test.IntegrationTests.API.Submit
 
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 		    var authenticateService = new FakeAuthenticateService(authenticated: true);
-			var commentService = new CommentService(_context, userService, authenticateService);
+			var commentService = new CommentService(_context, userService, authenticateService, _consultationService);
 
 		    var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI, true);
 		    var viewModel = new CommentsAndAnswers(commentsAndQuestions.Comments, commentsAndQuestions.Questions.First().Answers);
