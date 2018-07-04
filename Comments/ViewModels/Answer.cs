@@ -30,8 +30,8 @@ namespace Comments.ViewModels
 			StatusId = answer.StatusId;
 			if (!(answer.Status is null))
 				Status = new Status(answer.Status);
-			if (answer.Question != null)
-				Question = new Question(answer.Question.Location, answer.Question);
+			if (answer.Question?.Location != null)
+				SourceURI = answer.Question.Location.SourceURI;
 		}
 
 		public int AnswerId { get; set; }
@@ -39,13 +39,18 @@ namespace Comments.ViewModels
 		public bool? AnswerBoolean { get; set; }
 
 		public int QuestionId { get; set; }
-		public ViewModels.Question Question { get; set; }
+		//public ViewModels.Question Question { get; set; }
 
 		public DateTime LastModifiedDate { get; set; }
 		public Guid LastModifiedByUserId { get; set; }
 
 		public int StatusId { get; set; }
 		public ViewModels.Status Status { get; set; }
+
+		/// <summary>
+		/// This property doesn't match the database. it's only in a denormalised capacity to make things easier for the front-end.
+		/// </summary>
+		public string SourceURI { get; set; }
 
 		public void UpdateStatusFromDBModel(Models.Status status)
 		{

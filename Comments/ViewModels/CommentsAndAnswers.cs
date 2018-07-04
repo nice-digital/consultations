@@ -42,7 +42,7 @@ namespace Comments.ViewModels
 		    get
 		    {
 			    var commentSourceURIs = Comments.Select(c => c.SourceURI).ToList();
-			    var questionSourceURIs = Answers.Select(a => a.Question.SourceURI).ToList();
+			    var questionSourceURIs = Answers.Select(a => a.SourceURI).ToList();
 				return commentSourceURIs.Concat(questionSourceURIs).ToList();
 		    }
 	    }
