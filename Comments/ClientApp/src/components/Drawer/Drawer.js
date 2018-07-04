@@ -1,6 +1,6 @@
 // @flow
 
-import React, {Component, Fragment} from "react";
+import React, {Component} from "react";
 import {mobileWidth} from "../../constants";
 import CommentListWithRouter from "../CommentList/CommentList";
 import {pullFocusById} from "../../helpers/accessibility-helpers";
