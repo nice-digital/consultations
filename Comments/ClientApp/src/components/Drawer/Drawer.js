@@ -1,9 +1,9 @@
 // @flow
 
-import React, { Component, Fragment } from "react";
-import { mobileWidth } from "../../constants";
+import React, {Component, Fragment} from "react";
+import {mobileWidth} from "../../constants";
 import CommentListWithRouter from "../CommentList/CommentList";
-import { pullFocusById } from "../../helpers/accessibility-helpers";
+import {pullFocusById} from "../../helpers/accessibility-helpers";
 
 type PropsType = {
 	commentList: Function,
@@ -26,13 +26,19 @@ export class Drawer extends Component<PropsType, StateType> {
 		this.state = {
 			drawerExpandedWidth: false,
 			drawerOpen: false,
-			drawerMobile: this.isMobile()
+			drawerMobile: false
 		};
+	}
+
+	componentDidMount(){
+		// We can't prerender whether we're on mobile cos SSR doesn't have a window
+		this.setState({
+			drawerMobile: this.isMobile()
+		});
 	}
 
 	// This isn't called in this file - this is the method called from DocumentView
 	newComment(comment: Object) {
-
 		this.setState({
 			drawerOpen: true
 		});
@@ -60,13 +66,13 @@ export class Drawer extends Component<PropsType, StateType> {
 	handleClick = (event: string) => {
 		switch (event) {
 			case "toggleWidth--narrow":
-				this.setState({ drawerExpandedWidth: false });
+				this.setState({drawerExpandedWidth: false});
 				break;
 			case "toggleWidth--wide":
-				this.setState({ drawerExpandedWidth: true });
+				this.setState({drawerExpandedWidth: true});
 				break;
 			case "toggleOpen":
-				this.setState(prevState => ({ drawerOpen: !prevState.drawerOpen }));
+				this.setState(prevState => ({drawerOpen: !prevState.drawerOpen}));
 				pullFocusById("#js-drawer-toggleopen");
 				break;
 			default:
@@ -80,7 +86,6 @@ export class Drawer extends Component<PropsType, StateType> {
 					 className={this.drawerClassnames()}>
 				<div className="Drawer__controls">
 					<button
-						tabIndex={0}
 						data-qa-sel="open-commenting-panel"
 						id="js-drawer-toggleopen"
 						className="Drawer__control Drawer__control--comments"
@@ -88,20 +93,19 @@ export class Drawer extends Component<PropsType, StateType> {
 						aria-controls="sidebar-panel"
 						aria-haspopup="true"
 						aria-label={this.state.drawerOpen ? "Close the commenting panel" : "Open the commenting panel"}
-						tabIndex="0"
-					>
-						<span
-							className={`icon ${
-								this.state.drawerOpen
-									? "icon--chevron-right"
-									: "icon--chevron-left"}`}
-							aria-hidden="true"
-							data-qa-sel="close-commenting-panel"
-						/>
-
-
-
-
+						tabIndex="0">
+						{!this.state.drawerMobile ?
+							<span>Comments panel</span>
+							:
+							<span
+								className={`icon ${
+									this.state.drawerOpen
+										? "icon--chevron-right"
+										: "icon--chevron-left"}`}
+								aria-hidden="true"
+								data-qa-sel="close-commenting-panel"
+							/>
+						}
 					</button>
 				</div>
 				<div aria-hidden={!this.state.drawerOpen}
