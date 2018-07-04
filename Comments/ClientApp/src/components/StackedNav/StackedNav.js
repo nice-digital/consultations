@@ -27,11 +27,12 @@ export const StackedNav = (props: PropsType) => {
 				{links.map((item, index) => (
 					<li key={`${item.label}${index}`} data-qa-sel="nav-list-item" className="stacked-nav__list-item">
 						{item.isReactRoute ?
-							<Link to={item.url} aria-current={item.current ? "page" : "false"}>
-								{item.label}
-							</Link>
+							item.current ?
+								<Link to={item.url} aria-current="page">{item.label}</Link>
+								:
+								<Link to={item.url}>{item.label}</Link>
 							:
-							<a href={item.url} target="_blank" rel="noopener">{item.label}</a>
+							<a href={item.url} target="_blank" rel="noopener noreferrer">{item.label}</a>
 						}
 					</li>
 				))}
