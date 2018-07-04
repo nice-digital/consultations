@@ -104,7 +104,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
             var responseString = await response.Content.ReadAsStringAsync();
 
             // Assert
-            responseString.ShouldMatchApproved(new Func<string, string>[]{Scrubbers.ScrubLastModifiedDate});
+            responseString.ShouldMatchApproved(new Func<string, string>[]{Scrubbers.ScrubLastModifiedDate, Scrubbers.ScrubCommentId, Scrubbers.ScrubLocationId});
             var deserialisedResponse = JsonConvert.DeserializeObject<CommentsAndQuestions>(responseString);
             deserialisedResponse.Comments.Count().ShouldBe(3);
         }
