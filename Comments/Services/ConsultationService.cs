@@ -14,7 +14,6 @@ namespace Comments.Services
         IEnumerable<Document> GetDocuments(int consultationId);
         ViewModels.Consultation GetConsultation(int consultationId);
         IEnumerable<ViewModels.Consultation> GetConsultations();
-        (int validDocumentId, string validChapterSlug) ValidateDocumentAndChapterWithinConsultation(ConsultationDetail consultation, int documentId, string chapterSlug);
     }
 
     public class ConsultationService : IConsultationService
@@ -63,40 +62,9 @@ namespace Comments.Services
             return consultations.Select(c => new ViewModels.Consultation(c, user)).ToList();
         }
 
-        /// <summary>
-        /// This method is called to ensure the documentId and chapter slug have been set and that they belong together.
-        /// i.e. the document belongs to the consultation, and the chapter is in the document.
-        /// </summary>
-        /// <param name="consultation"></param>
-        /// <param name="documentId"></param>
-        /// <param name="chapterSlug"></param>
-        /// <returns></returns>
-        public (int validDocumentId, string validChapterSlug) ValidateDocumentAndChapterWithinConsultation(ConsultationDetail consultation, int documentId, string chapterSlug)
-        {
-            if (consultation.Documents == null || !consultation.Documents.Any())
-            {
-                throw new Exception("No documents found on consultation:" + consultation.ConsultationId);
-            }
-
-            var document = consultation.Documents.FirstOrDefault(d => d.DocumentId.Equals(documentId));
-            if (document == null)
-                document = consultation.Documents.FirstOrDefault(d => d.ConvertedDocument);
-            if (document == null)
-                document = consultation.Documents.First();
-
-            if (!document.ConvertedDocument)
-                return (document.DocumentId, null);
-
-            if (document.Chapters == null || !document.Chapters.Any())
-            {
-                throw new Exception("No chapters found within document:" + document.DocumentId);
-            }
-
-            var chapter = document.Chapters.FirstOrDefault(c => c.Slug.Equals(chapterSlug));
-            if (chapter == null)
-                chapter = document.Chapters.First();
-
-            return (document.DocumentId, chapter.Slug);
-        }
+	    //public bool ConsultationIsOpen()
+	    //{
+		    
+	    //}
     }
 }

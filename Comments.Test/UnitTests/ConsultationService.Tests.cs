@@ -77,47 +77,5 @@ namespace Comments.Test.UnitTests
             anotherQuestion.Questions.Single().Answers.Single().AnswerText.ShouldBe(answerText);
             
         }
-
-        
-
-        [Theory]
-        [InlineData(1, 1, null, null)]
-        [InlineData(1, 1, "a chapter for a supporting document - not valid", null)]
-        [InlineData(2, 2, "first-document-first-chapter-slug", "first-document-first-chapter-slug")]
-        [InlineData(2, 2, "first-document-second-chapter-slug", "first-document-second-chapter-slug")]
-        [InlineData(3, 3, "first-document-first-chapter-slug", "second-document-first-chapter-slug")]
-        [InlineData(2, 2, null, "first-document-first-chapter-slug")]
-        [InlineData(-1, 2, null, "first-document-first-chapter-slug")]
-        [InlineData(int.MaxValue, 2, null, "first-document-first-chapter-slug")]
-        public void EnsureDocumentAndChapterAreValidWithinConsultation_Validation(int documentIdIn, int documentIdOut, string chapterSlugIn, string chapterSlugOut)
-        {
-            // Arrange
-            var consultation = new ConsultationDetail(null, null, null, DateTime.MinValue, DateTime.MaxValue, null, null, null,
-                null, null, null,  1, null, true, true, true, true, null, null, 
-                new List<Document>
-                {
-                    new Document(1, 1, false, "supporting document", null),
-                    new Document(1, 2, true, "first commentable document", new List<Chapter>
-                    {
-                        new Chapter("first-document-first-chapter-slug", "first-document-first-chapter-title"),
-                        new Chapter("first-document-second-chapter-slug", "first-document-second-chapter-title")
-                    }),
-                    new Document(1, 3, true, "second commentable document", new List<Chapter>
-                    {
-                        new Chapter("second-document-first-chapter-slug", "second-document-first-chapter-title")
-                    })
-                }, 
-                user: null);
-            var feedReaderService = new FeedReader(Feed.ConsultationCommentsPublishedDetailMulitpleDoc);
-            var consultationService = new ConsultationService(new FeedService(feedReaderService), new FakeLogger<ConsultationService>(), FakeUserService.Get(false));
-
-            // Act
-            var (validatedDocumentId, validatedChapterSlug) = consultationService.ValidateDocumentAndChapterWithinConsultation(consultation, documentIdIn, chapterSlugIn);
-
-            //Assert
-            validatedDocumentId.ShouldBe(documentIdOut);
-            validatedChapterSlug.ShouldBe(chapterSlugOut);
-        }
-
-    }
+	}
 }

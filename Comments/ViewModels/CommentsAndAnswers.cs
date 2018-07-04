@@ -41,9 +41,9 @@ namespace Comments.ViewModels
 	    {
 		    get
 		    {
-			    return Comments.Select(c => c.SourceURI).ToList();
-			    //var questionSourceURIs = Answers.Select(a => a. //TODO: question source uri
-			    //return commentSourceURIs.Concat(questionSourceURIs).ToList();
+			    var commentSourceURIs = Comments.Select(c => c.SourceURI).ToList();
+			    var questionSourceURIs = Answers.Select(a => a.Question.SourceURI).ToList();
+				return commentSourceURIs.Concat(questionSourceURIs).ToList();
 		    }
 	    }
     }

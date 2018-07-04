@@ -30,6 +30,8 @@ namespace Comments.ViewModels
 			StatusId = answer.StatusId;
 			if (!(answer.Status is null))
 				Status = new Status(answer.Status);
+			if (answer.Question != null)
+				Question = new Question(answer.Question.Location, answer.Question);
 		}
 
 		public int AnswerId { get; set; }
@@ -37,6 +39,8 @@ namespace Comments.ViewModels
 		public bool? AnswerBoolean { get; set; }
 
 		public int QuestionId { get; set; }
+		public ViewModels.Question Question { get; set; }
+
 		public DateTime LastModifiedDate { get; set; }
 		public Guid LastModifiedByUserId { get; set; }
 
