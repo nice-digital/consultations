@@ -16,8 +16,6 @@ namespace Comments.Controllers.Web
     {
         public ActionResult Index()
         {
-	        var errorMessage = "This is my custom error";
-
 	        var reFeat = HttpContext.Features.Get<IStatusCodeReExecuteFeature>();
 	        string requestedPath = null;
 	        if (reFeat != null)
@@ -32,7 +30,7 @@ namespace Comments.Controllers.Web
 		        exception = ehFeat.Error;
 	        }
 
-			var viewModel = new Error(requestedPath, exception, errorMessage);
+			var viewModel = new Error(requestedPath, exception);
 			return View(viewModel);
         }
     }

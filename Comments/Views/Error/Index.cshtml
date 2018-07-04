@@ -7,20 +7,20 @@
 
 <main role="main">
 	<div class="container">
-		<div class="panel">
-			<h1 class="page-header__heading">Something's gone wrong</h1>
+		<div class="grid">
+			<div data-g="12">
+				<h1 class="page-header__heading mt--c">Something's gone wrong</h1>
+				<p class="page-header__lead">We'll look into it right away. Please try again in a few minutes. And if it's still not fixed, <a href="/get-involved/contact-us">contact us</a>.</p>
 
-			<p class="page-header__lead">We'll look into it right away. Please try again in a few minutes. And if it's still not fixed, <a href="/get-involved/contact-us">contact us</a>.</p>
-
-			<div style="display: none">
-				@Model.CustomMessage
-				@if (error != null)
-				{
-					<!--
-					@error.Message
-					@error.StackTrace
-					-->
-				}
+				<div style="display: none">
+					@if (error != null)
+					{
+						<!--
+						@error.Message
+						@error.StackTrace
+						-->
+					}
+				</div>
 			</div>
 		</div>
 	</div>

@@ -9,14 +9,12 @@ namespace Comments.ViewModels
     public class Error
     {
 	    public string RequestedPath { get; }
-		public string CustomMessage { get; }
 	    public Exception ErrorException { get; }
 
-	    public Error(string requestedPath, Exception errorException, string urlEncodedMessage)
+	    public Error(string requestedPath, Exception errorException)
 	    {
 		    RequestedPath = requestedPath;
 		    ErrorException = errorException;
-		    CustomMessage = WebUtility.UrlDecode(urlEncodedMessage);
 		}
 	}
 }
