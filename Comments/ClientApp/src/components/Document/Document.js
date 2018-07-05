@@ -16,14 +16,10 @@ import { HashLinkTop } from "../../helpers/component-helpers";
 import { projectInformation } from "../../constants";
 import { processDocumentHtml } from "../../document-processing/process-document-html";
 import { processPreviewHtml } from "../../document-processing/process-preview-html";
+import { ErrorOverview } from "./ErrorOverview";
 import { LoginBanner } from "./../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
 import { Selection } from "../Selection/Selection";
-
-import fakeData from "./fake-data/scope";
-// import fakeData from "./fake-data/optimum-intervals-for-chronic-open-angle-glaucoma-3";
-// import fakeData from "./fake-data/increased-risk-of-conversion-to-coag-2";
-// import fakeData from "./fake-data/document1";
 
 type PropsType = {
 	staticContext?: any,
@@ -528,6 +524,7 @@ export class Document extends Component<PropsType, StateType> {
 										<div data-g="12 md:9" className="documentColumn">
 											<div
 												className={`document-comment-container ${this.state.loading ? "loading" : ""}`}>
+												<ErrorOverview content={content} />
 												{processPreviewHtml(content)}
 											</div>
 										</div>

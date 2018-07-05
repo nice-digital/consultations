@@ -35,6 +35,8 @@
     "babel-register": "^6.26.0",
     "bowser": "^1.9.3",
     "ignore-styles": "^5.0.1",
+    "lodash": "^4.17.10",
+    "lodash-deeper": "^1.1.0",
     "moment": "^2.22.1",
     "query-string": "4.3.4",
     "rc-tooltip": "^3.7.2",
