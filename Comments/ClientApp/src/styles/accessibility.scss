@@ -1,0 +1,34 @@
+.screenreader-button {
+  position: absolute;
+  left: -9999em;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  z-index: -1;
+  &:focus, &:active {
+    position: absolute;
+    width: auto;
+    left: auto;
+    height: auto;
+    overflow: auto;
+    z-index: 1;
+  }
+}
+
+// this is just a helper while we're 'focussing' on accessibility... LOLZ
+*:focus {
+  //background: #eee !important;
+}
+
+.temporary-sign-out-link {
+  color: white !important;
+  text-align: right;
+  float: right;
+  display: block;
+  position: fixed;
+  right: 0;
+  background: white;
+  bottom: 0;
+  width: 10px;
+  height: 10px;
+}
