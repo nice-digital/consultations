@@ -7,8 +7,7 @@ import CommentListWithRouter from "../CommentList/CommentList";
 import { DocumentView } from "../DocumentView/DocumentView";
 import NotFound from "../NotFound/NotFound";
 import ReviewPageWithRouter from "../ReviewPage/ReviewPage";
-import UserProviderWithRouter  from "../../context/UserContext";
-import OnboardingModal from "../OnboardingModal/OnboardingModal";
+import UserProviderWithRouter from "../../context/UserContext";
 
 type PropsType = any;
 
@@ -17,11 +16,6 @@ type StateType = {
 }
 
 class App extends React.Component<PropsType, StateType> {
-	constructor() {
-		super();
-
-	}
-
 	render() {
 		return (
 			<UserProviderWithRouter>
@@ -32,7 +26,7 @@ class App extends React.Component<PropsType, StateType> {
 				<Switch>
 					{/*Home*/}
 					<Route exact path="/">
-						<Redirect to="/10/5/overview"/>
+						<Redirect to="/17/1/introduction"/>
 					</Route>
 
 					{/*Document View*/}
@@ -54,7 +48,6 @@ class App extends React.Component<PropsType, StateType> {
 					{/*404*/}
 					<Route component={NotFound}/>
 				</Switch>
-				<OnboardingModal />
 			</UserProviderWithRouter>
 		);
 	}

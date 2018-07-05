@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Comments.Models
 {
@@ -10,8 +10,8 @@ namespace Comments.Models
         {
             LocationId = locationId;
             CreatedByUserId = createdByUserId;
-            CreatedDate = DateTime.UtcNow;
-            LastModifiedDate = DateTime.UtcNow;
+            CreatedDate = DateTime.Now;
+            LastModifiedDate = DateTime.Now;
             LastModifiedByUserId = lastModifiedByUserId;
             CommentText = commentText ?? throw new ArgumentNullException(nameof(commentText));
             Location = location;

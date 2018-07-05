@@ -3,6 +3,7 @@
 import React, { Component } from "react";
 import { mobileWidth } from "../../constants";
 import CommentListWithRouter from "../CommentList/CommentList";
+import { pullFocusById } from "../../helpers/accessibility-helpers";
 
 type PropsType = {
 	commentList: Function,
@@ -29,17 +30,12 @@ export class Drawer extends Component<PropsType, StateType> {
 		};
 	}
 
-	pullFocus = () => {
-		window.document.getElementById("js-drawer-toggleopen").focus();
-	};
-
 	// This isn't called in this file - this is the method called from DocumentView
 	newComment(comment: Object) {
 		// make sure the drawer is open once we've clicked a new comment
 		this.setState({
 			drawerOpen: true
 		});
-		this.pullFocus();
 		// and what we're calling is newComment from inside <CommentList />
 		// $FlowIgnore | this is bound by wrappedComponentRef in CommentListWithRouter
 		this.commentList.newComment(comment);
@@ -71,7 +67,7 @@ export class Drawer extends Component<PropsType, StateType> {
 				break;
 			case "toggleOpen":
 				this.setState(prevState => ({ drawerOpen: !prevState.drawerOpen }));
-				this.pullFocus();
+				pullFocusById("#js-drawer-toggleopen");
 				break;
 			default:
 				return;
@@ -80,10 +76,8 @@ export class Drawer extends Component<PropsType, StateType> {
 
 	render() {
 		return (
-			<section aria-labelledby="commenting-panel"
-					 className={this.drawerClassnames()}
-					 aria-expanded={this.state.drawerOpen}
-			>
+			<section aria-label="Commenting panel"
+					 className={this.drawerClassnames()}>
 				<div className="Drawer__controls">
 					<button
 						data-qa-sel="open-commenting-panel"
@@ -92,12 +86,9 @@ export class Drawer extends Component<PropsType, StateType> {
 						onClick={() => this.handleClick("toggleOpen")}
 						aria-controls="sidebar-panel"
 						aria-haspopup="true"
+						aria-label={this.state.drawerOpen ? "Close the commenting panel" : "Open the commenting panel"}
+						tabIndex="0"
 					>
-						<span className="visually-hidden">
-							{this.state.drawerOpen
-								? "Close the commenting panel"
-								: "Open the commenting panel"}
-						</span>
 						<span
 							className={`icon ${
 								this.state.drawerOpen
@@ -106,27 +97,14 @@ export class Drawer extends Component<PropsType, StateType> {
 							aria-hidden="true"
 							data-qa-sel="close-commenting-panel"
 						/>
-					</button>
 
-					{/* this button is in temporarily for user testing */}
-					<button id="js-reading-mode-toggle"
-						title="Reading mode"
-						className="Drawer__toggleOpen"
-						style={{ marginTop: "3px" }}
-						aria-haspopup="true">
-						<img alt="Enable or disable reading view" src="reading-view/icon.png" style={{
-							position: "relative",
-							top: "3px"
-						}}/>
 					</button>
-					{/* / this button is in temporarily for user testing */}
-
 				</div>
 				{/* #sidebar-panel necessary here for pulling keyboard focus */}
-				<div data-qa-sel="comment-panel" id="sidebar-panel" className="Drawer__main">
+				<div aria-hidden={!this.state.drawerOpen} data-qa-sel="comment-panel" id="sidebar-panel" className="Drawer__main">
 					{/*wrappedComponentRef exposes the underlying, unwrapped component*/}
 					<CommentListWithRouter isReviewPage={false}
-										   drawerOpen={this.state.drawerOpen}
+										   isVisible={this.state.drawerOpen}
 						// $FlowIgnore | this.commentList is bound to this below
 										   wrappedComponentRef={component => (this.commentList = component)}
 					/>
