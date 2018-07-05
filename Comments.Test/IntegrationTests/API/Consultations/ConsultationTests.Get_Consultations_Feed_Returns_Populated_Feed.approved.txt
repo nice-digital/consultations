@@ -24,7 +24,8 @@
             "isAuthorised":true,
             "displayName":"Benjamin Button",
             "userId":"00000000-0000-0000-0000-000000000000"
-        }
+        },
+        "consultationState":null
     },
     {
         "reference":"GID-IPG10038",
@@ -51,6 +52,7 @@
             "isAuthorised":true,
             "displayName":"Benjamin Button",
             "userId":"00000000-0000-0000-0000-000000000000"
-        }
+        },
+        "consultationState":null
     }
 ]

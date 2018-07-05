@@ -77,6 +77,8 @@ namespace Comments.ViewModels
         public string OrigProjectReference { get; private set; }
 
         public ViewModels.User User { get; private set; }
+
+		public ConsultationState ConsultationState { get; private set; }
     }
 
     public class ConsultationDetail : Consultation

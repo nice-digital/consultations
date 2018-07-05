@@ -22,15 +22,16 @@ namespace Comments.Services
         private readonly ConsultationsContext _context;
         private readonly IUserService _userService;
         private readonly IAuthenticateService _authenticateService;
+	    private readonly IConsultationService _consultationService;
 	    private readonly ISubmitService _submitService;
 	    private readonly User _currentUser;
 
-        public CommentService(ConsultationsContext context, IUserService userService, IAuthenticateService authenticateService, ISubmitService submitService)
+        public CommentService(ConsultationsContext context, IUserService userService, IAuthenticateService authenticateService, IConsultationService consultationService)
         {
             _context = context;
             _userService = userService;
             _authenticateService = authenticateService;
-	        _submitService = submitService;
+	        _consultationService = consultationService;
 	        _currentUser = _userService.GetCurrentUser();
         }
 
@@ -126,7 +127,7 @@ namespace Comments.Services
 
 		    var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);
 
-		    var consultationState = _submitService.GetConsultationState(consultationSourceURI, locations);
+		    var consultationState = _consultationService.GetConsultationState(consultationSourceURI, locations);
 
 			return new CommentsAndQuestions(data.comments, data.questions, user.IsAuthorised, signInURL, consultationState);
 	    }

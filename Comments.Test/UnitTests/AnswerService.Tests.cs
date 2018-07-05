@@ -217,8 +217,8 @@ namespace Comments.Test.UnitTests
             AddAnswer(questionId, Guid.NewGuid(), "another user's answer");
 
 	        var context = new ConsultationsContext(_options, userService);
-			var submitService = new SubmitService(context, userService, _consultationService);
-			var commentService = new CommentService(context, userService, authenticateService, submitService);
+			//var submitService = new SubmitService(context, userService, _consultationService);
+			var commentService = new CommentService(context, userService, authenticateService, _consultationService);
 
             // Act
             var viewModel = commentService.GetCommentsAndQuestions(sourceURI);

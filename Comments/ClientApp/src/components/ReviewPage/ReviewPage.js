@@ -25,14 +25,22 @@ type PropsType = {
 	}
 };
 
-export class ReviewPage extends Component<PropsType> {
+type StateType = {
+	documentsList: Array<any>,
+	consultationData: any,
+	isSubmitted: boolean,
+	viewSubmittedComments: boolean,
+};
+
+export class ReviewPage extends Component<PropsType, StateType> {
 	constructor(props: PropsType) {
 		super(props);
 
 		this.state = {
 			documentsList: [],
 			consultationData: null,
-			isSubmitted: false
+			isSubmitted: false,
+			viewSubmittedComments: false
 		};
 	}
 
@@ -139,6 +147,11 @@ export class ReviewPage extends Component<PropsType> {
 	render() {
 		if (this.state.documentsList.length === 0) return <h1>Loading...</h1>;
 		const { title, reference, endDate } = this.state.consultationData;
+
+		if (this.state.isSubmitted){
+
+		}
+
 		return (
 			<Fragment>
 				<div className="container">

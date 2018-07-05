@@ -10,21 +10,18 @@ namespace Comments.Services
 	public interface ISubmitService
 	{
 		(int rowsUpdated, Validate validate) SubmitCommentsAndAnswers(CommentsAndAnswers commentsAndAnswers);
-		bool HasSubmittedCommentsOrQuestions(string consultationSourceURI, Guid userId);
-		ConsultationState GetConsultationState(string sourceURI, IEnumerable<Models.Location> locations = null);
 	}
+
 	public class SubmitService : ISubmitService
 	{
 		private readonly ConsultationsContext _context;
 		private readonly IConsultationService _consultationService;
-		private readonly IUserService _userService;
 		private readonly User _currentUser;
 
 		public SubmitService(ConsultationsContext context, IUserService userService, IConsultationService consultationService)
 		{
 			_context = context;
 			_consultationService = consultationService;
-			_userService = userService;
 			_currentUser = userService.GetCurrentUser();
 		}
 
@@ -39,12 +36,12 @@ namespace Comments.Services
 			if (anySourceURI == null)
 				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "Could not find SourceURI"));
 
-			var consultationState = GetConsultationState(anySourceURI);
+			var consultationState = _consultationService.GetConsultationState(anySourceURI);
 
 			if (!consultationState.ConsultationIsOpen)
 				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "Consultation is not open for submissions"));
 
-			var hasSubmitted = HasSubmittedCommentsOrQuestions(anySourceURI, _currentUser.UserId.Value);
+			var hasSubmitted = _consultationService.HasSubmittedCommentsOrQuestions(anySourceURI, _currentUser.UserId.Value);
 			if (hasSubmitted)
 				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "User has already submitted."));
 
@@ -67,7 +64,6 @@ namespace Comments.Services
 			{
 				commentInViewModel.UpdateStatusFromDBModel(status);
 			}
-
 			_context.AddSubmissionComments(commentIds, submission.SubmissionId);
 		}
 
@@ -80,41 +76,7 @@ namespace Comments.Services
 			{
 				answerInViewModel.UpdateStatusFromDBModel(status);
 			}
-
 			_context.AddSubmissionAnswers(answerIds, submission.SubmissionId);
-		}
-
-		public bool HasSubmittedCommentsOrQuestions(string anySourceURI, Guid userId)
-		{
-			if (string.IsNullOrWhiteSpace(anySourceURI))
-				return false;
-
-			var consultationsUriElements = ConsultationsUri.ParseConsultationsUri(anySourceURI);
-
-			var consultationSourceURI = ConsultationsUri.CreateConsultationURI(consultationsUriElements.ConsultationId);
-
-			return _context.HasSubmitted(consultationSourceURI, userId);
-		}
-
-		public ConsultationState GetConsultationState(string sourceURI, IEnumerable<Models.Location> locations = null)
-		{
-			var currentUser = _userService.GetCurrentUser();
-			var consultationsUriElements = ConsultationsUri.ParseConsultationsUri(sourceURI);
-			var consultationDetail = _consultationService.GetConsultationDetail(consultationsUriElements.ConsultationId);
-
-			if (locations == null)
-			{
-				locations = _context.GetAllCommentsAndQuestionsForDocument(new[] { sourceURI }, isReview: true);
-			}
-
-			var hasSubmitted = currentUser != null && currentUser.IsAuthorised && currentUser.UserId.HasValue ? HasSubmittedCommentsOrQuestions(sourceURI, currentUser.UserId.Value) : false;
-
-			var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);
-
-			var consultationState = new ConsultationState(consultationDetail.StartDate, consultationDetail.EndDate,
-				data.questions.Any(), data.questions.Any(q => q.Answers.Any()), data.comments.Any(), hasSubmitted);
-
-			return consultationState;
 		}
 	}
 }

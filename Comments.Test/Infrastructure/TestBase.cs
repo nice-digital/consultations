@@ -115,7 +115,7 @@ namespace Comments.Test.Infrastructure
                     services.TryAddTransient<IFeedReaderService>(provider => new FeedReader(FeedToUse));
 	                if (_useRealSubmitService)
 	                {
-						services.TryAddTransient<IConsultationService>(provider => new FakeConsultationService(true));
+						//services.TryAddTransient<IConsultationService>(provider => new FakeConsultationService(true));
 					}
 	                else
 					{
