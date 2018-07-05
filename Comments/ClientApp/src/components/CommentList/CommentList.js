@@ -59,37 +59,37 @@ export class CommentList extends Component<PropsType, StateType> {
 			questions: [],
 			loading: true
 		};
-		let preloadedData = {};
-		if (this.props.staticContext && this.props.staticContext.preload) {
-			preloadedData = this.props.staticContext.preload.data;
-		}
+	// 	let preloadedData = {};
+	// 	if (this.props.staticContext && this.props.staticContext.preload) {
+	// 		preloadedData = this.props.staticContext.preload.data;
+	// 	}
 
-		// if (this.props.isReviewPage){
-		// 	const preloaded = preload(
-		// 		this.props.staticContext,
-		// 		"review",
-		// 		[],
-		// 		{ sourceURI: this.props.match.url },
-		// 		preloadedData
-		// 	);
-		// } else{
-		const preloaded = preload(
-			this.props.staticContext,
-			"comments",
-			[],
-			{ sourceURI: this.props.match.url },
-			preloadedData
-		);
-		// }
+	// 	// if (this.props.isReviewPage){
+	// 	// 	const preloaded = preload(
+	// 	// 		this.props.staticContext,
+	// 	// 		"review",
+	// 	// 		[],
+	// 	// 		{ sourceURI: this.props.match.url },
+	// 	// 		preloadedData
+	// 	// 	);
+	// 	// } else{
+	// 	const preloaded = preload(
+	// 		this.props.staticContext,
+	// 		"comments",
+	// 		[],
+	// 		{ sourceURI: this.props.match.url },
+	// 		preloadedData
+	// 	);
+	// 	// }
 
-		if (preloaded) {
-			this.state = {
-				loading: false,
-				comments: preloaded.comments,
-				filteredComments: [],
-				questions: preloaded.questions
-			};
-		}
+	// 	if (preloaded) {
+	// 		this.state = {
+	// 			loading: false,
+	// 			comments: preloaded.comments,
+	// 			filteredComments: [],
+	// 			questions: preloaded.questions
+	// 		};
+	// 	}
 	}
 
 	loadComments() {
