@@ -1,6 +1,6 @@
 import ReactHtmlParser from "react-html-parser";
 import { nodeIsChapter, nodeIsInternalLink, nodeIsSection, nodeIsSubsection } from "./html-transforms/types";
-import processChapterSectionSubsection from "./html-transforms/chapter-section-subsection";
+import { processChapterSectionSubsection } from "./html-transforms/chapter-section-subsection";
 import processInternalLink from "./html-transforms/internal-link";
 
 // onNewCommentClick passed through from <Document />

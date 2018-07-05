@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import { convertNodeToElement } from "react-html-parser";
 import { nodeIsTypeText, nodeIsSubsection, nodeIsSpanTag } from "./types";
 
-export default function processChapterSection(node, incomingHtml, onNewCommentClick, sourceURI) {
+export const processChapterSectionSubsection = (node, incomingHtml, onNewCommentClick, sourceURI) => {
 	let commentOn = node.attribs["data-heading-type"].toLowerCase();
 	let quote = node.children.filter(nodeIsTypeText)[0].data;
 
@@ -36,4 +36,4 @@ export default function processChapterSection(node, incomingHtml, onNewCommentCl
 			{convertNodeToElement(node)}
 		</Fragment>
 	);
-}
+};
