@@ -39,9 +39,6 @@ export class ReviewPage extends Component<PropsType> {
 	gatherData = async () => {
 		const consultationId = this.props.match.params.consultationId;
 
-
-
-
 		const documentsData = load("documents", undefined, [], { consultationId })
 			.then(response => response.data)
 			.catch(err => {
@@ -55,17 +52,6 @@ export class ReviewPage extends Component<PropsType> {
 			.catch(err => {
 				throw new Error("consultationData " + err);
 			});
-
-
-
-
-		// const consultationData = load("consultation", undefined, [], {
-		// 	consultationId
-		// })
-		// 	.then(response => response.data)
-		// 	.catch(err => {
-		// 		throw new Error("consultationData " + err);
-		// 	});
 
 		return {
 			documentsList: await documentsData,
@@ -140,19 +126,15 @@ export class ReviewPage extends Component<PropsType> {
 	};
 
 	submitConsultation = () => {
-		console.log('about to call submit comments in commentlist');
-		this.commentList.submitComments();
-
-		
+		this.commentList.submitComments();		
 	};
 
 	submittedHandler = () => {
+		console.log('submitted handler in reviewpage');
 		this.setState({
 			isSubmitted: true
 		});
-		console.log('submittedHandler in review page called');
 	}
-
 
 	render() {
 		if (this.state.documentsList.length === 0) return <h1>Loading...</h1>;

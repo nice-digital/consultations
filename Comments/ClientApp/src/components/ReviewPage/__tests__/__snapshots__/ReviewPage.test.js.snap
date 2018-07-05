@@ -77,7 +77,7 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
             itemType="http://schema.org/ListItem"
           >
             <a
-              href="https://alpha.nice.org.uk/guidance/indevelopment/gid-ng10103/consultation/html-content"
+              href="https://alpha.nice.org.uk/guidance/indevelopment/gid-ng10107/consultation/html-content"
             >
               Consultation
             </a>
@@ -126,7 +126,24 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
             onTouchStart={[Function]}
           >
             <div
-              data-g="12 md:3"
+              data-g="12 md:6 md:push:3"
+            >
+              <h3
+                className="mt--0"
+                id="comments-column"
+              >
+                Comments
+              </h3>
+              <div
+                data-qa-sel="comment-list-wrapper"
+              >
+                <p>
+                  Loading...
+                </p>
+              </div>
+            </div>
+            <div
+              data-g="12 md:3 md:pull:6"
             >
               <div>
                 <div />
@@ -250,20 +267,6 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                     </ul>
                   </nav>
                 </div>
-              </div>
-            </div>
-            <div
-              data-g="12 md:6"
-            >
-              <h3
-                className="mt--0"
-              >
-                Comments
-              </h3>
-              <div>
-                <p>
-                  Loading...
-                </p>
               </div>
             </div>
             <div
