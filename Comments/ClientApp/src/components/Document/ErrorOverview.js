@@ -2,10 +2,8 @@ import React from "react";
 import { generateErrorList } from "../../document-processing/process-preview-html";
 
 export const ErrorOverview = (props) => {
-
 	const errorContent = generateErrorList(props.content);
 	const qty = errorContent.length;
-
 	if (qty) {
 		return (
 			<div className="panel panel--inverse">
