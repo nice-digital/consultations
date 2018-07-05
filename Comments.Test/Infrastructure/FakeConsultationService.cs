@@ -1,12 +1,7 @@
-using Comments.Models;
 using Comments.Services;
 using Comments.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Comment = Comments.ViewModels.Comment;
-using Location = Comments.Models.Location;
-using Question = Comments.ViewModels.Question;
 
 namespace Comments.Test.Infrastructure
 {
@@ -23,13 +18,22 @@ namespace Comments.Test.Infrastructure
 		    return _consultationIsOpen;
 	    }
 
-		#region Not Implemented Members
-		public ConsultationDetail GetConsultationDetail(int consultationId)
+	    public ConsultationDetail GetConsultationDetail(int consultationId)
 	    {
-		    throw new NotImplementedException();
+		    return new ConsultationDetail("CG80", "some consultation", "consultation name", DateTime.MinValue, DateTime.MaxValue,
+			    "type", "resource title", "CG", "Clinical guidelines", "CG", null, 1, null, true, true, true, true, null, null, null, null);
 	    }
 
-	    public ChapterContent GetChapterContent(int consultationId, int documentId, string chapterSlug)
+	    public bool HasSubmittedCommentsOrQuestions(string consultationSourceURI, Guid userId)
+	    {
+		    return true;
+	    }
+
+
+		#region Not Implemented Members
+
+
+		public ChapterContent GetChapterContent(int consultationId, int documentId, string chapterSlug)
 	    {
 		    throw new NotImplementedException();
 	    }
@@ -58,28 +62,6 @@ namespace Comments.Test.Infrastructure
 	    {
 		    throw new NotImplementedException();
 	    }
-
-	    public bool HasSubmittedCommentsOrQuestions(string consultationSourceURI, Guid userId)
-	    {
-		    throw new NotImplementedException();
-	    }
-
-		/// <summary>
-		/// maybe this code should be a static somewhere..?
-		/// </summary>
-		/// <param name="locations"></param>
-		/// <returns></returns>
-	    public (IList<Comment> comments, IList<Question> questions) ConvertLocationsToCommentsAndQuestionsViewModels(IEnumerable<Location> locations)
-	    {
-			var commentsData = new List<ViewModels.Comment>();
-		    var questionsData = new List<ViewModels.Question>();
-		    foreach (var location in locations)
-		    {
-			    commentsData.AddRange(location.Comment.Select(comment => new ViewModels.Comment(location, comment)));
-			    questionsData.AddRange(location.Question.Select(question => new ViewModels.Question(location, question)));
-		    }
-		    return (commentsData, questionsData);
-		}
 
 	    #endregion Not Implemented Members
 	}

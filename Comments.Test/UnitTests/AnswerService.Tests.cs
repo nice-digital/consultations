@@ -215,8 +215,10 @@ namespace Comments.Test.UnitTests
             var questionId = AddQuestion(locationId, questionTypeId, questionText);
             var expectedAnswerId = AddAnswer(questionId, userId, "current user's answer");
             AddAnswer(questionId, Guid.NewGuid(), "another user's answer");
-            
-            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService, authenticateService, _consultationService);
+
+	        var context = new ConsultationsContext(_options, userService);
+			var submitService = new SubmitService(context, userService, _consultationService);
+			var commentService = new CommentService(context, userService, authenticateService, submitService);
 
             // Act
             var viewModel = commentService.GetCommentsAndQuestions(sourceURI);

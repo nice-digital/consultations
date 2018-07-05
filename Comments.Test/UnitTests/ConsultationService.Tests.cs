@@ -29,8 +29,10 @@ namespace Comments.Test.UnitTests
 
             var locationId = AddLocation(sourceURI);
             AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId);
-            
-            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService, authenticateService, _consultationService);
+
+	        var context = new ConsultationsContext(_options, userService);
+			var submitService = new SubmitService(context, userService, _consultationService);
+            var commentService = new CommentService(context, userService, authenticateService, submitService);
             
             // Act
             var viewModel = commentService.GetCommentsAndQuestions(sourceURI);
@@ -52,7 +54,8 @@ namespace Comments.Test.UnitTests
             var authenticateService = new FakeAuthenticateService(authenticated: true);
 
             AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, createdByUserId, (int)StatusName.Draft, _context);
-            var commentService = new CommentService(_context, _fakeUserService, authenticateService, _consultationService);
+	        var submitService = new SubmitService(_context, _fakeUserService, _consultationService);
+			var commentService = new CommentService(_context, _fakeUserService, authenticateService, submitService);
 
             // Act    
             var viewModel = commentService.GetCommentsAndQuestions(sourceURI);

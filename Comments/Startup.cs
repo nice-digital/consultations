@@ -65,6 +65,7 @@ namespace Comments
             services.TryAddTransient<IFeedService, FeedService>();
             services.TryAddTransient<IAnswerService, AnswerService>();
             services.TryAddTransient<IQuestionService, QuestionService>();
+	        services.TryAddTransient<ISubmitService, SubmitService>();
 
 			// Add authentication 
 			services.AddAuthentication(options =>

@@ -46,7 +46,7 @@ namespace Comments.Test.Infrastructure
         protected readonly DbContextOptionsBuilder<ConsultationsContext> _contextOptions;
 
         protected readonly ConsultationsContext _context;
-	    protected readonly bool _useFakeConsultationService = false;
+	    protected readonly bool _useRealSubmitService = false;
 
 		public TestBase(Feed feed) : this()
         {
@@ -73,13 +73,13 @@ namespace Comments.Test.Infrastructure
 		}
 
 
-		public TestBase(bool useFakeConsultationService = false)
+		public TestBase(bool useRealSubmitService = false)
         {
             // Arrange
             _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
             _fakeHttpContextAccessor = FakeHttpContextAccessor.Get(_authenticated, _displayName, _userId);
 	        _consultationService = new FakeConsultationService();
-	        _useFakeConsultationService = useFakeConsultationService;
+	        _useRealSubmitService = useRealSubmitService;
 			var databaseName = DatabaseName + Guid.NewGuid();
 
             //SQLiteConnectionStringBuilder sqLiteConnectionStringBuilder = new SQLiteConnectionStringBuilder()
@@ -113,10 +113,14 @@ namespace Comments.Test.Infrastructure
                     services.TryAddSingleton<IHttpContextAccessor>(provider => _fakeHttpContextAccessor);
                     services.TryAddTransient<IUserService>(provider => _fakeUserService);
                     services.TryAddTransient<IFeedReaderService>(provider => new FeedReader(FeedToUse));
-
-					if (_useFakeConsultationService)
-						services.TryAddTransient<IConsultationService>(provider => _consultationService);
-
+	                if (_useRealSubmitService)
+	                {
+						services.TryAddTransient<IConsultationService>(provider => new FakeConsultationService(true));
+					}
+	                else
+					{
+		                services.TryAddTransient<ISubmitService>(provider => new FakeSubmitService());
+					}
                 })
                 .Configure(app =>
                 {

@@ -10,14 +10,12 @@ namespace Comments.Controllers.Api
 	[Authorize]
 	public class SubmitController : ControllerBase
 	{
-		private readonly IConsultationService _consultationService;
-		private readonly ICommentService _commentService;
+		private readonly ISubmitService _submitService;
 	    private readonly ILogger<SubmitController> _logger;
 
-		public SubmitController(IConsultationService consultationService, ICommentService commentService, ILogger<SubmitController> logger)
+		public SubmitController(ISubmitService submitService, ICommentService commentService, ILogger<SubmitController> logger)
 	    {
-		    _consultationService = consultationService;
-		    _commentService = commentService;
+		    _submitService = submitService;
 		    _logger = logger;
 		}
 
@@ -30,7 +28,7 @@ namespace Comments.Controllers.Api
 				return BadRequest(ModelState);
 			}
 
-			var result = _consultationService.SubmitCommentsAndAnswers(commentsAndAnswers);
+			var result = _submitService.SubmitCommentsAndAnswers(commentsAndAnswers);
 			var invalidResult = Validate(result.validate, _logger);
 			
 			return invalidResult ?? Ok(commentsAndAnswers); //should return comments and answers, might need submission object too
