@@ -94,7 +94,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 					{lastModifiedDate ? (
 						<div className="CommentBox__datestamp mb--d font-weight-bold">
 							Last Modified Date:{" "}
-							<Moment format="D/M/YYYY - h:mma" date={lastModifiedDate}/>
+							<Moment format="D/M/YYYY - h:mma" date={new Date(lastModifiedDate)}/>
 						</div>
 					) : null}
 					<form onSubmit={e => this.props.saveHandler(e, comment)}>

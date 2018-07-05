@@ -63,7 +63,7 @@ namespace Comments.Services
                 return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to edit comment id: {commentId}, but it's not their comment"));
 
             comment.LastModifiedByUserId = _currentUser.UserId.Value;
-            comment.LastModifiedDate = DateTime.Now;
+            comment.LastModifiedDate = DateTime.UtcNow;
             commentInDatabase.UpdateFromViewModel(comment);
             return (rowsUpdated: _context.SaveChanges(), validate: null);
         }
@@ -99,7 +99,7 @@ namespace Comments.Services
                 return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to delete comment id: {commentId}, but it's not their comment"));
 
             commentInDatabase.IsDeleted = true;
-            commentInDatabase.LastModifiedDate = DateTime.Now;
+            commentInDatabase.LastModifiedDate = DateTime.UtcNow;
             commentInDatabase.LastModifiedByUserId = _currentUser.UserId.Value;
             return (rowsUpdated: _context.SaveChanges(), validate: null);
         }

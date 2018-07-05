@@ -10,8 +10,8 @@ namespace Comments.Models
         {
             LocationId = locationId;
             CreatedByUserId = createdByUserId;
-            CreatedDate = DateTime.Now;
-            LastModifiedDate = DateTime.Now;
+            CreatedDate = DateTime.UtcNow;
+            LastModifiedDate = DateTime.UtcNow;
             LastModifiedByUserId = lastModifiedByUserId;
             CommentText = commentText ?? throw new ArgumentNullException(nameof(commentText));
             Location = location;
