@@ -1,7 +1,157 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied data 1`] = `
-<h1>
-  Loading...
-</h1>
+<div
+  className="container"
+>
+  <div
+    className="grid"
+  >
+    <div
+      data-g="12"
+    >
+      <aside
+        className="phase-banner mt--b"
+      >
+        <span
+          className="phase-banner__tag"
+          onClick={[Function]}
+          role="button"
+        >
+          <span
+            className="tag tag--impact tag--agile"
+          >
+            beta
+          </span>
+        </span>
+        <span
+          className="phase-banner__label"
+        >
+          NICE Consultations
+           is in development which means that some features may not work fully.
+           
+          <a
+            href="https://github.com/nhsevidence/consultations"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Report an issue
+          </a>
+        </span>
+      </aside>
+      <nav
+        aria-label="Breadcrumbs"
+      >
+        <p
+          className="visually-hidden"
+        >
+          You are here:
+        </p>
+        <ol
+          className="breadcrumbs"
+          itemScope={true}
+          itemType="http://schema.org/BreadcrumbList"
+        >
+          <li
+            className="breadcrumbs__crumb"
+            itemProp="itemListElement"
+            itemScope={true}
+            itemType="http://schema.org/ListItem"
+          >
+            <a
+              href="#"
+              itemProp="name"
+              onClick={[Function]}
+            >
+              All Consultations
+            </a>
+            <meta
+              content={0}
+              itemProp="position"
+            />
+          </li>
+          <li
+            className="breadcrumbs__crumb"
+            itemProp="itemListElement"
+            itemScope={true}
+            itemType="http://schema.org/ListItem"
+          >
+            <a
+              href="https://alpha.nice.org.uk/guidance/indevelopment/gid-ng10107/consultation/html-content"
+            >
+              Consultation
+            </a>
+            <meta
+              content={1}
+              itemProp="position"
+            />
+          </li>
+          <li
+            className="breadcrumbs__crumb"
+            itemProp="itemListElement"
+            itemScope={true}
+            itemType="http://schema.org/ListItem"
+          >
+            <a
+              href="/1/1/introduction"
+              itemProp="name"
+              onClick={[Function]}
+            >
+              Documents
+            </a>
+            <meta
+              content={2}
+              itemProp="position"
+            />
+          </li>
+        </ol>
+      </nav>
+      <main
+        role="main"
+      >
+        <div
+          className="page-header"
+        >
+          <undefined />
+          <h2
+            className="mt--0"
+          >
+            Comments submitted
+          </h2>
+          <div
+            className="hero"
+          >
+            <div
+              className="hero__container"
+            >
+              <div
+                className="hero__body"
+              >
+                <div
+                  className="hero__copy"
+                >
+                  <p
+                    className="hero__intro"
+                  >
+                    Thank you, your comments have been submitted
+                  </p>
+                  <div
+                    className="hero__actions"
+                  >
+                    <button
+                      className="btn"
+                      onClick={[Function]}
+                    >
+                      Review all submitted comments
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>
 `;

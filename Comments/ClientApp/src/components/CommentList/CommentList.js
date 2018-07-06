@@ -131,7 +131,9 @@ export class CommentList extends Component<PropsType, StateType> {
 
 	setCommentListState = (response: any) =>
 	{
+		console.log('about to set allow comments in setcommentliststate');
 		let allowComments = response.data.consultationState.consultationIsOpen && !response.data.consultationState.userHasSubmitted;
+		console.log('set allow comments in setcommentliststate');
 		const comments = this.filterComments(this.props.location.search, response.data.comments );
 		this.setState({
 			comments,

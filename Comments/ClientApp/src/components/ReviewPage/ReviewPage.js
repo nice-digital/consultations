@@ -181,13 +181,13 @@ export class ReviewPage extends Component<PropsType, StateType> {
 
 									{(this.state.isSubmitted && !this.state.viewSubmittedComments) ?
 
-									<div class="hero">
-										<div class="hero__container">
-											<div class="hero__body">
-												<div class="hero__copy">
+									<div className="hero">
+										<div className="hero__container">
+											<div className="hero__body">
+												<div className="hero__copy">
 													{/* <h1 class="hero__title">Hero title</h1> */}
-													<p class="hero__intro">Thank you, your comments have been submitted</p>
-													<div class="hero__actions">
+													<p className="hero__intro">Thank you, your comments have been submitted</p>
+													<div className="hero__actions">
 														<button className="btn" onClick={this.viewSubmittedCommentsHandler}>Review all submitted comments</button>
 														{/* <a onClick={this.state.viewSubmittedComments = true}>Review all submitted comments</a> */}
 													</div>

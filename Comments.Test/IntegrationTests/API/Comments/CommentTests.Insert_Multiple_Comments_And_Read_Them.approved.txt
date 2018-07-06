@@ -71,12 +71,12 @@
         "endDate":"2028-05-31T17:00:00",
         "hasQuestions":false,
         "hasUserSuppliedAnswers":false,
-        "hasUserSuppliedComments":true,
+        "hasUserSuppliedComments":false,
         "userHasSubmitted":false,
         "consultationIsOpen":true,
         "consultationHasNotStartedYet":false,
         "consultationHasEnded":false,
-        "supportsSubmission":true,
-        "supportsDownload":true
+        "supportsSubmission":false,
+        "supportsDownload":false
     }
 }
