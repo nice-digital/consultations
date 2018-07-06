@@ -9,7 +9,7 @@ import { LoginBanner } from "./../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
 import { queryStringToObject, replaceFormat } from "../../helpers/utils";
 import {pullFocusById} from "../../helpers/accessibility-helpers";
-//import stringifyObject from "stringify-object";
+import stringifyObject from "stringify-object";
 
 type PropsType = {
 	staticContext?: any,
@@ -86,7 +86,10 @@ export class CommentList extends Component<PropsType, StateType> {
 		// }
 
 		if (preloaded) {
-			let allowComments = !preloaded.consultationState.ConsultationIsOpen && !preloaded.consultationState.UserHasSubmitted;
+
+			//console.log(`preloaded 90: ${stringifyObject(preloaded)}`);
+
+			let allowComments = !preloaded.consultationState.consultationIsOpen && !preloaded.consultationState.userHasSubmitted;
 			this.state = {
 				loading: false,
 				comments: preloaded.comments,
@@ -128,7 +131,7 @@ export class CommentList extends Component<PropsType, StateType> {
 
 	setCommentListState = (response: any) =>
 	{
-		let allowComments = response.data.consultationState.ConsultationIsOpen && !response.data.consultationState.UserHasSubmitted;
+		let allowComments = response.data.consultationState.consultationIsOpen && !response.data.consultationState.userHasSubmitted;
 		const comments = this.filterComments(this.props.location.search, response.data.comments );
 		this.setState({
 			comments,

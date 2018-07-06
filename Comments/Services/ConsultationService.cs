@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Comments.Common;
 using Comments.Models;
+using Location = Comments.Models.Location;
 
 namespace Comments.Services
 {
@@ -82,10 +83,14 @@ namespace Comments.Services
 			var consultationDetail = GetConsultationDetail(consultationId);
 		    var currentUser = _userService.GetCurrentUser();
 
-			if (locations == null)
+			if (locations == null && currentUser.IsAuthorised && currentUser.UserId.HasValue)
 		    {
 			    locations = _context.GetAllCommentsAndQuestionsForDocument(new[] { sourceURI }, isReview: true);
 		    }
+			else
+			{
+				locations = new List<Location>(0);
+			}
 
 		    var hasSubmitted = currentUser != null && currentUser.IsAuthorised && currentUser.UserId.HasValue ? HasSubmittedCommentsOrQuestions(sourceURI, currentUser.UserId.Value) : false;
 

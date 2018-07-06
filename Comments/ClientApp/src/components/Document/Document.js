@@ -79,8 +79,8 @@ export class Document extends Component<PropsType, StateType> {
 
 			if (preloadedChapter && preloadedDocuments && preloadedConsultation) {
 				const allowComments = preloadedConsultation.supportsComments &&
-					preloadedConsultation.consultationState.ConsultationIsOpen &&
-					!preloadedConsultation.consultationState.UserHasSubmitted;
+					preloadedConsultation.consultationState.consultationIsOpen &&
+					!preloadedConsultation.consultationState.userHasSubmitted;
 				this.state = {
 					chapterData: preloadedChapter,
 					documentsData: preloadedDocuments,
@@ -134,8 +134,8 @@ export class Document extends Component<PropsType, StateType> {
 			this.gatherData()
 				.then(data => {
 					const allowComments = data.consultationData.supportsComments &&
-						data.consultationData.consultationState.ConsultationIsOpen &&
-						!data.consultationData.consultationState.UserHasSubmitted;
+						data.consultationData.consultationState.consultationIsOpen &&
+						!data.consultationData.consultationState.userHasSubmitted;
 					this.setState({
 						...data,
 						loading: false,
