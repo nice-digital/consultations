@@ -17,7 +17,9 @@ namespace Comments.Services
         ViewModels.Consultation GetConsultation(int consultationId);
         IEnumerable<ViewModels.Consultation> GetConsultations();
 	    ConsultationState GetConsultationState(string sourceURI, IEnumerable<Models.Location> locations = null);
-	    bool HasSubmittedCommentsOrQuestions(string consultationSourceURI, Guid userId);
+	    ConsultationState GetConsultationState(int consultationId, IEnumerable<Models.Location> locations = null);
+
+		bool HasSubmittedCommentsOrQuestions(string consultationSourceURI, Guid userId);
 	}
 
 	public class ConsultationService : IConsultationService
@@ -57,7 +59,8 @@ namespace Comments.Services
         {
             var user = _userService.GetCurrentUser();
             var consultation = _feedConverterService.GetIndevConsultationDetailForPublishedProject(consultationId, PreviewState.NonPreview);
-            return new ViewModels.Consultation(consultation, user);
+	        var consultationState = GetConsultationState(consultationId);
+            return new ViewModels.Consultation(consultation, user, consultationState);
         }
 
         public IEnumerable<ViewModels.Consultation> GetConsultations()
@@ -69,11 +72,17 @@ namespace Comments.Services
 
 	    public ConsultationState GetConsultationState(string sourceURI, IEnumerable<Models.Location> locations = null)
 	    {
-		    var currentUser = _userService.GetCurrentUser();
 		    var consultationsUriElements = ConsultationsUri.ParseConsultationsUri(sourceURI);
-		    var consultationDetail = GetConsultationDetail(consultationsUriElements.ConsultationId);
+		    return GetConsultationState(consultationsUriElements.ConsultationId, locations);
+	    }
 
-		    if (locations == null)
+		public ConsultationState GetConsultationState(int consultationId, IEnumerable<Models.Location> locations = null)
+	    {
+			var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
+			var consultationDetail = GetConsultationDetail(consultationId);
+		    var currentUser = _userService.GetCurrentUser();
+
+			if (locations == null)
 		    {
 			    locations = _context.GetAllCommentsAndQuestionsForDocument(new[] { sourceURI }, isReview: true);
 		    }
@@ -87,6 +96,7 @@ namespace Comments.Services
 
 		    return consultationState;
 	    }
+		
 
 	    public bool HasSubmittedCommentsOrQuestions(string anySourceURI, Guid userId)
 	    {

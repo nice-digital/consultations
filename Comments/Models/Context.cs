@@ -44,9 +44,6 @@ namespace Comments.Models
 		/// <returns></returns>
 		public IEnumerable<Location> GetAllCommentsAndQuestionsForDocument(IEnumerable<string> sourceURIs, bool isReview)
 	    {
-			if (!_userService.GetCurrentUser().IsAuthorised)
-			    throw new Exception("trying to return comments and questions when not logged in. this should have been trapped in the service.");
-
 			var data = Location.Where(l => isReview ? l.SourceURI.Contains(sourceURIs.First()) : sourceURIs.Contains(l.SourceURI))
 					.Include(l => l.Comment)
 						.ThenInclude(s => s.SubmissionComment)

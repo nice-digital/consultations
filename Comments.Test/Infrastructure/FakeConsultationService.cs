@@ -24,11 +24,20 @@ namespace Comments.Test.Infrastructure
 			    "type", "resource title", "CG", "Clinical guidelines", "CG", null, 1, null, true, true, true, true, null, null, null, null);
 	    }
 
+	   
+
 	    public bool HasSubmittedCommentsOrQuestions(string consultationSourceURI, Guid userId)
 	    {
 		    return false;
 	    }
-
+	    public ConsultationState GetConsultationState(string sourceURI, IEnumerable<Models.Location> locations = null)
+	    {
+		    return new ConsultationState(DateTime.MinValue, _consultationIsOpen ? DateTime.MaxValue : DateTime.MinValue, true, true, true, false);
+	    }
+	    public ConsultationState GetConsultationState(int consultationId, IEnumerable<Models.Location> locations = null)
+	    {
+		    return new ConsultationState(DateTime.MinValue, _consultationIsOpen ? DateTime.MaxValue : DateTime.MinValue, true, true, true, false);
+	    }
 
 		#region Not Implemented Members
 
@@ -53,12 +62,7 @@ namespace Comments.Test.Infrastructure
 		    throw new NotImplementedException();
 	    }
 
-		public ConsultationState GetConsultationState(string sourceURI, IEnumerable<Models.Location> locations = null)
-		{
-			return new ConsultationState(DateTime.MinValue, _consultationIsOpen ? DateTime.MaxValue : DateTime.MinValue, true, true, true, false);
-		}
-
-	    public (int rowsUpdated, Validate validate) SubmitCommentsAndAnswers(CommentsAndAnswers commentsAndAnswers)
+		public (int rowsUpdated, Validate validate) SubmitCommentsAndAnswers(CommentsAndAnswers commentsAndAnswers)
 	    {
 		    throw new NotImplementedException();
 	    }

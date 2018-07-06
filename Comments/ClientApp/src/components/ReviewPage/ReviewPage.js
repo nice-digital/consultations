@@ -91,7 +91,8 @@ export class ReviewPage extends Component<PropsType, StateType> {
 		this.gatherData()
 			.then(data => {
 				this.setState({
-					...data
+					...data//,
+					//isSubmitted = data.consultationState.supportsSubmission
 				});
 			})
 			.catch(err => {

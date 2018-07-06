@@ -3,7 +3,7 @@
     "title":"For consultation comments",
     "consultationName":"Appraisal consultation",
     "startDate":"2018-04-01T00:00:00",
-    "endDate":"2018-05-31T17:00:00",
+    "endDate":"2028-05-31T17:00:00",
     "consultationType":"Appraisal consultation",
     "resourceTitleId":null,
     "projectType":"TA",
@@ -24,5 +24,17 @@
         "displayName":"Benjamin Button",
         "userId":"00000000-0000-0000-0000-000000000000"
     },
-    "consultationState":null
+    "consultationState":{
+        "startDate":"2018-04-01T00:00:00",
+        "endDate":"2028-05-31T17:00:00",
+        "hasQuestions":false,
+        "hasUserSuppliedAnswers":false,
+        "hasUserSuppliedComments":false,
+        "userHasSubmitted":false,
+        "consultationIsOpen":true,
+        "consultationHasNotStartedYet":false,
+        "consultationHasEnded":false,
+        "supportsSubmission":false,
+        "supportsDownload":false
+    }
 }

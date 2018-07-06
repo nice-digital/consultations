@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Comments.Models;
 using Comments.ViewModels;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using SQLitePCL;
 
 namespace Comments.Services
 {
-    public interface IQuestionService
+	public interface IQuestionService
     {
         (ViewModels.Question question, Validate validate) GetQuestion(int questionId);
         (int rowsUpdated, Validate validate) EditQuestion(int questionId, ViewModels.Question question);
