@@ -11,6 +11,7 @@ import { StackedNav } from "./../StackedNav/StackedNav";
 import { queryStringToObject } from "../../helpers/utils";
 import { UserContext } from "../../context/UserContext";
 import { pullFocusById } from "../../helpers/accessibility-helpers";
+//import stringifyObject from "stringify-object";
 
 type DocumentType = {
 	title: string,
@@ -90,9 +91,11 @@ export class ReviewPage extends Component<PropsType, StateType> {
 		// if (!this.state.hasInitialData) {
 		this.gatherData()
 			.then(data => {
+
+				//console.log(`data: ${stringifyObject(data.consultationData.consultationState.supportsSubmission)}`);
 				this.setState({
-					...data//,
-					//isSubmitted = data.consultationState.supportsSubmission
+					...data,
+					isSubmitted: !data.consultationData.consultationState.supportsSubmission
 				});
 			})
 			.catch(err => {
