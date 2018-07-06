@@ -1,12 +1,17 @@
 ﻿{
     "comments":[
         {
-            "commentId":3,
+            "commentId":"scrubbed by ScrubCommentId",
             "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
             "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
             "commentText":"comment text",
+            "status":{
+                "statusId":1,
+                "name":"Draft"
+            },
+            "statusId":1,
             "commentOn":"Chapter",
-            "locationId":2,
+            "commentId":"scrubbed by ScrubLocationId",
             "sourceURI":"consultations://./consultation/1/document/1/chapter/introduction",
             "htmlElementID":null,
             "rangeStart":null,
@@ -16,12 +21,17 @@
             "quote":null
         },
         {
-            "commentId":1,
+            "commentId":"scrubbed by ScrubCommentId",
             "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
             "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
             "commentText":"comment text",
+            "status":{
+                "statusId":1,
+                "name":"Draft"
+            },
+            "statusId":1,
             "commentOn":"Chapter",
-            "locationId":1,
+            "commentId":"scrubbed by ScrubLocationId",
             "sourceURI":"consultations://./consultation/1/document/1/chapter/introduction",
             "htmlElementID":null,
             "rangeStart":null,
@@ -31,12 +41,17 @@
             "quote":null
         },
         {
-            "commentId":2,
+            "commentId":"scrubbed by ScrubCommentId",
             "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
             "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
             "commentText":"comment text",
+            "status":{
+                "statusId":1,
+                "name":"Draft"
+            },
+            "statusId":1,
             "commentOn":"Chapter",
-            "locationId":1,
+            "commentId":"scrubbed by ScrubLocationId",
             "sourceURI":"consultations://./consultation/1/document/1/chapter/introduction",
             "htmlElementID":null,
             "rangeStart":null,
@@ -50,5 +65,18 @@
         
     ],
     "isAuthorised":true,
-    "signInURL":"/signin?returnURL=/"
+    "signInURL":"/signin?returnURL=/",
+    "consultationState":{
+        "startDate":"0001-01-01T00:00:00",
+        "endDate":"9999-12-31T23:59:59.9999999",
+        "hasQuestions":true,
+        "hasUserSuppliedAnswers":true,
+        "hasUserSuppliedComments":true,
+        "userHasSubmitted":true,
+        "consultationIsOpen":true,
+        "consultationHasNotStartedYet":false,
+        "consultationHasEnded":false,
+        "supportsSubmission":false,
+        "supportsDownload":true
+    }
 }

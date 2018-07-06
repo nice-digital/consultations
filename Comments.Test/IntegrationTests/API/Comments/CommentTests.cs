@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -38,7 +38,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
         public async Task Create_Comment(int locationId, string sourceURI)
         {
             //Arrange
-            var comment = new ViewModels.Comment(locationId, sourceURI, null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty, "comment text");
+            var comment = new ViewModels.Comment(locationId, sourceURI, null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty, "comment text", 1);
             var content = new StringContent(JsonConvert.SerializeObject(comment), Encoding.UTF8, "application/json");
 
             // Act
@@ -58,7 +58,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
         public async Task Comment_ViewModel_Fails_To_Serialise_With_Invalid_SourceURI(int locationId, string sourceURI)
         {
             //Arrange
-            var comment = new ViewModels.Comment(locationId, sourceURI, null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty, "comment text");
+            var comment = new ViewModels.Comment(locationId, sourceURI, null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty, "comment text", 1);
             Exception _ex = null;
 
             // Act
@@ -81,7 +81,9 @@ namespace Comments.Test.IntegrationTests.API.Comments
         {
             //Arrange
             ResetDatabase();
-            string sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+	        _context.Database.EnsureCreated();
+
+			string sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 
             var locationId = AddLocation(sourceURI);
             AddComment(locationId, "comment text", false, Guid.Empty);
@@ -102,7 +104,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
             var responseString = await response.Content.ReadAsStringAsync();
 
             // Assert
-            responseString.ShouldMatchApproved(new Func<string, string>[]{Scrubbers.ScrubLastModifiedDate});
+            responseString.ShouldMatchApproved(new Func<string, string>[]{Scrubbers.ScrubLastModifiedDate, Scrubbers.ScrubCommentId, Scrubbers.ScrubLocationId});
             var deserialisedResponse = JsonConvert.DeserializeObject<CommentsAndQuestions>(responseString);
             deserialisedResponse.Comments.Count().ShouldBe(3);
         }
@@ -118,7 +120,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
             var answerText = Guid.NewGuid().ToString();
             var userId = Guid.NewGuid();
            
-            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId, _context);
+            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId, (int)StatusName.Draft, _context);
 
             // Act
             var response = await _client.GetAsync($"/consultations/api/Comments?sourceURI={WebUtility.UrlEncode("/1/2/introduction")}");
@@ -137,7 +139,9 @@ namespace Comments.Test.IntegrationTests.API.Comments
         {
             //Arrange
             ResetDatabase();
-            const string sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+	        _context.Database.EnsureCreated();
+
+			const string sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var commentText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
             var locationId = AddLocation(sourceURI);
@@ -145,7 +149,9 @@ namespace Comments.Test.IntegrationTests.API.Comments
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
             var authenticateService = new FakeAuthenticateService(authenticated: true);
-            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService, authenticateService);
+	        var context = new ConsultationsContext(_options, userService);
+			//var submitService = new SubmitService(context, userService, _consultationService);
+            var commentService = new CommentService(context, userService, authenticateService, _consultationService);
 
             //Act
             var response = await _client.DeleteAsync($"consultations/api/Comment/{commentId}");
@@ -162,15 +168,18 @@ namespace Comments.Test.IntegrationTests.API.Comments
         {
             //Arrange
             ResetDatabase();
-            const string sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+	        _context.Database.EnsureCreated();
+
+			const string sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var commentText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
             var locationId = AddLocation(sourceURI, _context);
-            var commentId = AddComment(locationId, commentText, false, userId, _context);
+            var commentId = AddComment(locationId, commentText, false, userId, (int)StatusName.Draft, _context);
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
             var authenticateService = new FakeAuthenticateService(authenticated: true);
-            var commentService = new CommentService(_context, userService, authenticateService);
+	       // var submitService = new SubmitService(_context, userService, _consultationService);
+			var commentService = new CommentService(_context, userService, authenticateService, _consultationService);
 
             var viewModel = commentService.GetComment(commentId);
 
@@ -188,5 +197,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
             //Assert
             result.comment.CommentText.ShouldBe(updatedCommentText);
         }
-    }
+
+	    
+	}
 }

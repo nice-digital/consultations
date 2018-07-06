@@ -168,21 +168,21 @@ namespace Comments.Migrations
             migrationBuilder.DropTable(
                 name: "QuestionType");
 
-            migrationBuilder.CreateTable(
-                name: "Consultations",
-                columns: table => new
-                {
-                    ConsultationId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    EndDate = table.Column<DateTime>(nullable: false),
-                    GuidanceReference = table.Column<string>(nullable: true),
-                    StartDate = table.Column<DateTime>(nullable: false),
-                    Title = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Consultations", x => x.ConsultationId);
-                });
+            //migrationBuilder.CreateTable(
+            //    name: "Consultations",
+            //    columns: table => new
+            //    {
+            //        ConsultationId = table.Column<int>(nullable: false)
+            //            .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+            //        EndDate = table.Column<DateTime>(nullable: false),
+            //        GuidanceReference = table.Column<string>(nullable: true),
+            //        StartDate = table.Column<DateTime>(nullable: false),
+            //        Title = table.Column<string>(nullable: true)
+            //    },
+            //    constraints: table =>
+            //    {
+            //        table.PrimaryKey("PK_Consultations", x => x.ConsultationId);
+            //    });
         }
     }
 }

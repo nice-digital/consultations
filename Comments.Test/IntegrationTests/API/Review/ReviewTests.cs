@@ -20,6 +20,7 @@ namespace Comments.Test.IntegrationTests.API.Review
         {
             // Arrange
             ResetDatabase();
+	        _context.Database.EnsureCreated();
 
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 	        var answerText = Guid.NewGuid().ToString();

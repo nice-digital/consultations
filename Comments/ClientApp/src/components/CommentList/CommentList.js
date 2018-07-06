@@ -24,7 +24,8 @@ type PropsType = {
 	isVisible: boolean,
 	isReviewPage: boolean,
 	filterByDocument: number,
-	isSubmmitted: boolean
+	isSubmmitted: boolean,
+	submittedHandler: Function
 };
 
 type CommentType = {
@@ -145,6 +146,21 @@ export class CommentList extends Component<PropsType, StateType> {
 			});
 			this.loadComments();
 		}
+	}
+
+	submitComments = () => {
+
+		let commentsAndAnswers = {comments: this.state.comments, answers: null}; //todo: answers
+
+		load("submit", undefined, [], {}, "POST", commentsAndAnswers, true)
+			.then(res => {
+				console.log('in the then in commentlist');
+				this.props.submittedHandler();
+			})
+			.catch(err => {
+				console.log(err);
+				if (err.response) alert(err.response.statusText);
+			});		
 	}
 
 	filterComments = (newSourceURIToFilterBy: string, comments: Array<CommentType>) => {

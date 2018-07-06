@@ -9,5 +9,6 @@ export const Endpoints = {
 	editcomment: "/api/Comment/{0}", // edits an existing comment. id must be positive int, restricted by current user
 	newcomment: "/api/Comment", // creates a new comment. body of message contains comment in json, restricted by current user
 	review: "/api/Review/{0}", //list of all comments for a consultation (inc Consultation, Document, Chapter and Section levels) given a URI, restricted by current user
-	user: "/api/User" // get details of currently logged in user
+	user: "/api/User", // get details of currently logged in user
+	submit: "/api/Submit" // submit on the review page.
 };

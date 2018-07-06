@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Comments.Common;
 using Microsoft.AspNetCore.Http.Extensions;
 
@@ -8,12 +8,13 @@ namespace Comments.ViewModels
     {
         public Comment() { } //only here for model binding. don't use it in code.
 
-        public Comment(int locationId, string sourceUri, string htmlElementId, string rangeStart, int? rangeStartOffset, string rangeEnd, int? rangeEndOffset, string quote, int commentId, DateTime lastModifiedDate, Guid lastModifiedByUserId, string commentText) : base(locationId, sourceUri, htmlElementId, rangeStart, rangeStartOffset, rangeEnd, rangeEndOffset, quote)
+        public Comment(int locationId, string sourceUri, string htmlElementId, string rangeStart, int? rangeStartOffset, string rangeEnd, int? rangeEndOffset, string quote, int commentId, DateTime lastModifiedDate, Guid lastModifiedByUserId, string commentText, int statusId) : base(locationId, sourceUri, htmlElementId, rangeStart, rangeStartOffset, rangeEnd, rangeEndOffset, quote)
         {
             CommentId = commentId;
             LastModifiedDate = lastModifiedDate;
             LastModifiedByUserId = lastModifiedByUserId;
             CommentText = commentText;
+	        StatusId = statusId;
         }
 
         public Comment(Models.Location location, Models.Comment comment) : base(location.LocationId, location.SourceURI, location.HtmlElementID,  
@@ -23,6 +24,9 @@ namespace Comments.ViewModels
             LastModifiedDate = comment.LastModifiedDate;
             LastModifiedByUserId = comment.LastModifiedByUserId;
             CommentText = comment.CommentText;
+	        if (!(comment.Status is null))
+		        Status = new Status(comment.Status);
+	        StatusId = comment.StatusId;
         }
 
         public int CommentId { get; set; }
@@ -30,7 +34,10 @@ namespace Comments.ViewModels
         public Guid LastModifiedByUserId { get; set; }
         public string CommentText { get; set; }
 
-        private CommentOn? _commentOn = null;
+	    public ViewModels.Status Status { get; set; }
+		public int StatusId { get; set; }
+
+		private CommentOn? _commentOn = null;
         public string CommentOn
         {
             get
@@ -49,5 +56,12 @@ namespace Comments.ViewModels
                 }
             }
         }
+
+	    public void UpdateStatusFromDBModel(Models.Status status)
+	    {
+		    StatusId = status.StatusId;
+		    Status = new Status(status);
+	    }
+	    
     }
 }
