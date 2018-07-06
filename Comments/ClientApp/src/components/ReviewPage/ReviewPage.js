@@ -145,28 +145,16 @@ export class ReviewPage extends Component<PropsType, StateType> {
 		});
 	}
 
+	viewSubmittedCommentsHandler = () => {
+		console.log('viewSubmittedCommentsHandler in reviewpage');
+		this.setState({
+			viewSubmittedComments: true
+		});
+	}
+
 	render() {
 		if (this.state.documentsList.length === 0) return <h1>Loading...</h1>;
 		const { title, reference, endDate } = this.state.consultationData;
-
-		if (this.state.isSubmitted && this.state.viewSubmittedComments){
-			return 
-			(<Fragment>
-				<div class="hero">
-					<div class="hero__container">
-						<div class="hero__body">
-							<div class="hero__copy">
-								{/* <h1 class="hero__title">Hero title</h1> */}
-								<p class="hero__intro">Thank you, your comments have been submitted</p>
-								<div class="hero__actions">
-									<a onClick={this.state.viewSubmittedComments = true}>Review all submitted comments</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</Fragment>);
-		}
 
 		return (
 			<Fragment>
@@ -185,10 +173,28 @@ export class ReviewPage extends Component<PropsType, StateType> {
 										title={title}
 										reference={reference}
 										endDate={endDate}/>
-									<h2 className="mt--0">Comments for review</h2>
+									<h2 className="mt--0">{this.state.isSubmitted ? "Comments submitted" : "Comments for review"}</h2>
+
+									{(this.state.isSubmitted && !this.state.viewSubmittedComments) ?
+
+									<div class="hero">
+										<div class="hero__container">
+											<div class="hero__body">
+												<div class="hero__copy">
+													{/* <h1 class="hero__title">Hero title</h1> */}
+													<p class="hero__intro">Thank you, your comments have been submitted</p>
+													<div class="hero__actions">
+														<button className="btn" onClick={this.viewSubmittedCommentsHandler}>Review all submitted comments</button>
+														{/* <a onClick={this.state.viewSubmittedComments = true}>Review all submitted comments</a> */}
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									:
 									<StickyContainer className="grid">
 										<div data-g="12 md:6 md:push:3">
-											<h3 className="mt--0" id="comments-column">{this.state.isSubmitted ? "Comments submitted" : "Comments"}</h3>
+											<h3 className="mt--0" id="comments-column">Comments</h3>
 											<CommentListWithRouter
 												isReviewPage={true}
 												isVisible={true}
@@ -250,6 +256,7 @@ export class ReviewPage extends Component<PropsType, StateType> {
 											</Sticky>
 										</div>
 									</StickyContainer>
+									}
 								</div>
 							</ main>
 						</div>
