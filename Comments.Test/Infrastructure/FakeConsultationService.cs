@@ -26,7 +26,7 @@ namespace Comments.Test.Infrastructure
 
 	    public bool HasSubmittedCommentsOrQuestions(string consultationSourceURI, Guid userId)
 	    {
-		    return true;
+		    return false;
 	    }
 
 

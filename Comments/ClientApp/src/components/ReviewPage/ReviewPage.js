@@ -140,7 +140,8 @@ export class ReviewPage extends Component<PropsType, StateType> {
 	submittedHandler = () => {
 		console.log('submitted handler in reviewpage');
 		this.setState({
-			isSubmitted: true
+			isSubmitted: true,
+			viewSubmittedComments: false
 		});
 	}
 
@@ -148,8 +149,23 @@ export class ReviewPage extends Component<PropsType, StateType> {
 		if (this.state.documentsList.length === 0) return <h1>Loading...</h1>;
 		const { title, reference, endDate } = this.state.consultationData;
 
-		if (this.state.isSubmitted){
-
+		if (this.state.isSubmitted && this.state.viewSubmittedComments){
+			return 
+			(<Fragment>
+				<div class="hero">
+					<div class="hero__container">
+						<div class="hero__body">
+							<div class="hero__copy">
+								{/* <h1 class="hero__title">Hero title</h1> */}
+								<p class="hero__intro">Thank you, your comments have been submitted</p>
+								<div class="hero__actions">
+									<a onClick={this.state.viewSubmittedComments = true}>Review all submitted comments</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</Fragment>);
 		}
 
 		return (
