@@ -60,6 +60,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			comments: [],
 			questions: [],
 			loading: true,
+			allowComments: true
 		};
 		let preloadedData = {};
 		if (this.props.staticContext && this.props.staticContext.preload) {
@@ -85,11 +86,13 @@ export class CommentList extends Component<PropsType, StateType> {
 		// }
 
 		if (preloaded) {
+			let allowComments = !preloaded.consultationState.ConsultationIsOpen && !preloaded.consultationState.UserHasSubmitted;
 			this.state = {
 				loading: false,
 				comments: preloaded.comments,
 				filteredComments: [],
-				questions: preloaded.questions
+				questions: preloaded.questions,
+				allowComments: allowComments
 			};
 		}
 	}
@@ -123,13 +126,15 @@ export class CommentList extends Component<PropsType, StateType> {
 			.catch(err => console.log("load comments in commentlist " + err));
 	}
 
-	setCommentListState = (response: any) => {
-
+	setCommentListState = (response: any) =>
+	{
+		let allowComments = response.data.consultationState.ConsultationIsOpen && !response.data.consultationState.UserHasSubmitted;
 		const comments = this.filterComments(this.props.location.search, response.data.comments );
 		this.setState({
 			comments,
 			questions: response.data.questions,
-			loading: false
+			loading: false,
+			allowComments: allowComments
 		});
 	};
 
@@ -285,7 +290,7 @@ export class CommentList extends Component<PropsType, StateType> {
 											{commentsToShow.map((comment) => {
 												return (
 													<CommentBox
-														readOnly={this.props.isSubmitted}
+														readOnly={!this.state.allowComments || this.props.isSubmitted}
 														isVisible={this.props.isVisible}
 														key={comment.commentId}
 														unique={`Comment${comment.commentId}`}

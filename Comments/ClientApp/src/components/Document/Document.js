@@ -53,7 +53,8 @@ export class Document extends Component<PropsType, StateType> {
 			loading: true,
 			hasInitialData: false,
 			currentInPageNavItem: null,
-			onboarded: false
+			onboarded: false,
+			allowComments: true
 		};
 
 		if (this.props) {
@@ -77,6 +78,9 @@ export class Document extends Component<PropsType, StateType> {
 			);
 
 			if (preloadedChapter && preloadedDocuments && preloadedConsultation) {
+				const allowComments = preloadedConsultation.supportsComments &&
+					preloadedConsultation.consultationState.ConsultationIsOpen &&
+					!preloadedConsultation.consultationState.UserHasSubmitted;
 				this.state = {
 					chapterData: preloadedChapter,
 					documentsData: preloadedDocuments,
@@ -84,7 +88,8 @@ export class Document extends Component<PropsType, StateType> {
 					loading: false,
 					hasInitialData: true,
 					currentInPageNavItem: null,
-					onboarded: false
+					onboarded: false,
+					allowComments: allowComments
 				};
 			}
 		}
@@ -128,10 +133,14 @@ export class Document extends Component<PropsType, StateType> {
 		if (!this.state.hasInitialData) {
 			this.gatherData()
 				.then(data => {
+					const allowComments = data.consultationData.supportsComments &&
+						data.consultationData.consultationState.ConsultationIsOpen &&
+						!data.consultationData.consultationState.UserHasSubmitted;
 					this.setState({
 						...data,
 						loading: false,
-						hasInitialData: true
+						hasInitialData: true,
+						allowComments : allowComments
 					});
 					this.addChapterDetailsToSections(this.state.chapterData);
 				})
@@ -312,45 +321,45 @@ export class Document extends Component<PropsType, StateType> {
 										[{reference}] Open until{" "}
 										<Moment format="D MMMM YYYY" date={endDate}/>
 									</p>
-
-									<button
-										data-qa-sel="comment-on-whole-consultation"
-										className="btn btn--cta"
-										onClick={e => {
-											e.preventDefault();
-											this.props.onNewCommentClick({
-												sourceURI: this.props.match.url,
-												commentText: "",
-												commentOn: "Consultation",
-												quote: title
-											});
-										}}
-									>
-										Comment on whole consultation
-									</button>
-
+									{this.state.allowComments && 
+										<button
+											data-qa-sel="comment-on-whole-consultation"
+											className="btn btn--cta"
+											onClick={e => {
+												e.preventDefault();
+												this.props.onNewCommentClick({
+													sourceURI: this.props.match.url,
+													commentText: "",
+													commentOn: "Consultation",
+													quote: title
+												});
+											}}
+										>
+											Comment on whole consultation
+										</button>
+									}
 									<h2 className="mb--b">
 										{this.getCurrentDocumentTitle(documentsData, documentId)}
 									</h2>
-
-									<button
-										data-qa-sel="comment-on-consultation-document"
-										className="btn btn--cta"
-										onClick={e => {
-											e.preventDefault();
-											this.props.onNewCommentClick({
-												sourceURI: this.props.match.url,
-												commentText: "",
-												commentOn: "Document",
-												quote: this.getCurrentDocumentTitle(
-													documentsData,
-													documentId
-												)
-											});
-										}}>
-										Comment on this document
-									</button>
-
+									{this.state.allowComments && 
+										<button
+											data-qa-sel="comment-on-consultation-document"
+											className="btn btn--cta"
+											onClick={e => {
+												e.preventDefault();
+												this.props.onNewCommentClick({
+													sourceURI: this.props.match.url,
+													commentText: "",
+													commentOn: "Document",
+													quote: this.getCurrentDocumentTitle(
+														documentsData,
+														documentId
+													)
+												});
+											}}>
+											Comment on this document
+										</button>
+									}
 								</div>
 
 								<StickyContainer className="grid">
@@ -409,11 +418,12 @@ export class Document extends Component<PropsType, StateType> {
 												this.state.loading ? "loading" : ""}`}
 										>
 											<Selection newCommentFunc={this.props.onNewCommentClick}
-													   sourceURI={this.props.match.url}>
+														   sourceURI={this.props.match.url}>
 												{processDocumentHtml(
 													content,
 													this.props.onNewCommentClick,
-													this.props.match.url
+													this.props.match.url,
+													this.state.allowComments
 												)}
 											</Selection>
 										</div>
