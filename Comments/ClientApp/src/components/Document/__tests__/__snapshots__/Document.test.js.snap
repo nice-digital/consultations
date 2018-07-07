@@ -96,24 +96,7 @@ Array [
                 <div
                     className="page-header"
                 >
-                    <h1
-                        className="page-header__heading mt--0"
-                    >
-                        Unstable angina and NSTEMI: early management
-                    </h1>
-                    <p
-                        className="page-header__lead"
-                    >
-                        [
-                        GID-TA10232
-                        ] Open until
-                         
-                        <time
-                            dateTime={"2018-05-31T16:00:00.000Z"}
-                        >
-                            31 May 2018
-                        </time>
-                    </p>
+                    <undefined />
                     <h2
                         className="mb--b"
                     >

@@ -176,7 +176,7 @@ export class ReviewPage extends Component<PropsType, StateType> {
 									<Header
 										title={title}
 										reference={reference}
-										endDate={endDate}/>
+										consultationState={this.state.consultationData.consultationState}/>
 									<h2 className="mt--0">{this.state.isSubmitted ? "Comments submitted" : "Comments for review"}</h2>
 
 									{(this.state.isSubmitted && !this.state.viewSubmittedComments) ?

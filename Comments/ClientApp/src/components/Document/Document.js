@@ -17,6 +17,7 @@ import { projectInformation } from "../../constants";
 import { processDocumentHtml } from "./process-document-html";
 import { Selection } from "../Selection/Selection";
 import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
+import { Header } from "../Header/Header";
 // import stringifyObject from "stringify-object";
 
 type PropsType = {
@@ -314,13 +315,17 @@ export class Document extends Component<PropsType, StateType> {
 							<BreadCrumbs links={this.getBreadcrumbs()}/>
 							<main role="main">
 								<div className="page-header">
-
-									<h1 className="page-header__heading mt--0">{title}</h1>
+									<Header
+										title={title}
+										reference={reference}
+										consultationState={this.state.consultationData.consultationState}/>
+	{ /*}<h1 className="page-header__heading mt--0">{title}</h1>
 
 									<p className="page-header__lead">
 										[{reference}] Open until{" "}
 										<Moment format="D MMMM YYYY" date={endDate}/>
-									</p>
+									</p> */
+	}
 									{this.state.allowComments && 
 										<button
 											data-qa-sel="comment-on-whole-consultation"
