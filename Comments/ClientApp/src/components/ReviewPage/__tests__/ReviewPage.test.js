@@ -12,7 +12,7 @@ import { nextTick, queryStringToObject } from "../../../helpers/utils";
 import ReviewPageWithRouter, {ReviewPage} from "../ReviewPage";
 import ConsultationData from "./Consultation";
 import DocumentsData from "./Documents";
-import stringifyObject from "stringify-object";
+//import stringifyObject from "stringify-object";
 
 const mock = new MockAdapter(axios);
 

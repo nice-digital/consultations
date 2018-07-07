@@ -9,7 +9,7 @@ import { LoginBanner } from "./../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
 import { queryStringToObject, replaceFormat } from "../../helpers/utils";
 import {pullFocusById} from "../../helpers/accessibility-helpers";
-import stringifyObject from "stringify-object";
+//import stringifyObject from "stringify-object";
 
 type PropsType = {
 	staticContext?: any,
