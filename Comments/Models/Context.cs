@@ -173,5 +173,44 @@ namespace Comments.Models
 
 	    }
 
+	    public int DeleteAllSubmissionsFromUser(Guid usersSubmissionsToDelete)
+	    {
+		    var draftStatus = GetStatus(StatusName.Draft);
+
+			var submissions = Submission.Where(s => s.SubmissionByUserId.Equals(usersSubmissionsToDelete))
+			    .Include(s => s.SubmissionComment)
+					.ThenInclude(sc => sc.Comment)
+						.ThenInclude(c => c.Location)
+
+			    .Include(s => s.SubmissionAnswer)
+					.ThenInclude(sa => sa.Answer)
+						.ThenInclude(a => a.Question)
+							.ThenInclude(q => q.Location)
+
+			    .ToList();
+
+		    var submissionCommentsToDelete = new List<SubmissionComment>();
+		    var submissionAnswersToDelete = new List<SubmissionAnswer>();
+		    foreach (var submission in submissions)
+		    {
+			    foreach (var submissionComment in submission.SubmissionComment)
+			    {
+				    submissionComment.Comment.StatusId = draftStatus.StatusId;
+				    submissionCommentsToDelete.Add(submissionComment);
+				}
+
+			    foreach (var submissionAnswer in submission.SubmissionAnswer)
+			    {
+				    submissionAnswer.Answer.StatusId = draftStatus.StatusId;
+				    submissionAnswersToDelete.Add(submissionAnswer);
+				}
+
+				SubmissionComment.RemoveRange(submissionCommentsToDelete);
+			    SubmissionAnswer.RemoveRange(submissionAnswersToDelete);
+			    Submission.Remove(submission);
+		    }
+		    return SaveChanges();
+	    }
+
 	}
 }
