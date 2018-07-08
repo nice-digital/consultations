@@ -29,8 +29,9 @@ type PropsType = {
 type StateType = {
 	documentsList: Array<any>,
 	consultationData: any,
-	isSubmitted: boolean,
-	viewSubmittedComments: boolean,
+	userHasSubmitted: boolean,
+	validToSubmit: false,
+	viewSubmittedComments: boolean
 };
 
 export class ReviewPage extends Component<PropsType, StateType> {
@@ -40,8 +41,9 @@ export class ReviewPage extends Component<PropsType, StateType> {
 		this.state = {
 			documentsList: [],
 			consultationData: null,
-			isSubmitted: false,
-			viewSubmittedComments: false
+			userHasSubmitted: false,
+			viewSubmittedComments: false,
+			validToSubmit: false
 		};
 	}
 
@@ -95,7 +97,8 @@ export class ReviewPage extends Component<PropsType, StateType> {
 				//console.log(`data: ${stringifyObject(data.consultationData.consultationState.supportsSubmission)}`);
 				this.setState({
 					...data,
-					isSubmitted: !data.consultationData.consultationState.supportsSubmission
+					userHasSubmitted: data.consultationData.consultationState.userHasSubmitted,
+					validToSubmit: data.consultationData.consultationState.supportsSubmission
 				});
 			})
 			.catch(err => {
@@ -144,7 +147,8 @@ export class ReviewPage extends Component<PropsType, StateType> {
 	submittedHandler = () => {
 		console.log('submitted handler in reviewpage');
 		this.setState({
-			isSubmitted: true,
+			userHasSubmitted: true,
+			validToSubmit: false,
 			viewSubmittedComments: false
 		});
 	}
@@ -177,9 +181,9 @@ export class ReviewPage extends Component<PropsType, StateType> {
 										title={title}
 										reference={reference}
 										consultationState={this.state.consultationData.consultationState}/>
-									<h2 className="mt--0">{this.state.isSubmitted ? "Comments submitted" : "Comments for review"}</h2>
+									<h2 className="mt--0">{this.state.userHasSubmitted ? "Comments submitted" : "Comments for review"}</h2>
 
-									{(this.state.isSubmitted && !this.state.viewSubmittedComments) ?
+									{(this.state.userHasSubmitted && !this.state.viewSubmittedComments) ?
 
 									<div className="hero">
 										<div className="hero__container">
@@ -202,7 +206,7 @@ export class ReviewPage extends Component<PropsType, StateType> {
 											<CommentListWithRouter
 												isReviewPage={true}
 												isVisible={true}
-												isSubmitted={this.state.isSubmitted} 
+												isSubmitted={this.state.userHasSubmitted} 
 												wrappedComponentRef={component => (this.commentList = component)}
 												submittedHandler={this.submittedHandler}/>
 										</div>
@@ -240,11 +244,11 @@ export class ReviewPage extends Component<PropsType, StateType> {
 																		<Fragment>
 																			<h3 className="mt--0">Ready to submit?</h3>
 																			<button
-																				disabled={this.state.isSubmitted}
+																				disabled={!this.state.validToSubmit}
 																				className="btn btn--cta"
 																				onClick={this.submitConsultation}
 																			>
-																				{this.state.isSubmitted ? "Comments submitted": "Submit your comments"}
+																			{this.state.userHasSubmitted ? "Comments submitted": "Submit your comments"}
 																			</button>
 																			<button
 																				className="btn btn--secondary">

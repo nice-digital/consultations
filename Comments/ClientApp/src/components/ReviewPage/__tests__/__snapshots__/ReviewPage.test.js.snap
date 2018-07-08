@@ -116,35 +116,168 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
           <h2
             className="mt--0"
           >
-            Comments submitted
+            Comments for review
           </h2>
           <div
-            className="hero"
+            className="grid"
+            onScroll={[Function]}
+            onTouchEnd={[Function]}
+            onTouchMove={[Function]}
+            onTouchStart={[Function]}
           >
             <div
-              className="hero__container"
+              data-g="12 md:6 md:push:3"
             >
-              <div
-                className="hero__body"
+              <h3
+                className="mt--0"
+                id="comments-column"
               >
+                Comments
+              </h3>
+              <div
+                data-qa-sel="comment-list-wrapper"
+              >
+                <p>
+                  Loading...
+                </p>
+              </div>
+            </div>
+            <div
+              data-g="12 md:3 md:pull:6"
+            >
+              <div>
+                <div />
                 <div
-                  className="hero__copy"
+                  style={Object {}}
                 >
-                  <p
-                    className="hero__intro"
+                  <nav
+                    aria-label="All comments in this consultation"
+                    className="stacked-nav"
                   >
-                    Thank you, your comments have been submitted
-                  </p>
-                  <div
-                    className="hero__actions"
-                  >
-                    <button
-                      className="btn"
-                      onClick={[Function]}
+                    <h2
+                      className="stacked-nav__root"
                     >
-                      Review all submitted comments
-                    </button>
-                  </div>
+                      All comments in this consultation
+                    </h2>
+                    <ul
+                      className="stacked-nav__list"
+                    >
+                      <li
+                        className="stacked-nav__list-item"
+                        data-qa-sel="nav-list-item"
+                      >
+                        <a
+                          aria-current="false"
+                          href="/1/review"
+                          onClick={[Function]}
+                        >
+                          Unstable angina and NSTEMI: early management
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>
+                  <nav
+                    aria-label="View comments by document"
+                    className="stacked-nav"
+                  >
+                    <h2
+                      className="stacked-nav__root"
+                    >
+                      View comments by document
+                    </h2>
+                    <ul
+                      className="stacked-nav__list"
+                    >
+                      <li
+                        className="stacked-nav__list-item"
+                        data-qa-sel="nav-list-item"
+                      >
+                        <a
+                          aria-current="false"
+                          href="/1/review?sourceURI=undefined"
+                          onClick={[Function]}
+                        >
+                          Unstable angina and NSTEMI
+                        </a>
+                      </li>
+                      <li
+                        className="stacked-nav__list-item"
+                        data-qa-sel="nav-list-item"
+                      >
+                        <a
+                          aria-current="false"
+                          href="/1/review?sourceURI=undefined"
+                          onClick={[Function]}
+                        >
+                          Sinusitis (acute): antimicrobial prescribing
+                        </a>
+                      </li>
+                      <li
+                        className="stacked-nav__list-item"
+                        data-qa-sel="nav-list-item"
+                      >
+                        <a
+                          aria-current="false"
+                          href="/1/review?sourceURI=undefined"
+                          onClick={[Function]}
+                        />
+                      </li>
+                      <li
+                        className="stacked-nav__list-item"
+                        data-qa-sel="nav-list-item"
+                      >
+                        <a
+                          aria-current="false"
+                          href="/1/review?sourceURI=undefined"
+                          onClick={[Function]}
+                        />
+                      </li>
+                      <li
+                        className="stacked-nav__list-item"
+                        data-qa-sel="nav-list-item"
+                      >
+                        <a
+                          aria-current="false"
+                          href="/1/review?sourceURI=undefined"
+                          onClick={[Function]}
+                        >
+                          Unstable angina and NSTEMI
+                        </a>
+                      </li>
+                      <li
+                        className="stacked-nav__list-item"
+                        data-qa-sel="nav-list-item"
+                      >
+                        <a
+                          aria-current="false"
+                          href="/1/review?sourceURI=undefined"
+                          onClick={[Function]}
+                        />
+                      </li>
+                      <li
+                        className="stacked-nav__list-item"
+                        data-qa-sel="nav-list-item"
+                      >
+                        <a
+                          aria-current="false"
+                          href="/1/review?sourceURI=undefined"
+                          onClick={[Function]}
+                        />
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+            </div>
+            <div
+              data-g="12 md:3"
+            >
+              <div>
+                <div />
+                <div
+                  style={Object {}}
+                >
+                  <undefined />
                 </div>
               </div>
             </div>
