@@ -65,7 +65,9 @@ export const serverRenderer = (params): Promise => {
 			</StaticRouter>);
 
 		// First render: this trigger any data preloaders to fire
-		let rootContent = renderToString(app);
+		let rootContent = renderToString(app),
+			statusCode: number = 200,
+			html: string;
 
 		// Wait for all preloaders to have loaded before re-rendering the app
 		Promise.all(staticContext.preload.loaders).then(() => {
@@ -75,7 +77,7 @@ export const serverRenderer = (params): Promise => {
 
 			const helmet = Helmet.renderStatic();
 
-			const html = processHtml(params.data.originalHtml, {
+			html = processHtml(params.data.originalHtml, {
 				htmlAttributes: helmet.htmlAttributes.toString(),
 				bodyAttributes: helmet.bodyAttributes.toString(),
 				rootContent: rootContent,
@@ -85,10 +87,19 @@ export const serverRenderer = (params): Promise => {
 				scripts: getPreloadedDataHtml(staticContext.preload.data) + helmet.script.toString()
 			});
 
-			resolve({ html: html, statusCode: staticContext.status || 200 });
+			//resolve({ html: html, statusCode: staticContext.status || 200 });
 		}).catch((error) => {
-			reject(error);
-		});
+			if (process.env.NODE_ENV === "production") {
+				// In production, rejecting the promise shows a standard dotnet 500 server error page
+				reject(error);
+				return;
+			}
+			// In development show a nice YSOD to devs with the error message
+			const err = "<Error error={error} />";
+			rootContent = renderToString(err);
+			statusCode = 500;
+			});
+		resolve({ html: html, statusCode: staticContext.status || statusCode });
 	});
 };
 

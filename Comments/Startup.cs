@@ -127,12 +127,14 @@ namespace Comments
 
             if (env.IsDevelopment())
             {
-                //app.UseDeveloperExceptionPage();
+                app.UseDeveloperExceptionPage();
                 loggerFactory.AddConsole(Configuration.GetSection("Logging"));
                 loggerFactory.AddDebug();
             }
+			else
+			{ app.UseExceptionHandler("/Error"); }
 
-	        app.UseExceptionHandler("/Error");
+	        
            
 
             app.UseCors("CorsPolicy");
