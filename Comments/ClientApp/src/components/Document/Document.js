@@ -38,7 +38,8 @@ type StateType = {
 	currentChapterDetails: {
 		title: string,
 		slug: string
-	}
+	},
+	allowComments: boolean
 };
 
 type DocumentsType = Array<Object>;
@@ -137,11 +138,12 @@ export class Document extends Component<PropsType, StateType> {
 					const allowComments = data.consultationData.supportsComments &&
 						data.consultationData.consultationState.consultationIsOpen &&
 						!data.consultationData.consultationState.userHasSubmitted;
+					console.log(allowComments);
 					this.setState({
 						...data,
 						loading: false,
 						hasInitialData: true,
-						allowComments : allowComments
+						allowComments : false
 					});
 					this.addChapterDetailsToSections(this.state.chapterData);
 				})
@@ -319,13 +321,13 @@ export class Document extends Component<PropsType, StateType> {
 										title={title}
 										reference={reference}
 										consultationState={this.state.consultationData.consultationState}/>
-	{ /*}<h1 className="page-header__heading mt--0">{title}</h1>
+									{ /*}<h1 className="page-header__heading mt--0">{title}</h1>
 
 									<p className="page-header__lead">
 										[{reference}] Open until{" "}
 										<Moment format="D MMMM YYYY" date={endDate}/>
 									</p> */
-	}
+									}
 									{this.state.allowComments && 
 										<button
 											data-qa-sel="comment-on-whole-consultation"

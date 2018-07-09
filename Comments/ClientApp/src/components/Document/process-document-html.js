@@ -4,10 +4,10 @@ import { processChapterSectionSubsection } from "./html-transforms/chapter-secti
 import processInternalLink from "./html-transforms/internal-link";
 
 // onNewCommentClick passed through from <Document />
-export const processDocumentHtml = (incomingHtml, onNewCommentClick, sourceURI) => {
+export const processDocumentHtml = (incomingHtml, onNewCommentClick, sourceURI, allowComments) => {
 	function transformHtml(node) {
 		if (nodeIsChapter(node) || nodeIsSection(node) || nodeIsSubsection(node)) {
-			return processChapterSectionSubsection(node, incomingHtml, onNewCommentClick, sourceURI);
+			return processChapterSectionSubsection(node, incomingHtml, onNewCommentClick, sourceURI, allowComments);
 		}
 		if (nodeIsInternalLink(node)) {
 			return processInternalLink(node);
