@@ -153,6 +153,15 @@ export class ReviewPage extends Component<PropsType, StateType> {
 		});
 	}
 
+	//this validation handler code is going to have to get a bit more advance when questions are introduced, as it'll be possible
+	//to answer a question on the review page and the submit button should then enable - if the consultation is open + hasn't already been submitted + all the mandatory questions are answered.
+	//(plus there's the whole unsaved changes to deal with. what happens there?)
+	validationHander = (validToSubmit) => {
+		this.setState({
+			validToSubmit: validToSubmit
+		});
+	}
+
 	viewSubmittedCommentsHandler = () => {
 		console.log('viewSubmittedCommentsHandler in reviewpage');
 		this.setState({
@@ -204,11 +213,12 @@ export class ReviewPage extends Component<PropsType, StateType> {
 										<div data-g="12 md:6 md:push:3">
 											<h3 className="mt--0" id="comments-column">Comments</h3>
 											<CommentListWithRouter
-												isReviewPage={true}
-												isVisible={true}
-												isSubmitted={this.state.userHasSubmitted} 
-												wrappedComponentRef={component => (this.commentList = component)}
-												submittedHandler={this.submittedHandler}/>
+													isReviewPage={true}
+													isVisible={true}
+													isSubmitted={this.state.userHasSubmitted}
+													wrappedComponentRef={component => (this.commentList = component)}
+													submittedHandler={this.submittedHandler}
+													validationHander={this.validationHander}/>
 										</div>
 										<div data-g="12 md:3 md:pull:6">
 											<Sticky disableHardwareAcceleration>

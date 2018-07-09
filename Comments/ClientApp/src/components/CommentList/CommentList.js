@@ -25,7 +25,8 @@ type PropsType = {
 	isReviewPage: boolean,
 	filterByDocument: number,
 	isSubmmitted: boolean,
-	submittedHandler: Function
+	submittedHandler: Function,
+	validationHander: Function
 };
 
 type CommentType = {
@@ -259,6 +260,9 @@ export class CommentList extends Component<PropsType, StateType> {
 		let comments = this.state.comments;
 		comments = comments.filter(comment => comment.commentId !== commentId);
 		this.setState({ comments });
+		if ((comments.length === 0) && (typeof this.props.validationHander === "function")) {
+			this.props.validationHander(false);
+		}
 	};
 
 	render() {
