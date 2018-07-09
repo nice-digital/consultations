@@ -1,36 +1,38 @@
 using Comments.Common;
 using Comments.Models;
 using Comments.ViewModels;
+using NICE.Auth.NetCore.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Http.Extensions;
-using NICE.Auth.NetCore.Services;
 
 namespace Comments.Services
 {
-    public interface ICommentService
+	public interface ICommentService
     {
 	    CommentsAndQuestions GetCommentsAndQuestions(string relativeURL, bool isReview = false);
 		(ViewModels.Comment comment, Validate validate) GetComment(int commentId);
         (int rowsUpdated, Validate validate) EditComment(int commentId, ViewModels.Comment comment);
         (ViewModels.Comment comment, Validate validate) CreateComment(ViewModels.Comment comment);
         (int rowsUpdated, Validate validate) DeleteComment(int commentId);
-    }
+	}
 
     public class CommentService : ICommentService
     {
         private readonly ConsultationsContext _context;
         private readonly IUserService _userService;
         private readonly IAuthenticateService _authenticateService;
-        private readonly User _currentUser;
+	    private readonly IConsultationService _consultationService;
+	    private readonly ISubmitService _submitService;
+	    private readonly User _currentUser;
 
-        public CommentService(ConsultationsContext context, IUserService userService, IAuthenticateService authenticateService)
+        public CommentService(ConsultationsContext context, IUserService userService, IAuthenticateService authenticateService, IConsultationService consultationService)
         {
             _context = context;
             _userService = userService;
             _authenticateService = authenticateService;
-            _currentUser = _userService.GetCurrentUser();
+	        _consultationService = consultationService;
+	        _currentUser = _userService.GetCurrentUser();
         }
 
         public (ViewModels.Comment comment, Validate validate) GetComment(int commentId)
@@ -77,8 +79,8 @@ namespace Comments.Services
             var locationToSave = new Models.Location(comment as ViewModels.Location);
             locationToSave.SourceURI = ConsultationsUri.ConvertToConsultationsUri(comment.SourceURI, CommentOnHelpers.GetCommentOn(comment.CommentOn));
             _context.Location.Add(locationToSave);
-            
-            var commentToSave = new Models.Comment(comment.LocationId, _currentUser.UserId.Value, comment.CommentText, _currentUser.UserId.Value, locationToSave);
+			
+            var commentToSave = new Models.Comment(comment.LocationId, _currentUser.UserId.Value, comment.CommentText, _currentUser.UserId.Value, locationToSave, (int)StatusName.Draft, null);
             _context.Comment.Add(commentToSave);
             _context.SaveChanges();
 
@@ -108,14 +110,17 @@ namespace Comments.Services
 	    {
 		    var user = _userService.GetCurrentUser();
 		    var signInURL = _authenticateService.GetLoginURL(relativeURL.ToConsultationsRelativeUrl());
+		    var consultationSourceURI = ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Consultation);
+		    ConsultationState consultationState;
 
 		    if (!user.IsAuthorised)
-			    return new CommentsAndQuestions(new List<ViewModels.Comment>(), new List<ViewModels.Question>(), user.IsAuthorised, signInURL);
+		    {
+			    consultationState = _consultationService.GetConsultationState(consultationSourceURI);
+				return new CommentsAndQuestions(new List<ViewModels.Comment>(), new List<ViewModels.Question>(),
+				    user.IsAuthorised, signInURL, consultationState);
+		    }
 
-			var sourceURIs = new List<string>
-			{
-				ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Consultation)
-			};
+		    var sourceURIs = new List<string> { consultationSourceURI };
 
 			if (!isReview)
 			{
@@ -123,17 +128,13 @@ namespace Comments.Services
 				sourceURIs.Add(ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Chapter));
 			}
 
-			var locations = _context.GetAllCommentsAndQuestionsForDocument(sourceURIs, isReview);
+			var locations = _context.GetAllCommentsAndQuestionsForDocument(sourceURIs, isReview).ToList();
 
-		    var commentsData = new List<ViewModels.Comment>();
-		    var questionsData = new List<ViewModels.Question>();
-		    foreach (var location in locations)
-		    {
-			    commentsData.AddRange(location.Comment.Select(comment => new ViewModels.Comment(location, comment)));
-			    questionsData.AddRange(location.Question.Select(question => new ViewModels.Question(location, question)));
-		    }
+		    var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);
 
-		    return new CommentsAndQuestions(commentsData, questionsData, user.IsAuthorised, signInURL);
+		    consultationState = _consultationService.GetConsultationState(consultationSourceURI, locations);
+
+			return new CommentsAndQuestions(data.comments, data.questions, user.IsAuthorised, signInURL, consultationState);
 	    }
 	}
 }

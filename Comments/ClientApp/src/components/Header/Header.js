@@ -13,14 +13,20 @@ type PropsType = {
 export const Header = (props: PropsType) => {
 	const title = props.title;
 	const reference = props.reference;
-	const endDate = props.endDate;
+	const endDate = props.consultationState.endDate;
+	const isOpen = props.consultationState.consultationIsOpen;
+	const notStartedYet = props.consultationState.consultationHasNotStartedYet;
+
+	const textBeforeDate = isOpen ? "Open until" : (notStartedYet ? "Starts on" : "Ended on");
+	const colourTag = isOpen ? "tag tag--consultation" : (notStartedYet ? "tag tag--beta" : "tag tag--alpha"); //todo: these colours shouldn't represent phases.
 
 	return (
 		<Fragment>
 			<h1 className="page-header__heading mt--0">{title}</h1>
 			<p className="page-header__lead">
-				[{reference}] Open until{" "}
-				<Moment format="D MMMM YYYY" date={endDate} />
+				<span>[{reference}] </span>
+				<span>{textBeforeDate}&nbsp;</span>
+				<span className={colourTag}><Moment format="D MMMM YYYY" date={endDate} /></span>
 			</p>
 		</ Fragment>
 	);

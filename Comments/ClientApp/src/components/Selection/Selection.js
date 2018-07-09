@@ -5,7 +5,8 @@ import xpathRange from "xpath-range";
 
 type PropsType = {
 	newCommentFunc: Function,
-	sourceURI: string
+	sourceURI: string,
+	allowComments: boolean
 };
 
 type StateType = {
@@ -33,21 +34,6 @@ export class Selection extends Component<PropsType, StateType> {
 
 	getCommentForRange = (limitingElement: any, selection: any) =>{
 		let selectionRange = selection.getRangeAt(0);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 		let comment = null;
 		try {
@@ -102,17 +88,6 @@ export class Selection extends Component<PropsType, StateType> {
 			this.setState({ toolTipVisible: false });
 		}
 	}
-
-	//getElementOffset = (element:any) => {
-
-	//	var de = document.documentElement;
-	//	var box = element.getBoundingClientRect();
-	//	var top = box.top + window.pageYOffset - de.clientTop;
-	//	var left = box.left + window.pageXOffset - de.clientLeft;
-	//	return { top: top, left: left };
-	//}
-
-
 	onButtonClick = (event: Event ) => {
 		this.props.newCommentFunc(this.state.comment);
 		this.setState({ toolTipVisible: false });
@@ -137,6 +112,12 @@ export class Selection extends Component<PropsType, StateType> {
 	}
 
 	render() {
+
+		if (!this.props.allowComments)
+			return (
+				<div>{this.props.children}</div>
+			);
+
 		return (
 			<div onMouseUp={this.onMouseUp} ref={this.selectionContainer}>
 				<MyToolTip visible={this.state.toolTipVisible} onButtonClick={this.onButtonClick} position={this.state.position}/>

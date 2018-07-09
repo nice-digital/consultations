@@ -24,7 +24,9 @@ type PropsType = {
 	isVisible: boolean,
 	isReviewPage: boolean,
 	filterByDocument: number,
-	isSubmmitted: boolean
+	isSubmmitted: boolean,
+	submittedHandler: Function,
+	validationHander: Function
 };
 
 type CommentType = {
@@ -58,7 +60,8 @@ export class CommentList extends Component<PropsType, StateType> {
 		this.state = {
 			comments: [],
 			questions: [],
-			loading: true
+			loading: true,
+			allowComments: true
 		};
 		let preloadedData = {};
 		if (this.props.staticContext && this.props.staticContext.preload) {
@@ -84,11 +87,16 @@ export class CommentList extends Component<PropsType, StateType> {
 		// }
 
 		if (preloaded) {
+
+			//console.log(`preloaded 90: ${stringifyObject(preloaded)}`);
+
+			let allowComments = !preloaded.consultationState.consultationIsOpen && !preloaded.consultationState.userHasSubmitted;
 			this.state = {
 				loading: false,
 				comments: preloaded.comments,
 				filteredComments: [],
-				questions: preloaded.questions
+				questions: preloaded.questions,
+				allowComments: allowComments
 			};
 		}
 	}
@@ -122,13 +130,17 @@ export class CommentList extends Component<PropsType, StateType> {
 			.catch(err => console.log("load comments in commentlist " + err));
 	}
 
-	setCommentListState = (response: any) => {
-
+	setCommentListState = (response: any) =>
+	{
+		console.log('about to set allow comments in setcommentliststate');
+		let allowComments = response.data.consultationState.consultationIsOpen && !response.data.consultationState.userHasSubmitted;
+		console.log('set allow comments in setcommentliststate');
 		const comments = this.filterComments(this.props.location.search, response.data.comments );
 		this.setState({
 			comments,
 			questions: response.data.questions,
-			loading: false
+			loading: false,
+			allowComments: allowComments
 		});
 	};
 
@@ -145,6 +157,21 @@ export class CommentList extends Component<PropsType, StateType> {
 			});
 			this.loadComments();
 		}
+	}
+
+	submitComments = () => {
+
+		let commentsAndAnswers = {comments: this.state.comments, answers: null}; //todo: answers
+
+		load("submit", undefined, [], {}, "POST", commentsAndAnswers, true)
+			.then(res => {
+				console.log('in the then in commentlist');
+				this.props.submittedHandler();
+			})
+			.catch(err => {
+				console.log(err);
+				if (err.response) alert(err.response.statusText);
+			});		
 	}
 
 	filterComments = (newSourceURIToFilterBy: string, comments: Array<CommentType>): Array<CommentType> => {
@@ -231,6 +258,9 @@ export class CommentList extends Component<PropsType, StateType> {
 		let comments = this.state.comments;
 		comments = comments.filter(comment => comment.commentId !== commentId);
 		this.setState({ comments });
+		if ((comments.length === 0) && (typeof this.props.validationHander === "function")) {
+			this.props.validationHander(false);
+		}
 	};
 
 	render() {
@@ -267,6 +297,7 @@ export class CommentList extends Component<PropsType, StateType> {
 											{commentsToShow.map((comment) => {
 												return (
 													<CommentBox
+														readOnly={!this.state.allowComments || this.props.isSubmitted}
 														isVisible={this.props.isVisible}
 														key={comment.commentId}
 														unique={`Comment${comment.commentId}`}
