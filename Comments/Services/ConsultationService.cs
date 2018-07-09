@@ -1,35 +1,41 @@
-using Comments.ViewModels;
-using NICE.Feeds;
 using System;
+using Comments.ViewModels;
+using Microsoft.Extensions.Logging;
+using NICE.Feeds;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Extensions.Logging;
+using Comments.Common;
+using Comments.Models;
 
 namespace Comments.Services
 {
-    public interface IConsultationService
+	public interface IConsultationService
     {
         ConsultationDetail GetConsultationDetail(int consultationId);
         ChapterContent GetChapterContent(int consultationId, int documentId, string chapterSlug);
         IEnumerable<Document> GetDocuments(int consultationId);
         ViewModels.Consultation GetConsultation(int consultationId);
         IEnumerable<ViewModels.Consultation> GetConsultations();
-        (int validDocumentId, string validChapterSlug) ValidateDocumentAndChapterWithinConsultation(ConsultationDetail consultation, int documentId, string chapterSlug);
-    }
+	    ConsultationState GetConsultationState(string sourceURI, IEnumerable<Models.Location> locations = null);
+	    ConsultationState GetConsultationState(int consultationId, IEnumerable<Models.Location> locations = null);
 
-    public class ConsultationService : IConsultationService
+		bool HasSubmittedCommentsOrQuestions(string consultationSourceURI, Guid userId);
+	}
+
+	public class ConsultationService : IConsultationService
     {
-
-        private readonly IFeedService _feedConverterService;
+	    private readonly ConsultationsContext _context;
+	    private readonly IFeedService _feedConverterService;
         private readonly ILogger<ConsultationService> _logger;
         private readonly IUserService _userService;
 
-        public ConsultationService(IFeedService feedConverterService, ILogger<ConsultationService> logger, IUserService userService)
+		public ConsultationService(ConsultationsContext context, IFeedService feedConverterService, ILogger<ConsultationService> logger, IUserService userService)
         {
-            _feedConverterService = feedConverterService;
+	        _context = context;
+	        _feedConverterService = feedConverterService;
             _logger = logger;
             _userService = userService;
-        }
+		}
 
         public ConsultationDetail GetConsultationDetail(int consultationId)
         {
@@ -53,7 +59,8 @@ namespace Comments.Services
         {
             var user = _userService.GetCurrentUser();
             var consultation = _feedConverterService.GetIndevConsultationDetailForPublishedProject(consultationId, PreviewState.NonPreview);
-            return new ViewModels.Consultation(consultation, user);
+	        var consultationState = GetConsultationState(consultationId);
+            return new ViewModels.Consultation(consultation, user, consultationState);
         }
 
         public IEnumerable<ViewModels.Consultation> GetConsultations()
@@ -63,40 +70,44 @@ namespace Comments.Services
             return consultations.Select(c => new ViewModels.Consultation(c, user)).ToList();
         }
 
-        /// <summary>
-        /// This method is called to ensure the documentId and chapter slug have been set and that they belong together.
-        /// i.e. the document belongs to the consultation, and the chapter is in the document.
-        /// </summary>
-        /// <param name="consultation"></param>
-        /// <param name="documentId"></param>
-        /// <param name="chapterSlug"></param>
-        /// <returns></returns>
-        public (int validDocumentId, string validChapterSlug) ValidateDocumentAndChapterWithinConsultation(ConsultationDetail consultation, int documentId, string chapterSlug)
-        {
-            if (consultation.Documents == null || !consultation.Documents.Any())
-            {
-                throw new Exception("No documents found on consultation:" + consultation.ConsultationId);
-            }
+	    public ConsultationState GetConsultationState(string sourceURI, IEnumerable<Models.Location> locations = null)
+	    {
+		    var consultationsUriElements = ConsultationsUri.ParseConsultationsUri(sourceURI);
+		    return GetConsultationState(consultationsUriElements.ConsultationId, locations);
+	    }
 
-            var document = consultation.Documents.FirstOrDefault(d => d.DocumentId.Equals(documentId));
-            if (document == null)
-                document = consultation.Documents.FirstOrDefault(d => d.ConvertedDocument);
-            if (document == null)
-                document = consultation.Documents.First();
+		public ConsultationState GetConsultationState(int consultationId, IEnumerable<Models.Location> locations = null)
+	    {
+			var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
+			var consultationDetail = GetConsultationDetail(consultationId);
+		    var currentUser = _userService.GetCurrentUser();
 
-            if (!document.ConvertedDocument)
-                return (document.DocumentId, null);
+			if (locations == null)
+		    {
+			    locations = _context.GetAllCommentsAndQuestionsForDocument(new[] { sourceURI }, isReview: true);
+		    }
 
-            if (document.Chapters == null || !document.Chapters.Any())
-            {
-                throw new Exception("No chapters found within document:" + document.DocumentId);
-            }
+		    var hasSubmitted = currentUser != null && currentUser.IsAuthorised && currentUser.UserId.HasValue ? HasSubmittedCommentsOrQuestions(sourceURI, currentUser.UserId.Value) : false;
 
-            var chapter = document.Chapters.FirstOrDefault(c => c.Slug.Equals(chapterSlug));
-            if (chapter == null)
-                chapter = document.Chapters.First();
+		    var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);
 
-            return (document.DocumentId, chapter.Slug);
-        }
-    }
+		    var consultationState = new ConsultationState(consultationDetail.StartDate, consultationDetail.EndDate,
+			    data.questions.Any(), data.questions.Any(q => q.Answers.Any()), data.comments.Any(), hasSubmitted);
+
+		    return consultationState;
+	    }
+		
+
+	    public bool HasSubmittedCommentsOrQuestions(string anySourceURI, Guid userId)
+	    {
+		    if (string.IsNullOrWhiteSpace(anySourceURI))
+			    return false;
+
+		    var consultationsUriElements = ConsultationsUri.ParseConsultationsUri(anySourceURI);
+
+		    var consultationSourceURI = ConsultationsUri.CreateConsultationURI(consultationsUriElements.ConsultationId);
+
+		    return _context.HasSubmitted(consultationSourceURI, userId);
+	    }
+	}
 }

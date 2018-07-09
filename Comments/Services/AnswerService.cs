@@ -1,4 +1,4 @@
-﻿using Comments.ViewModels;
+using Comments.ViewModels;
 using Comments.Models;
 
 namespace Comments.Services
@@ -69,7 +69,7 @@ namespace Comments.Services
             if (!_currentUser.IsAuthorised)
                 return (answer: null, validate: new Validate(valid: false, unauthorised: true, message: "Not logged in creating answer"));
 
-            var answerToSave = new Models.Answer(answer.QuestionId, _currentUser.UserId.Value, answer.AnswerText, answer.AnswerBoolean, null);
+            var answerToSave = new Models.Answer(answer.QuestionId, _currentUser.UserId.Value, answer.AnswerText, answer.AnswerBoolean, null, 1, null);
             _context.Answer.Add(answerToSave);
             _context.SaveChanges();
 

@@ -69,5 +69,9 @@
     <Build Include="dbo\Tables\Answer.sql" />
     <Build Include="dbo\Tables\Comment.sql" />
     <Build Include="dbo\Tables\Location.sql" />
+    <Build Include="dbo\Tables\Status.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="ConsultationsDatabase.refactorlog" />
   </ItemGroup>
 </Project>

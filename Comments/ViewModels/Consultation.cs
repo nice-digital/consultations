@@ -7,7 +7,7 @@ namespace Comments.ViewModels
 {
     public class Consultation
     {
-        public Consultation(NICE.Feeds.Models.Indev.List.ConsultationBase consultation, User user)
+        public Consultation(NICE.Feeds.Models.Indev.List.ConsultationBase consultation, User user, ConsultationState consultationState = null)
         {
             Reference = consultation.Reference;
             Title = consultation.Title;
@@ -28,6 +28,7 @@ namespace Comments.ViewModels
 			PartiallyUpdatedProjectReference = consultation.PartiallyUpdatedProjectReference;
             OrigProjectReference = consultation.OrigProjectReference;
             User = user;
+	        ConsultationState = consultationState;
         }
 
         [JsonConstructor]
@@ -77,6 +78,8 @@ namespace Comments.ViewModels
         public string OrigProjectReference { get; private set; }
 
         public ViewModels.User User { get; private set; }
+
+		public ConsultationState ConsultationState { get; private set; }
     }
 
     public class ConsultationDetail : Consultation
