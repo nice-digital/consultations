@@ -138,12 +138,11 @@ export class Document extends Component<PropsType, StateType> {
 					const allowComments = data.consultationData.supportsComments &&
 						data.consultationData.consultationState.consultationIsOpen &&
 						!data.consultationData.consultationState.userHasSubmitted;
-					console.log(allowComments);
 					this.setState({
 						...data,
 						loading: false,
 						hasInitialData: true,
-						allowComments : false
+						allowComments : allowComments
 					});
 					this.addChapterDetailsToSections(this.state.chapterData);
 				})

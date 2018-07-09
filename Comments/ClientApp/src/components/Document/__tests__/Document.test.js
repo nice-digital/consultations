@@ -45,7 +45,7 @@ describe("[ClientApp] ", () => {
 			expect(wrapper.find("h1").text()).toEqual("Loading...");
 		});
 
-		it.only("should match snapshot with supplied data", () => {
+		it("should match snapshot with supplied data", () => {
 			const mock = new MockAdapter(axios);
 
 			const wrapper = mount(
