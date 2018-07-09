@@ -5,7 +5,6 @@ import Moment from "react-moment";
 import { Helmet } from "react-helmet";
 import { StickyContainer, Sticky } from "react-sticky";
 import { withRouter } from "react-router";
-import Scrollspy from "react-scrollspy";
 
 import preload from "../../data/pre-loader";
 import { load } from "./../../data/loader";
@@ -32,7 +31,6 @@ type StateType = {
 	documentsData: any, // the list of other documents in this consultation
 	chapterData: any, // the current chapter's details - markup and sections,
 	consultationData: any, // the top level info - title etc
-	currentInPageNavItem: null | string,
 	hasInitialData: boolean,
 	onboarded: boolean,
 	currentChapterDetails: {
@@ -53,7 +51,10 @@ export class Document extends Component<PropsType, StateType> {
 			consultationData: null,
 			loading: true,
 			hasInitialData: false,
-			currentInPageNavItem: null,
+			currentChapterDetails: {
+				title: "",
+				slug: ""
+			},
 			onboarded: false,
 			allowComments: true
 		};
@@ -88,9 +89,12 @@ export class Document extends Component<PropsType, StateType> {
 					consultationData: preloadedConsultation,
 					loading: false,
 					hasInitialData: true,
-					currentInPageNavItem: null,
 					onboarded: false,
-					allowComments: allowComments
+					allowComments: allowComments,
+					currentChapterDetails: {
+						title: "",
+						slug: ""
+					}
 				};
 			}
 		}
@@ -273,21 +277,11 @@ export class Document extends Component<PropsType, StateType> {
 		return currentDocumentDetails.title;
 	};
 
-	generateScrollspy = (sections: Array<Object>): Array<Object> => {
-		return sections.map(section => section.slug);
-	};
-
-	addChapterDetailsToSections = (chapterData) => {
+	addChapterDetailsToSections = (chapterData: Object) => {
 		const { title, slug } = this.state.chapterData;
 		const chapterDetails = { title, slug };
 		chapterData.sections.unshift(chapterDetails);
 		this.setState({ chapterData });
-	};
-
-	inPageNav = (e: HTMLElement) => {
-		if (!e) return null;
-		const currentInPageNavItem = e.getAttribute("id");
-		this.setState({ currentInPageNavItem });
 	};
 
 	render() {
@@ -381,15 +375,8 @@ export class Document extends Component<PropsType, StateType> {
 																className="in-page-nav__title">
 																On this page
 															</h2>
-															<Scrollspy
-																componentTag="ol"
-																items={this.generateScrollspy(sections)}
-																currentClassName=""
-																className="in-page-nav__list"
-																role="menubar"
-																onUpdate={e => {
-																	this.inPageNav(e);
-																}}>
+															<ol className="in-page-nav__list"
+																role="menubar">
 																{sections.map((item, index) => {
 																	const props = {
 																		label: item.title,
@@ -401,16 +388,11 @@ export class Document extends Component<PropsType, StateType> {
 																		<li role="presentation"
 																			className="in-page-nav__item"
 																			key={index}>
-																			<HashLinkTop
-																				{...props}
-																				currentNavItem={
-																					this.state.currentInPageNavItem
-																				}
-																			/>
+																			<HashLinkTop {...props} />
 																		</li>
 																	);
 																})}
-															</Scrollspy>
+															</ol>
 														</nav>
 													) : null}
 												</div>
