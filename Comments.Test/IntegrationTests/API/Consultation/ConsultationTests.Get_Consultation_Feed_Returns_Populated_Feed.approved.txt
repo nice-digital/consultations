@@ -12,7 +12,6 @@
     "relevantTo":null,
     "consultationId":1,
     "process":"TAG",
-    "allowConsultationComments":true,
     "hasDocumentsWhichAllowConsultationComments":false,
     "hasDocumentsWhichAllowConsultationQuestions":true,
     "supportsQuestions":false,

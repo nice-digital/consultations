@@ -11,6 +11,7 @@ import { StackedNav } from "./../StackedNav/StackedNav";
 import { queryStringToObject } from "../../helpers/utils";
 import { UserContext } from "../../context/UserContext";
 import { pullFocusById } from "../../helpers/accessibility-helpers";
+//import stringifyObject from "stringify-object";
 
 type DocumentType = {
 	title: string,
@@ -28,8 +29,9 @@ type PropsType = {
 type StateType = {
 	documentsList: Array<any>,
 	consultationData: any,
-	isSubmitted: boolean,
-	viewSubmittedComments: boolean,
+	userHasSubmitted: boolean,
+	validToSubmit: false,
+	viewSubmittedComments: boolean
 };
 
 export class ReviewPage extends Component<PropsType, StateType> {
@@ -39,8 +41,9 @@ export class ReviewPage extends Component<PropsType, StateType> {
 		this.state = {
 			documentsList: [],
 			consultationData: null,
-			isSubmitted: false,
-			viewSubmittedComments: false
+			userHasSubmitted: false,
+			viewSubmittedComments: false,
+			validToSubmit: false
 		};
 	}
 
@@ -90,9 +93,12 @@ export class ReviewPage extends Component<PropsType, StateType> {
 		// if (!this.state.hasInitialData) {
 		this.gatherData()
 			.then(data => {
+
+				//console.log(`data: ${stringifyObject(data.consultationData.consultationState.supportsSubmission)}`);
 				this.setState({
-					...data//,
-					//isSubmitted = data.consultationState.supportsSubmission
+					...data,
+					userHasSubmitted: data.consultationData.consultationState.userHasSubmitted,
+					validToSubmit: data.consultationData.consultationState.supportsSubmission
 				});
 			})
 			.catch(err => {
@@ -141,8 +147,18 @@ export class ReviewPage extends Component<PropsType, StateType> {
 	submittedHandler = () => {
 		console.log('submitted handler in reviewpage');
 		this.setState({
-			isSubmitted: true,
+			userHasSubmitted: true,
+			validToSubmit: false,
 			viewSubmittedComments: false
+		});
+	}
+
+	//this validation handler code is going to have to get a bit more advance when questions are introduced, as it'll be possible
+	//to answer a question on the review page and the submit button should then enable - if the consultation is open + hasn't already been submitted + all the mandatory questions are answered.
+	//(plus there's the whole unsaved changes to deal with. what happens there?)
+	validationHander = (validToSubmit) => {
+		this.setState({
+			validToSubmit: validToSubmit
 		});
 	}
 
@@ -173,18 +189,18 @@ export class ReviewPage extends Component<PropsType, StateType> {
 									<Header
 										title={title}
 										reference={reference}
-										endDate={endDate}/>
-									<h2 className="mt--0">{this.state.isSubmitted ? "Comments submitted" : "Comments for review"}</h2>
+										consultationState={this.state.consultationData.consultationState}/>
+									<h2 className="mt--0">{this.state.userHasSubmitted ? "Comments submitted" : "Comments for review"}</h2>
 
-									{(this.state.isSubmitted && !this.state.viewSubmittedComments) ?
+									{(this.state.userHasSubmitted && !this.state.viewSubmittedComments) ?
 
-									<div class="hero">
-										<div class="hero__container">
-											<div class="hero__body">
-												<div class="hero__copy">
+									<div className="hero">
+										<div className="hero__container">
+											<div className="hero__body">
+												<div className="hero__copy">
 													{/* <h1 class="hero__title">Hero title</h1> */}
-													<p class="hero__intro">Thank you, your comments have been submitted</p>
-													<div class="hero__actions">
+													<p className="hero__intro">Thank you, your comments have been submitted</p>
+													<div className="hero__actions">
 														<button className="btn" onClick={this.viewSubmittedCommentsHandler}>Review all submitted comments</button>
 														{/* <a onClick={this.state.viewSubmittedComments = true}>Review all submitted comments</a> */}
 													</div>
@@ -197,11 +213,12 @@ export class ReviewPage extends Component<PropsType, StateType> {
 										<div data-g="12 md:6 md:push:3">
 											<h3 className="mt--0" id="comments-column">Comments</h3>
 											<CommentListWithRouter
-												isReviewPage={true}
-												isVisible={true}
-												isSubmitted={this.state.isSubmitted} 
-												wrappedComponentRef={component => (this.commentList = component)}
-												submittedHandler={this.submittedHandler}/>
+													isReviewPage={true}
+													isVisible={true}
+													isSubmitted={this.state.userHasSubmitted}
+													wrappedComponentRef={component => (this.commentList = component)}
+													submittedHandler={this.submittedHandler}
+													validationHander={this.validationHander}/>
 										</div>
 										<div data-g="12 md:3 md:pull:6">
 											<Sticky disableHardwareAcceleration>
@@ -237,11 +254,11 @@ export class ReviewPage extends Component<PropsType, StateType> {
 																		<Fragment>
 																			<h3 className="mt--0">Ready to submit?</h3>
 																			<button
-																				disabled={this.state.isSubmitted}
+																				disabled={!this.state.validToSubmit}
 																				className="btn btn--cta"
 																				onClick={this.submitConsultation}
 																			>
-																				{this.state.isSubmitted ? "Comments submitted": "Submit your comments"}
+																			{this.state.userHasSubmitted ? "Comments submitted": "Submit your comments"}
 																			</button>
 																			<button
 																				className="btn btn--secondary">

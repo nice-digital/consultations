@@ -10,6 +10,8 @@ namespace Comments.Services
 	public interface ISubmitService
 	{
 		(int rowsUpdated, Validate validate) SubmitCommentsAndAnswers(CommentsAndAnswers commentsAndAnswers);
+
+		int DeleteAllSubmissionsFromUser(Guid usersSubmissionsToDelete);
 	}
 
 	public class SubmitService : ISubmitService
@@ -77,6 +79,13 @@ namespace Comments.Services
 				answerInViewModel.UpdateStatusFromDBModel(status);
 			}
 			_context.AddSubmissionAnswers(answerIds, submission.SubmissionId);
+		}
+
+		
+		public int DeleteAllSubmissionsFromUser(Guid usersSubmissionsToDelete)
+		{
+			//todo: some kind of service authorisation
+			return _context.DeleteAllSubmissionsFromUser(usersSubmissionsToDelete);
 		}
 	}
 }

@@ -14,6 +14,11 @@ namespace Comments.Test.Infrastructure
 		    throw new NotImplementedException();
 	    }
 
+	    public int DeleteAllSubmissionsFromUser(Guid usersSubmissionsToDelete)
+	    {
+		    throw new NotImplementedException();
+	    }
+
 	    public bool HasSubmittedCommentsOrQuestions(string consultationSourceURI, Guid userId)
 	    {
 		    throw new NotImplementedException();

@@ -110,12 +110,17 @@ namespace Comments.Services
 	    {
 		    var user = _userService.GetCurrentUser();
 		    var signInURL = _authenticateService.GetLoginURL(relativeURL.ToConsultationsRelativeUrl());
+		    var consultationSourceURI = ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Consultation);
+		    ConsultationState consultationState;
 
 		    if (!user.IsAuthorised)
-			    return new CommentsAndQuestions(new List<ViewModels.Comment>(), new List<ViewModels.Question>(), user.IsAuthorised, signInURL, consultationState: null);
+		    {
+			    consultationState = _consultationService.GetConsultationState(consultationSourceURI);
+				return new CommentsAndQuestions(new List<ViewModels.Comment>(), new List<ViewModels.Question>(),
+				    user.IsAuthorised, signInURL, consultationState);
+		    }
 
-		    var consultationSourceURI = ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Consultation);
-			var sourceURIs = new List<string> { consultationSourceURI };
+		    var sourceURIs = new List<string> { consultationSourceURI };
 
 			if (!isReview)
 			{
@@ -127,7 +132,7 @@ namespace Comments.Services
 
 		    var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);
 
-		    var consultationState = _consultationService.GetConsultationState(consultationSourceURI, locations);
+		    consultationState = _consultationService.GetConsultationState(consultationSourceURI, locations);
 
 			return new CommentsAndQuestions(data.comments, data.questions, user.IsAuthorised, signInURL, consultationState);
 	    }
