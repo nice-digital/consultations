@@ -64,6 +64,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 		const unsavedChanges = this.state.unsavedChanges;
 		const comment = this.state.comment;
 		const readOnly = this.props.readOnly;
+		const moment = require("moment");
 
 		return (
 
@@ -92,7 +93,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 					{lastModifiedDate ? (
 						<div className="CommentBox__datestamp mb--d font-weight-bold">
 							Last Modified:{" "}
-							<Moment format="D/M/YYYY - h:mma" date={lastModifiedDate}/>
+							<Moment format="D/M/YYYY - h:mma" date={moment.utc(lastModifiedDate).toDate()}/>
 						</div>
 					) : null}
 					<form onSubmit={e => this.props.saveHandler(e, comment)}>
