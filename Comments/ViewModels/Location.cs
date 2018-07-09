@@ -1,4 +1,4 @@
-﻿namespace Comments.ViewModels
+namespace Comments.ViewModels
 {
     public class Location
     {
@@ -20,10 +20,6 @@
         public string SourceURI { get; set; }
         public string HtmlElementID { get; set; }
 
-        //public int ConsultationId { get; set; }
-        //public int? DocumentId { get; set; }
-        //public string ChapterSlug { get; set; }
-        //public string SectionSlug { get; set; }
         public string RangeStart { get; set; }
         public int? RangeStartOffset { get; set; }
         public string RangeEnd { get; set; }

@@ -1,10 +1,15 @@
-﻿using System;
+using System;
 using System.Linq;
 using Comments.Models;
 using Comments.Services;
 using Comments.Test.Infrastructure;
+using Comments.ViewModels;
 using Shouldly;
 using Xunit;
+using Answer = Comments.Models.Answer;
+using Location = Comments.Models.Location;
+using Question = Comments.Models.Question;
+using QuestionType = Comments.Models.QuestionType;
 using TestBase = Comments.Test.Infrastructure.TestBase;
 
 namespace Comments.Test.UnitTests
@@ -16,8 +21,9 @@ namespace Comments.Test.UnitTests
         {
             //Arrange
             ResetDatabase();
+	        _context.Database.EnsureCreated();
 
-            var answerText = Guid.NewGuid().ToString();
+			var answerText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
@@ -70,7 +76,9 @@ namespace Comments.Test.UnitTests
         {
             //Arrange
             ResetDatabase();
-            var answerText = Guid.NewGuid().ToString();
+	        _context.Database.EnsureCreated();
+
+			var answerText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
@@ -97,7 +105,9 @@ namespace Comments.Test.UnitTests
         {
             //Arrange
             ResetDatabase();
-            var answerText = Guid.NewGuid().ToString();
+	        _context.Database.EnsureCreated();
+
+			var answerText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
             
@@ -151,7 +161,7 @@ namespace Comments.Test.UnitTests
             var location = new Location(sourceURI, null, null, null, null, null, null, null, null);
             var question = new Question(locationId, questionText, questionTypeId, null, location, questionType, null);
 
-            var answer = new Answer(questionId, userId, answerText, false, question);
+            var answer = new Answer(questionId, userId, answerText, false, question, (int)StatusName.Draft, null);
             var viewModel = new ViewModels.Answer(answer);
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
@@ -205,8 +215,10 @@ namespace Comments.Test.UnitTests
             var questionId = AddQuestion(locationId, questionTypeId, questionText);
             var expectedAnswerId = AddAnswer(questionId, userId, "current user's answer");
             AddAnswer(questionId, Guid.NewGuid(), "another user's answer");
-            
-            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService, authenticateService);
+
+	        var context = new ConsultationsContext(_options, userService);
+			//var submitService = new SubmitService(context, userService, _consultationService);
+			var commentService = new CommentService(context, userService, authenticateService, _consultationService);
 
             // Act
             var viewModel = commentService.GetCommentsAndQuestions(sourceURI);

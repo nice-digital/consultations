@@ -76,6 +76,5 @@ namespace Comments.Test.UnitTests
 		    //Assert
 		    uri.ShouldBe("consultations://./consultation/10/document/100");
 	    }
-
 	}
 }

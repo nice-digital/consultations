@@ -96,43 +96,12 @@ Array [
                 <div
                     className="page-header"
                 >
-                    <h1
-                        className="page-header__heading mt--0"
-                    >
-                        Unstable angina and NSTEMI: early management
-                    </h1>
-                    <p
-                        className="page-header__lead"
-                    >
-                        [
-                        GID-TA10232
-                        ] Open until
-                         
-                        <time
-                            dateTime={"2018-05-31T16:00:00.000Z"}
-                        >
-                            31 May 2018
-                        </time>
-                    </p>
-                    <button
-                        className="btn btn--cta"
-                        data-qa-sel="comment-on-whole-consultation"
-                        onClick={[Function]}
-                    >
-                        Comment on whole consultation
-                    </button>
+                    <undefined />
                     <h2
                         className="mb--b"
                     >
                         Unstable angina and NSTEMI
                     </h2>
-                    <button
-                        className="btn btn--cta"
-                        data-qa-sel="comment-on-consultation-document"
-                        onClick={[Function]}
-                    >
-                        Comment on this document
-                    </button>
                 </div>
                 <div
                     className="grid"
@@ -254,30 +223,7 @@ Array [
                         <div
                             className="document-comment-container "
                         >
-                            <div
-                                onMouseUp={[Function]}
-                            >
-                                <div
-                                    className="selection-container unselectable"
-                                    style={
-                                        Object {
-                                            "display": "none",
-                                            "left": undefined,
-                                            "top": undefined,
-                                          }
-                                    }
-                                >
-                                    <button
-                                        className="btn"
-                                        onClick={[Function]}
-                                    >
-                                        <span
-                                            aria-hidden="true"
-                                            className="icon icon--comment unselectable"
-                                        />
-                                          Comment
-                                    </button>
-                                </div>
+                            <div>
                                 <div
                                     className="chapter"
                                     title="Introduction"
@@ -286,25 +232,6 @@ Array [
                                     <h2
                                         className="title"
                                     >
-                                        <button
-                                            className="document-comment-container__commentButton"
-                                            data-qa-sel="in-text-comment-button"
-                                            id="introduction"
-                                            onClick={[Function]}
-                                        >
-                                            <span
-                                                aria-hidden="true"
-                                                className="icon icon--comment"
-                                            />
-                                            <span
-                                                className="visually-hidden"
-                                            >
-                                                Comment on 
-                                                chapter
-                                                : 
-                                                Introduction 
-                                            </span>
-                                        </button>
                                         Introduction 
                                     </h2>
                                     <div
