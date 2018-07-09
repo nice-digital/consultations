@@ -64,7 +64,7 @@ describe("[ClientApp]", () => {
 		});
 
 		it("button fires passed function with expected object for a section", () => {
-				"<div><a id='bar' href='#test' data-heading-type='section'>Foo</a></div>"
+			const instance = setupHtml(	"<div><a id='bar' href='#test' data-heading-type='section'>Foo</a></div>"
 			);
 			instance.wrapper.find("button").simulate("click");
 			expect(instance.clickFunction).toHaveBeenCalledWith({

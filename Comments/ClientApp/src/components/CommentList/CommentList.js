@@ -63,10 +63,10 @@ export class CommentList extends Component<PropsType, StateType> {
 			loading: true,
 			allowComments: true
 		};
-		let preloadedData = {};
-		if (this.props.staticContext && this.props.staticContext.preload) {
-			preloadedData = this.props.staticContext.preload.data;
-		}
+		// let preloadedData = {};
+		// if (this.props.staticContext && this.props.staticContext.preload) {
+		// 	preloadedData = this.props.staticContext.preload.data;
+		// }
 
 		// if (this.props.isReviewPage){
 		// 	const preloaded = preload(
@@ -77,28 +77,28 @@ export class CommentList extends Component<PropsType, StateType> {
 		// 		preloadedData
 		// 	);
 		// } else{
-		const preloaded = preload(
-			this.props.staticContext,
-			"comments",
-			[],
-			{ sourceURI: this.props.match.url },
-			preloadedData
-		);
+		// const preloaded = preload(
+		// 	this.props.staticContext,
+		// 	"comments",
+		// 	[],
+		// 	{ sourceURI: this.props.match.url },
+		// 	preloadedData
+		// );
 		// }
 
-		if (preloaded) {
+		// if (preloaded) {
 
-			//console.log(`preloaded 90: ${stringifyObject(preloaded)}`);
+		// 	//console.log(`preloaded 90: ${stringifyObject(preloaded)}`);
 
-			let allowComments = !preloaded.consultationState.consultationIsOpen && !preloaded.consultationState.userHasSubmitted;
-			this.state = {
-				loading: false,
-				comments: preloaded.comments,
-				filteredComments: [],
-				questions: preloaded.questions,
-				allowComments: allowComments
-			};
-		}
+		// 	let allowComments = !preloaded.consultationState.consultationIsOpen && !preloaded.consultationState.userHasSubmitted;
+		// 	this.state = {
+		// 		loading: false,
+		// 		comments: preloaded.comments,
+		// 		filteredComments: [],
+		// 		questions: preloaded.questions,
+		// 		allowComments: allowComments
+		// 	};
+		// }
 	}
 
 	loadComments() {
