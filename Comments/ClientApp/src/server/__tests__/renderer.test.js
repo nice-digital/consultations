@@ -19,19 +19,13 @@ describe("Server renderer", () => {
 		it("resolves promise with error component and 500 status when app rendering fails in development", (done) => {
 			process.env.NODE_ENV = "development";
 
-			serverRenderer({ data: { viewModel: 99 } }).then((result) => {
-				const expectedResult = {
-					html: "<div data-reactroot=\"\">error</div>",
-					statusCode: 500,
-					globals: {
-						viewModel: 99
-					}
-				};
-				expect(result).toEqual(expectedResult);
-				done();
+			serverRenderer({ data: { viewModel: 99  } }).then((result) => {
+				expect(result.statusCode).toEqual(500);
+				expect(result.globals.viewModel).toEqual(99);
+				expect(result.html).toMatchSnapshot();
+				done();				
 			});
 		});
-
 
 		it("returns a promise that resolves with correct html", () => {
 			var result = serverRenderer({ url: "/",
