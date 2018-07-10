@@ -141,7 +141,7 @@ export class ReviewPage extends Component<PropsType, StateType> {
 	};
 
 	submitConsultation = () => {
-		this.commentList.submitComments();		
+		this.commentList.submitComments();
 	};
 
 	submittedHandler = () => {
@@ -256,6 +256,7 @@ export class ReviewPage extends Component<PropsType, StateType> {
 																			<button
 																				disabled={!this.state.validToSubmit}
 																				className="btn btn--cta"
+																				data-qa-sel="submit-comment-button"
 																				onClick={this.submitConsultation}
 																			>
 																			{this.state.userHasSubmitted ? "Comments submitted": "Submit your comments"}
