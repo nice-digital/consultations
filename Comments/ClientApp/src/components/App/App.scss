@@ -33,4 +33,10 @@ $color-agile-phase: #007AB8;
   word-wrap: break-word;
 }
 
+.errorBox {
+	background: $colour-error-background;
+	color: $colour-error;
+	border: 1px solid $colour-error;
+ }
+
 // ------------------------------------------------ //

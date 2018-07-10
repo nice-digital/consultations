@@ -279,7 +279,7 @@ export class CommentList extends Component<PropsType, StateType> {
 							}
 
 							{this.state.error != "" ? 
-								<p>Error: {this.state.error}</p>
+								<div className="container errorBox">Error: {this.state.error}</div>
 								: null }
 
 

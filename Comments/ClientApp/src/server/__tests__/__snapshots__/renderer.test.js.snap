@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Server renderer serverRenderer resolves promise with error component and 500 status when app rendering fails in development 1`] = `
-"<div class=\\"container\\" data-reactroot=\\"\\"><div class=\\"alert\\"><h2 class=\\"mt--0\\"><span class=\\"icon icon--warning\\" aria-hidden=\\"true\\"></span> <!-- -->TypeError</h2><p class=\\"lead\\">Cannot read property &#x27;replace&#x27; of undefined</p><p>TypeError: Cannot read property &#x27;replace&#x27; of undefined
+"<div class=\\"container\\" data-reactroot=\\"\\"><div class=\\"alert\\"><h2 class=\\"page-header__heading mt--0\\"><span class=\\"icon icon--warning\\" aria-hidden=\\"true\\"></span> <!-- -->TypeError</h2><p class=\\"page-header__lead\\">Cannot read property &#x27;replace&#x27; of undefined</p><p>TypeError: Cannot read property &#x27;replace&#x27; of undefined
     at Object.&lt;anonymous&gt;.exports.replaceRelativePaths.html (C:\\\\_src\\\\consultations\\\\Comments\\\\ClientApp\\\\src\\\\server\\\\html-processor.js:60:14)
     at Object.&lt;anonymous&gt;.exports.processHtml (C:\\\\_src\\\\consultations\\\\Comments\\\\ClientApp\\\\src\\\\server\\\\html-processor.js:70:9)
     at Promise.all.then (C:\\\\_src\\\\consultations\\\\Comments\\\\ClientApp\\\\src\\\\server\\\\renderer.js:75:42)
