@@ -167,7 +167,6 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                         data-qa-sel="nav-list-item"
                       >
                         <a
-                          aria-current="false"
                           href="/1/review"
                           onClick={[Function]}
                         >
@@ -193,7 +192,6 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                         data-qa-sel="nav-list-item"
                       >
                         <a
-                          aria-current="false"
                           href="/1/review?sourceURI=undefined"
                           onClick={[Function]}
                         >
@@ -205,7 +203,6 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                         data-qa-sel="nav-list-item"
                       >
                         <a
-                          aria-current="false"
                           href="/1/review?sourceURI=undefined"
                           onClick={[Function]}
                         >
@@ -217,7 +214,6 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                         data-qa-sel="nav-list-item"
                       >
                         <a
-                          aria-current="false"
                           href="/1/review?sourceURI=undefined"
                           onClick={[Function]}
                         />
@@ -227,7 +223,6 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                         data-qa-sel="nav-list-item"
                       >
                         <a
-                          aria-current="false"
                           href="/1/review?sourceURI=undefined"
                           onClick={[Function]}
                         />
@@ -237,7 +232,6 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                         data-qa-sel="nav-list-item"
                       >
                         <a
-                          aria-current="false"
                           href="/1/review?sourceURI=undefined"
                           onClick={[Function]}
                         >
@@ -249,7 +243,6 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                         data-qa-sel="nav-list-item"
                       >
                         <a
-                          aria-current="false"
                           href="/1/review?sourceURI=undefined"
                           onClick={[Function]}
                         />
@@ -259,7 +252,6 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                         data-qa-sel="nav-list-item"
                       >
                         <a
-                          aria-current="false"
                           href="/1/review?sourceURI=undefined"
                           onClick={[Function]}
                         />
