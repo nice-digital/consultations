@@ -282,7 +282,7 @@ export class CommentList extends Component<PropsType, StateType> {
 											<Link
 												to={`/${this.props.match.params.consultationId}/review`}
 												data-qa-sel="review-all-comments"
-												className="right">Review all comments</Link>
+												className="right">Review all {this.props.viewComments ? "comments" : "questions"}</Link>
 										</p> : null
 									}
 								</div> : null
@@ -312,20 +312,23 @@ export class CommentList extends Component<PropsType, StateType> {
 												})}
 											</ul> 
 										:
-										<ul className="CommentList list--unstyled">
-											<li>question list below</li>
-											{questionsToShow.map((question) => {
-												return (
-													<Question
-														readOnly={!this.state.allowComments || this.props.isSubmitted}
-														isVisible={this.props.isVisible}
-														key={question.questionId}
-														unique={`Comment${question.questionId}`}
-														question={question}
-													/>
-												);
-											})}
-										</ul> 
+										<div>
+											<p>We would like to hear your views on the draft recommendations presented in the guideline, and any comments you may have on the rationale and impact sections in the guideline and the evidence presented in the evidence reviews documents. We would also welcome views on the Equality Impact Assessment.</p>
+											<p>We would like to hear your views on these questions:</p>
+											<ul className="CommentList list--unstyled">
+												{questionsToShow.map((question) => {
+													return (
+														<Question
+															readOnly={!this.state.allowComments || this.props.isSubmitted}
+															isVisible={this.props.isVisible}
+															key={question.questionId}
+															unique={`Comment${question.questionId}`}
+															question={question}
+														/>
+													);
+												})}
+											</ul>
+										</div> 
 									:
 									<LoginBanner
 										signInButton={true}
