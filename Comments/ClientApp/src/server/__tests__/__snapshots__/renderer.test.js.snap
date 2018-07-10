@@ -6,5 +6,5 @@ exports[`Server renderer serverRenderer resolves promise with error component an
     at Object.&lt;anonymous&gt;.exports.processHtml (C:\\\\_src\\\\consultations\\\\Comments\\\\ClientApp\\\\src\\\\server\\\\html-processor.js:70:9)
     at Promise.all.then (C:\\\\_src\\\\consultations\\\\Comments\\\\ClientApp\\\\src\\\\server\\\\renderer.js:75:42)
     at &lt;anonymous&gt;
-    at process._tickDomainCallback (internal/process/next_tick.js:228:7)</p></div></div>"
+    at process._tickCallback (internal/process/next_tick.js:188:7)</p></div></div>"
 `;

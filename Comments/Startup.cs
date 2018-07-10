@@ -12,6 +12,7 @@ using NICE.Feeds;
 using System;
 using System.IO;
 using Comments.Auth;
+using Comments.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
@@ -127,12 +128,17 @@ namespace Comments
 
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+	            app.UseExceptionHandler(Constants.ErrorPath);
+				//app.UseDeveloperExceptionPage();
                 loggerFactory.AddConsole(Configuration.GetSection("Logging"));
                 loggerFactory.AddDebug();
             }
-			else
-			{ app.UseExceptionHandler("/Error"); }
+            else
+            {
+	            app.UseExceptionHandler(Constants.ErrorPath);
+
+	            app.UseStatusCodePagesWithReExecute(Constants.ErrorPath + "/{0}");
+			}
 
 	        
            
@@ -240,18 +246,18 @@ namespace Comments
                    // spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
-            
-            try
-            {
-                using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-                {
-                     serviceScope.ServiceProvider.GetService<ConsultationsContext>().Database.Migrate();
-                }
-            }
-            catch(Exception ex)
-            {
-                startupLogger.LogError(String.Format("EF Migrations Error: {0}", ex));
-            }
-        }
+
+			try
+			{
+				using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+				{
+					serviceScope.ServiceProvider.GetService<ConsultationsContext>().Database.Migrate();
+				}
+			}
+			catch (Exception ex)
+			{
+				startupLogger.LogError(String.Format("EF Migrations Error: {0}", ex));
+			}
+		}
     }
 }

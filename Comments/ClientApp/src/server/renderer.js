@@ -93,10 +93,9 @@ export const serverRenderer = (params): Promise => {
 			const error = <Error error={e} />;
 			rootContent = renderToString(error);
 			statusCode = 500;
-
-			resolve({ html: rootContent, statusCode: statusCode, globals: { viewModel: params.data.viewModel } });
-		});
-		//resolve({ html: html, statusCode: staticContext.status || statusCode });
+			
+			resolve({ html: rootContent, statusCode: staticContext.status || statusCode });
+			});
 	});
 };
 

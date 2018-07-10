@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 
 namespace Comments.Test.Infrastructure
 {
@@ -13,5 +13,11 @@ namespace Comments.Test.Infrastructure
         {
             return Regex.Replace(str, "\\\"lastModifiedDate\\\":\\\"([0-9\\-TZ:\\.]+)\\\"", "\"lastModifiedDate\":\"scrubbed by ScrubLastModifiedDate\""); //unescaped regex is: \"lastModifiedDate\":\"([0-9\-TZ:\.]+)\"
         }
-    }
+
+	    public static string ScrubErrorMessage(string str)
+	    {
+		    return Regex.Replace(str, "(<!--)([\\d\\D]+)(-->)", "\"Error Message\":\"scrubbed by ScrubErrorMessage\""); //unescaped regex is: <!--([a-z0-9]+)-->
+
+		}
+	}
 }

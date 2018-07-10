@@ -21,7 +21,6 @@ describe("Server renderer", () => {
 
 			serverRenderer({ data: { viewModel: 99  } }).then((result) => {
 				expect(result.statusCode).toEqual(500);
-				expect(result.globals.viewModel).toEqual(99);
 				expect(result.html).toMatchSnapshot();
 				done();				
 			});
