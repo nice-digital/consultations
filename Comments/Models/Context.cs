@@ -179,29 +179,25 @@ namespace Comments.Models
 
 			var submissions = Submission.Where(s => s.SubmissionByUserId.Equals(usersSubmissionsToDelete))
 			    .Include(s => s.SubmissionComment)
-					.ThenInclude(sc => sc.Comment)
-						.ThenInclude(c => c.Location)
-
-			    .Include(s => s.SubmissionAnswer)
+					.ThenInclude(sc => sc.Comment) 
+				.Include(s => s.SubmissionAnswer)
 					.ThenInclude(sa => sa.Answer)
-						.ThenInclude(a => a.Question)
-							.ThenInclude(q => q.Location)
-
-			    .ToList();
-
+				.IgnoreQueryFilters() //without this you'd only be able to delete your own data..
+				.ToList();
+			
 		    var submissionCommentsToDelete = new List<SubmissionComment>();
 		    var submissionAnswersToDelete = new List<SubmissionAnswer>();
 		    foreach (var submission in submissions)
 		    {
 			    foreach (var submissionComment in submission.SubmissionComment)
 			    {
-				    submissionComment.Comment.StatusId = draftStatus.StatusId;
+					submissionComment.Comment.StatusId = draftStatus.StatusId;
 				    submissionCommentsToDelete.Add(submissionComment);
 				}
 
 			    foreach (var submissionAnswer in submission.SubmissionAnswer)
 			    {
-				    submissionAnswer.Answer.StatusId = draftStatus.StatusId;
+					submissionAnswer.Answer.StatusId = draftStatus.StatusId;
 				    submissionAnswersToDelete.Add(submissionAnswer);
 				}
 

@@ -5,7 +5,10 @@ namespace Comments.Models
 {
     public partial class Answer
     {
-        private Answer() { } //just for EF
+	    private Answer() //just for EF
+		{
+			SubmissionAnswer = new HashSet<SubmissionAnswer>();
+		} 
 
         public Answer(int questionId, Guid createdByUserId, string answerText, bool? answerBoolean, Question question, int statusId, Status status)
         {
@@ -16,7 +19,8 @@ namespace Comments.Models
             Question = question;
 	        StatusId = statusId;
 	        Status = status;
-        }
+	        SubmissionAnswer = new HashSet<SubmissionAnswer>();
+		}
 
         public void UpdateFromViewModel(ViewModels.Answer answer)
         {
