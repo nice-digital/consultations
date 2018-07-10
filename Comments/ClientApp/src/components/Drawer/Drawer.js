@@ -100,7 +100,7 @@ export class Drawer extends Component<PropsType, StateType> {
 					<button
 						data-qa-sel="open-commenting-panel"
 						id="js-drawer-toggleopen-comments"
-						className={`Drawer__control Drawer__control--comments ${(this.state.commentsTabVisible ? "active" : "active")}`}
+						className={`Drawer__control Drawer__control--comments ${(this.state.commentsTabVisible ? "active" : "active")}`} 
 						onClick={() => this.handleClick("toggleOpenComments")}
 						aria-controls="comments-panel"
 						aria-haspopup="true"
@@ -145,19 +145,14 @@ export class Drawer extends Component<PropsType, StateType> {
 				<div aria-hidden={!this.state.drawerOpen && !this.state.commentsTabVisible}
 					 data-qa-sel="comment-panel"
 					 id="comments-panel"
-					 className={`Drawer__main ${(this.state.commentsTabVisible ? "" : "visuallyhidden")}`}>
+					 className="Drawer__main">
 					
 					<CommentListWithRouter
 						isReviewPage={false}
 						isVisible={this.state.drawerOpen}
+						viewComments={this.state.commentsTabVisible}
 						// $FlowIgnore | this.commentList is bound to this below
 						wrappedComponentRef={component => (this.commentList = component)}/>
-				</div>
-				<div aria-hidden={!this.state.drawerOpen && this.state.commentsTabVisible}
-					 data-qa-sel="questions-panel"
-					 id="question-panel"
-					 className={`Drawer__main ${(this.state.commentsTabVisible ? "visuallyhidden" : "")}`}>
-					<h3>questions panel component goes here</h3>
 				</div>
 			</section>
 		);

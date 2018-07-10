@@ -5,6 +5,7 @@ import { withRouter, Link } from "react-router-dom";
 import { load } from "./../../data/loader";
 import preload from "../../data/pre-loader";
 import { CommentBox } from "../CommentBox/CommentBox";
+import { Question } from "../Question/Question";
 import { LoginBanner } from "./../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
 import { queryStringToObject, replaceFormat } from "../../helpers/utils";
@@ -24,9 +25,10 @@ type PropsType = {
 	isVisible: boolean,
 	isReviewPage: boolean,
 	filterByDocument: number,
-	isSubmmitted: boolean,
+	isSubmitted: boolean,
 	submittedHandler: Function,
-	validationHander: Function
+	validationHander: Function,
+	viewComments: boolean //when false, we view questions.
 };
 
 type CommentType = {
@@ -49,7 +51,8 @@ type CommentType = {
 type StateType = {
 	comments: Array<CommentType>,
 	questions: any,
-	loading: boolean
+	loading: boolean,
+	allowComments: boolean
 };
 
 type ContextType = any;
@@ -132,9 +135,7 @@ export class CommentList extends Component<PropsType, StateType> {
 
 	setCommentListState = (response: any) =>
 	{
-		console.log('about to set allow comments in setcommentliststate');
 		let allowComments = response.data.consultationState.consultationIsOpen && !response.data.consultationState.userHasSubmitted;
-		console.log('set allow comments in setcommentliststate');
 		const comments = this.filterComments(this.props.location.search, response.data.comments );
 		this.setState({
 			comments,
@@ -165,7 +166,6 @@ export class CommentList extends Component<PropsType, StateType> {
 
 		load("submit", undefined, [], {}, "POST", commentsAndAnswers, true)
 			.then(res => {
-				console.log('in the then in commentlist');
 				this.props.submittedHandler();
 			})
 			.catch(err => {
@@ -265,6 +265,7 @@ export class CommentList extends Component<PropsType, StateType> {
 
 	render() {
 		const commentsToShow = this.state.comments.filter(comment => !comment.show);
+		const questionsToShow = this.state.questions.filter(question => !question.show);
 		return (
 			<UserContext.Consumer>
 				{ (contextValue: ContextType) => {
@@ -274,7 +275,7 @@ export class CommentList extends Component<PropsType, StateType> {
 							{!this.props.isReviewPage ?
 								<div className="grid">
 									<h1 data-g="6" id="commenting-panel" className="p">
-										Comments panel
+										{this.props.viewComments ? "Comments" : "Questions"} panel
 									</h1>
 									{contextValue.isAuthorised ?
 										<p data-g="6">
@@ -291,24 +292,41 @@ export class CommentList extends Component<PropsType, StateType> {
 
 								contextValue.isAuthorised ?
 
-									commentsToShow.length === 0 ? <p>No comments yet</p> :
+									this.props.viewComments ? 
+									
+										commentsToShow.length === 0 ? <p>No comments yet</p> :
 
+											<ul className="CommentList list--unstyled">
+												{commentsToShow.map((comment) => {
+													return (
+														<CommentBox
+															readOnly={!this.state.allowComments || this.props.isSubmitted}
+															isVisible={this.props.isVisible}
+															key={comment.commentId}
+															unique={`Comment${comment.commentId}`}
+															comment={comment}
+															saveHandler={this.saveCommentHandler}
+															deleteHandler={this.deleteCommentHandler}
+														/>
+													);
+												})}
+											</ul> 
+										:
 										<ul className="CommentList list--unstyled">
-											{commentsToShow.map((comment) => {
+											<li>question list below</li>
+											{questionsToShow.map((question) => {
 												return (
-													<CommentBox
+													<Question
 														readOnly={!this.state.allowComments || this.props.isSubmitted}
 														isVisible={this.props.isVisible}
-														key={comment.commentId}
-														unique={`Comment${comment.commentId}`}
-														comment={comment}
-														saveHandler={this.saveCommentHandler}
-														deleteHandler={this.deleteCommentHandler}
+														key={question.questionId}
+														unique={`Comment${question.questionId}`}
+														question={question}
 													/>
 												);
 											})}
-										</ul> :
-
+										</ul> 
+									:
 									<LoginBanner
 										signInButton={true}
 										currentURL={this.props.match.url}
@@ -316,7 +334,6 @@ export class CommentList extends Component<PropsType, StateType> {
 										registerURL={contextValue.registerURL}
 									/>
 							}
-
 						</div>
 					);
 				}}

@@ -33,11 +33,11 @@ type StateType = {
 	consultationData: any, // the top level info - title etc
 	currentInPageNavItem: null | string,
 	hasInitialData: boolean,
-	onboarded: boolean,
-	currentChapterDetails: {
-		title: string,
-		slug: string
-	}
+	onboarded: boolean//,
+	// currentChapterDetails: {
+	// 	title: string,
+	// 	slug: string
+	// }
 };
 
 type DocumentsType = Array<Object>;
