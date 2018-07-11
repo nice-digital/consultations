@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Comments.Migrations
 {
     [DbContext(typeof(ConsultationsContext))]
-    [Migration("20180622150134_SubmissionTables")]
-    partial class SubmissionTables
+    [Migration("20180711125435_QuestionInsertOne")]
+    partial class QuestionInsertOne
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
