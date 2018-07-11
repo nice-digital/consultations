@@ -203,7 +203,7 @@ namespace Comments.Models
 
 			modelBuilder.Entity<SubmissionAnswer>(entity =>
 			{
-				entity.Property(e => e.SubmissionAnswerId).HasColumnName("SubmissionCommentID");
+				entity.Property(e => e.SubmissionAnswerId).HasColumnName("SubmissionAnswerID");
 
 				entity.Property(e => e.SubmissionId).HasColumnName("SubmissionID");
 
