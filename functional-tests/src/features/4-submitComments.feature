@@ -31,6 +31,7 @@ Scenario: User makes a multiple comments and submits
 		When I click on the button "[data-qa-sel='review-all-comments']"
 		And I pause for 1000ms
 		And I click on the button "[data-qa-sel='submit-comment-button']"
+		And I pause for 1000ms
 		When I wait on element "[data-qa-sel='review-submitted-comments']" to exist
 		Then I expect that element "[data-qa-sel='submitted-text']" contains the text "Thank you, your comments have been submitted"
 		When I click on the button "[data-qa-sel='review-submitted-comments']"
