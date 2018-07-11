@@ -31,13 +31,10 @@ Scenario: User makes a multiple comments
 		And I click on the button "[data-qa-sel='submit-button']"
 		When I click on the button "[data-qa-sel='review-all-comments']"
 		And I pause for 1000ms
+		And I wait on element "[data-qa-sel='Comment-text-area']" to exist
 		Then I expect that element "[data-qa-sel='Comment-text-area']" contains the text "3"
 		And I expect that element "[data-qa-sel='Comment-text-area']" contains the text "2"
 		And I expect that element "[data-qa-sel='Comment-text-area']" contains the text "1"
-		# Then I click on the button "body [data-qa-sel='delete-comment-button']"
-		# And I pause for 1000ms
-		# Then I click on the button "body [data-qa-sel='delete-comment-button']"
-		# And I pause for 1000ms
 		Given I delete all comments on the page
 
 
