@@ -43,7 +43,8 @@ describe("[ClientApp] ", () => {
 			},
 			comment: {
 				commentId: 1
-			}
+			},
+			viewComments: true
 		};
 
 		afterEach(() => {
@@ -315,7 +316,8 @@ describe("[ClientApp] ", () => {
 			},
 			comment: {
 				commentId: 1
-			}				
+			},
+			viewComments: true				
 		};
 
 		it("componentDidUpdate filters comments for review page", async () => {
@@ -358,7 +360,8 @@ describe("[ClientApp] ", () => {
 				},
 				comment: {
 					commentId: 1
-				}				
+				},
+				viewComments: true				
 			};
 
 			mock.reset();
@@ -399,7 +402,8 @@ describe("[ClientApp] ", () => {
 				},
 				comment: {
 					commentId: 1
-				}				
+				},
+				viewComments: true		
 			};
 
 			mock.reset();
@@ -440,7 +444,8 @@ describe("[ClientApp] ", () => {
 				},
 				comment: {
 					commentId: 1
-				}				
+				},
+				viewComments: true				
 			};
 			
 			mock.reset();
