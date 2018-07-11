@@ -9,10 +9,6 @@ Background:
 		When I log in to Accounts via TopHat with username "ACCOUNTS_EMAIL3" and password "ACCOUNTS_PASSWORD"
 		When I wait on element ".page-header" to exist
 		And I pause for 1000ms
-		Given I open the url "admin/DeleteAllSubmissionsFromUser?userId=38bb6df2-9ab8-4248-bb63-251b5424711a"
-		And I open the url "1/1/introduction"
-		And I refresh
-		And I delete all comments on the page
 
 Scenario: User makes a multiple comments and submits
 		When I wait on element "[data-qa-sel='comment-on-whole-consultation']" to exist
@@ -40,3 +36,9 @@ Scenario: User makes a multiple comments and submits
 		When I click on the button "[data-qa-sel='review-submitted-comments']"
 		When I wait on element "[data-qa-sel='Comment-text-area']" to exist
 		Then I expect that element "[data-qa-sel='Comment-text-area']" is not enabled
+		Given I open the url "admin/DeleteAllSubmissionsFromUser?userId=38bb6df2-9ab8-4248-bb63-251b5424711a"
+		Given I open the url "1/review"
+		When I wait on element "[data-qa-sel='Comment-text-area']" to exist
+		And I pause for 1000ms
+		And I delete all comments on the page
+
