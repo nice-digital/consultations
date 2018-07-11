@@ -31,6 +31,11 @@ type PropsType = {
 	viewComments: boolean //when false, we view questions.
 };
 
+type StatusType = {
+	statusId: number,
+	name: string
+};
+
 type CommentType = {
 	commentId: number,
 	lastModifiedDate: Date,
@@ -45,12 +50,41 @@ type CommentType = {
 	rangeEndOffset: string,
 	quote: string,
 	commentOn: string,
-	show: boolean
+	show: boolean,
+	status: StatusType
+};
+
+type QuestionTypeType = {
+	description: string,
+	hasTextAnswer: boolean,
+	hasBooleanAnswer: boolean
+};
+
+type QuestionType = {
+	questionId: number,
+	questionText: string,
+	questionTypeId: number,
+	questionOrder: number,
+	lastModifiedDate: Date,
+	lastModifiedByUserId: string,
+	questionType: QuestionTypeType,
+	answers: Array<AnswerType>
+};
+
+type AnswerType = {
+	answerId: number,
+	answerText: string,
+	answerBoolean: boolean,
+	questionId: number,
+	lastModifiedDate: Date,
+	lastModifiedByUserId: string,
+	statusId: number,
+	status: StatusType
 };
 
 type StateType = {
 	comments: Array<CommentType>,
-	questions: any,
+	questions: Array<QuestionType>,
 	loading: boolean,
 	allowComments: boolean
 };
@@ -254,6 +288,18 @@ export class CommentList extends Component<PropsType, StateType> {
 		}
 	};
 
+	saveAnswerHandler = (e: Event, answer: AnswerType) => {
+		e.preventDefault();
+		//todo: post or put the answer to the api, then on success use answer.questionId to get the question in the this.state.questions array and update the state.
+		console.log('save answer handler hit. todo: implement answer saving.');
+	};
+
+	deleteAnswerHandler = (e: Event, answerId: number) => {
+		e.preventDefault();
+		//todo: call the delete answer api, then update the state on success.
+		console.log('todo: implement answer deletion');
+	};
+
 	removeCommentFromState = (commentId: number) => {
 		let comments = this.state.comments;
 		comments = comments.filter(comment => comment.commentId !== commentId);
@@ -324,6 +370,8 @@ export class CommentList extends Component<PropsType, StateType> {
 															key={question.questionId}
 															unique={`Comment${question.questionId}`}
 															question={question}
+															saveAnswerHandler={this.saveAnswerHandler}
+															deleteAnswerHandler={this.deleteAnswerHandler}
 														/>
 													);
 												})}

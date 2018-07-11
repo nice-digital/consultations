@@ -1,9 +1,46 @@
 import React, { Component, Fragment } from "react";
 import Moment from "react-moment";
 
+type QuestionTypeType = {
+	description: string,
+	hasTextAnswer: boolean,
+	hasBooleanAnswer: boolean
+};
+
+type QuestionType = {
+	questionId: number,
+	questionText: string,
+	questionTypeId: number,
+	questionOrder: number,
+	lastModifiedDate: Date,
+	lastModifiedByUserId: string,
+	questionType: QuestionTypeType,
+	answers: Array<AnswerType>
+};
+
+type StatusType = {
+	statusId: number,
+	name: string
+};
+
+type AnswerType = {
+	answerId: number,
+	answerText: string,
+	answerBoolean: boolean,
+	questionId: number,
+	lastModifiedDate: Date,
+	lastModifiedByUserId: string,
+	statusId: number,
+	status: StatusType
+};
+
 type PropsType = {
 	staticContext?: any,
-	isVisible: boolean
+	saveAnswerHandler: Function,
+	deleteAnswerHandler: Function,
+	question: QuestionType,
+	readOnly: boolean,
+	isVisible: boolean, //doesn't appear to get used.
 };
 
 type StateType = {
@@ -14,17 +51,17 @@ export class Question extends Component<PropsType, StateType> {
 	constructor() {
 		super();
 		this.state = {
-			question: {
-				questionText: ""
-			},
+			// question: {
+			// 	questionText: ""
+			// },
 			unsavedChanges: false
 		};
 	}
 
 	componentDidMount() {
-		this.setState({
-			question: this.props.question
-		});
+		// this.setState({
+		// 	question: this.props.question
+		// });
 	}
 
 	// static getDerivedStateFromProps(nextProps, prevState) {
@@ -43,13 +80,12 @@ export class Question extends Component<PropsType, StateType> {
 	// isTextSelection = (comment) => comment.commentOn && comment.commentOn.toLowerCase() === "selection" && comment.quote;
 
 	render() {
-		if (!this.state.question) return null;
-		
+		if (!this.props.question) return null;		
 
 		return (
 
 			<li className="CommentBox">
-				this is a question
+				<p>{this.props.question.questionText}</p>
 			</li>
 		);
 	}
