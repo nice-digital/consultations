@@ -199,9 +199,9 @@ export class ReviewPage extends Component<PropsType, StateType> {
 											<div className="hero__body">
 												<div className="hero__copy">
 													{/* <h1 class="hero__title">Hero title</h1> */}
-													<p className="hero__intro">Thank you, your comments have been submitted</p>
+													<p className="hero__intro" data-qa-sel="submitted-text">Thank you, your comments have been submitted</p>
 													<div className="hero__actions">
-														<button className="btn" onClick={this.viewSubmittedCommentsHandler}>Review all submitted comments</button>
+														<button className="btn" data-qa-sel="review-submitted-comments" onClick={this.viewSubmittedCommentsHandler}>Review all submitted comments</button>
 														{/* <a onClick={this.state.viewSubmittedComments = true}>Review all submitted comments</a> */}
 													</div>
 												</div>
