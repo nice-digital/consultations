@@ -121,7 +121,7 @@ export class Answer extends Component<PropsType, StateType> {
 								disabled={!unsavedChanges}/>
 
 						)}
-						{!readOnly &&
+						{!readOnly && (this.state.unsavedChanges || answerId > 0) &&
 						<button
 							data-qa-sel="delete-comment-button"
 							className="btn mr--0 right"
