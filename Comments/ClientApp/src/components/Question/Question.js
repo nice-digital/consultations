@@ -18,7 +18,8 @@ type QuestionType = {
 	lastModifiedDate: Date,
 	lastModifiedByUserId: string,
 	questionType: QuestionTypeType,
-	answers: Array<AnswerType>
+	answers: Array<AnswerType>,
+	commentOn: string
 };
 
 type StatusType = {
@@ -57,7 +58,9 @@ export class Question extends Component<PropsType, StateType> {
 			unsavedChanges: false
 		};
 	}
-	
+
+	isTextSelection = (question) => question.commentOn && question.commentOn.toLowerCase() === "selection" && question.quote;
+
 	render() {
 		if (!this.props.question) return null;		
 
@@ -72,6 +75,24 @@ export class Question extends Component<PropsType, StateType> {
 		return (
 
 			<li className="CommentBox">
+				{!this.isTextSelection(this.props.question) &&
+				<Fragment>
+					<h1 data-qa-sel="comment-box-title" className="CommentBox__title mt--0 mb--d">
+						Question on: <span className="text-lowercase">{this.props.question.commentOn}</span>
+						<br/>
+						{this.props.question.quote}
+					</h1>
+				</Fragment>
+				}
+
+				{this.isTextSelection(this.props.question) &&
+				<Fragment>
+					<h1 data-qa-sel="comment-box-title" className="CommentBox__title mt--0 mb--d">
+						Question on: <span className="text-lowercase">{this.props.question.commentOn}</span>
+					</h1>
+					<div className="CommentBox__quote mb--d">{this.props.question.quote}</div>
+				</Fragment>
+				}
 				<p>{this.props.question.questionText}</p>
 
 				{answers.map((answer) => {

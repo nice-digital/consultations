@@ -69,7 +69,9 @@ type QuestionType = {
 	lastModifiedByUserId: string,
 	questionType: QuestionTypeType,
 	answers: Array<AnswerType>,
-	show: boolean
+	show: boolean,
+	commentOn: string,
+	sourceURI: string,
 };
 
 type AnswerType = {
@@ -172,9 +174,10 @@ export class CommentList extends Component<PropsType, StateType> {
 	{
 		let allowComments = response.data.consultationState.consultationIsOpen && !response.data.consultationState.userHasSubmitted;
 		const comments = this.filterComments(this.props.location.search, response.data.comments );
+		const questions = this.filterQuestions(this.props.location.search, response.data.questions );
 		this.setState({
 			comments,
-			questions: response.data.questions,
+			questions,
 			loading: false,
 			allowComments: allowComments
 		});
@@ -197,7 +200,7 @@ export class CommentList extends Component<PropsType, StateType> {
 
 	submitComments = () => {
 
-		const answersToSubmit = this.state.questions.map
+		//const answersToSubmit = this.state.questions.map
 
 		let commentsAndAnswers = {comments: this.state.comments, answers: null}; //todo: answers
 
@@ -219,6 +222,17 @@ export class CommentList extends Component<PropsType, StateType> {
 		return comments.map(comment => {
 			comment.show = !idsOfFilteredComments.includes(comment.commentId);
 			return comment;
+		});
+	};
+
+	filterQuestions = (newSourceURIToFilterBy: string, questions: Array<QuestionType>): Array<QuestionType> => {
+		let filterBy = queryStringToObject(newSourceURIToFilterBy);
+		if (filterBy.sourceURI == null) filterBy = { sourceURI: "" };
+		const idsOfFilteredComments = questions.filter(question => question.sourceURI.indexOf(filterBy.sourceURI) !== -1).map(question => question.questionId);
+
+		return questions.map(question => {
+			question.show = !idsOfFilteredComments.includes(question.questionId);
+			return question;
 		});
 	};
 

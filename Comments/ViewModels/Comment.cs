@@ -1,10 +1,8 @@
 using System;
-using Comments.Common;
-using Microsoft.AspNetCore.Http.Extensions;
 
 namespace Comments.ViewModels
 {
-    public class Comment : Location
+	public class Comment : Location
     {
         public Comment() { } //only here for model binding. don't use it in code.
 
@@ -37,25 +35,25 @@ namespace Comments.ViewModels
 	    public ViewModels.Status Status { get; set; }
 		public int StatusId { get; set; }
 
-		private CommentOn? _commentOn = null;
-        public string CommentOn
-        {
-            get
-            {
-                if (_commentOn == null)
-                {
-                    _commentOn = CommentOnHelpers.GetCommentOn(SourceURI, RangeStart, HtmlElementID);
-                }
-                return _commentOn.HasValue ? Enum.GetName(typeof(CommentOn), _commentOn.Value) : null;
-            }
-            set
-            {
-                if (!string.IsNullOrWhiteSpace(value) && Enum.TryParse(value, out CommentOn parsedEnum))
-                {
-                    _commentOn = parsedEnum;
-                }
-            }
-        }
+		//private CommentOn? _commentOn = null;
+  //      public string CommentOn
+  //      {
+  //          get
+  //          {
+  //              if (_commentOn == null)
+  //              {
+  //                  _commentOn = CommentOnHelpers.GetCommentOn(SourceURI, RangeStart, HtmlElementID);
+  //              }
+  //              return _commentOn.HasValue ? Enum.GetName(typeof(CommentOn), _commentOn.Value) : null;
+  //          }
+  //          set
+  //          {
+  //              if (!string.IsNullOrWhiteSpace(value) && Enum.TryParse(value, out CommentOn parsedEnum))
+  //              {
+  //                  _commentOn = parsedEnum;
+  //              }
+  //          }
+  //      }
 
 	    public void UpdateStatusFromDBModel(Models.Status status)
 	    {
