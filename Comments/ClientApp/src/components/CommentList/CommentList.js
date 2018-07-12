@@ -200,9 +200,16 @@ export class CommentList extends Component<PropsType, StateType> {
 
 	submitComments = () => {
 
-		//const answersToSubmit = this.state.questions.map
+		const answersToSubmit = [];
+		this.state.questions.forEach(function(question){
+			if (question.answers != null && question.answers.length > 0){
+				question.answers.forEach(function(answer){
+					answersToSubmit.push(answer);
+				});
+			}			
+		});
 
-		let commentsAndAnswers = {comments: this.state.comments, answers: null}; //todo: answers
+		let commentsAndAnswers = {comments: this.state.comments, answers: answersToSubmit};
 
 		load("submit", undefined, [], {}, "POST", commentsAndAnswers, true)
 			.then(res => {
