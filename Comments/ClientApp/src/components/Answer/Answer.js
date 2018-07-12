@@ -77,7 +77,8 @@ export class Answer extends Component<PropsType, StateType> {
 		const {
 			answerText,
 			lastModifiedDate,
-			answerId
+			answerId,
+			questionId
 		} = this.state.answer;
 		const unsavedChanges = this.state.unsavedChanges;
 		const answer = this.state.answer;
@@ -119,7 +120,7 @@ export class Answer extends Component<PropsType, StateType> {
 						<button
 							data-qa-sel="delete-comment-button"
 							className="btn mr--0 right"
-							onClick={e => this.props.deleteHandler(e, answerId)}>
+							onClick={e => this.props.deleteHandler(e, questionId, answerId)}>
 							<span className="visually-hidden">Delete this answer</span>
 							<span className="icon icon--trash" aria-hidden="true"/>
 						</button>

@@ -68,7 +68,8 @@ type QuestionType = {
 	lastModifiedDate: Date,
 	lastModifiedByUserId: string,
 	questionType: QuestionTypeType,
-	answers: Array<AnswerType>
+	answers: Array<AnswerType>,
+	show: boolean
 };
 
 type AnswerType = {
@@ -292,13 +293,61 @@ export class CommentList extends Component<PropsType, StateType> {
 		e.preventDefault();
 		//todo: post or put the answer to the api, then on success use answer.questionId to get the question in the this.state.questions array and update the state.
 		//console.log(stringifyObject(answer));
-		console.log("save answer handler hit. todo: implement answer saving.");
+		const isANewAnswer = answer.answerId < 0;
+		const method = isANewAnswer ? "POST" : "PUT";
+		const urlParameters = isANewAnswer ? [] : [answer.answerId];
+		const endpointName = isANewAnswer ? "newanswer" : "editanswer";
+
+		load(endpointName, undefined, urlParameters, {}, method, answer, true)
+			.then(res => {
+				if (res.status === 201 || res.status === 200) {
+					const questionIndex = this.state.questions
+						.map(function(question) {
+							return question.questionId;
+						})
+						.indexOf(answer.questionId);
+					const questions = this.state.questions;
+
+					if (questions[questionIndex].answers === null || questions[questionIndex].answers.length < 1){
+						questions[questionIndex].answers = [res.data];
+					} else{					
+						const answerIndex = questions[questionIndex].answers
+							.map(function(answer) {
+								return answer.answerId;
+							}).indexOf(answer.answerId);
+						
+						const answers = questions[questionIndex].answers;
+						answers[answerIndex] = res.data;	
+						questions[questionIndex].answers = answers;
+					}					
+					this.setState({
+						questions
+					});
+				}
+			})
+			.catch(err => {
+				console.log(err);
+				if (err.response) alert(err.response.statusText);
+			});
 	};
 
-	deleteAnswerHandler = (e: Event, answerId: number) => {
+	deleteAnswerHandler = (e: Event, questionId: number, answerId: number) => {
 		e.preventDefault();
 		//todo: call the delete answer api, then update the state on success.
-		console.log("todo: implement answer deletion");
+		if (answerId < 0) {
+			this.removeAnswerFromState(questionId, answerId);
+		} else {
+			load("editanswer", undefined, [answerId], {}, "DELETE")
+				.then(res => {
+					if (res.status === 200) {
+						this.removeAnswerFromState(questionId, answerId);
+					}
+				})
+				.catch(err => {
+					console.log(err);
+					if (err.response) alert(err.response.statusText);
+				});
+		}
 	};
 
 	removeCommentFromState = (commentId: number) => {
@@ -308,6 +357,13 @@ export class CommentList extends Component<PropsType, StateType> {
 		if ((comments.length === 0) && (typeof this.props.validationHander === "function")) {
 			this.props.validationHander(false);
 		}
+	};
+
+	removeAnswerFromState = (questionId: number, answerId: number) => {
+		let questions = this.state.questions;
+		let questionToUpdate = questions.find(question => question.questionId === questionId);
+		questionToUpdate.answers = questionToUpdate.answers.filter(answer => answer.answerId != answerId);
+		this.setState({ questions });
 	};
 
 	render() {
