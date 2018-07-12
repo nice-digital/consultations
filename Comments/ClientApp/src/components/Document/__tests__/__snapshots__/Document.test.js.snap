@@ -96,43 +96,12 @@ Array [
                 <div
                     className="page-header"
                 >
-                    <h1
-                        className="page-header__heading mt--0"
-                    >
-                        Unstable angina and NSTEMI: early management
-                    </h1>
-                    <p
-                        className="page-header__lead"
-                    >
-                        [
-                        GID-TA10232
-                        ] Open until
-                         
-                        <time
-                            dateTime={"2018-05-31T16:00:00.000Z"}
-                        >
-                            31 May 2018
-                        </time>
-                    </p>
-                    <button
-                        className="btn btn--cta"
-                        data-qa-sel="comment-on-whole-consultation"
-                        onClick={[Function]}
-                    >
-                        Comment on whole consultation
-                    </button>
+                    <undefined />
                     <h2
                         className="mb--b"
                     >
                         Unstable angina and NSTEMI
                     </h2>
-                    <button
-                        className="btn btn--cta"
-                        data-qa-sel="comment-on-consultation-document"
-                        onClick={[Function]}
-                    >
-                        Comment on this document
-                    </button>
                 </div>
                 <div
                     className="grid"
