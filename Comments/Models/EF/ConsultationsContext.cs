@@ -214,7 +214,7 @@ namespace Comments.Models
 
 				entity.HasIndex(e => e.SubmissionId);
 
-				entity.Property(e => e.SubmissionAnswerId).HasColumnName("SubmissionCommentID"); //TODO: this column name needs fixing
+				entity.Property(e => e.SubmissionAnswerId).HasColumnName("SubmissionAnswerID");
 
 				entity.Property(e => e.SubmissionId).HasColumnName("SubmissionID");
 

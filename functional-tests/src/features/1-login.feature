@@ -17,5 +17,4 @@ Scenario: User not signed in signs in
 		When I log in to Accounts via TopHat with username "ACCOUNTS_EMAIL" and password "ACCOUNTS_PASSWORD"
 		And I pause for 1000ms
 		Then I wait on element "body .page-header" for 10000ms to exist
-		#And I click on the element "body [data-qa-sel='open-commenting-panel']"
 		Then I expect that element "body [data-qa-sel='sign-in-banner']" does not exist
