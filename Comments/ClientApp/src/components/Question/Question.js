@@ -2,6 +2,7 @@ import React, { Component, Fragment } from "react";
 import Moment from "react-moment";
 
 import { Answer } from "../Answer/Answer";
+//import stringifyObject from "stringify-object";
 
 type QuestionTypeType = {
 	description: string,
@@ -66,18 +67,20 @@ export class Question extends Component<PropsType, StateType> {
 		// });
 	}
 
-	// static getDerivedStateFromProps(nextProps, prevState) {
-	// 	const prevTimestamp = prevState.comment.lastModifiedDate;
-	// 	const nextTimestamp = nextProps.comment.lastModifiedDate;
-	// 	const hasCommentBeenUpdated = () => prevTimestamp !== nextTimestamp;
-	// 	if (hasCommentBeenUpdated()) {
-	// 		return {
-	// 			comment: nextProps.comment,
-	// 			unsavedChanges: false
-	// 		};
-	// 	}
-	// 	return null;
-	// }
+	static getDerivedStateFromProps(nextProps, prevState) {
+		// console.log(`nextProps: ${stringifyObject(nextProps)}`);
+		// console.log(`prevState: ${stringifyObject(prevState)}`);
+		// const prevTimestamp = prevState.question.answers[0].lastModifiedDate; //todo: loop through all answers?
+		// const nextTimestamp = nextProps.question.answers[0].lastModifiedDate;
+		// const hasAnswerInQuestionBeenUpdated = () => prevTimestamp !== nextTimestamp;
+		// if (hasAnswerInQuestionBeenUpdated()) {
+		// 	return {
+		// 		question: nextProps.question,
+		// 		unsavedChanges: false
+		// 	};
+		// }
+		// return null;
+	}
 
 	// isTextSelection = (comment) => comment.commentOn && comment.commentOn.toLowerCase() === "selection" && comment.quote;
 
