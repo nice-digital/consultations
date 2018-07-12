@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from "react";
 import Moment from "react-moment";
 
+import { Answer } from "../Answer/Answer";
+
 type QuestionTypeType = {
 	description: string,
 	hasTextAnswer: boolean,
@@ -82,10 +84,33 @@ export class Question extends Component<PropsType, StateType> {
 	render() {
 		if (!this.props.question) return null;		
 
+		let answers = this.props.question.answers;
+		if (answers === null || answers.length < 1){
+			answers = [{
+				answerId: -1,
+				questionId: this.props.question.questionId
+			}];
+		}
+
 		return (
 
 			<li className="CommentBox">
 				<p>{this.props.question.questionText}</p>
+
+				{answers.map((answer) => {
+					return (
+						<Answer
+							readOnly={this.props.readonly}
+							isVisible={this.props.isVisible}
+							key={answer.answerId}
+							unique={`Answer${answer.answerId}`}
+							answer={answer}
+							saveHandler={this.props.saveAnswerHandler}
+							deleteHandler={this.props.deleteAnswerHandler}
+						/>
+					);
+				})}
+
 			</li>
 		);
 	}

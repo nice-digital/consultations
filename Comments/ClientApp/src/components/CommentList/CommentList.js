@@ -291,13 +291,14 @@ export class CommentList extends Component<PropsType, StateType> {
 	saveAnswerHandler = (e: Event, answer: AnswerType) => {
 		e.preventDefault();
 		//todo: post or put the answer to the api, then on success use answer.questionId to get the question in the this.state.questions array and update the state.
-		console.log('save answer handler hit. todo: implement answer saving.');
+		//console.log(stringifyObject(answer));
+		console.log("save answer handler hit. todo: implement answer saving.");
 	};
 
 	deleteAnswerHandler = (e: Event, answerId: number) => {
 		e.preventDefault();
 		//todo: call the delete answer api, then update the state on success.
-		console.log('todo: implement answer deletion');
+		console.log("todo: implement answer deletion");
 	};
 
 	removeCommentFromState = (commentId: number) => {
