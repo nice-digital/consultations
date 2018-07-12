@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import Moment from "react-moment";
 
-import stringifyObject from "stringify-object";
+//import stringifyObject from "stringify-object";
 
 type StatusType = {
 	statusId: number,
@@ -62,9 +62,6 @@ export class Answer extends Component<PropsType, StateType> {
 	};
 
 	static getDerivedStateFromProps(nextProps, prevState) {
-		 console.log(`answer nextProps: ${stringifyObject(nextProps)}`);
-		 console.log(`answer prevState: ${stringifyObject(prevState)}`);
-		console.log('get derived thing in answer');
 		const prevTimestamp = prevState.answer.lastModifiedDate;
 		const nextTimestamp = nextProps.answer.lastModifiedDate;
 		const hasAnswerBeenUpdated = () => prevTimestamp !== nextTimestamp;

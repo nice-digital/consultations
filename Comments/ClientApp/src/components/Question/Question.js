@@ -54,36 +54,10 @@ export class Question extends Component<PropsType, StateType> {
 	constructor() {
 		super();
 		this.state = {
-			// question: {
-			// 	questionText: ""
-			// },
 			unsavedChanges: false
 		};
 	}
-
-	componentDidMount() {
-		// this.setState({
-		// 	question: this.props.question
-		// });
-	}
-
-	static getDerivedStateFromProps(nextProps, prevState) {
-		// console.log(`nextProps: ${stringifyObject(nextProps)}`);
-		// console.log(`prevState: ${stringifyObject(prevState)}`);
-		// const prevTimestamp = prevState.question.answers[0].lastModifiedDate; //todo: loop through all answers?
-		// const nextTimestamp = nextProps.question.answers[0].lastModifiedDate;
-		// const hasAnswerInQuestionBeenUpdated = () => prevTimestamp !== nextTimestamp;
-		// if (hasAnswerInQuestionBeenUpdated()) {
-		// 	return {
-		// 		question: nextProps.question,
-		// 		unsavedChanges: false
-		// 	};
-		// }
-		// return null;
-	}
-
-	// isTextSelection = (comment) => comment.commentOn && comment.commentOn.toLowerCase() === "selection" && comment.quote;
-
+	
 	render() {
 		if (!this.props.question) return null;		
 

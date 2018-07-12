@@ -197,6 +197,8 @@ export class CommentList extends Component<PropsType, StateType> {
 
 	submitComments = () => {
 
+		const answersToSubmit = this.state.questions.map
+
 		let commentsAndAnswers = {comments: this.state.comments, answers: null}; //todo: answers
 
 		load("submit", undefined, [], {}, "POST", commentsAndAnswers, true)

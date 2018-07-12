@@ -85,7 +85,9 @@ namespace Comments.Services
 
 	        var status = _context.GetStatus(StatusName.Draft);
             var answerToSave = new Models.Answer(answer.QuestionId, _currentUser.UserId.Value, answer.AnswerText, answer.AnswerBoolean, null, status.StatusId, null);
-            _context.Answer.Add(answerToSave);
+	        answerToSave.LastModifiedByUserId = _currentUser.UserId.Value;
+	        answerToSave.LastModifiedDate = DateTime.UtcNow;
+			_context.Answer.Add(answerToSave);
             _context.SaveChanges();
 
             return (answer: new ViewModels.Answer(answerToSave), validate: null);
