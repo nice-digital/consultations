@@ -1,4 +1,4 @@
-﻿using Comments.Services;
+using Comments.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -69,7 +69,7 @@ namespace Comments.Controllers.Api
             var result = _answerService.EditAnswer(answerId, answer);
             var invalidResult = Validate(result.validate, _logger);
 
-            return invalidResult ?? Ok(result.rowsUpdated);
+            return invalidResult ?? Ok(answer);
         }
 
         // DELETE: consultations/api/Answer/5

@@ -1,3 +1,5 @@
+using System;
+
 namespace Comments.ViewModels
 {
     public class Location
@@ -25,5 +27,25 @@ namespace Comments.ViewModels
         public string RangeEnd { get; set; }
         public int? RangeEndOffset { get; set; }
         public string Quote { get; set; }
-    }
+
+	    private CommentOn? _commentOn = null;
+	    public string CommentOn
+	    {
+		    get
+		    {
+			    if (_commentOn == null)
+			    {
+				    _commentOn = CommentOnHelpers.GetCommentOn(SourceURI, RangeStart, HtmlElementID);
+			    }
+			    return _commentOn.HasValue ? Enum.GetName(typeof(CommentOn), _commentOn.Value) : null;
+		    }
+		    set
+		    {
+			    if (!string.IsNullOrWhiteSpace(value) && Enum.TryParse(value, out CommentOn parsedEnum))
+			    {
+				    _commentOn = parsedEnum;
+			    }
+		    }
+	    }
+	}
 }

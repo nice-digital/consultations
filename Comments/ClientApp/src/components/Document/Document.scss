@@ -41,40 +41,10 @@
   }
 }
 
-.onboarding {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 100vw;
-  background: rgba(0,0,0,0.5);
-  &__closeButton {
-    @extend %unstyled-button;
-    position: absolute;
-    top: 0;
-    right: 0;
-    color: #999;
-    font-size: 24px;
-    padding: 0.75rem 1rem;
-    line-height: 24px;
-    &:hover {
-      cursor: pointer;
-    }
-  }
-  &__modal {
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    padding: rem(20px);
-    position: absolute;
-    top: 50%;
-    margin-top: -150px;
-    left: 50%;
-    width: 600px;
-    margin-left: -300px;
-    background: white;
-    img {
-      max-width: 80%;
-      display: block;
-      margin: 0 auto;
-    }
-  }
+.visuallyhidden { 
+  position: absolute; 
+  overflow: hidden; 
+  clip: rect(0 0 0 0); 
+  height: 1px; width: 1px; 
+  margin: -1px; padding: 0; border: 0; 
 }

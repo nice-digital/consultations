@@ -39,6 +39,7 @@ services:
     environment:
       - ACCOUNTS_EMAIL
       - ACCOUNTS_EMAIL2
+      - ACCOUNTS_EMAIL3
       - ACCOUNTS_PASSWORD
 
   # Comment Collection dotnet core web app

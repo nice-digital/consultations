@@ -18,6 +18,7 @@ import { processDocumentHtml } from "./process-document-html";
 import { Selection } from "../Selection/Selection";
 import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
 import { Header } from "../Header/Header";
+
 // import stringifyObject from "stringify-object";
 
 type PropsType = {
@@ -327,7 +328,7 @@ export class Document extends Component<PropsType, StateType> {
 										<Moment format="D MMMM YYYY" date={endDate}/>
 									</p> */
 									}
-									{this.state.allowComments && 
+									{this.state.allowComments &&
 										<button
 											data-qa-sel="comment-on-whole-consultation"
 											className="btn btn--cta"
@@ -347,7 +348,7 @@ export class Document extends Component<PropsType, StateType> {
 									<h2 className="mb--b">
 										{this.getCurrentDocumentTitle(documentsData, documentId)}
 									</h2>
-									{this.state.allowComments && 
+									{this.state.allowComments &&
 										<button
 											data-qa-sel="comment-on-consultation-document"
 											className="btn btn--cta"
@@ -424,7 +425,8 @@ export class Document extends Component<PropsType, StateType> {
 												this.state.loading ? "loading" : ""}`}
 										>
 											<Selection newCommentFunc={this.props.onNewCommentClick}
-														   sourceURI={this.props.match.url}>
+													   sourceURI={this.props.match.url}
+													   allowComments={this.state.allowComments}>
 												{processDocumentHtml(
 													content,
 													this.props.onNewCommentClick,

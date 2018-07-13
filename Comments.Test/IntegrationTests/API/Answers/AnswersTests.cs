@@ -70,12 +70,13 @@ namespace Comments.Test.IntegrationTests.API.Answers
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
             SetupTestDataInDB();
-            var answerId =  AddAnswer(1, userId, answerText, (int)StatusName.Draft, _context);
+	        AddStatus(StatusName.Draft.ToString(), (int)StatusName.Draft);
+			var answerId =  AddAnswer(1, userId, answerText, (int)StatusName.Draft, _context);
             
             var answerService = new AnswerService(_context, userService);
             var viewModel = answerService.GetAnswer(answerId);
 
-            var updatedAnswerText = Guid.NewGuid().ToString();
+            var updatedAnswerText = Guid.Empty.ToString();
             viewModel.answer.AnswerText = updatedAnswerText;
 
             var content = new StringContent(JsonConvert.SerializeObject(viewModel.answer), Encoding.UTF8, "application/json");
@@ -87,7 +88,7 @@ namespace Comments.Test.IntegrationTests.API.Answers
             var result = answerService.GetAnswer(answerId);
 
             //Assert
-            responseString.ShouldBe("1");
+            responseString.ShouldMatchApproved(new Func<string, string>[]{ Scrubbers.ScrubLastModifiedDate, Scrubbers.ScrubAnswerId });
             result.answer.AnswerText.ShouldBe(updatedAnswerText);
 
         }

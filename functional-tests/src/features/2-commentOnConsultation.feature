@@ -41,7 +41,6 @@
  		When I click on the button "[data-qa-sel='nav-list-item']:nth-of-type(4)"
  		And I pause for 1000ms
  		When I click on the button ".chapter > .title [data-qa-sel='in-text-comment-button']"
- 		#When I select the 1st option for element "body [data-qa-sel='in-text-comment-button']"
  		And I pause for 1000ms
  		Then I wait on element "body [data-qa-sel='comment-box-title']" for 10000ms to exist
     Then I expect that element "[data-qa-sel='comment-box-title']" contains the text "chapter"
@@ -57,7 +56,6 @@
  		When I click on the button "[data-qa-sel='nav-list-item']:nth-of-type(4)"
  		And I pause for 1000ms
  		When I click on the button ".section > .title [data-qa-sel='in-text-comment-button']"
- 		#When I select the 1st option for element "body [data-qa-sel='in-text-comment-button']"
  		And I pause for 1000ms
  		Then I wait on element "body [data-qa-sel='comment-box-title']" for 10000ms to exist
     Then I expect that element "[data-qa-sel='comment-box-title']" contains the text "section"

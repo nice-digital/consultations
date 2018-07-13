@@ -153,7 +153,8 @@ namespace Comments.Test.UnitTests
             var description = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
 
-            var locationId = AddLocation(sourceURI);
+	        AddStatus(StatusName.Draft.ToString(), (int)StatusName.Draft);
+			var locationId = AddLocation(sourceURI);
             var questionTypeId = AddQuestionType(description, false, true);
             var questionId = AddQuestion(locationId, questionTypeId, questionText);
 

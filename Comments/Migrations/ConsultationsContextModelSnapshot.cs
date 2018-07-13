@@ -237,7 +237,7 @@ namespace Comments.Migrations
                 {
                     b.Property<int>("SubmissionAnswerId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("SubmissionCommentID")
+                        .HasColumnName("SubmissionAnswerID")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("AnswerId")
