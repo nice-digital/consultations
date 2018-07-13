@@ -200,12 +200,10 @@ export class CommentList extends Component<PropsType, StateType> {
 
 	submitComments = () => {
 
-		const answersToSubmit = [];
+		let answersToSubmit = [];
 		this.state.questions.forEach(function(question){
-			if (question.answers != null && question.answers.length > 0){
-				question.answers.forEach(function(answer){
-					answersToSubmit.push(answer);
-				});
+			if (question.answers != null){
+				answersToSubmit = answersToSubmit.concat(question.answers);
 			}			
 		});
 

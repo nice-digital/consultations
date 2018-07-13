@@ -14,7 +14,9 @@ namespace Comments.Models
         {
             QuestionId = questionId;
             CreatedByUserId = createdByUserId;
-            AnswerText = answerText ?? throw new ArgumentNullException(nameof(answerText));
+	        CreatedDate = DateTime.UtcNow;
+	        LastModifiedDate = DateTime.UtcNow;
+			AnswerText = answerText ?? throw new ArgumentNullException(nameof(answerText));
             AnswerBoolean = answerBoolean;
             Question = question;
 	        StatusId = statusId;

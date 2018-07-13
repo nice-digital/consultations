@@ -10,7 +10,6 @@
                 "name":"Draft"
             },
             "statusId":1,
-            "commentOn":"Chapter",
             "commentId":"scrubbed by ScrubLocationId",
             "sourceURI":"consultations://./consultation/1/document/1/chapter/introduction",
             "htmlElementID":null,
@@ -18,7 +17,8 @@
             "rangeStartOffset":null,
             "rangeEnd":null,
             "rangeEndOffset":null,
-            "quote":null
+            "quote":null,
+            "commentOn":"Chapter"
         },
         {
             "commentId":"scrubbed by ScrubCommentId",
@@ -30,7 +30,6 @@
                 "name":"Draft"
             },
             "statusId":1,
-            "commentOn":"Chapter",
             "commentId":"scrubbed by ScrubLocationId",
             "sourceURI":"consultations://./consultation/1/document/1/chapter/introduction",
             "htmlElementID":null,
@@ -38,7 +37,8 @@
             "rangeStartOffset":null,
             "rangeEnd":null,
             "rangeEndOffset":null,
-            "quote":null
+            "quote":null,
+            "commentOn":"Chapter"
         },
         {
             "commentId":"scrubbed by ScrubCommentId",
@@ -50,7 +50,6 @@
                 "name":"Draft"
             },
             "statusId":1,
-            "commentOn":"Chapter",
             "commentId":"scrubbed by ScrubLocationId",
             "sourceURI":"consultations://./consultation/1/document/1/chapter/introduction",
             "htmlElementID":null,
@@ -58,7 +57,8 @@
             "rangeStartOffset":null,
             "rangeEnd":null,
             "rangeEndOffset":null,
-            "quote":null
+            "quote":null,
+            "commentOn":"Chapter"
         }
     ],
     "questions":[
