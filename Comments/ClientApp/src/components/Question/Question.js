@@ -93,8 +93,7 @@ export class Question extends Component<PropsType, StateType> {
 					<div className="CommentBox__quote mb--d">{this.props.question.quote}</div>
 				</Fragment>
 				}
-				<p>{this.props.question.questionText}</p>
-
+				<p><strong>{this.props.question.questionText}</strong></p>
 				{answers.map((answer) => {
 					return (
 						<Answer
