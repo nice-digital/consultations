@@ -13,6 +13,7 @@ import { UserContext } from "../../context/UserContext";
 import { pullFocusById } from "../../helpers/accessibility-helpers";
 //import stringifyObject from "stringify-object";
 
+
 type DocumentType = {
 	title: string,
 	sourceURI: string,

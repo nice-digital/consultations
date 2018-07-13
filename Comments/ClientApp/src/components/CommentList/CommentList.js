@@ -11,6 +11,8 @@ import { UserContext } from "../../context/UserContext";
 import { queryStringToObject, replaceFormat } from "../../helpers/utils";
 import {pullFocusById} from "../../helpers/accessibility-helpers";
 //import stringifyObject from "stringify-object";
+//import Tabs from "tabs";
+import Tabs from "../Tabs/Tabs";
 
 type PropsType = {
 	staticContext?: any,
@@ -139,6 +141,7 @@ export class CommentList extends Component<PropsType, StateType> {
 				allowComments: allowComments
 			};
 		}
+		this._tabs = React.createRef();
 	}
 
 	loadComments() {
@@ -185,6 +188,7 @@ export class CommentList extends Component<PropsType, StateType> {
 
 	componentDidMount() {
 		this.loadComments();
+		let tabs = new Tabs(this._tabs);
 	}
 
 	componentDidUpdate(prevProps: PropsType, prevState: any, nextContent: any) {
@@ -416,7 +420,7 @@ export class CommentList extends Component<PropsType, StateType> {
 
 								contextValue.isAuthorised ?
 
-									<div className="tabs" data-tabs>
+									<div className="tabs" data-tabs ref={this._tabs}>
 										<ul className="tabs__list" role="tablist">
 											<li className={`tabs__tab ${this.props.viewComments ? "" : "tabs__tab--active"}`} role="presentation">
 												<button className="tabs__tab-btn" type="button" role="tab">
