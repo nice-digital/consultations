@@ -10,7 +10,7 @@ Scenario: User not signed in signs in
     Given I am logged out of NICE accounts
 		When I wait on element ".page-header" to exist
     When I click on the button "body [data-qa-sel='open-commenting-panel']"
-    Then I expect that element "body #sidebar-panel" contains the text "Sign in to your NICE account to comment on this consultation. Don't have an account?"
+    Then I expect that element "body [data-qa-sel='sign-in-banner']" contains the text "Sign in to your NICE account to comment on this consultation. Don't have an account?"
 		And I pause for 1000ms
 		When I click on the button "body [data-qa-sel='open-commenting-panel']"
 		And I pause for 1000ms
