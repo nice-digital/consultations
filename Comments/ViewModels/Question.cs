@@ -31,7 +31,7 @@ namespace Comments.ViewModels
         public DateTime LastModifiedDate { get; set; }
 
         public ViewModels.QuestionType QuestionType { get; set; }
-        public IList<ViewModels.Answer>Answers { get; set; }
+        public IList<ViewModels.Answer> Answers { get; set; }
     }
 
     public class QuestionType

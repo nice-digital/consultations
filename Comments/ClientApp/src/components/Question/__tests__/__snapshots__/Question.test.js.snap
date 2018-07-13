@@ -1,0 +1,121 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[ClientApp]  Question Component should match snapshot with answer 1`] = `
+<li
+  className="CommentBox"
+>
+  <h1
+    className="CommentBox__title mt--0 mb--d"
+    data-qa-sel="comment-box-title"
+  >
+    Question on: 
+    <span
+      className="text-lowercase"
+    >
+      Consultation
+    </span>
+    <br />
+  </h1>
+  <p>
+    <strong>
+      Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
+    </strong>
+  </p>
+  <section
+    role="form"
+  >
+    <div
+      className="CommentBox__datestamp mb--d font-weight-bold"
+    >
+      Last Modified:
+       
+      <time
+        dateTime={"2018-07-13T08:01:41.522Z"}
+      >
+        13/7/2018 - 9:01am
+      </time>
+    </div>
+    <form
+      onSubmit={[Function]}
+    >
+      <div
+        className="form__group form__group--textarea mb--0"
+      >
+        <textarea
+          className="form__input form__input--textarea"
+          data-qa-sel="Comment-text-area"
+          id="Answer1007"
+          onChange={[Function]}
+          placeholder="Enter your answer here"
+          value="some answer text"
+        />
+      </div>
+      <input
+        className="btn ml--0"
+        data-qa-sel="submit-button"
+        disabled={true}
+        type="submit"
+        value="Saved"
+      />
+      <button
+        className="btn mr--0 right"
+        data-qa-sel="delete-comment-button"
+        onClick={[Function]}
+      >
+        <span
+          className="visually-hidden"
+        >
+          Delete this answer
+        </span>
+        <span
+          aria-hidden="true"
+          className="icon icon--trash"
+        />
+      </button>
+    </form>
+  </section>
+</li>
+`;
+
+exports[`[ClientApp]  Question Component should match snapshot without answer 1`] = `
+<li
+  className="CommentBox"
+>
+  <h1
+    className="CommentBox__title mt--0 mb--d"
+    data-qa-sel="comment-box-title"
+  >
+    Question on: 
+    <span
+      className="text-lowercase"
+    >
+      Consultation
+    </span>
+    <br />
+  </h1>
+  <p>
+    <strong>
+      Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
+    </strong>
+  </p>
+  <section
+    role="form"
+  >
+    <form
+      onSubmit={[Function]}
+    >
+      <div
+        className="form__group form__group--textarea mb--0"
+      >
+        <textarea
+          className="form__input form__input--textarea"
+          data-qa-sel="Comment-text-area"
+          id="Answer-1"
+          onChange={[Function]}
+          placeholder="Enter your answer here"
+        />
+      </div>
+    </form>
+  </section>
+</li>
+`;

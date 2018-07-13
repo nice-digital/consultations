@@ -5,6 +5,7 @@ import Moment from "react-moment";
 import { Helmet } from "react-helmet";
 import { StickyContainer, Sticky } from "react-sticky";
 import { withRouter } from "react-router";
+import Scrollspy from "react-scrollspy";
 
 import preload from "../../data/pre-loader";
 import { load } from "./../../data/loader";
@@ -17,6 +18,7 @@ import { processDocumentHtml } from "./process-document-html";
 import { Selection } from "../Selection/Selection";
 import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
 import { Header } from "../Header/Header";
+
 // import stringifyObject from "stringify-object";
 
 type PropsType = {
@@ -31,12 +33,14 @@ type StateType = {
 	documentsData: any, // the list of other documents in this consultation
 	chapterData: any, // the current chapter's details - markup and sections,
 	consultationData: any, // the top level info - title etc
+	currentInPageNavItem: null | string,
 	hasInitialData: boolean,
 	onboarded: boolean,
-	currentChapterDetails: {
-		title: string,
-		slug: string
-	}
+	// currentChapterDetails: {
+	// 	title: string,
+	// 	slug: string
+	// }
+	allowComments: true
 };
 
 type DocumentsType = Array<Object>;
@@ -51,11 +55,8 @@ export class Document extends Component<PropsType, StateType> {
 			consultationData: null,
 			loading: true,
 			hasInitialData: false,
-			currentChapterDetails: {
-				title: "",
-				slug: ""
-			},
-			onboarded: false,
+			currentInPageNavItem: null,
+			onboarded: false,	
 			allowComments: true
 		};
 
@@ -80,8 +81,8 @@ export class Document extends Component<PropsType, StateType> {
 			);
 
 			if (preloadedChapter && preloadedDocuments && preloadedConsultation) {
-				const allowComments = preloadedConsultation.supportsComments &&
-					preloadedConsultation.consultationState.consultationIsOpen &&
+				const allowComments = preloadedConsultation.supportsComments &&	
+					preloadedConsultation.consultationState.consultationIsOpen &&	
 					!preloadedConsultation.consultationState.userHasSubmitted;
 				this.state = {
 					chapterData: preloadedChapter,
@@ -89,12 +90,9 @@ export class Document extends Component<PropsType, StateType> {
 					consultationData: preloadedConsultation,
 					loading: false,
 					hasInitialData: true,
+					currentInPageNavItem: null,
 					onboarded: false,
-					allowComments: allowComments,
-					currentChapterDetails: {
-						title: "",
-						slug: ""
-					}
+					allowComments: allowComments
 				};
 			}
 		}
@@ -138,8 +136,8 @@ export class Document extends Component<PropsType, StateType> {
 		if (!this.state.hasInitialData) {
 			this.gatherData()
 				.then(data => {
-					const allowComments = data.consultationData.supportsComments &&
-						data.consultationData.consultationState.consultationIsOpen &&
+					const allowComments = data.consultationData.supportsComments &&	
+						data.consultationData.consultationState.consultationIsOpen &&	
 						!data.consultationData.consultationState.userHasSubmitted;
 					this.setState({
 						...data,
@@ -277,11 +275,21 @@ export class Document extends Component<PropsType, StateType> {
 		return currentDocumentDetails.title;
 	};
 
-	addChapterDetailsToSections = (chapterData: Object) => {
+	generateScrollspy = (sections: Array<Object>): Array<Object> => {
+		return sections.map(section => section.slug);
+	};
+
+	addChapterDetailsToSections = (chapterData) => {
 		const { title, slug } = this.state.chapterData;
 		const chapterDetails = { title, slug };
 		chapterData.sections.unshift(chapterDetails);
 		this.setState({ chapterData });
+	};
+
+	inPageNav = (e: HTMLElement) => {
+		if (!e) return null;
+		const currentInPageNavItem = e.getAttribute("id");
+		this.setState({ currentInPageNavItem });
 	};
 
 	render() {
@@ -309,17 +317,10 @@ export class Document extends Component<PropsType, StateType> {
 							<BreadCrumbs links={this.getBreadcrumbs()}/>
 							<main role="main">
 								<div className="page-header">
-									<Header
-										title={title}
-										reference={reference}
+									<Header	 
+										title={title}										
+										reference={reference}	
 										consultationState={this.state.consultationData.consultationState}/>
-	{ /*}<h1 className="page-header__heading mt--0">{title}</h1>
-
-									<p className="page-header__lead">
-										[{reference}] Open until{" "}
-										<Moment format="D MMMM YYYY" date={endDate}/>
-									</p> */
-	}
 									{this.state.allowComments && 
 										<button
 											data-qa-sel="comment-on-whole-consultation"
@@ -375,8 +376,15 @@ export class Document extends Component<PropsType, StateType> {
 																className="in-page-nav__title">
 																On this page
 															</h2>
-															<ol className="in-page-nav__list"
-																role="menubar">
+															<Scrollspy
+																componentTag="ol"
+																items={this.generateScrollspy(sections)}
+																currentClassName=""
+																className="in-page-nav__list"
+																role="menubar"
+																onUpdate={e => {
+																	this.inPageNav(e);
+																}}>
 																{sections.map((item, index) => {
 																	const props = {
 																		label: item.title,
@@ -388,11 +396,16 @@ export class Document extends Component<PropsType, StateType> {
 																		<li role="presentation"
 																			className="in-page-nav__item"
 																			key={index}>
-																			<HashLinkTop {...props} />
+																			<HashLinkTop
+																				{...props}
+																				currentNavItem={
+																					this.state.currentInPageNavItem
+																				}
+																			/>
 																		</li>
 																	);
 																})}
-															</ol>
+															</Scrollspy>
 														</nav>
 													) : null}
 												</div>
@@ -405,7 +418,8 @@ export class Document extends Component<PropsType, StateType> {
 												this.state.loading ? "loading" : ""}`}
 										>
 											<Selection newCommentFunc={this.props.onNewCommentClick}
-														   sourceURI={this.props.match.url}>
+													   sourceURI={this.props.match.url}
+													   allowComments={this.state.allowComments}>
 												{processDocumentHtml(
 													content,
 													this.props.onNewCommentClick,

@@ -1,0 +1,93 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[ClientApp]  Answer Component should match snapshot with answer 1`] = `
+<section
+  role="form"
+>
+  <div
+    className="CommentBox__datestamp mb--d font-weight-bold"
+  >
+    Last Modified:
+     
+    <time
+      dateTime={"2018-07-13T08:01:41.522Z"}
+    >
+      13/7/2018 - 9:01am
+    </time>
+  </div>
+  <form
+    onSubmit={[Function]}
+  >
+    <div
+      className="form__group form__group--textarea mb--0"
+    >
+      <textarea
+        className="form__input form__input--textarea"
+        data-qa-sel="Comment-text-area"
+        disabled={false}
+        id="string"
+        onChange={[Function]}
+        placeholder="Enter your answer here"
+        value="an updated answer"
+      />
+    </div>
+    <input
+      className="btn ml--0"
+      data-qa-sel="submit-button"
+      disabled={true}
+      type="submit"
+      value="Saved"
+    />
+    <button
+      className="btn mr--0 right"
+      data-qa-sel="delete-comment-button"
+      onClick={[Function]}
+    >
+      <span
+        className="visually-hidden"
+      >
+        Delete this answer
+      </span>
+      <span
+        aria-hidden="true"
+        className="icon icon--trash"
+      />
+    </button>
+  </form>
+</section>
+`;
+
+exports[`[ClientApp]  Answer Component should match snapshot without answer 1`] = `
+<section
+  role="form"
+>
+  <div
+    className="CommentBox__datestamp mb--d font-weight-bold"
+  >
+    Last Modified:
+     
+    <time
+      dateTime={"2018-07-13T08:01:41.522Z"}
+    >
+      13/7/2018 - 9:01am
+    </time>
+  </div>
+  <form
+    onSubmit={[Function]}
+  >
+    <div
+      className="form__group form__group--textarea mb--0"
+    >
+      <textarea
+        className="form__input form__input--textarea"
+        data-qa-sel="Comment-text-area"
+        disabled={false}
+        id="string"
+        onChange={[Function]}
+        placeholder="Enter your answer here"
+        value=""
+      />
+    </div>
+  </form>
+</section>
+`;

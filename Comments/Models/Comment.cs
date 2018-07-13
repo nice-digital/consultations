@@ -1,10 +1,14 @@
 using System;
+using System.Collections.Generic;
 
 namespace Comments.Models
 {
     public partial class Comment
     {
-        private Comment() {} //Just for EF
+	    private Comment() //Just for EF
+		{
+			SubmissionComment = new HashSet<SubmissionComment>();
+		} 
 
         public Comment(int locationId, Guid createdByUserId, string commentText, Guid lastModifiedByUserId, Location location, int statusId, Status status)
         {
@@ -17,10 +21,14 @@ namespace Comments.Models
             Location = location;
 	        StatusId = statusId;
 	        Status = status;
-        } 
+	        SubmissionComment = new HashSet<SubmissionComment>();
+		}
 
-        public Comment(ViewModels.Comment comment, Guid createdByUserId) : this(comment.LocationId, createdByUserId, comment.CommentText, comment.LastModifiedByUserId, location: null, statusId: comment.StatusId, status: null)
-        { }
+	    public Comment(ViewModels.Comment comment, Guid createdByUserId) : this(comment.LocationId, createdByUserId,
+		    comment.CommentText, comment.LastModifiedByUserId, location: null, statusId: comment.StatusId, status: null)
+	    {
+			SubmissionComment = new HashSet<SubmissionComment>();
+		}
 
         public void UpdateFromViewModel(ViewModels.Comment comment)
         {

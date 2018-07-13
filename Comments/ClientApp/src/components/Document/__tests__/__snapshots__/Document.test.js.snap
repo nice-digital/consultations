@@ -131,7 +131,7 @@ Array [
                                     </h2>
                                     <ol
                                         className="in-page-nav__list"
-                                        role="menubar"
+                                        style={Object {}}
                                     >
                                         <li
                                             className="in-page-nav__item"

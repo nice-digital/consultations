@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using Comments.Services;
 using Comments.ViewModels;
@@ -23,6 +24,7 @@ using Comment = Comments.Models.Comment;
 using Location = Comments.Models.Location;
 using Question = Comments.Models.Question;
 using QuestionType = Comments.Models.QuestionType;
+using Status = Comments.Models.Status;
 
 namespace Comments.Test.Infrastructure
 {
@@ -162,6 +164,8 @@ namespace Comments.Test.Infrastructure
                 context.Database.EnsureDeleted();
 				//context.Database.CloseConnection();
 				//context.Database.OpenConnection();
+
+				//context.Status.AddRange(new List<Status>(2){ new Status("Draft", null, null), new Status("Submitted", null, null)});
 			}
         }
 
@@ -170,9 +174,10 @@ namespace Comments.Test.Infrastructure
             using (var context = new ConsultationsContext(_options, userService))
             {
                 context.Database.EnsureDeleted();
-                //context.Database.CloseConnection();
-                //context.Database.OpenConnection();
-            }
+				//context.Database.CloseConnection();
+				//context.Database.OpenConnection();
+				//context.Status.AddRange(new List<Status>(2) { new Status("Draft", null, null), new Status("Submitted", null, null) });
+			}
         }
         protected int AddLocation(string sourceURI, ConsultationsContext passedInContext = null)
         {
@@ -307,8 +312,8 @@ namespace Comments.Test.Infrastructure
             var commentText = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
             var userId = Guid.NewGuid();
-
-            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId); //Add records for Foreign key constraints
+	        
+			AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId); //Add records for Foreign key constraints
         }
 
 	    protected void AddSubmittedCommentsAndAnswers(string sourceURI, string commentText, string questionText, string answerText, Guid createdByUserId, ConsultationsContext passedInContext = null)

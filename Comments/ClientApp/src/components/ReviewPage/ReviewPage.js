@@ -218,7 +218,8 @@ export class ReviewPage extends Component<PropsType, StateType> {
 													isSubmitted={this.state.userHasSubmitted}
 													wrappedComponentRef={component => (this.commentList = component)}
 													submittedHandler={this.submittedHandler}
-													validationHander={this.validationHander}/>
+													validationHander={this.validationHander}
+													viewComments={true}/>
 										</div>
 										<div data-g="12 md:3 md:pull:6">
 											<Sticky disableHardwareAcceleration>
