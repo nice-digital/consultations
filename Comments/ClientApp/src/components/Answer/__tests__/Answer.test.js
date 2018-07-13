@@ -1,20 +1,10 @@
 /* global jest */
-
 import React from "react";
 import { shallow, mount } from "enzyme";
-// import {MemoryRouter} from "react-router";
-import { Question } from "../../Question/Question";
 import { Answer } from "../Answer";
-import axios from "axios";
-import MockAdapter from "axios-mock-adapter";
-import { nextTick } from "../../../helpers/utils";
 import answerWithAnswer from "./answerWithAnswer.json";
 import answerWithoutAnswer from "./answerWithoutAnswer.json";
-// import questionWithAnswer from "./questionWithAnswer.json";
-// import questionWithoutAnswer from "./questionWithoutAnswer.json";
 import toJson from "enzyme-to-json";
-
-const mock = new MockAdapter(axios);
 
 describe("[ClientApp] ", () => {
 	describe("Answer Component", () => {
@@ -36,22 +26,6 @@ describe("[ClientApp] ", () => {
 			deleteHandler: jest.fn(),
 			unique: "string"
 		};
-
-		// const questionPropsWithAnswer = {
-		// 	readOnly: false,
-		// 	isVisible: true,
-		// 	key: 1,
-		// 	unique: "unique",
-		// 	question: questionWithAnswer
-		// };
-
-		// const questionPropsWithoutAnswer = {
-		// 	readOnly: false,
-		// 	isVisible: true,
-		// 	key: 1,
-		// 	unique: "unique",
-		// 	question: questionWithoutAnswer
-		// };
 
 		it("sets text area with comment text correctly", () => {
 			const wrapper = shallow(<Answer {...answerPropsWithAnswer} />);
