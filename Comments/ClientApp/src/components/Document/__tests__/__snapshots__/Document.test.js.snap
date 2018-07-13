@@ -237,7 +237,30 @@ Array [
                         <div
                             className="document-comment-container "
                         >
-                            <div>
+                            <div
+                                onMouseUp={[Function]}
+                            >
+                                <div
+                                    className="selection-container unselectable"
+                                    style={
+                                        Object {
+                                            "display": "none",
+                                            "left": undefined,
+                                            "top": undefined,
+                                          }
+                                    }
+                                >
+                                    <button
+                                        className="btn"
+                                        onClick={[Function]}
+                                    >
+                                        <span
+                                            aria-hidden="true"
+                                            className="icon icon--comment unselectable"
+                                        />
+                                          Comment
+                                    </button>
+                                </div>
                                 <div
                                     className="chapter"
                                     title="Introduction"
