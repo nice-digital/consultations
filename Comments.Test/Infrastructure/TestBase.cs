@@ -50,7 +50,8 @@ namespace Comments.Test.Infrastructure
         protected readonly ConsultationsContext _context;
 	    protected readonly bool _useRealSubmitService = false;
 
-	    protected readonly IEncryption _fakeEncryption;
+	    protected IEncryption _fakeEncryption;
+	    protected readonly bool _useRealEncryption = false;
 
 		public TestBase(Feed feed) : this()
         {
@@ -77,14 +78,14 @@ namespace Comments.Test.Infrastructure
 		}
 
 
-		public TestBase(bool useRealSubmitService = false)
+		public TestBase(bool useRealSubmitService = false, bool useRealEncryption = false)
         {
             // Arrange
             _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
             _fakeHttpContextAccessor = FakeHttpContextAccessor.Get(_authenticated, _displayName, _userId);
 	        _consultationService = new FakeConsultationService();
-			_fakeEncryption = new FakeEncryption();
 	        _useRealSubmitService = useRealSubmitService;
+	        _useRealEncryption = useRealEncryption;
 			var databaseName = DatabaseName + Guid.NewGuid();
 
             //SQLiteConnectionStringBuilder sqLiteConnectionStringBuilder = new SQLiteConnectionStringBuilder()
@@ -124,9 +125,21 @@ namespace Comments.Test.Infrastructure
 					}
 	                else
 					{
-		                services.TryAddTransient<ISubmitService>(provider => new FakeSubmitService());
+						services.TryAddTransient<ISubmitService>(provider => new FakeSubmitService());
 					}
-                })
+
+					if(_useRealEncryption)
+					{
+						services.AddDataProtection();
+						var serviceProvider = services.BuildServiceProvider();
+						_fakeEncryption = ActivatorUtilities.CreateInstance<Encryption>(serviceProvider);
+					}
+					else
+					{
+						_fakeEncryption = new FakeEncryption();
+					}
+
+				})
                 .Configure(app =>
                 {
                     app.UseStaticFiles();
