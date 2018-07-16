@@ -22,7 +22,7 @@ exports.config = {
         //}
     ],
 
-	logLevel: "silent",
+	logLevel: "verbose",
 	// Change this to verbose if you want more detailed logging in the terminal
     coloredLogs: true,
     screenshotPath: "./errorShots/",
@@ -39,7 +39,7 @@ exports.config = {
             "./src/steps/then.js"
         ],
         tagExpression: "not @pending", // See https://docs.cucumber.io/tag-expressions/
-        timeout: 300000,
+        timeout: 30000,
     },
 
     // Set up global asssertion libraries
