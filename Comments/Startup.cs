@@ -69,7 +69,8 @@ namespace Comments
 	        services.TryAddTransient<ISubmitService, SubmitService>();
 
 			services.AddDataProtection()
-		        .PersistKeysToFileSystem(new DirectoryInfo(@"c:\temp-keys\"))
+				.SetApplicationName("Consultations")
+				.PersistKeysToFileSystem(new DirectoryInfo(@"c:\temp-keys\"))
 				.ProtectKeysWithDpapi();
 
 			var serviceProvider = services.BuildServiceProvider();
