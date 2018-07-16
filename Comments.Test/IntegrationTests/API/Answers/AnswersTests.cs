@@ -102,7 +102,7 @@ namespace Comments.Test.IntegrationTests.API.Answers
             var answerId = AddAnswer(1, userId, answerText);
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var answerService = new AnswerService(new ConsultationsContext(_options, userService), userService);
+            var answerService = new AnswerService(new ConsultationsContext(_options, userService, _fakeEncryption), userService);
 
             //Act
             var response = await _client.DeleteAsync($"consultations/api/answer/{answerId}");

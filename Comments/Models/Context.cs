@@ -10,6 +10,7 @@ namespace Comments.Models
 {
     public partial class ConsultationsContext : DbContext
     {
+	    private readonly IEncryption _encryption;
 	    private readonly IConfiguration _configuration;
 
 		//these commented out constructors are just here for use when creating scaffolding with EF core. without them it won't work.
@@ -28,8 +29,9 @@ namespace Comments.Models
 		//}
 
 
-		public ConsultationsContext(DbContextOptions options, IUserService userService) : base(options)
+		public ConsultationsContext(DbContextOptions options, IUserService userService, IEncryption encryption) : base(options)
         {
+	        _encryption = encryption;
 	        _userService = userService;
             _createdByUserID = _userService.GetCurrentUser().UserId;
         }

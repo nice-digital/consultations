@@ -48,6 +48,8 @@ namespace Comments.Test.Infrastructure
         protected readonly ConsultationsContext _context;
 	    protected readonly bool _useRealSubmitService = false;
 
+	    protected readonly IEncryption _fakeEncryption;
+
 		public TestBase(Feed feed) : this()
         {
             FeedToUse = feed;
@@ -79,6 +81,7 @@ namespace Comments.Test.Infrastructure
             _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
             _fakeHttpContextAccessor = FakeHttpContextAccessor.Get(_authenticated, _displayName, _userId);
 	        _consultationService = new FakeConsultationService();
+			_fakeEncryption = new FakeEncryption();
 	        _useRealSubmitService = useRealSubmitService;
 			var databaseName = DatabaseName + Guid.NewGuid();
 
@@ -97,7 +100,7 @@ namespace Comments.Test.Infrastructure
                     .UseInMemoryDatabase(databaseName)
                     .Options;
 
-            _context = new ConsultationsContext(_options, _fakeUserService);
+            _context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption);
             _context.Database.EnsureCreatedAsync();
 			
 
@@ -157,7 +160,7 @@ namespace Comments.Test.Infrastructure
 
         protected void ResetDatabase()
         {
-            using (var context = new ConsultationsContext(_options, _fakeUserService))
+            using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
             {
                 context.Database.EnsureDeleted();
 				//context.Database.CloseConnection();
@@ -167,7 +170,7 @@ namespace Comments.Test.Infrastructure
 
         protected void ResetDatabase(IUserService userService)
         {
-            using (var context = new ConsultationsContext(_options, userService))
+            using (var context = new ConsultationsContext(_options, userService, _fakeEncryption))
             {
                 context.Database.EnsureDeleted();
                 //context.Database.CloseConnection();
@@ -184,7 +187,7 @@ namespace Comments.Test.Infrastructure
             }
             else
             {
-                using (var context =new ConsultationsContext(_options, _fakeUserService))
+                using (var context =new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
                 {
                     context.Location.Add(location);
                     context.SaveChanges();
@@ -204,7 +207,7 @@ namespace Comments.Test.Infrastructure
 		    }
 		    else
 		    {
-			    using (var context = new ConsultationsContext(_options, _fakeUserService))
+			    using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
 			    {
 					context.Status.Add(statusModel);
 					context.SaveChanges();
@@ -224,7 +227,7 @@ namespace Comments.Test.Infrastructure
             }
             else
             {
-                using (var context = new ConsultationsContext(_options, _fakeUserService))
+                using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
                 {
                     context.Comment.Add(comment);
                     context.SaveChanges();
@@ -243,7 +246,7 @@ namespace Comments.Test.Infrastructure
             }
             else
             {
-                using (var context = new ConsultationsContext(_options, _fakeUserService))
+                using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
                 {
                     context.QuestionType.Add(questionType);
                     context.SaveChanges();
@@ -262,7 +265,7 @@ namespace Comments.Test.Infrastructure
             }
             else
             {
-                using (var context = new ConsultationsContext(_options, _fakeUserService))
+                using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
                 {
                     context.Question.Add(question);
                     context.SaveChanges();
@@ -282,7 +285,7 @@ namespace Comments.Test.Infrastructure
             }
             else
             {
-                using (var context = new ConsultationsContext(_options, _fakeUserService))
+                using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
                 {
                     context.Answer.Add(answer);
                     context.SaveChanges();
@@ -333,7 +336,7 @@ namespace Comments.Test.Infrastructure
 			}
 			else
 			{
-				using (var context = new ConsultationsContext(_options, _fakeUserService))
+				using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
 				{
 					context.Submission.Add(submission);
 					context.SaveChanges();
@@ -353,7 +356,7 @@ namespace Comments.Test.Infrastructure
 		    }
 		    else
 		    {
-			    using (var context = new ConsultationsContext(_options, _fakeUserService))
+			    using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
 			    {
 				    context.SubmissionComment.Add(submissionComment);
 				    context.SaveChanges();
@@ -373,7 +376,7 @@ namespace Comments.Test.Infrastructure
 		    }
 		    else
 		    {
-			    using (var context = new ConsultationsContext(_options, _fakeUserService))
+			    using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
 			    {
 				    context.SubmissionAnswer.Add(submissionAnswer);
 				    context.SaveChanges();

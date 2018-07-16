@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
@@ -24,6 +24,6 @@ namespace Comments.Configuration
             Feed = sp.GetService<IOptions<FeedConfig>>().Value;
             GilliamConfig = sp.GetService<IOptions<GilliamConfig>>().Value;
             GilliamConfig.ContentRootPath = contentRootPath;
-        }
+		}
     }
 }

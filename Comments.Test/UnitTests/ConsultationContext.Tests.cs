@@ -7,6 +7,9 @@ using Shouldly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Comments.Services;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace Comments.Test.UnitTests
@@ -26,7 +29,7 @@ namespace Comments.Test.UnitTests
             AddComment(locationId, commentText, true, createdByUserId);
 
             // Act
-            using (var consultationsContext = new ConsultationsContext(_options, _fakeUserService))
+            using (var consultationsContext = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
             {
                 var unfilteredLocations = consultationsContext.Location.Where(l =>
                         l.SourceURI.Equals(sourceURI))
@@ -52,7 +55,7 @@ namespace Comments.Test.UnitTests
             AddComment(locationId, commentText, true, createdByUserId);
 
             // Act
-            using (var consultationsContext = new ConsultationsContext(_options, _fakeUserService))
+            using (var consultationsContext = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
             {
                 var filteredLocations = consultationsContext.Location.Where(l => l.SourceURI.Equals(sourceURI))
                     .Include(l => l.Comment)
@@ -94,7 +97,7 @@ namespace Comments.Test.UnitTests
 		    };
 
 			// Act
-			var consultationsContext = new ConsultationsContext(_options, _fakeUserService);
+			var consultationsContext = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption);
 		    var results = consultationsContext.GetAllCommentsAndQuestionsForDocument(sourceURIs, true);
 
 			//Assert
@@ -136,7 +139,7 @@ namespace Comments.Test.UnitTests
 			};
 
 		    // Act
-		    var consultationsContext = new ConsultationsContext(_options, _fakeUserService);
+		    var consultationsContext = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption);
 		    var results = consultationsContext.GetAllCommentsAndQuestionsForDocument(sourceURIs, false);
 
 		    //Assert

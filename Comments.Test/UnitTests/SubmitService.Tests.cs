@@ -26,7 +26,7 @@ namespace Comments.Test.UnitTests
 
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var authenticateService = new FakeAuthenticateService(authenticated: true);
-			var consultationContext = new ConsultationsContext(_options, userService);
+			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 			var submitService = new SubmitService(consultationContext, userService, _consultationService);
 			var commentService = new CommentService(consultationContext, userService, authenticateService, _consultationService);
 
@@ -62,7 +62,7 @@ namespace Comments.Test.UnitTests
 
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var authenticateService = new FakeAuthenticateService(authenticated: true);
-			var consultationContext = new ConsultationsContext(_options, userService);
+			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 			var submitService = new SubmitService(consultationContext, userService, _consultationService);
 			var commentService = new CommentService(consultationContext, userService, authenticateService, _consultationService);
 			var answerService = new AnswerService(consultationContext, userService);
@@ -98,7 +98,7 @@ namespace Comments.Test.UnitTests
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var userId = Guid.NewGuid();
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-			var consultationContext = new ConsultationsContext(_options, userService);
+			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 
 			AddSubmittedCommentsAndAnswers(sourceURI, "Comment Text", "Question Text", "Answer Text", userId, consultationContext);
 
@@ -130,7 +130,7 @@ namespace Comments.Test.UnitTests
 			//Arrange
 			var userId = Guid.NewGuid();
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-			var consultationContext = new ConsultationsContext(_options, userService);
+			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 			var consultationService = new ConsultationService(consultationContext, null, null, userService);
 			//var submitService = new SubmitService(consultationContext, userService, _consultationService);
 			AddSubmittedCommentsAndAnswers("consultations://./consultation/1/document/1/chapter/introduction", "Comment Text", "Question Text", "Answer Text", userId, consultationContext);
@@ -157,7 +157,7 @@ namespace Comments.Test.UnitTests
 			//Arrange
 			var userId = Guid.NewGuid();
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-			var consultationContext = new ConsultationsContext(_options, userService);
+			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 			//var submitService = new SubmitService(consultationContext, userService, _consultationService);
 			var consultationService = new ConsultationService(consultationContext, null, null, userService);
 			AddSubmittedCommentsAndAnswers("consultations://./consultation/1/document/1", "Comment Text", "Question Text", "Answer Text", userId, consultationContext);
@@ -184,7 +184,7 @@ namespace Comments.Test.UnitTests
 			//Arrange
 			var userId = Guid.NewGuid();
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-			var consultationContext = new ConsultationsContext(_options, userService);
+			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 			var consultationService = new ConsultationService(consultationContext, null, null, userService);
 			//var submitService = new SubmitService(consultationContext, userService, _consultationService);
 			AddSubmittedCommentsAndAnswers("consultations://./consultation/1", "Comment Text", "Question Text", "Answer Text", userId, consultationContext);

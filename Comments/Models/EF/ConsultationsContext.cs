@@ -1,6 +1,10 @@
 using System;
+using System.Linq;
+using Comments.Configuration;
 using Comments.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Comments.Models
 {
@@ -30,6 +34,11 @@ namespace Comments.Models
 				entity.Property(e => e.AnswerId).HasColumnName("AnswerID");
 
 				entity.Property(e => e.CreatedByUserId).HasColumnName("CreatedByUserID");
+
+				entity.Property(e => e.AnswerText)
+					.HasConversion(
+						v => _encryption.EncryptString(v),
+						v => _encryption.DecryptString(v));
 
 				entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
 
@@ -67,8 +76,12 @@ namespace Comments.Models
 				entity.HasIndex(e => e.StatusId);
 
 				entity.Property(e => e.CommentId).HasColumnName("CommentID");
-
-				entity.Property(e => e.CommentText).IsRequired();
+				
+				entity.Property(e => e.CommentText)
+					.HasConversion(
+						v => _encryption.EncryptString(v),
+						v => _encryption.DecryptString(v))
+					.IsRequired();
 
 				entity.Property(e => e.CreatedByUserId).HasColumnName("CreatedByUserID");
 
