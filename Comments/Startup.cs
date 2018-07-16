@@ -67,10 +67,12 @@ namespace Comments
             services.TryAddTransient<IAnswerService, AnswerService>();
             services.TryAddTransient<IQuestionService, QuestionService>();
 	        services.TryAddTransient<ISubmitService, SubmitService>();
-			
-			services.AddDataProtection();
 
-	        var serviceProvider = services.BuildServiceProvider();
+			services.AddDataProtection()
+		        .PersistKeysToFileSystem(new DirectoryInfo(@"c:\temp-keys\"))
+				.ProtectKeysWithDpapi();
+
+			var serviceProvider = services.BuildServiceProvider();
 			services.TryAddSingleton<IEncryption>(provider => ActivatorUtilities.CreateInstance<Encryption>(serviceProvider));
 
 			// Add authentication 
