@@ -194,12 +194,17 @@ namespace Comments.Models
 
 			modelBuilder.Entity<SubmissionComment>(entity =>
 			{
+				entity.HasKey(e => e.SubmissionCommentId);
+
+				entity.HasIndex(e => e.CommentId);
+
+				entity.HasIndex(e => e.SubmissionId);
+
 				entity.Property(e => e.SubmissionCommentId).HasColumnName("SubmissionCommentID");
 
 				entity.Property(e => e.SubmissionId).HasColumnName("SubmissionID");
 				
 				entity.Property(e => e.CommentId).HasColumnName("CommentID");
-				
 
 				entity.HasOne(d => d.Submission)
 					.WithMany(p => p.SubmissionComment)
@@ -216,6 +221,12 @@ namespace Comments.Models
 
 			modelBuilder.Entity<SubmissionAnswer>(entity =>
 			{
+				entity.HasKey(e => e.SubmissionAnswerId);
+
+				entity.HasIndex(e => e.AnswerId);
+
+				entity.HasIndex(e => e.SubmissionId);
+
 				entity.Property(e => e.SubmissionAnswerId).HasColumnName("SubmissionAnswerID");
 
 				entity.Property(e => e.SubmissionId).HasColumnName("SubmissionID");

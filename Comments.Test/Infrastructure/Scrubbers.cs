@@ -23,5 +23,10 @@ namespace Comments.Test.Infrastructure
 	    {
 		    return Regex.Replace(str, @"""locationId"":(\d+)", @"""commentId"":""scrubbed by ScrubLocationId""");
 	    }
+
+	    public static string ScrubAnswerId(string str)
+	    {
+		    return Regex.Replace(str, @"""answerId"":(\d+)", @"""answerId"":""scrubbed by ScrubAnswerId""");
+	    }
 	}
 }

@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Comments.Models
 {
     public partial class Question
     {
-        public Question(int locationId, string questionText, int questionTypeId, byte? questionOrder, Location location,
+		public Question(int locationId, string questionText, int questionTypeId, byte? questionOrder, Location location,
             QuestionType questionType, ICollection<Answer> answer)
         {
             LocationId = locationId;
@@ -15,7 +15,8 @@ namespace Comments.Models
             Location = location;
             QuestionType = questionType;
             Answer = answer;
-        }
+	        Answer = new HashSet<Answer>();
+		}
 
         public void UpdateFromViewModel(ViewModels.Question question)
         {

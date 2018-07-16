@@ -16,15 +16,16 @@ namespace Comments.Models
 		//these commented out constructors are just here for use when creating scaffolding with EF core. without them it won't work.
 		//don't leave them in uncommented though. and don't set that connection string to a valid value and commit it.
 		//public ConsultationsContext(DbContextOptions options)
-		//	: base(options) {
-		//    _createdByUserID = Guid.Empty;
+		//	: base(options)
+		//{
+		//	_createdByUserID = Guid.Empty;
 		//}
-	 //   public ConsultationsContext() : base()
-	 //   {
-		//    _createdByUserID = Guid.Empty;
-	 //   }
-	 //   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-	 //   {
+		//public ConsultationsContext() : base()
+		//{
+		//	_createdByUserID = Guid.Empty;
+		//}
+		//protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+		//{
 		//	optionsBuilder.UseSqlServer("[snip]");
 		//}
 
@@ -181,29 +182,25 @@ namespace Comments.Models
 
 			var submissions = Submission.Where(s => s.SubmissionByUserId.Equals(usersSubmissionsToDelete))
 			    .Include(s => s.SubmissionComment)
-					.ThenInclude(sc => sc.Comment)
-						.ThenInclude(c => c.Location)
-
-			    .Include(s => s.SubmissionAnswer)
+					.ThenInclude(sc => sc.Comment) 
+				.Include(s => s.SubmissionAnswer)
 					.ThenInclude(sa => sa.Answer)
-						.ThenInclude(a => a.Question)
-							.ThenInclude(q => q.Location)
-
-			    .ToList();
-
+				.IgnoreQueryFilters() //without this you'd only be able to delete your own data..
+				.ToList();
+			
 		    var submissionCommentsToDelete = new List<SubmissionComment>();
 		    var submissionAnswersToDelete = new List<SubmissionAnswer>();
 		    foreach (var submission in submissions)
 		    {
 			    foreach (var submissionComment in submission.SubmissionComment)
 			    {
-				    submissionComment.Comment.StatusId = draftStatus.StatusId;
+					submissionComment.Comment.StatusId = draftStatus.StatusId;
 				    submissionCommentsToDelete.Add(submissionComment);
 				}
 
 			    foreach (var submissionAnswer in submission.SubmissionAnswer)
 			    {
-				    submissionAnswer.Answer.StatusId = draftStatus.StatusId;
+					submissionAnswer.Answer.StatusId = draftStatus.StatusId;
 				    submissionAnswersToDelete.Add(submissionAnswer);
 				}
 

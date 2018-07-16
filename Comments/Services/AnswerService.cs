@@ -1,3 +1,4 @@
+using System;
 using Comments.ViewModels;
 using Comments.Models;
 
@@ -31,8 +32,11 @@ namespace Comments.Services
 
             if (answerInDatabase == null)
                 return (answer: null, validate: new Validate(valid: false, notFound: true, message: $"Answer id:{answerId} not found trying to get answer for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
-            
-            return (answer: (answerInDatabase == null) ? null : new ViewModels.Answer(answerInDatabase), validate: null);
+
+	        if (!answerInDatabase.CreatedByUserId.Equals(_currentUser.UserId.Value))
+		        return (answer: null, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to access answer id: {answerId}, but it's not their answer"));
+			
+			return (answer: new ViewModels.Answer(answerInDatabase), validate: null);
         }
 
         public (int rowsUpdated, Validate validate) EditAnswer(int answerId, ViewModels.Answer answer)
@@ -44,9 +48,14 @@ namespace Comments.Services
 
             if (answerInDatabase == null)
                 return (rowsUpdated: 0, validate: new Validate(valid: false, notFound: true, message: $"Answer id:{answerId} not found trying to edit answer for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
-            
-            answerInDatabase.UpdateFromViewModel(answer);
 
+	        if (!answerInDatabase.CreatedByUserId.Equals(_currentUser.UserId.Value))
+		        return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to edit answer id: {answerId}, but it's not their answer"));
+
+
+			answer.LastModifiedByUserId = _currentUser.UserId.Value;
+	        answer.LastModifiedDate = DateTime.UtcNow;
+			answerInDatabase.UpdateFromViewModel(answer);
             return (rowsUpdated: _context.SaveChanges(), validate: null);
         }
 
@@ -59,9 +68,14 @@ namespace Comments.Services
 
             if (answerInDatabase == null)
                 return (rowsUpdated: 0, validate: new Validate(valid: false, notFound: true, message: $"Answer id:{answerId} not found trying to delete answer for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
-            
-            answerInDatabase.IsDeleted = true;
-            return (rowsUpdated: _context.SaveChanges(), validate: null);
+
+	        if (!answerInDatabase.CreatedByUserId.Equals(_currentUser.UserId.Value))
+		        return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to delete answer id: {answerId}, but it's not their answer"));
+
+			answerInDatabase.IsDeleted = true;
+	        answerInDatabase.LastModifiedDate = DateTime.UtcNow;
+	        answerInDatabase.LastModifiedByUserId = _currentUser.UserId.Value;
+			return (rowsUpdated: _context.SaveChanges(), validate: null);
         }
 
         public (ViewModels.Answer answer, Validate validate) CreateAnswer(ViewModels.Answer answer)
@@ -69,8 +83,11 @@ namespace Comments.Services
             if (!_currentUser.IsAuthorised)
                 return (answer: null, validate: new Validate(valid: false, unauthorised: true, message: "Not logged in creating answer"));
 
-            var answerToSave = new Models.Answer(answer.QuestionId, _currentUser.UserId.Value, answer.AnswerText, answer.AnswerBoolean, null, 1, null);
-            _context.Answer.Add(answerToSave);
+	        var status = _context.GetStatus(StatusName.Draft);
+            var answerToSave = new Models.Answer(answer.QuestionId, _currentUser.UserId.Value, answer.AnswerText, answer.AnswerBoolean, null, status.StatusId, null);
+	        answerToSave.LastModifiedByUserId = _currentUser.UserId.Value;
+	        answerToSave.LastModifiedDate = DateTime.UtcNow;
+			_context.Answer.Add(answerToSave);
             _context.SaveChanges();
 
             return (answer: new ViewModels.Answer(answerToSave), validate: null);

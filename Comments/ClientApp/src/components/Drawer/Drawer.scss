@@ -36,10 +36,12 @@
     &:hover {
       cursor: pointer;
     }
-    &--comments {
-      background: $colour-btn-cta;
+    &--comments,&--questions {
       color: $colour-nice-white;
       box-shadow: inset -10px 0 10px rgba(0, 0, 0, 0.3);
+    }    
+    &--comments.active,&--questions.active{
+      background: $colour-btn-cta;
     }
     @extend .font-weight-bold;
   }
