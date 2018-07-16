@@ -7,6 +7,7 @@ config.services = [];
 // Run headless on TeamCity
 config.capabilities = [
      {
+		 maxInstances: 2,
          browserName: "chrome",
          chromeOptions: {
              args: ["--headless", "--window-size=1366,768"]
