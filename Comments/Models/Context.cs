@@ -1,6 +1,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using Comments.Services;
 using Comments.ViewModels;
@@ -209,5 +210,74 @@ namespace Comments.Models
 		    return SaveChanges();
 	    }
 
+	    public int InsertQuestionsWithScript(int consultationId)
+	    {
+		    return Database.ExecuteSqlCommand(@"
+				--DECLARE @consultationId AS int
+				--SET @consultationId = 1
+
+				DECLARE @questionTypeID AS int
+				DECLARE @locationID1 AS int, @locationID2 AS int, @locationID3 AS int
+
+				DECLARE @userID as uniqueidentifier
+				SELECT @userID = cast(cast(0 AS binary) AS uniqueidentifier)
+
+				DECLARE @questionTextDescription nvarchar(100)
+				SET @questionTextDescription = 'A text question requiring a text answer.'
+
+				DECLARE @questionOneText nvarchar(MAX)
+				SET @questionOneText = 'Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.'
+
+				--question type insert
+				SELECT @questionTypeID = QuestionTypeID
+				FROM QuestionType
+				WHERE [Description] = @questionTextDescription
+
+				IF @questionTypeID IS NULL 
+				BEGIN
+					INSERT INTO QuestionType ([Description], HasBooleanAnswer, HasTextAnswer)
+					VALUES (@questionTextDescription, 0, 1)
+
+					SET @questionTypeID = SCOPE_IDENTITY();
+				END
+
+				--3 location inserts
+				IF NOT EXISTS (SELECT * FROM [Location] L
+								INNER JOIN Question Q ON Q.LocationID = L.LocationID
+								WHERE L.SourceURI = 'consultations://./consultation/' + CAST(@consultationId AS varchar) AND
+								Q.QuestionText = @questionOneText)
+				BEGIN
+
+					INSERT INTO Location (SourceURI)
+					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar))
+
+					SET @locationID1 = SCOPE_IDENTITY();
+
+					INSERT INTO Location (SourceURI)
+					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar) + '/document/1')
+
+					SET @locationID2 = SCOPE_IDENTITY();
+
+					INSERT INTO Location (SourceURI)
+					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar) + '/document/2')
+
+					SET @locationID3 = SCOPE_IDENTITY();
+
+					--now the question inserts
+
+					INSERT INTO Question (LocationID, QuestionText, QuestionTypeID, QuestionOrder, CreatedByUserID, LastModifiedByUserID, LastModifiedDate)
+					VALUES (@locationID1, @questionOneText, @questionTypeID, 1, @userID, @userID, GETDATE())
+
+
+					INSERT INTO Question (LocationID, QuestionText, QuestionTypeID, QuestionOrder, CreatedByUserID, LastModifiedByUserID, LastModifiedDate)
+					VALUES (@locationID2, 'Would implementation of any of the draft recommendations have significant cost implications?', @questionTypeID, 2, @userID, @userID, GETDATE())
+
+
+					INSERT INTO Question (LocationID, QuestionText, QuestionTypeID, QuestionOrder, CreatedByUserID, LastModifiedByUserID, LastModifiedDate)
+					VALUES (@locationID3, 'Would implementation of any of the draft recommendations have cost implications?', @questionTypeID, 3, @userID, @userID, GETDATE())			
+		
+				END
+			", new SqlParameter("@consultationId", consultationId));
+	    }
 	}
 }

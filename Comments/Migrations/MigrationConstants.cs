@@ -57,8 +57,8 @@ namespace Comments.Migrations
 			    public const string TableName = "Comment";
 				public static class Columns
 			    {
-				    
 				    public const string StatusID = "StatusID";
+				    public const string IsDeleted = "IsDeleted";
 			    }
 		    }
 
@@ -69,7 +69,8 @@ namespace Comments.Migrations
 			    public static class Columns
 			    {
 				    public const string StatusID = "StatusID";
-			    }
+				    public const string IsDeleted = "IsDeleted";
+				}
 		    }
 
 		    public static class QuestionType
