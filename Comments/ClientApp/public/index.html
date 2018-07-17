@@ -48,12 +48,16 @@
 			data-cookie="true"
 			async></script>
 
-	<!-- <script src="//code.jquery.com/jquery-1.12.4.min.js"></script>
+	<script src="//code.jquery.com/jquery-1.12.4.min.js"></script>
 	<script src="//www.nice.org.uk/Media/Default/js/designsystem/nice.dev.js"></script>
 	<script>
-		$(document).ready(function () {
+		function niceDesignSystem(){
 			$(document).nice();
-		});
-	</script> -->
+		}
+		$(document).ready(function () {
+			niceDesignSystem();
+		});		
+		window.addEventListener("commentList_did_mount", niceDesignSystem);
+	</script>
 </body>
 </html>

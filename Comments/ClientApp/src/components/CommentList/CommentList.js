@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { withRouter, Link } from "react-router-dom";
 import { load } from "./../../data/loader";
 import preload from "../../data/pre-loader";
@@ -12,7 +12,7 @@ import { queryStringToObject, replaceFormat } from "../../helpers/utils";
 import {pullFocusById} from "../../helpers/accessibility-helpers";
 //import stringifyObject from "stringify-object";
 //import Tabs from "tabs";
-import Tabs from "../Tabs/Tabs";
+//import Tabs from "../Tabs/Tabs";
 
 type PropsType = {
 	staticContext?: any,
@@ -141,7 +141,7 @@ export class CommentList extends Component<PropsType, StateType> {
 				allowComments: allowComments
 			};
 		}
-		this._tabs = React.createRef();
+		//this._tabs = React.createRef();
 	}
 
 	loadComments() {
@@ -184,11 +184,22 @@ export class CommentList extends Component<PropsType, StateType> {
 			loading: false,
 			allowComments: allowComments
 		});
+		this.updateTabs();
 	};
 
 	componentDidMount() {
 		this.loadComments();
-		let tabs = new Tabs(this._tabs);
+		//let tabs = new Tabs(this._tabs);
+		this.updateTabs();
+	}
+
+	updateTabs = () => {
+		if (window){
+			window.dispatchEvent(new CustomEvent("commentList_did_mount", {}));
+			window.setTimeout(function(){
+				window.dispatchEvent(new CustomEvent("commentList_did_mount", {}));
+			}, 500);			
+		}
 	}
 
 	componentDidUpdate(prevProps: PropsType, prevState: any, nextContent: any) {
@@ -420,7 +431,7 @@ export class CommentList extends Component<PropsType, StateType> {
 
 								contextValue.isAuthorised ?
 
-									<div className="tabs" data-tabs ref={this._tabs}>
+									<div className="tabs" data-tabs>
 										<ul className="tabs__list" role="tablist">
 											<li className={`tabs__tab ${this.props.viewComments ? "" : "tabs__tab--active"}`} role="presentation">
 												<button className="tabs__tab-btn" type="button" role="tab">
@@ -459,22 +470,23 @@ export class CommentList extends Component<PropsType, StateType> {
 												</ul>
 											</div>
 											<div className="tabs__pane" role="tabpanel">
-												commentsToShow.length === 0 ? <p>No comments yet</p> :
-												<ul className="CommentList list--unstyled">
-													{commentsToShow.map((comment) => {
-														return (
-															<CommentBox
-																readOnly={!this.state.allowComments || this.props.isSubmitted}
-																isVisible={this.props.isVisible}
-																key={comment.commentId}
-																unique={`Comment${comment.commentId}`}
-																comment={comment}
-																saveHandler={this.saveCommentHandler}
-																deleteHandler={this.deleteCommentHandler}
-															/>
-														);
-													})}
-												</ul> 
+												{commentsToShow.length === 0 ? <p>No comments yet</p> :
+													<ul className="CommentList list--unstyled">
+														{commentsToShow.map((comment) => {
+															return (
+																<CommentBox
+																	readOnly={!this.state.allowComments || this.props.isSubmitted}
+																	isVisible={this.props.isVisible}
+																	key={comment.commentId}
+																	unique={`Comment${comment.commentId}`}
+																	comment={comment}
+																	saveHandler={this.saveCommentHandler}
+																	deleteHandler={this.deleteCommentHandler}
+																/>
+															);
+														})}
+													</ul> 
+												}
 											</div>
 											<div className="tabs__pane" role="tabpanel">
 												<div className="hero">
@@ -489,10 +501,38 @@ export class CommentList extends Component<PropsType, StateType> {
 																	<li>add any extra comments.</li>
 																</ul>
 																<p>Do you want to continue?</p>
-																<div className="hero__actions">
+																{/* <div className="hero__actions">
 																	<a className="btn btn--cta">Yes, submit my response</a>
 																	<a className="btn" target="_blank" rel="noopener external">No, keep editing</a>
-																</div>
+																</div> */}
+
+
+																<UserContext.Consumer>
+																	{contextValue => {
+																		if (contextValue.isAuthorised) {
+																			return (
+																				<Fragment>
+																					<h3 className="mt--0">Ready to submit?</h3>
+																					<button
+																						disabled={!this.state.validToSubmit}
+																						className="btn btn--cta"
+																						data-qa-sel="submit-comment-button"
+																						onClick={this.submitConsultation}
+																					>
+																					{this.state.userHasSubmitted ? "Comments submitted": "Submit your comments"}
+																					</button>
+																					<button
+																						className="btn btn--secondary">
+																						Download all comments
+																					</button>
+																				</Fragment>
+																			);
+																		}
+																	}}
+																</UserContext.Consumer>
+																			
+
+
 															</div>
 														</div>
 													</div>
