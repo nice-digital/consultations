@@ -10,6 +10,14 @@ export function nodeIsInternalLink(node) {
 	return node.name === "a" && node.attribs && node.attribs["rel"] === "internal";
 }
 
+export function nodeIsSubsection(node) {
+	return node.name === "p" && node.attribs && node.attribs["data-heading-type"] === "numbered-paragraph";
+}
+
 export function nodeIsTypeText(node) {
 	return node.type === "text";
+}
+
+export function nodeIsSpanTag(node) {
+	return node.name === "span";
 }

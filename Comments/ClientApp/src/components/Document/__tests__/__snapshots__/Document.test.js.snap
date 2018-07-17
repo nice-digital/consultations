@@ -97,11 +97,25 @@ Array [
                     className="page-header"
                 >
                     <undefined />
+                    <button
+                        className="btn btn--cta"
+                        data-qa-sel="comment-on-whole-consultation"
+                        onClick={[Function]}
+                    >
+                        Comment on whole consultation
+                    </button>
                     <h2
                         className="mb--b"
                     >
                         Unstable angina and NSTEMI
                     </h2>
+                    <button
+                        className="btn btn--cta"
+                        data-qa-sel="comment-on-consultation-document"
+                        onClick={[Function]}
+                    >
+                        Comment on this document
+                    </button>
                 </div>
                 <div
                     className="grid"
@@ -223,7 +237,30 @@ Array [
                         <div
                             className="document-comment-container "
                         >
-                            <div>
+                            <div
+                                onMouseUp={[Function]}
+                            >
+                                <div
+                                    className="selection-container unselectable"
+                                    style={
+                                        Object {
+                                            "display": "none",
+                                            "left": undefined,
+                                            "top": undefined,
+                                          }
+                                    }
+                                >
+                                    <button
+                                        className="btn"
+                                        onClick={[Function]}
+                                    >
+                                        <span
+                                            aria-hidden="true"
+                                            className="icon icon--comment unselectable"
+                                        />
+                                          Comment
+                                    </button>
+                                </div>
                                 <div
                                     className="chapter"
                                     title="Introduction"
@@ -232,7 +269,42 @@ Array [
                                     <h2
                                         className="title"
                                     >
-                                        Introduction 
+                                        <button
+                                            className="document-comment-container__commentButton"
+                                            data-qa-sel="in-text-comment-button"
+                                            onClick={[Function]}
+                                            tabIndex={0}
+                                        >
+                                            <span
+                                                aria-hidden="true"
+                                                className="icon icon--comment"
+                                            />
+                                            <span
+                                                className="visually-hidden"
+                                            >
+                                                Comment on 
+                                                chapter
+                                                : 
+                                                Introduction 
+                                            </span>
+                                        </button>
+                                        <a
+                                            className="annotator-chapter"
+                                            data-heading-type="chapter"
+                                            id="introduction"
+                                            style={
+                                                Object {
+                                                    "position": "relative",
+                                                  }
+                                            }
+                                            title="Comment on chapter"
+                                            xmlns=""
+                                        >
+                                            Introduction 
+                                            <span
+                                                className="annotator-adder"
+                                            />
+                                        </a>
                                     </h2>
                                     <div
                                         className="informaltable"
