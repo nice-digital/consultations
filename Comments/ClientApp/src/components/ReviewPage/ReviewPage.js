@@ -13,7 +13,6 @@ import { UserContext } from "../../context/UserContext";
 import { pullFocusById } from "../../helpers/accessibility-helpers";
 //import stringifyObject from "stringify-object";
 
-
 type DocumentType = {
 	title: string,
 	sourceURI: string,
@@ -142,7 +141,27 @@ export class ReviewPage extends Component<PropsType, StateType> {
 	};
 
 	submitConsultation = () => {
-		this.commentList.submitComments();
+		const comments = this.commentList.getComments();
+		const questions = this.questionList.getQuestions();
+
+		let answersToSubmit = [];
+		questions.forEach(function(question){
+			if (question.answers != null){
+				answersToSubmit = answersToSubmit.concat(question.answers);
+			}			
+		});
+
+		let commentsAndAnswers = {comments: comments, answers: answersToSubmit};
+
+		load("submit", undefined, [], {}, "POST", commentsAndAnswers, true)
+			.then(res => {
+				this.submittedHandler();
+			})
+			.catch(err => {
+				console.log(err);
+				if (err.response) alert(err.response.statusText);
+			});		
+
 	};
 
 	submittedHandler = () => {
@@ -194,16 +213,13 @@ export class ReviewPage extends Component<PropsType, StateType> {
 									<h2 className="mt--0">{this.state.userHasSubmitted ? "Comments submitted" : "Comments for review"}</h2>
 
 									{(this.state.userHasSubmitted && !this.state.viewSubmittedComments) ?
-
 										<div className="hero">
 											<div className="hero__container">
 												<div className="hero__body">
 													<div className="hero__copy">
-														{/* <h1 class="hero__title">Hero title</h1> */}
-														<p className="hero__intro" data-qa-sel="submitted-text">Thank you, your comments have been submitted</p>
+														<p className="hero__intro" data-qa-sel="submitted-text">Thank you, your comments have been submitted.</p>
 														<div className="hero__actions">
 															<button className="btn" data-qa-sel="review-submitted-comments" onClick={this.viewSubmittedCommentsHandler}>Review all submitted comments</button>
-															{/* <a onClick={this.state.viewSubmittedComments = true}>Review all submitted comments</a> */}
 														</div>
 													</div>
 												</div>
@@ -211,7 +227,7 @@ export class ReviewPage extends Component<PropsType, StateType> {
 										</div>
 										:
 										<StickyContainer className="grid">
-											<div data-g="12 md:6 md:push:3">
+											<div data-g="12 md:9 md:push:3">												
 												<div className="tabs" data-tabs>
 													<ul className="tabs__list" role="tablist">
 														<li className={`tabs__tab ${this.props.viewComments ? "" : "tabs__tab--active"}`} role="presentation">
@@ -237,11 +253,10 @@ export class ReviewPage extends Component<PropsType, StateType> {
 																isReviewPage={true}
 																isVisible={true}
 																isSubmitted={this.state.userHasSubmitted}
-																wrappedComponentRef={component => (this.commentList = component)}
+																wrappedComponentRef={component => (this.questionList = component)}
 																submittedHandler={this.submittedHandler}
 																validationHander={this.validationHander}
 																viewComments={false}/>
-
 														</div>
 														<div className="tabs__pane" role="tabpanel">
 															<h3 className="mt--0" id="comments-column">Comments</h3>
@@ -255,75 +270,91 @@ export class ReviewPage extends Component<PropsType, StateType> {
 																viewComments={true}/>
 														</div>
 														<div className="tabs__pane" role="tabpanel">
-															<div className="hero">
-																<div className="hero__container">
-																	<div className="hero__body">
-																		<div className="hero__copy">
-																			{/* <h1 className="hero__title">Hero title</h1> */}
-																			<p className="hero__intro">You are about to submit your final response to NICE</p>
-																			<p>After submission you won't be able to:</p>
-																			<ul>
-																				<li>edit your comments further</li>
-																				<li>add any extra comments.</li>
-																			</ul>
-																			<p>Do you want to continue?</p>
-																			{/* <div className="hero__actions">
-																				<a className="btn btn--cta">Yes, submit my response</a>
-																				<a className="btn" target="_blank" rel="noopener external">No, keep editing</a>
-																			</div> */}
-																			<UserContext.Consumer>
-																				{contextValue => {
-																					if (contextValue.isAuthorised) {
-																						return (
-																							<Fragment>
-																								<h3 className="mt--0">Ready to submit?</h3>
-																								<button
-																									disabled={!this.state.validToSubmit}
-																									className="btn btn--cta"
-																									data-qa-sel="submit-comment-button"
-																									onClick={this.submitConsultation}
-																								>
-																								{this.state.userHasSubmitted ? "Comments submitted": "Submit your comments"}
-																								</button>
-																								<button
-																									className="btn btn--secondary">
-																									Download all comments
-																								</button>
-																							</Fragment>
-																						);
-																					}
-																				}}
-																			</UserContext.Consumer>
+															{this.state.userHasSubmitted ?
+																<div className="hero">
+																	<div className="hero__container">
+																		<div className="hero__body">
+																			<div className="hero__copy">
+																				<p className="hero__intro" data-qa-sel="submitted-text">Thank you, your comments have been submitted.</p>
+																				<button
+																					className="btn btn--secondary">
+																					Download all comments
+																				</button>
+																			</div>
 																		</div>
 																	</div>
 																</div>
-															</div>
+																:
+																<div className="hero">
+																	<div className="hero__container">
+																		<div className="hero__body">
+																			<div className="hero__copy">
+																				{/* <h1 className="hero__title">Hero title</h1> */}
+																				<p className="hero__intro">You are about to submit your final response to NICE</p>
+																				<p>After submission you won't be able to:</p>
+																				<ul>
+																					<li>edit your comments further</li>
+																					<li>add any extra comments.</li>
+																				</ul>
+																				<p>Do you want to continue?</p>
+																				{/* <div className="hero__actions">
+																					<a className="btn btn--cta">Yes, submit my response</a>
+																					<a className="btn" target="_blank" rel="noopener external">No, keep editing</a>
+																				</div> */}
+																				<UserContext.Consumer>
+																					{contextValue => {
+																						if (contextValue.isAuthorised) {
+																							return (
+																								<Fragment>
+																									<h3 className="mt--0">Ready to submit?</h3>
+																									<button
+																										disabled={!this.state.validToSubmit}
+																										className="btn btn--cta"
+																										data-qa-sel="submit-comment-button"
+																										onClick={this.submitConsultation}
+																									>
+																										{this.state.userHasSubmitted ? "Comments submitted": "Submit your comments"}
+																									</button>
+																									<button
+																										className="btn btn--secondary">
+																										Download all comments
+																									</button>
+																								</Fragment>
+																							);
+																						}
+																					}}
+																				</UserContext.Consumer>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															}
 														</div>
 													</div>
 												</div>
-												<div data-g="12 md:3 md:pull:6">
-													<Sticky disableHardwareAcceleration>
-														{({ style }) => (
-															<div style={style}>
-																<StackedNav links={
-																	{
-																		title: "All comments in this consultation",
-																		links: [
-																			{
-																				label: title,
-																				url: this.props.location.pathname,
-																				current: this.getCurrentSourceURI() == null,
-																				isReactRoute: true
-																			}
-																		]
-																	}
-																}/>
-																<StackedNav
-																	links={this.generateDocumentList(this.state.documentsList)}/>
-															</div>
-														)}
-													</Sticky>
-												</div>
+											</div>
+											<div data-g="12 md:3 md:pull:9">
+												<Sticky disableHardwareAcceleration>
+													{({ style }) => (
+														<div style={style}>
+															<StackedNav links={
+																{
+																	title: "All comments in this consultation",
+																	links: [
+																		{
+																			label: title,
+																			url: this.props.location.pathname,
+																			current: this.getCurrentSourceURI() == null,
+																			isReactRoute: true
+																		}
+																	]
+																}
+															}/>
+															<StackedNav
+																links={this.generateDocumentList(this.state.documentsList)}/>
+														</div>
+													)}
+												</Sticky>
 											</div>
 										</StickyContainer>
 									}

@@ -213,26 +213,34 @@ export class CommentList extends Component<PropsType, StateType> {
 		}
 	}
 
-	submitComments = () => {
-
-		let answersToSubmit = [];
-		this.state.questions.forEach(function(question){
-			if (question.answers != null){
-				answersToSubmit = answersToSubmit.concat(question.answers);
-			}			
-		});
-
-		let commentsAndAnswers = {comments: this.state.comments, answers: answersToSubmit};
-
-		load("submit", undefined, [], {}, "POST", commentsAndAnswers, true)
-			.then(res => {
-				this.props.submittedHandler();
-			})
-			.catch(err => {
-				console.log(err);
-				if (err.response) alert(err.response.statusText);
-			});		
+	getComments = () => {
+		return this.state.comments;
 	}
+
+	getQuestions = () => {
+		return this.state.questions;
+	}
+
+	// submitComments = () => {
+
+	// 	let answersToSubmit = [];
+	// 	this.state.questions.forEach(function(question){
+	// 		if (question.answers != null){
+	// 			answersToSubmit = answersToSubmit.concat(question.answers);
+	// 		}			
+	// 	});
+
+	// 	let commentsAndAnswers = {comments: this.state.comments, answers: answersToSubmit};
+
+	// 	load("submit", undefined, [], {}, "POST", commentsAndAnswers, true)
+	// 		.then(res => {
+	// 			this.props.submittedHandler();
+	// 		})
+	// 		.catch(err => {
+	// 			console.log(err);
+	// 			if (err.response) alert(err.response.statusText);
+	// 		});		
+	// }
 
 	filterComments = (newSourceURIToFilterBy: string, comments: Array<CommentType>): Array<CommentType> => {
 		let filterBy = queryStringToObject(newSourceURIToFilterBy);
@@ -426,120 +434,48 @@ export class CommentList extends Component<PropsType, StateType> {
 									}
 								</div> : null
 							}
-
 							{this.state.loading ? <p>Loading...</p> :
 
 								contextValue.isAuthorised ?
 
-									<div className="tabs" data-tabs>
-										<ul className="tabs__list" role="tablist">
-											<li className={`tabs__tab ${this.props.viewComments ? "" : "tabs__tab--active"}`} role="presentation">
-												<button className="tabs__tab-btn" type="button" role="tab">
-													Questions
-												</button>
-											</li>
-											<li className={`tabs__tab ${this.props.viewComments ? "tabs__tab--active" : ""}`} role="presentation">
-												<button className="tabs__tab-btn" type="button" role="tab">
-													Comments
-												</button>
-											</li>
-											<li className="tabs__tab" role="presentation">
-												<button className="tabs__tab-btn" type="button" role="tab">
-													Submit
-												</button>
-											</li>
-										</ul>
-										<div className="tabs__content">
-											<div className="tabs__pane" role="tabpanel">
-												<p>We would like to hear your views on the draft recommendations presented in the guideline, and any comments you may have on the rationale and impact sections in the guideline and the evidence presented in the evidence reviews documents. We would also welcome views on the Equality Impact Assessment.</p>
-												<p>We would like to hear your views on these questions:</p>
-												<ul className="CommentList list--unstyled">
-													{questionsToShow.map((question) => {
-														return (
-															<Question
-																readOnly={!this.state.allowComments || this.props.isSubmitted}
-																isVisible={this.props.isVisible}
-																key={question.questionId}
-																unique={`Comment${question.questionId}`}
-																question={question}
-																saveAnswerHandler={this.saveAnswerHandler}
-																deleteAnswerHandler={this.deleteAnswerHandler}
-															/>
-														);
-													})}
-												</ul>
-											</div>
-											<div className="tabs__pane" role="tabpanel">
-												{commentsToShow.length === 0 ? <p>No comments yet</p> :
-													<ul className="CommentList list--unstyled">
-														{commentsToShow.map((comment) => {
-															return (
-																<CommentBox
-																	readOnly={!this.state.allowComments || this.props.isSubmitted}
-																	isVisible={this.props.isVisible}
-																	key={comment.commentId}
-																	unique={`Comment${comment.commentId}`}
-																	comment={comment}
-																	saveHandler={this.saveCommentHandler}
-																	deleteHandler={this.deleteCommentHandler}
-																/>
-															);
-														})}
-													</ul> 
-												}
-											</div>
-											<div className="tabs__pane" role="tabpanel">
-												<div className="hero">
-													<div className="hero__container">
-														<div className="hero__body">
-															<div className="hero__copy">
-																{/* <h1 className="hero__title">Hero title</h1> */}
-																<p className="hero__intro">You are about to submit your final response to NICE</p>
-																<p>After submission you won't be able to:</p>
-																<ul>
-																	<li>edit your comments further</li>
-																	<li>add any extra comments.</li>
-																</ul>
-																<p>Do you want to continue?</p>
-																{/* <div className="hero__actions">
-																	<a className="btn btn--cta">Yes, submit my response</a>
-																	<a className="btn" target="_blank" rel="noopener external">No, keep editing</a>
-																</div> */}
-
-
-																<UserContext.Consumer>
-																	{contextValue => {
-																		if (contextValue.isAuthorised) {
-																			return (
-																				<Fragment>
-																					<h3 className="mt--0">Ready to submit?</h3>
-																					<button
-																						disabled={!this.state.validToSubmit}
-																						className="btn btn--cta"
-																						data-qa-sel="submit-comment-button"
-																						onClick={this.submitConsultation}
-																					>
-																					{this.state.userHasSubmitted ? "Comments submitted": "Submit your comments"}
-																					</button>
-																					<button
-																						className="btn btn--secondary">
-																						Download all comments
-																					</button>
-																				</Fragment>
-																			);
-																		}
-																	}}
-																</UserContext.Consumer>
-																			
-
-
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>										
+									this.props.viewComments ? 
+									
+										commentsToShow.length === 0 ? <p>No comments yet</p> :
+											<ul className="CommentList list--unstyled">
+												{commentsToShow.map((comment) => {
+													return (
+														<CommentBox
+															readOnly={!this.state.allowComments || this.props.isSubmitted}
+															isVisible={this.props.isVisible}
+															key={comment.commentId}
+															unique={`Comment${comment.commentId}`}
+															comment={comment}
+															saveHandler={this.saveCommentHandler}
+															deleteHandler={this.deleteCommentHandler}
+														/>
+													);
+												})}
+											</ul> 									
+										:
+										<div>
+											<p>We would like to hear your views on the draft recommendations presented in the guideline, and any comments you may have on the rationale and impact sections in the guideline and the evidence presented in the evidence reviews documents. We would also welcome views on the Equality Impact Assessment.</p>
+											<p>We would like to hear your views on these questions:</p>
+											<ul className="CommentList list--unstyled">
+												{questionsToShow.map((question) => {
+													return (
+														<Question
+															readOnly={!this.state.allowComments || this.props.isSubmitted}
+															isVisible={this.props.isVisible}
+															key={question.questionId}
+															unique={`Comment${question.questionId}`}
+															question={question}
+															saveAnswerHandler={this.saveAnswerHandler}
+															deleteAnswerHandler={this.deleteAnswerHandler}
+														/>
+													);
+												})}
+											</ul>
+										</div>							
 									:
 									<LoginBanner
 										signInButton={true}
