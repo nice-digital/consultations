@@ -34,9 +34,11 @@ $color-agile-phase: #007AB8;
 }
 
 .errorBox {
-	background: $colour-error-background;
-	color: $colour-error;
-	border: 1px solid $colour-error;
- }
+  background: $colour-error-background;
+  color: $colour-error;
+  border: 0.125rem solid $colour-error;
+  margin-bottom: 0.5rem;
+  padding: 0 0.5rem 0 0.5rem;
+}
 
 // ------------------------------------------------ //

@@ -213,7 +213,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			.catch(err => {
 				console.log(err);
 				if (err.response) {
-					error = err.response.statusText;
+					error = "save";
 					this.setState({
 						error
 					});
@@ -237,7 +237,7 @@ export class CommentList extends Component<PropsType, StateType> {
 				.catch(err => {
 					console.log(err);
 					if (err.response) {
-						const error = err.response.statusText;
+						const error = "delete";
 						this.setState({
 							error
 						});
@@ -279,7 +279,14 @@ export class CommentList extends Component<PropsType, StateType> {
 							}
 
 							{this.state.error != "" ? 
-								<div className="container errorBox">Error: {this.state.error}</div>
+								<div className="container errorBox">
+									<p>
+										We couldn't {this.state.error} your comment. Please try again in a few minutes.
+									</p>
+									<p>
+										If the problem continues please <a href="/get-involved/contact-us">contact us</a>.
+									</p>
+								</div>
 								: null }
 
 
