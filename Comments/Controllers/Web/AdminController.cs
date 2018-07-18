@@ -10,10 +10,12 @@ namespace Comments.Controllers.Web
 	public class AdminController : Controller
     {
 	    private readonly ISubmitService _submitService;
+	    private readonly IQuestionService _questionService;
 
-	    public AdminController(ISubmitService submitService)
+	    public AdminController(ISubmitService submitService, IQuestionService questionService)
 	    {
 		    _submitService = submitService;
+		    _questionService = questionService;
 	    }
 
 		/// <summary>
@@ -34,6 +36,22 @@ namespace Comments.Controllers.Web
 		    var rowCount = _submitService.DeleteAllSubmissionsFromUser(parsedGuid);
 
 		    return Content($"Row count deleted/updated: {rowCount}");
+	    }
+
+		/// <summary>
+		/// /consultations/admin/InsertQuestionsForDocument1And2InConsultation?consultationId=1
+		/// </summary>
+		/// <param name="consultationId"></param>
+		/// <returns></returns>
+		[Route("consultations/admin/InsertQuestionsForDocument1And2InConsultation")]
+	    public ActionResult InsertQuestionsForDocument1And2InThisConsultation(int consultationId)
+	    {
+		    if (consultationId < 1)
+			    throw new ArgumentException("invalid consultation id", nameof(consultationId));
+
+		    var rowCount = _questionService.InsertQuestionsForAdmin(consultationId);
+
+			return Content($"Row count deleted/updated: {rowCount}");
 	    }
 	}
 }

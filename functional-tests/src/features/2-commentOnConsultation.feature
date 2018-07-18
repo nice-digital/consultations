@@ -4,7 +4,7 @@
  		I want to be able to comment at the consultation level
 
  Background:
-    Given I open the url "1/1/introduction"
+    Given I open the url "158/3/introduction"
     And I refresh
  		When I log in to Accounts via TopHat with username "ACCOUNTS_EMAIL2" and password "ACCOUNTS_PASSWORD"
  		When I wait on element ".page-header" to exist
@@ -20,6 +20,7 @@
  		And I click on the button "[data-qa-sel='submit-button']"
  		And I pause for 1000ms
  		Then I expect that element "[data-qa-sel='Comment-text-area']" contains the text "This is a Consultation comment"
+		And I pause for 1000ms
  		Then I expect that element "[data-qa-sel='submit-button']" contains the text "Saved"
  		Then I click on the button "body [data-qa-sel='delete-comment-button']"
 
@@ -33,6 +34,7 @@
  		And I click on the button "[data-qa-sel='submit-button']"
  		And I pause for 1000ms
  		Then I expect that element "[data-qa-sel='Comment-text-area']" contains the text "This is a Document comment"
+		And I pause for 1000ms
  		Then I expect that element "[data-qa-sel='submit-button']" contains the text "Saved"
  		Then I click on the button "body [data-qa-sel='delete-comment-button']"
 
@@ -48,6 +50,7 @@
  		And I click on the button "[data-qa-sel='submit-button']"
  		And I pause for 1000ms
  		Then I expect that element "[data-qa-sel='Comment-text-area']" contains the text "This is a Chapter comment"
+		And I pause for 1000ms
  		Then I expect that element "[data-qa-sel='submit-button']" contains the text "Saved"
  		Then I click on the button "body [data-qa-sel='delete-comment-button']"
 
@@ -63,5 +66,23 @@
  		And I click on the button "[data-qa-sel='submit-button']"
  		And I pause for 1000ms
  		Then I expect that element "[data-qa-sel='Comment-text-area']" contains the text "This is a Section comment"
+		And I pause for 1000ms
+ 		Then I expect that element "[data-qa-sel='submit-button']" contains the text "Saved"
+ 		Then I click on the button "body [data-qa-sel='delete-comment-button']"
+
+	Scenario: User makes a comment at sub-section level
+ 		And I pause for 1000ms
+ 		When I click on the button "[data-qa-sel='nav-list-item']:nth-of-type(4)"
+ 		And I pause for 1000ms
+ 		When I click on the button ".section > [data-qa-sel='in-text-comment-button']"
+ 		And I pause for 1000ms
+ 		Then I wait on element "body [data-qa-sel='comment-box-title']" for 1000ms to exist
+		And I pause for 1000ms
+    Then I expect that element "[data-qa-sel='comment-box-title']" contains the text "subsection"
+ 		When I add "This is a Sub-section comment" to the inputfield "[data-qa-sel='Comment-text-area']"
+ 		And I click on the button "[data-qa-sel='submit-button']"
+ 		And I pause for 1000ms
+ 		Then I expect that element "[data-qa-sel='Comment-text-area']" contains the text "This is a Sub-section comment"
+		And I pause for 1000ms
  		Then I expect that element "[data-qa-sel='submit-button']" contains the text "Saved"
  		Then I click on the button "body [data-qa-sel='delete-comment-button']"

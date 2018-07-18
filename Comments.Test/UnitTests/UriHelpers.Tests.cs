@@ -15,7 +15,8 @@ namespace Comments.Test.UnitTests
         [InlineData("consultations://./consultation/1", null, null, CommentOn.Consultation)]
         [InlineData("consultations://./consultation/1/document/1/chapter/introduction", null, "css path to start of range", CommentOn.Selection)]
         [InlineData("consultations://./consultation/1/document/1/chapter/introduction", "sectionHtmlElementId", null, CommentOn.Section)]
-        public void GetCommentOnParsesCorrectly(string sourceUri, string htmlElementId, string rangeStart, CommentOn commentOn)
+        [InlineData("consultations://./consultation/1/document/1/chapter/introduction", "np-1.1.1", null, CommentOn.SubSection)]
+		public void GetCommentOnParsesCorrectly(string sourceUri, string htmlElementId, string rangeStart, CommentOn commentOn)
         {
             //Arrange + Act
             var commentOnString = CommentOnHelpers.GetCommentOn(sourceUri, rangeStart, htmlElementId);
@@ -45,7 +46,8 @@ namespace Comments.Test.UnitTests
         [InlineData("consultations://./consultation/1/document/1/chapter/introduction", CommentOn.Chapter, "consultations://./consultation/1/document/1/chapter/introduction")]
         [InlineData("consultations://./consultation/1/document/1/chapter/introduction", CommentOn.Section, "consultations://./consultation/1/document/1/chapter/introduction")]
         [InlineData("consultations://./consultation/1/document/1/chapter/introduction", CommentOn.Selection, "consultations://./consultation/1/document/1/chapter/introduction")]
-        public void ConvertToConsultationsUri(string relativeURL, CommentOn commentOn, string consultationsUri)
+        [InlineData("consultations://./consultation/1/document/1/chapter/introduction", CommentOn.SubSection, "consultations://./consultation/1/document/1/chapter/introduction")]
+		public void ConvertToConsultationsUri(string relativeURL, CommentOn commentOn, string consultationsUri)
         {
             //Arrange + Act
             var uri = ConsultationsUri.ConvertToConsultationsUri(relativeURL, commentOn);
