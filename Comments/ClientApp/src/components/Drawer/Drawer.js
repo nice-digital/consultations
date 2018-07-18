@@ -42,7 +42,8 @@ export class Drawer extends Component<PropsType, StateType> {
 	// This isn't called in this file - this is the method called from DocumentView
 	newComment(comment: Object) {
 		this.setState({
-			drawerOpen: true
+			drawerOpen: true,
+			commentsTabVisible: true
 		});
 		// and what we're calling is newComment from inside <CommentList />
 		// $FlowIgnore | this is bound by wrappedComponentRef in CommentListWithRouter
