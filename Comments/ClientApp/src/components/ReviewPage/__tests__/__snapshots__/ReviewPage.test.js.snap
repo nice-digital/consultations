@@ -126,24 +126,138 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
             onTouchStart={[Function]}
           >
             <div
-              data-g="12 md:6 md:push:3"
+              data-g="12 md:9 md:push:3"
             >
-              <h3
-                className="mt--0"
-                id="comments-column"
-              >
-                Comments
-              </h3>
               <div
-                data-qa-sel="comment-list-wrapper"
+                className="tabs"
+                data-tabs={true}
               >
-                <p>
-                  Loading...
-                </p>
+                <ul
+                  className="tabs__list"
+                  role="tablist"
+                >
+                  <li
+                    className="tabs__tab tabs__tab--active"
+                    role="presentation"
+                  >
+                    <button
+                      className="tabs__tab-btn"
+                      role="tab"
+                      type="button"
+                    >
+                      Questions
+                    </button>
+                  </li>
+                  <li
+                    className="tabs__tab "
+                    role="presentation"
+                  >
+                    <button
+                      className="tabs__tab-btn"
+                      role="tab"
+                      type="button"
+                    >
+                      Comments
+                    </button>
+                  </li>
+                  <li
+                    className="tabs__tab"
+                    role="presentation"
+                  >
+                    <button
+                      className="tabs__tab-btn"
+                      role="tab"
+                      type="button"
+                    >
+                      Submit
+                    </button>
+                  </li>
+                </ul>
+                <div
+                  className="tabs__content"
+                >
+                  <div
+                    className="tabs__pane"
+                    role="tabpanel"
+                  >
+                    <h3
+                      className="mt--0"
+                      id="comments-column"
+                    >
+                      Questions
+                    </h3>
+                    <div
+                      data-qa-sel="comment-list-wrapper"
+                    >
+                      <p>
+                        Loading...
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    className="tabs__pane"
+                    role="tabpanel"
+                  >
+                    <h3
+                      className="mt--0"
+                      id="comments-column"
+                    >
+                      Comments
+                    </h3>
+                    <div
+                      data-qa-sel="comment-list-wrapper"
+                    >
+                      <p>
+                        Loading...
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    className="tabs__pane"
+                    role="tabpanel"
+                  >
+                    <div
+                      className="hero"
+                    >
+                      <div
+                        className="hero__container"
+                      >
+                        <div
+                          className="hero__body"
+                        >
+                          <div
+                            className="hero__copy"
+                          >
+                            <p
+                              className="hero__intro"
+                            >
+                              You are about to submit your final response to NICE
+                            </p>
+                            <p>
+                              After submission you won't be able to:
+                            </p>
+                            <ul>
+                              <li>
+                                edit your comments further
+                              </li>
+                              <li>
+                                add any extra comments.
+                              </li>
+                            </ul>
+                            <p>
+                              Do you want to continue?
+                            </p>
+                            <undefined />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <div
-              data-g="12 md:3 md:pull:6"
+              data-g="12 md:3 md:pull:9"
             >
               <div>
                 <div />
@@ -258,18 +372,6 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                       </li>
                     </ul>
                   </nav>
-                </div>
-              </div>
-            </div>
-            <div
-              data-g="12 md:3"
-            >
-              <div>
-                <div />
-                <div
-                  style={Object {}}
-                >
-                  <undefined />
                 </div>
               </div>
             </div>
