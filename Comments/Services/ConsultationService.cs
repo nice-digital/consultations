@@ -85,7 +85,7 @@ namespace Comments.Services
 
 			if (locations == null && currentUser.IsAuthorised && currentUser.UserId.HasValue)
 		    {
-			    locations = _context.GetAllCommentsAndQuestionsForDocument(new[] { sourceURI }, isReview: true);
+			    locations = _context.GetAllCommentsAndQuestionsForDocument(new[] { sourceURI }, partialMatchSourceURI: true);
 		    }
 			else
 			{
