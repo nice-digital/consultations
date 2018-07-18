@@ -11,8 +11,8 @@ namespace Comments
 
 	public interface IEncryption
 	{
-		byte[] EncryptString(string stringToEncrypt, byte[] key, byte[] iv);
-		string DecryptString(byte[] stringToDecrypt, byte[] key, byte[] iv);
+		string EncryptString(string stringToEncrypt, byte[] key, byte[] iv);
+		string DecryptString(string stringToDecrypt, byte[] key, byte[] iv);
 		string ConvertByteArrayToString(byte[] cipherText);
 		Byte[] ConvertStringToByteArray(string text);
 	}
@@ -28,7 +28,7 @@ namespace Comments
 			_protector = provider.CreateProtector("Consultations.Encryption");
 		}
 
-	    public byte[] EncryptString(string plainText, byte[] key, byte[] iv)
+	    public string EncryptString(string plainText, byte[] key, byte[] iv)
 	    {
 		    byte[] encrypted;
 
@@ -60,11 +60,12 @@ namespace Comments
 		    }
 
 		    // Return the encrypted bytes from the memory stream.
-		    return encrypted;
+		    return ConvertByteArrayToString(encrypted);
 		}
 
-	    public string DecryptString(byte[] cipherText, byte[] key, byte[] iv)
+	    public string DecryptString(string cipherText, byte[] key, byte[] iv)
 	    {
+		    var cipherBytes = ConvertStringToByteArray(cipherText);
 			string plaintext = null;
 
 			using (Aes aesAlg = Aes.Create())
@@ -76,7 +77,7 @@ namespace Comments
 			    ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
 
 			    // Create the streams used for decryption.
-			    using (MemoryStream msDecrypt = new MemoryStream(cipherText))
+			    using (MemoryStream msDecrypt = new MemoryStream(cipherBytes))
 			    {
 				    using (CryptoStream csDecrypt = new CryptoStream(msDecrypt
 					    , decryptor, CryptoStreamMode.Read))

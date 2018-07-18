@@ -4,12 +4,12 @@ namespace Comments.Test.Infrastructure
 {
     public class FakeEncryption : IEncryption
     {
-	    public byte[] EncryptString(string stringToEncrypt, byte[] key, byte[] iv)
+	    public string EncryptString(string stringToEncrypt, byte[] key, byte[] iv)
 		{
 		    throw new NotImplementedException();
 	    }
 
-		public string DecryptString(byte[] stringToDecrypt, byte[] key, byte[] iv)
+		public string DecryptString(string stringToDecrypt, byte[] key, byte[] iv)
 		{
 		    throw new NotImplementedException();
 	    }
