@@ -101,7 +101,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			comments: [],
 			questions: [],
 			loading: true,
-			error: ""
+			error: "",
 			allowComments: true
 		};
 		let preloadedData = {};
