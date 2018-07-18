@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Security.Authentication;
 using Comments.Models;
 using Comments.ViewModels;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using SQLitePCL;
 
 namespace Comments.Services
 {
-    public interface IQuestionService
+	public interface IQuestionService
     {
         (ViewModels.Question question, Validate validate) GetQuestion(int questionId);
         (int rowsUpdated, Validate validate) EditQuestion(int questionId, ViewModels.Question question);
         (int rowsUpdated, Validate validate) DeleteQuestion(int questionId);
         (ViewModels.Question question, Validate validate) CreateQuestion(ViewModels.Question question);
+	    int InsertQuestionsForAdmin(int consultationId);
+
     }
     public class QuestionService : IQuestionService
     {
@@ -84,5 +80,13 @@ namespace Comments.Services
             
             return (question: new ViewModels.Question(locationToSave, questionToSave), validate: null);
         }
-    }
+
+	    public int InsertQuestionsForAdmin(int consultationId)
+	    {
+			if (!_currentUser.IsAuthorised)
+				throw new AuthenticationException();
+
+		    return _context.InsertQuestionsWithScript(consultationId);
+	    }
+	}
 }

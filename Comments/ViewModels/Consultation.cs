@@ -7,7 +7,7 @@ namespace Comments.ViewModels
 {
     public class Consultation
     {
-        public Consultation(NICE.Feeds.Models.Indev.List.ConsultationBase consultation, User user)
+        public Consultation(NICE.Feeds.Models.Indev.List.ConsultationBase consultation, User user, ConsultationState consultationState = null)
         {
             Reference = consultation.Reference;
             Title = consultation.Title;
@@ -21,13 +21,14 @@ namespace Comments.ViewModels
             RelevantTo = consultation.RelevantTo;
             ConsultationId = consultation.ConsultationId;
             Process = consultation.Process;
-            AllowConsultationComments = consultation.HasDocumentsWhichAllowConsultationComments;
+            //AllowConsultationComments = consultation.HasDocumentsWhichAllowConsultationComments;
 	        HasDocumentsWhichAllowConsultationQuestions = consultation.HasDocumentsWhichAllowConsultationQuestions;
 	        SupportsComments = consultation.SupportsComments;
 	        SupportsQuestions = consultation.SupportsQuestions;
 			PartiallyUpdatedProjectReference = consultation.PartiallyUpdatedProjectReference;
             OrigProjectReference = consultation.OrigProjectReference;
             User = user;
+	        ConsultationState = consultationState;
         }
 
         [JsonConstructor]
@@ -46,7 +47,7 @@ namespace Comments.ViewModels
             RelevantTo = relevantTo;
             ConsultationId = consultationId;
             Process = process;
-            AllowConsultationComments = allowConsultationComments;
+            //AllowConsultationComments = allowConsultationComments;
 	        HasDocumentsWhichAllowConsultationQuestions = allowConsultationQuestions;
 	        SupportsComments = supportsComments;
 	        SupportsQuestions = supportsQuestions;
@@ -68,7 +69,7 @@ namespace Comments.ViewModels
         public string RelevantTo { get; private set; }
         public int ConsultationId { get; private set; }
         public string Process { get; private set; }
-        public bool AllowConsultationComments { get; private set; }
+        //public bool AllowConsultationComments { get; private set; }
 	    public bool HasDocumentsWhichAllowConsultationComments { get; private set; }
 	    public bool HasDocumentsWhichAllowConsultationQuestions { get; private set; }
 	    public bool SupportsQuestions { get; private set; }
@@ -77,6 +78,8 @@ namespace Comments.ViewModels
         public string OrigProjectReference { get; private set; }
 
         public ViewModels.User User { get; private set; }
+
+		public ConsultationState ConsultationState { get; private set; }
     }
 
     public class ConsultationDetail : Consultation

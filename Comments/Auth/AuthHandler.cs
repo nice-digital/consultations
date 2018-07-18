@@ -27,8 +27,9 @@ namespace Comments.Auth
         /// </summary>
         private readonly List<Regex> _pathsToAuthenticate = new List<Regex>
         {
-            new Regex(@"^\/?consultations\/api\/.+$", RegexOptions.IgnoreCase),
-            new Regex(@"^\/?$")
+            new Regex(@"^\/?consultations\/api\/.+$", RegexOptions.IgnoreCase), //api path
+			new Regex(@"\/?index.html", RegexOptions.IgnoreCase), //SSR path on the server only.
+			new Regex(@"^\/?$") //root - only used on dev machines
         };
 
         public AuthHandler(IOptionsMonitor<AuthOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock, IHttpContextAccessor httpContextAccessor, IAuthenticateService authenticateService)
@@ -44,6 +45,7 @@ namespace Comments.Auth
             var httpContext = _httpContextAccessor.HttpContext;
             if (httpContext != null)
             {
+				//the problem with the below is that it doesn't work for the server-side render.
                 //var requestPath = httpContext.Request.Path.HasValue ? httpContext.Request.Path.Value : null;
                 //if (!ShouldAuthenticatePath(requestPath))
                 //    return Task.FromResult(AuthenticateResult.NoResult());

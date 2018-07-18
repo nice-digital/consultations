@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Data.Edm.Expressions;
@@ -31,7 +31,7 @@ namespace Comments.ViewModels
         public DateTime LastModifiedDate { get; set; }
 
         public ViewModels.QuestionType QuestionType { get; set; }
-        public IEnumerable<ViewModels.Answer>Answers { get; set; }
+        public IList<ViewModels.Answer> Answers { get; set; }
     }
 
     public class QuestionType
@@ -49,35 +49,5 @@ namespace Comments.ViewModels
         public bool HasBooleanAnswer { get; set; }
     }
 
-    public class Answer
-    {
-        public Answer() { } //only here for model binding. don't use it in code.
-        public Answer(int answerId, string answerText, bool answerBoolean, DateTime lastModifiedDate, Guid lastModifiedByUserId, int questionId)
-        {
-            AnswerId = answerId;
-            AnswerText = answerText;
-            AnswerBoolean = answerBoolean;
-            QuestionId = questionId;
-            LastModifiedDate = lastModifiedDate;
-            LastModifiedByUserId = lastModifiedByUserId;
-        }
-
-        public Answer(Models.Answer answer)
-        {
-            AnswerId = answer.AnswerId;
-            AnswerText = answer.AnswerText;
-            AnswerBoolean = answer.AnswerBoolean;
-            QuestionId = answer.QuestionId;
-            LastModifiedDate = answer.LastModifiedDate;
-            LastModifiedByUserId = answer.LastModifiedByUserId;
-        }
-
-        public int AnswerId { get; set; }
-        public string AnswerText { get; set; }
-        public bool? AnswerBoolean { get; set; }
-
-        public int QuestionId { get; set; }
-        public DateTime LastModifiedDate { get; set; }
-        public Guid LastModifiedByUserId { get; set; }
-    }
+    
 }

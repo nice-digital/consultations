@@ -1,14 +1,43 @@
 import React, { Component, Fragment } from "react";
 import Moment from "react-moment";
 
+type StatusType = {
+	statusId: number,
+	name: string
+};
+
+type CommentType = {
+	commentId: number,
+	lastModifiedDate: Date,
+	lastModifiedByUserId: string,
+	commentText: string,
+	locationId: number,
+	sourceURI: string,
+	htmlElementID: string,
+	rangeStart: string,
+	rangeStartOffset: string,
+	rangeEnd: string,
+	rangeEndOffset: string,
+	quote: string,
+	commentOn: string,
+	show: boolean,
+	status: StatusType
+};
+
 type PropsType = {
 	staticContext?: any,
-	isVisible: boolean
+	isVisible: boolean,
+	comment: CommentType,
+	readOnly: boolean,
+	saveHandler: Function,
+	deleteHandler: Function,
+	unique: string
 };
 
 type StateType = {
 	commentId: number,
-	commentText: string
+	commentText: string,
+	comment: CommentType
 };
 
 export class CommentBox extends Component<PropsType, StateType> {
@@ -64,6 +93,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 		const unsavedChanges = this.state.unsavedChanges;
 		const comment = this.state.comment;
 		const readOnly = this.props.readOnly;
+		const moment = require("moment");
 
 		return (
 
@@ -92,7 +122,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 					{lastModifiedDate ? (
 						<div className="CommentBox__datestamp mb--d font-weight-bold">
 							Last Modified:{" "}
-							<Moment format="D/M/YYYY - h:mma" date={lastModifiedDate}/>
+							<Moment format="D/M/YYYY - h:mma" date={moment.utc(lastModifiedDate).toDate()}/>
 						</div>
 					) : null}
 					<form onSubmit={e => this.props.saveHandler(e, comment)}>

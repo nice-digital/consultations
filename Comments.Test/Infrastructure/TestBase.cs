@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using Comments.Services;
+using Comments.ViewModels;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
@@ -17,6 +19,12 @@ using NICE.Feeds;
 using NICE.Feeds.Configuration;
 using NICE.Feeds.Tests.Infrastructure;
 using Microsoft.Data.Sqlite;
+using Answer = Comments.Models.Answer;
+using Comment = Comments.Models.Comment;
+using Location = Comments.Models.Location;
+using Question = Comments.Models.Question;
+using QuestionType = Comments.Models.QuestionType;
+using Status = Comments.Models.Status;
 
 namespace Comments.Test.Infrastructure
 {
@@ -36,16 +44,18 @@ namespace Comments.Test.Infrastructure
         protected readonly IUserService _fakeUserService;
         protected readonly IHttpContextAccessor _fakeHttpContextAccessor;
 
-
+	    protected readonly IConsultationService _consultationService;
         protected readonly DbContextOptionsBuilder<ConsultationsContext> _contextOptions;
 
         protected readonly ConsultationsContext _context;
+	    protected readonly bool _useRealSubmitService = false;
 
-        public TestBase(Feed feed) : this()
+		public TestBase(Feed feed) : this()
         {
             FeedToUse = feed;
             _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
-        }
+	        _consultationService = new FakeConsultationService();
+		}
         public TestBase(Feed feed, bool authenticated, Guid userId, string displayName = null) : this()
         {
             FeedToUse = feed;
@@ -53,7 +63,8 @@ namespace Comments.Test.Infrastructure
             _displayName = displayName;
             _userId = Guid.Empty;
             _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
-        }
+	        _consultationService = new FakeConsultationService();
+		}
 
 	    public TestBase(bool authenticated, Guid? userId = null, string displayName = null) : this()
 	    {
@@ -63,12 +74,15 @@ namespace Comments.Test.Infrastructure
 		    _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
 		}
 
-		public TestBase()
+
+		public TestBase(bool useRealSubmitService = false)
         {
             // Arrange
             _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
             _fakeHttpContextAccessor = FakeHttpContextAccessor.Get(_authenticated, _displayName, _userId);
-            var databaseName = DatabaseName + Guid.NewGuid();
+	        _consultationService = new FakeConsultationService();
+	        _useRealSubmitService = useRealSubmitService;
+			var databaseName = DatabaseName + Guid.NewGuid();
 
             //SQLiteConnectionStringBuilder sqLiteConnectionStringBuilder = new SQLiteConnectionStringBuilder()
             //{	       
@@ -76,19 +90,20 @@ namespace Comments.Test.Infrastructure
             //};
 
         // var connection = new SqliteConnection(sqLiteConnectionStringBuilder.ConnectionString); //"Data Source=" + DatabaseName + ";"); //"BinaryGuid=False"); //Version=3;
-        var connection = new SqliteConnection("DataSource=:memory:");
+        //var connection = new SqliteConnection("DataSource=:memory:");
 
-            connection.Open();
+        //    connection.Open();
 
             _options = new DbContextOptionsBuilder<ConsultationsContext>()
-                    .UseSqlite(connection)
-                    //.UseInMemoryDatabase(databaseName)
+                    //.UseSqlite(connection)
+                    .UseInMemoryDatabase(databaseName)
                     .Options;
 
             _context = new ConsultationsContext(_options, _fakeUserService);
             _context.Database.EnsureCreatedAsync();
+			
 
-            var builder = new WebHostBuilder()
+			var builder = new WebHostBuilder()
                 .UseContentRoot("../../../../Comments")
                 .ConfigureServices(services =>
                 {
@@ -100,6 +115,14 @@ namespace Comments.Test.Infrastructure
                     services.TryAddSingleton<IHttpContextAccessor>(provider => _fakeHttpContextAccessor);
                     services.TryAddTransient<IUserService>(provider => _fakeUserService);
                     services.TryAddTransient<IFeedReaderService>(provider => new FeedReader(FeedToUse));
+	                if (_useRealSubmitService)
+	                {
+						//services.TryAddTransient<IConsultationService>(provider => new FakeConsultationService(true));
+					}
+	                else
+					{
+		                services.TryAddTransient<ISubmitService>(provider => new FakeSubmitService());
+					}
                 })
                 .Configure(app =>
                 {
@@ -139,9 +162,11 @@ namespace Comments.Test.Infrastructure
             using (var context = new ConsultationsContext(_options, _fakeUserService))
             {
                 context.Database.EnsureDeleted();
-                //context.Database.CloseConnection();
-                //context.Database.OpenConnection();
-            }
+				//context.Database.CloseConnection();
+				//context.Database.OpenConnection();
+
+				//context.Status.AddRange(new List<Status>(2){ new Status("Draft", null, null), new Status("Submitted", null, null)});
+			}
         }
 
         protected void ResetDatabase(IUserService userService)
@@ -149,9 +174,10 @@ namespace Comments.Test.Infrastructure
             using (var context = new ConsultationsContext(_options, userService))
             {
                 context.Database.EnsureDeleted();
-                //context.Database.CloseConnection();
-                //context.Database.OpenConnection();
-            }
+				//context.Database.CloseConnection();
+				//context.Database.OpenConnection();
+				//context.Status.AddRange(new List<Status>(2) { new Status("Draft", null, null), new Status("Submitted", null, null) });
+			}
         }
         protected int AddLocation(string sourceURI, ConsultationsContext passedInContext = null)
         {
@@ -172,9 +198,29 @@ namespace Comments.Test.Infrastructure
 
             return location.LocationId;
         }
-        protected int AddComment(int locationId, string commentText, bool isDeleted, Guid createdByUserId, ConsultationsContext passedInContext = null)
+
+	    protected int AddStatus(string statusName, int statusIdId = (int)StatusName.Draft, ConsultationsContext passedInContext = null)
+	    {
+		    var statusModel = new Models.Status("Draft", null, null);
+			if (passedInContext != null)
+		    {
+				passedInContext.Status.Add(statusModel);
+				passedInContext.SaveChanges();
+		    }
+		    else
+		    {
+			    using (var context = new ConsultationsContext(_options, _fakeUserService))
+			    {
+					context.Status.Add(statusModel);
+					context.SaveChanges();
+			    }
+		    }
+
+		    return statusModel.StatusId;
+	    }
+		protected int AddComment(int locationId, string commentText, bool isDeleted, Guid createdByUserId, int status = (int)StatusName.Draft, ConsultationsContext passedInContext = null)
         {
-            var comment = new Comment(locationId, createdByUserId, commentText, Guid.Empty, location: null);
+            var comment = new Comment(locationId, createdByUserId, commentText, Guid.Empty, location: null, statusId: status, status: null);
             comment.IsDeleted = isDeleted;
             if (passedInContext != null)
             {
@@ -230,9 +276,9 @@ namespace Comments.Test.Infrastructure
 
             return question.QuestionId;
         }
-        protected int AddAnswer(int questionId, Guid userId, string answerText, ConsultationsContext passedInContext = null)
+        protected int AddAnswer(int questionId, Guid userId, string answerText, int status = (int)StatusName.Draft, ConsultationsContext passedInContext = null)
         {
-            var answer = new Answer(questionId, userId, answerText, null, null);
+            var answer = new Answer(questionId, userId, answerText, null, null, status, null);
             answer.LastModifiedDate = DateTime.Now;
             if (passedInContext != null)
             {
@@ -250,13 +296,13 @@ namespace Comments.Test.Infrastructure
             
             return answer.AnswerId;
         }
-        protected void AddCommentsAndQuestionsAndAnswers(string sourceURI, string commentText, string questionText, string answerText, Guid createdByUserId, ConsultationsContext passedInContext = null)
+        protected void AddCommentsAndQuestionsAndAnswers(string sourceURI, string commentText, string questionText, string answerText, Guid createdByUserId, int status = (int)StatusName.Draft, ConsultationsContext passedInContext = null)
         {
             var locationId = AddLocation(sourceURI, passedInContext);
             AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId, passedInContext: passedInContext);
             var questionTypeId = AddQuestionType(description: "text", hasBooleanAnswer: false, hasTextAnswer: true, passedInContext: passedInContext);
             var questionId = AddQuestion(locationId, questionTypeId, questionText, passedInContext);
-            AddAnswer(questionId, createdByUserId, answerText, passedInContext);
+            AddAnswer(questionId, createdByUserId, answerText, status, passedInContext);
         }
 
         protected void SetupTestDataInDB()
@@ -266,15 +312,87 @@ namespace Comments.Test.Infrastructure
             var commentText = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
             var userId = Guid.NewGuid();
-
-            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId); //Add records for Foreign key constraints
+	        
+			AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId); //Add records for Foreign key constraints
         }
 
-        #endregion database stuff
+	    protected void AddSubmittedCommentsAndAnswers(string sourceURI, string commentText, string questionText, string answerText, Guid createdByUserId, ConsultationsContext passedInContext = null)
+	    {
+		    var locationId = AddLocation(sourceURI, passedInContext);
+		    var commentId = AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId, status: (int)StatusName.Submitted, passedInContext: passedInContext);
+		    var questionTypeId = AddQuestionType(description: "text", hasBooleanAnswer: false, hasTextAnswer: true, passedInContext: passedInContext);
+		    var questionId = AddQuestion(locationId, questionTypeId, questionText, passedInContext);
+		    var answerId = AddAnswer(questionId, createdByUserId, answerText, (int)StatusName.Submitted, passedInContext);
+			var submissionId = AddSubmission(createdByUserId, passedInContext);
+		    AddSubmissionComments(submissionId, commentId, passedInContext);
+		    AddSubmissionAnswers(submissionId, answerId, passedInContext);
+	    }
 
-        #region Helpers
+	    protected int AddSubmission(Guid userId, ConsultationsContext passedInContext = null)
+	    {
+			var submission = new Submission(userId, DateTime.Now);
+			if (passedInContext != null)
+			{
+				passedInContext.Submission.Add(submission);
+				passedInContext.SaveChanges();
+			}
+			else
+			{
+				using (var context = new ConsultationsContext(_options, _fakeUserService))
+				{
+					context.Submission.Add(submission);
+					context.SaveChanges();
+				}
+			}
 
-        protected int RandomNumber()
+			return submission.SubmissionId;
+		}
+
+	    protected int AddSubmissionComments(int submissionId, int commentId, ConsultationsContext passedInContext = null)
+	    {
+		    var submissionComment = new SubmissionComment(submissionId, commentId);
+		    if (passedInContext != null)
+		    {
+			    passedInContext.SubmissionComment.Add(submissionComment);
+			    passedInContext.SaveChanges();
+		    }
+		    else
+		    {
+			    using (var context = new ConsultationsContext(_options, _fakeUserService))
+			    {
+				    context.SubmissionComment.Add(submissionComment);
+				    context.SaveChanges();
+			    }
+		    }
+
+		    return submissionComment.SubmissionCommentId;
+	    }
+
+	    protected int AddSubmissionAnswers(int submissionId, int answerId, ConsultationsContext passedInContext = null)
+	    {
+		    var submissionAnswer = new SubmissionAnswer(submissionId, answerId);
+		    if (passedInContext != null)
+		    {
+			    passedInContext.SubmissionAnswer.Add(submissionAnswer);
+			    passedInContext.SaveChanges();
+		    }
+		    else
+		    {
+			    using (var context = new ConsultationsContext(_options, _fakeUserService))
+			    {
+				    context.SubmissionAnswer.Add(submissionAnswer);
+				    context.SaveChanges();
+			    }
+		    }
+
+		    return submissionAnswer.SubmissionAnswerId;
+	    }
+
+		#endregion database stuff
+
+		#region Helpers
+
+		protected int RandomNumber()
         {
             var rnd = new Random();
             return rnd.Next(1, int.MaxValue);

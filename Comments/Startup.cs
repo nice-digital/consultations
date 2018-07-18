@@ -66,9 +66,10 @@ namespace Comments
             services.TryAddTransient<IFeedService, FeedService>();
             services.TryAddTransient<IAnswerService, AnswerService>();
             services.TryAddTransient<IQuestionService, QuestionService>();
-            
-            // Add authentication 
-            services.AddAuthentication(options =>
+	        services.TryAddTransient<ISubmitService, SubmitService>();
+
+			// Add authentication 
+			services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = AuthOptions.DefaultScheme;
                 options.DefaultChallengeScheme = AuthOptions.DefaultScheme;
@@ -76,8 +77,7 @@ namespace Comments
             .AddNICEAuth(options =>
             {
                 // todo: Configure options here from AppSettings
-            })
-			.AddCookie();
+            });
 
             services.AddMvc(options =>
             {
@@ -247,17 +247,17 @@ namespace Comments
                 }
             });
 
-			try
-			{
-				using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-				{
-					serviceScope.ServiceProvider.GetService<ConsultationsContext>().Database.Migrate();
-				}
-			}
-			catch (Exception ex)
-			{
-				startupLogger.LogError(String.Format("EF Migrations Error: {0}", ex));
-			}
+            //try
+            //{
+            //    using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            //    {
+            //         serviceScope.ServiceProvider.GetService<ConsultationsContext>().Database.Migrate();
+            //    }
+            //}
+            //catch(Exception ex)
+            //{
+            //    startupLogger.LogError(String.Format("EF Migrations Error: {0}", ex));
+            //}
 		}
     }
 }

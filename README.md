@@ -139,6 +139,17 @@ The project uses serveral layers of tests:
 - JavaScript unit tests via jest. See [Comments/ClientApp/src](Comments/ClientApp/src).
 - Functional high-level tests, via webdriver.io.
 
+## Entity Framework Migrations
+We use Code first Entity Framework migrations to update the consultations database  
+
+To update the database   
+ - add a new property to the relevent class in Consultations > Comments > Models > EF
+ - in visual studio go to Tools > NuGet Package Manager > Package Manager Console
+ - in the package manager console window run the command Add-Migration [give your migration a useful name] eg Add-Migration AddCommentCreationDate  
+	This will create a new migrations script in Consultations > Comments > Migrations
+ - when the comment collection is next hit the changes in the migration script will be applied to SQL.   
+ 	A new column will be created in __EFMigrationHistory to flag that the migration has been run.
+
 ## Good to know
 
 ### Environments

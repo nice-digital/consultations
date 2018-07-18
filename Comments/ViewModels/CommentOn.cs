@@ -1,4 +1,4 @@
-﻿using Comments.Common;
+using Comments.Common;
 using System;
 using Comments.Models;
 
@@ -10,7 +10,8 @@ namespace Comments.ViewModels
         Document,
         Chapter,
         Section, //aka html element id..?
-        Selection
+        Selection,
+		SubSection //aka numbered-paragraphs, html element id np-xxxx
     }
 
     public static class CommentOnHelpers
@@ -42,10 +43,12 @@ namespace Comments.ViewModels
                     return CommentOn.Selection;
 
                 if (!string.IsNullOrWhiteSpace(htmlElementId))
-                    return CommentOn.Section;
-
+		            if (htmlElementId.IndexOf("np-") == 0)
+			            return CommentOn.SubSection;
+		            else
+						return CommentOn.Section;
+					
                 return CommentOn.Chapter;
-
             }
 
             if (consultationsUriParts.IsDocumentLevel())
