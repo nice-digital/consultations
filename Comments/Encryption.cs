@@ -1,10 +1,7 @@
 using System;
 using System.IO;
 using System.Security.Cryptography;
-using System.Text;
-using Comments.Configuration;
 using Microsoft.AspNetCore.DataProtection;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Comments
 {
@@ -13,24 +10,25 @@ namespace Comments
 	{
 		string EncryptString(string stringToEncrypt, byte[] key, byte[] iv);
 		string DecryptString(string stringToDecrypt, byte[] key, byte[] iv);
-		string ConvertByteArrayToString(byte[] cipherText);
-		Byte[] ConvertStringToByteArray(string text);
 	}
 
     public class Encryption : IEncryption
     {
-	    readonly IDataProtector _protector;
-		private byte[] _mykey = new byte[16];
-	    private byte[] _myIV = new byte[16];
-
 		public Encryption(IDataProtectionProvider provider)
 		{
-			_protector = provider.CreateProtector("Consultations.Encryption");
 		}
 
 	    public string EncryptString(string plainText, byte[] key, byte[] iv)
 	    {
-		    byte[] encrypted;
+		    // Check arguments.
+		    if (plainText == null || plainText.Length <= 0)
+			    throw new ArgumentNullException("plainText");
+		    if (key == null || key.Length <= 0)
+			    throw new ArgumentNullException("Key");
+		    if (iv == null || iv.Length <= 0)
+			    throw new ArgumentNullException("IV");
+
+			byte[] encrypted;
 
 		    using (Aes aesAlg = Aes.Create())
 		    {
@@ -38,34 +36,38 @@ namespace Comments
 			    aesAlg.IV = iv;
 
 			    // Create a decrytor to perform the stream transform.
-			    ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key
-				    , aesAlg.IV);
+			    ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
 
 			    // Create the streams used for encryption.
-			    using (MemoryStream msEncrypt = new MemoryStream())
+			    using (MemoryStream memoryStream = new MemoryStream())
 			    {
-				    using (CryptoStream csEncrypt = new CryptoStream(msEncrypt
-					    , encryptor, CryptoStreamMode.Write))
+				    using (CryptoStream cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
 				    {
-					    using (StreamWriter swEncrypt = new StreamWriter(
-						    csEncrypt))
+					    using (StreamWriter streamWriter = new StreamWriter(cryptoStream))
 					    {
-
 						    //Write all data to the stream.
-						    swEncrypt.Write(plainText);
+						    streamWriter.Write(plainText);
 					    }
-					    encrypted = msEncrypt.ToArray();
+					    encrypted = memoryStream.ToArray();
 				    }
 			    }
 		    }
 
 		    // Return the encrypted bytes from the memory stream.
-		    return ConvertByteArrayToString(encrypted);
+		    return Convert.ToBase64String(encrypted);
 		}
 
 	    public string DecryptString(string cipherText, byte[] key, byte[] iv)
 	    {
-		    var cipherBytes = ConvertStringToByteArray(cipherText);
+		    // Check arguments.
+		    if (cipherText == null || cipherText.Length <= 0)
+			    throw new ArgumentNullException("cipherText");
+		    if (key == null || key.Length <= 0)
+			    throw new ArgumentNullException("Key");
+		    if (iv == null || iv.Length <= 0)
+			    throw new ArgumentNullException("IV");
+
+			var cipherBytes = Convert.FromBase64String(cipherText);
 			string plaintext = null;
 
 			using (Aes aesAlg = Aes.Create())
@@ -77,16 +79,14 @@ namespace Comments
 			    ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
 
 			    // Create the streams used for decryption.
-			    using (MemoryStream msDecrypt = new MemoryStream(cipherBytes))
+			    using (MemoryStream memoryStream = new MemoryStream(cipherBytes))
 			    {
-				    using (CryptoStream csDecrypt = new CryptoStream(msDecrypt
-					    , decryptor, CryptoStreamMode.Read))
+				    using (CryptoStream cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
 				    {
-					    using (StreamReader srDecrypt = new StreamReader(csDecrypt))
+					    using (StreamReader streamReader = new StreamReader(cryptoStream))
 					    {
-						    // Read the decrypted bytes from the decrypting stream
-							// and place them in a string.
-							plaintext = srDecrypt.ReadToEnd();
+						    // Read the decrypted bytes from the decrypting stream and place them in a string.
+							plaintext = streamReader.ReadToEnd();
 					    }
 				    }
 			    }
@@ -94,17 +94,5 @@ namespace Comments
 
 		    return plaintext;
 		}
-
-	    public string ConvertByteArrayToString(byte[] cipherText)
-	    {
-		    var convertedString = Convert.ToBase64String(cipherText);
-			return convertedString;
-	    }
-
-	    public Byte[] ConvertStringToByteArray(string text)
-	    {
-		    var convertedBytes = Convert.FromBase64String(text);
-		    return convertedBytes;
-	    }
 	}
 }

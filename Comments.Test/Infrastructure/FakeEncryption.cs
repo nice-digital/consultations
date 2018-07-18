@@ -13,15 +13,5 @@ namespace Comments.Test.Infrastructure
 		{
 		    throw new NotImplementedException();
 	    }
-
-	    public string ConvertByteArrayToString(byte[] cipherText)
-	    {
-			throw new NotImplementedException();
-		}
-
-	    public Byte[] ConvertStringToByteArray(string text)
-	    {
-			throw new NotImplementedException();
-		}
 	}
 }
