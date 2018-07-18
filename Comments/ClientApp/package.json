@@ -52,8 +52,8 @@
     "xpath-range": "0.0.5"
   },
   "devDependencies": {
-    "@nice-digital/design-system": "^0.4.3",
     "@nice-digital/browserslist-config": "^1.0.0",
+    "@nice-digital/design-system": "^0.4.3",
     "@nice-digital/eslint-config": "^1.0.2",
     "@nice-digital/icons": "^1.4.3",
     "axios-mock-adapter": "^1.15.0",
