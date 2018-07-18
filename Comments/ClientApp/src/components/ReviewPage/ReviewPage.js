@@ -19,6 +19,20 @@ type DocumentType = {
 	convertedDocument: boolean
 };
 
+type ConsultationStateType = {
+	consultationIsOpen: boolean,
+	hasQuestions: boolean,
+	consultationHasEnded: boolean,
+	hasUserSuppliedAnswers: boolean,
+	hasUserSuppliedComments: boolean
+};
+
+type ConsultationDataType = {
+	consultationState: ConsultationStateType,
+	supportsComments: boolean,
+	supportsQuestions: boolean
+};
+
 type PropsType = {
 	location: {
 		pathname: string,
@@ -28,10 +42,12 @@ type PropsType = {
 
 type StateType = {
 	documentsList: Array<any>,
-	consultationData: any,
+	consultationData: ConsultationDataType,
 	userHasSubmitted: boolean,
 	validToSubmit: false,
-	viewSubmittedComments: boolean
+	viewSubmittedComments: boolean,
+	shouldShowCommentsTab: boolean,
+	shouldShowQuestionsTab: boolean
 };
 
 export class ReviewPage extends Component<PropsType, StateType> {
@@ -43,7 +59,9 @@ export class ReviewPage extends Component<PropsType, StateType> {
 			consultationData: null,
 			userHasSubmitted: false,
 			viewSubmittedComments: false,
-			validToSubmit: false
+			validToSubmit: false,
+			shouldShowCommentsTab: true,
+			shouldShowQuestionsTab: true
 		};
 	}
 
@@ -94,11 +112,18 @@ export class ReviewPage extends Component<PropsType, StateType> {
 		this.gatherData()
 			.then(data => {
 
-				//console.log(`data: ${stringifyObject(data.consultationData.consultationState.supportsSubmission)}`);
+				const shouldShowCommentsTab = (	data.consultationData.supportsComments || 
+												data.consultationData.consultationState.hasUserSuppliedComments);
+
+				const shouldShowQuestionsTab = (	data.consultationData.consultationState.hasQuestions || 
+													data.consultationData.consultationState.hasUserSuppliedAnswers);
+
 				this.setState({
 					...data,
 					userHasSubmitted: data.consultationData.consultationState.userHasSubmitted,
-					validToSubmit: data.consultationData.consultationState.supportsSubmission
+					validToSubmit: data.consultationData.consultationState.supportsSubmission,
+					shouldShowCommentsTab,
+					shouldShowQuestionsTab
 				});
 			})
 			.catch(err => {
@@ -142,15 +167,16 @@ export class ReviewPage extends Component<PropsType, StateType> {
 
 	submitConsultation = () => {
 		const comments = this.commentList.getComments();
-		const questions = this.questionList.getQuestions();
-
 		let answersToSubmit = [];
-		questions.forEach(function(question){
-			if (question.answers != null){
-				answersToSubmit = answersToSubmit.concat(question.answers);
-			}			
-		});
 
+		if (typeof(this.questionList) !== "undefined"){
+			const questions = this.questionList.getQuestions();		
+			questions.forEach(function(question){
+				if (question.answers != null){
+					answersToSubmit = answersToSubmit.concat(question.answers);
+				}			
+			});
+		}
 		let commentsAndAnswers = {comments: comments, answers: answersToSubmit};
 
 		load("submit", undefined, [], {}, "POST", commentsAndAnswers, true)
@@ -165,7 +191,6 @@ export class ReviewPage extends Component<PropsType, StateType> {
 	};
 
 	submittedHandler = () => {
-		console.log('submitted handler in reviewpage');
 		this.setState({
 			userHasSubmitted: true,
 			validToSubmit: false,
@@ -178,20 +203,22 @@ export class ReviewPage extends Component<PropsType, StateType> {
 	//(plus there's the whole unsaved changes to deal with. what happens there?)
 	validationHander = () => {
 		const comments = this.commentList.getComments();
-		const questions = this.questionList.getQuestions();
 		let hasAnswers = false;
-		questions.forEach(function(question){
-			if (question.answers !== null && question.answers.length > 0){
-				hasAnswers = true;
-			}
-		});
+		if (typeof(this.questionList) !== "undefined"){
+			const questions = this.questionList.getQuestions();
+			
+			questions.forEach(function(question){
+				if (question.answers !== null && question.answers.length > 0){
+					hasAnswers = true;
+				}
+			});
+		}
 		this.setState({
 			validToSubmit: comments.length > 0 || hasAnswers
 		});
 	}
 
 	viewSubmittedCommentsHandler = () => {
-		console.log('viewSubmittedCommentsHandler in reviewpage');
 		this.setState({
 			viewSubmittedComments: true
 		});
@@ -200,6 +227,10 @@ export class ReviewPage extends Component<PropsType, StateType> {
 	render() {
 		if (this.state.documentsList.length === 0) return <h1>Loading...</h1>;
 		const { title, reference, endDate } = this.state.consultationData;
+
+		if (!this.state.shouldShowQuestionsTab && !this.state.shouldShowCommentsTab){
+			return null; //shouldn't really be able to get here.
+		}
 
 		return (
 			<Fragment>
@@ -238,16 +269,20 @@ export class ReviewPage extends Component<PropsType, StateType> {
 											<div data-g="12 md:9 md:push:3">												
 												<div className="tabs" data-tabs>
 													<ul className="tabs__list" role="tablist">
-														<li className={`tabs__tab ${this.props.viewComments ? "" : "tabs__tab--active"}`} role="presentation">
-															<button className="tabs__tab-btn" type="button" role="tab">
-																Questions
-															</button>
-														</li>
-														<li className={`tabs__tab ${this.props.viewComments ? "tabs__tab--active" : ""}`} role="presentation">
-															<button className="tabs__tab-btn" type="button" role="tab">
-																Comments
-															</button>
-														</li>
+														{this.state.shouldShowQuestionsTab &&
+															<li className={`tabs__tab ${this.props.viewComments ? "" : "tabs__tab--active"}`} role="presentation">
+																<button className="tabs__tab-btn" type="button" role="tab">
+																	Questions
+																</button>
+															</li>
+														}
+														{this.state.shouldShowCommentsTab &&
+															<li className={`tabs__tab ${this.props.viewComments ? "tabs__tab--active" : ""}`} role="presentation">
+																<button className="tabs__tab-btn" type="button" role="tab">
+																	Comments
+																</button>
+															</li>
+														}
 														<li className="tabs__tab" role="presentation">
 															<button className="tabs__tab-btn" type="button" role="tab">
 																Submit
@@ -255,28 +290,32 @@ export class ReviewPage extends Component<PropsType, StateType> {
 														</li>
 													</ul>
 													<div className="tabs__content">
-														<div className="tabs__pane" role="tabpanel">
-															<h3 className="mt--0" id="comments-column">Questions</h3>
-															<CommentListWithRouter
-																isReviewPage={true}
-																isVisible={true}
-																isSubmitted={this.state.userHasSubmitted}
-																wrappedComponentRef={component => (this.questionList = component)}
-																submittedHandler={this.submittedHandler}
-																validationHander={this.validationHander}
-																viewComments={false}/>
-														</div>
-														<div className="tabs__pane" role="tabpanel">
-															<h3 className="mt--0" id="comments-column">Comments</h3>
-															<CommentListWithRouter
-																isReviewPage={true}
-																isVisible={true}
-																isSubmitted={this.state.userHasSubmitted}
-																wrappedComponentRef={component => (this.commentList = component)}
-																submittedHandler={this.submittedHandler}
-																validationHander={this.validationHander}
-																viewComments={true}/>
-														</div>
+														{this.state.shouldShowQuestionsTab &&
+															<div className="tabs__pane" role="tabpanel">
+																<h3 className="mt--0" id="comments-column">Questions</h3>
+																<CommentListWithRouter
+																	isReviewPage={true}
+																	isVisible={true}
+																	isSubmitted={this.state.userHasSubmitted}
+																	wrappedComponentRef={component => (this.questionList = component)}
+																	submittedHandler={this.submittedHandler}
+																	validationHander={this.validationHander}
+																	viewComments={false}/>
+															</div>
+														}
+														{this.state.shouldShowCommentsTab &&
+															<div className="tabs__pane" role="tabpanel">
+																<h3 className="mt--0" id="comments-column">Comments</h3>
+																<CommentListWithRouter
+																	isReviewPage={true}
+																	isVisible={true}
+																	isSubmitted={this.state.userHasSubmitted}
+																	wrappedComponentRef={component => (this.commentList = component)}
+																	submittedHandler={this.submittedHandler}
+																	validationHander={this.validationHander}
+																	viewComments={true}/>
+															</div>
+														}
 														<div className="tabs__pane" role="tabpanel">
 															{this.state.userHasSubmitted ?
 																<div className="hero">
