@@ -169,6 +169,8 @@ namespace Comments.Test.Infrastructure
                 IndevPublishedDetailFeedPath = "consultation-comments/{0}",
                 IndevListFeedPath = "consultation-comments-list"
             };
+
+			
         }
 
         #region database stuff

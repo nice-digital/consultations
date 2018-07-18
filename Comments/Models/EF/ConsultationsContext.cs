@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Text;
 using Comments.Configuration;
 using Comments.Services;
 using Microsoft.EntityFrameworkCore;
@@ -37,8 +38,8 @@ namespace Comments.Models
 
 				entity.Property(e => e.AnswerText)
 					.HasConversion(
-						v => _encryption.EncryptString(v),
-						v => _encryption.DecryptString(v));
+						v => _encryption.EncryptString(v, Encoding.ASCII.GetBytes(AppSettings.EncryptionConfig.Key), Encoding.ASCII.GetBytes(AppSettings.EncryptionConfig.IV)),
+						v => _encryption.DecryptString(v, Encoding.ASCII.GetBytes(AppSettings.EncryptionConfig.Key), Encoding.ASCII.GetBytes(AppSettings.EncryptionConfig.IV)));
 
 				entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
 
@@ -79,8 +80,8 @@ namespace Comments.Models
 				
 				entity.Property(e => e.CommentText)
 					.HasConversion(
-						v => _encryption.EncryptString(v),
-						v => _encryption.DecryptString(v))
+						v => _encryption.EncryptString(v, Encoding.ASCII.GetBytes(AppSettings.EncryptionConfig.Key), Encoding.ASCII.GetBytes(AppSettings.EncryptionConfig.IV)),
+						v => _encryption.DecryptString(v, Encoding.ASCII.GetBytes(AppSettings.EncryptionConfig.Key), Encoding.ASCII.GetBytes(AppSettings.EncryptionConfig.IV)))
 					.IsRequired();
 
 				entity.Property(e => e.CreatedByUserId).HasColumnName("CreatedByUserID");

@@ -13,6 +13,7 @@ using System;
 using System.IO;
 using Comments.Auth;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
@@ -68,10 +69,8 @@ namespace Comments
             services.TryAddTransient<IQuestionService, QuestionService>();
 	        services.TryAddTransient<ISubmitService, SubmitService>();
 
-			services.AddDataProtection()
-				.SetApplicationName("Consultations")
-				.PersistKeysToFileSystem(new DirectoryInfo(@"c:\temp-keys\"))
-				.ProtectKeysWithDpapi();
+	        services.AddDataProtection()
+		        .SetApplicationName("Consultations");
 
 			var serviceProvider = services.BuildServiceProvider();
 			services.TryAddSingleton<IEncryption>(provider => ActivatorUtilities.CreateInstance<Encryption>(serviceProvider));

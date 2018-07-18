@@ -12,18 +12,22 @@ namespace Comments.Configuration
         public static EnvironmentConfig Environment { get; private set; }
         public static FeedConfig Feed { get; private set; }
         public static GilliamConfig GilliamConfig { get; private set; }
+		public static EncryptionConfig EncryptionConfig { get; private set; }
 
         public static void Configure(IServiceCollection services, IConfiguration configuration, string contentRootPath)
         {
             services.Configure<EnvironmentConfig>(configuration.GetSection("AppSettings:Environment"));
             services.Configure<FeedConfig>(configuration.GetSection("Feeds")); 
             services.Configure<GilliamConfig>(configuration.GetSection("Gilliam"));
+	        services.Configure<EncryptionConfig>(configuration.GetSection("Encryption"));
 
             var sp = services.BuildServiceProvider();
             Environment = sp.GetService<IOptions<EnvironmentConfig>>().Value;
             Feed = sp.GetService<IOptions<FeedConfig>>().Value;
             GilliamConfig = sp.GetService<IOptions<GilliamConfig>>().Value;
             GilliamConfig.ContentRootPath = contentRootPath;
-		}
+	        EncryptionConfig = sp.GetService<IOptions<EncryptionConfig>>().Value;
+
+        }
     }
 }
