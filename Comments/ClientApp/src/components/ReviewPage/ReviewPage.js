@@ -173,12 +173,20 @@ export class ReviewPage extends Component<PropsType, StateType> {
 		});
 	}
 
-	//this validation handler code is going to have to get a bit more advance when questions are introduced, as it'll be possible
+	//this validation handler code is going to have to get a bit more advanced when questions are introduced, as it'll be possible
 	//to answer a question on the review page and the submit button should then enable - if the consultation is open + hasn't already been submitted + all the mandatory questions are answered.
 	//(plus there's the whole unsaved changes to deal with. what happens there?)
-	validationHander = (validToSubmit) => {
+	validationHander = () => {
+		const comments = this.commentList.getComments();
+		const questions = this.questionList.getQuestions();
+		let hasAnswers = false;
+		questions.forEach(function(question){
+			if (question.answers !== null && question.answers.length > 0){
+				hasAnswers = true;
+			}
+		});
 		this.setState({
-			validToSubmit: validToSubmit
+			validToSubmit: comments.length > 0 || hasAnswers
 		});
 	}
 

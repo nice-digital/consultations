@@ -304,6 +304,9 @@ export class CommentList extends Component<PropsType, StateType> {
 					this.setState({
 						comments
 					});
+					if (typeof this.props.validationHander === "function") {
+						this.props.validationHander();
+					}
 				}
 			})
 			.catch(err => {
@@ -364,6 +367,9 @@ export class CommentList extends Component<PropsType, StateType> {
 					this.setState({
 						questions
 					});
+					if (typeof this.props.validationHander === "function") {
+						this.props.validationHander();
+					}
 				}
 			})
 			.catch(err => {
@@ -396,7 +402,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		comments = comments.filter(comment => comment.commentId !== commentId);
 		this.setState({ comments });
 		if ((comments.length === 0) && (typeof this.props.validationHander === "function")) {
-			this.props.validationHander(false);
+			this.props.validationHander();
 		}
 	};
 
@@ -405,6 +411,9 @@ export class CommentList extends Component<PropsType, StateType> {
 		let questionToUpdate = questions.find(question => question.questionId === questionId);
 		questionToUpdate.answers = questionToUpdate.answers.filter(answer => answer.answerId != answerId);
 		this.setState({ questions });
+		if (typeof this.props.validationHander === "function") {
+			this.props.validationHander();
+		}
 	};
 
 	render() {
