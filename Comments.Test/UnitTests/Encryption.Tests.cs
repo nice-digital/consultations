@@ -1,4 +1,6 @@
+using System;
 using System.Security.Cryptography;
+using FluentAssertions;
 using Shouldly;
 using Xunit;
 using TestBase = Comments.Test.Infrastructure.TestBase;
@@ -25,6 +27,20 @@ namespace Comments.Test.UnitTests
 			//Assert
 			encrypted.ShouldNotBe(original);
 			decrypted.ShouldBe(original);
+		}
+
+		[Fact]
+		public void Blank_String_Throws_Error()
+		{
+			//Arrange
+			string original = "";
+			var encryption = new Encryption();
+
+			using (Aes myAes = Aes.Create())
+			{
+				//Act + Assert
+				Should.Throw<ArgumentNullException>(() => encryption.EncryptString(original, myAes.Key, myAes.IV));
+			}
 		}
 	}
 }
