@@ -11,8 +11,6 @@ import { UserContext } from "../../context/UserContext";
 import { queryStringToObject, replaceFormat } from "../../helpers/utils";
 import {pullFocusById} from "../../helpers/accessibility-helpers";
 //import stringifyObject from "stringify-object";
-//import Tabs from "tabs";
-//import Tabs from "../Tabs/Tabs";
 
 type PropsType = {
 	staticContext?: any,
@@ -141,7 +139,6 @@ export class CommentList extends Component<PropsType, StateType> {
 				allowComments: allowComments
 			};
 		}
-		//this._tabs = React.createRef();
 	}
 
 	loadComments() {
