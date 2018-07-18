@@ -68,13 +68,8 @@ namespace Comments
             services.TryAddTransient<IAnswerService, AnswerService>();
             services.TryAddTransient<IQuestionService, QuestionService>();
 	        services.TryAddTransient<ISubmitService, SubmitService>();
-
-	        services.AddDataProtection()
-		        .SetApplicationName("Consultations");
-
-			var serviceProvider = services.BuildServiceProvider();
-			services.TryAddSingleton<IEncryption>(provider => ActivatorUtilities.CreateInstance<Encryption>(serviceProvider));
-
+	        services.TryAddSingleton<IEncryption, Encryption>();
+			
 			// Add authentication 
 			services.AddAuthentication(options =>
             {

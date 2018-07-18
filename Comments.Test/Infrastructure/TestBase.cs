@@ -51,7 +51,6 @@ namespace Comments.Test.Infrastructure
 	    protected readonly bool _useRealSubmitService = false;
 
 	    protected IEncryption _fakeEncryption;
-	    protected readonly bool _useRealEncryption = false;
 
 		public TestBase(Feed feed) : this()
         {
@@ -78,14 +77,14 @@ namespace Comments.Test.Infrastructure
 		}
 
 
-		public TestBase(bool useRealSubmitService = false, bool useRealEncryption = false)
+		public TestBase(bool useRealSubmitService = false)
         {
             // Arrange
             _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
             _fakeHttpContextAccessor = FakeHttpContextAccessor.Get(_authenticated, _displayName, _userId);
 	        _consultationService = new FakeConsultationService();
 	        _useRealSubmitService = useRealSubmitService;
-	        _useRealEncryption = useRealEncryption;
+	        _fakeEncryption = new FakeEncryption();
 			var databaseName = DatabaseName + Guid.NewGuid();
 
             //SQLiteConnectionStringBuilder sqLiteConnectionStringBuilder = new SQLiteConnectionStringBuilder()
@@ -119,7 +118,8 @@ namespace Comments.Test.Infrastructure
                     services.TryAddSingleton<IHttpContextAccessor>(provider => _fakeHttpContextAccessor);
                     services.TryAddTransient<IUserService>(provider => _fakeUserService);
                     services.TryAddTransient<IFeedReaderService>(provider => new FeedReader(FeedToUse));
-	                if (_useRealSubmitService)
+
+					if (_useRealSubmitService)
 	                {
 						//services.TryAddTransient<IConsultationService>(provider => new FakeConsultationService(true));
 					}
@@ -127,18 +127,6 @@ namespace Comments.Test.Infrastructure
 					{
 						services.TryAddTransient<ISubmitService>(provider => new FakeSubmitService());
 					}
-
-					if(_useRealEncryption)
-					{
-						services.AddDataProtection();
-						var serviceProvider = services.BuildServiceProvider();
-						_fakeEncryption = ActivatorUtilities.CreateInstance<Encryption>(serviceProvider);
-					}
-					else
-					{
-						_fakeEncryption = new FakeEncryption();
-					}
-
 				})
                 .Configure(app =>
                 {

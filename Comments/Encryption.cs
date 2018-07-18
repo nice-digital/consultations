@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.DataProtection;
 
 namespace Comments
 {
-
 	public interface IEncryption
 	{
 		string EncryptString(string stringToEncrypt, byte[] key, byte[] iv);
@@ -14,10 +13,6 @@ namespace Comments
 
     public class Encryption : IEncryption
     {
-		public Encryption(IDataProtectionProvider provider)
-		{
-		}
-
 	    public string EncryptString(string plainText, byte[] key, byte[] iv)
 	    {
 		    // Check arguments.
