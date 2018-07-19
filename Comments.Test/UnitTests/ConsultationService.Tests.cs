@@ -76,5 +76,27 @@ namespace Comments.Test.UnitTests
             anotherQuestion.Questions.Single().Answers.Single().AnswerText.ShouldBe(answerText);
             
         }
+
+	    [Fact]
+	    public void GetBreadcrumbForDocumentPage()
+	    {
+		    //Arrange
+			var consultationService = new ConsultationService(null, null, null, null);
+
+			//Act
+		    var actualBreadcrumb = consultationService.GetBreadcrumb(1, false);
+
+
+			//Assert
+			actualBreadcrumb.Links.ShouldNotBeNull();
+		    actualBreadcrumb.Links.Count().ShouldBe(2);
+
+			actualBreadcrumb.Links.First().Text.ShouldBe("All consultations");
+		    actualBreadcrumb.Links.First().Url.ShouldBe("/guidance/inconsultation");
+
+		    actualBreadcrumb.Links.Skip(1).First().Text.ShouldBe("Consultation");
+		    actualBreadcrumb.Links.Skip(1).First().Url.ShouldBe("/guidance/indevelopment/gid-ng10107/consultation/html-content");
+		}
+
 	}
 }

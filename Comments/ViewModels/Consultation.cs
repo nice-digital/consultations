@@ -1,13 +1,11 @@
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Comments.ViewModels
 {
-    public class Consultation
+	public class Consultation
     {
-        public Consultation(NICE.Feeds.Models.Indev.List.ConsultationBase consultation, User user, ConsultationState consultationState = null)
+        public Consultation(NICE.Feeds.Models.Indev.List.ConsultationBase consultation, User user, Breadcrumb breadcrumb = null, ConsultationState consultationState = null)
         {
             Reference = consultation.Reference;
             Title = consultation.Title;
@@ -21,13 +19,13 @@ namespace Comments.ViewModels
             RelevantTo = consultation.RelevantTo;
             ConsultationId = consultation.ConsultationId;
             Process = consultation.Process;
-            //AllowConsultationComments = consultation.HasDocumentsWhichAllowConsultationComments;
 	        HasDocumentsWhichAllowConsultationQuestions = consultation.HasDocumentsWhichAllowConsultationQuestions;
 	        SupportsComments = consultation.SupportsComments;
 	        SupportsQuestions = consultation.SupportsQuestions;
 			PartiallyUpdatedProjectReference = consultation.PartiallyUpdatedProjectReference;
             OrigProjectReference = consultation.OrigProjectReference;
             User = user;
+	        Breadcrumb = breadcrumb;
 	        ConsultationState = consultationState;
         }
 
@@ -47,7 +45,6 @@ namespace Comments.ViewModels
             RelevantTo = relevantTo;
             ConsultationId = consultationId;
             Process = process;
-            //AllowConsultationComments = allowConsultationComments;
 	        HasDocumentsWhichAllowConsultationQuestions = allowConsultationQuestions;
 	        SupportsComments = supportsComments;
 	        SupportsQuestions = supportsQuestions;
@@ -69,8 +66,7 @@ namespace Comments.ViewModels
         public string RelevantTo { get; private set; }
         public int ConsultationId { get; private set; }
         public string Process { get; private set; }
-        //public bool AllowConsultationComments { get; private set; }
-	    public bool HasDocumentsWhichAllowConsultationComments { get; private set; }
+        public bool HasDocumentsWhichAllowConsultationComments { get; private set; }
 	    public bool HasDocumentsWhichAllowConsultationQuestions { get; private set; }
 	    public bool SupportsQuestions { get; private set; }
 	    public bool SupportsComments { get; private set; }
@@ -80,23 +76,7 @@ namespace Comments.ViewModels
         public ViewModels.User User { get; private set; }
 
 		public ConsultationState ConsultationState { get; private set; }
+
+		public Breadcrumb Breadcrumb { get; private set; }
     }
-
-    //public class ConsultationDetail : Consultation
-    //{
-    //    [JsonConstructor]
-    //    public ConsultationDetail(string reference, string title, string consultationName, DateTime startDate, DateTime endDate, string consultationType, string resourceTitleId, string projectType, string productTypeName, string developedAs, string relevantTo, int consultationId, string process, bool allowConsultationComments, bool allowConsultationQuestions, bool supportsComments, bool supportsQuestions, string partiallyUpdatedProjectReference, string origProjectReference, IList<Document> documents, User user) 
-    //        : base(reference, title, consultationName, startDate, endDate, consultationType, resourceTitleId, projectType, productTypeName, developedAs, relevantTo, consultationId, process, allowConsultationComments, allowConsultationQuestions, supportsComments, supportsQuestions, partiallyUpdatedProjectReference, origProjectReference, user)
-    //    {
-    //        Documents = documents;
-    //    }
-        
-
-    //    public ConsultationDetail(NICE.Feeds.Models.Indev.Detail.ConsultationDetail consultation, User user) : base(consultation, user)
-    //    {
-    //        Documents = consultation.Resources?.Select(r => new Document(consultation.ConsultationId, r)).ToList();
-    //    }
-
-    //    public IList<Document> Documents { get; set; }
-    //}
 }

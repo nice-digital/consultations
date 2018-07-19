@@ -14,13 +14,14 @@ namespace Comments.Services
     {
         ChapterContent GetChapterContent(int consultationId, int documentId, string chapterSlug);
         IEnumerable<Document> GetDocuments(int consultationId);
-        ViewModels.Consultation GetConsultation(int consultationId);
+        ViewModels.Consultation GetConsultation(int consultationId, bool isReview);
         IEnumerable<ViewModels.Consultation> GetConsultations();
 	    ConsultationState GetConsultationState(string sourceURI, IEnumerable<Models.Location> locations = null, ConsultationDetail consultation = null);
 	    ConsultationState GetConsultationState(int consultationId, IEnumerable<Models.Location> locations = null, ConsultationDetail consultation = null);
 
 		bool HasSubmittedCommentsOrQuestions(string consultationSourceURI, Guid userId);
-	}
+	    Breadcrumb GetBreadcrumb(int consultationId, bool isReview);
+    }
 
 	public class ConsultationService : IConsultationService
     {
@@ -49,15 +50,21 @@ namespace Comments.Services
             return consultationDetail.Resources.Select(r => new ViewModels.Document(consultationId, r)).ToList();
         }
 
-        public ViewModels.Consultation GetConsultation(int consultationId)
+        public ViewModels.Consultation GetConsultation(int consultationId, bool isReview)
         {
             var user = _userService.GetCurrentUser();
 	        var consultationDetail = GetConsultationDetail(consultationId);
 	        var consultationState = GetConsultationState(consultationId, null, consultationDetail);
-            return new ViewModels.Consultation(consultationDetail, user, consultationState);
+	        var breadcrumb = GetBreadcrumb(consultationId, isReview);
+            return new ViewModels.Consultation(consultationDetail, user, breadcrumb, consultationState);
         }
 
-        public IEnumerable<ViewModels.Consultation> GetConsultations()
+	    public Breadcrumb GetBreadcrumb(int consultationId, bool isReview)
+	    {
+		    return null;
+	    }
+
+	    public IEnumerable<ViewModels.Consultation> GetConsultations()
         {
             var user = _userService.GetCurrentUser();
             var consultations = _feedConverterService.GetConsultationList();

@@ -52,12 +52,12 @@ namespace Comments.Test.Infrastructure
 		    throw new NotImplementedException();
 	    }
 
-	    public Consultation GetConsultation(int consultationId)
+	    public Consultation GetConsultation(int consultationId, bool isReview)
 	    {
 		    throw new NotImplementedException();
 	    }
 
-	    public IEnumerable<Consultation> GetConsultations()
+		public IEnumerable<Consultation> GetConsultations()
 	    {
 		    throw new NotImplementedException();
 	    }
