@@ -137,7 +137,7 @@ export class CommentList extends Component<PropsType, StateType> {
 				comments: preloaded.comments,
 				filteredComments: [],
 				questions: preloaded.questions,
-				allowComments: allowComments
+				allowComments: allowComments,
 				error: ""
 			};
 		}
