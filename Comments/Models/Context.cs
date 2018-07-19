@@ -44,9 +44,21 @@ namespace Comments.Models
 		/// <param name="sourceURIs"></param>
 		/// <param name="isReview">True if data is being retrieved for the review page</param>
 		/// <returns></returns>
-		public IEnumerable<Location> GetAllCommentsAndQuestionsForDocument(IEnumerable<string> sourceURIs, bool isReview)
-	    {
-			var data = Location.Where(l => isReview ? l.SourceURI.Contains(sourceURIs.First()) : sourceURIs.Contains(l.SourceURI))
+		public IEnumerable<Location> GetAllCommentsAndQuestionsForDocument(IList<string> sourceURIs, bool partialMatchSourceURI)
+		{
+			string partialSourceURIToUse = null, partialMatchExactSourceURIToUse = null;
+		    if (partialMatchSourceURI)
+		    {
+			    partialMatchExactSourceURIToUse = sourceURIs.SingleOrDefault();
+				if (partialMatchExactSourceURIToUse == null)
+					throw new ArgumentException("There should be one and only one source uri passed when doing a partial match.");
+
+			    partialSourceURIToUse = $"{partialMatchExactSourceURIToUse}/";
+		    }
+
+			var data = Location.Where(l => partialMatchSourceURI ?
+											(l.SourceURI.Equals(partialMatchExactSourceURIToUse) || l.SourceURI.Contains(partialSourceURIToUse))
+											: sourceURIs.Contains(l.SourceURI))
 					.Include(l => l.Comment)
 						.ThenInclude(s => s.SubmissionComment)
 							.ThenInclude(s => s.Submission)
@@ -59,8 +71,10 @@ namespace Comments.Models
 				    .Include(l => l.Question)
 						.ThenInclude(q => q.Answer)
 							.ThenInclude(s => s.SubmissionAnswer)
-					.OrderByDescending(l => l.Comment
-					    .OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault());
+
+					.OrderBy(l => l.Question.OrderBy(q => q.QuestionOrder).Select(q => q.QuestionOrder).FirstOrDefault())
+
+					.ThenByDescending(l => l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault());
 
 			return data;
 	    }

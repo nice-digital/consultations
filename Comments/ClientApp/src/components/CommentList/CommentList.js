@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { withRouter, Link } from "react-router-dom";
 import { load } from "./../../data/loader";
 import preload from "../../data/pre-loader";
@@ -183,10 +183,22 @@ export class CommentList extends Component<PropsType, StateType> {
 			loading: false,
 			allowComments: allowComments
 		});
+		this.updateTabs();
 	};
 
 	componentDidMount() {
 		this.loadComments();
+		//let tabs = new Tabs(this._tabs);
+		this.updateTabs();
+	}
+
+	updateTabs = () => {
+		if (window){
+			window.dispatchEvent(new CustomEvent("commentList_did_mount", {}));
+			window.setTimeout(function(){
+				window.dispatchEvent(new CustomEvent("commentList_did_mount", {}));
+			}, 500);			
+		}
 	}
 
 	componentDidUpdate(prevProps: PropsType, prevState: any, nextContent: any) {
@@ -200,26 +212,34 @@ export class CommentList extends Component<PropsType, StateType> {
 		}
 	}
 
-	submitComments = () => {
-
-		let answersToSubmit = [];
-		this.state.questions.forEach(function(question){
-			if (question.answers != null){
-				answersToSubmit = answersToSubmit.concat(question.answers);
-			}			
-		});
-
-		let commentsAndAnswers = {comments: this.state.comments, answers: answersToSubmit};
-
-		load("submit", undefined, [], {}, "POST", commentsAndAnswers, true)
-			.then(res => {
-				this.props.submittedHandler();
-			})
-			.catch(err => {
-				console.log(err);
-				if (err.response) alert(err.response.statusText);
-			});		
+	getComments = () => {
+		return this.state.comments;
 	}
+
+	getQuestions = () => {
+		return this.state.questions;
+	}
+
+	// submitComments = () => {
+
+	// 	let answersToSubmit = [];
+	// 	this.state.questions.forEach(function(question){
+	// 		if (question.answers != null){
+	// 			answersToSubmit = answersToSubmit.concat(question.answers);
+	// 		}			
+	// 	});
+
+	// 	let commentsAndAnswers = {comments: this.state.comments, answers: answersToSubmit};
+
+	// 	load("submit", undefined, [], {}, "POST", commentsAndAnswers, true)
+	// 		.then(res => {
+	// 			this.props.submittedHandler();
+	// 		})
+	// 		.catch(err => {
+	// 			console.log(err);
+	// 			if (err.response) alert(err.response.statusText);
+	// 		});		
+	// }
 
 	filterComments = (newSourceURIToFilterBy: string, comments: Array<CommentType>): Array<CommentType> => {
 		let filterBy = queryStringToObject(newSourceURIToFilterBy);
@@ -288,6 +308,9 @@ export class CommentList extends Component<PropsType, StateType> {
 						comments,
 						error
 					});
+					if (typeof this.props.validationHander === "function") {
+						this.props.validationHander();
+					}
 				}
 			})
 			.catch(err => {
@@ -361,6 +384,9 @@ export class CommentList extends Component<PropsType, StateType> {
 					this.setState({
 						questions
 					});
+					if (typeof this.props.validationHander === "function") {
+						this.props.validationHander();
+					}
 				}
 			})
 			.catch(err => {
@@ -394,7 +420,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		comments = comments.filter(comment => comment.commentId !== commentId);
 		this.setState({ comments, error });
 		if ((comments.length === 0) && (typeof this.props.validationHander === "function")) {
-			this.props.validationHander(false);
+			this.props.validationHander();
 		}
 	};
 
@@ -403,6 +429,9 @@ export class CommentList extends Component<PropsType, StateType> {
 		let questionToUpdate = questions.find(question => question.questionId === questionId);
 		questionToUpdate.answers = questionToUpdate.answers.filter(answer => answer.answerId != answerId);
 		this.setState({ questions });
+		if (typeof this.props.validationHander === "function") {
+			this.props.validationHander();
+		}
 	};
 
 	render() {
@@ -441,7 +470,6 @@ export class CommentList extends Component<PropsType, StateType> {
 								</div>
 								: null }
 
-
 							{this.state.loading ? <p>Loading...</p> :
 
 								contextValue.isAuthorised ?
@@ -449,7 +477,6 @@ export class CommentList extends Component<PropsType, StateType> {
 									this.props.viewComments ? 
 									
 										commentsToShow.length === 0 ? <p>No comments yet</p> :
-
 											<ul className="CommentList list--unstyled">
 												{commentsToShow.map((comment) => {
 													return (
@@ -464,7 +491,7 @@ export class CommentList extends Component<PropsType, StateType> {
 														/>
 													);
 												})}
-											</ul> 
+											</ul> 									
 										:
 										<div>
 											<p>We would like to hear your views on the draft recommendations presented in the guideline, and any comments you may have on the rationale and impact sections in the guideline and the evidence presented in the evidence reviews documents. We would also welcome views on the Equality Impact Assessment.</p>
@@ -484,7 +511,7 @@ export class CommentList extends Component<PropsType, StateType> {
 													);
 												})}
 											</ul>
-										</div> 
+										</div>							
 									:
 									<LoginBanner
 										signInButton={true}
