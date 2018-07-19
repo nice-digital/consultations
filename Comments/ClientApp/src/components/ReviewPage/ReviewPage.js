@@ -267,8 +267,8 @@ export class ReviewPage extends Component<PropsType, StateType> {
 										:
 										<StickyContainer className="grid">
 											<div data-g="12 md:9 md:push:3">												
-												<div className="tabs" data-tabs>
-													<ul className="tabs__list" role="tablist">
+												{/* <div className="tabs" data-tabs> */}
+													{/* <ul className="tabs__list" role="tablist">
 														{this.state.shouldShowQuestionsTab &&
 															<li className={`tabs__tab ${this.props.viewComments ? "" : "tabs__tab--active"}`} role="presentation">
 																<button className="tabs__tab-btn" type="button" role="tab">
@@ -288,10 +288,11 @@ export class ReviewPage extends Component<PropsType, StateType> {
 																Submit
 															</button>
 														</li>
-													</ul>
-													<div className="tabs__content">
+													</ul> */}
+													{/* <div className="tabs__content"> */}
 														{this.state.shouldShowQuestionsTab &&
-															<div className="tabs__pane" role="tabpanel">
+															<Fragment>
+															{/* <div className="tabs__pane" role="tabpanel"> */}
 																<h3 className="mt--0" id="comments-column">Questions</h3>
 																<CommentListWithRouter
 																	isReviewPage={true}
@@ -301,10 +302,12 @@ export class ReviewPage extends Component<PropsType, StateType> {
 																	submittedHandler={this.submittedHandler}
 																	validationHander={this.validationHander}
 																	viewComments={false}/>
-															</div>
+															{/* </div> */}
+															</Fragment>
 														}
 														{this.state.shouldShowCommentsTab &&
-															<div className="tabs__pane" role="tabpanel">
+															<Fragment>
+															{/* <div className="tabs__pane" role="tabpanel"> */}
 																<h3 className="mt--0" id="comments-column">Comments</h3>
 																<CommentListWithRouter
 																	isReviewPage={true}
@@ -314,9 +317,10 @@ export class ReviewPage extends Component<PropsType, StateType> {
 																	submittedHandler={this.submittedHandler}
 																	validationHander={this.validationHander}
 																	viewComments={true}/>
-															</div>
+															{/* </div> */}
+															</Fragment>
 														}
-														<div className="tabs__pane" role="tabpanel">
+														{/* <div className="tabs__pane" role="tabpanel"> */}
 															{this.state.userHasSubmitted ?
 																<div className="hero">
 																	<div className="hero__container">
@@ -376,9 +380,9 @@ export class ReviewPage extends Component<PropsType, StateType> {
 																	</div>
 																</div>
 															}
-														</div>
-													</div>
-												</div>
+														{/* </div> */}
+													{/* </div> */}
+												{/* </div> */}
 											</div>
 											<div data-g="12 md:3 md:pull:9">
 												<Sticky disableHardwareAcceleration>
