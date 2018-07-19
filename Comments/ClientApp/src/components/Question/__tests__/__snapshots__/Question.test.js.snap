@@ -44,6 +44,7 @@ exports[`[ClientApp]  Question Component should match snapshot with answer 1`] =
         <textarea
           className="form__input form__input--textarea"
           data-qa-sel="Comment-text-area"
+          disabled={false}
           id="Answer1007"
           onChange={[Function]}
           placeholder="Enter your answer here"
@@ -110,6 +111,7 @@ exports[`[ClientApp]  Question Component should match snapshot without answer 1`
         <textarea
           className="form__input form__input--textarea"
           data-qa-sel="Comment-text-area"
+          disabled={false}
           id="Answer-1"
           onChange={[Function]}
           placeholder="Enter your answer here"

@@ -4,7 +4,7 @@ import React, { Fragment } from "react";
 import { Route, Switch, Redirect } from "react-router";
 import { Helmet } from "react-helmet";
 import CommentListWithRouter from "../CommentList/CommentList";
-import { DocumentView } from "../DocumentView/DocumentView";
+import DocumentViewWithRouter from "../DocumentView/DocumentView";
 import NotFound from "../NotFound/NotFound";
 import ReviewPageWithRouter from "../ReviewPage/ReviewPage";
 import UserProviderWithRouter from "../../context/UserContext";
@@ -31,7 +31,7 @@ class App extends React.Component<PropsType, StateType> {
 
 					{/*Document View*/}
 					<Route path="/:consultationId/:documentId/:chapterSlug">
-						<DocumentView/>
+						<DocumentViewWithRouter/>
 					</Route>
 
 					{/*Review Page*/}

@@ -1,13 +1,50 @@
 import React, { Component, Fragment } from "react";
+import { withRouter } from "react-router";
 
 import DocumentWithRouter from "../Document/Document";
 import { Drawer } from "../Drawer/Drawer";
+import { load } from "./../../data/loader";
 
-export class DocumentView extends Component {
-	constructor() {
-		super();
+type PropsType = {
+	location: {
+		pathname: string,
+		search: string
+	}
+};
+
+type ConsultationStateType = {
+	consultationIsOpen: boolean,
+	hasQuestions: boolean,
+	consultationHasEnded: boolean,
+	hasUserSuppliedAnswers: boolean,
+	hasUserSuppliedComments: boolean
+};
+
+type ConsultationDataType = {
+	consultationState: ConsultationStateType,
+	supportsComments: boolean,
+	supportsQuestions: boolean
+};
+
+type StateType = {
+	consultationData: ConsultationDataType,
+	shouldShowDrawer: boolean,
+	shouldShowCommentsTab: boolean,
+	shouldShowQuestionsTab: boolean
+};
+
+export class DocumentView extends Component<PropsType, StateType> {
+	constructor(props: PropsType) {
+		super(props);
 		// this creates a reference to <Drawer />
 		this.drawer = React.createRef();
+
+		this.state = {
+			consultationData: null,
+			shouldShowDrawer: true,
+			shouldShowCommentsTab: false,
+			shouldShowQuestionsTab: false
+		};
 	}
 
 	newCommentHandler = incomingComment => {
@@ -16,11 +53,60 @@ export class DocumentView extends Component {
 		this.drawer.current.newComment(incomingComment);
 	};
 
+	gatherData = async () => {
+
+		const consultationId = this.props.match.params.consultationId;
+		console.log(`gather data consultationsId:${consultationId}`);
+
+		const consultationData = load("consultation", undefined, [], {
+			consultationId
+		})
+			.then(response => response.data)
+			.catch(err => {
+				throw new Error("consultationData " + err);
+			});
+
+		return {
+			consultationData: await consultationData
+		};
+	};
+
+	componentDidMount() {
+		this.gatherData()
+			.then(data => {
+				
+				const shouldShowDrawer =  (	data.consultationData.supportsComments || 
+											data.consultationData.supportsQuestions ||
+											data.consultationData.consultationState.hasUserSuppliedComments || 
+											data.consultationData.consultationState.hasUserSuppliedAnswers); 
+				const shouldShowCommentsTab = (	data.consultationData.supportsComments || 
+												data.consultationData.consultationState.hasUserSuppliedComments);
+
+				const shouldShowQuestionsTab = (	data.consultationData.consultationState.hasQuestions || 
+													data.consultationData.consultationState.hasUserSuppliedAnswers);
+
+				this.setState({
+					consultationData : data.consultationData,
+					shouldShowDrawer: shouldShowDrawer,
+					shouldShowCommentsTab: shouldShowCommentsTab,
+					shouldShowQuestionsTab: shouldShowQuestionsTab
+				});
+				console.log("component did mount in document view ran");
+			})
+			.catch(err => {
+				throw new Error("gatherData in componentDidMount failed " + err);
+			});
+	}
+
 	render() {
 		return (
 			<Fragment>
 				{/* "ref" ties the <Drawer /> component to React.createRef() above*/}
-				<Drawer ref={this.drawer} />
+				{this.state.shouldShowDrawer && 					
+					<Drawer ref={this.drawer} 
+						shouldShowCommentsTab={this.state.shouldShowCommentsTab} 
+						shouldShowQuestionsTab={this.state.shouldShowQuestionsTab}/>
+				}
 				{/* Passing the function we're using from <Drawer /> to DocWithRouter via props*/}
 				<DocumentWithRouter onNewCommentClick={this.newCommentHandler} />
 			</Fragment>
@@ -28,4 +114,4 @@ export class DocumentView extends Component {
 	}
 }
 
-export default DocumentView;
+export default withRouter(DocumentView);

@@ -84,13 +84,15 @@ namespace Comments.Services
                 return (answer: null, validate: new Validate(valid: false, unauthorised: true, message: "Not logged in creating answer"));
 
 	        var status = _context.GetStatus(StatusName.Draft);
+	        var question = _context.GetQuestion(answer.QuestionId);
+
             var answerToSave = new Models.Answer(answer.QuestionId, _currentUser.UserId.Value, answer.AnswerText, answer.AnswerBoolean, null, status.StatusId, null);
 	        answerToSave.LastModifiedByUserId = _currentUser.UserId.Value;
 	        answerToSave.LastModifiedDate = DateTime.UtcNow;
 			_context.Answer.Add(answerToSave);
             _context.SaveChanges();
 
-            return (answer: new ViewModels.Answer(answerToSave), validate: null);
+            return (answer: new ViewModels.Answer(answerToSave, question), validate: null);
         }
     }
 }
