@@ -11,7 +11,9 @@ type PropsType = {
 		params: {
 			consultationId: number
 		}
-	}
+	},
+	shouldShowCommentsTab: boolean,
+	shouldShowQuestionsTab: boolean
 };
 
 type StateType = {
@@ -28,7 +30,7 @@ export class Drawer extends Component<PropsType, StateType> {
 			drawerExpandedWidth: false,
 			drawerOpen: false,
 			drawerMobile: false,
-			commentsTabVisible: true
+			commentsTabVisible: this.props.shouldShowCommentsTab
 		};
 	}
 
@@ -42,7 +44,8 @@ export class Drawer extends Component<PropsType, StateType> {
 	// This isn't called in this file - this is the method called from DocumentView
 	newComment(comment: Object) {
 		this.setState({
-			drawerOpen: true
+			drawerOpen: true,
+			commentsTabVisible: true
 		});
 		// and what we're calling is newComment from inside <CommentList />
 		// $FlowIgnore | this is bound by wrappedComponentRef in CommentListWithRouter
@@ -97,52 +100,56 @@ export class Drawer extends Component<PropsType, StateType> {
 			<section aria-label="Commenting panel"
 					 className={this.drawerClassnames()}>
 				<div className="Drawer__controls">
-					<button
-						data-qa-sel="open-commenting-panel"
-						id="js-drawer-toggleopen-comments"
-						className={`Drawer__control Drawer__control--comments ${(this.state.commentsTabVisible ? "active" : "active")}`} 
-						onClick={() => this.handleClick("toggleOpenComments")}
-						aria-controls="comments-panel"
-						aria-haspopup="true"
-						aria-label={this.state.drawerOpen ? "Close the commenting panel" : "Open the commenting panel"}
-						tabIndex="0">
-						{!this.state.drawerMobile ?
-							<span>{(this.state.drawerOpen && this.state.commentsTabVisible ? "Close comments" : "Open comments")}</span>
-							:
-							<span
-								className={`icon ${
-									this.state.drawerOpen
-										? "icon--chevron-right"
-										: "icon--chevron-left"}`}
-								aria-hidden="true"
-								data-qa-sel="close-commenting-panel"
-							/>
-						}
-					</button>
-					<button
-						data-qa-sel="open-questions-panel"
-						id="js-drawer-toggleopen-questions"
-						className={`Drawer__control Drawer__control--questions ${(this.state.commentsTabVisible ? "active" : "active")}`}
-						onClick={() => this.handleClick("toggleOpenQuestions")}
-						aria-controls="questions-panel"
-						aria-haspopup="true"
-						aria-label={this.state.drawerOpen ? "Close the questions panel" : "Open the questions panel"}
-						tabIndex="0">
-						{!this.state.drawerMobile ?
-							<span>{(this.state.drawerOpen && !this.state.commentsTabVisible ? "Close questions" : "Open questions")}</span>
-							:
-							<span
-								className={`icon ${
-									this.state.drawerOpen
-										? "icon--chevron-right"
-										: "icon--chevron-left"}`}
-								aria-hidden="true"
-								data-qa-sel="close-questions-panel"
-							/>
-						}
-					</button>
+					{this.props.shouldShowCommentsTab &&
+						<button
+							data-qa-sel="open-commenting-panel"
+							id="js-drawer-toggleopen-comments"
+							className={`Drawer__control Drawer__control--comments ${(this.state.commentsTabVisible ? "active" : "active")}`} 
+							onClick={() => this.handleClick("toggleOpenComments")}
+							aria-controls="comments-panel"
+							aria-haspopup="true"
+							aria-label={this.state.drawerOpen ? "Close the commenting panel" : "Open the commenting panel"}
+							tabIndex="0">
+							{!this.state.drawerMobile ?
+								<span>{(this.state.drawerOpen && this.state.commentsTabVisible ? "Close comments" : "Open comments")}</span>
+								:
+								<span
+									className={`icon ${
+										this.state.drawerOpen
+											? "icon--chevron-right"
+											: "icon--chevron-left"}`}
+									aria-hidden="true"
+									data-qa-sel="close-commenting-panel"
+								/>
+							}
+						</button>
+					}
+					{this.props.shouldShowQuestionsTab &&
+						<button
+							data-qa-sel="open-questions-panel"
+							id="js-drawer-toggleopen-questions"
+							className={`Drawer__control Drawer__control--questions ${(this.state.commentsTabVisible ? "active" : "active")}`}
+							onClick={() => this.handleClick("toggleOpenQuestions")}
+							aria-controls="questions-panel"
+							aria-haspopup="true"
+							aria-label={this.state.drawerOpen ? "Close the questions panel" : "Open the questions panel"}
+							tabIndex="0">
+							{!this.state.drawerMobile ?
+								<span>{(this.state.drawerOpen && !this.state.commentsTabVisible ? "Close questions" : "Open questions")}</span>
+								:
+								<span
+									className={`icon ${
+										this.state.drawerOpen
+											? "icon--chevron-right"
+											: "icon--chevron-left"}`}
+									aria-hidden="true"
+									data-qa-sel="close-questions-panel"
+								/>
+							}
+						</button>
+					}
 				</div>
-				<div aria-hidden={!this.state.drawerOpen && !this.state.commentsTabVisible}
+				<div aria-hidden={!this.state.drawerOpen && (this.props.shouldShowQuestionsTab || this.props.shouldShowCommentsTab)}
 					 data-qa-sel="comment-panel"
 					 id="comments-panel"
 					 className="Drawer__main">

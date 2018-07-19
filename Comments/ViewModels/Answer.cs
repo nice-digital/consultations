@@ -19,7 +19,7 @@ namespace Comments.ViewModels
 			StatusId = statusId;
 		}
 
-		public Answer(Models.Answer answer)
+		public Answer(Models.Answer answer, Models.Question question = null)
 		{
 			AnswerId = answer.AnswerId;
 			AnswerText = answer.AnswerText;
@@ -30,7 +30,10 @@ namespace Comments.ViewModels
 			StatusId = answer.StatusId;
 			if (!(answer.Status is null))
 				Status = new Status(answer.Status);
-			if (answer.Question?.Location != null)
+
+			if (question != null)
+				SourceURI = question.Location.SourceURI;
+			else if (answer.Question?.Location != null)
 				SourceURI = answer.Question.Location.SourceURI;
 		}
 

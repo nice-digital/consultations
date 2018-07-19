@@ -97,7 +97,7 @@ export class Question extends Component<PropsType, StateType> {
 				{answers.map((answer) => {
 					return (
 						<Answer
-							readOnly={this.props.readonly}
+							readOnly={this.props.readOnly}
 							isVisible={this.props.isVisible}
 							key={answer.answerId}
 							unique={`Answer${answer.answerId}`}

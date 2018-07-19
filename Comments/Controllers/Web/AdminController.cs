@@ -11,11 +11,13 @@ namespace Comments.Controllers.Web
     {
 	    private readonly ISubmitService _submitService;
 	    private readonly IQuestionService _questionService;
+	    private readonly IUserService _userService;
 
-	    public AdminController(ISubmitService submitService, IQuestionService questionService)
+	    public AdminController(ISubmitService submitService, IQuestionService questionService, IUserService userService)
 	    {
 		    _submitService = submitService;
 		    _questionService = questionService;
+		    _userService = userService;
 	    }
 
 		/// <summary>
@@ -34,6 +36,22 @@ namespace Comments.Controllers.Web
 
 
 		    var rowCount = _submitService.DeleteAllSubmissionsFromUser(parsedGuid);
+
+		    return Content($"Row count deleted/updated: {rowCount}");
+	    }
+
+		/// <summary>
+		/// /consultations/admin/DeleteAllSubmissionsFromSelf
+		/// </summary>
+		/// <returns></returns>
+		[Route("consultations/admin/DeleteAllSubmissionsFromSelf")]
+	    public ActionResult DeleteAllSubmissionsFromSelf()
+		{
+			var user = _userService.GetCurrentUser();
+			if (!user.IsAuthorised || !user.UserId.HasValue)
+				throw new Exception("Cannot get logged on user id");
+
+			var rowCount = _submitService.DeleteAllSubmissionsFromUser(user.UserId.Value);
 
 		    return Content($"Row count deleted/updated: {rowCount}");
 	    }
