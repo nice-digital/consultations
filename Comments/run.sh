@@ -20,6 +20,8 @@ jq \
     --arg gilliamBasePath "$GILLIAM_BASE_PATH" \
     --arg gilliamGetClaimsUrl "$GILLIAM_GET_CLAIMS_URL" \
     --arg gilliamRealm "$GILLIAM_REALM" \
+    --arg encryptionKey "$ENCRYPTION_KEY" \
+    --arg encryptionIV "$ENCYPTION_IV"
     '
     .ConnectionStrings.DefaultConnection = $defaultConnection |
     .Logging.LogFilePath = $loggingLogFilePath |
@@ -34,7 +36,9 @@ jq \
     .Gilliam.GilliamBasePath = $gilliamBasePath |
     .Gilliam.GetClaimsUrl = $gilliamGetClaimsUrl |
     .Gilliam.Realm = $gilliamRealm |
-    .Gilliam.GilliamClientCertificateBase64 = $gilliamClientCertificateBase64
+    .Gilliam.GilliamClientCertificateBase64 = $gilliamClientCertificateBase64 |
+    .Encryption.Key = $encryptionKey |
+    .Encryption.IV = $encryptionIV
     '\
     appsettings.json > _appsettings.json \
     && mv _appsettings.json appsettings.json
