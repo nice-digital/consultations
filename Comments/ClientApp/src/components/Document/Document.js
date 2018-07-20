@@ -77,7 +77,7 @@ export class Document extends Component<PropsType, StateType> {
 				this.props.staticContext,
 				"consultation",
 				[],
-				{ consultationId: this.props.match.params.consultationId }
+				{ consultationId: this.props.match.params.consultationId, isReview: false }
 			);
 
 			if (preloadedChapter && preloadedDocuments && preloadedConsultation) {
@@ -118,7 +118,7 @@ export class Document extends Component<PropsType, StateType> {
 			});
 
 		const consultationData = load("consultation", undefined, [], {
-			consultationId
+			consultationId, isReview: false
 		})
 			.then(response => response.data)
 			.catch(err => {
@@ -256,23 +256,6 @@ export class Document extends Component<PropsType, StateType> {
 		};
 	};
 
-	getBreadcrumbs = () => {
-		return this.state.consultationData.breadcrumb.links; 
-
-		//breadcrumbs.links
-
-		return [
-			{
-				label: "All Consultations",
-				url: "#"
-			},
-			{
-				label: "Consultation",
-				url: "https://alpha.nice.org.uk/guidance/indevelopment/gid-ng10107/consultation/html-content"
-			}
-		];
-	};
-
 	getCurrentDocumentTitle = (documents: Object, documentId: number) => {
 		const matchCurrentDocument = d => d.documentId === parseInt(documentId, 0);
 		const currentDocumentDetails = documents.filter(matchCurrentDocument)[0];
@@ -318,7 +301,7 @@ export class Document extends Component<PropsType, StateType> {
 								name={projectInformation.name}
 								repo={projectInformation.repo}
 							/>
-							<BreadCrumbs links={this.getBreadcrumbs()}/>
+							<BreadCrumbs links={this.state.consultationData.breadcrumbs}/>
 							<main role="main">
 								<div className="page-header">
 									<Header
