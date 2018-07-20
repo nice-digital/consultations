@@ -21,7 +21,7 @@ jq \
     --arg gilliamGetClaimsUrl "$GILLIAM_GET_CLAIMS_URL" \
     --arg gilliamRealm "$GILLIAM_REALM" \
     --arg encryptionKey "$ENCRYPTION_KEY" \
-    --arg encryptionIV "$ENCRYPTION_IV"
+    --arg encryptionIV "$ENCRYPTION_IV" \
     '
     .ConnectionStrings.DefaultConnection = $defaultConnection |
     .Logging.LogFilePath = $loggingLogFilePath |
