@@ -1,4 +1,4 @@
-﻿using Comments.Services;
+using Comments.Services;
 using Comments.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -20,18 +20,19 @@ namespace Comments.Controllers.Api
             _logger = logger;
         }
 
-        /// <summary>
-        /// GET: eg. consultations/api/Consultation?consultationId=1
-        /// </summary>
-        /// <param name="consultationId"></param>
-        /// <returns></returns>
-        [HttpGet]
-        public ViewModels.Consultation Get(int consultationId)
+		/// <summary>
+		/// GET: eg. consultations/api/Consultation?consultationId=1
+		/// </summary>
+		/// <param name="consultationId"></param>
+		/// <param name="isReview">boolean indicating if the feed isbeing accessed for reviewing purposes</param>
+		/// <returns></returns>
+		[HttpGet]
+        public ViewModels.Consultation Get(int consultationId, bool isReview = false)
         {
             if (consultationId < 1)
                 throw new ArgumentException(nameof(consultationId));
 
-            return _consultationService.GetConsultation(consultationId);
+            return _consultationService.GetConsultation(consultationId, isReview);
         }
     }
 }

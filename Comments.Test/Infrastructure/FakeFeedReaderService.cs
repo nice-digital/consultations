@@ -1,5 +1,5 @@
 //using NICE.Feeds;
-//using NICE.Feeds.Tests.Infrastructure;
+//using NICE.Feeds.ConsultationService.Infrastructure;
 
 //namespace Comments.Test.Infrastructure
 //{
