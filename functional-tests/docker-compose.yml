@@ -70,7 +70,7 @@ services:
       - GILLIAM_GET_CLAIMS_URL
       - GILLIAM_REALM
       - ENCRYPTION_KEY
-      - ENCYPTION_IV
+      - ENCRYPTION_IV
     networks:
       default:
         aliases:
