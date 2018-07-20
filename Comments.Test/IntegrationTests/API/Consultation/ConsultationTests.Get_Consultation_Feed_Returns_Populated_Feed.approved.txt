@@ -36,16 +36,14 @@
         "supportsSubmission":false,
         "supportsDownload":false
     },
-    "breadcrumb":{
-        "links":[
-            {
-                "text":"All consultations",
-                "url":"/guidance/inconsultation"
-            },
-            {
-                "text":"Consultation",
-                "url":"/guidance/indevelopment/gid-ta10232/consultation/"
-            }
-        ]
-    }
+    "breadcrumbs":[
+        {
+            "label":"All consultations",
+            "url":"/guidance/inconsultation"
+        },
+        {
+            "label":"Consultation",
+            "url":"/guidance/indevelopment/gid-ta10232/consultation/"
+        }
+    ]
 }

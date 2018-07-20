@@ -25,7 +25,7 @@
             "userId":"00000000-0000-0000-0000-000000000000"
         },
         "consultationState":null,
-        "breadcrumb":null
+        "breadcrumbs":null
     },
     {
         "reference":"GID-IPG10038",
@@ -53,6 +53,6 @@
             "userId":"00000000-0000-0000-0000-000000000000"
         },
         "consultationState":null,
-        "breadcrumb":null
+        "breadcrumbs":null
     }
 ]

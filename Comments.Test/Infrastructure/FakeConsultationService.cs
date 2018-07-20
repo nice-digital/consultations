@@ -39,7 +39,7 @@ namespace Comments.Test.Infrastructure
 	    }
 
 		#region Not Implemented Members
-	    public Breadcrumb GetBreadcrumb(ConsultationDetail consultation, bool isReview)
+	    public IEnumerable<BreadcrumbLink> GetBreadcrumbs(ConsultationDetail consultation, bool isReview)
 	    {
 		    throw new NotImplementedException();
 	    }

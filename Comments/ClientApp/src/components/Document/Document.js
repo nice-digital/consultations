@@ -257,6 +257,10 @@ export class Document extends Component<PropsType, StateType> {
 	};
 
 	getBreadcrumbs = () => {
+		return this.state.consultationData.breadcrumb.links; 
+
+		//breadcrumbs.links
+
 		return [
 			{
 				label: "All Consultations",

@@ -31,8 +31,8 @@ namespace Comments.Test.IntegrationTests.API.Submit
 
 			var commentId = AddComment(locationId, commentText, false, userId, (int)StatusName.Draft, _context);
 		    var questionTypeId = AddQuestionType("Question type description", false, true);
-		    var questionId = AddQuestion(locationId, questionTypeId, "Question Text");
-		    var answerId = AddAnswer(questionId, userId, "Answer Text");
+		    var questionId = AddQuestion(locationId, questionTypeId, "Question Label");
+		    var answerId = AddAnswer(questionId, userId, "Answer Label");
 
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 		    var authenticateService = new FakeAuthenticateService(authenticated: true);

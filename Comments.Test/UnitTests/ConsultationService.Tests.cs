@@ -98,17 +98,17 @@ namespace Comments.Test.UnitTests
 			};
 
 			//Act
-		    var actualBreadcrumb = consultationService.GetBreadcrumb(consultationDetail, false);
+		    var actualBreadcrumb = consultationService.GetBreadcrumbs(consultationDetail, false);
 
 			//Assert
-			actualBreadcrumb.Links.ShouldNotBeNull();
-		    actualBreadcrumb.Links.Count().ShouldBe(2);
+			actualBreadcrumb.ShouldNotBeNull();
+		    actualBreadcrumb.Count().ShouldBe(2);
 
-		    actualBreadcrumb.Links.First().Text.ShouldBe("All consultations");
-		    actualBreadcrumb.Links.First().Url.ShouldBe("/guidance/inconsultation");
+		    actualBreadcrumb.First().Label.ShouldBe("All consultations");
+		    actualBreadcrumb.First().Url.ShouldBe("/guidance/inconsultation");
 
-		    actualBreadcrumb.Links.Skip(1).First().Text.ShouldBe("Consultation");
-		    actualBreadcrumb.Links.Skip(1).First().Url.ShouldBe(expectedConsultationUrl);
+		    actualBreadcrumb.Skip(1).First().Label.ShouldBe("Consultation");
+		    actualBreadcrumb.Skip(1).First().Url.ShouldBe(expectedConsultationUrl);
 		}
 
 		[Theory]
@@ -122,20 +122,20 @@ namespace Comments.Test.UnitTests
 			var consultationDetail = feedService.GetIndevConsultationDetailForPublishedProject(1, PreviewState.NonPreview, 2);
 
 			//Act
-			var actualBreadcrumb = consultationService.GetBreadcrumb(consultationDetail, true);
+			var actualBreadcrumb = consultationService.GetBreadcrumbs(consultationDetail, true);
 
 			//Assert
-			actualBreadcrumb.Links.ShouldNotBeNull();
-			actualBreadcrumb.Links.Count().ShouldBe(3);
+			actualBreadcrumb.ShouldNotBeNull();
+			actualBreadcrumb.Count().ShouldBe(3);
 
-			actualBreadcrumb.Links.First().Text.ShouldBe("All consultations");
-			actualBreadcrumb.Links.First().Url.ShouldBe("/guidance/inconsultation");
+			actualBreadcrumb.First().Label.ShouldBe("All consultations");
+			actualBreadcrumb.First().Url.ShouldBe("/guidance/inconsultation");
 
-			actualBreadcrumb.Links.Skip(1).First().Text.ShouldBe("Consultation");
-			//actualBreadcrumb.Links.Skip(1).First().Url.ShouldBe(expectedConsultationUrl); //TODO: uncomment this, when the indev feed is fixed in ID-215
+			actualBreadcrumb.Skip(1).First().Label.ShouldBe("Consultation");
+			//actualBreadcrumb.Skip(1).First().Url.ShouldBe(expectedConsultationUrl); //TODO: uncomment this, when the indev feed is fixed in ID-215
 
-			actualBreadcrumb.Links.Skip(2).First().Text.ShouldBe("Documents");
-			actualBreadcrumb.Links.Skip(2).First().Url.ShouldBe(expectedDocumentsUrl);
+			actualBreadcrumb.Skip(2).First().Label.ShouldBe("Documents");
+			actualBreadcrumb.Skip(2).First().Url.ShouldBe(expectedDocumentsUrl);
 		}
 	}
 }

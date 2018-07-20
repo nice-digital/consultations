@@ -1,11 +1,12 @@
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 namespace Comments.ViewModels
 {
 	public class Consultation
     {
-        public Consultation(NICE.Feeds.Models.Indev.List.ConsultationBase consultation, User user, Breadcrumb breadcrumb = null, ConsultationState consultationState = null)
+        public Consultation(NICE.Feeds.Models.Indev.List.ConsultationBase consultation, User user, IEnumerable<BreadcrumbLink> breadcrumbs = null, ConsultationState consultationState = null)
         {
             Reference = consultation.Reference;
             Title = consultation.Title;
@@ -25,7 +26,7 @@ namespace Comments.ViewModels
 			PartiallyUpdatedProjectReference = consultation.PartiallyUpdatedProjectReference;
             OrigProjectReference = consultation.OrigProjectReference;
             User = user;
-	        Breadcrumb = breadcrumb;
+	        Breadcrumbs = breadcrumbs;
 	        ConsultationState = consultationState;
         }
 
@@ -77,6 +78,6 @@ namespace Comments.ViewModels
 
 		public ConsultationState ConsultationState { get; private set; }
 
-		public Breadcrumb Breadcrumb { get; private set; }
+		public IEnumerable<BreadcrumbLink> Breadcrumbs { get; private set; }
     }
 }

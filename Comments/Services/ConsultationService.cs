@@ -22,7 +22,7 @@ namespace Comments.Services
 	    ConsultationState GetConsultationState(int consultationId, IEnumerable<Models.Location> locations = null, ConsultationDetail consultation = null);
 
 		bool HasSubmittedCommentsOrQuestions(string consultationSourceURI, Guid userId);
-	    Breadcrumb GetBreadcrumb(ConsultationDetail consultation, bool isReview);
+	    IEnumerable<BreadcrumbLink> GetBreadcrumbs(ConsultationDetail consultation, bool isReview);
     }
 
 	public class ConsultationService : IConsultationService
@@ -57,16 +57,16 @@ namespace Comments.Services
             var user = _userService.GetCurrentUser();
 	        var consultationDetail = GetConsultationDetail(consultationId);
 	        var consultationState = GetConsultationState(consultationId, null, consultationDetail);
-	        var breadcrumb = GetBreadcrumb(consultationDetail, isReview);
-            return new ViewModels.Consultation(consultationDetail, user, breadcrumb, consultationState);
+	        var breadcrumbs = GetBreadcrumbs(consultationDetail, isReview);
+            return new ViewModels.Consultation(consultationDetail, user, breadcrumbs, consultationState);
         }
 
-	    public Breadcrumb GetBreadcrumb(ConsultationDetail consultation, bool isReview)
+	    public IEnumerable<BreadcrumbLink> GetBreadcrumbs(ConsultationDetail consultation, bool isReview)
 	    {
-			var breadcrumbs = new Breadcrumb(new List<BreadcrumbLink>{
+			var breadcrumbs = new List<BreadcrumbLink>{
 					new BreadcrumbLink("All consultations", ExternalRoutes.InconsultationListPage),
 					new BreadcrumbLink("Consultation", ExternalRoutes.ConsultationUrl(consultation))
-			});
+			};
 
 		    if (isReview)
 		    {
@@ -74,7 +74,7 @@ namespace Comments.Services
 			    var firstChapter = firstDocument?.Chapters.FirstOrDefault();
 
 			    if (firstChapter != null)
-				    breadcrumbs.Links.Add(new BreadcrumbLink("Documents",$"/consultations/{consultation.ConsultationId}/{firstDocument.DocumentId}/{firstChapter.Slug}"));
+				    breadcrumbs.Add(new BreadcrumbLink("Documents",$"/consultations/{consultation.ConsultationId}/{firstDocument.DocumentId}/{firstChapter.Slug}"));
 		    }
 
 		    return breadcrumbs;
