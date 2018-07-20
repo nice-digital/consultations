@@ -7,11 +7,12 @@ using Shouldly;
 using System;
 using System.Linq;
 using System.Net;
+using NICE.Feeds.Models.Indev.Detail;
 using Xunit;
 
 namespace Comments.Test.UnitTests
 {
-	public class Tests : Comments.Test.Infrastructure.TestBase
+	public class ConsultationService : Comments.Test.Infrastructure.TestBase
     {
         [Fact]
         public void Comments_CanBeRead()
@@ -77,26 +78,46 @@ namespace Comments.Test.UnitTests
             
         }
 
-	    [Fact]
-	    public void GetBreadcrumbForDocumentPage()
+	    [Theory]
+		//document page tests
+		[InlineData(false, null, "gid-ng10107", "html-content", "/guidance/indevelopment/gid-ng10107/consultation/html-content", null)] //regular indev project
+	    [InlineData(false, "", "gid-ng10107", "html-content", "/guidance/indevelopment/gid-ng10107/consultation/html-content", null)]
+	    [InlineData(false, "orig-ref", "gid-ng10107", "html-content", "/guidance/orig-ref/update/gid-ng10107/consultation/html-content", null)] //an "update project"
+	    [InlineData(false, null, "ph24", "html-content", "/guidance/ph24/consultation/html-content", null)] //published product
+		//now the same for the review page
+	    [InlineData(true, null, "gid-ng10107", "html-content", "/guidance/indevelopment/gid-ng10107/consultation/html-content", "/consultations/")] //regular indev project
+	    [InlineData(true, "", "gid-ng10107", "html-content", "/guidance/indevelopment/gid-ng10107/consultation/html-content", null)]
+	    [InlineData(true, "orig-ref", "gid-ng10107", "html-content", "/guidance/orig-ref/update/gid-ng10107/consultation/html-content", null)] //an "update project"
+	    [InlineData(true, null, "ph24", "html-content", "/guidance/ph24/consultation/html-content", null)] //published product
+		public void GetBreadcrumbForDocumentPage(bool isReview, string origProjectReference, string reference, string resourceTitleId, string expectedConsultationUrl, string expectedDocumentsUrl)
 	    {
 		    //Arrange
-			var consultationService = new ConsultationService(null, null, null, null);
+			var consultationService = new Services.ConsultationService(null, null, null, null);
+		    var consultationDetail = new ConsultationDetail()
+		    {
+			    OrigProjectReference = origProjectReference,
+			    Reference = reference,
+			    ResourceTitleId = resourceTitleId
+			};
 
 			//Act
-		    var actualBreadcrumb = consultationService.GetBreadcrumb(1, false);
-
+		    var actualBreadcrumb = consultationService.GetBreadcrumb(consultationDetail, isReview);
 
 			//Assert
 			actualBreadcrumb.Links.ShouldNotBeNull();
-		    actualBreadcrumb.Links.Count().ShouldBe(2);
+		    actualBreadcrumb.Links.Count().ShouldBe(isReview ? 3 : 2);
 
-			actualBreadcrumb.Links.First().Text.ShouldBe("All consultations");
+		    actualBreadcrumb.Links.First().Text.ShouldBe("All consultations");
 		    actualBreadcrumb.Links.First().Url.ShouldBe("/guidance/inconsultation");
 
 		    actualBreadcrumb.Links.Skip(1).First().Text.ShouldBe("Consultation");
-		    actualBreadcrumb.Links.Skip(1).First().Url.ShouldBe("/guidance/indevelopment/gid-ng10107/consultation/html-content");
-		}
+		    actualBreadcrumb.Links.Skip(1).First().Url.ShouldBe(expectedConsultationUrl);
 
+		    if (isReview)
+		    {
+			    actualBreadcrumb.Links.Skip(2).First().Text.ShouldBe("Documents");
+			    actualBreadcrumb.Links.Skip(2).First().Url.ShouldBe(expectedDocumentsUrl);
+			}
+		}
 	}
 }

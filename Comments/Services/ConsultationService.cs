@@ -6,7 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Comments.Common;
 using Comments.Models;
+using NICE.Feeds.Models.Indev.Chapter;
 using NICE.Feeds.Models.Indev.Detail;
+using NICE.Feeds.Models.Indev.List;
 
 namespace Comments.Services
 {
@@ -20,7 +22,7 @@ namespace Comments.Services
 	    ConsultationState GetConsultationState(int consultationId, IEnumerable<Models.Location> locations = null, ConsultationDetail consultation = null);
 
 		bool HasSubmittedCommentsOrQuestions(string consultationSourceURI, Guid userId);
-	    Breadcrumb GetBreadcrumb(int consultationId, bool isReview);
+	    Breadcrumb GetBreadcrumb(ConsultationDetail consultation, bool isReview);
     }
 
 	public class ConsultationService : IConsultationService
@@ -55,16 +57,30 @@ namespace Comments.Services
             var user = _userService.GetCurrentUser();
 	        var consultationDetail = GetConsultationDetail(consultationId);
 	        var consultationState = GetConsultationState(consultationId, null, consultationDetail);
-	        var breadcrumb = GetBreadcrumb(consultationId, isReview);
+	        var breadcrumb = GetBreadcrumb(consultationDetail, isReview);
             return new ViewModels.Consultation(consultationDetail, user, breadcrumb, consultationState);
         }
 
-	    public Breadcrumb GetBreadcrumb(int consultationId, bool isReview)
+	    public Breadcrumb GetBreadcrumb(ConsultationDetail consultation, bool isReview)
 	    {
-		    return null;
+			var breadcrumbs = new Breadcrumb(new List<BreadcrumbLink>{
+					new BreadcrumbLink("All consultations", ExternalRoutes.InconsultationListPage),
+					new BreadcrumbLink("Consultation", ExternalRoutes.ConsultationUrl(consultation))
+			});
+
+		    if (isReview)
+		    {
+			    var firstDocument = GetDocuments(consultation.ConsultationId).FirstOrDefault(d => d.ConvertedDocument);
+			    var firstChapter = firstDocument?.Chapters.FirstOrDefault();
+
+			    if (firstChapter != null)
+				    breadcrumbs.Links.Add(new BreadcrumbLink("Documents",$"/consultations/{consultation.ConsultationId}/{firstDocument.DocumentId}/{firstChapter.Slug}"));
+		    }
+
+		    return breadcrumbs;
 	    }
 
-	    public IEnumerable<ViewModels.Consultation> GetConsultations()
+		public IEnumerable<ViewModels.Consultation> GetConsultations()
         {
             var user = _userService.GetCurrentUser();
             var consultations = _feedConverterService.GetConsultationList();

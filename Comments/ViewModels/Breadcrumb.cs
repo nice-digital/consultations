@@ -4,12 +4,12 @@ namespace Comments.ViewModels
 {
 	public class Breadcrumb
     {
-	    public Breadcrumb(IEnumerable<BreadcrumbLink> links)
+	    public Breadcrumb(IList<BreadcrumbLink> links)
 	    {
 		    Links = links;
 	    }
 
-	    public IEnumerable<BreadcrumbLink> Links { get; private set; }
+	    public IList<BreadcrumbLink> Links { get; private set; }
     }
 
 	public class BreadcrumbLink

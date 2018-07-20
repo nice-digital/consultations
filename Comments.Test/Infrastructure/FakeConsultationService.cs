@@ -25,6 +25,8 @@ namespace Comments.Test.Infrastructure
 		    return false;
 	    }
 
+	    
+
 	    public ConsultationState GetConsultationState(string sourceURI, IEnumerable<Location> locations = null,
 		    ConsultationDetail consultation = null)
 	    {
@@ -37,6 +39,10 @@ namespace Comments.Test.Infrastructure
 	    }
 
 		#region Not Implemented Members
+	    public Breadcrumb GetBreadcrumb(ConsultationDetail consultation, bool isReview)
+	    {
+		    throw new NotImplementedException();
+	    }
 		public (int rowsUpdated, Validate validate) SubmitCommentsAndAnswers(CommentsAndAnswers commentsAndAnswers)
 		{
 			throw new NotImplementedException();
