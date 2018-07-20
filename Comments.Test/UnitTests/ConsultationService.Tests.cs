@@ -7,7 +7,9 @@ using Shouldly;
 using System;
 using System.Linq;
 using System.Net;
+using NICE.Feeds;
 using NICE.Feeds.Models.Indev.Detail;
+using NICE.Feeds.Tests.Infrastructure;
 using Xunit;
 
 namespace Comments.Test.UnitTests
@@ -80,19 +82,14 @@ namespace Comments.Test.UnitTests
 
 	    [Theory]
 		//document page tests
-		[InlineData(false, null, "gid-ng10107", "html-content", "/guidance/indevelopment/gid-ng10107/consultation/html-content", null)] //regular indev project
-	    [InlineData(false, "", "gid-ng10107", "html-content", "/guidance/indevelopment/gid-ng10107/consultation/html-content", null)]
-	    [InlineData(false, "orig-ref", "gid-ng10107", "html-content", "/guidance/orig-ref/update/gid-ng10107/consultation/html-content", null)] //an "update project"
-	    [InlineData(false, null, "ph24", "html-content", "/guidance/ph24/consultation/html-content", null)] //published product
-		//now the same for the review page
-	    [InlineData(true, null, "gid-ng10107", "html-content", "/guidance/indevelopment/gid-ng10107/consultation/html-content", "/consultations/")] //regular indev project
-	    [InlineData(true, "", "gid-ng10107", "html-content", "/guidance/indevelopment/gid-ng10107/consultation/html-content", null)]
-	    [InlineData(true, "orig-ref", "gid-ng10107", "html-content", "/guidance/orig-ref/update/gid-ng10107/consultation/html-content", null)] //an "update project"
-	    [InlineData(true, null, "ph24", "html-content", "/guidance/ph24/consultation/html-content", null)] //published product
-		public void GetBreadcrumbForDocumentPage(bool isReview, string origProjectReference, string reference, string resourceTitleId, string expectedConsultationUrl, string expectedDocumentsUrl)
+		[InlineData(null, "gid-ng10107", "html-content", "/guidance/indevelopment/gid-ng10107/consultation/html-content", null)] //regular indev project
+	    [InlineData("", "gid-ng10107", "html-content", "/guidance/indevelopment/gid-ng10107/consultation/html-content", null)]
+	    [InlineData("orig-ref", "gid-ng10107", "html-content", "/guidance/orig-ref/update/gid-ng10107/consultation/html-content", null)] //an "update project"
+	    [InlineData(null, "ph24", "html-content", "/guidance/ph24/consultation/html-content", null)] //published product
+		public void GetBreadcrumbForDocumentPage(string origProjectReference, string reference, string resourceTitleId, string expectedConsultationUrl, string expectedDocumentsUrl)
 	    {
-		    //Arrange
-			var consultationService = new Services.ConsultationService(null, null, null, null);
+			//Arrange
+		    var consultationService = new Services.ConsultationService(null, null, null, null);
 		    var consultationDetail = new ConsultationDetail()
 		    {
 			    OrigProjectReference = origProjectReference,
@@ -101,23 +98,44 @@ namespace Comments.Test.UnitTests
 			};
 
 			//Act
-		    var actualBreadcrumb = consultationService.GetBreadcrumb(consultationDetail, isReview);
+		    var actualBreadcrumb = consultationService.GetBreadcrumb(consultationDetail, false);
 
 			//Assert
 			actualBreadcrumb.Links.ShouldNotBeNull();
-		    actualBreadcrumb.Links.Count().ShouldBe(isReview ? 3 : 2);
+		    actualBreadcrumb.Links.Count().ShouldBe(2);
 
 		    actualBreadcrumb.Links.First().Text.ShouldBe("All consultations");
 		    actualBreadcrumb.Links.First().Url.ShouldBe("/guidance/inconsultation");
 
 		    actualBreadcrumb.Links.Skip(1).First().Text.ShouldBe("Consultation");
 		    actualBreadcrumb.Links.Skip(1).First().Url.ShouldBe(expectedConsultationUrl);
+		}
 
-		    if (isReview)
-		    {
-			    actualBreadcrumb.Links.Skip(2).First().Text.ShouldBe("Documents");
-			    actualBreadcrumb.Links.Skip(2).First().Url.ShouldBe(expectedDocumentsUrl);
-			}
+		[Theory]
+		[InlineData("/guidance/indevelopment/gid-ta10232/consultation/html-content", "/consultations/1/2/introduction")] //regular indev project
+		[InlineData("/guidance/orig-ref/update/gid-ta10232/consultation/html-content", "/consultations/1/2/introduction")] //an "update project"
+		public void GetBreadcrumbForReviewPage(string expectedConsultationUrl, string expectedDocumentsUrl)
+		{
+			//Arrange
+			var feedService = new FeedService(new FeedReader(Feed.ConsultationCommentsPublishedDetailMulitpleDoc));
+			var consultationService = new Services.ConsultationService(null, feedService, null, null);
+			var consultationDetail = feedService.GetIndevConsultationDetailForPublishedProject(1, PreviewState.NonPreview, 2);
+
+			//Act
+			var actualBreadcrumb = consultationService.GetBreadcrumb(consultationDetail, true);
+
+			//Assert
+			actualBreadcrumb.Links.ShouldNotBeNull();
+			actualBreadcrumb.Links.Count().ShouldBe(3);
+
+			actualBreadcrumb.Links.First().Text.ShouldBe("All consultations");
+			actualBreadcrumb.Links.First().Url.ShouldBe("/guidance/inconsultation");
+
+			actualBreadcrumb.Links.Skip(1).First().Text.ShouldBe("Consultation");
+			//actualBreadcrumb.Links.Skip(1).First().Url.ShouldBe(expectedConsultationUrl); //TODO: uncomment this, when the indev feed is fixed in ID-215
+
+			actualBreadcrumb.Links.Skip(2).First().Text.ShouldBe("Documents");
+			actualBreadcrumb.Links.Skip(2).First().Url.ShouldBe(expectedDocumentsUrl);
 		}
 	}
 }
