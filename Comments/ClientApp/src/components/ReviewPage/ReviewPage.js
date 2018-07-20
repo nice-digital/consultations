@@ -144,27 +144,6 @@ export class ReviewPage extends Component<PropsType, StateType> {
 		return queryParams.sourceURI;
 	};
 
-	// getBreadcrumbs = () => {
-	// 	const { consultationId } = this.props.match.params;
-	// 	const firstCommentableDocument = this.state.documentsList.filter(doc => doc.convertedDocument)[0]; //todo: this whole function needs to get it's content from the feed.
-	// 	const consultationsFirstDocument = firstCommentableDocument.documentId;
-	// 	const firstDocumentChapterSlug = firstCommentableDocument.chapters[0].slug;
-	// 	return [
-	// 		{
-	// 			label: "All Consultations",
-	// 			url: "#"
-	// 		},
-	// 		{
-	// 			label: "Consultation",
-	// 			url: "https://alpha.nice.org.uk/guidance/indevelopment/gid-ng10107/consultation/html-content"
-	// 		},
-	// 		{
-	// 			label: "Documents",
-	// 			url: `/${consultationId}/${consultationsFirstDocument}/${firstDocumentChapterSlug}`
-	// 		}
-	// 	];
-	// };
-
 	submitConsultation = () => {
 		const comments = this.commentList.getComments();
 		let answersToSubmit = [];

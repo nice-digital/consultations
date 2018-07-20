@@ -144,7 +144,7 @@ describe("[ClientApp] ", () => {
 
 		// });
 
-		it("should match snapshot with supplied data", () => {
+		it.only("should match snapshot with supplied data", () => {
 			const mock = new MockAdapter(axios);
 
 			const wrapper = mount(
@@ -164,7 +164,7 @@ describe("[ClientApp] ", () => {
 
 			let consultationPromise = new Promise(resolve => {
 				mock
-					.onGet("/consultations/api/Consultation?consultationId=1")
+					.onGet("/consultations/api/Consultation?consultationId=1&isReview=true")
 					.reply(() => {
 						resolve();
 						return [200, ConsultationData];

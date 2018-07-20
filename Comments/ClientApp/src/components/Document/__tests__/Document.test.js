@@ -65,7 +65,7 @@ describe("[ClientApp] ", () => {
 
 			let consulatationPromise = new Promise(resolve => {
 				mock
-					.onGet("/consultations/api/Consultation?consultationId=1")
+					.onGet("/consultations/api/Consultation?consultationId=1&isReview=false")
 					.reply(() => {
 						resolve();
 						return [200, ConsultationData];
