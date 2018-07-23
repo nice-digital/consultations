@@ -43,7 +43,8 @@ describe("[ClientApp] ", () => {
 			},
 			comment: {
 				commentId: 1
-			}
+			},
+			viewComments: true
 		};
 
 		afterEach(() => {
@@ -66,7 +67,7 @@ describe("[ClientApp] ", () => {
 		});
 
 		it("renders the 'no comments' message if the comments array is empty", async () => {
-			mock.onGet().reply(200, { comments: [] });
+			mock.onGet().reply(200, EmptyCommentsResponse);
 			const wrapper = mount(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>);
 			await nextTick();
 			wrapper.update();
@@ -74,7 +75,7 @@ describe("[ClientApp] ", () => {
 		});
 
 		it("has state with an empty array of comments", () => {
-			mock.onGet().reply(200, { comments: [] });
+			mock.onGet().reply(200, EmptyCommentsResponse);
 			const wrapper = shallow(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>).find("CommentList").dive();
 			expect(Array.isArray(wrapper.state().comments)).toEqual(true);
 		});
@@ -300,7 +301,8 @@ describe("[ClientApp] ", () => {
 			},
 			comment: {
 				commentId: 1
-			}
+			},
+			viewComments: true				
 		};
 
 		it("componentDidUpdate filters comments for review page", async () => {
@@ -343,7 +345,8 @@ describe("[ClientApp] ", () => {
 				},
 				comment: {
 					commentId: 1
-				}
+				},
+				viewComments: true				
 			};
 
 			mock.reset();
@@ -384,7 +387,8 @@ describe("[ClientApp] ", () => {
 				},
 				comment: {
 					commentId: 1
-				}
+				},
+				viewComments: true		
 			};
 
 			mock.reset();
@@ -425,7 +429,8 @@ describe("[ClientApp] ", () => {
 				},
 				comment: {
 					commentId: 1
-				}
+				},
+				viewComments: true				
 			};
 
 			mock.reset();

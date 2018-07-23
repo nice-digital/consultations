@@ -1,28 +1,29 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using Comments.Models;
 using Comments.Services;
 using Comments.Test.Infrastructure;
 using Comments.ViewModels;
 using Newtonsoft.Json;
-using NICE.Feeds;
-using NICE.Feeds.Tests.Infrastructure;
 using Shouldly;
+using System;
+using System.Linq;
+using System.Net;
+using NICE.Feeds;
+using NICE.Feeds.Models.Indev.Detail;
+using NICE.Feeds.Tests.Infrastructure;
 using Xunit;
-using Question = Comments.Models.Question;
 
 namespace Comments.Test.UnitTests
 {
-    public class Tests : Comments.Test.Infrastructure.TestBase
+	public class ConsultationService : Comments.Test.Infrastructure.TestBase
     {
         [Fact]
         public void Comments_CanBeRead()
         { 
             // Arrange
             ResetDatabase();
-            var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+	        _context.Database.EnsureCreated();
+
+			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var commentText = Guid.NewGuid().ToString();
             var createdByUserId = Guid.NewGuid();
 
@@ -31,8 +32,10 @@ namespace Comments.Test.UnitTests
 
             var locationId = AddLocation(sourceURI);
             AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId);
-            
-            var commentService = new CommentService(new ConsultationsContext(_options, userService), userService, authenticateService);
+
+	        var context = new ConsultationsContext(_options, userService);
+			//var submitService = new SubmitService(context, userService, _consultationService);
+            var commentService = new CommentService(context, userService, authenticateService, _consultationService);
             
             // Act
             var viewModel = commentService.GetCommentsAndQuestions(sourceURI);
@@ -53,8 +56,9 @@ namespace Comments.Test.UnitTests
             var createdByUserId = Guid.Empty;
             var authenticateService = new FakeAuthenticateService(authenticated: true);
 
-            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, createdByUserId, _context);
-            var commentService = new CommentService(_context, _fakeUserService, authenticateService);
+            AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, createdByUserId, (int)StatusName.Draft, _context);
+	        //var submitService = new SubmitService(_context, _fakeUserService, _consultationService);
+			var commentService = new CommentService(_context, _fakeUserService, authenticateService, _consultationService);
 
             // Act    
             var viewModel = commentService.GetCommentsAndQuestions(sourceURI);
@@ -76,46 +80,62 @@ namespace Comments.Test.UnitTests
             
         }
 
-        
+	    [Theory]
+		//document page tests
+		[InlineData(null, "gid-ng10107", "html-content", "/guidance/indevelopment/gid-ng10107/consultation/html-content", null)] //regular indev project
+	    [InlineData("", "gid-ng10107", "html-content", "/guidance/indevelopment/gid-ng10107/consultation/html-content", null)]
+	    [InlineData("orig-ref", "gid-ng10107", "html-content", "/guidance/orig-ref/update/gid-ng10107/consultation/html-content", null)] //an "update project"
+	    [InlineData(null, "ph24", "html-content", "/guidance/ph24/consultation/html-content", null)] //published product
+		public void GetBreadcrumbForDocumentPage(string origProjectReference, string reference, string resourceTitleId, string expectedConsultationUrl, string expectedDocumentsUrl)
+	    {
+			//Arrange
+		    var consultationService = new Services.ConsultationService(null, null, null, null);
+		    var consultationDetail = new ConsultationDetail()
+		    {
+			    OrigProjectReference = origProjectReference,
+			    Reference = reference,
+			    ResourceTitleId = resourceTitleId
+			};
 
-        [Theory]
-        [InlineData(1, 1, null, null)]
-        [InlineData(1, 1, "a chapter for a supporting document - not valid", null)]
-        [InlineData(2, 2, "first-document-first-chapter-slug", "first-document-first-chapter-slug")]
-        [InlineData(2, 2, "first-document-second-chapter-slug", "first-document-second-chapter-slug")]
-        [InlineData(3, 3, "first-document-first-chapter-slug", "second-document-first-chapter-slug")]
-        [InlineData(2, 2, null, "first-document-first-chapter-slug")]
-        [InlineData(-1, 2, null, "first-document-first-chapter-slug")]
-        [InlineData(int.MaxValue, 2, null, "first-document-first-chapter-slug")]
-        public void EnsureDocumentAndChapterAreValidWithinConsultation_Validation(int documentIdIn, int documentIdOut, string chapterSlugIn, string chapterSlugOut)
-        {
-            // Arrange
-            var consultation = new ConsultationDetail(null, null, null, DateTime.MinValue, DateTime.MaxValue, null, null, null,
-                null, null, null,  1, null, true, true, true, true, null, null, 
-                new List<Document>
-                {
-                    new Document(1, 1, false, "supporting document", null),
-                    new Document(1, 2, true, "first commentable document", new List<Chapter>
-                    {
-                        new Chapter("first-document-first-chapter-slug", "first-document-first-chapter-title"),
-                        new Chapter("first-document-second-chapter-slug", "first-document-second-chapter-title")
-                    }),
-                    new Document(1, 3, true, "second commentable document", new List<Chapter>
-                    {
-                        new Chapter("second-document-first-chapter-slug", "second-document-first-chapter-title")
-                    })
-                }, 
-                user: null);
-            var feedReaderService = new FeedReader(Feed.ConsultationCommentsPublishedDetailMulitpleDoc);
-            var consultationService = new ConsultationService(new FeedService(feedReaderService), new FakeLogger<ConsultationService>(), FakeUserService.Get(false));
+			//Act
+		    var actualBreadcrumb = consultationService.GetBreadcrumbs(consultationDetail, false);
 
-            // Act
-            var (validatedDocumentId, validatedChapterSlug) = consultationService.ValidateDocumentAndChapterWithinConsultation(consultation, documentIdIn, chapterSlugIn);
+			//Assert
+			actualBreadcrumb.ShouldNotBeNull();
+		    actualBreadcrumb.Count().ShouldBe(2);
 
-            //Assert
-            validatedDocumentId.ShouldBe(documentIdOut);
-            validatedChapterSlug.ShouldBe(chapterSlugOut);
-        }
+		    actualBreadcrumb.First().Label.ShouldBe("All consultations");
+		    actualBreadcrumb.First().Url.ShouldBe("/guidance/inconsultation");
 
-    }
+		    actualBreadcrumb.Skip(1).First().Label.ShouldBe("Consultation");
+		    actualBreadcrumb.Skip(1).First().Url.ShouldBe(expectedConsultationUrl);
+		}
+
+		[Theory]
+		[InlineData("/guidance/indevelopment/gid-ta10232/consultation/html-content", "/consultations/1/2/introduction")] //regular indev project
+		[InlineData("/guidance/orig-ref/update/gid-ta10232/consultation/html-content", "/consultations/1/2/introduction")] //an "update project"
+		public void GetBreadcrumbForReviewPage(string expectedConsultationUrl, string expectedDocumentsUrl)
+		{
+			//Arrange
+			var feedService = new FeedService(new FeedReader(Feed.ConsultationCommentsPublishedDetailMulitpleDoc));
+			var consultationService = new Services.ConsultationService(null, feedService, null, null);
+			var consultationDetail = feedService.GetIndevConsultationDetailForPublishedProject(1, PreviewState.NonPreview, 2);
+
+			//Act
+			var actualBreadcrumb = consultationService.GetBreadcrumbs(consultationDetail, true);
+
+			//Assert
+			actualBreadcrumb.ShouldNotBeNull();
+			actualBreadcrumb.Count().ShouldBe(3);
+
+			actualBreadcrumb.First().Label.ShouldBe("All consultations");
+			actualBreadcrumb.First().Url.ShouldBe("/guidance/inconsultation");
+
+			actualBreadcrumb.Skip(1).First().Label.ShouldBe("Consultation");
+			//actualBreadcrumb.Skip(1).First().Url.ShouldBe(expectedConsultationUrl); //TODO: uncomment this, when the indev feed is fixed in ID-215
+
+			actualBreadcrumb.Skip(2).First().Label.ShouldBe("Documents");
+			actualBreadcrumb.Skip(2).First().Url.ShouldBe(expectedDocumentsUrl);
+		}
+	}
 }

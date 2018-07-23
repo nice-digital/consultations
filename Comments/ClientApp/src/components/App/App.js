@@ -3,12 +3,11 @@
 import React from "react";
 import { Route, Switch, Redirect } from "react-router";
 import { Helmet } from "react-helmet";
-import { DocumentView } from "../DocumentView/DocumentView";
+import DocumentViewWithRouter from "../DocumentView/DocumentView";
 import NotFound from "../NotFound/NotFound";
 import DocumentPreviewRedirectWithRouter from "../Document/DocumentPreviewRedirect";
 import ReviewPageWithRouter from "../ReviewPage/ReviewPage";
 import UserProviderWithRouter from "../../context/UserContext";
-import OnboardingModal from "../OnboardingModal/OnboardingModal";
 
 type PropsType = any;
 
@@ -28,12 +27,12 @@ class App extends React.Component<PropsType, StateType> {
 				<Switch>
 					{/*Home*/}
 					<Route exact path="/">
-						<Redirect to="/10/5/overview"/>
+						<Redirect to="/17/1/introduction"/>
 					</Route>
 
 					{/*Document (Comment Layout)*/}
 					<Route exact path="/:consultationId/:documentId/:chapterSlug">
-						<DocumentView/>
+						<DocumentViewWithRouter/>
 					</Route>
 
 					<Switch>
@@ -60,7 +59,6 @@ class App extends React.Component<PropsType, StateType> {
 					{/*404*/}
 					<Route component={NotFound}/>
 				</Switch>
-				<OnboardingModal/>
 			</UserProviderWithRouter>
 		);
 	}

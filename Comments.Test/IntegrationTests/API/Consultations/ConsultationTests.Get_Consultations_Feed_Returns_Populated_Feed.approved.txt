@@ -4,7 +4,7 @@
         "title":"For consultation comments",
         "consultationName":"Appraisal consultation",
         "startDate":"2018-04-01T00:00:00",
-        "endDate":"2018-05-31T17:00:00",
+        "endDate":"2028-05-31T17:00:00",
         "consultationType":"Appraisal consultation",
         "resourceTitleId":null,
         "projectType":"TA",
@@ -13,7 +13,6 @@
         "relevantTo":null,
         "consultationId":1,
         "process":"TAG",
-        "allowConsultationComments":true,
         "hasDocumentsWhichAllowConsultationComments":false,
         "hasDocumentsWhichAllowConsultationQuestions":true,
         "supportsQuestions":false,
@@ -24,14 +23,16 @@
             "isAuthorised":true,
             "displayName":"Benjamin Button",
             "userId":"00000000-0000-0000-0000-000000000000"
-        }
+        },
+        "consultationState":null,
+        "breadcrumbs":null
     },
     {
         "reference":"GID-IPG10038",
         "title":"Transcutaneous microwave ablation for severe primary axillary hyperhidrosis ",
         "consultationName":"Interventional procedure consultation",
         "startDate":"2018-02-28T00:00:00",
-        "endDate":"2018-03-23T00:00:00",
+        "endDate":"2028-03-23T00:00:00",
         "consultationType":"Interventional procedure consultation",
         "resourceTitleId":null,
         "projectType":"IPG",
@@ -40,7 +41,6 @@
         "relevantTo":null,
         "consultationId":2,
         "process":"IP",
-        "allowConsultationComments":true,
         "hasDocumentsWhichAllowConsultationComments":false,
         "hasDocumentsWhichAllowConsultationQuestions":true,
         "supportsQuestions":false,
@@ -51,6 +51,8 @@
             "isAuthorised":true,
             "displayName":"Benjamin Button",
             "userId":"00000000-0000-0000-0000-000000000000"
-        }
+        },
+        "consultationState":null,
+        "breadcrumbs":null
     }
 ]

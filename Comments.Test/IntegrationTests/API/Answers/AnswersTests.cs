@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Comments.Models;
 using Comments.Services;
 using Comments.Test.Infrastructure;
+using Comments.ViewModels;
 using Newtonsoft.Json;
 using Shouldly;
 using Xunit;
@@ -20,7 +21,7 @@ namespace Comments.Test.IntegrationTests.API.Answers
         {
             // Arrange
             SetupTestDataInDB();
-            var answer = new ViewModels.Answer(0, "answer text", false, DateTime.Now, Guid.Empty, 1);
+            var answer = new ViewModels.Answer(0, "answer text", false, DateTime.Now, Guid.Empty, 1, (int)StatusName.Draft);
             var content = new StringContent(JsonConvert.SerializeObject(answer), Encoding.UTF8, "application/json");
 
             // Act
@@ -39,7 +40,9 @@ namespace Comments.Test.IntegrationTests.API.Answers
         {
             // Arrange
             ResetDatabase();
-            var answerText = Guid.NewGuid().ToString();
+	        _context.Database.EnsureCreated();
+
+			var answerText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
 
             SetupTestDataInDB();
@@ -67,12 +70,13 @@ namespace Comments.Test.IntegrationTests.API.Answers
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
             SetupTestDataInDB();
-            var answerId =  AddAnswer(1, userId, answerText, _context);
+	        AddStatus(StatusName.Draft.ToString(), (int)StatusName.Draft);
+			var answerId =  AddAnswer(1, userId, answerText, (int)StatusName.Draft, _context);
             
             var answerService = new AnswerService(_context, userService);
             var viewModel = answerService.GetAnswer(answerId);
 
-            var updatedAnswerText = Guid.NewGuid().ToString();
+            var updatedAnswerText = Guid.Empty.ToString();
             viewModel.answer.AnswerText = updatedAnswerText;
 
             var content = new StringContent(JsonConvert.SerializeObject(viewModel.answer), Encoding.UTF8, "application/json");
@@ -84,7 +88,7 @@ namespace Comments.Test.IntegrationTests.API.Answers
             var result = answerService.GetAnswer(answerId);
 
             //Assert
-            responseString.ShouldBe("1");
+            responseString.ShouldMatchApproved(new Func<string, string>[]{ Scrubbers.ScrubLastModifiedDate, Scrubbers.ScrubAnswerId });
             result.answer.AnswerText.ShouldBe(updatedAnswerText);
 
         }

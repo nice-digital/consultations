@@ -1,7 +1,8 @@
 var path = require("path");
 
 exports.config = {
-
+	// debug: true,
+	// execArgv: ['--debug=127.0.0.1:9229'],
     // Use selenium standalone server so we don't have spawn a separate server
     services: ["selenium-standalone"],
     seleniumLogs: "./logs",
@@ -21,7 +22,8 @@ exports.config = {
         //}
     ],
 
-    logLevel: "verbose",
+	logLevel: "verbose",
+	// Change this to verbose if you want more detailed logging in the terminal
     coloredLogs: true,
     screenshotPath: "./errorShots/",
     baseUrl: "https://test.nice.org.uk/consultations/",
@@ -37,7 +39,7 @@ exports.config = {
             "./src/steps/then.js"
         ],
         tagExpression: "not @pending", // See https://docs.cucumber.io/tag-expressions/
-        timeout: 300000,
+        timeout: 30000,
     },
 
     // Set up global asssertion libraries
@@ -46,5 +48,5 @@ exports.config = {
         global.expect = chai.expect;
         global.assert = chai.assert;
         global.should = chai.should();
-    },
+	}
 }

@@ -1,13 +1,15 @@
 // @flow
 
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { withRouter, Link } from "react-router-dom";
 import { load } from "./../../data/loader";
 import preload from "../../data/pre-loader";
 import { CommentBox } from "../CommentBox/CommentBox";
+import { Question } from "../Question/Question";
 import { LoginBanner } from "./../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
 import { queryStringToObject, replaceFormat } from "../../helpers/utils";
+import {pullFocusById} from "../../helpers/accessibility-helpers";
 //import stringifyObject from "stringify-object";
 
 type PropsType = {
@@ -20,10 +22,18 @@ type PropsType = {
 		pathname: string,
 		search: string
 	},
-	drawerOpen: boolean,
+	isVisible: boolean,
 	isReviewPage: boolean,
 	filterByDocument: number,
-	isSubmitted: boolean
+	isSubmitted: boolean,
+	submittedHandler: Function,
+	validationHander: Function,
+	viewComments: boolean //when false, we view questions.
+};
+
+type StatusType = {
+	statusId: number,
+	name: string
 };
 
 type CommentType = {
@@ -40,13 +50,46 @@ type CommentType = {
 	rangeEndOffset: string,
 	quote: string,
 	commentOn: string,
-	show: boolean
+	show: boolean,
+	status: StatusType
+};
+
+type QuestionTypeType = {
+	description: string,
+	hasTextAnswer: boolean,
+	hasBooleanAnswer: boolean
+};
+
+type QuestionType = {
+	questionId: number,
+	questionText: string,
+	questionTypeId: number,
+	questionOrder: number,
+	lastModifiedDate: Date,
+	lastModifiedByUserId: string,
+	questionType: QuestionTypeType,
+	answers: Array<AnswerType>,
+	show: boolean,
+	commentOn: string,
+	sourceURI: string,
+};
+
+type AnswerType = {
+	answerId: number,
+	answerText: string,
+	answerBoolean: boolean,
+	questionId: number,
+	lastModifiedDate: Date,
+	lastModifiedByUserId: string,
+	statusId: number,
+	status: StatusType
 };
 
 type StateType = {
 	comments: Array<CommentType>,
-	questions: any,
-	loading: boolean
+	questions: Array<QuestionType>,
+	loading: boolean,
+	allowComments: boolean
 };
 
 type ContextType = any;
@@ -57,7 +100,8 @@ export class CommentList extends Component<PropsType, StateType> {
 		this.state = {
 			comments: [],
 			questions: [],
-			loading: true
+			loading: true,
+			allowComments: true
 		};
 		let preloadedData = {};
 		if (this.props.staticContext && this.props.staticContext.preload) {
@@ -83,11 +127,16 @@ export class CommentList extends Component<PropsType, StateType> {
 		// }
 
 		if (preloaded) {
+
+			//console.log(`preloaded 90: ${stringifyObject(preloaded)}`);
+
+			let allowComments = !preloaded.consultationState.consultationIsOpen && !preloaded.consultationState.userHasSubmitted;
 			this.state = {
 				loading: false,
 				comments: preloaded.comments,
 				filteredComments: [],
-				questions: preloaded.questions
+				questions: preloaded.questions,
+				allowComments: allowComments
 			};
 		}
 	}
@@ -121,21 +170,36 @@ export class CommentList extends Component<PropsType, StateType> {
 			.catch(err => console.log("load comments in commentlist " + err));
 	}
 
-	setCommentListState = (response: any) => {
-
+	setCommentListState = (response: any) =>
+	{
+		let allowComments = response.data.consultationState.consultationIsOpen && !response.data.consultationState.userHasSubmitted;
 		const comments = this.filterComments(this.props.location.search, response.data.comments );
+		const questions = this.filterQuestions(this.props.location.search, response.data.questions );
 		this.setState({
 			comments,
-			questions: response.data.questions,
-			loading: false
+			questions,
+			loading: false,
+			allowComments: allowComments
 		});
+		this.updateTabs();
 	};
 
 	componentDidMount() {
 		this.loadComments();
+		//let tabs = new Tabs(this._tabs);
+		this.updateTabs();
 	}
 
-	componentDidUpdate(prevProps: PropsType) {
+	updateTabs = () => {
+		if (window){
+			window.dispatchEvent(new CustomEvent("commentList_did_mount", {}));
+			window.setTimeout(function(){
+				window.dispatchEvent(new CustomEvent("commentList_did_mount", {}));
+			}, 500);			
+		}
+	}
+
+	componentDidUpdate(prevProps: PropsType, prevState: any, nextContent: any) {
 		const oldRoute = prevProps.location.pathname + prevProps.location.search;
 		const newRoute = this.props.location.pathname + this.props.location.search;
 		if (oldRoute !== newRoute) {
@@ -145,6 +209,35 @@ export class CommentList extends Component<PropsType, StateType> {
 			this.loadComments();
 		}
 	}
+
+	getComments = () => {
+		return this.state.comments;
+	}
+
+	getQuestions = () => {
+		return this.state.questions;
+	}
+
+	// submitComments = () => {
+
+	// 	let answersToSubmit = [];
+	// 	this.state.questions.forEach(function(question){
+	// 		if (question.answers != null){
+	// 			answersToSubmit = answersToSubmit.concat(question.answers);
+	// 		}			
+	// 	});
+
+	// 	let commentsAndAnswers = {comments: this.state.comments, answers: answersToSubmit};
+
+	// 	load("submit", undefined, [], {}, "POST", commentsAndAnswers, true)
+	// 		.then(res => {
+	// 			this.props.submittedHandler();
+	// 		})
+	// 		.catch(err => {
+	// 			console.log(err);
+	// 			if (err.response) alert(err.response.statusText);
+	// 		});		
+	// }
 
 	filterComments = (newSourceURIToFilterBy: string, comments: Array<CommentType>): Array<CommentType> => {
 		let filterBy = queryStringToObject(newSourceURIToFilterBy);
@@ -157,8 +250,17 @@ export class CommentList extends Component<PropsType, StateType> {
 		});
 	};
 
-	newComment(newComment: CommentType) {
+	filterQuestions = (newSourceURIToFilterBy: string, questions: Array<QuestionType>): Array<QuestionType> => {
+		let filterBy = queryStringToObject(newSourceURIToFilterBy);
+		if (filterBy.sourceURI == null) filterBy = { sourceURI: "" };
+		const idsOfFilteredComments = questions.filter(question => question.sourceURI.indexOf(filterBy.sourceURI) !== -1).map(question => question.questionId);
+		return questions.map(question => {
+			question.show = !idsOfFilteredComments.includes(question.questionId);
+			return question;
+		});
+	};
 
+	newComment(newComment: CommentType) {
 		let comments = this.state.comments;
 		//negative ids are unsaved / new comments
 		let idToUseForNewBox = -1;
@@ -175,6 +277,9 @@ export class CommentList extends Component<PropsType, StateType> {
 		});
 		comments.unshift(generatedComment);
 		this.setState({ comments });
+		setTimeout(() => {
+			pullFocusById(`Comment${idToUseForNewBox}`);
+		}, 0);
 	}
 
 	saveCommentHandler = (e: Event, comment: CommentType) => {
@@ -198,6 +303,9 @@ export class CommentList extends Component<PropsType, StateType> {
 					this.setState({
 						comments
 					});
+					if (typeof this.props.validationHander === "function") {
+						this.props.validationHander();
+					}
 				}
 			})
 			.catch(err => {
@@ -224,53 +332,156 @@ export class CommentList extends Component<PropsType, StateType> {
 		}
 	};
 
+	saveAnswerHandler = (e: Event, answer: AnswerType) => {
+		e.preventDefault();
+		//todo: post or put the answer to the api, then on success use answer.questionId to get the question in the this.state.questions array and update the state.
+		//console.log(stringifyObject(answer));
+		const isANewAnswer = answer.answerId < 0;
+		const method = isANewAnswer ? "POST" : "PUT";
+		const urlParameters = isANewAnswer ? [] : [answer.answerId];
+		const endpointName = isANewAnswer ? "newanswer" : "editanswer";
+
+		load(endpointName, undefined, urlParameters, {}, method, answer, true)
+			.then(res => {
+				if (res.status === 201 || res.status === 200) {
+					const questionIndex = this.state.questions
+						.map(function(question) {
+							return question.questionId;
+						})
+						.indexOf(answer.questionId);
+					const questions = this.state.questions;
+
+					if (questions[questionIndex].answers === null || questions[questionIndex].answers.length < 1){
+						questions[questionIndex].answers = [res.data];
+					} else{					
+						const answerIndex = questions[questionIndex].answers
+							.map(function(answer) {
+								return answer.answerId;
+							}).indexOf(answer.answerId);
+						
+						const answers = questions[questionIndex].answers;
+						answers[answerIndex] = res.data;	
+						questions[questionIndex].answers = answers;
+					}					
+					this.setState({
+						questions
+					});
+					if (typeof this.props.validationHander === "function") {
+						this.props.validationHander();
+					}
+				}
+			})
+			.catch(err => {
+				console.log(err);
+				if (err.response) alert(err.response.statusText);
+			});
+	};
+
+	deleteAnswerHandler = (e: Event, questionId: number, answerId: number) => {
+		e.preventDefault();
+		//todo: call the delete answer api, then update the state on success.
+		if (answerId < 0) {
+			this.removeAnswerFromState(questionId, answerId);
+		} else {
+			load("editanswer", undefined, [answerId], {}, "DELETE")
+				.then(res => {
+					if (res.status === 200) {
+						this.removeAnswerFromState(questionId, answerId);
+					}
+				})
+				.catch(err => {
+					console.log(err);
+					if (err.response) alert(err.response.statusText);
+				});
+		}
+	};
+
 	removeCommentFromState = (commentId: number) => {
 		let comments = this.state.comments;
 		comments = comments.filter(comment => comment.commentId !== commentId);
 		this.setState({ comments });
+		if ((comments.length === 0) && (typeof this.props.validationHander === "function")) {
+			this.props.validationHander();
+		}
+	};
+
+	removeAnswerFromState = (questionId: number, answerId: number) => {
+		let questions = this.state.questions;
+		let questionToUpdate = questions.find(question => question.questionId === questionId);
+		questionToUpdate.answers = questionToUpdate.answers.filter(answer => answer.answerId != answerId);
+		this.setState({ questions });
+		if (typeof this.props.validationHander === "function") {
+			this.props.validationHander();
+		}
 	};
 
 	render() {
 		const commentsToShow = this.state.comments.filter(comment => !comment.show);
+		const questionsToShow = this.state.questions.filter(question => !question.show);
 		return (
 			<UserContext.Consumer>
 				{ (contextValue: ContextType) => {
 					return (
-						<div>
+						<div data-qa-sel="comment-list-wrapper">
 
 							{!this.props.isReviewPage ?
 								<div className="grid">
-									<h1 data-g="6" id="commenting-panel" className="p">Comments panel</h1>
+									<h1 data-g="6" id="commenting-panel" className="p">
+										{this.props.viewComments ? "Comments" : "Questions"} panel
+									</h1>
 									{contextValue.isAuthorised ?
 										<p data-g="6">
-											<Link to={`/${this.props.match.params.consultationId}/review`} data-qa-sel="review-all-comments" className="right">Review all comments</Link>
+											<Link
+												to={`/${this.props.match.params.consultationId}/review`}
+												data-qa-sel="review-all-comments"
+												className="right">Review all {this.props.viewComments ? "comments" : "questions"}</Link>
 										</p> : null
 									}
 								</div> : null
 							}
-
 							{this.state.loading ? <p>Loading...</p> :
 
 								contextValue.isAuthorised ?
 
-									commentsToShow.length === 0 ? <p>No comments yet</p> :
-
-										<ul className="CommentList list--unstyled">
-											{commentsToShow.map((comment, idx) => {
-												return (
-													<CommentBox
-														readOnly={this.props.isSubmitted}
-														drawerOpen={this.props.drawerOpen}
-														key={comment.commentId}
-														unique={`Comment${idx}`}
-														comment={comment}
-														saveHandler={this.saveCommentHandler}
-														deleteHandler={this.deleteCommentHandler}
-													/>
-												);
-											})}
-										</ul> :
-
+									this.props.viewComments ? 
+									
+										commentsToShow.length === 0 ? <p>No comments yet</p> :
+											<ul className="CommentList list--unstyled">
+												{commentsToShow.map((comment) => {
+													return (
+														<CommentBox
+															readOnly={!this.state.allowComments || this.props.isSubmitted}
+															isVisible={this.props.isVisible}
+															key={comment.commentId}
+															unique={`Comment${comment.commentId}`}
+															comment={comment}
+															saveHandler={this.saveCommentHandler}
+															deleteHandler={this.deleteCommentHandler}
+														/>
+													);
+												})}
+											</ul> 									
+										:
+										<div>
+											<p>We would like to hear your views on the draft recommendations presented in the guideline, and any comments you may have on the rationale and impact sections in the guideline and the evidence presented in the evidence reviews documents. We would also welcome views on the Equality Impact Assessment.</p>
+											<p>We would like to hear your views on these questions:</p>
+											<ul className="CommentList list--unstyled">
+												{questionsToShow.map((question) => {
+													return (
+														<Question
+															readOnly={!this.state.allowComments || this.props.isSubmitted}
+															isVisible={this.props.isVisible}
+															key={question.questionId}
+															unique={`Comment${question.questionId}`}
+															question={question}
+															saveAnswerHandler={this.saveAnswerHandler}
+															deleteAnswerHandler={this.deleteAnswerHandler}
+														/>
+													);
+												})}
+											</ul>
+										</div>							
+									:
 									<LoginBanner
 										signInButton={true}
 										currentURL={this.props.match.url}
@@ -278,7 +489,6 @@ export class CommentList extends Component<PropsType, StateType> {
 										registerURL={contextValue.registerURL}
 									/>
 							}
-
 						</div>
 					);
 				}}

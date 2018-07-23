@@ -37,20 +37,27 @@
 </head>
 <body>
     <div id="root"></div>
-	<script src="//cdn.nice.org.uk/V3.1/Scripts/nice/NICE.TopHat.min.js"
-        data-environment="Beta"
-        data-search="/search?q=%term"
-        data-typeaheadtype="remote"
-        data-typeaheadsource="/autocomplete?%query"
-        data-search-placeholder="Search NICE..."
-        data-cookie="true"
-        async></script>
-    <!--! scripts -->
 
-	<!-- READING VIEW PROTOTYPE -->
-	<link rel="stylesheet" href="%PUBLIC_URL%/reading-view/reading-view.css">
-	<script src="%PUBLIC_URL%/reading-view/jq.js"></script>
-	<script src="%PUBLIC_URL%/reading-view/reading-view.js"></script>
-	<!-- /READING VIEW PROTOTYPE -->
+	<!-- Tophat -->
+	<script src="//cdn.nice.org.uk/V3.1/Scripts/nice/NICE.TopHat.min.js"
+			data-environment="Beta"
+			data-search="/search?q=%term"
+			data-typeaheadtype="remote"
+			data-typeaheadsource="/autocomplete?%query"
+			data-search-placeholder="Search NICE..."
+			data-cookie="true"
+			async></script>
+
+	<script src="//code.jquery.com/jquery-1.12.4.min.js"></script>
+	<script src="//www.nice.org.uk/Media/Default/js/designsystem/nice.dev.js"></script>
+	<script>
+		function niceDesignSystem(){
+			$(document).nice();
+		}
+		$(document).ready(function () {
+			niceDesignSystem();
+		});		
+		window.addEventListener("commentList_did_mount", niceDesignSystem);
+	</script>
 </body>
 </html>

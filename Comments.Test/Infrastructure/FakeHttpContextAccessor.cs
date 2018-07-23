@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Moq;
 using NICE.Auth.NetCore.Helpers;
 using NICE.Auth.NetCore.Models;
@@ -19,8 +19,8 @@ namespace Comments.Test.Infrastructure
             {
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimType.Name, displayName),
-                    new Claim(ClaimType.NameIdentifier, userId.ToString())
+                    new Claim(ClaimType.Name, displayName, null, "http://consultations.nice.org.uk"),
+                    new Claim(ClaimType.NameIdentifier, userId.ToString(), null, "http://consultations.nice.org.uk")
                 };
                 context.Setup(r => r.User)
                     .Returns(() => new ClaimsPrincipal(new ClaimsIdentity(claims, Constants.DefaultScheme)));

@@ -1,4 +1,6 @@
-﻿namespace Comments.ViewModels
+using System;
+
+namespace Comments.ViewModels
 {
     public class Location
     {
@@ -20,14 +22,30 @@
         public string SourceURI { get; set; }
         public string HtmlElementID { get; set; }
 
-        //public int ConsultationId { get; set; }
-        //public int? DocumentId { get; set; }
-        //public string ChapterSlug { get; set; }
-        //public string SectionSlug { get; set; }
         public string RangeStart { get; set; }
         public int? RangeStartOffset { get; set; }
         public string RangeEnd { get; set; }
         public int? RangeEndOffset { get; set; }
         public string Quote { get; set; }
-    }
+
+	    private CommentOn? _commentOn = null;
+	    public string CommentOn
+	    {
+		    get
+		    {
+			    if (_commentOn == null)
+			    {
+				    _commentOn = CommentOnHelpers.GetCommentOn(SourceURI, RangeStart, HtmlElementID);
+			    }
+			    return _commentOn.HasValue ? Enum.GetName(typeof(CommentOn), _commentOn.Value) : null;
+		    }
+		    set
+		    {
+			    if (!string.IsNullOrWhiteSpace(value) && Enum.TryParse(value, out CommentOn parsedEnum))
+			    {
+				    _commentOn = parsedEnum;
+			    }
+		    }
+	    }
+	}
 }
