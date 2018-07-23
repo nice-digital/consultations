@@ -34,7 +34,7 @@
     &:hover {
       cursor: pointer;
     }
-    &.visible {
+    &.active {
       display: block;
     }
     @extend %all-drop-shadow;

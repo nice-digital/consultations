@@ -1,0 +1,967 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[ClientApp] Render Preview HTML should show the detail of the error when clicked by adding a class to make it visible 1`] = `
+ReactWrapper {
+  "length": 1,
+  Symbol(enzyme.__unrendered__): <div>
+    <p>
+        Here is a paragraph 
+        <div
+            className="ConversionError ConversionError--I"
+            onClick={[Function]}
+        >
+            <button
+                className="ConversionError__Button ConversionError__Button--I"
+            >
+                I
+            </button>
+            <ul
+                className="ConversionError__details ConversionError__details--I"
+            >
+                <li
+                    className="ml--d"
+                >
+                    You have been informed!
+                </li>
+            </ul>
+        </div>
+    </p>
+</div>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__node__): Object {
+    "instance": <div>
+      <p>
+            Here is a paragraph 
+            <div
+                  class="ConversionError ConversionError--I"
+            >
+                  <button
+                        class="ConversionError__Button ConversionError__Button--I"
+                  >
+                        I
+                  </button>
+                  <ul
+                        class="ConversionError__details ConversionError__details--I"
+                  >
+                        <li
+                              class="ml--d"
+                        >
+                              You have been informed!
+                        </li>
+                  </ul>
+            </div>
+      </p>
+</div>,
+    "key": undefined,
+    "nodeType": "host",
+    "props": Object {
+      "children": Array [
+        <p>
+          Here is a paragraph 
+          <div
+                    className="ConversionError ConversionError--I"
+                    onClick={[Function]}
+          >
+                    <button
+                              className="ConversionError__Button ConversionError__Button--I"
+                    >
+                              I
+                    </button>
+                    <ul
+                              className="ConversionError__details ConversionError__details--I"
+                    >
+                              <li
+                                        className="ml--d"
+                              >
+                                        You have been informed!
+                              </li>
+                    </ul>
+          </div>
+</p>,
+      ],
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": <p>
+          Here is a paragraph 
+          <div
+                    class="ConversionError ConversionError--I"
+          >
+                    <button
+                              class="ConversionError__Button ConversionError__Button--I"
+                    >
+                              I
+                    </button>
+                    <ul
+                              class="ConversionError__details ConversionError__details--I"
+                    >
+                              <li
+                                        class="ml--d"
+                              >
+                                        You have been informed!
+                              </li>
+                    </ul>
+          </div>
+</p>,
+        "key": "0",
+        "nodeType": "host",
+        "props": Object {
+          "children": Array [
+            "Here is a paragraph ",
+            <div
+              className="ConversionError ConversionError--I"
+              onClick={[Function]}
+>
+              <button
+                            className="ConversionError__Button ConversionError__Button--I"
+              >
+                            I
+              </button>
+              <ul
+                            className="ConversionError__details ConversionError__details--I"
+              >
+                            <li
+                                          className="ml--d"
+                            >
+                                          You have been informed!
+                            </li>
+              </ul>
+</div>,
+          ],
+        },
+        "ref": null,
+        "rendered": Array [
+          "Here is a paragraph ",
+          Object {
+            "instance": <div
+              class="ConversionError ConversionError--I"
+>
+              <button
+                            class="ConversionError__Button ConversionError__Button--I"
+              >
+                            I
+              </button>
+              <ul
+                            class="ConversionError__details ConversionError__details--I"
+              >
+                            <li
+                                          class="ml--d"
+                            >
+                                          You have been informed!
+                            </li>
+              </ul>
+</div>,
+            "key": "[object Object]",
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                <button
+                  className="ConversionError__Button ConversionError__Button--I"
+>
+                  I
+</button>,
+                <ul
+                  className="ConversionError__details ConversionError__details--I"
+>
+                  <li
+                                    className="ml--d"
+                  >
+                                    You have been informed!
+                  </li>
+</ul>,
+              ],
+              "className": "ConversionError ConversionError--I",
+              "onClick": [Function],
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": <button
+                  class="ConversionError__Button ConversionError__Button--I"
+>
+                  I
+</button>,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": "I",
+                  "className": "ConversionError__Button ConversionError__Button--I",
+                },
+                "ref": null,
+                "rendered": Array [
+                  "I",
+                ],
+                "type": "button",
+              },
+              Object {
+                "instance": <ul
+                  class="ConversionError__details ConversionError__details--I"
+>
+                  <li
+                                    class="ml--d"
+                  >
+                                    You have been informed!
+                  </li>
+</ul>,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <li
+                    className="ml--d"
+>
+                    You have been informed!
+</li>,
+                  "className": "ConversionError__details ConversionError__details--I",
+                },
+                "ref": null,
+                "rendered": Array [
+                  Object {
+                    "instance": <li
+                      class="ml--d"
+>
+                      You have been informed!
+</li>,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": "You have been informed!",
+                      "className": "ml--d",
+                    },
+                    "ref": null,
+                    "rendered": Array [
+                      "You have been informed!",
+                    ],
+                    "type": "li",
+                  },
+                ],
+                "type": "ul",
+              },
+            ],
+            "type": "div",
+          },
+        ],
+        "type": "p",
+      },
+    ],
+    "type": "div",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": <div>
+        <p>
+                Here is a paragraph 
+                <div
+                        class="ConversionError ConversionError--I"
+                >
+                        <button
+                                class="ConversionError__Button ConversionError__Button--I"
+                        >
+                                I
+                        </button>
+                        <ul
+                                class="ConversionError__details ConversionError__details--I"
+                        >
+                                <li
+                                        class="ml--d"
+                                >
+                                        You have been informed!
+                                </li>
+                        </ul>
+                </div>
+        </p>
+</div>,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": Array [
+          <p>
+            Here is a paragraph 
+            <div
+                        className="ConversionError ConversionError--I"
+                        onClick={[Function]}
+            >
+                        <button
+                                    className="ConversionError__Button ConversionError__Button--I"
+                        >
+                                    I
+                        </button>
+                        <ul
+                                    className="ConversionError__details ConversionError__details--I"
+                        >
+                                    <li
+                                                className="ml--d"
+                                    >
+                                                You have been informed!
+                                    </li>
+                        </ul>
+            </div>
+</p>,
+        ],
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": <p>
+            Here is a paragraph 
+            <div
+                        class="ConversionError ConversionError--I"
+            >
+                        <button
+                                    class="ConversionError__Button ConversionError__Button--I"
+                        >
+                                    I
+                        </button>
+                        <ul
+                                    class="ConversionError__details ConversionError__details--I"
+                        >
+                                    <li
+                                                class="ml--d"
+                                    >
+                                                You have been informed!
+                                    </li>
+                        </ul>
+            </div>
+</p>,
+          "key": "0",
+          "nodeType": "host",
+          "props": Object {
+            "children": Array [
+              "Here is a paragraph ",
+              <div
+                className="ConversionError ConversionError--I"
+                onClick={[Function]}
+>
+                <button
+                                className="ConversionError__Button ConversionError__Button--I"
+                >
+                                I
+                </button>
+                <ul
+                                className="ConversionError__details ConversionError__details--I"
+                >
+                                <li
+                                                className="ml--d"
+                                >
+                                                You have been informed!
+                                </li>
+                </ul>
+</div>,
+            ],
+          },
+          "ref": null,
+          "rendered": Array [
+            "Here is a paragraph ",
+            Object {
+              "instance": <div
+                class="ConversionError ConversionError--I"
+>
+                <button
+                                class="ConversionError__Button ConversionError__Button--I"
+                >
+                                I
+                </button>
+                <ul
+                                class="ConversionError__details ConversionError__details--I"
+                >
+                                <li
+                                                class="ml--d"
+                                >
+                                                You have been informed!
+                                </li>
+                </ul>
+</div>,
+              "key": "[object Object]",
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  <button
+                    className="ConversionError__Button ConversionError__Button--I"
+>
+                    I
+</button>,
+                  <ul
+                    className="ConversionError__details ConversionError__details--I"
+>
+                    <li
+                                        className="ml--d"
+                    >
+                                        You have been informed!
+                    </li>
+</ul>,
+                ],
+                "className": "ConversionError ConversionError--I",
+                "onClick": [Function],
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": <button
+                    class="ConversionError__Button ConversionError__Button--I"
+>
+                    I
+</button>,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": "I",
+                    "className": "ConversionError__Button ConversionError__Button--I",
+                  },
+                  "ref": null,
+                  "rendered": Array [
+                    "I",
+                  ],
+                  "type": "button",
+                },
+                Object {
+                  "instance": <ul
+                    class="ConversionError__details ConversionError__details--I"
+>
+                    <li
+                                        class="ml--d"
+                    >
+                                        You have been informed!
+                    </li>
+</ul>,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": <li
+                      className="ml--d"
+>
+                      You have been informed!
+</li>,
+                    "className": "ConversionError__details ConversionError__details--I",
+                  },
+                  "ref": null,
+                  "rendered": Array [
+                    Object {
+                      "instance": <li
+                        class="ml--d"
+>
+                        You have been informed!
+</li>,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": "You have been informed!",
+                        "className": "ml--d",
+                      },
+                      "ref": null,
+                      "rendered": Array [
+                        "You have been informed!",
+                      ],
+                      "type": "li",
+                    },
+                  ],
+                  "type": "ul",
+                },
+              ],
+              "type": "div",
+            },
+          ],
+          "type": "p",
+        },
+      ],
+      "type": "div",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;
+
+exports[`[ClientApp] Render Preview HTML should show the detail of the error when clicked by adding a class to make it visible 2`] = `
+ReactWrapper {
+  "length": 1,
+  Symbol(enzyme.__unrendered__): <div>
+    <p>
+        Here is a paragraph 
+        <div
+            className="ConversionError ConversionError--I"
+            onClick={[Function]}
+        >
+            <button
+                className="ConversionError__Button ConversionError__Button--I"
+            >
+                I
+            </button>
+            <ul
+                className="ConversionError__details ConversionError__details--I"
+            >
+                <li
+                    className="ml--d"
+                >
+                    You have been informed!
+                </li>
+            </ul>
+        </div>
+    </p>
+</div>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__node__): Object {
+    "instance": <div>
+      <p>
+            Here is a paragraph 
+            <div
+                  class="ConversionError ConversionError--I"
+            >
+                  <button
+                        class="ConversionError__Button ConversionError__Button--I"
+                  >
+                        I
+                  </button>
+                  <ul
+                        class="ConversionError__details ConversionError__details--I active"
+                  >
+                        <li
+                              class="ml--d"
+                        >
+                              You have been informed!
+                        </li>
+                  </ul>
+            </div>
+      </p>
+</div>,
+    "key": undefined,
+    "nodeType": "host",
+    "props": Object {
+      "children": Array [
+        <p>
+          Here is a paragraph 
+          <div
+                    className="ConversionError ConversionError--I"
+                    onClick={[Function]}
+          >
+                    <button
+                              className="ConversionError__Button ConversionError__Button--I"
+                    >
+                              I
+                    </button>
+                    <ul
+                              className="ConversionError__details ConversionError__details--I"
+                    >
+                              <li
+                                        className="ml--d"
+                              >
+                                        You have been informed!
+                              </li>
+                    </ul>
+          </div>
+</p>,
+      ],
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": <p>
+          Here is a paragraph 
+          <div
+                    class="ConversionError ConversionError--I"
+          >
+                    <button
+                              class="ConversionError__Button ConversionError__Button--I"
+                    >
+                              I
+                    </button>
+                    <ul
+                              class="ConversionError__details ConversionError__details--I active"
+                    >
+                              <li
+                                        class="ml--d"
+                              >
+                                        You have been informed!
+                              </li>
+                    </ul>
+          </div>
+</p>,
+        "key": "0",
+        "nodeType": "host",
+        "props": Object {
+          "children": Array [
+            "Here is a paragraph ",
+            <div
+              className="ConversionError ConversionError--I"
+              onClick={[Function]}
+>
+              <button
+                            className="ConversionError__Button ConversionError__Button--I"
+              >
+                            I
+              </button>
+              <ul
+                            className="ConversionError__details ConversionError__details--I"
+              >
+                            <li
+                                          className="ml--d"
+                            >
+                                          You have been informed!
+                            </li>
+              </ul>
+</div>,
+          ],
+        },
+        "ref": null,
+        "rendered": Array [
+          "Here is a paragraph ",
+          Object {
+            "instance": <div
+              class="ConversionError ConversionError--I"
+>
+              <button
+                            class="ConversionError__Button ConversionError__Button--I"
+              >
+                            I
+              </button>
+              <ul
+                            class="ConversionError__details ConversionError__details--I active"
+              >
+                            <li
+                                          class="ml--d"
+                            >
+                                          You have been informed!
+                            </li>
+              </ul>
+</div>,
+            "key": "[object Object]",
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                <button
+                  className="ConversionError__Button ConversionError__Button--I"
+>
+                  I
+</button>,
+                <ul
+                  className="ConversionError__details ConversionError__details--I"
+>
+                  <li
+                                    className="ml--d"
+                  >
+                                    You have been informed!
+                  </li>
+</ul>,
+              ],
+              "className": "ConversionError ConversionError--I",
+              "onClick": [Function],
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": <button
+                  class="ConversionError__Button ConversionError__Button--I"
+>
+                  I
+</button>,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": "I",
+                  "className": "ConversionError__Button ConversionError__Button--I",
+                },
+                "ref": null,
+                "rendered": Array [
+                  "I",
+                ],
+                "type": "button",
+              },
+              Object {
+                "instance": <ul
+                  class="ConversionError__details ConversionError__details--I active"
+>
+                  <li
+                                    class="ml--d"
+                  >
+                                    You have been informed!
+                  </li>
+</ul>,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <li
+                    className="ml--d"
+>
+                    You have been informed!
+</li>,
+                  "className": "ConversionError__details ConversionError__details--I",
+                },
+                "ref": null,
+                "rendered": Array [
+                  Object {
+                    "instance": <li
+                      class="ml--d"
+>
+                      You have been informed!
+</li>,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": "You have been informed!",
+                      "className": "ml--d",
+                    },
+                    "ref": null,
+                    "rendered": Array [
+                      "You have been informed!",
+                    ],
+                    "type": "li",
+                  },
+                ],
+                "type": "ul",
+              },
+            ],
+            "type": "div",
+          },
+        ],
+        "type": "p",
+      },
+    ],
+    "type": "div",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": <div>
+        <p>
+                Here is a paragraph 
+                <div
+                        class="ConversionError ConversionError--I"
+                >
+                        <button
+                                class="ConversionError__Button ConversionError__Button--I"
+                        >
+                                I
+                        </button>
+                        <ul
+                                class="ConversionError__details ConversionError__details--I active"
+                        >
+                                <li
+                                        class="ml--d"
+                                >
+                                        You have been informed!
+                                </li>
+                        </ul>
+                </div>
+        </p>
+</div>,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": Array [
+          <p>
+            Here is a paragraph 
+            <div
+                        className="ConversionError ConversionError--I"
+                        onClick={[Function]}
+            >
+                        <button
+                                    className="ConversionError__Button ConversionError__Button--I"
+                        >
+                                    I
+                        </button>
+                        <ul
+                                    className="ConversionError__details ConversionError__details--I"
+                        >
+                                    <li
+                                                className="ml--d"
+                                    >
+                                                You have been informed!
+                                    </li>
+                        </ul>
+            </div>
+</p>,
+        ],
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": <p>
+            Here is a paragraph 
+            <div
+                        class="ConversionError ConversionError--I"
+            >
+                        <button
+                                    class="ConversionError__Button ConversionError__Button--I"
+                        >
+                                    I
+                        </button>
+                        <ul
+                                    class="ConversionError__details ConversionError__details--I active"
+                        >
+                                    <li
+                                                class="ml--d"
+                                    >
+                                                You have been informed!
+                                    </li>
+                        </ul>
+            </div>
+</p>,
+          "key": "0",
+          "nodeType": "host",
+          "props": Object {
+            "children": Array [
+              "Here is a paragraph ",
+              <div
+                className="ConversionError ConversionError--I"
+                onClick={[Function]}
+>
+                <button
+                                className="ConversionError__Button ConversionError__Button--I"
+                >
+                                I
+                </button>
+                <ul
+                                className="ConversionError__details ConversionError__details--I"
+                >
+                                <li
+                                                className="ml--d"
+                                >
+                                                You have been informed!
+                                </li>
+                </ul>
+</div>,
+            ],
+          },
+          "ref": null,
+          "rendered": Array [
+            "Here is a paragraph ",
+            Object {
+              "instance": <div
+                class="ConversionError ConversionError--I"
+>
+                <button
+                                class="ConversionError__Button ConversionError__Button--I"
+                >
+                                I
+                </button>
+                <ul
+                                class="ConversionError__details ConversionError__details--I active"
+                >
+                                <li
+                                                class="ml--d"
+                                >
+                                                You have been informed!
+                                </li>
+                </ul>
+</div>,
+              "key": "[object Object]",
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  <button
+                    className="ConversionError__Button ConversionError__Button--I"
+>
+                    I
+</button>,
+                  <ul
+                    className="ConversionError__details ConversionError__details--I"
+>
+                    <li
+                                        className="ml--d"
+                    >
+                                        You have been informed!
+                    </li>
+</ul>,
+                ],
+                "className": "ConversionError ConversionError--I",
+                "onClick": [Function],
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": <button
+                    class="ConversionError__Button ConversionError__Button--I"
+>
+                    I
+</button>,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": "I",
+                    "className": "ConversionError__Button ConversionError__Button--I",
+                  },
+                  "ref": null,
+                  "rendered": Array [
+                    "I",
+                  ],
+                  "type": "button",
+                },
+                Object {
+                  "instance": <ul
+                    class="ConversionError__details ConversionError__details--I active"
+>
+                    <li
+                                        class="ml--d"
+                    >
+                                        You have been informed!
+                    </li>
+</ul>,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": <li
+                      className="ml--d"
+>
+                      You have been informed!
+</li>,
+                    "className": "ConversionError__details ConversionError__details--I",
+                  },
+                  "ref": null,
+                  "rendered": Array [
+                    Object {
+                      "instance": <li
+                        class="ml--d"
+>
+                        You have been informed!
+</li>,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": "You have been informed!",
+                        "className": "ml--d",
+                      },
+                      "ref": null,
+                      "rendered": Array [
+                        "You have been informed!",
+                      ],
+                      "type": "li",
+                    },
+                  ],
+                  "type": "ul",
+                },
+              ],
+              "type": "div",
+            },
+          ],
+          "type": "p",
+        },
+      ],
+      "type": "div",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;
