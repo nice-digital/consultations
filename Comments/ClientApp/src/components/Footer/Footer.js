@@ -60,7 +60,8 @@ export class Footer extends Component<PropsType, StateType> {
 				.then(data => {
 					this.setState({
 						loading: false,
-						hasInitialData: true
+						hasInitialData: true,
+						footerHTML: data.footerData,
 					});
 				})
 				.catch(err => {
@@ -70,12 +71,12 @@ export class Footer extends Component<PropsType, StateType> {
 	}
 
 	render() {
-		if (!this.state.hasInitialData) return <h1>Loading...</h1>;
+		if (!this.state.hasInitialData) return null; // <h1>Loading...</h1>;
 
 		return (
-			<Fragment>
-				{this.state.footerHTML}
-			</Fragment>
+			<div dangerouslySetInnerHTML={{
+				__html: this.state.footerHTML
+			}} />
 		);
 	}
 }
