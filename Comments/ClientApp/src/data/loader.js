@@ -25,6 +25,10 @@ export const generateUrl = (endpointName, baseUrl = BaseUrl, urlParameters = [],
 	const endpoint = Endpoints[endpointName];
 	if (!endpoint) return endpointName;
 
+	if (endpoint.startsWith("http")){
+		baseUrl = "";
+	}
+
 	return baseUrl + replaceFormat(endpoint, urlParameters) + objectToQueryString(query);
 };
 
