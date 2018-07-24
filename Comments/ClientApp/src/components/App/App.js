@@ -16,7 +16,7 @@ type StateType = {
 }
 
 class App extends React.Component<PropsType, StateType> {
-	
+
 	render() {
 		return (
 			<UserProviderWithRouter>
@@ -38,7 +38,7 @@ class App extends React.Component<PropsType, StateType> {
 					<Switch>
 						{/*Document (Preview Layout)*/}
 						<Route path="/preview/:reference/consultation/:consultationId/document/:documentId/chapter/:chapterSlug">
-							<DocumentView/>
+							<DocumentViewWithRouter/>
 						</Route>
 
 						{/*	If we hit this we're coming in *without* a chapter slug,

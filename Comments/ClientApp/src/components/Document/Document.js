@@ -1,11 +1,9 @@
 // @flow
 
 import React, { Component, Fragment } from "react";
-import Moment from "react-moment";
 import { Helmet } from "react-helmet";
 import { StickyContainer, Sticky } from "react-sticky";
 import { withRouter } from "react-router";
-import Scrollspy from "react-scrollspy";
 
 import preload from "../../data/pre-loader";
 import { load } from "./../../data/loader";
@@ -14,20 +12,14 @@ import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
 import { projectInformation } from "../../constants";
-import { processDocumentHtml } from "./process-document-html";
-import { LoginBanner } from "./../LoginBanner/LoginBanner";
-import { UserContext } from "../../context/UserContext";
-import { processDocumentHtml } from "./process-document-html";
 import { processDocumentHtml } from "../../document-processing/process-document-html";
 import { processPreviewHtml } from "../../document-processing/process-preview-html";
-import { ErrorOverview } from "./ErrorOverview";
 import { LoginBanner } from "./../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
+import { ErrorOverview } from "./ErrorOverview";
 import { Selection } from "../Selection/Selection";
 import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
 import { Header } from "../Header/Header";
-
-// import stringifyObject from "stringify-object";
 
 type PropsType = {
 	staticContext?: any,
@@ -44,7 +36,7 @@ type StateType = {
 	currentInPageNavItem: null | string,
 	hasInitialData: boolean,
 	onboarded: boolean,
-	currentChapterDetails: {
+	currentChapterDetails?: {
 		title: string,
 		slug: string
 	},
@@ -120,7 +112,7 @@ export class Document extends Component<PropsType, StateType> {
 					hasInitialData: true,
 					currentInPageNavItem: null,
 					onboarded: false,
-					allowComments: allowComments
+					allowComments: allowComments,
 				};
 			}
 		}
@@ -137,7 +129,7 @@ export class Document extends Component<PropsType, StateType> {
 				consultationId,
 				documentId,
 				chapterSlug,
-				reference
+				reference,
 			})
 				.then(response => response.data)
 				.catch(err => {
@@ -147,7 +139,7 @@ export class Document extends Component<PropsType, StateType> {
 			documentsData = load("previewdraftdocuments", undefined, [], {
 				consultationId,
 				documentId,
-				reference
+				reference,
 			})
 				.then(response => response.data)
 				.catch(err => {
@@ -157,7 +149,7 @@ export class Document extends Component<PropsType, StateType> {
 			chapterData = load("chapter", undefined, [], {
 				consultationId,
 				documentId,
-				chapterSlug
+				chapterSlug,
 			})
 				.then(response => response.data)
 				.catch(err => {
@@ -172,7 +164,8 @@ export class Document extends Component<PropsType, StateType> {
 		}
 
 		const consultationData = load("consultation", undefined, [], {
-			consultationId, isReview: false
+			consultationId,
+			isReview: false,
 		})
 			.then(response => response.data)
 			.catch(err => {
@@ -182,7 +175,7 @@ export class Document extends Component<PropsType, StateType> {
 		return {
 			chapterData: await chapterData,
 			documentsData: await documentsData,
-			consultationData: await consultationData
+			consultationData: await consultationData,
 		};
 	};
 
@@ -197,7 +190,7 @@ export class Document extends Component<PropsType, StateType> {
 						...data,
 						loading: false,
 						hasInitialData: true,
-						allowComments : allowComments
+						allowComments : allowComments,
 					});
 					this.addChapterDetailsToSections(this.state.chapterData);
 				})
@@ -213,14 +206,14 @@ export class Document extends Component<PropsType, StateType> {
 		if (oldRoute === newRoute) return;
 
 		this.setState({
-			loading: true
+			loading: true,
 		});
 
 		this.gatherData()
 			.then(data => {
 				this.setState({
 					...data,
-					loading: false
+					loading: false,
 				});
 				this.addChapterDetailsToSections(this.state.chapterData);
 				// once we've loaded, pull focus to the document container
@@ -228,6 +221,7 @@ export class Document extends Component<PropsType, StateType> {
 			})
 			.catch(err => {
 				throw new Error("gatherData in componentDidUpdate failed " + err);
+			});
 	}
 
 	getDocumentChapterLinks = (documentId: number) => {
@@ -241,14 +235,14 @@ export class Document extends Component<PropsType, StateType> {
 				url: `/${this.props.match.params.consultationId}/${
 					this.props.match.params.documentId}/${chapter.slug}`,
 				current: isCurrentChapter(chapter.slug),
-				isReactRoute: true
+				isReactRoute: true,
 			};
 		};
 		const documents = this.state.documentsData;
 		const currentDocument = documents.filter(isCurrentDocument);
 		return {
 			title: "Chapters in this document",
-			links: currentDocument[0].chapters.map(createChapterLink)
+			links: currentDocument[0].chapters.map(createChapterLink),
 		};
 	};
 
@@ -262,14 +256,14 @@ export class Document extends Component<PropsType, StateType> {
 				url: `/preview/${this.props.match.params.reference}/consultation/${this.props.match.params.consultationId}/document/${
 					this.props.match.params.documentId}/chapter/${chapter.slug}`,
 				current: isCurrentChapter(chapter.slug),
-				isReactRoute: true
+				isReactRoute: true,
 			};
 		};
 		const documents = this.state.documentsData;
 		const currentDocument = documents.filter(isCurrentDocument);
 		return {
 			title: "Chapters in this document",
-			links: currentDocument[0].chapters.map(createChapterLink)
+			links: currentDocument[0].chapters.map(createChapterLink),
 		};
 	};
 
@@ -303,17 +297,17 @@ export class Document extends Component<PropsType, StateType> {
 				label,
 				url,
 				current,
-				isReactRoute
+				isReactRoute,
 			};
 		};
 
-		let filteredDocuments: DocumentsType = [];
+		let filteredDocuments: any = [];
 
-		if (getCommentable) {
+		if (getCommentable) { // $FlowIgnore
 			filteredDocuments = documents
 				.filter(isCommentable)
 				.map(documentToLinkObject);
-		} else {
+		} else { // $FlowIgnore
 			filteredDocuments = documents
 				.filter(isSupporting)
 				.map(documentToLinkObject);
@@ -321,54 +315,15 @@ export class Document extends Component<PropsType, StateType> {
 
 		return {
 			title,
-			links: filteredDocuments
+			links: filteredDocuments,
 		};
 	};
 
-	getDocumentChapterLinks = (documentId: number) => {
-		if (!documentId) return null;
-
-		const isCurrentDocument = d => d.documentId === parseInt(documentId, 0);
-
-		const isCurrentChapter = slug =>
-			slug === this.props.match.params.chapterSlug;
-
-		const createChapterLink = chapter => {
-			return {
-				label: chapter.title,
-				url: `/${this.props.match.params.consultationId}/${
-					this.props.match.params.documentId}/${chapter.slug}`,
-				current: isCurrentChapter(chapter.slug),
-				isReactRoute: true
-			};
-		};
-
-		const documents = this.state.documentsData;
-
-		const currentDocument = documents.filter(isCurrentDocument);
-
-		return {
-			title: "Chapters in this document",
-			links: currentDocument[0].chapters.map(createChapterLink)
-		};
-	};
-
-	// Only Comment View
-	generateScrollspy = (sections: Array<Object>): Array<Object> => {
-		return sections.map(section => section.slug);
-	};
-
-	addChapterDetailsToSections = (chapterData) => {
+	addChapterDetailsToSections = (chapterData: Object) => {
 		const { title, slug } = this.state.chapterData;
 		const chapterDetails = { title, slug };
 		chapterData.sections.unshift(chapterDetails);
 		this.setState({ chapterData });
-	};
-
-	inPageNav = (e: HTMLElement) => {
-		if (!e) return null;
-		const currentInPageNavItem = e.getAttribute("id");
-		this.setState({ currentInPageNavItem });
 	};
 
 	getCurrentDocumentTitle = (documents: Object, documentId: number) => {
@@ -377,10 +332,10 @@ export class Document extends Component<PropsType, StateType> {
 		return currentDocumentDetails.title;
 	};
 
-render() {
+	render() {
 		if (!this.state.hasInitialData) return <h1>Loading...</h1>;
 
-		const { title, reference, endDate } = this.state.consultationData;
+		const { title, reference } = this.state.consultationData;
 		const { documentsData } = this.state;
 		const { sections, content } = this.state.chapterData;
 		const consultationId = parseInt(this.props.match.params.consultationId, 0);
@@ -391,6 +346,14 @@ render() {
 				<Helmet>
 					<title>{title}</title>
 				</Helmet>
+				<UserContext.Consumer>
+					{(contextValue: any) => !contextValue.isAuthorised ?
+						<LoginBanner signInButton={false}
+									 currentURL={this.props.match.url}
+									 signInURL={contextValue.signInURL}
+									 registerURL={contextValue.registerURL} />
+						: /* if contextValue.isAuthorised... */ null}
+				</UserContext.Consumer>
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">
@@ -400,20 +363,40 @@ render() {
 								repo={projectInformation.repo}
 							/>
 							<BreadCrumbs links={this.state.consultationData.breadcrumbs}/>
-							<main role="main">
-								<div className="page-header">
-									<Header
-										title={title}
-										reference={reference}
-										consultationState={this.state.consultationData.consultationState}/>
-									{ /*}<h1 className="page-header__heading mt--0">{title}</h1>
-
-									<p className="page-header__lead">
-										[{reference}] Open until{" "}
-										<Moment format="D MMMM YYYY" date={endDate}/>
-									</p> */
-									}
-									{this.state.allowComments &&
+							{this.props.match.url.indexOf("preview") === -1 ?
+							/* preview document view start */
+								<main role="main">
+									<div className="page-header">
+										<p className="mb--0">Consultation <span className="tag">Preview</span></p>
+										<h1 className="page-header__heading mt--0">{title}</h1>
+										<p className="mb--0">Document <span className="tag">Preview</span></p>
+										<h2 className="mt--0">
+											{this.getCurrentDocumentTitle(documentsData, documentId)}
+										</h2>
+									</div>
+									<div className="grid">
+										<div data-g="12 md:3">
+											<StackedNav links={this.getPreviewDocumentChapterLinks(documentId)} />
+										</div>
+										<div data-g="12 md:9" className="documentColumn">
+											<div
+												className={`document-comment-container ${this.state.loading ? "loading" : ""}`}>
+												<ErrorOverview content={content} />
+												{processPreviewHtml(content)}
+											</div>
+										</div>
+									</div>
+								</main>
+							/* preview document view end */
+								:
+							/* regular document view start */
+								<main role="main">
+									<div className="page-header">
+										<Header
+											title={title}
+											reference={reference}
+											consultationState={this.state.consultationData.consultationState}/>
+										{this.state.allowComments &&
 										<button
 											data-qa-sel="comment-on-whole-consultation"
 											className="btn btn--cta"
@@ -423,17 +406,17 @@ render() {
 													sourceURI: this.props.match.url,
 													commentText: "",
 													commentOn: "Consultation",
-													quote: title
+													quote: title,
 												});
 											}}
 										>
 											Comment on whole consultation
 										</button>
-									}
-									<h2 className="mb--b">
-										{this.getCurrentDocumentTitle(documentsData, documentId)}
-									</h2>
-									{this.state.allowComments &&
+										}
+										<h2 className="mb--b">
+											{this.getCurrentDocumentTitle(documentsData, documentId)}
+										</h2>
+										{this.state.allowComments &&
 										<button
 											data-qa-sel="comment-on-consultation-document"
 											className="btn btn--cta"
@@ -446,114 +429,109 @@ render() {
 													quote: this.getCurrentDocumentTitle(
 														documentsData,
 														documentId
-													)
+													),
 												});
 											}}>
 											Comment on this document
 										</button>
-									}
-								</div>
+										}
+									</div>
 
-								<StickyContainer className="grid">
-									<div data-g="12 md:3 md:push:9" className="inPageNavColumn">
-										<Sticky disableHardwareAcceleration>
-											{({ style }) => (
-												<div style={style}>
-													{sections.length ? (
-														<nav
-															className="in-page-nav"
-															aria-labelledby="inpagenav-title">
-															<h2
-																id="inpagenav-title"
-																className="in-page-nav__title">
-																On this page
-															</h2>
-															<Scrollspy
-																componentTag="ol"
-																items={this.generateScrollspy(sections)}
-																currentClassName=""
-																className="in-page-nav__list"
-																role="menubar"
-																onUpdate={e => {
-																	this.inPageNav(e);
-																}}>
-																{sections.map((item, index) => {
-																	const props = {
-																		label: item.title,
-																		to: `#${item.slug}`,
-																		behavior: "smooth",
-																		block: "start"
-																	};
-																	return (
-																		<li role="presentation"
-																			className="in-page-nav__item"
-																			key={index}>
-																			<HashLinkTop
-																				{...props}
-																				currentNavItem={
-																					this.state.currentInPageNavItem
-																				}
-																			/>
-																		</li>
-																	);
-																})}
-															</Scrollspy>
-														</nav>
-													) : null}
-												</div>
-											)}
-										</Sticky>
-									</div>
-									<div data-g="12 md:6" className="documentColumn">
-										<div
-											className={`document-comment-container ${
-												this.state.loading ? "loading" : ""}`}
-										>
-											<Selection newCommentFunc={this.props.onNewCommentClick}
-													   sourceURI={this.props.match.url}
-													   allowComments={this.state.allowComments}>
-												{processDocumentHtml(
-													content,
-													this.props.onNewCommentClick,
-													this.props.match.url,
-													this.state.allowComments
+									<StickyContainer className="grid">
+
+										{/* inPageNav column */}
+										<div data-g="12 md:3 md:push:9" className="inPageNavColumn">
+											<Sticky disableHardwareAcceleration>
+												{({ style }) => (
+													<div style={style}>
+														{sections.length ? (
+															<nav
+																className="in-page-nav"
+																aria-labelledby="inpagenav-title">
+																<h2
+																	id="inpagenav-title"
+																	className="in-page-nav__title">
+																	On this page
+																</h2>
+																<ol className="in-page-nav__list"
+																	role="menubar">
+																	{sections.map((item, index) => {
+																		const props = {
+																			label: item.title,
+																			to: `#${item.slug}`,
+																			behavior: "smooth",
+																			block: "start",
+																		};
+																		return (
+																			<li role="presentation"
+																				className="in-page-nav__item"
+																				key={index}>
+																				<HashLinkTop {...props} />
+																			</li>
+																		);
+																	})}
+																</ol>
+															</nav>
+														) : /* if !sections.length */ null }
+													</div>
 												)}
-											</Selection>
+											</Sticky>
 										</div>
-									</div>
-									<div data-g="12 md:3 md:pull:9" className="navigationColumn">
-										<StackedNav // "Chapters in this document"
-											links={this.getDocumentChapterLinks(documentId)}
-										/>
-										<StackedNav
-											links={this.getDocumentLinks(
-												true,
-												"Other commentable documents in this consultation",
-												documentsData,
-												documentId,
-												consultationId
-											)}
-										/>
-										<StackedNav
-											links={this.getDocumentLinks(
-												false,
-												"Supporting documents",
-												documentsData,
-												documentId,
-												consultationId
-											)}
-										/>
-									</div>
-								</StickyContainer>
-							</main>
+
+										{/* document column */}
+										<div data-g="12 md:6" className="documentColumn">
+											<div
+												className={`document-comment-container ${
+													this.state.loading ? "loading" : ""}`}
+											>
+												<Selection newCommentFunc={this.props.onNewCommentClick}
+														   sourceURI={this.props.match.url}
+														   allowComments={this.state.allowComments}>
+													{processDocumentHtml(
+														content,
+														this.props.onNewCommentClick,
+														this.props.match.url,
+														this.state.allowComments
+													)}
+												</Selection>
+											</div>
+										</div>
+
+										{/* navigation column */}
+										<div data-g="12 md:3 md:pull:9" className="navigationColumn">
+											<StackedNav // "Chapters in this document"
+												links={this.getDocumentChapterLinks(documentId)}
+											/>
+											<StackedNav
+												links={this.getDocumentLinks(
+													true,
+													"Other commentable documents in this consultation",
+													documentsData,
+													documentId,
+													consultationId
+												)}
+											/>
+											<StackedNav
+												links={this.getDocumentLinks(
+													false,
+													"Supporting documents",
+													documentsData,
+													documentId,
+													consultationId
+												)}
+											/>
+										</div>
+
+									</StickyContainer>
+								</main>
+							/* regular document view end */
+							}
 						</div>
 					</div>
 				</div>
 			</Fragment>
 		);
-	}	
+	}
 }
-
-export default withRouter(Document);
 
 export default withRouter(Document);
