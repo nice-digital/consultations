@@ -6,22 +6,24 @@ using System.Collections.Generic;
 using System.Linq;
 using Comments.Common;
 using Comments.Models;
-using Location = Comments.Models.Location;
+using NICE.Feeds.Models.Indev.Chapter;
+using NICE.Feeds.Models.Indev.Detail;
+using NICE.Feeds.Models.Indev.List;
 
 namespace Comments.Services
 {
 	public interface IConsultationService
     {
-        ConsultationDetail GetConsultationDetail(int consultationId);
         ChapterContent GetChapterContent(int consultationId, int documentId, string chapterSlug);
         IEnumerable<Document> GetDocuments(int consultationId);
-        ViewModels.Consultation GetConsultation(int consultationId);
+        ViewModels.Consultation GetConsultation(int consultationId, bool isReview);
         IEnumerable<ViewModels.Consultation> GetConsultations();
-	    ConsultationState GetConsultationState(string sourceURI, IEnumerable<Models.Location> locations = null);
-	    ConsultationState GetConsultationState(int consultationId, IEnumerable<Models.Location> locations = null);
+	    ConsultationState GetConsultationState(string sourceURI, IEnumerable<Models.Location> locations = null, ConsultationDetail consultation = null);
+	    ConsultationState GetConsultationState(int consultationId, IEnumerable<Models.Location> locations = null, ConsultationDetail consultation = null);
 
 		bool HasSubmittedCommentsOrQuestions(string consultationSourceURI, Guid userId);
-	}
+	    IEnumerable<BreadcrumbLink> GetBreadcrumbs(ConsultationDetail consultation, bool isReview);
+    }
 
 	public class ConsultationService : IConsultationService
     {
@@ -38,12 +40,6 @@ namespace Comments.Services
             _userService = userService;
 		}
 
-        public ConsultationDetail GetConsultationDetail(int consultationId)
-        {
-            var user = _userService.GetCurrentUser();
-            return new ViewModels.ConsultationDetail(_feedConverterService.GetIndevConsultationDetailForPublishedProject(consultationId, PreviewState.NonPreview), user); 
-        }
-
         public ChapterContent GetChapterContent(int consultationId, int documentId, string chapterSlug)
         {
             return new ViewModels.ChapterContent(
@@ -56,32 +52,54 @@ namespace Comments.Services
             return consultationDetail.Resources.Select(r => new ViewModels.Document(consultationId, r)).ToList();
         }
 
-        public ViewModels.Consultation GetConsultation(int consultationId)
+        public ViewModels.Consultation GetConsultation(int consultationId, bool isReview)
         {
             var user = _userService.GetCurrentUser();
-            var consultation = _feedConverterService.GetIndevConsultationDetailForPublishedProject(consultationId, PreviewState.NonPreview);
-	        var consultationState = GetConsultationState(consultationId);
-            return new ViewModels.Consultation(consultation, user, consultationState);
+	        var consultationDetail = GetConsultationDetail(consultationId);
+	        var consultationState = GetConsultationState(consultationId, null, consultationDetail);
+	        var breadcrumbs = GetBreadcrumbs(consultationDetail, isReview);
+            return new ViewModels.Consultation(consultationDetail, user, breadcrumbs, consultationState);
         }
 
-        public IEnumerable<ViewModels.Consultation> GetConsultations()
+	    public IEnumerable<BreadcrumbLink> GetBreadcrumbs(ConsultationDetail consultation, bool isReview)
+	    {
+			var breadcrumbs = new List<BreadcrumbLink>{
+					new BreadcrumbLink("All consultations", ExternalRoutes.InconsultationListPage),
+					new BreadcrumbLink("Consultation", ExternalRoutes.ConsultationUrl(consultation))
+			};
+
+		    if (isReview)
+		    {
+			    var firstDocument = GetDocuments(consultation.ConsultationId).FirstOrDefault(d => d.ConvertedDocument);
+			    var firstChapter = firstDocument?.Chapters.FirstOrDefault();
+
+			    if (firstChapter != null)
+				    breadcrumbs.Add(new BreadcrumbLink("Documents",$"/consultations/{consultation.ConsultationId}/{firstDocument.DocumentId}/{firstChapter.Slug}"));
+		    }
+
+		    return breadcrumbs;
+	    }
+
+		public IEnumerable<ViewModels.Consultation> GetConsultations()
         {
             var user = _userService.GetCurrentUser();
             var consultations = _feedConverterService.GetConsultationList();
             return consultations.Select(c => new ViewModels.Consultation(c, user)).ToList();
         }
 
-	    public ConsultationState GetConsultationState(string sourceURI, IEnumerable<Models.Location> locations = null)
+	    public ConsultationState GetConsultationState(string sourceURI, IEnumerable<Models.Location> locations = null, ConsultationDetail consultation = null)
 	    {
 		    var consultationsUriElements = ConsultationsUri.ParseConsultationsUri(sourceURI);
-		    return GetConsultationState(consultationsUriElements.ConsultationId, locations);
+		    return GetConsultationState(consultationsUriElements.ConsultationId, locations, consultation);
 	    }
 
-		public ConsultationState GetConsultationState(int consultationId, IEnumerable<Models.Location> locations = null)
+		public ConsultationState GetConsultationState(int consultationId, IEnumerable<Models.Location> locations = null, ConsultationDetail consultationDetail = null)
 	    {
 			var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
-			var consultationDetail = GetConsultationDetail(consultationId);
-		    var currentUser = _userService.GetCurrentUser();
+			if (consultationDetail == null)
+				consultationDetail = GetConsultationDetail(consultationId);
+
+			var currentUser = _userService.GetCurrentUser();
 
 			if (locations == null && currentUser.IsAuthorised && currentUser.UserId.HasValue)
 		    {
@@ -89,7 +107,7 @@ namespace Comments.Services
 		    }
 			else
 			{
-				locations = new List<Location>(0);
+				locations = new List<Models.Location>(0);
 			}
 
 		    var hasSubmitted = currentUser != null && currentUser.IsAuthorised && currentUser.UserId.HasValue ? HasSubmittedCommentsOrQuestions(sourceURI, currentUser.UserId.Value) : false;
@@ -101,7 +119,6 @@ namespace Comments.Services
 
 		    return consultationState;
 	    }
-		
 
 	    public bool HasSubmittedCommentsOrQuestions(string anySourceURI, Guid userId)
 	    {
@@ -113,6 +130,17 @@ namespace Comments.Services
 		    var consultationSourceURI = ConsultationsUri.CreateConsultationURI(consultationsUriElements.ConsultationId);
 
 		    return _context.HasSubmitted(consultationSourceURI, userId);
+	    }
+
+	    /// <summary>
+	    /// This is intentionally private as it gets the ConsultationDetail straight from the feed. not for external consumption outside of this class.
+	    /// </summary>
+	    /// <param name="consultationId"></param>
+	    /// <returns></returns>
+	    private ConsultationDetail GetConsultationDetail(int consultationId)
+	    {
+		    var consultationDetail = _feedConverterService.GetIndevConsultationDetailForPublishedProject(consultationId, PreviewState.NonPreview);
+		    return consultationDetail;
 	    }
 	}
 }

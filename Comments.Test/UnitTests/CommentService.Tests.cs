@@ -291,9 +291,9 @@ namespace Comments.Test.UnitTests
 
 		//	var commentService = new CommentService(new ConsultationsContext(_options, userService), userService, authenticateService);
 		   
-		//    AddCommentsAndQuestionsAndAnswers(sourceURI, "Comment Text 1", "Question Text 1", "Answer Text 1", userId, StatusName.Draft, consultationContext);
-		//    AddCommentsAndQuestionsAndAnswers(sourceURI, "Comment Text 2", "Question Text 2", "Answer Text 2", userId, StatusName.Draft, consultationContext);
-		//    AddCommentsAndQuestionsAndAnswers(sourceURI, "Someone elses Comment Text", "Question Text 2", "Someone elese Answer Text ", Guid.NewGuid(), StatusName.Draft, consultationContext);
+		//    AddCommentsAndQuestionsAndAnswers(sourceURI, "Comment Label 1", "Question Label 1", "Answer Label 1", userId, StatusName.Draft, consultationContext);
+		//    AddCommentsAndQuestionsAndAnswers(sourceURI, "Comment Label 2", "Question Label 2", "Answer Label 2", userId, StatusName.Draft, consultationContext);
+		//    AddCommentsAndQuestionsAndAnswers(sourceURI, "Someone elses Comment Label", "Question Label 2", "Someone elese Answer Label ", Guid.NewGuid(), StatusName.Draft, consultationContext);
 
 		//	//Act
 		//	var result = commentService.GetCommentsAndAnswers(sourceURI , true);

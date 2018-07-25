@@ -75,7 +75,7 @@ export class ReviewPage extends Component<PropsType, StateType> {
 			});
 
 		const consultationData = load("consultation", undefined, [], {
-			consultationId
+			consultationId, isReview: true
 		})
 			.then(response => response.data)
 			.catch(err => {
@@ -142,27 +142,6 @@ export class ReviewPage extends Component<PropsType, StateType> {
 	getCurrentSourceURI = () => {
 		const queryParams = queryStringToObject(this.props.location.search);
 		return queryParams.sourceURI;
-	};
-
-	getBreadcrumbs = () => {
-		const { consultationId } = this.props.match.params;
-		const firstCommentableDocument = this.state.documentsList.filter(doc => doc.convertedDocument)[0]; //todo: this whole function needs to get it's content from the feed.
-		const consultationsFirstDocument = firstCommentableDocument.documentId;
-		const firstDocumentChapterSlug = firstCommentableDocument.chapters[0].slug;
-		return [
-			{
-				label: "All Consultations",
-				url: "#"
-			},
-			{
-				label: "Consultation",
-				url: "https://alpha.nice.org.uk/guidance/indevelopment/gid-ng10107/consultation/html-content"
-			},
-			{
-				label: "Documents",
-				url: `/${consultationId}/${consultationsFirstDocument}/${firstDocumentChapterSlug}`
-			}
-		];
 	};
 
 	submitConsultation = () => {
@@ -242,7 +221,7 @@ export class ReviewPage extends Component<PropsType, StateType> {
 								name={projectInformation.name}
 								repo={projectInformation.repo}
 							/>
-							<BreadCrumbs links={this.getBreadcrumbs()} />
+							<BreadCrumbs links={this.state.consultationData.breadcrumbs}/>
 							<main role="main">
 								<div className="page-header">
 									<Header
