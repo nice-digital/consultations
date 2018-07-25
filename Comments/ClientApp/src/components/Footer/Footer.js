@@ -54,18 +54,18 @@ export class Footer extends Component<PropsType, StateType> {
 
 	setFooter = (footerHTML: string) => {
 		//annoyingly the footer html contains script! so we've got some nasty code here to run it.
-		const extractedScript = /<script( type="text\/javascript")?>([\S\s]+)<\/script>/gi.exec(footerHTML);
-		if (extractedScript !== null){
-			footerHTML = footerHTML.replace(extractedScript[0], "");
-		}
+		// const extractedScript = /<script( type="text\/javascript")?>([\S\s]+)<\/script>/gi.exec(footerHTML);
+		// if (extractedScript !== null){
+		// 	footerHTML = footerHTML.replace(extractedScript[0], "");
+		// }
 		this.setState({
 			loading: false,
 			hasInitialData: true,
 			footerHTML
 		});
-		if (extractedScript !== null && window){
-			window.eval(extractedScript[extractedScript.length - 1]); //sigh.
-		}
+		// if (extractedScript !== null && window){
+		// 	window.eval(extractedScript[extractedScript.length - 1]); //sigh.
+		// }
 	}
 
 	componentDidMount() {
