@@ -58,11 +58,20 @@ export class Footer extends Component<PropsType, StateType> {
 		if (!this.state.hasInitialData) {
 			this.gatherData()
 				.then(data => {
+					//annoyingly the footer html contains script! so we've got some nasty code here to run it.
+					let footerHTML = data.footerData;
+					const extractedScript = /<script( type="text\/javascript")?>([\S\s]+)<\/script>/gi.exec(footerHTML);
+					if (extractedScript !== null){
+						footerHTML = footerHTML.replace(extractedScript[0], "");
+					}
 					this.setState({
 						loading: false,
 						hasInitialData: true,
-						footerHTML: data.footerData,
+						footerHTML
 					});
+					if (extractedScript !== null && window){
+						window.eval(extractedScript[extractedScript.length - 1]); //sigh.
+					}
 				})
 				.catch(err => {
 					throw new Error("gatherData in componentDidMount failed " + err);
