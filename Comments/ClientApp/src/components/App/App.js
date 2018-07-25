@@ -1,13 +1,15 @@
 // @flow
 
-import React, { Fragment } from "react";
-import { Route, Switch, Redirect } from "react-router";
+import React from "react";
+import { Route, Switch } from "react-router";
 import { Helmet } from "react-helmet";
-import CommentListWithRouter from "../CommentList/CommentList";
+
 import DocumentViewWithRouter from "../DocumentView/DocumentView";
 import NotFound from "../NotFound/NotFound";
 import ReviewPageWithRouter from "../ReviewPage/ReviewPage";
 import UserProviderWithRouter from "../../context/UserContext";
+import InDevDocumentPreviewWithRouter from "../InDevDocumentPreview/InDevDocumentPreview";
+import InDevDocumentPreviewRedirectWithRouter from "../InDevDocumentPreview/InDevDocumentPreviewRedirect";
 
 type PropsType = any;
 
@@ -24,11 +26,6 @@ class App extends React.Component<PropsType, StateType> {
 				</Helmet>
 
 				<Switch>
-					{/*Home*/}
-					<Route exact path="/">
-						<Redirect to="/17/1/introduction"/>
-					</Route>
-
 					{/*Document View*/}
 					<Route path="/:consultationId/:documentId/:chapterSlug">
 						<DocumentViewWithRouter/>
@@ -37,28 +34,19 @@ class App extends React.Component<PropsType, StateType> {
 					<Switch>
 						{/*Document (Preview Layout)*/}
 						<Route path="/preview/:reference/consultation/:consultationId/document/:documentId/chapter/:chapterSlug">
-							<DocumentView/>
+							<InDevDocumentPreviewWithRouter />
 						</Route>
 
-						{/*	If we hit this we're coming in *without* a chapter slug,
-						so we need to get the first chapter of the current document
-						and pass its slug into the URL
-						so it matches the route above */}
+						{/*	If we hit this we're coming in *without* a chapter slug, so we need to get the first chapter of the current document and pass its slug into the URL so it matches the route above */}
 						<Route path="/preview/:reference/consultation/:consultationId/document/:documentId">
-							<DocumentPreviewRedirectWithRouter/>
-							 {/* This component only redirects to the above route */}
+							<InDevDocumentPreviewRedirectWithRouter />
+							{/* This component only redirects to the above route */}
 						</Route>
 					</Switch>
 
 					{/*Review Page*/}
 					<Route path="/:consultationId/review">
 						<ReviewPageWithRouter/>
-					</Route>
-
-					<Route path="/commentlist">
-						<Fragment>
-							<CommentListWithRouter/>
-						</Fragment>
 					</Route>
 
 					{/*404*/}

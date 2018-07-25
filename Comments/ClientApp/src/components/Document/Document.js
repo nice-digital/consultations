@@ -1,7 +1,6 @@
 // @flow
 
 import React, { Component, Fragment } from "react";
-import Moment from "react-moment";
 import { Helmet } from "react-helmet";
 import { StickyContainer, Sticky } from "react-sticky";
 import { withRouter } from "react-router";
@@ -14,7 +13,7 @@ import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
 import { projectInformation } from "../../constants";
-import { processDocumentHtml } from "./process-document-html";
+import { processDocumentHtml } from "../../document-processing/process-document-html";
 import { Selection } from "../Selection/Selection";
 import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
 import { Header } from "../Header/Header";
@@ -282,7 +281,7 @@ export class Document extends Component<PropsType, StateType> {
 	render() {
 		if (!this.state.hasInitialData) return <h1>Loading...</h1>;
 
-		const { title, reference, endDate } = this.state.consultationData;
+		const { title, reference } = this.state.consultationData;
 		const { documentsData } = this.state;
 		const { sections, content } = this.state.chapterData;
 		const consultationId = parseInt(this.props.match.params.consultationId, 0);
@@ -308,13 +307,6 @@ export class Document extends Component<PropsType, StateType> {
 										title={title}
 										reference={reference}
 										consultationState={this.state.consultationData.consultationState}/>
-									{ /*}<h1 className="page-header__heading mt--0">{title}</h1>
-
-									<p className="page-header__lead">
-										[{reference}] Open until{" "}
-										<Moment format="D MMMM YYYY" date={endDate}/>
-									</p> */
-									}
 									{this.state.allowComments &&
 										<button
 											data-qa-sel="comment-on-whole-consultation"
