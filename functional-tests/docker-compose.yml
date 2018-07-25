@@ -69,6 +69,8 @@ services:
       - GILLIAM_BASE_PATH
       - GILLIAM_GET_CLAIMS_URL
       - GILLIAM_REALM
+      - ENCRYPTION_KEY
+      - ENCRYPTION_IV
     networks:
       default:
         aliases:
