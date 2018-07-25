@@ -6,7 +6,6 @@ import CommentListWithRouter from "../CommentList/CommentList";
 import {pullFocusById} from "../../helpers/accessibility-helpers";
 
 type PropsType = {
-	commentList: Function,
 	match: {
 		params: {
 			consultationId: number

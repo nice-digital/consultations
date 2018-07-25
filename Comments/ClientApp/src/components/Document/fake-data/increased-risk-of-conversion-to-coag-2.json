@@ -1,0 +1,19 @@
+{
+  "_links": {
+    "self": [
+      {
+        "href":
+          "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/increased-risk-of-conversion-to-coag-2"
+      }
+    ]
+  },
+  "ETag": "01000000-0000-001A-0000-000000000006",
+  "Title": "5.1.1 Increased risk of conversion to COAG",
+  "Slug": "increased-risk-of-conversion-to-coag-2",
+  "ConsultationId": 113,
+  "ConsultationDocumentId": 1,
+  "Reference": "GID-NG10186",
+  "Content":
+    "<div class=\"chapter\" title=\"5.1.1 Increased risk of conversion to COAG\" xmlns=\"http://www.w3.org/1999/xhtml\">\r\n  <h2 class=\"title\">\r\n    <a id=\"increased-risk-of-conversion-to-coag-2\" style=\"position:relative\" class=\"annotator-chapter\" data-heading-type=\"chapter\" title=\"Comment on chapter\" xmlns=\"\">5.1.1 Increased risk of conversion to COAG<span class=\"annotator-adder\" /></a>\r\n  </h2>\r\n  <div class=\"informaltable\">\r\n    <table border=\"1\">\r\n      <colgroup>\r\n        <col />\r\n      </colgroup>\r\n      <tbody>\r\n        <tr>\r\n          <td align=\"left\" valign=\"top\">\r\n            <p>\r\n              <strong>Figure 1: Flow chart of clinical article selection for the review of: What is the accuracy of risk tools for identifying people in the community who are at increased risk of developing chronic open angle glaucoma?</strong>\r\n            </p>\r\n          </td>\r\n        </tr>\r\n        <tr>\r\n          <td align=\"left\" valign=\"top\">\r\n            <p>\r\n              <!--[E] - Error: Inline graphic objects aren't supported by the converter-->\r\n            </p>\r\n          </td>\r\n        </tr>\r\n      </tbody>\r\n    </table>\r\n  </div>\r\n</div>",
+  "Sections": []
+}

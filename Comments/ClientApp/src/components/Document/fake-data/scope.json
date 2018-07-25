@@ -1,0 +1,19 @@
+{
+  "_links": {
+    "self": [
+      {
+        "href":
+          "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/scope"
+      }
+    ]
+  },
+  "ETag": "01000000-0000-001A-0000-000000000006",
+  "Title": "1 Scope",
+  "Slug": "scope",
+  "ConsultationId": 113,
+  "ConsultationDocumentId": 1,
+  "Reference": "GID-NG10186",
+  "Content":
+    "<div class=\"chapter\" title=\"1 Scope\" xmlns=\"http://www.w3.org/1999/xhtml\">\r\n  <h2 class=\"title\">\r\n    <a id=\"scope\" style=\"position:relative\" class=\"annotator-chapter\" data-heading-type=\"chapter\" title=\"Comment on chapter\" xmlns=\"\">1 Scope<span class=\"annotator-adder\" /></a>\r\n    <!--[E] - Error: Embedded objects aren't supported by the converter-->\r\n    <!--[E] - Error: Embedded objects aren't supported by the converter-->\r\n    <!--[E] - Error: Embedded objects aren't supported by the converter-->\r\n    <!--[E] - Error: Embedded objects aren't supported by the converter-->\r\n    <!--[E] - Error: Embedded objects aren't supported by the converter-->\r\n    <!--[E] - Error: Embedded objects aren't supported by the converter-->\r\n    <!--[E] - Error: Embedded objects aren't supported by the converter-->\r\n    <!--[E] - Error: Embedded objects aren't supported by the converter-->\r\n    <!--[E] - Error: Embedded objects aren't supported by the converter-->\r\n    <!--[E] - Error: Embedded objects aren't supported by the converter-->\r\n    <!--[E] - Error: Embedded objects aren't supported by the converter-->\r\n    <!--[E] - Error: Embedded objects aren't supported by the converter-->\r\n    <!--[E] - Error: Embedded objects aren't supported by the converter-->\r\n    <!--[E] - Error: Embedded objects aren't supported by the converter-->\r\n  </h2>\r\n</div>",
+  "Sections": []
+}

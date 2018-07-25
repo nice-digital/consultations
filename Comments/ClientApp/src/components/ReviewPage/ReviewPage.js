@@ -1,3 +1,5 @@
+// @flow
+
 import React, { Component, Fragment } from "react";
 import CommentListWithRouter from "../CommentList/CommentList";
 import { withRouter } from "react-router";
@@ -16,7 +18,9 @@ import { pullFocusById } from "../../helpers/accessibility-helpers";
 type DocumentType = {
 	title: string,
 	sourceURI: string,
-	convertedDocument: boolean
+	convertedDocument: boolean,
+	chapters: any,
+	documentId: string
 };
 
 type ConsultationStateType = {
@@ -37,17 +41,18 @@ type PropsType = {
 	location: {
 		pathname: string,
 		search: string
-	}
+	},
+	match: Object
 };
 
 type StateType = {
-	documentsList: Array<any>,
+	documentsList: Array<DocumentType>,
 	consultationData: ConsultationDataType,
 	userHasSubmitted: boolean,
 	validToSubmit: false,
 	viewSubmittedComments: boolean,
 	shouldShowCommentsTab: boolean,
-	shouldShowQuestionsTab: boolean
+	shouldShowQuestionsTab: boolean,
 };
 
 export class ReviewPage extends Component<PropsType, StateType> {

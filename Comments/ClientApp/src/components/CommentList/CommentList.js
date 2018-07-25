@@ -254,7 +254,6 @@ export class CommentList extends Component<PropsType, StateType> {
 		let filterBy = queryStringToObject(newSourceURIToFilterBy);
 		if (filterBy.sourceURI == null) filterBy = { sourceURI: "" };
 		const idsOfFilteredComments = questions.filter(question => question.sourceURI.indexOf(filterBy.sourceURI) !== -1).map(question => question.questionId);
-
 		return questions.map(question => {
 			question.show = !idsOfFilteredComments.includes(question.questionId);
 			return question;

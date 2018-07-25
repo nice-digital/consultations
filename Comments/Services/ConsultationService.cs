@@ -4,11 +4,14 @@ using Microsoft.Extensions.Logging;
 using NICE.Feeds;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using Comments.Common;
 using Comments.Models;
 using NICE.Feeds.Models.Indev.Chapter;
 using NICE.Feeds.Models.Indev.Detail;
 using NICE.Feeds.Models.Indev.List;
+using Microsoft.AspNetCore.Razor.Language.Intermediate;
+
 
 namespace Comments.Services
 {
@@ -17,12 +20,17 @@ namespace Comments.Services
         ChapterContent GetChapterContent(int consultationId, int documentId, string chapterSlug);
         IEnumerable<Document> GetDocuments(int consultationId);
         ViewModels.Consultation GetConsultation(int consultationId, bool isReview);
+	    IEnumerable<Document> GetPreviewDraftDocuments(int consultationId, int documentId, string reference);
+	    IEnumerable<Document> GetPreviewPublishedDocuments(int consultationId, int documentId);
         IEnumerable<ViewModels.Consultation> GetConsultations();
+        (int validDocumentId, string validChapterSlug) ValidateDocumentAndChapterWithinConsultation(ConsultationDetail consultation, int documentId, string chapterSlug);
 	    ConsultationState GetConsultationState(string sourceURI, IEnumerable<Models.Location> locations = null, ConsultationDetail consultation = null);
 	    ConsultationState GetConsultationState(int consultationId, IEnumerable<Models.Location> locations = null, ConsultationDetail consultation = null);
+	    ChapterContent GetPreviewChapterContent(int consultationId, int documentId, string chapterSlug, string reference);
 
 		bool HasSubmittedCommentsOrQuestions(string consultationSourceURI, Guid userId);
 	    IEnumerable<BreadcrumbLink> GetBreadcrumbs(ConsultationDetail consultation, bool isReview);
+		(int validDocumentId, string validChapterSlug) ValidateDocumentAndChapterWithinConsultation(ConsultationDetail consultation, int documentId, string chapterSlug);
     }
 
 	public class ConsultationService : IConsultationService
@@ -46,11 +54,31 @@ namespace Comments.Services
                 _feedConverterService.GetConsultationChapterForPublishedProject(consultationId, documentId, chapterSlug));
         }
 
-        public IEnumerable<Document> GetDocuments(int consultationId)
+	    public ChapterContent GetPreviewChapterContent(int consultationId, int documentId, string chapterSlug, string reference)
+	    {
+		    return new ViewModels.ChapterContent(
+			    _feedConverterService.GetIndevConsultationChapterForDraftProject(consultationId, documentId, chapterSlug, reference));
+	    }
+
+		public IEnumerable<Document> GetDocuments(int consultationId)
         {
             var consultationDetail = _feedConverterService.GetIndevConsultationDetailForPublishedProject(consultationId, PreviewState.NonPreview);
             return consultationDetail.Resources.Select(r => new ViewModels.Document(consultationId, r)).ToList();
         }
+
+
+
+	    public IEnumerable<Document> GetPreviewPublishedDocuments(int consultationId, int documentId)
+	    {
+		    var consultationDetail = _feedConverterService.GetIndevConsultationDetailForPublishedProject(consultationId, PreviewState.Preview, documentId);
+		    return consultationDetail.Resources.Select(r => new ViewModels.Document(consultationId, r)).ToList();
+	    }
+
+		public IEnumerable<Document> GetPreviewDraftDocuments(int consultationId, int documentId, string reference)
+	    {
+		    var consultationDetail = _feedConverterService.GetIndevConsultationDetailForDraftProject(consultationId, documentId, reference);
+		    return consultationDetail.Resources.Select(r => new ViewModels.Document(consultationId, r)).ToList();
+	    }
 
         public ViewModels.Consultation GetConsultation(int consultationId, bool isReview)
         {

@@ -1,0 +1,2816 @@
+{
+  "_links": {
+    "self": [{ "href": "/preview/GID-NG10186/consultation/113/document/1" }]
+  },
+  "_embedded": {
+    "nice.indev:comment-document-list": {
+      "_links": { "self": [{}] },
+      "_embedded": {
+        "nice.indev:comment-document": {
+          "_links": { "self": [{}] },
+          "_embedded": {
+            "nice.indev:comment-document-chapter-info": [
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/draftappendicesa-tcleandocx"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "DRAFT_Appendices_A-T_CLEAN.docx",
+                "Slug": "draftappendicesa-tcleandocx",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/appendices"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "Appendices",
+                "Slug": "appendices",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/scope"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "1 Scope",
+                "Slug": "scope",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/declarations-of-interest"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "2 Declarations of interest",
+                "Slug": "declarations-of-interest",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/clinical-review-protocols"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "3 Clinical review protocols",
+                "Slug": "clinical-review-protocols",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/increased-risk-of-conversion-to-coag"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "3.1.1 Increased risk of conversion to COAG",
+                "Slug": "increased-risk-of-conversion-to-coag",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/increased-risk-of-coag-progression"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "3.1.2 Increased risk of COAG progression",
+                "Slug": "increased-risk-of-coag-progression",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/accuracy-of-tests-for-identifying-closed-or-occludable-anterior-chamber-angle"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "3.2.1 Accuracy of tests for identifying closed or occludable anterior chamber angle",
+                "Slug":
+                  "accuracy-of-tests-for-identifying-closed-or-occludable-anterior-chamber-angle",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/accuracy-of-iop-tests"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "3.2.2 Accuracy of IOP tests",
+                "Slug": "accuracy-of-iop-tests",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/central-corneal-thickness-measurement-evidence"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "3.2.3 Central corneal thickness measurement evidence",
+                "Slug": "central-corneal-thickness-measurement-evidence",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/visual-field-evidence"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "3.2.4 Visual field evidence",
+                "Slug": "visual-field-evidence",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/accuracy-of-structural-tests-for-identifying-and-monitoring-the-progression-of-glaucoma-damage"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "3.2.5 Accuracy of structural tests for identifying and monitoring the progression of glaucoma damage (damage of optic nerve head, macula and retinal nerve fibre layer)",
+                "Slug":
+                  "accuracy-of-structural-tests-for-identifying-and-monitoring-the-progression-of-glaucoma-damage",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/optimum-intervals-for-ocular-hypertension-suspected-chronic-open-angle-glaucoma-or-both"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "3.3.1 Optimum intervals for ocular hypertension, suspected chronic open-angle glaucoma or both",
+                "Slug":
+                  "optimum-intervals-for-ocular-hypertension-suspected-chronic-open-angle-glaucoma-or-both",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/optimum-intervals-for-chronic-open-angle-glaucoma"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "3.3.2 Optimum intervals for chronic open-angle glaucoma",
+                "Slug": "optimum-intervals-for-chronic-open-angle-glaucoma",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/pharmacological-treatment-for-ocular-hypertension-suspected-chronic-open-angle-glaucoma-and"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "3.5.1 Pharmacological treatment for ocular hypertension, suspected chronic open-angle glaucoma and confirmed chronic open-angle glaucoma",
+                "Slug":
+                  "pharmacological-treatment-for-ocular-hypertension-suspected-chronic-open-angle-glaucoma-and",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/laser-treatment-for-coag"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "3.5.2 Laser treatment for COAG",
+                "Slug": "laser-treatment-for-coag",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/surgical-treatment-for-coag"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "3.5.3 Surgical treatment for COAG",
+                "Slug": "surgical-treatment-for-coag",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/patients-with-coag-or-oht-associated-with-pseudoexfoliation-or-pigment-dispersion"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "3.5.4 Patients with COAG or OHT associated with pseudoexfoliation or pigment dispersion",
+                "Slug":
+                  "patients-with-coag-or-oht-associated-with-pseudoexfoliation-or-pigment-dispersion",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/service-models-for-case-finding-referral-filtering-and-diagnosis"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "3.7.1 Service models for case finding, referral filtering and diagnosis",
+                "Slug":
+                  "service-models-for-case-finding-referral-filtering-and-diagnosis",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/skills-required-by-healthcare-professionals"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "3.7.2 Skills required by healthcare professionals",
+                "Slug": "skills-required-by-healthcare-professionals",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/health-economic-review-protocol"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "4 Health economic review protocol",
+                "Slug": "health-economic-review-protocol",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/clinical-study-selection"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "5 Clinical study selection",
+                "Slug": "clinical-study-selection",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/increased-risk-of-conversion-to-coag-2"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "5.1.1 Increased risk of conversion to COAG",
+                "Slug": "increased-risk-of-conversion-to-coag-2",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/increased-risk-of-coag-progression-2"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "5.1.2 Increased risk of COAG progression",
+                "Slug": "increased-risk-of-coag-progression-2",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/accuracy-of-tests-for-identifying-closed-or-occludable-anterior-chamber-angle-2"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "5.2.1 Accuracy of tests for identifying closed or occludable anterior chamber angle",
+                "Slug":
+                  "accuracy-of-tests-for-identifying-closed-or-occludable-anterior-chamber-angle-2",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/accuracy-of-iop-tests-2"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "5.2.2 Accuracy of IOP tests",
+                "Slug": "accuracy-of-iop-tests-2",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/central-corneal-thickness-measurement-evidence-2"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "5.2.3 Central corneal thickness measurement evidence",
+                "Slug": "central-corneal-thickness-measurement-evidence-2",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/visual-field-evidence-2"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "5.2.4 Visual field evidence",
+                "Slug": "visual-field-evidence-2",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/accuracy-of-structural-tests-for-identifying-and-monitoring-the-progression-of-glaucoma-damage-2"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "5.2.5 Accuracy of structural tests for identifying and monitoring the progression of glaucoma damage (damage of optic nerve head, macula and retinal nerve fibre layer)",
+                "Slug":
+                  "accuracy-of-structural-tests-for-identifying-and-monitoring-the-progression-of-glaucoma-damage-2",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/optimum-intervals-for-ocular-hypertension-suspected-chronic-open-angle-glaucoma-or-both-2"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "5.3.1 Optimum intervals for ocular hypertension, suspected chronic open-angle glaucoma or both",
+                "Slug":
+                  "optimum-intervals-for-ocular-hypertension-suspected-chronic-open-angle-glaucoma-or-both-2",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/optimum-intervals-for-chronic-open-angle-glaucoma-2"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "5.3.2 Optimum intervals for chronic open-angle glaucoma",
+                "Slug": "optimum-intervals-for-chronic-open-angle-glaucoma-2",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/pharmacological-treatment-for-ocular-hypertension-suspected-chronic-open-angle-glaucoma-and-2"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "5.5.1 Pharmacological treatment for ocular hypertension, suspected chronic open-angle glaucoma and confirmed chronic open-angle glaucoma",
+                "Slug":
+                  "pharmacological-treatment-for-ocular-hypertension-suspected-chronic-open-angle-glaucoma-and-2",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/laser-treatment-for-coag-2"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "5.5.2 Laser treatment for COAG",
+                "Slug": "laser-treatment-for-coag-2",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/surgical-treatment-for-coag-2"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "5.5.3 Surgical treatment for COAG",
+                "Slug": "surgical-treatment-for-coag-2",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/patients-with-coag-or-oht-associated-with-pseudoexfoliation-or-pigment-dispersion-2"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "5.5.4 Patients with COAG or OHT associated with pseudoexfoliation or pigment dispersion",
+                "Slug":
+                  "patients-with-coag-or-oht-associated-with-pseudoexfoliation-or-pigment-dispersion-2",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/service-models-for-case-finding-referral-filtering-and-diagnosis-2"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "5.7.1 Service models for case finding, referral filtering and diagnosis",
+                "Slug":
+                  "service-models-for-case-finding-referral-filtering-and-diagnosis-2",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/skills-required-by-healthcare-professionals-2"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "5.7.2 Skills required by healthcare professionals",
+                "Slug": "skills-required-by-healthcare-professionals-2",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/health-economic-study-selection"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "6 Health economic study selection",
+                "Slug": "health-economic-study-selection",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/literature-search-strategies"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "7 Literature search strategies",
+                "Slug": "literature-search-strategies",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/contents-2"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "7.1 Contents",
+                "Slug": "contents-2",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/population-search-strategies"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "7.2 Population search strategies",
+                "Slug": "population-search-strategies",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/standard-glaucoma-population"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "7.2.1 Standard glaucoma population",
+                "Slug": "standard-glaucoma-population",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/study-filter-search-terms"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "7.3 Study filter search terms",
+                "Slug": "study-filter-search-terms",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/excluded-study-designs-and-publication-types"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "7.3.1 Excluded study designs and publication types",
+                "Slug": "excluded-study-designs-and-publication-types",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/randomised-controlled-trials-rct"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "7.3.2 Randomised controlled trials [RCT]",
+                "Slug": "randomised-controlled-trials-rct",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/systematic-reviews-sr"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "7.3.3 Systematic reviews [SR]",
+                "Slug": "systematic-reviews-sr",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/health-economic-studies-he"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "7.3.4 Health economic studies [HE]",
+                "Slug": "health-economic-studies-he",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/quality-of-life-studies-qol"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "7.3.5 Quality of life studies [QoL]",
+                "Slug": "quality-of-life-studies-qol",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/diagnostic-test-accuracy-studies-diag"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "7.3.6 Diagnostic test accuracy studies [DIAG]",
+                "Slug": "diagnostic-test-accuracy-studies-diag",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/health-economic-modelling-mod"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "7.3.7 Health economic modelling [MOD]",
+                "Slug": "health-economic-modelling-mod",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/searches-for-specific-questions"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "7.4 Searches for specific questions",
+                "Slug": "searches-for-specific-questions",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/prognostic-risk-tools-3"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "7.4.1 Prognostic risk tools",
+                "Slug": "prognostic-risk-tools-3",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/diagnostic-accuracy"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "7.4.2 Diagnostic accuracy",
+                "Slug": "diagnostic-accuracy",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/monitoring-intervals"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "7.4.3 Monitoring intervals",
+                "Slug": "monitoring-intervals",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/treatment"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "7.4.4 Treatment",
+                "Slug": "treatment",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/service-provision"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "7.4.5 Service provision",
+                "Slug": "service-provision",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/health-economics-search-terms"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "7.5 Health economics search terms",
+                "Slug": "health-economics-search-terms",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/health-economic-he-reviews"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "7.5.1 Health economic (HE) reviews",
+                "Slug": "health-economic-he-reviews",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/quality-of-life-qol-reviews"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "7.5.2 Quality of life (QoL) reviews",
+                "Slug": "quality-of-life-qol-reviews",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/clinical-evidence-tables"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "8 Clinical evidence tables",
+                "Slug": "clinical-evidence-tables",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/increased-risk-of-conversion-to-coag-3"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "8.1.1 Increased risk of conversion to COAG",
+                "Slug": "increased-risk-of-conversion-to-coag-3",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/increased-risk-of-coag-progression-3"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "8.1.2 Increased risk of COAG progression",
+                "Slug": "increased-risk-of-coag-progression-3",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/accuracy-of-tests-for-identifying-closed-or-occludable-anterior-chamber-angle-3"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "8.2.1 Accuracy of tests for identifying closed or occludable anterior chamber angle",
+                "Slug":
+                  "accuracy-of-tests-for-identifying-closed-or-occludable-anterior-chamber-angle-3",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/accuracy-of-iop-tests-3"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "8.2.2 Accuracy of IOP tests",
+                "Slug": "accuracy-of-iop-tests-3",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/central-corneal-thickness-measurement-evidence-3"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "8.2.3 Central corneal thickness measurement evidence",
+                "Slug": "central-corneal-thickness-measurement-evidence-3",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/visual-field-evidence-3"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "8.2.4 Visual field evidence",
+                "Slug": "visual-field-evidence-3",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/accuracy-of-structural-tests-for-identifying-and-monitoring-the-progression-of-glaucoma-damage-3"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "8.2.5 Accuracy of structural tests for identifying and monitoring the progression of glaucoma damage (damage of optic nerve head, macula and retinal nerve fibre layer)",
+                "Slug":
+                  "accuracy-of-structural-tests-for-identifying-and-monitoring-the-progression-of-glaucoma-damage-3",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/optimum-intervals-for-ocular-hypertension-suspected-chronic-open-angle-glaucoma-or-both-3"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "8.3.1 Optimum intervals for ocular hypertension, suspected chronic open-angle glaucoma or both",
+                "Slug":
+                  "optimum-intervals-for-ocular-hypertension-suspected-chronic-open-angle-glaucoma-or-both-3",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/optimum-intervals-for-chronic-open-angle-glaucoma-3"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "8.3.2 Optimum intervals for chronic open-angle glaucoma",
+                "Slug": "optimum-intervals-for-chronic-open-angle-glaucoma-3",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/pharmacological-treatment-for-ocular-hypertension-suspected-chronic-open-angle-glaucoma-and-chronic"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "8.5.1 Pharmacological treatment for ocular hypertension, suspected chronic open-angle glaucoma and chronic open-angle glaucoma",
+                "Slug":
+                  "pharmacological-treatment-for-ocular-hypertension-suspected-chronic-open-angle-glaucoma-and-chronic",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/laser-treatment-for-coag-3"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "8.5.2 Laser treatment for COAG",
+                "Slug": "laser-treatment-for-coag-3",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/surgical-treatment-for-coag-3"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "8.5.3 Surgical treatment for COAG",
+                "Slug": "surgical-treatment-for-coag-3",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/patients-with-coag-or-oht-associated-with-pseudoexfoliation-or-pigment-dispersion-3"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "8.5.4 Patients with COAG or OHT associated with pseudoexfoliation or pigment dispersion",
+                "Slug":
+                  "patients-with-coag-or-oht-associated-with-pseudoexfoliation-or-pigment-dispersion-3",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/service-models-for-case-finding-referral-filtering-and-diagnosis-3"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "8.7.1 Service models for case finding, referral filtering and diagnosis",
+                "Slug":
+                  "service-models-for-case-finding-referral-filtering-and-diagnosis-3",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/skills-required-by-healthcare-professionals-3"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "8.7.2 Skills required by healthcare professionals",
+                "Slug": "skills-required-by-healthcare-professionals-3",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/increased-risk-of-conversion-to-coag-4"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "8.9.1 Increased risk of conversion to COAG",
+                "Slug": "increased-risk-of-conversion-to-coag-4",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/increased-risk-of-coag-progression-4"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "8.9.2 Increased risk of COAG progression",
+                "Slug": "increased-risk-of-coag-progression-4",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/health-economic-evidence-tables"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "9 Health economic evidence tables",
+                "Slug": "health-economic-evidence-tables",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/increased-risk-of-conversion-to-coag-5"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "9.1.1 Increased risk of conversion to COAG",
+                "Slug": "increased-risk-of-conversion-to-coag-5",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/increased-risk-of-coag-progression-5"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "9.1.2 Increased risk of COAG progression",
+                "Slug": "increased-risk-of-coag-progression-5",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/accuracy-of-tests-for-identifying-closed-or-occludable-anterior-chamber-angle-4"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "9.2.1 Accuracy of tests for identifying closed or occludable anterior chamber angle",
+                "Slug":
+                  "accuracy-of-tests-for-identifying-closed-or-occludable-anterior-chamber-angle-4",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/accuracy-of-iop-tests-4"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "9.2.2 Accuracy of IOP tests",
+                "Slug": "accuracy-of-iop-tests-4",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/central-corneal-thickness-measurement-evidence-4"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "9.2.3 Central corneal thickness measurement evidence",
+                "Slug": "central-corneal-thickness-measurement-evidence-4",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/visual-field-evidence-4"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "9.2.4 Visual field evidence",
+                "Slug": "visual-field-evidence-4",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/accuracy-of-structural-tests-for-identifying-and-monitoring-the-progression-of-glaucoma-damage-4"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "9.2.5 Accuracy of structural tests for identifying and monitoring the progression of glaucoma damage (damage of optic nerve head, macula and retinal nerve fibre layer)",
+                "Slug":
+                  "accuracy-of-structural-tests-for-identifying-and-monitoring-the-progression-of-glaucoma-damage-4",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/optimum-intervals-for-ocular-hypertension-suspected-chronic-open-angle-glaucoma-or-both-4"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "9.3.1 Optimum intervals for ocular hypertension, suspected chronic open-angle glaucoma or both",
+                "Slug":
+                  "optimum-intervals-for-ocular-hypertension-suspected-chronic-open-angle-glaucoma-or-both-4",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/optimum-intervals-for-chronic-open-angle-glaucoma-4"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "9.3.2 Optimum intervals for chronic open-angle glaucoma",
+                "Slug": "optimum-intervals-for-chronic-open-angle-glaucoma-4",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/pharmacological-treatment-for-ocular-hypertension-suspected-chronic-open-angle-glaucoma-and-3"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "9.5.1 Pharmacological treatment for ocular hypertension, suspected chronic open-angle glaucoma and confirmed chronic open-angle glaucoma",
+                "Slug":
+                  "pharmacological-treatment-for-ocular-hypertension-suspected-chronic-open-angle-glaucoma-and-3",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/laser-treatment-for-coag-4"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "9.5.2 Laser treatment for COAG",
+                "Slug": "laser-treatment-for-coag-4",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/surgical-treatment-for-coag-4"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "9.5.3 Surgical treatment for COAG",
+                "Slug": "surgical-treatment-for-coag-4",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/patients-with-coag-or-oht-associated-with-pseudoexfoliation-or-pigment-dispersion-4"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "9.5.4 Patients with COAG or OHT associated with pseudoexfoliation or pigment dispersion",
+                "Slug":
+                  "patients-with-coag-or-oht-associated-with-pseudoexfoliation-or-pigment-dispersion-4",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/service-models-for-case-finding-referral-filtering-and-diagnosis-4"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "9.7.1 Service models for case finding, referral filtering and diagnosis",
+                "Slug":
+                  "service-models-for-case-finding-referral-filtering-and-diagnosis-4",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/skills-required-by-healthcare-professionals-4"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "9.7.2 Skills required by healthcare professionals",
+                "Slug": "skills-required-by-healthcare-professionals-4",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/grade-tables"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "10  GRADE tables",
+                "Slug": "grade-tables",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/increased-risk-of-chronic-open-angle-glaucoma"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "10.1.1 Increased risk of chronic open-angle glaucoma",
+                "Slug": "increased-risk-of-chronic-open-angle-glaucoma",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/increased-risk-of-vision-loss"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "10.1.2 Increased risk of vision loss",
+                "Slug": "increased-risk-of-vision-loss",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/accuracy-of-tests-for-identifying-closed-or-occludable-anterior-chamber-angle-5"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "10.2.1 Accuracy of tests for identifying closed or occludable anterior chamber angle",
+                "Slug":
+                  "accuracy-of-tests-for-identifying-closed-or-occludable-anterior-chamber-angle-5",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/accuracy-of-iop-tests-5"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "10.2.2 Accuracy of IOP tests",
+                "Slug": "accuracy-of-iop-tests-5",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/central-corneal-thickness-measurement-evidence-5"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "10.2.3 Central corneal thickness measurement evidence",
+                "Slug": "central-corneal-thickness-measurement-evidence-5",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/visual-field-evidence-5"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "10.2.4 Visual field evidence",
+                "Slug": "visual-field-evidence-5",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/accuracy-of-structural-tests-for-identifying-and-monitoring-the-progression-of-glaucoma-damage-5"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "10.2.5 Accuracy of structural tests for identifying and monitoring the progression of glaucoma damage (damage of optic nerve head, macula and retinal nerve fibre layer)",
+                "Slug":
+                  "accuracy-of-structural-tests-for-identifying-and-monitoring-the-progression-of-glaucoma-damage-5",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/optimum-intervals-for-ocular-hypertension-suspected-chronic-open-angle-glaucoma-or-both-5"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "10.3.1 Optimum intervals for ocular hypertension, suspected chronic open-angle glaucoma or both",
+                "Slug":
+                  "optimum-intervals-for-ocular-hypertension-suspected-chronic-open-angle-glaucoma-or-both-5",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/optimum-intervals-for-chronic-open-angle-glaucoma-5"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "10.3.2 Optimum intervals for chronic open-angle glaucoma",
+                "Slug": "optimum-intervals-for-chronic-open-angle-glaucoma-5",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/pharmacological-treatment-for-ocular-hypertension-suspected-chronic-open-angle-glaucoma-and-4"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "10.5.1 Pharmacological treatment for ocular hypertension, suspected chronic open-angle glaucoma and confirmed chronic open-angle glaucoma",
+                "Slug":
+                  "pharmacological-treatment-for-ocular-hypertension-suspected-chronic-open-angle-glaucoma-and-4",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/laser-treatment-for-coag-5"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "10.5.2 Laser treatment for COAG",
+                "Slug": "laser-treatment-for-coag-5",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/surgical-treatment-for-coag-5"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "10.5.3 Surgical treatment for COAG",
+                "Slug": "surgical-treatment-for-coag-5",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/patients-with-coag-or-oht-associated-with-pseudoexfoliation-or-pigment-dispersion-5"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "10.5.4 Patients with COAG or OHT associated with pseudoexfoliation or pigment dispersion",
+                "Slug":
+                  "patients-with-coag-or-oht-associated-with-pseudoexfoliation-or-pigment-dispersion-5",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/service-models-for-case-finding-referral-filtering-and-diagnosis-5"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "10.7.1 Service models for case finding, referral filtering and diagnosis",
+                "Slug":
+                  "service-models-for-case-finding-referral-filtering-and-diagnosis-5",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/skills-required-by-healthcare-professionals-5"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "10.7.2 Skills required by healthcare professionals",
+                "Slug": "skills-required-by-healthcare-professionals-5",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/forest-plots-and-coupled-sensitivity-and-specificity-plots"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "11 Forest plots and coupled sensitivity and specificity plots",
+                "Slug":
+                  "forest-plots-and-coupled-sensitivity-and-specificity-plots",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/increased-risk-of-conversion-to-coag-6"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "11.1.1 Increased risk of conversion to COAG",
+                "Slug": "increased-risk-of-conversion-to-coag-6",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/increased-risk-of-coag-progression-6"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "11.1.2 Increased risk of COAG progression",
+                "Slug": "increased-risk-of-coag-progression-6",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/accuracy-of-tests-for-identifying-closed-or-occludable-anterior-chamber-angle-6"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "11.2.1 Accuracy of tests for identifying closed or occludable anterior chamber angle",
+                "Slug":
+                  "accuracy-of-tests-for-identifying-closed-or-occludable-anterior-chamber-angle-6",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/accuracy-of-iop-tests-6"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "11.2.2 Accuracy of IOP tests",
+                "Slug": "accuracy-of-iop-tests-6",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/central-corneal-thickness-measurement-evidence-6"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "11.2.3 Central corneal thickness measurement evidence",
+                "Slug": "central-corneal-thickness-measurement-evidence-6",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/visual-field-evidence-6"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "11.2.4 Visual field evidence",
+                "Slug": "visual-field-evidence-6",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/accuracy-of-structural-tests-for-identifying-and-monitoring-the-progression-of-glaucoma-damage-6"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "11.2.5 Accuracy of structural tests for identifying and monitoring the progression of glaucoma damage (damage of optic nerve head, macula and retinal nerve fibre layer)",
+                "Slug":
+                  "accuracy-of-structural-tests-for-identifying-and-monitoring-the-progression-of-glaucoma-damage-6",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/optimum-intervals-for-ocular-hypertension-suspected-chronic-open-angle-glaucoma-or-both-6"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "11.3.1 Optimum intervals for ocular hypertension, suspected chronic open-angle glaucoma or both",
+                "Slug":
+                  "optimum-intervals-for-ocular-hypertension-suspected-chronic-open-angle-glaucoma-or-both-6",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/optimum-intervals-for-chronic-open-angle-glaucoma-6"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "11.3.2 Optimum intervals for chronic open-angle glaucoma",
+                "Slug": "optimum-intervals-for-chronic-open-angle-glaucoma-6",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/pharmacological-treatment-for-ocular-hypertension-suspected-chronic-open-angle-glaucoma-and-5"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "11.5.1 Pharmacological treatment for ocular hypertension, suspected chronic open-angle glaucoma and confirmed chronic open-angle glaucoma",
+                "Slug":
+                  "pharmacological-treatment-for-ocular-hypertension-suspected-chronic-open-angle-glaucoma-and-5",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/laser-treatment-for-coag-6"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "11.5.2 Laser treatment for COAG",
+                "Slug": "laser-treatment-for-coag-6",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/surgical-treatment-for-coag-6"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "11.5.3 Surgical treatment for COAG",
+                "Slug": "surgical-treatment-for-coag-6",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/patients-with-coag-or-oht-associated-with-pseudoexfoliation-or-pigment-dispersion-6"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "11.5.4 Patients with COAG or OHT associated with pseudoexfoliation or pigment dispersion",
+                "Slug":
+                  "patients-with-coag-or-oht-associated-with-pseudoexfoliation-or-pigment-dispersion-6",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/service-models-for-case-finding-referral-filtering-and-diagnosis-6"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "11.7.1 Service models for case finding, referral filtering and diagnosis",
+                "Slug":
+                  "service-models-for-case-finding-referral-filtering-and-diagnosis-6",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/skills-required-by-healthcare-professionals-6"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "11.7.2 Skills required by healthcare professionals",
+                "Slug": "skills-required-by-healthcare-professionals-6",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/excluded-clinical-studies"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "12 Excluded clinical studies",
+                "Slug": "excluded-clinical-studies",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/increased-risk-of-conversion-to-coag-7"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "12.1.1 Increased risk of conversion to COAG",
+                "Slug": "increased-risk-of-conversion-to-coag-7",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/increased-risk-of-coag-progression-7"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "12.1.2 Increased risk of COAG progression",
+                "Slug": "increased-risk-of-coag-progression-7",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/accuracy-of-tests-for-identifying-closed-or-occludable-anterior-chamber-angle-7"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "12.2.1 Accuracy of tests for identifying closed or occludable anterior chamber angle",
+                "Slug":
+                  "accuracy-of-tests-for-identifying-closed-or-occludable-anterior-chamber-angle-7",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/accuracy-of-iop-tests-7"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "12.2.2 Accuracy of IOP tests",
+                "Slug": "accuracy-of-iop-tests-7",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/central-corneal-thickness-measurement-evidence-7"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "12.2.3 Central corneal thickness measurement evidence",
+                "Slug": "central-corneal-thickness-measurement-evidence-7",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/visual-field-evidence-7"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "12.2.4 Visual field evidence",
+                "Slug": "visual-field-evidence-7",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/accuracy-of-structural-tests-for-identifying-and-monitoring-the-progression-of-glaucoma-damage-7"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "12.2.5 Accuracy of structural tests for identifying and monitoring the progression of glaucoma damage (damage of optic nerve head, macula and retinal nerve fibre layer)",
+                "Slug":
+                  "accuracy-of-structural-tests-for-identifying-and-monitoring-the-progression-of-glaucoma-damage-7",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/optimum-intervals-for-ocular-hypertension-suspected-chronic-open-angle-glaucoma-or-both-7"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "12.3.1 Optimum intervals for ocular hypertension, suspected chronic open-angle glaucoma or both",
+                "Slug":
+                  "optimum-intervals-for-ocular-hypertension-suspected-chronic-open-angle-glaucoma-or-both-7",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/optimum-intervals-for-chronic-open-angle-glaucoma-7"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "12.3.2 Optimum intervals for chronic open-angle glaucoma",
+                "Slug": "optimum-intervals-for-chronic-open-angle-glaucoma-7",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/pharmacological-treatment-for-ocular-hypertension-suspected-chronic-open-angle-glaucoma-and-6"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "12.5.1 Pharmacological treatment for ocular hypertension, suspected chronic open-angle glaucoma and confirmed chronic open-angle glaucoma",
+                "Slug":
+                  "pharmacological-treatment-for-ocular-hypertension-suspected-chronic-open-angle-glaucoma-and-6",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/laser-treatment-for-coag-7"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "12.5.2 Laser treatment for COAG",
+                "Slug": "laser-treatment-for-coag-7",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/surgical-treatment-for-coag-7"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "12.5.3 Surgical treatment for COAG",
+                "Slug": "surgical-treatment-for-coag-7",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/patients-with-coag-or-oht-associated-with-pseudoexfoliation-or-pigment-dispersion-7"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "12.5.4 Patients with COAG or OHT associated with pseudoexfoliation or pigment dispersion",
+                "Slug":
+                  "patients-with-coag-or-oht-associated-with-pseudoexfoliation-or-pigment-dispersion-7",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/service-models-for-case-finding-referral-filtering-and-diagnosis-7"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "12.7.1 Service models for case finding, referral filtering and diagnosis",
+                "Slug":
+                  "service-models-for-case-finding-referral-filtering-and-diagnosis-7",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/skills-required-by-healthcare-professionals-7"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "12.7.2 Skills required by healthcare professionals",
+                "Slug": "skills-required-by-healthcare-professionals-7",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/excluded-health-economic-studies"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "13 Excluded health economic studies",
+                "Slug": "excluded-health-economic-studies",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/increased-risk-of-conversion-to-coag-8"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "13.1.1 Increased risk of conversion to COAG",
+                "Slug": "increased-risk-of-conversion-to-coag-8",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/increased-risk-of-coag-progression-8"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "13.1.2 Increased risk of COAG progression",
+                "Slug": "increased-risk-of-coag-progression-8",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/accuracy-of-tests-for-identifying-closed-or-occludable-anterior-chamber-angle-8"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "13.2.1 Accuracy of tests for identifying closed or occludable anterior chamber angle",
+                "Slug":
+                  "accuracy-of-tests-for-identifying-closed-or-occludable-anterior-chamber-angle-8",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/accuracy-of-iop-tests-8"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "13.2.2 Accuracy of IOP tests",
+                "Slug": "accuracy-of-iop-tests-8",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/central-corneal-thickness-measurement-evidence-8"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "13.2.3 Central corneal thickness measurement evidence",
+                "Slug": "central-corneal-thickness-measurement-evidence-8",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/visual-field-evidence-8"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "13.2.4 Visual field evidence",
+                "Slug": "visual-field-evidence-8",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/accuracy-of-structural-tests-for-identifying-and-monitoring-the-progression-of-glaucoma-damage-8"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "13.2.5 Accuracy of structural tests for identifying and monitoring the progression of glaucoma damage (damage of optic nerve head, macula and retinal nerve fibre layer)",
+                "Slug":
+                  "accuracy-of-structural-tests-for-identifying-and-monitoring-the-progression-of-glaucoma-damage-8",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/optimum-intervals-for-ocular-hypertension-suspected-chronic-open-angle-glaucoma-or-both-8"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "13.3.1 Optimum intervals for ocular hypertension, suspected chronic open-angle glaucoma or both",
+                "Slug":
+                  "optimum-intervals-for-ocular-hypertension-suspected-chronic-open-angle-glaucoma-or-both-8",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/optimum-intervals-for-chronic-open-angle-glaucoma-8"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "13.3.2 Optimum intervals for chronic open-angle glaucoma",
+                "Slug": "optimum-intervals-for-chronic-open-angle-glaucoma-8",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/pharmacological-treatment-for-ocular-hypertension-suspected-chronic-open-angle-glaucoma-and-7"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "13.5.1 Pharmacological treatment for ocular hypertension, suspected chronic open-angle glaucoma and confirmed chronic open-angle glaucoma",
+                "Slug":
+                  "pharmacological-treatment-for-ocular-hypertension-suspected-chronic-open-angle-glaucoma-and-7",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/laser-treatment-for-coag-8"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "13.5.2 Laser treatment for COAG",
+                "Slug": "laser-treatment-for-coag-8",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/surgical-treatment-for-coag-8"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "13.5.3 Surgical treatment for COAG",
+                "Slug": "surgical-treatment-for-coag-8",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/patients-with-coag-or-oht-associated-with-pseudoexfoliation-or-pigment-dispersion-8"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "13.5.4 Patients with COAG or OHT associated with pseudoexfoliation or pigment dispersion",
+                "Slug":
+                  "patients-with-coag-or-oht-associated-with-pseudoexfoliation-or-pigment-dispersion-8",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/service-models-for-case-finding-referral-filtering-and-diagnosis-8"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "13.7.1 Service models for case finding, referral filtering and diagnosis",
+                "Slug":
+                  "service-models-for-case-finding-referral-filtering-and-diagnosis-8",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/skills-required-by-healthcare-professionals-8"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "13.7.2 Skills required by healthcare professionals",
+                "Slug": "skills-required-by-healthcare-professionals-8",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/cost-effectiveness-analysis-treatment-for-ocular-hypertension"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "14 Cost-effectiveness analysis: treatment for ocular hypertension",
+                "Slug":
+                  "cost-effectiveness-analysis-treatment-for-ocular-hypertension",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/network-meta-analysis-the-effectiveness-of-beta-blockers-and-prostaglandin-analogues-in-lowering"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "15 Network meta-analysis: the effectiveness of beta-blockers and prostaglandin analogues in lowering intraocular pressure",
+                "Slug":
+                  "network-meta-analysis-the-effectiveness-of-beta-blockers-and-prostaglandin-analogues-in-lowering",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/cg85-cost-effective-analysis"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "16 CG85 Cost-effective analysis",
+                "Slug": "cg85-cost-effective-analysis",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/general-method"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "16.1.1 General method",
+                "Slug": "general-method",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/research-recommendations"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "17 Research recommendations",
+                "Slug": "research-recommendations",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/treatment-for-people-with-an-iop-of-22-or-23mmhg"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title":
+                  "17.1 Treatment for people with an IOP of 22 or 23mmHg",
+                "Slug": "treatment-for-people-with-an-iop-of-22-or-23mmhg",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/updates-to-cg85"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "18 Updates to CG85",
+                "Slug": "updates-to-cg85",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/nice-technical-team"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "19 NICE technical team",
+                "Slug": "nice-technical-team",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              },
+              {
+                "_links": {
+                  "self": [
+                    {
+                      "href":
+                        "/preview/GID-NG10186/consultation/113/document/1/chapter-slug/references"
+                    }
+                  ]
+                },
+                "ETag": null,
+                "Title": "20 References",
+                "Slug": "references",
+                "ConsultationId": 113,
+                "ConsultationDocumentId": 1,
+                "Reference": "GID-NG10186"
+              }
+            ]
+          },
+          "ETag": null,
+          "Title": "",
+          "ConsultationDocumentId": 1
+        }
+      },
+      "ETag": null
+    }
+  },
+  "ETag": "01000000-0000-001A-0000-000000000006",
+  "Reference": "GID-NG10186",
+  "Title": "Warren's Project",
+  "ConsultationName": "Draft guidance consultation",
+  "StartDate": "2018-06-13T00:00:00",
+  "EndDate": "2018-11-24T00:01:00",
+  "ConsultationType": "Draft guidance consultation",
+  "ResourceTitleId": null,
+  "ProjectType": "NG",
+  "ProductTypeName": "NICE guideline",
+  "DevelopedAs": null,
+  "RelevantTo": null,
+  "ConsultationId": 113,
+  "Process": "NG",
+  "HasDocumentsWhichAllowConsultationComments": false,
+  "HasDocumentsWhichAllowConsultationQuestions": false,
+  "SupportQuestions": true,
+  "SupportsComments": true,
+  "PartiallyUpdatedProjectReference": null,
+  "OrigProjectReference": null,
+  "SelectedDocumentId": 1,
+  "DocumentId": 1
+}

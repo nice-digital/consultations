@@ -2,7 +2,11 @@
 // Depending on their specificity to this project they may be moved into the design system
 
 %left-drop-shadow {
-  box-shadow: -10px 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: rem(-10px) 0 rem(10px) rgba(0, 0, 0, 0.1);
+}
+
+%all-drop-shadow {
+  box-shadow: 0 0 rem(10px) rgba(0, 0, 0, 0.1);
 }
 
 %transition-default {
