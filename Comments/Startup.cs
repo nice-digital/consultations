@@ -131,12 +131,10 @@ namespace Comments
                 loggerFactory.AddConsole(Configuration.GetSection("Logging"));
                 loggerFactory.AddDebug();
 
-				app.UseStaticFiles();
-
+				app.UseStaticFiles(); //uses the wwwroot folder, only for dev. on other service the root is varnish
 			}
-           
 
-            app.UseCors("CorsPolicy");
+			app.UseCors("CorsPolicy");
 
             // Because in dev mode we proxy to a react dev server (which has to run in the root e.g. http://localhost:3000)
             // we re-write paths for static files to map them to the root

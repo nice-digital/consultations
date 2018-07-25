@@ -8,7 +8,7 @@ import DocumentViewWithRouter from "../DocumentView/DocumentView";
 import NotFound from "../NotFound/NotFound";
 import ReviewPageWithRouter from "../ReviewPage/ReviewPage";
 import UserProviderWithRouter from "../../context/UserContext";
-import { Footer } from "../Footer/Footer";
+import FooterWithRouter from "../Footer/Footer";
 
 type PropsType = any;
 
@@ -51,7 +51,7 @@ class App extends React.Component<PropsType, StateType> {
 						<Route component={NotFound}/>
 					</Switch>
 				</UserProviderWithRouter>
-				<Footer />
+				<FooterWithRouter />
 			</Fragment>
 		);
 	}

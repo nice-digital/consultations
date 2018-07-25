@@ -1,8 +1,12 @@
 // @flow
 
 import React, { Component, Fragment } from "react";
+import { withRouter } from "react-router-dom";
+
 import preload from "../../data/pre-loader";
 import { load } from "./../../data/loader";
+
+//import stringifyObject from "stringify-object";
 
 type PropsType = {
 	staticContext?: any,
@@ -25,25 +29,19 @@ export class Footer extends Component<PropsType, StateType> {
 			footerHTML: ""
 		};
 
-		// if (this.props) {
-		// 	const preloadedFooterHTML = preload(
-		// 		this.props.staticContext,
-		// 		"footer",
-		// 	);
-
-		// 	if (preloadedFooterHTML) {
-		// 		this.state = {
-		// 			loading: false,
-		// 			hasInitialData: true,
-		// 			footerHTML: preloadedFooterHTML
-		// 		};
-		// 	}
-		// }
+		if (this.props) {
+			const preloadedFooterHTML = preload(
+				this.props.staticContext,
+				"footer",
+			);
+			if (preloadedFooterHTML) {
+				this.setFooter(preloadedFooterHTML);
+			}
+		}
 	}
 
-	gatherData = async () => {
-		
-		const footerData = load("footer", "")
+	gatherData = async () => {		
+		const footerData = load("footer")
 			.then(response => response.data)
 			.catch(err => {
 				throw new Error("chapterData " + err);
@@ -54,24 +52,27 @@ export class Footer extends Component<PropsType, StateType> {
 		};
 	};
 
+	setFooter = (footerHTML: string) => {
+		//annoyingly the footer html contains script! so we've got some nasty code here to run it.
+		const extractedScript = /<script( type="text\/javascript")?>([\S\s]+)<\/script>/gi.exec(footerHTML);
+		if (extractedScript !== null){
+			footerHTML = footerHTML.replace(extractedScript[0], "");
+		}
+		this.setState({
+			loading: false,
+			hasInitialData: true,
+			footerHTML
+		});
+		if (extractedScript !== null && window){
+			window.eval(extractedScript[extractedScript.length - 1]); //sigh.
+		}
+	}
+
 	componentDidMount() {
 		if (!this.state.hasInitialData) {
 			this.gatherData()
 				.then(data => {
-					//annoyingly the footer html contains script! so we've got some nasty code here to run it.
-					let footerHTML = data.footerData;
-					const extractedScript = /<script( type="text\/javascript")?>([\S\s]+)<\/script>/gi.exec(footerHTML);
-					if (extractedScript !== null){
-						footerHTML = footerHTML.replace(extractedScript[0], "");
-					}
-					this.setState({
-						loading: false,
-						hasInitialData: true,
-						footerHTML
-					});
-					if (extractedScript !== null && window){
-						window.eval(extractedScript[extractedScript.length - 1]); //sigh.
-					}
+					this.setFooter(data.footerData);
 				})
 				.catch(err => {
 					throw new Error("gatherData in componentDidMount failed " + err);
@@ -80,7 +81,7 @@ export class Footer extends Component<PropsType, StateType> {
 	}
 
 	render() {
-		if (!this.state.hasInitialData) return null; // <h1>Loading...</h1>;
+		if (!this.state.hasInitialData) return null;
 
 		return (
 			<div dangerouslySetInnerHTML={{
@@ -90,4 +91,4 @@ export class Footer extends Component<PropsType, StateType> {
 	}
 }
 
-export default Footer;
+export default withRouter(Footer);

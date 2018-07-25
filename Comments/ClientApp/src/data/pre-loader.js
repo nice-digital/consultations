@@ -15,7 +15,7 @@ const preload = (staticContext, endpoint,  urlParameters = [], query = {}, prelo
 	}
 	// There should always be a static context on the server but check anyway
 	if (!staticContext) {
-		console.warn("Static context was null on the server");
+		console.warn(`Static context was null on the server when executing endpoint: ${endpoint}`);
 		return data;
 	}
 	// Data with that key already preloaded on the server
@@ -26,6 +26,7 @@ const preload = (staticContext, endpoint,  urlParameters = [], query = {}, prelo
 	if (preloadData && preloadData.cookies) {
 		cookies = preloadData.cookies;
 	}
+
 	// Load fresh data on the server
 	const promise = load(endpoint, staticContext.baseUrl, urlParameters, query,  "GET", {}, false, cookies)
 		.then(response => {
