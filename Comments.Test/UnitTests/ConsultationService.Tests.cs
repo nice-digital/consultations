@@ -14,7 +14,7 @@ using Xunit;
 
 namespace Comments.Test.UnitTests
 {
-	public class ConsultationService : Comments.Test.Infrastructure.TestBase
+	public class ConsultationServiceTests : Comments.Test.Infrastructure.TestBase
     {
         [Fact]
         public void Comments_CanBeRead()
