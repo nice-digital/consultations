@@ -43,7 +43,7 @@ export class Footer extends Component<PropsType, StateType> {
 
 	gatherData = async () => {
 		
-		const footerData = load("footer")
+		const footerData = load("footer", "")
 			.then(response => response.data)
 			.catch(err => {
 				throw new Error("chapterData " + err);

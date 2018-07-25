@@ -13,5 +13,5 @@ export const Endpoints = {
 	review: "/api/Review/{0}", //list of all comments for a consultation (inc Consultation, Document, Chapter and Section levels) given a URI, restricted by current user
 	user: "/api/User", // get details of currently logged in user
 	submit: "/api/Submit", // submit on the review page.
-	footer: "http://niceorg/Footer.html"
+	footer: "/media/default/html/htmlwidget/Footer.html"
 };
