@@ -1,15 +1,15 @@
-using System;
+using Comments.Services;
+using Comments.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using Comments.Services;
-using Comments.ViewModels;
-using Microsoft.Extensions.Configuration;
 
 namespace Comments.Models
 {
-    public partial class ConsultationsContext : DbContext
+	public partial class ConsultationsContext : DbContext
     {
 	    private readonly IEncryption _encryption;
 	    private readonly IConfiguration _configuration;
@@ -226,7 +226,12 @@ namespace Comments.Models
 		    return SaveChanges();
 	    }
 
-	    public int InsertQuestionsWithScript(int consultationId)
+		/// <summary>
+		/// this question insert script is temporary, until the question administration features are built.
+		/// </summary>
+		/// <param name="consultationId"></param>
+		/// <returns></returns>
+		public int InsertQuestionsWithScript(int consultationId)
 	    {
 		    return Database.ExecuteSqlCommand(@"
 				--DECLARE @consultationId AS int
@@ -295,5 +300,23 @@ namespace Comments.Models
 				END
 			", new SqlParameter("@consultationId", consultationId));
 	    }
+
+		/// <summary>
+		/// Deletes everything except for the Status table.
+		/// </summary>
+		/// <returns></returns>
+		public int DeleteEverything()
+		{
+			return Database.ExecuteSqlCommand(@"
+				DELETE FROM SubmissionComment;
+				DELETE FROM SubmissionAnswer;
+				DELETE FROM Submission;
+				DELETE FROM Answer;
+				DELETE FROM Question;
+				DELETE FROM Comment;
+				DELETE FROM [Location];
+				DELETE FROM QuestionType;
+			");
+		}
 	}
 }
