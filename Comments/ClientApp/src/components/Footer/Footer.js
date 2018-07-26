@@ -2,11 +2,10 @@
 
 import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router-dom";
+import ReactHtmlParser from "react-html-parser";
 
 import preload from "../../data/pre-loader";
 import { load } from "./../../data/loader";
-
-//import stringifyObject from "stringify-object";
 
 type PropsType = {
 	staticContext?: any,
@@ -56,18 +55,10 @@ export class Footer extends Component<PropsType, StateType> {
 	};
 
 	setFooter = (footerHTML: string) => {
-		//annoyingly the footer html contains script! so we've got some nasty code here to run it.
-		// const extractedScript = /<script( type="text\/javascript")?>([\S\s]+)<\/script>/gi.exec(footerHTML);
-		// if (extractedScript !== null){
-		// 	footerHTML = footerHTML.replace(extractedScript[0], "");
-		// }
 		this.setState({
 			hasInitialData: true,
 			footerHTML
 		});
-		// if (extractedScript !== null && window){
-		// 	window.eval(extractedScript[extractedScript.length - 1]); //sigh.
-		// }
 	}
 
 	componentDidMount() {
@@ -82,13 +73,23 @@ export class Footer extends Component<PropsType, StateType> {
 		}
 	}
 
+	//the footer includes a "[year]" string in the copyright text, which needs to be replaced with the current year.
+	transformHtml = (node) => {
+		if (node.type === "text" && node.data.indexOf("[year]") !== -1){
+			const text = node.data.replace("[year]", new Date().getFullYear());
+			return (
+				<Fragment>{text}</Fragment>
+			)
+		}
+	}
+
 	render() {
 		if (!this.state.hasInitialData) return null;
 
 		return (
-			<div dangerouslySetInnerHTML={{
-				__html: this.state.footerHTML
-			}} />
+			<div>
+				{ReactHtmlParser(this.state.footerHTML, {transform: this.transformHtml })}
+			</div>			
 		);
 	}
 }
