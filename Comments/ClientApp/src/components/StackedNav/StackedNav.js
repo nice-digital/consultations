@@ -30,8 +30,10 @@ export const StackedNav = (props: PropsType) => {
 							item.current ?
 								<Link to={item.url} aria-current="page">{item.label}</Link>
 								:
+								// if !item.current
 								<Link to={item.url}>{item.label}</Link>
 							:
+							// if !item.isReactRoute
 							<a href={item.url} target="_blank" rel="noopener noreferrer">{item.label}</a>
 						}
 					</li>

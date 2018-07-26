@@ -1,0 +1,46 @@
+{
+  "reference": "GID-NG10186",
+  "title": "Warren's Project",
+  "consultationName": "Draft guidance consultation",
+  "startDate": "2018-06-13T00:00:00",
+  "endDate": "2018-11-24T00:01:00",
+  "consultationType": "Draft guidance consultation",
+  "resourceTitleId": null,
+  "projectType": "NG",
+  "productTypeName": "NICE guideline",
+  "developedAs": null,
+  "relevantTo": null,
+  "consultationId": 113,
+  "process": "NG",
+  "hasDocumentsWhichAllowConsultationComments": false,
+  "hasDocumentsWhichAllowConsultationQuestions": false,
+  "supportsQuestions": false,
+  "supportsComments": true,
+  "partiallyUpdatedProjectReference": null,
+  "origProjectReference": null,
+  "user": {
+    "isAuthorised": false,
+    "displayName": null,
+    "userId": null
+  },
+  "consultationState": {
+    "startDate": "2018-06-13T00:00:00",
+    "endDate": "2018-11-24T00:01:00",
+    "hasQuestions": false,
+    "hasUserSuppliedAnswers": false,
+    "hasUserSuppliedComments": false,
+    "userHasSubmitted": false,
+    "consultationIsOpen": true,
+    "consultationHasNotStartedYet": false,
+    "consultationHasEnded": false,
+    "supportsSubmission": false,
+    "supportsDownload": false
+  },
+  "breadcrumbs": [{
+    "label": "All consultations",
+    "url": "/guidance/inconsultation"
+  }, {
+    "label": "Consultation",
+    "url": "/guidance/indevelopment/gid-ng10186/consultation/"
+  }]
+}

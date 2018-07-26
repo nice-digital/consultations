@@ -1,13 +1,28 @@
 import React, { Component, Fragment } from "react";
-import Moment from "react-moment";
-
 import { Answer } from "../Answer/Answer";
+
 //import stringifyObject from "stringify-object";
+
+type StatusType = {
+	statusId: number,
+	name: string
+};
 
 type QuestionTypeType = {
 	description: string,
 	hasTextAnswer: boolean,
 	hasBooleanAnswer: boolean
+};
+
+type AnswerType = {
+	answerId: number,
+	answerText: string,
+	answerBoolean: boolean,
+	questionId: number,
+	lastModifiedDate: Date,
+	lastModifiedByUserId: string,
+	statusId: number,
+	status: StatusType
 };
 
 type QuestionType = {
@@ -20,22 +35,6 @@ type QuestionType = {
 	questionType: QuestionTypeType,
 	answers: Array<AnswerType>,
 	commentOn: string
-};
-
-type StatusType = {
-	statusId: number,
-	name: string
-};
-
-type AnswerType = {
-	answerId: number,
-	answerText: string,
-	answerBoolean: boolean,
-	questionId: number,
-	lastModifiedDate: Date,
-	lastModifiedByUserId: string,
-	statusId: number,
-	status: StatusType
 };
 
 type PropsType = {
@@ -55,20 +54,20 @@ export class Question extends Component<PropsType, StateType> {
 	constructor() {
 		super();
 		this.state = {
-			unsavedChanges: false
+			unsavedChanges: false,
 		};
 	}
 
 	isTextSelection = (question) => question.commentOn && question.commentOn.toLowerCase() === "selection" && question.quote;
 
 	render() {
-		if (!this.props.question) return null;		
+		if (!this.props.question) return null;
 
 		let answers = this.props.question.answers;
 		if (answers === null || answers.length < 1){
 			answers = [{
 				answerId: -1,
-				questionId: this.props.question.questionId
+				questionId: this.props.question.questionId,
 			}];
 		}
 

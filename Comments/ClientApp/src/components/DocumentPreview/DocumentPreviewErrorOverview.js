@@ -1,7 +1,7 @@
 import React from "react";
 import { generateErrorList } from "../../document-processing/process-preview-html";
 
-export const ErrorOverview = (props) => {
+export const DocumentPreviewErrorOverview = (props) => {
 	const errorContent = generateErrorList(props.content);
 	const qty = errorContent.length;
 	if (qty) {

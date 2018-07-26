@@ -13,12 +13,12 @@ export default function processComment(node: Object) {
 		const relatedDetails = e.target.nextElementSibling;
 		relatedDetails.classList.toggle("active");
 	};
-
+	
 	return (
-		// todo: this div needs a key - possibly hash the incoming node?
-		<div className={`ConversionError ConversionError--${errorInitial}`}
-			 onClick={(e) => toggleDetail(e)}>
+		// I don't think the below actually needs a key cos it's not an iteration, could be an eslint thing
+		<div key="key" className={`ConversionError ConversionError--${errorInitial}`}>
 			<button
+				onClick={(e) => toggleDetail(e)}
 				className={`ConversionError__Button ConversionError__Button--${errorInitial}`}>
 				{errorInitial}
 			</button>

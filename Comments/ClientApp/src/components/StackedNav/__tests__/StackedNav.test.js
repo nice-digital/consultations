@@ -14,25 +14,25 @@ describe("[ClientApp] ", () => {
 						label: "Sub Link 1 Label",
 						url: "sub-link-1-url",
 						current: true,
-						isReactRoute: true
+						isReactRoute: true,
 					},
 					{
 						label: "Sub Link 2 Label",
 						url: "sub-link-2-url",
-						isReactRoute: true
+						isReactRoute: true,
 					},
 					{
 						label: "Sub Link 3 Label",
 						url: "sub-link-3-url",
-						isReactRoute: true
+						isReactRoute: true,
 					},
 					{
 						label: "External Link",
 						url: "https://external-link.com",
-						isReactRoute: false
-					}
-				]
-			}
+						isReactRoute: false,
+					},
+				],
+			},
 		};
 
 		let wrapper;
@@ -53,7 +53,7 @@ describe("[ClientApp] ", () => {
 		it("should render the number of links supplied in props with anchors that match", () => {
 			const el = wrapper.find("ul li a");
 			expect(el.length).toEqual(4);
-			expect(el.first().prop("href")).toEqual("sub-link-1-url");
+			expect(el.first().prop("href")).toEqual("/sub-link-1-url");
 			expect(el.at(2).text()).toEqual("Sub Link 3 Label");
 		});
 

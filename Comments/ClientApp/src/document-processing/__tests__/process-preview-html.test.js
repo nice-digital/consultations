@@ -11,7 +11,7 @@ describe("[ClientApp]", () => {
 			return {
 				wrapper: mount(
 					<div>{processPreviewHtml(html)}</div>
-				)
+				),
 			};
 		}
 
@@ -19,7 +19,7 @@ describe("[ClientApp]", () => {
 			const instance = setupHtml(
 				"<p><a href='#'>Hey!</a> Ain't no comment anywhere <span>here</span></p>"
 			);
-			expect(instance.wrapper.find("button").length).toEqual(0);
+			expect(instance.wrapper.find("div.ConversionError").length).toEqual(0);
 		});
 
 		it("renders a comment box if the markup contains a preview error comment", () => {

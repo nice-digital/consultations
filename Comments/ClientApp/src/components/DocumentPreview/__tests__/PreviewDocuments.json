@@ -1,0 +1,18 @@
+[{
+  "consultationId": 113,
+  "documentId": 1,
+  "convertedDocument": true,
+  "title": "DRAFT_Appendices_A-T_CLEAN.docx",
+  "chapters": [{
+    "slug": "draftappendicesa-tcleandocx",
+    "title": "DRAFT_Appendices_A-T_CLEAN.docx"
+  }, {
+    "slug": "appendices",
+    "title": "Appendices"
+  }, {
+    "slug": "scope",
+    "title": "1 Scope"
+  }],
+  "href": null,
+  "sourceURI": "consultations://./consultation/113/document/1"
+}]

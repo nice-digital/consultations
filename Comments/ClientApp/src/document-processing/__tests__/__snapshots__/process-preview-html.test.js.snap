@@ -8,10 +8,10 @@ ReactWrapper {
         Here is a paragraph 
         <div
             className="ConversionError ConversionError--I"
-            onClick={[Function]}
         >
             <button
                 className="ConversionError__Button ConversionError__Button--I"
+                onClick={[Function]}
             >
                 I
             </button>
@@ -67,10 +67,10 @@ ReactWrapper {
           Here is a paragraph 
           <div
                     className="ConversionError ConversionError--I"
-                    onClick={[Function]}
           >
                     <button
                               className="ConversionError__Button ConversionError__Button--I"
+                              onClick={[Function]}
                     >
                               I
                     </button>
@@ -118,10 +118,10 @@ ReactWrapper {
             "Here is a paragraph ",
             <div
               className="ConversionError ConversionError--I"
-              onClick={[Function]}
 >
               <button
                             className="ConversionError__Button ConversionError__Button--I"
+                            onClick={[Function]}
               >
                             I
               </button>
@@ -159,12 +159,13 @@ ReactWrapper {
                             </li>
               </ul>
 </div>,
-            "key": "[object Object]",
+            "key": "key",
             "nodeType": "host",
             "props": Object {
               "children": Array [
                 <button
                   className="ConversionError__Button ConversionError__Button--I"
+                  onClick={[Function]}
 >
                   I
 </button>,
@@ -179,7 +180,6 @@ ReactWrapper {
 </ul>,
               ],
               "className": "ConversionError ConversionError--I",
-              "onClick": [Function],
             },
             "ref": null,
             "rendered": Array [
@@ -194,6 +194,7 @@ ReactWrapper {
                 "props": Object {
                   "children": "I",
                   "className": "ConversionError__Button ConversionError__Button--I",
+                  "onClick": [Function],
                 },
                 "ref": null,
                 "rendered": Array [
@@ -286,10 +287,10 @@ ReactWrapper {
             Here is a paragraph 
             <div
                         className="ConversionError ConversionError--I"
-                        onClick={[Function]}
             >
                         <button
                                     className="ConversionError__Button ConversionError__Button--I"
+                                    onClick={[Function]}
                         >
                                     I
                         </button>
@@ -337,10 +338,10 @@ ReactWrapper {
               "Here is a paragraph ",
               <div
                 className="ConversionError ConversionError--I"
-                onClick={[Function]}
 >
                 <button
                                 className="ConversionError__Button ConversionError__Button--I"
+                                onClick={[Function]}
                 >
                                 I
                 </button>
@@ -378,12 +379,13 @@ ReactWrapper {
                                 </li>
                 </ul>
 </div>,
-              "key": "[object Object]",
+              "key": "key",
               "nodeType": "host",
               "props": Object {
                 "children": Array [
                   <button
                     className="ConversionError__Button ConversionError__Button--I"
+                    onClick={[Function]}
 >
                     I
 </button>,
@@ -398,7 +400,6 @@ ReactWrapper {
 </ul>,
                 ],
                 "className": "ConversionError ConversionError--I",
-                "onClick": [Function],
               },
               "ref": null,
               "rendered": Array [
@@ -413,6 +414,7 @@ ReactWrapper {
                   "props": Object {
                     "children": "I",
                     "className": "ConversionError__Button ConversionError__Button--I",
+                    "onClick": [Function],
                   },
                   "ref": null,
                   "rendered": Array [
@@ -491,10 +493,10 @@ ReactWrapper {
         Here is a paragraph 
         <div
             className="ConversionError ConversionError--I"
-            onClick={[Function]}
         >
             <button
                 className="ConversionError__Button ConversionError__Button--I"
+                onClick={[Function]}
             >
                 I
             </button>
@@ -550,10 +552,10 @@ ReactWrapper {
           Here is a paragraph 
           <div
                     className="ConversionError ConversionError--I"
-                    onClick={[Function]}
           >
                     <button
                               className="ConversionError__Button ConversionError__Button--I"
+                              onClick={[Function]}
                     >
                               I
                     </button>
@@ -601,10 +603,10 @@ ReactWrapper {
             "Here is a paragraph ",
             <div
               className="ConversionError ConversionError--I"
-              onClick={[Function]}
 >
               <button
                             className="ConversionError__Button ConversionError__Button--I"
+                            onClick={[Function]}
               >
                             I
               </button>
@@ -642,12 +644,13 @@ ReactWrapper {
                             </li>
               </ul>
 </div>,
-            "key": "[object Object]",
+            "key": "key",
             "nodeType": "host",
             "props": Object {
               "children": Array [
                 <button
                   className="ConversionError__Button ConversionError__Button--I"
+                  onClick={[Function]}
 >
                   I
 </button>,
@@ -662,7 +665,6 @@ ReactWrapper {
 </ul>,
               ],
               "className": "ConversionError ConversionError--I",
-              "onClick": [Function],
             },
             "ref": null,
             "rendered": Array [
@@ -677,6 +679,7 @@ ReactWrapper {
                 "props": Object {
                   "children": "I",
                   "className": "ConversionError__Button ConversionError__Button--I",
+                  "onClick": [Function],
                 },
                 "ref": null,
                 "rendered": Array [
@@ -769,10 +772,10 @@ ReactWrapper {
             Here is a paragraph 
             <div
                         className="ConversionError ConversionError--I"
-                        onClick={[Function]}
             >
                         <button
                                     className="ConversionError__Button ConversionError__Button--I"
+                                    onClick={[Function]}
                         >
                                     I
                         </button>
@@ -820,10 +823,10 @@ ReactWrapper {
               "Here is a paragraph ",
               <div
                 className="ConversionError ConversionError--I"
-                onClick={[Function]}
 >
                 <button
                                 className="ConversionError__Button ConversionError__Button--I"
+                                onClick={[Function]}
                 >
                                 I
                 </button>
@@ -861,12 +864,13 @@ ReactWrapper {
                                 </li>
                 </ul>
 </div>,
-              "key": "[object Object]",
+              "key": "key",
               "nodeType": "host",
               "props": Object {
                 "children": Array [
                   <button
                     className="ConversionError__Button ConversionError__Button--I"
+                    onClick={[Function]}
 >
                     I
 </button>,
@@ -881,7 +885,6 @@ ReactWrapper {
 </ul>,
                 ],
                 "className": "ConversionError ConversionError--I",
-                "onClick": [Function],
               },
               "ref": null,
               "rendered": Array [
@@ -896,6 +899,7 @@ ReactWrapper {
                   "props": Object {
                     "children": "I",
                     "className": "ConversionError__Button ConversionError__Button--I",
+                    "onClick": [Function],
                   },
                   "ref": null,
                   "rendered": Array [

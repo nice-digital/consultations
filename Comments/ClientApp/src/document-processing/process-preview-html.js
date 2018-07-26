@@ -19,7 +19,7 @@ export const processPreviewHtml = (incomingHtml: string) => {
 	}
 
 	return ReactHtmlParser(incomingHtml, {
-		transform: transformHtml
+		transform: transformHtml,
 	});
 };
 
@@ -39,7 +39,7 @@ export const generateErrorList = (incomingHtml: string) => {
 
 	return ReactHtmlParser(incomingHtml, {
 		preprocessNodes: filterOutComments,
-		transform: transformHtml
+		transform: transformHtml,
 	});
 
 };

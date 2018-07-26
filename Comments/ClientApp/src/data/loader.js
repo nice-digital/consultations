@@ -31,29 +31,28 @@ export const generateUrl = (endpointName, baseUrl = BaseUrl, urlParameters = [],
 export const load = (endpoint, baseUrl = BaseUrl, urlParameters = [],  query = {}, method = "GET", data = {}, isJson = false, cookie = "") => {
 	return new Promise((resolve, reject) => {
 		const url = generateUrl(endpoint, baseUrl, urlParameters, query);
-		let headers = isJson ? { "Content-Type": "application/json"} : {}; 
+		let headers = isJson ? { "Content-Type": "application/json"} : {};
 		//let headers = isJson ? { "Accept": "text/html" } : { "Accept": "text/html"};
 		if (cookie !== ""){
 		 	headers = Object.assign({"Cookie": cookie}, headers);
 		}
 		const httpsAgent = (baseUrl.indexOf("https") !== -1) ? new https.Agent({ rejectUnauthorized: false }) : {};
 
-		//console.log(`about to hit url:${url}`);
-		
 		axios({
 			url,
 			data,
 			method,
 			headers,
-			httpsAgent//,
+			httpsAgent,
 			//maxRedirects: 0
-		}) //withCredentials: true
-		.then(response => {
-			resolve(response);
+			//withCredentials: true
 		})
-		.catch(err => {
-			reject(err);
-		});
+			.then(response => {
+				resolve(response);
+			})
+			.catch(err => {
+				reject(err);
+			});
 	});
 };
 
