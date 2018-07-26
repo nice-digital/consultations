@@ -36,7 +36,7 @@
     "bowser": "^1.9.3",
     "ignore-styles": "^5.0.1",
     "moment": "^2.22.1",
-    "niceorg-client": "github:nhsevidence/niceorg-client#master",
+    "niceorg-client": "github:nhsevidence/niceorg-client",
     "query-string": "4.3.4",
     "rc-tooltip": "^3.7.2",
     "react": "^16.3.2",
