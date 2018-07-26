@@ -1,3 +1,5 @@
+//this has been replaced by Context.InsertQuestionsWithScript  - which is temporary measure until question administration is built.
+
 //using Microsoft.EntityFrameworkCore.Migrations;
 
 //namespace Comments.Migrations

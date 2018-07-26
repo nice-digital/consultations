@@ -68,7 +68,8 @@ namespace Comments
             services.TryAddTransient<IAnswerService, AnswerService>();
             services.TryAddTransient<IQuestionService, QuestionService>();
 	        services.TryAddTransient<ISubmitService, SubmitService>();
-	        services.TryAddSingleton<IEncryption, Encryption>();
+			services.TryAddTransient<IAdminService, AdminService>();
+			services.TryAddSingleton<IEncryption, Encryption>();
 			
 			// Add authentication 
 			services.AddAuthentication(options =>
