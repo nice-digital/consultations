@@ -159,7 +159,7 @@ ReactWrapper {
                             </li>
               </ul>
 </div>,
-            "key": "key",
+            "key": "06b5cdd2de8e4cabda5115c891fbca7e71f619f7",
             "nodeType": "host",
             "props": Object {
               "children": Array [
@@ -379,7 +379,7 @@ ReactWrapper {
                                 </li>
                 </ul>
 </div>,
-              "key": "key",
+              "key": "06b5cdd2de8e4cabda5115c891fbca7e71f619f7",
               "nodeType": "host",
               "props": Object {
                 "children": Array [
@@ -644,7 +644,7 @@ ReactWrapper {
                             </li>
               </ul>
 </div>,
-            "key": "key",
+            "key": "06b5cdd2de8e4cabda5115c891fbca7e71f619f7",
             "nodeType": "host",
             "props": Object {
               "children": Array [
@@ -864,7 +864,7 @@ ReactWrapper {
                                 </li>
                 </ul>
 </div>,
-              "key": "key",
+              "key": "06b5cdd2de8e4cabda5115c891fbca7e71f619f7",
               "nodeType": "host",
               "props": Object {
                 "children": Array [

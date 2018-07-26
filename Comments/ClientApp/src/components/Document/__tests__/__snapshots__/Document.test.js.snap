@@ -151,8 +151,8 @@ Array [
                                             role="presentation"
                                         >
                                             <a
-                                                aria-current={null}
-                                                href="/#introduction"
+                                                aria-current={false}
+                                                href="#introduction"
                                                 onClick={[Function]}
                                                 role="menuitem"
                                             >
@@ -164,8 +164,8 @@ Array [
                                             role="presentation"
                                         >
                                             <a
-                                                aria-current={null}
-                                                href="/#provision-of-information"
+                                                aria-current={false}
+                                                href="#provision-of-information"
                                                 onClick={[Function]}
                                                 role="menuitem"
                                             >
@@ -177,8 +177,8 @@ Array [
                                             role="presentation"
                                         >
                                             <a
-                                                aria-current={null}
-                                                href="/#assessment-of-a-patients-risk-of-future-adverse-cardiovascular-events"
+                                                aria-current={false}
+                                                href="#assessment-of-a-patients-risk-of-future-adverse-cardiovascular-events"
                                                 onClick={[Function]}
                                                 role="menuitem"
                                             >
@@ -190,8 +190,8 @@ Array [
                                             role="presentation"
                                         >
                                             <a
-                                                aria-current={null}
-                                                href="/#antiplatelet-therapy"
+                                                aria-current={false}
+                                                href="#antiplatelet-therapy"
                                                 onClick={[Function]}
                                                 role="menuitem"
                                             >
@@ -203,8 +203,8 @@ Array [
                                             role="presentation"
                                         >
                                             <a
-                                                aria-current={null}
-                                                href="/#antithrombin-therapy"
+                                                aria-current={false}
+                                                href="#antithrombin-therapy"
                                                 onClick={[Function]}
                                                 role="menuitem"
                                             >
@@ -216,8 +216,8 @@ Array [
                                             role="presentation"
                                         >
                                             <a
-                                                aria-current={null}
-                                                href="/#management-strategies"
+                                                aria-current={false}
+                                                href="#management-strategies"
                                                 onClick={[Function]}
                                                 role="menuitem"
                                             >
@@ -374,9 +374,9 @@ Array [
                                         <sup>
                                             [
                                             <a
-                                                aria-current={null}
+                                                aria-current={false}
                                                 className="footnote"
-                                                href="/#ftn.footnote_1"
+                                                href="#ftn.footnote_1"
                                                 id="footnote_1"
                                                 name="footnote_1"
                                                 onClick={[Function]}
@@ -434,9 +434,9 @@ Array [
                                                 <sup>
                                                     [
                                                     <a
-                                                        aria-current={null}
+                                                        aria-current={false}
                                                         className="para"
-                                                        href="/#footnote_1"
+                                                        href="#footnote_1"
                                                         id="ftn.footnote_1"
                                                         name="ftn.footnote_1"
                                                         onClick={[Function]}
@@ -467,13 +467,13 @@ Array [
                         data-g="12 md:3 md:pull:9"
                     >
                         <nav
-                            aria-label="Chapters in this document!!!"
+                            aria-label="Chapters in this document"
                             className="stacked-nav"
                         >
                             <h2
                                 className="stacked-nav__root"
                             >
-                                Chapters in this document!!!
+                                Chapters in this document
                             </h2>
                             <ul
                                 className="stacked-nav__list"

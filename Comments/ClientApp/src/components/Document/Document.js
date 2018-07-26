@@ -4,6 +4,7 @@ import React, { Component, Fragment } from "react";
 import { Helmet } from "react-helmet";
 import { StickyContainer, Sticky } from "react-sticky";
 import { withRouter } from "react-router";
+import objectHash from "object-hash";
 
 import preload from "../../data/pre-loader";
 import { load } from "./../../data/loader";
@@ -18,6 +19,7 @@ import { UserContext } from "../../context/UserContext";
 import { Selection } from "../Selection/Selection";
 import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
 import { Header } from "../Header/Header";
+
 
 type PropsType = {
 	staticContext?: any,
@@ -370,7 +372,7 @@ export class Document extends Component<PropsType, StateType> {
 															</h2>
 															<ol className="in-page-nav__list"
 																role="menubar">
-																{sections.map((item, index) => {
+																{sections.map(item => {
 																	const props = {
 																		label: item.title,
 																		to: `#${item.slug}`,
@@ -380,7 +382,7 @@ export class Document extends Component<PropsType, StateType> {
 																	return (
 																		<li role="presentation"
 																			className="in-page-nav__item"
-																			key={index}>
+																			key={objectHash(item)}>
 																			<HashLinkTop {...props} />
 																		</li>
 																	);
@@ -413,13 +415,13 @@ export class Document extends Component<PropsType, StateType> {
 
 									{/* navigation column */}
 									<div data-g="12 md:3 md:pull:9" className="navigationColumn">
-										<StackedNav // "Chapters in this document"
+										<StackedNav
 											links={this.getDocumentChapterLinks(
 												documentId,
 												this.props.match.params.chapterSlug,
 												consultationId,
 												documentsData,
-												"Chapters in this document!!!"
+												"Chapters in this document"
 											)}/>
 										<StackedNav
 											links={this.getDocumentLinks(

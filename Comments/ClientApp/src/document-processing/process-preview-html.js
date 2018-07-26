@@ -7,6 +7,7 @@ import processInternalLink from "./transforms/internal-link";
 import processComment from "./transforms/comment";
 import { filterDeep } from "lodash-deeper";
 import uniqBy from "lodash/uniqBy";
+import objectHash from "object-hash";
 
 export const processPreviewHtml = (incomingHtml: string) => {
 	function transformHtml(node) {
@@ -46,6 +47,6 @@ export const generateErrorList = (incomingHtml: string) => {
 
 function processError(node){
 	return (
-		<li>{node.data}</li>
+		<li key={objectHash(node)}>{node.data}</li>
 	);
 }

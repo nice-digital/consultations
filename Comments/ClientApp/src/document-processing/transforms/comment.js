@@ -1,6 +1,7 @@
 // @flow
 
 import React from "react";
+import objectHash from "object-hash";
 
 export default function processComment(node: Object) {
 	const errorText = node.data;
@@ -8,15 +9,14 @@ export default function processComment(node: Object) {
 	const errorStatus = errorArray[0]; // "[E] - Error"
 	const errorInitial = errorStatus.match(/[A-Z]/)[0]; // "E"
 	const errorMessage = errorArray[1].trim(); // "Inline graphic objects aren't supported by the converter"
-
 	const toggleDetail = e => {
 		const relatedDetails = e.target.nextElementSibling;
 		relatedDetails.classList.toggle("active");
 	};
-	
+
 	return (
 		// I don't think the below actually needs a key cos it's not an iteration, could be an eslint thing
-		<div key="key" className={`ConversionError ConversionError--${errorInitial}`}>
+		<div key={objectHash(node)} className={`ConversionError ConversionError--${errorInitial}`}>
 			<button
 				onClick={(e) => toggleDetail(e)}
 				className={`ConversionError__Button ConversionError__Button--${errorInitial}`}>

@@ -91,7 +91,6 @@ describe("[ClientApp] ", () => {
 			]).then(async () => {
 				await nextTick();
 				wrapper.update();
-				console.log(wrapper.html());
 				expect(
 					toJson(wrapper, {
 						noKey: true,
