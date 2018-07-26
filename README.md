@@ -113,10 +113,7 @@ Consultations sits below [Varnish](https://github.com/nhsevidence/varnish) so is
 - [NICE Design System](https://nhsevidence.github.io/nice-design-system/) for NICE styling
     - [NICE Icons](https://github.com/nhsevidence/nice-icons) for icon webfont
 
-### In-dev integration
-
-TODO
-  
+ 
 ## Set up
 1. Install [KDiff](http://kdiff3.sourceforge.net/) to be able see diffs from integration tests
 2. Clone the project `git clone git@github.com:nhsevidence/consultations.git`
