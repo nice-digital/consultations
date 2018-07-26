@@ -62,6 +62,9 @@ export class Footer extends Component<PropsType, StateType> {
 						footerHTML: data.footerData,
 					});
 				});
+				.catch(err => {
+					console.error("Footer failed to load");
+				});
 		}
 	}
 
