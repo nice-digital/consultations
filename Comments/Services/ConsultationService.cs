@@ -66,7 +66,7 @@ namespace Comments.Services
 			var breadcrumbs = new List<BreadcrumbLink>{
 					new BreadcrumbLink("Home", ExternalRoutes.HomePage),
 					new BreadcrumbLink("All consultations", ExternalRoutes.InconsultationListPage),
-					new BreadcrumbLink("Consultation", ExternalRoutes.ConsultationUrl(consultation))
+					new BreadcrumbLink(consultation.Title, ExternalRoutes.ConsultationUrl(consultation))
 			};
 
 		    if (isReview)

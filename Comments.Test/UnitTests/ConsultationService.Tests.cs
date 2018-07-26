@@ -89,11 +89,13 @@ namespace Comments.Test.UnitTests
 	    {
 			//Arrange
 		    var consultationService = new Services.ConsultationService(null, null, null, null);
-		    var consultationDetail = new ConsultationDetail()
+		    var consultationTitle = "Some consultation title";
+			var consultationDetail = new ConsultationDetail()
 		    {
 			    OrigProjectReference = origProjectReference,
 			    Reference = reference,
-			    ResourceTitleId = resourceTitleId
+			    ResourceTitleId = resourceTitleId,
+				Title = consultationTitle
 			};
 
 			//Act
@@ -109,7 +111,7 @@ namespace Comments.Test.UnitTests
 			actualBreadcrumb.Skip(1).First().Label.ShouldBe("All consultations");
 		    actualBreadcrumb.Skip(1).First().Url.ShouldBe("/guidance/inconsultation");
 
-		    actualBreadcrumb.Skip(2).First().Label.ShouldBe("Consultation");
+		    actualBreadcrumb.Skip(2).First().Label.ShouldBe(consultationTitle);
 		    actualBreadcrumb.Skip(2).First().Url.ShouldBe(expectedConsultationUrl);
 		}
 
@@ -136,7 +138,7 @@ namespace Comments.Test.UnitTests
 			actualBreadcrumb.Skip(1).First().Label.ShouldBe("All consultations");
 			actualBreadcrumb.Skip(1).First().Url.ShouldBe("/guidance/inconsultation");
 
-			actualBreadcrumb.Skip(2).First().Label.ShouldBe("Consultation");
+			actualBreadcrumb.Skip(2).First().Label.ShouldBe("For consultation comments");
 			//actualBreadcrumb.Skip(2).First().Url.ShouldBe(expectedConsultationUrl); //TODO: uncomment this, when the indev feed is fixed in ID-215
 
 			actualBreadcrumb.Skip(3).First().Label.ShouldBe("Documents");
