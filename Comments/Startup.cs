@@ -12,6 +12,8 @@ using NICE.Feeds;
 using System;
 using System.IO;
 using Comments.Auth;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
@@ -52,7 +54,7 @@ namespace Comments
             services.TryAddSingleton<IAuthenticateService, AuthService>();
             services.TryAddTransient<IUserService, UserService>();
 
-            var contextOptionsBuilder = new DbContextOptionsBuilder<ConsultationsContext>();
+			var contextOptionsBuilder = new DbContextOptionsBuilder<ConsultationsContext>();
             services.TryAddSingleton<IDbContextOptionsBuilderInfrastructure>(contextOptionsBuilder);
 
             services.AddDbContext<ConsultationsContext>(options =>
@@ -66,7 +68,8 @@ namespace Comments
             services.TryAddTransient<IAnswerService, AnswerService>();
             services.TryAddTransient<IQuestionService, QuestionService>();
 	        services.TryAddTransient<ISubmitService, SubmitService>();
-
+	        services.TryAddSingleton<IEncryption, Encryption>();
+			
 			// Add authentication 
 			services.AddAuthentication(options =>
             {
@@ -133,6 +136,7 @@ namespace Comments
 
 				app.UseStaticFiles(); //uses the wwwroot folder, only for dev. on other service the root is varnish
 			}
+
 
 			app.UseCors("CorsPolicy");
 
