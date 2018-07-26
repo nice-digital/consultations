@@ -61,12 +61,28 @@ Array [
                         itemType="http://schema.org/ListItem"
                     >
                         <a
+                            href="/"
+                        >
+                            Home
+                        </a>
+                        <meta
+                            content={0}
+                            itemProp="position"
+                        />
+                    </li>
+                    <li
+                        className="breadcrumbs__crumb"
+                        itemProp="itemListElement"
+                        itemScope={true}
+                        itemType="http://schema.org/ListItem"
+                    >
+                        <a
                             href="/guidance/inconsultation"
                         >
                             All consultations
                         </a>
                         <meta
-                            content={0}
+                            content={1}
                             itemProp="position"
                         />
                     </li>
@@ -82,7 +98,7 @@ Array [
                             Consultation
                         </a>
                         <meta
-                            content={1}
+                            content={2}
                             itemProp="position"
                         />
                     </li>
