@@ -105,7 +105,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		};
 		let preloadedData = {};
 		if (this.props.staticContext && this.props.staticContext.preload) {
-			preloadedData = this.props.staticContext.preload.data;
+			preloadedData = this.props.staticContext.preload.data; //this is data from Configure => SupplyData in Startup.cs. the main thing it contains for this call is the cookie for the current user.
 		}
 
 		// if (this.props.isReviewPage){
