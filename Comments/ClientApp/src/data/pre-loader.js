@@ -4,7 +4,7 @@ import { load } from "./loader";
 // when it's loaded async.
 // This assumes the app will be rendered twice on the server: once for
 // requests to fire and once when all the data has loaded
-const preload = (staticContext, endpoint,  urlParameters = [], query = {}, preloadData = {}) => {
+const preload = (staticContext, endpoint,  urlParameters = [], query = {}, preloadData = {}, throwOnException = true) => {
 	let data = null;
 	// Client - get data from global var
 	if (typeof window !== "undefined") {
@@ -32,7 +32,14 @@ const preload = (staticContext, endpoint,  urlParameters = [], query = {}, prelo
 		.then(response => {
 			staticContext.preload.data[endpoint] = response.data;
 			return response.data;
-		});
+		})
+		.catch(err => {
+			if (throwOnException){
+				throw new Error(err);
+			} else{
+				console.error(err); //this console.log is server-side, so not useful anywhere except locally.
+			}
+		});;
 
 	//staticContext.preload.data[endpoint] = data;
 

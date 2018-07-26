@@ -24,7 +24,6 @@ export class Footer extends Component<PropsType, StateType> {
 		super(props);
 
 		this.state = {
-			loading: true,
 			hasInitialData: false,
 			footerHTML: ""
 		};
@@ -33,6 +32,10 @@ export class Footer extends Component<PropsType, StateType> {
 			const preloadedFooterHTML = preload(
 				this.props.staticContext,
 				"footer",
+				[],
+				{},
+				{},
+				false,
 			);
 			if (preloadedFooterHTML) {
 				this.setFooter(preloadedFooterHTML);
@@ -59,7 +62,6 @@ export class Footer extends Component<PropsType, StateType> {
 		// 	footerHTML = footerHTML.replace(extractedScript[0], "");
 		// }
 		this.setState({
-			loading: false,
 			hasInitialData: true,
 			footerHTML
 		});
@@ -75,7 +77,8 @@ export class Footer extends Component<PropsType, StateType> {
 					this.setFooter(data.footerData);
 				})
 				.catch(err => {
-					throw new Error("gatherData in componentDidMount failed " + err);
+					console.error("Footer failed to load");
+					//throw new Error("gatherData in componentDidMount failed " + err);
 				});
 		}
 	}
