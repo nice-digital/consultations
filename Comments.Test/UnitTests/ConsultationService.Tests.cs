@@ -89,11 +89,13 @@ namespace Comments.Test.UnitTests
 	    {
 			//Arrange
 		    var consultationService = new Services.ConsultationService(null, null, null, null);
-		    var consultationDetail = new ConsultationDetail()
+		    var consultationTitle = "Some consultation title";
+			var consultationDetail = new ConsultationDetail()
 		    {
 			    OrigProjectReference = origProjectReference,
 			    Reference = reference,
-			    ResourceTitleId = resourceTitleId
+			    ResourceTitleId = resourceTitleId,
+				Title = consultationTitle
 			};
 
 			//Act
@@ -101,13 +103,16 @@ namespace Comments.Test.UnitTests
 
 			//Assert
 			actualBreadcrumb.ShouldNotBeNull();
-		    actualBreadcrumb.Count().ShouldBe(2);
+		    actualBreadcrumb.Count().ShouldBe(3);
 
-		    actualBreadcrumb.First().Label.ShouldBe("All consultations");
-		    actualBreadcrumb.First().Url.ShouldBe("/guidance/inconsultation");
+		    actualBreadcrumb.First().Label.ShouldBe("Home");
+		    actualBreadcrumb.First().Url.ShouldBe("/");
 
-		    actualBreadcrumb.Skip(1).First().Label.ShouldBe("Consultation");
-		    actualBreadcrumb.Skip(1).First().Url.ShouldBe(expectedConsultationUrl);
+			actualBreadcrumb.Skip(1).First().Label.ShouldBe("All consultations");
+		    actualBreadcrumb.Skip(1).First().Url.ShouldBe("/guidance/inconsultation");
+
+		    actualBreadcrumb.Skip(2).First().Label.ShouldBe(consultationTitle);
+		    actualBreadcrumb.Skip(2).First().Url.ShouldBe(expectedConsultationUrl);
 		}
 
 		[Theory]
@@ -125,16 +130,19 @@ namespace Comments.Test.UnitTests
 
 			//Assert
 			actualBreadcrumb.ShouldNotBeNull();
-			actualBreadcrumb.Count().ShouldBe(3);
+			actualBreadcrumb.Count().ShouldBe(4);
 
-			actualBreadcrumb.First().Label.ShouldBe("All consultations");
-			actualBreadcrumb.First().Url.ShouldBe("/guidance/inconsultation");
+			actualBreadcrumb.First().Label.ShouldBe("Home");
+			actualBreadcrumb.First().Url.ShouldBe("/");
 
-			actualBreadcrumb.Skip(1).First().Label.ShouldBe("Consultation");
-			//actualBreadcrumb.Skip(1).First().Url.ShouldBe(expectedConsultationUrl); //TODO: uncomment this, when the indev feed is fixed in ID-215
+			actualBreadcrumb.Skip(1).First().Label.ShouldBe("All consultations");
+			actualBreadcrumb.Skip(1).First().Url.ShouldBe("/guidance/inconsultation");
 
-			actualBreadcrumb.Skip(2).First().Label.ShouldBe("Documents");
-			actualBreadcrumb.Skip(2).First().Url.ShouldBe(expectedDocumentsUrl);
+			actualBreadcrumb.Skip(2).First().Label.ShouldBe("For consultation comments");
+			//actualBreadcrumb.Skip(2).First().Url.ShouldBe(expectedConsultationUrl); //TODO: uncomment this, when the indev feed is fixed in ID-215
+
+			actualBreadcrumb.Skip(3).First().Label.ShouldBe("Documents");
+			actualBreadcrumb.Skip(3).First().Url.ShouldBe(expectedDocumentsUrl);
 		}
 	}
 }

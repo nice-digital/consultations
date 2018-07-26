@@ -61,9 +61,9 @@ Array [
                         itemType="http://schema.org/ListItem"
                     >
                         <a
-                            href="/guidance/inconsultation"
+                            href="/"
                         >
-                            All consultations
+                            Home
                         </a>
                         <meta
                             content={0}
@@ -77,12 +77,28 @@ Array [
                         itemType="http://schema.org/ListItem"
                     >
                         <a
-                            href="/guidance/indevelopment/gid-ta10232/consultation/"
+                            href="/guidance/inconsultation"
                         >
-                            Consultation
+                            All consultations
                         </a>
                         <meta
                             content={1}
+                            itemProp="position"
+                        />
+                    </li>
+                    <li
+                        className="breadcrumbs__crumb"
+                        itemProp="itemListElement"
+                        itemScope={true}
+                        itemType="http://schema.org/ListItem"
+                    >
+                        <a
+                            href="/guidance/indevelopment/gid-ta10232/consultation/"
+                        >
+                            Consultation title
+                        </a>
+                        <meta
+                            content={2}
                             itemProp="position"
                         />
                     </li>
