@@ -78,7 +78,6 @@ export class Footer extends Component<PropsType, StateType> {
 				})
 				.catch(err => {
 					console.error("Footer failed to load");
-					//throw new Error("gatherData in componentDidMount failed " + err);
 				});
 		}
 	}
