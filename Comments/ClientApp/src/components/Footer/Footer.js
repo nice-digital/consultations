@@ -30,14 +30,13 @@ export class Footer extends Component<PropsType, StateType> {
 		if (this.props) {
 			const preloadedFooterHTML = preload(
 				this.props.staticContext,
-				"footer",
-				[],
-				{},
-				{},
-				false,
+				"footer", [], {}, {}, false
 			);
 			if (preloadedFooterHTML) {
-				this.setFooter(preloadedFooterHTML);
+				this.setState({
+					hasInitialData: true,
+					footerHTML: preloadedFooterHTML,
+				});
 			}
 		}
 	}
@@ -46,7 +45,7 @@ export class Footer extends Component<PropsType, StateType> {
 		const footerData = load("footer")
 			.then(response => response.data)
 			.catch(err => {
-				throw new Error("chapterData " + err);
+				console.error("Footer failed to load");
 			});
 		
 		return {
@@ -54,21 +53,14 @@ export class Footer extends Component<PropsType, StateType> {
 		};
 	};
 
-	setFooter = (footerHTML: string) => {
-		this.setState({
-			hasInitialData: true,
-			footerHTML
-		});
-	}
-
 	componentDidMount() {
 		if (!this.state.hasInitialData) {
 			this.gatherData()
 				.then(data => {
-					this.setFooter(data.footerData);
-				})
-				.catch(err => {
-					console.error("Footer failed to load");
+					this.setState({
+						hasInitialData: true,
+						footerHTML: data.footerData,
+					});
 				});
 		}
 	}
