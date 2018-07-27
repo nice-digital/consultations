@@ -4,6 +4,7 @@ namespace Comments.Common
 {
 	public static class ExternalRoutes
 	{
+		public const string HomePage = "/";
 		public const string InconsultationListPage = "/guidance/inconsultation";
 
 		#region ConsultationUrls - this code has been copied from guidance-web

@@ -91,8 +91,8 @@ namespace Comments.Services
 	    public IEnumerable<BreadcrumbLink> GetBreadcrumbs(ConsultationDetail consultation, bool isReview)
 	    {
 			var breadcrumbs = new List<BreadcrumbLink>{
-					new BreadcrumbLink("All consultations", ExternalRoutes.InconsultationListPage),
-					new BreadcrumbLink("Consultation", ExternalRoutes.ConsultationUrl(consultation))
+					new BreadcrumbLink("Home", ExternalRoutes.HomePage),
+					new BreadcrumbLink(consultation.Title, ExternalRoutes.ConsultationUrl(consultation))
 			};
 
 		    if (isReview)
@@ -101,7 +101,7 @@ namespace Comments.Services
 			    var firstChapter = firstDocument?.Chapters.FirstOrDefault();
 
 			    if (firstChapter != null)
-				    breadcrumbs.Add(new BreadcrumbLink("Documents",$"/consultations/{consultation.ConsultationId}/{firstDocument.DocumentId}/{firstChapter.Slug}"));
+				    breadcrumbs.Add(new BreadcrumbLink("Consultation documents", $"/consultations/{consultation.ConsultationId}/{firstDocument.DocumentId}/{firstChapter.Slug}"));
 		    }
 
 		    return breadcrumbs;

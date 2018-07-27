@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -121,7 +121,7 @@ namespace Comments.Test.IntegrationTests.API.Questions
             var questionId = AddQuestion(locationId, questionTypeId, questionText);
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var questionService = new QuestionService(new ConsultationsContext(_options, userService), userService);
+            var questionService = new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService);
 
             //Act
             var response = await _client.DeleteAsync($"consultations/api/question/{questionId}");

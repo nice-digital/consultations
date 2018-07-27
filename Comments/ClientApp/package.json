@@ -38,6 +38,7 @@
     "lodash": "^4.17.10",
     "lodash-deeper": "^1.1.0",
     "moment": "^2.22.1",
+    "niceorg-client": "github:nhsevidence/niceorg-client",
     "object-hash": "^1.3.0",
     "query-string": "4.3.4",
     "rc-tooltip": "^3.7.2",

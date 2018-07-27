@@ -149,7 +149,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
             var authenticateService = new FakeAuthenticateService(authenticated: true);
-	        var context = new ConsultationsContext(_options, userService);
+	        var context = new ConsultationsContext(_options, userService, _fakeEncryption);
 			//var submitService = new SubmitService(context, userService, _consultationService);
             var commentService = new CommentService(context, userService, authenticateService, _consultationService);
 

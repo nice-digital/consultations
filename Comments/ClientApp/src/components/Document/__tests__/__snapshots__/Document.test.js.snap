@@ -62,9 +62,9 @@ Array [
                         itemType="http://schema.org/ListItem"
                     >
                         <a
-                            href="/guidance/inconsultation"
+                            href="/"
                         >
-                            All consultations
+                            Home
                         </a>
                         <meta
                             content={0}
@@ -80,7 +80,7 @@ Array [
                         <a
                             href="/guidance/indevelopment/gid-ta10232/consultation/"
                         >
-                            Consultation
+                            Consultation title
                         </a>
                         <meta
                             content={1}
@@ -96,18 +96,6 @@ Array [
                     className="page-header"
                 >
                     <undefined />
-                    <button
-                        className="btn btn--cta"
-                        data-qa-sel="comment-on-whole-consultation"
-                        onClick={[Function]}
-                    >
-                        Comment on whole consultation
-                    </button>
-                    <h2
-                        className="mb--b"
-                    >
-                        Unstable angina and NSTEMI
-                    </h2>
                     <button
                         className="btn btn--cta"
                         data-qa-sel="comment-on-consultation-document"

@@ -4,7 +4,7 @@ import { load } from "./loader";
 // when it's loaded async.
 // This assumes the app will be rendered twice on the server: once for
 // requests to fire and once when all the data has loaded
-const preload = (staticContext, endpoint,  urlParameters = [], query = {}, preloadData = {}) => {
+const preload = (staticContext, endpoint,  urlParameters = [], query = {}, preloadData = {}, throwOnException = true) => {
 	let data = null;
 	// Client - get data from global var
 	if (typeof window !== "undefined") {
@@ -15,7 +15,7 @@ const preload = (staticContext, endpoint,  urlParameters = [], query = {}, prelo
 	}
 	// There should always be a static context on the server but check anyway
 	if (!staticContext) {
-		console.warn("Static context was null on the server");
+		console.warn(`Static context was null on the server when executing endpoint: ${endpoint}`);
 		return data;
 	}
 	// Data with that key already preloaded on the server
@@ -26,12 +26,20 @@ const preload = (staticContext, endpoint,  urlParameters = [], query = {}, prelo
 	if (preloadData && preloadData.cookies) {
 		cookies = preloadData.cookies;
 	}
+
 	// Load fresh data on the server
 	const promise = load(endpoint, staticContext.baseUrl, urlParameters, query,  "GET", {}, false, cookies)
 		.then(response => {
 			staticContext.preload.data[endpoint] = response.data;
 			return response.data;
-		});
+		})
+		.catch(err => {
+			if (throwOnException){
+				throw new Error(err);
+			} else{
+				console.error(err); //this console.log is server-side, so not useful anywhere except locally.
+			}
+		});;
 
 	//staticContext.preload.data[endpoint] = data;
 

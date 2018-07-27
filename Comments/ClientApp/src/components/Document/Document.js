@@ -311,29 +311,9 @@ export class Document extends Component<PropsType, StateType> {
 							<main role="main">
 								<div className="page-header">
 									<Header
-										title={title}
+										title={this.getCurrentDocumentTitle(documentsData, documentId)}
 										reference={reference}
 										consultationState={this.state.consultationData.consultationState}/>
-									{this.state.allowComments &&
-									<button
-										data-qa-sel="comment-on-whole-consultation"
-										className="btn btn--cta"
-										onClick={e => {
-											e.preventDefault();
-											this.props.onNewCommentClick({
-												sourceURI: this.props.match.url,
-												commentText: "",
-												commentOn: "Consultation",
-												quote: title,
-											});
-										}}
-									>
-										Comment on whole consultation
-									</button>
-									}
-									<h2 className="mb--b">
-										{this.getCurrentDocumentTitle(documentsData, documentId)}
-									</h2>
 									{this.state.allowComments &&
 									<button
 										data-qa-sel="comment-on-consultation-document"

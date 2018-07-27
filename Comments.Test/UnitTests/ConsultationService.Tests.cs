@@ -14,7 +14,7 @@ using Xunit;
 
 namespace Comments.Test.UnitTests
 {
-	public class ConsultationService : Comments.Test.Infrastructure.TestBase
+	public class ConsultationServiceTests : Comments.Test.Infrastructure.TestBase
     {
         [Fact]
         public void Comments_CanBeRead()
@@ -33,8 +33,7 @@ namespace Comments.Test.UnitTests
             var locationId = AddLocation(sourceURI);
             AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId);
 
-	        var context = new ConsultationsContext(_options, userService);
-			//var submitService = new SubmitService(context, userService, _consultationService);
+	        var context = new ConsultationsContext(_options, userService, _fakeEncryption);
             var commentService = new CommentService(context, userService, authenticateService, _consultationService);
             
             // Act
@@ -90,11 +89,13 @@ namespace Comments.Test.UnitTests
 	    {
 			//Arrange
 		    var consultationService = new Services.ConsultationService(null, null, null, null);
-		    var consultationDetail = new ConsultationDetail()
+		    var consultationTitle = "Some consultation title";
+			var consultationDetail = new ConsultationDetail()
 		    {
 			    OrigProjectReference = origProjectReference,
 			    Reference = reference,
-			    ResourceTitleId = resourceTitleId
+			    ResourceTitleId = resourceTitleId,
+				Title = consultationTitle
 			};
 
 			//Act
@@ -104,10 +105,10 @@ namespace Comments.Test.UnitTests
 			actualBreadcrumb.ShouldNotBeNull();
 		    actualBreadcrumb.Count().ShouldBe(2);
 
-		    actualBreadcrumb.First().Label.ShouldBe("All consultations");
-		    actualBreadcrumb.First().Url.ShouldBe("/guidance/inconsultation");
+		    actualBreadcrumb.First().Label.ShouldBe("Home");
+		    actualBreadcrumb.First().Url.ShouldBe("/");
 
-		    actualBreadcrumb.Skip(1).First().Label.ShouldBe("Consultation");
+		    actualBreadcrumb.Skip(1).First().Label.ShouldBe(consultationTitle);
 		    actualBreadcrumb.Skip(1).First().Url.ShouldBe(expectedConsultationUrl);
 		}
 
@@ -128,13 +129,13 @@ namespace Comments.Test.UnitTests
 			actualBreadcrumb.ShouldNotBeNull();
 			actualBreadcrumb.Count().ShouldBe(3);
 
-			actualBreadcrumb.First().Label.ShouldBe("All consultations");
-			actualBreadcrumb.First().Url.ShouldBe("/guidance/inconsultation");
+			actualBreadcrumb.First().Label.ShouldBe("Home");
+			actualBreadcrumb.First().Url.ShouldBe("/");
 
-			actualBreadcrumb.Skip(1).First().Label.ShouldBe("Consultation");
+			actualBreadcrumb.Skip(1).First().Label.ShouldBe("For consultation comments");
 			//actualBreadcrumb.Skip(1).First().Url.ShouldBe(expectedConsultationUrl); //TODO: uncomment this, when the indev feed is fixed in ID-215
 
-			actualBreadcrumb.Skip(2).First().Label.ShouldBe("Documents");
+			actualBreadcrumb.Skip(2).First().Label.ShouldBe("Consultation documents");
 			actualBreadcrumb.Skip(2).First().Url.ShouldBe(expectedDocumentsUrl);
 		}
 	}

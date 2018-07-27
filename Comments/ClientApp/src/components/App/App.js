@@ -8,6 +8,7 @@ import DocumentViewWithRouter from "../DocumentView/DocumentView";
 import NotFound from "../NotFound/NotFound";
 import ReviewPageWithRouter from "../ReviewPage/ReviewPage";
 import UserProviderWithRouter from "../../context/UserContext";
+import FooterWithRouter from "../Footer/Footer";
 import DocumentPreviewWithRouter from "../DocumentPreview/DocumentPreview";
 import DocumentPreviewRedirectWithRouter from "../DocumentPreview/DocumentPreviewRedirect";
 
