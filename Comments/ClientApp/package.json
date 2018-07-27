@@ -53,7 +53,8 @@
     "react-router-hash-link": "^1.2.0",
     "react-scrollspy": "^3.3.5",
     "react-sticky": "^6.0.2",
-    "xpath-range": "0.0.5"
+    "xpath-range": "0.0.5",
+    "stringify-object": "^3.2.2"
   },
   "devDependencies": {
     "@nice-digital/browserslist-config": "^1.0.0",
@@ -84,8 +85,7 @@
     "prettier-eslint": "^8.8.1",
     "raf": "^3.4.0",
     "react-scripts": "1.1.4",
-    "rimraf": "^2.6.2",
-    "stringify-object": "^3.2.2"
+    "rimraf": "^2.6.2"
   },
   "proxy": "http://niceorg",
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).",
