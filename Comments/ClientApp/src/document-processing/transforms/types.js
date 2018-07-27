@@ -21,3 +21,7 @@ export function nodeIsTypeText(node) {
 export function nodeIsSpanTag(node) {
 	return node.name === "span";
 }
+
+export function nodeIsComment(node) {
+	return node.type === "comment";
+}

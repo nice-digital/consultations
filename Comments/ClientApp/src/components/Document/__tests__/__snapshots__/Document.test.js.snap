@@ -3,6 +3,7 @@
 exports[`[ClientApp]  Document Component should match snapshot with supplied data 1`] = `
 Array [
   "",
+  "",
   <div
     className="container"
 >
@@ -131,7 +132,7 @@ Array [
                                     </h2>
                                     <ol
                                         className="in-page-nav__list"
-                                        style={Object {}}
+                                        role="menubar"
                                     >
                                         <li
                                             className="in-page-nav__item"

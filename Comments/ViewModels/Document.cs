@@ -40,6 +40,28 @@ namespace Comments.ViewModels
             Href = resource.File.Href;
         }
 
+	    public Document(int consultationId, Resource<PreviewCommentDocument> resource)
+	    {
+		    ConsultationId = consultationId;
+		    DocumentId = resource.ConsultationDocumentId;
+		    ConvertedDocument = resource.ConvertedDocument;
+
+		    if (resource.Document != null)
+		    {
+			    Title = resource.Document.Title;
+			    if (resource.Document.Chapters != null)
+			    {
+				    Chapters = resource.Document.Chapters.Select(c => new Chapter(c));
+			    }
+		    }
+		    else
+		    {
+			    Title = resource.Title ?? resource.File.FileName;
+		    }
+
+		    Href = resource.File.Href;
+	    }
+
 		public int ConsultationId { get; private set; }
         public int DocumentId { get; private set; }
         public bool ConvertedDocument { get; private set; }

@@ -25,7 +25,11 @@ namespace Comments.Test.Infrastructure
 		    return false;
 	    }
 
-	    
+
+	    public ChapterContent GetPreviewChapterContent(int consultationId, int documentId, string chapterSlug, string reference)
+	    {
+		    throw new NotImplementedException();
+	    }
 
 	    public ConsultationState GetConsultationState(string sourceURI, IEnumerable<Location> locations = null,
 		    ConsultationDetail consultation = null)
@@ -54,6 +58,16 @@ namespace Comments.Test.Infrastructure
 	    }
 
 	    public IEnumerable<Document> GetDocuments(int consultationId)
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    public IEnumerable<Document> GetPreviewDraftDocuments(int consultationId, int documentId, string reference)
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    public IEnumerable<Document> GetPreviewPublishedDocuments(int consultationId, int documentId)
 	    {
 		    throw new NotImplementedException();
 	    }

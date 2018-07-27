@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { withRouter, Link } from "react-router-dom";
 import { load } from "./../../data/loader";
 import preload from "../../data/pre-loader";
@@ -60,6 +60,17 @@ type QuestionTypeType = {
 	hasBooleanAnswer: boolean
 };
 
+type AnswerType = {
+	answerId: number,
+	answerText: string,
+	answerBoolean: boolean,
+	questionId: number,
+	lastModifiedDate: Date,
+	lastModifiedByUserId: string,
+	statusId: number,
+	status: StatusType
+};
+
 type QuestionType = {
 	questionId: number,
 	questionText: string,
@@ -72,17 +83,6 @@ type QuestionType = {
 	show: boolean,
 	commentOn: string,
 	sourceURI: string,
-};
-
-type AnswerType = {
-	answerId: number,
-	answerText: string,
-	answerBoolean: boolean,
-	questionId: number,
-	lastModifiedDate: Date,
-	lastModifiedByUserId: string,
-	statusId: number,
-	status: StatusType
 };
 
 type StateType = {
@@ -195,7 +195,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			window.dispatchEvent(new CustomEvent("commentList_did_mount", {}));
 			window.setTimeout(function(){
 				window.dispatchEvent(new CustomEvent("commentList_did_mount", {}));
-			}, 500);			
+			}, 500);
 		}
 	}
 
@@ -224,7 +224,7 @@ export class CommentList extends Component<PropsType, StateType> {
 	// 	this.state.questions.forEach(function(question){
 	// 		if (question.answers != null){
 	// 			answersToSubmit = answersToSubmit.concat(question.answers);
-	// 		}			
+	// 		}
 	// 	});
 
 	// 	let commentsAndAnswers = {comments: this.state.comments, answers: answersToSubmit};
@@ -236,7 +236,7 @@ export class CommentList extends Component<PropsType, StateType> {
 	// 		.catch(err => {
 	// 			console.log(err);
 	// 			if (err.response) alert(err.response.statusText);
-	// 		});		
+	// 		});
 	// }
 
 	filterComments = (newSourceURIToFilterBy: string, comments: Array<CommentType>): Array<CommentType> => {
@@ -354,16 +354,16 @@ export class CommentList extends Component<PropsType, StateType> {
 
 					if (questions[questionIndex].answers === null || questions[questionIndex].answers.length < 1){
 						questions[questionIndex].answers = [res.data];
-					} else{					
+					} else{
 						const answerIndex = questions[questionIndex].answers
 							.map(function(answer) {
 								return answer.answerId;
 							}).indexOf(answer.answerId);
-						
+
 						const answers = questions[questionIndex].answers;
-						answers[answerIndex] = res.data;	
+						answers[answerIndex] = res.data;
 						questions[questionIndex].answers = answers;
-					}					
+					}
 					this.setState({
 						questions
 					});
@@ -409,7 +409,7 @@ export class CommentList extends Component<PropsType, StateType> {
 	removeAnswerFromState = (questionId: number, answerId: number) => {
 		let questions = this.state.questions;
 		let questionToUpdate = questions.find(question => question.questionId === questionId);
-		questionToUpdate.answers = questionToUpdate.answers.filter(answer => answer.answerId != answerId);
+		questionToUpdate.answers = questionToUpdate.answers.filter(answer => answer.answerId !== answerId);
 		this.setState({ questions });
 		if (typeof this.props.validationHander === "function") {
 			this.props.validationHander();
@@ -444,8 +444,8 @@ export class CommentList extends Component<PropsType, StateType> {
 
 								contextValue.isAuthorised ?
 
-									this.props.viewComments ? 
-									
+									this.props.viewComments ?
+
 										commentsToShow.length === 0 ? <p>No comments yet</p> :
 											<ul className="CommentList list--unstyled">
 												{commentsToShow.map((comment) => {
@@ -461,7 +461,7 @@ export class CommentList extends Component<PropsType, StateType> {
 														/>
 													);
 												})}
-											</ul> 									
+											</ul>
 										:
 										<div>
 											<p>We would like to hear your views on the draft recommendations presented in the guideline, and any comments you may have on the rationale and impact sections in the guideline and the evidence presented in the evidence reviews documents. We would also welcome views on the Equality Impact Assessment.</p>
@@ -481,7 +481,7 @@ export class CommentList extends Component<PropsType, StateType> {
 													);
 												})}
 											</ul>
-										</div>							
+										</div>
 									:
 									<LoginBanner
 										signInButton={true}

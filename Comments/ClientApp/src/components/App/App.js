@@ -1,14 +1,16 @@
 // @flow
 
 import React, { Fragment } from "react";
-import { Route, Switch, Redirect } from "react-router";
+import { Route, Switch } from "react-router";
 import { Helmet } from "react-helmet";
-import CommentListWithRouter from "../CommentList/CommentList";
+
 import DocumentViewWithRouter from "../DocumentView/DocumentView";
 import NotFound from "../NotFound/NotFound";
 import ReviewPageWithRouter from "../ReviewPage/ReviewPage";
 import UserProviderWithRouter from "../../context/UserContext";
 import FooterWithRouter from "../Footer/Footer";
+import DocumentPreviewWithRouter from "../DocumentPreview/DocumentPreview";
+import DocumentPreviewRedirectWithRouter from "../DocumentPreview/DocumentPreviewRedirect";
 
 type PropsType = any;
 
@@ -26,25 +28,25 @@ class App extends React.Component<PropsType, StateType> {
 					</Helmet>
 
 					<Switch>
-						{/*Home*/}
-						<Route exact path="/">
-							<Redirect to="/17/1/introduction"/>
-						</Route>
-
 						{/*Document View*/}
-						<Route path="/:consultationId/:documentId/:chapterSlug">
+						<Route exact path="/:consultationId/:documentId/:chapterSlug">
 							<DocumentViewWithRouter/>
 						</Route>
 
-						{/*Review Page*/}
-						<Route path="/:consultationId/review">
-							<ReviewPageWithRouter/>
+						{/*Document (Preview Layout)*/}
+						<Route exact path="/preview/:reference/consultation/:consultationId/document/:documentId/chapter/:chapterSlug">
+							<DocumentPreviewWithRouter />
 						</Route>
 
-						<Route path="/commentlist">
-							<Fragment>
-								<CommentListWithRouter/>
-							</Fragment>
+						{/*	If we hit this we're coming in *without* a chapter slug, so we need to get the first chapter of the current document and pass its slug into the URL so it matches the route above */}
+						<Route exact path="/preview/:reference/consultation/:consultationId/document/:documentId">
+							<DocumentPreviewRedirectWithRouter />
+							{/* This component only redirects to the above route */}
+						</Route>
+
+						{/*Review Page*/}
+						<Route exact path="/:consultationId/review">
+							<ReviewPageWithRouter/>
 						</Route>
 
 						{/*404*/}
