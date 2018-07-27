@@ -6,7 +6,7 @@ FROM microsoft/aspnetcore:2.0
 ENV ASPNETCORE_URLS http://+:8080
 
 # Install Git
-RUN apt-get update && apt-get upgrade && apt-get install git
+RUN apt-get update && apt-get install git -y
 RUN git --version
 
 # Install node and npm
