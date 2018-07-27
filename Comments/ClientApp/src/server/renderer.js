@@ -7,12 +7,9 @@ import React from "react";
 import { renderToString  } from "react-dom/server";
 import { StaticRouter } from "react-router";
 import { Helmet } from "react-helmet";
-//import stringifyObject from "stringify-object";
-
 import { processHtml } from "./html-processor";
-
 import App from "./../components/App/App";
-
+import stringifyObject from "stringify-object";
 
 const BaseUrlRelative: string = "/consultations";
 
@@ -51,42 +48,68 @@ export const serverRenderer = (params): Promise => {
 					displayName: params.data.displayName,
 					signInURL: params.data.signInURL,
 					registerURL: params.data.registerURL,
-					requestURL: params.data.requestURL
+					requestURL: params.data.requestURL,
 				}, // Key value pairs of preloaded data sets
-				loaders: [] // List of promises where we track preloading data
+				loaders: [], // List of promises where we track preloading data
 			},
-			baseUrl: params.origin + BaseUrlRelative
+			baseUrl: params.origin + BaseUrlRelative,
 			// Base url is used for 'server' ajax requests so we can hit the .NET instance from the Node process
 		};
 
-		var app = (
-			<StaticRouter basename={BaseUrlRelative} location={params.url} context={staticContext}>
-				<App />
-			</StaticRouter>);
+		let rootContent, app;
 
-		// First render: this trigger any data preloaders to fire
-		let rootContent = renderToString(app);
+		try {
+			app = (
+				<StaticRouter basename={BaseUrlRelative} location={params.url} context={staticContext}>
+					<App />
+				</StaticRouter>);
+
+			// First render: this trigger any data preloaders to fire
+			rootContent = renderToString(app);
+		} catch(error) {
+			if (process.env.NODE_ENV === "development") {
+				resolve({ html: stringifyObject(error), statusCode: 500 });
+				return;
+			}
+			reject(error);
+		}
 
 		// Wait for all preloaders to have loaded before re-rendering the app
 		Promise.all(staticContext.preload.loaders).then(() => {
 
-			// Second render now that all the data preloaders have finished so we can render with data on the server
-			rootContent = renderToString(app);
+			let html;
 
-			const helmet = Helmet.renderStatic();
+			try {
+				// Second render now that all the data preloaders have finished so we can render with data on the server
+				rootContent = renderToString(app);
 
-			const html = processHtml(params.data.originalHtml, {
-				htmlAttributes: helmet.htmlAttributes.toString(),
-				bodyAttributes: helmet.bodyAttributes.toString(),
-				rootContent: rootContent,
-				title: helmet.title.toString(),
-				metas: helmet.meta.toString(),
-				links: helmet.link.toString(),
-				scripts: getPreloadedDataHtml(staticContext.preload.data) + helmet.script.toString()
-			});
+				const helmet = Helmet.renderStatic();
 
-			resolve({ html: html, statusCode: staticContext.status || 200 });
-		}).catch((error) => {
+				html = processHtml(params.data.originalHtml, {
+					htmlAttributes: helmet.htmlAttributes.toString(),
+					bodyAttributes: helmet.bodyAttributes.toString(),
+					rootContent: rootContent,
+					title: helmet.title.toString(),
+					metas: helmet.meta.toString(),
+					links: helmet.link.toString(),
+					scripts: getPreloadedDataHtml(staticContext.preload.data) + helmet.script.toString(),
+				});
+
+				resolve({ html: html, statusCode: staticContext.status || 200 });
+
+			} catch(error) {
+				if (process.env.NODE_ENV === "development") {
+					resolve({ html: stringifyObject(error), statusCode: 500 });
+					return;
+				}
+				reject(error);
+			}
+
+		}).catch(error => {
+			if (process.env.NODE_ENV === "development") {
+				resolve({ html: stringifyObject(error), statusCode: 500 });
+				return;
+			}
 			reject(error);
 		});
 	});
