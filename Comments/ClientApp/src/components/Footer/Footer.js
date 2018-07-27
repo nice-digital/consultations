@@ -27,18 +27,18 @@ export class Footer extends Component<PropsType, StateType> {
 			footerHTML: ""
 		};
 
-		if (this.props) {
-			const preloadedFooterHTML = preload(
-				this.props.staticContext,
-				"footer", [], {}, {}, false
-			);
-			if (preloadedFooterHTML) {
-				this.setState({
-					hasInitialData: true,
-					footerHTML: preloadedFooterHTML,
-				});
-			}
-		}
+		// if (this.props) {
+		// 	const preloadedFooterHTML = preload(
+		// 		this.props.staticContext,
+		// 		"footer", [], {}, {}, false
+		// 	);
+		// 	if (preloadedFooterHTML) {
+		// 		this.setState({
+		// 			hasInitialData: true,
+		// 			footerHTML: preloadedFooterHTML,
+		// 		});
+		// 	}
+		// }
 	}
 
 	gatherData = async () => {		
