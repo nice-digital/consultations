@@ -36,10 +36,11 @@ const preload = (staticContext, endpoint,  urlParameters = [], query = {}, prelo
 		.catch(err => {
 			if (throwOnException){
 				throw new Error(err);
-			} else{
-				console.error(err); //this console.log is server-side, so not useful anywhere except locally.
 			}
-		});;
+			//else{
+				//console.log(err); //this console.log is server-side, so not useful anywhere except locally.
+			//}
+		});
 
 	//staticContext.preload.data[endpoint] = data;
 
