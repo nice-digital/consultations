@@ -65,7 +65,6 @@ namespace Comments.Services
 	    {
 			var breadcrumbs = new List<BreadcrumbLink>{
 					new BreadcrumbLink("Home", ExternalRoutes.HomePage),
-					new BreadcrumbLink("All consultations", ExternalRoutes.InconsultationListPage),
 					new BreadcrumbLink(consultation.Title, ExternalRoutes.ConsultationUrl(consultation))
 			};
 
@@ -75,7 +74,7 @@ namespace Comments.Services
 			    var firstChapter = firstDocument?.Chapters.FirstOrDefault();
 
 			    if (firstChapter != null)
-				    breadcrumbs.Add(new BreadcrumbLink("Documents",$"/consultations/{consultation.ConsultationId}/{firstDocument.DocumentId}/{firstChapter.Slug}"));
+				    breadcrumbs.Add(new BreadcrumbLink("Consultation documents", $"/consultations/{consultation.ConsultationId}/{firstDocument.DocumentId}/{firstChapter.Slug}"));
 		    }
 
 		    return breadcrumbs;
