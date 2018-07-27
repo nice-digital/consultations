@@ -13,8 +13,11 @@ jq \
     --arg appSettingsEnvironmentRealm "$APPSETTINGS_ENVIRONMENT_REALM" \
     --arg indevApiKey "$INDEV_APIKEY" \
     --arg indevBasePath "$INDEV_BASEPATH" \
-    --arg indevPublishedChapterFeedPath "$INDEV_CHAPTER" \
-    --arg indevPublishedDetailFeedPath "$INDEV_DETAIL" \
+    --arg indevPublishedChapterFeedPath "$INDEV_PUBLISHED_CHAPTER" \
+    --arg indevDraftPreviewChapterFeedPath "$INDEV_DRAFT_PREVIEW_CHAPTER" \
+    --arg indevPublishedDetailFeedPath "$INDEV_PUBLISHED_DETAIL" \
+    --arg indevDraftPreviewDetailFeedPath "$INDEV_DRAFT_PREVIEW_DETAIL" \
+    --arg indevPublishedPreviewDetailFeedPath "$INDEV_PUBLISHED_PREVIEW_DETAIL" \
     --arg indevListFeedPath "$INDEV_LIST" \
     --arg gilliamClientCertificateBase64 "$GILLIAM_CLIENT_CERTIFICATE_BASE64" \
     --arg gilliamBasePath "$GILLIAM_BASE_PATH" \
@@ -31,7 +34,10 @@ jq \
     .Feeds.IndevApiKey = $indevApiKey |
     .Feeds.IndevBasePath = $indevBasePath |
     .Feeds.IndevPublishedChapterFeedPath = $indevPublishedChapterFeedPath |
+    .Feeds.IndevDraftPreviewChapterFeedPath = $indevDraftPreviewChapterFeedPath |
     .Feeds.IndevPublishedDetailFeedPath = $indevPublishedDetailFeedPath |
+    .Feeds.IndevDraftPreviewDetailFeedPath = $indevDraftPreviewDetailFeedPath |
+    .Feeds.IndevPublishedPreviewDetailFeedPath = $indevPublishedPreviewDetailFeedPath |
     .Feeds.IndevListFeedPath = $indevListFeedPath |
     .Gilliam.GilliamBasePath = $gilliamBasePath |
     .Gilliam.GetClaimsUrl = $gilliamGetClaimsUrl |
