@@ -1,6 +1,6 @@
 // @flow
 
-import React from "react";
+import React, { Fragment } from "react";
 import { Route, Switch } from "react-router";
 import { Helmet } from "react-helmet";
 
@@ -21,37 +21,40 @@ type StateType = {
 class App extends React.Component<PropsType, StateType> {
 	render() {
 		return (
-			<UserProviderWithRouter>
-				<Helmet titleTemplate="%s | Consultations | NICE">
-					<html lang="en-GB"/>
-				</Helmet>
+			<Fragment>
+				<UserProviderWithRouter>
+					<Helmet titleTemplate="%s | Consultations | NICE">
+						<html lang="en-GB"/>
+					</Helmet>
 
-				<Switch>
-					{/*Document View*/}
-					<Route exact path="/:consultationId/:documentId/:chapterSlug">
-						<DocumentViewWithRouter/>
-					</Route>
+					<Switch>
+						{/*Document View*/}
+						<Route exact path="/:consultationId/:documentId/:chapterSlug">
+							<DocumentViewWithRouter/>
+						</Route>
 
-					{/*Document (Preview Layout)*/}
-					<Route exact path="/preview/:reference/consultation/:consultationId/document/:documentId/chapter/:chapterSlug">
-						<DocumentPreviewWithRouter />
-					</Route>
+						{/*Document (Preview Layout)*/}
+						<Route exact path="/preview/:reference/consultation/:consultationId/document/:documentId/chapter/:chapterSlug">
+							<DocumentPreviewWithRouter />
+						</Route>
 
-					{/*	If we hit this we're coming in *without* a chapter slug, so we need to get the first chapter of the current document and pass its slug into the URL so it matches the route above */}
-					<Route exact path="/preview/:reference/consultation/:consultationId/document/:documentId">
-						<DocumentPreviewRedirectWithRouter />
-						{/* This component only redirects to the above route */}
-					</Route>
+						{/*	If we hit this we're coming in *without* a chapter slug, so we need to get the first chapter of the current document and pass its slug into the URL so it matches the route above */}
+						<Route exact path="/preview/:reference/consultation/:consultationId/document/:documentId">
+							<DocumentPreviewRedirectWithRouter />
+							{/* This component only redirects to the above route */}
+						</Route>
 
-					{/*Review Page*/}
-					<Route exact path="/:consultationId/review">
-						<ReviewPageWithRouter/>
-					</Route>
+						{/*Review Page*/}
+						<Route exact path="/:consultationId/review">
+							<ReviewPageWithRouter/>
+						</Route>
 
-					{/*404*/}
-					<Route component={NotFound}/>
-				</Switch>
-			</UserProviderWithRouter>
+						{/*404*/}
+						<Route component={NotFound}/>
+					</Switch>
+				</UserProviderWithRouter>
+				<FooterWithRouter />
+			</Fragment>
 		);
 	}
 }
