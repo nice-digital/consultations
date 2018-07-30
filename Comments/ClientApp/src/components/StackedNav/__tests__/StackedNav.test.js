@@ -14,25 +14,25 @@ describe("[ClientApp] ", () => {
 						label: "Sub Link 1 Label",
 						url: "sub-link-1-url",
 						current: true,
-						isReactRoute: true
+						isReactRoute: true,
 					},
 					{
 						label: "Sub Link 2 Label",
 						url: "sub-link-2-url",
-						isReactRoute: true
+						isReactRoute: true,
 					},
 					{
 						label: "Sub Link 3 Label",
 						url: "sub-link-3-url",
-						isReactRoute: true
+						isReactRoute: true,
 					},
 					{
 						label: "External Link",
 						url: "https://external-link.com",
-						isReactRoute: false
-					}
-				]
-			}
+						isReactRoute: false,
+					},
+				],
+			},
 		};
 
 		let wrapper;

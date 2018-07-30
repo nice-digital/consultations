@@ -56,5 +56,32 @@ namespace Comments.Test.IntegrationTests.API.Documents
             responseString.ShouldMatchApproved();
         }
 
-    }
+	    [Fact]
+	    public async Task Get_Draft_Preview_Documents_Feed_Returns_Populated_Feed()
+	    {
+		    //Arrange (in base constructor)
+
+		    // Act
+		    var response = await _client.GetAsync("/consultations/api/PreviewDraftDocuments?consultationId=113&documentId=1&reference=GID-NG10186");
+		    response.EnsureSuccessStatusCode();
+		    var responseString = await response.Content.ReadAsStringAsync();
+
+		    // Assert
+		    responseString.ShouldMatchApproved();
+	    }
+
+	    [Fact]
+	    public async Task Get_Published_Preview_Documents_Feed_Returns_Populated_Feed()
+	    {
+		    //Arrange (in base constructor)
+
+		    // Act
+		    var response = await _client.GetAsync("/consultations/api/PreviewPublishedDocuments?consultationId=113&documentId=1");
+		    response.EnsureSuccessStatusCode();
+		    var responseString = await response.Content.ReadAsStringAsync();
+
+		    // Assert
+		    responseString.ShouldMatchApproved();
+	    }
+	}
 }

@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
+import objectHash from "object-hash";
 
 type LinkType = {
 	label: string,
@@ -24,14 +25,16 @@ export const StackedNav = (props: PropsType) => {
 		<nav className="stacked-nav" aria-label={title}>
 			<h2 className="stacked-nav__root">{title}</h2>
 			<ul className="stacked-nav__list">
-				{links.map((item, index) => (
-					<li key={`${item.label}${index}`} data-qa-sel="nav-list-item" className="stacked-nav__list-item">
+				{links.map(item => (
+					<li key={objectHash(item)} data-qa-sel="nav-list-item" className="stacked-nav__list-item">
 						{item.isReactRoute ?
 							item.current ?
 								<Link to={item.url} aria-current="page">{item.label}</Link>
 								:
+								// if !item.current
 								<Link to={item.url}>{item.label}</Link>
 							:
+							// if !item.isReactRoute
 							<a href={item.url} target="_blank" rel="noopener noreferrer">{item.label}</a>
 						}
 					</li>

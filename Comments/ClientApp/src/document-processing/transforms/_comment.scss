@@ -1,0 +1,57 @@
+.ConversionError {
+  z-index: 1;
+  position: absolute;
+  right: 0;
+  @include font-size(0);
+  &__Button {
+    z-index: 2;
+    @extend .font-weight-bold;
+    border: rem(3px) solid;
+    border-radius: 50%;
+    width: rem(50px);
+    height: rem(50px);
+    text-align: center;
+    float: right;
+    &:hover {
+      cursor: pointer;
+    }
+    &--E { // Error
+      color: $colour-error;
+      background-color: $colour-error-background;
+    }
+    &--W { // Warning
+      color: $colour-caution;
+      background-color: $colour-caution-background;
+    }
+    &--I { // Information
+      color: $colour-info;
+      background-color: $colour-info-background;
+    }
+  }
+  &__details {
+    border-top: rem(3px) solid;
+    display: none;
+    &:hover {
+      cursor: pointer;
+    }
+    &.active {
+      display: block;
+    }
+    @extend %all-drop-shadow;
+    padding: 1rem;
+    margin: rem(25px) rem(25px) 0 0;
+    @extend .font-weight-normal;
+    &--E { // Error
+      color: $colour-error;
+      background-color: $colour-error-background;
+    }
+    &--W { // Warning
+      color: $colour-caution;
+      background-color: $colour-caution-background;
+    }
+    &--I { // Information
+      color: $colour-info;
+      background-color: $colour-info-background;
+    }
+  }
+}

@@ -2,6 +2,8 @@ using Comments.Services;
 using Comments.ViewModels;
 using System;
 using System.Collections.Generic;
+using NICE.Feeds.Models.Indev.Detail;
+using Location = Comments.Models.Location;
 
 namespace Comments.Test.Infrastructure
 {
@@ -18,29 +20,37 @@ namespace Comments.Test.Infrastructure
 		    return _consultationIsOpen;
 	    }
 
-	    public ConsultationDetail GetConsultationDetail(int consultationId)
-	    {
-		    return new ConsultationDetail("CG80", "some consultation", "consultation name", DateTime.MinValue, DateTime.MaxValue,
-			    "type", "resource title", "CG", "Clinical guidelines", "CG", null, 1, null, true, true, true, true, null, null, null, null);
-	    }
-
-	   
-
 	    public bool HasSubmittedCommentsOrQuestions(string consultationSourceURI, Guid userId)
 	    {
 		    return false;
 	    }
-	    public ConsultationState GetConsultationState(string sourceURI, IEnumerable<Models.Location> locations = null)
+
+
+	    public ChapterContent GetPreviewChapterContent(int consultationId, int documentId, string chapterSlug, string reference)
 	    {
-		    return new ConsultationState(DateTime.MinValue, _consultationIsOpen ? DateTime.MaxValue : DateTime.MinValue, true, true, true, false);
+		    throw new NotImplementedException();
 	    }
-	    public ConsultationState GetConsultationState(int consultationId, IEnumerable<Models.Location> locations = null)
+
+	    public ConsultationState GetConsultationState(string sourceURI, IEnumerable<Location> locations = null,
+		    ConsultationDetail consultation = null)
+	    {
+			return new ConsultationState(DateTime.MinValue, _consultationIsOpen ? DateTime.MaxValue : DateTime.MinValue, true, true, true, false);
+		}
+	    public ConsultationState GetConsultationState(int consultationId, IEnumerable<Location> locations = null,
+		    ConsultationDetail consultation = null)
 	    {
 		    return new ConsultationState(DateTime.MinValue, _consultationIsOpen ? DateTime.MaxValue : DateTime.MinValue, true, true, true, false);
 	    }
 
 		#region Not Implemented Members
-
+	    public IEnumerable<BreadcrumbLink> GetBreadcrumbs(ConsultationDetail consultation, bool isReview)
+	    {
+		    throw new NotImplementedException();
+	    }
+		public (int rowsUpdated, Validate validate) SubmitCommentsAndAnswers(CommentsAndAnswers commentsAndAnswers)
+		{
+			throw new NotImplementedException();
+		}
 
 		public ChapterContent GetChapterContent(int consultationId, int documentId, string chapterSlug)
 	    {
@@ -52,17 +62,22 @@ namespace Comments.Test.Infrastructure
 		    throw new NotImplementedException();
 	    }
 
-	    public Consultation GetConsultation(int consultationId)
+	    public IEnumerable<Document> GetPreviewDraftDocuments(int consultationId, int documentId, string reference)
 	    {
 		    throw new NotImplementedException();
 	    }
 
-	    public IEnumerable<Consultation> GetConsultations()
+	    public IEnumerable<Document> GetPreviewPublishedDocuments(int consultationId, int documentId)
 	    {
 		    throw new NotImplementedException();
 	    }
 
-		public (int rowsUpdated, Validate validate) SubmitCommentsAndAnswers(CommentsAndAnswers commentsAndAnswers)
+	    public Consultation GetConsultation(int consultationId, bool isReview)
+	    {
+		    throw new NotImplementedException();
+	    }
+
+		public IEnumerable<Consultation> GetConsultations()
 	    {
 		    throw new NotImplementedException();
 	    }

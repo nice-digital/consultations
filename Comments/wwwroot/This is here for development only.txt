@@ -1,0 +1,1 @@
+This folder is here for development purposes only, to mock out what the server will look like when this is deployed.

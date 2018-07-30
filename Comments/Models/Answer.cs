@@ -27,6 +27,7 @@ namespace Comments.Models
         public void UpdateFromViewModel(ViewModels.Answer answer)
         {
             LastModifiedByUserId = answer.LastModifiedByUserId;
+	        LastModifiedDate = answer.LastModifiedDate;
             AnswerText = answer.AnswerText ?? throw new ArgumentNullException(nameof(answer.AnswerText)); 
             AnswerBoolean = answer.AnswerBoolean;
 	        StatusId = answer.StatusId;

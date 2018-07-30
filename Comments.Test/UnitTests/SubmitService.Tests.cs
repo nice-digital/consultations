@@ -26,7 +26,7 @@ namespace Comments.Test.UnitTests
 
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var authenticateService = new FakeAuthenticateService(authenticated: true);
-			var consultationContext = new ConsultationsContext(_options, userService);
+			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 			var submitService = new SubmitService(consultationContext, userService, _consultationService);
 			var commentService = new CommentService(consultationContext, userService, authenticateService, _consultationService);
 
@@ -62,15 +62,15 @@ namespace Comments.Test.UnitTests
 
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var authenticateService = new FakeAuthenticateService(authenticated: true);
-			var consultationContext = new ConsultationsContext(_options, userService);
+			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 			var submitService = new SubmitService(consultationContext, userService, _consultationService);
 			var commentService = new CommentService(consultationContext, userService, authenticateService, _consultationService);
 			var answerService = new AnswerService(consultationContext, userService);
 
 			var locationId = AddLocation(sourceURI, _context);
 			var questionTypeId = AddQuestionType("Question Type", false, true);
-			var questionId = AddQuestion(locationId, questionTypeId, "Question Text");
-			var answerId = AddAnswer(questionId, userId, "Answer Text");
+			var questionId = AddQuestion(locationId, questionTypeId, "Question Label");
+			var answerId = AddAnswer(questionId, userId, "Answer Label");
 
 			//Act
 			var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI, true);
@@ -98,9 +98,9 @@ namespace Comments.Test.UnitTests
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var userId = Guid.NewGuid();
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-			var consultationContext = new ConsultationsContext(_options, userService);
+			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 
-			AddSubmittedCommentsAndAnswers(sourceURI, "Comment Text", "Question Text", "Answer Text", userId, consultationContext);
+			AddSubmittedCommentsAndAnswers(sourceURI, "Comment Label", "Question Label", "Answer Label", userId, consultationContext);
 
 			var sourceURIs = new List<string>
 			{
@@ -130,14 +130,14 @@ namespace Comments.Test.UnitTests
 			//Arrange
 			var userId = Guid.NewGuid();
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-			var consultationContext = new ConsultationsContext(_options, userService);
+			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 			var consultationService = new ConsultationService(consultationContext, null, null, userService);
 			//var submitService = new SubmitService(consultationContext, userService, _consultationService);
-			AddSubmittedCommentsAndAnswers("consultations://./consultation/1/document/1/chapter/introduction", "Comment Text", "Question Text", "Answer Text", userId, consultationContext);
+			AddSubmittedCommentsAndAnswers("consultations://./consultation/1/document/1/chapter/introduction", "Comment Label", "Question Label", "Answer Label", userId, consultationContext);
 
 			//Act
 			var actualResult = consultationService.HasSubmittedCommentsOrQuestions(consultationSourceURI, userId);
-			
+
 			//Assert
 			actualResult.ShouldBe(expectedResult);
 		}
@@ -157,10 +157,10 @@ namespace Comments.Test.UnitTests
 			//Arrange
 			var userId = Guid.NewGuid();
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-			var consultationContext = new ConsultationsContext(_options, userService);
+			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 			//var submitService = new SubmitService(consultationContext, userService, _consultationService);
-			var consultationService = new ConsultationService(consultationContext, null, null, userService);
-			AddSubmittedCommentsAndAnswers("consultations://./consultation/1/document/1", "Comment Text", "Question Text", "Answer Text", userId, consultationContext);
+			var consultationService = new Services.ConsultationService(consultationContext, null, null, userService);
+			AddSubmittedCommentsAndAnswers("consultations://./consultation/1/document/1", "Comment Label", "Question Label", "Answer Label", userId, consultationContext);
 
 			//Act
 			var actualResult = consultationService.HasSubmittedCommentsOrQuestions(consultationSourceURI, userId);
@@ -184,10 +184,10 @@ namespace Comments.Test.UnitTests
 			//Arrange
 			var userId = Guid.NewGuid();
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-			var consultationContext = new ConsultationsContext(_options, userService);
+			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 			var consultationService = new ConsultationService(consultationContext, null, null, userService);
 			//var submitService = new SubmitService(consultationContext, userService, _consultationService);
-			AddSubmittedCommentsAndAnswers("consultations://./consultation/1", "Comment Text", "Question Text", "Answer Text", userId, consultationContext);
+			AddSubmittedCommentsAndAnswers("consultations://./consultation/1", "Comment Label", "Question Label", "Answer Label", userId, consultationContext);
 
 			//Act
 			var actualResult = consultationService.HasSubmittedCommentsOrQuestions(consultationSourceURI, userId);

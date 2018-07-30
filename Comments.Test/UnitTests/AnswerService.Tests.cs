@@ -31,7 +31,7 @@ namespace Comments.Test.UnitTests
             var answerId = AddAnswer(1, userId, answerText);
 
             //Act
-            var viewModel = new AnswerService(new ConsultationsContext(_options, userService), userService).GetAnswer(answerId);
+            var viewModel = new AnswerService(new ConsultationsContext(_options, userService, _fakeEncryption), userService).GetAnswer(answerId);
 
             //Assert
             viewModel.answer.AnswerText.ShouldBe(answerText);
@@ -46,7 +46,7 @@ namespace Comments.Test.UnitTests
             var userId = Guid.Empty;
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
-            var answerService = new AnswerService(new ConsultationsContext(_options, userService), userService);
+            var answerService = new AnswerService(new ConsultationsContext(_options, userService, _fakeEncryption), userService);
 
             //Act
             var viewModel = answerService.GetAnswer(1);
@@ -65,7 +65,7 @@ namespace Comments.Test.UnitTests
             var userService = FakeUserService.Get(isAuthenticated: false);
 
             //Act
-            var viewModel = new AnswerService(new ConsultationsContext(_options, userService), userService).GetAnswer(1);
+            var viewModel = new AnswerService(new ConsultationsContext(_options, userService, _fakeEncryption), userService).GetAnswer(1);
 
             //Assert
             viewModel.validate.Unauthorised.ShouldBeTrue();
@@ -85,7 +85,7 @@ namespace Comments.Test.UnitTests
             SetupTestDataInDB();
             var answerId = AddAnswer(1, userId, answerText);
 
-            var answerService = new AnswerService(new ConsultationsContext(_options, userService), userService);
+            var answerService = new AnswerService(new ConsultationsContext(_options, userService, _fakeEncryption), userService);
             var viewModel = answerService.GetAnswer(answerId);
 
             var updatedAnswerText = Guid.NewGuid().ToString();
@@ -114,7 +114,7 @@ namespace Comments.Test.UnitTests
             SetupTestDataInDB();
             var answerId = AddAnswer(1, userId, answerText);
 
-            var answerService = new AnswerService(new ConsultationsContext(_options, userService), userService);
+            var answerService = new AnswerService(new ConsultationsContext(_options, userService, _fakeEncryption), userService);
 
             //Act
             var result = answerService.DeleteAnswer(answerId);
@@ -133,7 +133,7 @@ namespace Comments.Test.UnitTests
             var answerId = 1;
             var userId = Guid.Empty;
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var answerService = new AnswerService(new ConsultationsContext(_options, userService), userService);
+            var answerService = new AnswerService(new ConsultationsContext(_options, userService, _fakeEncryption), userService);
 
             //Act
             var result = answerService.DeleteAnswer(answerId);
@@ -166,7 +166,7 @@ namespace Comments.Test.UnitTests
             var viewModel = new ViewModels.Answer(answer);
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var answerService = new AnswerService(new ConsultationsContext(_options, userService), userService);
+            var answerService = new AnswerService(new ConsultationsContext(_options, userService, _fakeEncryption), userService);
 
             //Act
             var result = answerService.CreateAnswer(viewModel);
@@ -192,7 +192,7 @@ namespace Comments.Test.UnitTests
             AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId);
 
             // Act
-            var viewModel = new AnswerService(new ConsultationsContext(_options, _fakeUserService), FakeUserService.Get(isAuthenticated: false)).GetAnswer(1);
+            var viewModel = new AnswerService(new ConsultationsContext(_options, _fakeUserService, _fakeEncryption), FakeUserService.Get(isAuthenticated: false)).GetAnswer(1);
 
             //Assert
             viewModel.validate.Unauthorised.ShouldBeTrue();
@@ -217,7 +217,7 @@ namespace Comments.Test.UnitTests
             var expectedAnswerId = AddAnswer(questionId, userId, "current user's answer");
             AddAnswer(questionId, Guid.NewGuid(), "another user's answer");
 
-	        var context = new ConsultationsContext(_options, userService);
+	        var context = new ConsultationsContext(_options, userService, _fakeEncryption);
 			//var submitService = new SubmitService(context, userService, _consultationService);
 			var commentService = new CommentService(context, userService, authenticateService, _consultationService);
 

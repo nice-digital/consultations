@@ -6,8 +6,8 @@ import Moment from "react-moment";
 type PropsType = {
 	title: string,
 	reference: string,
-	endDate: any,
-	match: any
+	endDate?: any,
+	match?: any
 }
 
 export const Header = (props: PropsType) => {

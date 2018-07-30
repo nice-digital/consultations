@@ -1,4 +1,5 @@
-﻿using System;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.IO;
 
 namespace Comments.Common
@@ -51,5 +52,10 @@ namespace Comments.Common
                 ? url.Replace("http://", "https://", StringComparison.OrdinalIgnoreCase)
                 : url;
         }
-    }
+
+		public static void Clear<T>(this DbSet<T> dbSet) where T : class
+		{
+			dbSet.RemoveRange(dbSet);
+		}
+	}
 }

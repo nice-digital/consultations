@@ -3,6 +3,7 @@
 exports[`[ClientApp]  Document Component should match snapshot with supplied data 1`] = `
 Array [
   "",
+  "",
   <div
     className="container"
 >
@@ -61,11 +62,9 @@ Array [
                         itemType="http://schema.org/ListItem"
                     >
                         <a
-                            href="#"
-                            itemProp="name"
-                            onClick={[Function]}
+                            href="/"
                         >
-                            All Consultations
+                            Home
                         </a>
                         <meta
                             content={0}
@@ -79,9 +78,9 @@ Array [
                         itemType="http://schema.org/ListItem"
                     >
                         <a
-                            href="https://alpha.nice.org.uk/guidance/indevelopment/gid-ng10107/consultation/html-content"
+                            href="/guidance/indevelopment/gid-ta10232/consultation/"
                         >
-                            Consultation
+                            Consultation title
                         </a>
                         <meta
                             content={1}
@@ -97,18 +96,6 @@ Array [
                     className="page-header"
                 >
                     <undefined />
-                    <button
-                        className="btn btn--cta"
-                        data-qa-sel="comment-on-whole-consultation"
-                        onClick={[Function]}
-                    >
-                        Comment on whole consultation
-                    </button>
-                    <h2
-                        className="mb--b"
-                    >
-                        Unstable angina and NSTEMI
-                    </h2>
                     <button
                         className="btn btn--cta"
                         data-qa-sel="comment-on-consultation-document"
@@ -145,7 +132,7 @@ Array [
                                     </h2>
                                     <ol
                                         className="in-page-nav__list"
-                                        style={Object {}}
+                                        role="menubar"
                                     >
                                         <li
                                             className="in-page-nav__item"

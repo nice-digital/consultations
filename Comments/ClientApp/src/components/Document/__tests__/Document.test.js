@@ -18,10 +18,10 @@ jest.mock("../../../context/UserContext", () => {
 		UserContext: {
 			Consumer: (props) => {
 				return props.children({
-					isAuthorised: true
+					isAuthorised: true,
 				});
-			}
-		}
+			},
+		},
 	};
 });
 
@@ -33,14 +33,14 @@ describe("[ClientApp] ", () => {
 				params: {
 					consultationId: 1,
 					documentId: 1,
-					chapterSlug: "introduction"
-				}
-			}
+					chapterSlug: "introduction",
+				},
+			},
 		};
 
 		it("should render the loading message", () => {
 			const wrapper = shallow(<Document {...fakeProps} />, {
-				disableLifecycleMethods: true
+				disableLifecycleMethods: true,
 			});
 			expect(wrapper.find("h1").text()).toEqual("Loading...");
 		});
@@ -65,7 +65,7 @@ describe("[ClientApp] ", () => {
 
 			let consulatationPromise = new Promise(resolve => {
 				mock
-					.onGet("/consultations/api/Consultation?consultationId=1")
+					.onGet("/consultations/api/Consultation?consultationId=1&isReview=false")
 					.reply(() => {
 						resolve();
 						return [200, ConsultationData];
@@ -86,17 +86,24 @@ describe("[ClientApp] ", () => {
 			return Promise.all([
 				documentsPromise,
 				consulatationPromise,
-				chapterPromise
+				chapterPromise,
 			]).then(async () => {
 				await nextTick();
 				wrapper.update();
 				expect(
 					toJson(wrapper, {
 						noKey: true,
-						mode: "deep"
+						mode: "deep",
 					})
 				).toMatchSnapshot();
 			});
+		});
+
+		it("getDocumentChapterLinks method", () => {
+			const document = new Document();
+			expect(
+				document.getDocumentChapterLinks(1, "introduction", 1, DocumentsData, "A title for the nav")
+			).toHaveProperty("links", [{"current": true, "isReactRoute": true, "label": "Introduction", "url": "/1/1/introduction"}, {"current": false, "isReactRoute": true, "label": "Patient-centred care", "url": "/1/1/patient-centred-care"}, {"current": false, "isReactRoute": true, "label": "Key priorities for implementation", "url": "/1/1/key-priorities-for-implementation"}, {"current": false, "isReactRoute": true, "label": "1 Guidance", "url": "/1/1/guidance"}, {"current": false, "isReactRoute": true, "label": "2 Notes on the scope of the guidance", "url": "/1/1/notes-on-the-scope-of-the-guidance"}, {"current": false, "isReactRoute": true, "label": "3 Implementation", "url": "/1/1/implementation"}, {"current": false, "isReactRoute": true, "label": "4 Research recommendations", "url": "/1/1/research-recommendations"}, {"current": false, "isReactRoute": true, "label": "5 Other versions of this guideline", "url": "/1/1/other-versions-of-this-guideline"}, {"current": false, "isReactRoute": true, "label": "6 Related NICE guidance", "url": "/1/1/related-nice-guidance"}, {"current": false, "isReactRoute": true, "label": "7 Updating the guideline", "url": "/1/1/updating-the-guideline"}, {"current": false, "isReactRoute": true, "label": "Appendix A: The Guideline Development Group and NICE project team", "url": "/1/1/appendix-a-the-guideline-development-group-and-nice-project-team"}, {"current": false, "isReactRoute": true, "label": "Appendix B: The Guideline Review Panel", "url": "/1/1/appendix-b-the-guideline-review-panel"}, {"current": false, "isReactRoute": true, "label": "Appendix C: The algorithm", "url": "/1/1/appendix-c-the-algorithm"}, {"current": false, "isReactRoute": true, "label": "Changes after publication", "url": "/1/1/changes-after-publication"}, {"current": false, "isReactRoute": true, "label": "About this guideline", "url": "/1/1/about-this-guideline"}]);
 		});
 
 		describe("getDocumentLinks method", () => {
@@ -106,29 +113,29 @@ describe("[ClientApp] ", () => {
 					documentId: 1,
 					convertedDocument: false,
 					href: "/guidance/one/123",
-					chapters: null
+					chapters: null,
 				},
 				{
 					title: "",
 					documentId: 2,
 					chapters: [{ slug: "chapter-two-slug" }],
 					convertedDocument: true,
-					href: "/guidance/two/123"
+					href: "/guidance/two/123",
 				},
 				{
 					title: "Document Three",
 					documentId: 3,
 					convertedDocument: false,
 					href: "/guidance/three/123",
-					chapters: null
+					chapters: null,
 				},
 				{
 					title: "Document Four",
 					documentId: 4,
 					convertedDocument: true,
 					href: "/guidance/four/123",
-					chapters: [{ slug: "chapter-two-slug" }]
-				}
+					chapters: [{ slug: "chapter-two-slug" }],
+				},
 			];
 
 			it("getDocumentLinks for Commentable documents", () => {
@@ -140,14 +147,14 @@ describe("[ClientApp] ", () => {
 						current: false,
 						label: "Download Document",
 						url: "/1/2/chapter-two-slug",
-						isReactRoute: true
+						isReactRoute: true,
 					},
 					{
 						current: false,
 						label: "Document Four",
 						url: "/1/4/chapter-two-slug",
-						isReactRoute: true
-					}
+						isReactRoute: true,
+					},
 				]);
 			});
 
@@ -160,14 +167,14 @@ describe("[ClientApp] ", () => {
 						current: true,
 						label: "Document One",
 						url: "/guidance/one/123",
-						isReactRoute: false
+						isReactRoute: false,
 					},
 					{
 						current: false,
 						label: "Document Three",
 						url: "/guidance/three/123",
-						isReactRoute: false
-					}
+						isReactRoute: false,
+					},
 				]);
 			});
 		});

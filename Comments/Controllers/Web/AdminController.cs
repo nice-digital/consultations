@@ -9,15 +9,13 @@ namespace Comments.Controllers.Web
 	
 	public class AdminController : Controller
     {
-	    private readonly ISubmitService _submitService;
-	    private readonly IQuestionService _questionService;
 	    private readonly IUserService _userService;
+	    private readonly IAdminService _adminService;
 
-	    public AdminController(ISubmitService submitService, IQuestionService questionService, IUserService userService)
+	    public AdminController(IUserService userService, IAdminService adminService)
 	    {
-		    _submitService = submitService;
-		    _questionService = questionService;
 		    _userService = userService;
+		    _adminService = adminService;
 	    }
 
 		/// <summary>
@@ -35,7 +33,7 @@ namespace Comments.Controllers.Web
 			    throw new ArgumentException("Cannot parse guid", nameof(userId));
 
 
-		    var rowCount = _submitService.DeleteAllSubmissionsFromUser(parsedGuid);
+		    var rowCount = _adminService.DeleteAllSubmissionsFromUser(parsedGuid);
 
 		    return Content($"Row count deleted/updated: {rowCount}");
 	    }
@@ -51,7 +49,7 @@ namespace Comments.Controllers.Web
 			if (!user.IsAuthorised || !user.UserId.HasValue)
 				throw new Exception("Cannot get logged on user id");
 
-			var rowCount = _submitService.DeleteAllSubmissionsFromUser(user.UserId.Value);
+			var rowCount = _adminService.DeleteAllSubmissionsFromUser(user.UserId.Value);
 
 		    return Content($"Row count deleted/updated: {rowCount}");
 	    }
@@ -67,9 +65,21 @@ namespace Comments.Controllers.Web
 		    if (consultationId < 1)
 			    throw new ArgumentException("invalid consultation id", nameof(consultationId));
 
-		    var rowCount = _questionService.InsertQuestionsForAdmin(consultationId);
+		    var rowCount = _adminService.InsertQuestionsForAdmin(consultationId);
 
 			return Content($"Row count deleted/updated: {rowCount}");
+	    }
+
+		/// <summary>
+		/// /consultations/admin/DeleteAllData
+		/// </summary>
+		/// <returns></returns>
+		[Route("consultations/admin/DeleteAllData")]
+	    public ActionResult DeleteAllData()
+	    {
+		    var rowCount = _adminService.DeleteAllData();
+
+		    return Content($"Row count deleted/updated: {rowCount}");
 	    }
 	}
 }

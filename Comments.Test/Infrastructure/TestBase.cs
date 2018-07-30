@@ -50,6 +50,8 @@ namespace Comments.Test.Infrastructure
         protected readonly ConsultationsContext _context;
 	    protected readonly bool _useRealSubmitService = false;
 
+	    protected IEncryption _fakeEncryption;
+
 		public TestBase(Feed feed) : this()
         {
             FeedToUse = feed;
@@ -82,6 +84,7 @@ namespace Comments.Test.Infrastructure
             _fakeHttpContextAccessor = FakeHttpContextAccessor.Get(_authenticated, _displayName, _userId);
 	        _consultationService = new FakeConsultationService();
 	        _useRealSubmitService = useRealSubmitService;
+	        _fakeEncryption = new FakeEncryption();
 			var databaseName = DatabaseName + Guid.NewGuid();
 
             //SQLiteConnectionStringBuilder sqLiteConnectionStringBuilder = new SQLiteConnectionStringBuilder()
@@ -99,7 +102,7 @@ namespace Comments.Test.Infrastructure
                     .UseInMemoryDatabase(databaseName)
                     .Options;
 
-            _context = new ConsultationsContext(_options, _fakeUserService);
+            _context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption);
             _context.Database.EnsureCreatedAsync();
 			
 
@@ -115,15 +118,16 @@ namespace Comments.Test.Infrastructure
                     services.TryAddSingleton<IHttpContextAccessor>(provider => _fakeHttpContextAccessor);
                     services.TryAddTransient<IUserService>(provider => _fakeUserService);
                     services.TryAddTransient<IFeedReaderService>(provider => new FeedReader(FeedToUse));
-	                if (_useRealSubmitService)
+
+					if (_useRealSubmitService)
 	                {
 						//services.TryAddTransient<IConsultationService>(provider => new FakeConsultationService(true));
 					}
 	                else
 					{
-		                services.TryAddTransient<ISubmitService>(provider => new FakeSubmitService());
+						services.TryAddTransient<ISubmitService>(provider => new FakeSubmitService());
 					}
-                })
+				})
                 .Configure(app =>
                 {
                     app.UseStaticFiles();
@@ -150,16 +154,19 @@ namespace Comments.Test.Infrastructure
                 IndevApiKey = "api key goes here",
                 IndevBasePath = new Uri("http://test-indev.nice.org.uk"),
                 IndevPublishedChapterFeedPath = "consultation-comments/{0}/document/{1}/chapter-slug/{2}",
-                IndevPublishedDetailFeedPath = "consultation-comments/{0}",
+	            IndevDraftPreviewChapterFeedPath = "preview/{0}/consultation/{1}/document/{2}/chapter-slug/{3}",
+				IndevPublishedDetailFeedPath = "consultation-comments/{0}",
                 IndevListFeedPath = "consultation-comments-list"
             };
+
+			
         }
 
         #region database stuff
 
         protected void ResetDatabase()
         {
-            using (var context = new ConsultationsContext(_options, _fakeUserService))
+            using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
             {
                 context.Database.EnsureDeleted();
 				//context.Database.CloseConnection();
@@ -171,7 +178,7 @@ namespace Comments.Test.Infrastructure
 
         protected void ResetDatabase(IUserService userService)
         {
-            using (var context = new ConsultationsContext(_options, userService))
+            using (var context = new ConsultationsContext(_options, userService, _fakeEncryption))
             {
                 context.Database.EnsureDeleted();
 				//context.Database.CloseConnection();
@@ -189,7 +196,7 @@ namespace Comments.Test.Infrastructure
             }
             else
             {
-                using (var context =new ConsultationsContext(_options, _fakeUserService))
+                using (var context =new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
                 {
                     context.Location.Add(location);
                     context.SaveChanges();
@@ -209,7 +216,7 @@ namespace Comments.Test.Infrastructure
 		    }
 		    else
 		    {
-			    using (var context = new ConsultationsContext(_options, _fakeUserService))
+			    using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
 			    {
 					context.Status.Add(statusModel);
 					context.SaveChanges();
@@ -229,7 +236,7 @@ namespace Comments.Test.Infrastructure
             }
             else
             {
-                using (var context = new ConsultationsContext(_options, _fakeUserService))
+                using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
                 {
                     context.Comment.Add(comment);
                     context.SaveChanges();
@@ -248,7 +255,7 @@ namespace Comments.Test.Infrastructure
             }
             else
             {
-                using (var context = new ConsultationsContext(_options, _fakeUserService))
+                using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
                 {
                     context.QuestionType.Add(questionType);
                     context.SaveChanges();
@@ -267,7 +274,7 @@ namespace Comments.Test.Infrastructure
             }
             else
             {
-                using (var context = new ConsultationsContext(_options, _fakeUserService))
+                using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
                 {
                     context.Question.Add(question);
                     context.SaveChanges();
@@ -287,7 +294,7 @@ namespace Comments.Test.Infrastructure
             }
             else
             {
-                using (var context = new ConsultationsContext(_options, _fakeUserService))
+                using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
                 {
                     context.Answer.Add(answer);
                     context.SaveChanges();
@@ -338,7 +345,7 @@ namespace Comments.Test.Infrastructure
 			}
 			else
 			{
-				using (var context = new ConsultationsContext(_options, _fakeUserService))
+				using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
 				{
 					context.Submission.Add(submission);
 					context.SaveChanges();
@@ -358,7 +365,7 @@ namespace Comments.Test.Infrastructure
 		    }
 		    else
 		    {
-			    using (var context = new ConsultationsContext(_options, _fakeUserService))
+			    using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
 			    {
 				    context.SubmissionComment.Add(submissionComment);
 				    context.SaveChanges();
@@ -378,7 +385,7 @@ namespace Comments.Test.Infrastructure
 		    }
 		    else
 		    {
-			    using (var context = new ConsultationsContext(_options, _fakeUserService))
+			    using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
 			    {
 				    context.SubmissionAnswer.Add(submissionAnswer);
 				    context.SaveChanges();

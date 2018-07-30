@@ -13,6 +13,8 @@ using System;
 using System.IO;
 using Comments.Auth;
 using Comments.Common;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
@@ -53,7 +55,7 @@ namespace Comments
             services.TryAddSingleton<IAuthenticateService, AuthService>();
             services.TryAddTransient<IUserService, UserService>();
 
-            var contextOptionsBuilder = new DbContextOptionsBuilder<ConsultationsContext>();
+			var contextOptionsBuilder = new DbContextOptionsBuilder<ConsultationsContext>();
             services.TryAddSingleton<IDbContextOptionsBuilderInfrastructure>(contextOptionsBuilder);
 
             services.AddDbContext<ConsultationsContext>(options =>
@@ -67,7 +69,9 @@ namespace Comments
             services.TryAddTransient<IAnswerService, AnswerService>();
             services.TryAddTransient<IQuestionService, QuestionService>();
 	        services.TryAddTransient<ISubmitService, SubmitService>();
-
+			services.TryAddTransient<IAdminService, AdminService>();
+			services.TryAddSingleton<IEncryption, Encryption>();
+			
 			// Add authentication 
 			services.AddAuthentication(options =>
             {
@@ -132,7 +136,9 @@ namespace Comments
 				//app.UseDeveloperExceptionPage();
                 loggerFactory.AddConsole(Configuration.GetSection("Logging"));
                 loggerFactory.AddDebug();
-            }
+
+				app.UseStaticFiles(); //uses the wwwroot folder, only for dev. on other service the root is varnish
+			}
             else
             {
 	            app.UseExceptionHandler(Constants.ErrorPath);
@@ -141,9 +147,9 @@ namespace Comments
 			}
 
 	        
-           
 
-            app.UseCors("CorsPolicy");
+
+			app.UseCors("CorsPolicy");
 
             // Because in dev mode we proxy to a react dev server (which has to run in the root e.g. http://localhost:3000)
             // we re-write paths for static files to map them to the root
@@ -154,14 +160,16 @@ namespace Comments
                     var reqPath = context.Request.Path;
                     if (reqPath.HasValue && reqPath.Value.Contains("."))
                     {
-                        // Map static files paths to the root, for use within the 
-                        if (reqPath.Value.Contains("/consultations"))
-                            context.Request.Path = reqPath.Value.Replace("/consultations", "");
-                        else
-                        {
-                            context.Response.StatusCode = 404;
-                            throw new FileNotFoundException($"Path {reqPath.Value} could not be found. Did you mean to load '/consultations{context.Request.Path.Value  }' instead?");
-                        }
+						// Map static files paths to the root, for use within the 
+						if (reqPath.Value.Contains("/consultations"))
+						{
+							context.Request.Path = reqPath.Value.Replace("/consultations", "");
+						}
+						else if (reqPath.Value.IndexOf("favicon.ico", StringComparison.OrdinalIgnoreCase) == -1)
+						{
+							context.Response.StatusCode = 404;
+							throw new FileNotFoundException($"Path {reqPath.Value} could not be found. Did you mean to load '/consultations{context.Request.Path.Value  }' instead?");
+						}
                     }
 
                     return next();
