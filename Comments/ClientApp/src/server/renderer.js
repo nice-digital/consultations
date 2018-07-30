@@ -64,9 +64,11 @@ export const serverRenderer = (params): Promise => {
 				</StaticRouter>);
 
 			// First render: this trigger any data preloaders to fire
-		rootContent = renderToString(app),
+		let rootCont = renderToString(app),
 			statusCode: number = 200,
 			html: string;
+
+			rootContent = rootCont;
 		} catch(error) {
 			if (process.env.NODE_ENV === "development") {
 				resolve({ html: stringifyObject(error), statusCode: 500 });
@@ -83,17 +85,25 @@ export const serverRenderer = (params): Promise => {
 				rootContent = renderToString(app);
 
 				const helmet = Helmet.renderStatic();
-			html = processHtml(params.data.originalHtml, {
-					htmlAttributes: helmet.htmlAttributes.toString(),
-					bodyAttributes: helmet.bodyAttributes.toString(),
-					rootContent: rootContent,
-					title: helmet.title.toString(),
-					metas: helmet.meta.toString(),
-					links: helmet.link.toString(),
-					scripts: getPreloadedDataHtml(staticContext.preload.data) + helmet.script.toString(),
-				});
+				html = processHtml(params.data.originalHtml,
+					{
+						htmlAttributes: helmet.htmlAttributes.toString(),
+						bodyAttributes: helmet.bodyAttributes.toString(),
+						rootContent: rootContent,
+						title: helmet.title.toString(),
+						metas: helmet.meta.toString(),
+						links: helmet.link.toString(),
+						scripts: getPreloadedDataHtml(staticContext.preload.data) + helmet.script.toString(),
+					});
 
 				resolve({ html: html, statusCode: staticContext.status || 200 });
+		} catch (error) {
+			if (process.env.NODE_ENV === "development") {
+				resolve({ html: stringifyObject(error), statusCode: 500 });
+				return;
+			}
+			reject(error);
+		}
 		}).catch((e) => {
 			if (process.env.NODE_ENV === "production") {
 				// In production, rejecting the promise shows a standard dotnet 500 server error page
@@ -107,7 +117,7 @@ export const serverRenderer = (params): Promise => {
 			
 			resolve({ html: rootContent, statusCode: staticContext.status || statusCode });
 				return;
-			}
+			
 			});
 	});
 };
