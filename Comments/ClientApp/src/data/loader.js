@@ -25,7 +25,8 @@ export const generateUrl = (endpointName, baseUrl = BaseUrl, urlParameters = [],
 	const endpoint = Endpoints[endpointName];
 	if (!endpoint) return endpointName;
 
-	if (endpoint.startsWith("http")){
+
+	if (endpoint.indexOf("http") === 0){
 		baseUrl = "";
 	}
 
