@@ -445,7 +445,7 @@ export class CommentList extends Component<PropsType, StateType> {
 								contextValue.isAuthorised ?
 
 									<Fragment>
-									 	{(this.prop.isReviewPage || !this.props.viewComments) && (
+									 	{(this.prop.isReviewPage || !this.props.viewComments) && 
 											<div>
 												<p>We would like to hear your views on the draft recommendations presented in the guideline, and any comments you may have on the rationale and impact sections in the guideline and the evidence presented in the evidence reviews documents. We would also welcome views on the Equality Impact Assessment.</p>
 												<p>We would like to hear your views on these questions:</p>
@@ -465,26 +465,26 @@ export class CommentList extends Component<PropsType, StateType> {
 													})}
 												</ul>
 											</div>
-										)}
+										}
 
-										{(this.prop.isReviewPage || this.props.viewComments) && (
+										{(this.prop.isReviewPage || this.props.viewComments) && 
 											commentsToShow.length === 0 ? <p>No comments yet</p> :
-												<ul className="CommentList list--unstyled">
-													{commentsToShow.map((comment) => {
-														return (
-															<CommentBox
-																readOnly={!this.state.allowComments || this.props.isSubmitted}
-																isVisible={this.props.isVisible}
-																key={comment.commentId}
-																unique={`Comment${comment.commentId}`}
-																comment={comment}
-																saveHandler={this.saveCommentHandler}
-																deleteHandler={this.deleteCommentHandler}
-															/>
-														);
-													})}
-												</ul>
-										)}
+											<ul className="CommentList list--unstyled">
+												{commentsToShow.map((comment) => {
+													return (
+														<CommentBox
+															readOnly={!this.state.allowComments || this.props.isSubmitted}
+															isVisible={this.props.isVisible}
+															key={comment.commentId}
+															unique={`Comment${comment.commentId}`}
+															comment={comment}
+															saveHandler={this.saveCommentHandler}
+															deleteHandler={this.deleteCommentHandler}
+														/>
+													);
+												})}
+											</ul>
+										}
 									</Fragment>
 									:
 									<LoginBanner
