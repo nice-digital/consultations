@@ -425,7 +425,7 @@ describe("[ClientApp] ", () => {
 			await nextTick();
 			wrapper.update();
 
-			expect(wrapper.find("p").text()).toEqual("No comments yet");
+			expect(wrapper.find("p").last().text()).toEqual("No comments yet");
 		});
 
 		it("list all comments if no sourceURI is given", async () => {
