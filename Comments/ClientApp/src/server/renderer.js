@@ -55,55 +55,37 @@ export const serverRenderer = (params): Promise => {
 			baseUrl: params.origin + BaseUrlRelative,
 			// Base url is used for 'server' ajax requests so we can hit the .NET instance from the Node process
 		};
-		let rootContent, app;
 
-		try {
-			app = (
+		let app = (
 				<StaticRouter basename={BaseUrlRelative} location={params.url} context={staticContext}>
 					<App />
 				</StaticRouter>);
 
-			// First render: this trigger any data preloaders to fire
-		let rootCont = renderToString(app),
+		// First render: this trigger any data preloaders to fire
+		let rootContent = renderToString(app),
 			statusCode: number = 200,
 			html: string;
-
-			rootContent = rootCont;
-		} catch(error) {
-			if (process.env.NODE_ENV === "development") {
-				resolve({ html: stringifyObject(error), statusCode: 500 });
-				return;
-			}
-			reject(error);
-		}
+		
 		// Wait for all preloaders to have loaded before re-rendering the app
 		Promise.all(staticContext.preload.loaders).then(() => {
-			let html;
+			
+			// Second render now that all the data preloaders have finished so we can render with data on the server
+			rootContent = renderToString(app);
 
-			try {
-				// Second render now that all the data preloaders have finished so we can render with data on the server
-				rootContent = renderToString(app);
+			const helmet = Helmet.renderStatic();
+			const html = processHtml(params.data.originalHtml,
+				{
+					htmlAttributes: helmet.htmlAttributes.toString(),
+					bodyAttributes: helmet.bodyAttributes.toString(),
+					rootContent: rootContent,
+					title: helmet.title.toString(),
+					metas: helmet.meta.toString(),
+					links: helmet.link.toString(),
+					scripts: getPreloadedDataHtml(staticContext.preload.data) + helmet.script.toString(),
+				});
 
-				const helmet = Helmet.renderStatic();
-				html = processHtml(params.data.originalHtml,
-					{
-						htmlAttributes: helmet.htmlAttributes.toString(),
-						bodyAttributes: helmet.bodyAttributes.toString(),
-						rootContent: rootContent,
-						title: helmet.title.toString(),
-						metas: helmet.meta.toString(),
-						links: helmet.link.toString(),
-						scripts: getPreloadedDataHtml(staticContext.preload.data) + helmet.script.toString(),
-					});
-
-				resolve({ html: html, statusCode: staticContext.status || 200 });
-		} catch (error) {
-			if (process.env.NODE_ENV === "development") {
-				resolve({ html: stringifyObject(error), statusCode: 500 });
-				return;
-			}
-			reject(error);
-		}
+			resolve({ html: html, statusCode: staticContext.status || 200 });
+			
 		}).catch((e) => {
 			if (process.env.NODE_ENV === "production") {
 				// In production, rejecting the promise shows a standard dotnet 500 server error page
@@ -113,12 +95,11 @@ export const serverRenderer = (params): Promise => {
 			// In development show a nice YSOD to devs with the error message
 			const error = <Error error={e} />;
 			rootContent = renderToString(error);
-			statusCode = 500;
 			
-			resolve({ html: rootContent, statusCode: staticContext.status || statusCode });
-				return;
+			resolve({ html: rootContent, statusCode: staticContext.status || 500 });
+			return;
 			
-			});
+		});
 	});
 };
 

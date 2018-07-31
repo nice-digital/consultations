@@ -31,7 +31,7 @@ namespace Comments.Test.Infrastructure
 
 	    public static string ScrubErrorMessage(string str)
 	    {
-		    return Regex.Replace(str, "(<!--)([\\d\\D]+)(-->)", "\"Error Message\":\"scrubbed by ScrubErrorMessage\""); //unescaped regex is: <!--([a-z0-9]+)-->
+		    return Regex.Replace(str, "(<!--)([\\d\\D]+)(-->)", "\"Error Message\":\"scrubbed by ScrubErrorMessage\"");
 
 		}
 	}

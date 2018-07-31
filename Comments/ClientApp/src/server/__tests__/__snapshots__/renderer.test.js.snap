@@ -1,3 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`Server renderer serverRenderer resolves promise with error component and 500 status when app rendering fails in development 1`] = `"{}"`;
