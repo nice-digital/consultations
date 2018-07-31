@@ -7,6 +7,7 @@ import { Helmet } from "react-helmet";
 import DocumentViewWithRouter from "../DocumentView/DocumentView";
 import NotFound from "../NotFound/NotFound";
 import ReviewPageWithRouter from "../ReviewPage/ReviewPage";
+import ReviewListPageWithRouter from "../ReviewListPage/ReviewListPage";
 import UserProviderWithRouter from "../../context/UserContext";
 import FooterWithRouter from "../Footer/Footer";
 import DocumentPreviewWithRouter from "../DocumentPreview/DocumentPreview";
@@ -46,7 +47,7 @@ class App extends React.Component<PropsType, StateType> {
 
 						{/*Review Page*/}
 						<Route exact path="/:consultationId/review">
-							<ReviewPageWithRouter/>
+							<ReviewPageWithRouter />
 						</Route>
 
 						{/*404*/}

@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { withRouter, Link } from "react-router-dom";
 import { load } from "./../../data/loader";
 import preload from "../../data/pre-loader";
@@ -444,44 +444,48 @@ export class CommentList extends Component<PropsType, StateType> {
 
 								contextValue.isAuthorised ?
 
-									this.props.viewComments ?
+									<Fragment>
+									 	{(this.prop.isReviewPage || !this.props.viewComments) && (
+											<div>
+												<p>We would like to hear your views on the draft recommendations presented in the guideline, and any comments you may have on the rationale and impact sections in the guideline and the evidence presented in the evidence reviews documents. We would also welcome views on the Equality Impact Assessment.</p>
+												<p>We would like to hear your views on these questions:</p>
+												<ul className="CommentList list--unstyled">
+													{questionsToShow.map((question) => {
+														return (
+															<Question
+																readOnly={!this.state.allowComments || this.props.isSubmitted}
+																isVisible={this.props.isVisible}
+																key={question.questionId}
+																unique={`Comment${question.questionId}`}
+																question={question}
+																saveAnswerHandler={this.saveAnswerHandler}
+																deleteAnswerHandler={this.deleteAnswerHandler}
+															/>
+														);
+													})}
+												</ul>
+											</div>
+										)}
 
-										commentsToShow.length === 0 ? <p>No comments yet</p> :
-											<ul className="CommentList list--unstyled">
-												{commentsToShow.map((comment) => {
-													return (
-														<CommentBox
-															readOnly={!this.state.allowComments || this.props.isSubmitted}
-															isVisible={this.props.isVisible}
-															key={comment.commentId}
-															unique={`Comment${comment.commentId}`}
-															comment={comment}
-															saveHandler={this.saveCommentHandler}
-															deleteHandler={this.deleteCommentHandler}
-														/>
-													);
-												})}
-											</ul>
-										:
-										<div>
-											<p>We would like to hear your views on the draft recommendations presented in the guideline, and any comments you may have on the rationale and impact sections in the guideline and the evidence presented in the evidence reviews documents. We would also welcome views on the Equality Impact Assessment.</p>
-											<p>We would like to hear your views on these questions:</p>
-											<ul className="CommentList list--unstyled">
-												{questionsToShow.map((question) => {
-													return (
-														<Question
-															readOnly={!this.state.allowComments || this.props.isSubmitted}
-															isVisible={this.props.isVisible}
-															key={question.questionId}
-															unique={`Comment${question.questionId}`}
-															question={question}
-															saveAnswerHandler={this.saveAnswerHandler}
-															deleteAnswerHandler={this.deleteAnswerHandler}
-														/>
-													);
-												})}
-											</ul>
-										</div>
+										{(this.prop.isReviewPage || this.props.viewComments) && (
+											commentsToShow.length === 0 ? <p>No comments yet</p> :
+												<ul className="CommentList list--unstyled">
+													{commentsToShow.map((comment) => {
+														return (
+															<CommentBox
+																readOnly={!this.state.allowComments || this.props.isSubmitted}
+																isVisible={this.props.isVisible}
+																key={comment.commentId}
+																unique={`Comment${comment.commentId}`}
+																comment={comment}
+																saveHandler={this.saveCommentHandler}
+																deleteHandler={this.deleteCommentHandler}
+															/>
+														);
+													})}
+												</ul>
+										)}
+									</Fragment>
 									:
 									<LoginBanner
 										signInButton={true}
