@@ -2,7 +2,7 @@ import {Endpoints, BaseUrl} from "./endpoints";
 import axios from "axios";
 import https from "https";
 
-import {objectToQueryString, replaceFormat} from "./../helpers/utils";
+import {objectToQueryString, replaceFormat} from "../helpers/utils";
 //import stringifyObject from "stringify-object";
 
 /**

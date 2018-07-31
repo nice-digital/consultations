@@ -58,3 +58,29 @@ export function replaceFormat(stringToReplace, args) {
  * @returns {Boolean}
  */
 export const isHttpLink = link => link.indexOf("http") === 0;
+
+// Remove querystring parameters from a given URL
+export const removeQueryParameter =
+	(url: string, parameter: string, value: ?string = null): string => {
+		const urlParts = url.split("?");
+
+		if (urlParts.length < 2)
+			return url;
+
+		let urlParams = urlParts[1].split(/[&;]/g);
+
+		for (var i = urlParams.length; i-- > 0;) {
+			const parParts = urlParams[i].split("=");
+
+			if (parParts[0].toLowerCase() === parameter.toLowerCase()
+				&& (!value || (value && value.toLowerCase() === (parParts[1] || "").toLowerCase()))) {
+				urlParams.splice(i, 1);
+			}
+		}
+
+		const queryString = (urlParams.length > 0 ? "?" + urlParams.join("&") : "");
+		return urlParts[0] + queryString;
+	};
+
+export const appendQueryParameter =
+	(url: string, parameter: string, value: string): string => `${url}${url.indexOf("?") === -1 ? "?" : "&"}${parameter}=${value}`;

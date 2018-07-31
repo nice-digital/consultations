@@ -2,11 +2,11 @@
 
 import React, { Component, Fragment } from "react";
 import { withRouter, Link } from "react-router-dom";
-import { load } from "./../../data/loader";
+import { load } from "../../data/loader";
 import preload from "../../data/pre-loader";
 import { CommentBox } from "../CommentBox/CommentBox";
 import { Question } from "../Question/Question";
-import { LoginBanner } from "./../LoginBanner/LoginBanner";
+import { LoginBanner } from "../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
 import { queryStringToObject, replaceFormat } from "../../helpers/utils";
 import {pullFocusById} from "../../helpers/accessibility-helpers";

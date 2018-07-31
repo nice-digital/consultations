@@ -1,13 +1,13 @@
 import React, { Component, Fragment } from "react";
 import CommentListWithRouter from "../CommentList/CommentList";
 import { withRouter } from "react-router";
-import { load } from "./../../data/loader";
+import { load } from "../../data/loader";
 import { Header } from "../Header/Header";
-import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
+import { PhaseBanner } from "../PhaseBanner/PhaseBanner";
 import { projectInformation } from "../../constants";
-import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
+import { BreadCrumbs } from "../Breadcrumbs/Breadcrumbs";
 import { StickyContainer, Sticky } from "react-sticky";
-import { StackedNav } from "./../StackedNav/StackedNav";
+import { StackedNav } from "../StackedNav/StackedNav";
 import { queryStringToObject } from "../../helpers/utils";
 import { UserContext } from "../../context/UserContext";
 import { pullFocusById } from "../../helpers/accessibility-helpers";

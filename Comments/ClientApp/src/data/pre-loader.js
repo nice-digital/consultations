@@ -38,7 +38,7 @@ const preload = (staticContext, endpoint,  urlParameters = [], query = {}, prelo
 				throw new Error(err);
 			}
 			//else{
-				//console.log(err); //this console.log is server-side, so not useful anywhere except locally.
+			//console.log(err); //this console.log is server-side, so not useful anywhere except locally.
 			//}
 		});
 
