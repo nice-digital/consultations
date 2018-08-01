@@ -195,13 +195,13 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 										<StickyContainer className="grid">
 											<div data-g="12 md:9 md:push:3">
 
-												<CommentListWithRouter
+												{/* <CommentListWithRouter
 													isReviewPage={true}
 													isVisible={true}
 													isSubmitted={this.state.userHasSubmitted}
 													wrappedComponentRef={component => (this.questionList = component)}
 													submittedHandler={this.submittedHandler}
-													validationHander={this.validationHander} />
+													validationHander={this.validationHander} /> */}
 												
 												{this.state.userHasSubmitted ?
 													<div className="hero">
@@ -256,7 +256,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 												<Sticky disableHardwareAcceleration>
 													{({ style }) => (
 														<div style={style}>
-															{/* <FilterPanel filters={this.state.model.filters} path={this.state.path} /> */}
+															{/* <FilterPanel filters={this.commentList.getFilters()} path={"/1/review"} /> */}
 														</div>
 													)}
 												</Sticky>

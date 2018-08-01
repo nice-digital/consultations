@@ -89,7 +89,8 @@ type StateType = {
 	comments: Array<CommentType>,
 	questions: Array<QuestionType>,
 	loading: boolean,
-	allowComments: boolean
+	allowComments: boolean,
+	filters: any //TODO: specify type!
 };
 
 type ContextType = any;
@@ -101,7 +102,8 @@ export class CommentList extends Component<PropsType, StateType> {
 			comments: [],
 			questions: [],
 			loading: true,
-			allowComments: true
+			allowComments: true,
+			filters: null,
 		};
 		let preloadedData = {};
 		if (this.props.staticContext && this.props.staticContext.preload) {
@@ -136,7 +138,8 @@ export class CommentList extends Component<PropsType, StateType> {
 				comments: preloaded.comments,
 				filteredComments: [],
 				questions: preloaded.questions,
-				allowComments: allowComments
+				allowComments: allowComments,
+				filters: preloaded.filters,
 			};
 		}
 	}
@@ -156,11 +159,10 @@ export class CommentList extends Component<PropsType, StateType> {
 		// }
 
 		let sourceURI = this.props.match.url;
-		if (this.props.isReviewPage)
-		{
-			sourceURI = replaceFormat("/{0}/{1}/{2}", [this.props.match.params.consultationId, 0, "Review"]);
-
-		}
+		// if (this.props.isReviewPage)
+		// {
+		// 	sourceURI = replaceFormat("/{0}/{1}/{2}", [this.props.match.params.consultationId, 0, "Review"]);
+		// }
 		// console.log(sourceURI);
 
 		load("comments", undefined, [], { sourceURI: sourceURI, isReview: this.props.isReviewPage }).then(
@@ -179,25 +181,26 @@ export class CommentList extends Component<PropsType, StateType> {
 			comments,
 			questions,
 			loading: false,
-			allowComments: allowComments
+			allowComments: allowComments,
+			filters: response.data.filters,
 		});
-		this.updateTabs();
+		//this.updateTabs();
 	};
 
 	componentDidMount() {
 		this.loadComments();
 		//let tabs = new Tabs(this._tabs);
-		this.updateTabs();
+	//	this.updateTabs();
 	}
 
-	updateTabs = () => {
-		if (window){
-			window.dispatchEvent(new CustomEvent("commentList_did_mount", {}));
-			window.setTimeout(function(){
-				window.dispatchEvent(new CustomEvent("commentList_did_mount", {}));
-			}, 500);
-		}
-	}
+	// updateTabs = () => {
+	// 	if (window){
+	// 		window.dispatchEvent(new CustomEvent("commentList_did_mount", {}));
+	// 		window.setTimeout(function(){
+	// 			window.dispatchEvent(new CustomEvent("commentList_did_mount", {}));
+	// 		}, 500);
+	// 	}
+	// }
 
 	componentDidUpdate(prevProps: PropsType, prevState: any, nextContent: any) {
 		const oldRoute = prevProps.location.pathname + prevProps.location.search;
@@ -216,6 +219,10 @@ export class CommentList extends Component<PropsType, StateType> {
 
 	getQuestions = () => {
 		return this.state.questions;
+	}
+
+	getFilters = () => {
+		return this.state.filters;
 	}
 
 	// submitComments = () => {
@@ -239,27 +246,27 @@ export class CommentList extends Component<PropsType, StateType> {
 	// 		});
 	// }
 
-	filterComments = (newSourceURIToFilterBy: string, comments: Array<CommentType>): Array<CommentType> => {
-		let filterBy = queryStringToObject(newSourceURIToFilterBy);
-		if (filterBy.sourceURI == null) filterBy = { sourceURI: "" };
-		const idsOfFilteredComments = comments.filter(comment => comment.sourceURI.indexOf(filterBy.sourceURI) !== -1).map(comment => comment.commentId);
+	// filterComments = (newSourceURIToFilterBy: string, comments: Array<CommentType>): Array<CommentType> => {
+	// 	let filterBy = queryStringToObject(newSourceURIToFilterBy);
+	// 	if (filterBy.sourceURI == null) filterBy = { sourceURI: "" };
+	// 	const idsOfFilteredComments = comments.filter(comment => comment.sourceURI.indexOf(filterBy.sourceURI) !== -1).map(comment => comment.commentId);
 
-		return comments.map(comment => {
-			comment.show = !idsOfFilteredComments.includes(comment.commentId);
-			return comment;
-		});
-	};
+	// 	return comments.map(comment => {
+	// 		comment.show = !idsOfFilteredComments.includes(comment.commentId);
+	// 		return comment;
+	// 	});
+	// };
 
-	filterQuestions = (newSourceURIToFilterBy: string, questions: Array<QuestionType>): Array<QuestionType> => {
-		let filterBy = queryStringToObject(newSourceURIToFilterBy);
-		if (filterBy.sourceURI == null) filterBy = { sourceURI: "" };
-		const idsOfFilteredComments = questions.filter(question => question.sourceURI.indexOf(filterBy.sourceURI) !== -1).map(question => question.questionId);
+	// filterQuestions = (newSourceURIToFilterBy: string, questions: Array<QuestionType>): Array<QuestionType> => {
+	// 	let filterBy = queryStringToObject(newSourceURIToFilterBy);
+	// 	if (filterBy.sourceURI == null) filterBy = { sourceURI: "" };
+	// 	const idsOfFilteredComments = questions.filter(question => question.sourceURI.indexOf(filterBy.sourceURI) !== -1).map(question => question.questionId);
 
-		return questions.map(question => {
-			question.show = !idsOfFilteredComments.includes(question.questionId);
-			return question;
-		});
-	};
+	// 	return questions.map(question => {
+	// 		question.show = !idsOfFilteredComments.includes(question.questionId);
+	// 		return question;
+	// 	});
+	// };
 
 	newComment(newComment: CommentType) {
 		let comments = this.state.comments;
