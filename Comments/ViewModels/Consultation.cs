@@ -6,7 +6,7 @@ namespace Comments.ViewModels
 {
 	public class Consultation
     {
-        public Consultation(NICE.Feeds.Models.Indev.List.ConsultationBase consultation, User user, IEnumerable<BreadcrumbLink> breadcrumbs = null, ConsultationState consultationState = null)
+        public Consultation(NICE.Feeds.Models.Indev.List.ConsultationBase consultation, User user, IEnumerable<BreadcrumbLink> breadcrumbs = null, ConsultationState consultationState = null, IEnumerable<TopicListFilterGroup> filters = null)
         {
             Reference = consultation.Reference;
             Title = consultation.Title;
@@ -28,6 +28,7 @@ namespace Comments.ViewModels
             User = user;
 	        Breadcrumbs = breadcrumbs;
 	        ConsultationState = consultationState;
+	        Filters = filters;
         }
 
         [JsonConstructor]
@@ -79,5 +80,7 @@ namespace Comments.ViewModels
 		public ConsultationState ConsultationState { get; private set; }
 
 		public IEnumerable<BreadcrumbLink> Breadcrumbs { get; private set; }
-    }
+
+	    public IEnumerable<TopicListFilterGroup> Filters { get; private set; }
+	}
 }

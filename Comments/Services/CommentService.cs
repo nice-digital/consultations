@@ -120,17 +120,14 @@ namespace Comments.Services
 		    {
 			    consultationState = _consultationService.GetConsultationState(consultationSourceURI);
 				return new CommentsAndQuestions(new List<ViewModels.Comment>(), new List<ViewModels.Question>(),
-				    user.IsAuthorised, signInURL, consultationState, filters: null);
+				    user.IsAuthorised, signInURL, consultationState);
 		    }
 
 		    var sourceURIs = new List<string> { consultationSourceURI };
-		    IEnumerable<TopicListFilterGroup> filters = null;
-			if (!isReview)
-			{
+		    if (!isReview)
+		    {
 				sourceURIs.Add(ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Document));
-				sourceURIs.Add(ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Chapter));
-
-				filters = AppSettings.ReviewConfig.Filters;
+			    sourceURIs.Add(ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Chapter));
 			}
 
 			var locations = _context.GetAllCommentsAndQuestionsForDocument(sourceURIs, isReview).ToList();
@@ -139,7 +136,7 @@ namespace Comments.Services
 
 		    consultationState = _consultationService.GetConsultationState(consultationSourceURI, locations);
 
-			return new CommentsAndQuestions(data.comments, data.questions, user.IsAuthorised, signInURL, consultationState, filters);
+			return new CommentsAndQuestions(data.comments, data.questions, user.IsAuthorised, signInURL, consultationState);
 	    }
 	}
 }

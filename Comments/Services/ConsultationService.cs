@@ -7,6 +7,7 @@ using System.Linq;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Razor.Language.Intermediate;
 using Comments.Common;
+using Comments.Configuration;
 using Comments.Models;
 using NICE.Feeds.Models.Indev.Chapter;
 using NICE.Feeds.Models.Indev.Detail;
@@ -85,7 +86,8 @@ namespace Comments.Services
 	        var consultationDetail = GetConsultationDetail(consultationId);
 	        var consultationState = GetConsultationState(consultationId, null, consultationDetail);
 	        var breadcrumbs = GetBreadcrumbs(consultationDetail, isReview);
-            return new ViewModels.Consultation(consultationDetail, user, breadcrumbs, consultationState);
+	        var filters = isReview ? AppSettings.ReviewConfig.Filters : null;
+            return new ViewModels.Consultation(consultationDetail, user, breadcrumbs, consultationState, filters);
         }
 
 	    public IEnumerable<BreadcrumbLink> GetBreadcrumbs(ConsultationDetail consultation, bool isReview)

@@ -90,7 +90,6 @@ type StateType = {
 	questions: Array<QuestionType>,
 	loading: boolean,
 	allowComments: boolean,
-	filters: any //TODO: specify type!
 };
 
 type ContextType = any;
@@ -103,7 +102,6 @@ export class CommentList extends Component<PropsType, StateType> {
 			questions: [],
 			loading: true,
 			allowComments: true,
-			filters: null,
 		};
 		let preloadedData = {};
 		if (this.props.staticContext && this.props.staticContext.preload) {
@@ -138,8 +136,7 @@ export class CommentList extends Component<PropsType, StateType> {
 				comments: preloaded.comments,
 				filteredComments: [],
 				questions: preloaded.questions,
-				allowComments: allowComments,
-				filters: preloaded.filters,
+				allowComments: allowComments
 			};
 		}
 	}
@@ -165,7 +162,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		// }
 		// console.log(sourceURI);
 
-		load("comments", undefined, [], { sourceURI: sourceURI, isReview: this.props.isReviewPage }).then(
+		load("comments", undefined, [], { sourceURI: sourceURI }).then(
 			res => {
 				this.setCommentListState(res);
 			})
@@ -182,7 +179,6 @@ export class CommentList extends Component<PropsType, StateType> {
 			questions,
 			loading: false,
 			allowComments: allowComments,
-			filters: response.data.filters,
 		});
 		//this.updateTabs();
 	};
@@ -219,10 +215,6 @@ export class CommentList extends Component<PropsType, StateType> {
 
 	getQuestions = () => {
 		return this.state.questions;
-	}
-
-	getFilters = () => {
-		return this.state.filters;
 	}
 
 	// submitComments = () => {

@@ -28,7 +28,8 @@ type StateType = {
 	consultationData: ConsultationDataType,
 	userHasSubmitted: boolean,
 	validToSubmit: false,
-	viewSubmittedComments: boolean
+	viewSubmittedComments: boolean,
+	filters: any //TODO: specify type!
 };
 
 export class ReviewListPage extends Component<PropsType, StateType> {
@@ -41,6 +42,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			userHasSubmitted: false,
 			viewSubmittedComments: false,
 			validToSubmit: false,
+			filters: null,
 		};
 	}
 
@@ -75,7 +77,8 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 				this.setState({
 					...data,
 					userHasSubmitted: data.consultationData.consultationState.userHasSubmitted,
-					validToSubmit: data.consultationData.consultationState.supportsSubmission
+					validToSubmit: data.consultationData.consultationState.supportsSubmission,
+					filters: data.consultationData.filters,
 				});
 			})
 			.catch(err => {
@@ -100,8 +103,8 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		const comments = this.commentList.getComments();
 		let answersToSubmit = [];
 
-		if (typeof(this.questionList) !== "undefined"){
-			const questions = this.questionList.getQuestions();
+		if (typeof(this.commentList) !== "undefined"){
+			const questions = this.commentList.getQuestions();
 			questions.forEach(function(question){
 				if (question.answers != null){
 					answersToSubmit = answersToSubmit.concat(question.answers);
@@ -135,8 +138,8 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 	validationHander = () => {
 		const comments = this.commentList.getComments();
 		let hasAnswers = false;
-		if (typeof(this.questionList) !== "undefined"){
-			const questions = this.questionList.getQuestions();
+		if (typeof(this.commentList) !== "undefined"){
+			const questions = this.commentList.getQuestions();
 
 			questions.forEach(function(question){
 				if (question.answers !== null && question.answers.length > 0){
@@ -195,13 +198,13 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 										<StickyContainer className="grid">
 											<div data-g="12 md:9 md:push:3">
 
-												{/* <CommentListWithRouter
+												<CommentListWithRouter
 													isReviewPage={true}
 													isVisible={true}
 													isSubmitted={this.state.userHasSubmitted}
-													wrappedComponentRef={component => (this.questionList = component)}
+													wrappedComponentRef={component => (this.commentList = component)}
 													submittedHandler={this.submittedHandler}
-													validationHander={this.validationHander} /> */}
+													validationHander={this.validationHander} />
 												
 												{this.state.userHasSubmitted ?
 													<div className="hero">
@@ -256,7 +259,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 												<Sticky disableHardwareAcceleration>
 													{({ style }) => (
 														<div style={style}>
-															{/* <FilterPanel filters={this.commentList.getFilters()} path={"/1/review"} /> */}
+															<FilterPanel filters={this.state.filters} path={"/1/review"} />
 														</div>
 													)}
 												</Sticky>

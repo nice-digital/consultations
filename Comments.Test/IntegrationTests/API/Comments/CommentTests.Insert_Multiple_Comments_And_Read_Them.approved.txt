@@ -78,6 +78,5 @@
         "consultationHasEnded":false,
         "supportsSubmission":false,
         "supportsDownload":false
-    },
-    "filters":null
+    }
 }

@@ -4,14 +4,13 @@ namespace Comments.ViewModels
 {
 	public class CommentsAndQuestions
     {
-	    public CommentsAndQuestions(IList<Comment> comments, IList<Question> questions, bool isAuthorised, string signInURL, ConsultationState consultationState, IEnumerable<TopicListFilterGroup> filters)
+	    public CommentsAndQuestions(IList<Comment> comments, IList<Question> questions, bool isAuthorised, string signInURL, ConsultationState consultationState)
 	    {
 		    Comments = comments;
 		    Questions = questions;
 		    IsAuthorised = isAuthorised;
 		    SignInURL = signInURL;
 		    ConsultationState = consultationState;
-		    Filters = filters;
 	    }
 
 	    public IList<ViewModels.Comment> Comments { get; private set; }
@@ -23,7 +22,5 @@ namespace Comments.ViewModels
         public string SignInURL { get; private set; }
 
 		public ConsultationState ConsultationState { get; private set; }
-
-	    public IEnumerable<TopicListFilterGroup> Filters { get; private set; }
 	}
 }
