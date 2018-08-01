@@ -93,7 +93,7 @@ export const serverRenderer = (params): Promise => {
 				return;
 			}
 			// In development show a nice YSOD to devs with the error message
-			const error = <Error error={e} />;
+			const error = <Error error={e}/>;
 			rootContent = renderToString(error);
 			
 			resolve({ html: rootContent, statusCode: staticContext.status || 500 });
