@@ -175,11 +175,7 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                 <div />
                 <div
                   style={Object {}}
-                >
-                  <h3>
-                    filter panels here.
-                  </h3>
-                </div>
+                />
               </div>
             </div>
           </div>

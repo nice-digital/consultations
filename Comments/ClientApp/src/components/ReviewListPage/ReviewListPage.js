@@ -13,6 +13,7 @@ import { StackedNav } from "../StackedNav/StackedNav";
 import { queryStringToObject } from "../../helpers/utils";
 import { UserContext } from "../../context/UserContext";
 import { pullFocusById } from "../../helpers/accessibility-helpers";
+import { FilterPanel } from "../FilterPanel/FilterPanel";
 //import stringifyObject from "stringify-object";
 
 type PropsType = {
@@ -255,7 +256,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 												<Sticky disableHardwareAcceleration>
 													{({ style }) => (
 														<div style={style}>
-															<h3>filter panels here.</h3>
+															{/* <FilterPanel filters={this.state.model.filters} path={this.state.path} /> */}
 														</div>
 													)}
 												</Sticky>

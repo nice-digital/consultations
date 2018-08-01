@@ -1,4 +1,4 @@
-﻿namespace Comments.Models
+namespace Comments.Models
 {   
     public class ConsultationsUriElements
     {
@@ -12,7 +12,7 @@
         public int? DocumentId { get; set; }
         public string ChapterSlug { get; set; }
 
-        public bool IsConsultationLevel()
+		public bool IsConsultationLevel()
         {
             return !DocumentId.HasValue;
         }

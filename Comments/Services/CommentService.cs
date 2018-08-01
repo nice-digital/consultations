@@ -10,7 +10,7 @@ namespace Comments.Services
 {
 	public interface ICommentService
     {
-	    CommentsAndQuestions GetCommentsAndQuestions(string relativeURL, bool isReview = false);
+	    CommentsAndQuestions GetCommentsAndQuestions(string relativeURL);
 		(ViewModels.Comment comment, Validate validate) GetComment(int commentId);
         (int rowsUpdated, Validate validate) EditComment(int commentId, ViewModels.Comment comment);
         (ViewModels.Comment comment, Validate validate) CreateComment(ViewModels.Comment comment);
@@ -107,11 +107,12 @@ namespace Comments.Services
             return (rowsUpdated: _context.SaveChanges(), validate: null);
         }
 
-	    public CommentsAndQuestions GetCommentsAndQuestions(string relativeURL, bool isReview = false)
+	    public CommentsAndQuestions GetCommentsAndQuestions(string relativeURL)
 	    {
 		    var user = _userService.GetCurrentUser();
 		    var signInURL = _authenticateService.GetLoginURL(relativeURL.ToConsultationsRelativeUrl());
-		    var consultationSourceURI = ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Consultation);
+		    var isReview = ConsultationsUri.IsReviewPageRelativeUrl(relativeURL);
+			var consultationSourceURI = ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Consultation);
 		    ConsultationState consultationState;
 
 		    if (!user.IsAuthorised)

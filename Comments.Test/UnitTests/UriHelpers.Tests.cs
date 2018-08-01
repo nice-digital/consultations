@@ -76,5 +76,20 @@ namespace Comments.Test.UnitTests
 		    //Assert
 		    uri.ShouldBe("consultations://./consultation/10/document/100");
 	    }
+
+	    [Theory]
+		[InlineData("/1/review", true)]
+	    [InlineData("/1/REVIEW", true)]
+	    [InlineData("/1/Review", true)]
+	    [InlineData("/999/Review", true)]
+	    [InlineData("/1/1/introduction", false)]
+		public void IsReviewPageRelativeUrlParsesCorrectly(string relativeURL, bool expectedOutput)
+	    {
+			//Arrange + Act
+		    var actualOutput = ConsultationsUri.IsReviewPageRelativeUrl(relativeURL);
+
+		    //Assert
+		    actualOutput.ShouldBe(expectedOutput);
+		}
 	}
 }
