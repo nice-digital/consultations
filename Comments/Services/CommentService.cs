@@ -5,6 +5,7 @@ using NICE.Auth.NetCore.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Comments.Configuration;
 
 namespace Comments.Services
 {
@@ -119,15 +120,17 @@ namespace Comments.Services
 		    {
 			    consultationState = _consultationService.GetConsultationState(consultationSourceURI);
 				return new CommentsAndQuestions(new List<ViewModels.Comment>(), new List<ViewModels.Question>(),
-				    user.IsAuthorised, signInURL, consultationState);
+				    user.IsAuthorised, signInURL, consultationState, filters: null);
 		    }
 
 		    var sourceURIs = new List<string> { consultationSourceURI };
-
+		    IEnumerable<TopicListFilterGroup> filters = null;
 			if (!isReview)
 			{
 				sourceURIs.Add(ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Document));
 				sourceURIs.Add(ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Chapter));
+
+				filters = AppSettings.ReviewConfig.Filters;
 			}
 
 			var locations = _context.GetAllCommentsAndQuestionsForDocument(sourceURIs, isReview).ToList();
@@ -136,7 +139,7 @@ namespace Comments.Services
 
 		    consultationState = _consultationService.GetConsultationState(consultationSourceURI, locations);
 
-			return new CommentsAndQuestions(data.comments, data.questions, user.IsAuthorised, signInURL, consultationState);
+			return new CommentsAndQuestions(data.comments, data.questions, user.IsAuthorised, signInURL, consultationState, filters);
 	    }
 	}
 }
