@@ -1,3 +1,5 @@
+// @flow
+
 import React, { Component, Fragment } from "react";
 import CommentListWithRouter from "../CommentList/CommentList";
 import { withRouter } from "react-router";

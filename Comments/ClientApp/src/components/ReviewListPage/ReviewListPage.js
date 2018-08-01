@@ -1,3 +1,5 @@
+// @flow
+
 import React, { Component, Fragment } from "react";
 import CommentListWithRouter from "../CommentList/CommentList";
 import { withRouter } from "react-router";
@@ -12,26 +14,6 @@ import { queryStringToObject } from "../../helpers/utils";
 import { UserContext } from "../../context/UserContext";
 import { pullFocusById } from "../../helpers/accessibility-helpers";
 //import stringifyObject from "stringify-object";
-
-type DocumentType = {
-	title: string,
-	sourceURI: string,
-	convertedDocument: boolean
-};
-
-type ConsultationStateType = {
-	consultationIsOpen: boolean,
-	hasQuestions: boolean,
-	consultationHasEnded: boolean,
-	hasUserSuppliedAnswers: boolean,
-	hasUserSuppliedComments: boolean
-};
-
-type ConsultationDataType = {
-	consultationState: ConsultationStateType,
-	supportsComments: boolean,
-	supportsQuestions: boolean
-};
 
 type PropsType = {
 	location: {

@@ -2,7 +2,7 @@
 import React from "react";
 import { shallow } from "enzyme";
 
-import { FilterOption } from "./FilterOption";
+import { FilterOption } from "../FilterOption";
 
 describe("[TopicList]", () => {
 	describe("FilterOption", () => {

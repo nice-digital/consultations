@@ -84,3 +84,12 @@ export const removeQueryParameter =
 
 export const appendQueryParameter =
 	(url: string, parameter: string, value: string): string => `${url}${url.indexOf("?") === -1 ? "?" : "&"}${parameter}=${value}`;
+
+/// Determines if the execution environment is client or server
+/// See https://stackoverflow.com/a/32598826/486434
+export const canUseDOM = (): boolean => (
+	!!(
+		typeof window !== "undefined" &&
+		window.document &&
+		window.document.createElement
+	));

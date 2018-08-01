@@ -2,7 +2,7 @@
 import React from "react";
 import { mount } from "enzyme";
 
-import browserHistory from "../../helpers/history";
+import browserHistory from "../../../helpers/history";
 
 import { HistoryContext, Provider, Consumer, withHistory } from "../HistoryContext";
 
@@ -37,7 +37,7 @@ describe("[TopicList]", () => {
 				expect(typeof wrapped).toEqual("function");
 			});
 
-			it("passes props and default browser history to srapped component when not wrapped in provider", () => {
+			it("passes props and default browser history to wrapped component when not wrapped in provider", () => {
 
 				const TestComponent = () => <div />;
 				const WrappedTestComponent = withHistory(TestComponent);

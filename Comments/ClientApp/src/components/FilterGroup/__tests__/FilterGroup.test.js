@@ -4,7 +4,7 @@ import { shallow } from "enzyme";
 
 import { FilterGroup } from "../FilterGroup";
 
-jest.mock("./../HistoryContext/HistoryContext", () => {
+jest.mock("../../HistoryContext/HistoryContext", () => {
 	return {
 		withHistory: (Component) => {
 			return Component;

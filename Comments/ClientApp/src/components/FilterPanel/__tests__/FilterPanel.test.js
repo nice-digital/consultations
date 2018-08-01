@@ -3,7 +3,7 @@ import React from "react";
 import { shallow } from "enzyme";
 
 import { FilterPanel } from "../FilterPanel";
-import FilterGroup from "./../FilterGroup/FilterGroup";
+import { FilterGroup } from "../../FilterGroup/FilterGroup";
 
 describe("[TopicList]", () => {
 	describe("FilterPanel", () => {

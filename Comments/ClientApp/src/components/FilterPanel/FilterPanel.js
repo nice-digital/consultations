@@ -2,7 +2,7 @@
 
 import React, { Component } from "react";
 
-import FilterGroup from "../FilterGroup/FilterGroup";
+import { FilterGroup } from "../FilterGroup/FilterGroup";
 
 type PropsType = {
 	filters: TopicListFilterGroupType[],

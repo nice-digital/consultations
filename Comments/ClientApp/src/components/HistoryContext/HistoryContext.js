@@ -1,6 +1,6 @@
 import React from "react";
 
-import browserHistory from "./../../../helpers/history";
+import browserHistory from "../../helpers/history";
 
 export const HistoryContext = React.createContext({ history: browserHistory });
 
