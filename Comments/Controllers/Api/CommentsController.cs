@@ -9,7 +9,6 @@ namespace Comments.Controllers.Api
 {
     [Produces("application/json")]
     [Route("consultations/api/[controller]")]
-    [Authorize]
     public class CommentsController : ControllerBase
     {
         private readonly ICommentService _commentService;
