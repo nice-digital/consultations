@@ -24,65 +24,11 @@ type PropsType = {
 	},
 	isVisible: boolean,
 	isReviewPage: boolean,
-	filterByDocument: number,
+	//filterByDocument: number,
 	isSubmitted: boolean,
 	submittedHandler: Function,
 	validationHander: Function,
 	viewComments: boolean //when false, we view questions.
-};
-
-type StatusType = {
-	statusId: number,
-	name: string
-};
-
-type CommentType = {
-	commentId: number,
-	lastModifiedDate: Date,
-	lastModifiedByUserId: string,
-	commentText: string,
-	locationId: number,
-	sourceURI: string,
-	htmlElementID: string,
-	rangeStart: string,
-	rangeStartOffset: string,
-	rangeEnd: string,
-	rangeEndOffset: string,
-	quote: string,
-	commentOn: string,
-	show: boolean,
-	status: StatusType
-};
-
-type QuestionTypeType = {
-	description: string,
-	hasTextAnswer: boolean,
-	hasBooleanAnswer: boolean
-};
-
-type AnswerType = {
-	answerId: number,
-	answerText: string,
-	answerBoolean: boolean,
-	questionId: number,
-	lastModifiedDate: Date,
-	lastModifiedByUserId: string,
-	statusId: number,
-	status: StatusType
-};
-
-type QuestionType = {
-	questionId: number,
-	questionText: string,
-	questionTypeId: number,
-	questionOrder: number,
-	lastModifiedDate: Date,
-	lastModifiedByUserId: string,
-	questionType: QuestionTypeType,
-	answers: Array<AnswerType>,
-	show: boolean,
-	commentOn: string,
-	sourceURI: string,
 };
 
 type StateType = {
@@ -108,15 +54,6 @@ export class CommentList extends Component<PropsType, StateType> {
 			preloadedData = this.props.staticContext.preload.data; //this is data from Configure => SupplyData in Startup.cs. the main thing it contains for this call is the cookie for the current user.
 		}
 
-		// if (this.props.isReviewPage){
-		// 	const preloaded = preload(
-		// 		this.props.staticContext,
-		// 		"review",
-		// 		[],
-		// 		{ sourceURI: this.props.match.url },
-		// 		preloadedData
-		// 	);
-		// } else{
 		const preloaded = preload(
 			this.props.staticContext,
 			"comments",
@@ -124,7 +61,6 @@ export class CommentList extends Component<PropsType, StateType> {
 			{ sourceURI: this.props.match.url },
 			preloadedData
 		);
-		// }
 
 		if (preloaded) {
 
@@ -142,27 +78,7 @@ export class CommentList extends Component<PropsType, StateType> {
 	}
 
 	loadComments() {
-		// if (this.props.isReviewPage){
-		// 	load("review", undefined, [this.props.match.params.consultationId], {}) // todo: maybe this should us source URI instead of id... need to change feed to do this
-		//  	.then(
-		//  	 	res => {
-		//  	 		this.setCommentListState(res);
-		// 			});
-		// } else{
-		//  	load("comments", undefined, [], { sourceURI: this.props.match.url }).then(
-		//  		res => {
-		//  			this.setCommentListState(res);
-		//  		});
-		// }
-
-		let sourceURI = this.props.match.url;
-		// if (this.props.isReviewPage)
-		// {
-		// 	sourceURI = replaceFormat("/{0}/{1}/{2}", [this.props.match.params.consultationId, 0, "Review"]);
-		// }
-		// console.log(sourceURI);
-
-		load("comments", undefined, [], { sourceURI: sourceURI }).then(
+		load("comments", undefined, [], { sourceURI: this.props.match.url }).then(
 			res => {
 				this.setCommentListState(res);
 			})
@@ -180,23 +96,11 @@ export class CommentList extends Component<PropsType, StateType> {
 			loading: false,
 			allowComments: allowComments,
 		});
-		//this.updateTabs();
 	};
 
 	componentDidMount() {
 		this.loadComments();
-		//let tabs = new Tabs(this._tabs);
-	//	this.updateTabs();
 	}
-
-	// updateTabs = () => {
-	// 	if (window){
-	// 		window.dispatchEvent(new CustomEvent("commentList_did_mount", {}));
-	// 		window.setTimeout(function(){
-	// 			window.dispatchEvent(new CustomEvent("commentList_did_mount", {}));
-	// 		}, 500);
-	// 	}
-	// }
 
 	componentDidUpdate(prevProps: PropsType, prevState: any, nextContent: any) {
 		const oldRoute = prevProps.location.pathname + prevProps.location.search;
@@ -215,50 +119,7 @@ export class CommentList extends Component<PropsType, StateType> {
 
 	getQuestions = () => {
 		return this.state.questions;
-	}
-
-	// submitComments = () => {
-
-	// 	let answersToSubmit = [];
-	// 	this.state.questions.forEach(function(question){
-	// 		if (question.answers != null){
-	// 			answersToSubmit = answersToSubmit.concat(question.answers);
-	// 		}
-	// 	});
-
-	// 	let commentsAndAnswers = {comments: this.state.comments, answers: answersToSubmit};
-
-	// 	load("submit", undefined, [], {}, "POST", commentsAndAnswers, true)
-	// 		.then(res => {
-	// 			this.props.submittedHandler();
-	// 		})
-	// 		.catch(err => {
-	// 			console.log(err);
-	// 			if (err.response) alert(err.response.statusText);
-	// 		});
-	// }
-
-	// filterComments = (newSourceURIToFilterBy: string, comments: Array<CommentType>): Array<CommentType> => {
-	// 	let filterBy = queryStringToObject(newSourceURIToFilterBy);
-	// 	if (filterBy.sourceURI == null) filterBy = { sourceURI: "" };
-	// 	const idsOfFilteredComments = comments.filter(comment => comment.sourceURI.indexOf(filterBy.sourceURI) !== -1).map(comment => comment.commentId);
-
-	// 	return comments.map(comment => {
-	// 		comment.show = !idsOfFilteredComments.includes(comment.commentId);
-	// 		return comment;
-	// 	});
-	// };
-
-	// filterQuestions = (newSourceURIToFilterBy: string, questions: Array<QuestionType>): Array<QuestionType> => {
-	// 	let filterBy = queryStringToObject(newSourceURIToFilterBy);
-	// 	if (filterBy.sourceURI == null) filterBy = { sourceURI: "" };
-	// 	const idsOfFilteredComments = questions.filter(question => question.sourceURI.indexOf(filterBy.sourceURI) !== -1).map(question => question.questionId);
-
-	// 	return questions.map(question => {
-	// 		question.show = !idsOfFilteredComments.includes(question.questionId);
-	// 		return question;
-	// 	});
-	// };
+	}	
 
 	newComment(newComment: CommentType) {
 		let comments = this.state.comments;
