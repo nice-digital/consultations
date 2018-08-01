@@ -5,7 +5,7 @@ import { mount, shallow } from "enzyme";
 import { MemoryRouter } from "react-router";
 import CommentListWithRouter, { CommentList } from "../CommentList";
 import axios from "axios";
-import MockAdapter from "axios-mock-adapter/types";
+import MockAdapter from "axios-mock-adapter";
 import { generateUrl } from "../../../data/loader";
 import sampleComments from "./sample";
 import reviewComments from "./reviewComments";

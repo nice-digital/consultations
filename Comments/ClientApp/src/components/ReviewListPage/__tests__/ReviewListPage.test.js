@@ -4,7 +4,7 @@ import React from "react";
 import { mount, shallow } from "enzyme";
 import { MemoryRouter } from "react-router";
 import axios from "axios";
-import MockAdapter from "axios-mock-adapter/types";
+import MockAdapter from "axios-mock-adapter";
 import toJson from "enzyme-to-json";
 
 import { generateUrl } from "../../../data/loader";
