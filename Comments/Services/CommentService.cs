@@ -138,5 +138,53 @@ namespace Comments.Services
 
 			return new CommentsAndQuestions(data.comments, data.questions, user.IsAuthorised, signInURL, consultationState);
 	    }
+
+		/// <summary>
+		/// TODO: this needs to change to pass in the state of the filters.
+		/// </summary>
+		/// <param name="consultationId"></param>
+		/// <param name="commentsAndQuestions"></param>
+		/// <returns></returns>
+	    public IEnumerable<TopicListFilterGroup> GetFilterGroups(int consultationId, CommentsAndQuestions commentsAndQuestions)
+	    {
+		    var filters = AppSettings.ReviewConfig.Filters;
+
+		    var questionsAndCommentsFilter = filters.Single(f => f.Id.Equals("questionscomments", StringComparison.OrdinalIgnoreCase));
+			var questionOption = questionsAndCommentsFilter.Options.Single(o => o.Id.Equals("questions", StringComparison.OrdinalIgnoreCase));
+		    var commentsOption = questionsAndCommentsFilter.Options.Single(o => o.Id.Equals("comments", StringComparison.OrdinalIgnoreCase));
+			
+		    var documentsFilter = filters.Single(f => f.Id.Equals("documents", StringComparison.OrdinalIgnoreCase));
+
+			//questions
+			questionOption.IsSelected = false; //todo 
+		    questionOption.FilteredResultCount = commentsAndQuestions.Questions.Count(q => q.Answers != null && q.Answers.Any()); //todo 
+			questionOption.UnfilteredResultCount = commentsAndQuestions.Questions.Count(); //todo 
+
+			//comments
+			commentsOption.IsSelected = false; //todo 
+		    commentsOption.FilteredResultCount = commentsAndQuestions.Comments.Count(); //todo 
+			commentsOption.UnfilteredResultCount = commentsAndQuestions.Comments.Count(); //todo 
+
+			//populate documents
+			var documents = _consultationService.GetDocuments(consultationId).ToList();
+		    documentsFilter.Options = new List<TopicListFilterOption>(documents.Count());
+
+			foreach (var document in documents)
+			{
+				documentsFilter.Options.Add(
+					new TopicListFilterOption($"doc-{document.DocumentId}", document.Title, isSelected: false) //todo
+					{
+						//todo 
+						FilteredResultCount = commentsAndQuestions.Comments.Count(c => c.DocumentId.HasValue && c.DocumentId.Equals(document.DocumentId)) +
+						                      commentsAndQuestions.Questions.Count(q => q.DocumentId.HasValue && q.DocumentId.Equals(document.DocumentId) && q.Answers != null && q.Answers.Any()), //this assumes 1 answer per question. no good for admins..
+
+						//todo 
+						UnfilteredResultCount = commentsAndQuestions.Comments.Count() +
+						                        commentsAndQuestions.Questions.Count()
+					}
+				);
+		    }
+			return filters;
+	    }
 	}
 }

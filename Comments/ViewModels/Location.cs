@@ -1,4 +1,5 @@
 using System;
+using Comments.Common;
 
 namespace Comments.ViewModels
 {
@@ -46,6 +47,21 @@ namespace Comments.ViewModels
 				    _commentOn = parsedEnum;
 			    }
 		    }
+	    }
+
+	    private const int UnsetDocumentIdValue = 0;
+	    private int? _documentId = UnsetDocumentIdValue;
+	    public int? DocumentId
+	    {
+		    get
+		    {
+			    if (_documentId == UnsetDocumentIdValue)
+			    {
+				    _documentId = ConsultationsUri.ParseConsultationsUri(SourceURI).DocumentId;
+			    }
+			    return _documentId;
+		    }
+		    set => _documentId = value;
 	    }
 	}
 }

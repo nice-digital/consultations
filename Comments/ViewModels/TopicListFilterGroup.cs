@@ -8,6 +8,6 @@ namespace Comments.ViewModels
 
         public string Title { get; set; }
 
-        public IEnumerable<TopicListFilterOption> Options { get; set; }
+        public IList<TopicListFilterOption> Options { get; set; }
     }
 }

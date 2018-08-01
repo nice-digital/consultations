@@ -90,6 +90,9 @@ namespace Comments.Services
             return new ViewModels.Consultation(consultationDetail, user, breadcrumbs, consultationState, filters);
         }
 
+
+
+
 	    public IEnumerable<BreadcrumbLink> GetBreadcrumbs(ConsultationDetail consultation, bool isReview)
 	    {
 			var breadcrumbs = new List<BreadcrumbLink>{
