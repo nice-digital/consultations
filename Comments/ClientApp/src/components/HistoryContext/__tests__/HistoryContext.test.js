@@ -2,9 +2,9 @@
 import React from "react";
 import { mount } from "enzyme";
 
-import browserHistory from "./../../../helpers/history";
+import browserHistory from "../../helpers/history";
 
-import { HistoryContext, Provider, Consumer, withHistory } from "./HistoryContext";
+import { HistoryContext, Provider, Consumer, withHistory } from "../HistoryContext";
 
 function mockReact() {
 	const original = require.requireActual("react");
