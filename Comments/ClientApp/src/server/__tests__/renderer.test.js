@@ -16,13 +16,13 @@ describe("Server renderer", () => {
 			});
 		});
 
-		it("resolves promise with error component and 500 status when app rendering fails in development", (done) => {
+		it("resolves promise with error component when app rendering fails in development", (done) => {
 			process.env.NODE_ENV = "development";
 
 			serverRenderer({ data: { viewModel: 99  } }).then((result) => {
 				expect(result.statusCode).toEqual(404);
 				console.log(result.html);
-				var pos = result.html.search("<main role=\"main\" data-reactroot=\"\"><div class=\"container\"><div class=\"panel page-header\"><h1 class=\"heading mt--c\">Something&#x27;s gone wrong</h1><p class=\"lead\">We&#x27;ll look into it right away. Please try again in a few minutes. And if it&#x27;s still not fixed, <a href=\"/get-involved/contact-us\">contact us</a>.</p><p><a href=\"~/guidance/inconsultation\">Back to consultations</a></p><div class=\"hide\">");
+				var pos = result.html.search("<div class=\"container\" data-reactroot=\"\"><div class=\"alert\"><h2 class=\"page-header__heading mt--0\"><span class=\"icon icon--warning\" aria-hidden=\"true\"></span> <!-- -->TypeError</h2><p class=\"page-header__lead\">");
 				expect(pos).toEqual(0);
 				done();				
 			});

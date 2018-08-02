@@ -28,7 +28,7 @@
                       Back to consultations
                     </a>
                   </p>
-                  <div style="display: none">
+                  <div class="hide">
                     "Error Message":"scrubbed by ScrubErrorMessage"
                     </div>
                   </div>

@@ -43,12 +43,25 @@ export class ErrorBoundary extends Component<PropsType, StateType> {
 	render() {
 		if (this.state.hasError) {
 			const error = {
-				name: "Error",
 				message: this.state.error.message,
 				stack: this.state.error.stack
 			};
-			// You can render any custom fallback UI
-			return <Error error={error}/>;
+
+			return (
+				<main role="main">
+					<div className="container">
+						<div className="panel page-header">
+							<h1 className="heading mt--c">Something's gone wrong</h1>
+							<p className="lead">We'll look into it right away. Please try again in a few minutes. And if it's still not fixed, <a href="/get-involved/contact-us">contact us</a>.</p>
+							<p><a href="~/guidance/inconsultation">Back to consultations</a></p>
+							<div className="hide">
+								{this.state.error.message}
+								{this.state.error.stack}
+							</div>
+						</div>
+					</div>
+				</main>
+			);
 		}
 		return this.props.children;
 	}
