@@ -24,7 +24,7 @@ export class Footer extends Component<PropsType, StateType> {
 
 		this.state = {
 			hasInitialData: false,
-			footerHTML: ""
+			footerHTML: "",
 		};
 
 		// if (this.props) {
@@ -73,8 +73,8 @@ export class Footer extends Component<PropsType, StateType> {
 		if (node.type === "text" && node.data.indexOf("[year]") !== -1){
 			const text = node.data.replace("[year]", new Date().getFullYear());
 			return (
-				<Fragment>{text}</Fragment>
-			)
+				<Fragment key="footer-date">{text}</Fragment>
+			);
 		}
 	}
 
