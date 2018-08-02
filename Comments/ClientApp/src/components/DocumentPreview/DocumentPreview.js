@@ -37,7 +37,11 @@ type StateType = {
 		title: string,
 		slug: string
 	},
-	allowComments: boolean
+	allowComments: boolean,
+	error: {
+		hasError: boolean,
+		message: string
+	}
 };
 
 export class DocumentPreview extends Component<PropsType, StateType> {
@@ -54,6 +58,10 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 			onboarded: false,
 			allowComments: true,
 			children: null,
+			error: {
+				hasError: false,
+				message: null
+			}
 		};
 
 		if (this.props) {
@@ -93,6 +101,10 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 					currentInPageNavItem: null,
 					onboarded: false,
 					allowComments: allowComments,
+					error: {
+						hasError: false,
+						message: null
+					}
 				};
 			}
 		}
@@ -111,7 +123,13 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 		})
 			.then(response => response.data)
 			.catch(err => {
-				throw new Error("previewChapterData " + err);
+				//throw new Error("previewChapterData " + err);
+				this.setState({
+					error: {
+						hasError: true,
+						message: "previewChapterData " + err
+					}
+				});
 			});
 
 		documentsData = load("previewdraftdocuments", undefined, [], {
@@ -121,7 +139,13 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 		})
 			.then(response => response.data)
 			.catch(err => {
-				throw new Error("previewdraftdocumentsData " + err);
+				//throw new Error("previewdraftdocumentsData " + err);
+				this.setState({
+					error: {
+						hasError: true,
+						message: "previewdraftdocumentsData " + err
+					}
+				});
 			});
 
 		const consultationData = load("consultation", undefined, [], {
@@ -130,7 +154,13 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 		})
 			.then(response => response.data)
 			.catch(err => {
-				throw new Error("consultationData " + err);
+				//throw new Error("consultationData " + err);
+				this.setState({
+					error: {
+						hasError: true,
+						message: "consultationData " + err
+					}
+				});
 			});
 
 		return {
@@ -156,7 +186,13 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 					this.addChapterDetailsToSections(this.state.chapterData);
 				})
 				.catch(err => {
-					throw new Error("gatherData in componentDidMount failed " + err);
+					//throw new Error("gatherData in componentDidMount failed " + err);
+					this.setState({
+						error: {
+							hasError: true,
+							message: "gatherData in componentDidMount failed  " + err
+						}
+					});
 				});
 		}
 	}
@@ -181,7 +217,13 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 				pullFocusByQuerySelector(".document-comment-container");
 			})
 			.catch(err => {
-				throw new Error("gatherData in componentDidUpdate failed " + err);
+				//throw new Error("gatherData in componentDidUpdate failed " + err);
+				this.setState({
+					error: {
+						hasError: true,
+						message: "gatherData in componentDidUpdate failed  " + err
+					}
+				});
 			});
 	}
 
@@ -219,6 +261,7 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 	};
 
 	render() {
+		if (this.state.error.hasError) { throw new Error(this.state.error.message) }
 		if (!this.state.hasInitialData) return <h1>Loading...</h1>;
 		const { title, reference } = this.state.consultationData;
 		const { content } = this.state.chapterData;

@@ -30,7 +30,11 @@ type StateType = {
 	consultationData: ConsultationDataType,
 	shouldShowDrawer: boolean,
 	shouldShowCommentsTab: boolean,
-	shouldShowQuestionsTab: boolean
+	shouldShowQuestionsTab: boolean,
+	error: {
+		hasError: boolean,
+		message: string
+	}
 };
 
 export class DocumentView extends Component<PropsType, StateType> {
@@ -43,7 +47,11 @@ export class DocumentView extends Component<PropsType, StateType> {
 			consultationData: null,
 			shouldShowDrawer: true,
 			shouldShowCommentsTab: false,
-			shouldShowQuestionsTab: false
+			shouldShowQuestionsTab: false,
+			error: {
+				hasError: false,
+				message: null
+			}
 		};
 	}
 
@@ -54,16 +62,18 @@ export class DocumentView extends Component<PropsType, StateType> {
 	};
 
 	gatherData = async () => {
-
 		const consultationId = this.props.match.params.consultationId;
-		console.log(`gather data consultationsId:${consultationId}`);
-
 		const consultationData = load("consultation", undefined, [], {
 			consultationId
 		})
 			.then(response => response.data)
 			.catch(err => {
-				throw new Error("consultationData " + err);
+				this.setState({
+					error: {
+						hasError: true,
+						message: "consultationData " + err
+					}
+				});
 			});
 
 		return {
@@ -91,16 +101,23 @@ export class DocumentView extends Component<PropsType, StateType> {
 					shouldShowCommentsTab: shouldShowCommentsTab,
 					shouldShowQuestionsTab: shouldShowQuestionsTab
 				});
-				console.log("component did mount in document view ran");
 			})
 			.catch(err => {
-				throw new Error("gatherData in componentDidMount failed " + err);
+				this.setState({
+					error: {
+						hasError: true,
+						message: "gatherData in componentDidMount failed  " + err
+					}
+				});
+
 			});
 	}
 
 	render() {
+		if (this.state.error.hasError) { throw new Error(this.state.error.message) }
 		return (
 			<Fragment>
+				
 				{/* "ref" ties the <Drawer /> component to React.createRef() above*/}
 				{this.state.shouldShowDrawer && 					
 					<Drawer ref={this.drawer} 

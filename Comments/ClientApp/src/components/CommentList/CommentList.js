@@ -101,6 +101,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			comments: [],
 			questions: [],
 			loading: true,
+			error: "",
 			allowComments: true
 		};
 		let preloadedData = {};
@@ -136,7 +137,8 @@ export class CommentList extends Component<PropsType, StateType> {
 				comments: preloaded.comments,
 				filteredComments: [],
 				questions: preloaded.questions,
-				allowComments: allowComments
+				allowComments: allowComments,
+				error: ""
 			};
 		}
 	}
@@ -290,6 +292,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		const method = isANewComment ? "POST" : "PUT";
 		const urlParameters = isANewComment ? [] : [comment.commentId];
 		const endpointName = isANewComment ? "newcomment" : "editcomment";
+		let error = "";
 
 		load(endpointName, undefined, urlParameters, {}, method, comment, true)
 			.then(res => {
@@ -302,7 +305,8 @@ export class CommentList extends Component<PropsType, StateType> {
 					const comments = this.state.comments;
 					comments[index] = res.data;
 					this.setState({
-						comments
+						comments,
+						error
 					});
 					if (typeof this.props.validationHander === "function") {
 						this.props.validationHander();
@@ -311,7 +315,14 @@ export class CommentList extends Component<PropsType, StateType> {
 			})
 			.catch(err => {
 				console.log(err);
-				if (err.response) alert(err.response.statusText);
+				if (err.response) {
+					error = "save";
+					this.setState({
+						error
+					});
+					
+				}
+
 			});
 	};
 
@@ -328,7 +339,13 @@ export class CommentList extends Component<PropsType, StateType> {
 				})
 				.catch(err => {
 					console.log(err);
-					if (err.response) alert(err.response.statusText);
+					if (err.response) {
+						const error = "delete";
+						this.setState({
+							error
+						});
+						
+					}
 				});
 		}
 	};
@@ -399,8 +416,9 @@ export class CommentList extends Component<PropsType, StateType> {
 
 	removeCommentFromState = (commentId: number) => {
 		let comments = this.state.comments;
+		const error = "";
 		comments = comments.filter(comment => comment.commentId !== commentId);
-		this.setState({ comments });
+		this.setState({ comments, error });
 		if ((comments.length === 0) && (typeof this.props.validationHander === "function")) {
 			this.props.validationHander();
 		}
@@ -440,6 +458,18 @@ export class CommentList extends Component<PropsType, StateType> {
 									}
 								</div> : null
 							}
+
+							{this.state.error != "" ? 
+								<div className="errorBox">
+									<p>
+										We couldn't {this.state.error} your comment. Please try again in a few minutes.
+									</p>
+									<p>
+										If the problem continues please <a href="/get-involved/contact-us">contact us</a>.
+									</p>
+								</div>
+								: null }
+
 							{this.state.loading ? <p>Loading...</p> :
 
 								contextValue.isAuthorised ?

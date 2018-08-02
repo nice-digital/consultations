@@ -12,6 +12,7 @@ using NICE.Feeds;
 using System;
 using System.IO;
 using Comments.Auth;
+using Comments.Common;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Http;
@@ -131,12 +132,21 @@ namespace Comments
 
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+	            app.UseExceptionHandler(Constants.ErrorPath);
+				//app.UseDeveloperExceptionPage();
                 loggerFactory.AddConsole(Configuration.GetSection("Logging"));
                 loggerFactory.AddDebug();
 
 				app.UseStaticFiles(); //uses the wwwroot folder, only for dev. on other service the root is varnish
 			}
+            else
+            {
+	            app.UseExceptionHandler(Constants.ErrorPath);
+
+	            app.UseStatusCodePagesWithReExecute(Constants.ErrorPath + "/{0}");
+			}
+
+	        
 
 
 			app.UseCors("CorsPolicy");
@@ -244,7 +254,7 @@ namespace Comments
                    // spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
-            
+
             //try
             //{
             //    using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
@@ -256,6 +266,6 @@ namespace Comments
             //{
             //    startupLogger.LogError(String.Format("EF Migrations Error: {0}", ex));
             //}
-        }
+		}
     }
 }
