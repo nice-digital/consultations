@@ -7,7 +7,7 @@ namespace Comments.ViewModels
     {
         public Location() { } //only here for model binding. don't use it in code.
 
-        public Location(int locationId, string sourceUri, string htmlElementId, string rangeStart, int? rangeStartOffset, string rangeEnd, int? rangeEndOffset, string quote, bool show)
+        public Location(int locationId, string sourceUri, string htmlElementId, string rangeStart, int? rangeStartOffset, string rangeEnd, int? rangeEndOffset, string quote, string order, bool show)
         {
             LocationId = locationId;
             SourceURI = sourceUri;
@@ -17,6 +17,7 @@ namespace Comments.ViewModels
             RangeEnd = rangeEnd;
             RangeEndOffset = rangeEndOffset;
             Quote = quote;
+	        Order = order;
 	        Show = show;
         }
         public int LocationId { get; set; }
@@ -29,6 +30,7 @@ namespace Comments.ViewModels
         public string RangeEnd { get; set; }
         public int? RangeEndOffset { get; set; }
         public string Quote { get; set; }
+		public string Order { get; set; }
 
 	    private CommentOn? _commentOn = null;
 	    public string CommentOn

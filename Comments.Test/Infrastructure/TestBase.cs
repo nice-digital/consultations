@@ -188,7 +188,7 @@ namespace Comments.Test.Infrastructure
         }
         protected int AddLocation(string sourceURI, ConsultationsContext passedInContext = null)
         {
-            var location = new Location(sourceURI, null, null, null, null, null, null, null, null);
+            var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null);
             if (passedInContext != null)
             {
                 passedInContext.Location.Add(location);

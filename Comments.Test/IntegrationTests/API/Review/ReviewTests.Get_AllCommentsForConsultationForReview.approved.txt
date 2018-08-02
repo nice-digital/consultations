@@ -19,6 +19,7 @@
                 "rangeEnd":null,
                 "rangeEndOffset":null,
                 "quote":null,
+                "order":null,
                 "commentOn":"Chapter",
                 "documentId":1,
                 "show":true
@@ -41,6 +42,7 @@
                 "rangeEnd":null,
                 "rangeEndOffset":null,
                 "quote":null,
+                "order":null,
                 "commentOn":"Chapter",
                 "documentId":1,
                 "show":true
@@ -83,6 +85,7 @@
                 "rangeEnd":null,
                 "rangeEndOffset":null,
                 "quote":null,
+                "order":null,
                 "commentOn":"Chapter",
                 "documentId":1,
                 "show":true
@@ -123,6 +126,7 @@
                 "rangeEnd":null,
                 "rangeEndOffset":null,
                 "quote":null,
+                "order":null,
                 "commentOn":"Chapter",
                 "documentId":1,
                 "show":true
@@ -150,6 +154,7 @@
                 "rangeEnd":null,
                 "rangeEndOffset":null,
                 "quote":null,
+                "order":null,
                 "commentOn":"Chapter",
                 "documentId":1,
                 "show":true

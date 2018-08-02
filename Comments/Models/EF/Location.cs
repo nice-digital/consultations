@@ -19,6 +19,7 @@ namespace Comments.Models
 		public string RangeEnd { get; set; }
 		public int? RangeEndOffset { get; set; }
 		public string Quote { get; set; }
+		public string Order { get; set; }
 
 		public ICollection<Comment> Comment { get; set; }
 		public ICollection<Question> Question { get; set; }
