@@ -11,8 +11,8 @@ Background:
 		And I pause for 1000ms
 
 Scenario: User makes a multiple comments and submits
-		When I wait on element "[data-qa-sel='comment-on-whole-consultation']" to exist
-		When I click on the button "[data-qa-sel='comment-on-whole-consultation']"
+		When I wait on element "[data-qa-sel='comment-on-consultation-document']" to exist
+		When I click on the button "[data-qa-sel='comment-on-consultation-document']"
 		And I pause for 1000ms
 		And I add "1" to the inputfield "#Comment-1"
 		And I pause for 1000ms

@@ -32,7 +32,7 @@ export const BreadCrumbs = (props: PropsType) => {
 							itemScope
 							itemType="http://schema.org/ListItem"
 						>
-							{(isHttpLink(url) || url.startsWith("/")) ?
+							{(isHttpLink(url) || url.indexOf("/") === 0) ?
 								<a href={url}>{label}</a>
 								:
 								<Link to={url} itemProp="name">

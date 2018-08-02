@@ -5,6 +5,10 @@ FROM microsoft/aspnetcore:2.0
 
 ENV ASPNETCORE_URLS http://+:8080
 
+# Install Git
+RUN apt-get update && apt-get install git -y
+RUN git --version
+
 # Install node and npm
 # Latest Nodejs LTS as of 03/05/2018
 ENV NODE_VERSION 8.11.1
@@ -42,7 +46,7 @@ COPY ./published-app/ClientApp/package.json ./app/ClientApp/
 WORKDIR /app/ClientApp
 RUN npm i --production
 
-# Copy .net app to a location on container and run application 
+# Copy .net app to a location on container and run application
 WORKDIR /app
 
 # Script for running the dotnet app and setting appsettings.json values
