@@ -1,0 +1,17 @@
+@model Comments.ViewModels.Error
+@{var error = Model.ErrorException;}
+
+@{
+	Layout = "~/Views/_Layout.cshtml";
+}
+
+<main role="main">
+	<div class="container">
+		<div class="panel page-header">
+			<h1 class="heading mt--c">We can't find this page</h1>
+			<p class="lead">It's probably been moved, updated or deleted.</p>
+			<p><a href="~/guidance/inconsultation">Back to consultations</a></p>
+		</div>
+	</div>
+</main>
+

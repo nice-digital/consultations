@@ -49,7 +49,11 @@ type StateType = {
 	validToSubmit: false,
 	viewSubmittedComments: boolean,
 	shouldShowCommentsTab: boolean,
-	shouldShowQuestionsTab: boolean
+	shouldShowQuestionsTab: boolean,
+	error: {
+		hasError: boolean,
+		message: string
+	}
 };
 
 export class ReviewPage extends Component<PropsType, StateType> {
@@ -64,6 +68,10 @@ export class ReviewPage extends Component<PropsType, StateType> {
 			validToSubmit: false,
 			shouldShowCommentsTab: true,
 			shouldShowQuestionsTab: true,
+			error: {
+				hasError: false,
+				message: null
+			}
 		};
 	}
 
@@ -73,7 +81,12 @@ export class ReviewPage extends Component<PropsType, StateType> {
 		const documentsData = load("documents", undefined, [], { consultationId })
 			.then(response => response.data)
 			.catch(err => {
-				throw new Error("documentsData " + err);
+				this.setState({
+					error: {
+						hasError: true,
+						message: "documentsData " + err
+					}
+				});
 			});
 
 		const consultationData = load("consultation", undefined, [], {
@@ -81,7 +94,12 @@ export class ReviewPage extends Component<PropsType, StateType> {
 		})
 			.then(response => response.data)
 			.catch(err => {
-				throw new Error("consultationData " + err);
+				this.setState({
+					error: {
+						hasError: true,
+						message: "consultationData " + err
+					}
+				});
 			});
 
 		return {
@@ -129,7 +147,12 @@ export class ReviewPage extends Component<PropsType, StateType> {
 				});
 			})
 			.catch(err => {
-				throw new Error("gatherData in componentDidMount failed " + err);
+				this.setState({
+					error: {
+						hasError: true,
+						message: "gatherData in componentDidMount failed " + err
+					}
+				});
 			});
 		// }
 	}
@@ -160,13 +183,17 @@ export class ReviewPage extends Component<PropsType, StateType> {
 		}
 		let commentsAndAnswers = {comments: comments, answers: answersToSubmit};
 
-		load("submit", undefined, [], {}, "POST", commentsAndAnswers, true)
+		load("submit5", undefined, [], {}, "POST", commentsAndAnswers, true)
 			.then(() => {
 				this.submittedHandler();
 			})
 			.catch(err => {
-				console.log(err);
-				if (err.response) alert(err.response.statusText);
+				this.setState({
+					error: {
+						hasError: true,
+						message: "gatherData in componentDidMount failed " + err
+					}
+				});
 			});
 
 	};
@@ -206,13 +233,13 @@ export class ReviewPage extends Component<PropsType, StateType> {
 	};
 
 	render() {
+		if (this.state.error.hasError) { throw new Error(this.state.error.message) }
 		if (this.state.documentsList.length === 0) return <h1>Loading...</h1>;
 		const { title, reference } = this.state.consultationData;
 
 		if (!this.state.shouldShowQuestionsTab && !this.state.shouldShowCommentsTab){
 			return null; //shouldn't really be able to get here.
 		}
-
 		return (
 			<Fragment>
 				<div className="container">

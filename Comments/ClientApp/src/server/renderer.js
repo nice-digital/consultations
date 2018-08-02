@@ -9,6 +9,7 @@ import { StaticRouter } from "react-router";
 import { Helmet } from "react-helmet";
 import { processHtml } from "./html-processor";
 import App from "./../components/App/App";
+import Error from "./../components/Error/Error";
 import stringifyObject from "stringify-object";
 
 const BaseUrlRelative: string = "/consultations";
@@ -32,7 +33,6 @@ const getPreloadedDataHtml = (data): string => {
 // The `params.data` property contains properties set in `SupplyData` in Startup.cs.
 export const serverRenderer = (params): Promise => {
 	return new Promise((resolve, reject) => {
-
 		// Context object that Routes can use to pass properties 'out'. Primarily used for status code.
 		// eslint-disable-next-line
 		// See https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/api/StaticRouter.md#context-object
@@ -56,36 +56,25 @@ export const serverRenderer = (params): Promise => {
 			// Base url is used for 'server' ajax requests so we can hit the .NET instance from the Node process
 		};
 
-		let rootContent, app;
-
-		try {
-			app = (
+		let app = (
 				<StaticRouter basename={BaseUrlRelative} location={params.url} context={staticContext}>
 					<App />
 				</StaticRouter>);
 
-			// First render: this trigger any data preloaders to fire
-			rootContent = renderToString(app);
-		} catch(error) {
-			if (process.env.NODE_ENV === "development") {
-				resolve({ html: stringifyObject(error), statusCode: 500 });
-				return;
-			}
-			reject(error);
-		}
-
+		// First render: this trigger any data preloaders to fire
+		let rootContent = renderToString(app),
+			statusCode: number = 200,
+			html: string;
+		
 		// Wait for all preloaders to have loaded before re-rendering the app
 		Promise.all(staticContext.preload.loaders).then(() => {
+			
+			// Second render now that all the data preloaders have finished so we can render with data on the server
+			rootContent = renderToString(app);
 
-			let html;
-
-			try {
-				// Second render now that all the data preloaders have finished so we can render with data on the server
-				rootContent = renderToString(app);
-
-				const helmet = Helmet.renderStatic();
-
-				html = processHtml(params.data.originalHtml, {
+			const helmet = Helmet.renderStatic();
+			const html = processHtml(params.data.originalHtml,
+				{
 					htmlAttributes: helmet.htmlAttributes.toString(),
 					bodyAttributes: helmet.bodyAttributes.toString(),
 					rootContent: rootContent,
@@ -95,22 +84,21 @@ export const serverRenderer = (params): Promise => {
 					scripts: getPreloadedDataHtml(staticContext.preload.data) + helmet.script.toString(),
 				});
 
-				resolve({ html: html, statusCode: staticContext.status || 200 });
-
-			} catch(error) {
-				if (process.env.NODE_ENV === "development") {
-					resolve({ html: stringifyObject(error), statusCode: 500 });
-					return;
-				}
-				reject(error);
-			}
-
-		}).catch(error => {
-			if (process.env.NODE_ENV === "development") {
-				resolve({ html: stringifyObject(error), statusCode: 500 });
+			resolve({ html: html, statusCode: staticContext.status || 200 });
+			
+		}).catch((e) => {
+			if (process.env.NODE_ENV === "production") {
+				// In production, rejecting the promise shows a standard dotnet 500 server error page
+				reject(e);
 				return;
 			}
-			reject(error);
+			// In development show a nice YSOD to devs with the error message
+			const error = <Error error={e}/>;
+			rootContent = renderToString(error);
+			
+			resolve({ html: rootContent, statusCode: staticContext.status || 500 });
+			return;
+			
 		});
 	});
 };

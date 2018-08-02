@@ -28,5 +28,11 @@ namespace Comments.Test.Infrastructure
 	    {
 		    return Regex.Replace(str, @"""answerId"":(\d+)", @"""answerId"":""scrubbed by ScrubAnswerId""");
 	    }
+
+	    public static string ScrubErrorMessage(string str)
+	    {
+		    return Regex.Replace(str, "(<!--)([\\d\\D]+)(-->)", "\"Error Message\":\"scrubbed by ScrubErrorMessage\"");
+
+		}
 	}
 }

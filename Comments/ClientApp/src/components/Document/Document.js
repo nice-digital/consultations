@@ -41,7 +41,11 @@ type StateType = {
 		title: string,
 		slug: string
 	},
-	allowComments: boolean
+	allowComments: boolean,
+	error: {
+		hasError: boolean,
+		message: string
+	}
 };
 
 type DocumentsType = Array<Object>;
@@ -60,6 +64,10 @@ export class Document extends Component<PropsType, StateType> {
 			onboarded: false,
 			allowComments: true,
 			children: null,
+			error: {
+				hasError: false,
+				message: null
+			}
 		};
 
 		if (this.props) {
@@ -99,6 +107,10 @@ export class Document extends Component<PropsType, StateType> {
 					currentInPageNavItem: null,
 					onboarded: false,
 					allowComments: allowComments,
+					error: {
+						hasError: false,
+						message: null
+					}
 				};
 			}
 		}
@@ -117,13 +129,23 @@ export class Document extends Component<PropsType, StateType> {
 		})
 			.then(response => response.data)
 			.catch(err => {
-				throw new Error("chapterData " + err);
+				this.setState({
+					error: {
+						hasError: true,
+						message: "chapterData " + err
+					}
+				});
 			});
 
 		documentsData = load("documents", undefined, [], { consultationId })
 			.then(response => response.data)
 			.catch(err => {
-				throw new Error("documentsData " + err);
+				this.setState({
+					error: {
+						hasError: true,
+						message: "documentsData " + err
+					}
+				});
 			});
 
 		const consultationData = load("consultation", undefined, [], {
@@ -132,7 +154,12 @@ export class Document extends Component<PropsType, StateType> {
 		})
 			.then(response => response.data)
 			.catch(err => {
-				throw new Error("consultationData " + err);
+				this.setState({
+					error: {
+						hasError: true,
+						message: "consultationData " + err
+					}
+				});
 			});
 
 		return {
@@ -153,13 +180,18 @@ export class Document extends Component<PropsType, StateType> {
 						...data,
 						loading: false,
 						hasInitialData: true,
-						allowComments : allowComments,
+						allowComments: allowComments,
 					});
 					this.addChapterDetailsToSections(this.state.chapterData);
 				})
 				.catch(err => {
-					throw new Error("gatherData in componentDidMount failed " + err);
-				});
+					this.setState({
+						error: {
+							hasError: true,
+							message: "gatherData in componentDidMount failed " + err
+						}
+					});
+				})
 		}
 	}
 
@@ -183,7 +215,12 @@ export class Document extends Component<PropsType, StateType> {
 				pullFocusByQuerySelector(".document-comment-container");
 			})
 			.catch(err => {
-				throw new Error("gatherData in componentDidUpdate failed " + err);
+				this.setState({
+					error: {
+						hasError: true,
+						message: "gatherData in componentDidUpdate failed " + err
+					}
+				});
 			});
 	}
 
@@ -278,6 +315,7 @@ export class Document extends Component<PropsType, StateType> {
 	};
 
 	render() {
+		if (this.state.error.hasError) { throw new Error(this.state.error.message) }
 		if (!this.state.hasInitialData) return <h1>Loading...</h1>;
 
 		const { title, reference } = this.state.consultationData;
@@ -285,7 +323,7 @@ export class Document extends Component<PropsType, StateType> {
 		const { sections, content } = this.state.chapterData;
 		const consultationId = parseInt(this.props.match.params.consultationId, 0);
 		const documentId = parseInt(this.props.match.params.documentId, 0);
-
+		
 		return (
 			<Fragment>
 				<Helmet>

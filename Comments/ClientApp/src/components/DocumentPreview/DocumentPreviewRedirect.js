@@ -5,7 +5,11 @@ import { withRouter, Redirect } from "react-router";
 import { load } from "../../data/loader";
 
 type StateType = {
-	redirectUrl: string | null
+	redirectUrl: string | null,
+	error: {
+		hasError: boolean,
+		message: string
+	}
 };
 
 type PropsType = {
@@ -18,6 +22,10 @@ export class DocumentPreviewRedirect extends Component<PropsType, StateType> {
 		super();
 		this.state = {
 			redirectUrl: null,
+			error: {
+				hasError: false,
+				message: null
+			}
 		};
 	}
 
@@ -40,11 +48,18 @@ export class DocumentPreviewRedirect extends Component<PropsType, StateType> {
 				});
 			})
 			.catch(err => {
-				throw new Error("documentsData " + err);
+				//throw new Error("documentsData " + err);
+				this.setState({
+					error: {
+						hasError: true,
+						message: "documentsData " + err
+					}
+				});
 			});
 	};
 
 	render() {
+		if (this.state.error.hasError) { throw new Error(this.state.error.message) }
 		if (!this.state.redirectUrl) return null;
 		return <Redirect to={this.state.redirectUrl} />;
 	}
