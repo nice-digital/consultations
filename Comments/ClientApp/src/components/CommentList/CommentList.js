@@ -88,11 +88,11 @@ export class CommentList extends Component<PropsType, StateType> {
 	setCommentListState = (response: any) =>
 	{
 		let allowComments = response.data.consultationState.consultationIsOpen && !response.data.consultationState.userHasSubmitted;
-		const comments = this.filterComments(this.props.location.search, response.data.comments );
-		const questions = this.filterQuestions(this.props.location.search, response.data.questions );
+		// const comments = this.filterComments(this.props.location.search, response.data.comments );
+		// const questions = this.filterQuestions(this.props.location.search, response.data.questions );
 		this.setState({
-			comments,
-			questions,
+			comments: response.data.comments,
+			questions: response.data.questions,
 			loading: false,
 			allowComments: allowComments,
 		});

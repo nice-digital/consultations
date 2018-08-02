@@ -26,7 +26,7 @@ namespace Comments.Controllers.Api
 		/// <param name="sourceURI">this is really the relativeURL eg "/1/1/introduction" on document page or "/1/review" on review page</param>
 		/// <returns></returns>
 		[HttpGet]
-        public CommentsAndQuestions Get(string sourceURI)
+        public CommentsAndQuestions Get(string sourceURI, ReviewPageViewModel reviewPageViewModel)
         {
             if (string.IsNullOrWhiteSpace(sourceURI))
                 throw new ArgumentNullException(nameof(sourceURI));

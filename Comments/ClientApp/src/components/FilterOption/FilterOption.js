@@ -4,7 +4,7 @@ import React, { Component } from "react";
 
 import { removeQueryParameter, appendQueryParameter } from "../../helpers/utils";
 
-import { withHistory } from "./../HistoryContext/HistoryContext";
+import { withHistory } from "../HistoryContext/HistoryContext";
 
 type PropsType = {
 	groupId: string,

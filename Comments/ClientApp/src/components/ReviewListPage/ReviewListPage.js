@@ -1,7 +1,8 @@
 // @flow
 
 import React, { Component, Fragment } from "react";
-import CommentListWithRouter from "../CommentList/CommentList";
+//import CommentListWithRouter from "../CommentList/CommentList";
+import ReviewListWithRouter from "../ReviewList/ReviewList";
 import { withRouter } from "react-router";
 import { load } from "../../data/loader";
 import { Header } from "../Header/Header";
@@ -17,7 +18,12 @@ import { FilterPanel } from "../FilterPanel/FilterPanel";
 //import stringifyObject from "stringify-object";
 
 type PropsType = {
-	location: {
+	staticContext?: any,
+	match: {
+		url: string,
+		params: any
+	},
+	location: {		
 		pathname: string,
 		search: string
 	}
@@ -26,6 +32,7 @@ type PropsType = {
 type StateType = {
 	documentsList: Array<DocumentType>,
 	consultationData: ConsultationDataType,
+	commentsData: any, //TODO: any
 	userHasSubmitted: boolean,
 	validToSubmit: false,
 	viewSubmittedComments: boolean,
@@ -37,7 +44,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		super(props);
 
 		this.state = {
-			documentsList: [],
+			loading: true,
 			consultationData: null,
 			userHasSubmitted: false,
 			viewSubmittedComments: false,
@@ -47,44 +54,58 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 	}
 
 	gatherData = async () => {
-		const consultationId = this.props.match.params.consultationId;
 
-		const documentsData = load("documents", undefined, [], { consultationId })
+		let todoURLstuff = this.getAjaxLoadUrl(this.location);
+
+		const commentsData = load("comments", undefined, [], { sourceURI: this.props.match.url })
 			.then(response => response.data)
 			.catch(err => {
-				throw new Error("documentsData " + err);
-			});
+				throw new Error("commentsData " + err);
+			});	
 
-		const consultationData = load("consultation", undefined, [], {
-			consultationId, isReview: true,
-		})
-			.then(response => response.data)
-			.catch(err => {
-				throw new Error("consultationData " + err);
-			});
+		if (this.state.consultationData === null){
 
+			const consultationId = this.props.match.params.consultationId;
+
+			const consultationData = load("consultation", undefined, [], {
+				consultationId, isReview: true,
+			})
+				.then(response => response.data)
+				.catch(err => {
+					throw new Error("consultationData " + err);
+				});
+
+			return {
+				consultationData: await consultationData,
+				commentsData: await commentsData,
+			};
+		}
 		return {
-			documentsList: await documentsData,
-			consultationData: await consultationData,
+			commentsData: await commentsData,
 		};
 	};
 
-	componentDidMount() {
-		// if (!this.state.hasInitialData) {
-		this.gatherData()
-			.then(data => {
+	getAjaxLoadUrl(location: HistoryLocationType): string {
+		// Append ajax=ajax to avoid caching pages based on url only and mixing html/json responses
+		return `${ location.pathname }${ location.search }${ location.search ? "&" : "?" }ajax=ajax`;
+	}
 
-				this.setState({
-					...data,
-					userHasSubmitted: data.consultationData.consultationState.userHasSubmitted,
-					validToSubmit: data.consultationData.consultationState.supportsSubmission,
-					filters: data.consultationData.filters,
+	componentDidMount() {
+		this.props.history.listen(location => {
+			this.gatherData()
+				.then(data => {
+					this.setState({
+						consultationData: data.consultationData,
+						commentsData: data.commentsData,
+						userHasSubmitted: data.consultationData.consultationState.userHasSubmitted,
+						validToSubmit: data.consultationData.consultationState.supportsSubmission,
+						loading: false,
+					});
+				})
+				.catch(err => {
+					throw new Error("gatherData in componentDidMount failed " + err);
 				});
-			})
-			.catch(err => {
-				throw new Error("gatherData in componentDidMount failed " + err);
-			});
-		// }
+		});
 	}
 
 	componentDidUpdate(prevProps: PropsType) {
@@ -100,11 +121,11 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 	};
 
 	submitConsultation = () => {
-		const comments = this.commentList.getComments();
+		const comments = this.reviewList.getComments();
 		let answersToSubmit = [];
 
-		if (typeof(this.commentList) !== "undefined"){
-			const questions = this.commentList.getQuestions();
+		if (typeof(this.reviewList) !== "undefined"){
+			const questions = this.reviewList.getQuestions();
 			questions.forEach(function(question){
 				if (question.answers != null){
 					answersToSubmit = answersToSubmit.concat(question.answers);
@@ -136,10 +157,10 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 	//to answer a question on the review page and the submit button should then enable - if the consultation is open + hasn't already been submitted + all the mandatory questions are answered.
 	//(plus there's the whole unsaved changes to deal with. what happens there?)
 	validationHander = () => {
-		const comments = this.commentList.getComments();
+		const comments = this.reviewList.getComments();
 		let hasAnswers = false;
-		if (typeof(this.commentList) !== "undefined"){
-			const questions = this.commentList.getQuestions();
+		if (typeof(this.reviewList) !== "undefined"){
+			const questions = this.reviewList.getQuestions();
 
 			questions.forEach(function(question){
 				if (question.answers !== null && question.answers.length > 0){
@@ -159,7 +180,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 	};
 
 	render() {
-		if (this.state.documentsList.length === 0) return <h1>Loading...</h1>;
+		if (this.state.loading) return <h1>Loading...</h1>;
 		const { title, reference } = this.state.consultationData;	
 
 		return (
@@ -198,11 +219,10 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 										<StickyContainer className="grid">
 											<div data-g="12 md:9 md:push:3">
 
-												<CommentListWithRouter
-													isReviewPage={true}
+												<ReviewListWithRouter
 													isVisible={true}
 													isSubmitted={this.state.userHasSubmitted}
-													wrappedComponentRef={component => (this.commentList = component)}
+													wrappedComponentRef={component => (this.reviewList = component)}
 													submittedHandler={this.submittedHandler}
 													validationHander={this.validationHander} />
 												
