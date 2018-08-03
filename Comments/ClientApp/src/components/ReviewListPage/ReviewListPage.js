@@ -39,6 +39,7 @@ type StateType = {
 	userHasSubmitted: boolean,
 	validToSubmit: false,
 	viewSubmittedComments: boolean,
+	querystring: string
 };
 
 export class ReviewListPage extends Component<PropsType, StateType> {
@@ -52,6 +53,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			viewSubmittedComments: false,
 			validToSubmit: false,
 			filters: null,
+			querystring: null,
 		};
 	}
 
@@ -59,7 +61,12 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 
 		let todoURLstuff = this.getAjaxLoadUrl(this.props.location);
 
-		const searchFiltersInQuerystring = queryStringToObject(this.props.history.location.search);
+		const querystring = this.props.history.location.search;
+		this.setState({
+			//loading: true,
+			querystring,
+		});
+		const searchFiltersInQuerystring = queryStringToObject(querystring);
 
 		const commentsData = load("commentsreview", undefined, [], Object.assign({ sourceURI: this.props.match.url }, searchFiltersInQuerystring))
 			.then(response => response.data)
@@ -301,7 +308,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 												<Sticky disableHardwareAcceleration>
 													{({ style }) => (
 														<div style={style}>
-															<FilterPanel filters={this.state.commentsData.filters} path={this.props.basename + this.props.location.pathname} />
+															<FilterPanel filters={this.state.commentsData.filters} path={this.props.basename + this.props.location.pathname + this.state.querystring} />
 														</div>
 													)}
 												</Sticky>

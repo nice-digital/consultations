@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace Comments.Controllers.Web
@@ -25,7 +25,7 @@ namespace Comments.Controllers.Web
         {
             _logger.LogWarning("Hitting the root controller. this should only occur locally.");
             //return Content("root controller hit");
-            return Redirect("/consultations/1/1/introduction");
+            return Redirect("/consultations/22/1/guidance");
         }
     }
 }
