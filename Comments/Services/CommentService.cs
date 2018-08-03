@@ -210,8 +210,8 @@ namespace Comments.Services
 						FilteredResultCount = model.CommentsAndQuestions.Comments.Count(c => c.DocumentId.HasValue && c.DocumentId.Equals(document.DocumentId)) +
 						                      model.CommentsAndQuestions.Questions.Count(q => q.DocumentId.HasValue && q.DocumentId.Equals(document.DocumentId)),
 
-						UnfilteredResultCount = unfilteredCommentsAndQuestions.Comments.Count() +
-						                        unfilteredCommentsAndQuestions.Questions.Count()
+						UnfilteredResultCount = unfilteredCommentsAndQuestions.Comments.Count(c => c.DocumentId.HasValue && c.DocumentId.Equals(document.DocumentId)) +
+						                        unfilteredCommentsAndQuestions.Questions.Count(q => q.DocumentId.HasValue && q.DocumentId.Equals(document.DocumentId))
 					}
 				);
 		    }
