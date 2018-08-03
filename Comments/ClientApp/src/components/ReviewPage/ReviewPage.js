@@ -181,7 +181,7 @@ export class ReviewPage extends Component<PropsType, StateType> {
 		}
 		let commentsAndAnswers = {comments: comments, answers: answersToSubmit};
 
-		load("submit5", undefined, [], {}, "POST", commentsAndAnswers, true)
+		load("submit", undefined, [], {}, "POST", commentsAndAnswers, true)
 			.then(() => {
 				this.submittedHandler();
 			})
