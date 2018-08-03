@@ -205,7 +205,7 @@ namespace Comments.Services
 			{
 				var isSelected = model.Documents != null && model.Documents.Contains(document.DocumentId);
 				documentsFilter.Options.Add(
-					new TopicListFilterOption($"doc-{document.DocumentId}", document.Title, isSelected)
+					new TopicListFilterOption(document.DocumentId.ToString(), document.Title, isSelected)
 					{
 						FilteredResultCount = model.CommentsAndQuestions.Comments.Count(c => c.DocumentId.HasValue && c.DocumentId.Equals(document.DocumentId)) +
 						                      model.CommentsAndQuestions.Questions.Count(q => q.DocumentId.HasValue && q.DocumentId.Equals(document.DocumentId)),

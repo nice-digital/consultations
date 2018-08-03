@@ -29,6 +29,7 @@ type PropsType = {
 		search: string
 	},
 	history: HistoryType,
+	basename: string,
 };
 
 type StateType = {
@@ -58,7 +59,9 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 
 		let todoURLstuff = this.getAjaxLoadUrl(this.props.location);
 
-		const commentsData = load("commentsreview", undefined, [], { sourceURI: this.props.match.url })
+		const searchFiltersInQuerystring = queryStringToObject(this.props.history.location.search);
+
+		const commentsData = load("commentsreview", undefined, [], Object.assign({ sourceURI: this.props.match.url }, searchFiltersInQuerystring))
 			.then(response => response.data)
 			.catch(err => {
 				throw new Error("commentsData " + err);
@@ -93,6 +96,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 	}
 
 	loadDataAndUpdateState = () => {
+		console.log('load data and update state called');
 		this.gatherData()
 		.then(data => {
 			if (data.consultationData !== null){
@@ -297,7 +301,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 												<Sticky disableHardwareAcceleration>
 													{({ style }) => (
 														<div style={style}>
-															<FilterPanel filters={this.state.commentsData.filters} path={"/1/review"} />
+															<FilterPanel filters={this.state.commentsData.filters} path={this.props.basename + this.props.location.pathname} />
 														</div>
 													)}
 												</Sticky>

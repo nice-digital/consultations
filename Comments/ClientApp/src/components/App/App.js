@@ -48,7 +48,7 @@ class App extends React.Component<PropsType, StateType> {
 
 								{/*Review Page*/}
 								<Route exact path="/:consultationId/review">
-									<ReviewListPageWithRouter/>
+									<ReviewListPageWithRouter basename={this.props.basename}/>
 								</Route>
 
 								{/*404*/}

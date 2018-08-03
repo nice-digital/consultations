@@ -16,7 +16,7 @@ const rootElement = document.getElementById("root");
 
 ReactDOM.hydrate(
 	<BrowserRouter basename={baseUrl}>
-		<App />
+		<App basename={baseUrl}/>
 	</BrowserRouter>,
 	rootElement
 );
