@@ -13,9 +13,9 @@ namespace Comments.ViewModels
 		    ConsultationState = consultationState;
 	    }
 
-	    public IList<ViewModels.Comment> Comments { get; private set; }
+	    public IList<ViewModels.Comment> Comments { get; set; }
 
-        public IList<ViewModels.Question> Questions { get; private set; }
+        public IList<ViewModels.Question> Questions { get; set; }
 
         public bool IsAuthorised { get; private set; }
 

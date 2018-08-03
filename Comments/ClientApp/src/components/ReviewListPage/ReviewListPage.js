@@ -55,7 +55,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 
 	gatherData = async () => {
 
-		let todoURLstuff = this.getAjaxLoadUrl(this.location);
+		let todoURLstuff = this.getAjaxLoadUrl(this.props.location);
 
 		const commentsData = load("comments", undefined, [], { sourceURI: this.props.match.url })
 			.then(response => response.data)
@@ -90,21 +90,26 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		return `${ location.pathname }${ location.search }${ location.search ? "&" : "?" }ajax=ajax`;
 	}
 
+	loadDataAndUpdateState = () => {
+		this.gatherData()
+		.then(data => {
+			this.setState({
+				consultationData: data.consultationData,
+				commentsData: data.commentsData,
+				userHasSubmitted: data.consultationData.consultationState.userHasSubmitted,
+				validToSubmit: data.consultationData.consultationState.supportsSubmission,
+				loading: false,
+			});
+		})
+		.catch(err => {
+			throw new Error("gatherData in componentDidMount failed " + err);
+		});
+	}
+
 	componentDidMount() {
+		this.loadDataAndUpdateState(); //maybe SSR this?
 		this.props.history.listen(location => {
-			this.gatherData()
-				.then(data => {
-					this.setState({
-						consultationData: data.consultationData,
-						commentsData: data.commentsData,
-						userHasSubmitted: data.consultationData.consultationState.userHasSubmitted,
-						validToSubmit: data.consultationData.consultationState.supportsSubmission,
-						loading: false,
-					});
-				})
-				.catch(err => {
-					throw new Error("gatherData in componentDidMount failed " + err);
-				});
+			this.loadDataAndUpdateState();
 		});
 	}
 

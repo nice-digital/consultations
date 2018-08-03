@@ -8,7 +8,6 @@ using System;
 namespace Comments.Controllers.Api
 {
     [Produces("application/json")]
-    [Route("consultations/api/[controller]")]
     public class CommentsController : ControllerBase
     {
         private readonly ICommentService _commentService;
@@ -23,15 +22,33 @@ namespace Comments.Controllers.Api
 		/// <summary>
 		/// GET: eg. consultations/api/Comments?sourceURI=%2Fconsultations%2F1%2F1%2Fchapter-slug
 		/// </summary>
-		/// <param name="sourceURI">this is really the relativeURL eg "/1/1/introduction" on document page or "/1/review" on review page</param>
+		/// <param name="sourceURI">this is really the relativeURL eg "/1/1/introduction" on document page</param>
 		/// <returns></returns>
+		[Route("consultations/api/[controller]")]
 		[HttpGet]
-        public CommentsAndQuestions Get(string sourceURI, ReviewPageViewModel reviewPageViewModel)
+        public CommentsAndQuestions Get(string sourceURI)
         {
             if (string.IsNullOrWhiteSpace(sourceURI))
                 throw new ArgumentNullException(nameof(sourceURI));
 
             return _commentService.GetCommentsAndQuestions(relativeURL: sourceURI);
         }
+
+		/// <summary>
+		/// GET: eg. consultations/api/CommentsForReview?consultationId=1
+		/// </summary>
+		/// <param name="sourceURI">this is really the relativeURL eg "/1/review" on review page</param>
+		/// <param name="reviewPageViewModel"></param>
+		/// <returns></returns>
+		[Route("consultations/api/[controller]ForReview")]
+	    [HttpGet]
+	    public ReviewPageViewModel Get(string sourceURI, ReviewPageViewModel reviewPageViewModel)
+	    {
+			if (string.IsNullOrWhiteSpace(sourceURI))
+				throw new ArgumentNullException(nameof(sourceURI));
+
+			return _commentService.GetCommentsAndQuestionsForReview(sourceURI, reviewPageViewModel);
+	    }
+
 	}
 }

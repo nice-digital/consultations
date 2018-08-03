@@ -17,9 +17,12 @@ namespace Comments.ViewModels
 
 		public CommentsAndQuestions CommentsAndQuestions { get; set; }
 
+		/// <summary>
+		/// This property is initialised from appsettings.json, then it gets updated in CommentService with documents and the counts are updated.
+		/// </summary>
 	    public IEnumerable<TopicListFilterGroup> Filters { get; set; }
 
-	    #region Filter options
+	    #region Filter options from the check boxes
 
 	    [JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
 	    public QuestionsOrComments[] QuestionsOrComments { get; set; } = new QuestionsOrComments[0];

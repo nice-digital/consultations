@@ -6,12 +6,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Comments.Configuration;
+using Comment = Comments.ViewModels.Comment;
+using Question = Comments.ViewModels.Question;
 
 namespace Comments.Services
 {
 	public interface ICommentService
     {
 	    CommentsAndQuestions GetCommentsAndQuestions(string relativeURL);
+	    ReviewPageViewModel GetCommentsAndQuestionsForReview(string relativeURL, ReviewPageViewModel model);
 		(ViewModels.Comment comment, Validate validate) GetComment(int commentId);
         (int rowsUpdated, Validate validate) EditComment(int commentId, ViewModels.Comment comment);
         (ViewModels.Comment comment, Validate validate) CreateComment(ViewModels.Comment comment);
@@ -36,7 +39,7 @@ namespace Comments.Services
 	        _currentUser = _userService.GetCurrentUser();
         }
 
-        public (ViewModels.Comment comment, Validate validate) GetComment(int commentId)
+	    public (ViewModels.Comment comment, Validate validate) GetComment(int commentId)
         {
             if (!_currentUser.IsAuthorised)
                 return (comment: null, validate: new Validate(valid: false, unauthorised: true, message: $"Not logged in accessing comment id:{commentId}"));
@@ -139,15 +142,44 @@ namespace Comments.Services
 			return new CommentsAndQuestions(data.comments, data.questions, user.IsAuthorised, signInURL, consultationState);
 	    }
 
-		/// <summary>
-		/// TODO: this needs to change to pass in the state of the filters.
-		/// </summary>
-		/// <param name="consultationId"></param>
-		/// <param name="commentsAndQuestions"></param>
-		/// <returns></returns>
-	    public IEnumerable<TopicListFilterGroup> GetFilterGroups(int consultationId, CommentsAndQuestions commentsAndQuestions)
+		public ReviewPageViewModel GetCommentsAndQuestionsForReview(string relativeURL, ReviewPageViewModel model)
+		{
+			var unfilteredQuestionsAndComments = GetCommentsAndQuestions(relativeURL);
+			model.CommentsAndQuestions = FilterCommentsAndQuestions(unfilteredQuestionsAndComments, model.QuestionsOrComments, model.Documents);
+
+			var consultationId = ConsultationsUri.ParseRelativeUrl(relativeURL).ConsultationId;
+			model.Filters = GetFilterGroups(consultationId, unfilteredQuestionsAndComments, model);
+			return model;
+		}
+
+	    private static CommentsAndQuestions FilterCommentsAndQuestions(CommentsAndQuestions unfilteredCommentsAndQuestions, QuestionsOrComments[] QuestionsOrComments, int[] Documents)
 	    {
-		    var filters = AppSettings.ReviewConfig.Filters;
+		    var filteredCommentsAndQuestions = unfilteredCommentsAndQuestions;
+		    if (QuestionsOrComments.Length == 1)
+		    {
+				if (QuestionsOrComments[0] == ViewModels.QuestionsOrComments.Comments)
+			    {
+					filteredCommentsAndQuestions.Questions = new List<Question>();
+			    }
+			    else
+			    {
+				    filteredCommentsAndQuestions.Comments = new List<Comment>();
+				}
+			}
+
+		    if (Documents.Any())
+		    {
+				filteredCommentsAndQuestions.Questions = filteredCommentsAndQuestions.Questions.Where(q => q.DocumentId.HasValue && Documents.Contains(q.DocumentId.Value)).ToList();
+			    filteredCommentsAndQuestions.Comments = filteredCommentsAndQuestions.Comments.Where(c => c.DocumentId.HasValue && Documents.Contains(c.DocumentId.Value)).ToList();
+			}
+
+		    return filteredCommentsAndQuestions;
+	    }
+
+
+	    private IEnumerable<TopicListFilterGroup> GetFilterGroups(int consultationId, CommentsAndQuestions unfilteredCommentsAndQuestions, ReviewPageViewModel model)
+	    {
+		    var filters = AppSettings.ReviewConfig.Filters.ToList();
 
 		    var questionsAndCommentsFilter = filters.Single(f => f.Id.Equals("questionscomments", StringComparison.OrdinalIgnoreCase));
 			var questionOption = questionsAndCommentsFilter.Options.Single(o => o.Id.Equals("questions", StringComparison.OrdinalIgnoreCase));
@@ -156,14 +188,14 @@ namespace Comments.Services
 		    var documentsFilter = filters.Single(f => f.Id.Equals("documents", StringComparison.OrdinalIgnoreCase));
 
 			//questions
-			questionOption.IsSelected = false; //todo 
-		    questionOption.FilteredResultCount = commentsAndQuestions.Questions.Count(q => q.Answers != null && q.Answers.Any()); //todo 
-			questionOption.UnfilteredResultCount = commentsAndQuestions.Questions.Count(); //todo 
+		    questionOption.IsSelected = model.QuestionsOrComments.Contains(QuestionsOrComments.Questions);
+		    questionOption.FilteredResultCount = model.CommentsAndQuestions.Questions.Count(); 
+			questionOption.UnfilteredResultCount = unfilteredCommentsAndQuestions.Questions.Count();
 
 			//comments
-			commentsOption.IsSelected = false; //todo 
-		    commentsOption.FilteredResultCount = commentsAndQuestions.Comments.Count(); //todo 
-			commentsOption.UnfilteredResultCount = commentsAndQuestions.Comments.Count(); //todo 
+			commentsOption.IsSelected = model.QuestionsOrComments.Contains(QuestionsOrComments.Comments);
+			commentsOption.FilteredResultCount = model.CommentsAndQuestions.Comments.Count(); 
+			commentsOption.UnfilteredResultCount = unfilteredCommentsAndQuestions.Comments.Count(); 
 
 			//populate documents
 			var documents = _consultationService.GetDocuments(consultationId).ToList();
@@ -171,16 +203,15 @@ namespace Comments.Services
 
 			foreach (var document in documents)
 			{
+				var isSelected = model.Documents.Contains(document.DocumentId);
 				documentsFilter.Options.Add(
-					new TopicListFilterOption($"doc-{document.DocumentId}", document.Title, isSelected: false) //todo
+					new TopicListFilterOption($"doc-{document.DocumentId}", document.Title, isSelected)
 					{
-						//todo 
-						FilteredResultCount = commentsAndQuestions.Comments.Count(c => c.DocumentId.HasValue && c.DocumentId.Equals(document.DocumentId)) +
-						                      commentsAndQuestions.Questions.Count(q => q.DocumentId.HasValue && q.DocumentId.Equals(document.DocumentId) && q.Answers != null && q.Answers.Any()), //this assumes 1 answer per question. no good for admins..
+						FilteredResultCount = model.CommentsAndQuestions.Comments.Count(c => c.DocumentId.HasValue && c.DocumentId.Equals(document.DocumentId)) +
+						                      model.CommentsAndQuestions.Questions.Count(q => q.DocumentId.HasValue && q.DocumentId.Equals(document.DocumentId)),
 
-						//todo 
-						UnfilteredResultCount = commentsAndQuestions.Comments.Count() +
-						                        commentsAndQuestions.Questions.Count()
+						UnfilteredResultCount = unfilteredCommentsAndQuestions.Comments.Count() +
+						                        unfilteredCommentsAndQuestions.Questions.Count()
 					}
 				);
 		    }
