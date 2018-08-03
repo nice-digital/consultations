@@ -198,7 +198,7 @@ namespace Comments.Services
 			commentsOption.UnfilteredResultCount = unfilteredCommentsAndQuestions.Comments.Count(); 
 
 			//populate documents
-			var documents = _consultationService.GetDocuments(consultationId).ToList();
+			var documents = _consultationService.GetDocuments(consultationId).Where(d => d.ConvertedDocument).ToList();
 		    documentsFilter.Options = new List<TopicListFilterOption>(documents.Count());
 
 			foreach (var document in documents)
