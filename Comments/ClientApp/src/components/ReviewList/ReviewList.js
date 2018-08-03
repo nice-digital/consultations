@@ -26,12 +26,15 @@ type PropsType = {
 	isSubmitted: boolean,
 	submittedHandler: Function,
 	validationHander: Function,
-};
-
-type StateType = {
 	comments: Array<CommentType>,
 	questions: Array<QuestionType>,
 	loading: boolean,
+};
+
+type StateType = {
+	// comments: Array<CommentType>,
+	// questions: Array<QuestionType>,
+	// loading: boolean,
 	allowComments: boolean,
 };
 
@@ -41,9 +44,9 @@ export class ReviewList extends Component<PropsType, StateType> {
 	constructor(props: PropsType) {
 		super(props);
 		this.state = {
-			comments: [],
-			questions: [],
-			loading: true,
+			// comments: [],
+			// questions: [],
+			//loading: true,
 			allowComments: true,
 		};
 	}
@@ -190,38 +193,40 @@ export class ReviewList extends Component<PropsType, StateType> {
 	};
 
 	render() {
-		const commentsToShow = this.state.comments; //.filter(comment => !comment.show);
-		const questionsToShow = this.state.questions; //.filter(question => !question.show);
+		const commentsToShow = this.props.comments || []; //.filter(comment => !comment.show);
+		const questionsToShow = this.props.questions || []; //.filter(question => !question.show);
 		return (
 			<UserContext.Consumer>
 				{ (contextValue: ContextType) => {
 					return (
 						<div data-qa-sel="comment-list-wrapper">
 
-							{this.state.loading ? <p>Loading...</p> :
+							{this.props.loading ? <p>Loading...</p> :
 
 								contextValue.isAuthorised ?
 
 									<Fragment>
-										<div>
-											<p>We would like to hear your views on the draft recommendations presented in the guideline, and any comments you may have on the rationale and impact sections in the guideline and the evidence presented in the evidence reviews documents. We would also welcome views on the Equality Impact Assessment.</p>
-											<p>We would like to hear your views on these questions:</p>
-											<ul className="CommentList list--unstyled">
-												{questionsToShow.map((question) => {
-													return (
-														<Question
-															readOnly={!this.state.allowComments || this.props.isSubmitted}
-															isVisible={this.props.isVisible}
-															key={question.questionId}
-															unique={`Comment${question.questionId}`}
-															question={question}
-															saveAnswerHandler={this.saveAnswerHandler}
-															deleteAnswerHandler={this.deleteAnswerHandler}
-														/>
-													);
-												})}
-											</ul>
-										</div>																				
+										{questionsToShow.length > 0 &&
+											<div>
+												<p>We would like to hear your views on the draft recommendations presented in the guideline, and any comments you may have on the rationale and impact sections in the guideline and the evidence presented in the evidence reviews documents. We would also welcome views on the Equality Impact Assessment.</p>
+												<p>We would like to hear your views on these questions:</p>
+												<ul className="CommentList list--unstyled">
+													{questionsToShow.map((question) => {
+														return (
+															<Question
+																readOnly={!this.state.allowComments || this.props.isSubmitted}
+																isVisible={this.props.isVisible}
+																key={question.questionId}
+																unique={`Comment${question.questionId}`}
+																question={question}
+																saveAnswerHandler={this.saveAnswerHandler}
+																deleteAnswerHandler={this.deleteAnswerHandler}
+															/>
+														);
+													})}
+												</ul>
+											</div>						
+										}														
 										{commentsToShow.length === 0 ? <p>No comments yet</p> :
 											<ul className="CommentList list--unstyled">
 												{commentsToShow.map((comment) => {

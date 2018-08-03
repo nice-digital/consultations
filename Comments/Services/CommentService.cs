@@ -155,7 +155,7 @@ namespace Comments.Services
 	    private static CommentsAndQuestions FilterCommentsAndQuestions(CommentsAndQuestions unfilteredCommentsAndQuestions, QuestionsOrComments[] QuestionsOrComments, int[] Documents)
 	    {
 		    var filteredCommentsAndQuestions = unfilteredCommentsAndQuestions;
-		    if (QuestionsOrComments.Length == 1)
+		    if (QuestionsOrComments != null && QuestionsOrComments.Length == 1)
 		    {
 				if (QuestionsOrComments[0] == ViewModels.QuestionsOrComments.Comments)
 			    {
@@ -167,7 +167,7 @@ namespace Comments.Services
 				}
 			}
 
-		    if (Documents.Any())
+		    if (Documents != null && Documents.Any())
 		    {
 				filteredCommentsAndQuestions.Questions = filteredCommentsAndQuestions.Questions.Where(q => q.DocumentId.HasValue && Documents.Contains(q.DocumentId.Value)).ToList();
 			    filteredCommentsAndQuestions.Comments = filteredCommentsAndQuestions.Comments.Where(c => c.DocumentId.HasValue && Documents.Contains(c.DocumentId.Value)).ToList();
@@ -181,11 +181,11 @@ namespace Comments.Services
 	    {
 		    var filters = AppSettings.ReviewConfig.Filters.ToList();
 
-		    var questionsAndCommentsFilter = filters.Single(f => f.Id.Equals("questionscomments", StringComparison.OrdinalIgnoreCase));
-			var questionOption = questionsAndCommentsFilter.Options.Single(o => o.Id.Equals("questions", StringComparison.OrdinalIgnoreCase));
-		    var commentsOption = questionsAndCommentsFilter.Options.Single(o => o.Id.Equals("comments", StringComparison.OrdinalIgnoreCase));
+		    var questionsAndCommentsFilter = filters.Single(f => f.Id.Equals("QuestionsOrComments", StringComparison.OrdinalIgnoreCase));
+			var questionOption = questionsAndCommentsFilter.Options.Single(o => o.Id.Equals("Questions", StringComparison.OrdinalIgnoreCase));
+		    var commentsOption = questionsAndCommentsFilter.Options.Single(o => o.Id.Equals("Comments", StringComparison.OrdinalIgnoreCase));
 			
-		    var documentsFilter = filters.Single(f => f.Id.Equals("documents", StringComparison.OrdinalIgnoreCase));
+		    var documentsFilter = filters.Single(f => f.Id.Equals("Documents", StringComparison.OrdinalIgnoreCase));
 
 			//questions
 		    questionOption.IsSelected = model.QuestionsOrComments.Contains(QuestionsOrComments.Questions);
@@ -203,7 +203,7 @@ namespace Comments.Services
 
 			foreach (var document in documents)
 			{
-				var isSelected = model.Documents.Contains(document.DocumentId);
+				var isSelected = model.Documents != null && model.Documents.Contains(document.DocumentId);
 				documentsFilter.Options.Add(
 					new TopicListFilterOption($"doc-{document.DocumentId}", document.Title, isSelected)
 					{

@@ -57,7 +57,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 
 		let todoURLstuff = this.getAjaxLoadUrl(this.props.location);
 
-		const commentsData = load("comments", undefined, [], { sourceURI: this.props.match.url })
+		const commentsData = load("commentsreview", undefined, [], { sourceURI: this.props.match.url })
 			.then(response => response.data)
 			.catch(err => {
 				throw new Error("commentsData " + err);
@@ -81,6 +81,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			};
 		}
 		return {
+			consultationData: null,
 			commentsData: await commentsData,
 		};
 	};
@@ -93,13 +94,20 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 	loadDataAndUpdateState = () => {
 		this.gatherData()
 		.then(data => {
-			this.setState({
-				consultationData: data.consultationData,
-				commentsData: data.commentsData,
-				userHasSubmitted: data.consultationData.consultationState.userHasSubmitted,
-				validToSubmit: data.consultationData.consultationState.supportsSubmission,
-				loading: false,
-			});
+			if (data.consultationData !== null){
+				this.setState({
+					consultationData: data.consultationData,
+					commentsData: data.commentsData,
+					userHasSubmitted: data.consultationData.consultationState.userHasSubmitted,
+					validToSubmit: data.consultationData.consultationState.supportsSubmission,
+					loading: false,
+				});
+			} else{
+				this.setState({
+					commentsData: data.commentsData,
+					loading: false,
+				});
+			}			
 		})
 		.catch(err => {
 			throw new Error("gatherData in componentDidMount failed " + err);
@@ -229,7 +237,11 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 													isSubmitted={this.state.userHasSubmitted}
 													wrappedComponentRef={component => (this.reviewList = component)}
 													submittedHandler={this.submittedHandler}
-													validationHander={this.validationHander} />
+													validationHander={this.validationHander}
+													comments={this.state.commentsData.commentsAndQuestions.comments}
+													questions={this.state.commentsData.commentsAndQuestions.questions}
+													loading={this.state.loading}
+													/>
 												
 												{this.state.userHasSubmitted ?
 													<div className="hero">
@@ -284,7 +296,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 												<Sticky disableHardwareAcceleration>
 													{({ style }) => (
 														<div style={style}>
-															<FilterPanel filters={this.state.filters} path={"/1/review"} />
+															<FilterPanel filters={this.state.commentsData.filters} path={"/1/review"} />
 														</div>
 													)}
 												</Sticky>
