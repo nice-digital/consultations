@@ -356,23 +356,24 @@ export class CommentList extends Component<PropsType, StateType> {
 												</ul>
 											</div>
 										}										
-										{(this.props.isReviewPage || this.props.viewComments) && 
-											commentsToShow.length === 0 ? <p>No comments yet</p> :
-											<ul className="CommentList list--unstyled">
-												{commentsToShow.map((comment) => {
-													return (
-														<CommentBox
-															readOnly={!this.state.allowComments || this.props.isSubmitted}
-															isVisible={this.props.isVisible}
-															key={comment.commentId}
-															unique={`Comment${comment.commentId}`}
-															comment={comment}
-															saveHandler={this.saveCommentHandler}
-															deleteHandler={this.deleteCommentHandler}
-														/>
-													);
-												})}
-											</ul>
+										{(this.props.isReviewPage || this.props.viewComments) && (
+												commentsToShow.length === 0 ? <p>No comments yet</p> :
+												<ul className="CommentList list--unstyled">
+													{commentsToShow.map((comment) => {
+														return (
+															<CommentBox
+																readOnly={!this.state.allowComments || this.props.isSubmitted}
+																isVisible={this.props.isVisible}
+																key={comment.commentId}
+																unique={`Comment${comment.commentId}`}
+																comment={comment}
+																saveHandler={this.saveCommentHandler}
+																deleteHandler={this.deleteCommentHandler}
+															/>
+														);
+													})}
+												</ul>
+											)
 										}
 									</Fragment>
 									:
