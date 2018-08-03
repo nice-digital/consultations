@@ -91,5 +91,25 @@ namespace Comments.Test.UnitTests
 		    //Assert
 		    actualOutput.ShouldBe(expectedOutput);
 		}
+
+	    [Theory]
+	    [InlineData(null, false)]
+	    [InlineData("", false)]
+		[InlineData("invalid uri", false)]
+	    [InlineData("/1/1/introduction", false)]
+	    [InlineData("http://www.nice.org.uk/consultations/1/1/introduction", false)]
+	    [InlineData("consultations://./consultation/", false)]
+	    [InlineData("consultations://./consultation/1", true)]
+	    [InlineData("consultations://./consultation/1/document/1", true)]
+	    [InlineData("consultations://./consultation/1/document/1/chapter/introduction", true)]
+		public void IsValidSourceURIParsesCorrectly(string uri, bool expectedOutput)
+	    {
+		    //Arrange + Act
+		    var actualOutput = ConsultationsUri.IsValidSourceURI(uri);
+
+		    //Assert
+		    actualOutput.ShouldBe(expectedOutput);
+		}
+
 	}
 }

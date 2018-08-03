@@ -57,7 +57,12 @@ namespace Comments.ViewModels
 		    {
 			    if (_documentId == UnsetDocumentIdValue)
 			    {
-				    _documentId = ConsultationsUri.ParseConsultationsUri(SourceURI).DocumentId;
+				    var sourceUri = SourceURI;
+				    if (!ConsultationsUri.IsValidSourceURI(sourceUri))
+				    {
+					    sourceUri = ConsultationsUri.ConvertToConsultationsUri(SourceURI, _commentOn.Value);
+				    }
+				    _documentId = ConsultationsUri.ParseConsultationsUri(sourceUri).DocumentId;
 			    }
 			    return _documentId;
 		    }

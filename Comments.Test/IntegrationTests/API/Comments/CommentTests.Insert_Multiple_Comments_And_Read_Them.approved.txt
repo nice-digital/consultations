@@ -18,7 +18,8 @@
             "rangeEnd":null,
             "rangeEndOffset":null,
             "quote":null,
-            "commentOn":"Chapter"
+            "commentOn":"Chapter",
+            "documentId":1
         },
         {
             "commentId":"scrubbed by ScrubCommentId",
@@ -38,7 +39,8 @@
             "rangeEnd":null,
             "rangeEndOffset":null,
             "quote":null,
-            "commentOn":"Chapter"
+            "commentOn":"Chapter",
+            "documentId":1
         },
         {
             "commentId":"scrubbed by ScrubCommentId",
@@ -58,7 +60,8 @@
             "rangeEnd":null,
             "rangeEndOffset":null,
             "quote":null,
-            "commentOn":"Chapter"
+            "commentOn":"Chapter",
+            "documentId":1
         }
     ],
     "questions":[

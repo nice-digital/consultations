@@ -38,6 +38,13 @@ namespace Comments.Common
 		    return regex.IsMatch(relativeURL);
 		}
 
+	    public static bool IsValidSourceURI(string uri)
+	    {
+		    if (string.IsNullOrWhiteSpace(uri)) return false;
+		    var regex = new Regex(string.Format(ConsultationUriFormat, ".+"));
+		    return regex.IsMatch(uri);
+	    }
+
         public static ConsultationsUriElements ParseRelativeUrl(string relativeURL)
         {
 			var regexString = IsReviewPageRelativeUrl(relativeURL) ? ConsultationsReviewPageRelativeUrlRegEx : ConsultationsDocumentPageRelativeUrlRegEx;
