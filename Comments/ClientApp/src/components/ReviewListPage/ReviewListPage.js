@@ -16,6 +16,7 @@ import { UserContext } from "../../context/UserContext";
 import { pullFocusById } from "../../helpers/accessibility-helpers";
 import { FilterPanel } from "../FilterPanel/FilterPanel";
 //import stringifyObject from "stringify-object";
+import { withHistory } from "../HistoryContext/HistoryContext";
 
 type PropsType = {
 	staticContext?: any,
@@ -26,7 +27,8 @@ type PropsType = {
 	location: {		
 		pathname: string,
 		search: string
-	}
+	},
+	history: HistoryType,
 };
 
 type StateType = {
@@ -36,7 +38,6 @@ type StateType = {
 	userHasSubmitted: boolean,
 	validToSubmit: false,
 	viewSubmittedComments: boolean,
-	filters: any //TODO: specify type!
 };
 
 export class ReviewListPage extends Component<PropsType, StateType> {
@@ -313,4 +314,4 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 	}
 }
 
-export default withRouter(ReviewListPage);
+export default withRouter(withHistory(ReviewListPage));

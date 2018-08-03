@@ -2,7 +2,7 @@
 
 import React, { Component } from "react";
 
-import { FilterOption } from "../FilterOption/FilterOption";
+import FilterOption from "../FilterOption/FilterOption";
 
 type PropsType = {
 	path: string,
