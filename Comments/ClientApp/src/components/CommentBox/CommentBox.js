@@ -125,7 +125,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 							<Moment format="D/M/YYYY - h:mma" date={moment.utc(lastModifiedDate).toDate()}/>
 						</div>
 					) : null}
-					<form onSubmit={e => this.props.saveHandler(e, comment)}>
+					<form onSubmit={e => this.props.saveHandler(e, comment, this)}>
 						<div className="form__group form__group--textarea mb--0">
 							<label
 								className="form__label visually-hidden"
@@ -154,7 +154,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 						<button
 							data-qa-sel="delete-comment-button"
 							className="btn mr--0 right"
-							onClick={e => this.props.deleteHandler(e, commentId)}>
+							onClick={e => this.props.deleteHandler(e, commentId, this)}>
 							<span className="visually-hidden">Delete this comment</span>
 							<span className="icon icon--trash" aria-hidden="true"/>
 						</button>

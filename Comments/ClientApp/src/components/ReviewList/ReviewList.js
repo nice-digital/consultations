@@ -9,8 +9,9 @@ import { Question } from "../Question/Question";
 import { LoginBanner } from "../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
 import { queryStringToObject, replaceFormat } from "../../helpers/utils";
-import {pullFocusById} from "../../helpers/accessibility-helpers";
+import { pullFocusById } from "../../helpers/accessibility-helpers";
 //import stringifyObject from "stringify-object";
+import { saveCommentHandler, deleteCommentHandler, saveAnswerHandler, deleteAnswerHandler } from "../../helpers/editing-and-deleting";
 
 type PropsType = {
 	staticContext?: any,
@@ -59,138 +60,7 @@ export class ReviewList extends Component<PropsType, StateType> {
 		return this.state.questions;
 	}
 
-	saveCommentHandler = (e: Event, comment: CommentType) => {
-		e.preventDefault();
-
-		const isANewComment = comment.commentId < 0;
-		const method = isANewComment ? "POST" : "PUT";
-		const urlParameters = isANewComment ? [] : [comment.commentId];
-		const endpointName = isANewComment ? "newcomment" : "editcomment";
-
-		load(endpointName, undefined, urlParameters, {}, method, comment, true)
-			.then(res => {
-				if (res.status === 201 || res.status === 200) {
-					const index = this.state.comments
-						.map(function(comment) {
-							return comment.commentId;
-						})
-						.indexOf(comment.commentId);
-					const comments = this.state.comments;
-					comments[index] = res.data;
-					this.setState({
-						comments
-					});
-					if (typeof this.props.validationHander === "function") {
-						this.props.validationHander();
-					}
-				}
-			})
-			.catch(err => {
-				console.log(err);
-				if (err.response) alert(err.response.statusText);
-			});
-	};
-
-	deleteCommentHandler = (e: Event, commentId: number) => {
-		e.preventDefault();
-		if (commentId < 0) {
-			this.removeCommentFromState(commentId);
-		} else {
-			load("editcomment", undefined, [commentId], {}, "DELETE")
-				.then(res => {
-					if (res.status === 200) {
-						this.removeCommentFromState(commentId);
-					}
-				})
-				.catch(err => {
-					console.log(err);
-					if (err.response) alert(err.response.statusText);
-				});
-		}
-	};
-
-	saveAnswerHandler = (e: Event, answer: AnswerType) => {
-		e.preventDefault();
-		//todo: post or put the answer to the api, then on success use answer.questionId to get the question in the this.state.questions array and update the state.
-		//console.log(stringifyObject(answer));
-		const isANewAnswer = answer.answerId < 0;
-		const method = isANewAnswer ? "POST" : "PUT";
-		const urlParameters = isANewAnswer ? [] : [answer.answerId];
-		const endpointName = isANewAnswer ? "newanswer" : "editanswer";
-
-		load(endpointName, undefined, urlParameters, {}, method, answer, true)
-			.then(res => {
-				if (res.status === 201 || res.status === 200) {
-					const questionIndex = this.state.questions
-						.map(function(question) {
-							return question.questionId;
-						})
-						.indexOf(answer.questionId);
-					const questions = this.state.questions;
-
-					if (questions[questionIndex].answers === null || questions[questionIndex].answers.length < 1){
-						questions[questionIndex].answers = [res.data];
-					} else{
-						const answerIndex = questions[questionIndex].answers
-							.map(function(answer) {
-								return answer.answerId;
-							}).indexOf(answer.answerId);
-
-						const answers = questions[questionIndex].answers;
-						answers[answerIndex] = res.data;
-						questions[questionIndex].answers = answers;
-					}
-					this.setState({
-						questions
-					});
-					if (typeof this.props.validationHander === "function") {
-						this.props.validationHander();
-					}
-				}
-			})
-			.catch(err => {
-				console.log(err);
-				if (err.response) alert(err.response.statusText);
-			});
-	};
-
-	deleteAnswerHandler = (e: Event, questionId: number, answerId: number) => {
-		e.preventDefault();
-		//todo: call the delete answer api, then update the state on success.
-		if (answerId < 0) {
-			this.removeAnswerFromState(questionId, answerId);
-		} else {
-			load("editanswer", undefined, [answerId], {}, "DELETE")
-				.then(res => {
-					if (res.status === 200) {
-						this.removeAnswerFromState(questionId, answerId);
-					}
-				})
-				.catch(err => {
-					console.log(err);
-					if (err.response) alert(err.response.statusText);
-				});
-		}
-	};
-
-	removeCommentFromState = (commentId: number) => {
-		let comments = this.state.comments;
-		comments = comments.filter(comment => comment.commentId !== commentId);
-		this.setState({ comments });
-		if ((comments.length === 0) && (typeof this.props.validationHander === "function")) {
-			this.props.validationHander();
-		}
-	};
-
-	removeAnswerFromState = (questionId: number, answerId: number) => {
-		let questions = this.state.questions;
-		let questionToUpdate = questions.find(question => question.questionId === questionId);
-		questionToUpdate.answers = questionToUpdate.answers.filter(answer => answer.answerId !== answerId);
-		this.setState({ questions });
-		if (typeof this.props.validationHander === "function") {
-			this.props.validationHander();
-		}
-	};
+	
 
 	render() {
 		const commentsToShow = this.props.comments || []; //.filter(comment => !comment.show);
@@ -219,8 +89,8 @@ export class ReviewList extends Component<PropsType, StateType> {
 																key={question.questionId}
 																unique={`Comment${question.questionId}`}
 																question={question}
-																saveAnswerHandler={this.saveAnswerHandler}
-																deleteAnswerHandler={this.deleteAnswerHandler}
+																saveAnswerHandler={saveAnswerHandler}
+																deleteAnswerHandler={deleteAnswerHandler}
 															/>
 														);
 													})}
@@ -237,8 +107,8 @@ export class ReviewList extends Component<PropsType, StateType> {
 															key={comment.commentId}
 															unique={`Comment${comment.commentId}`}
 															comment={comment}
-															saveHandler={this.saveCommentHandler}
-															deleteHandler={this.deleteCommentHandler}
+															saveHandler={saveCommentHandler}
+															deleteHandler={deleteCommentHandler}
 														/>
 													);
 												})}
