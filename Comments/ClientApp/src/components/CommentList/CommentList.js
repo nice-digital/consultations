@@ -36,6 +36,7 @@ type StateType = {
 	questions: Array<QuestionType>,
 	loading: boolean,
 	allowComments: boolean,
+	initialDataLoaded: boolean
 };
 
 type ContextType = any;
@@ -49,6 +50,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			loading: true,
 			allowComments: true,
 			error: "",
+			initialDataLoaded: false,
 		};
 		let preloadedData = {};
 		if (this.props.staticContext && this.props.staticContext.preload) {
@@ -66,42 +68,45 @@ export class CommentList extends Component<PropsType, StateType> {
 		if (preloaded) {
 
 			//console.log(`preloaded 90: ${stringifyObject(preloaded)}`);
-
-			let allowComments = !preloaded.consultationState.consultationIsOpen && !preloaded.consultationState.userHasSubmitted;
-			this.state = {
-				loading: false,
-				comments: preloaded.comments,
-				filteredComments: [],
-				questions: preloaded.questions,
-				allowComments: allowComments,
-				error: ""
-			};
+			this.setCommentListState(preloaded);
+			// let allowComments = !preloaded.consultationState.consultationIsOpen && !preloaded.consultationState.userHasSubmitted;
+			// this.state = {
+			// 	loading: false,
+			// 	comments: preloaded.comments,
+			// 	filteredComments: [],
+			// 	questions: preloaded.questions,
+			// 	allowComments: allowComments,
+			// 	error: "",
+			// 	initialDataLoaded: true
+			// };
 		}
 	}
 
 	loadComments() {
 		load("comments", undefined, [], { sourceURI: this.props.match.url }).then(
-			res => {
-				this.setCommentListState(res);
+			response => {
+				this.setCommentListState(response.data);
 			})
 			.catch(err => console.log("load comments in commentlist " + err));
 	}
 
-	setCommentListState = (response: any) =>
+	setCommentListState = (commentsData: any) =>
 	{
-		let allowComments = response.data.consultationState.consultationIsOpen && !response.data.consultationState.userHasSubmitted;
-		// const comments = this.filterComments(this.props.location.search, response.data.comments );
-		// const questions = this.filterQuestions(this.props.location.search, response.data.questions );
+		let allowComments = commentsData.consultationState.consultationIsOpen && !commentsData.consultationState.userHasSubmitted;
+		// const comments = this.filterComments(this.props.location.search, commentsData.comments );
+		// const questions = this.filterQuestions(this.props.location.search, commentsData.questions );
 		this.setState({
-			comments: response.data.comments,
-			questions: response.data.questions,
+			comments: commentsData.comments,
+			questions: commentsData.questions,
 			loading: false,
 			allowComments: allowComments,
 		});
 	};
 
 	componentDidMount() {
-		this.loadComments();
+		if (!this.state.initialDataLoaded){
+			this.loadComments();
+		}
 	}
 
 	componentDidUpdate(prevProps: PropsType, prevState: any, nextContent: any) {
