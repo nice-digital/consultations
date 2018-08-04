@@ -39,7 +39,7 @@ type StateType = {
 	userHasSubmitted: boolean,
 	validToSubmit: false,
 	viewSubmittedComments: boolean,
-	querystring: string
+	path: string
 };
 
 export class ReviewListPage extends Component<PropsType, StateType> {
@@ -53,25 +53,26 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			viewSubmittedComments: false,
 			validToSubmit: false,
 			filters: null,
-			querystring: null,
+			path: null,
 		};
 	}
 
 	gatherData = async () => {
 
-		let todoURLstuff = this.getAjaxLoadUrl(this.props.location);
-
 		const querystring = this.props.history.location.search;
+		const path = this.props.basename + this.props.location.pathname + querystring;
 		this.setState({
-			//loading: true,
-			querystring,
+			path,
 		});
-		const searchFiltersInQuerystring = queryStringToObject(querystring);
 
-		const commentsData = load("commentsreview", undefined, [], Object.assign({ sourceURI: this.props.match.url }, searchFiltersInQuerystring))
+		const commentsData = load("commentsreview", undefined, [], Object.assign({ sourceURI: this.props.match.url }, queryStringToObject(querystring)))
 			.then(response => response.data)
 			.catch(err => {
-				throw new Error("commentsData " + err);
+				if (window){
+					window.location.assign(path); // Fallback to full page reload if we fail to load data
+				} else{
+					throw new Error("failed to load comments for review.  " + err);
+				}				
 			});	
 
 		if (this.state.consultationData === null){
@@ -97,13 +98,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		};
 	};
 
-	getAjaxLoadUrl(location: HistoryLocationType): string {
-		// Append ajax=ajax to avoid caching pages based on url only and mixing html/json responses
-		return `${ location.pathname }${ location.search }${ location.search ? "&" : "?" }ajax=ajax`;
-	}
-
 	loadDataAndUpdateState = () => {
-		console.log('load data and update state called');
 		this.gatherData()
 		.then(data => {
 			if (data.consultationData !== null){
@@ -308,7 +303,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 												<Sticky disableHardwareAcceleration>
 													{({ style }) => (
 														<div style={style}>
-															<FilterPanel filters={this.state.commentsData.filters} path={this.props.basename + this.props.location.pathname + this.state.querystring} />
+															<FilterPanel filters={this.state.commentsData.filters} path={this.state.path} />
 														</div>
 													)}
 												</Sticky>
