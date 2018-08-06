@@ -107,3 +107,17 @@ declare type QuestionType = {
 	commentOn: string,
 	sourceURI: string,
 };
+
+declare type CommentsAndQuestionsType = {
+	comments: Array<CommentType>,
+	questions: Array<QuestionType>,
+	isAuthorised: boolean,
+	signInURL: string, 
+	consultationState: ConsultationStateType,
+};
+
+declare type ReviewPageViewModelType = {
+	commentsAndQuestions: CommentsAndQuestionsType,
+	filters: Array<TopicListFilterGroupType>,
+	//QuestionsOrComments[] and Documents[] are only for sending up to the backend. not to use in react. 
+};

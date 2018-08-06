@@ -38,7 +38,7 @@ type PropsType = {
 
 type StateType = {
 	consultationData: ConsultationDataType,
-	commentsData: any, //TODO: any
+	commentsData: ReviewPageViewModelType, 
 	userHasSubmitted: boolean,
 	validToSubmit: false,
 	viewSubmittedComments: boolean,
@@ -172,7 +172,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 	}
 
 	componentDidMount() {
-		if (!this.state.hasInitalData){
+		if (!this.state.hasInitalData){ //typically this page is accessed by clicking a link on the document page, so it
 			this.loadDataAndUpdateState(); 	
 		}
 		this.props.history.listen(location => {
