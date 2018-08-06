@@ -131,6 +131,10 @@ namespace Comments.Services
 			if (consultationDetail == null)
 				consultationDetail = GetConsultationDetail(consultationId);
 
+		    var documents = GetDocuments(consultationId).ToList();
+		    var documentsWhichSupportQuestions = documents.Where(d => d.SupportsQuestions).Select(d => d.DocumentId).ToList();
+		    var documentsWhichSupportComments = documents.Where(d => d.SupportsComments).Select(d => d.DocumentId).ToList();
+
 			var currentUser = _userService.GetCurrentUser();
 
 			if (locations == null && currentUser.IsAuthorised && currentUser.UserId.HasValue)
@@ -147,7 +151,8 @@ namespace Comments.Services
 		    var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);
 
 		    var consultationState = new ConsultationState(consultationDetail.StartDate, consultationDetail.EndDate,
-			    data.questions.Any(), data.questions.Any(q => q.Answers.Any()), data.comments.Any(), hasSubmitted);
+			    data.questions.Any(), data.questions.Any(q => q.Answers.Any()), data.comments.Any(), hasSubmitted,
+			    consultationDetail.SupportsQuestions, consultationDetail.SupportsComments, documentsWhichSupportQuestions, documentsWhichSupportComments);
 
 		    return consultationState;
 	    }
