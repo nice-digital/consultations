@@ -112,7 +112,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		});
 
 		console.log(`sourceURI: ${this.props.match.url}`);
-		debugger;
+		//debugger;
 		const commentsData = load("commentsreview", undefined, [], Object.assign({ sourceURI: this.props.match.url }, queryStringToObject(querystring)))
 			.then(response => response.data)
 			.catch(err => {

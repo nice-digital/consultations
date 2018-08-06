@@ -161,7 +161,7 @@ describe("[ClientApp] ", () => {
 
 			let commentsReviewPromise = new Promise(resolve => {
 				mock
-					.onAny() //("/consultations/api/CommentsForReview?sourceURI=/1/review")
+					.onAny("/consultations/api/CommentsForReview?sourceURI=/1/review")
 					.reply(() => {
 						resolve();
 						return [200, CommentsReviewData];
