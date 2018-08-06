@@ -7,7 +7,7 @@ namespace Comments.ViewModels
     {
         public Location() { } //only here for model binding. don't use it in code.
 
-        public Location(int locationId, string sourceUri, string htmlElementId, string rangeStart, int? rangeStartOffset, string rangeEnd, int? rangeEndOffset, string quote)
+        public Location(int locationId, string sourceUri, string htmlElementId, string rangeStart, int? rangeStartOffset, string rangeEnd, int? rangeEndOffset, string quote, bool show)
         {
             LocationId = locationId;
             SourceURI = sourceUri;
@@ -17,6 +17,7 @@ namespace Comments.ViewModels
             RangeEnd = rangeEnd;
             RangeEndOffset = rangeEndOffset;
             Quote = quote;
+	        Show = show;
         }
         public int LocationId { get; set; }
 
@@ -68,5 +69,11 @@ namespace Comments.ViewModels
 		    }
 		    set => _documentId = value;
 	    }
+
+		/// <summary>
+		/// When false, on the review page, the comment is not shown, i.e. it's filtered out by the filtering on that page.
+		/// on the document page, it should always be true and is unused.
+		/// </summary>
+	    public bool Show { get; set; } 
 	}
 }

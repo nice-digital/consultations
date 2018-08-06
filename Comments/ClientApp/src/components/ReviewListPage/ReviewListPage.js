@@ -3,7 +3,7 @@
 import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router";
 import { StickyContainer, Sticky } from "react-sticky";
-import stringifyObject from "stringify-object";
+//import stringifyObject from "stringify-object";
 
 import preload from "../../data/pre-loader";
 import { load } from "../../data/loader";
@@ -62,8 +62,8 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			path: null,
 			hasInitalData: false,
 			allowComments: false,
-			comments: [],
-			questions: []
+			comments: [], //this contains all the comments, not just the ones displayed to the user. the show property defines whether the comment is filtered out from view.
+			questions: [] //this contains all the questions, not just the ones displayed to the user. the show property defines whether the question is filtered out from view.
 		};
 
 		let preloadedData = {};
@@ -173,7 +173,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 
 	componentDidMount() {
 		if (!this.state.hasInitalData){
-			// this.loadDataAndUpdateState(); 	
+			this.loadDataAndUpdateState(); 	
 		}
 		this.props.history.listen(location => {
 			this.loadDataAndUpdateState();
@@ -193,11 +193,11 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 	};
 
 	submitConsultation = () => {
-		const comments = this.state.commentsData.commentsAndQuestions.comments;
+		const comments = this.state.comments.comments;
 		let answersToSubmit = [];
 
 		if (typeof(this.reviewList) !== "undefined"){
-			const questions = this.state.commentsData.commentsAndQuestions.questions;
+			const questions = this.state.questions;
 			questions.forEach(function(question){
 				if (question.answers != null){
 					answersToSubmit = answersToSubmit.concat(question.answers);
@@ -267,8 +267,8 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 	render() {
 		if (this.state.loading) return <h1>Loading...</h1>;
 		const { title, reference } = this.state.consultationData;	
-		const commentsToShow = this.state.comments || []; //.filter(comment => !comment.show);
-		const questionsToShow = this.state.questions || []; //.filter(question => !question.show);
+		const commentsToShow = this.state.comments.filter(comment => !comment.show) || []; 
+		const questionsToShow = this.state.questions.filter(question => !question.show) || []; 
 
 		return (
 			<Fragment>

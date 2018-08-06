@@ -14,7 +14,6 @@ namespace Comments.ViewModels
 
 	public class ReviewPageViewModel
     {
-
 		public CommentsAndQuestions CommentsAndQuestions { get; set; }
 
 		/// <summary>

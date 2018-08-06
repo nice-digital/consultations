@@ -91,7 +91,7 @@ declare type AnswerType = {
 	lastModifiedDate: Date,
 	lastModifiedByUserId: string,
 	statusId: number,
-	status: StatusType
+	status: StatusType,
 };
 
 declare type QuestionType = {

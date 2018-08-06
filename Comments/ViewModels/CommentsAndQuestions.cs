@@ -4,7 +4,7 @@ namespace Comments.ViewModels
 {
 	public class CommentsAndQuestions
     {
-	    public CommentsAndQuestions(IList<Comment> comments, IList<Question> questions, bool isAuthorised, string signInURL, ConsultationState consultationState)
+	    public CommentsAndQuestions(List<Comment> comments, List<Question> questions, bool isAuthorised, string signInURL, ConsultationState consultationState)
 	    {
 		    Comments = comments;
 		    Questions = questions;
@@ -13,9 +13,9 @@ namespace Comments.ViewModels
 		    ConsultationState = consultationState;
 	    }
 
-	    public IList<ViewModels.Comment> Comments { get; set; }
+	    public List<ViewModels.Comment> Comments { get; set; }
 
-        public IList<ViewModels.Question> Questions { get; set; }
+        public List<ViewModels.Question> Questions { get; set; }
 
         public bool IsAuthorised { get; private set; }
 
