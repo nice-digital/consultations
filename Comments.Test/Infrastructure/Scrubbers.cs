@@ -29,7 +29,27 @@ namespace Comments.Test.Infrastructure
 		    return Regex.Replace(str, @"""answerId"":(\d+)", @"""answerId"":""scrubbed by ScrubAnswerId""");
 	    }
 
-	    public static string ScrubErrorMessage(string str)
+	    public static string ScrubQuestionId(string str)
+	    {
+		    return Regex.Replace(str, @"""questionId"":(\d+)", @"""questionId"":""scrubbed by ScrubQuestionId""");
+	    }
+
+	    public static string ScrubQuestionTypeId(string str)
+	    {
+		    return Regex.Replace(str, @"""questionTypeId"":(\d+)", @"""questionTypeId"":""scrubbed by ScrubQuestionTypeId""");
+	    }
+
+	    public static string ScrubIds(string str)
+	    {
+		    str = ScrubCommentId(str);
+		    str = ScrubLocationId(str);
+		    str = ScrubAnswerId(str);
+		    str = ScrubQuestionId(str);
+		    str = ScrubQuestionTypeId(str);
+			return str;
+	    }
+
+		public static string ScrubErrorMessage(string str)
 	    {
 		    return Regex.Replace(str, "(<!--)([\\d\\D]+)(-->)", "\"Error Message\":\"scrubbed by ScrubErrorMessage\"");
 

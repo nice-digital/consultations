@@ -11,7 +11,7 @@ import { generateUrl } from "../../../data/loader";
 import { nextTick, queryStringToObject } from "../../../helpers/utils";
 import ReviewListPageWithRouter, {ReviewListPage} from "../ReviewListPage";
 import ConsultationData from "./Consultation";
-import DocumentsData from "./Documents";
+import CommentsReviewData from "./CommentsReview";
 //import stringifyObject from "stringify-object";
 
 const mock = new MockAdapter(axios);
@@ -40,7 +40,13 @@ describe("[ClientApp] ", () => {
 			location: {
 				pathname: "/1/review",
 				search: "?sourceURI=consultations%3A%2F%2F.%2Fconsultation%2F1%2Fdocument%2F1"
-			}
+			},
+			history:{
+				location:{
+					search: ""
+				}
+			},
+			basename: "/consultations"
 		};
 
 		afterEach(() => {
@@ -144,7 +150,7 @@ describe("[ClientApp] ", () => {
 
 		// });
 
-		it("should match snapshot with supplied data", () => {
+		it.only("should match snapshot with supplied data", () => {
 			const mock = new MockAdapter(axios);
 
 			const wrapper = mount(
@@ -153,12 +159,12 @@ describe("[ClientApp] ", () => {
 				</MemoryRouter>
 			);
 
-			let documentsPromise = new Promise(resolve => {
+			let commentsReviewPromise = new Promise(resolve => {
 				mock
-					.onGet("/consultations/api/Documents?consultationId=1")
+					.onAny() //("/consultations/api/CommentsForReview?sourceURI=/1/review")
 					.reply(() => {
 						resolve();
-						return [200, DocumentsData];
+						return [200, CommentsReviewData];
 					});
 			});
 
@@ -172,7 +178,7 @@ describe("[ClientApp] ", () => {
 			});
 
 			return Promise.all([
-				documentsPromise,
+				commentsReviewPromise,
 				consultationPromise
 			]).then(async () => {
 				await nextTick();

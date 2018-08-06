@@ -13,7 +13,7 @@ namespace Comments.Configuration
         public static FeedConfig Feed { get; private set; }
         public static GilliamConfig GilliamConfig { get; private set; }
 		public static EncryptionConfig EncryptionConfig { get; private set; }
-	    public static ReviewConfig ReviewConfig { get; private set; }
+	    public static ReviewConfig ReviewConfig { get; set; }
 
 		public static void Configure(IServiceCollection services, IConfiguration configuration, string contentRootPath)
         {

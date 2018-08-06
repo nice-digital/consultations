@@ -111,11 +111,13 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			path,
 		});
 
+		console.log(`sourceURI: ${this.props.match.url}`);
+		debugger;
 		const commentsData = load("commentsreview", undefined, [], Object.assign({ sourceURI: this.props.match.url }, queryStringToObject(querystring)))
 			.then(response => response.data)
 			.catch(err => {
 				if (window){
-					window.location.assign(path); // Fallback to full page reload if we fail to load data
+					//window.location.assign(path); // Fallback to full page reload if we fail to load data
 				} else{
 					throw new Error("failed to load comments for review.  " + err);
 				}				

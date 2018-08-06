@@ -1,0 +1,233 @@
+﻿{
+    "commentsAndQuestions":{
+        "comments":[
+            {
+                "commentId":"scrubbed by ScrubCommentId",
+                "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
+                "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
+                "commentText":"My Second Comment",
+                "status":{
+                    "statusId":1,
+                    "name":"Draft"
+                },
+                "statusId":1,
+                "commentId":"scrubbed by ScrubLocationId",
+                "sourceURI":"consultations://./consultation/1/document/1/chapter/introduction",
+                "htmlElementID":null,
+                "rangeStart":null,
+                "rangeStartOffset":null,
+                "rangeEnd":null,
+                "rangeEndOffset":null,
+                "quote":null,
+                "commentOn":"Chapter",
+                "documentId":1,
+                "show":true
+            },
+            {
+                "commentId":"scrubbed by ScrubCommentId",
+                "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
+                "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
+                "commentText":"My Comment",
+                "status":{
+                    "statusId":1,
+                    "name":"Draft"
+                },
+                "statusId":1,
+                "commentId":"scrubbed by ScrubLocationId",
+                "sourceURI":"consultations://./consultation/1/document/1/chapter/introduction",
+                "htmlElementID":null,
+                "rangeStart":null,
+                "rangeStartOffset":null,
+                "rangeEnd":null,
+                "rangeEndOffset":null,
+                "quote":null,
+                "commentOn":"Chapter",
+                "documentId":1,
+                "show":true
+            }
+        ],
+        "questions":[
+            {
+                "questionId":"scrubbed by ScrubQuestionId",
+                "questionText":"00000000-0000-0000-0000-000000000000",
+                "questionTypeId":"scrubbed by ScrubQuestionTypeId",
+                "questionOrder":null,
+                "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
+                "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
+                "questionType":{
+                    "description":"text",
+                    "hasTextAnswer":true,
+                    "hasBooleanAnswer":false
+                },
+                "answers":[
+                    {
+                        "answerId":"scrubbed by ScrubAnswerId",
+                        "answerText":"00000000-0000-0000-0000-000000000000",
+                        "answerBoolean":null,
+                        "questionId":"scrubbed by ScrubQuestionId",
+                        "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
+                        "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
+                        "statusId":1,
+                        "status":{
+                            "statusId":1,
+                            "name":"Draft"
+                        },
+                        "sourceURI":"consultations://./consultation/1/document/1/chapter/introduction"
+                    }
+                ],
+                "commentId":"scrubbed by ScrubLocationId",
+                "sourceURI":"consultations://./consultation/1/document/1/chapter/introduction",
+                "htmlElementID":null,
+                "rangeStart":null,
+                "rangeStartOffset":null,
+                "rangeEnd":null,
+                "rangeEndOffset":null,
+                "quote":null,
+                "commentOn":"Chapter",
+                "documentId":1,
+                "show":true
+            },
+            {
+                "questionId":"scrubbed by ScrubQuestionId",
+                "questionText":"00000000-0000-0000-0000-000000000000",
+                "questionTypeId":"scrubbed by ScrubQuestionTypeId",
+                "questionOrder":null,
+                "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
+                "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
+                "questionType":{
+                    "description":"text",
+                    "hasTextAnswer":true,
+                    "hasBooleanAnswer":false
+                },
+                "answers":[
+                    {
+                        "answerId":"scrubbed by ScrubAnswerId",
+                        "answerText":"00000000-0000-0000-0000-000000000000",
+                        "answerBoolean":null,
+                        "questionId":"scrubbed by ScrubQuestionId",
+                        "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
+                        "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
+                        "statusId":1,
+                        "status":{
+                            "statusId":1,
+                            "name":"Draft"
+                        },
+                        "sourceURI":"consultations://./consultation/1/document/1/chapter/introduction"
+                    }
+                ],
+                "commentId":"scrubbed by ScrubLocationId",
+                "sourceURI":"consultations://./consultation/1/document/1/chapter/introduction",
+                "htmlElementID":null,
+                "rangeStart":null,
+                "rangeStartOffset":null,
+                "rangeEnd":null,
+                "rangeEndOffset":null,
+                "quote":null,
+                "commentOn":"Chapter",
+                "documentId":1,
+                "show":true
+            },
+            {
+                "questionId":"scrubbed by ScrubQuestionId",
+                "questionText":"00000000-0000-0000-0000-000000000000",
+                "questionTypeId":"scrubbed by ScrubQuestionTypeId",
+                "questionOrder":null,
+                "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
+                "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
+                "questionType":{
+                    "description":"text",
+                    "hasTextAnswer":true,
+                    "hasBooleanAnswer":false
+                },
+                "answers":[
+                    
+                ],
+                "commentId":"scrubbed by ScrubLocationId",
+                "sourceURI":"consultations://./consultation/1/document/1/chapter/introduction",
+                "htmlElementID":null,
+                "rangeStart":null,
+                "rangeStartOffset":null,
+                "rangeEnd":null,
+                "rangeEndOffset":null,
+                "quote":null,
+                "commentOn":"Chapter",
+                "documentId":1,
+                "show":true
+            }
+        ],
+        "isAuthorised":true,
+        "signInURL":"/signin?returnURL=/",
+        "consultationState":{
+            "startDate":"2018-04-01T00:00:00",
+            "endDate":"2028-05-31T17:00:00",
+            "hasQuestions":false,
+            "hasUserSuppliedAnswers":false,
+            "hasUserSuppliedComments":false,
+            "userHasSubmitted":false,
+            "consultationSupportsQuestions":false,
+            "consultationSupportsComments":false,
+            "documentIdsWhichSupportQuestions":[
+                2,
+                2
+            ],
+            "documentIdsWhichSupportComments":[
+                2,
+                2
+            ],
+            "consultationIsOpen":true,
+            "consultationHasNotStartedYet":false,
+            "consultationHasEnded":false,
+            "supportsSubmission":false,
+            "supportsDownload":false,
+            "shouldShowDrawer":true,
+            "shouldShowCommentsTab":true,
+            "shouldShowQuestionsTab":true
+        }
+    },
+    "filters":[
+        {
+            "id":"QuestionsOrComments",
+            "title":"Questions / Comments",
+            "options":[
+                {
+                    "id":"Questions",
+                    "label":"Question responses",
+                    "isSelected":false,
+                    "filteredResultCount":3,
+                    "unfilteredResultCount":3
+                },
+                {
+                    "id":"Comments",
+                    "label":"Comments",
+                    "isSelected":false,
+                    "filteredResultCount":2,
+                    "unfilteredResultCount":2
+                }
+            ]
+        },
+        {
+            "id":"Documents",
+            "title":"View comments by document",
+            "options":[
+                {
+                    "id":"2",
+                    "label":"Unstable angina and NSTEMI",
+                    "isSelected":false,
+                    "filteredResultCount":0,
+                    "unfilteredResultCount":0
+                },
+                {
+                    "id":"2",
+                    "label":"Sinusitis (acute): antimicrobial prescribing",
+                    "isSelected":false,
+                    "filteredResultCount":0,
+                    "unfilteredResultCount":0
+                }
+            ]
+        }
+    ],
+    "questionsOrComments":[
+        
+    ],
+    "documents":null
+}
