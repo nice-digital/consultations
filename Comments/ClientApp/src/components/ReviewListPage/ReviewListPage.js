@@ -187,11 +187,6 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		pullFocusById("comments-column");
 	}
 
-	getCurrentSourceURI = () => {
-		const queryParams = queryStringToObject(this.props.location.search);
-		return queryParams.sourceURI;
-	};
-
 	submitConsultation = () => {
 		const comments = this.state.comments;
 		const questions = this.state.questions;
@@ -205,21 +200,17 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 
 		load("submit", undefined, [], {}, "POST", commentsAndAnswers, true)
 			.then(() => {
-				this.submittedHandler();
+				this.setState({
+					userHasSubmitted: true,
+					validToSubmit: false,
+					viewSubmittedComments: false,
+					allowComments: false,
+				});
 			})
 			.catch(err => {
 				console.log(err);
 				if (err.response) alert(err.response.statusText);
 			});
-	};
-
-	submittedHandler = () => {
-		this.setState({
-			userHasSubmitted: true,
-			validToSubmit: false,
-			viewSubmittedComments: false,
-			allowComments: false,
-		});
 	};
 
 	//this validation handler code is going to have to get a bit more advanced when questions are introduced, as it'll be possible
@@ -311,20 +302,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 															(
 																<StickyContainer className="grid">
 																	<div data-g="12 md:9 md:push:3">
-						
-																		{/* <ReviewListWithRouter
-																			isVisible={true}
-																			isSubmitted={this.state.userHasSubmitted}
-																			wrappedComponentRef={component => (this.reviewList = component)}
-																			submittedHandler={this.submittedHandler}
-																			validationHander={this.validationHander}
-																			comments={this.state.commentsData.commentsAndQuestions.comments}
-																			questions={this.state.commentsData.commentsAndQuestions.questions}
-																			loading={this.state.loading}
-																			/> */}
-						
-																		<div data-qa-sel="comment-list-wrapper">					
-																					
+																		<div data-qa-sel="comment-list-wrapper">																										
 																			{questionsToShow.length > 0 &&
 																				<div>
 																					<p>We would like to hear your views on the draft recommendations presented in the guideline, and any comments you may have on the rationale and impact sections in the guideline and the evidence presented in the evidence reviews documents. We would also welcome views on the Equality Impact Assessment.</p>
@@ -363,8 +341,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																					})}
 																				</ul>
 																			}
-																		</div>		
-																		
+																		</div>																				
 																		{this.state.userHasSubmitted ?
 																			<div className="hero">
 																				<div className="hero__container">
