@@ -60,7 +60,19 @@ export class ReviewList extends Component<PropsType, StateType> {
 		return this.state.questions;
 	}
 
-	
+	//these handlers are in the helpers/editing-and-deleting.js utility file as they're also used in CommentList.js
+	saveCommentHandler = (e: Event, comment: CommentType) => {
+		saveCommentHandler(e, comment, this);
+	}
+	deleteCommentHandler = (e: Event, comment: CommentType) => {
+		deleteCommentHandler(e, comment, this);
+	}
+	saveAnswerHandler = (e: Event, comment: CommentType) => {
+		saveAnswerHandler(e, comment, this);
+	}
+	deleteAnswerHandler = (e: Event, comment: CommentType) => {
+		deleteAnswerHandler(e, comment, this);
+	}	
 
 	render() {
 		const commentsToShow = this.props.comments || []; //.filter(comment => !comment.show);
@@ -89,8 +101,8 @@ export class ReviewList extends Component<PropsType, StateType> {
 																key={question.questionId}
 																unique={`Comment${question.questionId}`}
 																question={question}
-																saveAnswerHandler={saveAnswerHandler}
-																deleteAnswerHandler={deleteAnswerHandler}
+																saveAnswerHandler={this.saveAnswerHandler}
+																deleteAnswerHandler={this.deleteAnswerHandler}
 															/>
 														);
 													})}
@@ -107,8 +119,8 @@ export class ReviewList extends Component<PropsType, StateType> {
 															key={comment.commentId}
 															unique={`Comment${comment.commentId}`}
 															comment={comment}
-															saveHandler={saveCommentHandler}
-															deleteHandler={deleteCommentHandler}
+															saveHandler={this.saveCommentHandler}
+															deleteHandler={this.deleteCommentHandler}
 														/>
 													);
 												})}
