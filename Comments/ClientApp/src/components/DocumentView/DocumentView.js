@@ -3,7 +3,7 @@ import { withRouter } from "react-router";
 
 import DocumentWithRouter from "../Document/Document";
 import { Drawer } from "../Drawer/Drawer";
-import { load } from "./../../data/loader";
+//import { load } from "./../../data/loader";
 
 type PropsType = {
 	location: {
@@ -12,25 +12,25 @@ type PropsType = {
 	}
 };
 
-type ConsultationStateType = {
-	consultationIsOpen: boolean,
-	hasQuestions: boolean,
-	consultationHasEnded: boolean,
-	hasUserSuppliedAnswers: boolean,
-	hasUserSuppliedComments: boolean
-};
+// type ConsultationStateType = {
+// 	consultationIsOpen: boolean,
+// 	hasQuestions: boolean,
+// 	consultationHasEnded: boolean,
+// 	hasUserSuppliedAnswers: boolean,
+// 	hasUserSuppliedComments: boolean
+// };
 
-type ConsultationDataType = {
-	consultationState: ConsultationStateType,
-	supportsComments: boolean,
-	supportsQuestions: boolean
-};
+// type ConsultationDataType = {
+// 	consultationState: ConsultationStateType,
+// 	supportsComments: boolean,
+// 	supportsQuestions: boolean
+// };
 
 type StateType = {
-	consultationData: ConsultationDataType,
-	shouldShowDrawer: boolean,
-	shouldShowCommentsTab: boolean,
-	shouldShowQuestionsTab: boolean,
+	// consultationData: ConsultationDataType,
+	// shouldShowDrawer: boolean,
+	// shouldShowCommentsTab: boolean,
+	// shouldShowQuestionsTab: boolean,
 	error: {
 		hasError: boolean,
 		message: string
@@ -44,10 +44,10 @@ export class DocumentView extends Component<PropsType, StateType> {
 		this.drawer = React.createRef();
 
 		this.state = {
-			consultationData: null,
-			shouldShowDrawer: true,
-			shouldShowCommentsTab: false,
-			shouldShowQuestionsTab: false,
+			// consultationData: null,
+			// shouldShowDrawer: true,
+			// shouldShowCommentsTab: false,
+			// shouldShowQuestionsTab: false,
 			error: {
 				hasError: false,
 				message: null
@@ -61,57 +61,57 @@ export class DocumentView extends Component<PropsType, StateType> {
 		this.drawer.current.newComment(incomingComment);
 	};
 
-	gatherData = async () => {
-		const consultationId = this.props.match.params.consultationId;
-		const consultationData = load("consultation", undefined, [], {
-			consultationId
-		})
-			.then(response => response.data)
-			.catch(err => {
-				this.setState({
-					error: {
-						hasError: true,
-						message: "consultationData " + err
-					}
-				});
-			});
+	// gatherData = async () => {
+	// 	const consultationId = this.props.match.params.consultationId;
+	// 	const consultationData = load("consultation", undefined, [], {
+	// 		consultationId
+	// 	})
+	// 		.then(response => response.data)
+	// 		.catch(err => {
+	// 			this.setState({
+	// 				error: {
+	// 					hasError: true,
+	// 					message: "consultationData " + err
+	// 				}
+	// 			});
+	// 		});
 
-		return {
-			consultationData: await consultationData
-		};
-	};
+	// 	return {
+	// 		consultationData: await consultationData
+	// 	};
+	// };
 
-	componentDidMount() {
-		this.gatherData()
-			.then(data => {
+	// componentDidMount() {
+	// 	this.gatherData()
+	// 		.then(data => {
 				
-				const shouldShowDrawer =  (	data.consultationData.supportsComments || 
-											data.consultationData.supportsQuestions ||
-											data.consultationData.consultationState.hasUserSuppliedComments || 
-											data.consultationData.consultationState.hasUserSuppliedAnswers); 
-				const shouldShowCommentsTab = (	data.consultationData.supportsComments || 
-												data.consultationData.consultationState.hasUserSuppliedComments);
+	// 			const shouldShowDrawer =  (	data.consultationData.supportsComments || 
+	// 										data.consultationData.supportsQuestions ||
+	// 										data.consultationData.consultationState.hasUserSuppliedComments || 
+	// 										data.consultationData.consultationState.hasUserSuppliedAnswers); 
+	// 			const shouldShowCommentsTab = (	data.consultationData.supportsComments || 
+	// 											data.consultationData.consultationState.hasUserSuppliedComments);
 
-				const shouldShowQuestionsTab = (	data.consultationData.consultationState.hasQuestions || 
-													data.consultationData.consultationState.hasUserSuppliedAnswers);
+	// 			const shouldShowQuestionsTab = (	data.consultationData.consultationState.hasQuestions || 
+	// 												data.consultationData.consultationState.hasUserSuppliedAnswers);
 
-				this.setState({
-					consultationData : data.consultationData,
-					shouldShowDrawer: shouldShowDrawer,
-					shouldShowCommentsTab: shouldShowCommentsTab,
-					shouldShowQuestionsTab: shouldShowQuestionsTab
-				});
-			})
-			.catch(err => {
-				this.setState({
-					error: {
-						hasError: true,
-						message: "gatherData in componentDidMount failed  " + err
-					}
-				});
+	// 			this.setState({
+	// 				consultationData : data.consultationData,
+	// 				shouldShowDrawer: shouldShowDrawer,
+	// 				shouldShowCommentsTab: shouldShowCommentsTab,
+	// 				shouldShowQuestionsTab: shouldShowQuestionsTab
+	// 			});
+	// 		})
+	// 		.catch(err => {
+	// 			this.setState({
+	// 				error: {
+	// 					hasError: true,
+	// 					message: "gatherData in componentDidMount failed  " + err
+	// 				}
+	// 			});
 
-			});
-	}
+	// 		});
+	// }
 
 	render() {
 		if (this.state.error.hasError) { throw new Error(this.state.error.message) }
@@ -119,11 +119,11 @@ export class DocumentView extends Component<PropsType, StateType> {
 			<Fragment>
 				
 				{/* "ref" ties the <Drawer /> component to React.createRef() above*/}
-				{this.state.shouldShowDrawer && 					
-					<Drawer ref={this.drawer} 
-						shouldShowCommentsTab={this.state.shouldShowCommentsTab} 
-						shouldShowQuestionsTab={this.state.shouldShowQuestionsTab}/>
-				}
+				{/* {this.state.shouldShowDrawer && 					 */}
+					<Drawer ref={this.drawer} />
+					{/* shouldShowCommentsTab={this.state.shouldShowCommentsTab} 
+						shouldShowQuestionsTab={this.state.shouldShowQuestionsTab} */}
+				{/* } */}
 				{/* Passing the function we're using from <Drawer /> to DocWithRouter via props*/}
 				<DocumentWithRouter onNewCommentClick={this.newCommentHandler} />
 			</Fragment>
