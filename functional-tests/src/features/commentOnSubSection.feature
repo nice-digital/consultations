@@ -16,6 +16,7 @@
  		When I click on the button "[data-qa-sel='nav-list-item']:nth-of-type(4)"
 		And I refresh
  		And I pause for 1000ms
+		Then I wait on element ".section:first-of-type > [data-qa-sel='in-text-comment-button'] > .icon" to exist
  		When I click on the button ".section:first-of-type > [data-qa-sel='in-text-comment-button'] > .icon"
  		And I pause for 1000ms
  		Then I wait on element "body [data-qa-sel='comment-box-title']" for 1000ms to exist
