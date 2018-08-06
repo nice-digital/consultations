@@ -21,12 +21,25 @@
 		"hasQuestions": false,
 		"hasUserSuppliedAnswers": false,
 		"hasUserSuppliedComments": false,
-		"userHasSubmitted": false,
+        "userHasSubmitted": false,
+        "consultationSupportsQuestions":false,
+        "consultationSupportsComments":false,
+        "documentIdsWhichSupportQuestions":[
+            2,
+            2
+        ],
+        "documentIdsWhichSupportComments":[
+            2,
+            2
+        ],
 		"consultationIsOpen": true,
 		"consultationHasNotStartedYet": false,
 		"consultationHasEnded": false,
 		"supportsSubmission": false,
-		"supportsDownload": false
+        "supportsDownload": false,
+        "shouldShowDrawer":true,
+        "shouldShowCommentsTab":true,
+        "shouldShowQuestionsTab":true
   },
   "breadcrumbs": [
         {
