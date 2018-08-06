@@ -14,6 +14,7 @@
 	Scenario: User makes a comment at sub-section level
  		And I pause for 1000ms
  		When I click on the button "[data-qa-sel='nav-list-item']:nth-of-type(4)"
+		And I refresh
  		And I pause for 1000ms
  		When I click on the button ".section > [data-qa-sel='in-text-comment-button']"
  		And I pause for 1000ms
