@@ -42,12 +42,12 @@ export function saveCommentHandler(e: Event, comment: CommentType, self: any) {
 export function deleteCommentHandler(e: Event, commentId: number, self: any) {
     e.preventDefault();
     if (commentId < 0) {
-        self.removeCommentFromState(commentId, self);
+        removeCommentFromState(commentId, self);
     } else {
         load("editcomment", undefined, [commentId], {}, "DELETE")
             .then(res => {
                 if (res.status === 200) {
-                    self.removeCommentFromState(commentId, self);
+                    removeCommentFromState(commentId, self);
                 }
             })
             .catch(err => {
@@ -110,12 +110,12 @@ export function deleteAnswerHandler(e: Event, questionId: number, answerId: numb
     e.preventDefault();
     //todo: call the delete answer api, then update the state on success.
     if (answerId < 0) {
-        self.removeAnswerFromState(questionId, answerId);
+        removeAnswerFromState(questionId, answerId);
     } else {
         load("editanswer", undefined, [answerId], {}, "DELETE")
             .then(res => {
                 if (res.status === 200) {
-                    self.removeAnswerFromState(questionId, answerId, self);
+                    removeAnswerFromState(questionId, answerId, self);
                 }
             })
             .catch(err => {

@@ -1,22 +1,26 @@
 // @flow
 
 import React, { Component, Fragment } from "react";
-//import CommentListWithRouter from "../CommentList/CommentList";
-import ReviewListWithRouter from "../ReviewList/ReviewList";
 import { withRouter } from "react-router";
+import { StickyContainer, Sticky } from "react-sticky";
+import stringifyObject from "stringify-object";
+
+import preload from "../../data/pre-loader";
 import { load } from "../../data/loader";
+import { saveCommentHandler, deleteCommentHandler, saveAnswerHandler, deleteAnswerHandler } from "../../helpers/editing-and-deleting";
+import { queryStringToObject } from "../../helpers/utils";
+import { pullFocusById } from "../../helpers/accessibility-helpers";
+import { projectInformation } from "../../constants";
+import { UserContext } from "../../context/UserContext";
+
 import { Header } from "../Header/Header";
 import { PhaseBanner } from "../PhaseBanner/PhaseBanner";
-import { projectInformation } from "../../constants";
 import { BreadCrumbs } from "../Breadcrumbs/Breadcrumbs";
-import { StickyContainer, Sticky } from "react-sticky";
-import { StackedNav } from "../StackedNav/StackedNav";
-import { queryStringToObject } from "../../helpers/utils";
-import { UserContext } from "../../context/UserContext";
-import { pullFocusById } from "../../helpers/accessibility-helpers";
 import { FilterPanel } from "../FilterPanel/FilterPanel";
-//import stringifyObject from "stringify-object";
 import { withHistory } from "../HistoryContext/HistoryContext";
+import { CommentBox } from "../CommentBox/CommentBox";
+import { Question } from "../Question/Question";
+import { LoginBanner } from "../LoginBanner/LoginBanner";
 
 type PropsType = {
 	staticContext?: any,
@@ -33,28 +37,70 @@ type PropsType = {
 };
 
 type StateType = {
-	documentsList: Array<DocumentType>,
 	consultationData: ConsultationDataType,
 	commentsData: any, //TODO: any
 	userHasSubmitted: boolean,
 	validToSubmit: false,
 	viewSubmittedComments: boolean,
-	path: string
+	path: string,
+	hasInitalData: boolean,
+	allowComments: boolean,
+	comments: Array<CommentType>,
+	questions: Array<QuestionType>,
 };
 
 export class ReviewListPage extends Component<PropsType, StateType> {
 	constructor(props: PropsType) {
 		super(props);
-
 		this.state = {
 			loading: true,
 			consultationData: null,
+			commentsData: null,
 			userHasSubmitted: false,
 			viewSubmittedComments: false,
 			validToSubmit: false,
-			filters: null,
 			path: null,
+			hasInitalData: false,
+			allowComments: false,
+			comments: [],
+			questions: []
 		};
+
+		let preloadedData = {};
+		if (this.props.staticContext && this.props.staticContext.preload) {
+			preloadedData = this.props.staticContext.preload.data; //this is data from Configure => SupplyData in Startup.cs. the main thing it contains for this call is the cookie for the current user.
+		}
+	
+		const preloadedCommentsData = preload(
+			this.props.staticContext,
+			"commentsreview",
+			[],
+			{ sourceURI: this.props.match.url },
+			preloadedData
+		);
+		const consultationId = this.props.match.params.consultationId;
+		const preloadedConsultationData = preload(
+			this.props.staticContext,
+			"consultation",
+			[],
+			{consultationId, isReview: true},
+			preloadedData
+		);
+
+		if (preloadedCommentsData && preloadedConsultationData) {
+			this.state = {
+				path: this.props.basename + this.props.location.pathname,
+				commentsData: preloadedCommentsData,
+				consultationData: preloadedConsultationData,
+				userHasSubmitted: preloadedConsultationData.consultationState.userHasSubmitted,
+				validToSubmit: preloadedConsultationData.consultationState.supportsSubmission,
+				loading: false,
+				hasInitalData: true,
+				allowComments: (preloadedConsultationData.consultationState.consultationIsOpen && !preloadedConsultationData.consultationState.userHasSubmitted),
+				comments: preloadedCommentsData.commentsAndQuestions.comments,
+				questions: preloadedCommentsData.commentsAndQuestions.questions,
+			};
+		}
 	}
 
 	gatherData = async () => {
@@ -78,14 +124,13 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		if (this.state.consultationData === null){
 
 			const consultationId = this.props.match.params.consultationId;
-
 			const consultationData = load("consultation", undefined, [], {
 				consultationId, isReview: true,
 			})
-				.then(response => response.data)
-				.catch(err => {
-					throw new Error("consultationData " + err);
-				});
+			.then(response => response.data)
+			.catch(err => {
+				throw new Error("consultationData " + err);
+			});
 
 			return {
 				consultationData: await consultationData,
@@ -105,13 +150,18 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 				this.setState({
 					consultationData: data.consultationData,
 					commentsData: data.commentsData,
+					comments: data.commentsData.commentsAndQuestions.comments,
+					questions: data.commentsData.commentsAndQuestions.questions,
 					userHasSubmitted: data.consultationData.consultationState.userHasSubmitted,
 					validToSubmit: data.consultationData.consultationState.supportsSubmission,
 					loading: false,
+					allowComments: (data.consultationData.consultationState.consultationIsOpen && !data.consultationData.consultationState.userHasSubmitted),
 				});
 			} else{
 				this.setState({
 					commentsData: data.commentsData,
+					comments: data.commentsData.commentsAndQuestions.comments,
+					questions: data.commentsData.commentsAndQuestions.questions,
 					loading: false,
 				});
 			}			
@@ -122,7 +172,9 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 	}
 
 	componentDidMount() {
-		this.loadDataAndUpdateState(); //maybe SSR this?
+		if (!this.state.hasInitalData){
+			// this.loadDataAndUpdateState(); 	
+		}
 		this.props.history.listen(location => {
 			this.loadDataAndUpdateState();
 		});
@@ -141,11 +193,11 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 	};
 
 	submitConsultation = () => {
-		const comments = this.reviewList.getComments();
+		const comments = this.state.commentsData.commentsAndQuestions.comments;
 		let answersToSubmit = [];
 
 		if (typeof(this.reviewList) !== "undefined"){
-			const questions = this.reviewList.getQuestions();
+			const questions = this.state.commentsData.commentsAndQuestions.questions;
 			questions.forEach(function(question){
 				if (question.answers != null){
 					answersToSubmit = answersToSubmit.concat(question.answers);
@@ -162,7 +214,6 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 				console.log(err);
 				if (err.response) alert(err.response.statusText);
 			});
-
 	};
 
 	submittedHandler = () => {
@@ -199,9 +250,25 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		});
 	};
 
+	//these handlers are in the helpers/editing-and-deleting.js utility file as they're also used in CommentList.js
+	saveCommentHandler = (e: Event, comment: CommentType) => {
+		saveCommentHandler(e, comment, this);
+	}
+	deleteCommentHandler = (e: Event, comment: CommentType) => {
+		deleteCommentHandler(e, comment, this);
+	}
+	saveAnswerHandler = (e: Event, answer: AnswerType) => {
+		saveAnswerHandler(e, answer, this);
+	}
+	deleteAnswerHandler = (e: Event, answer: AnswerType) => {
+		deleteAnswerHandler(e, answer, this);
+	}	
+
 	render() {
 		if (this.state.loading) return <h1>Loading...</h1>;
 		const { title, reference } = this.state.consultationData;	
+		const commentsToShow = this.state.comments || []; //.filter(comment => !comment.show);
+		const questionsToShow = this.state.questions || []; //.filter(question => !question.show);
 
 		return (
 			<Fragment>
@@ -221,95 +288,152 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 										reference={reference}
 										consultationState={this.state.consultationData.consultationState}/>
 									<h2 className="mt--0">{this.state.userHasSubmitted ? "Comments submitted" : "Comments for review"}</h2>
-
-									{(this.state.userHasSubmitted && !this.state.viewSubmittedComments) ?
-										<div className="hero">
-											<div className="hero__container">
-												<div className="hero__body">
-													<div className="hero__copy">
-														<p className="hero__intro" data-qa-sel="submitted-text">Thank you, your comments have been submitted.</p>
-														<div className="hero__actions">
-															<button className="btn" data-qa-sel="review-submitted-comments" onClick={this.viewSubmittedCommentsHandler}>Review all submitted comments</button>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										:
-										<StickyContainer className="grid">
-											<div data-g="12 md:9 md:push:3">
-
-												<ReviewListWithRouter
-													isVisible={true}
-													isSubmitted={this.state.userHasSubmitted}
-													wrappedComponentRef={component => (this.reviewList = component)}
-													submittedHandler={this.submittedHandler}
-													validationHander={this.validationHander}
-													comments={this.state.commentsData.commentsAndQuestions.comments}
-													questions={this.state.commentsData.commentsAndQuestions.questions}
-													loading={this.state.loading}
-													/>
-												
-												{this.state.userHasSubmitted ?
-													<div className="hero">
-														<div className="hero__container">
-															<div className="hero__body">
-																<div className="hero__copy">
-																	<p className="hero__intro" data-qa-sel="submitted-text">Thank you, your comments have been submitted.</p>
-																	<button className="btn btn--secondary">Download all comments</button>
+									<UserContext.Consumer>
+										{ (contextValue: ContextType) => {
+											return (
+												!contextValue.isAuthorised ?
+													<LoginBanner
+															signInButton={true}
+															currentURL={this.props.match.url}
+															signInURL={contextValue.signInURL}
+															registerURL={contextValue.registerURL}
+														/> :
+														(
+															(this.state.userHasSubmitted && !this.state.viewSubmittedComments) ?
+																<div className="hero">
+																	<div className="hero__container">
+																		<div className="hero__body">
+																			<div className="hero__copy">
+																				<p className="hero__intro" data-qa-sel="submitted-text">Thank you, your comments have been submitted.</p>
+																				<div className="hero__actions">
+																					<button className="btn" data-qa-sel="review-submitted-comments" onClick={this.viewSubmittedCommentsHandler}>Review all submitted comments</button>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
 																</div>
-															</div>
-														</div>
-													</div>
-													:
-													<div className="hero">
-														<div className="hero__container">
-															<div className="hero__body">
-																<div className="hero__copy">
-																	{/* <h1 className="hero__title">Hero title</h1> */}
-																	<p className="hero__intro">You are about to submit your final response to NICE</p>
-																	<p>After submission you won't be able to:</p>
-																	<ul>
-																		<li>edit your comments further</li>
-																		<li>add any extra comments.</li>
-																	</ul>
-																	<p>Do you want to continue?</p>
-																	<UserContext.Consumer>
-																		{contextValue => {
-																			if (contextValue.isAuthorised) {
-																				return (
-																					<Fragment>
-																						<h3 className="mt--0">Ready to submit?</h3>
-																						<button
-																							disabled={!this.state.validToSubmit}
-																							className="btn btn--cta"
-																							data-qa-sel="submit-comment-button"
-																							onClick={this.submitConsultation}
-																						>{this.state.userHasSubmitted ? "Comments submitted": "Submit your comments"}
-																						</button>
-																						<button className="btn btn--secondary">Download all comments</button>
-																					</Fragment>
-																				);
+																: 
+															(
+																<StickyContainer className="grid">
+																	<div data-g="12 md:9 md:push:3">
+						
+																		{/* <ReviewListWithRouter
+																			isVisible={true}
+																			isSubmitted={this.state.userHasSubmitted}
+																			wrappedComponentRef={component => (this.reviewList = component)}
+																			submittedHandler={this.submittedHandler}
+																			validationHander={this.validationHander}
+																			comments={this.state.commentsData.commentsAndQuestions.comments}
+																			questions={this.state.commentsData.commentsAndQuestions.questions}
+																			loading={this.state.loading}
+																			/> */}
+						
+																		<div data-qa-sel="comment-list-wrapper">					
+																					
+																			{questionsToShow.length > 0 &&
+																				<div>
+																					<p>We would like to hear your views on the draft recommendations presented in the guideline, and any comments you may have on the rationale and impact sections in the guideline and the evidence presented in the evidence reviews documents. We would also welcome views on the Equality Impact Assessment.</p>
+																					<p>We would like to hear your views on these questions:</p>
+																					<ul className="CommentList list--unstyled">
+																						{questionsToShow.map((question) => {
+																							return (
+																								<Question
+																									readOnly={!this.state.allowComments}
+																									isVisible={this.props.isVisible}
+																									key={question.questionId}
+																									unique={`Comment${question.questionId}`}
+																									question={question}
+																									saveAnswerHandler={this.saveAnswerHandler}
+																									deleteAnswerHandler={this.deleteAnswerHandler}
+																								/>
+																							);
+																						})}
+																					</ul>
+																				</div>						
+																			}														
+																			{commentsToShow.length === 0 ? <p>No comments yet</p> :
+																				<ul className="CommentList list--unstyled">
+																					{commentsToShow.map((comment) => {
+																						return (
+																							<CommentBox
+																								readOnly={!this.state.allowComments}
+																								isVisible={this.props.isVisible}
+																								key={comment.commentId}
+																								unique={`Comment${comment.commentId}`}
+																								comment={comment}
+																								saveHandler={this.saveCommentHandler}
+																								deleteHandler={this.deleteCommentHandler}
+																							/>
+																						);
+																					})}
+																				</ul>
 																			}
-																		}}
-																	</UserContext.Consumer>
-																</div>
-															</div>
-														</div>
-													</div>
-												}
-											</div>
-											<div data-g="12 md:3 md:pull:9">
-												<Sticky disableHardwareAcceleration>
-													{({ style }) => (
-														<div style={style}>
-															<FilterPanel filters={this.state.commentsData.filters} path={this.state.path} />
-														</div>
-													)}
-												</Sticky>
-											</div>
-										</StickyContainer>
-									}
+																		</div>		
+																		
+																		{this.state.userHasSubmitted ?
+																			<div className="hero">
+																				<div className="hero__container">
+																					<div className="hero__body">
+																						<div className="hero__copy">
+																							<p className="hero__intro" data-qa-sel="submitted-text">Thank you, your comments have been submitted.</p>
+																							<button className="btn btn--secondary">Download all comments</button>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			:
+																			<div className="hero">
+																				<div className="hero__container">
+																					<div className="hero__body">
+																						<div className="hero__copy">
+																							{/* <h1 className="hero__title">Hero title</h1> */}
+																							<p className="hero__intro">You are about to submit your final response to NICE</p>
+																							<p>After submission you won't be able to:</p>
+																							<ul>
+																								<li>edit your comments further</li>
+																								<li>add any extra comments.</li>
+																							</ul>
+																							<p>Do you want to continue?</p>
+																							<UserContext.Consumer>
+																								{contextValue => {
+																									if (contextValue.isAuthorised) {
+																										return (
+																											<Fragment>
+																												<h3 className="mt--0">Ready to submit?</h3>
+																												<button
+																													disabled={!this.state.validToSubmit}
+																													className="btn btn--cta"
+																													data-qa-sel="submit-comment-button"
+																													onClick={this.submitConsultation}
+																												>{this.state.userHasSubmitted ? "Comments submitted": "Submit your comments"}
+																												</button>
+																												<button className="btn btn--secondary">Download all comments</button>
+																											</Fragment>
+																										);
+																									}
+																								}}
+																							</UserContext.Consumer>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																		}
+																	</div>
+																	<div data-g="12 md:3 md:pull:9">
+																		<Sticky disableHardwareAcceleration>
+																			{({ style }) => (
+																				<div style={style}>
+																					<FilterPanel filters={this.state.commentsData.filters} path={this.state.path} />
+																				</div>
+																			)}
+																		</Sticky>
+																	</div>
+																</StickyContainer>
+															)
+														)
+											);
+										}}
+									</UserContext.Consumer>									
 								</div>
 							</ main>
 						</div>
