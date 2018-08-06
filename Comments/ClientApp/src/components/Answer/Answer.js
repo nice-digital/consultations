@@ -98,7 +98,7 @@ export class Answer extends Component<PropsType, StateType> {
 							<Moment format="D/M/YYYY - h:mma" date={moment.utc(lastModifiedDate).toDate()}/>
 						</div>
 					) : null}
-					<form onSubmit={e => this.props.saveHandler(e, answer, this)}>
+					<form onSubmit={e => this.props.saveHandler(e, answer)}>
 						<div className="form__group form__group--textarea mb--0">
 							<textarea
 								data-qa-sel="Comment-text-area"
@@ -122,7 +122,7 @@ export class Answer extends Component<PropsType, StateType> {
 						<button
 							data-qa-sel="delete-comment-button"
 							className="btn mr--0 right"
-							onClick={e => this.props.deleteHandler(e, questionId, answerId, this)}>
+							onClick={e => this.props.deleteHandler(e, questionId, answerId)}>
 							<span className="visually-hidden">Delete this answer</span>
 							<span className="icon icon--trash" aria-hidden="true"/>
 						</button>

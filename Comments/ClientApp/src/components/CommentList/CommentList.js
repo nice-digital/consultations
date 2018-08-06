@@ -144,11 +144,11 @@ export class CommentList extends Component<PropsType, StateType> {
 	deleteCommentHandler = (e: Event, comment: CommentType) => {
 		deleteCommentHandler(e, comment, this);
 	}
-	saveAnswerHandler = (e: Event, comment: CommentType) => {
-		saveAnswerHandler(e, comment, this);
+	saveAnswerHandler = (e: Event, answer: AnswerType) => {
+		saveAnswerHandler(e, answer, this);
 	}
-	deleteAnswerHandler = (e: Event, comment: CommentType) => {
-		deleteAnswerHandler(e, comment, this);
+	deleteAnswerHandler = (e: Event,  questionId: number, answerId: number) => {
+		deleteAnswerHandler(e, questionId, answerId, this);
 	}
 
 	render() {

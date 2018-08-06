@@ -23,8 +23,8 @@ export function saveCommentHandler(e: Event, comment: CommentType, self: any) {
                     comments,
                     error
                 });
-                if (typeof self.props.validationHander === "function") {
-                    self.props.validationHander();
+                if (typeof self.validationHander === "function") {
+                    self.validationHander();
                 }
             }
         })
@@ -95,8 +95,8 @@ export function saveAnswerHandler(e: Event, answer: AnswerType, self: any) {
                 self.setState({
                     questions
                 });
-                if (typeof self.props.validationHander === "function") {
-                    self.props.validationHander();
+                if (typeof self.validationHander === "function") {
+                    self.validationHander();
                 }
             }
         })
@@ -130,8 +130,8 @@ function removeCommentFromState(commentId: number, self: any) {
     const error = "";
     comments = comments.filter(comment => comment.commentId !== commentId);
     self.setState({ comments, error });
-    if ((comments.length === 0) && (typeof self.props.validationHander === "function")) {
-        self.props.validationHander();
+    if ((comments.length === 0) && (typeof self.validationHander === "function")) {
+        self.validationHander();
     }
 };
 
@@ -140,7 +140,7 @@ function removeAnswerFromState(questionId: number, answerId: number, self: any) 
     let questionToUpdate = questions.find(question => question.questionId === questionId);
     questionToUpdate.answers = questionToUpdate.answers.filter(answer => answer.answerId !== answerId);
     self.setState({ questions });
-    if (typeof self.props.validationHander === "function") {
-        self.props.validationHander();
+    if (typeof self.validationHander === "function") {
+        self.validationHander();
     }
 };

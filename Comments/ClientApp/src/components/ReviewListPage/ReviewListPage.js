@@ -193,17 +193,14 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 	};
 
 	submitConsultation = () => {
-		const comments = this.state.comments.comments;
+		const comments = this.state.comments;
+		const questions = this.state.questions;
 		let answersToSubmit = [];
-
-		if (typeof(this.reviewList) !== "undefined"){
-			const questions = this.state.questions;
-			questions.forEach(function(question){
-				if (question.answers != null){
-					answersToSubmit = answersToSubmit.concat(question.answers);
-				}
-			});
-		}
+		questions.forEach(function(question){
+			if (question.answers != null){
+				answersToSubmit = answersToSubmit.concat(question.answers);
+			}
+		});		
 		let commentsAndAnswers = {comments: comments, answers: answersToSubmit};
 
 		load("submit", undefined, [], {}, "POST", commentsAndAnswers, true)
@@ -221,6 +218,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			userHasSubmitted: true,
 			validToSubmit: false,
 			viewSubmittedComments: false,
+			allowComments: false,
 		});
 	};
 
@@ -228,17 +226,14 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 	//to answer a question on the review page and the submit button should then enable - if the consultation is open + hasn't already been submitted + all the mandatory questions are answered.
 	//(plus there's the whole unsaved changes to deal with. what happens there?)
 	validationHander = () => {
-		const comments = this.reviewList.getComments();
+		const comments = this.state.comments;
+		const questions = this.state.questions;
 		let hasAnswers = false;
-		if (typeof(this.reviewList) !== "undefined"){
-			const questions = this.reviewList.getQuestions();
-
-			questions.forEach(function(question){
-				if (question.answers !== null && question.answers.length > 0){
-					hasAnswers = true;
-				}
-			});
-		}
+		questions.forEach(function(question){
+			if (question.answers !== null && question.answers.length > 0){
+				hasAnswers = true;
+			}
+		});
 		this.setState({
 			validToSubmit: comments.length > 0 || hasAnswers,
 		});
@@ -260,15 +255,15 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 	saveAnswerHandler = (e: Event, answer: AnswerType) => {
 		saveAnswerHandler(e, answer, this);
 	}
-	deleteAnswerHandler = (e: Event, answer: AnswerType) => {
-		deleteAnswerHandler(e, answer, this);
+	deleteAnswerHandler = (e: Event,  questionId: number, answerId: number) => {
+		deleteAnswerHandler(e, questionId, answerId, this);
 	}	
 
 	render() {
 		if (this.state.loading) return <h1>Loading...</h1>;
 		const { title, reference } = this.state.consultationData;	
-		const commentsToShow = this.state.comments.filter(comment => !comment.show) || []; 
-		const questionsToShow = this.state.questions.filter(question => !question.show) || []; 
+		const commentsToShow = this.state.comments.filter(comment => comment.show) || []; 
+		const questionsToShow = this.state.questions.filter(question => question.show) || []; 
 
 		return (
 			<Fragment>
@@ -338,7 +333,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																						{questionsToShow.map((question) => {
 																							return (
 																								<Question
-																									readOnly={!this.state.allowComments}
+																									readOnly={!this.state.allowComments || this.state.userHasSubmitted}
 																									isVisible={this.props.isVisible}
 																									key={question.questionId}
 																									unique={`Comment${question.questionId}`}
@@ -356,7 +351,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																					{commentsToShow.map((comment) => {
 																						return (
 																							<CommentBox
-																								readOnly={!this.state.allowComments}
+																								readOnly={!this.state.allowComments || this.state.userHasSubmitted}
 																								isVisible={this.props.isVisible}
 																								key={comment.commentId}
 																								unique={`Comment${comment.commentId}`}
