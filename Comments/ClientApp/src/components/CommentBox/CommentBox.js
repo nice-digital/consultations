@@ -26,7 +26,6 @@ type CommentType = {
 
 type PropsType = {
 	staticContext?: any,
-	isVisible: boolean,
 	comment: CommentType,
 	readOnly: boolean,
 	saveHandler: Function,

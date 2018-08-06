@@ -6,9 +6,9 @@ import { withRouter, Link } from "react-router-dom";
 
 import preload from "../../data/pre-loader";
 import { load } from "../../data/loader";
-import { queryStringToObject, replaceFormat } from "../../helpers/utils";
 import { saveCommentHandler, deleteCommentHandler, saveAnswerHandler, deleteAnswerHandler } from "../../helpers/editing-and-deleting";
 import { pullFocusById } from "../../helpers/accessibility-helpers";
+import {mobileWidth} from "../../constants";
 
 import { CommentBox } from "../CommentBox/CommentBox";
 import { Question } from "../Question/Question";
@@ -25,11 +25,6 @@ type PropsType = {
 		pathname: string,
 		search: string
 	},
-	isVisible: boolean,
-	isSubmitted: boolean,
-	submittedHandler: Function,
-	validationHander: Function,
-	viewComments: boolean //when false, we view questions.
 };
 
 type StateType = {
@@ -37,7 +32,14 @@ type StateType = {
 	questions: Array<QuestionType>,
 	loading: boolean,
 	allowComments: boolean,
-	initialDataLoaded: boolean
+	initialDataLoaded: boolean,
+	//drawer:
+	drawerExpandedWidth: boolean,
+	drawerOpen: boolean,
+	drawerMobile: boolean,
+	viewComments: boolean,
+	shouldShowCommentsTab: boolean,
+	shouldShowQuestionsTab: boolean,
 };
 
 type ContextType = any;
@@ -52,6 +54,12 @@ export class CommentList extends Component<PropsType, StateType> {
 			allowComments: true,
 			error: "",
 			initialDataLoaded: false,
+			drawerExpandedWidth: false,
+			drawerOpen: false,
+			drawerMobile: false,
+			viewComments: true,
+			shouldShowCommentsTab: false,
+			shouldShowQuestionsTab: false,
 		};
 		let preloadedData = {};
 		if (this.props.staticContext && this.props.staticContext.preload) {
@@ -75,6 +83,9 @@ export class CommentList extends Component<PropsType, StateType> {
 				allowComments: allowComments,
 				error: "",
 				initialDataLoaded: true,
+				viewComments: preloadedCommentsData.consultationState.shouldShowCommentsTab,
+				shouldShowCommentsTab: preloadedCommentsData.consultationState.shouldShowCommentsTab,
+				shouldShowQuestionsTab: preloadedCommentsData.consultationState.shouldShowQuestionsTab,
 			};
 		}
 	}
@@ -88,6 +99,8 @@ export class CommentList extends Component<PropsType, StateType> {
 					questions: response.data.questions,
 					loading: false,
 					allowComments: allowComments,
+					shouldShowCommentsTab: response.data.consultationState.shouldShowCommentsTab,
+					shouldShowQuestionsTab: response.data.consultationState.shouldShowQuestionsTab,
 				});
 			})
 			.catch(err => console.log("load comments in commentlist " + err));
@@ -97,6 +110,10 @@ export class CommentList extends Component<PropsType, StateType> {
 		if (!this.state.initialDataLoaded){
 			this.loadComments();
 		}
+		// We can't prerender whether we're on mobile cos SSR doesn't have a window
+		this.setState({
+			drawerMobile: this.isMobile()
+		});
 	}
 
 	componentDidUpdate(prevProps: PropsType, prevState: any, nextContent: any) {
@@ -111,6 +128,10 @@ export class CommentList extends Component<PropsType, StateType> {
 	}
 
 	newComment(newComment: CommentType) {
+		this.setState({
+			drawerOpen: true,
+			viewComments: true,
+		});
 		let comments = this.state.comments;
 		//negative ids are unsaved / new comments
 		let idToUseForNewBox = -1;
@@ -146,91 +167,191 @@ export class CommentList extends Component<PropsType, StateType> {
 		deleteAnswerHandler(e, questionId, answerId, this);
 	}
 
+	//old drawer code:
+	isMobile = () => {
+		if (typeof document !== "undefined") {
+			return (
+				document.getElementsByTagName("body")[0].offsetWidth <= mobileWidth
+			);
+		}
+		return false;
+	};
+
+	drawerClassnames = () => {
+		const width = this.state.drawerExpandedWidth ? "Drawer--wide" : "";
+		const open = this.state.drawerOpen ? "Drawer--open" : "";
+		const mobile = this.state.drawerMobile ? "Drawer--mobile" : "";
+		return `Drawer ${width} ${open} ${mobile}`;
+	};
+
+	handleClick = (event: string) => {
+		switch (event) {
+			case "toggleWidth--narrow":
+				this.setState({drawerExpandedWidth: false});
+				break;
+			case "toggleWidth--wide":
+				this.setState({drawerExpandedWidth: true});
+				break;
+			case "toggleOpenComments":
+				this.setState(prevState => ({
+					drawerOpen: (prevState.drawerOpen && prevState.viewComments ? !prevState.drawerOpen : true),
+					viewComments: true
+				}));
+				pullFocusById("#js-drawer-toggleopen-comments");
+				break;
+			case "toggleOpenQuestions":
+				this.setState(prevState => ({
+					drawerOpen: (prevState.drawerOpen && !prevState.viewComments ? !prevState.drawerOpen : true),
+					viewComments: false
+				}));
+				pullFocusById("#js-drawer-toggleopen-questions");
+				break;
+			default:
+				return;
+		}
+	};
+
+
 	render() {
-		const commentsToShow = this.state.comments;
-		const questionsToShow = this.state.questions;
 		return (
-			<UserContext.Consumer>
-				{ (contextValue: ContextType) => {
-					return (
-						<div data-qa-sel="comment-list-wrapper">
 
-							<div className="grid">
-								<h1 data-g="6" id="commenting-panel" className="p">
-									{this.props.viewComments ? "Comments" : "Questions"} panel
-								</h1>
-								{contextValue.isAuthorised ?
-									<p data-g="6">
-										<Link 	to={`/${this.props.match.params.consultationId}/review`}
-												data-qa-sel="review-all-comments"
-												className="right">Review all {this.props.viewComments ? "comments" : "questions"}</Link>
-									</p> : null
-								}
-							</div> 
-
-							{this.state.error != "" ? 
-								<div className="errorBox">
-									<p>We couldn't {this.state.error} your comment. Please try again in a few minutes.</p>
-									<p>If the problem continues please <a href="/get-involved/contact-us">contact us</a>.</p>
-								</div>
-								: null }
-
-							{this.state.loading ? <p>Loading...</p> :
-
-								contextValue.isAuthorised ?
-
-									<Fragment>
-										{this.props.viewComments ? (
-											this.state.comments.length === 0 ? <p>No comments yet</p> :
-											<ul className="CommentList list--unstyled">
-												{this.state.comments.map((comment) => {
-													return (
-														<CommentBox
-															readOnly={!this.state.allowComments}
-															isVisible={this.props.isVisible}
-															key={comment.commentId}
-															unique={`Comment${comment.commentId}`}
-															comment={comment}
-															saveHandler={this.saveCommentHandler}
-															deleteHandler={this.deleteCommentHandler}
-														/>
-													);
-												})}
-											</ul>
-										) : ( 
-											<div>
-												<p>We would like to hear your views on the draft recommendations presented in the guideline, and any comments you may have on the rationale and impact sections in the guideline and the evidence presented in the evidence reviews documents. We would also welcome views on the Equality Impact Assessment.</p>
-												<p>We would like to hear your views on these questions:</p>
-												<ul className="CommentList list--unstyled">
-													{this.state.questions.map((question) => {
-														return (
-															<Question
-																readOnly={!this.state.allowComments}
-																isVisible={this.props.isVisible}
-																key={question.questionId}
-																unique={`Comment${question.questionId}`}
-																question={question}
-																saveAnswerHandler={this.saveAnswerHandler}
-																deleteAnswerHandler={this.deleteAnswerHandler}
-															/>
-														);
-													})}
-												</ul>
-											</div>
-										)}	
-									</Fragment>
-									:
-									<LoginBanner
-										signInButton={true}
-										currentURL={this.props.match.url}
-										signInURL={contextValue.signInURL}
-										registerURL={contextValue.registerURL}
-									/>
+			<section aria-label="Commenting panel"
+					 className={this.drawerClassnames()}>
+				<div className="Drawer__controls">
+					{this.state.shouldShowCommentsTab &&
+						<button
+							data-qa-sel="open-commenting-panel"
+							id="js-drawer-toggleopen-comments"
+							className={`Drawer__control Drawer__control--comments ${(this.state.viewComments ? "active" : "active")}`} 
+							onClick={() => this.handleClick("toggleOpenComments")}
+							aria-controls="comments-panel"
+							aria-haspopup="true"
+							aria-label={this.state.drawerOpen ? "Close the commenting panel" : "Open the commenting panel"}
+							tabIndex="0">
+							{!this.state.drawerMobile ?
+								<span>{(this.state.drawerOpen && this.state.viewComments ? "Close comments" : "Open comments")}</span>
+								:
+								<span
+									className={`icon ${
+										this.state.drawerOpen
+											? "icon--chevron-right"
+											: "icon--chevron-left"}`}
+									aria-hidden="true"
+									data-qa-sel="close-commenting-panel"
+								/>
 							}
-						</div>
-					);
-				}}
-			</UserContext.Consumer>
+						</button>
+					}
+					{this.state.shouldShowQuestionsTab &&
+						<button
+							data-qa-sel="open-questions-panel"
+							id="js-drawer-toggleopen-questions"
+							className={`Drawer__control Drawer__control--questions ${(this.state.viewComments ? "active" : "active")}`}
+							onClick={() => this.handleClick("toggleOpenQuestions")}
+							aria-controls="questions-panel"
+							aria-haspopup="true"
+							aria-label={this.state.drawerOpen ? "Close the questions panel" : "Open the questions panel"}
+							tabIndex="0">
+							{!this.state.drawerMobile ?
+								<span>{(this.state.drawerOpen && !this.state.viewComments ? "Close questions" : "Open questions")}</span>
+								:
+								<span
+									className={`icon ${
+										this.state.drawerOpen
+											? "icon--chevron-right"
+											: "icon--chevron-left"}`}
+									aria-hidden="true"
+									data-qa-sel="close-questions-panel"
+								/>
+							}
+						</button>
+					}
+				</div>
+				<div aria-hidden={!this.state.drawerOpen && (this.state.shouldShowQuestionsTab || this.state.shouldShowCommentsTab)}
+					 data-qa-sel="comment-panel"
+					 id="comments-panel"
+					 className="Drawer__main">
+					<UserContext.Consumer>
+						{ (contextValue: ContextType) => {
+							return (
+								<div data-qa-sel="comment-list-wrapper">
+
+									<div className="grid">
+										<h1 data-g="6" id="commenting-panel" className="p">
+											{this.state.viewComments ? "Comments" : "Questions"} panel
+										</h1>
+										{contextValue.isAuthorised ?
+											<p data-g="6">
+												<Link 	to={`/${this.props.match.params.consultationId}/review`}
+														data-qa-sel="review-all-comments"
+														className="right">Review all {this.state.viewComments ? "comments" : "questions"}</Link>
+											</p> : null
+										}
+									</div> 
+
+									{this.state.error !== "" ? 
+										<div className="errorBox">
+											<p>We couldn't {this.state.error} your comment. Please try again in a few minutes.</p>
+											<p>If the problem continues please <a href="/get-involved/contact-us">contact us</a>.</p>
+										</div>
+										: null }
+
+									{this.state.loading ? <p>Loading...</p> :
+
+										contextValue.isAuthorised ?
+
+											<Fragment>
+												{this.state.viewComments ? (
+													this.state.comments.length === 0 ? <p>No comments yet</p> :
+													<ul className="CommentList list--unstyled">
+														{this.state.comments.map((comment) => {
+															return (
+																<CommentBox
+																	readOnly={!this.state.allowComments}
+																	key={comment.commentId}
+																	unique={`Comment${comment.commentId}`}
+																	comment={comment}
+																	saveHandler={this.saveCommentHandler}
+																	deleteHandler={this.deleteCommentHandler}
+																/>
+															);
+														})}
+													</ul>
+												) : ( 
+													<div>
+														<p>We would like to hear your views on the draft recommendations presented in the guideline, and any comments you may have on the rationale and impact sections in the guideline and the evidence presented in the evidence reviews documents. We would also welcome views on the Equality Impact Assessment.</p>
+														<p>We would like to hear your views on these questions:</p>
+														<ul className="CommentList list--unstyled">
+															{this.state.questions.map((question) => {
+																return (
+																	<Question
+																		readOnly={!this.state.allowComments}
+																		key={question.questionId}
+																		unique={`Comment${question.questionId}`}
+																		question={question}
+																		saveAnswerHandler={this.saveAnswerHandler}
+																		deleteAnswerHandler={this.deleteAnswerHandler}
+																	/>
+																);
+															})}
+														</ul>
+													</div>
+												)}	
+											</Fragment>
+											:
+											<LoginBanner
+												signInButton={true}
+												currentURL={this.props.match.url}
+												signInURL={contextValue.signInURL}
+												registerURL={contextValue.registerURL}
+											/>
+									}
+								</div>
+							);
+						}}
+					</UserContext.Consumer>
+				</div>
+			</section>			
 		);
 	}
 }

@@ -4,7 +4,7 @@ import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import ReactHtmlParser from "react-html-parser";
 
-import preload from "../../data/pre-loader";
+//import preload from "../../data/pre-loader";
 import { load } from "./../../data/loader";
 
 type PropsType = {

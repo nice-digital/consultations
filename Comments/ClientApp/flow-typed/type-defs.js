@@ -45,7 +45,14 @@ declare type ConsultationStateType = {
 	hasQuestions: boolean,
 	consultationHasEnded: boolean,
 	hasUserSuppliedAnswers: boolean,
-	hasUserSuppliedComments: boolean
+	hasUserSuppliedComments: boolean,
+	consultationSupportsQuestion: boolean,
+	consultationSupportsComments: boolean,
+	documentIdsWhichSupportQuestions: Array<number>,
+	documentIdsWhichSupportComments: Array<number>,
+	shouldShowDrawer: boolean,
+	shouldShowCommentsTab: boolean,
+	shouldShowQuestionsTab: boolean,
 };
 
 declare type ConsultationDataType = {

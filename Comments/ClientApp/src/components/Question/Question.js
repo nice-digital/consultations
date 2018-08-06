@@ -43,7 +43,6 @@ type PropsType = {
 	deleteAnswerHandler: Function,
 	question: QuestionType,
 	readOnly: boolean,
-	isVisible: boolean, //doesn't appear to get used.
 };
 
 type StateType = {

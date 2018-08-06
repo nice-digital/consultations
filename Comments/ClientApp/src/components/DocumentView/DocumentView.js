@@ -2,7 +2,8 @@ import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router";
 
 import DocumentWithRouter from "../Document/Document";
-import { Drawer } from "../Drawer/Drawer";
+//import { Drawer } from "../Drawer/Drawer";
+import CommentListWithRouter from "../CommentList/CommentList";
 //import { load } from "./../../data/loader";
 
 type PropsType = {
@@ -58,7 +59,7 @@ export class DocumentView extends Component<PropsType, StateType> {
 	newCommentHandler = incomingComment => {
 		// this method is passed down to <DocumentWithRouter /> by props.
 		// The function is the one we're using from <Drawer />
-		this.drawer.current.newComment(incomingComment);
+		this.commentList.current.newComment(incomingComment);
 	};
 
 	// gatherData = async () => {
@@ -120,9 +121,11 @@ export class DocumentView extends Component<PropsType, StateType> {
 				
 				{/* "ref" ties the <Drawer /> component to React.createRef() above*/}
 				{/* {this.state.shouldShowDrawer && 					 */}
-					<Drawer ref={this.drawer} />
-					{/* shouldShowCommentsTab={this.state.shouldShowCommentsTab} 
-						shouldShowQuestionsTab={this.state.shouldShowQuestionsTab} */}
+					{/* <Drawer ref={this.drawer} 
+					shouldShowCommentsTab={this.state.shouldShowCommentsTab} 
+					shouldShowQuestionsTab={this.state.shouldShowQuestionsTab}
+					/> */}
+					<CommentListWithRouter  ref={this.commentList} />
 				{/* } */}
 				{/* Passing the function we're using from <Drawer /> to DocWithRouter via props*/}
 				<DocumentWithRouter onNewCommentClick={this.newCommentHandler} />
