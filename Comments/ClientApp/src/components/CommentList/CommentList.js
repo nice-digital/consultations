@@ -38,6 +38,7 @@ type StateType = {
 	drawerOpen: boolean,
 	drawerMobile: boolean,
 	viewComments: boolean,
+	shouldShowDrawer: boolean,
 	shouldShowCommentsTab: boolean,
 	shouldShowQuestionsTab: boolean,
 };
@@ -58,6 +59,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			drawerOpen: false,
 			drawerMobile: false,
 			viewComments: true,
+			shouldShowDrawer: false,
 			shouldShowCommentsTab: false,
 			shouldShowQuestionsTab: false,
 		};
@@ -84,6 +86,7 @@ export class CommentList extends Component<PropsType, StateType> {
 				error: "",
 				initialDataLoaded: true,
 				viewComments: preloadedCommentsData.consultationState.shouldShowCommentsTab,
+				shouldShowDrawer: preloadedCommentsData.consultationState.shouldShowDrawer,
 				shouldShowCommentsTab: preloadedCommentsData.consultationState.shouldShowCommentsTab,
 				shouldShowQuestionsTab: preloadedCommentsData.consultationState.shouldShowQuestionsTab,
 				drawerExpandedWidth: false,
@@ -102,6 +105,7 @@ export class CommentList extends Component<PropsType, StateType> {
 					questions: response.data.questions,
 					loading: false,
 					allowComments: allowComments,
+					shouldShowDrawer: response.data.consultationState.shouldShowDrawer,
 					shouldShowCommentsTab: response.data.consultationState.shouldShowCommentsTab,
 					shouldShowQuestionsTab: response.data.consultationState.shouldShowQuestionsTab,
 				});
@@ -215,6 +219,10 @@ export class CommentList extends Component<PropsType, StateType> {
 	};
 
 	render() {
+		if (!this.state.shouldShowDrawer){
+			return null;
+		}
+
 		return (
 
 			<section aria-label="Commenting panel"

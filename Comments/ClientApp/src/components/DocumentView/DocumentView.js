@@ -44,7 +44,7 @@ export class DocumentView extends Component<PropsType, StateType> {
 	constructor(props: PropsType) {
 		super(props);
 		// this creates a reference to <Drawer />
-		this.commentList = React.createRef();
+		//this.commentList = React.createRef();
 
 		this.state = {
 			// consultationData: null,
@@ -62,7 +62,7 @@ export class DocumentView extends Component<PropsType, StateType> {
 		// this method is passed down to <DocumentWithRouter /> by props.
 		// The function is the one we're using from <Drawer />
 		//this.commentList.current.newComment(incomingComment);
-		this.commentList.current.newComment(incomingComment);
+		this.commentList.newComment(incomingComment);
 	};
 
 	// gatherData = async () => {
@@ -119,6 +119,7 @@ export class DocumentView extends Component<PropsType, StateType> {
 
 	render() {
 		if (this.state.error.hasError) { throw new Error(this.state.error.message); }
+
 		return (
 			<Fragment>
 				
@@ -128,7 +129,7 @@ export class DocumentView extends Component<PropsType, StateType> {
 				shouldShowCommentsTab={this.state.shouldShowCommentsTab} 
 				shouldShowQuestionsTab={this.state.shouldShowQuestionsTab}
 				/> */}
-				<CommentListWithRouter  ref={this.commentList} />
+				<CommentListWithRouter  wrappedComponentRef={component => (this.commentList = component)} />
 				{/* } */}
 				{/* Passing the function we're using from <Drawer /> to DocWithRouter via props*/}
 				<DocumentWithRouter onNewCommentClick={this.newCommentHandler} />
