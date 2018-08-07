@@ -86,6 +86,9 @@ export class CommentList extends Component<PropsType, StateType> {
 				viewComments: preloadedCommentsData.consultationState.shouldShowCommentsTab,
 				shouldShowCommentsTab: preloadedCommentsData.consultationState.shouldShowCommentsTab,
 				shouldShowQuestionsTab: preloadedCommentsData.consultationState.shouldShowQuestionsTab,
+				drawerExpandedWidth: false,
+				drawerOpen: false,
+				drawerMobile: false,
 			};
 		}
 	}
@@ -211,7 +214,6 @@ export class CommentList extends Component<PropsType, StateType> {
 		}
 	};
 
-
 	render() {
 		return (
 
@@ -283,8 +285,8 @@ export class CommentList extends Component<PropsType, StateType> {
 										{contextValue.isAuthorised ?
 											<p data-g="6">
 												<Link 	to={`/${this.props.match.params.consultationId}/review`}
-														data-qa-sel="review-all-comments"
-														className="right">Review all {this.state.viewComments ? "comments" : "questions"}</Link>
+													data-qa-sel="review-all-comments"
+													className="right">Review all {this.state.viewComments ? "comments" : "questions"}</Link>
 											</p> : null
 										}
 									</div> 
@@ -303,20 +305,20 @@ export class CommentList extends Component<PropsType, StateType> {
 											<Fragment>
 												{this.state.viewComments ? (
 													this.state.comments.length === 0 ? <p>No comments yet</p> :
-													<ul className="CommentList list--unstyled">
-														{this.state.comments.map((comment) => {
-															return (
-																<CommentBox
-																	readOnly={!this.state.allowComments}
-																	key={comment.commentId}
-																	unique={`Comment${comment.commentId}`}
-																	comment={comment}
-																	saveHandler={this.saveCommentHandler}
-																	deleteHandler={this.deleteCommentHandler}
-																/>
-															);
-														})}
-													</ul>
+														<ul className="CommentList list--unstyled">
+															{this.state.comments.map((comment) => {
+																return (
+																	<CommentBox
+																		readOnly={!this.state.allowComments}
+																		key={comment.commentId}
+																		unique={`Comment${comment.commentId}`}
+																		comment={comment}
+																		saveHandler={this.saveCommentHandler}
+																		deleteHandler={this.deleteCommentHandler}
+																	/>
+																);
+															})}
+														</ul>
 												) : ( 
 													<div>
 														<p>We would like to hear your views on the draft recommendations presented in the guideline, and any comments you may have on the rationale and impact sections in the guideline and the evidence presented in the evidence reviews documents. We would also welcome views on the Equality Impact Assessment.</p>

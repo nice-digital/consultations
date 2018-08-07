@@ -1,3 +1,5 @@
+// @flow
+
 import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router";
 
@@ -42,7 +44,7 @@ export class DocumentView extends Component<PropsType, StateType> {
 	constructor(props: PropsType) {
 		super(props);
 		// this creates a reference to <Drawer />
-		this.drawer = React.createRef();
+		this.commentList = React.createRef();
 
 		this.state = {
 			// consultationData: null,
@@ -59,6 +61,7 @@ export class DocumentView extends Component<PropsType, StateType> {
 	newCommentHandler = incomingComment => {
 		// this method is passed down to <DocumentWithRouter /> by props.
 		// The function is the one we're using from <Drawer />
+		//this.commentList.current.newComment(incomingComment);
 		this.commentList.current.newComment(incomingComment);
 	};
 
@@ -115,17 +118,17 @@ export class DocumentView extends Component<PropsType, StateType> {
 	// }
 
 	render() {
-		if (this.state.error.hasError) { throw new Error(this.state.error.message) }
+		if (this.state.error.hasError) { throw new Error(this.state.error.message); }
 		return (
 			<Fragment>
 				
 				{/* "ref" ties the <Drawer /> component to React.createRef() above*/}
 				{/* {this.state.shouldShowDrawer && 					 */}
-					{/* <Drawer ref={this.drawer} 
-					shouldShowCommentsTab={this.state.shouldShowCommentsTab} 
-					shouldShowQuestionsTab={this.state.shouldShowQuestionsTab}
-					/> */}
-					<CommentListWithRouter  ref={this.commentList} />
+				{/* <Drawer ref={this.drawer} 
+				shouldShowCommentsTab={this.state.shouldShowCommentsTab} 
+				shouldShowQuestionsTab={this.state.shouldShowQuestionsTab}
+				/> */}
+				<CommentListWithRouter  ref={this.commentList} />
 				{/* } */}
 				{/* Passing the function we're using from <Drawer /> to DocWithRouter via props*/}
 				<DocumentWithRouter onNewCommentClick={this.newCommentHandler} />
