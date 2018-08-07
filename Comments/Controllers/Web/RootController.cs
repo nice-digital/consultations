@@ -1,11 +1,7 @@
-<<<<<<< Updated upstream
-﻿using Microsoft.AspNetCore.Mvc;
-=======
 using System;
 using System.Linq;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
->>>>>>> Stashed changes
 using Microsoft.Extensions.Logging;
 
 namespace Comments.Controllers.Web
@@ -31,11 +27,8 @@ namespace Comments.Controllers.Web
         public IActionResult Index()
         {
             _logger.LogWarning("Hitting the root controller. this should only occur locally.");
-<<<<<<< Updated upstream
-            //return Content("root controller hit");
-            return Redirect("/consultations/1/1/introduction");
-=======
-	        try
+
+            try
 	        {
 		        //don't judge this too harshly. this pretty nasty code is here for dev purposes only. it's not production code.
 		        string wctx = Request.Form["wctx"];
@@ -59,7 +52,6 @@ namespace Comments.Controllers.Web
 			}
 	        //return Content("root controller hit");
 			return Redirect("/consultations/22/1/guidance");
->>>>>>> Stashed changes
         }
     }
 }
