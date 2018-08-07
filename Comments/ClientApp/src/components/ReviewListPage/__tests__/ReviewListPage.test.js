@@ -6,13 +6,14 @@ import { MemoryRouter } from "react-router";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import toJson from "enzyme-to-json";
+//import stringifyObject from "stringify-object";
 
 import { generateUrl } from "../../../data/loader";
 import { nextTick, queryStringToObject } from "../../../helpers/utils";
 import ReviewListPageWithRouter, {ReviewListPage} from "../ReviewListPage";
+
 import ConsultationData from "./Consultation";
 import CommentsReviewData from "./CommentsReview";
-//import stringifyObject from "stringify-object";
 
 const mock = new MockAdapter(axios);
 
@@ -44,7 +45,8 @@ describe("[ClientApp] ", () => {
 			history:{
 				location:{
 					search: ""
-				}
+				},
+				listen: function(){},
 			},
 			basename: "/consultations"
 		};
@@ -161,7 +163,7 @@ describe("[ClientApp] ", () => {
 
 			let commentsReviewPromise = new Promise(resolve => {
 				mock
-					.onAny("/consultations/api/CommentsForReview?sourceURI=/1/review")
+					.onGet("/consultations/api/CommentsForReview?relativeURL=%2F1%2Freview")
 					.reply(() => {
 						resolve();
 						return [200, CommentsReviewData];
@@ -179,7 +181,7 @@ describe("[ClientApp] ", () => {
 
 			return Promise.all([
 				commentsReviewPromise,
-				consultationPromise
+				consultationPromise,
 			]).then(async () => {
 				await nextTick();
 				wrapper.update();

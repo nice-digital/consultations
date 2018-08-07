@@ -35,19 +35,19 @@ namespace Comments.Controllers.Api
         }
 
 		/// <summary>
-		/// GET: eg. consultations/api/CommentsForReview?consultationId=1
+		/// GET: eg. consultations/api/CommentsForReview?relativeURL=%2F1%2Freview
 		/// </summary>
-		/// <param name="sourceURI">this is really the relativeURL eg "/1/review" on review page</param>
+		/// <param name="relativeURL">this is the relativeURL eg "/1/review" on review page</param>
 		/// <param name="reviewPageViewModel"></param>
 		/// <returns></returns>
 		[Route("consultations/api/[controller]ForReview")]
 	    [HttpGet]
-	    public ReviewPageViewModel Get(string sourceURI, ReviewPageViewModel reviewPageViewModel)
+	    public ReviewPageViewModel Get(string relativeURL, ReviewPageViewModel reviewPageViewModel)
 	    {
-			if (string.IsNullOrWhiteSpace(sourceURI))
-				throw new ArgumentNullException(nameof(sourceURI));
+			if (string.IsNullOrWhiteSpace(relativeURL))
+				throw new ArgumentNullException(nameof(relativeURL));
 
-			return _commentService.GetCommentsAndQuestionsForReview(sourceURI, reviewPageViewModel);
+			return _commentService.GetCommentsAndQuestionsForReview(relativeURL, reviewPageViewModel);
 	    }
 
 	}

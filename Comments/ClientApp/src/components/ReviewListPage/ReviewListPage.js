@@ -75,7 +75,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			this.props.staticContext,
 			"commentsreview",
 			[],
-			{ sourceURI: this.props.match.url },
+			{ relativeURL: this.props.match.url },
 			preloadedData
 		);
 		const consultationId = this.props.match.params.consultationId;
@@ -111,9 +111,9 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			path,
 		});
 
-		console.log(`sourceURI: ${this.props.match.url}`);
+		//console.log(`sourceURI: ${this.props.match.url}`);
 		//debugger;
-		const commentsData = load("commentsreview", undefined, [], Object.assign({ sourceURI: this.props.match.url }, queryStringToObject(querystring)))
+		const commentsData = load("commentsreview", undefined, [], Object.assign({ relativeURL: this.props.match.url }, queryStringToObject(querystring)))
 			.then(response => response.data)
 			.catch(err => {
 				if (window){
@@ -129,10 +129,10 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			const consultationData = load("consultation", undefined, [], {
 				consultationId, isReview: true,
 			})
-			.then(response => response.data)
-			.catch(err => {
-				throw new Error("consultationData " + err);
-			});
+				.then(response => response.data)
+				.catch(err => {
+					throw new Error("consultationData " + err);
+				});
 
 			return {
 				consultationData: await consultationData,
@@ -147,30 +147,30 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 
 	loadDataAndUpdateState = () => {
 		this.gatherData()
-		.then(data => {
-			if (data.consultationData !== null){
-				this.setState({
-					consultationData: data.consultationData,
-					commentsData: data.commentsData,
-					comments: data.commentsData.commentsAndQuestions.comments,
-					questions: data.commentsData.commentsAndQuestions.questions,
-					userHasSubmitted: data.consultationData.consultationState.userHasSubmitted,
-					validToSubmit: data.consultationData.consultationState.supportsSubmission,
-					loading: false,
-					allowComments: (data.consultationData.consultationState.consultationIsOpen && !data.consultationData.consultationState.userHasSubmitted),
-				});
-			} else{
-				this.setState({
-					commentsData: data.commentsData,
-					comments: data.commentsData.commentsAndQuestions.comments,
-					questions: data.commentsData.commentsAndQuestions.questions,
-					loading: false,
-				});
-			}			
-		})
-		.catch(err => {
-			throw new Error("gatherData in componentDidMount failed " + err);
-		});
+			.then(data => {
+				if (data.consultationData !== null){
+					this.setState({
+						consultationData: data.consultationData,
+						commentsData: data.commentsData,
+						comments: data.commentsData.commentsAndQuestions.comments,
+						questions: data.commentsData.commentsAndQuestions.questions,
+						userHasSubmitted: data.consultationData.consultationState.userHasSubmitted,
+						validToSubmit: data.consultationData.consultationState.supportsSubmission,
+						loading: false,
+						allowComments: (data.consultationData.consultationState.consultationIsOpen && !data.consultationData.consultationState.userHasSubmitted),
+					});
+				} else{
+					this.setState({
+						commentsData: data.commentsData,
+						comments: data.commentsData.commentsAndQuestions.comments,
+						questions: data.commentsData.commentsAndQuestions.questions,
+						loading: false,
+					});
+				}			
+			})
+			.catch(err => {
+				throw new Error("gatherData in componentDidMount failed " + err);
+			});
 	}
 
 	componentDidMount() {
@@ -281,26 +281,26 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 											return (
 												!contextValue.isAuthorised ?
 													<LoginBanner
-															signInButton={true}
-															currentURL={this.props.match.url}
-															signInURL={contextValue.signInURL}
-															registerURL={contextValue.registerURL}
-														/> :
-														(
-															(this.state.userHasSubmitted && !this.state.viewSubmittedComments) ?
-																<div className="hero">
-																	<div className="hero__container">
-																		<div className="hero__body">
-																			<div className="hero__copy">
-																				<p className="hero__intro" data-qa-sel="submitted-text">Thank you, your comments have been submitted.</p>
-																				<div className="hero__actions">
-																					<button className="btn" data-qa-sel="review-submitted-comments" onClick={this.viewSubmittedCommentsHandler}>Review all submitted comments</button>
-																				</div>
+														signInButton={true}
+														currentURL={this.props.match.url}
+														signInURL={contextValue.signInURL}
+														registerURL={contextValue.registerURL}
+													/> :
+													(
+														(this.state.userHasSubmitted && !this.state.viewSubmittedComments) ?
+															<div className="hero">
+																<div className="hero__container">
+																	<div className="hero__body">
+																		<div className="hero__copy">
+																			<p className="hero__intro" data-qa-sel="submitted-text">Thank you, your comments have been submitted.</p>
+																			<div className="hero__actions">
+																				<button className="btn" data-qa-sel="review-submitted-comments" onClick={this.viewSubmittedCommentsHandler}>Review all submitted comments</button>
 																			</div>
 																		</div>
 																	</div>
 																</div>
-																: 
+															</div>
+															: 
 															(
 																<StickyContainer className="grid">
 																	<div data-g="12 md:9 md:push:3">
@@ -404,7 +404,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																	</div>
 																</StickyContainer>
 															)
-														)
+													)
 											);
 										}}
 									</UserContext.Consumer>									
