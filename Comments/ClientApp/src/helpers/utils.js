@@ -1,4 +1,5 @@
 import queryString from "query-string";
+//import stringifyObject from "stringify-object";
 
 /**
  * Create a query string out of an object
@@ -9,7 +10,13 @@ export function objectToQueryString(obj) {
 	let str = [];
 	for (let p in obj)
 		if (obj.hasOwnProperty(p)) {
-			str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+			if (Array.isArray(obj[p])){
+				for (let index in obj[p]){
+					str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p][index]));	
+				}
+			} else{
+				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+			}
 		}
 	if (str.length) return "?" + str.join("&");
 	return "";

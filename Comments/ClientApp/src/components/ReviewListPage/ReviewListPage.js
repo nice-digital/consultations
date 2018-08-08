@@ -174,7 +174,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 	}
 
 	componentDidMount() {
-		if (!this.state.hasInitalData){ //typically this page is accessed by clicking a link on the document page, so it
+		if (!this.state.hasInitalData){ //typically this page is accessed by clicking a link on the document page, so it won't SSR. 
 			this.loadDataAndUpdateState(); 	
 		}
 		this.props.history.listen(location => {
@@ -307,8 +307,8 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																		<div data-qa-sel="comment-list-wrapper">																										
 																			{questionsToShow.length > 0 &&
 																				<div>
-																					<p>We would like to hear your views on the draft recommendations presented in the guideline, and any comments you may have on the rationale and impact sections in the guideline and the evidence presented in the evidence reviews documents. We would also welcome views on the Equality Impact Assessment.</p>
-																					<p>We would like to hear your views on these questions:</p>
+																					{/* <p>We would like to hear your views on the draft recommendations presented in the guideline, and any comments you may have on the rationale and impact sections in the guideline and the evidence presented in the evidence reviews documents. We would also welcome views on the Equality Impact Assessment.</p>
+																					<p>We would like to hear your views on these questions:</p> */}
 																					<ul className="CommentList list--unstyled">
 																						{questionsToShow.map((question) => {
 																							return (
@@ -326,7 +326,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																					</ul>
 																				</div>						
 																			}														
-																			{commentsToShow.length === 0 ? <p>No comments yet</p> :
+																			{commentsToShow.length === 0 ? <p>{/*No comments yet*/}</p> :
 																				<ul className="CommentList list--unstyled">
 																					{commentsToShow.map((comment) => {
 																						return (

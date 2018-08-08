@@ -22,12 +22,12 @@ namespace Comments.Test.IntegrationTests.API.Review
 	    {
 		    return new ReviewConfig() { Filters = new List<TopicListFilterGroup>()
 		    {
-				new TopicListFilterGroup(){ Id = "QuestionsOrComments", Title = "Questions / Comments", Options = new List<TopicListFilterOption>()
+				new TopicListFilterGroup(){ Id = "Type", Title = "Questions / Comments", Options = new List<TopicListFilterOption>()
 				{
 					new TopicListFilterOption("Questions", "Question responses"),
 					new TopicListFilterOption("Comments", "Comments"),
 				}},
-				new TopicListFilterGroup(){Id =  "Documents", Title = "View comments by document", Options = new List<TopicListFilterOption>()}
+				new TopicListFilterGroup(){Id =  "Document", Title = "View comments by document", Options = new List<TopicListFilterOption>()}
 		    } };
 		}
 

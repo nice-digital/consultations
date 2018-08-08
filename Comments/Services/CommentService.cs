@@ -143,10 +143,11 @@ namespace Comments.Services
 		public ReviewPageViewModel GetCommentsAndQuestionsForReview(string relativeURL, ReviewPageViewModel model)
 		{
 			var commentsAndQuestions = GetCommentsAndQuestions(relativeURL);
-			model.CommentsAndQuestions = FilterCommentsAndQuestions(commentsAndQuestions, model.QuestionsOrComments, model.Documents);
+
+			model.CommentsAndQuestions = FilterCommentsAndQuestions(commentsAndQuestions, model.Type, model.Document);
 
 			var consultationId = ConsultationsUri.ParseRelativeUrl(relativeURL).ConsultationId;
-			model.Filters = GetFilterGroups(consultationId, commentsAndQuestions, model.QuestionsOrComments, model.Documents);
+			model.Filters = GetFilterGroups(consultationId, commentsAndQuestions, model.Type, model.Document);
 			return model;
 		}
 
@@ -154,50 +155,40 @@ namespace Comments.Services
 		/// Filtering is just setting a Show property on the comments and questions to false.
 		/// </summary>
 		/// <param name="commentsAndQuestions"></param>
-		/// <param name="QuestionsOrComments"></param>
-		/// <param name="Documents"></param>
+		/// <param name="questionsOrComments"></param>
+		/// <param name="documentIdsToFilter"></param>
 		/// <returns></returns>
-	    private static CommentsAndQuestions FilterCommentsAndQuestions(CommentsAndQuestions commentsAndQuestions, QuestionsOrComments[] QuestionsOrComments, int[] Documents)
+		private static CommentsAndQuestions FilterCommentsAndQuestions(CommentsAndQuestions commentsAndQuestions, IEnumerable<QuestionsOrComments> type, IEnumerable<int> documentIdsToFilter)
 	    {
-		    commentsAndQuestions.Questions.ForEach(q => q.Show = true);
-		    commentsAndQuestions.Comments.ForEach(q => q.Show = true);
-			
-			if (QuestionsOrComments != null && QuestionsOrComments.Length == 1)
+		    commentsAndQuestions.Questions.ForEach(q => q.Show = type == null ||  type.Contains(QuestionsOrComments.Questions));
+		    commentsAndQuestions.Comments.ForEach(q => q.Show = type == null || type.Contains(QuestionsOrComments.Comments));
+
+		    var idsToFilter = documentIdsToFilter?.ToList() ?? new List<int>(0);
+		    if (idsToFilter.Any())
 		    {
-				if (QuestionsOrComments[0] == ViewModels.QuestionsOrComments.Comments)
-			    {
-				    commentsAndQuestions.Questions.ForEach(q => q.Show = false);
-			    }
-			    else
-			    {
-				    commentsAndQuestions.Comments.ForEach(q => q.Show = false);
-				}
-			}
-		    if (Documents != null && Documents.Any())
-		    {
-			    commentsAndQuestions.Questions.ForEach(q => q.Show = (!q.Show || !q.DocumentId.HasValue) ? false : Documents.Contains(q.DocumentId.Value));
-			    commentsAndQuestions.Comments.ForEach(c => c.Show = (!c.Show || !c.DocumentId.HasValue) ? false : Documents.Contains(c.DocumentId.Value));
+			    commentsAndQuestions.Questions.ForEach(q => q.Show = (!q.Show || !q.DocumentId.HasValue) ? false : idsToFilter.Contains(q.DocumentId.Value));
+			    commentsAndQuestions.Comments.ForEach(c => c.Show = (!c.Show || !c.DocumentId.HasValue) ? false : idsToFilter.Contains(c.DocumentId.Value));
 			}
 		    return commentsAndQuestions;
 	    }
 
-	    private IEnumerable<TopicListFilterGroup> GetFilterGroups(int consultationId, CommentsAndQuestions commentsAndQuestions, QuestionsOrComments[] questionsOrComments, int[] documentIdsToFilter)
+	    private IEnumerable<TopicListFilterGroup> GetFilterGroups(int consultationId, CommentsAndQuestions commentsAndQuestions, IEnumerable<QuestionsOrComments> type, IEnumerable<int> documentIdsToFilter)
 	    {
 		    var filters = AppSettings.ReviewConfig.Filters.ToList();
 
-		    var questionsAndCommentsFilter = filters.Single(f => f.Id.Equals("QuestionsOrComments", StringComparison.OrdinalIgnoreCase));
+		    var questionsAndCommentsFilter = filters.Single(f => f.Id.Equals("Type", StringComparison.OrdinalIgnoreCase));
 			var questionOption = questionsAndCommentsFilter.Options.Single(o => o.Id.Equals("Questions", StringComparison.OrdinalIgnoreCase));
 		    var commentsOption = questionsAndCommentsFilter.Options.Single(o => o.Id.Equals("Comments", StringComparison.OrdinalIgnoreCase));
 			
-		    var documentsFilter = filters.Single(f => f.Id.Equals("Documents", StringComparison.OrdinalIgnoreCase));
+		    var documentsFilter = filters.Single(f => f.Id.Equals("Document", StringComparison.OrdinalIgnoreCase));
 
 			//questions
-		    questionOption.IsSelected = questionsOrComments.Contains(QuestionsOrComments.Questions);
+		    questionOption.IsSelected = type != null && type.Contains(QuestionsOrComments.Questions);
 		    questionOption.FilteredResultCount = commentsAndQuestions.Questions.Count(q => q.Show); 
 			questionOption.UnfilteredResultCount = commentsAndQuestions.Questions.Count();
 
 			//comments
-			commentsOption.IsSelected = questionsOrComments.Contains(QuestionsOrComments.Comments);
+			commentsOption.IsSelected = type != null && type.Contains(QuestionsOrComments.Comments);
 			commentsOption.FilteredResultCount = commentsAndQuestions.Comments.Count(q => q.Show); 
 			commentsOption.UnfilteredResultCount = commentsAndQuestions.Comments.Count(); 
 

@@ -14,20 +14,31 @@ namespace Comments.ViewModels
 
 	public class ReviewPageViewModel
     {
-		public CommentsAndQuestions CommentsAndQuestions { get; set; }
+	    
+	    public CommentsAndQuestions CommentsAndQuestions { get; set; }
 
 		/// <summary>
 		/// This property is initialised from appsettings.json, then it gets updated in CommentService with documents and the counts are updated.
 		/// </summary>
 	    public IEnumerable<TopicListFilterGroup> Filters { get; set; }
 
-	    #region Filter options from the check boxes
+		#region Filter options from the check boxes
 
+		
 	    [JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
-	    public QuestionsOrComments[] QuestionsOrComments { get; set; } = new QuestionsOrComments[0];
+	    public IEnumerable<QuestionsOrComments> Type
+	    {
+		    get;
+		    set;
+	    }
 
-	    public int[] Documents { get; set; }
+	    private IEnumerable<int> _document;
+		public IEnumerable<int> Document
+		{
+			get;
+			set;
+		}
 
-		#endregion Filter options
+	    #endregion Filter options
 	}
 }
