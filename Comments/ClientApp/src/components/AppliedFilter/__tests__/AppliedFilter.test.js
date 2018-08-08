@@ -4,7 +4,7 @@ import { shallow } from "enzyme";
 
 import { AppliedFilter } from "../AppliedFilter";
 
-describe("[TopicList]", () => {
+describe("[Consultations]", () => {
 	describe("AppliedFilter", () => {
 
 		const appliedFilterModel = {

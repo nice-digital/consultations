@@ -5,7 +5,7 @@ import React, { Component } from "react";
 import FilterGroup from "../FilterGroup/FilterGroup";
 
 type PropsType = {
-	filters: TopicListFilterGroupType[],
+	filters: ReviewFilterGroupType[],
 	path: string
 };
 
@@ -38,7 +38,7 @@ export class FilterPanel extends Component<PropsType, StateType> {
 		  }));
 	}
 
-	getFilterGroupsToDisplay(): TopicListFilterGroupType[] {
+	getFilterGroupsToDisplay(): ReviewFilterGroupType[] {
 		return this.props.filters
 			.filter(filterGroup => filterGroup.options.some(opt => opt.isSelected || opt.filteredResultCount > 0));
 	}

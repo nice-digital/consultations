@@ -21,7 +21,7 @@ const appliedFilters = [
 	}
 ];
 
-describe("[TopicList]", () => {
+describe("[Consultations]", () => {
 	describe("ResultsInfo", () => {
 		describe("product count and loading", () => {
 			it("product count is aria-live assertive", () => {

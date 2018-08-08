@@ -4,7 +4,7 @@ import { shallow } from "enzyme";
 
 import { Sort } from "./../Sort";
 
-describe("[TopicList]", () => {
+describe("[Consultations]", () => {
 	describe("Sort", () => {
 
 		it("renders two sort links", () => {

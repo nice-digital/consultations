@@ -2,12 +2,12 @@ using System.Collections.Generic;
 
 namespace Comments.ViewModels
 {
-    public class TopicListFilterGroup
+    public class ReviewFilterGroup
     {
         public string Id { get; set; }
 
         public string Title { get; set; }
 
-        public IList<TopicListFilterOption> Options { get; set; }
+        public IList<ReviewFilterOption> Options { get; set; }
     }
 }

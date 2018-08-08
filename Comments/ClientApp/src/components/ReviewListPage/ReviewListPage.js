@@ -75,11 +75,12 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			preloadedData = this.props.staticContext.preload.data; //this is data from Configure => SupplyData in Startup.cs. the main thing it contains for this call is the cookie for the current user.
 		}
 	
+		const querystring = this.props.location.search;
 		const preloadedCommentsData = preload(
 			this.props.staticContext,
 			"commentsreview",
 			[],
-			{ relativeURL: this.props.match.url },
+			Object.assign({ relativeURL: this.props.match.url }, queryStringToObject(querystring)),
 			preloadedData
 		);
 		const consultationId = this.props.match.params.consultationId;
@@ -261,9 +262,9 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		deleteAnswerHandler(e, questionId, answerId, this);
 	}	
 
-	getAppliedFilters(): TopicListAppliedFilterType[] {
+	getAppliedFilters(): ReviewAppliedFilterType[] {
 		const mapOptions =
-			(group: TopicListFilterGroupType) => group.options
+			(group: ReviewFilterGroupType) => group.options
 				.filter(opt => opt.isSelected)
 				.map(opt => ({
 					groupTitle: group.title,
@@ -279,7 +280,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 
 	render() {
 		if (this.state.loading) return <h1>Loading...</h1>;
-		const { title, reference } = this.state.consultationData;	
+		const { reference } = this.state.consultationData;	
 		const commentsToShow = this.state.comments.filter(comment => comment.show) || []; 
 		const questionsToShow = this.state.questions.filter(question => question.show) || []; 
 
@@ -297,14 +298,11 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 							<main role="main">
 								<div className="page-header">
 									<Header
-										title="Review your response"
-										subtitle1="Review and edit your question responses and comments before you submit them to us."
+										title={this.state.userHasSubmitted ? "Comments submitted" : "Review your response"}
+										subtitle1={this.state.userHasSubmitted ? "" : "Review and edit your question responses and comments before you submit them to us."}
 										subtitle2="Once they have been submitted you will not be able to edit them further or add any extra comments."
 										reference={reference}
 										consultationState={this.state.consultationData.consultationState}/>
-									{this.state.userHasSubmitted && 
-										<h2 className="mt--0">Comments submitted</h2>
-									}
 									{this.state.supportsDownload && 
 										<div className="clearfix">
 											<button className="btn btn--secondary right mr--0">Download your responses</button>
@@ -416,7 +414,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																													className="btn btn--cta"
 																													data-qa-sel="submit-comment-button"
 																													onClick={this.submitConsultation}
-																												>{this.state.userHasSubmitted ? "Responses submitted": "Yes, submit my reponse"}
+																												>{this.state.userHasSubmitted ? "Responses submitted": "Yes, submit my response"}
 																												</button>
 																											</Fragment>
 																										);

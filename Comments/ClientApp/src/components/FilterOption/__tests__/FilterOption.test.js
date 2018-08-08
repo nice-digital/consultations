@@ -4,7 +4,7 @@ import { shallow } from "enzyme";
 
 import { FilterOption } from "../FilterOption";
 
-describe("[TopicList]", () => {
+describe("[Consultations]", () => {
 	describe("FilterOption", () => {
 
 		describe("getHref", () => {

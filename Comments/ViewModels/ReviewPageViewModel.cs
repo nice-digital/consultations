@@ -20,7 +20,7 @@ namespace Comments.ViewModels
 		/// <summary>
 		/// This property is initialised from appsettings.json, then it gets updated in CommentService with documents and the counts are updated.
 		/// </summary>
-	    public IEnumerable<TopicListFilterGroup> Filters { get; set; }
+	    public IEnumerable<ReviewFilterGroup> Filters { get; set; }
 
 		#region Filter options from the check boxes
 

@@ -6,7 +6,7 @@ import FilterOption from "../FilterOption/FilterOption";
 
 type PropsType = {
 	path: string,
-	filterGroup: TopicListFilterGroupType
+	filterGroup: ReviewFilterGroupType
 };
 
 type StateType = {

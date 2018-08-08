@@ -4,7 +4,7 @@ import { shallow } from "enzyme";
 
 import { SortLink } from "./../SortLink";
 
-describe("[TopicList]", () => {
+describe("[Consultations]", () => {
 	describe("SortLink", () => {
 
 		it("renders active text when sort order active", () => {
