@@ -307,7 +307,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 									}
 									{this.state.supportsDownload && 
 										<div className="clearfix">
-											<button className="btn btn--secondary right mr--0">Download all responses</button>
+											<button className="btn btn--secondary right mr--0">Download your responses</button>
 										</div>
 									}
 									<UserContext.Consumer>
