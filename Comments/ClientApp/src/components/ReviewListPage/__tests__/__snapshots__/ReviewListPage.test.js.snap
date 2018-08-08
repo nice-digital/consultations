@@ -127,9 +127,339 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
               <div
                 data-qa-sel="comment-list-wrapper"
               >
-                <p>
-                  Loading...
-                </p>
+                <div>
+                  <p>
+                    We would like to hear your views on the draft recommendations presented in the guideline, and any comments you may have on the rationale and impact sections in the guideline and the evidence presented in the evidence reviews documents. We would also welcome views on the Equality Impact Assessment.
+                  </p>
+                  <p>
+                    We would like to hear your views on these questions:
+                  </p>
+                  <ul
+                    className="CommentList list--unstyled"
+                  >
+                    <li
+                      className="CommentBox"
+                    >
+                      <h1
+                        className="CommentBox__title mt--0 mb--d"
+                        data-qa-sel="comment-box-title"
+                      >
+                        Question on: 
+                        <span
+                          className="text-lowercase"
+                        >
+                          Consultation
+                        </span>
+                        <br />
+                      </h1>
+                      <p>
+                        <strong>
+                          Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
+                        </strong>
+                      </p>
+                      <section
+                        role="form"
+                      >
+                        <div
+                          className="CommentBox__datestamp mb--d font-weight-bold"
+                        >
+                          Last Modified:
+                           
+                          <time
+                            dateTime={"2018-08-06T14:41:57.930Z"}
+                          >
+                            6/8/2018 - 3:41pm
+                          </time>
+                        </div>
+                        <form
+                          onSubmit={[Function]}
+                        >
+                          <div
+                            className="form__group form__group--textarea mb--0"
+                          >
+                            <textarea
+                              className="form__input form__input--textarea"
+                              data-qa-sel="Comment-text-area"
+                              disabled={false}
+                              id="Answer11"
+                              onChange={[Function]}
+                              placeholder="Enter your answer here"
+                              value="gg"
+                            />
+                          </div>
+                          <input
+                            className="btn ml--0"
+                            data-qa-sel="submit-button"
+                            disabled={true}
+                            type="submit"
+                            value="Saved"
+                          />
+                          <button
+                            className="btn mr--0 right"
+                            data-qa-sel="delete-comment-button"
+                            onClick={[Function]}
+                          >
+                            <span
+                              className="visually-hidden"
+                            >
+                              Delete this answer
+                            </span>
+                            <span
+                              aria-hidden="true"
+                              className="icon icon--trash"
+                            />
+                          </button>
+                        </form>
+                      </section>
+                    </li>
+                    <li
+                      className="CommentBox"
+                    >
+                      <h1
+                        className="CommentBox__title mt--0 mb--d"
+                        data-qa-sel="comment-box-title"
+                      >
+                        Question on: 
+                        <span
+                          className="text-lowercase"
+                        >
+                          Document
+                        </span>
+                        <br />
+                      </h1>
+                      <p>
+                        <strong>
+                          Would implementation of any of the draft recommendations have significant cost implications?
+                        </strong>
+                      </p>
+                      <section
+                        role="form"
+                      >
+                        <form
+                          onSubmit={[Function]}
+                        >
+                          <div
+                            className="form__group form__group--textarea mb--0"
+                          >
+                            <textarea
+                              className="form__input form__input--textarea"
+                              data-qa-sel="Comment-text-area"
+                              disabled={false}
+                              id="Answer-1"
+                              onChange={[Function]}
+                              placeholder="Enter your answer here"
+                            />
+                          </div>
+                        </form>
+                      </section>
+                    </li>
+                    <li
+                      className="CommentBox"
+                    >
+                      <h1
+                        className="CommentBox__title mt--0 mb--d"
+                        data-qa-sel="comment-box-title"
+                      >
+                        Question on: 
+                        <span
+                          className="text-lowercase"
+                        >
+                          Document
+                        </span>
+                        <br />
+                      </h1>
+                      <p>
+                        <strong>
+                          Would implementation of any of the draft recommendations have cost implications?
+                        </strong>
+                      </p>
+                      <section
+                        role="form"
+                      >
+                        <form
+                          onSubmit={[Function]}
+                        >
+                          <div
+                            className="form__group form__group--textarea mb--0"
+                          >
+                            <textarea
+                              className="form__input form__input--textarea"
+                              data-qa-sel="Comment-text-area"
+                              disabled={false}
+                              id="Answer-1"
+                              onChange={[Function]}
+                              placeholder="Enter your answer here"
+                            />
+                          </div>
+                        </form>
+                      </section>
+                    </li>
+                  </ul>
+                </div>
+                <ul
+                  className="CommentList list--unstyled"
+                >
+                  <li
+                    className="CommentBox"
+                  >
+                    <section
+                      role="form"
+                    >
+                      <h1
+                        className="CommentBox__title mt--0 mb--d"
+                        data-qa-sel="comment-box-title"
+                      >
+                        Comment on: 
+                        <span
+                          className="text-lowercase"
+                        >
+                          Document
+                        </span>
+                        <br />
+                        Unstable angina and NSTEMI
+                      </h1>
+                      <div
+                        className="CommentBox__datestamp mb--d font-weight-bold"
+                      >
+                        Last Modified:
+                         
+                        <time
+                          dateTime={"2018-08-06T14:47:06.638Z"}
+                        >
+                          6/8/2018 - 3:47pm
+                        </time>
+                      </div>
+                      <form
+                        onSubmit={[Function]}
+                      >
+                        <div
+                          className="form__group form__group--textarea mb--0"
+                        >
+                          <label
+                            className="form__label visually-hidden"
+                            htmlFor="Comment5"
+                          >
+                            Comment on 
+                            Document
+                            , 
+                            Unstable angina and NSTEMI
+                          </label>
+                          <textarea
+                            className="form__input form__input--textarea"
+                            data-qa-sel="Comment-text-area"
+                            disabled={false}
+                            id="Comment5"
+                            onChange={[Function]}
+                            placeholder="Enter your comment here"
+                            value="ffffc"
+                          />
+                        </div>
+                        <input
+                          className="btn ml--0"
+                          data-qa-sel="submit-button"
+                          disabled={true}
+                          type="submit"
+                          value="Saved"
+                        />
+                        <button
+                          className="btn mr--0 right"
+                          data-qa-sel="delete-comment-button"
+                          onClick={[Function]}
+                        >
+                          <span
+                            className="visually-hidden"
+                          >
+                            Delete this comment
+                          </span>
+                          <span
+                            aria-hidden="true"
+                            className="icon icon--trash"
+                          />
+                        </button>
+                      </form>
+                    </section>
+                  </li>
+                  <li
+                    className="CommentBox"
+                  >
+                    <section
+                      role="form"
+                    >
+                      <h1
+                        className="CommentBox__title mt--0 mb--d"
+                        data-qa-sel="comment-box-title"
+                      >
+                        Comment on: 
+                        <span
+                          className="text-lowercase"
+                        >
+                          Chapter
+                        </span>
+                        <br />
+                        Introduction 
+                      </h1>
+                      <div
+                        className="CommentBox__datestamp mb--d font-weight-bold"
+                      >
+                        Last Modified:
+                         
+                        <time
+                          dateTime={"2018-08-06T13:11:38.764Z"}
+                        >
+                          6/8/2018 - 2:11pm
+                        </time>
+                      </div>
+                      <form
+                        onSubmit={[Function]}
+                      >
+                        <div
+                          className="form__group form__group--textarea mb--0"
+                        >
+                          <label
+                            className="form__label visually-hidden"
+                            htmlFor="Comment7"
+                          >
+                            Comment on 
+                            Chapter
+                            , 
+                            Introduction 
+                          </label>
+                          <textarea
+                            className="form__input form__input--textarea"
+                            data-qa-sel="Comment-text-area"
+                            disabled={false}
+                            id="Comment7"
+                            onChange={[Function]}
+                            placeholder="Enter your comment here"
+                            value="ffff"
+                          />
+                        </div>
+                        <input
+                          className="btn ml--0"
+                          data-qa-sel="submit-button"
+                          disabled={true}
+                          type="submit"
+                          value="Saved"
+                        />
+                        <button
+                          className="btn mr--0 right"
+                          data-qa-sel="delete-comment-button"
+                          onClick={[Function]}
+                        >
+                          <span
+                            className="visually-hidden"
+                          >
+                            Delete this comment
+                          </span>
+                          <span
+                            aria-hidden="true"
+                            className="icon icon--trash"
+                          />
+                        </button>
+                      </form>
+                    </section>
+                  </li>
+                </ul>
               </div>
               <div
                 className="hero"
@@ -175,7 +505,145 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                 <div />
                 <div
                   style={Object {}}
-                />
+                >
+                  <div
+                    className="filter-panel"
+                  >
+                    <button
+                      aria-controls="filter-panel-body"
+                      aria-expanded={true}
+                      className="filter-panel__heading"
+                      onClick={[Function]}
+                      type="button"
+                    >
+                      Filter
+                    </button>
+                    <div
+                      aria-hidden={false}
+                      className="filter-panel__body"
+                      id="filter-panel-body"
+                    >
+                      <div
+                        className="filter-group"
+                      >
+                        <button
+                          aria-controls="group-QuestionsOrComments"
+                          aria-expanded={false}
+                          className="filter-group__heading gtm-topic-list-filter-group-expand"
+                          onClick={[Function]}
+                          type="button"
+                        >
+                          <div
+                            id="group-title-QuestionsOrComments"
+                          >
+                            Questions / comments
+                          </div>
+                        </button>
+                        <div
+                          aria-hidden={true}
+                          aria-labelledby="group-title-QuestionsOrComments"
+                          className="filter-group__options"
+                          id="group-QuestionsOrComments"
+                          role="group"
+                        >
+                          <label
+                            className="filter-group__option"
+                            htmlFor="filter_QuestionsOrComments_Questions"
+                          >
+                            <input
+                              aria-controls="results-info-count"
+                              checked={false}
+                              className="gtm-topic-list-filter-select"
+                              id="filter_QuestionsOrComments_Questions"
+                              name="QuestionsOrComments"
+                              onChange={[Function]}
+                              title="Questions / comments - Question responses"
+                              type="checkbox"
+                              value="Questions"
+                            />
+                            Question responses
+                          </label>
+                          <label
+                            className="filter-group__option"
+                            htmlFor="filter_QuestionsOrComments_Comments"
+                          >
+                            <input
+                              aria-controls="results-info-count"
+                              checked={false}
+                              className="gtm-topic-list-filter-select"
+                              id="filter_QuestionsOrComments_Comments"
+                              name="QuestionsOrComments"
+                              onChange={[Function]}
+                              title="Questions / comments - Comments"
+                              type="checkbox"
+                              value="Comments"
+                            />
+                            Comments
+                          </label>
+                        </div>
+                      </div>
+                      <div
+                        className="filter-group"
+                      >
+                        <button
+                          aria-controls="group-Documents"
+                          aria-expanded={false}
+                          className="filter-group__heading gtm-topic-list-filter-group-expand"
+                          onClick={[Function]}
+                          type="button"
+                        >
+                          <div
+                            id="group-title-Documents"
+                          >
+                            View comments by document
+                          </div>
+                        </button>
+                        <div
+                          aria-hidden={true}
+                          aria-labelledby="group-title-Documents"
+                          className="filter-group__options"
+                          id="group-Documents"
+                          role="group"
+                        >
+                          <label
+                            className="filter-group__option"
+                            htmlFor="filter_Documents_1"
+                          >
+                            <input
+                              aria-controls="results-info-count"
+                              checked={false}
+                              className="gtm-topic-list-filter-select"
+                              id="filter_Documents_1"
+                              name="Documents"
+                              onChange={[Function]}
+                              title="View comments by document - Unstable angina and NSTEMI"
+                              type="checkbox"
+                              value="1"
+                            />
+                            Unstable angina and NSTEMI
+                          </label>
+                          <label
+                            className="filter-group__option"
+                            htmlFor="filter_Documents_2"
+                          >
+                            <input
+                              aria-controls="results-info-count"
+                              checked={false}
+                              className="gtm-topic-list-filter-select"
+                              id="filter_Documents_2"
+                              name="Documents"
+                              onChange={[Function]}
+                              title="View comments by document - Glaucoma: diagnosis and management – Full Guideline"
+                              type="checkbox"
+                              value="2"
+                            />
+                            Glaucoma: diagnosis and management – Full Guideline
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

@@ -6,7 +6,6 @@ import { MemoryRouter } from "react-router";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import toJson from "enzyme-to-json";
-//import stringifyObject from "stringify-object";
 
 import { generateUrl } from "../../../data/loader";
 import { nextTick, queryStringToObject } from "../../../helpers/utils";
@@ -28,6 +27,28 @@ jest.mock("../../../context/UserContext", () => {
 		}
 	};
 });
+
+function mockReact() {
+	const original = require.requireActual("react");
+	return {
+		...original,
+		// Mock react's create context because Enzyme doesn't support context in mount
+		createContext: jest.fn(defaultValue => {
+			var value = defaultValue;
+			const Provider = (props) => {
+				value = props.value;
+				return props.children;
+			};
+			const Consumer = (props) => props.children(value);
+
+			return {
+				Provider: Provider,
+				Consumer: Consumer
+			};
+		})
+	};
+}
+jest.mock("react", () => mockReact());
 
 describe("[ClientApp] ", () => {
 	describe("ReviewPage Component", () => {
@@ -55,32 +76,6 @@ describe("[ClientApp] ", () => {
 			mock.reset();
 		});
 
-		// it("generateDocumentList doesn't filter out documents where convertedDocument is true", async () => {
-
-		// 	const docTypesIn = [
-		// 		{ title: "first doc title", sourceURI: "first source uri", convertedDocument : true},
-		// 		{ title: "second doc title", sourceURI: "second source uri", convertedDocument : true}];
-
-		// 	const reviewPage = new ReviewListPage(fakeProps);
-
-		// 	const returnValue = reviewPage.generateDocumentList(docTypesIn);
-
-		// 	expect(returnValue.links.length).toEqual(2);
-		// });
-
-		// it("generateDocumentList filters out documents where convertedDocument is false", async () => {
-
-		// 	const docTypesIn = [
-		// 		{ title: "first doc title", sourceURI: "first source uri", convertedDocument : true},
-		// 		{ title: "second doc title", sourceURI: "second source uri", convertedDocument : false}];
-
-		// 	const reviewPage = new ReviewListPage(fakeProps);
-
-		// 	const returnValue = reviewPage.generateDocumentList(docTypesIn);
-
-		// 	expect(returnValue.links.length).toEqual(1);
-		// });
-
 		it("queryStringToObject should return an object", async () => {
 			const returnValue = queryStringToObject("?search=foo&id=bar");
 			expect(returnValue.search).toEqual("foo");
@@ -103,56 +98,53 @@ describe("[ClientApp] ", () => {
 				});
 		});
 
-		// it.only("should hit the submit endpoint successfully", async done => {
+		it("should hit the submit endpoint successfully", async done => {
 
-		// 	const mock = new MockAdapter(axios);
+			const mock = new MockAdapter(axios);
 
-		// 	const wrapper = mount(
-		// 		<MemoryRouter>
-		// 			<ReviewPage {...fakeProps} />
-		// 		</MemoryRouter>
-		// 	);
+			const wrapper = mount(
+				<MemoryRouter>
+					<ReviewListPage {...fakeProps} />
+				</MemoryRouter>
+			);
 
-		// 	let documentsPromise = new Promise(resolve => {
-		// 		mock
-		// 			.onGet("/consultations/api/Documents?consultationId=1")
-		// 			.reply(() => {
-		// 				resolve();
-		// 				return [200, DocumentsData];
-		// 			});
-		// 	});
+			let commentsReviewPromise = new Promise(resolve => {
+				mock
+					.onGet("/consultations/api/CommentsForReview?relativeURL=%2F1%2Freview")
+					.reply(() => {
+						resolve();
+						return [200, CommentsReviewData];
+					});
+			});
 
-		// 	let consultationPromise = new Promise(resolve => {
-		// 		mock
-		// 			.onGet("/consultations/api/Consultation?consultationId=1")
-		// 			.reply(() => {
-		// 				resolve();
-		// 				return [200, ConsultationData];
-		// 			});
-		// 	});
+			let consultationPromise = new Promise(resolve => {
+				mock
+					.onGet("/consultations/api/Consultation?consultationId=1&isReview=true")
+					.reply(() => {
+						resolve();
+						return [200, ConsultationData];
+					});
+			});
 
-		// 	mock
-		// 		.onPost("/consultations/api/Submit")
-		// 		.reply(() => {
-		// 			done();
+			mock
+				.onPost("/consultations/api/Submit")
+				.reply(() => {
+					done();
+				});
 
-		// 		});
+			return Promise.all([
+				commentsReviewPromise,
+				consultationPromise
+			]).then(async () => {
+				await nextTick();
+				wrapper.update();
 
-		// 	return Promise.all([
-		// 		documentsPromise,
-		// 		consultationPromise
-		// 	]).then(async () => {
-		// 		await nextTick();
-		// 		wrapper.update();
+				wrapper.find(ReviewListPage).instance().submitConsultation();
+			});
 
-		// 		//expect(wrapper.find(ReviewPage).instance().state.isSubmitted).toEqual(false);
+		});
 
-		// 		wrapper.find(ReviewPage).instance().submitConsultation();
-		// 	});
-
-		// });
-
-		it.only("should match snapshot with supplied data", () => {
+		it("should match snapshot with supplied data", () => {
 			const mock = new MockAdapter(axios);
 
 			const wrapper = mount(
