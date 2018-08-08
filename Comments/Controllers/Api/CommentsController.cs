@@ -4,12 +4,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 
 namespace Comments.Controllers.Api
 {
     [Produces("application/json")]
-    [Route("consultations/api/[controller]")]
-   // [Authorize]
     public class CommentsController : ControllerBase
     {
         private readonly ICommentService _commentService;
@@ -24,16 +23,33 @@ namespace Comments.Controllers.Api
 		/// <summary>
 		/// GET: eg. consultations/api/Comments?sourceURI=%2Fconsultations%2F1%2F1%2Fchapter-slug
 		/// </summary>
-		/// <param name="sourceURI">this is really the relativeURL eg "/1/1/introduction"</param>
-		/// <param name="isReview">boolean indicating if the feed isbeing accessed for reviewing purposes</param>
+		/// <param name="sourceURI">this is really the relativeURL eg "/1/1/introduction" on document page</param>
 		/// <returns></returns>
+		[Route("consultations/api/[controller]")]
 		[HttpGet]
-        public CommentsAndQuestions Get(string sourceURI, bool isReview = false)
+        public CommentsAndQuestions Get(string sourceURI)
         {
             if (string.IsNullOrWhiteSpace(sourceURI))
                 throw new ArgumentNullException(nameof(sourceURI));
 
-            return _commentService.GetCommentsAndQuestions(relativeURL: sourceURI, isReview: isReview);
+            return _commentService.GetCommentsAndQuestions(relativeURL: sourceURI);
         }
+
+		/// <summary>
+		/// GET: eg. consultations/api/CommentsForReview?relativeURL=%2F1%2Freview
+		/// </summary>
+		/// <param name="relativeURL">this is the relativeURL eg "/1/review" on review page</param>
+		/// <param name="reviewPageViewModel"></param>
+		/// <returns></returns>
+		[Route("consultations/api/[controller]ForReview")]
+	    [HttpGet]
+	    public ReviewPageViewModel Get(string relativeURL, ReviewPageViewModel reviewPageViewModel)
+	    {
+			if (string.IsNullOrWhiteSpace(relativeURL))
+				throw new ArgumentNullException(nameof(relativeURL));
+
+			return _commentService.GetCommentsAndQuestionsForReview(relativeURL, reviewPageViewModel);
+	    }
+
 	}
 }

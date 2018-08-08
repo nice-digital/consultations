@@ -93,7 +93,7 @@ namespace Comments.Test.UnitTests
 
 			var sourceURIs = new List<string>
 		    {
-			    ConsultationsUri.ConvertToConsultationsUri("/1/0/Review", CommentOn.Consultation)
+			    ConsultationsUri.ConvertToConsultationsUri("/1/Review", CommentOn.Consultation)
 		    };
 
 			// Act

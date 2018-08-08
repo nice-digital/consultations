@@ -76,5 +76,40 @@ namespace Comments.Test.UnitTests
 		    //Assert
 		    uri.ShouldBe("consultations://./consultation/10/document/100");
 	    }
+
+	    [Theory]
+		[InlineData("/1/review", true)]
+	    [InlineData("/1/REVIEW", true)]
+	    [InlineData("/1/Review", true)]
+	    [InlineData("/999/Review", true)]
+	    [InlineData("/1/1/introduction", false)]
+		public void IsReviewPageRelativeUrlParsesCorrectly(string relativeURL, bool expectedOutput)
+	    {
+			//Arrange + Act
+		    var actualOutput = ConsultationsUri.IsReviewPageRelativeUrl(relativeURL);
+
+		    //Assert
+		    actualOutput.ShouldBe(expectedOutput);
+		}
+
+	    [Theory]
+	    [InlineData(null, false)]
+	    [InlineData("", false)]
+		[InlineData("invalid uri", false)]
+	    [InlineData("/1/1/introduction", false)]
+	    [InlineData("http://www.nice.org.uk/consultations/1/1/introduction", false)]
+	    [InlineData("consultations://./consultation/", false)]
+	    [InlineData("consultations://./consultation/1", true)]
+	    [InlineData("consultations://./consultation/1/document/1", true)]
+	    [InlineData("consultations://./consultation/1/document/1/chapter/introduction", true)]
+		public void IsValidSourceURIParsesCorrectly(string uri, bool expectedOutput)
+	    {
+		    //Arrange + Act
+		    var actualOutput = ConsultationsUri.IsValidSourceURI(uri);
+
+		    //Assert
+		    actualOutput.ShouldBe(expectedOutput);
+		}
+
 	}
 }

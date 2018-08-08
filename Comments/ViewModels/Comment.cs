@@ -6,7 +6,7 @@ namespace Comments.ViewModels
     {
         public Comment() { } //only here for model binding. don't use it in code.
 
-        public Comment(int locationId, string sourceUri, string htmlElementId, string rangeStart, int? rangeStartOffset, string rangeEnd, int? rangeEndOffset, string quote, int commentId, DateTime lastModifiedDate, Guid lastModifiedByUserId, string commentText, int statusId) : base(locationId, sourceUri, htmlElementId, rangeStart, rangeStartOffset, rangeEnd, rangeEndOffset, quote)
+        public Comment(int locationId, string sourceUri, string htmlElementId, string rangeStart, int? rangeStartOffset, string rangeEnd, int? rangeEndOffset, string quote, int commentId, DateTime lastModifiedDate, Guid lastModifiedByUserId, string commentText, int statusId, bool show) : base(locationId, sourceUri, htmlElementId, rangeStart, rangeStartOffset, rangeEnd, rangeEndOffset, quote, show)
         {
             CommentId = commentId;
             LastModifiedDate = lastModifiedDate;
@@ -16,7 +16,7 @@ namespace Comments.ViewModels
         }
 
         public Comment(Models.Location location, Models.Comment comment) : base(location.LocationId, location.SourceURI, location.HtmlElementID,  
-            location.RangeStart, location.RangeStartOffset, location.RangeEnd, location.RangeEndOffset, location.Quote)
+            location.RangeStart, location.RangeStartOffset, location.RangeEnd, location.RangeEndOffset, location.Quote, show: true)
         {
             CommentId = comment.CommentId;
             LastModifiedDate = comment.LastModifiedDate;

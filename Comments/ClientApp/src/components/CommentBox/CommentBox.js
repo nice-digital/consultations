@@ -1,32 +1,8 @@
 import React, { Component, Fragment } from "react";
 import Moment from "react-moment";
 
-type StatusType = {
-	statusId: number,
-	name: string
-};
-
-type CommentType = {
-	commentId: number,
-	lastModifiedDate: Date,
-	lastModifiedByUserId: string,
-	commentText: string,
-	locationId: number,
-	sourceURI: string,
-	htmlElementID: string,
-	rangeStart: string,
-	rangeStartOffset: string,
-	rangeEnd: string,
-	rangeEndOffset: string,
-	quote: string,
-	commentOn: string,
-	show: boolean,
-	status: StatusType
-};
-
 type PropsType = {
 	staticContext?: any,
-	isVisible: boolean,
 	comment: CommentType,
 	readOnly: boolean,
 	saveHandler: Function,

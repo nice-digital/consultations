@@ -3,6 +3,8 @@
         "consultationId":113,
         "documentId":1,
         "convertedDocument":true,
+        "supportsComments":false,
+        "supportsQuestions":false,
         "title":"Unstable angina and NSTEMI",
         "chapters":[
             {
@@ -73,6 +75,8 @@
         "consultationId":113,
         "documentId":2,
         "convertedDocument":true,
+        "supportsComments":false,
+        "supportsQuestions":false,
         "title":"Sinusitis (acute): antimicrobial prescribing",
         "chapters":[
             {

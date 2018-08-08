@@ -12,16 +12,19 @@ namespace Comments.Common
         public const string DocumentUriFormat = ConsultationUriFormat + "/document/{1}";
         public const string ChapterUriFormat = DocumentUriFormat + "/chapter/{2}";
 
-        public const string ConsultationsUriRegEx =
-                "^consultations:\\/\\/.+\\/consultation\\/(?<consultationId>\\d+)(\\/document\\/)?(?<documentId>\\d?)(\\/chapter\\/)?(?<chapterSlug>.*)$"
-            ;
-        //unescaped version: ^consultations:\/\/.+\/consultation\/(\d+)(\/document\/)?(\d?)(\/chapter\/)?(.*)$
+	    public const string ConsultationsUriRegEx =
+			@"^consultations:\/\/.+\/consultation\/(?<consultationId>\d+)(\/document\/)?(?<documentId>\d?)(\/chapter\/)?(?<chapterSlug>.*)$";
+//                "^consultations:\\/\\/.+\\/consultation\\/(?<consultationId>\\d+)(\\/document\\/)?(?<documentId>\\d?)(\\/chapter\\/)?(?<chapterSlug>.*)$"
+            
+	    public const string ConsultationsDocumentPageRelativeUrlRegEx =
+			@"^\/(?<consultationId>\d+)\/(?<documentId>\d+)\/(?<chapterSlug>.+)$";
+            //"^\\/(?<consultationId>\\d+)\\/(?<documentId>\\d+)\\/(?<chapterSlug>.+)$";
 
-        public const string ConsultationsRelativeUrlRegEx =
-            "^\\/(?<consultationId>\\d+)\\/(?<documentId>\\d+)\\/(?<chapterSlug>.+)$";
-        //unescaped version: ^consultations:\/\/.+\/consultation\/(\d+)\/document\/(\d+)\/chapter\/(.+)$
 
-        public static ConsultationsUriElements ParseConsultationsUri(string consultationsURI)
+		public const string ConsultationsReviewPageRelativeUrlRegEx =
+			@"^\/(?<consultationId>\d+)\/review$";
+
+		public static ConsultationsUriElements ParseConsultationsUri(string consultationsURI)
         {
             var regex = new Regex(ConsultationsUriRegEx);
             var groups = regex.Match(consultationsURI).Groups;
@@ -29,15 +32,35 @@ namespace Comments.Common
             return GetElementsFromRegExGroups(groups);
         }
 
+	    public static bool IsReviewPageRelativeUrl(string relativeURL)
+	    {
+			var regex = new Regex(ConsultationsReviewPageRelativeUrlRegEx, RegexOptions.IgnoreCase);
+		    return regex.IsMatch(relativeURL);
+		}
+
+	    public static bool IsValidSourceURI(string uri)
+	    {
+		    if (string.IsNullOrWhiteSpace(uri)) return false;
+		    var regex = new Regex(string.Format(ConsultationUriFormat, ".+"));
+		    return regex.IsMatch(uri);
+	    }
+
         public static ConsultationsUriElements ParseRelativeUrl(string relativeURL)
         {
-            var regex = new Regex(ConsultationsRelativeUrlRegEx);
-            var groups = regex.Match(relativeURL).Groups;
+			var regexString = IsReviewPageRelativeUrl(relativeURL) ? ConsultationsReviewPageRelativeUrlRegEx : ConsultationsDocumentPageRelativeUrlRegEx;
+			var regex =  new Regex(regexString, RegexOptions.IgnoreCase);
+	        var groups = regex.Match(relativeURL).Groups;
 
             return GetElementsFromRegExGroups(groups);
         }
 
-        public static string ConvertToConsultationsUri(string relativeURL, CommentOn commentOn)
+		/// <summary>
+		/// This takes the relativeURL formats like "1/1/introduction" or "/1/review".
+		/// </summary>
+		/// <param name="relativeURL"></param>
+		/// <param name="commentOn"></param>
+		/// <returns></returns>
+		public static string ConvertToConsultationsUri(string relativeURL, CommentOn commentOn)
         {
             ConsultationsUriElements uriElements;
             if (relativeURL.StartsWith(Scheme))

@@ -1,23 +1,9 @@
+// @flow
+
 import React, { Component, Fragment } from "react";
 import Moment from "react-moment";
 
 //import stringifyObject from "stringify-object";
-
-type StatusType = {
-	statusId: number,
-	name: string
-};
-
-type AnswerType = {
-	answerId: number,
-	answerText: string,
-	answerBoolean: boolean,
-	questionId: number,
-	lastModifiedDate: Date,
-	lastModifiedByUserId: string,
-	statusId: number,
-	status: StatusType
-};
 
 type PropsType = {
 	staticContext?: any,

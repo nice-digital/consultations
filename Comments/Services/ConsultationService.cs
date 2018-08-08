@@ -7,6 +7,7 @@ using System.Linq;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Razor.Language.Intermediate;
 using Comments.Common;
+using Comments.Configuration;
 using Comments.Models;
 using NICE.Feeds.Models.Indev.Chapter;
 using NICE.Feeds.Models.Indev.Detail;
@@ -85,8 +86,12 @@ namespace Comments.Services
 	        var consultationDetail = GetConsultationDetail(consultationId);
 	        var consultationState = GetConsultationState(consultationId, null, consultationDetail);
 	        var breadcrumbs = GetBreadcrumbs(consultationDetail, isReview);
-            return new ViewModels.Consultation(consultationDetail, user, breadcrumbs, consultationState);
+	        var filters = isReview ? AppSettings.ReviewConfig.Filters : null;
+            return new ViewModels.Consultation(consultationDetail, user, breadcrumbs, consultationState, filters);
         }
+
+
+
 
 	    public IEnumerable<BreadcrumbLink> GetBreadcrumbs(ConsultationDetail consultation, bool isReview)
 	    {
@@ -126,6 +131,10 @@ namespace Comments.Services
 			if (consultationDetail == null)
 				consultationDetail = GetConsultationDetail(consultationId);
 
+		    var documents = GetDocuments(consultationId).ToList();
+		    var documentsWhichSupportQuestions = documents.Where(d => d.SupportsQuestions).Select(d => d.DocumentId).ToList();
+		    var documentsWhichSupportComments = documents.Where(d => d.SupportsComments).Select(d => d.DocumentId).ToList();
+
 			var currentUser = _userService.GetCurrentUser();
 
 			if (locations == null && currentUser.IsAuthorised && currentUser.UserId.HasValue)
@@ -142,7 +151,8 @@ namespace Comments.Services
 		    var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);
 
 		    var consultationState = new ConsultationState(consultationDetail.StartDate, consultationDetail.EndDate,
-			    data.questions.Any(), data.questions.Any(q => q.Answers.Any()), data.comments.Any(), hasSubmitted);
+			    data.questions.Any(), data.questions.Any(q => q.Answers.Any()), data.comments.Any(), hasSubmitted,
+			    consultationDetail.SupportsQuestions, consultationDetail.SupportsComments, documentsWhichSupportQuestions, documentsWhichSupportComments);
 
 		    return consultationState;
 	    }

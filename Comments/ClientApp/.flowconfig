@@ -1,8 +1,9 @@
 [ignore]
+.*/node_modules/.*
+.*/coverage/.*
 
 [include]
-node_modules/
-src/
+.*/src/.*
 
 [libs]
 flow-typed/
