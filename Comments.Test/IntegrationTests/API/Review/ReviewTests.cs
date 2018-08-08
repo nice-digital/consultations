@@ -24,7 +24,7 @@ namespace Comments.Test.IntegrationTests.API.Review
 		    {
 				new TopicListFilterGroup(){ Id = "Type", Title = "Questions / Comments", Options = new List<TopicListFilterOption>()
 				{
-					new TopicListFilterOption("Questions", "Question responses"),
+					new TopicListFilterOption("Questions", "Questions"),
 					new TopicListFilterOption("Comments", "Comments"),
 				}},
 				new TopicListFilterGroup(){Id =  "Document", Title = "View comments by document", Options = new List<TopicListFilterOption>()}

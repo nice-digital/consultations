@@ -53,6 +53,7 @@ declare type ConsultationStateType = {
 	shouldShowDrawer: boolean,
 	shouldShowCommentsTab: boolean,
 	shouldShowQuestionsTab: boolean,
+	supportsDownload: boolean,
 };
 
 declare type ConsultationDataType = {

@@ -176,7 +176,7 @@
             "options": [
                 {
                     "id": "Questions",
-                    "label": "Question responses",
+                    "label": "Questions",
                     "isSelected": false,
                     "filteredResultCount": 3,
                     "unfilteredResultCount": 3

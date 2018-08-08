@@ -7,11 +7,15 @@ type PropsType = {
 	title: string,
 	reference: string,
 	endDate?: any,
-	match?: any
+	match?: any,
+	subtitle1: string,
+	subtitle2: string,
 }
 
 export const Header = (props: PropsType) => {
 	const title = props.title;
+	const subtitle1 = props.subtitle1;
+	const subtitle2 = props.subtitle2;
 	const reference = props.reference;
 	const endDate = props.consultationState.endDate;
 	const isOpen = props.consultationState.consultationIsOpen;
@@ -31,6 +35,12 @@ export const Header = (props: PropsType) => {
 	return (
 		<Fragment>
 			<h1 className="page-header__heading mt--0">{title}</h1>
+			{subtitle1 &&
+				<p className="mt--0 mb--0">{subtitle1}</p>
+			}
+			{subtitle2 &&
+				<p className="mt--0 mb--0">{subtitle2}</p>
+			}
 			<p className="page-header__lead">
 				<span>[{reference}] </span>
 				{isOpen ? (
