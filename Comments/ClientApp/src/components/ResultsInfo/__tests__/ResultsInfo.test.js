@@ -33,13 +33,13 @@ describe("[TopicList]", () => {
 			it("product count shows singular with one product when not loading", () => {
 				const resultsInfo = shallow(<ResultsInfo count={1} sortOrder="" appliedFilters={[]} path="" history={null} isLoading={false} />);
 
-				expect(resultsInfo.find("#results-info-count").text()).toEqual("Showing 1 product");
+				expect(resultsInfo.find("#results-info-count").text()).toEqual("Showing 1 response");
 			});
 
 			it("product count shows plural with multiple products when not loading", () => {
 				const resultsInfo = shallow(<ResultsInfo count={2} sortOrder="" appliedFilters={[]} path="" history={null} isLoading={false} />);
 
-				expect(resultsInfo.find("#results-info-count").text()).toEqual("Showing 2 products");
+				expect(resultsInfo.find("#results-info-count").text()).toEqual("Showing 2 responses");
 			});
 
 			it("loading message shows with aria-busy when loading", () => {

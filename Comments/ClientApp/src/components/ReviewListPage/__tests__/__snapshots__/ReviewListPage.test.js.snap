@@ -109,11 +109,6 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
           className="page-header"
         >
           <undefined />
-          <h2
-            className="mt--0"
-          >
-            Comments for review
-          </h2>
           <div
             className="grid"
             onScroll={[Function]}
@@ -124,6 +119,25 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
             <div
               data-g="12 md:9 md:push:3"
             >
+              <div
+                className="results-info"
+              >
+                <h2
+                  aria-live="assertive"
+                  className="results-info__count"
+                  id="results-info-count"
+                >
+                  Showing 
+                  5
+                   response
+                  s
+                </h2>
+                <p
+                  className="results-info__sort hide-print"
+                >
+                  <undefined />
+                </p>
+              </div>
               <div
                 data-qa-sel="comment-list-wrapper"
               >
@@ -462,7 +476,7 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                   className="hero__container"
                 >
                   <div
-                    className="hero__body"
+                    className="hero__body "
                   >
                     <div
                       className="hero__copy"
@@ -483,9 +497,6 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                           add any extra comments.
                         </li>
                       </ul>
-                      <p>
-                        Do you want to continue?
-                      </p>
                       <undefined />
                     </div>
                   </div>
@@ -551,11 +562,11 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                               id="filter_QuestionsOrComments_Questions"
                               name="QuestionsOrComments"
                               onChange={[Function]}
-                              title="Questions / comments - Question responses"
+                              title="Questions / comments - Questions"
                               type="checkbox"
                               value="Questions"
                             />
-                            Question responses
+                            Questions
                           </label>
                           <label
                             className="filter-group__option"

@@ -22,10 +22,10 @@ describe("[TopicList]", () => {
 			expect(sortLink.prop("path")).toEqual("test-path");
 		});
 
-		it("renders title asc sort link with correct props", () => {
+		it("renders document asc sort link with correct props", () => {
 			const sort = shallow(<Sort sortOrder="TestOrder" path="test-path" />);
 
-			const sortLink = sort.find({ sortOrder: "TitleAsc" });
+			const sortLink = sort.find({ sortOrder: "DocumentAsc" });
 
 			expect(sortLink.prop("currentSortOrder")).toEqual("TestOrder");
 			expect(sortLink.prop("path")).toEqual("test-path");
