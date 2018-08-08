@@ -3,7 +3,7 @@
 import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router";
 import { StickyContainer, Sticky } from "react-sticky";
-//import stringifyObject from "stringify-object";
+import stringifyObject from "stringify-object";
 
 import preload from "../../data/pre-loader";
 import { load } from "../../data/loader";
@@ -75,11 +75,12 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			preloadedData = this.props.staticContext.preload.data; //this is data from Configure => SupplyData in Startup.cs. the main thing it contains for this call is the cookie for the current user.
 		}
 	
+		const querystring = this.props.location.search;
 		const preloadedCommentsData = preload(
 			this.props.staticContext,
 			"commentsreview",
 			[],
-			{ relativeURL: this.props.match.url },
+			Object.assign({ relativeURL: this.props.match.url }, queryStringToObject(querystring)),
 			preloadedData
 		);
 		const consultationId = this.props.match.params.consultationId;
