@@ -1,6 +1,7 @@
+// @flow
+
 import React, { Component } from "react";
 import xpathRange from "xpath-range";
-//import Tooltip from "rc-tooltip";
 //import stringifyObject from "stringify-object";
 
 type PropsType = {
@@ -25,11 +26,6 @@ export class Selection extends Component<PropsType, StateType> {
 		};
 		this.selectionContainer = React.createRef();
 		
-	}
-
-	componentDidMount = () =>
-	{
-		//document.addEventListener("selectionchange", this.onMouseUp);
 	}
 
 	getCommentForRange = (limitingElement: any, selection: any) =>{

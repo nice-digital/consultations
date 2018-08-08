@@ -91,7 +91,12 @@ declare type QuestionTypeType = {
 	hasBooleanAnswer: boolean
 };
 
-declare type AnswerType = {
+type StatusType = {
+	statusId: number,
+	name: string
+};
+
+type AnswerType = {
 	answerId: number,
 	answerText: string,
 	answerBoolean: boolean,
@@ -99,7 +104,13 @@ declare type AnswerType = {
 	lastModifiedDate: Date,
 	lastModifiedByUserId: string,
 	statusId: number,
-	status: StatusType,
+	status: StatusType
+};
+
+type QuestionTypeType = {
+	description: string,
+	hasTextAnswer: boolean,
+	hasBooleanAnswer: boolean
 };
 
 declare type QuestionType = {

@@ -1,3 +1,5 @@
+// @flow
+
 import React, { Component, Fragment } from "react";
 import { Answer } from "../Answer/Answer";
 
@@ -6,35 +8,6 @@ import { Answer } from "../Answer/Answer";
 type StatusType = {
 	statusId: number,
 	name: string
-};
-
-type QuestionTypeType = {
-	description: string,
-	hasTextAnswer: boolean,
-	hasBooleanAnswer: boolean
-};
-
-type AnswerType = {
-	answerId: number,
-	answerText: string,
-	answerBoolean: boolean,
-	questionId: number,
-	lastModifiedDate: Date,
-	lastModifiedByUserId: string,
-	statusId: number,
-	status: StatusType
-};
-
-type QuestionType = {
-	questionId: number,
-	questionText: string,
-	questionTypeId: number,
-	questionOrder: number,
-	lastModifiedDate: Date,
-	lastModifiedByUserId: string,
-	questionType: QuestionTypeType,
-	answers: Array<AnswerType>,
-	commentOn: string
 };
 
 type PropsType = {
