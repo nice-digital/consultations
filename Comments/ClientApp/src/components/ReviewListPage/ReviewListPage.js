@@ -3,7 +3,7 @@
 import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router";
 import { StickyContainer, Sticky } from "react-sticky";
-import stringifyObject from "stringify-object";
+//import stringifyObject from "stringify-object";
 
 import preload from "../../data/pre-loader";
 import { load } from "../../data/loader";
@@ -262,9 +262,9 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		deleteAnswerHandler(e, questionId, answerId, this);
 	}	
 
-	getAppliedFilters(): TopicListAppliedFilterType[] {
+	getAppliedFilters(): ReviewAppliedFilterType[] {
 		const mapOptions =
-			(group: TopicListFilterGroupType) => group.options
+			(group: ReviewFilterGroupType) => group.options
 				.filter(opt => opt.isSelected)
 				.map(opt => ({
 					groupTitle: group.title,
@@ -280,7 +280,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 
 	render() {
 		if (this.state.loading) return <h1>Loading...</h1>;
-		const { title, reference } = this.state.consultationData;	
+		const { reference } = this.state.consultationData;	
 		const commentsToShow = this.state.comments.filter(comment => comment.show) || []; 
 		const questionsToShow = this.state.questions.filter(question => question.show) || []; 
 
@@ -417,7 +417,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																													className="btn btn--cta"
 																													data-qa-sel="submit-comment-button"
 																													onClick={this.submitConsultation}
-																												>{this.state.userHasSubmitted ? "Responses submitted": "Yes, submit my reponse"}
+																												>{this.state.userHasSubmitted ? "Responses submitted": "Yes, submit my response"}
 																												</button>
 																											</Fragment>
 																										);

@@ -10,7 +10,7 @@ type PropsType = {
 	groupId: string,
 	groupName: string,
 	path: string,
-	option: TopicListFilterOptionType,
+	option: ReviewFilterOptionType,
 	history: HistoryType
 };
 

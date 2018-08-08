@@ -1,10 +1,10 @@
-declare type TopicListFilterGroupType = {
+declare type ReviewFilterGroupType = {
 	id: string,
 	title: string,
-	options: TopicListFilterOptionType[]
+	options: ReviewFilterOptionType[]
 };
 
-declare type TopicListFilterOptionType = {
+declare type ReviewFilterOptionType = {
 	filteredResultCount: number,
 	id: string,
 	isSelected: boolean,
@@ -12,7 +12,7 @@ declare type TopicListFilterOptionType = {
 	unfilteredResultCount: number
 };
 
-declare type TopicListFilterOptionType = {
+declare type ReviewFilterOptionType = {
 	filteredResultCount: number,
 	id: string,
 	isSelected: boolean,
@@ -137,6 +137,6 @@ declare type CommentsAndQuestionsType = {
 
 declare type ReviewPageViewModelType = {
 	commentsAndQuestions: CommentsAndQuestionsType,
-	filters: Array<TopicListFilterGroupType>,
+	filters: Array<ReviewFilterGroupType>,
 	//QuestionsOrComments[] and Documents[] are only for sending up to the backend. not to use in react. 
 };

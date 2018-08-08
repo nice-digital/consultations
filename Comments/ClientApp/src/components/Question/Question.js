@@ -5,11 +5,6 @@ import { Answer } from "../Answer/Answer";
 
 //import stringifyObject from "stringify-object";
 
-type StatusType = {
-	statusId: number,
-	name: string
-};
-
 type PropsType = {
 	staticContext?: any,
 	saveAnswerHandler: Function,

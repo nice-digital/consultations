@@ -28,7 +28,7 @@ function mockReact() {
 }
 jest.mock("react", () => mockReact());
 
-describe("[TopicList]", () => {
+describe("[Consultations]", () => {
 	describe("HistoryContext", () => {
 
 		describe("withHistory", () => {

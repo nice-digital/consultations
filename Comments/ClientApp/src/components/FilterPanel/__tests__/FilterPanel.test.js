@@ -5,7 +5,7 @@ import { shallow } from "enzyme";
 import { FilterPanel } from "../FilterPanel";
 import { FilterGroup } from "../../FilterGroup/FilterGroup";
 
-describe("[TopicList]", () => {
+describe("[Consultations]", () => {
 	describe("FilterPanel", () => {
 
 		describe("getFilterGroupsToDisplay", () => {

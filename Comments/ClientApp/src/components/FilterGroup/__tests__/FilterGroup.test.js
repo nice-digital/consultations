@@ -12,7 +12,7 @@ jest.mock("../../HistoryContext/HistoryContext", () => {
 	};
 });
 
-describe("[TopicList]", () => {
+describe("[Consultations]", () => {
 	describe("FilterGroup", () => {
 
 		const zeroResultsOptions = [
