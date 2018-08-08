@@ -11,7 +11,7 @@ import sampleComments from "./sample";
 import reviewComments from "./reviewComments";
 import EmptyCommentsResponse from "./EmptyCommentsResponse";
 import { nextTick, queryStringToObject } from "../../../helpers/utils";
-import stringifyObject from "stringify-object";
+//import stringifyObject from "stringify-object";
 
 const mock = new MockAdapter(axios);
 

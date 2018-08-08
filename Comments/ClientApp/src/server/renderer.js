@@ -10,7 +10,7 @@ import { Helmet } from "react-helmet";
 import { processHtml } from "./html-processor";
 import App from "./../components/App/App";
 import Error from "./../components/Error/Error";
-import stringifyObject from "stringify-object";
+//import stringifyObject from "stringify-object";
 
 const BaseUrlRelative: string = "/consultations";
 
