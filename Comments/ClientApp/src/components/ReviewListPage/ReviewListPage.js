@@ -298,14 +298,11 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 							<main role="main">
 								<div className="page-header">
 									<Header
-										title="Review your response"
-										subtitle1="Review and edit your question responses and comments before you submit them to us."
+										title={this.state.userHasSubmitted ? "Comments submitted" : "Review your response"}
+										subtitle1={this.state.userHasSubmitted ? "" : "Review and edit your question responses and comments before you submit them to us."}
 										subtitle2="Once they have been submitted you will not be able to edit them further or add any extra comments."
 										reference={reference}
 										consultationState={this.state.consultationData.consultationState}/>
-									{this.state.userHasSubmitted && 
-										<h2 className="mt--0">Comments submitted</h2>
-									}
 									{this.state.supportsDownload && 
 										<div className="clearfix">
 											<button className="btn btn--secondary right mr--0">Download your responses</button>
