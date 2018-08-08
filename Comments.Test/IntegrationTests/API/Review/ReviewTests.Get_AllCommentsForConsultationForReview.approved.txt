@@ -186,7 +186,7 @@
     },
     "filters":[
         {
-            "id":"QuestionsOrComments",
+            "id":"Type",
             "title":"Questions / Comments",
             "options":[
                 {
@@ -206,7 +206,7 @@
             ]
         },
         {
-            "id":"Documents",
+            "id":"Document",
             "title":"View comments by document",
             "options":[
                 {
@@ -226,8 +226,6 @@
             ]
         }
     ],
-    "questionsOrComments":[
-        
-    ],
-    "documents":null
+    "type":null,
+    "document":null
 }
