@@ -49,7 +49,7 @@ namespace Comments.Test.IntegrationTests.API.Review
 	        AddCommentsAndQuestionsAndAnswers(sourceURI, "Another users Comment", questionText, answerText, Guid.NewGuid());
 
 			// Act
-			var response = await _client.GetAsync(string.Format("/consultations/api/CommentsForReview?sourceURI={0}", relativeURIForReviewPage));
+			var response = await _client.GetAsync(string.Format("/consultations/api/CommentsForReview?relativeURL={0}", relativeURIForReviewPage));
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
             var deserialisedObject = JsonConvert.DeserializeObject<ViewModels.ReviewPageViewModel>(responseString);
