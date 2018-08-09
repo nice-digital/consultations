@@ -39,32 +39,48 @@ export class Selection extends Component<PropsType, StateType> {
 		return [curleft,curtop];
 	}
 
+	getXPathForElement(element) {
+		const idx = (sib, name) => sib 
+			? idx(sib.previousElementSibling, name||sib.localName) + (sib.localName == name)
+			: 1;
+		const segs = elm => !elm || elm.nodeType !== 1 
+			? [""]
+			: elm.id && document.querySelector(`#${elm.id}`) === elm
+				? [`id("${elm.id}")`]
+				: [...segs(elm.parentNode), `${elm.localName.toLowerCase()}[${idx(elm)}]`];
+		return segs(element).join("/");
+	}
+
+	// function getElementByXPath(path) { 
+	// 	return (new XPathEvaluator()) 
+	// 		.evaluate(path, document.documentElement, null, 
+	// 						XPathResult.FIRST_ORDERED_NODE_TYPE, null) 
+	// 		.singleNodeValue; 
+	// } 
+
 	getCommentForRange = (limitingElement: any, selection: any) =>{
 		let selectionRange = selection.getRangeAt(0);
 
 		let comment = null;
 		try {
 
-			var parentElement = selectionRange.startContainer.parentElement;
-			var startPosition = this.findPos(parentElement);
+			// let browserRange = new xpathRange.Range.BrowserRange(selectionRange);
+			// let normedRange = browserRange.normalize().limit(limitingElement); //restrict the range to the current limiting area.
 
-			let browserRange = new xpathRange.Range.BrowserRange(selectionRange);
-			let normedRange = browserRange.normalize().limit(limitingElement); //restrict the range to the current limiting area.
-
-			let quote = this.trim(normedRange.text());
-			let serialisedRange = normedRange.serialize(limitingElement, "");
+			// let quote = this.trim(normedRange.text());
+			// let serialisedRange = normedRange.serialize(limitingElement, "");
 
 			comment = {
-				quote: quote,
-				rangeStart: serialisedRange.start,
-				rangeStartOffset: serialisedRange.startOffset,
-				rangeEnd: serialisedRange.end,
-				rangeEndOffset: serialisedRange.endOffset,
+				quote: selectionRange.toString(),
+				rangeStart: this.getXPathForElement(selectionRange.startContainer.parentElement),
+				rangeStartOffset: selectionRange.startOffset,
+				rangeEnd: this.getXPathForElement(selectionRange.endContainer.parentElement),
+				rangeEndOffset: selectionRange.endOffset,
 				sourceURI: this.props.sourceURI,
 				placeholder: "Comment on this selected text",
 				commentText: "",
 				commentOn: "Selection",
-				position: startPosition,
+				position: this.findPos(selectionRange.startContainer.parentElement),
 			};
 		} catch (error) {
 			console.error(error);
