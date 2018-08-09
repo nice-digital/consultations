@@ -100,3 +100,20 @@ export const canUseDOM = (): boolean => (
 		window.document &&
 		window.document.createElement
 	));
+
+function whichChild(elem){
+	let  i= 0;
+	while ((elem=elem.previousSibling)!=null) ++i;
+	return i;
+}
+	
+//this function returns a long dotted decimal
+export const getElementPositionWithinDocument = (elem) => {
+	let curindex = "";
+	if (elem.offsetParent) {
+		do {
+			curindex += this.whichChild(elem).toString() + ".";
+		} while (elem = elem.offsetParent && elem.id !== "root"); //assignment is correct. should not be conditional.
+	}
+	return curindex.trim().replace(new RegExp(/\s/, "g"), ".");
+};

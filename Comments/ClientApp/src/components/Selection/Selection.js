@@ -1,8 +1,9 @@
 // @flow
 
 import React, { Component } from "react";
-import xpathRange from "xpath-range";
 //import stringifyObject from "stringify-object";
+
+import { getElementPositionWithinDocument } from "../../helpers/utils";
 
 type PropsType = {
 	newCommentFunc: Function,
@@ -24,20 +25,24 @@ export class Selection extends Component<PropsType, StateType> {
 			comment: {},
 			position: {}
 		};
-		this.selectionContainer = React.createRef();
-		
+		this.selectionContainer = React.createRef();		
 	}
 
-	findPos(obj) {
-		let curleft = 0, curtop = 0;
-		if (obj.offsetParent) {
-			do {
-				curleft += obj.offsetLeft;
-				curtop += obj.offsetTop;
-			} while (obj = obj.offsetParent);
-		}
-		return [curleft,curtop];
-	}
+	// whichChild(elem){
+	// 	var  i= 0;
+	// 	while((elem=elem.previousSibling)!=null) ++i;
+	// 	return i;
+	// }
+	
+	// findPos(obj) {
+	// 	let curindex = "";
+	// 	if (obj.offsetParent) {
+	// 		do {
+	// 			curindex += this.whichChild(obj).toString() + ".";
+	// 		} while (obj = obj.offsetParent);
+	// 	}
+	// 	return curindex; //.trim().replace(new RegExp(/\s/, "g"), ".");
+	// }
 
 	getXPathForElement(element) {
 		const idx = (sib, name) => sib 
@@ -51,25 +56,11 @@ export class Selection extends Component<PropsType, StateType> {
 		return segs(element).join("/");
 	}
 
-	// function getElementByXPath(path) { 
-	// 	return (new XPathEvaluator()) 
-	// 		.evaluate(path, document.documentElement, null, 
-	// 						XPathResult.FIRST_ORDERED_NODE_TYPE, null) 
-	// 		.singleNodeValue; 
-	// } 
-
 	getCommentForRange = (limitingElement: any, selection: any) =>{
 		let selectionRange = selection.getRangeAt(0);
 
 		let comment = null;
 		try {
-
-			// let browserRange = new xpathRange.Range.BrowserRange(selectionRange);
-			// let normedRange = browserRange.normalize().limit(limitingElement); //restrict the range to the current limiting area.
-
-			// let quote = this.trim(normedRange.text());
-			// let serialisedRange = normedRange.serialize(limitingElement, "");
-
 			comment = {
 				quote: selectionRange.toString(),
 				rangeStart: this.getXPathForElement(selectionRange.startContainer.parentElement),
@@ -80,7 +71,7 @@ export class Selection extends Component<PropsType, StateType> {
 				placeholder: "Comment on this selected text",
 				commentText: "",
 				commentOn: "Selection",
-				position: this.findPos(selectionRange.startContainer.parentElement),
+				position: getElementPositionWithinDocument(selectionRange.startContainer.parentElement) + "." + selectionRange.startOffset.toString(),
 			};
 		} catch (error) {
 			console.error(error);
