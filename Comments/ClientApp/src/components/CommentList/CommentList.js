@@ -2,7 +2,7 @@
 
 import React, { Component, Fragment } from "react";
 import { withRouter, Link } from "react-router-dom";
-//import stringifyObject from "stringify-object";
+import stringifyObject from "stringify-object";
 
 import preload from "../../data/pre-loader";
 import { load } from "../../data/loader";
@@ -134,7 +134,28 @@ export class CommentList extends Component<PropsType, StateType> {
 		}
 	}
 
-	newComment(newComment: CommentType) {
+	findPos(obj) {
+		let curleft = 0, curtop = 0;
+		if (obj.offsetParent) {
+			do {
+				curleft += obj.offsetLeft;
+				curtop += obj.offsetTop;
+			} while (obj = obj.offsetParent);
+		}
+		return [curleft,curtop];
+	}
+
+	newComment = (e: Event, newComment: CommentType, position: Array<number>) => {
+
+
+		if (typeof(position) === "undefined" && e !== null) {
+			console.log("position undefined. going to try and figure it out.");
+			position = this.findPos(e.currentTarget);
+		}
+		
+		console.log(`position is: ${stringifyObject(position)}`);
+
+
 		this.setState({
 			drawerOpen: true,
 			viewComments: true,

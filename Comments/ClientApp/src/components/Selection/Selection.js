@@ -85,7 +85,7 @@ export class Selection extends Component<PropsType, StateType> {
 		}
 	}
 	onButtonClick = (event: Event ) => {
-		this.props.newCommentFunc(this.state.comment);
+		this.props.newCommentFunc(null, this.state.comment, [this.state.position.x, this.state.position.y]); //can't pass the event here, as it's the button click event, not the start of the text selection.
 		this.setState({ toolTipVisible: false });
 	}
 

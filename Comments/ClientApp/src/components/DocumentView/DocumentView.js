@@ -32,10 +32,10 @@ export class DocumentView extends Component<PropsType, StateType> {
 		};
 	}
 
-	newCommentHandler = incomingComment => {
+	newCommentHandler = (e: Event, incomingComment: CommentType, position: Array<number>) => {
 		// this method is passed down to <DocumentWithRouter /> by props.
 		// The function is the one we're using from <Drawer />
-		this.commentList.newComment(incomingComment);
+		this.commentList.newComment(e, incomingComment, position);
 	};
 
 
