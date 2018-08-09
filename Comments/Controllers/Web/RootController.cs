@@ -24,14 +24,13 @@ namespace Comments.Controllers.Web
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string wctx)
         {
             _logger.LogWarning("Hitting the root controller. this should only occur locally.");
 
             try
 	        {
 		        //don't judge this too harshly. this pretty nasty code is here for dev purposes only. it's not production code.
-		        string wctx = Request.Form["wctx"];
 		        const string returnName = "ru=";
 		        var parts = wctx.Split('&');
 		        var returnPart = parts.FirstOrDefault(p => p.StartsWith(returnName));
