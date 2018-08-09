@@ -145,15 +145,14 @@ export class CommentList extends Component<PropsType, StateType> {
 		return [curleft,curtop];
 	}
 
-	newComment = (e: Event, newComment: CommentType, position: Array<number>) => {
+	newComment = (e: Event, newComment: CommentType) => {
 
-
-		if (typeof(position) === "undefined" && e !== null) {
+		if ((typeof(newComment.position) === "undefined" || (newComment.position === null)) && e !== null) {
 			console.log("position undefined. going to try and figure it out.");
-			position = this.findPos(e.currentTarget);
+			newComment.position = this.findPos(e.currentTarget);
 		}
 		
-		console.log(`position is: ${stringifyObject(position)}`);
+		console.log(`position is: ${stringifyObject(newComment.position)}`);
 
 
 		this.setState({

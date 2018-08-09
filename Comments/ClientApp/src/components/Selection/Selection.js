@@ -28,11 +28,26 @@ export class Selection extends Component<PropsType, StateType> {
 		
 	}
 
+	findPos(obj) {
+		let curleft = 0, curtop = 0;
+		if (obj.offsetParent) {
+			do {
+				curleft += obj.offsetLeft;
+				curtop += obj.offsetTop;
+			} while (obj = obj.offsetParent);
+		}
+		return [curleft,curtop];
+	}
+
 	getCommentForRange = (limitingElement: any, selection: any) =>{
 		let selectionRange = selection.getRangeAt(0);
 
 		let comment = null;
 		try {
+
+			var parentElement = selectionRange.startContainer.parentElement;
+			var startPosition = this.findPos(parentElement);
+
 			let browserRange = new xpathRange.Range.BrowserRange(selectionRange);
 			let normedRange = browserRange.normalize().limit(limitingElement); //restrict the range to the current limiting area.
 
@@ -48,7 +63,8 @@ export class Selection extends Component<PropsType, StateType> {
 				sourceURI: this.props.sourceURI,
 				placeholder: "Comment on this selected text",
 				commentText: "",
-				commentOn: "Selection"
+				commentOn: "Selection",
+				position: startPosition,
 			};
 		} catch (error) {
 			console.error(error);
@@ -85,7 +101,7 @@ export class Selection extends Component<PropsType, StateType> {
 		}
 	}
 	onButtonClick = (event: Event ) => {
-		this.props.newCommentFunc(null, this.state.comment, [this.state.position.x, this.state.position.y]); //can't pass the event here, as it's the button click event, not the start of the text selection.
+		this.props.newCommentFunc(null, this.state.comment); //can't pass the event here, as it's the button click event, not the start of the text selection.
 		this.setState({ toolTipVisible: false });
 	}
 
