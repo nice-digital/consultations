@@ -55,6 +55,7 @@ namespace Comments.ViewModels
 
 	    private const int UnsetDocumentIdValue = 0;
 	    private int? _documentId = UnsetDocumentIdValue;
+	    
 	    public int? DocumentId
 	    {
 		    get
@@ -79,15 +80,20 @@ namespace Comments.ViewModels
 		/// </summary>
 	    public bool Show { get; set; }
 
+	    private string _order;
 		/// <summary>
 		/// Order is the position within the chapter. it's a dotted decimal a bit like "2.1.0.0.2.1.1.0.0.1.2.167"
 		/// it's going to get added to the order field in the location table.
 		/// </summary>
-		public string Order { get; set; }
+		public string Order
+	    {
+		    get => _order ?? "0";
+			set => _order = value;
+		}
 
-		/// <summary>
-		/// Nearest section that this comment/question belongs to. might well be null. it might also start with a dotted decimal number or not.
-		/// </summary>
-		public string Section { get; set; }
+	    /// <summary>
+	    /// Nearest section that this comment/question belongs to. might well be null. it might also start with a dotted decimal number or not.
+	    /// </summary>
+	    public string Section { get; set; }
 	}
 }

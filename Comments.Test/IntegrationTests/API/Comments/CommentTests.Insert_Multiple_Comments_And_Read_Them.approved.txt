@@ -18,11 +18,10 @@
             "rangeEnd":null,
             "rangeEndOffset":null,
             "quote":null,
-            "order":null,
             "commentOn":"Chapter",
             "documentId":1,
             "show":true,
-            "position":null,
+            "order":"0",
             "section":null
         },
         {
@@ -43,11 +42,10 @@
             "rangeEnd":null,
             "rangeEndOffset":null,
             "quote":null,
-            "order":null,
             "commentOn":"Chapter",
             "documentId":1,
             "show":true,
-            "position":null,
+            "order":"0",
             "section":null
         },
         {
@@ -68,11 +66,10 @@
             "rangeEnd":null,
             "rangeEndOffset":null,
             "quote":null,
-            "order":null,
             "commentOn":"Chapter",
             "documentId":1,
             "show":true,
-            "position":null,
+            "order":"0",
             "section":null
         }
     ],
