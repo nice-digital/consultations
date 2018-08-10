@@ -8,7 +8,8 @@ import preload from "../../data/pre-loader";
 import { load } from "../../data/loader";
 import { saveCommentHandler, deleteCommentHandler, saveAnswerHandler, deleteAnswerHandler } from "../../helpers/editing-and-deleting";
 import { pullFocusById } from "../../helpers/accessibility-helpers";
-import {mobileWidth} from "../../constants";
+import { mobileWidth } from "../../constants";
+import { getElementPositionWithinDocument } from "../../helpers/utils";
 
 import { CommentBox } from "../CommentBox/CommentBox";
 import { Question } from "../Question/Question";
@@ -134,22 +135,11 @@ export class CommentList extends Component<PropsType, StateType> {
 		}
 	}
 
-	findPos(obj) {
-		let curleft = 0, curtop = 0;
-		if (obj.offsetParent) {
-			do {
-				curleft += obj.offsetLeft;
-				curtop += obj.offsetTop;
-			} while (obj = obj.offsetParent);
-		}
-		return [curleft,curtop];
-	}
-
 	newComment = (e: Event, newComment: CommentType) => {
 
 		if ((typeof(newComment.position) === "undefined" || (newComment.position === null)) && e !== null) {
 			console.log("position undefined. going to try and figure it out.");
-			newComment.position = this.findPos(e.currentTarget);
+			newComment.position = getElementPositionWithinDocument(e.currentTarget);
 		}
 		
 		console.log(`position is: ${stringifyObject(newComment.position)}`);

@@ -101,19 +101,26 @@ export const canUseDOM = (): boolean => (
 		window.document.createElement
 	));
 
-function whichChild(elem){
+const whichChild = (elem) => {
 	let  i= 0;
 	while ((elem=elem.previousSibling)!=null) ++i;
 	return i;
-}
+};
+
+const reverseString = (str) => {
+	return (str === "") ? "" : reverseString(str.substr(1)) + str.charAt(0);
+};
 	
-//this function returns a long dotted decimal
+//this function returns a long dotted decimal representing the position in the document.
 export const getElementPositionWithinDocument = (elem) => {
 	let curindex = "";
-	if (elem.offsetParent) {
+	if (elem.parentElement) {
 		do {
-			curindex += this.whichChild(elem).toString() + ".";
-		} while (elem = elem.offsetParent && elem.id !== "root"); //assignment is correct. should not be conditional.
+			curindex += whichChild(elem).toString() + " "; // add elem.tagName to see what the element is.
+			if (elem.id === "root"){ //this ensures the top element in the position is the div with id="root"
+				break;
+			}
+		} while (elem = elem.parentElement);
 	}
-	return curindex.trim().replace(new RegExp(/\s/, "g"), ".");
+	return reverseString(curindex.trim().replace(new RegExp(/\s/, "g"), "."));
 };

@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from "react";
-//import stringifyObject from "stringify-object";
+import stringifyObject from "stringify-object";
 
 import { getElementPositionWithinDocument } from "../../helpers/utils";
 
@@ -28,22 +28,6 @@ export class Selection extends Component<PropsType, StateType> {
 		this.selectionContainer = React.createRef();		
 	}
 
-	// whichChild(elem){
-	// 	var  i= 0;
-	// 	while((elem=elem.previousSibling)!=null) ++i;
-	// 	return i;
-	// }
-	
-	// findPos(obj) {
-	// 	let curindex = "";
-	// 	if (obj.offsetParent) {
-	// 		do {
-	// 			curindex += this.whichChild(obj).toString() + ".";
-	// 		} while (obj = obj.offsetParent);
-	// 	}
-	// 	return curindex; //.trim().replace(new RegExp(/\s/, "g"), ".");
-	// }
-
 	getXPathForElement(element) {
 		const idx = (sib, name) => sib 
 			? idx(sib.previousElementSibling, name||sib.localName) + (sib.localName == name)
@@ -58,7 +42,6 @@ export class Selection extends Component<PropsType, StateType> {
 
 	getCommentForRange = (limitingElement: any, selection: any) =>{
 		let selectionRange = selection.getRangeAt(0);
-
 		let comment = null;
 		try {
 			comment = {
@@ -76,6 +59,9 @@ export class Selection extends Component<PropsType, StateType> {
 		} catch (error) {
 			console.error(error);
 		}
+
+		//console.log(`comment in selection: ${stringifyObject(comment)}`);
+
 		return(comment);
 	}
 
