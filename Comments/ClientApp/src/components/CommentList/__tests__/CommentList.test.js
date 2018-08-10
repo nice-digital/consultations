@@ -149,7 +149,7 @@ describe("[ClientApp] ", () => {
 			});
 			const wrapper = shallow(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>).find("CommentList").dive();
 			expect(wrapper.state().comments.length).toEqual(0);
-			wrapper.instance().newComment({});
+			wrapper.instance().newComment(null, {order: "0"});
 			expect(wrapper.state().comments.length).toEqual(1);
 			expect(wrapper.state().comments[0].commentId).toEqual(-1);
 		});
@@ -161,8 +161,8 @@ describe("[ClientApp] ", () => {
 			});
 			const wrapper = shallow(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>).find("CommentList").dive();
 			expect(wrapper.state().comments.length).toEqual(0);
-			wrapper.instance().newComment({});
-			wrapper.instance().newComment({});
+			wrapper.instance().newComment(null, {order: "0"});
+			wrapper.instance().newComment(null, {order: "0"});
 			expect(wrapper.state().comments.length).toEqual(2);
 			expect(wrapper.state().comments[0].commentId).toEqual(-2);
 			expect(wrapper.state().comments[1].commentId).toEqual(-1);
@@ -179,8 +179,8 @@ describe("[ClientApp] ", () => {
 				.reply(200, sampleComments);
 			const wrapper = shallow(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>).find("CommentList").dive();
 			expect(wrapper.state().comments.length).toEqual(0);
-			wrapper.instance().newComment({});
-			wrapper.instance().newComment({});
+			wrapper.instance().newComment(null, {order: "0"});
+			wrapper.instance().newComment(null, {order: "0"});
 			expect(wrapper.state().comments.length).toEqual(2);
 			expect(wrapper.state().comments[0].commentId).toEqual(-2);
 			expect(wrapper.state().comments[1].commentId).toEqual(-1);
@@ -228,9 +228,10 @@ describe("[ClientApp] ", () => {
 
 			expect(state.comments.length).toEqual(5);
 
-			wrapper.instance().newComment({
+			wrapper.instance().newComment(null, {
 				sourceURI: "/1/1/introduction",
-				commentText: ""
+				commentText: "",
+				order: "0",
 			});
 
 			expect(state.comments.length).toEqual(6);
