@@ -1,8 +1,9 @@
 // @flow
 
 import React, { Component } from "react";
-import xpathRange from "xpath-range";
 //import stringifyObject from "stringify-object";
+
+import { getElementPositionWithinDocument, getSectionTitle } from "../../helpers/utils";
 
 type PropsType = {
 	newCommentFunc: Function,
@@ -24,35 +25,44 @@ export class Selection extends Component<PropsType, StateType> {
 			comment: {},
 			position: {}
 		};
-		this.selectionContainer = React.createRef();
-		
+		this.selectionContainer = React.createRef();		
+	}
+
+	getXPathForElement(element) {
+		const idx = (sib, name) => sib 
+			? idx(sib.previousElementSibling, name||sib.localName) + (sib.localName == name)
+			: 1;
+		const segs = elm => !elm || elm.nodeType !== 1 
+			? [""]
+			: elm.id && document.querySelector(`#${elm.id}`) === elm
+				? [`id("${elm.id}")`]
+				: [...segs(elm.parentNode), `${elm.localName.toLowerCase()}[${idx(elm)}]`];
+		return segs(element).join("/");
 	}
 
 	getCommentForRange = (limitingElement: any, selection: any) =>{
 		let selectionRange = selection.getRangeAt(0);
-
 		let comment = null;
 		try {
-			let browserRange = new xpathRange.Range.BrowserRange(selectionRange);
-			let normedRange = browserRange.normalize().limit(limitingElement); //restrict the range to the current limiting area.
-
-			let quote = this.trim(normedRange.text());
-			let serialisedRange = normedRange.serialize(limitingElement, "");
-
 			comment = {
-				quote: quote,
-				rangeStart: serialisedRange.start,
-				rangeStartOffset: serialisedRange.startOffset,
-				rangeEnd: serialisedRange.end,
-				rangeEndOffset: serialisedRange.endOffset,
+				quote: selectionRange.toString(),
+				rangeStart: this.getXPathForElement(selectionRange.startContainer.parentElement),
+				rangeStartOffset: selectionRange.startOffset,
+				rangeEnd: this.getXPathForElement(selectionRange.endContainer.parentElement),
+				rangeEndOffset: selectionRange.endOffset,
 				sourceURI: this.props.sourceURI,
 				placeholder: "Comment on this selected text",
 				commentText: "",
-				commentOn: "Selection"
+				commentOn: "Selection",
+				order: getElementPositionWithinDocument(selectionRange.startContainer.parentElement) + "." + selectionRange.startOffset.toString(),
+				section: getSectionTitle(selectionRange.startContainer.parentElement),
 			};
 		} catch (error) {
 			console.error(error);
 		}
+
+		//console.log(`comment in selection: ${stringifyObject(comment)}`);
+
 		return(comment);
 	}
 
@@ -85,7 +95,7 @@ export class Selection extends Component<PropsType, StateType> {
 		}
 	}
 	onButtonClick = (event: Event ) => {
-		this.props.newCommentFunc(this.state.comment);
+		this.props.newCommentFunc(null, this.state.comment); //can't pass the event here, as it's the button click event, not the start of the text selection.
 		this.setState({ toolTipVisible: false });
 	}
 

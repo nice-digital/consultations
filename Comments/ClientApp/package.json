@@ -53,7 +53,6 @@
     "react-router-hash-link": "^1.2.0",
     "react-scrollspy": "^3.3.5",
     "react-sticky": "^6.0.2",
-    "xpath-range": "0.0.5",
     "stringify-object": "^3.2.2"
   },
   "devDependencies": {

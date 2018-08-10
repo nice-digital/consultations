@@ -21,7 +21,9 @@
                 "quote":null,
                 "commentOn":"Chapter",
                 "documentId":1,
-                "show":true
+                "show":true,
+                "order":"0",
+                "section":null
             },
             {
                 "commentId":"scrubbed by ScrubCommentId",
@@ -43,7 +45,9 @@
                 "quote":null,
                 "commentOn":"Chapter",
                 "documentId":1,
-                "show":true
+                "show":true,
+                "order":"0",
+                "section":null
             }
         ],
         "questions":[
@@ -85,7 +89,9 @@
                 "quote":null,
                 "commentOn":"Chapter",
                 "documentId":1,
-                "show":true
+                "show":true,
+                "order":"0",
+                "section":null
             },
             {
                 "questionId":"scrubbed by ScrubQuestionId",
@@ -125,7 +131,9 @@
                 "quote":null,
                 "commentOn":"Chapter",
                 "documentId":1,
-                "show":true
+                "show":true,
+                "order":"0",
+                "section":null
             },
             {
                 "questionId":"scrubbed by ScrubQuestionId",
@@ -152,7 +160,9 @@
                 "quote":null,
                 "commentOn":"Chapter",
                 "documentId":1,
-                "show":true
+                "show":true,
+                "order":"0",
+                "section":null
             }
         ],
         "isAuthorised":true,
@@ -187,7 +197,7 @@
     "filters":[
         {
             "id":"Type",
-            "title":"Questions / Comments",
+            "title":"Response type",
             "options":[
                 {
                     "id":"Questions",
@@ -207,7 +217,7 @@
         },
         {
             "id":"Document",
-            "title":"View comments by document",
+            "title":"Document",
             "options":[
                 {
                     "id":"2",
@@ -227,5 +237,6 @@
         }
     ],
     "type":null,
-    "document":null
+    "document":null,
+    "sort":"DocumentAsc"
 }

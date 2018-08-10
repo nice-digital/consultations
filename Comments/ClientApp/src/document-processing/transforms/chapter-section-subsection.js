@@ -24,7 +24,7 @@ export const processChapterSectionSubsection = (node, incomingHtml, onNewComment
 					tabIndex={0}
 					onClick={e => {
 						e.preventDefault();
-						onNewCommentClick({
+						onNewCommentClick(e, {
 							sourceURI,
 							commentText: "",
 							commentOn,

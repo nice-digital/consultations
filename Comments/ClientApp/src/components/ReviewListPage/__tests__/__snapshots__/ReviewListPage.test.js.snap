@@ -533,19 +533,19 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                       >
                         <button
                           aria-controls="group-QuestionsOrComments"
-                          aria-expanded={false}
-                          className="filter-group__heading gtm-topic-list-filter-group-expand"
+                          aria-expanded={true}
+                          className="filter-group__heading gtm-topic-list-filter-group-collapse"
                           onClick={[Function]}
                           type="button"
                         >
                           <div
                             id="group-title-QuestionsOrComments"
                           >
-                            Questions / comments
+                            Response type
                           </div>
                         </button>
                         <div
-                          aria-hidden={true}
+                          aria-hidden={false}
                           aria-labelledby="group-title-QuestionsOrComments"
                           className="filter-group__options"
                           id="group-QuestionsOrComments"
@@ -562,7 +562,7 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                               id="filter_QuestionsOrComments_Questions"
                               name="QuestionsOrComments"
                               onChange={[Function]}
-                              title="Questions / comments - Questions"
+                              title="Response type - Questions"
                               type="checkbox"
                               value="Questions"
                             />
@@ -579,7 +579,7 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                               id="filter_QuestionsOrComments_Comments"
                               name="QuestionsOrComments"
                               onChange={[Function]}
-                              title="Questions / comments - Comments"
+                              title="Response type - Comments"
                               type="checkbox"
                               value="Comments"
                             />
@@ -592,19 +592,19 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                       >
                         <button
                           aria-controls="group-Documents"
-                          aria-expanded={false}
-                          className="filter-group__heading gtm-topic-list-filter-group-expand"
+                          aria-expanded={true}
+                          className="filter-group__heading gtm-topic-list-filter-group-collapse"
                           onClick={[Function]}
                           type="button"
                         >
                           <div
                             id="group-title-Documents"
                           >
-                            View comments by document
+                            Document
                           </div>
                         </button>
                         <div
-                          aria-hidden={true}
+                          aria-hidden={false}
                           aria-labelledby="group-title-Documents"
                           className="filter-group__options"
                           id="group-Documents"
@@ -621,7 +621,7 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                               id="filter_Documents_1"
                               name="Documents"
                               onChange={[Function]}
-                              title="View comments by document - Unstable angina and NSTEMI"
+                              title="Document - Unstable angina and NSTEMI"
                               type="checkbox"
                               value="1"
                             />
@@ -638,7 +638,7 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                               id="filter_Documents_2"
                               name="Documents"
                               onChange={[Function]}
-                              title="View comments by document - Glaucoma: diagnosis and management – Full Guideline"
+                              title="Document - Glaucoma: diagnosis and management – Full Guideline"
                               type="checkbox"
                               value="2"
                             />

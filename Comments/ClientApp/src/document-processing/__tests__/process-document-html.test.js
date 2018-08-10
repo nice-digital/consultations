@@ -54,7 +54,7 @@ describe("[ClientApp]", () => {
 				"  </h2>"
 			);
 			instance.wrapper.find("button").simulate("click");
-			expect(instance.clickFunction).toHaveBeenCalledWith({
+			expect(instance.clickFunction).toHaveBeenCalledWith(expect.anything(), {
 				sourceURI: "/1/1/guidance",
 				commentText: "",
 				commentOn: "chapter",
@@ -67,7 +67,7 @@ describe("[ClientApp]", () => {
 			const instance = setupHtml(true,	"<div><a id='bar' href='#test' data-heading-type='section'>Foo</a></div>"
 			);
 			instance.wrapper.find("button").simulate("click");
-			expect(instance.clickFunction).toHaveBeenCalledWith({
+			expect(instance.clickFunction).toHaveBeenCalledWith(expect.anything(), {
 				sourceURI: "/1/1/guidance",
 				commentText: "",
 				commentOn: "section",
@@ -79,7 +79,7 @@ describe("[ClientApp]", () => {
 		it("button fires passed function with expected object for a subsection", () => {
 			const instance = setupHtml(true, "<p class='numbered-paragraph annotator-numbered-paragraph' id='np-1-3-1' data-heading-type='numbered-paragraph' title='Comment on numbered paragraph'><span class='paragraph-number'>1.3.1 </span>Healthcare providers should:</p>");
 			instance.wrapper.find("button").simulate("click");
-			expect(instance.clickFunction).toHaveBeenCalledWith({
+			expect(instance.clickFunction).toHaveBeenCalledWith(expect.anything(), {
 				sourceURI: "/1/1/guidance",
 				commentText: "",
 				commentOn: "subsection",

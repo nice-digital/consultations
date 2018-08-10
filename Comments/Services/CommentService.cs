@@ -77,10 +77,15 @@ namespace Comments.Services
             if (!_currentUser.IsAuthorised)
                 return (comment: null, validate: new Validate(valid: false, unauthorised: true, message: "Not logged in creating comment"));
 
-            
-            var locationToSave = new Models.Location(comment as ViewModels.Location);
-            locationToSave.SourceURI = ConsultationsUri.ConvertToConsultationsUri(comment.SourceURI, CommentOnHelpers.GetCommentOn(comment.CommentOn));
-            _context.Location.Add(locationToSave);
+
+			var sourceURI = ConsultationsUri.ConvertToConsultationsUri(comment.SourceURI, CommentOnHelpers.GetCommentOn(comment.CommentOn));
+			var order = GetOrder(comment.Order, sourceURI);
+	        var locationToSave = new Models.Location(comment as ViewModels.Location)
+	        {
+		        SourceURI = sourceURI,
+				Order = order
+	        };
+			_context.Location.Add(locationToSave);
 
 	        var status = _context.GetStatus(StatusName.Draft);
 			var commentToSave = new Models.Comment(comment.LocationId, _currentUser.UserId.Value, comment.CommentText, _currentUser.UserId.Value, locationToSave, status.StatusId, null);
@@ -143,6 +148,12 @@ namespace Comments.Services
 		public ReviewPageViewModel GetCommentsAndQuestionsForReview(string relativeURL, ReviewPageViewModel model)
 		{
 			var commentsAndQuestions = GetCommentsAndQuestions(relativeURL);
+
+			if (model.Sort == ReviewSortOrder.DocumentAsc)
+			{
+				commentsAndQuestions.Comments = commentsAndQuestions.Comments.OrderByAlphaNumeric(c => c.Order).ToList();
+				//commentsAndQuestions.Questions = commentsAndQuestions.Questions.OrderByAlphaNumeric(q => q.Order).ToList();
+			}
 
 			model.CommentsAndQuestions = FilterCommentsAndQuestions(commentsAndQuestions, model.Type, model.Document);
 
@@ -211,6 +222,28 @@ namespace Comments.Services
 				);
 		    }
 			return filters;
+	    }
+
+	    public const string OrderFormat = "{0}.{1}.{2}.{3}";
+	    public string GetOrder(string orderWithinChapter, string sourceURI)
+	    {
+		    var consultationsUriElements = ConsultationsUri.ParseConsultationsUri(sourceURI);
+
+			var consultationId = consultationsUriElements.ConsultationId;
+			var documentId = consultationsUriElements.DocumentId;
+		    int? chapterIndex = null;
+		    
+			if (consultationsUriElements.IsChapterLevel())
+			{
+				var document = _consultationService.GetDocuments(consultationsUriElements.ConsultationId).FirstOrDefault(d => d.DocumentId.Equals(documentId));
+				var chapterSelected = document?.Chapters.FirstOrDefault(c => c.Slug.Equals(consultationsUriElements.ChapterSlug, StringComparison.OrdinalIgnoreCase));
+				if (chapterSelected != null)
+				{
+					chapterIndex = document.Chapters.Select((chapter, index) => new {chapter, index}).FirstOrDefault(c => c.chapter.Slug.Equals(chapterSelected.Slug, StringComparison.OrdinalIgnoreCase))?.index;
+				}
+			}
+			
+		    return string.Format(OrderFormat, consultationId, documentId ?? 0, chapterIndex ?? 0, orderWithinChapter);
 	    }
 	}
 }

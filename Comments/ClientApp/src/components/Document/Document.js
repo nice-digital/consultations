@@ -358,7 +358,7 @@ export class Document extends Component<PropsType, StateType> {
 										className="btn btn--cta"
 										onClick={e => {
 											e.preventDefault();
-											this.props.onNewCommentClick({
+											this.props.onNewCommentClick(e, {
 												sourceURI: this.props.match.url,
 												commentText: "",
 												commentOn: "Document",
@@ -366,6 +366,8 @@ export class Document extends Component<PropsType, StateType> {
 													documentsData,
 													documentId
 												),
+												order: 0,
+												section: null,
 											});
 										}}>
 										Comment on this document

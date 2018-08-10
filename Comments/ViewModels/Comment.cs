@@ -6,7 +6,7 @@ namespace Comments.ViewModels
     {
         public Comment() { } //only here for model binding. don't use it in code.
 
-        public Comment(int locationId, string sourceUri, string htmlElementId, string rangeStart, int? rangeStartOffset, string rangeEnd, int? rangeEndOffset, string quote, int commentId, DateTime lastModifiedDate, Guid lastModifiedByUserId, string commentText, int statusId, bool show) : base(locationId, sourceUri, htmlElementId, rangeStart, rangeStartOffset, rangeEnd, rangeEndOffset, quote, show)
+        public Comment(int locationId, string sourceUri, string htmlElementId, string rangeStart, int? rangeStartOffset, string rangeEnd, int? rangeEndOffset, string quote, string order, int commentId, DateTime lastModifiedDate, Guid lastModifiedByUserId, string commentText, int statusId, bool show, string section) : base(locationId, sourceUri, htmlElementId, rangeStart, rangeStartOffset, rangeEnd, rangeEndOffset, quote, order, show, section)
         {
             CommentId = commentId;
             LastModifiedDate = lastModifiedDate;
@@ -16,7 +16,7 @@ namespace Comments.ViewModels
         }
 
         public Comment(Models.Location location, Models.Comment comment) : base(location.LocationId, location.SourceURI, location.HtmlElementID,  
-            location.RangeStart, location.RangeStartOffset, location.RangeEnd, location.RangeEndOffset, location.Quote, show: true)
+            location.RangeStart, location.RangeStartOffset, location.RangeEnd, location.RangeEndOffset, location.Quote, location.Order, show: true, section: location.Section )
         {
             CommentId = comment.CommentId;
             LastModifiedDate = comment.LastModifiedDate;
@@ -34,26 +34,6 @@ namespace Comments.ViewModels
 
 	    public ViewModels.Status Status { get; set; }
 		public int StatusId { get; set; }
-
-		//private CommentOn? _commentOn = null;
-  //      public string CommentOn
-  //      {
-  //          get
-  //          {
-  //              if (_commentOn == null)
-  //              {
-  //                  _commentOn = CommentOnHelpers.GetCommentOn(SourceURI, RangeStart, HtmlElementID);
-  //              }
-  //              return _commentOn.HasValue ? Enum.GetName(typeof(CommentOn), _commentOn.Value) : null;
-  //          }
-  //          set
-  //          {
-  //              if (!string.IsNullOrWhiteSpace(value) && Enum.TryParse(value, out CommentOn parsedEnum))
-  //              {
-  //                  _commentOn = parsedEnum;
-  //              }
-  //          }
-  //      }
 
 	    public void UpdateStatusFromDBModel(Models.Status status)
 	    {

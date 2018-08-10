@@ -64,7 +64,8 @@ export class CommentBox extends Component<PropsType, StateType> {
 			commentOn,
 			lastModifiedDate,
 			quote,
-			commentId
+			commentId,
+			order,
 		} = this.state.comment;
 		const unsavedChanges = this.state.unsavedChanges;
 		const comment = this.state.comment;
@@ -101,6 +102,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 							<Moment format="D/M/YYYY - h:mma" date={moment.utc(lastModifiedDate).toDate()}/>
 						</div>
 					) : null}
+
 					<form onSubmit={e => this.props.saveHandler(e, comment)}>
 						<div className="form__group form__group--textarea mb--0">
 							<label

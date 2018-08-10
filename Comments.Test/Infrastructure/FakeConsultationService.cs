@@ -59,7 +59,14 @@ namespace Comments.Test.Infrastructure
 
 	    public IEnumerable<Document> GetDocuments(int consultationId)
 	    {
-		    throw new NotImplementedException();
+		    return new List<Document>()
+		    {
+			    new Document(1, 1, true, "doc 1", new List<Chapter>()
+			    {
+				    new Chapter("chapter-slug", "title"),
+				    new Chapter("chapter-slug2", "title2")
+				}, true, true)
+		    };
 	    }
 
 	    public IEnumerable<Document> GetPreviewDraftDocuments(int consultationId, int documentId, string reference)

@@ -82,7 +82,9 @@ declare type CommentType = {
 	quote: string,
 	commentOn: string,
 	show: boolean,
-	status: StatusType
+	status: StatusType,
+	order: string,
+	section: string,
 };
 
 declare type QuestionTypeType = {

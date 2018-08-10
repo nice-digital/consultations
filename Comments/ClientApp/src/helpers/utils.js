@@ -100,3 +100,43 @@ export const canUseDOM = (): boolean => (
 		window.document &&
 		window.document.createElement
 	));
+
+const whichChild = (elem) => {
+	let  i= 0;
+	while ((elem=elem.previousSibling)!=null) ++i;
+	return i;
+};
+
+const reverseString = (str) => {
+	return (str === "") ? "" : reverseString(str.substr(1)) + str.charAt(0);
+};
+	
+//this function returns a long dotted decimal representing the position in the document. below the div with id of root.
+export const getElementPositionWithinDocument = (elem) => {
+	let curindex = "";
+	if (elem.parentElement) {
+		do {
+			curindex += whichChild(elem).toString() + " "; // add elem.tagName to see what the element is.
+			if (elem.id === "root"){
+				break;
+			}
+		} while (elem = elem.parentElement);
+	}
+	return reverseString(curindex.trim().replace(new RegExp(/\s/, "g"), "."));
+};
+
+//this gets the title of the nearest section above the passed in element (or the element itself). it can also return the chapter title.
+export const getSectionTitle = (elem) => {
+	do {
+		if (elem.classList.contains("section")){
+			return elem.title;
+		}
+		if (elem.classList.contains("chapter")){
+			return elem.title;
+		}
+		if (elem.id === "root"){ //it won't look higher than root.
+			return null;
+		}
+	} while (elem = elem.parentElement);
+	return null; //shouldn't really ever be called, as root will get hit if there's no matches.
+};

@@ -32,7 +32,7 @@ namespace Comments.ViewModels
                 Title = resource.Document.Title;
                 if (resource.Document.Chapters != null)
                 {
-                    Chapters = resource.Document.Chapters.Select(c => new Chapter(c));
+                    Chapters = resource.Document.Chapters.Select((chapter, index) => new Chapter(chapter));
                 }
             }
             else
@@ -54,7 +54,7 @@ namespace Comments.ViewModels
 			    Title = resource.Document.Title;
 			    if (resource.Document.Chapters != null)
 			    {
-				    Chapters = resource.Document.Chapters.Select(c => new Chapter(c));
+				    Chapters = resource.Document.Chapters.Select((chapter, index) => new Chapter(chapter));
 			    }
 		    }
 		    else

@@ -49,6 +49,7 @@ type StateType = {
 	comments: Array<CommentType>,
 	questions: Array<QuestionType>,
 	sort: string,
+	supportsDownload: boolean,
 };
 
 export class ReviewListPage extends Component<PropsType, StateType> {
@@ -67,7 +68,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			comments: [], //this contains all the comments, not just the ones displayed to the user. the show property defines whether the comment is filtered out from view.
 			questions: [], //this contains all the questions, not just the ones displayed to the user. the show property defines whether the question is filtered out from view.
 			sort: "DocumentAsc",
-			supportsDownload: false
+			supportsDownload: false,
 		};
 
 		let preloadedData = {};
@@ -104,8 +105,9 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 				allowComments: (preloadedConsultationData.consultationState.consultationIsOpen && !preloadedConsultationData.consultationState.userHasSubmitted),
 				comments: preloadedCommentsData.commentsAndQuestions.comments,
 				questions: preloadedCommentsData.commentsAndQuestions.questions,
-				sort: "DocumentAsc",
+				sort: preloadedCommentsData.sort,
 				supportsDownload: preloadedConsultationData.consultationState.supportsDownload, 
+				viewSubmittedComments: false,
 			};
 		}
 	}
@@ -166,12 +168,14 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 						loading: false,
 						allowComments: (data.consultationData.consultationState.consultationIsOpen && !data.consultationData.consultationState.userHasSubmitted),
 						supportsDownload: data.consultationData.consultationState.supportsDownload,
+						sort: data.commentsData.sort,
 					});
 				} else{
 					this.setState({
 						commentsData: data.commentsData,
 						comments: data.commentsData.commentsAndQuestions.comments,
 						questions: data.commentsData.commentsAndQuestions.questions,
+						sort: data.commentsData.sort,
 						loading: false,
 					});
 				}			
@@ -298,14 +302,14 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 							<main role="main">
 								<div className="page-header">
 									<Header
-										title={this.state.userHasSubmitted ? "Comments submitted" : "Review your response"}
+										title={this.state.userHasSubmitted ? "Response submitted" : "Review your response"}
 										subtitle1={this.state.userHasSubmitted ? "" : "Review and edit your question responses and comments before you submit them to us."}
-										subtitle2="Once they have been submitted you will not be able to edit them further or add any extra comments."
+										subtitle2={this.state.userHasSubmitted ? "" : "Once they have been submitted you will not be able to edit them further or add any extra comments."}
 										reference={reference}
 										consultationState={this.state.consultationData.consultationState}/>
 									{this.state.supportsDownload && 
 										<div className="clearfix">
-											<button className="btn btn--secondary right mr--0">Download your responses</button>
+											<button className="btn btn--secondary right mr--0">Download your response</button>
 										</div>
 									}
 									<UserContext.Consumer>
@@ -324,9 +328,9 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																<div className="hero__container">
 																	<div className="hero__body">
 																		<div className="hero__copy">
-																			<p className="hero__intro" data-qa-sel="submitted-text">Thank you, your comments have been submitted.</p>
+																			<p className="hero__intro" data-qa-sel="submitted-text">Thank you, your response has been submitted.</p>
 																			<div className="hero__actions">
-																				<button className="btn" data-qa-sel="review-submitted-comments" onClick={this.viewSubmittedCommentsHandler}>Review all submitted comments</button>
+																				<button className="btn" data-qa-sel="review-submitted-comments" onClick={this.viewSubmittedCommentsHandler}>Review your response</button>
 																			</div>
 																		</div>
 																	</div>
@@ -386,7 +390,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																				<div className="hero__container">
 																					<div className="hero__body">
 																						<div className="hero__copy">
-																							<p className="hero__intro" data-qa-sel="submitted-text">Thank you, your comments have been submitted.</p>
+																							<p className="hero__intro" data-qa-sel="submitted-text">Thank you, your response has been submitted.</p>
 																						</div>
 																					</div>
 																				</div>

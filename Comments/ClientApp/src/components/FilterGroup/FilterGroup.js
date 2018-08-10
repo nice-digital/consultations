@@ -30,7 +30,7 @@ export class FilterGroup extends Component<PropsType, StateType> {
 	componentDidMount() {
 		this.setState({
 			canUseDOM: true,
-			isExpanded: this.getSelectedCount() > 0
+			//isExpanded: this.getSelectedCount() > 0
 		});
 	}
 
