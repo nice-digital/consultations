@@ -197,7 +197,7 @@
     "filters":[
         {
             "id":"Type",
-            "title":"Questions / Comments",
+            "title":"Response type",
             "options":[
                 {
                     "id":"Questions",
@@ -217,7 +217,7 @@
         },
         {
             "id":"Document",
-            "title":"View comments by document",
+            "title":"Document",
             "options":[
                 {
                     "id":"2",

@@ -541,7 +541,7 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                           <div
                             id="group-title-QuestionsOrComments"
                           >
-                            Questions / comments
+                            Response type
                           </div>
                         </button>
                         <div
@@ -562,7 +562,7 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                               id="filter_QuestionsOrComments_Questions"
                               name="QuestionsOrComments"
                               onChange={[Function]}
-                              title="Questions / comments - Questions"
+                              title="Response type - Questions"
                               type="checkbox"
                               value="Questions"
                             />
@@ -579,7 +579,7 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                               id="filter_QuestionsOrComments_Comments"
                               name="QuestionsOrComments"
                               onChange={[Function]}
-                              title="Questions / comments - Comments"
+                              title="Response type - Comments"
                               type="checkbox"
                               value="Comments"
                             />
@@ -600,7 +600,7 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                           <div
                             id="group-title-Documents"
                           >
-                            View comments by document
+                            Document
                           </div>
                         </button>
                         <div
@@ -621,7 +621,7 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                               id="filter_Documents_1"
                               name="Documents"
                               onChange={[Function]}
-                              title="View comments by document - Unstable angina and NSTEMI"
+                              title="Document - Unstable angina and NSTEMI"
                               type="checkbox"
                               value="1"
                             />
@@ -638,7 +638,7 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                               id="filter_Documents_2"
                               name="Documents"
                               onChange={[Function]}
-                              title="View comments by document - Glaucoma: diagnosis and management – Full Guideline"
+                              title="Document - Glaucoma: diagnosis and management – Full Guideline"
                               type="checkbox"
                               value="2"
                             />
