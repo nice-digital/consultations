@@ -49,6 +49,7 @@ type StateType = {
 	comments: Array<CommentType>,
 	questions: Array<QuestionType>,
 	sort: string,
+	supportsDownload: boolean,
 };
 
 export class ReviewListPage extends Component<PropsType, StateType> {
@@ -67,7 +68,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			comments: [], //this contains all the comments, not just the ones displayed to the user. the show property defines whether the comment is filtered out from view.
 			questions: [], //this contains all the questions, not just the ones displayed to the user. the show property defines whether the question is filtered out from view.
 			sort: "DocumentAsc",
-			supportsDownload: false
+			supportsDownload: false,
 		};
 
 		let preloadedData = {};
@@ -104,8 +105,9 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 				allowComments: (preloadedConsultationData.consultationState.consultationIsOpen && !preloadedConsultationData.consultationState.userHasSubmitted),
 				comments: preloadedCommentsData.commentsAndQuestions.comments,
 				questions: preloadedCommentsData.commentsAndQuestions.questions,
-				sort: "DocumentAsc",
+				sort: preloadedCommentsData.sort,
 				supportsDownload: preloadedConsultationData.consultationState.supportsDownload, 
+				viewSubmittedComments: false,
 			};
 		}
 	}
@@ -166,12 +168,14 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 						loading: false,
 						allowComments: (data.consultationData.consultationState.consultationIsOpen && !data.consultationData.consultationState.userHasSubmitted),
 						supportsDownload: data.consultationData.consultationState.supportsDownload,
+						sort: data.commentsData.sort,
 					});
 				} else{
 					this.setState({
 						commentsData: data.commentsData,
 						comments: data.commentsData.commentsAndQuestions.comments,
 						questions: data.commentsData.commentsAndQuestions.questions,
+						sort: data.commentsData.sort,
 						loading: false,
 					});
 				}			

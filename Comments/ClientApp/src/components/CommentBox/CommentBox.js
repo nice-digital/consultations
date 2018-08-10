@@ -103,12 +103,6 @@ export class CommentBox extends Component<PropsType, StateType> {
 						</div>
 					) : null}
 
-					{order ? (
-						<div className="mb--d font-weight-bold">
-							Order: {order}
-						</div>
-					) : null}
-					
 					<form onSubmit={e => this.props.saveHandler(e, comment)}>
 						<div className="form__group form__group--textarea mb--0">
 							<label

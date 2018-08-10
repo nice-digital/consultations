@@ -12,6 +12,12 @@ namespace Comments.ViewModels
 		Comments = 2
 	}
 
+	public enum ReviewSortOrder
+	{
+		DocumentAsc,
+		DateDesc
+	}
+
 	public class ReviewPageViewModel
     {
 	    
@@ -32,13 +38,11 @@ namespace Comments.ViewModels
 		    set;
 	    }
 
-	    private IEnumerable<int> _document;
-		public IEnumerable<int> Document
-		{
-			get;
-			set;
-		}
+	    public IEnumerable<int> Document { get; set; }
 
-	    #endregion Filter options
+	    [JsonConverter(typeof(StringEnumConverter))]
+	    public ReviewSortOrder Sort { get; set; } = ReviewSortOrder.DocumentAsc;
+
+		#endregion Filter options
 	}
 }
