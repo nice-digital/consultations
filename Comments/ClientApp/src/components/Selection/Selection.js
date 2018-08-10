@@ -3,7 +3,7 @@
 import React, { Component } from "react";
 import stringifyObject from "stringify-object";
 
-import { getElementPositionWithinDocument } from "../../helpers/utils";
+import { getElementPositionWithinDocument, getSectionTitle } from "../../helpers/utils";
 
 type PropsType = {
 	newCommentFunc: Function,
@@ -55,6 +55,7 @@ export class Selection extends Component<PropsType, StateType> {
 				commentText: "",
 				commentOn: "Selection",
 				position: getElementPositionWithinDocument(selectionRange.startContainer.parentElement) + "." + selectionRange.startOffset.toString(),
+				section: getSectionTitle(selectionRange.startContainer.parentElement),
 			};
 		} catch (error) {
 			console.error(error);

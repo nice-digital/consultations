@@ -9,7 +9,7 @@ import { load } from "../../data/loader";
 import { saveCommentHandler, deleteCommentHandler, saveAnswerHandler, deleteAnswerHandler } from "../../helpers/editing-and-deleting";
 import { pullFocusById } from "../../helpers/accessibility-helpers";
 import { mobileWidth } from "../../constants";
-import { getElementPositionWithinDocument } from "../../helpers/utils";
+import { getElementPositionWithinDocument, getSectionTitle } from "../../helpers/utils";
 
 import { CommentBox } from "../CommentBox/CommentBox";
 import { Question } from "../Question/Question";
@@ -140,9 +140,11 @@ export class CommentList extends Component<PropsType, StateType> {
 		if ((typeof(newComment.position) === "undefined" || (newComment.position === null)) && e !== null) {
 			console.log("position undefined. going to try and figure it out.");
 			newComment.position = getElementPositionWithinDocument(e.currentTarget);
+			newComment.section = getSectionTitle(e.currentTarget);
 		}
 		
 		console.log(`position is: ${stringifyObject(newComment.position)}`);
+		console.log(`section is: ${stringifyObject(newComment.section)}`);
 
 
 		this.setState({
