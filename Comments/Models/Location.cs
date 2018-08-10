@@ -5,7 +5,7 @@ namespace Comments.Models
 {
     public partial class Location
     {
-        public Location(string sourceUri, string htmlElementId, string rangeStart, int? rangeStartOffset, string rangeEnd, int? rangeEndOffset, string quote, string order, ICollection<Comment> comment, ICollection<Question> question)
+        public Location(string sourceUri, string htmlElementId, string rangeStart, int? rangeStartOffset, string rangeEnd, int? rangeEndOffset, string quote, string order, string section, ICollection<Comment> comment, ICollection<Question> question)
         {
             SourceURI = sourceUri;
             HtmlElementID = htmlElementId;
@@ -17,10 +17,11 @@ namespace Comments.Models
 	        Order = order;
 			Comment = comment;
             Question = question;
+	        Section = section;
         }
 
         public Location(ViewModels.Location location) : this(location.SourceURI, location.HtmlElementID, 
-            location.RangeStart, location.RangeStartOffset, location.RangeEnd, location.RangeEndOffset, location.Quote, location.Order, null, null)
+            location.RangeStart, location.RangeStartOffset, location.RangeEnd, location.RangeEndOffset, location.Quote, location.Order, location.Section, null, null)
         {
         }
 
@@ -34,6 +35,7 @@ namespace Comments.Models
             RangeEndOffset = location.RangeEndOffset;
             Quote = location.Quote;
 	        Order = location.Order;
+	        Section = location.Section;
         }
     }
 }

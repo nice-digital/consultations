@@ -9,7 +9,7 @@ namespace Comments.ViewModels
     {
         public Question() { } //only here for model binding. don't use it in code.
         public Question(Models.Location location, Models.Question question) : base(location.LocationId, location.SourceURI, location.HtmlElementID,
-            location.RangeStart, location.RangeStartOffset, location.RangeEnd, location.RangeEndOffset, location.Quote, location.Order, show: true)
+            location.RangeStart, location.RangeStartOffset, location.RangeEnd, location.RangeEndOffset, location.Quote, location.Order, show: true, position: location.Order, section: location.Section)
         {
             QuestionId = question.QuestionId;
             QuestionText = question.QuestionText;

@@ -133,7 +133,7 @@ namespace Comments.Test.UnitTests
             var locationId = AddLocation(sourceURI);
             var userId = Guid.Empty;
             var commentText = Guid.NewGuid().ToString();
-            var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null);
+            var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
             var comment = new Comment(locationId, userId, commentText, userId, location, 1, null);
             var viewModel = new ViewModels.Comment(location, comment);
             

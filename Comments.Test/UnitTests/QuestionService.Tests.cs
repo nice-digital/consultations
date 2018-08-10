@@ -145,7 +145,7 @@ namespace Comments.Test.UnitTests
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
             var questionService = new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService);
 
-            var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null);
+            var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
             var questionType = new QuestionType(description, false, true, null);
             var question = new Question(locationId, questionText, questionTypeId, null, null, questionType, new List<Answer>());
             var viewModel = new ViewModels.Question(location, question);
