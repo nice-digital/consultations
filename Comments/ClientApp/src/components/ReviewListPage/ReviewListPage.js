@@ -304,7 +304,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 									<Header
 										title={this.state.userHasSubmitted ? "Response submitted" : "Review your response"}
 										subtitle1={this.state.userHasSubmitted ? "" : "Review and edit your question responses and comments before you submit them to us."}
-										subtitle2="Once they have been submitted you will not be able to edit them further or add any extra comments."
+										subtitle2={this.state.userHasSubmitted ? "" : "Once they have been submitted you will not be able to edit them further or add any extra comments."}
 										reference={reference}
 										consultationState={this.state.consultationData.consultationState}/>
 									{this.state.supportsDownload && 
@@ -330,7 +330,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																		<div className="hero__copy">
 																			<p className="hero__intro" data-qa-sel="submitted-text">Thank you, your response has been submitted.</p>
 																			<div className="hero__actions">
-																				<button className="btn" data-qa-sel="review-submitted-comments" onClick={this.viewSubmittedCommentsHandler}>Review all submitted comments</button>
+																				<button className="btn" data-qa-sel="review-submitted-comments" onClick={this.viewSubmittedCommentsHandler}>Review your response</button>
 																			</div>
 																		</div>
 																	</div>
@@ -390,7 +390,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																				<div className="hero__container">
 																					<div className="hero__body">
 																						<div className="hero__copy">
-																							<p className="hero__intro" data-qa-sel="submitted-text">Thank you, your comments have been submitted.</p>
+																							<p className="hero__intro" data-qa-sel="submitted-text">Thank you, your response has been submitted.</p>
 																						</div>
 																					</div>
 																				</div>

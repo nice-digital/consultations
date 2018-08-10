@@ -533,8 +533,8 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                       >
                         <button
                           aria-controls="group-QuestionsOrComments"
-                          aria-expanded={false}
-                          className="filter-group__heading gtm-topic-list-filter-group-expand"
+                          aria-expanded={true}
+                          className="filter-group__heading gtm-topic-list-filter-group-collapse"
                           onClick={[Function]}
                           type="button"
                         >
@@ -545,7 +545,7 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                           </div>
                         </button>
                         <div
-                          aria-hidden={true}
+                          aria-hidden={false}
                           aria-labelledby="group-title-QuestionsOrComments"
                           className="filter-group__options"
                           id="group-QuestionsOrComments"
@@ -592,8 +592,8 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                       >
                         <button
                           aria-controls="group-Documents"
-                          aria-expanded={false}
-                          className="filter-group__heading gtm-topic-list-filter-group-expand"
+                          aria-expanded={true}
+                          className="filter-group__heading gtm-topic-list-filter-group-collapse"
                           onClick={[Function]}
                           type="button"
                         >
@@ -604,7 +604,7 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                           </div>
                         </button>
                         <div
-                          aria-hidden={true}
+                          aria-hidden={false}
                           aria-labelledby="group-title-Documents"
                           className="filter-group__options"
                           id="group-Documents"
