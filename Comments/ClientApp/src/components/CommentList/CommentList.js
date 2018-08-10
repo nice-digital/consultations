@@ -138,14 +138,10 @@ export class CommentList extends Component<PropsType, StateType> {
 	newComment = (e: Event, newComment: CommentType) => {
 
 		if ((typeof(newComment.position) === "undefined" || (newComment.position === null)) && e !== null) {
-			console.log("position undefined. going to try and figure it out.");
+			///these values are already set when user has selected text. when they've clicked a button though they'll be unset.
 			newComment.position = getElementPositionWithinDocument(e.currentTarget);
 			newComment.section = getSectionTitle(e.currentTarget);
 		}
-		
-		console.log(`position is: ${stringifyObject(newComment.position)}`);
-		console.log(`section is: ${stringifyObject(newComment.section)}`);
-
 
 		this.setState({
 			drawerOpen: true,

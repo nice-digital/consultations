@@ -366,6 +366,8 @@ export class Document extends Component<PropsType, StateType> {
 													documentsData,
 													documentId
 												),
+												position: 0,
+												section: null,
 											});
 										}}>
 										Comment on this document
