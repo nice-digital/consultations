@@ -54,7 +54,7 @@ export class Selection extends Component<PropsType, StateType> {
 				placeholder: "Comment on this selected text",
 				commentText: "",
 				commentOn: "Selection",
-				position: getElementPositionWithinDocument(selectionRange.startContainer.parentElement) + "." + selectionRange.startOffset.toString(),
+				order: getElementPositionWithinDocument(selectionRange.startContainer.parentElement) + "." + selectionRange.startOffset.toString(),
 				section: getSectionTitle(selectionRange.startContainer.parentElement),
 			};
 		} catch (error) {

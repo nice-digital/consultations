@@ -366,7 +366,7 @@ export class Document extends Component<PropsType, StateType> {
 													documentsData,
 													documentId
 												),
-												position: 0,
+												order: 0,
 												section: null,
 											});
 										}}>

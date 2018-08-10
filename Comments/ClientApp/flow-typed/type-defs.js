@@ -83,7 +83,7 @@ declare type CommentType = {
 	commentOn: string,
 	show: boolean,
 	status: StatusType,
-	position: string,
+	order: string,
 	section: string,
 };
 

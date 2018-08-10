@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using NICE.Feeds.Models.Indev;
@@ -23,13 +23,12 @@ namespace Comments.ViewModels
         
         public string Slug { get; protected set; }
         public string Title { get; protected set; }
-        
     }
 
     public class ChapterContent : Chapter
     {
         [JsonConstructor]
-        public ChapterContent(string slug, string title, string content, IEnumerable<ChapterSection> sections) : base(slug, title)
+        public ChapterContent(string slug, string title, int index, string content, IEnumerable<ChapterSection> sections) : base(slug, title)
         {
             Content = content;
             Sections = sections;

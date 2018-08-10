@@ -36,14 +36,14 @@ namespace Comments.Services
 	public class ConsultationService : IConsultationService
     {
 	    private readonly ConsultationsContext _context;
-	    private readonly IFeedService _feedConverterService;
+	    private readonly IFeedService _feedService;
         private readonly ILogger<ConsultationService> _logger;
         private readonly IUserService _userService;
 
-		public ConsultationService(ConsultationsContext context, IFeedService feedConverterService, ILogger<ConsultationService> logger, IUserService userService)
+		public ConsultationService(ConsultationsContext context, IFeedService feedService, ILogger<ConsultationService> logger, IUserService userService)
         {
 	        _context = context;
-	        _feedConverterService = feedConverterService;
+	        _feedService = feedService;
             _logger = logger;
             _userService = userService;
 		}
@@ -51,31 +51,31 @@ namespace Comments.Services
         public ChapterContent GetChapterContent(int consultationId, int documentId, string chapterSlug)
         {
             return new ViewModels.ChapterContent(
-                _feedConverterService.GetConsultationChapterForPublishedProject(consultationId, documentId, chapterSlug));
+                _feedService.GetConsultationChapterForPublishedProject(consultationId, documentId, chapterSlug));
         }
 
 	    public ChapterContent GetPreviewChapterContent(int consultationId, int documentId, string chapterSlug, string reference)
 	    {
 		    return new ViewModels.ChapterContent(
-			    _feedConverterService.GetIndevConsultationChapterForDraftProject(consultationId, documentId, chapterSlug, reference));
+			    _feedService.GetIndevConsultationChapterForDraftProject(consultationId, documentId, chapterSlug, reference));
 	    }
 
 		public IEnumerable<Document> GetDocuments(int consultationId)
         {
-            var consultationDetail = _feedConverterService.GetIndevConsultationDetailForPublishedProject(consultationId, PreviewState.NonPreview);
+            var consultationDetail = _feedService.GetIndevConsultationDetailForPublishedProject(consultationId, PreviewState.NonPreview);
             return consultationDetail.Resources.Select(r => new ViewModels.Document(consultationId, r)).ToList();
         }
 
 
 	    public IEnumerable<Document> GetPreviewPublishedDocuments(int consultationId, int documentId)
 	    {
-		    var consultationDetail = _feedConverterService.GetIndevConsultationDetailForPublishedProject(consultationId, PreviewState.Preview, documentId);
+		    var consultationDetail = _feedService.GetIndevConsultationDetailForPublishedProject(consultationId, PreviewState.Preview, documentId);
 		    return consultationDetail.Resources.Select(r => new ViewModels.Document(consultationId, r)).ToList();
 	    }
 
 		public IEnumerable<Document> GetPreviewDraftDocuments(int consultationId, int documentId, string reference)
 	    {
-		    var consultationDetail = _feedConverterService.GetIndevConsultationDetailForDraftProject(consultationId, documentId, reference);
+		    var consultationDetail = _feedService.GetIndevConsultationDetailForDraftProject(consultationId, documentId, reference);
 		    return consultationDetail.Resources.Select(r => new ViewModels.Document(consultationId, r)).ToList();
 	    }
 
@@ -115,7 +115,7 @@ namespace Comments.Services
 		public IEnumerable<ViewModels.Consultation> GetConsultations()
         {
             var user = _userService.GetCurrentUser();
-            var consultations = _feedConverterService.GetConsultationList();
+            var consultations = _feedService.GetConsultationList();
             return consultations.Select(c => new ViewModels.Consultation(c, user)).ToList();
         }
 
@@ -176,7 +176,7 @@ namespace Comments.Services
 	    /// <returns></returns>
 	    private ConsultationDetail GetConsultationDetail(int consultationId)
 	    {
-		    var consultationDetail = _feedConverterService.GetIndevConsultationDetailForPublishedProject(consultationId, PreviewState.NonPreview);
+		    var consultationDetail = _feedService.GetIndevConsultationDetailForPublishedProject(consultationId, PreviewState.NonPreview);
 		    return consultationDetail;
 	    }
 	}
