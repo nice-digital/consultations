@@ -22,7 +22,9 @@
                 "order":null,
                 "commentOn":"Chapter",
                 "documentId":1,
-                "show":true
+                "show":true,
+                "position":null,
+                "section":null
             },
             {
                 "commentId":"scrubbed by ScrubCommentId",
@@ -45,7 +47,9 @@
                 "order":null,
                 "commentOn":"Chapter",
                 "documentId":1,
-                "show":true
+                "show":true,
+                "position":null,
+                "section":null
             }
         ],
         "questions":[
@@ -88,7 +92,9 @@
                 "order":null,
                 "commentOn":"Chapter",
                 "documentId":1,
-                "show":true
+                "show":true,
+                "position":null,
+                "section":null
             },
             {
                 "questionId":"scrubbed by ScrubQuestionId",
@@ -129,7 +135,9 @@
                 "order":null,
                 "commentOn":"Chapter",
                 "documentId":1,
-                "show":true
+                "show":true,
+                "position":null,
+                "section":null
             },
             {
                 "questionId":"scrubbed by ScrubQuestionId",
@@ -157,7 +165,9 @@
                 "order":null,
                 "commentOn":"Chapter",
                 "documentId":1,
-                "show":true
+                "show":true,
+                "position":null,
+                "section":null
             }
         ],
         "isAuthorised":true,

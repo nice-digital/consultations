@@ -21,7 +21,9 @@
             "order":null,
             "commentOn":"Chapter",
             "documentId":1,
-            "show":true
+            "show":true,
+            "position":null,
+            "section":null
         },
         {
             "commentId":"scrubbed by ScrubCommentId",
@@ -44,7 +46,9 @@
             "order":null,
             "commentOn":"Chapter",
             "documentId":1,
-            "show":true
+            "show":true,
+            "position":null,
+            "section":null
         },
         {
             "commentId":"scrubbed by ScrubCommentId",
@@ -67,7 +71,9 @@
             "order":null,
             "commentOn":"Chapter",
             "documentId":1,
-            "show":true
+            "show":true,
+            "position":null,
+            "section":null
         }
     ],
     "questions":[
