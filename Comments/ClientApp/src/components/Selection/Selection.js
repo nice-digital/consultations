@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from "react";
-import stringifyObject from "stringify-object";
+//import stringifyObject from "stringify-object";
 
 import { getElementPositionWithinDocument, getSectionTitle } from "../../helpers/utils";
 

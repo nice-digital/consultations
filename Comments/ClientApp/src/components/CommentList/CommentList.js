@@ -2,7 +2,7 @@
 
 import React, { Component, Fragment } from "react";
 import { withRouter, Link } from "react-router-dom";
-import stringifyObject from "stringify-object";
+//import stringifyObject from "stringify-object";
 
 import preload from "../../data/pre-loader";
 import { load } from "../../data/loader";
