@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Text.RegularExpressions;
 using Comments.Common;
 
 namespace Comments.ViewModels
@@ -80,15 +82,27 @@ namespace Comments.ViewModels
 		/// </summary>
 	    public bool Show { get; set; }
 
-	    private string _order;
+	    private string _order = null;
 		/// <summary>
-		/// Order is the position within the chapter. it's a dotted decimal a bit like "2.1.0.0.2.1.1.0.0.1.2.167"
-		/// it's going to get added to the order field in the location table.
+		/// Order is: "[consultation id].[document id].[chapter index].[html element position within chapter]", 
+		/// it's a dotted decimal a bit like "002.001.000.000.002.001.001.000.000.001.002.167" zeros are padded based on the longest decimal value between dots.
+		/// so after setting this field can just be ordered like a string.
 		/// </summary>
 		public string Order
 	    {
 		    get => _order ?? "0";
-			set => _order = value;
+			set
+			{
+				if (!string.IsNullOrWhiteSpace(value))
+				{
+					var parts = value.Split('.');
+					var maxDigitsPerPart =
+						parts.SelectMany(i => Regex.Matches(i, @"\d+").Cast<Match>().Select(m => (int?) m.Value.Length)).Max() ?? 0;
+					var partsWithPaddedZeros =
+						parts.Select(i => Regex.Replace(i, @"\d+", m => m.Value.PadLeft(maxDigitsPerPart, '0')));
+					_order = string.Join('.', partsWithPaddedZeros);
+				}
+			}
 		}
 
 	    /// <summary>

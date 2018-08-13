@@ -79,11 +79,10 @@ namespace Comments.Services
 
 
 			var sourceURI = ConsultationsUri.ConvertToConsultationsUri(comment.SourceURI, CommentOnHelpers.GetCommentOn(comment.CommentOn));
-			var order = GetOrder(comment.Order, sourceURI);
+	        comment.Order = UpdateOrderWithSourceURI(comment.Order, sourceURI);
 	        var locationToSave = new Models.Location(comment as ViewModels.Location)
 	        {
-		        SourceURI = sourceURI,
-				Order = order
+		        SourceURI = sourceURI
 	        };
 			_context.Location.Add(locationToSave);
 
@@ -151,7 +150,7 @@ namespace Comments.Services
 
 			if (model.Sort == ReviewSortOrder.DocumentAsc)
 			{
-				commentsAndQuestions.Comments = commentsAndQuestions.Comments.OrderByAlphaNumeric(c => c.Order).ToList();
+				commentsAndQuestions.Comments = commentsAndQuestions.Comments.OrderBy(c => c.Order).ToList();
 				//commentsAndQuestions.Questions = commentsAndQuestions.Questions.OrderByAlphaNumeric(q => q.Order).ToList();
 			}
 
@@ -225,7 +224,7 @@ namespace Comments.Services
 	    }
 
 	    public const string OrderFormat = "{0}.{1}.{2}.{3}";
-	    public string GetOrder(string orderWithinChapter, string sourceURI)
+	    public string UpdateOrderWithSourceURI(string orderWithinChapter, string sourceURI)
 	    {
 		    var consultationsUriElements = ConsultationsUri.ParseConsultationsUri(sourceURI);
 
