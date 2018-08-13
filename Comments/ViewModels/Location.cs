@@ -54,6 +54,16 @@ namespace Comments.ViewModels
 			    }
 		    }
 	    }
+		public CommentOn? CommentOnEnum{
+			get
+			{
+				if (_commentOn == null)
+				{
+					_commentOn = CommentOnHelpers.GetCommentOn(SourceURI, RangeStart, HtmlElementID);
+				}
+				return _commentOn;
+			}
+		}
 
 	    private const int UnsetDocumentIdValue = 0;
 	    private int? _documentId = UnsetDocumentIdValue;
@@ -67,7 +77,7 @@ namespace Comments.ViewModels
 				    var sourceUri = SourceURI;
 				    if (!ConsultationsUri.IsValidSourceURI(sourceUri))
 				    {
-					    sourceUri = ConsultationsUri.ConvertToConsultationsUri(SourceURI, _commentOn.Value);
+					    sourceUri = ConsultationsUri.ConvertToConsultationsUri(SourceURI, CommentOnEnum.Value);
 				    }
 				    _documentId = ConsultationsUri.ParseConsultationsUri(sourceUri).DocumentId;
 			    }

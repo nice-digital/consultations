@@ -168,16 +168,17 @@ namespace Comments.Services
 		/// <param name="questionsOrComments"></param>
 		/// <param name="documentIdsToFilter"></param>
 		/// <returns></returns>
-		private static CommentsAndQuestions FilterCommentsAndQuestions(CommentsAndQuestions commentsAndQuestions, IEnumerable<QuestionsOrComments> type, IEnumerable<int> documentIdsToFilter)
-	    {
-		    commentsAndQuestions.Questions.ForEach(q => q.Show = type == null ||  type.Contains(QuestionsOrComments.Questions));
-		    commentsAndQuestions.Comments.ForEach(q => q.Show = type == null || type.Contains(QuestionsOrComments.Comments));
+		public CommentsAndQuestions FilterCommentsAndQuestions(CommentsAndQuestions commentsAndQuestions, IEnumerable<QuestionsOrComments> type, IEnumerable<int> documentIdsToFilter)
+		{
+			var types = type?.ToList() ?? new List<QuestionsOrComments>(0);
+		    commentsAndQuestions.Questions.ForEach(q => q.Show = !types.Any() ||  types.Contains(QuestionsOrComments.Questions));
+			commentsAndQuestions.Comments.ForEach(q => q.Show = !types.Any() || types.Contains(QuestionsOrComments.Comments));
 
-		    var idsToFilter = documentIdsToFilter?.ToList() ?? new List<int>(0);
-		    if (idsToFilter.Any())
+			var documentIds = documentIdsToFilter?.ToList() ?? new List<int>(0);
+			if (documentIds.Any())
 		    {
-			    commentsAndQuestions.Questions.ForEach(q => q.Show = (!q.Show || !q.DocumentId.HasValue) ? false : idsToFilter.Contains(q.DocumentId.Value));
-			    commentsAndQuestions.Comments.ForEach(c => c.Show = (!c.Show || !c.DocumentId.HasValue) ? false : idsToFilter.Contains(c.DocumentId.Value));
+			    commentsAndQuestions.Questions.ForEach(q => q.Show = (!q.Show || !q.DocumentId.HasValue) ? false : documentIds.Contains(q.DocumentId.Value));
+			    commentsAndQuestions.Comments.ForEach(c => c.Show = (!c.Show || !c.DocumentId.HasValue) ? false : documentIds.Contains(c.DocumentId.Value));
 			}
 		    return commentsAndQuestions;
 	    }
