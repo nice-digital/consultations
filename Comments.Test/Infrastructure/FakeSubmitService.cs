@@ -26,7 +26,7 @@ namespace Comments.Test.Infrastructure
 
 	    public ConsultationState GetConsultationState(string sourceURI, IEnumerable<Location> locations = null)
 	    {
-		    return new ConsultationState(DateTime.MinValue, DateTime.MaxValue, true, true, true, true);
+		    return new ConsultationState(DateTime.MinValue, DateTime.MaxValue, true, true, true, true, true, true, null, null);
 	    }
     }
 }

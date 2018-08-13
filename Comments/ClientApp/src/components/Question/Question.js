@@ -1,41 +1,9 @@
+// @flow
+
 import React, { Component, Fragment } from "react";
 import { Answer } from "../Answer/Answer";
 
 //import stringifyObject from "stringify-object";
-
-type StatusType = {
-	statusId: number,
-	name: string
-};
-
-type QuestionTypeType = {
-	description: string,
-	hasTextAnswer: boolean,
-	hasBooleanAnswer: boolean
-};
-
-type AnswerType = {
-	answerId: number,
-	answerText: string,
-	answerBoolean: boolean,
-	questionId: number,
-	lastModifiedDate: Date,
-	lastModifiedByUserId: string,
-	statusId: number,
-	status: StatusType
-};
-
-type QuestionType = {
-	questionId: number,
-	questionText: string,
-	questionTypeId: number,
-	questionOrder: number,
-	lastModifiedDate: Date,
-	lastModifiedByUserId: string,
-	questionType: QuestionTypeType,
-	answers: Array<AnswerType>,
-	commentOn: string
-};
 
 type PropsType = {
 	staticContext?: any,
@@ -43,7 +11,6 @@ type PropsType = {
 	deleteAnswerHandler: Function,
 	question: QuestionType,
 	readOnly: boolean,
-	isVisible: boolean, //doesn't appear to get used.
 };
 
 type StateType = {

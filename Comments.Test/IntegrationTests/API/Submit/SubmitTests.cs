@@ -39,7 +39,7 @@ namespace Comments.Test.IntegrationTests.API.Submit
 			//var submitService = new SubmitService(_context, userService, _consultationService);
 			var commentService = new CommentService(_context, userService, authenticateService, _consultationService);
 
-		    var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI, true);
+		    var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI);
 		    var viewModel = new CommentsAndAnswers(commentsAndQuestions.Comments, commentsAndQuestions.Questions.First().Answers);
 		
 			var content = new StringContent(JsonConvert.SerializeObject(viewModel), Encoding.UTF8, "application/json");

@@ -34,7 +34,7 @@ namespace Comments.Test.UnitTests
 			var commentId = AddComment(locationId, "Comment text", false, userId, (int)StatusName.Draft, _context);
 
 			//Act
-			var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI, true);
+			var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI);
 			var result = submitService.SubmitCommentsAndAnswers(new CommentsAndAnswers(commentsAndQuestions.Comments, new List<ViewModels.Answer>()));
 
 			var comment = commentService.GetComment(commentId);
@@ -73,7 +73,7 @@ namespace Comments.Test.UnitTests
 			var answerId = AddAnswer(questionId, userId, "Answer Label");
 
 			//Act
-			var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI, true);
+			var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI);
 			var result = submitService.SubmitCommentsAndAnswers(new CommentsAndAnswers(new List<ViewModels.Comment>(), commentsAndQuestions.Questions.First().Answers));
 
 			var answer = answerService.GetAnswer(answerId);

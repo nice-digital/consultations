@@ -9,6 +9,7 @@ export const Endpoints = {
 	chapter: "/api/Chapter", // chapter content for a document
 	previewchapter: "/api/PreviewChapter", // chapter content for a document in preview mode
 	comments: "/api/Comments", // list of comments for a given URI, restricted by current user
+	commentsreview: "/api/CommentsForReview", // list of comments for a given URI, restricted by current user
 	editcomment: "/api/Comment/{0}", // edits an existing comment. id must be positive int, restricted by current user
 	newcomment: "/api/Comment", // creates a new comment. body of message contains comment in json, restricted by current user
 	editanswer: "/api/Answer/{0}", // edits an existing answer. id must be positive int, restricted by current user

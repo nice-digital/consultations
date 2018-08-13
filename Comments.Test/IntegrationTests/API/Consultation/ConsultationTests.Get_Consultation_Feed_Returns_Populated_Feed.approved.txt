@@ -30,11 +30,24 @@
         "hasUserSuppliedAnswers":false,
         "hasUserSuppliedComments":false,
         "userHasSubmitted":false,
+        "consultationSupportsQuestions":false,
+        "consultationSupportsComments":false,
+        "documentIdsWhichSupportQuestions":[
+            2,
+            2
+        ],
+        "documentIdsWhichSupportComments":[
+            2,
+            2
+        ],
         "consultationIsOpen":true,
         "consultationHasNotStartedYet":false,
         "consultationHasEnded":false,
         "supportsSubmission":false,
-        "supportsDownload":false
+        "supportsDownload":false,
+        "shouldShowDrawer":true,
+        "shouldShowCommentsTab":true,
+        "shouldShowQuestionsTab":true
     },
     "breadcrumbs":[
         {
@@ -45,5 +58,6 @@
             "label":"For consultation comments",
             "url":"/guidance/indevelopment/gid-ta10232/consultation/"
         }
-    ]
+    ],
+    "filters":null
 }

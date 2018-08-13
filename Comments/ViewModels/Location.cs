@@ -1,4 +1,5 @@
 using System;
+using Comments.Common;
 
 namespace Comments.ViewModels
 {
@@ -6,7 +7,7 @@ namespace Comments.ViewModels
     {
         public Location() { } //only here for model binding. don't use it in code.
 
-        public Location(int locationId, string sourceUri, string htmlElementId, string rangeStart, int? rangeStartOffset, string rangeEnd, int? rangeEndOffset, string quote)
+        public Location(int locationId, string sourceUri, string htmlElementId, string rangeStart, int? rangeStartOffset, string rangeEnd, int? rangeEndOffset, string quote, string order, bool show, string section)
         {
             LocationId = locationId;
             SourceURI = sourceUri;
@@ -16,6 +17,9 @@ namespace Comments.ViewModels
             RangeEnd = rangeEnd;
             RangeEndOffset = rangeEndOffset;
             Quote = quote;
+	        Order = order;
+	        Show = show;
+	        Section = section;
         }
         public int LocationId { get; set; }
 
@@ -27,6 +31,7 @@ namespace Comments.ViewModels
         public string RangeEnd { get; set; }
         public int? RangeEndOffset { get; set; }
         public string Quote { get; set; }
+		
 
 	    private CommentOn? _commentOn = null;
 	    public string CommentOn
@@ -47,5 +52,48 @@ namespace Comments.ViewModels
 			    }
 		    }
 	    }
+
+	    private const int UnsetDocumentIdValue = 0;
+	    private int? _documentId = UnsetDocumentIdValue;
+	    
+	    public int? DocumentId
+	    {
+		    get
+		    {
+			    if (_documentId == UnsetDocumentIdValue)
+			    {
+				    var sourceUri = SourceURI;
+				    if (!ConsultationsUri.IsValidSourceURI(sourceUri))
+				    {
+					    sourceUri = ConsultationsUri.ConvertToConsultationsUri(SourceURI, _commentOn.Value);
+				    }
+				    _documentId = ConsultationsUri.ParseConsultationsUri(sourceUri).DocumentId;
+			    }
+			    return _documentId;
+		    }
+		    set => _documentId = value;
+	    }
+
+		/// <summary>
+		/// When false, on the review page, the comment is not shown, i.e. it's filtered out by the filtering on that page.
+		/// on the document page, it should always be true and is unused.
+		/// </summary>
+	    public bool Show { get; set; }
+
+	    private string _order;
+		/// <summary>
+		/// Order is the position within the chapter. it's a dotted decimal a bit like "2.1.0.0.2.1.1.0.0.1.2.167"
+		/// it's going to get added to the order field in the location table.
+		/// </summary>
+		public string Order
+	    {
+		    get => _order ?? "0";
+			set => _order = value;
+		}
+
+	    /// <summary>
+	    /// Nearest section that this comment/question belongs to. might well be null. it might also start with a dotted decimal number or not.
+	    /// </summary>
+	    public string Section { get; set; }
 	}
 }

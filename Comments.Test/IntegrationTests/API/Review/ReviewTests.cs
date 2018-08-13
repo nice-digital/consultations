@@ -1,12 +1,15 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Comments.Configuration;
 using Comments.Models;
 using Comments.Services;
 using Comments.Test.Infrastructure;
+using Comments.ViewModels;
 using Newtonsoft.Json;
 using Shouldly;
 using Xunit;
@@ -15,16 +18,30 @@ namespace Comments.Test.IntegrationTests.API.Review
 {
     public class ReviewTests : TestBase
     {
+	    private static ReviewConfig GetTestReviewConfig()
+	    {
+		    return new ReviewConfig() { Filters = new List<ReviewFilterGroup>()
+		    {
+				new ReviewFilterGroup(){ Id = "Type", Title = "Response type", Options = new List<ReviewFilterOption>()
+				{
+					new ReviewFilterOption("Questions", "Questions"),
+					new ReviewFilterOption("Comments", "Comments"),
+				}},
+				new ReviewFilterGroup(){Id =  "Document", Title = "Document", Options = new List<ReviewFilterOption>()}
+		    } };
+		}
+
         [Fact]
         public async Task Get_AllCommentsForConsultationForReview()
         {
             // Arrange
             ResetDatabase();
 	        _context.Database.EnsureCreated();
-
+	        AppSettings.ReviewConfig = GetTestReviewConfig();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
-	        var answerText = Guid.NewGuid().ToString();
-	        var questionText = Guid.NewGuid().ToString();
+	        var relativeURIForReviewPage = "/1/review";
+			var answerText = Guid.Empty.ToString();
+	        var questionText = Guid.Empty.ToString();
 	        var userId = Guid.Empty;
 
 	        AddCommentsAndQuestionsAndAnswers(sourceURI, "My Comment", questionText, answerText, userId);
@@ -32,14 +49,15 @@ namespace Comments.Test.IntegrationTests.API.Review
 	        AddCommentsAndQuestionsAndAnswers(sourceURI, "Another users Comment", questionText, answerText, Guid.NewGuid());
 
 			// Act
-			var response = await _client.GetAsync(string.Format("/consultations/api/Comments?sourceURI={0}", sourceURI ));
+			var response = await _client.GetAsync(string.Format("/consultations/api/CommentsForReview?relativeURL={0}", relativeURIForReviewPage));
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
-            var deserialisedObject = JsonConvert.DeserializeObject<ViewModels.CommentsAndQuestions>(responseString);
+            var deserialisedObject = JsonConvert.DeserializeObject<ViewModels.ReviewPageViewModel>(responseString);
 
 			// Assert
 			response.StatusCode.ShouldBe(HttpStatusCode.OK);
-			deserialisedObject.Comments.Count().ShouldBe(2);
+	        responseString.ShouldMatchApproved(new Func<string, string>[] { Scrubbers.ScrubLastModifiedDate, Scrubbers.ScrubIds });
+			deserialisedObject.CommentsAndQuestions.Comments.Count().ShouldBe(2);
 		}
 	}
 }

@@ -12,7 +12,9 @@
       "rangeStartOffset": null,
       "rangeEnd": null,
       "rangeEndOffset": null,
-      "quote": null
+      "quote": null,
+      "order":"0",
+      "show":true
     },
     {
       "commentId": 1003,
@@ -26,7 +28,9 @@
       "rangeStartOffset": null,
       "rangeEnd": null,
       "rangeEndOffset": null,
-      "quote": null
+      "quote": null,
+      "order":"0",
+      "show":true
     },
     {
       "commentId": 1004,
@@ -40,6 +44,7 @@
       "rangeStartOffset": null,
       "rangeEnd": null,
       "rangeEndOffset": null,
+      "order":"0",
       "quote": null
     },
     {
@@ -54,7 +59,9 @@
       "rangeStartOffset": null,
       "rangeEnd": null,
       "rangeEndOffset": null,
-      "quote": null
+      "quote": null,
+      "order":"0",
+      "show":true
     },
     {
       "commentId": 1006,
@@ -68,7 +75,9 @@
       "rangeStartOffset": null,
       "rangeEnd": null,
       "rangeEndOffset": null,
-      "quote": null
+      "quote": null,
+      "order":"0",
+      "show":true
     },
     {
       "commentId": 1007,
@@ -82,7 +91,9 @@
       "rangeStartOffset": null,
       "rangeEnd": null,
       "rangeEndOffset": null,
-      "quote": null
+      "quote": null,
+      "order":"0",
+      "show":true
     }
   ],
   "questions": [],
@@ -93,11 +104,24 @@
 		"hasQuestions": false,
 		"hasUserSuppliedAnswers": false,
 		"hasUserSuppliedComments": false,
-		"userHasSubmitted": false,
+    "userHasSubmitted": false,
+    "consultationSupportsQuestions":false,
+        "consultationSupportsComments":false,
+        "documentIdsWhichSupportQuestions":[
+            2,
+            2
+        ],
+        "documentIdsWhichSupportComments":[
+            2,
+            2
+        ],
 		"consultationIsOpen": true,
 		"consultationHasNotStartedYet": false,
 		"consultationHasEnded": false,
 		"supportsSubmission": false,
-		"supportsDownload": false
+    "supportsDownload": false,
+    "shouldShowDrawer":true,
+    "shouldShowCommentsTab":true,
+    "shouldShowQuestionsTab":true
 	}
 }

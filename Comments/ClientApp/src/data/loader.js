@@ -2,7 +2,7 @@ import {Endpoints, BaseUrl} from "./endpoints";
 import axios from "axios";
 import https from "https";
 
-import {objectToQueryString, replaceFormat} from "./../helpers/utils";
+import {objectToQueryString, replaceFormat} from "../helpers/utils";
 //import stringifyObject from "stringify-object";
 
 /**
@@ -36,6 +36,7 @@ export const generateUrl = (endpointName, baseUrl = BaseUrl, urlParameters = [],
 export const load = (endpoint, baseUrl = BaseUrl, urlParameters = [],  query = {}, method = "GET", data = {}, isJson = false, cookie = "") => {
 	return new Promise((resolve, reject) => {
 		const url = generateUrl(endpoint, baseUrl, urlParameters, query);
+		//console.log(`about to hit url:${url}`);
 		let headers = isJson ? { "Content-Type": "application/json"} : {};
 		//let headers = isJson ? { "Accept": "text/html" } : { "Accept": "text/html"};
 		if (cookie !== ""){

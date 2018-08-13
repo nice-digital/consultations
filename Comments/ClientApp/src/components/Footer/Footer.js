@@ -4,7 +4,7 @@ import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import ReactHtmlParser from "react-html-parser";
 
-import preload from "../../data/pre-loader";
+//import preload from "../../data/pre-loader";
 import { load } from "./../../data/loader";
 
 type PropsType = {
@@ -24,7 +24,7 @@ export class Footer extends Component<PropsType, StateType> {
 
 		this.state = {
 			hasInitialData: false,
-			footerHTML: ""
+			footerHTML: "",
 		};
 
 		// if (this.props) {
@@ -73,8 +73,8 @@ export class Footer extends Component<PropsType, StateType> {
 		if (node.type === "text" && node.data.indexOf("[year]") !== -1){
 			const text = node.data.replace("[year]", new Date().getFullYear());
 			return (
-				<Fragment>{text}</Fragment>
-			)
+				<Fragment key="footer-date">{text}</Fragment>
+			);
 		}
 	}
 

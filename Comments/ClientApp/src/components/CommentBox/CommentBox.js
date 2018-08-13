@@ -1,32 +1,8 @@
 import React, { Component, Fragment } from "react";
 import Moment from "react-moment";
 
-type StatusType = {
-	statusId: number,
-	name: string
-};
-
-type CommentType = {
-	commentId: number,
-	lastModifiedDate: Date,
-	lastModifiedByUserId: string,
-	commentText: string,
-	locationId: number,
-	sourceURI: string,
-	htmlElementID: string,
-	rangeStart: string,
-	rangeStartOffset: string,
-	rangeEnd: string,
-	rangeEndOffset: string,
-	quote: string,
-	commentOn: string,
-	show: boolean,
-	status: StatusType
-};
-
 type PropsType = {
 	staticContext?: any,
-	isVisible: boolean,
 	comment: CommentType,
 	readOnly: boolean,
 	saveHandler: Function,
@@ -88,7 +64,8 @@ export class CommentBox extends Component<PropsType, StateType> {
 			commentOn,
 			lastModifiedDate,
 			quote,
-			commentId
+			commentId,
+			order,
 		} = this.state.comment;
 		const unsavedChanges = this.state.unsavedChanges;
 		const comment = this.state.comment;
@@ -125,6 +102,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 							<Moment format="D/M/YYYY - h:mma" date={moment.utc(lastModifiedDate).toDate()}/>
 						</div>
 					) : null}
+
 					<form onSubmit={e => this.props.saveHandler(e, comment)}>
 						<div className="form__group form__group--textarea mb--0">
 							<label

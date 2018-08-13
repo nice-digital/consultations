@@ -34,12 +34,12 @@ namespace Comments.Test.Infrastructure
 	    public ConsultationState GetConsultationState(string sourceURI, IEnumerable<Location> locations = null,
 		    ConsultationDetail consultation = null)
 	    {
-			return new ConsultationState(DateTime.MinValue, _consultationIsOpen ? DateTime.MaxValue : DateTime.MinValue, true, true, true, false);
+			return new ConsultationState(DateTime.MinValue, _consultationIsOpen ? DateTime.MaxValue : DateTime.MinValue, true, true, true, false, true, true, null, null);
 		}
 	    public ConsultationState GetConsultationState(int consultationId, IEnumerable<Location> locations = null,
 		    ConsultationDetail consultation = null)
 	    {
-		    return new ConsultationState(DateTime.MinValue, _consultationIsOpen ? DateTime.MaxValue : DateTime.MinValue, true, true, true, false);
+		    return new ConsultationState(DateTime.MinValue, _consultationIsOpen ? DateTime.MaxValue : DateTime.MinValue, true, true, true, false, true, true, null, null);
 	    }
 
 		#region Not Implemented Members
@@ -59,7 +59,14 @@ namespace Comments.Test.Infrastructure
 
 	    public IEnumerable<Document> GetDocuments(int consultationId)
 	    {
-		    throw new NotImplementedException();
+		    return new List<Document>()
+		    {
+			    new Document(1, 1, true, "doc 1", new List<Chapter>()
+			    {
+				    new Chapter("chapter-slug", "title"),
+				    new Chapter("chapter-slug2", "title2")
+				}, true, true)
+		    };
 	    }
 
 	    public IEnumerable<Document> GetPreviewDraftDocuments(int consultationId, int documentId, string reference)

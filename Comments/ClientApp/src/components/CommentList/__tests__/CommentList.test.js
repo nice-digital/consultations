@@ -149,7 +149,7 @@ describe("[ClientApp] ", () => {
 			});
 			const wrapper = shallow(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>).find("CommentList").dive();
 			expect(wrapper.state().comments.length).toEqual(0);
-			wrapper.instance().newComment({});
+			wrapper.instance().newComment(null, {order: "0"});
 			expect(wrapper.state().comments.length).toEqual(1);
 			expect(wrapper.state().comments[0].commentId).toEqual(-1);
 		});
@@ -161,8 +161,8 @@ describe("[ClientApp] ", () => {
 			});
 			const wrapper = shallow(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>).find("CommentList").dive();
 			expect(wrapper.state().comments.length).toEqual(0);
-			wrapper.instance().newComment({});
-			wrapper.instance().newComment({});
+			wrapper.instance().newComment(null, {order: "0"});
+			wrapper.instance().newComment(null, {order: "0"});
 			expect(wrapper.state().comments.length).toEqual(2);
 			expect(wrapper.state().comments[0].commentId).toEqual(-2);
 			expect(wrapper.state().comments[1].commentId).toEqual(-1);
@@ -179,8 +179,8 @@ describe("[ClientApp] ", () => {
 				.reply(200, sampleComments);
 			const wrapper = shallow(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>).find("CommentList").dive();
 			expect(wrapper.state().comments.length).toEqual(0);
-			wrapper.instance().newComment({});
-			wrapper.instance().newComment({});
+			wrapper.instance().newComment(null, {order: "0"});
+			wrapper.instance().newComment(null, {order: "0"});
 			expect(wrapper.state().comments.length).toEqual(2);
 			expect(wrapper.state().comments[0].commentId).toEqual(-2);
 			expect(wrapper.state().comments[1].commentId).toEqual(-1);
@@ -228,9 +228,10 @@ describe("[ClientApp] ", () => {
 
 			expect(state.comments.length).toEqual(5);
 
-			wrapper.instance().newComment({
+			wrapper.instance().newComment(null, {
 				sourceURI: "/1/1/introduction",
-				commentText: ""
+				commentText: "",
+				order: "0",
 			});
 
 			expect(state.comments.length).toEqual(6);
@@ -319,155 +320,5 @@ describe("[ClientApp] ", () => {
 			},
 			viewComments: true				
 		};
-
-		it("componentDidUpdate filters comments for review page", async () => {
-					
-			mock.reset();
-			mock
-				.onGet()
-				.reply(200, reviewComments);
-
-			let wrapper = mount(
-				<CommentList {...firstProps}  isReviewPage={true} />
-			);
-			
-			await nextTick();
-			wrapper.update();
-
-			expect(wrapper.state().comments.length).toEqual(6);
-
-			wrapper.find("CommentList").instance().filterComments("?sourceURI=/consultations/1/1/guidance", wrapper.state().comments);
-
-			await nextTick();
-			wrapper.update();
-
-			expect(wrapper.find("li").length).toEqual(1);
-		});
-
-		it("componentDidUpdate filters comments by substring if isReviewPage set to true", async () => {
-			const firstProps = {
-				match: {
-					url: "/1/1/introduction",
-					params: {
-						consultationId: 1,
-						documentId: 1,
-						chapterSlug: "introduction"
-					}
-				},
-				location: {
-					pathname: "1/review",
-					search: "?sourceURI=/consultations/1/1"
-				},
-				comment: {
-					commentId: 1
-				},
-				viewComments: true				
-			};
-
-			mock.reset();
-			mock
-				.onGet()
-				.reply(200, reviewComments);
-
-			let wrapper = mount(
-				<CommentList {...firstProps}  isReviewPage={true} />
-			);
-			
-			await nextTick();
-			wrapper.update();
-
-			expect(wrapper.state().comments.length).toEqual(6);
-
-			wrapper.find("CommentList").instance().filterComments("?sourceURI=/consultations/1/1",  wrapper.state().comments);
-
-			await nextTick();
-			wrapper.update();
-
-			expect(wrapper.find("li").length).toEqual(2);
-		});
-
-		it("renders 'no comments yet' if URI is supplied and filteredComments array is empty", async () => {
-			const firstProps = {
-				match: {
-					url: "/1/1/introduction",
-					params: {
-						consultationId: 1,
-						documentId: 1,
-						chapterSlug: "introduction"
-					}
-				},
-				location: {
-					pathname: "1/review",
-					search: "?sourceURI=/consultations/1/0"
-				},
-				comment: {
-					commentId: 1
-				},
-				viewComments: true		
-			};
-
-			mock.reset();
-			mock
-				.onGet()
-				.reply(200, reviewComments);
-
-			let wrapper = mount(
-				<CommentList {...firstProps}  isReviewPage={true} />
-			);
-			
-			await nextTick();
-			wrapper.update();
-
-			expect(wrapper.state().comments.length).toEqual(6);
-
-			wrapper.find("CommentList").instance().filterComments("?sourceURI=/consultations/1/0", wrapper.state().comments);
-
-			await nextTick();
-			wrapper.update();
-
-			expect(wrapper.find("p").text()).toEqual("No comments yet");
-		});
-
-		it("list all comments if no sourceURI is given", async () => {
-			const firstProps = {
-				match: {
-					url: "/1/1/introduction",
-					params: {
-						consultationId: 1,
-						documentId: 1,
-						chapterSlug: "introduction"
-					}
-				},
-				location: {
-					pathname: "1/review",
-					search: ""
-				},
-				comment: {
-					commentId: 1
-				},
-				viewComments: true				
-			};
-			
-			mock.reset();
-			mock
-				.onGet()
-				.reply(200, reviewComments);
-
-			let wrapper = mount(
-				<CommentList {...firstProps}  isReviewPage={true} />
-			);
-			
-			await nextTick();
-			wrapper.update();
-
-			expect(wrapper.state().comments.length).toEqual(6);
-
-			wrapper.find("CommentList").instance().filterComments(firstProps.location.search, wrapper.state().comments);
-
-			await nextTick();
-			wrapper.update();
-
-			expect(wrapper.find("li").length).toEqual(6);
-		});
 	});
 });

@@ -116,6 +116,8 @@ namespace Comments.Migrations
                     b.Property<string>("HtmlElementID")
                         .HasColumnName("HtmlElementID");
 
+                    b.Property<string>("Order");
+
                     b.Property<string>("Quote");
 
                     b.Property<string>("RangeEnd");

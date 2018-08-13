@@ -10,7 +10,8 @@
 		"@nice-digital/eslint-config/es6-flow",
 		"plugin:react/recommended",
 		"plugin:jsx-a11y/recommended",
-		"plugin:import/recommended"
+		"plugin:import/recommended",
+		"plugin:flowtype/recommended"
 	],
 	"plugins": ["react", "jsx-a11y", "import"],
 	"rules": {
@@ -19,9 +20,19 @@
     "no-multiple-empty-lines": [1, { "max": 1, "maxEOF": 1 }],
 		"no-case-declarations": 0,
 		"react/no-unescaped-entities": 0,
-    "comma-dangle": [1, "always-multiline"], // John, you're no longer welcome
+    "comma-dangle": [1, "always-multiline"], 
 		"//": "below not necessary as we're using flow",
 		"react/prop-types": 0,
 		"object-property-newline": ["error", { "allowAllPropertiesOnSameLine": true }]
-	}
+	},
+	"settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [
+          ".js",
+          ".jsx"
+        ]
+      }
+    }
+  }
 }
