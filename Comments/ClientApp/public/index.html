@@ -42,10 +42,10 @@
 	<script>
 		document.onTophatReady = function(){
 			document
-				.getElementById("skip-to-content")
+				.querySelector("#skip-to-content")
 				.addEventListener("click", function(e) {
 					e.preventDefault();
-					var tophatEnd = document.querySelector("tophat-end");
+					var tophatEnd = document.querySelector("#tophat-end");
 					tophatEnd.setAttribute("tabindex", "-1");
 					tophatEnd.focus();
 				}
