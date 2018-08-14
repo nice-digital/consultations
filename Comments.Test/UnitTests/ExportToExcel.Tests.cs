@@ -6,7 +6,12 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Comments.Export;
+using Comments.Models;
+using Comments.Services;
+using Comments.Test.Infrastructure;
 using Comments.ViewModels;
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
 using Newtonsoft.Json;
 using Shouldly;
 using Xunit;
@@ -33,12 +38,30 @@ namespace Comments.Test.UnitTests
 
 
 	    [Fact]
-	    public async Task Create_Answer()
+	    public async Task Create_Spreadsheet()
 	    {
-		    // Arrange
+			// Arrange
+		    ResetDatabase();
+		    _context.Database.EnsureCreated();
+		    var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+		    var userId = Guid.Empty;
 
-		    // Act
-		    var response = await _client.PostAsync("/consultations/api/export", null);
+			var locationId = AddLocation(sourceURI);
+		    var commentId = AddComment(locationId, "This is my comment text", isDeleted: false, createdByUserId: userId);
+
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+		    var authenticateService = new FakeAuthenticateService(authenticated: true);
+		    var context = new ConsultationsContext(_options, userService, _fakeEncryption);
+		    var commentService = new CommentService(context, userService, authenticateService, _consultationService);
+
+
+		    var viewModel = commentService.GetComment(commentId);
+
+			// Act
+			//var response = await _client.GetAsync("/consultations/api/export");
+			ExportToExcel toExcel = new ExportToExcel();
+		    toExcel.ToConvert(viewModel.comment);
+
 	    }
 
 	}
