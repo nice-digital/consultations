@@ -110,6 +110,11 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
         >
           <undefined />
           <div
+            className="clearfix"
+          >
+            bvc
+          </div>
+          <div
             className="grid"
             onScroll={[Function]}
             onTouchEnd={[Function]}
@@ -127,16 +132,8 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                   className="results-info__count"
                   id="results-info-count"
                 >
-                  Showing 
-                  5
-                   response
-                  s
+                  Showing 3 questions and 2 comments
                 </h2>
-                <p
-                  className="results-info__sort hide-print"
-                >
-                  <undefined />
-                </p>
               </div>
               <div
                 data-qa-sel="comment-list-wrapper"
@@ -491,10 +488,10 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                       </p>
                       <ul>
                         <li>
-                          edit your comments further
+                          edit your response further
                         </li>
                         <li>
-                          add any extra comments.
+                          add any extra information.
                         </li>
                       </ul>
                       <undefined />

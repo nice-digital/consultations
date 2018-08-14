@@ -307,11 +307,12 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 										subtitle2={this.state.userHasSubmitted ? "" : "Once they have been submitted you will not be able to edit them further or add any extra comments."}
 										reference={reference}
 										consultationState={this.state.consultationData.consultationState}/>
-									{this.state.supportsDownload && 
-										<div className="clearfix">
+									<div className="clearfix">bvc</div>
+									{this.state.supportsDownload && 		
+										<div className="clearfix">								
 											<button className="btn btn--secondary right mr--0">Download your response</button>
 										</div>
-									}
+									}									
 									<UserContext.Consumer>
 										{ (contextValue: ContextType) => {
 											return (
@@ -340,7 +341,10 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 															(
 																<StickyContainer className="grid">
 																	<div data-g="12 md:9 md:push:3">
-																		<ResultsInfo count={commentsToShow.length + questionsToShow.length}
+																		<ResultsInfo commentCount={commentsToShow.length}
+																			showCommentsCount={this.state.consultationData.consultationState.shouldShowCommentsTab}
+																			questionCount={questionsToShow.length}
+																			showQuestionsCount={this.state.consultationData.consultationState.shouldShowQuestionsTab}
 																			sortOrder={this.state.sort}
 																			appliedFilters={this.getAppliedFilters()}
 																			path={this.state.path}
@@ -404,8 +408,8 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																							<p className="hero__intro">You are about to submit your final response to NICE</p>
 																							<p>After submission you won't be able to:</p>
 																							<ul>
-																								<li>edit your comments further</li>
-																								<li>add any extra comments.</li>
+																								<li>edit your response further</li>
+																								<li>add any extra information.</li>
 																							</ul>
 																							<UserContext.Consumer>
 																								{contextValue => {

@@ -25,25 +25,49 @@ describe("[Consultations]", () => {
 	describe("ResultsInfo", () => {
 		describe("product count and loading", () => {
 			it("product count is aria-live assertive", () => {
-				const resultsInfo = shallow(<ResultsInfo count={1} sortOrder="" appliedFilters={[]} path="" history={null} isLoading={false} />);
+				const resultsInfo = shallow(<ResultsInfo commentCount={1} showCommentsCount={true} questionCount={1} showQuestionsCount={true} sortOrder="" appliedFilters={[]} path="" history={null} isLoading={false} />);
 
 				expect(resultsInfo.find("#results-info-count").prop("aria-live")).toEqual("assertive");
 			});
 
-			it("product count shows singular with one product when not loading", () => {
-				const resultsInfo = shallow(<ResultsInfo count={1} sortOrder="" appliedFilters={[]} path="" history={null} isLoading={false} />);
+			it("product count shows 1 comment and 1 question when not loading", () => {
+				const resultsInfo = shallow(<ResultsInfo commentCount={1} showCommentsCount={true} questionCount={1} showQuestionsCount={true}  sortOrder="" appliedFilters={[]} path="" history={null} isLoading={false} />);
 
-				expect(resultsInfo.find("#results-info-count").text()).toEqual("Showing 1 response");
+				expect(resultsInfo.find("#results-info-count").text()).toEqual("Showing 1 question and 1 comment");
 			});
 
-			it("product count shows plural with multiple products when not loading", () => {
-				const resultsInfo = shallow(<ResultsInfo count={2} sortOrder="" appliedFilters={[]} path="" history={null} isLoading={false} />);
+			it("product count shows plural with comments and questions when not loading", () => {
+				const resultsInfo = shallow(<ResultsInfo commentCount={2} showCommentsCount={true} questionCount={2} showQuestionsCount={true}  sortOrder="" appliedFilters={[]} path="" history={null} isLoading={false} />);
 
-				expect(resultsInfo.find("#results-info-count").text()).toEqual("Showing 2 responses");
+				expect(resultsInfo.find("#results-info-count").text()).toEqual("Showing 2 questions and 2 comments");
+			});
+			
+			it("product count shows questions only when comments not allowed and zero passed", () => {
+				const resultsInfo = shallow(<ResultsInfo commentCount={0} showCommentsCount={false} questionCount={2} showQuestionsCount={true}  sortOrder="" appliedFilters={[]} path="" history={null} isLoading={false} />);
+
+				expect(resultsInfo.find("#results-info-count").text()).toEqual("Showing 2 questions");
+			});
+
+			it("product count shows questions only when comments not allowed and non-zero passed", () => {
+				const resultsInfo = shallow(<ResultsInfo commentCount={2} showCommentsCount={false} questionCount={2} showQuestionsCount={true}  sortOrder="" appliedFilters={[]} path="" history={null} isLoading={false} />);
+
+				expect(resultsInfo.find("#results-info-count").text()).toEqual("Showing 2 questions");
+			});
+
+			it("product count shows comments only when questions not allowed and zero passed", () => {
+				const resultsInfo = shallow(<ResultsInfo commentCount={2} showCommentsCount={true} questionCount={0} showQuestionsCount={false}  sortOrder="" appliedFilters={[]} path="" history={null} isLoading={false} />);
+
+				expect(resultsInfo.find("#results-info-count").text()).toEqual("Showing 2 comments");
+			});
+
+			it("product count shows comments only when questions not allowed and non-zero passed", () => {
+				const resultsInfo = shallow(<ResultsInfo commentCount={2} showCommentsCount={true} questionCount={2} showQuestionsCount={false}  sortOrder="" appliedFilters={[]} path="" history={null} isLoading={false} />);
+
+				expect(resultsInfo.find("#results-info-count").text()).toEqual("Showing 2 comments");
 			});
 
 			it("loading message shows with aria-busy when loading", () => {
-				const resultsInfo = shallow(<ResultsInfo count={2} sortOrder="" appliedFilters={[]} path="" history={null} isLoading={true} />);
+				const resultsInfo = shallow(<ResultsInfo commentCount={1} showCommentsCount={true} questionCount={1} showQuestionsCount={true}  sortOrder="" appliedFilters={[]} path="" history={null} isLoading={true} />);
 
 				const loading = resultsInfo.find("#results-info-count [aria-busy]");
 				expect(loading.length).toEqual(1);
@@ -51,22 +75,24 @@ describe("[Consultations]", () => {
 			});
 		});
 
-		describe("sort", () => {
-			it("sort links are hidden on print", () => {
-				const resultsInfo = shallow(<ResultsInfo count={1} sortOrder="" appliedFilters={[]} path="" history={null} isLoading={false} />);
+		//sort tests commented out since the sort links have been commented out too.
+		//describe("sort", () => {
+			
+			// it("sort links are hidden on print", () => {
+			// 	const resultsInfo = shallow(<ResultsInfo commentCount={1} showCommentsCount={true} questionCount={1} showQuestionsCount={true}  sortOrder="" appliedFilters={[]} path="" history={null} isLoading={false} />);
 
-				expect(resultsInfo.find(".results-info__sort").is(".hide-print")).toEqual(true);
-			});
+			// 	expect(resultsInfo.find(".results-info__sort").is(".hide-print")).toEqual(true);
+			// });
 
-			it("passes props to sort component", () => {
-				const resultsInfo = shallow(<ResultsInfo count={1} sortOrder="TestOrder" appliedFilters={[]} path="test-path" history={null} isLoading={false} />);
+			// it("passes props to sort component", () => {
+			// 	const resultsInfo = shallow(<ResultsInfo commentCount={1} showCommentsCount={true} questionCount={1} showQuestionsCount={true}  sortOrder="TestOrder" appliedFilters={[]} path="test-path" history={null} isLoading={false} />);
 
-				let sort = resultsInfo.find(Sort);
+			// 	let sort = resultsInfo.find(Sort);
 
-				expect(sort.prop("sortOrder")).toEqual("TestOrder");
-				expect(sort.prop("path")).toEqual("test-path");
-			});
-		});
+			// 	expect(sort.prop("sortOrder")).toEqual("TestOrder");
+			// 	expect(sort.prop("path")).toEqual("test-path");
+			// });
+		//});
 
 		describe("applied filter links", () => {
 			it("doesn't render applied filter list when no applied filters", () => {
@@ -93,7 +119,7 @@ describe("[Consultations]", () => {
 			});
 
 			it("passes correct props to child applied filter components", () => {
-				const resultsInfo = shallow(<ResultsInfo count={1} appliedFilters={appliedFilters} path="test-path" history={null} isLoading={false} />);
+				const resultsInfo = shallow(<ResultsInfo commentCount={1} showCommentsCount={true} questionCount={1} showQuestionsCount={true}  appliedFilters={appliedFilters} path="test-path" history={null} isLoading={false} />);
 
 				var appliedFilterComponents = resultsInfo.find(AppliedFilter);
 				expect(appliedFilterComponents.at(0).prop("appliedFilter")).toEqual(appliedFilters[0]);
