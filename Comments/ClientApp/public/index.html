@@ -38,6 +38,21 @@
 <body>
     <div id="root"></div>
 
+	<!-- Jump to main content (end of tophat) -->
+	<script>
+		document.onTophatReady = function(){
+			document
+				.getElementById("skip-to-content")
+				.addEventListener("click", function(e) {
+					e.preventDefault();
+					var tophatEnd = document.querySelector("tophat-end");
+					tophatEnd.setAttribute("tabindex", "-1");
+					tophatEnd.focus();
+				}
+			);
+		};
+	</script>
+
 	<!-- Tophat -->
 	<script src="//cdn.nice.org.uk/V3.1/Scripts/nice/NICE.TopHat.min.js"
 			data-environment="Beta"
