@@ -110,11 +110,6 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
         >
           <undefined />
           <div
-            className="clearfix"
-          >
-            bvc
-          </div>
-          <div
             className="grid"
             onScroll={[Function]}
             onTouchEnd={[Function]}

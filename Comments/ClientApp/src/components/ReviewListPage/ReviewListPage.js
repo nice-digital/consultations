@@ -307,7 +307,6 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 										subtitle2={this.state.userHasSubmitted ? "" : "Once they have been submitted you will not be able to edit them further or add any extra comments."}
 										reference={reference}
 										consultationState={this.state.consultationData.consultationState}/>
-									<div className="clearfix">bvc</div>
 									{this.state.supportsDownload && 		
 										<div className="clearfix">								
 											<button className="btn btn--secondary right mr--0">Download your response</button>
