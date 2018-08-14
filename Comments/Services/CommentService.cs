@@ -151,7 +151,7 @@ namespace Comments.Services
 			if (model.Sort == ReviewSortOrder.DocumentAsc)
 			{
 				commentsAndQuestions.Comments = commentsAndQuestions.Comments.OrderBy(c => c.Order).ToList();
-				//commentsAndQuestions.Questions = commentsAndQuestions.Questions.OrderByAlphaNumeric(q => q.Order).ToList();
+				//commentsAndQuestions.Questions = commentsAndQuestions.Questions.OrderBy(q => q.Order).ToList();
 			}
 
 			model.CommentsAndQuestions = FilterCommentsAndQuestions(commentsAndQuestions, model.Type, model.Document);

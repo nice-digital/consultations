@@ -234,8 +234,8 @@ namespace Comments.Models
 		public int InsertQuestionsWithScript(int consultationId)
 	    {
 		    return Database.ExecuteSqlCommand(@"
-				--DECLARE @consultationId AS int
-				--SET @consultationId = 1
+				--DECLARE @consultationId AS int --UNCOMMENT OUT THESE 2 LINES TO USE IN SQL MANAGEMENT STUDIO
+				--SET @consultationId = 11
 
 				DECLARE @questionTypeID AS int
 				DECLARE @locationID1 AS int, @locationID2 AS int, @locationID3 AS int
@@ -248,6 +248,9 @@ namespace Comments.Models
 
 				DECLARE @questionOneText nvarchar(MAX)
 				SET @questionOneText = 'Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.'
+
+				DECLARE @consultationIdPaddedForOrder nvarchar(3)
+				SELECT @consultationIdPaddedForOrder = RIGHT('000'+ CAST(@consultationId AS VARCHAR(3)),3)
 
 				--question type insert
 				SELECT @questionTypeID = QuestionTypeID
@@ -269,18 +272,18 @@ namespace Comments.Models
 								Q.QuestionText = @questionOneText)
 				BEGIN
 
-					INSERT INTO Location (SourceURI)
-					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar))
+					INSERT INTO [Location] (SourceURI, [Order])
+					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar), @consultationIdPaddedForOrder + '.000.000.000')
 
 					SET @locationID1 = SCOPE_IDENTITY();
 
-					INSERT INTO Location (SourceURI)
-					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar) + '/document/1')
+					INSERT INTO [Location] (SourceURI, [Order])
+					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar) + '/document/1', @consultationIdPaddedForOrder + '.001.000.000')
 
 					SET @locationID2 = SCOPE_IDENTITY();
 
-					INSERT INTO Location (SourceURI)
-					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar) + '/document/2')
+					INSERT INTO [Location] (SourceURI, [Order])
+					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar) + '/document/2', @consultationIdPaddedForOrder + '.002.000.000')
 
 					SET @locationID3 = SCOPE_IDENTITY();
 
