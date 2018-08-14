@@ -22,6 +22,7 @@ import { withHistory } from "../HistoryContext/HistoryContext";
 import { CommentBox } from "../CommentBox/CommentBox";
 import { Question } from "../Question/Question";
 import { LoginBanner } from "../LoginBanner/LoginBanner";
+import { SubmitResponseBox } from "../SubmitResponseBox/SubmitResponseBox";
 
 type PropsType = {
 	staticContext?: any,
@@ -29,7 +30,7 @@ type PropsType = {
 		url: string,
 		params: any
 	},
-	location: {		
+	location: {
 		pathname: string,
 		search: string
 	},
@@ -39,7 +40,7 @@ type PropsType = {
 
 type StateType = {
 	consultationData: ConsultationDataType,
-	commentsData: ReviewPageViewModelType, 
+	commentsData: ReviewPageViewModelType,
 	userHasSubmitted: boolean,
 	validToSubmit: false,
 	viewSubmittedComments: boolean,
@@ -75,7 +76,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		if (this.props.staticContext && this.props.staticContext.preload) {
 			preloadedData = this.props.staticContext.preload.data; //this is data from Configure => SupplyData in Startup.cs. the main thing it contains for this call is the cookie for the current user.
 		}
-	
+
 		const querystring = this.props.location.search;
 		const preloadedCommentsData = preload(
 			this.props.staticContext,
@@ -106,7 +107,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 				comments: preloadedCommentsData.commentsAndQuestions.comments,
 				questions: preloadedCommentsData.commentsAndQuestions.questions,
 				sort: preloadedCommentsData.sort,
-				supportsDownload: preloadedConsultationData.consultationState.supportsDownload, 
+				supportsDownload: preloadedConsultationData.consultationState.supportsDownload,
 				viewSubmittedComments: false,
 			};
 		}
@@ -129,8 +130,8 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 					//window.location.assign(path); // Fallback to full page reload if we fail to load data
 				} else{
 					throw new Error("failed to load comments for review.  " + err);
-				}				
-			});	
+				}
+			});
 
 		if (this.state.consultationData === null){
 
@@ -178,7 +179,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 						sort: data.commentsData.sort,
 						loading: false,
 					});
-				}			
+				}
 			})
 			.catch(err => {
 				throw new Error("gatherData in componentDidMount failed " + err);
@@ -186,8 +187,8 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 	}
 
 	componentDidMount() {
-		if (!this.state.hasInitalData){ //typically this page is accessed by clicking a link on the document page, so it won't SSR. 
-			this.loadDataAndUpdateState(); 	
+		if (!this.state.hasInitalData){ //typically this page is accessed by clicking a link on the document page, so it won't SSR.
+			this.loadDataAndUpdateState();
 		}
 		this.props.history.listen(location => {
 			this.loadDataAndUpdateState();
@@ -209,7 +210,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			if (question.answers != null){
 				answersToSubmit = answersToSubmit.concat(question.answers);
 			}
-		});		
+		});
 		let commentsAndAnswers = {comments: comments, answers: answersToSubmit};
 
 		load("submit", undefined, [], {}, "POST", commentsAndAnswers, true)
@@ -264,7 +265,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 	}
 	deleteAnswerHandler = (e: Event,  questionId: number, answerId: number) => {
 		deleteAnswerHandler(e, questionId, answerId, this);
-	}	
+	}
 
 	getAppliedFilters(): ReviewAppliedFilterType[] {
 		const mapOptions =
@@ -284,9 +285,9 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 
 	render() {
 		if (this.state.loading) return <h1>Loading...</h1>;
-		const { reference } = this.state.consultationData;	
-		const commentsToShow = this.state.comments.filter(comment => comment.show) || []; 
-		const questionsToShow = this.state.questions.filter(question => question.show) || []; 
+		const { reference } = this.state.consultationData;
+		const commentsToShow = this.state.comments.filter(comment => comment.show) || [];
+		const questionsToShow = this.state.questions.filter(question => question.show) || [];
 
 		return (
 			<Fragment>
@@ -307,7 +308,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 										subtitle2={this.state.userHasSubmitted ? "" : "Once they have been submitted you will not be able to edit them further or add any extra comments."}
 										reference={reference}
 										consultationState={this.state.consultationData.consultationState}/>
-									{this.state.supportsDownload && 
+									{this.state.supportsDownload &&
 										<div className="clearfix">
 											<button className="btn btn--secondary right mr--0">Download your response</button>
 										</div>
@@ -336,7 +337,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																	</div>
 																</div>
 															</div>
-															: 
+															:
 															(
 																<StickyContainer className="grid">
 																	<div data-g="12 md:9 md:push:3">
@@ -345,7 +346,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																			appliedFilters={this.getAppliedFilters()}
 																			path={this.state.path}
 																			isLoading={this.state.loading} />
-																		<div data-qa-sel="comment-list-wrapper">																										
+																		<div data-qa-sel="comment-list-wrapper">
 																			{questionsToShow.length > 0 &&
 																				<div>
 																					{/* <p>We would like to hear your views on the draft recommendations presented in the guideline, and any comments you may have on the rationale and impact sections in the guideline and the evidence presented in the evidence reviews documents. We would also welcome views on the Equality Impact Assessment.</p>
@@ -365,8 +366,8 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																							);
 																						})}
 																					</ul>
-																				</div>						
-																			}														
+																				</div>
+																			}
 																			{commentsToShow.length === 0 ? <p>{/*No comments yet*/}</p> :
 																				<ul className="CommentList list--unstyled">
 																					{commentsToShow.map((comment) => {
@@ -384,52 +385,12 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																					})}
 																				</ul>
 																			}
-																		</div>																				
-																		{this.state.userHasSubmitted ?
-																			<div className="hero">
-																				<div className="hero__container">
-																					<div className="hero__body">
-																						<div className="hero__copy">
-																							<p className="hero__intro" data-qa-sel="submitted-text">Thank you, your response has been submitted.</p>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																			:
-																			<div className="hero">
-																				<div className="hero__container">
-																					<div className="hero__body ">
-																						<div className="hero__copy">
-																							{/* <h1 className="hero__title">Hero title</h1> */}
-																							<p className="hero__intro">You are about to submit your final response to NICE</p>
-																							<p>After submission you won't be able to:</p>
-																							<ul>
-																								<li>edit your comments further</li>
-																								<li>add any extra comments.</li>
-																							</ul>
-																							<UserContext.Consumer>
-																								{contextValue => {
-																									if (contextValue.isAuthorised) {
-																										return (
-																											<Fragment>
-																												<h3 className="mt--0">Ready to submit?</h3>
-																												<button
-																													disabled={!this.state.validToSubmit}
-																													className="btn btn--cta"
-																													data-qa-sel="submit-comment-button"
-																													onClick={this.submitConsultation}
-																												>{this.state.userHasSubmitted ? "Responses submitted": "Yes, submit my response"}
-																												</button>
-																											</Fragment>
-																										);
-																									}
-																								}}
-																							</UserContext.Consumer>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																		}
+																		</div>
+																		<SubmitResponseBox
+																			isAuthorised={contextValue.isAuthorised}
+																			userHasSubmitted={this.state.userHasSubmitted}
+																			validToSubmit={this.state.validToSubmit}
+																			submitConsultation={this.submitConsultation} />
 																	</div>
 																	<div data-g="12 md:3 md:pull:9">
 																		<Sticky disableHardwareAcceleration>
@@ -445,7 +406,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 													)
 											);
 										}}
-									</UserContext.Consumer>									
+									</UserContext.Consumer>
 								</div>
 							</ main>
 						</div>

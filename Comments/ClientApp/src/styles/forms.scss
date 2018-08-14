@@ -142,5 +142,8 @@
   &__hint {
     color: $colour-nice-dark-grey;
     margin-top: rem($spacing-x-small);
+    &--inverse {
+      color: $colour-nice-white;
+    }
   }
 }
