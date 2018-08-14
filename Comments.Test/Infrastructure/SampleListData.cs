@@ -23,7 +23,7 @@ namespace Comments.Test.Infrastructure
 					{
 						new Question(
 							new Models.Location("consultations://./consultation/1/document/1/chapter/introduction", null, null, null, null, null, "quote", null, "section 1", null, null),
-							new Models.Question(1, "question text", 1, null, null, new Comments.Models.QuestionType("description", true, false, null), null))
+							new Models.Question(1, "question text", 1, null, new Comments.Models.QuestionType("description", true, false, null), null))
 					},
 					true,
 					"sign in url",

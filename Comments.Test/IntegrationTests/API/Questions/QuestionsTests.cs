@@ -56,7 +56,7 @@ namespace Comments.Test.IntegrationTests.API.Questions
 
             var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
             var questionType = new QuestionType(description, false, true, null);
-            var question = new Question(locationId, questionText, questionTypeId, null, null, questionType, new List<Answer>());
+            var question = new Question(locationId, questionText, questionTypeId, null, questionType, new List<Answer>());
             var viewModel = new ViewModels.Question(location, question);
 
             var content = new StringContent(JsonConvert.SerializeObject(viewModel), Encoding.UTF8, "application/json");

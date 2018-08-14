@@ -27,7 +27,7 @@ namespace Comments.Models
 		//}
 		//protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		//{
-		//	optionsBuilder.UseSqlServer("[snip]");
+		//	optionsBuilder.UseSqlServer("[you don't need a valid connection string when creating migrations. the real connection string should never be put here though. it should be kept in secrets.json]");
 		//}
 
 
@@ -74,7 +74,7 @@ namespace Comments.Models
 						.ThenInclude(q => q.Answer)
 							.ThenInclude(s => s.SubmissionAnswer)
 
-					.OrderBy(l => l.Question.OrderBy(q => q.QuestionOrder).Select(q => q.QuestionOrder).FirstOrDefault())
+					.OrderBy(l => l.Order)
 
 					.ThenByDescending(l => l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault());
 
@@ -289,16 +289,16 @@ namespace Comments.Models
 
 					--now the question inserts
 
-					INSERT INTO Question (LocationID, QuestionText, QuestionTypeID, QuestionOrder, CreatedByUserID, LastModifiedByUserID, LastModifiedDate)
-					VALUES (@locationID1, @questionOneText, @questionTypeID, 1, @userID, @userID, GETDATE())
+					INSERT INTO Question (LocationID, QuestionText, QuestionTypeID, CreatedByUserID, LastModifiedByUserID, LastModifiedDate)
+					VALUES (@locationID1, @questionOneText, @questionTypeID, @userID, @userID, GETDATE())
 
 
-					INSERT INTO Question (LocationID, QuestionText, QuestionTypeID, QuestionOrder, CreatedByUserID, LastModifiedByUserID, LastModifiedDate)
-					VALUES (@locationID2, 'Would implementation of any of the draft recommendations have significant cost implications?', @questionTypeID, 2, @userID, @userID, GETDATE())
+					INSERT INTO Question (LocationID, QuestionText, QuestionTypeID, CreatedByUserID, LastModifiedByUserID, LastModifiedDate)
+					VALUES (@locationID2, 'Would implementation of any of the draft recommendations have significant cost implications?', @questionTypeID, @userID, @userID, GETDATE())
 
 
-					INSERT INTO Question (LocationID, QuestionText, QuestionTypeID, QuestionOrder, CreatedByUserID, LastModifiedByUserID, LastModifiedDate)
-					VALUES (@locationID3, 'Would implementation of any of the draft recommendations have cost implications?', @questionTypeID, 3, @userID, @userID, GETDATE())			
+					INSERT INTO Question (LocationID, QuestionText, QuestionTypeID, CreatedByUserID, LastModifiedByUserID, LastModifiedDate)
+					VALUES (@locationID3, 'Would implementation of any of the draft recommendations have cost implications?', @questionTypeID, @userID, @userID, GETDATE())			
 		
 				END
 			", new SqlParameter("@consultationId", consultationId));

@@ -136,12 +136,12 @@ namespace Comments.Services
 			}
 
 			var locations = _context.GetAllCommentsAndQuestionsForDocument(sourceURIs, isReview).ToList();
-
-		    var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);
-
 		    consultationState = _consultationService.GetConsultationState(consultationSourceURI, locations);
 
-			return new CommentsAndQuestions(data.comments.ToList(), data.questions.ToList(), user.IsAuthorised, signInURL, consultationState);
+			var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);
+		    var resortedComments = data.comments.OrderByDescending(c => c.LastModifiedDate).ToList(); //comments should be sorted in date by default, questions by document order.
+			
+			return new CommentsAndQuestions(resortedComments, data.questions.ToList(), user.IsAuthorised, signInURL, consultationState);
 	    }
 
 		public ReviewPageViewModel GetCommentsAndQuestionsForReview(string relativeURL, ReviewPageViewModel model)
@@ -151,7 +151,6 @@ namespace Comments.Services
 			if (model.Sort == ReviewSortOrder.DocumentAsc)
 			{
 				commentsAndQuestions.Comments = commentsAndQuestions.Comments.OrderBy(c => c.Order).ToList();
-				//commentsAndQuestions.Questions = commentsAndQuestions.Questions.OrderBy(q => q.Order).ToList();
 			}
 
 			model.CommentsAndQuestions = FilterCommentsAndQuestions(commentsAndQuestions, model.Type, model.Document);
