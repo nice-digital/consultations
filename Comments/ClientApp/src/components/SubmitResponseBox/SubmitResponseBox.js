@@ -1,7 +1,8 @@
 import React, {Fragment} from "react";
 
 export const SubmitResponseBox = props => {
-	const { isAuthorised, userHasSubmitted, validToSubmit, submitConsultation } = props;
+	const { isAuthorised, userHasSubmitted, validToSubmit, submitConsultation, inputChangeHandler, organisationResponse, tobaccoResponse } = props;
+
 	return (
 		<Fragment>
 			{userHasSubmitted ?
@@ -26,23 +27,24 @@ export const SubmitResponseBox = props => {
 									<li>add any extra comments.</li>
 								</ul>
 
-								<div className="form__fieldset">
+								<fieldset className="form__fieldset">
 									<legend className="form__legend">Please answer the below questions before submitting</legend>
 									<div className="form__group form__group--text">
-										<label htmlFor="organisation" className="form__label">
+										<label htmlFor="organisationResponse" className="form__label">
 											Organisation
-											<input id="organisation" className="form__input" type="text"/>
 										</label>
+										<input id="organisationResponse" name="organisationResponse" value={organisationResponse} className="form__input" type="text" onChange={inputChangeHandler}/>
 										<div className="form__hint form__hint--inverse">If you are commenting on behalf of an organisation, please enter the organisation name</div>
 									</div>
 									<div className="form__group form__group--textarea">
-										<label htmlFor="tobacco" className="form__label">
+										<label htmlFor="tobaccoResponse" className="form__label">
 											Disclose tobacco industry links
-											<textarea id="tobacco" className="form__input form__input--textarea" type="text"/>
 										</label>
+										<textarea id="tobaccoResponse" name="tobaccoResponse" value={tobaccoResponse} className="form__input form__input--textarea" onChange={inputChangeHandler}/>
+
 										<div className="form__hint form__hint--inverse">Please disclose whether you or the organisation who's behalf on which you are commenting has any past or current, direct or indirect links to, or receives funding from, the tobacco industry.</div>
 									</div>
-								</div>
+								</fieldset>
 
 								{isAuthorised &&
 								<Fragment>

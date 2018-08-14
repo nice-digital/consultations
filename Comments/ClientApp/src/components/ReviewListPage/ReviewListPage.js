@@ -51,6 +51,8 @@ type StateType = {
 	questions: Array<QuestionType>,
 	sort: string,
 	supportsDownload: boolean,
+	organisationResponse: string,
+	tobaccoResponse: string,
 };
 
 export class ReviewListPage extends Component<PropsType, StateType> {
@@ -70,6 +72,8 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			questions: [], //this contains all the questions, not just the ones displayed to the user. the show property defines whether the question is filtered out from view.
 			sort: "DocumentAsc",
 			supportsDownload: false,
+			organisationResponse: "",
+			tobaccoResponse: "",
 		};
 
 		let preloadedData = {};
@@ -109,6 +113,8 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 				sort: preloadedCommentsData.sort,
 				supportsDownload: preloadedConsultationData.consultationState.supportsDownload,
 				viewSubmittedComments: false,
+				organisationResponse: "",
+				tobaccoResponse: "",
 			};
 		}
 	}
@@ -184,13 +190,13 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			.catch(err => {
 				throw new Error("gatherData in componentDidMount failed " + err);
 			});
-	}
+	};
 
 	componentDidMount() {
 		if (!this.state.hasInitalData){ //typically this page is accessed by clicking a link on the document page, so it won't SSR.
 			this.loadDataAndUpdateState();
 		}
-		this.props.history.listen(location => {
+		this.props.history.listen(() => {
 			this.loadDataAndUpdateState();
 		});
 	}
@@ -253,19 +259,25 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		});
 	};
 
+	inputChangeHandler = e => {
+		this.setState({
+			[e.target.name]: e.target.value,
+		});
+	};
+
 	//these handlers are in the helpers/editing-and-deleting.js utility file as they're also used in CommentList.js
 	saveCommentHandler = (e: Event, comment: CommentType) => {
 		saveCommentHandler(e, comment, this);
-	}
+	};
 	deleteCommentHandler = (e: Event, comment: CommentType) => {
 		deleteCommentHandler(e, comment, this);
-	}
+	};
 	saveAnswerHandler = (e: Event, answer: AnswerType) => {
 		saveAnswerHandler(e, answer, this);
-	}
+	};
 	deleteAnswerHandler = (e: Event,  questionId: number, answerId: number) => {
 		deleteAnswerHandler(e, questionId, answerId, this);
-	}
+	};
 
 	getAppliedFilters(): ReviewAppliedFilterType[] {
 		const mapOptions =
@@ -275,7 +287,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 					groupTitle: group.title,
 					optionLabel: opt.label,
 					groupId: group.id,
-					optionId: opt.id
+					optionId: opt.id,
 				}));
 
 		return this.state.commentsData.filters
@@ -390,7 +402,11 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																			isAuthorised={contextValue.isAuthorised}
 																			userHasSubmitted={this.state.userHasSubmitted}
 																			validToSubmit={this.state.validToSubmit}
-																			submitConsultation={this.submitConsultation} />
+																			submitConsultation={this.submitConsultation}
+																			inputChangeHandler={this.inputChangeHandler}
+																			organisationResponse={this.state.organisationResponse}
+																			tobaccoResponse={this.state.tobaccoResponse}
+																		/>
 																	</div>
 																	<div data-g="12 md:3 md:pull:9">
 																		<Sticky disableHardwareAcceleration>
