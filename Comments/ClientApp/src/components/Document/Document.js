@@ -446,7 +446,7 @@ export class Document extends Component<PropsType, StateType> {
 										<StackedNav
 											links={this.getDocumentLinks(
 												true,
-												"Other commentable documents in this consultation",
+												"Other consultation documents you can comment on",
 												documentsData,
 												documentId,
 												consultationId
@@ -454,7 +454,7 @@ export class Document extends Component<PropsType, StateType> {
 										<StackedNav
 											links={this.getDocumentLinks(
 												false,
-												"Supporting documents",
+												"Supporting documents (for information only)",
 												documentsData,
 												documentId,
 												consultationId

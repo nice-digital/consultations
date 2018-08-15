@@ -109,15 +109,151 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
           className="page-header"
         >
           <undefined />
-          <div
-            className="grid"
-            onScroll={[Function]}
-            onTouchEnd={[Function]}
-            onTouchMove={[Function]}
-            onTouchStart={[Function]}
-          >
+          <div>
             <div
-              data-g="12 md:9 md:push:3"
+              className="sticky"
+              data-g="12 md:3"
+            >
+              <div
+                className="filter-panel"
+              >
+                <button
+                  aria-controls="filter-panel-body"
+                  aria-expanded={true}
+                  className="filter-panel__heading"
+                  onClick={[Function]}
+                  type="button"
+                >
+                  Filter
+                </button>
+                <div
+                  aria-hidden={false}
+                  className="filter-panel__body"
+                  id="filter-panel-body"
+                >
+                  <div
+                    className="filter-group"
+                  >
+                    <button
+                      aria-controls="group-QuestionsOrComments"
+                      aria-expanded={true}
+                      className="filter-group__heading gtm-topic-list-filter-group-collapse"
+                      onClick={[Function]}
+                      type="button"
+                    >
+                      <div
+                        id="group-title-QuestionsOrComments"
+                      >
+                        Response type
+                      </div>
+                    </button>
+                    <div
+                      aria-hidden={false}
+                      aria-labelledby="group-title-QuestionsOrComments"
+                      className="filter-group__options"
+                      id="group-QuestionsOrComments"
+                      role="group"
+                    >
+                      <label
+                        className="filter-group__option"
+                        htmlFor="filter_QuestionsOrComments_Questions"
+                      >
+                        <input
+                          aria-controls="results-info-count"
+                          checked={false}
+                          className="gtm-topic-list-filter-select"
+                          id="filter_QuestionsOrComments_Questions"
+                          name="QuestionsOrComments"
+                          onChange={[Function]}
+                          title="Response type - Questions"
+                          type="checkbox"
+                          value="Questions"
+                        />
+                        Questions
+                      </label>
+                      <label
+                        className="filter-group__option"
+                        htmlFor="filter_QuestionsOrComments_Comments"
+                      >
+                        <input
+                          aria-controls="results-info-count"
+                          checked={false}
+                          className="gtm-topic-list-filter-select"
+                          id="filter_QuestionsOrComments_Comments"
+                          name="QuestionsOrComments"
+                          onChange={[Function]}
+                          title="Response type - Comments"
+                          type="checkbox"
+                          value="Comments"
+                        />
+                        Comments
+                      </label>
+                    </div>
+                  </div>
+                  <div
+                    className="filter-group"
+                  >
+                    <button
+                      aria-controls="group-Documents"
+                      aria-expanded={true}
+                      className="filter-group__heading gtm-topic-list-filter-group-collapse"
+                      onClick={[Function]}
+                      type="button"
+                    >
+                      <div
+                        id="group-title-Documents"
+                      >
+                        Document
+                      </div>
+                    </button>
+                    <div
+                      aria-hidden={false}
+                      aria-labelledby="group-title-Documents"
+                      className="filter-group__options"
+                      id="group-Documents"
+                      role="group"
+                    >
+                      <label
+                        className="filter-group__option"
+                        htmlFor="filter_Documents_1"
+                      >
+                        <input
+                          aria-controls="results-info-count"
+                          checked={false}
+                          className="gtm-topic-list-filter-select"
+                          id="filter_Documents_1"
+                          name="Documents"
+                          onChange={[Function]}
+                          title="Document - Unstable angina and NSTEMI"
+                          type="checkbox"
+                          value="1"
+                        />
+                        Unstable angina and NSTEMI
+                      </label>
+                      <label
+                        className="filter-group__option"
+                        htmlFor="filter_Documents_2"
+                      >
+                        <input
+                          aria-controls="results-info-count"
+                          checked={false}
+                          className="gtm-topic-list-filter-select"
+                          id="filter_Documents_2"
+                          name="Documents"
+                          onChange={[Function]}
+                          title="Document - Glaucoma: diagnosis and management – Full Guideline"
+                          type="checkbox"
+                          value="2"
+                        />
+                        Glaucoma: diagnosis and management – Full Guideline
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              data-g="12 md:9"
             >
               <div
                 className="results-info"
@@ -490,154 +626,6 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                         </li>
                       </ul>
                       <undefined />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              data-g="12 md:3 md:pull:9"
-            >
-              <div>
-                <div />
-                <div
-                  style={Object {}}
-                >
-                  <div
-                    className="filter-panel"
-                  >
-                    <button
-                      aria-controls="filter-panel-body"
-                      aria-expanded={true}
-                      className="filter-panel__heading"
-                      onClick={[Function]}
-                      type="button"
-                    >
-                      Filter
-                    </button>
-                    <div
-                      aria-hidden={false}
-                      className="filter-panel__body"
-                      id="filter-panel-body"
-                    >
-                      <div
-                        className="filter-group"
-                      >
-                        <button
-                          aria-controls="group-QuestionsOrComments"
-                          aria-expanded={true}
-                          className="filter-group__heading gtm-topic-list-filter-group-collapse"
-                          onClick={[Function]}
-                          type="button"
-                        >
-                          <div
-                            id="group-title-QuestionsOrComments"
-                          >
-                            Response type
-                          </div>
-                        </button>
-                        <div
-                          aria-hidden={false}
-                          aria-labelledby="group-title-QuestionsOrComments"
-                          className="filter-group__options"
-                          id="group-QuestionsOrComments"
-                          role="group"
-                        >
-                          <label
-                            className="filter-group__option"
-                            htmlFor="filter_QuestionsOrComments_Questions"
-                          >
-                            <input
-                              aria-controls="results-info-count"
-                              checked={false}
-                              className="gtm-topic-list-filter-select"
-                              id="filter_QuestionsOrComments_Questions"
-                              name="QuestionsOrComments"
-                              onChange={[Function]}
-                              title="Response type - Questions"
-                              type="checkbox"
-                              value="Questions"
-                            />
-                            Questions
-                          </label>
-                          <label
-                            className="filter-group__option"
-                            htmlFor="filter_QuestionsOrComments_Comments"
-                          >
-                            <input
-                              aria-controls="results-info-count"
-                              checked={false}
-                              className="gtm-topic-list-filter-select"
-                              id="filter_QuestionsOrComments_Comments"
-                              name="QuestionsOrComments"
-                              onChange={[Function]}
-                              title="Response type - Comments"
-                              type="checkbox"
-                              value="Comments"
-                            />
-                            Comments
-                          </label>
-                        </div>
-                      </div>
-                      <div
-                        className="filter-group"
-                      >
-                        <button
-                          aria-controls="group-Documents"
-                          aria-expanded={true}
-                          className="filter-group__heading gtm-topic-list-filter-group-collapse"
-                          onClick={[Function]}
-                          type="button"
-                        >
-                          <div
-                            id="group-title-Documents"
-                          >
-                            Document
-                          </div>
-                        </button>
-                        <div
-                          aria-hidden={false}
-                          aria-labelledby="group-title-Documents"
-                          className="filter-group__options"
-                          id="group-Documents"
-                          role="group"
-                        >
-                          <label
-                            className="filter-group__option"
-                            htmlFor="filter_Documents_1"
-                          >
-                            <input
-                              aria-controls="results-info-count"
-                              checked={false}
-                              className="gtm-topic-list-filter-select"
-                              id="filter_Documents_1"
-                              name="Documents"
-                              onChange={[Function]}
-                              title="Document - Unstable angina and NSTEMI"
-                              type="checkbox"
-                              value="1"
-                            />
-                            Unstable angina and NSTEMI
-                          </label>
-                          <label
-                            className="filter-group__option"
-                            htmlFor="filter_Documents_2"
-                          >
-                            <input
-                              aria-controls="results-info-count"
-                              checked={false}
-                              className="gtm-topic-list-filter-select"
-                              id="filter_Documents_2"
-                              name="Documents"
-                              onChange={[Function]}
-                              title="Document - Glaucoma: diagnosis and management – Full Guideline"
-                              type="checkbox"
-                              value="2"
-                            />
-                            Glaucoma: diagnosis and management – Full Guideline
-                          </label>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </div>
