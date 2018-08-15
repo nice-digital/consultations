@@ -47,7 +47,7 @@ namespace Comments.Test.Infrastructure
 	    {
 		    throw new NotImplementedException();
 	    }
-		public (int rowsUpdated, Validate validate) SubmitCommentsAndAnswers(CommentsAndAnswers commentsAndAnswers)
+		public (int rowsUpdated, Validate validate) SubmitCommentsAndAnswers(ViewModels.Submission submission)
 		{
 			throw new NotImplementedException();
 		}

@@ -9,6 +9,9 @@ namespace Comments.Models
 		public DateTime SubmissionDateTime { get; set; }
 		public Guid SubmissionByUserId { get; set; }
 
+		public string OrganisationName { get; set; }
+	    public string TobaccoDisclosure { get; set; }
+
 		public ICollection<SubmissionComment> SubmissionComment { get; set; }
 	    public ICollection<SubmissionAnswer> SubmissionAnswer { get; set; }
 	}

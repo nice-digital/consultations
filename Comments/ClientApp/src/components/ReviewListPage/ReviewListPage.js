@@ -218,9 +218,12 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 				answersToSubmit = answersToSubmit.concat(question.answers);
 			}
 		});
-		let commentsAndAnswers = {comments: comments, answers: answersToSubmit};
-
-		load("submit", undefined, [], {}, "POST", commentsAndAnswers, true)
+		let submission = {comments: comments, 
+			answers: answersToSubmit, 
+			organisationName: this.state.organisationResponse, 
+			tobaccoDisclosure: this.state.tobaccoResponse,
+		};
+		load("submit", undefined, [], {}, "POST", submission, true)
 			.then(() => {
 				this.setState({
 					userHasSubmitted: true,

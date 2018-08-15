@@ -157,9 +157,9 @@ namespace Comments.Models
 		    SubmissionAnswer.AddRange(submissionAnswersToInsert);
 	    }
 
-	    public Submission InsertSubmission(Guid currentUser)
+	    public Submission InsertSubmission(Guid currentUser, string organisationName, string tobaccoDisclosure)
 	    {
-		    var submission = new Models.Submission(currentUser, DateTime.UtcNow);
+		    var submission = new Models.Submission(currentUser, DateTime.UtcNow, organisationName, tobaccoDisclosure);
 		    Submission.Add(submission);
 		    return submission;
 	    }
