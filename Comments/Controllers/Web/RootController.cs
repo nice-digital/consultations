@@ -27,28 +27,30 @@ namespace Comments.Controllers.Web
         public IActionResult Index(string wctx)
         {
             _logger.LogWarning("Hitting the root controller. this should only occur locally.");
-
-            try
+	        if (!string.IsNullOrEmpty(wctx))
 	        {
-		        //don't judge this too harshly. this pretty nasty code is here for dev purposes only. it's not production code.
-		        const string returnName = "ru=";
-		        var parts = wctx.Split('&');
-		        var returnPart = parts.FirstOrDefault(p => p.StartsWith(returnName));
-		        if (returnPart != null)
+		        try
 		        {
-			        var url = returnPart.Substring(returnName.Length);
-			        if (url.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+			        //don't judge this too harshly. this pretty nasty code is here for dev purposes only. it's not production code.
+			        const string returnName = "ru=";
+			        var parts = wctx.Split('&');
+			        var returnPart = parts.FirstOrDefault(p => p.StartsWith(returnName));
+			        if (returnPart != null)
 			        {
-				        var uri = new Uri(WebUtility.UrlDecode(url));
-				        url = uri.AbsolutePath;
+				        var url = returnPart.Substring(returnName.Length);
+				        if (url.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+				        {
+					        var uri = new Uri(WebUtility.UrlDecode(url));
+					        url = uri.AbsolutePath;
+				        }
+				        return Redirect(url);
 			        }
-			        return Redirect(url);
+		        }
+		        catch (Exception ex)
+		        {
+			        _logger.LogError(ex, "Error when hitting the root controller. this should only occur locally.");
 		        }
 	        }
-	        catch (Exception ex)
-	        {
-				_logger.LogError(ex, "Error when hitting the root controller. this should only occur locally.");
-			}
 	        //return Content("root controller hit");
 			return Redirect("/consultations/22/1/guidance");
         }
