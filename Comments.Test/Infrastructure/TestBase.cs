@@ -266,7 +266,7 @@ namespace Comments.Test.Infrastructure
         }
         protected int AddQuestion(int locationId, int questionTypeId, string questionText, ConsultationsContext passedInContext = null)
         {
-            var question = new Question(locationId, questionText, questionTypeId, null, null, null, null);
+            var question = new Question(locationId, questionText, questionTypeId, null, null, null);
             if (passedInContext != null)
             {
                 passedInContext.Question.Add(question);

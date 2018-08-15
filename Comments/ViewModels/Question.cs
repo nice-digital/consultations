@@ -14,7 +14,6 @@ namespace Comments.ViewModels
             QuestionId = question.QuestionId;
             QuestionText = question.QuestionText;
             QuestionTypeId = question.QuestionTypeId;
-            QuestionOrder = question.QuestionOrder;
             LastModifiedByUserId = question.LastModifiedByUserId;
             LastModifiedDate = question.LastModifiedDate;
 
@@ -26,7 +25,6 @@ namespace Comments.ViewModels
         public int QuestionId { get; set; }
         public string QuestionText { get; set; }
         public int QuestionTypeId { get; set; }
-        public byte? QuestionOrder { get; set; }
         public Guid LastModifiedByUserId { get; set; }
         public DateTime LastModifiedDate { get; set; }
 

@@ -51,6 +51,7 @@ type StateType = {
 	questions: Array<QuestionType>,
 	sort: string,
 	supportsDownload: boolean,
+	loading: boolean,
 	organisationResponse: string,
 	tobaccoResponse: string,
 };
@@ -324,7 +325,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 										<div className="clearfix">
 											<button className="btn btn--secondary right mr--0">Download your response</button>
 										</div>
-									}
+									}									
 									<UserContext.Consumer>
 										{ (contextValue: ContextType) => {
 											return (
@@ -349,11 +350,16 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																	</div>
 																</div>
 															</div>
-															:
-															(
-																<StickyContainer className="grid">
-																	<div data-g="12 md:9 md:push:3">
-																		<ResultsInfo count={commentsToShow.length + questionsToShow.length}
+															: (
+																<div>
+																	<div data-g="12 md:3" className="sticky">
+																		<FilterPanel filters={this.state.commentsData.filters} path={this.state.path} />
+																	</div>
+																	<div data-g="12 md:9">
+																		<ResultsInfo commentCount={commentsToShow.length}
+																			showCommentsCount={this.state.consultationData.consultationState.shouldShowCommentsTab}
+																			questionCount={questionsToShow.length}
+																			showQuestionsCount={this.state.consultationData.consultationState.shouldShowQuestionsTab}
 																			sortOrder={this.state.sort}
 																			appliedFilters={this.getAppliedFilters()}
 																			path={this.state.path}
@@ -368,7 +374,6 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																							return (
 																								<Question
 																									readOnly={!this.state.allowComments || this.state.userHasSubmitted}
-																									isVisible={this.props.isVisible}
 																									key={question.questionId}
 																									unique={`Comment${question.questionId}`}
 																									question={question}
@@ -397,7 +402,52 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																					})}
 																				</ul>
 																			}
-																		</div>
+																		</div>																				
+																		{this.state.userHasSubmitted ?
+																			<div className="hero">
+																				<div className="hero__container">
+																					<div className="hero__body">
+																						<div className="hero__copy">
+																							<p className="hero__intro" data-qa-sel="submitted-text">Thank you, your response has been submitted.</p>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			:
+																			<div className="hero">
+																				<div className="hero__container">
+																					<div className="hero__body ">
+																						<div className="hero__copy">
+																							{/* <h1 className="hero__title">Hero title</h1> */}
+																							<p className="hero__intro">You are about to submit your final response to NICE</p>
+																							<p>After submission you won't be able to:</p>
+																							<ul>
+																								<li>edit your response further</li>
+																								<li>add any extra information.</li>
+																							</ul>
+																							<UserContext.Consumer>
+																								{contextValue => {
+																									if (contextValue.isAuthorised) {
+																										return (
+																											<Fragment>
+																												<h3 className="mt--0">Ready to submit?</h3>
+																												<button
+																													disabled={!this.state.validToSubmit}
+																													className="btn btn--cta"
+																													data-qa-sel="submit-comment-button"
+																													onClick={this.submitConsultation}
+																												>{this.state.userHasSubmitted ? "Responses submitted": "Yes, submit my response"}
+																												</button>
+																											</Fragment>
+																										);
+																									}
+																								}}
+																							</UserContext.Consumer>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																		}
 																		<SubmitResponseBox
 																			isAuthorised={contextValue.isAuthorised}
 																			userHasSubmitted={this.state.userHasSubmitted}
@@ -407,17 +457,8 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																			organisationResponse={this.state.organisationResponse}
 																			tobaccoResponse={this.state.tobaccoResponse}
 																		/>
-																	</div>
-																	<div data-g="12 md:3 md:pull:9">
-																		<Sticky disableHardwareAcceleration>
-																			{({ style }) => (
-																				<div style={style}>
-																					<FilterPanel filters={this.state.commentsData.filters} path={this.state.path} />
-																				</div>
-																			)}
-																		</Sticky>
-																	</div>
-																</StickyContainer>
+																	</div>																	
+																</div>
 															)
 													)
 											);

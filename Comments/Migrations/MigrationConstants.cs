@@ -105,7 +105,6 @@ namespace Comments.Migrations
 				    public const string LastModifiedByUserID = "LastModifiedByUserID";
 				    public const string LastModifiedDate = "LastModifiedDate";
 				    public const string LocationID = "LocationID";
-				    public const string QuestionOrder = "QuestionOrder";
 				    public const string QuestionText = "QuestionText";
 				    public const string QuestionTypeID = "QuestionTypeID";
 				}

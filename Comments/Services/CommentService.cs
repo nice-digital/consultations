@@ -79,11 +79,10 @@ namespace Comments.Services
 
 
 			var sourceURI = ConsultationsUri.ConvertToConsultationsUri(comment.SourceURI, CommentOnHelpers.GetCommentOn(comment.CommentOn));
-			var order = GetOrder(comment.Order, sourceURI);
+	        comment.Order = UpdateOrderWithSourceURI(comment.Order, sourceURI);
 	        var locationToSave = new Models.Location(comment as ViewModels.Location)
 	        {
-		        SourceURI = sourceURI,
-				Order = order
+		        SourceURI = sourceURI
 	        };
 			_context.Location.Add(locationToSave);
 
@@ -137,12 +136,12 @@ namespace Comments.Services
 			}
 
 			var locations = _context.GetAllCommentsAndQuestionsForDocument(sourceURIs, isReview).ToList();
-
-		    var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);
-
 		    consultationState = _consultationService.GetConsultationState(consultationSourceURI, locations);
 
-			return new CommentsAndQuestions(data.comments.ToList(), data.questions.ToList(), user.IsAuthorised, signInURL, consultationState);
+			var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);
+		    var resortedComments = data.comments.OrderByDescending(c => c.LastModifiedDate).ToList(); //comments should be sorted in date by default, questions by document order.
+			
+			return new CommentsAndQuestions(resortedComments, data.questions.ToList(), user.IsAuthorised, signInURL, consultationState);
 	    }
 
 		public ReviewPageViewModel GetCommentsAndQuestionsForReview(string relativeURL, ReviewPageViewModel model)
@@ -151,8 +150,7 @@ namespace Comments.Services
 
 			if (model.Sort == ReviewSortOrder.DocumentAsc)
 			{
-				commentsAndQuestions.Comments = commentsAndQuestions.Comments.OrderByAlphaNumeric(c => c.Order).ToList();
-				//commentsAndQuestions.Questions = commentsAndQuestions.Questions.OrderByAlphaNumeric(q => q.Order).ToList();
+				commentsAndQuestions.Comments = commentsAndQuestions.Comments.OrderBy(c => c.Order).ToList();
 			}
 
 			model.CommentsAndQuestions = FilterCommentsAndQuestions(commentsAndQuestions, model.Type, model.Document);
@@ -169,16 +167,17 @@ namespace Comments.Services
 		/// <param name="questionsOrComments"></param>
 		/// <param name="documentIdsToFilter"></param>
 		/// <returns></returns>
-		private static CommentsAndQuestions FilterCommentsAndQuestions(CommentsAndQuestions commentsAndQuestions, IEnumerable<QuestionsOrComments> type, IEnumerable<int> documentIdsToFilter)
-	    {
-		    commentsAndQuestions.Questions.ForEach(q => q.Show = type == null ||  type.Contains(QuestionsOrComments.Questions));
-		    commentsAndQuestions.Comments.ForEach(q => q.Show = type == null || type.Contains(QuestionsOrComments.Comments));
+		public CommentsAndQuestions FilterCommentsAndQuestions(CommentsAndQuestions commentsAndQuestions, IEnumerable<QuestionsOrComments> type, IEnumerable<int> documentIdsToFilter)
+		{
+			var types = type?.ToList() ?? new List<QuestionsOrComments>(0);
+		    commentsAndQuestions.Questions.ForEach(q => q.Show = !types.Any() ||  types.Contains(QuestionsOrComments.Questions));
+			commentsAndQuestions.Comments.ForEach(q => q.Show = !types.Any() || types.Contains(QuestionsOrComments.Comments));
 
-		    var idsToFilter = documentIdsToFilter?.ToList() ?? new List<int>(0);
-		    if (idsToFilter.Any())
+			var documentIds = documentIdsToFilter?.ToList() ?? new List<int>(0);
+			if (documentIds.Any())
 		    {
-			    commentsAndQuestions.Questions.ForEach(q => q.Show = (!q.Show || !q.DocumentId.HasValue) ? false : idsToFilter.Contains(q.DocumentId.Value));
-			    commentsAndQuestions.Comments.ForEach(c => c.Show = (!c.Show || !c.DocumentId.HasValue) ? false : idsToFilter.Contains(c.DocumentId.Value));
+			    commentsAndQuestions.Questions.ForEach(q => q.Show = (!q.Show || !q.DocumentId.HasValue) ? false : documentIds.Contains(q.DocumentId.Value));
+			    commentsAndQuestions.Comments.ForEach(c => c.Show = (!c.Show || !c.DocumentId.HasValue) ? false : documentIds.Contains(c.DocumentId.Value));
 			}
 		    return commentsAndQuestions;
 	    }
@@ -225,7 +224,7 @@ namespace Comments.Services
 	    }
 
 	    public const string OrderFormat = "{0}.{1}.{2}.{3}";
-	    public string GetOrder(string orderWithinChapter, string sourceURI)
+	    public string UpdateOrderWithSourceURI(string orderWithinChapter, string sourceURI)
 	    {
 		    var consultationsUriElements = ConsultationsUri.ParseConsultationsUri(sourceURI);
 
