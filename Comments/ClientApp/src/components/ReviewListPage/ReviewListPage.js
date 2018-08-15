@@ -50,6 +50,7 @@ type StateType = {
 	questions: Array<QuestionType>,
 	sort: string,
 	supportsDownload: boolean,
+	loading: boolean,
 };
 
 export class ReviewListPage extends Component<PropsType, StateType> {
@@ -336,10 +337,12 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																	</div>
 																</div>
 															</div>
-															: 
-															(
-																<StickyContainer className="grid">
-																	<div data-g="12 md:9 md:push:3">
+															: (
+																<div>
+																	<div data-g="12 md:3" className="sticky">
+																		<FilterPanel filters={this.state.commentsData.filters} path={this.state.path} />
+																	</div>
+																	<div data-g="12 md:9">
 																		<ResultsInfo commentCount={commentsToShow.length}
 																			showCommentsCount={this.state.consultationData.consultationState.shouldShowCommentsTab}
 																			questionCount={questionsToShow.length}
@@ -358,7 +361,6 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																							return (
 																								<Question
 																									readOnly={!this.state.allowComments || this.state.userHasSubmitted}
-																									isVisible={this.props.isVisible}
 																									key={question.questionId}
 																									unique={`Comment${question.questionId}`}
 																									question={question}
@@ -433,17 +435,8 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																				</div>
 																			</div>
 																		}
-																	</div>
-																	<div data-g="12 md:3 md:pull:9">
-																		<Sticky disableHardwareAcceleration>
-																			{({ style }) => (
-																				<div style={style}>
-																					<FilterPanel filters={this.state.commentsData.filters} path={this.state.path} />
-																				</div>
-																			)}
-																		</Sticky>
-																	</div>
-																</StickyContainer>
+																	</div>																	
+																</div>
 															)
 													)
 											);
