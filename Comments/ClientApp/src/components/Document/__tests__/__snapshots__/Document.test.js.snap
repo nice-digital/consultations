@@ -635,13 +635,13 @@ Array [
                             </ul>
                         </nav>
                         <nav
-                            aria-label="Other commentable documents in this consultation"
+                            aria-label="Other consultation documents you can comment on"
                             className="stacked-nav"
                         >
                             <h2
                                 className="stacked-nav__root"
                             >
-                                Other commentable documents in this consultation
+                                Other consultation documents you can comment on
                             </h2>
                             <ul
                                 className="stacked-nav__list"
@@ -727,13 +727,13 @@ Array [
                             </ul>
                         </nav>
                         <nav
-                            aria-label="Supporting documents"
+                            aria-label="Supporting documents (for information only)"
                             className="stacked-nav"
                         >
                             <h2
                                 className="stacked-nav__root"
                             >
-                                Supporting documents
+                                Supporting documents (for information only)
                             </h2>
                             <ul
                                 className="stacked-nav__list"
