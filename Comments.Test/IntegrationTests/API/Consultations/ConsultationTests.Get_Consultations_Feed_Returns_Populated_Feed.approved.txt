@@ -22,7 +22,8 @@
         "user":{
             "isAuthorised":true,
             "displayName":"Benjamin Button",
-            "userId":"00000000-0000-0000-0000-000000000000"
+            "userId":"00000000-0000-0000-0000-000000000000",
+            "organisationName":null
         },
         "consultationState":null,
         "breadcrumbs":null,
@@ -51,7 +52,8 @@
         "user":{
             "isAuthorised":true,
             "displayName":"Benjamin Button",
-            "userId":"00000000-0000-0000-0000-000000000000"
+            "userId":"00000000-0000-0000-0000-000000000000",
+            "organisationName":null
         },
         "consultationState":null,
         "breadcrumbs":null,

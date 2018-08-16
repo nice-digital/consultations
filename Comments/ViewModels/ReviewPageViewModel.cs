@@ -28,6 +28,11 @@ namespace Comments.ViewModels
 		/// </summary>
 	    public IEnumerable<ReviewFilterGroup> Filters { get; set; }
 
+		/// <summary>
+		/// This is the organisation name from nice accounts. it's going to prepopulate the organisation name on the review page, but will be overwritable. it won't change the field in nice accounts.
+		/// </summary>
+	    public string OrganisationName { get; set; }
+
 		#region Filter options from the check boxes
 
 		

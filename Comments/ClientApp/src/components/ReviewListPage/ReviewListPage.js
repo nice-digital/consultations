@@ -113,7 +113,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 				sort: preloadedCommentsData.sort,
 				supportsDownload: preloadedConsultationData.consultationState.supportsDownload,
 				viewSubmittedComments: false,
-				organisationName: "",
+				organisationName: preloadedCommentsData.organisationName,
 				tobaccoDisclosure: "",
 			};
 		}
@@ -176,6 +176,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 						allowComments: (data.consultationData.consultationState.consultationIsOpen && !data.consultationData.consultationState.userHasSubmitted),
 						supportsDownload: data.consultationData.consultationState.supportsDownload,
 						sort: data.commentsData.sort,
+						organisationName: data.commentsData.organisationName,
 					});
 				} else{
 					this.setState({
@@ -184,6 +185,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 						questions: data.commentsData.commentsAndQuestions.questions,
 						sort: data.commentsData.sort,
 						loading: false,
+						organisationName: data.commentsData.organisationName,
 					});
 				}
 			})
