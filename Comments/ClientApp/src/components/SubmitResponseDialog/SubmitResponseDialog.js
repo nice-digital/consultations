@@ -1,7 +1,14 @@
 import React, {Fragment} from "react";
 
-export const SubmitResponseBox = props => {
-	const { isAuthorised, userHasSubmitted, validToSubmit, submitConsultation, inputChangeHandler, organisationName, tobaccoDisclosure } = props;
+export const SubmitResponseDialog = props => {
+	const {
+		isAuthorised,
+		userHasSubmitted,
+		validToSubmit,
+		submitConsultation,
+		inputChangeHandler,
+		organisationName,
+		tobaccoDisclosure } = props;
 
 	return (
 		<Fragment>

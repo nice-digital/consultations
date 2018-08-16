@@ -21,7 +21,7 @@ import { withHistory } from "../HistoryContext/HistoryContext";
 import { CommentBox } from "../CommentBox/CommentBox";
 import { Question } from "../Question/Question";
 import { LoginBanner } from "../LoginBanner/LoginBanner";
-import { SubmitResponseBox } from "../SubmitResponseBox/SubmitResponseBox";
+import { SubmitResponseDialog } from "../SubmitResponseDialog/SubmitResponseDialog";
 
 type PropsType = {
 	staticContext?: any,
@@ -408,7 +408,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																				</ul>
 																			}
 																		</div>																				
-																		<SubmitResponseBox
+																		<SubmitResponseDialog
 																			isAuthorised={contextValue.isAuthorised}
 																			userHasSubmitted={this.state.userHasSubmitted}
 																			validToSubmit={this.state.validToSubmit}
