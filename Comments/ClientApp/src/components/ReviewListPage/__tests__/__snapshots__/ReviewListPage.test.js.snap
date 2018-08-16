@@ -604,39 +604,6 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                   className="hero__container"
                 >
                   <div
-                    className="hero__body "
-                  >
-                    <div
-                      className="hero__copy"
-                    >
-                      <p
-                        className="hero__intro"
-                      >
-                        You are about to submit your final response to NICE
-                      </p>
-                      <p>
-                        After submission you won't be able to:
-                      </p>
-                      <ul>
-                        <li>
-                          edit your response further
-                        </li>
-                        <li>
-                          add any extra information.
-                        </li>
-                      </ul>
-                      <undefined />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="hero"
-              >
-                <div
-                  className="hero__container"
-                >
-                  <div
                     className="hero__body"
                   >
                     <div
@@ -671,14 +638,14 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                         >
                           <label
                             className="form__label"
-                            htmlFor="organisationResponse"
+                            htmlFor="organisationName"
                           >
                             Organisation
                           </label>
                           <input
                             className="form__input"
-                            id="organisationResponse"
-                            name="organisationResponse"
+                            id="organisationName"
+                            name="organisationName"
                             onChange={[Function]}
                             type="text"
                           />
@@ -693,14 +660,14 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                         >
                           <label
                             className="form__label"
-                            htmlFor="tobaccoResponse"
+                            htmlFor="tobaccoDisclosure"
                           >
                             Disclose tobacco industry links
                           </label>
                           <textarea
                             className="form__input form__input--textarea"
-                            id="tobaccoResponse"
-                            name="tobaccoResponse"
+                            id="tobaccoDisclosure"
+                            name="tobaccoDisclosure"
                             onChange={[Function]}
                             value=""
                           />
