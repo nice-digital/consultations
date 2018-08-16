@@ -1,7 +1,14 @@
 import React, {Fragment} from "react";
 
-export const SubmitResponseBox = props => {
-	const { isAuthorised, userHasSubmitted, validToSubmit, submitConsultation, inputChangeHandler, organisationResponse, tobaccoResponse } = props;
+export const SubmitResponseDialog = props => {
+	const {
+		isAuthorised,
+		userHasSubmitted,
+		validToSubmit,
+		submitConsultation,
+		inputChangeHandler,
+		organisationName,
+		tobaccoDisclosure } = props;
 
 	return (
 		<Fragment>
@@ -30,17 +37,17 @@ export const SubmitResponseBox = props => {
 								<fieldset className="form__fieldset">
 									<legend className="form__legend">Please answer the below questions before submitting</legend>
 									<div className="form__group form__group--text">
-										<label htmlFor="organisationResponse" className="form__label">
+										<label htmlFor="organisationName" className="form__label">
 											Organisation
 										</label>
-										<input id="organisationResponse" name="organisationResponse" value={organisationResponse} className="form__input" type="text" onChange={inputChangeHandler}/>
+										<input id="organisationName" name="organisationName" value={organisationName} className="form__input" type="text" onChange={inputChangeHandler}/>
 										<div className="form__hint form__hint--inverse">If you are commenting on behalf of an organisation, please enter the organisation name</div>
 									</div>
 									<div className="form__group form__group--textarea">
-										<label htmlFor="tobaccoResponse" className="form__label">
+										<label htmlFor="tobaccoDisclosure" className="form__label">
 											Disclose tobacco industry links
 										</label>
-										<textarea id="tobaccoResponse" name="tobaccoResponse" value={tobaccoResponse} className="form__input form__input--textarea" onChange={inputChangeHandler}/>
+										<textarea id="tobaccoDisclosure" name="tobaccoDisclosure" value={tobaccoDisclosure} className="form__input form__input--textarea" onChange={inputChangeHandler}/>
 
 										<div className="form__hint form__hint--inverse">Please disclose whether you or the organisation who's behalf on which you are commenting has any past or current, direct or indirect links to, or receives funding from, the tobacco industry.</div>
 									</div>
