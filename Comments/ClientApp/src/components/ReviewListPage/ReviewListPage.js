@@ -1,8 +1,7 @@
 // @flow
 
 import React, { Component, Fragment } from "react";
-import { withRouter } from "react-router";
-import { StickyContainer, Sticky } from "react-sticky";
+import { withRouter } from "react-router-dom";
 //import stringifyObject from "stringify-object";
 
 import preload from "../../data/pre-loader";
