@@ -52,7 +52,7 @@ type StateType = {
 	supportsDownload: boolean,
 	loading: boolean,
 	organisationName: string,
-	tobaccoResponse: string,
+	tobaccoDisclosure: string,
 };
 
 export class ReviewListPage extends Component<PropsType, StateType> {
@@ -73,7 +73,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			sort: "DocumentAsc",
 			supportsDownload: false,
 			organisationName: "",
-			tobaccoResponse: "",
+			tobaccoDisclosure: "",
 		};
 
 		let preloadedData = {};
@@ -114,7 +114,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 				supportsDownload: preloadedConsultationData.consultationState.supportsDownload,
 				viewSubmittedComments: false,
 				organisationName: "",
-				tobaccoResponse: "",
+				tobaccoDisclosure: "",
 			};
 		}
 	}
@@ -212,7 +212,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		const comments = this.state.comments;
 		const questions = this.state.questions;
 		const organisationName = this.state.organisationName;
-		const tobaccoResponse = this.state.tobaccoResponse;
+		const tobaccoDisclosure = this.state.tobaccoDisclosure;
 		let answersToSubmit = [];
 		questions.forEach(function(question){
 			if (question.answers != null){
@@ -223,7 +223,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			comments,
 			answers: answersToSubmit, 
 			organisationName,
-			tobaccoResponse,
+			tobaccoDisclosure,
 		};
 		load("submit", undefined, [], {}, "POST", submission, true)
 			.then(() => {
@@ -415,7 +415,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																			submitConsultation={this.submitConsultation}
 																			inputChangeHandler={this.inputChangeHandler}
 																			organisationName={this.state.organisationName}
-																			tobaccoResponse={this.state.tobaccoResponse}
+																			tobaccoDisclosure={this.state.tobaccoDisclosure}
 																		/>
 																	</div>																	
 																</div>
