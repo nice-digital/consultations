@@ -681,7 +681,6 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                             name="organisationResponse"
                             onChange={[Function]}
                             type="text"
-                            value=""
                           />
                           <div
                             className="form__hint form__hint--inverse"
