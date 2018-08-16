@@ -52,7 +52,7 @@ type StateType = {
 	sort: string,
 	supportsDownload: boolean,
 	loading: boolean,
-	organisationResponse: string,
+	organisationName: string,
 	tobaccoResponse: string,
 };
 
@@ -73,7 +73,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			questions: [], //this contains all the questions, not just the ones displayed to the user. the show property defines whether the question is filtered out from view.
 			sort: "DocumentAsc",
 			supportsDownload: false,
-			organisationResponse: "",
+			organisationName: "",
 			tobaccoResponse: "",
 		};
 
@@ -114,7 +114,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 				sort: preloadedCommentsData.sort,
 				supportsDownload: preloadedConsultationData.consultationState.supportsDownload,
 				viewSubmittedComments: false,
-				organisationResponse: "",
+				organisationName: "",
 				tobaccoResponse: "",
 			};
 		}
@@ -212,16 +212,19 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 	submitConsultation = () => {
 		const comments = this.state.comments;
 		const questions = this.state.questions;
+		const organisationName = this.state.organisationName;
+		const tobaccoResponse = this.state.tobaccoResponse;
 		let answersToSubmit = [];
 		questions.forEach(function(question){
 			if (question.answers != null){
 				answersToSubmit = answersToSubmit.concat(question.answers);
 			}
 		});
-		let submission = {comments: comments, 
+		let submission = {
+			comments,
 			answers: answersToSubmit, 
-			organisationName: this.state.organisationResponse, 
-			tobaccoDisclosure: this.state.tobaccoResponse,
+			organisationName,
+			tobaccoResponse,
 		};
 		load("submit", undefined, [], {}, "POST", submission, true)
 			.then(() => {
@@ -406,58 +409,13 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																				</ul>
 																			}
 																		</div>																				
-																		{this.state.userHasSubmitted ?
-																			<div className="hero">
-																				<div className="hero__container">
-																					<div className="hero__body">
-																						<div className="hero__copy">
-																							<p className="hero__intro" data-qa-sel="submitted-text">Thank you, your response has been submitted.</p>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																			:
-																			<div className="hero">
-																				<div className="hero__container">
-																					<div className="hero__body ">
-																						<div className="hero__copy">
-																							{/* <h1 className="hero__title">Hero title</h1> */}
-																							<p className="hero__intro">You are about to submit your final response to NICE</p>
-																							<p>After submission you won't be able to:</p>
-																							<ul>
-																								<li>edit your response further</li>
-																								<li>add any extra information.</li>
-																							</ul>
-																							<UserContext.Consumer>
-																								{contextValue => {
-																									if (contextValue.isAuthorised) {
-																										return (
-																											<Fragment>
-																												<h3 className="mt--0">Ready to submit?</h3>
-																												<button
-																													disabled={!this.state.validToSubmit}
-																													className="btn btn--cta"
-																													data-qa-sel="submit-comment-button"
-																													onClick={this.submitConsultation}
-																												>{this.state.userHasSubmitted ? "Responses submitted": "Yes, submit my response"}
-																												</button>
-																											</Fragment>
-																										);
-																									}
-																								}}
-																							</UserContext.Consumer>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																		}
 																		<SubmitResponseBox
 																			isAuthorised={contextValue.isAuthorised}
 																			userHasSubmitted={this.state.userHasSubmitted}
 																			validToSubmit={this.state.validToSubmit}
 																			submitConsultation={this.submitConsultation}
 																			inputChangeHandler={this.inputChangeHandler}
-																			organisationResponse={this.state.organisationResponse}
+																			organisationName={this.state.organisationName}
 																			tobaccoResponse={this.state.tobaccoResponse}
 																		/>
 																	</div>																	
