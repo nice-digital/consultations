@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, {Component, Fragment} from "react";
 
 export class SubmitResponseDialog extends Component {
@@ -28,6 +29,31 @@ export class SubmitResponseDialog extends Component {
 								<div className="hero__copy">
 									<p className="hero__intro" data-qa-sel="submitted-text">Thank you, your response has been submitted.</p>
 								</div>
+=======
+import React, {Fragment} from "react";
+
+export const SubmitResponseDialog = props => {
+	const {
+		isAuthorised,
+		userHasSubmitted,
+		validToSubmit,
+		submitConsultation,
+		inputChangeHandler,
+		respondingAsOrganisation, //TODO: use this field
+		organisationName,
+		hasTobaccoLinks, //TODO: use this field
+		tobaccoDisclosure,
+	} = props;
+
+	return (
+		<Fragment>
+			{userHasSubmitted ?
+				<div className="hero">
+					<div className="hero__container">
+						<div className="hero__body">
+							<div className="hero__copy">
+								<p className="hero__intro" data-qa-sel="submitted-text">Thank you, your response has been submitted.</p>
+>>>>>>> 1028ae9f3f4be40ca42af403eb09874cdc2ea888
 							</div>
 						</div>
 					</div>
