@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using Remotion.Linq.Clauses;
 
 namespace Comments.Models
 {
@@ -44,9 +45,10 @@ namespace Comments.Models
 		/// This behaviour can be overridden with the IgnoreQueryFilters command. See the ConsultationContext.Tests for example usage.
 		/// </summary>
 		/// <param name="sourceURIs"></param>
-		/// <param name="isReview">True if data is being retrieved for the review page</param>
+		/// <param name="partialMatchSourceURI">True if data is being retrieved for the review page</param>
+		/// <param name="getSubmitted">True if data is being retrieved should only be submitted data</param>
 		/// <returns></returns>
-		public IEnumerable<Location> GetAllCommentsAndQuestionsForDocument(IList<string> sourceURIs, bool partialMatchSourceURI)
+		public IEnumerable<Location> GetAllCommentsAndQuestionsForDocument(IList<string> sourceURIs, bool partialMatchSourceURI, bool getSubmitted = false)
 		{
 			string partialSourceURIToUse = null, partialMatchExactSourceURIToUse = null;
 		    if (partialMatchSourceURI)
@@ -58,30 +60,43 @@ namespace Comments.Models
 			    partialSourceURIToUse = $"{partialMatchExactSourceURIToUse}/";
 		    }
 
-			var data = Location.Where(l => partialMatchSourceURI ?
-											(l.SourceURI.Equals(partialMatchExactSourceURIToUse) || l.SourceURI.Contains(partialSourceURIToUse))
-											: sourceURIs.Contains(l.SourceURI))
-					.Include(l => l.Comment)
-						.ThenInclude(s => s.SubmissionComment)
-							.ThenInclude(s => s.Submission)
+			var data = Location.Where(l => partialMatchSourceURI
+					? (l.SourceURI.Equals(partialMatchExactSourceURIToUse) || l.SourceURI.Contains(partialSourceURIToUse))
+					: sourceURIs.Contains(l.SourceURI))
+				.Include(l => l.Comment)
+					.ThenInclude(s => s.SubmissionComment)
+					.ThenInclude(s => s.Submission)
 
-					.Include(l => l.Comment)
-						.ThenInclude(s => s.Status)
+				.Include(l => l.Comment)
+					.ThenInclude(s => s.Status)	
 
-					.Include(l => l.Question)
-						.ThenInclude(q => q.QuestionType)
-				    .Include(l => l.Question)
-						.ThenInclude(q => q.Answer)
-							.ThenInclude(s => s.SubmissionAnswer)
+				.Include(l => l.Question)
+					.ThenInclude(q => q.QuestionType)
+				.Include(l => l.Question)
+					.ThenInclude(q => q.Answer)
+					.ThenInclude(s => s.SubmissionAnswer)
 
-					.OrderBy(l => l.Question.OrderBy(q => q.QuestionOrder).Select(q => q.QuestionOrder).FirstOrDefault())
+				.OrderBy(l => l.Question.OrderBy(q => q.QuestionOrder).Select(q => q.QuestionOrder).FirstOrDefault())
 
-					.ThenByDescending(l => l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault());
+				.ThenByDescending(l =>
+					l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault())
+
+				.ToList();
+
+			if (getSubmitted)
+			{
+				var filteredData = data.Where(l => l.Comment.Any(c => c.StatusId == (int)StatusName.Submitted));// ||
+												  // (l.Question != null ? (l.Question.FirstOrDefault().Answer.Any(c => c.StatusId == (int)StatusName.Submitted)) : false));
+				                                   
+				return filteredData;
+			}
 
 			return data;
-	    }
-		
-        public Comment GetComment(int commentId)
+			
+			
+		}
+
+		public Comment GetComment(int commentId)
         {
             var comment = Comment.Where(c => c.CommentId.Equals(commentId))
                             .Include(c => c.Location)

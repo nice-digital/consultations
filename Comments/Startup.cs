@@ -71,8 +71,9 @@ namespace Comments
             services.TryAddTransient<IQuestionService, QuestionService>();
 	        services.TryAddTransient<ISubmitService, SubmitService>();
 			services.TryAddTransient<IAdminService, AdminService>();
+	        services.TryAddTransient<IExportService, ExportService>();
 			services.TryAddSingleton<IEncryption, Encryption>();
-	        services.TryAddSingleton<IExportToExcel, ExportToExcel>();
+	        services.TryAddTransient<IExportToExcel, ExportToExcel>();
 
 			// Add authentication 
 			services.AddAuthentication(options =>

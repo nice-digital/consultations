@@ -2,34 +2,40 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Xml.Linq;
+using Comments.Common;
+using Comments.Models;
+using Comments.Services;
 using Comments.ViewModels;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
-using Microsoft.AspNetCore.Mvc;
-using NICE.Feeds.Models.Indev.List;
+using Answer = Comments.Models.Answer;
 
 namespace Comments.Export
 {
 	public interface IExportToExcel
 	{
-		Stream ToSpreadsheet(ViewModels.Comment comment);
+		Stream ToSpreadsheet(IEnumerable<Comments.Models.Location> locations, string consultation, string Document, string chapter);
+		void ToConvert(IEnumerable<Comments.Models.Location> locations, string consultation, string Document, string chapter);
 	}
 
 	public class ExportToExcel : IExportToExcel
 	{
-		public Stream ToSpreadsheet(ViewModels.Comment comment)
+		private readonly IConsultationService _consultationService;
+		public ExportToExcel(IConsultationService consultationService)
+		{
+			_consultationService = consultationService;
+		}
+		public Stream ToSpreadsheet(IEnumerable<Comments.Models.Location> locations, string consultation, string Document, string chapter)
 		{
 			var stream = new MemoryStream();
 			using (var workbook = SpreadsheetDocument.Create(stream, SpreadsheetDocumentType.Workbook))
 			{
-				createSheet(workbook, comment);
+				createSheet(workbook, locations, consultation, Document, chapter);
 			}
 
 			stream.Position = 0;
-			
+
 			return stream;
 		}
 
@@ -37,106 +43,188 @@ namespace Comments.Export
 		{
 			var headerRow = new Row();
 
-			DocumentFormat.OpenXml.Spreadsheet.Cell cell = new DocumentFormat.OpenXml.Spreadsheet.Cell();
-			cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
-			cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue("Comment ID");
+			DocumentFormat.OpenXml.Spreadsheet.Cell cell;
+
+			cell = new Cell();
+			cell.DataType = CellValues.String;
+			cell.CellValue = new CellValue("Consultation Name");
 			headerRow.AppendChild(cell);
 
-			cell = new DocumentFormat.OpenXml.Spreadsheet.Cell();
-			cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
-			cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue("Comment");
+			cell = new Cell();
+			cell.DataType = CellValues.String;
+			cell.CellValue = new CellValue("Document Name");
 			headerRow.AppendChild(cell);
 
-			//DocumentFormat.OpenXml.Spreadsheet.Cell cell = new DocumentFormat.OpenXml.Spreadsheet.Cell();
-			//cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
-			//cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue("Consultation Name");
-			//headerRow.AppendChild(cell);
+			cell = new Cell();
+			cell.DataType = CellValues.String;
+			cell.CellValue = new CellValue("Chapter Name");
+			headerRow.AppendChild(cell);
 
-			//cell = new DocumentFormat.OpenXml.Spreadsheet.Cell();
-			//cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
-			//cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue("Start date");
-			//headerRow.AppendChild(cell);
+			cell = new Cell();
+			cell.DataType = CellValues.String;
+			cell.CellValue = new CellValue("Section");
+			headerRow.AppendChild(cell);
 
-			//cell = new DocumentFormat.OpenXml.Spreadsheet.Cell();
-			//cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
-			//cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue("End date");
-			//headerRow.AppendChild(cell);
+			cell = new Cell();
+			cell.DataType = CellValues.String;
+			cell.CellValue = new CellValue("Quote");
+			headerRow.AppendChild(cell);
 
-			//cell = new DocumentFormat.OpenXml.Spreadsheet.Cell();
-			//cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
-			//cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue("User");
-			//headerRow.AppendChild(cell);
+			cell = new Cell();
+			cell.DataType = CellValues.String;
+			cell.CellValue = new CellValue("User ID");
+			headerRow.AppendChild(cell);
 
-			//cell = new DocumentFormat.OpenXml.Spreadsheet.Cell();
-			//cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
-			//cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue("Comment type");
-			//headerRow.AppendChild(cell);
+			cell = new Cell();
+			cell.DataType = CellValues.String;
+			cell.CellValue = new CellValue("Question ID");
+			headerRow.AppendChild(cell);
 
-			//cell = new DocumentFormat.OpenXml.Spreadsheet.Cell();
-			//cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
-			//cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue("Document");
-			//headerRow.AppendChild(cell);
+			cell = new Cell();
+			cell.DataType = CellValues.String;
+			cell.CellValue = new CellValue("Question Text");
+			headerRow.AppendChild(cell);
 
-			//cell = new DocumentFormat.OpenXml.Spreadsheet.Cell();
-			//cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
-			//cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue("Chapter");
-			//headerRow.AppendChild(cell);
+			cell = new Cell();
+			cell.DataType = CellValues.String;
+			cell.CellValue = new CellValue("Comment ID");
+			headerRow.AppendChild(cell);
 
-			//cell = new DocumentFormat.OpenXml.Spreadsheet.Cell();
-			//cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
-			//cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue("Section");
-			//headerRow.AppendChild(cell);
+			cell = new Cell();
+			cell.DataType = CellValues.String;
+			cell.CellValue = new CellValue("Comment");
+			headerRow.AppendChild(cell);
 
-			//cell = new DocumentFormat.OpenXml.Spreadsheet.Cell();
-			//cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
-			//cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue("Comment");
-			//headerRow.AppendChild(cell);
+			cell = new Cell();
+			cell.DataType = CellValues.String;
+			cell.CellValue = new CellValue("Answer ID");
+			headerRow.AppendChild(cell);
 
-			//if (User.IsAdministrator)
-			//{
-			//	cell = new DocumentFormat.OpenXml.Spreadsheet.Cell();
-			//	cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
-			//	cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue("Tags");
-			//	headerRow.AppendChild(cell);
-			//}
+			cell = new Cell();
+			cell.DataType = CellValues.String;
+			cell.CellValue = new CellValue("Answer Text");
+			headerRow.AppendChild(cell);
 
-			//cell = new DocumentFormat.OpenXml.Spreadsheet.Cell();
-			//cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
-			//cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue("Response");
-			//headerRow.AppendChild(cell);
+			cell = new Cell();
+			cell.DataType = CellValues.String;
+			cell.CellValue = new CellValue("Submission Criteria Organisation");
+			headerRow.AppendChild(cell);
+
+			cell = new Cell();
+			cell.DataType = CellValues.String;
+			cell.CellValue = new CellValue("Submission Criteria Tobacco");
+			headerRow.AppendChild(cell);
 
 			sheet.AppendChild(headerRow);
 		}
 
-		void AppendDataRow(SheetData sheet, ViewModels.Comment comment)
+		void AppendDataRow(SheetData sheet, IEnumerable<Comments.Models.Location> locations)
 		{
-			var dataRow = new Row();
-			Cell cell = new Cell();
-			cell.DataType = CellValues.String;
-			cell.CellValue = new CellValue(comment.CommentId.ToString());
-			dataRow.AppendChild(cell);
+			foreach (var location in locations)
+			{
+				var sourceURI = location.SourceURI;
+				ConsultationsUriElements URIElements = ConsultationsUri.ParseConsultationsUri(sourceURI);
 
-			cell = new Cell();
-			cell.DataType = CellValues.String;
-			cell.CellValue = new CellValue(comment.CommentText);
-			dataRow.AppendChild(cell);
+				var consultationDetails = _consultationService.GetConsultation(URIElements.ConsultationId, false);
+				var documents = _consultationService.GetDocuments(URIElements.ConsultationId);
+				var documentDetail = documents.FirstOrDefault(x => x.DocumentId == URIElements.DocumentId);
+				var chapterDetail = documentDetail?.Chapters.First(c => c.Slug == URIElements.ChapterSlug);
 
-			sheet.AppendChild(dataRow);
+				ICollection<Models.Answer> answers = new List<Answer>();
+				if (location.Question != null && location.Question.Count != 0)
+				{
+					answers = location.Question.First().Answer;
+				}
+				
+				//var submission = location.Comment.First().SubmissionComment.First().Submission.TobaccoDisclosure;
+
+				var dataRow = new Row();
+				Cell cell;
+
+				cell = new Cell();
+				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue(consultationDetails.Title);
+				dataRow.AppendChild(cell);
+
+				cell = new Cell();
+				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue(documentDetail?.Title);
+				dataRow.AppendChild(cell);
+
+				cell = new Cell();
+				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue(chapterDetail?.Title);
+				dataRow.AppendChild(cell);
+
+				cell = new Cell();
+				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue(location.Section);
+				dataRow.AppendChild(cell);
+
+				cell = new Cell();
+				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue(location.Quote);
+				dataRow.AppendChild(cell);
+
+				cell = new Cell();
+				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue(location.Comment.Count >= 1 ? location.Comment.First().CreatedByUserId.ToString(): null);
+				dataRow.AppendChild(cell);
+
+				cell = new Cell();
+				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue(location.Question == null || location.Question.Count ==0  ? null : location.Question.First().QuestionId.ToString());
+				dataRow.AppendChild(cell);
+
+				cell = new Cell();
+				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue(location.Question == null || location.Question.Count == 0 ? null : location.Question.First().QuestionText);
+				dataRow.AppendChild(cell);
+
+				cell = new Cell();
+				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue(location.Comment.Count >= 1 ? location.Comment.First().CommentId.ToString(): null);
+				dataRow.AppendChild(cell);
+
+				cell = new Cell();
+				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue(location.Comment.Count >= 1 ? location.Comment.First().CommentText : null);
+				dataRow.AppendChild(cell);
+
+				cell = new Cell();
+				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue(answers == null || answers.Count == 0 ? null : answers.First().AnswerId.ToString());
+				dataRow.AppendChild(cell);
+
+				cell = new Cell();
+				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue(answers == null || answers.Count == 0 ? null : answers?.First().AnswerText);
+				dataRow.AppendChild(cell);
+
+				cell = new Cell();
+				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue("Org");
+				dataRow.AppendChild(cell);
+
+				cell = new Cell();
+				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue("Tobacco");
+				dataRow.AppendChild(cell);
+
+				sheet.AppendChild(dataRow);
+			}
 		}
 
-		public void ToConvert(ViewModels.Comment comment)
+		public void ToConvert(IEnumerable<Comments.Models.Location> locations, string consultation, string Document, string chapter)
 		{
 			SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Create("C:/Test/TestExcel"+ DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second + ".xlsx", SpreadsheetDocumentType.Workbook);
 
 			//add the excel contents...
-			createSheet(spreadsheetDocument, comment);
+			createSheet(spreadsheetDocument, locations, consultation, Document, chapter);
 		}
 
-		private void createSheet(SpreadsheetDocument spreadsheetDocument, ViewModels.Comment comment)
+		private void createSheet(SpreadsheetDocument spreadsheetDocument, IEnumerable<Comments.Models.Location> locations, string consultation, string Document, string chapter)
 		{
-			var consultation = new Consultation(null, "My Consultation", null, DateTime.Now, DateTime.Now, null, null, null,
-				null, null, null, 1, null, true, true, true, true, null, null, new User(true, "Me", new Guid()));
-
 			// Add a WorkbookPart to the document.
 			WorkbookPart workbookpart = spreadsheetDocument.AddWorkbookPart();
 			workbookpart.Workbook = new Workbook();
@@ -161,7 +249,7 @@ namespace Comments.Export
 
 			AppendHeaderRow(sheetData);
 
-			AppendDataRow(sheetData, comment);
+			AppendDataRow(sheetData, locations);
 
 			workbookpart.WorksheetParts.First().Worksheet.Save();
 			workbookpart.Workbook.Save();
