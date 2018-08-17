@@ -13,11 +13,13 @@ namespace Comments.Models
 		    SubmissionComment = new HashSet<SubmissionComment>();
 		}
 
-		public Submission(Guid submissionByUserId, DateTime submissioDateTime, string organisationName, string tobaccoDisclosure)
+		public Submission(Guid submissionByUserId, DateTime submissioDateTime, bool respondingAsOrganisation, string organisationName, bool hasTobaccoLinks, string tobaccoDisclosure)
 	    {
 		    SubmissionByUserId = submissionByUserId;
 		    SubmissionDateTime = submissioDateTime;
+		    RespondingAsOrganisation = respondingAsOrganisation;
 		    OrganisationName = organisationName;
+		    HasTobaccoLinks = hasTobaccoLinks;
 		    TobaccoDisclosure = tobaccoDisclosure;
 		    SubmissionAnswer = new HashSet<SubmissionAnswer>();
 		    SubmissionComment = new HashSet<SubmissionComment>();

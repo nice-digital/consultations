@@ -1,3 +1,4 @@
+using System;
 using Comments.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,6 +28,10 @@ namespace Comments.Controllers.Api
 			{
 				return BadRequest(ModelState);
 			}
+		    if (!submission.HasTobaccoLinks && !string.IsNullOrWhiteSpace(submission.TobaccoDisclosure))
+		    {
+				throw new ArgumentException(nameof(submission.TobaccoDisclosure));
+		    }
 
 			var result = _submitService.Submit(submission);
 			var invalidResult = Validate(result.validate, _logger);

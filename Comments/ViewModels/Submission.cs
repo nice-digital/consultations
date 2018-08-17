@@ -37,7 +37,10 @@ namespace Comments.ViewModels
 			set => _answers = value;
 		}
 
+	    public bool RespondingAsOrganisation { get; set; }
 	    public string OrganisationName { get; set; }
+
+	    public bool HasTobaccoLinks { get; set; }
 	    public string TobaccoDisclosure { get; set; }
 
 		public IList<string> SourceURIs

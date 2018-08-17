@@ -7,8 +7,11 @@ export const SubmitResponseDialog = props => {
 		validToSubmit,
 		submitConsultation,
 		inputChangeHandler,
+		respondingAsOrganisation, //TODO: use this field
 		organisationName,
-		tobaccoDisclosure } = props;
+		hasTobaccoLinks, //TODO: use this field
+		tobaccoDisclosure,
+	} = props;
 
 	return (
 		<Fragment>

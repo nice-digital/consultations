@@ -51,7 +51,9 @@ type StateType = {
 	sort: string,
 	supportsDownload: boolean,
 	loading: boolean,
+	respondingAsOrganisation: boolean,
 	organisationName: string,
+	hasTobaccoLinks: boolean,
 	tobaccoDisclosure: string,
 };
 
@@ -72,8 +74,11 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			questions: [], //this contains all the questions, not just the ones displayed to the user. the show property defines whether the question is filtered out from view.
 			sort: "DocumentAsc",
 			supportsDownload: false,
+			respondingAsOrganisation: false,
 			organisationName: "",
+			hasTobaccoLinks: false,
 			tobaccoDisclosure: "",
+
 		};
 
 		let preloadedData = {};
@@ -114,7 +119,6 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 				supportsDownload: preloadedConsultationData.consultationState.supportsDownload,
 				viewSubmittedComments: false,
 				organisationName: preloadedCommentsData.organisationName,
-				tobaccoDisclosure: "",
 			};
 		}
 	}
@@ -416,7 +420,9 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																			validToSubmit={this.state.validToSubmit}
 																			submitConsultation={this.submitConsultation}
 																			inputChangeHandler={this.inputChangeHandler}
+																			respondingAsOrganisation={this.state.respondingAsOrganisation}
 																			organisationName={this.state.organisationName}
+																			hasTobaccoLinks={this.state.hasTobaccoLinks}
 																			tobaccoDisclosure={this.state.tobaccoDisclosure}
 																		/>
 																	</div>																	

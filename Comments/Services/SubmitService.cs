@@ -43,7 +43,7 @@ namespace Comments.Services
 			if (hasSubmitted)
 				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "User has already submitted."));
 
-			var submissionToSave = _context.InsertSubmission(_currentUser.UserId.Value, submission.OrganisationName, submission.TobaccoDisclosure);
+			var submissionToSave = _context.InsertSubmission(_currentUser.UserId.Value, submission.RespondingAsOrganisation, submission.OrganisationName, submission.HasTobaccoLinks, submission.TobaccoDisclosure);
 
 			var submittedStatus = _context.GetStatus(StatusName.Submitted);
 
