@@ -50,6 +50,7 @@ type StateType = {
 	questions: Array<QuestionType>,
 	sort: string,
 	supportsDownload: boolean,
+	loading: boolean,
 };
 
 export class ReviewListPage extends Component<PropsType, StateType> {
@@ -307,11 +308,11 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 										subtitle2={this.state.userHasSubmitted ? "" : "Once they have been submitted you will not be able to edit them further or add any extra comments."}
 										reference={reference}
 										consultationState={this.state.consultationData.consultationState}/>
-									{this.state.supportsDownload && 
-										<div className="clearfix">
+									{this.state.supportsDownload && 		
+										<div className="clearfix">								
 											<button className="btn btn--secondary right mr--0">Download your response</button>
 										</div>
-									}
+									}									
 									<UserContext.Consumer>
 										{ (contextValue: ContextType) => {
 											return (
@@ -336,11 +337,16 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																	</div>
 																</div>
 															</div>
-															: 
-															(
-																<StickyContainer className="grid">
-																	<div data-g="12 md:9 md:push:3">
-																		<ResultsInfo count={commentsToShow.length + questionsToShow.length}
+															: (
+																<div>
+																	<div data-g="12 md:3" className="sticky">
+																		<FilterPanel filters={this.state.commentsData.filters} path={this.state.path} />
+																	</div>
+																	<div data-g="12 md:9">
+																		<ResultsInfo commentCount={commentsToShow.length}
+																			showCommentsCount={this.state.consultationData.consultationState.shouldShowCommentsTab}
+																			questionCount={questionsToShow.length}
+																			showQuestionsCount={this.state.consultationData.consultationState.shouldShowQuestionsTab}
 																			sortOrder={this.state.sort}
 																			appliedFilters={this.getAppliedFilters()}
 																			path={this.state.path}
@@ -355,7 +361,6 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																							return (
 																								<Question
 																									readOnly={!this.state.allowComments || this.state.userHasSubmitted}
-																									isVisible={this.props.isVisible}
 																									key={question.questionId}
 																									unique={`Comment${question.questionId}`}
 																									question={question}
@@ -404,8 +409,8 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																							<p className="hero__intro">You are about to submit your final response to NICE</p>
 																							<p>After submission you won't be able to:</p>
 																							<ul>
-																								<li>edit your comments further</li>
-																								<li>add any extra comments.</li>
+																								<li>edit your response further</li>
+																								<li>add any extra information.</li>
 																							</ul>
 																							<UserContext.Consumer>
 																								{contextValue => {
@@ -430,17 +435,8 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																				</div>
 																			</div>
 																		}
-																	</div>
-																	<div data-g="12 md:3 md:pull:9">
-																		<Sticky disableHardwareAcceleration>
-																			{({ style }) => (
-																				<div style={style}>
-																					<FilterPanel filters={this.state.commentsData.filters} path={this.state.path} />
-																				</div>
-																			)}
-																		</Sticky>
-																	</div>
-																</StickyContainer>
+																	</div>																	
+																</div>
 															)
 													)
 											);
