@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, {Component, Fragment} from "react";
 
 export class SubmitResponseDialog extends Component {
@@ -8,6 +7,7 @@ export class SubmitResponseDialog extends Component {
 		this.state = {
 			showOrganisationInput: false,
 			showTobaccoInput: false,
+			mandatoryQuestionsAreValid: false,
 		};
 	}
 
@@ -19,7 +19,13 @@ export class SubmitResponseDialog extends Component {
 			submitConsultation,
 			inputChangeHandler,
 			organisationName,
-			tobaccoDisclosure } = this.props;
+			tobaccoDisclosure,
+			respondingAsOrganisation,
+			hasTobaccoLinks } = this.props;
+		const {
+			showOrganisationInput,
+			showTobaccoInput,
+			mandatoryQuestionsAreValid } = this.state;
 		return(
 			<Fragment>
 				{userHasSubmitted ?
@@ -29,31 +35,6 @@ export class SubmitResponseDialog extends Component {
 								<div className="hero__copy">
 									<p className="hero__intro" data-qa-sel="submitted-text">Thank you, your response has been submitted.</p>
 								</div>
-=======
-import React, {Fragment} from "react";
-
-export const SubmitResponseDialog = props => {
-	const {
-		isAuthorised,
-		userHasSubmitted,
-		validToSubmit,
-		submitConsultation,
-		inputChangeHandler,
-		respondingAsOrganisation, //TODO: use this field
-		organisationName,
-		hasTobaccoLinks, //TODO: use this field
-		tobaccoDisclosure,
-	} = props;
-
-	return (
-		<Fragment>
-			{userHasSubmitted ?
-				<div className="hero">
-					<div className="hero__container">
-						<div className="hero__body">
-							<div className="hero__copy">
-								<p className="hero__intro" data-qa-sel="submitted-text">Thank you, your response has been submitted.</p>
->>>>>>> 1028ae9f3f4be40ca42af403eb09874cdc2ea888
 							</div>
 						</div>
 					</div>
@@ -106,7 +87,7 @@ export const SubmitResponseDialog = props => {
 
 									</div>
 
-									{this.state.showOrganisationInput &&
+									{showOrganisationInput &&
 										<div className="form__group form__group--text">
 											<label htmlFor="organisationName" className="form__label">
 												Enter the name of your organisation
@@ -156,7 +137,7 @@ export const SubmitResponseDialog = props => {
 
 									</div>
 
-									{this.state.showTobaccoInput &&
+									{showTobaccoInput &&
 										<div className="form__group form__group--textarea">
 											<label htmlFor="tobaccoDisclosure" className="form__label">
 												Please provide details
@@ -171,7 +152,7 @@ export const SubmitResponseDialog = props => {
 									<Fragment>
 										<h3 className="mt--0">Ready to submit?</h3>
 										<button
-											disabled={!validToSubmit}
+											disabled={!validToSubmit && mandatoryQuestionsAreValid}
 											className="btn btn--cta"
 											data-qa-sel="submit-comment-button"
 											onClick={submitConsultation}>
