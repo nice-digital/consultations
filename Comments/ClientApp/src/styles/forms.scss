@@ -4,11 +4,16 @@
 
 // sass-lint:disable class-name-format
 
+$radio-base-size: 32px;
+
+// todo: remove this when the form stuff is in the design system
+$colour-border-focus: $colour-nice-blue-3;
+
 .form {
   &__fieldset {
+    border: rem($spacing-xx-small) solid $colour-border;
     margin-bottom: rem($spacing-medium);
     padding: rem($spacing-small);
-    border: rem($spacing-xx-small) solid $colour-border;
   }
 
   &__legend {
@@ -19,13 +24,11 @@
 
   &__group {
     margin-bottom: rem($spacing-medium);
-    &:last-of-type {
-      margin-bottom: rem($spacing-medium);
-    }
 
     &--error {
       .form__input,
-      .form__radioCheck {
+      .form__radio,
+      .form__checkbox {
         background-color: $colour-error-background;
         border-color: $colour-nice-white;
         outline: $colour-error rem($spacing-x-small) solid;
@@ -41,16 +44,12 @@
       }
     }
 
-    &--checkbox {
-
-    }
-
     &--radio {
+      @include clearfix;
       clear: left;
       display: block;
-      padding-left: rem($spacing-x-large);
+      padding-left: $radio-base-size * 1.4;
       position: relative;
-      @include clearfix();
     }
 
     &--inline {
@@ -63,7 +62,7 @@
     }
 
     &--stacked {
-      margin-bottom: rem($spacing-x-small);
+      margin-bottom: rem($spacing-small);
     }
   }
 
@@ -73,7 +72,11 @@
     width: 100%;
 
     &:focus {
-      outline: $colour-focus rem($spacing-x-small) solid;
+      outline: $colour-border-focus rem($spacing-x-small) solid;
+    }
+
+    @include mq($from: sm) {
+      width: rem($nice-breakpoint-xs);
     }
 
     &--file,
@@ -83,23 +86,29 @@
     }
 
     &--textarea {
-      height: 8rem;
+      height: 8em; // default textarea 8 characters tall
     }
   }
 
-  // this is the radio / check equivalent of form__input
-  &__radioCheck {
-    &--radio {
-      height: rem($spacing-medium * 2);
-      left: 0;
-      margin: 0;
-      opacity: 0;
-      position: absolute;
-      top: 0;
-      width: rem($spacing-medium * 2);
-      &:checked + label:after {
-        opacity: 1;
+  &__radio {
+    cursor: pointer;
+    height: $radio-base-size;
+    left: 0;
+    margin: 0;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    width: $radio-base-size;
+
+    &:checked + label:after { // sass-lint:disable-line force-pseudo-nesting pseudo-element
+      opacity: 1;
+    }
+
+    &:focus {
+      & + label:before { // sass-lint:disable-line force-pseudo-nesting pseudo-element
+        box-shadow: 0 0 0 ($radio-base-size / 16) $colour-border-focus;
       }
+
     }
   }
 
@@ -110,31 +119,31 @@
 
     &--radio {
       cursor: pointer;
-      float: left;
-      padding: rem($spacing-small) 0;
-      // main circle border
+      padding: ($radio-base-size / 8) 0;
+
+      // radio - outside circle
       &::before {
-        background: transparent;
-        border: 2px solid $colour-nice-black;
+        border: ($radio-base-size / 16) solid $colour-nice-black;
         border-radius: 50%;
         content: '';
-        height: rem($spacing-medium * 2);
+        height: $radio-base-size;
         left: 0;
         position: absolute;
-        top: rem($spacing-medium / 4);
-        width: rem($spacing-medium * 2);
+        top: 0;
+        width: $radio-base-size;
       }
-      // dot inside the label
+
+      // radio - center dot
       &::after {
-        border: rem($spacing-medium / 2) solid $colour-nice-black;
+        background: $colour-nice-black;
         border-radius: 50%;
         content: '';
-        height: 0;
-        left: rem($spacing-medium / 2);
+        height: ($radio-base-size / 2);
+        left: ($radio-base-size / 4);
         opacity: 0;
         position: absolute;
-        top: rem($spacing-medium / 1.3);
-        width: 0;
+        top: ($radio-base-size / 4);
+        width: ($radio-base-size / 2);
       }
     }
   }
