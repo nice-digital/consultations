@@ -41,28 +41,23 @@ namespace Comments.Test.UnitTests
 		    //var context = new ConsultationsContext(_options, userService, _fakeEncryption);
 		    var authenticateService = new FakeAuthenticateService(authenticated: true);
 
-			//AddCommentsAndQuestionsAndAnswers(sourceURI, "My Comment Text", "1 My Question Text", "My Answer Text", userId, (int)StatusName.Submitted, _context);
-			//AddCommentsAndQuestionsAndAnswers(sourceURI, "A second comment", "2 A second question", "A second answer", userId, (int)StatusName.Submitted, _context);
-			//AddCommentsAndQuestionsAndAnswers(sourceURI, "Yet another comment", "3 Yet another question", "Yet another answer", userId, (int)StatusName.Submitted, _context);
-			//AddCommentsAndQuestionsAndAnswers(sourceURI, "Another users comment", "4 Another users question", "Another users answer", Guid.NewGuid(), (int)StatusName.Submitted, _context);
-			//AddCommentsAndQuestionsAndAnswers(sourceURI, "Not submitted comment", "5 Not submitted question", "Not submitted answer", userId, (int)StatusName.Draft, _context);
-
-			locationId = AddLocation("consultations://./consultation/1/document/1", _context);
+			locationId = AddLocation("consultations://./consultation/1", _context);
 			AddComment(locationId, "Just a comment", false, userId, (int)StatusName.Submitted, _context);
 			locationId = AddLocation("consultations://./consultation/1/document/2/chapter/guidance", _context);
 			AddComment(locationId, "Another just a comment", false, userId, (int)StatusName.Draft, _context);
-			locationId = AddLocation("consultations://./consultation/1/document/2/chapter/guidance", _context);
+			locationId = AddLocation("consultations://./consultation/1/document/2", _context);
 			AddComment(locationId, "Submitted comment", false, userId, (int)StatusName.Submitted, _context);
 
 			var questionTypeId = AddQuestionType("My Question Type", false, true, 1, _context);
 			locationId = AddLocation("consultations://./consultation/1/document/2/chapter/guidance", _context);
 			var questionId = AddQuestion(locationId, questionTypeId, "Question 1", _context);
 			AddAnswer(questionId, userId, "This is a submitted answer", (int)StatusName.Submitted, _context);
-		    AddAnswer(questionId, Guid.NewGuid(), "An answer to the same question by another user", (int)StatusName.Submitted, _context);
-		    AddAnswer(questionId, userId, "This is a draft answer", (int)StatusName.Draft, _context);
+			AddAnswer(questionId, Guid.NewGuid(), "An answer to the same question by another user", (int)StatusName.Submitted, _context);
+			AddAnswer(questionId, userId, "This is a draft answer", (int)StatusName.Draft, _context);
 
 			locationId = AddLocation("consultations://./consultation/1/document/2/chapter/guidance", _context);
-			questionId = AddQuestion(locationId, questionTypeId, "Question 2", _context);
+		    questionTypeId = AddQuestionType("another Question Type", false, true, 1, _context);
+			AddQuestion(locationId, questionTypeId, "Without an answer", _context);
 			//AddAnswer(questionId, userId, "This is a draft answer", (int)StatusName.Draft, _context);
 
 			//locationId = AddLocation("consultations://./consultation/1/document/2/chapter/guidance", _context);
