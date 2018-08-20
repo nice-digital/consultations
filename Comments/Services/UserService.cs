@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Comments.Common;
 using Comments.ViewModels;
 using Microsoft.AspNetCore.Http;
@@ -11,6 +13,8 @@ namespace Comments.Services
     {
         User GetCurrentUser();
 	    SignInDetails GetCurrentUserSignInDetails(string returnURL);
+	    string GetDisplayNameForUserId(Guid userId);
+	    IDictionary<Guid, string> GetDisplayNamesForMultipleUserIds(IEnumerable<Guid> userIds);
     }
 
     public class UserService : IUserService
@@ -39,5 +43,15 @@ namespace Comments.Services
 
 			return new SignInDetails(user, signInURL, registerURL);
 		}
+
+	    public string GetDisplayNameForUserId(Guid userId)
+	    {
+		    return _authenticateService.FindUser(userId)?.DisplayName;
+	    }
+
+	    public IDictionary<Guid, string> GetDisplayNamesForMultipleUserIds(IEnumerable<Guid> userIds)
+	    {
+		    return userIds.Distinct().ToDictionary(userId => userId, GetDisplayNameForUserId);
+	    }
     }
 }
