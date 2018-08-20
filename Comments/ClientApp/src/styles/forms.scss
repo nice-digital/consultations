@@ -75,9 +75,9 @@ $colour-border-focus: $colour-nice-blue-3;
       outline: $colour-border-focus rem($spacing-x-small) solid;
     }
 
-    @include mq($from: sm) {
-      width: rem($nice-breakpoint-xs);
-    }
+    //@include mq($from: sm) {
+    //  width: rem($nice-breakpoint-xs);
+    //}
 
     &--file,
     &--range {
