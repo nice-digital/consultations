@@ -74,9 +74,9 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			questions: [], //this contains all the questions, not just the ones displayed to the user. the show property defines whether the question is filtered out from view.
 			sort: "DocumentAsc",
 			supportsDownload: false,
-			respondingAsOrganisation: false,
+			respondingAsOrganisation: "",
 			organisationName: "",
-			hasTobaccoLinks: false,
+			hasTobaccoLinks: "",
 			tobaccoDisclosure: "",
 
 		};
@@ -118,7 +118,10 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 				sort: preloadedCommentsData.sort,
 				supportsDownload: preloadedConsultationData.consultationState.supportsDownload,
 				viewSubmittedComments: false,
-				organisationName: preloadedCommentsData.organisationName,
+				organisationName: preloadedCommentsData.organisationName || "",
+				respondingAsOrganisation: "",
+				hasTobaccoLinks: "",
+				tobaccoDisclosure: "",
 			};
 		}
 	}
@@ -271,7 +274,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		});
 	};
 
-	inputChangeHandler = e => {
+	fieldsChangeHandler = (e: SyntheticInputEvent) => {
 		this.setState({
 			[e.target.name]: e.target.value,
 		});
@@ -419,7 +422,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																			userHasSubmitted={this.state.userHasSubmitted}
 																			validToSubmit={this.state.validToSubmit}
 																			submitConsultation={this.submitConsultation}
-																			inputChangeHandler={this.inputChangeHandler}
+																			fieldsChangeHandler={this.fieldsChangeHandler}
 																			respondingAsOrganisation={this.state.respondingAsOrganisation}
 																			organisationName={this.state.organisationName}
 																			hasTobaccoLinks={this.state.hasTobaccoLinks}
