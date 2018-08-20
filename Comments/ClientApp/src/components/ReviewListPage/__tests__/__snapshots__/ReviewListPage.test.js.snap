@@ -625,59 +625,113 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                           add any extra comments.
                         </li>
                       </ul>
-                      <fieldset
-                        className="form__fieldset"
-                      >
-                        <legend
-                          className="form__legend"
-                        >
-                          Please answer the below questions before submitting
-                        </legend>
+                      <p>
+                        You must answer the following questions before you submit
+                      </p>
+                      <p>
+                        Are you responding on behalf of an organisation?
+                      </p>
+                      <div>
                         <div
-                          className="form__group form__group--text"
+                          className="form__group form__group--radio form__group--inline"
                         >
-                          <label
-                            className="form__label"
-                            htmlFor="organisationName"
-                          >
-                            Organisation
-                          </label>
                           <input
-                            className="form__input"
-                            id="organisationName"
-                            name="organisationName"
+                            checked={false}
+                            className="form__radio"
+                            id="respondingAsOrganisation--true"
+                            name="respondingAsOrganisation"
                             onChange={[Function]}
-                            type="text"
+                            type="radio"
+                            value="yes"
                           />
-                          <div
-                            className="form__hint form__hint--inverse"
+                          <label
+                            className="form__label form__label--radio form__label--radio--inverted"
+                            htmlFor="respondingAsOrganisation--true"
                           >
-                            If you are commenting on behalf of an organisation, please enter the organisation name
-                          </div>
+                            Yes
+                          </label>
                         </div>
                         <div
-                          className="form__group form__group--textarea"
+                          className="form__group form__group--radio form__group--inline"
                         >
-                          <label
-                            className="form__label"
-                            htmlFor="tobaccoDisclosure"
-                          >
-                            Disclose tobacco industry links
-                          </label>
-                          <textarea
-                            className="form__input form__input--textarea"
-                            id="tobaccoDisclosure"
-                            name="tobaccoDisclosure"
+                          <input
+                            checked={false}
+                            className="form__radio"
+                            id="respondingAsOrganisation--false"
+                            name="respondingAsOrganisation"
                             onChange={[Function]}
-                            value=""
+                            type="radio"
+                            value="no"
                           />
-                          <div
-                            className="form__hint form__hint--inverse"
+                          <label
+                            className="form__label form__label--radio form__label--radio--inverted"
+                            htmlFor="respondingAsOrganisation--false"
                           >
-                            Please disclose whether you or the organisation who's behalf on which you are commenting has any past or current, direct or indirect links to, or receives funding from, the tobacco industry.
-                          </div>
+                            No
+                          </label>
                         </div>
-                      </fieldset>
+                      </div>
+                      <p>
+                        Do you or the organisation you represent have any links with the tobacco industry?
+                      </p>
+                      <p
+                        className="mb--0"
+                      >
+                        This includes:
+                      </p>
+                      <ul
+                        className="mt--0"
+                      >
+                        <li>
+                          current or past links
+                        </li>
+                        <li>
+                          direct or indirect links
+                        </li>
+                        <li>
+                          receiving funding from the tobacco industry.
+                        </li>
+                      </ul>
+                      <div>
+                        <div
+                          className="form__group form__group--radio form__group--inline"
+                        >
+                          <input
+                            checked={false}
+                            className="form__radio"
+                            id="hasTobaccoLinks--true"
+                            name="hasTobaccoLinks"
+                            onChange={[Function]}
+                            type="radio"
+                            value="yes"
+                          />
+                          <label
+                            className="form__label form__label--radio form__label--radio--inverted"
+                            htmlFor="hasTobaccoLinks--true"
+                          >
+                            Yes
+                          </label>
+                        </div>
+                        <div
+                          className="form__group form__group--radio form__group--inline"
+                        >
+                          <input
+                            checked={false}
+                            className="form__radio"
+                            id="hasTobaccoLinks--false"
+                            name="hasTobaccoLinks"
+                            onChange={[Function]}
+                            type="radio"
+                            value="no"
+                          />
+                          <label
+                            className="form__label form__label--radio form__label--radio--inverted"
+                            htmlFor="hasTobaccoLinks--false"
+                          >
+                            No
+                          </label>
+                        </div>
+                      </div>
                       <h3
                         className="mt--0"
                       >
