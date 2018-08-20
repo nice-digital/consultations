@@ -14,19 +14,14 @@ export const SubmitResponseDialog = (props) => {
 		hasTobaccoLinks } = props;
 
 	function mandatoryQuestionsAreValid() {
-		let organisationIsValid = false;
-		let tobaccoIsValid = false;
-		if (respondingAsOrganisation === "yes" && organisationName.length > 0) { // if responding as org is selected and there's something in the name box
-			organisationIsValid = true; // org is yes and something's been entered
-		} else if (respondingAsOrganisation === "no") {
-			organisationIsValid = true; // org is no, but at least it's been answered
+		let organisationIsValid, tobaccoIsValid = false;
+		if ((respondingAsOrganisation === "yes" && organisationName.length > 0) || respondingAsOrganisation === "no") {
+			organisationIsValid = true;
 		}
-		if (hasTobaccoLinks === "yes" && tobaccoDisclosure.length > 0) {
-			tobaccoIsValid = true; // tobacco is yes and something's been entered
-		} else if (hasTobaccoLinks === "no") {
-			tobaccoIsValid = true; // tobacco is no, but at least it's been answered
+		if ((hasTobaccoLinks === "yes" && tobaccoDisclosure.length > 0) || hasTobaccoLinks === "no") {
+			tobaccoIsValid = true;
 		}
-		return organisationIsValid && tobaccoIsValid; // one of the radio buttons hasn't been selected
+		return organisationIsValid && tobaccoIsValid;
 	}
 
 	return(
