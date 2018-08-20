@@ -222,6 +222,9 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		const questions = this.state.questions;
 		const organisationName = this.state.organisationName;
 		const tobaccoDisclosure = this.state.tobaccoDisclosure;
+		const respondingAsOrganisation = this.state.respondingAsOrganisation === "yes";
+		const hasTobaccoLinks = this.state.hasTobaccoLinks === "yes";
+
 		let answersToSubmit = [];
 		questions.forEach(function(question){
 			if (question.answers != null){
@@ -231,8 +234,10 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		let submission = {
 			comments,
 			answers: answersToSubmit, 
-			organisationName,
-			tobaccoDisclosure,
+			organisationName: respondingAsOrganisation ? organisationName : null,
+			tobaccoDisclosure: hasTobaccoLinks ? tobaccoDisclosure : null,
+			respondingAsOrganisation,
+			hasTobaccoLinks,
 		};
 		load("submit", undefined, [], {}, "POST", submission, true)
 			.then(() => {
