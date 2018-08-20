@@ -102,6 +102,7 @@ $colour-border-focus: $colour-nice-blue-3;
 
     &:checked + label:after { // sass-lint:disable-line force-pseudo-nesting pseudo-element
       opacity: 1;
+      color: white;
     }
 
     &:focus {
@@ -144,6 +145,15 @@ $colour-border-focus: $colour-nice-blue-3;
         position: absolute;
         top: ($radio-base-size / 4);
         width: ($radio-base-size / 2);
+      }
+
+      &--inverted {
+        &::before {
+          border: ($radio-base-size / 16) solid $colour-nice-white;
+        }
+        &::after {
+          background: $colour-nice-white;
+        }
       }
     }
   }

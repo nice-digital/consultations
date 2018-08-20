@@ -66,9 +66,8 @@ export const SubmitResponseDialog = (props) => {
 											onChange={fieldsChangeHandler}
 											value={"yes"}
 										/>
-										{/* todo: add fieldchangehandlers here */}
 										<label
-											className="form__label form__label--radio"
+											className="form__label form__label--radio form__label--radio--inverted"
 											htmlFor="respondingAsOrganisation--true">
 											Yes
 										</label>
@@ -85,7 +84,7 @@ export const SubmitResponseDialog = (props) => {
 											value={"no"}
 										/>
 										<label
-											className="form__label form__label--radio"
+											className="form__label form__label--radio form__label--radio--inverted"
 											htmlFor="respondingAsOrganisation--false">
 											No
 										</label>
@@ -124,7 +123,7 @@ export const SubmitResponseDialog = (props) => {
 											onChange={fieldsChangeHandler}
 										/>
 										<label
-											className="form__label form__label--radio"
+											className="form__label form__label--radio form__label--radio--inverted"
 											htmlFor="hasTobaccoLinks--true">
 											Yes
 										</label>
@@ -140,7 +139,7 @@ export const SubmitResponseDialog = (props) => {
 											checked={hasTobaccoLinks === "no"}
 											value={"no"}/>
 										<label
-											className="form__label form__label--radio"
+											className="form__label form__label--radio form__label--radio--inverted"
 											htmlFor="hasTobaccoLinks--false">
 											No
 										</label>
