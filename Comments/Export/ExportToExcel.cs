@@ -39,6 +39,19 @@ namespace Comments.Export
 			return stream;
 		}
 
+		(string ConsultationName, string DocumentName, string ChapterName) GetLocationData(Comments.Models.Location location)
+		{
+			var sourceURI = location.SourceURI;
+			ConsultationsUriElements URIElements = ConsultationsUri.ParseConsultationsUri(sourceURI);
+
+			var consultationDetails = _consultationService.GetConsultation(URIElements.ConsultationId, false);
+			var documents = _consultationService.GetDocuments(URIElements.ConsultationId);
+			var documentDetail = documents.FirstOrDefault(x => x.DocumentId == URIElements.DocumentId);
+			var chapterDetail = documentDetail?.Chapters.First(c => c.Slug == URIElements.ChapterSlug);
+
+			return (consultationDetails.ConsultationName, documentDetail?.Title, chapterDetail?.Slug);
+		}
+
 		void AppendHeaderRow(SheetData sheet)
 		{
 			var headerRow = new Row();
@@ -77,22 +90,22 @@ namespace Comments.Export
 
 			cell = new Cell();
 			cell.DataType = CellValues.String;
-			cell.CellValue = new CellValue("Question ID");
-			headerRow.AppendChild(cell);
-
-			cell = new Cell();
-			cell.DataType = CellValues.String;
-			cell.CellValue = new CellValue("Question Text");
-			headerRow.AppendChild(cell);
-
-			cell = new Cell();
-			cell.DataType = CellValues.String;
 			cell.CellValue = new CellValue("Comment ID");
 			headerRow.AppendChild(cell);
 
 			cell = new Cell();
 			cell.DataType = CellValues.String;
 			cell.CellValue = new CellValue("Comment");
+			headerRow.AppendChild(cell);
+
+			cell = new Cell();
+			cell.DataType = CellValues.String;
+			cell.CellValue = new CellValue("Question ID");
+			headerRow.AppendChild(cell);
+
+			cell = new Cell();
+			cell.DataType = CellValues.String;
+			cell.CellValue = new CellValue("Question Text");
 			headerRow.AppendChild(cell);
 
 			cell = new Cell();
@@ -122,98 +135,158 @@ namespace Comments.Export
 		{
 			foreach (var location in locations)
 			{
-				var sourceURI = location.SourceURI;
-				ConsultationsUriElements URIElements = ConsultationsUri.ParseConsultationsUri(sourceURI);
+				var locationDetails = GetLocationData(location);
 
-				var consultationDetails = _consultationService.GetConsultation(URIElements.ConsultationId, false);
-				var documents = _consultationService.GetDocuments(URIElements.ConsultationId);
-				var documentDetail = documents.FirstOrDefault(x => x.DocumentId == URIElements.DocumentId);
-				var chapterDetail = documentDetail?.Chapters.First(c => c.Slug == URIElements.ChapterSlug);
-
-				ICollection<Models.Answer> answers = new List<Answer>();
-				if (location.Question != null && location.Question.Count != 0)
-				{
-					answers = location.Question.First().Answer;
-				}
+				var hasComment = location.Comment.Count != 0;
+				var hasQuestion = location.Question.Count != 0;
+				var hasAnswer = hasQuestion && location.Question.First().Answer.Count != 0;
 				
 				//var submission = location.Comment.First().SubmissionComment.First().Submission.TobaccoDisclosure;
 
 				var dataRow = new Row();
-				Cell cell;
 
-				cell = new Cell();
-				cell.DataType = CellValues.String;
-				cell.CellValue = new CellValue(consultationDetails.Title);
-				dataRow.AppendChild(cell);
+				LocationColumns(dataRow, locationDetails.ConsultationName, locationDetails.DocumentName, locationDetails.ChapterName, location);
+				CommentColumns(dataRow, location);
 
-				cell = new Cell();
-				cell.DataType = CellValues.String;
-				cell.CellValue = new CellValue(documentDetail?.Title);
-				dataRow.AppendChild(cell);
-
-				cell = new Cell();
-				cell.DataType = CellValues.String;
-				cell.CellValue = new CellValue(chapterDetail?.Title);
-				dataRow.AppendChild(cell);
-
-				cell = new Cell();
-				cell.DataType = CellValues.String;
-				cell.CellValue = new CellValue(location.Section);
-				dataRow.AppendChild(cell);
-
-				cell = new Cell();
-				cell.DataType = CellValues.String;
-				cell.CellValue = new CellValue(location.Quote);
-				dataRow.AppendChild(cell);
-
-				cell = new Cell();
-				cell.DataType = CellValues.String;
-				cell.CellValue = new CellValue(location.Comment.Count >= 1 ? location.Comment.First().CreatedByUserId.ToString(): null);
-				dataRow.AppendChild(cell);
-
-				cell = new Cell();
-				cell.DataType = CellValues.String;
-				cell.CellValue = new CellValue(location.Question == null || location.Question.Count ==0  ? null : location.Question.First().QuestionId.ToString());
-				dataRow.AppendChild(cell);
-
-				cell = new Cell();
-				cell.DataType = CellValues.String;
-				cell.CellValue = new CellValue(location.Question == null || location.Question.Count == 0 ? null : location.Question.First().QuestionText);
-				dataRow.AppendChild(cell);
-
-				cell = new Cell();
-				cell.DataType = CellValues.String;
-				cell.CellValue = new CellValue(location.Comment.Count >= 1 ? location.Comment.First().CommentId.ToString(): null);
-				dataRow.AppendChild(cell);
-
-				cell = new Cell();
+				Cell cell = new Cell();
 				cell.DataType = CellValues.String;
 				cell.CellValue = new CellValue(location.Comment.Count >= 1 ? location.Comment.First().CommentText : null);
 				dataRow.AppendChild(cell);
 
-				cell = new Cell();
-				cell.DataType = CellValues.String;
-				cell.CellValue = new CellValue(answers == null || answers.Count == 0 ? null : answers.First().AnswerId.ToString());
-				dataRow.AppendChild(cell);
+				var count = 0;
+				foreach (Answer answer in (hasAnswer)
+					? location.Question?.First().Answer
+					: Enumerable.Empty<Models.Answer>())
+				{
+					if (count > 0)
+					{
+						sheet.AppendChild(dataRow);
+						dataRow = new Row();
+						LocationColumns(dataRow, locationDetails.ConsultationName, locationDetails.DocumentName, locationDetails.ChapterName, location);
+						AddBlankCells(3, dataRow);
+					}
 
-				cell = new Cell();
-				cell.DataType = CellValues.String;
-				cell.CellValue = new CellValue(answers == null || answers.Count == 0 ? null : answers?.First().AnswerText);
-				dataRow.AppendChild(cell);
+					QuestionColumns(location, dataRow);
+					AnswerColumns(dataRow, hasAnswer ? location.Question.First().Answer : new List<Answer>());
 
-				cell = new Cell();
-				cell.DataType = CellValues.String;
-				cell.CellValue = new CellValue("Org");
-				dataRow.AppendChild(cell);
+					count++;
+				}
 
-				cell = new Cell();
-				cell.DataType = CellValues.String;
-				cell.CellValue = new CellValue("Tobacco");
-				dataRow.AppendChild(cell);
+				if (!hasQuestion)
+				{
+					AddBlankCells(2, dataRow);
+				}
+				if (!hasAnswer)
+				{
+					AddBlankCells(2, dataRow);
+				}
+
+				SubmissionColumns(dataRow);
 
 				sheet.AppendChild(dataRow);
 			}
 		}
+
+		#region AddCells
+
+		private void QuestionColumns(Comments.Models.Location location, Row dataRow)
+		{
+			Cell cell = new Cell();
+			cell.DataType = CellValues.String;
+			cell.CellValue = new CellValue(location.Question == null || location.Question.Count == 0
+				? null
+				: location.Question.First().QuestionId.ToString());
+			dataRow.AppendChild(cell);
+
+			cell = new Cell();
+			cell.DataType = CellValues.String;
+			cell.CellValue = new CellValue(location.Question == null || location.Question.Count == 0
+				? null
+				: location.Question.First().QuestionText);
+			dataRow.AppendChild(cell);
+		}
+
+		private void AnswerColumns(Row dataRow, ICollection<Models.Answer> answers)
+		{ 
+			Cell cell = new Cell();
+			cell.DataType = CellValues.String;
+			cell.CellValue =
+				new CellValue(answers == null || answers.Count == 0 ? null : answers.First().AnswerId.ToString());
+			dataRow.AppendChild(cell);
+
+			cell = new Cell();
+			cell.DataType = CellValues.String;
+			cell.CellValue = new CellValue(answers == null || answers.Count == 0 ? null : answers?.First().AnswerText);
+			dataRow.AppendChild(cell);
+		}
+
+		private void LocationColumns(Row dataRow, string consultationName, string documentName, string chapterName, Models.Location location)
+		{
+			Cell cell;
+
+			cell = new Cell();
+			cell.DataType = CellValues.String;
+			cell.CellValue = new CellValue(consultationName);
+			dataRow.AppendChild(cell);
+
+			cell = new Cell();
+			cell.DataType = CellValues.String;
+			cell.CellValue = new CellValue(documentName);
+			dataRow.AppendChild(cell);
+
+			cell = new Cell();
+			cell.DataType = CellValues.String;
+			cell.CellValue = new CellValue(chapterName);
+			dataRow.AppendChild(cell);
+
+			cell = new Cell();
+			cell.DataType = CellValues.String;
+			cell.CellValue = new CellValue(location.Section);
+			dataRow.AppendChild(cell);
+
+			cell = new Cell();
+			cell.DataType = CellValues.String;
+			cell.CellValue = new CellValue(location.Quote);
+			dataRow.AppendChild(cell);
+		}
+
+		private void CommentColumns(Row dataRow, Models.Location location)
+		{
+			Cell cell = new Cell();
+			cell.DataType = CellValues.String;
+			cell.CellValue = new CellValue(location.Comment.Count >= 1 ? location.Comment.First().CreatedByUserId.ToString() : null);
+			dataRow.AppendChild(cell);
+
+			cell = new Cell();
+			cell.DataType = CellValues.String;
+			cell.CellValue = new CellValue(location.Comment.Count >= 1 ? location.Comment.First().CommentId.ToString() : null);
+			dataRow.AppendChild(cell);
+		}
+
+		private void SubmissionColumns(Row dataRow)
+		{
+			Cell cell = new Cell();
+			cell.DataType = CellValues.String;
+			cell.CellValue = new CellValue("Org");
+			dataRow.AppendChild(cell);
+
+			cell = new Cell();
+			cell.DataType = CellValues.String;
+			cell.CellValue = new CellValue("Tobacco");
+			dataRow.AppendChild(cell);
+		}
+
+		private void AddBlankCells(int numberOfCellsToAdd, Row dataRow)
+		{
+			Cell cell;
+			for (int i = 0; i < numberOfCellsToAdd; i++)
+			{
+				cell = new Cell();
+				dataRow.AppendChild(cell);
+			}
+		}
+		
+		#endregion
 
 		public void ToConvert(IEnumerable<Comments.Models.Location> locations, string consultation, string Document, string chapter)
 		{

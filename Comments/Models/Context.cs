@@ -85,9 +85,13 @@ namespace Comments.Models
 
 			if (getSubmitted)
 			{
-				var filteredData = data.Where(l => l.Comment.Any(c => c.StatusId == (int)StatusName.Submitted));// ||
-												  // (l.Question != null ? (l.Question.FirstOrDefault().Answer.Any(c => c.StatusId == (int)StatusName.Submitted)) : false));
-				                                   
+				var filteredData = data.Where(l =>
+												(l.Comment != null && l.Comment.Count != 0 ? l.Comment.Any(c => c.StatusId == (int)StatusName.Submitted) : false)
+												||
+												(l.Question != null && l.Question.Count != 0 ? l.Question.FirstOrDefault().Answer.Any(c => c.StatusId == (int)StatusName.Submitted) : false)
+												);
+
+
 				return filteredData;
 			}
 
