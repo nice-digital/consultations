@@ -3,11 +3,11 @@ using System.Linq;
 
 namespace Comments.ViewModels
 {
-    public class CommentsAndAnswers
+    public class Submission
     {
-	    public CommentsAndAnswers() {} //this is here for the model binding.
+	    public Submission() {} //this is here for the model binding.
 
-	    public CommentsAndAnswers(IList<Comment> comments, IList<Answer> answers)
+	    public Submission(IList<Comment> comments, IList<Answer> answers)
 		{
 			_comments = comments;
 			_answers = answers;
@@ -37,7 +37,13 @@ namespace Comments.ViewModels
 			set => _answers = value;
 		}
 
-	    public IList<string> SourceURIs
+	    public bool RespondingAsOrganisation { get; set; }
+	    public string OrganisationName { get; set; }
+
+	    public bool HasTobaccoLinks { get; set; }
+	    public string TobaccoDisclosure { get; set; }
+
+		public IList<string> SourceURIs
 	    {
 		    get
 		    {

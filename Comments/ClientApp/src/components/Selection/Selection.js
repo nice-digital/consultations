@@ -30,7 +30,7 @@ export class Selection extends Component<PropsType, StateType> {
 
 	getXPathForElement(element) {
 		const idx = (sib, name) => sib 
-			? idx(sib.previousElementSibling, name||sib.localName) + (sib.localName == name)
+			? idx(sib.previousElementSibling, name||sib.localName) + (sib.localName == name) // eslint-disable-line
 			: 1;
 		const segs = elm => !elm || elm.nodeType !== 1 
 			? [""]

@@ -337,7 +337,7 @@ namespace Comments.Test.Infrastructure
 
 	    protected int AddSubmission(Guid userId, ConsultationsContext passedInContext = null)
 	    {
-			var submission = new Submission(userId, DateTime.Now);
+			var submission = new Models.Submission(userId, DateTime.Now, false, null, false, null);
 			if (passedInContext != null)
 			{
 				passedInContext.Submission.Add(submission);

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Comments.Configuration;
+using NICE.Auth.NetCore.Helpers;
 
 namespace Comments.Services
 {
@@ -154,6 +155,7 @@ namespace Comments.Services
 			}
 
 			model.CommentsAndQuestions = FilterCommentsAndQuestions(commentsAndQuestions, model.Type, model.Document);
+			model.OrganisationName = _currentUser.OrganisationName;
 
 			var consultationId = ConsultationsUri.ParseRelativeUrl(relativeURL).ConsultationId;
 			model.Filters = GetFilterGroups(consultationId, commentsAndQuestions, model.Type, model.Document);

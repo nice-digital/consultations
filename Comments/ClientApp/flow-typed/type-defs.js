@@ -12,14 +12,6 @@ declare type ReviewFilterOptionType = {
 	unfilteredResultCount: number
 };
 
-declare type ReviewFilterOptionType = {
-	filteredResultCount: number,
-	id: string,
-	isSelected: boolean,
-	label: string,
-	unfilteredResultCount: number
-};
-
 // See https://github.com/ReactTraining/history#listening
 declare type HistoryLocationType = {
 	pathname: string,
@@ -62,11 +54,6 @@ declare type ConsultationDataType = {
 	supportsQuestions: boolean
 };
 
-type StatusType = {
-	statusId: number,
-	name: string
-};
-
 declare type CommentType = {
 	commentId: number,
 	lastModifiedDate: Date,
@@ -85,12 +72,6 @@ declare type CommentType = {
 	status: StatusType,
 	order: string,
 	section: string,
-};
-
-declare type QuestionTypeType = {
-	description: string,
-	hasTextAnswer: boolean,
-	hasBooleanAnswer: boolean
 };
 
 type StatusType = {
@@ -133,12 +114,12 @@ declare type CommentsAndQuestionsType = {
 	comments: Array<CommentType>,
 	questions: Array<QuestionType>,
 	isAuthorised: boolean,
-	signInURL: string, 
+	signInURL: string,
 	consultationState: ConsultationStateType,
 };
 
 declare type ReviewPageViewModelType = {
 	commentsAndQuestions: CommentsAndQuestionsType,
 	filters: Array<ReviewFilterGroupType>,
-	//QuestionsOrComments[] and Documents[] are only for sending up to the backend. not to use in react. 
+	//QuestionsOrComments[] and Documents[] are only for sending up to the backend. not to use in react.
 };

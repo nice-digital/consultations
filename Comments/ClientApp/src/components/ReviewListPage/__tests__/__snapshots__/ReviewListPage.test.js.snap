@@ -604,7 +604,7 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                   className="hero__container"
                 >
                   <div
-                    className="hero__body "
+                    className="hero__body"
                   >
                     <div
                       className="hero__copy"
@@ -619,13 +619,132 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                       </p>
                       <ul>
                         <li>
-                          edit your response further
+                          edit your comments further
                         </li>
                         <li>
-                          add any extra information.
+                          add any extra comments.
                         </li>
                       </ul>
-                      <undefined />
+                      <p>
+                        You must answer the following questions before you submit
+                      </p>
+                      <p>
+                        Are you responding on behalf of an organisation?
+                      </p>
+                      <div>
+                        <div
+                          className="form__group form__group--radio form__group--inline"
+                        >
+                          <input
+                            checked={false}
+                            className="form__radio"
+                            id="respondingAsOrganisation--true"
+                            name="respondingAsOrganisation"
+                            onChange={[Function]}
+                            type="radio"
+                            value="yes"
+                          />
+                          <label
+                            className="form__label form__label--radio form__label--radio--inverted"
+                            htmlFor="respondingAsOrganisation--true"
+                          >
+                            Yes
+                          </label>
+                        </div>
+                        <div
+                          className="form__group form__group--radio form__group--inline"
+                        >
+                          <input
+                            checked={false}
+                            className="form__radio"
+                            id="respondingAsOrganisation--false"
+                            name="respondingAsOrganisation"
+                            onChange={[Function]}
+                            type="radio"
+                            value="no"
+                          />
+                          <label
+                            className="form__label form__label--radio form__label--radio--inverted"
+                            htmlFor="respondingAsOrganisation--false"
+                          >
+                            No
+                          </label>
+                        </div>
+                      </div>
+                      <p>
+                        Do you or the organisation you represent have any links with the tobacco industry?
+                      </p>
+                      <p
+                        className="mb--0"
+                      >
+                        This includes:
+                      </p>
+                      <ul
+                        className="mt--0"
+                      >
+                        <li>
+                          current or past links
+                        </li>
+                        <li>
+                          direct or indirect links
+                        </li>
+                        <li>
+                          receiving funding from the tobacco industry.
+                        </li>
+                      </ul>
+                      <div>
+                        <div
+                          className="form__group form__group--radio form__group--inline"
+                        >
+                          <input
+                            checked={false}
+                            className="form__radio"
+                            id="hasTobaccoLinks--true"
+                            name="hasTobaccoLinks"
+                            onChange={[Function]}
+                            type="radio"
+                            value="yes"
+                          />
+                          <label
+                            className="form__label form__label--radio form__label--radio--inverted"
+                            htmlFor="hasTobaccoLinks--true"
+                          >
+                            Yes
+                          </label>
+                        </div>
+                        <div
+                          className="form__group form__group--radio form__group--inline"
+                        >
+                          <input
+                            checked={false}
+                            className="form__radio"
+                            id="hasTobaccoLinks--false"
+                            name="hasTobaccoLinks"
+                            onChange={[Function]}
+                            type="radio"
+                            value="no"
+                          />
+                          <label
+                            className="form__label form__label--radio form__label--radio--inverted"
+                            htmlFor="hasTobaccoLinks--false"
+                          >
+                            No
+                          </label>
+                        </div>
+                      </div>
+                      <h3
+                        className="mt--0"
+                      >
+                        Ready to submit?
+                      </h3>
+                      <button
+                        className="btn btn--cta"
+                        data-qa-sel="submit-comment-button"
+                        disabled={true}
+                        onClick={[Function]}
+                      >
+                        Yes, submit my response
+                      </button>
                     </div>
                   </div>
                 </div>

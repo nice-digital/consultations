@@ -1,3 +1,5 @@
+// @flow
+
 import queryString from "query-string";
 //import stringifyObject from "stringify-object";
 
@@ -12,7 +14,7 @@ export function objectToQueryString(obj) {
 		if (obj.hasOwnProperty(p)) {
 			if (Array.isArray(obj[p])){
 				for (let index in obj[p]){
-					str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p][index]));	
+					str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p][index]));
 				}
 			} else{
 				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
@@ -23,8 +25,8 @@ export function objectToQueryString(obj) {
 }
 
 /**
- * Creates an object out of a querys tring
- * 	@param {string} the querystring you'd like to be turned into an object
+ * Creates an object out of a query string
+ * 	@param qryString {string} the querystring you'd like to be turned into an object
  *  @returns obj
  */
 export function queryStringToObject(qryString) {
@@ -60,7 +62,7 @@ export function replaceFormat(stringToReplace, args) {
 }
 
 /**
- * @param String The string in which you want to check for the presence of "http"
+ * @param link String The string in which you want to check for the presence of "http"
  * Detects link that starts with "http"
  * @returns {Boolean}
  */
@@ -76,7 +78,7 @@ export const removeQueryParameter =
 
 		let urlParams = urlParts[1].split(/[&;]/g);
 
-		for (var i = urlParams.length; i-- > 0;) {
+		for (let i = urlParams.length; i-- > 0;) {
 			const parParts = urlParams[i].split("=");
 
 			if (parParts[0].toLowerCase() === parameter.toLowerCase()
@@ -120,7 +122,7 @@ export const getElementPositionWithinDocument = (elem) => {
 			if (elem.id === "root"){
 				break;
 			}
-		} while (elem = elem.parentElement);
+		} while (elem = elem.parentElement); // eslint-disable-line
 	}
 	return reverseString(curindex.trim().replace(new RegExp(/\s/, "g"), "."));
 };
@@ -137,6 +139,6 @@ export const getSectionTitle = (elem) => {
 		if (elem.id === "root"){ //it won't look higher than root.
 			return null;
 		}
-	} while (elem = elem.parentElement);
+	} while (elem = elem.parentElement); // eslint-disable-line
 	return null; //shouldn't really ever be called, as root will get hit if there's no matches.
 };
