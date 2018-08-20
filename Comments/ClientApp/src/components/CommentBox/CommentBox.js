@@ -1,3 +1,5 @@
+// @flow
+
 import React, { Component, Fragment } from "react";
 import Moment from "react-moment";
 
@@ -21,15 +23,15 @@ export class CommentBox extends Component<PropsType, StateType> {
 		super();
 		this.state = {
 			comment: {
-				commentText: ""
+				commentText: "",
 			},
-			unsavedChanges: false
+			unsavedChanges: false,
 		};
 	}
 
 	componentDidMount() {
 		this.setState({
-			comment: this.props.comment
+			comment: this.props.comment,
 		});
 	}
 
@@ -38,7 +40,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 		comment.commentText = e.target.value;
 		this.setState({
 			comment,
-			unsavedChanges: true
+			unsavedChanges: true,
 		});
 	};
 
@@ -49,7 +51,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 		if (hasCommentBeenUpdated()) {
 			return {
 				comment: nextProps.comment,
-				unsavedChanges: false
+				unsavedChanges: false,
 			};
 		}
 		return null;
@@ -65,7 +67,6 @@ export class CommentBox extends Component<PropsType, StateType> {
 			lastModifiedDate,
 			quote,
 			commentId,
-			order,
 		} = this.state.comment;
 		const unsavedChanges = this.state.unsavedChanges;
 		const comment = this.state.comment;

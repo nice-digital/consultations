@@ -35,7 +35,7 @@ namespace Comments.Test.UnitTests
 
 			//Act
 			var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI);
-			var result = submitService.SubmitCommentsAndAnswers(new CommentsAndAnswers(commentsAndQuestions.Comments, new List<ViewModels.Answer>()));
+			var result = submitService.Submit(new ViewModels.Submission(commentsAndQuestions.Comments, new List<ViewModels.Answer>()));
 
 			var comment = commentService.GetComment(commentId);
 
@@ -74,7 +74,7 @@ namespace Comments.Test.UnitTests
 
 			//Act
 			var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI);
-			var result = submitService.SubmitCommentsAndAnswers(new CommentsAndAnswers(new List<ViewModels.Comment>(), commentsAndQuestions.Questions.First().Answers));
+			var result = submitService.Submit(new ViewModels.Submission(new List<ViewModels.Comment>(), commentsAndQuestions.Questions.First().Answers));
 
 			var answer = answerService.GetAnswer(answerId);
 

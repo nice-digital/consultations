@@ -1,3 +1,4 @@
+using System;
 using Comments.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,17 +22,21 @@ namespace Comments.Controllers.Api
 
 		// POST: consultations/api/submit
 		[HttpPost]
-	    public IActionResult Post([FromBody] ViewModels.CommentsAndAnswers commentsAndAnswers)
+	    public IActionResult Post([FromBody] ViewModels.Submission submission)
 	    {
 			if (!ModelState.IsValid)
 			{
 				return BadRequest(ModelState);
 			}
+		    if (!submission.HasTobaccoLinks && !string.IsNullOrWhiteSpace(submission.TobaccoDisclosure))
+		    {
+				throw new ArgumentException(nameof(submission.TobaccoDisclosure));
+		    }
 
-			var result = _submitService.SubmitCommentsAndAnswers(commentsAndAnswers);
+			var result = _submitService.Submit(submission);
 			var invalidResult = Validate(result.validate, _logger);
 			
-			return invalidResult ?? Ok(commentsAndAnswers); //should return comments and answers, might need submission object too
+			return invalidResult ?? Ok(submission); //should return comments and answers, might need submission object too
 	    }
 	}
 }

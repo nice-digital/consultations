@@ -1,15 +1,13 @@
-using System;
 using Comments.Models;
 using Comments.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
-using Comments.Common;
 
 namespace Comments.Services
 {
 	public interface ISubmitService
 	{
-		(int rowsUpdated, Validate validate) SubmitCommentsAndAnswers(CommentsAndAnswers commentsAndAnswers);
+		(int rowsUpdated, Validate validate) Submit(ViewModels.Submission submission);
 	}
 
 	public class SubmitService : ISubmitService
@@ -25,14 +23,14 @@ namespace Comments.Services
 			_currentUser = userService.GetCurrentUser();
 		}
 
-		public (int rowsUpdated, Validate validate) SubmitCommentsAndAnswers(CommentsAndAnswers commentsAndAnswers)
+		public (int rowsUpdated, Validate validate) Submit(ViewModels.Submission submission)
 		{
 			if (!_currentUser.IsAuthorised || !_currentUser.UserId.HasValue)
 				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"Not logged in submitting comments and answers"));
 
 			//if a user is submitting a different users comment, the context will throw an exception.
 
-			var anySourceURI = commentsAndAnswers.SourceURIs.FirstOrDefault();
+			var anySourceURI = submission.SourceURIs.FirstOrDefault();
 			if (anySourceURI == null)
 				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "Could not find SourceURI"));
 
@@ -45,17 +43,17 @@ namespace Comments.Services
 			if (hasSubmitted)
 				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "User has already submitted."));
 
-			var submissionToSave = _context.InsertSubmission(_currentUser.UserId.Value);
+			var submissionToSave = _context.InsertSubmission(_currentUser.UserId.Value, submission.RespondingAsOrganisation, submission.OrganisationName, submission.HasTobaccoLinks, submission.TobaccoDisclosure);
 
 			var submittedStatus = _context.GetStatus(StatusName.Submitted);
 
-			UpdateCommentsModel(commentsAndAnswers.Comments, submissionToSave, submittedStatus);
-			UpdateAnswersModel(commentsAndAnswers.Answers, submissionToSave, submittedStatus);
+			UpdateCommentsModel(submission.Comments, submissionToSave, submittedStatus);
+			UpdateAnswersModel(submission.Answers, submissionToSave, submittedStatus);
 
 			return (rowsUpdated: _context.SaveChanges(), validate: null);
 		}
 
-		private void UpdateCommentsModel(IList<ViewModels.Comment> comments, Submission submission, Models.Status status)
+		private void UpdateCommentsModel(IList<ViewModels.Comment> comments, Models.Submission submission, Models.Status status)
 		{
 			var commentIds = comments.Select(c => c.CommentId).ToList();
 			_context.UpdateCommentStatus(commentIds, status);
@@ -67,7 +65,7 @@ namespace Comments.Services
 			_context.AddSubmissionComments(commentIds, submission.SubmissionId);
 		}
 
-		private void UpdateAnswersModel(IList<ViewModels.Answer> answers, Submission submission, Models.Status status)
+		private void UpdateAnswersModel(IList<ViewModels.Answer> answers, Models.Submission submission, Models.Status status)
 		{
 			var answerIds = answers.Select(a => a.AnswerId).ToList();
 			_context.UpdateAnswerStatus(answerIds, status);

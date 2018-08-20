@@ -2,7 +2,6 @@
 
 import React, { Fragment } from "react";
 
-import Sort from "./../Sort/Sort";
 import AppliedFilter from "./../AppliedFilter/AppliedFilter";
 
 type PropsType = {

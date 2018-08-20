@@ -40,7 +40,7 @@ namespace Comments.Test.IntegrationTests.API.Submit
 			var commentService = new CommentService(_context, userService, authenticateService, _consultationService);
 
 		    var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI);
-		    var viewModel = new CommentsAndAnswers(commentsAndQuestions.Comments, commentsAndQuestions.Questions.First().Answers);
+		    var viewModel = new ViewModels.Submission(commentsAndQuestions.Comments, commentsAndQuestions.Questions.First().Answers);
 		
 			var content = new StringContent(JsonConvert.SerializeObject(viewModel), Encoding.UTF8, "application/json");
 
@@ -49,7 +49,7 @@ namespace Comments.Test.IntegrationTests.API.Submit
 		    response.EnsureSuccessStatusCode();
 		    var responseString = await response.Content.ReadAsStringAsync();
 			var comment = commentService.GetComment(commentId);
-		    var deserialisedCommentsAndAnswers = JsonConvert.DeserializeObject<ViewModels.CommentsAndAnswers>(responseString);
+		    var deserialisedCommentsAndAnswers = JsonConvert.DeserializeObject<ViewModels.Submission>(responseString);
 
 			//Assert
 			comment.comment.StatusId.ShouldBe((int)StatusName.Submitted);
