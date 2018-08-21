@@ -357,17 +357,9 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 													/> :
 													(
 														(this.state.userHasSubmitted && !this.state.viewSubmittedComments) ?
-															<div className="hero">
-																<div className="hero__container">
-																	<div className="hero__body">
-																		<div className="hero__copy">
-																			<p className="hero__intro" data-qa-sel="submitted-text">Thank you, your response has been submitted.</p>
-																			<div className="hero__actions">
-																				<button className="btn" data-qa-sel="review-submitted-comments" onClick={this.viewSubmittedCommentsHandler}>Review your response</button>
-																			</div>
-																		</div>
-																	</div>
-																</div>
+															<div className="panel">
+																<p className="lead" data-qa-sel="submitted-text">Thank you, your response has been submitted.</p>
+																<button className="btn btn--cta" data-qa-sel="review-submitted-comments" onClick={this.viewSubmittedCommentsHandler}>Review your response</button>
 															</div>
 															: (
 																<div>

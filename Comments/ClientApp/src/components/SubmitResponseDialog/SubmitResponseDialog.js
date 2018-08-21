@@ -28,14 +28,8 @@ export const SubmitResponseDialog = (props) => {
 	return(
 		<Fragment>
 			{userHasSubmitted ?
-				<div className="hero">
-					<div className="hero__container">
-						<div className="hero__body">
-							<div className="hero__copy">
-								<p className="hero__intro" data-qa-sel="submitted-text">Thank you, your response has been submitted.</p>
-							</div>
-						</div>
-					</div>
+				<div className="panel">
+					<p className="lead" data-qa-sel="submitted-text">Thank you, your response has been submitted.</p>
 				</div>
 				:
 				<div className="panel">
