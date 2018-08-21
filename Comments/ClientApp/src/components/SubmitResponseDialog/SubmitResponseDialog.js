@@ -14,7 +14,8 @@ export const SubmitResponseDialog = (props) => {
 		hasTobaccoLinks } = props;
 
 	function mandatoryQuestionsAreValid() {
-		let organisationIsValid, tobaccoIsValid = false;
+		let organisationIsValid = false;
+		let tobaccoIsValid = false;
 		if (
 			(respondingAsOrganisation === "yes" && organisationName.length > 0) || respondingAsOrganisation === "no") {
 			organisationIsValid = true;
