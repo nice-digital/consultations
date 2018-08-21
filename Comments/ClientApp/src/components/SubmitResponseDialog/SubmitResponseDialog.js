@@ -75,6 +75,7 @@ export const SubmitResponseDialog = (props) => {
 								value={"no"}
 							/>
 							<label
+								data-qa-sel="respond-no-responding-as-org"
 								className="form__label form__label--radio"
 								htmlFor="respondingAsOrganisation--false">
 								No
@@ -114,6 +115,7 @@ export const SubmitResponseDialog = (props) => {
 								onChange={fieldsChangeHandler}
 							/>
 							<label
+								data-qa-sel="respond-no-has-tobac-links"
 								className="form__label form__label--radio"
 								htmlFor="hasTobaccoLinks--true">
 								Yes
