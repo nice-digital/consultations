@@ -647,6 +647,7 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                     />
                     <label
                       className="form__label form__label--radio"
+                      data-qa-sel="respond-no-responding-as-org"
                       htmlFor="respondingAsOrganisation--false"
                     >
                       No
@@ -691,6 +692,7 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                     />
                     <label
                       className="form__label form__label--radio"
+                      data-qa-sel="respond-no-has-tobac-links"
                       htmlFor="hasTobaccoLinks--true"
                     >
                       Yes
