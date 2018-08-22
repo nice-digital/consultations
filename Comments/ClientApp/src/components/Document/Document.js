@@ -20,7 +20,6 @@ import { Selection } from "../Selection/Selection";
 import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
 import { Header } from "../Header/Header";
 
-
 type PropsType = {
 	staticContext?: any,
 	match: any,
@@ -66,8 +65,8 @@ export class Document extends Component<PropsType, StateType> {
 			children: null,
 			error: {
 				hasError: false,
-				message: null
-			}
+				message: null,
+			},
 		};
 
 		if (this.props) {
@@ -109,8 +108,8 @@ export class Document extends Component<PropsType, StateType> {
 					allowComments: allowComments,
 					error: {
 						hasError: false,
-						message: null
-					}
+						message: null,
+					},
 				};
 			}
 		}
@@ -132,8 +131,8 @@ export class Document extends Component<PropsType, StateType> {
 				this.setState({
 					error: {
 						hasError: true,
-						message: "chapterData " + err
-					}
+						message: "chapterData " + err,
+					},
 				});
 			});
 
@@ -143,8 +142,8 @@ export class Document extends Component<PropsType, StateType> {
 				this.setState({
 					error: {
 						hasError: true,
-						message: "documentsData " + err
-					}
+						message: "documentsData " + err,
+					},
 				});
 			});
 
@@ -157,8 +156,8 @@ export class Document extends Component<PropsType, StateType> {
 				this.setState({
 					error: {
 						hasError: true,
-						message: "consultationData " + err
-					}
+						message: "consultationData " + err,
+					},
 				});
 			});
 
@@ -188,10 +187,10 @@ export class Document extends Component<PropsType, StateType> {
 					this.setState({
 						error: {
 							hasError: true,
-							message: "gatherData in componentDidMount failed " + err
-						}
+							message: "gatherData in componentDidMount failed " + err,
+						},
 					});
-				})
+				});
 		}
 	}
 
@@ -218,8 +217,8 @@ export class Document extends Component<PropsType, StateType> {
 				this.setState({
 					error: {
 						hasError: true,
-						message: "gatherData in componentDidUpdate failed " + err
-					}
+						message: "gatherData in componentDidUpdate failed " + err,
+					},
 				});
 			});
 	}
@@ -315,7 +314,7 @@ export class Document extends Component<PropsType, StateType> {
 	};
 
 	render() {
-		if (this.state.error.hasError) { throw new Error(this.state.error.message) }
+		if (this.state.error.hasError) { throw new Error(this.state.error.message); }
 		if (!this.state.hasInitialData) return <h1>Loading...</h1>;
 
 		const { title, reference } = this.state.consultationData;
@@ -376,8 +375,37 @@ export class Document extends Component<PropsType, StateType> {
 								</div>
 
 								<StickyContainer className="grid">
+
+									{/* navigation column */}
+									<div data-g="12 md:3" className="navigationColumn">
+										<StackedNav
+											links={this.getDocumentChapterLinks(
+												documentId,
+												this.props.match.params.chapterSlug,
+												consultationId,
+												documentsData,
+												"Chapters in this document"
+											)}/>
+										<StackedNav
+											links={this.getDocumentLinks(
+												true,
+												"Other consultation documents you can comment on",
+												documentsData,
+												documentId,
+												consultationId
+											)}/>
+										<StackedNav
+											links={this.getDocumentLinks(
+												false,
+												"Supporting documents (for information only)",
+												documentsData,
+												documentId,
+												consultationId
+											)}/>
+									</div>
+
 									{/* inPageNav column */}
-									<div data-g="12 md:3 md:push:9" className="inPageNavColumn">
+									<div data-g="12 md:3 md:push:6" className="inPageNavColumn">
 										<Sticky disableHardwareAcceleration>
 											{({ style }) => (
 												<div style={style}>
@@ -416,7 +444,7 @@ export class Document extends Component<PropsType, StateType> {
 									</div>
 
 									{/* document column */}
-									<div data-g="12 md:6" className="documentColumn">
+									<div data-g="12 md:6 md:pull:3" className="documentColumn">
 										<div
 											className={`document-comment-container ${
 												this.state.loading ? "loading" : ""}`}>
@@ -433,33 +461,6 @@ export class Document extends Component<PropsType, StateType> {
 										</div>
 									</div>
 
-									{/* navigation column */}
-									<div data-g="12 md:3 md:pull:9" className="navigationColumn">
-										<StackedNav
-											links={this.getDocumentChapterLinks(
-												documentId,
-												this.props.match.params.chapterSlug,
-												consultationId,
-												documentsData,
-												"Chapters in this document"
-											)}/>
-										<StackedNav
-											links={this.getDocumentLinks(
-												true,
-												"Other consultation documents you can comment on",
-												documentsData,
-												documentId,
-												consultationId
-											)}/>
-										<StackedNav
-											links={this.getDocumentLinks(
-												false,
-												"Supporting documents (for information only)",
-												documentsData,
-												documentId,
-												consultationId
-											)}/>
-									</div>
 								</StickyContainer>
 							</main>
 						</div>
