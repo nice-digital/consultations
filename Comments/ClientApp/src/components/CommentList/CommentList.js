@@ -285,10 +285,11 @@ export class CommentList extends Component<PropsType, StateType> {
 						</button>
 					}
 				</div>
-				<div aria-hidden={!this.state.drawerOpen && (this.state.shouldShowQuestionsTab || this.state.shouldShowCommentsTab)}
+				<div aria-disabled={!this.state.drawerOpen && (this.state.shouldShowQuestionsTab || this.state.shouldShowCommentsTab)}
 					 data-qa-sel="comment-panel"
 					 id="comments-panel"
-					 className="Drawer__main">
+					 className={`Drawer__main ${this.state.drawerOpen ? "Drawer__main--open" : "Drawer__main--closed"}`}
+				>
 					<UserContext.Consumer>
 						{ (contextValue: ContextType) => {
 							return (

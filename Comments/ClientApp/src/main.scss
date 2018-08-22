@@ -27,3 +27,7 @@ $nice-font-base-path: "/consultations/fonts/";
 
 // Document transform styling (comments buttons etc)
 @import "./document-processing/transforms/comment";
+
+* :focus {
+   background: red !important;
+}

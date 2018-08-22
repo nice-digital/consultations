@@ -54,11 +54,44 @@
     overflow-scrolling: touch;
     -webkit-overflow-scrolling: touch;
     background-color: $colour-nice-white;
+    animation: 1s showVisibleOut;
+    animation-fill-mode: forwards;
+    &--open {
+      // todo: tidy this up - variables etc.
+      animation: 1s showVisibleIn;
+      animation-fill-mode: forwards;
+    }
   }
   &--open {
     transform: translateX(0);
   }
   &--mobile {
     width: calc(100% - 40px);
+  }
+}
+
+// todo: tidy this up - variables etc.
+@keyframes showVisibleOut {
+  1% {
+    visibility: visible;
+  }
+  99% {
+    visibility: visible;
+  }
+  100% {
+    visibility: hidden;
+  }
+}
+
+
+@keyframes showVisibleIn {
+  0% {
+    visibility: hidden;
+  }
+  1% {
+    visibility: visible;
+  }
+  100% {
+    visibility: visible;
   }
 }
