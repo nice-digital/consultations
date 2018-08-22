@@ -116,7 +116,6 @@ export const SubmitResponseDialog = (props) => {
 								onChange={fieldsChangeHandler}
 							/>
 							<label
-								data-qa-sel="respond-no-has-tobac-links"
 								className="form__label form__label--radio"
 								htmlFor="hasTobaccoLinks--true">
 								Yes
@@ -133,6 +132,7 @@ export const SubmitResponseDialog = (props) => {
 								checked={hasTobaccoLinks === "no"}
 								value={"no"}/>
 							<label
+								data-qa-sel="respond-no-has-tobac-links"
 								className="form__label form__label--radio"
 								htmlFor="hasTobaccoLinks--false">
 								No
