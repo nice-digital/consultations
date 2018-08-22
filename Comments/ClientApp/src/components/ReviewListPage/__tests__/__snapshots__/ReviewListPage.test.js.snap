@@ -109,15 +109,151 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
           className="page-header"
         >
           <undefined />
-          <div
-            className="grid"
-            onScroll={[Function]}
-            onTouchEnd={[Function]}
-            onTouchMove={[Function]}
-            onTouchStart={[Function]}
-          >
+          <div>
             <div
-              data-g="12 md:9 md:push:3"
+              className="sticky"
+              data-g="12 md:3"
+            >
+              <div
+                className="filter-panel"
+              >
+                <button
+                  aria-controls="filter-panel-body"
+                  aria-expanded={true}
+                  className="filter-panel__heading"
+                  onClick={[Function]}
+                  type="button"
+                >
+                  Filter
+                </button>
+                <div
+                  aria-hidden={false}
+                  className="filter-panel__body"
+                  id="filter-panel-body"
+                >
+                  <div
+                    className="filter-group"
+                  >
+                    <button
+                      aria-controls="group-QuestionsOrComments"
+                      aria-expanded={true}
+                      className="filter-group__heading gtm-topic-list-filter-group-collapse"
+                      onClick={[Function]}
+                      type="button"
+                    >
+                      <div
+                        id="group-title-QuestionsOrComments"
+                      >
+                        Response type
+                      </div>
+                    </button>
+                    <div
+                      aria-hidden={false}
+                      aria-labelledby="group-title-QuestionsOrComments"
+                      className="filter-group__options"
+                      id="group-QuestionsOrComments"
+                      role="group"
+                    >
+                      <label
+                        className="filter-group__option"
+                        htmlFor="filter_QuestionsOrComments_Questions"
+                      >
+                        <input
+                          aria-controls="results-info-count"
+                          checked={false}
+                          className="gtm-topic-list-filter-select"
+                          id="filter_QuestionsOrComments_Questions"
+                          name="QuestionsOrComments"
+                          onChange={[Function]}
+                          title="Response type - Questions"
+                          type="checkbox"
+                          value="Questions"
+                        />
+                        Questions
+                      </label>
+                      <label
+                        className="filter-group__option"
+                        htmlFor="filter_QuestionsOrComments_Comments"
+                      >
+                        <input
+                          aria-controls="results-info-count"
+                          checked={false}
+                          className="gtm-topic-list-filter-select"
+                          id="filter_QuestionsOrComments_Comments"
+                          name="QuestionsOrComments"
+                          onChange={[Function]}
+                          title="Response type - Comments"
+                          type="checkbox"
+                          value="Comments"
+                        />
+                        Comments
+                      </label>
+                    </div>
+                  </div>
+                  <div
+                    className="filter-group"
+                  >
+                    <button
+                      aria-controls="group-Documents"
+                      aria-expanded={true}
+                      className="filter-group__heading gtm-topic-list-filter-group-collapse"
+                      onClick={[Function]}
+                      type="button"
+                    >
+                      <div
+                        id="group-title-Documents"
+                      >
+                        Document
+                      </div>
+                    </button>
+                    <div
+                      aria-hidden={false}
+                      aria-labelledby="group-title-Documents"
+                      className="filter-group__options"
+                      id="group-Documents"
+                      role="group"
+                    >
+                      <label
+                        className="filter-group__option"
+                        htmlFor="filter_Documents_1"
+                      >
+                        <input
+                          aria-controls="results-info-count"
+                          checked={false}
+                          className="gtm-topic-list-filter-select"
+                          id="filter_Documents_1"
+                          name="Documents"
+                          onChange={[Function]}
+                          title="Document - Unstable angina and NSTEMI"
+                          type="checkbox"
+                          value="1"
+                        />
+                        Unstable angina and NSTEMI
+                      </label>
+                      <label
+                        className="filter-group__option"
+                        htmlFor="filter_Documents_2"
+                      >
+                        <input
+                          aria-controls="results-info-count"
+                          checked={false}
+                          className="gtm-topic-list-filter-select"
+                          id="filter_Documents_2"
+                          name="Documents"
+                          onChange={[Function]}
+                          title="Document - Glaucoma: diagnosis and management – Full Guideline"
+                          type="checkbox"
+                          value="2"
+                        />
+                        Glaucoma: diagnosis and management – Full Guideline
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              data-g="12 md:9"
             >
               <div
                 className="results-info"
@@ -127,16 +263,8 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                   className="results-info__count"
                   id="results-info-count"
                 >
-                  Showing 
-                  5
-                   response
-                  s
+                  Showing 3 questions and 2 comments
                 </h2>
-                <p
-                  className="results-info__sort hide-print"
-                >
-                  <undefined />
-                </p>
               </div>
               <div
                 data-qa-sel="comment-list-wrapper"
@@ -470,185 +598,142 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                 </ul>
               </div>
               <div
-                className="hero"
+                className="panel"
               >
-                <div
-                  className="hero__container"
+                <p
+                  className="lead"
                 >
+                  You are about to submit your final response to NICE
+                </p>
+                <p>
+                  You must answer the following questions before you submit.
+                </p>
+                <p>
+                  <strong>
+                    Are you responding on behalf of an organisation?
+                  </strong>
+                </p>
+                <div>
                   <div
-                    className="hero__body "
+                    className="form__group form__group--radio form__group--inline"
                   >
-                    <div
-                      className="hero__copy"
+                    <input
+                      checked={false}
+                      className="form__radio"
+                      id="respondingAsOrganisation--true"
+                      name="respondingAsOrganisation"
+                      onChange={[Function]}
+                      type="radio"
+                      value="yes"
+                    />
+                    <label
+                      className="form__label form__label--radio"
+                      htmlFor="respondingAsOrganisation--true"
                     >
-                      <p
-                        className="hero__intro"
-                      >
-                        You are about to submit your final response to NICE
-                      </p>
-                      <p>
-                        After submission you won't be able to:
-                      </p>
-                      <ul>
-                        <li>
-                          edit your comments further
-                        </li>
-                        <li>
-                          add any extra comments.
-                        </li>
-                      </ul>
-                      <undefined />
-                    </div>
+                      Yes
+                    </label>
+                  </div>
+                  <div
+                    className="form__group form__group--radio form__group--inline"
+                  >
+                    <input
+                      checked={false}
+                      className="form__radio"
+                      id="respondingAsOrganisation--false"
+                      name="respondingAsOrganisation"
+                      onChange={[Function]}
+                      type="radio"
+                      value="no"
+                    />
+                    <label
+                      className="form__label form__label--radio"
+                      data-qa-sel="respond-no-responding-as-org"
+                      htmlFor="respondingAsOrganisation--false"
+                    >
+                      No
+                    </label>
                   </div>
                 </div>
-              </div>
-            </div>
-            <div
-              data-g="12 md:3 md:pull:9"
-            >
-              <div>
-                <div />
-                <div
-                  style={Object {}}
+                <p>
+                  <strong>
+                    Do you or the organisation you represent have any links with the tobacco industry?
+                  </strong>
+                </p>
+                <p
+                  className="mb--0"
                 >
+                  This includes:
+                </p>
+                <ul
+                  className="mt--0"
+                >
+                  <li>
+                    current or past links
+                  </li>
+                  <li>
+                    direct or indirect links
+                  </li>
+                  <li>
+                    receiving funding from the tobacco industry.
+                  </li>
+                </ul>
+                <div>
                   <div
-                    className="filter-panel"
+                    className="form__group form__group--radio form__group--inline"
                   >
-                    <button
-                      aria-controls="filter-panel-body"
-                      aria-expanded={true}
-                      className="filter-panel__heading"
-                      onClick={[Function]}
-                      type="button"
+                    <input
+                      checked={false}
+                      className="form__radio"
+                      id="hasTobaccoLinks--true"
+                      name="hasTobaccoLinks"
+                      onChange={[Function]}
+                      type="radio"
+                      value="yes"
+                    />
+                    <label
+                      className="form__label form__label--radio"
+                      htmlFor="hasTobaccoLinks--true"
                     >
-                      Filter
-                    </button>
-                    <div
-                      aria-hidden={false}
-                      className="filter-panel__body"
-                      id="filter-panel-body"
+                      Yes
+                    </label>
+                  </div>
+                  <div
+                    className="form__group form__group--radio form__group--inline"
+                  >
+                    <input
+                      checked={false}
+                      className="form__radio"
+                      id="hasTobaccoLinks--false"
+                      name="hasTobaccoLinks"
+                      onChange={[Function]}
+                      type="radio"
+                      value="no"
+                    />
+                    <label
+                      className="form__label form__label--radio"
+                      data-qa-sel="respond-no-has-tobac-links"
+                      htmlFor="hasTobaccoLinks--false"
                     >
-                      <div
-                        className="filter-group"
-                      >
-                        <button
-                          aria-controls="group-QuestionsOrComments"
-                          aria-expanded={true}
-                          className="filter-group__heading gtm-topic-list-filter-group-collapse"
-                          onClick={[Function]}
-                          type="button"
-                        >
-                          <div
-                            id="group-title-QuestionsOrComments"
-                          >
-                            Response type
-                          </div>
-                        </button>
-                        <div
-                          aria-hidden={false}
-                          aria-labelledby="group-title-QuestionsOrComments"
-                          className="filter-group__options"
-                          id="group-QuestionsOrComments"
-                          role="group"
-                        >
-                          <label
-                            className="filter-group__option"
-                            htmlFor="filter_QuestionsOrComments_Questions"
-                          >
-                            <input
-                              aria-controls="results-info-count"
-                              checked={false}
-                              className="gtm-topic-list-filter-select"
-                              id="filter_QuestionsOrComments_Questions"
-                              name="QuestionsOrComments"
-                              onChange={[Function]}
-                              title="Response type - Questions"
-                              type="checkbox"
-                              value="Questions"
-                            />
-                            Questions
-                          </label>
-                          <label
-                            className="filter-group__option"
-                            htmlFor="filter_QuestionsOrComments_Comments"
-                          >
-                            <input
-                              aria-controls="results-info-count"
-                              checked={false}
-                              className="gtm-topic-list-filter-select"
-                              id="filter_QuestionsOrComments_Comments"
-                              name="QuestionsOrComments"
-                              onChange={[Function]}
-                              title="Response type - Comments"
-                              type="checkbox"
-                              value="Comments"
-                            />
-                            Comments
-                          </label>
-                        </div>
-                      </div>
-                      <div
-                        className="filter-group"
-                      >
-                        <button
-                          aria-controls="group-Documents"
-                          aria-expanded={true}
-                          className="filter-group__heading gtm-topic-list-filter-group-collapse"
-                          onClick={[Function]}
-                          type="button"
-                        >
-                          <div
-                            id="group-title-Documents"
-                          >
-                            Document
-                          </div>
-                        </button>
-                        <div
-                          aria-hidden={false}
-                          aria-labelledby="group-title-Documents"
-                          className="filter-group__options"
-                          id="group-Documents"
-                          role="group"
-                        >
-                          <label
-                            className="filter-group__option"
-                            htmlFor="filter_Documents_1"
-                          >
-                            <input
-                              aria-controls="results-info-count"
-                              checked={false}
-                              className="gtm-topic-list-filter-select"
-                              id="filter_Documents_1"
-                              name="Documents"
-                              onChange={[Function]}
-                              title="Document - Unstable angina and NSTEMI"
-                              type="checkbox"
-                              value="1"
-                            />
-                            Unstable angina and NSTEMI
-                          </label>
-                          <label
-                            className="filter-group__option"
-                            htmlFor="filter_Documents_2"
-                          >
-                            <input
-                              aria-controls="results-info-count"
-                              checked={false}
-                              className="gtm-topic-list-filter-select"
-                              id="filter_Documents_2"
-                              name="Documents"
-                              onChange={[Function]}
-                              title="Document - Glaucoma: diagnosis and management – Full Guideline"
-                              type="checkbox"
-                              value="2"
-                            />
-                            Glaucoma: diagnosis and management – Full Guideline
-                          </label>
-                        </div>
-                      </div>
-                    </div>
+                      No
+                    </label>
                   </div>
                 </div>
+                <p>
+                  <strong>
+                    Now submit your response to NICE
+                  </strong>
+                </p>
+                <p>
+                  After submission you won't be able to edit your comments further or add any extra comments.
+                </p>
+                <button
+                  className="btn btn--cta"
+                  data-qa-sel="submit-comment-button"
+                  disabled={true}
+                  onClick={[Function]}
+                >
+                  Submit my response
+                </button>
               </div>
             </div>
           </div>

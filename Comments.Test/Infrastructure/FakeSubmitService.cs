@@ -9,7 +9,7 @@ namespace Comments.Test.Infrastructure
 {
     public class FakeSubmitService : ISubmitService
     {
-	    public (int rowsUpdated, Validate validate) SubmitCommentsAndAnswers(CommentsAndAnswers commentsAndAnswers)
+	    public (int rowsUpdated, Validate validate) Submit(ViewModels.Submission submission)
 	    {
 		    throw new NotImplementedException();
 	    }

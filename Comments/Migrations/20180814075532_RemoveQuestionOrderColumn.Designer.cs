@@ -4,14 +4,16 @@ using Comments.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Comments.Migrations
 {
     [DbContext(typeof(ConsultationsContext))]
-    partial class ConsultationsContextModelSnapshot : ModelSnapshot
+    [Migration("20180814075532_RemoveQuestionOrderColumn")]
+    partial class RemoveQuestionOrderColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -162,6 +164,8 @@ namespace Comments.Migrations
                     b.Property<int>("LocationId")
                         .HasColumnName("LocationID");
 
+                    b.Property<byte?>("QuestionOrder");
+
                     b.Property<string>("QuestionText")
                         .IsRequired();
 
@@ -223,16 +227,12 @@ namespace Comments.Migrations
                         .HasColumnName("SubmissionID")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("OrganisationName");
-
                     b.Property<Guid>("SubmissionByUserId")
                         .HasColumnName("SubmissionByUserID");
 
                     b.Property<DateTime>("SubmissionDateTime")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValueSql("(getdate())");
-
-                    b.Property<string>("TobaccoDisclosure");
 
                     b.HasKey("SubmissionId");
 

@@ -14,7 +14,6 @@ namespace Comments.Models
 		public int LocationId { get; set; }
 		public string QuestionText { get; set; }
 		public int QuestionTypeId { get; set; }
-		public byte? QuestionOrder { get; set; }
 		public Guid CreatedByUserId { get; set; }
 		public DateTime CreatedDate { get; set; }
 		public Guid LastModifiedByUserId { get; set; }

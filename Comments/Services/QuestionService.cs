@@ -70,7 +70,7 @@ namespace Comments.Services
             _context.Location.Add(locationToSave);
 
             var questionTypeToSave = new Models.QuestionType(question.QuestionType.Description, question.QuestionType.HasTextAnswer, question.QuestionType.HasBooleanAnswer, null);
-            var questionToSave = new Models.Question(question.LocationId, question.QuestionText, question.QuestionTypeId, question.QuestionOrder, locationToSave, questionTypeToSave, null);
+            var questionToSave = new Models.Question(question.LocationId, question.QuestionText, question.QuestionTypeId, locationToSave, questionTypeToSave, null);
 
             _context.Question.Add(questionToSave);
             _context.SaveChanges();

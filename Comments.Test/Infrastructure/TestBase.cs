@@ -266,7 +266,7 @@ namespace Comments.Test.Infrastructure
         }
         protected int AddQuestion(int locationId, int questionTypeId, string questionText, ConsultationsContext passedInContext = null)
         {
-            var question = new Question(locationId, questionText, questionTypeId, null, null, null, null);
+            var question = new Question(locationId, questionText, questionTypeId, null, null, null);
             if (passedInContext != null)
             {
                 passedInContext.Question.Add(question);
@@ -337,7 +337,7 @@ namespace Comments.Test.Infrastructure
 
 	    protected int AddSubmission(Guid userId, ConsultationsContext passedInContext = null)
 	    {
-			var submission = new Submission(userId, DateTime.Now);
+			var submission = new Models.Submission(userId, DateTime.Now, false, null, false, null);
 			if (passedInContext != null)
 			{
 				passedInContext.Submission.Add(submission);

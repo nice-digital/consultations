@@ -1,8 +1,7 @@
 // @flow
 
 import React, { Component, Fragment } from "react";
-import { withRouter } from "react-router";
-import { StickyContainer, Sticky } from "react-sticky";
+import { withRouter } from "react-router-dom";
 //import stringifyObject from "stringify-object";
 
 import preload from "../../data/pre-loader";
@@ -22,6 +21,7 @@ import { withHistory } from "../HistoryContext/HistoryContext";
 import { CommentBox } from "../CommentBox/CommentBox";
 import { Question } from "../Question/Question";
 import { LoginBanner } from "../LoginBanner/LoginBanner";
+import { SubmitResponseDialog } from "../SubmitResponseDialog/SubmitResponseDialog";
 
 type PropsType = {
 	staticContext?: any,
@@ -29,7 +29,7 @@ type PropsType = {
 		url: string,
 		params: any
 	},
-	location: {		
+	location: {
 		pathname: string,
 		search: string
 	},
@@ -39,7 +39,7 @@ type PropsType = {
 
 type StateType = {
 	consultationData: ConsultationDataType,
-	commentsData: ReviewPageViewModelType, 
+	commentsData: ReviewPageViewModelType,
 	userHasSubmitted: boolean,
 	validToSubmit: false,
 	viewSubmittedComments: boolean,
@@ -50,6 +50,11 @@ type StateType = {
 	questions: Array<QuestionType>,
 	sort: string,
 	supportsDownload: boolean,
+	loading: boolean,
+	respondingAsOrganisation: boolean,
+	organisationName: string,
+	hasTobaccoLinks: boolean,
+	tobaccoDisclosure: string,
 };
 
 export class ReviewListPage extends Component<PropsType, StateType> {
@@ -69,13 +74,18 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			questions: [], //this contains all the questions, not just the ones displayed to the user. the show property defines whether the question is filtered out from view.
 			sort: "DocumentAsc",
 			supportsDownload: false,
+			respondingAsOrganisation: "",
+			organisationName: "",
+			hasTobaccoLinks: "",
+			tobaccoDisclosure: "",
+
 		};
 
 		let preloadedData = {};
 		if (this.props.staticContext && this.props.staticContext.preload) {
 			preloadedData = this.props.staticContext.preload.data; //this is data from Configure => SupplyData in Startup.cs. the main thing it contains for this call is the cookie for the current user.
 		}
-	
+
 		const querystring = this.props.location.search;
 		const preloadedCommentsData = preload(
 			this.props.staticContext,
@@ -106,8 +116,12 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 				comments: preloadedCommentsData.commentsAndQuestions.comments,
 				questions: preloadedCommentsData.commentsAndQuestions.questions,
 				sort: preloadedCommentsData.sort,
-				supportsDownload: preloadedConsultationData.consultationState.supportsDownload, 
+				supportsDownload: preloadedConsultationData.consultationState.supportsDownload,
 				viewSubmittedComments: false,
+				organisationName: preloadedCommentsData.organisationName || "",
+				respondingAsOrganisation: "",
+				hasTobaccoLinks: "",
+				tobaccoDisclosure: "",
 			};
 		}
 	}
@@ -129,8 +143,8 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 					//window.location.assign(path); // Fallback to full page reload if we fail to load data
 				} else{
 					throw new Error("failed to load comments for review.  " + err);
-				}				
-			});	
+				}
+			});
 
 		if (this.state.consultationData === null){
 
@@ -169,6 +183,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 						allowComments: (data.consultationData.consultationState.consultationIsOpen && !data.consultationData.consultationState.userHasSubmitted),
 						supportsDownload: data.consultationData.consultationState.supportsDownload,
 						sort: data.commentsData.sort,
+						organisationName: data.commentsData.organisationName,
 					});
 				} else{
 					this.setState({
@@ -177,19 +192,20 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 						questions: data.commentsData.commentsAndQuestions.questions,
 						sort: data.commentsData.sort,
 						loading: false,
+						organisationName: data.commentsData.organisationName,
 					});
-				}			
+				}
 			})
 			.catch(err => {
 				throw new Error("gatherData in componentDidMount failed " + err);
 			});
-	}
+	};
 
 	componentDidMount() {
-		if (!this.state.hasInitalData){ //typically this page is accessed by clicking a link on the document page, so it won't SSR. 
-			this.loadDataAndUpdateState(); 	
+		if (!this.state.hasInitalData){ //typically this page is accessed by clicking a link on the document page, so it won't SSR.
+			this.loadDataAndUpdateState();
 		}
-		this.props.history.listen(location => {
+		this.props.history.listen(() => {
 			this.loadDataAndUpdateState();
 		});
 	}
@@ -204,15 +220,26 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 	submitConsultation = () => {
 		const comments = this.state.comments;
 		const questions = this.state.questions;
+		const organisationName = this.state.organisationName;
+		const tobaccoDisclosure = this.state.tobaccoDisclosure;
+		const respondingAsOrganisation = this.state.respondingAsOrganisation === "yes";
+		const hasTobaccoLinks = this.state.hasTobaccoLinks === "yes";
+
 		let answersToSubmit = [];
 		questions.forEach(function(question){
 			if (question.answers != null){
 				answersToSubmit = answersToSubmit.concat(question.answers);
 			}
-		});		
-		let commentsAndAnswers = {comments: comments, answers: answersToSubmit};
-
-		load("submit", undefined, [], {}, "POST", commentsAndAnswers, true)
+		});
+		let submission = {
+			comments,
+			answers: answersToSubmit, 
+			organisationName: respondingAsOrganisation ? organisationName : null,
+			tobaccoDisclosure: hasTobaccoLinks ? tobaccoDisclosure : null,
+			respondingAsOrganisation,
+			hasTobaccoLinks,
+		};
+		load("submit", undefined, [], {}, "POST", submission, true)
 			.then(() => {
 				this.setState({
 					userHasSubmitted: true,
@@ -252,19 +279,25 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		});
 	};
 
+	fieldsChangeHandler = (e: SyntheticInputEvent) => {
+		this.setState({
+			[e.target.name]: e.target.value,
+		});
+	};
+
 	//these handlers are in the helpers/editing-and-deleting.js utility file as they're also used in CommentList.js
 	saveCommentHandler = (e: Event, comment: CommentType) => {
 		saveCommentHandler(e, comment, this);
-	}
+	};
 	deleteCommentHandler = (e: Event, comment: CommentType) => {
 		deleteCommentHandler(e, comment, this);
-	}
+	};
 	saveAnswerHandler = (e: Event, answer: AnswerType) => {
 		saveAnswerHandler(e, answer, this);
-	}
+	};
 	deleteAnswerHandler = (e: Event,  questionId: number, answerId: number) => {
 		deleteAnswerHandler(e, questionId, answerId, this);
-	}	
+	};
 
 	getAppliedFilters(): ReviewAppliedFilterType[] {
 		const mapOptions =
@@ -274,7 +307,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 					groupTitle: group.title,
 					optionLabel: opt.label,
 					groupId: group.id,
-					optionId: opt.id
+					optionId: opt.id,
 				}));
 
 		return this.state.commentsData.filters
@@ -284,9 +317,9 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 
 	render() {
 		if (this.state.loading) return <h1>Loading...</h1>;
-		const { reference } = this.state.consultationData;	
-		const commentsToShow = this.state.comments.filter(comment => comment.show) || []; 
-		const questionsToShow = this.state.questions.filter(question => question.show) || []; 
+		const { reference } = this.state.consultationData;
+		const commentsToShow = this.state.comments.filter(comment => comment.show) || [];
+		const questionsToShow = this.state.questions.filter(question => question.show) || [];
 
 		return (
 			<Fragment>
@@ -307,11 +340,11 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 										subtitle2={this.state.userHasSubmitted ? "" : "Once they have been submitted you will not be able to edit them further or add any extra comments."}
 										reference={reference}
 										consultationState={this.state.consultationData.consultationState}/>
-									{this.state.supportsDownload && 
+									{this.state.supportsDownload &&
 										<div className="clearfix">
 											<button className="btn btn--secondary right mr--0">Download your response</button>
 										</div>
-									}
+									}									
 									<UserContext.Consumer>
 										{ (contextValue: ContextType) => {
 											return (
@@ -324,28 +357,25 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 													/> :
 													(
 														(this.state.userHasSubmitted && !this.state.viewSubmittedComments) ?
-															<div className="hero">
-																<div className="hero__container">
-																	<div className="hero__body">
-																		<div className="hero__copy">
-																			<p className="hero__intro" data-qa-sel="submitted-text">Thank you, your response has been submitted.</p>
-																			<div className="hero__actions">
-																				<button className="btn" data-qa-sel="review-submitted-comments" onClick={this.viewSubmittedCommentsHandler}>Review your response</button>
-																			</div>
-																		</div>
-																	</div>
-																</div>
+															<div className="panel">
+																<p className="lead" data-qa-sel="submitted-text">Thank you, your response has been submitted.</p>
+																<button className="btn btn--cta" data-qa-sel="review-submitted-comments" onClick={this.viewSubmittedCommentsHandler}>Review your response</button>
 															</div>
-															: 
-															(
-																<StickyContainer className="grid">
-																	<div data-g="12 md:9 md:push:3">
-																		<ResultsInfo count={commentsToShow.length + questionsToShow.length}
+															: (
+																<div>
+																	<div data-g="12 md:3" className="sticky">
+																		<FilterPanel filters={this.state.commentsData.filters} path={this.state.path} />
+																	</div>
+																	<div data-g="12 md:9">
+																		<ResultsInfo commentCount={commentsToShow.length}
+																			showCommentsCount={this.state.consultationData.consultationState.shouldShowCommentsTab}
+																			questionCount={questionsToShow.length}
+																			showQuestionsCount={this.state.consultationData.consultationState.shouldShowQuestionsTab}
 																			sortOrder={this.state.sort}
 																			appliedFilters={this.getAppliedFilters()}
 																			path={this.state.path}
 																			isLoading={this.state.loading} />
-																		<div data-qa-sel="comment-list-wrapper">																										
+																		<div data-qa-sel="comment-list-wrapper">
 																			{questionsToShow.length > 0 &&
 																				<div>
 																					{/* <p>We would like to hear your views on the draft recommendations presented in the guideline, and any comments you may have on the rationale and impact sections in the guideline and the evidence presented in the evidence reviews documents. We would also welcome views on the Equality Impact Assessment.</p>
@@ -355,7 +385,6 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																							return (
 																								<Question
 																									readOnly={!this.state.allowComments || this.state.userHasSubmitted}
-																									isVisible={this.props.isVisible}
 																									key={question.questionId}
 																									unique={`Comment${question.questionId}`}
 																									question={question}
@@ -365,8 +394,8 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																							);
 																						})}
 																					</ul>
-																				</div>						
-																			}														
+																				</div>
+																			}
 																			{commentsToShow.length === 0 ? <p>{/*No comments yet*/}</p> :
 																				<ul className="CommentList list--unstyled">
 																					{commentsToShow.map((comment) => {
@@ -385,67 +414,24 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																				</ul>
 																			}
 																		</div>																				
-																		{this.state.userHasSubmitted ?
-																			<div className="hero">
-																				<div className="hero__container">
-																					<div className="hero__body">
-																						<div className="hero__copy">
-																							<p className="hero__intro" data-qa-sel="submitted-text">Thank you, your response has been submitted.</p>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																			:
-																			<div className="hero">
-																				<div className="hero__container">
-																					<div className="hero__body ">
-																						<div className="hero__copy">
-																							{/* <h1 className="hero__title">Hero title</h1> */}
-																							<p className="hero__intro">You are about to submit your final response to NICE</p>
-																							<p>After submission you won't be able to:</p>
-																							<ul>
-																								<li>edit your comments further</li>
-																								<li>add any extra comments.</li>
-																							</ul>
-																							<UserContext.Consumer>
-																								{contextValue => {
-																									if (contextValue.isAuthorised) {
-																										return (
-																											<Fragment>
-																												<h3 className="mt--0">Ready to submit?</h3>
-																												<button
-																													disabled={!this.state.validToSubmit}
-																													className="btn btn--cta"
-																													data-qa-sel="submit-comment-button"
-																													onClick={this.submitConsultation}
-																												>{this.state.userHasSubmitted ? "Responses submitted": "Yes, submit my response"}
-																												</button>
-																											</Fragment>
-																										);
-																									}
-																								}}
-																							</UserContext.Consumer>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																		}
-																	</div>
-																	<div data-g="12 md:3 md:pull:9">
-																		<Sticky disableHardwareAcceleration>
-																			{({ style }) => (
-																				<div style={style}>
-																					<FilterPanel filters={this.state.commentsData.filters} path={this.state.path} />
-																				</div>
-																			)}
-																		</Sticky>
-																	</div>
-																</StickyContainer>
+																		<SubmitResponseDialog
+																			isAuthorised={contextValue.isAuthorised}
+																			userHasSubmitted={this.state.userHasSubmitted}
+																			validToSubmit={this.state.validToSubmit}
+																			submitConsultation={this.submitConsultation}
+																			fieldsChangeHandler={this.fieldsChangeHandler}
+																			respondingAsOrganisation={this.state.respondingAsOrganisation}
+																			organisationName={this.state.organisationName}
+																			hasTobaccoLinks={this.state.hasTobaccoLinks}
+																			tobaccoDisclosure={this.state.tobaccoDisclosure}
+																		/>
+																	</div>																	
+																</div>
 															)
 													)
 											);
 										}}
-									</UserContext.Consumer>									
+									</UserContext.Consumer>
 								</div>
 							</ main>
 						</div>

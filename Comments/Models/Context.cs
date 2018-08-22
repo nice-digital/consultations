@@ -27,7 +27,7 @@ namespace Comments.Models
 		//}
 		//protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		//{
-		//	optionsBuilder.UseSqlServer("[snip]");
+		//	optionsBuilder.UseSqlServer("[you don't need a valid connection string when creating migrations. the real connection string should never be put here though. it should be kept in secrets.json]");
 		//}
 
 
@@ -74,7 +74,7 @@ namespace Comments.Models
 						.ThenInclude(q => q.Answer)
 							.ThenInclude(s => s.SubmissionAnswer)
 
-					.OrderBy(l => l.Question.OrderBy(q => q.QuestionOrder).Select(q => q.QuestionOrder).FirstOrDefault())
+					.OrderBy(l => l.Order)
 
 					.ThenByDescending(l => l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault());
 
@@ -157,9 +157,9 @@ namespace Comments.Models
 		    SubmissionAnswer.AddRange(submissionAnswersToInsert);
 	    }
 
-	    public Submission InsertSubmission(Guid currentUser)
+	    public Submission InsertSubmission(Guid currentUser, bool respondingAsOrganisation, string organisationName, bool hasTobaccoLinks, string tobaccoDisclosure)
 	    {
-		    var submission = new Models.Submission(currentUser, DateTime.UtcNow);
+		    var submission = new Models.Submission(currentUser, DateTime.UtcNow, respondingAsOrganisation, organisationName, hasTobaccoLinks, tobaccoDisclosure);
 		    Submission.Add(submission);
 		    return submission;
 	    }
@@ -234,8 +234,8 @@ namespace Comments.Models
 		public int InsertQuestionsWithScript(int consultationId)
 	    {
 		    return Database.ExecuteSqlCommand(@"
-				--DECLARE @consultationId AS int
-				--SET @consultationId = 1
+				--DECLARE @consultationId AS int --UNCOMMENT OUT THESE 2 LINES TO USE IN SQL MANAGEMENT STUDIO
+				--SET @consultationId = 11
 
 				DECLARE @questionTypeID AS int
 				DECLARE @locationID1 AS int, @locationID2 AS int, @locationID3 AS int
@@ -248,6 +248,9 @@ namespace Comments.Models
 
 				DECLARE @questionOneText nvarchar(MAX)
 				SET @questionOneText = 'Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.'
+
+				DECLARE @consultationIdPaddedForOrder nvarchar(3)
+				SELECT @consultationIdPaddedForOrder = RIGHT('000'+ CAST(@consultationId AS VARCHAR(3)),3)
 
 				--question type insert
 				SELECT @questionTypeID = QuestionTypeID
@@ -269,33 +272,33 @@ namespace Comments.Models
 								Q.QuestionText = @questionOneText)
 				BEGIN
 
-					INSERT INTO Location (SourceURI)
-					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar))
+					INSERT INTO [Location] (SourceURI, [Order])
+					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar), @consultationIdPaddedForOrder + '.000.000.000')
 
 					SET @locationID1 = SCOPE_IDENTITY();
 
-					INSERT INTO Location (SourceURI)
-					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar) + '/document/1')
+					INSERT INTO [Location] (SourceURI, [Order])
+					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar) + '/document/1', @consultationIdPaddedForOrder + '.001.000.000')
 
 					SET @locationID2 = SCOPE_IDENTITY();
 
-					INSERT INTO Location (SourceURI)
-					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar) + '/document/2')
+					INSERT INTO [Location] (SourceURI, [Order])
+					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar) + '/document/2', @consultationIdPaddedForOrder + '.002.000.000')
 
 					SET @locationID3 = SCOPE_IDENTITY();
 
 					--now the question inserts
 
-					INSERT INTO Question (LocationID, QuestionText, QuestionTypeID, QuestionOrder, CreatedByUserID, LastModifiedByUserID, LastModifiedDate)
-					VALUES (@locationID1, @questionOneText, @questionTypeID, 1, @userID, @userID, GETDATE())
+					INSERT INTO Question (LocationID, QuestionText, QuestionTypeID, CreatedByUserID, LastModifiedByUserID, LastModifiedDate)
+					VALUES (@locationID1, @questionOneText, @questionTypeID, @userID, @userID, GETDATE())
 
 
-					INSERT INTO Question (LocationID, QuestionText, QuestionTypeID, QuestionOrder, CreatedByUserID, LastModifiedByUserID, LastModifiedDate)
-					VALUES (@locationID2, 'Would implementation of any of the draft recommendations have significant cost implications?', @questionTypeID, 2, @userID, @userID, GETDATE())
+					INSERT INTO Question (LocationID, QuestionText, QuestionTypeID, CreatedByUserID, LastModifiedByUserID, LastModifiedDate)
+					VALUES (@locationID2, 'Would implementation of any of the draft recommendations have significant cost implications?', @questionTypeID, @userID, @userID, GETDATE())
 
 
-					INSERT INTO Question (LocationID, QuestionText, QuestionTypeID, QuestionOrder, CreatedByUserID, LastModifiedByUserID, LastModifiedDate)
-					VALUES (@locationID3, 'Would implementation of any of the draft recommendations have cost implications?', @questionTypeID, 3, @userID, @userID, GETDATE())			
+					INSERT INTO Question (LocationID, QuestionText, QuestionTypeID, CreatedByUserID, LastModifiedByUserID, LastModifiedDate)
+					VALUES (@locationID3, 'Would implementation of any of the draft recommendations have cost implications?', @questionTypeID, @userID, @userID, GETDATE())			
 		
 				END
 			", new SqlParameter("@consultationId", consultationId));

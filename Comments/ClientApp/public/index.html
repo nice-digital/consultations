@@ -27,6 +27,7 @@
 	<link rel="apple-touch-icon" sizes="152x152" href="//cdn.nice.org.uk/V3/Content/nice/favicon-152.png">
 	<link href="//fonts.googleapis.com/css?family=Lato:400,700,900" rel="stylesheet" type="text/css" />
 	<link rel="stylesheet" href="%PUBLIC_URL%/main.css">
+
 	<!--! links -->
 	<!--[if lt IE 9]>
 		<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -37,6 +38,21 @@
 </head>
 <body>
     <div id="root"></div>
+
+	<!-- Jump to main content (end of tophat) -->
+	<script>
+		document.onTophatReady = function(){
+			document
+				.querySelector("#skip-to-content")
+				.addEventListener("click", function(e) {
+					e.preventDefault();
+					var tophatEnd = document.querySelector("#tophat-end");
+					tophatEnd.setAttribute("tabindex", "-1");
+					tophatEnd.focus();
+				}
+			);
+		};
+	</script>
 
 	<!-- Tophat -->
 	<script src="//cdn.nice.org.uk/V3.1/Scripts/nice/NICE.TopHat.min.js"
@@ -49,17 +65,5 @@
 			async></script>
 
 	<!--! scripts -->
-
-	<script src="//code.jquery.com/jquery-1.12.4.min.js"></script>
-	<script src="//www.nice.org.uk/Media/Default/js/designsystem/nice.dev.js"></script>
-	<script>
-		function niceDesignSystem(){
-			$(document).nice();
-		}
-		$(document).ready(function () {
-			niceDesignSystem();
-		});		
-		window.addEventListener("commentList_did_mount", niceDesignSystem);
-	</script>
 </body>
 </html>
