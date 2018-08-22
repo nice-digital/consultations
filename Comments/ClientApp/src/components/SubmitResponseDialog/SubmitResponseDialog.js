@@ -14,7 +14,8 @@ export const SubmitResponseDialog = (props) => {
 		hasTobaccoLinks } = props;
 
 	function mandatoryQuestionsAreValid() {
-		let organisationIsValid, tobaccoIsValid = false;
+		let organisationIsValid = false;
+		let tobaccoIsValid = false;
 		if (
 			(respondingAsOrganisation === "yes" && organisationName.length > 0) || respondingAsOrganisation === "no") {
 			organisationIsValid = true;
@@ -69,6 +70,7 @@ export const SubmitResponseDialog = (props) => {
 								value={"no"}
 							/>
 							<label
+								data-qa-sel="respond-no-responding-as-org"
 								className="form__label form__label--radio"
 								htmlFor="respondingAsOrganisation--false">
 								No
@@ -124,6 +126,7 @@ export const SubmitResponseDialog = (props) => {
 								checked={hasTobaccoLinks === "no"}
 								value={"no"}/>
 							<label
+								data-qa-sel="respond-no-has-tobac-links"
 								className="form__label form__label--radio"
 								htmlFor="hasTobaccoLinks--false">
 								No
