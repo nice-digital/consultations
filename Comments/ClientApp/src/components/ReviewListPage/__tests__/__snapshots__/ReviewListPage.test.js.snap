@@ -692,7 +692,6 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                     />
                     <label
                       className="form__label form__label--radio"
-                      data-qa-sel="respond-no-has-tobac-links"
                       htmlFor="hasTobaccoLinks--true"
                     >
                       Yes
@@ -712,6 +711,7 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                     />
                     <label
                       className="form__label form__label--radio"
+                      data-qa-sel="respond-no-has-tobac-links"
                       htmlFor="hasTobaccoLinks--false"
                     >
                       No
