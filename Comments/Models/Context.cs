@@ -126,6 +126,7 @@ namespace Comments.Models
 	    public List<Question> GetUnansweredQuestionsForURI(string sourceURI)
 	    {
 		    var question = Question.Where(q => q.Answer.Count == 0 && q.Location.SourceURI.Contains(sourceURI) && q.IsDeleted == false)
+				.Include(l => l.Location)
 			    .IgnoreQueryFilters()
 				.ToList();
 

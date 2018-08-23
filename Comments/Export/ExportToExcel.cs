@@ -13,7 +13,6 @@ namespace Comments.Export
 	public interface IExportToExcel
 	{
 		Stream ToSpreadsheet(IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions);
-		void ToConvert(IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions);
 	}
 
 	public class ExportToExcel : IExportToExcel
@@ -28,6 +27,8 @@ namespace Comments.Export
 		}
 		public Stream ToSpreadsheet(IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions)
 		{
+			//SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Create("C:/Test/TestExcel" + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second + ".xlsx", SpreadsheetDocumentType.Workbook);
+
 			var stream = new MemoryStream();
 			using (var workbook = SpreadsheetDocument.Create(stream, SpreadsheetDocumentType.Workbook))
 			{
@@ -212,7 +213,7 @@ namespace Comments.Export
 			}
 		}
 
-		public List<Excel> CollateData(IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions)
+		private List<Excel> CollateData(IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions)
 		{
 			List<Excel> excel = new List<Excel>();
 			foreach (var comment in comments)
@@ -293,14 +294,6 @@ namespace Comments.Export
 			var orderedData = excel.OrderBy(o => o.Order).ToList();
 
 			return orderedData;
-		}
-
-		public void ToConvert(IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions)
-		{
-			SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Create("C:/Test/TestExcel"+ DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second + ".xlsx", SpreadsheetDocumentType.Workbook);
-
-			//add the excel contents...
-			CreateSheet(spreadsheetDocument, comments, answers, questions);
 		}
 
 		private void CreateSheet(SpreadsheetDocument spreadsheetDocument, IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions)

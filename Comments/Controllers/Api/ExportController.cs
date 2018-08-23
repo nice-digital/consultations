@@ -22,8 +22,6 @@ namespace Comments.Controllers.Api
 		{
 			var result = _exportService.GetAllDataForConsulation(consultationId);
 			
-			//_exportToExcel.ToConvert(result.comment, result.answer, result.question);
-
 			var stream = _exportToExcel.ToSpreadsheet(result.comment, result.answer, result.question);
 			return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 		}
