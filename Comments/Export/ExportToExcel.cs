@@ -2,16 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
-using Comments.Common;
 using Comments.Models;
 using Comments.Services;
-using Comments.ViewModels;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
-using Remotion.Linq.Parsing.Structure.IntermediateModel;
-using Answer = Comments.Models.Answer;
 
 namespace Comments.Export
 {

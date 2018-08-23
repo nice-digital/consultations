@@ -106,7 +106,7 @@ namespace Comments.Models
 
 	    public List<Comment> GetAllSubmittedCommentsForURI(string  sourceURI)
 	    {
-		    var comment = Comment.Where(c => c.StatusId == (int)StatusName.Submitted && c.Location.SourceURI.Contains(sourceURI))
+		    var comment = Comment.Where(c => c.StatusId == (int)StatusName.Submitted && c.Location.SourceURI.Contains(sourceURI) && c.IsDeleted == false)
 			    .Include(l => l.Location)
 			    .Include(s => s.Status)
 			    .IgnoreQueryFilters()
@@ -117,7 +117,7 @@ namespace Comments.Models
 
 	    public List<Answer> GetAllSubmittedAnswersForURI(string sourceURI)
 	    {
-		    var answer = Answer.Where(a => a.StatusId == (int) StatusName.Submitted && a.Question.Location.SourceURI.Contains(sourceURI))
+		    var answer = Answer.Where(a => a.StatusId == (int) StatusName.Submitted && a.Question.Location.SourceURI.Contains(sourceURI) && a.IsDeleted == false)
 				.IgnoreQueryFilters()
 			    .ToList();
 
@@ -125,8 +125,9 @@ namespace Comments.Models
 	    }
 	    public List<Question> GetUnansweredQuestionsForURI(string sourceURI)
 	    {
-		    var question = Question.Where(q => q.Answer.Count == 0)
-			    .ToList();
+		    var question = Question.Where(q => q.Answer.Count == 0 && q.Location.SourceURI.Contains(sourceURI) && q.IsDeleted == false)
+			    .IgnoreQueryFilters()
+				.ToList();
 
 		    return question;
 	    }

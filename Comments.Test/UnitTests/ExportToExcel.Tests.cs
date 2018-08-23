@@ -24,13 +24,9 @@ namespace Comments.Test.UnitTests
 			// Act
 			var response = await _client.GetAsync($"consultations/api/Export/{consultationId}");
 		    response.EnsureSuccessStatusCode();
-
-		    var responseString = await response.Content.ReadAsStreamAsync();
-		    var count = responseString.Read(new byte[responseString.Length], 0, (int)responseString.Length);
 			
 			//Assert
 			response.IsSuccessStatusCode.ShouldBeTrue();
-			count.ShouldBe(1972);
 		}
 
 	    [Fact]
@@ -102,6 +98,11 @@ namespace Comments.Test.UnitTests
 
 			locationId = AddLocation("consultations://./consultation/1", _context, "001.000.000.000");
 		    commentId = AddComment(locationId, "Just a comment", false, userId, (int)StatusName.Submitted, _context);
+		    submissionId = AddSubmission(userId, _context);
+		    AddSubmissionComments(submissionId, commentId, _context);
+
+		    locationId = AddLocation("consultations://./consultation/1", _context, "001.000.000.000");
+		    commentId = AddComment(locationId, "Deleted comment", true, userId, (int)StatusName.Submitted, _context);
 		    submissionId = AddSubmission(userId, _context);
 		    AddSubmissionComments(submissionId, commentId, _context);
 
