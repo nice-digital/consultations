@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using Comments.Common;
 using Comments.Models;
 using Comments.Services;
@@ -16,23 +17,26 @@ namespace Comments.Export
 {
 	public interface IExportToExcel
 	{
-		Stream ToSpreadsheet(IEnumerable<Comments.Models.Location> locations, string consultation, string Document, string chapter);
-		void ToConvert(IEnumerable<Comments.Models.Location> locations, string consultation, string Document, string chapter);
+		Stream ToSpreadsheet(IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions);
+		void ToConvert(IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions);
 	}
 
 	public class ExportToExcel : IExportToExcel
 	{
-		private readonly IConsultationService _consultationService;
-		public ExportToExcel(IConsultationService consultationService)
+		private readonly IUserService _userService;
+		private readonly IExportService _exportService;
+
+		public ExportToExcel(IUserService userService, IExportService exportService)
 		{
-			_consultationService = consultationService;
+			_userService = userService;
+			_exportService = exportService;
 		}
-		public Stream ToSpreadsheet(IEnumerable<Comments.Models.Location> locations, string consultation, string Document, string chapter)
+		public Stream ToSpreadsheet(IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions)
 		{
 			var stream = new MemoryStream();
 			using (var workbook = SpreadsheetDocument.Create(stream, SpreadsheetDocumentType.Workbook))
 			{
-				createSheet(workbook, locations, consultation, Document, chapter);
+				CreateSheet(workbook, comments, answers, questions);
 			}
 
 			stream.Position = 0;
@@ -40,22 +44,7 @@ namespace Comments.Export
 			return stream;
 		}
 
-		(string ConsultationName, string DocumentName, string ChapterName) GetLocationData(Comments.Models.Location location)
-		{
-			var sourceURI = location.SourceURI;
-			ConsultationsUriElements URIElements = ConsultationsUri.ParseConsultationsUri(sourceURI);
-
-			var consultationDetails = _consultationService.GetConsultation(URIElements.ConsultationId, false);
-			var documents = _consultationService.GetDocuments(URIElements.ConsultationId);
-			var documentDetail = documents.FirstOrDefault(x => x.DocumentId == URIElements.DocumentId);
-
-			Chapter chapterDetail = null;
-			if (URIElements.ChapterSlug != null)
-				chapterDetail = documentDetail?.Chapters.First(c => c.Slug == URIElements.ChapterSlug);
-			return (consultationDetails.ConsultationName, documentDetail?.Title, chapterDetail?.Slug);
-		}
-
-		void AppendHeaderRow(SheetData sheet)
+		private void AppendHeaderRow(SheetData sheet)
 		{
 			var headerRow = new Row();
 
@@ -128,149 +117,198 @@ namespace Comments.Export
 
 			cell = new Cell();
 			cell.DataType = CellValues.String;
+			cell.CellValue = new CellValue("Has Tobacco Links");
+			headerRow.AppendChild(cell);
+
+			cell = new Cell();
+			cell.DataType = CellValues.String;
 			cell.CellValue = new CellValue("Submission Criteria Tobacco");
 			headerRow.AppendChild(cell);
 
 			sheet.AppendChild(headerRow);
 		}
 
-		void AppendDataRow(SheetData sheet, IEnumerable<Comments.Models.Location> locations)
+		private void AppendDataRow(SheetData sheet, IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions)
 		{
-			foreach (var location in locations)
+			var data = CollateData(comments, answers, questions);
+
+			foreach (var row in data)
 			{
-				var locationDetails = GetLocationData(location);
-
-				var hasComment = location.Comment.Count != 0;
-				var hasQuestion = location.Question.Count != 0;
-				var hasAnswer = hasQuestion && location.Question.First().Answer.Count != 0;
-
-				//var submission = location.Comment.First().SubmissionComment.First().Submission.TobaccoDisclosure;
-
 				var dataRow = new Row();
-				var answerList = hasAnswer ? location.Question?.First().Answer.ToList() : new List<Answer>();
 
-				var count = 0;
-				do
-				{
-					var userName = hasComment ? location.Comment?.FirstOrDefault().CreatedByUserId.ToString() : answerList[count].CreatedByUserId.ToString();
+				Cell cell;
 
-					LocationColumns(dataRow, locationDetails.ConsultationName, locationDetails.DocumentName, locationDetails.ChapterName, location);
-					UserColumn(dataRow, userName);
-					CommentColumns(dataRow, location, hasComment);
-					QuestionColumns(dataRow, location, hasQuestion);
-					AnswerColumns(dataRow, hasAnswer ? answerList[count] : null, hasAnswer);
-					SubmissionColumns(dataRow);
-					sheet.AppendChild(dataRow);
-					dataRow = new Row();
+				cell = new Cell();
+				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue(row.ConsultationName);
+				dataRow.AppendChild(cell);
 
-					count++;
-				} while (count < answerList.Count()) ;
+				cell = new Cell();
+				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue(row.DocumentName);
+				dataRow.AppendChild(cell);
+
+				cell = new Cell();
+				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue(row.ChapterTitle);
+				dataRow.AppendChild(cell);
+
+				cell = new Cell();
+				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue(row.Section);
+				dataRow.AppendChild(cell);
+
+				cell = new Cell();
+				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue(row.Quote);
+				dataRow.AppendChild(cell);
+
+				cell = new Cell();
+				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue(row.UserName);
+				dataRow.AppendChild(cell);
+
+				cell = new Cell();
+				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue(row.CommentId.ToString());
+				dataRow.AppendChild(cell);
+
+				cell = new Cell();
+				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue(row.Comment);
+				dataRow.AppendChild(cell);
+
+				cell = new Cell();
+				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue(row.QuestionId.ToString());
+				dataRow.AppendChild(cell);
+
+				cell = new Cell();
+				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue(row.Question);
+				dataRow.AppendChild(cell);
+
+				cell = new Cell();
+				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue(row.AnswerId.ToString());
+				dataRow.AppendChild(cell);
+
+				cell = new Cell();
+				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue(row.Answer);
+				dataRow.AppendChild(cell);
+
+				cell = new Cell();
+				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue(row.OrganisationName);
+				dataRow.AppendChild(cell);
+
+				cell = new Cell();
+				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue(row.HasTobaccoLinks.ToString());
+				dataRow.AppendChild(cell);
+
+				cell = new Cell();
+				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue(row.TobaccoIndustryDetails);
+				dataRow.AppendChild(cell);
+
+				sheet.AppendChild(dataRow);
 			}
 		}
 
-		#region AddCells
-
-		private void QuestionColumns(Row dataRow, Comments.Models.Location location, bool hasQuestion)
+		public List<Excel> CollateData(IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions)
 		{
-			Cell cell = new Cell();
-			cell.DataType = CellValues.String;
-			cell.CellValue = new CellValue(hasQuestion ? location.Question.First().QuestionId.ToString() : null);
-			dataRow.AppendChild(cell);
+			List<Excel> excel = new List<Excel>();
+			foreach (var comment in comments)
+			{
+				var locationDetails = _exportService.GetLocationData(comment.Location);
+				var excelrow = new Excel()
+				{
+					ConsultationName = locationDetails.ConsultationName,
+					DocumentName = locationDetails.DocumentName,
+					ChapterTitle = locationDetails.ChapterName,
+					Section = comment.Location.Section,
+					Quote = comment.Location.Quote,
+					UserName = _userService.GetDisplayNameForUserId(comment.CreatedByUserId),
+					CommentId = comment.CommentId,
+					Comment = comment.CommentText,
+					QuestionId = null,
+					Question = null,
+					AnswerId = null,
+					Answer = null,
+					OrganisationName = comment.SubmissionComment.First().Submission.OrganisationName,
+					HasTobaccoLinks = comment.SubmissionComment.First().Submission.HasTobaccoLinks,
+					TobaccoIndustryDetails = comment.SubmissionComment.First().Submission.TobaccoDisclosure,
+					Order = comment.Location.Order
+				};
+				excel.Add(excelrow);
+			}
 
-			cell = new Cell();
-			cell.DataType = CellValues.String;
-			cell.CellValue = new CellValue(hasQuestion ? location.Question.First().QuestionText : null);
-			dataRow.AppendChild(cell);
+			foreach (var answer in answers)
+			{
+				var locationDetails = _exportService.GetLocationData(answer.Question.Location);
+				var excelrow = new Excel()
+				{
+					ConsultationName = locationDetails.ConsultationName,
+					DocumentName = locationDetails.DocumentName,
+					ChapterTitle = locationDetails.ChapterName,
+					Section = answer.Question.Location.Section,
+					Quote = answer.Question.Location.Quote,
+					UserName = _userService.GetDisplayNameForUserId(answer.CreatedByUserId),
+					CommentId = null,
+					Comment = null,
+					QuestionId = answer.Question.QuestionId,
+					Question = answer.Question.QuestionText,
+					AnswerId = answer.AnswerId,
+					Answer = answer.AnswerText,
+					OrganisationName = answer.SubmissionAnswer.First().Submission.OrganisationName,
+					HasTobaccoLinks = answer.SubmissionAnswer.First().Submission.HasTobaccoLinks,
+					TobaccoIndustryDetails = answer.SubmissionAnswer.First().Submission.TobaccoDisclosure,
+					Order = answer.Question.Location.Order
+				};
+				excel.Add(excelrow);
+			}
+
+			foreach (var question in questions)
+			{
+				var locationDetails = _exportService.GetLocationData(question.Location);
+				var excelrow = new Excel()
+				{
+					ConsultationName = locationDetails.ConsultationName,
+					DocumentName = locationDetails.DocumentName,
+					ChapterTitle = locationDetails.ChapterName,
+					Section = question.Location.Section,
+					Quote = question.Location.Quote,
+					UserName = null,
+					CommentId = null,
+					Comment = null,
+					QuestionId = question.QuestionId,
+					Question = question.QuestionText,
+					AnswerId = null,
+					Answer = null,
+					OrganisationName = null,
+					HasTobaccoLinks = null,
+					TobaccoIndustryDetails = null,
+					Order = question.Location.Order
+				};
+				excel.Add(excelrow);
+			}
+
+			var orderedData = excel.OrderBy(o => o.Order).ToList();
+
+			return orderedData;
 		}
 
-		private void AnswerColumns(Row dataRow, Models.Answer answer, bool hasAnswer)
-		{ 
-			Cell cell = new Cell();
-			cell.DataType = CellValues.String;
-			cell.CellValue = new CellValue(hasAnswer ?  answer.AnswerId.ToString() : null);
-			dataRow.AppendChild(cell);
-
-			cell = new Cell();
-			cell.DataType = CellValues.String;
-			cell.CellValue = new CellValue(hasAnswer ? answer.AnswerText : null);
-			dataRow.AppendChild(cell);
-		}
-
-		private void LocationColumns(Row dataRow, string consultationName, string documentName, string chapterName, Models.Location location)
-		{
-			Cell cell;
-
-			cell = new Cell();
-			cell.DataType = CellValues.String;
-			cell.CellValue = new CellValue(consultationName);
-			dataRow.AppendChild(cell);
-
-			cell = new Cell();
-			cell.DataType = CellValues.String;
-			cell.CellValue = new CellValue(documentName);
-			dataRow.AppendChild(cell);
-
-			cell = new Cell();
-			cell.DataType = CellValues.String;
-			cell.CellValue = new CellValue(chapterName);
-			dataRow.AppendChild(cell);
-
-			cell = new Cell();
-			cell.DataType = CellValues.String;
-			cell.CellValue = new CellValue(location.Section);
-			dataRow.AppendChild(cell);
-
-			cell = new Cell();
-			cell.DataType = CellValues.String;
-			cell.CellValue = new CellValue(location.Quote);
-			dataRow.AppendChild(cell);
-		}
-
-		private void UserColumn(Row dataRow, string username)
-		{
-			Cell cell = new Cell();
-			cell.DataType = CellValues.String;
-			cell.CellValue = new CellValue(username);
-			dataRow.AppendChild(cell);
-		}
-
-		private void CommentColumns(Row dataRow, Models.Location location, bool hasComment)
-		{
-			Cell cell = new Cell();
-			cell.DataType = CellValues.String;
-			cell.CellValue = new CellValue(hasComment ? location.Comment.First().CommentId.ToString() : null);
-			dataRow.AppendChild(cell);
-
-			cell = new Cell();
-			cell.DataType = CellValues.String;
-			cell.CellValue = new CellValue(hasComment ? location.Comment.First().CommentText : null);
-			dataRow.AppendChild(cell);
-		}
-
-		private void SubmissionColumns(Row dataRow)
-		{
-			Cell cell = new Cell();
-			cell.DataType = CellValues.String;
-			cell.CellValue = new CellValue("Org");
-			dataRow.AppendChild(cell);
-
-			cell = new Cell();
-			cell.DataType = CellValues.String;
-			cell.CellValue = new CellValue("Tobacco");
-			dataRow.AppendChild(cell);
-		}
-		
-		#endregion
-
-		public void ToConvert(IEnumerable<Comments.Models.Location> locations, string consultation, string Document, string chapter)
+		public void ToConvert(IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions)
 		{
 			SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Create("C:/Test/TestExcel"+ DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second + ".xlsx", SpreadsheetDocumentType.Workbook);
 
 			//add the excel contents...
-			createSheet(spreadsheetDocument, locations, consultation, Document, chapter);
+			CreateSheet(spreadsheetDocument, comments, answers, questions);
 		}
 
-		private void createSheet(SpreadsheetDocument spreadsheetDocument, IEnumerable<Comments.Models.Location> locations, string consultation, string Document, string chapter)
+		private void CreateSheet(SpreadsheetDocument spreadsheetDocument, IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions)
 		{
 			// Add a WorkbookPart to the document.
 			WorkbookPart workbookpart = spreadsheetDocument.AddWorkbookPart();
@@ -296,7 +334,7 @@ namespace Comments.Export
 
 			AppendHeaderRow(sheetData);
 
-			AppendDataRow(sheetData, locations);
+			AppendDataRow(sheetData, comments, answers, questions);
 
 			workbookpart.WorksheetParts.First().Worksheet.Save();
 			workbookpart.Workbook.Save();

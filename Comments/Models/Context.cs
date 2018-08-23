@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using Remotion.Linq.Clauses;
+using SQLitePCL;
 
 namespace Comments.Models
 {
@@ -60,6 +61,8 @@ namespace Comments.Models
 			    partialSourceURIToUse = $"{partialMatchExactSourceURIToUse}/";
 		    }
 
+			//Answer.Where(a => a.Status = 1 && a.Question.Location.SourceURI)
+
 			var data = Location.Where(l => partialMatchSourceURI
 					? (l.SourceURI.Equals(partialMatchExactSourceURIToUse) || l.SourceURI.Contains(partialSourceURIToUse))
 					: sourceURIs.Contains(l.SourceURI))
@@ -87,16 +90,12 @@ namespace Comments.Models
 			{
 				var filteredData = data.Where(l =>
 												(l.Comment != null && l.Comment.Count != 0 ? l.Comment.Any(c => c.StatusId == (int)StatusName.Submitted) : false)
-												//||
-												//(l.Question != null && l.Question.Count != 0 ? l.Question.Any(q => q.Answer.Count() == 0) : false)
-												//||
-												//(l.Question != null && l.Question.Count != 0 ? l.Question.FirstOrDefault().Answer.Any(c => c.StatusId == (int)StatusName.Submitted) : false)
+												||
+												(l.Question != null && l.Question.Count != 0 ? l.Question.Any(q => q.Answer.Count() == 0) : false)
 												||
 												(l.Question != null && l.Question.Count != 0 ? l.Question.FirstOrDefault().Answer.Any(c => c.StatusId == (int)StatusName.Submitted) : false)
-												);
+											);
 
-				var results = from l in Location;
-				
 				return filteredData;
 			}
 
@@ -104,6 +103,33 @@ namespace Comments.Models
 			
 			
 		}
+
+	    public List<Comment> GetAllSubmittedCommentsForURI(string  sourceURI)
+	    {
+		    var comment = Comment.Where(c => c.StatusId == (int)StatusName.Submitted && c.Location.SourceURI.Contains(sourceURI))
+			    .Include(l => l.Location)
+			    .Include(s => s.Status)
+			    .IgnoreQueryFilters()
+				.ToList();
+
+		    return comment;
+		}
+
+	    public List<Answer> GetAllSubmittedAnswersForURI(string sourceURI)
+	    {
+		    var answer = Answer.Where(a => a.StatusId == (int) StatusName.Submitted && a.Question.Location.SourceURI.Contains(sourceURI))
+				.IgnoreQueryFilters()
+			    .ToList();
+
+			return answer;
+	    }
+	    public List<Question> GetUnansweredQuestionsForURI(string sourceURI)
+	    {
+		    var question = Question.Where(q => q.Answer.Count == 0)
+			    .ToList();
+
+		    return question;
+	    }
 
 		public Comment GetComment(int commentId)
         {

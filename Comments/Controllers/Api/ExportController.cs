@@ -21,11 +21,10 @@ namespace Comments.Controllers.Api
 		public IActionResult Get([FromRoute] int consultationId)
 		{
 			var result = _exportService.GetAllDataForConsulation(consultationId);
-			var data = _exportService.GetConsultationDetails(consultationId);
 			
-			_exportToExcel.ToConvert(result.Item1, data.Item1, data.Item2.First().Title, data.Item3);
+			//_exportToExcel.ToConvert(result.comment, result.answer, result.question);
 
-			var stream = _exportToExcel.ToSpreadsheet(result.Item1, data.Item1, data.Item2.First().Title, data.Item3);
+			var stream = _exportToExcel.ToSpreadsheet(result.comment, result.answer, result.question);
 			return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 		}
 	}

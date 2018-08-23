@@ -31,7 +31,7 @@ namespace Comments.Services
         public User GetCurrentUser()
         {
             var contextUser = _httpContextAccessor.HttpContext?.User;
-            return new User(contextUser?.Identity.IsAuthenticated ?? false, contextUser?.DisplayName(), contextUser?.Id());
+            return new User(contextUser?.Identity.IsAuthenticated ?? false, contextUser?.DisplayName(), contextUser?.Id(), contextUser?.Organisation());
         }
 
 	    public SignInDetails GetCurrentUserSignInDetails(string returnURL)
