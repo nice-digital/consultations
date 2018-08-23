@@ -1,18 +1,17 @@
 /* global jest */
 
 import React from "react";
-import { mount, shallow } from "enzyme";
+import { mount } from "enzyme";
 import { MemoryRouter } from "react-router";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import toJson from "enzyme-to-json";
 
-import { generateUrl } from "../../../data/loader";
 import { nextTick, queryStringToObject } from "../../../helpers/utils";
-import ReviewListPageWithRouter, {ReviewListPage} from "../ReviewListPage";
+import { ReviewListPage } from "../ReviewListPage";
 
-import ConsultationData from "./Consultation";
-import CommentsReviewData from "./CommentsReview";
+import ConsultationData from "./Consultation.json";
+import CommentsReviewData from "./CommentsReview.json";
 
 const mock = new MockAdapter(axios);
 
@@ -21,10 +20,10 @@ jest.mock("../../../context/UserContext", () => {
 		UserContext: {
 			Consumer: (props) => {
 				return props.children({
-					isAuthorised: true
+					isAuthorised: true,
 				});
-			}
-		}
+			},
+		},
 	};
 });
 
@@ -43,9 +42,9 @@ function mockReact() {
 
 			return {
 				Provider: Provider,
-				Consumer: Consumer
+				Consumer: Consumer,
 			};
-		})
+		}),
 	};
 }
 jest.mock("react", () => mockReact());
@@ -57,19 +56,19 @@ describe("[ClientApp] ", () => {
 				url: "/1/review",
 				params: {
 					consultationId: 1,
-				}
+				},
 			},
 			location: {
 				pathname: "/1/review",
-				search: "?sourceURI=consultations%3A%2F%2F.%2Fconsultation%2F1%2Fdocument%2F1"
+				search: "?sourceURI=consultations%3A%2F%2F.%2Fconsultation%2F1%2Fdocument%2F1",
 			},
 			history:{
 				location:{
-					search: ""
+					search: "",
 				},
 				listen: function(){},
 			},
-			basename: "/consultations"
+			basename: "/consultations",
 		};
 
 		afterEach(() => {
@@ -88,7 +87,7 @@ describe("[ClientApp] ", () => {
 			mock
 				.onGet("/consultations/api/Documents?consultationId=1")
 				.reply(() => {
-					return [200, DocumentsData];
+					return [200, []];
 				});
 
 			mock
@@ -134,7 +133,7 @@ describe("[ClientApp] ", () => {
 
 			return Promise.all([
 				commentsReviewPromise,
-				consultationPromise
+				consultationPromise,
 			]).then(async () => {
 				await nextTick();
 				wrapper.update();
@@ -180,7 +179,7 @@ describe("[ClientApp] ", () => {
 				expect(
 					toJson(wrapper, {
 						noKey: true,
-						mode: "deep"
+						mode: "deep",
 					})
 				).toMatchSnapshot();
 			});
