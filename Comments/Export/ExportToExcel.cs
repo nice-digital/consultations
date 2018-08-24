@@ -222,9 +222,26 @@ namespace Comments.Export
 			foreach (var comment in comments)
 			{
 				_logger.LogWarning("comments");
+
 				var locationDetails = _exportService.GetLocationData(comment.Location);
+
+				_logger.LogWarning("1" + locationDetails.ConsultationName);
+				_logger.LogWarning("2" + locationDetails.DocumentName);
+				_logger.LogWarning("3" + locationDetails.ChapterName);
+				_logger.LogWarning("4" + comment.Location.Section);
+				_logger.LogWarning("5" + comment.Location.Quote);
+				_logger.LogWarning("6" + _userService.GetDisplayNameForUserId(comment.CreatedByUserId));
+				_logger.LogWarning("7" + comment.CommentId.ToString());
+				_logger.LogWarning("8" + comment.CommentText);
+				_logger.LogWarning("9" + comment.SubmissionComment.First().Submission.OrganisationName);
+				_logger.LogWarning("10" + comment.SubmissionComment.First().Submission.HasTobaccoLinks.ToString());
+				_logger.LogWarning("11" + comment.SubmissionComment.First().Submission.TobaccoDisclosure);
+				_logger.LogWarning("12" + comment.Location.Order);
+
+				//var locationDetails = _exportService.GetLocationData(comment.Location);
 				var excelrow = new Excel()
 				{
+
 					ConsultationName = locationDetails.ConsultationName,
 					DocumentName = locationDetails.DocumentName,
 					ChapterTitle = locationDetails.ChapterName,
