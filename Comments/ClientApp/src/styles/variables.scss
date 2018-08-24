@@ -16,34 +16,4 @@
 
 $colour-agile-phase: #007AB8;
 
-@mixin visibleToggleOut($duration) {
-  animation: $duration visibleToggleOut;
-  animation-fill-mode: forwards;
-  @keyframes visibleToggleOut {
-    1% {
-      visibility: visible;
-    }
-    99% {
-      visibility: visible;
-    }
-    100% {
-      visibility: hidden;
-    }
-  }
-}
 
-@mixin visibleToggleIn($duration) {
-  animation: $duration visibleToggleIn;
-  animation-fill-mode: forwards;
-  @keyframes visibleToggleIn {
-    0% {
-      visibility: hidden;
-    }
-    1% {
-      visibility: visible;
-    }
-    100% {
-      visibility: visible;
-    }
-  }
-}
