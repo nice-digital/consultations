@@ -221,14 +221,14 @@ namespace Comments.Export
 				var locationDetails = _exportService.GetLocationData(comment.Location);
 				var excelrow = new Excel()
 				{
-					ConsultationName = locationDetails.ConsultationName,
-					DocumentName = locationDetails.DocumentName,
-					ChapterTitle = locationDetails.ChapterName,
-					Section = comment.Location.Section,
-					Quote = comment.Location.Quote,
-					UserName = _userService.GetDisplayNameForUserId(comment.CreatedByUserId),
-					CommentId = comment.CommentId,
-					Comment = comment.CommentText,
+					//ConsultationName = locationDetails.ConsultationName,
+					//DocumentName = locationDetails.DocumentName,
+					//ChapterTitle = locationDetails.ChapterName,
+					//Section = comment.Location.Section,
+					//Quote = comment.Location.Quote,
+					//UserName = _userService.GetDisplayNameForUserId(comment.CreatedByUserId),
+					//CommentId = comment.CommentId,
+					//Comment = comment.CommentText,
 					//QuestionId = null,
 					//Question = null,
 					//AnswerId = null,
