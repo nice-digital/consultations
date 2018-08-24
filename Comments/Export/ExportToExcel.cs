@@ -7,6 +7,7 @@ using Comments.Services;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
+using Microsoft.Extensions.Logging;
 
 namespace Comments.Export
 {
@@ -19,11 +20,13 @@ namespace Comments.Export
 	{
 		private readonly IUserService _userService;
 		private readonly IExportService _exportService;
+		private readonly ILogger<ExportToExcel> _logger;
 
-		public ExportToExcel(IUserService userService, IExportService exportService)
+		public ExportToExcel(IUserService userService, IExportService exportService, ILogger<ExportToExcel> logger)
 		{
 			_userService = userService;
 			_exportService = exportService;
+			_logger = logger;
 		}
 		public Stream ToSpreadsheet(IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions)
 		{
@@ -218,78 +221,78 @@ namespace Comments.Export
 			List<Excel> excel = new List<Excel>();
 			foreach (var comment in comments)
 			{
-				System.Console.WriteLine("comment");
+				_logger.LogWarning("comments");
 				var locationDetails = _exportService.GetLocationData(comment.Location);
 				var excelrow = new Excel()
 				{
-					//ConsultationName = locationDetails.ConsultationName,
-					//DocumentName = locationDetails.DocumentName,
-					//ChapterTitle = locationDetails.ChapterName,
-					//Section = comment.Location.Section,
-					//Quote = comment.Location.Quote,
-					//UserName = _userService.GetDisplayNameForUserId(comment.CreatedByUserId),
-					//CommentId = comment.CommentId,
-					//Comment = comment.CommentText,
-					//QuestionId = null,
-					//Question = null,
-					//AnswerId = null,
-					//Answer = null,
-					//OrganisationName = comment.SubmissionComment.First().Submission.OrganisationName,
-					//HasTobaccoLinks = comment.SubmissionComment.First().Submission.HasTobaccoLinks,
-					//TobaccoIndustryDetails = comment.SubmissionComment.First().Submission.TobaccoDisclosure,
-					//Order = comment.Location.Order
+					ConsultationName = locationDetails.ConsultationName,
+					DocumentName = locationDetails.DocumentName,
+					ChapterTitle = locationDetails.ChapterName,
+					Section = comment.Location.Section,
+					Quote = comment.Location.Quote,
+					UserName = _userService.GetDisplayNameForUserId(comment.CreatedByUserId),
+					CommentId = comment.CommentId,
+					Comment = comment.CommentText,
+					QuestionId = null,
+					Question = null,
+					AnswerId = null,
+					Answer = null,
+					OrganisationName = comment.SubmissionComment.First().Submission.OrganisationName,
+					HasTobaccoLinks = comment.SubmissionComment.First().Submission.HasTobaccoLinks,
+					TobaccoIndustryDetails = comment.SubmissionComment.First().Submission.TobaccoDisclosure,
+					Order = comment.Location.Order
 				};
 				excel.Add(excelrow);
 			}
 
 			foreach (var answer in answers)
 			{
-				System.Console.WriteLine("comment");
+				_logger.LogWarning("answer");
 				var locationDetails = _exportService.GetLocationData(answer.Question.Location);
 				var excelrow = new Excel()
 				{
-					//ConsultationName = locationDetails.ConsultationName,
-					//DocumentName = locationDetails.DocumentName,
-					//ChapterTitle = locationDetails.ChapterName,
-					//Section = answer.Question.Location.Section,
-					//Quote = answer.Question.Location.Quote,
-					//UserName = _userService.GetDisplayNameForUserId(answer.CreatedByUserId),
-					//CommentId = null,
-					//Comment = null,
-					//QuestionId = answer.Question.QuestionId,
-					//Question = answer.Question.QuestionText,
-					//AnswerId = answer.AnswerId,
-					//Answer = answer.AnswerText,
-					//OrganisationName = answer.SubmissionAnswer.First().Submission.OrganisationName,
-					//HasTobaccoLinks = answer.SubmissionAnswer.First().Submission.HasTobaccoLinks,
-					//TobaccoIndustryDetails = answer.SubmissionAnswer.First().Submission.TobaccoDisclosure,
-					//Order = answer.Question.Location.Order
+					ConsultationName = locationDetails.ConsultationName,
+					DocumentName = locationDetails.DocumentName,
+					ChapterTitle = locationDetails.ChapterName,
+					Section = answer.Question.Location.Section,
+					Quote = answer.Question.Location.Quote,
+					UserName = _userService.GetDisplayNameForUserId(answer.CreatedByUserId),
+					CommentId = null,
+					Comment = null,
+					QuestionId = answer.Question.QuestionId,
+					Question = answer.Question.QuestionText,
+					AnswerId = answer.AnswerId,
+					Answer = answer.AnswerText,
+					OrganisationName = answer.SubmissionAnswer.First().Submission.OrganisationName,
+					HasTobaccoLinks = answer.SubmissionAnswer.First().Submission.HasTobaccoLinks,
+					TobaccoIndustryDetails = answer.SubmissionAnswer.First().Submission.TobaccoDisclosure,
+					Order = answer.Question.Location.Order
 				};
 				excel.Add(excelrow);
 			}
 
 			foreach (var question in questions)
 			{
-				System.Console.WriteLine("comment");
+				_logger.LogWarning("question");
 				var locationDetails = _exportService.GetLocationData(question.Location);
 				var excelrow = new Excel()
 				{
-					//ConsultationName = locationDetails.ConsultationName,
-					//DocumentName = locationDetails.DocumentName,
-					//ChapterTitle = locationDetails.ChapterName,
-					//Section = question.Location.Section,
-					//Quote = question.Location.Quote,
-					//UserName = null,
-					//CommentId = null,
-					//Comment = null,
-					//QuestionId = question.QuestionId,
-					//Question = question.QuestionText,
-					//AnswerId = null,
-					//Answer = null,
-					//OrganisationName = null,
-					//HasTobaccoLinks = null,
-					//TobaccoIndustryDetails = null,
-					//Order = question.Location.Order
+					ConsultationName = locationDetails.ConsultationName,
+					DocumentName = locationDetails.DocumentName,
+					ChapterTitle = locationDetails.ChapterName,
+					Section = question.Location.Section,
+					Quote = question.Location.Quote,
+					UserName = null,
+					CommentId = null,
+					Comment = null,
+					QuestionId = question.QuestionId,
+					Question = question.QuestionText,
+					AnswerId = null,
+					Answer = null,
+					OrganisationName = null,
+					HasTobaccoLinks = null,
+					TobaccoIndustryDetails = null,
+					Order = question.Location.Order
 				};
 				excel.Add(excelrow);
 			}
