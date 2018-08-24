@@ -241,55 +241,55 @@ namespace Comments.Export
 				excel.Add(excelrow);
 			}
 
-			foreach (var answer in answers)
-			{
-				var locationDetails = _exportService.GetLocationData(answer.Question.Location);
-				var excelrow = new Excel()
-				{
-					ConsultationName = locationDetails.ConsultationName,
-					DocumentName = locationDetails.DocumentName,
-					ChapterTitle = locationDetails.ChapterName,
-					Section = answer.Question.Location.Section,
-					Quote = answer.Question.Location.Quote,
-					UserName = _userService.GetDisplayNameForUserId(answer.CreatedByUserId),
-					CommentId = null,
-					Comment = null,
-					QuestionId = answer.Question.QuestionId,
-					Question = answer.Question.QuestionText,
-					AnswerId = answer.AnswerId,
-					Answer = answer.AnswerText,
-					OrganisationName = answer.SubmissionAnswer.First().Submission.OrganisationName,
-					HasTobaccoLinks = answer.SubmissionAnswer.First().Submission.HasTobaccoLinks,
-					TobaccoIndustryDetails = answer.SubmissionAnswer.First().Submission.TobaccoDisclosure,
-					Order = answer.Question.Location.Order
-				};
-				excel.Add(excelrow);
-			}
+			//foreach (var answer in answers)
+			//{
+			//	var locationDetails = _exportService.GetLocationData(answer.Question.Location);
+			//	var excelrow = new Excel()
+			//	{
+			//		ConsultationName = locationDetails.ConsultationName,
+			//		DocumentName = locationDetails.DocumentName,
+			//		ChapterTitle = locationDetails.ChapterName,
+			//		Section = answer.Question.Location.Section,
+			//		Quote = answer.Question.Location.Quote,
+			//		UserName = _userService.GetDisplayNameForUserId(answer.CreatedByUserId),
+			//		CommentId = null,
+			//		Comment = null,
+			//		QuestionId = answer.Question.QuestionId,
+			//		Question = answer.Question.QuestionText,
+			//		AnswerId = answer.AnswerId,
+			//		Answer = answer.AnswerText,
+			//		OrganisationName = answer.SubmissionAnswer.First().Submission.OrganisationName,
+			//		HasTobaccoLinks = answer.SubmissionAnswer.First().Submission.HasTobaccoLinks,
+			//		TobaccoIndustryDetails = answer.SubmissionAnswer.First().Submission.TobaccoDisclosure,
+			//		Order = answer.Question.Location.Order
+			//	};
+			//	excel.Add(excelrow);
+			//}
 
-			foreach (var question in questions)
-			{
-				var locationDetails = _exportService.GetLocationData(question.Location);
-				var excelrow = new Excel()
-				{
-					ConsultationName = locationDetails.ConsultationName,
-					DocumentName = locationDetails.DocumentName,
-					ChapterTitle = locationDetails.ChapterName,
-					Section = question.Location.Section,
-					Quote = question.Location.Quote,
-					UserName = null,
-					CommentId = null,
-					Comment = null,
-					QuestionId = question.QuestionId,
-					Question = question.QuestionText,
-					AnswerId = null,
-					Answer = null,
-					OrganisationName = null,
-					HasTobaccoLinks = null,
-					TobaccoIndustryDetails = null,
-					Order = question.Location.Order
-				};
-				excel.Add(excelrow);
-			}
+			//foreach (var question in questions)
+			//{
+			//	var locationDetails = _exportService.GetLocationData(question.Location);
+			//	var excelrow = new Excel()
+			//	{
+			//		ConsultationName = locationDetails.ConsultationName,
+			//		DocumentName = locationDetails.DocumentName,
+			//		ChapterTitle = locationDetails.ChapterName,
+			//		Section = question.Location.Section,
+			//		Quote = question.Location.Quote,
+			//		UserName = null,
+			//		CommentId = null,
+			//		Comment = null,
+			//		QuestionId = question.QuestionId,
+			//		Question = question.QuestionText,
+			//		AnswerId = null,
+			//		Answer = null,
+			//		OrganisationName = null,
+			//		HasTobaccoLinks = null,
+			//		TobaccoIndustryDetails = null,
+			//		Order = question.Location.Order
+			//	};
+			//	excel.Add(excelrow);
+			//}
 
 			var orderedData = excel.OrderBy(o => o.Order).ToList();
 
