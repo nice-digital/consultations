@@ -229,14 +229,14 @@ namespace Comments.Export
 					UserName = _userService.GetDisplayNameForUserId(comment.CreatedByUserId),
 					CommentId = comment.CommentId,
 					Comment = comment.CommentText,
-					QuestionId = null,
-					Question = null,
-					AnswerId = null,
-					Answer = null,
-					OrganisationName = comment.SubmissionComment.First().Submission.OrganisationName,
-					HasTobaccoLinks = comment.SubmissionComment.First().Submission.HasTobaccoLinks,
-					TobaccoIndustryDetails = comment.SubmissionComment.First().Submission.TobaccoDisclosure,
-					Order = comment.Location.Order
+					//QuestionId = null,
+					//Question = null,
+					//AnswerId = null,
+					//Answer = null,
+					//OrganisationName = comment.SubmissionComment.First().Submission.OrganisationName,
+					//HasTobaccoLinks = comment.SubmissionComment.First().Submission.HasTobaccoLinks,
+					//TobaccoIndustryDetails = comment.SubmissionComment.First().Submission.TobaccoDisclosure,
+					//Order = comment.Location.Order
 				};
 				excel.Add(excelrow);
 			}
@@ -291,7 +291,8 @@ namespace Comments.Export
 			//	excel.Add(excelrow);
 			//}
 
-			var orderedData = excel.OrderBy(o => o.Order).ToList();
+			//var orderedData = excel.OrderBy(o => o.Order).ToList();
+			var orderedData = excel.ToList();
 
 			return orderedData;
 		}
