@@ -2,7 +2,7 @@
 import React from "react";
 import { shallow } from "enzyme";
 
-import ResultsInfo from "./../ResultsInfo";
+import ResultsInfo from "../ResultsInfo";
 import Sort from "./../../Sort/Sort";
 import AppliedFilter from "./../../AppliedFilter/AppliedFilter";
 
