@@ -109,6 +109,8 @@ namespace Comments.Models
 		    var comment = Comment.Where(c => c.StatusId == (int)StatusName.Submitted && c.Location.SourceURI.Contains(sourceURI) && c.IsDeleted == false)
 			    .Include(l => l.Location)
 			    .Include(s => s.Status)
+				.Include(sc => sc.SubmissionComment)
+				.ThenInclude(s => s.Submission)
 			    .IgnoreQueryFilters()
 				.ToList();
 
@@ -118,6 +120,8 @@ namespace Comments.Models
 	    public List<Answer> GetAllSubmittedAnswersForURI(string sourceURI)
 	    {
 		    var answer = Answer.Where(a => a.StatusId == (int) StatusName.Submitted && a.Question.Location.SourceURI.Contains(sourceURI) && a.IsDeleted == false)
+			    .Include(sc => sc.SubmissionAnswer)
+			    .ThenInclude(s => s.Submission)
 				.IgnoreQueryFilters()
 			    .ToList();
 
