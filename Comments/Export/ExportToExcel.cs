@@ -233,9 +233,9 @@ namespace Comments.Export
 				_logger.LogWarning("6" + _userService.GetDisplayNameForUserId(comment.CreatedByUserId));
 				_logger.LogWarning("7" + comment.CommentId.ToString());
 				_logger.LogWarning("8" + comment.CommentText);
-				_logger.LogWarning("9" + comment.SubmissionComment.First().Submission.OrganisationName);
-				_logger.LogWarning("10" + comment.SubmissionComment.First().Submission.HasTobaccoLinks.ToString());
-				_logger.LogWarning("11" + comment.SubmissionComment.First().Submission.TobaccoDisclosure);
+				_logger.LogWarning("9" + comment.SubmissionComment?.First().Submission.OrganisationName);
+				_logger.LogWarning("10" + comment.SubmissionComment?.First().Submission.HasTobaccoLinks.ToString());
+				_logger.LogWarning("11" + comment.SubmissionComment?.First().Submission.TobaccoDisclosure);
 				_logger.LogWarning("12" + comment.Location.Order);
 
 				//var locationDetails = _exportService.GetLocationData(comment.Location);
@@ -254,9 +254,9 @@ namespace Comments.Export
 					Question = null,
 					AnswerId = null,
 					Answer = null,
-					OrganisationName = comment.SubmissionComment.First().Submission.OrganisationName,
-					HasTobaccoLinks = comment.SubmissionComment.First().Submission.HasTobaccoLinks,
-					TobaccoIndustryDetails = comment.SubmissionComment.First().Submission.TobaccoDisclosure,
+					OrganisationName = comment.SubmissionComment?.First().Submission.OrganisationName,
+					HasTobaccoLinks = comment.SubmissionComment?.First().Submission.HasTobaccoLinks,
+					TobaccoIndustryDetails = comment.SubmissionComment?.First().Submission.TobaccoDisclosure,
 					Order = comment.Location.Order
 				};
 				excel.Add(excelrow);
@@ -280,9 +280,9 @@ namespace Comments.Export
 					Question = answer.Question.QuestionText,
 					AnswerId = answer.AnswerId,
 					Answer = answer.AnswerText,
-					OrganisationName = answer.SubmissionAnswer.First().Submission.OrganisationName,
-					HasTobaccoLinks = answer.SubmissionAnswer.First().Submission.HasTobaccoLinks,
-					TobaccoIndustryDetails = answer.SubmissionAnswer.First().Submission.TobaccoDisclosure,
+					OrganisationName = answer.SubmissionAnswer?.First().Submission.OrganisationName,
+					HasTobaccoLinks = answer.SubmissionAnswer?.First().Submission.HasTobaccoLinks,
+					TobaccoIndustryDetails = answer.SubmissionAnswer?.First().Submission.TobaccoDisclosure,
 					Order = answer.Question.Location.Order
 				};
 				excel.Add(excelrow);
