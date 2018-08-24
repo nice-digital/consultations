@@ -218,6 +218,7 @@ namespace Comments.Export
 			List<Excel> excel = new List<Excel>();
 			foreach (var comment in comments)
 			{
+				System.Console.WriteLine("comment");
 				var locationDetails = _exportService.GetLocationData(comment.Location);
 				var excelrow = new Excel()
 				{
@@ -243,6 +244,7 @@ namespace Comments.Export
 
 			foreach (var answer in answers)
 			{
+				System.Console.WriteLine("comment");
 				var locationDetails = _exportService.GetLocationData(answer.Question.Location);
 				var excelrow = new Excel()
 				{
@@ -268,6 +270,7 @@ namespace Comments.Export
 
 			foreach (var question in questions)
 			{
+				System.Console.WriteLine("comment");
 				var locationDetails = _exportService.GetLocationData(question.Location);
 				var excelrow = new Excel()
 				{
