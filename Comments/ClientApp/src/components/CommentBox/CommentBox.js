@@ -118,6 +118,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 								className="form__input form__input--textarea"
 								onChange={this.textareaChangeHandler}
 								placeholder="Enter your comment here"
+								tabIndex={0}
 								value={commentText}/>
 						</div>
 						{!readOnly && commentText && commentText.length > 0 && (
