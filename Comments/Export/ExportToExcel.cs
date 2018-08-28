@@ -250,22 +250,22 @@ namespace Comments.Export
 				var locationDetails = _exportService.GetLocationData(answer.Question.Location);
 				var excelrow = new Excel()
 				{
-					//ConsultationName = locationDetails.ConsultationName,
-					//DocumentName = locationDetails.DocumentName,
-					//ChapterTitle = locationDetails.ChapterName,
-					//Section = answer.Question.Location.Section,
-					//Quote = answer.Question.Location.Quote,
-					//UserName = _userService.GetDisplayNameForUserId(answer.CreatedByUserId),
+					ConsultationName = locationDetails.ConsultationName,
+					DocumentName = locationDetails.DocumentName,
+					ChapterTitle = locationDetails.ChapterName,
+					Section = answer.Question.Location.Section,
+					Quote = answer.Question.Location.Quote,
+					UserName = _userService.GetDisplayNameForUserId(answer.CreatedByUserId),
 					CommentId = null,
 					Comment = null,
-					//QuestionId = answer.Question.QuestionId,
-					//Question = answer.Question.QuestionText,
+					QuestionId = answer.Question.QuestionId,
+					Question = answer.Question.QuestionText,
 					AnswerId = answer.AnswerId,
 					Answer = answer.AnswerText,
-					//OrganisationName = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.OrganisationName : null,
-					//HasTobaccoLinks = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.HasTobaccoLinks : null,
-					//TobaccoIndustryDetails = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.TobaccoDisclosure : null,
-					//Order = answer.Question.Location.Order
+					OrganisationName = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.OrganisationName : null,
+					HasTobaccoLinks = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.HasTobaccoLinks : null,
+					TobaccoIndustryDetails = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.TobaccoDisclosure : null,
+					Order = answer.Question.Location.Order
 				};
 				excel.Add(excelrow);
 			}

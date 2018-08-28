@@ -120,6 +120,7 @@ namespace Comments.Models
 	    public List<Answer> GetAllSubmittedAnswersForURI(string sourceURI)
 	    {
 		    var answer = Answer.Where(a => a.StatusId == (int) StatusName.Submitted && a.Question.Location.SourceURI.Contains(sourceURI) && a.IsDeleted == false)
+				.Include(q => q.Question)
 			    .Include(sc => sc.SubmissionAnswer)
 			    .ThenInclude(s => s.Submission)
 				.IgnoreQueryFilters()
