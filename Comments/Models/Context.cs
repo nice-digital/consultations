@@ -121,6 +121,7 @@ namespace Comments.Models
 	    {
 		    var answer = Answer.Where(a => a.StatusId == (int) StatusName.Submitted && a.Question.Location.SourceURI.Contains(sourceURI) && a.IsDeleted == false)
 				.Include(q => q.Question)
+				.ThenInclude(l => l.Location)
 			    .Include(sc => sc.SubmissionAnswer)
 			    .ThenInclude(s => s.Submission)
 				.IgnoreQueryFilters()
