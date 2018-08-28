@@ -245,55 +245,55 @@ namespace Comments.Export
 				excel.Add(excelrow);
 			}
 
-			//foreach (var answer in answers)
-			//{
-			//	var locationDetails = _exportService.GetLocationData(answer.Question.Location);
-			//	var excelrow = new Excel()
-			//	{
-			//		ConsultationName = locationDetails.ConsultationName,
-			//		DocumentName = locationDetails.DocumentName,
-			//		ChapterTitle = locationDetails.ChapterName,
-			//		Section = answer.Question.Location.Section,
-			//		Quote = answer.Question.Location.Quote,
-			//		UserName = null, //_userService.GetDisplayNameForUserId(answer.CreatedByUserId),
-			//		CommentId = null,
-			//		Comment = null,
-			//		QuestionId = answer.Question.QuestionId,
-			//		Question = answer.Question.QuestionText,
-			//		AnswerId = answer.AnswerId,
-			//		Answer = answer.AnswerText,
-			//		OrganisationName = null, // answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.OrganisationName : null,
-			//		HasTobaccoLinks = null, // answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.HasTobaccoLinks : null,
-			//		TobaccoIndustryDetails = null, // answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.TobaccoDisclosure : null,
-			//		Order = null //answer.Question.Location.Order
-			//	};
-			//	excel.Add(excelrow);
-			//}
+			foreach (var answer in answers)
+			{
+				var locationDetails = _exportService.GetLocationData(answer.Question.Location);
+				var excelrow = new Excel()
+				{
+					ConsultationName = locationDetails.ConsultationName,
+					DocumentName = locationDetails.DocumentName,
+					ChapterTitle = locationDetails.ChapterName,
+					Section = answer.Question.Location.Section,
+					Quote = answer.Question.Location.Quote,
+					UserName = null, //_userService.GetDisplayNameForUserId(answer.CreatedByUserId),
+					CommentId = null,
+					Comment = null,
+					QuestionId = answer.Question.QuestionId,
+					Question = answer.Question.QuestionText,
+					AnswerId = answer.AnswerId,
+					Answer = answer.AnswerText,
+					OrganisationName = null, // answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.OrganisationName : null,
+					HasTobaccoLinks = null, // answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.HasTobaccoLinks : null,
+					TobaccoIndustryDetails = null, // answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.TobaccoDisclosure : null,
+					Order = null //answer.Question.Location.Order
+				};
+				excel.Add(excelrow);
+			}
 
-			//foreach (var question in questions)
-			//{
-			//	var locationDetails = _exportService.GetLocationData(question.Location);
-			//	var excelrow = new Excel()
-			//	{
-			//		ConsultationName = locationDetails.ConsultationName,
-			//		DocumentName = locationDetails.DocumentName,
-			//		ChapterTitle = locationDetails.ChapterName,
-			//		Section = question.Location.Section,
-			//		Quote = question.Location.Quote,
-			//		UserName = null,
-			//		CommentId = null,
-			//		Comment = null,
-			//		QuestionId = question.QuestionId,
-			//		Question = question.QuestionText,
-			//		AnswerId = null,
-			//		Answer = null,
-			//		OrganisationName = null,
-			//		HasTobaccoLinks = null,
-			//		TobaccoIndustryDetails = null,
-			//		Order = null// question.Location.Order
-			//	};
-			//	excel.Add(excelrow);
-			//}
+			foreach (var question in questions)
+			{
+				var locationDetails = _exportService.GetLocationData(question.Location);
+				var excelrow = new Excel()
+				{
+					ConsultationName = locationDetails.ConsultationName,
+					DocumentName = locationDetails.DocumentName,
+					ChapterTitle = locationDetails.ChapterName,
+					Section = question.Location.Section,
+					Quote = question.Location.Quote,
+					UserName = null,
+					CommentId = null,
+					Comment = null,
+					QuestionId = question.QuestionId,
+					Question = question.QuestionText,
+					AnswerId = null,
+					Answer = null,
+					OrganisationName = null,
+					HasTobaccoLinks = null,
+					TobaccoIndustryDetails = null,
+					Order = null// question.Location.Order
+				};
+				excel.Add(excelrow);
+			}
 
 			var orderedData = excel.OrderBy(o => o.Order).ToList();
 
