@@ -13,6 +13,7 @@ import FooterWithRouter from "../Footer/Footer";
 import DocumentPreviewWithRouter from "../DocumentPreview/DocumentPreview";
 import DocumentPreviewRedirectWithRouter from "../DocumentPreview/DocumentPreviewRedirect";
 import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
+import {LiveAnnouncer} from "react-aria-live";
 
 type PropsType = any;
 
@@ -29,7 +30,8 @@ class App extends React.Component<PropsType, StateType> {
 						<html lang="en-GB"/>
 					</Helmet>
 					<ErrorBoundary>
-						<Switch>
+						<LiveAnnouncer>
+							<Switch>
 								{/*Document View*/}			
 								<Route exact path="/:consultationId/:documentId/:chapterSlug">
 									<DocumentViewWithRouter/>
@@ -53,7 +55,8 @@ class App extends React.Component<PropsType, StateType> {
 
 								{/*404*/}
 								<Route component={NotFound} />
-						</Switch>
+							</Switch>
+						</LiveAnnouncer>
 					</ErrorBoundary>
 				</UserProviderWithRouter>
 				<FooterWithRouter />
