@@ -231,8 +231,8 @@ namespace Comments.Export
 					Section = comment.Location.Section,
 					Quote = comment.Location.Quote,
 					UserName = null, // _userService.GetDisplayNameForUserId(comment.CreatedByUserId),
-					CommentId = comment.CommentId,
-					Comment = comment.CommentText,
+					CommentId = null, // comment.CommentId,
+					Comment = null, // comment.CommentText,
 					QuestionId = null,
 					Question = null,
 					AnswerId = null,
@@ -240,7 +240,7 @@ namespace Comments.Export
 					OrganisationName = null, // comment.SubmissionComment.Count > 0 ? comment.SubmissionComment?.First().Submission.OrganisationName : null,
 					HasTobaccoLinks = null, // comment.SubmissionComment.Count> 0 ? comment.SubmissionComment?.First().Submission.HasTobaccoLinks : null,
 					TobaccoIndustryDetails = null, //comment.SubmissionComment.Count > 0? comment.SubmissionComment?.First().Submission.TobaccoDisclosure : null,
-					Order = comment.Location.Order
+					Order = null //comment.Location.Order
 				};
 				excel.Add(excelrow);
 			}
@@ -265,7 +265,7 @@ namespace Comments.Export
 					OrganisationName = null, // answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.OrganisationName : null,
 					HasTobaccoLinks = null, // answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.HasTobaccoLinks : null,
 					TobaccoIndustryDetails = null, // answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.TobaccoDisclosure : null,
-					Order = answer.Question.Location.Order
+					Order = null //answer.Question.Location.Order
 				};
 				excel.Add(excelrow);
 			}
@@ -290,7 +290,7 @@ namespace Comments.Export
 					OrganisationName = null,
 					HasTobaccoLinks = null,
 					TobaccoIndustryDetails = null,
-					Order = question.Location.Order
+					Order = null// question.Location.Order
 				};
 				excel.Add(excelrow);
 			}
