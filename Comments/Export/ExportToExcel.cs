@@ -270,30 +270,30 @@ namespace Comments.Export
 				excel.Add(excelrow);
 			}
 
-			//foreach (var question in questions)
-			//{
-			//	var locationDetails = _exportService.GetLocationData(question.Location);
-			//	var excelrow = new Excel()
-			//	{
-			//		ConsultationName = locationDetails.ConsultationName,
-			//		DocumentName = locationDetails.DocumentName,
-			//		ChapterTitle = locationDetails.ChapterName,
-			//		Section = question.Location.Section,
-			//		Quote = question.Location.Quote,
-			//		UserName = null,
-			//		CommentId = null,
-			//		Comment = null,
-			//		QuestionId = question.QuestionId,
-			//		Question = question.QuestionText,
-			//		AnswerId = null,
-			//		Answer = null,
-			//		OrganisationName = null,
-			//		HasTobaccoLinks = null,
-			//		TobaccoIndustryDetails = null,
-			//		Order = null// question.Location.Order
-			//	};
-			//	excel.Add(excelrow);
-			//}
+			foreach (var question in questions)
+			{
+				var locationDetails = _exportService.GetLocationData(question.Location);
+				var excelrow = new Excel()
+				{
+					ConsultationName = locationDetails.ConsultationName,
+					DocumentName = locationDetails.DocumentName,
+					ChapterTitle = locationDetails.ChapterName,
+					Section = question.Location.Section,
+					Quote = question.Location.Quote,
+					UserName = null,
+					CommentId = null,
+					Comment = null,
+					QuestionId = question.QuestionId,
+					Question = question.QuestionText,
+					AnswerId = null,
+					Answer = null,
+					OrganisationName = null,
+					HasTobaccoLinks = null,
+					TobaccoIndustryDetails = null,
+					Order = null// question.Location.Order
+				};
+				excel.Add(excelrow);
+			}
 
 			var orderedData = excel.OrderBy(o => o.Order).ToList();
 
