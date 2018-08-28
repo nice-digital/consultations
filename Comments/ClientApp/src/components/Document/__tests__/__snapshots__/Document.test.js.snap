@@ -104,6 +104,12 @@ Array [
                         Comment on this document
                     </button>
                 </div>
+                <button
+                    className="screenreader-button"
+                    onClick={[Function]}
+                >
+                    Skip navigation
+                </button>
                 <div
                     className="grid"
                     onScroll={[Function]}

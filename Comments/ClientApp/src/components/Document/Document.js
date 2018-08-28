@@ -374,6 +374,11 @@ export class Document extends Component<PropsType, StateType> {
 									}
 								</div>
 
+								<button
+									className="screenreader-button"
+									onClick={()=>{pullFocusByQuerySelector(".document-comment-container");}}>
+									Skip navigation</button>
+
 								<StickyContainer className="grid">
 
 									{/* navigation column */}
