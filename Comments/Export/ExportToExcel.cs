@@ -237,9 +237,9 @@ namespace Comments.Export
 					Question = null,
 					AnswerId = null,
 					Answer = null,
-					OrganisationName = comment.SubmissionComment?.First().Submission.OrganisationName,
-					HasTobaccoLinks = comment.SubmissionComment?.First().Submission.HasTobaccoLinks,
-					TobaccoIndustryDetails = comment.SubmissionComment?.First().Submission.TobaccoDisclosure,
+					OrganisationName = comment.SubmissionComment.Count > 0 ? comment.SubmissionComment?.First().Submission.OrganisationName : null,
+					HasTobaccoLinks = comment.SubmissionComment.Count> 0 ? comment.SubmissionComment?.First().Submission.HasTobaccoLinks : null,
+					TobaccoIndustryDetails = comment.SubmissionComment.Count > 0? comment.SubmissionComment?.First().Submission.TobaccoDisclosure : null,
 					Order = comment.Location.Order
 				};
 				excel.Add(excelrow);
@@ -262,9 +262,9 @@ namespace Comments.Export
 					Question = answer.Question.QuestionText,
 					AnswerId = answer.AnswerId,
 					Answer = answer.AnswerText,
-					OrganisationName = answer.SubmissionAnswer?.First().Submission.OrganisationName,
-					HasTobaccoLinks = answer.SubmissionAnswer?.First().Submission.HasTobaccoLinks,
-					TobaccoIndustryDetails = answer.SubmissionAnswer?.First().Submission.TobaccoDisclosure,
+					OrganisationName = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.OrganisationName : null,
+					HasTobaccoLinks = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.HasTobaccoLinks : null,
+					TobaccoIndustryDetails = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.TobaccoDisclosure : null,
 					Order = answer.Question.Location.Order
 				};
 				excel.Add(excelrow);
