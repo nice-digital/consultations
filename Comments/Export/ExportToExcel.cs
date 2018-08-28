@@ -245,30 +245,30 @@ namespace Comments.Export
 				excel.Add(excelrow);
 			}
 
-			//foreach (var answer in answers)
-			//{
-			//	var locationDetails = _exportService.GetLocationData(answer.Question.Location);
-			//	var excelrow = new Excel()
-			//	{
-			//		ConsultationName = locationDetails.ConsultationName,
-			//		DocumentName = locationDetails.DocumentName,
-			//		ChapterTitle = locationDetails.ChapterName,
-			//		Section = answer.Question.Location.Section,
-			//		Quote = answer.Question.Location.Quote,
-			//		UserName = null, //_userService.GetDisplayNameForUserId(answer.CreatedByUserId),
-			//		CommentId = null,
-			//		Comment = null,
-			//		QuestionId = answer.Question.QuestionId,
-			//		Question = answer.Question.QuestionText,
-			//		AnswerId = answer.AnswerId,
-			//		Answer = answer.AnswerText,
-			//		OrganisationName = null, // answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.OrganisationName : null,
-			//		HasTobaccoLinks = null, // answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.HasTobaccoLinks : null,
-			//		TobaccoIndustryDetails = null, // answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.TobaccoDisclosure : null,
-			//		Order = null //answer.Question.Location.Order
-			//	};
-			//	excel.Add(excelrow);
-			//}
+			foreach (var answer in answers)
+			{
+				var locationDetails = _exportService.GetLocationData(answer.Question.Location);
+				var excelrow = new Excel()
+				{
+					ConsultationName = locationDetails.ConsultationName,
+					DocumentName = locationDetails.DocumentName,
+					ChapterTitle = locationDetails.ChapterName,
+					Section = answer.Question.Location.Section,
+					Quote = answer.Question.Location.Quote,
+					UserName = _userService.GetDisplayNameForUserId(answer.CreatedByUserId),
+					CommentId = null,
+					Comment = null,
+					QuestionId = answer.Question.QuestionId,
+					Question = answer.Question.QuestionText,
+					AnswerId = answer.AnswerId,
+					Answer = answer.AnswerText,
+					OrganisationName = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.OrganisationName : null,
+					HasTobaccoLinks = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.HasTobaccoLinks : null,
+					TobaccoIndustryDetails = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.TobaccoDisclosure : null,
+					Order = answer.Question.Location.Order
+				};
+				excel.Add(excelrow);
+			}
 
 			//foreach (var question in questions)
 			//{
