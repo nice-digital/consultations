@@ -22,7 +22,9 @@ namespace Comments.Services
 	    IEnumerable<Document> GetPreviewDraftDocuments(int consultationId, int documentId, string reference);
 	    IEnumerable<Document> GetPreviewPublishedDocuments(int consultationId, int documentId);
         ViewModels.Consultation GetConsultation(int consultationId, bool isReview);
-        IEnumerable<ViewModels.Consultation> GetConsultations();
+	    ViewModels.Consultation GetDraftConsultation(int consultationId, int documentId, string reference, bool isReview);
+
+		IEnumerable<ViewModels.Consultation> GetConsultations();
 
 	    ChapterContent GetPreviewChapterContent(int consultationId, int documentId, string chapterSlug, string reference);
 	    ConsultationState GetConsultationState(string sourceURI, IEnumerable<Models.Location> locations = null, ConsultationDetail consultation = null);
@@ -90,10 +92,16 @@ namespace Comments.Services
             return new ViewModels.Consultation(consultationDetail, user, breadcrumbs, consultationState, filters);
         }
 
+	    public ViewModels.Consultation GetDraftConsultation(int consultationId, int documentId, string reference, bool isReview)
+	    {
+		    var user = _userService.GetCurrentUser();
+		    var draftConsultationDetail = GetDraftConsultationDetail(consultationId, documentId, reference);
+			var consultationState = GetConsultationState(consultationId);
+		    var filters = isReview ? AppSettings.ReviewConfig.Filters : null;
+		    return new ViewModels.Consultation(draftConsultationDetail, user, null, consultationState, filters);
+	    }
 
-
-
-	    public IEnumerable<BreadcrumbLink> GetBreadcrumbs(ConsultationDetail consultation, bool isReview)
+		public IEnumerable<BreadcrumbLink> GetBreadcrumbs(ConsultationDetail consultation, bool isReview)
 	    {
 			var breadcrumbs = new List<BreadcrumbLink>{
 					new BreadcrumbLink("Home", ExternalRoutes.HomePage),
@@ -177,6 +185,19 @@ namespace Comments.Services
 	    private ConsultationDetail GetConsultationDetail(int consultationId)
 	    {
 		    var consultationDetail = _feedService.GetIndevConsultationDetailForPublishedProject(consultationId, PreviewState.NonPreview);
+		    return consultationDetail;
+	    }
+
+		/// <summary>
+		/// This is intentionally private as it gets the ConsultationDetail straight from the feed. not for external consumption outside of this class.
+		/// </summary>
+		/// <param name="consultationId"></param>
+		/// <param name="documentId"></param>
+		/// <param name="reference"></param>
+		/// <returns></returns>
+		private ConsultationPublishedPreviewDetail GetDraftConsultationDetail(int consultationId, int documentId,  string reference)
+	    {
+		    var consultationDetail = _feedService.GetIndevConsultationDetailForDraftProject(consultationId, documentId, reference);
 		    return consultationDetail;
 	    }
 	}

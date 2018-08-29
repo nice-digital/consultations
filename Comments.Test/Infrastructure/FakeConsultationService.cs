@@ -84,6 +84,11 @@ namespace Comments.Test.Infrastructure
 		    throw new NotImplementedException();
 	    }
 
+	    public Consultation GetDraftConsultation(int consultationId, int documentId, string reference, bool isReview)
+	    {
+		    throw new NotImplementedException();
+	    }
+
 		public IEnumerable<Consultation> GetConsultations()
 	    {
 		    throw new NotImplementedException();

@@ -35,4 +35,35 @@ namespace Comments.Controllers.Api
             return _consultationService.GetConsultation(consultationId, isReview);
         }
     }
+
+	[Produces("application/json")]
+	[Route("consultations/api/[controller]")]
+	public class DraftConsultationController : Controller
+	{
+		private readonly IConsultationService _consultationService;
+		private readonly ILogger<ConsultationController> _logger;
+
+		public DraftConsultationController(IConsultationService consultationService, ILogger<ConsultationController> logger)
+		{
+			_consultationService = consultationService;
+			_logger = logger;
+		}
+
+		/// <summary>
+		/// GET: eg. consultations/api/Consultation?consultationId=1
+		/// </summary>
+		/// <param name="consultationId"></param>
+		/// <param name="documentId"></param>
+		/// <param name="reference"></param>
+		/// <param name="isReview">boolean indicating if the feed isbeing accessed for reviewing purposes</param>
+		/// <returns></returns>
+		[HttpGet]
+		public ViewModels.Consultation Get(int consultationId, int documentId, string reference, bool isReview = false)
+		{
+			if (consultationId < 1)
+				throw new ArgumentException(nameof(consultationId));
+
+			return _consultationService.GetDraftConsultation(consultationId, documentId, reference, isReview);
+		}
+	}
 }
