@@ -76,12 +76,7 @@ namespace Comments.Export
 
 			cell = new Cell();
 			cell.DataType = CellValues.String;
-			cell.CellValue = new CellValue("User ID");
-			headerRow.AppendChild(cell);
-
-			cell = new Cell();
-			cell.DataType = CellValues.String;
-			cell.CellValue = new CellValue("Comment ID");
+			cell.CellValue = new CellValue("User");
 			headerRow.AppendChild(cell);
 
 			cell = new Cell();
@@ -91,17 +86,7 @@ namespace Comments.Export
 
 			cell = new Cell();
 			cell.DataType = CellValues.String;
-			cell.CellValue = new CellValue("Question ID");
-			headerRow.AppendChild(cell);
-
-			cell = new Cell();
-			cell.DataType = CellValues.String;
 			cell.CellValue = new CellValue("Question Text");
-			headerRow.AppendChild(cell);
-
-			cell = new Cell();
-			cell.DataType = CellValues.String;
-			cell.CellValue = new CellValue("Answer ID");
 			headerRow.AppendChild(cell);
 
 			cell = new Cell();
@@ -169,27 +154,12 @@ namespace Comments.Export
 
 				cell = new Cell();
 				cell.DataType = CellValues.String;
-				cell.CellValue = new CellValue(row.CommentId.ToString());
-				dataRow.AppendChild(cell);
-
-				cell = new Cell();
-				cell.DataType = CellValues.String;
 				cell.CellValue = new CellValue(row.Comment);
 				dataRow.AppendChild(cell);
-
-				cell = new Cell();
-				cell.DataType = CellValues.String;
-				cell.CellValue = new CellValue(row.QuestionId.ToString());
-				dataRow.AppendChild(cell);
-
+				
 				cell = new Cell();
 				cell.DataType = CellValues.String;
 				cell.CellValue = new CellValue(row.Question);
-				dataRow.AppendChild(cell);
-
-				cell = new Cell();
-				cell.DataType = CellValues.String;
-				cell.CellValue = new CellValue(row.AnswerId.ToString());
 				dataRow.AppendChild(cell);
 
 				cell = new Cell();
