@@ -50,7 +50,7 @@ namespace Comments.Controllers.Api
 		}
 
 		/// <summary>
-		/// GET: eg. consultations/api/Consultation?consultationId=1
+		/// GET: eg. consultations/api/DraftConsultation?consultationId=1&documentId=1&reference=GID-TA1232
 		/// </summary>
 		/// <param name="consultationId"></param>
 		/// <param name="documentId"></param>
