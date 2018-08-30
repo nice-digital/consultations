@@ -3,15 +3,15 @@
 import React from "react";
 import { mount, shallow } from "enzyme";
 import { MemoryRouter } from "react-router";
-import CommentListWithRouter, { CommentList } from "../CommentList";
+import { CommentList } from "../CommentList";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
+import { LiveAnnouncer } from "react-aria-live";
+
 import { generateUrl } from "../../../data/loader";
-import sampleComments from "./sample";
-import reviewComments from "./reviewComments";
-import EmptyCommentsResponse from "./EmptyCommentsResponse";
-import { nextTick, queryStringToObject } from "../../../helpers/utils";
-//import stringifyObject from "stringify-object";
+import sampleComments from "./sample.json";
+import EmptyCommentsResponse from "./EmptyCommentsResponse.json";
+import { nextTick } from "../../../helpers/utils";
 
 const mock = new MockAdapter(axios);
 
@@ -20,10 +20,10 @@ jest.mock("../../../context/UserContext", () => {
 		UserContext: {
 			Consumer: (props) => {
 				return props.children({
-					isAuthorised: true
+					isAuthorised: true,
 				});
-			}
-		}
+			},
+		},
 	};
 });
 
@@ -35,16 +35,16 @@ describe("[ClientApp] ", () => {
 				params: {
 					consultationId: 1,
 					documentId: 1,
-					chapterSlug: "introduction"
-				}
+					chapterSlug: "introduction",
+				},
 			},
 			location: {
-				pathname: ""
+				pathname: "",
 			},
 			comment: {
-				commentId: 1
+				commentId: 1,
 			},
-			viewComments: true
+			viewComments: true,
 		};
 
 		afterEach(() => {
@@ -55,10 +55,11 @@ describe("[ClientApp] ", () => {
 			mock
 				.onGet()
 				.reply(200, sampleComments);
-
 			const wrapper = mount(
 				<MemoryRouter>
-					<CommentList {...fakeProps} />
+					<LiveAnnouncer>
+						<CommentList {...fakeProps} />
+					</LiveAnnouncer>
 				</MemoryRouter>
 			);
 			await nextTick();
@@ -68,7 +69,12 @@ describe("[ClientApp] ", () => {
 
 		it("renders the 'no comments' message if the comments array is empty", async () => {
 			mock.onGet().reply(200, EmptyCommentsResponse);
-			const wrapper = mount(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>);
+			const wrapper = mount(
+				<MemoryRouter>
+					<LiveAnnouncer>
+						<CommentList {...fakeProps} />
+					</LiveAnnouncer>
+				</MemoryRouter>);
 			await nextTick();
 			wrapper.update();
 			expect(wrapper.find("p").last().text()).toEqual("No comments yet");
@@ -85,7 +91,7 @@ describe("[ClientApp] ", () => {
 			mock
 				.onGet(
 					generateUrl("comments", undefined, [], {
-						sourceURI: fakeProps.match.url
+						sourceURI: fakeProps.match.url,
 					})
 				)
 				.reply(config => {
@@ -111,7 +117,7 @@ describe("[ClientApp] ", () => {
 			mock
 				.onGet(
 					generateUrl("comments", undefined, [], {
-						sourceURI: fakeProps.match.url
+						sourceURI: fakeProps.match.url,
 					})
 				)
 				.reply(200, sampleComments);
@@ -173,7 +179,7 @@ describe("[ClientApp] ", () => {
 			mock
 				.onGet(
 					generateUrl("comments", undefined, [], {
-						sourceURI: fakeProps.match.url
+						sourceURI: fakeProps.match.url,
 					})
 				)
 				.reply(200, sampleComments);
@@ -190,12 +196,12 @@ describe("[ClientApp] ", () => {
 			mock.reset();
 			const commentToInsert = {
 				commentId: -1,
-				commentText: "a newly created comment"
+				commentText: "a newly created comment",
 			};
 			mock
 				.onGet(
 					generateUrl("comments", undefined, [], {
-						sourceURI: fakeProps.match.url
+						sourceURI: fakeProps.match.url,
 					})
 				)
 				.reply(200, EmptyCommentsResponse);
@@ -219,7 +225,16 @@ describe("[ClientApp] ", () => {
 				.onGet()
 				.reply(200, sampleComments);
 
-			const wrapper = shallow(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>).find("CommentList").dive();
+			const localProps = fakeProps;
+			fakeProps.announceAssertive = jest.fn();
+
+			const wrapper = shallow(
+				<MemoryRouter>
+					<LiveAnnouncer>
+						<CommentList {...fakeProps} />
+					</LiveAnnouncer>
+				</MemoryRouter>
+			).find("CommentList").dive();
 
 			await nextTick();
 			wrapper.update();
@@ -241,6 +256,41 @@ describe("[ClientApp] ", () => {
 			const updatedState = wrapper.state();
 
 			expect(updatedState.comments.length).toEqual(5);
+		});
+
+		it("should call the aria announcer with the correct message when a comment is deleted", async () => {
+			mock.reset();
+			mock
+				.onGet()
+				.reply(200, sampleComments);
+
+			const localProps = fakeProps;
+			fakeProps.announceAssertive = jest.fn();
+
+			const wrapper = shallow(
+				<MemoryRouter>
+					<LiveAnnouncer>
+						<CommentList {...fakeProps} />
+					</LiveAnnouncer>
+				</MemoryRouter>
+			).find("CommentList").dive();
+
+			await nextTick();
+			wrapper.update();
+
+			const state = wrapper.state();
+
+			wrapper.instance().newComment(null, {
+				sourceURI: "/1/1/introduction",
+				commentText: "",
+				order: "0",
+			});
+
+			expect(state.comments.length).toEqual(6);
+
+			wrapper.instance().deleteCommentHandler(new Event("click"), -1);
+			expect(fakeProps.announceAssertive)
+				.toHaveBeenCalledWith("Comment deleted", expect.any(String));
 		});
 
 		it("delete handler called with positive number hits the correct delete endpoint", async () => {
@@ -308,17 +358,17 @@ describe("[ClientApp] ", () => {
 				params: {
 					consultationId: 1,
 					documentId: 1,
-					chapterSlug: "introduction"
-				}
+					chapterSlug: "introduction",
+				},
 			},
 			location: {
 				pathname: "1/review",
-				search: "?sourceURI=/consultations/1/1/introduction"
+				search: "?sourceURI=/consultations/1/1/introduction",
 			},
 			comment: {
-				commentId: 1
+				commentId: 1,
 			},
-			viewComments: true				
+			viewComments: true,				
 		};
 	});
 });

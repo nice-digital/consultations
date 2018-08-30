@@ -2,7 +2,6 @@
 
 exports[`[ClientApp] Render Preview HTML should show the detail of the error when clicked by adding a class to make it visible 1`] = `
 ReactWrapper {
-  "length": 1,
   Symbol(enzyme.__unrendered__): <div>
     <p>
         Here is a paragraph 
@@ -479,15 +478,26 @@ ReactWrapper {
     "adapter": ReactSixteenAdapter {
       "options": Object {
         "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
       },
     },
+    "attachTo": undefined,
+    "hydrateIn": undefined,
   },
 }
 `;
 
 exports[`[ClientApp] Render Preview HTML should show the detail of the error when clicked by adding a class to make it visible 2`] = `
 ReactWrapper {
-  "length": 1,
   Symbol(enzyme.__unrendered__): <div>
     <p>
         Here is a paragraph 
@@ -964,8 +974,20 @@ ReactWrapper {
     "adapter": ReactSixteenAdapter {
       "options": Object {
         "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
       },
     },
+    "attachTo": undefined,
+    "hydrateIn": undefined,
   },
 }
 `;

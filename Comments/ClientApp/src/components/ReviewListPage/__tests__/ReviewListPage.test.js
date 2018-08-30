@@ -6,6 +6,7 @@ import { MemoryRouter } from "react-router";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import toJson from "enzyme-to-json";
+import { LiveAnnouncer } from "react-aria-live";
 
 import { nextTick, queryStringToObject } from "../../../helpers/utils";
 import { ReviewListPage } from "../ReviewListPage";
@@ -103,7 +104,9 @@ describe("[ClientApp] ", () => {
 
 			const wrapper = mount(
 				<MemoryRouter>
-					<ReviewListPage {...fakeProps} />
+					<LiveAnnouncer>
+						<ReviewListPage {...fakeProps} />
+					</LiveAnnouncer>
 				</MemoryRouter>
 			);
 
@@ -148,7 +151,9 @@ describe("[ClientApp] ", () => {
 
 			const wrapper = mount(
 				<MemoryRouter>
-					<ReviewListPage {...fakeProps} />
+					<LiveAnnouncer>
+						<ReviewListPage {...fakeProps} />
+					</LiveAnnouncer>
 				</MemoryRouter>
 			);
 
