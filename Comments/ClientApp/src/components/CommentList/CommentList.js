@@ -3,6 +3,7 @@
 import React, { Component, Fragment } from "react";
 import { withRouter, Link } from "react-router-dom";
 //import stringifyObject from "stringify-object";
+import { LiveMessage } from "react-aria-live";
 
 import preload from "../../data/pre-loader";
 import { load } from "../../data/loader";
@@ -15,7 +16,6 @@ import { CommentBox } from "../CommentBox/CommentBox";
 import { Question } from "../Question/Question";
 import { LoginBanner } from "../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
-import { LiveAnnouncer, LiveMessage } from "react-aria-live";
 
 type PropsType = {
 	staticContext?: any,
@@ -137,8 +137,10 @@ export class CommentList extends Component<PropsType, StateType> {
 	}
 
 	issueA11yMessage = (message: string) => {
+		console.log(`Issuing a11y message from CommentList: ${message}`);
 		const unique = new Date().getTime().toString();
-		this.props.announcePolite(message, unique);
+		// announcer requires a unique id so we're able to repeat phrases
+		this.props.announceAssertive(message, unique);
 	};
 
 	newComment = (e: Event, newComment: CommentType) => {
@@ -240,12 +242,25 @@ export class CommentList extends Component<PropsType, StateType> {
 			return null;
 		}
 
-		return (
+		const a11yMessage = () => {
+			if (!this.state.drawerOpen) {
+				return "Comments and questions panel closed";
+			} else {
+				if (this.state.viewComments) {
+					return "Comments panel open";
+				} else {
+					return "Questions panel open";
+				}
+			}
+		};
 
-			<section aria-label="Commenting panel"
+		return (
+			<Fragment>
+				<LiveMessage message={a11yMessage()} aria-live="assertive"/>
+				<section aria-label="Commenting panel"
 								 className={this.drawerClassnames()}>
-				<div className="Drawer__controls">
-					{this.state.shouldShowCommentsTab &&
+					<div className="Drawer__controls">
+						{this.state.shouldShowCommentsTab &&
 									<button
 										data-qa-sel="open-commenting-panel"
 										id="js-drawer-toggleopen-comments"
@@ -268,8 +283,8 @@ export class CommentList extends Component<PropsType, StateType> {
 											/>
 										}
 									</button>
-					}
-					{this.state.shouldShowQuestionsTab &&
+						}
+						{this.state.shouldShowQuestionsTab &&
 									<button
 										data-qa-sel="open-questions-panel"
 										id="js-drawer-toggleopen-questions"
@@ -292,95 +307,95 @@ export class CommentList extends Component<PropsType, StateType> {
 											/>
 										}
 									</button>
-					}
-				</div>
-				<div aria-disabled={!this.state.drawerOpen && (this.state.shouldShowQuestionsTab || this.state.shouldShowCommentsTab)}
+						}
+					</div>
+					<div aria-disabled={!this.state.drawerOpen && (this.state.shouldShowQuestionsTab || this.state.shouldShowCommentsTab)}
 								 data-qa-sel="comment-panel"
 								 id="comments-panel"
 								 className={`Drawer__main ${this.state.drawerOpen ? "Drawer__main--open" : "Drawer__main--closed"}`}
-				>
-					<UserContext.Consumer>
-						{ (contextValue: ContextType) => {
-							return (
-								<div data-qa-sel="comment-list-wrapper">
+					>
+						<UserContext.Consumer>
+							{ (contextValue: ContextType) => {
+								return (
+									<div data-qa-sel="comment-list-wrapper">
 
-									<div className="grid">
-										<h1 data-g="6" id="commenting-panel" className="p">
-											{this.state.viewComments ? "Comments" : "Questions"} panel
-										</h1>
-										{contextValue.isAuthorised ?
-											<p data-g="6">
-												<Link 	to={`/${this.props.match.params.consultationId}/review`}
-													data-qa-sel="review-all-comments"
-													className="right">Review all {this.state.viewComments ? "comments" : "questions"}</Link>
-											</p> : null
+										<div className="grid">
+											<h1 data-g="6" id="commenting-panel" className="p">
+												{this.state.viewComments ? "Comments" : "Questions"} panel
+											</h1>
+											{contextValue.isAuthorised ?
+												<p data-g="6">
+													<Link 	to={`/${this.props.match.params.consultationId}/review`}
+														data-qa-sel="review-all-comments"
+														className="right">Review all {this.state.viewComments ? "comments" : "questions"}</Link>
+												</p> : null
+											}
+										</div>
+
+										{this.state.error !== "" ?
+											<div className="errorBox">
+												<p>We couldn't {this.state.error} your comment. Please try again in a few minutes.</p>
+												<p>If the problem continues please <a href="/get-involved/contact-us">contact us</a>.</p>
+											</div>
+											: null }
+
+										{this.state.loading ? <p>Loading...</p> :
+
+											contextValue.isAuthorised ?
+
+												<Fragment>
+													{this.state.viewComments ? (
+														this.state.comments.length === 0 ? <p>No comments yet</p> :
+															<ul className="CommentList list--unstyled">
+																{this.state.comments.map((comment) => {
+																	return (
+																		<CommentBox
+																			readOnly={!this.state.allowComments}
+																			key={comment.commentId}
+																			unique={`Comment${comment.commentId}`}
+																			comment={comment}
+																			saveHandler={this.saveCommentHandler}
+																			deleteHandler={this.deleteCommentHandler}
+																		/>
+																	);
+																})}
+															</ul>
+													) : (
+														<div>
+															<p>We would like to hear your views on the draft recommendations presented in the guideline, and any comments you may have on the rationale and impact sections in the guideline and the evidence presented in the evidence reviews documents. We would also welcome views on the Equality Impact Assessment.</p>
+															<p>We would like to hear your views on these questions:</p>
+															<ul className="CommentList list--unstyled">
+																{this.state.questions.map((question) => {
+																	return (
+																		<Question
+																			readOnly={!this.state.allowComments}
+																			key={question.questionId}
+																			unique={`Comment${question.questionId}`}
+																			question={question}
+																			saveAnswerHandler={this.saveAnswerHandler}
+																			deleteAnswerHandler={this.deleteAnswerHandler}
+																		/>
+																	);
+																})}
+															</ul>
+														</div>
+													)}
+												</Fragment>
+												:
+												<LoginBanner
+													signInButton={true}
+													currentURL={this.props.match.url}
+													signInURL={contextValue.signInURL}
+													registerURL={contextValue.registerURL}
+												/>
 										}
 									</div>
-
-									{this.state.error !== "" ?
-										<div className="errorBox">
-											<p>We couldn't {this.state.error} your comment. Please try again in a few minutes.</p>
-											<p>If the problem continues please <a href="/get-involved/contact-us">contact us</a>.</p>
-										</div>
-										: null }
-
-									{this.state.loading ? <p>Loading...</p> :
-
-										contextValue.isAuthorised ?
-
-											<Fragment>
-												{this.state.viewComments ? (
-													this.state.comments.length === 0 ? <p>No comments yet</p> :
-														<ul className="CommentList list--unstyled">
-															{this.state.comments.map((comment) => {
-																return (
-																	<CommentBox
-																		readOnly={!this.state.allowComments}
-																		key={comment.commentId}
-																		unique={`Comment${comment.commentId}`}
-																		comment={comment}
-																		saveHandler={this.saveCommentHandler}
-																		deleteHandler={this.deleteCommentHandler}
-																	/>
-																);
-															})}
-														</ul>
-												) : (
-													<div>
-														<p>We would like to hear your views on the draft recommendations presented in the guideline, and any comments you may have on the rationale and impact sections in the guideline and the evidence presented in the evidence reviews documents. We would also welcome views on the Equality Impact Assessment.</p>
-														<p>We would like to hear your views on these questions:</p>
-														<ul className="CommentList list--unstyled">
-															{this.state.questions.map((question) => {
-																return (
-																	<Question
-																		readOnly={!this.state.allowComments}
-																		key={question.questionId}
-																		unique={`Comment${question.questionId}`}
-																		question={question}
-																		saveAnswerHandler={this.saveAnswerHandler}
-																		deleteAnswerHandler={this.deleteAnswerHandler}
-																	/>
-																);
-															})}
-														</ul>
-													</div>
-												)}
-											</Fragment>
-											:
-											<LoginBanner
-												signInButton={true}
-												currentURL={this.props.match.url}
-												signInURL={contextValue.signInURL}
-												registerURL={contextValue.registerURL}
-											/>
-									}
-								</div>
-							);
-						}}
-					</UserContext.Consumer>
-				</div>
-			</section>
-
+								);
+							}}
+						</UserContext.Consumer>
+					</div>
+				</section>
+			</Fragment>
 		);
 	}
 }

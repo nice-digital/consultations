@@ -56,9 +56,6 @@ export function deleteCommentHandler(e: Event, commentId: number, self: any) {
 			.then(res => {
 				if (res.status === 200) {
 					removeCommentFromState(commentId, self);
-					if (typeof self.issueA11yMessage === "function") {
-						self.issueA11yMessage("Comment deleted");
-					}
 				}
 			})
 			.catch(err => {
@@ -135,9 +132,6 @@ export function deleteAnswerHandler(e: Event, questionId: number, answerId: numb
 			.then(res => {
 				if (res.status === 200) {
 					removeAnswerFromState(questionId, answerId, self);
-					if (typeof self.issueA11yMessage === "function") {
-						self.issueA11yMessage("Answer deleted");
-					}
 				}
 			})
 			.catch(err => {
@@ -151,6 +145,9 @@ export function deleteAnswerHandler(e: Event, questionId: number, answerId: numb
 }
 
 function removeCommentFromState(commentId: number, self: any) {
+	if (typeof self.issueA11yMessage === "function") {
+		self.issueA11yMessage("Comment deleted");
+	}
 	let comments = self.state.comments;
 	const error = "";
 	comments = comments.filter(comment => comment.commentId !== commentId);
@@ -167,5 +164,8 @@ function removeAnswerFromState(questionId: number, answerId: number, self: any) 
 	self.setState({ questions });
 	if (typeof self.validationHander === "function") {
 		self.validationHander();
+	}
+	if (typeof self.issueA11yMessage === "function") {
+		self.issueA11yMessage("Answer deleted");
 	}
 }

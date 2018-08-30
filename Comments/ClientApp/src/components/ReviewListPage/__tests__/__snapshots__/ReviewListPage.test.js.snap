@@ -259,11 +259,13 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
                 className="results-info"
               >
                 <h2
-                  aria-live="assertive"
                   className="results-info__count"
                   id="results-info-count"
                 >
-                  Showing 3 questions and 2 comments
+                  <span>
+                    Showing 3 questions and 2 comments
+                  </span>
+                  <undefined />
                 </h2>
               </div>
               <div
