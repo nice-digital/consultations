@@ -12,8 +12,9 @@
   "scripts": {
     "start": "rimraf ./build && npm run modernizr && npm-run-all -p sass:watch start-js",
     "start-js": "react-scripts start",
-    "build": "npm run modernizr && npm run sass:build && react-scripts build",
+    "build": "npm run modernizr && npm run sass:build && npm run bless && react-scripts build",
     "test": "react-scripts test --env=node",
+    "bless": "blessc ./public/styles/main.css --output ./public/styles/main-ie9.css",
     "eslint": "node node_modules/eslint/bin/eslint 'src/'",
     "esw": "node node_modules/eslint-watch/bin/esw 'src/' --watch",
     "test:ci": "cross-env CI=true react-scripts test --env=jsdom --testResultsProcessor=jest-teamcity-reporter",
@@ -21,9 +22,9 @@
     "eject": "react-scripts eject",
     "flow": "flow",
     "modernizr": "modernizr -c modernizr-config.json -d ./public/vendor/modernizr-custom.js",
-    "sass:build": "npm-run-all -s sass:compile sass:post",
-    "sass:compile": "node-sass-chokidar --include-path ./node_modules/@nice-digital/design-system/src/stylesheets --include-path ./node_modules/@nice-digital/icons/dist --source-map true src/main.scss -o public",
-    "sass:post": "postcss public/*.css --use autoprefixer -d public",
+    "sass:build": "npm-run-all -s sass:compile sass:post bless",
+    "sass:compile": "node-sass-chokidar --include-path ./node_modules/@nice-digital/design-system/src/stylesheets --include-path ./node_modules/@nice-digital/icons/dist --source-map true src/main.scss -o public/styles",
+    "sass:post": "postcss public/styles/*.css --use autoprefixer -d public/styles",
     "sass:watch": "npm run sass:build && chokidar \"./src/**/*.scss\" -c \"npm run sass:build\""
   },
   "dependencies": {
@@ -33,6 +34,7 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-react-app": "^3.1.1",
     "babel-register": "^6.26.0",
+    "bless": "^3.0.3",
     "bowser": "^1.9.3",
     "ignore-styles": "^5.0.1",
     "lodash": "^4.17.10",
