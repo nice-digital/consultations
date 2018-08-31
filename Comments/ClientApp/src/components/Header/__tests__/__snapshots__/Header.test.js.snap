@@ -1,0 +1,159 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[ClientApp]  Header  should display correctly when consulation has ended 1`] = `
+<React.Fragment>
+  <h1
+    className="page-header__heading mt--0"
+  >
+    My title has changed
+  </h1>
+  <p
+    className="mt--0 mb--0"
+  >
+    Subtitle 1
+  </p>
+  <p
+    className="page-header__lead"
+  >
+    <React.Fragment>
+      The consultation 
+      ended
+       on 
+      <t
+        ago={false}
+        calendar={false}
+        date="1994-11-05T08:15:30-05:00"
+        decimal={false}
+        element="time"
+        filter={[Function]}
+        format="D MMMM YYYY"
+        fromNow={false}
+        interval={60000}
+        onChange={[Function]}
+        toNow={false}
+        unit={null}
+        unix={false}
+        utc={false}
+      />
+       at 
+      <t
+        ago={false}
+        calendar={false}
+        date="1994-11-05T08:15:30-05:00"
+        decimal={false}
+        element="time"
+        filter={[Function]}
+        format="HH:mm"
+        fromNow={false}
+        interval={60000}
+        onChange={[Function]}
+        toNow={false}
+        unit={null}
+        unix={false}
+        utc={false}
+      />
+    </React.Fragment>
+  </p>
+</React.Fragment>
+`;
+
+exports[`[ClientApp]  Header  should display correctly when consulation hasn't started 1`] = `
+<React.Fragment>
+  <h1
+    className="page-header__heading mt--0"
+  >
+    My title
+  </h1>
+  <p
+    className="mt--0 mb--0"
+  >
+    Subtitle 1
+  </p>
+  <p
+    className="mt--0 mb--0"
+  >
+    Subtitle 2
+  </p>
+  <p
+    className="page-header__lead"
+  >
+    <React.Fragment>
+      The consultation 
+      starts
+       on 
+      <t
+        ago={false}
+        calendar={false}
+        date="1994-11-05T08:15:30-05:00"
+        decimal={false}
+        element="time"
+        filter={[Function]}
+        format="D MMMM YYYY"
+        fromNow={false}
+        interval={60000}
+        onChange={[Function]}
+        toNow={false}
+        unit={null}
+        unix={false}
+        utc={false}
+      />
+       at 
+      <t
+        ago={false}
+        calendar={false}
+        date="1994-11-05T08:15:30-05:00"
+        decimal={false}
+        element="time"
+        filter={[Function]}
+        format="HH:mm"
+        fromNow={false}
+        interval={60000}
+        onChange={[Function]}
+        toNow={false}
+        unit={null}
+        unix={false}
+        utc={false}
+      />
+    </React.Fragment>
+  </p>
+</React.Fragment>
+`;
+
+exports[`[ClientApp]  Header  should display correctly when consulation is in progress 1`] = `
+<React.Fragment>
+  <h1
+    className="page-header__heading mt--0"
+  >
+    My title
+  </h1>
+  <p
+    className="mt--0 mb--0"
+  >
+    Subtitle 1
+  </p>
+  <p
+    className="page-header__lead"
+  >
+    <React.Fragment>
+      Open until
+       
+      <t
+        ago={false}
+        calendar={false}
+        date="1994-11-05T08:15:30-05:00"
+        decimal={false}
+        element="time"
+        filter={[Function]}
+        format="D MMMM YYYY"
+        fromNow={false}
+        interval={60000}
+        onChange={[Function]}
+        toNow={false}
+        unit={null}
+        unix={false}
+        utc={false}
+      />
+    </React.Fragment>
+  </p>
+</React.Fragment>
+`;
