@@ -3,6 +3,7 @@ using Comments.ViewModels;
 using System;
 using System.Collections.Generic;
 using NICE.Feeds.Models.Indev.Detail;
+using NICE.Feeds.Models.Indev.List;
 using Location = Comments.Models.Location;
 
 namespace Comments.Test.Infrastructure
@@ -81,7 +82,14 @@ namespace Comments.Test.Infrastructure
 
 	    public Consultation GetConsultation(int consultationId, bool isReview)
 	    {
-		    throw new NotImplementedException();
+			var userService = FakeUserService.Get(true, "Benjamin Button", Guid.NewGuid());
+			var consultationBase = new ConsultationBase()
+		    {
+			    ConsultationId = 1,
+			    ConsultationName = "ConsultationName"
+		    };
+
+		    return new Consultation(consultationBase, userService.GetCurrentUser());
 	    }
 
 		public IEnumerable<Consultation> GetConsultations()
