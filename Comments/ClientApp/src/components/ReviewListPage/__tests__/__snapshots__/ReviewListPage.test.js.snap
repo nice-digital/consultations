@@ -178,7 +178,9 @@ Array [
                     className="page-header"
                 >
                     <undefined />
-                    <div>
+                    <div
+                        className="grid"
+                    >
                         <div
                             className="sticky"
                             data-g="12 md:3"

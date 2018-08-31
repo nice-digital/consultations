@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`[ClientApp]  Header  should display correctly when consulation has ended 1`] = `
-<React.Fragment>
+<Fragment>
   <h1
     className="page-header__heading mt--0"
   >
@@ -10,53 +10,51 @@ exports[`[ClientApp]  Header  should display correctly when consulation has ende
   <p
     className="page-header__lead mb--d"
   >
-    <React.Fragment>
-      The consultation 
-      ended
-       on 
-      <t
-        ago={false}
-        calendar={false}
-        date="1994-11-05T08:15:30-05:00"
-        decimal={false}
-        element="time"
-        filter={[Function]}
-        format="D MMMM YYYY"
-        fromNow={false}
-        interval={60000}
-        onChange={[Function]}
-        toNow={false}
-        unit={null}
-        unix={false}
-        utc={false}
-      />
-       at 
-      <t
-        ago={false}
-        calendar={false}
-        date="1994-11-05T08:15:30-05:00"
-        decimal={false}
-        element="time"
-        filter={[Function]}
-        format="HH:mm"
-        fromNow={false}
-        interval={60000}
-        onChange={[Function]}
-        toNow={false}
-        unit={null}
-        unix={false}
-        utc={false}
-      />
-    </React.Fragment>
+    The consultation 
+    ended
+     on 
+    <t
+      ago={false}
+      calendar={false}
+      date="1994-11-05T08:15:30-05:00"
+      decimal={false}
+      element="time"
+      filter={[Function]}
+      format="D MMMM YYYY"
+      fromNow={false}
+      interval={60000}
+      onChange={[Function]}
+      toNow={false}
+      unit={null}
+      unix={false}
+      utc={false}
+    />
+     at 
+    <t
+      ago={false}
+      calendar={false}
+      date="1994-11-05T08:15:30-05:00"
+      decimal={false}
+      element="time"
+      filter={[Function]}
+      format="HH:mm"
+      fromNow={false}
+      interval={60000}
+      onChange={[Function]}
+      toNow={false}
+      unit={null}
+      unix={false}
+      utc={false}
+    />
   </p>
   <p>
     Subtitle 1
   </p>
-</React.Fragment>
+</Fragment>
 `;
 
 exports[`[ClientApp]  Header  should display correctly when consulation hasn't started 1`] = `
-<React.Fragment>
+<Fragment>
   <h1
     className="page-header__heading mt--0"
   >
@@ -65,44 +63,42 @@ exports[`[ClientApp]  Header  should display correctly when consulation hasn't s
   <p
     className="page-header__lead mb--d"
   >
-    <React.Fragment>
-      The consultation 
-      starts
-       on 
-      <t
-        ago={false}
-        calendar={false}
-        date="1994-11-05T08:15:30-05:00"
-        decimal={false}
-        element="time"
-        filter={[Function]}
-        format="D MMMM YYYY"
-        fromNow={false}
-        interval={60000}
-        onChange={[Function]}
-        toNow={false}
-        unit={null}
-        unix={false}
-        utc={false}
-      />
-       at 
-      <t
-        ago={false}
-        calendar={false}
-        date="1994-11-05T08:15:30-05:00"
-        decimal={false}
-        element="time"
-        filter={[Function]}
-        format="HH:mm"
-        fromNow={false}
-        interval={60000}
-        onChange={[Function]}
-        toNow={false}
-        unit={null}
-        unix={false}
-        utc={false}
-      />
-    </React.Fragment>
+    The consultation 
+    starts
+     on 
+    <t
+      ago={false}
+      calendar={false}
+      date="1994-11-05T08:15:30-05:00"
+      decimal={false}
+      element="time"
+      filter={[Function]}
+      format="D MMMM YYYY"
+      fromNow={false}
+      interval={60000}
+      onChange={[Function]}
+      toNow={false}
+      unit={null}
+      unix={false}
+      utc={false}
+    />
+     at 
+    <t
+      ago={false}
+      calendar={false}
+      date="1994-11-05T08:15:30-05:00"
+      decimal={false}
+      element="time"
+      filter={[Function]}
+      format="HH:mm"
+      fromNow={false}
+      interval={60000}
+      onChange={[Function]}
+      toNow={false}
+      unit={null}
+      unix={false}
+      utc={false}
+    />
   </p>
   <p>
     Subtitle 1
@@ -110,11 +106,11 @@ exports[`[ClientApp]  Header  should display correctly when consulation hasn't s
   <p>
     Subtitle 2
   </p>
-</React.Fragment>
+</Fragment>
 `;
 
 exports[`[ClientApp]  Header  should display correctly when consulation is in progress 1`] = `
-<React.Fragment>
+<Fragment>
   <h1
     className="page-header__heading mt--0"
   >
@@ -123,29 +119,27 @@ exports[`[ClientApp]  Header  should display correctly when consulation is in pr
   <p
     className="page-header__lead mb--d"
   >
-    <React.Fragment>
-      Open until
-       
-      <t
-        ago={false}
-        calendar={false}
-        date="1994-11-05T08:15:30-05:00"
-        decimal={false}
-        element="time"
-        filter={[Function]}
-        format="D MMMM YYYY"
-        fromNow={false}
-        interval={60000}
-        onChange={[Function]}
-        toNow={false}
-        unit={null}
-        unix={false}
-        utc={false}
-      />
-    </React.Fragment>
+    Open until
+     
+    <t
+      ago={false}
+      calendar={false}
+      date="1994-11-05T08:15:30-05:00"
+      decimal={false}
+      element="time"
+      filter={[Function]}
+      format="D MMMM YYYY"
+      fromNow={false}
+      interval={60000}
+      onChange={[Function]}
+      toNow={false}
+      unit={null}
+      unix={false}
+      utc={false}
+    />
   </p>
   <p>
     Subtitle 1
   </p>
-</React.Fragment>
+</Fragment>
 `;
