@@ -186,9 +186,9 @@ namespace Comments.Test.Infrastructure
 				//context.Status.AddRange(new List<Status>(2) { new Status("Draft", null, null), new Status("Submitted", null, null) });
 			}
         }
-        protected int AddLocation(string sourceURI, ConsultationsContext passedInContext = null)
+        protected int AddLocation(string sourceURI, ConsultationsContext passedInContext = null, string order = "0")
         {
-            var location = new Location(sourceURI, null, null, null, null, null, null, "0", null, null, null);
+            var location = new Location(sourceURI, null, null, null, null, null, null, order, null, null, null);
             if (passedInContext != null)
             {
                 passedInContext.Location.Add(location);
@@ -306,7 +306,7 @@ namespace Comments.Test.Infrastructure
         protected void AddCommentsAndQuestionsAndAnswers(string sourceURI, string commentText, string questionText, string answerText, Guid createdByUserId, int status = (int)StatusName.Draft, ConsultationsContext passedInContext = null)
         {
             var locationId = AddLocation(sourceURI, passedInContext);
-            AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId, passedInContext: passedInContext);
+            AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId, passedInContext: passedInContext, status: status);
             var questionTypeId = AddQuestionType(description: "text", hasBooleanAnswer: false, hasTextAnswer: true, passedInContext: passedInContext);
             var questionId = AddQuestion(locationId, questionTypeId, questionText, passedInContext);
             AddAnswer(questionId, createdByUserId, answerText, status, passedInContext);

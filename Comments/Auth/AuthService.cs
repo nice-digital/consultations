@@ -1,5 +1,7 @@
+using System;
 using Comments.Configuration;
 using Microsoft.AspNetCore.Http;
+using NICE.Auth.NetCore.Models;
 using NICE.Auth.NetCore.Services;
 
 namespace Comments.Auth
@@ -36,5 +38,10 @@ namespace Comments.Auth
 	    {
 			return _authenticateService.GetRegisterURL(returnURL);
 		}
+
+	    public UserInfo FindUser(Guid userId)
+	    {
+		    return _authenticateService.FindUser(userId);
+	    }
     }
 }
