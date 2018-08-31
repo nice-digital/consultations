@@ -33,23 +33,23 @@ export const Header = (props: PropsType) => {
 	return (
 		<Fragment>
 			<h1 className="page-header__heading mt--0">{title}</h1>
-			{subtitle1 &&
-				<p className="mt--0 mb--0">{subtitle1}</p>
-			}
-			{subtitle2 &&
-				<p className="mt--0 mb--0">{subtitle2}</p>
-			}
-			<p className="page-header__lead">
-				{isOpen ? (
+			<p className="page-header__lead mb--d">
+				{isOpen ?
 					<Fragment>
 						Open until{" "}<Moment format="D MMMM YYYY" date={endDate} />
 					</Fragment>
-				):(
+					:
 					<Fragment>
 						The consultation {startOrEnd} on <Moment format="D MMMM YYYY" date={endDate} /> at <Moment format="HH:mm" date={endDate} />
 					</Fragment>
-				)}
+				}
 			</p>
+			{subtitle1 &&
+			<p>{subtitle1}</p>
+			}
+			{subtitle2 &&
+			<p>{subtitle2}</p>
+			}
 		</ Fragment>
 	);
 };

@@ -109,7 +109,9 @@ exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied d
           className="page-header"
         >
           <undefined />
-          <div>
+          <div
+            className="grid"
+          >
             <div
               className="sticky"
               data-g="12 md:3"

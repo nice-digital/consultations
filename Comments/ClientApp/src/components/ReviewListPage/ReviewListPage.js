@@ -339,12 +339,13 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 										subtitle1={this.state.userHasSubmitted ? "" : "Review and edit your question responses and comments before you submit them to us."}
 										subtitle2={this.state.userHasSubmitted ? "" : "Once they have been submitted you will not be able to edit them further or add any extra comments."}
 										reference={reference}
-										consultationState={this.state.consultationData.consultationState}/>
+										consultationState={this.state.consultationData.consultationState}
+									/>
 									{this.state.supportsDownload &&
 										<div className="clearfix">
 											<button className="btn btn--secondary right mr--0">Download your response</button>
 										</div>
-									}									
+									}
 									<UserContext.Consumer>
 										{ (contextValue: ContextType) => {
 											return (
@@ -355,80 +356,86 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 														signInURL={contextValue.signInURL}
 														registerURL={contextValue.registerURL}
 													/> :
-													(
-														(this.state.userHasSubmitted && !this.state.viewSubmittedComments) ?
-															<div className="panel">
-																<p className="lead" data-qa-sel="submitted-text">Thank you, your response has been submitted.</p>
-																<button className="btn btn--cta" data-qa-sel="review-submitted-comments" onClick={this.viewSubmittedCommentsHandler}>Review your response</button>
-															</div>
-															: (
-																<div>
-																	<div data-g="12 md:3" className="sticky">
-																		<FilterPanel filters={this.state.commentsData.filters} path={this.state.path} />
-																	</div>
-																	<div data-g="12 md:9">
-																		<ResultsInfo commentCount={commentsToShow.length}
-																			showCommentsCount={this.state.consultationData.consultationState.shouldShowCommentsTab}
-																			questionCount={questionsToShow.length}
-																			showQuestionsCount={this.state.consultationData.consultationState.shouldShowQuestionsTab}
-																			sortOrder={this.state.sort}
-																			appliedFilters={this.getAppliedFilters()}
-																			path={this.state.path}
-																			isLoading={this.state.loading} />
-																		<div data-qa-sel="comment-list-wrapper">
-																			{questionsToShow.length > 0 &&
-																				<div>
-																					{/* <p>We would like to hear your views on the draft recommendations presented in the guideline, and any comments you may have on the rationale and impact sections in the guideline and the evidence presented in the evidence reviews documents. We would also welcome views on the Equality Impact Assessment.</p>
-																					<p>We would like to hear your views on these questions:</p> */}
-																					<ul className="CommentList list--unstyled">
-																						{questionsToShow.map((question) => {
-																							return (
-																								<Question
-																									readOnly={!this.state.allowComments || this.state.userHasSubmitted}
-																									key={question.questionId}
-																									unique={`Comment${question.questionId}`}
-																									question={question}
-																									saveAnswerHandler={this.saveAnswerHandler}
-																									deleteAnswerHandler={this.deleteAnswerHandler}
-																								/>
-																							);
-																						})}
-																					</ul>
-																				</div>
-																			}
-																			{commentsToShow.length === 0 ? <p>{/*No comments yet*/}</p> :
-																				<ul className="CommentList list--unstyled">
-																					{commentsToShow.map((comment) => {
-																						return (
-																							<CommentBox
-																								readOnly={!this.state.allowComments || this.state.userHasSubmitted}
-																								isVisible={this.props.isVisible}
-																								key={comment.commentId}
-																								unique={`Comment${comment.commentId}`}
-																								comment={comment}
-																								saveHandler={this.saveCommentHandler}
-																								deleteHandler={this.deleteCommentHandler}
-																							/>
-																						);
-																					})}
-																				</ul>
-																			}
-																		</div>																				
-																		<SubmitResponseDialog
-																			isAuthorised={contextValue.isAuthorised}
-																			userHasSubmitted={this.state.userHasSubmitted}
-																			validToSubmit={this.state.validToSubmit}
-																			submitConsultation={this.submitConsultation}
-																			fieldsChangeHandler={this.fieldsChangeHandler}
-																			respondingAsOrganisation={this.state.respondingAsOrganisation}
-																			organisationName={this.state.organisationName}
-																			hasTobaccoLinks={this.state.hasTobaccoLinks}
-																			tobaccoDisclosure={this.state.tobaccoDisclosure}
-																		/>
-																	</div>																	
+													<div className="grid">
+														{(this.state.userHasSubmitted && !this.state.viewSubmittedComments) ?
+															<div data-g="12">
+																<div className="panel">
+																	<p className="lead" data-qa-sel="submitted-text">Your response has been submitted</p>
+																	<button
+																		className="btn btn--cta"
+																		data-qa-sel="review-submitted-comments"
+																		onClick={this.viewSubmittedCommentsHandler}>Review your response
+																	</button>
 																</div>
-															)
-													)
+															</div>
+															:
+															<Fragment>
+																<div data-g="12 md:3" className="sticky">
+																	<FilterPanel filters={this.state.commentsData.filters} path={this.state.path}/>
+																</div>
+																<div data-g="12 md:9">
+																	<ResultsInfo commentCount={commentsToShow.length}
+																							 showCommentsCount={this.state.consultationData.consultationState.shouldShowCommentsTab}
+																							 questionCount={questionsToShow.length}
+																							 showQuestionsCount={this.state.consultationData.consultationState.shouldShowQuestionsTab}
+																							 sortOrder={this.state.sort}
+																							 appliedFilters={this.getAppliedFilters()}
+																							 path={this.state.path}
+																							 isLoading={this.state.loading}/>
+																	<div data-qa-sel="comment-list-wrapper">
+																		{questionsToShow.length > 0 &&
+																		<div>
+																			{/* <p>We would like to hear your views on the draft recommendations presented in the guideline, and any comments you may have on the rationale and impact sections in the guideline and the evidence presented in the evidence reviews documents. We would also welcome views on the Equality Impact Assessment.</p>
+																			<p>We would like to hear your views on these questions:</p> */}
+																			<ul className="CommentList list--unstyled">
+																				{questionsToShow.map((question) => {
+																					return (
+																						<Question
+																							readOnly={!this.state.allowComments || this.state.userHasSubmitted}
+																							key={question.questionId}
+																							unique={`Comment${question.questionId}`}
+																							question={question}
+																							saveAnswerHandler={this.saveAnswerHandler}
+																							deleteAnswerHandler={this.deleteAnswerHandler}
+																						/>
+																					);
+																				})}
+																			</ul>
+																		</div>
+																		}
+																		{commentsToShow.length === 0 ? <p>{/*No comments yet*/}</p> :
+																			<ul className="CommentList list--unstyled">
+																				{commentsToShow.map((comment) => {
+																					return (
+																						<CommentBox
+																							readOnly={!this.state.allowComments || this.state.userHasSubmitted}
+																							isVisible={this.props.isVisible}
+																							key={comment.commentId}
+																							unique={`Comment${comment.commentId}`}
+																							comment={comment}
+																							saveHandler={this.saveCommentHandler}
+																							deleteHandler={this.deleteCommentHandler}
+																						/>
+																					);
+																				})}
+																			</ul>
+																		}
+																	</div>
+																	<SubmitResponseDialog
+																		isAuthorised={contextValue.isAuthorised}
+																		userHasSubmitted={this.state.userHasSubmitted}
+																		validToSubmit={this.state.validToSubmit}
+																		submitConsultation={this.submitConsultation}
+																		fieldsChangeHandler={this.fieldsChangeHandler}
+																		respondingAsOrganisation={this.state.respondingAsOrganisation}
+																		organisationName={this.state.organisationName}
+																		hasTobaccoLinks={this.state.hasTobaccoLinks}
+																		tobaccoDisclosure={this.state.tobaccoDisclosure}
+																	/>
+																</div>
+															</Fragment>
+														}
+													</div>
 											);
 										}}
 									</UserContext.Consumer>

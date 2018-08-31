@@ -104,11 +104,11 @@ describe("[ClientApp] ", () => {
 			expect(wrapper.find("button").length).toEqual(0);
 		});
 
-		it("should show thank you message if user has submitted", () => {
+		it("should show nothing if user has submitted", () => {
 			const localProps = fakeProps;
 			localProps.userHasSubmitted = true;
 			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			expect(wrapper.find("p").text()).toEqual("Thank you, your response has been submitted.");
+			expect(wrapper.html()).toEqual(null);
 		});
 
 	});
