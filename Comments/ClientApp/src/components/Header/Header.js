@@ -10,26 +10,24 @@ type PropsType = {
 	match?: any,
 	subtitle1: string,
 	subtitle2: string,
+	consultationState: {
+		endDate: string,
+		consultationIsOpen: boolean,
+		consultationHasNotStartedYet: boolean,
+	},
 }
 
 export const Header = (props: PropsType) => {
 	const title = props.title;
 	const subtitle1 = props.subtitle1;
 	const subtitle2 = props.subtitle2;
-	const reference = props.reference;
 	const endDate = props.consultationState.endDate;
 	const isOpen = props.consultationState.consultationIsOpen;
 	const notStartedYet = props.consultationState.consultationHasNotStartedYet;
-	const ended = props.consultationState.consultationHasEnded;
 
 	let startOrEnd = "ended";
-	let colourTag = "tag tag--consultation";
-
 	if (notStartedYet) {
 		startOrEnd = "starts";
-		colourTag = "tag tag--beta";
-	} else if (ended) {
-		colourTag = "tag";
 	}
 
 	return (
@@ -42,14 +40,14 @@ export const Header = (props: PropsType) => {
 				<p className="mt--0 mb--0">{subtitle2}</p>
 			}
 			<p className="page-header__lead">
-				<span>[{reference}] </span>
 				{isOpen ? (
-					<span>
-						<span>Open until&nbsp;</span>
-						<span className={colourTag}><Moment format="D MMMM YYYY" date={endDate} /></span>
-					</span>
+					<Fragment>
+						Open until{" "}<Moment format="D MMMM YYYY" date={endDate} />
+					</Fragment>
 				):(
-					<span className={colourTag}>The consultation {startOrEnd} on <Moment format="D MMMM YYYY" date={endDate} /> at <Moment format="HH:mm" date={endDate} /></span>
+					<Fragment>
+						The consultation {startOrEnd} on <Moment format="D MMMM YYYY" date={endDate} /> at <Moment format="HH:mm" date={endDate} />
+					</Fragment>
 				)}
 			</p>
 		</ Fragment>
