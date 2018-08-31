@@ -13,6 +13,7 @@ import FooterWithRouter from "../Footer/Footer";
 import DocumentPreviewWithRouter from "../DocumentPreview/DocumentPreview";
 import DocumentPreviewRedirectWithRouter from "../DocumentPreview/DocumentPreviewRedirect";
 import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
+import {LiveAnnouncer, LiveMessenger} from "react-aria-live";
 
 type PropsType = any;
 
@@ -29,31 +30,44 @@ class App extends React.Component<PropsType, StateType> {
 						<html lang="en-GB"/>
 					</Helmet>
 					<ErrorBoundary>
-						<Switch>
+						<LiveAnnouncer>
+							<Switch>
 								{/*Document View*/}			
-								<Route exact path="/:consultationId/:documentId/:chapterSlug">
+								<Route exact
+											 path="/:consultationId/:documentId/:chapterSlug">
 									<DocumentViewWithRouter/>
 								</Route>
 
 								{/*Document (Preview Layout)*/}
-								<Route exact path="/preview/:reference/consultation/:consultationId/document/:documentId/chapter/:chapterSlug">
-									<DocumentPreviewWithRouter />
+								<Route exact
+											 path="/preview/:reference/consultation/:consultationId/document/:documentId/chapter/:chapterSlug">
+									<DocumentPreviewWithRouter/>
 								</Route>
 
 								{/*	If we hit this we're coming in *without* a chapter slug, so we need to get the first chapter of the current document and pass its slug into the URL so it matches the route above */}
-								<Route exact path="/preview/:reference/consultation/:consultationId/document/:documentId">
+								<Route exact
+											 path="/preview/:reference/consultation/:consultationId/document/:documentId">
 									<DocumentPreviewRedirectWithRouter />
 									{/* This component only redirects to the above route */}
 								</Route>
 
 								{/*Review Page*/}
-								<Route exact path="/:consultationId/review">
-									<ReviewListPageWithRouter basename={this.props.basename}/>
+								<Route exact
+											 path="/:consultationId/review">
+									<LiveMessenger>
+										{({announcePolite, announceAssertive}) =>
+											<ReviewListPageWithRouter
+												announcePolite={announcePolite}
+												announceAssertive={announceAssertive}
+												basename={this.props.basename}/>
+										}
+									</LiveMessenger>
 								</Route>
 
 								{/*404*/}
-								<Route component={NotFound} />
-						</Switch>
+								<Route component={NotFound}/>
+							</Switch>
+						</LiveAnnouncer>
 					</ErrorBoundary>
 				</UserProviderWithRouter>
 				<FooterWithRouter />

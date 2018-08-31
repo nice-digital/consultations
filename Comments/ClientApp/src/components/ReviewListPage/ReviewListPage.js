@@ -285,16 +285,26 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		});
 	};
 
+	issueA11yMessage = (message: string) => {
+		console.log(`Issuing a11y message from ReviewListPage: ${message}`);
+		const unique = new Date().getTime().toString();
+		// announcer requires a unique id so we're able to repeat phrases
+		this.props.announceAssertive(message, unique);
+	};
+
 	//these handlers are in the helpers/editing-and-deleting.js utility file as they're also used in CommentList.js
 	saveCommentHandler = (e: Event, comment: CommentType) => {
 		saveCommentHandler(e, comment, this);
 	};
+
 	deleteCommentHandler = (e: Event, comment: CommentType) => {
 		deleteCommentHandler(e, comment, this);
 	};
+
 	saveAnswerHandler = (e: Event, answer: AnswerType) => {
 		saveAnswerHandler(e, answer, this);
 	};
+
 	deleteAnswerHandler = (e: Event,  questionId: number, answerId: number) => {
 		deleteAnswerHandler(e, questionId, answerId, this);
 	};

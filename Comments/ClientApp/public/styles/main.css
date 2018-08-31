@@ -3218,8 +3218,8 @@ ol, .list {
   font-family: "NICE Icons";
   font-style: normal;
   font-weight: normal;
-  src: url("/consultations/fonts/nice-icons.eot?964143558");
-  src: url("/consultations/fonts/nice-icons.eot?#iefix") format("embedded-opentype"), url("/consultations/fonts/nice-icons.woff2?964143558") format("woff2"), url("/consultations/fonts/nice-icons.woff?964143558") format("woff"), url("/consultations/fonts/nice-icons.ttf?964143558") format("truetype"), url("/consultations/fonts/nice-icons.svg?964143558#nice-icons") format("svg"); }
+  src: url("/consultations/fonts/nice-icons.eot?252907925");
+  src: url("/consultations/fonts/nice-icons.eot?#iefix") format("embedded-opentype"), url("/consultations/fonts/nice-icons.woff2?252907925") format("woff2"), url("/consultations/fonts/nice-icons.woff?252907925") format("woff"), url("/consultations/fonts/nice-icons.ttf?252907925") format("truetype"), url("/consultations/fonts/nice-icons.svg?252907925#nice-icons") format("svg"); }
 
 .icon {
   display: inline-block;
@@ -4390,8 +4390,8 @@ table {
   font-family: "NICE Icons";
   font-style: normal;
   font-weight: normal;
-  src: url("/consultations/fonts/nice-icons.eot?445217010");
-  src: url("/consultations/fonts/nice-icons.eot?#iefix") format("embedded-opentype"), url("/consultations/fonts/nice-icons.woff2?445217010") format("woff2"), url("/consultations/fonts/nice-icons.woff?445217010") format("woff"), url("/consultations/fonts/nice-icons.ttf?445217010") format("truetype"), url("/consultations/fonts/nice-icons.svg?445217010#nice-icons") format("svg"); }
+  src: url("/consultations/fonts/nice-icons.eot?425642828");
+  src: url("/consultations/fonts/nice-icons.eot?#iefix") format("embedded-opentype"), url("/consultations/fonts/nice-icons.woff2?425642828") format("woff2"), url("/consultations/fonts/nice-icons.woff?425642828") format("woff"), url("/consultations/fonts/nice-icons.ttf?425642828") format("truetype"), url("/consultations/fonts/nice-icons.svg?425642828#nice-icons") format("svg"); }
 
 .icon {
   display: inline-block;
@@ -7931,8 +7931,8 @@ ol, .list {
   font-family: "NICE Icons";
   font-style: normal;
   font-weight: normal;
-  src: url("/consultations/fonts/nice-icons.eot?615296227");
-  src: url("/consultations/fonts/nice-icons.eot?#iefix") format("embedded-opentype"), url("/consultations/fonts/nice-icons.woff2?615296227") format("woff2"), url("/consultations/fonts/nice-icons.woff?615296227") format("woff"), url("/consultations/fonts/nice-icons.ttf?615296227") format("truetype"), url("/consultations/fonts/nice-icons.svg?615296227#nice-icons") format("svg"); }
+  src: url("/consultations/fonts/nice-icons.eot?366727191");
+  src: url("/consultations/fonts/nice-icons.eot?#iefix") format("embedded-opentype"), url("/consultations/fonts/nice-icons.woff2?366727191") format("woff2"), url("/consultations/fonts/nice-icons.woff?366727191") format("woff"), url("/consultations/fonts/nice-icons.ttf?366727191") format("truetype"), url("/consultations/fonts/nice-icons.svg?366727191#nice-icons") format("svg"); }
 
 .icon {
   display: inline-block;
@@ -9146,8 +9146,8 @@ table {
     overflow-scrolling: touch;
     -webkit-overflow-scrolling: touch;
     background-color: #fff;
-    -webkit-animation: 0.1s visibleToggleOut;
-            animation: 0.1s visibleToggleOut;
+    -webkit-animation: 0.4s visibleToggleOut;
+            animation: 0.4s visibleToggleOut;
     -webkit-animation-fill-mode: forwards;
             animation-fill-mode: forwards; }
 
@@ -9167,8 +9167,8 @@ table {
   100% {
     visibility: hidden; } }
     .Drawer__main--open {
-      -webkit-animation: 0.1s visibleToggleIn;
-              animation: 0.1s visibleToggleIn;
+      -webkit-animation: 0.4s visibleToggleIn;
+              animation: 0.4s visibleToggleIn;
       -webkit-animation-fill-mode: forwards;
               animation-fill-mode: forwards; }
 
@@ -12432,8 +12432,8 @@ ol, .list {
   font-family: "NICE Icons";
   font-style: normal;
   font-weight: normal;
-  src: url("/consultations/fonts/nice-icons.eot?696224220");
-  src: url("/consultations/fonts/nice-icons.eot?#iefix") format("embedded-opentype"), url("/consultations/fonts/nice-icons.woff2?696224220") format("woff2"), url("/consultations/fonts/nice-icons.woff?696224220") format("woff"), url("/consultations/fonts/nice-icons.ttf?696224220") format("truetype"), url("/consultations/fonts/nice-icons.svg?696224220#nice-icons") format("svg"); }
+  src: url("/consultations/fonts/nice-icons.eot?611957522");
+  src: url("/consultations/fonts/nice-icons.eot?#iefix") format("embedded-opentype"), url("/consultations/fonts/nice-icons.woff2?611957522") format("woff2"), url("/consultations/fonts/nice-icons.woff?611957522") format("woff"), url("/consultations/fonts/nice-icons.ttf?611957522") format("truetype"), url("/consultations/fonts/nice-icons.svg?611957522#nice-icons") format("svg"); }
 
 .icon {
   display: inline-block;
