@@ -80,15 +80,19 @@ export class Answer extends Component<PropsType, StateType> {
 								placeholder="Enter your answer here"
 								value={answerText}/>
 						</div>
-						{!readOnly && answerText && answerText.length > 0 && (
-							<input
-								data-qa-sel="submit-button"
-								className="btn ml--0"
-								type="submit"
-								value={unsavedChanges ? "Save answer" : "Saved"}
-								disabled={!unsavedChanges}/>
-
-						)}
+						{!readOnly && answerText && answerText.length > 0 ?
+							unsavedChanges ?
+								<input
+									data-qa-sel="submit-button"
+									className="btn ml--0"
+									type="submit"
+									value="Save answer"
+								/>
+								:
+								<span className="ml--0 CommentBox__savedIndicator">Saved</span>
+							:
+							null
+						}
 						{!readOnly && (this.state.unsavedChanges || answerId > 0) &&
 						<button
 							data-qa-sel="delete-comment-button"
