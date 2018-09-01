@@ -1,7 +1,6 @@
 // @flow
 
 import React, { Component, Fragment } from "react";
-import Moment from "react-moment";
 
 type PropsType = {
 	staticContext?: any,
@@ -13,18 +12,15 @@ type PropsType = {
 };
 
 type StateType = {
-	commentId: number,
-	commentText: string,
-	comment: CommentType
+	comment: CommentType,
+	unsavedChanges: boolean,
 };
 
 export class CommentBox extends Component<PropsType, StateType> {
 	constructor() {
 		super();
 		this.state = {
-			comment: {
-				commentText: "",
-			},
+			comment: {},
 			unsavedChanges: false,
 		};
 	}
@@ -35,7 +31,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 		});
 	}
 
-	textareaChangeHandler = e => {
+	textareaChangeHandler = (e: any) => {
 		const comment = this.state.comment;
 		comment.commentText = e.target.value;
 		this.setState({
@@ -44,7 +40,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 		});
 	};
 
-	static getDerivedStateFromProps(nextProps, prevState) {
+	static getDerivedStateFromProps(nextProps: any, prevState: any) {
 		const prevTimestamp = prevState.comment.lastModifiedDate;
 		const nextTimestamp = nextProps.comment.lastModifiedDate;
 		const hasCommentBeenUpdated = () => prevTimestamp !== nextTimestamp;
@@ -57,21 +53,19 @@ export class CommentBox extends Component<PropsType, StateType> {
 		return null;
 	}
 
-	isTextSelection = (comment) => comment.commentOn && comment.commentOn.toLowerCase() === "selection" && comment.quote;
+	isTextSelection = (comment: CommentType) => comment.commentOn && comment.commentOn.toLowerCase() === "selection" && comment.quote;
 
 	render() {
 		if (!this.state.comment) return null;
 		const {
 			commentText,
 			commentOn,
-			lastModifiedDate,
 			quote,
 			commentId,
 		} = this.state.comment;
 		const unsavedChanges = this.state.unsavedChanges;
 		const comment = this.state.comment;
 		const readOnly = this.props.readOnly;
-		const moment = require("moment");
 
 		return (
 
@@ -97,13 +91,6 @@ export class CommentBox extends Component<PropsType, StateType> {
 					</Fragment>
 					}
 
-					{lastModifiedDate ? (
-						<div className="CommentBox__datestamp mb--d font-weight-bold">
-							Last Modified:{" "}
-							<Moment format="D/M/YYYY - h:mma" date={moment.utc(lastModifiedDate).toDate()}/>
-						</div>
-					) : null}
-
 					<form onSubmit={e => this.props.saveHandler(e, comment)}>
 						<div className="form__group form__group--textarea mb--0">
 							<label
@@ -121,22 +108,25 @@ export class CommentBox extends Component<PropsType, StateType> {
 								tabIndex={0}
 								value={commentText}/>
 						</div>
-						{!readOnly && commentText && commentText.length > 0 && (
-							<input
-								data-qa-sel="submit-button"
-								className="btn ml--0"
-								type="submit"
-								value={unsavedChanges ? "Save comment" : "Saved"}
-								disabled={!unsavedChanges}/>
-
-						)}
+						{!readOnly && commentText && commentText.length > 0 ?
+							unsavedChanges ?
+								<input
+									data-qa-sel="submit-button"
+									className="btn ml--0"
+									type="submit"
+									value="Save comment"
+								/>
+								:
+								<span className="ml--0 CommentBox__savedIndicator">Saved</span>
+							:
+							null
+						}
 						{!readOnly &&
 						<button
 							data-qa-sel="delete-comment-button"
 							className="btn mr--0 right"
 							onClick={e => this.props.deleteHandler(e, commentId)}>
-							<span className="visually-hidden">Delete this comment</span>
-							<span className="icon icon--trash" aria-hidden="true"/>
+							Delete
 						</button>
 						}
 					</form>

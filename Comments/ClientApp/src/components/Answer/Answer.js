@@ -1,9 +1,6 @@
 // @flow
 
 import React, { Component, Fragment } from "react";
-import Moment from "react-moment";
-
-//import stringifyObject from "stringify-object";
 
 type PropsType = {
 	staticContext?: any,
@@ -16,25 +13,22 @@ type PropsType = {
 };
 
 type StateType = {
-	answerId: number,
-	answerText: string,
-	answer: AnswerType
+	answer: AnswerType,
+	unsavedChanges: boolean,
 };
 
 export class Answer extends Component<PropsType, StateType> {
 	constructor() {
 		super();
 		this.state = {
-			answer: {
-				answerText: ""
-			},
-			unsavedChanges: false
+			answer: {},
+			unsavedChanges: false,
 		};
 	}
 
 	componentDidMount() {
 		this.setState({
-			answer: this.props.answer
+			answer: this.props.answer,
 		});
 	}
 
@@ -43,18 +37,18 @@ export class Answer extends Component<PropsType, StateType> {
 		answer.answerText = e.target.value;
 		this.setState({
 			answer,
-			unsavedChanges: true
+			unsavedChanges: true,
 		});
 	};
 
-	static getDerivedStateFromProps(nextProps, prevState) {
+	static getDerivedStateFromProps(nextProps: any, prevState: any) {
 		const prevTimestamp = prevState.answer.lastModifiedDate;
 		const nextTimestamp = nextProps.answer.lastModifiedDate;
 		const hasAnswerBeenUpdated = () => prevTimestamp !== nextTimestamp;
 		if (hasAnswerBeenUpdated()) {
 			return {
 				answer: nextProps.answer,
-				unsavedChanges: false
+				unsavedChanges: false,
 			};
 		}
 		return null;
@@ -64,26 +58,17 @@ export class Answer extends Component<PropsType, StateType> {
 		if (!this.state.answer) return null;
 		const {
 			answerText,
-			lastModifiedDate,
 			answerId,
-			questionId
+			questionId,
 		} = this.state.answer;
 		const unsavedChanges = this.state.unsavedChanges;
 		const answer = this.state.answer;
 		const readOnly = this.props.readOnly;
-		const moment = require("moment");
 
 		return (
 
 			<Fragment>
 				<section role="form">
-
-					{lastModifiedDate ? (
-						<div className="CommentBox__datestamp mb--d font-weight-bold">
-							Last Modified:{" "}
-							<Moment format="D/M/YYYY - h:mma" date={moment.utc(lastModifiedDate).toDate()}/>
-						</div>
-					) : null}
 					<form onSubmit={e => this.props.saveHandler(e, answer)}>
 						<div className="form__group form__group--textarea mb--0">
 							<textarea
@@ -95,15 +80,19 @@ export class Answer extends Component<PropsType, StateType> {
 								placeholder="Enter your answer here"
 								value={answerText}/>
 						</div>
-						{!readOnly && answerText && answerText.length > 0 && (
-							<input
-								data-qa-sel="submit-button"
-								className="btn ml--0"
-								type="submit"
-								value={unsavedChanges ? "Save answer" : "Saved"}
-								disabled={!unsavedChanges}/>
-
-						)}
+						{!readOnly && answerText && answerText.length > 0 ?
+							unsavedChanges ?
+								<input
+									data-qa-sel="submit-button"
+									className="btn ml--0"
+									type="submit"
+									value="Save answer"
+								/>
+								:
+								<span className="ml--0 CommentBox__savedIndicator">Saved</span>
+							:
+							null
+						}
 						{!readOnly && (this.state.unsavedChanges || answerId > 0) &&
 						<button
 							data-qa-sel="delete-comment-button"

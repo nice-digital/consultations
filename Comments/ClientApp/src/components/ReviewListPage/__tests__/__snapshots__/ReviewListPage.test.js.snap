@@ -368,17 +368,6 @@ Array [
                                             <section
                                                 role="form"
                                             >
-                                                <div
-                                                    className="CommentBox__datestamp mb--d font-weight-bold"
-                                                >
-                                                    Last Modified:
-                                                     
-                                                    <time
-                                                        dateTime={"2018-08-06T14:41:57.930Z"}
-                                                    >
-                                                        6/8/2018 - 3:41pm
-                                                    </time>
-                                                </div>
                                                 <form
                                                     onSubmit={[Function]}
                                                 >
@@ -395,13 +384,11 @@ Array [
                                                             value="gg"
                                                         />
                                                     </div>
-                                                    <input
-                                                        className="btn ml--0"
-                                                        data-qa-sel="submit-button"
-                                                        disabled={true}
-                                                        type="submit"
-                                                        value="Saved"
-                                                    />
+                                                    <span
+                                                        className="ml--0 CommentBox__savedIndicator"
+                                                    >
+                                                        Saved
+                                                    </span>
                                                     <button
                                                         className="btn mr--0 right"
                                                         data-qa-sel="delete-comment-button"
@@ -526,17 +513,6 @@ Array [
                                                 <br />
                                                 Unstable angina and NSTEMI
                                             </h1>
-                                            <div
-                                                className="CommentBox__datestamp mb--d font-weight-bold"
-                                            >
-                                                Last Modified:
-                                                 
-                                                <time
-                                                    dateTime={"2018-08-06T14:47:06.638Z"}
-                                                >
-                                                    6/8/2018 - 3:47pm
-                                                </time>
-                                            </div>
                                             <form
                                                 onSubmit={[Function]}
                                             >
@@ -563,27 +539,17 @@ Array [
                                                         value="ffffc"
                                                     />
                                                 </div>
-                                                <input
-                                                    className="btn ml--0"
-                                                    data-qa-sel="submit-button"
-                                                    disabled={true}
-                                                    type="submit"
-                                                    value="Saved"
-                                                />
+                                                <span
+                                                    className="ml--0 CommentBox__savedIndicator"
+                                                >
+                                                    Saved
+                                                </span>
                                                 <button
                                                     className="btn mr--0 right"
                                                     data-qa-sel="delete-comment-button"
                                                     onClick={[Function]}
                                                 >
-                                                    <span
-                                                        className="visually-hidden"
-                                                    >
-                                                        Delete this comment
-                                                    </span>
-                                                    <span
-                                                        aria-hidden="true"
-                                                        className="icon icon--trash"
-                                                    />
+                                                    Delete
                                                 </button>
                                             </form>
                                         </section>
@@ -607,17 +573,6 @@ Array [
                                                 <br />
                                                 Introduction 
                                             </h1>
-                                            <div
-                                                className="CommentBox__datestamp mb--d font-weight-bold"
-                                            >
-                                                Last Modified:
-                                                 
-                                                <time
-                                                    dateTime={"2018-08-06T13:11:38.764Z"}
-                                                >
-                                                    6/8/2018 - 2:11pm
-                                                </time>
-                                            </div>
                                             <form
                                                 onSubmit={[Function]}
                                             >
@@ -644,27 +599,17 @@ Array [
                                                         value="ffff"
                                                     />
                                                 </div>
-                                                <input
-                                                    className="btn ml--0"
-                                                    data-qa-sel="submit-button"
-                                                    disabled={true}
-                                                    type="submit"
-                                                    value="Saved"
-                                                />
+                                                <span
+                                                    className="ml--0 CommentBox__savedIndicator"
+                                                >
+                                                    Saved
+                                                </span>
                                                 <button
                                                     className="btn mr--0 right"
                                                     data-qa-sel="delete-comment-button"
                                                     onClick={[Function]}
                                                 >
-                                                    <span
-                                                        className="visually-hidden"
-                                                    >
-                                                        Delete this comment
-                                                    </span>
-                                                    <span
-                                                        aria-hidden="true"
-                                                        className="icon icon--trash"
-                                                    />
+                                                    Delete
                                                 </button>
                                             </form>
                                         </section>
