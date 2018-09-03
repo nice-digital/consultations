@@ -10,7 +10,7 @@ export const processDocumentHtml = (incomingHtml: string, onNewCommentClick: Fun
 
 	function transformHtml(node) {
 		if (nodeIsChapter(node) || nodeIsSection(node) || nodeIsSubsection(node)) {
-			return processChapterSectionSubsection(node, incomingHtml, onNewCommentClick, sourceURI, allowComments);
+			return processChapterSectionSubsection(node, onNewCommentClick, sourceURI, allowComments);
 		}
 
 		if (nodeIsInternalLink(node)) {
@@ -19,6 +19,6 @@ export const processDocumentHtml = (incomingHtml: string, onNewCommentClick: Fun
 	}
 
 	return ReactHtmlParser(incomingHtml, {
-		transform: transformHtml
+		transform: transformHtml,
 	});
 };
