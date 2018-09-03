@@ -10,6 +10,8 @@ namespace Comments.Services
 	public interface IExportService
 	{
 		(IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetAllDataForConsulation(int consultationId);
+
+		(IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetAllDataForConsulationForCurrentUser(int consultationId);
 		(string ConsultationName, string DocumentName, string ChapterName) GetLocationData(Comments.Models.Location location);
 	}
 
@@ -28,9 +30,9 @@ namespace Comments.Services
 	    {
 		    
 			var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
-		    var commentsInDB = _context.GetAllSubmittedCommentsForURI(sourceURI);
-		    var answersInDB = _context.GetAllSubmittedAnswersForURI(sourceURI);
-		    var questionsInDB = _context.GetUnansweredQuestionsForURI(sourceURI);
+		    var commentsInDB = _context.GetAllSubmittedCommentsForURI(sourceURI, true);
+		    var answersInDB = _context.GetAllSubmittedAnswersForURI(sourceURI, true);
+		    var questionsInDB = _context.GetUnansweredQuestionsForURI(sourceURI, true);
 
 			if (commentsInDB == null && answersInDB == null && questionsInDB == null)
 				return (null, null, null, new Validate(valid: false, notFound: true, message: $"Consultation id:{consultationId} not found trying to get all data for consultation"));
@@ -38,7 +40,21 @@ namespace Comments.Services
 			return (commentsInDB, answersInDB, questionsInDB, null);
 	    }
 
-	    public (string ConsultationName, string DocumentName, string ChapterName) GetLocationData(Location location)
+	    public (IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetAllDataForConsulationForCurrentUser(int consultationId)
+	    {
+
+		    var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
+		    var commentsInDB = _context.GetAllSubmittedCommentsForURI(sourceURI, false);
+		    var answersInDB = _context.GetAllSubmittedAnswersForURI(sourceURI, false);
+		    var questionsInDB = _context.GetUnansweredQuestionsForURI(sourceURI, false);
+
+		    if (commentsInDB == null && answersInDB == null && questionsInDB == null)
+			    return (null, null, null, new Validate(valid: false, notFound: true, message: $"Consultation id:{consultationId} not found trying to get all data for consultation"));
+
+		    return (commentsInDB, answersInDB, questionsInDB, null);
+	    }
+
+		public (string ConsultationName, string DocumentName, string ChapterName) GetLocationData(Location location)
 	    {
 		    var sourceURI = location.SourceURI;
 		    ConsultationsUriElements URIElements = ConsultationsUri.ParseConsultationsUri(sourceURI);

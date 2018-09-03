@@ -37,7 +37,7 @@ namespace Comments.Test.UnitTests
 			var sourceURI = "consultations://./consultation/1";
 
 			//Act
-		    var comments = _context.GetAllSubmittedCommentsForURI(sourceURI);
+		    var comments = _context.GetAllSubmittedCommentsForURI(sourceURI, true);
 
 			//Assert
 			comments.Count.ShouldBe(2);
@@ -51,7 +51,7 @@ namespace Comments.Test.UnitTests
 		    var sourceURI = "consultations://./consultation/1";
 
 		    //Act
-		    var answers = _context.GetAllSubmittedAnswersForURI(sourceURI);
+		    var answers = _context.GetAllSubmittedAnswersForURI(sourceURI,true);
 
 			//Assert
 		    answers.Count.ShouldBe(2);
@@ -65,7 +65,7 @@ namespace Comments.Test.UnitTests
 		    var sourceURI = "consultations://./consultation/1";
 
 		    //Act
-		    var questions = _context.GetUnansweredQuestionsForURI(sourceURI);
+		    var questions = _context.GetUnansweredQuestionsForURI(sourceURI, true);
 
 			//Assert
 		    questions.Count.ShouldBe(1);
@@ -80,7 +80,7 @@ namespace Comments.Test.UnitTests
 			CreateALotOfData(Guid.NewGuid());
 
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/chapter-slug";
-			var comments = _context.GetAllSubmittedCommentsForURI(sourceURI);
+			var comments = _context.GetAllSubmittedCommentsForURI(sourceURI, true);
 			var exportService = new ExportService(_context, _fakeUserService, _consultationService);
 
 			//Act
@@ -92,12 +92,54 @@ namespace Comments.Test.UnitTests
 			locationDetails.ChapterName.ShouldBe("chapter-slug");
 	    }
 
+	    [Fact]
+	    public void Get_All_Users_Submitted_Comments_For_URI()
+	    {
+		    //Arrange
+		    CreateALotOfData(Guid.Empty);
+		    var sourceURI = "consultations://./consultation/1";
+
+		    //Act
+		    var comments = _context.GetAllSubmittedCommentsForURI(sourceURI, false);
+
+		    //Assert
+		    comments.Count.ShouldBe(1);
+	    }
+
+	    [Fact]
+	    public void Get_All_Users_Submitted_Answers_For_URI()
+	    {
+		    //Arrange
+		    CreateALotOfData(Guid.Empty);
+		    var sourceURI = "consultations://./consultation/1";
+
+		    //Act
+		    var answers = _context.GetAllSubmittedAnswersForURI(sourceURI, false);
+
+		    //Assert
+		    answers.Count.ShouldBe(1);
+	    }
+
+	    [Fact]
+	    public void Get_Users_Unanswered_Questions_For_URI()
+	    {
+		    //Arrange
+		    CreateALotOfData(Guid.Empty);
+		    var sourceURI = "consultations://./consultation/1";
+
+		    //Act
+		    var questions = _context.GetUnansweredQuestionsForURI(sourceURI, false);
+
+		    //Assert
+		    questions.Count.ShouldBe(2);
+	    }
+
 		private void CreateALotOfData(Guid userId)
 	    {
 		    int locationId, submissionId, commentId, answerId;
 
 			locationId = AddLocation("consultations://./consultation/1", _context, "001.000.000.000");
-		    commentId = AddComment(locationId, "Just a comment", false, userId, (int)StatusName.Submitted, _context);
+		    commentId = AddComment(locationId, "Submitted comment", false, userId, (int)StatusName.Submitted, _context);
 		    submissionId = AddSubmission(userId, _context);
 		    AddSubmissionComments(submissionId, commentId, _context);
 
@@ -111,7 +153,7 @@ namespace Comments.Test.UnitTests
 		    AddSubmissionComments(submissionId, commentId, _context);
 
 			locationId = AddLocation("consultations://./consultation/1/document/1/chapter/chapter-slug", _context, "001.002.000.000");
-		    commentId = AddComment(locationId, "Submitted comment", false, userId, (int)StatusName.Submitted, _context);
+		    commentId = AddComment(locationId, "Another Users Submitted comment", false, Guid.NewGuid(), (int)StatusName.Submitted, _context);
 		    AddSubmissionComments(submissionId, commentId, _context);
 
 			var questionTypeId = AddQuestionType("My Question Type", false, true, 1, _context);
@@ -123,6 +165,12 @@ namespace Comments.Test.UnitTests
 			answerId = AddAnswer(questionId, Guid.NewGuid(), "An answer to the same question by another user", (int)StatusName.Submitted, _context);
 		    AddSubmissionAnswers(submissionId, answerId, _context);
 			answerId = AddAnswer(questionId, userId, "This is a draft answer", (int)StatusName.Draft, _context);
+		    AddSubmissionAnswers(submissionId, answerId, _context);
+
+		    questionTypeId = AddQuestionType("Question Type", false, true, 1, _context);
+		    locationId = AddLocation("consultations://./consultation/1/document/2/chapter/guidance", _context, "001.002.001.000");
+			questionId = AddQuestion(locationId, questionTypeId, "Question 2", _context);
+		    answerId = AddAnswer(questionId, Guid.NewGuid(), "Another Users answer", (int)StatusName.Draft, _context);
 		    AddSubmissionAnswers(submissionId, answerId, _context);
 
 			locationId = AddLocation("consultations://./consultation/1/document/2", _context, "001.002.000.000");
