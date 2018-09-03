@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Http;
 
 namespace Comments.Common
 {
@@ -60,5 +62,39 @@ namespace Comments.Common
 		{
 			dbSet.RemoveRange(dbSet);
 		}
+
+	    private const string UnknownHostName = "UNKNOWN-HOST";
+		public static Uri GetUri(this HttpRequest request)
+	    {
+		    if (null == request)
+		    {
+			    throw new ArgumentNullException("request");
+		    }
+
+		    if (true == string.IsNullOrWhiteSpace(request.Scheme))
+		    {
+			    throw new ArgumentException("Http request Scheme is not specified");
+		    }
+
+		    string hostName = request.Host.HasValue ? request.Host.ToString() : UnknownHostName;
+
+		    var builder = new StringBuilder();
+
+		    builder.Append(request.Scheme)
+			    .Append("://")
+			    .Append(hostName);
+
+		    if (true == request.Path.HasValue)
+		    {
+			    builder.Append(request.Path.Value);
+		    }
+
+		    if (true == request.QueryString.HasValue)
+		    {
+			    builder.Append(request.QueryString);
+		    }
+
+		    return new Uri(builder.ToString());
+	    }
 	}
 }
