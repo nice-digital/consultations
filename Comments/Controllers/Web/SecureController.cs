@@ -1,5 +1,4 @@
-﻿using Comments.ViewModels;
-using Microsoft.ApplicationInsights.AspNetCore.Extensions;
+using Comments.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using NICE.Auth.NetCore.Helpers;
 using NICE.Auth.NetCore.Services;
 using System;
+using Comments.Common;
 
 namespace Comments.Controllers.Web
 {
