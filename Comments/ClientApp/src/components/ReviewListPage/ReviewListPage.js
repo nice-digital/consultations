@@ -279,6 +279,15 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		});
 	};
 
+	downloadResponse = () => {
+		load("exportExternal", undefined, [this.props.match.params.consultationId], {}, "GET", {}, false)
+			.then(() => {})
+			.catch(err => {
+				console.log(err);
+				if (err.response) alert(err.response.statusText);
+			});
+	};
+
 	fieldsChangeHandler = (e: SyntheticInputEvent) => {
 		this.setState({
 			[e.target.name]: e.target.value,
@@ -353,7 +362,8 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 									/>
 									{this.state.supportsDownload &&
 										<div className="clearfix">
-											<button className="btn btn--secondary right mr--0">Download your response</button>
+										<button className="btn btn--secondary right mr--0"
+												onClick={this.downloadResponse}>Download your response</button>
 										</div>
 									}
 									<UserContext.Consumer>
