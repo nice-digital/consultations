@@ -34,21 +34,19 @@
         "consultationSupportsQuestions":false,
         "consultationSupportsComments":false,
         "documentIdsWhichSupportQuestions":[
-            2,
-            2
+            
         ],
         "documentIdsWhichSupportComments":[
-            2,
-            2
+            
         ],
         "consultationIsOpen":true,
         "consultationHasNotStartedYet":false,
         "consultationHasEnded":false,
         "supportsSubmission":false,
         "supportsDownload":false,
-        "shouldShowDrawer":true,
-        "shouldShowCommentsTab":true,
-        "shouldShowQuestionsTab":true
+        "shouldShowDrawer":false,
+        "shouldShowCommentsTab":false,
+        "shouldShowQuestionsTab":false
     },
     "breadcrumbs":null,
     "filters":null
