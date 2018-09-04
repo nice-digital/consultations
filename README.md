@@ -155,3 +155,12 @@ To update the database
 | ----------- | :---: |
 | Dev         | https://dev.nice.org.uk/consultations/ |
 | Test        | https://test.nice.org.uk/consultations/ |
+
+## Supported by
+
+<a href="https://browserstack.com">
+<img src="https://image.ibb.co/k7aNvK/browserstack_logo_600x315.png" width="300" alt="BrowserStack Logo">
+</a>
+
+We're using BrowserStack's support of open source projects for our day-to-day cross-browser and cross-device testing, and as part of an automated CI environment. <a href="https://www.browserstack.com/open-source">See their support for open source projects</a>.
+
