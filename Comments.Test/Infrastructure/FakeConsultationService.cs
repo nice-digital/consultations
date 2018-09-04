@@ -2,7 +2,9 @@ using Comments.Services;
 using Comments.ViewModels;
 using System;
 using System.Collections.Generic;
+using NICE.Feeds;
 using NICE.Feeds.Models.Indev.Detail;
+using NICE.Feeds.Models.Indev.List;
 using Location = Comments.Models.Location;
 
 namespace Comments.Test.Infrastructure
@@ -31,13 +33,13 @@ namespace Comments.Test.Infrastructure
 		    throw new NotImplementedException();
 	    }
 
-	    public ConsultationState GetConsultationState(string sourceURI, IEnumerable<Location> locations = null,
-		    ConsultationDetail consultation = null)
+	    public ConsultationState GetConsultationState(string sourceURI, PreviewState previewState, IEnumerable<Location> locations = null,
+		    ConsultationBase consultation = null)
 	    {
 			return new ConsultationState(DateTime.MinValue, _consultationIsOpen ? DateTime.MaxValue : DateTime.MinValue, true, true, true, false, true, true, null, null);
 		}
-	    public ConsultationState GetConsultationState(int consultationId, IEnumerable<Location> locations = null,
-		    ConsultationDetail consultation = null)
+	    public ConsultationState GetConsultationState(int consultationId, int? documentId, string reference, PreviewState previewState, IEnumerable<Location> locations = null,
+		    ConsultationBase consultation = null)
 	    {
 		    return new ConsultationState(DateTime.MinValue, _consultationIsOpen ? DateTime.MaxValue : DateTime.MinValue, true, true, true, false, true, true, null, null);
 	    }

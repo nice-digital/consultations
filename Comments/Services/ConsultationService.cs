@@ -27,11 +27,11 @@ namespace Comments.Services
 		IEnumerable<ViewModels.Consultation> GetConsultations();
 
 	    ChapterContent GetPreviewChapterContent(int consultationId, int documentId, string chapterSlug, string reference);
-	    ConsultationState GetConsultationState(string sourceURI, IEnumerable<Models.Location> locations = null, ConsultationDetail consultation = null);
-	    ConsultationState GetConsultationState(int consultationId, IEnumerable<Models.Location> locations = null, ConsultationDetail consultation = null);
+	    ConsultationState GetConsultationState(string sourceURI, PreviewState previewState, IEnumerable<Models.Location> locations = null, ConsultationBase consultation = null);
+	    ConsultationState GetConsultationState(int consultationId, int? documentId, string chapterSlug, PreviewState previewState, IEnumerable<Models.Location> locations = null, ConsultationBase consultation = null);
 
-	    ConsultationState GetDraftConsultationState(int consultationId, int documentId, string reference,
-		    IEnumerable<Models.Location> locations = null, ConsultationPublishedPreviewDetail consultationDetail = null);
+	    //ConsultationState GetDraftConsultationState(int consultationId, int documentId, string reference,
+		   // IEnumerable<Models.Location> locations = null, ConsultationPublishedPreviewDetail consultationDetail = null);
 
 		bool HasSubmittedCommentsOrQuestions(string consultationSourceURI, Guid userId);
 	    IEnumerable<BreadcrumbLink> GetBreadcrumbs(ConsultationDetail consultation, bool isReview);
@@ -88,7 +88,7 @@ namespace Comments.Services
         {
             var user = _userService.GetCurrentUser();
 	        var consultationDetail = GetConsultationDetail(consultationId);
-	        var consultationState = GetConsultationState(consultationId, null, consultationDetail);
+	        var consultationState = GetConsultationState(consultationId, null, null, PreviewState.NonPreview, null, consultationDetail);
 	        var breadcrumbs = GetBreadcrumbs(consultationDetail, isReview);
 	        var filters = isReview ? AppSettings.ReviewConfig.Filters : null;
             return new ViewModels.Consultation(consultationDetail, user, breadcrumbs, consultationState, filters);
@@ -129,51 +129,35 @@ namespace Comments.Services
             return consultations.Select(c => new ViewModels.Consultation(c, user)).ToList();
         }
 
-	    public ConsultationState GetConsultationState(string sourceURI, IEnumerable<Models.Location> locations = null, ConsultationDetail consultation = null)
+	    public ConsultationState GetConsultationState(string sourceURI, PreviewState previewState, IEnumerable<Models.Location> locations = null, ConsultationBase consultation = null)
 	    {
 		    var consultationsUriElements = ConsultationsUri.ParseConsultationsUri(sourceURI);
-		    return GetConsultationState(consultationsUriElements.ConsultationId, locations, consultation);
+		    return GetConsultationState(consultationsUriElements.ConsultationId, consultationsUriElements.DocumentId, consultationsUriElements.ChapterSlug, previewState, locations, consultation);
 	    }
 
-		public ConsultationState GetConsultationState(int consultationId, IEnumerable<Models.Location> locations = null, ConsultationDetail consultationDetail = null)
+	    public ConsultationState GetConsultationState(int consultationId, int? documentId, string reference, PreviewState previewState, IEnumerable<Models.Location> locations = null, ConsultationBase consultationDetail = null)
 	    {
-			var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
-			if (consultationDetail == null)
-				consultationDetail = GetConsultationDetail(consultationId);
-
-		    var documents = GetDocuments(consultationId).ToList();
-		    var documentsWhichSupportQuestions = documents.Where(d => d.SupportsQuestions).Select(d => d.DocumentId).ToList();
-		    var documentsWhichSupportComments = documents.Where(d => d.SupportsComments).Select(d => d.DocumentId).ToList();
-
-			var currentUser = _userService.GetCurrentUser();
-
-			if (locations == null && currentUser.IsAuthorised && currentUser.UserId.HasValue)
+		    if (previewState == PreviewState.Preview)
 		    {
-			    locations = _context.GetAllCommentsAndQuestionsForDocument(new[] { sourceURI }, partialMatchSourceURI: true);
-		    }
-			else
-			{
-				locations = new List<Models.Location>(0);
+			    if (documentId == null)
+				    throw new ArgumentException(nameof(documentId));
+				if (reference == null)
+					throw new ArgumentException(nameof(reference));
 			}
 
-		    var hasSubmitted = currentUser != null && currentUser.IsAuthorised && currentUser.UserId.HasValue ? HasSubmittedCommentsOrQuestions(sourceURI, currentUser.UserId.Value) : false;
-
-		    var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);
-
-		    var consultationState = new ConsultationState(consultationDetail.StartDate, consultationDetail.EndDate,
-			    data.questions.Any(), data.questions.Any(q => q.Answers.Any()), data.comments.Any(), hasSubmitted,
-			    consultationDetail.SupportsQuestions, consultationDetail.SupportsComments, documentsWhichSupportQuestions, documentsWhichSupportComments);
-
-		    return consultationState;
-	    }
-
-	    public ConsultationState GetDraftConsultationState(int consultationId,int documentId, string reference, IEnumerable<Models.Location> locations = null, ConsultationPublishedPreviewDetail consultationDetail = null)
-	    {
 		    var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
 		    if (consultationDetail == null)
-			    consultationDetail = GetDraftConsultationDetail(consultationId, documentId, reference);
+				if (previewState ==  PreviewState.NonPreview)
+					consultationDetail = GetConsultationDetail(consultationId);
+				else
+					consultationDetail = GetDraftConsultationDetail(consultationId, (int)documentId, reference);
 
-		    var documents = GetPreviewDraftDocuments(consultationId, documentId, reference).ToList();
+		    IEnumerable<Document> documents;
+		    if (previewState == PreviewState.NonPreview)
+			    documents = GetDocuments(consultationId).ToList();
+			else
+				documents = GetPreviewDraftDocuments(consultationId, (int)documentId, reference).ToList();
+
 		    var documentsWhichSupportQuestions = documents.Where(d => d.SupportsQuestions).Select(d => d.DocumentId).ToList();
 		    var documentsWhichSupportComments = documents.Where(d => d.SupportsComments).Select(d => d.DocumentId).ToList();
 
@@ -233,6 +217,39 @@ namespace Comments.Services
 	    {
 		    var consultationDetail = _feedService.GetIndevConsultationDetailForDraftProject(consultationId, documentId, reference);
 		    return consultationDetail;
+	    }
+
+
+	    public ConsultationState GetDraftConsultationState(int consultationId, int documentId, string reference, IEnumerable<Models.Location> locations = null, ConsultationPublishedPreviewDetail consultationDetail = null)
+	    {
+		    var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
+		    if (consultationDetail == null)
+			    consultationDetail = GetDraftConsultationDetail(consultationId, documentId, reference);
+
+		    var documents = GetPreviewDraftDocuments(consultationId, documentId, reference).ToList();
+		    var documentsWhichSupportQuestions = documents.Where(d => d.SupportsQuestions).Select(d => d.DocumentId).ToList();
+		    var documentsWhichSupportComments = documents.Where(d => d.SupportsComments).Select(d => d.DocumentId).ToList();
+
+		    var currentUser = _userService.GetCurrentUser();
+
+		    if (locations == null && currentUser.IsAuthorised && currentUser.UserId.HasValue)
+		    {
+			    locations = _context.GetAllCommentsAndQuestionsForDocument(new[] { sourceURI }, partialMatchSourceURI: true);
+		    }
+		    else
+		    {
+			    locations = new List<Models.Location>(0);
+		    }
+
+		    var hasSubmitted = currentUser != null && currentUser.IsAuthorised && currentUser.UserId.HasValue ? HasSubmittedCommentsOrQuestions(sourceURI, currentUser.UserId.Value) : false;
+
+		    var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);
+
+		    var consultationState = new ConsultationState(consultationDetail.StartDate, consultationDetail.EndDate,
+			    data.questions.Any(), data.questions.Any(q => q.Answers.Any()), data.comments.Any(), hasSubmitted,
+			    false, false, documentsWhichSupportQuestions, documentsWhichSupportComments);
+
+		    return consultationState;
 	    }
 	}
 }

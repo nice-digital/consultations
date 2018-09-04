@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Comments.Configuration;
 using NICE.Auth.NetCore.Helpers;
+using NICE.Feeds;
 
 namespace Comments.Services
 {
@@ -124,7 +125,7 @@ namespace Comments.Services
 
 		    if (!user.IsAuthorised)
 		    {
-			    consultationState = _consultationService.GetConsultationState(consultationSourceURI);
+			    consultationState = _consultationService.GetConsultationState(consultationSourceURI, PreviewState.NonPreview);
 				return new CommentsAndQuestions(new List<ViewModels.Comment>(), new List<ViewModels.Question>(),
 				    user.IsAuthorised, signInURL, consultationState);
 		    }
@@ -137,7 +138,7 @@ namespace Comments.Services
 			}
 
 			var locations = _context.GetAllCommentsAndQuestionsForDocument(sourceURIs, isReview).ToList();
-		    consultationState = _consultationService.GetConsultationState(consultationSourceURI, locations);
+		    consultationState = _consultationService.GetConsultationState(consultationSourceURI, PreviewState.NonPreview, locations);
 
 			var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);
 		    var resortedComments = data.comments.OrderByDescending(c => c.LastModifiedDate).ToList(); //comments should be sorted in date by default, questions by document order.
