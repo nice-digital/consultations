@@ -24,5 +24,5 @@ Scenario: User makes a comment at section level
  		And I pause for 1000ms
  		Then I expect that element "[data-qa-sel='Comment-text-area']" contains the text "This is a Section comment"
 		And I pause for 1000ms
- 		Then I expect that element "[data-qa-sel='submit-button']" contains the text "Saved"
+ 		Then I expect that element ".CommentBox:first-child .CommentBox__savedIndicator" contains the text "Saved"
  		Then I click on the button "body [data-qa-sel='delete-comment-button']"
