@@ -3,6 +3,7 @@
 import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router-dom";
 //import stringifyObject from "stringify-object";
+import { saveAs } from "file-saver";
 
 import preload from "../../data/pre-loader";
 import { load } from "../../data/loader";
@@ -279,14 +280,35 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		});
 	};
 
+	//downloadResponse = () => {
+	//	load("exportExternal", undefined, [this.props.match.params.consultationId], {}, "GET", {}, false)
+	//		.then((response) => {
+
+	//			var buf = new ArrayBuffer(response.data.length);
+	//			var view = new Uint8Array(buf);
+	//			for (var i = 0; i !== response.data.length; ++i) view[i] = response.data.charCodeAt(i) & 0xFF;
+				
+
+	//			console.log(buf);
+	//			var blob = new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+	//			saveAs(blob, "responses.xlsx");
+	//		})
+	//		.catch(err => {
+	//			console.log(err);
+	//			if (err.response) alert(err.response.statusText);
+	//		});
+	//};
+
 	downloadResponse = () => {
-		load("exportExternal", undefined, [this.props.match.params.consultationId], {}, "GET", {}, false)
-			.then(() => {})
-			.catch(err => {
-				console.log(err);
-				if (err.response) alert(err.response.statusText);
-			});
-	};
+		var link = document.createElement('a');
+		link.href = 'http://niceorg/consultations/api/ExportExternal/171';
+		link.download = 'response.xlsx';
+		document.body.appendChild(link);
+		link.click();
+		document.body.removeChild(link);
+	}
+
+	
 
 	fieldsChangeHandler = (e: SyntheticInputEvent) => {
 		this.setState({
