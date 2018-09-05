@@ -190,6 +190,7 @@ export class CommentList extends Component<PropsType, StateType> {
 	};
 
 	deleteAnswerHandler = (e: Event,  questionId: number, answerId: number) => {
+
 		deleteAnswerHandler(e, questionId, answerId, this);
 	};
 
