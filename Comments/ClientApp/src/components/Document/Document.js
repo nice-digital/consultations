@@ -43,7 +43,7 @@ type StateType = {
 	allowComments: boolean,
 	error: {
 		hasError: boolean,
-		message: string
+		message: string | null,
 	}
 };
 
@@ -97,6 +97,9 @@ export class Document extends Component<PropsType, StateType> {
 				const allowComments = preloadedConsultation.supportsComments &&
 					preloadedConsultation.consultationState.consultationIsOpen &&
 					!preloadedConsultation.consultationState.userHasSubmitted;
+				if (preloadedChapter) {
+					preloadedChapter = this.addChapterDetailsToSections(preloadedChapter);
+				}
 				this.state = {
 					chapterData: preloadedChapter,
 					documentsData: preloadedDocuments,
@@ -181,7 +184,6 @@ export class Document extends Component<PropsType, StateType> {
 						hasInitialData: true,
 						allowComments: allowComments,
 					});
-					this.addChapterDetailsToSections(this.state.chapterData);
 				})
 				.catch(err => {
 					this.setState({
@@ -205,12 +207,13 @@ export class Document extends Component<PropsType, StateType> {
 
 		this.gatherData()
 			.then(data => {
+				const chapterDataWithAddedSection = this.addChapterDetailsToSections(data.chapterData);
+				delete data.chapterData;
 				this.setState({
 					...data,
+					chapterData: chapterDataWithAddedSection,
 					loading: false,
 				});
-				this.addChapterDetailsToSections(this.state.chapterData);
-				// once we've loaded, pull focus to the document container
 				pullFocusByQuerySelector(".document-comment-container");
 			})
 			.catch(err => {
@@ -301,10 +304,16 @@ export class Document extends Component<PropsType, StateType> {
 	};
 
 	addChapterDetailsToSections = (chapterData: Object) => {
-		const { title, slug } = this.state.chapterData;
-		const chapterDetails = { title, slug };
-		chapterData.sections.unshift(chapterDetails);
-		this.setState({ chapterData });
+		const { title, slug } = chapterData;
+		if (chapterData.sections.length) {
+			if ((chapterData.sections[0].slug !== slug) && (chapterData.sections[0].title !== title)) {
+				chapterData.sections.unshift({title, slug});
+				return chapterData;
+			}
+		} else {
+			chapterData.sections.push({title, slug});
+		}
+		return chapterData;
 	};
 
 	getCurrentDocumentTitle = (documents: Object, documentId: number) => {
@@ -414,7 +423,7 @@ export class Document extends Component<PropsType, StateType> {
 										<Sticky disableHardwareAcceleration>
 											{({ style }) => (
 												<div style={style}>
-													{sections.length ? (
+													{sections && sections.length ? (
 														<nav
 															className="in-page-nav"
 															aria-labelledby="inpagenav-title">
