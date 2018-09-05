@@ -10,7 +10,15 @@ exports.config = {
     specs: [
         "./src/features/**/*.feature"
     ],
-    exclude: [],
+	exclude: [
+		//"./src/features/**/answerQuestion.feature",
+		//"./src/features/**/commentOnChapter.feature",
+		//"./src/features/**/commentOnDocument.feature",
+		//"./src/features/**/commentOnSection.feature",
+		//"./src/features/**/commentOnSubSection.feature",
+		//"./src/features/**/orderingOnReviewPage.feature",
+		//"./src/features/**/submitComments.feature"
+	],
 
     // Assume user has Chrome and Firefox installed.
     capabilities: [
