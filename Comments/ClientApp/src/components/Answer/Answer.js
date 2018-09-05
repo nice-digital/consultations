@@ -98,8 +98,7 @@ export class Answer extends Component<PropsType, StateType> {
 							data-qa-sel="delete-comment-button"
 							className="btn mr--0 right"
 							onClick={e => this.props.deleteHandler(e, questionId, answerId)}>
-							<span className="visually-hidden">Delete this answer</span>
-							<span className="icon icon--trash" aria-hidden="true"/>
+							Delete
 						</button>
 						}
 					</form>
