@@ -16,6 +16,7 @@
  		And I pause for 10000ms
 		Then I wait on element ".section:first-of-type > [data-qa-sel='in-text-comment-button']" to exist
  		When I click on the button ".section:first-of-type > [data-qa-sel='in-text-comment-button']"
+		When I wait on element ".document-comment-container" to exist
  		And I pause for 1000ms
  		Then I wait on element "body [data-qa-sel='comment-box-title']" for 1000ms to exist
 		And I pause for 1000ms
@@ -25,5 +26,5 @@
  		And I pause for 1000ms
  		Then I expect that element "[data-qa-sel='Comment-text-area']" contains the text "This is a Sub-section comment"
 		And I pause for 1000ms
- 		Then I expect that element "[data-qa-sel='submit-button']" contains the text "Saved"
+ 		Then I expect that element ".CommentBox:first-child .CommentBox__savedIndicator" contains the text "Saved"
  		Then I click on the button "body [data-qa-sel='delete-comment-button']"
