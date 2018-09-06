@@ -1,9 +1,10 @@
 import React, { Fragment } from "react";
 import { convertNodeToElement } from "react-html-parser";
-import { nodeIsTypeText, nodeIsSubsection, nodeIsSpanTag } from "./types";
+import {nodeIsTypeText, nodeIsSubsection, nodeIsSpanTag, nodeIsInternalLink} from "./types";
 import objectHash from "object-hash";
+import processInternalLink from "./internal-link";
 
-export const processChapterSectionSubsection = (node, incomingHtml, onNewCommentClick, sourceURI, allowComments) => {
+export const processChapterSectionSubsection = (node, onNewCommentClick, sourceURI, allowComments) => {
 
 	let commentOn = node.attribs["data-heading-type"].toLowerCase();
 	let quote = node.children.filter(nodeIsTypeText)[0].data;
@@ -37,7 +38,13 @@ export const processChapterSectionSubsection = (node, incomingHtml, onNewComment
 					<span className="visually-hidden">Comment on {commentOn}: {quote}</span>
 				</button>
 			}
-			{convertNodeToElement(node)}
+			{convertNodeToElement(node, 0, transform)}
 		</Fragment>
 	);
+};
+
+const transform = (node) => {
+	if (nodeIsInternalLink(node)){
+		return processInternalLink(node);
+	}
 };

@@ -660,11 +660,13 @@ Array [
                                             <a
                                                 aria-current={false}
                                                 className="footnote"
+                                                data-identified-as="internal-link"
                                                 href="#ftn.footnote_1"
                                                 id="footnote_1"
                                                 name="footnote_1"
                                                 onClick={[Function]}
                                                 rel="internal"
+                                                tabIndex="0"
                                             >
                                                 1
                                             </a>
@@ -720,11 +722,13 @@ Array [
                                                     <a
                                                         aria-current={false}
                                                         className="para"
+                                                        data-identified-as="internal-link"
                                                         href="#footnote_1"
                                                         id="ftn.footnote_1"
                                                         name="ftn.footnote_1"
                                                         onClick={[Function]}
                                                         rel="internal"
+                                                        tabIndex="0"
                                                     >
                                                         1
                                                     </a>
