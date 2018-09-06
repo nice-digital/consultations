@@ -9,8 +9,9 @@ import processInternalLink from "./transforms/internal-link";
 export const processDocumentHtml = (incomingHtml: string, onNewCommentClick: Function, sourceURI: string, allowComments: boolean) => {
 
 	function transformHtml(node) {
-		if (nodeIsChapter(node) || nodeIsSection(node) || nodeIsSubsection(node)) {
-			return processChapterSectionSubsection(node, onNewCommentClick, sourceURI, allowComments);
+		const isSubsection = nodeIsSubsection(node);
+		if (nodeIsChapter(node) || nodeIsSection(node) || isSubsection) {
+			return processChapterSectionSubsection(node, onNewCommentClick, sourceURI, allowComments, isSubsection);
 		}
 
 		if (nodeIsInternalLink(node)) {

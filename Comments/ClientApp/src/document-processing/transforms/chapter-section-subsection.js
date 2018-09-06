@@ -1,15 +1,15 @@
 import React, { Fragment } from "react";
 import { convertNodeToElement } from "react-html-parser";
-import {nodeIsTypeText, nodeIsSubsection, nodeIsSpanTag, nodeIsInternalLink} from "./types";
+import {nodeIsTypeText, nodeIsSpanTag, nodeIsInternalLink} from "./types";
 import objectHash from "object-hash";
 import processInternalLink from "./internal-link";
 
-export const processChapterSectionSubsection = (node, onNewCommentClick, sourceURI, allowComments) => {
+export const processChapterSectionSubsection = (node, onNewCommentClick, sourceURI, allowComments, isSubsection) => {
 
 	let commentOn = node.attribs["data-heading-type"].toLowerCase();
 	let quote = node.children.filter(nodeIsTypeText)[0].data;
 
-	if (nodeIsSubsection(node)) {
+	if (isSubsection) {
 		quote = node.children.filter(nodeIsSpanTag)[0].children.filter(nodeIsTypeText)[0].data;
 		commentOn = "subsection";
 	}
