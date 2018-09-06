@@ -30,9 +30,6 @@ namespace Comments.Services
 	    ConsultationState GetConsultationState(string sourceURI, PreviewState previewState, IEnumerable<Models.Location> locations = null, ConsultationBase consultation = null);
 	    ConsultationState GetConsultationState(int consultationId, int? documentId, string chapterSlug, PreviewState previewState, IEnumerable<Models.Location> locations = null, ConsultationBase consultation = null);
 
-	    //ConsultationState GetDraftConsultationState(int consultationId, int documentId, string reference,
-		   // IEnumerable<Models.Location> locations = null, ConsultationPublishedPreviewDetail consultationDetail = null);
-
 		bool HasSubmittedCommentsOrQuestions(string consultationSourceURI, Guid userId);
 	    IEnumerable<BreadcrumbLink> GetBreadcrumbs(ConsultationDetail consultation, bool isReview);
     }
@@ -98,7 +95,7 @@ namespace Comments.Services
 	    {
 		    var user = _userService.GetCurrentUser();
 		    var draftConsultationDetail = GetDraftConsultationDetail(consultationId, documentId, reference);
-		    var consultationState = GetDraftConsultationState(consultationId, documentId, reference, null, draftConsultationDetail);
+		    var consultationState = GetConsultationState(consultationId, documentId, reference, PreviewState.Preview, null, draftConsultationDetail);
 		    var filters = isReview ? AppSettings.ReviewConfig.Filters : null;
 		    return new ViewModels.Consultation(draftConsultationDetail, user, null, consultationState, filters);
 	    }
@@ -220,36 +217,36 @@ namespace Comments.Services
 	    }
 
 
-	    public ConsultationState GetDraftConsultationState(int consultationId, int documentId, string reference, IEnumerable<Models.Location> locations = null, ConsultationPublishedPreviewDetail consultationDetail = null)
-	    {
-		    var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
-		    if (consultationDetail == null)
-			    consultationDetail = GetDraftConsultationDetail(consultationId, documentId, reference);
+	    //public ConsultationState GetDraftConsultationState(int consultationId, int documentId, string reference, IEnumerable<Models.Location> locations = null, ConsultationPublishedPreviewDetail consultationDetail = null)
+	    //{
+		   // var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
+		   // if (consultationDetail == null)
+			  //  consultationDetail = GetDraftConsultationDetail(consultationId, documentId, reference);
 
-		    var documents = GetPreviewDraftDocuments(consultationId, documentId, reference).ToList();
-		    var documentsWhichSupportQuestions = documents.Where(d => d.SupportsQuestions).Select(d => d.DocumentId).ToList();
-		    var documentsWhichSupportComments = documents.Where(d => d.SupportsComments).Select(d => d.DocumentId).ToList();
+		   // var documents = GetPreviewDraftDocuments(consultationId, documentId, reference).ToList();
+		   // var documentsWhichSupportQuestions = documents.Where(d => d.SupportsQuestions).Select(d => d.DocumentId).ToList();
+		   // var documentsWhichSupportComments = documents.Where(d => d.SupportsComments).Select(d => d.DocumentId).ToList();
 
-		    var currentUser = _userService.GetCurrentUser();
+		   // var currentUser = _userService.GetCurrentUser();
 
-		    if (locations == null && currentUser.IsAuthorised && currentUser.UserId.HasValue)
-		    {
-			    locations = _context.GetAllCommentsAndQuestionsForDocument(new[] { sourceURI }, partialMatchSourceURI: true);
-		    }
-		    else
-		    {
-			    locations = new List<Models.Location>(0);
-		    }
+		   // if (locations == null && currentUser.IsAuthorised && currentUser.UserId.HasValue)
+		   // {
+			  //  locations = _context.GetAllCommentsAndQuestionsForDocument(new[] { sourceURI }, partialMatchSourceURI: true);
+		   // }
+		   // else
+		   // {
+			  //  locations = new List<Models.Location>(0);
+		   // }
 
-		    var hasSubmitted = currentUser != null && currentUser.IsAuthorised && currentUser.UserId.HasValue ? HasSubmittedCommentsOrQuestions(sourceURI, currentUser.UserId.Value) : false;
+		   // var hasSubmitted = currentUser != null && currentUser.IsAuthorised && currentUser.UserId.HasValue ? HasSubmittedCommentsOrQuestions(sourceURI, currentUser.UserId.Value) : false;
 
-		    var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);
+		   // var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);
 
-		    var consultationState = new ConsultationState(consultationDetail.StartDate, consultationDetail.EndDate,
-			    data.questions.Any(), data.questions.Any(q => q.Answers.Any()), data.comments.Any(), hasSubmitted,
-			    false, false, documentsWhichSupportQuestions, documentsWhichSupportComments);
+		   // var consultationState = new ConsultationState(consultationDetail.StartDate, consultationDetail.EndDate,
+			  //  data.questions.Any(), data.questions.Any(q => q.Answers.Any()), data.comments.Any(), hasSubmitted,
+			  //  false, false, documentsWhichSupportQuestions, documentsWhichSupportComments);
 
-		    return consultationState;
-	    }
+		   // return consultationState;
+	    //}
 	}
 }
