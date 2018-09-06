@@ -37,7 +37,7 @@ namespace Comments.Test.UnitTests
 			var sourceURI = "consultations://./consultation/1";
 
 			//Act
-		    var comments = _context.GetAllSubmittedCommentsForURI(sourceURI, true);
+		    var comments = _context.GetAllSubmittedCommentsForURI(sourceURI);
 
 			//Assert
 			comments.Count.ShouldBe(2);
@@ -51,7 +51,7 @@ namespace Comments.Test.UnitTests
 		    var sourceURI = "consultations://./consultation/1";
 
 		    //Act
-		    var answers = _context.GetAllSubmittedAnswersForURI(sourceURI,true);
+		    var answers = _context.GetAllSubmittedAnswersForURI(sourceURI);
 
 			//Assert
 		    answers.Count.ShouldBe(2);
@@ -65,7 +65,7 @@ namespace Comments.Test.UnitTests
 		    var sourceURI = "consultations://./consultation/1";
 
 		    //Act
-		    var questions = _context.GetUnansweredQuestionsForURI(sourceURI, true);
+		    var questions = _context.GetUnansweredQuestionsForURI(sourceURI);
 
 			//Assert
 		    questions.Count.ShouldBe(1);
@@ -80,7 +80,7 @@ namespace Comments.Test.UnitTests
 			CreateALotOfData(Guid.NewGuid());
 
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/chapter-slug";
-			var comments = _context.GetAllSubmittedCommentsForURI(sourceURI, true);
+			var comments = _context.GetAllSubmittedCommentsForURI(sourceURI);
 			var exportService = new ExportService(_context, _fakeUserService, _consultationService);
 
 			//Act
@@ -93,31 +93,31 @@ namespace Comments.Test.UnitTests
 	    }
 
 	    [Fact]
-	    public void Get_All_Users_Submitted_Comments_For_URI()
+	    public void Get_Users_Comments_For_URI()
 	    {
 		    //Arrange
 		    CreateALotOfData(Guid.Empty);
 		    var sourceURI = "consultations://./consultation/1";
 
 		    //Act
-		    var comments = _context.GetAllSubmittedCommentsForURI(sourceURI, false);
+		    var comments = _context.GetUsersCommentsForURI(sourceURI);
 
 		    //Assert
-		    comments.Count.ShouldBe(1);
+		    comments.Count.ShouldBe(2);
 	    }
 
 	    [Fact]
-	    public void Get_All_Users_Submitted_Answers_For_URI()
+	    public void Get_Users_Answers_For_URI()
 	    {
 		    //Arrange
 		    CreateALotOfData(Guid.Empty);
 		    var sourceURI = "consultations://./consultation/1";
 
 		    //Act
-		    var answers = _context.GetAllSubmittedAnswersForURI(sourceURI, false);
+		    var answers = _context.GetUsersAnswersForURI(sourceURI);
 
 		    //Assert
-		    answers.Count.ShouldBe(1);
+		    answers.Count.ShouldBe(2);
 	    }
 
 	    [Fact]
@@ -128,7 +128,7 @@ namespace Comments.Test.UnitTests
 		    var sourceURI = "consultations://./consultation/1";
 
 		    //Act
-		    var questions = _context.GetUnansweredQuestionsForURI(sourceURI, false);
+		    var questions = _context.GetUsersUnansweredQuestionsForURI(sourceURI);
 
 		    //Assert
 		    questions.Count.ShouldBe(2);

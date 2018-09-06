@@ -30,9 +30,9 @@ namespace Comments.Services
 	    {
 		    
 			var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
-		    var commentsInDB = _context.GetAllSubmittedCommentsForURI(sourceURI, true);
-		    var answersInDB = _context.GetAllSubmittedAnswersForURI(sourceURI, true);
-		    var questionsInDB = _context.GetUnansweredQuestionsForURI(sourceURI, true);
+		    var commentsInDB = _context.GetAllSubmittedCommentsForURI(sourceURI);
+		    var answersInDB = _context.GetAllSubmittedAnswersForURI(sourceURI);
+		    var questionsInDB = _context.GetUnansweredQuestionsForURI(sourceURI);
 
 			if (commentsInDB == null && answersInDB == null && questionsInDB == null)
 				return (null, null, null, new Validate(valid: false, notFound: true, message: $"Consultation id:{consultationId} not found trying to get all data for consultation"));
@@ -44,9 +44,9 @@ namespace Comments.Services
 	    {
 
 		    var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
-		    var commentsInDB = _context.GetAllSubmittedCommentsForURI(sourceURI, false);
-		    var answersInDB = _context.GetAllSubmittedAnswersForURI(sourceURI, false);
-		    var questionsInDB = _context.GetUnansweredQuestionsForURI(sourceURI, false);
+		    var commentsInDB = _context.GetUsersCommentsForURI(sourceURI);
+		    var answersInDB = _context.GetUsersAnswersForURI(sourceURI);
+		    var questionsInDB = _context.GetUsersUnansweredQuestionsForURI(sourceURI);
 
 		    if (commentsInDB == null && answersInDB == null && questionsInDB == null)
 			    return (null, null, null, new Validate(valid: false, notFound: true, message: $"Consultation id:{consultationId} not found trying to get all data for consultation"));
