@@ -2,6 +2,7 @@
 
 import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router";
+import { LiveMessenger } from "react-aria-live";
 
 import DocumentWithRouter from "../Document/Document";
 import CommentListWithRouter from "../CommentList/CommentList";
@@ -27,8 +28,8 @@ export class DocumentView extends Component<PropsType, StateType> {
 		this.state = {
 			error: {
 				hasError: false,
-				message: null
-			}
+				message: null,
+			},
 		};
 	}
 
@@ -38,14 +39,18 @@ export class DocumentView extends Component<PropsType, StateType> {
 		this.commentList.newComment(e, incomingComment);
 	};
 
-
 	render() {
 		if (this.state.error.hasError) { throw new Error(this.state.error.message); }
 
 		return (
 			<Fragment>
-				
-				<CommentListWithRouter  wrappedComponentRef={component => (this.commentList = component)} />
+				<LiveMessenger>
+					{({announceAssertive, announcePolite}) =>
+						<CommentListWithRouter
+							announceAssertive={announceAssertive}
+							announcePolite={announcePolite}
+							wrappedComponentRef={component => (this.commentList = component)} />}
+				</LiveMessenger>
 				
 				{/* Passing the function we're using from <CommentListWithRouter /> to DocWithRouter via props*/}
 				<DocumentWithRouter onNewCommentClick={this.newCommentHandler} />

@@ -4,17 +4,6 @@ exports[`[ClientApp]  Answer Component should match snapshot with answer 1`] = `
 <section
   role="form"
 >
-  <div
-    className="CommentBox__datestamp mb--d font-weight-bold"
-  >
-    Last Modified:
-     
-    <time
-      dateTime={"2018-07-13T08:01:41.522Z"}
-    >
-      13/7/2018 - 9:01am
-    </time>
-  </div>
   <form
     onSubmit={[Function]}
   >
@@ -31,13 +20,11 @@ exports[`[ClientApp]  Answer Component should match snapshot with answer 1`] = `
         value="an updated answer"
       />
     </div>
-    <input
-      className="btn ml--0"
-      data-qa-sel="submit-button"
-      disabled={true}
-      type="submit"
-      value="Saved"
-    />
+    <span
+      className="ml--0 CommentBox__savedIndicator"
+    >
+      Saved
+    </span>
     <button
       className="btn mr--0 right"
       data-qa-sel="delete-comment-button"
@@ -61,17 +48,6 @@ exports[`[ClientApp]  Answer Component should match snapshot without answer 1`] 
 <section
   role="form"
 >
-  <div
-    className="CommentBox__datestamp mb--d font-weight-bold"
-  >
-    Last Modified:
-     
-    <time
-      dateTime={"2018-07-13T08:01:41.522Z"}
-    >
-      13/7/2018 - 9:01am
-    </time>
-  </div>
   <form
     onSubmit={[Function]}
   >

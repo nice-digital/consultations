@@ -9,12 +9,14 @@ namespace Comments.Migrations
             migrationBuilder.AddColumn<bool>(
                 name: "RespondingAsOrganisation",
                 table: "Submission",
-                nullable: false);
+                nullable: false,
+	            defaultValue: false);
 
             migrationBuilder.AddColumn<bool>(
                 name: "HasTobaccoLinks",
                 table: "Submission",
-                nullable: false);
+                nullable: false,
+	            defaultValue: false);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

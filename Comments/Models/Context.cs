@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using Remotion.Linq.Clauses;
+using SQLitePCL;
 
 namespace Comments.Models
 {
@@ -44,9 +46,10 @@ namespace Comments.Models
 		/// This behaviour can be overridden with the IgnoreQueryFilters command. See the ConsultationContext.Tests for example usage.
 		/// </summary>
 		/// <param name="sourceURIs"></param>
-		/// <param name="isReview">True if data is being retrieved for the review page</param>
+		/// <param name="partialMatchSourceURI">True if data is being retrieved for the review page</param>
+		/// <param name="getSubmitted">True if data is being retrieved should only be submitted data</param>
 		/// <returns></returns>
-		public IEnumerable<Location> GetAllCommentsAndQuestionsForDocument(IList<string> sourceURIs, bool partialMatchSourceURI)
+		public IEnumerable<Location> GetAllCommentsAndQuestionsForDocument(IList<string> sourceURIs, bool partialMatchSourceURI, bool getSubmitted = false)
 		{
 			string partialSourceURIToUse = null, partialMatchExactSourceURIToUse = null;
 		    if (partialMatchSourceURI)
@@ -58,30 +61,85 @@ namespace Comments.Models
 			    partialSourceURIToUse = $"{partialMatchExactSourceURIToUse}/";
 		    }
 
-			var data = Location.Where(l => partialMatchSourceURI ?
-											(l.SourceURI.Equals(partialMatchExactSourceURIToUse) || l.SourceURI.Contains(partialSourceURIToUse))
-											: sourceURIs.Contains(l.SourceURI))
-					.Include(l => l.Comment)
-						.ThenInclude(s => s.SubmissionComment)
-							.ThenInclude(s => s.Submission)
+			//Answer.Where(a => a.Status = 1 && a.Question.Location.SourceURI)
 
-					.Include(l => l.Comment)
-						.ThenInclude(s => s.Status)
+			var data = Location.Where(l => partialMatchSourceURI
+					? (l.SourceURI.Equals(partialMatchExactSourceURIToUse) || l.SourceURI.Contains(partialSourceURIToUse))
+					: sourceURIs.Contains(l.SourceURI))
+				.Include(l => l.Comment)
+					.ThenInclude(s => s.SubmissionComment)
+					.ThenInclude(s => s.Submission)
 
-					.Include(l => l.Question)
-						.ThenInclude(q => q.QuestionType)
-				    .Include(l => l.Question)
-						.ThenInclude(q => q.Answer)
-							.ThenInclude(s => s.SubmissionAnswer)
+				.Include(l => l.Comment)
+					.ThenInclude(s => s.Status)	
+
+				.Include(l => l.Question)
+					.ThenInclude(q => q.QuestionType)
+				.Include(l => l.Question)
+					.ThenInclude(q => q.Answer)
+					.ThenInclude(s => s.SubmissionAnswer)
 
 					.OrderBy(l => l.Order)
 
-					.ThenByDescending(l => l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault());
+				.ThenByDescending(l =>
+					l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault())
+
+				.ToList();
+
+			if (getSubmitted)
+			{
+				var filteredData = data.Where(l =>
+												(l.Comment != null && l.Comment.Count != 0 ? l.Comment.Any(c => c.StatusId == (int)StatusName.Submitted) : false)
+												||
+												(l.Question != null && l.Question.Count != 0 ? l.Question.Any(q => q.Answer.Count() == 0) : false)
+												||
+												(l.Question != null && l.Question.Count != 0 ? l.Question.FirstOrDefault().Answer.Any(c => c.StatusId == (int)StatusName.Submitted) : false)
+											);
+
+				return filteredData;
+			}
 
 			return data;
+			
+			
+		}
+
+	    public List<Comment> GetAllSubmittedCommentsForURI(string  sourceURI)
+	    {
+		    var comment = Comment.Where(c => c.StatusId == (int)StatusName.Submitted && c.Location.SourceURI.Contains(sourceURI) && c.IsDeleted == false)
+			    .Include(l => l.Location)
+			    .Include(s => s.Status)
+				.Include(sc => sc.SubmissionComment)
+				.ThenInclude(s => s.Submission)
+			    .IgnoreQueryFilters()
+				.ToList();
+
+		    return comment;
+		}
+
+	    public List<Answer> GetAllSubmittedAnswersForURI(string sourceURI)
+	    {
+		    var answer = Answer.Where(a => a.StatusId == (int) StatusName.Submitted && a.Question.Location.SourceURI.Contains(sourceURI) && a.IsDeleted == false)
+				.Include(q => q.Question)
+				.ThenInclude(l => l.Location)
+			    .Include(sc => sc.SubmissionAnswer)
+			    .ThenInclude(s => s.Submission)
+				.IgnoreQueryFilters()
+			    .ToList();
+
+			return answer;
 	    }
-		
-        public Comment GetComment(int commentId)
+	    public List<Question> GetUnansweredQuestionsForURI(string sourceURI)
+	    {
+		    var question = Question.Where(q => q.Answer.Count == 0 && q.Location.SourceURI.Contains(sourceURI) && q.IsDeleted == false)
+				.Include(l => l.Location)
+			    .IgnoreQueryFilters()
+				.ToList();
+
+		    return question;
+	    }
+
+		public Comment GetComment(int commentId)
         {
             var comment = Comment.Where(c => c.CommentId.Equals(commentId))
                             .Include(c => c.Location)

@@ -54,9 +54,9 @@
     overflow-scrolling: touch;
     -webkit-overflow-scrolling: touch;
     background-color: $colour-nice-white;
-    @include visibleToggleOut(0.1s);
+    @include visibleToggleOut(0.4s); // slightly longer than the duration of the transition
     &--open {
-      @include visibleToggleIn(0.1s);
+      @include visibleToggleIn(0.4s);
     }
   }
   &--open {

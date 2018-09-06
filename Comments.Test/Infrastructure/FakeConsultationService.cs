@@ -83,7 +83,14 @@ namespace Comments.Test.Infrastructure
 
 	    public Consultation GetConsultation(int consultationId, bool isReview)
 	    {
-		    throw new NotImplementedException();
+			var userService = FakeUserService.Get(true, "Benjamin Button", Guid.NewGuid());
+			var consultationBase = new ConsultationBase()
+		    {
+			    ConsultationId = 1,
+			    ConsultationName = "ConsultationName"
+		    };
+
+		    return new Consultation(consultationBase, userService.GetCurrentUser());
 	    }
 
 	    public Consultation GetDraftConsultation(int consultationId, int documentId, string reference, bool isReview)

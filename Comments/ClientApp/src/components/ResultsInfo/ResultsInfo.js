@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Fragment } from "react";
+import { LiveMessage } from "react-aria-live";
 
 import AppliedFilter from "./../AppliedFilter/AppliedFilter";
 
@@ -46,13 +47,15 @@ const GetShowingText = (props: PropsType) => {
 
 export const ResultsInfo = (props: PropsType) => (
 	<div className="results-info">
-		<h2 className="results-info__count" aria-live="assertive" id="results-info-count">
+		<h2 className="results-info__count" id="results-info-count">
 			{(props.showCommentsCount || props.showQuestionsCount) &&
 				props.isLoading ? (
 					<span aria-busy="true">Loading…</span>
 				) : (
-					<Fragment>{GetShowingText(props)}</Fragment>
-					// <Fragment>Showing {props.count} response{props.count === 1 ? "" : "s"}</Fragment>
+					<Fragment>
+						<span>{GetShowingText(props)}</span>
+						<LiveMessage message={GetShowingText(props)} aria-live="polite" />
+					</Fragment>
 				)
 			}
 		</h2>
