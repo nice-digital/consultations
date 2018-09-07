@@ -14,9 +14,9 @@
 Scenario: User makes a comment at section level
  		And I pause for 1000ms
  		When I click on the button "[data-qa-sel='nav-list-item']:nth-of-type(4)"
+		When I wait on element ".document-comment-container" to exist
  		And I pause for 1000ms
  		When I click on the button ".section:first-of-type > .title [data-qa-sel='in-text-comment-button']"
-		When I wait on element ".document-comment-container" to exist
  		And I pause for 1000ms
  		Then I wait on element "body [data-qa-sel='comment-box-title']" to exist
     Then I expect that element "[data-qa-sel='comment-box-title']" contains the text "section"
