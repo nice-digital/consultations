@@ -18,7 +18,7 @@ Scenario: User makes a comment at section level
  		When I click on the button ".section:first-of-type > .title [data-qa-sel='in-text-comment-button']"
 		When I wait on element ".document-comment-container" to exist
  		And I pause for 1000ms
- 		Then I wait on element "body [data-qa-sel='comment-box-title']" for 10000ms to exist
+ 		Then I wait on element "body [data-qa-sel='comment-box-title']" to exist
     Then I expect that element "[data-qa-sel='comment-box-title']" contains the text "section"
  		When I add "This is a Section comment" to the inputfield "[data-qa-sel='Comment-text-area']"
  		And I click on the button "[data-qa-sel='submit-button']"

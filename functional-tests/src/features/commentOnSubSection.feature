@@ -18,7 +18,7 @@
  		When I click on the button ".section:first-of-type > [data-qa-sel='in-text-comment-button']"
 		When I wait on element ".document-comment-container" to exist
  		And I pause for 1000ms
- 		Then I wait on element "body [data-qa-sel='comment-box-title']" for 1000ms to exist
+ 		Then I wait on element "body [data-qa-sel='comment-box-title']" to exist
 		And I pause for 1000ms
     Then I expect that element "[data-qa-sel='comment-box-title']" contains the text "subsection"
  		When I add "This is a Sub-section comment" to the inputfield "[data-qa-sel='Comment-text-area']"
