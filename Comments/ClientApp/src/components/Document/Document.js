@@ -459,8 +459,8 @@ export class Document extends Component<PropsType, StateType> {
 													   allowComments={this.state.allowComments}>
 												<Chapter html={content} 
 													newCommentClickFunc={this.props.onNewCommentClick}
-													matchUrl={this.props.match.url}
-													allowComment={this.state.allowComments} />
+													sourceURI={this.props.match.url}
+													allowComments={this.state.allowComments} />
 												{/* {processDocumentHtml(
 													content,
 													this.props.onNewCommentClick,
