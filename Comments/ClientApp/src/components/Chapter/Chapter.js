@@ -27,30 +27,13 @@ export class Chapter extends Component<PropsType, StateType> {
 			originalHTML: this.props.html,
 			convertedHTML: convertedHTML,
 		};
+		
 	}
 
-	// byTag (element: any, tag: string) { return element ? element.getElementsByTagName(tag) : []; }
-	// hasClass (element: any, className: string) { 		
-	// 	return ((" " + element.className + " ").replace(/[\t\r\n\f]/g, " ").indexOf(` ${className} `) > -1 );
-	// }
-	// elementsWithClass(elements: Array<any>, className: string){
-	// 	let elementsToReturn = [];
-	// 	for (let index = 0; index < elements.length; index++){
-	// 		elementsToReturn = elementsToReturn.concat(elements[index]);
-	// 	}
-	// 	return elementsToReturn;
-	// }
-	// hasAttributeWithValue(element: any, attribute: string, value: string) {
-	// 	return (typeof(element[attribute=value]) !== "undefined");
-	// }
-	// elementsWithAttributeValue(elements: Array<any>, className: string){
-	// 	let elementsToReturn = [];
-	// 	for (let index = 0; index < elements.length; index++){
-	// 		elementsToReturn = elementsToReturn.concat(elements[index]);
-	// 	}
-	// 	return elementsToReturn;
-	// }
-	
+	componentDidMount(){
+		this.attachEvents();
+	}
+
 	parseHtml = (setState: boolean) => {
 
 		let handler=new htmlparser.DomHandler();
@@ -58,31 +41,12 @@ export class Chapter extends Component<PropsType, StateType> {
 		parser.write(this.props.html);
 		parser.end();
 		let dom = handler.dom;
-		//let div = document.createElement('div')
-		//div.innerHTML = str
-		//return div
 
 		let chapters = domutils.find(nodeIsChapter, dom, true);
 
 		this.addButton(handler, chapters);
 
-
-		console.log(chapters);
-
 		const convertedHTML = domutils.getOuterHTML(handler.dom);
-// 		let doc = HtmlParser(this.props.html); //new DOMParser().parseFromString(this.props.html, "text/html");
-
-// console.log(doc);
-
-// 		const htmlSections = doc.childNodes[0].childNodes;
-// 		const convertedHTML = Object.keys(htmlSections).map((key, i) => {
-// 			let el = htmlSections[key];
-// 			let contents = [<p>{el.innerHTML}</p>];
-// 			if (el.hasAttribute("but")) contents.push(<button>Comment</button>);
-// 			return <div key={i}>{contents}</div>;
-// 		});
-
-		//let convertedHTML = this.props.html;
 
 		if (setState){
 			this.setState({convertedHTML})
@@ -90,20 +54,56 @@ export class Chapter extends Component<PropsType, StateType> {
 		return convertedHTML;
 	}
 
+	getProperties = (tagName: string, attribs: any, children: any) => {
+		return {
+			type: ElementType.Tag,
+			name: tagName,
+			attribs: attribs,
+			children: children,
+		};		
+	};
+
+	attachEvents = () => {
+		const node = ReactDOM.findDOMNode(this);
+
+		let button = node.querySelector("#uniqueButtonIdGoesHere");
+
+		button.addEventListener('click', this.clickEventHandler);
+	};
+
+	clickEventHandler = () => {
+		console.log('clicked!');
+	};
+
 	addButton = (handler: DomHandler, elementArray: Array<any>) => {
 
-		var properties = {
-			type: ElementType.Tag,
-			name: "button",
-			attribs: {},
-			children: []
-		};
-	
-		var newElement = handler._createDomElement(properties);
+		//todo: refactor
+		const spanCommentIconProperties = this.getProperties("span", {
+			"class": "icon icon--comment",
+			"aria-hidden": "true"
+		}, []);
+		const spanCommentIcon = handler._createDomElement(spanCommentIconProperties);
+
+		const spanCommentLabelProperties = this.getProperties("span", {
+			"class": "visually-hidden",
+		}, [{
+			  "data": "Comment on {commentOn}: {quote}", //TODO - replacements
+			  "type": "text"
+			}]);
+		const spanCommentLabel = handler._createDomElement(spanCommentLabelProperties);
+
+		var buttonProperties = this.getProperties("button", {
+			"data-qa-sel": "in-text-comment-button",
+			"class": "document-comment-container__commentButton",
+			"tabIndex": "0", //todo: tabindex
+			"id": "uniqueButtonIdGoesHere",
+			//todo: onclick
+		}, [spanCommentIcon, spanCommentLabel]);
+		var buttonElement = handler._createDomElement(buttonProperties);
 
 		for (let elementToInsertBefore of elementArray){
 
-			domutils.prepend(elementToInsertBefore, newElement);
+			domutils.prepend(elementToInsertBefore, buttonElement);
 
 		}
 
@@ -131,41 +131,15 @@ export class Chapter extends Component<PropsType, StateType> {
 
 	};
 
-
-	// byAttrValue (elementArray: Array<any>, attr: string, value: string) {
-	// 	let values = [];
-	// 	for (let element of elementArray){
-	// 		let elementsForThisElement = element.querySelectorAll(`[${attr}="${value}"]`);
-	// 		values = values.concat(...elementsForThisElement);
-	// 	}
-	// 	return values;
-	// } 
-
 	componentDidUpdate(prevProps, prevState){
-		console.log("CDU");
-
 		 if (prevProps.html !== this.state.originalHTML){
 		 	this.setState({originalHTML: prevProps.html});
-		 	this.parseHtml(true);
+			this.parseHtml(true);
+			this.attachEvents();
 		 }		
-
-		//const domNode = ReactDOM.findDOMNode(this);
-
-		//let chapters = domNode.querySelectorAll(chapterSelector);
-
-		// for (var chapter of chapters){
-			
-		// 	if ()
-
-
-		// }
-
-
-
 	}
 
 	render() {
-		//return <div>{this.state.convertedHTML}</div>;
 		return (<div dangerouslySetInnerHTML={{__html: this.state.convertedHTML}} />);
 	}
 }
