@@ -2,9 +2,10 @@
 
 import React, { Component, Fragment } from "react";
 import ReactDOM from "react-dom";
-import { chapterSelector, sectionSelector, subsectionSelector, internalLinkSelector } from "../../document-processing/transforms/types";
+import { nodeIsChapter, nodeIsSection, nodeIsSubsection, nodeIsInternalLink } from "../../document-processing/transforms/types";
 import htmlparser from "htmlparser2";
 import domutils from "domutils"
+import ElementType from "domelementtype";
 
 type PropsType = {
 	html: string,
@@ -52,14 +53,21 @@ export class Chapter extends Component<PropsType, StateType> {
 	
 	parseHtml = (setState: boolean) => {
 
-		 var handler=new htmlparser.DomHandler();
-		 var parser = new htmlparser.Parser(handler);
-		 parser.write(this.props.html);
-		 parser.end();
-
+		let handler=new htmlparser.DomHandler();
+		let parser = new htmlparser.Parser(handler);
+		parser.write(this.props.html);
+		parser.end();
+		let dom = handler.dom;
 		//let div = document.createElement('div')
 		//div.innerHTML = str
 		//return div
+
+		let chapters = domutils.find(nodeIsChapter, dom, true);
+
+		this.addButton(handler, chapters);
+
+
+		console.log(chapters);
 
 		const convertedHTML = domutils.getOuterHTML(handler.dom);
 // 		let doc = HtmlParser(this.props.html); //new DOMParser().parseFromString(this.props.html, "text/html");
@@ -81,6 +89,47 @@ export class Chapter extends Component<PropsType, StateType> {
 		}
 		return convertedHTML;
 	}
+
+	addButton = (handler: DomHandler, elementArray: Array<any>) => {
+
+		var properties = {
+			type: ElementType.Tag,
+			name: "button",
+			attribs: {},
+			children: []
+		};
+	
+		var newElement = handler._createDomElement(properties);
+
+		for (let elementToInsertBefore of elementArray){
+
+			domutils.prepend(elementToInsertBefore, newElement);
+
+		}
+
+		// <button
+		// 			data-qa-sel="in-text-comment-button"
+		// 			className="document-comment-container__commentButton"
+		// 			tabIndex={0}
+		// 			onClick={e => {
+		// 				e.preventDefault();
+		// 				onNewCommentClick(e, {
+		// 					sourceURI,
+		// 					commentText: "",
+		// 					commentOn,
+		// 					htmlElementID,
+		// 					quote,
+		// 				});
+		// 			}}
+		// 		>
+		// 			<span className="icon icon--comment" aria-hidden="true" />
+		// 			<span className="visually-hidden">Comment on {commentOn}: {quote}</span>
+		// 		</button>
+
+
+
+
+	};
 
 
 	// byAttrValue (elementArray: Array<any>, attr: string, value: string) {
