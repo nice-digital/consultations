@@ -36,6 +36,9 @@
     "babel-register": "^6.26.0",
     "bless": "^3.0.3",
     "bowser": "^1.9.3",
+    "domhandler": "^2.4.2",
+    "domutils": "^1.7.0",
+    "htmlparser2": "^3.9.2",
     "ignore-styles": "^5.0.1",
     "lodash": "^4.17.10",
     "lodash-deeper": "^1.1.0",
@@ -56,7 +59,8 @@
     "react-router-hash-link": "^1.2.0",
     "react-scrollspy": "^3.3.5",
     "react-sticky": "^6.0.2",
-    "stringify-object": "^3.2.2"
+    "stringify-object": "^3.2.2",
+    "xml-parse-from-string": "^1.0.1"
   },
   "devDependencies": {
     "@nice-digital/browserslist-config": "^1.0.0",
