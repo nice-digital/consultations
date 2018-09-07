@@ -12,15 +12,17 @@ type PropsType = {
 };
 
 type StateType = {
-	content: any
+	originalHTML: string,
+	convertedHTML: string,
 };
 
 export class Chapter extends Component<PropsType, StateType> {
 	constructor(props: PropsType) {
 		super(props);
+		const convertedHTML = this.parseHtml(false);
 		this.state = {
-			originalContent: this.props.html,
-			content: null,
+			originalHTML: this.props.html,
+			convertedHTML: convertedHTML,
 		};
 	}
 
@@ -46,6 +48,23 @@ export class Chapter extends Component<PropsType, StateType> {
 	// 	return elementsToReturn;
 	// }
 	
+	parseHtml = (setState: boolean) => {
+		let doc = new DOMParser().parseFromString(this.props.html, "text/html");
+
+		const htmlSections = doc.childNodes[0].childNodes;
+		const convertedHTML = Object.keys(htmlSections).map((key, i) => {
+			let el = htmlSections[key];
+			let contents = [<p>{el.innerHTML}</p>];
+			if (el.hasAttribute("but")) contents.push(<button>Comment</button>);
+			return <div key={i}>{contents}</div>;
+		});
+
+		if (setState){
+			this.setState({convertedHTML})
+		}
+		return convertedHTML;
+	}
+
 
 	// byAttrValue (elementArray: Array<any>, attr: string, value: string) {
 	// 	let values = [];
@@ -59,18 +78,9 @@ export class Chapter extends Component<PropsType, StateType> {
 	componentDidUpdate(prevProps, prevState){
 		console.log("CDU");
 
-		let doc = new DOMParser().parseFromString(this.props.html, "text/html");
-
-		const htmlSections = doc.childNodes[0].childNodes;
-		const sections = Object.keys(htmlSections).map((key, i) => {
-			let el = htmlSections[key];
-			let contents = [<p>{el.innerHTML}</p>];
-			if (el.hasAttribute("but")) contents.push(<button>Comment</button>);
-			return <div key={i}>{contents}</div>;
-		});
-
-		if (prevState.sections != sections){
-			this.setState({content: sections});
+		if (prevProps.html != this.state.originalHTML){
+			this.setState({originalHTML: prevProps.html});
+			this.parseHtml(true);
 		}		
 
 		//const domNode = ReactDOM.findDOMNode(this);
@@ -89,7 +99,7 @@ export class Chapter extends Component<PropsType, StateType> {
 	}
 
 	render() {
-		return <div>{this.state.sections}</div>;
+		return <div>{this.state.convertedHTML}</div>;
 		//return (<div dangerouslySetInnerHTML={{__html: this.props.html}} />);
 	}
 }
