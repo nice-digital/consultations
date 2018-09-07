@@ -33,9 +33,17 @@ export class Chapter extends Component<PropsType, StateType> {
 		this.attachOrDetachEvents(true);
 	}
 
-	parseHtml = () => {
+	componentDidUpdate(prevProps, prevState){
+		if (prevProps.html !== this.state.originalHTML){
+		   	this.attachOrDetachEvents(false);
+			this.setState({originalHTML: prevProps.html});
+		   	const convertedHTML = this.parseHtml();
+		   	this.setState({convertedHTML}, () => this.attachOrDetachEvents(true));
+		}		
+   }
 
-		let handler=new htmlparser.DomHandler();
+	parseHtml = () => {
+		let handler = new htmlparser.DomHandler();
 		let parser = new htmlparser.Parser(handler);
 		parser.write(this.props.html);
 		parser.end();
@@ -44,13 +52,10 @@ export class Chapter extends Component<PropsType, StateType> {
 		let chapters = domutils.find(nodeIsChapter, dom, true);
 		let sections = domutils.find(nodeIsSection, dom, true);
 		let subsections = domutils.find(nodeIsSubsection, dom, true);
-
 		const foundElements = [].concat(chapters).concat(sections).concat(subsections);
+
 		this.addButtons(handler, foundElements);
-
-		const convertedHTML = domutils.getOuterHTML(handler.dom);
-
-		return convertedHTML;
+		return domutils.getOuterHTML(handler.dom);
 	}
 
 	getProperties = (tagName: string, attribs: any, children: any) => {
@@ -64,7 +69,6 @@ export class Chapter extends Component<PropsType, StateType> {
 
 	attachOrDetachEvents = (attach: bool) => {
 		const node = ReactDOM.findDOMNode(this);
-
 		let elementsWithCommentEventClass = [...node.querySelectorAll(".comment-event")];
 
 		for (let element of elementsWithCommentEventClass){
@@ -76,9 +80,7 @@ export class Chapter extends Component<PropsType, StateType> {
 		}			
 	};
 
-
 	clickEventHandler = (e: Event) => {
-		console.log('clicked!');
 		const buttonClicked = e.currentTarget;
 		const commentOn = buttonClicked.getAttribute("data-comment-on");
 		const htmlElementID = buttonClicked.getAttribute("data-html-element-id");
@@ -133,16 +135,7 @@ export class Chapter extends Component<PropsType, StateType> {
 
 			domutils.prepend(elementToInsertBefore, buttonElement);
 		}
-	};
-
-	componentDidUpdate(prevProps, prevState){
-		 if (prevProps.html !== this.state.originalHTML){
-			this.attachOrDetachEvents(false);
-		 	this.setState({originalHTML: prevProps.html});
-			const convertedHTML = this.parseHtml();
-			this.setState({convertedHTML}, () => this.attachOrDetachEvents(true));
-		 }		
-	}
+	};	
 
 	render() {
 		return (<div dangerouslySetInnerHTML={{__html: this.state.convertedHTML}} />);
