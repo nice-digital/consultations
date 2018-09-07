@@ -36,7 +36,7 @@ Scenario: User makes a multiple comments and submits
 		And I click on the button "[data-qa-sel='submit-comment-button']"
 		And I pause for 1000ms
 		When I wait on element "[data-qa-sel='review-submitted-comments']" to exist
-		Then I expect that element "[data-qa-sel='submitted-text']" contains the text "Thank you, your response has been submitted."
+		Then I expect that element "[data-qa-sel='submitted-text']" contains the text "Your response has been submitted"
 		When I click on the button "[data-qa-sel='review-submitted-comments']"
 		When I wait on element "[data-qa-sel='Comment-text-area']" to exist
 		Then I expect that element "[data-qa-sel='Comment-text-area']" is not enabled

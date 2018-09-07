@@ -14,6 +14,7 @@
 Scenario: User makes a comment at chapter level
  		And I pause for 1000ms
  		When I click on the button "[data-qa-sel='nav-list-item']:nth-of-type(4)"
+		When I wait on element ".document-comment-container" to exist
  		And I pause for 1000ms
  		When I click on the button ".chapter > .title [data-qa-sel='in-text-comment-button']"
  		And I pause for 1000ms
@@ -24,5 +25,5 @@ Scenario: User makes a comment at chapter level
  		And I pause for 1000ms
  		Then I expect that element "[data-qa-sel='Comment-text-area']" contains the text "This is a Chapter comment"
 		And I pause for 1000ms
- 		Then I expect that element "[data-qa-sel='submit-button']" contains the text "Saved"
+ 		Then I expect that element ".CommentBox:first-child .CommentBox__savedIndicator" contains the text "Saved"
  		Then I click on the button "body [data-qa-sel='delete-comment-button']"

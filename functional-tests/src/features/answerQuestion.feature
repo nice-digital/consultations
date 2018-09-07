@@ -24,13 +24,13 @@ Scenario: I answer a Consultation and Document level question
  		And I click on the button ".CommentBox:first-child [data-qa-sel='submit-button']"
  		And I pause for 1000ms
  		Then I expect that element ".CommentBox:first-child [data-qa-sel='Comment-text-area']" contains the text "If this is a question then this is the answer"
-		Then I expect that element ".CommentBox:first-child [data-qa-sel='submit-button']" contains the text "Saved"
+		Then I expect that element ".CommentBox:first-child .CommentBox__savedIndicator" contains the text "Saved"
 		Then I click on the button "body .CommentBox:first-child [data-qa-sel='delete-comment-button']"
 		And I pause for 1000ms
 		When I add "If this is a question then this is the answer" to the inputfield ".CommentBox:nth-child(2) [data-qa-sel='Comment-text-area']"
  		And I click on the button ".CommentBox:nth-child(2) [data-qa-sel='submit-button']"
  		And I pause for 1000ms
  		Then I expect that element ".CommentBox:nth-child(2) [data-qa-sel='Comment-text-area']" contains the text "If this is a question then this is the answer"
- 		Then I expect that element ".CommentBox:nth-child(2) [data-qa-sel='submit-button']" contains the text "Saved"
+ 		Then I expect that element ".CommentBox:nth-child(2) .CommentBox__savedIndicator" contains the text "Saved"
  		Then I click on the button "body .CommentBox:nth-child(2) [data-qa-sel='delete-comment-button']"
 
