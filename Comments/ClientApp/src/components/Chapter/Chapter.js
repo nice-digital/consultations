@@ -184,7 +184,7 @@ export class Chapter extends Component<PropsType, StateType> {
 	}
 
 	escapeTheDotsInId = (id: string) => {
-		//annoyingly some internal link id's have dots in them, and they break querySelector as that interprets dots as a class name. so escaping here.
+		//annoyingly some internal link id's have dots in them, and they break querySelector as that interprets dots as distguishing a class name. so escaping here.
 		return id.replace(/\./g, "\\."); 
 	};
 
