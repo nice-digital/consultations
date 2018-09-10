@@ -17,15 +17,18 @@ type PropsType = {
 type StateType = {
 	originalHTML: string,
 	convertedHTML: string,
+	internalLinkHrefs: Array<string>,
 };
 
 export class Chapter extends Component<PropsType, StateType> {
 	constructor(props: PropsType) {
 		super(props);
-		const convertedHTML = this.parseHtml();
+		const convertedHTMLAndinternalLinkHrefs = this.parseHtml();
+
 		this.state = {
 			originalHTML: this.props.html,
-			convertedHTML: convertedHTML,
+			convertedHTML: convertedHTMLAndinternalLinkHrefs.html,
+			internalLinkHrefs: convertedHTMLAndinternalLinkHrefs.internalLinkHrefs,
 		};		
 	}
 
@@ -37,8 +40,10 @@ export class Chapter extends Component<PropsType, StateType> {
 		if (prevProps.html !== this.state.originalHTML){
 		   	this.attachOrDetachEvents(false);
 			this.setState({originalHTML: prevProps.html});
-		   	const convertedHTML = this.parseHtml();
-		   	this.setState({convertedHTML}, () => this.attachOrDetachEvents(true));
+		   	const convertedHTMLAndinternalLinkHrefs = this.parseHtml();
+			   this.setState({convertedHTML: convertedHTMLAndinternalLinkHrefs.html,
+					internalLinkHrefs: convertedHTMLAndinternalLinkHrefs.internalLinkHrefs,
+			}, () => this.attachOrDetachEvents(true));
 		}		
    }
 
@@ -53,9 +58,13 @@ export class Chapter extends Component<PropsType, StateType> {
 		let sections = domutils.find(nodeIsSection, dom, true);
 		let subsections = domutils.find(nodeIsSubsection, dom, true);
 		const foundElements = [].concat(chapters).concat(sections).concat(subsections);
-
 		this.addButtons(handler, foundElements);
-		return domutils.getOuterHTML(handler.dom);
+
+		const internalLinks = domutils.find(nodeIsInternalLink, dom, true);
+		const internalLinkHrefs = this.processInternalLinks(handler, internalLinks);
+		
+		return { html: domutils.getOuterHTML(handler.dom), 
+			internalLinkHrefs: internalLinkHrefs };
 	}
 
 	getProperties = (tagName: string, attribs: any, children: any) => {
@@ -71,16 +80,26 @@ export class Chapter extends Component<PropsType, StateType> {
 		const node = ReactDOM.findDOMNode(this);
 		let elementsWithCommentEventClass = [...node.querySelectorAll(".comment-event")];
 
-		for (let element of elementsWithCommentEventClass){
+		for (let buttonElement of elementsWithCommentEventClass){
 			if (attach){
-				element.addEventListener('click', this.clickEventHandler);
+				buttonElement.addEventListener("click", this.commentButtonClickEventHandler);
 			} else{
-				element.removeEventListener('click', this.clickEventHandler);
+				buttonElement.removeEventListener("click", this.commentButtonClickEventHandler);
 			}			
 		}			
+
+		const internalLinkHrefs = this.state.internalLinkHrefs;
+		for (let internalLinkHref of internalLinkHrefs){
+			let internalLinkElement = node.querySelector(internalLinkHref);
+			if (internalLinkElement != null){ //hmm
+				internalLinkElement.addEventListener("click", this.internalLinkClickEventHandler)
+			} else{
+				console.log("something's wrong. no match for: " + internalLinkHref);
+			}
+		}
 	};
 
-	clickEventHandler = (e: Event) => {
+	commentButtonClickEventHandler = (e: Event) => {
 		const buttonClicked = e.currentTarget;
 		const commentOn = buttonClicked.getAttribute("data-comment-on");
 		const htmlElementID = buttonClicked.getAttribute("data-html-element-id");
@@ -93,6 +112,21 @@ export class Chapter extends Component<PropsType, StateType> {
 			htmlElementID,
 			quote,
 		});
+	};
+
+	internalLinkClickEventHandler = (e: Event) => {
+		e.preventDefault();
+		let hash = e.srcElement.hash;
+		if (document){ //the click event should only ever be called client-side. calling it on the server-side render would be weird, and break without this.
+			const target = document.querySelector(this.escapeTheDotsInId(hash));
+			if (target){
+				target.scrollIntoView();
+			} else{
+				console.log("something went wrong finding element:" + this.escapeTheDotsInId(hash));
+			}			
+		}
+		//console.log("internal link click. should scroll to:" + hash);
+		//console.log(e);
 	};
 
 	addButtons = (handler: DomHandler, elementArray: Array<any>) => {		
@@ -136,6 +170,23 @@ export class Chapter extends Component<PropsType, StateType> {
 			domutils.prepend(elementToInsertBefore, buttonElement);
 		}
 	};	
+
+	processInternalLinks = (handler: DomHandler, internalLinks: Array<any>) => {
+		let linkIds = [];
+		for (let internalLink of internalLinks){
+			let id = internalLink.attribs["href"];
+			let escapedId = this.escapeTheDotsInId(id);
+			if (!linkIds.includes(escapedId)){
+				linkIds.push(escapedId);
+			}
+		}
+		return linkIds;
+	}
+
+	escapeTheDotsInId = (id: string) => {
+		//annoyingly some internal link id's have dots in them, and they break querySelector as that interprets dots as a class name. so escaping here.
+		return id.replace(/\./g, "\\."); 
+	};
 
 	render() {
 		return (<div dangerouslySetInnerHTML={{__html: this.state.convertedHTML}} />);
