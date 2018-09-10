@@ -137,7 +137,6 @@ export class CommentList extends Component<PropsType, StateType> {
 	}
 
 	issueA11yMessage = (message: string) => {
-		console.log(`Issuing a11y message from CommentList: ${message}`);
 		const unique = new Date().getTime().toString();
 		// announcer requires a unique id so we're able to repeat phrases
 		this.props.announceAssertive(message, unique);
