@@ -8,7 +8,7 @@ import domutils from "domutils"
 //import stringifyObject from "stringify-object";
 
 describe("[ClientApp]", () => {
-	describe("Render Document HTML", () => {
+	describe("Chapter Component", () => {
 
 		function setupHtml(allowComments, html) {
 			const URI = "/1/1/guidance";
