@@ -1,10 +1,12 @@
 using System.Linq;
 using Comments.Export;
 using Comments.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Comments.Controllers.Api
 {
+	[Authorize(Roles = "Administrator")]
 	[Route("consultations/api/[controller]")]
 	public class ExportController: ControllerBase
 	{
