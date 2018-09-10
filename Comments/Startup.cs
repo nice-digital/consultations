@@ -181,7 +181,7 @@ namespace Comments
 
             app.UseAuthentication();
             app.UseSpaStaticFiles(new StaticFileOptions { RequestPath = "/consultations" });
-
+	        app.UseHttpsRedirection();
             
 
             app.UseMvc(routes =>
