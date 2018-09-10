@@ -1,7 +1,7 @@
 # Runs the Comment Collection webapp.
 # Assumes you've published the app to ./published-app
 
-FROM microsoft/aspnetcore:2.0
+FROM microsoft/dotnet:2.1-aspnetcore-runtime
 
 ENV ASPNETCORE_URLS http://+:8080
 
