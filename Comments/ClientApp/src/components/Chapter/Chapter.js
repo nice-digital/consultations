@@ -4,8 +4,9 @@ import React, { Component, Fragment } from "react";
 import ReactDOM from "react-dom";
 import { nodeIsChapter, nodeIsSection, nodeIsSubsection, nodeIsInternalLink, nodeIsTypeText, nodeIsSpanTag } from "../../document-processing/transforms/types";
 import htmlparser from "htmlparser2";
-import domutils from "domutils"
+import domutils from "domutils";
 import ElementType from "domelementtype";
+//import stringifyObject from "stringify-object";
 
 type PropsType = {
 	html: string,
@@ -23,12 +24,12 @@ type StateType = {
 export class Chapter extends Component<PropsType, StateType> {
 	constructor(props: PropsType) {
 		super(props);
-		const convertedHTMLAndinternalLinkHrefs = this.parseHtml();
+		const convertedHTMLAndInternalLinkHrefs = this.parseHtml();
 
 		this.state = {
 			originalHTML: this.props.html,
-			convertedHTML: convertedHTMLAndinternalLinkHrefs.html,
-			internalLinkHrefs: convertedHTMLAndinternalLinkHrefs.internalLinkHrefs,
+			convertedHTML: convertedHTMLAndInternalLinkHrefs.html,
+			internalLinkHrefs: convertedHTMLAndInternalLinkHrefs.internalLinkHrefs,
 		};		
 	}
 
@@ -40,9 +41,9 @@ export class Chapter extends Component<PropsType, StateType> {
 		if (prevProps.html !== this.state.originalHTML){
 		   	this.attachOrDetachEvents(false);
 			this.setState({originalHTML: prevProps.html});
-		   	const convertedHTMLAndinternalLinkHrefs = this.parseHtml();
-			   this.setState({convertedHTML: convertedHTMLAndinternalLinkHrefs.html,
-					internalLinkHrefs: convertedHTMLAndinternalLinkHrefs.internalLinkHrefs,
+		   	const convertedHTMLAndInternalLinkHrefs = this.parseHtml();
+			   this.setState({convertedHTML: convertedHTMLAndInternalLinkHrefs.html,
+					internalLinkHrefs: convertedHTMLAndInternalLinkHrefs.internalLinkHrefs,
 			}, () => this.attachOrDetachEvents(true));
 		}		
    }
@@ -54,17 +55,18 @@ export class Chapter extends Component<PropsType, StateType> {
 		parser.end();
 		let dom = handler.dom;
 
-		let chapters = domutils.find(nodeIsChapter, dom, true);
-		let sections = domutils.find(nodeIsSection, dom, true);
-		let subsections = domutils.find(nodeIsSubsection, dom, true);
-		const foundElements = [].concat(chapters).concat(sections).concat(subsections);
-		this.addButtons(handler, foundElements);
+		if (this.props.allowComments){
+			let chapters = domutils.find(nodeIsChapter, dom, true);
+			let sections = domutils.find(nodeIsSection, dom, true);
+			let subsections = domutils.find(nodeIsSubsection, dom, true);
+			const foundElements = [].concat(chapters).concat(sections).concat(subsections);
+			this.addButtons(handler, foundElements);
+		}		
 
 		const internalLinks = domutils.find(nodeIsInternalLink, dom, true);
 		const internalLinkHrefs = this.processInternalLinks(handler, internalLinks);
-		
-		return { html: domutils.getOuterHTML(handler.dom), 
-			internalLinkHrefs: internalLinkHrefs };
+		const html = domutils.getOuterHTML(handler.dom);
+		return { html, internalLinkHrefs };
 	}
 
 	getProperties = (tagName: string, attribs: any, children: any) => {
@@ -88,13 +90,15 @@ export class Chapter extends Component<PropsType, StateType> {
 			}			
 		}			
 
-		const internalLinkHrefs = this.state.internalLinkHrefs;
-		for (let internalLinkHref of internalLinkHrefs){
-			let internalLinkElement = node.querySelector(internalLinkHref);
-			if (internalLinkElement != null){ //hmm
-				internalLinkElement.addEventListener("click", this.internalLinkClickEventHandler)
-			} else{
-				console.log("something's wrong. no match for: " + internalLinkHref);
+		if (attach){
+			const internalLinkHrefs = this.state.internalLinkHrefs;
+			for (let internalLinkHref of internalLinkHrefs){
+				let internalLinkElement = node.querySelector(internalLinkHref);
+				if (attach){
+					internalLinkElement.addEventListener("click", this.internalLinkClickEventHandler)
+				} else{
+					internalLinkElement.removeEventListener("click", this.internalLinkClickEventHandler);
+				}
 			}
 		}
 	};
@@ -122,11 +126,9 @@ export class Chapter extends Component<PropsType, StateType> {
 			if (target){
 				target.scrollIntoView();
 			} else{
-				console.log("something went wrong finding element:" + this.escapeTheDotsInId(hash));
+				console.error("something went wrong finding element:" + this.escapeTheDotsInId(hash));
 			}			
 		}
-		//console.log("internal link click. should scroll to:" + hash);
-		//console.log(e);
 	};
 
 	addButtons = (handler: DomHandler, elementArray: Array<any>) => {		
