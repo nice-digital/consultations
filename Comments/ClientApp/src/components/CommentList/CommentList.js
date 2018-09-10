@@ -16,6 +16,7 @@ import { CommentBox } from "../CommentBox/CommentBox";
 import { Question } from "../Question/Question";
 import { LoginBanner } from "../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
+import {FormError} from "../FormComponents/FormError";
 
 type PropsType = {
 	staticContext?: any,
@@ -64,6 +65,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			shouldShowDrawer: false,
 			shouldShowCommentsTab: false,
 			shouldShowQuestionsTab: false,
+			highlightUnsavedChanges: true,
 		};
 		let preloadedData = {};
 		if (this.props.staticContext && this.props.staticContext.preload) {
@@ -94,6 +96,7 @@ export class CommentList extends Component<PropsType, StateType> {
 				drawerExpandedWidth: false,
 				drawerOpen: false,
 				drawerMobile: false,
+				highlightUnsavedChanges: true,
 			};
 		}
 	}
@@ -110,6 +113,7 @@ export class CommentList extends Component<PropsType, StateType> {
 					shouldShowDrawer: response.data.consultationState.shouldShowDrawer,
 					shouldShowCommentsTab: response.data.consultationState.shouldShowCommentsTab,
 					shouldShowQuestionsTab: response.data.consultationState.shouldShowQuestionsTab,
+					highlightUnsavedChanges: true,
 				});
 			})
 			.catch(err => console.log("load comments in commentlist " + err));
@@ -343,6 +347,12 @@ export class CommentList extends Component<PropsType, StateType> {
 											contextValue.isAuthorised ?
 
 												<Fragment>
+
+													{this.state.highlightUnsavedChanges &&
+														<FormError
+															title="You have unsaved changes"
+															secondary="You must save your comments before you proceed"/>
+													}
 													{this.state.viewComments ? (
 														this.state.comments.length === 0 ? <p>No comments yet</p> :
 															<ul className="CommentList list--unstyled">
@@ -355,6 +365,7 @@ export class CommentList extends Component<PropsType, StateType> {
 																			comment={comment}
 																			saveHandler={this.saveCommentHandler}
 																			deleteHandler={this.deleteCommentHandler}
+																			highlightUnsavedChanges={this.state.highlightUnsavedChanges}
 																		/>
 																	);
 																})}

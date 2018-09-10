@@ -66,10 +66,11 @@ export class CommentBox extends Component<PropsType, StateType> {
 		const unsavedChanges = this.state.unsavedChanges;
 		const comment = this.state.comment;
 		const readOnly = this.props.readOnly;
+		const unsavedValidation = unsavedChanges && this.props.highlightUnsavedChanges;
 
 		return (
 
-			<li className="CommentBox">
+			<li className={unsavedValidation ? "CommentBox CommentBox--unsavedChanges" : "CommentBox"}>
 				<section role="form">
 
 					{!this.isTextSelection(comment) &&
@@ -98,6 +99,9 @@ export class CommentBox extends Component<PropsType, StateType> {
 								htmlFor={this.props.unique}>
 								Comment on {commentOn}, {quote}
 							</label>
+							{unsavedValidation &&
+							<p className="CommentBox__validationMessage">You have unsaved changes</p>
+							}
 							<textarea
 								data-qa-sel="Comment-text-area"
 								disabled={readOnly}

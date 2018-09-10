@@ -1,4 +1,11 @@
 .CommentBox {
+  &--unsavedChanges {
+    border-color: $colour-error;
+  }
+  &__validationMessage {
+    color: $colour-error;
+    font-weight: bold;
+  }
   @include clearfix;
   margin-bottom: rem($spacing-small);
   padding: rem($spacing-small) rem($spacing-small) 0 rem($spacing-small);
