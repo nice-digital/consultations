@@ -130,10 +130,10 @@ export const getElementPositionWithinDocument = (elem) => {
 //this gets the title of the nearest section above the passed in element (or the element itself). it can also return the chapter title.
 export const getSectionTitle = (elem) => {
 	do {
-		if (elem.classList.indexOf("section") !== -1){
+		if (elem.classList.contains("section")){
 			return elem.title;
 		}
-		if (elem.classList.indexOf("chapter") !== -1){
+		if (elem.classList.contains("chapter")){
 			return elem.title;
 		}
 		if (elem.id === "root"){ //it won't look higher than root.
