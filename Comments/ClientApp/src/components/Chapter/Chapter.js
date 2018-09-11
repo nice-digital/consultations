@@ -10,7 +10,7 @@ import ElementType from "domelementtype";
 
 type PropsType = {
 	html: string,
-	newCommentClickFunc: func,
+	newCommentClickFunc: Function,
 	sourceURI: string,
 	allowComments: boolean
 };
@@ -37,16 +37,16 @@ export class Chapter extends Component<PropsType, StateType> {
 		this.attachOrDetachEvents(true);
 	}
 
-	componentDidUpdate(prevProps, prevState){
+	componentDidUpdate(prevProps: PropsType){
 		if (prevProps.html !== this.state.originalHTML){
 		   	this.attachOrDetachEvents(false);
 			this.setState({originalHTML: prevProps.html});
 		   	const convertedHTMLAndInternalLinkHrefs = this.parseHtml();
 			   this.setState({convertedHTML: convertedHTMLAndInternalLinkHrefs.html,
-					internalLinkHrefs: convertedHTMLAndInternalLinkHrefs.internalLinkHrefs,
+				internalLinkHrefs: convertedHTMLAndInternalLinkHrefs.internalLinkHrefs,
 			}, () => this.attachOrDetachEvents(true));
 		}		
-   }
+	}
 
 	parseHtml = () => {
 		let handler = new htmlparser.DomHandler();
@@ -78,7 +78,7 @@ export class Chapter extends Component<PropsType, StateType> {
 		};		
 	};
 
-	attachOrDetachEvents = (attach: bool) => {
+	attachOrDetachEvents = (attach: boolean) => {
 		const node = ReactDOM.findDOMNode(this);
 		let elementsWithCommentEventClass = [...node.querySelectorAll(".comment-event")];
 
@@ -155,8 +155,8 @@ export class Chapter extends Component<PropsType, StateType> {
 				"class": "visually-hidden",
 			}, [{
 				"data": `Comment on ${commentOn}: ${quote}`,
-				"type": "text"
-				}]);
+				"type": "text",
+			}]);
 			const spanCommentLabel = handler._createDomElement(spanCommentLabelProperties);
 
 			var buttonProperties = this.getProperties("button", {
