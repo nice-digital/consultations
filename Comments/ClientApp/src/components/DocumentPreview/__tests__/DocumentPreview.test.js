@@ -7,9 +7,9 @@ import MockAdapter from "axios-mock-adapter";
 import { MemoryRouter } from "react-router";
 
 import { DocumentPreview } from "../DocumentPreview";
-import PreviewChapterData from "./PreviewChapter";
-import PreviewConsultationData from "./PreviewConsultation";
-import PreviewDocumentsData from "./PreviewDocuments";
+import PreviewChapterData from "./PreviewChapter.json";
+import PreviewConsultationData from "./PreviewConsultation.json";
+import PreviewDocumentsData from "./PreviewDocuments.json";
 import { nextTick } from "../../../helpers/utils";
 import toJson from "enzyme-to-json";
 
@@ -66,7 +66,7 @@ describe("[ClientApp] ", () => {
 
 			let consulatationPromise = new Promise(resolve => {
 				mock
-					.onGet("/consultations/api/Consultation?consultationId=113&isReview=false")
+					.onGet("/consultations/api/DraftConsultation?consultationId=113&documentId=1&reference=GID-NG10186")
 					.reply(() => {
 						resolve();
 						return [200, PreviewConsultationData];
