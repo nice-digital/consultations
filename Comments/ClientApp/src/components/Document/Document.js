@@ -19,6 +19,7 @@ import { UserContext } from "../../context/UserContext";
 import { Selection } from "../Selection/Selection";
 import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
 import { Header } from "../Header/Header";
+import { Chapter } from "../Chapter/Chapter";
 
 type PropsType = {
 	staticContext?: any,
@@ -456,12 +457,16 @@ export class Document extends Component<PropsType, StateType> {
 											<Selection newCommentFunc={this.props.onNewCommentClick}
 													   sourceURI={this.props.match.url}
 													   allowComments={this.state.allowComments}>
-												{processDocumentHtml(
+												<Chapter html={content} 
+													newCommentClickFunc={this.props.onNewCommentClick}
+													sourceURI={this.props.match.url}
+													allowComments={this.state.allowComments} />
+												{/* {processDocumentHtml(
 													content,
 													this.props.onNewCommentClick,
 													this.props.match.url,
 													this.state.allowComments
-												)}
+												)} */}
 											</Selection>
 										</div>
 									</div>
