@@ -92,7 +92,7 @@
     "postcss-cli": "^5.0.0",
     "prettier-eslint": "^8.8.1",
     "raf": "^3.4.0",
-    "react-scripts": "1.1.4",
+    "react-scripts": "1.1.5",
     "rimraf": "^2.6.2"
   },
   "proxy": "http://niceorg",
