@@ -40,7 +40,7 @@ type StateType = {
 	allowComments: boolean,
 	error: {
 		hasError: boolean,
-		message: string
+		message: string | null,
 	}
 };
 
@@ -60,8 +60,8 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 			children: null,
 			error: {
 				hasError: false,
-				message: null
-			}
+				message: null,
+			},
 		};
 
 		if (this.props) {
@@ -83,9 +83,9 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 
 			preloadedConsultation = preload(
 				this.props.staticContext,
-				"consultation",
+				"draftconsultation",
 				[],
-				{ consultationId: this.props.match.params.consultationId, isReview: false }
+				{ ...this.props.match.params }
 			);
 
 			if (preloadedChapter && preloadedDocuments && preloadedConsultation) {
@@ -103,8 +103,8 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 					allowComments: allowComments,
 					error: {
 						hasError: false,
-						message: null
-					}
+						message: null,
+					},
 				};
 			}
 		}
@@ -127,8 +127,8 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 				this.setState({
 					error: {
 						hasError: true,
-						message: "previewChapterData " + err
-					}
+						message: "previewChapterData " + err,
+					},
 				});
 			});
 
@@ -143,14 +143,15 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 				this.setState({
 					error: {
 						hasError: true,
-						message: "previewdraftdocumentsData " + err
-					}
+						message: "previewdraftdocumentsData " + err,
+					},
 				});
 			});
 
-		const consultationData = load("consultation", undefined, [], {
+		const consultationData = load("draftconsultation", undefined, [], {
 			consultationId,
-			isReview: false,
+			documentId,
+			reference,
 		})
 			.then(response => response.data)
 			.catch(err => {
@@ -158,8 +159,8 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 				this.setState({
 					error: {
 						hasError: true,
-						message: "consultationData " + err
-					}
+						message: "consultationData " + err,
+					},
 				});
 			});
 
@@ -190,8 +191,8 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 					this.setState({
 						error: {
 							hasError: true,
-							message: "gatherData in componentDidMount failed  " + err
-						}
+							message: "gatherData in componentDidMount failed  " + err,
+						},
 					});
 				});
 		}
@@ -221,8 +222,8 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 				this.setState({
 					error: {
 						hasError: true,
-						message: "gatherData in componentDidUpdate failed  " + err
-					}
+						message: "gatherData in componentDidUpdate failed  " + err,
+					},
 				});
 			});
 	}
@@ -261,7 +262,7 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 	};
 
 	render() {
-		if (this.state.error.hasError) { throw new Error(this.state.error.message) }
+		if (this.state.error.hasError) { throw new Error(this.state.error.message); }
 		if (!this.state.hasInitialData) return <h1>Loading...</h1>;
 		const { title, reference } = this.state.consultationData;
 		const { content } = this.state.chapterData;
@@ -287,7 +288,9 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 								name={projectInformation.name}
 								repo={projectInformation.repo}
 							/>
-							<BreadCrumbs links={this.state.consultationData.breadcrumbs}/>
+							{this.state.consultationData.breadcrumbs &&
+								<BreadCrumbs links={this.state.consultationData.breadcrumbs}/>
+							}
 							<main role="main">
 								<Header
 									title={title}

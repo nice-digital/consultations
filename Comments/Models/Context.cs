@@ -6,8 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using Remotion.Linq.Clauses;
-using SQLitePCL;
 
 namespace Comments.Models
 {

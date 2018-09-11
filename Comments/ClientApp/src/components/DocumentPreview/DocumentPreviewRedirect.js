@@ -24,8 +24,8 @@ export class DocumentPreviewRedirect extends Component<PropsType, StateType> {
 			redirectUrl: null,
 			error: {
 				hasError: false,
-				message: null
-			}
+				message: null,
+			},
 		};
 	}
 
@@ -52,14 +52,14 @@ export class DocumentPreviewRedirect extends Component<PropsType, StateType> {
 				this.setState({
 					error: {
 						hasError: true,
-						message: "documentsData " + err
-					}
+						message: "documentsData " + err,
+					},
 				});
 			});
 	};
 
 	render() {
-		if (this.state.error.hasError) { throw new Error(this.state.error.message) }
+		if (this.state.error.hasError) { throw new Error(this.state.error.message); }
 		if (!this.state.redirectUrl) return null;
 		return <Redirect to={this.state.redirectUrl} />;
 	}

@@ -13,12 +13,11 @@
 
 Scenario: User makes a comment at chapter level
  		And I pause for 1000ms
- 		When I click on the button "[data-qa-sel='nav-list-item']:nth-of-type(4)"
 		When I wait on element ".document-comment-container" to exist
  		And I pause for 1000ms
  		When I click on the button ".chapter > .title [data-qa-sel='in-text-comment-button']"
  		And I pause for 1000ms
- 		Then I wait on element "body [data-qa-sel='comment-box-title']" for 10000ms to exist
+ 		Then I wait on element "body [data-qa-sel='comment-box-title']" to exist
     Then I expect that element "[data-qa-sel='comment-box-title']" contains the text "chapter"
  		When I add "This is a Chapter comment" to the inputfield "[data-qa-sel='Comment-text-area']"
  		And I click on the button "[data-qa-sel='submit-button']"
