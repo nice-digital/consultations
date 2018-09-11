@@ -1,17 +1,22 @@
-// @flow
-
-import React, { PureComponent } from "react";
+import React, {PureComponent} from "react";
 import ReactHtmlParser from "react-html-parser";
-import { nodeIsChapter, nodeIsInternalLink, nodeIsSection, nodeIsSubsection } from "./transforms/types";
-import { processChapterSectionSubsection } from "./transforms/chapter-section-subsection";
+import {nodeIsChapter, nodeIsInternalLink, nodeIsSection, nodeIsSubsection} from "./transforms/types";
+import {processChapterSectionSubsection} from "./transforms/chapter-section-subsection";
 import processInternalLink from "./transforms/internal-link";
 
 export class ProcessDocumentHtmlComponent extends PureComponent {
-	constructor(){
-		super();
-		this.state = {
-			content: "",
-		};
+	constructor(props) {
+		super(props);
+
+		if (this.props) {
+			let content;
+			content =  ReactHtmlParser(this.props.content, {
+				transform: this.transformHtml,
+			});
+			this.state = {
+				content,
+			};
+		}
 	}
 
 	transformHtml = (node) => {
@@ -30,17 +35,18 @@ export class ProcessDocumentHtmlComponent extends PureComponent {
 		this.setState({content});
 	};
 
-	componentDidMount(){
+	componentDidMount() {
 		this.renderHtml();
 	}
 
-	componentDidUpdate(prevProps){
+	componentDidUpdate(prevProps) {
 		if (prevProps.content !== this.props.content) {
 			this.renderHtml();
 		}
 	}
 
 	render() {
+		if (!this.state.content) return null;
 		return (
 			<div>
 				{this.state.content}

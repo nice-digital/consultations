@@ -20,7 +20,7 @@ export function HashLinkTop(props: HashLinkTopType) {
 			scroll={el => {
 				el.scrollIntoView({
 					behavior,
-					block
+					block,
 				});
 				const element = el.attributes.id.value;
 				pullFocusById(element);
