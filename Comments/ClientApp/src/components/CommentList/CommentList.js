@@ -324,9 +324,12 @@ export class CommentList extends Component<PropsType, StateType> {
 											</h1>
 											{contextValue.isAuthorised ?
 												<p data-g="6">
-													<Link 	to={`/${this.props.match.params.consultationId}/review`}
+													<Link
+														to={`/${this.props.match.params.consultationId}/review`}
 														data-qa-sel="review-all-comments"
-														className="right">Review all {this.state.viewComments ? "comments" : "questions"}</Link>
+														className="right">
+														Review all {this.state.viewComments ? "comments" : "questions"}
+													</Link>
 												</p> : null
 											}
 										</div>

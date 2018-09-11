@@ -13,7 +13,8 @@ import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
 import { projectInformation } from "../../constants";
-import { processDocumentHtml } from "../../document-processing/process-document-html";
+// import { processDocumentHtml } from "../../document-processing/process-document-html";
+import {ProcessDocumentHtmlComponent} from "../../document-processing/process-document-html";
 import { LoginBanner } from "./../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
 import { Selection } from "../Selection/Selection";
@@ -322,7 +323,14 @@ export class Document extends Component<PropsType, StateType> {
 		const { sections, content } = this.state.chapterData;
 		const consultationId = parseInt(this.props.match.params.consultationId, 0);
 		const documentId = parseInt(this.props.match.params.documentId, 0);
-		
+
+		const documentHtmlProps = {
+			content,
+			onNewCommentClick: this.props.onNewCommentClick,
+			url: this.props.match.url,
+			allowComments: this.state.allowComments,
+		};
+
 		return (
 			<Fragment>
 				<Helmet>
@@ -456,12 +464,7 @@ export class Document extends Component<PropsType, StateType> {
 											<Selection newCommentFunc={this.props.onNewCommentClick}
 													   sourceURI={this.props.match.url}
 													   allowComments={this.state.allowComments}>
-												{processDocumentHtml(
-													content,
-													this.props.onNewCommentClick,
-													this.props.match.url,
-													this.state.allowComments
-												)}
+												<ProcessDocumentHtmlComponent {...documentHtmlProps} />
 											</Selection>
 										</div>
 									</div>
