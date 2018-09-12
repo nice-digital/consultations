@@ -361,8 +361,7 @@ export class CommentList extends Component<PropsType, StateType> {
 															</ul>
 													) : (
 														<div>
-															<p>We would like to hear your views on the draft recommendations presented in the guideline, and any comments you may have on the rationale and impact sections in the guideline and the evidence presented in the evidence reviews documents. We would also welcome views on the Equality Impact Assessment.</p>
-															<p>We would like to hear your views on these questions:</p>
+															<p>Please answer the following questions</p>
 															<ul className="CommentList list--unstyled">
 																{this.state.questions.map((question) => {
 																	return (
