@@ -104,37 +104,74 @@ namespace Comments.Models
 
 	    public List<Comment> GetAllSubmittedCommentsForURI(string  sourceURI)
 	    {
-		    var comment = Comment.Where(c => c.StatusId == (int)StatusName.Submitted && c.Location.SourceURI.Contains(sourceURI) && c.IsDeleted == false)
-			    .Include(l => l.Location)
-			    .Include(s => s.Status)
+			var comment = Comment.Where(c =>
+					c.StatusId == (int) StatusName.Submitted && c.Location.SourceURI.Contains(sourceURI) && c.IsDeleted == false)
+				.Include(l => l.Location)
+				.Include(s => s.Status)
 				.Include(sc => sc.SubmissionComment)
 				.ThenInclude(s => s.Submission)
-			    .IgnoreQueryFilters()
+				.IgnoreQueryFilters()
 				.ToList();
 
-		    return comment;
-		}
+			return comment;
+	    }
 
-	    public List<Answer> GetAllSubmittedAnswersForURI(string sourceURI)
+	    public List<Comment> GetUsersCommentsForURI(string sourceURI)
 	    {
-		    var answer = Answer.Where(a => a.StatusId == (int) StatusName.Submitted && a.Question.Location.SourceURI.Contains(sourceURI) && a.IsDeleted == false)
+		   var comment = Comment.Where(c => c.Location.SourceURI.Contains(sourceURI))
+				.Include(l => l.Location)
+				.Include(s => s.Status)
+				.Include(sc => sc.SubmissionComment)
+				.ThenInclude(s => s.Submission)
+				.ToList();
+
+			return comment;
+	    }
+
+		public List<Answer> GetAllSubmittedAnswersForURI(string sourceURI)
+	    {
+			var answer = Answer.Where(a =>
+					a.StatusId == (int) StatusName.Submitted && a.Question.Location.SourceURI.Contains(sourceURI) &&
+					a.IsDeleted == false)
 				.Include(q => q.Question)
 				.ThenInclude(l => l.Location)
-			    .Include(sc => sc.SubmissionAnswer)
-			    .ThenInclude(s => s.Submission)
+				.Include(sc => sc.SubmissionAnswer)
+				.ThenInclude(s => s.Submission)
 				.IgnoreQueryFilters()
-			    .ToList();
+				.ToList();
 
 			return answer;
 	    }
-	    public List<Question> GetUnansweredQuestionsForURI(string sourceURI)
+
+	    public List<Answer> GetUsersAnswersForURI(string sourceURI)
 	    {
-		    var question = Question.Where(q => q.Answer.Count == 0 && q.Location.SourceURI.Contains(sourceURI) && q.IsDeleted == false)
-				.Include(l => l.Location)
-			    .IgnoreQueryFilters()
+			var answer = Answer.Where(a => a.Question.Location.SourceURI.Contains(sourceURI))
+				.Include(q => q.Question)
+				.ThenInclude(l => l.Location)
+				.Include(sc => sc.SubmissionAnswer)
+				.ThenInclude(s => s.Submission)
 				.ToList();
 
-		    return question;
+			return answer;
+	    }
+		public List<Question> GetUnansweredQuestionsForURI(string sourceURI)
+	    {
+			var question = Question.Where(q =>
+					q.Answer.Count == 0 && q.Location.SourceURI.Contains(sourceURI) && q.IsDeleted == false)
+				.Include(l => l.Location)
+				.IgnoreQueryFilters()
+				.ToList();
+
+			return question;
+	    }
+
+	    public List<Question> GetUsersUnansweredQuestionsForURI(string sourceURI)
+	    {
+		    var question = Question.Where(q => q.Answer.Count == 0 && q.Location.SourceURI.Contains(sourceURI))
+				    .Include(l => l.Location)
+				    .ToList();
+
+			return question;
 	    }
 
 		public Comment GetComment(int commentId)

@@ -58,7 +58,7 @@ export const serverRenderer = (params): Promise => {
 
 		let app = (
 				<StaticRouter basename={BaseUrlRelative} location={params.url} context={staticContext}>
-					<App />
+					<App basename={BaseUrlRelative} />
 				</StaticRouter>);
 
 		// First render: this trigger any data preloaders to fire
