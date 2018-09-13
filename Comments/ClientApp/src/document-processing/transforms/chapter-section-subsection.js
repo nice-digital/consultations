@@ -16,7 +16,7 @@ export const processChapterSectionSubsection = (node, onNewCommentClick, sourceU
 	const htmlElementID = (commentOn === "section" || commentOn === "subsection") ? node.attribs.id : "";
 
 	return (
-		<Fragment>
+		<Fragment key={0}>
 			{allowComments &&
 				<button
 					data-qa-sel="in-text-comment-button"

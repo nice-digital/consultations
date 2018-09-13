@@ -1,10 +1,23 @@
+// @flow
+
 import React, {PureComponent, Fragment} from "react";
 import ReactHtmlParser from "react-html-parser";
 import {nodeIsChapter, nodeIsInternalLink, nodeIsSection, nodeIsSubsection} from "./transforms/types";
 import {processChapterSectionSubsection} from "./transforms/chapter-section-subsection";
 import processInternalLink from "./transforms/internal-link";
 
-export class ProcessDocumentHtmlComponent extends PureComponent {
+type PropsType = {
+	content: any,
+	url: string,
+	onNewCommentClick: Function,
+	allowComments: boolean,
+}
+
+type StateType = {
+	content: any,
+}
+
+export class ProcessDocumentHtml extends PureComponent<PropsType, StateType> {
 	constructor(props) {
 		super(props);
 
@@ -18,7 +31,7 @@ export class ProcessDocumentHtmlComponent extends PureComponent {
 
 	transformHtml = (node) => {
 		if (nodeIsChapter(node) || nodeIsSection(node) || nodeIsSubsection(node)) {
-			return processChapterSectionSubsection(node, this.props.onNewCommentClick, this.props.sourceURI, this.props.allowComments);
+			return processChapterSectionSubsection(node, this.props.onNewCommentClick, this.props.url, this.props.allowComments);
 		}
 		if (nodeIsInternalLink(node)) {
 			return processInternalLink(node);

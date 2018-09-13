@@ -1,25 +1,25 @@
 // @flow
 
-import React, { Component, Fragment } from "react";
-import { Helmet } from "react-helmet";
-import { StickyContainer, Sticky } from "react-sticky";
-import { withRouter } from "react-router";
+import React, {Component, Fragment} from "react";
+import {Helmet} from "react-helmet";
+import {StickyContainer, Sticky} from "react-sticky";
+import {withRouter} from "react-router";
 import objectHash from "object-hash";
 
 import preload from "../../data/pre-loader";
-import { load } from "./../../data/loader";
-import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
-import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
-import { StackedNav } from "./../StackedNav/StackedNav";
-import { HashLinkTop } from "../../helpers/component-helpers";
-import { projectInformation } from "../../constants";
+import {load} from "./../../data/loader";
+import {PhaseBanner} from "./../PhaseBanner/PhaseBanner";
+import {BreadCrumbs} from "./../Breadcrumbs/Breadcrumbs";
+import {StackedNav} from "./../StackedNav/StackedNav";
+import {HashLinkTop} from "../../helpers/component-helpers";
+import {projectInformation} from "../../constants";
 // import { processDocumentHtml } from "../../document-processing/process-document-html";
-import {ProcessDocumentHtmlComponent} from "../../document-processing/process-document-html";
-import { LoginBanner } from "./../LoginBanner/LoginBanner";
-import { UserContext } from "../../context/UserContext";
-import { Selection } from "../Selection/Selection";
-import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
-import { Header } from "../Header/Header";
+import {ProcessDocumentHtml} from "../../document-processing/ProcessDocumentHtml";
+import {LoginBanner} from "./../LoginBanner/LoginBanner";
+import {UserContext} from "../../context/UserContext";
+import {Selection} from "../Selection/Selection";
+import {pullFocusByQuerySelector} from "../../helpers/accessibility-helpers";
+import {Header} from "../Header/Header";
 
 type PropsType = {
 	staticContext?: any,
@@ -78,20 +78,20 @@ export class Document extends Component<PropsType, StateType> {
 				this.props.staticContext,
 				"chapter",
 				[],
-				{ ...this.props.match.params }
+				{...this.props.match.params}
 			);
 			preloadedDocuments = preload(
 				this.props.staticContext,
 				"documents",
 				[],
-				{ consultationId: this.props.match.params.consultationId }
+				{consultationId: this.props.match.params.consultationId}
 			);
 
 			preloadedConsultation = preload(
 				this.props.staticContext,
 				"consultation",
 				[],
-				{ consultationId: this.props.match.params.consultationId, isReview: false }
+				{consultationId: this.props.match.params.consultationId, isReview: false}
 			);
 
 			if (preloadedChapter && preloadedDocuments && preloadedConsultation) {
@@ -116,17 +116,17 @@ export class Document extends Component<PropsType, StateType> {
 		}
 	}
 
+	getChapterData = (params) => {
+		return load("chapter", undefined, [], {...params});
+	};
+
 	gatherData = async () => {
-		const { consultationId, documentId, chapterSlug } = this.props.match.params;
+		const {consultationId} = this.props.match.params;
 
 		let chapterData;
 		let documentsData;
 
-		chapterData = load("chapter", undefined, [], {
-			consultationId,
-			documentId,
-			chapterSlug,
-		})
+		chapterData = this.getChapterData(this.props.match.params)
 			.then(response => response.data)
 			.catch(err => {
 				this.setState({
@@ -135,9 +135,10 @@ export class Document extends Component<PropsType, StateType> {
 						message: "chapterData " + err,
 					},
 				});
-			});
+			}
+			);
 
-		documentsData = load("documents", undefined, [], { consultationId })
+		documentsData = load("documents", undefined, [], {consultationId})
 			.then(response => response.data)
 			.catch(err => {
 				this.setState({
@@ -204,24 +205,36 @@ export class Document extends Component<PropsType, StateType> {
 			loading: true,
 		});
 
-		this.gatherData()
-			.then(data => {
-				this.setState({
-					...data,
-					loading: false,
+		// are we on the same consultation and document as before?
+		if (this.props.match.params.documentId === prevProps.match.params.documentId) {
+			this.getChapterData(this.props.match.params)
+				.then(response => {
+					this.setState({
+						chapterData: response.data,
+						loading: false,
+					});
+					this.addChapterDetailsToSections(this.state.chapterData);
+					pullFocusByQuerySelector(".document-comment-container");
 				});
-				this.addChapterDetailsToSections(this.state.chapterData);
-				// once we've loaded, pull focus to the document container
-				pullFocusByQuerySelector(".document-comment-container");
-			})
-			.catch(err => {
-				this.setState({
-					error: {
-						hasError: true,
-						message: "gatherData in componentDidUpdate failed " + err,
-					},
+		} else {
+			this.gatherData()
+				.then(data => {
+					this.setState({
+						...data,
+						loading: false,
+					});
+					this.addChapterDetailsToSections(this.state.chapterData);
+					pullFocusByQuerySelector(".document-comment-container");
+				})
+				.catch(err => {
+					this.setState({
+						error: {
+							hasError: true,
+							message: "gatherData in componentDidUpdate failed " + err,
+						},
+					});
 				});
-			});
+		}
 	}
 
 	getDocumentChapterLinks = (
@@ -302,10 +315,10 @@ export class Document extends Component<PropsType, StateType> {
 	};
 
 	addChapterDetailsToSections = (chapterData: Object) => {
-		const { title, slug } = this.state.chapterData;
-		const chapterDetails = { title, slug };
+		const {title, slug} = this.state.chapterData;
+		const chapterDetails = {title, slug};
 		chapterData.sections.unshift(chapterDetails);
-		this.setState({ chapterData });
+		this.setState({chapterData});
 	};
 
 	getCurrentDocumentTitle = (documents: Object, documentId: number) => {
@@ -315,12 +328,14 @@ export class Document extends Component<PropsType, StateType> {
 	};
 
 	render() {
-		if (this.state.error.hasError) { throw new Error(this.state.error.message); }
+		if (this.state.error.hasError) {
+			throw new Error(this.state.error.message);
+		}
 		if (!this.state.hasInitialData) return <h1>Loading...</h1>;
 
-		const { title, reference } = this.state.consultationData;
-		const { documentsData } = this.state;
-		const { sections, content, slug } = this.state.chapterData;
+		const {title, reference} = this.state.consultationData;
+		const {documentsData} = this.state;
+		const {sections, content, slug} = this.state.chapterData;
 		const consultationId = parseInt(this.props.match.params.consultationId, 0);
 		const documentId = parseInt(this.props.match.params.documentId, 0);
 
@@ -340,9 +355,9 @@ export class Document extends Component<PropsType, StateType> {
 				<UserContext.Consumer>
 					{(contextValue: any) => !contextValue.isAuthorised ?
 						<LoginBanner signInButton={false}
-									 currentURL={this.props.match.url}
-									 signInURL={contextValue.signInURL}
-									 registerURL={contextValue.registerURL} />
+												 currentURL={this.props.match.url}
+												 signInURL={contextValue.signInURL}
+												 registerURL={contextValue.registerURL}/>
 						: /* if contextValue.isAuthorised... */ null}
 				</UserContext.Consumer>
 				<div className="container">
@@ -385,10 +400,13 @@ export class Document extends Component<PropsType, StateType> {
 
 								<button
 									className="screenreader-button"
-									onClick={()=>{pullFocusByQuerySelector(".document-comment-container");}}>
-									Skip navigation</button>
+									onClick={() => {
+										pullFocusByQuerySelector(".document-comment-container");
+									}}>
+									Skip navigation
+								</button>
 
-								<StickyContainer className="grid">
+								<div className="grid">
 
 									{/* navigation column */}
 									<div data-g="12 md:3" className="navigationColumn">
@@ -420,41 +438,32 @@ export class Document extends Component<PropsType, StateType> {
 
 									{/* inPageNav column */}
 									<div data-g="12 md:3 md:push:6" className="inPageNavColumn">
-										<Sticky disableHardwareAcceleration>
-											{({ style }) => (
-												<div style={style}>
-													{sections.length ? (
-														<nav
-															className="in-page-nav"
-															aria-labelledby="inpagenav-title">
-															<h2
-																id="inpagenav-title"
-																className="in-page-nav__title">
-																On this page
-															</h2>
-															<ol className="in-page-nav__list"
-																role="menubar">
-																{sections.map(item => {
-																	const props = {
-																		label: item.title,
-																		to: `#${item.slug}`,
-																		behavior: "smooth",
-																		block: "start",
-																	};
-																	return (
-																		<li role="presentation"
-																			className="in-page-nav__item"
-																			key={objectHash(item)}>
-																			<HashLinkTop {...props} />
-																		</li>
-																	);
-																})}
-															</ol>
-														</nav>
-													) : /* if !sections.length */ null }
-												</div>
-											)}
-										</Sticky>
+										{sections && sections.length ? (
+											<nav
+												className="in-page-nav"
+												aria-labelledby="inpagenav-title">
+												<h2
+													id="inpagenav-title"
+													className="in-page-nav__title">
+													On this page
+												</h2>
+												<ol className="in-page-nav__list" role="menubar">
+													{sections.map(item => {
+														const props = {
+															label: item.title,
+															to: `#${item.slug}`,
+															behavior: "smooth",
+															block: "start",
+														};
+														return (
+															<li role="presentation" className="in-page-nav__item" key={objectHash(item)}>
+																<HashLinkTop {...props} />
+															</li>
+														);
+													})}
+												</ol>
+											</nav>
+										) : /* if !sections.length */ null}
 									</div>
 
 									{/* document column */}
@@ -463,13 +472,15 @@ export class Document extends Component<PropsType, StateType> {
 											className={`document-comment-container ${
 												this.state.loading ? "loading" : ""}`}>
 											<Selection newCommentFunc={this.props.onNewCommentClick}
-													   sourceURI={this.props.match.url}
-													   allowComments={this.state.allowComments}>
-												<ProcessDocumentHtmlComponent {...documentHtmlProps} />
+																 sourceURI={this.props.match.url}
+																 allowComments={this.state.allowComments}>
+												<ProcessDocumentHtml {...documentHtmlProps} />
 											</Selection>
 										</div>
 									</div>
-								</StickyContainer>
+								</div>
+
+
 							</main>
 						</div>
 					</div>
