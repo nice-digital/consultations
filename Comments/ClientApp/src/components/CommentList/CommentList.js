@@ -338,7 +338,7 @@ export class CommentList extends Component<PropsType, StateType> {
 
 										{this.state.error !== "" ?
 											<div className="errorBox">
-												<p>We couldn't {this.state.error} your comment. Please try again in a few minutes.</p>
+												<p>We couldn{"'"}t {this.state.error} your comment. Please try again in a few minutes.</p>
 												<p>If the problem continues please <a href={"/get-involved/contact-us"}>contact us</a>.</p>
 											</div>
 											: null }
