@@ -353,7 +353,8 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 									/>
 									{this.state.supportsDownload &&
 										<div className="clearfix">
-											<button className="btn btn--secondary right mr--0">Download your response</button>
+										<a className="btn btn--secondary right mr--0"
+											href={`${this.props.basename}/api/exportexternal/${this.props.match.params.consultationId}`}>Download your response</a>
 										</div>
 									}
 									<UserContext.Consumer>
