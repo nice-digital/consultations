@@ -63,7 +63,6 @@ export class Footer extends Component<PropsType, StateType> {
 	};
 
 	render() {
-		console.log("rendering footer");
 		if (!this.state.hasInitialData) return null;
 
 		return (

@@ -1,4 +1,4 @@
-import React, {PureComponent} from "react";
+import React, {PureComponent, Fragment} from "react";
 import ReactHtmlParser from "react-html-parser";
 import {nodeIsChapter, nodeIsInternalLink, nodeIsSection, nodeIsSubsection} from "./transforms/types";
 import {processChapterSectionSubsection} from "./transforms/chapter-section-subsection";
@@ -9,13 +9,10 @@ export class ProcessDocumentHtmlComponent extends PureComponent {
 		super(props);
 
 		if (this.props) {
-			let content;
-			content =  ReactHtmlParser(this.props.content, {
+			const content = ReactHtmlParser(this.props.content, {
 				transform: this.transformHtml,
 			});
-			this.state = {
-				content,
-			};
+			this.state = {content};
 		}
 	}
 
@@ -29,6 +26,7 @@ export class ProcessDocumentHtmlComponent extends PureComponent {
 	};
 
 	renderHtml = () => {
+		console.log("running renderHtml()");
 		const content = ReactHtmlParser(this.props.content, {
 			transform: this.transformHtml,
 		});
@@ -36,11 +34,13 @@ export class ProcessDocumentHtmlComponent extends PureComponent {
 	};
 
 	componentDidMount() {
-		this.renderHtml();
+		if (!this.state.content) {
+			this.renderHtml();
+		}
 	}
 
 	componentDidUpdate(prevProps) {
-		if (prevProps.content !== this.props.content) {
+		if (prevProps.slug !== this.props.slug) {
 			this.renderHtml();
 		}
 	}
@@ -48,9 +48,9 @@ export class ProcessDocumentHtmlComponent extends PureComponent {
 	render() {
 		if (!this.state.content) return null;
 		return (
-			<div>
+			<Fragment>
 				{this.state.content}
-			</div>
+			</Fragment>
 		);
 	}
 }

@@ -320,12 +320,13 @@ export class Document extends Component<PropsType, StateType> {
 
 		const { title, reference } = this.state.consultationData;
 		const { documentsData } = this.state;
-		const { sections, content } = this.state.chapterData;
+		const { sections, content, slug } = this.state.chapterData;
 		const consultationId = parseInt(this.props.match.params.consultationId, 0);
 		const documentId = parseInt(this.props.match.params.documentId, 0);
 
 		const documentHtmlProps = {
 			content,
+			slug,
 			onNewCommentClick: this.props.onNewCommentClick,
 			url: this.props.match.url,
 			allowComments: this.state.allowComments,
@@ -468,7 +469,6 @@ export class Document extends Component<PropsType, StateType> {
 											</Selection>
 										</div>
 									</div>
-
 								</StickyContainer>
 							</main>
 						</div>

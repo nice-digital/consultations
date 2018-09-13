@@ -9,6 +9,12 @@ import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import App from "./components/App/App";
 
+if (process.env.NODE_ENV === "development") {
+	console.log("Attaching react-perf-devtool...");
+	const { registerObserver } = require("react-perf-devtool");
+	registerObserver();
+}
+
 const baseUrl = document.getElementsByTagName("base")[0].getAttribute("href").replace(/\/$/, "");
 const rootElement = document.getElementById("root");
 
