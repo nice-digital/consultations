@@ -124,9 +124,8 @@ export function saveAnswerHandler(e: Event, answer: AnswerType, self: any) {
 
 export function deleteAnswerHandler(e: Event, questionId: number, answerId: number, self: any) {
 	e.preventDefault();
-	//todo: call the delete answer api, then update the state on success.
 	if (answerId < 0) {
-		removeAnswerFromState(questionId, answerId);
+		removeAnswerFromState(questionId, answerId, self);
 	} else {
 		load("editanswer", undefined, [answerId], {}, "DELETE")
 			.then(res => {

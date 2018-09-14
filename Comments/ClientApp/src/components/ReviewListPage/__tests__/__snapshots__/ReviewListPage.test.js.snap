@@ -394,15 +394,7 @@ Array [
                                                         data-qa-sel="delete-comment-button"
                                                         onClick={[Function]}
                                                     >
-                                                        <span
-                                                            className="visually-hidden"
-                                                        >
-                                                            Delete this answer
-                                                        </span>
-                                                        <span
-                                                            aria-hidden="true"
-                                                            className="icon icon--trash"
-                                                        />
+                                                        Delete
                                                     </button>
                                                 </form>
                                             </section>
