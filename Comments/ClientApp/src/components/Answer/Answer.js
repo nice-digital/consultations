@@ -93,13 +93,12 @@ export class Answer extends Component<PropsType, StateType> {
 							:
 							null
 						}
-						{!readOnly && (this.state.unsavedChanges || answerId > 0) &&
+						{!readOnly && answerId > 0 &&
 						<button
 							data-qa-sel="delete-comment-button"
 							className="btn mr--0 right"
 							onClick={e => this.props.deleteHandler(e, questionId, answerId)}>
-							<span className="visually-hidden">Delete this answer</span>
-							<span className="icon icon--trash" aria-hidden="true"/>
+							Delete
 						</button>
 						}
 					</form>

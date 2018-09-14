@@ -30,15 +30,7 @@ exports[`[ClientApp]  Answer Component should match snapshot with answer 1`] = `
       data-qa-sel="delete-comment-button"
       onClick={[Function]}
     >
-      <span
-        className="visually-hidden"
-      >
-        Delete this answer
-      </span>
-      <span
-        aria-hidden="true"
-        className="icon icon--trash"
-      />
+      Delete
     </button>
   </form>
 </section>
