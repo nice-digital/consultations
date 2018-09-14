@@ -2,7 +2,6 @@
 
 import React, {Component, Fragment} from "react";
 import {Helmet} from "react-helmet";
-import {StickyContainer, Sticky} from "react-sticky";
 import {withRouter} from "react-router";
 import objectHash from "object-hash";
 
@@ -13,7 +12,6 @@ import {BreadCrumbs} from "./../Breadcrumbs/Breadcrumbs";
 import {StackedNav} from "./../StackedNav/StackedNav";
 import {HashLinkTop} from "../../helpers/component-helpers";
 import {projectInformation} from "../../constants";
-// import { processDocumentHtml } from "../../document-processing/process-document-html";
 import {ProcessDocumentHtml} from "../../document-processing/ProcessDocumentHtml";
 import {LoginBanner} from "./../LoginBanner/LoginBanner";
 import {UserContext} from "../../context/UserContext";
@@ -180,6 +178,7 @@ export class Document extends Component<PropsType, StateType> {
 					const allowComments = data.consultationData.supportsComments &&
 						data.consultationData.consultationState.consultationIsOpen &&
 						!data.consultationData.consultationState.userHasSubmitted;
+					this.addChapterDetailsToSections(data.chapterData);
 					this.setState({
 						...data,
 						loading: false,
@@ -211,21 +210,24 @@ export class Document extends Component<PropsType, StateType> {
 		if (this.props.match.params.documentId === prevProps.match.params.documentId) {
 			this.getChapterData(this.props.match.params)
 				.then(response => {
+					const chapterData = this.addChapterDetailsToSections(response.data);
 					this.setState({
-						chapterData: response.data,
+						chapterData,
 						loading: false,
 					});
-					this.addChapterDetailsToSections(this.state.chapterData);
 					pullFocusByQuerySelector(".document-comment-container");
 				});
 		} else {
 			this.gatherData()
 				.then(data => {
+					const chapterData = this.addChapterDetailsToSections(data.chapterData);
 					this.setState({
-						...data,
+						chapterData,
+						consultationData: data.consultationData,
+						documentsData: data.documentsData,
 						loading: false,
 					});
-					this.addChapterDetailsToSections(this.state.chapterData);
+
 					pullFocusByQuerySelector(".document-comment-container");
 				})
 				.catch(err => {

@@ -427,6 +427,19 @@ Array [
                                 >
                                     <a
                                         aria-current={false}
+                                        href="#introduction"
+                                        onClick={[Function]}
+                                        role="menuitem"
+                                    >
+                                        Introduction
+                                    </a>
+                                </li>
+                                <li
+                                    className="in-page-nav__item"
+                                    role="presentation"
+                                >
+                                    <a
+                                        aria-current={false}
                                         href="#provision-of-information"
                                         onClick={[Function]}
                                         role="menuitem"
