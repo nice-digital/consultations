@@ -127,7 +127,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		});
 	}
 
-	componentDidUpdate(prevProps: PropsType, prevState: any, nextContent: any) {
+	componentDidUpdate(prevProps: PropsType) {
 		const oldRoute = prevProps.location.pathname + prevProps.location.search;
 		const newRoute = this.props.location.pathname + this.props.location.search;
 		if (oldRoute !== newRoute) {
@@ -182,8 +182,8 @@ export class CommentList extends Component<PropsType, StateType> {
 		saveCommentHandler(e, comment, this);
 	};
 
-	deleteCommentHandler = (e: Event, comment: CommentType) => {
-		deleteCommentHandler(e, comment, this);
+	deleteCommentHandler = (e: Event, commentId: number) => {
+		deleteCommentHandler(e, commentId, this);
 	};
 
 	saveAnswerHandler = (e: Event, answer: AnswerType) => {
@@ -191,7 +191,6 @@ export class CommentList extends Component<PropsType, StateType> {
 	};
 
 	deleteAnswerHandler = (e: Event,  questionId: number, answerId: number) => {
-
 		deleteAnswerHandler(e, questionId, answerId, this);
 	};
 

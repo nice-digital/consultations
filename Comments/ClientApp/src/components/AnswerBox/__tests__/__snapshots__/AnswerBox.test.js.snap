@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[ClientApp]  AnswerBox Component should match snapshot with answer 1`] = `
+<section
+  role="form"
+>
+  <form
+    onSubmit={[Function]}
+  >
+    <div
+      className="form__group form__group--textarea mb--0"
+    >
+      <textarea
+        className="form__input form__input--textarea"
+        data-qa-sel="Comment-text-area"
+        disabled={false}
+        id="string"
+        onChange={[Function]}
+        placeholder="Enter your answer here"
+        value="an updated answer"
+      />
+    </div>
+    <span
+      className="ml--0 CommentBox__savedIndicator"
+    >
+      Saved
+    </span>
+    <button
+      className="btn mr--0 right"
+      data-qa-sel="delete-comment-button"
+      onClick={[Function]}
+    >
+      Delete
+    </button>
+  </form>
+</section>
+`;
+
+exports[`[ClientApp]  AnswerBox Component should match snapshot without answer 1`] = `
+<section
+  role="form"
+>
+  <form
+    onSubmit={[Function]}
+  >
+    <div
+      className="form__group form__group--textarea mb--0"
+    >
+      <textarea
+        className="form__input form__input--textarea"
+        data-qa-sel="Comment-text-area"
+        disabled={false}
+        id="string"
+        onChange={[Function]}
+        placeholder="Enter your answer here"
+        value=""
+      />
+    </div>
+  </form>
+</section>
+`;

@@ -509,7 +509,7 @@ Array [
                                                 onSubmit={[Function]}
                                             >
                                                 <div
-                                                    className="form__group form__group--textarea mb--0"
+                                                    className="form__group form__group--textarea"
                                                 >
                                                     <label
                                                         className="form__label visually-hidden"
@@ -532,12 +532,12 @@ Array [
                                                     />
                                                 </div>
                                                 <span
-                                                    className="ml--0 CommentBox__savedIndicator"
+                                                    className="ml--0 mb--0 CommentBox__savedIndicator"
                                                 >
                                                     Saved
                                                 </span>
                                                 <button
-                                                    className="btn mr--0 right"
+                                                    className="btn mr--0 mb--0 right"
                                                     data-qa-sel="delete-comment-button"
                                                     onClick={[Function]}
                                                 >
@@ -569,7 +569,7 @@ Array [
                                                 onSubmit={[Function]}
                                             >
                                                 <div
-                                                    className="form__group form__group--textarea mb--0"
+                                                    className="form__group form__group--textarea"
                                                 >
                                                     <label
                                                         className="form__label visually-hidden"
@@ -592,12 +592,12 @@ Array [
                                                     />
                                                 </div>
                                                 <span
-                                                    className="ml--0 CommentBox__savedIndicator"
+                                                    className="ml--0 mb--0 CommentBox__savedIndicator"
                                                 >
                                                     Saved
                                                 </span>
                                                 <button
-                                                    className="btn mr--0 right"
+                                                    className="btn mr--0 mb--0 right"
                                                     data-qa-sel="delete-comment-button"
                                                     onClick={[Function]}
                                                 >
