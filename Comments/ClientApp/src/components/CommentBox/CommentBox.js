@@ -63,6 +63,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 			quote,
 			commentId,
 		} = this.state.comment;
+		const { documentTitle } = this.props;
 		const unsavedChanges = this.state.unsavedChanges;
 		const comment = this.state.comment;
 		const readOnly = this.props.readOnly;
@@ -74,19 +75,20 @@ export class CommentBox extends Component<PropsType, StateType> {
 
 					{!this.isTextSelection(comment) &&
 					<Fragment>
-						<h1 data-qa-sel="comment-box-title" className="CommentBox__title mt--0 mb--d">
-							Comment on: <span className="text-lowercase">{commentOn}</span>
-							<br/>
-							{quote}
-						</h1>
+						{documentTitle && <h1 className="CommentBox__title mv--0">{documentTitle}</h1>}
+						<h2 data-qa-sel="comment-box-title" className="CommentBox__title mt--0 mb--d">
+							Comment on <span className="text-lowercase">{commentOn}</span>
+							{(commentOn !== "Document" && quote) && <span> - "{quote.trim()}"</span>}
+						</h2>
 					</Fragment>
 					}
 
 					{this.isTextSelection(comment) &&
 					<Fragment>
-						<h1 data-qa-sel="comment-box-title" className="CommentBox__title mt--0 mb--d">
-							Comment on: <span className="text-lowercase">{commentOn}</span>
-						</h1>
+						{documentTitle && <h1 className="CommentBox__title mv--0">{documentTitle}</h1>}
+						<h2 data-qa-sel="comment-box-title" className="CommentBox__title mt--0 mb--d">
+							Comment on a text selection
+						</h2>
 						<div className="CommentBox__quote mb--d">{quote}</div>
 					</Fragment>
 					}
