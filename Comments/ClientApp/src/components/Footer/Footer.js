@@ -3,8 +3,6 @@
 import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import ReactHtmlParser from "react-html-parser";
-
-//import preload from "../../data/pre-loader";
 import { load } from "./../../data/loader";
 
 type PropsType = {
@@ -13,7 +11,6 @@ type PropsType = {
 };
 
 type StateType = {
-	loading: boolean,
 	hasInitialData: boolean,
 	footerHTML: string,
 };
@@ -26,26 +23,13 @@ export class Footer extends Component<PropsType, StateType> {
 			hasInitialData: false,
 			footerHTML: "",
 		};
-
-		// if (this.props) {
-		// 	const preloadedFooterHTML = preload(
-		// 		this.props.staticContext,
-		// 		"footer", [], {}, {}, false
-		// 	);
-		// 	if (preloadedFooterHTML) {
-		// 		this.setState({
-		// 			hasInitialData: true,
-		// 			footerHTML: preloadedFooterHTML,
-		// 		});
-		// 	}
-		// }
 	}
 
 	gatherData = async () => {		
 		const footerData = load("footer")
 			.then(response => response.data)
 			.catch(err => {
-				console.error("Footer failed to load");
+				console.error("Footer failed to load", err);
 			});
 		
 		return {
@@ -63,7 +47,7 @@ export class Footer extends Component<PropsType, StateType> {
 					});
 				})
 				.catch(err => {
-					console.error("Footer failed to load");
+					console.error("Footer failed to load", err);
 				});
 		}
 	}
@@ -76,14 +60,14 @@ export class Footer extends Component<PropsType, StateType> {
 				<Fragment key="footer-date">{text}</Fragment>
 			);
 		}
-	}
+	};
 
 	render() {
 		if (!this.state.hasInitialData) return null;
 
 		return (
 			<div>
-				{ReactHtmlParser(this.state.footerHTML, {transform: this.transformHtml })}
+				{ReactHtmlParser(this.state.footerHTML, {transform: this.transformHtml})}
 			</div>			
 		);
 	}

@@ -30,6 +30,7 @@ exports[`[ClientApp]  Header  should display correctly when consulation has ende
       utc={false}
     />
      at 
+     
     <t
       ago={false}
       calendar={false}
@@ -83,6 +84,7 @@ exports[`[ClientApp]  Header  should display correctly when consulation hasn't s
       utc={false}
     />
      at 
+     
     <t
       ago={false}
       calendar={false}

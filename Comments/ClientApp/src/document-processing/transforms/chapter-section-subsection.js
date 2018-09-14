@@ -1,7 +1,6 @@
 import React, { Fragment } from "react";
 import { convertNodeToElement } from "react-html-parser";
 import {nodeIsTypeText, nodeIsSubsection, nodeIsSpanTag, nodeIsInternalLink} from "./types";
-import objectHash from "object-hash";
 import processInternalLink from "./internal-link";
 
 export const processChapterSectionSubsection = (node, onNewCommentClick, sourceURI, allowComments) => {
@@ -17,7 +16,7 @@ export const processChapterSectionSubsection = (node, onNewCommentClick, sourceU
 	const htmlElementID = (commentOn === "section" || commentOn === "subsection") ? node.attribs.id : "";
 
 	return (
-		<Fragment key={objectHash(node)}>
+		<Fragment key={0}>
 			{allowComments &&
 				<button
 					data-qa-sel="in-text-comment-button"

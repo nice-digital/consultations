@@ -3,8 +3,6 @@
 import React from "react";
 import { load } from "../data/loader";
 import { withRouter } from "react-router";
-//import preload from "../data/pre-loader";
-//import stringifyObject from "stringify-object";
 
 export const UserContext = React.createContext();
 
@@ -30,52 +28,38 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 			isAuthorised: false,
 			displayName: "",
 			signInURL: "",
-			registerURL: ""
+			registerURL: "",
 		};
 
 		const isServerSideRender = (this.props.staticContext && this.props.staticContext.preload);		
-		const preloadSource = isServerSideRender ? this.props.staticContext.preload.data : window.__PRELOADED__; //TODO: extract this preloaded line out to (or near) the preload endpoint method.
+		const preloadSource = isServerSideRender ? this.props.staticContext.preload.data : window.__PRELOADED__; // TODO: extract this preloaded line out to (or near) the preload endpoint method.
 
 		if (preloadSource){
 			this.state = {
 				isAuthorised: preloadSource.isAuthorised,
 				displayName: preloadSource.displayName,
 				signInURL: preloadSource.signInURL,
-				registerURL: preloadSource.registerURL
+				registerURL: preloadSource.registerURL,
 			};
 		} 
 	}
 
-	loadUser = () => {
-		load("user", undefined, [], { returnURL: this.props.location.pathname, cachebust: new Date().getTime() })
+	loadUser = (returnURL) => {
+		load("user", undefined, [], { returnURL, cachebust: new Date().getTime() })
 			.then(
 				res => {
 					this.setState({
 						isAuthorised: res.data.isAuthorised,
 						displayName: res.data.displayName,
 						signInURL: res.data.signInURL,
-						registerURL: res.data.registerURL
-					}); //, this.totalHack);
+						registerURL: res.data.registerURL,
+					});
 				}
 			);
-	}
-
-	//totalHack = () => { //this _shouldn't_ be needed any more..
-	//	if (!this.state.isAuthorised) {
-	//		setTimeout(this.loadUser, 3000);
-	//	}
-	//}
-
-	componentDidUpdate(prevProps: PropsType) {
-		const oldRoute = prevProps.location.pathname;
-		const newRoute = this.props.location.pathname;
-		if (oldRoute !== newRoute) {
-			this.loadUser();
-		}
-	}
+	};
 
 	componentDidMount() {
-		this.loadUser(); //this is currently only needed as the sign in url isn't right on SSR. TODO: fix SSR.
+		this.loadUser(this.props.location.pathname); //this is currently only needed as the sign in url isn't right on SSR. TODO: fix SSR.
 	}
 
 	render() {

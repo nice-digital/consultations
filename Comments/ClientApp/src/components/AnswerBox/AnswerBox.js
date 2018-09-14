@@ -17,7 +17,7 @@ type StateType = {
 	unsavedChanges: boolean,
 };
 
-export class Answer extends Component<PropsType, StateType> {
+export class AnswerBox extends Component<PropsType, StateType> {
 	constructor() {
 		super();
 		this.state = {
@@ -32,7 +32,7 @@ export class Answer extends Component<PropsType, StateType> {
 		});
 	}
 
-	textareaChangeHandler = e => {
+	textareaChangeHandler = (e: SyntheticEvent) => {
 		const answer = this.state.answer;
 		answer.answerText = e.target.value;
 		this.setState({
@@ -69,8 +69,8 @@ export class Answer extends Component<PropsType, StateType> {
 
 			<Fragment>
 				<section role="form">
-					<form onSubmit={e => this.props.saveHandler(e, answer)}>
-						<div className="form__group form__group--textarea mb--0">
+					<form onSubmit={e => this.props.saveHandler(e, answer)} className="mb--0">
+						<div className="form__group form__group--textarea mb--b">
 							<textarea
 								data-qa-sel="Comment-text-area"
 								disabled={readOnly}
@@ -84,19 +84,19 @@ export class Answer extends Component<PropsType, StateType> {
 							unsavedChanges ?
 								<input
 									data-qa-sel="submit-button"
-									className="btn ml--0"
+									className="btn ml--0 mb--0"
 									type="submit"
 									value="Save answer"
 								/>
 								:
-								<span className="ml--0 CommentBox__savedIndicator">Saved</span>
+								<span className="ml--0 mb--0 CommentBox__savedIndicator">Saved</span>
 							:
 							null
 						}
 						{!readOnly && answerId > 0 &&
 						<button
 							data-qa-sel="delete-comment-button"
-							className="btn mr--0 right"
+							className="btn mr--0 mb--0 right"
 							onClick={e => this.props.deleteHandler(e, questionId, answerId)}>
 							Delete
 						</button>
@@ -107,5 +107,3 @@ export class Answer extends Component<PropsType, StateType> {
 		);
 	}
 }
-
-export default Answer;

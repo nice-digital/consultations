@@ -55,8 +55,6 @@
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "react-router-hash-link": "^1.2.0",
-    "react-scrollspy": "^3.3.5",
-    "react-sticky": "^6.0.2",
     "stringify-object": "^3.2.2"
   },
   "devDependencies": {
@@ -87,8 +85,10 @@
     "postcss-cli": "^5.0.0",
     "prettier-eslint": "^8.8.1",
     "raf": "^3.4.0",
+    "react-perf-devtool": "^3.1.8",
     "react-scripts": "1.1.5",
-    "rimraf": "^2.6.2"
+    "rimraf": "^2.6.2",
+    "why-did-you-update": "^0.1.1"
   },
   "proxy": "http://niceorg",
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).",

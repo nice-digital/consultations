@@ -1,7 +1,7 @@
 .CommentBox {
   @include clearfix;
   margin-bottom: rem($spacing-small);
-  padding: rem($spacing-small) rem($spacing-small) 0 rem($spacing-small);
+  padding: rem($spacing-small);
   border: rem($spacing-xx-small) solid $colour-border;
   &__title{
     @include font-size(0);

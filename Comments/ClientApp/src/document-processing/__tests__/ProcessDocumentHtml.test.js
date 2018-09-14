@@ -1,20 +1,24 @@
 /* eslint-env jest */
 
-import { processDocumentHtml } from "../process-document-html";
+import { ProcessDocumentHtml } from "../ProcessDocumentHtml";
 import React from "react";
 import { mount } from "enzyme";
 
 describe("[ClientApp]", () => {
+
 	describe("Render Document HTML", () => {
 
 		function setupHtml(allowComments, html) {
-			const URI = "/1/1/guidance";
+			const url = "/1/1/guidance";
 			const clickFunction = jest.fn();
 			return {
-				wrapper: mount(
-					<div>{processDocumentHtml(html, clickFunction, URI, allowComments)}</div>
-				),
-				clickFunction
+				wrapper:
+					mount(
+						<div>
+							<ProcessDocumentHtml content={html} onNewCommentClick={clickFunction} url={url} allowComments={allowComments}/>
+						</div>
+					),
+				clickFunction,
 			};
 		}
 
@@ -24,7 +28,7 @@ describe("[ClientApp]", () => {
 			);
 			expect(instance.wrapper.find("button").text()).toEqual("Comment on section: Foo");
 		});
-		
+
 		it("renders a button if the html contains an anchor with a type of 'chapter'", () => {
 			const instance = setupHtml(true,
 				"<div><a id='bar' href='#test' data-heading-type='chapter'>Bar</a></div>"
@@ -59,7 +63,7 @@ describe("[ClientApp]", () => {
 				commentText: "",
 				commentOn: "chapter",
 				htmlElementID: "",
-				quote: "Recommendations"
+				quote: "Recommendations",
 			});
 		});
 
@@ -72,7 +76,7 @@ describe("[ClientApp]", () => {
 				commentText: "",
 				commentOn: "section",
 				htmlElementID: "bar",
-				quote: "Foo"
+				quote: "Foo",
 			});
 		});
 
@@ -84,7 +88,7 @@ describe("[ClientApp]", () => {
 				commentText: "",
 				commentOn: "subsection",
 				htmlElementID: "np-1-3-1",
-				quote: "1.3.1 "
+				quote: "1.3.1 ",
 			});
 		});
 
@@ -94,7 +98,7 @@ describe("[ClientApp]", () => {
 			);
 			expect(instance.wrapper.find("button").length).toEqual(0);
 		});
-		
+
 		it("does not render a button when allowComments is false, even if the html contains an anchor with a type of 'chapter'", () => {
 			const instance = setupHtml(false,
 				"<div><a id='bar' href='#test' data-heading-type='chapter'>Bar</a></div>"
