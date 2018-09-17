@@ -106,7 +106,7 @@ export function saveAnswerHandler(e: Event, answer: AnswerType, self: any) {
 					questions,
 				});
 				if (typeof self.issueA11yMessage === "function") {
-					self.issueA11yMessage("Answer saved");
+					self.issueA11yMessage("AnswerBox saved");
 				}
 				if (typeof self.validationHander === "function") {
 					self.validationHander();
@@ -124,9 +124,8 @@ export function saveAnswerHandler(e: Event, answer: AnswerType, self: any) {
 
 export function deleteAnswerHandler(e: Event, questionId: number, answerId: number, self: any) {
 	e.preventDefault();
-	//todo: call the delete answer api, then update the state on success.
 	if (answerId < 0) {
-		removeAnswerFromState(questionId, answerId);
+		removeAnswerFromState(questionId, answerId, self);
 	} else {
 		load("editanswer", undefined, [answerId], {}, "DELETE")
 			.then(res => {
@@ -166,6 +165,6 @@ function removeAnswerFromState(questionId: number, answerId: number, self: any) 
 		self.validationHander();
 	}
 	if (typeof self.issueA11yMessage === "function") {
-		self.issueA11yMessage("Answer deleted");
+		self.issueA11yMessage("AnswerBox deleted");
 	}
 }

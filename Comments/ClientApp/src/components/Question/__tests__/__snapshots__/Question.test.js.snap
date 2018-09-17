@@ -25,10 +25,11 @@ exports[`[ClientApp]  Question Component should match snapshot with answer 1`] =
     role="form"
   >
     <form
+      className="mb--0"
       onSubmit={[Function]}
     >
       <div
-        className="form__group form__group--textarea mb--0"
+        className="form__group form__group--textarea mb--b"
       >
         <textarea
           className="form__input form__input--textarea"
@@ -41,24 +42,16 @@ exports[`[ClientApp]  Question Component should match snapshot with answer 1`] =
         />
       </div>
       <span
-        className="ml--0 CommentBox__savedIndicator"
+        className="ml--0 mb--0 CommentBox__savedIndicator"
       >
         Saved
       </span>
       <button
-        className="btn mr--0 right"
+        className="btn mr--0 mb--0 right"
         data-qa-sel="delete-comment-button"
         onClick={[Function]}
       >
-        <span
-          className="visually-hidden"
-        >
-          Delete this answer
-        </span>
-        <span
-          aria-hidden="true"
-          className="icon icon--trash"
-        />
+        Delete
       </button>
     </form>
   </section>
@@ -90,10 +83,11 @@ exports[`[ClientApp]  Question Component should match snapshot without answer 1`
     role="form"
   >
     <form
+      className="mb--0"
       onSubmit={[Function]}
     >
       <div
-        className="form__group form__group--textarea mb--0"
+        className="form__group form__group--textarea mb--b"
       >
         <textarea
           className="form__input form__input--textarea"

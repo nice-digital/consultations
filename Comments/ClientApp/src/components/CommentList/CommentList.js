@@ -28,6 +28,7 @@ type PropsType = {
 		pathname: string,
 		search: string
 	},
+	announceAssertive: Function,
 };
 
 type StateType = {
@@ -44,6 +45,7 @@ type StateType = {
 	shouldShowDrawer: boolean,
 	shouldShowCommentsTab: boolean,
 	shouldShowQuestionsTab: boolean,
+	error: string,
 };
 
 type ContextType = any;
@@ -129,7 +131,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		});
 	}
 
-	componentDidUpdate(prevProps: PropsType, prevState: any, nextContent: any) {
+	componentDidUpdate(prevProps: PropsType) {
 		const oldRoute = prevProps.location.pathname + prevProps.location.search;
 		const newRoute = this.props.location.pathname + this.props.location.search;
 		if (oldRoute !== newRoute) {
@@ -184,8 +186,8 @@ export class CommentList extends Component<PropsType, StateType> {
 		saveCommentHandler(e, comment, this);
 	};
 
-	deleteCommentHandler = (e: Event, comment: CommentType) => {
-		deleteCommentHandler(e, comment, this);
+	deleteCommentHandler = (e: Event, commentId: number) => {
+		deleteCommentHandler(e, commentId, this);
 	};
 
 	saveAnswerHandler = (e: Event, answer: AnswerType) => {
@@ -328,17 +330,20 @@ export class CommentList extends Component<PropsType, StateType> {
 											</h1>
 											{contextValue.isAuthorised ?
 												<p data-g="6">
-													<Link 	to={`/${this.props.match.params.consultationId}/review`}
+													<Link
+														to={`/${this.props.match.params.consultationId}/review`}
 														data-qa-sel="review-all-comments"
-														className="right">Review all {this.state.viewComments ? "comments" : "questions"}</Link>
+														className="right">
+														Review all {this.state.viewComments ? "comments" : "questions"}
+													</Link>
 												</p> : null
 											}
 										</div>
 
 										{this.state.error !== "" ?
 											<div className="errorBox">
-												<p>We couldn't {this.state.error} your comment. Please try again in a few minutes.</p>
-												<p>If the problem continues please <a href="/get-involved/contact-us">contact us</a>.</p>
+												<p>We couldn{"'"}t {this.state.error} your comment. Please try again in a few minutes.</p>
+												<p>If the problem continues please <a href={"/get-involved/contact-us"}>contact us</a>.</p>
 											</div>
 											: null }
 
@@ -372,8 +377,7 @@ export class CommentList extends Component<PropsType, StateType> {
 															</ul>
 													) : (
 														<div>
-															<p>We would like to hear your views on the draft recommendations presented in the guideline, and any comments you may have on the rationale and impact sections in the guideline and the evidence presented in the evidence reviews documents. We would also welcome views on the Equality Impact Assessment.</p>
-															<p>We would like to hear your views on these questions:</p>
+															<p>Please answer the following questions</p>
 															<ul className="CommentList list--unstyled">
 																{this.state.questions.map((question) => {
 																	return (

@@ -92,8 +92,8 @@ export class CommentBox extends Component<PropsType, StateType> {
 					</Fragment>
 					}
 
-					<form onSubmit={e => this.props.saveHandler(e, comment)}>
-						<div className="form__group form__group--textarea mb--0">
+					<form onSubmit={e => this.props.saveHandler(e, comment)} className="mb--0">
+						<div className="form__group form__group--textarea mb--b">
 							<label
 								className="form__label visually-hidden"
 								htmlFor={this.props.unique}>
@@ -116,19 +116,19 @@ export class CommentBox extends Component<PropsType, StateType> {
 							unsavedChanges ?
 								<input
 									data-qa-sel="submit-button"
-									className="btn ml--0"
+									className="btn ml--0 mb--0"
 									type="submit"
 									value="Save comment"
 								/>
 								:
-								<span className="ml--0 CommentBox__savedIndicator">Saved</span>
+								<span className="ml--0 mb--0 CommentBox__savedIndicator">Saved</span>
 							:
 							null
 						}
 						{!readOnly &&
 						<button
 							data-qa-sel="delete-comment-button"
-							className="btn mr--0 right"
+							className="btn mr--0 mb--0 right"
 							onClick={e => this.props.deleteHandler(e, commentId)}>
 							Delete
 						</button>

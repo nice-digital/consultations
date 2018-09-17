@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component, Fragment } from "react";
-import { Answer } from "../Answer/Answer";
+import { AnswerBox } from "../AnswerBox/AnswerBox";
 
 //import stringifyObject from "stringify-object";
 
@@ -62,7 +62,7 @@ export class Question extends Component<PropsType, StateType> {
 				<p><strong>{this.props.question.questionText}</strong></p>
 				{answers.map((answer) => {
 					return (
-						<Answer
+						<AnswerBox
 							readOnly={this.props.readOnly}
 							isVisible={this.props.isVisible}
 							key={answer.answerId}

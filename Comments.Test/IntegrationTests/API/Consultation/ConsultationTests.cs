@@ -39,5 +39,19 @@ namespace Comments.Test.IntegrationTests.API.Consultation
             // Assert
             responseString.ShouldMatchApproved();
         }
-    }
+
+	    [Fact]
+	    public async Task Get_Draft_Consultation_Feed_Returns_Populated_Feed()
+	    {
+		    //Arrange (in base constructor)
+
+		    // Act
+		    var response = await _client.GetAsync("/consultations/api/DraftConsultation?consultationId=113&documentId=1&reference=GID-NG10186");
+		    response.EnsureSuccessStatusCode();
+		    var responseString = await response.Content.ReadAsStringAsync();
+
+		    // Assert
+		    responseString.ShouldMatchApproved();
+	    }
+	}
 }

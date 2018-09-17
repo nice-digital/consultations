@@ -2,6 +2,7 @@ using Comments.Models;
 using Comments.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
+using NICE.Feeds;
 
 namespace Comments.Services
 {
@@ -34,7 +35,7 @@ namespace Comments.Services
 			if (anySourceURI == null)
 				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "Could not find SourceURI"));
 
-			var consultationState = _consultationService.GetConsultationState(anySourceURI);
+			var consultationState = _consultationService.GetConsultationState(anySourceURI, PreviewState.NonPreview);
 
 			if (!consultationState.ConsultationIsOpen)
 				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "Consultation is not open for submissions"));

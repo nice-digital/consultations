@@ -1,6 +1,6 @@
 // @flow
 
-import React from "react";
+import React, {PureComponent} from "react";
 import { Link } from "react-router-dom";
 import objectHash from "object-hash";
 
@@ -18,30 +18,30 @@ type PropsType = {
 	}
 };
 
-export const StackedNav = (props: PropsType) => {
-	if (!props.links) return null;
-	const { title, links } = props.links;
-	return (
-		<nav className="stacked-nav" aria-label={title}>
-			<h2 className="stacked-nav__root">{title}</h2>
-			<ul className="stacked-nav__list">
-				{links.map(item => (
-					<li key={objectHash(item)} data-qa-sel="nav-list-item" className="stacked-nav__list-item">
-						{item.isReactRoute ?
-							item.current ?
-								<Link to={item.url} aria-current="page">{item.label}</Link>
+export class StackedNav extends PureComponent<PropsType> {
+	render() {
+		if (!this.props.links) return null;
+		const { title, links } = this.props.links;
+		return (
+			<nav className="stacked-nav" aria-label={title}>
+				<h2 className="stacked-nav__root">{title}</h2>
+				<ul className="stacked-nav__list">
+					{links.map(item => (
+						<li key={objectHash(item)} data-qa-sel="nav-list-item" className="stacked-nav__list-item">
+							{item.isReactRoute ?
+								item.current ?
+									<Link to={item.url} aria-current="page">{item.label}</Link>
+									:
+									// if !item.current
+									<Link to={item.url}>{item.label}</Link>
 								:
-								// if !item.current
-								<Link to={item.url}>{item.label}</Link>
-							:
-							// if !item.isReactRoute
-							<a href={item.url} target="_blank" rel="noopener noreferrer">{item.label}</a>
-						}
-					</li>
-				))}
-			</ul>
-		</nav>
-	);
-};
-
-export default StackedNav;
+								// if !item.isReactRoute
+								<a href={item.url} target="_blank" rel="noopener noreferrer">{item.label}</a>
+							}
+						</li>
+					))}
+				</ul>
+			</nav>
+		);
+	}
+}

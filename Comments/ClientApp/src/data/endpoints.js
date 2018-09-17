@@ -3,6 +3,7 @@ export const BaseUrl  = "/consultations";
 export const Endpoints = {
 	consultation: "/api/Consultation", // details for a single consultation
 	consultations: "/api/Consultations", // list of consultations
+	draftconsultation: "/api/DraftConsultation", // details for a single consultation that has never been published
 	documents: "/api/Documents", // documents contained within consultation
 	previewdraftdocuments: "/api/PreviewDraftDocuments", // documents contained within consultation
 	previewpublisheddocuments: "/api/PreviewpublishedDocuments", // documents contained within consultation
@@ -18,4 +19,5 @@ export const Endpoints = {
 	user: "/api/User", // get details of currently logged in user
 	submit: "/api/Submit", // submit on the review page.
 	footer: "/../media/default/html/htmlwidget/Footer.html", //the double dots at the start of this line make it work whether serverd under consultations or not.
+	exportExternal: "/api/ExportExternal/{0}", //Creates an excel spread sheet for external users of the system that contains only their responses
 };
