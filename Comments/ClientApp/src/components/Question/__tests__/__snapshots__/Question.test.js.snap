@@ -5,17 +5,19 @@ exports[`[ClientApp]  Question Component should match snapshot with answer 1`] =
   className="CommentBox"
 >
   <h1
-    className="CommentBox__title mt--0 mb--d"
+    className="CommentBox__title mt--0 mb--0"
+  />
+  <h2
+    className="CommentBox__title mt--0 mb--0"
     data-qa-sel="comment-box-title"
   >
-    Question on: 
+    Question on 
     <span
       className="text-lowercase"
     >
       Consultation
     </span>
-    <br />
-  </h1>
+  </h2>
   <p>
     <strong>
       Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
@@ -63,17 +65,19 @@ exports[`[ClientApp]  Question Component should match snapshot without answer 1`
   className="CommentBox"
 >
   <h1
-    className="CommentBox__title mt--0 mb--d"
+    className="CommentBox__title mt--0 mb--0"
+  />
+  <h2
+    className="CommentBox__title mt--0 mb--0"
     data-qa-sel="comment-box-title"
   >
-    Question on: 
+    Question on 
     <span
       className="text-lowercase"
     >
       Consultation
     </span>
-    <br />
-  </h1>
+  </h2>
   <p>
     <strong>
       Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.

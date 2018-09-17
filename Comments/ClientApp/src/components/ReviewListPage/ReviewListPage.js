@@ -315,6 +315,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 	};
 
 	getListOfDocuments = (filters: Array<any>) => {
+		if (!filters) return;
 		return filters.filter(item => item.id === "Document")[0].options
 			.map(item => {
 				return {
