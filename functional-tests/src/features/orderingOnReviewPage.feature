@@ -12,7 +12,7 @@ Background:
 		Given I delete all comments on the page
 
 Scenario: User makes a multiple comments
-		When I wait on element "[data-qa-sel='comment-on-consultation-document']" to exist
+		When I wait on element "[data-qa-sel='comment-on-consultation-document']" to be visible
 		When I click on the button "[data-qa-sel='comment-on-consultation-document']"
 		And I pause for 1000ms
 		And I add "1" to the inputfield "#Comment-1"
@@ -32,7 +32,7 @@ Scenario: User makes a multiple comments
 		And I click on the button "[data-qa-sel='submit-button']"
 		When I click on the button "[data-qa-sel='review-all-comments']"
 		And I pause for 1000ms
-		And I wait on element "[data-qa-sel='Comment-text-area']" to exist
+		And I wait on element "[data-qa-sel='Comment-text-area']" to be visible
 		Then I expect that element "[data-qa-sel='Comment-text-area']" contains the text "3"
 		And I expect that element "[data-qa-sel='Comment-text-area']" contains the text "2"
 		And I expect that element "[data-qa-sel='Comment-text-area']" contains the text "1"

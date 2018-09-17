@@ -15,7 +15,7 @@
  		And I pause for 1000ms
  		When I click on the button "[data-qa-sel='comment-on-consultation-document']"
  		And I pause for 1000ms
- 		Then I wait on element "body [data-qa-sel='comment-box-title']" for 10000ms to exist
+ 		Then I wait on element "body [data-qa-sel='comment-box-title']" for 10000ms to be visible
     Then I expect that element "[data-qa-sel='comment-box-title']" contains the text "document"
  		When I add "This is a Document comment" to the inputfield "[data-qa-sel='Comment-text-area']"
  		And I click on the button "[data-qa-sel='submit-button']"
