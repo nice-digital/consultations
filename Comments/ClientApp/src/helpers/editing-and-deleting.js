@@ -5,6 +5,7 @@ import { load } from "../data/loader";
 export function saveCommentHandler(e: Event, comment: CommentType, self: any) {
 	e.preventDefault();
 
+	const orig = comment.commentId;
 	const isANewComment = comment.commentId < 0;
 	const method = isANewComment ? "POST" : "PUT";
 	const urlParameters = isANewComment ? [] : [comment.commentId];
@@ -25,6 +26,7 @@ export function saveCommentHandler(e: Event, comment: CommentType, self: any) {
 					comments,
 					error,
 				});
+				self.updateUnsavedCommentIds(orig, false);
 				if (typeof self.issueA11yMessage === "function") {
 					self.issueA11yMessage("Comment saved");
 				}
@@ -144,6 +146,7 @@ export function deleteAnswerHandler(e: Event, questionId: number, answerId: numb
 }
 
 function removeCommentFromState(commentId: number, self: any) {
+	self.updateUnsavedCommentIds(commentId, false);
 	if (typeof self.issueA11yMessage === "function") {
 		self.issueA11yMessage("Comment deleted");
 	}

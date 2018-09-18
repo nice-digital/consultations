@@ -2,7 +2,7 @@
 
 import React from "react";
 import { mount, shallow } from "enzyme";
-import { MemoryRouter } from "react-router";
+import { MemoryRouter } from "react-router-dom";
 import { CommentList } from "../CommentList";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
@@ -349,26 +349,6 @@ describe("[ClientApp] ", () => {
 
 			 mount(<CommentList {...fakeProps} isReviewPage={true} />);
 		});
-		
-		//sourceURI: "/1/0/Review", isReview: true
 
-		const firstProps = {
-			match: {
-				url: "/1/1/introduction",
-				params: {
-					consultationId: 1,
-					documentId: 1,
-					chapterSlug: "introduction",
-				},
-			},
-			location: {
-				pathname: "1/review",
-				search: "?sourceURI=/consultations/1/1/introduction",
-			},
-			comment: {
-				commentId: 1,
-			},
-			viewComments: true,				
-		};
 	});
 });

@@ -1,9 +1,9 @@
 .CommentBox {
   &--unsavedChanges {
-    border-color: $colour-error;
+    border-color: $colour-caution;
   }
   &__validationMessage {
-    color: $colour-error;
+    color: $colour-caution;
     font-weight: bold;
   }
   @include clearfix;

@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component, Fragment } from "react";
-import { withRouter, Link } from "react-router-dom";
+import {withRouter, Link, Prompt} from "react-router-dom";
 //import stringifyObject from "stringify-object";
 import { LiveMessage } from "react-aria-live";
 
@@ -16,7 +16,6 @@ import { CommentBox } from "../CommentBox/CommentBox";
 import { Question } from "../Question/Question";
 import { LoginBanner } from "../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
-import {FormError} from "../FormComponents/FormError";
 
 type PropsType = {
 	staticContext?: any,
@@ -37,7 +36,6 @@ type StateType = {
 	loading: boolean,
 	allowComments: boolean,
 	initialDataLoaded: boolean,
-	//drawer:
 	drawerExpandedWidth: boolean,
 	drawerOpen: boolean,
 	drawerMobile: boolean,
@@ -46,6 +44,7 @@ type StateType = {
 	shouldShowCommentsTab: boolean,
 	shouldShowQuestionsTab: boolean,
 	error: string,
+	unsavedCommentIds: Array<number>,
 };
 
 type ContextType = any;
@@ -67,7 +66,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			shouldShowDrawer: false,
 			shouldShowCommentsTab: false,
 			shouldShowQuestionsTab: false,
-			highlightUnsavedChanges: true,
+			unsavedCommentIds: [],
 		};
 		let preloadedData = {};
 		if (this.props.staticContext && this.props.staticContext.preload) {
@@ -98,7 +97,7 @@ export class CommentList extends Component<PropsType, StateType> {
 				drawerExpandedWidth: false,
 				drawerOpen: false,
 				drawerMobile: false,
-				highlightUnsavedChanges: true,
+				unsavedCommentIds: [],
 			};
 		}
 	}
@@ -115,7 +114,6 @@ export class CommentList extends Component<PropsType, StateType> {
 					shouldShowDrawer: response.data.consultationState.shouldShowDrawer,
 					shouldShowCommentsTab: response.data.consultationState.shouldShowCommentsTab,
 					shouldShowQuestionsTab: response.data.consultationState.shouldShowQuestionsTab,
-					highlightUnsavedChanges: true,
 				});
 			})
 			.catch(err => console.log("load comments in commentlist " + err));
@@ -137,6 +135,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		if (oldRoute !== newRoute) {
 			this.setState({
 				loading: true,
+				unsavedCommentIds: [],
 			});
 			this.loadComments();
 		}
@@ -149,7 +148,6 @@ export class CommentList extends Component<PropsType, StateType> {
 	};
 
 	newComment = (e: Event, newComment: CommentType) => {
-
 		if ((typeof(newComment.order) === "undefined" || (newComment.order === null)) && e !== null) {
 			///these values are already set when user has selected text. when they've clicked a button though they'll be unset.
 			newComment.order = getElementPositionWithinDocument(e.currentTarget);
@@ -242,6 +240,22 @@ export class CommentList extends Component<PropsType, StateType> {
 		}
 	};
 
+	updateUnsavedCommentIds = (commentId: number, dirty: boolean) => {
+		const unsavedCommentIds = this.state.unsavedCommentIds;
+		if (dirty) {
+			if (!unsavedCommentIds.includes(commentId)) {
+				unsavedCommentIds.push(commentId);
+				this.setState({
+					unsavedCommentIds,
+				});
+			}
+		} else {
+			this.setState({
+				unsavedCommentIds: unsavedCommentIds.filter(id=>id !== commentId),
+			});
+		}
+	};
+
 	render() {
 		if (!this.state.shouldShowDrawer){
 			return null;
@@ -261,6 +275,10 @@ export class CommentList extends Component<PropsType, StateType> {
 
 		return (
 			<Fragment>
+				<Prompt
+					when={this.state.unsavedCommentIds.length > 0}
+					message={`You have ${this.state.unsavedCommentIds.length} unsaved ${this.state.unsavedCommentIds.length === 1 ? "change" : "changes"}. Continue without saving?`}
+				/>
 				<LiveMessage message={a11yMessage()} aria-live="assertive"/>
 				<section aria-label="Commenting panel"
 								 className={this.drawerClassnames()}>
@@ -352,25 +370,19 @@ export class CommentList extends Component<PropsType, StateType> {
 											contextValue.isAuthorised ?
 
 												<Fragment>
-
-													{this.state.highlightUnsavedChanges &&
-														<FormError
-															title="You have unsaved changes"
-															secondary="You must save your comments before you proceed"/>
-													}
 													{this.state.viewComments ? (
 														this.state.comments.length === 0 ? <p>No comments yet</p> :
 															<ul className="CommentList list--unstyled">
 																{this.state.comments.map((comment) => {
 																	return (
 																		<CommentBox
+																			updateUnsavedCommentIds={this.updateUnsavedCommentIds}
 																			readOnly={!this.state.allowComments}
 																			key={comment.commentId}
 																			unique={`Comment${comment.commentId}`}
 																			comment={comment}
 																			saveHandler={this.saveCommentHandler}
 																			deleteHandler={this.deleteCommentHandler}
-																			highlightUnsavedChanges={this.state.highlightUnsavedChanges}
 																		/>
 																	);
 																})}
