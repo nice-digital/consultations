@@ -11,6 +11,7 @@ using Comments.ViewModels;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
@@ -19,6 +20,7 @@ using NICE.Feeds;
 using NICE.Feeds.Configuration;
 using NICE.Feeds.Tests.Infrastructure;
 using Microsoft.Data.Sqlite;
+using Xunit;
 using Answer = Comments.Models.Answer;
 using Comment = Comments.Models.Comment;
 using Location = Comments.Models.Location;
@@ -42,7 +44,8 @@ namespace Comments.Test.Infrastructure
         protected readonly string _displayName = "Benjamin Button";
         protected readonly Guid? _userId = Guid.Empty;
         protected readonly IUserService _fakeUserService;
-        protected readonly IHttpContextAccessor _fakeHttpContextAccessor;
+	    protected readonly IUserService _fakeUserServiceInstance;
+		protected readonly IHttpContextAccessor _fakeHttpContextAccessor;
 
 	    protected readonly IConsultationService _consultationService;
         protected readonly DbContextOptionsBuilder<ConsultationsContext> _contextOptions;
@@ -51,14 +54,17 @@ namespace Comments.Test.Infrastructure
 	    protected readonly bool _useRealSubmitService = false;
 
 	    protected IEncryption _fakeEncryption;
-
+	    //protected readonly WebApplicationFactory<Startup> _factory;
+	    protected IWebHostBuilder _builder;
+	    
 		public TestBase(Feed feed) : this()
         {
             FeedToUse = feed;
             _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
 	        _consultationService = new FakeConsultationService();
 		}
-        public TestBase(Feed feed, bool authenticated, Guid userId, string displayName = null) : this()
+
+		public TestBase(Feed feed, bool authenticated, Guid userId, string displayName = null) : this()
         {
             FeedToUse = feed;
             _authenticated = authenticated;
@@ -86,6 +92,7 @@ namespace Comments.Test.Infrastructure
 	        _useRealSubmitService = useRealSubmitService;
 	        _fakeEncryption = new FakeEncryption();
 			var databaseName = DatabaseName + Guid.NewGuid();
+	        
 
             //SQLiteConnectionStringBuilder sqLiteConnectionStringBuilder = new SQLiteConnectionStringBuilder()
             //{	       
@@ -145,8 +152,11 @@ namespace Comments.Test.Infrastructure
                 })
                 .UseEnvironment("Production")
                 .UseStartup(typeof(Startup));
+
+
             _server = new TestServer(builder);
             _client = _server.CreateClient();
+			//_client = _factory.CreateClient( new WebApplicationFactoryClientOptions {AllowAutoRedirect = false} );
 
             _feedConfig = new FeedConfig()
             {
