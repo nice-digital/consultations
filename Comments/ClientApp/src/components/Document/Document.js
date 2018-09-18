@@ -387,6 +387,7 @@ export class Document extends Component<PropsType, StateType> {
 										consultationState={this.state.consultationData.consultationState}/>
 									{this.state.allowComments &&
 									<button
+										data-gtm="comment-on-document-button"
 										data-qa-sel="comment-on-consultation-document"
 										className="btn btn--cta"
 										onClick={e => {

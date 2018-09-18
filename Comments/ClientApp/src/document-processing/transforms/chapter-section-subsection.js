@@ -19,11 +19,21 @@ export const processChapterSectionSubsection = (node, onNewCommentClick, sourceU
 		<Fragment key={0}>
 			{allowComments &&
 				<button
+					data-gtm="button"
+					data-gtm-category="Consultation comments page"
+					data-gtm-action="Clicked"
+					data-gtm-label={`Comment on ${commentOn || "chapter"}`}
 					data-qa-sel="in-text-comment-button"
 					className="document-comment-container__commentButton"
 					tabIndex={0}
 					onClick={e => {
 						e.preventDefault();
+						window.dataLayer.push({
+							event: "button",
+							category: "Consultation comments page",
+							action: "Clicked",
+							label: `Comment on ${commentOn || "chapter"}`,
+						});
 						onNewCommentClick(e, {
 							sourceURI,
 							commentText: "",

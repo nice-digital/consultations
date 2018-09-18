@@ -22,6 +22,7 @@ import { CommentBox } from "../CommentBox/CommentBox";
 import { Question } from "../Question/Question";
 import { LoginBanner } from "../LoginBanner/LoginBanner";
 import { SubmitResponseDialog } from "../SubmitResponseDialog/SubmitResponseDialog";
+import {Helmet} from "react-helmet";
 
 type PropsType = {
 	staticContext?: any,
@@ -333,6 +334,9 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 
 		return (
 			<Fragment>
+				<Helmet>
+					<title>Review!!!!</title>
+				</Helmet>
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">
