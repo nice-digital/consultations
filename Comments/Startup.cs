@@ -192,7 +192,7 @@ namespace Comments
 
 	            routes.MapRoute(
 		            name: "redirect",
-		            template: "consultations/{consultationId}/{documentId}",
+		            template: "consultations/{consultationId:int}/{documentId:int}",
 		            defaults: new {controller = "Redirect", action = "DocumentWithoutChapter"});
 
             });
