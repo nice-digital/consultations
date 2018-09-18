@@ -190,6 +190,11 @@ namespace Comments
                     name: "default",
                     template: "{controller}/{action=Index}/{id?}");
 
+	            routes.MapRoute(
+		            name: "redirect",
+		            template: "consultations/{consultationId}/{documentId}",
+		            defaults: new {controller = "Redirect", action = "DocumentWithoutChapter"});
+
             });
 
             //// here you can see we make sure it doesn't start with /api, if it does, it'll 404 within .NET if it can't be found
