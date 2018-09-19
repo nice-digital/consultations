@@ -26,7 +26,7 @@ export function saveCommentHandler(e: Event, comment: CommentType, self: any) {
 					comments,
 					error,
 				});
-				self.updateUnsavedCommentIds(orig, false);
+				self.updateUnsavedIds(orig, false);
 				if (typeof self.issueA11yMessage === "function") {
 					self.issueA11yMessage("Comment saved");
 				}
@@ -75,7 +75,7 @@ export function deleteCommentHandler(e: Event, commentId: number, self: any) {
 	}
 }
 
-export function saveAnswerHandler(e: Event, answer: AnswerType, self: any) {
+export function saveAnswerHandler(e: Event, answer: AnswerType, questionId: number, self: any) {
 	e.preventDefault();
 	const isANewAnswer = answer.answerId < 0;
 	const method = isANewAnswer ? "POST" : "PUT";
@@ -107,6 +107,7 @@ export function saveAnswerHandler(e: Event, answer: AnswerType, self: any) {
 				self.setState({
 					questions,
 				});
+				self.updateUnsavedIds(questionId, false);
 				if (typeof self.issueA11yMessage === "function") {
 					self.issueA11yMessage("AnswerBox saved");
 				}
@@ -146,7 +147,7 @@ export function deleteAnswerHandler(e: Event, questionId: number, answerId: numb
 }
 
 function removeCommentFromState(commentId: number, self: any) {
-	self.updateUnsavedCommentIds(commentId, false);
+	self.updateUnsavedIds(commentId, false);
 	if (typeof self.issueA11yMessage === "function") {
 		self.issueA11yMessage("Comment deleted");
 	}
@@ -160,6 +161,7 @@ function removeCommentFromState(commentId: number, self: any) {
 }
 
 function removeAnswerFromState(questionId: number, answerId: number, self: any) {
+	self.updateUnsavedIds(questionId, false);
 	let questions = self.state.questions;
 	let questionToUpdate = questions.find(question => question.questionId === questionId);
 	questionToUpdate.answers = questionToUpdate.answers.filter(answer => answer.answerId !== answerId);

@@ -27,3 +27,8 @@ $nice-font-base-path: "/consultations/fonts/";
 
 // Document transform styling (comments buttons etc)
 @import "./document-processing/transforms/comment";
+
+.monkey {
+  background: red !important;
+  transform: scale(0.8) rotate(-10deg);
+}
