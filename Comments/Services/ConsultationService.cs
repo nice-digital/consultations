@@ -113,7 +113,7 @@ namespace Comments.Services
 			    var firstChapter = firstDocument?.Chapters.FirstOrDefault();
 
 			    if (firstChapter != null)
-				    breadcrumbs.Add(new BreadcrumbLink("Consultation documents", $"/consultations/{consultation.ConsultationId}/{firstDocument.DocumentId}/{firstChapter.Slug}"));
+				    breadcrumbs.Add(new BreadcrumbLink("Consultation documents", $"/{consultation.ConsultationId}/{firstDocument.DocumentId}/{firstChapter.Slug}", true));
 		    }
 
 		    return breadcrumbs;

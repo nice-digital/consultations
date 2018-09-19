@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component, Fragment } from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Prompt } from "react-router-dom";
 //import stringifyObject from "stringify-object";
 
 import preload from "../../data/pre-loader";
@@ -55,6 +55,7 @@ type StateType = {
 	organisationName: string,
 	hasTobaccoLinks: boolean,
 	tobaccoDisclosure: string,
+	unsavedCommentIds: Array<number>,
 };
 
 export class ReviewListPage extends Component<PropsType, StateType> {
@@ -78,7 +79,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			organisationName: "",
 			hasTobaccoLinks: "",
 			tobaccoDisclosure: "",
-
+			unsavedCommentIds: [],
 		};
 
 		let preloadedData = {};
@@ -122,6 +123,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 				respondingAsOrganisation: "",
 				hasTobaccoLinks: "",
 				tobaccoDisclosure: "",
+				unsavedCommentIds: [],
 			};
 		}
 	}
@@ -325,6 +327,22 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			.reduce((arr, group) => arr.concat(group), []);
 	}
 
+	updateUnsavedCommentIds = (commentId: number, dirty: boolean) => {
+		const unsavedCommentIds = this.state.unsavedCommentIds;
+		if (dirty) {
+			if (!unsavedCommentIds.includes(commentId)) {
+				unsavedCommentIds.push(commentId);
+				this.setState({
+					unsavedCommentIds,
+				});
+			}
+		} else {
+			this.setState({
+				unsavedCommentIds: unsavedCommentIds.filter(id=>id !== commentId),
+			});
+		}
+	};
+
 	render() {
 		if (this.state.loading) return <h1>Loading...</h1>;
 		const { reference } = this.state.consultationData;
@@ -333,6 +351,10 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 
 		return (
 			<Fragment>
+				<Prompt
+					when={this.state.unsavedCommentIds.length > 0}
+					message={`You have ${this.state.unsavedCommentIds.length} unsaved ${this.state.unsavedCommentIds.length === 1 ? "change" : "changes"}. Continue without saving?`}
+				/>
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">
@@ -426,6 +448,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																							comment={comment}
 																							saveHandler={this.saveCommentHandler}
 																							deleteHandler={this.deleteCommentHandler}
+																							updateUnsavedCommentIds={this.updateUnsavedCommentIds }
 																						/>
 																					);
 																				})}
