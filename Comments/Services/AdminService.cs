@@ -9,7 +9,8 @@ namespace Comments.Services
 	{
 		int DeleteAllData();
 		int DeleteAllSubmissionsFromUser(Guid usersSubmissionsToDelete);
-		int InsertQuestionsForAdmin(int consultationId);
+		int InsertQuestionsForDocument1And2InConsultation(int consultationId);
+		int InsertQuestionsForConsultation(int consultationId);
 	}
 
 	/// <summary>
@@ -48,9 +49,14 @@ namespace Comments.Services
 		    return _dbContext.DeleteAllSubmissionsFromUser(usersSubmissionsToDelete);
 	    }
 
-	    public int InsertQuestionsForAdmin(int consultationId)
+	    public int InsertQuestionsForDocument1And2InConsultation(int consultationId)
 	    {
-		    return _dbContext.InsertQuestionsWithScript(consultationId);
+		    return _dbContext.InsertQuestionsWithScriptForDocument1And2InConsultation(consultationId);
+	    }
+
+	    public int InsertQuestionsForConsultation(int consultationId)
+	    {
+		    return _dbContext.InsertQuestionsWithScriptForConsultation(consultationId);
 	    }
 	}
 }
