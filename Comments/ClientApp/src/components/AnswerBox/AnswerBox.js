@@ -76,9 +76,9 @@ export class AnswerBox extends Component<PropsType, StateType> {
 								disabled={readOnly}
 								id={this.props.unique}
 								className="form__input form__input--textarea"
-								onChange={this.textareaChangeHandler}
+								onInput={this.textareaChangeHandler}
 								placeholder="Enter your answer here"
-								value={answerText}/>
+								defaultValue={answerText}/>
 						</div>
 						{!readOnly && answerText && answerText.length > 0 ?
 							unsavedChanges ?
