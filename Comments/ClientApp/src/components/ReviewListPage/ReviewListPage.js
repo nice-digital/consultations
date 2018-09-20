@@ -309,15 +309,15 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		deleteCommentHandler(e, comment, this);
 	};
 
-	saveAnswerHandler = (e: Event, answer: AnswerType) => {
-		saveAnswerHandler(e, answer, this);
+	saveAnswerHandler = (e: Event, answer: AnswerType, questionId: number) => {
+		saveAnswerHandler(e, answer, questionId, this);
 	};
 
 	deleteAnswerHandler = (e: Event, questionId: number, answerId: number) => {
 		deleteAnswerHandler(e, questionId, answerId, this);
 	};
 
-	updateUnsavedIds = (commentId: number, dirty: boolean) => {
+	updateUnsavedIds = (commentId: string, dirty: boolean) => {
 		updateUnsavedIds(commentId, dirty, this);
 	};
 
