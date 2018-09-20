@@ -125,7 +125,6 @@ namespace Comments
 		        options.ForwardedHeaders = ForwardedHeaders.All;
 				options.KnownNetworks.Clear();
 				options.KnownProxies.Clear();
-			    options.ForwardLimit = 3;
 		    });
 
 			services.AddCors(options =>
