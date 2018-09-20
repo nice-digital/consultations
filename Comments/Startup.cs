@@ -115,12 +115,6 @@ namespace Comments
             //    });
             //}
 
-	        services.AddHttpsRedirection(options =>
-	        {
-		        options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
-		        options.HttpsPort = 443;
-	        });
-
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
