@@ -123,6 +123,8 @@ namespace Comments
 	        services.Configure<ForwardedHeadersOptions>(options =>
 	        {
 		        options.ForwardedHeaders = ForwardedHeaders.All;
+				options.KnownNetworks.Clear();
+				options.KnownProxies.Clear();
 			    options.ForwardLimit = 3;
 		    });
 
