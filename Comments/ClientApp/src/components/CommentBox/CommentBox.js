@@ -48,7 +48,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 			comment,
 			unsavedChanges: true,
 		});
-		this.props.updateUnsavedIds(comment.commentId, true);
+		this.props.updateUnsavedIds(`${comment.commentId}c`, true);
 	};
 
 	static getDerivedStateFromProps(nextProps: any, prevState: any) {

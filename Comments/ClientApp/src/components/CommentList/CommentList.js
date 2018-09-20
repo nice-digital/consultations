@@ -11,11 +11,12 @@ import {
 	saveCommentHandler,
 	deleteCommentHandler,
 	saveAnswerHandler,
-	deleteAnswerHandler
+	deleteAnswerHandler,
 } from "../../helpers/editing-and-deleting";
 import {pullFocusById} from "../../helpers/accessibility-helpers";
 import {mobileWidth} from "../../constants";
 import {getElementPositionWithinDocument, getSectionTitle} from "../../helpers/utils";
+import {updateUnsavedIds} from "../../helpers/unsaved-comments";
 
 import {CommentBox} from "../CommentBox/CommentBox";
 import {Question} from "../Question/Question";
@@ -49,7 +50,7 @@ type StateType = {
 	shouldShowCommentsTab: boolean,
 	shouldShowQuestionsTab: boolean,
 	error: string,
-	unsavedCommentIds: Array<number>,
+	unsavedIds: Array<number>,
 };
 
 type ContextType = any;
@@ -71,7 +72,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			shouldShowDrawer: false,
 			shouldShowCommentsTab: false,
 			shouldShowQuestionsTab: false,
-			unsavedCommentIds: [],
+			unsavedIds: [],
 		};
 
 
@@ -104,7 +105,7 @@ export class CommentList extends Component<PropsType, StateType> {
 				drawerExpandedWidth: false,
 				drawerOpen: false,
 				drawerMobile: false,
-				unsavedCommentIds: [],
+				unsavedIds: [],
 			};
 		}
 	}
@@ -142,7 +143,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		if (oldRoute !== newRoute) {
 			this.setState({
 				loading: true,
-				unsavedCommentIds: [],
+				unsavedIds: [],
 			});
 			this.loadComments();
 		}
@@ -203,6 +204,10 @@ export class CommentList extends Component<PropsType, StateType> {
 		deleteAnswerHandler(e, questionId, answerId, this);
 	};
 
+	updateUnsavedIds = (commentId: number, dirty: boolean) => {
+		updateUnsavedIds(commentId, dirty, this);
+	};
+
 	//old drawer code:
 	isMobile = () => {
 		if (typeof document !== "undefined") {
@@ -247,22 +252,6 @@ export class CommentList extends Component<PropsType, StateType> {
 		}
 	};
 
-	updateUnsavedIds = (commentId: number, dirty: boolean) => {
-		const unsavedCommentIds = this.state.unsavedCommentIds;
-		if (dirty) {
-			if (!unsavedCommentIds.includes(commentId)) {
-				unsavedCommentIds.push(commentId);
-				this.setState({
-					unsavedCommentIds,
-				});
-			}
-		} else {
-			this.setState({
-				unsavedCommentIds: unsavedCommentIds.filter(id => id !== commentId),
-			});
-		}
-	};
-
 	render() {
 		if (!this.state.shouldShowDrawer) {
 			return null;
@@ -283,8 +272,8 @@ export class CommentList extends Component<PropsType, StateType> {
 		return (
 			<Fragment>
 				<Prompt
-					when={this.state.unsavedCommentIds.length > 0}
-					message={`You have ${this.state.unsavedCommentIds.length} unsaved ${this.state.unsavedCommentIds.length === 1 ? "change" : "changes"}. Continue without saving?`}
+					when={this.state.unsavedIds.length > 0}
+					message={`You have ${this.state.unsavedIds.length} unsaved ${this.state.unsavedIds.length === 1 ? "change" : "changes"}. Continue without saving?`}
 				/>
 				<LiveMessage message={a11yMessage()} aria-live="assertive"/>
 				<section aria-label="Commenting panel"
@@ -402,8 +391,10 @@ export class CommentList extends Component<PropsType, StateType> {
 														<p>Please answer the following questions</p>
 														<ul className="CommentList list--unstyled">
 															{this.state.questions.map((question) => {
+																const isUnsaved = this.state.unsavedIds.includes(`${question.questionId}q`);
 																return (
 																	<Question
+																		isUnsaved={isUnsaved}
 																		updateUnsavedIds={this.updateUnsavedIds}
 																		readOnly={!this.state.allowComments}
 																		key={question.questionId}

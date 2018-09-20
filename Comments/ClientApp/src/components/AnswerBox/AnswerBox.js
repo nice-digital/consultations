@@ -37,7 +37,7 @@ export class AnswerBox extends Component<PropsType, StateType> {
 		const answer = this.state.answer;
 		answer.answerText = e.target.value;
 		const unsavedChanges = !(answer.answerId === -1 && answer.answerText.length === 0);
-		this.props.updateUnsavedIds(answer.questionId, unsavedChanges);
+		this.props.updateUnsavedIds(`${answer.questionId}q`, unsavedChanges);
 		this.setState({
 			answer,
 			unsavedChanges,
@@ -71,7 +71,7 @@ export class AnswerBox extends Component<PropsType, StateType> {
 		return (
 
 			<Fragment>
-				<section role="form" className={`${unsavedChanges ? "monkey" : ""}`}>
+				<section role="form">
 					<form onSubmit={e => this.props.saveAnswerHandler(e, answer, this.props.questionId)} className="mb--0">
 						<div className="form__group form__group--textarea mb--b">
 							<textarea

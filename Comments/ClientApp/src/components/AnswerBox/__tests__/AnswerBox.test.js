@@ -33,19 +33,6 @@ describe("[ClientApp] ", () => {
 			expect(wrapper.find("textarea").props().value).toEqual("some answer text");
 		});
 
-		it("unsavedChanges state is updated correctly on text area change", () => {
-			const wrapper = mount(<AnswerBox {...answerPropsWithAnswer} />);
-			expect(wrapper.state().unsavedChanges).toEqual(false);
-			const textArea = wrapper.find("textarea");
-			textArea.simulate("change", {
-				target: {
-					value: "an updated answer",
-				},
-			});
-			expect(wrapper.state().answer.answerText).toEqual("an updated answer");
-			expect(wrapper.state().unsavedChanges).toEqual(true);
-		});
-
 		it("should update UnsavedChanges if lastupdateddate has changed", () => {
 			const wrapper = mount(<AnswerBox {...answerPropsWithAnswer} />);
 			wrapper.setState({unsavedChanges: true});
@@ -83,7 +70,6 @@ describe("[ClientApp] ", () => {
 			const wrapper = mount(
 				<AnswerBox {...answerPropsWithAnswer} />
 			);
-
 			expect(toJson(wrapper, {
 				noKey: true,
 				mode: "deep",
@@ -94,7 +80,6 @@ describe("[ClientApp] ", () => {
 			const wrapper = mount(
 				<AnswerBox {...answerPropsWithoutAnswer} />
 			);
-
 			expect(toJson(wrapper, {
 				noKey: true,
 				mode: "deep",

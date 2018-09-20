@@ -67,19 +67,6 @@ describe("[ClientApp] ", () => {
 			expect(wrapper.find("li").length).toEqual(5);
 		});
 
-		it("renders the 'no comments' message if the comments array is empty", async () => {
-			mock.onGet().reply(200, EmptyCommentsResponse);
-			const wrapper = mount(
-				<MemoryRouter>
-					<LiveAnnouncer>
-						<CommentList {...fakeProps} />
-					</LiveAnnouncer>
-				</MemoryRouter>);
-			await nextTick();
-			wrapper.update();
-			expect(wrapper.find("p").last().text()).toEqual("No comments yet");
-		});
-
 		it("has state with an empty array of comments", () => {
 			mock.onGet().reply(200, EmptyCommentsResponse);
 			const wrapper = shallow(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>).find("CommentList").dive();

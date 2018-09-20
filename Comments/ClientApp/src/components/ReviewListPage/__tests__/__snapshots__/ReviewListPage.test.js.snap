@@ -70,693 +70,696 @@ Array [
         }
     />
 </div>,
-  <div
-    className="container"
->
+  Array [
+    "",
     <div
-        className="grid"
-    >
-        <div
-            data-g="12"
-        >
-            <aside
-                className="phase-banner mt--b"
+      className="container"
+>
+      <div
+            className="grid"
+      >
+            <div
+                  data-g="12"
             >
-                <span
-                    className="phase-banner__tag"
-                    onClick={[Function]}
-                    role="button"
-                >
-                    <span
-                        className="tag tag--impact tag--agile"
-                    >
-                        beta
-                    </span>
-                </span>
-                <span
-                    className="phase-banner__label"
-                >
-                    NICE Consultations
-                     is in development which means that some features may not work fully.
-                     
-                    <a
-                        href="https://github.com/nhsevidence/consultations"
-                        rel="noopener noreferrer"
-                        target="_blank"
-                    >
-                        Report an issue
-                    </a>
-                </span>
-            </aside>
-            <nav
-                aria-label="Breadcrumbs"
-            >
-                <p
-                    className="visually-hidden"
-                >
-                    You are here:
-                </p>
-                <ol
-                    className="breadcrumbs"
-                    itemScope={true}
-                    itemType="http://schema.org/BreadcrumbList"
-                >
-                    <li
-                        className="breadcrumbs__crumb"
-                        itemProp="itemListElement"
-                        itemScope={true}
-                        itemType="http://schema.org/ListItem"
-                    >
-                        <a
-                            href="/"
+                  <aside
+                        className="phase-banner mt--b"
+                  >
+                        <span
+                              className="phase-banner__tag"
+                              onClick={[Function]}
+                              role="button"
                         >
-                            Home
-                        </a>
-                        <meta
-                            content={0}
-                            itemProp="position"
-                        />
-                    </li>
-                    <li
-                        className="breadcrumbs__crumb"
-                        itemProp="itemListElement"
-                        itemScope={true}
-                        itemType="http://schema.org/ListItem"
-                    >
-                        <a
-                            href="/guidance/indevelopment/gid-ta10232/consultation/"
+                              <span
+                                    className="tag tag--impact tag--agile"
+                              >
+                                    beta
+                              </span>
+                        </span>
+                        <span
+                              className="phase-banner__label"
                         >
-                            Consultation title
-                        </a>
-                        <meta
-                            content={1}
-                            itemProp="position"
-                        />
-                    </li>
-                    <li
-                        className="breadcrumbs__crumb"
-                        itemProp="itemListElement"
-                        itemScope={true}
-                        itemType="http://schema.org/ListItem"
-                    >
-                        <a
-                            href="/consultations/1/1/introduction"
+                              NICE Consultations
+                               is in development which means that some features may not work fully.
+                               
+                              <a
+                                    href="https://github.com/nhsevidence/consultations"
+                                    rel="noopener noreferrer"
+                                    target="_blank"
+                              >
+                                    Report an issue
+                              </a>
+                        </span>
+                  </aside>
+                  <nav
+                        aria-label="Breadcrumbs"
+                  >
+                        <p
+                              className="visually-hidden"
                         >
-                            Consultation documents
-                        </a>
-                        <meta
-                            content={2}
-                            itemProp="position"
-                        />
-                    </li>
-                </ol>
-            </nav>
-            <main
-                role="main"
-            >
-                <div
-                    className="page-header"
-                >
-                    <undefined />
-                    <div
-                        className="grid"
-                    >
+                              You are here:
+                        </p>
+                        <ol
+                              className="breadcrumbs"
+                              itemScope={true}
+                              itemType="http://schema.org/BreadcrumbList"
+                        >
+                              <li
+                                    className="breadcrumbs__crumb"
+                                    itemProp="itemListElement"
+                                    itemScope={true}
+                                    itemType="http://schema.org/ListItem"
+                              >
+                                    <a
+                                          href="/"
+                                    >
+                                          Home
+                                    </a>
+                                    <meta
+                                          content={0}
+                                          itemProp="position"
+                                    />
+                              </li>
+                              <li
+                                    className="breadcrumbs__crumb"
+                                    itemProp="itemListElement"
+                                    itemScope={true}
+                                    itemType="http://schema.org/ListItem"
+                              >
+                                    <a
+                                          href="/guidance/indevelopment/gid-ta10232/consultation/"
+                                    >
+                                          Consultation title
+                                    </a>
+                                    <meta
+                                          content={1}
+                                          itemProp="position"
+                                    />
+                              </li>
+                              <li
+                                    className="breadcrumbs__crumb"
+                                    itemProp="itemListElement"
+                                    itemScope={true}
+                                    itemType="http://schema.org/ListItem"
+                              >
+                                    <a
+                                          href="/consultations/1/1/introduction"
+                                    >
+                                          Consultation documents
+                                    </a>
+                                    <meta
+                                          content={2}
+                                          itemProp="position"
+                                    />
+                              </li>
+                        </ol>
+                  </nav>
+                  <main
+                        role="main"
+                  >
                         <div
-                            className="sticky"
-                            data-g="12 md:3"
+                              className="page-header"
                         >
-                            <div
-                                className="filter-panel"
-                            >
-                                <button
-                                    aria-controls="filter-panel-body"
-                                    aria-expanded={true}
-                                    className="filter-panel__heading"
-                                    onClick={[Function]}
-                                    type="button"
-                                >
-                                    Filter
-                                </button>
-                                <div
-                                    aria-hidden={false}
-                                    className="filter-panel__body"
-                                    id="filter-panel-body"
-                                >
+                              <undefined />
+                              <div
+                                    className="grid"
+                              >
                                     <div
-                                        className="filter-group"
+                                          className="sticky"
+                                          data-g="12 md:3"
                                     >
-                                        <button
-                                            aria-controls="group-QuestionsOrComments"
-                                            aria-expanded={true}
-                                            className="filter-group__heading gtm-topic-list-filter-group-collapse"
-                                            onClick={[Function]}
-                                            type="button"
-                                        >
-                                            <div
-                                                id="group-title-QuestionsOrComments"
-                                            >
-                                                Response type
-                                            </div>
-                                        </button>
-                                        <div
-                                            aria-hidden={false}
-                                            aria-labelledby="group-title-QuestionsOrComments"
-                                            className="filter-group__options"
-                                            id="group-QuestionsOrComments"
-                                            role="group"
-                                        >
-                                            <label
-                                                className="filter-group__option"
-                                                htmlFor="filter_QuestionsOrComments_Questions"
-                                            >
-                                                <input
-                                                    aria-controls="results-info-count"
-                                                    checked={false}
-                                                    className="gtm-topic-list-filter-select"
-                                                    id="filter_QuestionsOrComments_Questions"
-                                                    name="QuestionsOrComments"
-                                                    onChange={[Function]}
-                                                    title="Response type - Questions"
-                                                    type="checkbox"
-                                                    value="Questions"
-                                                />
-                                                Questions
-                                            </label>
-                                            <label
-                                                className="filter-group__option"
-                                                htmlFor="filter_QuestionsOrComments_Comments"
-                                            >
-                                                <input
-                                                    aria-controls="results-info-count"
-                                                    checked={false}
-                                                    className="gtm-topic-list-filter-select"
-                                                    id="filter_QuestionsOrComments_Comments"
-                                                    name="QuestionsOrComments"
-                                                    onChange={[Function]}
-                                                    title="Response type - Comments"
-                                                    type="checkbox"
-                                                    value="Comments"
-                                                />
-                                                Comments
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div
-                                        className="filter-group"
-                                    >
-                                        <button
-                                            aria-controls="group-Documents"
-                                            aria-expanded={true}
-                                            className="filter-group__heading gtm-topic-list-filter-group-collapse"
-                                            onClick={[Function]}
-                                            type="button"
-                                        >
-                                            <div
-                                                id="group-title-Documents"
-                                            >
-                                                Document
-                                            </div>
-                                        </button>
-                                        <div
-                                            aria-hidden={false}
-                                            aria-labelledby="group-title-Documents"
-                                            className="filter-group__options"
-                                            id="group-Documents"
-                                            role="group"
-                                        >
-                                            <label
-                                                className="filter-group__option"
-                                                htmlFor="filter_Documents_1"
-                                            >
-                                                <input
-                                                    aria-controls="results-info-count"
-                                                    checked={false}
-                                                    className="gtm-topic-list-filter-select"
-                                                    id="filter_Documents_1"
-                                                    name="Documents"
-                                                    onChange={[Function]}
-                                                    title="Document - Unstable angina and NSTEMI"
-                                                    type="checkbox"
-                                                    value="1"
-                                                />
-                                                Unstable angina and NSTEMI
-                                            </label>
-                                            <label
-                                                className="filter-group__option"
-                                                htmlFor="filter_Documents_2"
-                                            >
-                                                <input
-                                                    aria-controls="results-info-count"
-                                                    checked={false}
-                                                    className="gtm-topic-list-filter-select"
-                                                    id="filter_Documents_2"
-                                                    name="Documents"
-                                                    onChange={[Function]}
-                                                    title="Document - Glaucoma: diagnosis and management – Full Guideline"
-                                                    type="checkbox"
-                                                    value="2"
-                                                />
-                                                Glaucoma: diagnosis and management – Full Guideline
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div
-                            data-g="12 md:9"
-                        >
-                            <div
-                                className="results-info"
-                            >
-                                <h2
-                                    className="results-info__count"
-                                    id="results-info-count"
-                                >
-                                    <span>
-                                        Showing 3 questions and 2 comments
-                                    </span>
-                                </h2>
-                            </div>
-                            <div
-                                data-qa-sel="comment-list-wrapper"
-                            >
-                                <div>
-                                    <ul
-                                        className="CommentList list--unstyled"
-                                    >
-                                        <li
-                                            className="CommentBox"
-                                        >
-                                            <h1
-                                                className="CommentBox__title mt--0 mb--d"
-                                                data-qa-sel="comment-box-title"
-                                            >
-                                                Question on: 
-                                                <span
-                                                    className="text-lowercase"
-                                                >
-                                                    Consultation
-                                                </span>
-                                                <br />
-                                            </h1>
-                                            <p>
-                                                <strong>
-                                                    Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
-                                                </strong>
-                                            </p>
-                                            <section
-                                                role="form"
-                                            >
-                                                <form
-                                                    className="mb--0"
-                                                    onSubmit={[Function]}
-                                                >
-                                                    <div
-                                                        className="form__group form__group--textarea mb--b"
-                                                    >
-                                                        <textarea
-                                                            className="form__input form__input--textarea"
-                                                            data-qa-sel="Comment-text-area"
-                                                            disabled={false}
-                                                            id="Answer11"
-                                                            onChange={[Function]}
-                                                            placeholder="Enter your answer here"
-                                                            value="gg"
-                                                        />
-                                                    </div>
-                                                    <span
-                                                        className="ml--0 mb--0 CommentBox__savedIndicator"
-                                                    >
-                                                        Saved
-                                                    </span>
-                                                    <button
-                                                        className="btn mr--0 mb--0 right"
-                                                        data-qa-sel="delete-comment-button"
-                                                        onClick={[Function]}
-                                                    >
-                                                        Delete
-                                                    </button>
-                                                </form>
-                                            </section>
-                                        </li>
-                                        <li
-                                            className="CommentBox"
-                                        >
-                                            <h1
-                                                className="CommentBox__title mt--0 mb--d"
-                                                data-qa-sel="comment-box-title"
-                                            >
-                                                Question on: 
-                                                <span
-                                                    className="text-lowercase"
-                                                >
-                                                    Document
-                                                </span>
-                                                <br />
-                                            </h1>
-                                            <p>
-                                                <strong>
-                                                    Would implementation of any of the draft recommendations have significant cost implications?
-                                                </strong>
-                                            </p>
-                                            <section
-                                                role="form"
-                                            >
-                                                <form
-                                                    className="mb--0"
-                                                    onSubmit={[Function]}
-                                                >
-                                                    <div
-                                                        className="form__group form__group--textarea mb--b"
-                                                    >
-                                                        <textarea
-                                                            className="form__input form__input--textarea"
-                                                            data-qa-sel="Comment-text-area"
-                                                            disabled={false}
-                                                            id="Answer-1"
-                                                            onChange={[Function]}
-                                                            placeholder="Enter your answer here"
-                                                        />
-                                                    </div>
-                                                </form>
-                                            </section>
-                                        </li>
-                                        <li
-                                            className="CommentBox"
-                                        >
-                                            <h1
-                                                className="CommentBox__title mt--0 mb--d"
-                                                data-qa-sel="comment-box-title"
-                                            >
-                                                Question on: 
-                                                <span
-                                                    className="text-lowercase"
-                                                >
-                                                    Document
-                                                </span>
-                                                <br />
-                                            </h1>
-                                            <p>
-                                                <strong>
-                                                    Would implementation of any of the draft recommendations have cost implications?
-                                                </strong>
-                                            </p>
-                                            <section
-                                                role="form"
-                                            >
-                                                <form
-                                                    className="mb--0"
-                                                    onSubmit={[Function]}
-                                                >
-                                                    <div
-                                                        className="form__group form__group--textarea mb--b"
-                                                    >
-                                                        <textarea
-                                                            className="form__input form__input--textarea"
-                                                            data-qa-sel="Comment-text-area"
-                                                            disabled={false}
-                                                            id="Answer-1"
-                                                            onChange={[Function]}
-                                                            placeholder="Enter your answer here"
-                                                        />
-                                                    </div>
-                                                </form>
-                                            </section>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <ul
-                                    className="CommentList list--unstyled"
-                                >
-                                    <li
-                                        className="CommentBox"
-                                    >
-                                        <section
-                                            role="form"
-                                        >
-                                            <h1
-                                                className="CommentBox__title mt--0 mb--d"
-                                                data-qa-sel="comment-box-title"
-                                            >
-                                                Comment on: 
-                                                <span
-                                                    className="text-lowercase"
-                                                >
-                                                    Document
-                                                </span>
-                                                <br />
-                                                Unstable angina and NSTEMI
-                                            </h1>
-                                            <form
-                                                className="mb--0"
-                                                onSubmit={[Function]}
-                                            >
-                                                <div
-                                                    className="form__group form__group--textarea mb--b"
-                                                >
-                                                    <label
-                                                        className="form__label visually-hidden"
-                                                        htmlFor="Comment5"
-                                                    >
-                                                        Comment on 
-                                                        Document
-                                                        , 
-                                                        Unstable angina and NSTEMI
-                                                    </label>
-                                                    <textarea
-                                                        className="form__input form__input--textarea"
-                                                        data-qa-sel="Comment-text-area"
-                                                        disabled={false}
-                                                        id="Comment5"
-                                                        onChange={[Function]}
-                                                        placeholder="Enter your comment here"
-                                                        tabIndex={0}
-                                                        value="ffffc"
-                                                    />
-                                                </div>
-                                                <span
-                                                    className="ml--0 mb--0 CommentBox__savedIndicator"
-                                                >
-                                                    Saved
-                                                </span>
+                                          <div
+                                                className="filter-panel"
+                                          >
                                                 <button
-                                                    className="btn mr--0 mb--0 right"
-                                                    data-qa-sel="delete-comment-button"
-                                                    onClick={[Function]}
+                                                      aria-controls="filter-panel-body"
+                                                      aria-expanded={true}
+                                                      className="filter-panel__heading"
+                                                      onClick={[Function]}
+                                                      type="button"
                                                 >
-                                                    Delete
+                                                      Filter
                                                 </button>
-                                            </form>
-                                        </section>
-                                    </li>
-                                    <li
-                                        className="CommentBox"
-                                    >
-                                        <section
-                                            role="form"
-                                        >
-                                            <h1
-                                                className="CommentBox__title mt--0 mb--d"
-                                                data-qa-sel="comment-box-title"
-                                            >
-                                                Comment on: 
-                                                <span
-                                                    className="text-lowercase"
-                                                >
-                                                    Chapter
-                                                </span>
-                                                <br />
-                                                Introduction 
-                                            </h1>
-                                            <form
-                                                className="mb--0"
-                                                onSubmit={[Function]}
-                                            >
                                                 <div
-                                                    className="form__group form__group--textarea mb--b"
+                                                      aria-hidden={false}
+                                                      className="filter-panel__body"
+                                                      id="filter-panel-body"
                                                 >
-                                                    <label
-                                                        className="form__label visually-hidden"
-                                                        htmlFor="Comment7"
-                                                    >
-                                                        Comment on 
-                                                        Chapter
-                                                        , 
-                                                        Introduction 
-                                                    </label>
-                                                    <textarea
-                                                        className="form__input form__input--textarea"
-                                                        data-qa-sel="Comment-text-area"
-                                                        disabled={false}
-                                                        id="Comment7"
-                                                        onChange={[Function]}
-                                                        placeholder="Enter your comment here"
-                                                        tabIndex={0}
-                                                        value="ffff"
-                                                    />
+                                                      <div
+                                                            className="filter-group"
+                                                      >
+                                                            <button
+                                                                  aria-controls="group-QuestionsOrComments"
+                                                                  aria-expanded={true}
+                                                                  className="filter-group__heading gtm-topic-list-filter-group-collapse"
+                                                                  onClick={[Function]}
+                                                                  type="button"
+                                                            >
+                                                                  <div
+                                                                        id="group-title-QuestionsOrComments"
+                                                                  >
+                                                                        Response type
+                                                                  </div>
+                                                            </button>
+                                                            <div
+                                                                  aria-hidden={false}
+                                                                  aria-labelledby="group-title-QuestionsOrComments"
+                                                                  className="filter-group__options"
+                                                                  id="group-QuestionsOrComments"
+                                                                  role="group"
+                                                            >
+                                                                  <label
+                                                                        className="filter-group__option"
+                                                                        htmlFor="filter_QuestionsOrComments_Questions"
+                                                                  >
+                                                                        <input
+                                                                              aria-controls="results-info-count"
+                                                                              checked={false}
+                                                                              className="gtm-topic-list-filter-select"
+                                                                              id="filter_QuestionsOrComments_Questions"
+                                                                              name="QuestionsOrComments"
+                                                                              onChange={[Function]}
+                                                                              title="Response type - Questions"
+                                                                              type="checkbox"
+                                                                              value="Questions"
+                                                                        />
+                                                                        Questions
+                                                                  </label>
+                                                                  <label
+                                                                        className="filter-group__option"
+                                                                        htmlFor="filter_QuestionsOrComments_Comments"
+                                                                  >
+                                                                        <input
+                                                                              aria-controls="results-info-count"
+                                                                              checked={false}
+                                                                              className="gtm-topic-list-filter-select"
+                                                                              id="filter_QuestionsOrComments_Comments"
+                                                                              name="QuestionsOrComments"
+                                                                              onChange={[Function]}
+                                                                              title="Response type - Comments"
+                                                                              type="checkbox"
+                                                                              value="Comments"
+                                                                        />
+                                                                        Comments
+                                                                  </label>
+                                                            </div>
+                                                      </div>
+                                                      <div
+                                                            className="filter-group"
+                                                      >
+                                                            <button
+                                                                  aria-controls="group-Documents"
+                                                                  aria-expanded={true}
+                                                                  className="filter-group__heading gtm-topic-list-filter-group-collapse"
+                                                                  onClick={[Function]}
+                                                                  type="button"
+                                                            >
+                                                                  <div
+                                                                        id="group-title-Documents"
+                                                                  >
+                                                                        Document
+                                                                  </div>
+                                                            </button>
+                                                            <div
+                                                                  aria-hidden={false}
+                                                                  aria-labelledby="group-title-Documents"
+                                                                  className="filter-group__options"
+                                                                  id="group-Documents"
+                                                                  role="group"
+                                                            >
+                                                                  <label
+                                                                        className="filter-group__option"
+                                                                        htmlFor="filter_Documents_1"
+                                                                  >
+                                                                        <input
+                                                                              aria-controls="results-info-count"
+                                                                              checked={false}
+                                                                              className="gtm-topic-list-filter-select"
+                                                                              id="filter_Documents_1"
+                                                                              name="Documents"
+                                                                              onChange={[Function]}
+                                                                              title="Document - Unstable angina and NSTEMI"
+                                                                              type="checkbox"
+                                                                              value="1"
+                                                                        />
+                                                                        Unstable angina and NSTEMI
+                                                                  </label>
+                                                                  <label
+                                                                        className="filter-group__option"
+                                                                        htmlFor="filter_Documents_2"
+                                                                  >
+                                                                        <input
+                                                                              aria-controls="results-info-count"
+                                                                              checked={false}
+                                                                              className="gtm-topic-list-filter-select"
+                                                                              id="filter_Documents_2"
+                                                                              name="Documents"
+                                                                              onChange={[Function]}
+                                                                              title="Document - Glaucoma: diagnosis and management – Full Guideline"
+                                                                              type="checkbox"
+                                                                              value="2"
+                                                                        />
+                                                                        Glaucoma: diagnosis and management – Full Guideline
+                                                                  </label>
+                                                            </div>
+                                                      </div>
                                                 </div>
-                                                <span
-                                                    className="ml--0 mb--0 CommentBox__savedIndicator"
+                                          </div>
+                                    </div>
+                                    <div
+                                          data-g="12 md:9"
+                                    >
+                                          <div
+                                                className="results-info"
+                                          >
+                                                <h2
+                                                      className="results-info__count"
+                                                      id="results-info-count"
                                                 >
-                                                    Saved
-                                                </span>
+                                                      <span>
+                                                            Showing 3 questions and 2 comments
+                                                      </span>
+                                                </h2>
+                                          </div>
+                                          <div
+                                                data-qa-sel="comment-list-wrapper"
+                                          >
+                                                <div>
+                                                      <ul
+                                                            className="CommentList list--unstyled"
+                                                      >
+                                                            <li
+                                                                  className="CommentBox"
+                                                            >
+                                                                  <h1
+                                                                        className="CommentBox__title mt--0 mb--d"
+                                                                        data-qa-sel="comment-box-title"
+                                                                  >
+                                                                        Question on: 
+                                                                        <span
+                                                                              className="text-lowercase"
+                                                                        >
+                                                                              Consultation
+                                                                        </span>
+                                                                        <br />
+                                                                  </h1>
+                                                                  <p>
+                                                                        <strong>
+                                                                              Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
+                                                                        </strong>
+                                                                  </p>
+                                                                  <section
+                                                                        role="form"
+                                                                  >
+                                                                        <form
+                                                                              className="mb--0"
+                                                                              onSubmit={[Function]}
+                                                                        >
+                                                                              <div
+                                                                                    className="form__group form__group--textarea mb--b"
+                                                                              >
+                                                                                    <textarea
+                                                                                          className="form__input form__input--textarea"
+                                                                                          data-qa-sel="Comment-text-area"
+                                                                                          disabled={false}
+                                                                                          id="Answer11"
+                                                                                          onChange={[Function]}
+                                                                                          placeholder="Enter your answer here"
+                                                                                          value="gg"
+                                                                                    />
+                                                                              </div>
+                                                                              <span
+                                                                                    className="ml--0 mb--0 CommentBox__savedIndicator"
+                                                                              >
+                                                                                    Saved
+                                                                              </span>
+                                                                              <button
+                                                                                    className="btn mr--0 mb--0 right"
+                                                                                    data-qa-sel="delete-comment-button"
+                                                                                    onClick={[Function]}
+                                                                              >
+                                                                                    Delete
+                                                                              </button>
+                                                                        </form>
+                                                                  </section>
+                                                            </li>
+                                                            <li
+                                                                  className="CommentBox"
+                                                            >
+                                                                  <h1
+                                                                        className="CommentBox__title mt--0 mb--d"
+                                                                        data-qa-sel="comment-box-title"
+                                                                  >
+                                                                        Question on: 
+                                                                        <span
+                                                                              className="text-lowercase"
+                                                                        >
+                                                                              Document
+                                                                        </span>
+                                                                        <br />
+                                                                  </h1>
+                                                                  <p>
+                                                                        <strong>
+                                                                              Would implementation of any of the draft recommendations have significant cost implications?
+                                                                        </strong>
+                                                                  </p>
+                                                                  <section
+                                                                        role="form"
+                                                                  >
+                                                                        <form
+                                                                              className="mb--0"
+                                                                              onSubmit={[Function]}
+                                                                        >
+                                                                              <div
+                                                                                    className="form__group form__group--textarea mb--b"
+                                                                              >
+                                                                                    <textarea
+                                                                                          className="form__input form__input--textarea"
+                                                                                          data-qa-sel="Comment-text-area"
+                                                                                          disabled={false}
+                                                                                          id="Answer-1"
+                                                                                          onChange={[Function]}
+                                                                                          placeholder="Enter your answer here"
+                                                                                    />
+                                                                              </div>
+                                                                        </form>
+                                                                  </section>
+                                                            </li>
+                                                            <li
+                                                                  className="CommentBox"
+                                                            >
+                                                                  <h1
+                                                                        className="CommentBox__title mt--0 mb--d"
+                                                                        data-qa-sel="comment-box-title"
+                                                                  >
+                                                                        Question on: 
+                                                                        <span
+                                                                              className="text-lowercase"
+                                                                        >
+                                                                              Document
+                                                                        </span>
+                                                                        <br />
+                                                                  </h1>
+                                                                  <p>
+                                                                        <strong>
+                                                                              Would implementation of any of the draft recommendations have cost implications?
+                                                                        </strong>
+                                                                  </p>
+                                                                  <section
+                                                                        role="form"
+                                                                  >
+                                                                        <form
+                                                                              className="mb--0"
+                                                                              onSubmit={[Function]}
+                                                                        >
+                                                                              <div
+                                                                                    className="form__group form__group--textarea mb--b"
+                                                                              >
+                                                                                    <textarea
+                                                                                          className="form__input form__input--textarea"
+                                                                                          data-qa-sel="Comment-text-area"
+                                                                                          disabled={false}
+                                                                                          id="Answer-1"
+                                                                                          onChange={[Function]}
+                                                                                          placeholder="Enter your answer here"
+                                                                                    />
+                                                                              </div>
+                                                                        </form>
+                                                                  </section>
+                                                            </li>
+                                                      </ul>
+                                                </div>
+                                                <ul
+                                                      className="CommentList list--unstyled"
+                                                >
+                                                      <li
+                                                            className="CommentBox"
+                                                      >
+                                                            <section
+                                                                  role="form"
+                                                            >
+                                                                  <h1
+                                                                        className="CommentBox__title mt--0 mb--d"
+                                                                        data-qa-sel="comment-box-title"
+                                                                  >
+                                                                        Comment on: 
+                                                                        <span
+                                                                              className="text-lowercase"
+                                                                        >
+                                                                              Document
+                                                                        </span>
+                                                                        <br />
+                                                                        Unstable angina and NSTEMI
+                                                                  </h1>
+                                                                  <form
+                                                                        className="mb--0"
+                                                                        onSubmit={[Function]}
+                                                                  >
+                                                                        <div
+                                                                              className="form__group form__group--textarea mb--b"
+                                                                        >
+                                                                              <label
+                                                                                    className="form__label visually-hidden"
+                                                                                    htmlFor="Comment5"
+                                                                              >
+                                                                                    Comment on 
+                                                                                    Document
+                                                                                    , 
+                                                                                    Unstable angina and NSTEMI
+                                                                              </label>
+                                                                              <textarea
+                                                                                    className="form__input form__input--textarea"
+                                                                                    data-qa-sel="Comment-text-area"
+                                                                                    disabled={false}
+                                                                                    id="Comment5"
+                                                                                    onChange={[Function]}
+                                                                                    placeholder="Enter your comment here"
+                                                                                    tabIndex={0}
+                                                                                    value="ffffc"
+                                                                              />
+                                                                        </div>
+                                                                        <span
+                                                                              className="ml--0 mb--0 CommentBox__savedIndicator"
+                                                                        >
+                                                                              Saved
+                                                                        </span>
+                                                                        <button
+                                                                              className="btn mr--0 mb--0 right"
+                                                                              data-qa-sel="delete-comment-button"
+                                                                              onClick={[Function]}
+                                                                        >
+                                                                              Delete
+                                                                        </button>
+                                                                  </form>
+                                                            </section>
+                                                      </li>
+                                                      <li
+                                                            className="CommentBox"
+                                                      >
+                                                            <section
+                                                                  role="form"
+                                                            >
+                                                                  <h1
+                                                                        className="CommentBox__title mt--0 mb--d"
+                                                                        data-qa-sel="comment-box-title"
+                                                                  >
+                                                                        Comment on: 
+                                                                        <span
+                                                                              className="text-lowercase"
+                                                                        >
+                                                                              Chapter
+                                                                        </span>
+                                                                        <br />
+                                                                        Introduction 
+                                                                  </h1>
+                                                                  <form
+                                                                        className="mb--0"
+                                                                        onSubmit={[Function]}
+                                                                  >
+                                                                        <div
+                                                                              className="form__group form__group--textarea mb--b"
+                                                                        >
+                                                                              <label
+                                                                                    className="form__label visually-hidden"
+                                                                                    htmlFor="Comment7"
+                                                                              >
+                                                                                    Comment on 
+                                                                                    Chapter
+                                                                                    , 
+                                                                                    Introduction 
+                                                                              </label>
+                                                                              <textarea
+                                                                                    className="form__input form__input--textarea"
+                                                                                    data-qa-sel="Comment-text-area"
+                                                                                    disabled={false}
+                                                                                    id="Comment7"
+                                                                                    onChange={[Function]}
+                                                                                    placeholder="Enter your comment here"
+                                                                                    tabIndex={0}
+                                                                                    value="ffff"
+                                                                              />
+                                                                        </div>
+                                                                        <span
+                                                                              className="ml--0 mb--0 CommentBox__savedIndicator"
+                                                                        >
+                                                                              Saved
+                                                                        </span>
+                                                                        <button
+                                                                              className="btn mr--0 mb--0 right"
+                                                                              data-qa-sel="delete-comment-button"
+                                                                              onClick={[Function]}
+                                                                        >
+                                                                              Delete
+                                                                        </button>
+                                                                  </form>
+                                                            </section>
+                                                      </li>
+                                                </ul>
+                                          </div>
+                                          <div
+                                                className="panel"
+                                          >
+                                                <p
+                                                      className="lead"
+                                                >
+                                                      You are about to submit your final response to NICE
+                                                </p>
+                                                <p>
+                                                      You must answer the following questions before you submit.
+                                                </p>
+                                                <p>
+                                                      <strong>
+                                                            Are you responding on behalf of an organisation?
+                                                      </strong>
+                                                </p>
+                                                <div>
+                                                      <div
+                                                            className="form__group form__group--radio form__group--inline"
+                                                      >
+                                                            <input
+                                                                  checked={false}
+                                                                  className="form__radio"
+                                                                  id="respondingAsOrganisation--true"
+                                                                  name="respondingAsOrganisation"
+                                                                  onChange={[Function]}
+                                                                  type="radio"
+                                                                  value="yes"
+                                                            />
+                                                            <label
+                                                                  className="form__label form__label--radio"
+                                                                  htmlFor="respondingAsOrganisation--true"
+                                                            >
+                                                                  Yes
+                                                            </label>
+                                                      </div>
+                                                      <div
+                                                            className="form__group form__group--radio form__group--inline"
+                                                      >
+                                                            <input
+                                                                  checked={false}
+                                                                  className="form__radio"
+                                                                  id="respondingAsOrganisation--false"
+                                                                  name="respondingAsOrganisation"
+                                                                  onChange={[Function]}
+                                                                  type="radio"
+                                                                  value="no"
+                                                            />
+                                                            <label
+                                                                  className="form__label form__label--radio"
+                                                                  data-qa-sel="respond-no-responding-as-org"
+                                                                  htmlFor="respondingAsOrganisation--false"
+                                                            >
+                                                                  No
+                                                            </label>
+                                                      </div>
+                                                </div>
+                                                <p>
+                                                      <strong>
+                                                            Do you or the organisation you represent have any links with the tobacco industry?
+                                                      </strong>
+                                                </p>
+                                                <p
+                                                      className="mb--0"
+                                                >
+                                                      This includes:
+                                                </p>
+                                                <ul
+                                                      className="mt--0"
+                                                >
+                                                      <li>
+                                                            current or past links
+                                                      </li>
+                                                      <li>
+                                                            direct or indirect links
+                                                      </li>
+                                                      <li>
+                                                            receiving funding from the tobacco industry.
+                                                      </li>
+                                                </ul>
+                                                <div>
+                                                      <div
+                                                            className="form__group form__group--radio form__group--inline"
+                                                      >
+                                                            <input
+                                                                  checked={false}
+                                                                  className="form__radio"
+                                                                  id="hasTobaccoLinks--true"
+                                                                  name="hasTobaccoLinks"
+                                                                  onChange={[Function]}
+                                                                  type="radio"
+                                                                  value="yes"
+                                                            />
+                                                            <label
+                                                                  className="form__label form__label--radio"
+                                                                  htmlFor="hasTobaccoLinks--true"
+                                                            >
+                                                                  Yes
+                                                            </label>
+                                                      </div>
+                                                      <div
+                                                            className="form__group form__group--radio form__group--inline"
+                                                      >
+                                                            <input
+                                                                  checked={false}
+                                                                  className="form__radio"
+                                                                  id="hasTobaccoLinks--false"
+                                                                  name="hasTobaccoLinks"
+                                                                  onChange={[Function]}
+                                                                  type="radio"
+                                                                  value="no"
+                                                            />
+                                                            <label
+                                                                  className="form__label form__label--radio"
+                                                                  data-qa-sel="respond-no-has-tobac-links"
+                                                                  htmlFor="hasTobaccoLinks--false"
+                                                            >
+                                                                  No
+                                                            </label>
+                                                      </div>
+                                                </div>
+                                                <p>
+                                                      <strong>
+                                                            Now submit your response to NICE
+                                                      </strong>
+                                                </p>
+                                                <p>
+                                                      After submission you won't be able to edit your comments further or add any extra comments.
+                                                </p>
                                                 <button
-                                                    className="btn mr--0 mb--0 right"
-                                                    data-qa-sel="delete-comment-button"
-                                                    onClick={[Function]}
+                                                      className="btn btn--cta"
+                                                      data-qa-sel="submit-comment-button"
+                                                      disabled={true}
+                                                      onClick={[Function]}
                                                 >
-                                                    Delete
+                                                      Submit my response
                                                 </button>
-                                            </form>
-                                        </section>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div
-                                className="panel"
-                            >
-                                <p
-                                    className="lead"
-                                >
-                                    You are about to submit your final response to NICE
-                                </p>
-                                <p>
-                                    You must answer the following questions before you submit.
-                                </p>
-                                <p>
-                                    <strong>
-                                        Are you responding on behalf of an organisation?
-                                    </strong>
-                                </p>
-                                <div>
-                                    <div
-                                        className="form__group form__group--radio form__group--inline"
-                                    >
-                                        <input
-                                            checked={false}
-                                            className="form__radio"
-                                            id="respondingAsOrganisation--true"
-                                            name="respondingAsOrganisation"
-                                            onChange={[Function]}
-                                            type="radio"
-                                            value="yes"
-                                        />
-                                        <label
-                                            className="form__label form__label--radio"
-                                            htmlFor="respondingAsOrganisation--true"
-                                        >
-                                            Yes
-                                        </label>
+                                          </div>
                                     </div>
-                                    <div
-                                        className="form__group form__group--radio form__group--inline"
-                                    >
-                                        <input
-                                            checked={false}
-                                            className="form__radio"
-                                            id="respondingAsOrganisation--false"
-                                            name="respondingAsOrganisation"
-                                            onChange={[Function]}
-                                            type="radio"
-                                            value="no"
-                                        />
-                                        <label
-                                            className="form__label form__label--radio"
-                                            data-qa-sel="respond-no-responding-as-org"
-                                            htmlFor="respondingAsOrganisation--false"
-                                        >
-                                            No
-                                        </label>
-                                    </div>
-                                </div>
-                                <p>
-                                    <strong>
-                                        Do you or the organisation you represent have any links with the tobacco industry?
-                                    </strong>
-                                </p>
-                                <p
-                                    className="mb--0"
-                                >
-                                    This includes:
-                                </p>
-                                <ul
-                                    className="mt--0"
-                                >
-                                    <li>
-                                        current or past links
-                                    </li>
-                                    <li>
-                                        direct or indirect links
-                                    </li>
-                                    <li>
-                                        receiving funding from the tobacco industry.
-                                    </li>
-                                </ul>
-                                <div>
-                                    <div
-                                        className="form__group form__group--radio form__group--inline"
-                                    >
-                                        <input
-                                            checked={false}
-                                            className="form__radio"
-                                            id="hasTobaccoLinks--true"
-                                            name="hasTobaccoLinks"
-                                            onChange={[Function]}
-                                            type="radio"
-                                            value="yes"
-                                        />
-                                        <label
-                                            className="form__label form__label--radio"
-                                            htmlFor="hasTobaccoLinks--true"
-                                        >
-                                            Yes
-                                        </label>
-                                    </div>
-                                    <div
-                                        className="form__group form__group--radio form__group--inline"
-                                    >
-                                        <input
-                                            checked={false}
-                                            className="form__radio"
-                                            id="hasTobaccoLinks--false"
-                                            name="hasTobaccoLinks"
-                                            onChange={[Function]}
-                                            type="radio"
-                                            value="no"
-                                        />
-                                        <label
-                                            className="form__label form__label--radio"
-                                            data-qa-sel="respond-no-has-tobac-links"
-                                            htmlFor="hasTobaccoLinks--false"
-                                        >
-                                            No
-                                        </label>
-                                    </div>
-                                </div>
-                                <p>
-                                    <strong>
-                                        Now submit your response to NICE
-                                    </strong>
-                                </p>
-                                <p>
-                                    After submission you won't be able to edit your comments further or add any extra comments.
-                                </p>
-                                <button
-                                    className="btn btn--cta"
-                                    data-qa-sel="submit-comment-button"
-                                    disabled={true}
-                                    onClick={[Function]}
-                                >
-                                    Submit my response
-                                </button>
-                            </div>
+                              </div>
                         </div>
-                    </div>
-                </div>
-            </main>
-        </div>
-    </div>
+                  </main>
+            </div>
+      </div>
 </div>,
+  ],
 ]
 `;

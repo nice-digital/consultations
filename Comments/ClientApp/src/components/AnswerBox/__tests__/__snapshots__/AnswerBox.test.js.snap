@@ -18,7 +18,7 @@ exports[`[ClientApp]  AnswerBox Component should match snapshot with answer 1`] 
         id="string"
         onChange={[Function]}
         placeholder="Enter your answer here"
-        value="an updated answer"
+        value="some answer text"
       />
     </div>
     <span
