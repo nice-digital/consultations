@@ -380,11 +380,11 @@ Array [
                                                                                     <textarea
                                                                                           className="form__input form__input--textarea"
                                                                                           data-qa-sel="Comment-text-area"
+                                                                                          defaultValue="gg"
                                                                                           disabled={false}
                                                                                           id="Answer11"
-                                                                                          onChange={[Function]}
+                                                                                          onInput={[Function]}
                                                                                           placeholder="Enter your answer here"
-                                                                                          value="gg"
                                                                                     />
                                                                               </div>
                                                                               <span
@@ -437,7 +437,7 @@ Array [
                                                                                           data-qa-sel="Comment-text-area"
                                                                                           disabled={false}
                                                                                           id="Answer-1"
-                                                                                          onChange={[Function]}
+                                                                                          onInput={[Function]}
                                                                                           placeholder="Enter your answer here"
                                                                                     />
                                                                               </div>
@@ -479,7 +479,7 @@ Array [
                                                                                           data-qa-sel="Comment-text-area"
                                                                                           disabled={false}
                                                                                           id="Answer-1"
-                                                                                          onChange={[Function]}
+                                                                                          onInput={[Function]}
                                                                                           placeholder="Enter your answer here"
                                                                                     />
                                                                               </div>
@@ -529,12 +529,12 @@ Array [
                                                                               <textarea
                                                                                     className="form__input form__input--textarea"
                                                                                     data-qa-sel="Comment-text-area"
+                                                                                    defaultValue="ffffc"
                                                                                     disabled={false}
                                                                                     id="Comment5"
-                                                                                    onChange={[Function]}
+                                                                                    onInput={[Function]}
                                                                                     placeholder="Enter your comment here"
                                                                                     tabIndex={0}
-                                                                                    value="ffffc"
                                                                               />
                                                                         </div>
                                                                         <span
@@ -590,12 +590,12 @@ Array [
                                                                               <textarea
                                                                                     className="form__input form__input--textarea"
                                                                                     data-qa-sel="Comment-text-area"
+                                                                                    defaultValue="ffff"
                                                                                     disabled={false}
                                                                                     id="Comment7"
-                                                                                    onChange={[Function]}
+                                                                                    onInput={[Function]}
                                                                                     placeholder="Enter your comment here"
                                                                                     tabIndex={0}
-                                                                                    value="ffff"
                                                                               />
                                                                         </div>
                                                                         <span

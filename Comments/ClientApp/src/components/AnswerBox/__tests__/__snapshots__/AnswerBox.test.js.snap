@@ -14,11 +14,11 @@ exports[`[ClientApp]  AnswerBox Component should match snapshot with answer 1`] 
       <textarea
         className="form__input form__input--textarea"
         data-qa-sel="Comment-text-area"
+        defaultValue="an updated answer"
         disabled={false}
         id="string"
-        onChange={[Function]}
+        onInput={[Function]}
         placeholder="Enter your answer here"
-        value="some answer text"
       />
     </div>
     <span
@@ -51,11 +51,11 @@ exports[`[ClientApp]  AnswerBox Component should match snapshot without answer 1
       <textarea
         className="form__input form__input--textarea"
         data-qa-sel="Comment-text-area"
+        defaultValue=""
         disabled={false}
         id="string"
-        onChange={[Function]}
+        onInput={[Function]}
         placeholder="Enter your answer here"
-        value=""
       />
     </div>
   </form>

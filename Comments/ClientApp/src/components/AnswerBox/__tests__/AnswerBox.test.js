@@ -16,6 +16,7 @@ describe("[ClientApp] ", () => {
 			saveHandler: jest.fn(),
 			deleteHandler: jest.fn(),
 			unique: "string",
+			updateUnsavedIds: jest.fn(),
 		};
 
 		const answerPropsWithoutAnswer = {
@@ -25,12 +26,26 @@ describe("[ClientApp] ", () => {
 			saveHandler: jest.fn(),
 			deleteHandler: jest.fn(),
 			unique: "string",
+			updateUnsavedIds: jest.fn(),
 		};
 
 		it("sets text area with comment text correctly", () => {
 			const wrapper = shallow(<AnswerBox {...answerPropsWithAnswer} />);
 			expect(wrapper.find("textarea").length).toEqual(1);
-			expect(wrapper.find("textarea").props().value).toEqual("some answer text");
+			expect(wrapper.find("textarea").props().defaultValue).toEqual("some answer text");
+		});
+
+		it("unsavedChanges function is fired correctly on text area change", () => {
+			const wrapper = mount(<AnswerBox {...answerPropsWithAnswer} />);
+			expect(wrapper.state().unsavedChanges).toEqual(false);
+			const textArea = wrapper.find("textarea");
+			textArea.simulate("input", {
+				target: {
+					value: "an updated answer",
+				},
+			});
+			expect(wrapper.state().answer.answerText).toEqual("an updated answer");
+			expect(answerPropsWithAnswer.updateUnsavedIds).toHaveBeenCalledWith("22q", true);
 		});
 
 		it("should update UnsavedChanges if lastupdateddate has changed", () => {

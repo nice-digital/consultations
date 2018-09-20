@@ -367,13 +367,6 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 										reference={reference}
 										consultationState={this.state.consultationData.consultationState}
 									/>
-									{this.state.supportsDownload &&
-									<div className="clearfix">
-										<a className="btn btn--secondary right mr--0"
-											 href={`${this.props.basename}/api/exportexternal/${this.props.match.params.consultationId}`}>Download
-											your response</a>
-									</div>
-									}
 									<UserContext.Consumer>
 										{(contextValue: ContextType) => {
 											return (
@@ -387,14 +380,32 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 													<div className="grid">
 														{(this.state.userHasSubmitted && !this.state.viewSubmittedComments) ?
 															<div data-g="12">
-																<div className="panel">
-																	<p className="lead" data-qa-sel="submitted-text">Your response has been submitted</p>
-																	<button
-																		className="btn btn--cta"
-																		data-qa-sel="review-submitted-comments"
-																		onClick={this.viewSubmittedCommentsHandler}>Review your response
-																	</button>
-																</div>
+																<button
+																	className="btn btn--cta"
+																	data-qa-sel="review-submitted-comments"
+																	onClick={this.viewSubmittedCommentsHandler}>Review your response
+																</button>
+																{this.state.supportsDownload &&
+																<a className="btn btn--secondary"
+																	 href={`${this.props.basename}/api/exportexternal/${this.props.match.params.consultationId}`}>Download
+																	your response</a>
+																}
+																<h2>What happens next?</h2>
+																<p>We will review all the submissions received for this consultation. Our response
+																	will
+																	be published on the website around the time the guidance is published.</p>
+																<h2>Help us improve our online commenting service</h2>
+																<p>This is the first time we have used our new online commenting software on a live
+																	consultation. We'd really like to hear your feedback so that we can keep improving
+																	it.</p>
+																<p>Answer our short, anonymous survey (4 questions, 2 minutes).</p>
+																<p>
+																	<a className="btn btn--cta"
+																		 href="https://in.hotjar.com/s?siteId=119167&surveyId=109567" target="_blank"
+																		 rel="noopener noreferrer">
+																		Answer the survey
+																	</a>
+																</p>
 															</div>
 															:
 															<Fragment>
@@ -413,8 +424,6 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																	<div data-qa-sel="comment-list-wrapper">
 																		{questionsToShow.length > 0 &&
 																		<div>
-																			{/* <p>We would like to hear your views on the draft recommendations presented in the guideline, and any comments you may have on the rationale and impact sections in the guideline and the evidence presented in the evidence reviews documents. We would also welcome views on the Equality Impact Assessment.</p>
-																			<p>We would like to hear your views on these questions:</p> */}
 																			<ul className="CommentList list--unstyled">
 																				{questionsToShow.map((question) => {
 																					return (

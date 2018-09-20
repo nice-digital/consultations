@@ -4,6 +4,7 @@ import "core-js/fn/array/includes";
 import "core-js/es6/regexp";
 import "raf/polyfill";
 import "classlist-polyfill";
+import "ie9-oninput-polyfill";
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";

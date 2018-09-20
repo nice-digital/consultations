@@ -1,17 +1,14 @@
-using System;
-using Comments.ViewModels;
-using Microsoft.Extensions.Logging;
-using NICE.Feeds;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Razor.Language.Intermediate;
 using Comments.Common;
 using Comments.Configuration;
 using Comments.Models;
-using NICE.Feeds.Models.Indev.Chapter;
+using Comments.ViewModels;
+using Microsoft.Extensions.Logging;
+using NICE.Feeds;
 using NICE.Feeds.Models.Indev.Detail;
 using NICE.Feeds.Models.Indev.List;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Comments.Services
 {
@@ -32,6 +29,8 @@ namespace Comments.Services
 
 		bool HasSubmittedCommentsOrQuestions(string consultationSourceURI, Guid userId);
 	    IEnumerable<BreadcrumbLink> GetBreadcrumbs(ConsultationDetail consultation, bool isReview);
+
+	    string GetFirstChapterSlug(int consultationId, int documentId);
     }
 
 	public class ConsultationService : IConsultationService
@@ -119,7 +118,12 @@ namespace Comments.Services
 		    return breadcrumbs;
 	    }
 
-		public IEnumerable<ViewModels.Consultation> GetConsultations()
+	    public string GetFirstChapterSlug(int consultationId, int documentId)
+	    {
+		    return GetDocuments(consultationId).FirstOrDefault(d => d.DocumentId.Equals(documentId))?.Chapters.FirstOrDefault()?.Slug;
+	    }
+
+	    public IEnumerable<ViewModels.Consultation> GetConsultations()
         {
             var user = _userService.GetCurrentUser();
             var consultations = _feedService.GetConsultationList();
