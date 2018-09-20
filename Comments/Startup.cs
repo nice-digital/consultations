@@ -15,6 +15,7 @@ using Comments.Auth;
 using Comments.Common;
 using Comments.Export;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -119,6 +120,12 @@ namespace Comments
 				options.HttpsPort = 443;
 			});
 
+	        services.Configure<ForwardedHeadersOptions>(options =>
+		        {
+			        options.ForwardedHeaders = ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedFor;
+			        options.ForwardLimit = 2;
+		        });
+
 			services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
@@ -183,6 +190,7 @@ namespace Comments
                 });
             }
 
+	        app.UseForwardedHeaders();
             app.UseAuthentication();
             app.UseSpaStaticFiles(new StaticFileOptions { RequestPath = "/consultations" });
 
