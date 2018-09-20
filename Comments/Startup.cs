@@ -121,10 +121,10 @@ namespace Comments
 			});
 
 	        services.Configure<ForwardedHeadersOptions>(options =>
-		        {
-			        options.ForwardedHeaders = ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedFor;
-			        options.ForwardLimit = 2;
-		        });
+	        {
+		        options.ForwardedHeaders = ForwardedHeaders.All;
+			    options.ForwardLimit = 3;
+		    });
 
 			services.AddCors(options =>
             {
@@ -194,10 +194,10 @@ namespace Comments
             app.UseAuthentication();
             app.UseSpaStaticFiles(new StaticFileOptions { RequestPath = "/consultations" });
 
-	        if (!env.IsIntegrationTest())
-	        {
-		        app.UseHttpsRedirection();
-	        }
+		    if (!env.IsIntegrationTest())
+		    {
+			    app.UseHttpsRedirection();
+		    }
 
 
 	        app.UseMvc(routes =>
