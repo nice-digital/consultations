@@ -10,7 +10,7 @@ import {
 	saveCommentHandler,
 	deleteCommentHandler,
 	saveAnswerHandler,
-	deleteAnswerHandler
+	deleteAnswerHandler,
 } from "../../helpers/editing-and-deleting";
 import { queryStringToObject } from "../../helpers/utils";
 import { pullFocusById } from "../../helpers/accessibility-helpers";
@@ -463,6 +463,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																		}
 																	</div>
 																	<SubmitResponseDialog
+																		unsavedIds={this.state.unsavedIds}
 																		isAuthorised={contextValue.isAuthorised}
 																		userHasSubmitted={this.state.userHasSubmitted}
 																		validToSubmit={this.state.validToSubmit}
