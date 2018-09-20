@@ -436,7 +436,7 @@ namespace Comments.Models
 					SET @questionTypeID = SCOPE_IDENTITY();
 				END
 
-				--4 location inserts. the questions are all consultation level, but there's an order to preserve.
+				--3 location inserts. the questions are all consultation level, but there's an order to preserve.
 				IF NOT EXISTS (SELECT * FROM [Location] L
 								INNER JOIN Question Q ON Q.LocationID = L.LocationID
 								WHERE L.SourceURI = 'consultations://./consultation/' + CAST(@consultationId AS varchar) AND
@@ -458,26 +458,16 @@ namespace Comments.Models
 
 					SET @locationID3 = SCOPE_IDENTITY();
 
-					INSERT INTO [Location] (SourceURI, [Order])
-					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar), @consultationIdPaddedForOrder + '.000.000.000.004')
-
-					SET @locationID4 = SCOPE_IDENTITY();
-
 					--now the question inserts
 
 					INSERT INTO Question (LocationID, QuestionText, QuestionTypeID, CreatedByUserID, LastModifiedByUserID, LastModifiedDate)
 					VALUES (@locationID1, @questionOneText, @questionTypeID, @userID, @userID, GETDATE())
 
-
 					INSERT INTO Question (LocationID, QuestionText, QuestionTypeID, CreatedByUserID, LastModifiedByUserID, LastModifiedDate)
 					VALUES (@locationID2, 'Are the summaries of clinical and cost effectiveness reasonable interpretations of the evidence?', @questionTypeID, @userID, @userID, GETDATE())
 
-
 					INSERT INTO Question (LocationID, QuestionText, QuestionTypeID, CreatedByUserID, LastModifiedByUserID, LastModifiedDate)
 					VALUES (@locationID3, 'Are the recommendations sound and a suitable basis for guidance to the NHS?', @questionTypeID, @userID, @userID, GETDATE())			
-
-					INSERT INTO Question (LocationID, QuestionText, QuestionTypeID, CreatedByUserID, LastModifiedByUserID, LastModifiedDate)
-					VALUES (@locationID4, 'Are there any aspects of the recommendations that need particular consideration to make sure we avoid unlawful discrimination against any group of people  race, gender, disability, religion or belief, sexual orientation, age, gender reassignment, or pregnancy and maternity?', @questionTypeID, @userID, @userID, GETDATE())			
 		
 				END
 
