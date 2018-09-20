@@ -409,7 +409,7 @@ namespace Comments.Models
 				--SET @consultationId = 210
 
 				DECLARE @questionTypeID AS int
-				DECLARE @locationID1 AS int, @locationID2 AS int, @locationID3 AS int, @locationID4 AS int
+				DECLARE @locationID1 AS int, @locationID2 AS int, @locationID3 AS int
 
 				DECLARE @userID as uniqueidentifier
 				SELECT @userID = cast(cast(0 AS binary) AS uniqueidentifier)
