@@ -14,8 +14,6 @@ using System.IO;
 using Comments.Auth;
 using Comments.Common;
 using Comments.Export;
-using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
@@ -97,25 +95,31 @@ namespace Comments
                 configuration.RootPath = "ClientApp/build";
             });
 
-            // Uncomment this if you want to debug server node
-            //if (Environment.IsDevelopment())
-            //{
-            //    services.AddNodeServices(options =>
-            //    {
-            //        options.LaunchWithDebugging = true;
-            //        options.DebuggingPort = 9229;
-            //    });
-            //}
-             
-            //if (!Environment.IsDevelopment()) //this breaks the tests.
-            //{
-            //    services.Configure<MvcOptions>(options =>
-            //    {
-            //        options.Filters.Add(new RequireHttpsAttribute());
-            //    });
-            //}
+			// Uncomment this if you want to debug server node
+			//if (Environment.IsDevelopment())
+			//{
+			//    services.AddNodeServices(options =>
+			//    {
+			//        options.LaunchWithDebugging = true;
+			//        options.DebuggingPort = 9229;
+			//    });
+			//}
 
-            services.AddCors(options =>
+			//if (!Environment.IsDevelopment()) //this breaks the tests.
+			//{
+			//    services.Configure<MvcOptions>(options =>
+			//    {
+			//        options.Filters.Add(new RequireHttpsAttribute());
+			//    });
+			//}
+
+			services.AddHttpsRedirection(options =>
+			{
+				options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
+				options.HttpsPort = 443;
+			});
+
+			services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
                     builder => builder.AllowAnyOrigin()
@@ -182,9 +186,13 @@ namespace Comments
             app.UseAuthentication();
             app.UseSpaStaticFiles(new StaticFileOptions { RequestPath = "/consultations" });
 
-            
+	        if (!env.IsIntegrationTest())
+	        {
+		        app.UseHttpsRedirection();
+	        }
 
-            app.UseMvc(routes =>
+
+	        app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
