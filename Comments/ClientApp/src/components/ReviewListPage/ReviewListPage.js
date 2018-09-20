@@ -426,8 +426,11 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																		<div>
 																			<ul className="CommentList list--unstyled">
 																				{questionsToShow.map((question) => {
+																					const isUnsaved = this.state.unsavedIds.includes(`${question.questionId}q`);
 																					return (
 																						<Question
+																							updateUnsavedIds={this.updateUnsavedIds}
+																							isUnsaved={isUnsaved}
 																							readOnly={!this.state.allowComments || this.state.userHasSubmitted}
 																							key={question.questionId}
 																							unique={`Comment${question.questionId}`}
