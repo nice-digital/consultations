@@ -120,11 +120,11 @@ namespace Comments
 				options.HttpsPort = 443;
 			});
 
-	        services.Configure<ForwardedHeadersOptions>(options =>
-	        {
-		        options.ForwardedHeaders = ForwardedHeaders.XForwardedProto;
-				options.KnownProxies.Clear();
-		    });
+	   //     services.Configure<ForwardedHeadersOptions>(options =>
+	   //     {
+		  //      options.ForwardedHeaders = ForwardedHeaders.XForwardedProto;
+				//options.KnownProxies.Clear();
+		  //  });
 
 			services.AddCors(options =>
             {
