@@ -97,5 +97,18 @@ namespace Comments.Controllers.Web
 
 		    return Content($"Row count deleted/updated: {rowCount}");
 	    }
+
+
+		/// <summary>
+		/// /consultations/admin/GetData?table=Comment
+		/// </summary>
+		/// <returns></returns>
+		[Route("consultations/admin/GetData")]
+	    public JsonResult GetData(string table)
+		{
+			var allData = _adminService.GetData(table);
+
+			return Json(allData);
+		}
 	}
 }

@@ -491,5 +491,17 @@ namespace Comments.Models
 				DELETE FROM QuestionType;
 			");
 		}
+
+		/// <summary>
+		/// This method is just here for temporary debug purposes. it's locked down so only administrators can run it, and even then it's only meant for devs.
+		/// </summary>
+		/// <param name="typeName"></param>
+		/// <returns></returns>
+		public IList<object> GetAllOfATable(string typeName)
+	    {
+		    var method = typeof(DbContext).GetMethod("Set").MakeGenericMethod(Type.GetType("Comments.Models." + typeName));
+			var query = method.Invoke(this, null) as IQueryable;
+		    return (query ?? throw new InvalidOperationException()).OfType<object>().ToList();
+	    }
 	}
 }
