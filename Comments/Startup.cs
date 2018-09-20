@@ -40,7 +40,7 @@ namespace Comments
         public IHostingEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public virtual void ConfigureServices(IServiceCollection services)
         {
             if (Environment.IsDevelopment())
             {
@@ -115,6 +115,12 @@ namespace Comments
             //    });
             //}
 
+	        services.AddHttpsRedirection(options =>
+	        {
+		        options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
+		        options.HttpsPort = 443;
+	        });
+
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
@@ -181,7 +187,7 @@ namespace Comments
 
             app.UseAuthentication();
             app.UseSpaStaticFiles(new StaticFileOptions { RequestPath = "/consultations" });
-
+	        app.UseHttpsRedirection();
             
 
             app.UseMvc(routes =>
