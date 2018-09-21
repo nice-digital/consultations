@@ -1,0 +1,29 @@
+.Tutorial {
+	.panel {
+		background-color: $colour-panel-default
+	}
+	&__title{
+		@include font-size(h4);
+	  }	
+}
+
+button.Tutorial {
+	font-weight: bolder;
+	border: none;
+	background-color: $colour-panel-default;
+	text-decoration: underline;
+	padding-left: 0;
+	padding-top: 0;
+	color: $colour-link;
+}
+
+button::after.Tutorial {
+	color: $colour-link-visited;
+}
+
+button:hover.Tutorial {
+	color: $colour-link-hover;
+	cursor: pointer;
+}
+
+
