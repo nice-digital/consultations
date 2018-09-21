@@ -1,3 +1,5 @@
+// @flow
+
 // Handles post-processing of the HTML from create-react-app to support
 // server side rendering. I.e. replaces placeholders within html etc
 
@@ -7,12 +9,13 @@ const OpeningHtmlTagRegex: RegExp = /<html[^>]*>/g,
 
 // Replace placeholders and tokens in the static html layout file.
 
-export const prepHead = (html: string, { title, metas, links, scripts }): string => {
+export const prepTags = (html: string, { title, metas, links, scripts, globals }): string => {
 	return html
 		.replace("<!--! title -->", title)
 		.replace("<!--! metas -->", metas)
 		.replace("<!--! links -->", links)
-		.replace("<!--! scripts -->", scripts);
+		.replace("<!--! scripts -->", scripts)
+		.replace("<!--! globals -->", globals);
 };
 
 // Removes the class attribute from the given html attributes.
@@ -62,7 +65,7 @@ export const replaceRelativePaths = (html: string): string => {
 };
 
 export const processHtml = (html: string, {
-	title, metas, links, scripts, htmlAttributes, bodyAttributes, rootContent
+	title, metas, links, globals, scripts, htmlAttributes, bodyAttributes, rootContent,
 }): string => {
 	// In dev mode we proxy requests to react dev server, which runs in the root. So we prepend relative URLs.
 	// We don't need to do this in production because we use PUBLIC_URL=/consultations with `npm run build`.
@@ -72,10 +75,11 @@ export const processHtml = (html: string, {
 	html = replaceOpeningHtmlTag(html, htmlAttributes);
 	html = replaceOpeningBodyTag(html, bodyAttributes);
 	html = replaceRootContent(html, rootContent);
-	html = prepHead(html, { title,
+	html = prepTags(html, { title,
 		metas,
 		links,
-		scripts
+		scripts,
+		globals,
 	});
 	return html;
 };

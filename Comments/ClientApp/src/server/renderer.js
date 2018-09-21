@@ -1,22 +1,34 @@
+// @flow
+
 // eslint-disable-next-line
 // See https://medium.com/@cereallarceny/server-side-rendering-with-create-react-app-fiber-react-router-v4-helmet-redux-and-thunk-275cb25ca972
 // and https://github.com/cereallarceny/cra-ssr/blob/master/server/universal.js
 
 import { createServerRenderer } from "aspnet-prerendering";
 import React from "react";
-import { renderToString  } from "react-dom/server";
+import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router";
 import { Helmet } from "react-helmet";
 import { processHtml } from "./html-processor";
 import App from "./../components/App/App";
-import Error from "./../components/Error/Error";
-//import stringifyObject from "stringify-object";
+import { Error } from "./../components/Error/Error";
 
 const BaseUrlRelative: string = "/consultations";
 
 // Returns a script tag with the stringified data for loading on the client
 const getPreloadedDataHtml = (data): string => {
 	let scriptTag: string = `<script>window.__PRELOADED__=${JSON.stringify(data)};</script>`;
+
+	// Wrap new lines in dev mode so it's easier to scan over html source for debugging purposes
+	if (process.env.NODE_ENV === "development") {
+		scriptTag = `\r\n\r\n${scriptTag}\r\n\r\n`;
+	}
+
+	return scriptTag;
+};
+
+const getGlobalsDataHtml = (data): string => {
+	let scriptTag: string = `<script>window.globals=${JSON.stringify(data)};</script>`;
 
 	// Wrap new lines in dev mode so it's easier to scan over html source for debugging purposes
 	if (process.env.NODE_ENV === "development") {
@@ -52,23 +64,22 @@ export const serverRenderer = (params): Promise => {
 				}, // Key value pairs of preloaded data sets
 				loaders: [], // List of promises where we track preloading data
 			},
+			globals: {},
 			baseUrl: params.origin + BaseUrlRelative,
 			// Base url is used for 'server' ajax requests so we can hit the .NET instance from the Node process
 		};
 
 		let app = (
-				<StaticRouter basename={BaseUrlRelative} location={params.url} context={staticContext}>
-					<App basename={BaseUrlRelative} />
-				</StaticRouter>);
+			<StaticRouter basename={BaseUrlRelative} location={params.url} context={staticContext}>
+				<App basename={BaseUrlRelative}/>
+			</StaticRouter>);
 
 		// First render: this trigger any data preloaders to fire
-		let rootContent = renderToString(app),
-			statusCode: number = 200,
-			html: string;
-		
+		let rootContent = renderToString(app);
+
 		// Wait for all preloaders to have loaded before re-rendering the app
 		Promise.all(staticContext.preload.loaders).then(() => {
-			
+
 			// Second render now that all the data preloaders have finished so we can render with data on the server
 			rootContent = renderToString(app);
 
@@ -81,11 +92,12 @@ export const serverRenderer = (params): Promise => {
 					title: helmet.title.toString(),
 					metas: helmet.meta.toString(),
 					links: helmet.link.toString(),
+					globals: getGlobalsDataHtml(staticContext.globals),
 					scripts: getPreloadedDataHtml(staticContext.preload.data) + helmet.script.toString(),
 				});
 
-			resolve({ html: html, statusCode: staticContext.status || 200 });
-			
+			resolve({html: html, statusCode: staticContext.status || 200});
+
 		}).catch((e) => {
 			if (process.env.NODE_ENV === "production") {
 				// In production, rejecting the promise shows a standard dotnet 500 server error page
@@ -95,10 +107,8 @@ export const serverRenderer = (params): Promise => {
 			// In development show a nice YSOD to devs with the error message
 			const error = <Error error={e}/>;
 			rootContent = renderToString(error);
-			
-			resolve({ html: rootContent, statusCode: staticContext.status || 500 });
-			return;
-			
+
+			resolve({html: rootContent, statusCode: staticContext.status || 500});
 		});
 	});
 };

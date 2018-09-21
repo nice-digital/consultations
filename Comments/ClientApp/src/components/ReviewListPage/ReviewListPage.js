@@ -39,12 +39,12 @@ type PropsType = {
 };
 
 type StateType = {
-	consultationData: ConsultationDataType,
-	commentsData: ReviewPageViewModelType,
+	consultationData: ConsultationDataType | null,
+	commentsData: ReviewPageViewModelType | null,
 	userHasSubmitted: boolean,
 	validToSubmit: false,
 	viewSubmittedComments: boolean,
-	path: string,
+	path: string | null,
 	hasInitalData: boolean,
 	allowComments: boolean,
 	comments: Array<CommentType>,
@@ -75,9 +75,9 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			questions: [], //this contains all the questions, not just the ones displayed to the user. the show property defines whether the question is filtered out from view.
 			sort: "DocumentAsc",
 			supportsDownload: false,
-			respondingAsOrganisation: "",
+			respondingAsOrganisation: false,
 			organisationName: "",
-			hasTobaccoLinks: "",
+			hasTobaccoLinks: false,
 			tobaccoDisclosure: "",
 
 		};
@@ -88,6 +88,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		}
 
 		const querystring = this.props.location.search;
+
 		const preloadedCommentsData = preload(
 			this.props.staticContext,
 			"commentsreview",
@@ -105,6 +106,9 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		);
 
 		if (preloadedCommentsData && preloadedConsultationData) {
+			if (this.props.staticContext) {
+				this.props.staticContext.globals.gidReference = preloadedConsultationData.reference;
+			}
 			this.state = {
 				path: this.props.basename + this.props.location.pathname,
 				commentsData: preloadedCommentsData,
@@ -120,8 +124,8 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 				supportsDownload: preloadedConsultationData.consultationState.supportsDownload,
 				viewSubmittedComments: false,
 				organisationName: preloadedCommentsData.organisationName || "",
-				respondingAsOrganisation: "",
-				hasTobaccoLinks: "",
+				respondingAsOrganisation: false,
+				hasTobaccoLinks: false,
 				tobaccoDisclosure: "",
 			};
 		}
@@ -185,6 +189,12 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 						supportsDownload: data.consultationData.consultationState.supportsDownload,
 						sort: data.commentsData.sort,
 						organisationName: data.commentsData.organisationName || "",
+					}, ()=>{
+						window.dataLayer.push({
+							event: "pageview",
+							gidReference: this.state.consultationData.reference,
+							title: this.getPageTitle(),
+						});
 					});
 				} else{
 					this.setState({
@@ -194,6 +204,8 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 						sort: data.commentsData.sort,
 						loading: false,
 						organisationName: data.commentsData.organisationName || "",
+					}, ()=> {
+						// todo: this is where we'd track an applied filter
 					});
 				}
 			})
@@ -215,6 +227,11 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		const oldQueryString = prevProps.location.search;
 		const newQueryString = this.props.location.search;
 		if (oldQueryString === newQueryString) return;
+		window.dataLayer.push({
+			event: "pageview",
+			gidReference: this.state.consultationData.reference,
+			title: this.getPageTitle(),
+		});
 		pullFocusById("comments-column");
 	}
 
@@ -287,7 +304,6 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 	};
 
 	issueA11yMessage = (message: string) => {
-		console.log(`Issuing a11y message from ReviewListPage: ${message}`);
 		const unique = new Date().getTime().toString();
 		// announcer requires a unique id so we're able to repeat phrases
 		this.props.announceAssertive(message, unique);
@@ -326,6 +342,10 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			.reduce((arr, group) => arr.concat(group), []);
 	}
 
+	getPageTitle = () => {
+		return `${this.state.consultationData.title} | Response reviewed pre submission`;
+	};
+
 	render() {
 		if (this.state.loading) return <h1>Loading...</h1>;
 		const { reference } = this.state.consultationData;
@@ -335,7 +355,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		return (
 			<Fragment>
 				<Helmet>
-					<title>Review!!!!</title>
+					<title>{this.getPageTitle()}</title>
 				</Helmet>
 				<div className="container">
 					<div className="grid">

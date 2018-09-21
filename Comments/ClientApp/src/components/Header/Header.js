@@ -8,8 +8,8 @@ type PropsType = {
 	reference: string,
 	endDate?: any,
 	match?: any,
-	subtitle1: string,
-	subtitle2: string,
+	subtitle1?: string,
+	subtitle2?: string,
 	consultationState: {
 		endDate: string,
 		consultationIsOpen: boolean,

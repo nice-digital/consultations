@@ -58,6 +58,8 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 			);
 	};
 
+	// fire when route changes
+
 	componentDidMount() {
 		this.loadUser(this.props.location.pathname); //this is currently only needed as the sign in url isn't right on SSR. TODO: fix SSR.
 	}

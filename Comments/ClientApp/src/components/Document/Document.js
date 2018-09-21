@@ -20,7 +20,9 @@ import {pullFocusByQuerySelector} from "../../helpers/accessibility-helpers";
 import {Header} from "../Header/Header";
 
 type PropsType = {
-	staticContext?: any,
+	staticContext: {
+		globals: any,
+	},
 	match: any,
 	location: any,
 	onNewCommentClick: Function,
@@ -93,6 +95,9 @@ export class Document extends Component<PropsType, StateType> {
 			);
 
 			if (preloadedChapter && preloadedDocuments && preloadedConsultation) {
+				if (this.props.staticContext) {
+					this.props.staticContext.globals.gidReference = preloadedConsultation.reference;
+				}
 				const allowComments = preloadedConsultation.supportsComments &&
 					preloadedConsultation.consultationState.consultationIsOpen &&
 					!preloadedConsultation.consultationState.userHasSubmitted;
@@ -184,6 +189,12 @@ export class Document extends Component<PropsType, StateType> {
 						loading: false,
 						hasInitialData: true,
 						allowComments: allowComments,
+					}, () => {
+						window.dataLayer.push({
+							event: "pageview",
+							gidReference: this.state.consultationData.reference,
+							title: this.getPageTitle(),
+						});
 					});
 				})
 				.catch(err => {
@@ -206,7 +217,7 @@ export class Document extends Component<PropsType, StateType> {
 			loading: true,
 		});
 
-		// are we on the same consultation and document as before?
+		// are we on the same document as before?
 		if (this.props.match.params.documentId === prevProps.match.params.documentId) {
 			this.getChapterData(this.props.match.params)
 				.then(response => {
@@ -214,6 +225,12 @@ export class Document extends Component<PropsType, StateType> {
 					this.setState({
 						chapterData,
 						loading: false,
+					}, () => {
+						window.dataLayer.push({
+							event: "pageview",
+							gidReference: this.state.consultationData.reference,
+							title: this.getPageTitle(),
+						});
 					});
 					pullFocusByQuerySelector(".document-comment-container");
 				});
@@ -226,8 +243,13 @@ export class Document extends Component<PropsType, StateType> {
 						consultationData: data.consultationData,
 						documentsData: data.documentsData,
 						loading: false,
+					}, () => {
+						window.dataLayer.push({
+							event: "pageview",
+							gidReference: this.state.consultationData.reference,
+							title: this.getPageTitle(),
+						});
 					});
-
 					pullFocusByQuerySelector(".document-comment-container");
 				})
 				.catch(err => {
@@ -331,10 +353,17 @@ export class Document extends Component<PropsType, StateType> {
 		return chapterData;
 	};
 
-	getCurrentDocumentTitle = (documents: Object, documentId: number) => {
+	getCurrentDocumentTitle = () => {
+		const documents = this.state.documentsData;
+		const documentId = parseInt(this.props.match.params.documentId, 0);
+
 		const matchCurrentDocument = d => d.documentId === parseInt(documentId, 0);
 		const currentDocumentDetails = documents.filter(matchCurrentDocument)[0];
 		return currentDocumentDetails.title;
+	};
+
+	getPageTitle = () => {
+		return `${this.state.chapterData.title} | ${this.getCurrentDocumentTitle()} | ${this.state.consultationData.title}`;
 	};
 
 	render() {
@@ -343,11 +372,13 @@ export class Document extends Component<PropsType, StateType> {
 		}
 		if (!this.state.hasInitialData) return <h1>Loading...</h1>;
 
-		const {title, reference} = this.state.consultationData;
+		const {reference} = this.state.consultationData;
 		const {documentsData} = this.state;
 		const {sections, content, slug} = this.state.chapterData;
 		const consultationId = parseInt(this.props.match.params.consultationId, 0);
 		const documentId = parseInt(this.props.match.params.documentId, 0);
+
+		const currentDocumentTitle = this.getCurrentDocumentTitle();
 
 		const documentHtmlProps = {
 			content,
@@ -360,7 +391,7 @@ export class Document extends Component<PropsType, StateType> {
 		return (
 			<Fragment>
 				<Helmet>
-					<title>{title}</title>
+					<title>{this.getPageTitle()}</title>
 				</Helmet>
 				<UserContext.Consumer>
 					{(contextValue: any) => !contextValue.isAuthorised ?
@@ -382,7 +413,7 @@ export class Document extends Component<PropsType, StateType> {
 							<main role="main">
 								<div className="page-header">
 									<Header
-										title={this.getCurrentDocumentTitle(documentsData, documentId)}
+										title={currentDocumentTitle}
 										reference={reference}
 										consultationState={this.state.consultationData.consultationState}/>
 									{this.state.allowComments &&
@@ -396,12 +427,15 @@ export class Document extends Component<PropsType, StateType> {
 												sourceURI: this.props.match.url,
 												commentText: "",
 												commentOn: "Document",
-												quote: this.getCurrentDocumentTitle(
-													documentsData,
-													documentId
-												),
+												quote: currentDocumentTitle,
 												order: 0,
 												section: null,
+											});
+											window.dataLayer.push({
+												event: "button",
+												category: "Consultation comments page",
+												action: "Clicked",
+												label: "Comment on this document",
 											});
 										}}>
 										Comment on this document
@@ -489,9 +523,8 @@ export class Document extends Component<PropsType, StateType> {
 											</Selection>
 										</div>
 									</div>
+
 								</div>
-
-
 							</main>
 						</div>
 					</div>
