@@ -1,12 +1,10 @@
 using Comments.Services;
-using Comments.ViewModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace Comments.Controllers.Api
 {
-    [Produces("application/json")]
+	[Produces("application/json")]
     [Route("consultations/api/[controller]")]
     public class UserController : ControllerBase
     {
