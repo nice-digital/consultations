@@ -30,14 +30,14 @@ describe("[ClientApp] ", () => {
 		it("sets text area with comment text correctly", () => {
 			const wrapper = shallow(<AnswerBox {...answerPropsWithAnswer} />);
 			expect(wrapper.find("textarea").length).toEqual(1);
-			expect(wrapper.find("textarea").props().value).toEqual("some answer text");
+			expect(wrapper.find("textarea").props().defaultValue).toEqual("some answer text");
 		});
 
 		it("unsavedChanges state is updated correctly on text area change", () => {
 			const wrapper = mount(<AnswerBox {...answerPropsWithAnswer} />);
 			expect(wrapper.state().unsavedChanges).toEqual(false);
 			const textArea = wrapper.find("textarea");
-			textArea.simulate("change", {
+			textArea.simulate("input", {
 				target: {
 					value: "an updated answer",
 				},

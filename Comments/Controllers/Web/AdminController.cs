@@ -65,9 +65,25 @@ namespace Comments.Controllers.Web
 		    if (consultationId < 1)
 			    throw new ArgumentException("invalid consultation id", nameof(consultationId));
 
-		    var rowCount = _adminService.InsertQuestionsForAdmin(consultationId);
+		    var rowCount = _adminService.InsertQuestionsForDocument1And2InConsultation(consultationId);
 
 			return Content($"Row count deleted/updated: {rowCount}");
+	    }
+
+	    /// <summary>
+	    /// /consultations/admin/InsertQuestionsForConsultation?consultationId=1
+	    /// </summary>
+	    /// <param name="consultationId"></param>
+	    /// <returns></returns>
+	    [Route("consultations/admin/InsertQuestionsForConsultation")]
+	    public ActionResult InsertQuestionsForConsultation(int consultationId)
+	    {
+		    if (consultationId < 1)
+			    throw new ArgumentException("invalid consultation id", nameof(consultationId));
+
+		    var rowCount = _adminService.InsertQuestionsForConsultation(consultationId);
+
+		    return Content($"Row count deleted/updated: {rowCount}");
 	    }
 
 		/// <summary>
@@ -81,5 +97,18 @@ namespace Comments.Controllers.Web
 
 		    return Content($"Row count deleted/updated: {rowCount}");
 	    }
+
+
+		/// <summary>
+		/// /consultations/admin/GetData?table=Comment
+		/// </summary>
+		/// <returns></returns>
+		[Route("consultations/admin/GetData")]
+	    public JsonResult GetData(string table)
+		{
+			var allData = _adminService.GetData(table);
+
+			return Json(allData);
+		}
 	}
 }
