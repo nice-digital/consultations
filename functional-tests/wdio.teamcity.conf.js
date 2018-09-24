@@ -7,6 +7,8 @@ config.services = [];
 // Run headless on TeamCity
 config.capabilities = [
 	{
+		acceptInsecureCerts: true, // Because of self-signed cert inside Docker
+	 	acceptSslCerts: true,
 		maxInstances: 2,
 		browserName: "chrome",
 		chromeOptions: {
