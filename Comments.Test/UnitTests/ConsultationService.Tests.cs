@@ -113,8 +113,8 @@ namespace Comments.Test.UnitTests
 		}
 
 		[Theory]
-		[InlineData("/guidance/indevelopment/gid-ta10232/consultation/html-content", "/consultations/1/2/introduction")] //regular indev project
-		[InlineData("/guidance/orig-ref/update/gid-ta10232/consultation/html-content", "/consultations/1/2/introduction")] //an "update project"
+		[InlineData("/guidance/indevelopment/gid-ta10232/consultation/html-content", "/1/2/introduction")] //regular indev project
+		[InlineData("/guidance/orig-ref/update/gid-ta10232/consultation/html-content", "/1/2/introduction")] //an "update project"
 		public void GetBreadcrumbForReviewPage(string expectedConsultationUrl, string expectedDocumentsUrl)
 		{
 			//Arrange
