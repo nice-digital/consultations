@@ -15,10 +15,10 @@ Background:
  		And I pause for 1000ms
 
 Scenario: I answer a Consultation and Document level question
- 		When I wait on element "[data-qa-sel='open-questions-panel']" to exist
+ 		When I wait on element "[data-qa-sel='open-questions-panel']" to be visible
 		When I click on the button "[data-qa-sel='open-questions-panel']"
 		Then I expect that element "[data-qa-sel='comment-panel']" is within the viewport
-		When I wait on element "[data-qa-sel='Comment-text-area']" to exist
+		When I wait on element "[data-qa-sel='Comment-text-area']" to be visible
 		#And I debug
 		When I add "If this is a question then this is the answer" to the inputfield ".CommentBox:first-child [data-qa-sel='Comment-text-area']"
  		And I click on the button ".CommentBox:first-child [data-qa-sel='submit-button']"

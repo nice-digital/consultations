@@ -1,6 +1,7 @@
-using System;
 using Comments.Models;
 using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
 using System.Security.Authentication;
 
 namespace Comments.Services
@@ -9,7 +10,9 @@ namespace Comments.Services
 	{
 		int DeleteAllData();
 		int DeleteAllSubmissionsFromUser(Guid usersSubmissionsToDelete);
-		int InsertQuestionsForAdmin(int consultationId);
+		int InsertQuestionsForDocument1And2InConsultation(int consultationId);
+		int InsertQuestionsForConsultation(int consultationId);
+		IList<object> GetData(string tableName);
 	}
 
 	/// <summary>
@@ -48,9 +51,19 @@ namespace Comments.Services
 		    return _dbContext.DeleteAllSubmissionsFromUser(usersSubmissionsToDelete);
 	    }
 
-	    public int InsertQuestionsForAdmin(int consultationId)
+	    public int InsertQuestionsForDocument1And2InConsultation(int consultationId)
 	    {
-		    return _dbContext.InsertQuestionsWithScript(consultationId);
+		    return _dbContext.InsertQuestionsWithScriptForDocument1And2InConsultation(consultationId);
+	    }
+
+	    public int InsertQuestionsForConsultation(int consultationId)
+	    {
+		    return _dbContext.InsertQuestionsWithScriptForConsultation(consultationId);
+	    }
+
+	    public IList<object> GetData(string tableName)
+	    {
+		    return _dbContext.GetAllOfATable(tableName);
 	    }
 	}
 }

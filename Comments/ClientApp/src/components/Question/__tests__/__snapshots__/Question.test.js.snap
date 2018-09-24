@@ -36,11 +36,11 @@ exports[`[ClientApp]  Question Component should match snapshot with answer 1`] =
         <textarea
           className="form__input form__input--textarea"
           data-qa-sel="Comment-text-area"
+          defaultValue="some answer text"
           disabled={false}
           id="Answer1007"
-          onChange={[Function]}
+          onInput={[Function]}
           placeholder="Enter your answer here"
-          value="some answer text"
         />
       </div>
       <span
@@ -98,7 +98,7 @@ exports[`[ClientApp]  Question Component should match snapshot without answer 1`
           data-qa-sel="Comment-text-area"
           disabled={false}
           id="Answer-1"
-          onChange={[Function]}
+          onInput={[Function]}
           placeholder="Enter your answer here"
         />
       </div>

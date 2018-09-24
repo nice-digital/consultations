@@ -105,10 +105,10 @@ export class CommentBox extends Component<PropsType, StateType> {
 								disabled={readOnly}
 								id={this.props.unique}
 								className="form__input form__input--textarea"
-								onChange={this.textareaChangeHandler}
+								onInput={this.textareaChangeHandler}
 								placeholder="Enter your comment here"
 								tabIndex={0}
-								value={commentText}/>
+								defaultValue={commentText}/>
 						</div>
 						{!readOnly && commentText && commentText.length > 0 ?
 							unsavedChanges ?
