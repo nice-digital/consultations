@@ -4,6 +4,7 @@ exports[`[ClientApp]  Header  should display correctly when consulation has ende
 <Fragment>
   <h1
     className="page-header__heading mt--0"
+    data-qa-sel="changeable-page-header"
   >
     My title has changed
   </h1>
@@ -58,6 +59,7 @@ exports[`[ClientApp]  Header  should display correctly when consulation hasn't s
 <Fragment>
   <h1
     className="page-header__heading mt--0"
+    data-qa-sel="changeable-page-header"
   >
     My title
   </h1>
@@ -115,6 +117,7 @@ exports[`[ClientApp]  Header  should display correctly when consulation is in pr
 <Fragment>
   <h1
     className="page-header__heading mt--0"
+    data-qa-sel="changeable-page-header"
   >
     My title
   </h1>

@@ -53,7 +53,7 @@ describe("[ClientApp] ", () => {
 		it("should render the number of links supplied in props with anchors that match", () => {
 			const el = wrapper.find("ul li a");
 			expect(el.length).toEqual(4);
-			expect(el.first().prop("href")).toEqual("sub-link-1-url");
+			expect(el.first().prop("href")).toEqual("/sub-link-1-url");
 			expect(el.at(2).text()).toEqual("Sub Link 3 Label");
 		});
 
