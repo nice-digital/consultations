@@ -9,7 +9,7 @@ docker-compose down --remove-orphans && docker-compose rm -vf
 docker-compose build && docker-compose up -d
 
 # Wait for comments webapp before running the tests
-docker-compose run tests waitforit -t 120 --strict niceorg:8080 -- npm run test:teamcity -- --host hub -b http://niceorg:8080/consultations/
+docker-compose run tests waitforit -t 120 --strict niceorg:443 -- npm run test:teamcity -- --host hub -b https://niceorg/consultations/
 
 # Copy error shots and logs to use as a TeamCity artifact for debugging purposes
 mkdir -p docker-output

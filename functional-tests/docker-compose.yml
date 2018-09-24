@@ -39,7 +39,7 @@ services:
       - /tests/node_modules
     links:
       - hub
-      - comments
+      - nginx
     environment:
       - ACCOUNTS_EMAIL
       - ACCOUNTS_EMAIL2
@@ -75,10 +75,7 @@ services:
       - GILLIAM_REALM
       - ENCRYPTION_KEY
       - ENCRYPTION_IV
-    networks:
-      default:
-        aliases:
-          - niceorg
+
 
   # MS SQL Server database
   database:
@@ -89,3 +86,17 @@ services:
       - MSSQL_SA_PASSWORD
     ports:
       - 1434:1433
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./docker_ssl_proxy:/etc/nginx
+    ports:
+      - 80:80
+      - 443:443
+    links:
+      - comments
+    networks:
+      default:
+        aliases:
+          - niceorg
