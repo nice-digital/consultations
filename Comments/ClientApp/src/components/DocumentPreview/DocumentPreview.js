@@ -284,7 +284,8 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 						<LoginBanner signInButton={false}
 									 currentURL={this.props.match.url}
 									 signInURL={contextValue.signInURL}
-									 registerURL={contextValue.registerURL} />
+									 registerURL={contextValue.registerURL}
+									 signInText="to view the document preview" />
 						: 
 						<div className="container">
 							<div className="grid">
