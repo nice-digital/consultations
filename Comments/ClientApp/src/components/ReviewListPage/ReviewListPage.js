@@ -14,6 +14,7 @@ import {
 } from "../../helpers/editing-and-deleting";
 import { queryStringToObject } from "../../helpers/utils";
 import { pullFocusById } from "../../helpers/accessibility-helpers";
+import { tagManager } from "../../helpers/tag-manager";
 import { projectInformation } from "../../constants";
 import { UserContext } from "../../context/UserContext";
 
@@ -196,13 +197,15 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 						sort: data.commentsData.sort,
 						organisationName: data.commentsData.organisationName || "",
 						documentTitles: this.getListOfDocuments(data.commentsData.filters),
-					}, ()=>{
-						window.dataLayer.push({
+					},
+					() => {
+						tagManager({
 							event: "pageview",
 							gidReference: this.state.consultationData.reference,
 							title: this.getPageTitle(),
 						});
-					});
+					}
+					);
 				} else {
 					this.setState({
 						commentsData: data.commentsData,
@@ -212,7 +215,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 						loading: false,
 						organisationName: data.commentsData.organisationName || "",
 						documentTitles: this.getListOfDocuments(data.commentsData.filters),
-					}, ()=> {
+					}, () => {
 						// todo: this is where we'd track an applied filter
 					});
 				}
@@ -235,11 +238,11 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		const oldQueryString = prevProps.location.search;
 		const newQueryString = this.props.location.search;
 		if (oldQueryString === newQueryString) return;
-		window.dataLayer.push({
+		tagManager({
 			event: "pageview",
 			gidReference: this.state.consultationData.reference,
 			title: this.getPageTitle(),
-		});
+		})
 		pullFocusById("comments-column");
 	}
 

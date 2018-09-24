@@ -11,6 +11,7 @@ import {PhaseBanner} from "./../PhaseBanner/PhaseBanner";
 import {BreadCrumbs} from "./../Breadcrumbs/Breadcrumbs";
 import {StackedNav} from "./../StackedNav/StackedNav";
 import {HashLinkTop} from "../../helpers/component-helpers";
+import {tagManager} from "../../helpers/tag-manager";
 import {projectInformation} from "../../constants";
 import {ProcessDocumentHtml} from "../../document-processing/ProcessDocumentHtml";
 import {LoginBanner} from "./../LoginBanner/LoginBanner";
@@ -190,7 +191,7 @@ export class Document extends Component<PropsType, StateType> {
 						hasInitialData: true,
 						allowComments: allowComments,
 					}, () => {
-						window.dataLayer.push({
+						tagManager({
 							event: "pageview",
 							gidReference: this.state.consultationData.reference,
 							title: this.getPageTitle(),
@@ -226,11 +227,11 @@ export class Document extends Component<PropsType, StateType> {
 						chapterData,
 						loading: false,
 					}, () => {
-						window.dataLayer.push({
+						tagManager({
 							event: "pageview",
 							gidReference: this.state.consultationData.reference,
 							title: this.getPageTitle(),
-						});
+						})
 					});
 					pullFocusByQuerySelector(".document-comment-container");
 				});
@@ -244,11 +245,11 @@ export class Document extends Component<PropsType, StateType> {
 						documentsData: data.documentsData,
 						loading: false,
 					}, () => {
-						window.dataLayer.push({
+						tagManager({
 							event: "pageview",
 							gidReference: this.state.consultationData.reference,
 							title: this.getPageTitle(),
-						});
+						})
 					});
 					pullFocusByQuerySelector(".document-comment-container");
 				})
@@ -431,12 +432,12 @@ export class Document extends Component<PropsType, StateType> {
 												order: 0,
 												section: null,
 											});
-											window.dataLayer.push({
+											tagManager({
 												event: "button",
 												category: "Consultation comments page",
 												action: "Clicked",
 												label: "Comment on this document",
-											});
+											})
 										}}>
 										Comment on this document
 									</button>

@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import { convertNodeToElement } from "react-html-parser";
 import {nodeIsTypeText, nodeIsSubsection, nodeIsSpanTag, nodeIsInternalLink} from "./types";
 import processInternalLink from "./internal-link";
+import {tagManager} from "../../helpers/tag-manager";
 
 export const processChapterSectionSubsection = (node, onNewCommentClick, sourceURI, allowComments) => {
 
@@ -28,7 +29,7 @@ export const processChapterSectionSubsection = (node, onNewCommentClick, sourceU
 					tabIndex={0}
 					onClick={e => {
 						e.preventDefault();
-						window.dataLayer.push({
+						tagManager({
 							event: "button",
 							category: "Consultation comments page",
 							action: "Clicked",

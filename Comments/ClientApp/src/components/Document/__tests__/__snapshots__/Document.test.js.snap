@@ -98,6 +98,7 @@ Array [
                     <undefined />
                     <button
                         className="btn btn--cta"
+                        data-gtm="comment-on-document-button"
                         data-qa-sel="comment-on-consultation-document"
                         onClick={[Function]}
                     >
@@ -543,6 +544,10 @@ Array [
                                     >
                                         <button
                                             className="document-comment-container__commentButton"
+                                            data-gtm="button"
+                                            data-gtm-action="Clicked"
+                                            data-gtm-category="Consultation comments page"
+                                            data-gtm-label="Comment on chapter"
                                             data-qa-sel="in-text-comment-button"
                                             onClick={[Function]}
                                             tabIndex={0}
