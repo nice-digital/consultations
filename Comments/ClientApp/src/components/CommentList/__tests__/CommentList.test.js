@@ -2,7 +2,7 @@
 
 import React from "react";
 import { mount, shallow } from "enzyme";
-import { MemoryRouter } from "react-router";
+import { MemoryRouter } from "react-router-dom";
 import { CommentList } from "../CommentList";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
@@ -65,19 +65,6 @@ describe("[ClientApp] ", () => {
 			await nextTick();
 			wrapper.update();
 			expect(wrapper.find("li").length).toEqual(5);
-		});
-
-		it("renders the 'no comments' message if the comments array is empty", async () => {
-			mock.onGet().reply(200, EmptyCommentsResponse);
-			const wrapper = mount(
-				<MemoryRouter>
-					<LiveAnnouncer>
-						<CommentList {...fakeProps} />
-					</LiveAnnouncer>
-				</MemoryRouter>);
-			await nextTick();
-			wrapper.update();
-			expect(wrapper.find("p").last().text()).toEqual("No comments yet");
 		});
 
 		it("has state with an empty array of comments", () => {
@@ -349,26 +336,6 @@ describe("[ClientApp] ", () => {
 
 			 mount(<CommentList {...fakeProps} isReviewPage={true} />);
 		});
-		
-		//sourceURI: "/1/0/Review", isReview: true
 
-		const firstProps = {
-			match: {
-				url: "/1/1/introduction",
-				params: {
-					consultationId: 1,
-					documentId: 1,
-					chapterSlug: "introduction",
-				},
-			},
-			location: {
-				pathname: "1/review",
-				search: "?sourceURI=/consultations/1/1/introduction",
-			},
-			comment: {
-				commentId: 1,
-			},
-			viewComments: true,				
-		};
 	});
 });
