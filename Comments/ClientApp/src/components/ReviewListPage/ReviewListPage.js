@@ -1,27 +1,32 @@
 // @flow
 
-import React, { Component, Fragment } from "react";
-import { withRouter } from "react-router-dom";
+import React, {Component, Fragment} from "react";
+import {withRouter} from "react-router-dom";
 //import stringifyObject from "stringify-object";
 
 import preload from "../../data/pre-loader";
-import { load } from "../../data/loader";
-import { saveCommentHandler, deleteCommentHandler, saveAnswerHandler, deleteAnswerHandler } from "../../helpers/editing-and-deleting";
-import { queryStringToObject } from "../../helpers/utils";
-import { pullFocusById } from "../../helpers/accessibility-helpers";
-import { projectInformation } from "../../constants";
-import { UserContext } from "../../context/UserContext";
+import {load} from "../../data/loader";
+import {
+	saveCommentHandler,
+	deleteCommentHandler,
+	saveAnswerHandler,
+	deleteAnswerHandler,
+} from "../../helpers/editing-and-deleting";
+import {queryStringToObject} from "../../helpers/utils";
+import {pullFocusById} from "../../helpers/accessibility-helpers";
+import {projectInformation} from "../../constants";
+import {UserContext} from "../../context/UserContext";
 
-import { Header } from "../Header/Header";
-import { PhaseBanner } from "../PhaseBanner/PhaseBanner";
-import { BreadCrumbs } from "../Breadcrumbs/Breadcrumbs";
-import { FilterPanel } from "../FilterPanel/FilterPanel";
-import { ResultsInfo } from "../ResultsInfo/ResultsInfo";
-import { withHistory } from "../HistoryContext/HistoryContext";
-import { CommentBox } from "../CommentBox/CommentBox";
-import { Question } from "../Question/Question";
-import { LoginBanner } from "../LoginBanner/LoginBanner";
-import { SubmitResponseDialog } from "../SubmitResponseDialog/SubmitResponseDialog";
+import {Header} from "../Header/Header";
+import {PhaseBanner} from "../PhaseBanner/PhaseBanner";
+import {BreadCrumbs} from "../Breadcrumbs/Breadcrumbs";
+import {FilterPanel} from "../FilterPanel/FilterPanel";
+import {ResultsInfo} from "../ResultsInfo/ResultsInfo";
+import {withHistory} from "../HistoryContext/HistoryContext";
+import {CommentBox} from "../CommentBox/CommentBox";
+import {Question} from "../Question/Question";
+import {LoginBanner} from "../LoginBanner/LoginBanner";
+import {SubmitResponseDialog} from "../SubmitResponseDialog/SubmitResponseDialog";
 
 type PropsType = {
 	staticContext?: any,
@@ -55,6 +60,7 @@ type StateType = {
 	organisationName: string,
 	hasTobaccoLinks: boolean,
 	tobaccoDisclosure: string,
+	documentTitles: Array<any>,
 };
 
 export class ReviewListPage extends Component<PropsType, StateType> {
@@ -78,7 +84,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			organisationName: "",
 			hasTobaccoLinks: "",
 			tobaccoDisclosure: "",
-
+			documentTitles: [],
 		};
 
 		let preloadedData = {};
@@ -91,7 +97,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			this.props.staticContext,
 			"commentsreview",
 			[],
-			Object.assign({ relativeURL: this.props.match.url }, queryStringToObject(querystring)),
+			Object.assign({relativeURL: this.props.match.url}, queryStringToObject(querystring)),
 			preloadedData
 		);
 		const consultationId = this.props.match.params.consultationId;
@@ -122,31 +128,28 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 				respondingAsOrganisation: "",
 				hasTobaccoLinks: "",
 				tobaccoDisclosure: "",
+				documentTitles: this.getListOfDocuments(preloadedCommentsData.filters),
 			};
 		}
 	}
 
 	gatherData = async () => {
-
 		const querystring = this.props.history.location.search;
 		const path = this.props.basename + this.props.location.pathname + querystring;
 		this.setState({
 			path,
 		});
-
-		//console.log(`sourceURI: ${this.props.match.url}`);
-		//debugger;
-		const commentsData = load("commentsreview", undefined, [], Object.assign({ relativeURL: this.props.match.url }, queryStringToObject(querystring)))
+		const commentsData = load("commentsreview", undefined, [], Object.assign({relativeURL: this.props.match.url}, queryStringToObject(querystring)))
 			.then(response => response.data)
 			.catch(err => {
-				if (window){
+				if (window) {
 					//window.location.assign(path); // Fallback to full page reload if we fail to load data
-				} else{
+				} else {
 					throw new Error("failed to load comments for review.  " + err);
 				}
 			});
 
-		if (this.state.consultationData === null){
+		if (this.state.consultationData === null) {
 
 			const consultationId = this.props.match.params.consultationId;
 			const consultationData = load("consultation", undefined, [], {
@@ -171,7 +174,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 	loadDataAndUpdateState = () => {
 		this.gatherData()
 			.then(data => {
-				if (data.consultationData !== null){
+				if (data.consultationData !== null) {
 					this.setState({
 						consultationData: data.consultationData,
 						commentsData: data.commentsData,
@@ -184,8 +187,9 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 						supportsDownload: data.consultationData.consultationState.supportsDownload,
 						sort: data.commentsData.sort,
 						organisationName: data.commentsData.organisationName || "",
+						documentTitles: this.getListOfDocuments(data.commentsData.filters),
 					});
-				} else{
+				} else {
 					this.setState({
 						commentsData: data.commentsData,
 						comments: data.commentsData.commentsAndQuestions.comments,
@@ -193,6 +197,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 						sort: data.commentsData.sort,
 						loading: false,
 						organisationName: data.commentsData.organisationName || "",
+						documentTitles: this.getListOfDocuments(data.commentsData.filters),
 					});
 				}
 			})
@@ -202,7 +207,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 	};
 
 	componentDidMount() {
-		if (!this.state.hasInitalData){ //typically this page is accessed by clicking a link on the document page, so it won't SSR.
+		if (!this.state.hasInitalData) { //typically this page is accessed by clicking a link on the document page, so it won't SSR.
 			this.loadDataAndUpdateState();
 		}
 		this.props.history.listen(() => {
@@ -226,8 +231,8 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		const hasTobaccoLinks = this.state.hasTobaccoLinks === "yes";
 
 		let answersToSubmit = [];
-		questions.forEach(function(question){
-			if (question.answers != null){
+		questions.forEach(function (question) {
+			if (question.answers != null) {
 				answersToSubmit = answersToSubmit.concat(question.answers);
 			}
 		});
@@ -261,8 +266,8 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		const comments = this.state.comments;
 		const questions = this.state.questions;
 		let hasAnswers = false;
-		questions.forEach(function(question){
-			if (question.answers !== null && question.answers.length > 0){
+		questions.forEach(function (question) {
+			if (question.answers !== null && question.answers.length > 0) {
 				hasAnswers = true;
 			}
 		});
@@ -305,8 +310,25 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		saveAnswerHandler(e, answer, this);
 	};
 
-	deleteAnswerHandler = (e: Event,  questionId: number, answerId: number) => {
+	deleteAnswerHandler = (e: Event, questionId: number, answerId: number) => {
 		deleteAnswerHandler(e, questionId, answerId, this);
+	};
+
+	getListOfDocuments = (filters: Array<any>) => {
+		if (!filters) return;
+		return filters.filter(item => item.id === "Document")[0].options
+			.map(item => {
+				return {
+					id: item.id,
+					title: item.label,
+				};
+			});
+	};
+
+	getDocumentTitle = (documentId: string) => {
+		if (documentId && documentId !== null) {
+			return this.state.documentTitles.filter(item => item.id === documentId.toString())[0].title;
+		}
 	};
 
 	getAppliedFilters(): ReviewAppliedFilterType[] {
@@ -327,7 +349,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 
 	render() {
 		if (this.state.loading) return <h1>Loading...</h1>;
-		const { reference } = this.state.consultationData;
+		const {reference} = this.state.consultationData;
 		const commentsToShow = this.state.comments.filter(comment => comment.show) || [];
 		const questionsToShow = this.state.questions.filter(question => question.show) || [];
 
@@ -418,6 +440,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																							question={question}
 																							saveAnswerHandler={this.saveAnswerHandler}
 																							deleteAnswerHandler={this.deleteAnswerHandler}
+																							documentTitle={this.getDocumentTitle(question.documentId)}
 																						/>
 																					);
 																				})}
@@ -434,6 +457,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																							key={comment.commentId}
 																							unique={`Comment${comment.commentId}`}
 																							comment={comment}
+																							documentTitle={this.getDocumentTitle(comment.documentId)}
 																							saveHandler={this.saveCommentHandler}
 																							deleteHandler={this.deleteCommentHandler}
 																						/>

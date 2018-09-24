@@ -13,7 +13,7 @@ type PropsType = {
 	consultationState: {
 		endDate: string,
 		consultationIsOpen: boolean,
-		consultationHasNotStartedYet: boolean,
+		consultationHasNotStartedYet: ?boolean,
 	},
 }
 

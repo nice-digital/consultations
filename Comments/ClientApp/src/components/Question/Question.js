@@ -29,7 +29,8 @@ export class Question extends Component<PropsType, StateType> {
 
 	render() {
 		if (!this.props.question) return null;
-
+		const { documentTitle } = this.props;
+		const { commentOn, quote, questionText } = this.props.question;
 		let answers = this.props.question.answers;
 		if (answers === null || answers.length < 1){
 			answers = [{
@@ -43,23 +44,23 @@ export class Question extends Component<PropsType, StateType> {
 			<li className="CommentBox">
 				{!this.isTextSelection(this.props.question) &&
 				<Fragment>
-					<h1 data-qa-sel="comment-box-title" className="CommentBox__title mt--0 mb--d">
-						Question on: <span className="text-lowercase">{this.props.question.commentOn}</span>
-						<br/>
-						{this.props.question.quote}
-					</h1>
+					<h1 className="CommentBox__title mt--0 mb--0">{documentTitle}</h1>
+					<h2 data-qa-sel="comment-box-title" className="CommentBox__title mt--0 mb--0">
+						Question on <span className="text-lowercase">{commentOn}</span>
+					</h2>
 				</Fragment>
 				}
 
 				{this.isTextSelection(this.props.question) &&
 				<Fragment>
-					<h1 data-qa-sel="comment-box-title" className="CommentBox__title mt--0 mb--d">
-						Question on: <span className="text-lowercase">{this.props.question.commentOn}</span>
-					</h1>
-					<div className="CommentBox__quote mb--d">{this.props.question.quote}</div>
+					<h1 className="CommentBox__title mt--0 mb--0">{documentTitle}</h1>
+					<h2 data-qa-sel="comment-box-title" className="CommentBox__title mt--0 mb--0">
+						Question on: <span className="text-lowercase">{commentOn}</span>
+					</h2>
+					<div className="CommentBox__quote mb--d">{quote}</div>
 				</Fragment>
 				}
-				<p><strong>{this.props.question.questionText}</strong></p>
+				<p><strong>{questionText}</strong></p>
 				{answers.map((answer) => {
 					return (
 						<AnswerBox
