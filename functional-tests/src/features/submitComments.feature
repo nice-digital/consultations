@@ -27,6 +27,7 @@ Scenario: User makes a multiple comments and submits
 		And I click on the button ".chapter > .title [data-qa-sel='in-text-comment-button']"
 		And I pause for 1000ms
 		And I add "3" to the inputfield "#Comment-1"
+		And I pause for 1000ms
 		And I click on the button "[data-qa-sel='submit-button']"
 		When I click on the button "[data-qa-sel='review-all-comments']"
 		And I wait on element "body [data-qa-sel='respond-no-responding-as-org']" to be visible
