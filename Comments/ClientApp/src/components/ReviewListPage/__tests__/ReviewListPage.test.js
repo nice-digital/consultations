@@ -140,7 +140,6 @@ describe("[ClientApp] ", () => {
 			]).then(async () => {
 				await nextTick();
 				wrapper.update();
-
 				wrapper.find(ReviewListPage).instance().submitConsultation();
 			});
 

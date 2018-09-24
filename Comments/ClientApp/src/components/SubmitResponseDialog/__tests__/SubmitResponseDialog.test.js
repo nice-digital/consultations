@@ -17,6 +17,7 @@ describe("[ClientApp] ", () => {
 			tobaccoDisclosure: "",
 			hasTobaccoLinks: "no",
 			respondingAsOrganisation: "no",
+			unsavedIds: [],
 		};
 
 		it("should fire parent change handler if the input values change", () => {
@@ -92,6 +93,14 @@ describe("[ClientApp] ", () => {
 		it("should not fire parent submit function when the submit button is clicked, if form is in invalid state", () => {
 			const localProps = fakeProps;
 			localProps.validToSubmit = false;
+			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
+			const button = wrapper.find("button");
+			expect(button.prop("disabled")).toBe(true);
+		});
+
+		it("should prevent submission if there are currently unsaved changes to any comments or answers",() => {
+			const localProps = fakeProps;
+			localProps.unsavedIds = ["1001q","2002c"];
 			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
 			const button = wrapper.find("button");
 			expect(button.prop("disabled")).toBe(true);
