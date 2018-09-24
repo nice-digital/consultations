@@ -2,7 +2,7 @@
 
 import React, { Component, Fragment } from "react";
 import { withRouter, Prompt } from "react-router-dom";
-//import stringifyObject from "stringify-object";
+import Helmet from "react-helmet";
 
 import preload from "../../data/pre-loader";
 import { load } from "../../data/loader";
@@ -27,11 +27,7 @@ import { CommentBox } from "../CommentBox/CommentBox";
 import { Question } from "../Question/Question";
 import { LoginBanner } from "../LoginBanner/LoginBanner";
 import { SubmitResponseDialog } from "../SubmitResponseDialog/SubmitResponseDialog";
-<<<<<<< HEAD
-import {Helmet} from "react-helmet";
-=======
 import { updateUnsavedIds } from "../../helpers/unsaved-comments";
->>>>>>> master
 
 type PropsType = {
 	staticContext?: any,
@@ -199,16 +195,13 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 						supportsDownload: data.consultationData.consultationState.supportsDownload,
 						sort: data.commentsData.sort,
 						organisationName: data.commentsData.organisationName || "",
-<<<<<<< HEAD
+						documentTitles: this.getListOfDocuments(data.commentsData.filters),
 					}, ()=>{
 						window.dataLayer.push({
 							event: "pageview",
 							gidReference: this.state.consultationData.reference,
 							title: this.getPageTitle(),
 						});
-=======
-						documentTitles: this.getListOfDocuments(data.commentsData.filters),
->>>>>>> master
 					});
 				} else {
 					this.setState({
@@ -218,12 +211,9 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 						sort: data.commentsData.sort,
 						loading: false,
 						organisationName: data.commentsData.organisationName || "",
-<<<<<<< HEAD
+						documentTitles: this.getListOfDocuments(data.commentsData.filters),
 					}, ()=> {
 						// todo: this is where we'd track an applied filter
-=======
-						documentTitles: this.getListOfDocuments(data.commentsData.filters),
->>>>>>> master
 					});
 				}
 			})
@@ -393,16 +383,13 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 
 		return (
 			<Fragment>
-<<<<<<< HEAD
 				<Helmet>
 					<title>{this.getPageTitle()}</title>
 				</Helmet>
-=======
 				<Prompt
 					when={this.state.unsavedIds.length > 0}
 					message={`You have ${this.state.unsavedIds.length} unsaved ${this.state.unsavedIds.length === 1 ? "change" : "changes"}. Continue without saving?`}
 				/>
->>>>>>> master
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">

@@ -25,7 +25,7 @@ export class Question extends Component<PropsType, StateType> {
 	render() {
 		if (!this.props.question) return null;
 		const { documentTitle } = this.props;
-		const { commentOn, quote, questionText } = this.props.question;
+		const { commentOn, quote } = this.props.question;
 		let answers = this.props.question.answers;
 		if (answers === null || answers.length < 1){
 			answers = [{
@@ -79,5 +79,3 @@ export class Question extends Component<PropsType, StateType> {
 		);
 	}
 }
-
-export default Question;
