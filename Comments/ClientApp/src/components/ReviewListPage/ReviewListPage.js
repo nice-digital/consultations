@@ -62,6 +62,7 @@ type StateType = {
 	hasTobaccoLinks: boolean,
 	tobaccoDisclosure: string,
 	unsavedIds: Array<number>,
+	documentTitles: Array<any>,
 };
 
 export class ReviewListPage extends Component<PropsType, StateType> {
@@ -86,6 +87,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			hasTobaccoLinks: "",
 			tobaccoDisclosure: "",
 			unsavedIds: [],
+			documentTitles: [],
 		};
 
 		let preloadedData = {};
@@ -130,20 +132,17 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 				hasTobaccoLinks: "",
 				tobaccoDisclosure: "",
 				unsavedIds: [],
+				documentTitles: this.getListOfDocuments(preloadedCommentsData.filters),
 			};
 		}
 	}
 
 	gatherData = async () => {
-
 		const querystring = this.props.history.location.search;
 		const path = this.props.basename + this.props.location.pathname + querystring;
 		this.setState({
 			path,
 		});
-
-		//console.log(`sourceURI: ${this.props.match.url}`);
-		//debugger;
 		const commentsData = load("commentsreview", undefined, [], Object.assign({relativeURL: this.props.match.url}, queryStringToObject(querystring)))
 			.then(response => response.data)
 			.catch(err => {
@@ -192,6 +191,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 						supportsDownload: data.consultationData.consultationState.supportsDownload,
 						sort: data.commentsData.sort,
 						organisationName: data.commentsData.organisationName || "",
+						documentTitles: this.getListOfDocuments(data.commentsData.filters),
 					});
 				} else {
 					this.setState({
@@ -201,6 +201,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 						sort: data.commentsData.sort,
 						loading: false,
 						organisationName: data.commentsData.organisationName || "",
+						documentTitles: this.getListOfDocuments(data.commentsData.filters),
 					});
 				}
 			})
@@ -321,6 +322,23 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		updateUnsavedIds(commentId, dirty, this);
 	};
 
+	getListOfDocuments = (filters: Array<any>) => {
+		if (!filters) return;
+		return filters.filter(item => item.id === "Document")[0].options
+			.map(item => {
+				return {
+					id: item.id,
+					title: item.label,
+				};
+			});
+	};
+
+	getDocumentTitle = (documentId: string) => {
+		if (documentId && documentId !== null) {
+			return this.state.documentTitles.filter(item => item.id === documentId.toString())[0].title;
+		}
+	};
+
 	getAppliedFilters(): ReviewAppliedFilterType[] {
 		const mapOptions =
 			(group: ReviewFilterGroupType) => group.options
@@ -437,6 +455,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																							question={question}
 																							saveAnswerHandler={this.saveAnswerHandler}
 																							deleteAnswerHandler={this.deleteAnswerHandler}
+																							documentTitle={this.getDocumentTitle(question.documentId)}
 																						/>
 																					);
 																				})}
@@ -453,6 +472,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																							key={comment.commentId}
 																							unique={`Comment${comment.commentId}`}
 																							comment={comment}
+																							documentTitle={this.getDocumentTitle(comment.documentId)}
 																							saveHandler={this.saveCommentHandler}
 																							deleteHandler={this.deleteCommentHandler}
 																							updateUnsavedIds={this.updateUnsavedIds}

@@ -109,7 +109,7 @@ export function saveAnswerHandler(event: Event, answer: AnswerType, questionId: 
 				});
 				self.updateUnsavedIds(`${questionId}q`, false);
 				if (typeof self.issueA11yMessage === "function") {
-					self.issueA11yMessage("AnswerBox saved");
+					self.issueA11yMessage("Answer saved");
 				}
 				if (typeof self.validationHander === "function") {
 					self.validationHander();
@@ -170,6 +170,6 @@ function removeAnswerFromState(questionId: number, answerId: number, self: any) 
 		self.validationHander();
 	}
 	if (typeof self.issueA11yMessage === "function") {
-		self.issueA11yMessage("AnswerBox deleted");
+		self.issueA11yMessage("Answer deleted");
 	}
 }

@@ -13,7 +13,7 @@ type PropsType = {
 	consultationState: {
 		endDate: string,
 		consultationIsOpen: boolean,
-		consultationHasNotStartedYet: boolean,
+		consultationHasNotStartedYet: ?boolean,
 	},
 }
 
@@ -35,7 +35,7 @@ export class Header extends PureComponent<PropsType> {
 
 		return (
 			<Fragment>
-				<h1 className="page-header__heading mt--0">{title}</h1>
+				<h1 data-qa-sel="changeable-page-header" className="page-header__heading mt--0">{title}</h1>
 				<p className="page-header__lead mb--d">
 					{isOpen ?
 						<Fragment>
