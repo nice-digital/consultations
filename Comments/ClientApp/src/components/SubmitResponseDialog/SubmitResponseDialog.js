@@ -11,7 +11,9 @@ export const SubmitResponseDialog = (props) => {
 		organisationName,
 		tobaccoDisclosure,
 		respondingAsOrganisation,
-		hasTobaccoLinks } = props;
+		hasTobaccoLinks,
+		unsavedIds,
+	} = props;
 
 	function mandatoryQuestionsAreValid() {
 		let organisationIsValid = false;
@@ -145,7 +147,7 @@ export const SubmitResponseDialog = (props) => {
 						<p><strong>Now submit your response to NICE</strong></p>
 						<p>After submission you won't be able to edit your comments further or add any extra comments.</p>
 						<button
-							disabled={!validToSubmit || !mandatoryQuestionsAreValid()}
+							disabled={!validToSubmit || !mandatoryQuestionsAreValid() || unsavedIds.length !== 0}
 							className="btn btn--cta"
 							data-qa-sel="submit-comment-button"
 							onClick={submitConsultation}>

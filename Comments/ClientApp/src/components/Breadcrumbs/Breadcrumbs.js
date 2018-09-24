@@ -6,7 +6,8 @@ import {isHttpLink} from "../../helpers/utils";
 
 type LinksType = {
 	label: string,
-	url: string
+	url: string,
+	localRoute: boolean,
 };
 
 type PropsType = {
@@ -24,7 +25,7 @@ export class BreadCrumbs extends PureComponent<PropsType> {
 					itemType="http://schema.org/BreadcrumbList"
 				>
 					{this.props.links.map((segment, index) => {
-						const {label, url} = segment;
+						const {label, url, localRoute} = segment;
 						return (
 							<li
 								key={`${label}${index}`}
@@ -33,7 +34,7 @@ export class BreadCrumbs extends PureComponent<PropsType> {
 								itemScope
 								itemType="http://schema.org/ListItem"
 							>
-								{(isHttpLink(url) || url.indexOf("/") === 0) ?
+								{(isHttpLink(url) || (url.indexOf("/") === 0 && !localRoute)) ?
 									<a href={url}>{label}</a>
 									:
 									<Link to={url} itemProp="name">

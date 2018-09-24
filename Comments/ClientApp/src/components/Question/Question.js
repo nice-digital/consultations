@@ -11,6 +11,7 @@ type PropsType = {
 	deleteAnswerHandler: Function,
 	question: QuestionType,
 	readOnly: boolean,
+	isUnsaved: boolean,
 };
 
 type StateType = {
@@ -18,12 +19,6 @@ type StateType = {
 };
 
 export class Question extends Component<PropsType, StateType> {
-	constructor() {
-		super();
-		this.state = {
-			unsavedChanges: false,
-		};
-	}
 
 	isTextSelection = (question) => question.commentOn && question.commentOn.toLowerCase() === "selection" && question.quote;
 
@@ -41,7 +36,7 @@ export class Question extends Component<PropsType, StateType> {
 
 		return (
 
-			<li className="CommentBox">
+			<li className={this.props.isUnsaved ? "CommentBox CommentBox--unsavedChanges" : "CommentBox"}>
 				{!this.isTextSelection(this.props.question) &&
 				<Fragment>
 					<h1 className="CommentBox__title mt--0 mb--0">{documentTitle}</h1>
@@ -60,17 +55,22 @@ export class Question extends Component<PropsType, StateType> {
 					<div className="CommentBox__quote mb--d">{quote}</div>
 				</Fragment>
 				}
-				<p><strong>{questionText}</strong></p>
+				<p><strong>{this.props.question.questionText}</strong></p>
+				{this.props.isUnsaved &&
+				<p className="CommentBox__validationMessage">You have unsaved changes</p>
+				}
 				{answers.map((answer) => {
 					return (
 						<AnswerBox
+							updateUnsavedIds={this.props.updateUnsavedIds}
+							questionId={this.props.question.questionId}
 							readOnly={this.props.readOnly}
 							isVisible={this.props.isVisible}
 							key={answer.answerId}
 							unique={`Answer${answer.answerId}`}
 							answer={answer}
-							saveHandler={this.props.saveAnswerHandler}
-							deleteHandler={this.props.deleteAnswerHandler}
+							saveAnswerHandler={this.props.saveAnswerHandler}
+							deleteAnswerHandler={this.props.deleteAnswerHandler}
 						/>
 					);
 				})}

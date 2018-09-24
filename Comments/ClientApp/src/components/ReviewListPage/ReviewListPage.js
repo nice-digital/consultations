@@ -1,32 +1,33 @@
 // @flow
 
-import React, {Component, Fragment} from "react";
-import {withRouter} from "react-router-dom";
+import React, { Component, Fragment } from "react";
+import { withRouter, Prompt } from "react-router-dom";
 //import stringifyObject from "stringify-object";
 
 import preload from "../../data/pre-loader";
-import {load} from "../../data/loader";
+import { load } from "../../data/loader";
 import {
 	saveCommentHandler,
 	deleteCommentHandler,
 	saveAnswerHandler,
 	deleteAnswerHandler,
 } from "../../helpers/editing-and-deleting";
-import {queryStringToObject} from "../../helpers/utils";
-import {pullFocusById} from "../../helpers/accessibility-helpers";
-import {projectInformation} from "../../constants";
-import {UserContext} from "../../context/UserContext";
+import { queryStringToObject } from "../../helpers/utils";
+import { pullFocusById } from "../../helpers/accessibility-helpers";
+import { projectInformation } from "../../constants";
+import { UserContext } from "../../context/UserContext";
 
-import {Header} from "../Header/Header";
-import {PhaseBanner} from "../PhaseBanner/PhaseBanner";
-import {BreadCrumbs} from "../Breadcrumbs/Breadcrumbs";
-import {FilterPanel} from "../FilterPanel/FilterPanel";
-import {ResultsInfo} from "../ResultsInfo/ResultsInfo";
-import {withHistory} from "../HistoryContext/HistoryContext";
-import {CommentBox} from "../CommentBox/CommentBox";
-import {Question} from "../Question/Question";
-import {LoginBanner} from "../LoginBanner/LoginBanner";
-import {SubmitResponseDialog} from "../SubmitResponseDialog/SubmitResponseDialog";
+import { Header } from "../Header/Header";
+import { PhaseBanner } from "../PhaseBanner/PhaseBanner";
+import { BreadCrumbs } from "../Breadcrumbs/Breadcrumbs";
+import { FilterPanel } from "../FilterPanel/FilterPanel";
+import { ResultsInfo } from "../ResultsInfo/ResultsInfo";
+import { withHistory } from "../HistoryContext/HistoryContext";
+import { CommentBox } from "../CommentBox/CommentBox";
+import { Question } from "../Question/Question";
+import { LoginBanner } from "../LoginBanner/LoginBanner";
+import { SubmitResponseDialog } from "../SubmitResponseDialog/SubmitResponseDialog";
+import { updateUnsavedIds } from "../../helpers/unsaved-comments";
 
 type PropsType = {
 	staticContext?: any,
@@ -60,6 +61,7 @@ type StateType = {
 	organisationName: string,
 	hasTobaccoLinks: boolean,
 	tobaccoDisclosure: string,
+	unsavedIds: Array<number>,
 	documentTitles: Array<any>,
 };
 
@@ -84,6 +86,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			organisationName: "",
 			hasTobaccoLinks: "",
 			tobaccoDisclosure: "",
+			unsavedIds: [],
 			documentTitles: [],
 		};
 
@@ -128,6 +131,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 				respondingAsOrganisation: "",
 				hasTobaccoLinks: "",
 				tobaccoDisclosure: "",
+				unsavedIds: [],
 				documentTitles: this.getListOfDocuments(preloadedCommentsData.filters),
 			};
 		}
@@ -306,12 +310,16 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		deleteCommentHandler(e, comment, this);
 	};
 
-	saveAnswerHandler = (e: Event, answer: AnswerType) => {
-		saveAnswerHandler(e, answer, this);
+	saveAnswerHandler = (e: Event, answer: AnswerType, questionId: number) => {
+		saveAnswerHandler(e, answer, questionId, this);
 	};
 
 	deleteAnswerHandler = (e: Event, questionId: number, answerId: number) => {
 		deleteAnswerHandler(e, questionId, answerId, this);
+	};
+
+	updateUnsavedIds = (commentId: string, dirty: boolean) => {
+		updateUnsavedIds(commentId, dirty, this);
 	};
 
 	getListOfDocuments = (filters: Array<any>) => {
@@ -355,6 +363,10 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 
 		return (
 			<Fragment>
+				<Prompt
+					when={this.state.unsavedIds.length > 0}
+					message={`You have ${this.state.unsavedIds.length} unsaved ${this.state.unsavedIds.length === 1 ? "change" : "changes"}. Continue without saving?`}
+				/>
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">
@@ -432,8 +444,11 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																		<div>
 																			<ul className="CommentList list--unstyled">
 																				{questionsToShow.map((question) => {
+																					const isUnsaved = this.state.unsavedIds.includes(`${question.questionId}q`);
 																					return (
 																						<Question
+																							updateUnsavedIds={this.updateUnsavedIds}
+																							isUnsaved={isUnsaved}
 																							readOnly={!this.state.allowComments || this.state.userHasSubmitted}
 																							key={question.questionId}
 																							unique={`Comment${question.questionId}`}
@@ -460,6 +475,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																							documentTitle={this.getDocumentTitle(comment.documentId)}
 																							saveHandler={this.saveCommentHandler}
 																							deleteHandler={this.deleteCommentHandler}
+																							updateUnsavedIds={this.updateUnsavedIds}
 																						/>
 																					);
 																				})}
@@ -467,6 +483,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																		}
 																	</div>
 																	<SubmitResponseDialog
+																		unsavedIds={this.state.unsavedIds}
 																		isAuthorised={contextValue.isAuthorised}
 																		userHasSubmitted={this.state.userHasSubmitted}
 																		validToSubmit={this.state.validToSubmit}

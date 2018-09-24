@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component, Fragment } from "react";
+import React, {Component, Fragment} from "react";
 
 type PropsType = {
 	staticContext?: any,
@@ -8,7 +8,8 @@ type PropsType = {
 	readOnly: boolean,
 	saveHandler: Function,
 	deleteHandler: Function,
-	unique: string
+	unique: string,
+	updateUnsavedIds: Function,
 };
 
 type StateType = {
@@ -31,6 +32,15 @@ export class CommentBox extends Component<PropsType, StateType> {
 		});
 	}
 
+	componentDidUpdate(prevProps: PropsType) {
+		const nextTimestamp = this.props.comment.lastModifiedDate;
+		const prevTimestamp = prevProps.comment.lastModifiedDate;
+		const hasCommentBeenUpdated = () => prevTimestamp !== nextTimestamp;
+		if (hasCommentBeenUpdated()) {
+			this.props.updateUnsavedIds(this.props.comment.commentId, false);
+		}
+	}
+
 	textareaChangeHandler = (e: any) => {
 		const comment = this.state.comment;
 		comment.commentText = e.target.value;
@@ -38,6 +48,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 			comment,
 			unsavedChanges: true,
 		});
+		this.props.updateUnsavedIds(`${comment.commentId}c`, true);
 	};
 
 	static getDerivedStateFromProps(nextProps: any, prevState: any) {
@@ -67,10 +78,8 @@ export class CommentBox extends Component<PropsType, StateType> {
 		const unsavedChanges = this.state.unsavedChanges;
 		const comment = this.state.comment;
 		const readOnly = this.props.readOnly;
-
 		return (
-
-			<li className="CommentBox">
+			<li className={unsavedChanges ? "CommentBox CommentBox--unsavedChanges" : "CommentBox"}>
 				<section role="form">
 
 					{!this.isTextSelection(comment) &&
@@ -100,6 +109,9 @@ export class CommentBox extends Component<PropsType, StateType> {
 								htmlFor={this.props.unique}>
 								Comment on {commentOn}, {quote}
 							</label>
+							{unsavedChanges &&
+							<p className="CommentBox__validationMessage">You have unsaved changes</p>
+							}
 							<textarea
 								data-qa-sel="Comment-text-area"
 								disabled={readOnly}
