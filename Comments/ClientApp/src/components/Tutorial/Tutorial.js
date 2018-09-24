@@ -16,14 +16,47 @@ export class Tutorial extends Component<PropsType, StateType> {
 		};
 	}
 
+	componentDidMount()
+	{
+		this.setCookie(this.state.isPanelVisible);
+		var isPanelVisible = this.getCookie();
+		console.log(isPanelVisible);
+	}
+
+	setCookie = (isPanelVisible: boolean) => {
+		window.document.cookie = "isPanelVisible = " + isPanelVisible.toString();
+	};
+
+	getCookie = () => {
+		var cookie = window.document.cookie;
+		for(var i = 0; i < cookie.length; i++)
+		{
+			var startCookieValue = cookie.indexOf("isPanelVisible=");
+			
+			if (cookie[i] === ";")
+			{
+				var cookieValue = cookie.substring(startCookieValue, i);
+				return cookieValue.substring(14, cookieValue.length);
+			}
+		}
+	
+		return "";
+	};
+
 	handleClick = (isPanelVisible: boolean) => {
 		if (isPanelVisible)
 		{
 			isPanelVisible = false;
+			this.setCookie(isPanelVisible);
+			console.log(window.document.cookie);
+			console.log(this.getCookie());
 		}
 		else
 		{
 			isPanelVisible = true;
+			this.setCookie(isPanelVisible);
+			console.log(window.document.cookie);
+			console.log(this.getCookie());
 		}
 
 		this.setState({
