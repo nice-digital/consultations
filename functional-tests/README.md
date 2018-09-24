@@ -132,7 +132,7 @@ First, the following script will set up the docker containers needed for testing
 You will now notice you have started up the docker environment and you appear on the command line within the tests container. To run the tests run the following:
 
 ```sh
-npm run test:teamcity -- --host hub -b http://niceorg:8080/consultations/
+npm run test:teamcity -- --host hub -b http://niceorg/consultations/
 ```
 Now, if you make a change to the tests locally, you have a way of testing the change within docker giving you more confidence that it will run in the teamcity build agent when you push it up. 
 
