@@ -426,8 +426,8 @@ Array [
                                     role="presentation"
                                 >
                                     <a
-                                        aria-current={false}
-                                        href="#introduction"
+                                        aria-current={null}
+                                        href="/#introduction"
                                         onClick={[Function]}
                                         role="menuitem"
                                     >
@@ -439,8 +439,8 @@ Array [
                                     role="presentation"
                                 >
                                     <a
-                                        aria-current={false}
-                                        href="#provision-of-information"
+                                        aria-current={null}
+                                        href="/#provision-of-information"
                                         onClick={[Function]}
                                         role="menuitem"
                                     >
@@ -452,8 +452,8 @@ Array [
                                     role="presentation"
                                 >
                                     <a
-                                        aria-current={false}
-                                        href="#assessment-of-a-patients-risk-of-future-adverse-cardiovascular-events"
+                                        aria-current={null}
+                                        href="/#assessment-of-a-patients-risk-of-future-adverse-cardiovascular-events"
                                         onClick={[Function]}
                                         role="menuitem"
                                     >
@@ -465,8 +465,8 @@ Array [
                                     role="presentation"
                                 >
                                     <a
-                                        aria-current={false}
-                                        href="#antiplatelet-therapy"
+                                        aria-current={null}
+                                        href="/#antiplatelet-therapy"
                                         onClick={[Function]}
                                         role="menuitem"
                                     >
@@ -478,8 +478,8 @@ Array [
                                     role="presentation"
                                 >
                                     <a
-                                        aria-current={false}
-                                        href="#antithrombin-therapy"
+                                        aria-current={null}
+                                        href="/#antithrombin-therapy"
                                         onClick={[Function]}
                                         role="menuitem"
                                     >
@@ -491,8 +491,8 @@ Array [
                                     role="presentation"
                                 >
                                     <a
-                                        aria-current={false}
-                                        href="#management-strategies"
+                                        aria-current={null}
+                                        href="/#management-strategies"
                                         onClick={[Function]}
                                         role="menuitem"
                                     >
@@ -647,10 +647,10 @@ Array [
                                         <sup>
                                             [
                                             <a
-                                                aria-current={false}
+                                                aria-current={null}
                                                 className="footnote"
                                                 data-identified-as="internal-link"
-                                                href="#ftn.footnote_1"
+                                                href="/#ftn.footnote_1"
                                                 id="footnote_1"
                                                 name="footnote_1"
                                                 onClick={[Function]}
@@ -709,10 +709,10 @@ Array [
                                                 <sup>
                                                     [
                                                     <a
-                                                        aria-current={false}
+                                                        aria-current={null}
                                                         className="para"
                                                         data-identified-as="internal-link"
-                                                        href="#footnote_1"
+                                                        href="/#footnote_1"
                                                         id="ftn.footnote_1"
                                                         name="ftn.footnote_1"
                                                         onClick={[Function]}
