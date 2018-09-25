@@ -190,7 +190,6 @@ export class Document extends Component<PropsType, StateType> {
 						data.consultationData.supportsComments &&
 						data.consultationData.consultationState.consultationIsOpen &&
 						!data.consultationData.consultationState.userHasSubmitted;
-					console.log(data.consultationData);
 					this.addChapterDetailsToSections(data.chapterData);
 					this.setState({
 						...data,
@@ -370,6 +369,14 @@ export class Document extends Component<PropsType, StateType> {
 			allowComments: this.state.allowComments,
 		};
 
+		const supportingDocs = this.getDocumentLinks(
+			false,
+			"Supporting documents (for information only)",
+			documentsData,
+			documentId,
+			consultationId
+		);
+		
 		return (
 			<Fragment>
 				<Helmet>
@@ -450,14 +457,9 @@ export class Document extends Component<PropsType, StateType> {
 												documentId,
 												consultationId
 											)}/>
-										<StackedNav
-											links={this.getDocumentLinks(
-												false,
-												"Supporting documents (for information only)",
-												documentsData,
-												documentId,
-												consultationId
-											)}/>
+										{supportingDocs.links.length !== 0 ?
+											<StackedNav	links={supportingDocs}/>
+											: null}
 									</div>
 
 									{/* inPageNav column */}
