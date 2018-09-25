@@ -33,7 +33,7 @@ export const processChapterSectionSubsection = (node, onNewCommentClick, sourceU
 							event: "button",
 							category: "Consultation comments page",
 							action: "Clicked",
-							label: `Comment on ${commentOn || "chapter"}`,
+							label: `Comment on ${commentOn || "chapter"} button`,
 						});
 						onNewCommentClick(e, {
 							sourceURI,

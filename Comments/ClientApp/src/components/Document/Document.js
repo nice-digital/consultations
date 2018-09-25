@@ -456,8 +456,8 @@ export class Document extends Component<PropsType, StateType> {
 												event: "button",
 												category: "Consultation comments page",
 												action: "Clicked",
-												label: "Comment on this document",
-											})
+												label: "Comment on this document button",
+											});
 										}}>
 										Comment on this document
 									</button>

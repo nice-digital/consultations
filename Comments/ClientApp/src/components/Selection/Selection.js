@@ -102,7 +102,7 @@ export class Selection extends Component<PropsType, StateType> {
 			event: "button",
 			category: "Consultation comments page",
 			action: "Clicked",
-			label: "Comment on text selection",
+			label: "Comment on text selection button",
 		});
 	}
 
