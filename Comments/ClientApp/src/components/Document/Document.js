@@ -369,6 +369,16 @@ export class Document extends Component<PropsType, StateType> {
 			allowComments: this.state.allowComments,
 		};
 
+		const supportingDocs = this.getDocumentLinks(
+			false,
+			"Supporting documents (for information only)",
+			documentsData,
+			documentId,
+			consultationId
+		);
+
+		console.log(supportingDocs.links.length);
+
 		return (
 			<Fragment>
 				<Helmet>
@@ -448,14 +458,9 @@ export class Document extends Component<PropsType, StateType> {
 												documentId,
 												consultationId
 											)}/>
-										<StackedNav
-											links={this.getDocumentLinks(
-												false,
-												"Supporting documents (for information only)",
-												documentsData,
-												documentId,
-												consultationId
-											)}/>
+										{supportingDocs.links.length !== 0 ?
+											<StackedNav	links={supportingDocs}/>
+											: null}
 									</div>
 
 									{/* inPageNav column */}
