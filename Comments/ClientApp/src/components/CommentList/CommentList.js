@@ -17,6 +17,7 @@ import {pullFocusById} from "../../helpers/accessibility-helpers";
 import {mobileWidth} from "../../constants";
 import {getElementPositionWithinDocument, getSectionTitle} from "../../helpers/utils";
 import {updateUnsavedIds} from "../../helpers/unsaved-comments";
+import {tagManager} from "../../helpers/tag-manager";
 
 import {CommentBox} from "../CommentBox/CommentBox";
 import {Question} from "../Question/Question";
@@ -42,7 +43,6 @@ type StateType = {
 	loading: boolean,
 	allowComments: boolean,
 	initialDataLoaded: boolean,
-	drawerExpandedWidth: boolean,
 	drawerOpen: boolean,
 	drawerMobile: boolean,
 	viewComments: boolean,
@@ -65,7 +65,6 @@ export class CommentList extends Component<PropsType, StateType> {
 			allowComments: true,
 			error: "",
 			initialDataLoaded: false,
-			drawerExpandedWidth: false,
 			drawerOpen: false,
 			drawerMobile: false,
 			viewComments: true,
@@ -101,7 +100,6 @@ export class CommentList extends Component<PropsType, StateType> {
 				shouldShowDrawer: preloadedCommentsData.consultationState.shouldShowDrawer,
 				shouldShowCommentsTab: preloadedCommentsData.consultationState.shouldShowCommentsTab,
 				shouldShowQuestionsTab: preloadedCommentsData.consultationState.shouldShowQuestionsTab,
-				drawerExpandedWidth: false,
 				drawerOpen: false,
 				drawerMobile: false,
 				unsavedIds: [],
@@ -203,7 +201,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		deleteAnswerHandler(e, questionId, answerId, this);
 	};
 
-	updateUnsavedIds = (commentId: number, dirty: boolean) => {
+	updateUnsavedIds = (commentId: string, dirty: boolean) => {
 		updateUnsavedIds(commentId, dirty, this);
 	};
 
@@ -218,20 +216,13 @@ export class CommentList extends Component<PropsType, StateType> {
 	};
 
 	drawerClassnames = () => {
-		const width = this.state.drawerExpandedWidth ? "Drawer--wide" : "";
 		const open = this.state.drawerOpen ? "Drawer--open" : "";
 		const mobile = this.state.drawerMobile ? "Drawer--mobile" : "";
-		return `Drawer ${width} ${open} ${mobile}`;
+		return `Drawer ${open} ${mobile}`;
 	};
 
 	handleClick = (event: string) => {
 		switch (event) {
-			case "toggleWidth--narrow":
-				this.setState({drawerExpandedWidth: false});
-				break;
-			case "toggleWidth--wide":
-				this.setState({drawerExpandedWidth: true});
-				break;
 			case "toggleOpenComments":
 				this.setState(prevState => ({
 					drawerOpen: (prevState.drawerOpen && prevState.viewComments ? !prevState.drawerOpen : true),
