@@ -1,0 +1,12 @@
+.Tutorial {
+	background-color: $colour-panel-default;
+  &__buttonImage {
+    display: block;
+    width: 60%;
+    margin: 0 auto rem(20px);
+    @include mq($from: sm) {
+      width: 80%;
+      margin: 0;
+    }
+  }
+}

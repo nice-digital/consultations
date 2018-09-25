@@ -354,7 +354,14 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 
 	getDocumentTitle = (documentId: string) => {
 		if (documentId && documentId !== null) {
-			return this.state.documentTitles.filter(item => item.id === documentId.toString())[0].title;
+			// this catch is here temporarily until we have a way to administer questions (it's possible that questions have been placed on documents that are not set to support questions)
+			try {
+				return this.state.documentTitles.filter(item => item.id === documentId.toString())[0].title;
+			}
+			catch(err) {
+				return "Consultation document ID " + documentId;
+			}
+
 		}
 	};
 

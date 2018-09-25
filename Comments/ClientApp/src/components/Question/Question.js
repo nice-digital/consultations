@@ -12,6 +12,7 @@ type PropsType = {
 	question: QuestionType,
 	readOnly: boolean,
 	isUnsaved: boolean,
+	documentTitle: string,
 };
 
 type StateType = {
