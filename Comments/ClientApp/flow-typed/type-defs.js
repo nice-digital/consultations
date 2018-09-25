@@ -108,6 +108,7 @@ declare type QuestionType = {
 	show: boolean,
 	commentOn: string,
 	sourceURI: string,
+	quote: string,
 };
 
 declare type CommentsAndQuestionsType = {
