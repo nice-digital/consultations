@@ -1,4 +1,4 @@
-﻿using Comments.Services;
+using Comments.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -70,7 +70,7 @@ namespace Comments.Controllers.Api
 
         // DELETE: consultations/api/Question/5
         [HttpDelete("{QuestionId}")]
-        public IActionResult DeleteComment([FromRoute] int questionId)
+        public IActionResult DeleteQuestion([FromRoute] int questionId)
         {
             if (!ModelState.IsValid)
             {

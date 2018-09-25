@@ -104,7 +104,7 @@ export MSSQL_SA_PASSWORD=""
 
 ### Docker Compose
 
-We use [Docker Compose](https://docs.docker.com/compose/) to create all of the containers needed to run the application and tests. It consists of 7 containers:
+We use [Docker Compose](https://docs.docker.com/compose/) to create all of the containers needed to run the application and tests. It consists of 8 containers:
 
 - *[Comment Collection web application](../Comments/Dockerfile)* - the dotnet core and React application
 - SQL Server database
@@ -113,6 +113,7 @@ We use [Docker Compose](https://docs.docker.com/compose/) to create all of the c
 - *Selenium Grid Hub* - See https://github.com/SeleniumHQ/docker-selenium#via-docker-compose
 - *Chrome* - Grid Node with Chrome installed
 - *Firefox* - Grid Node with Firefox installed
+- Nginx container as a reverse proxy to handle the SSL encryption/decryption
 
 The following command create a network, builds images and runs all the containers, then runs the tests against Chrome and Firefox, via the selenium grid:
 
@@ -131,7 +132,7 @@ First, the following script will set up the docker containers needed for testing
 You will now notice you have started up the docker environment and you appear on the command line within the tests container. To run the tests run the following:
 
 ```sh
-npm run test:teamcity -- --host hub -b http://niceorg:8080/consultations/
+npm run test:teamcity -- --host hub -b http://niceorg/consultations/
 ```
 Now, if you make a change to the tests locally, you have a way of testing the change within docker giving you more confidence that it will run in the teamcity build agent when you push it up. 
 

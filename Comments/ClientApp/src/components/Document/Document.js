@@ -72,30 +72,40 @@ export class Document extends Component<PropsType, StateType> {
 
 			let preloadedChapter, preloadedDocuments, preloadedConsultation;
 
+			let preloadedData = {};
+			if (this.props.staticContext && this.props.staticContext.preload) {
+				preloadedData = this.props.staticContext.preload.data; //this is data from Configure => SupplyData in Startup.cs. the main thing it contains for this call is the cookie for the current user.
+			}
+
 			preloadedChapter = preload(
 				this.props.staticContext,
 				"chapter",
 				[],
-				{...this.props.match.params}
+				{...this.props.match.params},
+				preloadedData,
 			);
 			preloadedDocuments = preload(
 				this.props.staticContext,
 				"documents",
 				[],
-				{consultationId: this.props.match.params.consultationId}
+				{consultationId: this.props.match.params.consultationId},
+				preloadedData,
 			);
 
 			preloadedConsultation = preload(
 				this.props.staticContext,
 				"consultation",
 				[],
-				{consultationId: this.props.match.params.consultationId, isReview: false}
+				{consultationId: this.props.match.params.consultationId, isReview: false},
+				preloadedData,
 			);
 
 			if (preloadedChapter && preloadedDocuments && preloadedConsultation) {
+
 				const allowComments = preloadedConsultation.supportsComments &&
 					preloadedConsultation.consultationState.consultationIsOpen &&
 					!preloadedConsultation.consultationState.userHasSubmitted;
+
 				if (preloadedChapter) {
 					preloadedChapter = this.addChapterDetailsToSections(preloadedChapter);
 				}
@@ -107,7 +117,7 @@ export class Document extends Component<PropsType, StateType> {
 					hasInitialData: true,
 					currentInPageNavItem: null,
 					onboarded: false,
-					allowComments: allowComments,
+					allowComments,
 					error: {
 						hasError: false,
 						message: null,
@@ -175,15 +185,17 @@ export class Document extends Component<PropsType, StateType> {
 		if (!this.state.hasInitialData) {
 			this.gatherData()
 				.then(data => {
-					const allowComments = data.consultationData.supportsComments &&
+					const allowComments =
+						data.consultationData.supportsComments &&
 						data.consultationData.consultationState.consultationIsOpen &&
 						!data.consultationData.consultationState.userHasSubmitted;
+					console.log(data.consultationData);
 					this.addChapterDetailsToSections(data.chapterData);
 					this.setState({
 						...data,
 						loading: false,
 						hasInitialData: true,
-						allowComments: allowComments,
+						allowComments,
 					});
 				})
 				.catch(err => {

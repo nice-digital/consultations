@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 
 namespace Comments.Common
@@ -95,6 +96,11 @@ namespace Comments.Common
 		    }
 
 		    return new Uri(builder.ToString());
+	    }
+
+	    public static bool IsIntegrationTest(this IHostingEnvironment hostingEnvironment)
+	    {
+		    return hostingEnvironment.ContentRootPath.IndexOf(".Test", StringComparison.OrdinalIgnoreCase) != -1;
 	    }
 	}
 }
