@@ -39,7 +39,6 @@ export class ProcessDocumentHtml extends PureComponent<PropsType, StateType> {
 	};
 
 	renderHtml = () => {
-		console.log("running renderHtml()");
 		const content = ReactHtmlParser(this.props.content, {
 			transform: this.transformHtml,
 		});

@@ -19,10 +19,11 @@
     "comments": {
       "commandName": "Project",
       "launchBrowser": true,
+      "launchUrl": "consultations/22/1/introduction",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:52680/"
+      "applicationUrl": "http://niceorg/"
     }
   }
 }

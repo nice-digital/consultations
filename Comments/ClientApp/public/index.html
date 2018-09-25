@@ -8,7 +8,7 @@
 
 	<!--! title -->
 
-	<base href="%PUBLIC_URL%/" />
+	<base href="%PUBLIC_URL%/"/>
 
 	<meta name="theme-color" content="#004650">
 	<!--! metas -->
@@ -37,16 +37,16 @@
 	<![endif]-->
 
 	<!-- Hotjar Tracking Code for Consultations -->
-	<script>
+	<script data-hotjarid="%REACT_APP_HOTJARID%" id="hotjarScript">
 		(function(h,o,t,j,a,r){
 			h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-			h._hjSettings={hjid:1018214,hjsv:6};
+			h._hjSettings={hjid:document.getElementById("hotjarScript").getAttribute("data-hotjarid"),hjsv:6};
 			a=o.getElementsByTagName('head')[0];
 			r=o.createElement('script');r.async=1;
 			r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
 			a.appendChild(r);
 		})(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
-	</script>
+	</script> 
 </head>
 <body>
     <div id="root"></div>
