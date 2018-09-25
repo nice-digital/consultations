@@ -3,7 +3,6 @@
 exports[`[ClientApp]  DocumentPreview Component should match snapshot with supplied data 1`] = `
 Array [
   "",
-  "",
   <div
     className="container"
 >
