@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component } from "react";
+import Cookies from "js-cookie";
 
 type PropsType = {};
 
@@ -17,24 +18,22 @@ export class Tutorial extends Component<PropsType, StateType> {
 	}
 
 	componentDidMount() {
-		const cookie = this.getCookie();
-		const isPanelVisible = cookie !== false;
+		const isPanelVisible = this.getCookie();
 		this.setState({isPanelVisible});		
 	}
 
 	setCookie = (isPanelVisible: boolean) => {
-		window.document.cookie = "isPanelVisible = " + isPanelVisible.toString();
+		Cookies.set("TutorialVisible", isPanelVisible);
 	};
 
 	getCookie = () => {
-		const cookie = window.document.cookie;
-		const cookieData = cookie.match(/isPanelVisible=(true|false);/);
-		if (cookieData !== null)
-		{
-			const cookieValue = cookieData[0].match(/(true|false)/);
-			return cookieValue[0] === "true";
+		const cookieValue = Cookies.get("TutorialVisible");
+		if (cookieValue === "true" || cookieValue === undefined) {
+			return true;
 		}
-		return null;
+		else {
+			return false;
+		}
 	};
 
 	handleClick = (isPanelVisible: boolean) => {
@@ -58,6 +57,7 @@ export class Tutorial extends Component<PropsType, StateType> {
 							<div className="grid">
 								<div data-g="6 lg:5">
 									<p className="mt--0"><strong>Use the icon next to chapters, subsections and recommendations to comment on them</strong></p>
+									<img src="images/tutorial_graphic_800.png" alt="Mouse pointer hovering over commenting icon" />
 								</div>
 								<div data-g="6 lg:push:1">
 									<p className="mt--0 mb--0"><strong>Highlight a selection of text using the cursor to make a comment on it</strong></p>
