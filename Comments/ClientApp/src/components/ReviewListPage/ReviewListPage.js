@@ -185,26 +185,26 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			.then(data => {
 				if (data.consultationData !== null) {
 					this.setState({
-						consultationData: data.consultationData,
-						commentsData: data.commentsData,
-						comments: data.commentsData.commentsAndQuestions.comments,
-						questions: data.commentsData.commentsAndQuestions.questions,
-						userHasSubmitted: data.consultationData.consultationState.userHasSubmitted,
-						validToSubmit: data.consultationData.consultationState.supportsSubmission,
-						loading: false,
-						allowComments: (data.consultationData.consultationState.consultationIsOpen && !data.consultationData.consultationState.userHasSubmitted),
-						supportsDownload: data.consultationData.consultationState.supportsDownload,
-						sort: data.commentsData.sort,
-						organisationName: data.commentsData.organisationName || "",
-						documentTitles: this.getListOfDocuments(data.commentsData.filters),
-					},
-					() => {
-						tagManager({
-							event: "pageview",
-							gidReference: this.state.consultationData.reference,
-							title: this.getPageTitle(),
-						});
-					}
+							consultationData: data.consultationData,
+							commentsData: data.commentsData,
+							comments: data.commentsData.commentsAndQuestions.comments,
+							questions: data.commentsData.commentsAndQuestions.questions,
+							userHasSubmitted: data.consultationData.consultationState.userHasSubmitted,
+							validToSubmit: data.consultationData.consultationState.supportsSubmission,
+							loading: false,
+							allowComments: (data.consultationData.consultationState.consultationIsOpen && !data.consultationData.consultationState.userHasSubmitted),
+							supportsDownload: data.consultationData.consultationState.supportsDownload,
+							sort: data.commentsData.sort,
+							organisationName: data.commentsData.organisationName || "",
+							documentTitles: this.getListOfDocuments(data.commentsData.filters),
+						},
+						() => {
+							tagManager({
+								event: "pageview",
+								gidReference: this.state.consultationData.reference,
+								title: this.getPageTitle(),
+							});
+						}
 					);
 				} else {
 					this.setState({
@@ -276,6 +276,12 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 					viewSubmittedComments: false,
 					allowComments: false,
 				});
+				tagManager({
+					event: "button",
+					category: "Consultation comments page",
+					action: "Clicked",
+					label: "Submit my response button",
+				});
 			})
 			.catch(err => {
 				console.log(err);
@@ -306,11 +312,23 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		this.setState({
 			viewSubmittedComments: true,
 		});
+		tagManager({
+			event: "button",
+			category: "Consultation comments page",
+			action: "Clicked",
+			label: "Review your response button",
+		});
 	};
 
 	fieldsChangeHandler = (e: SyntheticInputEvent) => {
 		this.setState({
 			[e.target.name]: e.target.value,
+		});
+		tagManager({
+			event: "button",
+			category: "Consultation comments page",
+			action: e.target.name,
+			label: e.target.value,
 		});
 	};
 
@@ -358,7 +376,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			try {
 				return this.state.documentTitles.filter(item => item.id === documentId.toString())[0].title;
 			}
-			catch(err) {
+			catch (err) {
 				return "Consultation document ID " + documentId;
 			}
 
@@ -437,8 +455,17 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																	onClick={this.viewSubmittedCommentsHandler}>Review your response
 																</button>
 																{this.state.supportsDownload &&
-																<a className="btn btn--secondary"
-																	 href={`${this.props.basename}/api/exportexternal/${this.props.match.params.consultationId}`}>Download
+																<a
+																	onClick={() => {
+																		tagManager({
+																			event: "button",
+																			category: "Consultation comments page",
+																			action: "Clicked",
+																			label: "Download your response button",
+																		});
+																	}}
+																	className="btn btn--secondary"
+																	href={`${this.props.basename}/api/exportexternal/${this.props.match.params.consultationId}`}>Download
 																	your response</a>
 																}
 																<h2>What happens next?</h2>
