@@ -189,7 +189,6 @@ export class Document extends Component<PropsType, StateType> {
 						data.consultationData.supportsComments &&
 						data.consultationData.consultationState.consultationIsOpen &&
 						!data.consultationData.consultationState.userHasSubmitted;
-					console.log(data.consultationData);
 					this.addChapterDetailsToSections(data.chapterData);
 					this.setState({
 						...data,
@@ -376,9 +375,7 @@ export class Document extends Component<PropsType, StateType> {
 			documentId,
 			consultationId
 		);
-
-		console.log(supportingDocs.links.length);
-
+		
 		return (
 			<Fragment>
 				<Helmet>
