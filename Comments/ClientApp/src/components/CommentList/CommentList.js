@@ -1,28 +1,28 @@
 // @flow
 
-import React, {Component, Fragment} from "react";
-import {withRouter, Link, Prompt} from "react-router-dom";
+import React, { Component, Fragment } from "react";
+import { withRouter, Link, Prompt } from "react-router-dom";
 //import stringifyObject from "stringify-object";
-import {LiveMessage} from "react-aria-live";
+import { LiveMessage } from "react-aria-live";
 
 import preload from "../../data/pre-loader";
-import {load} from "../../data/loader";
+import { load } from "../../data/loader";
 import {
 	saveCommentHandler,
 	deleteCommentHandler,
 	saveAnswerHandler,
 	deleteAnswerHandler,
 } from "../../helpers/editing-and-deleting";
-import {pullFocusById} from "../../helpers/accessibility-helpers";
-import {mobileWidth} from "../../constants";
-import {getElementPositionWithinDocument, getSectionTitle} from "../../helpers/utils";
-import {updateUnsavedIds} from "../../helpers/unsaved-comments";
-import {tagManager} from "../../helpers/tag-manager";
+import { pullFocusById } from "../../helpers/accessibility-helpers";
+import { mobileWidth } from "../../constants";
+import { getElementPositionWithinDocument, getSectionTitle } from "../../helpers/utils";
+import { updateUnsavedIds } from "../../helpers/unsaved-comments";
+import { tagManager } from "../../helpers/tag-manager";
 
-import {CommentBox} from "../CommentBox/CommentBox";
-import {Question} from "../Question/Question";
-import {LoginBanner} from "../LoginBanner/LoginBanner";
-import {UserContext} from "../../context/UserContext";
+import { CommentBox } from "../CommentBox/CommentBox";
+import { Question } from "../Question/Question";
+import { LoginBanner } from "../LoginBanner/LoginBanner";
+import { UserContext } from "../../context/UserContext";
 
 type PropsType = {
 	staticContext?: any,
@@ -224,19 +224,44 @@ export class CommentList extends Component<PropsType, StateType> {
 	handleClick = (event: string) => {
 		switch (event) {
 			case "toggleOpenComments":
-				this.setState(prevState => ({
-					drawerOpen: (prevState.drawerOpen && prevState.viewComments ? !prevState.drawerOpen : true),
-					viewComments: true,
-				}));
+				this.setState(prevState => {
+					const drawerOpen = prevState.drawerOpen && prevState.viewComments ? !prevState.drawerOpen : true;
+					tagManager({
+						event: "button",
+						category: "Consultation comments page",
+						action: "Clicked",
+						label: `${drawerOpen ? "Open" : "Close"} comments panel button`,
+					});
+					return (
+						{
+							drawerOpen,
+							viewComments: true,
+						}
+					);
+				});
 				pullFocusById("#js-drawer-toggleopen-comments");
 				break;
+
 			case "toggleOpenQuestions":
-				this.setState(prevState => ({
-					drawerOpen: (prevState.drawerOpen && !prevState.viewComments ? !prevState.drawerOpen : true),
-					viewComments: false,
-				}));
+
+				this.setState(prevState => {
+					const drawerOpen = prevState.drawerOpen && !prevState.viewComments ? !prevState.drawerOpen : true;
+					tagManager({
+						event: "button",
+						category: "Consultation comments page",
+						action: "Clicked",
+						label: `${drawerOpen ? "Open" : "Close"} questions panel button`,
+					});
+					return (
+						{
+							drawerOpen,
+							viewComments: false,
+						}
+					);
+				});
 				pullFocusById("#js-drawer-toggleopen-questions");
 				break;
+
 			default:
 				return;
 		}
