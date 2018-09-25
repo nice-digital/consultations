@@ -18,6 +18,7 @@ import {UserContext} from "../../context/UserContext";
 import {Selection} from "../Selection/Selection";
 import {pullFocusByQuerySelector} from "../../helpers/accessibility-helpers";
 import {Header} from "../Header/Header";
+import { Tutorial } from "../Tutorial/Tutorial";
 
 type PropsType = {
 	staticContext?: any,
@@ -382,6 +383,7 @@ export class Document extends Component<PropsType, StateType> {
 												 registerURL={contextValue.registerURL}/>
 						: /* if contextValue.isAuthorised... */ null}
 				</UserContext.Consumer>
+				<Tutorial />
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">

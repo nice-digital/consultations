@@ -1,0 +1,128 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[ClientApp]  Tutorial Component should match snapshot and display the tutorial when no cookie is set 1`] = `
+<aside
+  className="Tutorial mt--0 pt--d pb--d"
+>
+  <div
+    className="container"
+  >
+    <button
+      className="buttonAsLink"
+      onClick={[Function]}
+    >
+      Hide how to comment
+    </button>
+    <div>
+      <h1
+        className="pt--c"
+      >
+        How to comment
+      </h1>
+      <div
+        className="grid"
+      >
+        <div
+          data-g="12 sm:6 lg:4"
+        >
+          <p
+            className="mt--0"
+          >
+            Use the icon next to chapters, subsections and recommendations to comment on them
+          </p>
+          <img
+            alt="Mouse pointer hovering over commenting icon"
+            className="Tutorial__buttonImage"
+            src="images/tutorial_graphic_800.png"
+          />
+        </div>
+        <div
+          data-g="12 sm:6 lg:4"
+        >
+          <p
+            className="mt--0 mb--0"
+          >
+            Highlight a selection of text using the cursor to make a comment on it
+          </p>
+          <img
+            alt="Animation showing an example of highlighting text and clicking comment"
+            src="images/text-selection.gif"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</aside>
+`;
+
+exports[`[ClientApp]  Tutorial Component should match snapshot and display the tutorial when no cookie is set to false 1`] = `
+<aside
+  className="Tutorial mt--0 pt--d pb--d"
+>
+  <div
+    className="container"
+  >
+    <button
+      className="buttonAsLink"
+      onClick={[Function]}
+    >
+      Show how to comment
+    </button>
+  </div>
+</aside>
+`;
+
+exports[`[ClientApp]  Tutorial Component should match snapshot and display the tutorial when no cookie is set to true 1`] = `
+<aside
+  className="Tutorial mt--0 pt--d pb--d"
+>
+  <div
+    className="container"
+  >
+    <button
+      className="buttonAsLink"
+      onClick={[Function]}
+    >
+      Hide how to comment
+    </button>
+    <div>
+      <h1
+        className="pt--c"
+      >
+        How to comment
+      </h1>
+      <div
+        className="grid"
+      >
+        <div
+          data-g="12 sm:6 lg:4"
+        >
+          <p
+            className="mt--0"
+          >
+            Use the icon next to chapters, subsections and recommendations to comment on them
+          </p>
+          <img
+            alt="Mouse pointer hovering over commenting icon"
+            className="Tutorial__buttonImage"
+            src="images/tutorial_graphic_800.png"
+          />
+        </div>
+        <div
+          data-g="12 sm:6 lg:4"
+        >
+          <p
+            className="mt--0 mb--0"
+          >
+            Highlight a selection of text using the cursor to make a comment on it
+          </p>
+          <img
+            alt="Animation showing an example of highlighting text and clicking comment"
+            src="images/text-selection.gif"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</aside>
+`;
