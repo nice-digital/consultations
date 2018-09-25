@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`[ClientApp]  Tutorial Component should match snapshot and display the tutorial when no cookie is set 1`] = `
-<div
-  className="Tutorial mt--0 pt--b pb--b"
+<aside
+  className="Tutorial mt--0 pt--d pb--d"
 >
   <div
     className="container"
@@ -15,7 +15,7 @@ exports[`[ClientApp]  Tutorial Component should match snapshot and display the t
     </button>
     <div>
       <h1
-        className="h4 pt--c"
+        className="pt--c"
       >
         How to comment
       </h1>
@@ -23,29 +23,26 @@ exports[`[ClientApp]  Tutorial Component should match snapshot and display the t
         className="grid"
       >
         <div
-          data-g="6 lg:5"
+          data-g="12 sm:6 lg:4"
         >
           <p
             className="mt--0"
           >
-            <strong>
-              Use the icon next to chapters, subsections and recommendations to comment on them
-            </strong>
+            Use the icon next to chapters, subsections and recommendations to comment on them
           </p>
           <img
             alt="Mouse pointer hovering over commenting icon"
+            className="Tutorial__buttonImage"
             src="images/tutorial_graphic_800.png"
           />
         </div>
         <div
-          data-g="6 lg:push:1"
+          data-g="12 sm:6 lg:4"
         >
           <p
             className="mt--0 mb--0"
           >
-            <strong>
-              Highlight a selection of text using the cursor to make a comment on it
-            </strong>
+            Highlight a selection of text using the cursor to make a comment on it
           </p>
           <img
             alt="Animation showing an example of highlighting text and clicking comment"
@@ -55,12 +52,12 @@ exports[`[ClientApp]  Tutorial Component should match snapshot and display the t
       </div>
     </div>
   </div>
-</div>
+</aside>
 `;
 
 exports[`[ClientApp]  Tutorial Component should match snapshot and display the tutorial when no cookie is set to false 1`] = `
-<div
-  className="Tutorial mt--0 pt--b pb--b"
+<aside
+  className="Tutorial mt--0 pt--d pb--d"
 >
   <div
     className="container"
@@ -72,12 +69,12 @@ exports[`[ClientApp]  Tutorial Component should match snapshot and display the t
       Show how to comment
     </button>
   </div>
-</div>
+</aside>
 `;
 
 exports[`[ClientApp]  Tutorial Component should match snapshot and display the tutorial when no cookie is set to true 1`] = `
-<div
-  className="Tutorial mt--0 pt--b pb--b"
+<aside
+  className="Tutorial mt--0 pt--d pb--d"
 >
   <div
     className="container"
@@ -90,7 +87,7 @@ exports[`[ClientApp]  Tutorial Component should match snapshot and display the t
     </button>
     <div>
       <h1
-        className="h4 pt--c"
+        className="pt--c"
       >
         How to comment
       </h1>
@@ -98,29 +95,26 @@ exports[`[ClientApp]  Tutorial Component should match snapshot and display the t
         className="grid"
       >
         <div
-          data-g="6 lg:5"
+          data-g="12 sm:6 lg:4"
         >
           <p
             className="mt--0"
           >
-            <strong>
-              Use the icon next to chapters, subsections and recommendations to comment on them
-            </strong>
+            Use the icon next to chapters, subsections and recommendations to comment on them
           </p>
           <img
             alt="Mouse pointer hovering over commenting icon"
+            className="Tutorial__buttonImage"
             src="images/tutorial_graphic_800.png"
           />
         </div>
         <div
-          data-g="6 lg:push:1"
+          data-g="12 sm:6 lg:4"
         >
           <p
             className="mt--0 mb--0"
           >
-            <strong>
-              Highlight a selection of text using the cursor to make a comment on it
-            </strong>
+            Highlight a selection of text using the cursor to make a comment on it
           </p>
           <img
             alt="Animation showing an example of highlighting text and clicking comment"
@@ -130,5 +124,5 @@ exports[`[ClientApp]  Tutorial Component should match snapshot and display the t
       </div>
     </div>
   </div>
-</div>
+</aside>
 `;

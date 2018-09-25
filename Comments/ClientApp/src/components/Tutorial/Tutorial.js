@@ -28,12 +28,7 @@ export class Tutorial extends Component<PropsType, StateType> {
 
 	getCookie = () => {
 		const cookieValue = Cookies.get("TutorialVisible");
-		if (cookieValue === "true" || cookieValue === undefined) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		return cookieValue === "true" || cookieValue === undefined;
 	};
 
 	handleClick = (isPanelVisible: boolean) => {
@@ -44,7 +39,7 @@ export class Tutorial extends Component<PropsType, StateType> {
 	render() {
 		const isPanelVisible = this.state.isPanelVisible;
 		return (
-			<div className="Tutorial mt--0 pt--b pb--b">
+			<aside className="Tutorial mt--0 pt--d pb--d">
 				<div className="container">
 					<button 
 						className="buttonAsLink"
@@ -53,21 +48,21 @@ export class Tutorial extends Component<PropsType, StateType> {
 					</button>
 					{isPanelVisible ?
 						<div>
-							<h1 className="h4 pt--c">How to comment</h1>
+							<h1 className="pt--c">How to comment</h1>
 							<div className="grid">
-								<div data-g="6 lg:5">
-									<p className="mt--0"><strong>Use the icon next to chapters, subsections and recommendations to comment on them</strong></p>
-									<img src="images/tutorial_graphic_800.png" alt="Mouse pointer hovering over commenting icon" />
+								<div data-g="12 sm:6 lg:4">
+									<p className="mt--0">Use the icon next to chapters, subsections and recommendations to comment on them</p>
+									<img className="Tutorial__buttonImage" src="images/tutorial_graphic_800.png" alt="Mouse pointer hovering over commenting icon" />
 								</div>
-								<div data-g="6 lg:push:1">
-									<p className="mt--0 mb--0"><strong>Highlight a selection of text using the cursor to make a comment on it</strong></p>
+								<div data-g="12 sm:6 lg:4">
+									<p className="mt--0 mb--0">Highlight a selection of text using the cursor to make a comment on it</p>
 									<img src="images/text-selection.gif" alt="Animation showing an example of highlighting text and clicking comment" />
 								</div>
 							</div>
 						</div>
 						: null }
 				</div>
-			</div>			
+			</aside>
 		);
 	}
 }
