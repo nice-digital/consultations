@@ -41,6 +41,9 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 				signInURL: preloadSource.signInURL,
 				registerURL: preloadSource.registerURL,
 			};
+			if (this.props.staticContext) {
+				this.props.staticContext.globals.isSignedIn = preloadSource.isAuthorised;
+			}
 		} 
 	}
 

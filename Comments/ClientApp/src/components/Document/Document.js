@@ -146,13 +146,13 @@ export class Document extends Component<PropsType, StateType> {
 		chapterData = this.getChapterData(this.props.match.params)
 			.then(response => response.data)
 			.catch(err => {
-					this.setState({
-						error: {
-							hasError: true,
-							message: "chapterData " + err,
-						},
-					});
-				}
+				this.setState({
+					error: {
+						hasError: true,
+						message: "chapterData " + err,
+					},
+				});
+			}
 			);
 
 		documentsData = load("documents", undefined, [], {consultationId})
