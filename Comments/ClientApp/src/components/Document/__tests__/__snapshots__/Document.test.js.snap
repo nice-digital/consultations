@@ -442,19 +442,6 @@ Array [
                                 </li>
                             </ul>
                         </nav>
-                        <nav
-                            aria-label="Supporting documents (for information only)"
-                            className="stacked-nav"
-                        >
-                            <h2
-                                className="stacked-nav__root"
-                            >
-                                Supporting documents (for information only)
-                            </h2>
-                            <ul
-                                className="stacked-nav__list"
-                            />
-                        </nav>
                     </div>
                     <div
                         className="inPageNavColumn"
