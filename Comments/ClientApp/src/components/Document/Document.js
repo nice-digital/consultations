@@ -242,7 +242,7 @@ export class Document extends Component<PropsType, StateType> {
 							event: "pageview",
 							gidReference: this.state.consultationData.reference,
 							title: this.getPageTitle(),
-						})
+						});
 					});
 					pullFocusByQuerySelector(".document-comment-container");
 				});
@@ -260,7 +260,7 @@ export class Document extends Component<PropsType, StateType> {
 							event: "pageview",
 							gidReference: this.state.consultationData.reference,
 							title: this.getPageTitle(),
-						})
+						});
 					});
 					pullFocusByQuerySelector(".document-comment-container");
 				})
@@ -456,7 +456,7 @@ export class Document extends Component<PropsType, StateType> {
 												event: "button",
 												category: "Consultation comments page",
 												action: "Clicked",
-												label: "Comment on this document button",
+												label: "Comment on document",
 											});
 										}}>
 										Comment on this document
@@ -492,8 +492,8 @@ export class Document extends Component<PropsType, StateType> {
 												documentId,
 												consultationId
 											)}/>
-										{supportingDocs.links.length !== 0 ?
-											<StackedNav	links={supportingDocs}/>
+										{supportingDocs.links && supportingDocs.links.length !== 0 ?
+											<StackedNav links={supportingDocs}/>
 											: null}
 									</div>
 

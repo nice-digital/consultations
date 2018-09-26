@@ -327,8 +327,8 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		tagManager({
 			event: "button",
 			category: "Consultation comments page",
-			action: e.target.name,
-			label: e.target.value,
+			action: `Submission mandatory question - ${e.target.name}`,
+			label: `${e.target.value}`,
 		});
 	};
 
