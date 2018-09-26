@@ -1,24 +1,24 @@
 // @flow
 
-import React, {Component, Fragment} from "react";
-import {Helmet} from "react-helmet";
-import {withRouter} from "react-router";
+import React, { Component, Fragment } from "react";
+import { Helmet } from "react-helmet";
+import { withRouter } from "react-router";
 import objectHash from "object-hash";
 
 import preload from "../../data/pre-loader";
-import {load} from "./../../data/loader";
-import {PhaseBanner} from "./../PhaseBanner/PhaseBanner";
-import {BreadCrumbs} from "./../Breadcrumbs/Breadcrumbs";
-import {StackedNav} from "./../StackedNav/StackedNav";
-import {HashLinkTop} from "../../helpers/component-helpers";
-import {tagManager} from "../../helpers/tag-manager";
-import {projectInformation} from "../../constants";
-import {ProcessDocumentHtml} from "../../document-processing/ProcessDocumentHtml";
-import {LoginBanner} from "./../LoginBanner/LoginBanner";
-import {UserContext} from "../../context/UserContext";
-import {Selection} from "../Selection/Selection";
-import {pullFocusByQuerySelector} from "../../helpers/accessibility-helpers";
-import {Header} from "../Header/Header";
+import { load } from "./../../data/loader";
+import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
+import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
+import { StackedNav } from "./../StackedNav/StackedNav";
+import { HashLinkTop } from "../../helpers/component-helpers";
+import { tagManager } from "../../helpers/tag-manager";
+import { projectInformation } from "../../constants";
+import { ProcessDocumentHtml } from "../../document-processing/ProcessDocumentHtml";
+import { LoginBanner } from "./../LoginBanner/LoginBanner";
+import { UserContext } from "../../context/UserContext";
+import { Selection } from "../Selection/Selection";
+import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
+import { Header } from "../Header/Header";
 import { Tutorial } from "../Tutorial/Tutorial";
 
 type PropsType = {
@@ -146,13 +146,13 @@ export class Document extends Component<PropsType, StateType> {
 		chapterData = this.getChapterData(this.props.match.params)
 			.then(response => response.data)
 			.catch(err => {
-				this.setState({
-					error: {
-						hasError: true,
-						message: "chapterData " + err,
-					},
-				});
-			}
+					this.setState({
+						error: {
+							hasError: true,
+							message: "chapterData " + err,
+						},
+					});
+				}
 			);
 
 		documentsData = load("documents", undefined, [], {consultationId})
@@ -353,7 +353,7 @@ export class Document extends Component<PropsType, StateType> {
 	};
 
 	addChapterDetailsToSections = (chapterData: Object) => {
-		const { title, slug } = chapterData;
+		const {title, slug} = chapterData;
 		if (chapterData.sections.length) {
 			if ((chapterData.sections[0].slug !== slug) && (chapterData.sections[0].title !== title)) {
 				chapterData.sections.unshift({title, slug});
@@ -376,6 +376,15 @@ export class Document extends Component<PropsType, StateType> {
 
 	getPageTitle = () => {
 		return `${this.state.chapterData.title} | ${this.getCurrentDocumentTitle()} | ${this.state.consultationData.title}`;
+	};
+
+	trackInPageNav = (e: SyntheticEvent, item: Object) => {
+		tagManager({
+			event: "button",
+			category: "Consultation comments page",
+			action: "In-Page Chapter Navigation",
+			label: item.title,
+		});
 	};
 
 	render() {
@@ -407,7 +416,7 @@ export class Document extends Component<PropsType, StateType> {
 			documentId,
 			consultationId
 		);
-		
+
 		return (
 			<Fragment>
 				<Helmet>
@@ -421,7 +430,7 @@ export class Document extends Component<PropsType, StateType> {
 												 registerURL={contextValue.registerURL}/>
 						: /* if contextValue.isAuthorised... */ null}
 				</UserContext.Consumer>
-				<Tutorial />
+				<Tutorial/>
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">
@@ -517,7 +526,8 @@ export class Document extends Component<PropsType, StateType> {
 															block: "start",
 														};
 														return (
-															<li role="presentation" className="in-page-nav__item" key={objectHash(item)}>
+															<li role="presentation" className="in-page-nav__item" key={objectHash(item)}
+																	onClick={(e) => this.trackInPageNav(e, item)}>
 																<HashLinkTop {...props} />
 															</li>
 														);
