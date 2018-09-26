@@ -269,18 +269,18 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			hasTobaccoLinks,
 		};
 		load("submit", undefined, [], {}, "POST", submission, true)
-			.then(() => {
+			.then(response => {
+				tagManager({
+					event: "generic",
+					category: "Consultation comments page",
+					action: "Response submitted",
+					label: `${response.data.comments ? response.data.comments.length : "0"} comments and ${response.data.answers ? response.data.answers.length : "0"} answers`,
+				});
 				this.setState({
 					userHasSubmitted: true,
 					validToSubmit: false,
 					viewSubmittedComments: false,
 					allowComments: false,
-				});
-				tagManager({
-					event: "button",
-					category: "Consultation comments page",
-					action: "Clicked",
-					label: "Submit my response button",
 				});
 			})
 			.catch(err => {
@@ -313,7 +313,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			viewSubmittedComments: true,
 		});
 		tagManager({
-			event: "button",
+			event: "generic",
 			category: "Consultation comments page",
 			action: "Clicked",
 			label: "Review your response button",
@@ -325,7 +325,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			[e.target.name]: e.target.value,
 		});
 		tagManager({
-			event: "button",
+			event: "generic",
 			category: "Consultation comments page",
 			action: `Submission mandatory question - ${e.target.name}`,
 			label: `${e.target.value}`,
@@ -458,7 +458,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																<a
 																	onClick={() => {
 																		tagManager({
-																			event: "button",
+																			event: "generic",
 																			category: "Consultation comments page",
 																			action: "Clicked",
 																			label: "Download your response button",

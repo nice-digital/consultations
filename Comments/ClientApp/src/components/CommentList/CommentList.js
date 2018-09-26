@@ -227,7 +227,7 @@ export class CommentList extends Component<PropsType, StateType> {
 				this.setState(prevState => {
 					const drawerOpen = prevState.drawerOpen && prevState.viewComments ? !prevState.drawerOpen : true;
 					tagManager({
-						event: "button",
+						event: "generic",
 						category: "Consultation comments page",
 						action: "Clicked",
 						label: `${drawerOpen ? "Open" : "Close"} comments panel button`,
@@ -247,7 +247,7 @@ export class CommentList extends Component<PropsType, StateType> {
 				this.setState(prevState => {
 					const drawerOpen = prevState.drawerOpen && !prevState.viewComments ? !prevState.drawerOpen : true;
 					tagManager({
-						event: "button",
+						event: "generic",
 						category: "Consultation comments page",
 						action: "Clicked",
 						label: `${drawerOpen ? "Open" : "Close"} questions panel button`,

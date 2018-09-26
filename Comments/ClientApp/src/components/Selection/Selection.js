@@ -99,7 +99,7 @@ export class Selection extends Component<PropsType, StateType> {
 		this.props.newCommentFunc(null, this.state.comment); //can't pass the event here, as it's the button click event, not the start of the text selection.
 		this.setState({ toolTipVisible: false });
 		tagManager({
-			event: "button",
+			event: "generic",
 			category: "Consultation comments page",
 			action: "Clicked",
 			label: "Comment on text selection",

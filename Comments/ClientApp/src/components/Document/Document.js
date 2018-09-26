@@ -380,7 +380,7 @@ export class Document extends Component<PropsType, StateType> {
 
 	trackInPageNav = (e: SyntheticEvent, item: Object) => {
 		tagManager({
-			event: "button",
+			event: "generic",
 			category: "Consultation comments page",
 			action: "In-Page Chapter Navigation",
 			label: item.title,
@@ -462,7 +462,7 @@ export class Document extends Component<PropsType, StateType> {
 												section: null,
 											});
 											tagManager({
-												event: "button",
+												event: "generic",
 												category: "Consultation comments page",
 												action: "Clicked",
 												label: "Comment on document",

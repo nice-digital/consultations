@@ -22,7 +22,7 @@ export class StackedNav extends PureComponent<PropsType> {
 
 	trackClick = (e: SyntheticEvent) => {
 		tagManager({
-			event: "button",
+			event: "generic",
 			category: "Consultation comments page",
 			action: "Opened",
 			label: e.target.href,

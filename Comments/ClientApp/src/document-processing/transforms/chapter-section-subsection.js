@@ -30,7 +30,7 @@ export const processChapterSectionSubsection = (node, onNewCommentClick, sourceU
 					onClick={e => {
 						e.preventDefault();
 						tagManager({
-							event: "button",
+							event: "generic",
 							category: "Consultation comments page",
 							action: "Clicked",
 							label: `Comment on ${commentOn || "chapter"}`,
