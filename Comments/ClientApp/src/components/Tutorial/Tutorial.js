@@ -2,7 +2,7 @@
 
 import React, { Component } from "react";
 import Cookies from "js-cookie";
-import { tagManager } from "../../helpers/tag-manager";
+//import { tagManager } from "../../helpers/tag-manager";
 
 type PropsType = {};
 
@@ -34,15 +34,16 @@ export class Tutorial extends Component<PropsType, StateType> {
 
 	handleClick = (isPanelVisible: boolean) => {
 		this.setCookie(!isPanelVisible);
-		this.setState({isPanelVisible: !isPanelVisible},
-			()=>{
-				tagManager({
-					event: "generic",
-					category: "Consultation comments page",
-					action: "Clicked",
-					label: `${this.state.isPanelVisible ? "Show" : "Hide"} how to comment panel button`,
-				});
-			});
+		this.setState({isPanelVisible: !isPanelVisible});
+		// ,
+		// ()=>{
+		// 	tagManager({
+		// 		event: "generic",
+		// 		category: "Consultation comments page",
+		// 		action: "Clicked",
+		// 		label: `${this.state.isPanelVisible ? "Show" : "Hide"} how to comment panel button`,
+		// 	});
+		// });
 	};
 
 	render() {

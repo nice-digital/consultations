@@ -242,9 +242,15 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			event: "pageview",
 			gidReference: this.state.consultationData.reference,
 			title: this.getPageTitle(),
-		})
+		});
 		pullFocusById("comments-column");
 	}
+
+	calculateResponseDuration = (data) => {
+		const now = new Date.now();
+		const {answers, comments} = data;
+
+	};
 
 	submitConsultation = () => {
 		const comments = this.state.comments;
@@ -270,11 +276,18 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		};
 		load("submit", undefined, [], {}, "POST", submission, true)
 			.then(response => {
+				response.data.durationFromFirstCommentOrAnswerSavedUntilSubmissionInSeconds = 123456;
 				tagManager({
 					event: "generic",
 					category: "Consultation comments page",
 					action: "Response submitted",
 					label: `${response.data.comments ? response.data.comments.length : "0"} comments and ${response.data.answers ? response.data.answers.length : "0"} answers`,
+				});
+				tagManager({
+					event: "generic",
+					category: "Consultation comments page",
+					action: "Length to submit response",
+					label: (response.data.durationFromFirstCommentOrAnswerSavedUntilSubmissionInSeconds / 3600).toString(),
 				});
 				this.setState({
 					userHasSubmitted: true,
