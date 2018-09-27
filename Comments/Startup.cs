@@ -248,7 +248,6 @@ namespace Comments
                     options.SupplyData = (context, data) =>
                     {
                         data["isHttpsRequest"] = context.Request.IsHttps;
-                        //data["cookies"] = new Dictionary<string, string>{{NICE.Auth.NetCore.Helpers.Constants.DefaultCookieName, context.Request.Cookies[NICE.Auth.NetCore.Helpers.Constants.DefaultCookieName] }};
                         var cookieForSSR = context.Request.Cookies[NICE.Auth.NetCore.Helpers.Constants.DefaultCookieName];
                         if (cookieForSSR != null)
                         {

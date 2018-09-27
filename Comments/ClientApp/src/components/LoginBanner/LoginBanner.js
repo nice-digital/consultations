@@ -4,7 +4,8 @@ import React, { PureComponent } from "react";
 type PropsType = {
 	signInURL: string,
 	registerURL: string,
-	signInButton: boolean
+	signInButton: boolean,
+	signInText: string,
 }
 
 export class LoginBanner extends PureComponent<PropsType> {
@@ -17,7 +18,7 @@ export class LoginBanner extends PureComponent<PropsType> {
 						<div data-g="12">
 							<div className="LoginBanner">
 								<a href={this.props.signInURL} title="Sign in to your NICE account">
-									Sign in to your NICE account</a> to comment on this consultation.{" "}
+									Sign in to your NICE account</a> {this.props.signInText || "to comment on this consultation"}.{" "}
 								Don't have an account?{" "}
 								<a href={this.props.registerURL} title="Register for a NICE account">
 									Register
