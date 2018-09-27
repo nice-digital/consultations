@@ -206,6 +206,7 @@ export class Document extends Component<PropsType, StateType> {
 							event: "pageview",
 							gidReference: this.state.consultationData.reference,
 							title: this.getPageTitle(),
+							stage: "previewed",
 						});
 					});
 				})
@@ -241,7 +242,7 @@ export class Document extends Component<PropsType, StateType> {
 						tagManager({
 							event: "pageview",
 							gidReference: this.state.consultationData.reference,
-							title: this.getPageTitle(),
+							stage: "previewed",
 						});
 					});
 					pullFocusByQuerySelector(".document-comment-container");
@@ -260,6 +261,7 @@ export class Document extends Component<PropsType, StateType> {
 							event: "pageview",
 							gidReference: this.state.consultationData.reference,
 							title: this.getPageTitle(),
+							stage: "previewed",
 						});
 					});
 					pullFocusByQuerySelector(".document-comment-container");

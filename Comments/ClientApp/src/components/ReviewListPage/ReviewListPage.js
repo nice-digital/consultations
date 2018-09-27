@@ -185,26 +185,27 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			.then(data => {
 				if (data.consultationData !== null) {
 					this.setState({
-							consultationData: data.consultationData,
-							commentsData: data.commentsData,
-							comments: data.commentsData.commentsAndQuestions.comments,
-							questions: data.commentsData.commentsAndQuestions.questions,
-							userHasSubmitted: data.consultationData.consultationState.userHasSubmitted,
-							validToSubmit: data.consultationData.consultationState.supportsSubmission,
-							loading: false,
-							allowComments: (data.consultationData.consultationState.consultationIsOpen && !data.consultationData.consultationState.userHasSubmitted),
-							supportsDownload: data.consultationData.consultationState.supportsDownload,
-							sort: data.commentsData.sort,
-							organisationName: data.commentsData.organisationName || "",
-							documentTitles: this.getListOfDocuments(data.commentsData.filters),
-						},
-						() => {
-							tagManager({
-								event: "pageview",
-								gidReference: this.state.consultationData.reference,
-								title: this.getPageTitle(),
-							});
-						}
+						consultationData: data.consultationData,
+						commentsData: data.commentsData,
+						comments: data.commentsData.commentsAndQuestions.comments,
+						questions: data.commentsData.commentsAndQuestions.questions,
+						userHasSubmitted: data.consultationData.consultationState.userHasSubmitted,
+						validToSubmit: data.consultationData.consultationState.supportsSubmission,
+						loading: false,
+						allowComments: (data.consultationData.consultationState.consultationIsOpen && !data.consultationData.consultationState.userHasSubmitted),
+						supportsDownload: data.consultationData.consultationState.supportsDownload,
+						sort: data.commentsData.sort,
+						organisationName: data.commentsData.organisationName || "",
+						documentTitles: this.getListOfDocuments(data.commentsData.filters),
+					},
+					() => {
+						tagManager({
+							event: "pageview",
+							gidReference: this.state.consultationData.reference,
+							title: this.getPageTitle(),
+							stage: this.state.userHasSubmitted ? "postsubmission" : "presubmission",
+						});
+					}
 					);
 				} else {
 					this.setState({
@@ -242,6 +243,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			event: "pageview",
 			gidReference: this.state.consultationData.reference,
 			title: this.getPageTitle(),
+			stage: this.state.userHasSubmitted ? "postsubmission" : "presubmission",
 		});
 		pullFocusById("comments-column");
 	}
@@ -282,6 +284,12 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 					category: "Consultation comments page",
 					action: "Length to submit response",
 					label: (response.data.durationFromFirstCommentOrAnswerSavedUntilSubmissionInSeconds / 3600).toString(),
+				});
+				tagManager({
+					event: "pageview",
+					gidReference: this.state.consultationData.reference,
+					title: this.getPageTitle(),
+					stage: "submitted",
 				});
 				this.setState({
 					userHasSubmitted: true,
@@ -325,18 +333,26 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			action: "Clicked",
 			label: "Review your response button",
 		});
+		tagManager({
+			event: "pageview",
+			gidReference: this.state.consultationData.reference,
+			title: this.getPageTitle(),
+			stage: this.state.userHasSubmitted ? "postsubmission" : "presubmission",
+		});
 	};
 
 	fieldsChangeHandler = (e: SyntheticInputEvent) => {
 		this.setState({
 			[e.target.name]: e.target.value,
 		});
-		tagManager({
-			event: "generic",
-			category: "Consultation comments page",
-			action: `Submission mandatory question - ${e.target.name}`,
-			label: `${e.target.value}`,
-		});
+		if (e.target.name === "hasTobaccoLinks" || e.target.name === "respondingAsOrganisation") {
+			tagManager({
+				event: "generic",
+				category: "Consultation comments page",
+				action: `Submission mandatory question - ${e.target.name}`,
+				label: `${e.target.value}`,
+			});
+		}
 	};
 
 	issueA11yMessage = (message: string) => {
