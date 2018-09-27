@@ -2,7 +2,7 @@
 
 import React, { Component, Fragment } from "react";
 import { withRouter, Prompt } from "react-router-dom";
-//import stringifyObject from "stringify-object";
+import Helmet from "react-helmet";
 
 import preload from "../../data/pre-loader";
 import { load } from "../../data/loader";
@@ -14,6 +14,7 @@ import {
 } from "../../helpers/editing-and-deleting";
 import { queryStringToObject } from "../../helpers/utils";
 import { pullFocusById } from "../../helpers/accessibility-helpers";
+import { tagManager } from "../../helpers/tag-manager";
 import { projectInformation } from "../../constants";
 import { UserContext } from "../../context/UserContext";
 
@@ -44,12 +45,12 @@ type PropsType = {
 };
 
 type StateType = {
-	consultationData: ConsultationDataType,
-	commentsData: ReviewPageViewModelType,
+	consultationData: ConsultationDataType | null,
+	commentsData: ReviewPageViewModelType | null,
 	userHasSubmitted: boolean,
 	validToSubmit: false,
 	viewSubmittedComments: boolean,
-	path: string,
+	path: string | null,
 	hasInitalData: boolean,
 	allowComments: boolean,
 	comments: Array<CommentType>,
@@ -82,9 +83,9 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			questions: [], //this contains all the questions, not just the ones displayed to the user. the show property defines whether the question is filtered out from view.
 			sort: "DocumentAsc",
 			supportsDownload: false,
-			respondingAsOrganisation: "",
+			respondingAsOrganisation: false,
 			organisationName: "",
-			hasTobaccoLinks: "",
+			hasTobaccoLinks: false,
 			tobaccoDisclosure: "",
 			unsavedIds: [],
 			documentTitles: [],
@@ -96,6 +97,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		}
 
 		const querystring = this.props.location.search;
+
 		const preloadedCommentsData = preload(
 			this.props.staticContext,
 			"commentsreview",
@@ -113,6 +115,9 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		);
 
 		if (preloadedCommentsData && preloadedConsultationData) {
+			if (this.props.staticContext) {
+				this.props.staticContext.globals.gidReference = preloadedConsultationData.reference;
+			}
 			this.state = {
 				path: this.props.basename + this.props.location.pathname,
 				commentsData: preloadedCommentsData,
@@ -128,8 +133,8 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 				supportsDownload: preloadedConsultationData.consultationState.supportsDownload,
 				viewSubmittedComments: false,
 				organisationName: preloadedCommentsData.organisationName || "",
-				respondingAsOrganisation: "",
-				hasTobaccoLinks: "",
+				respondingAsOrganisation: false,
+				hasTobaccoLinks: false,
 				tobaccoDisclosure: "",
 				unsavedIds: [],
 				documentTitles: this.getListOfDocuments(preloadedCommentsData.filters),
@@ -180,19 +185,27 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			.then(data => {
 				if (data.consultationData !== null) {
 					this.setState({
-						consultationData: data.consultationData,
-						commentsData: data.commentsData,
-						comments: data.commentsData.commentsAndQuestions.comments,
-						questions: data.commentsData.commentsAndQuestions.questions,
-						userHasSubmitted: data.consultationData.consultationState.userHasSubmitted,
-						validToSubmit: data.consultationData.consultationState.supportsSubmission,
-						loading: false,
-						allowComments: (data.consultationData.consultationState.consultationIsOpen && !data.consultationData.consultationState.userHasSubmitted),
-						supportsDownload: data.consultationData.consultationState.supportsDownload,
-						sort: data.commentsData.sort,
-						organisationName: data.commentsData.organisationName || "",
-						documentTitles: this.getListOfDocuments(data.commentsData.filters),
-					});
+							consultationData: data.consultationData,
+							commentsData: data.commentsData,
+							comments: data.commentsData.commentsAndQuestions.comments,
+							questions: data.commentsData.commentsAndQuestions.questions,
+							userHasSubmitted: data.consultationData.consultationState.userHasSubmitted,
+							validToSubmit: data.consultationData.consultationState.supportsSubmission,
+							loading: false,
+							allowComments: (data.consultationData.consultationState.consultationIsOpen && !data.consultationData.consultationState.userHasSubmitted),
+							supportsDownload: data.consultationData.consultationState.supportsDownload,
+							sort: data.commentsData.sort,
+							organisationName: data.commentsData.organisationName || "",
+							documentTitles: this.getListOfDocuments(data.commentsData.filters),
+						},
+						() => {
+							tagManager({
+								event: "pageview",
+								gidReference: this.state.consultationData.reference,
+								title: this.getPageTitle(),
+							});
+						}
+					);
 				} else {
 					this.setState({
 						commentsData: data.commentsData,
@@ -202,6 +215,8 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 						loading: false,
 						organisationName: data.commentsData.organisationName || "",
 						documentTitles: this.getListOfDocuments(data.commentsData.filters),
+					}, () => {
+						// todo: this is where we'd track an applied filter
 					});
 				}
 			})
@@ -223,6 +238,11 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		const oldQueryString = prevProps.location.search;
 		const newQueryString = this.props.location.search;
 		if (oldQueryString === newQueryString) return;
+		tagManager({
+			event: "pageview",
+			gidReference: this.state.consultationData.reference,
+			title: this.getPageTitle(),
+		});
 		pullFocusById("comments-column");
 	}
 
@@ -249,7 +269,20 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			hasTobaccoLinks,
 		};
 		load("submit", undefined, [], {}, "POST", submission, true)
-			.then(() => {
+			.then(response => {
+				response.data.durationFromFirstCommentOrAnswerSavedUntilSubmissionInSeconds = 123456;
+				tagManager({
+					event: "generic",
+					category: "Consultation comments page",
+					action: "Response submitted",
+					label: `${response.data.comments ? response.data.comments.length : "0"} comments and ${response.data.answers ? response.data.answers.length : "0"} answers`,
+				});
+				tagManager({
+					event: "generic",
+					category: "Consultation comments page",
+					action: "Length to submit response",
+					label: (response.data.durationFromFirstCommentOrAnswerSavedUntilSubmissionInSeconds / 3600).toString(),
+				});
 				this.setState({
 					userHasSubmitted: true,
 					validToSubmit: false,
@@ -286,16 +319,27 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		this.setState({
 			viewSubmittedComments: true,
 		});
+		tagManager({
+			event: "generic",
+			category: "Consultation comments page",
+			action: "Clicked",
+			label: "Review your response button",
+		});
 	};
 
 	fieldsChangeHandler = (e: SyntheticInputEvent) => {
 		this.setState({
 			[e.target.name]: e.target.value,
 		});
+		tagManager({
+			event: "generic",
+			category: "Consultation comments page",
+			action: `Submission mandatory question - ${e.target.name}`,
+			label: `${e.target.value}`,
+		});
 	};
 
 	issueA11yMessage = (message: string) => {
-		console.log(`Issuing a11y message from ReviewListPage: ${message}`);
 		const unique = new Date().getTime().toString();
 		// announcer requires a unique id so we're able to repeat phrases
 		this.props.announceAssertive(message, unique);
@@ -339,7 +383,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			try {
 				return this.state.documentTitles.filter(item => item.id === documentId.toString())[0].title;
 			}
-			catch(err) {
+			catch (err) {
 				return "Consultation document ID " + documentId;
 			}
 
@@ -362,6 +406,10 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			.reduce((arr, group) => arr.concat(group), []);
 	}
 
+	getPageTitle = () => {
+		return `${this.state.consultationData.title} | Response reviewed pre submission`;
+	};
+
 	render() {
 		if (this.state.loading) return <h1>Loading...</h1>;
 		const {reference} = this.state.consultationData;
@@ -370,6 +418,9 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 
 		return (
 			<Fragment>
+				<Helmet>
+					<title>{this.getPageTitle()}</title>
+				</Helmet>
 				<Prompt
 					when={this.state.unsavedIds.length > 0}
 					message={`You have ${this.state.unsavedIds.length} unsaved ${this.state.unsavedIds.length === 1 ? "change" : "changes"}. Continue without saving?`}
@@ -411,8 +462,17 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 																	onClick={this.viewSubmittedCommentsHandler}>Review your response
 																</button>
 																{this.state.supportsDownload &&
-																<a className="btn btn--secondary"
-																	 href={`${this.props.basename}/api/exportexternal/${this.props.match.params.consultationId}`}>Download
+																<a
+																	onClick={() => {
+																		tagManager({
+																			event: "generic",
+																			category: "Consultation comments page",
+																			action: "Clicked",
+																			label: "Download your response button",
+																		});
+																	}}
+																	className="btn btn--secondary"
+																	href={`${this.props.basename}/api/exportexternal/${this.props.match.params.consultationId}`}>Download
 																	your response</a>
 																}
 																<h2>What happens next?</h2>
