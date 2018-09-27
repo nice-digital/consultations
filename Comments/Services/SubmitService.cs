@@ -51,6 +51,10 @@ namespace Comments.Services
 			UpdateCommentsModel(submission.Comments, submissionToSave, submittedStatus);
 			UpdateAnswersModel(submission.Answers, submissionToSave, submittedStatus);
 
+			//var earliestComment = submission.Comments.Min(c => c.)
+
+			//submission.DurationBetweenFirstCommentOrAnswerSavedAndSubmissionInSeconds = 
+
 			return (rowsUpdated: _context.SaveChanges(), validate: null);
 		}
 

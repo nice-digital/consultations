@@ -194,7 +194,7 @@ namespace Comments
             app.UseAuthentication();
             app.UseSpaStaticFiles(new StaticFileOptions { RequestPath = "/consultations" });
 
-		    if (!env.IsIntegrationTest())
+		    if (!env.IsDevelopment() && !env.IsIntegrationTest())
 		    {
 			    app.UseHttpsRedirection();
 		    }
