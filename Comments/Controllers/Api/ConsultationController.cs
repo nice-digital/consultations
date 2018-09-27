@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Comments.Controllers.Api
 {
@@ -38,6 +39,7 @@ namespace Comments.Controllers.Api
 
 	[Produces("application/json")]
 	[Route("consultations/api/[controller]")]
+	[Authorize(Roles="IndevUser")]
 	public class DraftConsultationController : Controller
 	{
 		private readonly IConsultationService _consultationService;

@@ -20,8 +20,9 @@ namespace Comments.Test.Infrastructure
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimType.Name, displayName, null, "http://consultations.nice.org.uk"),
-                    new Claim(ClaimType.NameIdentifier, userId.ToString(), null, "http://consultations.nice.org.uk")
-                };
+                    new Claim(ClaimType.NameIdentifier, userId.ToString(), null, "http://consultations.nice.org.uk"),
+	                new Claim(ClaimType.Role, "IndevUser", null, "http://consultations.nice.org.uk")
+				};
                 context.Setup(r => r.User)
                     .Returns(() => new ClaimsPrincipal(new ClaimsIdentity(claims, Constants.DefaultScheme)));
             }
