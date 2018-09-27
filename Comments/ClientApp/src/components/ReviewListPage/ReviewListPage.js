@@ -246,12 +246,6 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		pullFocusById("comments-column");
 	}
 
-	calculateResponseDuration = (data) => {
-		const now = new Date.now();
-		const {answers, comments} = data;
-
-	};
-
 	submitConsultation = () => {
 		const comments = this.state.comments;
 		const questions = this.state.questions;
