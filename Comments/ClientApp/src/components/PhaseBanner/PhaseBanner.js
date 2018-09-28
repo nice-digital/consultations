@@ -10,10 +10,13 @@ type PropsType = {
 }
 
 const getBrowserInfo = () => {
+
+	const environmentName = process.env.NODE_ENV;
+	
 	if (typeof window !== "undefined") {
-		return `${Bowser.name} ${Bowser.version} on ${Bowser.osname} ${Bowser.osversion}`;
+		return `${Bowser.name} ${Bowser.version} on ${Bowser.osname} ${Bowser.osversion} running as ${environmentName}`;
 	}
-	return "";
+	return environmentName;
 };
 
 export class PhaseBanner extends PureComponent<PropsType> {

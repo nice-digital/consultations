@@ -140,6 +140,30 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 				documentTitles: this.getListOfDocuments(preloadedCommentsData.filters),
 			};
 		}
+
+		let isSSR = false;
+		if (this.props.staticContext){
+			isSSR = true;
+		}
+		const message = `Review page log hit at ${new Date().toJSON()}. running as ${process.env.NODE_ENV} SSR: ${isSSR}`;
+		preload(this.props.staticContext, "logging", [], {logLevel:"Warning"}, null, false,  "POST", {}, {message}, true);			
+
+	}
+
+	//this is temporary for debug purposes.
+	logStuff = () => {
+
+		let isSSR = false;
+		if (this.props.staticContext){
+			isSSR = true;
+		}
+		const message = `Review page log hit at ${new Date().toJSON()}. running as ${process.env.NODE_ENV} SSR: ${isSSR}`;
+
+		const logResponse = load("logging", undefined, [], {logLevel:"Warning"}, "POST", {message}, true)
+			.then(response => response.data)
+			.catch(err => {
+				console.error(err);
+			});
 	}
 
 	gatherData = async () => {
@@ -297,6 +321,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 					viewSubmittedComments: false,
 					allowComments: false,
 				});
+				this.logStuff();
 			})
 			.catch(err => {
 				console.log(err);
