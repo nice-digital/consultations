@@ -304,7 +304,9 @@ export class Review extends Component<PropsType, StateType> {
 					event: "generic",
 					category: "Consultation comments page",
 					action: "Length to submit response",
-					label: (response.data.durationBetweenFirstCommentOrAnswerSavedAndSubmissionInSeconds / 3600).toString(), //:-( no more whole numbers. lengthy decimals from now on  - though they're much more likely to get trimmed and lose accuracy
+					label: "Duration in hours",
+					value: (Math.round(response.data.durationBetweenFirstCommentOrAnswerSavedAndSubmissionInSeconds / 3600)), // number of hours, rounded. will be 0 if less than 30 mins
+					//:-( no more whole numbers. lengthy decimals from now on  - though they're much more likely to get trimmed and lose accuracy
 				});
 				tagManager({
 					event: "generic",
