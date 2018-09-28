@@ -207,11 +207,16 @@ namespace Comments
                     template: "{controller}/{action=Index}/{id?}");
 
 	            routes.MapRoute(
-		            name: "redirect",
+		            name: "PublishedRedirect",
 		            template: "consultations/{consultationId:int}/{documentId:int}",
-		            defaults: new {controller = "Redirect", action = "DocumentWithoutChapter"});
+		            defaults: new {controller = "Redirect", action = "PublishedDocumentWithoutChapter"});
 
-            });
+	            routes.MapRoute(
+		            name: "PreviewRedirect",
+		            template: "consultations/preview/{reference}/consultation/{consultationId:int}/document/{documentId:int}",
+		            defaults: new { controller = "Redirect", action = "PreviewDocumentWithoutChapter" });
+
+			});
 
             //// here you can see we make sure it doesn't start with /api, if it does, it'll 404 within .NET if it can't be found
             //app.MapWhen(x => !x.Request.Path.Value.StartsWith("/consultations/api", StringComparison.OrdinalIgnoreCase), builder =>
