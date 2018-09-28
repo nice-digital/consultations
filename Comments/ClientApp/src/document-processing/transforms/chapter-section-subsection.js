@@ -17,7 +17,7 @@ export const processChapterSectionSubsection = (node, onNewCommentClick, sourceU
 	const htmlElementID = (commentOn === "section" || commentOn === "subsection") ? node.attribs.id : "";
 
 	return (
-		<Fragment key={0}>
+		<Fragment key={htmlElementID}>
 			{allowComments &&
 				<button
 					data-gtm="button"
