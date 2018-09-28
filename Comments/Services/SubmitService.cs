@@ -1,3 +1,4 @@
+using System;
 using Comments.Models;
 using Comments.ViewModels;
 using System.Collections.Generic;
@@ -51,9 +52,14 @@ namespace Comments.Services
 			UpdateCommentsModel(submission.Comments, submissionToSave, submittedStatus);
 			UpdateAnswersModel(submission.Answers, submissionToSave, submittedStatus);
 
-			//var earliestComment = submission.Comments.Min(c => c.)
-
-			//submission.DurationBetweenFirstCommentOrAnswerSavedAndSubmissionInSeconds = 
+			//now for analytics calculate the number of seconds between the user's first comment or answer and the submission date
+			var earliestDate = submissionToSave.SubmissionComment.Any() ? submissionToSave.SubmissionComment.Min(sc => sc.Comment.CreatedDate) : DateTime.MaxValue;
+			var earliestAnswer = submissionToSave.SubmissionAnswer.Any() ? submissionToSave.SubmissionAnswer.Min(sa => sa.Answer.CreatedDate) : DateTime.MaxValue;
+			if (earliestAnswer < earliestDate)
+			{
+				earliestDate = earliestAnswer;
+			}
+			submission.DurationBetweenFirstCommentOrAnswerSavedAndSubmissionInSeconds = (submissionToSave.SubmissionDateTime - earliestDate).TotalSeconds;
 
 			return (rowsUpdated: _context.SaveChanges(), validate: null);
 		}

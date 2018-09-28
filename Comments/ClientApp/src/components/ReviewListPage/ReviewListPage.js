@@ -296,7 +296,6 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		};
 		load("submit", undefined, [], {}, "POST", submission, true)
 			.then(response => {
-				response.data.durationFromFirstCommentOrAnswerSavedUntilSubmissionInSeconds = 123456;
 				tagManager({
 					event: "generic",
 					category: "Consultation comments page",
@@ -307,7 +306,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 					event: "generic",
 					category: "Consultation comments page",
 					action: "Length to submit response",
-					label: (response.data.durationFromFirstCommentOrAnswerSavedUntilSubmissionInSeconds / 3600).toString(),
+					label: (response.data.durationBetweenFirstCommentOrAnswerSavedAndSubmissionInSeconds / 3600).toString(), //sigh. now we have to deal with super long decimals.
 				});
 				tagManager({
 					event: "pageview",

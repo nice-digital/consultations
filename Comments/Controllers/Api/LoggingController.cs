@@ -1,5 +1,3 @@
-using System.IO;
-using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -14,7 +12,7 @@ namespace Comments.Controllers.Api
 
 	/// <summary>
 	/// This is just here so the front-end can log stuff to kibana.
-	/// the front-end can call this either during the server-side render, or the client-side render (or after initial render). so anytime. 
+	/// the front-end can call this either during the server-side render or client-side.
 	/// </summary>
 	[Produces("application/json")]
     [Route("consultations/api/[controller]")]
@@ -26,25 +24,17 @@ namespace Comments.Controllers.Api
             _logger = logger;
         }
 
-        // POST: consultations/api/Logging?logLevel=Warning
-        [HttpPost]
+		/// <summary>
+		/// POST: consultations/api/Logging?logLevel=Error
+		/// </summary>
+		/// <param name="logPost">LogPostModel</param>
+		/// <param name="logLevel">LogLevel</param>
+		/// <returns></returns>
+		[HttpPost]
         public JsonResult PostLog([FromBody] LogPostModel logPost, [JsonConverter(typeof(StringEnumConverter))] LogLevel logLevel = LogLevel.Warning)
         {
 			_logger.Log(logLevel, logPost.Message);
 	        return Json(new { success = true});
         }
-
-
-	    [HttpGet]
-	    public IActionResult GetLog()
-	    {
-
-
-
-
-
-		    return Json(new { success = true });
-	    }
-
 	}
 }

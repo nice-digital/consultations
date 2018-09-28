@@ -53,6 +53,6 @@ namespace Comments.ViewModels
 		    }
 	    }
 
-		public int DurationBetweenFirstCommentOrAnswerSavedAndSubmissionInSeconds { get; set; }
+		public double DurationBetweenFirstCommentOrAnswerSavedAndSubmissionInSeconds { get; set; }
     }
 }
