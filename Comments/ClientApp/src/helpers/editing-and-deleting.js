@@ -31,7 +31,7 @@ export function saveCommentHandler(event: Event, comment: CommentType, self: any
 					event: "generic",
 					category: "Consultation comments page",
 					action: "Clicked",
-					label: "Comment saved",
+					label: "Comment saved button",
 				});
 				self.updateUnsavedIds(`${originalId}c`, false);
 				if (typeof self.issueA11yMessage === "function") {
@@ -118,7 +118,7 @@ export function saveAnswerHandler(event: Event, answer: AnswerType, questionId: 
 					event: "generic",
 					category: "Consultation comments page",
 					action: "Clicked",
-					label: "Answer saved",
+					label: "Save answer button",
 				});
 				self.updateUnsavedIds(`${questionId}q`, false);
 				if (typeof self.issueA11yMessage === "function") {
@@ -166,7 +166,7 @@ function removeCommentFromState(commentId: number, self: any) {
 	}
 	tagManager({
 		action: "Clicked",
-		label: "Comment deleted",
+		label: "Comment deleted button",
 		event: "generic",
 		category: "Consultation comments page",
 	});
@@ -193,7 +193,7 @@ function removeAnswerFromState(questionId: number, answerId: number, self: any) 
 	}
 	tagManager({
 		action: "Clicked",
-		label: "Answer deleted",
+		label: "Delete answer button",
 		event: "generic",
 		category: "Consultation comments page",
 	});

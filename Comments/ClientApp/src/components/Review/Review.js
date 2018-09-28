@@ -281,6 +281,12 @@ export class Review extends Component<PropsType, StateType> {
 					action: "Length to submit response",
 					label: (response.data.durationFromFirstCommentOrAnswerSavedUntilSubmissionInSeconds / 3600).toString(),
 				});
+				tagManager({
+					event: "generic",
+					category: "Consultation comments page",
+					action: "Submission mandatory questions",
+					label: `${response.data.respondingAsOrganisation ? "Yes" : "No"}, ${response.data.hasTobaccoLinks ? "Yes" : "No"}`,
+				});
 				this.setState({
 					userHasSubmitted: true,
 					validToSubmit: false,
@@ -317,14 +323,6 @@ export class Review extends Component<PropsType, StateType> {
 		this.setState({
 			[e.target.name]: e.target.value,
 		});
-		if (e.target.name === "hasTobaccoLinks" || e.target.name === "respondingAsOrganisation") {
-			tagManager({
-				event: "generic",
-				category: "Consultation comments page",
-				action: `Submission mandatory question - ${e.target.name}`,
-				label: `${e.target.value}`,
-			});
-		}
 	};
 
 	issueA11yMessage = (message: string) => {
