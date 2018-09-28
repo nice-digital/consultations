@@ -254,6 +254,10 @@ namespace Comments.Models
 	    {
 		    var submission = new Models.Submission(currentUser, DateTime.UtcNow, respondingAsOrganisation, organisationName, hasTobaccoLinks, tobaccoDisclosure);
 		    Submission.Add(submission);
+
+
+
+
 		    return submission;
 	    }
 

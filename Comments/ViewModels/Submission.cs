@@ -52,5 +52,7 @@ namespace Comments.ViewModels
 				return commentSourceURIs.Concat(questionSourceURIs).ToList();
 		    }
 	    }
+
+		public double DurationBetweenFirstCommentOrAnswerSavedAndSubmissionInSeconds { get; set; }
     }
 }
