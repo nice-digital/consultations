@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Security.Authentication;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Comments.Services
 {
@@ -21,8 +22,9 @@ namespace Comments.Services
     public class AdminService : IAdminService
     {
 	    private readonly ConsultationsContext _dbContext;
+	    private readonly IHostingEnvironment _hostingEnvironment;
 
-	    public AdminService(IUserService userService, IHttpContextAccessor httpContextAccessor, ConsultationsContext dbContext)
+	    public AdminService(IUserService userService, IHttpContextAccessor httpContextAccessor, ConsultationsContext dbContext, IHostingEnvironment hostingEnvironment)
 	    {
 		    var user = userService.GetCurrentUser();
 		    if (!user.IsAuthorised)
@@ -39,10 +41,15 @@ namespace Comments.Services
 			    throw new AuthenticationException("NICE user is not an administrator");
 		    }
 		    _dbContext = dbContext;
-		}
+		    _hostingEnvironment = hostingEnvironment;
+	    }
 
 	    public int DeleteAllData()
 	    {
+		    if (_hostingEnvironment.IsProduction())
+		    {
+			    throw new Exception("Not allowed to do this on production");
+		    }
 		    return _dbContext.DeleteEverything();
 	    }
 
