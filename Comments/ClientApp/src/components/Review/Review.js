@@ -426,7 +426,7 @@ export class Review extends Component<PropsType, StateType> {
 
 	render() {
 		if (this.state.loading) return <h1>Loading...</h1>;
-		if (this.state.justSubmitted) return <Redirect push to={"submit"}/>;
+		if (this.state.justSubmitted) return <Redirect push to={"submitted"}/>;
 		const {reference} = this.state.consultationData;
 		const commentsToShow = this.state.comments.filter(comment => comment.show) || [];
 		const questionsToShow = this.state.questions.filter(question => question.show) || [];

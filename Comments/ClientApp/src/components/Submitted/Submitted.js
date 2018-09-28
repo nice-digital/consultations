@@ -13,7 +13,7 @@ import { LoginBanner } from "../LoginBanner/LoginBanner";
 import preload from "../../data/pre-loader";
 import { load } from "../../data/loader";
 
-export class Submit extends Component {
+export class Submitted extends Component {
 
 	constructor(props: PropsType) {
 		super(props);
@@ -187,4 +187,4 @@ export class Submit extends Component {
 	}
 }
 
-export default withRouter(Submit);
+export default withRouter(Submitted);
