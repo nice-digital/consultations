@@ -306,7 +306,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 					event: "generic",
 					category: "Consultation comments page",
 					action: "Length to submit response",
-					label: (response.data.durationBetweenFirstCommentOrAnswerSavedAndSubmissionInSeconds / 3600).toString(), //sigh. now we have to deal with super long decimals.
+					label: (response.data.durationBetweenFirstCommentOrAnswerSavedAndSubmissionInSeconds / 3600).toString(), //:-( no more whole numbers. lengthy decimals from now on  - though they're much more likely to get trimmed and lose accuracy
 				});
 				tagManager({
 					event: "pageview",
