@@ -9,7 +9,7 @@ docker-compose down --remove-orphans && docker-compose rm -vf
 docker-compose build && docker-compose up -d
 
 # Wait for comments webapp before running the tests
-docker-compose run tests waitforit -t 120 --strict niceorg:8080 -- npm run test:teamcity -- --host hub -b http://niceorg:8080/consultations/
+docker-compose run tests waitforit -t 120 --strict comments:8080 -- npm run test:teamcity -- --host hub -b https://niceorg/consultations/
 
 # Copy error shots and logs to use as a TeamCity artifact for debugging purposes
 mkdir -p docker-output
@@ -18,4 +18,7 @@ docker cp functional-tests_comments_1:/app/logs ./docker-output
 docker-compose logs --no-color > ./docker-output/logs.txt
 
 # Clean up
-docker-compose down
+docker volume ls
+docker-compose down -v
+docker volume ls
+#docker volume prune -f

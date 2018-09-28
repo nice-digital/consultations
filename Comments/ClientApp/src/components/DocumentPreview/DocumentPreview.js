@@ -65,6 +65,10 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 		};
 
 		if (this.props) {
+			let preloadedData = {};
+			if (this.props.staticContext && this.props.staticContext.preload) {
+				preloadedData = this.props.staticContext.preload.data; //this is data from Configure => SupplyData in Startup.cs. the main thing it contains for this call is the cookie for the current user.
+			}
 
 			let preloadedChapter, preloadedDocuments, preloadedConsultation;
 
@@ -72,20 +76,23 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 				this.props.staticContext,
 				"previewchapter",
 				[],
-				{ ...this.props.match.params }
+				{ ...this.props.match.params },
+				preloadedData,
 			);
 			preloadedDocuments = preload(
 				this.props.staticContext,
 				"previewdraftdocuments",
 				[],
-				{ ...this.props.match.params }
+				{ ...this.props.match.params },
+				preloadedData,
 			);
 
 			preloadedConsultation = preload(
 				this.props.staticContext,
 				"draftconsultation",
 				[],
-				{ ...this.props.match.params }
+				{ ...this.props.match.params },
+				preloadedData,
 			);
 
 			if (preloadedChapter && preloadedDocuments && preloadedConsultation) {
@@ -277,49 +284,52 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 						<LoginBanner signInButton={false}
 									 currentURL={this.props.match.url}
 									 signInURL={contextValue.signInURL}
-									 registerURL={contextValue.registerURL} />
-						: /* if contextValue.isAuthorised... */ null}
-				</UserContext.Consumer>
-				<div className="container">
-					<div className="grid">
-						<div data-g="12">
-							<PhaseBanner
-								phase={projectInformation.phase}
-								name={projectInformation.name}
-								repo={projectInformation.repo}
-							/>
-							{this.state.consultationData.breadcrumbs &&
-								<BreadCrumbs links={this.state.consultationData.breadcrumbs}/>
-							}
-							<main role="main">
-								<Header
-									title={title}
-									reference={reference}
-									consultationState={this.state.consultationData.consultationState}/>
-								<div className="grid">
-									<div data-g="12 md:3">
-										<StackedNav links={this.getPreviewDocumentChapterLinks(
-											documentId,
-											this.props.match.params.chapterSlug,
-											this.state.documentsData,
-											"Chapters in my this document",
-											reference,
-											this.props.match.params.consultationId,
+									 registerURL={contextValue.registerURL}
+									 signInText="to view the document preview" />
+						: 
+						<div className="container">
+							<div className="grid">
+								<div data-g="12">
+									<PhaseBanner
+										phase={projectInformation.phase}
+										name={projectInformation.name}
+										repo={projectInformation.repo}
+									/>
+									{this.state.consultationData.breadcrumbs &&
+										<BreadCrumbs links={this.state.consultationData.breadcrumbs}/>
+									}
+									<main role="main">
+										<Header
+											title={title}
+											reference={reference}
+											consultationState={this.state.consultationData.consultationState}/>
+										<div className="grid">
+											<div data-g="12 md:3">
+												<StackedNav links={this.getPreviewDocumentChapterLinks(
+													documentId,
+													this.props.match.params.chapterSlug,
+													this.state.documentsData,
+													"Chapters in my this document",
+													reference,
+													this.props.match.params.consultationId,
 
-										)} />
-									</div>
-									<div data-g="12 md:9" className="documentColumn">
-										<div
-											className={`document-comment-container ${this.state.loading ? "loading" : ""}`}>
-											<DocumentPreviewErrorOverview content={content} />
-											{processPreviewHtml(content)}
+												)} />
+											</div>
+											<div data-g="12 md:9" className="documentColumn">
+												<div
+													className={`document-comment-container ${this.state.loading ? "loading" : ""}`}>
+													<DocumentPreviewErrorOverview content={content} />
+													{processPreviewHtml(content)}
+												</div>
+											</div>
 										</div>
-									</div>
+									</main>
 								</div>
-							</main>
-						</div>
-					</div>
-				</div>
+							</div>
+						</div>						
+					}
+				</UserContext.Consumer>
+				
 			</Fragment>
 		);
 	}

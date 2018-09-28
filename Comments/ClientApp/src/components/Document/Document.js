@@ -1,26 +1,30 @@
 // @flow
 
-import React, {Component, Fragment} from "react";
-import {Helmet} from "react-helmet";
-import {withRouter} from "react-router";
+import React, { Component, Fragment } from "react";
+import { Helmet } from "react-helmet";
+import { withRouter } from "react-router";
 import objectHash from "object-hash";
 
 import preload from "../../data/pre-loader";
-import {load} from "./../../data/loader";
-import {PhaseBanner} from "./../PhaseBanner/PhaseBanner";
-import {BreadCrumbs} from "./../Breadcrumbs/Breadcrumbs";
-import {StackedNav} from "./../StackedNav/StackedNav";
-import {HashLinkTop} from "../../helpers/component-helpers";
-import {projectInformation} from "../../constants";
-import {ProcessDocumentHtml} from "../../document-processing/ProcessDocumentHtml";
-import {LoginBanner} from "./../LoginBanner/LoginBanner";
-import {UserContext} from "../../context/UserContext";
-import {Selection} from "../Selection/Selection";
-import {pullFocusByQuerySelector} from "../../helpers/accessibility-helpers";
-import {Header} from "../Header/Header";
+import { load } from "./../../data/loader";
+import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
+import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
+import { StackedNav } from "./../StackedNav/StackedNav";
+import { HashLinkTop } from "../../helpers/component-helpers";
+import { tagManager } from "../../helpers/tag-manager";
+import { projectInformation } from "../../constants";
+import { ProcessDocumentHtml } from "../../document-processing/ProcessDocumentHtml";
+import { LoginBanner } from "./../LoginBanner/LoginBanner";
+import { UserContext } from "../../context/UserContext";
+import { Selection } from "../Selection/Selection";
+import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
+import { Header } from "../Header/Header";
+import { Tutorial } from "../Tutorial/Tutorial";
 
 type PropsType = {
-	staticContext?: any,
+	staticContext: {
+		globals: any,
+	},
 	match: any,
 	location: any,
 	onNewCommentClick: Function,
@@ -72,30 +76,42 @@ export class Document extends Component<PropsType, StateType> {
 
 			let preloadedChapter, preloadedDocuments, preloadedConsultation;
 
+			let preloadedData = {};
+			if (this.props.staticContext && this.props.staticContext.preload) {
+				preloadedData = this.props.staticContext.preload.data; //this is data from Configure => SupplyData in Startup.cs. the main thing it contains for this call is the cookie for the current user.
+			}
+
 			preloadedChapter = preload(
 				this.props.staticContext,
 				"chapter",
 				[],
-				{...this.props.match.params}
+				{...this.props.match.params},
+				preloadedData,
 			);
 			preloadedDocuments = preload(
 				this.props.staticContext,
 				"documents",
 				[],
-				{consultationId: this.props.match.params.consultationId}
+				{consultationId: this.props.match.params.consultationId},
+				preloadedData,
 			);
 
 			preloadedConsultation = preload(
 				this.props.staticContext,
 				"consultation",
 				[],
-				{consultationId: this.props.match.params.consultationId, isReview: false}
+				{consultationId: this.props.match.params.consultationId, isReview: false},
+				preloadedData,
 			);
 
 			if (preloadedChapter && preloadedDocuments && preloadedConsultation) {
+				if (this.props.staticContext) {
+					this.props.staticContext.globals.gidReference = preloadedConsultation.reference;
+				}
 				const allowComments = preloadedConsultation.supportsComments &&
 					preloadedConsultation.consultationState.consultationIsOpen &&
 					!preloadedConsultation.consultationState.userHasSubmitted;
+
 				if (preloadedChapter) {
 					preloadedChapter = this.addChapterDetailsToSections(preloadedChapter);
 				}
@@ -107,7 +123,7 @@ export class Document extends Component<PropsType, StateType> {
 					hasInitialData: true,
 					currentInPageNavItem: null,
 					onboarded: false,
-					allowComments: allowComments,
+					allowComments,
 					error: {
 						hasError: false,
 						message: null,
@@ -175,7 +191,8 @@ export class Document extends Component<PropsType, StateType> {
 		if (!this.state.hasInitialData) {
 			this.gatherData()
 				.then(data => {
-					const allowComments = data.consultationData.supportsComments &&
+					const allowComments =
+						data.consultationData.supportsComments &&
 						data.consultationData.consultationState.consultationIsOpen &&
 						!data.consultationData.consultationState.userHasSubmitted;
 					this.addChapterDetailsToSections(data.chapterData);
@@ -184,6 +201,13 @@ export class Document extends Component<PropsType, StateType> {
 						loading: false,
 						hasInitialData: true,
 						allowComments: allowComments,
+					}, () => {
+						tagManager({
+							event: "pageview",
+							gidReference: this.state.consultationData.reference,
+							title: this.getPageTitle(),
+							stage: "previewed",
+						});
 					});
 				})
 				.catch(err => {
@@ -206,7 +230,7 @@ export class Document extends Component<PropsType, StateType> {
 			loading: true,
 		});
 
-		// are we on the same consultation and document as before?
+		// are we on the same document as before?
 		if (this.props.match.params.documentId === prevProps.match.params.documentId) {
 			this.getChapterData(this.props.match.params)
 				.then(response => {
@@ -214,6 +238,12 @@ export class Document extends Component<PropsType, StateType> {
 					this.setState({
 						chapterData,
 						loading: false,
+					}, () => {
+						tagManager({
+							event: "pageview",
+							gidReference: this.state.consultationData.reference,
+							stage: "previewed",
+						});
 					});
 					pullFocusByQuerySelector(".document-comment-container");
 				});
@@ -226,8 +256,14 @@ export class Document extends Component<PropsType, StateType> {
 						consultationData: data.consultationData,
 						documentsData: data.documentsData,
 						loading: false,
+					}, () => {
+						tagManager({
+							event: "pageview",
+							gidReference: this.state.consultationData.reference,
+							title: this.getPageTitle(),
+							stage: "previewed",
+						});
 					});
-
 					pullFocusByQuerySelector(".document-comment-container");
 				})
 				.catch(err => {
@@ -319,7 +355,7 @@ export class Document extends Component<PropsType, StateType> {
 	};
 
 	addChapterDetailsToSections = (chapterData: Object) => {
-		const { title, slug } = chapterData;
+		const {title, slug} = chapterData;
 		if (chapterData.sections.length) {
 			if ((chapterData.sections[0].slug !== slug) && (chapterData.sections[0].title !== title)) {
 				chapterData.sections.unshift({title, slug});
@@ -331,10 +367,26 @@ export class Document extends Component<PropsType, StateType> {
 		return chapterData;
 	};
 
-	getCurrentDocumentTitle = (documents: Object, documentId: number) => {
+	getCurrentDocumentTitle = () => {
+		const documents = this.state.documentsData;
+		const documentId = parseInt(this.props.match.params.documentId, 0);
+
 		const matchCurrentDocument = d => d.documentId === parseInt(documentId, 0);
 		const currentDocumentDetails = documents.filter(matchCurrentDocument)[0];
 		return currentDocumentDetails.title;
+	};
+
+	getPageTitle = () => {
+		return `${this.state.chapterData.title} | ${this.getCurrentDocumentTitle()} | ${this.state.consultationData.title}`;
+	};
+
+	trackInPageNav = (e: SyntheticEvent, item: Object) => {
+		tagManager({
+			event: "generic",
+			category: "Consultation comments page",
+			action: "In-Page Chapter Navigation",
+			label: item.title,
+		});
 	};
 
 	render() {
@@ -343,11 +395,13 @@ export class Document extends Component<PropsType, StateType> {
 		}
 		if (!this.state.hasInitialData) return <h1>Loading...</h1>;
 
-		const {title, reference} = this.state.consultationData;
+		const {reference} = this.state.consultationData;
 		const {documentsData} = this.state;
 		const {sections, content, slug} = this.state.chapterData;
 		const consultationId = parseInt(this.props.match.params.consultationId, 0);
 		const documentId = parseInt(this.props.match.params.documentId, 0);
+
+		const currentDocumentTitle = this.getCurrentDocumentTitle();
 
 		const documentHtmlProps = {
 			content,
@@ -357,10 +411,18 @@ export class Document extends Component<PropsType, StateType> {
 			allowComments: this.state.allowComments,
 		};
 
+		const supportingDocs = this.getDocumentLinks(
+			false,
+			"Supporting documents (for information only)",
+			documentsData,
+			documentId,
+			consultationId
+		);
+
 		return (
 			<Fragment>
 				<Helmet>
-					<title>{title}</title>
+					<title>{this.getPageTitle()}</title>
 				</Helmet>
 				<UserContext.Consumer>
 					{(contextValue: any) => !contextValue.isAuthorised ?
@@ -370,6 +432,7 @@ export class Document extends Component<PropsType, StateType> {
 												 registerURL={contextValue.registerURL}/>
 						: /* if contextValue.isAuthorised... */ null}
 				</UserContext.Consumer>
+				<Tutorial/>
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">
@@ -382,11 +445,12 @@ export class Document extends Component<PropsType, StateType> {
 							<main role="main">
 								<div className="page-header">
 									<Header
-										title={this.getCurrentDocumentTitle(documentsData, documentId)}
+										title={currentDocumentTitle}
 										reference={reference}
 										consultationState={this.state.consultationData.consultationState}/>
 									{this.state.allowComments &&
 									<button
+										data-gtm="comment-on-document-button"
 										data-qa-sel="comment-on-consultation-document"
 										className="btn btn--cta"
 										onClick={e => {
@@ -395,12 +459,15 @@ export class Document extends Component<PropsType, StateType> {
 												sourceURI: this.props.match.url,
 												commentText: "",
 												commentOn: "Document",
-												quote: this.getCurrentDocumentTitle(
-													documentsData,
-													documentId
-												),
+												quote: currentDocumentTitle,
 												order: 0,
 												section: null,
+											});
+											tagManager({
+												event: "generic",
+												category: "Consultation comments page",
+												action: "Clicked",
+												label: "Comment on document",
 											});
 										}}>
 										Comment on this document
@@ -436,14 +503,9 @@ export class Document extends Component<PropsType, StateType> {
 												documentId,
 												consultationId
 											)}/>
-										<StackedNav
-											links={this.getDocumentLinks(
-												false,
-												"Supporting documents (for information only)",
-												documentsData,
-												documentId,
-												consultationId
-											)}/>
+										{supportingDocs.links && supportingDocs.links.length !== 0 ?
+											<StackedNav links={supportingDocs}/>
+											: null}
 									</div>
 
 									{/* inPageNav column */}
@@ -466,7 +528,8 @@ export class Document extends Component<PropsType, StateType> {
 															block: "start",
 														};
 														return (
-															<li role="presentation" className="in-page-nav__item" key={objectHash(item)}>
+															<li role="presentation" className="in-page-nav__item" key={objectHash(item)}
+																	onClick={(e) => this.trackInPageNav(e, item)}>
 																<HashLinkTop {...props} />
 															</li>
 														);
@@ -488,9 +551,8 @@ export class Document extends Component<PropsType, StateType> {
 											</Selection>
 										</div>
 									</div>
+
 								</div>
-
-
 							</main>
 						</div>
 					</div>

@@ -53,11 +53,13 @@
     "breadcrumbs":[
         {
             "label":"Home",
-            "url":"/"
+            "url":"/",
+            "localRoute":false
         },
         {
             "label":"For consultation comments",
-            "url":"/guidance/indevelopment/gid-ta10232/consultation/"
+            "url":"/guidance/indevelopment/gid-ta10232/consultation/",
+            "localRoute":false
         }
     ],
     "filters":null

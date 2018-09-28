@@ -16,23 +16,7 @@ namespace Comments.Test.UnitTests
 {
     public class ExportToExcelTests : TestBase
     {
-		[Fact]
-		public async Task Create_Spreadsheet()
-	    {
-			// Arrange
-		    ResetDatabase();
-		    _context.Database.EnsureCreated();
-		    var userId = Guid.NewGuid();
-			CreateALotOfData(userId);
-		    var consultationId = 1;
-			
-			// Act
-			var response = await _client.GetAsync($"consultations/api/ExportExternal/{consultationId}");
-		    response.EnsureSuccessStatusCode();
-			
-			//Assert
-			response.IsSuccessStatusCode.ShouldBeTrue();
-		}
+		
 
 	    [Fact]
 	    public async Task Get_All_Data_For_Consultation()

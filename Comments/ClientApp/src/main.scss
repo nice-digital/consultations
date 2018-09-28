@@ -24,6 +24,8 @@ $nice-font-base-path: "/consultations/fonts/";
 @import "./components/Selection/Selection";
 @import "./components/Footer/Footer";
 @import "./components/ReviewListPage/ReviewListPage";
+@import "./components/Tutorial/Tutorial";
 
 // Document transform styling (comments buttons etc)
 @import "./document-processing/transforms/comment";
+

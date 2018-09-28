@@ -1,4 +1,4 @@
-import { prepHead,
+import { prepTags,
 	parseClassAttribute,
 	replaceOpeningHtmlTag,
 	replaceOpeningBodyTag,
@@ -6,24 +6,29 @@ import { prepHead,
 	replaceRelativePaths } from "../html-processor";
 
 describe("HTML processor", () => {
-	describe("prepHead", () => {
+	describe("prepTags", () => {
 		it("replaces <!--! title --> placeholder in HTML", () => {
-			let result = prepHead("test1 <!--! title --> test2", { title: "ABC" });
+			let result = prepTags("test1 <!--! title --> test2", { title: "ABC" });
 			expect(result).toBe("test1 ABC test2");
 		});
 
 		it("replaces <!--! metas --> placeholder in HTML", () => {
-			let result = prepHead("test1 <!--! metas --> test2", { metas: "ABC" });
+			let result = prepTags("test1 <!--! metas --> test2", { metas: "ABC" });
 			expect(result).toBe("test1 ABC test2");
 		});
 
 		it("replaces <!--! links -->  placeholder in HTML", () => {
-			let result = prepHead("test1 <!--! links --> test2", { links: "ABC" });
+			let result = prepTags("test1 <!--! links --> test2", { links: "ABC" });
 			expect(result).toBe("test1 ABC test2");
 		});
 
 		it("replaces <!--! scripts --> placeholder in HTML", () => {
-			let result = prepHead("test1 <!--! scripts --> test2", { scripts: "ABC" });
+			let result = prepTags("test1 <!--! scripts --> test2", { scripts: "ABC" });
+			expect(result).toBe("test1 ABC test2");
+		});
+
+		it("replaces <!--! globals --> placeholder in HTML", () => {
+			let result = prepTags("test1 <!--! globals --> test2", { globals: "ABC" });
 			expect(result).toBe("test1 ABC test2");
 		});
 	});
