@@ -6,12 +6,11 @@ import { Helmet } from "react-helmet";
 
 import DocumentViewWithRouter from "../DocumentView/DocumentView";
 import NotFound from "../NotFound/NotFound";
-//import ReviewPageWithRouter from "../ReviewPage/ReviewPage";
 import ReviewListPageWithRouter from "../ReviewListPage/ReviewListPage";
 import UserProviderWithRouter from "../../context/UserContext";
 import FooterWithRouter from "../Footer/Footer";
 import DocumentPreviewWithRouter from "../DocumentPreview/DocumentPreview";
-import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
+import {ErrorBoundary} from "../ErrorBoundary/ErrorBoundary";
 import {LiveAnnouncer, LiveMessenger} from "react-aria-live";
 
 type PropsType = any;

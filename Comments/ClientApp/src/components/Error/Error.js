@@ -18,14 +18,13 @@ export const Error = (props: PropsType) => {
 		<div className="container">
 			<div className="alert">
 				<h2 className="page-header__heading mt--0">
-					<span className="icon icon--warning" aria-hidden="true"></span> {props.error.name}
+					<span className="icon icon--warning" aria-hidden="true"/> {props.error.name}
 				</h2>
 				<p className="page-header__lead">{props.error.message}</p>
 				<p>{props.error.stack}</p>
 			</div>
 		</div>
 	);
-}
-	
+};
 
 export default Error;

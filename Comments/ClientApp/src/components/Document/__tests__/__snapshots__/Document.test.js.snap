@@ -4,6 +4,58 @@ exports[`[ClientApp]  Document Component should match snapshot with supplied dat
 Array [
   "",
   "",
+  <aside
+    className="Tutorial mt--0 pt--d pb--d"
+>
+    <div
+        className="container"
+    >
+        <button
+            className="buttonAsLink"
+            onClick={[Function]}
+        >
+            Hide how to comment
+        </button>
+        <div>
+            <h1
+                className="pt--c"
+            >
+                How to comment
+            </h1>
+            <div
+                className="grid"
+            >
+                <div
+                    data-g="12 sm:6 lg:4"
+                >
+                    <p
+                        className="mt--0"
+                    >
+                        Use the icon next to chapters, subsections and recommendations to comment on them
+                    </p>
+                    <img
+                        alt="Mouse pointer hovering over commenting icon"
+                        className="Tutorial__buttonImage"
+                        src="images/tutorial_graphic_800.png"
+                    />
+                </div>
+                <div
+                    data-g="12 sm:6 lg:4"
+                >
+                    <p
+                        className="mt--0 mb--0"
+                    >
+                        Highlight a selection of text using the cursor to make a comment on it
+                    </p>
+                    <img
+                        alt="Animation showing an example of highlighting text and clicking comment"
+                        src="images/text-selection.gif"
+                    />
+                </div>
+            </div>
+        </div>
+    </div>
+</aside>,
   <div
     className="container"
 >
@@ -98,6 +150,7 @@ Array [
                     <undefined />
                     <button
                         className="btn btn--cta"
+                        data-gtm="comment-on-document-button"
                         data-qa-sel="comment-on-consultation-document"
                         onClick={[Function]}
                     >
@@ -389,19 +442,6 @@ Array [
                                 </li>
                             </ul>
                         </nav>
-                        <nav
-                            aria-label="Supporting documents (for information only)"
-                            className="stacked-nav"
-                        >
-                            <h2
-                                className="stacked-nav__root"
-                            >
-                                Supporting documents (for information only)
-                            </h2>
-                            <ul
-                                className="stacked-nav__list"
-                            />
-                        </nav>
                     </div>
                     <div
                         className="inPageNavColumn"
@@ -423,6 +463,7 @@ Array [
                             >
                                 <li
                                     className="in-page-nav__item"
+                                    onClick={[Function]}
                                     role="presentation"
                                 >
                                     <a
@@ -436,6 +477,7 @@ Array [
                                 </li>
                                 <li
                                     className="in-page-nav__item"
+                                    onClick={[Function]}
                                     role="presentation"
                                 >
                                     <a
@@ -449,6 +491,7 @@ Array [
                                 </li>
                                 <li
                                     className="in-page-nav__item"
+                                    onClick={[Function]}
                                     role="presentation"
                                 >
                                     <a
@@ -462,6 +505,7 @@ Array [
                                 </li>
                                 <li
                                     className="in-page-nav__item"
+                                    onClick={[Function]}
                                     role="presentation"
                                 >
                                     <a
@@ -475,6 +519,7 @@ Array [
                                 </li>
                                 <li
                                     className="in-page-nav__item"
+                                    onClick={[Function]}
                                     role="presentation"
                                 >
                                     <a
@@ -488,6 +533,7 @@ Array [
                                 </li>
                                 <li
                                     className="in-page-nav__item"
+                                    onClick={[Function]}
                                     role="presentation"
                                 >
                                     <a
@@ -543,6 +589,10 @@ Array [
                                     >
                                         <button
                                             className="document-comment-container__commentButton"
+                                            data-gtm="button"
+                                            data-gtm-action="Clicked"
+                                            data-gtm-category="Consultation comments page"
+                                            data-gtm-label="Comment on chapter"
                                             data-qa-sel="in-text-comment-button"
                                             onClick={[Function]}
                                             tabIndex={0}
