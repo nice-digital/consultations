@@ -5,7 +5,6 @@ import Moment from "react-moment";
 
 type PropsType = {
 	title: string,
-	reference: string,
 	endDate?: any,
 	match?: any,
 	subtitle1?: string,

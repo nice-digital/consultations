@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component, Fragment } from "react";
-import { withRouter, Prompt } from "react-router-dom";
+import { withRouter, Prompt, Redirect } from "react-router-dom";
 import Helmet from "react-helmet";
 
 import preload from "../../data/pre-loader";
@@ -66,7 +66,7 @@ type StateType = {
 	documentTitles: Array<any>,
 };
 
-export class ReviewListPage extends Component<PropsType, StateType> {
+export class Review extends Component<PropsType, StateType> {
 	constructor(props: PropsType) {
 		super(props);
 		this.state = {
@@ -74,7 +74,6 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			consultationData: null,
 			commentsData: null,
 			userHasSubmitted: false,
-			viewSubmittedComments: false,
 			validToSubmit: false,
 			path: null,
 			hasInitalData: false,
@@ -89,6 +88,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			tobaccoDisclosure: "",
 			unsavedIds: [],
 			documentTitles: [],
+			justSubmitted: false,
 		};
 
 		let preloadedData = {};
@@ -131,13 +131,13 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 				questions: preloadedCommentsData.commentsAndQuestions.questions,
 				sort: preloadedCommentsData.sort,
 				supportsDownload: preloadedConsultationData.consultationState.supportsDownload,
-				viewSubmittedComments: false,
 				organisationName: preloadedCommentsData.organisationName || "",
 				respondingAsOrganisation: false,
 				hasTobaccoLinks: false,
 				tobaccoDisclosure: "",
 				unsavedIds: [],
 				documentTitles: this.getListOfDocuments(preloadedCommentsData.filters),
+				justSubmitted: false,
 			};
 		}
 	}
@@ -197,16 +197,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 						sort: data.commentsData.sort,
 						organisationName: data.commentsData.organisationName || "",
 						documentTitles: this.getListOfDocuments(data.commentsData.filters),
-					},
-					() => {
-						tagManager({
-							event: "pageview",
-							gidReference: this.state.consultationData.reference,
-							title: this.getPageTitle(),
-							stage: this.state.userHasSubmitted ? "postsubmission" : "presubmission",
-						});
-					}
-					);
+					});
 				} else {
 					this.setState({
 						commentsData: data.commentsData,
@@ -217,9 +208,20 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 						organisationName: data.commentsData.organisationName || "",
 						documentTitles: this.getListOfDocuments(data.commentsData.filters),
 					}, () => {
-						// todo: this is where we'd track an applied filter
+						tagManager({
+							event: "generic",
+							category: "Consultation comments page",
+							action: "Clicked",
+							label: "Review filter",
+						});
 					});
 				}
+				tagManager({
+					event: "pageview",
+					gidReference: this.state.consultationData.reference,
+					title: this.getPageTitle(),
+					stage: this.state.consultationData.consultationState.userHasSubmitted ? "postsubmission" : "presubmission",
+				});
 			})
 			.catch(err => {
 				throw new Error("gatherData in componentDidMount failed " + err);
@@ -239,12 +241,6 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		const oldQueryString = prevProps.location.search;
 		const newQueryString = this.props.location.search;
 		if (oldQueryString === newQueryString) return;
-		tagManager({
-			event: "pageview",
-			gidReference: this.state.consultationData.reference,
-			title: this.getPageTitle(),
-			stage: this.state.userHasSubmitted ? "postsubmission" : "presubmission",
-		});
 		pullFocusById("comments-column");
 	}
 
@@ -285,17 +281,11 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 					action: "Length to submit response",
 					label: (response.data.durationFromFirstCommentOrAnswerSavedUntilSubmissionInSeconds / 3600).toString(),
 				});
-				tagManager({
-					event: "pageview",
-					gidReference: this.state.consultationData.reference,
-					title: this.getPageTitle(),
-					stage: "submitted",
-				});
 				this.setState({
 					userHasSubmitted: true,
 					validToSubmit: false,
-					viewSubmittedComments: false,
 					allowComments: false,
+					justSubmitted: true,
 				});
 			})
 			.catch(err => {
@@ -320,24 +310,6 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		this.setState({
 			validToSubmit: anyCommentsOrAnswers,
 			supportsDownload: anyCommentsOrAnswers,
-		});
-	};
-
-	viewSubmittedCommentsHandler = () => {
-		this.setState({
-			viewSubmittedComments: true,
-		});
-		tagManager({
-			event: "generic",
-			category: "Consultation comments page",
-			action: "Clicked",
-			label: "Review your response button",
-		});
-		tagManager({
-			event: "pageview",
-			gidReference: this.state.consultationData.reference,
-			title: this.getPageTitle(),
-			stage: this.state.userHasSubmitted ? "postsubmission" : "presubmission",
 		});
 	};
 
@@ -428,6 +400,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 
 	render() {
 		if (this.state.loading) return <h1>Loading...</h1>;
+		if (this.state.justSubmitted) return <Redirect push to={"submit"}/>;
 		const {reference} = this.state.consultationData;
 		const commentsToShow = this.state.comments.filter(comment => comment.show) || [];
 		const questionsToShow = this.state.questions.filter(question => question.show) || [];
@@ -470,116 +443,76 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 														registerURL={contextValue.registerURL}
 													/> :
 													<div className="grid">
-														{(this.state.userHasSubmitted && !this.state.viewSubmittedComments) ?
-															<div data-g="12">
-																<button
-																	className="btn btn--cta"
-																	data-qa-sel="review-submitted-comments"
-																	onClick={this.viewSubmittedCommentsHandler}>Review your response
-																</button>
-																{this.state.supportsDownload &&
-																<a
-																	onClick={() => {
-																		tagManager({
-																			event: "generic",
-																			category: "Consultation comments page",
-																			action: "Clicked",
-																			label: "Download your response button",
-																		});
-																	}}
-																	className="btn btn--secondary"
-																	href={`${this.props.basename}/api/exportexternal/${this.props.match.params.consultationId}`}>Download
-																	your response</a>
-																}
-																<h2>What happens next?</h2>
-																<p>We will review all the submissions received for this consultation. Our response
-																	will
-																	be published on the website around the time the guidance is published.</p>
-																<h2>Help us improve our online commenting service</h2>
-																<p>This is the first time we have used our new online commenting software on a live
-																	consultation. We'd really like to hear your feedback so that we can keep improving
-																	it.</p>
-																<p>Answer our short, anonymous survey (4 questions, 2 minutes).</p>
-																<p>
-																	<a className="btn btn--cta"
-																		 href="https://in.hotjar.com/s?siteId=119167&surveyId=109567" target="_blank"
-																		 rel="noopener noreferrer">
-																		Answer the survey
-																	</a>
-																</p>
+														<Fragment>
+															<div data-g="12 md:3" className="sticky">
+																<FilterPanel filters={this.state.commentsData.filters} path={this.state.path}/>
 															</div>
-															:
-															<Fragment>
-																<div data-g="12 md:3" className="sticky">
-																	<FilterPanel filters={this.state.commentsData.filters} path={this.state.path}/>
-																</div>
-																<div data-g="12 md:9">
-																	<ResultsInfo commentCount={commentsToShow.length}
-																							 showCommentsCount={this.state.consultationData.consultationState.shouldShowCommentsTab}
-																							 questionCount={questionsToShow.length}
-																							 showQuestionsCount={this.state.consultationData.consultationState.shouldShowQuestionsTab}
-																							 sortOrder={this.state.sort}
-																							 appliedFilters={this.getAppliedFilters()}
-																							 path={this.state.path}
-																							 isLoading={this.state.loading}/>
-																	<div data-qa-sel="comment-list-wrapper">
-																		{questionsToShow.length > 0 &&
-																		<div>
-																			<ul className="CommentList list--unstyled">
-																				{questionsToShow.map((question) => {
-																					const isUnsaved = this.state.unsavedIds.includes(`${question.questionId}q`);
-																					return (
-																						<Question
-																							updateUnsavedIds={this.updateUnsavedIds}
-																							isUnsaved={isUnsaved}
-																							readOnly={!this.state.allowComments || this.state.userHasSubmitted}
-																							key={question.questionId}
-																							unique={`Comment${question.questionId}`}
-																							question={question}
-																							saveAnswerHandler={this.saveAnswerHandler}
-																							deleteAnswerHandler={this.deleteAnswerHandler}
-																							documentTitle={this.getDocumentTitle(question.documentId)}
-																						/>
-																					);
-																				})}
-																			</ul>
-																		</div>
-																		}
-																		{commentsToShow.length === 0 ? <p>{/*No comments yet*/}</p> :
-																			<ul className="CommentList list--unstyled">
-																				{commentsToShow.map((comment) => {
-																					return (
-																						<CommentBox
-																							readOnly={!this.state.allowComments || this.state.userHasSubmitted}
-																							isVisible={this.props.isVisible}
-																							key={comment.commentId}
-																							unique={`Comment${comment.commentId}`}
-																							comment={comment}
-																							documentTitle={this.getDocumentTitle(comment.documentId)}
-																							saveHandler={this.saveCommentHandler}
-																							deleteHandler={this.deleteCommentHandler}
-																							updateUnsavedIds={this.updateUnsavedIds}
-																						/>
-																					);
-																				})}
-																			</ul>
-																		}
+															<div data-g="12 md:9">
+																<ResultsInfo commentCount={commentsToShow.length}
+																						 showCommentsCount={this.state.consultationData.consultationState.shouldShowCommentsTab}
+																						 questionCount={questionsToShow.length}
+																						 showQuestionsCount={this.state.consultationData.consultationState.shouldShowQuestionsTab}
+																						 sortOrder={this.state.sort}
+																						 appliedFilters={this.getAppliedFilters()}
+																						 path={this.state.path}
+																						 isLoading={this.state.loading}/>
+																<div data-qa-sel="comment-list-wrapper">
+																	{questionsToShow.length > 0 &&
+																	<div>
+																		<ul className="CommentList list--unstyled">
+																			{questionsToShow.map((question) => {
+																				const isUnsaved = this.state.unsavedIds.includes(`${question.questionId}q`);
+																				return (
+																					<Question
+																						updateUnsavedIds={this.updateUnsavedIds}
+																						isUnsaved={isUnsaved}
+																						readOnly={!this.state.allowComments || this.state.userHasSubmitted}
+																						key={question.questionId}
+																						unique={`Comment${question.questionId}`}
+																						question={question}
+																						saveAnswerHandler={this.saveAnswerHandler}
+																						deleteAnswerHandler={this.deleteAnswerHandler}
+																						documentTitle={this.getDocumentTitle(question.documentId)}
+																					/>
+																				);
+																			})}
+																		</ul>
 																	</div>
-																	<SubmitResponseDialog
-																		unsavedIds={this.state.unsavedIds}
-																		isAuthorised={contextValue.isAuthorised}
-																		userHasSubmitted={this.state.userHasSubmitted}
-																		validToSubmit={this.state.validToSubmit}
-																		submitConsultation={this.submitConsultation}
-																		fieldsChangeHandler={this.fieldsChangeHandler}
-																		respondingAsOrganisation={this.state.respondingAsOrganisation}
-																		organisationName={this.state.organisationName}
-																		hasTobaccoLinks={this.state.hasTobaccoLinks}
-																		tobaccoDisclosure={this.state.tobaccoDisclosure}
-																	/>
+																	}
+																	{commentsToShow.length === 0 ? <p>{/*No comments yet*/}</p> :
+																		<ul className="CommentList list--unstyled">
+																			{commentsToShow.map((comment) => {
+																				return (
+																					<CommentBox
+																						readOnly={!this.state.allowComments || this.state.userHasSubmitted}
+																						isVisible={this.props.isVisible}
+																						key={comment.commentId}
+																						unique={`Comment${comment.commentId}`}
+																						comment={comment}
+																						documentTitle={this.getDocumentTitle(comment.documentId)}
+																						saveHandler={this.saveCommentHandler}
+																						deleteHandler={this.deleteCommentHandler}
+																						updateUnsavedIds={this.updateUnsavedIds}
+																					/>
+																				);
+																			})}
+																		</ul>
+																	}
 																</div>
-															</Fragment>
-														}
+																<SubmitResponseDialog
+																	unsavedIds={this.state.unsavedIds}
+																	isAuthorised={contextValue.isAuthorised}
+																	userHasSubmitted={this.state.userHasSubmitted}
+																	validToSubmit={this.state.validToSubmit}
+																	submitConsultation={this.submitConsultation}
+																	fieldsChangeHandler={this.fieldsChangeHandler}
+																	respondingAsOrganisation={this.state.respondingAsOrganisation}
+																	organisationName={this.state.organisationName}
+																	hasTobaccoLinks={this.state.hasTobaccoLinks}
+																	tobaccoDisclosure={this.state.tobaccoDisclosure}
+																/>
+															</div>
+														</Fragment>
 													</div>
 											);
 										}}
@@ -594,4 +527,4 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 	}
 }
 
-export default withRouter(withHistory(ReviewListPage));
+export default withRouter(withHistory(Review));

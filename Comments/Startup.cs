@@ -113,12 +113,15 @@ namespace Comments
 			//        options.Filters.Add(new RequireHttpsAttribute());
 			//    });
 			//}
-
-			services.AddHttpsRedirection(options =>
+			if (!Environment.IsDevelopment())
 			{
-				options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
-				options.HttpsPort = 443;
-			});
+				services.AddHttpsRedirection(options =>
+				{
+					options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
+					options.HttpsPort = 443;
+				});
+			}
+			
 
 			services.Configure<ForwardedHeadersOptions>(options =>
 			{

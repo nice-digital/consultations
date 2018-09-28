@@ -206,7 +206,7 @@ export class Document extends Component<PropsType, StateType> {
 							event: "pageview",
 							gidReference: this.state.consultationData.reference,
 							title: this.getPageTitle(),
-							stage: "previewed",
+							stage: "preview",
 						});
 					});
 				})

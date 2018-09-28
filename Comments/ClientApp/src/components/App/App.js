@@ -6,7 +6,8 @@ import { Helmet } from "react-helmet";
 
 import DocumentViewWithRouter from "../DocumentView/DocumentView";
 import NotFound from "../NotFound/NotFound";
-import ReviewListPageWithRouter from "../ReviewListPage/ReviewListPage";
+import ReviewWithRouter from "../Review/Review";
+import SubmitWithRouter from "../Submit/Submit";
 import UserProviderWithRouter from "../../context/UserContext";
 import FooterWithRouter from "../Footer/Footer";
 import DocumentPreviewWithRouter from "../DocumentPreview/DocumentPreview";
@@ -55,7 +56,20 @@ class App extends React.Component<PropsType, StateType> {
 											 path="/:consultationId/review">
 									<LiveMessenger>
 										{({announcePolite, announceAssertive}) =>
-											<ReviewListPageWithRouter
+											<ReviewWithRouter
+												announcePolite={announcePolite}
+												announceAssertive={announceAssertive}
+												basename={this.props.basename}/>
+										}
+									</LiveMessenger>
+								</Route>
+
+								{/*Submit Page*/}
+								<Route exact
+											 path="/:consultationId/submit">
+									<LiveMessenger>
+										{({announcePolite, announceAssertive}) =>
+											<SubmitWithRouter
 												announcePolite={announcePolite}
 												announceAssertive={announceAssertive}
 												basename={this.props.basename}/>
