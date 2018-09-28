@@ -117,6 +117,8 @@ export class Review extends Component<PropsType, StateType> {
 		if (preloadedCommentsData && preloadedConsultationData) {
 			if (this.props.staticContext) {
 				this.props.staticContext.globals.gidReference = preloadedConsultationData.reference;
+				this.props.staticContext.globals.consultationId = preloadedConsultationData.consultationId;
+				this.props.staticContext.globals.stage = preloadedConsultationData.consultationState.userHasSubmitted ? "postsubmission" : "presubmission";
 			}
 			this.state = {
 				path: this.props.basename + this.props.location.pathname,
@@ -273,13 +275,14 @@ export class Review extends Component<PropsType, StateType> {
 					event: "generic",
 					category: "Consultation comments page",
 					action: "Response submitted",
-					label: `${response.data.comments ? response.data.comments.length : "0"} comments and ${response.data.answers ? response.data.answers.length : "0"} answers`,
+					label: `${response.data.comments ? response.data.comments.length : "0"} comments, ${response.data.answers ? response.data.answers.length : "0"} answers`,
 				});
 				tagManager({
 					event: "generic",
 					category: "Consultation comments page",
 					action: "Length to submit response",
-					label: (response.data.durationFromFirstCommentOrAnswerSavedUntilSubmissionInSeconds / 3600).toString(),
+					label: "Number of hours",
+					value: (response.data.durationFromFirstCommentOrAnswerSavedUntilSubmissionInSeconds / 3600).toString()
 				});
 				tagManager({
 					event: "generic",

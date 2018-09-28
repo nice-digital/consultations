@@ -107,6 +107,7 @@ export class Document extends Component<PropsType, StateType> {
 			if (preloadedChapter && preloadedDocuments && preloadedConsultation) {
 				if (this.props.staticContext) {
 					this.props.staticContext.globals.gidReference = preloadedConsultation.reference;
+					this.props.staticContext.globals.stage = "preview";
 				}
 				const allowComments = preloadedConsultation.supportsComments &&
 					preloadedConsultation.consultationState.consultationIsOpen &&
@@ -242,7 +243,7 @@ export class Document extends Component<PropsType, StateType> {
 						tagManager({
 							event: "pageview",
 							gidReference: this.state.consultationData.reference,
-							stage: "previewed",
+							stage: "preview",
 						});
 					});
 					pullFocusByQuerySelector(".document-comment-container");
@@ -261,7 +262,7 @@ export class Document extends Component<PropsType, StateType> {
 							event: "pageview",
 							gidReference: this.state.consultationData.reference,
 							title: this.getPageTitle(),
-							stage: "previewed",
+							stage: "preview",
 						});
 					});
 					pullFocusByQuerySelector(".document-comment-container");
