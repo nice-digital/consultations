@@ -1,27 +1,28 @@
 // @flow
 
-import React, {Component, Fragment} from "react";
-import {withRouter, Link, Prompt} from "react-router-dom";
+import React, { Component, Fragment } from "react";
+import { withRouter, Link, Prompt } from "react-router-dom";
 //import stringifyObject from "stringify-object";
-import {LiveMessage} from "react-aria-live";
+import { LiveMessage } from "react-aria-live";
 
 import preload from "../../data/pre-loader";
-import {load} from "../../data/loader";
+import { load } from "../../data/loader";
 import {
 	saveCommentHandler,
 	deleteCommentHandler,
 	saveAnswerHandler,
 	deleteAnswerHandler,
 } from "../../helpers/editing-and-deleting";
-import {pullFocusById} from "../../helpers/accessibility-helpers";
-import {mobileWidth} from "../../constants";
-import {getElementPositionWithinDocument, getSectionTitle} from "../../helpers/utils";
-import {updateUnsavedIds} from "../../helpers/unsaved-comments";
+import { pullFocusById } from "../../helpers/accessibility-helpers";
+import { mobileWidth } from "../../constants";
+import { getElementPositionWithinDocument, getSectionTitle } from "../../helpers/utils";
+import { updateUnsavedIds } from "../../helpers/unsaved-comments";
+import { tagManager } from "../../helpers/tag-manager";
 
-import {CommentBox} from "../CommentBox/CommentBox";
-import {Question} from "../Question/Question";
-import {LoginBanner} from "../LoginBanner/LoginBanner";
-import {UserContext} from "../../context/UserContext";
+import { CommentBox } from "../CommentBox/CommentBox";
+import { Question } from "../Question/Question";
+import { LoginBanner } from "../LoginBanner/LoginBanner";
+import { UserContext } from "../../context/UserContext";
 
 type PropsType = {
 	staticContext?: any,
@@ -42,7 +43,6 @@ type StateType = {
 	loading: boolean,
 	allowComments: boolean,
 	initialDataLoaded: boolean,
-	drawerExpandedWidth: boolean,
 	drawerOpen: boolean,
 	drawerMobile: boolean,
 	viewComments: boolean,
@@ -65,7 +65,6 @@ export class CommentList extends Component<PropsType, StateType> {
 			allowComments: true,
 			error: "",
 			initialDataLoaded: false,
-			drawerExpandedWidth: false,
 			drawerOpen: false,
 			drawerMobile: false,
 			viewComments: true,
@@ -74,7 +73,6 @@ export class CommentList extends Component<PropsType, StateType> {
 			shouldShowQuestionsTab: false,
 			unsavedIds: [],
 		};
-
 
 		let preloadedData = {};
 		if (this.props.staticContext && this.props.staticContext.preload) {
@@ -102,7 +100,6 @@ export class CommentList extends Component<PropsType, StateType> {
 				shouldShowDrawer: preloadedCommentsData.consultationState.shouldShowDrawer,
 				shouldShowCommentsTab: preloadedCommentsData.consultationState.shouldShowCommentsTab,
 				shouldShowQuestionsTab: preloadedCommentsData.consultationState.shouldShowQuestionsTab,
-				drawerExpandedWidth: false,
 				drawerOpen: false,
 				drawerMobile: false,
 				unsavedIds: [],
@@ -204,7 +201,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		deleteAnswerHandler(e, questionId, answerId, this);
 	};
 
-	updateUnsavedIds = (commentId: number, dirty: boolean) => {
+	updateUnsavedIds = (commentId: string, dirty: boolean) => {
 		updateUnsavedIds(commentId, dirty, this);
 	};
 
@@ -219,34 +216,52 @@ export class CommentList extends Component<PropsType, StateType> {
 	};
 
 	drawerClassnames = () => {
-		const width = this.state.drawerExpandedWidth ? "Drawer--wide" : "";
 		const open = this.state.drawerOpen ? "Drawer--open" : "";
 		const mobile = this.state.drawerMobile ? "Drawer--mobile" : "";
-		return `Drawer ${width} ${open} ${mobile}`;
+		return `Drawer ${open} ${mobile}`;
 	};
 
 	handleClick = (event: string) => {
 		switch (event) {
-			case "toggleWidth--narrow":
-				this.setState({drawerExpandedWidth: false});
-				break;
-			case "toggleWidth--wide":
-				this.setState({drawerExpandedWidth: true});
-				break;
 			case "toggleOpenComments":
-				this.setState(prevState => ({
-					drawerOpen: (prevState.drawerOpen && prevState.viewComments ? !prevState.drawerOpen : true),
-					viewComments: true,
-				}));
+				this.setState(prevState => {
+					const drawerOpen = prevState.drawerOpen && prevState.viewComments ? !prevState.drawerOpen : true;
+					tagManager({
+						event: "generic",
+						category: "Consultation comments page",
+						action: "Clicked",
+						label: `${drawerOpen ? "Open" : "Close"} comments panel button`,
+					});
+					return (
+						{
+							drawerOpen,
+							viewComments: true,
+						}
+					);
+				});
 				pullFocusById("#js-drawer-toggleopen-comments");
 				break;
+
 			case "toggleOpenQuestions":
-				this.setState(prevState => ({
-					drawerOpen: (prevState.drawerOpen && !prevState.viewComments ? !prevState.drawerOpen : true),
-					viewComments: false,
-				}));
+
+				this.setState(prevState => {
+					const drawerOpen = prevState.drawerOpen && !prevState.viewComments ? !prevState.drawerOpen : true;
+					tagManager({
+						event: "generic",
+						category: "Consultation comments page",
+						action: "Clicked",
+						label: `${drawerOpen ? "Open" : "Close"} questions panel button`,
+					});
+					return (
+						{
+							drawerOpen,
+							viewComments: false,
+						}
+					);
+				});
 				pullFocusById("#js-drawer-toggleopen-questions");
 				break;
+
 			default:
 				return;
 		}

@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import { convertNodeToElement } from "react-html-parser";
 import {nodeIsTypeText, nodeIsSubsection, nodeIsSpanTag, nodeIsInternalLink} from "./types";
 import processInternalLink from "./internal-link";
+import {tagManager} from "../../helpers/tag-manager";
 
 export const processChapterSectionSubsection = (node, onNewCommentClick, sourceURI, allowComments) => {
 
@@ -19,11 +20,21 @@ export const processChapterSectionSubsection = (node, onNewCommentClick, sourceU
 		<Fragment key={0}>
 			{allowComments &&
 				<button
+					data-gtm="button"
+					data-gtm-category="Consultation comments page"
+					data-gtm-action="Clicked"
+					data-gtm-label={`Comment on ${commentOn || "chapter"}`}
 					data-qa-sel="in-text-comment-button"
 					className="document-comment-container__commentButton"
 					tabIndex={0}
 					onClick={e => {
 						e.preventDefault();
+						tagManager({
+							event: "generic",
+							category: "Consultation comments page",
+							action: "Clicked",
+							label: `Comment on ${commentOn || "chapter"}`,
+						});
 						onNewCommentClick(e, {
 							sourceURI,
 							commentText: "",

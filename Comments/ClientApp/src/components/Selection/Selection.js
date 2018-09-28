@@ -4,6 +4,7 @@ import React, { Component } from "react";
 //import stringifyObject from "stringify-object";
 
 import { getElementPositionWithinDocument, getSectionTitle } from "../../helpers/utils";
+import { tagManager } from "../../helpers/tag-manager";
 
 type PropsType = {
 	newCommentFunc: Function,
@@ -97,6 +98,12 @@ export class Selection extends Component<PropsType, StateType> {
 	onButtonClick = (event: Event ) => {
 		this.props.newCommentFunc(null, this.state.comment); //can't pass the event here, as it's the button click event, not the start of the text selection.
 		this.setState({ toolTipVisible: false });
+		tagManager({
+			event: "generic",
+			category: "Consultation comments page",
+			action: "Clicked",
+			label: "Comment on text selection",
+		});
 	}
 
 

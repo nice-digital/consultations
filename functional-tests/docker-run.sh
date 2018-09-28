@@ -18,4 +18,7 @@ docker cp functional-tests_comments_1:/app/logs ./docker-output
 docker-compose logs --no-color > ./docker-output/logs.txt
 
 # Clean up
-docker-compose down
+docker volume ls
+docker-compose down -v
+docker volume ls
+#docker volume prune -f

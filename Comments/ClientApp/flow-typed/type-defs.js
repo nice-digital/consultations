@@ -23,7 +23,8 @@ declare type HistoryLocationType = {
 
 declare type HistoryType = {
 	push: (url: string) => void,
-	listen: ((location: HistoryLocationType, action: "PUSH" | "REPLACE" | "POP" | null) => void) => void
+	listen: ((location: HistoryLocationType, action: "PUSH" | "REPLACE" | "POP" | null) => void) => void,
+	location: HistoryLocationType
 };
 
 declare type DocumentType = {
@@ -51,7 +52,8 @@ declare type ConsultationStateType = {
 declare type ConsultationDataType = {
 	consultationState: ConsultationStateType,
 	supportsComments: boolean,
-	supportsQuestions: boolean
+	supportsQuestions: boolean,
+	reference: string,
 };
 
 declare type CommentType = {

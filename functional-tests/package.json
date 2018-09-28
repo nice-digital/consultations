@@ -31,6 +31,6 @@
     "webdriverio": "^4.12.0"
   },
   "dependencies": {
-    "@nice-digital/wdio-cucumber-steps": "^0.3.5"
+    "@nice-digital/wdio-cucumber-steps": "^0.3.6"
   }
 }
