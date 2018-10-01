@@ -43,7 +43,7 @@ export class Header extends PureComponent<PropsType> {
 						</Fragment>
 						:
 						<Fragment>
-							The consultation {startOrEnd} on <Moment format="D MMMM YYYY" date={endDate}/> at {" "}
+							This consultation {startOrEnd} on <Moment format="D MMMM YYYY" date={endDate}/> at {" "}
 							<Moment format="HH:mm" date={endDate}/>
 						</Fragment>
 					}
