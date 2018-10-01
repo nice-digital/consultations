@@ -59,8 +59,10 @@ describe("[ClientApp] ", () => {
 				wrapper.update();
 
 				expect(
-					toJson(wrapper)
-				).toMatchSnapshot();
+					toJson(wrapper, {
+						noKey: true,
+						mode: "shallow",
+					})).toMatchSnapshot();
 			});
 		});
 
