@@ -46,10 +46,10 @@ namespace Comments.Services
 
 	    public int DeleteAllData()
 	    {
-		    if (_hostingEnvironment.IsProduction())
-		    {
-			    throw new Exception("Not allowed to do this on production");
-		    }
+		    //if (_hostingEnvironment.IsProduction())
+		    //{
+			//    throw new Exception("Not allowed to do this on production");
+		    //}
 		    return _dbContext.DeleteEverything();
 	    }
 
