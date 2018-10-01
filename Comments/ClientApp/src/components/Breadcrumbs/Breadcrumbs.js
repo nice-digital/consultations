@@ -20,8 +20,9 @@ export class BreadCrumbs extends PureComponent<PropsType> {
 	trackBreadcrumb = (segment) => {
 		tagManager({
 			event: "generic",
-			category: "Breadcrumbs - guidancebreadcrumbs",
+			category: "Breadcrumb - guidancebreadcrumb",
 			action: segment.url,
+			label: window.location.href,
 		});
 	};
 
