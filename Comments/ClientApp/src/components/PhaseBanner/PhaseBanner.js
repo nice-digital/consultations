@@ -6,7 +6,6 @@ import * as Bowser from "bowser";
 type PropsType = {
 	phase: string,
 	name: string,
-	repo: string
 }
 
 const getBrowserInfo = () => {
@@ -21,7 +20,7 @@ const getBrowserInfo = () => {
 
 export class PhaseBanner extends PureComponent<PropsType> {
 	render() {
-		const {phase, name, repo} = this.props;
+		const {phase, name} = this.props;
 		return (
 			<aside className="phase-banner mt--b">
 				{/* eslint-disable-next-line*/}
@@ -31,7 +30,7 @@ export class PhaseBanner extends PureComponent<PropsType> {
 				<span className="phase-banner__label">
 					{name} is in development which means that some features may not work fully.{" "}
 					<a
-						href={repo}
+						href="/get-involved/contact-us"
 						rel="noopener noreferrer"
 						target="_blank"
 					>Report an issue</a>
