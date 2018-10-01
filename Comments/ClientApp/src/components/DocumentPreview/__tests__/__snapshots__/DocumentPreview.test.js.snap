@@ -59,6 +59,7 @@ Array [
                         itemProp="itemListElement"
                         itemScope={true}
                         itemType="http://schema.org/ListItem"
+                        onClick={[Function]}
                     >
                         <a
                             href="/guidance/inconsultation"
@@ -75,6 +76,7 @@ Array [
                         itemProp="itemListElement"
                         itemScope={true}
                         itemType="http://schema.org/ListItem"
+                        onClick={[Function]}
                     >
                         <a
                             href="/guidance/indevelopment/gid-ng10186/consultation/"

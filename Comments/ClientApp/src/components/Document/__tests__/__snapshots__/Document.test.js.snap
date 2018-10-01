@@ -112,6 +112,7 @@ Array [
                         itemProp="itemListElement"
                         itemScope={true}
                         itemType="http://schema.org/ListItem"
+                        onClick={[Function]}
                     >
                         <a
                             href="/"
@@ -128,6 +129,7 @@ Array [
                         itemProp="itemListElement"
                         itemScope={true}
                         itemType="http://schema.org/ListItem"
+                        onClick={[Function]}
                     >
                         <a
                             href="/guidance/indevelopment/gid-ta10232/consultation/"

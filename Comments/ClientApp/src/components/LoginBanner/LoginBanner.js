@@ -5,7 +5,7 @@ type PropsType = {
 	signInURL: string,
 	registerURL: string,
 	signInButton: boolean,
-	signInText: string,
+	signInText?: string,
 }
 
 export class LoginBanner extends PureComponent<PropsType> {
