@@ -166,7 +166,7 @@ Array [
                     className="grid"
                 >
                     <div
-                        className="navigationColumn"
+                        className="navigationColumn sticky"
                         data-g="12 md:3"
                     >
                         <nav
