@@ -439,7 +439,6 @@ export class Document extends Component<PropsType, StateType> {
 							<PhaseBanner
 								phase={projectInformation.phase}
 								name={projectInformation.name}
-								repo={projectInformation.repo}
 							/>
 							<BreadCrumbs links={this.state.consultationData.breadcrumbs}/>
 							<main role="main">
