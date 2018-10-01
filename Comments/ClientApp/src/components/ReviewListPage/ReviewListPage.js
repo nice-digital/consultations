@@ -261,6 +261,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 				console.log(err);
 				if (err.response) alert(err.response.statusText);
 			});
+		window.scrollTo(0,0);
 	};
 
 	//this validation handler code is going to have to get a bit more advanced when questions are introduced, as it'll be possible
