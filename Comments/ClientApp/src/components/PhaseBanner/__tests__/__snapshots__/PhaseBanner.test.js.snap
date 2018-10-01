@@ -22,7 +22,7 @@ exports[`[ClientApp]  PhaseBanner  Matches snapshot 1`] = `
      is in development which means that some features may not work fully.
      
     <a
-      href="http://mygitrepo.com"
+      href="/get-involved/contact-us"
       rel="noopener noreferrer"
       target="_blank"
     >
