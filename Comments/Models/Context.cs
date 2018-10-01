@@ -503,9 +503,35 @@ namespace Comments.Models
 		/// <returns></returns>
 		public IList<object> GetAllOfATable(string typeName)
 	    {
-		    var method = typeof(DbContext).GetMethod("Set").MakeGenericMethod(Type.GetType("Comments.Models." + typeName));
-			var query = method.Invoke(this, null) as IQueryable;
-		    return (query ?? throw new InvalidOperationException()).OfType<object>().ToList();
+			//the below works and is kinda nice, but the big switch is probably safer.
+			//var method = typeof(DbContext).GetMethod("Set").MakeGenericMethod(Type.GetType("Comments.Models." + typeName));
+			//var query = method.Invoke(this, null) as IQueryable;
+			//return (query ?? throw new InvalidOperationException()).OfType<object>().ToList();
+
+		    switch (typeName.ToLower())
+		    {
+				case "submissioncomment":
+					return SubmissionComment.IgnoreQueryFilters().Select(x => (object)x).ToList();
+			    case "submissionanswer":
+				    return SubmissionAnswer.IgnoreQueryFilters().Select(x => (object)x).ToList();
+			    case "submission":
+				    return Submission.IgnoreQueryFilters().Select(x => (object)x).ToList();
+			    case "answer":
+				    return Answer.IgnoreQueryFilters().Select(x => (object)x).ToList();
+			    case "question":
+				    return Question.IgnoreQueryFilters().Select(x => (object)x).ToList();
+			    case "comment":
+				    return Comment.IgnoreQueryFilters().Select(x => (object)x).ToList();
+			    case "location":
+				    return Location.IgnoreQueryFilters().Select(x => (object)x).ToList();
+			    case "questiontype":
+				    return QuestionType.IgnoreQueryFilters().Select(x => (object)x).ToList();
+			    case "status":
+				    return Status.IgnoreQueryFilters().Select(x => (object)x).ToList();
+
+				default:
+					throw new Exception("Unknown table name");
+		    }
 	    }
 	}
 }
