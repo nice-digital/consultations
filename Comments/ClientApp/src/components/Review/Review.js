@@ -172,7 +172,7 @@ export class Review extends Component<PropsType, StateType> {
 
 	gatherData = async () => {
 		const querystring = this.props.history.location.search;
-		const path = this.props.basename + this.props.location.pathname + querystring;
+		const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;
 		this.setState({
 			path,
 		});
@@ -244,32 +244,35 @@ export class Review extends Component<PropsType, StateType> {
 						});
 					});
 				}
+				tagManager({
+					event: "pageview",
+					gidReference: this.state.consultationData.reference,
+					title: this.getPageTitle(),
+					stage: this.state.consultationData.consultationState.userHasSubmitted ? "postsubmission" : "presubmission",
+				});
 			})
 			.catch(err => {
 				throw new Error("gatherData in componentDidMount failed " + err);
 			});
 	};
 
-	// componentWillUnmount(){
-	// 	this.props.history.listen
-	// }
+	componentWillUnmount() {
+		this.unlisten();
+	}
 
 	componentDidMount() {
-		if (!this.state.hasInitalData) { //typically this page is accessed by clicking a link on the document page, so it won't SSR.
+		if (!this.state.hasInitialData) {
 			this.loadDataAndUpdateState();
 		}
-		// todo: revisit this
-		this.props.history.listen(() => {
-			this.loadDataAndUpdateState();
+		this.unlisten = this.props.history.listen(() => {
+			const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;
+			if (!this.state.path || path !== this.state.path) {
+				this.loadDataAndUpdateState();
+			}
 		});
 	}
 
-	componentDidUpdate(prevProps: PropsType) {
-		const oldQueryString = prevProps.location.search;
-		const newQueryString = this.props.location.search;
-		if (oldQueryString === newQueryString) return;
-		pullFocusById("comments-column");
-	}
+	unlisten = function(){};
 
 	submitConsultation = () => {
 		const comments = this.state.comments;
