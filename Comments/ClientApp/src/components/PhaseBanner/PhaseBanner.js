@@ -34,7 +34,7 @@ export class PhaseBanner extends PureComponent<PropsType> {
 					<span className="tag tag--impact tag--agile">{phase}</span>
 				</span>
 				<span className="phase-banner__label">
-					{name} is in development which means that some features may not work fully.{" "}
+					{name} is in development, which means that some features may not work fully.{" "}
 					<a
 						href="/get-involved/contact-us"
 						rel="noopener noreferrer"
