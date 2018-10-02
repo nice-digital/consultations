@@ -6,6 +6,7 @@
     &:hover {
       cursor: pointer;
     }
+    outline: -webkit-focus-ring-color red 5px
   }
   padding-left: rem($spacing-large);
   &.loading {
@@ -55,3 +56,8 @@
   z-index: 10;
   background-color: $colour-body;
 }
+
+/* remember to define focus styles! */
+:focus {
+  outline: 0;
+  }
