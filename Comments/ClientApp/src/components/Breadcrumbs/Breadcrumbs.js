@@ -1,7 +1,7 @@
 // @flow
 
 import React, {PureComponent} from "react";
-import {Link} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import {isHttpLink} from "../../helpers/utils";
 import {tagManager} from "../../helpers/tag-manager";
 
@@ -17,12 +17,16 @@ type PropsType = {
 
 export class BreadCrumbs extends PureComponent<PropsType> {
 
+	constructor(props) {
+		super(props);
+	}
+
 	trackBreadcrumb = (segment) => {
 		tagManager({
 			event: "generic",
 			category: "Breadcrumb - guidancebreadcrumb",
 			action: segment.url,
-			label: window.location.href,
+			label: this.props.location.pathname,
 		});
 	};
 
@@ -62,3 +66,5 @@ export class BreadCrumbs extends PureComponent<PropsType> {
 		);
 	}
 }
+
+export default withRouter(BreadCrumbs);

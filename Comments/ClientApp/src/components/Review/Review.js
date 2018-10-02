@@ -20,7 +20,7 @@ import { UserContext } from "../../context/UserContext";
 
 import { Header } from "../Header/Header";
 import { PhaseBanner } from "../PhaseBanner/PhaseBanner";
-import { BreadCrumbs } from "../Breadcrumbs/Breadcrumbs";
+import BreadCrumbsWithRouter from "../Breadcrumbs/Breadcrumbs";
 import { FilterPanel } from "../FilterPanel/FilterPanel";
 import { ResultsInfo } from "../ResultsInfo/ResultsInfo";
 import { withHistory } from "../HistoryContext/HistoryContext";
@@ -42,6 +42,7 @@ type PropsType = {
 	},
 	history: HistoryType,
 	basename: string,
+	announceAssertive: Function,
 };
 
 type StateType = {
@@ -49,7 +50,6 @@ type StateType = {
 	commentsData: ReviewPageViewModelType | null,
 	userHasSubmitted: boolean,
 	validToSubmit: false,
-	viewSubmittedComments: boolean,
 	path: string | null,
 	hasInitalData: boolean,
 	allowComments: boolean,
@@ -63,7 +63,9 @@ type StateType = {
 	hasTobaccoLinks: boolean,
 	tobaccoDisclosure: string,
 	unsavedIds: Array<number>,
-	documentTitles: Array<any>,
+	documentTitles: "undefined" | Array<any>,
+	justSubmitted: boolean,
+	path: null | string,
 };
 
 export class Review extends Component<PropsType, StateType> {
@@ -144,11 +146,11 @@ export class Review extends Component<PropsType, StateType> {
 		}
 
 		let isSSR = false;
-		if (this.props.staticContext){
+		if (this.props.staticContext) {
 			isSSR = true;
 		}
 		const message = `Review page log hit at ${new Date().toJSON()}. running as ${process.env.NODE_ENV} SSR: ${isSSR}`;
-		preload(this.props.staticContext, "logging", [], {logLevel:"Warning"}, null, false,  "POST", {}, {message}, true);			
+		preload(this.props.staticContext, "logging", [], {logLevel: "Warning"}, null, false, "POST", {}, {message}, true);
 
 	}
 
@@ -156,17 +158,17 @@ export class Review extends Component<PropsType, StateType> {
 	logStuff = () => {
 
 		let isSSR = false;
-		if (this.props.staticContext){
+		if (this.props.staticContext) {
 			isSSR = true;
 		}
 		const message = `Review page log hit at ${new Date().toJSON()}. running as ${process.env.NODE_ENV} SSR: ${isSSR}`;
 
-		const logResponse = load("logging", undefined, [], {logLevel:"Warning"}, "POST", {message}, true)
+		const logResponse = load("logging", undefined, [], {logLevel: "Warning"}, "POST", {message}, true)
 			.then(response => response.data)
 			.catch(err => {
 				console.error(err);
 			});
-	}
+	};
 
 	gatherData = async () => {
 		const querystring = this.props.history.location.search;
@@ -242,22 +244,21 @@ export class Review extends Component<PropsType, StateType> {
 						});
 					});
 				}
-				tagManager({
-					event: "pageview",
-					gidReference: this.state.consultationData.reference,
-					title: this.getPageTitle(),
-					stage: this.state.consultationData.consultationState.userHasSubmitted ? "postsubmission" : "presubmission",
-				});
 			})
 			.catch(err => {
 				throw new Error("gatherData in componentDidMount failed " + err);
 			});
 	};
 
+	// componentWillUnmount(){
+	// 	this.props.history.listen
+	// }
+
 	componentDidMount() {
 		if (!this.state.hasInitalData) { //typically this page is accessed by clicking a link on the document page, so it won't SSR.
 			this.loadDataAndUpdateState();
 		}
+		// todo: revisit this
 		this.props.history.listen(() => {
 			this.loadDataAndUpdateState();
 		});
@@ -300,12 +301,13 @@ export class Review extends Component<PropsType, StateType> {
 					action: "Response submitted",
 					label: `${response.data.comments ? response.data.comments.length : "0"} comments, ${response.data.answers ? response.data.answers.length : "0"} answers`,
 				});
+
 				tagManager({
 					event: "generic",
 					category: "Consultation comments page",
 					action: "Length to submit response",
-					label: "Duration in hours",
-					value: (Math.round(response.data.durationBetweenFirstCommentOrAnswerSavedAndSubmissionInSeconds / 3600)), // number of hours, rounded. will be 0 if less than 30 mins
+					label: "Duration in minutes",
+					value: (Math.round(response.data.durationBetweenFirstCommentOrAnswerSavedAndSubmissionInSeconds / 60)), // number of mins, rounded. will be 0 if less than 30 mins
 					//:-( no more whole numbers. lengthy decimals from now on  - though they're much more likely to get trimmed and lose accuracy
 				});
 				tagManager({
@@ -347,7 +349,7 @@ export class Review extends Component<PropsType, StateType> {
 		});
 	};
 
-	fieldsChangeHandler = (e: SyntheticInputEvent) => {
+	fieldsChangeHandler = (e: SyntheticInputEvent<*>) => {
 		this.setState({
 			[e.target.name]: e.target.value,
 		});
@@ -421,7 +423,7 @@ export class Review extends Component<PropsType, StateType> {
 	}
 
 	getPageTitle = () => {
-		return `${this.state.consultationData.title} | Response reviewed pre submission`;
+		return `${this.state.consultationData.title} | Review your response`;
 	};
 
 	render() {
@@ -448,103 +450,128 @@ export class Review extends Component<PropsType, StateType> {
 								name={projectInformation.name}
 								repo={projectInformation.repo}
 							/>
-							<BreadCrumbs links={this.state.consultationData.breadcrumbs}/>
-							<main role="main">
-								<div className="page-header">
-									<Header
-										title={this.state.userHasSubmitted ? "Response submitted" : "Review your response"}
-										subtitle1={this.state.userHasSubmitted ? "" : "Review and edit your question responses and comments before you submit them to us."}
-										subtitle2={this.state.userHasSubmitted ? "" : "Once they have been submitted you will not be able to edit them further or add any extra comments."}
-										reference={reference}
-										consultationState={this.state.consultationData.consultationState}
-									/>
-									<UserContext.Consumer>
-										{(contextValue: ContextType) => {
-											return (
-												!contextValue.isAuthorised ?
-													<LoginBanner
-														signInButton={true}
-														currentURL={this.props.match.url}
-														signInURL={contextValue.signInURL}
-														registerURL={contextValue.registerURL}
-													/> :
+							<BreadCrumbsWithRouter links={this.state.consultationData.breadcrumbs}/>
+							<UserContext.Consumer>
+								{(contextValue: ContextType) => {
+									return (
+										!contextValue.isAuthorised ?
+											<LoginBanner
+												signInButton={true}
+												currentURL={this.props.match.url}
+												signInURL={contextValue.signInURL}
+												registerURL={contextValue.registerURL}
+											/> :
+											<main role="main">
+												<div className="page-header">
+													<Header
+														title={this.state.userHasSubmitted ? "Response submitted" : "Review your response"}
+														subtitle1={this.state.userHasSubmitted ? "" : "Review and edit your question responses and comments before you submit them to us."}
+														subtitle2={this.state.userHasSubmitted ? "" : "Once they have been submitted you will not be able to edit them further or add any extra comments."}
+														reference={reference}
+														consultationState={this.state.consultationData.consultationState}
+													/>
+													{this.state.userHasSubmitted &&
+													<Fragment>
+														{this.state.consultationData.consultationState.supportsDownload &&
+														<a
+															onClick={() => {
+																tagManager({
+																	event: "generic",
+																	category: "Consultation comments page",
+																	action: "Clicked",
+																	label: "Download your response button",
+																});
+															}}
+															className="btn btn--secondary"
+															href={`${this.props.basename}/api/exportexternal/${this.props.match.params.consultationId}`}>Download
+															your response</a>
+														}
+														<h2>What happens next?</h2>
+														<p>We will review all the submissions received for this consultation. Our response
+															will
+															be published on the website around the time the guidance is published.</p>
+														<hr/>
+													</Fragment>
+													}
+													{/* /userHasSubmitted */}
+
+													{/*Review Comments Columns */}
 													<div className="grid">
-														<Fragment>
-															<div data-g="12 md:3" className="sticky">
-																<FilterPanel filters={this.state.commentsData.filters} path={this.state.path}/>
-															</div>
-															<div data-g="12 md:9">
-																<ResultsInfo commentCount={commentsToShow.length}
-																						 showCommentsCount={this.state.consultationData.consultationState.shouldShowCommentsTab}
-																						 questionCount={questionsToShow.length}
-																						 showQuestionsCount={this.state.consultationData.consultationState.shouldShowQuestionsTab}
-																						 sortOrder={this.state.sort}
-																						 appliedFilters={this.getAppliedFilters()}
-																						 path={this.state.path}
-																						 isLoading={this.state.loading}/>
-																<div data-qa-sel="comment-list-wrapper">
-																	{questionsToShow.length > 0 &&
-																	<div>
-																		<ul className="CommentList list--unstyled">
-																			{questionsToShow.map((question) => {
-																				const isUnsaved = this.state.unsavedIds.includes(`${question.questionId}q`);
-																				return (
-																					<Question
-																						updateUnsavedIds={this.updateUnsavedIds}
-																						isUnsaved={isUnsaved}
-																						readOnly={!this.state.allowComments || this.state.userHasSubmitted}
-																						key={question.questionId}
-																						unique={`Comment${question.questionId}`}
-																						question={question}
-																						saveAnswerHandler={this.saveAnswerHandler}
-																						deleteAnswerHandler={this.deleteAnswerHandler}
-																						documentTitle={this.getDocumentTitle(question.documentId)}
-																					/>
-																				);
-																			})}
-																		</ul>
-																	</div>
-																	}
-																	{commentsToShow.length === 0 ? <p>{/*No comments yet*/}</p> :
-																		<ul className="CommentList list--unstyled">
-																			{commentsToShow.map((comment) => {
-																				return (
-																					<CommentBox
-																						readOnly={!this.state.allowComments || this.state.userHasSubmitted}
-																						isVisible={this.props.isVisible}
-																						key={comment.commentId}
-																						unique={`Comment${comment.commentId}`}
-																						comment={comment}
-																						documentTitle={this.getDocumentTitle(comment.documentId)}
-																						saveHandler={this.saveCommentHandler}
-																						deleteHandler={this.deleteCommentHandler}
-																						updateUnsavedIds={this.updateUnsavedIds}
-																					/>
-																				);
-																			})}
-																		</ul>
-																	}
+														<div data-g="12 md:3" className="sticky">
+															<FilterPanel filters={this.state.commentsData.filters} path={this.state.path}/>
+														</div>
+														<div data-g="12 md:9">
+															<ResultsInfo
+																commentCount={commentsToShow.length}
+																showCommentsCount={this.state.consultationData.consultationState.shouldShowCommentsTab}
+																questionCount={questionsToShow.length}
+																showQuestionsCount={this.state.consultationData.consultationState.shouldShowQuestionsTab}
+																sortOrder={this.state.sort}
+																appliedFilters={this.getAppliedFilters()}
+																path={this.state.path}
+																isLoading={this.state.loading}/>
+															<div data-qa-sel="comment-list-wrapper">
+																{questionsToShow.length > 0 &&
+																<div>
+																	<ul className="CommentList list--unstyled">
+																		{questionsToShow.map((question) => {
+																			const isUnsaved = this.state.unsavedIds.includes(`${question.questionId}q`);
+																			return (
+																				<Question
+																					updateUnsavedIds={this.updateUnsavedIds}
+																					isUnsaved={isUnsaved}
+																					readOnly={!this.state.allowComments || this.state.userHasSubmitted}
+																					key={question.questionId}
+																					unique={`Comment${question.questionId}`}
+																					question={question}
+																					saveAnswerHandler={this.saveAnswerHandler}
+																					deleteAnswerHandler={this.deleteAnswerHandler}
+																					documentTitle={this.getDocumentTitle(question.documentId)}
+																				/>
+																			);
+																		})}
+																	</ul>
 																</div>
-																<SubmitResponseDialog
-																	unsavedIds={this.state.unsavedIds}
-																	isAuthorised={contextValue.isAuthorised}
-																	userHasSubmitted={this.state.userHasSubmitted}
-																	validToSubmit={this.state.validToSubmit}
-																	submitConsultation={this.submitConsultation}
-																	fieldsChangeHandler={this.fieldsChangeHandler}
-																	respondingAsOrganisation={this.state.respondingAsOrganisation}
-																	organisationName={this.state.organisationName}
-																	hasTobaccoLinks={this.state.hasTobaccoLinks}
-																	tobaccoDisclosure={this.state.tobaccoDisclosure}
-																/>
+																}
+																{commentsToShow.length === 0 ? <p>{/*No comments yet*/}</p> :
+																	<ul className="CommentList list--unstyled">
+																		{commentsToShow.map((comment) => {
+																			return (
+																				<CommentBox
+																					readOnly={!this.state.allowComments || this.state.userHasSubmitted}
+																					isVisible={this.props.isVisible}
+																					key={comment.commentId}
+																					unique={`Comment${comment.commentId}`}
+																					comment={comment}
+																					documentTitle={this.getDocumentTitle(comment.documentId)}
+																					saveHandler={this.saveCommentHandler}
+																					deleteHandler={this.deleteCommentHandler}
+																					updateUnsavedIds={this.updateUnsavedIds}
+																				/>
+																			);
+																		})}
+																	</ul>
+																}
 															</div>
-														</Fragment>
+															<SubmitResponseDialog
+																unsavedIds={this.state.unsavedIds}
+																isAuthorised={contextValue.isAuthorised}
+																userHasSubmitted={this.state.userHasSubmitted}
+																validToSubmit={this.state.validToSubmit}
+																submitConsultation={this.submitConsultation}
+																fieldsChangeHandler={this.fieldsChangeHandler}
+																respondingAsOrganisation={this.state.respondingAsOrganisation}
+																organisationName={this.state.organisationName}
+																hasTobaccoLinks={this.state.hasTobaccoLinks}
+																tobaccoDisclosure={this.state.tobaccoDisclosure}
+															/>
+														</div>
 													</div>
-											);
-										}}
-									</UserContext.Consumer>
-								</div>
-							</ main>
+												</div>
+											</ main>
+									);
+								}}
+							</UserContext.Consumer>
 						</div>
 					</div>
 				</div>
