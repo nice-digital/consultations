@@ -1,4 +1,7 @@
 .document-comment-container {
+  &:focus {
+    outline: none;
+  }
   &__commentButton {
     margin-left: rem(-40px);
     position: absolute;
