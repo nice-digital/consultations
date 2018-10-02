@@ -47,6 +47,8 @@ declare type ConsultationStateType = {
 	shouldShowCommentsTab: boolean,
 	shouldShowQuestionsTab: boolean,
 	supportsDownload: boolean,
+	reference?: string,
+	userHasSubmitted: boolean,
 };
 
 declare type ConsultationDataType = {
@@ -126,3 +128,5 @@ declare type ReviewPageViewModelType = {
 	filters: Array<ReviewFilterGroupType>,
 	//QuestionsOrComments[] and Documents[] are only for sending up to the backend. not to use in react.
 };
+
+declare type ContextType = any;

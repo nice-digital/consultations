@@ -6,14 +6,26 @@ import { tagManager } from "../../helpers/tag-manager";
 import Helmet from "react-helmet";
 import { PhaseBanner } from "../PhaseBanner/PhaseBanner";
 import { projectInformation } from "../../constants";
-import { BreadCrumbs } from "../Breadcrumbs/Breadcrumbs";
+import BreadCrumbsWithRouter from "../Breadcrumbs/Breadcrumbs";
 import { Header } from "../Header/Header";
 import { UserContext } from "../../context/UserContext";
 import { LoginBanner } from "../LoginBanner/LoginBanner";
 import preload from "../../data/pre-loader";
 import { load } from "../../data/loader";
 
-export class Submitted extends Component {
+type PropsType = any;
+
+type StateType = {
+	consultationData: ConsultationStateType | null,
+	loading: boolean,
+	hasInitialData: boolean,
+	error: {
+		hasError: boolean,
+		message: string,
+	},
+}
+
+export class Submitted extends Component<PropsType, StateType> {
 
 	constructor(props: PropsType) {
 		super(props);
@@ -22,6 +34,10 @@ export class Submitted extends Component {
 			consultationData: null,
 			loading: true,
 			hasInitialData: false,
+			error: {
+				hasError: false,
+				message: "",
+			},
 		};
 
 		if (this.props) {
@@ -49,6 +65,10 @@ export class Submitted extends Component {
 					consultationData: preloadedConsultation,
 					loading: false,
 					hasInitialData: true,
+					error: {
+						hasError: false,
+						message: "",
+					},
 				};
 			}
 		}
@@ -71,16 +91,12 @@ export class Submitted extends Component {
 		};
 	};
 
-	getPageTitle = () => {
-		return "page title tbc";
-	};
-
 	componentDidMount() {
 		if (!this.state.hasInitialData) {
 			this.gatherData()
 				.then(data => {
 					this.setState({
-						...data,
+						consultationData: data.consultationData,
 						loading: false,
 						hasInitialData: true,
 					}, () => {
@@ -103,12 +119,16 @@ export class Submitted extends Component {
 		}
 	}
 
+	getPageTitle = () => {
+		return `${this.state.consultationData.title} | Response submitted`;
+	};
+
 	render() {
 		if (!this.state.hasInitialData) return <h1>Loading...</h1>;
 		return (
 			<Fragment>
 				<Helmet>
-					<title>Hey</title>
+					<title>{this.getPageTitle()}</title>
 				</Helmet>
 				<div className="container">
 					<div className="grid">
@@ -118,7 +138,7 @@ export class Submitted extends Component {
 								name={projectInformation.name}
 								repo={projectInformation.repo}
 							/>
-							<BreadCrumbs links={this.state.consultationData.breadcrumbs}/>
+							<BreadCrumbsWithRouter links={this.state.consultationData.breadcrumbs}/>
 							<main role="main">
 								<div className="page-header">
 									<Header
