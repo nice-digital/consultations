@@ -1,10 +1,15 @@
 .CommentBox {
-  &--unsavedChanges {
-    border-color: $colour-caution;
-  }
   &__validationMessage {
-    color: $colour-caution;
-    font-weight: bold;
+    &:before {
+      content: "";
+      display: inline-block;
+      background-color: $colour-caution-our-version;
+      width: 0.75rem;
+      height: 1.75rem;
+      margin-right: 0.75rem;
+      position: relative;
+      top: 0.5rem
+    }
   }
   @include clearfix;
   margin-bottom: rem($spacing-small);
