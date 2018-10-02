@@ -73,6 +73,7 @@ namespace Comments
 	        services.TryAddTransient<IExportService, ExportService>();
 			services.TryAddSingleton<IEncryption, Encryption>();
 	        services.TryAddTransient<IExportToExcel, ExportToExcel>();
+	        services.TryAddTransient<IStatusService, StatusService>();
 
 			// Add authentication 
 			services.AddAuthentication(options =>
