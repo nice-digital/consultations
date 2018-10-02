@@ -72,6 +72,7 @@ Array [
 </div>,
   Array [
     "",
+    "",
     <div
       className="container"
 >
@@ -102,7 +103,7 @@ Array [
                                is in development which means that some features may not work fully.
                                
                               <a
-                                    href="https://github.com/nhsevidence/consultations"
+                                    href="/get-involved/contact-us"
                                     rel="noopener noreferrer"
                                     target="_blank"
                               >
@@ -128,6 +129,7 @@ Array [
                                     itemProp="itemListElement"
                                     itemScope={true}
                                     itemType="http://schema.org/ListItem"
+                                    onClick={[Function]}
                               >
                                     <a
                                           href="/"
@@ -144,6 +146,7 @@ Array [
                                     itemProp="itemListElement"
                                     itemScope={true}
                                     itemType="http://schema.org/ListItem"
+                                    onClick={[Function]}
                               >
                                     <a
                                           href="/guidance/indevelopment/gid-ta10232/consultation/"
@@ -160,6 +163,7 @@ Array [
                                     itemProp="itemListElement"
                                     itemScope={true}
                                     itemType="http://schema.org/ListItem"
+                                    onClick={[Function]}
                               >
                                     <a
                                           href="/consultations/1/1/introduction"

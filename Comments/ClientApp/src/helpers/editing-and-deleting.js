@@ -1,6 +1,7 @@
 // @flow
 
 import { load } from "../data/loader";
+import { tagManager } from "./tag-manager";
 
 export function saveCommentHandler(event: Event, comment: CommentType, self: any) {
 	event.preventDefault();
@@ -25,6 +26,12 @@ export function saveCommentHandler(event: Event, comment: CommentType, self: any
 				self.setState({
 					comments,
 					error,
+				});
+				tagManager({
+					event: "generic",
+					category: "Consultation comments page",
+					action: "Clicked",
+					label: "Comment saved button",
 				});
 				self.updateUnsavedIds(`${originalId}c`, false);
 				if (typeof self.issueA11yMessage === "function") {
@@ -107,6 +114,12 @@ export function saveAnswerHandler(event: Event, answer: AnswerType, questionId: 
 				self.setState({
 					questions,
 				});
+				tagManager({
+					event: "generic",
+					category: "Consultation comments page",
+					action: "Clicked",
+					label: "Save answer button",
+				});
 				self.updateUnsavedIds(`${questionId}q`, false);
 				if (typeof self.issueA11yMessage === "function") {
 					self.issueA11yMessage("Answer saved");
@@ -151,6 +164,12 @@ function removeCommentFromState(commentId: number, self: any) {
 	if (typeof self.issueA11yMessage === "function") {
 		self.issueA11yMessage("Comment deleted");
 	}
+	tagManager({
+		action: "Clicked",
+		label: "Comment deleted button",
+		event: "generic",
+		category: "Consultation comments page",
+	});
 	let comments = self.state.comments;
 	const error = "";
 	comments = comments.filter(comment => comment.commentId !== commentId);
@@ -172,4 +191,10 @@ function removeAnswerFromState(questionId: number, answerId: number, self: any) 
 	if (typeof self.issueA11yMessage === "function") {
 		self.issueA11yMessage("Answer deleted");
 	}
+	tagManager({
+		action: "Clicked",
+		label: "Delete answer button",
+		event: "generic",
+		category: "Consultation comments page",
+	});
 }

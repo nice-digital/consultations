@@ -3,6 +3,7 @@
 import React, {PureComponent} from "react";
 import {Link} from "react-router-dom";
 import {isHttpLink} from "../../helpers/utils";
+import {tagManager} from "../../helpers/tag-manager";
 
 type LinksType = {
 	label: string,
@@ -15,6 +16,16 @@ type PropsType = {
 };
 
 export class BreadCrumbs extends PureComponent<PropsType> {
+
+	trackBreadcrumb = (segment) => {
+		tagManager({
+			event: "generic",
+			category: "Breadcrumb - guidancebreadcrumb",
+			action: segment.url,
+			label: window.location.href,
+		});
+	};
+
 	render() {
 		return (
 			<nav aria-label="Breadcrumbs">
@@ -33,6 +44,7 @@ export class BreadCrumbs extends PureComponent<PropsType> {
 								itemProp="itemListElement"
 								itemScope
 								itemType="http://schema.org/ListItem"
+								onClick={()=>this.trackBreadcrumb(segment)}
 							>
 								{(isHttpLink(url) || (url.indexOf("/") === 0 && !localRoute)) ?
 									<a href={url}>{label}</a>

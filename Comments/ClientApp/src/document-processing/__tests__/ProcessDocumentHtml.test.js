@@ -52,6 +52,7 @@ describe("[ClientApp]", () => {
 		});
 
 		it("button fires passed function with expected object for a chapter", () => {
+
 			const instance = setupHtml(true,
 				"<h2 class=\"title\">\n" +
 				"    <a id=\"recommendations\" style=\"position:relative\" class=\"annotator-chapter\" data-heading-type=\"chapter\" title=\"Comment on chapter\" xmlns=\"\">Recommendations<span class=\"annotator-adder\" /></a>\n" +

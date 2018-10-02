@@ -6,13 +6,12 @@ import { Helmet } from "react-helmet";
 
 import DocumentViewWithRouter from "../DocumentView/DocumentView";
 import NotFound from "../NotFound/NotFound";
-//import ReviewPageWithRouter from "../ReviewPage/ReviewPage";
-import ReviewListPageWithRouter from "../ReviewListPage/ReviewListPage";
+import ReviewWithRouter from "../Review/Review";
+import SubmittedWithRouter from "../Submitted/Submitted";
 import UserProviderWithRouter from "../../context/UserContext";
 import FooterWithRouter from "../Footer/Footer";
 import DocumentPreviewWithRouter from "../DocumentPreview/DocumentPreview";
-import DocumentPreviewRedirectWithRouter from "../DocumentPreview/DocumentPreviewRedirect";
-import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
+import {ErrorBoundary} from "../ErrorBoundary/ErrorBoundary";
 import {LiveAnnouncer, LiveMessenger} from "react-aria-live";
 
 type PropsType = any;
@@ -44,19 +43,25 @@ class App extends React.Component<PropsType, StateType> {
 									<DocumentPreviewWithRouter/>
 								</Route>
 
-								{/*	If we hit this we're coming in *without* a chapter slug, so we need to get the first chapter of the current document and pass its slug into the URL so it matches the route above */}
-								<Route exact
-											 path="/preview/:reference/consultation/:consultationId/document/:documentId">
-									<DocumentPreviewRedirectWithRouter />
-									{/* This component only redirects to the above route */}
-								</Route>
-
 								{/*Review Page*/}
 								<Route exact
 											 path="/:consultationId/review">
 									<LiveMessenger>
 										{({announcePolite, announceAssertive}) =>
-											<ReviewListPageWithRouter
+											<ReviewWithRouter
+												announcePolite={announcePolite}
+												announceAssertive={announceAssertive}
+												basename={this.props.basename}/>
+										}
+									</LiveMessenger>
+								</Route>
+
+								{/*Submit Page*/}
+								<Route exact
+											 path="/:consultationId/submitted">
+									<LiveMessenger>
+										{({announcePolite, announceAssertive}) =>
+											<SubmittedWithRouter
 												announcePolite={announcePolite}
 												announceAssertive={announceAssertive}
 												basename={this.props.basename}/>

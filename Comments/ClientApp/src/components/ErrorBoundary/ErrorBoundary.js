@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component } from "react";
+import { load } from "../../data/loader";
 
 type PropsType = any;
 
@@ -36,8 +37,20 @@ export class ErrorBoundary extends Component<PropsType, StateType> {
 			hasError: true,
 			error,
 			info,
-		});
+		},
+		() => {
+			this.logError(error);
+		});		
 	}
+
+	logError = async (error) => {
+		const message = `Client-side front-end error logging. running as ${process.env.NODE_ENV} error message: ${error.message} stack: ${error.stack}`;
+		load("logging", undefined, [], {logLevel:"Error"}, "POST", {message}, true)
+			.then(response => response.data)
+			.catch(err => {
+				console.error(err);
+			});
+	};
 
 	render() {
 		if (this.state.hasError) {

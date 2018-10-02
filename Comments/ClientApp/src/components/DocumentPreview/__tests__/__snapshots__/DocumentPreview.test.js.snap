@@ -33,7 +33,7 @@ Array [
                      is in development which means that some features may not work fully.
                      
                     <a
-                        href="https://github.com/nhsevidence/consultations"
+                        href="/get-involved/contact-us"
                         rel="noopener noreferrer"
                         target="_blank"
                     >
@@ -59,6 +59,7 @@ Array [
                         itemProp="itemListElement"
                         itemScope={true}
                         itemType="http://schema.org/ListItem"
+                        onClick={[Function]}
                     >
                         <a
                             href="/guidance/inconsultation"
@@ -75,6 +76,7 @@ Array [
                         itemProp="itemListElement"
                         itemScope={true}
                         itemType="http://schema.org/ListItem"
+                        onClick={[Function]}
                     >
                         <a
                             href="/guidance/indevelopment/gid-ng10186/consultation/"

@@ -9,7 +9,7 @@ import toJson from "enzyme-to-json";
 import { LiveAnnouncer } from "react-aria-live";
 
 import { nextTick, queryStringToObject } from "../../../helpers/utils";
-import { ReviewListPage } from "../ReviewListPage";
+import { Review } from "../Review";
 
 import ConsultationData from "./Consultation.json";
 import CommentsReviewData from "./CommentsReview.json";
@@ -105,7 +105,7 @@ describe("[ClientApp] ", () => {
 			const wrapper = mount(
 				<MemoryRouter>
 					<LiveAnnouncer>
-						<ReviewListPage {...fakeProps} />
+						<Review {...fakeProps} />
 					</LiveAnnouncer>
 				</MemoryRouter>
 			);
@@ -140,7 +140,7 @@ describe("[ClientApp] ", () => {
 			]).then(async () => {
 				await nextTick();
 				wrapper.update();
-				wrapper.find(ReviewListPage).instance().submitConsultation();
+				wrapper.find(Review).instance().submitConsultation();
 			});
 
 		});
@@ -151,7 +151,7 @@ describe("[ClientApp] ", () => {
 			const wrapper = mount(
 				<MemoryRouter>
 					<LiveAnnouncer>
-						<ReviewListPage {...fakeProps} />
+						<Review {...fakeProps} />
 					</LiveAnnouncer>
 				</MemoryRouter>
 			);

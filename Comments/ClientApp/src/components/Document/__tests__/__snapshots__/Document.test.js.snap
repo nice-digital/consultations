@@ -86,7 +86,7 @@ Array [
                      is in development which means that some features may not work fully.
                      
                     <a
-                        href="https://github.com/nhsevidence/consultations"
+                        href="/get-involved/contact-us"
                         rel="noopener noreferrer"
                         target="_blank"
                     >
@@ -112,6 +112,7 @@ Array [
                         itemProp="itemListElement"
                         itemScope={true}
                         itemType="http://schema.org/ListItem"
+                        onClick={[Function]}
                     >
                         <a
                             href="/"
@@ -128,6 +129,7 @@ Array [
                         itemProp="itemListElement"
                         itemScope={true}
                         itemType="http://schema.org/ListItem"
+                        onClick={[Function]}
                     >
                         <a
                             href="/guidance/indevelopment/gid-ta10232/consultation/"
@@ -150,6 +152,7 @@ Array [
                     <undefined />
                     <button
                         className="btn btn--cta"
+                        data-gtm="comment-on-document-button"
                         data-qa-sel="comment-on-consultation-document"
                         onClick={[Function]}
                     >
@@ -462,6 +465,7 @@ Array [
                             >
                                 <li
                                     className="in-page-nav__item"
+                                    onClick={[Function]}
                                     role="presentation"
                                 >
                                     <a
@@ -475,6 +479,7 @@ Array [
                                 </li>
                                 <li
                                     className="in-page-nav__item"
+                                    onClick={[Function]}
                                     role="presentation"
                                 >
                                     <a
@@ -488,6 +493,7 @@ Array [
                                 </li>
                                 <li
                                     className="in-page-nav__item"
+                                    onClick={[Function]}
                                     role="presentation"
                                 >
                                     <a
@@ -501,6 +507,7 @@ Array [
                                 </li>
                                 <li
                                     className="in-page-nav__item"
+                                    onClick={[Function]}
                                     role="presentation"
                                 >
                                     <a
@@ -514,6 +521,7 @@ Array [
                                 </li>
                                 <li
                                     className="in-page-nav__item"
+                                    onClick={[Function]}
                                     role="presentation"
                                 >
                                     <a
@@ -527,6 +535,7 @@ Array [
                                 </li>
                                 <li
                                     className="in-page-nav__item"
+                                    onClick={[Function]}
                                     role="presentation"
                                 >
                                     <a
@@ -582,6 +591,10 @@ Array [
                                     >
                                         <button
                                             className="document-comment-container__commentButton"
+                                            data-gtm="button"
+                                            data-gtm-action="Clicked"
+                                            data-gtm-category="Consultation comments page"
+                                            data-gtm-label="Comment on chapter"
                                             data-qa-sel="in-text-comment-button"
                                             onClick={[Function]}
                                             tabIndex={0}

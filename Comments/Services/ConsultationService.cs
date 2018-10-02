@@ -31,6 +31,8 @@ namespace Comments.Services
 	    IEnumerable<BreadcrumbLink> GetBreadcrumbs(ConsultationDetail consultation, bool isReview);
 
 	    string GetFirstChapterSlug(int consultationId, int documentId);
+	    string GetFirstChapterSlugFromPreviewDocument(string reference, int consultationId, int documentId);
+
     }
 
 	public class ConsultationService : IConsultationService
@@ -122,8 +124,12 @@ namespace Comments.Services
 	    {
 		    return GetDocuments(consultationId).FirstOrDefault(d => d.DocumentId.Equals(documentId))?.Chapters.FirstOrDefault()?.Slug;
 	    }
+	    public string GetFirstChapterSlugFromPreviewDocument(string reference, int consultationId, int documentId)
+	    {
+		    return GetPreviewDraftDocuments(consultationId, documentId, reference).FirstOrDefault(d => d.DocumentId.Equals(documentId))?.Chapters.FirstOrDefault()?.Slug;
+	    }
 
-	    public IEnumerable<ViewModels.Consultation> GetConsultations()
+		public IEnumerable<ViewModels.Consultation> GetConsultations()
         {
             var user = _userService.GetCurrentUser();
             var consultations = _feedService.GetConsultationList();

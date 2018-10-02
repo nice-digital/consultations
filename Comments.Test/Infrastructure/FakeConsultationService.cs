@@ -55,6 +55,11 @@ namespace Comments.Test.Infrastructure
 		    throw new NotImplementedException();
 	    }
 
+	    public string GetFirstChapterSlugFromPreviewDocument(string reference, int consultationId, int documentId)
+	    {
+		    throw new NotImplementedException();
+	    }
+
 	    public (int rowsUpdated, Validate validate) SubmitCommentsAndAnswers(ViewModels.Submission submission)
 		{
 			throw new NotImplementedException();

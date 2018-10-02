@@ -1,8 +1,8 @@
 // @flow
 
 import React, { Component, Fragment } from "react";
-import { withRouter, Prompt } from "react-router-dom";
-//import stringifyObject from "stringify-object";
+import { withRouter, Prompt, Redirect } from "react-router-dom";
+import Helmet from "react-helmet";
 
 import preload from "../../data/pre-loader";
 import { load } from "../../data/loader";
@@ -14,6 +14,7 @@ import {
 } from "../../helpers/editing-and-deleting";
 import { queryStringToObject } from "../../helpers/utils";
 import { pullFocusById } from "../../helpers/accessibility-helpers";
+import { tagManager } from "../../helpers/tag-manager";
 import { projectInformation } from "../../constants";
 import { UserContext } from "../../context/UserContext";
 
@@ -44,12 +45,12 @@ type PropsType = {
 };
 
 type StateType = {
-	consultationData: ConsultationDataType,
-	commentsData: ReviewPageViewModelType,
+	consultationData: ConsultationDataType | null,
+	commentsData: ReviewPageViewModelType | null,
 	userHasSubmitted: boolean,
 	validToSubmit: false,
 	viewSubmittedComments: boolean,
-	path: string,
+	path: string | null,
 	hasInitalData: boolean,
 	allowComments: boolean,
 	comments: Array<CommentType>,
@@ -65,7 +66,7 @@ type StateType = {
 	documentTitles: Array<any>,
 };
 
-export class ReviewListPage extends Component<PropsType, StateType> {
+export class Review extends Component<PropsType, StateType> {
 	constructor(props: PropsType) {
 		super(props);
 		this.state = {
@@ -73,7 +74,6 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			consultationData: null,
 			commentsData: null,
 			userHasSubmitted: false,
-			viewSubmittedComments: false,
 			validToSubmit: false,
 			path: null,
 			hasInitalData: false,
@@ -82,12 +82,13 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			questions: [], //this contains all the questions, not just the ones displayed to the user. the show property defines whether the question is filtered out from view.
 			sort: "DocumentAsc",
 			supportsDownload: false,
-			respondingAsOrganisation: "",
+			respondingAsOrganisation: false,
 			organisationName: "",
-			hasTobaccoLinks: "",
+			hasTobaccoLinks: false,
 			tobaccoDisclosure: "",
 			unsavedIds: [],
 			documentTitles: [],
+			justSubmitted: false,
 		};
 
 		let preloadedData = {};
@@ -96,6 +97,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		}
 
 		const querystring = this.props.location.search;
+
 		const preloadedCommentsData = preload(
 			this.props.staticContext,
 			"commentsreview",
@@ -113,6 +115,11 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		);
 
 		if (preloadedCommentsData && preloadedConsultationData) {
+			if (this.props.staticContext) {
+				this.props.staticContext.globals.gidReference = preloadedConsultationData.reference;
+				this.props.staticContext.globals.consultationId = preloadedConsultationData.consultationId;
+				this.props.staticContext.globals.stage = preloadedConsultationData.consultationState.userHasSubmitted ? "postsubmission" : "presubmission";
+			}
 			this.state = {
 				path: this.props.basename + this.props.location.pathname,
 				commentsData: preloadedCommentsData,
@@ -126,15 +133,39 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 				questions: preloadedCommentsData.commentsAndQuestions.questions,
 				sort: preloadedCommentsData.sort,
 				supportsDownload: preloadedConsultationData.consultationState.supportsDownload,
-				viewSubmittedComments: false,
 				organisationName: preloadedCommentsData.organisationName || "",
-				respondingAsOrganisation: "",
-				hasTobaccoLinks: "",
+				respondingAsOrganisation: false,
+				hasTobaccoLinks: false,
 				tobaccoDisclosure: "",
 				unsavedIds: [],
 				documentTitles: this.getListOfDocuments(preloadedCommentsData.filters),
+				justSubmitted: false,
 			};
 		}
+
+		let isSSR = false;
+		if (this.props.staticContext){
+			isSSR = true;
+		}
+		const message = `Review page log hit at ${new Date().toJSON()}. running as ${process.env.NODE_ENV} SSR: ${isSSR}`;
+		preload(this.props.staticContext, "logging", [], {logLevel:"Warning"}, null, false,  "POST", {}, {message}, true);			
+
+	}
+
+	//this is temporary for debug purposes.
+	logStuff = () => {
+
+		let isSSR = false;
+		if (this.props.staticContext){
+			isSSR = true;
+		}
+		const message = `Review page log hit at ${new Date().toJSON()}. running as ${process.env.NODE_ENV} SSR: ${isSSR}`;
+
+		const logResponse = load("logging", undefined, [], {logLevel:"Warning"}, "POST", {message}, true)
+			.then(response => response.data)
+			.catch(err => {
+				console.error(err);
+			});
 	}
 
 	gatherData = async () => {
@@ -202,8 +233,21 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 						loading: false,
 						organisationName: data.commentsData.organisationName || "",
 						documentTitles: this.getListOfDocuments(data.commentsData.filters),
+					}, () => {
+						tagManager({
+							event: "generic",
+							category: "Consultation comments page",
+							action: "Clicked",
+							label: "Review filter",
+						});
 					});
 				}
+				tagManager({
+					event: "pageview",
+					gidReference: this.state.consultationData.reference,
+					title: this.getPageTitle(),
+					stage: this.state.consultationData.consultationState.userHasSubmitted ? "postsubmission" : "presubmission",
+				});
 			})
 			.catch(err => {
 				throw new Error("gatherData in componentDidMount failed " + err);
@@ -249,13 +293,34 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			hasTobaccoLinks,
 		};
 		load("submit", undefined, [], {}, "POST", submission, true)
-			.then(() => {
+			.then(response => {
+				tagManager({
+					event: "generic",
+					category: "Consultation comments page",
+					action: "Response submitted",
+					label: `${response.data.comments ? response.data.comments.length : "0"} comments, ${response.data.answers ? response.data.answers.length : "0"} answers`,
+				});
+				tagManager({
+					event: "generic",
+					category: "Consultation comments page",
+					action: "Length to submit response",
+					label: "Duration in hours",
+					value: (Math.round(response.data.durationBetweenFirstCommentOrAnswerSavedAndSubmissionInSeconds / 3600)), // number of hours, rounded. will be 0 if less than 30 mins
+					//:-( no more whole numbers. lengthy decimals from now on  - though they're much more likely to get trimmed and lose accuracy
+				});
+				tagManager({
+					event: "generic",
+					category: "Consultation comments page",
+					action: "Submission mandatory questions",
+					label: `${response.data.respondingAsOrganisation ? "Yes" : "No"}, ${response.data.hasTobaccoLinks ? "Yes" : "No"}`,
+				});
 				this.setState({
 					userHasSubmitted: true,
 					validToSubmit: false,
-					viewSubmittedComments: false,
 					allowComments: false,
+					justSubmitted: true,
 				});
+				this.logStuff();
 			})
 			.catch(err => {
 				console.log(err);
@@ -283,12 +348,6 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 		});
 	};
 
-	viewSubmittedCommentsHandler = () => {
-		this.setState({
-			viewSubmittedComments: true,
-		});
-	};
-
 	fieldsChangeHandler = (e: SyntheticInputEvent) => {
 		this.setState({
 			[e.target.name]: e.target.value,
@@ -296,7 +355,6 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 	};
 
 	issueA11yMessage = (message: string) => {
-		console.log(`Issuing a11y message from ReviewListPage: ${message}`);
 		const unique = new Date().getTime().toString();
 		// announcer requires a unique id so we're able to repeat phrases
 		this.props.announceAssertive(message, unique);
@@ -340,7 +398,7 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			try {
 				return this.state.documentTitles.filter(item => item.id === documentId.toString())[0].title;
 			}
-			catch(err) {
+			catch (err) {
 				return "Consultation document ID " + documentId;
 			}
 
@@ -363,14 +421,22 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 			.reduce((arr, group) => arr.concat(group), []);
 	}
 
+	getPageTitle = () => {
+		return `${this.state.consultationData.title} | Response reviewed pre submission`;
+	};
+
 	render() {
 		if (this.state.loading) return <h1>Loading...</h1>;
+		if (this.state.justSubmitted) return <Redirect push to={"submitted"}/>;
 		const {reference} = this.state.consultationData;
 		const commentsToShow = this.state.comments.filter(comment => comment.show) || [];
 		const questionsToShow = this.state.questions.filter(question => question.show) || [];
 
 		return (
 			<Fragment>
+				<Helmet>
+					<title>{this.getPageTitle()}</title>
+				</Helmet>
 				<Prompt
 					when={this.state.unsavedIds.length > 0}
 					message={`You have ${this.state.unsavedIds.length} unsaved ${this.state.unsavedIds.length === 1 ? "change" : "changes"}. Continue without saving?`}
@@ -404,107 +470,76 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 														registerURL={contextValue.registerURL}
 													/> :
 													<div className="grid">
-														{(this.state.userHasSubmitted && !this.state.viewSubmittedComments) ?
-															<div data-g="12">
-																<button
-																	className="btn btn--cta"
-																	data-qa-sel="review-submitted-comments"
-																	onClick={this.viewSubmittedCommentsHandler}>Review your response
-																</button>
-																{this.state.supportsDownload &&
-																<a className="btn btn--secondary"
-																	 href={`${this.props.basename}/api/exportexternal/${this.props.match.params.consultationId}`}>Download
-																	your response</a>
-																}
-																<h2>What happens next?</h2>
-																<p>We will review all the submissions received for this consultation. Our response
-																	will
-																	be published on the website around the time the guidance is published.</p>
-																<h2>Help us improve our online commenting service</h2>
-																<p>This is the first time we have used our new online commenting software on a live
-																	consultation. We'd really like to hear your feedback so that we can keep improving
-																	it.</p>
-																<p>Answer our short, anonymous survey (4 questions, 2 minutes).</p>
-																<p>
-																	<a className="btn btn--cta"
-																		 href="https://in.hotjar.com/s?siteId=119167&surveyId=109567" target="_blank"
-																		 rel="noopener noreferrer">
-																		Answer the survey
-																	</a>
-																</p>
+														<Fragment>
+															<div data-g="12 md:3" className="sticky">
+																<FilterPanel filters={this.state.commentsData.filters} path={this.state.path}/>
 															</div>
-															:
-															<Fragment>
-																<div data-g="12 md:3" className="sticky">
-																	<FilterPanel filters={this.state.commentsData.filters} path={this.state.path}/>
-																</div>
-																<div data-g="12 md:9">
-																	<ResultsInfo commentCount={commentsToShow.length}
-																							 showCommentsCount={this.state.consultationData.consultationState.shouldShowCommentsTab}
-																							 questionCount={questionsToShow.length}
-																							 showQuestionsCount={this.state.consultationData.consultationState.shouldShowQuestionsTab}
-																							 sortOrder={this.state.sort}
-																							 appliedFilters={this.getAppliedFilters()}
-																							 path={this.state.path}
-																							 isLoading={this.state.loading}/>
-																	<div data-qa-sel="comment-list-wrapper">
-																		{questionsToShow.length > 0 &&
-																		<div>
-																			<ul className="CommentList list--unstyled">
-																				{questionsToShow.map((question) => {
-																					const isUnsaved = this.state.unsavedIds.includes(`${question.questionId}q`);
-																					return (
-																						<Question
-																							updateUnsavedIds={this.updateUnsavedIds}
-																							isUnsaved={isUnsaved}
-																							readOnly={!this.state.allowComments || this.state.userHasSubmitted}
-																							key={question.questionId}
-																							unique={`Comment${question.questionId}`}
-																							question={question}
-																							saveAnswerHandler={this.saveAnswerHandler}
-																							deleteAnswerHandler={this.deleteAnswerHandler}
-																							documentTitle={this.getDocumentTitle(question.documentId)}
-																						/>
-																					);
-																				})}
-																			</ul>
-																		</div>
-																		}
-																		{commentsToShow.length === 0 ? <p>{/*No comments yet*/}</p> :
-																			<ul className="CommentList list--unstyled">
-																				{commentsToShow.map((comment) => {
-																					return (
-																						<CommentBox
-																							readOnly={!this.state.allowComments || this.state.userHasSubmitted}
-																							isVisible={this.props.isVisible}
-																							key={comment.commentId}
-																							unique={`Comment${comment.commentId}`}
-																							comment={comment}
-																							documentTitle={this.getDocumentTitle(comment.documentId)}
-																							saveHandler={this.saveCommentHandler}
-																							deleteHandler={this.deleteCommentHandler}
-																							updateUnsavedIds={this.updateUnsavedIds}
-																						/>
-																					);
-																				})}
-																			</ul>
-																		}
+															<div data-g="12 md:9">
+																<ResultsInfo commentCount={commentsToShow.length}
+																						 showCommentsCount={this.state.consultationData.consultationState.shouldShowCommentsTab}
+																						 questionCount={questionsToShow.length}
+																						 showQuestionsCount={this.state.consultationData.consultationState.shouldShowQuestionsTab}
+																						 sortOrder={this.state.sort}
+																						 appliedFilters={this.getAppliedFilters()}
+																						 path={this.state.path}
+																						 isLoading={this.state.loading}/>
+																<div data-qa-sel="comment-list-wrapper">
+																	{questionsToShow.length > 0 &&
+																	<div>
+																		<ul className="CommentList list--unstyled">
+																			{questionsToShow.map((question) => {
+																				const isUnsaved = this.state.unsavedIds.includes(`${question.questionId}q`);
+																				return (
+																					<Question
+																						updateUnsavedIds={this.updateUnsavedIds}
+																						isUnsaved={isUnsaved}
+																						readOnly={!this.state.allowComments || this.state.userHasSubmitted}
+																						key={question.questionId}
+																						unique={`Comment${question.questionId}`}
+																						question={question}
+																						saveAnswerHandler={this.saveAnswerHandler}
+																						deleteAnswerHandler={this.deleteAnswerHandler}
+																						documentTitle={this.getDocumentTitle(question.documentId)}
+																					/>
+																				);
+																			})}
+																		</ul>
 																	</div>
-																	<SubmitResponseDialog
-																		unsavedIds={this.state.unsavedIds}
-																		isAuthorised={contextValue.isAuthorised}
-																		userHasSubmitted={this.state.userHasSubmitted}
-																		validToSubmit={this.state.validToSubmit}
-																		submitConsultation={this.submitConsultation}
-																		fieldsChangeHandler={this.fieldsChangeHandler}
-																		respondingAsOrganisation={this.state.respondingAsOrganisation}
-																		organisationName={this.state.organisationName}
-																		hasTobaccoLinks={this.state.hasTobaccoLinks}
-																		tobaccoDisclosure={this.state.tobaccoDisclosure}
-																	/>
+																	}
+																	{commentsToShow.length === 0 ? <p>{/*No comments yet*/}</p> :
+																		<ul className="CommentList list--unstyled">
+																			{commentsToShow.map((comment) => {
+																				return (
+																					<CommentBox
+																						readOnly={!this.state.allowComments || this.state.userHasSubmitted}
+																						isVisible={this.props.isVisible}
+																						key={comment.commentId}
+																						unique={`Comment${comment.commentId}`}
+																						comment={comment}
+																						documentTitle={this.getDocumentTitle(comment.documentId)}
+																						saveHandler={this.saveCommentHandler}
+																						deleteHandler={this.deleteCommentHandler}
+																						updateUnsavedIds={this.updateUnsavedIds}
+																					/>
+																				);
+																			})}
+																		</ul>
+																	}
 																</div>
-															</Fragment>
-														}
+																<SubmitResponseDialog
+																	unsavedIds={this.state.unsavedIds}
+																	isAuthorised={contextValue.isAuthorised}
+																	userHasSubmitted={this.state.userHasSubmitted}
+																	validToSubmit={this.state.validToSubmit}
+																	submitConsultation={this.submitConsultation}
+																	fieldsChangeHandler={this.fieldsChangeHandler}
+																	respondingAsOrganisation={this.state.respondingAsOrganisation}
+																	organisationName={this.state.organisationName}
+																	hasTobaccoLinks={this.state.hasTobaccoLinks}
+																	tobaccoDisclosure={this.state.tobaccoDisclosure}
+																/>
+															</div>
+														</Fragment>
 													</div>
 											);
 										}}
@@ -519,4 +554,4 @@ export class ReviewListPage extends Component<PropsType, StateType> {
 	}
 }
 
-export default withRouter(withHistory(ReviewListPage));
+export default withRouter(withHistory(Review));
