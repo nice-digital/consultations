@@ -16,13 +16,19 @@ const getBrowserInfo = () => {
 	return "";
 };
 
+const phaseBannerClicked = () => {
+	if(window.location.hostname.includes("alpha")) {
+		alert(getBrowserInfo());
+	}
+};
+
 export class PhaseBanner extends PureComponent<PropsType> {
 	render() {
 		const {phase, name, repo} = this.props;
 		return (
 			<aside className="phase-banner mt--b">
 				{/* eslint-disable-next-line*/}
-				<span className="phase-banner__tag" role="button" onClick={() => alert(getBrowserInfo())}>
+				<span className="phase-banner__tag" role="button" onClick={() => phaseBannerClicked()}>
 					<span className="tag tag--impact tag--agile">{phase}</span>
 				</span>
 				<span className="phase-banner__label">
