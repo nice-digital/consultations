@@ -40,7 +40,6 @@ exports[`[ClientApp]  Question Component should match snapshot with answer 1`] =
           disabled={false}
           id="Answer1007"
           onInput={[Function]}
-          placeholder="Enter your answer here"
         />
       </div>
       <span
@@ -99,7 +98,6 @@ exports[`[ClientApp]  Question Component should match snapshot without answer 1`
           disabled={false}
           id="Answer-1"
           onInput={[Function]}
-          placeholder="Enter your answer here"
         />
       </div>
     </form>
