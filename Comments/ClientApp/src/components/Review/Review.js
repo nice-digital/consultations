@@ -13,7 +13,6 @@ import {
 	deleteAnswerHandler,
 } from "../../helpers/editing-and-deleting";
 import { queryStringToObject } from "../../helpers/utils";
-import { pullFocusById } from "../../helpers/accessibility-helpers";
 import { tagManager } from "../../helpers/tag-manager";
 import { projectInformation } from "../../constants";
 import { UserContext } from "../../context/UserContext";
