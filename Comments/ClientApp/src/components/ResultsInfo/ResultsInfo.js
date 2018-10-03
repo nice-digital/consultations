@@ -19,7 +19,8 @@ type PropsType = {
 const ShouldShowFilter = (appliedFilters: TopicListAppliedFilterType[], filterText: string) => {
 	const typeFilters = appliedFilters.filter(f => f.groupId === "Type");
 	if (typeFilters.length === 1){
-		return !!typeFilters.find(f => f.optionId === filterText);
+		//return !!typeFilters.find(f => f.optionId === filterText); //can't use find in IE.
+		return (typeFilters.filter(f => f.optionId === filterText).length > 0);
 	}
 	return true;
 };
