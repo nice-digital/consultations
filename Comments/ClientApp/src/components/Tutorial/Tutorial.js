@@ -2,7 +2,7 @@
 
 import React, { Component } from "react";
 import Cookies from "js-cookie";
-//import { tagManager } from "../../helpers/tag-manager";
+import { tagManager } from "../../helpers/tag-manager";
 
 type PropsType = {};
 
@@ -20,7 +20,7 @@ export class Tutorial extends Component<PropsType, StateType> {
 
 	componentDidMount() {
 		const isPanelVisible = this.getCookie();
-		this.setState({isPanelVisible});		
+		this.setState({isPanelVisible});
 	}
 
 	setCookie = (isPanelVisible: boolean) => {
@@ -34,16 +34,15 @@ export class Tutorial extends Component<PropsType, StateType> {
 
 	handleClick = (isPanelVisible: boolean) => {
 		this.setCookie(!isPanelVisible);
-		this.setState({isPanelVisible: !isPanelVisible});
-		// ,
-		// ()=>{
-		// 	tagManager({
-		// 		event: "generic",
-		// 		category: "Consultation comments page",
-		// 		action: "Clicked",
-		// 		label: `${this.state.isPanelVisible ? "Show" : "Hide"} how to comment panel button`,
-		// 	});
-		// });
+		this.setState({isPanelVisible: !isPanelVisible},
+			() => {
+				tagManager({
+					event: "generic",
+					category: "Consultation comments page",
+					action: "Clicked",
+					label: `${this.state.isPanelVisible ? "Show" : "Hide"} how to comment panel button`,
+				});
+			});
 	};
 
 	render() {
@@ -51,7 +50,7 @@ export class Tutorial extends Component<PropsType, StateType> {
 		return (
 			<aside className="Tutorial mt--0 pt--d pb--d">
 				<div className="container">
-					<button 
+					<button
 						className="buttonAsLink"
 						onClick={() => this.handleClick(isPanelVisible)}>
 						{isPanelVisible ? "Hide how to comment" : "Show how to comment"}
@@ -61,16 +60,19 @@ export class Tutorial extends Component<PropsType, StateType> {
 							<h1 className="pt--c">How to comment</h1>
 							<div className="grid">
 								<div data-g="12 sm:6 lg:4">
-									<p className="mt--0">Use the icon next to chapters, subsections and recommendations to comment on them</p>
-									<img className="Tutorial__buttonImage" src="images/tutorial_graphic_800.png" alt="Mouse pointer hovering over commenting icon" />
+									<p className="mt--0">Use the icon next to chapters, subsections and recommendations to comment on
+										them</p>
+									<img className="Tutorial__buttonImage" src="images/tutorial_graphic_800.png"
+											 alt="Mouse pointer hovering over commenting icon"/>
 								</div>
 								<div data-g="12 sm:6 lg:4">
 									<p className="mt--0 mb--0">Highlight a selection of text using the cursor to make a comment on it</p>
-									<img src="images/text-selection.gif" alt="Animation showing an example of highlighting text and clicking comment" />
+									<img src="images/text-selection.gif"
+											 alt="Animation showing an example of highlighting text and clicking comment"/>
 								</div>
 							</div>
 						</div>
-						: null }
+						: null}
 				</div>
 			</aside>
 		);
