@@ -52,14 +52,3 @@
   height: 1px; width: 1px; 
   margin: -1px; padding: 0; border: 0; 
 }
-
-.sticky {
-  position: sticky;
-  top: 20px;
-  z-index: 10;
-  background-color: $colour-body;
-}
-
-:focus {
-  outline: 0;
-}
