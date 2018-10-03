@@ -64,6 +64,7 @@ type StateType = {
 	tobaccoDisclosure: string,
 	unsavedIds: Array<number>,
 	documentTitles: Array<any>,
+	submissionDateTime: DateTime,
 };
 
 export class Review extends Component<PropsType, StateType> {
@@ -89,6 +90,7 @@ export class Review extends Component<PropsType, StateType> {
 			unsavedIds: [],
 			documentTitles: [],
 			justSubmitted: false,
+			submissionDateTime: null,
 		};
 
 		let preloadedData = {};
@@ -140,6 +142,7 @@ export class Review extends Component<PropsType, StateType> {
 				unsavedIds: [],
 				documentTitles: this.getListOfDocuments(preloadedCommentsData.filters),
 				justSubmitted: false,
+				submittedDateTime: null,
 			};
 		}
 
@@ -319,6 +322,7 @@ export class Review extends Component<PropsType, StateType> {
 					validToSubmit: false,
 					allowComments: false,
 					justSubmitted: true,
+					submissionDateTime : response.data.submissionDateTime,
 				});
 				this.logStuff();
 			})
@@ -326,7 +330,6 @@ export class Review extends Component<PropsType, StateType> {
 				console.log(err);
 				if (err.response) alert(err.response.statusText);
 			});
-		window.scrollTo(0,0);
 	};
 
 	//this validation handler code is going to have to get a bit more advanced when questions are introduced, as it'll be possible
