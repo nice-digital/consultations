@@ -51,7 +51,7 @@ type StateType = {
 	userHasSubmitted: boolean,
 	validToSubmit: false,
 	path: string | null,
-	hasInitalData: boolean,
+	hasInitialData: boolean,
 	allowComments: boolean,
 	comments: Array<CommentType>,
 	questions: Array<QuestionType>,
@@ -78,7 +78,7 @@ export class Review extends Component<PropsType, StateType> {
 			userHasSubmitted: false,
 			validToSubmit: false,
 			path: null,
-			hasInitalData: false,
+			hasInitialData: false,
 			allowComments: false,
 			comments: [], //this contains all the comments, not just the ones displayed to the user. the show property defines whether the comment is filtered out from view.
 			questions: [], //this contains all the questions, not just the ones displayed to the user. the show property defines whether the question is filtered out from view.
@@ -129,7 +129,7 @@ export class Review extends Component<PropsType, StateType> {
 				userHasSubmitted: preloadedConsultationData.consultationState.userHasSubmitted,
 				validToSubmit: preloadedConsultationData.consultationState.supportsSubmission,
 				loading: false,
-				hasInitalData: true,
+				hasInitialData: true,
 				allowComments: (preloadedConsultationData.consultationState.consultationIsOpen && !preloadedConsultationData.consultationState.userHasSubmitted),
 				comments: preloadedCommentsData.commentsAndQuestions.comments,
 				questions: preloadedCommentsData.commentsAndQuestions.questions,
@@ -244,12 +244,14 @@ export class Review extends Component<PropsType, StateType> {
 						});
 					});
 				}
-				tagManager({
-					event: "pageview",
-					gidReference: this.state.consultationData.reference,
-					title: this.getPageTitle(),
-					stage: this.state.consultationData.consultationState.userHasSubmitted ? "postsubmission" : "presubmission",
-				});
+				if (data.consultationData !== null) {
+					tagManager({
+						event: "pageview",
+						gidReference: this.state.consultationData.reference,
+						title: this.getPageTitle(),
+						stage: this.state.consultationData.consultationState.userHasSubmitted ? "postsubmission" : "presubmission",
+					});
+				}
 			})
 			.catch(err => {
 				throw new Error("gatherData in componentDidMount failed " + err);
@@ -272,7 +274,7 @@ export class Review extends Component<PropsType, StateType> {
 		});
 	}
 
-	unlisten = function(){};
+	unlisten = () => {};
 
 	submitConsultation = () => {
 		const comments = this.state.comments;
