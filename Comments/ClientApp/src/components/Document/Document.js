@@ -487,7 +487,7 @@ export class Document extends Component<PropsType, StateType> {
 								<div className="grid">
 
 									{/* navigation column */}
-									<div data-g="12 md:3" className="navigationColumn sticky">
+									<div data-g="12 md:3" className="navigationColumn">
 										<StackedNav
 											links={this.getDocumentChapterLinks(
 												documentId,
