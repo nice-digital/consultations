@@ -80,7 +80,6 @@ export class AnswerBox extends Component<PropsType, StateType> {
 								id={this.props.unique}
 								className="form__input form__input--textarea"
 								onInput={this.textareaChangeHandler}
-								placeholder="Enter your answer here"
 								defaultValue={answerText}/>
 						</div>
 						{!readOnly && answerText && answerText.length > 0 ?

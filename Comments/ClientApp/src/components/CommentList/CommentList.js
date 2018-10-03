@@ -53,8 +53,6 @@ type StateType = {
 	unsavedIds: Array<number>,
 };
 
-type ContextType = any;
-
 export class CommentList extends Component<PropsType, StateType> {
 	constructor(props: PropsType) {
 		super(props);

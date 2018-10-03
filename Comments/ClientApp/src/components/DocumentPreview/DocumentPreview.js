@@ -7,7 +7,7 @@ import { withRouter } from "react-router";
 import preload from "../../data/pre-loader";
 import { load } from "./../../data/loader";
 import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
-import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
+import BreadCrumbsWithRouter from "./../Breadcrumbs/Breadcrumbs";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { projectInformation } from "../../constants";
 import { processPreviewHtml } from "../../document-processing/process-preview-html";
@@ -296,7 +296,7 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 										repo={projectInformation.repo}
 									/>
 									{this.state.consultationData.breadcrumbs &&
-										<BreadCrumbs links={this.state.consultationData.breadcrumbs}/>
+										<BreadCrumbsWithRouter links={this.state.consultationData.breadcrumbs}/>
 									}
 									<main role="main">
 										<Header

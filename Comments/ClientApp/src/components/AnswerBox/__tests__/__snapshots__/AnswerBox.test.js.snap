@@ -18,7 +18,6 @@ exports[`[ClientApp]  AnswerBox Component should match snapshot with answer 1`] 
         disabled={false}
         id="string"
         onInput={[Function]}
-        placeholder="Enter your answer here"
       />
     </div>
     <span
@@ -55,7 +54,6 @@ exports[`[ClientApp]  AnswerBox Component should match snapshot without answer 1
         disabled={false}
         id="string"
         onInput={[Function]}
-        placeholder="Enter your answer here"
       />
     </div>
   </form>

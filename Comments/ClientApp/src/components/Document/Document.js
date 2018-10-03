@@ -8,7 +8,7 @@ import objectHash from "object-hash";
 import preload from "../../data/pre-loader";
 import { load } from "./../../data/loader";
 import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
-import { BreadCrumbs } from "./../Breadcrumbs/Breadcrumbs";
+import BreadCrumbsWithRouter from "./../Breadcrumbs/Breadcrumbs";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
 import { tagManager } from "../../helpers/tag-manager";
@@ -23,6 +23,7 @@ import { Tutorial } from "../Tutorial/Tutorial";
 
 type PropsType = {
 	staticContext: {
+		preload: any,
 		globals: any,
 	},
 	match: any,
@@ -441,7 +442,7 @@ export class Document extends Component<PropsType, StateType> {
 								phase={projectInformation.phase}
 								name={projectInformation.name}
 							/>
-							<BreadCrumbs links={this.state.consultationData.breadcrumbs}/>
+							<BreadCrumbsWithRouter links={this.state.consultationData.breadcrumbs}/>
 							<main role="main">
 								<div className="page-header">
 									<Header
@@ -528,8 +529,11 @@ export class Document extends Component<PropsType, StateType> {
 															block: "start",
 														};
 														return (
-															<li role="presentation" className="in-page-nav__item" key={objectHash(item)}
-																	onClick={(e) => this.trackInPageNav(e, item)}>
+															<li
+																role="presentation"
+																className="in-page-nav__item"
+																key={objectHash(item)}
+																onClick={(e) => this.trackInPageNav(e, item)}>
 																<HashLinkTop {...props} />
 															</li>
 														);

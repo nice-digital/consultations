@@ -2,7 +2,6 @@
  * Pull focus to an element, principally for accessibility
  * @param {string} selection - The ***ID ONLY*** If it's not an interactive element, the target will need an attribute of "tabIndex={-1}"
  */
-// todo: needs test
 export const pullFocusByQuerySelector = selection => {
 	const el = document.querySelector(selection);
 	if (el) {
