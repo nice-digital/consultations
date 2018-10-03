@@ -64,7 +64,6 @@ type StateType = {
 	tobaccoDisclosure: string,
 	unsavedIds: Array<number>,
 	documentTitles: "undefined" | Array<any>,
-	submissionDateTime: DateTime,
 	justSubmitted: boolean,
 	path: null | string,
 };
@@ -92,7 +91,6 @@ export class Review extends Component<PropsType, StateType> {
 			unsavedIds: [],
 			documentTitles: [],
 			justSubmitted: false,
-			submissionDateTime: null,
 		};
 
 		let preloadedData = {};
@@ -144,7 +142,6 @@ export class Review extends Component<PropsType, StateType> {
 				unsavedIds: [],
 				documentTitles: this.getListOfDocuments(preloadedCommentsData.filters),
 				justSubmitted: false,
-				submittedDateTime: null,
 			};
 		}
 
@@ -327,7 +324,6 @@ export class Review extends Component<PropsType, StateType> {
 					validToSubmit: false,
 					allowComments: false,
 					justSubmitted: true,
-					submissionDateTime : response.data.submissionDateTime,
 				});
 				this.logStuff();
 			})
