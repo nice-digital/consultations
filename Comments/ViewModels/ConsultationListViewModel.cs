@@ -21,8 +21,12 @@ namespace Comments.ViewModels
 
 	public class ConsultationListViewModel
 	{
-	    
-	    public Consultations Consultations{ get; set; }
+		public ConsultationListViewModel(IEnumerable<ConsultationListRow> consultations)
+		{
+			Consultations = consultations;
+		}
+
+		public IEnumerable<ConsultationListRow> Consultations{ get; private set; }
 
 		///// <summary>
 		///// This property is initialised from appsettings.json, then it gets updated in CommentService with documents and the counts are updated.

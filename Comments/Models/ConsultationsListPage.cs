@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace Comments.Models
 {
-	public class Consultations
+	public class ConsultationListRow
 	{
-		public Consultations(string title, DateTime startDate, DateTime endDate, int responses, int consultationId)
+		public ConsultationListRow(string title, DateTime startDate, DateTime endDate, int responses, int consultationId)
 		{
 			Title = title;
 			StartDate = startDate;

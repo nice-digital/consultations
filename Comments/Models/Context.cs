@@ -45,9 +45,8 @@ namespace Comments.Models
 		/// </summary>
 		/// <param name="sourceURIs"></param>
 		/// <param name="partialMatchSourceURI">True if data is being retrieved for the review page</param>
-		/// <param name="getSubmitted">True if data is being retrieved should only be submitted data</param>
 		/// <returns></returns>
-		public IEnumerable<Location> GetAllCommentsAndQuestionsForDocument(IList<string> sourceURIs, bool partialMatchSourceURI, bool getSubmitted = false)
+		public IEnumerable<Location> GetAllCommentsAndQuestionsForDocument(IList<string> sourceURIs, bool partialMatchSourceURI)
 		{
 			string partialSourceURIToUse = null, partialMatchExactSourceURIToUse = null;
 		    if (partialMatchSourceURI)
@@ -84,22 +83,7 @@ namespace Comments.Models
 
 				.ToList();
 
-			if (getSubmitted)
-			{
-				var filteredData = data.Where(l =>
-												(l.Comment != null && l.Comment.Count != 0 ? l.Comment.Any(c => c.StatusId == (int)StatusName.Submitted) : false)
-												||
-												(l.Question != null && l.Question.Count != 0 ? l.Question.Any(q => q.Answer.Count() == 0) : false)
-												||
-												(l.Question != null && l.Question.Count != 0 ? l.Question.FirstOrDefault().Answer.Any(c => c.StatusId == (int)StatusName.Submitted) : false)
-											);
-
-				return filteredData;
-			}
-
 			return data;
-			
-			
 		}
 
 	    public List<Comment> GetAllSubmittedCommentsForURI(string  sourceURI)
