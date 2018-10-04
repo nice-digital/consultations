@@ -309,7 +309,7 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 													documentId,
 													this.props.match.params.chapterSlug,
 													this.state.documentsData,
-													"Chapters in my this document",
+													"Chapters in this document",
 													reference,
 													this.props.match.params.consultationId,
 

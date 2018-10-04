@@ -100,7 +100,7 @@ Array [
                               className="phase-banner__label"
                         >
                               NICE Consultations
-                               is in development which means that some features may not work fully.
+                               is in development, which means that some features may not work fully.
                                
                               <a
                                     href="/get-involved/contact-us"
@@ -641,7 +641,7 @@ Array [
                                                 <p
                                                       className="lead"
                                                 >
-                                                      You are about to submit your final response to NICE
+                                                      You are about to submit your final response to NICE.
                                                 </p>
                                                 <p>
                                                       You must answer the following questions before you submit.
@@ -758,7 +758,7 @@ Array [
                                                 </div>
                                                 <p>
                                                       <strong>
-                                                            Now submit your response to NICE
+                                                            Now submit your response to NICE.
                                                       </strong>
                                                 </p>
                                                 <p>

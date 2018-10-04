@@ -30,7 +30,7 @@ Array [
                     className="phase-banner__label"
                 >
                     NICE Consultations
-                     is in development which means that some features may not work fully.
+                     is in development, which means that some features may not work fully.
                      
                     <a
                         href="/get-involved/contact-us"
@@ -101,13 +101,13 @@ Array [
                         data-g="12 md:3"
                     >
                         <nav
-                            aria-label="Chapters in my this document"
+                            aria-label="Chapters in this document"
                             className="stacked-nav"
                         >
                             <h2
                                 className="stacked-nav__root"
                             >
-                                Chapters in my this document
+                                Chapters in this document
                             </h2>
                             <ul
                                 className="stacked-nav__list"

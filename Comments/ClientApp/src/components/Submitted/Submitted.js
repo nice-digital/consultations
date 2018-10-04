@@ -179,10 +179,9 @@ export class Submitted extends Component<PropsType, StateType> {
 														<h2>What happens next?</h2>
 														<p>We will review all the submissions received for this consultation. Our response
 															will
-															be published on the website around the time the guidance is published.</p>
+															be published on the website around the time the final guidance is published.</p>
 														<h2>Help us improve our online commenting service</h2>
-														<p>This is the first time we have used our new online commenting software on a live
-															consultation. We'd really like to hear your feedback so that we can keep improving
+														<p>This is the first time we have used our new online commenting software. We'd really like to hear your feedback so that we can keep improving
 															it.</p>
 														<p>Answer our short, anonymous survey (4 questions, 2 minutes).</p>
 														<p>
