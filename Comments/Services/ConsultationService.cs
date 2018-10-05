@@ -31,7 +31,7 @@ namespace Comments.Services
 		bool HasSubmittedCommentsOrQuestions(string consultationSourceURI, Guid userId);
 	    IEnumerable<BreadcrumbLink> GetBreadcrumbs(ConsultationDetail consultation, bool isReview);
 
-	    (int documentId, string chapterSlug) GetFirstConvertedDocumentAndChapterSlug(int consultationId);
+	    (int? documentId, string chapterSlug) GetFirstConvertedDocumentAndChapterSlug(int consultationId);
 		string GetFirstChapterSlug(int consultationId, int documentId);
 	    string GetFirstChapterSlugFromPreviewDocument(string reference, int consultationId, int documentId);
 
@@ -122,11 +122,14 @@ namespace Comments.Services
 		    return breadcrumbs;
 	    }
 
-	    public (int documentId, string chapterSlug) GetFirstConvertedDocumentAndChapterSlug(int consultationId)
+	    public (int? documentId, string chapterSlug) GetFirstConvertedDocumentAndChapterSlug(int consultationId)
 	    {
-		    var documentId = GetDocuments(consultationId).First().DocumentId;
-		    var chapterSlug = GetFirstChapterSlug(consultationId, documentId);
-		    return (documentId, chapterSlug);
+			var firstDocument = GetDocuments(consultationId).FirstOrDefault(d => d.ConvertedDocument);
+		    if (firstDocument == null)
+			    return (null, null);
+
+			var chapterSlug = firstDocument.Chapters.FirstOrDefault()?.Slug;
+			return (firstDocument.DocumentId, chapterSlug);
 	    }
 
 	    public string GetFirstChapterSlug(int consultationId, int documentId)

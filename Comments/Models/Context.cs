@@ -107,7 +107,7 @@ namespace Comments.Models
 						.ThenInclude(l => l.Location)
 						
 				.IgnoreQueryFilters()
-					.Select(s => s.SubmissionId).Distinct().Count();
+				.Select(s => s.SubmissionId).Distinct().Count();
 
 		    return submissions;
 	    }

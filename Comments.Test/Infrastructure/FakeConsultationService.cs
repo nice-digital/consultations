@@ -44,7 +44,7 @@ namespace Comments.Test.Infrastructure
 		    return new ConsultationState(DateTime.MinValue, _consultationIsOpen ? DateTime.MaxValue : DateTime.MinValue, true, true, true, false, true, true, null, null);
 	    }
 
-	    public (int documentId, string chapterSlug) GetFirstConvertedDocumentAndChapterSlug(int consultationId)
+	    public (int? documentId, string chapterSlug) GetFirstConvertedDocumentAndChapterSlug(int consultationId)
 	    {
 		    return (documentId: 1, chapterSlug: "my-chapter-slug");
 	    }
