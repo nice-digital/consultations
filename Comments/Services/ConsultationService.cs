@@ -124,7 +124,9 @@ namespace Comments.Services
 
 	    public (int documentId, string chapterSlug) GetFirstConvertedDocumentAndChapterSlug(int consultationId)
 	    {
-		    throw new NotImplementedException();
+		    var documentId = GetDocuments(consultationId).First().DocumentId;
+		    var chapterSlug = GetFirstChapterSlug(consultationId, documentId);
+		    return (documentId, chapterSlug);
 	    }
 
 	    public string GetFirstChapterSlug(int consultationId, int documentId)
