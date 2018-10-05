@@ -21,7 +21,7 @@ namespace Comments.Test.UnitTests
 			//Arrange
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList{ ConsultationId = 123});
-			var consultationListService = new ConsultationListService(null, new FakeFeedService(consultationList));
+			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList));
 
 			//Act
 			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel();
@@ -121,7 +121,7 @@ namespace Comments.Test.UnitTests
 			var locationId = AddLocation(sourceURI);
 			var questionTypeId = AddQuestionType("Question Type ", false, true);
 			var questionId = AddQuestion(locationId, questionTypeId, "Question Text");
-			var AnswerId = AddAnswer(questionId, userId, "my answer");
+			var AnswerId = AddAnswer(questionId, userId, "my answer", 2);
 			var submissionId = AddSubmission(userId);
 			AddSubmissionAnswers(submissionId, AnswerId);
 
@@ -134,6 +134,30 @@ namespace Comments.Test.UnitTests
 
 			//Assert
 			viewModel.Consultations.First().Responses.ShouldBe(1);
+		}
+
+		[Fact]
+		public void ConsultationListPageModelHasCorrectlySetResponseCountWithMulitpleUsers()
+		{
+			//Arrange
+			ResetDatabase();
+			_context.Database.EnsureCreated();
+			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+			var userId = Guid.NewGuid();
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
+			AddSubmittedCommentsAndAnswers(sourceURI, "Comment Label", "Question Label", "Answer Label", userId, consultationContext);
+			AddSubmittedCommentsAndAnswers(sourceURI, "another users Comment Label", "another users Question Label", " another users Answer Label", Guid.NewGuid(), consultationContext);
+
+			var consultationList = new List<ConsultationList>();
+			consultationList.Add(new ConsultationList { ConsultationId = 1 });
+			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList));
+
+			//Act
+			var viewModel = consultationListService.GetConsultationListViewModel();
+
+			//Assert
+			viewModel.Consultations.First().Responses.ShouldBe(2);
 		}
 	}
 }
