@@ -9,6 +9,7 @@ using NICE.Feeds.Models.Indev.List;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DocumentFormat.OpenXml.Office2010.Word;
 
 namespace Comments.Services
 {
@@ -30,7 +31,8 @@ namespace Comments.Services
 		bool HasSubmittedCommentsOrQuestions(string consultationSourceURI, Guid userId);
 	    IEnumerable<BreadcrumbLink> GetBreadcrumbs(ConsultationDetail consultation, bool isReview);
 
-	    string GetFirstChapterSlug(int consultationId, int documentId);
+	    (int documentId, string chapterSlug) GetFirstConvertedDocumentAndChapterSlug(int consultationId);
+		string GetFirstChapterSlug(int consultationId, int documentId);
 	    string GetFirstChapterSlugFromPreviewDocument(string reference, int consultationId, int documentId);
 
     }
@@ -118,6 +120,11 @@ namespace Comments.Services
 		    }
 
 		    return breadcrumbs;
+	    }
+
+	    public (int documentId, string chapterSlug) GetFirstConvertedDocumentAndChapterSlug(int consultationId)
+	    {
+		    throw new NotImplementedException();
 	    }
 
 	    public string GetFirstChapterSlug(int consultationId, int documentId)

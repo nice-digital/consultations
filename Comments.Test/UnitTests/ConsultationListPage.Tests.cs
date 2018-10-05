@@ -21,7 +21,7 @@ namespace Comments.Test.UnitTests
 			//Arrange
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList{ ConsultationId = 123});
-			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList));
+			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
 
 			//Act
 			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel();
@@ -44,7 +44,7 @@ namespace Comments.Test.UnitTests
 
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList { ConsultationId = 1 });
-			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList));
+			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
 
 			//Act
 			var viewModel = consultationListService.GetConsultationListViewModel();
@@ -68,7 +68,7 @@ namespace Comments.Test.UnitTests
 
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList { ConsultationId = 1 });
-			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList));
+			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
 
 			//Act
 			var viewModel = consultationListService.GetConsultationListViewModel();
@@ -96,7 +96,7 @@ namespace Comments.Test.UnitTests
 
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList { ConsultationId = 1 });
-			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList));
+			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
 
 			//Act
 			var viewModel = consultationListService.GetConsultationListViewModel();
@@ -127,7 +127,7 @@ namespace Comments.Test.UnitTests
 
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList { ConsultationId = 1 });
-			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList));
+			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
 
 			//Act
 			var viewModel = consultationListService.GetConsultationListViewModel();
@@ -151,7 +151,7 @@ namespace Comments.Test.UnitTests
 
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList { ConsultationId = 1 });
-			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList));
+			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
 
 			//Act
 			var viewModel = consultationListService.GetConsultationListViewModel();
@@ -159,5 +159,22 @@ namespace Comments.Test.UnitTests
 			//Assert
 			viewModel.Consultations.First().Responses.ShouldBe(2);
 		}
+
+		[Fact]
+		public void ConsultationListPageModelHasDocumentIdAndChapterSlugPopulatedCorrectly()
+		{
+			//Arrange
+			var consultationList = new List<ConsultationList>();
+			consultationList.Add(new ConsultationList { ConsultationId = 123 });
+			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
+
+			//Act
+			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel();
+
+			//Assert
+			viewModel.Consultations.First().DocumentId.ShouldBe(1);
+			viewModel.Consultations.First().ChapterSlug.ShouldBe("my-chapter-slug");
+		}
+
 	}
 }

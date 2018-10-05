@@ -20,11 +20,13 @@ namespace Comments.Services
 	{
 		private readonly ConsultationsContext _context;
 		private readonly IFeedService _feedService;
+		private readonly IConsultationService _consultationService;
 
-		public ConsultationListService(ConsultationsContext consultationsContext, IFeedService feedService)
+		public ConsultationListService(ConsultationsContext consultationsContext, IFeedService feedService, IConsultationService consultationService)
 		{
 			_context = consultationsContext;
 			_feedService = feedService;
+			_consultationService = consultationService;
 		}
 
 		public ConsultationListViewModel GetConsultationListViewModel()
@@ -36,7 +38,7 @@ namespace Comments.Services
 			{
 				var sourceURI = ConsultationsUri.CreateConsultationURI(consultation.ConsultationId);
 				var responseCount = _context.GetAllSubmittedResponses(sourceURI);
-				consultationListRows.Add(new ConsultationListRow(consultation.Title, consultation.StartDate, consultation.EndDate, responseCount, consultation.ConsultationId));
+				consultationListRows.Add(new ConsultationListRow(consultation.Title, consultation.StartDate, consultation.EndDate, responseCount, consultation.ConsultationId, 0, "todo"));
 			}
 	
 			return new ConsultationListViewModel(consultationListRows);
