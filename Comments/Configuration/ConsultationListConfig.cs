@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Comments.ViewModels;
+using System.Collections.Generic;
 
 namespace Comments.Configuration
 {
-    public class ReviewConfig
+	public class ConsultationListConfig
     {
 	    public IEnumerable<FilterGroup> Filters { get; set; }
 	}

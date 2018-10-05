@@ -26,7 +26,7 @@ namespace Comments.ViewModels
 		/// <summary>
 		/// This property is initialised from appsettings.json, then it gets updated in CommentService with documents and the counts are updated.
 		/// </summary>
-	    public IEnumerable<ReviewFilterGroup> Filters { get; set; }
+	    public IEnumerable<FilterGroup> Filters { get; set; }
 
 		/// <summary>
 		/// This is the organisation name from nice accounts. it's going to prepopulate the organisation name on the review page, but will be overwritable. it won't change the field in nice accounts.

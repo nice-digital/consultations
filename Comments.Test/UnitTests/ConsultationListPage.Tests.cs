@@ -2,23 +2,26 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Comments.Common;
+using Comments.Configuration;
 using Comments.Models;
 using Comments.Services;
 using Comments.Test.Infrastructure;
 using Comments.ViewModels;
 using NICE.Feeds.Models.Indev.List;
+using NICE.Feeds.Tests.Infrastructure;
 using Shouldly;
 using Xunit;
+using TestBase = Comments.Test.Infrastructure.TestBase;
 
 namespace Comments.Test.UnitTests
 {
 	public class ConsultationListPageTests : TestBase
 	{
-
 		[Fact]
 		public void ConsultationListPageModelHasConsultationsPopulated()
 		{
 			//Arrange
+			AppSettings.ConsultationListConfig = GetConsultationListConfig();
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList{ ConsultationId = 123});
 			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
@@ -34,6 +37,7 @@ namespace Comments.Test.UnitTests
 		public void ConsultationListPageModelHasCorrectlySetResponseCount()
 		{
 			//Arrange
+			AppSettings.ConsultationListConfig = GetConsultationListConfig();
 			ResetDatabase();
 			_context.Database.EnsureCreated();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
@@ -57,6 +61,7 @@ namespace Comments.Test.UnitTests
 		public void ConsultationListPageModelHasCorrectlySetResponseCountWithMulitpleSubmissions()
 		{
 			//Arrange
+			AppSettings.ConsultationListConfig = GetConsultationListConfig();
 			ResetDatabase();
 			_context.Database.EnsureCreated();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
@@ -82,6 +87,7 @@ namespace Comments.Test.UnitTests
 		public void ConsultationListPageModelHasCorrectlySetResponseCountWithComments()
 		{
 			//Arrange
+			AppSettings.ConsultationListConfig = GetConsultationListConfig();
 			ResetDatabase();
 			_context.Database.EnsureCreated();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
@@ -111,6 +117,7 @@ namespace Comments.Test.UnitTests
 		public void ConsultationListPageModelHasCorrectlySetResponseCountWithAnswers()
 		{
 			//Arrange
+			AppSettings.ConsultationListConfig = GetConsultationListConfig();
 			ResetDatabase();
 			_context.Database.EnsureCreated();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
@@ -140,6 +147,7 @@ namespace Comments.Test.UnitTests
 		public void ConsultationListPageModelHasCorrectlySetResponseCountWithMulitpleUsers()
 		{
 			//Arrange
+			AppSettings.ConsultationListConfig = GetConsultationListConfig();
 			ResetDatabase();
 			_context.Database.EnsureCreated();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
@@ -164,6 +172,7 @@ namespace Comments.Test.UnitTests
 		public void ConsultationListPageModelHasDocumentIdAndChapterSlugPopulatedCorrectly()
 		{
 			//Arrange
+			AppSettings.ConsultationListConfig = GetConsultationListConfig();
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList { ConsultationId = 123 });
 			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
@@ -176,5 +185,39 @@ namespace Comments.Test.UnitTests
 			viewModel.Consultations.First().ChapterSlug.ShouldBe("my-chapter-slug");
 		}
 
+		[Fact]
+		public void ConsultationListPageModelHasFilterOptions()
+		{
+			//Arrange
+			AppSettings.ConsultationListConfig = GetConsultationListConfig();
+			var consultationList = new List<ConsultationList>();
+			consultationList.Add(new ConsultationList { ConsultationId = 123  });
+			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
+
+			//Act
+			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel();
+
+			//Assert
+
+			var firstFilter = viewModel.Filters.First();
+			firstFilter.Title.ShouldBe("Status");
+			firstFilter.Options.Count.ShouldBe(2);
+			firstFilter.Options.First().Label.ShouldBe("Open");
+			firstFilter.Options.Skip(1).First().Label.ShouldBe("Closed");
+		}
+		private static ConsultationListConfig GetConsultationListConfig()
+		{
+			return new ConsultationListConfig()
+			{
+				Filters = new List<FilterGroup>()
+				{
+					new FilterGroup(){ Id = "Status", Title = "Status", Options = new List<FilterOption>()
+					{
+						new FilterOption("Open", "Open"),
+						new FilterOption("Closed", "Closed"),
+					}}
+				}
+			};
+		}
 	}
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Comments.Common;
+using Comments.Configuration;
 using Comments.Models;
 using Comments.ViewModels;
 using DocumentFormat.OpenXml.Wordprocessing;
@@ -38,11 +39,12 @@ namespace Comments.Services
 			{
 				var sourceURI = ConsultationsUri.CreateConsultationURI(consultation.ConsultationId);
 				var responseCount = _context.GetAllSubmittedResponses(sourceURI);
-				var documentAndChapterSlug = _consultationService.GetFirstConvertedDocumentAndChapterSlug(consultation.ConsultationId);
-				consultationListRows.Add(new ConsultationListRow(consultation.Title, consultation.StartDate, consultation.EndDate, responseCount, consultation.ConsultationId, documentAndChapterSlug.documentId, documentAndChapterSlug.chapterSlug));
+				consultationListRows.Add(new ConsultationListRow(consultation.Title, consultation.StartDate, consultation.EndDate, responseCount, consultation.ConsultationId, 0, "todo"));
 			}
-	
-			return new ConsultationListViewModel(consultationListRows);
+
+			var filters = AppSettings.ConsultationListConfig.Filters.ToList();
+
+			return new ConsultationListViewModel(consultationListRows, filters);
 		}
 	}
 }
