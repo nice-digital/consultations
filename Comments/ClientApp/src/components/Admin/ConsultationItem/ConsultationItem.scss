@@ -1,0 +1,7 @@
+.ConsultationItem {
+  border-bottom: 2px solid $colour-border;
+  padding-bottom: 1rem;
+  &:last-of-type {
+    border-bottom: none;
+  }
+}

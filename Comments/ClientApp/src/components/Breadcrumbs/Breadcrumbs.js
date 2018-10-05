@@ -15,12 +15,7 @@ type PropsType = {
 	links: Array<LinksType>
 };
 
-export class BreadCrumbs extends PureComponent<PropsType> {
-
-	constructor(props) {
-		super(props);
-	}
-
+export class Breadcrumbs extends PureComponent<PropsType> {
 	trackBreadcrumb = (segment) => {
 		tagManager({
 			event: "generic",
@@ -67,4 +62,4 @@ export class BreadCrumbs extends PureComponent<PropsType> {
 	}
 }
 
-export default withRouter(BreadCrumbs);
+export default withRouter(Breadcrumbs);
