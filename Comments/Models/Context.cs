@@ -88,30 +88,28 @@ namespace Comments.Models
 
 	    public int GetAllSubmittedResponses(string sourceURI)
 	    {
-		    var submissionIds = new List<int>();
+			var submissions = Submission.Where(s => (s.SubmissionComment.Any(sc => sc.Comment.IsDeleted == false) &&
+			                                               s.SubmissionComment.Any(sc => sc.Comment.Location.SourceURI.Contains(sourceURI)) &&
+			                                               s.SubmissionComment.Any(sc => sc.Comment.StatusId == (int) StatusName.Submitted))
+													||
+			                                        (s.SubmissionAnswer.Any(sa => sa.Answer.IsDeleted == false) &&
+															s.SubmissionAnswer.Any(sa => sa.Answer.Question.Location.SourceURI.Contains(sourceURI)) &&
+															s.SubmissionAnswer.Any(sa => sa.Answer.StatusId == (int)StatusName.Submitted))
+												)
 
-			var submissionComments = SubmissionComment.Where(sc => sc.Comment.IsDeleted == false &&
-		                                                    sc.Comment.Location.SourceURI.Contains(sourceURI) &&
-		                                                    sc.Comment.StatusId == (int) StatusName.Submitted)
-			    .Include(c => c.Comment)
-			    .ThenInclude(l => l.Location)
-				.IgnoreQueryFilters()
-			    .ToList();
+				.Include(sc => sc.SubmissionComment)
+					.ThenInclude(c => c.Comment)
+						.ThenInclude(l => l.Location)
 
-		    submissionIds.AddRange(submissionComments.Select(sc => sc.SubmissionId));
-
-		    var submissionAnswers = SubmissionAnswer.Where(sa => sa.Answer.IsDeleted == false &&
-		                                                           sa.Answer.Question.Location.SourceURI.Contains(sourceURI) &&
-		                                                           sa.Answer.StatusId == (int)StatusName.Submitted)
-			    .Include(a => a.Answer)
+				.Include(sa => sa.SubmissionAnswer)
+				.ThenInclude(a => a.Answer)
 					.ThenInclude(q => q.Question)
 						.ThenInclude(l => l.Location)
-			    .IgnoreQueryFilters()
-				.ToList();
+						
+				.IgnoreQueryFilters()
+					.Select(s => s.SubmissionId).Distinct().Count();
 
-		    submissionIds.AddRange(submissionAnswers.Select(sc => sc.SubmissionId));
-
-		    return submissionIds.Distinct().Count();
+		    return submissions;
 	    }
 
 		public List<Comment> GetAllSubmittedCommentsForURI(string  sourceURI)
