@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Comments.Common;
 using Comments.Models;
 using Comments.ViewModels;
 using DocumentFormat.OpenXml.Wordprocessing;
@@ -28,20 +29,17 @@ namespace Comments.Services
 
 		public ConsultationListViewModel GetConsultationListViewModel()
 		{
-			IEnumerable<ConsultationList> consultations = _feedService.GetConsultationList();
-			
+			var consultations = _feedService.GetConsultationList().ToList();
+			var consultationListRows = new List<ConsultationListRow>();
 
 			foreach (var consultation in consultations)
 			{
-				var consultationList = new ConsultationListRow(consultation.Title, consultation.StartDate, consultation.EndDate, 0, consultation.ConsultationId);
-				CreateConsultationURI(consultation.ConsultationIf)
-
+				var sourceURI = ConsultationsUri.CreateConsultationURI(consultation.ConsultationId);
+				var responseCount = _context.GetAllSubmittedResponses(sourceURI);
+				consultationListRows.Add(new ConsultationListRow(consultation.Title, consultation.StartDate, consultation.EndDate, responseCount, consultation.ConsultationId));
 			}
-
-			var responses = _context.GetAllCommentsAndQuestionsForDocument(sourceURI, true);
-			
-
-			return new ConsultationListViewModel(consultationList);
+	
+			return new ConsultationListViewModel(consultationListRows);
 		}
 	}
 }

@@ -86,7 +86,35 @@ namespace Comments.Models
 			return data;
 		}
 
-	    public List<Comment> GetAllSubmittedCommentsForURI(string  sourceURI)
+	    public int GetAllSubmittedResponses(string sourceURI)
+	    {
+		    var submissionIds = new List<int>();
+
+			var submissionComments = SubmissionComment.Where(sc => sc.Comment.IsDeleted == false &&
+		                                                    sc.Comment.Location.SourceURI.Contains(sourceURI) &&
+		                                                    sc.Comment.StatusId == (int) StatusName.Submitted)
+			    .Include(c => c.Comment)
+			    .ThenInclude(l => l.Location)
+				.IgnoreQueryFilters()
+			    .ToList();
+
+		    submissionIds.AddRange(submissionComments.Select(sc => sc.SubmissionId));
+
+		    var submissionAnswers = SubmissionAnswer.Where(sa => sa.Answer.IsDeleted == false &&
+		                                                           sa.Answer.Question.Location.SourceURI.Contains(sourceURI) &&
+		                                                           sa.Answer.StatusId == (int)StatusName.Submitted)
+			    .Include(a => a.Answer)
+					.ThenInclude(q => q.Question)
+						.ThenInclude(l => l.Location)
+			    .IgnoreQueryFilters()
+				.ToList();
+
+		    submissionIds.AddRange(submissionAnswers.Select(sc => sc.SubmissionId));
+
+		    return submissionIds.Distinct().Count();
+	    }
+
+		public List<Comment> GetAllSubmittedCommentsForURI(string  sourceURI)
 	    {
 			var comment = Comment.Where(c =>
 					c.StatusId == (int) StatusName.Submitted && c.Location.SourceURI.Contains(sourceURI) && c.IsDeleted == false)
