@@ -14,7 +14,7 @@ namespace Comments.Services
 {
 	public interface IConsultationListService
 	{
-		ConsultationListViewModel GetConsultationListViewModel();
+		ConsultationListViewModel GetConsultationListViewModel(ConsultationListViewModel model);
 	}
 
 	public class ConsultationListService : IConsultationListService
@@ -30,7 +30,7 @@ namespace Comments.Services
 			_consultationService = consultationService;
 		}
 
-		public ConsultationListViewModel GetConsultationListViewModel()
+		public ConsultationListViewModel GetConsultationListViewModel(ConsultationListViewModel model)
 		{
 			var consultations = _feedService.GetConsultationList().ToList();
 			var consultationListRows = new List<ConsultationListRow>();

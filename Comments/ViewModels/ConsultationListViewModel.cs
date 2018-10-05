@@ -6,12 +6,12 @@ using Comments.Models;
 
 namespace Comments.ViewModels
 {
-	//[Flags]
-	//public enum QuestionsOrComments
-	//{
-	//	Questions = 1,
-	//	Comments = 2
-	//}
+	[Flags]
+	public enum ConsultationStatus
+	{
+		Open = 1,
+		Closed = 2
+	}
 
 	//public enum ReviewSortOrder
 	//{
@@ -38,12 +38,12 @@ namespace Comments.ViewModels
 		#region Filter options from the check boxes
 
 
-		//[JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
-		//public IEnumerable<QuestionsOrComments> Type
-		//{
-		//	get;
-		//	set;
-		//}
+		[JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
+		public IEnumerable<ConsultationStatus> Status
+		{
+			get;
+			set;
+		}
 
 		//public IEnumerable<int> Document { get; set; }
 

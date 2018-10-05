@@ -195,13 +195,33 @@ namespace Comments.Test.UnitTests
 			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel();
 
 			//Assert
-
 			var firstFilter = viewModel.Filters.First();
 			firstFilter.Title.ShouldBe("Status");
 			firstFilter.Options.Count.ShouldBe(2);
 			firstFilter.Options.First().Label.ShouldBe("Open");
 			firstFilter.Options.Skip(1).First().Label.ShouldBe("Closed");
 		}
+
+		[Fact]
+		public void ConsultationListPageModelHasFilterOptionSetToSelected()
+		{
+			//Arrange
+			var consultationList = new List<ConsultationList>();
+			consultationList.Add(new ConsultationList { ConsultationId = 123 });
+			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
+			var viewModel = new ConsultationListViewModel(null, null);
+			viewModel.Status = new List<ConsultationStatus>(){ ConsultationStatus.Open };
+
+			//Act
+			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
+
+			//Assert
+			updatedViewModel.Filters.First().Options.First(f => f.Id == "Open").IsSelected.ShouldBeTrue();
+		}
+
+
+
+
 		private static ConsultationListConfig GetConsultationListConfig()
 		{
 			return new ConsultationListConfig()
