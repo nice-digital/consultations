@@ -11,8 +11,11 @@ import SubmittedWithRouter from "../Submitted/Submitted";
 import UserProviderWithRouter from "../../context/UserContext";
 import FooterWithRouter from "../Footer/Footer";
 import DocumentPreviewWithRouter from "../DocumentPreview/DocumentPreview";
+import AdminWithRouter from "../Admin/Admin";
 import {ErrorBoundary} from "../ErrorBoundary/ErrorBoundary";
 import {LiveAnnouncer, LiveMessenger} from "react-aria-live";
+import { projectInformation } from "../../constants";
+import { PhaseBanner } from "../PhaseBanner/PhaseBanner";
 
 type PropsType = any;
 
@@ -24,6 +27,10 @@ class App extends React.Component<PropsType, StateType> {
 	render() {
 		return (
 			<Fragment>
+				<PhaseBanner
+					phase={projectInformation.phase}
+					name={projectInformation.name}
+				/>
 				<UserProviderWithRouter>
 					<Helmet titleTemplate="%s | Consultations | NICE">
 						<html lang="en-GB"/>
@@ -31,6 +38,12 @@ class App extends React.Component<PropsType, StateType> {
 					<ErrorBoundary>
 						<LiveAnnouncer>
 							<Switch>
+
+								{/*Admin Routes*/}
+								<Route path="/admin">
+									<AdminWithRouter />
+								</Route>
+
 								{/*Document View*/}			
 								<Route exact
 											 path="/:consultationId/:documentId/:chapterSlug">

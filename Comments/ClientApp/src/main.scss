@@ -13,6 +13,7 @@ $nice-font-base-path: "/consultations/fonts/";
 // Global Styles
 @import "styles/forms";
 @import "styles/accessibility";
+@import "styles/non-design-system";
 
 // Component folder structure imports here
 @import "./components/App/App";
@@ -25,6 +26,7 @@ $nice-font-base-path: "/consultations/fonts/";
 @import "./components/Footer/Footer";
 @import "./components/Review/Review";
 @import "./components/Tutorial/Tutorial";
+@import "./components/Admin/ConsultationItem/ConsultationItem";
 
 // Document transform styling (comments buttons etc)
 @import "./document-processing/transforms/comment";

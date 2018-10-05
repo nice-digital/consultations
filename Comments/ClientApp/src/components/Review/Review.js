@@ -14,11 +14,8 @@ import {
 } from "../../helpers/editing-and-deleting";
 import { queryStringToObject } from "../../helpers/utils";
 import { tagManager } from "../../helpers/tag-manager";
-import { projectInformation } from "../../constants";
 import { UserContext } from "../../context/UserContext";
-
 import { Header } from "../Header/Header";
-import { PhaseBanner } from "../PhaseBanner/PhaseBanner";
 import BreadCrumbsWithRouter from "../Breadcrumbs/Breadcrumbs";
 import { FilterPanel } from "../FilterPanel/FilterPanel";
 import { ResultsInfo } from "../ResultsInfo/ResultsInfo";
@@ -449,11 +446,6 @@ export class Review extends Component<PropsType, StateType> {
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">
-							<PhaseBanner
-								phase={projectInformation.phase}
-								name={projectInformation.name}
-								repo={projectInformation.repo}
-							/>
 							<BreadCrumbsWithRouter links={this.state.consultationData.breadcrumbs}/>
 							<UserContext.Consumer>
 								{(contextValue: ContextType) => {
