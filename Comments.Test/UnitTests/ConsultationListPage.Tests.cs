@@ -17,11 +17,15 @@ namespace Comments.Test.UnitTests
 {
 	public class ConsultationListPageTests : TestBase
 	{
+		public ConsultationListPageTests() : base(null)
+		{
+			AppSettings.ConsultationListConfig = GetConsultationListConfig();
+		}
+
 		[Fact]
 		public void ConsultationListPageModelHasConsultationsPopulated()
 		{
 			//Arrange
-			AppSettings.ConsultationListConfig = GetConsultationListConfig();
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList{ ConsultationId = 123});
 			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
@@ -37,7 +41,6 @@ namespace Comments.Test.UnitTests
 		public void ConsultationListPageModelHasCorrectlySetResponseCount()
 		{
 			//Arrange
-			AppSettings.ConsultationListConfig = GetConsultationListConfig();
 			ResetDatabase();
 			_context.Database.EnsureCreated();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
@@ -61,7 +64,6 @@ namespace Comments.Test.UnitTests
 		public void ConsultationListPageModelHasCorrectlySetResponseCountWithMulitpleSubmissions()
 		{
 			//Arrange
-			AppSettings.ConsultationListConfig = GetConsultationListConfig();
 			ResetDatabase();
 			_context.Database.EnsureCreated();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
@@ -87,7 +89,6 @@ namespace Comments.Test.UnitTests
 		public void ConsultationListPageModelHasCorrectlySetResponseCountWithComments()
 		{
 			//Arrange
-			AppSettings.ConsultationListConfig = GetConsultationListConfig();
 			ResetDatabase();
 			_context.Database.EnsureCreated();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
@@ -117,7 +118,6 @@ namespace Comments.Test.UnitTests
 		public void ConsultationListPageModelHasCorrectlySetResponseCountWithAnswers()
 		{
 			//Arrange
-			AppSettings.ConsultationListConfig = GetConsultationListConfig();
 			ResetDatabase();
 			_context.Database.EnsureCreated();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
@@ -147,7 +147,6 @@ namespace Comments.Test.UnitTests
 		public void ConsultationListPageModelHasCorrectlySetResponseCountWithMulitpleUsers()
 		{
 			//Arrange
-			AppSettings.ConsultationListConfig = GetConsultationListConfig();
 			ResetDatabase();
 			_context.Database.EnsureCreated();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
@@ -172,7 +171,6 @@ namespace Comments.Test.UnitTests
 		public void ConsultationListPageModelHasDocumentIdAndChapterSlugPopulatedCorrectly()
 		{
 			//Arrange
-			AppSettings.ConsultationListConfig = GetConsultationListConfig();
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList { ConsultationId = 123 });
 			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
@@ -189,7 +187,6 @@ namespace Comments.Test.UnitTests
 		public void ConsultationListPageModelHasFilterOptions()
 		{
 			//Arrange
-			AppSettings.ConsultationListConfig = GetConsultationListConfig();
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList { ConsultationId = 123  });
 			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());

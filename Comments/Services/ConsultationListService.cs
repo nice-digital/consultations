@@ -39,7 +39,8 @@ namespace Comments.Services
 			{
 				var sourceURI = ConsultationsUri.CreateConsultationURI(consultation.ConsultationId);
 				var responseCount = _context.GetAllSubmittedResponses(sourceURI);
-				consultationListRows.Add(new ConsultationListRow(consultation.Title, consultation.StartDate, consultation.EndDate, responseCount, consultation.ConsultationId, 0, "todo"));
+				var documentAndChapterSlug =  _consultationService.GetFirstConvertedDocumentAndChapterSlug(consultation.ConsultationId);
+				consultationListRows.Add(new ConsultationListRow(consultation.Title, consultation.StartDate, consultation.EndDate, responseCount, consultation.ConsultationId, documentAndChapterSlug.documentId, documentAndChapterSlug.chapterSlug));
 			}
 
 			var filters = AppSettings.ConsultationListConfig.Filters.ToList();
