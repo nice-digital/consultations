@@ -76,6 +76,8 @@ services:
       - GILLIAM_REALM
       - ENCRYPTION_KEY
       - ENCRYPTION_IV
+      - BROWSERSTACK_ACCESS_KEY
+      - BROWSERSTACK_USERNAME
 
 
   # MS SQL Server database

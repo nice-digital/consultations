@@ -5,7 +5,8 @@
   "main": "wdio.conf.js",
   "scripts": {
     "test": "node node_modules/webdriverio/bin/wdio",
-    "test:teamcity": "node node_modules/webdriverio/bin/wdio wdio.teamcity.conf.js"
+    "test:teamcity": "node node_modules/webdriverio/bin/wdio wdio.teamcity.conf.js",
+    "test:browserstack": "node node_modules/webdriverio/bin/wdio wdio.browserstack.conf.js"
   },
   "author": "NICE Digital Services",
   "contributors": [
@@ -23,6 +24,8 @@
     "babel-register": "^6.26.0",
     "chai": "^4.1.2",
     "node": "^8.11.1",
+    "wdio-browserstack-service": "^0.1.16",
+    "browserstack-local": "^1.3.4",
     "wdio-chromedriver-service": "^0.1.3",
     "wdio-cucumber-framework": "^1.1.1",
     "wdio-selenium-standalone-service": "0.0.10",
