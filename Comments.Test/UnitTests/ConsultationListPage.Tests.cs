@@ -27,11 +27,11 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			var consultationList = new List<ConsultationList>();
-			consultationList.Add(new ConsultationList{ ConsultationId = 123});
+			consultationList.Add(new ConsultationList { ConsultationId = 123 });
 			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
 
 			//Act
-			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel();
+			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null));
 
 			//Assert
 			viewModel.Consultations.First().ConsultationId.ShouldBe(123);
@@ -54,7 +54,7 @@ namespace Comments.Test.UnitTests
 			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
 
 			//Act
-			var viewModel = consultationListService.GetConsultationListViewModel();
+			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null));
 
 			//Assert
 			viewModel.Consultations.First().Responses.ShouldBe(1);
@@ -78,7 +78,7 @@ namespace Comments.Test.UnitTests
 			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
 
 			//Act
-			var viewModel = consultationListService.GetConsultationListViewModel();
+			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null));
 
 			//Assert
 			viewModel.Consultations.First().Responses.ShouldBe(2);
@@ -106,7 +106,7 @@ namespace Comments.Test.UnitTests
 			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
 
 			//Act
-			var viewModel = consultationListService.GetConsultationListViewModel();
+			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null));
 
 			//Assert
 			viewModel.Consultations.First().Responses.ShouldBe(1);
@@ -137,7 +137,7 @@ namespace Comments.Test.UnitTests
 			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
 
 			//Act
-			var viewModel = consultationListService.GetConsultationListViewModel();
+			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null));
 
 			//Assert
 			viewModel.Consultations.First().Responses.ShouldBe(1);
@@ -161,7 +161,7 @@ namespace Comments.Test.UnitTests
 			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
 
 			//Act
-			var viewModel = consultationListService.GetConsultationListViewModel();
+			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null));
 
 			//Assert
 			viewModel.Consultations.First().Responses.ShouldBe(2);
@@ -176,7 +176,7 @@ namespace Comments.Test.UnitTests
 			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
 
 			//Act
-			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel();
+			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null));
 
 			//Assert
 			viewModel.Consultations.First().DocumentId.ShouldBe(1);
@@ -188,11 +188,11 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			var consultationList = new List<ConsultationList>();
-			consultationList.Add(new ConsultationList { ConsultationId = 123  });
+			consultationList.Add(new ConsultationList { ConsultationId = 123 });
 			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
 
 			//Act
-			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel();
+			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null));
 
 			//Assert
 			var firstFilter = viewModel.Filters.First();

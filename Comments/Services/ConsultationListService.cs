@@ -43,9 +43,24 @@ namespace Comments.Services
 				consultationListRows.Add(new ConsultationListRow(consultation.Title, consultation.StartDate, consultation.EndDate, responseCount, consultation.ConsultationId, documentAndChapterSlug.documentId, documentAndChapterSlug.chapterSlug));
 			}
 
+			model.Filters = GetFilterGroups(model.Status);
+			model.Consultations = consultationListRows;
+			return model;
+
+			//var filters = AppSettings.ConsultationListConfig.Filters.ToList();
+			//return new ConsultationListViewModel(consultationListRows, filters);
+		}
+
+		private IEnumerable<FilterGroup> GetFilterGroups(IEnumerable<ConsultationStatus> status)
+		{
 			var filters = AppSettings.ConsultationListConfig.Filters.ToList();
 
-			return new ConsultationListViewModel(consultationListRows, filters);
+			var consultationListFilter = filters.Single(f => f.Id.Equals("Status", StringComparison.OrdinalIgnoreCase));
+			var openOption = consultationListFilter.Options.Single(o => o.Id.Equals("Open", StringComparison.OrdinalIgnoreCase));
+
+			openOption.IsSelected = status != null && status.Contains(ConsultationStatus.Open);
+
+			return filters;
 		}
 	}
 }

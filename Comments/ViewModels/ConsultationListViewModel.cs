@@ -27,7 +27,7 @@ namespace Comments.ViewModels
 			Filters = filters;
 		}
 
-		public IEnumerable<ConsultationListRow> Consultations{ get; private set; }
+		public IEnumerable<ConsultationListRow> Consultations{ get; set; }
 
 		/// <summary>
 		/// This property is initialised from appsettings.json, then it gets updated in CommentService with documents and the counts are updated.
