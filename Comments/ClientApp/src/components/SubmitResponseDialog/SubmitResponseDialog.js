@@ -32,7 +32,7 @@ export const SubmitResponseDialog = (props) => {
 
 	return(
 		<div className="panel">
-			<p className="lead">You are about to submit your final response to NICE</p>
+			<p className="lead">You are about to submit your final response to NICE.</p>
 
 			<p>You must answer the following questions before you submit.</p>
 
@@ -144,7 +144,7 @@ export const SubmitResponseDialog = (props) => {
 
 			{isAuthorised &&
 					<Fragment>
-						<p><strong>Now submit your response to NICE</strong></p>
+						<p><strong>Now submit your response to NICE.</strong></p>
 						<p>After submission you won't be able to edit your comments further or add any extra comments.</p>
 						<button
 							disabled={!validToSubmit || !mandatoryQuestionsAreValid() || unsavedIds.length !== 0}
