@@ -203,7 +203,7 @@ namespace Comments.Test.UnitTests
 		}
 
 		[Fact]
-		public void ConsultationListPageModelHasFilterOptionSetToSelected()
+		public void ConsultationListPageModelHasFilterOptionOpenSetToSelected()
 		{
 			//Arrange
 			var consultationList = new List<ConsultationList>();
@@ -219,7 +219,22 @@ namespace Comments.Test.UnitTests
 			updatedViewModel.Filters.First().Options.First(f => f.Id == "Open").IsSelected.ShouldBeTrue();
 		}
 
+		[Fact]
+		public void ConsultationListPageModelHasFilterOptionClosedSetToSelected()
+		{
+			//Arrange
+			var consultationList = new List<ConsultationList>();
+			consultationList.Add(new ConsultationList { ConsultationId = 123 });
+			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
+			var viewModel = new ConsultationListViewModel(null, null);
+			viewModel.Status = new List<ConsultationStatus>() { ConsultationStatus.Closed };
 
+			//Act
+			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
+
+			//Assert
+			updatedViewModel.Filters.First().Options.Skip(1).First(f => f.Id == "Closed").IsSelected.ShouldBeTrue();
+		}
 
 
 		private static ConsultationListConfig GetConsultationListConfig()

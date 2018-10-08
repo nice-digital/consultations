@@ -57,8 +57,10 @@ namespace Comments.Services
 
 			var consultationListFilter = filters.Single(f => f.Id.Equals("Status", StringComparison.OrdinalIgnoreCase));
 			var openOption = consultationListFilter.Options.Single(o => o.Id.Equals("Open", StringComparison.OrdinalIgnoreCase));
+			var closedOption = consultationListFilter.Options.Single(o => o.Id.Equals("Closed", StringComparison.OrdinalIgnoreCase));
 
 			openOption.IsSelected = status != null && status.Contains(ConsultationStatus.Open);
+			closedOption.IsSelected = status != null && status.Contains(ConsultationStatus.Closed);
 
 			return filters;
 		}
