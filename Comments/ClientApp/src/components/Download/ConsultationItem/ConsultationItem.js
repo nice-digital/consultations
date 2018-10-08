@@ -1,10 +1,13 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import Moment from "react-moment";
+import { Link } from "react-router-dom";
 
 export class ConsultationItem extends Component {
 
 	randomStatus = (responses) => {
-		if (responses > 50) {
+		if (responses < 30) {
+			return <span className="tag tag--flush tag--consultation">Upcoming</span>;
+		} else if (responses > 30 && responses < 60){
 			return <span className="tag tag--flush tag--consultation">Open</span>;
 		}
 		return <span className="tag tag--flush tag--updated">Closed</span>;
@@ -22,47 +25,50 @@ export class ConsultationItem extends Component {
 			supportsComments,
 		} = this.props;
 
-		// fake data for design's sake
-		const responsesReceived = Math.round(Math.random() * 100);
+		// fake data yet to come in
+		const responses = Math.floor(Math.random() * 100);
+		const consultationId = 22;
+		const documentId = 1;
 		
 		return (
 			<li className="ConsultationItem">
-				<h3 className="h5">{title}</h3>
-				<p>
-					<Fragment>
-						{this.randomStatus(responsesReceived)} {" "}
-					</Fragment>
-					{supportsQuestions &&
-						<Fragment>
-							<span className="tag tag--flush">Questions</span> {" "}
-						</Fragment>
-					}
-					{supportsComments &&
-						<Fragment>
-							<span className="tag tag--flush">Comments</span> {" "}
-						</Fragment>
-					}
-				</p>
-				<div className="grid">
-					<div data-g="9">
-						<div>
-							<strong><Moment format="D MMMM YYYY" date={startDate}/></strong>
-							{" "}to{" "}
-							<strong><Moment format="D MMMM YYYY" date={endDate}/></strong>
+				<article className="card">
+					<header className="card__header">
+						<h3 className="card__heading">
+							<Link to={`/${consultationId}/${documentId}`}>{title}</Link>	
+						</h3>
+					</header>
+					<dl className="card__metadata">
+						<div className="card__metadatum">
+							<dt className="visually-hidden">Consultation state</dt>
+							<dd>
+								{this.randomStatus(responses)}
+							</dd>
 						</div>
-						<div>Received <strong>{responsesReceived}</strong> responses
-							{" "}	<a href="#">Download</a>
+						<div className="card__metadatum">
+							<dt className="visually-hidden">Project ID</dt>
+							<dd>
+								{reference}
+							</dd>
 						</div>
-						<p className="text-muted">{reference} | {consultationType}</p>
-					</div>
-
-
-					<div data-g="3">
-						<div>
-							<button className="btn btn--secondary">Set questions</button>
+						<div className="card__metadatum">
+							<dd>
+								Closes on {" "}
+								<Moment format="D MMMM YYYY" date={endDate}/>
+							</dd>
 						</div>
-					</div>
-				</div>
+						<div className="card__metadatum">
+							<dd>
+								<button
+									className="buttonAsLink"
+									onClick={() => {alert("downloading...")}}
+									title="Download responses">
+									Download <strong>{responses}</strong> responses
+								</button>
+							</dd>
+						</div>
+					</dl>
+				</article>
 			</li>
 		);
 	}

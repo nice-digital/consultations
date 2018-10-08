@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Fragment } from "react";
-import { Route, Switch } from "react-router";
+import { Route, Switch, Redirect } from "react-router";
 import { Helmet } from "react-helmet";
 
 import DocumentViewWithRouter from "../DocumentView/DocumentView";
@@ -11,7 +11,8 @@ import SubmittedWithRouter from "../Submitted/Submitted";
 import UserProviderWithRouter from "../../context/UserContext";
 import FooterWithRouter from "../Footer/Footer";
 import DocumentPreviewWithRouter from "../DocumentPreview/DocumentPreview";
-import AdminWithRouter from "../Admin/Admin";
+import DownloadWithRouter from "../Download/Download";
+import QuestionsWithRouter from "../Questions/Questions";
 import {ErrorBoundary} from "../ErrorBoundary/ErrorBoundary";
 import {LiveAnnouncer, LiveMessenger} from "react-aria-live";
 import { projectInformation } from "../../constants";
@@ -40,8 +41,19 @@ class App extends React.Component<PropsType, StateType> {
 							<Switch>
 
 								{/*Admin Routes*/}
-								<Route path="/admin">
-									<AdminWithRouter />
+								{/*Download*/}
+								<Route exact path="/admin">
+									<Redirect to={"/admin/download"} />
+								</Route>
+
+								{/*Download*/}
+								<Route exact path="/admin/download">
+									<DownloadWithRouter />
+								</Route>
+
+								{/*Questions*/}
+								<Route path="/admin/questions/:consultationId">
+									<QuestionsWithRouter />
 								</Route>
 
 								{/*Document View*/}			
