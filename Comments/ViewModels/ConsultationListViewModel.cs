@@ -21,6 +21,9 @@ namespace Comments.ViewModels
 
 	public class ConsultationListViewModel
 	{
+		//default constructor needed for model binding.
+		public ConsultationListViewModel() {} 
+
 		public ConsultationListViewModel(IEnumerable<ConsultationListRow> consultations, IEnumerable<FilterGroup> filters)
 		{
 			Consultations = consultations;

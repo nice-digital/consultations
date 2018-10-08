@@ -26,7 +26,7 @@ namespace Comments.Test.UnitTests
 		public void ConsultationListPageModelHasConsultationsPopulated()
 		{
 			//Arrange
-			var consultationList = AddConsutationsToList();
+			var consultationList = AddConsultationsToList();
 			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
 
 			//Act
@@ -167,7 +167,7 @@ namespace Comments.Test.UnitTests
 		public void ConsultationListPageModelHasDocumentIdAndChapterSlugPopulatedCorrectly()
 		{
 			//Arrange
-			var consultationList = AddConsutationsToList();
+			var consultationList = AddConsultationsToList();
 			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
 
 			//Act
@@ -182,7 +182,7 @@ namespace Comments.Test.UnitTests
 		public void ConsultationListPageModelHasFilterOptions()
 		{
 			//Arrange
-			var consultationList = AddConsutationsToList();
+			var consultationList = AddConsultationsToList();
 			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
 
 			//Act
@@ -200,7 +200,7 @@ namespace Comments.Test.UnitTests
 		public void ConsultationListPageModelHasFilterOptionOpenSetToSelected()
 		{
 			//Arrange
-			var consultationList = AddConsutationsToList();
+			var consultationList = AddConsultationsToList();
 			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
 			var viewModel = new ConsultationListViewModel(null, null);
 			viewModel.Status = new List<ConsultationStatus>(){ ConsultationStatus.Open };
@@ -212,7 +212,7 @@ namespace Comments.Test.UnitTests
 			updatedViewModel.Filters.First().Options.First(f => f.Id == "Open").IsSelected.ShouldBeTrue();
 		}
 
-		private List<ConsultationList> AddConsutationsToList()
+		private List<ConsultationList> AddConsultationsToList()
 		{
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList
@@ -235,7 +235,7 @@ namespace Comments.Test.UnitTests
 
 		private ConsultationListService AddSubmissions()
 		{
-			var consultationList = AddConsutationsToList();
+			var consultationList = AddConsultationsToList();
 
 			var sourceURI = "consultations://./consultation/123/document/1/chapter/introduction";
 			var userId = Guid.NewGuid();

@@ -28,6 +28,14 @@ using Status = Comments.Models.Status;
 
 namespace Comments.Test.Infrastructure
 {
+	public enum TestUserType
+	{
+		Administrator,
+		IndevUser,
+		Authenticated,
+		NotAuthenticated
+	}
+
     public class TestBase
     {
         protected const string DatabaseName = "testDB";
@@ -51,6 +59,8 @@ namespace Comments.Test.Infrastructure
 	    protected readonly bool _useRealSubmitService = false;
 
 	    protected IEncryption _fakeEncryption;
+
+	    protected TestUserType _testUserType = TestUserType.NotAuthenticated;
 
 		public TestBase(Feed feed) : this()
         {
@@ -76,12 +86,17 @@ namespace Comments.Test.Infrastructure
 		    _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
 		}
 
+	    public TestBase(TestUserType testUserType) : this()
+	    {
+		    _testUserType = testUserType;
+	    }
 
 		public TestBase(bool useRealSubmitService = false)
         {
             // Arrange
             _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
-            _fakeHttpContextAccessor = FakeHttpContextAccessor.Get(_authenticated, _displayName, _userId);
+
+			_fakeHttpContextAccessor = FakeHttpContextAccessor.Get(_authenticated, _displayName, _userId, _testUserType);
 	        _consultationService = new FakeConsultationService();
 	        _useRealSubmitService = useRealSubmitService;
 	        _fakeEncryption = new FakeEncryption();
