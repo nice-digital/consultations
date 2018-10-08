@@ -11,6 +11,7 @@ jq \
     --arg appSettingsEnvironmentName "$APPSETTINGS_ENVIRONMENT_NAME" \
     --arg appSettingsEnvironmentSecureSite "$APPSETTINGS_ENVIRONMENT_SECURESITE" \
     --arg appSettingsEnvironmentRealm "$APPSETTINGS_ENVIRONMENT_REALM" \
+    --arg appSettingsEnvironmentAccountsEnv "$ACCOUNTS_ENVIRONMENT" \
     --arg indevApiKey "$INDEV_APIKEY" \
     --arg indevBasePath "$INDEV_BASEPATH" \
     --arg indevPublishedChapterFeedPath "$INDEV_PUBLISHED_CHAPTER" \
@@ -31,6 +32,7 @@ jq \
     .AppSettings.Environment.Name = $appSettingsEnvironmentName |
     .AppSettings.Environment.SecureSite = $appSettingsEnvironmentSecureSite |
     .AppSettings.Environment.Realm = $appSettingsEnvironmentRealm |
+    .AppSettings.Environment.AccountsEnvironment = $appSettingsEnvironmentAccountsEnv |
     .Feeds.IndevApiKey = $indevApiKey |
     .Feeds.IndevBasePath = $indevBasePath |
     .Feeds.IndevPublishedChapterFeedPath = $indevPublishedChapterFeedPath |
