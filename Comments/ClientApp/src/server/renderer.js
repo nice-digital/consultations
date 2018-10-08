@@ -94,6 +94,7 @@ export const serverRenderer = (params): Promise => {
 					links: helmet.link.toString(),
 					globals: getGlobalsDataHtml(staticContext.globals),
 					scripts: getPreloadedDataHtml(staticContext.preload.data) + helmet.script.toString(),
+					accountsEnvironment: params.data.accountsEnvironment,
 				});
 
 			resolve({html: html, statusCode: staticContext.status || 200});
