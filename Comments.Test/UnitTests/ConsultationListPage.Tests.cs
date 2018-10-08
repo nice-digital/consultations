@@ -26,12 +26,11 @@ namespace Comments.Test.UnitTests
 		public void ConsultationListPageModelHasConsultationsPopulated()
 		{
 			//Arrange
-			var consultationList = new List<ConsultationList>();
-			consultationList.Add(new ConsultationList { ConsultationId = 123 });
+			var consultationList = AddConsutationsToList();
 			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
 
 			//Act
-			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null));
+			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null) { Status = new List<ConsultationStatus>() });
 
 			//Assert
 			viewModel.Consultations.First().ConsultationId.ShouldBe(123);
@@ -54,10 +53,10 @@ namespace Comments.Test.UnitTests
 			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
 
 			//Act
-			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null));
+			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null) { Status = new List<ConsultationStatus>() });
 
 			//Assert
-			viewModel.Consultations.First().Responses.ShouldBe(1);
+			viewModel.Consultations.First().SubmissionCount.ShouldBe(1);
 		}
 
 		[Fact]
@@ -78,10 +77,10 @@ namespace Comments.Test.UnitTests
 			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
 
 			//Act
-			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null));
+			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null) { Status = new List<ConsultationStatus>() });
 
 			//Assert
-			viewModel.Consultations.First().Responses.ShouldBe(2);
+			viewModel.Consultations.First().SubmissionCount.ShouldBe(2);
 		}
 
 
@@ -93,8 +92,6 @@ namespace Comments.Test.UnitTests
 			_context.Database.EnsureCreated();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var userId = Guid.NewGuid();
-			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 
 			var locationId = AddLocation(sourceURI);
 			var commentId = AddComment(locationId, "Just a comment", false, userId, 2);
@@ -106,10 +103,10 @@ namespace Comments.Test.UnitTests
 			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
 
 			//Act
-			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null));
+			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null) { Status = new List<ConsultationStatus>() });
 
 			//Assert
-			viewModel.Consultations.First().Responses.ShouldBe(1);
+			viewModel.Consultations.First().SubmissionCount.ShouldBe(1);
 		}
 
 
@@ -123,7 +120,6 @@ namespace Comments.Test.UnitTests
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var userId = Guid.NewGuid();
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 
 			var locationId = AddLocation(sourceURI);
 			var questionTypeId = AddQuestionType("Question Type ", false, true);
@@ -137,10 +133,10 @@ namespace Comments.Test.UnitTests
 			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
 
 			//Act
-			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null));
+			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null) { Status = new List<ConsultationStatus>() });
 
 			//Assert
-			viewModel.Consultations.First().Responses.ShouldBe(1);
+			viewModel.Consultations.First().SubmissionCount.ShouldBe(1);
 		}
 
 		[Fact]
@@ -161,22 +157,21 @@ namespace Comments.Test.UnitTests
 			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
 
 			//Act
-			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null));
+			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null) { Status = new List<ConsultationStatus>() });
 
 			//Assert
-			viewModel.Consultations.First().Responses.ShouldBe(2);
+			viewModel.Consultations.First().SubmissionCount.ShouldBe(2);
 		}
 
 		[Fact]
 		public void ConsultationListPageModelHasDocumentIdAndChapterSlugPopulatedCorrectly()
 		{
 			//Arrange
-			var consultationList = new List<ConsultationList>();
-			consultationList.Add(new ConsultationList { ConsultationId = 123 });
+			var consultationList = AddConsutationsToList();
 			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
 
 			//Act
-			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null));
+			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null){ Status = new List<ConsultationStatus>() });
 
 			//Assert
 			viewModel.Consultations.First().DocumentId.ShouldBe(1);
@@ -187,12 +182,11 @@ namespace Comments.Test.UnitTests
 		public void ConsultationListPageModelHasFilterOptions()
 		{
 			//Arrange
-			var consultationList = new List<ConsultationList>();
-			consultationList.Add(new ConsultationList { ConsultationId = 123 });
+			var consultationList = AddConsutationsToList();
 			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
 
 			//Act
-			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null));
+			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null){Status = new List<ConsultationStatus>()});
 
 			//Assert
 			var firstFilter = viewModel.Filters.First();
@@ -206,8 +200,7 @@ namespace Comments.Test.UnitTests
 		public void ConsultationListPageModelHasFilterOptionOpenSetToSelected()
 		{
 			//Arrange
-			var consultationList = new List<ConsultationList>();
-			consultationList.Add(new ConsultationList { ConsultationId = 123 });
+			var consultationList = AddConsutationsToList();
 			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
 			var viewModel = new ConsultationListViewModel(null, null);
 			viewModel.Status = new List<ConsultationStatus>(){ ConsultationStatus.Open };
@@ -218,6 +211,110 @@ namespace Comments.Test.UnitTests
 			//Assert
 			updatedViewModel.Filters.First().Options.First(f => f.Id == "Open").IsSelected.ShouldBeTrue();
 		}
+
+		private List<ConsultationList> AddConsutationsToList()
+		{
+			var consultationList = new List<ConsultationList>();
+			consultationList.Add(new ConsultationList
+			{
+				ConsultationId = 123,
+				ConsultationName = "open consultation",
+				StartDate = DateTime.Now.AddDays(-1),
+				EndDate = DateTime.Now.AddDays(1)
+			});
+			consultationList.Add(new ConsultationList()
+			{
+				ConsultationId = 124,
+				ConsultationName = "closed consultation",
+				StartDate = DateTime.Now.AddDays(-3),
+				EndDate = DateTime.Now.AddDays(-2)
+			});
+
+			return consultationList;
+		}
+
+		private ConsultationListService AddSubmissions()
+		{
+			var consultationList = AddConsutationsToList();
+
+			var sourceURI = "consultations://./consultation/123/document/1/chapter/introduction";
+			var userId = Guid.NewGuid();
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
+
+			var locationId = AddLocation(sourceURI);
+			var commentId = AddComment(locationId, "Just a comment", false, userId, 2);
+			var submissionId = AddSubmission(userId);
+			AddSubmissionComments(submissionId, commentId);
+
+			var locationId2 = AddLocation("consultations://./consultation/124/document/1/chapter/introduction");
+			var commentId2 = AddComment(locationId2, "Just a comment", false, userId, 2);
+			var submissionId2 = AddSubmission(userId);
+			AddSubmissionComments(submissionId2, commentId2);
+
+			var consultationListService = new ConsultationListService(consultationContext, new FakeFeedService(consultationList), new FakeConsultationService());
+
+			return consultationListService;
+		}
+
+
+		[Fact]
+		public void ConsultationListPageModel_WithFilterOptionOpenHasCorrectResultCounts()
+		{
+			//Arrange
+			var consultationListService = AddSubmissions();
+			var viewModel = new ConsultationListViewModel(null, null)
+			{
+				Status = new List<ConsultationStatus> {ConsultationStatus.Open}
+			};
+
+			//Act
+			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
+
+			//Assert
+			updatedViewModel.Filters.First().Options.First(f => f.Id == "Open").FilteredResultCount.ShouldBe(1);
+			updatedViewModel.Filters.First().Options.First(f => f.Id == "Open").UnfilteredResultCount.ShouldBe(2);
+		}
+
+
+		[Fact]
+		public void ConsultationListPageModel_WithFilterOptionClosedHasCorrectResultCounts()
+		{
+			//Arrange
+			var consultationListService = AddSubmissions();
+			var viewModel = new ConsultationListViewModel(null, null)
+			{
+				Status = new List<ConsultationStatus> { ConsultationStatus.Closed }
+			};
+
+			//Act
+			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
+
+			//Assert
+			updatedViewModel.Filters.First().Options.First(f => f.Id == "Closed").FilteredResultCount.ShouldBe(1);
+			updatedViewModel.Filters.First().Options.First(f => f.Id == "Closed").UnfilteredResultCount.ShouldBe(2);
+		}
+
+		[Fact]
+		public void ConsultationListPageModel_WithFilterOptionOpenAndClosedHasCorrectResultCounts()
+		{
+			//Arrange
+			var consultationListService = AddSubmissions();
+			var viewModel = new ConsultationListViewModel(null, null)
+			{
+				Status = new List<ConsultationStatus> { ConsultationStatus.Closed, ConsultationStatus.Open }
+			};
+
+			//Act
+			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
+
+			//Assert
+			updatedViewModel.Filters.First().Options.First(f => f.Id == "Open").FilteredResultCount.ShouldBe(1);
+			updatedViewModel.Filters.First().Options.First(f => f.Id == "Open").UnfilteredResultCount.ShouldBe(2);
+			updatedViewModel.Filters.First().Options.First(f => f.Id == "Closed").FilteredResultCount.ShouldBe(1);
+			updatedViewModel.Filters.First().Options.First(f => f.Id == "Closed").UnfilteredResultCount.ShouldBe(2);
+		}
+
 
 		[Fact]
 		public void ConsultationListPageModelHasFilterOptionClosedSetToSelected()

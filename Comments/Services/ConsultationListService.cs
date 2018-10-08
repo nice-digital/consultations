@@ -40,18 +40,18 @@ namespace Comments.Services
 				var sourceURI = ConsultationsUri.CreateConsultationURI(consultation.ConsultationId);
 				var responseCount = _context.GetAllSubmittedResponses(sourceURI);
 				var documentAndChapterSlug =  _consultationService.GetFirstConvertedDocumentAndChapterSlug(consultation.ConsultationId);
-				consultationListRows.Add(new ConsultationListRow(consultation.Title, consultation.StartDate, consultation.EndDate, responseCount, consultation.ConsultationId, documentAndChapterSlug.documentId, documentAndChapterSlug.chapterSlug));
+				consultationListRows.Add(
+					new ConsultationListRow(consultation.Title,
+						consultation.StartDate, consultation.EndDate, responseCount, consultation.ConsultationId,
+						documentAndChapterSlug.documentId, documentAndChapterSlug.chapterSlug, consultation.Reference,
+						consultation.ConsultationType));
 			}
-
-			model.Filters = GetFilterGroups(model.Status);
+			model.Filters = GetFilterGroups(model.Status.ToList(), consultationListRows);
 			model.Consultations = consultationListRows;
 			return model;
-
-			//var filters = AppSettings.ConsultationListConfig.Filters.ToList();
-			//return new ConsultationListViewModel(consultationListRows, filters);
 		}
 
-		private IEnumerable<FilterGroup> GetFilterGroups(IEnumerable<ConsultationStatus> status)
+		private static IEnumerable<FilterGroup> GetFilterGroups(IList<ConsultationStatus> status, List<ConsultationListRow> consultationListRows)
 		{
 			var filters = AppSettings.ConsultationListConfig.Filters.ToList();
 
@@ -59,8 +59,15 @@ namespace Comments.Services
 			var openOption = consultationListFilter.Options.Single(o => o.Id.Equals("Open", StringComparison.OrdinalIgnoreCase));
 			var closedOption = consultationListFilter.Options.Single(o => o.Id.Equals("Closed", StringComparison.OrdinalIgnoreCase));
 
+			//status - open
 			openOption.IsSelected = status != null && status.Contains(ConsultationStatus.Open);
+			openOption.UnfilteredResultCount = consultationListRows.Count;
+			openOption.FilteredResultCount = consultationListRows.Count(c => c.StartDate <= DateTime.UtcNow && c.EndDate > DateTime.UtcNow);
+
+			//status - closed
 			closedOption.IsSelected = status != null && status.Contains(ConsultationStatus.Closed);
+			closedOption.UnfilteredResultCount = consultationListRows.Count;
+			closedOption.FilteredResultCount = consultationListRows.Count(c => c.StartDate > DateTime.UtcNow || c.EndDate < DateTime.UtcNow);
 
 			return filters;
 		}
