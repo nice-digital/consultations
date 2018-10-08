@@ -119,13 +119,17 @@ export const serverRenderer = (params): Promise => {
 			}
 			// In development show a nice YSOD to devs with the error message
 			const error = <Error error={e}/>;
-			const html = processHtml(params.data.originalHtml,
-				{
-					rootContent: renderToString(error),
-					accountsEnvironment: params.data.accountsEnvironment,
-				});
-
-			resolve({html: html, statusCode: 500});
+			let html = params.data.originalHtml;
+			if (typeof(html) !== "undefined"){
+				html = processHtml(params.data.originalHtml,
+					{
+						rootContent: renderToString(error),
+						accountsEnvironment: params.data.accountsEnvironment,
+					});
+			} else{
+				html = renderToString(error);
+			}
+			resolve({html: html, statusCode: staticContext.status || 500});
 		});
 	});
 };
