@@ -10,7 +10,8 @@ namespace Comments.ViewModels
 	public enum ConsultationStatus
 	{
 		Open = 1,
-		Closed = 2
+		Closed = 2,
+		Upcoming = 3,
 	}
 
 	//public enum ReviewSortOrder

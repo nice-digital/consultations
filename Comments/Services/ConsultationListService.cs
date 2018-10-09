@@ -58,18 +58,25 @@ namespace Comments.Services
 			var consultationListFilter = filters.Single(f => f.Id.Equals("Status", StringComparison.OrdinalIgnoreCase));
 			var openOption = consultationListFilter.Options.Single(o => o.Id.Equals("Open", StringComparison.OrdinalIgnoreCase));
 			var closedOption = consultationListFilter.Options.Single(o => o.Id.Equals("Closed", StringComparison.OrdinalIgnoreCase));
+			var upcomingOption = consultationListFilter.Options.Single(o => o.Id.Equals("Upcoming", StringComparison.OrdinalIgnoreCase));
 
 			//status - open
 			openOption.IsSelected = status != null && status.Contains(ConsultationStatus.Open);
 			openOption.UnfilteredResultCount = consultationListRows.Count;
-			openOption.FilteredResultCount = consultationListRows.Count(c => c.StartDate <= DateTime.UtcNow && c.EndDate > DateTime.UtcNow);
+			openOption.FilteredResultCount = consultationListRows.Count(c => c.IsOpen);
 
 			//status - closed
 			closedOption.IsSelected = status != null && status.Contains(ConsultationStatus.Closed);
 			closedOption.UnfilteredResultCount = consultationListRows.Count;
-			closedOption.FilteredResultCount = consultationListRows.Count(c => c.StartDate > DateTime.UtcNow || c.EndDate < DateTime.UtcNow);
+			closedOption.FilteredResultCount = consultationListRows.Count(c => c.IsClosed);
+
+			//status - upcoming
+			upcomingOption.IsSelected = status != null && status.Contains(ConsultationStatus.Upcoming);
+			upcomingOption.UnfilteredResultCount = consultationListRows.Count;
+			upcomingOption.FilteredResultCount = consultationListRows.Count(c => c.IsUpcoming);
 
 			return filters;
 		}
+		
 	}
 }
