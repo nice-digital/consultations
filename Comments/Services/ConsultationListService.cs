@@ -46,8 +46,9 @@ namespace Comments.Services
 						documentAndChapterSlug.documentId, documentAndChapterSlug.chapterSlug, consultation.Reference,
 						consultation.ConsultationType));
 			}
+			
 			model.Filters = GetFilterGroups(model.Status.ToList(), consultationListRows);
-			model.Consultations = consultationListRows;
+			model.Consultations = consultationListRows.OrderByDescending(c => c.EndDate).ToList();
 			return model;
 		}
 
