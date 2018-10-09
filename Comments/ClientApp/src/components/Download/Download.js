@@ -9,13 +9,39 @@ import { Header } from "../Header/Header";
 import { Breadcrumbs } from "../Breadcrumbs/Breadcrumbs";
 import { ConsultationItem } from "./ConsultationItem/ConsultationItem";
 import preload from "../../data/pre-loader";
+import { FilterPanel } from "../FilterPanel/FilterPanel";
+import TestFilters from "./TestFilters.json";
 
-class Download extends Component {
+type StateType = {
+	path: string;
+	consultationsData: any; // todo: return to this
+	hasInitialData: boolean;
+	loading: boolean;
+	error: {
+		hasError: boolean;
+		message: string | null;
+	};
+}
+
+type PropsType = {
+	staticContext: any;
+	match: {
+		params: Object;
+		url: string;
+	};
+	basename: string;
+	location: {
+		pathname: string;
+	}
+}
+
+class Download extends Component<PropsType, StateType> {
 
 	constructor(props) {
 		super(props);
 
 		this.state = {
+			path: "",
 			consultationsData: [],
 			hasInitialData: false,
 			loading: true,
@@ -40,6 +66,7 @@ class Download extends Component {
 
 		if (preloadedConsultations) {
 			this.state = {
+				path: this.props.basename + this.props.location.pathname,
 				consultationsData: preloadedConsultations,
 				loading: false,
 				hasInitialData: true,
@@ -72,7 +99,7 @@ class Download extends Component {
 			},
 		];
 
-		const { loading, hasInitialData, consultationsData } = this.state;
+		const { path, loading, hasInitialData, consultationsData } = this.state;
 
 		if (!hasInitialData) return null;
 
@@ -100,12 +127,18 @@ class Download extends Component {
 									<Header title="Download Responses"/>
 									<div className="grid">
 										<div data-g="12 md:3">
-											<h2 className="h3">Filter</h2>
+											<div className="mt--d">
+												<FilterPanel
+													filters={TestFilters.filters}
+													path={path}/>
+											</div>
 										</div>
 										<div data-g="12 md:9">
-											<h2 className="h3">All consultations</h2>
+											<h2 className="h4">All consultations</h2>
 											<ul className="list--unstyled">
-												{consultationsData.map((item, idx) => <ConsultationItem key={idx} {...item} />)}
+												{consultationsData.map((item, idx) =>
+													<ConsultationItem key={idx} {...item} />
+												)}
 											</ul>
 										</div>
 									</div>

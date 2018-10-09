@@ -1,0 +1,31 @@
+{
+  "filters": [
+    {
+      "id": "Status",
+      "title": "Status",
+      "options": [
+        {
+          "id": "Upcoming",
+          "label": "Upcoming",
+          "isSelected": false,
+          "filteredResultCount": 3,
+          "unfilteredResultCount": 3
+        },
+        {
+          "id": "Open",
+          "label": "Open",
+          "isSelected": false,
+          "filteredResultCount": 3,
+          "unfilteredResultCount": 3
+        },
+        {
+          "id": "Closed",
+          "label": "Closed",
+          "isSelected": false,
+          "filteredResultCount": 3,
+          "unfilteredResultCount": 3
+        }
+      ]
+    }
+  ]
+}
