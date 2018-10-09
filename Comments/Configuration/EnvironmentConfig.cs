@@ -10,6 +10,6 @@ namespace Comments.Configuration
 
         //public bool IsLocal => string.Equals(Name, LocalEnvironmentName, StringComparison.OrdinalIgnoreCase);
 
-	    public string AccountsEnvironment { get; set; }
+	    public string AccountsEnvironment { get; set; } = "Live";
     }
 }
