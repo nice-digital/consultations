@@ -7,10 +7,50 @@ import { UserContext } from "../../context/UserContext";
 import { LoginBanner } from "../LoginBanner/LoginBanner";
 import { Header } from "../Header/Header";
 import { Breadcrumbs } from "../Breadcrumbs/Breadcrumbs";
-import ConsultationSampleData from "./ConsultationSampleData";
 import { ConsultationItem } from "./ConsultationItem/ConsultationItem";
+import preload from "../../data/pre-loader";
 
 class Download extends Component {
+
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			consultationsData: [],
+			hasInitialData: false,
+			loading: true,
+			error: {
+				hasError: false,
+				message: null,
+			},
+		};
+
+		let preloadedData, preloadedConsultations;
+		if (this.props.staticContext && this.props.staticContext.preload) {
+			preloadedData = this.props.staticContext.preload.data;
+		}
+
+		preloadedConsultations = preload(
+			this.props.staticContext,
+			"consultations",
+			[],
+			{...this.props.match.params},
+			preloadedData
+		);
+
+		if (preloadedConsultations) {
+			this.state = {
+				consultationsData: preloadedConsultations,
+				loading: false,
+				hasInitialData: true,
+				error: {
+					hasError: false,
+					message: null,
+				},
+			};
+		}
+
+	}
 
 	render() {
 
@@ -31,6 +71,12 @@ class Download extends Component {
 				localRoute: true,
 			},
 		];
+
+		const { loading, hasInitialData, consultationsData } = this.state;
+
+		if (!hasInitialData) return null;
+
+		if (loading) return <h1>Loading...</h1>;
 
 		return (
 			<UserContext.Consumer>
@@ -54,12 +100,12 @@ class Download extends Component {
 									<Header title="Download Responses"/>
 									<div className="grid">
 										<div data-g="12 md:3">
-											<h2>Filter</h2>
+											<h2 className="h3">Filter</h2>
 										</div>
 										<div data-g="12 md:9">
-											<h2>All consultations</h2>
+											<h2 className="h3">All consultations</h2>
 											<ul className="list--unstyled">
-												{ConsultationSampleData.map((item, idx) => <ConsultationItem key={idx} {...item} />)}
+												{consultationsData.map((item, idx) => <ConsultationItem key={idx} {...item} />)}
 											</ul>
 										</div>
 									</div>
@@ -71,7 +117,6 @@ class Download extends Component {
 			</UserContext.Consumer>
 		);
 	}
-
 }
 
 export default withRouter(Download);

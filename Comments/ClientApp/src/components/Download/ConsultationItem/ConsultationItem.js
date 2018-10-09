@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import Moment from "react-moment";
 import { Link } from "react-router-dom";
 
@@ -7,12 +7,12 @@ export class ConsultationItem extends Component {
 	randomStatus = (responses) => {
 		if (responses < 30) {
 			return <span className="tag tag--flush tag--consultation">Upcoming</span>;
-		} else if (responses > 30 && responses < 60){
+		} else if (responses > 30 && responses < 60) {
 			return <span className="tag tag--flush tag--consultation">Open</span>;
 		}
 		return <span className="tag tag--flush tag--updated">Closed</span>;
 	};
-	
+
 	render() {
 
 		const {
@@ -21,52 +21,83 @@ export class ConsultationItem extends Component {
 			startDate,
 			reference,
 			consultationType,
-			supportsQuestions,
-			supportsComments,
 		} = this.props;
+
+		function status(startDate, endDate) {
+			const now = new Date();
+			startDate = new Date(startDate);
+			endDate = new Date(endDate);
+			if (now < startDate) {
+				return "Upcoming";
+			} else if (now > startDate && now < endDate) {
+				return "Open";
+			}
+			return "Closed";
+		}
+
+		const consultationStatus = status(startDate, endDate);
 
 		// fake data yet to come in
 		const responses = Math.floor(Math.random() * 100);
 		const consultationId = 22;
 		const documentId = 1;
-		
+
 		return (
 			<li className="ConsultationItem">
 				<article className="card">
 					<header className="card__header">
 						<h3 className="card__heading">
-							<Link to={`/${consultationId}/${documentId}`}>{title}</Link>	
+							<Link to={`/${consultationId}/${documentId}`}>{title}</Link>
 						</h3>
 					</header>
 					<dl className="card__metadata">
 						<div className="card__metadatum">
 							<dt className="visually-hidden">Consultation state</dt>
 							<dd>
-								{this.randomStatus(responses)}
+								<span className={`tag tag--${consultationStatus.toLowerCase()}`}>{consultationStatus}</span>
 							</dd>
 						</div>
 						<div className="card__metadatum">
 							<dt className="visually-hidden">Project ID</dt>
-							<dd>
+							<dd title={`Consultation ID ${consultationId}`}>
 								{reference}
 							</dd>
 						</div>
 						<div className="card__metadatum">
+							<dt className="visually-hidden">Consultation Type</dt>
 							<dd>
-								Closes on {" "}
-								<Moment format="D MMMM YYYY" date={endDate}/>
+								{consultationType}
 							</dd>
 						</div>
 						<div className="card__metadatum">
 							<dd>
+								{consultationStatus === "Upcoming" ?
+									<Fragment>
+										Starts on{" "}
+										<strong><Moment format="D MMMM YYYY" date={startDate}/></strong>
+									</Fragment>
+									:
+									<Fragment>
+										Closes on{" "}
+										<strong><Moment format="D MMMM YYYY" date={endDate}/></strong>
+									</Fragment>
+								}
+							</dd>
+						</div>
+						{consultationStatus !== "Upcoming" &&
+						<div className="card__metadatum">
+							<dd>
 								<button
 									className="buttonAsLink"
-									onClick={() => {alert("downloading...")}}
+									onClick={() => {
+										alert("downloading...");
+									}}
 									title="Download responses">
 									Download <strong>{responses}</strong> responses
 								</button>
 							</dd>
 						</div>
+						}
 					</dl>
 				</article>
 			</li>
