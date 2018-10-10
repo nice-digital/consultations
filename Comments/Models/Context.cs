@@ -546,8 +546,8 @@ namespace Comments.Models
 
 	    public (int totalComments, int totalAnswers, int totalSubmissions) GetStatusData()
 	    {
-		    return (totalComments: Comment.IgnoreQueryFilters().Count(),
-			    totalAnswers: Answer.IgnoreQueryFilters().Count(),
+		    return (totalComments: Comment.IgnoreQueryFilters().Count(c => c.IsDeleted == false),
+			    totalAnswers: Answer.IgnoreQueryFilters().Count(a => a.IsDeleted == false),
 			    totalSubmissions: Submission.IgnoreQueryFilters().Count());
 	    }
 	}
