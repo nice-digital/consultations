@@ -83,19 +83,9 @@ class Download extends Component<PropsType, StateType> {
 
 		const fakeLinks = [
 			{
-				label: "Not",
-				url: "/",
-				localRoute: true,
-			},
-			{
-				label: "Real",
-				url: "/",
-				localRoute: true,
-			},
-			{
-				label: "Breadcrumbs",
-				url: "/",
-				localRoute: true,
+				label: "Back to InDev",
+				url: "#",
+				localRoute: false,
 			},
 		];
 
@@ -128,13 +118,14 @@ class Download extends Component<PropsType, StateType> {
 									<div className="grid">
 										<div data-g="12 md:3">
 											<div className="mt--d">
+												<h2 className="h5">Filter</h2>
 												<FilterPanel
 													filters={TestFilters.filters}
 													path={path}/>
 											</div>
 										</div>
 										<div data-g="12 md:9">
-											<h2 className="h4">All consultations</h2>
+											<h2 className="h5">All consultations</h2>
 											<ul className="list--unstyled">
 												{consultationsData.map((item, idx) =>
 													<ConsultationItem key={idx} {...item} />

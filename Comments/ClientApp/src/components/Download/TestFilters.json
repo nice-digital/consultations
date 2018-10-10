@@ -26,6 +26,55 @@
           "unfilteredResultCount": 3
         }
       ]
+    },
+    {
+      "id": "ConsultationType",
+      "title": "Consultation Type",
+      "options": [
+        {
+          "id": "DraftGuidanceConsultation",
+          "label": "Draft Guidance Consultation",
+          "isSelected": false,
+          "filteredResultCount": 3,
+          "unfilteredResultCount": 3
+        },
+        {
+          "id": "AppraisalConsultation",
+          "label": "Appraisal Consultation",
+          "isSelected": false,
+          "filteredResultCount": 5,
+          "unfilteredResultCount": 5
+        },
+        {
+          "id": "ReviewConsultation",
+          "label": "Review Consultation",
+          "isSelected": false,
+          "filteredResultCount": 5,
+          "unfilteredResultCount": 5
+        },
+        {
+          "id": "DraftGuidance",
+          "label": "Draft Guidance",
+          "isSelected": false,
+          "filteredResultCount": 5,
+          "unfilteredResultCount": 5
+        },
+        {
+          "id": "DraftScope",
+          "label": "Draft Scope",
+          "isSelected": false,
+          "filteredResultCount": 5,
+          "unfilteredResultCount": 5
+        },
+        {
+          "id": "AddendumConsultation",
+          "label": "Addendum Consultation",
+          "isSelected": false,
+          "filteredResultCount": 5,
+          "unfilteredResultCount": 5
+        }
+      ]
     }
+
   ]
 }

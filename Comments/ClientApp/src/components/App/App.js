@@ -48,7 +48,7 @@ class App extends React.Component<PropsType, StateType> {
 
 								{/*Download*/}
 								<Route exact path="/admin/download">
-									<DownloadWithRouter />
+									<DownloadWithRouter basename={this.props.basename}/>
 								</Route>
 
 								{/*Questions*/}

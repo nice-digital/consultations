@@ -38,7 +38,6 @@ export class ConsultationItem extends Component {
 		const consultationStatus = status(startDate, endDate);
 
 		// fake data yet to come in
-		const responses = Math.floor(Math.random() * 100);
 		const consultationId = 22;
 		const documentId = 1;
 
@@ -90,10 +89,10 @@ export class ConsultationItem extends Component {
 								<button
 									className="buttonAsLink"
 									onClick={() => {
-										alert("downloading...");
+										alert("Will download...");
 									}}
 									title="Download responses">
-									Download <strong>{responses}</strong> responses
+									Download <strong>{"{quantity}"}</strong> responses
 								</button>
 							</dd>
 						</div>
