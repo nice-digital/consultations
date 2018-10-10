@@ -1,17 +1,17 @@
 namespace Comments.ViewModels
 {
-    public class ReviewFilterOption
+    public class FilterOption
     {
-		public ReviewFilterOption() { }
+		public FilterOption() { }
 
-		public ReviewFilterOption(string id, string label, bool isSelected)
+		public FilterOption(string id, string label, bool isSelected)
 		{
 			Id = id;
 			Label = label;
 			IsSelected = isSelected;
 		}
 
-		public ReviewFilterOption(string id, string label)
+		public FilterOption(string id, string label)
 		{
 			Id = id;
 			Label = label;

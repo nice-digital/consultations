@@ -15,6 +15,7 @@ namespace Comments.Configuration
 		public static EncryptionConfig EncryptionConfig { get; private set; }
 	    public static ReviewConfig ReviewConfig { get; set; }
 	    public static StatusConfig StatusConfig { get; private set; }
+	    public static ConsultationListConfig ConsultationListConfig { get; set; }
 
 		public static void Configure(IServiceCollection services, IConfiguration configuration, string contentRootPath)
         {
@@ -24,6 +25,7 @@ namespace Comments.Configuration
 	        services.Configure<EncryptionConfig>(configuration.GetSection("Encryption"));
 	        services.Configure<ReviewConfig>(configuration.GetSection("Review"));
 	        services.Configure<StatusConfig>(configuration.GetSection("Status"));
+	        services.Configure<ConsultationListConfig>(configuration.GetSection("ConsultationList"));
 
 			var sp = services.BuildServiceProvider();
             Environment = sp.GetService<IOptions<EnvironmentConfig>>().Value;
@@ -33,6 +35,7 @@ namespace Comments.Configuration
 	        EncryptionConfig = sp.GetService<IOptions<EncryptionConfig>>().Value;
 	        ReviewConfig = sp.GetService<IOptions<ReviewConfig>>().Value;
 	        StatusConfig = sp.GetService<IOptions<StatusConfig>>().Value;
+	        ConsultationListConfig = sp.GetService<IOptions<ConsultationListConfig>>().Value;
 		}
     }
 }

@@ -45,9 +45,8 @@ namespace Comments.Models
 		/// </summary>
 		/// <param name="sourceURIs"></param>
 		/// <param name="partialMatchSourceURI">True if data is being retrieved for the review page</param>
-		/// <param name="getSubmitted">True if data is being retrieved should only be submitted data</param>
 		/// <returns></returns>
-		public IEnumerable<Location> GetAllCommentsAndQuestionsForDocument(IList<string> sourceURIs, bool partialMatchSourceURI, bool getSubmitted = false)
+		public IEnumerable<Location> GetAllCommentsAndQuestionsForDocument(IList<string> sourceURIs, bool partialMatchSourceURI)
 		{
 			string partialSourceURIToUse = null, partialMatchExactSourceURIToUse = null;
 		    if (partialMatchSourceURI)
@@ -84,25 +83,36 @@ namespace Comments.Models
 
 				.ToList();
 
-			if (getSubmitted)
-			{
-				var filteredData = data.Where(l =>
-												(l.Comment != null && l.Comment.Count != 0 ? l.Comment.Any(c => c.StatusId == (int)StatusName.Submitted) : false)
-												||
-												(l.Question != null && l.Question.Count != 0 ? l.Question.Any(q => q.Answer.Count() == 0) : false)
-												||
-												(l.Question != null && l.Question.Count != 0 ? l.Question.FirstOrDefault().Answer.Any(c => c.StatusId == (int)StatusName.Submitted) : false)
-											);
-
-				return filteredData;
-			}
-
 			return data;
-			
-			
 		}
 
-	    public List<Comment> GetAllSubmittedCommentsForURI(string  sourceURI)
+	    public int GetAllSubmittedResponses(string sourceURI)
+	    {
+			var submissions = Submission.Where(s => (s.SubmissionComment.Any(sc => sc.Comment.IsDeleted == false) &&
+			                                               s.SubmissionComment.Any(sc => sc.Comment.Location.SourceURI.Contains(sourceURI)) &&
+			                                               s.SubmissionComment.Any(sc => sc.Comment.StatusId == (int) StatusName.Submitted))
+													||
+			                                        (s.SubmissionAnswer.Any(sa => sa.Answer.IsDeleted == false) &&
+															s.SubmissionAnswer.Any(sa => sa.Answer.Question.Location.SourceURI.Contains(sourceURI)) &&
+															s.SubmissionAnswer.Any(sa => sa.Answer.StatusId == (int)StatusName.Submitted))
+												)
+
+				.Include(sc => sc.SubmissionComment)
+					.ThenInclude(c => c.Comment)
+						.ThenInclude(l => l.Location)
+
+				.Include(sa => sa.SubmissionAnswer)
+				.ThenInclude(a => a.Answer)
+					.ThenInclude(q => q.Question)
+						.ThenInclude(l => l.Location)
+						
+				.IgnoreQueryFilters()
+				.Select(s => s.SubmissionId).Distinct().Count();
+
+		    return submissions;
+	    }
+
+		public List<Comment> GetAllSubmittedCommentsForURI(string  sourceURI)
 	    {
 			var comment = Comment.Where(c =>
 					c.StatusId == (int) StatusName.Submitted && c.Location.SourceURI.Contains(sourceURI) && c.IsDeleted == false)

@@ -8,6 +8,6 @@ namespace Comments.Configuration
 {
     public class ReviewConfig
     {
-	    public IEnumerable<ReviewFilterGroup> Filters { get; set; }
+	    public IEnumerable<OptionFilterGroup> Filters { get; set; }
 	}
 }

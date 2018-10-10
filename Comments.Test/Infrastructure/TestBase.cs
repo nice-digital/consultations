@@ -28,6 +28,14 @@ using Status = Comments.Models.Status;
 
 namespace Comments.Test.Infrastructure
 {
+	public enum TestUserType
+	{
+		Administrator,
+		IndevUser,
+		Authenticated,
+		NotAuthenticated
+	}
+
     public class TestBase
     {
         protected const string DatabaseName = "testDB";
@@ -76,35 +84,28 @@ namespace Comments.Test.Infrastructure
 		    _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
 		}
 
+	    public TestBase(TestUserType testUserType, Feed feed) : this(false, testUserType, true)
+	    {
+			FeedToUse = feed;
+		}
 
-		public TestBase(bool useRealSubmitService = false)
+		public TestBase(bool useRealSubmitService = false, TestUserType testUserType = TestUserType.Authenticated, bool useFakeConsultationService = false)
         {
             // Arrange
             _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
-            _fakeHttpContextAccessor = FakeHttpContextAccessor.Get(_authenticated, _displayName, _userId);
+
+			_fakeHttpContextAccessor = FakeHttpContextAccessor.Get(_authenticated, _displayName, _userId, testUserType);
 	        _consultationService = new FakeConsultationService();
 	        _useRealSubmitService = useRealSubmitService;
 	        _fakeEncryption = new FakeEncryption();
 			var databaseName = DatabaseName + Guid.NewGuid();
 
-            //SQLiteConnectionStringBuilder sqLiteConnectionStringBuilder = new SQLiteConnectionStringBuilder()
-            //{	       
-            //    DataSource = "my.db",
-            //};
-
-        // var connection = new SqliteConnection(sqLiteConnectionStringBuilder.ConnectionString); //"Data Source=" + DatabaseName + ";"); //"BinaryGuid=False"); //Version=3;
-        //var connection = new SqliteConnection("DataSource=:memory:");
-
-        //    connection.Open();
-
-            _options = new DbContextOptionsBuilder<ConsultationsContext>()
-                    //.UseSqlite(connection)
-                    .UseInMemoryDatabase(databaseName)
+			_options = new DbContextOptionsBuilder<ConsultationsContext>()
+					.UseInMemoryDatabase(databaseName)
                     .Options;
 
             _context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption);
             _context.Database.EnsureCreatedAsync();
-			
 
 			var builder = new WebHostBuilder()
                 .UseContentRoot("../../../../Comments")
@@ -119,14 +120,14 @@ namespace Comments.Test.Infrastructure
                     services.TryAddTransient<IUserService>(provider => _fakeUserService);
                     services.TryAddTransient<IFeedReaderService>(provider => new FeedReader(FeedToUse));
 
-					if (_useRealSubmitService)
+					if (!_useRealSubmitService)
 	                {
-						//services.TryAddTransient<IConsultationService>(provider => new FakeConsultationService(true));
-					}
-	                else
-					{
 						services.TryAddTransient<ISubmitService>(provider => new FakeSubmitService());
 					}
+	                if (useFakeConsultationService)
+	                {
+		                services.TryAddTransient<IConsultationService>(provider => _consultationService);
+	                }
 				})
                 .Configure(app =>
                 {
@@ -158,8 +159,6 @@ namespace Comments.Test.Infrastructure
 				IndevPublishedDetailFeedPath = "consultation-comments/{0}",
                 IndevListFeedPath = "consultation-comments-list"
             };
-
-			
         }
 
         #region database stuff
@@ -169,10 +168,6 @@ namespace Comments.Test.Infrastructure
             using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
             {
                 context.Database.EnsureDeleted();
-				//context.Database.CloseConnection();
-				//context.Database.OpenConnection();
-
-				//context.Status.AddRange(new List<Status>(2){ new Status("Draft", null, null), new Status("Submitted", null, null)});
 			}
         }
 
