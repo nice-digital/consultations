@@ -22,18 +22,18 @@ namespace Comments.Test.Infrastructure
                     new Claim(ClaimType.Name, displayName, null, "http://consultations.nice.org.uk"),
                     new Claim(ClaimType.NameIdentifier, userId.ToString(), null, "http://consultations.nice.org.uk"),
 	                new Claim(ClaimType.Role, "IndevUser", null, "http://consultations.nice.org.uk"),
-	                new Claim(ClaimType.Role, "Administrator", null, "http://consultations.nice.org.uk")
+	               // new Claim(ClaimType.Role, "Administrator", null, "http://consultations.nice.org.uk")
 			};
-	            //switch (testUserType)
-	            //{
-		           // case TestUserType.IndevUser:
-			          //  claims.Add(new Claim(ClaimType.Role, "IndevUser", null, "http://consultations.nice.org.uk"));
-			          //  break;
-		           // case TestUserType.Administrator:
-			          //  claims.Add(new Claim(ClaimType.Role, "Administrator", null, "http://consultations.nice.org.uk"));
-			          //  break;
-	            //}
-	            context.Setup(r => r.User)
+				switch (testUserType)
+				{
+					case TestUserType.IndevUser:
+						claims.Add(new Claim(ClaimType.Role, "IndevUser", null, "http://consultations.nice.org.uk"));
+						break;
+					case TestUserType.Administrator:
+						claims.Add(new Claim(ClaimType.Role, "Administrator", null, "http://consultations.nice.org.uk"));
+						break;
+				}
+				context.Setup(r => r.User)
                     .Returns(() => new ClaimsPrincipal(new ClaimsIdentity(claims, Constants.DefaultScheme)));
             }
             else

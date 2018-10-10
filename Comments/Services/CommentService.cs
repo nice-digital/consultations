@@ -185,7 +185,7 @@ namespace Comments.Services
 		    return commentsAndQuestions;
 	    }
 
-	    private IEnumerable<FilterGroup> GetFilterGroups(int consultationId, CommentsAndQuestions commentsAndQuestions, IEnumerable<QuestionsOrComments> type, IEnumerable<int> documentIdsToFilter)
+	    private IEnumerable<OptionFilterGroup> GetFilterGroups(int consultationId, CommentsAndQuestions commentsAndQuestions, IEnumerable<QuestionsOrComments> type, IEnumerable<int> documentIdsToFilter)
 	    {
 		    var filters = AppSettings.ReviewConfig.Filters.ToList();
 

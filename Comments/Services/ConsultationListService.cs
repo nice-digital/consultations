@@ -47,16 +47,17 @@ namespace Comments.Services
 						consultation.ConsultationType));
 			}
 			
-			model.Filters = GetFilterGroups(model.Status.ToList(), consultationListRows);
+			model.OptionFilters = GetOptionFilterGroups(model.Status?.ToList(), consultationListRows);
+			model.TextFilters = GeTextFilterGroups(model.Reference, consultationListRows);
 			model.Consultations = consultationListRows.OrderByDescending(c => c.EndDate).ToList();
 			return model;
 		}
 
-		private static IEnumerable<FilterGroup> GetFilterGroups(IList<ConsultationStatus> status, List<ConsultationListRow> consultationListRows)
+		private static IEnumerable<OptionFilterGroup> GetOptionFilterGroups(IList<ConsultationStatus> status, List<ConsultationListRow> consultationListRows)
 		{
-			var filters = AppSettings.ConsultationListConfig.Filters.ToList();
+			var optionFilters = AppSettings.ConsultationListConfig.OptionFilters.ToList();
 
-			var consultationListFilter = filters.Single(f => f.Id.Equals("Status", StringComparison.OrdinalIgnoreCase));
+			var consultationListFilter = optionFilters.Single(f => f.Id.Equals("Status", StringComparison.OrdinalIgnoreCase));
 			var openOption = consultationListFilter.Options.Single(o => o.Id.Equals("Open", StringComparison.OrdinalIgnoreCase));
 			var closedOption = consultationListFilter.Options.Single(o => o.Id.Equals("Closed", StringComparison.OrdinalIgnoreCase));
 			var upcomingOption = consultationListFilter.Options.Single(o => o.Id.Equals("Upcoming", StringComparison.OrdinalIgnoreCase));
@@ -75,8 +76,17 @@ namespace Comments.Services
 			upcomingOption.IsSelected = status != null && status.Contains(ConsultationStatus.Upcoming);
 			upcomingOption.UnfilteredResultCount = consultationListRows.Count;
 			upcomingOption.FilteredResultCount = consultationListRows.Count(c => c.IsUpcoming);
+			return optionFilters;
+		}
 
-			return filters;
+		public List<TextFilterGroup> GeTextFilterGroups(string reference, List<ConsultationListRow> consultationListRows)
+		{
+			var textFilters = AppSettings.ConsultationListConfig.TextFilters.ToList();
+			var referenceFilter = textFilters.Single(f => f.Id.Equals("Reference", StringComparison.OrdinalIgnoreCase));
+			referenceFilter.IsSelected = !string.IsNullOrWhiteSpace(reference);
+			referenceFilter.FilteredResultCount = consultationListRows.Count(c => c.GidReference.IndexOf(reference, StringComparison.OrdinalIgnoreCase) != -1);
+			referenceFilter.UnfilteredResultCount = consultationListRows.Count;
+			return textFilters;
 		}
 		
 	}

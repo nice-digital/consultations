@@ -5,6 +5,8 @@ namespace Comments.Configuration
 {
 	public class ConsultationListConfig
     {
-	    public IEnumerable<FilterGroup> Filters { get; set; }
+	    public IEnumerable<OptionFilterGroup> OptionFilters { get; set; }
+
+	    public IEnumerable<TextFilterGroup> TextFilters { get; set; }
 	}
 }

@@ -6,7 +6,7 @@ namespace Comments.ViewModels
 {
 	public class Consultation
     {
-        public Consultation(NICE.Feeds.Models.Indev.List.ConsultationBase consultation, User user, IEnumerable<BreadcrumbLink> breadcrumbs = null, ConsultationState consultationState = null, IEnumerable<FilterGroup> filters = null)
+        public Consultation(NICE.Feeds.Models.Indev.List.ConsultationBase consultation, User user, IEnumerable<BreadcrumbLink> breadcrumbs = null, ConsultationState consultationState = null, IEnumerable<OptionFilterGroup> filters = null)
         {
             Reference = consultation.Reference;
             Title = consultation.Title;
@@ -81,6 +81,6 @@ namespace Comments.ViewModels
 
 		public IEnumerable<BreadcrumbLink> Breadcrumbs { get; private set; }
 
-	    public IEnumerable<FilterGroup> Filters { get; private set; }
+	    public IEnumerable<OptionFilterGroup> Filters { get; private set; }
 	}
 }

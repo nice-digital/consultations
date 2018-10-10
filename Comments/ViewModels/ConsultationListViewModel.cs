@@ -23,12 +23,13 @@ namespace Comments.ViewModels
 	public class ConsultationListViewModel
 	{
 		//default constructor needed for model binding.
-		public ConsultationListViewModel() {} 
+		public ConsultationListViewModel() {}
 
-		public ConsultationListViewModel(IEnumerable<ConsultationListRow> consultations, IEnumerable<FilterGroup> filters)
+		public ConsultationListViewModel(IEnumerable<ConsultationListRow> consultations, IEnumerable<OptionFilterGroup> optionFilters, IEnumerable<TextFilterGroup> textFilters)
 		{
 			Consultations = consultations;
-			Filters = filters;
+			OptionFilters = optionFilters;
+			TextFilters = textFilters;
 		}
 
 		public IEnumerable<ConsultationListRow> Consultations{ get; set; }
@@ -36,7 +37,9 @@ namespace Comments.ViewModels
 		/// <summary>
 		/// This property is initialised from appsettings.json, then it gets updated in CommentService with documents and the counts are updated.
 		/// </summary>
-		public IEnumerable<FilterGroup> Filters { get; set; }
+		public IEnumerable<OptionFilterGroup> OptionFilters { get; set; }
+
+		public IEnumerable<TextFilterGroup> TextFilters { get; set; }
 
 
 		#region Filter options from the check boxes
@@ -49,7 +52,7 @@ namespace Comments.ViewModels
 			set;
 		}
 
-		//public IEnumerable<int> Document { get; set; }
+		public string Reference { get; set; }
 
 		//[JsonConverter(typeof(StringEnumConverter))]
 		//public ReviewSortOrder Sort { get; set; } = ReviewSortOrder.DocumentAsc;

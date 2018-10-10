@@ -20,14 +20,14 @@ namespace Comments.Test.IntegrationTests.API.Review
     {
 	    private static ReviewConfig GetTestReviewConfig()
 	    {
-		    return new ReviewConfig() { Filters = new List<FilterGroup>()
+		    return new ReviewConfig() { Filters = new List<OptionFilterGroup>()
 		    {
-				new FilterGroup(){ Id = "Type", Title = "Response type", Options = new List<FilterOption>()
+				new OptionFilterGroup(){ Id = "Type", Title = "Response type", Options = new List<FilterOption>()
 				{
 					new FilterOption("Questions", "Questions"),
 					new FilterOption("Comments", "Comments"),
 				}},
-				new FilterGroup(){Id =  "Document", Title = "Document", Options = new List<FilterOption>()}
+				new OptionFilterGroup(){Id =  "Document", Title = "Document", Options = new List<FilterOption>()}
 		    } };
 		}
 

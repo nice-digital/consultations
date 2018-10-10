@@ -19,12 +19,12 @@ namespace Comments.Test.IntegrationTests.API.ConsultationList
 			//var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
 
 			// Act
-			//var response = await _client.GetAsync("/consultations/api/ConsultationList?Status=Open");
-   //         response.EnsureSuccessStatusCode();
-   //         var responseString = await response.Content.ReadAsStringAsync();
+			var response = await _client.GetAsync("/consultations/api/ConsultationList?Status=Open");
+            response.EnsureSuccessStatusCode();
+            var responseString = await response.Content.ReadAsStringAsync();
 
-   //         // Assert
-   //         responseString.ShouldMatchApproved();
+            // Assert
+            responseString.ShouldMatchApproved();
         }
 	}
 }
