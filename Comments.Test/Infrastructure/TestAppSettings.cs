@@ -1,6 +1,7 @@
 using Comments.Configuration;
 using Comments.ViewModels;
 using System.Collections.Generic;
+using Comments.Common;
 
 namespace Comments.Test.Infrastructure
 {
@@ -19,7 +20,7 @@ namespace Comments.Test.Infrastructure
 						new FilterOption("Upcoming", "Upcoming"),
 					}}
 				},
-				TextFilters = new List<TextFilterGroup> { new TextFilterGroup() { Id = "Keyword", Title = "Keyword" } }
+				TextFilters = new List<TextFilterGroup> { new TextFilterGroup() { Id = Constants.AppSettings.Keyword, Title = Constants.AppSettings.Keyword } }
 			};
 		}
 	}
