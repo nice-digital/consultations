@@ -11,10 +11,15 @@ import { ConsultationItem } from "./ConsultationItem/ConsultationItem";
 import preload from "../../data/pre-loader";
 import { FilterPanel } from "../FilterPanel/FilterPanel";
 import TestFilters from "./TestFilters.json";
+import { load } from "../../data/loader";
 
 type StateType = {
 	path: string;
-	consultationsData: any; // todo: return to this
+	consultationListData: {
+		consultations: [],
+		optionFilters: [],
+		textFilters: [],
+	}; // todo: return to this
 	hasInitialData: boolean;
 	loading: boolean;
 	error: {
@@ -42,7 +47,7 @@ class Download extends Component<PropsType, StateType> {
 
 		this.state = {
 			path: "",
-			consultationsData: [],
+			consultationListData: [],
 			hasInitialData: false,
 			loading: true,
 			error: {
@@ -58,16 +63,16 @@ class Download extends Component<PropsType, StateType> {
 
 		preloadedConsultations = preload(
 			this.props.staticContext,
-			"consultations",
+			"consultationList",
 			[],
-			{...this.props.match.params},
+			{},
 			preloadedData
 		);
 
 		if (preloadedConsultations) {
 			this.state = {
 				path: this.props.basename + this.props.location.pathname,
-				consultationsData: preloadedConsultations,
+				consultationListData: preloadedConsultations,
 				loading: false,
 				hasInitialData: true,
 				error: {
@@ -77,6 +82,25 @@ class Download extends Component<PropsType, StateType> {
 			};
 		}
 
+	}
+
+	componentDidMount() {
+		if (!this.state.hasInitialData) {
+			load("consultationsList")
+				.then(response => {
+					this.setState({
+						consultationListData: response.data,
+					});
+				})
+				.catch(err => {
+					this.setState({
+						error: {
+							hasError: true,
+							message: "consultationsList error  " + err,
+						},
+					});
+				});
+		}
 	}
 
 	render() {
@@ -89,7 +113,9 @@ class Download extends Component<PropsType, StateType> {
 			},
 		];
 
-		const { path, loading, hasInitialData, consultationsData } = this.state;
+		const {path, loading, hasInitialData, consultationListData} = this.state;
+
+		const consultations = consultationListData.consultations;
 
 		if (!hasInitialData) return null;
 
@@ -127,7 +153,7 @@ class Download extends Component<PropsType, StateType> {
 										<div data-g="12 md:9">
 											<h2 className="h5">All consultations</h2>
 											<ul className="list--unstyled">
-												{consultationsData.map((item, idx) =>
+												{consultations.map((item, idx) =>
 													<ConsultationItem key={idx} {...item} />
 												)}
 											</ul>

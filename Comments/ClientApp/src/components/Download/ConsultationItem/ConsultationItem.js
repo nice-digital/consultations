@@ -17,49 +17,47 @@ export class ConsultationItem extends Component {
 
 		const {
 			title,
-			endDate,
 			startDate,
-			reference,
+			endDate,
+			submissionCount,
+			consultationId,
+			documentId,
+			chapterSlug,
+			gidReference,
 			consultationType,
+			isOpen,
+			isClosed,
+			isUpcoming,
 		} = this.props;
 
-		function status(startDate, endDate) {
-			const now = new Date();
-			startDate = new Date(startDate);
-			endDate = new Date(endDate);
-			if (now < startDate) {
-				return "Upcoming";
-			} else if (now > startDate && now < endDate) {
-				return "Open";
-			}
-			return "Closed";
-		}
+		const status = (isOpen, isClosed, isUpcoming) => {
+			if (isOpen) return "Open";
+			if (isClosed) return "Closed";
+			if (isUpcoming) return "Upcoming";
+			return "?";
+		};
 
-		const consultationStatus = status(startDate, endDate);
-
-		// fake data yet to come in
-		const consultationId = 22;
-		const documentId = 1;
+		const constultationStatus = status(isOpen, isClosed, isUpcoming);
 
 		return (
 			<li className="ConsultationItem">
 				<article className="card">
 					<header className="card__header">
 						<h3 className="card__heading">
-							<Link to={`/${consultationId}/${documentId}`}>{title}</Link>
+							<Link to={`/${consultationId}/${documentId}/${chapterSlug}`}>{title}</Link>
 						</h3>
 					</header>
 					<dl className="card__metadata">
 						<div className="card__metadatum">
 							<dt className="visually-hidden">Consultation state</dt>
 							<dd>
-								<span className={`tag tag--${consultationStatus.toLowerCase()}`}>{consultationStatus}</span>
+								<span className={`tag tag--${constultationStatus.toLowerCase()}`}>{constultationStatus}</span>
 							</dd>
 						</div>
 						<div className="card__metadatum">
 							<dt className="visually-hidden">Project ID</dt>
 							<dd title={`Consultation ID ${consultationId}`}>
-								{reference}
+								{gidReference}
 							</dd>
 						</div>
 						<div className="card__metadatum">
@@ -70,7 +68,7 @@ export class ConsultationItem extends Component {
 						</div>
 						<div className="card__metadatum">
 							<dd>
-								{consultationStatus === "Upcoming" ?
+								{constultationStatus === "Upcoming" ?
 									<Fragment>
 										Starts on{" "}
 										<strong><Moment format="D MMMM YYYY" date={startDate}/></strong>
@@ -83,7 +81,7 @@ export class ConsultationItem extends Component {
 								}
 							</dd>
 						</div>
-						{consultationStatus !== "Upcoming" &&
+						{constultationStatus !== "Upcoming" &&
 						<div className="card__metadatum">
 							<dd>
 								<button
@@ -92,7 +90,7 @@ export class ConsultationItem extends Component {
 										alert("Will download...");
 									}}
 									title="Download responses">
-									Download <strong>{"{quantity}"}</strong> responses
+									Download <strong>{submissionCount}</strong> responses
 								</button>
 							</dd>
 						</div>
@@ -103,34 +101,3 @@ export class ConsultationItem extends Component {
 		);
 	}
 }
-
-//  {
-//     "reference": "GID-NG10109",
-//     "title": "Consultation Comments Test project (Numbered Paragraphs )",
-//     "consultationName": "Draft guidance consultation",
-//     "startDate": "2018-07-02T00:00:00",
-//     "endDate": "2056-12-24T17:00:00",
-//     "consultationType": "Draft guidance consultation",
-//     "resourceTitleId": null,
-//     "projectType": "NG",
-//     "productTypeName": "NICE guideline",
-//     "developedAs": null,
-//     "relevantTo": null,
-//     "consultationId": 22,
-//     "process": "NG",
-//     "hasDocumentsWhichAllowConsultationComments": false,
-//     "hasDocumentsWhichAllowConsultationQuestions": true,
-//     "supportsQuestions": true,
-//     "supportsComments": true,
-//     "partiallyUpdatedProjectReference": null,
-//     "origProjectReference": null,
-//     "user": {
-//       "isAuthorised": false,
-//       "displayName": null,
-//       "userId": null,
-//       "organisationName": null
-//     },
-//     "consultationState": null,
-//     "breadcrumbs": null,
-//     "filters": null
-//   }
