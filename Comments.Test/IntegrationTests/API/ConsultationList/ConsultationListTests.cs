@@ -1,5 +1,6 @@
 using Comments.Test.Infrastructure;
 using System.Threading.Tasks;
+using Comments.Configuration;
 using Comments.Services;
 using NICE.Feeds.Tests.Infrastructure;
 using Xunit;
@@ -9,15 +10,15 @@ namespace Comments.Test.IntegrationTests.API.ConsultationList
 {
 	public class ConsultationListTests : TestBase
     {
-        public ConsultationListTests() : base(TestUserType.Administrator, Feed.ConsultationCommentsPublishedDetailMulitpleDoc) { }
+	    public ConsultationListTests() : base(TestUserType.Administrator, Feed.ConsultationCommentsListMultiple)
+	    {
+			AppSettings.ConsultationListConfig = TestAppSettings.GetConsultationListConfig();
+		}
 
         [Fact]
         public async Task Get_Consultation_Feed_Returns_Populated_Feed()
         {
 			//Arrange
-			//TODO: finish this
-			//var consultationList = AddConsultationsToList();
-			//var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
 
 			// Act
 			var response = await _client.GetAsync("/consultations/api/ConsultationList?Status=Open");

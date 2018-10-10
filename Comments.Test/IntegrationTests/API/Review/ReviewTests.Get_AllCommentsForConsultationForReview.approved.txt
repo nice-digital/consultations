@@ -198,8 +198,6 @@
     },
     "filters":[
         {
-            "id":"Type",
-            "title":"Response type",
             "options":[
                 {
                     "id":"Questions",
@@ -215,11 +213,11 @@
                     "filteredResultCount":2,
                     "unfilteredResultCount":2
                 }
-            ]
+            ],
+            "id":"Type",
+            "title":"Response type"
         },
         {
-            "id":"Document",
-            "title":"Document",
             "options":[
                 {
                     "id":"2",
@@ -235,7 +233,9 @@
                     "filteredResultCount":0,
                     "unfilteredResultCount":0
                 }
-            ]
+            ],
+            "id":"Document",
+            "title":"Document"
         }
     ],
     "organisationName":null,

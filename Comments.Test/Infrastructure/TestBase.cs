@@ -84,12 +84,12 @@ namespace Comments.Test.Infrastructure
 		    _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
 		}
 
-	    public TestBase(TestUserType testUserType, Feed feed) : this(false, testUserType)
+	    public TestBase(TestUserType testUserType, Feed feed) : this(false, testUserType, true)
 	    {
 			FeedToUse = feed;
 		}
 
-		public TestBase(bool useRealSubmitService = false, TestUserType testUserType = TestUserType.Authenticated)
+		public TestBase(bool useRealSubmitService = false, TestUserType testUserType = TestUserType.Authenticated, bool useFakeConsultationService = false)
         {
             // Arrange
             _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
@@ -124,6 +124,10 @@ namespace Comments.Test.Infrastructure
 	                {
 						services.TryAddTransient<ISubmitService>(provider => new FakeSubmitService());
 					}
+	                if (useFakeConsultationService)
+	                {
+		                services.TryAddTransient<IConsultationService>(provider => _consultationService);
+	                }
 				})
                 .Configure(app =>
                 {

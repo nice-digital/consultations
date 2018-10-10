@@ -19,7 +19,7 @@ namespace Comments.Test.UnitTests
 	{
 		public ConsultationListPageTests() : base(null)
 		{
-			AppSettings.ConsultationListConfig = GetConsultationListConfig();
+			AppSettings.ConsultationListConfig = TestAppSettings.GetConsultationListConfig();
 		}
 
 		[Fact]
@@ -378,23 +378,6 @@ namespace Comments.Test.UnitTests
 
 			//Assert
 			updatedViewModel.TextFilters.First(f => f.Id == "Reference").IsSelected.ShouldBeFalse();
-		}
-
-		private static ConsultationListConfig GetConsultationListConfig()
-		{
-			return new ConsultationListConfig()
-			{
-				OptionFilters = new List<OptionFilterGroup>
-				{
-					new OptionFilterGroup{ Id = "Status", Title = "Status", Options = new List<FilterOption>()
-					{
-						new FilterOption("Open", "Open"),
-						new FilterOption("Closed", "Closed"),
-						new FilterOption("Upcoming", "Upcoming"),
-					}}
-				},
-				TextFilters = new List<TextFilterGroup>{ new TextFilterGroup() { Id = "Reference", Title = "Reference" }}
-			};
 		}
 
 		private List<ConsultationList> AddConsultationsToList()

@@ -48,7 +48,7 @@ namespace Comments.Services
 			}
 			
 			model.OptionFilters = GetOptionFilterGroups(model.Status?.ToList(), consultationListRows);
-			model.TextFilters = GeTextFilterGroups(model.Reference, consultationListRows);
+			model.TextFilters = GetTextFilterGroups(model.Reference, consultationListRows);
 			model.Consultations = consultationListRows.OrderByDescending(c => c.EndDate).ToList();
 			return model;
 		}
@@ -79,13 +79,14 @@ namespace Comments.Services
 			return optionFilters;
 		}
 
-		public List<TextFilterGroup> GeTextFilterGroups(string reference, List<ConsultationListRow> consultationListRows)
+		public List<TextFilterGroup> GetTextFilterGroups(string reference, List<ConsultationListRow> consultationListRows)
 		{
 			var textFilters = AppSettings.ConsultationListConfig.TextFilters.ToList();
 			var referenceFilter = textFilters.Single(f => f.Id.Equals("Reference", StringComparison.OrdinalIgnoreCase));
 			referenceFilter.IsSelected = !string.IsNullOrWhiteSpace(reference);
-			referenceFilter.FilteredResultCount = consultationListRows.Count(c => c.GidReference.IndexOf(reference, StringComparison.OrdinalIgnoreCase) != -1);
-			referenceFilter.UnfilteredResultCount = consultationListRows.Count;
+			var unfilteredCount = consultationListRows.Count;
+			referenceFilter.FilteredResultCount = string.IsNullOrWhiteSpace(reference) ? unfilteredCount : consultationListRows.Count(c => c.GidReference.IndexOf(reference, StringComparison.OrdinalIgnoreCase) != -1);
+			referenceFilter.UnfilteredResultCount = unfilteredCount;
 			return textFilters;
 		}
 		
