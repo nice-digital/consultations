@@ -1,6 +1,7 @@
 using Comments.Test.Infrastructure;
 using System.Threading.Tasks;
 using Comments.Services;
+using NICE.Feeds.Tests.Infrastructure;
 using Xunit;
 using TestBase = Comments.Test.Infrastructure.TestBase;
 
@@ -8,7 +9,7 @@ namespace Comments.Test.IntegrationTests.API.ConsultationList
 {
 	public class ConsultationListTests : TestBase
     {
-        public ConsultationListTests() : base(TestUserType.Administrator) { }
+        public ConsultationListTests() : base(TestUserType.Administrator, Feed.ConsultationCommentsPublishedDetailMulitpleDoc) { }
 
         [Fact]
         public async Task Get_Consultation_Feed_Returns_Populated_Feed()

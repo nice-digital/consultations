@@ -23,7 +23,7 @@ namespace Comments.Test.Infrastructure
                     new Claim(ClaimType.NameIdentifier, userId.ToString(), null, "http://consultations.nice.org.uk"),
 	                new Claim(ClaimType.Role, "IndevUser", null, "http://consultations.nice.org.uk"),
 	               // new Claim(ClaimType.Role, "Administrator", null, "http://consultations.nice.org.uk")
-			};
+				};
 				switch (testUserType)
 				{
 					case TestUserType.IndevUser:

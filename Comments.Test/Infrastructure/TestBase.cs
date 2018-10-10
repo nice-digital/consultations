@@ -60,8 +60,6 @@ namespace Comments.Test.Infrastructure
 
 	    protected IEncryption _fakeEncryption;
 
-	    protected TestUserType _testUserType = TestUserType.NotAuthenticated;
-
 		public TestBase(Feed feed) : this()
         {
             FeedToUse = feed;
@@ -86,17 +84,17 @@ namespace Comments.Test.Infrastructure
 		    _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
 		}
 
-	    public TestBase(TestUserType testUserType) : this()
+	    public TestBase(TestUserType testUserType, Feed feed) : this(false, testUserType)
 	    {
-		    _testUserType = testUserType;
-	    }
+			FeedToUse = feed;
+		}
 
-		public TestBase(bool useRealSubmitService = false)
+		public TestBase(bool useRealSubmitService = false, TestUserType testUserType = TestUserType.Authenticated)
         {
             // Arrange
             _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
 
-			_fakeHttpContextAccessor = FakeHttpContextAccessor.Get(_authenticated, _displayName, _userId, _testUserType);
+			_fakeHttpContextAccessor = FakeHttpContextAccessor.Get(_authenticated, _displayName, _userId, testUserType);
 	        _consultationService = new FakeConsultationService();
 	        _useRealSubmitService = useRealSubmitService;
 	        _fakeEncryption = new FakeEncryption();
