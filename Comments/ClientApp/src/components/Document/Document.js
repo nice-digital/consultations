@@ -7,12 +7,10 @@ import objectHash from "object-hash";
 
 import preload from "../../data/pre-loader";
 import { load } from "./../../data/loader";
-import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
 import BreadCrumbsWithRouter from "./../Breadcrumbs/Breadcrumbs";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
 import { tagManager } from "../../helpers/tag-manager";
-import { projectInformation } from "../../constants";
 import { ProcessDocumentHtml } from "../../document-processing/ProcessDocumentHtml";
 import { LoginBanner } from "./../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
@@ -438,10 +436,6 @@ export class Document extends Component<PropsType, StateType> {
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">
-							<PhaseBanner
-								phase={projectInformation.phase}
-								name={projectInformation.name}
-							/>
 							<BreadCrumbsWithRouter links={this.state.consultationData.breadcrumbs}/>
 							<main role="main">
 								<div className="page-header">
