@@ -10,15 +10,14 @@ import { Breadcrumbs } from "../Breadcrumbs/Breadcrumbs";
 import { ConsultationItem } from "./ConsultationItem/ConsultationItem";
 import preload from "../../data/pre-loader";
 import { FilterPanel } from "../FilterPanel/FilterPanel";
-import TestFilters from "./TestFilters.json";
 import { load } from "../../data/loader";
 
 type StateType = {
 	path: string;
 	consultationListData: any | {
-		consultations: [],
-		optionFilters: [],
-		textFilters: [],
+		consultations: any,
+		optionFilters: any,
+		textFilters: any,
 	};
 	hasInitialData: boolean;
 	loading: boolean;
@@ -122,6 +121,8 @@ class Download extends Component<PropsType, StateType> {
 
 		const consultations = consultationListData.consultations;
 
+		const filters = consultationListData.optionFilters;
+
 		if (!hasInitialData) return null;
 
 		if (loading) return <h1>Loading...</h1>;
@@ -148,12 +149,25 @@ class Download extends Component<PropsType, StateType> {
 									<Header title="Download Responses"/>
 									<div className="grid">
 										<div data-g="12 md:3">
-											<div className="mt--d">
-												<h2 className="h5">Filter</h2>
-												<FilterPanel
-													filters={TestFilters.filters}
-													path={path}/>
-											</div>
+											<h2 className="h5">Filter</h2>
+
+											{this.state.consultationListData.textFilters
+												.map((item, idx) => {
+													return (
+														<Fragment key={idx}>
+															<p>{item.title}</p>
+															<input type="text"/>
+															<submit className="btn btn--cta">
+																Search
+															</submit>
+														</Fragment>
+													);
+												})
+											}
+
+											<FilterPanel
+												filters={filters}
+												path={path}/>
 										</div>
 										<div data-g="12 md:9">
 											<h2 className="h5">All consultations</h2>

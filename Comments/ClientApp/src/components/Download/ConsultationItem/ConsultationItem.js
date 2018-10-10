@@ -84,14 +84,13 @@ export class ConsultationItem extends Component {
 						{constultationStatus !== "Upcoming" &&
 						<div className="card__metadatum">
 							<dd>
-								<button
-									className="buttonAsLink"
-									onClick={() => {
-										alert("Will download...");
-									}}
-									title="Download responses">
-									Download <strong>{submissionCount}</strong> responses
-								</button>
+								{submissionCount > 0 ?
+									<button className="buttonAsLink">
+										Download <strong>{submissionCount}</strong> responses
+									</button>
+									:
+									<span>No responses</span>
+								}
 							</dd>
 						</div>
 						}
