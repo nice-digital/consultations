@@ -76,6 +76,7 @@ services:
       - GILLIAM_REALM
       - ENCRYPTION_KEY
       - ENCRYPTION_IV
+      - ACCOUNTS_ENVIRONMENT
 
 
   # MS SQL Server database
