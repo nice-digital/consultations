@@ -19,7 +19,7 @@ namespace Comments.Test.Infrastructure
 						new FilterOption("Upcoming", "Upcoming"),
 					}}
 				},
-				TextFilters = new List<TextFilterGroup> { new TextFilterGroup() { Id = "Reference", Title = "Reference" } }
+				TextFilters = new List<TextFilterGroup> { new TextFilterGroup() { Id = "Keyword", Title = "Keyword" } }
 			};
 		}
 	}

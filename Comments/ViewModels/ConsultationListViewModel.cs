@@ -52,7 +52,7 @@ namespace Comments.ViewModels
 			set;
 		}
 
-		public string Reference { get; set; }
+		public string Keyword { get; set; }
 
 		//[JsonConverter(typeof(StringEnumConverter))]
 		//public ReviewSortOrder Sort { get; set; } = ReviewSortOrder.DocumentAsc;

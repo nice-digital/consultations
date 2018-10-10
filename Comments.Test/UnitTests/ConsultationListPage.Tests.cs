@@ -331,15 +331,15 @@ namespace Comments.Test.UnitTests
 			var consultationListService = GetConsultationListService();
 			var viewModel = new ConsultationListViewModel(null, null, null)
 			{
-				Reference = "GID-1"
+				Keyword = "GID-1"
 			};
 
 			//Act
 			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
 
 			//Assert
-			updatedViewModel.TextFilters.First(f => f.Id == "Reference").FilteredResultCount.ShouldBe(1);
-			updatedViewModel.TextFilters.First(f => f.Id == "Reference").UnfilteredResultCount.ShouldBe(3);
+			updatedViewModel.TextFilters.First(f => f.Id == Constants.AppSettings.Keyword).FilteredResultCount.ShouldBe(1);
+			updatedViewModel.TextFilters.First(f => f.Id == Constants.AppSettings.Keyword).UnfilteredResultCount.ShouldBe(3);
 		}
 
 		[Fact]
@@ -349,15 +349,15 @@ namespace Comments.Test.UnitTests
 			var consultationListService = GetConsultationListService();
 			var viewModel = new ConsultationListViewModel(null, null, null)
 			{
-				Reference = "gid"
+				Keyword = "gid"
 			};
 
 			//Act
 			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
 
 			//Assert
-			updatedViewModel.TextFilters.First(f => f.Id == "Reference").FilteredResultCount.ShouldBe(3);
-			updatedViewModel.TextFilters.First(f => f.Id == "Reference").UnfilteredResultCount.ShouldBe(3);
+			updatedViewModel.TextFilters.First(f => f.Id == Constants.AppSettings.Keyword).FilteredResultCount.ShouldBe(3);
+			updatedViewModel.TextFilters.First(f => f.Id == Constants.AppSettings.Keyword).UnfilteredResultCount.ShouldBe(3);
 		}
 
 		[Theory]
@@ -370,15 +370,52 @@ namespace Comments.Test.UnitTests
 			var consultationListService = GetConsultationListService();
 			var viewModel = new ConsultationListViewModel(null, null, null)
 			{
-				Reference = reference
+				Keyword = reference
 			};
 
 			//Act
 			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
 
 			//Assert
-			updatedViewModel.TextFilters.First(f => f.Id == "Reference").IsSelected.ShouldBeFalse();
+			updatedViewModel.TextFilters.First(f => f.Id == Constants.AppSettings.Keyword).IsSelected.ShouldBeFalse();
 		}
+
+		[Fact]
+		public void ConsultationListPageModel_WithFilterReferenceTextSetToPartialTitle()
+		{
+			//Arrange
+			var consultationListService = GetConsultationListService();
+			var viewModel = new ConsultationListViewModel(null, null, null)
+			{
+				Keyword = "consultation title"
+			};
+
+			//Act
+			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
+
+			//Assert
+			updatedViewModel.TextFilters.First(f => f.Id == Constants.AppSettings.Keyword).FilteredResultCount.ShouldBe(3);
+			updatedViewModel.TextFilters.First(f => f.Id == Constants.AppSettings.Keyword).UnfilteredResultCount.ShouldBe(3);
+		}
+
+		[Fact]
+		public void ConsultationListPageModel_WithFilterReferenceTextSetToSpecificTitle()
+		{
+			//Arrange
+			var consultationListService = GetConsultationListService();
+			var viewModel = new ConsultationListViewModel(null, null, null)
+			{
+				Keyword = "consultation title 1"
+			};
+
+			//Act
+			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
+
+			//Assert
+			updatedViewModel.TextFilters.First(f => f.Id == Constants.AppSettings.Keyword).FilteredResultCount.ShouldBe(1);
+			updatedViewModel.TextFilters.First(f => f.Id == Constants.AppSettings.Keyword).UnfilteredResultCount.ShouldBe(3);
+		}
+
 
 		private List<ConsultationList> AddConsultationsToList()
 		{
@@ -389,7 +426,8 @@ namespace Comments.Test.UnitTests
 				ConsultationName = "open consultation",
 				StartDate = DateTime.Now.AddDays(-1),
 				EndDate = DateTime.Now.AddDays(1),
-				Reference = "GID-1"
+				Reference = "GID-1",
+				Title = "Consultation title 1"
 			});
 			consultationList.Add(new ConsultationList()
 			{
@@ -397,7 +435,8 @@ namespace Comments.Test.UnitTests
 				ConsultationName = "closed consultation",
 				StartDate = DateTime.Now.AddDays(-3),
 				EndDate = DateTime.Now.AddDays(-2),
-				Reference = "GID-2"
+				Reference = "GID-2",
+				Title = "Consultation Title 2"
 			});
 			consultationList.Add(new ConsultationList()
 			{
@@ -405,7 +444,8 @@ namespace Comments.Test.UnitTests
 				ConsultationName = "upcoming consultation",
 				StartDate = DateTime.Now.AddDays(3),
 				EndDate = DateTime.Now.AddDays(5),
-				Reference = "GID-3"
+				Reference = "GID-3",
+				Title = "Consultation Title 3"
 			});
 
 			return consultationList;

@@ -64,12 +64,12 @@
             "isSelected":false,
             "filteredResultCount":2,
             "unfilteredResultCount":2,
-            "id":"Reference",
-            "title":"Reference"
+            "id":"Keyword",
+            "title":"Keyword"
         }
     ],
     "status":[
         "Open"
     ],
-    "reference":null
+    "keyword":null
 }
