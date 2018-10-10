@@ -17,7 +17,6 @@ exports[`[ClientApp]  Header  should display correctly when consulation has ende
     <t
       ago={false}
       calendar={false}
-      date="1994-11-05T08:15:30-05:00"
       decimal={false}
       element="time"
       filter={[Function]}
@@ -35,7 +34,6 @@ exports[`[ClientApp]  Header  should display correctly when consulation has ende
     <t
       ago={false}
       calendar={false}
-      date="1994-11-05T08:15:30-05:00"
       decimal={false}
       element="time"
       filter={[Function]}
@@ -67,12 +65,11 @@ exports[`[ClientApp]  Header  should display correctly when consulation hasn't s
     className="page-header__lead mb--d"
   >
     This consultation 
-    starts
+    ended
      on 
     <t
       ago={false}
       calendar={false}
-      date="1994-11-05T08:15:30-05:00"
       decimal={false}
       element="time"
       filter={[Function]}
@@ -90,7 +87,6 @@ exports[`[ClientApp]  Header  should display correctly when consulation hasn't s
     <t
       ago={false}
       calendar={false}
-      date="1994-11-05T08:15:30-05:00"
       decimal={false}
       element="time"
       filter={[Function]}
@@ -124,16 +120,33 @@ exports[`[ClientApp]  Header  should display correctly when consulation is in pr
   <p
     className="page-header__lead mb--d"
   >
-    Open until
-     
+    This consultation 
+    ended
+     on 
     <t
       ago={false}
       calendar={false}
-      date="1994-11-05T08:15:30-05:00"
       decimal={false}
       element="time"
       filter={[Function]}
       format="D MMMM YYYY"
+      fromNow={false}
+      interval={60000}
+      onChange={[Function]}
+      toNow={false}
+      unit={null}
+      unix={false}
+      utc={false}
+    />
+     at 
+     
+    <t
+      ago={false}
+      calendar={false}
+      decimal={false}
+      element="time"
+      filter={[Function]}
+      format="HH:mm"
       fromNow={false}
       interval={60000}
       onChange={[Function]}

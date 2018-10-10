@@ -15,11 +15,11 @@ import { load } from "../../data/loader";
 
 type StateType = {
 	path: string;
-	consultationListData: {
+	consultationListData: any | {
 		consultations: [],
 		optionFilters: [],
 		textFilters: [],
-	}; // todo: return to this
+	};
 	hasInitialData: boolean;
 	loading: boolean;
 	error: {
@@ -47,7 +47,7 @@ class Download extends Component<PropsType, StateType> {
 
 		this.state = {
 			path: "",
-			consultationListData: [],
+			consultationListData: {},
 			hasInitialData: false,
 			loading: true,
 			error: {
@@ -113,7 +113,12 @@ class Download extends Component<PropsType, StateType> {
 			},
 		];
 
-		const {path, loading, hasInitialData, consultationListData} = this.state;
+		const {
+			path,
+			loading,
+			hasInitialData,
+			consultationListData,
+		} = this.state;
 
 		const consultations = consultationListData.consultations;
 
