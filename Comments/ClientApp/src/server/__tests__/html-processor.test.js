@@ -3,7 +3,9 @@ import { prepTags,
 	replaceOpeningHtmlTag,
 	replaceOpeningBodyTag,
 	replaceRootContent,
-	replaceRelativePaths } from "../html-processor";
+	replaceRelativePaths,
+	replaceAccountsEnvironment,
+} from "../html-processor";
 
 describe("HTML processor", () => {
 	describe("prepTags", () => {
@@ -96,6 +98,20 @@ describe("HTML processor", () => {
 		it("doesn't prepend for double slash URLs", () => {
 			let result = replaceRelativePaths("<body><script href=\"//cdn.\"></script><span>");
 			expect(result).toEqual("<body><script href=\"//cdn.\"></script><span>");
+		});
+	});
+
+	describe("replaceAccountsEnvironment", () => {
+		it("replaces supplied environment variable", () => {
+			let result = replaceAccountsEnvironment(`<script data-environment="Beta"
+			data-search="/search?q=%term" data-typeaheadtype="remote" </script>`, "Live");
+			expect(result).toContain(`data-environment="Live"`);
+		});
+
+		it("replaces supplied environment variable", () => {
+			let result = replaceAccountsEnvironment(`<script data-environment=""
+			data-search="/search?q=%term" data-typeaheadtype="remote" </script>`, "Live");
+			expect(result).toContain(`data-environment="Live"`);
 		});
 	});
 });

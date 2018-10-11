@@ -13,7 +13,6 @@ import {
 	deleteAnswerHandler,
 } from "../../helpers/editing-and-deleting";
 import { queryStringToObject } from "../../helpers/utils";
-import { pullFocusById } from "../../helpers/accessibility-helpers";
 import { tagManager } from "../../helpers/tag-manager";
 import { projectInformation } from "../../constants";
 import { UserContext } from "../../context/UserContext";
@@ -51,7 +50,7 @@ type StateType = {
 	userHasSubmitted: boolean,
 	validToSubmit: false,
 	path: string | null,
-	hasInitalData: boolean,
+	hasInitialData: boolean,
 	allowComments: boolean,
 	comments: Array<CommentType>,
 	questions: Array<QuestionType>,
@@ -78,7 +77,7 @@ export class Review extends Component<PropsType, StateType> {
 			userHasSubmitted: false,
 			validToSubmit: false,
 			path: null,
-			hasInitalData: false,
+			hasInitialData: false,
 			allowComments: false,
 			comments: [], //this contains all the comments, not just the ones displayed to the user. the show property defines whether the comment is filtered out from view.
 			questions: [], //this contains all the questions, not just the ones displayed to the user. the show property defines whether the question is filtered out from view.
@@ -129,7 +128,7 @@ export class Review extends Component<PropsType, StateType> {
 				userHasSubmitted: preloadedConsultationData.consultationState.userHasSubmitted,
 				validToSubmit: preloadedConsultationData.consultationState.supportsSubmission,
 				loading: false,
-				hasInitalData: true,
+				hasInitialData: true,
 				allowComments: (preloadedConsultationData.consultationState.consultationIsOpen && !preloadedConsultationData.consultationState.userHasSubmitted),
 				comments: preloadedCommentsData.commentsAndQuestions.comments,
 				questions: preloadedCommentsData.commentsAndQuestions.questions,
@@ -172,7 +171,7 @@ export class Review extends Component<PropsType, StateType> {
 
 	gatherData = async () => {
 		const querystring = this.props.history.location.search;
-		const path = this.props.basename + this.props.location.pathname + querystring;
+		const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;
 		this.setState({
 			path,
 		});
@@ -244,32 +243,37 @@ export class Review extends Component<PropsType, StateType> {
 						});
 					});
 				}
+				if (data.consultationData !== null) {
+					tagManager({
+						event: "pageview",
+						gidReference: this.state.consultationData.reference,
+						title: this.getPageTitle(),
+						stage: this.state.consultationData.consultationState.userHasSubmitted ? "postsubmission" : "presubmission",
+					});
+				}
 			})
 			.catch(err => {
 				throw new Error("gatherData in componentDidMount failed " + err);
 			});
 	};
 
-	// componentWillUnmount(){
-	// 	this.props.history.listen
-	// }
+	componentWillUnmount() {
+		this.unlisten();
+	}
 
 	componentDidMount() {
-		if (!this.state.hasInitalData) { //typically this page is accessed by clicking a link on the document page, so it won't SSR.
+		if (!this.state.hasInitialData) {
 			this.loadDataAndUpdateState();
 		}
-		// todo: revisit this
-		this.props.history.listen(() => {
-			this.loadDataAndUpdateState();
+		this.unlisten = this.props.history.listen(() => {
+			const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;
+			if (!this.state.path || path !== this.state.path) {
+				this.loadDataAndUpdateState();
+			}
 		});
 	}
 
-	componentDidUpdate(prevProps: PropsType) {
-		const oldQueryString = prevProps.location.search;
-		const newQueryString = this.props.location.search;
-		if (oldQueryString === newQueryString) return;
-		pullFocusById("comments-column");
-	}
+	unlisten = () => {};
 
 	submitConsultation = () => {
 		const comments = this.state.comments;

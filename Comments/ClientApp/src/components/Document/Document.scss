@@ -9,6 +9,7 @@
     &:hover {
       cursor: pointer;
     }
+    outline: -webkit-focus-ring-color red 5px
   }
   padding-left: rem($spacing-large);
   &.loading {

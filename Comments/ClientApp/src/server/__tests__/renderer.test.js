@@ -21,7 +21,6 @@ describe("Server renderer", () => {
 
 			serverRenderer({ data: { viewModel: 99  } }).then((result) => {
 				expect(result.statusCode).toEqual(404);
-				console.log(result.html);
 				var pos = result.html.search("<div class=\"container\" data-reactroot=\"\"><div class=\"alert\"><h2 class=\"page-header__heading mt--0\"><span class=\"icon icon--warning\" aria-hidden=\"true\"></span> <!-- -->TypeError</h2><p class=\"page-header__lead\">");
 				expect(pos).toEqual(0);
 				done();				

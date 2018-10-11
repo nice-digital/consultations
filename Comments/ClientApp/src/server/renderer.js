@@ -74,15 +74,27 @@ export const serverRenderer = (params): Promise => {
 				<App basename={BaseUrlRelative}/>
 			</StaticRouter>);
 
-		// First render: this trigger any data preloaders to fire
-		let rootContent = renderToString(app);
+		let rootContent = "";
+		try {
+			// First render: this trigger any data preloaders to fire
+			rootContent = renderToString(app);
+		}
+		catch (e) {
+			reject(e);
+			return;
+		}
 
 		// Wait for all preloaders to have loaded before re-rendering the app
 		Promise.all(staticContext.preload.loaders).then(() => {
 
-			// Second render now that all the data preloaders have finished so we can render with data on the server
-			rootContent = renderToString(app);
-
+			try {
+				// Second render now that all the data preloaders have finished so we can render with data on the server
+				rootContent = renderToString(app);
+			}
+			catch (e) {
+				reject(e);
+				return;
+			}
 			const helmet = Helmet.renderStatic();
 			const html = processHtml(params.data.originalHtml,
 				{
@@ -94,6 +106,7 @@ export const serverRenderer = (params): Promise => {
 					links: helmet.link.toString(),
 					globals: getGlobalsDataHtml(staticContext.globals),
 					scripts: getPreloadedDataHtml(staticContext.preload.data) + helmet.script.toString(),
+					accountsEnvironment: params.data.accountsEnvironment,
 				});
 
 			resolve({html: html, statusCode: staticContext.status || 200});
@@ -106,9 +119,17 @@ export const serverRenderer = (params): Promise => {
 			}
 			// In development show a nice YSOD to devs with the error message
 			const error = <Error error={e}/>;
-			rootContent = renderToString(error);
-
-			resolve({html: rootContent, statusCode: staticContext.status || 500});
+			let html = params.data.originalHtml;
+			if (typeof(html) !== "undefined"){
+				html = processHtml(params.data.originalHtml,
+					{
+						rootContent: renderToString(error),
+						accountsEnvironment: params.data.accountsEnvironment,
+					});
+			} else{
+				html = renderToString(error);
+			}
+			resolve({html: html, statusCode: staticContext.status || 500});
 		});
 	});
 };

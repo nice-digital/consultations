@@ -73,6 +73,7 @@ namespace Comments
 	        services.TryAddTransient<IExportService, ExportService>();
 			services.TryAddSingleton<IEncryption, Encryption>();
 	        services.TryAddTransient<IExportToExcel, ExportToExcel>();
+	        services.TryAddTransient<IStatusService, StatusService>();
 
 			// Add authentication 
 			services.AddAuthentication(options =>
@@ -267,6 +268,7 @@ namespace Comments
 	                    data["signInURL"] = authenticateService.GetLoginURL(); //context.Request.Path);
 	                    data["registerURL"] = authenticateService.GetRegisterURL(); //context.Request.Path);
 	                    data["requestURL"] = context.Request.Path;
+	                    data["accountsEnvironment"] = AppSettings.Environment.AccountsEnvironment;
 	                    //data["user"] = context.User; - possible security implications here, surfacing claims to the front end. might be ok, if just server-side.
 	                    // Pass further data in e.g. user/authentication data
                     };

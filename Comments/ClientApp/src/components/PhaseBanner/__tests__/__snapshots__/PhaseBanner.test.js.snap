@@ -19,7 +19,7 @@ exports[`[ClientApp]  PhaseBanner  Matches snapshot 1`] = `
     className="phase-banner__label"
   >
     My Project
-     is in development which means that some features may not work fully.
+     is in development, which means that some features may not work fully.
      
     <a
       href="/get-involved/contact-us"

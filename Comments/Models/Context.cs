@@ -533,5 +533,12 @@ namespace Comments.Models
 					throw new Exception("Unknown table name");
 		    }
 	    }
+
+	    public (int totalComments, int totalAnswers, int totalSubmissions) GetStatusData()
+	    {
+		    return (totalComments: Comment.IgnoreQueryFilters().Count(),
+			    totalAnswers: Answer.IgnoreQueryFilters().Count(),
+			    totalSubmissions: Submission.IgnoreQueryFilters().Count());
+	    }
 	}
 }
