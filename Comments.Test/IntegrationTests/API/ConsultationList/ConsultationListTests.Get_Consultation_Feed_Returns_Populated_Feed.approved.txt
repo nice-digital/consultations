@@ -58,16 +58,14 @@
             "title":"Status"
         }
     ],
-    "textFilters":[
-        {
-            "filterText":null,
-            "isSelected":false,
-            "filteredResultCount":2,
-            "unfilteredResultCount":2,
-            "id":"Keyword",
-            "title":"Keyword"
-        }
-    ],
+    "textFilters":{
+        "filterText":null,
+        "isSelected":false,
+        "filteredResultCount":2,
+        "unfilteredResultCount":2,
+        "id":"Keyword",
+        "title":"Keyword"
+    },
     "status":[
         "Open"
     ],

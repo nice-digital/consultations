@@ -79,15 +79,15 @@ namespace Comments.Services
 			return optionFilters;
 		}
 
-		public List<TextFilterGroup> GetTextFilterGroups(string reference, List<ConsultationListRow> consultationListRows)
+		public TextFilterGroup GetTextFilterGroups(string reference, List<ConsultationListRow> consultationListRows)
 		{
-			var textFilters = AppSettings.ConsultationListConfig.TextFilters.ToList();
-			var referenceFilter = textFilters.Single(f => f.Id.Equals(Constants.AppSettings.Keyword, StringComparison.OrdinalIgnoreCase));
-			referenceFilter.IsSelected = !string.IsNullOrWhiteSpace(reference);
+			var textFilter = AppSettings.ConsultationListConfig.TextFilters;
+			//var referenceFilter = textFilter.Single(f => f.Id.Equals(Constants.AppSettings.Keyword, StringComparison.OrdinalIgnoreCase));
+			textFilter.IsSelected = !string.IsNullOrWhiteSpace(reference);
 			var unfilteredCount = consultationListRows.Count;
-			referenceFilter.FilteredResultCount = string.IsNullOrWhiteSpace(reference) ? unfilteredCount : consultationListRows.Count(c => (c.GidReference.IndexOf(reference, StringComparison.OrdinalIgnoreCase) != -1) || (c.Title.IndexOf(reference, StringComparison.OrdinalIgnoreCase) != -1));
-			referenceFilter.UnfilteredResultCount = unfilteredCount;
-			return textFilters;
+			textFilter.FilteredResultCount = string.IsNullOrWhiteSpace(reference) ? unfilteredCount : consultationListRows.Count(c => (c.GidReference.IndexOf(reference, StringComparison.OrdinalIgnoreCase) != -1) || (c.Title.IndexOf(reference, StringComparison.OrdinalIgnoreCase) != -1));
+			textFilter.UnfilteredResultCount = unfilteredCount;
+			return textFilter;
 		}
 		
 	}

@@ -25,7 +25,7 @@ namespace Comments.ViewModels
 		//default constructor needed for model binding.
 		public ConsultationListViewModel() {}
 
-		public ConsultationListViewModel(IEnumerable<ConsultationListRow> consultations, IEnumerable<OptionFilterGroup> optionFilters, IEnumerable<TextFilterGroup> textFilters)
+		public ConsultationListViewModel(IEnumerable<ConsultationListRow> consultations, IEnumerable<OptionFilterGroup> optionFilters, TextFilterGroup textFilters)
 		{
 			Consultations = consultations;
 			OptionFilters = optionFilters;
@@ -39,7 +39,7 @@ namespace Comments.ViewModels
 		/// </summary>
 		public IEnumerable<OptionFilterGroup> OptionFilters { get; set; }
 
-		public IEnumerable<TextFilterGroup> TextFilters { get; set; }
+		public TextFilterGroup TextFilters { get; set; }
 
 
 		#region Filter options from the check boxes

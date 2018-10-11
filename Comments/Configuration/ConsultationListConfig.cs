@@ -7,6 +7,6 @@ namespace Comments.Configuration
 {
 		public IEnumerable<OptionFilterGroup> OptionFilters { get; set; }
 
-		public IEnumerable<TextFilterGroup> TextFilters { get; set; }
+		public TextFilterGroup TextFilters { get; set; }
     }
 }
