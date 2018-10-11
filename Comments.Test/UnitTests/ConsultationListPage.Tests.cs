@@ -340,9 +340,6 @@ namespace Comments.Test.UnitTests
 			//Assert
 			updatedViewModel.TextFilters.FilteredResultCount.ShouldBe(1);
 			updatedViewModel.TextFilters.UnfilteredResultCount.ShouldBe(3);
-
-			//updatedViewModel.TextFilters.First(f => f.Id == Constants.AppSettings.Keyword).FilteredResultCount.ShouldBe(1);
-			//updatedViewModel.TextFilters.First(f => f.Id == Constants.AppSettings.Keyword).UnfilteredResultCount.ShouldBe(3);
 		}
 
 		[Fact]
@@ -361,9 +358,6 @@ namespace Comments.Test.UnitTests
 			//Assert
 			updatedViewModel.TextFilters.FilteredResultCount.ShouldBe(3);
 			updatedViewModel.TextFilters.UnfilteredResultCount.ShouldBe(3);
-
-			//updatedViewModel.TextFilters.First(f => f.Id == Constants.AppSettings.Keyword).FilteredResultCount.ShouldBe(3);
-			//updatedViewModel.TextFilters.First(f => f.Id == Constants.AppSettings.Keyword).UnfilteredResultCount.ShouldBe(3);
 		}
 
 		[Theory]
@@ -384,8 +378,6 @@ namespace Comments.Test.UnitTests
 
 			//Assert
 			updatedViewModel.TextFilters.IsSelected.ShouldBeFalse();
-
-			//updatedViewModel.TextFilters.First(f => f.Id == Constants.AppSettings.Keyword).IsSelected.ShouldBeFalse();
 		}
 
 		[Fact]
@@ -404,9 +396,6 @@ namespace Comments.Test.UnitTests
 			//Assert
 			updatedViewModel.TextFilters.FilteredResultCount.ShouldBe(3);
 			updatedViewModel.TextFilters.UnfilteredResultCount.ShouldBe(3);
-
-			//updatedViewModel.TextFilters.First(f => f.Id == Constants.AppSettings.Keyword).FilteredResultCount.ShouldBe(3);
-			//updatedViewModel.TextFilters.First(f => f.Id == Constants.AppSettings.Keyword).UnfilteredResultCount.ShouldBe(3);
 		}
 
 		[Fact]
@@ -425,9 +414,6 @@ namespace Comments.Test.UnitTests
 			//Assert
 			updatedViewModel.TextFilters.FilteredResultCount.ShouldBe(1);
 			updatedViewModel.TextFilters.UnfilteredResultCount.ShouldBe(3);
-
-			//updatedViewModel.TextFilters.First(f => f.Id == Constants.AppSettings.Keyword).FilteredResultCount.ShouldBe(1);
-			//updatedViewModel.TextFilters.First(f => f.Id == Constants.AppSettings.Keyword).UnfilteredResultCount.ShouldBe(3);
 		}
 
 
