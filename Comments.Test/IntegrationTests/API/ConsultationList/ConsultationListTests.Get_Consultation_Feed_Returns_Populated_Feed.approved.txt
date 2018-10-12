@@ -61,7 +61,7 @@
             "title":"Status"
         }
     ],
-    "textFilters":{
+    "textFilter":{
         "filterText":null,
         "isSelected":false,
         "filteredResultCount":2,
