@@ -3,6 +3,7 @@
 import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import Helmet from "react-helmet";
+import Cookies from "js-cookie";
 import { UserContext } from "../../context/UserContext";
 import { LoginBanner } from "../LoginBanner/LoginBanner";
 import { Header } from "../Header/Header";
@@ -29,7 +30,7 @@ type StateType = {
 		hasError: boolean;
 		message: string | null;
 	};
-	referrer: string;
+	indevReturnPath: string;
 }
 
 type PropsType = {
@@ -59,7 +60,7 @@ class Download extends Component<PropsType, StateType> {
 				hasError: false,
 				message: null,
 			},
-			referrer: "",
+			indevReturnPath: "",
 		};
 
 		let preloadedData, preloadedConsultations;
@@ -86,7 +87,7 @@ class Download extends Component<PropsType, StateType> {
 					hasError: false,
 					message: null,
 				},
-				referrer: "",
+				indevReturnPath: "",
 			};
 		}
 
@@ -128,22 +129,28 @@ class Download extends Component<PropsType, StateType> {
 			}
 		});
 
-		let referrer = this.state.consultationListData.indevBasePath;
-		this.setState({referrer});
+		let indevReturnPath = this.state.consultationListData.indevBasePath;
 		if (typeof(document) !== "undefined"){
-			referrer = document.referrer;
-			if (referrer.toLowerCase().indexOf("indev") != -1)
-			{
-				this.setState({referrer});
+			const documentReferrer = document.referrer;
+			if (documentReferrer.toLowerCase().indexOf("indev") != -1) {
+				indevReturnPath = documentReferrer;
+				Cookies.set("documentReferrer", documentReferrer);
 			}
-		}
+			else {
+				const cookieReferrer = Cookies.get("documentReferrer");
+				if (cookieReferrer != null){
+					indevReturnPath = cookieReferrer;
+				}
+			}
+		} 
+		this.setState({indevReturnPath: indevReturnPath});		
 	}
 
 	render() {
 		const BackToIndevLink = [
 			{
 				label: "Back to InDev",
-				url: this.state.referrer,
+				url: this.state.indevReturnPath,
 				localRoute: false,
 			},
 		];
@@ -184,7 +191,7 @@ class Download extends Component<PropsType, StateType> {
 							<div className="grid">
 								<div data-g="12">
 									<Breadcrumbs links={BackToIndevLink}/>
-									<Header title={`Download Responses - referrer: ${this.state.consultationListData.indevBasePath}`}/>
+									<Header title="Download Responses"/>
 									<div className="grid">
 										<div data-g="12 md:3">
 											<h2 className="h5">Filter</h2>
