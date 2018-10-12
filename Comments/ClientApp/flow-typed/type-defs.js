@@ -130,3 +130,33 @@ declare type ReviewPageViewModelType = {
 };
 
 declare type ContextType = any;
+
+declare type ConsultationListRow = {
+	title:string,
+	startDate : Date,
+	endDate : Date,
+	submissionCount:number,
+	consultationId :number,
+	documentId:number,
+	chapterSlug :string,
+	gidReference :string,
+	consultationType :string,
+	isOpen: boolean,
+	isClosed: boolean,
+	isUpcoming: boolean,
+	show: boolean,
+};
+
+declare type OptionFilterGroup = {
+	filterText:string,
+	isSelected:boolean,
+	filteredResultCount:number,
+	unfilteredResultCount:number,
+};
+
+declare type TextFilterGroup = {
+	filterText:string,
+	isSelected:boolean,
+	filteredResultCount:number,
+	unfilteredResultCount:number,
+};

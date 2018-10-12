@@ -18,9 +18,10 @@ type StateType = {
 	path: string;
 	searchTerm: string;
 	consultationListData: any | {
-		consultations: any,
-		optionFilters: any,
-		textFilters: any,
+		consultations: any, //Array<ConsultationListRow>,
+		optionFilters: any, //Array<OptionFilterGroup>,
+		textFilter: any, //TextFilterGroup,
+		indevBasePath: any, //string,
 	};
 	hasInitialData: boolean;
 	loading: boolean;
@@ -28,6 +29,7 @@ type StateType = {
 		hasError: boolean;
 		message: string | null;
 	};
+	referrer: string;
 }
 
 type PropsType = {
@@ -57,6 +59,7 @@ class Download extends Component<PropsType, StateType> {
 				hasError: false,
 				message: null,
 			},
+			referrer: "",
 		};
 
 		let preloadedData, preloadedConsultations;
@@ -83,8 +86,11 @@ class Download extends Component<PropsType, StateType> {
 					hasError: false,
 					message: null,
 				},
+				referrer: "",
 			};
 		}
+
+
 	}
 
 	loadDataAndUpdateState = () => {
@@ -121,14 +127,23 @@ class Download extends Component<PropsType, StateType> {
 				this.loadDataAndUpdateState();
 			}
 		});
+
+		let referrer = this.state.consultationListData.indevBasePath;
+		this.setState({referrer});
+		if (typeof(document) !== "undefined"){
+			referrer = document.referrer;
+			if (referrer.toLowerCase().indexOf("indev") != -1)
+			{
+				this.setState({referrer});
+			}
+		}
 	}
 
 	render() {
-
-		const fakeLinks = [
+		const BackToIndevLink = [
 			{
 				label: "Back to InDev",
-				url: "#",
+				url: this.state.referrer,
 				localRoute: false,
 			},
 		];
@@ -143,7 +158,7 @@ class Download extends Component<PropsType, StateType> {
 		const {
 			consultations,
 			optionFilters,
-			textFilters,
+			textFilter,
 		} = consultationListData;
 
 		if (!hasInitialData) return null;
@@ -168,13 +183,13 @@ class Download extends Component<PropsType, StateType> {
 						<div className="container">
 							<div className="grid">
 								<div data-g="12">
-									<Breadcrumbs links={fakeLinks}/>
-									<Header title="Download Responses"/>
+									<Breadcrumbs links={BackToIndevLink}/>
+									<Header title={`Download Responses - referrer: ${this.state.consultationListData.indevBasePath}`}/>
 									<div className="grid">
 										<div data-g="12 md:3">
 											<h2 className="h5">Filter</h2>
-											{textFilters && <TextFilterWithHistory search={this.props.location.search}
-																														 path={this.props.basename + this.props.location.pathname} {...textFilters}/>}
+											{textFilter && <TextFilterWithHistory search={this.props.location.search}
+																														 path={this.props.basename + this.props.location.pathname} {...textFilter}/>}
 											<FilterPanel filters={optionFilters} path={path}/>
 										</div>
 										<div data-g="12 md:9">

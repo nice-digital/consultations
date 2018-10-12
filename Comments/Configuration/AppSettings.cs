@@ -10,7 +10,7 @@ namespace Comments.Configuration
         // (i.e. to stop us having to pass IOptions<SomeConfig> through the stack)
 
         public static EnvironmentConfig Environment { get; private set; }
-        public static FeedConfig Feed { get; private set; }
+        public static FeedConfig Feed { get; set; }
         public static GilliamConfig GilliamConfig { get; private set; }
 		public static EncryptionConfig EncryptionConfig { get; private set; }
 	    public static ReviewConfig ReviewConfig { get; set; }

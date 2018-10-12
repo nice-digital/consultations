@@ -48,7 +48,7 @@ namespace Comments.Services
 			}
 			
 			model.OptionFilters = GetOptionFilterGroups(model.Status?.ToList(), consultationListRows);
-			model.TextFilters = GetTextFilterGroups(model.Keyword, consultationListRows);
+			model.TextFilter = GetTextFilterGroups(model.Keyword, consultationListRows);
 			model.Consultations = FilterAndOrderConsultationList(consultationListRows, model.Status, model.Keyword);
 			return model;
 		}

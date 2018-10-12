@@ -13,6 +13,7 @@ namespace Comments.Test.IntegrationTests.API.ConsultationList
 	    public ConsultationListTests() : base(TestUserType.Administrator, Feed.ConsultationCommentsListMultiple)
 	    {
 			AppSettings.ConsultationListConfig = TestAppSettings.GetConsultationListConfig();
+		    AppSettings.Feed = TestAppSettings.GetFeedConfig();
 		}
 
         [Fact]

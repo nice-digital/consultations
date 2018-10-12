@@ -2,6 +2,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
+using Comments.Common;
+using Comments.Configuration;
 using Comments.Models;
 
 namespace Comments.ViewModels
@@ -29,8 +31,10 @@ namespace Comments.ViewModels
 		{
 			Consultations = consultations;
 			OptionFilters = optionFilters;
-			TextFilters = textFilters;
+			TextFilter = textFilters;
 		}
+
+		public string IndevBasePath => AppSettings.Feed.IndevBasePath.OriginalString; 
 
 		public IEnumerable<ConsultationListRow> Consultations{ get; set; }
 
@@ -39,7 +43,7 @@ namespace Comments.ViewModels
 		/// </summary>
 		public IEnumerable<OptionFilterGroup> OptionFilters { get; set; }
 
-		public TextFilterGroup TextFilters { get; set; }
+		public TextFilterGroup TextFilter { get; set; }
 
 
 		#region Filter options from the check boxes

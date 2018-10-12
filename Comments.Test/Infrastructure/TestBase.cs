@@ -43,7 +43,7 @@ namespace Comments.Test.Infrastructure
 
         protected readonly TestServer _server;
         protected readonly HttpClient _client;
-        protected IFeedConfig _feedConfig;
+        protected FeedConfig _feedConfig;
 
         protected Feed FeedToUse = Feed.ConsultationCommentsPublishedDetailMulitpleDoc;
         protected readonly bool _authenticated = true;

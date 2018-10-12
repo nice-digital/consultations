@@ -2,6 +2,7 @@ using Comments.Configuration;
 using Comments.ViewModels;
 using System.Collections.Generic;
 using Comments.Common;
+using System;
 
 namespace Comments.Test.Infrastructure
 {
@@ -21,6 +22,14 @@ namespace Comments.Test.Infrastructure
 					}}
 				},
 				TextFilters = new TextFilterGroup {  Id = Constants.AppSettings.Keyword, Title = Constants.AppSettings.Keyword  }
+			};
+		}
+
+		internal static FeedConfig GetFeedConfig()
+		{
+			return new FeedConfig()
+			{
+				IndevBasePath = new Uri("https://indevnice.org")
 			};
 		}
 	}

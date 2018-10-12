@@ -338,8 +338,8 @@ namespace Comments.Test.UnitTests
 			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
 
 			//Assert
-			updatedViewModel.TextFilters.FilteredResultCount.ShouldBe(1);
-			updatedViewModel.TextFilters.UnfilteredResultCount.ShouldBe(3);
+			updatedViewModel.TextFilter.FilteredResultCount.ShouldBe(1);
+			updatedViewModel.TextFilter.UnfilteredResultCount.ShouldBe(3);
 		}
 
 		[Fact]
@@ -356,8 +356,8 @@ namespace Comments.Test.UnitTests
 			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
 
 			//Assert
-			updatedViewModel.TextFilters.FilteredResultCount.ShouldBe(3);
-			updatedViewModel.TextFilters.UnfilteredResultCount.ShouldBe(3);
+			updatedViewModel.TextFilter.FilteredResultCount.ShouldBe(3);
+			updatedViewModel.TextFilter.UnfilteredResultCount.ShouldBe(3);
 		}
 
 		[Theory]
@@ -377,7 +377,7 @@ namespace Comments.Test.UnitTests
 			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
 
 			//Assert
-			updatedViewModel.TextFilters.IsSelected.ShouldBeFalse();
+			updatedViewModel.TextFilter.IsSelected.ShouldBeFalse();
 		}
 
 		[Fact]
@@ -394,8 +394,8 @@ namespace Comments.Test.UnitTests
 			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
 
 			//Assert
-			updatedViewModel.TextFilters.FilteredResultCount.ShouldBe(3);
-			updatedViewModel.TextFilters.UnfilteredResultCount.ShouldBe(3);
+			updatedViewModel.TextFilter.FilteredResultCount.ShouldBe(3);
+			updatedViewModel.TextFilter.UnfilteredResultCount.ShouldBe(3);
 		}
 
 		[Fact]
@@ -412,8 +412,8 @@ namespace Comments.Test.UnitTests
 			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
 
 			//Assert
-			updatedViewModel.TextFilters.FilteredResultCount.ShouldBe(1);
-			updatedViewModel.TextFilters.UnfilteredResultCount.ShouldBe(3);
+			updatedViewModel.TextFilter.FilteredResultCount.ShouldBe(1);
+			updatedViewModel.TextFilter.UnfilteredResultCount.ShouldBe(3);
 		}
 
 		[Fact]
