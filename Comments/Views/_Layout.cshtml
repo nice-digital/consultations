@@ -1,3 +1,4 @@
+@using Comments.Configuration
 <!DOCTYPE html>
 
 <html>
@@ -12,6 +13,6 @@
         @RenderBody()
     </div>
 
-<script src="//cdn.nice.org.uk/V3.1/Scripts/nice/NICE.TopHat.min.js" data-environment="Beta" data-search="/search?q=%term" data-typeaheadtype="remote" data-typeaheadsource="/autocomplete?%query" data-search-placeholder="Search NICE..." data-cookie="true" async=""></script>
+<script src="//cdn.nice.org.uk/V3.1/Scripts/nice/NICE.TopHat.min.js" data-environment="@AppSettings.Environment.AccountsEnvironment" data-search="/search?q=%term" data-typeaheadtype="remote" data-typeaheadsource="/autocomplete?%query" data-search-placeholder="Search NICE..." data-cookie="true" async=""></script>
 </body>
 </html>
