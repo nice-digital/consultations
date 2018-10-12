@@ -49,7 +49,7 @@ namespace Comments.Services
 			
 			model.OptionFilters = GetOptionFilterGroups(model.Status?.ToList(), consultationListRows);
 			model.TextFilters = GetTextFilterGroups(model.Keyword, consultationListRows);
-			model.Consultations = consultationListRows.OrderByDescending(c => c.EndDate).ToList();
+			model.Consultations = FilterConsultationList(consultationListRows, model.Status, model.Keyword);
 			return model;
 		}
 
@@ -79,16 +79,40 @@ namespace Comments.Services
 			return optionFilters;
 		}
 
-		public TextFilterGroup GetTextFilterGroups(string reference, List<ConsultationListRow> consultationListRows)
+		public TextFilterGroup GetTextFilterGroups(string keyword, List<ConsultationListRow> consultationListRows)
 		{
 			var textFilter = AppSettings.ConsultationListConfig.TextFilters;
-			//var referenceFilter = textFilter.Single(f => f.Id.Equals(Constants.AppSettings.Keyword, StringComparison.OrdinalIgnoreCase));
-			textFilter.IsSelected = !string.IsNullOrWhiteSpace(reference);
+			textFilter.IsSelected = !string.IsNullOrWhiteSpace(keyword);
 			var unfilteredCount = consultationListRows.Count;
-			textFilter.FilteredResultCount = string.IsNullOrWhiteSpace(reference) ? unfilteredCount : consultationListRows.Count(c => (c.GidReference.IndexOf(reference, StringComparison.OrdinalIgnoreCase) != -1) || (c.Title.IndexOf(reference, StringComparison.OrdinalIgnoreCase) != -1));
+			textFilter.FilteredResultCount = string.IsNullOrWhiteSpace(keyword) ? unfilteredCount : consultationListRows.Count(c => (c.GidReference.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) != -1) || (c.Title.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) != -1));
 			textFilter.UnfilteredResultCount = unfilteredCount;
 			return textFilter;
 		}
-		
+
+		public List<ConsultationListRow> FilterConsultationList(List<ConsultationListRow> consultationListRows, IEnumerable<ConsultationStatus> status, string keyword)
+		{
+			var statuses = status?.ToList() ?? new List<ConsultationStatus>();
+
+			foreach (var state in statuses)
+			{
+				switch (state)
+				{
+					case ConsultationStatus.Open:
+						consultationListRows.ForEach(c => c.Show =  c.IsOpen);
+						break;
+					case ConsultationStatus.Closed:
+						consultationListRows.ForEach(c => c.Show =  c.IsClosed);
+						break;
+					case ConsultationStatus.Upcoming:
+						consultationListRows.ForEach(c => c.Show = c.IsUpcoming);
+						break;
+				}
+			}
+			
+
+			if (!string.IsNullOrWhiteSpace(keyword))
+				consultationListRows.ForEach(c => c.Show = c.Title.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) != -1);
+			return consultationListRows.OrderByDescending(c => c.EndDate).ToList(); 
+		}
 	}
 }

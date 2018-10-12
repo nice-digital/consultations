@@ -416,6 +416,74 @@ namespace Comments.Test.UnitTests
 			updatedViewModel.TextFilters.UnfilteredResultCount.ShouldBe(3);
 		}
 
+		[Fact]
+		public void ConsultationListPageModel_FilterDataByKeyword()
+		{
+			//Arrange
+			var consultationListService = GetConsultationListService();
+			var viewModel = new ConsultationListViewModel(null, null, null)
+			{
+				Keyword = "consultation title 3"
+			};
+
+			//Act
+			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
+
+			//Assert
+			updatedViewModel.Consultations.Count(c => c.Show).ShouldBe(1);
+		}
+
+		[Fact]
+		public void ConsultationListPageModel_FilterDataByOpenStatus()
+		{
+			//Arrange
+			var consultationListService = GetConsultationListService();
+			var viewModel = new ConsultationListViewModel(null, null, null)
+			{
+				Status = new List<ConsultationStatus> { ConsultationStatus.Open }
+			};
+
+			//Act
+			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
+
+			//Assert
+			updatedViewModel.Consultations.Count(c => c.Show).ShouldBe(1);
+		}
+
+		[Fact]
+		public void ConsultationListPageModel_FilterDataByOpenandUpcomingStatus()
+		{
+			//Arrange
+			var consultationListService = GetConsultationListService();
+			var viewModel = new ConsultationListViewModel(null, null, null)
+			{
+				Status = new List<ConsultationStatus> { ConsultationStatus.Upcoming, ConsultationStatus.Open }
+			};
+
+			//Act
+			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
+
+			//Assert
+			updatedViewModel.Consultations.Count(c => c.Show).ShouldBe(2);
+		}
+
+		[Fact]
+		public void ConsultationListPageModel_FilterDataByOpenStatusAndKeyword()
+		{
+			//Arrange
+			var consultationListService = GetConsultationListService();
+			var viewModel = new ConsultationListViewModel(null, null, null)
+			{
+				Keyword = "consultation title 1",
+				Status = new List<ConsultationStatus> { ConsultationStatus.Open }
+			};
+
+			//Act
+			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
+
+			//Assert
+			updatedViewModel.Consultations.Count(c => c.Show).ShouldBe(1);
+		}
 
 		private List<ConsultationList> AddConsultationsToList()
 		{
@@ -436,7 +504,7 @@ namespace Comments.Test.UnitTests
 				StartDate = DateTime.Now.AddDays(-3),
 				EndDate = DateTime.Now.AddDays(-2),
 				Reference = "GID-2",
-				Title = "Consultation Title 2"
+				Title = "Consultation Title 1"
 			});
 			consultationList.Add(new ConsultationList()
 			{

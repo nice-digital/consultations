@@ -32,6 +32,7 @@ namespace Comments.Models
 		public bool IsOpen => StartDate <= DateTime.UtcNow && EndDate > DateTime.UtcNow;
 		public bool IsClosed => EndDate < DateTime.UtcNow;
 		public bool IsUpcoming => StartDate > DateTime.UtcNow;
+		public bool Show { get; set; } = true;
 
 	}
 }
