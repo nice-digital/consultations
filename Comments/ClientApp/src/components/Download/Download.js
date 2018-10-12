@@ -11,9 +11,12 @@ import { ConsultationItem } from "./ConsultationItem/ConsultationItem";
 import preload from "../../data/pre-loader";
 import { FilterPanel } from "../FilterPanel/FilterPanel";
 import { load } from "../../data/loader";
+import { withHistory } from "../HistoryContext/HistoryContext";
+import TextFilterWithHistory from "../TextFilter/TextFilter";
 
 type StateType = {
 	path: string;
+	searchTerm: string;
 	consultationListData: any | {
 		consultations: any,
 		optionFilters: any,
@@ -45,6 +48,7 @@ class Download extends Component<PropsType, StateType> {
 		super(props);
 
 		this.state = {
+			searchTerm: "",
 			path: "",
 			consultationListData: {},
 			hasInitialData: false,
@@ -70,6 +74,7 @@ class Download extends Component<PropsType, StateType> {
 
 		if (preloadedConsultations) {
 			this.state = {
+				searchTerm: "",
 				path: this.props.basename + this.props.location.pathname,
 				consultationListData: preloadedConsultations,
 				loading: false,
@@ -80,26 +85,42 @@ class Download extends Component<PropsType, StateType> {
 				},
 			};
 		}
+	}
 
+	loadDataAndUpdateState = () => {
+		load("consultationsList")
+			.then(response => {
+				this.setState({
+					consultationListData: response.data,
+				});
+			})
+			.catch(err => {
+				this.setState({
+					error: {
+						hasError: true,
+						message: "consultationsList error  " + err,
+					},
+				});
+			});
+	};
+
+	unlisten = () => {};
+
+	componentWillUnmount(){
+		this.unlisten();
 	}
 
 	componentDidMount() {
 		if (!this.state.hasInitialData) {
-			load("consultationsList")
-				.then(response => {
-					this.setState({
-						consultationListData: response.data,
-					});
-				})
-				.catch(err => {
-					this.setState({
-						error: {
-							hasError: true,
-							message: "consultationsList error  " + err,
-						},
-					});
-				});
+			this.loadDataAndUpdateState();
 		}
+		this.unlisten = this.props.history.listen(() => {
+			console.log("filter changed");
+			const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;
+			if (!this.state.path || path !== this.state.path) {
+				this.loadDataAndUpdateState();
+			}
+		});
 	}
 
 	render() {
@@ -119,9 +140,11 @@ class Download extends Component<PropsType, StateType> {
 			consultationListData,
 		} = this.state;
 
-		const consultations = consultationListData.consultations;
-
-		const filters = consultationListData.optionFilters;
+		const {
+			consultations,
+			optionFilters,
+			textFilters,
+		} = consultationListData;
 
 		if (!hasInitialData) return null;
 
@@ -150,24 +173,9 @@ class Download extends Component<PropsType, StateType> {
 									<div className="grid">
 										<div data-g="12 md:3">
 											<h2 className="h5">Filter</h2>
-
-											{this.state.consultationListData.textFilters
-												.map((item, idx) => {
-													return (
-														<Fragment key={idx}>
-															<p>{item.title}</p>
-															<input type="text"/>
-															<submit className="btn btn--cta">
-																Search
-															</submit>
-														</Fragment>
-													);
-												})
-											}
-
-											<FilterPanel
-												filters={filters}
-												path={path}/>
+											{textFilters && <TextFilterWithHistory search={this.props.location.search}
+																														 path={this.props.basename + this.props.location.pathname} {...textFilters}/>}
+											<FilterPanel filters={optionFilters} path={path}/>
 										</div>
 										<div data-g="12 md:9">
 											<h2 className="h5">All consultations</h2>
@@ -188,4 +196,4 @@ class Download extends Component<PropsType, StateType> {
 	}
 }
 
-export default withRouter(Download);
+export default withRouter(withHistory(Download));
