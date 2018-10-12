@@ -1,4 +1,5 @@
 using System.Net;
+using System.Security.Authentication;
 using Comments.Test.Infrastructure;
 using System.Threading.Tasks;
 using Comments.Configuration;
@@ -45,13 +46,10 @@ namespace Comments.Test.IntegrationTests.API.ConsultationList
 		[Fact]
 		public async Task Get_Consultation_Feed_Returns_Populated_Feed()
 		{
-			//Arrange
+			//Arrange in constructor
 
-			// Act
-			var response = await _client.GetAsync("/consultations/api/ConsultationList?Status=Open");
-
-			// Assert
-			response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
+			// Act + Assert
+			await Should.ThrowAsync<AuthenticationException>(() => _client.GetAsync("/consultations/api/ConsultationList?Status=Open"));
 		}
 	}
 
@@ -69,10 +67,12 @@ namespace Comments.Test.IntegrationTests.API.ConsultationList
 			//Arrange
 
 			// Act
-			var response = await _client.GetAsync("/consultations/api/ConsultationList?Status=Open");
+			//var ex = Assert.ThrowsAsync<AuthenticationException>(() => _client.GetAsync("/consultations/api/ConsultationList?Status=Open")).Result;
 
-			// Assert
-			response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
+			//// Assert
+			//ex.ShouldNotBeNull();
+			
+			Should.Throw<AuthenticationException>(() => _client.GetAsync("/consultations/api/ConsultationList?Status=Open"));
 		}
 	}
 }

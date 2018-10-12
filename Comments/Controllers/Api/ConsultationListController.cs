@@ -8,7 +8,7 @@ namespace Comments.Controllers.Api
 {
 	[Produces("application/json")]
     [Route("consultations/api/[controller]")]
-	[Authorize(Roles = "Administrator")]
+	//[Authorize(Roles = "Administrator")] - authorisation is now in the constructor of the service
     public class ConsultationListController : Controller
     {
         private readonly IConsultationListService _consultationListService;

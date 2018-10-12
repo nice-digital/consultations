@@ -21,7 +21,8 @@ namespace Comments.Test.Infrastructure
 						new FilterOption("Upcoming", "Upcoming"),
 					}}
 				},
-				TextFilters = new TextFilterGroup {  Id = Constants.AppSettings.Keyword, Title = Constants.AppSettings.Keyword  }
+				TextFilters = new TextFilterGroup {  Id = Constants.AppSettings.Keyword, Title = Constants.AppSettings.Keyword  },
+				DownloadRolesCSV = "Administrator"
 			};
 		}
 

@@ -1,12 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Authentication;
 using System.Threading.Tasks;
 using Comments.Common;
 using Comments.Configuration;
 using Comments.Models;
 using Comments.ViewModels;
 using DocumentFormat.OpenXml.Wordprocessing;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
+using NICE.Auth.NetCore.Helpers;
 using NICE.Feeds;
 using NICE.Feeds.Models.Indev.List;
 
@@ -23,8 +27,26 @@ namespace Comments.Services
 		private readonly IFeedService _feedService;
 		private readonly IConsultationService _consultationService;
 
-		public ConsultationListService(ConsultationsContext consultationsContext, IFeedService feedService, IConsultationService consultationService)
+		public ConsultationListService(ConsultationsContext consultationsContext, IFeedService feedService, IConsultationService consultationService, IUserService userService, IHttpContextAccessor httpContextAccessor)
 		{
+			var user = userService.GetCurrentUser();
+			if (!user.IsAuthorised)
+			{
+				throw new AuthenticationException("GetCurrentUser returned null");
+			}
+			var niceUser = httpContextAccessor.HttpContext.User;
+			if (!niceUser.Identity.IsAuthenticated)
+			{
+				throw new AuthenticationException("NICE user is not authenticated");
+			}
+			var userRoles = niceUser.Roles();
+			var permittedRoles = AppSettings.ConsultationListConfig.PermittedRolesToDownload;
+			
+			if (!userRoles.Any(role => permittedRoles.Contains(role)))
+			{
+				throw new AuthenticationException("NICE user is not permitted to download this file");
+			}
+
 			_context = consultationsContext;
 			_feedService = feedService;
 			_consultationService = consultationService;

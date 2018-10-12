@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Authentication;
 using Comments.Common;
 using Comments.Configuration;
 using Comments.Models;
@@ -17,7 +18,7 @@ namespace Comments.Test.UnitTests
 {
 	public class ConsultationListPageTests : TestBase
 	{
-		public ConsultationListPageTests() : base(null)
+		public ConsultationListPageTests() : base(TestUserType.Administrator, Feed.ConsultationCommentsPublishedDetailMulitpleDoc)
 		{
 			AppSettings.ConsultationListConfig = TestAppSettings.GetConsultationListConfig();
 		}
@@ -27,7 +28,7 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			var consultationList = AddConsultationsToList();
-			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
+			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeUserService, _fakeHttpContextAccessor);
 
 			//Act
 			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null) { Status = new List<ConsultationStatus>() });
@@ -50,7 +51,7 @@ namespace Comments.Test.UnitTests
 
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList { ConsultationId = 1 });
-			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
+			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeUserService, _fakeHttpContextAccessor);
 
 			//Act
 			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null) { Status = new List<ConsultationStatus>() });
@@ -74,7 +75,7 @@ namespace Comments.Test.UnitTests
 
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList { ConsultationId = 1 });
-			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
+			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeUserService, _fakeHttpContextAccessor);
 
 			//Act
 			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null) { Status = new List<ConsultationStatus>() });
@@ -100,7 +101,7 @@ namespace Comments.Test.UnitTests
 
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList { ConsultationId = 1 });
-			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
+			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeUserService, _fakeHttpContextAccessor);
 
 			//Act
 			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null) { Status = new List<ConsultationStatus>() });
@@ -130,7 +131,7 @@ namespace Comments.Test.UnitTests
 
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList { ConsultationId = 1 });
-			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
+			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeUserService, _fakeHttpContextAccessor);
 
 			//Act
 			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null) { Status = new List<ConsultationStatus>() });
@@ -154,7 +155,7 @@ namespace Comments.Test.UnitTests
 
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList { ConsultationId = 1 });
-			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
+			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeUserService, _fakeHttpContextAccessor);
 
 			//Act
 			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null) { Status = new List<ConsultationStatus>() });
@@ -168,7 +169,7 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			var consultationList = AddConsultationsToList();
-			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
+			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeUserService, _fakeHttpContextAccessor);
 
 			//Act
 			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null){ Status = new List<ConsultationStatus>() });
@@ -183,7 +184,7 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			var consultationList = AddConsultationsToList();
-			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
+			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeUserService, _fakeHttpContextAccessor);
 
 			//Act
 			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null){Status = new List<ConsultationStatus>()});
@@ -202,7 +203,7 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			var consultationList = AddConsultationsToList();
-			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
+			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeUserService, _fakeHttpContextAccessor);
 			var viewModel = new ConsultationListViewModel(null, null, null);
 			viewModel.Status = new List<ConsultationStatus>(){ ConsultationStatus.Open };
 
@@ -219,7 +220,7 @@ namespace Comments.Test.UnitTests
 			//Arrange
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList { ConsultationId = 123 });
-			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
+			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeUserService, _fakeHttpContextAccessor);
 			var viewModel = new ConsultationListViewModel(null, null, null);
 			viewModel.Status = new List<ConsultationStatus>() { ConsultationStatus.Closed };
 
@@ -236,7 +237,7 @@ namespace Comments.Test.UnitTests
 			//Arrange
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList { ConsultationId = 123 });
-			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService());
+			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeUserService, _fakeHttpContextAccessor);
 			var viewModel = new ConsultationListViewModel(null, null, null);
 			viewModel.Status = new List<ConsultationStatus>() { ConsultationStatus.Upcoming };
 
@@ -527,7 +528,7 @@ namespace Comments.Test.UnitTests
 			var userId = Guid.NewGuid();
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
-			var consultationListService = new ConsultationListService(consultationContext, new FakeFeedService(consultationList), new FakeConsultationService());
+			var consultationListService = new ConsultationListService(consultationContext, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeUserService, _fakeHttpContextAccessor);
 
 			return consultationListService;
 		}
