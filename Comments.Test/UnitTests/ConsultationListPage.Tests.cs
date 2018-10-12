@@ -405,7 +405,7 @@ namespace Comments.Test.UnitTests
 			var consultationListService = GetConsultationListService();
 			var viewModel = new ConsultationListViewModel(null, null, null)
 			{
-				Keyword = "consultation title 1"
+				Keyword = "consultation title 3"
 			};
 
 			//Act

@@ -49,7 +49,7 @@ namespace Comments.Services
 			
 			model.OptionFilters = GetOptionFilterGroups(model.Status?.ToList(), consultationListRows);
 			model.TextFilters = GetTextFilterGroups(model.Keyword, consultationListRows);
-			model.Consultations = FilterConsultationList(consultationListRows, model.Status, model.Keyword);
+			model.Consultations = FilterAndOrderConsultationList(consultationListRows, model.Status, model.Keyword);
 			return model;
 		}
 
@@ -89,29 +89,21 @@ namespace Comments.Services
 			return textFilter;
 		}
 
-		public List<ConsultationListRow> FilterConsultationList(List<ConsultationListRow> consultationListRows, IEnumerable<ConsultationStatus> status, string keyword)
+		public List<ConsultationListRow> FilterAndOrderConsultationList(List<ConsultationListRow> consultationListRows, IEnumerable<ConsultationStatus> status, string keyword)
 		{
 			var statuses = status?.ToList() ?? new List<ConsultationStatus>();
-
-			foreach (var state in statuses)
+			if (statuses.Any())
 			{
-				switch (state)
-				{
-					case ConsultationStatus.Open:
-						consultationListRows.ForEach(c => c.Show =  c.IsOpen);
-						break;
-					case ConsultationStatus.Closed:
-						consultationListRows.ForEach(c => c.Show =  c.IsClosed);
-						break;
-					case ConsultationStatus.Upcoming:
-						consultationListRows.ForEach(c => c.Show = c.IsUpcoming);
-						break;
-				}
+				consultationListRows.ForEach(clr => clr.Show = (clr.IsOpen && statuses.Contains(ConsultationStatus.Open)) ||
+				                                               (clr.IsClosed && statuses.Contains(ConsultationStatus.Closed)) ||
+				                                               (clr.IsUpcoming && statuses.Contains(ConsultationStatus.Upcoming)));
 			}
-			
 
 			if (!string.IsNullOrWhiteSpace(keyword))
-				consultationListRows.ForEach(c => c.Show = c.Title.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) != -1);
+			{
+				consultationListRows.ForEach(c => c.Show = c.Show ? c.Title.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) != -1 : false);
+			}
+				
 			return consultationListRows.OrderByDescending(c => c.EndDate).ToList(); 
 		}
 	}
