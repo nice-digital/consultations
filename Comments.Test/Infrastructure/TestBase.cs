@@ -60,6 +60,7 @@ namespace Comments.Test.Infrastructure
 	    protected readonly bool _useRealSubmitService = false;
 
 	    protected IEncryption _fakeEncryption;
+	    protected readonly ISecurityService _fakeSecurityService;
 
 		public TestBase(Feed feed) : this()
         {
@@ -94,7 +95,7 @@ namespace Comments.Test.Infrastructure
         {
             // Arrange
             _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
-
+	        _fakeSecurityService = new FakeSecurityService(_authenticated, _authenticated, false, null);
 			_fakeHttpContextAccessor = FakeHttpContextAccessor.Get(_authenticated, _displayName, _userId, testUserType);
 	        _consultationService = new FakeConsultationService();
 	        _useRealSubmitService = useRealSubmitService;

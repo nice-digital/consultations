@@ -1,9 +1,8 @@
 using Comments.Models;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Security.Authentication;
-using Microsoft.AspNetCore.Hosting;
 
 namespace Comments.Services
 {
@@ -24,22 +23,12 @@ namespace Comments.Services
 	    private readonly ConsultationsContext _dbContext;
 	    private readonly IHostingEnvironment _hostingEnvironment;
 
-	    public AdminService(IUserService userService, IHttpContextAccessor httpContextAccessor, ConsultationsContext dbContext, IHostingEnvironment hostingEnvironment)
+	    public AdminService(ConsultationsContext dbContext, IHostingEnvironment hostingEnvironment, ISecurityService securityService)
 	    {
-		    var user = userService.GetCurrentUser();
-		    if (!user.IsAuthorised)
+		    if (!securityService.IsAllowedAccess(new List<string> {"Administrator"}).Valid)
 		    {
-				throw new AuthenticationException("GetCurrentUser returned null");
-		    }
-		    var niceUser = httpContextAccessor.HttpContext.User;
-		    if (!niceUser.Identity.IsAuthenticated)
-		    {
-			    throw new AuthenticationException("NICE user is not authenticated");
+			    throw new AuthenticationException("Not authenticated");
 			}
-			if (!niceUser.IsInRole("Administrator"))
-			{
-			    throw new AuthenticationException("NICE user is not an administrator");
-		    }
 		    _dbContext = dbContext;
 		    _hostingEnvironment = hostingEnvironment;
 	    }

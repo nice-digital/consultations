@@ -1,24 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Authentication;
-using System.Threading.Tasks;
 using Comments.Common;
 using Comments.Configuration;
 using Comments.Models;
 using Comments.ViewModels;
-using DocumentFormat.OpenXml.Wordprocessing;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Hosting;
-using NICE.Auth.NetCore.Helpers;
 using NICE.Feeds;
-using NICE.Feeds.Models.Indev.List;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Comments.Services
 {
 	public interface IConsultationListService
 	{
-		ConsultationListViewModel GetConsultationListViewModel(ConsultationListViewModel model);
+		(ConsultationListViewModel consultationListViewModel, Validate validate)  GetConsultationListViewModel(ConsultationListViewModel model);
 	}
 
 	public class ConsultationListService : IConsultationListService
@@ -26,56 +19,46 @@ namespace Comments.Services
 		private readonly ConsultationsContext _context;
 		private readonly IFeedService _feedService;
 		private readonly IConsultationService _consultationService;
+		private readonly ISecurityService _securityService;
 
-		public ConsultationListService(ConsultationsContext consultationsContext, IFeedService feedService, IConsultationService consultationService, IUserService userService, IHttpContextAccessor httpContextAccessor)
+		public ConsultationListService(ConsultationsContext consultationsContext, IFeedService feedService, IConsultationService consultationService, ISecurityService securityService)
 		{
-			var user = userService.GetCurrentUser();
-			if (!user.IsAuthorised)
-			{
-				throw new AuthenticationException("GetCurrentUser returned null");
-			}
-			var niceUser = httpContextAccessor.HttpContext.User;
-			if (!niceUser.Identity.IsAuthenticated)
-			{
-				throw new AuthenticationException("NICE user is not authenticated");
-			}
-			var userRoles = niceUser.Roles();
-			var permittedRoles = AppSettings.ConsultationListConfig.PermittedRolesToDownload;
-			
-			if (!userRoles.Any(role => permittedRoles.Contains(role)))
-			{
-				throw new AuthenticationException("NICE user is not permitted to download this file");
-			}
-
 			_context = consultationsContext;
 			_feedService = feedService;
 			_consultationService = consultationService;
+			_securityService = securityService;
 		}
 
-		public ConsultationListViewModel GetConsultationListViewModel(ConsultationListViewModel model)
+		public (ConsultationListViewModel consultationListViewModel, Validate validate) GetConsultationListViewModel(ConsultationListViewModel model)
 		{
-			var consultations = _feedService.GetConsultationList().ToList();
-			var consultationListRows = new List<ConsultationListRow>();
-
-			foreach (var consultation in consultations)
+			var validate = _securityService.IsAllowedAccess(AppSettings.ConsultationListConfig.PermittedRolesToDownload);
+			if (validate.Valid)
 			{
-				var sourceURI = ConsultationsUri.CreateConsultationURI(consultation.ConsultationId);
-				var responseCount = _context.GetAllSubmittedResponses(sourceURI);
-				var documentAndChapterSlug =  _consultationService.GetFirstConvertedDocumentAndChapterSlug(consultation.ConsultationId);
-				consultationListRows.Add(
-					new ConsultationListRow(consultation.Title,
-						consultation.StartDate, consultation.EndDate, responseCount, consultation.ConsultationId,
-						documentAndChapterSlug.documentId, documentAndChapterSlug.chapterSlug, consultation.Reference,
-						consultation.ConsultationType));
+				var consultations = _feedService.GetConsultationList().ToList();
+				var consultationListRows = new List<ConsultationListRow>();
+
+				foreach (var consultation in consultations)
+				{
+					var sourceURI = ConsultationsUri.CreateConsultationURI(consultation.ConsultationId);
+					var responseCount = _context.GetAllSubmittedResponses(sourceURI);
+					var documentAndChapterSlug =
+						_consultationService.GetFirstConvertedDocumentAndChapterSlug(consultation.ConsultationId);
+					consultationListRows.Add(
+						new ConsultationListRow(consultation.Title,
+							consultation.StartDate, consultation.EndDate, responseCount, consultation.ConsultationId,
+							documentAndChapterSlug.documentId, documentAndChapterSlug.chapterSlug, consultation.Reference,
+							consultation.ConsultationType));
+				}
+
+				model.OptionFilters = GetOptionFilterGroups(model.Status?.ToList(), consultationListRows);
+				model.TextFilter = GetTextFilterGroups(model.Keyword, consultationListRows);
+				model.Consultations = FilterAndOrderConsultationList(consultationListRows, model.Status, model.Keyword);
 			}
-			
-			model.OptionFilters = GetOptionFilterGroups(model.Status?.ToList(), consultationListRows);
-			model.TextFilter = GetTextFilterGroups(model.Keyword, consultationListRows);
-			model.Consultations = FilterAndOrderConsultationList(consultationListRows, model.Status, model.Keyword);
-			return model;
+
+			return (model, validate);
 		}
 
-		private static IEnumerable<OptionFilterGroup> GetOptionFilterGroups(IList<ConsultationStatus> status, List<ConsultationListRow> consultationListRows)
+		private static IEnumerable<OptionFilterGroup> GetOptionFilterGroups(IList<ConsultationStatus> status, IList<ConsultationListRow> consultationListRows)
 		{
 			var optionFilters = AppSettings.ConsultationListConfig.OptionFilters.ToList();
 
@@ -101,7 +84,7 @@ namespace Comments.Services
 			return optionFilters;
 		}
 
-		public TextFilterGroup GetTextFilterGroups(string keyword, List<ConsultationListRow> consultationListRows)
+		private static TextFilterGroup GetTextFilterGroups(string keyword, IList<ConsultationListRow> consultationListRows)
 		{
 			var textFilter = AppSettings.ConsultationListConfig.TextFilters;
 			textFilter.IsSelected = !string.IsNullOrWhiteSpace(keyword);
@@ -111,7 +94,7 @@ namespace Comments.Services
 			return textFilter;
 		}
 
-		public List<ConsultationListRow> FilterAndOrderConsultationList(List<ConsultationListRow> consultationListRows, IEnumerable<ConsultationStatus> status, string keyword)
+		private static IEnumerable<ConsultationListRow> FilterAndOrderConsultationList(List<ConsultationListRow> consultationListRows, IEnumerable<ConsultationStatus> status, string keyword)
 		{
 			var statuses = status?.ToList() ?? new List<ConsultationStatus>();
 			if (statuses.Any())

@@ -1,6 +1,5 @@
 using Comments.Services;
 using Comments.ViewModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -8,16 +7,18 @@ namespace Comments.Controllers.Api
 {
 	[Produces("application/json")]
     [Route("consultations/api/[controller]")]
-	//[Authorize(Roles = "Administrator")] - authorisation is now in the constructor of the service
-    public class ConsultationListController : Controller
-    {
+	//[Authorize(Roles = "Administrator")] - authorisation is in the service as the role list is configurable in appsettings.json
+    public class ConsultationListController : ControllerBase
+	{
         private readonly IConsultationListService _consultationListService;
         private readonly ILogger<ConsultationListController> _logger;
+	    private readonly ISecurityService _securityService;
 
-        public ConsultationListController(IConsultationListService consultationListService, ILogger<ConsultationListController> logger)
+	    public ConsultationListController(IConsultationListService consultationListService, ILogger<ConsultationListController> logger, ISecurityService securityService)
         {
 	        _consultationListService = consultationListService;
             _logger = logger;
+	        _securityService = securityService;
         }
 
 		/// <summary>
@@ -25,9 +26,13 @@ namespace Comments.Controllers.Api
 		/// </summary>
 		/// <returns></returns>
 		[HttpGet]
-        public ConsultationListViewModel Get(ConsultationListViewModel consultationListViewModel)
+        public IActionResult Get(ConsultationListViewModel consultationListViewModel)
 		{
-			return _consultationListService.GetConsultationListViewModel(consultationListViewModel);
+			var result = _consultationListService.GetConsultationListViewModel(consultationListViewModel);
+
+			var invalidResult = Validate(result.validate, _logger);
+
+			return invalidResult ?? Ok(result.consultationListViewModel);
 		}
     }
 }
