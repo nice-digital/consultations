@@ -1,11 +1,7 @@
-using System.Net;
-using System.Security.Authentication;
-using Comments.Test.Infrastructure;
-using System.Threading.Tasks;
 using Comments.Configuration;
-using Comments.Services;
+using Comments.Test.Infrastructure;
 using NICE.Feeds.Tests.Infrastructure;
-using Shouldly;
+using System.Threading.Tasks;
 using Xunit;
 using TestBase = Comments.Test.Infrastructure.TestBase;
 
@@ -33,46 +29,4 @@ namespace Comments.Test.IntegrationTests.API.ConsultationList
             responseString.ShouldMatchApproved();
         }
 	}
-
-
-	//public class ConsultationListNotAuthTests : TestBase
-	//{
-	//	public ConsultationListNotAuthTests() : base(TestUserType.NotAuthenticated, Feed.ConsultationCommentsListMultiple)
-	//	{
-	//		AppSettings.ConsultationListConfig = TestAppSettings.GetConsultationListConfig();
-	//		AppSettings.Feed = TestAppSettings.GetFeedConfig();
-	//	}
-
-	//	[Fact]
-	//	public async Task Get_Consultation_Feed_Returns_Populated_Feed()
-	//	{
-	//		//Arrange in constructor
-
-	//		// Act + Assert
-	//		await Should.ThrowAsync<AuthenticationException>(() => _client.GetAsync("/consultations/api/ConsultationList?Status=Open"));
-	//	}
-	//}
-
-	//public class ConsultationListAuthTests : TestBase
-	//{
-	//	public ConsultationListAuthTests() : base(TestUserType.Authenticated, Feed.ConsultationCommentsListMultiple)
-	//	{
-	//		AppSettings.ConsultationListConfig = TestAppSettings.GetConsultationListConfig();
-	//		AppSettings.Feed = TestAppSettings.GetFeedConfig();
-	//	}
-
-	//	[Fact]
-	//	public async Task Get_Consultation_Feed_Returns_Populated_Feed()
-	//	{
-	//		//Arrange
-
-	//		// Act
-	//		//var ex = Assert.ThrowsAsync<AuthenticationException>(() => _client.GetAsync("/consultations/api/ConsultationList?Status=Open")).Result;
-
-	//		//// Assert
-	//		//ex.ShouldNotBeNull();
-			
-	//		Should.Throw<AuthenticationException>(() => _client.GetAsync("/consultations/api/ConsultationList?Status=Open"));
-	//	}
-	//}
 }
