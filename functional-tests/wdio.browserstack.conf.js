@@ -1,39 +1,54 @@
-const config = require("./wdio.conf").config,
-	pkg = require("./package.json");
-
-// Assumption that running on port 8000 either on localhost:8000 or tophat:8000 in Docker
-// means we need to use browserstack local
-const isLocal = (process.env.BASE_URL || "").indexOf("8000") > -1;
-
-const configOverrides = {
+var path = require("path");
+// wdio.conf.js
+exports.config = {
+	// ...
+	services: ['browserstack'],
 	user: process.env.BROWSERSTACK_USERNAME,
 	key: process.env.BROWSERSTACK_ACCESS_KEY,
+	browserstackLocal: true,
 	specs: [
-		"./test/functional/**/*.js"
+		"./src/features/**/*.feature"
 	],
-	maxInstances: 10,
 	capabilities: [
-		// Use https://www.browserstack.com/automate/webdriverio#configure-capabilities
 		{
-			// We use Edge as it's free, but also run the functional tests in headless Chrome in Docker
-			project: "TopHat",
-			name: "Functional tests - Edge",
-			build: "TopHat " + pkg.version,
-			browser: "Edge",
+			project: "Comment Collection",
+			name: "Functional tests - Chrome",
+			browser: "Chrome",
 			os: "Windows",
 			os_version: "10",
-			browser_version: "16.0",
+			browser_version: "62.0",
 			resolution: "1024x768",
-			"browserstack.debug": true,
-			"browserstack.local": isLocal
+			acceptInsecureCerts: true, // Because of self-signed cert inside Docker
+			acceptSslCerts: true,
+			maxInstances: 2,
 		}
 	],
-	baseUrl: process.env.BASE_URL || "http://dev-tophat.nice.org.uk/",
-	waitforTimeout: 10000,
-	connectionRetryTimeout: 90000,
-	connectionRetryCount: 3,
-	services: ["browserstack"],
-	browserstackLocal: true
-};
 
-exports.config = Object.assign({}, config, configOverrides);
+	logLevel: "verbose",
+	// Change this to verbose if you want more detailed logging in the terminal
+	coloredLogs: true,
+	screenshotPath: "./errorShots/",
+	baseUrl: "https://niceorg/consultations/",
+	reporters: ["spec"],
+
+	// Use BDD with Cucumber
+	framework: "cucumber",
+	cucumberOpts: {
+		compiler: ["js:babel-register"], // Babel so we can use ES6 in tests
+		require: [
+			"./src/steps/given.js",
+			"./src/steps/when.js",
+			"./src/steps/then.js"
+		],
+		tagExpression: "not @pending", // See https://docs.cucumber.io/tag-expressions/
+		timeout: 30000,
+	},
+
+	// Set up global asssertion libraries
+	before: function before() {
+		const chai = require("chai");
+		global.expect = chai.expect;
+		global.assert = chai.assert;
+		global.should = chai.should();
+	}
+};

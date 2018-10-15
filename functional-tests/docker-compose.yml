@@ -47,6 +47,8 @@ services:
       - ACCOUNTS_EMAIL3
       - ACCOUNTS_EMAIL4
       - ACCOUNTS_PASSWORD
+      - BROWSERSTACK_ACCESS_KEY
+      - BROWSERSTACK_USERNAME
 
   # Comment Collection dotnet core web app
   comments:
@@ -76,8 +78,6 @@ services:
       - GILLIAM_REALM
       - ENCRYPTION_KEY
       - ENCRYPTION_IV
-      - BROWSERSTACK_ACCESS_KEY
-      - BROWSERSTACK_USERNAME
       - ACCOUNTS_ENVIRONMENT
 
 
