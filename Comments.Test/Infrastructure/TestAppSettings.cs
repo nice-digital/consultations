@@ -22,7 +22,7 @@ namespace Comments.Test.Infrastructure
 					}}
 				},
 				TextFilters = new TextFilterGroup {  Id = Constants.AppSettings.Keyword, Title = Constants.AppSettings.Keyword  },
-				DownloadRolesCSV = "Administrator"
+				DownloadRolesCSV = "Administrator,CustomFictionalRole"
 			};
 		}
 

@@ -523,8 +523,6 @@ namespace Comments.Test.UnitTests
 		private ConsultationListService GetConsultationListService()
 		{
 			var consultationList = AddConsultationsToList();
-
-			var sourceURI = "consultations://./consultation/123/document/1/chapter/introduction";
 			var userId = Guid.NewGuid();
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
@@ -533,5 +531,40 @@ namespace Comments.Test.UnitTests
 			return consultationListService;
 		}
 
+		[Theory]
+		[InlineData(true, TestUserType.Authenticated)]
+		[InlineData(false, TestUserType.NotAuthenticated)]
+		public void ConsultationListServiceConstructorThrowsErrorIfInvalidUserUsed(bool isAuthenticated, TestUserType testUserType)
+		{
+			//Arrange
+			var consultationList = AddConsultationsToList();
+			var userId = Guid.NewGuid();
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId, testUserType: testUserType);
+			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
+			var contextAccessor = FakeHttpContextAccessor.Get(_authenticated, _displayName, _userId, testUserType);
+
+			//Act + Assert
+			Should.Throw<AuthenticationException>(() => new ConsultationListService(consultationContext, new FakeFeedService(consultationList), new FakeConsultationService(), userService, contextAccessor));			
+		}
+
+		[Theory]
+		[InlineData(TestUserType.CustomFictionalRole)]
+		[InlineData(TestUserType.Administrator)]
+		public void ConsultationListServiceConstructorWorksWithCorrectSecurity(TestUserType testUserType)
+		{
+			//Arrange
+			var consultationList = AddConsultationsToList();
+			var userId = Guid.NewGuid();
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId, testUserType: testUserType);
+			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
+			var contextAccessor = FakeHttpContextAccessor.Get(_authenticated, _displayName, _userId, testUserType);
+
+			//Act 
+			var consultationService = new ConsultationListService(consultationContext, new FakeFeedService(consultationList), new FakeConsultationService(), userService, contextAccessor);
+
+			//Assert
+			consultationService.ShouldNotBeNull();
+		}
 	}
+
 }

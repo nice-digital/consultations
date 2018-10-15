@@ -32,6 +32,9 @@ namespace Comments.Test.Infrastructure
 					case TestUserType.Administrator:
 						claims.Add(new Claim(ClaimType.Role, "Administrator", null, "http://consultations.nice.org.uk"));
 						break;
+					case TestUserType.CustomFictionalRole:
+						claims.Add(new Claim(ClaimType.Role, "CustomFictionalRole", null, "http://consultations.nice.org.uk"));
+						break;
 				}
 				context.Setup(r => r.User)
                     .Returns(() => new ClaimsPrincipal(new ClaimsIdentity(claims, Constants.DefaultScheme)));

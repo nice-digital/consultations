@@ -33,7 +33,8 @@ namespace Comments.Test.Infrastructure
 		Administrator,
 		IndevUser,
 		Authenticated,
-		NotAuthenticated
+		NotAuthenticated,
+		CustomFictionalRole
 	}
 
     public class TestBase
