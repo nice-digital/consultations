@@ -1,3 +1,4 @@
+using System;
 using Comments.ViewModels;
 using Microsoft.AspNetCore.Http;
 using NICE.Auth.NetCore.Helpers;
@@ -24,6 +25,11 @@ namespace Comments.Services
 
 	    public Validate IsAllowedAccess(ICollection<string> permittedRoles)
 	    {
+		    if (!permittedRoles.Any())
+		    {
+			    throw new ArgumentException("There is expected to be at least one permitted role", nameof(permittedRoles));
+		    }
+
 		    var user = _userService.GetCurrentUser();
 		    if (!user.IsAuthorised)
 		    {

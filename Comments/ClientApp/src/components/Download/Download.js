@@ -4,6 +4,9 @@ import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import Helmet from "react-helmet";
 import Cookies from "js-cookie";
+import stringifyObject from "stringify-object";
+
+import { queryStringToObject } from "../../helpers/utils";
 import { UserContext } from "../../context/UserContext";
 import { LoginBanner } from "../LoginBanner/LoginBanner";
 import { Header } from "../Header/Header";
@@ -18,11 +21,11 @@ import TextFilterWithHistory from "../TextFilter/TextFilter";
 type StateType = {
 	path: string;
 	searchTerm: string;
-	consultationListData: any | {
-		consultations: any, //Array<ConsultationListRow>,
-		optionFilters: any, //Array<OptionFilterGroup>,
-		textFilter: any, //TextFilterGroup,
-		indevBasePath: any, //string,
+	consultationListData: {
+		consultations: Array<ConsultationListRow>,
+		optionFilters: Array<OptionFilterGroup>,
+		textFilter: TextFilterGroup,
+		indevBasePath: string,
 	};
 	hasInitialData: boolean;
 	loading: boolean;
@@ -63,20 +66,29 @@ class Download extends Component<PropsType, StateType> {
 			indevReturnPath: "",
 		};
 
-		let preloadedData, preloadedConsultations;
+		let preloadedData;
 		if (this.props.staticContext && this.props.staticContext.preload) {
 			preloadedData = this.props.staticContext.preload.data;
 		}
 
-		preloadedConsultations = preload(
+		const querystring = this.props.location.search;
+		const preloadedConsultations = preload(
 			this.props.staticContext,
 			"consultationList",
 			[],
-			{},
+			queryStringToObject(querystring),
 			preloadedData
 		);
+		
+		console.log(`SSR preload1-querystring: ${stringifyObject(querystring)}`);
+		console.log(`SSR preload1-preloadedData: ${stringifyObject(preloadedData)}`);
+		console.log(`SSR preload1: ${stringifyObject(preloadedConsultations)}`);
 
 		if (preloadedConsultations) {
+
+			console.log(`SSR preload2: ${stringifyObject(preloadedConsultations)}`);
+
+
 			this.state = {
 				searchTerm: "",
 				path: this.props.basename + this.props.location.pathname,
@@ -95,7 +107,12 @@ class Download extends Component<PropsType, StateType> {
 	}
 
 	loadDataAndUpdateState = () => {
-		load("consultationsList")
+		const querystring = this.props.history.location.search;
+		const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;
+		this.setState({
+			path,
+		});
+		load("consultationList", undefined, [], Object.assign({relativeURL: this.props.match.url}, queryStringToObject(querystring)))
 			.then(response => {
 				this.setState({
 					consultationListData: response.data,
@@ -118,21 +135,21 @@ class Download extends Component<PropsType, StateType> {
 	}
 
 	componentDidMount() {
-		if (!this.state.hasInitialData) {
-			this.loadDataAndUpdateState();
-		}
-		this.unlisten = this.props.history.listen(() => {
-			console.log("filter changed");
-			const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;
-			if (!this.state.path || path !== this.state.path) {
-				this.loadDataAndUpdateState();
-			}
-		});
+		// if (!this.state.hasInitialData) {
+		// 	this.loadDataAndUpdateState();
+		// }
+		// this.unlisten = this.props.history.listen(() => {
+		// 	console.log("filter changed");
+		// 	const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;
+		// 	if (!this.state.path || path !== this.state.path) {
+		// 		this.loadDataAndUpdateState();
+		// 	}
+		// });
 
 		let indevReturnPath = this.state.consultationListData.indevBasePath;
 		if (typeof(document) !== "undefined"){
 			const documentReferrer = document.referrer;
-			if (documentReferrer.toLowerCase().indexOf("indev") != -1) {
+			if (documentReferrer.toLowerCase().indexOf("indev") !== -1) {
 				indevReturnPath = documentReferrer;
 				Cookies.set("documentReferrer", documentReferrer);
 			}
@@ -163,10 +180,12 @@ class Download extends Component<PropsType, StateType> {
 		} = this.state;
 
 		const {
-			consultations,
 			optionFilters,
 			textFilter,
 		} = consultationListData;
+
+		console.log(`SSRconsultations: ${stringifyObject(this.state.consultationListData.consultations)}`);
+		const consultationsToShow = hasInitialData ? this.state.consultationListData.consultations : this.state.consultationListData.consultations.filter(consultation => consultation.show) || [];
 
 		if (!hasInitialData) return null;
 
@@ -202,7 +221,7 @@ class Download extends Component<PropsType, StateType> {
 										<div data-g="12 md:9">
 											<h2 className="h5">All consultations</h2>
 											<ul className="list--unstyled">
-												{consultations.map((item, idx) =>
+												{consultationsToShow.map((item, idx) =>
 													<ConsultationItem key={idx} {...item} />
 												)}
 											</ul>

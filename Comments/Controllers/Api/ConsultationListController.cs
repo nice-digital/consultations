@@ -12,13 +12,11 @@ namespace Comments.Controllers.Api
 	{
         private readonly IConsultationListService _consultationListService;
         private readonly ILogger<ConsultationListController> _logger;
-	    private readonly ISecurityService _securityService;
 
-	    public ConsultationListController(IConsultationListService consultationListService, ILogger<ConsultationListController> logger, ISecurityService securityService)
+	    public ConsultationListController(IConsultationListService consultationListService, ILogger<ConsultationListController> logger)
         {
 	        _consultationListService = consultationListService;
             _logger = logger;
-	        _securityService = securityService;
         }
 
 		/// <summary>
