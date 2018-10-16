@@ -486,6 +486,23 @@ namespace Comments.Test.UnitTests
 			updatedViewModel.consultationListViewModel.Consultations.Count(c => c.Show).ShouldBe(1);
 		}
 
+		[Fact]
+		public void ConsultationListPageModel_FilterDataByGidReferenceKeyword()
+		{
+			//Arrange
+			var consultationListService = GetConsultationListService();
+			var viewModel = new ConsultationListViewModel(null, null, null)
+			{
+				Keyword = "GID-1"
+			};
+
+			//Act
+			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
+
+			//Assert
+			updatedViewModel.consultationListViewModel.Consultations.Count(c => c.Show).ShouldBe(1);
+		}
+
 		private List<ConsultationList> AddConsultationsToList()
 		{
 			var consultationList = new List<ConsultationList>();

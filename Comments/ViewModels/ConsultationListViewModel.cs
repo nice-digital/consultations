@@ -16,12 +16,6 @@ namespace Comments.ViewModels
 		Upcoming = 3,
 	}
 
-	//public enum ReviewSortOrder
-	//{
-	//	DocumentAsc,
-	//	DateDesc
-	//}
-
 	public class ConsultationListViewModel
 	{
 		//default constructor needed for model binding.
@@ -57,9 +51,6 @@ namespace Comments.ViewModels
 		}
 
 		public string Keyword { get; set; }
-
-		//[JsonConverter(typeof(StringEnumConverter))]
-		//public ReviewSortOrder Sort { get; set; } = ReviewSortOrder.DocumentAsc;
 
 		#endregion Filter options
 	}

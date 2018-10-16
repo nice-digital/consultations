@@ -108,7 +108,8 @@ namespace Comments.Services
 
 			if (!string.IsNullOrWhiteSpace(keyword))
 			{
-				consultationListRows.ForEach(c => c.Show = c.Show ? c.Title.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) != -1 : false);
+				consultationListRows.ForEach(c => c.Show = c.Show && (  c.Title.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) != -1 ||
+																		c.GidReference.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) != -1));
 			}
 				
 			return consultationListRows.OrderByDescending(c => c.EndDate).ToList(); 
