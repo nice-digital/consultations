@@ -160,3 +160,5 @@ declare type TextFilterGroup = {
 	filteredResultCount:number,
 	unfilteredResultCount:number,
 };
+
+declare type AppliedFilterType = any; //TODO!!!

@@ -4,7 +4,7 @@ import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import Helmet from "react-helmet";
 import Cookies from "js-cookie";
-import stringifyObject from "stringify-object";
+//import stringifyObject from "stringify-object";
 
 import { queryStringToObject } from "../../helpers/utils";
 import { UserContext } from "../../context/UserContext";
@@ -17,6 +17,7 @@ import { FilterPanel } from "../FilterPanel/FilterPanel";
 import { load } from "../../data/loader";
 import { withHistory } from "../HistoryContext/HistoryContext";
 import TextFilterWithHistory from "../TextFilter/TextFilter";
+import { DownloadResultsInfo } from "../DownloadResultsInfo/DownloadResultsInfo";
 
 type StateType = {
 	path: string,
@@ -113,6 +114,7 @@ export class Download extends Component<PropsType, StateType> {
 		const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;
 		this.setState({
 			path,
+			search: this.props.history.location.search,
 		});
 		load("consultationList", undefined, [], Object.assign({relativeURL: this.props.match.url}, queryStringToObject(querystring)))
 			.then(response => {
@@ -144,7 +146,7 @@ export class Download extends Component<PropsType, StateType> {
 			console.log("filter changed");
 			const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;
 			if (!this.state.path || path !== this.state.path) {
-				this.setState({search: this.props.location.search});
+				
 				this.loadDataAndUpdateState();
 			}
 		});
@@ -164,6 +166,22 @@ export class Download extends Component<PropsType, StateType> {
 			}
 		} 
 		this.setState({indevReturnPath: indevReturnPath});		
+	}
+
+	getAppliedFilters(): ReviewAppliedFilterType[] {
+		const mapOptions =
+			(group: ReviewFilterGroupType) => group.options
+				.filter(opt => opt.isSelected)
+				.map(opt => ({
+					groupTitle: group.title,
+					optionLabel: opt.label,
+					groupId: group.id,
+					optionId: opt.id,
+				}));
+
+		return this.state.consultationListData.optionFilters //TODO: support text filters.
+			.map(mapOptions)
+			.reduce((arr, group) => arr.concat(group), []);
 	}
 
 	render() {
@@ -221,7 +239,12 @@ export class Download extends Component<PropsType, StateType> {
 											<FilterPanel filters={optionFilters} path={path}/>
 										</div>
 										<div data-g="12 md:9">
-											<h2 className="h5">All consultations</h2>
+											<DownloadResultsInfo
+												consultationCount={consultationsToShow.length}
+												appliedFilters={this.getAppliedFilters()}
+												path={this.state.path}
+												isLoading={this.state.loading}/>
+											{/* <h2 className="h5">All consultations</h2> */}
 											{consultationsToShow.length > 0 ? (
 												<ul className="list--unstyled">
 													{consultationsToShow.map((item, idx) =>

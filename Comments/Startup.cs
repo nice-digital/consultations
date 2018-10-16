@@ -186,7 +186,7 @@ namespace Comments
 						{
 							context.Request.Path = reqPath.Value.Replace("/consultations", "");
 						}
-						else if (reqPath.Value.IndexOf("favicon.ico", StringComparison.OrdinalIgnoreCase) == -1)
+						else if (reqPath.Value.IndexOf("favicon.ico", StringComparison.OrdinalIgnoreCase) == -1 && reqPath.Value.IndexOf("hot-update", StringComparison.OrdinalIgnoreCase) == -1)
 						{
 							context.Response.StatusCode = 404;
 							throw new FileNotFoundException($"Path {reqPath.Value} could not be found. Did you mean to load '/consultations{context.Request.Path.Value  }' instead?");

@@ -6,7 +6,7 @@ import { removeQueryParameter } from "./../../helpers/utils";
 import { withHistory } from "./../HistoryContext/HistoryContext";
 
 type PropsType = {
-	appliedFilter: TopicListAppliedFilterType,
+	appliedFilter: AppliedFilterType,
 	history: HistoryType,
 	path: string
 };

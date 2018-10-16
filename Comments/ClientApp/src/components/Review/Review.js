@@ -18,7 +18,7 @@ import { UserContext } from "../../context/UserContext";
 import { Header } from "../Header/Header";
 import BreadCrumbsWithRouter from "../Breadcrumbs/Breadcrumbs";
 import { FilterPanel } from "../FilterPanel/FilterPanel";
-import { ResultsInfo } from "../ResultsInfo/ResultsInfo";
+import { ReviewResultsInfo } from "../ReviewResultsInfo/ReviewResultsInfo";
 import { withHistory } from "../HistoryContext/HistoryContext";
 import { CommentBox } from "../CommentBox/CommentBox";
 import { Question } from "../Question/Question";
@@ -497,7 +497,7 @@ export class Review extends Component<PropsType, StateType> {
 															<FilterPanel filters={this.state.commentsData.filters} path={this.state.path}/>
 														</div>
 														<div data-g="12 md:9">
-															<ResultsInfo
+															<ReviewResultsInfo
 																commentCount={commentsToShow.length}
 																showCommentsCount={this.state.consultationData.consultationState.shouldShowCommentsTab}
 																questionCount={questionsToShow.length}
