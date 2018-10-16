@@ -34,6 +34,7 @@ type StateType = {
 		message: string | null,
 	},
 	indevReturnPath: string,
+	search: string,
 }
 
 type PropsType = {
@@ -59,7 +60,7 @@ export class Download extends Component<PropsType, StateType> {
 			searchTerm: "",
 			path: "",
 			consultationListData: {
-				consultations: [],
+				consultations: [], //if you don't set this to an empty array, the filter line below will fail in the first SSR render.
 				optionFilters: [],
 				textFilter: {},
 				indevBasePath: "",
@@ -71,6 +72,7 @@ export class Download extends Component<PropsType, StateType> {
 				message: null,
 			},
 			indevReturnPath: "",
+			search: this.props.location.search,
 		};
 
 		let preloadedData;
@@ -84,7 +86,7 @@ export class Download extends Component<PropsType, StateType> {
 			this.props.staticContext,
 			"consultationList",
 			[],
-			Object.assign({relativeURL: this.props.match.url}, queryStringToObject(querystring)), //queryStringToObject(querystring),
+			Object.assign({relativeURL: this.props.match.url}, queryStringToObject(querystring)),
 			preloadedData
 		);
 
@@ -101,6 +103,7 @@ export class Download extends Component<PropsType, StateType> {
 					message: null,
 				},
 				indevReturnPath: "",
+				search: this.props.location.search,
 			};
 		}
 	}
@@ -117,7 +120,7 @@ export class Download extends Component<PropsType, StateType> {
 					consultationListData: response.data,
 				});
 			})
-			.catch(err => {
+			.catch(err => { //TODO: maybe this should log?
 				this.setState({
 					error: {
 						hasError: true,
@@ -141,6 +144,7 @@ export class Download extends Component<PropsType, StateType> {
 			console.log("filter changed");
 			const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;
 			if (!this.state.path || path !== this.state.path) {
+				this.setState({search: this.props.location.search});
 				this.loadDataAndUpdateState();
 			}
 		});
@@ -183,8 +187,6 @@ export class Download extends Component<PropsType, StateType> {
 			textFilter,
 		} = consultationListData;
 
-		//in the SSR pre-render, in the first pass the consultationListData.consultations array will be undefined. it will only be populated on the second pass. hence this ternary:
-		//const consultationsToShow = //typeof(this.state.consultationListData.consultations) === "undefined" ? [] : this.state.consultationListData.consultations.filter(consultation => consultation.show);
 		const consultationsToShow = this.state.consultationListData.consultations.filter(consultation => consultation.show);
 
 		if (!hasInitialData) return null;
@@ -214,17 +216,21 @@ export class Download extends Component<PropsType, StateType> {
 									<div className="grid">
 										<div data-g="12 md:3">
 											<h2 className="h5">Filter</h2>
-											{textFilter && <TextFilterWithHistory search={this.props.location.search}
+											{textFilter && <TextFilterWithHistory search={this.state.search}
 												path={this.props.basename + this.props.location.pathname} {...textFilter}/>}
 											<FilterPanel filters={optionFilters} path={path}/>
 										</div>
 										<div data-g="12 md:9">
 											<h2 className="h5">All consultations</h2>
-											<ul className="list--unstyled">
-												{consultationsToShow.map((item, idx) =>
-													<ConsultationItem key={idx} basename={this.props.basename} {...item} />
-												)}
-											</ul>
+											{consultationsToShow.length > 0 ? (
+												<ul className="list--unstyled">
+													{consultationsToShow.map((item, idx) =>
+														<ConsultationItem key={idx} basename={this.props.basename} {...item} />
+													)}
+												</ul>
+											) : (
+												<p>No consultations found matching supplied filters.</p>
+											)}
 										</div>
 									</div>
 								</div>
