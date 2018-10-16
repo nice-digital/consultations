@@ -19,32 +19,33 @@ import { withHistory } from "../HistoryContext/HistoryContext";
 import TextFilterWithHistory from "../TextFilter/TextFilter";
 
 type StateType = {
-	path: string;
-	searchTerm: string;
+	path: string,
+	searchTerm: string,
 	consultationListData: {
 		consultations: Array<ConsultationListRow>,
 		optionFilters: Array<OptionFilterGroup>,
 		textFilter: TextFilterGroup,
 		indevBasePath: string,
 	};
-	hasInitialData: boolean;
-	loading: boolean;
+	hasInitialData: boolean,
+	loading: boolean,
 	error: {
-		hasError: boolean;
-		message: string | null;
-	};
-	indevReturnPath: string;
+		hasError: boolean,
+		message: string | null,
+	},
+	indevReturnPath: string,
 }
 
 type PropsType = {
-	staticContext: any;
+	staticContext: any,
 	match: {
-		params: any;
-		url: string;
+		params: any,
+		url: string,
 	};
-	basename: string;
+	basename: string,
 	location: {
-		pathname: string;
+		pathname: string,
+		search: string,
 	},
 	history: HistoryType,
 }
@@ -57,7 +58,12 @@ export class Download extends Component<PropsType, StateType> {
 		this.state = {
 			searchTerm: "",
 			path: "",
-			consultationListData: {},
+			consultationListData: {
+				consultations: [],
+				optionFilters: [],
+				textFilter: {},
+				indevBasePath: "",
+			},
 			hasInitialData: false,
 			loading: true,
 			error: {
@@ -178,7 +184,8 @@ export class Download extends Component<PropsType, StateType> {
 		} = consultationListData;
 
 		//in the SSR pre-render, in the first pass the consultationListData.consultations array will be undefined. it will only be populated on the second pass. hence this ternary:
-		const consultationsToShow = typeof(this.state.consultationListData.consultations) === "undefined" ? [] : this.state.consultationListData.consultations.filter(consultation => consultation.show);
+		//const consultationsToShow = //typeof(this.state.consultationListData.consultations) === "undefined" ? [] : this.state.consultationListData.consultations.filter(consultation => consultation.show);
+		const consultationsToShow = this.state.consultationListData.consultations.filter(consultation => consultation.show);
 
 		if (!hasInitialData) return null;
 

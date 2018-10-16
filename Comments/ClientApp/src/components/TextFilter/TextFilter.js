@@ -24,11 +24,12 @@ export class TextFilter extends Component {
 	}
 
 	getHref = (keyword) => {
-		let path = removeQueryParameter(this.props.path, "Keyword");
-		return keyword.length ?
-			appendQueryParameter(path, "Keyword", keyword)
-			:
-			path;
+		if (keyword.length <= 0){
+			return this.props.path;
+		}
+		const querystringWithRemovedKeyword = removeQueryParameter(this.props.search, "Keyword");
+		const querystringWithKeywordAdded = appendQueryParameter(querystringWithRemovedKeyword, "Keyword", keyword);
+		return this.props.path + querystringWithKeywordAdded;
 	};
 
 	handleKeywordChange = (keyword) => {
