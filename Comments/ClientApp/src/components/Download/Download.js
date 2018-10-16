@@ -177,7 +177,7 @@ export class Download extends Component<PropsType, StateType> {
 			textFilter,
 		} = consultationListData;
 
-		console.log(`SSRconsultations: ${stringifyObject(this.state.consultationListData.consultations)}`);
+		//in the SSR pre-render, in the first pass the consultationListData.consultations array will be undefined. it will only be populated on the second pass. hence this ternary:
 		const consultationsToShow = typeof(this.state.consultationListData.consultations) === "undefined" ? [] : this.state.consultationListData.consultations.filter(consultation => consultation.show);
 
 		if (!hasInitialData) return null;
@@ -208,14 +208,14 @@ export class Download extends Component<PropsType, StateType> {
 										<div data-g="12 md:3">
 											<h2 className="h5">Filter</h2>
 											{textFilter && <TextFilterWithHistory search={this.props.location.search}
-																														 path={this.props.basename + this.props.location.pathname} {...textFilter}/>}
+												path={this.props.basename + this.props.location.pathname} {...textFilter}/>}
 											<FilterPanel filters={optionFilters} path={path}/>
 										</div>
 										<div data-g="12 md:9">
 											<h2 className="h5">All consultations</h2>
 											<ul className="list--unstyled">
 												{consultationsToShow.map((item, idx) =>
-													<ConsultationItem key={idx} {...item} />
+													<ConsultationItem key={idx} basename={this.props.basename} {...item} />
 												)}
 											</ul>
 										</div>

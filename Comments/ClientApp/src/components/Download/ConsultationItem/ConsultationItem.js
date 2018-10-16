@@ -2,16 +2,31 @@ import React, { Component, Fragment } from "react";
 import Moment from "react-moment";
 import { Link } from "react-router-dom";
 
-export class ConsultationItem extends Component {
 
-	randomStatus = (responses) => {
-		if (responses < 30) {
-			return <span className="tag tag--flush tag--consultation">Upcoming</span>;
-		} else if (responses > 30 && responses < 60) {
-			return <span className="tag tag--flush tag--consultation">Open</span>;
-		}
-		return <span className="tag tag--flush tag--updated">Closed</span>;
-	};
+type StateType = {}
+
+type PropsType = {
+	title:string,
+	startDate : Date,
+	endDate : Date,
+	submissionCount:number,
+	consultationId :number,
+	documentId:number,
+	chapterSlug :string,
+	gidReference :string,
+	consultationType :string,
+	isOpen: boolean,
+	isClosed: boolean,
+	isUpcoming: boolean,
+	show: boolean,
+	basename: string,
+}
+
+export class ConsultationItem extends Component<PropsType, StateType> {
+
+	constructor(props: PropsType) {
+		super(props);
+	}
 
 	render() {
 
@@ -37,7 +52,7 @@ export class ConsultationItem extends Component {
 			return "?";
 		};
 
-		const constultationStatus = status(isOpen, isClosed, isUpcoming);
+		const consultationStatus = status(isOpen, isClosed, isUpcoming);
 
 		return (
 			<li className="ConsultationItem">
@@ -51,7 +66,7 @@ export class ConsultationItem extends Component {
 						<div className="card__metadatum">
 							<dt className="visually-hidden">Consultation state</dt>
 							<dd>
-								<span className={`tag tag--${constultationStatus.toLowerCase()}`}>{constultationStatus}</span>
+								<span className={`tag tag--${consultationStatus.toLowerCase()}`}>{consultationStatus}</span>
 							</dd>
 						</div>
 						<div className="card__metadatum">
@@ -68,7 +83,7 @@ export class ConsultationItem extends Component {
 						</div>
 						<div className="card__metadatum">
 							<dd>
-								{constultationStatus === "Upcoming" ?
+								{consultationStatus === "Upcoming" ?
 									<Fragment>
 										Starts on{" "}
 										<strong><Moment format="D MMMM YYYY" date={startDate}/></strong>
@@ -81,13 +96,13 @@ export class ConsultationItem extends Component {
 								}
 							</dd>
 						</div>
-						{constultationStatus !== "Upcoming" &&
+						{consultationStatus !== "Upcoming" &&
 						<div className="card__metadatum">
 							<dd>
 								{submissionCount > 0 ?
-									<button className="buttonAsLink">
-										Download <strong>{submissionCount}</strong> responses
-									</button>
+									<a href={`${this.props.basename}/api/Export/${this.props.consultationId}`} target="_blank" rel="noopener noreferrer">
+										Download <strong>{submissionCount}</strong> response{submissionCount > 1 ? "s" : ""}
+									</a>
 									:
 									<span>No responses</span>
 								}
