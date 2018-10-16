@@ -20,7 +20,8 @@ namespace Comments.Controllers.Api
         }
 
 		/// <summary>
-		/// GET: eg. consultations/api/ConsultationList
+		/// GET: eg. consultations/api/ConsultationList?Status=Open&Status=Closed
+		/// note: the repeated querystring parameter. this is how default model binding to an array works. don't pass a CSV list and expect it to work without writing something custom (like I did)
 		/// </summary>
 		/// <returns></returns>
 		[HttpGet]
@@ -31,6 +32,7 @@ namespace Comments.Controllers.Api
 			var invalidResult = Validate(result.validate, _logger);
 
 			return invalidResult ?? Ok(result.consultationListViewModel);
+			//return result.consultationListViewModel;
 		}
     }
 }

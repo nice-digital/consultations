@@ -97,14 +97,15 @@ namespace Comments.Models
 															s.SubmissionAnswer.Any(sa => sa.Answer.StatusId == (int)StatusName.Submitted))
 												)
 
-				.Include(sc => sc.SubmissionComment)
-					.ThenInclude(c => c.Comment)
-						.ThenInclude(l => l.Location)
+				//these includes aren't needed when they're not used in the resultset. since we've switched it to return the count from the SQL then the joins aren't needed.
+				//.Include(sc => sc.SubmissionComment)
+				//	.ThenInclude(c => c.Comment)
+				//		.ThenInclude(l => l.Location)
 
-				.Include(sa => sa.SubmissionAnswer)
-				.ThenInclude(a => a.Answer)
-					.ThenInclude(q => q.Question)
-						.ThenInclude(l => l.Location)
+				//.Include(sa => sa.SubmissionAnswer)
+				//.ThenInclude(a => a.Answer)
+				//	.ThenInclude(q => q.Question)
+				//		.ThenInclude(l => l.Location)
 						
 				.IgnoreQueryFilters()
 				.Select(s => s.SubmissionId).Distinct().Count();

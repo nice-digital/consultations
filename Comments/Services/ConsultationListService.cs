@@ -40,9 +40,11 @@ namespace Comments.Services
 				foreach (var consultation in consultations)
 				{
 					var sourceURI = ConsultationsUri.CreateConsultationURI(consultation.ConsultationId);
-					var responseCount = _context.GetAllSubmittedResponses(sourceURI);
-					var documentAndChapterSlug =
-						_consultationService.GetFirstConvertedDocumentAndChapterSlug(consultation.ConsultationId);
+
+					var responseCount = _context.GetAllSubmittedResponses(sourceURI); //TODO: refactor this so there's only 1 DB hit, not 1 hit for each consultation.
+
+					var documentAndChapterSlug = _consultationService.GetFirstConvertedDocumentAndChapterSlug(consultation.ConsultationId);
+
 					consultationListRows.Add(
 						new ConsultationListRow(consultation.Title,
 							consultation.StartDate, consultation.EndDate, responseCount, consultation.ConsultationId,

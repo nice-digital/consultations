@@ -39,18 +39,19 @@ type StateType = {
 type PropsType = {
 	staticContext: any;
 	match: {
-		params: Object;
+		params: any;
 		url: string;
 	};
 	basename: string;
 	location: {
 		pathname: string;
-	}
+	},
+	history: HistoryType,
 }
 
-class Download extends Component<PropsType, StateType> {
+export class Download extends Component<PropsType, StateType> {
 
-	constructor(props) {
+	constructor(props: PropsType) {
 		super(props);
 
 		this.state = {
@@ -72,22 +73,16 @@ class Download extends Component<PropsType, StateType> {
 		}
 
 		const querystring = this.props.location.search;
+
 		const preloadedConsultations = preload(
 			this.props.staticContext,
 			"consultationList",
 			[],
-			queryStringToObject(querystring),
+			Object.assign({relativeURL: this.props.match.url}, queryStringToObject(querystring)), //queryStringToObject(querystring),
 			preloadedData
 		);
-		
-		console.log(`SSR preload1-querystring: ${stringifyObject(querystring)}`);
-		console.log(`SSR preload1-preloadedData: ${stringifyObject(preloadedData)}`);
-		console.log(`SSR preload1: ${stringifyObject(preloadedConsultations)}`);
 
 		if (preloadedConsultations) {
-
-			console.log(`SSR preload2: ${stringifyObject(preloadedConsultations)}`);
-
 
 			this.state = {
 				searchTerm: "",
@@ -102,8 +97,6 @@ class Download extends Component<PropsType, StateType> {
 				indevReturnPath: "",
 			};
 		}
-
-
 	}
 
 	loadDataAndUpdateState = () => {
@@ -135,16 +128,16 @@ class Download extends Component<PropsType, StateType> {
 	}
 
 	componentDidMount() {
-		// if (!this.state.hasInitialData) {
-		// 	this.loadDataAndUpdateState();
-		// }
-		// this.unlisten = this.props.history.listen(() => {
-		// 	console.log("filter changed");
-		// 	const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;
-		// 	if (!this.state.path || path !== this.state.path) {
-		// 		this.loadDataAndUpdateState();
-		// 	}
-		// });
+		if (!this.state.hasInitialData) {
+			this.loadDataAndUpdateState();
+		}
+		this.unlisten = this.props.history.listen(() => {
+			console.log("filter changed");
+			const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;
+			if (!this.state.path || path !== this.state.path) {
+				this.loadDataAndUpdateState();
+			}
+		});
 
 		let indevReturnPath = this.state.consultationListData.indevBasePath;
 		if (typeof(document) !== "undefined"){
@@ -185,7 +178,7 @@ class Download extends Component<PropsType, StateType> {
 		} = consultationListData;
 
 		console.log(`SSRconsultations: ${stringifyObject(this.state.consultationListData.consultations)}`);
-		const consultationsToShow = hasInitialData ? this.state.consultationListData.consultations : this.state.consultationListData.consultations.filter(consultation => consultation.show) || [];
+		const consultationsToShow = typeof(this.state.consultationListData.consultations) === "undefined" ? [] : this.state.consultationListData.consultations.filter(consultation => consultation.show);
 
 		if (!hasInitialData) return null;
 

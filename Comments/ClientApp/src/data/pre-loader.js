@@ -1,5 +1,5 @@
 import { load } from "./loader";
-import stringifyObject from "stringify-object";
+//import stringifyObject from "stringify-object";
 
 // Returns data if it's available or a promise that resolves with the data
 // when it's loaded async.
@@ -30,19 +30,13 @@ const preload = (staticContext, endpoint,  urlParameters = [], query = {}, prelo
 	if (preloadData && preloadData.cookies) {
 		cookies = preloadData.cookies;
 	}
-	console.log(`in preloader - calling load with:. endpoint: ${endpoint} staticContext.baseUrl: ${staticContext.baseUrl} urlParameters: ${stringifyObject(urlParameters)} query: ${stringifyObject(query)} method: ${method} content: ${stringifyObject(content)} isJson:${isJson} cookies:${stringifyObject(cookies)} headers:${stringifyObject(headers)}`);
 	// Load fresh data on the server
 	const promise = load(endpoint, staticContext.baseUrl, urlParameters, query,  method, content, isJson, cookies, headers)
 		.then(response => {
-			console.log("in preloader - in the then.");
 			staticContext.preload.data[endpoint] = response.data;
-			console.log(`in preloader - in the then. response: ${stringifyObject(response)}`);
 			return response.data;
 		})
 		.catch(err => {
-			console.log("in preloader - in the catch2.");
-			console.error(err);
-			console.log(`in preloader - in the catch. error: ${err}`);
 			if (throwOnException){
 				// todo: no pages loading on dev / alpha poss to do with the footer erroring...?
 				 throw new Error(err);
