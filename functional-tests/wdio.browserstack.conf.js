@@ -13,6 +13,7 @@ exports.config = {
 		{
 			project: "Comment Collection",
 			name: "Functional tests - Chrome",
+			build: "Comment Collection" + BUILD_NUMBER,
 			browser: "Chrome",
 			os: "Windows",
 			os_version: "10",
