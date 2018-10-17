@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { DebounceInput } from "react-debounce-input";
 import queryString from "query-string";
+import stringifyObject from "stringify-object";
 
 import { withHistory } from "../HistoryContext/HistoryContext";
 import { appendQueryParameter, removeQueryParameter } from "../../helpers/utils";
@@ -16,12 +17,25 @@ export class TextFilter extends Component {
 	}
 
 	componentDidMount() {
-		console.log(this.props);
+		//console.log(this.props);
 		const keyword = queryString.parse(this.props.search).Keyword;
 		this.setState({
 			keyword,
+		}, () => {
+			this.props.onKeywordUpdated(keyword);
 		});
 	}
+
+	removeKeyword = () => {
+		console.log('remove keyword hit');
+	}
+
+	// UNSAFE_componentWillReceiveProps(nextProps) {
+	// 	console.log(`nextProps: ${stringifyObject(nextProps)}`);
+	// 	// this.setState({
+	// 	// 	isSelected: nextProps.option.isSelected
+	// 	// });
+	// }
 
 	getHref = (keyword) => {
 		if (keyword.length <= 0){
@@ -37,6 +51,7 @@ export class TextFilter extends Component {
 			keyword,
 		}, () => {
 			this.props.history.push(this.getHref(keyword));
+			this.props.onKeywordUpdated(keyword);
 		});
 	};
 

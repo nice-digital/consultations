@@ -4,7 +4,7 @@ import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import Helmet from "react-helmet";
 import Cookies from "js-cookie";
-//import stringifyObject from "stringify-object";
+import stringifyObject from "stringify-object";
 
 import { queryStringToObject } from "../../helpers/utils";
 import { UserContext } from "../../context/UserContext";
@@ -36,6 +36,7 @@ type StateType = {
 	},
 	indevReturnPath: string,
 	search: string,
+	keywordToFilterBy: string
 }
 
 type PropsType = {
@@ -56,6 +57,7 @@ export class Download extends Component<PropsType, StateType> {
 
 	constructor(props: PropsType) {
 		super(props);
+		this.textFilter = React.createRef();
 
 		this.state = {
 			searchTerm: "",
@@ -74,6 +76,7 @@ export class Download extends Component<PropsType, StateType> {
 			},
 			indevReturnPath: "",
 			search: this.props.location.search,
+			keywordToFilterBy: null,
 		};
 
 		let preloadedData;
@@ -105,8 +108,10 @@ export class Download extends Component<PropsType, StateType> {
 				},
 				indevReturnPath: "",
 				search: this.props.location.search,
+				keywordToFilterBy: null,
 			};
 		}
+		
 	}
 
 	loadDataAndUpdateState = () => {
@@ -144,10 +149,12 @@ export class Download extends Component<PropsType, StateType> {
 		}
 		this.unlisten = this.props.history.listen(() => {
 			console.log("filter changed");
+			this.textFilter.removeKeyword(); //TODO: this should be conditional somewhere.
 			const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;
 			if (!this.state.path || path !== this.state.path) {
 				
 				this.loadDataAndUpdateState();
+				
 			}
 		});
 
@@ -168,7 +175,11 @@ export class Download extends Component<PropsType, StateType> {
 		this.setState({indevReturnPath: indevReturnPath});		
 	}
 
-	getAppliedFilters(): ReviewAppliedFilterType[] {
+	keywordToFilterByUpdated = (keywordToFilterBy) => {
+		this.setState({keywordToFilterBy});
+	}
+
+	getAppliedFilters(): AppliedFilterType[] {
 		const mapOptions =
 			(group: ReviewFilterGroupType) => group.options
 				.filter(opt => opt.isSelected)
@@ -178,10 +189,25 @@ export class Download extends Component<PropsType, StateType> {
 					groupId: group.id,
 					optionId: opt.id,
 				}));
-
-		return this.state.consultationListData.optionFilters //TODO: support text filters.
+				
+		let filters = this.state.consultationListData.optionFilters
 			.map(mapOptions)
 			.reduce((arr, group) => arr.concat(group), []);
+
+		if (this.state.keywordToFilterBy){
+			if (filters.length){
+				filters = [];
+			}
+
+			filters.unshift({
+				groupTitle: "Keyword",
+				optionLabel: this.state.keywordToFilterBy,
+				groupId: "Keyword",
+				optionId: "Keyword",
+			});
+		}
+		console.log(`filters:${stringifyObject(filters)}`);
+		return filters;
 	}
 
 	render() {
@@ -234,8 +260,8 @@ export class Download extends Component<PropsType, StateType> {
 									<div className="grid">
 										<div data-g="12 md:3">
 											<h2 className="h5">Filter</h2>
-											{textFilter && <TextFilterWithHistory search={this.state.search}
-												path={this.props.basename + this.props.location.pathname} {...textFilter}/>}
+											{textFilter && <TextFilterWithHistory ref={this.textFilter} onKeywordUpdated={this.keywordToFilterByUpdated} search={this.state.search}
+												path={this.state.path} {...textFilter}/>}
 											<FilterPanel filters={optionFilters} path={path}/>
 										</div>
 										<div data-g="12 md:9">

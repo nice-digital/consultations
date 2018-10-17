@@ -22,6 +22,9 @@ const ShouldShowFilter = (appliedFilters: AppliedFilterType[], filterText: strin
 };
 
 const GetShowingText = (props: PropsType) => {
+
+	//const appliedFilters = props.appliedFilters
+
 	return `Showing ${props.consultationCount} consultation${props.consultationCount === 1 ? "": "s"}`;
 };
 
