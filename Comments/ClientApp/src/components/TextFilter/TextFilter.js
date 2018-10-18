@@ -18,7 +18,6 @@ export class TextFilter extends Component {
 	}
 
 	componentDidMount() {
-		//console.log(this.props);
 		const keyword = queryString.parse(this.props.search).Keyword;
 		this.setState({
 			keyword,
@@ -28,7 +27,6 @@ export class TextFilter extends Component {
 	}
 
 	removeKeyword = () => {
-		alert('remove keyword hit');
 		this.handleKeywordChange("");
 	}
 
@@ -52,7 +50,7 @@ export class TextFilter extends Component {
 		this.setState({
 			keyword,
 		}, () => {
-			//this.props.history.push(this.getHref(keyword));
+			//this.props.history.push(this.getHref(keyword)); //TODO: fix the history!!!
 			this.props.onKeywordUpdated(keyword);
 		});
 	};

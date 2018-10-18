@@ -58,7 +58,7 @@ export class Download extends Component<PropsType, StateType> {
 	constructor(props: PropsType) {
 		super(props);
 		
-		this.johnsTextFilter = React.createRef();
+		this.textFilter = React.createRef();
 
 		this.state = {
 			searchTerm: "",
@@ -115,8 +115,6 @@ export class Download extends Component<PropsType, StateType> {
 		
 	}
 
-	//textFilter = () => {};
-
 	loadDataAndUpdateState = () => {
 		const querystring = this.props.history.location.search;
 		const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;
@@ -151,7 +149,7 @@ export class Download extends Component<PropsType, StateType> {
 			this.loadDataAndUpdateState();
 		}
 		this.unlisten = this.props.history.listen(() => {
-			console.log("filter changed");
+			//console.log("filter changed");
 			
 			const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;
 			if (!this.state.path || path !== this.state.path) {
@@ -183,12 +181,9 @@ export class Download extends Component<PropsType, StateType> {
 	}
 
 	removeFilter = (optionId) => {
-		console.log("todo: figure out if it's a text filter");
 		if (optionId === "Keyword"){
-			this.textFilter.removeKeyword();
-			this.setState({keywordToFilterBy: null}, () => {
-				console.log(this.textFilter);
-				//this.textFilter.removeKeyword(); //TODO: this should be conditional somewhere.
+			this.setState({keywordToFilterBy: ""}, () => {
+				this.textFilter.current.removeKeyword();
 			});
 		}
 	}
@@ -220,12 +215,8 @@ export class Download extends Component<PropsType, StateType> {
 				optionId: "Keyword",
 			});
 		}
-		console.log(`filters:${stringifyObject(filters)}`);
+		//console.log(`filters:${stringifyObject(filters)}`);
 		return filters;
-	}
-
-	testMe = () => {
-		this.johnsTextFilter.current.removeKeyword();
 	}
 
 	render() {
@@ -278,10 +269,9 @@ export class Download extends Component<PropsType, StateType> {
 									<div className="grid">
 										<div data-g="12 md:3">
 											<h2 className="h5">Filter</h2>
-											<button onClick={this.testMe} >Click me</button>
 											{textFilter && 
 												<TextFilterWithHistory
-													ref={this.johnsTextFilter} 
+													ref={this.textFilter} 
 													onKeywordUpdated={this.keywordToFilterByUpdated} 
 													search={this.state.search}
 													path={this.state.path}
