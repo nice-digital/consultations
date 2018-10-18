@@ -225,8 +225,6 @@ export class Download extends Component<PropsType, StateType> {
 	}
 
 	testMe = () => {
-		//debugger;
-		console.log(this);
 		this.johnsTextFilter.current.removeKeyword();
 	}
 
@@ -281,7 +279,7 @@ export class Download extends Component<PropsType, StateType> {
 										<div data-g="12 md:3">
 											<h2 className="h5">Filter</h2>
 											<button onClick={this.testMe} >Click me</button>
-											{/* {textFilter &&  */}
+											{textFilter && 
 												<TextFilterWithHistory
 													ref={this.johnsTextFilter} 
 													onKeywordUpdated={this.keywordToFilterByUpdated} 
@@ -289,7 +287,7 @@ export class Download extends Component<PropsType, StateType> {
 													path={this.state.path}
 													{...textFilter}
 												/>
-											{/* } */}
+											}
 											<FilterPanel filters={optionFilters} path={path}/>
 										</div>
 										<div data-g="12 md:9">
@@ -300,7 +298,6 @@ export class Download extends Component<PropsType, StateType> {
 												isLoading={this.state.loading}
 												onRemoveFilter={this.removeFilter}
 											/>
-											{/* <h2 className="h5">All consultations</h2> */}
 											{consultationsToShow.length > 0 ? (
 												<ul className="list--unstyled">
 													{consultationsToShow.map((item, idx) =>

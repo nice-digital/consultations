@@ -49,7 +49,7 @@ namespace Comments.Services
 						new ConsultationListRow(consultation.Title,
 							consultation.StartDate, consultation.EndDate, responseCount, consultation.ConsultationId,
 							documentAndChapterSlug.documentId, documentAndChapterSlug.chapterSlug, consultation.Reference,
-							consultation.ConsultationType));
+							consultation.ProductTypeName));
 				}
 
 				model.OptionFilters = GetOptionFilterGroups(model.Status?.ToList(), consultationListRows);

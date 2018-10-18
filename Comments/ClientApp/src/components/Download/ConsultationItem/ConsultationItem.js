@@ -14,7 +14,7 @@ type PropsType = {
 	documentId:number,
 	chapterSlug :string,
 	gidReference :string,
-	consultationType :string,
+	productTypeName :string,
 	isOpen: boolean,
 	isClosed: boolean,
 	isUpcoming: boolean,
@@ -39,7 +39,7 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 			documentId,
 			chapterSlug,
 			gidReference,
-			consultationType,
+			productTypeName,
 			isOpen,
 			isClosed,
 			isUpcoming,
@@ -76,9 +76,9 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 							</dd>
 						</div>
 						<div className="card__metadatum">
-							<dt className="visually-hidden">Consultation Type</dt>
+							<dt className="visually-hidden">Product type name</dt>
 							<dd>
-								{consultationType}
+								{productTypeName}
 							</dd>
 						</div>
 						<div className="card__metadatum">

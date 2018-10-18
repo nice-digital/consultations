@@ -28,8 +28,8 @@ export class TextFilter extends Component {
 	}
 
 	removeKeyword = () => {
-		console.log('remove keyword hit');
-		this.handleKeywordChange(null);
+		alert('remove keyword hit');
+		this.handleKeywordChange("");
 	}
 
 	// UNSAFE_componentWillReceiveProps(nextProps) {
@@ -52,7 +52,7 @@ export class TextFilter extends Component {
 		this.setState({
 			keyword,
 		}, () => {
-			this.props.history.push(this.getHref(keyword));
+			//this.props.history.push(this.getHref(keyword));
 			this.props.onKeywordUpdated(keyword);
 		});
 	};
@@ -81,5 +81,6 @@ export class TextFilter extends Component {
 	}
 }
 
-export default withHistory(TextFilter);
+export default TextFilter;
+//export default withHistory(TextFilter);
 //export default withRouter(withHistory(TextFilter));

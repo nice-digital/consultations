@@ -140,7 +140,7 @@ declare type ConsultationListRow = {
 	documentId:number,
 	chapterSlug :string,
 	gidReference :string,
-	consultationType :string,
+	productTypeName :string,
 	isOpen: boolean,
 	isClosed: boolean,
 	isUpcoming: boolean,
