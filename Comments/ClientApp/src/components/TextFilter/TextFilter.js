@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { DebounceInput } from "react-debounce-input";
 import queryString from "query-string";
-import stringifyObject from "stringify-object";
+//import stringifyObject from "stringify-object";
+import { withRouter } from "react-router-dom";
 
 import { withHistory } from "../HistoryContext/HistoryContext";
 import { appendQueryParameter, removeQueryParameter } from "../../helpers/utils";
@@ -28,6 +29,7 @@ export class TextFilter extends Component {
 
 	removeKeyword = () => {
 		console.log('remove keyword hit');
+		this.handleKeywordChange(null);
 	}
 
 	// UNSAFE_componentWillReceiveProps(nextProps) {
@@ -80,3 +82,4 @@ export class TextFilter extends Component {
 }
 
 export default withHistory(TextFilter);
+//export default withRouter(withHistory(TextFilter));

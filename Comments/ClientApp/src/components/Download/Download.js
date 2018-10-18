@@ -54,10 +54,11 @@ type PropsType = {
 }
 
 export class Download extends Component<PropsType, StateType> {
-
+	
 	constructor(props: PropsType) {
 		super(props);
-		this.textFilter = React.createRef();
+		
+		this.johnsTextFilter = React.createRef();
 
 		this.state = {
 			searchTerm: "",
@@ -114,6 +115,8 @@ export class Download extends Component<PropsType, StateType> {
 		
 	}
 
+	//textFilter = () => {};
+
 	loadDataAndUpdateState = () => {
 		const querystring = this.props.history.location.search;
 		const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;
@@ -149,7 +152,7 @@ export class Download extends Component<PropsType, StateType> {
 		}
 		this.unlisten = this.props.history.listen(() => {
 			console.log("filter changed");
-			this.textFilter.removeKeyword(); //TODO: this should be conditional somewhere.
+			
 			const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;
 			if (!this.state.path || path !== this.state.path) {
 				
@@ -177,6 +180,17 @@ export class Download extends Component<PropsType, StateType> {
 
 	keywordToFilterByUpdated = (keywordToFilterBy) => {
 		this.setState({keywordToFilterBy});
+	}
+
+	removeFilter = (optionId) => {
+		console.log("todo: figure out if it's a text filter");
+		if (optionId === "Keyword"){
+			this.textFilter.removeKeyword();
+			this.setState({keywordToFilterBy: null}, () => {
+				console.log(this.textFilter);
+				//this.textFilter.removeKeyword(); //TODO: this should be conditional somewhere.
+			});
+		}
 	}
 
 	getAppliedFilters(): AppliedFilterType[] {
@@ -208,6 +222,12 @@ export class Download extends Component<PropsType, StateType> {
 		}
 		console.log(`filters:${stringifyObject(filters)}`);
 		return filters;
+	}
+
+	testMe = () => {
+		//debugger;
+		console.log(this);
+		this.johnsTextFilter.current.removeKeyword();
 	}
 
 	render() {
@@ -260,8 +280,16 @@ export class Download extends Component<PropsType, StateType> {
 									<div className="grid">
 										<div data-g="12 md:3">
 											<h2 className="h5">Filter</h2>
-											{textFilter && <TextFilterWithHistory ref={this.textFilter} onKeywordUpdated={this.keywordToFilterByUpdated} search={this.state.search}
-												path={this.state.path} {...textFilter}/>}
+											<button onClick={this.testMe} >Click me</button>
+											{/* {textFilter &&  */}
+												<TextFilterWithHistory
+													ref={this.johnsTextFilter} 
+													onKeywordUpdated={this.keywordToFilterByUpdated} 
+													search={this.state.search}
+													path={this.state.path}
+													{...textFilter}
+												/>
+											{/* } */}
 											<FilterPanel filters={optionFilters} path={path}/>
 										</div>
 										<div data-g="12 md:9">
@@ -269,12 +297,17 @@ export class Download extends Component<PropsType, StateType> {
 												consultationCount={consultationsToShow.length}
 												appliedFilters={this.getAppliedFilters()}
 												path={this.state.path}
-												isLoading={this.state.loading}/>
+												isLoading={this.state.loading}
+												onRemoveFilter={this.removeFilter}
+											/>
 											{/* <h2 className="h5">All consultations</h2> */}
 											{consultationsToShow.length > 0 ? (
 												<ul className="list--unstyled">
 													{consultationsToShow.map((item, idx) =>
-														<ConsultationItem key={idx} basename={this.props.basename} {...item} />
+														<ConsultationItem key={idx} 
+															basename={this.props.basename} 
+															{...item} 
+														/>
 													)}
 												</ul>
 											) : (

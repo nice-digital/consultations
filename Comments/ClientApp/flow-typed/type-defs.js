@@ -161,4 +161,9 @@ declare type TextFilterGroup = {
 	unfilteredResultCount:number,
 };
 
-declare type AppliedFilterType = any; //TODO!!!
+declare type AppliedFilterType = {
+	groupId: string,
+	groupTitle: string,
+	optionId: string,
+	optionLabel: string,
+}
