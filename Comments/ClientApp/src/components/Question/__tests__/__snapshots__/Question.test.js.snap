@@ -44,6 +44,7 @@ exports[`[ClientApp]  Question Component should match snapshot with answer 1`] =
       </div>
       <span
         className="ml--0 mb--0 CommentBox__savedIndicator"
+        data-qa-sel="comment-saved"
       >
         Saved
       </span>

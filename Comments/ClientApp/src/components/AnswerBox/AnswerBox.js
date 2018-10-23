@@ -91,7 +91,7 @@ export class AnswerBox extends Component<PropsType, StateType> {
 									value="Save answer"
 								/>
 								:
-								<span className="ml--0 mb--0 CommentBox__savedIndicator">Saved</span>
+								<span data-qa-sel="comment-saved" className="ml--0 mb--0 CommentBox__savedIndicator">Saved</span>
 							:
 							null
 						}

@@ -10,14 +10,28 @@ exports.config = {
 		"./src/features/**/*.feature"
 	],
 	capabilities: [
+		// {
+		// 	project: "Comment Collection",
+		// 	name: "Functional tests - Chrome",
+		// 	build: "Comment Collection" + "BUILD_NUMBER",
+		// 	browser: "Chrome",
+		// 	os: "Windows",
+		// 	os_version: "10",
+		// 	browser_version: "62.0",
+		// 	resolution: "1024x768",
+		// 	acceptInsecureCerts: true, // Because of self-signed cert inside Docker
+		// 	acceptSslCerts: true,
+		// 	maxInstances: 2,
+		// }
 		{
 			project: "Comment Collection",
-			name: "Functional tests - Chrome",
-			build: "Comment Collection" + BUILD_NUMBER,
-			browser: "Chrome",
-			os: "Windows",
-			os_version: "10",
-			browser_version: "62.0",
+			name: "Functional tests - Edge",
+			build: "Comment Collection" + "BUILD_NUMBER",
+			os: 'Windows',
+			os_version: '10',
+			browser: 'IE',
+			browser_version: '11.0',
+			selenium_version: '3.5.2',
 			resolution: "1024x768",
 			acceptInsecureCerts: true, // Because of self-signed cert inside Docker
 			acceptSslCerts: true,
