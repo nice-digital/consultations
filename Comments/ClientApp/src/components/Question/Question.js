@@ -41,20 +41,20 @@ export class Question extends Component<PropsType, StateType> {
 				{!this.isTextSelection(this.props.question) &&
 				<Fragment>
 					{documentTitle &&
-						<h1 className="CommentBox__title mt--0 mb--0">{documentTitle}</h1>
+						<h3 className="CommentBox__title mt--0 mb--0">{documentTitle}</h3>
 					}
-					<h2 data-qa-sel="comment-box-title" className="CommentBox__title mt--0 mb--0">
+					<h4 data-qa-sel="comment-box-title" className="CommentBox__title mt--0 mb--0">
 						Question on <span className="text-lowercase">{commentOn}</span>
-					</h2>
+					</h4>
 				</Fragment>
 				}
 
 				{this.isTextSelection(this.props.question) &&
 				<Fragment>
-					<h1 className="CommentBox__title mt--0 mb--0">{documentTitle}</h1>
-					<h2 data-qa-sel="comment-box-title" className="CommentBox__title mt--0 mb--0">
+					<h3 className="CommentBox__title mt--0 mb--0">{documentTitle}</h3>
+					<h4 data-qa-sel="comment-box-title" className="CommentBox__title mt--0 mb--0">
 						Question on: <span className="text-lowercase">{commentOn}</span>
-					</h2>
+					</h4>
 					<div className="CommentBox__quote mb--d">{quote}</div>
 				</Fragment>
 				}
