@@ -31,13 +31,6 @@ export class TextFilter extends Component {
 	}
 
 	componentDidUpdate(prevProps, prevState){
-
-		// console.log('component did update in text filter');
-
-		// console.log('previous keyword: ' + prevProps.keyword);
-
-		// console.log('current keyword: ' + this.props.keyword);
-
 		if (prevProps.keyword !== "" && this.props.keyword === ""){
 			this.removeKeyword();
 		}
@@ -51,15 +44,15 @@ export class TextFilter extends Component {
 	// }
 
 	getHref = (keyword) => {
+		const pathWithoutQuerystring = removeQuerystring(this.props.path);
 		const querystringWithRemovedKeyword = removeQueryParameter(this.props.search, "Keyword");
 
-		if (keyword.length <= 0){
-			const pathWithoutQuerystring = removeQuerystring(this.props.path);
+		if (keyword.length <= 0){			
 			return pathWithoutQuerystring + querystringWithRemovedKeyword;
 		}
 		
 		const querystringWithKeywordAdded = appendQueryParameter(querystringWithRemovedKeyword, "Keyword", keyword);
-		return this.props.path + querystringWithKeywordAdded;
+		return pathWithoutQuerystring + querystringWithKeywordAdded;
 	};
 
 	handleKeywordChange = (keyword) => {

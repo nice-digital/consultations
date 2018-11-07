@@ -209,7 +209,7 @@ export class Download extends Component<PropsType, StateType> {
 			.reduce((arr, group) => arr.concat(group), []);
 
 		if (this.state.keywordToFilterBy){
-			if (filters.length){
+			if (!filters.length){
 				filters = [];
 			}
 
