@@ -99,7 +99,7 @@ export class Download extends Component<PropsType, StateType> {
 
 			this.state = {
 				searchTerm: "",
-				path: this.props.basename + this.props.location.pathname,
+				path: this.props.basename + this.props.location.pathname + this.props.location.search,
 				consultationListData: preloadedConsultations,
 				loading: false,
 				hasInitialData: true,
@@ -149,9 +149,14 @@ export class Download extends Component<PropsType, StateType> {
 			this.loadDataAndUpdateState();
 		}
 		this.unlisten = this.props.history.listen(() => {
-			//console.log("filter changed");
+			console.log("listen hit");
 			
 			const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;
+			console.log(`in this listen path is: ${path} and this.state.path is: ${this.state.path}`);
+
+			console.log(`in this listen this.props.history.location.search is: ${this.props.history.location.search} and this.state.search is: ${this.state.search} and this.props.location.search is: ${this.props.location.search}`);
+
+
 			if (!this.state.path || path !== this.state.path) {
 				
 				this.loadDataAndUpdateState();
@@ -182,9 +187,9 @@ export class Download extends Component<PropsType, StateType> {
 
 	removeFilter = (optionId) => {
 		if (optionId === "Keyword"){
-			this.setState({keywordToFilterBy: ""}, () => {
-				this.textFilter.current.removeKeyword();
-			});
+			console.log("about to try and remove keyword");
+			console.log(this.state.keywordToFilterBy);
+			this.setState({keywordToFilterBy: ""});
 		}
 	}
 
@@ -271,8 +276,8 @@ export class Download extends Component<PropsType, StateType> {
 											<h2 className="h5">Filter</h2>
 											{textFilter && 
 												<TextFilterWithHistory
-													ref={this.textFilter} 
 													onKeywordUpdated={this.keywordToFilterByUpdated} 
+													keyword={this.state.keywordToFilterBy}
 													search={this.state.search}
 													path={this.state.path}
 													{...textFilter}

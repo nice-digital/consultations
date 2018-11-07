@@ -5,7 +5,7 @@ import queryString from "query-string";
 import { withRouter } from "react-router-dom";
 
 import { withHistory } from "../HistoryContext/HistoryContext";
-import { appendQueryParameter, removeQueryParameter } from "../../helpers/utils";
+import { appendQueryParameter, removeQueryParameter, removeQuerystring } from "../../helpers/utils";
 
 export class TextFilter extends Component {
 
@@ -30,6 +30,19 @@ export class TextFilter extends Component {
 		this.handleKeywordChange("");
 	}
 
+	componentDidUpdate(prevProps, prevState){
+
+		// console.log('component did update in text filter');
+
+		// console.log('previous keyword: ' + prevProps.keyword);
+
+		// console.log('current keyword: ' + this.props.keyword);
+
+		if (prevProps.keyword !== "" && this.props.keyword === ""){
+			this.removeKeyword();
+		}
+	}
+
 	// UNSAFE_componentWillReceiveProps(nextProps) {
 	// 	console.log(`nextProps: ${stringifyObject(nextProps)}`);
 	// 	// this.setState({
@@ -38,10 +51,13 @@ export class TextFilter extends Component {
 	// }
 
 	getHref = (keyword) => {
-		if (keyword.length <= 0){
-			return this.props.path;
-		}
 		const querystringWithRemovedKeyword = removeQueryParameter(this.props.search, "Keyword");
+
+		if (keyword.length <= 0){
+			const pathWithoutQuerystring = removeQuerystring(this.props.path);
+			return pathWithoutQuerystring + querystringWithRemovedKeyword;
+		}
+		
 		const querystringWithKeywordAdded = appendQueryParameter(querystringWithRemovedKeyword, "Keyword", keyword);
 		return this.props.path + querystringWithKeywordAdded;
 	};
@@ -50,7 +66,8 @@ export class TextFilter extends Component {
 		this.setState({
 			keyword,
 		}, () => {
-			//this.props.history.push(this.getHref(keyword)); //TODO: fix the history!!!
+			console.log('handle keyword change');
+			this.props.history.push(this.getHref(keyword)); //TODO: fix the history!!!
 			this.props.onKeywordUpdated(keyword);
 		});
 	};
@@ -79,6 +96,6 @@ export class TextFilter extends Component {
 	}
 }
 
-export default TextFilter;
-//export default withHistory(TextFilter);
+//export default TextFilter;
+export default withHistory(TextFilter);
 //export default withRouter(withHistory(TextFilter));

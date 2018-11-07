@@ -142,3 +142,7 @@ export const getSectionTitle = (elem) => {
 	} while (elem = elem.parentElement); // eslint-disable-line
 	return null; //shouldn't really ever be called, as root will get hit if there's no matches.
 };
+
+export const removeQuerystring = (url) => {
+	return url.split("?")[0];
+};
