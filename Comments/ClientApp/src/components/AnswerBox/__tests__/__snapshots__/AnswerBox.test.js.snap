@@ -11,6 +11,10 @@ exports[`[ClientApp]  AnswerBox Component should match snapshot with answer 1`] 
     <div
       className="form__group form__group--textarea mb--b"
     >
+      <label
+        className="form__label visually-hidden"
+        htmlFor="string"
+      />
       <textarea
         className="form__input form__input--textarea"
         data-qa-sel="Comment-text-area"
@@ -47,6 +51,10 @@ exports[`[ClientApp]  AnswerBox Component should match snapshot without answer 1
     <div
       className="form__group form__group--textarea mb--b"
     >
+      <label
+        className="form__label visually-hidden"
+        htmlFor="string"
+      />
       <textarea
         className="form__input form__input--textarea"
         data-qa-sel="Comment-text-area"

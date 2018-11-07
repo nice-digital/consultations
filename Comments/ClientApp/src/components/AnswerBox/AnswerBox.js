@@ -67,6 +67,7 @@ export class AnswerBox extends Component<PropsType, StateType> {
 		const unsavedChanges = this.state.unsavedChanges;
 		const answer = this.state.answer;
 		const readOnly = this.props.readOnly;
+		const questionText = this.props.questionText;
 
 		return (
 
@@ -74,6 +75,11 @@ export class AnswerBox extends Component<PropsType, StateType> {
 				<section role="form">
 					<form onSubmit={e => this.props.saveAnswerHandler(e, answer, this.props.questionId)} className="mb--0">
 						<div className="form__group form__group--textarea mb--b">
+							<label
+								className="form__label visually-hidden"
+								htmlFor={this.props.unique}>
+								{questionText}
+							</label>
 							<textarea
 								data-qa-sel="Comment-text-area"
 								disabled={readOnly}

@@ -63,6 +63,7 @@ export class Question extends Component<PropsType, StateType> {
 				{answers.map((answer) => {
 					return (
 						<AnswerBox
+							questionText={this.props.question.questionText}
 							updateUnsavedIds={this.props.updateUnsavedIds}
 							questionId={this.props.question.questionId}
 							readOnly={this.props.readOnly}
