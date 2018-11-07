@@ -40,7 +40,9 @@ export class Question extends Component<PropsType, StateType> {
 			<li className={this.props.isUnsaved ? "CommentBox CommentBox--unsavedChanges" : "CommentBox"}>
 				{!this.isTextSelection(this.props.question) &&
 				<Fragment>
-					<h1 className="CommentBox__title mt--0 mb--0">{documentTitle}</h1>
+					{documentTitle &&
+						<h1 className="CommentBox__title mt--0 mb--0">{documentTitle}</h1>
+					}
 					<h2 data-qa-sel="comment-box-title" className="CommentBox__title mt--0 mb--0">
 						Question on <span className="text-lowercase">{commentOn}</span>
 					</h2>

@@ -354,9 +354,6 @@ Array [
                                                             <li
                                                                   className="CommentBox"
                                                             >
-                                                                  <h1
-                                                                        className="CommentBox__title mt--0 mb--0"
-                                                                  />
                                                                   <h2
                                                                         className="CommentBox__title mt--0 mb--0"
                                                                         data-qa-sel="comment-box-title"
