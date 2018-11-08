@@ -351,6 +351,7 @@ Array [
                                                                               >
                                                                                     <textarea
                                                                                           className="form__input form__input--textarea"
+                                                                                          data-hj-whitelist={true}
                                                                                           data-qa-sel="Comment-text-area"
                                                                                           defaultValue="gg"
                                                                                           disabled={false}
@@ -409,6 +410,7 @@ Array [
                                                                               >
                                                                                     <textarea
                                                                                           className="form__input form__input--textarea"
+                                                                                          data-hj-whitelist={true}
                                                                                           data-qa-sel="Comment-text-area"
                                                                                           disabled={false}
                                                                                           id="Answer-1"
@@ -454,6 +456,7 @@ Array [
                                                                               >
                                                                                     <textarea
                                                                                           className="form__input form__input--textarea"
+                                                                                          data-hj-whitelist={true}
                                                                                           data-qa-sel="Comment-text-area"
                                                                                           disabled={false}
                                                                                           id="Answer-1"
@@ -508,6 +511,7 @@ Array [
                                                                               </label>
                                                                               <textarea
                                                                                     className="form__input form__input--textarea"
+                                                                                    data-hj-whitelist={true}
                                                                                     data-qa-sel="Comment-text-area"
                                                                                     defaultValue="ffffc"
                                                                                     disabled={false}
@@ -576,6 +580,7 @@ Array [
                                                                               </label>
                                                                               <textarea
                                                                                     className="form__input form__input--textarea"
+                                                                                    data-hj-whitelist={true}
                                                                                     data-qa-sel="Comment-text-area"
                                                                                     defaultValue="ffff"
                                                                                     disabled={false}

@@ -113,6 +113,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 							<p className="CommentBox__validationMessage">You have unsaved changes</p>
 							}
 							<textarea
+								data-hj-whitelist
 								data-qa-sel="Comment-text-area"
 								disabled={readOnly}
 								id={this.props.unique}
