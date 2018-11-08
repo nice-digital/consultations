@@ -30,7 +30,7 @@ describe("[ClientApp] ", () => {
 		};
 
 		it("should match snapshot with supplied data", () => {
-			
+			window.__PRELOADED__ = { isAuthorised: true};
 			const wrapper = mount(
 				<MemoryRouter>
 					<Download {...fakeProps} />
