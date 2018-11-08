@@ -75,6 +75,7 @@ export class AnswerBox extends Component<PropsType, StateType> {
 					<form onSubmit={e => this.props.saveAnswerHandler(e, answer, this.props.questionId)} className="mb--0">
 						<div className="form__group form__group--textarea mb--b">
 							<textarea
+								data-hj-whitelist
 								data-qa-sel="Comment-text-area"
 								disabled={readOnly}
 								id={this.props.unique}

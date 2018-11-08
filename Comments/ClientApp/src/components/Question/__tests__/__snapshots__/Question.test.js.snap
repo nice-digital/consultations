@@ -35,6 +35,7 @@ exports[`[ClientApp]  Question Component should match snapshot with answer 1`] =
       >
         <textarea
           className="form__input form__input--textarea"
+          data-hj-whitelist={true}
           data-qa-sel="Comment-text-area"
           defaultValue="some answer text"
           disabled={false}
@@ -94,6 +95,7 @@ exports[`[ClientApp]  Question Component should match snapshot without answer 1`
       >
         <textarea
           className="form__input form__input--textarea"
+          data-hj-whitelist={true}
           data-qa-sel="Comment-text-area"
           disabled={false}
           id="Answer-1"
