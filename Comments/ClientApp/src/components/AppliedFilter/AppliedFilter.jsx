@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from "react";
-import stringifyObject from "stringify-object";
+//import stringifyObject from "stringify-object";
 
 import { removeQueryParameter } from "./../../helpers/utils";
 import { withHistory } from "./../HistoryContext/HistoryContext";
@@ -25,8 +25,6 @@ export class AppliedFilter extends Component<PropsType> {
 	handleRemoveFilterLinkClick(e: DOMEvent) {
 		e.preventDefault();
 		this.props.history.push(this.getHref());
-		console.log(e);
-		//console.log(`removing: ${stringifyObject(e.currentTarget)}`);
 		if (typeof(this.props.onRemoveFilter) === "function"){
 			this.props.onRemoveFilter(e.currentTarget.getAttribute("data-option-id"));
 		}
