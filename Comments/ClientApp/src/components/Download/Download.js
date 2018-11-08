@@ -59,12 +59,13 @@ export class Download extends Component<PropsType, StateType> {
 	constructor(props: PropsType) {
 		super(props);
 		
-		//this.textFilter = React.createRef();
 		let preloadedData;
 		if (this.props.staticContext && this.props.staticContext.preload) {
 			preloadedData = this.props.staticContext.preload.data;
 		}
-		const isAuthorised = (preloadedData && preloadedData.isAuthorised);
+
+		const querystring = this.props.location.search;
+		const isAuthorised = ((preloadedData && preloadedData.isAuthorised) || window.__PRELOADED__["isAuthorised"]);
 
 		this.state = {
 			searchTerm: "",
@@ -87,9 +88,7 @@ export class Download extends Component<PropsType, StateType> {
 			keywordToFilterBy: null,
 		};
 
-		if (isAuthorised){ //only SSR if the user is authenticated. if not we'll have to wait for the client side render then redirect.
-			
-			const querystring = this.props.location.search;
+		if (isAuthorised){			
 
 			const preloadedConsultations = preload(
 				this.props.staticContext,
@@ -116,7 +115,7 @@ export class Download extends Component<PropsType, StateType> {
 					keywordToFilterBy: null,
 				};
 			}
-		}
+		}		
 	}
 
 	loadDataAndUpdateState = () => {
@@ -153,13 +152,8 @@ export class Download extends Component<PropsType, StateType> {
 			this.loadDataAndUpdateState();
 		}
 		this.unlisten = this.props.history.listen(() => {
-			console.log("listen hit");
-			
+		
 			const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;
-			console.log(`in this listen path is: ${path} and this.state.path is: ${this.state.path}`);
-
-			console.log(`in this listen this.props.history.location.search is: ${this.props.history.location.search} and this.state.search is: ${this.state.search} and this.props.location.search is: ${this.props.location.search}`);
-
 
 			if (!this.state.path || path !== this.state.path) {
 				
@@ -191,8 +185,6 @@ export class Download extends Component<PropsType, StateType> {
 
 	removeFilter = (optionId) => {
 		if (optionId === "Keyword"){
-			console.log("about to try and remove keyword");
-			console.log(this.state.keywordToFilterBy);
 			this.setState({keywordToFilterBy: ""});
 		}
 	}
@@ -224,7 +216,6 @@ export class Download extends Component<PropsType, StateType> {
 				optionId: "Keyword",
 			});
 		}
-		//console.log(`filters:${stringifyObject(filters)}`);
 		return filters;
 	}
 
