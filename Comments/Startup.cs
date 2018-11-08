@@ -267,8 +267,8 @@ namespace Comments
                         }
                         data["isAuthorised"] = context.User.Identity.IsAuthenticated;
 	                    data["displayName"] = context.User.Identity.Name;
-	                    data["signInURL"] = authenticateService.GetLoginURL(); //context.Request.Path);
-	                    data["registerURL"] = authenticateService.GetRegisterURL(); //context.Request.Path);
+	                    data["signInURL"] = authenticateService.GetLoginURL(context.Request.Path);
+	                    data["registerURL"] = authenticateService.GetRegisterURL(context.Request.Path);
 	                    data["requestURL"] = context.Request.Path;
 	                    data["accountsEnvironment"] = AppSettings.Environment.AccountsEnvironment;
 	                    //data["user"] = context.User; - possible security implications here, surfacing claims to the front end. might be ok, if just server-side.

@@ -30,6 +30,7 @@ type StateType = {
 	};
 	hasInitialData: boolean,
 	loading: boolean,
+	isAuthorised: boolean,
 	error: {
 		hasError: boolean,
 		message: string | null,
@@ -58,7 +59,12 @@ export class Download extends Component<PropsType, StateType> {
 	constructor(props: PropsType) {
 		super(props);
 		
-		this.textFilter = React.createRef();
+		//this.textFilter = React.createRef();
+		let preloadedData;
+		if (this.props.staticContext && this.props.staticContext.preload) {
+			preloadedData = this.props.staticContext.preload.data;
+		}
+		const isAuthorised = (preloadedData && preloadedData.isAuthorised);
 
 		this.state = {
 			searchTerm: "",
@@ -71,6 +77,7 @@ export class Download extends Component<PropsType, StateType> {
 			},
 			hasInitialData: false,
 			loading: true,
+			isAuthorised: isAuthorised,
 			error: {
 				hasError: false,
 				message: null,
@@ -80,39 +87,36 @@ export class Download extends Component<PropsType, StateType> {
 			keywordToFilterBy: null,
 		};
 
-		let preloadedData;
-		if (this.props.staticContext && this.props.staticContext.preload) {
-			preloadedData = this.props.staticContext.preload.data;
+		if (isAuthorised){ //only SSR if the user is authenticated. if not we'll have to wait for the client side render then redirect.
+			
+			const querystring = this.props.location.search;
+
+			const preloadedConsultations = preload(
+				this.props.staticContext,
+				"consultationList",
+				[],
+				Object.assign({relativeURL: this.props.match.url}, queryStringToObject(querystring)),
+				preloadedData
+			);
+	
+			if (preloadedConsultations) {	
+				this.state = {
+					searchTerm: "",
+					path: this.props.basename + this.props.location.pathname + this.props.location.search,
+					consultationListData: preloadedConsultations,
+					loading: false,
+					isAuthorised: isAuthorised,
+					hasInitialData: true,
+					error: {
+						hasError: false,
+						message: null,
+					},
+					indevReturnPath: "",
+					search: this.props.location.search,
+					keywordToFilterBy: null,
+				};
+			}
 		}
-
-		const querystring = this.props.location.search;
-
-		const preloadedConsultations = preload(
-			this.props.staticContext,
-			"consultationList",
-			[],
-			Object.assign({relativeURL: this.props.match.url}, queryStringToObject(querystring)),
-			preloadedData
-		);
-
-		if (preloadedConsultations) {
-
-			this.state = {
-				searchTerm: "",
-				path: this.props.basename + this.props.location.pathname + this.props.location.search,
-				consultationListData: preloadedConsultations,
-				loading: false,
-				hasInitialData: true,
-				error: {
-					hasError: false,
-					message: null,
-				},
-				indevReturnPath: "",
-				search: this.props.location.search,
-				keywordToFilterBy: null,
-			};
-		}
-		
 	}
 
 	loadDataAndUpdateState = () => {
@@ -238,6 +242,7 @@ export class Download extends Component<PropsType, StateType> {
 			loading,
 			hasInitialData,
 			consultationListData,
+			isAuthorised,
 		} = this.state;
 
 		const {
@@ -247,9 +252,9 @@ export class Download extends Component<PropsType, StateType> {
 
 		const consultationsToShow = this.state.consultationListData.consultations.filter(consultation => consultation.show);
 
-		if (!hasInitialData) return null;
+		if (isAuthorised && !hasInitialData) return null;
 
-		if (loading) return <h1>Loading...</h1>;
+		if (isAuthorised && loading) return <h1>Loading...</h1>;
 
 		return (
 			<UserContext.Consumer>
