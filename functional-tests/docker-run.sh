@@ -5,6 +5,7 @@
 export COMPOSE_CONVERT_WINDOWS_PATHS=1
 
 # Clean up before starting containers
+docker exec functional-tests_database_1 kill 1 || :
 docker-compose down --remove-orphans && docker-compose rm -vf
 docker-compose build && docker-compose up -d
 
