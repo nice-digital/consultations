@@ -6,6 +6,7 @@ using NICE.Feeds;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NICE.Feeds.Models.Indev.List;
 
 namespace Comments.Services
 {
@@ -34,22 +35,29 @@ namespace Comments.Services
 			var validate = _securityService.IsAllowedAccess(AppSettings.ConsultationListConfig.PermittedRolesToDownload);
 			if (validate.Valid)
 			{
-				var consultations = _feedService.GetConsultationList().ToList();
+				var consultationsFromIndev = _feedService.GetConsultationList().ToList();
+				var submittedCommentsAndAnswerCounts = _context.GetSubmittedCommentsAndAnswerCounts();
+
+				var consultationsFromIndevWithSourceURIAndResponseCount = new Dictionary<ConsultationList, (string sourceURI, int responseCount)>();
+				foreach (var consultationInIndev in consultationsFromIndev)
+				{
+					var sourceURI = ConsultationsUri.CreateConsultationURI(consultationInIndev.ConsultationId);
+					var responseCount = submittedCommentsAndAnswerCounts.FirstOrDefault(s => s.SourceURI.Equals(sourceURI))?.TotalCount ?? 0;
+
+					consultationsFromIndevWithSourceURIAndResponseCount.Add(consultationInIndev, (sourceURI, responseCount));
+				}
+
 				var consultationListRows = new List<ConsultationListRow>();
 
-				foreach (var consultation in consultations)
+				foreach (var consultation in consultationsFromIndevWithSourceURIAndResponseCount)
 				{
-					var sourceURI = ConsultationsUri.CreateConsultationURI(consultation.ConsultationId);
-
-					var responseCount = _context.GetAllSubmittedResponses(sourceURI); //TODO: refactor this so there's only 1 DB hit, not 1 hit for each consultation.
-
-					var documentAndChapterSlug = _consultationService.GetFirstConvertedDocumentAndChapterSlug(consultation.ConsultationId);
+					var documentAndChapterSlug = _consultationService.GetFirstConvertedDocumentAndChapterSlug(consultation.Key.ConsultationId);
 
 					consultationListRows.Add(
-						new ConsultationListRow(consultation.Title,
-							consultation.StartDate, consultation.EndDate, responseCount, consultation.ConsultationId,
-							documentAndChapterSlug.documentId, documentAndChapterSlug.chapterSlug, consultation.Reference,
-							consultation.ProductTypeName));
+						new ConsultationListRow(consultation.Key.Title,
+							consultation.Key.StartDate, consultation.Key.EndDate, consultation.Value.responseCount, consultation.Key.ConsultationId,
+							documentAndChapterSlug.documentId, documentAndChapterSlug.chapterSlug, consultation.Key.Reference,
+							consultation.Key.ProductTypeName));
 				}
 
 				model.OptionFilters = GetOptionFilterGroups(model.Status?.ToList(), consultationListRows);

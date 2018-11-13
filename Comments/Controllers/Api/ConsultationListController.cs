@@ -32,7 +32,6 @@ namespace Comments.Controllers.Api
 			var invalidResult = Validate(result.validate, _logger);
 
 			return invalidResult ?? Ok(result.consultationListViewModel);
-			//return result.consultationListViewModel;
 		}
     }
 }

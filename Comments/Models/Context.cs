@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Comments.Models
 {
@@ -111,6 +112,19 @@ namespace Comments.Models
 				.Select(s => s.SubmissionId).Distinct().Count();
 
 		    return submissions;
+	    }
+
+		//public Dictionary<string, int> GetAllSubmittedResponses(IEnumerable<string> sourceURIs)
+		//{
+		//	var submittedCounts = SubmittedCommentsAndAnswerCounts.ToList();
+
+		//	return sourceURIs.ToDictionary(sourceURI => sourceURI,
+		//		sourceURI => submittedCounts.FirstOrDefault(s => s.SourceURI.Equals(sourceURI))?.TotalCount ?? 0);
+		//}
+
+	    public IList<SubmittedCommentsAndAnswerCount> GetSubmittedCommentsAndAnswerCounts()
+	    {
+		    return SubmittedCommentsAndAnswerCounts.ToList();
 	    }
 
 		public List<Comment> GetAllSubmittedCommentsForURI(string  sourceURI)
