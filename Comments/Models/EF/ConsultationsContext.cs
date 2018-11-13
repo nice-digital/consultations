@@ -23,7 +23,7 @@ namespace Comments.Models
 		public virtual DbSet<SubmissionAnswer> SubmissionAnswer { get; set; }
 		public virtual DbSet<SubmissionComment> SubmissionComment { get; set; }
 
-		public DbQuery<SubmittedCommentsAndAnswerCount> SubmittedCommentsAndAnswerCounts { get; set; }
+		public virtual DbQuery<SubmittedCommentsAndAnswerCount> SubmittedCommentsAndAnswerCounts { get; set; }
 
 		private Guid? _createdByUserID;
 

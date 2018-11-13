@@ -18,9 +18,12 @@ namespace Comments.Test.UnitTests
 {
 	public class ConsultationListPageTests : TestBase
 	{
+		private readonly ConsultationsContext _consultationListContext;
+
 		public ConsultationListPageTests() : base(TestUserType.Administrator, Feed.ConsultationCommentsPublishedDetailMulitpleDoc)
 		{
 			AppSettings.ConsultationListConfig = TestAppSettings.GetConsultationListConfig();
+			_consultationListContext = new ConsultationListContext(_options, _fakeUserService, _fakeEncryption);
 		}
 
 		[Fact]
@@ -28,7 +31,7 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			var consultationList = AddConsultationsToList();
-			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeSecurityService);
+			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeSecurityService);
 
 			//Act
 			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null) { Status = new List<ConsultationStatus>() }).consultationListViewModel;
@@ -46,12 +49,13 @@ namespace Comments.Test.UnitTests
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var userId = Guid.NewGuid();
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
-			AddSubmittedCommentsAndAnswers(sourceURI, "Comment Label", "Question Label", "Answer Label", userId, consultationContext);
+			//var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
+			var consultationListContext = new ConsultationListContext(_options, userService, _fakeEncryption, new List<SubmittedCommentsAndAnswerCount>(){ });
+			AddSubmittedCommentsAndAnswers(sourceURI, "Comment Label", "Question Label", "Answer Label", userId, consultationListContext);
 
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList { ConsultationId = 1 });
-			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeSecurityService);
+			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeSecurityService);
 
 			//Act
 			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null) { Status = new List<ConsultationStatus>() });
@@ -75,7 +79,7 @@ namespace Comments.Test.UnitTests
 
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList { ConsultationId = 1 });
-			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeSecurityService);
+			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeSecurityService);
 
 			//Act
 			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null) { Status = new List<ConsultationStatus>() });
@@ -101,7 +105,7 @@ namespace Comments.Test.UnitTests
 
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList { ConsultationId = 1 });
-			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeSecurityService);
+			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeSecurityService);
 
 			//Act
 			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null) { Status = new List<ConsultationStatus>() });
@@ -131,7 +135,7 @@ namespace Comments.Test.UnitTests
 
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList { ConsultationId = 1 });
-			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeSecurityService);
+			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeSecurityService);
 
 			//Act
 			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null) { Status = new List<ConsultationStatus>() });
@@ -155,7 +159,7 @@ namespace Comments.Test.UnitTests
 
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList { ConsultationId = 1 });
-			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeSecurityService);
+			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeSecurityService);
 
 			//Act
 			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null) { Status = new List<ConsultationStatus>() });
@@ -169,7 +173,7 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			var consultationList = AddConsultationsToList();
-			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeSecurityService);
+			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeSecurityService);
 
 			//Act
 			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null){ Status = new List<ConsultationStatus>() }).consultationListViewModel;
@@ -184,7 +188,7 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			var consultationList = AddConsultationsToList();
-			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeSecurityService);
+			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeSecurityService);
 
 			//Act
 			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null){Status = new List<ConsultationStatus>()}).consultationListViewModel;
@@ -203,7 +207,7 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			var consultationList = AddConsultationsToList();
-			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeSecurityService);
+			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeSecurityService);
 			var viewModel = new ConsultationListViewModel(null, null, null);
 			viewModel.Status = new List<ConsultationStatus>(){ ConsultationStatus.Open };
 
@@ -220,7 +224,7 @@ namespace Comments.Test.UnitTests
 			//Arrange
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList { ConsultationId = 123 });
-			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeSecurityService);
+			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeSecurityService);
 			var viewModel = new ConsultationListViewModel(null, null, null);
 			viewModel.Status = new List<ConsultationStatus>() { ConsultationStatus.Closed };
 
@@ -237,7 +241,7 @@ namespace Comments.Test.UnitTests
 			//Arrange
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList { ConsultationId = 123 });
-			var consultationListService = new ConsultationListService(_context, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeSecurityService);
+			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeSecurityService);
 			var viewModel = new ConsultationListViewModel(null, null, null);
 			viewModel.Status = new List<ConsultationStatus>() { ConsultationStatus.Upcoming };
 
@@ -540,10 +544,10 @@ namespace Comments.Test.UnitTests
 		private ConsultationListService GetConsultationListService()
 		{
 			var consultationList = AddConsultationsToList();
-			var userId = Guid.NewGuid();
-			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
-			var consultationListService = new ConsultationListService(consultationContext, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeSecurityService);
+			//var userId = Guid.NewGuid();
+			//var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+			//var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
+			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeSecurityService);
 
 			return consultationListService;
 		}

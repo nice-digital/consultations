@@ -114,7 +114,7 @@ namespace Comments.Models
 		    return submissions;
 	    }
 
-	    public IList<SubmittedCommentsAndAnswerCount> GetSubmittedCommentsAndAnswerCounts()
+	    public virtual IList<SubmittedCommentsAndAnswerCount> GetSubmittedCommentsAndAnswerCounts()
 	    {
 		    return SubmittedCommentsAndAnswerCounts.ToList();
 	    }

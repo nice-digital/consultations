@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using Comments.Migrations;
 using Comments.Services;
 using Comments.ViewModels;
 using Microsoft.AspNetCore.Builder;
@@ -178,9 +179,6 @@ namespace Comments.Test.Infrastructure
             using (var context = new ConsultationsContext(_options, userService, _fakeEncryption))
             {
                 context.Database.EnsureDeleted();
-				//context.Database.CloseConnection();
-				//context.Database.OpenConnection();
-				//context.Status.AddRange(new List<Status>(2) { new Status("Draft", null, null), new Status("Submitted", null, null) });
 			}
         }
         protected int AddLocation(string sourceURI, ConsultationsContext passedInContext = null, string order = "0")

@@ -38,18 +38,18 @@ namespace Comments.Services
 				var consultationsFromIndev = _feedService.GetConsultationList().ToList();
 				var submittedCommentsAndAnswerCounts = _context.GetSubmittedCommentsAndAnswerCounts();
 
-				var consultationsFromIndevWithSourceURIAndResponseCount = new Dictionary<ConsultationList, int>();
+				var consultationsFromIndevWithResponseCount = new Dictionary<ConsultationList, int>();
 				foreach (var consultationInIndev in consultationsFromIndev)
 				{
 					var sourceURI = ConsultationsUri.CreateConsultationURI(consultationInIndev.ConsultationId);
 					var responseCount = submittedCommentsAndAnswerCounts.FirstOrDefault(s => s.SourceURI.Equals(sourceURI))?.TotalCount ?? 0;
 
-					consultationsFromIndevWithSourceURIAndResponseCount.Add(consultationInIndev, responseCount);
+					consultationsFromIndevWithResponseCount.Add(consultationInIndev, responseCount);
 				}
 
 				var consultationListRows = new List<ConsultationListRow>();
 
-				foreach (var consultation in consultationsFromIndevWithSourceURIAndResponseCount)
+				foreach (var consultation in consultationsFromIndevWithResponseCount)
 				{
 					var documentAndChapterSlug = _consultationService.GetFirstConvertedDocumentAndChapterSlug(consultation.Key.ConsultationId);
 
