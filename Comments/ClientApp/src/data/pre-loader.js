@@ -12,7 +12,7 @@ const preload = (staticContext, endpoint,  urlParameters = [], query = {}, prelo
 	if (typeof window !== "undefined") {
 		if (!window.__PRELOADED__) return null;
 		data = window.__PRELOADED__[endpoint];
-		delete window.__PRELOADED__[endpoint];
+		delete window.__PRELOADED__[endpoint]; //this is deleted since the preloaded data should only be used on the initial page render and not persist beyond that
 		return data;
 	}
 

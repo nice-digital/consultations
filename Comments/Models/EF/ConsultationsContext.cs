@@ -23,6 +23,9 @@ namespace Comments.Models
 		public virtual DbSet<SubmissionAnswer> SubmissionAnswer { get; set; }
 		public virtual DbSet<SubmissionComment> SubmissionComment { get; set; }
 
+		/// <summary>
+		/// Query type - see here for more info https://docs.microsoft.com/en-us/ef/core/modeling/query-types
+		/// </summary>
 		public virtual DbQuery<SubmittedCommentsAndAnswerCount> SubmittedCommentsAndAnswerCounts { get; set; }
 
 		private Guid? _createdByUserID;

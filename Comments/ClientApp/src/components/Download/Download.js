@@ -6,7 +6,7 @@ import Helmet from "react-helmet";
 import Cookies from "js-cookie";
 //import stringifyObject from "stringify-object";
 
-import { queryStringToObject } from "../../helpers/utils";
+import { queryStringToObject, canUseDOM } from "../../helpers/utils";
 import { UserContext } from "../../context/UserContext";
 import { LoginBanner } from "../LoginBanner/LoginBanner";
 import { Header } from "../Header/Header";
@@ -65,7 +65,8 @@ export class Download extends Component<PropsType, StateType> {
 		}
 
 		const querystring = this.props.location.search;
-		const isAuthorised = ((preloadedData && preloadedData.isAuthorised) || window.__PRELOADED__["isAuthorised"]);
+
+		const isAuthorised = ((preloadedData && preloadedData.isAuthorised) || (canUseDOM() && window.__PRELOADED__["isAuthorised"]));
 
 		this.state = {
 			searchTerm: "",
@@ -129,6 +130,8 @@ export class Download extends Component<PropsType, StateType> {
 			.then(response => {
 				this.setState({
 					consultationListData: response.data,
+					hasInitialData: true,
+					loading: false,
 				});
 			})
 			.catch(err => { //TODO: maybe this should log?
@@ -243,9 +246,9 @@ export class Download extends Component<PropsType, StateType> {
 
 		const consultationsToShow = this.state.consultationListData.consultations.filter(consultation => consultation.show);
 
-		if (isAuthorised && !hasInitialData) return null;
-
 		if (isAuthorised && loading) return <h1>Loading...</h1>;
+
+		if (isAuthorised && !hasInitialData) return null;		
 
 		return (
 			<UserContext.Consumer>
