@@ -170,7 +170,10 @@ export class Download extends Component<PropsType, StateType> {
 			const documentReferrer = document.referrer;
 			if (documentReferrer.toLowerCase().indexOf("indev") !== -1) {
 				indevReturnPath = documentReferrer;
-				Cookies.set("documentReferrer", documentReferrer);
+				const inTenMinutes = new Date(new Date().getTime() + 10 * 60 * 1000);
+				Cookies.set("documentReferrer", documentReferrer, {
+					expires: inTenMinutes,
+				});
 			}
 			else {
 				const cookieReferrer = Cookies.get("documentReferrer");
@@ -270,9 +273,9 @@ export class Download extends Component<PropsType, StateType> {
 								<div data-g="12">
 									<Breadcrumbs links={BackToIndevLink}/>
 									<Header title="Download Responses"/>
-									<div className="grid">
+									<div className="grid mt--d">
 										<div data-g="12 md:3">
-											<h2 className="h5">Filter</h2>
+											<h2 className="h5 mt--0">Filter</h2>
 											{textFilter && 
 												<TextFilterWithHistory
 													onKeywordUpdated={this.keywordToFilterByUpdated} 
