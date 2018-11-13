@@ -26,6 +26,20 @@ namespace Comments.Test.UnitTests
 			_consultationListContext = new ConsultationListContext(_options, _fakeUserService, _fakeEncryption);
 		}
 
+		private ConsultationListContext CreateContext(IUserService userService, int totalCount = 1)
+		{
+			var consultationListContext = new ConsultationListContext(_options, userService, _fakeEncryption,
+				new List<SubmittedCommentsAndAnswerCount>
+				{
+					new SubmittedCommentsAndAnswerCount
+					{
+						SourceURI = "consultations://./consultation/1",
+						TotalCount = totalCount
+					}
+				});
+			return consultationListContext;
+		}
+
 		[Fact]
 		public void ConsultationListPageModel_HasConsultationsPopulated()
 		{
@@ -49,13 +63,12 @@ namespace Comments.Test.UnitTests
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var userId = Guid.NewGuid();
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-			//var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
-			var consultationListContext = new ConsultationListContext(_options, userService, _fakeEncryption, new List<SubmittedCommentsAndAnswerCount>(){ });
-			AddSubmittedCommentsAndAnswers(sourceURI, "Comment Label", "Question Label", "Answer Label", userId, consultationListContext);
+			var context = CreateContext(userService);
+			AddSubmittedCommentsAndAnswers(sourceURI, "Comment Label", "Question Label", "Answer Label", userId, context);
 
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList { ConsultationId = 1 });
-			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeSecurityService);
+			var consultationListService = new ConsultationListService(context, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeSecurityService);
 
 			//Act
 			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null) { Status = new List<ConsultationStatus>() });
@@ -73,13 +86,13 @@ namespace Comments.Test.UnitTests
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var userId = Guid.NewGuid();
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
-			AddSubmittedCommentsAndAnswers(sourceURI, "Comment Label", "Question Label", "Answer Label", userId, consultationContext);
-			AddSubmittedCommentsAndAnswers(sourceURI, "Second Comment Label", "Second Question Label", " Second Answer Label", userId, consultationContext);
+			var context = CreateContext(userService, 2);
+			AddSubmittedCommentsAndAnswers(sourceURI, "Comment Label", "Question Label", "Answer Label", userId, context);
+			AddSubmittedCommentsAndAnswers(sourceURI, "Second Comment Label", "Second Question Label", " Second Answer Label", userId, context);
 
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList { ConsultationId = 1 });
-			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeSecurityService);
+			var consultationListService = new ConsultationListService(context, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeSecurityService);
 
 			//Act
 			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null) { Status = new List<ConsultationStatus>() });
@@ -97,15 +110,15 @@ namespace Comments.Test.UnitTests
 			_context.Database.EnsureCreated();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var userId = Guid.NewGuid();
-
-			var locationId = AddLocation(sourceURI);
-			var commentId = AddComment(locationId, "Just a comment", false, userId, 2);
-			var submissionId = AddSubmission(userId);
-			AddSubmissionComments(submissionId, commentId);
+			var context = CreateContext(_fakeUserService);
+			var locationId = AddLocation(sourceURI, context);
+			var commentId = AddComment(locationId, "Just a comment", false, userId, 2, context);
+			var submissionId = AddSubmission(userId, context);
+			AddSubmissionComments(submissionId, commentId, context);
 
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList { ConsultationId = 1 });
-			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeSecurityService);
+			var consultationListService = new ConsultationListService(context, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeSecurityService);
 
 			//Act
 			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null) { Status = new List<ConsultationStatus>() });
@@ -125,17 +138,18 @@ namespace Comments.Test.UnitTests
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var userId = Guid.NewGuid();
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+			var context =  CreateContext(userService);
 
-			var locationId = AddLocation(sourceURI);
-			var questionTypeId = AddQuestionType("Question Type ", false, true);
-			var questionId = AddQuestion(locationId, questionTypeId, "Question Text");
-			var AnswerId = AddAnswer(questionId, userId, "my answer", 2);
-			var submissionId = AddSubmission(userId);
-			AddSubmissionAnswers(submissionId, AnswerId);
+			var locationId = AddLocation(sourceURI, context);
+			var questionTypeId = AddQuestionType("Question Type ", false, true, 1, context);
+			var questionId = AddQuestion(locationId, questionTypeId, "Question Text", context);
+			var AnswerId = AddAnswer(questionId, userId, "my answer", 2, context);
+			var submissionId = AddSubmission(userId, context);
+			AddSubmissionAnswers(submissionId, AnswerId, context);
 
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList { ConsultationId = 1 });
-			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeSecurityService);
+			var consultationListService = new ConsultationListService(context, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeSecurityService);
 
 			//Act
 			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null) { Status = new List<ConsultationStatus>() });
@@ -143,31 +157,7 @@ namespace Comments.Test.UnitTests
 			//Assert
 			viewModel.consultationListViewModel.Consultations.First().SubmissionCount.ShouldBe(1);
 		}
-
-		[Fact]
-		public void ConsultationListPageModel_HasCorrectlySetResponseCountWithMulitpleUsers()
-		{
-			//Arrange
-			ResetDatabase();
-			_context.Database.EnsureCreated();
-			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
-			var userId = Guid.NewGuid();
-			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
-			AddSubmittedCommentsAndAnswers(sourceURI, "Comment Label", "Question Label", "Answer Label", userId, consultationContext);
-			AddSubmittedCommentsAndAnswers(sourceURI, "another users Comment Label", "another users Question Label", " another users Answer Label", Guid.NewGuid(), consultationContext);
-
-			var consultationList = new List<ConsultationList>();
-			consultationList.Add(new ConsultationList { ConsultationId = 1 });
-			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeSecurityService);
-
-			//Act
-			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null) { Status = new List<ConsultationStatus>() });
-
-			//Assert
-			viewModel.consultationListViewModel.Consultations.First().SubmissionCount.ShouldBe(2);
-		}
-
+		
 		[Fact]
 		public void ConsultationListPageModel_HasDocumentIdAndChapterSlugPopulatedCorrectly()
 		{

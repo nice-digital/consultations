@@ -87,12 +87,12 @@ namespace Comments.Test.Infrastructure
 		    _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
 		}
 
-	    public TestBase(TestUserType testUserType, Feed feed) : this(false, testUserType, true)
+	    public TestBase(TestUserType testUserType, Feed feed, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null) : this(false, testUserType, true, submittedCommentsAndAnswerCounts)
 	    {
 			FeedToUse = feed;
 		}
 
-		public TestBase(bool useRealSubmitService = false, TestUserType testUserType = TestUserType.Authenticated, bool useFakeConsultationService = false)
+		public TestBase(bool useRealSubmitService = false, TestUserType testUserType = TestUserType.Authenticated, bool useFakeConsultationService = false, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null)
         {
             // Arrange
             _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
@@ -107,7 +107,15 @@ namespace Comments.Test.Infrastructure
 					.UseInMemoryDatabase(databaseName)
                     .Options;
 
-            _context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption);
+	        if (submittedCommentsAndAnswerCounts != null)
+	        {
+		        _context = new ConsultationListContext(_options, _fakeUserService, _fakeEncryption, submittedCommentsAndAnswerCounts);
+	        }
+	        else
+	        {
+				_context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption);
+			}
+            
             _context.Database.EnsureCreatedAsync();
 
 			var builder = new WebHostBuilder()

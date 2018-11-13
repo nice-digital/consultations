@@ -1,8 +1,10 @@
+using System.Collections.Generic;
 using System.Net;
 using Comments.Configuration;
 using Comments.Test.Infrastructure;
 using NICE.Feeds.Tests.Infrastructure;
 using System.Threading.Tasks;
+using Comments.Models;
 using Shouldly;
 using Xunit;
 using TestBase = Comments.Test.Infrastructure.TestBase;
@@ -11,7 +13,15 @@ namespace Comments.Test.IntegrationTests.API.ConsultationList
 {
 	public class ConsultationListTests : TestBase
     {
-	    public ConsultationListTests() : base(TestUserType.Administrator, Feed.ConsultationCommentsListMultiple)
+	    public ConsultationListTests() : base(TestUserType.Administrator, Feed.ConsultationCommentsListMultiple,
+		    new List<SubmittedCommentsAndAnswerCount>
+		    {
+			    new SubmittedCommentsAndAnswerCount
+			    {
+				    SourceURI = "consultations://./consultation/1",
+				    TotalCount = 1
+			    }
+		    })
 	    {
 			AppSettings.ConsultationListConfig = TestAppSettings.GetConsultationListConfig();
 		    AppSettings.Feed = TestAppSettings.GetFeedConfig();

@@ -5,7 +5,7 @@
             "title":"For consultation comments",
             "startDate":"2018-04-01T00:00:00",
             "endDate":"2028-05-31T17:00:00",
-            "submissionCount":0,
+            "submissionCount":1,
             "consultationId":1,
             "documentId":1,
             "chapterSlug":"my-chapter-slug",
