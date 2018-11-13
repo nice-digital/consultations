@@ -38,13 +38,13 @@ namespace Comments.Services
 				var consultationsFromIndev = _feedService.GetConsultationList().ToList();
 				var submittedCommentsAndAnswerCounts = _context.GetSubmittedCommentsAndAnswerCounts();
 
-				var consultationsFromIndevWithSourceURIAndResponseCount = new Dictionary<ConsultationList, (string sourceURI, int responseCount)>();
+				var consultationsFromIndevWithSourceURIAndResponseCount = new Dictionary<ConsultationList, int>();
 				foreach (var consultationInIndev in consultationsFromIndev)
 				{
 					var sourceURI = ConsultationsUri.CreateConsultationURI(consultationInIndev.ConsultationId);
 					var responseCount = submittedCommentsAndAnswerCounts.FirstOrDefault(s => s.SourceURI.Equals(sourceURI))?.TotalCount ?? 0;
 
-					consultationsFromIndevWithSourceURIAndResponseCount.Add(consultationInIndev, (sourceURI, responseCount));
+					consultationsFromIndevWithSourceURIAndResponseCount.Add(consultationInIndev, responseCount);
 				}
 
 				var consultationListRows = new List<ConsultationListRow>();
@@ -55,7 +55,7 @@ namespace Comments.Services
 
 					consultationListRows.Add(
 						new ConsultationListRow(consultation.Key.Title,
-							consultation.Key.StartDate, consultation.Key.EndDate, consultation.Value.responseCount, consultation.Key.ConsultationId,
+							consultation.Key.StartDate, consultation.Key.EndDate, consultation.Value, consultation.Key.ConsultationId,
 							documentAndChapterSlug.documentId, documentAndChapterSlug.chapterSlug, consultation.Key.Reference,
 							consultation.Key.ProductTypeName));
 				}

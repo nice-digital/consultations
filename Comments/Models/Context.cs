@@ -114,14 +114,6 @@ namespace Comments.Models
 		    return submissions;
 	    }
 
-		//public Dictionary<string, int> GetAllSubmittedResponses(IEnumerable<string> sourceURIs)
-		//{
-		//	var submittedCounts = SubmittedCommentsAndAnswerCounts.ToList();
-
-		//	return sourceURIs.ToDictionary(sourceURI => sourceURI,
-		//		sourceURI => submittedCounts.FirstOrDefault(s => s.SourceURI.Equals(sourceURI))?.TotalCount ?? 0);
-		//}
-
 	    public IList<SubmittedCommentsAndAnswerCount> GetSubmittedCommentsAndAnswerCounts()
 	    {
 		    return SubmittedCommentsAndAnswerCounts.ToList();
