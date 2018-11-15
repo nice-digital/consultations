@@ -80,5 +80,21 @@ namespace Comments.Test.UnitTests
 		    displayNamesReturned[marlasUserId].ShouldBe("Marla Singer");
 		    displayNamesReturned[angelFaceUserId].ShouldBeNull();
 		}
+
+	    [Fact]
+	    public void GetUserRolesCopesWithNoAuthenticatedUser()
+	    {
+			//Arrange
+			var httpContextAccessor = FakeHttpContextAccessor.Get(false);
+			var userService = new UserService(httpContextAccessor, null);
+
+			//Act
+		    var roles = userService.GetUserRoles();
+
+			//Assert
+			roles.Count.ShouldBe(0);
+		}
+
+
 	}
 }

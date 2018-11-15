@@ -35,7 +35,8 @@ namespace Comments.Test.Infrastructure
 		IndevUser,
 		Authenticated,
 		NotAuthenticated,
-		CustomFictionalRole
+		CustomFictionalRole,
+		ConsultationListTestRole
 	}
 
     public class TestBase
@@ -61,7 +62,6 @@ namespace Comments.Test.Infrastructure
 	    protected readonly bool _useRealSubmitService = false;
 
 	    protected IEncryption _fakeEncryption;
-	    protected readonly ISecurityService _fakeSecurityService;
 
 		public TestBase(Feed feed) : this()
         {
@@ -95,8 +95,7 @@ namespace Comments.Test.Infrastructure
 		public TestBase(bool useRealSubmitService = false, TestUserType testUserType = TestUserType.Authenticated, bool useFakeConsultationService = false, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null)
         {
             // Arrange
-            _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
-	        _fakeSecurityService = new FakeSecurityService(_authenticated, _authenticated, false, null);
+            _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId, testUserType);
 			_fakeHttpContextAccessor = FakeHttpContextAccessor.Get(_authenticated, _displayName, _userId, testUserType);
 	        _consultationService = new FakeConsultationService();
 	        _useRealSubmitService = useRealSubmitService;

@@ -75,7 +75,6 @@ namespace Comments
 	        services.TryAddTransient<IExportToExcel, ExportToExcel>();
 	        services.TryAddTransient<IStatusService, StatusService>();
 			services.TryAddTransient<IConsultationListService, ConsultationListService>();
-	        services.TryAddTransient<ISecurityService, SecurityService>();
 
 			// Add authentication 
 			services.AddAuthentication(options =>

@@ -23,9 +23,9 @@ namespace Comments.Services
 	    private readonly ConsultationsContext _dbContext;
 	    private readonly IHostingEnvironment _hostingEnvironment;
 
-	    public AdminService(ConsultationsContext dbContext, IHostingEnvironment hostingEnvironment, ISecurityService securityService)
+	    public AdminService(ConsultationsContext dbContext, IHostingEnvironment hostingEnvironment, IUserService userService)
 	    {
-		    if (!securityService.IsAllowedAccess(new List<string> {"Administrator"}).Valid)
+		    if (!userService.IsAllowedAccess(new List<string> {"Administrator"}).Valid)
 		    {
 			    throw new AuthenticationException("Not authenticated");
 			}

@@ -6,13 +6,21 @@ using System.Linq;
 namespace Comments.Configuration
 {
 	public class ConsultationListConfig
-{
+	{
 		public IEnumerable<OptionFilterGroup> OptionFilters { get; set; }
 
 		public TextFilterGroup TextFilters { get; set; }
+		
+		public RoleTypes DownloadRoles { get; set; }
+		
+	}
 
-		public string DownloadRolesCSV { get; set; }
+	public class RoleTypes
+	{
+		public IEnumerable<string> AdminRoles { get; set; }
 
-		public ICollection<string> PermittedRolesToDownload => DownloadRolesCSV?.Split(',', StringSplitOptions.RemoveEmptyEntries)?.ToList() ?? new List<string>();
-}
+		public IEnumerable<string> TeamRoles { get; set; }
+
+		public ICollection<string> AllRoles => AdminRoles.Concat(TeamRoles).ToList();
+	}
 }

@@ -20,44 +20,42 @@ namespace Comments.Services
 		private readonly ConsultationsContext _context;
 		private readonly IFeedService _feedService;
 		private readonly IConsultationService _consultationService;
-		private readonly ISecurityService _securityService;
+		private readonly IUserService _userService;
 
-		public ConsultationListService(ConsultationsContext consultationsContext, IFeedService feedService, IConsultationService consultationService, ISecurityService securityService)
+		public ConsultationListService(ConsultationsContext consultationsContext, IFeedService feedService, IConsultationService consultationService, IUserService userService)
 		{
 			_context = consultationsContext;
 			_feedService = feedService;
 			_consultationService = consultationService;
-			_securityService = securityService;
+			_userService = userService;
 		}
 
 		public (ConsultationListViewModel consultationListViewModel, Validate validate) GetConsultationListViewModel(ConsultationListViewModel model)
 		{
-			var validate = _securityService.IsAllowedAccess(AppSettings.ConsultationListConfig.PermittedRolesToDownload);
+			var validate = _userService.IsAllowedAccess(AppSettings.ConsultationListConfig.DownloadRoles.AllRoles);
 			if (validate.Valid)
 			{
 				var consultationsFromIndev = _feedService.GetConsultationList().ToList();
 				var submittedCommentsAndAnswerCounts = _context.GetSubmittedCommentsAndAnswerCounts();
-
-				var consultationsFromIndevWithResponseCount = new Dictionary<ConsultationList, int>();
-				foreach (var consultationInIndev in consultationsFromIndev)
-				{
-					var sourceURI = ConsultationsUri.CreateConsultationURI(consultationInIndev.ConsultationId);
-					var responseCount = submittedCommentsAndAnswerCounts.FirstOrDefault(s => s.SourceURI.Equals(sourceURI))?.TotalCount ?? 0;
-
-					consultationsFromIndevWithResponseCount.Add(consultationInIndev, responseCount);
-				}
-
 				var consultationListRows = new List<ConsultationListRow>();
+				var userRoles = _userService.GetUserRoles().ToList();
+				var isAdminUser = userRoles.Any(role => AppSettings.ConsultationListConfig.DownloadRoles.AdminRoles.Contains(role));
 
-				foreach (var consultation in consultationsFromIndevWithResponseCount)
+				foreach (var consultation in consultationsFromIndev)
 				{
-					var documentAndChapterSlug = _consultationService.GetFirstConvertedDocumentAndChapterSlug(consultation.Key.ConsultationId);
+					if (isAdminUser || userRoles.Contains(consultation.AllowedRole))
+					{
+						var sourceURI = ConsultationsUri.CreateConsultationURI(consultation.ConsultationId);
+						var responseCount = submittedCommentsAndAnswerCounts.FirstOrDefault(s => s.SourceURI.Equals(sourceURI))?.TotalCount ?? 0;
 
-					consultationListRows.Add(
-						new ConsultationListRow(consultation.Key.Title,
-							consultation.Key.StartDate, consultation.Key.EndDate, consultation.Value, consultation.Key.ConsultationId,
-							documentAndChapterSlug.documentId, documentAndChapterSlug.chapterSlug, consultation.Key.Reference,
-							consultation.Key.ProductTypeName));
+						var documentAndChapterSlug = _consultationService.GetFirstConvertedDocumentAndChapterSlug(consultation.ConsultationId);
+
+						consultationListRows.Add(
+							new ConsultationListRow(consultation.Title,
+								consultation.StartDate, consultation.EndDate, responseCount, consultation.ConsultationId,
+								documentAndChapterSlug.documentId, documentAndChapterSlug.chapterSlug, consultation.Reference,
+								consultation.ProductTypeName));
+					}
 				}
 
 				model.OptionFilters = GetOptionFilterGroups(model.Status?.ToList(), consultationListRows);

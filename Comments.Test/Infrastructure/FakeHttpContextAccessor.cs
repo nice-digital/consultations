@@ -35,6 +35,9 @@ namespace Comments.Test.Infrastructure
 					case TestUserType.CustomFictionalRole:
 						claims.Add(new Claim(ClaimType.Role, "CustomFictionalRole", null, "http://consultations.nice.org.uk"));
 						break;
+					case TestUserType.ConsultationListTestRole:
+						claims.Add(new Claim(ClaimType.Role, "ConsultationListTestRole", null, "http://consultations.nice.org.uk"));
+						break;
 				}
 				context.Setup(r => r.User)
                     .Returns(() => new ClaimsPrincipal(new ClaimsIdentity(claims, Constants.DefaultScheme)));
@@ -49,5 +52,7 @@ namespace Comments.Test.Infrastructure
 
             return contextAccessor.Object;
         }
-    }
+
+		
+	}
 }
