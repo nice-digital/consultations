@@ -213,6 +213,11 @@ namespace Comments
                     template: "{controller}/{action=Index}/{id?}");
 
 	            routes.MapRoute(
+		            name: "PublishedRedirectWithoutDocument",
+		            template: "consultations/{consultationId:int}",
+		            defaults: new { controller = "Redirect", action = "PublishedRedirectWithoutDocument" });
+
+				routes.MapRoute(
 		            name: "PublishedRedirect",
 		            template: "consultations/{consultationId:int}/{documentId:int}",
 		            defaults: new {controller = "Redirect", action = "PublishedDocumentWithoutChapter"});

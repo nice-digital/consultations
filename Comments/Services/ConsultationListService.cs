@@ -48,7 +48,7 @@ namespace Comments.Services
 						var sourceURI = ConsultationsUri.CreateConsultationURI(consultation.ConsultationId);
 						var responseCount = submittedCommentsAndAnswerCounts.FirstOrDefault(s => s.SourceURI.Equals(sourceURI))?.TotalCount ?? 0;
 
-						var documentAndChapterSlug = _consultationService.GetFirstConvertedDocumentAndChapterSlug(consultation.ConsultationId);
+						var documentAndChapterSlug = _consultationService.GetFirstConvertedDocumentAndChapterSlug(consultation.ConsultationId); //TODO: this might be slow. potentially refactor.
 
 						consultationListRows.Add(
 							new ConsultationListRow(consultation.Title,

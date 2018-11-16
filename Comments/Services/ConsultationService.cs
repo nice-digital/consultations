@@ -112,7 +112,7 @@ namespace Comments.Services
 
 		    if (isReview)
 		    {
-			    var firstDocument = GetDocuments(consultation.ConsultationId).FirstOrDefault(d => d.ConvertedDocument);
+			    var firstDocument = GetDocuments(consultation.ConsultationId).FirstOrDefault(d => d.ConvertedDocument && d.DocumentId > 0);
 			    var firstChapter = firstDocument?.Chapters.FirstOrDefault();
 
 			    if (firstChapter != null)
@@ -124,7 +124,7 @@ namespace Comments.Services
 
 	    public (int? documentId, string chapterSlug) GetFirstConvertedDocumentAndChapterSlug(int consultationId)
 	    {
-			var firstDocument = GetDocuments(consultationId).FirstOrDefault(d => d.ConvertedDocument);
+			var firstDocument = GetDocuments(consultationId).FirstOrDefault(d => d.ConvertedDocument && d.DocumentId > 0);
 		    if (firstDocument == null)
 			    return (null, null);
 
