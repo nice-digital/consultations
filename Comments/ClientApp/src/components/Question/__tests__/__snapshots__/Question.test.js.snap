@@ -4,10 +4,7 @@ exports[`[ClientApp]  Question Component should match snapshot with answer 1`] =
 <li
   className="CommentBox"
 >
-  <h1
-    className="CommentBox__title mt--0 mb--0"
-  />
-  <h2
+  <h4
     className="CommentBox__title mt--0 mb--0"
     data-qa-sel="comment-box-title"
   >
@@ -17,7 +14,7 @@ exports[`[ClientApp]  Question Component should match snapshot with answer 1`] =
     >
       Consultation
     </span>
-  </h2>
+  </h4>
   <p>
     <strong>
       Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
@@ -33,6 +30,12 @@ exports[`[ClientApp]  Question Component should match snapshot with answer 1`] =
       <div
         className="form__group form__group--textarea mb--b"
       >
+        <label
+          className="form__label visually-hidden"
+          htmlFor="Answer1007"
+        >
+          Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
+        </label>
         <textarea
           className="form__input form__input--textarea"
           data-hj-whitelist={true}
@@ -64,10 +67,7 @@ exports[`[ClientApp]  Question Component should match snapshot without answer 1`
 <li
   className="CommentBox"
 >
-  <h1
-    className="CommentBox__title mt--0 mb--0"
-  />
-  <h2
+  <h4
     className="CommentBox__title mt--0 mb--0"
     data-qa-sel="comment-box-title"
   >
@@ -77,7 +77,7 @@ exports[`[ClientApp]  Question Component should match snapshot without answer 1`
     >
       Consultation
     </span>
-  </h2>
+  </h4>
   <p>
     <strong>
       Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
@@ -93,6 +93,12 @@ exports[`[ClientApp]  Question Component should match snapshot without answer 1`
       <div
         className="form__group form__group--textarea mb--b"
       >
+        <label
+          className="form__label visually-hidden"
+          htmlFor="Answer-1"
+        >
+          Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
+        </label>
         <textarea
           className="form__input form__input--textarea"
           data-hj-whitelist={true}
