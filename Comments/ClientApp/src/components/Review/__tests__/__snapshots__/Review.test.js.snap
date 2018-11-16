@@ -354,10 +354,7 @@ Array [
                                                             <li
                                                                   className="CommentBox"
                                                             >
-                                                                  <h1
-                                                                        className="CommentBox__title mt--0 mb--0"
-                                                                  />
-                                                                  <h2
+                                                                  <h4
                                                                         className="CommentBox__title mt--0 mb--0"
                                                                         data-qa-sel="comment-box-title"
                                                                   >
@@ -367,7 +364,7 @@ Array [
                                                                         >
                                                                               Consultation
                                                                         </span>
-                                                                  </h2>
+                                                                  </h4>
                                                                   <p>
                                                                         <strong>
                                                                               Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
@@ -383,6 +380,12 @@ Array [
                                                                               <div
                                                                                     className="form__group form__group--textarea mb--b"
                                                                               >
+                                                                                    <label
+                                                                                          className="form__label visually-hidden"
+                                                                                          htmlFor="Answer11"
+                                                                                    >
+                                                                                          Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
+                                                                                    </label>
                                                                                     <textarea
                                                                                           className="form__input form__input--textarea"
                                                                                           data-hj-whitelist={true}
@@ -411,12 +414,12 @@ Array [
                                                             <li
                                                                   className="CommentBox"
                                                             >
-                                                                  <h1
+                                                                  <h3
                                                                         className="CommentBox__title mt--0 mb--0"
                                                                   >
                                                                         Unstable angina and NSTEMI
-                                                                  </h1>
-                                                                  <h2
+                                                                  </h3>
+                                                                  <h4
                                                                         className="CommentBox__title mt--0 mb--0"
                                                                         data-qa-sel="comment-box-title"
                                                                   >
@@ -426,7 +429,7 @@ Array [
                                                                         >
                                                                               Document
                                                                         </span>
-                                                                  </h2>
+                                                                  </h4>
                                                                   <p>
                                                                         <strong>
                                                                               Would implementation of any of the draft recommendations have significant cost implications?
@@ -442,6 +445,12 @@ Array [
                                                                               <div
                                                                                     className="form__group form__group--textarea mb--b"
                                                                               >
+                                                                                    <label
+                                                                                          className="form__label visually-hidden"
+                                                                                          htmlFor="Answer-1"
+                                                                                    >
+                                                                                          Would implementation of any of the draft recommendations have significant cost implications?
+                                                                                    </label>
                                                                                     <textarea
                                                                                           className="form__input form__input--textarea"
                                                                                           data-hj-whitelist={true}
@@ -457,12 +466,12 @@ Array [
                                                             <li
                                                                   className="CommentBox"
                                                             >
-                                                                  <h1
+                                                                  <h3
                                                                         className="CommentBox__title mt--0 mb--0"
                                                                   >
                                                                         Glaucoma: diagnosis and management – Full Guideline
-                                                                  </h1>
-                                                                  <h2
+                                                                  </h3>
+                                                                  <h4
                                                                         className="CommentBox__title mt--0 mb--0"
                                                                         data-qa-sel="comment-box-title"
                                                                   >
@@ -472,7 +481,7 @@ Array [
                                                                         >
                                                                               Document
                                                                         </span>
-                                                                  </h2>
+                                                                  </h4>
                                                                   <p>
                                                                         <strong>
                                                                               Would implementation of any of the draft recommendations have cost implications?
@@ -488,6 +497,12 @@ Array [
                                                                               <div
                                                                                     className="form__group form__group--textarea mb--b"
                                                                               >
+                                                                                    <label
+                                                                                          className="form__label visually-hidden"
+                                                                                          htmlFor="Answer-1"
+                                                                                    >
+                                                                                          Would implementation of any of the draft recommendations have cost implications?
+                                                                                    </label>
                                                                                     <textarea
                                                                                           className="form__input form__input--textarea"
                                                                                           data-hj-whitelist={true}
@@ -516,7 +531,7 @@ Array [
                                                                   >
                                                                         Unstable angina and NSTEMI
                                                                   </h1>
-                                                                  <h2
+                                                                  <h3
                                                                         className="CommentBox__title mt--0 mb--d"
                                                                         data-qa-sel="comment-box-title"
                                                                   >
@@ -526,7 +541,7 @@ Array [
                                                                         >
                                                                               Document
                                                                         </span>
-                                                                  </h2>
+                                                                  </h3>
                                                                   <form
                                                                         className="mb--0"
                                                                         onSubmit={[Function]}
@@ -580,7 +595,7 @@ Array [
                                                                   >
                                                                         Unstable angina and NSTEMI
                                                                   </h1>
-                                                                  <h2
+                                                                  <h3
                                                                         className="CommentBox__title mt--0 mb--d"
                                                                         data-qa-sel="comment-box-title"
                                                                   >
@@ -595,7 +610,7 @@ Array [
                                                                               Introduction
                                                                               "
                                                                         </span>
-                                                                  </h2>
+                                                                  </h3>
                                                                   <form
                                                                         className="mb--0"
                                                                         onSubmit={[Function]}
