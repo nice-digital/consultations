@@ -106,6 +106,7 @@ export class Document extends Component<PropsType, StateType> {
 			);
 
 			if (preloadedChapter && preloadedDocuments && preloadedConsultation) {
+				// Set up globals for analytics tracking of SSR props
 				if (this.props.staticContext) {
 					this.props.staticContext.globals.gidReference = preloadedConsultation.reference;
 					this.props.staticContext.globals.stage = "preview";

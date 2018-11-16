@@ -162,7 +162,7 @@ export class Review extends Component<PropsType, StateType> {
 		}
 		const message = `Review page log hit at ${new Date().toJSON()}. running as ${process.env.NODE_ENV} SSR: ${isSSR}`;
 
-		const logResponse = load("logging", undefined, [], {logLevel: "Warning"}, "POST", {message}, true)
+		load("logging", undefined, [], {logLevel: "Warning"}, "POST", {message}, true)
 			.then(response => response.data)
 			.catch(err => {
 				console.error(err);
@@ -273,7 +273,8 @@ export class Review extends Component<PropsType, StateType> {
 		});
 	}
 
-	unlisten = () => {};
+	unlisten = () => {
+	};
 
 	submitConsultation = () => {
 		const comments = this.state.comments;

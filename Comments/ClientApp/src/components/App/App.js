@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Fragment } from "react";
-import { Route, Switch } from "react-router";
+import { Route, Switch, Redirect } from "react-router";
 import { Helmet } from "react-helmet";
 
 import DocumentViewWithRouter from "../DocumentView/DocumentView";
@@ -11,8 +11,11 @@ import SubmittedWithRouter from "../Submitted/Submitted";
 import UserProviderWithRouter from "../../context/UserContext";
 import FooterWithRouter from "../Footer/Footer";
 import DocumentPreviewWithRouter from "../DocumentPreview/DocumentPreview";
+import QuestionsWithRouter from "../Questions/Questions";
 import {ErrorBoundary} from "../ErrorBoundary/ErrorBoundary";
 import {LiveAnnouncer, LiveMessenger} from "react-aria-live";
+import { projectInformation } from "../../constants";
+import { PhaseBanner } from "../PhaseBanner/PhaseBanner";
 
 type PropsType = any;
 
@@ -24,6 +27,10 @@ class App extends React.Component<PropsType, StateType> {
 	render() {
 		return (
 			<Fragment>
+				<PhaseBanner
+					phase={projectInformation.phase}
+					name={projectInformation.name}
+				/>
 				<UserProviderWithRouter>
 					<Helmet titleTemplate="%s | Consultations | NICE">
 						<html lang="en-GB"/>
@@ -31,7 +38,19 @@ class App extends React.Component<PropsType, StateType> {
 					<ErrorBoundary>
 						<LiveAnnouncer>
 							<Switch>
-								{/*Document View*/}			
+
+								{/*Admin Routes*/}
+								{/*Download*/}
+								<Route exact path="/admin">
+									<Redirect to={"/admin/download"} />
+								</Route>
+
+								{/*Questions*/}
+								<Route path="/admin/questions/:consultationId">
+									<QuestionsWithRouter />
+								</Route>
+
+								{/*Document View*/}
 								<Route exact
 											 path="/:consultationId/:documentId/:chapterSlug">
 									<DocumentViewWithRouter/>

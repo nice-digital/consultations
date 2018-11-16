@@ -1,0 +1,240 @@
+[
+  {
+    "consultationId": 22,
+    "documentId": 1,
+    "convertedDocument": true,
+    "supportsComments": true,
+    "supportsQuestions": true,
+    "title": "Unstable angina and NSTEMI",
+    "chapters": [
+      {
+        "slug": "introduction",
+        "title": "Introduction"
+      },
+      {
+        "slug": "patient-centred-care",
+        "title": "Patient-centred care"
+      },
+      {
+        "slug": "key-priorities-for-implementation",
+        "title": "Key priorities for implementation"
+      },
+      {
+        "slug": "guidance",
+        "title": "1 Guidance"
+      },
+      {
+        "slug": "notes-on-the-scope-of-the-guidance",
+        "title": "2 Notes on the scope of the guidance"
+      },
+      {
+        "slug": "implementation",
+        "title": "3 Implementation"
+      },
+      {
+        "slug": "research-recommendations",
+        "title": "4 Research recommendations"
+      },
+      {
+        "slug": "other-versions-of-this-guideline",
+        "title": "5 Other versions of this guideline"
+      },
+      {
+        "slug": "related-nice-guidance",
+        "title": "6 Related NICE guidance"
+      },
+      {
+        "slug": "updating-the-guideline",
+        "title": "7 Updating the guideline"
+      },
+      {
+        "slug": "appendix-a-the-guideline-development-group-and-nice-project-team",
+        "title": "Appendix A: The Guideline Development Group and NICE project team"
+      },
+      {
+        "slug": "appendix-b-the-guideline-review-panel",
+        "title": "Appendix B: The Guideline Review Panel"
+      },
+      {
+        "slug": "appendix-c-the-algorithm",
+        "title": "Appendix C: The algorithm"
+      },
+      {
+        "slug": "changes-after-publication",
+        "title": "Changes after publication"
+      },
+      {
+        "slug": "about-this-guideline",
+        "title": "About this guideline"
+      }
+    ],
+    "href": "/guidance/GID-NG10109/documents/129",
+    "sourceURI": "consultations://./consultation/22/document/1"
+  },
+  {
+    "consultationId": 22,
+    "documentId": 2,
+    "convertedDocument": true,
+    "supportsComments": true,
+    "supportsQuestions": true,
+    "title": "Glaucoma: diagnosis and management – Full Guideline",
+    "chapters": [
+      {
+        "slug": "glaucoma-diagnosis-and-management-full-guideline",
+        "title": "Glaucoma: diagnosis and management – Full Guideline"
+      },
+      {
+        "slug": "acknowledgements",
+        "title": "Acknowledgements"
+      },
+      {
+        "slug": "guideline-summary",
+        "title": "1 Guideline summary"
+      },
+      {
+        "slug": "introduction",
+        "title": "2 Introduction"
+      },
+      {
+        "slug": "development-of-the-guideline",
+        "title": "3 Development of the guideline"
+      },
+      {
+        "slug": "methods",
+        "title": "4 Methods"
+      },
+      {
+        "slug": "prognostic-risk-tools",
+        "title": "5 Prognostic risk tools"
+      },
+      {
+        "slug": "tests-used-in-case-finding-diagnosis-and-reassessment",
+        "title": "6 Tests used in case finding, diagnosis and reassessment"
+      },
+      {
+        "slug": "reassessment-intervals",
+        "title": "7 Reassessment intervals"
+      },
+      {
+        "slug": "overview-of-treatment",
+        "title": "8 Overview of treatment"
+      },
+      {
+        "slug": "treatment-of-ocular-hypertension-suspected-chronic-open-angle-glaucoma-and-confirmed-chronic",
+        "title": "9 Treatment of ocular hypertension, suspected chronic open-angle glaucoma and confirmed chronic open-angle glaucoma"
+      },
+      {
+        "slug": "complementary-and-alternative-interventions",
+        "title": "10  Complementary and alternative interventions"
+      },
+      {
+        "slug": "organisation-of-care",
+        "title": "11 Organisation of care"
+      },
+      {
+        "slug": "provision-of-information-for-patients",
+        "title": "12 Provision of information for patients"
+      },
+      {
+        "slug": "reference-list",
+        "title": "13 Reference list"
+      },
+      {
+        "slug": "acronyms-and-abbreviations",
+        "title": "14 Acronyms and abbreviations"
+      },
+      {
+        "slug": "glossary",
+        "title": "15 Glossary"
+      }
+    ],
+    "href": "/guidance/GID-NG10109/documents/129-2",
+    "sourceURI": "consultations://./consultation/22/document/2"
+  },
+  {
+    "consultationId": 22,
+    "documentId": 0,
+    "convertedDocument": false,
+    "supportsComments": false,
+    "supportsQuestions": false,
+    "title": "Comments form",
+    "chapters": null,
+    "href": "/guidance/GID-NG10109/documents/comments-form",
+    "sourceURI": null
+  },
+  {
+    "consultationId": 22,
+    "documentId": 3,
+    "convertedDocument": true,
+    "supportsComments": true,
+    "supportsQuestions": true,
+    "title": "Emergency and acute medical care in over 16s: service delivery and organisation",
+    "chapters": [
+      {
+        "slug": "overview",
+        "title": "Overview"
+      },
+      {
+        "slug": "context",
+        "title": "Context"
+      },
+      {
+        "slug": "recommendations",
+        "title": "Recommendations"
+      },
+      {
+        "slug": "putting-this-guideline-into-practice",
+        "title": "Putting this guideline into practice"
+      },
+      {
+        "slug": "recommendations-for-research-3",
+        "title": "Recommendations for research"
+      }
+    ],
+    "href": "/guidance/GID-NG10109/documents/129-3",
+    "sourceURI": "consultations://./consultation/22/document/3"
+  },
+  {
+    "consultationId": 22,
+    "documentId": 0,
+    "convertedDocument": false,
+    "supportsComments": false,
+    "supportsQuestions": false,
+    "title": "Addendum appendix",
+    "chapters": null,
+    "href": "/guidance/GID-NG10109/documents/addendum-appendix",
+    "sourceURI": null
+  },
+  {
+    "consultationId": 22,
+    "documentId": 4,
+    "convertedDocument": true,
+    "supportsComments": true,
+    "supportsQuestions": true,
+    "title": "Nivolumab for adjuvant treatment of completely resected melanoma with lymph node involvement or metastatic disease",
+    "chapters": [
+      {
+        "slug": "recommendations",
+        "title": "1 Recommendations"
+      },
+      {
+        "slug": "information-about-nivolumab",
+        "title": "2 Information about nivolumab"
+      },
+      {
+        "slug": "committee-discussion",
+        "title": "3 Committee discussion"
+      },
+      {
+        "slug": "proposed-date-for-review-of-guidance",
+        "title": "4 Proposed date for review of guidance"
+      },
+      {
+        "slug": "appraisal-committee-members-and-nice-project-team",
+        "title": "5 Appraisal committee members and NICE project team"
+      }
+    ],
+    "href": "/guidance/GID-NG10109/documents/129-4",
+    "sourceURI": "consultations://./consultation/22/document/4"
+  }
+]

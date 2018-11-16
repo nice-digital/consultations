@@ -1,0 +1,70 @@
+{
+  "reference": "GID-NG10109",
+  "title": "Consultation Comments Test project (Numbered Paragraphs )",
+  "consultationName": "Draft guidance consultation",
+  "startDate": "2018-03-01T00:00:00",
+  "endDate": "2056-12-24T17:00:00",
+  "consultationType": "Draft guidance consultation",
+  "resourceTitleId": null,
+  "projectType": "NG",
+  "productTypeName": "NICE guideline",
+  "developedAs": null,
+  "relevantTo": null,
+  "consultationId": 22,
+  "process": "NG",
+  "hasDocumentsWhichAllowConsultationComments": false,
+  "hasDocumentsWhichAllowConsultationQuestions": true,
+  "supportsQuestions": true,
+  "supportsComments": true,
+  "partiallyUpdatedProjectReference": null,
+  "origProjectReference": null,
+  "user": {
+    "isAuthorised": true,
+    "displayName": "Warren Keith",
+    "userId": "0b09270a-7a30-4cdb-86e6-7d19d0cea1ba",
+    "organisationName": null
+  },
+  "consultationState": {
+    "startDate": "2018-03-01T00:00:00",
+    "endDate": "2056-12-24T17:00:00",
+    "hasQuestions": true,
+    "hasUserSuppliedAnswers": true,
+    "hasUserSuppliedComments": true,
+    "userHasSubmitted": false,
+    "consultationSupportsQuestions": false,
+    "consultationSupportsComments": false,
+    "documentIdsWhichSupportQuestions": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "documentIdsWhichSupportComments": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "consultationIsOpen": true,
+    "consultationHasNotStartedYet": false,
+    "consultationHasEnded": false,
+    "supportsSubmission": true,
+    "supportsDownload": true,
+    "shouldShowDrawer": true,
+    "shouldShowCommentsTab": true,
+    "shouldShowQuestionsTab": true
+  },
+  "breadcrumbs": [
+    {
+      "label": "Home",
+      "url": "/",
+      "localRoute": false
+    },
+    {
+      "label": "Consultation Comments Test project (Numbered Paragraphs )",
+      "url": "/guidance/indevelopment/gid-ng10109/consultation/html-content",
+      "localRoute": false
+    }
+  ],
+  "filters": null
+}

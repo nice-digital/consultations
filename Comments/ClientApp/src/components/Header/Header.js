@@ -9,10 +9,10 @@ type PropsType = {
 	match?: any,
 	subtitle1?: string,
 	subtitle2?: string,
-	consultationState: {
+	consultationState?: {
 		endDate: string,
 		consultationIsOpen: boolean,
-		consultationHasNotStartedYet: ?boolean,
+		consultationHasNotStartedYet?: boolean,
 	},
 }
 
@@ -22,9 +22,14 @@ export class Header extends PureComponent<PropsType> {
 		const title = this.props.title;
 		const subtitle1 = this.props.subtitle1;
 		const subtitle2 = this.props.subtitle2;
-		const endDate = this.props.consultationState.endDate;
-		const isOpen = this.props.consultationState.consultationIsOpen;
-		const notStartedYet = this.props.consultationState.consultationHasNotStartedYet;
+
+		let endDate, isOpen, notStartedYet;
+
+		if (this.props.constultationState) {
+			endDate = this.props.consultationState.endDate || "";
+			isOpen = this.props.consultationState.consultationIsOpen || "";
+			notStartedYet = this.props.consultationState.consultationHasNotStartedYet || "";
+		}
 
 		let startOrEnd = "ended";
 
@@ -35,6 +40,7 @@ export class Header extends PureComponent<PropsType> {
 		return (
 			<Fragment>
 				<h1 data-qa-sel="changeable-page-header" className="page-header__heading mt--0">{title}</h1>
+				{this.props.consultationState &&
 				<p className="page-header__lead mb--d">
 					{isOpen ?
 						<Fragment>
@@ -47,6 +53,7 @@ export class Header extends PureComponent<PropsType> {
 						</Fragment>
 					}
 				</p>
+				}
 				{subtitle1 && <p>{subtitle1}</p>}
 				{subtitle2 &&	<p>{subtitle2}</p>}
 			</ Fragment>
