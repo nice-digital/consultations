@@ -21,6 +21,6 @@ namespace Comments.Configuration
 
 		public IEnumerable<string> TeamRoles { get; set; }
 
-		public ICollection<string> AllRoles => AdminRoles.Concat(TeamRoles).ToList();
+		public ICollection<string> AllRoles => AdminRoles.Concat(TeamRoles ?? new List<string>()).ToList();
 	}
 }
