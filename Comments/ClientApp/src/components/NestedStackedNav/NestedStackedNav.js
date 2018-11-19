@@ -6,7 +6,7 @@ export class NestedStackedNav extends PureComponent {
 	renderNavRow = (item) => {
 		if (item.children) {
 			return (
-				<ListItem>
+				<ListItem key={item.to}>
 					<ListLink item={item}/>
 					<ListWrapper>
 						{item.children.map((this.renderNavRow))}
@@ -15,7 +15,7 @@ export class NestedStackedNav extends PureComponent {
 			);
 		} else {
 			return (
-				<ListItem>
+				<ListItem key={item.to}>
 					<ListLink item={item}/>
 				</ListItem>
 			);
@@ -24,6 +24,9 @@ export class NestedStackedNav extends PureComponent {
 
 	render() {
 		const navigationStructure = this.props.navigationStructure;
+		if (!navigationStructure) {
+			return null;
+		}
 		return (
 			<nav className="stacked-nav NestedStackedNav">
 				<ListWrapper>
