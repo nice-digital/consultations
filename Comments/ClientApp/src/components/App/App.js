@@ -12,8 +12,8 @@ import UserProviderWithRouter from "../../context/UserContext";
 import FooterWithRouter from "../Footer/Footer";
 import DocumentPreviewWithRouter from "../DocumentPreview/DocumentPreview";
 import QuestionsWithRouter from "../Questions/Questions";
-import {ErrorBoundary} from "../ErrorBoundary/ErrorBoundary";
-import {LiveAnnouncer, LiveMessenger} from "react-aria-live";
+import { ErrorBoundary } from "../ErrorBoundary/ErrorBoundary";
+import { LiveAnnouncer, LiveMessenger } from "react-aria-live";
 import { projectInformation } from "../../constants";
 import { PhaseBanner } from "../PhaseBanner/PhaseBanner";
 
@@ -27,10 +27,16 @@ class App extends React.Component<PropsType, StateType> {
 	render() {
 		return (
 			<Fragment>
-				<PhaseBanner
-					phase={projectInformation.phase}
-					name={projectInformation.name}
-				/>
+				<div className="container">
+					<div className="grid">
+						<div data-g="12">
+							<PhaseBanner
+								phase={projectInformation.phase}
+								name={projectInformation.name}
+							/>
+						</div>
+					</div>
+				</div>
 				<UserProviderWithRouter>
 					<Helmet titleTemplate="%s | Consultations | NICE">
 						<html lang="en-GB"/>
@@ -42,17 +48,21 @@ class App extends React.Component<PropsType, StateType> {
 								{/*Admin Routes*/}
 								{/*Download*/}
 								<Route exact path="/admin">
-									<Redirect to={"/admin/download"} />
+									<Redirect to={"/admin/download"}/>
 								</Route>
 
 								{/*Questions*/}
-								<Route path="/admin/questions/:consultationId">
-									<QuestionsWithRouter />
+								<Route exact path="/admin/questions/:consultationId">
+									<QuestionsWithRouter/>
+								</Route>
+
+								{/*Questions*/}
+								<Route exact path="/admin/questions/:consultationId/:documentId">
+									<QuestionsWithRouter/>
 								</Route>
 
 								{/*Document View*/}
-								<Route exact
-											 path="/:consultationId/:documentId/:chapterSlug">
+								<Route exact path="/:consultationId/:documentId/:chapterSlug">
 									<DocumentViewWithRouter/>
 								</Route>
 
@@ -94,7 +104,7 @@ class App extends React.Component<PropsType, StateType> {
 						</LiveAnnouncer>
 					</ErrorBoundary>
 				</UserProviderWithRouter>
-				<FooterWithRouter />
+				<FooterWithRouter/>
 			</Fragment>
 		);
 	}

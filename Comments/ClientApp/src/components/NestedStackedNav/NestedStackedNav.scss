@@ -1,5 +1,5 @@
 .NestedStackedNav {
   li > ul {
-    margin-left: 1rem;
+    margin-left: rem($spacing-medium);
   }
 }

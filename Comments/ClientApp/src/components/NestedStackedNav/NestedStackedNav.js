@@ -1,11 +1,7 @@
-import React, { PureComponent, Fragment } from "react";
+import React, { PureComponent } from "react";
 import { Link } from "react-router-dom";
 
 export class NestedStackedNav extends PureComponent {
-
-	constructor(props) {
-		super(props);
-	}
 
 	renderNavRow = (item) => {
 		if (item.children) {
@@ -40,9 +36,12 @@ export class NestedStackedNav extends PureComponent {
 }
 
 const ListLink = (props) => (
-	<Link
-		aria-current={props.item.active ? "page" : null}
-		to={props.item.to}>{props.item.title}</Link>
+	<Link aria-current={props.item.current ? "page" : null} to={props.item.to}>
+		<span data-g="11">{props.item.title}</span>
+		{props.item.marker &&
+			<span className="text-right" data-g="1">({props.item.marker})</span>
+		}
+	</Link>
 );
 
 const ListWrapper = (props) => (
@@ -50,5 +49,5 @@ const ListWrapper = (props) => (
 );
 
 const ListItem = (props) => (
-	<li className="stacked-nav__list-item">{props.children}</li>
+	<li className="grid grid--gutterless stacked-nav__list-item">{props.children}</li>
 );

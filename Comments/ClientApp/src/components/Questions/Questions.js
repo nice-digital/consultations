@@ -14,7 +14,6 @@ type PropsType = any; // todo
 type StateType = any; // todo
 
 export class Questions extends Component<PropsType, StateType> {
-
 	constructor(props: PropsType) {
 		super(props);
 
@@ -121,34 +120,40 @@ export class Questions extends Component<PropsType, StateType> {
 		}
 	}
 
-	createConsultationNavigation = (consultationData, documentsData) => {
+	createConsultationNavigation = (consultationData, documentsData, currentConsultationId, currentDocumentId) => {
+		const supportsQuestions = document => document.supportsQuestions;
 
-		const supportsQuestions = (document) => document.supportsQuestions;
+		const isCurrentRoute = (consultationId, documentId) => {
+			return (consultationId === parseInt(currentConsultationId))
+				&& (documentId === parseInt(currentDocumentId));
+		};
 
-		const documentsList = documentsData.filter(supportsQuestions).map(
-			document => {
+		const documentsList = documentsData
+			.filter(supportsQuestions)
+			.map(consultationDocument => {
 				return {
-					title: document.title,
-					to: `/admin/questions/${document.consultationId}/${document.documentId}`,
+					title: consultationDocument.title,
+					to: `/admin/questions/${consultationDocument.consultationId}/${consultationDocument.documentId}`,
 					marker: 2,
-					active: false,
+					current: isCurrentRoute(
+						consultationDocument.consultationId,
+						consultationDocument.documentId),
 				};
 			}
-		);
+			);
 
 		return [
 			{
 				title: consultationData.title,
-				to: `/admin/questions/${consultationData.consulationId}`,
+				to: `/admin/questions/${consultationData.consultationId}/0`,
 				marker: 3,
-				active: false,
-				children: documentsList
+				current: isCurrentRoute(consultationData.consultationId, 0),
+				children: documentsList,
 			},
 		];
 	};
 
 	render() {
-
 		if (!this.state.hasInitialData) return null;
 
 		const fakeLinks = [
@@ -164,64 +169,10 @@ export class Questions extends Component<PropsType, StateType> {
 			},
 		];
 
-		const { consultationData, documentsData } = this.state;
+		const {consultationData, documentsData} = this.state;
 
-		const hierarchialNav = [
-			{
-				title: "link zero",
-				to: "/thing/zero",
-				marker: 0,
-				active: false,
-			},
-			{
-				title: "link one",
-				to: "/thing/here",
-				marker: 1,
-				active: false,
-				children: [
-					{
-						title: "link two",
-						to: "/thing/two",
-						marker: 2,
-						active: false,
-						children: [
-							{
-								title: "link five",
-								to: "/thing/five",
-								marker: 5,
-								active: false,
-							},
-							{
-								title: "link six",
-								to: "/thing/six",
-								marker: 6,
-								active: false,
-							},
-							{
-								title: "link seven",
-								to: "/thing/seven",
-								marker: 7,
-								active: true,
-							},
-						],
-					},
-					{
-						title: "link three",
-						to: "/thing/three",
-						marker: 3,
-						active: false,
-					},
-					{
-						title: "link four",
-						to: "/thing/four",
-						marker: 4,
-						active: false,
-					},
-				],
-			},
-		];
-
-
+		const currentDocumentId = this.props.match.params.documentId;
+		const currentConsultationId =this.props.match.params.consultationId;
 
 		return (
 			<UserContext.Consumer>
@@ -245,10 +196,20 @@ export class Questions extends Component<PropsType, StateType> {
 									<h1 className="h3">{consultationData.title}</h1>
 									<div className="grid">
 										<div data-g="12 md:6">
-											<NestedStackedNav navigationStructure={this.createConsultationNavigation(consultationData, documentsData)} />
+											<NestedStackedNav
+												navigationStructure={
+													this.createConsultationNavigation(
+														consultationData,
+														documentsData,
+														currentConsultationId,
+														currentDocumentId,
+													)
+												}/>
 										</div>
 										<div data-g="12 md:6">
-											Add question
+											{!currentDocumentId &&
+												<p>Choose a consultation or document to add questions</p>
+											}
 										</div>
 									</div>
 								</div>
