@@ -163,9 +163,13 @@ namespace Comments.Test.UnitTests
 	    public void GetQuestionsByConsulationId()
 	    {
 			//Arrange
-		    var consultationLevelLocationId = AddLocation("consultations://./consultation/1");
 		    var questionTypeId = AddQuestionType("Question Type", false, true);
-			var questionId = AddQuestion(consultationLevelLocationId, questionTypeId, "Question Label");
+
+			var consultationLevelLocationId = AddLocation("consultations://./consultation/1");
+			var questionIdToBeReturned = AddQuestion(consultationLevelLocationId, questionTypeId, "Question Label");
+
+		    var differentConsultationLevelLocationId = AddLocation("consultations://./consultation/2");
+		    var questionIdForDifferentConsultation = AddQuestion(differentConsultationLevelLocationId, questionTypeId, "Question Label");
 
 			var userId = Guid.Empty;
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
@@ -175,7 +179,32 @@ namespace Comments.Test.UnitTests
 		    var result = questionService.GetQuestions(1, null);
 
 		    //Assert
-		    result.First().QuestionId.ShouldBe(questionId);
+			result.Count().ShouldBe(1);
+		    result.First().QuestionId.ShouldBe(questionIdToBeReturned);
 	    }
-    }
+
+	    [Fact]
+	    public void GetQuestionsByDocumentId()
+	    {
+			//Arrange
+			var questionTypeId = AddQuestionType("Question Type", false, true);
+
+			var documentLevelLocationId = AddLocation("consultations://./consultation/1/document/1");
+		    var questionIdToBeReturned = AddQuestion(documentLevelLocationId, questionTypeId, "Question Label");
+
+		    var differentDocumentLevelLocationId = AddLocation("consultations://./consultation/1/document/2");
+		    var questionIdforDifferentDocument = AddQuestion(differentDocumentLevelLocationId, questionTypeId, "Question Label");
+
+			var userId = Guid.Empty;
+		    var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+		    var questionService = new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService);
+
+		    //Act
+		    var result = questionService.GetQuestions(1, 1);
+
+		    //Assert
+			result.Count().ShouldBe(1);
+		    result.First().QuestionId.ShouldBe(questionIdToBeReturned);
+	    }
+	}
 }
