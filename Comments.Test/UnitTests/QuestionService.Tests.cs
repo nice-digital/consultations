@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Comments.Services;
 using Shouldly;
 using Xunit;
@@ -171,10 +172,10 @@ namespace Comments.Test.UnitTests
 			var questionService = new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService);
 
 			//Act
-		    var result = questionService.GetQuestions(1, null, true);
+		    var result = questionService.GetQuestions(1, null);
 
 		    //Assert
-		    result.question.questionId.ShouldBe(questionId);
+		    result.First().QuestionId.ShouldBe(questionId);
 	    }
     }
 }
