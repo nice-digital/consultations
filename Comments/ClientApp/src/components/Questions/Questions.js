@@ -1,13 +1,15 @@
-import React, { Component, Fragment } from "react";
-import { withRouter } from "react-router-dom";
+// @flow
+import React, {Component, Fragment} from "react";
+import {withRouter} from "react-router-dom";
 import Helmet from "react-helmet";
 
-import { LoginBanner } from "../LoginBanner/LoginBanner";
-import { Breadcrumbs } from "../Breadcrumbs/Breadcrumbs";
-import { NestedStackedNav } from "../NestedStackedNav/NestedStackedNav";
-import { UserContext } from "../../context/UserContext";
+import {LoginBanner} from "../LoginBanner/LoginBanner";
+import {Breadcrumbs} from "../Breadcrumbs/Breadcrumbs";
+import {NestedStackedNav} from "../NestedStackedNav/NestedStackedNav";
+import {UserContext} from "../../context/UserContext";
 import preload from "../../data/pre-loader";
-import { load } from "../../data/loader";
+import {load} from "../../data/loader";
+import {TextQuestion} from "../QuestionTypes/TextQuestion/TextQuestion";
 
 type PropsType = any; // todo
 
@@ -19,6 +21,8 @@ export class Questions extends Component<PropsType, StateType> {
 
 		this.state = {
 			consultationData: null,
+			documentsData: null,
+			questionsData: null,
 			loading: true,
 			hasInitialData: false,
 			error: {
@@ -27,7 +31,7 @@ export class Questions extends Component<PropsType, StateType> {
 			},
 		};
 
-		let preloadedConsultation, preloadedDocuments;
+		let preloadedConsultation, preloadedDocuments, preloadedQuestions;
 
 		let preloadedData = {};
 		if (this.props.staticContext && this.props.staticContext.preload) {
@@ -38,7 +42,10 @@ export class Questions extends Component<PropsType, StateType> {
 			this.props.staticContext,
 			"consultation",
 			[],
-			{consultationId: this.props.match.params.consultationId, isReview: false},
+			{
+				consultationId: this.props.match.params.consultationId,
+				isReview: false,
+			},
 			preloadedData,
 		);
 
@@ -50,10 +57,19 @@ export class Questions extends Component<PropsType, StateType> {
 			preloadedData,
 		);
 
-		if (preloadedConsultation && preloadedDocuments) {
+		preloadedQuestions = preload(
+			this.props.staticContext,
+			"comments",
+			[],
+			{sourceURI: "/22/1/patient-centred-care"},
+			preloadedData,
+		);
+
+		if (preloadedConsultation && preloadedDocuments && preloadedQuestions) {
 			this.state = {
 				consultationData: preloadedConsultation,
 				documentsData: preloadedDocuments,
+				questionsData: preloadedQuestions.questions,
 				loading: false,
 				hasInitialData: true,
 				error: {
@@ -93,9 +109,21 @@ export class Questions extends Component<PropsType, StateType> {
 				});
 			});
 
+		const questionsData = load("comments", undefined, [], {sourceURI: "/22/1/patient-centred-care"})
+			.then(response => response.data.questions)
+			.catch(err => {
+				this.setState({
+					error: {
+						hasError: true,
+						message: "documentsData " + err,
+					},
+				});
+			});
+
 		return {
 			consultationData: await consultationData,
 			documentsData: await documentsData,
+			questionsData: await questionsData,
 		};
 	};
 
@@ -139,7 +167,7 @@ export class Questions extends Component<PropsType, StateType> {
 						consultationDocument.consultationId,
 						consultationDocument.documentId),
 				};
-			}
+			},
 			);
 
 		return [
@@ -169,10 +197,10 @@ export class Questions extends Component<PropsType, StateType> {
 			},
 		];
 
-		const {consultationData, documentsData} = this.state;
+		const {consultationData, documentsData, questionsData} = this.state;
 
 		const currentDocumentId = this.props.match.params.documentId;
-		const currentConsultationId =this.props.match.params.consultationId;
+		const currentConsultationId = this.props.match.params.consultationId;
 
 		return (
 			<UserContext.Consumer>
@@ -207,8 +235,17 @@ export class Questions extends Component<PropsType, StateType> {
 												}/>
 										</div>
 										<div data-g="12 md:6">
-											{!currentDocumentId &&
+											{!currentDocumentId ?
 												<p>Choose a consultation or document to add questions</p>
+												:
+												questionsData &&
+												<div>
+													<ul>
+														{questionsData.map(question => (
+															<TextQuestion question={question}/>
+														))}
+													</ul>
+												</div>
 											}
 										</div>
 									</div>
