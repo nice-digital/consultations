@@ -540,5 +540,82 @@ namespace Comments.Models
 			    totalAnswers: Answer.IgnoreQueryFilters().Count(),
 			    totalSubmissions: Submission.IgnoreQueryFilters().Count());
 	    }
+
+		/// <summary>
+		/// this question insert script is temporary, until the question administration features are built.
+		/// </summary>
+		/// <param name="consultationId"></param>
+		/// <returns></returns>
+		public int InsertQuestionsWithScriptForCfGConsultation(int consultationId)
+		{
+			return Database.ExecuteSqlCommand(@"
+				--DECLARE @consultationId AS int --UNCOMMENT OUT THESE 2 LINES TO USE IN SQL MANAGEMENT STUDIO
+				--SET @consultationId = 210
+
+				DECLARE @questionTypeID AS int
+				DECLARE @locationID1 AS int, @locationID2 AS int, @locationID3 AS int
+
+				DECLARE @userID as uniqueidentifier
+				SELECT @userID = cast(cast(0 AS binary) AS uniqueidentifier)
+
+				DECLARE @questionTextDescription nvarchar(100)
+				SET @questionTextDescription = 'A text question requiring a text answer.'
+
+				DECLARE @questionOneText nvarchar(MAX)
+				SET @questionOneText = 'Do you agree with the proposal for a partial update/not to update the guideline?'
+
+				DECLARE @consultationIdPaddedForOrder nvarchar(3)
+				SELECT @consultationIdPaddedForOrder = RIGHT('000'+ CAST(@consultationId AS VARCHAR(3)),3)
+
+				--question type insert
+				SELECT @questionTypeID = QuestionTypeID
+				FROM QuestionType
+				WHERE [Description] = @questionTextDescription
+
+				IF @questionTypeID IS NULL 
+				BEGIN
+					INSERT INTO QuestionType ([Description], HasBooleanAnswer, HasTextAnswer)
+					VALUES (@questionTextDescription, 0, 1)
+
+					SET @questionTypeID = SCOPE_IDENTITY();
+				END
+
+				--3 location inserts. the questions are all consultation level, but there's an order to preserve.
+				IF NOT EXISTS (SELECT * FROM [Location] L
+								INNER JOIN Question Q ON Q.LocationID = L.LocationID
+								WHERE L.SourceURI = 'consultations://./consultation/' + CAST(@consultationId AS varchar) AND
+								Q.QuestionText = @questionOneText)
+				BEGIN
+
+					INSERT INTO [Location] (SourceURI, [Order])
+					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar), @consultationIdPaddedForOrder + '.000.000.000.001')
+
+					SET @locationID1 = SCOPE_IDENTITY();
+
+					INSERT INTO [Location] (SourceURI, [Order])
+					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar), @consultationIdPaddedForOrder + '.000.000.000.002')
+
+					SET @locationID2 = SCOPE_IDENTITY();
+
+					INSERT INTO [Location] (SourceURI, [Order])
+					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar), @consultationIdPaddedForOrder + '.000.000.000.003')
+
+					SET @locationID3 = SCOPE_IDENTITY();
+
+					--now the question inserts
+
+					INSERT INTO Question (LocationID, QuestionText, QuestionTypeID, CreatedByUserID, LastModifiedByUserID, LastModifiedDate)
+					VALUES (@locationID1, @questionOneText, @questionTypeID, @userID, @userID, GETDATE())
+
+					INSERT INTO Question (LocationID, QuestionText, QuestionTypeID, CreatedByUserID, LastModifiedByUserID, LastModifiedDate)
+					VALUES (@locationID2, 'Do you have any comments on areas excluded from the scope of the guideline?', @questionTypeID, @userID, @userID, GETDATE())
+
+					INSERT INTO Question (LocationID, QuestionText, QuestionTypeID, CreatedByUserID, LastModifiedByUserID, LastModifiedDate)
+					VALUES (@locationID3, 'Do you have any comments on equalities issues?', @questionTypeID, @userID, @userID, GETDATE())			
+		
+				END
+
+			", new SqlParameter("@consultationId", consultationId));
+		}
 	}
 }

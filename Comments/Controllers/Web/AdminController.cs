@@ -86,6 +86,22 @@ namespace Comments.Controllers.Web
 		    return Content($"Row count deleted/updated: {rowCount}");
 	    }
 
+	    /// <summary>
+	    /// /consultations/admin/InsertQuestionsForCfGConsultation?consultationId=1
+	    /// </summary>
+	    /// <param name="consultationId"></param>
+	    /// <returns></returns>
+	    [Route("consultations/admin/InsertQuestionsForCfGConsultation")]
+	    public ActionResult InsertQuestionsForCfGConsultation(int consultationId)
+	    {
+		    if (consultationId < 1)
+			    throw new ArgumentException("invalid consultation id", nameof(consultationId));
+
+		    var rowCount = _adminService.InsertQuestionsForCfGConsultation(consultationId);
+
+		    return Content($"Row count deleted/updated: {rowCount}");
+	    }
+
 		/// <summary>
 		/// /consultations/admin/DeleteAllData
 		/// </summary>

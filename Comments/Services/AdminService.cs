@@ -13,6 +13,7 @@ namespace Comments.Services
 		int DeleteAllSubmissionsFromUser(Guid usersSubmissionsToDelete);
 		int InsertQuestionsForDocument1And2InConsultation(int consultationId);
 		int InsertQuestionsForConsultation(int consultationId);
+		int InsertQuestionsForCfGConsultation(int consultationId);
 		IList<object> GetData(string tableName);
 	}
 
@@ -68,7 +69,12 @@ namespace Comments.Services
 		    return _dbContext.InsertQuestionsWithScriptForConsultation(consultationId);
 	    }
 
-	    public IList<object> GetData(string tableName)
+	    public int InsertQuestionsForCfGConsultation(int consultationId)
+	    {
+		    return _dbContext.InsertQuestionsWithScriptForCfGConsultation(consultationId);
+	    }
+
+		public IList<object> GetData(string tableName)
 	    {
 		    return _dbContext.GetAllOfATable(tableName);
 	    }
