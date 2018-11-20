@@ -5,6 +5,7 @@ using Shouldly;
 using Xunit;
 using Comments.Models;
 using Comments.Test.Infrastructure;
+using DocumentFormat.OpenXml.Office2010.Word;
 
 namespace Comments.Test.UnitTests
 {
@@ -156,5 +157,24 @@ namespace Comments.Test.UnitTests
             //Assert
             result.question.QuestionText.ShouldBe(questionText);
         }
+
+	    [Fact]
+	    public void GetQuestionsByConsulationId()
+	    {
+			//Arrange
+		    var consultationLevelLocationId = AddLocation("consultations://./consultation/1");
+		    var questionTypeId = AddQuestionType("Question Type", false, true);
+			var questionId = AddQuestion(consultationLevelLocationId, questionTypeId, "Question Label");
+
+			var userId = Guid.Empty;
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+			var questionService = new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService);
+
+			//Act
+		    var result = questionService.GetQuestions(1, null, true);
+
+		    //Assert
+		    result.question.questionId.ShouldBe(questionId);
+	    }
     }
 }
