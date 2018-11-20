@@ -143,7 +143,58 @@ namespace Comments.Test.UnitTests
 		    var results = consultationsContext.GetAllCommentsAndQuestionsForDocument(sourceURIs, false);
 
 		    //Assert
-		    results.Count().ShouldBe(2);
+		    results.Count().ShouldBe(3);
 	    }
+
+	    [Fact]
+	    public void Get_Questions_For_SourceURI()
+	    {
+		    // Arrange
+		    ResetDatabase();
+
+		    var expectedQuestionIdsInResultSet = new List<int>();
+
+			//these questions should appear in the resultset
+		    var locationId = AddLocation("consultations://./consultation/1/document/1/chapter/introduction");
+			var questionTypeId = AddQuestionType("Question Type", false, true);
+		    expectedQuestionIdsInResultSet.Add(AddQuestion(locationId, questionTypeId, "Question Label"));		
+
+			locationId = AddLocation("consultations://./consultation/1/document/1");
+		    expectedQuestionIdsInResultSet.Add(AddQuestion(locationId, questionTypeId, "Question Label"));
+
+			locationId = AddLocation("consultations://./consultation/1");
+			expectedQuestionIdsInResultSet.Add(AddQuestion(locationId, questionTypeId, "Question Label"));
+
+			//these questions shouldn't appear in the resultset.
+		    var differetDocumentLocationId = AddLocation("consultations://./consultation/1/document/2");
+		    AddQuestion(differetDocumentLocationId, questionTypeId, "Question Label");
+
+			var differentChapterLocationId = AddLocation("consultations://./consultation/1/document/1/chapter/overview");
+		    AddQuestion(differentChapterLocationId, questionTypeId, "Question Label");
+
+			var differentConsultationLocationId = AddLocation("consultations://./consultation/2");
+			AddQuestion(differentConsultationLocationId, questionTypeId, "Question Label");
+
+			var sourceURIs = new List<string>
+		    {
+			    ConsultationsUri.ConvertToConsultationsUri("/1/1/Introduction", CommentOn.Consultation),
+			    ConsultationsUri.ConvertToConsultationsUri("/1/1/Introduction", CommentOn.Document),
+			    ConsultationsUri.ConvertToConsultationsUri("/1/1/Introduction", CommentOn.Chapter)
+		    };
+
+		    // Act
+		    var consultationsContext = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption);
+		    var results = consultationsContext.GetQuestionsForDocument(sourceURIs, false).ToList();
+			
+		    //Assert
+		    results.Count.ShouldBe(expectedQuestionIdsInResultSet.Count);
+		    foreach (var result in results)
+		    {
+			    foreach (var question in result.Question)
+			    {
+				    expectedQuestionIdsInResultSet.Contains(question.QuestionId).ShouldBeTrue();
+			    }
+		    }
+		}
 	}
 }
