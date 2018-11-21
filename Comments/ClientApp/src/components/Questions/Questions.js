@@ -59,9 +59,9 @@ export class Questions extends Component<PropsType, StateType> {
 
 		preloadedQuestions = preload(
 			this.props.staticContext,
-			"comments",
+			"questions",
 			[],
-			{sourceURI: "/22/1/patient-centred-care"},
+			{consultationId: this.props.match.params.consultationId, documentId: this.props.match.params.documentId},
 			preloadedData,
 		);
 
@@ -69,7 +69,7 @@ export class Questions extends Component<PropsType, StateType> {
 			this.state = {
 				consultationData: preloadedConsultation,
 				documentsData: preloadedDocuments,
-				questionsData: preloadedQuestions.questions,
+				questionsData: preloadedQuestions,
 				loading: false,
 				hasInitialData: true,
 				error: {
@@ -82,7 +82,7 @@ export class Questions extends Component<PropsType, StateType> {
 	}
 
 	gatherData = async () => {
-		const {consultationId} = this.props.match.params;
+		const {consultationId, documentId} = this.props.match.params;
 
 		const consultationData = load("consultation", undefined, [], {
 			consultationId,
@@ -109,13 +109,13 @@ export class Questions extends Component<PropsType, StateType> {
 				});
 			});
 
-		const questionsData = load("comments", undefined, [], {sourceURI: "/22/1/patient-centred-care"})
-			.then(response => response.data.questions)
+		const questionsData = load("questions", undefined, [], {consultationId, documentId})
+			.then(response => response.data)
 			.catch(err => {
 				this.setState({
 					error: {
 						hasError: true,
-						message: "documentsData " + err,
+						message: "questionsData " + err,
 					},
 				});
 			});
@@ -148,38 +148,65 @@ export class Questions extends Component<PropsType, StateType> {
 		}
 	}
 
-	createConsultationNavigation = (consultationData, documentsData, currentConsultationId, currentDocumentId) => {
+	componentDidUpdate(prevProps){
+		const oldRoute = prevProps.location.pathname;
+		const newRoute = this.props.location.pathname;
+
+		if (oldRoute === newRoute) return;
+
+		this.gatherData()
+			.then(data => {
+				this.setState({...data});
+			})
+
+	}
+
+	numberOfQuestions = (questionsData, documentId) => {
+		return questionsData
+			.map(question => {
+				if (question.documentId === documentId) {
+					return 1;
+				}
+				return 0;
+			})
+			.reduce((total, current) => {
+				return total + current
+			}, 0);
+	};
+
+	createConsultationNavigation = (consultationData, documentsData, questionsData, currentConsultationId, currentDocumentId) => {
 		const supportsQuestions = document => document.supportsQuestions;
 
 		const isCurrentRoute = (consultationId, documentId) => {
-			return (consultationId === parseInt(currentConsultationId))
-				&& (documentId === parseInt(currentDocumentId));
+			return (consultationId === parseInt(currentConsultationId, 10))
+				&& (documentId === parseInt(currentDocumentId, 10));
 		};
 
 		const documentsList = documentsData
 			.filter(supportsQuestions)
 			.map(consultationDocument => {
-				return {
-					title: consultationDocument.title,
-					to: `/admin/questions/${consultationDocument.consultationId}/${consultationDocument.documentId}`,
-					marker: 2,
-					current: isCurrentRoute(
-						consultationDocument.consultationId,
-						consultationDocument.documentId),
-				};
-			},
+					return {
+						title: consultationDocument.title,
+						to: `/admin/questions/${consultationDocument.consultationId}/${consultationDocument.documentId}`,
+						marker: 1,
+						current: isCurrentRoute(
+							consultationDocument.consultationId,
+							consultationDocument.documentId),
+					};
+				},
 			);
 
 		return [
 			{
 				title: consultationData.title,
 				to: `/admin/questions/${consultationData.consultationId}/0`,
-				marker: 3,
+				marker: 1,
 				current: isCurrentRoute(consultationData.consultationId, 0),
 				children: documentsList,
 			},
 		];
 	};
+
 
 	render() {
 		if (!this.state.hasInitialData) return null;
@@ -229,6 +256,7 @@ export class Questions extends Component<PropsType, StateType> {
 													this.createConsultationNavigation(
 														consultationData,
 														documentsData,
+														questionsData,
 														currentConsultationId,
 														currentDocumentId,
 													)

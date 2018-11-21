@@ -1,34 +1,25 @@
 // @flow
-import React, {Component, Fragment} from "react";
+import React, {PureComponent} from "react";
 
-export class TextQuestion extends Component {
+export class TextQuestion extends PureComponent {
 
-	constructor() {
-		super();
-		this.state = {
-			question: {},
-		};
+	constructor(props) {
+		super(props);
 	}
 
-	componentDidMount() {
-		this.setState({
-			question: this.props.question,
-		});
-	}
-
-	textareaChangeHandler = (e: SyntheticEvent) => {
-		const question = this.state.question;
-		question.questionText = e.target.value;
-		//const unsavedChanges = !(answer.answerId === -1 && answer.answerText.length === 0);
-		//this.props.updateUnsavedIds(`${answer.questionId}q`, unsavedChanges);
-		this.setState({
-			question
-			//unsavedChanges,
-		});
-	};
+	// textareaChangeHandler = (e: SyntheticEvent) => {
+	// 	const question = this.state.question;
+	// 	question.questionText = e.target.value;
+	// 	//const unsavedChanges = !(answer.answerId === -1 && answer.answerText.length === 0);
+	// 	//this.props.updateUnsavedIds(`${answer.questionId}q`, unsavedChanges);
+	// 	this.setState({
+	// 		question
+	// 		//unsavedChanges,
+	// 	});
+	// };
 
 	render() {
-		const { questionText } = this.state.question;
+		const { questionText, questionId, documentId } = this.props.question;
 
 		return (
 			<li>
@@ -36,9 +27,11 @@ export class TextQuestion extends Component {
 					data-hj-whitelist
 					data-qa-sel="Question-text-area"
 					className="form__input form__input--textarea"
-					onInput={this.textareaChangeHandler}
+					// onInput={this.textareaChangeHandler}
 					value={questionText}/>
 				<button>Save Question</button>
+				<h1>{questionId}</h1>
+				<h2>{documentId}</h2>
 				<button>Delete</button>
 			</li>
 		);
