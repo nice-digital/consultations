@@ -59,7 +59,11 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 				<article className="card">
 					<header className="card__header">
 						<h3 className="card__heading">
-							<Link to={`/${consultationId}/${documentId}/${chapterSlug}`}>{title}</Link>
+							{ 
+								documentId != null && chapterSlug != null ?
+									<Link to={`/${consultationId}/${documentId}/${chapterSlug}`}>{title}</Link> 
+									: title
+							}
 						</h3>
 					</header>
 					<dl className="card__metadata">
@@ -115,3 +119,5 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 		);
 	}
 }
+
+export default ConsultationItem;

@@ -11,7 +11,7 @@ import { UserContext } from "../../context/UserContext";
 import { LoginBanner } from "../LoginBanner/LoginBanner";
 import { Header } from "../Header/Header";
 import { Breadcrumbs } from "../Breadcrumbs/Breadcrumbs";
-import { ConsultationItem } from "./ConsultationItem/ConsultationItem";
+import { ConsultationItem } from "../ConsultationItem/ConsultationItem";
 import preload from "../../data/pre-loader";
 import { FilterPanel } from "../FilterPanel/FilterPanel";
 import { load } from "../../data/loader";

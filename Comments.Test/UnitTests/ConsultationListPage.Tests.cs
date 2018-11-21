@@ -508,7 +508,9 @@ namespace Comments.Test.UnitTests
 				EndDate = DateTime.Now.AddDays(1),
 				Reference = "GID-1",
 				Title = "Consultation title 1",
-				AllowedRole = "ConsultationListTestRole"
+				AllowedRole = "ConsultationListTestRole",
+				FirstDocumentIdWhichSupportsCommentsOrQuestions = null,
+				FirstChapterSlugOfFirstDocumentWhichSupportsCommentsOrQuestions = null
 			});
 			consultationList.Add(new ConsultationList()
 			{
@@ -518,7 +520,9 @@ namespace Comments.Test.UnitTests
 				EndDate = DateTime.Now.AddDays(-2),
 				Reference = "GID-2",
 				Title = "Consultation Title 1",
-				AllowedRole = "ConsultationListTestRole"
+				AllowedRole = "ConsultationListTestRole",
+				FirstDocumentIdWhichSupportsCommentsOrQuestions = null,
+				FirstChapterSlugOfFirstDocumentWhichSupportsCommentsOrQuestions = null
 			});
 			consultationList.Add(new ConsultationList()
 			{
@@ -528,7 +532,9 @@ namespace Comments.Test.UnitTests
 				EndDate = DateTime.Now.AddDays(5),
 				Reference = "GID-3",
 				Title = "Consultation Title 3",
-				AllowedRole = "Some other role"
+				AllowedRole = "Some other role",
+				FirstDocumentIdWhichSupportsCommentsOrQuestions = 1,
+				FirstChapterSlugOfFirstDocumentWhichSupportsCommentsOrQuestions = "my-chapter-slug"
 			});
 
 			return consultationList;
