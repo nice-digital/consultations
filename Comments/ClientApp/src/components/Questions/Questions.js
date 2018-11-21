@@ -33,6 +33,10 @@ export class Questions extends Component<PropsType, StateType> {
 
 		let preloadedConsultation, preloadedDocuments, preloadedQuestions;
 
+
+		let { consultationId, documentId } = this.props.match.params;
+		documentId = documentId !== "0" ? documentId : "";
+
 		let preloadedData = {};
 		if (this.props.staticContext && this.props.staticContext.preload) {
 			preloadedData = this.props.staticContext.preload.data; //this is data from Configure => SupplyData in Startup.cs. the main thing it contains for this call is the cookie for the current user.
@@ -43,7 +47,7 @@ export class Questions extends Component<PropsType, StateType> {
 			"consultation",
 			[],
 			{
-				consultationId: this.props.match.params.consultationId,
+				consultationId,
 				isReview: false,
 			},
 			preloadedData,
@@ -53,7 +57,7 @@ export class Questions extends Component<PropsType, StateType> {
 			this.props.staticContext,
 			"documents",
 			[],
-			{consultationId: this.props.match.params.consultationId},
+			{consultationId},
 			preloadedData,
 		);
 
@@ -61,7 +65,7 @@ export class Questions extends Component<PropsType, StateType> {
 			this.props.staticContext,
 			"questions",
 			[],
-			{consultationId: this.props.match.params.consultationId, documentId: this.props.match.params.documentId},
+			{consultationId, documentId},
 			preloadedData,
 		);
 
@@ -82,7 +86,9 @@ export class Questions extends Component<PropsType, StateType> {
 	}
 
 	gatherData = async () => {
-		const {consultationId, documentId} = this.props.match.params;
+		let {consultationId, documentId} = this.props.match.params;
+
+		documentId = documentId !== "0" ? documentId : "";
 
 		const consultationData = load("consultation", undefined, [], {
 			consultationId,
@@ -263,18 +269,13 @@ export class Questions extends Component<PropsType, StateType> {
 												}/>
 										</div>
 										<div data-g="12 md:6">
-											{!currentDocumentId ?
-												<p>Choose a consultation or document to add questions</p>
-												:
-												questionsData &&
 												<div>
 													<ul>
 														{questionsData.map(question => (
-															<TextQuestion question={question}/>
+															<TextQuestion key={question.questionId} question={question}/>
 														))}
 													</ul>
 												</div>
-											}
 										</div>
 									</div>
 								</div>
