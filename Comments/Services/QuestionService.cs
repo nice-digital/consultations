@@ -1,5 +1,8 @@
 using Comments.Models;
 using Comments.ViewModels;
+using System.Collections.Generic;
+using Comments.Common;
+using Question = Comments.ViewModels.Question;
 
 namespace Comments.Services
 {
@@ -9,6 +12,7 @@ namespace Comments.Services
         (int rowsUpdated, Validate validate) EditQuestion(int questionId, ViewModels.Question question);
         (int rowsUpdated, Validate validate) DeleteQuestion(int questionId);
         (ViewModels.Question question, Validate validate) CreateQuestion(ViewModels.Question question);
+	    IEnumerable<ViewModels.Question> GetQuestions(int consultationId, int? documentId);
     }
     public class QuestionService : IQuestionService
     {
@@ -77,5 +81,31 @@ namespace Comments.Services
             
             return (question: new ViewModels.Question(locationToSave, questionToSave), validate: null);
         }
-	}
+
+	    public IEnumerable<ViewModels.Question> GetQuestions(int consultationId, int? documentId)
+	    {
+		    var sourceURIs = new List<string>();
+		    var partialMatch = false;
+		    if (documentId.HasValue)
+		    {
+			    partialMatch = true;
+			    sourceURIs.Add(ConsultationsUri.CreateDocumentURI(consultationId, documentId.Value));
+		    }
+		    else
+		    {
+				sourceURIs.Add(ConsultationsUri.CreateConsultationURI(consultationId));
+			}
+		    var locations = _context.GetQuestionsForDocument(sourceURIs, partialMatch);
+		    var questionViewModels = new List<ViewModels.Question>();
+
+		    foreach (var location in locations)
+		    {
+			    foreach (var question in location.Question)
+			    {
+					questionViewModels.Add(new Question(location, question));
+				}
+		    }
+		    return questionViewModels;
+	    }
+    }
 }

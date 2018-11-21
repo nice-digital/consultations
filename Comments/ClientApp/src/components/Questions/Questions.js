@@ -1,13 +1,15 @@
-import React, { Component, Fragment } from "react";
-import { withRouter } from "react-router-dom";
+// @flow
+import React, {Component, Fragment} from "react";
+import {withRouter} from "react-router-dom";
 import Helmet from "react-helmet";
 
-import { LoginBanner } from "../LoginBanner/LoginBanner";
-import { Breadcrumbs } from "../Breadcrumbs/Breadcrumbs";
-import { NestedStackedNav } from "../NestedStackedNav/NestedStackedNav";
-import { UserContext } from "../../context/UserContext";
+import {LoginBanner} from "../LoginBanner/LoginBanner";
+import {Breadcrumbs} from "../Breadcrumbs/Breadcrumbs";
+import {NestedStackedNav} from "../NestedStackedNav/NestedStackedNav";
+import {UserContext} from "../../context/UserContext";
 import preload from "../../data/pre-loader";
-import { load } from "../../data/loader";
+import {load} from "../../data/loader";
+import {TextQuestion} from "../QuestionTypes/TextQuestion/TextQuestion";
 
 type PropsType = any; // todo
 
@@ -19,6 +21,8 @@ export class Questions extends Component<PropsType, StateType> {
 
 		this.state = {
 			consultationData: null,
+			documentsData: null,
+			questionsData: null,
 			loading: true,
 			hasInitialData: false,
 			error: {
@@ -27,7 +31,7 @@ export class Questions extends Component<PropsType, StateType> {
 			},
 		};
 
-		let preloadedConsultation, preloadedDocuments;
+		let preloadedConsultation, preloadedDocuments, preloadedQuestions;
 
 		let preloadedData = {};
 		if (this.props.staticContext && this.props.staticContext.preload) {
@@ -38,7 +42,10 @@ export class Questions extends Component<PropsType, StateType> {
 			this.props.staticContext,
 			"consultation",
 			[],
-			{consultationId: this.props.match.params.consultationId, isReview: false},
+			{
+				consultationId: this.props.match.params.consultationId,
+				isReview: false,
+			},
 			preloadedData,
 		);
 
@@ -50,10 +57,19 @@ export class Questions extends Component<PropsType, StateType> {
 			preloadedData,
 		);
 
-		if (preloadedConsultation && preloadedDocuments) {
+		preloadedQuestions = preload(
+			this.props.staticContext,
+			"questions",
+			[],
+			{consultationId: this.props.match.params.consultationId, documentId: this.props.match.params.documentId},
+			preloadedData,
+		);
+
+		if (preloadedConsultation && preloadedDocuments && preloadedQuestions) {
 			this.state = {
 				consultationData: preloadedConsultation,
 				documentsData: preloadedDocuments,
+				questionsData: preloadedQuestions,
 				loading: false,
 				hasInitialData: true,
 				error: {
@@ -66,7 +82,7 @@ export class Questions extends Component<PropsType, StateType> {
 	}
 
 	gatherData = async () => {
-		const {consultationId} = this.props.match.params;
+		const {consultationId, documentId} = this.props.match.params;
 
 		const consultationData = load("consultation", undefined, [], {
 			consultationId,
@@ -93,9 +109,21 @@ export class Questions extends Component<PropsType, StateType> {
 				});
 			});
 
+		const questionsData = load("questions", undefined, [], {consultationId, documentId})
+			.then(response => response.data)
+			.catch(err => {
+				this.setState({
+					error: {
+						hasError: true,
+						message: "questionsData " + err,
+					},
+				});
+			});
+
 		return {
 			consultationData: await consultationData,
 			documentsData: await documentsData,
+			questionsData: await questionsData,
 		};
 	};
 
@@ -120,38 +148,65 @@ export class Questions extends Component<PropsType, StateType> {
 		}
 	}
 
-	createConsultationNavigation = (consultationData, documentsData, currentConsultationId, currentDocumentId) => {
+	componentDidUpdate(prevProps){
+		const oldRoute = prevProps.location.pathname;
+		const newRoute = this.props.location.pathname;
+
+		if (oldRoute === newRoute) return;
+
+		this.gatherData()
+			.then(data => {
+				this.setState({...data});
+			})
+
+	}
+
+	numberOfQuestions = (questionsData, documentId) => {
+		return questionsData
+			.map(question => {
+				if (question.documentId === documentId) {
+					return 1;
+				}
+				return 0;
+			})
+			.reduce((total, current) => {
+				return total + current
+			}, 0);
+	};
+
+	createConsultationNavigation = (consultationData, documentsData, questionsData, currentConsultationId, currentDocumentId) => {
 		const supportsQuestions = document => document.supportsQuestions;
 
 		const isCurrentRoute = (consultationId, documentId) => {
-			return (consultationId === parseInt(currentConsultationId))
-				&& (documentId === parseInt(currentDocumentId));
+			return (consultationId === parseInt(currentConsultationId, 10))
+				&& (documentId === parseInt(currentDocumentId, 10));
 		};
 
 		const documentsList = documentsData
 			.filter(supportsQuestions)
 			.map(consultationDocument => {
-				return {
-					title: consultationDocument.title,
-					to: `/admin/questions/${consultationDocument.consultationId}/${consultationDocument.documentId}`,
-					marker: 2,
-					current: isCurrentRoute(
-						consultationDocument.consultationId,
-						consultationDocument.documentId),
-				};
-			}
+					return {
+						title: consultationDocument.title,
+						to: `/admin/questions/${consultationDocument.consultationId}/${consultationDocument.documentId}`,
+						marker: 1,
+						current: isCurrentRoute(
+							consultationDocument.consultationId,
+							consultationDocument.documentId),
+					};
+				},
 			);
 
 		return [
 			{
 				title: consultationData.title,
 				to: `/admin/questions/${consultationData.consultationId}/0`,
-				marker: 3,
+				marker: 1,
 				current: isCurrentRoute(consultationData.consultationId, 0),
 				children: documentsList,
 			},
 		];
 	};
+
 
 	render() {
 		if (!this.state.hasInitialData) return null;
@@ -169,10 +224,10 @@ export class Questions extends Component<PropsType, StateType> {
 			},
 		];
 
-		const {consultationData, documentsData} = this.state;
+		const {consultationData, documentsData, questionsData} = this.state;
 
 		const currentDocumentId = this.props.match.params.documentId;
-		const currentConsultationId =this.props.match.params.consultationId;
+		const currentConsultationId = this.props.match.params.consultationId;
 
 		return (
 			<UserContext.Consumer>
@@ -201,14 +256,24 @@ export class Questions extends Component<PropsType, StateType> {
 													this.createConsultationNavigation(
 														consultationData,
 														documentsData,
+														questionsData,
 														currentConsultationId,
 														currentDocumentId,
 													)
 												}/>
 										</div>
 										<div data-g="12 md:6">
-											{!currentDocumentId &&
+											{!currentDocumentId ?
 												<p>Choose a consultation or document to add questions</p>
+												:
+												questionsData &&
+												<div>
+													<ul>
+														{questionsData.map(question => (
+															<TextQuestion question={question}/>
+														))}
+													</ul>
+												</div>
 											}
 
 										</div>

@@ -63,7 +63,7 @@ namespace Comments.Models
 
 			var data = Location.Where(l => partialMatchSourceURI
 					? (l.SourceURI.Equals(partialMatchExactSourceURIToUse) || l.SourceURI.Contains(partialSourceURIToUse))
-					: sourceURIs.Contains(l.SourceURI))
+					: sourceURIs.Contains(l.SourceURI, StringComparer.OrdinalIgnoreCase))
 				.Include(l => l.Comment)
 					.ThenInclude(s => s.SubmissionComment)
 					.ThenInclude(s => s.Submission)
@@ -102,7 +102,38 @@ namespace Comments.Models
 			
 		}
 
-	    public List<Comment> GetAllSubmittedCommentsForURI(string  sourceURI)
+		public IEnumerable<Location> GetQuestionsForDocument(IList<string> sourceURIs, bool partialMatchSourceURI)
+		{
+			string partialSourceURIToUse = null, partialMatchExactSourceURIToUse = null;
+			if (partialMatchSourceURI)
+			{
+				partialMatchExactSourceURIToUse = sourceURIs.SingleOrDefault();
+				if (partialMatchExactSourceURIToUse == null)
+					throw new ArgumentException("There should be one and only one source uri passed when doing a partial match.");
+
+				partialSourceURIToUse = $"{partialMatchExactSourceURIToUse}/";
+			}
+
+			var data = Location.Where(l => partialMatchSourceURI
+					? (l.SourceURI.Equals(partialMatchExactSourceURIToUse) || l.SourceURI.Contains(partialSourceURIToUse))
+					: sourceURIs.Contains(l.SourceURI, StringComparer.OrdinalIgnoreCase))
+
+				.Include(l => l.Question)
+					.ThenInclude(q => q.QuestionType)
+
+					.OrderBy(l => l.Order)
+
+				.ThenByDescending(l =>
+					l.Question.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault())
+
+				.ToList();
+
+			return data;
+
+
+		}
+
+		public List<Comment> GetAllSubmittedCommentsForURI(string  sourceURI)
 	    {
 			var comment = Comment.Where(c =>
 					c.StatusId == (int) StatusName.Submitted && c.Location.SourceURI.Contains(sourceURI) && c.IsDeleted == false)
