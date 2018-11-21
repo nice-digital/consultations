@@ -210,6 +210,7 @@ export class Questions extends Component<PropsType, StateType> {
 											{!currentDocumentId &&
 												<p>Choose a consultation or document to add questions</p>
 											}
+
 										</div>
 									</div>
 								</div>

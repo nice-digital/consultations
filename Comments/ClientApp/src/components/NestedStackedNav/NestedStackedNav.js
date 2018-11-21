@@ -29,6 +29,7 @@ export class NestedStackedNav extends PureComponent {
 		}
 		return (
 			<nav className="stacked-nav NestedStackedNav">
+				<h2 className="stacked-nav__root">Select to add question</h2>
 				<ListWrapper>
 					{navigationStructure.map(this.renderNavRow)}
 				</ListWrapper>
