@@ -92,7 +92,7 @@ namespace Comments.Test.Infrastructure
 		    throw new NotImplementedException();
 	    }
 
-	    public Consultation GetConsultation(int consultationId, Page page, bool useFilter)
+	    public Consultation GetConsultation(int consultationId, BreadcrumbType breadcrumbType, bool useFilter)
 	    {
 			var userService = FakeUserService.Get(true, "Benjamin Button", Guid.NewGuid());
 			var consultationBase = new ConsultationBase()
@@ -115,6 +115,11 @@ namespace Comments.Test.Infrastructure
 		    throw new NotImplementedException();
 	    }
 
-	    #endregion Not Implemented Members
+	    public IEnumerable<BreadcrumbLink> GetBreadcrumbs(ConsultationDetail consultation, BreadcrumbType breadcrumbType)
+	    {
+		    throw new NotImplementedException();
+	    }
+
+		#endregion Not Implemented Members
 	}
 }
