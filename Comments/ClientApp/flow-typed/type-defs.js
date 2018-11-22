@@ -113,6 +113,7 @@ declare type QuestionType = {
 	commentOn: string,
 	sourceURI: string,
 	quote: string,
+	documentId: number
 };
 
 declare type CommentsAndQuestionsType = {

@@ -1,7 +1,17 @@
 // @flow
-import React, {PureComponent} from "react";
+import React, {Component} from "react";
 
-export class TextQuestion extends PureComponent {
+type StateType = {
+	question: QuestionType,
+	unsavedChanges: boolean
+
+}
+
+type PropsType = {
+	question: QuestionType
+}
+
+export class TextQuestion extends Component<PropsType, StateType> {
 
 	constructor() {
 		super();
@@ -39,32 +49,33 @@ export class TextQuestion extends PureComponent {
 	// 	return null;
 	// }
 
-	textareaChangeHandler = (e: any) => {
-		const question = Object.assign({}, this.state.question);
+	handleChange = (e) => {
+		const question = this.state.question;
 		question.questionText = e.target.value;
+
 		this.setState({
 			question,
-			unsavedChanges: true
+			unsavedChanges: true,
 		});
 	};
 
 	render() {
 		if (!this.state.question) {
-			return null
-		};
+			return null;
+		}
 
-		const { questionText, questionId, documentId } = this.state.question;
+		const { questionText } = this.state.question;
 		return (
 			<li>
 				<textarea
 					data-hj-whitelist
 					data-qa-sel="Question-text-area"
 					className="form__input form__input--textarea"
-					onInput={this.textareaChangeHandler}
+					onChange={this.handleChange}
 					value={questionText}/>
 				<button>Save Question</button>
 				<button>Delete</button>
 			</li>
 		);
-	};
+	}
 }

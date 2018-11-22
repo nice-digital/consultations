@@ -33,7 +33,6 @@ export class Questions extends Component<PropsType, StateType> {
 
 		let preloadedConsultation, preloadedDocuments, preloadedQuestions;
 
-
 		let { consultationId, documentId } = this.props.match.params;
 		documentId = documentId !== "0" ? documentId : "";
 
@@ -163,8 +162,7 @@ export class Questions extends Component<PropsType, StateType> {
 		this.gatherData()
 			.then(data => {
 				this.setState({...data});
-			})
-
+			});
 	}
 
 	numberOfQuestions = (questionsData, documentId) => {
@@ -176,7 +174,7 @@ export class Questions extends Component<PropsType, StateType> {
 				return 0;
 			})
 			.reduce((total, current) => {
-				return total + current
+				return total + current;
 			}, 0);
 	};
 
@@ -191,15 +189,15 @@ export class Questions extends Component<PropsType, StateType> {
 		const documentsList = documentsData
 			.filter(supportsQuestions)
 			.map(consultationDocument => {
-					return {
-						title: consultationDocument.title,
-						to: `/admin/questions/${consultationDocument.consultationId}/${consultationDocument.documentId}`,
-						marker: 1,
-						current: isCurrentRoute(
-							consultationDocument.consultationId,
-							consultationDocument.documentId),
-					};
-				},
+				return {
+					title: consultationDocument.title,
+					to: `/admin/questions/${consultationDocument.consultationId}/${consultationDocument.documentId}`,
+					marker: 1,
+					current: isCurrentRoute(
+						consultationDocument.consultationId,
+						consultationDocument.documentId),
+				};
+			},
 			);
 
 		return [
@@ -212,7 +210,6 @@ export class Questions extends Component<PropsType, StateType> {
 			},
 		];
 	};
-
 
 	render() {
 		if (!this.state.hasInitialData) return null;
@@ -269,13 +266,13 @@ export class Questions extends Component<PropsType, StateType> {
 												}/>
 										</div>
 										<div data-g="12 md:6">
-												<div>
-													<ul>
-														{questionsData.map(question => (
-															<TextQuestion key={question.questionId} question={question}/>
-														))}
-													</ul>
-												</div>
+											<div>
+												<ul>
+													{questionsData.map(question => (
+														<TextQuestion key={question.questionId} question={question}/>
+													))}
+												</ul>
+											</div>
 										</div>
 									</div>
 								</div>
