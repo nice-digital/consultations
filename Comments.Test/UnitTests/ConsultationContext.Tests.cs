@@ -299,5 +299,59 @@ namespace Comments.Test.UnitTests
 				}
 			}
 		}
+
+
+		[Fact]
+		public void Get_Questions_For_Consultation_Partially_Matching_SourceURI()
+		{
+			// Arrange
+			ResetDatabase();
+
+			var expectedQuestionIdsInResultSet = new List<int>();
+
+			var questionTypeId = AddQuestionType("Question Type", false, true);
+
+			//these questions should appear in the resultset
+			var consultationLevelLocationId = AddLocation("consultations://./consultation/1");
+			expectedQuestionIdsInResultSet.Add(AddQuestion(consultationLevelLocationId, questionTypeId, "Question Label"));
+
+			var locationId = AddLocation("consultations://./consultation/1/document/1/chapter/introduction");
+			expectedQuestionIdsInResultSet.Add(AddQuestion(locationId, questionTypeId, "Question Label"));
+
+			locationId = AddLocation("consultations://./consultation/1/document/1");
+			expectedQuestionIdsInResultSet.Add(AddQuestion(locationId, questionTypeId, "Question Label"));
+
+			var differentChapterLocationId = AddLocation("consultations://./consultation/1/document/1/chapter/overview");
+			expectedQuestionIdsInResultSet.Add(AddQuestion(differentChapterLocationId, questionTypeId, "Question Label"));
+
+			var differetDocumentLocationId = AddLocation("consultations://./consultation/1/document/2");
+			expectedQuestionIdsInResultSet.Add(AddQuestion(differetDocumentLocationId, questionTypeId, "Question Label"));
+
+			//these questions shouldn't appear in the resultset.
+
+			var differentConsultationLocationId = AddLocation("consultations://./consultation/2");
+			AddQuestion(differentConsultationLocationId, questionTypeId, "Question Label");
+
+
+			var sourceURIs = new List<string>
+			{
+				ConsultationsUri.ConvertToConsultationsUri("/1/1/Introduction", CommentOn.Consultation),
+			};
+
+			// Act
+			var consultationsContext = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption);
+			var results = consultationsContext.GetQuestionsForDocument(sourceURIs, true).ToList();
+
+			//Assert
+			results.Count.ShouldBe(expectedQuestionIdsInResultSet.Count);
+			foreach (var result in results)
+			{
+				foreach (var question in result.Question)
+				{
+					expectedQuestionIdsInResultSet.Contains(question.QuestionId).ShouldBeTrue();
+				}
+			}
+		}
+
 	}
 }

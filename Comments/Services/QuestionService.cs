@@ -12,19 +12,21 @@ namespace Comments.Services
         (int rowsUpdated, Validate validate) EditQuestion(int questionId, ViewModels.Question question);
         (int rowsUpdated, Validate validate) DeleteQuestion(int questionId);
         (ViewModels.Question question, Validate validate) CreateQuestion(ViewModels.Question question);
-	    IEnumerable<ViewModels.Question> GetQuestions(int consultationId, int? documentId);
+	    QuestionAdmin GetQuestionAdmin(int consultationId);
     }
     public class QuestionService : IQuestionService
     {
         private readonly ConsultationsContext _context;
         private readonly IUserService _userService;
-        private readonly User _currentUser;
+	    private readonly IConsultationService _consultationService;
+	    private readonly User _currentUser;
 
-        public QuestionService(ConsultationsContext consultationsContext, IUserService userService)
+        public QuestionService(ConsultationsContext consultationsContext, IUserService userService, IConsultationService consultationService)
         {
             _context = consultationsContext;
             _userService = userService;
-            _currentUser = _userService.GetCurrentUser();
+	        _consultationService = consultationService;
+	        _currentUser = _userService.GetCurrentUser();
         }
 
         public (ViewModels.Question question, Validate validate) GetQuestion(int questionId)
@@ -82,30 +84,34 @@ namespace Comments.Services
             return (question: new ViewModels.Question(locationToSave, questionToSave), validate: null);
         }
 
-	    public IEnumerable<ViewModels.Question> GetQuestions(int consultationId, int? documentId)
+	    public QuestionAdmin GetQuestionAdmin(int consultationId)
 	    {
-		    var sourceURIs = new List<string>();
-		    var partialMatch = false;
-		    if (documentId.HasValue)
-		    {
-			    partialMatch = true;
-			    sourceURIs.Add(ConsultationsUri.CreateDocumentURI(consultationId, documentId.Value));
-		    }
-		    else
-		    {
-				sourceURIs.Add(ConsultationsUri.CreateConsultationURI(consultationId));
-			}
-		    var locations = _context.GetQuestionsForDocument(sourceURIs, partialMatch);
-		    var questionViewModels = new List<ViewModels.Question>();
 
-		    foreach (var location in locations)
-		    {
-			    foreach (var question in location.Question)
-			    {
-					questionViewModels.Add(new Question(location, question));
-				}
-		    }
-		    return questionViewModels;
+		    var consultation = _consultationService.GetConsultation(consultationId, false);
+
+
+		    //   var sourceURIs = new List<string>();
+		    //   var partialMatch = false;
+		    //   if (documentId.HasValue)
+		    //   {
+		    //    partialMatch = true;
+		    //    sourceURIs.Add(ConsultationsUri.CreateDocumentURI(consultationId, documentId.Value));
+		    //   }
+		    //   else
+		    //   {
+		    //	sourceURIs.Add(ConsultationsUri.CreateConsultationURI(consultationId));
+		    //}
+		    //   var locations = _context.GetQuestionsForDocument(sourceURIs, partialMatch);
+		    //   var questionViewModels = new List<ViewModels.Question>();
+
+		    //   foreach (var location in locations)
+		    //   {
+		    //    foreach (var question in location.Question)
+		    //    {
+		    //		questionViewModels.Add(new Question(location, question));
+		    //	}
+		    //   }
+		    //   return questionViewModels;
 	    }
     }
 }

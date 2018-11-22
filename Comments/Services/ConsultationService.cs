@@ -81,14 +81,21 @@ namespace Comments.Services
 		    return consultationDetail.Resources.Select(r => new ViewModels.Document(consultationId, r)).ToList();
 	    }
 
+	    public enum Page
+		{
+		    DocumentPage,
+			Review,
+			QuestionAdmin
+	    }
 
-        public ViewModels.Consultation GetConsultation(int consultationId, bool isReview)
+        public ViewModels.Consultation GetConsultation(int consultationId, Page page, bool useFilters)
         {
             var user = _userService.GetCurrentUser();
 	        var consultationDetail = GetConsultationDetail(consultationId);
 	        var consultationState = GetConsultationState(consultationId, null, null, PreviewState.NonPreview, null, consultationDetail);
+	        var isReview = (page == Page.Review);
 	        var breadcrumbs = GetBreadcrumbs(consultationDetail, isReview);
-	        var filters = isReview ? AppSettings.ReviewConfig.Filters : null;
+	        var filters = useFilters ? AppSettings.ReviewConfig.Filters : null;
             return new ViewModels.Consultation(consultationDetail, user, breadcrumbs, consultationState, filters);
         }
 

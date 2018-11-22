@@ -98,7 +98,8 @@ namespace Comments.Test.Infrastructure
 			var consultationBase = new ConsultationBase()
 		    {
 			    ConsultationId = 1,
-			    ConsultationName = "ConsultationName"
+			    ConsultationName = "ConsultationName",
+				Title = "Consultation Title"
 		    };
 
 		    return new Consultation(consultationBase, userService.GetCurrentUser());
