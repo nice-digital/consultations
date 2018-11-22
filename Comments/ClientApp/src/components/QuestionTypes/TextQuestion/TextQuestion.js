@@ -3,35 +3,66 @@ import React, {PureComponent} from "react";
 
 export class TextQuestion extends PureComponent {
 
-	constructor(props) {
-		super(props);
+	constructor() {
+		super();
+		this.state = {
+			question: {},
+			unsavedChanges: false,
+		};
 	}
 
-	// textareaChangeHandler = (e: SyntheticEvent) => {
-	// 	const question = this.state.question;
-	// 	question.questionText = e.target.value;
-	// 	//const unsavedChanges = !(answer.answerId === -1 && answer.answerText.length === 0);
-	// 	//this.props.updateUnsavedIds(`${answer.questionId}q`, unsavedChanges);
-	// 	this.setState({
-	// 		question
-	// 		//unsavedChanges,
-	// 	});
-	// };
+	componentDidMount() {
+		this.setState({
+			question: this.props.question,
+		});
+	}
+
+	// componentDidUpdate(prevProps) {
+	// 	const nextTimestamp = this.props.question.questionId;
+	// 	const prevTimestamp = prevProps.question.questionId;
+	// 	const hasQuestionBeenUpdated = () => prevTimestamp !== nextTimestamp;
+	// 	if (hasQuestionBeenUpdated()) {
+	// 		// this.props.updateUnsavedIds(this.props.question.commentId, false);
+	// 	}
+	// }
+	//
+	// static getDerivedStateFromProps(nextProps: any, prevState: any) {
+	// 	const prevTimestamp = prevState.question.questionId;
+	// 	const nextTimestamp = nextProps.question.questionId;
+	// 	const hasQuestionBeenUpdated = () => prevTimestamp !== nextTimestamp;
+	// 	if (hasQuestionBeenUpdated()) {
+	// 		return {
+	// 			question: nextProps.question,
+	// 			unsavedChanges: false,
+	// 		};
+	// 	}
+	// 	return null;
+	// }
+
+	textareaChangeHandler = (e: any) => {
+		const question = Object.assign({}, this.state.question);
+		question.questionText = e.target.value;
+		this.setState({
+			question,
+			unsavedChanges: true
+		});
+	};
 
 	render() {
-		const { questionText, questionId, documentId } = this.props.question;
+		if (!this.state.question) {
+			return null
+		};
 
+		const { questionText, questionId, documentId } = this.state.question;
 		return (
 			<li>
 				<textarea
 					data-hj-whitelist
 					data-qa-sel="Question-text-area"
 					className="form__input form__input--textarea"
-					// onInput={this.textareaChangeHandler}
+					onInput={this.textareaChangeHandler}
 					value={questionText}/>
 				<button>Save Question</button>
-				<h1>{questionId}</h1>
-				<h2>{documentId}</h2>
 				<button>Delete</button>
 			</li>
 		);

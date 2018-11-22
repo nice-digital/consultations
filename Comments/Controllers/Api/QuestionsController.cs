@@ -18,16 +18,16 @@ namespace Comments.Controllers.Api
             _logger = logger;
         }
 
-		// GET: consultations/api/Questions?consultationId=22&documentId=1
+		// GET: consultations/api/Questions?consultationId=22
 		[HttpGet]
-        public IActionResult GetQuestions(int consultationId, int? documentId)
+        public IActionResult GetQuestions(int consultationId)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var result = _questionService.GetQuestions(consultationId, documentId);
+            var result = _questionService.GetQuestionAdmin(consultationId);
 
             return Ok(result);
         }
