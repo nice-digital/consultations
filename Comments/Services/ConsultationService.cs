@@ -12,11 +12,11 @@ using System.Linq;
 
 namespace Comments.Services
 {
-	public enum Page
+	public enum BreadcrumbType
 	{
 		DocumentPage,
 		Review,
-		QuestionAdmin
+		None
 	}
 
 	public interface IConsultationService
@@ -25,7 +25,7 @@ namespace Comments.Services
         IEnumerable<Document> GetDocuments(int consultationId);
 	    IEnumerable<Document> GetPreviewDraftDocuments(int consultationId, int documentId, string reference);
 	    IEnumerable<Document> GetPreviewPublishedDocuments(int consultationId, int documentId);
-        ViewModels.Consultation GetConsultation(int consultationId, Page page, bool useFilters);
+        ViewModels.Consultation GetConsultation(int consultationId, BreadcrumbType breadcrumbType, bool useFilters);
 	    ViewModels.Consultation GetDraftConsultation(int consultationId, int documentId, string reference, bool isReview);
 
 		IEnumerable<ViewModels.Consultation> GetConsultations();
@@ -35,7 +35,7 @@ namespace Comments.Services
 	    ConsultationState GetConsultationState(int consultationId, int? documentId, string chapterSlug, PreviewState previewState, IEnumerable<Models.Location> locations = null, ConsultationBase consultation = null);
 
 		bool HasSubmittedCommentsOrQuestions(string consultationSourceURI, Guid userId);
-	    IEnumerable<BreadcrumbLink> GetBreadcrumbs(ConsultationDetail consultation, bool isReview);
+	    IEnumerable<BreadcrumbLink> GetBreadcrumbs(ConsultationDetail consultation, BreadcrumbType breadcrumbType);
 
 	    string GetFirstChapterSlug(int consultationId, int documentId);
 	    string GetFirstChapterSlugFromPreviewDocument(string reference, int consultationId, int documentId);
@@ -88,13 +88,12 @@ namespace Comments.Services
 		    return consultationDetail.Resources.Select(r => new ViewModels.Document(consultationId, r)).ToList();
 	    }
 
-        public ViewModels.Consultation GetConsultation(int consultationId, Page page, bool useFilters)
+        public ViewModels.Consultation GetConsultation(int consultationId, BreadcrumbType breadcrumbType, bool useFilters)
         {
             var user = _userService.GetCurrentUser();
 	        var consultationDetail = GetConsultationDetail(consultationId);
 	        var consultationState = GetConsultationState(consultationId, null, null, PreviewState.NonPreview, null, consultationDetail);
-	        var isReview = (page == Page.Review);
-	        var breadcrumbs = GetBreadcrumbs(consultationDetail, isReview);
+	        var breadcrumbs = GetBreadcrumbs(consultationDetail, breadcrumbType);
 	        var filters = useFilters ? AppSettings.ReviewConfig.Filters : null;
             return new ViewModels.Consultation(consultationDetail, user, breadcrumbs, consultationState, filters);
         }
@@ -108,14 +107,19 @@ namespace Comments.Services
 		    return new ViewModels.Consultation(draftConsultationDetail, user, null, consultationState, filters);
 	    }
 
-		public IEnumerable<BreadcrumbLink> GetBreadcrumbs(ConsultationDetail consultation, bool isReview)
+		public IEnumerable<BreadcrumbLink> GetBreadcrumbs(ConsultationDetail consultation, BreadcrumbType breadcrumbType)
 	    {
+		    if (breadcrumbType == BreadcrumbType.None)
+		    {
+			    return null;
+		    }
+
 			var breadcrumbs = new List<BreadcrumbLink>{
 					new BreadcrumbLink("Home", ExternalRoutes.HomePage),
 					new BreadcrumbLink(consultation.Title, ExternalRoutes.ConsultationUrl(consultation))
 			};
 
-		    if (isReview)
+		    if (breadcrumbType == BreadcrumbType.Review)
 		    {
 			    var firstDocument = GetDocuments(consultation.ConsultationId).FirstOrDefault(d => d.ConvertedDocument);
 			    var firstChapter = firstDocument?.Chapters.FirstOrDefault();

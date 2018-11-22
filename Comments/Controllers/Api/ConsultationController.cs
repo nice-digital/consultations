@@ -33,7 +33,7 @@ namespace Comments.Controllers.Api
             if (consultationId < 1)
                 throw new ArgumentException(nameof(consultationId));
 
-            return _consultationService.GetConsultation(consultationId, Page.DocumentPage, isReview);
+            return _consultationService.GetConsultation(consultationId, BreadcrumbType.DocumentPage, isReview);
         }
     }
 

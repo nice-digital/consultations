@@ -1,7 +1,10 @@
+using System;
 using Comments.Models;
 using Comments.ViewModels;
 using System.Collections.Generic;
+using System.Linq;
 using Comments.Common;
+using Location = Comments.Models.Location;
 using Question = Comments.ViewModels.Question;
 
 namespace Comments.Services
@@ -87,31 +90,64 @@ namespace Comments.Services
 	    public QuestionAdmin GetQuestionAdmin(int consultationId)
 	    {
 
-		    var consultation = _consultationService.GetConsultation(consultationId, Page.QuestionAdmin, false);
+		    var consultation = _consultationService.GetConsultation(consultationId, BreadcrumbType.None, useFilters:false);
+
+		    var locations = _context.GetQuestionsForDocument(new List<string>{ConsultationsUri.CreateConsultationURI(consultationId)}, partialMatchSourceURI: true).ToList();
+
+			var allTheQuestions = new List<Question>();
+		    foreach (var location in locations)
+		    {
+			    allTheQuestions.AddRange(location.Question.Select(question => new Question(location, question)));
+		    }
+
+		    var documents = _consultationService.GetDocuments(consultationId);
+		    var questionAdminDocuments = new List<QuestionAdminDocument>();
+
+			foreach (var document in documents)
+			{
+				//List<Location> questionIdsForThisDocument = locations.Where(l =>
+				//	l.SourceURI.Contains(ConsultationsUri.CreateDocumentURI(consultationId, document.DocumentId),
+				//		StringComparison.OrdinalIgnoreCase)).SelectMany(l => l.Question, (question) => new { question. })
 
 
-		    //   var sourceURIs = new List<string>();
-		    //   var partialMatch = false;
-		    //   if (documentId.HasValue)
-		    //   {
-		    //    partialMatch = true;
-		    //    sourceURIs.Add(ConsultationsUri.CreateDocumentURI(consultationId, documentId.Value));
-		    //   }
-		    //   else
-		    //   {
-		    //	sourceURIs.Add(ConsultationsUri.CreateConsultationURI(consultationId));
-		    //}
-		    //   var locations = _context.GetQuestionsForDocument(sourceURIs, partialMatch);
-		    //   var questionViewModels = new List<ViewModels.Question>();
+			}
 
-		    //   foreach (var location in locations)
-		    //   {
-		    //    foreach (var question in location.Question)
-		    //    {
-		    //		questionViewModels.Add(new Question(location, question));
-		    //	}
-		    //   }
-		    return new QuestionAdmin();
+
+			
+					//new QuestionAdminDocument(  doc.DocumentId,
+					//							doc.SupportsQuestions,
+					//							doc.Title,
+					//							allTheQuestions.Where(q =>
+
+					//								locations.Where(l => l.SourceURI.Contains(ConsultationsUri.CreateDocumentURI(consultationId, doc.DocumentId), StringComparison.OrdinalIgnoreCase)))
+
+					//								q.QuestionId 
+					//								q. 
+
+					//								.Select(l => new Question(l, l.Question))
+
+			//   var sourceURIs = new List<string>();
+			//   var partialMatch = false;
+			//   if (documentId.HasValue)
+			//   {
+			//    partialMatch = true;
+			//    sourceURIs.Add(ConsultationsUri.CreateDocumentURI(consultationId, documentId.Value));
+			//   }
+			//   else
+			//   {
+			//	sourceURIs.Add(ConsultationsUri.CreateConsultationURI(consultationId));
+			//}
+			//   var locations = _context.GetQuestionsForDocument(sourceURIs, partialMatch);
+			//   var questionViewModels = new List<ViewModels.Question>();
+
+			//   foreach (var location in locations)
+			//   {
+			//    foreach (var question in location.Question)
+			//    {
+			//		questionViewModels.Add(new Question(location, question));
+			//	}
+			//   }
+			return new QuestionAdmin(consultation.Title, null, null);
 	    }
     }
 }

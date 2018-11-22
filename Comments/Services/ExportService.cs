@@ -73,7 +73,7 @@ namespace Comments.Services
 		    var sourceURI = location.SourceURI;
 		    ConsultationsUriElements URIElements = ConsultationsUri.ParseConsultationsUri(sourceURI);
 
-		    var consultationDetails = _consultationService.GetConsultation(URIElements.ConsultationId, Page.QuestionAdmin, false);
+		    var consultationDetails = _consultationService.GetConsultation(URIElements.ConsultationId, BreadcrumbType.None, useFilters:false);
 		    var documents = _consultationService.GetDocuments(URIElements.ConsultationId);
 		    var documentDetail = documents.FirstOrDefault(x => x.DocumentId == URIElements.DocumentId);
 
