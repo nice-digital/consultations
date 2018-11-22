@@ -92,7 +92,7 @@ namespace Comments.Test.Infrastructure
 		    throw new NotImplementedException();
 	    }
 
-	    public Consultation GetConsultation(int consultationId, bool isReview)
+	    public Consultation GetConsultation(int consultationId, Page page, bool useFilter)
 	    {
 			var userService = FakeUserService.Get(true, "Benjamin Button", Guid.NewGuid());
 			var consultationBase = new ConsultationBase()

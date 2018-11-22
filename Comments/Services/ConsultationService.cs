@@ -12,13 +12,20 @@ using System.Linq;
 
 namespace Comments.Services
 {
+	public enum Page
+	{
+		DocumentPage,
+		Review,
+		QuestionAdmin
+	}
+
 	public interface IConsultationService
     {
         ChapterContent GetChapterContent(int consultationId, int documentId, string chapterSlug);
         IEnumerable<Document> GetDocuments(int consultationId);
 	    IEnumerable<Document> GetPreviewDraftDocuments(int consultationId, int documentId, string reference);
 	    IEnumerable<Document> GetPreviewPublishedDocuments(int consultationId, int documentId);
-        ViewModels.Consultation GetConsultation(int consultationId, bool isReview);
+        ViewModels.Consultation GetConsultation(int consultationId, Page page, bool useFilters);
 	    ViewModels.Consultation GetDraftConsultation(int consultationId, int documentId, string reference, bool isReview);
 
 		IEnumerable<ViewModels.Consultation> GetConsultations();
@@ -79,13 +86,6 @@ namespace Comments.Services
 	    {
 		    var consultationDetail = _feedService.GetIndevConsultationDetailForDraftProject(consultationId, documentId, reference);
 		    return consultationDetail.Resources.Select(r => new ViewModels.Document(consultationId, r)).ToList();
-	    }
-
-	    public enum Page
-		{
-		    DocumentPage,
-			Review,
-			QuestionAdmin
 	    }
 
         public ViewModels.Consultation GetConsultation(int consultationId, Page page, bool useFilters)

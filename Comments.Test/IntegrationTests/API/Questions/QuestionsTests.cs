@@ -87,7 +87,7 @@ namespace Comments.Test.IntegrationTests.API.Questions
             var questionId = AddQuestion(locationId, questionTypeId, questionText, _context);
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var questionService = new QuestionService(_context, userService);
+            var questionService = new QuestionService(_context, userService, _consultationService);
             var viewModel = questionService.GetQuestion(questionId);
 
             var updatedQuestionText = Guid.NewGuid().ToString();
@@ -121,7 +121,7 @@ namespace Comments.Test.IntegrationTests.API.Questions
             var questionId = AddQuestion(locationId, questionTypeId, questionText);
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var questionService = new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService);
+            var questionService = new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService);
 
             //Act
             var response = await _client.DeleteAsync($"consultations/api/question/{questionId}");

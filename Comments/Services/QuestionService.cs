@@ -87,7 +87,7 @@ namespace Comments.Services
 	    public QuestionAdmin GetQuestionAdmin(int consultationId)
 	    {
 
-		    var consultation = _consultationService.GetConsultation(consultationId, false);
+		    var consultation = _consultationService.GetConsultation(consultationId, Page.QuestionAdmin, false);
 
 
 		    //   var sourceURIs = new List<string>();
@@ -111,7 +111,7 @@ namespace Comments.Services
 		    //		questionViewModels.Add(new Question(location, question));
 		    //	}
 		    //   }
-		    //   return questionViewModels;
+		    return new QuestionAdmin();
 	    }
     }
 }
