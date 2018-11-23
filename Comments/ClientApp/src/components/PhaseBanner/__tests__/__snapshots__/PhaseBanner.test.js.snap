@@ -1,33 +1,45 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`[ClientApp]  PhaseBanner  Matches snapshot 1`] = `
-<aside
-  className="phase-banner mt--b"
+<div
+  className="container"
 >
-  <span
-    className="phase-banner__tag"
-    onClick={[Function]}
-    role="button"
+  <div
+    className="grid"
   >
-    <span
-      className="tag tag--impact tag--agile"
+    <div
+      data-g="12"
     >
-      delta
-    </span>
-  </span>
-  <span
-    className="phase-banner__label"
-  >
-    My Project
-     is in development, which means that some features may not work fully.
-     
-    <a
-      href="/get-involved/contact-us"
-      rel="noopener noreferrer"
-      target="_blank"
-    >
-      Report an issue
-    </a>
-  </span>
-</aside>
+      <aside
+        className="phase-banner mt--b"
+      >
+        <span
+          className="phase-banner__tag"
+          onClick={[Function]}
+          role="button"
+        >
+          <span
+            className="tag tag--impact tag--agile"
+          >
+            delta
+          </span>
+        </span>
+        <span
+          className="phase-banner__label"
+        >
+          My Project
+           is in development, which means that some features may not work fully.
+           
+          <a
+            href="/get-involved/contact-us"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Report an issue
+          </a>
+        </span>
+      </aside>
+    </div>
+  </div>
+</div>
 `;

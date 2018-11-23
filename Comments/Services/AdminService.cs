@@ -1,9 +1,8 @@
 using Comments.Models;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Security.Authentication;
-using Microsoft.AspNetCore.Hosting;
 
 namespace Comments.Services
 {
@@ -13,6 +12,7 @@ namespace Comments.Services
 		int DeleteAllSubmissionsFromUser(Guid usersSubmissionsToDelete);
 		int InsertQuestionsForDocument1And2InConsultation(int consultationId);
 		int InsertQuestionsForConsultation(int consultationId);
+		int InsertQuestionsForCfGConsultation(int consultationId);
 		IList<object> GetData(string tableName);
 	}
 
@@ -24,22 +24,12 @@ namespace Comments.Services
 	    private readonly ConsultationsContext _dbContext;
 	    private readonly IHostingEnvironment _hostingEnvironment;
 
-	    public AdminService(IUserService userService, IHttpContextAccessor httpContextAccessor, ConsultationsContext dbContext, IHostingEnvironment hostingEnvironment)
+	    public AdminService(ConsultationsContext dbContext, IHostingEnvironment hostingEnvironment, IUserService userService)
 	    {
-		    var user = userService.GetCurrentUser();
-		    if (!user.IsAuthorised)
+		    if (!userService.IsAllowedAccess(new List<string> {"Administrator"}).Valid)
 		    {
-				throw new AuthenticationException("GetCurrentUser returned null");
-		    }
-		    var niceUser = httpContextAccessor.HttpContext.User;
-		    if (!niceUser.Identity.IsAuthenticated)
-		    {
-			    throw new AuthenticationException("NICE user is not authenticated");
+			    throw new AuthenticationException("Not authenticated");
 			}
-			if (!niceUser.IsInRole("Administrator"))
-			{
-			    throw new AuthenticationException("NICE user is not an administrator");
-		    }
 		    _dbContext = dbContext;
 		    _hostingEnvironment = hostingEnvironment;
 	    }
@@ -68,7 +58,12 @@ namespace Comments.Services
 		    return _dbContext.InsertQuestionsWithScriptForConsultation(consultationId);
 	    }
 
-	    public IList<object> GetData(string tableName)
+	    public int InsertQuestionsForCfGConsultation(int consultationId)
+	    {
+		    return _dbContext.InsertQuestionsWithScriptForCfGConsultation(consultationId);
+	    }
+
+		public IList<object> GetData(string tableName)
 	    {
 		    return _dbContext.GetAllOfATable(tableName);
 	    }

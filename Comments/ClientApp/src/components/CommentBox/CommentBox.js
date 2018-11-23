@@ -85,19 +85,19 @@ export class CommentBox extends Component<PropsType, StateType> {
 					{!this.isTextSelection(comment) &&
 					<Fragment>
 						{documentTitle && <h1 className="CommentBox__title mv--0">{documentTitle}</h1>}
-						<h2 data-qa-sel="comment-box-title" className="CommentBox__title mt--0 mb--d">
+						<h3 data-qa-sel="comment-box-title" className="CommentBox__title mt--0 mb--d">
 							Comment on <span className="text-lowercase">{commentOn}</span>
 							{(commentOn !== "Document" && quote) && <span> - "{quote.trim()}"</span>}
-						</h2>
+						</h3>
 					</Fragment>
 					}
 
 					{this.isTextSelection(comment) &&
 					<Fragment>
 						{documentTitle && <h1 className="CommentBox__title mv--0">{documentTitle}</h1>}
-						<h2 data-qa-sel="comment-box-title" className="CommentBox__title mt--0 mb--d">
+						<h3 data-qa-sel="comment-box-title" className="CommentBox__title mt--0 mb--d">
 							Comment on a text selection
-						</h2>
+						</h3>
 						<div className="CommentBox__quote mb--d">{quote}</div>
 					</Fragment>
 					}
@@ -113,6 +113,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 							<p className="CommentBox__validationMessage">You have unsaved changes</p>
 							}
 							<textarea
+								data-hj-whitelist
 								data-qa-sel="Comment-text-area"
 								disabled={readOnly}
 								id={this.props.unique}

@@ -11,8 +11,13 @@ exports[`[ClientApp]  AnswerBox Component should match snapshot with answer 1`] 
     <div
       className="form__group form__group--textarea mb--b"
     >
+      <label
+        className="form__label visually-hidden"
+        htmlFor="string"
+      />
       <textarea
         className="form__input form__input--textarea"
+        data-hj-whitelist={true}
         data-qa-sel="Comment-text-area"
         defaultValue="an updated answer"
         disabled={false}
@@ -47,8 +52,13 @@ exports[`[ClientApp]  AnswerBox Component should match snapshot without answer 1
     <div
       className="form__group form__group--textarea mb--b"
     >
+      <label
+        className="form__label visually-hidden"
+        htmlFor="string"
+      />
       <textarea
         className="form__input form__input--textarea"
+        data-hj-whitelist={true}
         data-qa-sel="Comment-text-area"
         defaultValue=""
         disabled={false}

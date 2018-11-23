@@ -3,7 +3,7 @@
 import React, { Fragment } from "react";
 import { LiveMessage } from "react-aria-live";
 
-import AppliedFilter from "./../AppliedFilter/AppliedFilter";
+import AppliedFilter from "../AppliedFilter/AppliedFilter";
 
 type PropsType = {
 	commentCount: number,
@@ -11,12 +11,12 @@ type PropsType = {
 	questionCount: number,
 	showQuestionsCount: boolean,
 	sortOrder: string,
-	appliedFilters: TopicListAppliedFilterType[],
+	appliedFilters: AppliedFilterType[],
 	path: string,
 	isLoading: boolean
 };
 
-const ShouldShowFilter = (appliedFilters: TopicListAppliedFilterType[], filterText: string) => {
+const ShouldShowFilter = (appliedFilters: AppliedFilterType[], filterText: string) => {
 	const typeFilters = appliedFilters.filter(f => f.groupId === "Type");
 	if (typeFilters.length === 1){
 		//return !!typeFilters.find(f => f.optionId === filterText); //can't use find in IE.

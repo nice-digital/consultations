@@ -67,74 +67,16 @@ describe("[Consultations]", () => {
 			});
 		});
 
-		describe("handleClick", () => {
-
-			it("clicking heading button collapses expanded panel", () => {
-				const filterPanel = shallow(<FilterPanel filters={[]} />);
-
-				expect(filterPanel.find("button.filter-panel__heading").prop("aria-expanded")).toEqual(true);
-				expect(filterPanel.find(".filter-panel__body").prop("aria-hidden")).toEqual(false);
-
-				filterPanel.find("button.filter-panel__heading").simulate("click", {});
-
-				expect(filterPanel.find("button.filter-panel__heading").prop("aria-expanded")).toEqual(false);
-				expect(filterPanel.find(".filter-panel__body").prop("aria-hidden")).toEqual(true);
-			});
-
-			it("clicking heading button expands collapsed panel", () => {
-				const filterPanel = shallow(<FilterPanel filters={[]} />);
-
-				filterPanel.setState({ isExpanded: false });
-
-				expect(filterPanel.find("button.filter-panel__heading").prop("aria-expanded")).toEqual(false);
-				expect(filterPanel.find(".filter-panel__body").prop("aria-hidden")).toEqual(true);
-
-				filterPanel.find("button.filter-panel__heading").simulate("click", {});
-
-				expect(filterPanel.find("button.filter-panel__heading").prop("aria-expanded")).toEqual(true);
-				expect(filterPanel.find(".filter-panel__body").prop("aria-hidden")).toEqual(false);
-			});
-
-		});
-
 		describe("render", () => {
 			it("renders rootElement with filter-group class", () => {
 				const filterPanel = shallow(<FilterPanel filters={[]} />);
 				expect(filterPanel.is(".filter-panel")).toEqual(true);
 			});
 
-			it("panel title renders as a heading 2 when not mounted", () => {
-				const filterPanel = shallow(<FilterPanel filters={[]} />, { disableLifecycleMethods: true });
-				expect(filterPanel.find(".filter-panel__heading").is("h2")).toEqual(true);
-			});
-
-			it("panel title renders as a button when mounted", () => {
-				const filterPanel = shallow(<FilterPanel filters={[]} />);
-				expect(filterPanel.find(".filter-panel__heading").is("button")).toEqual(true);
-			});
-
-			it("panel title button aria controls the panel body", () => {
-				const filterPanel = shallow(<FilterPanel filters={[]} />);
-				const buttonHeading = filterPanel.find("button.filter-panel__heading");
-				expect(buttonHeading.prop("aria-controls")).toEqual("filter-panel-body");
-			});
-
-			it("panel title button is aria expanded by default when mounted", () => {
-				const filterPanel = shallow(<FilterPanel filters={[]} />);
-				const buttonHeading = filterPanel.find("button.filter-panel__heading");
-				expect(buttonHeading.prop("aria-expanded")).toEqual(true);
-			});
-
 			it("panel body has id", () => {
 				const filterPanel = shallow(<FilterPanel filters={[]} />);
 				const panelBody = filterPanel.find(".filter-panel__body");
 				expect(panelBody.prop("id")).toEqual("filter-panel-body");
-			});
-
-			it("panel body is aria hidden by default when mounted", () => {
-				const filterPanel = shallow(<FilterPanel filters={[]} />);
-				const panelBody = filterPanel.find(".filter-panel__body");
-				expect(panelBody.prop("aria-hidden")).toEqual(false);
 			});
 
 			it("renders list of filter groups", () => {

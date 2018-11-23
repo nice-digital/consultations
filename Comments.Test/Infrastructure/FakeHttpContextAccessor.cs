@@ -11,19 +11,35 @@ namespace Comments.Test.Infrastructure
 {
     public static class FakeHttpContextAccessor
     {
-        public static IHttpContextAccessor Get(bool isAuthenticated, string displayName = null, Guid? userId = null)
+        public static IHttpContextAccessor Get(bool isAuthenticated, string displayName = null, Guid? userId = null, TestUserType testUserType = TestUserType.NotAuthenticated)
         {
             var context = new Mock<HttpContext>();
 
-            if (isAuthenticated)
+            if (isAuthenticated || testUserType == TestUserType.Authenticated || testUserType == TestUserType.Administrator || testUserType == TestUserType.IndevUser)
             {
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimType.Name, displayName, null, "http://consultations.nice.org.uk"),
                     new Claim(ClaimType.NameIdentifier, userId.ToString(), null, "http://consultations.nice.org.uk"),
-	                new Claim(ClaimType.Role, "IndevUser", null, "http://consultations.nice.org.uk")
+	                new Claim(ClaimType.Role, "IndevUser", null, "http://consultations.nice.org.uk"),
+	               // new Claim(ClaimType.Role, "Administrator", null, "http://consultations.nice.org.uk")
 				};
-                context.Setup(r => r.User)
+				switch (testUserType)
+				{
+					case TestUserType.IndevUser:
+						claims.Add(new Claim(ClaimType.Role, "IndevUser", null, "http://consultations.nice.org.uk"));
+						break;
+					case TestUserType.Administrator:
+						claims.Add(new Claim(ClaimType.Role, "Administrator", null, "http://consultations.nice.org.uk"));
+						break;
+					case TestUserType.CustomFictionalRole:
+						claims.Add(new Claim(ClaimType.Role, "CustomFictionalRole", null, "http://consultations.nice.org.uk"));
+						break;
+					case TestUserType.ConsultationListTestRole:
+						claims.Add(new Claim(ClaimType.Role, "ConsultationListTestRole", null, "http://consultations.nice.org.uk"));
+						break;
+				}
+				context.Setup(r => r.User)
                     .Returns(() => new ClaimsPrincipal(new ClaimsIdentity(claims, Constants.DefaultScheme)));
             }
             else
@@ -36,5 +52,7 @@ namespace Comments.Test.Infrastructure
 
             return contextAccessor.Object;
         }
-    }
+
+		
+	}
 }

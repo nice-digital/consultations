@@ -185,7 +185,7 @@ namespace Comments.Services
 		    return commentsAndQuestions;
 	    }
 
-	    private IEnumerable<ReviewFilterGroup> GetFilterGroups(int consultationId, CommentsAndQuestions commentsAndQuestions, IEnumerable<QuestionsOrComments> type, IEnumerable<int> documentIdsToFilter)
+	    private IEnumerable<OptionFilterGroup> GetFilterGroups(int consultationId, CommentsAndQuestions commentsAndQuestions, IEnumerable<QuestionsOrComments> type, IEnumerable<int> documentIdsToFilter)
 	    {
 		    var filters = AppSettings.ReviewConfig.Filters.ToList();
 
@@ -207,13 +207,13 @@ namespace Comments.Services
 
 			//populate documents
 			var documents = _consultationService.GetDocuments(consultationId).Where(d => d.SupportsComments || d.SupportsQuestions).ToList();
-		    documentsFilter.Options = new List<ReviewFilterOption>(documents.Count());
+		    documentsFilter.Options = new List<FilterOption>(documents.Count());
 
 			foreach (var document in documents)
 			{
 				var isSelected = documentIdsToFilter != null && documentIdsToFilter.Contains(document.DocumentId);
 				documentsFilter.Options.Add(
-					new ReviewFilterOption(document.DocumentId.ToString(), document.Title, isSelected)
+					new FilterOption(document.DocumentId.ToString(), document.Title, isSelected)
 					{
 						FilteredResultCount = commentsAndQuestions.Comments.Count(c => c.Show && c.DocumentId.HasValue && c.DocumentId.Equals(document.DocumentId)) +
 						                      commentsAndQuestions.Questions.Count(q => q.Show && q.DocumentId.HasValue && q.DocumentId.Equals(document.DocumentId)),

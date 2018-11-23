@@ -65,35 +65,6 @@ Array [
         <div
             data-g="12"
         >
-            <aside
-                className="phase-banner mt--b"
-            >
-                <span
-                    className="phase-banner__tag"
-                    onClick={[Function]}
-                    role="button"
-                >
-                    <span
-                        className="tag tag--impact tag--agile"
-                    >
-                        beta
-                    </span>
-                </span>
-                <span
-                    className="phase-banner__label"
-                >
-                    NICE Consultations
-                     is in development, which means that some features may not work fully.
-                     
-                    <a
-                        href="/get-involved/contact-us"
-                        rel="noopener noreferrer"
-                        target="_blank"
-                    >
-                        Report an issue
-                    </a>
-                </span>
-            </aside>
             <nav
                 aria-label="Breadcrumbs"
             >

@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Text;
 using Comments.Configuration;
+using Comments.Migrations;
 using Comments.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
@@ -21,6 +22,11 @@ namespace Comments.Models
 		public virtual DbSet<Submission> Submission { get; set; }
 		public virtual DbSet<SubmissionAnswer> SubmissionAnswer { get; set; }
 		public virtual DbSet<SubmissionComment> SubmissionComment { get; set; }
+
+		/// <summary>
+		/// Query type - see here for more info https://docs.microsoft.com/en-us/ef/core/modeling/query-types
+		/// </summary>
+		public virtual DbQuery<SubmittedCommentsAndAnswerCount> SubmittedCommentsAndAnswerCounts { get; set; }
 
 		private Guid? _createdByUserID;
 
@@ -246,6 +252,10 @@ namespace Comments.Models
 					.OnDelete(DeleteBehavior.ClientSetNull)
 					.HasConstraintName("FK_SubmissionAnswer_AnswerID");
 			});
+
+			modelBuilder
+				.Query<SubmittedCommentsAndAnswerCount>()
+				.ToView(MigrationConstants.Views.SubmittedCommentAndAnswerCount);
 		}
 	}
 }

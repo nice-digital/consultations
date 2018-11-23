@@ -1,5 +1,6 @@
 import { load } from "./loader";
 //import stringifyObject from "stringify-object";
+
 // Returns data if it's available or a promise that resolves with the data
 // when it's loaded async.
 // This assumes the app will be rendered twice on the server: once for
@@ -11,7 +12,7 @@ const preload = (staticContext, endpoint,  urlParameters = [], query = {}, prelo
 	if (typeof window !== "undefined") {
 		if (!window.__PRELOADED__) return null;
 		data = window.__PRELOADED__[endpoint];
-		delete window.__PRELOADED__[endpoint];
+		delete window.__PRELOADED__[endpoint]; //this is deleted since the preloaded data should only be used on the initial page render and not persist beyond that
 		return data;
 	}
 
@@ -29,7 +30,6 @@ const preload = (staticContext, endpoint,  urlParameters = [], query = {}, prelo
 	if (preloadData && preloadData.cookies) {
 		cookies = preloadData.cookies;
 	}
-
 	// Load fresh data on the server
 	const promise = load(endpoint, staticContext.baseUrl, urlParameters, query,  method, content, isJson, cookies, headers)
 		.then(response => {
@@ -39,11 +39,11 @@ const preload = (staticContext, endpoint,  urlParameters = [], query = {}, prelo
 		.catch(err => {
 			if (throwOnException){
 				// todo: no pages loading on dev / alpha poss to do with the footer erroring...?
-				// throw new Error(err);
+				 throw new Error(err);
 			}
-			// else{
-			// console.log(err); //this console.log is server-side, so not useful anywhere except locally.
-			//}
+			else{
+			 console.log(err); //this console.log is server-side, so not useful anywhere except locally.
+			}
 		});
 
 	//staticContext.preload.data[endpoint] = data;

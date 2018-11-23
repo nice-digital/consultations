@@ -1,0 +1,104 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[ClientApp]  Download Component should match snapshot with supplied data 1`] = `
+<li
+  className="ConsultationItem"
+>
+  <article
+    className="card"
+  >
+    <header
+      className="card__header"
+    >
+      <h3
+        className="card__heading"
+      >
+        <a
+          href="/123/1/introduction"
+          onClick={[Function]}
+        >
+          Consultation Title
+        </a>
+      </h3>
+    </header>
+    <dl
+      className="card__metadata"
+    >
+      <div
+        className="card__metadatum"
+      >
+        <dt
+          className="visually-hidden"
+        >
+          Consultation state
+        </dt>
+        <dd>
+          <span
+            className="tag tag--open"
+          >
+            Open
+          </span>
+        </dd>
+      </div>
+      <div
+        className="card__metadatum"
+      >
+        <dt
+          className="visually-hidden"
+        >
+          Project ID
+        </dt>
+        <dd
+          title="Consultation ID 123"
+        >
+          TA-123
+        </dd>
+      </div>
+      <div
+        className="card__metadatum"
+      >
+        <dt
+          className="visually-hidden"
+        >
+          Product type name
+        </dt>
+        <dd>
+          TA
+        </dd>
+      </div>
+      <div
+        className="card__metadatum"
+      >
+        <dd>
+          Closes on
+           
+          <strong>
+            <time
+              dateTime={"2059-12-17T03:24:00.000Z"}
+            >
+              17 December 2059
+            </time>
+          </strong>
+        </dd>
+      </div>
+      <div
+        className="card__metadatum"
+      >
+        <dd>
+          <a
+            href="fdfd/api/Export/123"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Download 
+            <strong>
+              1
+            </strong>
+             response
+          </a>
+        </dd>
+      </div>
+    </dl>
+  </article>
+</li>
+`;

@@ -82,7 +82,7 @@ export const SubmitResponseDialog = (props) => {
 						<label htmlFor="organisationName" className="form__label">
 							<strong>Enter the name of your organisation</strong>
 						</label>
-						<input id="organisationName" name="organisationName" value={organisationName}
+						<input data-hj-whitelist id="organisationName" name="organisationName" value={organisationName}
 									 className="form__input" type="text" onChange={fieldsChangeHandler}/>
 					</div>
 			}
@@ -122,7 +122,8 @@ export const SubmitResponseDialog = (props) => {
 						name="hasTobaccoLinks"
 						onChange={fieldsChangeHandler}
 						checked={hasTobaccoLinks === "no"}
-						value={"no"}/>
+						value={"no"}
+					/>
 					<label
 						data-qa-sel="respond-no-has-tobac-links"
 						className="form__label form__label--radio"
@@ -138,7 +139,13 @@ export const SubmitResponseDialog = (props) => {
 						<label htmlFor="tobaccoDisclosure" className="form__label">
 							<strong>Please provide details</strong>
 						</label>
-						<textarea id="tobaccoDisclosure" name="tobaccoDisclosure" value={tobaccoDisclosure} className="form__input form__input--textarea" onChange={fieldsChangeHandler}/>
+						<textarea
+							data-hj-whitelist
+							id="tobaccoDisclosure"
+							name="tobaccoDisclosure"
+							value={tobaccoDisclosure}
+							className="form__input form__input--textarea"
+							onChange={fieldsChangeHandler}/>
 					</div>
 			}
 
