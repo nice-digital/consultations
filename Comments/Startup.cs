@@ -74,6 +74,7 @@ namespace Comments
 			services.TryAddSingleton<IEncryption, Encryption>();
 	        services.TryAddTransient<IExportToExcel, ExportToExcel>();
 	        services.TryAddTransient<IStatusService, StatusService>();
+			services.TryAddTransient<IConsultationListService, ConsultationListService>();
 
 			// Add authentication 
 			services.AddAuthentication(options =>
@@ -184,7 +185,7 @@ namespace Comments
 						{
 							context.Request.Path = reqPath.Value.Replace("/consultations", "");
 						}
-						else if (reqPath.Value.IndexOf("favicon.ico", StringComparison.OrdinalIgnoreCase) == -1)
+						else if (reqPath.Value.IndexOf("favicon.ico", StringComparison.OrdinalIgnoreCase) == -1 && reqPath.Value.IndexOf("hot-update", StringComparison.OrdinalIgnoreCase) == -1)
 						{
 							context.Response.StatusCode = 404;
 							throw new FileNotFoundException($"Path {reqPath.Value} could not be found. Did you mean to load '/consultations{context.Request.Path.Value  }' instead?");
@@ -212,6 +213,11 @@ namespace Comments
                     template: "{controller}/{action=Index}/{id?}");
 
 	            routes.MapRoute(
+		            name: "PublishedRedirectWithoutDocument",
+		            template: "consultations/{consultationId:int}",
+		            defaults: new { controller = "Redirect", action = "PublishedRedirectWithoutDocument" });
+
+				routes.MapRoute(
 		            name: "PublishedRedirect",
 		            template: "consultations/{consultationId:int}/{documentId:int}",
 		            defaults: new {controller = "Redirect", action = "PublishedDocumentWithoutChapter"});
@@ -265,8 +271,8 @@ namespace Comments
                         }
                         data["isAuthorised"] = context.User.Identity.IsAuthenticated;
 	                    data["displayName"] = context.User.Identity.Name;
-	                    data["signInURL"] = authenticateService.GetLoginURL(); //context.Request.Path);
-	                    data["registerURL"] = authenticateService.GetRegisterURL(); //context.Request.Path);
+	                    data["signInURL"] = authenticateService.GetLoginURL(context.Request.Path);
+	                    data["registerURL"] = authenticateService.GetRegisterURL(context.Request.Path);
 	                    data["requestURL"] = context.Request.Path;
 	                    data["accountsEnvironment"] = AppSettings.Environment.AccountsEnvironment;
 	                    //data["user"] = context.User; - possible security implications here, surfacing claims to the front end. might be ok, if just server-side.

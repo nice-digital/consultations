@@ -6,17 +6,23 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Comments.Controllers.Api
 {
-	[Authorize(Roles = "Administrator")]
-	[Route("consultations/api/[controller]")]
-	public class ExportController: ControllerBase
+
+	public class ExportControllerBase : ControllerBase
 	{
-		private readonly IExportService _exportService;
-		private readonly IExportToExcel _exportToExcel;
-		public ExportController(IExportService exportService, IExportToExcel exportToExcel)
+		protected readonly IExportService _exportService;
+		protected readonly IExportToExcel _exportToExcel;
+		public ExportControllerBase(IExportService exportService, IExportToExcel exportToExcel)
 		{
 			_exportService = exportService;
 			_exportToExcel = exportToExcel;
 		}
+	}
+
+	[Authorize(Roles = "Administrator")]
+	[Route("consultations/api/[controller]")]
+	public class ExportController: ExportControllerBase
+	{
+		public ExportController(IExportService exportService, IExportToExcel exportToExcel) : base(exportService, exportToExcel) {}
 
 		//GET: consultations/api/Export/5 
 		[HttpGet("{consultationId}")]
@@ -30,15 +36,9 @@ namespace Comments.Controllers.Api
 	}
 
 	[Route("consultations/api/[controller]")]
-	public class ExportExternalController : ControllerBase
+	public class ExportExternalController : ExportControllerBase
 	{
-		private readonly IExportService _exportService;
-		private readonly IExportToExcel _exportToExcel;
-		public ExportExternalController(IExportService exportService, IExportToExcel exportToExcel)
-		{
-			_exportService = exportService;
-			_exportToExcel = exportToExcel;
-		}
+		public ExportExternalController(IExportService exportService, IExportToExcel exportToExcel) : base(exportService, exportToExcel) {}
 
 		//GET: consultations/api/ExportExternal/5 
 		[HttpGet("{consultationId}")]

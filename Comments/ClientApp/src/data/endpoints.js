@@ -3,6 +3,7 @@ export const BaseUrl  = "/consultations";
 export const Endpoints = {
 	consultation: "/api/Consultation", // details for a single consultation
 	consultations: "/api/Consultations", // list of consultations
+	consultationList: "/api/ConsultationList", // list of consultations for the download page
 	draftconsultation: "/api/DraftConsultation", // details for a single consultation that has never been published
 	documents: "/api/Documents", // documents contained within consultation
 	previewdraftdocuments: "/api/PreviewDraftDocuments", // documents contained within consultation
