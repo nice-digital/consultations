@@ -1,15 +1,16 @@
 // @flow
-import React, {Component, Fragment} from "react";
-import {withRouter} from "react-router-dom";
+
+import React, { Component, Fragment } from "react";
+import { withRouter } from "react-router-dom";
 import Helmet from "react-helmet";
 
-import {LoginBanner} from "../LoginBanner/LoginBanner";
-import {Breadcrumbs} from "../Breadcrumbs/Breadcrumbs";
-import {NestedStackedNav} from "../NestedStackedNav/NestedStackedNav";
-import {UserContext} from "../../context/UserContext";
+import { LoginBanner } from "../LoginBanner/LoginBanner";
+import { NestedStackedNav } from "../NestedStackedNav/NestedStackedNav";
+import { UserContext } from "../../context/UserContext";
 import preload from "../../data/pre-loader";
-import {load} from "../../data/loader";
-import {TextQuestion} from "../QuestionTypes/TextQuestion/TextQuestion";
+import { load } from "../../data/loader";
+import { TextQuestion } from "../QuestionTypes/TextQuestion/TextQuestion";
+import { saveQuestionHandler, deleteQuestionHandler } from "../../helpers/editing-and-deleting";
 
 type PropsType = any; // todo
 
@@ -31,48 +32,24 @@ export class Questions extends Component<PropsType, StateType> {
 			},
 		};
 
-		let preloadedConsultation, preloadedDocuments, preloadedQuestions;
-
-		let { consultationId, documentId } = this.props.match.params;
-		documentId = documentId !== "0" ? documentId : "";
+		let preloadedQuestionsData;
 
 		let preloadedData = {};
 		if (this.props.staticContext && this.props.staticContext.preload) {
 			preloadedData = this.props.staticContext.preload.data; //this is data from Configure => SupplyData in Startup.cs. the main thing it contains for this call is the cookie for the current user.
 		}
 
-		preloadedConsultation = preload(
-			this.props.staticContext,
-			"consultation",
-			[],
-			{
-				consultationId,
-				isReview: false,
-			},
-			preloadedData,
-		);
-
-		preloadedDocuments = preload(
-			this.props.staticContext,
-			"documents",
-			[],
-			{consultationId},
-			preloadedData,
-		);
-
-		preloadedQuestions = preload(
+		preloadedQuestionsData = preload(
 			this.props.staticContext,
 			"questions",
 			[],
-			{consultationId, documentId},
+			{consultationId: this.props.match.params.consultationId},
 			preloadedData,
 		);
 
-		if (preloadedConsultation && preloadedDocuments && preloadedQuestions) {
+		if (preloadedQuestionsData) {
 			this.state = {
-				consultationData: preloadedConsultation,
-				documentsData: preloadedDocuments,
-				questionsData: preloadedQuestions,
+				questionsData: preloadedQuestionsData,
 				loading: false,
 				hasInitialData: true,
 				error: {
@@ -81,40 +58,10 @@ export class Questions extends Component<PropsType, StateType> {
 				},
 			};
 		}
-
 	}
 
 	gatherData = async () => {
-		let {consultationId, documentId} = this.props.match.params;
-
-		documentId = documentId !== "0" ? documentId : "";
-
-		const consultationData = load("consultation", undefined, [], {
-			consultationId,
-			isReview: false,
-		})
-			.then(response => response.data)
-			.catch(err => {
-				this.setState({
-					error: {
-						hasError: true,
-						message: "consultationData " + err,
-					},
-				});
-			});
-
-		const documentsData = load("documents", undefined, [], {consultationId})
-			.then(response => response.data)
-			.catch(err => {
-				this.setState({
-					error: {
-						hasError: true,
-						message: "documentsData " + err,
-					},
-				});
-			});
-
-		const questionsData = load("questions", undefined, [], {consultationId, documentId})
+		const questionsData = load("questions", undefined, [], {consultationId: this.props.match.params.consultationId})
 			.then(response => response.data)
 			.catch(err => {
 				this.setState({
@@ -124,10 +71,7 @@ export class Questions extends Component<PropsType, StateType> {
 					},
 				});
 			});
-
 		return {
-			consultationData: await consultationData,
-			documentsData: await documentsData,
 			questionsData: await questionsData,
 		};
 	};
@@ -153,84 +97,73 @@ export class Questions extends Component<PropsType, StateType> {
 		}
 	}
 
-	componentDidUpdate(prevProps){
+	componentDidUpdate(prevProps: PropsType) {
 		const oldRoute = prevProps.location.pathname;
 		const newRoute = this.props.location.pathname;
-
 		if (oldRoute === newRoute) return;
-
-		this.gatherData()
-			.then(data => {
-				this.setState({...data});
-			});
+		//	this is where we need to filter what's displayed
 	}
 
-	numberOfQuestions = (questionsData, documentId) => {
-		return questionsData
-			.map(question => {
-				if (question.documentId === documentId) {
-					return 1;
-				}
-				return 0;
-			})
-			.reduce((total, current) => {
-				return total + current;
-			}, 0);
+	// numberOfQuestions = (questionsData, documentId) => {
+	// 	return questionsData
+	// 		.map(question => {
+	// 			if (question.documentId === documentId) {
+	// 				return 1;
+	// 			}
+	// 			return 0;
+	// 		})
+	// 		.reduce((total, current) => {
+	// 			return total + current;
+	// 		}, 0);
+	// };
+
+	getQuestionsToDisplay = (currentDocumentId: number, questionsData: Object) => {
+		if (!currentDocumentId || !questionsData) return {};
+		currentDocumentId = parseInt(currentDocumentId, 10);
+		const isCurrentDocument = item => item.documentId === currentDocumentId;
+		if (currentDocumentId === -1) return questionsData.consultationQuestions; // documentId of -1 represents consultation level questions
+		return questionsData.documents.filter(isCurrentDocument)[0].documentQuestions;
 	};
 
-	createConsultationNavigation = (consultationData, documentsData, questionsData, currentConsultationId, currentDocumentId) => {
+	createConsultationNavigation = (questionsData: Object, currentConsultationId: string, currentDocumentId: string) => {
 		const supportsQuestions = document => document.supportsQuestions;
-
-		const isCurrentRoute = (consultationId, documentId) => {
-			return (consultationId === parseInt(currentConsultationId, 10))
-				&& (documentId === parseInt(currentDocumentId, 10));
-		};
-
-		const documentsList = documentsData
+		const isCurrentRoute = (documentId) => documentId === parseInt(currentDocumentId, 10);
+		const documentsList = questionsData.documents
 			.filter(supportsQuestions)
 			.map(consultationDocument => {
 				return {
 					title: consultationDocument.title,
-					to: `/admin/questions/${consultationDocument.consultationId}/${consultationDocument.documentId}`,
-					marker: 1,
-					current: isCurrentRoute(
-						consultationDocument.consultationId,
-						consultationDocument.documentId),
+					to: `/admin/questions/${currentConsultationId}/${consultationDocument.documentId}`,
+					marker: "nope",
+					current: isCurrentRoute(consultationDocument.documentId),
 				};
-			},
-			);
-
+			});
 		return [
 			{
-				title: consultationData.title,
-				to: `/admin/questions/${consultationData.consultationId}/0`,
-				marker: 1,
-				current: isCurrentRoute(consultationData.consultationId, 0),
+				title: questionsData.consultationTitle,
+				to: `/admin/questions/${currentConsultationId}/-1`,
+				marker: "nope",
+				current: isCurrentRoute(-1), // -1 is going to represent the consultation level questions (didn't realise there could be a documentId of 0!
 				children: documentsList,
 			},
 		];
 	};
 
+	saveQuestion = (event: Event, question: QuestionType) => {
+		saveQuestionHandler(event, question, this);
+	};
+
+	deleteQuestion = (event: Event, questionId: number) => {
+		deleteQuestionHandler(event, questionId, this);
+	};
+
 	render() {
 		if (!this.state.hasInitialData) return null;
 
-		const fakeLinks = [
-			{
-				label: "Back to In Development",
-				url: "/",
-				localRoute: false,
-			},
-			{
-				label: "Add questions",
-				url: this.props.match.url,
-				localRoute: true,
-			},
-		];
-
-		const {consultationData, documentsData, questionsData} = this.state;
-
+		const {questionsData} = this.state;
 		const currentDocumentId = this.props.match.params.documentId;
 		const currentConsultationId = this.props.match.params.consultationId;
+		const questionsToDisplay = this.getQuestionsToDisplay(currentDocumentId, questionsData);
 
 		return (
 			<UserContext.Consumer>
@@ -250,28 +183,34 @@ export class Questions extends Component<PropsType, StateType> {
 						<div className="container">
 							<div className="grid">
 								<div data-g="12">
-									<Breadcrumbs links={fakeLinks}/>
-									<h1 className="h3">{consultationData.title}</h1>
+									<h1 className="h3">{questionsData.consultationTitle}</h1>
 									<div className="grid">
 										<div data-g="12 md:6">
-											<NestedStackedNav
-												navigationStructure={
-													this.createConsultationNavigation(
-														consultationData,
-														documentsData,
-														questionsData,
-														currentConsultationId,
-														currentDocumentId,
-													)
-												}/>
+											<NestedStackedNav navigationStructure={
+												this.createConsultationNavigation(questionsData, currentConsultationId, currentDocumentId)
+											}/>
 										</div>
 										<div data-g="12 md:6">
 											<div>
-												<ul>
-													{questionsData.map(question => (
-														<TextQuestion key={question.questionId} question={question}/>
-													))}
-												</ul>
+												{currentDocumentId ?
+													<Fragment>
+														<button className="btn btn--cta">Add Question</button>
+														{questionsToDisplay.length ?
+															<ul className="list--unstyled">
+																{questionsToDisplay.map(question => (
+																	<TextQuestion
+																		key={question.questionId}
+																		question={question}
+																		saveQuestion={this.saveQuestion}
+																		deleteQuestion={this.deleteQuestion}
+																	/>
+																))}
+															</ul> : <p>Click button to add a question.</p>
+														}
+													</Fragment>
+													:
+													<p>Choose consulation title or document to add questions.</p>
+												}
 											</div>
 										</div>
 									</div>
@@ -286,3 +225,4 @@ export class Questions extends Component<PropsType, StateType> {
 }
 
 export default withRouter(Questions);
+

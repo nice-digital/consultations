@@ -159,6 +159,17 @@ export function deleteAnswerHandler(event: Event, questionId: number, answerId: 
 	}
 }
 
+export function saveQuestionHandler(event: Event, question: QuestionType, self: any) {
+	console.log("Called saveQuestionHandler in editing-and-deleting.js");
+	console.log(event, question, self);
+}
+
+export function deleteQuestionHandler(event: Event, questionId: number, self: any) {
+	console.log("Called deleteQuestionHandler in editing-and-deleting.js");
+	console.log(event, questionId, self);
+
+}
+
 function removeCommentFromState(commentId: number, self: any) {
 	self.updateUnsavedIds(`${commentId}c`, false);
 	if (typeof self.issueA11yMessage === "function") {
@@ -197,4 +208,9 @@ function removeAnswerFromState(questionId: number, answerId: number, self: any) 
 		event: "generic",
 		category: "Consultation comments page",
 	});
+}
+
+function removeQuestionFromState(questionId: number, self: any) {
+	console.log("Called removeQuestionFromState in editing-and-deleting.js");
+	console.log(questionId, self);
 }
