@@ -77,7 +77,7 @@ namespace Comments.Test.Infrastructure
 		}
 
 
-		public TestBase(bool useRealSubmitService = false)
+		public TestBase(bool useRealSubmitService = false, string feedName = null)
         {
             // Arrange
             _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
@@ -86,6 +86,10 @@ namespace Comments.Test.Infrastructure
 	        _useRealSubmitService = useRealSubmitService;
 	        _fakeEncryption = new FakeEncryption();
 			var databaseName = DatabaseName + Guid.NewGuid();
+	        if (feedName != null)
+	        {
+				FeedToUse = new Feed(feedName);
+			}
 
             //SQLiteConnectionStringBuilder sqLiteConnectionStringBuilder = new SQLiteConnectionStringBuilder()
             //{	       

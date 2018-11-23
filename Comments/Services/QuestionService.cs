@@ -91,8 +91,9 @@ namespace Comments.Services
 	    {
 
 		    var consultation = _consultationService.GetConsultation(consultationId, BreadcrumbType.None, useFilters:false);
+		    var consultationSourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
 
-		    var locationsWithQuestions = _context.GetQuestionsForDocument(new List<string>{ConsultationsUri.CreateConsultationURI(consultationId)}, partialMatchSourceURI: true).ToList();
+			var locationsWithQuestions = _context.GetQuestionsForDocument(new List<string>{ consultationSourceURI }, partialMatchSourceURI: true).ToList();
 
 			var allTheQuestions = new List<Question>();
 		    foreach (var location in locationsWithQuestions)
@@ -102,7 +103,6 @@ namespace Comments.Services
 
 		    var documents = _consultationService.GetDocuments(consultationId);
 		    var questionAdminDocuments = new List<QuestionAdminDocument>();
-
 			foreach (var document in documents)
 			{
 				var questionIdsForThisDocument = locationsWithQuestions.Where(l =>
@@ -110,53 +110,24 @@ namespace Comments.Services
 						StringComparison.OrdinalIgnoreCase))
 						.SelectMany(l => l.Question, (location, question) => question.QuestionId).ToList();
 				
-				var listOfQuestions = locationsWithQuestions.SelectMany(l => l.Question, (location, question) => question)
+				var listOfQuestions = locationsWithQuestions.SelectMany(l => l.Question, (location, question) => new ViewModels.Question(location, question))
 										.Where(q => questionIdsForThisDocument.Contains(q.QuestionId)).ToList();
 
 				questionAdminDocuments.Add(
 					new QuestionAdminDocument(document.DocumentId,
 						document.SupportsQuestions,
 						document.Title,
-						null //need to convert listOfQuestions to view model
+						listOfQuestions
 					)
 				);
 			}
-			
 
-			//new QuestionAdminDocument(  doc.DocumentId,
-			//							doc.SupportsQuestions,
-			//							doc.Title,
-			//							allTheQuestions.Where(q =>
+		    var consultationQuestions = locationsWithQuestions
+			    .Where(l => l.SourceURI.Equals(consultationSourceURI, StringComparison.OrdinalIgnoreCase))
+			    .SelectMany(l => l.Question, (location, question) => new ViewModels.Question(location, question))
+			    .ToList();
 
-			//								locations.Where(l => l.SourceURI.Contains(ConsultationsUri.CreateDocumentURI(consultationId, doc.DocumentId), StringComparison.OrdinalIgnoreCase)))
-
-			//								q.QuestionId 
-			//								q. 
-
-			//								.Select(l => new Question(l, l.Question))
-
-			//   var sourceURIs = new List<string>();
-			//   var partialMatch = false;
-			//   if (documentId.HasValue)
-			//   {
-			//    partialMatch = true;
-			//    sourceURIs.Add(ConsultationsUri.CreateDocumentURI(consultationId, documentId.Value));
-			//   }
-			//   else
-			//   {
-			//	sourceURIs.Add(ConsultationsUri.CreateConsultationURI(consultationId));
-			//}
-			//   var locations = _context.GetQuestionsForDocument(sourceURIs, partialMatch);
-			//   var questionViewModels = new List<ViewModels.Question>();
-
-			//   foreach (var location in locations)
-			//   {
-			//    foreach (var question in location.Question)
-			//    {
-			//		questionViewModels.Add(new Question(location, question));
-			//	}
-			//   }
-			return new QuestionAdmin(consultation.Title, null, null);
+			return new QuestionAdmin(consultation.Title, consultation.SupportsQuestions, consultationQuestions, questionAdminDocuments);
 	    }
     }
 }
