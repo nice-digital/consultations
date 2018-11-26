@@ -155,6 +155,18 @@ export class Questions extends Component<PropsType, StateType> {
 		updateUnsavedIds(commentId, dirty, this);
 	};
 
+	newQuestion = (e: SyntheticEvent<HTMLElement>, documentId: string, question: QuestionType) => {
+		const questionsData = this.state.questionsData;
+		documentId = parseInt(documentId, 10);
+		if (documentId !== null) {
+			const currentDocumentQuestions = questionsData.documents.filter(item => item.documentId == documentId)[0].documentQuestions;
+			currentDocumentQuestions.unshift({
+				questionText: "",
+			});
+			this.setState({questionsData});
+		}
+	};
+
 	render() {
 		if (!this.state.hasInitialData) return null;
 
@@ -189,14 +201,20 @@ export class Questions extends Component<PropsType, StateType> {
 									<div className="grid">
 										<div data-g="12 md:6">
 											<NestedStackedNav navigationStructure={
-												this.createConsultationNavigation(questionsData, currentConsultationId, currentDocumentId)
+												this.createConsultationNavigation(
+													questionsData,
+													currentConsultationId,
+													currentDocumentId)
 											}/>
 										</div>
 										<div data-g="12 md:6">
 											<div>
 												{currentDocumentId ?
 													<Fragment>
-														<button className="btn btn--cta">Add Question</button>
+														<button
+															className="btn btn--cta"
+															onClick={(e)=>this.newQuestion(e, currentDocumentId)}
+														>Add Question</button>
 														{questionsToDisplay.length ?
 															<ul className="list--unstyled">
 																{questionsToDisplay.map(question => (

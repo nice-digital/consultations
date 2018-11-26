@@ -245,7 +245,6 @@ export function saveQuestionHandler(event: Event, question: QuestionType, self: 
 export function deleteQuestionHandler(event: Event, questionId: number, self: any) {
 	event.preventDefault();
 	console.log("Called deleteQuestionHandler in editing-and-deleting.js");
-	console.log(event, questionId, self);
 }
 
 function removeCommentFromState(commentId: number, self: any) {
