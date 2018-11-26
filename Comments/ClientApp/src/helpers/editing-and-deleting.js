@@ -17,7 +17,7 @@ export function saveCommentHandler(event: Event, comment: CommentType, self: any
 		.then(res => {
 			if (res.status === 201 || res.status === 200) {
 				const index = self.state.comments
-					.map(function(comment) {
+					.map(function (comment) {
 						return comment.commentId;
 					})
 					.indexOf(comment.commentId);
@@ -93,17 +93,17 @@ export function saveAnswerHandler(event: Event, answer: AnswerType, questionId: 
 		.then(res => {
 			if (res.status === 201 || res.status === 200) {
 				const questionIndex = self.state.questions
-					.map(function(question) {
+					.map(function (question) {
 						return question.questionId;
 					})
 					.indexOf(answer.questionId);
 				const questions = self.state.questions;
 
-				if (questions[questionIndex].answers === null || questions[questionIndex].answers.length < 1){
+				if (questions[questionIndex].answers === null || questions[questionIndex].answers.length < 1) {
 					questions[questionIndex].answers = [res.data];
-				} else{
+				} else {
 					const answerIndex = questions[questionIndex].answers
-						.map(function(answer) {
+						.map(function (answer) {
 							return answer.answerId;
 						}).indexOf(answer.answerId);
 
@@ -160,14 +160,92 @@ export function deleteAnswerHandler(event: Event, questionId: number, answerId: 
 }
 
 export function saveQuestionHandler(event: Event, question: QuestionType, self: any) {
-	console.log("Called saveQuestionHandler in editing-and-deleting.js");
-	console.log(event, question, self);
+	event.preventDefault();
+	console.log(question);
+	const originalId = question.questionId;
+	const isANewQuestion = question.questionId < 0;
+	const method = isANewQuestion ? "POST" : "PUT";
+	const urlParameters = isANewQuestion ? [] : [question.questionId];
+	let error = "";
+
+	load("question", undefined, urlParameters, {}, method, question, true)
+		.then(res => {
+			if (res.status === 201 || res.status === 200) {
+
+				const updatedQuestion = JSON.parse(res.config.data);
+				updatedQuestion.questionText = updatedQuestion.questionText + " SAVED";
+				const documentId = updatedQuestion.documentId;
+				const questionId = updatedQuestion.questionId;
+				const questionsData = self.state.questionsData;
+
+				// if we've updated a document's question, go to that document's documentQuestions
+				if (documentId) {
+					const documentQuestions = questionsData.documents.filter(item => item.documentId === documentId)[0].documentQuestions;
+					const index = documentQuestions.map(item => item.questionId).indexOf(questionId);
+					documentQuestions[index] = updatedQuestion;
+					self.setState({
+						questionsData,
+					});
+					self.updateUnsavedIds(`${updatedQuestion.questionId}q`, false);
+				} else { // otherwise presume that we're updating a consultation's question
+					const index = questionsData.consultationQuestions.map(item => item.questionId).indexOf(questionId);
+					questionsData.consultationQuestions[index] = updatedQuestion;
+					self.setState({
+						questionsData,
+					});
+					self.updateUnsavedIds(`${updatedQuestion.questionId}q`, false);
+				}
+
+				// const index = self.state.comments
+				// 	.map(function (comment) {
+				// 		return comment.commentId;
+				// 	})
+				// 	.indexOf(comment.commentId);
+				//
+				// const comments = self.state.comments;
+				//
+				// comments[index] = res.data;
+				//
+				// self.setState({
+				// 	comments,
+				// 	error,
+				// });
+
+				// tagManager({
+				// 	event: "generic",
+				// 	category: "Consultation comments page",
+				// 	action: "Clicked",
+				// 	label: "Question saved button",
+				// });
+
+				// self.updateUnsavedIds(`${originalId}q`, false);
+
+				// if (typeof self.issueA11yMessage === "function") {
+				// 	self.issueA11yMessage("Question saved");
+				// }
+				// if (typeof self.validationHander === "function") {
+				// 	self.validationHander();
+				// }
+			}
+		})
+		.catch(err => {
+			console.log(err);
+			if (err.response) {
+				error = "save";
+				self.setState({
+					error,
+				});
+				if (typeof self.issueA11yMessage === "function") {
+					self.issueA11yMessage("There was a problem saving this question");
+				}
+			}
+		});
 }
 
 export function deleteQuestionHandler(event: Event, questionId: number, self: any) {
+	event.preventDefault();
 	console.log("Called deleteQuestionHandler in editing-and-deleting.js");
 	console.log(event, questionId, self);
-
 }
 
 function removeCommentFromState(commentId: number, self: any) {
@@ -184,7 +262,7 @@ function removeCommentFromState(commentId: number, self: any) {
 	let comments = self.state.comments;
 	const error = "";
 	comments = comments.filter(comment => comment.commentId !== commentId);
-	self.setState({ comments, error });
+	self.setState({comments, error});
 	if ((comments.length === 0) && (typeof self.validationHander === "function")) {
 		self.validationHander();
 	}
@@ -195,7 +273,7 @@ function removeAnswerFromState(questionId: number, answerId: number, self: any) 
 	let questions = self.state.questions;
 	let questionToUpdate = questions.find(question => question.questionId === questionId);
 	questionToUpdate.answers = questionToUpdate.answers.filter(answer => answer.answerId !== answerId);
-	self.setState({ questions });
+	self.setState({questions});
 	if (typeof self.validationHander === "function") {
 		self.validationHander();
 	}

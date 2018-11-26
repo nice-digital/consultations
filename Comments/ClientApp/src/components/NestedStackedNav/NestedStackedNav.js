@@ -41,9 +41,9 @@ export class NestedStackedNav extends PureComponent {
 
 const ListLink = (props) => (
 	<Link aria-current={props.item.current ? "page" : null} to={props.item.to}>
-		<span data-g="11">{props.item.title}</span>
+		<span data-g="10">{props.item.title}</span>
 		{props.item.marker &&
-			<span className="text-right" data-g="1">({props.item.marker})</span>
+			<span className="text-right" data-g="2">({props.item.marker})</span>
 		}
 	</Link>
 );

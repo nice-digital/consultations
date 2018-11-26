@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component, Fragment } from "react";
-import { withRouter } from "react-router-dom";
+import { Prompt, withRouter } from "react-router-dom";
 import Helmet from "react-helmet";
 
 import { LoginBanner } from "../LoginBanner/LoginBanner";
@@ -11,6 +11,7 @@ import preload from "../../data/pre-loader";
 import { load } from "../../data/loader";
 import { TextQuestion } from "../QuestionTypes/TextQuestion/TextQuestion";
 import { saveQuestionHandler, deleteQuestionHandler } from "../../helpers/editing-and-deleting";
+import { updateUnsavedIds } from "../../helpers/unsaved-comments";
 
 type PropsType = any; // todo
 
@@ -21,11 +22,10 @@ export class Questions extends Component<PropsType, StateType> {
 		super(props);
 
 		this.state = {
-			consultationData: null,
-			documentsData: null,
 			questionsData: null,
 			loading: true,
 			hasInitialData: false,
+			unsavedIds: [],
 			error: {
 				hasError: false,
 				message: null,
@@ -36,7 +36,7 @@ export class Questions extends Component<PropsType, StateType> {
 
 		let preloadedData = {};
 		if (this.props.staticContext && this.props.staticContext.preload) {
-			preloadedData = this.props.staticContext.preload.data; //this is data from Configure => SupplyData in Startup.cs. the main thing it contains for this call is the cookie for the current user.
+			preloadedData = this.props.staticContext.preload.data;
 		}
 
 		preloadedQuestionsData = preload(
@@ -52,6 +52,7 @@ export class Questions extends Component<PropsType, StateType> {
 				questionsData: preloadedQuestionsData,
 				loading: false,
 				hasInitialData: true,
+				unsavedIds: [],
 				error: {
 					hasError: false,
 					message: null,
@@ -101,21 +102,11 @@ export class Questions extends Component<PropsType, StateType> {
 		const oldRoute = prevProps.location.pathname;
 		const newRoute = this.props.location.pathname;
 		if (oldRoute === newRoute) return;
-		//	this is where we need to filter what's displayed
-	}
 
-	// numberOfQuestions = (questionsData, documentId) => {
-	// 	return questionsData
-	// 		.map(question => {
-	// 			if (question.documentId === documentId) {
-	// 				return 1;
-	// 			}
-	// 			return 0;
-	// 		})
-	// 		.reduce((total, current) => {
-	// 			return total + current;
-	// 		}, 0);
-	// };
+		this.setState({
+			unsavedIds: [],
+		});
+	}
 
 	getQuestionsToDisplay = (currentDocumentId: number, questionsData: Object) => {
 		if (!currentDocumentId || !questionsData) return {};
@@ -125,7 +116,10 @@ export class Questions extends Component<PropsType, StateType> {
 		return questionsData.documents.filter(isCurrentDocument)[0].documentQuestions;
 	};
 
-	createConsultationNavigation = (questionsData: Object, currentConsultationId: string, currentDocumentId: string) => {
+	createConsultationNavigation = (
+		questionsData: Object,
+		currentConsultationId: string,
+		currentDocumentId: string) => {
 		const supportsQuestions = document => document.supportsQuestions;
 		const isCurrentRoute = (documentId) => documentId === parseInt(currentDocumentId, 10);
 		const documentsList = questionsData.documents
@@ -134,7 +128,7 @@ export class Questions extends Component<PropsType, StateType> {
 				return {
 					title: consultationDocument.title,
 					to: `/admin/questions/${currentConsultationId}/${consultationDocument.documentId}`,
-					marker: "nope",
+					marker: consultationDocument.documentQuestions.length || null,
 					current: isCurrentRoute(consultationDocument.documentId),
 				};
 			});
@@ -142,8 +136,8 @@ export class Questions extends Component<PropsType, StateType> {
 			{
 				title: questionsData.consultationTitle,
 				to: `/admin/questions/${currentConsultationId}/-1`,
-				marker: "nope",
-				current: isCurrentRoute(-1), // -1 is going to represent the consultation level questions (didn't realise there could be a documentId of 0!
+				marker: questionsData.consultationQuestions.length || null,
+				current: isCurrentRoute(-1), // -1 is going to represent the consultation level questions (didn't realise there could be a documentId of 0!)
 				children: documentsList,
 			},
 		];
@@ -157,10 +151,14 @@ export class Questions extends Component<PropsType, StateType> {
 		deleteQuestionHandler(event, questionId, this);
 	};
 
+	updateUnsavedIds = (commentId: string, dirty: boolean) => {
+		updateUnsavedIds(commentId, dirty, this);
+	};
+
 	render() {
 		if (!this.state.hasInitialData) return null;
 
-		const {questionsData} = this.state;
+		const {questionsData, unsavedIds} = this.state;
 		const currentDocumentId = this.props.match.params.documentId;
 		const currentConsultationId = this.props.match.params.consultationId;
 		const questionsToDisplay = this.getQuestionsToDisplay(currentDocumentId, questionsData);
@@ -177,6 +175,10 @@ export class Questions extends Component<PropsType, StateType> {
 					/>
 					:
 					<Fragment>
+						<Prompt
+							when={this.state.unsavedIds.length > 0}
+							message={`You have ${unsavedIds.length} unsaved ${unsavedIds.length === 1 ? "change" : "changes"}. Continue without saving?`}
+						/>
 						<Helmet>
 							<title>Set Questions</title>
 						</Helmet>
@@ -199,6 +201,7 @@ export class Questions extends Component<PropsType, StateType> {
 															<ul className="list--unstyled">
 																{questionsToDisplay.map(question => (
 																	<TextQuestion
+																		updateUnsavedIds={this.updateUnsavedIds}
 																		key={question.questionId}
 																		question={question}
 																		saveQuestion={this.saveQuestion}

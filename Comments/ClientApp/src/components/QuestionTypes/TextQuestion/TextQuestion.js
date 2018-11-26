@@ -10,6 +10,7 @@ type PropsType = {
 	question: QuestionType;
 	saveQuestion: Function;
 	deleteQuestion: Function;
+	updateUnsavedIds: Function;
 }
 
 export class TextQuestion extends Component<PropsType, StateType> {
@@ -28,6 +29,19 @@ export class TextQuestion extends Component<PropsType, StateType> {
 		});
 	}
 
+	// static getDerivedStateFromProps(nextProps: any, prevState: any) {
+		// const prevTimestamp = prevState.question.lastModifiedDate;
+		// const nextTimestamp = nextProps.question.lastModifiedDate;
+		// const hasQuestionBeenUpdated = () => prevTimestamp !== nextTimestamp;
+		// if (hasQuestionBeenUpdated()) {
+		// return {
+		// 	question: nextProps.question,
+		// 	unsavedChanges: false,
+		// };
+		// }
+		// return null;
+	// }
+
 	// componentDidUpdate(prevProps) {
 	// 	const nextTimestamp = this.props.question.questionId;
 	// 	const prevTimestamp = prevProps.question.questionId;
@@ -37,27 +51,20 @@ export class TextQuestion extends Component<PropsType, StateType> {
 	// 	}
 	// }
 	//
-	// static getDerivedStateFromProps(nextProps: any, prevState: any) {
-	// 	const prevTimestamp = prevState.question.questionId;
-	// 	const nextTimestamp = nextProps.question.questionId;
-	// 	const hasQuestionBeenUpdated = () => prevTimestamp !== nextTimestamp;
-	// 	if (hasQuestionBeenUpdated()) {
-	// 		return {
-	// 			question: nextProps.question,
-	// 			unsavedChanges: false,
-	// 		};
-	// 	}
-	// 	return null;
-	// }
 
 
 	textareaChangeHandler = (e: SyntheticInputEvent<any>) => {
 		const question = this.state.question;
 		question.questionText = e.target.value;
-		this.setState({
-			question,
-			unsavedChanges: true,
-		});
+		this.setState(
+			() => {
+				this.props.updateUnsavedIds(`${question.questionId}q`, true);
+				return {
+					question,
+					unsavedChanges: true,
+				};
+			}
+		);
 	};
 
 
