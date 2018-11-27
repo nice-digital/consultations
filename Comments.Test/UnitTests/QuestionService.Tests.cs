@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using Comments.Services;
 using Shouldly;
@@ -195,5 +197,40 @@ namespace Comments.Test.UnitTests
 			result.ConsultationQuestions.Count().ShouldBe(1);
 			result.ConsultationQuestions.First().QuestionText.ShouldBe("Question Label");
 		}
-}
+
+		[Fact]
+		public void Question_LastModified_Has_Changed()
+		{
+			//Arrange
+			ResetDatabase();
+			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+			var description = Guid.NewGuid().ToString();
+			var questionText = Guid.NewGuid().ToString();
+			var userId = Guid.NewGuid();
+
+			var locationId = AddLocation(sourceURI);
+			var questionTypeId = AddQuestionType(description, false, true);
+			var questionId = AddQuestion(locationId, questionTypeId, questionText);
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+			var questionService =
+				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService);
+
+			var viewModel = questionService.GetQuestion(questionId);
+			var updatedQuestionText = Guid.NewGuid().ToString();
+
+			viewModel.question.QuestionText = updatedQuestionText;
+
+			var lastModifiedDate = viewModel.question.LastModifiedDate;
+			var lastModifiedByUserId = viewModel.question.LastModifiedByUserId;
+
+			//Act
+			var result = questionService.EditQuestion(questionId, viewModel.question);
+			var updatedViewModel = questionService.GetQuestion(questionId);
+
+			//Assert
+			result.rowsUpdated.ShouldBe(1);
+			updatedViewModel.question.LastModifiedDate.ShouldNotBe(lastModifiedDate, TimeSpan.Zero);
+			updatedViewModel.question.LastModifiedByUserId.ShouldNotBe(lastModifiedByUserId);
+		}
+	}
 }
