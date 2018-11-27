@@ -432,7 +432,8 @@ export class Document extends Component<PropsType, StateType> {
 												 registerURL={contextValue.registerURL}/>
 						: /* if contextValue.isAuthorised... */ null}
 				</UserContext.Consumer>
-				<Tutorial/>
+				{ this.state.allowComments &&
+					<Tutorial/> }
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">
