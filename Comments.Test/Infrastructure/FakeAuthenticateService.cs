@@ -28,15 +28,15 @@ namespace Comments.Test.Infrastructure
 	        _errorMessage = errorMessage;
         }
 
-	    public FakeAuthenticateService(Dictionary<Guid, string> userDictionary)
-	    {
-		    _userDictionary = userDictionary.ToDictionary(u => u.Key, u => new UserInfo {DisplayName = u.Value });
-	    }
+	    //public FakeAuthenticateService(Dictionary<Guid, string> userDictionary)
+	    //{
+		   // _userDictionary = userDictionary.ToDictionary(u => u.Key, u => new UserInfo {DisplayName = u.Value });
+	    //}
 
-	    public FakeAuthenticateService(Dictionary<Guid, string> userDictionary, string email)
+	    public FakeAuthenticateService(Dictionary<Guid, UserInfo> userDictionary)
 	    {
-			_userDictionary = userDictionary.ToDictionary(u => u.Key, u => new UserInfo { DisplayName = u.Value, EmailAddress = email });
-		}
+		    _userDictionary = userDictionary.ToDictionary(u => u.Key, u => new UserInfo { DisplayName = u.Value.DisplayName, EmailAddress = u.Value.EmailAddress });
+	    }
 
 		public bool Authenticate(HttpContext httpContext, out string redirectURL, out string errorMessage)
 	    {
