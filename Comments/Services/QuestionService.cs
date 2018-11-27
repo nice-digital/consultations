@@ -52,6 +52,8 @@ namespace Comments.Services
             if (questionInDatabase == null)
                 return (rowsUpdated: 0, validate: new Validate(valid: false, notFound: true, message: $"Question id:{questionId} not found trying to edit question for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
 
+	        question.LastModifiedByUserId = _currentUser.UserId.Value;
+	        question.LastModifiedDate = DateTime.UtcNow;
             questionInDatabase.UpdateFromViewModel(question);
             return (rowsUpdated: _context.SaveChanges(), validate: null);
         }
@@ -65,12 +67,12 @@ namespace Comments.Services
 
             if (questionInDatabase == null)
                 return (rowsUpdated: 0, validate: new Validate(valid: false, notFound: true, message: $"Question id:{questionId} not found trying to delete question"));
-            
+
             questionInDatabase.IsDeleted = true;
             return (rowsUpdated: _context.SaveChanges(), validate: null);
         }
 
-        public (ViewModels.Question question, Validate validate) CreateQuestion(ViewModels.Question question) 
+        public (ViewModels.Question question, Validate validate) CreateQuestion(ViewModels.Question question)
         {
             if (!_currentUser.IsAuthorised)
                 return (question: null, validate: new Validate(valid: false, unauthorised: true, message: "Not logged in creating question"));
@@ -83,7 +85,7 @@ namespace Comments.Services
 
             _context.Question.Add(questionToSave);
             _context.SaveChanges();
-            
+
             return (question: new ViewModels.Question(locationToSave, questionToSave), validate: null);
         }
 
@@ -109,7 +111,7 @@ namespace Comments.Services
 					l.SourceURI.Contains(ConsultationsUri.CreateDocumentURI(consultationId, document.DocumentId),
 						StringComparison.OrdinalIgnoreCase))
 						.SelectMany(l => l.Question, (location, question) => question.QuestionId).ToList();
-				
+
 				var listOfQuestions = locationsWithQuestions.SelectMany(l => l.Question, (location, question) => new ViewModels.Question(location, question))
 										.Where(q => questionIdsForThisDocument.Contains(q.QuestionId)).ToList();
 
