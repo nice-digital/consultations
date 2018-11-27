@@ -51,6 +51,16 @@ namespace Comments.Export
 
 			cell = new Cell();
 			cell.DataType = CellValues.String;
+			cell.CellValue = new CellValue("User");
+			headerRow.AppendChild(cell);
+
+			cell = new Cell();
+			cell.DataType = CellValues.String;
+			cell.CellValue = new CellValue("Email Address");
+			headerRow.AppendChild(cell);
+
+			cell = new Cell();
+			cell.DataType = CellValues.String;
 			cell.CellValue = new CellValue("Consultation Name");
 			headerRow.AppendChild(cell);
 
@@ -71,12 +81,7 @@ namespace Comments.Export
 
 			cell = new Cell();
 			cell.DataType = CellValues.String;
-			cell.CellValue = new CellValue("Quote");
-			headerRow.AppendChild(cell);
-
-			cell = new Cell();
-			cell.DataType = CellValues.String;
-			cell.CellValue = new CellValue("User");
+			cell.CellValue = new CellValue("Selected Text");
 			headerRow.AppendChild(cell);
 
 			cell = new Cell();
@@ -96,7 +101,12 @@ namespace Comments.Export
 
 			cell = new Cell();
 			cell.DataType = CellValues.String;
-			cell.CellValue = new CellValue("Submission Criteria Organisation");
+			cell.CellValue = new CellValue("Represents An Organisation");
+			headerRow.AppendChild(cell);
+
+			cell = new Cell();
+			cell.DataType = CellValues.String;
+			cell.CellValue = new CellValue(" Organisation");
 			headerRow.AppendChild(cell);
 
 			cell = new Cell();
@@ -106,7 +116,7 @@ namespace Comments.Export
 
 			cell = new Cell();
 			cell.DataType = CellValues.String;
-			cell.CellValue = new CellValue("Submission Criteria Tobacco");
+			cell.CellValue = new CellValue("Tobacco Link Details");
 			headerRow.AppendChild(cell);
 
 			sheet.AppendChild(headerRow);
@@ -121,6 +131,16 @@ namespace Comments.Export
 				var dataRow = new Row();
 
 				Cell cell;
+
+				cell = new Cell();
+				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue(row.UserName);
+				dataRow.AppendChild(cell);
+
+				cell = new Cell();
+				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue(row.Email);
+				dataRow.AppendChild(cell);
 
 				cell = new Cell();
 				cell.DataType = CellValues.String;
@@ -149,11 +169,6 @@ namespace Comments.Export
 
 				cell = new Cell();
 				cell.DataType = CellValues.String;
-				cell.CellValue = new CellValue(row.UserName);
-				dataRow.AppendChild(cell);
-
-				cell = new Cell();
-				cell.DataType = CellValues.String;
 				cell.CellValue = new CellValue(row.Comment);
 				dataRow.AppendChild(cell);
 				
@@ -169,12 +184,17 @@ namespace Comments.Export
 
 				cell = new Cell();
 				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue(row.RepresentsOrganisation == true ? "Yes" : row.RepresentsOrganisation == false ? "No" : null);
+				dataRow.AppendChild(cell);
+
+				cell = new Cell();
+				cell.DataType = CellValues.String;
 				cell.CellValue = new CellValue(row.OrganisationName);
 				dataRow.AppendChild(cell);
 
 				cell = new Cell();
 				cell.DataType = CellValues.String;
-				cell.CellValue = new CellValue(row.HasTobaccoLinks.ToString());
+				cell.CellValue = new CellValue(row.HasTobaccoLinks == true ? "Yes" : row.HasTobaccoLinks == false ? "No" : null);
 				dataRow.AppendChild(cell);
 
 				cell = new Cell();
@@ -201,6 +221,7 @@ namespace Comments.Export
 					Section = comment.Location.Section,
 					Quote = comment.Location.Quote,
 					UserName =  _userService.GetDisplayNameForUserId(comment.CreatedByUserId),
+					Email = _userService.GetCurrentUser().DisplayName,
 					CommentId = comment.CommentId,
 					Comment =  comment.CommentText,
 					QuestionId = null,
@@ -233,6 +254,7 @@ namespace Comments.Export
 					AnswerId = answer.AnswerId,
 					Answer = answer.AnswerText,
 					OrganisationName = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.OrganisationName : null,
+					RepresentsOrganisation = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.RespondingAsOrganisation : null,
 					HasTobaccoLinks = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.HasTobaccoLinks : null,
 					TobaccoIndustryDetails = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.TobaccoDisclosure : null,
 					Order = answer.Question.Location.Order
@@ -265,7 +287,7 @@ namespace Comments.Export
 				excel.Add(excelrow);
 			}
 
-			var orderedData = excel.OrderBy(o => o.Order).ToList();
+			var orderedData = excel.OrderBy(o => o.UserName).ThenBy(o => o.Order).ToList();
 
 			return orderedData;
 		}
