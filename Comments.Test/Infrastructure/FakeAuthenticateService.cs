@@ -30,8 +30,13 @@ namespace Comments.Test.Infrastructure
 
 	    public FakeAuthenticateService(Dictionary<Guid, string> userDictionary)
 	    {
-		    _userDictionary = userDictionary.ToDictionary(u => u.Key, u => new UserInfo {DisplayName = u.Value});
+		    _userDictionary = userDictionary.ToDictionary(u => u.Key, u => new UserInfo {DisplayName = u.Value });
 	    }
+
+	    public FakeAuthenticateService(Dictionary<Guid, string> userDictionary, string email)
+	    {
+			_userDictionary = userDictionary.ToDictionary(u => u.Key, u => new UserInfo { DisplayName = u.Value, EmailAddress = email });
+		}
 
 		public bool Authenticate(HttpContext httpContext, out string redirectURL, out string errorMessage)
 	    {

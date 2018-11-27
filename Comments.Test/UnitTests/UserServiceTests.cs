@@ -95,6 +95,18 @@ namespace Comments.Test.UnitTests
 			roles.Count.ShouldBe(0);
 		}
 
+	    [Theory]
+	    [InlineData("1594B24E-2672-4509-9037-831775D39DD9", "Tyler Durden", "T.Durden@email.com", "1594B24E-2672-4509-9037-831775D39DD9", "Tyler Durden", "t.Durden@email.com")]
+	    public void GetEmailForUserId_Returns_Correct_EmailAddress(string userIdToInsert, string displayNameToInsert, string emailToInsert, string userIdToQueryBy, string expectedDisplayName, string expectedEmail)
+	    {
+		    // Arrange
+		    var userService = new UserService(null, new FakeAuthenticateService(new Dictionary<Guid, string> { { Guid.Parse(userIdToInsert), emailToInsert } }, emailToInsert));
 
+		    // Act
+		    var actualDisplayName = userService.GetEmailForUserId(Guid.Parse(userIdToQueryBy));
+
+		    // Assert
+		    actualDisplayName.ShouldBe(emailToInsert);
+	    }
 	}
 }

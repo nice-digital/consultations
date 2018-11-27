@@ -221,7 +221,7 @@ namespace Comments.Export
 					Section = comment.Location.Section,
 					Quote = comment.Location.Quote,
 					UserName =  _userService.GetDisplayNameForUserId(comment.CreatedByUserId),
-					Email = _userService.GetCurrentUser().DisplayName,
+					Email = _userService.GetEmailForUserId(comment.CreatedByUserId),
 					CommentId = comment.CommentId,
 					Comment =  comment.CommentText,
 					QuestionId = null,
