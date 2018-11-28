@@ -20,6 +20,7 @@ namespace Comments.Models
         public void UpdateFromViewModel(ViewModels.Question question)
         {
             LastModifiedByUserId = question.LastModifiedByUserId;
+	        LastModifiedDate = question.LastModifiedDate;
             QuestionText = question.QuestionText ?? throw new ArgumentNullException(nameof(question.QuestionText));
             Location.UpdateFromViewModel(question as ViewModels.Location);
         }

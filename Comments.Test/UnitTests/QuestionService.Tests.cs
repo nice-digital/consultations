@@ -229,7 +229,7 @@ namespace Comments.Test.UnitTests
 
 			//Assert
 			result.rowsUpdated.ShouldBe(1);
-			updatedViewModel.question.LastModifiedDate.ShouldNotBe(lastModifiedDate, TimeSpan.Zero);
+			updatedViewModel.question.LastModifiedDate.ShouldNotBe(lastModifiedDate);
 			updatedViewModel.question.LastModifiedByUserId.ShouldNotBe(lastModifiedByUserId);
 		}
 	}
