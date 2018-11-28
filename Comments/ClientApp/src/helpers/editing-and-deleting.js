@@ -172,7 +172,7 @@ export function saveQuestionHandler(event: Event, question: QuestionType, self: 
 		.then(res => {
 			if (res.status === 201 || res.status === 200) {
 
-				const updatedQuestion = JSON.parse(res.config.data);
+				const updatedQuestion = res.data;
 				updatedQuestion.questionText = updatedQuestion.questionText + " SAVED";
 				const documentId = updatedQuestion.documentId;
 				const questionId = updatedQuestion.questionId;
@@ -180,6 +180,7 @@ export function saveQuestionHandler(event: Event, question: QuestionType, self: 
 
 				// if we've updated a document's question, go to that document's documentQuestions
 				if (documentId) {
+
 					const documentQuestions = questionsData.documents.filter(item => item.documentId === documentId)[0].documentQuestions;
 					const index = documentQuestions.map(item => item.questionId).indexOf(questionId);
 					documentQuestions[index] = updatedQuestion;

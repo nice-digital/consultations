@@ -29,36 +29,35 @@ export class TextQuestion extends Component<PropsType, StateType> {
 		});
 	}
 
-	// static getDerivedStateFromProps(nextProps: any, prevState: any) {
-		// const prevTimestamp = prevState.question.lastModifiedDate;
-		// const nextTimestamp = nextProps.question.lastModifiedDate;
-		// const hasQuestionBeenUpdated = () => prevTimestamp !== nextTimestamp;
-		// if (hasQuestionBeenUpdated()) {
-		// return {
-		// 	question: nextProps.question,
-		// 	unsavedChanges: false,
-		// };
-		// }
-		// return null;
-	// }
+	static getDerivedStateFromProps(nextProps: any, prevState: any) {
+		const prevTimestamp = prevState.question.lastModifiedDate;
+		const nextTimestamp = nextProps.question.lastModifiedDate;
+		const hasQuestionBeenUpdated = () => prevTimestamp !== nextTimestamp;
+		if (hasQuestionBeenUpdated()){
+			console.log(nextProps.question.questionId, prevTimestamp, nextTimestamp);
+			return {
+				question: nextProps.question,
+				unsavedChanges: false,
+			};
+		}
+		return null;
+	}
 
-	// componentDidUpdate(prevProps) {
-	// 	const nextTimestamp = this.props.question.questionId;
-	// 	const prevTimestamp = prevProps.question.questionId;
-	// 	const hasQuestionBeenUpdated = () => prevTimestamp !== nextTimestamp;
-	// 	if (hasQuestionBeenUpdated()) {
-	// 		// this.props.updateUnsavedIds(this.props.question.commentId, false);
-	// 	}
-	// }
-	//
-
+	componentDidUpdate(prevProps) {
+		const nextTimestamp = this.props.question.lastModifiedDate;
+		const prevTimestamp = prevProps.question.lastModifiedDate;
+		const hasQuestionBeenUpdated = () => prevTimestamp !== nextTimestamp;
+		if (hasQuestionBeenUpdated()) {
+			this.props.updateUnsavedIds(this.props.question.commentId, false);
+		}
+	}
 
 	textareaChangeHandler = (e: SyntheticInputEvent<any>) => {
 		const question = this.state.question;
 		question.questionText = e.target.value;
 		this.setState(
 			() => {
-				this.props.updateUnsavedIds(`${question.questionId}q`, true);
+				// this.props.updateUnsavedIds(`${question.questionId}q`, true);
 				return {
 					question,
 					unsavedChanges: true,
@@ -80,6 +79,7 @@ export class TextQuestion extends Component<PropsType, StateType> {
 				<section role="form">
 					<form onSubmit={e => this.props.saveQuestion(e, question)} className="mb--0">
 						<div className="form__group form__group--textarea mb--b">
+							<p>{question.lastModifiedDate}</p>
 							<label className="form__label visually-hidden" htmlFor={question.questionId}>Set question</label>
 							{unsavedChanges &&
 							<p className="CommentBox__validationMessage mt--0">You have unsaved changes</p>

@@ -17,6 +17,16 @@ type PropsType = any; // todo
 
 type StateType = any; // todo
 
+type NewQuestionType = {
+	questionText: string;
+	questionType: {
+		description: string;
+		hasTextAnswer: boolean;
+		hasBooleanAnswer: boolean;
+	};
+	sourceURI: string;
+};
+
 export class Questions extends Component<PropsType, StateType> {
 	constructor(props: PropsType) {
 		super(props);
@@ -155,21 +165,19 @@ export class Questions extends Component<PropsType, StateType> {
 		updateUnsavedIds(commentId, dirty, this);
 	};
 
-	newQuestion = (e: SyntheticEvent<HTMLElement>, documentId: string, question: QuestionType) => {
+	newQuestion = (e: SyntheticEvent<HTMLElement>, documentId: string, question: NewQuestionType) => {
 		const questionsData = this.state.questionsData;
 		documentId = parseInt(documentId, 10);
 		if (documentId !== null) {
 			const currentDocumentQuestions = questionsData.documents.filter(item => item.documentId == documentId)[0].documentQuestions;
-			currentDocumentQuestions.unshift({
-				questionText: "",
-			});
+			console.log("going to add a question of " + question);
+			currentDocumentQuestions.unshift(question	);
 			this.setState({questionsData});
 		}
 	};
 
 	render() {
 		if (!this.state.hasInitialData) return null;
-
 		const {questionsData, unsavedIds} = this.state;
 		const currentDocumentId = this.props.match.params.documentId;
 		const currentConsultationId = this.props.match.params.consultationId;
@@ -213,8 +221,18 @@ export class Questions extends Component<PropsType, StateType> {
 													<Fragment>
 														<button
 															className="btn btn--cta"
-															onClick={(e)=>this.newQuestion(e, currentDocumentId)}
-														>Add Question</button>
+															onClick={(e) => this.newQuestion(e, currentDocumentId,
+																{
+																	"questionText": `This is a question on ${currentDocumentId}`,
+																	"questionType": {
+																		"description": "A text question requiring a text answer.",
+																		"hasTextAnswer": true,
+																		"hasBooleanAnswer": false,
+																	},
+																	"sourceURI": `consultations://./consultation/${currentConsultationId}${currentDocumentId ? `/document/${currentDocumentId}` : ""}`,
+																})}
+														>Add Question
+														</button>
 														{questionsToDisplay.length ?
 															<ul className="list--unstyled">
 																{questionsToDisplay.map(question => (
