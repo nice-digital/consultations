@@ -34,7 +34,6 @@ export class TextQuestion extends Component<PropsType, StateType> {
 		const nextTimestamp = nextProps.question.lastModifiedDate;
 		const hasQuestionBeenUpdated = () => prevTimestamp !== nextTimestamp;
 		if (hasQuestionBeenUpdated()){
-			console.log(nextProps.question.questionId, prevTimestamp, nextTimestamp);
 			return {
 				question: nextProps.question,
 				unsavedChanges: false,
@@ -43,12 +42,12 @@ export class TextQuestion extends Component<PropsType, StateType> {
 		return null;
 	}
 
-	componentDidUpdate(prevProps) {
+	componentDidUpdate(prevProps: PropsType) {
 		const nextTimestamp = this.props.question.lastModifiedDate;
 		const prevTimestamp = prevProps.question.lastModifiedDate;
 		const hasQuestionBeenUpdated = () => prevTimestamp !== nextTimestamp;
 		if (hasQuestionBeenUpdated()) {
-			this.props.updateUnsavedIds(this.props.question.commentId, false);
+			this.props.updateUnsavedIds(`${this.props.question.questionId}q`, false);
 		}
 	}
 
@@ -57,7 +56,7 @@ export class TextQuestion extends Component<PropsType, StateType> {
 		question.questionText = e.target.value;
 		this.setState(
 			() => {
-				// this.props.updateUnsavedIds(`${question.questionId}q`, true);
+				this.props.updateUnsavedIds(`${question.questionId}q`, true);
 				return {
 					question,
 					unsavedChanges: true,

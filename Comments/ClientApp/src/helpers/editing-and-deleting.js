@@ -161,41 +161,36 @@ export function deleteAnswerHandler(event: Event, questionId: number, answerId: 
 
 export function saveQuestionHandler(event: Event, question: QuestionType, self: any) {
 	event.preventDefault();
-	console.log(question);
 	const originalId = question.questionId;
 	const isANewQuestion = question.questionId < 0;
 	const method = isANewQuestion ? "POST" : "PUT";
+	const endpoint = isANewQuestion ? "newquestion" : "question";
 	const urlParameters = isANewQuestion ? [] : [question.questionId];
 	let error = "";
 
-	load("question", undefined, urlParameters, {}, method, question, true)
+	load(endpoint, undefined, urlParameters, {}, method, question, true)
 		.then(res => {
 			if (res.status === 201 || res.status === 200) {
 
 				const updatedQuestion = res.data;
-				updatedQuestion.questionText = updatedQuestion.questionText + " SAVED";
 				const documentId = updatedQuestion.documentId;
-				const questionId = updatedQuestion.questionId;
 				const questionsData = self.state.questionsData;
+				let relevantQuestions;
 
 				// if we've updated a document's question, go to that document's documentQuestions
 				if (documentId) {
-
-					const documentQuestions = questionsData.documents.filter(item => item.documentId === documentId)[0].documentQuestions;
-					const index = documentQuestions.map(item => item.questionId).indexOf(questionId);
-					documentQuestions[index] = updatedQuestion;
-					self.setState({
-						questionsData,
-					});
-					self.updateUnsavedIds(`${updatedQuestion.questionId}q`, false);
+					relevantQuestions = questionsData.documents.filter(item => item.documentId === documentId)[0].documentQuestions;
 				} else { // otherwise presume that we're updating a consultation's question
-					const index = questionsData.consultationQuestions.map(item => item.questionId).indexOf(questionId);
-					questionsData.consultationQuestions[index] = updatedQuestion;
-					self.setState({
-						questionsData,
-					});
-					self.updateUnsavedIds(`${updatedQuestion.questionId}q`, false);
+					relevantQuestions = questionsData.consultationQuestions;
 				}
+
+				const index = relevantQuestions.map(item => item.questionId).indexOf(originalId);
+				relevantQuestions[index] = updatedQuestion;
+
+				self.setState({
+					questionsData,
+				});
+				self.updateUnsavedIds(`${originalId}q`, false);
 
 				// const index = self.state.comments
 				// 	.map(function (comment) {

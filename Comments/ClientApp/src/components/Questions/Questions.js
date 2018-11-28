@@ -17,16 +17,6 @@ type PropsType = any; // todo
 
 type StateType = any; // todo
 
-type NewQuestionType = {
-	questionText: string;
-	questionType: {
-		description: string;
-		hasTextAnswer: boolean;
-		hasBooleanAnswer: boolean;
-	};
-	sourceURI: string;
-};
-
 export class Questions extends Component<PropsType, StateType> {
 	constructor(props: PropsType) {
 		super(props);
@@ -165,15 +155,39 @@ export class Questions extends Component<PropsType, StateType> {
 		updateUnsavedIds(commentId, dirty, this);
 	};
 
-	newQuestion = (e: SyntheticEvent<HTMLElement>, documentId: string, question: NewQuestionType) => {
+	newQuestion = (e: SyntheticEvent<HTMLElement>, consultationId: string, documentId: string) => {
+		const newQuestion = {
+			questionId: -1,
+			questionText: "",
+			questionType: {
+				description: "A text question requiring a text answer.",
+				hasTextAnswer: true,
+				hasBooleanAnswer: false,
+			},
+			sourceURI: "",
+		};
+
 		const questionsData = this.state.questionsData;
-		documentId = parseInt(documentId, 10);
-		if (documentId !== null) {
-			const currentDocumentQuestions = questionsData.documents.filter(item => item.documentId == documentId)[0].documentQuestions;
-			console.log("going to add a question of " + question);
-			currentDocumentQuestions.unshift(question	);
-			this.setState({questionsData});
+		const documentIdNumber = parseInt(documentId, 10);
+		let currentQuestions;
+
+		if (documentIdNumber !== -1) {
+			// this is a document level question
+			currentQuestions = questionsData.documents.filter(item => item.documentId === documentIdNumber)[0].documentQuestions;
+			newQuestion.sourceURI = `consultations://./consultation/${consultationId}/document/${documentId}`;
+		} else {
+			//	this is a consultation level question
+			currentQuestions = questionsData.consultationQuestions;
+			newQuestion.sourceURI = `consultations://./consultation/${consultationId}`;
 		}
+
+		if (currentQuestions && currentQuestions.length) {
+			const existingIds = currentQuestions.map(q => q.questionId);
+			const lowestExistingId = Math.min.apply(Math, existingIds);
+			newQuestion.questionId = lowestExistingId >= 0 ? -1 : lowestExistingId - 1;
+		}
+		currentQuestions.unshift(newQuestion);
+		this.setState({questionsData});
 	};
 
 	render() {
@@ -221,16 +235,7 @@ export class Questions extends Component<PropsType, StateType> {
 													<Fragment>
 														<button
 															className="btn btn--cta"
-															onClick={(e) => this.newQuestion(e, currentDocumentId,
-																{
-																	"questionText": `This is a question on ${currentDocumentId}`,
-																	"questionType": {
-																		"description": "A text question requiring a text answer.",
-																		"hasTextAnswer": true,
-																		"hasBooleanAnswer": false,
-																	},
-																	"sourceURI": `consultations://./consultation/${currentConsultationId}${currentDocumentId ? `/document/${currentDocumentId}` : ""}`,
-																})}
+															onClick={(e) => this.newQuestion(e, currentConsultationId, currentDocumentId)}
 														>Add Question
 														</button>
 														{questionsToDisplay.length ?
