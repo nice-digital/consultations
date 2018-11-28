@@ -83,6 +83,8 @@ namespace Comments.Services
             var questionTypeToSave = new Models.QuestionType(question.QuestionType.Description, question.QuestionType.HasTextAnswer, question.QuestionType.HasBooleanAnswer, null);
             var questionToSave = new Models.Question(question.LocationId, question.QuestionText, question.QuestionTypeId, locationToSave, questionTypeToSave, null);
 
+	        questionToSave.LastModifiedByUserId = _currentUser.UserId.Value;
+	        questionToSave.LastModifiedDate = DateTime.UtcNow;
             _context.Question.Add(questionToSave);
             _context.SaveChanges();
 
