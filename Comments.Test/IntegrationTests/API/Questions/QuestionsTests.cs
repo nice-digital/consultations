@@ -78,7 +78,7 @@ namespace Comments.Test.IntegrationTests.API.Questions
 		{
 			//Arrange
 			const string sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
-			var description = Guid.NewGuid().ToString();
+			var description = Guid.Empty.ToString();
 			var questionText = Guid.NewGuid().ToString();
 			var userId = Guid.Empty;
 
@@ -90,7 +90,7 @@ namespace Comments.Test.IntegrationTests.API.Questions
 			var questionService = new QuestionService(_context, userService, _consultationService);
 			var viewModel = questionService.GetQuestion(questionId);
 
-			var updatedQuestionText = Guid.NewGuid().ToString();
+			var updatedQuestionText = Guid.Parse("{FCA1BA48-59F8-43E4-B413-6F89E2F0B73F}").ToString();
 			viewModel.question.QuestionText = updatedQuestionText;
 
 			var content = new StringContent(JsonConvert.SerializeObject(viewModel.question), Encoding.UTF8, "application/json");
@@ -103,7 +103,7 @@ namespace Comments.Test.IntegrationTests.API.Questions
 			var result = questionService.GetQuestion(questionId);
 
 			//Assert
-			responseString.ShouldBe("1");
+			responseString.ShouldMatchApproved(new Func<string, string>[] { Scrubbers.ScrubLastModifiedDate, Scrubbers.ScrubIds });
 			result.question.QuestionText.ShouldBe(updatedQuestionText);
 		}
 

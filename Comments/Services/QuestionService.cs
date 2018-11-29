@@ -4,8 +4,10 @@ using Comments.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 using Comments.Common;
+using NICE.Feeds;
 using Location = Comments.Models.Location;
 using Question = Comments.ViewModels.Question;
+using QuestionType = Comments.ViewModels.QuestionType;
 
 namespace Comments.Services
 {
@@ -16,6 +18,7 @@ namespace Comments.Services
         (int rowsUpdated, Validate validate) DeleteQuestion(int questionId);
         (ViewModels.Question question, Validate validate) CreateQuestion(ViewModels.Question question);
 	    QuestionAdmin GetQuestionAdmin(int consultationId);
+	    IEnumerable<QuestionType> GetQuestionTypes();
     }
     public class QuestionService : IQuestionService
     {
@@ -77,11 +80,14 @@ namespace Comments.Services
             if (!_currentUser.IsAuthorised)
                 return (question: null, validate: new Validate(valid: false, unauthorised: true, message: "Not logged in creating question"));
 
-            var locationToSave = new Models.Location(question as ViewModels.Location);
-            _context.Location.Add(locationToSave);
+	        var questionType = _context.GetQuestionTypes().SingleOrDefault(qt => qt.QuestionTypeId.Equals(question.QuestionTypeId));
+			if (questionType == null)
+				return (question: null, validate: new Validate(valid: false, unauthorised: false, message: "Question type not found"));
 
-            var questionTypeToSave = new Models.QuestionType(question.QuestionType.Description, question.QuestionType.HasTextAnswer, question.QuestionType.HasBooleanAnswer, null);
-            var questionToSave = new Models.Question(question.LocationId, question.QuestionText, question.QuestionTypeId, locationToSave, questionTypeToSave, null);
+			var locationToSave = new Models.Location(question as ViewModels.Location);
+            _context.Location.Add(locationToSave);
+	        
+            var questionToSave = new Models.Question(question.LocationId, question.QuestionText, question.QuestionTypeId, locationToSave, questionType, answer: null);
 
 	        questionToSave.LastModifiedByUserId = _currentUser.UserId.Value;
 	        questionToSave.LastModifiedDate = DateTime.UtcNow;
@@ -95,6 +101,7 @@ namespace Comments.Services
 	    {
 
 		    var consultation = _consultationService.GetConsultation(consultationId, BreadcrumbType.None, useFilters:false);
+			
 		    var consultationSourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
 
 			var locationsWithQuestions = _context.GetQuestionsForDocument(new List<string>{ consultationSourceURI }, partialMatchSourceURI: true).ToList();
@@ -131,7 +138,19 @@ namespace Comments.Services
 			    .SelectMany(l => l.Question, (location, question) => new ViewModels.Question(location, question))
 			    .ToList();
 
-			return new QuestionAdmin(consultation.Title, consultation.SupportsQuestions, consultationQuestions, questionAdminDocuments);
+		    var questionTypes = GetQuestionTypes();
+
+			//getting consultation state. not happy about this getting the consultation list for this..
+		    var publishedConsultationIds = _consultationService.GetConsultations().Select(publishedConsultation => publishedConsultation.ConsultationId);
+			var previewState = publishedConsultationIds.Contains(consultationId) ? PreviewState.NonPreview : PreviewState.Preview;
+			var consultationState = _consultationService.GetConsultationState(consultationId, null, null, previewState);
+
+			return new QuestionAdmin(consultation.Title, consultation.SupportsQuestions, consultationQuestions, questionAdminDocuments, questionTypes, consultationState);
+	    }
+
+	    public IEnumerable<QuestionType> GetQuestionTypes()
+	    {
+		    return _context.GetQuestionTypes().Select(modelQuestionType => new ViewModels.QuestionType(modelQuestionType));
 	    }
     }
 }

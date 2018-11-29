@@ -232,5 +232,26 @@ namespace Comments.Test.UnitTests
 			updatedViewModel.question.LastModifiedDate.ShouldNotBe(lastModifiedDate);
 			updatedViewModel.question.LastModifiedByUserId.ShouldNotBe(lastModifiedByUserId);
 		}
+
+		[Fact]
+		public void Get_QuestionTypes()
+		{
+			//Arrange
+			ResetDatabase();
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: Guid.NewGuid());
+			var questionService =
+				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService);
+
+			var textQuestionTypeId = AddQuestionType("Text", hasBooleanAnswer: false, hasTextAnswer: true);
+			var booleanQuestionTypeId = AddQuestionType("Boolean", hasBooleanAnswer: true, hasTextAnswer: false);
+
+			//Act
+			IEnumerable<ViewModels.QuestionType> results = questionService.GetQuestionTypes();
+
+			//Assert
+			results.Count().ShouldBe(2);
+			results.First().QuestionTypeId.ShouldBe(textQuestionTypeId);
+			results.Skip(1).First().QuestionTypeId.ShouldBe(booleanQuestionTypeId);
+		}
 	}
 }
