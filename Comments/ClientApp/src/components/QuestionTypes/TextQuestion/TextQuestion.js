@@ -105,7 +105,7 @@ export class TextQuestion extends Component<PropsType, StateType> {
 						}
 						<button
 							className="btn mr--0 mb--0 right"
-							onClick={e => this.props.deleteQuestion(e, question.questionId)}>
+							onClick={e => this.props.deleteQuestion(e, question)}>
 							Delete
 						</button>
 					</form>

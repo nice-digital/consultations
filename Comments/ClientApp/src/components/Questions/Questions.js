@@ -13,9 +13,9 @@ import { TextQuestion } from "../QuestionTypes/TextQuestion/TextQuestion";
 import { saveQuestionHandler, deleteQuestionHandler } from "../../helpers/editing-and-deleting";
 import { updateUnsavedIds } from "../../helpers/unsaved-comments";
 
-type PropsType = any; // todo
+type PropsType = any; // todo - create flow types
 
-type StateType = any; // todo
+type StateType = any; // todo - create flow types
 
 export class Questions extends Component<PropsType, StateType> {
 	constructor(props: PropsType) {
@@ -108,11 +108,10 @@ export class Questions extends Component<PropsType, StateType> {
 		});
 	}
 
-	getQuestionsToDisplay = (currentDocumentId: number, questionsData: Object) => {
-		if (!currentDocumentId || !questionsData) return {};
-		currentDocumentId = parseInt(currentDocumentId, 10);
-		const isCurrentDocument = item => item.documentId === currentDocumentId;
-		if (currentDocumentId === -1) return questionsData.consultationQuestions; // documentId of -1 represents consultation level questions
+	getQuestionsToDisplay = (currentDocumentId: string, questionsData: Object) => {
+		if (currentDocumentId === null) return;
+		const isCurrentDocument = item => item.documentId.toString() === currentDocumentId;
+		if (currentDocumentId === "consultation") return questionsData.consultationQuestions; // documentId of -1 represents consultation level questions
 		return questionsData.documents.filter(isCurrentDocument)[0].documentQuestions;
 	};
 
@@ -121,7 +120,7 @@ export class Questions extends Component<PropsType, StateType> {
 		currentConsultationId: string,
 		currentDocumentId: string) => {
 		const supportsQuestions = document => document.supportsQuestions;
-		const isCurrentRoute = (documentId) => documentId === parseInt(currentDocumentId, 10);
+		const isCurrentRoute = (documentId) => documentId.toString() === currentDocumentId;
 		const documentsList = questionsData.documents
 			.filter(supportsQuestions)
 			.map(consultationDocument => {
@@ -135,9 +134,9 @@ export class Questions extends Component<PropsType, StateType> {
 		return [
 			{
 				title: questionsData.consultationTitle,
-				to: `/admin/questions/${currentConsultationId}/-1`,
+				to: `/admin/questions/${currentConsultationId}/consultation`,
 				marker: questionsData.consultationQuestions.length || null,
-				current: isCurrentRoute(-1), // -1 is going to represent the consultation level questions (didn't realise there could be a documentId of 0!)
+				current: isCurrentRoute("consultation"), // -1 is going to represent the consultation level questions (didn't realise there could be a documentId of 0!)
 				children: documentsList,
 			},
 		];
@@ -155,9 +154,10 @@ export class Questions extends Component<PropsType, StateType> {
 		updateUnsavedIds(commentId, dirty, this);
 	};
 
-	newQuestion = (e: SyntheticEvent<HTMLElement>, consultationId: string, documentId: string) => {
+	newQuestion = (e: SyntheticEvent<HTMLElement>, consultationId: string, documentId: number) => {
 		const newQuestion = {
 			questionId: -1,
+			documentId,
 			questionText: "",
 			questionType: {
 				description: "A text question requiring a text answer.",
@@ -168,17 +168,16 @@ export class Questions extends Component<PropsType, StateType> {
 		};
 
 		const questionsData = this.state.questionsData;
-		const documentIdNumber = parseInt(documentId, 10);
 		let currentQuestions;
 
-		if (documentIdNumber !== -1) {
-			// this is a document level question
-			currentQuestions = questionsData.documents.filter(item => item.documentId === documentIdNumber)[0].documentQuestions;
-			newQuestion.sourceURI = `consultations://./consultation/${consultationId}/document/${documentId}`;
-		} else {
+		if (documentId === null) {
 			//	this is a consultation level question
 			currentQuestions = questionsData.consultationQuestions;
 			newQuestion.sourceURI = `consultations://./consultation/${consultationId}`;
+		} else {
+			// this is a document level question
+			currentQuestions = questionsData.documents.filter(item => item.documentId === documentId)[0].documentQuestions;
+			newQuestion.sourceURI = `consultations://./consultation/${consultationId}/document/${documentId}`;
 		}
 
 		if (currentQuestions && currentQuestions.length) {
@@ -193,7 +192,12 @@ export class Questions extends Component<PropsType, StateType> {
 	render() {
 		if (!this.state.hasInitialData) return null;
 		const {questionsData, unsavedIds} = this.state;
-		const currentDocumentId = this.props.match.params.documentId;
+		let currentDocumentId;
+		if (this.props.match.params.documentId === undefined) {
+			currentDocumentId = null;
+		} else {
+			currentDocumentId = this.props.match.params.documentId;
+		}
 		const currentConsultationId = this.props.match.params.consultationId;
 		const questionsToDisplay = this.getQuestionsToDisplay(currentDocumentId, questionsData);
 
@@ -235,7 +239,13 @@ export class Questions extends Component<PropsType, StateType> {
 													<Fragment>
 														<button
 															className="btn btn--cta"
-															onClick={(e) => this.newQuestion(e, currentConsultationId, currentDocumentId)}
+															onClick={(e) => {
+																if (currentDocumentId === "consultation") {
+																	this.newQuestion(e, currentConsultationId, null);
+																} else {
+																	this.newQuestion(e, currentConsultationId, parseInt(currentDocumentId, 10));
+																}
+															}}
 														>Add Question
 														</button>
 														{questionsToDisplay.length ?
