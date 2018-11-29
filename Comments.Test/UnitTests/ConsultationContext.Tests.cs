@@ -353,5 +353,40 @@ namespace Comments.Test.UnitTests
 			}
 		}
 
+		[Fact]
+		public void Get_All_QuestionTypes_Where_There_Is_Only_A_Single_QuestionType()
+		{
+			// Arrange
+			ResetDatabase();
+
+			var textQuestionTypeId = AddQuestionType("Text", false, true);
+
+			// Act
+			var consultationsContext = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption);
+			var results = consultationsContext.GetQuestionTypes();
+
+			//Assert
+			results.Single().QuestionTypeId.ShouldBe(textQuestionTypeId);
+		}
+
+	    [Fact]
+	    public void Get_All_QuestionTypes_Where_There_Are_Multiple_QuestionTypes()
+	    {
+		    // Arrange
+		    ResetDatabase();
+
+		    var textQuestionTypeId = AddQuestionType("Text", hasBooleanAnswer: false, hasTextAnswer: true);
+		    var booleanQuestionTypeId = AddQuestionType("Boolean", hasBooleanAnswer: true, hasTextAnswer: false);
+
+			// Act
+			var consultationsContext = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption);
+		    var results = consultationsContext.GetQuestionTypes().ToList();
+
+		    //Assert
+			results.Count().ShouldBe(2);
+		    results.First().QuestionTypeId.ShouldBe(textQuestionTypeId);
+		    results.Skip(1).First().QuestionTypeId.ShouldBe(booleanQuestionTypeId);
+		}
+
 	}
 }

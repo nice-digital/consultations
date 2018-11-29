@@ -5,12 +5,13 @@ namespace Comments.ViewModels
 {
 	public class QuestionAdmin
 	{
-		public QuestionAdmin(string consultationTitle, bool consultationSupportsQuestions, IEnumerable<Question> consultationQuestions, IEnumerable<QuestionAdminDocument> documents)
+		public QuestionAdmin(string consultationTitle, bool consultationSupportsQuestions, IEnumerable<Question> consultationQuestions, IEnumerable<QuestionAdminDocument> documents, IEnumerable<QuestionType> questionTypes)
 		{
 			ConsultationTitle = consultationTitle;
 			ConsultationSupportsQuestions = consultationSupportsQuestions;
 			ConsultationQuestions = consultationQuestions;
 			Documents = documents;
+			QuestionTypes = questionTypes;
 		}
 
 		public string ConsultationTitle{ get; private set; }
@@ -21,6 +22,7 @@ namespace Comments.ViewModels
 
 		//public IEnumerable<BreadcrumbLink> Breadcrumbs { get; private set; }
 		public IEnumerable<QuestionAdminDocument> Documents { get; private set; }
-		
+
+		public IEnumerable<QuestionType> QuestionTypes { get; private set; }
 	}
 }

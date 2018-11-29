@@ -571,5 +571,10 @@ namespace Comments.Models
 			    totalAnswers: Answer.IgnoreQueryFilters().Count(),
 			    totalSubmissions: Submission.IgnoreQueryFilters().Count());
 	    }
-	}
+
+	    public IEnumerable<QuestionType> GetQuestionTypes()
+	    {
+		    return QuestionType;
+	    }
+    }
 }
