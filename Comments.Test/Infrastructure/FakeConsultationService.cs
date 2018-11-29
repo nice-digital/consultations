@@ -12,9 +12,12 @@ namespace Comments.Test.Infrastructure
 	public class FakeConsultationService : IConsultationService
     {
 	    private readonly bool _consultationIsOpen;
-	    public FakeConsultationService(bool consultationIsOpen = true)
+	    private readonly int _documentCount;
+
+	    public FakeConsultationService(bool consultationIsOpen = true, int documentCount = 1)
 	    {
 		    _consultationIsOpen = consultationIsOpen;
+		    _documentCount = documentCount;
 	    }
 
 	    public bool ConsultationIsOpen(string sourceURI)
@@ -44,8 +47,14 @@ namespace Comments.Test.Infrastructure
 		    return new ConsultationState(DateTime.MinValue, _consultationIsOpen ? DateTime.MaxValue : DateTime.MinValue, true, true, true, false, true, true, null, null);
 	    }
 
+	    public IEnumerable<Consultation> GetConsultations()
+	    {
+		    return new List<Consultation>(){ new Consultation("GID-WAVE", "title", "some name", DateTime.MinValue, DateTime.MaxValue, "consultation type", "resource title id", "project type",
+				"product type name", "developed as", "relevant to", 1, "process", true, true, true, true, "partially updated reference", "original reference", new User(true, "Benjamin Button", Guid.Empty, "org name"))};
+	    }
+
 		#region Not Implemented Members
-	    public IEnumerable<BreadcrumbLink> GetBreadcrumbs(ConsultationDetail consultation, bool isReview)
+		public IEnumerable<BreadcrumbLink> GetBreadcrumbs(ConsultationDetail consultation, bool isReview)
 	    {
 		    throw new NotImplementedException();
 	    }
@@ -72,14 +81,26 @@ namespace Comments.Test.Infrastructure
 
 	    public IEnumerable<Document> GetDocuments(int consultationId)
 	    {
-		    return new List<Document>()
+		    if (_documentCount == 1)
 		    {
-			    new Document(1, 1, true, "doc 1", new List<Chapter>()
+			    return new List<Document>()
 			    {
-				    new Chapter("chapter-slug", "title"),
-				    new Chapter("chapter-slug2", "title2")
-				}, true, true)
-		    };
+				    new Document(1, 1, true, "doc 1", new List<Chapter>()
+				    {
+					    new Chapter("chapter-slug", "title"),
+					    new Chapter("chapter-slug2", "title2")
+				    }, true, true)
+			    };
+		    }
+		    else
+		    {
+			    var documents = new List<Document>();
+			    for (var docIndex = 0; docIndex < _documentCount; docIndex++)
+			    {
+				    documents.Add(new Document(consultationId, docIndex + 1, true, "doc title", new List<Chapter>(), true, true));
+			    }
+			    return documents;
+		    }
 	    }
 
 	    public IEnumerable<Document> GetPreviewDraftDocuments(int consultationId, int documentId, string reference)
@@ -106,11 +127,6 @@ namespace Comments.Test.Infrastructure
 	    }
 
 	    public Consultation GetDraftConsultation(int consultationId, int documentId, string reference, bool isReview)
-	    {
-		    throw new NotImplementedException();
-	    }
-
-		public IEnumerable<Consultation> GetConsultations()
 	    {
 		    throw new NotImplementedException();
 	    }

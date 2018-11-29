@@ -77,7 +77,7 @@ namespace Comments.Test.Infrastructure
 		}
 
 
-		public TestBase(bool useRealSubmitService = false, string feedName = null)
+		public TestBase(bool useRealSubmitService = false, string feedName = null, IConsultationService replacementConsultationService = null)
         {
             // Arrange
             _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
@@ -131,6 +131,12 @@ namespace Comments.Test.Infrastructure
 					{
 						services.TryAddTransient<ISubmitService>(provider => new FakeSubmitService());
 					}
+
+	                if (replacementConsultationService != null)
+	                {
+						services.TryAddTransient<IConsultationService>(provider => replacementConsultationService);
+					}
+
 				})
                 .Configure(app =>
                 {

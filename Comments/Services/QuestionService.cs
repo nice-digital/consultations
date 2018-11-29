@@ -4,6 +4,7 @@ using Comments.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 using Comments.Common;
+using NICE.Feeds;
 using Location = Comments.Models.Location;
 using Question = Comments.ViewModels.Question;
 using QuestionType = Comments.ViewModels.QuestionType;
@@ -100,6 +101,7 @@ namespace Comments.Services
 	    {
 
 		    var consultation = _consultationService.GetConsultation(consultationId, BreadcrumbType.None, useFilters:false);
+			
 		    var consultationSourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
 
 			var locationsWithQuestions = _context.GetQuestionsForDocument(new List<string>{ consultationSourceURI }, partialMatchSourceURI: true).ToList();
@@ -138,7 +140,12 @@ namespace Comments.Services
 
 		    var questionTypes = GetQuestionTypes();
 
-			return new QuestionAdmin(consultation.Title, consultation.SupportsQuestions, consultationQuestions, questionAdminDocuments, questionTypes);
+			//getting consultation state. not happy about this getting the consultation list for this..
+		    var publishedConsultationIds = _consultationService.GetConsultations().Select(publishedConsultation => publishedConsultation.ConsultationId);
+			var previewState = publishedConsultationIds.Contains(consultationId) ? PreviewState.NonPreview : PreviewState.Preview;
+			var consultationState = _consultationService.GetConsultationState(consultationId, null, null, previewState);
+
+			return new QuestionAdmin(consultation.Title, consultation.SupportsQuestions, consultationQuestions, questionAdminDocuments, questionTypes, consultationState);
 	    }
 
 	    public IEnumerable<QuestionType> GetQuestionTypes()
