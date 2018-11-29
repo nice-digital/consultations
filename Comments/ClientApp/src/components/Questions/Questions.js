@@ -111,7 +111,7 @@ export class Questions extends Component<PropsType, StateType> {
 	getQuestionsToDisplay = (currentDocumentId: string, questionsData: Object) => {
 		if (currentDocumentId === null) return;
 		const isCurrentDocument = item => item.documentId.toString() === currentDocumentId;
-		if (currentDocumentId === "consultation") return questionsData.consultationQuestions; // documentId of -1 represents consultation level questions
+		if (currentDocumentId === "consultation") return questionsData.consultationQuestions;
 		return questionsData.documents.filter(isCurrentDocument)[0].documentQuestions;
 	};
 
@@ -154,16 +154,12 @@ export class Questions extends Component<PropsType, StateType> {
 		updateUnsavedIds(commentId, dirty, this);
 	};
 
-	newQuestion = (e: SyntheticEvent<HTMLElement>, consultationId: string, documentId: number) => {
+	newQuestion = (e: SyntheticEvent<HTMLElement>, consultationId: string, documentId: number, questionTypeId: number) => {
 		const newQuestion = {
 			questionId: -1,
+			questionTypeId,
 			documentId,
 			questionText: "",
-			questionType: {
-				description: "A text question requiring a text answer.",
-				hasTextAnswer: true,
-				hasBooleanAnswer: false,
-			},
 			sourceURI: "",
 		};
 
@@ -241,12 +237,12 @@ export class Questions extends Component<PropsType, StateType> {
 															className="btn btn--cta"
 															onClick={(e) => {
 																if (currentDocumentId === "consultation") {
-																	this.newQuestion(e, currentConsultationId, null);
+																	this.newQuestion(e, currentConsultationId, null, questionsData.questionTypes[0].questionTypeId);
 																} else {
-																	this.newQuestion(e, currentConsultationId, parseInt(currentDocumentId, 10));
+																	this.newQuestion(e, currentConsultationId, parseInt(currentDocumentId, 10), questionsData.questionTypes[0].questionTypeId);
 																}
 															}}
-														>Add Question
+														>Add text response question
 														</button>
 														{questionsToDisplay.length ?
 															<ul className="list--unstyled">
