@@ -11,6 +11,7 @@ type PropsType = {
 	saveQuestion: Function;
 	deleteQuestion: Function;
 	updateUnsavedIds: Function;
+	readOnly: boolean;
 }
 
 export class TextQuestion extends Component<PropsType, StateType> {
@@ -33,10 +34,11 @@ export class TextQuestion extends Component<PropsType, StateType> {
 		const prevTimestamp = prevState.question.lastModifiedDate;
 		const nextTimestamp = nextProps.question.lastModifiedDate;
 		const hasQuestionBeenUpdated = () => prevTimestamp !== nextTimestamp;
-		if (hasQuestionBeenUpdated()){
+		if (hasQuestionBeenUpdated()) {
 			return {
 				question: nextProps.question,
 				unsavedChanges: false,
+				readOnly: nextProps.readOnly,
 			};
 		}
 		return null;
@@ -65,11 +67,12 @@ export class TextQuestion extends Component<PropsType, StateType> {
 		);
 	};
 
-
 	render() {
 		if (!this.state.question) {
 			return null;
 		}
+
+		const {readOnly} = this.props;
 
 		const {question, unsavedChanges} = this.state;
 
@@ -83,6 +86,7 @@ export class TextQuestion extends Component<PropsType, StateType> {
 							<p className="CommentBox__validationMessage mt--0">You have unsaved changes</p>
 							}
 							<textarea
+								disabled={readOnly}
 								data-hj-whitelist
 								id={question.questionId}
 								className="form__input form__input--textarea"
@@ -90,7 +94,7 @@ export class TextQuestion extends Component<PropsType, StateType> {
 								tabIndex={0}
 								value={question.questionText}/>
 						</div>
-						{question.questionText && question.questionText.length > 0 ?
+						{question.questionText && question.questionText.length > 0 && !readOnly ?
 							unsavedChanges ?
 								<input
 									className="btn ml--0 mb--0"
@@ -102,11 +106,13 @@ export class TextQuestion extends Component<PropsType, StateType> {
 							:
 							null
 						}
+						{!readOnly &&
 						<button
 							className="btn mr--0 mb--0 right"
 							onClick={e => this.props.deleteQuestion(e, question)}>
 							Delete
 						</button>
+						}
 					</form>
 				</section>
 			</li>

@@ -22,6 +22,7 @@ export class Questions extends Component<PropsType, StateType> {
 		super(props);
 
 		this.state = {
+			editingAllowed: false,
 			questionsData: null,
 			loading: true,
 			hasInitialData: false,
@@ -48,7 +49,9 @@ export class Questions extends Component<PropsType, StateType> {
 		);
 
 		if (preloadedQuestionsData) {
+
 			this.state = {
+				editingAllowed: this.editingAllowed(preloadedQuestionsData.consultationState),
 				questionsData: preloadedQuestionsData,
 				loading: false,
 				hasInitialData: true,
@@ -60,6 +63,8 @@ export class Questions extends Component<PropsType, StateType> {
 			};
 		}
 	}
+
+	editingAllowed = (data: Object) => data.consultationHasEnded || data.consultationIsOpen;
 
 	gatherData = async () => {
 		const questionsData = load("questions", undefined, [], {consultationId: this.props.match.params.consultationId})
@@ -80,11 +85,12 @@ export class Questions extends Component<PropsType, StateType> {
 	componentDidMount() {
 		if (!this.state.hasInitialData) {
 			this.setState({
-				loading: true
+				loading: true,
 			});
 			this.gatherData()
 				.then(data => {
 					this.setState({
+						editingAllowed: this.editingAllowed(data.questionsData.consultationState),
 						...data,
 						loading: false,
 						hasInitialData: true,
@@ -101,17 +107,17 @@ export class Questions extends Component<PropsType, StateType> {
 		}
 	}
 
-	componentDidUpdate(prevProps: PropsType, prevState: StateType) {
+	componentDidUpdate(prevProps: PropsType) {
 		const oldRoute = prevProps.location.pathname;
 		const newRoute = this.props.location.pathname;
-		// console.log(prevState.questionsData.consultationQuestions[0], prevState.questionsData.documents[0].documentQuestions[0]);
 		if (oldRoute === newRoute) return;
 		this.setState({
-			loading: true
+			loading: true,
 		});
 		this.gatherData()
 			.then(data => {
 				this.setState({
+					editingAllowed: this.editingAllowed(data.questionsData.consultationState),
 					...data,
 					loading: false,
 					unsavedIds: [],
@@ -127,7 +133,7 @@ export class Questions extends Component<PropsType, StateType> {
 			});
 	}
 
-	getQuestionsToDisplay = (currentDocumentId: string, questionsData: Object) => {
+	getQuestionsToDisplay = (currentDocumentId: string | null, questionsData: Object) => {
 		if (currentDocumentId === null) return;
 		const isCurrentDocument = item => item.documentId.toString() === currentDocumentId;
 		if (currentDocumentId === "consultation") return questionsData.consultationQuestions;
@@ -138,7 +144,7 @@ export class Questions extends Component<PropsType, StateType> {
 		questionsData: Object,
 		currentConsultationId: string,
 		currentDocumentId: string) => {
-		const doesntHaveDocumentIdOfZero = document => document.documentId !== 0; // to be replaced with convertedDocument when available on endpoint
+		const doesntHaveDocumentIdOfZero = document => document.documentId !== 0; // todo: to be replaced with convertedDocument when available on endpoint
 		const isCurrentRoute = (documentId) => documentId.toString() === currentDocumentId;
 		const documentsList = questionsData.documents
 			.filter(doesntHaveDocumentIdOfZero)
@@ -207,16 +213,12 @@ export class Questions extends Component<PropsType, StateType> {
 	render() {
 		if (!this.state.hasInitialData) return null;
 		const {questionsData, unsavedIds} = this.state;
-		let currentDocumentId;
-		if (this.props.match.params.documentId === undefined) {
-			currentDocumentId = null;
-		} else {
-			currentDocumentId = this.props.match.params.documentId;
-		}
+		// If there's no documentId, set currentDocumentId to null
+		const currentDocumentId = this.props.match.params.documentId === undefined ? null : this.props.match.params.documentId;
 		const currentConsultationId = this.props.match.params.consultationId;
 		const questionsToDisplay = this.getQuestionsToDisplay(currentDocumentId, questionsData);
-
-		const textQuestionTypeId = questionsData.questionTypes[0].questionTypeId; // only one Qtype for the time being
+		// only one question type for the time being
+		const textQuestionTypeId = questionsData.questionTypes[0].questionTypeId;
 
 		return (
 			<UserContext.Consumer>
@@ -254,6 +256,7 @@ export class Questions extends Component<PropsType, StateType> {
 											<div>
 												{currentDocumentId ?
 													<Fragment>
+														{this.state.editingAllowed &&
 														<button
 															className="btn btn--cta"
 															onClick={(e) => {
@@ -265,10 +268,12 @@ export class Questions extends Component<PropsType, StateType> {
 															}}
 														>Add text response question
 														</button>
+														}
 														{questionsToDisplay && questionsToDisplay.length ?
 															<ul className="list--unstyled">
 																{questionsToDisplay.map(question => (
 																	<TextQuestion
+																		readOnly={!this.state.editingAllowed}
 																		updateUnsavedIds={this.updateUnsavedIds}
 																		key={question.questionId}
 																		question={question}
