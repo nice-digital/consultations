@@ -78,7 +78,6 @@ export class TextQuestion extends Component<PropsType, StateType> {
 				<section role="form">
 					<form onSubmit={e => this.props.saveQuestion(e, question)} className="mb--0">
 						<div className="form__group form__group--textarea mb--b">
-							<p>{question.lastModifiedDate}</p>
 							<label className="form__label visually-hidden" htmlFor={question.questionId}>Set question</label>
 							{unsavedChanges &&
 							<p className="CommentBox__validationMessage mt--0">You have unsaved changes</p>
