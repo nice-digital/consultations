@@ -65,7 +65,7 @@ namespace Comments.Services
 			if (commentsInDB == null && answersInDB == null && questionsInDB == null)
 				return (null, null, null, new Validate(valid: false, notFound: true, message: $"Consultation id:{consultationId} not found trying to get all data for consultation"));
 
-			return (commentsInDB, answersInDB, questionsInDB, null);
+			return (commentsInDB, answersInDB, questionsInDB, new Validate(true));
 	    }
 
 	    public (IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetAllDataForConsulationForCurrentUser(int consultationId)
@@ -79,7 +79,7 @@ namespace Comments.Services
 		    if (commentsInDB == null && answersInDB == null && questionsInDB == null)
 			    return (null, null, null, new Validate(valid: false, notFound: true, message: $"Consultation id:{consultationId} not found trying to get all data for consultation"));
 
-		    return (commentsInDB, answersInDB, questionsInDB, null);
+		    return (commentsInDB, answersInDB, questionsInDB, new Validate(true));
 	    }
 
 		public (string ConsultationName, string DocumentName, string ChapterName) GetLocationData(Location location)
