@@ -7,6 +7,7 @@ using Comments.Configuration;
 using Comments.Models;
 using Comments.ViewModels;
 using Microsoft.AspNetCore.Http;
+using NICE.Feeds;
 using Location = Comments.Models.Location;
 
 namespace Comments.Services
@@ -24,9 +25,10 @@ namespace Comments.Services
 	    private readonly ConsultationsContext _context;
 	    private readonly IUserService _userService;
 	    private readonly IConsultationService _consultationService;
+	    private readonly IFeedService _feedService;
 	    private readonly ClaimsPrincipal _niceUser;
 
-		public ExportService(ConsultationsContext consultationsContext, IUserService userService, IConsultationService consultationService, IHttpContextAccessor httpContextAccessor)
+		public ExportService(ConsultationsContext consultationsContext, IUserService userService, IConsultationService consultationService, IHttpContextAccessor httpContextAccessor, IFeedService feedService)
 	    {
 		    var user = userService.GetCurrentUser();
 		    if (!user.IsAuthorised)
@@ -42,15 +44,18 @@ namespace Comments.Services
 			_context = consultationsContext;
 		    _userService = userService;
 		    _consultationService = consultationService;
-		}
+		    _feedService = feedService;
+	    }
 
 	    public (IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetAllDataForConsulation(int consultationId)
 	    {
-		    var validate = _userService.IsAllowedAccess(AppSettings.ConsultationListConfig.DownloadRoles.AllRoles);
-		    if (!validate.Valid)
+		    var userRoles = _userService.GetUserRoles().ToList();
+		    var isAdminUser = userRoles.Any(role => AppSettings.ConsultationListConfig.DownloadRoles.AdminRoles.Contains(role));
+			var consultation = _feedService.GetConsultationList().Single(c => c.ConsultationId.Equals(consultationId));
+		    if (!isAdminUser && !userRoles.Contains(consultation.AllowedRole))
 		    {
-			    return (null, null, null, validate);
-		    }
+				return (null, null, null, new Validate(valid: false, unauthorised: true, message: $"User does not have access to download this type of consultation."));
+			}
 
 			var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
 		    var commentsInDB = _context.GetAllSubmittedCommentsForURI(sourceURI);

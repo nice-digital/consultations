@@ -10,6 +10,8 @@ using Comments.Models;
 using Comments.Services;
 using Comments.Test.Infrastructure;
 using Comments.ViewModels;
+using NICE.Feeds;
+using NICE.Feeds.Models.Indev.List;
 using NICE.Feeds.Tests.Infrastructure;
 using Shouldly;
 using Xunit;
@@ -20,8 +22,12 @@ namespace Comments.Test.UnitTests
 
 	public class ExportBase : TestBase
 	{
-		public ExportBase(TestUserType testUserType) : base(testUserType, Feed.ConsultationCommentsPublishedDetailMulitpleDoc)
+		protected readonly IFeedService FeedService;
+		public ExportBase(TestUserType testUserType) : base(testUserType, Feed.ConsultationCommentsListMultiple)
 		{
+			var consultationList = new List<ConsultationList>();
+			consultationList.Add(new ConsultationList { ConsultationId = 1, AllowedRole = testUserType.ToString() });
+			FeedService = new FakeFeedService(consultationList);
 		}
 
 		protected void CreateALotOfData(Guid userId)
@@ -71,6 +77,7 @@ namespace Comments.Test.UnitTests
 
 	public class ExportToExcelTests : ExportBase
 	{
+		
 	    public ExportToExcelTests() : base(TestUserType.CustomFictionalRole)
 	    {
 	    }
@@ -89,7 +96,7 @@ namespace Comments.Test.UnitTests
 		    var context = new ConsultationsContext(_options, userService, _fakeEncryption);
 			
 			var consultationService = new ConsultationService(_context, new FakeFeedService(), new FakeLogger<ConsultationService>(), _fakeUserService);
-			var export = new ExportService(context, _fakeUserService, consultationService, _fakeHttpContextAccessor);
+			var export = new ExportService(context, _fakeUserService, consultationService, _fakeHttpContextAccessor, FeedService);
 
 			//Act
 		    var resultTuple = export.GetAllDataForConsulation(1);
@@ -113,7 +120,7 @@ namespace Comments.Test.UnitTests
 		    var context = new ConsultationsContext(_options, userService, _fakeEncryption);
 
 		    var consultationService = new ConsultationService(_context, new FakeFeedService(), new FakeLogger<ConsultationService>(), _fakeUserService);
-		    var export = new ExportService(context, _fakeUserService, consultationService, _fakeHttpContextAccessor);
+		    var export = new ExportService(context, _fakeUserService, consultationService, _fakeHttpContextAccessor, FeedService);
 
 		    //Act
 		    var resultTuple = export.GetAllDataForConsulationForCurrentUser(1);
@@ -176,7 +183,7 @@ namespace Comments.Test.UnitTests
 
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/chapter-slug";
 			var comments = _context.GetAllSubmittedCommentsForURI(sourceURI);
-			var exportService = new ExportService(_context, _fakeUserService, _consultationService, _fakeHttpContextAccessor);
+			var exportService = new ExportService(_context, _fakeUserService, _consultationService, _fakeHttpContextAccessor, FeedService);
 
 			//Act
 		    var locationDetails = exportService.GetLocationData(comments.First().Location);
@@ -234,6 +241,7 @@ namespace Comments.Test.UnitTests
 	{
 		public ExportToExcelTestsForNonAdminUser() : base(TestUserType.Authenticated)
 		{
+			AppSettings.Feed = TestAppSettings.GetFeedConfig();
 		}
 
 		[Fact]
