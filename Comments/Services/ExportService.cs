@@ -3,6 +3,7 @@ using System.Linq;
 using System.Security.Authentication;
 using System.Security.Claims;
 using Comments.Common;
+using Comments.Configuration;
 using Comments.Models;
 using Comments.ViewModels;
 using Microsoft.AspNetCore.Http;
@@ -21,6 +22,7 @@ namespace Comments.Services
     public class ExportService : IExportService
     {
 	    private readonly ConsultationsContext _context;
+	    private readonly IUserService _userService;
 	    private readonly IConsultationService _consultationService;
 	    private readonly ClaimsPrincipal _niceUser;
 
@@ -38,11 +40,18 @@ namespace Comments.Services
 		    }
 		    
 			_context = consultationsContext;
+		    _userService = userService;
 		    _consultationService = consultationService;
 		}
 
 	    public (IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetAllDataForConsulation(int consultationId)
 	    {
+		    var validate = _userService.IsAllowedAccess(AppSettings.ConsultationListConfig.DownloadRoles.AllRoles);
+		    if (!validate.Valid)
+		    {
+			    return (null, null, null, validate);
+		    }
+
 			var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
 		    var commentsInDB = _context.GetAllSubmittedCommentsForURI(sourceURI);
 		    var answersInDB = _context.GetAllSubmittedAnswersForURI(sourceURI);
