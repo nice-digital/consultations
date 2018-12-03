@@ -49,7 +49,6 @@ export class Questions extends Component<PropsType, StateType> {
 		);
 
 		if (preloadedQuestionsData) {
-
 			this.state = {
 				editingAllowed: this.editingAllowed(preloadedQuestionsData.consultationState),
 				questionsData: preloadedQuestionsData,
@@ -64,7 +63,11 @@ export class Questions extends Component<PropsType, StateType> {
 		}
 	}
 
-	editingAllowed = (data: Object) => data.consultationHasEnded || data.consultationIsOpen;
+	editingAllowed = (data: Object) => {
+		// return true;
+		if (!data) return true;
+		return data.consultationHasEnded || data.consultationIsOpen;
+	};
 
 	gatherData = async () => {
 		const questionsData = load("questions", undefined, [], {consultationId: this.props.match.params.consultationId})
@@ -214,11 +217,17 @@ export class Questions extends Component<PropsType, StateType> {
 		if (!this.state.hasInitialData) return null;
 		const {questionsData, unsavedIds} = this.state;
 		// If there's no documentId, set currentDocumentId to null
-		const currentDocumentId = this.props.match.params.documentId === undefined ? null : this.props.match.params.documentId;
+		const currentDocumentId =
+			this.props.match.params.documentId === undefined ? null : this.props.match.params.documentId;
 		const currentConsultationId = this.props.match.params.consultationId;
-		const questionsToDisplay = this.getQuestionsToDisplay(currentDocumentId, questionsData);
-		// only one question type for the time being
-		const textQuestionTypeId = questionsData.questionTypes[0].questionTypeId;
+		let questionsToDisplay, textQuestionTypeId;
+		if (questionsData.consultationQuestions) {
+			questionsToDisplay = this.getQuestionsToDisplay(currentDocumentId, questionsData);
+		}
+		if (questionsData.questionTypes) {
+			// only one question type for the time being
+			textQuestionTypeId = questionsData.questionTypes[0].questionTypeId;
+		}
 
 		return (
 			<UserContext.Consumer>
@@ -259,6 +268,7 @@ export class Questions extends Component<PropsType, StateType> {
 														{this.state.editingAllowed &&
 														<button
 															className="btn btn--cta"
+															disabled={this.state.loading}
 															onClick={(e) => {
 																if (currentDocumentId === "consultation") {
 																	this.newQuestion(e, currentConsultationId, null, textQuestionTypeId);
