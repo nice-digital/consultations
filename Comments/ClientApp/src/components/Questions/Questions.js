@@ -215,6 +215,17 @@ export class Questions extends Component<PropsType, StateType> {
 
 	render() {
 		if (!this.state.hasInitialData) return null;
+		if (!this.context.isAuthorised) {
+			return (
+				<LoginBanner
+					signInButton={false}
+					currentURL={this.props.match.url}
+					signInURL={this.context.signInURL}
+					registerURL={this.context.registerURL}
+					signInText="to administer a consultation"
+				/>
+			);
+		}
 		const {questionsData, unsavedIds} = this.state;
 		// If there's no documentId, set currentDocumentId to null
 		const currentDocumentId =
@@ -230,85 +241,74 @@ export class Questions extends Component<PropsType, StateType> {
 		}
 
 		return (
-			<UserContext.Consumer>
-				{(contextValue: any) => !contextValue.isAuthorised ?
-					<LoginBanner
-						signInButton={false}
-						currentURL={this.props.match.url}
-						signInURL={contextValue.signInURL}
-						registerURL={contextValue.registerURL}
-						signInText="to administer a consultation"
-					/>
-					:
-					<Fragment>
-						<Prompt
-							when={this.state.unsavedIds.length > 0}
-							message={`You have ${unsavedIds.length} unsaved ${unsavedIds.length === 1 ? "change" : "changes"}. Continue without saving?`}
-						/>
-						<Helmet>
-							<title>Set Questions</title>
-						</Helmet>
-						<div className="container">
+			<Fragment>
+				<Prompt
+					when={this.state.unsavedIds.length > 0}
+					message={`You have ${unsavedIds.length} unsaved ${unsavedIds.length === 1 ? "change" : "changes"}. Continue without saving?`}
+				/>
+				<Helmet>
+					<title>Set Questions</title>
+				</Helmet>
+				<div className="container">
+					<div className="grid">
+						<div data-g="12">
+							<h1 className="h3">{questionsData.consultationTitle}</h1>
 							<div className="grid">
-								<div data-g="12">
-									<h1 className="h3">{questionsData.consultationTitle}</h1>
-									<div className="grid">
-										<div data-g="12 md:6">
-											<NestedStackedNav navigationStructure={
-												this.createConsultationNavigation(
-													questionsData,
-													currentConsultationId,
-													currentDocumentId)
-											}/>
-										</div>
-										<div data-g="12 md:6">
-											<div>
-												{currentDocumentId ?
-													<Fragment>
-														{this.state.editingAllowed &&
-														<button
-															className="btn btn--cta"
-															disabled={this.state.loading}
-															onClick={(e) => {
-																if (currentDocumentId === "consultation") {
-																	this.newQuestion(e, currentConsultationId, null, textQuestionTypeId);
-																} else {
-																	this.newQuestion(e, currentConsultationId, parseInt(currentDocumentId, 10), textQuestionTypeId);
-																}
-															}}
-														>Add text response question
-														</button>
+								<div data-g="12 md:6">
+									<NestedStackedNav navigationStructure={
+										this.createConsultationNavigation(
+											questionsData,
+											currentConsultationId,
+											currentDocumentId)
+									}/>
+								</div>
+								<div data-g="12 md:6">
+									<div>
+										{currentDocumentId ?
+											<Fragment>
+												{this.state.editingAllowed &&
+												<button
+													className="btn btn--cta"
+													disabled={this.state.loading}
+													onClick={(e) => {
+														if (currentDocumentId === "consultation") {
+															this.newQuestion(e, currentConsultationId, null, textQuestionTypeId);
+														} else {
+															this.newQuestion(e, currentConsultationId, parseInt(currentDocumentId, 10), textQuestionTypeId);
 														}
-														{questionsToDisplay && questionsToDisplay.length ?
-															<ul className="list--unstyled">
-																{questionsToDisplay.map(question => (
-																	<TextQuestion
-																		readOnly={!this.state.editingAllowed}
-																		updateUnsavedIds={this.updateUnsavedIds}
-																		key={question.questionId}
-																		question={question}
-																		saveQuestion={this.saveQuestion}
-																		deleteQuestion={this.deleteQuestion}
-																	/>
-																))}
-															</ul> : <p>Click button to add a question.</p>
-														}
-													</Fragment>
-													:
-													<p>Choose consulation title or document to add questions.</p>
+													}}
+												>Add text response question
+												</button>
 												}
-											</div>
-										</div>
+												{questionsToDisplay && questionsToDisplay.length ?
+													<ul className="list--unstyled">
+														{questionsToDisplay.map(question => (
+															<TextQuestion
+																readOnly={!this.state.editingAllowed}
+																updateUnsavedIds={this.updateUnsavedIds}
+																key={question.questionId}
+																question={question}
+																saveQuestion={this.saveQuestion}
+																deleteQuestion={this.deleteQuestion}
+															/>
+														))}
+													</ul> : <p>Click button to add a question.</p>
+												}
+											</Fragment>
+											:
+											<p>Choose consulation title or document to add questions.</p>
+										}
 									</div>
 								</div>
 							</div>
 						</div>
-					</Fragment>
-				}
-			</UserContext.Consumer>
+					</div>
+				</div>
+			</Fragment>
 		);
 	}
 }
 
 export default withRouter(Questions);
 
+Questions.contextType = UserContext;
