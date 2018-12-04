@@ -242,6 +242,7 @@ export class Document extends Component<PropsType, StateType> {
 						tagManager({
 							event: "pageview",
 							gidReference: this.state.consultationData.reference,
+							title: this.getPageTitle(),
 							stage: "preview",
 						});
 					});
