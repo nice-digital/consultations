@@ -33,6 +33,12 @@ export function saveCommentHandler(event: Event, comment: CommentType, self: any
 					action: "Clicked",
 					label: "Comment saved button",
 				});
+				tagManager({
+					event: "pageview",
+					gidReference: window.analyticsGlobals.gidReference,
+					title: window.analyticsGlobals.consultationTitle,
+					stage: "save",
+				});
 				self.updateUnsavedIds(`${originalId}c`, false);
 				if (typeof self.issueA11yMessage === "function") {
 					self.issueA11yMessage("Comment saved");

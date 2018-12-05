@@ -57,7 +57,7 @@ export class Submitted extends Component<PropsType, StateType> {
 
 			if (preloadedConsultation) {
 				if (this.props.staticContext) {
-					this.props.staticContext.globals.gidReference = preloadedConsultation.reference;
+					this.props.staticContext.analyticsGlobals.gidReference = preloadedConsultation.reference;
 				}
 				this.state = {
 					consultationData: preloadedConsultation,

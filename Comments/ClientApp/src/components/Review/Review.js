@@ -114,9 +114,9 @@ export class Review extends Component<PropsType, StateType> {
 
 		if (preloadedCommentsData && preloadedConsultationData) {
 			if (this.props.staticContext) {
-				this.props.staticContext.globals.gidReference = preloadedConsultationData.reference;
-				this.props.staticContext.globals.consultationId = preloadedConsultationData.consultationId;
-				this.props.staticContext.globals.stage = preloadedConsultationData.consultationState.userHasSubmitted ? "postsubmission" : "presubmission";
+				this.props.staticContext.analyticsGlobals.gidReference = preloadedConsultationData.reference;
+				this.props.staticContext.analyticsGlobals.consultationId = preloadedConsultationData.consultationId;
+				this.props.staticContext.analyticsGlobals.stage = preloadedConsultationData.consultationState.userHasSubmitted ? "postsubmission" : "presubmission";
 			}
 			this.state = {
 				path: this.props.basename + this.props.location.pathname,
