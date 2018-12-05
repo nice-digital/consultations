@@ -10,7 +10,7 @@ import { UserContext } from "../../context/UserContext";
 import preload from "../../data/pre-loader";
 import { load } from "../../data/loader";
 import { TextQuestion } from "../QuestionTypes/TextQuestion/TextQuestion";
-import { saveQuestionHandler, deleteQuestionHandler } from "../../helpers/editing-and-deleting";
+import { saveQuestionHandler, deleteQuestionHandler, moveQuestionHandler } from "../../helpers/editing-and-deleting";
 import { updateUnsavedIds } from "../../helpers/unsaved-comments";
 
 type PropsType = any; // todo - create flow types
@@ -182,6 +182,10 @@ export class Questions extends Component<PropsType, StateType> {
 		updateUnsavedIds(commentId, dirty, this);
 	};
 
+	moveQuestion = (event: Event, question: QuestionType, direction: string) => {
+		moveQuestionHandler(event, question, direction, this);
+	};
+
 	newQuestion = (e: SyntheticEvent<HTMLElement>, consultationId: string, documentId: number | null, questionTypeId: number) => {
 		const newQuestion = {
 			questionId: -1,
@@ -290,6 +294,7 @@ export class Questions extends Component<PropsType, StateType> {
 																question={question}
 																saveQuestion={this.saveQuestion}
 																deleteQuestion={this.deleteQuestion}
+																moveQuestion={this.moveQuestion}
 															/>
 														))}
 													</ul> : <p>Click button to add a question.</p>

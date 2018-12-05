@@ -11,6 +11,7 @@ type PropsType = {
 	saveQuestion: Function;
 	deleteQuestion: Function;
 	updateUnsavedIds: Function;
+	moveQuestion: Function;
 	readOnly: boolean;
 }
 
@@ -94,6 +95,23 @@ export class TextQuestion extends Component<PropsType, StateType> {
 								tabIndex={0}
 								value={question.questionText}/>
 						</div>
+						{!readOnly &&
+						<div>
+							<button
+								className="btn ml--0 mb--0 right"
+								onClick={e => this.props.deleteQuestion(e, question)}>
+								Delete
+							</button>
+							<button
+								className="btn btn--inverse ml--0 mb--0 right icon icon--chevron-down"
+								onClick={e => this.props.moveQuestion(e, question, "down")}>
+							</button>
+							<button
+								className="btn btn--inverse ml--0 mb--0 right icon icon--chevron-up"
+								onClick={e => this.props.moveQuestion(e, question, "up")}>
+							</button>
+						</div>
+						}
 						{question.questionText && question.questionText.length > 0 && !readOnly ?
 							unsavedChanges ?
 								<input
@@ -105,13 +123,6 @@ export class TextQuestion extends Component<PropsType, StateType> {
 								<span className="ml--0 mb--0 CommentBox__savedIndicator">Saved</span>
 							:
 							null
-						}
-						{!readOnly &&
-						<button
-							className="btn mr--0 mb--0 right"
-							onClick={e => this.props.deleteQuestion(e, question)}>
-							Delete
-						</button>
 						}
 					</form>
 				</section>
