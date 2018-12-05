@@ -85,12 +85,20 @@ namespace Comments.Services
 				return (question: null, validate: new Validate(valid: false, unauthorised: false, message: "Question type not found"));
 
 			var locationToSave = new Models.Location(question as ViewModels.Location);
-            _context.Location.Add(locationToSave);
-	        
             var questionToSave = new Models.Question(question.LocationId, question.QuestionText, question.QuestionTypeId, locationToSave, questionType, answer: null);
+
+	        var consultationsUri = ConsultationsUri.ParseConsultationsUri(questionToSave.Location.SourceURI);
+	        var locationQuestions = _context.GetQuestionsForURI(questionToSave.Location.SourceURI).ToList();
+
+	        var orderConsultation = consultationsUri.ConsultationId.ToString("D3");
+	        var orderDocument = !consultationsUri.DocumentId.HasValue ? "000" : consultationsUri.DocumentId.Value.ToString("D3");
+	        var orderQuestion = locationQuestions.Count.Equals(0) ? "000": locationQuestions.Count.ToString("D3");
 
 	        questionToSave.LastModifiedByUserId = _currentUser.UserId.Value;
 	        questionToSave.LastModifiedDate = DateTime.UtcNow;
+	        questionToSave.Location.Order = $"{orderConsultation}:{orderDocument}:{orderQuestion}";
+
+	        _context.Location.Add(locationToSave);
             _context.Question.Add(questionToSave);
             _context.SaveChanges();
 
@@ -101,7 +109,7 @@ namespace Comments.Services
 	    {
 
 		    var consultation = _consultationService.GetConsultation(consultationId, BreadcrumbType.None, useFilters:false);
-			
+
 		    var consultationSourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
 
 			var locationsWithQuestions = _context.GetQuestionsForDocument(new List<string>{ consultationSourceURI }, partialMatchSourceURI: true).ToList();
