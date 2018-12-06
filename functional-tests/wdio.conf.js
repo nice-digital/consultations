@@ -11,13 +11,14 @@ exports.config = {
         "./src/features/**/*.feature"
     ],
 	exclude: [
-		//"./src/features/**/commentOnChapter.feature"
-		// "./src/features/**/answerQuestion.feature",
-		// "./src/features/**/commentOnDocument.feature",
-		// "./src/features/**/commentOnSection.feature",
-		// "./src/features/**/commentOnSubSection.feature",
-		// "./src/features/**/orderingOnReviewPage.feature",
-		// "./src/features/**/submitComments.feature"
+		// "./src/features/**/commentOnDocument.feature"
+		"./src/features/**/commentOnChapter.feature",
+		"./src/features/**/answerQuestion.feature",
+		"./src/features/**/commentOnSection.feature",
+		"./src/features/**/commentOnSubSection.feature",
+		"./src/features/**/orderingOnReviewPage.feature",
+		"./src/features/**/submitComments.feature",
+		"./src/features/**/unsavedCommentDocPage.feature"
 	],
 
     // Assume user has Chrome and Firefox installed.
