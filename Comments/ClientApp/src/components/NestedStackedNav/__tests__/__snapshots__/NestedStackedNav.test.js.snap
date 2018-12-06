@@ -4,6 +4,11 @@ exports[`[ClientApp]  NestedStackedNav  should match the snapshot 1`] = `
 <nav
   className="stacked-nav NestedStackedNav"
 >
+  <h2
+    className="stacked-nav__root"
+  >
+    Select to add question
+  </h2>
   <ul
     className="stacked-nav__list"
   >
@@ -16,13 +21,13 @@ exports[`[ClientApp]  NestedStackedNav  should match the snapshot 1`] = `
         onClick={[Function]}
       >
         <span
-          data-g="11"
+          data-g="10"
         >
           consultation name
         </span>
         <span
           className="text-right"
-          data-g="1"
+          data-g="2"
         >
           (
           1
@@ -41,13 +46,13 @@ exports[`[ClientApp]  NestedStackedNav  should match the snapshot 1`] = `
             onClick={[Function]}
           >
             <span
-              data-g="11"
+              data-g="10"
             >
               consultation doc 1
             </span>
             <span
               className="text-right"
-              data-g="1"
+              data-g="2"
             >
               (
               1
@@ -64,13 +69,13 @@ exports[`[ClientApp]  NestedStackedNav  should match the snapshot 1`] = `
             onClick={[Function]}
           >
             <span
-              data-g="11"
+              data-g="10"
             >
               consultation doc 2
             </span>
             <span
               className="text-right"
-              data-g="1"
+              data-g="2"
             >
               (
               1
@@ -87,13 +92,13 @@ exports[`[ClientApp]  NestedStackedNav  should match the snapshot 1`] = `
             onClick={[Function]}
           >
             <span
-              data-g="11"
+              data-g="10"
             >
               consultation doc 3
             </span>
             <span
               className="text-right"
-              data-g="1"
+              data-g="2"
             >
               (
               1
@@ -110,13 +115,13 @@ exports[`[ClientApp]  NestedStackedNav  should match the snapshot 1`] = `
             onClick={[Function]}
           >
             <span
-              data-g="11"
+              data-g="10"
             >
               consultation doc 4
             </span>
             <span
               className="text-right"
-              data-g="1"
+              data-g="2"
             >
               (
               1

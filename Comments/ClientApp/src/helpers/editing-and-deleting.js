@@ -1,7 +1,7 @@
 // @flow
 
-import { load } from "../data/loader";
-import { tagManager } from "./tag-manager";
+import {load} from "../data/loader";
+import {tagManager} from "./tag-manager";
 
 // Comments =================================== //
 
@@ -271,6 +271,93 @@ export function deleteQuestionHandler(event: Event, question: QuestionType, self
 			.catch(err => {
 				console.log(err);
 				if (err.response) alert(err.response.statusText);
+			});
+	}
+}
+
+export function moveQuestionHandler(event: Event, question: QuestionType, direction: string, self: any) {
+	event.preventDefault();
+
+	self.setState({
+		loading: true,
+	});
+
+	const questions = question.documentId === null ?
+		self.state.questionsData.consultationQuestions :
+		self.state.questionsData.documents.find(document => document.documentId === question.documentId).documentQuestions;
+	const questionIndex = questions.findIndex(q => q.questionId === question.questionId);
+	let updateableQuestionIndex = null;
+	let moveQuestion = false;
+
+	if(direction.indexOf("up") !== -1 && questionIndex!==0) {
+		updateableQuestionIndex = questionIndex-1;
+		moveQuestion = true;
+	} else if (direction.indexOf("down") !== -1 && questionIndex!==questions.length-1) {
+		updateableQuestionIndex = questionIndex+1;
+		moveQuestion = true;
+	}
+
+	if (moveQuestion === true){
+
+		let originalQuestion = Object.assign({}, question);
+		let updateableQuestion = Object.assign({}, questions[updateableQuestionIndex]);
+		let originalQuestionOrder = originalQuestion.order;
+
+		originalQuestion.order = updateableQuestion.order;
+		updateableQuestion.order = originalQuestionOrder;
+
+		let error = "";
+
+		load("question", undefined, [originalQuestion.questionId], {}, "PUT", originalQuestion, true)
+			.then(res => {
+				if (res.status === 201 || res.status === 200) {
+					load("question", undefined, [updateableQuestion.questionId], {}, "PUT", updateableQuestion, true)
+						.then(res => {
+							if (res.status === 201 || res.status === 200) {
+								self.gatherData()
+									.then(data => {
+										self.setState({
+											loading: false,
+											questionsData: data.questionsData,
+										});
+									})
+									.catch(err => {
+										self.setState({
+											error: {
+												hasError: true,
+												message: "gatherData in componentDidMount failed " + err,
+											},
+										});
+									});
+							}
+						})
+						.catch(err => {
+							console.log(err);
+							if (err.response) {
+								error = "save";
+								self.setState({
+									loading:false,
+									error,
+								});
+								if (typeof self.issueA11yMessage === "function") {
+									self.issueA11yMessage("There was a problem moving this question");
+								}
+							}
+						});
+				}
+			})
+			.catch(err => {
+				console.log(err);
+				if (err.response) {
+					error = "save";
+					self.setState({
+						loading:false,
+						error,
+					});
+					if (typeof self.issueA11yMessage === "function") {
+						self.issueA11yMessage("There was a problem moving this question");
+					}
+				}
 			});
 	}
 }

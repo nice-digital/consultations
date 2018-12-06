@@ -69,7 +69,7 @@ namespace Comments.Models
 					.ThenInclude(s => s.Submission)
 
 				.Include(l => l.Comment)
-					.ThenInclude(s => s.Status)	
+					.ThenInclude(s => s.Status)
 
 				.Include(l => l.Question)
 					.ThenInclude(q => q.QuestionType)
@@ -98,8 +98,8 @@ namespace Comments.Models
 			}
 
 			return data;
-			
-			
+
+
 		}
 
 		public IEnumerable<Location> GetQuestionsForDocument(IList<string> sourceURIs, bool partialMatchSourceURI)
@@ -184,6 +184,15 @@ namespace Comments.Models
 				.ToList();
 
 			return answer;
+	    }
+
+	    public List<Question> GetQuestionsForURI(string sourceURI)
+	    {
+		    return Question.Where(q => q.Location.SourceURI.Equals(sourceURI))
+			    .Include(q => q.Location)
+			    .Include(q => q.QuestionType)
+			    .OrderBy(q => q.Location.Order)
+			    .ToList();
 	    }
 		public List<Question> GetUnansweredQuestionsForURI(string sourceURI)
 	    {
@@ -325,12 +334,12 @@ namespace Comments.Models
 
 			var submissions = Submission.Where(s => s.SubmissionByUserId.Equals(usersSubmissionsToDelete))
 			    .Include(s => s.SubmissionComment)
-					.ThenInclude(sc => sc.Comment) 
+					.ThenInclude(sc => sc.Comment)
 				.Include(s => s.SubmissionAnswer)
 					.ThenInclude(sa => sa.Answer)
 				.IgnoreQueryFilters() //without this you'd only be able to delete your own data..
 				.ToList();
-			
+
 		    var submissionCommentsToDelete = new List<SubmissionComment>();
 		    var submissionAnswersToDelete = new List<SubmissionAnswer>();
 		    foreach (var submission in submissions)
@@ -385,7 +394,7 @@ namespace Comments.Models
 				FROM QuestionType
 				WHERE [Description] = @questionTextDescription
 
-				IF @questionTypeID IS NULL 
+				IF @questionTypeID IS NULL
 				BEGIN
 					INSERT INTO QuestionType ([Description], HasBooleanAnswer, HasTextAnswer)
 					VALUES (@questionTextDescription, 0, 1)
@@ -426,8 +435,8 @@ namespace Comments.Models
 
 
 					INSERT INTO Question (LocationID, QuestionText, QuestionTypeID, CreatedByUserID, LastModifiedByUserID, LastModifiedDate)
-					VALUES (@locationID3, 'Would implementation of any of the draft recommendations have cost implications?', @questionTypeID, @userID, @userID, GETDATE())			
-		
+					VALUES (@locationID3, 'Would implementation of any of the draft recommendations have cost implications?', @questionTypeID, @userID, @userID, GETDATE())
+
 				END
 			", new SqlParameter("@consultationId", consultationId));
 	    }
@@ -463,7 +472,7 @@ namespace Comments.Models
 				FROM QuestionType
 				WHERE [Description] = @questionTextDescription
 
-				IF @questionTypeID IS NULL 
+				IF @questionTypeID IS NULL
 				BEGIN
 					INSERT INTO QuestionType ([Description], HasBooleanAnswer, HasTextAnswer)
 					VALUES (@questionTextDescription, 0, 1)
@@ -502,8 +511,8 @@ namespace Comments.Models
 					VALUES (@locationID2, 'Are the summaries of clinical and cost effectiveness reasonable interpretations of the evidence?', @questionTypeID, @userID, @userID, GETDATE())
 
 					INSERT INTO Question (LocationID, QuestionText, QuestionTypeID, CreatedByUserID, LastModifiedByUserID, LastModifiedDate)
-					VALUES (@locationID3, 'Are the recommendations sound and a suitable basis for guidance to the NHS?', @questionTypeID, @userID, @userID, GETDATE())			
-		
+					VALUES (@locationID3, 'Are the recommendations sound and a suitable basis for guidance to the NHS?', @questionTypeID, @userID, @userID, GETDATE())
+
 				END
 
 			", new SqlParameter("@consultationId", consultationId));
