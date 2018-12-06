@@ -569,6 +569,7 @@ Array [
                                             data-qa-sel="in-text-comment-button"
                                             onClick={[Function]}
                                             tabIndex={0}
+                                            title="Comment on chapter"
                                         >
                                             <span
                                                 aria-hidden="true"
@@ -592,7 +593,7 @@ Array [
                                                     "position": "relative",
                                                   }
                                             }
-                                            title="Comment on chapter"
+                                            title=""
                                             xmlns=""
                                         >
                                             Introduction 
