@@ -126,6 +126,12 @@ export function saveAnswerHandler(event: Event, answer: AnswerType, questionId: 
 					action: "Clicked",
 					label: "Save answer button",
 				});
+				tagManager({
+					event: "pageview",
+					gidReference: window.analyticsGlobals.gidReference,
+					title: window.analyticsGlobals.consultationTitle,
+					stage: "save",
+				});
 				self.updateUnsavedIds(`${questionId}q`, false);
 				if (typeof self.issueA11yMessage === "function") {
 					self.issueA11yMessage("Answer saved");
