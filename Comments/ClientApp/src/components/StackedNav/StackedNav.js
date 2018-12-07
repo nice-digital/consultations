@@ -8,7 +8,8 @@ type LinkType = {
 	label: string,
 	url: string,
 	current?: boolean,
-	isReactRoute: boolean
+	isReactRoute: boolean,
+	marker?: string,
 };
 
 type PropsType = {
@@ -37,13 +38,17 @@ export class StackedNav extends PureComponent<PropsType> {
 				<h2 className="stacked-nav__root">{title}</h2>
 				<ul className="stacked-nav__list">
 					{links.map((item, index) => (
-						<li key={index} data-qa-sel="nav-list-item" className="stacked-nav__list-item">
+						<li key={index} data-qa-sel="nav-list-item" className="stacked-nav__list-item grid grid--gutterless">
 							{item.isReactRoute ?
-								item.current ?
-									<Link to={item.url} aria-current="page">{item.label}</Link>
-									:
-									// if !item.current
-									<Link to={item.url}>{item.label}</Link>
+								<Link
+									to={item.url}
+									aria-current={item.current ? "page" : null}
+								>
+									<span data-g="10">{item.label}</span>
+									{item.marker &&
+										<span className="text-right" data-g="2">({item.marker})</span>
+									}
+								</Link>
 								:
 								// if !item.isReactRoute
 								<a href={item.url}
