@@ -97,32 +97,38 @@ export class TextQuestion extends Component<PropsType, StateType> {
 						</div>
 						{!readOnly &&
 						<div>
+							{question.questionText && question.questionText.length > 0 && !readOnly ?
+								unsavedChanges ?
+									<input
+										className="btn ml--0 mb--0"
+										type="submit"
+										value="Save Question"
+									/>
+									:
+									<span className="ml--0 mb--0 CommentBox__savedIndicator">Saved</span>
+								:
+								null
+							}
 							<button
-								className="btn ml--0 mb--0 right"
+								className="btn btn--inverse ml--0 mb--0 icon icon--chevron-up"
+								onClick={e => this.props.moveQuestion(e, question, "up")}>
+								<span className="visually-hidden">
+									Move Up
+								</span>
+							</button>
+							<button
+								className="btn btn--inverse ml--0 mb--0 icon icon--chevron-down"
+								onClick={e => this.props.moveQuestion(e, question, "down")}>
+								<span className="visually-hidden">
+									Move Down
+								</span>
+							</button>
+							<button
+								className="btn mr--0 mb--0 pull-right"
 								onClick={e => this.props.deleteQuestion(e, question)}>
 								Delete
 							</button>
-							<button
-								className="btn btn--inverse ml--0 mb--0 right icon icon--chevron-down"
-								onClick={e => this.props.moveQuestion(e, question, "down")}>
-							</button>
-							<button
-								className="btn btn--inverse ml--0 mb--0 right icon icon--chevron-up"
-								onClick={e => this.props.moveQuestion(e, question, "up")}>
-							</button>
 						</div>
-						}
-						{question.questionText && question.questionText.length > 0 && !readOnly ?
-							unsavedChanges ?
-								<input
-									className="btn ml--0 mb--0"
-									type="submit"
-									value="Save Question"
-								/>
-								:
-								<span className="ml--0 mb--0 CommentBox__savedIndicator">Saved</span>
-							:
-							null
 						}
 					</form>
 				</section>
