@@ -16,7 +16,6 @@
         "hasDocumentsWhichAllowConsultationComments":false,
         "hasDocumentsWhichAllowConsultationQuestions":true,
         "supportsQuestions":false,
-        "supportsComments":false,
         "partiallyUpdatedProjectReference":null,
         "origProjectReference":null,
         "user":{
@@ -46,7 +45,6 @@
         "hasDocumentsWhichAllowConsultationComments":false,
         "hasDocumentsWhichAllowConsultationQuestions":true,
         "supportsQuestions":false,
-        "supportsComments":false,
         "partiallyUpdatedProjectReference":null,
         "origProjectReference":null,
         "user":{
