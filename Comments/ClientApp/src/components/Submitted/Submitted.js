@@ -4,8 +4,6 @@ import React, { Fragment, Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { tagManager } from "../../helpers/tag-manager";
 import Helmet from "react-helmet";
-import { PhaseBanner } from "../PhaseBanner/PhaseBanner";
-import { projectInformation } from "../../constants";
 import BreadCrumbsWithRouter from "../Breadcrumbs/Breadcrumbs";
 import { Header } from "../Header/Header";
 import { UserContext } from "../../context/UserContext";
@@ -133,11 +131,6 @@ export class Submitted extends Component<PropsType, StateType> {
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">
-							<PhaseBanner
-								phase={projectInformation.phase}
-								name={projectInformation.name}
-								repo={projectInformation.repo}
-							/>
 							<BreadCrumbsWithRouter links={this.state.consultationData.breadcrumbs}/>
 							<main role="main">
 								<div className="page-header">

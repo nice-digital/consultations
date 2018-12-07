@@ -9,6 +9,7 @@ using NICE.Feeds.Models.Indev.List;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DocumentFormat.OpenXml.Office2010.Word;
 
 namespace Comments.Services
 {
@@ -37,7 +38,8 @@ namespace Comments.Services
 		bool HasSubmittedCommentsOrQuestions(string consultationSourceURI, Guid userId);
 	    IEnumerable<BreadcrumbLink> GetBreadcrumbs(ConsultationDetail consultation, BreadcrumbType breadcrumbType);
 
-	    string GetFirstChapterSlug(int consultationId, int documentId);
+	    (int? documentId, string chapterSlug) GetFirstConvertedDocumentAndChapterSlug(int consultationId);
+		string GetFirstChapterSlug(int consultationId, int documentId);
 	    string GetFirstChapterSlugFromPreviewDocument(string reference, int consultationId, int documentId);
 
     }
@@ -121,7 +123,7 @@ namespace Comments.Services
 
 		    if (breadcrumbType == BreadcrumbType.Review)
 		    {
-			    var firstDocument = GetDocuments(consultation.ConsultationId).FirstOrDefault(d => d.ConvertedDocument);
+			    var firstDocument = GetDocuments(consultation.ConsultationId).FirstOrDefault(d => d.ConvertedDocument && d.DocumentId > 0);
 			    var firstChapter = firstDocument?.Chapters.FirstOrDefault();
 
 			    if (firstChapter != null)
@@ -129,6 +131,16 @@ namespace Comments.Services
 		    }
 
 		    return breadcrumbs;
+	    }
+
+	    public (int? documentId, string chapterSlug) GetFirstConvertedDocumentAndChapterSlug(int consultationId)
+	    {
+			var firstDocument = GetDocuments(consultationId).FirstOrDefault(d => d.ConvertedDocument && d.DocumentId > 0);
+		    if (firstDocument == null)
+			    return (null, null);
+
+			var chapterSlug = firstDocument.Chapters.FirstOrDefault()?.Slug;
+			return (firstDocument.DocumentId, chapterSlug);
 	    }
 
 	    public string GetFirstChapterSlug(int consultationId, int documentId)

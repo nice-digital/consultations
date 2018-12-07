@@ -113,6 +113,11 @@ namespace Comments.Migrations
 			//add classes and constants for the other tables when needed.
 	    }
 
+	    public static class Views
+	    {
+		    public const string SubmittedCommentAndAnswerCount = "View_SubmittedCommentAndAnswerCount";
+	    }
+
 		/// <summary>
 		/// Annotations are here to support targetting different DB providers.
 		/// see: https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/providers

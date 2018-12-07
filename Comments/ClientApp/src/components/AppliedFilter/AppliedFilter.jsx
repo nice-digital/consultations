@@ -1,14 +1,16 @@
 // @flow
 
 import React, { Component } from "react";
+//import stringifyObject from "stringify-object";
 
 import { removeQueryParameter } from "./../../helpers/utils";
 import { withHistory } from "./../HistoryContext/HistoryContext";
 
 type PropsType = {
-	appliedFilter: TopicListAppliedFilterType,
+	appliedFilter: AppliedFilterType,
 	history: HistoryType,
-	path: string
+	path: string,
+	onRemoveFilter: Function,
 };
 
 export class AppliedFilter extends Component<PropsType> {
@@ -23,6 +25,9 @@ export class AppliedFilter extends Component<PropsType> {
 	handleRemoveFilterLinkClick(e: DOMEvent) {
 		e.preventDefault();
 		this.props.history.push(this.getHref());
+		if (typeof(this.props.onRemoveFilter) === "function"){
+			this.props.onRemoveFilter(e.currentTarget.getAttribute("data-option-id"));
+		}
 	}
 
 	getHref() {
@@ -39,7 +44,9 @@ export class AppliedFilter extends Component<PropsType> {
 					<a href={this.getHref()}
 						className="tag__remove gtm-topic-list-applied-filter"
 						title={filterTitle}
-						onClick={this.handleRemoveFilterLinkClick}>
+						onClick={this.handleRemoveFilterLinkClick}
+						data-option-id={this.props.appliedFilter.optionId}
+					>						
 						<span className="icon icon--remove" aria-hidden="true"></span>
 						<span className="visually-hidden">Remove ‘{filterTitle}’ filter</span>
 					</a>

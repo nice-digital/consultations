@@ -3,7 +3,6 @@
 import React, { Component, Fragment } from "react";
 import { Prompt, withRouter } from "react-router-dom";
 import Helmet from "react-helmet";
-
 import { LoginBanner } from "../LoginBanner/LoginBanner";
 import { NestedStackedNav } from "../NestedStackedNav/NestedStackedNav";
 import { UserContext } from "../../context/UserContext";
@@ -301,7 +300,7 @@ export class Questions extends Component<PropsType, StateType> {
 												}
 											</Fragment>
 											:
-											<p>Choose consulation title or document to add questions.</p>
+											<p>Choose consultation title or document to add questions.</p>
 										}
 									</div>
 								</div>

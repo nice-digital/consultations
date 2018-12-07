@@ -10,9 +10,17 @@ namespace Comments.Test.Infrastructure
 {
 	public class FakeFeedService : IFeedService
 	{
+		private readonly IEnumerable<ConsultationList> _consultationList;
+		public FakeFeedService() { }
+		public FakeFeedService(IEnumerable<ConsultationList> consultationList)
+		{
+			_consultationList = consultationList;
+		}
+
+
 		public IEnumerable<ConsultationList> GetConsultationList()
 		{
-			throw new NotImplementedException();
+			return _consultationList;
 		}
 
 		public ConsultationDetail GetIndevConsultationDetailForPublishedProject(int consultationId, PreviewState previewState,

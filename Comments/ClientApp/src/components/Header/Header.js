@@ -25,7 +25,7 @@ export class Header extends PureComponent<PropsType> {
 
 		let endDate, isOpen, notStartedYet;
 
-		if (this.props.constultationState) {
+		if (this.props.consultationState) {
 			endDate = this.props.consultationState.endDate || "";
 			isOpen = this.props.consultationState.consultationIsOpen || "";
 			notStartedYet = this.props.consultationState.consultationHasNotStartedYet || "";

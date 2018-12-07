@@ -6,10 +6,8 @@ import { withRouter } from "react-router";
 
 import preload from "../../data/pre-loader";
 import { load } from "./../../data/loader";
-import { PhaseBanner } from "./../PhaseBanner/PhaseBanner";
 import BreadCrumbsWithRouter from "./../Breadcrumbs/Breadcrumbs";
 import { StackedNav } from "./../StackedNav/StackedNav";
-import { projectInformation } from "../../constants";
 import { processPreviewHtml } from "../../document-processing/process-preview-html";
 import { LoginBanner } from "./../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
@@ -290,11 +288,6 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 						<div className="container">
 							<div className="grid">
 								<div data-g="12">
-									<PhaseBanner
-										phase={projectInformation.phase}
-										name={projectInformation.name}
-										repo={projectInformation.repo}
-									/>
 									{this.state.consultationData.breadcrumbs &&
 										<BreadCrumbsWithRouter links={this.state.consultationData.breadcrumbs}/>
 									}

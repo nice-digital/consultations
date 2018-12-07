@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Comments.Models
 {
@@ -45,9 +46,8 @@ namespace Comments.Models
 		/// </summary>
 		/// <param name="sourceURIs"></param>
 		/// <param name="partialMatchSourceURI">True if data is being retrieved for the review page</param>
-		/// <param name="getSubmitted">True if data is being retrieved should only be submitted data</param>
 		/// <returns></returns>
-		public IEnumerable<Location> GetAllCommentsAndQuestionsForDocument(IList<string> sourceURIs, bool partialMatchSourceURI, bool getSubmitted = false)
+		public IEnumerable<Location> GetAllCommentsAndQuestionsForDocument(IList<string> sourceURIs, bool partialMatchSourceURI)
 		{
 			string partialSourceURIToUse = null, partialMatchExactSourceURIToUse = null;
 		    if (partialMatchSourceURI)
@@ -84,22 +84,7 @@ namespace Comments.Models
 
 				.ToList();
 
-			if (getSubmitted)
-			{
-				var filteredData = data.Where(l =>
-												(l.Comment != null && l.Comment.Count != 0 ? l.Comment.Any(c => c.StatusId == (int)StatusName.Submitted) : false)
-												||
-												(l.Question != null && l.Question.Count != 0 ? l.Question.Any(q => q.Answer.Count() == 0) : false)
-												||
-												(l.Question != null && l.Question.Count != 0 ? l.Question.FirstOrDefault().Answer.Any(c => c.StatusId == (int)StatusName.Submitted) : false)
-											);
-
-				return filteredData;
-			}
-
 			return data;
-
-
 		}
 
 		public IEnumerable<Location> GetQuestionsForDocument(IList<string> sourceURIs, bool partialMatchSourceURI)
@@ -129,9 +114,39 @@ namespace Comments.Models
 				.ToList();
 
 			return data;
-
-
 		}
+
+	    public int GetAllSubmittedResponses(string sourceURI)
+	    {
+			var submissions = Submission.Where(s => (s.SubmissionComment.Any(sc => sc.Comment.IsDeleted == false) &&
+			                                               s.SubmissionComment.Any(sc => sc.Comment.Location.SourceURI.Contains(sourceURI)) &&
+			                                               s.SubmissionComment.Any(sc => sc.Comment.StatusId == (int) StatusName.Submitted))
+													||
+			                                        (s.SubmissionAnswer.Any(sa => sa.Answer.IsDeleted == false) &&
+															s.SubmissionAnswer.Any(sa => sa.Answer.Question.Location.SourceURI.Contains(sourceURI)) &&
+															s.SubmissionAnswer.Any(sa => sa.Answer.StatusId == (int)StatusName.Submitted))
+												)
+
+				//these includes aren't needed when they're not used in the resultset. since we've switched it to return the count from the SQL then the joins aren't needed.
+				//.Include(sc => sc.SubmissionComment)
+				//	.ThenInclude(c => c.Comment)
+				//		.ThenInclude(l => l.Location)
+
+				//.Include(sa => sa.SubmissionAnswer)
+				//.ThenInclude(a => a.Answer)
+				//	.ThenInclude(q => q.Question)
+				//		.ThenInclude(l => l.Location)
+
+				.IgnoreQueryFilters()
+				.Select(s => s.SubmissionId).Distinct().Count();
+
+		    return submissions;
+	    }
+
+	    public virtual IList<SubmittedCommentsAndAnswerCount> GetSubmittedCommentsAndAnswerCounts()
+	    {
+		    return SubmittedCommentsAndAnswerCounts.ToList();
+	    }
 
 		public List<Comment> GetAllSubmittedCommentsForURI(string  sourceURI)
 	    {
@@ -194,6 +209,7 @@ namespace Comments.Models
 			    .OrderBy(q => q.Location.Order)
 			    .ToList();
 	    }
+
 		public List<Question> GetUnansweredQuestionsForURI(string sourceURI)
 	    {
 			var question = Question.Where(q =>
@@ -576,8 +592,8 @@ namespace Comments.Models
 
 	    public (int totalComments, int totalAnswers, int totalSubmissions) GetStatusData()
 	    {
-		    return (totalComments: Comment.IgnoreQueryFilters().Count(),
-			    totalAnswers: Answer.IgnoreQueryFilters().Count(),
+		    return (totalComments: Comment.IgnoreQueryFilters().Count(c => c.IsDeleted == false),
+			    totalAnswers: Answer.IgnoreQueryFilters().Count(a => a.IsDeleted == false),
 			    totalSubmissions: Submission.IgnoreQueryFilters().Count());
 	    }
 
@@ -585,5 +601,82 @@ namespace Comments.Models
 	    {
 		    return QuestionType;
 	    }
-    }
+
+		/// <summary>
+		/// this question insert script is temporary, until the question administration features are built.
+		/// </summary>
+		/// <param name="consultationId"></param>
+		/// <returns></returns>
+		public int InsertQuestionsWithScriptForCfGConsultation(int consultationId)
+		{
+			return Database.ExecuteSqlCommand(@"
+				--DECLARE @consultationId AS int --UNCOMMENT OUT THESE 2 LINES TO USE IN SQL MANAGEMENT STUDIO
+				--SET @consultationId = 210
+
+				DECLARE @questionTypeID AS int
+				DECLARE @locationID1 AS int, @locationID2 AS int, @locationID3 AS int
+
+				DECLARE @userID as uniqueidentifier
+				SELECT @userID = cast(cast(0 AS binary) AS uniqueidentifier)
+
+				DECLARE @questionTextDescription nvarchar(100)
+				SET @questionTextDescription = 'A text question requiring a text answer.'
+
+				DECLARE @questionOneText nvarchar(MAX)
+				SET @questionOneText = 'Do you agree with the proposal for a partial update/not to update the guideline?'
+
+				DECLARE @consultationIdPaddedForOrder nvarchar(3)
+				SELECT @consultationIdPaddedForOrder = RIGHT('000'+ CAST(@consultationId AS VARCHAR(3)),3)
+
+				--question type insert
+				SELECT @questionTypeID = QuestionTypeID
+				FROM QuestionType
+				WHERE [Description] = @questionTextDescription
+
+				IF @questionTypeID IS NULL
+				BEGIN
+					INSERT INTO QuestionType ([Description], HasBooleanAnswer, HasTextAnswer)
+					VALUES (@questionTextDescription, 0, 1)
+
+					SET @questionTypeID = SCOPE_IDENTITY();
+				END
+
+				--3 location inserts. the questions are all consultation level, but there's an order to preserve.
+				IF NOT EXISTS (SELECT * FROM [Location] L
+								INNER JOIN Question Q ON Q.LocationID = L.LocationID
+								WHERE L.SourceURI = 'consultations://./consultation/' + CAST(@consultationId AS varchar) AND
+								Q.QuestionText = @questionOneText)
+				BEGIN
+
+					INSERT INTO [Location] (SourceURI, [Order])
+					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar), @consultationIdPaddedForOrder + '.000.000.000.001')
+
+					SET @locationID1 = SCOPE_IDENTITY();
+
+					INSERT INTO [Location] (SourceURI, [Order])
+					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar), @consultationIdPaddedForOrder + '.000.000.000.002')
+
+					SET @locationID2 = SCOPE_IDENTITY();
+
+					INSERT INTO [Location] (SourceURI, [Order])
+					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar), @consultationIdPaddedForOrder + '.000.000.000.003')
+
+					SET @locationID3 = SCOPE_IDENTITY();
+
+					--now the question inserts
+
+					INSERT INTO Question (LocationID, QuestionText, QuestionTypeID, CreatedByUserID, LastModifiedByUserID, LastModifiedDate)
+					VALUES (@locationID1, @questionOneText, @questionTypeID, @userID, @userID, GETDATE())
+
+					INSERT INTO Question (LocationID, QuestionText, QuestionTypeID, CreatedByUserID, LastModifiedByUserID, LastModifiedDate)
+					VALUES (@locationID2, 'Do you have any comments on areas excluded from the scope of the guideline?', @questionTypeID, @userID, @userID, GETDATE())
+
+					INSERT INTO Question (LocationID, QuestionText, QuestionTypeID, CreatedByUserID, LastModifiedByUserID, LastModifiedDate)
+					VALUES (@locationID3, 'Do you have any comments on equalities issues?', @questionTypeID, @userID, @userID, GETDATE())
+
+				END
+
+			", new SqlParameter("@consultationId", consultationId));
+		}
+	}
 }

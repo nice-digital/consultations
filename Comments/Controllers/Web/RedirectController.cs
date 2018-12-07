@@ -1,7 +1,7 @@
+using Comments.Common;
 using Comments.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using Comments.Common;
 
 namespace Comments.Controllers.Web
 {
@@ -14,7 +14,25 @@ namespace Comments.Controllers.Web
 		    _consultationService = consultationService;
 	    }
 
-	    public IActionResult PublishedDocumentWithoutChapter(int consultationId, int documentId)
+	    public IActionResult PublishedRedirectWithoutDocument(int consultationId)
+	    {
+		    if (consultationId <= 0)
+			    throw new ArgumentException(nameof(consultationId));
+
+		    var documentIdAndChapterSlug = _consultationService.GetFirstConvertedDocumentAndChapterSlug(consultationId);
+
+		    if (!documentIdAndChapterSlug.documentId.HasValue)
+			    throw new Exception($"No converted document found for consultation: {consultationId}");
+
+			if (string.IsNullOrWhiteSpace(documentIdAndChapterSlug.chapterSlug))
+			    throw new Exception($"No chapter found for consultation: {consultationId} with doc id: {documentIdAndChapterSlug.documentId}");
+
+			var redirectUrl = string.Format(Constants.ConsultationsReplaceableRelativeUrl, consultationId, documentIdAndChapterSlug.documentId, documentIdAndChapterSlug.chapterSlug);
+
+		    return Redirect(redirectUrl);
+	    }
+
+		public IActionResult PublishedDocumentWithoutChapter(int consultationId, int documentId)
         {
 			if (consultationId <= 0)
 				throw new ArgumentException(nameof(consultationId));

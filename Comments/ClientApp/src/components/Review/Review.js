@@ -14,14 +14,11 @@ import {
 } from "../../helpers/editing-and-deleting";
 import { queryStringToObject } from "../../helpers/utils";
 import { tagManager } from "../../helpers/tag-manager";
-import { projectInformation } from "../../constants";
 import { UserContext } from "../../context/UserContext";
-
 import { Header } from "../Header/Header";
-import { PhaseBanner } from "../PhaseBanner/PhaseBanner";
 import BreadCrumbsWithRouter from "../Breadcrumbs/Breadcrumbs";
 import { FilterPanel } from "../FilterPanel/FilterPanel";
-import { ResultsInfo } from "../ResultsInfo/ResultsInfo";
+import { ReviewResultsInfo } from "../ReviewResultsInfo/ReviewResultsInfo";
 import { withHistory } from "../HistoryContext/HistoryContext";
 import { CommentBox } from "../CommentBox/CommentBox";
 import { Question } from "../Question/Question";
@@ -450,11 +447,6 @@ export class Review extends Component<PropsType, StateType> {
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">
-							<PhaseBanner
-								phase={projectInformation.phase}
-								name={projectInformation.name}
-								repo={projectInformation.repo}
-							/>
 							<BreadCrumbsWithRouter links={this.state.consultationData.breadcrumbs}/>
 							<UserContext.Consumer>
 								{(contextValue: ContextType) => {
@@ -492,9 +484,7 @@ export class Review extends Component<PropsType, StateType> {
 															your response</a>
 														}
 														<h2>What happens next?</h2>
-														<p>We will review all the submissions received for this consultation. Our response
-															will
-															be published on the website around the time the guidance is published.</p>
+														<p>We will review all the submissions received for this consultation. Our response	will be published on the website around the time the guidance is published.</p>
 														<hr/>
 													</Fragment>
 													}
@@ -503,10 +493,11 @@ export class Review extends Component<PropsType, StateType> {
 													{/*Review Comments Columns */}
 													<div className="grid">
 														<div data-g="12 md:3" className="sticky">
+															<h2 className="h5 mt--0">Filter</h2>
 															<FilterPanel filters={this.state.commentsData.filters} path={this.state.path}/>
 														</div>
 														<div data-g="12 md:9">
-															<ResultsInfo
+															<ReviewResultsInfo
 																commentCount={commentsToShow.length}
 																showCommentsCount={this.state.consultationData.consultationState.shouldShowCommentsTab}
 																questionCount={questionsToShow.length}

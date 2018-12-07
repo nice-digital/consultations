@@ -1,34 +1,25 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Comments.Services;
 using Comments.Test.Infrastructure;
-using Newtonsoft.Json;
-using NICE.Feeds.Tests.Infrastructure;
-using Shouldly;
 using Xunit;
-using TestBase = Comments.Test.Infrastructure.TestBase;
+using Newtonsoft.Json;
+using Shouldly;
 
 namespace Comments.Test.IntegrationTests.API.Questions
 {
-	public static class FakeConsultationServiceFactory //if you want to use this somewhere else, then please move it first. 
-	{
-		public static IConsultationService Get(int documentCount)
-		{
-			return new FakeConsultationService(true, documentCount);
-		}
-	}
-
 	public class QuestionsAdminTests : TestBase
 	{
-		private static readonly int DocumentCount = 3;
-		public QuestionsAdminTests() : base(false, Feed.ConsultationCommentsPublishedDetailMulitpleDoc.FilePath, FakeConsultationServiceFactory.Get(DocumentCount)) { }
+		private static readonly int DocumentCount = 1;
+		public QuestionsAdminTests() : base(false, TestUserType.Administrator, true) { }
 
 		[Fact]
 		public async Task GetQuestions()
 		{
+			ResetDatabase();
+
 			//Arrange
-			const string sourceURI = "consultations://./consultation/1/document/2";
+			const string sourceURI = "consultations://./consultation/1/document/1";
 			var description = Guid.NewGuid().ToString();
 			var questionText = Guid.NewGuid().ToString();
 			var userId = Guid.Empty;
@@ -40,7 +31,7 @@ namespace Comments.Test.IntegrationTests.API.Questions
 			var consultationId = 1;
 
 			//Act
-			var response = await _client.GetAsync($"/consultations/api/questions?consultationId={consultationId}");
+			var response = await _client.GetAsync($"consultations/api/questions?consultationId={consultationId}");
 			response.EnsureSuccessStatusCode();
 			var responseString = await response.Content.ReadAsStringAsync();
 			var deserialisedQuestionAdmin = JsonConvert.DeserializeObject<ViewModels.QuestionAdmin>(responseString);
@@ -51,10 +42,9 @@ namespace Comments.Test.IntegrationTests.API.Questions
 
 			deserialisedQuestionAdmin.Documents.Count().ShouldBe(DocumentCount);
 
-			var documentWithQuestion = deserialisedQuestionAdmin.Documents.First(d => d.DocumentId == 2 && d.SupportsQuestions);
+			var documentWithQuestion = deserialisedQuestionAdmin.Documents.First(d => d.DocumentId == 1 && d.SupportsQuestions);
 			documentWithQuestion.SupportsQuestions.ShouldBeTrue();
 			documentWithQuestion.DocumentQuestions.Single().QuestionId.ShouldBe(questionId);
-
 		}
 	}
 }

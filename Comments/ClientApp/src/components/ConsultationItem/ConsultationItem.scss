@@ -1,0 +1,8 @@
+.ConsultationItem {
+ .tag--open {
+   @extend .tag--live;
+ }
+  .tag--upcoming {
+    @extend .tag--beta;
+  }
+}

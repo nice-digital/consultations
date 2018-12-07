@@ -82,35 +82,6 @@ Array [
             <div
                   data-g="12"
             >
-                  <aside
-                        className="phase-banner mt--b"
-                  >
-                        <span
-                              className="phase-banner__tag"
-                              onClick={[Function]}
-                              role="button"
-                        >
-                              <span
-                                    className="tag tag--impact tag--agile"
-                              >
-                                    beta
-                              </span>
-                        </span>
-                        <span
-                              className="phase-banner__label"
-                        >
-                              NICE Consultations
-                               is in development, which means that some features may not work fully.
-                               
-                              <a
-                                    href="/get-involved/contact-us"
-                                    rel="noopener noreferrer"
-                                    target="_blank"
-                              >
-                                    Report an issue
-                              </a>
-                        </span>
-                  </aside>
                   <nav
                         aria-label="Breadcrumbs"
                   >
@@ -191,20 +162,15 @@ Array [
                                           className="sticky"
                                           data-g="12 md:3"
                                     >
+                                          <h2
+                                                className="h5 mt--0"
+                                          >
+                                                Filter
+                                          </h2>
                                           <div
                                                 className="filter-panel"
                                           >
-                                                <button
-                                                      aria-controls="filter-panel-body"
-                                                      aria-expanded={true}
-                                                      className="filter-panel__heading"
-                                                      onClick={[Function]}
-                                                      type="button"
-                                                >
-                                                      Filter
-                                                </button>
                                                 <div
-                                                      aria-hidden={false}
                                                       className="filter-panel__body"
                                                       id="filter-panel-body"
                                                 >

@@ -11,9 +11,10 @@ import SubmittedWithRouter from "../Submitted/Submitted";
 import UserProviderWithRouter from "../../context/UserContext";
 import FooterWithRouter from "../Footer/Footer";
 import DocumentPreviewWithRouter from "../DocumentPreview/DocumentPreview";
+import DownloadWithRouter from "../Download/Download";
 import QuestionsWithRouter from "../Questions/Questions";
-import { ErrorBoundary } from "../ErrorBoundary/ErrorBoundary";
-import { LiveAnnouncer, LiveMessenger } from "react-aria-live";
+import {ErrorBoundary} from "../ErrorBoundary/ErrorBoundary";
+import {LiveAnnouncer, LiveMessenger} from "react-aria-live";
 import { projectInformation } from "../../constants";
 import { PhaseBanner } from "../PhaseBanner/PhaseBanner";
 
@@ -49,6 +50,11 @@ class App extends React.Component<PropsType, StateType> {
 								{/*Download*/}
 								<Route exact path="/admin">
 									<Redirect to={"/admin/download"}/>
+								</Route>
+
+								{/*Download*/}
+								<Route exact path="/admin/download">
+									<DownloadWithRouter basename={this.props.basename}/>
 								</Route>
 
 								{/*Questions*/}

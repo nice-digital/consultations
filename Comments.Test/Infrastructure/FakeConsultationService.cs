@@ -51,6 +51,11 @@ namespace Comments.Test.Infrastructure
 	    {
 		    return new List<Consultation>(){ new Consultation("GID-WAVE", "title", "some name", DateTime.MinValue, DateTime.MaxValue, "consultation type", "resource title id", "project type",
 				"product type name", "developed as", "relevant to", 1, "process", true, true, true, true, "partially updated reference", "original reference", new User(true, "Benjamin Button", Guid.Empty, "org name"))};
+		}
+
+	    public (int? documentId, string chapterSlug) GetFirstConvertedDocumentAndChapterSlug(int consultationId)
+	    {
+		    return (documentId: 1, chapterSlug: "my-chapter-slug");
 	    }
 
 		#region Not Implemented Members
