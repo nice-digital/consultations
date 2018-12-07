@@ -449,7 +449,7 @@ namespace Comments.Export
 
 			Fills fills = new Fills(
 				new Fill(new PatternFill() { PatternType = PatternValues.None }), // Index 0 - default
-				new Fill(new PatternFill() { PatternType = PatternValues.Gray125 }), // Index 1 - default
+				new Fill(new PatternFill() { PatternType = PatternValues.Gray125 }), // Index 1 - should be able to remove this as it isn't used, it breaks if I do though
 				new Fill(new PatternFill(new ForegroundColor { Rgb = new HexBinaryValue() { Value = "66666666" } })
 					{ PatternType = PatternValues.Solid }) // Index 2 - header
 			);
@@ -540,7 +540,7 @@ namespace Comments.Export
 
 			Cell cell = new Cell();
 			cell.DataType = CellValues.String;
-			cell.CellValue = new CellValue(consultationTitle);
+			cell.CellValue = new CellValue(consultationTitle + " consultation comments");
 			cell.StyleIndex = 3;
 			titleRow.AppendChild(cell);
 
