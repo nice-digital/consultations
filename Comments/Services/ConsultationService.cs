@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DocumentFormat.OpenXml.Office2010.Word;
+using Location = Comments.Models.Location;
 
 namespace Comments.Services
 {
@@ -28,13 +29,14 @@ namespace Comments.Services
 	    ConsultationState GetConsultationState(string sourceURI, PreviewState previewState, IEnumerable<Models.Location> locations = null, ConsultationBase consultation = null);
 	    ConsultationState GetConsultationState(int consultationId, int? documentId, string chapterSlug, PreviewState previewState, IEnumerable<Models.Location> locations = null, ConsultationBase consultation = null);
 
-		bool HasSubmittedCommentsOrQuestions(string consultationSourceURI, Guid userId);
+		bool HasSubmittedCommentsOrQuestions(string consultationSourceURI, Guid userId, bool externalResource);
 	    IEnumerable<BreadcrumbLink> GetBreadcrumbs(ConsultationDetail consultation, bool isReview);
 
 	    (int? documentId, string chapterSlug) GetFirstConvertedDocumentAndChapterSlug(int consultationId);
 		string GetFirstChapterSlug(int consultationId, int documentId);
 	    string GetFirstChapterSlugFromPreviewDocument(string reference, int consultationId, int documentId);
 
+	    ConsultationState GetConsultationStateForExternalResource(string relativeURL, List<Location> locations);
     }
 
 	public class ConsultationService : IConsultationService
@@ -141,14 +143,14 @@ namespace Comments.Services
 		    return GetPreviewDraftDocuments(consultationId, documentId, reference).FirstOrDefault(d => d.DocumentId.Equals(documentId))?.Chapters.FirstOrDefault()?.Slug;
 	    }
 
-		public IEnumerable<ViewModels.Consultation> GetConsultations()
+	    public IEnumerable<ViewModels.Consultation> GetConsultations()
         {
             var user = _userService.GetCurrentUser();
             var consultations = _feedService.GetConsultationList();
             return consultations.Select(c => new ViewModels.Consultation(c, user)).ToList();
         }
 
-	    public ConsultationState GetConsultationState(string sourceURI, PreviewState previewState, IEnumerable<Models.Location> locations = null, ConsultationBase consultation = null)
+		public ConsultationState GetConsultationState(string sourceURI, PreviewState previewState, IEnumerable<Models.Location> locations = null, ConsultationBase consultation = null)
 	    {
 		    var consultationsUriElements = ConsultationsUri.ParseConsultationsUri(sourceURI);
 		    return GetConsultationState(consultationsUriElements.ConsultationId, consultationsUriElements.DocumentId, consultationsUriElements.ChapterSlug, previewState, locations, consultation);
@@ -191,25 +193,45 @@ namespace Comments.Services
 			    locations = new List<Models.Location>(0);
 		    }
 
-		    var hasSubmitted = currentUser != null && currentUser.IsAuthorised && currentUser.UserId.HasValue ? HasSubmittedCommentsOrQuestions(sourceURI, currentUser.UserId.Value) : false;
+		    var hasSubmitted = currentUser != null && currentUser.IsAuthorised && currentUser.UserId.HasValue ? HasSubmittedCommentsOrQuestions(sourceURI, currentUser.UserId.Value, externalResource: false) : false;
 
 		    var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);
 
-		    var consultationState = new ConsultationState(consultationDetail.StartDate, consultationDetail.EndDate,
+		    var consultationState = new ConsultationState(false, consultationDetail.StartDate, consultationDetail.EndDate,
 			    data.questions.Any(), data.questions.Any(q => q.Answers.Any()), data.comments.Any(), hasSubmitted,
 			    false, false, documentsWhichSupportQuestions, documentsWhichSupportComments);
 
 		    return consultationState;
 	    }
 
-		public bool HasSubmittedCommentsOrQuestions(string anySourceURI, Guid userId)
+	    public ConsultationState GetConsultationStateForExternalResource(string relativeURL, List<Location> locations)
+	    {
+		    var currentUser = _userService.GetCurrentUser();
+			var hasSubmitted = currentUser != null && currentUser.IsAuthorised && currentUser.UserId.HasValue ? HasSubmittedCommentsOrQuestions(relativeURL, currentUser.UserId.Value, externalResource: true) : false;
+
+			var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);
+
+		    var consultationState = new ConsultationState(true,
+			    data.questions.Any(),
+			    data.questions.Any(q => q.Answers.Any()),
+			    data.comments.Any(),
+			    hasSubmitted);
+
+		    return consultationState;
+	    }
+
+		public bool HasSubmittedCommentsOrQuestions(string anySourceURI, Guid userId, bool externalResource)
 	    {
 		    if (string.IsNullOrWhiteSpace(anySourceURI))
 			    return false;
 
-		    var consultationsUriElements = ConsultationsUri.ParseConsultationsUri(anySourceURI);
-
-		    var consultationSourceURI = ConsultationsUri.CreateConsultationURI(consultationsUriElements.ConsultationId);
+			if (externalResource)
+			{
+				return _context.HasSubmitted(anySourceURI, userId);
+			}
+		    
+			var consultationsUriElements = ConsultationsUri.ParseConsultationsUri(anySourceURI);
+			var consultationSourceURI = ConsultationsUri.CreateConsultationURI(consultationsUriElements.ConsultationId);
 
 		    return _context.HasSubmitted(consultationSourceURI, userId);
 	    }

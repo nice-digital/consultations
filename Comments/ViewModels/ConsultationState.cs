@@ -6,8 +6,9 @@ namespace Comments.ViewModels
 {
 	public class ConsultationState
 	{
-		public ConsultationState(DateTime startDate, DateTime endDate, bool hasQuestions, bool hasUserSuppliedAnswers, bool hasUserSuppliedComments, bool userHasSubmitted, bool consultationSupportsQuestions, bool consultationSupportsComments, IEnumerable<int> documentIdsWhichSupportQuestions, IEnumerable<int> documentIdsWhichSupportComments)
+		public ConsultationState(bool externalResource, DateTime startDate, DateTime endDate, bool hasQuestions, bool hasUserSuppliedAnswers, bool hasUserSuppliedComments, bool userHasSubmitted, bool consultationSupportsQuestions, bool consultationSupportsComments, IEnumerable<int> documentIdsWhichSupportQuestions, IEnumerable<int> documentIdsWhichSupportComments)
 		{
+			ExternalResource = externalResource;
 			StartDate = startDate;
 			EndDate = endDate;
 			HasQuestions = hasQuestions;
@@ -19,6 +20,20 @@ namespace Comments.ViewModels
 			_documentIdsWhichSupportQuestions = documentIdsWhichSupportQuestions;
 			_documentIdsWhichSupportComments = documentIdsWhichSupportComments;
 		}
+
+		public ConsultationState(bool externalResource, bool hasQuestions, bool hasUserSuppliedAnswers, bool hasUserSuppliedComments, bool userHasSubmitted)
+		{
+			ExternalResource = externalResource;
+			HasQuestions = hasQuestions;
+			HasUserSuppliedAnswers = hasUserSuppliedAnswers;
+			HasUserSuppliedComments = hasUserSuppliedComments;
+			UserHasSubmitted = userHasSubmitted;
+
+			StartDate = DateTime.MinValue;
+			EndDate = DateTime.MaxValue;
+		}
+
+		public bool ExternalResource { get; private set; }
 
 		public DateTime StartDate { get; private set; }
 		public DateTime EndDate { get; private set; }
@@ -43,14 +58,15 @@ namespace Comments.ViewModels
 		public bool SupportsSubmission => ConsultationIsOpen && !UserHasSubmitted && (HasUserSuppliedAnswers || HasUserSuppliedComments);
 		public bool SupportsDownload => (HasUserSuppliedAnswers || HasUserSuppliedComments);
 
-		public bool ShouldShowDrawer => ConsultationSupportsQuestions || ConsultationSupportsComments ||
+		public bool ShouldShowDrawer => ExternalResource || ConsultationSupportsQuestions || ConsultationSupportsComments ||
 		                                DocumentIdsWhichSupportQuestions.Any() || DocumentIdsWhichSupportComments.Any() || 
 		                                HasUserSuppliedAnswers || HasUserSuppliedComments;
 
 		public bool ShouldShowCommentsTab => ConsultationSupportsComments || DocumentIdsWhichSupportComments.Any() ||
 		                                     HasUserSuppliedComments;
 
-		public bool ShouldShowQuestionsTab => ConsultationSupportsQuestions || DocumentIdsWhichSupportQuestions.Any() ||
+		public bool ShouldShowQuestionsTab => ExternalResource || ConsultationSupportsQuestions || DocumentIdsWhichSupportQuestions.Any() ||
 		                                      HasUserSuppliedAnswers;
+
 	}
 }

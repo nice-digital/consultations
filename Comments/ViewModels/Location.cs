@@ -75,11 +75,15 @@ namespace Comments.ViewModels
 			    if (_documentId == UnsetDocumentIdValue)
 			    {
 				    var sourceUri = SourceURI;
-				    if (!ConsultationsUri.IsValidSourceURI(sourceUri))
+				    if (!ConsultationsUri.IsValidSourceURI(sourceUri) && ConsultationsUri.IsValidRelativeURL(sourceUri))
 				    {
 					    sourceUri = ConsultationsUri.ConvertToConsultationsUri(SourceURI, CommentOnEnum.Value);
+					    _documentId = ConsultationsUri.ParseConsultationsUri(sourceUri).DocumentId;
+					}
+				    else
+				    {
+					    _documentId = null;
 				    }
-				    _documentId = ConsultationsUri.ParseConsultationsUri(sourceUri).DocumentId;
 			    }
 			    return _documentId;
 		    }

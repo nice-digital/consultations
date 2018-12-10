@@ -45,7 +45,14 @@ namespace Comments.Common
 		    return regex.IsMatch(uri);
 	    }
 
-        public static ConsultationsUriElements ParseRelativeUrl(string relativeURL)
+	    public static bool IsValidRelativeURL(string url)
+	    {
+		    if (string.IsNullOrWhiteSpace(url)) return false;
+		    var regex = new Regex(string.Format(ConsultationsDocumentPageRelativeUrlRegEx, ".+"));
+		    return regex.IsMatch(url);
+	    }
+
+		public static ConsultationsUriElements ParseRelativeUrl(string relativeURL)
         {
 			var regexString = IsReviewPageRelativeUrl(relativeURL) ? ConsultationsReviewPageRelativeUrlRegEx : ConsultationsDocumentPageRelativeUrlRegEx;
 			var regex =  new Regex(regexString, RegexOptions.IgnoreCase);

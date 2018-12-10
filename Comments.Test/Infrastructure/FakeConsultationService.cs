@@ -65,6 +65,11 @@ namespace Comments.Test.Infrastructure
 		    throw new NotImplementedException();
 	    }
 
+	    public ConsultationState GetConsultationStateForExternalResource(string relativeURL, List<Location> locations)
+	    {
+		    throw new NotImplementedException();
+	    }
+
 	    public (int rowsUpdated, Validate validate) SubmitCommentsAndAnswers(ViewModels.Submission submission)
 		{
 			throw new NotImplementedException();

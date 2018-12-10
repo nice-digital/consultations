@@ -11,7 +11,8 @@ namespace Comments.ViewModels
         Chapter,
         Section, //aka html element id..?
         Selection,
-		SubSection //aka numbered-paragraphs, html element id np-xxxx
+		SubSection, //aka numbered-paragraphs, html element id np-xxxx
+		ExternalResource
     }
 
     public static class CommentOnHelpers
@@ -24,6 +25,12 @@ namespace Comments.ViewModels
         public static CommentOn GetCommentOn(string sourceURI, string rangeStart, string htmlElementId)
         {
             ConsultationsUriElements consultationsUriParts;
+
+	        if (!ConsultationsUri.IsValidSourceURI(sourceURI))
+	        {
+				return CommentOn.ExternalResource;
+			}
+
             if (sourceURI.StartsWith(ConsultationsUri.Scheme))
             {
                 consultationsUriParts = ConsultationsUri.ParseConsultationsUri(sourceURI);

@@ -150,10 +150,8 @@ namespace Comments.Services
 		    {
 			    sourceURIs = new List<string> {relativeURL};
 			    locations = _context.GetAllCommentsAndQuestionsForDocument(sourceURIs, isReview).ToList();
-				//////////////TODO: consultation state 
-				consultationState = new ConsultationState(DateTime.MinValue, DateTime.MaxValue, true, false, false, false, false, true, null, null);
-			}
-
+			    consultationState = _consultationService.GetConsultationStateForExternalResource(relativeURL, locations);
+		    }
 
 			var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);
 		    var resortedComments = data.comments.OrderByDescending(c => c.LastModifiedDate).ToList(); //comments should be sorted in date by default, questions by document order.
