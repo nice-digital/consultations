@@ -8,12 +8,13 @@ using System.Linq;
 using Comments.Configuration;
 using NICE.Auth.NetCore.Helpers;
 using NICE.Feeds;
+using Location = Comments.Models.Location;
 
 namespace Comments.Services
 {
 	public interface ICommentService
     {
-	    CommentsAndQuestions GetCommentsAndQuestions(string relativeURL);
+	    CommentsAndQuestions GetCommentsAndQuestions(string relativeURL, bool externalResource = false);
 	    ReviewPageViewModel GetCommentsAndQuestionsForReview(string relativeURL, ReviewPageViewModel model);
 		(ViewModels.Comment comment, Validate validate) GetComment(int commentId);
         (int rowsUpdated, Validate validate) EditComment(int commentId, ViewModels.Comment comment);
@@ -115,30 +116,44 @@ namespace Comments.Services
             return (rowsUpdated: _context.SaveChanges(), validate: null);
         }
 
-	    public CommentsAndQuestions GetCommentsAndQuestions(string relativeURL)
+	    public CommentsAndQuestions GetCommentsAndQuestions(string relativeURL, bool externalResource = false)
 	    {
 		    var user = _userService.GetCurrentUser();
 		    var signInURL = _authenticateService.GetLoginURL(relativeURL.ToConsultationsRelativeUrl());
 		    var isReview = ConsultationsUri.IsReviewPageRelativeUrl(relativeURL);
-			var consultationSourceURI = ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Consultation);
-		    ConsultationState consultationState;
+		    var sourceURIs = new List<string>();
 
-		    if (!user.IsAuthorised)
-		    {
-			    consultationState = _consultationService.GetConsultationState(consultationSourceURI, PreviewState.NonPreview);
-				return new CommentsAndQuestions(new List<ViewModels.Comment>(), new List<ViewModels.Question>(),
-				    user.IsAuthorised, signInURL, consultationState);
-		    }
+		    List<Location> locations;
+		    ConsultationState consultationState = null;
 
-		    var sourceURIs = new List<string> { consultationSourceURI };
-		    if (!isReview)
+			if (!externalResource)
 		    {
-				sourceURIs.Add(ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Document));
-			    sourceURIs.Add(ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Chapter));
+			    var consultationSourceURI = ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Consultation);
+
+			    if (!user.IsAuthorised)
+			    {
+				    consultationState = _consultationService.GetConsultationState(consultationSourceURI, PreviewState.NonPreview);
+				    return new CommentsAndQuestions(new List<ViewModels.Comment>(), new List<ViewModels.Question>(),
+					    user.IsAuthorised, signInURL, consultationState);
+			    }
+
+			    sourceURIs = new List<string> {consultationSourceURI};
+			    if (!isReview)
+			    {
+				    sourceURIs.Add(ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Document));
+				    sourceURIs.Add(ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Chapter));
+			    }
+			    locations = _context.GetAllCommentsAndQuestionsForDocument(sourceURIs, isReview).ToList();
+			    consultationState = _consultationService.GetConsultationState(consultationSourceURI, PreviewState.NonPreview, locations);
+			}
+			else
+		    {
+			    sourceURIs = new List<string> {relativeURL};
+			    locations = _context.GetAllCommentsAndQuestionsForDocument(sourceURIs, isReview).ToList();
+				//////////////TODO: consultation state 
+				consultationState = new ConsultationState(DateTime.MinValue, DateTime.MaxValue, true, false, false, false, false, true, null, null);
 			}
 
-			var locations = _context.GetAllCommentsAndQuestionsForDocument(sourceURIs, isReview).ToList();
-		    consultationState = _consultationService.GetConsultationState(consultationSourceURI, PreviewState.NonPreview, locations);
 
 			var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);
 		    var resortedComments = data.comments.OrderByDescending(c => c.LastModifiedDate).ToList(); //comments should be sorted in date by default, questions by document order.
@@ -148,7 +163,7 @@ namespace Comments.Services
 
 		public ReviewPageViewModel GetCommentsAndQuestionsForReview(string relativeURL, ReviewPageViewModel model)
 		{
-			var commentsAndQuestions = GetCommentsAndQuestions(relativeURL);
+			var commentsAndQuestions = GetCommentsAndQuestions(relativeURL, externalResource: false);
 
 			if (model.Sort == ReviewSortOrder.DocumentAsc)
 			{

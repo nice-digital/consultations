@@ -35,6 +35,7 @@ type PropsType = {
 		search: string
 	},
 	announceAssertive: Function,
+	externalResource: boolean
 };
 
 type StateType = {
@@ -106,7 +107,7 @@ export class CommentList extends Component<PropsType, StateType> {
 	}
 
 	loadComments() {
-		load("comments", undefined, [], {sourceURI: this.props.match.url}).then(
+		load("comments", undefined, [], {sourceURI: this.props.match.url, externalResource: this.props.externalResource}).then(
 			response => {
 				let allowComments = response.data.consultationState.consultationIsOpen && !response.data.consultationState.userHasSubmitted;
 				this.setState({
@@ -119,7 +120,7 @@ export class CommentList extends Component<PropsType, StateType> {
 					shouldShowQuestionsTab: response.data.consultationState.shouldShowQuestionsTab,
 				});
 			})
-			.catch(err => console.log("load comments in commentlist " + err));
+			.catch(err => console.error("load comments in commentlist " + err));
 	}
 
 	componentDidMount() {

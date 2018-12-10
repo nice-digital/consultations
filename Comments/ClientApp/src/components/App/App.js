@@ -17,6 +17,7 @@ import {ErrorBoundary} from "../ErrorBoundary/ErrorBoundary";
 import {LiveAnnouncer, LiveMessenger} from "react-aria-live";
 import { projectInformation } from "../../constants";
 import { PhaseBanner } from "../PhaseBanner/PhaseBanner";
+import CommentListWithRouter from "../CommentList/CommentList";
 
 type PropsType = any;
 
@@ -95,7 +96,14 @@ class App extends React.Component<PropsType, StateType> {
 								</Route>
 
 								<Route exact path="/CommentingOnOtherThings">
-									<p>this is some sample component</p>
+									<LiveMessenger>
+										{({announceAssertive, announcePolite}) =>
+											<CommentListWithRouter
+												announceAssertive={announceAssertive}
+												announcePolite={announcePolite}
+												externalResource={true}
+												wrappedComponentRef={component => (this.commentList = component)} />}
+									</LiveMessenger>
 								</Route>
 
 								{/*404*/}
