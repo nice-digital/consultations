@@ -94,6 +94,10 @@ class App extends React.Component<PropsType, StateType> {
 									</LiveMessenger>
 								</Route>
 
+								<Route exact path="/CommentingOnOtherThings">
+									<p>this is some sample component</p>
+								</Route>
+
 								{/*404*/}
 								<Route component={NotFound}/>
 							</Switch>
