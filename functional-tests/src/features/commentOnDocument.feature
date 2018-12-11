@@ -13,10 +13,8 @@
 
  Scenario: User makes a comment at document level
  		Given I comment on a Document
-    #Then I expect that element "[data-qa-sel='comment-box-title']" contains the text "document"
- 		#When I add "This is a Document comment" to the inputfield "[data-qa-sel='Comment-text-area']"
-		When I add the comment "This is a Document comment" and I submit
- 		Then I expect that element "[data-qa-sel='Comment-text-area']" contains the text "This is a Document comment"
+		When I add the comment "This is a Document comment" and submit
+		Then I expect the comment box contains "This is a Document comment"
 		And I pause for 1000ms
- 		Then I expect that element ".CommentBox:first-child .CommentBox__savedIndicator" contains the text "Saved"
+		Then I expect the comment save button displays "Saved"
  		Then I click on the button "body [data-qa-sel='delete-comment-button']"
