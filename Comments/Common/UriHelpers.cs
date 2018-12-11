@@ -14,12 +14,9 @@ namespace Comments.Common
 
 	    public const string ConsultationsUriRegEx =
 			@"^consultations:\/\/.+\/consultation\/(?<consultationId>\d+)(\/document\/)?(?<documentId>\d?)(\/chapter\/)?(?<chapterSlug>.*)$";
-//                "^consultations:\\/\\/.+\\/consultation\\/(?<consultationId>\\d+)(\\/document\\/)?(?<documentId>\\d?)(\\/chapter\\/)?(?<chapterSlug>.*)$"
             
 	    public const string ConsultationsDocumentPageRelativeUrlRegEx =
 			@"^\/(?<consultationId>\d+)\/(?<documentId>\d+)\/(?<chapterSlug>.+)$";
-            //"^\\/(?<consultationId>\\d+)\\/(?<documentId>\\d+)\\/(?<chapterSlug>.+)$";
-
 
 		public const string ConsultationsReviewPageRelativeUrlRegEx =
 			@"^\/(?<consultationId>\d+)\/review$";
