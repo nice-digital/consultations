@@ -82,7 +82,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			this.props.staticContext,
 			"comments",
 			[],
-			{sourceURI: this.props.match.url},
+			{sourceURI: this.props.match.url, externalResource: this.props.externalResource},
 			preloadedData
 		);
 

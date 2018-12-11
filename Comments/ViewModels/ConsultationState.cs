@@ -21,6 +21,14 @@ namespace Comments.ViewModels
 			_documentIdsWhichSupportComments = documentIdsWhichSupportComments;
 		}
 
+		/// <summary>
+		/// This overload is currently only used when commenting on other things (besides consultations).
+		/// </summary>
+		/// <param name="externalResource"></param>
+		/// <param name="hasQuestions"></param>
+		/// <param name="hasUserSuppliedAnswers"></param>
+		/// <param name="hasUserSuppliedComments"></param>
+		/// <param name="userHasSubmitted"></param>
 		public ConsultationState(bool externalResource, bool hasQuestions, bool hasUserSuppliedAnswers, bool hasUserSuppliedComments, bool userHasSubmitted)
 		{
 			ExternalResource = externalResource;
@@ -55,18 +63,31 @@ namespace Comments.ViewModels
 		public bool ConsultationIsOpen => DateTime.Now >= StartDate && DateTime.Now <= EndDate;
 		public bool ConsultationHasNotStartedYet => DateTime.Now < StartDate;  //admin's in preview mode can see the consultation before the start date
 		public bool ConsultationHasEnded => DateTime.Now > EndDate;
-		public bool SupportsSubmission => ConsultationIsOpen && !UserHasSubmitted && (HasUserSuppliedAnswers || HasUserSuppliedComments);
-		public bool SupportsDownload => (HasUserSuppliedAnswers || HasUserSuppliedComments);
 
-		public bool ShouldShowDrawer => ExternalResource || ConsultationSupportsQuestions || ConsultationSupportsComments ||
-		                                DocumentIdsWhichSupportQuestions.Any() || DocumentIdsWhichSupportComments.Any() || 
-		                                HasUserSuppliedAnswers || HasUserSuppliedComments;
+		public bool SupportsSubmission => (ConsultationIsOpen &&
+		                                  !UserHasSubmitted &&
+		                                  (HasUserSuppliedAnswers || HasUserSuppliedComments));
 
-		public bool ShouldShowCommentsTab => ConsultationSupportsComments || DocumentIdsWhichSupportComments.Any() ||
-		                                     HasUserSuppliedComments;
+		public bool SupportsDownload => (HasUserSuppliedAnswers ||
+		                                 HasUserSuppliedComments);
 
-		public bool ShouldShowQuestionsTab => ExternalResource || ConsultationSupportsQuestions || DocumentIdsWhichSupportQuestions.Any() ||
-		                                      HasUserSuppliedAnswers;
+		public bool ShouldShowDrawer => (ExternalResource ||
+		                                ConsultationSupportsQuestions ||
+		                                ConsultationSupportsComments ||
+		                                DocumentIdsWhichSupportQuestions.Any() ||
+		                                DocumentIdsWhichSupportComments.Any() || 
+		                                HasUserSuppliedAnswers ||
+		                                HasUserSuppliedComments);
+
+		public bool ShouldShowCommentsTab => (ExternalResource ||
+		                                     ConsultationSupportsComments ||
+		                                     DocumentIdsWhichSupportComments.Any() ||
+		                                     HasUserSuppliedComments);
+
+		public bool ShouldShowQuestionsTab => ((ExternalResource && HasQuestions) ||
+		                                      ConsultationSupportsQuestions ||
+		                                      DocumentIdsWhichSupportQuestions.Any() ||
+		                                      HasUserSuppliedAnswers);
 
 	}
 }
