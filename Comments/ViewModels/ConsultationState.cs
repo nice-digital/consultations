@@ -6,7 +6,7 @@ namespace Comments.ViewModels
 {
 	public class ConsultationState
 	{
-		public ConsultationState(DateTime startDate, DateTime endDate, bool hasQuestions, bool hasUserSuppliedAnswers, bool hasUserSuppliedComments, bool userHasSubmitted, bool consultationSupportsQuestions, bool consultationSupportsComments, IEnumerable<int> documentIdsWhichSupportQuestions, IEnumerable<int> documentIdsWhichSupportComments)
+		public ConsultationState(DateTime startDate, DateTime endDate, bool hasQuestions, bool hasUserSuppliedAnswers, bool hasUserSuppliedComments, bool userHasSubmitted, bool consultationSupportsQuestions, IEnumerable<int> documentIdsWhichSupportQuestions, IEnumerable<int> documentIdsWhichSupportComments)
 		{
 			StartDate = startDate;
 			EndDate = endDate;
@@ -15,7 +15,6 @@ namespace Comments.ViewModels
 			HasUserSuppliedComments = hasUserSuppliedComments;
 			UserHasSubmitted = userHasSubmitted;
 			ConsultationSupportsQuestions = consultationSupportsQuestions;
-			ConsultationSupportsComments = consultationSupportsComments;
 			_documentIdsWhichSupportQuestions = documentIdsWhichSupportQuestions;
 			_documentIdsWhichSupportComments = documentIdsWhichSupportComments;
 		}
@@ -29,7 +28,6 @@ namespace Comments.ViewModels
 		public bool UserHasSubmitted { get; private set; }
 
 		public bool ConsultationSupportsQuestions { get; private set; }
-		public bool ConsultationSupportsComments { get; private set; }
 
 		private readonly IEnumerable<int> _documentIdsWhichSupportQuestions;
 		public IEnumerable<int> DocumentIdsWhichSupportQuestions => _documentIdsWhichSupportQuestions ?? new List<int>();
@@ -43,11 +41,11 @@ namespace Comments.ViewModels
 		public bool SupportsSubmission => ConsultationIsOpen && !UserHasSubmitted && (HasUserSuppliedAnswers || HasUserSuppliedComments);
 		public bool SupportsDownload => (HasUserSuppliedAnswers || HasUserSuppliedComments);
 
-		public bool ShouldShowDrawer => ConsultationSupportsQuestions || ConsultationSupportsComments ||
+		public bool ShouldShowDrawer => ConsultationSupportsQuestions ||
 		                                DocumentIdsWhichSupportQuestions.Any() || DocumentIdsWhichSupportComments.Any() || 
 		                                HasUserSuppliedAnswers || HasUserSuppliedComments;
 
-		public bool ShouldShowCommentsTab => ConsultationSupportsComments || DocumentIdsWhichSupportComments.Any() ||
+		public bool ShouldShowCommentsTab => DocumentIdsWhichSupportComments.Any() ||
 		                                     HasUserSuppliedComments;
 
 		public bool ShouldShowQuestionsTab => ConsultationSupportsQuestions || DocumentIdsWhichSupportQuestions.Any() ||

@@ -197,7 +197,7 @@ namespace Comments.Services
 
 		    var consultationState = new ConsultationState(consultationDetail.StartDate, consultationDetail.EndDate,
 			    data.questions.Any(), data.questions.Any(q => q.Answers.Any()), data.comments.Any(), hasSubmitted,
-			    false, false, documentsWhichSupportQuestions, documentsWhichSupportComments);
+			    false, documentsWhichSupportQuestions, documentsWhichSupportComments);
 
 		    return consultationState;
 	    }

@@ -31,7 +31,6 @@
         "hasUserSuppliedComments":false,
         "userHasSubmitted":false,
         "consultationSupportsQuestions":false,
-        "consultationSupportsComments":false,
         "documentIdsWhichSupportQuestions":[
             2,
             2
