@@ -18,6 +18,7 @@ import {LiveAnnouncer, LiveMessenger} from "react-aria-live";
 import { projectInformation } from "../../constants";
 import { PhaseBanner } from "../PhaseBanner/PhaseBanner";
 import CommentListWithRouter from "../CommentList/CommentList";
+import { ExternalResource } from "../ExternalResource/ExternalResource";
 
 type PropsType = any;
 
@@ -96,14 +97,7 @@ class App extends React.Component<PropsType, StateType> {
 								</Route>
 
 								<Route exact path="/CommentingOnOtherThings">
-									<LiveMessenger>
-										{({announceAssertive, announcePolite}) =>
-											<CommentListWithRouter
-												announceAssertive={announceAssertive}
-												announcePolite={announcePolite}
-												externalResource={true}
-												wrappedComponentRef={component => (this.commentList = component)} />}
-									</LiveMessenger>
+									<ExternalResource />
 								</Route>
 
 								{/*404*/}

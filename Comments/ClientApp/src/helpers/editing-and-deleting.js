@@ -9,7 +9,10 @@ export function saveCommentHandler(event: Event, comment: CommentType, self: any
 	const originalId = comment.commentId;
 	const isANewComment = comment.commentId < 0;
 	const method = isANewComment ? "POST" : "PUT";
-	const urlParameters = isANewComment ? [] : [comment.commentId];
+	let urlParameters = isANewComment ? [] : [comment.commentId];
+	// if (self.props.externalResource){
+	// 	urlParameters.push()
+	// }
 	const endpointName = isANewComment ? "newcomment" : "editcomment";
 	let error = "";
 

@@ -67,7 +67,22 @@ export class Selection extends Component<PropsType, StateType> {
 		return(comment);
 	}
 
-	onMouseUp = (event: Event) => {
+	componentDidMount() {
+		window.addEventListener("comment", this.handleCommentSelectionMouseUp);
+	}
+
+	componentWillUnmount() {
+		window.removeEventListener("comment", this.handleCommentSelectionMouseUp);
+	}
+	
+	handleCommentSelectionMouseUp = (customEvent) => {
+		
+
+		this.onMouseUp(customEvent.detail.eventRaised, true);
+	}
+
+
+	onMouseUp = (event: Event, useCommentableId: boolean) => {
 
 		if (window && window.getSelection) {
 			const arrowSize = 10; //this must match the size in $arrow-size in Selection.scss
@@ -83,7 +98,12 @@ export class Selection extends Component<PropsType, StateType> {
 
 			const scrollTop = "pageYOffset" in window ? window.pageYOffset : document.documentElement.scrollTop;
 			const scrollLeft = "pageXOffset" in window ? window.pageXOffset : document.documentElement.scrollLeft;
-			const boundingRectOfContainer = this.selectionContainer.current.getBoundingClientRect();
+			let boundingRectOfContainer;
+			if (useCommentableId){
+				boundingRectOfContainer = document.getElementById("commentablecontent").getBoundingClientRect();
+			} else{
+				boundingRectOfContainer = this.selectionContainer.current.getBoundingClientRect();
+			}
 			const position =
 			{
 				x: event.pageX - (boundingRectOfContainer.left + scrollLeft) - arrowSize,

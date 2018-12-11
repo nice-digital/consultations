@@ -1,4 +1,4 @@
-
+﻿
 
 
 
@@ -14,7 +14,7 @@
 	<link rel="preload" as="style" href="https://static.bbc.co.uk/news/1.268.03155/stylesheets/services/news/compact.css" media="(max-width: 599px)">
 	<link rel="preload" as="style" href="https://static.bbc.co.uk/news/1.268.03155/stylesheets/services/news/tablet.css" media="(min-width: 600px) and (max-width: 1007px)">
 	<link rel="preload" as="style" href="https://static.bbc.co.uk/news/1.268.03155/stylesheets/services/news/wide.css" media="(min-width: 1008px)">
-
+<link rel="stylesheet" href="/consultations/styles/main.css" />
 	<script>window.orb_fig_blocking = true;</script>
 
 	<link rel="preload" as="script" href="//fig.bbc.co.uk/frameworks/fig/2/fig.js?callback=orb.orb_fig">
@@ -418,7 +418,7 @@
 		});</script>
 	<script src="https://nav.files.bbci.co.uk/orbit/2.0.0-431.08fec43/js/api.min.js"></script>
 	<script type="text/javascript">window.bbcFlagpoles_istats = "ON", require.config({ paths: { "istats-1": "https://nav.files.bbci.co.uk/orbit-webmodules/0.0.1-166.7295734/istats/istats-1" } }), require(["istats-1", "orb/cookies"], function (t, a) { if (a.isAllowed("s1")) { var e = (o = document.location.href.match(/^(?:https|http):\/\/\w*\.(?:(int|test|stage|live|)\.)?bbc\.(?:co\.uk|com)/)) ? void 0 === o[1] || "" === o[1] || "live" === o[1] ? "//sa.bbc.co.uk/bbc/bbc/s" : "//sa.bbc.co.uk/bbc/" + o[1] + "/s" : "//sa.bbc.co.uk/bbc/test/s"; t.addCollector({ name: "default", url: e, separator: "&" }); var s = "news.technology.correspondent_story.46515590.page"; t.setCountername(s), window.istats_countername && t.setCountername(window.istats_countername), t.addLabels("ml_name=webmodule&ml_version=0.0.1-166.7295734&blq_e=orbit&blq_r=orbit&blq_s=orbit&blq_v=default&language=en&pal_route=asset&language=en-GB&pal_webapp=tabloid&prod_name=news&app_name=news&cps_asset_id=46515590&page_type=correspondent_story&section=%2Fnews%2Ftechnology&first_pub=2018-12-10T19%3A26%3A16%2B00%3A00&last_editorial_update=2018-12-10T19%3A53%3A28%2B00%3A00&curie=62ca42df-2f7f-4770-abc6-d1c29336ee76&title=Google%2B+to+shut+early+after+second+bug+revealed&has_video=&for_nation=gb&app_version=1.268.0&app_type=responsive&bbc_site=news") } var o });</script>
-	<link rel="stylesheet" href="https://mybbc.files.bbci.co.uk/s/id/account-idcta/1.9.0/style/id-cta.css"><!--[if IE 8]><link href="https://mybbc.files.bbci.co.uk/s/id/account-idcta/1.9.0/style/ie8.css" rel="stylesheet"/> <![endif]-->
+	
 	<script type="text/javascript">
 		// Globally available search context
 		window.SEARCHBOX = { "variant": "default", "locale": "en", "navSearchboxStaticPrefix": "https://nav.files.bbci.co.uk/searchbox/1.0.0-19.f0f6837", "searchboxAppStaticPrefix": "https://nav.files.bbci.co.uk/searchbox/1.0.0-19.f0f6837/drawer", "searchFormHtml": "<div tabindex=\"-1\" data-reactroot=\"\" data-reactid=\"1\" data-react-checksum=\"729995048\"><div data-reactid=\"2\"><section class=\"se-searchbox-panel\" data-reactid=\"3\"><div class=\"se-g-wrap\" data-reactid=\"4\"><div class=\"se-g-layout\" data-reactid=\"5\"><div class=\"se-g-layout__item se-searchbox-title\" aria-hidden=\"true\" data-reactid=\"6\">search</div><div class=\"se-g-layout__item se-searchbox\" data-reactid=\"7\"><form accept-charset=\"utf-8\" id=\"searchboxDrawerForm\" method=\"get\" action=\"https://search.bbc.co.uk/search\" data-reactid=\"8\"><label class=\"se-searchbox__input\" for=\"se-searchbox-input-field\" data-reactid=\"9\"><span class=\"se-sr-only\" data-reactid=\"10\">Search Term</span><input type=\"text\" name=\"q\" value=\"\" id=\"se-searchbox-input-field\" class=\"se-searchbox__input__field\" maxlength=\"512\" autocomplete=\"off\" autocorrect=\"off\" autocapitalize=\"off\" spellcheck=\"false\" tabindex=\"0\" data-reactid=\"11\"/></label><input type=\"hidden\" name=\"scope\" value=\"\" data-reactid=\"12\"/><button type=\"submit\" class=\"se-searchbox__submit\" tabindex=\"0\" data-reactid=\"13\">Search</button><button type=\"button\" class=\"se-searchbox__clear se-searchbox__clear--visible\" tabindex=\"0\" data-reactid=\"14\">Close</button></form></div></div></div></section><div aria-live=\"polite\" aria-atomic=\"true\" class=\"se-suggestions-container\" data-reactid=\"15\"><section class=\"se-g-wrap\" data-reactid=\"16\"></section></div></div></div>", "searchScopePlaceholder": "<input type=\"hidden\" name=\"scope\" id=\"orb-search-scope\" value=\"all\">", "searchScopeParam": "?scope=all", "searchScopeTemplate": "all", "searchPlaceholderWrapperStart": "", "searchPlaceholderWrapperEnd": "" };
@@ -511,8 +511,10 @@
 </head>
 <!--[if IE]><body id="asset-type-csp" class="ie device--feature"><![endif]-->
 <!--[if !IE]>-->
-<body id="asset-type-csp" class="device--feature">
-	<!--<![endif]-->
+	<body id="asset-type-csp" class="device--feature">
+
+	<div id="commentablecontent" onmouseup="window.dispatchEvent(new CustomEvent('comment', { detail: {eventRaised: event}}));">
+<!--<![endif]-->
 	<div class="direction">
 
 
@@ -1665,65 +1667,7 @@
 				}
 
 			})</script>
-		<script type="text/javascript">
-	/*<![CDATA[*/
-			require(['orb/fig', 'orb/nav'], function (fig, nav) {
-				fig.load(function (fig) {
-					if (fig.geo.isUK()) {
-						nav.loadJs('https://nav.files.bbci.co.uk/orbit/2.0.0-431.08fec43/js/edr.min.js');
-					}
-				});
-			});
-			/*]]>*/</script>
-		<script type="text/javascript">require(["istats-1", "orb/cookies"], function (o, t) { if (t.isAllowed("s1")) try { if (!require.s.contexts._.config.paths.idcta) return void i(); require(["idcta/idcta-1"], function (t) { t && "function" == typeof t.getIStatsLabels && o.addLabels(t.getIStatsLabels()), i() }, function (t) { throw t }) } catch (t) { console && "function" == typeof console.log && console.log("an exception occurred while adding idcta labels to istats, invoking istats without them", t), i() } function i() { o.invoke() } });</script>
-		<script type="text/javascript">
-	require.config({
-				paths: {
-					"mybbc/templates": '//mybbc.files.bbci.co.uk/notification-ui/3.9.5/templates',
-					"mybbc/notifications": '//mybbc.files.bbci.co.uk/notification-ui/3.9.5/js'
-				}
-			});
-
-			require(['mybbc/notifications/NotificationsMain', 'idcta/idcta-1'], function (NotificationsMain, idcta) {
-
-				var loadNotifications = function (isUK) {
-					if (isUK) {
-						window.bbcpage.loadCSS('//mybbc.files.bbci.co.uk/notification-ui/3.9.5/css/main.min.css').then(function () {
-							NotificationsMain.run(idcta, '//mybbc.files.bbci.co.uk/notification-ui/3.9.5/');
-						});
-					}
-				};
-
-				if (window.bbcuser && window.bbcuser.isUKCombined && typeof (window.bbcuser.isUKCombined) === 'function') {
-					// Use new API from Orbit if available
-					window.bbcuser.isUKCombined().then(function (isUK) {
-						loadNotifications(isUK);
-					});
-				} else {
-					// Fallback to fig (ORB support)
-					var orbFig = window.orb.fig;
-					loadNotifications(orbFig.geo.isUK());
-				}
-			});</script>
-		<script type="text/javascript">
-	if (window.SEARCHBOX.suppress === false && window.SEARCHBOX.locale && /^en-?.*?/.test(window.SEARCHBOX.locale)) {
-				require.config({
-					paths: {
-						"search/searchbox": window.SEARCHBOX.searchboxAppStaticPrefix,
-					}
-				});
-
-				if (bbcuser && bbcuser.isUKCombined) {
-					bbcuser.isUKCombined().then(function (isUK) {
-						if (isUK) {
-							require(['search/searchbox/searchboxDrawer'], function (SearchboxDrawer) {
-								SearchboxDrawer.run(window.SEARCHBOX);
-							});
-						}
-					});
-				}
-
-			}</script><!-- BBCDOTCOM bodyLast --><div class="bbccom_display_none">
+		<!-- BBCDOTCOM bodyLast --><div class="bbccom_display_none">
 		<script type="text/javascript">/*<![CDATA[*/ if (window.bbcdotcom && window.bbcdotcom.analytics && bbcdotcom.config && !bbcdotcom.config.isSportApp() && !bbcdotcom.config.isReel()) { bbcdotcom.analytics.page(); } /*]]>*/</script><noscript><img src="//ssc.api.bbc.com/?c1=2&c2=19293874&ns_site=bbc&name=" height="1" width="1" alt=""></noscript>
 		<script type="text/javascript">/*<![CDATA[*/ if (window.bbcdotcom && bbcdotcom.currencyProviders) { bbcdotcom.currencyProviders.write(); } /*]]>*/</script>
 		<script type="text/javascript">/*<![CDATA[*/ if (window.bbcdotcom && bbcdotcom.currencyProviders) { bbcdotcom.currencyProviders.postWrite(); } /*]]>*/</script>
@@ -1735,49 +1679,52 @@
 		<script type="text/javascript">"use strict"; require(["reverb"], function (t) { var n = function () { return window && window.bbcpage ? Promise.all([window.bbcpage.getName(), window.bbcpage.getDestination(), window.bbcpage.getProducer(), window.bbcpage.getSection(), window.bbcpage.getContentId(), window.bbcpage.getContentType(), window.bbcpage.getLanguage()]).then(function (e) { return { name: e[0], destination: e[1], producer: e[2], section: e[3], contentId: e[4], contentType: e[5], language: e[6] } }) : Promise.resolve(void 0) }, o = {}; function i(e) { return e && t.setUserInfo(e.bbc_hid, "1" === e.bbc_identity), t.invoke({ useAti: !0, atiOpts: o }, function () { n().then(function (e) { e && (t.setDestination(e.destination), e.producer && t.setProducer(e.producer), t.trackPage(e)) }).catch(function (e) { console.log(e) }) }) } try { if (!require.s.contexts._.config.paths.idcta) return i(); require(["idcta/idcta-1"], function (e) { return i(e.getIStatsLabels()) }, function (e) { throw e }) } catch (e) { return console && "function" == typeof console.log && console.log("an exception occurred while adding idcta labels to Reverb, invoking Reverb without them", e), i() } });</script>
 	</div><!-- closes .direction -->
 	<script>window.old_onload = window.onload; window.onload = function () { if (window.old_onload) { window.old_onload(); } window.loaded = true; };</script> <!-- Chartbeat Web Analytics code - start -->
-	<script type="text/javascript">
-		/** CONFIGURATION START **/
-		var _sf_async_config = {};
+<script type="text/javascript">
+	/** CONFIGURATION START **/
+	var _sf_async_config = {};
 
-		_sf_async_config.uid = "50924";
-		_sf_async_config.domain = "www.bbc.co.uk";
-		_sf_async_config.sections = "News, News - technology, News - CSP, News - technology - CSP, News - news-category";
-		<!-- if page is an index, add the edition to the path -->
-			_sf_async_config.path = "bbc.co.uk/news/technology-46515590";
+	_sf_async_config.uid = "50924";
+	_sf_async_config.domain = "www.bbc.co.uk";
+	_sf_async_config.sections = "News, News - technology, News - CSP, News - technology - CSP, News - news-category";
+	<!-- if page is an index, add the edition to the path -->
+		_sf_async_config.path = "bbc.co.uk/news/technology-46515590";
 
-		(function () {
-			var cookiePrefix = 'ckpf_sylphid';
-			_sf_async_config.idSync = _sf_async_config.idSync || {};
+	(function () {
+		var cookiePrefix = 'ckpf_sylphid';
+		_sf_async_config.idSync = _sf_async_config.idSync || {};
 
-			if (document.cookie.indexOf(cookiePrefix) !== -1) {
-				var cookieSplit = document.cookie.split(';');
-				var cookieLength = cookieSplit.length;
-				while (cookieLength--) {
-					var cookie = cookieSplit[cookieLength].replace(/^\s+|\s+$/g, '');
-					var cookieName = cookie.split('=')[0];
-					if (cookieName.indexOf(cookiePrefix) === 0) {
-						_sf_async_config.idSync.bbc_hid = cookieSplit[cookieLength].split('=')[1];
-						break;
-					}
+		if (document.cookie.indexOf(cookiePrefix) !== -1) {
+			var cookieSplit = document.cookie.split(';');
+			var cookieLength = cookieSplit.length;
+			while (cookieLength--) {
+				var cookie = cookieSplit[cookieLength].replace(/^\s+|\s+$/g, '');
+				var cookieName = cookie.split('=')[0];
+				if (cookieName.indexOf(cookiePrefix) === 0) {
+					_sf_async_config.idSync.bbc_hid = cookieSplit[cookieLength].split('=')[1];
+					break;
 				}
 			}
-		}());
+		}
+	}());
 
-		/** CONFIGURATION END **/
-		(function () {
-			function loadChartbeat() {
-				window._sf_endpt = (new Date()).getTime();
-				var e = document.createElement("script");
-				e.setAttribute("language", "javascript");
-				e.setAttribute("type", "text/javascript");
-				e.setAttribute('src', '//static.chartbeat.com/js/chartbeat.js');
-				document.body.appendChild(e);
-			}
-			var oldonload = window.onload;
-			window.onload = (typeof window.onload != "function") ?
-				loadChartbeat : function () { oldonload(); loadChartbeat(); };
-		}());
-	</script>
+	/** CONFIGURATION END **/
+	(function () {
+		function loadChartbeat() {
+			window._sf_endpt = (new Date()).getTime();
+			var e = document.createElement("script");
+			e.setAttribute("language", "javascript");
+			e.setAttribute("type", "text/javascript");
+			e.setAttribute('src', '//static.chartbeat.com/js/chartbeat.js');
+			document.body.appendChild(e);
+		}
+		var oldonload = window.onload;
+		window.onload = (typeof window.onload != "function") ?
+			loadChartbeat : function () { oldonload(); loadChartbeat(); };
+	}());
+</script>
+
+	
+</div>
 <div id="root"></div>
 <script type="text/javascript" src="/consultations/static/js/bundle.js"></script>
 
