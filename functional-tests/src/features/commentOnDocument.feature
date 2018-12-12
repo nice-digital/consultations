@@ -17,4 +17,4 @@
 		Then I expect the comment box contains "This is a Document comment"
 		And I pause for 1000ms
 		Then I expect the comment save button displays "Saved"
- 		Then I click on the button "body [data-qa-sel='delete-comment-button']"
+		Then I click delete comment

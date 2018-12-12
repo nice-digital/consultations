@@ -17,3 +17,16 @@ Given(
 		browser.waitForVisible("body [data-qa-sel='comment-box-title']", 1000)// Then I wait on element "body [data-qa-sel='comment-box-title']" for 10000ms to be visible
 	}
 );
+
+Given(
+	/^I comment on a Chapter$/,
+	() => {
+		browser.pause(1000);// And I pause for 1000ms
+		browser.waitForVisible(".document-comment-container");// When I wait on element ".document-comment-container" to be visible
+		browser.pause(1000);// And I pause for 1000ms
+		browser.click(".chapter > .title [data-qa-sel='in-text-comment-button']");// When I click on the button ".chapter > .title [data-qa-sel='in-text-comment-button']"
+		browser.pause(1000);// And I pause for 1000ms
+		browser.waitForVisible("body [data-qa-sel='comment-box-title']");// Then I wait on element "body [data-qa-sel='comment-box-title']" to be visible
+		// Then I expect that element "[data-qa-sel='comment-box-title']" contains the text "chapter"
+	}
+)

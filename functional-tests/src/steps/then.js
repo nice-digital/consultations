@@ -1,8 +1,9 @@
 import "@nice-digital/wdio-cucumber-steps/lib/then";
 import { Then } from "cucumber";
 
-import validateCommentBox, { validateCommentBoxText } from '../support/check/validateCommentBox';
-import validateCommentSaved from "../support/check/validateCommentSaved";
+import validateCommentBox, { validateCommentBoxText, validateCommentSaved }  from '../support/check/validateCommentBox';
+import deleteOneComment from '../support/action/deleteOneComment';
+// import validateCommentSaved from "../support/check/validateCommentSaved";
 
 /*Then(
     /^I expect that (button|element) "([^"]*)?"( not)* matches the text "([^"]*)?"$/,
@@ -16,4 +17,9 @@ Then(
 Then(
 	/^I expect the comment save button displays "([^"]*)"$/,
 	validateCommentSaved
+);
+
+Then(
+	/^I click delete comment$/,
+	deleteOneComment
 );
