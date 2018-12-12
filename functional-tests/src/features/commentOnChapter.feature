@@ -13,11 +13,10 @@
 
 Scenario: User makes a comment at chapter level
 		Given I comment on a Chapter
-		Then I expect the comment box contains "Chapter"
- 		When I add "This is a Chapter comment" to the inputfield "[data-qa-sel='Comment-text-area']"
- 		And I click on the button "[data-qa-sel='submit-button']"
+		Then I expect the comment box title contains "chapter"
+		When I add the comment "This is a Chapter comment" and submit
  		And I pause for 1000ms
- 		Then I expect that element "[data-qa-sel='Comment-text-area']" contains the text "This is a Chapter comment"
+		Then I expect the comment box contains "This is a Chapter comment"
 		And I pause for 1000ms
- 		Then I expect that element ".CommentBox:first-child .CommentBox__savedIndicator" contains the text "Saved"
- 		Then I click on the button "body [data-qa-sel='delete-comment-button']"
+		Then I expect the comment save button displays "Saved"
+ 		Then I click delete comment

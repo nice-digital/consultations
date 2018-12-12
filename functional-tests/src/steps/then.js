@@ -1,7 +1,7 @@
 import "@nice-digital/wdio-cucumber-steps/lib/then";
 import { Then } from "cucumber";
 
-import validateCommentBox, { validateCommentBoxText, validateCommentSaved }  from '../support/check/validateCommentBox';
+import validateCommentBox, { validateCommentBoxText, validateCommentBoxTitle, validateCommentSaved }  from '../support/check/validateCommentBox';
 import deleteOneComment from '../support/action/deleteOneComment';
 // import validateCommentSaved from "../support/check/validateCommentSaved";
 
@@ -13,6 +13,11 @@ Then(
 	/^I expect the comment box contains "([^"]*)"$/,
 	validateCommentBox
 );
+
+Then(
+	/^I expect the comment box title contains "([^"]*)"$/,
+	validateCommentBoxTitle
+)
 
 Then(
 	/^I expect the comment save button displays "([^"]*)"$/,

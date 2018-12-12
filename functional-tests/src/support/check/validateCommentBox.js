@@ -5,6 +5,10 @@ export const validateCommentBoxText = (commentText) => {
 	checkContainsText("element", selectors.documentPage.commentTextArea, commentText);
 };
 
+export const validateCommentBoxTitle = (titleText) => {
+	checkContainsText("element", selectors.documentPage.commentBoxTitle, titleText);
+};
+
 export const validateCommentSaved = (commentText) => {
 	checkContainsText("element", selectors.documentPage.saveIndicator, commentText);
 };
