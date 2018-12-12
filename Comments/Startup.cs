@@ -132,14 +132,15 @@ namespace Comments
 				options.KnownProxies.Clear();
 			});
 
-			services.AddCors(options =>
-            {
-                options.AddPolicy("CorsPolicy",
-                    builder => builder.AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader()
-                        .AllowCredentials());
-            }); //adding CORS for Warren. todo: maybe move this into the isDevelopment block..
+	        services.AddCors(); //options =>
+      //      {
+      //          options.AddPolicy("CorsPolicy",
+      //              builder => builder
+						//.AllowAnyOrigin()
+      //                  .AllowAnyMethod()
+      //                  .AllowAnyHeader()
+      //                  .AllowCredentials());
+      //      }); //adding CORS for Warren. todo: maybe move this into the isDevelopment block..
             
             services.AddOptions();
         }
@@ -165,11 +166,13 @@ namespace Comments
 
 	            app.UseStatusCodePagesWithReExecute(Constants.ErrorPath + "/{0}");
 			}
-
-	        
-
-
-			app.UseCors("CorsPolicy");
+			
+			app.UseCors(builder => builder
+				.AllowAnyOrigin()
+				.AllowAnyMethod()
+				.AllowAnyHeader()
+				.AllowCredentials()
+				);
 
             // Because in dev mode we proxy to a react dev server (which has to run in the root e.g. http://localhost:3000)
             // we re-write paths for static files to map them to the root
@@ -185,7 +188,9 @@ namespace Comments
 						{
 							context.Request.Path = reqPath.Value.Replace("/consultations", "");
 						}
-						else if (reqPath.Value.IndexOf("favicon.ico", StringComparison.OrdinalIgnoreCase) == -1 && reqPath.Value.IndexOf("hot-update", StringComparison.OrdinalIgnoreCase) == -1)
+						else if (reqPath.Value.IndexOf("favicon.ico", StringComparison.OrdinalIgnoreCase) == -1 &&
+								reqPath.Value.IndexOf("hot-update", StringComparison.OrdinalIgnoreCase) == -1)
+								//&& reqPath.Value.IndexOf("TopScroll", StringComparison.OrdinalIgnoreCase) == -1)
 						{
 							context.Response.StatusCode = 404;
 							throw new FileNotFoundException($"Path {reqPath.Value} could not be found. Did you mean to load '/consultations{context.Request.Path.Value  }' instead?");

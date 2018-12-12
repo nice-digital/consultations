@@ -1,4 +1,4 @@
-export const BaseUrl  = "/consultations";
+export const BaseUrl  = "//niceorg/consultations";
 
 export const Endpoints = {
 	consultation: "/api/Consultation", // details for a single consultation

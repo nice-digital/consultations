@@ -5,11 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Cors;
 
 namespace Comments.Controllers.Api
 {
     [Produces("application/json")]
-    public class CommentsController : ControllerBase
+  //  [EnableCors("CorsPolicy")]
+	public class CommentsController : ControllerBase
     {
         private readonly ICommentService _commentService;
         private readonly ILogger<CommentsController> _logger;

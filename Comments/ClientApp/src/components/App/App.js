@@ -17,7 +17,6 @@ import {ErrorBoundary} from "../ErrorBoundary/ErrorBoundary";
 import {LiveAnnouncer, LiveMessenger} from "react-aria-live";
 import { projectInformation } from "../../constants";
 import { PhaseBanner } from "../PhaseBanner/PhaseBanner";
-import CommentListWithRouter from "../CommentList/CommentList";
 import { ExternalResource } from "../ExternalResource/ExternalResource";
 
 type PropsType = any;
@@ -97,6 +96,9 @@ class App extends React.Component<PropsType, StateType> {
 								</Route>
 
 								<Route exact path="/CommentingOnOtherThings">
+									<ExternalResource />
+								</Route>
+								<Route exact path="/guidance/conditions-and-diseases/cancer/breast-cancer/products">
 									<ExternalResource />
 								</Route>
 

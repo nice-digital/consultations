@@ -15,8 +15,11 @@ if (process.env.NODE_ENV === "development") {
 	const { registerObserver } = require("react-perf-devtool");
 	registerObserver();
 }
-
-const baseUrl = document.getElementsByTagName("base")[0].getAttribute("href").replace(/\/$/, "");
+const baseElement = document.querySelector("base");
+let baseUrl = "";
+if (baseElement != null){
+	baseUrl = baseElement.getAttribute("href").replace(/\/$/, "");
+} 
 
 let rootElement = document.getElementById("root");
 
@@ -33,7 +36,8 @@ if (!rootElement){ //element not found. we'll assume (for now) that we're commen
 		window.dispatchEvent(new CustomEvent("comment", { detail: {eventRaised: event}}));
 	});
 
-	loadStyle("/consultations/styles/main.css");	
+	loadStyle("//niceorg/consultations/styles/main.css");	
+	//baseUrl = "//niceorg/";
 }
 
 //stuff to insert stuff here:
