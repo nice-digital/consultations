@@ -80,9 +80,15 @@ namespace Comments.Services
             if (!_currentUser.IsAuthorised)
                 return (comment: null, validate: new Validate(valid: false, unauthorised: true, message: "Not logged in creating comment"));
 
-
-			var sourceURI = ConsultationsUri.ConvertToConsultationsUri(comment.SourceURI, CommentOnHelpers.GetCommentOn(comment.CommentOn));
-	        comment.Order = UpdateOrderWithSourceURI(comment.Order, sourceURI);
+	        var sourceURI = comment.SourceURI;
+	        if (ConsultationsUri.IsValidRelativeURL(comment.SourceURI))
+	        {
+				sourceURI = ConsultationsUri.ConvertToConsultationsUri(comment.SourceURI, CommentOnHelpers.GetCommentOn(comment.CommentOn));
+			}
+	        if (ConsultationsUri.IsValidSourceURI(sourceURI))
+	        {
+				comment.Order = UpdateOrderWithSourceURI(comment.Order, sourceURI);
+			}
 	        var locationToSave = new Models.Location(comment as ViewModels.Location)
 	        {
 		        SourceURI = sourceURI
