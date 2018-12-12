@@ -315,6 +315,7 @@ export class Document extends Component<PropsType, StateType> {
 		const isCurrentDocument = documentId => documentId === currentDocumentFromRoute;
 		const isCommentable = d => d.convertedDocument;
 		const isSupporting = d => !d.convertedDocument;
+		const isCommentableAndNotCurrentDocument = document => isCommentable(document) && !isCurrentDocument(document.documentId);
 
 		const documentToLinkObject = d => {
 			const label = d.title || "Download Document";
@@ -340,7 +341,7 @@ export class Document extends Component<PropsType, StateType> {
 
 		if (getCommentable) { // $FlowIgnore
 			filteredDocuments = documents
-				.filter(isCommentable)
+				.filter(isCommentableAndNotCurrentDocument)
 				.map(documentToLinkObject);
 		} else { // $FlowIgnore
 			filteredDocuments = documents
