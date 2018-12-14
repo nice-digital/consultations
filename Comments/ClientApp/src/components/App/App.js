@@ -17,7 +17,7 @@ import {ErrorBoundary} from "../ErrorBoundary/ErrorBoundary";
 import {LiveAnnouncer, LiveMessenger} from "react-aria-live";
 import { projectInformation } from "../../constants";
 import { PhaseBanner } from "../PhaseBanner/PhaseBanner";
-import { ExternalResource } from "../ExternalResource/ExternalResource";
+import ExternalResourceWithRouter from "../ExternalResource/ExternalResource";
 
 type PropsType = any;
 
@@ -96,10 +96,10 @@ class App extends React.Component<PropsType, StateType> {
 								</Route>
 
 								<Route exact path="/CommentingOnOtherThings">
-									<ExternalResource />
+									<ExternalResourceWithRouter />
 								</Route>
 								<Route exact path="/guidance/conditions-and-diseases/cancer/breast-cancer/products">
-									<ExternalResource />
+									<ExternalResourceWithRouter />
 								</Route>
 
 								{/*404*/}

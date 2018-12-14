@@ -2,11 +2,15 @@
 
 import React, {Component, Fragment} from "react";
 import {LiveMessenger} from "react-aria-live";
+import { withRouter } from "react-router-dom";
 
 import { Selection } from "../Selection/Selection";
 import CommentListWithRouter from "../CommentList/CommentList";
 
 type PropsType = {
+	match: {
+		url: string,
+	},
 };
 
 type StateType = {
@@ -31,7 +35,7 @@ export class ExternalResource extends Component<PropsType, StateType> {
 		return (
 			<Fragment>
 				<Selection newCommentFunc={this.newCommentHandler}
-					sourceURI={"/CommentingOnOtherThings"}
+					sourceURI={this.props.match.url}
 					allowComments={true}/>
 				<LiveMessenger>
 					{({announceAssertive, announcePolite}) =>
@@ -46,4 +50,4 @@ export class ExternalResource extends Component<PropsType, StateType> {
 	}
 }
 
-export default ExternalResource;
+export default withRouter(ExternalResource);

@@ -36,7 +36,7 @@ if (!rootElement){ //element not found. we'll assume (for now) that we're commen
 		window.dispatchEvent(new CustomEvent("comment", { detail: {eventRaised: event}}));
 	});
 
-	loadStyle("//niceorg/consultations/styles/main.css");	
+	loadStyle("//niceorg:1400/consultations/styles/main.css");	
 	//baseUrl = "//niceorg/";
 }
 

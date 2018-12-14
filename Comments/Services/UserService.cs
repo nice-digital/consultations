@@ -32,7 +32,13 @@ namespace Comments.Services
 
         public User GetCurrentUser()
         {
-            var contextUser = _httpContextAccessor.HttpContext?.User;
+			var contextUser = _httpContextAccessor.HttpContext?.User;
+
+	        if (contextUser == null || !contextUser.Identity.IsAuthenticated)
+	        {
+		        //HACK
+		        return new User(true, "Tyler Durden", Guid.Empty, "Fight club");
+	        }
 
             return new User(contextUser?.Identity.IsAuthenticated ?? false, contextUser?.DisplayName(), contextUser?.Id(), contextUser?.Organisation());
         }
