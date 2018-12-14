@@ -15,8 +15,6 @@ Scenario: User makes a comment at chapter level
 		Given I comment on a Chapter
 		Then I expect the comment box title contains "chapter"
 		When I add the comment "This is a Chapter comment" and submit
- 		And I pause for 1000ms
 		Then I expect the comment box contains "This is a Chapter comment"
-		And I pause for 1000ms
 		Then I expect the comment save button displays "Saved"
  		Then I click delete comment
