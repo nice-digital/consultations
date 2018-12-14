@@ -15,6 +15,5 @@
  		Given I comment on a Document
 		When I add the comment "This is a Document comment" and submit
 		Then I expect the comment box contains "This is a Document comment"
-		And I pause for 1000ms
 		Then I expect the comment save button displays "Saved"
 		Then I click delete comment
