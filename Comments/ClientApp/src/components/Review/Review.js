@@ -304,7 +304,6 @@ export class Review extends Component<PropsType, StateType> {
 					action: "Response submitted",
 					label: `${response.data.comments ? response.data.comments.length : "0"} comments, ${response.data.answers ? response.data.answers.length : "0"} answers`,
 				});
-				debugger;
 				tagManager({
 					event: "generic",
 					category: "Consultation comments page",
