@@ -103,7 +103,7 @@ class App extends React.Component<PropsType, StateType> {
 								</Route>
 
 								{/*404*/}
-								<Route component={NotFound}/>
+								<Route component={ExternalResourceWithRouter}/>
 							</Switch>
 						</LiveAnnouncer>
 					</ErrorBoundary>
