@@ -28,5 +28,6 @@
     background-color: $colour-nice-dark-grey;
     color: $colour-nice-white;
     opacity: 0.5;
+    border: rem($spacing-xx-small) solid $colour-nice-white; // todo: find border width!
   }
 }

@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from "react";
+import React, {Component, Fragment} from "react";
 
 type StateType = {
 	question: QuestionType;
@@ -97,7 +97,7 @@ export class TextQuestion extends Component<PropsType, StateType> {
 						</div>
 						{!readOnly &&
 						<div>
-							{question.questionText && question.questionText.length > 0 && !readOnly ?
+							{question.questionText && question.questionText.length > 0 ?
 								unsavedChanges ?
 									<input
 										className="btn ml--0 mb--0"
@@ -109,20 +109,27 @@ export class TextQuestion extends Component<PropsType, StateType> {
 								:
 								null
 							}
-							<button
-								className="btn btn--inverse ml--0 mb--0 icon icon--chevron-up"
-								onClick={e => this.props.moveQuestion(e, question, "up")}>
-								<span className="visually-hidden">
-									Move Up
-								</span>
-							</button>
-							<button
-								className="btn btn--inverse ml--0 mb--0 icon icon--chevron-down"
-								onClick={e => this.props.moveQuestion(e, question, "down")}>
-								<span className="visually-hidden">
-									Move Down
-								</span>
-							</button>
+							{question.questionText && question.questionText.length > 0 && !unsavedChanges &&
+								<Fragment>
+									<button
+										className="btn btn--inverse ml--0 mb--0"
+										onClick={e => this.props.moveQuestion(e, question, "up")}>
+										<span className="icon icon--chevron-up" aria-hidden="true" />
+										<span className="visually-hidden">
+											Move Up
+										</span>
+									</button>
+									<button
+										className="btn btn--inverse ml--0 mb--0"
+										onClick={e => this.props.moveQuestion(e, question, "down")}>
+										<span className="icon icon--chevron-down" aria-hidden="true" />
+										<span className="visually-hidden">
+											Move Down
+										</span>
+									</button>
+
+								</Fragment>
+							}
 							<button
 								className="btn mr--0 mb--0 pull-right"
 								onClick={e => this.props.deleteQuestion(e, question)}>

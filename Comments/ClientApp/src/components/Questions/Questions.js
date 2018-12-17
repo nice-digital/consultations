@@ -13,7 +13,7 @@ import { saveQuestionHandler, deleteQuestionHandler, moveQuestionHandler } from 
 import { updateUnsavedIds } from "../../helpers/unsaved-comments";
 
 type PropsType = {
-	
+
 };
 
 type StateType = {
@@ -188,7 +188,7 @@ export class Questions extends Component<PropsType, StateType> {
 			const lowestExistingId = Math.min.apply(Math, existingIds);
 			newQuestion.questionId = lowestExistingId >= 0 ? -1 : lowestExistingId - 1;
 		}
-		currentQuestions.unshift(newQuestion);
+		currentQuestions.push(newQuestion);
 		this.setState({questionsData});
 	};
 
@@ -280,22 +280,8 @@ export class Questions extends Component<PropsType, StateType> {
 											<div>
 												{currentDocumentId ?
 													<Fragment>
-														{this.state.editingAllowed &&
-														<button
-															className="btn btn--cta"
-															disabled={this.state.loading}
-															onClick={(e) => {
-																if (currentDocumentId === "consultation") {
-																	this.newQuestion(e, currentConsultationId, null, textQuestionTypeId);
-																} else {
-																	this.newQuestion(e, currentConsultationId, parseInt(currentDocumentId, 10), textQuestionTypeId);
-																}
-															}}
-														>Add text response question
-														</button>
-														}
 														{questionsToDisplay && questionsToDisplay.length ?
-															<ul className="list--unstyled">
+															<ul className="list--unstyled mt--0">
 																{questionsToDisplay.map(question => (
 																	<TextQuestion
 																		readOnly={!this.state.editingAllowed}
@@ -308,6 +294,20 @@ export class Questions extends Component<PropsType, StateType> {
 																	/>
 																))}
 															</ul> : <p>Click button to add a question.</p>
+														}
+														{this.state.editingAllowed &&
+															<button
+																className="btn btn--cta"
+																disabled={this.state.loading}
+																onClick={(e) => {
+																	if (currentDocumentId === "consultation") {
+																		this.newQuestion(e, currentConsultationId, null, textQuestionTypeId);
+																	} else {
+																		this.newQuestion(e, currentConsultationId, parseInt(currentDocumentId, 10), textQuestionTypeId);
+																	}
+																}}
+															>Add text response question
+															</button>
 														}
 													</Fragment>
 													:
