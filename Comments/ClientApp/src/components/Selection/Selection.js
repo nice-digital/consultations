@@ -24,11 +24,11 @@ export class Selection extends Component<PropsType, StateType> {
 		this.state = {
 			toolTipVisible: false,
 			comment: {},
-			position: {},
+			position: {}
 		};
 		this.selectionContainer = React.createRef();		
 	}
-
+	
 	getXPathForElement(element) {
 		const idx = (sib, name) => sib 
 			? idx(sib.previousElementSibling, name||sib.localName) + (sib.localName == name) // eslint-disable-line
@@ -41,19 +41,11 @@ export class Selection extends Component<PropsType, StateType> {
 		return segs(element).join("/");
 	}
 
-	// IE11 issue in here
 	getCommentForRange = (limitingElement: any, selection: any) =>{
 		let selectionRange = selection.getRangeAt(0);
 		let comment = null;
-		const getContainerElement = (selectionRange) => {
-			if (selectionRange.startContainer && selectionRange.startContainer.parentElement) {
-				return selectionRange.startContainer.parentElement;
-			} else if (selectionRange.commonAncestorContainer && selectionRange.commonAncestorContainer.parentNode) {
-				return selectionRange.commonAncestorContainer.parentNode;
-			}
-		};
 		try {
-			comment = {	
+			comment = {
 				quote: selectionRange.toString(),
 				rangeStart: this.getXPathForElement(selectionRange.startContainer.parentElement),
 				rangeStartOffset: selectionRange.startOffset,
