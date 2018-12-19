@@ -96,7 +96,7 @@ namespace Comments.Services
 
 	        questionToSave.LastModifiedByUserId = _currentUser.UserId.Value;
 	        questionToSave.LastModifiedDate = DateTime.UtcNow;
-	        questionToSave.Location.Order = $"{orderConsultation}:{orderDocument}:{orderQuestion}";
+	        questionToSave.Location.Order = $"{orderConsultation}.{orderDocument}.{orderQuestion}";
 
 	        _context.Location.Add(locationToSave);
             _context.Question.Add(questionToSave);
