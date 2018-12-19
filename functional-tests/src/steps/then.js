@@ -1,7 +1,7 @@
 import "@nice-digital/wdio-cucumber-steps/lib/then";
 import { Then } from "cucumber";
 
-import validateCommentBox, { validateCommentBoxText, validateCommentBoxTitle, validateCommentSaved }  from '../support/check/validateCommentBox';
+import validateCommentBox, { validateCommentBoxText, validateCommentBoxTitle, validateCommentSaved, validateFirstCommentBox, validateSecondCommentBox, validateThirdCommentBox }  from '../support/check/validateCommentBox';
 import deleteOneComment from '../support/action/deleteOneComment';
 // import validateCommentSaved from "../support/check/validateCommentSaved";
 
@@ -12,6 +12,21 @@ import deleteOneComment from '../support/action/deleteOneComment';
 Then(
 	/^I expect the comment box contains "([^"]*)"$/,
 	validateCommentBox
+);
+
+Then(
+	/^I expect the first comment box contains "([^"]*)"$/,
+	validateFirstCommentBox
+);
+
+Then(
+	/^I expect the second comment box contains "([^"]*)"$/,
+	validateSecondCommentBox
+);
+
+Then(
+	/^I expect the third comment box contains "([^"]*)"$/,
+	validateThirdCommentBox
 );
 
 Then(

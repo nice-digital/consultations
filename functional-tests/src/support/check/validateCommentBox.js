@@ -6,6 +6,21 @@ export const validateCommentBoxText = (commentText) => {
 	browser.pause(1000);
 };
 
+export const validateFirstCommentBox = (commentText) => {
+	checkContainsText("element", selectors.reviewPage.firstCommentTextArea, commentText);
+	browser.pause(1000);
+};
+
+export const validateSecondCommentBox = (commentText) => {
+	checkContainsText("element", selectors.reviewPage.secondCommentTextArea, commentText);
+	browser.pause(1000);
+};
+
+export const validateThirdCommentBox = (commentText) => {
+	checkContainsText("element", selectors.reviewPage.thirdCommentTextArea, commentText);
+	browser.pause(1000);
+};
+
 export const validateCommentBoxTitle = (titleText) => {
 	checkContainsText("element", selectors.documentPage.commentBoxTitle, titleText);
 	browser.pause(1000);
