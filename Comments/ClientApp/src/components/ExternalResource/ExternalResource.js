@@ -42,7 +42,6 @@ export class ExternalResource extends Component<PropsType, StateType> {
 						<CommentListWithRouter
 							announceAssertive={announceAssertive}
 							announcePolite={announcePolite}
-							externalResource={true}
 							wrappedComponentRef={component => (this.commentList = component)} />}
 				</LiveMessenger>
 			</Fragment>

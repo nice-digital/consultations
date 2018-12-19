@@ -82,7 +82,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			this.props.staticContext,
 			"comments",
 			[],
-			{sourceURI: this.props.match.url, externalResource: this.props.externalResource},
+			{sourceURI: this.props.match.url},
 			preloadedData
 		);
 
@@ -107,7 +107,7 @@ export class CommentList extends Component<PropsType, StateType> {
 	}
 
 	loadComments() {
-		load("comments", undefined, [], {sourceURI: this.props.match.url, externalResource: this.props.externalResource}).then(
+		load("comments", undefined, [], {sourceURI: this.props.match.url}).then(
 			response => {
 				let allowComments = response.data.consultationState.consultationIsOpen && !response.data.consultationState.userHasSubmitted;
 				this.setState({

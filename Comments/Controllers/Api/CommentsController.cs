@@ -29,12 +29,12 @@ namespace Comments.Controllers.Api
 		/// <returns></returns>
 		[Route("consultations/api/[controller]")]
 		[HttpGet]
-        public CommentsAndQuestions Get(string sourceURI, bool externalResource)
+        public CommentsAndQuestions Get(string sourceURI)
         {
             if (string.IsNullOrWhiteSpace(sourceURI))
                 throw new ArgumentNullException(nameof(sourceURI));
 
-            return _commentService.GetCommentsAndQuestions(relativeURL: sourceURI, externalResource: externalResource);
+            return _commentService.GetCommentsAndQuestions(relativeURL: sourceURI);
         }
 
 		/// <summary>

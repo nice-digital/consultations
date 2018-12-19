@@ -14,7 +14,7 @@ namespace Comments.Services
 {
 	public interface ICommentService
     {
-	    CommentsAndQuestions GetCommentsAndQuestions(string relativeURL, bool externalResource = false);
+	    CommentsAndQuestions GetCommentsAndQuestions(string relativeURL);
 	    ReviewPageViewModel GetCommentsAndQuestionsForReview(string relativeURL, ReviewPageViewModel model);
 		(ViewModels.Comment comment, Validate validate) GetComment(int commentId);
         (int rowsUpdated, Validate validate) EditComment(int commentId, ViewModels.Comment comment);
@@ -122,7 +122,7 @@ namespace Comments.Services
             return (rowsUpdated: _context.SaveChanges(), validate: null);
         }
 
-	    public CommentsAndQuestions GetCommentsAndQuestions(string relativeURL, bool externalResource = false)
+	    public CommentsAndQuestions GetCommentsAndQuestions(string relativeURL)
 	    {
 		    var user = _userService.GetCurrentUser();
 		    var signInURL = _authenticateService.GetLoginURL(relativeURL.ToConsultationsRelativeUrl());
@@ -132,7 +132,7 @@ namespace Comments.Services
 		    List<Location> locations;
 		    ConsultationState consultationState = null;
 
-			if (!externalResource)
+			if (ConsultationsUri.IsValidRelativeURL(relativeURL))
 		    {
 			    var consultationSourceURI = ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Consultation);
 
@@ -167,7 +167,7 @@ namespace Comments.Services
 
 		public ReviewPageViewModel GetCommentsAndQuestionsForReview(string relativeURL, ReviewPageViewModel model)
 		{
-			var commentsAndQuestions = GetCommentsAndQuestions(relativeURL, externalResource: false);
+			var commentsAndQuestions = GetCommentsAndQuestions(relativeURL);
 
 			if (model.Sort == ReviewSortOrder.DocumentAsc)
 			{
