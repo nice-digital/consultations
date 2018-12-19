@@ -4,10 +4,12 @@ using System.IO;
 using System.Linq;
 using Comments.Models;
 using Comments.Services;
+using Comments.ViewModels;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.Extensions.Logging;
+using Question = Comments.Models.Question;
 
 namespace Comments.Export
 {
@@ -345,12 +347,14 @@ namespace Comments.Export
 			foreach (var comment in comments)
 			{
 				var locationDetails = _exportService.GetLocationData(comment.Location);
+				var commentOn = CommentOnHelpers.GetCommentOn(comment.Location.SourceURI, comment.Location.RangeStart, comment.Location.HtmlElementID);
+				
 				var excelrow = new Excel()
 				{
 					ConsultationName = locationDetails.ConsultationName,
 					DocumentName = locationDetails.DocumentName,
 					ChapterTitle = locationDetails.ChapterName,
-					Section = comment.Location.Section,
+					Section = commentOn == CommentOn.Section || commentOn == CommentOn.SubSection || commentOn == CommentOn.Selection ? comment.Location.Section : null,
 					Quote = comment.Location.RangeEnd != null && comment.Location.RangeStart != null ? comment.Location.Quote : null,
 					UserName =  _userService.GetDisplayNameForUserId(comment.CreatedByUserId),
 					Email = _userService.GetEmailForUserId(comment.CreatedByUserId),
@@ -364,8 +368,10 @@ namespace Comments.Export
 					OrganisationName =  comment.SubmissionComment.Count > 0 ? comment.SubmissionComment?.First().Submission.OrganisationName : null,
 					HasTobaccoLinks =  comment.SubmissionComment.Count> 0 ? comment.SubmissionComment?.First().Submission.HasTobaccoLinks : null,
 					TobaccoIndustryDetails = comment.SubmissionComment.Count > 0? comment.SubmissionComment?.First().Submission.TobaccoDisclosure : null,
-					Order = comment.Location.Order
-				};
+					Order = comment.Location.Order,
+
+					
+			};
 				excel.Add(excelrow);
 			}
 
