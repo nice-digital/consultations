@@ -22,7 +22,7 @@ import { Tutorial } from "../Tutorial/Tutorial";
 type PropsType = {
 	staticContext: {
 		preload: any,
-		globals: any,
+		analyticsGlobals: any,
 	},
 	match: any,
 	location: any,
@@ -106,8 +106,10 @@ export class Document extends Component<PropsType, StateType> {
 			if (preloadedChapter && preloadedDocuments && preloadedConsultation) {
 				// Set up globals for analytics tracking of SSR props
 				if (this.props.staticContext) {
-					this.props.staticContext.globals.gidReference = preloadedConsultation.reference;
-					this.props.staticContext.globals.stage = "preview";
+					this.props.staticContext.analyticsGlobals.gidReference = preloadedConsultation.reference;
+					this.props.staticContext.analyticsGlobals.consultationTitle = preloadedConsultation.title;
+					this.props.staticContext.analyticsGlobals.stage = "preview";
+
 				}
 				const allowComments = preloadedConsultation.supportsComments &&
 					preloadedConsultation.consultationState.consultationIsOpen &&
@@ -206,7 +208,7 @@ export class Document extends Component<PropsType, StateType> {
 						tagManager({
 							event: "pageview",
 							gidReference: this.state.consultationData.reference,
-							title: this.getPageTitle(),
+							title: this.getPageTitle(true),
 							stage: "preview",
 						});
 					});
@@ -243,6 +245,7 @@ export class Document extends Component<PropsType, StateType> {
 						tagManager({
 							event: "pageview",
 							gidReference: this.state.consultationData.reference,
+							title: this.getPageTitle(true),
 							stage: "preview",
 						});
 					});
@@ -261,7 +264,7 @@ export class Document extends Component<PropsType, StateType> {
 						tagManager({
 							event: "pageview",
 							gidReference: this.state.consultationData.reference,
-							title: this.getPageTitle(),
+							title: this.getPageTitle(true),
 							stage: "preview",
 						});
 					});
@@ -316,6 +319,7 @@ export class Document extends Component<PropsType, StateType> {
 		const isCurrentDocument = documentId => documentId === currentDocumentFromRoute;
 		const isCommentable = d => d.convertedDocument;
 		const isSupporting = d => !d.convertedDocument;
+		const isCommentableAndNotCurrentDocument = document => isCommentable(document) && !isCurrentDocument(document.documentId);
 
 		const documentToLinkObject = d => {
 			const label = d.title || "Download Document";
@@ -341,7 +345,7 @@ export class Document extends Component<PropsType, StateType> {
 
 		if (getCommentable) { // $FlowIgnore
 			filteredDocuments = documents
-				.filter(isCommentable)
+				.filter(isCommentableAndNotCurrentDocument)
 				.map(documentToLinkObject);
 		} else { // $FlowIgnore
 			filteredDocuments = documents
@@ -371,13 +375,13 @@ export class Document extends Component<PropsType, StateType> {
 	getCurrentDocumentTitle = () => {
 		const documents = this.state.documentsData;
 		const documentId = parseInt(this.props.match.params.documentId, 0);
-
 		const matchCurrentDocument = d => d.documentId === parseInt(documentId, 0);
 		const currentDocumentDetails = documents.filter(matchCurrentDocument)[0];
 		return currentDocumentDetails.title;
 	};
 
-	getPageTitle = () => {
+	getPageTitle = (isForAnalytics = false) => {
+		if (isForAnalytics) return this.state.consultationData.title;
 		return `${this.state.chapterData.title} | ${this.getCurrentDocumentTitle()} | ${this.state.consultationData.title}`;
 	};
 

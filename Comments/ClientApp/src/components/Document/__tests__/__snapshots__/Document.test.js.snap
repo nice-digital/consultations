@@ -414,22 +414,6 @@ Array [
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
-                                        aria-current="page"
-                                        href="/1/1/introduction"
-                                        onClick={[Function]}
-                                    >
-                                        <span
-                                            data-g="10"
-                                        >
-                                            Unstable angina and NSTEMI
-                                        </span>
-                                    </a>
-                                </li>
-                                <li
-                                    className="stacked-nav__list-item grid grid--gutterless"
-                                    data-qa-sel="nav-list-item"
-                                >
-                                    <a
                                         aria-current={null}
                                         href="/1/2/overview"
                                         onClick={[Function]}
