@@ -84,7 +84,7 @@ Array [
                                 className="stacked-nav__list"
                             >
                                 <li
-                                    className="stacked-nav__list-item"
+                                    className="stacked-nav__list-item grid grid--gutterless"
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
@@ -92,29 +92,43 @@ Array [
                                         href="/preview/GID-NG10186/consultation/113/document/1/chapter/draftappendicesa-tcleandocx"
                                         onClick={[Function]}
                                     >
-                                        DRAFT_Appendices_A-T_CLEAN.docx
+                                        <span
+                                            data-g="10"
+                                        >
+                                            DRAFT_Appendices_A-T_CLEAN.docx
+                                        </span>
                                     </a>
                                 </li>
                                 <li
-                                    className="stacked-nav__list-item"
+                                    className="stacked-nav__list-item grid grid--gutterless"
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/preview/GID-NG10186/consultation/113/document/1/chapter/appendices"
                                         onClick={[Function]}
                                     >
-                                        Appendices
+                                        <span
+                                            data-g="10"
+                                        >
+                                            Appendices
+                                        </span>
                                     </a>
                                 </li>
                                 <li
-                                    className="stacked-nav__list-item"
+                                    className="stacked-nav__list-item grid grid--gutterless"
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/preview/GID-NG10186/consultation/113/document/1/chapter/scope"
                                         onClick={[Function]}
                                     >
-                                        1 Scope
+                                        <span
+                                            data-g="10"
+                                        >
+                                            1 Scope
+                                        </span>
                                     </a>
                                 </li>
                             </ul>

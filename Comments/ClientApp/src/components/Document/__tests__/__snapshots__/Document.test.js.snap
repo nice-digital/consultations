@@ -156,7 +156,7 @@ Array [
                                 className="stacked-nav__list"
                             >
                                 <li
-                                    className="stacked-nav__list-item"
+                                    className="stacked-nav__list-item grid grid--gutterless"
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
@@ -164,161 +164,235 @@ Array [
                                         href="/1/1/introduction"
                                         onClick={[Function]}
                                     >
-                                        Introduction
+                                        <span
+                                            data-g="10"
+                                        >
+                                            Introduction
+                                        </span>
                                     </a>
                                 </li>
                                 <li
-                                    className="stacked-nav__list-item"
+                                    className="stacked-nav__list-item grid grid--gutterless"
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/1/patient-centred-care"
                                         onClick={[Function]}
                                     >
-                                        Patient-centred care
+                                        <span
+                                            data-g="10"
+                                        >
+                                            Patient-centred care
+                                        </span>
                                     </a>
                                 </li>
                                 <li
-                                    className="stacked-nav__list-item"
+                                    className="stacked-nav__list-item grid grid--gutterless"
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/1/key-priorities-for-implementation"
                                         onClick={[Function]}
                                     >
-                                        Key priorities for implementation
+                                        <span
+                                            data-g="10"
+                                        >
+                                            Key priorities for implementation
+                                        </span>
                                     </a>
                                 </li>
                                 <li
-                                    className="stacked-nav__list-item"
+                                    className="stacked-nav__list-item grid grid--gutterless"
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/1/guidance"
                                         onClick={[Function]}
                                     >
-                                        1 Guidance
+                                        <span
+                                            data-g="10"
+                                        >
+                                            1 Guidance
+                                        </span>
                                     </a>
                                 </li>
                                 <li
-                                    className="stacked-nav__list-item"
+                                    className="stacked-nav__list-item grid grid--gutterless"
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/1/notes-on-the-scope-of-the-guidance"
                                         onClick={[Function]}
                                     >
-                                        2 Notes on the scope of the guidance
+                                        <span
+                                            data-g="10"
+                                        >
+                                            2 Notes on the scope of the guidance
+                                        </span>
                                     </a>
                                 </li>
                                 <li
-                                    className="stacked-nav__list-item"
+                                    className="stacked-nav__list-item grid grid--gutterless"
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/1/implementation"
                                         onClick={[Function]}
                                     >
-                                        3 Implementation
+                                        <span
+                                            data-g="10"
+                                        >
+                                            3 Implementation
+                                        </span>
                                     </a>
                                 </li>
                                 <li
-                                    className="stacked-nav__list-item"
+                                    className="stacked-nav__list-item grid grid--gutterless"
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/1/research-recommendations"
                                         onClick={[Function]}
                                     >
-                                        4 Research recommendations
+                                        <span
+                                            data-g="10"
+                                        >
+                                            4 Research recommendations
+                                        </span>
                                     </a>
                                 </li>
                                 <li
-                                    className="stacked-nav__list-item"
+                                    className="stacked-nav__list-item grid grid--gutterless"
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/1/other-versions-of-this-guideline"
                                         onClick={[Function]}
                                     >
-                                        5 Other versions of this guideline
+                                        <span
+                                            data-g="10"
+                                        >
+                                            5 Other versions of this guideline
+                                        </span>
                                     </a>
                                 </li>
                                 <li
-                                    className="stacked-nav__list-item"
+                                    className="stacked-nav__list-item grid grid--gutterless"
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/1/related-nice-guidance"
                                         onClick={[Function]}
                                     >
-                                        6 Related NICE guidance
+                                        <span
+                                            data-g="10"
+                                        >
+                                            6 Related NICE guidance
+                                        </span>
                                     </a>
                                 </li>
                                 <li
-                                    className="stacked-nav__list-item"
+                                    className="stacked-nav__list-item grid grid--gutterless"
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/1/updating-the-guideline"
                                         onClick={[Function]}
                                     >
-                                        7 Updating the guideline
+                                        <span
+                                            data-g="10"
+                                        >
+                                            7 Updating the guideline
+                                        </span>
                                     </a>
                                 </li>
                                 <li
-                                    className="stacked-nav__list-item"
+                                    className="stacked-nav__list-item grid grid--gutterless"
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/1/appendix-a-the-guideline-development-group-and-nice-project-team"
                                         onClick={[Function]}
                                     >
-                                        Appendix A: The Guideline Development Group and NICE project team
+                                        <span
+                                            data-g="10"
+                                        >
+                                            Appendix A: The Guideline Development Group and NICE project team
+                                        </span>
                                     </a>
                                 </li>
                                 <li
-                                    className="stacked-nav__list-item"
+                                    className="stacked-nav__list-item grid grid--gutterless"
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/1/appendix-b-the-guideline-review-panel"
                                         onClick={[Function]}
                                     >
-                                        Appendix B: The Guideline Review Panel
+                                        <span
+                                            data-g="10"
+                                        >
+                                            Appendix B: The Guideline Review Panel
+                                        </span>
                                     </a>
                                 </li>
                                 <li
-                                    className="stacked-nav__list-item"
+                                    className="stacked-nav__list-item grid grid--gutterless"
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/1/appendix-c-the-algorithm"
                                         onClick={[Function]}
                                     >
-                                        Appendix C: The algorithm
+                                        <span
+                                            data-g="10"
+                                        >
+                                            Appendix C: The algorithm
+                                        </span>
                                     </a>
                                 </li>
                                 <li
-                                    className="stacked-nav__list-item"
+                                    className="stacked-nav__list-item grid grid--gutterless"
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/1/changes-after-publication"
                                         onClick={[Function]}
                                     >
-                                        Changes after publication
+                                        <span
+                                            data-g="10"
+                                        >
+                                            Changes after publication
+                                        </span>
                                     </a>
                                 </li>
                                 <li
-                                    className="stacked-nav__list-item"
+                                    className="stacked-nav__list-item grid grid--gutterless"
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/1/about-this-guideline"
                                         onClick={[Function]}
                                     >
-                                        About this guideline
+                                        <span
+                                            data-g="10"
+                                        >
+                                            About this guideline
+                                        </span>
                                     </a>
                                 </li>
                             </ul>
@@ -336,7 +410,7 @@ Array [
                                 className="stacked-nav__list"
                             >
                                 <li
-                                    className="stacked-nav__list-item"
+                                    className="stacked-nav__list-item grid grid--gutterless"
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
@@ -344,73 +418,107 @@ Array [
                                         href="/1/1/introduction"
                                         onClick={[Function]}
                                     >
-                                        Unstable angina and NSTEMI
+                                        <span
+                                            data-g="10"
+                                        >
+                                            Unstable angina and NSTEMI
+                                        </span>
                                     </a>
                                 </li>
                                 <li
-                                    className="stacked-nav__list-item"
+                                    className="stacked-nav__list-item grid grid--gutterless"
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/2/overview"
                                         onClick={[Function]}
                                     >
-                                        Sinusitis (acute): antimicrobial prescribing
+                                        <span
+                                            data-g="10"
+                                        >
+                                            Sinusitis (acute): antimicrobial prescribing
+                                        </span>
                                     </a>
                                 </li>
                                 <li
-                                    className="stacked-nav__list-item"
+                                    className="stacked-nav__list-item grid grid--gutterless"
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/3/product-intros-056fc427-7484-4d78-8d55-0070aaa12061-2-2docx"
                                         onClick={[Function]}
                                     >
-                                        Download Document
+                                        <span
+                                            data-g="10"
+                                        >
+                                            Download Document
+                                        </span>
                                     </a>
                                 </li>
                                 <li
-                                    className="stacked-nav__list-item"
+                                    className="stacked-nav__list-item grid grid--gutterless"
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/4/messaging-service-restartdocx"
                                         onClick={[Function]}
                                     >
-                                        Download Document
+                                        <span
+                                            data-g="10"
+                                        >
+                                            Download Document
+                                        </span>
                                     </a>
                                 </li>
                                 <li
-                                    className="stacked-nav__list-item"
+                                    className="stacked-nav__list-item grid grid--gutterless"
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/5/introduction"
                                         onClick={[Function]}
                                     >
-                                        Unstable angina and NSTEMI
+                                        <span
+                                            data-g="10"
+                                        >
+                                            Unstable angina and NSTEMI
+                                        </span>
                                     </a>
                                 </li>
                                 <li
-                                    className="stacked-nav__list-item"
+                                    className="stacked-nav__list-item grid grid--gutterless"
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/6/messaging-service-restartdocx"
                                         onClick={[Function]}
                                     >
-                                        Download Document
+                                        <span
+                                            data-g="10"
+                                        >
+                                            Download Document
+                                        </span>
                                     </a>
                                 </li>
                                 <li
-                                    className="stacked-nav__list-item"
+                                    className="stacked-nav__list-item grid grid--gutterless"
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/7/supervisor-self-service-nice-guide-2018docx"
                                         onClick={[Function]}
                                     >
-                                        Download Document
+                                        <span
+                                            data-g="10"
+                                        >
+                                            Download Document
+                                        </span>
                                     </a>
                                 </li>
                             </ul>
