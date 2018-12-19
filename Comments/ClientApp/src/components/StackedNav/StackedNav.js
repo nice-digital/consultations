@@ -38,13 +38,13 @@ export class StackedNav extends PureComponent<PropsType> {
 				<h2 className="stacked-nav__root">{title}</h2>
 				<ul className="stacked-nav__list">
 					{links.map((item, index) => (
-						<li key={index} data-qa-sel="nav-list-item" className="stacked-nav__list-item grid grid--gutterless">
+						<li key={index} data-qa-sel="nav-list-item" className="stacked-nav__list-item">
 							{item.isReactRoute ?
 								<Link
 									to={item.url}
 									aria-current={item.current ? "page" : null}
 								>
-									<span data-g="10">{item.label}</span>
+									<span data-g="10" className="pl--0">{item.label}</span>
 									{item.marker &&
 										<span className="text-right" data-g="2">({item.marker})</span>
 									}
@@ -54,7 +54,11 @@ export class StackedNav extends PureComponent<PropsType> {
 								<a href={item.url}
 									 target="_blank"
 									 onClick={this.trackClick}
-									 rel="noopener noreferrer">{item.label}</a>
+									 rel="noopener noreferrer">
+									<span data-g="10" className="pl--0">
+										{item.label}
+									</span>
+									</a>
 							}
 						</li>
 					))}

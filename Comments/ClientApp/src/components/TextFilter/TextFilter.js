@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { DebounceInput } from "react-debounce-input";
 import queryString from "query-string";
 //import stringifyObject from "stringify-object";
-import { withRouter } from "react-router-dom";
 
 import { withHistory } from "../HistoryContext/HistoryContext";
 import { appendQueryParameter, removeQueryParameter, removeQuerystring } from "../../helpers/utils";
@@ -28,7 +27,7 @@ export class TextFilter extends Component {
 
 	removeKeyword = () => {
 		this.handleKeywordChange("");
-	}
+	};
 
 	componentDidUpdate(prevProps, prevState){
 		if (prevProps.keyword !== "" && this.props.keyword === ""){
@@ -47,10 +46,10 @@ export class TextFilter extends Component {
 		const pathWithoutQuerystring = removeQuerystring(this.props.path);
 		const querystringWithRemovedKeyword = removeQueryParameter(this.props.search, "Keyword");
 
-		if (keyword.length <= 0){			
+		if (keyword.length <= 0){
 			return pathWithoutQuerystring + querystringWithRemovedKeyword;
 		}
-		
+
 		const querystringWithKeywordAdded = appendQueryParameter(querystringWithRemovedKeyword, "Keyword", keyword);
 		return pathWithoutQuerystring + querystringWithKeywordAdded;
 	};
