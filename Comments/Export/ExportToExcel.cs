@@ -347,12 +347,11 @@ namespace Comments.Export
 				var locationDetails = _exportService.GetLocationData(comment.Location);
 				var excelrow = new Excel()
 				{
-
 					ConsultationName = locationDetails.ConsultationName,
 					DocumentName = locationDetails.DocumentName,
 					ChapterTitle = locationDetails.ChapterName,
 					Section = comment.Location.Section,
-					Quote = comment.Location.Quote,
+					Quote = comment.Location.RangeEnd != null && comment.Location.RangeStart != null ? comment.Location.Quote : null,
 					UserName =  _userService.GetDisplayNameForUserId(comment.CreatedByUserId),
 					Email = _userService.GetEmailForUserId(comment.CreatedByUserId),
 					CommentId = comment.CommentId,
