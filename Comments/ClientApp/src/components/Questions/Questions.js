@@ -308,6 +308,7 @@ export class Questions extends Component<PropsType, StateType> {
 																		saveQuestion={this.saveQuestion}
 																		deleteQuestion={this.deleteQuestion}
 																		moveQuestion={this.moveQuestion}
+																		totalQuestionQty={questionsToDisplay.length}
 																	/>
 																))}
 															</ul> : <p>Click button to add a question.</p>

@@ -73,7 +73,7 @@ export class TextQuestion extends Component<PropsType, StateType> {
 			return null;
 		}
 
-		const {readOnly} = this.props;
+		const {readOnly, totalQuestionQty} = this.props;
 
 		const {question, unsavedChanges} = this.state;
 
@@ -109,7 +109,7 @@ export class TextQuestion extends Component<PropsType, StateType> {
 								:
 								null
 							}
-							{question.questionText && question.questionText.length > 0 && !unsavedChanges &&
+							{totalQuestionQty > 1 && question.questionText && question.questionText.length > 0 && !unsavedChanges &&
 								<Fragment>
 									<button
 										className="btn btn--inverse ml--0 mb--0"
