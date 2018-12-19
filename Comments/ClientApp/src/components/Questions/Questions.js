@@ -13,11 +13,19 @@ import { saveQuestionHandler, deleteQuestionHandler, moveQuestionHandler } from 
 import { updateUnsavedIds } from "../../helpers/unsaved-comments";
 
 type PropsType = {
-
+	staticContext: ContextType;
+	match: any;
+	location: any;
+	preview: boolean;
 };
 
 type StateType = {
-
+	error: ErrorType;
+	loading: boolean;
+	hasInitialData: boolean;
+	editingAllowed: boolean;
+	questionsData: Object;
+	unsavedIds: Array<string>;
 };
 
 export class Questions extends Component<PropsType, StateType> {
@@ -26,7 +34,7 @@ export class Questions extends Component<PropsType, StateType> {
 
 		this.state = {
 			editingAllowed: false,
-			questionsData: null,
+			questionsData: {},
 			loading: true,
 			hasInitialData: false,
 			unsavedIds: [],
@@ -192,9 +200,9 @@ export class Questions extends Component<PropsType, StateType> {
 		this.setState({questionsData});
 	};
 
-	createConsultationNavigation = (questionsData: Object, currentConsultationId: string, currentDocumentId: string) => {
+	createConsultationNavigation = (questionsData: Object, currentConsultationId: string, currentDocumentId: string|null) => {
 		const isCurrentRoute = (documentId) => documentId.toString() === currentDocumentId;
-		const { consultationTitle, consultationQuestions } = questionsData;
+		const {consultationTitle, consultationQuestions} = questionsData;
 		return {
 			title: "Add questions to consultation",
 			links: [
@@ -212,7 +220,7 @@ export class Questions extends Component<PropsType, StateType> {
 	createDocumentsNavigation = (
 		questionsData: Object,
 		currentConsultationId: string,
-		currentDocumentId: string) => {
+		currentDocumentId: string|null) => {
 		const doesntHaveDocumentIdOfZero = document => document.documentId !== 0; // todo: to be replaced with convertedDocument when available on endpoint
 		const isCurrentRoute = (documentId) => documentId.toString() === currentDocumentId;
 		return {
@@ -273,8 +281,17 @@ export class Questions extends Component<PropsType, StateType> {
 									<div className="grid">
 										<div data-g="12 md:6">
 											<StackedNav
-												links={this.createConsultationNavigation(questionsData, currentConsultationId, currentDocumentId)}/>
-											<StackedNav links={this.createDocumentsNavigation(questionsData, currentConsultationId, currentDocumentId)}/>
+												links={
+													this.createConsultationNavigation(
+														questionsData,
+														currentConsultationId,
+														currentDocumentId)}/>
+											<StackedNav
+												links={
+													this.createDocumentsNavigation(
+														questionsData,
+														currentConsultationId,
+														currentDocumentId)}/>
 										</div>
 										<div data-g="12 md:6">
 											<div>
@@ -296,18 +313,18 @@ export class Questions extends Component<PropsType, StateType> {
 															</ul> : <p>Click button to add a question.</p>
 														}
 														{this.state.editingAllowed &&
-															<button
-																className="btn btn--cta"
-																disabled={this.state.loading}
-																onClick={(e) => {
-																	if (currentDocumentId === "consultation") {
-																		this.newQuestion(e, currentConsultationId, null, textQuestionTypeId);
-																	} else {
-																		this.newQuestion(e, currentConsultationId, parseInt(currentDocumentId, 10), textQuestionTypeId);
-																	}
-																}}
-															>Add text response question
-															</button>
+														<button
+															className="btn btn--cta"
+															disabled={this.state.loading}
+															onClick={(e) => {
+																if (currentDocumentId === "consultation") {
+																	this.newQuestion(e, currentConsultationId, null, textQuestionTypeId);
+																} else {
+																	this.newQuestion(e, currentConsultationId, parseInt(currentDocumentId, 10), textQuestionTypeId);
+																}
+															}}
+														>Add text response question
+														</button>
 														}
 													</Fragment>
 													:

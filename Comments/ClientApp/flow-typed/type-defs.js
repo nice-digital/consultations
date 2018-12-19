@@ -167,4 +167,9 @@ declare type AppliedFilterType = {
 	groupTitle: string,
 	optionId: string,
 	optionLabel: string,
-}
+};
+
+declare type ErrorType = {
+	hasError: boolean,
+	message: string | null,
+};

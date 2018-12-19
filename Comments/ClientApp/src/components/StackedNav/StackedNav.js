@@ -9,7 +9,7 @@ type LinkType = {
 	url: string,
 	current?: boolean,
 	isReactRoute: boolean,
-	marker?: string,
+	marker?: string | null,
 };
 
 type PropsType = {
@@ -21,7 +21,7 @@ type PropsType = {
 
 export class StackedNav extends PureComponent<PropsType> {
 
-	trackClick = (e: SyntheticEvent) => {
+	trackClick = (e: SyntheticEvent<any>) => {
 		tagManager({
 			event: "generic",
 			category: "Consultation comments page",
