@@ -355,7 +355,7 @@ namespace Comments.Export
 					DocumentName = locationDetails.DocumentName,
 					ChapterTitle = locationDetails.ChapterName,
 					Section = commentOn == CommentOn.Section || commentOn == CommentOn.SubSection || commentOn == CommentOn.Selection ? comment.Location.Section : null,
-					Quote = comment.Location.RangeEnd != null && comment.Location.RangeStart != null ? comment.Location.Quote : null,
+					Quote = commentOn  == CommentOn.Selection ? comment.Location.Quote : null,
 					UserName =  _userService.GetDisplayNameForUserId(comment.CreatedByUserId),
 					Email = _userService.GetEmailForUserId(comment.CreatedByUserId),
 					CommentId = comment.CommentId,
