@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`[ClientApp]  Question administration Component should render without crashing 1`] = `
+exports[`[ClientApp]  Question administration Component should match the supplied snapshot 1`] = `
 Array [
   "",
   "",

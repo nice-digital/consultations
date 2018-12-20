@@ -1,5 +1,3 @@
-export const useSSR = false;
-
 export const mobileWidth = 499;
 
 export const projectInformation = {

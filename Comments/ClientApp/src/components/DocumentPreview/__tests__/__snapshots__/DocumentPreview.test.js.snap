@@ -84,7 +84,7 @@ Array [
                                 className="stacked-nav__list"
                             >
                                 <li
-                                    className="stacked-nav__list-item grid grid--gutterless"
+                                    className="stacked-nav__list-item"
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
@@ -93,6 +93,7 @@ Array [
                                         onClick={[Function]}
                                     >
                                         <span
+                                            className="pl--0"
                                             data-g="10"
                                         >
                                             DRAFT_Appendices_A-T_CLEAN.docx
@@ -100,7 +101,7 @@ Array [
                                     </a>
                                 </li>
                                 <li
-                                    className="stacked-nav__list-item grid grid--gutterless"
+                                    className="stacked-nav__list-item"
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
@@ -109,6 +110,7 @@ Array [
                                         onClick={[Function]}
                                     >
                                         <span
+                                            className="pl--0"
                                             data-g="10"
                                         >
                                             Appendices
@@ -116,7 +118,7 @@ Array [
                                     </a>
                                 </li>
                                 <li
-                                    className="stacked-nav__list-item grid grid--gutterless"
+                                    className="stacked-nav__list-item"
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
@@ -125,6 +127,7 @@ Array [
                                         onClick={[Function]}
                                     >
                                         <span
+                                            className="pl--0"
                                             data-g="10"
                                         >
                                             1 Scope

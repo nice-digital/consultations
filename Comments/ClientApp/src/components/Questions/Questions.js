@@ -3,7 +3,6 @@
 import React, { Component, Fragment } from "react";
 import { Prompt, withRouter } from "react-router-dom";
 import Helmet from "react-helmet";
-import { useSSR } from "../../constants";
 import { LoginBanner } from "../LoginBanner/LoginBanner";
 import { StackedNav } from "../StackedNav/StackedNav";
 import { UserContext } from "../../context/UserContext";
@@ -45,7 +44,7 @@ export class Questions extends Component<PropsType, StateType> {
 			},
 		};
 
-		if (useSSR) {
+		if (this.props) {
 			let preloadedQuestionsData;
 			let preloadedData = {};
 			if (this.props.staticContext && this.props.staticContext.preload) {
@@ -72,10 +71,6 @@ export class Questions extends Component<PropsType, StateType> {
 				};
 			}
 		}
-		else {
-			console.log("Not using SSR");
-		}
-
 	}
 
 	editingAllowed = (data: Object) => {
@@ -126,7 +121,10 @@ export class Questions extends Component<PropsType, StateType> {
 		}
 	}
 
-	componentDidUpdate(prevProps: PropsType) {
+	cmponentDidUpdate(prevProps
+											:
+											PropsType
+	) {
 		const oldRoute = prevProps.location.pathname;
 		const newRoute = this.props.location.pathname;
 		if (oldRoute === newRoute) return;
@@ -244,10 +242,6 @@ export class Questions extends Component<PropsType, StateType> {
 				}),
 		};
 	};
-
-	componentWillUnmount(){
-		console.log("unmounted for some reason");
-	}
 
 	render() {
 		if (!this.state.hasInitialData && this.state.loading) return <h1>Loading...</h1>;
