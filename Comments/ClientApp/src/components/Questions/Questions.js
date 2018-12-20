@@ -3,6 +3,7 @@
 import React, { Component, Fragment } from "react";
 import { Prompt, withRouter } from "react-router-dom";
 import Helmet from "react-helmet";
+import { useSSR } from "../../constants";
 import { LoginBanner } from "../LoginBanner/LoginBanner";
 import { StackedNav } from "../StackedNav/StackedNav";
 import { UserContext } from "../../context/UserContext";
@@ -44,34 +45,37 @@ export class Questions extends Component<PropsType, StateType> {
 			},
 		};
 
-		let preloadedQuestionsData;
-
-		let preloadedData = {};
-		if (this.props.staticContext && this.props.staticContext.preload) {
-			preloadedData = this.props.staticContext.preload.data;
+		if (useSSR) {
+			let preloadedQuestionsData;
+			let preloadedData = {};
+			if (this.props.staticContext && this.props.staticContext.preload) {
+				preloadedData = this.props.staticContext.preload.data;
+			}
+			preloadedQuestionsData = preload(
+				this.props.staticContext,
+				"questions",
+				[],
+				{consultationId: this.props.match.params.consultationId},
+				preloadedData,
+			);
+			if (preloadedQuestionsData) {
+				this.state = {
+					editingAllowed: this.editingAllowed(preloadedQuestionsData.consultationState),
+					questionsData: preloadedQuestionsData,
+					loading: false,
+					hasInitialData: true,
+					unsavedIds: [],
+					error: {
+						hasError: false,
+						message: null,
+					},
+				};
+			}
+		}
+		else {
+			console.log("Not using SSR");
 		}
 
-		preloadedQuestionsData = preload(
-			this.props.staticContext,
-			"questions",
-			[],
-			{consultationId: this.props.match.params.consultationId},
-			preloadedData,
-		);
-
-		if (preloadedQuestionsData) {
-			this.state = {
-				editingAllowed: this.editingAllowed(preloadedQuestionsData.consultationState),
-				questionsData: preloadedQuestionsData,
-				loading: false,
-				hasInitialData: true,
-				unsavedIds: [],
-				error: {
-					hasError: false,
-					message: null,
-				},
-			};
-		}
 	}
 
 	editingAllowed = (data: Object) => {
@@ -80,7 +84,12 @@ export class Questions extends Component<PropsType, StateType> {
 	};
 
 	gatherData = async () => {
-		const questionsData = load("questions", undefined, [], {consultationId: this.props.match.params.consultationId})
+		const questionsData = load(
+			"questions",
+			undefined,
+			[],
+			{consultationId: this.props.match.params.consultationId}
+		)
 			.then(response => response.data)
 			.catch(err => {
 				this.setState({
@@ -97,9 +106,6 @@ export class Questions extends Component<PropsType, StateType> {
 
 	componentDidMount() {
 		if (!this.state.hasInitialData) {
-			this.setState({
-				loading: true,
-			});
 			this.gatherData()
 				.then(data => {
 					this.setState({
@@ -200,7 +206,7 @@ export class Questions extends Component<PropsType, StateType> {
 		this.setState({questionsData});
 	};
 
-	createConsultationNavigation = (questionsData: Object, currentConsultationId: string, currentDocumentId: string|null) => {
+	createConsultationNavigation = (questionsData: Object, currentConsultationId: string, currentDocumentId: string | null) => {
 		const isCurrentRoute = (documentId) => documentId.toString() === currentDocumentId;
 		const {consultationTitle, consultationQuestions} = questionsData;
 		return {
@@ -220,7 +226,7 @@ export class Questions extends Component<PropsType, StateType> {
 	createDocumentsNavigation = (
 		questionsData: Object,
 		currentConsultationId: string,
-		currentDocumentId: string|null) => {
+		currentDocumentId: string | null) => {
 		const doesntHaveDocumentIdOfZero = document => document.documentId !== 0; // todo: to be replaced with convertedDocument when available on endpoint
 		const isCurrentRoute = (documentId) => documentId.toString() === currentDocumentId;
 		return {
@@ -239,8 +245,12 @@ export class Questions extends Component<PropsType, StateType> {
 		};
 	};
 
+	componentWillUnmount(){
+		console.log("unmounted for some reason");
+	}
+
 	render() {
-		if (!this.state.hasInitialData) return null;
+		if (!this.state.hasInitialData && this.state.loading) return <h1>Loading...</h1>;
 		const {questionsData, unsavedIds} = this.state;
 		// If there's no documentId, set currentDocumentId to null
 		const currentDocumentId =

@@ -12,6 +12,7 @@ import { generateUrl } from "../../../data/loader";
 import sampleComments from "./sample.json";
 import EmptyCommentsResponse from "./EmptyCommentsResponse.json";
 import { nextTick } from "../../../helpers/utils";
+import toJson from "enzyme-to-json";
 
 const mock = new MockAdapter(axios);
 
@@ -55,6 +56,7 @@ describe("[ClientApp] ", () => {
 			mock
 				.onGet()
 				.reply(200, sampleComments);
+
 			const wrapper = mount(
 				<MemoryRouter>
 					<LiveAnnouncer>
@@ -62,6 +64,7 @@ describe("[ClientApp] ", () => {
 					</LiveAnnouncer>
 				</MemoryRouter>
 			);
+
 			await nextTick();
 			wrapper.update();
 			expect(wrapper.find("li").length).toEqual(5);
@@ -327,7 +330,7 @@ describe("[ClientApp] ", () => {
 			 	.onGet(
 					generateUrl("comments", undefined, [], {sourceURI: "/1/0/Review", isReview: true})
 			 	)
-			 	.reply(config => {	 
+			 	.reply(config => {
 			 		expect(config.url).toEqual(
 			 			"/consultations/api/Comments?sourceURI=%2F1%2F0%2FReview&isReview=true"
 					 );
