@@ -10,7 +10,7 @@ export default {
 		commentTextArea:toDataQASelAttr("Comment-text-area"),
 		firstCommentTextArea:"#Comment-1",
 		submitButton:toDataQASelAttr("submit-button"),
-		saveIndicator:".CommentBox:first-child .CommentBox__savedIndicator",
+		saveIndicator: toNthChildAttr(1) + ' ' + ".CommentBox__savedIndicator",
 		deletebutton: toDataQASelAttr("delete-comment-button"),
 		reviewAllButton: toDataQASelAttr("review-all-comments")
 	},

@@ -3,22 +3,22 @@ import selectors from "../selectors";
 
 export const enterComment = (commentText) => {
 	setInputField("set", commentText, selectors.documentPage.commentTextArea);
-	browser.pause(1000);
+	browser.pause(2000);
 };
 
 export const enterCommentAndSubmit = (commentText) => {
-	browser.pause(1000);
+	browser.pause(2000);
 	enterComment(commentText);
-	browser.pause(1000);
+	browser.pause(2000);
 	browser.click(selectors.documentPage.submitButton);
-	browser.pause(1000);
+	browser.pause(2000);
 };
 
 export const enterCommentToFirstInListAndSubmit = (commentText) => {
 	setInputField("set", commentText, selectors.documentPage.firstCommentTextArea);
-	browser.pause(1000);
+	browser.pause(2000);
 	browser.click(selectors.documentPage.submitButton);
-	browser.pause(1000);
+	browser.pause(2000);
 }
 
 export default enterComment;
