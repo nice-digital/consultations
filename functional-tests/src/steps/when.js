@@ -4,6 +4,7 @@ import { When } from "cucumber";
 // import clickElement from "../support/action/clickElement";
 import enterComment, { enterCommentAndSubmit, enterCommentToFirstInListAndSubmit } from "../support/action/enterComment";
 import navigateToReviewPage from "../support/action/navigateToReviewPage";
+import { submitResponse } from "../support/action/submitResponse";
 
 // E.g. When I click on text "Title here" in ".ancestor"
 When(
@@ -25,3 +26,13 @@ When(
 	/^I navigate to the Review Page$/,
 	navigateToReviewPage
 );
+
+When(
+	/^I submit my response$/,
+	submitResponse
+);
+
+When(
+	/^I review my response$/,
+	reviewResponse
+)

@@ -1,7 +1,7 @@
 import "@nice-digital/wdio-cucumber-steps/lib/then";
 import { Then } from "cucumber";
 
-import validateCommentBox, { validateCommentBoxText, validateCommentBoxTitle, validateCommentSaved, validateFirstCommentBox, validateSecondCommentBox, validateThirdCommentBox }  from '../support/check/validateCommentBox';
+import validateCommentBox, { validateCommentBoxText, validateCommentBoxTitle, validateCommentSaved, validateFirstCommentBox, validateSecondCommentBox, validateThirdCommentBox, validateCommentBoxInactive }  from '../support/check/validateCommentBox';
 import deleteOneComment from '../support/action/deleteOneComment';
 // import validateCommentSaved from "../support/check/validateCommentSaved";
 
@@ -37,6 +37,11 @@ Then(
 Then(
 	/^I expect the comment save button displays "([^"]*)"$/,
 	validateCommentSaved
+);
+
+Then(
+	/^I expect the comment box is inactive$/,
+	validateCommentBoxInactive
 );
 
 Then(
