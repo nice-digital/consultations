@@ -177,14 +177,14 @@ namespace Comments.Services
 			else
 				documents = GetPreviewDraftDocuments(consultationId, (int)documentId, reference).ToList();
 
-		    var documentsWhichSupportQuestions = documents.Where(d => d.SupportsQuestions).Select(d => d.DocumentId).ToList();
+		   // var documentsWhichSupportQuestions = documents.Where(d => d.SupportsQuestions).Select(d => d.DocumentId).ToList();
 		    var documentsWhichSupportComments = documents.Where(d => d.SupportsComments).Select(d => d.DocumentId).ToList();
 
 		    var currentUser = _userService.GetCurrentUser();
 
-		    if (locations == null && currentUser.IsAuthorised && currentUser.UserId.HasValue)
+		    if (currentUser.IsAuthorised && currentUser.UserId.HasValue)
 		    {
-			    locations = _context.GetAllCommentsAndQuestionsForDocument(new[] { sourceURI }, partialMatchSourceURI: true);
+			    locations = locations ?? _context.GetAllCommentsAndQuestionsForDocument(new[] { sourceURI }, partialMatchSourceURI: true);
 		    }
 		    else
 		    {
@@ -197,7 +197,7 @@ namespace Comments.Services
 
 		    var consultationState = new ConsultationState(consultationDetail.StartDate, consultationDetail.EndDate,
 			    data.questions.Any(), data.questions.Any(q => q.Answers.Any()), data.comments.Any(), hasSubmitted,
-			    false, documentsWhichSupportQuestions, documentsWhichSupportComments);
+			    documentsWhichSupportComments);
 
 		    return consultationState;
 	    }

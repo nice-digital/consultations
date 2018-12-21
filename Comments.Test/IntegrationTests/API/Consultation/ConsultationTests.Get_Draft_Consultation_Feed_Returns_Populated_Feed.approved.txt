@@ -13,8 +13,6 @@
     "consultationId":1,
     "process":"TAG",
     "hasDocumentsWhichAllowConsultationComments":false,
-    "hasDocumentsWhichAllowConsultationQuestions":true,
-    "supportsQuestions":false,
     "partiallyUpdatedProjectReference":null,
     "origProjectReference":null,
     "user":{
@@ -30,10 +28,6 @@
         "hasUserSuppliedAnswers":false,
         "hasUserSuppliedComments":false,
         "userHasSubmitted":false,
-        "consultationSupportsQuestions":false,
-        "documentIdsWhichSupportQuestions":[
-            
-        ],
         "documentIdsWhichSupportComments":[
             
         ],

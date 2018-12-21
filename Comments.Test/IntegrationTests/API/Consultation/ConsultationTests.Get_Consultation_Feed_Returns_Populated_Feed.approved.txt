@@ -13,8 +13,6 @@
     "consultationId":1,
     "process":"TAG",
     "hasDocumentsWhichAllowConsultationComments":false,
-    "hasDocumentsWhichAllowConsultationQuestions":true,
-    "supportsQuestions":false,
     "partiallyUpdatedProjectReference":null,
     "origProjectReference":null,
     "user":{
@@ -30,11 +28,6 @@
         "hasUserSuppliedAnswers":false,
         "hasUserSuppliedComments":false,
         "userHasSubmitted":false,
-        "consultationSupportsQuestions":false,
-        "documentIdsWhichSupportQuestions":[
-            2,
-            2
-        ],
         "documentIdsWhichSupportComments":[
             2,
             2
@@ -46,7 +39,7 @@
         "supportsDownload":false,
         "shouldShowDrawer":true,
         "shouldShowCommentsTab":true,
-        "shouldShowQuestionsTab":true
+        "shouldShowQuestionsTab":false
     },
     "breadcrumbs":[
         {

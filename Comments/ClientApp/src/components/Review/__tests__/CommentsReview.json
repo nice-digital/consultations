@@ -149,11 +149,6 @@
             "userHasSubmitted": false,
             "consultationSupportsQuestions": false,
             "consultationSupportsComments": true,
-            "documentIdsWhichSupportQuestions": [
-                1,
-                2,
-                3
-            ],
             "documentIdsWhichSupportComments": [
                 1,
                 2,
