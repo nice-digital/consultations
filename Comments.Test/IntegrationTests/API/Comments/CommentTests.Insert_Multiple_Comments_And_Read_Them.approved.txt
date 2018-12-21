@@ -86,17 +86,18 @@
         "endDate":"2028-05-31T17:00:00",
         "hasQuestions":false,
         "hasUserSuppliedAnswers":false,
-        "hasUserSuppliedComments":false,
+        "hasUserSuppliedComments":true,
         "userHasSubmitted":false,
         "documentIdsWhichSupportComments":[
             2,
             2
         ],
+        "hasAnyDocumentsSupportingComments":true,
         "consultationIsOpen":true,
         "consultationHasNotStartedYet":false,
         "consultationHasEnded":false,
-        "supportsSubmission":false,
-        "supportsDownload":false,
+        "supportsSubmission":true,
+        "supportsDownload":true,
         "shouldShowDrawer":true,
         "shouldShowCommentsTab":true,
         "shouldShowQuestionsTab":false
