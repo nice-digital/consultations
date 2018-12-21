@@ -41,7 +41,7 @@ namespace Comments.Services
 		    {
 			    throw new AuthenticationException("NICE user is not authenticated");
 		    }
-		    
+
 			_context = consultationsContext;
 		    _userService = userService;
 		    _consultationService = consultationService;
@@ -104,7 +104,7 @@ namespace Comments.Services
 		    var sourceURI = location.SourceURI;
 		    ConsultationsUriElements URIElements = ConsultationsUri.ParseConsultationsUri(sourceURI);
 
-		    var consultationDetails = _consultationService.GetConsultation(URIElements.ConsultationId, false);
+		    var consultationDetails = _consultationService.GetConsultation(URIElements.ConsultationId,  BreadcrumbType.None, useFilters:false);
 		    return consultationDetails.ConsultationName;
 	    }
 	}
