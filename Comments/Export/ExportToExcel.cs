@@ -526,8 +526,11 @@ namespace Comments.Export
 
 			AppendDataRow(sheetData, comments, answers, questions);
 
-			worksheetPart.Worksheet.Save();
 
+			AutoFilter autoFilter = new AutoFilter() { Reference = "A3:N3"};
+
+			worksheetPart.Worksheet.Save();
+			worksheetPart.Worksheet.Append(autoFilter);
 			// Close the document.
 			spreadsheetDocument.Close();
 		}
