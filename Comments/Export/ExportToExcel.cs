@@ -526,8 +526,9 @@ namespace Comments.Export
 
 			AppendDataRow(sheetData, comments, answers, questions);
 
-
-			AutoFilter autoFilter = new AutoFilter() { Reference = "A3:N3"};
+			// Add filtering to the worksheet
+			var headerCells = "A3:N3";
+			AutoFilter autoFilter = new AutoFilter() { Reference = headerCells };
 
 			worksheetPart.Worksheet.Save();
 			worksheetPart.Worksheet.Append(autoFilter);
