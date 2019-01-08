@@ -5,6 +5,7 @@ import React, { Component } from "react";
 
 import { getElementPositionWithinDocument, getSectionTitle } from "../../helpers/utils";
 import { tagManager } from "../../helpers/tag-manager";
+import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
 
 type PropsType = {
 	newCommentFunc: Function,
@@ -26,14 +27,14 @@ export class Selection extends Component<PropsType, StateType> {
 			comment: {},
 			position: {}
 		};
-		this.selectionContainer = React.createRef();		
+		this.selectionContainer = React.createRef();
 	}
-	
+
 	getXPathForElement(element) {
-		const idx = (sib, name) => sib 
+		const idx = (sib, name) => sib
 			? idx(sib.previousElementSibling, name||sib.localName) + (sib.localName == name) // eslint-disable-line
 			: 1;
-		const segs = elm => !elm || elm.nodeType !== 1 
+		const segs = elm => !elm || elm.nodeType !== 1
 			? [""]
 			: elm.id && document.querySelector(`#${elm.id}`) === elm
 				? [`id("${elm.id}")`]
@@ -82,14 +83,15 @@ export class Selection extends Component<PropsType, StateType> {
 			const position =
 			{
 				x: event.pageX - (boundingRectOfContainer.left + scrollLeft) - arrowSize,
-				y: event.pageY - (boundingRectOfContainer.top + scrollTop) + arrowSize,		  
+				y: event.pageY - (boundingRectOfContainer.top + scrollTop) + arrowSize,
 			};
 			this.setState({ comment, position, toolTipVisible: true });
+			setTimeout(() => { pullFocusByQuerySelector(".selection-container button") }, 0);
 		} else{
 			this.setState({ toolTipVisible: false });
 		}
 	}
-	
+
 	onButtonClick = () => {
 		this.props.newCommentFunc(null, this.state.comment); //can't pass the event here, as it's the button click event, not the start of the text selection.
 		this.setState({ toolTipVisible: false });
