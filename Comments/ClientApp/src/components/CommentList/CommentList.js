@@ -13,7 +13,7 @@ import {
 	saveAnswerHandler,
 	deleteAnswerHandler,
 } from "../../helpers/editing-and-deleting";
-import { pullFocusById } from "../../helpers/accessibility-helpers";
+import { pullFocusByQuerySelector, pullFocusById } from "../../helpers/accessibility-helpers";
 import { mobileWidth } from "../../constants";
 import { getElementPositionWithinDocument, getSectionTitle } from "../../helpers/utils";
 import { updateUnsavedIds } from "../../helpers/unsaved-comments";
@@ -177,9 +177,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		});
 		comments.unshift(generatedComment);
 		this.setState({comments});
-		setTimeout(() => {
-			pullFocusById(`Comment${idToUseForNewBox}`);
-		}, 0);
+		pullFocusByQuerySelector(`#Comment${idToUseForNewBox}`);
 	};
 
 	//these handlers have moved to the helpers/editing-and-deleting.js utility file as they're also used in ReviewList.js
