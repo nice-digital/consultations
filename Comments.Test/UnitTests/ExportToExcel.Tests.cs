@@ -72,6 +72,31 @@ namespace Comments.Test.UnitTests
 			locationId = AddLocation("consultations://./consultation/1/document/2", _context, "001.002.000.000");
 			questionTypeId = AddQuestionType("another Question Type", false, true, 1, _context);
 			AddQuestion(locationId, questionTypeId, "Without an answer", _context);
+
+			locationId = AddLocation("consultations://./consultation/154/document/1", _context, "001.001.000.000");
+			commentId = AddComment(locationId, "Submitted comment consultation 154", false, userId, (int)StatusName.Submitted, _context);
+			submissionId = AddSubmission(userId, _context);
+			AddSubmissionComments(submissionId, commentId, _context);
+
+			questionTypeId = AddQuestionType("Question Type", false, true, 1, _context);
+			locationId = AddLocation("consultations://./consultation/1", _context, "001.002.001.000");
+			questionId = AddQuestion(locationId, questionTypeId, "Consultation Level Question", _context);
+			answerId = AddAnswer(questionId, userId, "answering a consultation level question", (int)StatusName.Submitted, _context);
+			AddSubmissionAnswers(submissionId, answerId, _context);
+
+			questionTypeId = AddQuestionType("Question Type", false, true, 1, _context);
+			locationId = AddLocation("consultations://./consultation/154", _context, "001.002.001.000");
+			questionId = AddQuestion(locationId, questionTypeId, "Consultation Level Question for Consultation 154", _context);
+			answerId = AddAnswer(questionId, userId, "answering a consultation level question for consultation 154", (int)StatusName.Submitted, _context);
+			AddSubmissionAnswers(submissionId, answerId, _context);
+
+			locationId = AddLocation("consultations://./consultation/1", _context, "001.002.000.000");
+			questionTypeId = AddQuestionType("another Question Type", false, true, 1, _context);
+			AddQuestion(locationId, questionTypeId, "Without an answer", _context);
+
+			locationId = AddLocation("consultations://./consultation/154", _context, "001.002.000.000");
+			questionTypeId = AddQuestionType("another Question Type", false, true, 1, _context);
+			AddQuestion(locationId, questionTypeId, "Without an answer", _context);
 		}
 	}
 
@@ -103,8 +128,8 @@ namespace Comments.Test.UnitTests
 
 			//Assert
 			resultTuple.comment.Count().ShouldBe(2);
-		    resultTuple.answer.Count().ShouldBe(2);
-		    resultTuple.question.Count().ShouldBe(1);
+		    resultTuple.answer.Count().ShouldBe(3);
+		    resultTuple.question.Count().ShouldBe(2);
 		}
 
 	    [Fact]
@@ -127,8 +152,8 @@ namespace Comments.Test.UnitTests
 
 		    //Assert
 		    resultTuple.comment.Count().ShouldBe(2);
-		    resultTuple.answer.Count().ShouldBe(2);
-		    resultTuple.question.Count().ShouldBe(2);
+		    resultTuple.answer.Count().ShouldBe(3);
+		    resultTuple.question.Count().ShouldBe(3);
 	    }
 
 		[Fact]
@@ -156,7 +181,7 @@ namespace Comments.Test.UnitTests
 		    var answers = _context.GetAllSubmittedAnswersForURI(sourceURI);
 
 			//Assert
-		    answers.Count.ShouldBe(2);
+		    answers.Count.ShouldBe(3);
 	    }
 
 	    [Fact]
@@ -170,7 +195,7 @@ namespace Comments.Test.UnitTests
 		    var questions = _context.GetUnansweredQuestionsForURI(sourceURI);
 
 			//Assert
-		    questions.Count.ShouldBe(1);
+		    questions.Count.ShouldBe(2);
 	    }
 
 	    [Fact]
@@ -219,7 +244,7 @@ namespace Comments.Test.UnitTests
 		    var answers = _context.GetUsersAnswersForURI(sourceURI);
 
 		    //Assert
-		    answers.Count.ShouldBe(2);
+		    answers.Count.ShouldBe(3);
 	    }
 
 	    [Fact]
@@ -233,7 +258,7 @@ namespace Comments.Test.UnitTests
 		    var questions = _context.GetUsersUnansweredQuestionsForURI(sourceURI);
 
 		    //Assert
-		    questions.Count.ShouldBe(2);
+		    questions.Count.ShouldBe(3);
 	    }		
 	}
 
