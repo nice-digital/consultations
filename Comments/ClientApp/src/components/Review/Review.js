@@ -12,7 +12,7 @@ import {
 	saveAnswerHandler,
 	deleteAnswerHandler,
 } from "../../helpers/editing-and-deleting";
-import { queryStringToObject } from "../../helpers/utils";
+import { canUseDOM, queryStringToObject } from "../../helpers/utils";
 import { tagManager } from "../../helpers/tag-manager";
 import { UserContext } from "../../context/UserContext";
 import { Header } from "../Header/Header";
@@ -25,6 +25,7 @@ import { Question } from "../Question/Question";
 import { LoginBanner } from "../LoginBanner/LoginBanner";
 import { SubmitResponseDialog } from "../SubmitResponseDialog/SubmitResponseDialog";
 import { updateUnsavedIds } from "../../helpers/unsaved-comments";
+import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
 
 type PropsType = {
 	staticContext?: any,
@@ -205,7 +206,7 @@ export class Review extends Component<PropsType, StateType> {
 		};
 	};
 
-	loadDataAndUpdateState = () => {
+	loadDataAndUpdateState = (callback?: Function) => {
 		this.gatherData()
 			.then(data => {
 				if (data.consultationData !== null) {
@@ -249,6 +250,7 @@ export class Review extends Component<PropsType, StateType> {
 						stage: this.state.consultationData.consultationState.userHasSubmitted ? "postsubmission" : "presubmission",
 					});
 				}
+				if (callback) callback();
 			})
 			.catch(err => {
 				throw new Error("gatherData in componentDidMount failed " + err);
@@ -260,8 +262,10 @@ export class Review extends Component<PropsType, StateType> {
 	}
 
 	componentDidMount() {
-		if (!this.state.hasInitialData) {
-			this.loadDataAndUpdateState();
+		if (!this.state.hasInitialData) { // if this statement is true then we know we've come from another page
+			this.loadDataAndUpdateState(()=>{
+				pullFocusByQuerySelector("#root");
+			});
 		}
 		this.unlisten = this.props.history.listen(() => {
 			const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;

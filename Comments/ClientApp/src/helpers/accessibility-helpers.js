@@ -11,6 +11,7 @@ export const pullFocusByQuerySelector = (selection: string, scroll: boolean) => 
 				el.setAttribute("tabindex", "-1");
 			}
 			el.focus();
+			el.classList.add("no-outline");
 			scroll && el.scrollIntoView();
 		}
 	}, 100);
