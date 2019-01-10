@@ -1,23 +1,50 @@
 using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
+using Comments.Configuration;
 using Comments.Test.Infrastructure;
 using Comments.ViewModels;
+using NICE.Feeds;
+using NICE.Feeds.Tests.Infrastructure;
 using Shouldly;
 using Xunit;
+using TestBase = Comments.Test.Infrastructure.TestBase;
 
 namespace Comments.Test.IntegrationTests.API.Export
 {
-    public class ExportTests :  TestBase
-    {
+	public class ExportBase : TestBase
+	{
+		protected readonly IFeedService FeedService;
+		public ExportBase(TestUserType testUserType) : base(testUserType, Feed.ConsultationCommentsListMultiple)
+		{
+			var consultationList = new List<NICE.Feeds.Models.Indev.List.ConsultationList>
+			{
+				new NICE.Feeds.Models.Indev.List.ConsultationList { ConsultationId = 1, AllowedRole = testUserType.ToString() }
+			};
+			FeedService = new FakeFeedService(consultationList);
+		}
+	}
+
+    public class ExportTests : ExportBase
+	{
+		public ExportTests() : base(TestUserType.CustomFictionalRole) { }
+
 	    [Fact]
 	    public async Task Create_Spreadsheet()
 	    {
 		    // Arrange
 		    ResetDatabase();
 		    _context.Database.EnsureCreated();
+			
 		    var userId = Guid.NewGuid();
-		    CreateALotOfData(userId);
-		    var consultationId = 1;
+
+		    var locationId = AddLocation("consultations://./consultation/1", _context, "001.000.000.000");
+		    var commentId = AddComment(locationId, "Submitted comment", false, userId, (int)StatusName.Submitted, _context);
+		    var submissionId = AddSubmission(userId, _context);
+			AddSubmissionComments(submissionId, commentId, _context);
+
+			const int consultationId = 1;
 
 		    // Act
 		    var response = await _client.GetAsync($"consultations/api/ExportExternal/{consultationId}");
@@ -26,49 +53,37 @@ namespace Comments.Test.IntegrationTests.API.Export
 		    //Assert
 		    response.IsSuccessStatusCode.ShouldBeTrue();
 	    }
+	}
 
-		private void CreateALotOfData(Guid userId)
+	public class ExportToExcelTestsForNonAdminUser : ExportBase
+	{
+		public ExportToExcelTestsForNonAdminUser() : base(TestUserType.Authenticated)
 		{
-			int locationId, submissionId, commentId, answerId;
+			AppSettings.Feed = TestAppSettings.GetFeedConfig();
+		}
 
-			locationId = AddLocation("consultations://./consultation/1", _context, "001.000.000.000");
-			commentId = AddComment(locationId, "Submitted comment", false, userId, (int)StatusName.Submitted, _context);
-			submissionId = AddSubmission(userId, _context);
+		[Fact]
+		public async Task None_Admin_Cannot_Create_Spreadsheet()
+		{
+			// Arrange
+			ResetDatabase();
+			AppSettings.ConsultationListConfig = TestAppSettings.GetConsultationListConfig();
+			_context.Database.EnsureCreated();
+
+			var userId = Guid.NewGuid();
+
+			var locationId = AddLocation("consultations://./consultation/1", _context, "001.000.000.000");
+			var commentId = AddComment(locationId, "Submitted comment", false, userId, (int)StatusName.Submitted, _context);
+			var submissionId = AddSubmission(userId, _context);
 			AddSubmissionComments(submissionId, commentId, _context);
 
-			locationId = AddLocation("consultations://./consultation/1", _context, "001.000.000.000");
-			commentId = AddComment(locationId, "Deleted comment", true, userId, (int)StatusName.Submitted, _context);
-			submissionId = AddSubmission(userId, _context);
-			AddSubmissionComments(submissionId, commentId, _context);
+			const int consultationId = 1;
 
-			locationId = AddLocation("consultations://./consultation/1/document/2/chapter/introduction", _context, "001.002.002.000");
-			commentId = AddComment(locationId, "Draft comment", false, userId, (int)StatusName.Draft, _context);
-			AddSubmissionComments(submissionId, commentId, _context);
+			// Act
+			var response = await _client.GetAsync($"consultations/api/Export/{consultationId}");
 
-			locationId = AddLocation("consultations://./consultation/1/document/1/chapter/chapter-slug", _context, "001.002.000.000");
-			commentId = AddComment(locationId, "Another Users Submitted comment", false, Guid.NewGuid(), (int)StatusName.Submitted, _context);
-			AddSubmissionComments(submissionId, commentId, _context);
-
-			var questionTypeId = AddQuestionType("My Question Type", false, true, 1, _context);
-			locationId = AddLocation("consultations://./consultation/1/document/2/chapter/guidance", _context, "001.002.001.000");
-			var questionId = AddQuestion(locationId, questionTypeId, "Question 1", _context);
-			answerId = AddAnswer(questionId, userId, "This is a submitted answer", (int)StatusName.Submitted, _context);
-			submissionId = AddSubmission(userId, _context);
-			AddSubmissionAnswers(submissionId, answerId, _context);
-			answerId = AddAnswer(questionId, Guid.NewGuid(), "An answer to the same question by another user", (int)StatusName.Submitted, _context);
-			AddSubmissionAnswers(submissionId, answerId, _context);
-			answerId = AddAnswer(questionId, userId, "This is a draft answer", (int)StatusName.Draft, _context);
-			AddSubmissionAnswers(submissionId, answerId, _context);
-
-			questionTypeId = AddQuestionType("Question Type", false, true, 1, _context);
-			locationId = AddLocation("consultations://./consultation/1/document/2/chapter/guidance", _context, "001.002.001.000");
-			questionId = AddQuestion(locationId, questionTypeId, "Question 2", _context);
-			answerId = AddAnswer(questionId, Guid.NewGuid(), "Another Users answer", (int)StatusName.Draft, _context);
-			AddSubmissionAnswers(submissionId, answerId, _context);
-
-			locationId = AddLocation("consultations://./consultation/1/document/2", _context, "001.002.000.000");
-			questionTypeId = AddQuestionType("another Question Type", false, true, 1, _context);
-			AddQuestion(locationId, questionTypeId, "Without an answer", _context);
+			//Assert
+			response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
 		}
 	}
 }
