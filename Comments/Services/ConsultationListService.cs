@@ -51,7 +51,7 @@ namespace Comments.Services
 						consultationListRows.Add(
 							new ConsultationListRow(consultation.Title,
 								consultation.StartDate, consultation.EndDate, responseCount, consultation.ConsultationId,
-								consultation.FirstDocumentIdWhichSupportsCommentsOrQuestions, consultation.FirstChapterSlugOfFirstDocumentWhichSupportsCommentsOrQuestions, consultation.Reference,
+								consultation.FirstConvertedDocumentId, consultation.FirstChapterSlugOfFirstConvertedDocument, consultation.Reference,
 								consultation.ProductTypeName));
 					}
 				}

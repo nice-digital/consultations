@@ -4,7 +4,6 @@
         "documentId":1,
         "convertedDocument":true,
         "supportsComments":true,
-        "supportsQuestions":true,
         "title":"tophat_card.docx",
         "chapters":[
             {
@@ -20,7 +19,6 @@
         "documentId":2,
         "convertedDocument":true,
         "supportsComments":true,
-        "supportsQuestions":true,
         "title":"Return to work form 2017.docx",
         "chapters":[
             {
@@ -36,7 +34,6 @@
         "documentId":3,
         "convertedDocument":true,
         "supportsComments":true,
-        "supportsQuestions":true,
         "title":"QA_checklist.docx",
         "chapters":[
             {
@@ -52,7 +49,6 @@
         "documentId":0,
         "convertedDocument":false,
         "supportsComments":false,
-        "supportsQuestions":false,
         "title":"Addendum to draft scope",
         "chapters":null,
         "href":"/guidance/GID-NG10168/documents/addendum-to-draft-scope",
@@ -63,7 +59,6 @@
         "documentId":0,
         "convertedDocument":false,
         "supportsComments":false,
-        "supportsQuestions":false,
         "title":"Addendum appendicies",
         "chapters":null,
         "href":"/guidance/GID-NG10168/documents/addendum-appendicies",
@@ -74,7 +69,6 @@
         "documentId":0,
         "convertedDocument":false,
         "supportsComments":false,
-        "supportsQuestions":false,
         "title":"Draft scope",
         "chapters":null,
         "href":"/guidance/GID-NG10168/documents/draft-scope",
@@ -85,7 +79,6 @@
         "documentId":0,
         "convertedDocument":false,
         "supportsComments":false,
-        "supportsQuestions":false,
         "title":"Database of treatment effects user guide",
         "chapters":null,
         "href":"/guidance/GID-NG10168/documents/database-of-treatment-effects-user-guide",
@@ -96,7 +89,6 @@
         "documentId":0,
         "convertedDocument":false,
         "supportsComments":false,
-        "supportsQuestions":false,
         "title":"Database of treatment effects",
         "chapters":null,
         "href":"/guidance/GID-NG10168/documents/database-of-treatment-effects",
@@ -107,7 +99,6 @@
         "documentId":0,
         "convertedDocument":false,
         "supportsComments":false,
-        "supportsQuestions":false,
         "title":"DOI",
         "chapters":null,
         "href":"/guidance/GID-NG10168/documents/97",
