@@ -12,7 +12,7 @@ import {
 	saveAnswerHandler,
 	deleteAnswerHandler,
 } from "../../helpers/editing-and-deleting";
-import { canUseDOM, queryStringToObject } from "../../helpers/utils";
+import { queryStringToObject } from "../../helpers/utils";
 import { tagManager } from "../../helpers/tag-manager";
 import { UserContext } from "../../context/UserContext";
 import { Header } from "../Header/Header";
