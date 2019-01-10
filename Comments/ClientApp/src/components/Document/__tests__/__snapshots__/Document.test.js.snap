@@ -36,20 +36,7 @@ Array [
                     <img
                         alt="Mouse pointer hovering over commenting icon"
                         className="Tutorial__buttonImage"
-                        src="images/tutorial_graphic_800.png"
-                    />
-                </div>
-                <div
-                    data-g="12 sm:4"
-                >
-                    <p
-                        className="mt--0 mb--0"
-                    >
-                        You can also highlight a selection of text using the cursor to make a comment on it
-                    </p>
-                    <img
-                        alt="Animation showing an example of highlighting text and clicking comment"
-                        src="images/text-selection.gif"
+                        src="images/tutorial-1.png"
                     />
                 </div>
                 <div
@@ -58,7 +45,21 @@ Array [
                     <p
                         className="mt--0"
                     >
-                        You can review your response before submitting by visiting the review page
+                        You can also highlight a selection of text using the cursor to make a comment on it
+                    </p>
+                    <img
+                        alt="Animation showing an example of highlighting text and clicking comment"
+                        className="Tutorial__buttonImage"
+                        src="images/tutorial-2.gif"
+                    />
+                </div>
+                <div
+                    data-g="12 sm:4"
+                >
+                    <p
+                        className="mt--0"
+                    >
+                        Review your comments or answers before submitting your response
                     </p>
                     <img
                         alt="Indication of how to get to the review page"
