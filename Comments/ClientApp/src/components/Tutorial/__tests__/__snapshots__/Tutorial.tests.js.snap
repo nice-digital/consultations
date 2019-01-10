@@ -23,7 +23,7 @@ exports[`[ClientApp]  Tutorial Component should match snapshot and display the t
         className="grid"
       >
         <div
-          data-g="12 sm:6 lg:4"
+          data-g="12 sm:4"
         >
           <p
             className="mt--0"
@@ -37,16 +37,30 @@ exports[`[ClientApp]  Tutorial Component should match snapshot and display the t
           />
         </div>
         <div
-          data-g="12 sm:6 lg:4"
+          data-g="12 sm:4"
         >
           <p
             className="mt--0 mb--0"
           >
-            Highlight a selection of text using the cursor to make a comment on it
+            You can also highlight a selection of text using the cursor to make a comment on it
           </p>
           <img
             alt="Animation showing an example of highlighting text and clicking comment"
             src="images/text-selection.gif"
+          />
+        </div>
+        <div
+          data-g="12 sm:4"
+        >
+          <p
+            className="mt--0"
+          >
+            You can review your response before submitting by visiting the review page
+          </p>
+          <img
+            alt="Indication of how to get to the review page"
+            className="Tutorial__buttonImage"
+            src="images/tutorial-3.png"
           />
         </div>
       </div>
@@ -95,7 +109,7 @@ exports[`[ClientApp]  Tutorial Component should match snapshot and display the t
         className="grid"
       >
         <div
-          data-g="12 sm:6 lg:4"
+          data-g="12 sm:4"
         >
           <p
             className="mt--0"
@@ -109,16 +123,30 @@ exports[`[ClientApp]  Tutorial Component should match snapshot and display the t
           />
         </div>
         <div
-          data-g="12 sm:6 lg:4"
+          data-g="12 sm:4"
         >
           <p
             className="mt--0 mb--0"
           >
-            Highlight a selection of text using the cursor to make a comment on it
+            You can also highlight a selection of text using the cursor to make a comment on it
           </p>
           <img
             alt="Animation showing an example of highlighting text and clicking comment"
             src="images/text-selection.gif"
+          />
+        </div>
+        <div
+          data-g="12 sm:4"
+        >
+          <p
+            className="mt--0"
+          >
+            You can review your response before submitting by visiting the review page
+          </p>
+          <img
+            alt="Indication of how to get to the review page"
+            className="Tutorial__buttonImage"
+            src="images/tutorial-3.png"
           />
         </div>
       </div>
