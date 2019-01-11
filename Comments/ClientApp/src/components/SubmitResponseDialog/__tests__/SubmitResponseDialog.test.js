@@ -48,54 +48,68 @@ describe("[ClientApp] ", () => {
 			localProps.hasTobaccoLinks = ""; // not answered at all
 			localProps.respondingAsOrganisation = ""; // not answered at all
 			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			expect(wrapper.find("button").prop("disabled")).toBe(true);
+			expect(wrapper.find("button").prop("aria-disabled")).toBe(true);
 
 			localProps.hasTobaccoLinks = "no";
 			localProps.respondingAsOrganisation = ""; // not answered at all
 			const newWrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			expect(newWrapper.find("button").prop("disabled")).toBe(true);
+			expect(newWrapper.find("button").prop("aria-disabled")).toBe(true);
 
 			localProps.hasTobaccoLinks = ""; // not answered at all
 			localProps.respondingAsOrganisation = "no";
 			const newerWrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			expect(newerWrapper.find("button").prop("disabled")).toBe(true);
+			expect(newerWrapper.find("button").prop("aria-disabled")).toBe(true);
 
 			localProps.hasTobaccoLinks = "no";
 			localProps.respondingAsOrganisation = "no";
 			const evenNewerWrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			expect(evenNewerWrapper.find("button").prop("disabled")).toBe(false);
+			expect(evenNewerWrapper.find("button").prop("aria-disabled")).toBe(false);
 
 			localProps.hasTobaccoLinks = "yes";
 			localProps.respondingAsOrganisation = "no";
 			localProps.tobaccoDisclosure = "test";
 			const newestWrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			expect(newestWrapper.find("button").prop("disabled")).toBe(false);
+			expect(newestWrapper.find("button").prop("aria-disabled")).toBe(false);
 
 			localProps.hasTobaccoLinks = "no";
 			localProps.respondingAsOrganisation = "yes";
 			localProps.organisationName = "test";
 			const evenNewestWrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			expect(evenNewestWrapper.find("button").prop("disabled")).toBe(false);
+			expect(evenNewestWrapper.find("button").prop("aria-disabled")).toBe(false);
 
 			localProps.hasTobaccoLinks = "no";
 			localProps.respondingAsOrganisation = "yes";
 			localProps.organisationName = "";
 			const lastWrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			expect(lastWrapper.find("button").prop("disabled")).toBe(true);
+			expect(lastWrapper.find("button").prop("aria-disabled")).toBe(true);
 		});
 
 		it("should fire parent submit function when the submit button is clicked", () => {
-			const wrapper = shallow(<SubmitResponseDialog {...fakeProps} />);
+			const localProps = {
+				isAuthorised: true,
+				userHasSubmitted: false,
+				validToSubmit: true,
+				organisationName: "",
+				tobaccoDisclosure: "",
+				hasTobaccoLinks: "no",
+				respondingAsOrganisation: "no",
+				submitConsultation: jest.fn(),
+				unsavedIds: [],
+			};
+			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
+			expect(wrapper.state().feedbackVisible).toEqual(false);
 			wrapper.find("button").simulate("click");
-			expect(fakeProps.submitConsultation.mock.calls.length).toEqual(1);
+			expect(wrapper.state().feedbackVisible).toEqual(false);
 		});
 
-		it("should not fire parent submit function when the submit button is clicked, if form is in invalid state", () => {
+		it("should not fire parent submit function when the submit button is clicked, if form is in invalid state, and should instead show the feedback panel", () => {
 			const localProps = fakeProps;
 			localProps.validToSubmit = false;
 			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
 			const button = wrapper.find("button");
-			expect(button.prop("disabled")).toBe(true);
+			button.simulate("click");
+			wrapper.update();
+			expect(wrapper.state().feedbackVisible).toEqual(true);
 		});
 
 		it("should prevent submission if there are currently unsaved changes to any comments or answers",() => {
@@ -103,7 +117,7 @@ describe("[ClientApp] ", () => {
 			localProps.unsavedIds = ["1001q","2002c"];
 			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
 			const button = wrapper.find("button");
-			expect(button.prop("disabled")).toBe(true);
+			expect(button.prop("aria-disabled")).toBe(true);
 		});
 
 		it("should not display a submit button if the current user isn't authorised", () => {
