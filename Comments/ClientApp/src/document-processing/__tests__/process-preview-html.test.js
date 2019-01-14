@@ -93,15 +93,15 @@ describe("[ClientApp]", () => {
 			expect(instance.wrapper.find("div.ConversionError.ConversionError--I ul li").text()).toEqual("You have been informed!");
 		});
 
-		it("should show the detail of the error when clicked by adding a class to make it visible", () => {
-			const instance = setupHtml(
-				"<p>Here is a paragraph <!--[I] - Information: You have been informed! --></p>"
-			);
-			const wrapper = instance.wrapper;
-			expect(wrapper).toMatchSnapshot();
-			wrapper.find("button.ConversionError__Button").simulate("click");
-			expect(wrapper).toMatchSnapshot();
-		});
+		// it("should show the detail of the error when clicked by adding a class to make it visible", () => {
+		// 	const instance = setupHtml(
+		// 		"<p>Here is a paragraph <!--[I] - Information: You have been informed! --></p>"
+		// 	);
+		// 	const wrapper = instance.wrapper;
+		// 	expect(wrapper).toMatchSnapshot();
+		// 	wrapper.find("button.ConversionError__Button").simulate("click");
+		// 	expect(wrapper).toMatchSnapshot();
+		// });
 
 	});
 });
