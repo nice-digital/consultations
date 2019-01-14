@@ -5,9 +5,7 @@
 
  Background:
     Given I open the url "158/3/guidance"
- 		When I log in to Accounts via TopHat with username "ACCOUNTS_EMAIL2" and password "ACCOUNTS_PASSWORD"
- 		When I wait on element ".page-header" to exist
- 		And I pause for 1000ms
+		When I log into accounts with username "ACCOUNTS_EMAIL2" and password "ACCOUNTS_PASSWORD"
 		Given I delete all comments on the page
 
 	Scenario: User makes a comment at sub-section level

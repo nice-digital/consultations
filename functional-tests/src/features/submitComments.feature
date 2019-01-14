@@ -5,10 +5,7 @@ Feature: Submit Comments on a Consultation
 
 Background:
     Given I open the url "1/1/introduction"
-    And I refresh
-		When I log in to Accounts via TopHat with username "ACCOUNTS_EMAIL3" and password "ACCOUNTS_PASSWORD"
-		When I wait on element ".page-header" to exist
-		And I pause for 1000ms
+		When I log into accounts with username "ACCOUNTS_EMAIL3" and password "ACCOUNTS_PASSWORD"
 
 Scenario: User makes a multiple comments and submits
 		Given I comment on a Document

@@ -6,12 +6,7 @@ Feature: User is alerted when there are unsaved comments on Document page
 
  Background:
     Given I open the url "233/1/recommendations"
-    And I refresh
- 		When I log in to Accounts via TopHat with username "ACCOUNTS_EMAIL2" and password "ACCOUNTS_PASSWORD"
-		Given I open the url "233/1/recommendations"
-		And I refresh
- 		When I wait on element ".page-header" to exist
- 		And I pause for 1000ms
+		When I log into accounts with username "ACCOUNTS_EMAIL2" and password "ACCOUNTS_PASSWORD"
 
  Scenario: User is prompted to Save unsaved Comments
  		And I pause for 1000ms

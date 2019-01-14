@@ -6,6 +6,7 @@ import enterComment, { enterCommentAndSubmit, enterCommentToFirstInListAndSubmit
 import navigateToReviewPage from "../support/action/navigateToReviewPage";
 import { submitResponse } from "../support/action/submitResponse";
 import { reviewResponse } from "../support/action/reviewResponse";
+import { Login } from "../support/action/tophatLogin";
 
 // E.g. When I click on text "Title here" in ".ancestor"
 When(
@@ -40,5 +41,5 @@ When(
 
 When(
 	/^I log into accounts with username "([A-Z0-9_]+)" and password "([A-Z0-9_]+)"$/,
-	tophatLogin
+	Login
 )

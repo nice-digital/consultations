@@ -5,12 +5,8 @@ Feature: Comment Ordering on the Review Page
 	I want them to be ordered and displayed on the review page
 
 Background:
-    Given I open the url "1/1/introduction"
-    # And I refresh
+  	Given I open the url "1/1/introduction"
 		When I log into accounts with username "ACCOUNTS_EMAIL" and password "ACCOUNTS_PASSWORD"
-		# When I log in to Accounts via TopHat with username "ACCOUNTS_EMAIL" and password "ACCOUNTS_PASSWORD"
-		# When I wait on element ".page-header" to exist
-		# And I pause for 1000ms
 		Given I delete all comments on the page
 
 Scenario: User makes multiple comments and views them on the Review page
