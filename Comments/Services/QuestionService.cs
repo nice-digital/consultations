@@ -134,7 +134,7 @@ namespace Comments.Services
 
 				questionAdminDocuments.Add(
 					new QuestionAdminDocument(document.DocumentId,
-						document.SupportsQuestions,
+						//document.SupportsQuestions,
 						document.Title,
 						listOfQuestions
 					)
@@ -153,7 +153,7 @@ namespace Comments.Services
 			var previewState = publishedConsultationIds.Contains(consultationId) ? PreviewState.NonPreview : PreviewState.Preview;
 			var consultationState = _consultationService.GetConsultationState(consultationId, null, null, previewState);
 
-			return new QuestionAdmin(consultation.Title, consultation.SupportsQuestions, consultationQuestions, questionAdminDocuments, questionTypes, consultationState);
+			return new QuestionAdmin(consultation.Title, consultationQuestions, questionAdminDocuments, questionTypes, consultationState);
 	    }
 
 	    public IEnumerable<QuestionType> GetQuestionTypes()

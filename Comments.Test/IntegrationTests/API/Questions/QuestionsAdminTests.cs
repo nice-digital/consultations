@@ -38,12 +38,12 @@ namespace Comments.Test.IntegrationTests.API.Questions
 
 			//Assert
 			deserialisedQuestionAdmin.ConsultationTitle.ShouldBe("Consultation Title");
-			deserialisedQuestionAdmin.ConsultationSupportsQuestions.ShouldBeFalse();
+			//deserialisedQuestionAdmin.ConsultationSupportsQuestions.ShouldBeFalse();
 
 			deserialisedQuestionAdmin.Documents.Count().ShouldBe(DocumentCount);
 
-			var documentWithQuestion = deserialisedQuestionAdmin.Documents.First(d => d.DocumentId == 1 && d.SupportsQuestions);
-			documentWithQuestion.SupportsQuestions.ShouldBeTrue();
+			var documentWithQuestion = deserialisedQuestionAdmin.Documents.First(d => d.DocumentId == 1); // && d.SupportsQuestions);
+			//documentWithQuestion.SupportsQuestions.ShouldBeTrue();
 			documentWithQuestion.DocumentQuestions.Single().QuestionId.ShouldBe(questionId);
 		}
 	}
