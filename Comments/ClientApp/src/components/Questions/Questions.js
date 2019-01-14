@@ -121,10 +121,7 @@ export class Questions extends Component<PropsType, StateType> {
 		}
 	}
 
-	cmponentDidUpdate(prevProps
-											:
-											PropsType
-	) {
+	componentDidUpdate(prevProps: PropsType) {
 		const oldRoute = prevProps.location.pathname;
 		const newRoute = this.props.location.pathname;
 		if (oldRoute === newRoute) return;
