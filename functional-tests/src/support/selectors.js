@@ -1,7 +1,6 @@
 const toDataQASelAttr = (attrValue) => `[data-qa-sel='${attrValue}']`;
 const toNthChildAttr = (attrValue) => `.CommentBox:nth-child(${attrValue})`;
 const toChildAndQASel = (childIndex, attrValue) => toNthChildAttr(childIndex) + ' ' + toDataQASelAttr(attrValue);
-
 export default {
 	documentPage: {
 		commentBoxTitle: toDataQASelAttr("comment-box-title"),
@@ -11,7 +10,7 @@ export default {
 		commentTextArea:toDataQASelAttr("Comment-text-area"),
 		firstCommentTextArea:"#Comment-1",
 		submitButton:toDataQASelAttr("submit-button"),
-		saveIndicator: toChildAndQASel(1, ".CommentBox__savedIndicator"),
+		saveIndicator: toNthChildAttr(1) + ' ' + ".CommentBox__savedIndicator",
 		deletebutton: toDataQASelAttr("delete-comment-button"),
 		reviewAllButton: toDataQASelAttr("review-all-comments")
 	},

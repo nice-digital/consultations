@@ -5,6 +5,7 @@ import selectors from "../selectors";
 export const Login = (username, password) => {
 	browser.refresh();
 	tophatLogin(username, password);
+	browser.pause(2000);
 	waitFor(".page-header");
 	browser.pause(2000);
 }

@@ -34,7 +34,7 @@ export const validateCommentSaved = (commentText) => {
 };
 
 export const validateCommentBoxInactive = () => {
-	isEnabled(selectors.reviewPage.commentTextArea);
+	isEnabled(selectors.reviewPage.commentTextArea, 1);
 	pause(1000);
 };
 

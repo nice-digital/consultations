@@ -8,7 +8,8 @@ export const submitResponse = () => {
 	clickElement("click", "element", selectors.reviewPage.answerNoRepresentOrg);
 	waitForVisible(selectors.reviewPage.answerNoTobacLink);
 	clickElement("click", "element", selectors.reviewPage.answerNoTobacLink);
-	clickElement("click", "element", selectors.reviewPage.submitResponse);
+	clickElement("click", "element", selectors.reviewPage.submitResponseButton);
+	browser.pause(2000);
 	waitForVisible(selectors.reviewPage.reviewSubmittedCommentsButton);
 	checkContainsText("element", selectors.reviewPage.responseSubmittedHeader, "Response submitted");
 };

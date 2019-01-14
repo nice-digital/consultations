@@ -21,9 +21,6 @@ Scenario: User makes a multiple comments and submits
 		And I submit my response
 		And I review my response
 		Then I expect the comment box is inactive
-		Given I open the url "admin/DeleteAllSubmissionsFromUser?userId=38bb6df2-9ab8-4248-bb63-251b5424711a"
-		Given I open the url "1/review"
-		When I wait on element "[data-qa-sel='Comment-text-area']" to be visible
-		And I pause for 1000ms
+		Given I delete submissions for userid "38bb6df2-9ab8-4248-bb63-251b5424711a"
 		And I delete all comments on the page
 

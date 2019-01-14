@@ -2,6 +2,7 @@ import "@nice-digital/wdio-cucumber-steps/lib/given";
 import { Given } from "cucumber";
 
 import deleteComments from '../support/action/deleteComments';
+import { deleteSubmissionUser } from "../support/action/deleteSubmissionUser";
 
 Given(
     /^I delete all comments on the page$/,
@@ -57,3 +58,8 @@ Given(
 		browser.pause(1000);
 	}
 )
+
+Given(
+	/^I delete submissions for userid "([^"]*)?"$/,
+	deleteSubmissionUser
+);
