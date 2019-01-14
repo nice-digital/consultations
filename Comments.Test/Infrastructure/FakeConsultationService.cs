@@ -39,12 +39,12 @@ namespace Comments.Test.Infrastructure
 	    public ConsultationState GetConsultationState(string sourceURI, PreviewState previewState, IEnumerable<Location> locations = null,
 		    ConsultationBase consultation = null)
 	    {
-			return new ConsultationState(DateTime.MinValue, _consultationIsOpen ? DateTime.MaxValue : DateTime.MinValue, true, true, true, false, true, true, null, null);
+			return new ConsultationState(DateTime.MinValue, _consultationIsOpen ? DateTime.MaxValue : DateTime.MinValue, true, true, true, false, null);
 		}
 	    public ConsultationState GetConsultationState(int consultationId, int? documentId, string reference, PreviewState previewState, IEnumerable<Location> locations = null,
 		    ConsultationBase consultation = null)
 	    {
-		    return new ConsultationState(DateTime.MinValue, _consultationIsOpen ? DateTime.MaxValue : DateTime.MinValue, true, true, true, false, true, true, null, null);
+		    return new ConsultationState(DateTime.MinValue, _consultationIsOpen ? DateTime.MaxValue : DateTime.MinValue, true, true, true, false, null);
 	    }
 
 	    public IEnumerable<Consultation> GetConsultations()
@@ -86,26 +86,14 @@ namespace Comments.Test.Infrastructure
 
 	    public IEnumerable<Document> GetDocuments(int consultationId)
 	    {
-		    if (_documentCount == 1)
+		    return new List<Document>()
 		    {
-			    return new List<Document>()
+			    new Document(1, 1, true, "doc 1", new List<Chapter>()
 			    {
-				    new Document(1, 1, true, "doc 1", new List<Chapter>()
-				    {
-					    new Chapter("chapter-slug", "title"),
-					    new Chapter("chapter-slug2", "title2")
-				    }, true, true)
-			    };
-		    }
-		    else
-		    {
-			    var documents = new List<Document>();
-			    for (var docIndex = 0; docIndex < _documentCount; docIndex++)
-			    {
-				    documents.Add(new Document(consultationId, docIndex + 1, true, "doc title", new List<Chapter>(), true, true));
-			    }
-			    return documents;
-		    }
+				    new Chapter("chapter-slug", "title"),
+				    new Chapter("chapter-slug2", "title2")
+				}, true)
+		    };
 	    }
 
 	    public IEnumerable<Document> GetPreviewDraftDocuments(int consultationId, int documentId, string reference)

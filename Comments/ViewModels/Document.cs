@@ -10,7 +10,7 @@ namespace Comments.ViewModels
     public class Document
     {
         [JsonConstructor]
-        public Document(int consultationId, int documentId, bool convertedDocument, string title, IEnumerable<Chapter> chapters, bool supportsComments, bool supportsQuestions)
+        public Document(int consultationId, int documentId, bool convertedDocument, string title, IEnumerable<Chapter> chapters, bool supportsComments)
         {
 	        ConsultationId = consultationId;
 			DocumentId = documentId;
@@ -18,7 +18,7 @@ namespace Comments.ViewModels
             Title = title;
             Chapters = chapters;
 	        SupportsComments = supportsComments;
-	        SupportsQuestions = supportsQuestions;
+	        //SupportsQuestions = supportsQuestions;
         }
         public Document(int consultationId, Resource<DetailCommentDocument> resource)
         {
@@ -26,7 +26,7 @@ namespace Comments.ViewModels
 			DocumentId = resource.ConsultationDocumentId;
             ConvertedDocument = resource.ConvertedDocument;
 	        SupportsComments = resource.SupportsComments;
-	        SupportsQuestions = resource.SupportsQuestions;
+	        //SupportsQuestions = resource.SupportsQuestions;
             if (resource.Document != null)
             {
                 Title = resource.Document.Title;
@@ -69,7 +69,7 @@ namespace Comments.ViewModels
         public int DocumentId { get; private set; }
         public bool ConvertedDocument { get; private set; }
 		public bool SupportsComments { get; private set; }
-	    public bool SupportsQuestions { get; private set; }
+	    //public bool SupportsQuestions { get; private set; }
 		public string Title { get; private set; }
         public IEnumerable<Chapter> Chapters { get; private set; }
         public string Href { get; private set; }
