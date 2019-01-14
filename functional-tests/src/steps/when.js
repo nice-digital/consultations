@@ -5,6 +5,7 @@ import { When } from "cucumber";
 import enterComment, { enterCommentAndSubmit, enterCommentToFirstInListAndSubmit } from "../support/action/enterComment";
 import navigateToReviewPage from "../support/action/navigateToReviewPage";
 import { submitResponse } from "../support/action/submitResponse";
+import { reviewResponse } from "../support/action/reviewResponse";
 
 // E.g. When I click on text "Title here" in ".ancestor"
 When(
@@ -35,4 +36,9 @@ When(
 When(
 	/^I review my response$/,
 	reviewResponse
+);
+
+When(
+	/^I log into accounts with username "([A-Z0-9_]+)" and password "([A-Z0-9_]+)"$/,
+	tophatLogin
 )

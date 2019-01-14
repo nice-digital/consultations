@@ -6,10 +6,11 @@ Feature: Comment Ordering on the Review Page
 
 Background:
     Given I open the url "1/1/introduction"
-    And I refresh
-		When I log in to Accounts via TopHat with username "ACCOUNTS_EMAIL" and password "ACCOUNTS_PASSWORD"
-		When I wait on element ".page-header" to exist
-		And I pause for 1000ms
+    # And I refresh
+		When I log into accounts with username "ACCOUNTS_EMAIL" and password "ACCOUNTS_PASSWORD"
+		# When I log in to Accounts via TopHat with username "ACCOUNTS_EMAIL" and password "ACCOUNTS_PASSWORD"
+		# When I wait on element ".page-header" to exist
+		# And I pause for 1000ms
 		Given I delete all comments on the page
 
 Scenario: User makes multiple comments and views them on the Review page
