@@ -2,6 +2,7 @@
 version: '2'
 services:
   firefox:
+    container_name: functional-tests_firefox_1
     image: selenium/node-firefox:3.11.0-dysprosium
     # See https://github.com/SeleniumHQ/docker-selenium#running-the-images
     volumes:
@@ -12,6 +13,7 @@ services:
       HUB_HOST: hub
 
   chrome:
+    container_name: functional-tests_chrome_1
     image: selenium/node-chrome:3.11.0-dysprosium
     volumes:
       - /dev/shm:/dev/shm
@@ -33,6 +35,7 @@ services:
 
   # The tests themselves
   tests:
+    container_name: functional-tests_tests_1
     build: .
     volumes:
       - ./:/tests
@@ -50,6 +53,7 @@ services:
 
   # Comment Collection dotnet core web app
   comments:
+    container_name: functional-tests_comments_1
     build: ./../Comments/
     links:
       - database
@@ -81,6 +85,7 @@ services:
 
   # MS SQL Server database
   database:
+    container_name: functional-tests_database_1
     image: microsoft/mssql-server-linux:2017-latest
     environment:
       - ACCEPT_EULA=Y
@@ -91,6 +96,7 @@ services:
       - 1434:1433
 
   nginx:
+    container_name: functional-tests_nginx_1
     image: nginx:latest
     volumes:
       - ./docker_ssl_proxy:/etc/nginx
