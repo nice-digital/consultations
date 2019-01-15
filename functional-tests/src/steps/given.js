@@ -3,6 +3,7 @@ import { Given } from "cucumber";
 
 import deleteComments from '../support/action/deleteComments';
 import { deleteSubmissionUser } from "../support/action/deleteSubmissionUser";
+import { addQuestionsToConsultation } from "../support/action/addQuestionsToConsultation";
 
 Given(
     /^I delete all comments on the page$/,
@@ -74,4 +75,9 @@ Given(
 Given(
 	/^I delete submissions for userid "([^"]*)?"$/,
 	deleteSubmissionUser
+);
+
+Given(
+	/^I add questions to Consultation "([^"]*)?"$/,
+	addQuestionsToConsultation
 );

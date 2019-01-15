@@ -3,10 +3,12 @@ import { When } from "cucumber";
 
 // import clickElement from "../support/action/clickElement";
 import enterComment, { enterCommentAndSubmit, enterCommentToFirstInListAndSubmit, enterCommentToFirstInList, enterCommentToFirstInListReviewPage } from "../support/action/enterComment";
+import enterQuestionAnswer, { enterQuestionAnswerAndSubmit, enterQuestionAnswerToFirstInListAndSubmit, enterQuestionAnswerToFirstInList, enterQuestionAnswerToSecondInListAndSubmit } from "../support/action/enterQuestionAnswer";
 import navigateToReviewPage, { clickReviewPageLink } from "../support/action/navigateToReviewPage";
 import submitResponse, { completeResponseMandatoryQuestions } from "../support/action/submitResponse";
 import { reviewResponse } from "../support/action/reviewResponse";
 import { Login } from "../support/action/tophatLogin";
+import { openQuestionPanel } from "../support/action/openQuestionPanel";
 
 // E.g. When I click on text "Title here" in ".ancestor"
 When(
@@ -15,8 +17,18 @@ When(
 );
 
 When(
+	/^I add the question answer "([^"]*)"$/,
+	enterQuestionAnswer
+);
+
+When(
 	/^I add the comment "([^"]*)" and submit$/,
 	enterCommentAndSubmit
+);
+
+When(
+	/^I add the question answer "([^"]*)" and submit$/,
+	enterQuestionAnswerAndSubmit
 );
 
 When(
@@ -25,8 +37,23 @@ When(
 );
 
 When(
+	/^I add the question answer "([^"]*)" to the first in the list and submit$/,
+	enterQuestionAnswerToFirstInListAndSubmit
+);
+
+When(
+	/^I add the question answer "([^"]*)" to the second in the list and submit$/,
+	enterQuestionAnswerToSecondInListAndSubmit
+);
+
+When(
 	/^I add the comment "([^"]*)" to the first in the list$/,
 	enterCommentToFirstInList
+);
+
+When(
+	/^I add the question answer "([^"]*)" to the first in the list$/,
+	enterQuestionAnswerToFirstInList
 );
 
 When(
@@ -62,4 +89,9 @@ When(
 When(
 	/^I log into accounts with username "([A-Z0-9_]+)" and password "([A-Z0-9_]+)"$/,
 	Login
-)
+);
+
+When(
+	/^I open question panel$/,
+	openQuestionPanel
+);
