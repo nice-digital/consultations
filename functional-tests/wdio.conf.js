@@ -11,14 +11,14 @@ exports.config = {
         "./src/features/**/*.feature"
     ],
 	exclude: [
-		// "./src/features/**/submitComments.feature",
+		// "./src/features/**/unsavedCommentDocPage.feature",
+		"./src/features/**/submitComments.feature",
 		"./src/features/**/orderingOnReviewPage.feature",
 		"./src/features/**/commentOnSubSection.feature",
 		"./src/features/**/commentOnDocument.feature",
 		"./src/features/**/commentOnChapter.feature",
 		"./src/features/**/answerQuestion.feature",
 		"./src/features/**/unsavedCommentReviewPage.feature",
-		"./src/features/**/unsavedCommentDocPage.feature",
 		"./src/features/**/commentOnSection.feature"
 	],
 

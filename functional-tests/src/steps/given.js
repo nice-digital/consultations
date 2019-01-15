@@ -13,9 +13,21 @@ Given(
 	/^I comment on a Document$/,
 	() => {
 		browser.pause(1000);
+		browser.waitForVisible("[data-qa-sel='comment-on-consultation-document']");
 		browser.click("[data-qa-sel='comment-on-consultation-document']");
 		browser.pause(1000);
-		browser.waitForVisible("body [data-qa-sel='comment-box-title']", 1000);
+		browser.waitForVisible("body [data-qa-sel='comment-box-title']", 10000);
+	}
+);
+
+Given(
+	/^I comment on a Document again$/,
+	() => {
+		browser.pause(1000);
+		browser.waitForVisible("[data-qa-sel='comment-on-consultation-document']");
+		browser.click("[data-qa-sel='comment-on-consultation-document']");
+		browser.pause(1000);
+		browser.waitForVisible("body [data-qa-sel='comment-box-title']", 10000);
 	}
 );
 

@@ -8,7 +8,7 @@ export default {
 		secondCommentTextArea: toChildAndQASel(2, "Comment-text-area"),
 		thirdCommentTextArea: toChildAndQASel(3, "Comment-text-area"),
 		commentTextArea:toDataQASelAttr("Comment-text-area"),
-		firstCommentTextArea:"#Comment-1",
+		firstCommentTextAreapart2:"#Comment-1",
 		submitButton:toDataQASelAttr("submit-button"),
 		saveIndicator: toNthChildAttr(1) + ' ' + ".CommentBox__savedIndicator",
 		deletebutton: toDataQASelAttr("delete-comment-button"),

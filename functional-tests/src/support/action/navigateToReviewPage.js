@@ -10,5 +10,10 @@ export const navigateToReviewPage = () => {
 	waitForVisible(selectors.reviewPage.answerNoTobacLink);
 };
 
+export const clickReviewPageLink = () => {
+	clickElement("click", "button", selectors.documentPage.reviewAllButton);
+	browser.pause(2000);
+};
+
 export default navigateToReviewPage;
 
