@@ -14,4 +14,12 @@ export const submitResponse = () => {
 	checkContainsText("element", selectors.reviewPage.responseSubmittedHeader, "Response submitted");
 };
 
+export const completeResponseMandatoryQuestions = () => {
+	waitForVisible(selectors.reviewPage.answerNoRepresentOrg);
+	clickElement("click", "element", selectors.reviewPage.answerNoRepresentOrg);
+	waitForVisible(selectors.reviewPage.answerNoTobacLink);
+	clickElement("click", "element", selectors.reviewPage.answerNoTobacLink);
+	browser.pause(2000);
+};
+
 export default submitResponse;

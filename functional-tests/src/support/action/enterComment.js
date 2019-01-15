@@ -27,4 +27,10 @@ export const enterCommentToFirstInList = (commentText) => {
 	browser.pause(2000);
 };
 
+export const enterCommentToFirstInListReviewPage = (commentText) => {
+	browser.pause(2000);
+	setInputField("set", commentText, selectors.reviewPage.firstCommentTextArea);
+	browser.pause(2000);
+};
+
 export default enterComment;
