@@ -58,9 +58,7 @@ namespace Comments.Models
 
 			    partialSourceURIToUse = $"{partialMatchExactSourceURIToUse}/";
 		    }
-
-			//Answer.Where(a => a.Status = 1 && a.Question.Location.SourceURI)
-
+			
 			var data = Location.Where(l => partialMatchSourceURI
 					? (l.SourceURI.Equals(partialMatchExactSourceURIToUse) || l.SourceURI.Contains(partialSourceURIToUse))
 					: sourceURIs.Contains(l.SourceURI))
@@ -87,34 +85,7 @@ namespace Comments.Models
 			return data;
 		}
 
-	    public int GetAllSubmittedResponses(string sourceURI)
-	    {
-			var submissions = Submission.Where(s => (s.SubmissionComment.Any(sc => sc.Comment.IsDeleted == false) &&
-			                                               s.SubmissionComment.Any(sc => sc.Comment.Location.SourceURI.Contains(sourceURI)) &&
-			                                               s.SubmissionComment.Any(sc => sc.Comment.StatusId == (int) StatusName.Submitted))
-													||
-			                                        (s.SubmissionAnswer.Any(sa => sa.Answer.IsDeleted == false) &&
-															s.SubmissionAnswer.Any(sa => sa.Answer.Question.Location.SourceURI.Contains(sourceURI)) &&
-															s.SubmissionAnswer.Any(sa => sa.Answer.StatusId == (int)StatusName.Submitted))
-												)
-
-				//these includes aren't needed when they're not used in the resultset. since we've switched it to return the count from the SQL then the joins aren't needed.
-				//.Include(sc => sc.SubmissionComment)
-				//	.ThenInclude(c => c.Comment)
-				//		.ThenInclude(l => l.Location)
-
-				//.Include(sa => sa.SubmissionAnswer)
-				//.ThenInclude(a => a.Answer)
-				//	.ThenInclude(q => q.Question)
-				//		.ThenInclude(l => l.Location)
-						
-				.IgnoreQueryFilters()
-				.Select(s => s.SubmissionId).Distinct().Count();
-
-		    return submissions;
-	    }
-
-	    public virtual IList<SubmittedCommentsAndAnswerCount> GetSubmittedCommentsAndAnswerCounts()
+		public virtual IList<SubmittedCommentsAndAnswerCount> GetSubmittedCommentsAndAnswerCounts()
 	    {
 		    return SubmittedCommentsAndAnswerCounts.ToList();
 	    }
