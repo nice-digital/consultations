@@ -10,11 +10,21 @@ import { nextTick } from "../../../helpers/utils";
 const mock = new MockAdapter(axios);
 
 describe("[ClientApp] ", () => {
-	describe("Selection Component", () => {		
+	describe("Selection Component", () => {
 
 		// beforeEach(() => {
-			
+
 		//   });
+
+		it('should clear the comment and selection if the route (sourceURI) changes', function () {
+			let wrapper = mount(<Selection sourceUri="/test/1/1"><p>some paragraph content</p></Selection>);
+			expect(wrapper.state().toolTipVisible).toEqual(false);
+			wrapper.setState({toolTipVisible: true});
+			expect(wrapper.state().toolTipVisible).toEqual(true);
+			wrapper.setProps({sourceURI: "/change/1/1"});
+			wrapper.update();
+			expect(wrapper.state().toolTipVisible).toEqual(false);
+		});
 
 		it("mouseup event with invalid range should hide tooltip", async () => {
 			window.getSelection = () => {
@@ -32,7 +42,7 @@ describe("[ClientApp] ", () => {
 			expect(wrapper.state().toolTipVisible).toEqual(true);
 
 			wrapper.instance().onMouseUp(new Event("mouseup"));
-			expect(wrapper.state().toolTipVisible).toEqual(false);			
+			expect(wrapper.state().toolTipVisible).toEqual(false);
 		});
 
 		it("mouseup event with valid range should show tooltip", async () => {
@@ -63,7 +73,7 @@ describe("[ClientApp] ", () => {
 			expect(wrapper.state().toolTipVisible).toEqual(false);
 
 			// wrapper.instance().onMouseUp(new Event("mouseup"));
-			// expect(wrapper.state().toolTipVisible).toEqual(false);			
+			// expect(wrapper.state().toolTipVisible).toEqual(false);
 		});
 
 
