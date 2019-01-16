@@ -206,6 +206,7 @@ namespace Comments.Models
 		    return Question.Where(q => q.Location.SourceURI.Equals(sourceURI))
 			    .Include(q => q.Location)
 			    .Include(q => q.QuestionType)
+			    .IgnoreQueryFilters()
 			    .OrderBy(q => q.Location.Order)
 			    .ToList();
 	    }
@@ -710,7 +711,7 @@ namespace Comments.Models
 				FROM QuestionType
 				WHERE [Description] = @questionTextDescription
 
-				IF @questionTypeID IS NULL 
+				IF @questionTypeID IS NULL
 				BEGIN
 					INSERT INTO QuestionType ([Description], HasBooleanAnswer, HasTextAnswer)
 					VALUES (@questionTextDescription, 0, 1)
@@ -749,8 +750,8 @@ namespace Comments.Models
 					VALUES (@locationID2, 'Are local systems and structures in place to collect data for the proposed quality measures? If not, how feasible would it be for these to be put in place?', @questionTypeID, @userID, @userID, GETDATE())
 
 					INSERT INTO Question (LocationID, QuestionText, QuestionTypeID, CreatedByUserID, LastModifiedByUserID, LastModifiedDate)
-					VALUES (@locationID3, 'Do you think each of the statements in this draft quality standard would be achievable by local services given the net resources needed to deliver them? Please describe any resource requirements that you think would be necessary for any statement. Please describe any potential cost savings or opportunities for disinvestment', @questionTypeID, @userID, @userID, GETDATE())			
-		
+					VALUES (@locationID3, 'Do you think each of the statements in this draft quality standard would be achievable by local services given the net resources needed to deliver them? Please describe any resource requirements that you think would be necessary for any statement. Please describe any potential cost savings or opportunities for disinvestment', @questionTypeID, @userID, @userID, GETDATE())
+
 				END
 
 			", new SqlParameter("@consultationId", consultationId));
