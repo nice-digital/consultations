@@ -1,8 +1,6 @@
 // @flow
 
 import React, { Component } from "react";
-//import stringifyObject from "stringify-object";
-
 import { getElementPositionWithinDocument, getSectionTitle } from "../../helpers/utils";
 import { tagManager } from "../../helpers/tag-manager";
 
@@ -26,14 +24,14 @@ export class Selection extends Component<PropsType, StateType> {
 			comment: {},
 			position: {}
 		};
-		this.selectionContainer = React.createRef();		
+		this.selectionContainer = React.createRef();
 	}
-	
+
 	getXPathForElement(element) {
-		const idx = (sib, name) => sib 
+		const idx = (sib, name) => sib
 			? idx(sib.previousElementSibling, name||sib.localName) + (sib.localName == name) // eslint-disable-line
 			: 1;
-		const segs = elm => !elm || elm.nodeType !== 1 
+		const segs = elm => !elm || elm.nodeType !== 1
 			? [""]
 			: elm.id && document.querySelector(`#${elm.id}`) === elm
 				? [`id("${elm.id}")`]
@@ -82,14 +80,14 @@ export class Selection extends Component<PropsType, StateType> {
 			const position =
 			{
 				x: event.pageX - (boundingRectOfContainer.left + scrollLeft) - arrowSize,
-				y: event.pageY - (boundingRectOfContainer.top + scrollTop) + arrowSize,		  
+				y: event.pageY - (boundingRectOfContainer.top + scrollTop) + arrowSize,
 			};
 			this.setState({ comment, position, toolTipVisible: true });
 		} else{
 			this.setState({ toolTipVisible: false });
 		}
 	}
-	
+
 	onButtonClick = () => {
 		this.props.newCommentFunc(null, this.state.comment); //can't pass the event here, as it's the button click event, not the start of the text selection.
 		this.setState({ toolTipVisible: false });
@@ -101,12 +99,6 @@ export class Selection extends Component<PropsType, StateType> {
 		});
 	}
 
-	onVisibleChange = (toolTipVisible) => {
-		this.setState({
-			toolTipVisible,
-		});
-	}
-
 	// trim strips whitespace from either end of a string.
 	//
 	// This usually exists in native code, but not in IE8.
@@ -115,6 +107,17 @@ export class Selection extends Component<PropsType, StateType> {
 			return String.prototype.trim.call(s);
 		} else {
 			return s.replace(/^[\s\xA0]+|[\s\xA0]+$/g, "");
+		}
+	}
+
+	componentDidUpdate(prevProps: PropsType, prevState: StateType){
+		// if we're on a different page from when the selection was made, reinitialise the selection
+		if (this.props.sourceURI !== prevProps.sourceURI) {
+			this.setState({
+				toolTipVisible: false,
+				comment: {},
+				position: {}
+			})
 		}
 	}
 
