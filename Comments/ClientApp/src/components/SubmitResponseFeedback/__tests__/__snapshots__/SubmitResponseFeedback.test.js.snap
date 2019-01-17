@@ -1,0 +1,156 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[ClientApp Submit response feedback alert box should match the snapshot when all is good except for no saved comments 1`] = `null`;
+
+exports[`[ClientApp Submit response feedback alert box should match the snapshot when almost everything that can be wrong, is 1`] = `
+<div
+  className="SubmitResponseFeedback mb--d"
+  id="SubmitResponseFeedback"
+>
+  <p
+    className="SubmitResponseFeedback__title"
+  >
+    You can't submit your response yet
+  </p>
+  <ul
+    className="mt--0"
+  >
+    <li>
+      You have unsaved changes. Please save or delete before submitting your response
+    </li>
+    <li>
+      You have not saved any comments
+    </li>
+    <li>
+      You have not stated whether you are submitting the response on behalf of an organisation
+    </li>
+    <li>
+      You have not disclosed whether you or the organisation you represent have links to the tobacco industry
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`[ClientApp Submit response feedback alert box should match the snapshot when comments are saved 1`] = `
+<div
+  className="SubmitResponseFeedback mb--d"
+  id="SubmitResponseFeedback"
+>
+  <p
+    className="SubmitResponseFeedback__title"
+  >
+    You can't submit your response yet
+  </p>
+  <ul
+    className="mt--0"
+  >
+    <li>
+      You have unsaved changes. Please save or delete before submitting your response
+    </li>
+    <li>
+      You have not stated whether you are submitting the response on behalf of an organisation
+    </li>
+    <li>
+      You have not disclosed whether you or the organisation you represent have links to the tobacco industry
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`[ClientApp Submit response feedback alert box should match the snapshot when everything is good apart from 2 unsaved changes 1`] = `
+<div
+  className="SubmitResponseFeedback mb--d"
+  id="SubmitResponseFeedback"
+>
+  <p
+    className="SubmitResponseFeedback__title"
+  >
+    You can't submit your response yet
+  </p>
+  <ul
+    className="mt--0"
+  >
+    <li>
+      You have unsaved changes. Please save or delete before submitting your response
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`[ClientApp Submit response feedback alert box should match the snapshot when everything is good apart from 2 unsaved changes 2`] = `
+<div
+  className="SubmitResponseFeedback mb--d"
+  id="SubmitResponseFeedback"
+>
+  <p
+    className="SubmitResponseFeedback__title"
+  >
+    You can't submit your response yet
+  </p>
+  <ul
+    className="mt--0"
+  >
+    <li>
+      You have unsaved changes. Please save or delete before submitting your response
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`[ClientApp Submit response feedback alert box should match the snapshot when responding as organisation is yes but there is no name 1`] = `
+<div
+  className="SubmitResponseFeedback mb--d"
+  id="SubmitResponseFeedback"
+>
+  <p
+    className="SubmitResponseFeedback__title"
+  >
+    You can't submit your response yet
+  </p>
+  <ul
+    className="mt--0"
+  >
+    <li>
+      You have unsaved changes. Please save or delete before submitting your response
+    </li>
+    <li>
+      You have not saved any comments
+    </li>
+    <li>
+      You have stated that you are responding on behalf of an organisation but you haven't entered the organisation name
+    </li>
+    <li>
+      You have not disclosed whether you or the organisation you represent have links to the tobacco industry
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`[ClientApp Submit response feedback alert box should match the snapshot when tobacco disclosure is yes but there is no further detail 1`] = `
+<div
+  className="SubmitResponseFeedback mb--d"
+  id="SubmitResponseFeedback"
+>
+  <p
+    className="SubmitResponseFeedback__title"
+  >
+    You can't submit your response yet
+  </p>
+  <ul
+    className="mt--0"
+  >
+    <li>
+      You have unsaved changes. Please save or delete before submitting your response
+    </li>
+    <li>
+      You have not saved any comments
+    </li>
+    <li>
+      You have not stated whether you are submitting the response on behalf of an organisation
+    </li>
+    <li>
+      You have indicated that you or the organisation you represent have links with the tobacco industry but you have not supplied any details
+    </li>
+  </ul>
+</div>
+`;
