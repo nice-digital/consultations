@@ -41,47 +41,91 @@ describe("[ClientApp] ", () => {
 			expect(newWrapper.find("input#organisationName").length).toEqual(1);
 		});
 
-		it("should not allow submission if the mandatory questions have not been answered", () => {
+		it("should not allow submission if the mandatory questions have not been answered 1", () => {
 			const localProps = fakeProps;
 			localProps.validToSubmit = true;
-
 			localProps.hasTobaccoLinks = ""; // not answered at all
 			localProps.respondingAsOrganisation = ""; // not answered at all
 			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			expect(wrapper.find("button").prop("aria-disabled")).toBe(true);
+			expect(wrapper.state().feedbackVisible).toEqual(false);
+			wrapper.find("button").simulate("click");
+			wrapper.update();
+			expect(wrapper.state().feedbackVisible).toEqual(true);
+		});
 
+		it("should not allow submission if the manadatory questions have not been answered 2", ()=> {
+			const localProps = fakeProps;
+			localProps.validToSubmit = true;
 			localProps.hasTobaccoLinks = "no";
 			localProps.respondingAsOrganisation = ""; // not answered at all
-			const newWrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			expect(newWrapper.find("button").prop("aria-disabled")).toBe(true);
+			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
+			expect(wrapper.state().feedbackVisible).toEqual(false);
+			wrapper.find("button").simulate("click");
+			wrapper.update();
+			expect(wrapper.state().feedbackVisible).toEqual(true);
+		});
 
+		it("should not allow submission if the manadatory questions have not been answered 3", ()=> {
+			const localProps = fakeProps;
+			localProps.validToSubmit = true;
 			localProps.hasTobaccoLinks = ""; // not answered at all
 			localProps.respondingAsOrganisation = "no";
-			const newerWrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			expect(newerWrapper.find("button").prop("aria-disabled")).toBe(true);
+			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
+			expect(wrapper.state().feedbackVisible).toEqual(false);
+			wrapper.find("button").simulate("click");
+			wrapper.update();
+			expect(wrapper.state().feedbackVisible).toEqual(true);
+		});
 
+		it("should allow submission if the manadatory questions have been answered 1", ()=> {
+			const localProps = fakeProps;
+			localProps.validToSubmit = true;
 			localProps.hasTobaccoLinks = "no";
 			localProps.respondingAsOrganisation = "no";
-			const evenNewerWrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			expect(evenNewerWrapper.find("button").prop("aria-disabled")).toBe(false);
+			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
+			expect(wrapper.state().feedbackVisible).toEqual(false);
+			wrapper.find("button").simulate("click");
+			wrapper.update();
+			expect(wrapper.state().feedbackVisible).toEqual(false);
+		});
 
+		it("should allow submission if the manadatory questions have been answered 2", ()=> {
+			const localProps = fakeProps;
+			localProps.validToSubmit = true;
 			localProps.hasTobaccoLinks = "yes";
 			localProps.respondingAsOrganisation = "no";
 			localProps.tobaccoDisclosure = "test";
-			const newestWrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			expect(newestWrapper.find("button").prop("aria-disabled")).toBe(false);
+			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
+			expect(wrapper.state().feedbackVisible).toEqual(false);
+			wrapper.find("button").simulate("click");
+			wrapper.update();
+			expect(wrapper.state().feedbackVisible).toEqual(false);
+		});
 
+		it("should allow submission if the manadatory questions have been answered 3", ()=> {
+			const localProps = fakeProps;
+			localProps.validToSubmit = true;
 			localProps.hasTobaccoLinks = "no";
 			localProps.respondingAsOrganisation = "yes";
 			localProps.organisationName = "test";
-			const evenNewestWrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			expect(evenNewestWrapper.find("button").prop("aria-disabled")).toBe(false);
+			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
+			expect(wrapper.state().feedbackVisible).toEqual(false);
+			wrapper.find("button").simulate("click");
+			wrapper.update();
+			expect(wrapper.state().feedbackVisible).toEqual(false);
+		});
 
+		it("should not allow submission if the manadatory questions have not been answered 7", ()=> {
+			const localProps = fakeProps;
+			localProps.validToSubmit = true;
 			localProps.hasTobaccoLinks = "no";
 			localProps.respondingAsOrganisation = "yes";
 			localProps.organisationName = "";
-			const lastWrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			expect(lastWrapper.find("button").prop("aria-disabled")).toBe(true);
+			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
+			expect(wrapper.state().feedbackVisible).toEqual(false);
+			wrapper.find("button").simulate("click");
+			wrapper.update();
+			expect(wrapper.state().feedbackVisible).toEqual(true);
 		});
 
 		it("should fire parent submit function when the submit button is clicked", () => {
@@ -116,8 +160,9 @@ describe("[ClientApp] ", () => {
 			const localProps = fakeProps;
 			localProps.unsavedIds = ["1001q","2002c"];
 			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			const button = wrapper.find("button");
-			expect(button.prop("aria-disabled")).toBe(true);
+			wrapper.find("button").simulate("click");
+			wrapper.update();
+			expect(wrapper.state().feedbackVisible).toEqual(true);
 		});
 
 		it("should not display a submit button if the current user isn't authorised", () => {
