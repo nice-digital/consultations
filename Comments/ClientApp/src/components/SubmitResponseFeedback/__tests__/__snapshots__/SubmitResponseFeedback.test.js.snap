@@ -5,6 +5,7 @@ exports[`[ClientApp Submit response feedback alert box should match the snapshot
 exports[`[ClientApp Submit response feedback alert box should match the snapshot when almost everything that can be wrong, is 1`] = `
 <div
   className="SubmitResponseFeedback mb--d"
+  data-qa-sel="Submit-response-feedback"
   id="SubmitResponseFeedback"
 >
   <p
@@ -34,6 +35,7 @@ exports[`[ClientApp Submit response feedback alert box should match the snapshot
 exports[`[ClientApp Submit response feedback alert box should match the snapshot when comments are saved 1`] = `
 <div
   className="SubmitResponseFeedback mb--d"
+  data-qa-sel="Submit-response-feedback"
   id="SubmitResponseFeedback"
 >
   <p
@@ -60,6 +62,7 @@ exports[`[ClientApp Submit response feedback alert box should match the snapshot
 exports[`[ClientApp Submit response feedback alert box should match the snapshot when everything is good apart from 2 unsaved changes 1`] = `
 <div
   className="SubmitResponseFeedback mb--d"
+  data-qa-sel="Submit-response-feedback"
   id="SubmitResponseFeedback"
 >
   <p
@@ -80,6 +83,7 @@ exports[`[ClientApp Submit response feedback alert box should match the snapshot
 exports[`[ClientApp Submit response feedback alert box should match the snapshot when everything is good apart from 2 unsaved changes 2`] = `
 <div
   className="SubmitResponseFeedback mb--d"
+  data-qa-sel="Submit-response-feedback"
   id="SubmitResponseFeedback"
 >
   <p
@@ -100,6 +104,7 @@ exports[`[ClientApp Submit response feedback alert box should match the snapshot
 exports[`[ClientApp Submit response feedback alert box should match the snapshot when responding as organisation is yes but there is no name 1`] = `
 <div
   className="SubmitResponseFeedback mb--d"
+  data-qa-sel="Submit-response-feedback"
   id="SubmitResponseFeedback"
 >
   <p
@@ -129,6 +134,7 @@ exports[`[ClientApp Submit response feedback alert box should match the snapshot
 exports[`[ClientApp Submit response feedback alert box should match the snapshot when tobacco disclosure is yes but there is no further detail 1`] = `
 <div
   className="SubmitResponseFeedback mb--d"
+  data-qa-sel="Submit-response-feedback"
   id="SubmitResponseFeedback"
 >
   <p

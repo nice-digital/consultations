@@ -15,7 +15,9 @@ Feature: User unable to submit when they have unsaved comments on Review page
 		When I navigate to the Review Page
 		And I add the comment ". must be saved" to the first in the list on the review page
 		And I complete the mandatory response submission questions
-		Then I expect the Submit Response button is inactive
+		And I click submit my response button
+		Then I expect the feedback message "You have unsaved changes. Please save or delete before submitting your response" to be displayed
+		Given I delete all comments on the page
 
 
 
