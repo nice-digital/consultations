@@ -127,7 +127,6 @@ export class TextQuestion extends Component<PropsType, StateType> {
 											Move Down
 										</span>
 									</button>
-
 								</Fragment>
 							}
 							<button

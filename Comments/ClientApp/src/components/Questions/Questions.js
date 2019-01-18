@@ -192,13 +192,10 @@ export class Questions extends Component<PropsType, StateType> {
 			newQuestion.sourceURI = `consultations://./consultation/${consultationId}/document/${documentId}`;
 		}
 
-		if (currentQuestions && currentQuestions.length) {
-			const existingIds = currentQuestions.map(q => q.questionId);
-			const lowestExistingId = Math.min.apply(Math, existingIds);
-			newQuestion.questionId = lowestExistingId >= 0 ? -1 : lowestExistingId - 1;
-		}
+		this.saveQuestion(e, newQuestion);
 		currentQuestions.push(newQuestion);
 		this.setState({questionsData});
+
 	};
 
 	createConsultationNavigation = (questionsData: Object, currentConsultationId: string, currentDocumentId: string | null) => {

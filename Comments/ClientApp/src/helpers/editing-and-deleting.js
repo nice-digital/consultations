@@ -218,6 +218,7 @@ function removeAnswerFromState(questionId: number, answerId: number, self: any) 
 // Questions ================================= //
 
 export function saveQuestionHandler(event: Event, question: QuestionType, self: any) {
+	debugger;
 	event.preventDefault();
 	const originalQuestionId = question.questionId;
 	const isANewQuestion = question.questionId < 0;
