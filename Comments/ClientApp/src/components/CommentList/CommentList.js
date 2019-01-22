@@ -356,21 +356,15 @@ export class CommentList extends Component<PropsType, StateType> {
 								return (
 									<div data-qa-sel="comment-list-wrapper">
 
-										<div className="grid">
-											<h1 data-g="6" id="commenting-panel" className="p">
-												{this.state.viewComments ? "Comments" : "Questions"} panel
-											</h1>
-											{contextValue.isAuthorised ?
-												<p data-g="6">
-													<Link
-														to={`/${this.props.match.params.consultationId}/review`}
-														data-qa-sel="review-all-comments"
-														className="right">
-														Review all {this.state.viewComments ? "comments" : "questions"}
-													</Link>
-												</p> : null
-											}
-										</div>
+										{contextValue.isAuthorised &&
+												<Link
+													to={`/${this.props.match.params.consultationId}/review`}
+													data-qa-sel="review-all-comments"
+													className="btn btn--cta mt--c">
+													Review and submit your response &nbsp;&nbsp;
+													<span className="icon icon--chevron-right" aria-hidden="true" />
+												</Link>
+										}
 
 										{this.state.error !== "" ?
 											<div className="errorBox">
@@ -386,7 +380,7 @@ export class CommentList extends Component<PropsType, StateType> {
 
 													<div className={`${this.state.viewComments ? "show" : "hide"}`}>
 														{this.state.comments.length === 0 ? <p>No comments yet</p> :
-															<ul className="CommentList list--unstyled">
+															<ul className="CommentList list--unstyled mt--0">
 																{this.state.comments.map((comment) => {
 																	return (
 																		<CommentBox
@@ -405,8 +399,8 @@ export class CommentList extends Component<PropsType, StateType> {
 													</div>
 
 													<div className={`${this.state.viewComments ? "hide" : "show"}`}>
-														<p>Please answer the following questions</p>
-														<ul className="CommentList list--unstyled">
+														<p className="mt--0">Please answer the following questions</p>
+														<ul className="CommentList list--unstyled mt--0">
 															{this.state.questions.map((question) => {
 																const isUnsaved = this.state.unsavedIds.includes(`${question.questionId}q`);
 																return (

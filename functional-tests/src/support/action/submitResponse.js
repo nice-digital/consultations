@@ -22,4 +22,9 @@ export const completeResponseMandatoryQuestions = () => {
 	browser.pause(2000);
 };
 
+export const clickSubmitResponseButton = () => {
+	waitForVisible(selectors.reviewPage.submitResponseButton);
+	clickElement("click", "element", selectors.reviewPage.submitResponseButton);
+};
+
 export default submitResponse;
