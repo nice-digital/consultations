@@ -33,7 +33,7 @@ export class Questions extends Component<PropsType, StateType> {
 		super(props);
 
 		this.state = {
-			editingAllowed: false,
+			editingAllowed: true,
 			questionsData: {},
 			loading: true,
 			hasInitialData: false,
@@ -59,7 +59,7 @@ export class Questions extends Component<PropsType, StateType> {
 			);
 			if (preloadedQuestionsData) {
 				this.state = {
-					editingAllowed: this.editingAllowed(preloadedQuestionsData.consultationState),
+					editingAllowed: true,
 					questionsData: preloadedQuestionsData,
 					loading: false,
 					hasInitialData: true,
@@ -72,11 +72,6 @@ export class Questions extends Component<PropsType, StateType> {
 			}
 		}
 	}
-
-	editingAllowed = (data: Object) => {
-		if (!data) return true;
-		return data.consultationHasEnded || data.consultationIsOpen;
-	};
 
 	gatherData = async () => {
 		const questionsData = load(
@@ -104,7 +99,6 @@ export class Questions extends Component<PropsType, StateType> {
 			this.gatherData()
 				.then(data => {
 					this.setState({
-						editingAllowed: this.editingAllowed(data.questionsData.consultationState),
 						...data,
 						loading: false,
 						hasInitialData: true,
@@ -131,7 +125,6 @@ export class Questions extends Component<PropsType, StateType> {
 		this.gatherData()
 			.then(data => {
 				this.setState({
-					editingAllowed: this.editingAllowed(data.questionsData.consultationState),
 					...data,
 					loading: false,
 					unsavedIds: [],

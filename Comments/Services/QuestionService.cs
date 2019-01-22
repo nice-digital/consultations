@@ -108,7 +108,7 @@ namespace Comments.Services
 	    public QuestionAdmin GetQuestionAdmin(int consultationId)
 	    {
 
-		    var consultation = _consultationService.GetConsultation(consultationId, BreadcrumbType.None, useFilters:false);
+		    /*var consultation = _consultationService.GetConsultation(consultationId, BreadcrumbType.None, useFilters:false);*/
 
 		    var consultationSourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
 
@@ -153,7 +153,7 @@ namespace Comments.Services
 			var previewState = publishedConsultationIds.Contains(consultationId) ? PreviewState.NonPreview : PreviewState.Preview;
 			var consultationState = _consultationService.GetConsultationState(consultationId, null, null, previewState);
 
-			return new QuestionAdmin(consultation.Title, consultationQuestions, questionAdminDocuments, questionTypes, consultationState);
+			return new QuestionAdmin("hey!", consultationQuestions, questionAdminDocuments, questionTypes, consultationState);
 	    }
 
 	    public IEnumerable<QuestionType> GetQuestionTypes()
