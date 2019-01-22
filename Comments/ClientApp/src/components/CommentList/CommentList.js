@@ -13,7 +13,7 @@ import {
 	saveAnswerHandler,
 	deleteAnswerHandler,
 } from "../../helpers/editing-and-deleting";
-import { pullFocusById } from "../../helpers/accessibility-helpers";
+import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
 import { mobileWidth } from "../../constants";
 import { getElementPositionWithinDocument, getSectionTitle } from "../../helpers/utils";
 import { updateUnsavedIds } from "../../helpers/unsaved-comments";
@@ -178,7 +178,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		comments.unshift(generatedComment);
 		this.setState({comments});
 		setTimeout(() => {
-			pullFocusById(`Comment${idToUseForNewBox}`);
+			pullFocusByQuerySelector(`Comment${idToUseForNewBox}`);
 		}, 0);
 	};
 
@@ -237,7 +237,7 @@ export class CommentList extends Component<PropsType, StateType> {
 						}
 					);
 				});
-				pullFocusById("#js-drawer-toggleopen-comments");
+				pullFocusByQuerySelector("#js-drawer-toggleopen-comments");
 				break;
 
 			case "toggleOpenQuestions":
@@ -257,7 +257,7 @@ export class CommentList extends Component<PropsType, StateType> {
 						}
 					);
 				});
-				pullFocusById("#js-drawer-toggleopen-questions");
+				pullFocusByQuerySelector("#js-drawer-toggleopen-questions");
 				break;
 
 			default:

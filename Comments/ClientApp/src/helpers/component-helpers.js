@@ -2,7 +2,7 @@
 
 import React from "react";
 import { NavHashLink } from "react-router-hash-link";
-import { pullFocusById } from "./accessibility-helpers";
+import { pullFocusByQuerySelector } from "./accessibility-helpers";
 
 type HashLinkTopType = {
 	label: string,
@@ -23,10 +23,11 @@ export function HashLinkTop(props: HashLinkTopType) {
 					block,
 				});
 				const element = el.attributes.id.value;
-				pullFocusById(element);
+				pullFocusByQuerySelector(`#${element}`);
 			}}
 		>
 			{label}
 		</NavHashLink>
 	);
 }
+
