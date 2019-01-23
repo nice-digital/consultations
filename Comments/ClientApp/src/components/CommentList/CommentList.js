@@ -178,7 +178,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		comments.unshift(generatedComment);
 		this.setState({comments});
 		setTimeout(() => {
-			pullFocusByQuerySelector(`Comment${idToUseForNewBox}`);
+			pullFocusByQuerySelector(`#Comment${idToUseForNewBox}`);
 		}, 0);
 	};
 
