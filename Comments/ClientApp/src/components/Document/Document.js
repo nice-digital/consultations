@@ -209,6 +209,7 @@ export class Document extends Component<PropsType, StateType> {
 							stage: "preview",
 						});
 					});
+					pullFocusByQuerySelector("#root");
 				})
 				.catch(err => {
 					this.setState({
@@ -246,7 +247,7 @@ export class Document extends Component<PropsType, StateType> {
 							stage: "preview",
 						});
 					});
-					pullFocusByQuerySelector(".document-comment-container");
+					pullFocusByQuerySelector(".document-comment-container", true);
 				});
 		} else {
 			this.gatherData()
@@ -265,7 +266,6 @@ export class Document extends Component<PropsType, StateType> {
 							stage: "preview",
 						});
 					});
-					pullFocusByQuerySelector(".document-comment-container");
 				})
 				.catch(err => {
 					this.setState({

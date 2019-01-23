@@ -24,6 +24,10 @@
   //background: #eee !important;
 }
 
+.no-outline {
+  outline: none;
+}
+
 @mixin visibleToggleOut($duration) {
   animation: $duration visibleToggleOut;
   animation-fill-mode: forwards;
