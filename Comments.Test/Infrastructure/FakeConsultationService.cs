@@ -84,16 +84,16 @@ namespace Comments.Test.Infrastructure
 		    throw new NotImplementedException();
 	    }
 
-	    public IEnumerable<Document> GetDocuments(int consultationId)
+	    public (IEnumerable<Document> documents, string consultationTitle) GetDocuments(int consultationId, string reference = null, bool draft = false)
 	    {
-		    return new List<Document>()
+		    return (new List<Document>()
 		    {
 			    new Document(1, 1, true, "doc 1", new List<Chapter>()
 			    {
 				    new Chapter("chapter-slug", "title"),
 				    new Chapter("chapter-slug2", "title2")
-				}, true)
-		    };
+			    }, true)
+		    }, "Consultation Title");
 	    }
 
 	    public IEnumerable<Document> GetPreviewDraftDocuments(int consultationId, int documentId, string reference)

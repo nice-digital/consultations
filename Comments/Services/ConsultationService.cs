@@ -23,8 +23,8 @@ namespace Comments.Services
 	public interface IConsultationService
     {
         ChapterContent GetChapterContent(int consultationId, int documentId, string chapterSlug);
-        IEnumerable<Document> GetDocuments(int consultationId);
-	    IEnumerable<Document> GetPreviewDraftDocuments(int consultationId, int documentId, string reference);
+	    (IEnumerable<Document> documents, string consultationTitle) GetDocuments(int consultationId, string reference = null, bool draft = false);
+		IEnumerable<Document> GetPreviewDraftDocuments(int consultationId, int documentId, string reference);
 	    IEnumerable<Document> GetPreviewPublishedDocuments(int consultationId, int documentId);
         ViewModels.Consultation GetConsultation(int consultationId, BreadcrumbType breadcrumbType, bool useFilters);
 	    ViewModels.Consultation GetDraftConsultation(int consultationId, int documentId, string reference, bool isReview);
@@ -71,10 +71,16 @@ namespace Comments.Services
 			    _feedService.GetIndevConsultationChapterForDraftProject(consultationId, documentId, chapterSlug, reference));
 	    }
 
-		public IEnumerable<Document> GetDocuments(int consultationId)
+	    public (IEnumerable<Document> documents, string consultationTitle) GetDocuments(int consultationId, string reference = null, bool draft = false)
         {
-            var consultationDetail = _feedService.GetIndevConsultationDetailForPublishedProject(consultationId, PreviewState.NonPreview);
-            return consultationDetail.Resources.Select(r => new ViewModels.Document(consultationId, r)).ToList();
+	        if (draft)
+	        {
+		        var consultationPreviewDetail = _feedService.GetIndevConsultationDetailForDraftProject(consultationId, 0, reference);
+		        return (consultationPreviewDetail.Resources.Select(r => new ViewModels.Document(consultationId, r)).ToList(), consultationPreviewDetail.ConsultationName);
+			}
+
+	        var consultationDetail =_feedService.GetIndevConsultationDetailForPublishedProject(consultationId, PreviewState.NonPreview);
+            return (consultationDetail.Resources.Select(r => new ViewModels.Document(consultationId, r)).ToList(), consultationDetail.ConsultationName);
         }
 
 
@@ -123,7 +129,7 @@ namespace Comments.Services
 
 		    if (breadcrumbType == BreadcrumbType.Review)
 		    {
-			    var firstDocument = GetDocuments(consultation.ConsultationId).FirstOrDefault(d => d.ConvertedDocument && d.DocumentId > 0);
+			    var firstDocument = GetDocuments(consultation.ConsultationId).documents.FirstOrDefault(d => d.ConvertedDocument && d.DocumentId > 0);
 			    var firstChapter = firstDocument?.Chapters.FirstOrDefault();
 
 			    if (firstChapter != null)
@@ -135,7 +141,7 @@ namespace Comments.Services
 
 	    public (int? documentId, string chapterSlug) GetFirstConvertedDocumentAndChapterSlug(int consultationId)
 	    {
-			var firstDocument = GetDocuments(consultationId).FirstOrDefault(d => d.ConvertedDocument && d.DocumentId > 0);
+			var firstDocument = GetDocuments(consultationId).documents.FirstOrDefault(d => d.ConvertedDocument && d.DocumentId > 0);
 		    if (firstDocument == null)
 			    return (null, null);
 
@@ -145,7 +151,7 @@ namespace Comments.Services
 
 	    public string GetFirstChapterSlug(int consultationId, int documentId)
 	    {
-		    return GetDocuments(consultationId).FirstOrDefault(d => d.DocumentId.Equals(documentId))?.Chapters.FirstOrDefault()?.Slug;
+		    return GetDocuments(consultationId).documents.FirstOrDefault(d => d.DocumentId.Equals(documentId))?.Chapters.FirstOrDefault()?.Slug;
 	    }
 	    public string GetFirstChapterSlugFromPreviewDocument(string reference, int consultationId, int documentId)
 	    {
@@ -184,7 +190,7 @@ namespace Comments.Services
 
 		    IEnumerable<Document> documents;
 		    if (previewState == PreviewState.NonPreview)
-			    documents = GetDocuments(consultationId).ToList();
+			    documents = GetDocuments(consultationId).documents.ToList();
 			else
 				documents = GetPreviewDraftDocuments(consultationId, (int)documentId, reference).ToList();
 

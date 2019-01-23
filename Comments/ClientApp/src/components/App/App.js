@@ -57,14 +57,21 @@ class App extends React.Component<PropsType, StateType> {
 									<DownloadWithRouter basename={this.props.basename}/>
 								</Route>
 
-								{/*Questions*/}
-								<Route exact path="/admin/questions/:consultationId">
-									<QuestionsWithRouter/>
+								{/*Questions admin - this route is hit when the 'Add question' button is pressed in indev on a draft project.*/}
+								<Route exact path="/admin/questions/preview/:reference/:consultationId">
+									<QuestionsWithRouter draftProject={true}/>
 								</Route>
-
-								{/*Questions*/}
+								{/*Questions admin - viewing a documents questions on a draft project */}
+								<Route exact path="/admin/questions/preview/:reference/:consultationId/:documentId">
+									<QuestionsWithRouter draftProject={true}/>
+								</Route>
+								{/*Questions admin - this route is hit when the 'Add question' button is pressed in indev on a published project.*/}
+								<Route exact path="/admin/questions/:consultationId">
+									<QuestionsWithRouter draftProject={false}/>
+								</Route>
+								{/*Questions admin - viewing a documents questions on a published project */}
 								<Route exact path="/admin/questions/:consultationId/:documentId">
-									<QuestionsWithRouter/>
+									<QuestionsWithRouter draftProject={false}/>
 								</Route>
 
 								{/*Document View*/}

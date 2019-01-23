@@ -20,14 +20,14 @@ namespace Comments.Controllers.Api
 
 		// GET: consultations/api/Questions?consultationId=22
 		[HttpGet]
-        public IActionResult GetQuestions(int consultationId)
+        public IActionResult GetQuestions(int consultationId, bool draft, string reference)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var result = _questionService.GetQuestionAdmin(consultationId);
+            var result = _questionService.GetQuestionAdmin(consultationId, draft, reference);
 
             return Ok(result);
         }

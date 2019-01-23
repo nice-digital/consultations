@@ -16,7 +16,7 @@ type PropsType = {
 	staticContext: ContextType;
 	match: any;
 	location: any;
-	preview: boolean;
+	draftProject: boolean;
 };
 
 type StateType = {
@@ -54,7 +54,7 @@ export class Questions extends Component<PropsType, StateType> {
 				this.props.staticContext,
 				"questions",
 				[],
-				{consultationId: this.props.match.params.consultationId},
+				{consultationId: this.props.match.params.consultationId, draft: this.props.draftProject, reference: this.props.match.params.reference},
 				preloadedData,
 			);
 			if (preloadedQuestionsData) {
@@ -78,7 +78,7 @@ export class Questions extends Component<PropsType, StateType> {
 			"questions",
 			undefined,
 			[],
-			{consultationId: this.props.match.params.consultationId}
+			{consultationId: this.props.match.params.consultationId, draft: this.props.draftProject, reference: this.props.match.params.reference}
 		)
 			.then(response => response.data)
 			.catch(err => {

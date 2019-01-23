@@ -32,7 +32,7 @@ namespace Comments.Controllers.Api
 		    if (consultationId < 1)
 			    throw new ArgumentException(nameof(consultationId));
 
-		    return _consultationService.GetDocuments(consultationId);
+		    return _consultationService.GetDocuments(consultationId).documents;
 	    }
 	}
 

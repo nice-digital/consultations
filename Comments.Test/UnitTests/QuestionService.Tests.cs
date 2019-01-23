@@ -185,7 +185,7 @@ namespace Comments.Test.UnitTests
 			var questionService = new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService);
 
 			//Act
-			var result = questionService.GetQuestionAdmin(1);
+			var result = questionService.GetQuestionAdmin(1, false, null);
 
 			//Assert
 			result.ConsultationTitle.ShouldBe("Consultation Title");

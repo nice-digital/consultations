@@ -17,8 +17,9 @@ namespace Comments.Services
         (int rowsUpdated, Validate validate) EditQuestion(int questionId, ViewModels.Question question);
         (int rowsUpdated, Validate validate) DeleteQuestion(int questionId);
         (ViewModels.Question question, Validate validate) CreateQuestion(ViewModels.Question question);
-	    QuestionAdmin GetQuestionAdmin(int consultationId);
-	    IEnumerable<QuestionType> GetQuestionTypes();
+	    QuestionAdmin GetQuestionAdmin(int consultationId, bool draft, string reference);
+
+		IEnumerable<QuestionType> GetQuestionTypes();
     }
     public class QuestionService : IQuestionService
     {
@@ -105,7 +106,7 @@ namespace Comments.Services
             return (question: new ViewModels.Question(locationToSave, questionToSave), validate: null);
         }
 
-	    public QuestionAdmin GetQuestionAdmin(int consultationId)
+	    public QuestionAdmin GetQuestionAdmin(int consultationId, bool draft, string reference)
 	    {
 
 		    /*var consultation = _consultationService.GetConsultation(consultationId, BreadcrumbType.None, useFilters:false);*/
@@ -120,9 +121,9 @@ namespace Comments.Services
 			    allTheQuestions.AddRange(location.Question.Select(question => new Question(location, question)));
 		    }
 
-		    var documents = _consultationService.GetDocuments(consultationId);
+		    var documentsAndConsultationTitle = _consultationService.GetDocuments(consultationId, reference, draft);
 		    var questionAdminDocuments = new List<QuestionAdminDocument>();
-			foreach (var document in documents)
+			foreach (var document in documentsAndConsultationTitle.documents)
 			{
 				var questionIdsForThisDocument = locationsWithQuestions.Where(l =>
 					l.SourceURI.Contains(ConsultationsUri.CreateDocumentURI(consultationId, document.DocumentId),
@@ -153,7 +154,7 @@ namespace Comments.Services
 			var previewState = publishedConsultationIds.Contains(consultationId) ? PreviewState.NonPreview : PreviewState.Preview;
 			var consultationState = _consultationService.GetConsultationState(consultationId, null, null, previewState);
 
-			return new QuestionAdmin("hey!", consultationQuestions, questionAdminDocuments, questionTypes, consultationState);
+			return new QuestionAdmin(documentsAndConsultationTitle.consultationTitle, consultationQuestions, questionAdminDocuments, questionTypes, consultationState);
 	    }
 
 	    public IEnumerable<QuestionType> GetQuestionTypes()
