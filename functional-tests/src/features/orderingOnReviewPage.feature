@@ -1,8 +1,8 @@
 Feature: Comment Ordering on the Review Page
   As a user of consultations
-  I want to be able to login to make a comment
-	I want to be able to comment at multiple levels
-	I want them to be ordered and displayed on the review page
+  We want to be able to login to make a comment
+	We want to be able to comment at multiple levels
+	We want them to be ordered and displayed on the review page
 
 Background:
   	Given I open the url "1/1/introduction"

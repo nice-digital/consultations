@@ -1,7 +1,7 @@
 Feature: Answer Question on a Consultation
    	As a user of consultations
-  	I want to be able to login to make answer a question
- 		I want to be able to answer a question at the consultation or document level
+  	We want to be able to login to make answer a question
+ 		We want to be able to answer a question at the consultation or document level
 
 Background:
 		Given I open the url "154/1/overview"

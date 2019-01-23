@@ -1,8 +1,8 @@
 Feature: User is alerted when there are unsaved comments on Document page
    	As a user of consultations
-  	I want to be able to login to make a comment
- 		I want to be able to comment at the Document level
-		I want to be warned if I attempt to navigate away while having unsaved Comments
+  	We want to be able to login to make a comment
+ 		We want to be able to comment at the Document level
+		We want to be warned if I attempt to navigate away while having unsaved Comments
 
  Background:
     Given I open the url "233/1/recommendations"
