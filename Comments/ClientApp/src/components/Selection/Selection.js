@@ -3,6 +3,7 @@
 import React, { Component } from "react";
 import { getElementPositionWithinDocument, getSectionTitle } from "../../helpers/utils";
 import { tagManager } from "../../helpers/tag-manager";
+import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
 
 type PropsType = {
 	newCommentFunc: Function,
@@ -83,6 +84,7 @@ export class Selection extends Component<PropsType, StateType> {
 				y: event.pageY - (boundingRectOfContainer.top + scrollTop) + arrowSize,
 			};
 			this.setState({ comment, position, toolTipVisible: true });
+			setTimeout(() => { pullFocusByQuerySelector(".selection-container button") }, 0);
 		} else{
 			this.setState({ toolTipVisible: false });
 		}

@@ -4,10 +4,12 @@ using System.IO;
 using System.Linq;
 using Comments.Models;
 using Comments.Services;
+using Comments.ViewModels;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.Extensions.Logging;
+using Question = Comments.Models.Question;
 
 namespace Comments.Export
 {
@@ -345,13 +347,15 @@ namespace Comments.Export
 			foreach (var comment in comments)
 			{
 				var locationDetails = _exportService.GetLocationData(comment.Location);
+				var commentOn = CommentOnHelpers.GetCommentOn(comment.Location.SourceURI, comment.Location.RangeStart, comment.Location.HtmlElementID);
+				
 				var excelrow = new Excel()
 				{
 					ConsultationName = locationDetails.ConsultationName,
 					DocumentName = locationDetails.DocumentName,
 					ChapterTitle = locationDetails.ChapterName,
-					Section = comment.Location.Section,
-					Quote = comment.Location.RangeEnd != null && comment.Location.RangeStart != null ? comment.Location.Quote : null,
+					Section = commentOn == CommentOn.Section || commentOn == CommentOn.SubSection || commentOn == CommentOn.Selection ? comment.Location.Section : null,
+					Quote = commentOn  == CommentOn.Selection ? comment.Location.Quote : null,
 					UserName =  _userService.GetDisplayNameForUserId(comment.CreatedByUserId),
 					Email = _userService.GetEmailForUserId(comment.CreatedByUserId),
 					CommentId = comment.CommentId,
@@ -364,8 +368,10 @@ namespace Comments.Export
 					OrganisationName =  comment.SubmissionComment.Count > 0 ? comment.SubmissionComment?.First().Submission.OrganisationName : null,
 					HasTobaccoLinks =  comment.SubmissionComment.Count> 0 ? comment.SubmissionComment?.First().Submission.HasTobaccoLinks : null,
 					TobaccoIndustryDetails = comment.SubmissionComment.Count > 0? comment.SubmissionComment?.First().Submission.TobaccoDisclosure : null,
-					Order = comment.Location.Order
-				};
+					Order = comment.Location.Order,
+
+					
+			};
 				excel.Add(excelrow);
 			}
 
@@ -520,8 +526,12 @@ namespace Comments.Export
 
 			AppendDataRow(sheetData, comments, answers, questions);
 
-			worksheetPart.Worksheet.Save();
+			// Add filtering to the worksheet
+			var headerCells = "A3:N3";
+			AutoFilter autoFilter = new AutoFilter() { Reference = headerCells };
 
+			worksheetPart.Worksheet.Save();
+			worksheetPart.Worksheet.Append(autoFilter);
 			// Close the document.
 			spreadsheetDocument.Close();
 		}

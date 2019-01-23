@@ -58,9 +58,7 @@ namespace Comments.Models
 
 			    partialSourceURIToUse = $"{partialMatchExactSourceURIToUse}/";
 		    }
-
-			//Answer.Where(a => a.Status = 1 && a.Question.Location.SourceURI)
-
+			
 			var data = Location.Where(l => partialMatchSourceURI
 					? (l.SourceURI.Equals(partialMatchExactSourceURIToUse) || l.SourceURI.Contains(partialSourceURIToUse))
 					: sourceURIs.Contains(l.SourceURI))
@@ -87,34 +85,7 @@ namespace Comments.Models
 			return data;
 		}
 
-	    public int GetAllSubmittedResponses(string sourceURI)
-	    {
-			var submissions = Submission.Where(s => (s.SubmissionComment.Any(sc => sc.Comment.IsDeleted == false) &&
-			                                               s.SubmissionComment.Any(sc => sc.Comment.Location.SourceURI.Contains(sourceURI)) &&
-			                                               s.SubmissionComment.Any(sc => sc.Comment.StatusId == (int) StatusName.Submitted))
-													||
-			                                        (s.SubmissionAnswer.Any(sa => sa.Answer.IsDeleted == false) &&
-															s.SubmissionAnswer.Any(sa => sa.Answer.Question.Location.SourceURI.Contains(sourceURI)) &&
-															s.SubmissionAnswer.Any(sa => sa.Answer.StatusId == (int)StatusName.Submitted))
-												)
-
-				//these includes aren't needed when they're not used in the resultset. since we've switched it to return the count from the SQL then the joins aren't needed.
-				//.Include(sc => sc.SubmissionComment)
-				//	.ThenInclude(c => c.Comment)
-				//		.ThenInclude(l => l.Location)
-
-				//.Include(sa => sa.SubmissionAnswer)
-				//.ThenInclude(a => a.Answer)
-				//	.ThenInclude(q => q.Question)
-				//		.ThenInclude(l => l.Location)
-						
-				.IgnoreQueryFilters()
-				.Select(s => s.SubmissionId).Distinct().Count();
-
-		    return submissions;
-	    }
-
-	    public virtual IList<SubmittedCommentsAndAnswerCount> GetSubmittedCommentsAndAnswerCounts()
+		public virtual IList<SubmittedCommentsAndAnswerCount> GetSubmittedCommentsAndAnswerCounts()
 	    {
 		    return SubmittedCommentsAndAnswerCounts.ToList();
 	    }
@@ -122,7 +93,7 @@ namespace Comments.Models
 		public List<Comment> GetAllSubmittedCommentsForURI(string  sourceURI)
 	    {
 			var comment = Comment.Where(c =>
-					c.StatusId == (int) StatusName.Submitted && c.Location.SourceURI.Contains(sourceURI) && c.IsDeleted == false)
+					c.StatusId == (int) StatusName.Submitted && (c.Location.SourceURI.Contains($"{sourceURI}/") || c.Location.SourceURI.Equals(sourceURI)) && c.IsDeleted == false)
 				.Include(l => l.Location)
 				.Include(s => s.Status)
 				.Include(sc => sc.SubmissionComment)
@@ -135,7 +106,7 @@ namespace Comments.Models
 
 	    public List<Comment> GetUsersCommentsForURI(string sourceURI)
 	    {
-		   var comment = Comment.Where(c => c.Location.SourceURI.Contains(sourceURI))
+		   var comment = Comment.Where(c => (c.Location.SourceURI.Contains($"{sourceURI}/") || c.Location.SourceURI.Equals(sourceURI)))
 				.Include(l => l.Location)
 				.Include(s => s.Status)
 				.Include(sc => sc.SubmissionComment)
@@ -148,7 +119,7 @@ namespace Comments.Models
 		public List<Answer> GetAllSubmittedAnswersForURI(string sourceURI)
 	    {
 			var answer = Answer.Where(a =>
-					a.StatusId == (int) StatusName.Submitted && a.Question.Location.SourceURI.Contains(sourceURI) &&
+					a.StatusId == (int) StatusName.Submitted && (a.Question.Location.SourceURI.Contains($"{sourceURI}/") || a.Question.Location.SourceURI.Equals(sourceURI)) &&
 					a.IsDeleted == false)
 				.Include(q => q.Question)
 				.ThenInclude(l => l.Location)
@@ -162,7 +133,7 @@ namespace Comments.Models
 
 	    public List<Answer> GetUsersAnswersForURI(string sourceURI)
 	    {
-			var answer = Answer.Where(a => a.Question.Location.SourceURI.Contains(sourceURI))
+			var answer = Answer.Where(a => (a.Question.Location.SourceURI.Contains($"{sourceURI}/") || a.Question.Location.SourceURI.Equals(sourceURI)))
 				.Include(q => q.Question)
 				.ThenInclude(l => l.Location)
 				.Include(sc => sc.SubmissionAnswer)
@@ -174,7 +145,7 @@ namespace Comments.Models
 		public List<Question> GetUnansweredQuestionsForURI(string sourceURI)
 	    {
 			var question = Question.Where(q =>
-					q.Answer.Count == 0 && q.Location.SourceURI.Contains(sourceURI) && q.IsDeleted == false)
+					q.Answer.Count == 0 && (q.Location.SourceURI.Contains($"{sourceURI}/") || q.Location.SourceURI.Equals(sourceURI)) && q.IsDeleted == false)
 				.Include(l => l.Location)
 				.IgnoreQueryFilters()
 				.ToList();
@@ -184,7 +155,7 @@ namespace Comments.Models
 
 	    public List<Question> GetUsersUnansweredQuestionsForURI(string sourceURI)
 	    {
-		    var question = Question.Where(q => q.Answer.Count == 0 && q.Location.SourceURI.Contains(sourceURI))
+		    var question = Question.Where(q => q.Answer.Count == 0 && (q.Location.SourceURI.Contains($"{sourceURI}/") || q.Location.SourceURI.Equals(sourceURI)))
 				    .Include(l => l.Location)
 				    .ToList();
 

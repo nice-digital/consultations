@@ -33,13 +33,17 @@
     border: none;
     width: 100%;
     margin-bottom: rem($spacing-x-small);
+    &:focus {
+      @extend .btn--cta:focus;
+      background-color: $colour-btn-cta-hover;
+    }
     &:hover {
       cursor: pointer;
     }
     &--comments,&--questions {
       color: $colour-nice-white;
       box-shadow: inset -10px 0 10px rgba(0, 0, 0, 0.3);
-    }    
+    }
     &--comments.active,&--questions.active{
       background: $colour-btn-cta;
     }

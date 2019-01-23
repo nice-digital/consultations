@@ -1,7 +1,6 @@
-import React, { Fragment, PureComponent } from "react";
-
-import { SubmitResponseFeedback } from "../SubmitResponseFeedback/SubmitResponseFeedback";
+import React, { PureComponent, Fragment } from "react";
 import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
+import { SubmitResponseFeedback } from "../SubmitResponseFeedback/SubmitResponseFeedback";
 
 export class SubmitResponseDialog extends PureComponent {
 
@@ -57,8 +56,7 @@ export class SubmitResponseDialog extends PureComponent {
 
 				<p><strong>Are you responding on behalf of an organisation?</strong></p>
 
-				<div>
-
+				<div role="radiogroup" aria-label="Are you responding on behalf of an organisation?">
 					<div className="form__group form__group--radio form__group--inline">
 						<input
 							className="form__radio"
@@ -87,7 +85,6 @@ export class SubmitResponseDialog extends PureComponent {
 							value={"no"}
 						/>
 						<label
-							data-qa-sel="respond-no-responding-as-org"
 							className="form__label form__label--radio"
 							htmlFor="respondingAsOrganisation--false">
 							No
@@ -114,7 +111,9 @@ export class SubmitResponseDialog extends PureComponent {
 					<li>receiving funding from the tobacco industry.</li>
 				</ul>
 
-				<div>
+
+				<div role="radiogroup"
+						 aria-label="Do you or the organisation you represent have any links with the tobacco industry?">
 
 					<div className="form__group form__group--radio form__group--inline">
 						<input
@@ -131,6 +130,7 @@ export class SubmitResponseDialog extends PureComponent {
 							htmlFor="hasTobaccoLinks--true">
 							Yes
 						</label>
+
 					</div>
 
 					<div className="form__group form__group--radio form__group--inline">
@@ -150,7 +150,6 @@ export class SubmitResponseDialog extends PureComponent {
 							No
 						</label>
 					</div>
-
 				</div>
 
 				{hasTobaccoLinks === "yes" &&
@@ -167,18 +166,17 @@ export class SubmitResponseDialog extends PureComponent {
 						onChange={fieldsChangeHandler}/>
 				</div>
 				}
-				
+
 				{isAuthorised &&
 				<Fragment>
 					<p><strong>Now submit your response to NICE.</strong></p>
 					<p>After submission you won't be able to edit your comments further or add any extra comments.</p>
 					{this.state.feedbackVisible &&
-						<SubmitResponseFeedback
-							{...this.props}
-							unsavedIdsQty={this.props.unsavedIds.length}
-						/>
+					<SubmitResponseFeedback
+						{...this.props}
+						unsavedIdsQty={this.props.unsavedIds.length}
+					/>
 					}
-
 					<button
 						className="btn btn--cta"
 						data-qa-sel="submit-comment-button"
@@ -191,5 +189,4 @@ export class SubmitResponseDialog extends PureComponent {
 			</div>
 		);
 	}
-
 }
