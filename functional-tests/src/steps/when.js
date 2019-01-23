@@ -5,7 +5,7 @@ import { When } from "cucumber";
 import enterComment, { enterCommentAndSubmit, enterCommentToFirstInListAndSubmit, enterCommentToFirstInList, enterCommentToFirstInListReviewPage } from "../support/action/enterComment";
 import enterQuestionAnswer, { enterQuestionAnswerAndSubmit, enterQuestionAnswerToFirstInListAndSubmit, enterQuestionAnswerToFirstInList, enterQuestionAnswerToSecondInListAndSubmit } from "../support/action/enterQuestionAnswer";
 import navigateToReviewPage, { clickReviewPageLink } from "../support/action/navigateToReviewPage";
-import submitResponse, { completeResponseMandatoryQuestions } from "../support/action/submitResponse";
+import submitResponse, { completeResponseMandatoryQuestions, clickSubmitResponseButton } from "../support/action/submitResponse";
 import { reviewResponse } from "../support/action/reviewResponse";
 import { Login } from "../support/action/tophatLogin";
 import { openQuestionPanel } from "../support/action/openQuestionPanel";
@@ -74,6 +74,11 @@ When(
 When(
 	/^I submit my response$/,
 	submitResponse
+);
+
+When(
+	/^I click submit my response button$/,
+	clickSubmitResponseButton
 );
 
 When(

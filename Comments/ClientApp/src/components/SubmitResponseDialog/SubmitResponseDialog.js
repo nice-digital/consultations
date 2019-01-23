@@ -167,8 +167,7 @@ export class SubmitResponseDialog extends PureComponent {
 						onChange={fieldsChangeHandler}/>
 				</div>
 				}
-
-
+				
 				{isAuthorised &&
 				<Fragment>
 					<p><strong>Now submit your response to NICE.</strong></p>
@@ -181,7 +180,6 @@ export class SubmitResponseDialog extends PureComponent {
 					}
 
 					<button
-						aria-disabled={!this.props.validToSubmit || !this.mandatoryQuestionsAreValid() || this.props.unsavedIds.length !== 0}
 						className="btn btn--cta"
 						data-qa-sel="submit-comment-button"
 						onClick={this.submitConsultation}>

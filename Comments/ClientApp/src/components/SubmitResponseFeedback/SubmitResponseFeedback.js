@@ -34,7 +34,7 @@ export const SubmitResponseFeedback = (props) => {
 	if (!items.length) return null;
 
 	return (
-		<div className="SubmitResponseFeedback mb--d" id="SubmitResponseFeedback">
+		<div data-qa-sel="Submit-response-feedback" className="SubmitResponseFeedback mb--d" id="SubmitResponseFeedback">
 			<p className="SubmitResponseFeedback__title">You can't submit your response yet</p>
 			<ul className="mt--0">
 				{items.map(i => <li key={i}>{i}</li>)}

@@ -751,7 +751,6 @@ Array [
                                                       After submission you won't be able to edit your comments further or add any extra comments.
                                                 </p>
                                                 <button
-                                                      aria-disabled={true}
                                                       className="btn btn--cta"
                                                       data-qa-sel="submit-comment-button"
                                                       onClick={[Function]}
