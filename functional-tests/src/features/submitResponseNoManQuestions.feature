@@ -1,8 +1,8 @@
 Feature: User unable to submit when they have not completed mandatory questions on Review page
 	As a user of consultations
-	I want to be able to login to make a comment
-	I want to be able to comment at the Document level
-	I want to be warned if I attempt to submit response without answering mandatory questions
+	We want to be able to login to make a comment
+	We want to be able to comment at the Document level
+	We want to be warned if I attempt to submit response without answering mandatory questions
 
 	Background:
 		Given I open the url "234/1/recommendations"

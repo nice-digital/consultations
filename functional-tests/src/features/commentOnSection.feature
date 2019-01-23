@@ -1,7 +1,7 @@
  Feature: Comment on a Section
    	As a user of consultations
-  	I want to be able to login to make a comment
- 		I want to be able to comment at the Section level
+  	We want to be able to login to make a comment
+ 		We want to be able to comment at the Section level
 
  Background:
     Given I open the url "158/3/introduction"

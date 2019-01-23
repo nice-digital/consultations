@@ -1,7 +1,7 @@
 Feature: Submit Comments on a Consultation
   As a user of consultations
-  I want to be able to login to make a comment
-	I want to be able to submit my comments for review by NICE
+  We want to be able to login to make a comment
+	We want to be able to submit my comments for review by NICE
 
 Background:
     Given I open the url "1/1/introduction"

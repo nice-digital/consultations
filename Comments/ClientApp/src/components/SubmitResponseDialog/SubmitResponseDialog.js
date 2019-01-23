@@ -85,6 +85,7 @@ export class SubmitResponseDialog extends PureComponent {
 							value={"no"}
 						/>
 						<label
+							data-qa-sel="respond-no-responding-as-org"
 							className="form__label form__label--radio"
 							htmlFor="respondingAsOrganisation--false">
 							No

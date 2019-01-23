@@ -674,6 +674,7 @@ Array [
                                                             />
                                                             <label
                                                                   className="form__label form__label--radio"
+                                                                  data-qa-sel="respond-no-responding-as-org"
                                                                   htmlFor="respondingAsOrganisation--false"
                                                             >
                                                                   No
