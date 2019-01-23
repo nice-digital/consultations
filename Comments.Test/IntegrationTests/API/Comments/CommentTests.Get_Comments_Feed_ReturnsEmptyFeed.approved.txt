@@ -14,16 +14,11 @@
         "hasUserSuppliedAnswers":false,
         "hasUserSuppliedComments":false,
         "userHasSubmitted":false,
-        "consultationSupportsQuestions":false,
-        "consultationSupportsComments":false,
-        "documentIdsWhichSupportQuestions":[
-            2,
-            2
-        ],
         "documentIdsWhichSupportComments":[
             2,
             2
         ],
+        "hasAnyDocumentsSupportingComments":true,
         "consultationIsOpen":true,
         "consultationHasNotStartedYet":false,
         "consultationHasEnded":false,
@@ -31,6 +26,6 @@
         "supportsDownload":false,
         "shouldShowDrawer":true,
         "shouldShowCommentsTab":true,
-        "shouldShowQuestionsTab":true
+        "shouldShowQuestionsTab":false
     }
 }

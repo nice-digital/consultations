@@ -674,7 +674,6 @@ Array [
                                                             />
                                                             <label
                                                                   className="form__label form__label--radio"
-                                                                  data-qa-sel="respond-no-responding-as-org"
                                                                   htmlFor="respondingAsOrganisation--false"
                                                             >
                                                                   No
@@ -759,7 +758,6 @@ Array [
                                                 <button
                                                       className="btn btn--cta"
                                                       data-qa-sel="submit-comment-button"
-                                                      disabled={true}
                                                       onClick={[Function]}
                                                 >
                                                       Submit my response

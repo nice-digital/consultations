@@ -4,7 +4,6 @@
         "documentId":2,
         "convertedDocument":true,
         "supportsComments":true,
-        "supportsQuestions":true,
         "title":"Unstable angina and NSTEMI",
         "chapters":[
             {
@@ -76,7 +75,6 @@
         "documentId":2,
         "convertedDocument":false,
         "supportsComments":false,
-        "supportsQuestions":false,
         "title":"Committee papers",
         "chapters":null,
         "href":"/guidance/GID-TA10232/documents/committee-papers",
@@ -87,7 +85,6 @@
         "documentId":2,
         "convertedDocument":true,
         "supportsComments":true,
-        "supportsQuestions":true,
         "title":"Sinusitis (acute): antimicrobial prescribing",
         "chapters":[
             {

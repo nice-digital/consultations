@@ -509,8 +509,8 @@ namespace Comments.Test.UnitTests
 				Reference = "GID-1",
 				Title = "Consultation title 1",
 				AllowedRole = "ConsultationListTestRole",
-				FirstDocumentIdWhichSupportsCommentsOrQuestions = null,
-				FirstChapterSlugOfFirstDocumentWhichSupportsCommentsOrQuestions = null
+				FirstConvertedDocumentId = null,
+				FirstChapterSlugOfFirstConvertedDocument = null
 			});
 			consultationList.Add(new ConsultationList()
 			{
@@ -521,8 +521,8 @@ namespace Comments.Test.UnitTests
 				Reference = "GID-2",
 				Title = "Consultation Title 1",
 				AllowedRole = "ConsultationListTestRole",
-				FirstDocumentIdWhichSupportsCommentsOrQuestions = null,
-				FirstChapterSlugOfFirstDocumentWhichSupportsCommentsOrQuestions = null
+				FirstConvertedDocumentId = null,
+				FirstChapterSlugOfFirstConvertedDocument = null
 			});
 			consultationList.Add(new ConsultationList()
 			{
@@ -533,8 +533,8 @@ namespace Comments.Test.UnitTests
 				Reference = "GID-3",
 				Title = "Consultation Title 3",
 				AllowedRole = "Some other role",
-				FirstDocumentIdWhichSupportsCommentsOrQuestions = 1,
-				FirstChapterSlugOfFirstDocumentWhichSupportsCommentsOrQuestions = "my-chapter-slug"
+				FirstConvertedDocumentId = 1,
+				FirstChapterSlugOfFirstConvertedDocument = "my-chapter-slug"
 			});
 
 			return consultationList;

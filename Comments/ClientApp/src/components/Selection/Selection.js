@@ -1,8 +1,6 @@
 // @flow
 
 import React, { Component } from "react";
-//import stringifyObject from "stringify-object";
-
 import { getElementPositionWithinDocument, getSectionTitle } from "../../helpers/utils";
 import { tagManager } from "../../helpers/tag-manager";
 import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
@@ -103,12 +101,6 @@ export class Selection extends Component<PropsType, StateType> {
 		});
 	}
 
-	onVisibleChange = (toolTipVisible) => {
-		this.setState({
-			toolTipVisible,
-		});
-	}
-
 	// trim strips whitespace from either end of a string.
 	//
 	// This usually exists in native code, but not in IE8.
@@ -117,6 +109,17 @@ export class Selection extends Component<PropsType, StateType> {
 			return String.prototype.trim.call(s);
 		} else {
 			return s.replace(/^[\s\xA0]+|[\s\xA0]+$/g, "");
+		}
+	}
+
+	componentDidUpdate(prevProps: PropsType, prevState: StateType){
+		// if we're on a different page from when the selection was made, reinitialise the selection
+		if (this.props.sourceURI !== prevProps.sourceURI) {
+			this.setState({
+				toolTipVisible: false,
+				comment: {},
+				position: {}
+			})
 		}
 	}
 

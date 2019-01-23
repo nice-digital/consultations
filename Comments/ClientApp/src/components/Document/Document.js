@@ -34,7 +34,7 @@ type StateType = {
 	loading: boolean,
 	documentsData: any, // the list of other documents in this consultation
 	chapterData: any, // the current chapter's details - markup and sections,
-	consultationData: any, // the top level info - title etc
+	consultationData: ConsultationStateType, // the top level info - title etc
 	currentInPageNavItem: null | string,
 	hasInitialData: boolean,
 	onboarded: boolean,
@@ -110,7 +110,7 @@ export class Document extends Component<PropsType, StateType> {
 					this.props.staticContext.analyticsGlobals.stage = "preview";
 
 				}
-				const allowComments = preloadedConsultation.supportsComments &&
+				const allowComments = preloadedConsultation.consultationState.hasAnyDocumentsSupportingComments &&
 					preloadedConsultation.consultationState.consultationIsOpen &&
 					!preloadedConsultation.consultationState.userHasSubmitted;
 
@@ -194,7 +194,7 @@ export class Document extends Component<PropsType, StateType> {
 			this.gatherData()
 				.then(data => {
 					const allowComments =
-						data.consultationData.supportsComments &&
+						data.consultationData.consultationState.hasAnyDocumentsSupportingComments &&
 						data.consultationData.consultationState.consultationIsOpen &&
 						!data.consultationData.consultationState.userHasSubmitted;
 					this.addChapterDetailsToSections(data.chapterData);
@@ -211,6 +211,7 @@ export class Document extends Component<PropsType, StateType> {
 							stage: "preview",
 						});
 					});
+					pullFocusByQuerySelector("#root");
 				})
 				.catch(err => {
 					this.setState({
@@ -248,7 +249,7 @@ export class Document extends Component<PropsType, StateType> {
 							stage: "preview",
 						});
 					});
-					pullFocusByQuerySelector(".document-comment-container");
+					pullFocusByQuerySelector(".document-comment-container", true);
 				});
 		} else {
 			this.gatherData()
@@ -267,7 +268,6 @@ export class Document extends Component<PropsType, StateType> {
 							stage: "preview",
 						});
 					});
-					pullFocusByQuerySelector(".document-comment-container");
 				})
 				.catch(err => {
 					this.setState({
