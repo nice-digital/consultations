@@ -199,7 +199,8 @@ export class Questions extends Component<PropsType, StateType> {
 			links: [
 				{
 					label: consultationTitle,
-					url: `/admin/questions/${currentConsultationId}/consultation`,
+					//url: `/admin/questions/${currentConsultationId}/consultation`,
+					url: this.getUrlForNavigation(this.props.draftProject, currentConsultationId, "consultation", this.props.match.params.reference),
 					marker: consultationQuestions.length || null,
 					current: isCurrentRoute("consultation"),
 					isReactRoute: true,
@@ -221,7 +222,8 @@ export class Questions extends Component<PropsType, StateType> {
 				.map(consultationDocument => {
 					return {
 						label: consultationDocument.title,
-						url: `/admin/questions/${currentConsultationId}/${consultationDocument.documentId}`,
+						 //`/admin/questions/${currentConsultationId}/${consultationDocument.documentId}`,
+						url: this.getUrlForNavigation(this.props.draftProject, currentConsultationId, consultationDocument.documentId, this.props.match.params.reference),
 						isReactRoute: true,
 						marker: consultationDocument.documentQuestions.length || null,
 						current: isCurrentRoute(consultationDocument.documentId),
@@ -229,6 +231,16 @@ export class Questions extends Component<PropsType, StateType> {
 				}),
 		};
 	};
+
+	getUrlForNavigation = (isDraft, currentConsultationId, documentId, reference) => {
+
+		if (isDraft){
+			return `/admin/questions/preview/${reference}/${currentConsultationId}/${documentId}`;
+		}
+		else{
+			return `/admin/questions/${currentConsultationId}/${documentId}`;
+		}		
+	}
 
 	render() {
 		if (!this.state.hasInitialData && this.state.loading) return <h1>Loading...</h1>;

@@ -149,10 +149,9 @@ namespace Comments.Services
 
 		    var questionTypes = GetQuestionTypes();
 
-			//getting consultation state. not happy about this getting the consultation list for this..
-		    var publishedConsultationIds = _consultationService.GetConsultations().Select(publishedConsultation => publishedConsultation.ConsultationId);
-			var previewState = publishedConsultationIds.Contains(consultationId) ? PreviewState.NonPreview : PreviewState.Preview;
-			var consultationState = _consultationService.GetConsultationState(consultationId, null, null, previewState);
+		    var previewState = draft ? PreviewState.Preview : PreviewState.NonPreview;
+		    var documentId = draft ? Constants.DummyDocumentNumberForPreviewProject : (int?)null;
+			var consultationState = _consultationService.GetConsultationState(consultationId, documentId, reference, previewState);
 
 			return new QuestionAdmin(documentsAndConsultationTitle.consultationTitle, consultationQuestions, questionAdminDocuments, questionTypes, consultationState);
 	    }

@@ -33,7 +33,7 @@ namespace Comments.Services
 
 	    ChapterContent GetPreviewChapterContent(int consultationId, int documentId, string chapterSlug, string reference);
 	    ConsultationState GetConsultationState(string sourceURI, PreviewState previewState, IEnumerable<Models.Location> locations = null, ConsultationBase consultation = null);
-	    ConsultationState GetConsultationState(int consultationId, int? documentId, string chapterSlug, PreviewState previewState, IEnumerable<Models.Location> locations = null, ConsultationBase consultation = null);
+	    ConsultationState GetConsultationState(int consultationId, int? documentId, string reference, PreviewState previewState, IEnumerable<Models.Location> locations = null, ConsultationBase consultationDetail = null);
 
 		bool HasSubmittedCommentsOrQuestions(string consultationSourceURI, Guid userId);
 	    IEnumerable<BreadcrumbLink> GetBreadcrumbs(ConsultationDetail consultation, BreadcrumbType breadcrumbType);
@@ -75,7 +75,7 @@ namespace Comments.Services
         {
 	        if (draft)
 	        {
-		        var consultationPreviewDetail = _feedService.GetIndevConsultationDetailForDraftProject(consultationId, 0, reference);
+		        var consultationPreviewDetail = _feedService.GetIndevConsultationDetailForDraftProject(consultationId, Constants.DummyDocumentNumberForPreviewProject, reference);
 		        return (consultationPreviewDetail.Resources.Select(r => new ViewModels.Document(consultationId, r)).ToList(), consultationPreviewDetail.ConsultationName);
 			}
 
@@ -168,7 +168,7 @@ namespace Comments.Services
 	    public ConsultationState GetConsultationState(string sourceURI, PreviewState previewState, IEnumerable<Models.Location> locations = null, ConsultationBase consultation = null)
 	    {
 		    var consultationsUriElements = ConsultationsUri.ParseConsultationsUri(sourceURI);
-		    return GetConsultationState(consultationsUriElements.ConsultationId, consultationsUriElements.DocumentId, consultationsUriElements.ChapterSlug, previewState, locations, consultation);
+		    return GetConsultationState(consultationsUriElements.ConsultationId, consultationsUriElements.DocumentId, null, previewState, locations, consultation);
 	    }
 
 	    public ConsultationState GetConsultationState(int consultationId, int? documentId, string reference, PreviewState previewState, IEnumerable<Models.Location> locations = null, ConsultationBase consultationDetail = null)
