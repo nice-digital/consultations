@@ -206,7 +206,7 @@ namespace Comments.Services
 			commentsOption.UnfilteredResultCount = commentsAndQuestions.Comments.Count(); 
 
 			//populate documents
-			var documents = _consultationService.GetDocuments(consultationId).Where(d => d.SupportsComments).ToList();
+			var documents = _consultationService.GetDocuments(consultationId).documents.Where(d => d.SupportsComments).ToList();
 		    documentsFilter.Options = new List<FilterOption>(documents.Count());
 
 			foreach (var document in documents)
@@ -237,7 +237,7 @@ namespace Comments.Services
 		    
 			if (consultationsUriElements.IsChapterLevel())
 			{
-				var document = _consultationService.GetDocuments(consultationsUriElements.ConsultationId).FirstOrDefault(d => d.DocumentId.Equals(documentId));
+				var document = _consultationService.GetDocuments(consultationsUriElements.ConsultationId).documents.FirstOrDefault(d => d.DocumentId.Equals(documentId));
 				var chapterSelected = document?.Chapters.FirstOrDefault(c => c.Slug.Equals(consultationsUriElements.ChapterSlug, StringComparison.OrdinalIgnoreCase));
 				if (chapterSelected != null)
 				{

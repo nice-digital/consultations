@@ -12,10 +12,11 @@ type LinksType = {
 };
 
 type PropsType = {
-	links: Array<LinksType>
+	links: Array<LinksType>,
 };
 
 export class Breadcrumbs extends PureComponent<PropsType> {
+
 	trackBreadcrumb = (segment) => {
 		tagManager({
 			event: "generic",

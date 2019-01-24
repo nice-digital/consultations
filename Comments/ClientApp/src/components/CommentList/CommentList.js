@@ -203,6 +203,10 @@ export class CommentList extends Component<PropsType, StateType> {
 		updateUnsavedIds(commentId, dirty, this);
 	};
 
+	componentWillUnmount(){
+		console.log("componentWillUnmount called");
+	}
+
 	//old drawer code:
 	isMobile = () => {
 		if (typeof document !== "undefined") {

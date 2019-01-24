@@ -36,15 +36,14 @@ namespace Comments.ViewModels
         public QuestionType() { } //only here for model binding. don't use it in code.
         public QuestionType(Models.QuestionType questionType)
         {
-            Description = questionType.Description;
+	        QuestionTypeId = questionType.QuestionTypeId;
+			Description = questionType.Description;
             HasTextAnswer = questionType.HasTextAnswer;
             HasBooleanAnswer = questionType.HasBooleanAnswer;
         }
-
-        public string Description { get; set; }
+	    public int QuestionTypeId { get; set; }
+		public string Description { get; set; }
         public bool HasTextAnswer { get; set; }
         public bool HasBooleanAnswer { get; set; }
     }
-
-    
 }

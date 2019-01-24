@@ -112,7 +112,7 @@ const whichChild = (elem) => {
 const reverseString = (str) => {
 	return (str === "") ? "" : reverseString(str.substr(1)) + str.charAt(0);
 };
-	
+
 //this function returns a long dotted decimal representing the position in the document. below the div with id of root.
 export const getElementPositionWithinDocument = (elem) => {
 	let curindex = "";
@@ -140,7 +140,7 @@ export const getSectionTitle = (elem) => {
 			return null;
 		}
 	} while (elem = elem.parentNode); // eslint-disable-line
-	return null; //shouldn't really ever be called, as root will get hit if there's no matches. 
+	return null; //shouldn't really ever be called, as root will get hit if there's no matches.
 };
 
 export const removeQuerystring = (url) => {

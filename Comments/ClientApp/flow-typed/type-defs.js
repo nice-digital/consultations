@@ -110,6 +110,7 @@ declare type QuestionType = {
 	commentOn: string,
 	sourceURI: string,
 	quote: string,
+	documentId: number
 };
 
 declare type CommentsAndQuestionsType = {
@@ -163,4 +164,9 @@ declare type AppliedFilterType = {
 	groupTitle: string,
 	optionId: string,
 	optionLabel: string,
-}
+};
+
+declare type ErrorType = {
+	hasError: boolean,
+	message: string | null,
+};

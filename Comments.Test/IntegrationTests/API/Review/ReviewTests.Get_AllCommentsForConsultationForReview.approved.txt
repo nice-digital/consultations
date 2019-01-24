@@ -60,6 +60,7 @@
                 "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
                 "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
                 "questionType":{
+                    "questionTypeId":"scrubbed by ScrubQuestionTypeId",
                     "description":"text",
                     "hasTextAnswer":true,
                     "hasBooleanAnswer":false
@@ -102,6 +103,7 @@
                 "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
                 "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
                 "questionType":{
+                    "questionTypeId":"scrubbed by ScrubQuestionTypeId",
                     "description":"text",
                     "hasTextAnswer":true,
                     "hasBooleanAnswer":false
@@ -144,6 +146,7 @@
                 "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
                 "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
                 "questionType":{
+                    "questionTypeId":"scrubbed by ScrubQuestionTypeId",
                     "description":"text",
                     "hasTextAnswer":true,
                     "hasBooleanAnswer":false

@@ -41,7 +41,7 @@ namespace Comments.Services
 		    {
 			    throw new AuthenticationException("NICE user is not authenticated");
 		    }
-		    
+
 			_context = consultationsContext;
 		    _userService = userService;
 		    _consultationService = consultationService;
@@ -88,8 +88,8 @@ namespace Comments.Services
 		    var sourceURI = location.SourceURI;
 		    ConsultationsUriElements URIElements = ConsultationsUri.ParseConsultationsUri(sourceURI);
 
-		    var consultationDetails = _consultationService.GetConsultation(URIElements.ConsultationId, false);
-		    var documents = _consultationService.GetDocuments(URIElements.ConsultationId);
+		    var consultationDetails = _consultationService.GetConsultation(URIElements.ConsultationId, BreadcrumbType.None, useFilters:false);
+		    var documents = _consultationService.GetDocuments(URIElements.ConsultationId).documents;
 		    var documentDetail = documents.FirstOrDefault(x => x.DocumentId == URIElements.DocumentId);
 
 		    Chapter chapterDetail = null;
@@ -104,7 +104,7 @@ namespace Comments.Services
 		    var sourceURI = location.SourceURI;
 		    ConsultationsUriElements URIElements = ConsultationsUri.ParseConsultationsUri(sourceURI);
 
-		    var consultationDetails = _consultationService.GetConsultation(URIElements.ConsultationId, false);
+		    var consultationDetails = _consultationService.GetConsultation(URIElements.ConsultationId,  BreadcrumbType.None, useFilters:false);
 		    return consultationDetails.ConsultationName;
 	    }
 	}

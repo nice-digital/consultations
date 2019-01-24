@@ -16,7 +16,7 @@ namespace Comments.Controllers.Api
             _logger = logger;
         }
 
-        // GET: consultations/api/Question/5 
+        // GET: consultations/api/Question/5
         [HttpGet("{questionId}")]
         public IActionResult GetQuestion([FromRoute] int questionId)
         {
@@ -64,8 +64,7 @@ namespace Comments.Controllers.Api
             var result = _questionService.EditQuestion(questionId, question);
             var invalidResult = Validate(result.validate, _logger);
 
-
-            return invalidResult ?? Ok(result.rowsUpdated);
+            return invalidResult ?? Ok(question);
         }
 
         // DELETE: consultations/api/Question/5

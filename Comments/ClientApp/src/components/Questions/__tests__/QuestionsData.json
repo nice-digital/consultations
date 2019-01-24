@@ -1,0 +1,317 @@
+{
+  "consultationTitle": "Our test consultation title",
+  "consultationSupportsQuestions": true,
+  "consultationQuestions": [
+    {
+      "questionId": 2247,
+      "questionText": "First Question",
+      "questionTypeId": 2117,
+      "lastModifiedByUserId": "0b09270a-7a30-4cdb-86e6-7d19d0cea1ba",
+      "lastModifiedDate": "2018-12-19T12:23:11.990555",
+      "questionType": {
+        "questionTypeId": 2117,
+        "description": "A text question requiring a text answer.",
+        "hasTextAnswer": true,
+        "hasBooleanAnswer": false
+      },
+      "answers": [],
+      "locationId": 5472,
+      "sourceURI": "consultations://./consultation/22",
+      "htmlElementID": null,
+      "rangeStart": null,
+      "rangeStartOffset": null,
+      "rangeEnd": null,
+      "rangeEndOffset": null,
+      "quote": null,
+      "commentOn": "Consultation",
+      "commentOnEnum": 0,
+      "documentId": null,
+      "show": true,
+      "order": "022.000.000.000",
+      "section": null
+    }
+  ],
+  "consultationQuestionsCount": 1,
+  "documents": [
+    {
+      "documentId": 1,
+      "supportsQuestions": true,
+      "title": "Unstable angina and NSTEMI",
+      "documentQuestions": [
+        {
+          "questionId": 2252,
+          "questionText": "dfsdfdsfs",
+          "questionTypeId": 2117,
+          "lastModifiedByUserId": "0b09270a-7a30-4cdb-86e6-7d19d0cea1ba",
+          "lastModifiedDate": "2018-12-19T14:15:30.9006814",
+          "questionType": {
+            "questionTypeId": 2117,
+            "description": "A text question requiring a text answer.",
+            "hasTextAnswer": true,
+            "hasBooleanAnswer": false
+          },
+          "answers": [],
+          "locationId": 5480,
+          "sourceURI": "consultations://./consultation/22/document/1",
+          "htmlElementID": null,
+          "rangeStart": null,
+          "rangeStartOffset": null,
+          "rangeEnd": null,
+          "rangeEndOffset": null,
+          "quote": null,
+          "commentOn": "Document",
+          "commentOnEnum": 1,
+          "documentId": 1,
+          "show": true,
+          "order": "022:001:000",
+          "section": null
+        }
+      ],
+      "documentQuestionCount": 1
+    },
+    {
+      "documentId": 2,
+      "supportsQuestions": true,
+      "title": "Glaucoma: diagnosis and management – Full Guideline",
+      "documentQuestions": [
+        {
+          "questionId": 2248,
+          "questionText": "another",
+          "questionTypeId": 2117,
+          "lastModifiedByUserId": "0b09270a-7a30-4cdb-86e6-7d19d0cea1ba",
+          "lastModifiedDate": "2018-12-07T16:55:22.8807768",
+          "questionType": {
+            "questionTypeId": 2117,
+            "description": "A text question requiring a text answer.",
+            "hasTextAnswer": true,
+            "hasBooleanAnswer": false
+          },
+          "answers": [],
+          "locationId": 5473,
+          "sourceURI": "consultations://./consultation/22/document/2",
+          "htmlElementID": null,
+          "rangeStart": null,
+          "rangeStartOffset": null,
+          "rangeEnd": null,
+          "rangeEndOffset": null,
+          "quote": null,
+          "commentOn": "Document",
+          "commentOnEnum": 1,
+          "documentId": 2,
+          "show": true,
+          "order": "022.002.000.000",
+          "section": null
+        },
+        {
+          "questionId": 2239,
+          "questionText": "Would implementation of any of the draft recommendations have cost implications, really?",
+          "questionTypeId": 2117,
+          "lastModifiedByUserId": "0b09270a-7a30-4cdb-86e6-7d19d0cea1ba",
+          "lastModifiedDate": "2018-12-07T16:55:23.1109804",
+          "questionType": {
+            "questionTypeId": 2117,
+            "description": "A text question requiring a text answer.",
+            "hasTextAnswer": true,
+            "hasBooleanAnswer": false
+          },
+          "answers": [],
+          "locationId": 5462,
+          "sourceURI": "consultations://./consultation/22/document/2",
+          "htmlElementID": null,
+          "rangeStart": null,
+          "rangeStartOffset": null,
+          "rangeEnd": null,
+          "rangeEndOffset": null,
+          "quote": null,
+          "commentOn": "Document",
+          "commentOnEnum": 1,
+          "documentId": 2,
+          "show": true,
+          "order": "022:002:001",
+          "section": null
+        }
+      ],
+      "documentQuestionCount": 2
+    },
+    {
+      "documentId": 0,
+      "supportsQuestions": false,
+      "title": "Comments form",
+      "documentQuestions": [],
+      "documentQuestionCount": 0
+    },
+    {
+      "documentId": 3,
+      "supportsQuestions": true,
+      "title": "Emergency and acute medical care in over 16s: service delivery and organisation",
+      "documentQuestions": [
+        {
+          "questionId": 2251,
+          "questionText": "fghghgh",
+          "questionTypeId": 2117,
+          "lastModifiedByUserId": "0b09270a-7a30-4cdb-86e6-7d19d0cea1ba",
+          "lastModifiedDate": "2018-12-19T14:12:16.3535671",
+          "questionType": {
+            "questionTypeId": 2117,
+            "description": "A text question requiring a text answer.",
+            "hasTextAnswer": true,
+            "hasBooleanAnswer": false
+          },
+          "answers": [],
+          "locationId": 5479,
+          "sourceURI": "consultations://./consultation/22/document/3",
+          "htmlElementID": null,
+          "rangeStart": null,
+          "rangeStartOffset": null,
+          "rangeEnd": null,
+          "rangeEndOffset": null,
+          "quote": null,
+          "commentOn": "Document",
+          "commentOnEnum": 1,
+          "documentId": 3,
+          "show": true,
+          "order": "022:003:000",
+          "section": null
+        }
+      ],
+      "documentQuestionCount": 1
+    },
+    {
+      "documentId": 0,
+      "supportsQuestions": false,
+      "title": "Addendum appendix",
+      "documentQuestions": [],
+      "documentQuestionCount": 0
+    },
+    {
+      "documentId": 4,
+      "supportsQuestions": true,
+      "title": "Nivolumab for adjuvant treatment of completely resected melanoma with lymph node involvement or metastatic disease",
+      "documentQuestions": [
+        {
+          "questionId": 2254,
+          "questionText": "First",
+          "questionTypeId": 2117,
+          "lastModifiedByUserId": "0b09270a-7a30-4cdb-86e6-7d19d0cea1ba",
+          "lastModifiedDate": "2018-12-19T15:05:35.9623906",
+          "questionType": {
+            "questionTypeId": 2117,
+            "description": "A text question requiring a text answer.",
+            "hasTextAnswer": true,
+            "hasBooleanAnswer": false
+          },
+          "answers": [],
+          "locationId": 5482,
+          "sourceURI": "consultations://./consultation/22/document/4",
+          "htmlElementID": null,
+          "rangeStart": null,
+          "rangeStartOffset": null,
+          "rangeEnd": null,
+          "rangeEndOffset": null,
+          "quote": null,
+          "commentOn": "Document",
+          "commentOnEnum": 1,
+          "documentId": 4,
+          "show": true,
+          "order": "022:004:000",
+          "section": null
+        },
+        {
+          "questionId": 2255,
+          "questionText": "Second",
+          "questionTypeId": 2117,
+          "lastModifiedByUserId": "0b09270a-7a30-4cdb-86e6-7d19d0cea1ba",
+          "lastModifiedDate": "2018-12-19T15:05:36.1665079",
+          "questionType": {
+            "questionTypeId": 2117,
+            "description": "A text question requiring a text answer.",
+            "hasTextAnswer": true,
+            "hasBooleanAnswer": false
+          },
+          "answers": [],
+          "locationId": 5483,
+          "sourceURI": "consultations://./consultation/22/document/4",
+          "htmlElementID": null,
+          "rangeStart": null,
+          "rangeStartOffset": null,
+          "rangeEnd": null,
+          "rangeEndOffset": null,
+          "quote": null,
+          "commentOn": "Document",
+          "commentOnEnum": 1,
+          "documentId": 4,
+          "show": true,
+          "order": "022:004:001",
+          "section": null
+        },
+        {
+          "questionId": 2250,
+          "questionText": "Third",
+          "questionTypeId": 2117,
+          "lastModifiedByUserId": "0b09270a-7a30-4cdb-86e6-7d19d0cea1ba",
+          "lastModifiedDate": "2018-12-19T15:05:32.7727447",
+          "questionType": {
+            "questionTypeId": 2117,
+            "description": "A text question requiring a text answer.",
+            "hasTextAnswer": true,
+            "hasBooleanAnswer": false
+          },
+          "answers": [],
+          "locationId": 5478,
+          "sourceURI": "consultations://./consultation/22/document/4",
+          "htmlElementID": null,
+          "rangeStart": null,
+          "rangeStartOffset": null,
+          "rangeEnd": null,
+          "rangeEndOffset": null,
+          "quote": null,
+          "commentOn": "Document",
+          "commentOnEnum": 1,
+          "documentId": 4,
+          "show": true,
+          "order": "022:004:002",
+          "section": null
+        }
+      ],
+      "documentQuestionCount": 3
+    }
+  ],
+  "questionTypes": [
+    {
+      "questionTypeId": 2117,
+      "description": "A text question requiring a text answer.",
+      "hasTextAnswer": true,
+      "hasBooleanAnswer": false
+    }
+  ],
+  "consultationState": {
+    "startDate": "2018-03-01T00:00:00",
+    "endDate": "2019-12-14T17:00:00",
+    "hasQuestions": true,
+    "hasUserSuppliedAnswers": false,
+    "hasUserSuppliedComments": true,
+    "userHasSubmitted": false,
+    "consultationSupportsQuestions": false,
+    "consultationSupportsComments": false,
+    "documentIdsWhichSupportQuestions": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "documentIdsWhichSupportComments": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "consultationIsOpen": true,
+    "consultationHasNotStartedYet": false,
+    "consultationHasEnded": false,
+    "supportsSubmission": true,
+    "supportsDownload": true,
+    "shouldShowDrawer": true,
+    "shouldShowCommentsTab": true,
+    "shouldShowQuestionsTab": true
+  }
+}

@@ -43,10 +43,7 @@ type StateType = {
 		slug: string
 	},
 	allowComments: boolean,
-	error: {
-		hasError: boolean,
-		message: string | null,
-	}
+	error: ErrorType,
 };
 
 type DocumentsType = Array<Object>;
@@ -104,6 +101,7 @@ export class Document extends Component<PropsType, StateType> {
 			);
 
 			if (preloadedChapter && preloadedDocuments && preloadedConsultation) {
+				// Set up globals for analytics tracking of SSR props
 				if (this.props.staticContext) {
 					this.props.staticContext.analyticsGlobals.gidReference = preloadedConsultation.reference;
 					this.props.staticContext.analyticsGlobals.consultationTitle = preloadedConsultation.title;
@@ -135,7 +133,7 @@ export class Document extends Component<PropsType, StateType> {
 		}
 	}
 
-	getChapterData = (params) => {
+	getChapterData = (params: Object) => {
 		return load("chapter", undefined, [], {...params});
 	};
 
@@ -379,12 +377,12 @@ export class Document extends Component<PropsType, StateType> {
 		return currentDocumentDetails.title;
 	};
 
-	getPageTitle = (isForAnalytics = false) => {
+	getPageTitle = (isForAnalytics: boolean = false) => {
 		if (isForAnalytics) return this.state.consultationData.title;
 		return `${this.state.chapterData.title} | ${this.getCurrentDocumentTitle()} | ${this.state.consultationData.title}`;
 	};
 
-	trackInPageNav = (e: SyntheticEvent, item: Object) => {
+	trackInPageNav = (e: SyntheticEvent<any>, item: Object) => {
 		tagManager({
 			event: "generic",
 			category: "Consultation comments page",
@@ -503,7 +501,7 @@ export class Document extends Component<PropsType, StateType> {
 												documentId,
 												consultationId
 											)}/>
-										{supportingDocs.links && supportingDocs.links.length !== 0 ?
+										{supportingDocs && supportingDocs.links && supportingDocs.links.length !== 0 ?
 											<StackedNav links={supportingDocs}/>
 											: null}
 									</div>

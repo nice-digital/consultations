@@ -1,0 +1,30 @@
+﻿{
+    "questionId":"scrubbed by ScrubQuestionId",
+    "questionText":"fca1ba48-59f8-43e4-b413-6f89e2f0b73f",
+    "questionTypeId":"scrubbed by ScrubQuestionTypeId",
+    "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
+    "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
+    "questionType":{
+        "questionTypeId":"scrubbed by ScrubQuestionTypeId",
+        "description":"00000000-0000-0000-0000-000000000000",
+        "hasTextAnswer":true,
+        "hasBooleanAnswer":false
+    },
+    "answers":[
+        
+    ],
+    "commentId":"scrubbed by ScrubLocationId",
+    "sourceURI":"consultations://./consultation/1/document/1/chapter/introduction",
+    "htmlElementID":null,
+    "rangeStart":null,
+    "rangeStartOffset":null,
+    "rangeEnd":null,
+    "rangeEndOffset":null,
+    "quote":null,
+    "commentOn":"Chapter",
+    "commentOnEnum":2,
+    "documentId":1,
+    "show":true,
+    "order":"0",
+    "section":null
+}

@@ -65,7 +65,7 @@ namespace Comments.Test.UnitTests
 			};
 
 			//Act
-		    var actualBreadcrumb = consultationService.GetBreadcrumbs(consultationDetail, false);
+		    var actualBreadcrumb = consultationService.GetBreadcrumbs(consultationDetail, BreadcrumbType.DocumentPage);
 
 			//Assert
 			actualBreadcrumb.ShouldNotBeNull();
@@ -89,7 +89,7 @@ namespace Comments.Test.UnitTests
 			var consultationDetail = feedService.GetIndevConsultationDetailForPublishedProject(1, PreviewState.NonPreview, 2);
 
 			//Act
-			var actualBreadcrumb = consultationService.GetBreadcrumbs(consultationDetail, true);
+			var actualBreadcrumb = consultationService.GetBreadcrumbs(consultationDetail, BreadcrumbType.Review); 
 
 			//Assert
 			actualBreadcrumb.ShouldNotBeNull();
@@ -104,5 +104,20 @@ namespace Comments.Test.UnitTests
 			actualBreadcrumb.Skip(2).First().Label.ShouldBe("Consultation documents");
 			actualBreadcrumb.Skip(2).First().Url.ShouldBe(expectedDocumentsUrl);
 		}
+
+	    [Fact]
+	    public void GetBreadcrumbsReturnsNullForBreadcrumbTypeOfNone()
+	    {
+			//Arrange
+		    var feedService = new FeedService(new FeedReader(Feed.ConsultationCommentsPublishedDetailMulitpleDoc));
+			var consultationService = new Services.ConsultationService(null, feedService, null, null);
+		    var consultationDetail = feedService.GetIndevConsultationDetailForPublishedProject(1, PreviewState.NonPreview, 2);
+
+			//Act
+		    var breadcrumbs = consultationService.GetBreadcrumbs(consultationDetail, BreadcrumbType.None);
+
+		    //Act
+			breadcrumbs.ShouldBeNull();
+	    }
 	}
 }
