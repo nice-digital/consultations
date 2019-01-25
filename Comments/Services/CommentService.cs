@@ -206,7 +206,7 @@ namespace Comments.Services
 			commentsOption.UnfilteredResultCount = commentsAndQuestions.Comments.Count(); 
 
 			//populate documents
-			var documents = _consultationService.GetDocuments(consultationId).documents.Where(d => d.SupportsComments).ToList();
+			var documents = _consultationService.GetDocuments(consultationId).documents.Where(d => d.ConvertedDocument).ToList();
 		    documentsFilter.Options = new List<FilterOption>(documents.Count());
 
 			foreach (var document in documents)
