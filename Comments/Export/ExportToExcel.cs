@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Packaging;
 using System.Linq;
 using Comments.Models;
 using Comments.Services;
@@ -505,15 +506,23 @@ namespace Comments.Export
 			// Add Sheets to the Workbook.
 			Sheets sheets = spreadsheetDocument.WorkbookPart.Workbook.AppendChild(new Sheets());
 
+			//Add relationship -Fix for ipad to be able to read the sheets inside the xlsx file.
+			string relationshipId = spreadsheetDocument.WorkbookPart.GetIdOfPart(worksheetPart);
+			string relationshipType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet";
+			spreadsheetDocument.Package.GetPart(spreadsheetDocument.WorkbookPart.Uri).CreateRelationship(new Uri(worksheetPart.Uri.OriginalString.Replace("/xl/", String.Empty).Trim(), UriKind.Relative), TargetMode.Internal, relationshipType);
+			spreadsheetDocument.Package.GetPart(spreadsheetDocument.WorkbookPart.Uri).DeleteRelationship(relationshipId);
+			PackageRelationshipCollection sheetRelationships = spreadsheetDocument.Package.GetPart(spreadsheetDocument.WorkbookPart.Uri).GetRelationshipsByType(relationshipType);
+			relationshipId = sheetRelationships.Where(f => f.TargetUri.OriginalString == worksheetPart.Uri.OriginalString.Replace("/xl/", String.Empty).Trim()).Single().Id;
+
 			// Append a new worksheet and associate it with the spreadsheetDocument.
 			Sheet sheet = new Sheet()
 			{
-				Id = spreadsheetDocument.WorkbookPart.GetIdOfPart(worksheetPart),
+				Id = relationshipId,
 				SheetId = 1,
 				Name = "Comments"
 			};
 			sheets.Append(sheet);
-			
+
 			workbookpart.Workbook.Save();
 
 			// Add data to the worksheet
