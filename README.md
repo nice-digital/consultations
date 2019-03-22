@@ -33,7 +33,7 @@
 </details>
   
 ## What is it?
- > This service provides a way for NICE stakeholders to comment directly on NICE consultations and documents to provide their viewpoint; and a way for NICE teams to request comments and process them for response which doesn’t require repetitive manual handling.
+This service provides a way for NICE stakeholders to comment directly on NICE consultations and documents to provide their viewpoint; and a way for NICE teams to request comments and process them for response which doesn’t require repetitive manual handling.
 
 ### Background
 Consultation is a key part of developing NICE guidance, including NICE quality standards. The consultation processes enable external organisations and individuals to comment on guidance content at specific stages in the development process, and feed into the decision-making process.
