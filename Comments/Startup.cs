@@ -90,7 +90,7 @@ namespace Comments
             services.AddMvc(options =>
             {
                 options.Filters.Add(new ResponseCacheAttribute() { NoStore = true, Location = ResponseCacheLocation.None });
-            });
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             // In production, static files are served from the pre-built files, rather than proxied via react dev server
             services.AddSpaStaticFiles(configuration =>
@@ -142,6 +142,13 @@ namespace Comments
             }); //adding CORS for Warren. todo: maybe move this into the isDevelopment block..
             
             services.AddOptions();
+
+	        services.AddOpenApiDocument(document =>
+	        {
+		        document.DocumentName = "openapi";
+		        document.Title = "Comments API";
+	        });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -178,7 +185,7 @@ namespace Comments
                 app.Use((context, next) =>
                 {
                     var reqPath = context.Request.Path;
-                    if (reqPath.HasValue && reqPath.Value.Contains("."))
+                    if (reqPath.HasValue && reqPath.Value.Contains(".") && !reqPath.Value.Contains("comments-api"))
                     {
 						// Map static files paths to the root, for use within the 
 						if (reqPath.Value.Contains("/consultations"))
@@ -242,70 +249,87 @@ namespace Comments
 
             // DotNetCore SpaServices requires RawTarget property, which isn't set on a TestServer.
             // So set it here to allow integration tests to work with SSR via SpaServices
-            app.Use((context, next) =>
-            {
-                var httpRequestFeature = context.Features.Get<IHttpRequestFeature>();
+	        app.MapWhen(x => !x.Request.Path.Value.StartsWith("/comments-api", StringComparison.OrdinalIgnoreCase),
+		        builder =>
+		        {
+			        builder.Use((context, next) =>
+			        {
+				        var httpRequestFeature = context.Features.Get<IHttpRequestFeature>();
 
-                if (httpRequestFeature != null && string.IsNullOrEmpty(httpRequestFeature.RawTarget))
-                    httpRequestFeature.RawTarget = httpRequestFeature.Path;
+				        if (httpRequestFeature != null && string.IsNullOrEmpty(httpRequestFeature.RawTarget))
+					        httpRequestFeature.RawTarget = httpRequestFeature.Path;
 
-                return next();
-            });
+				        return next();
+			        });
 
-            app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = "ClientApp";
+			        builder.UseSpa(spa =>
+			        {
+				        spa.Options.SourcePath = "ClientApp";
 
-                spa.UseSpaPrerendering(options =>
-                {
-                    options.ExcludeUrls = new[] { "/sockjs-node" };
-                    // Pass data in from .NET into the SSR. These come through as `params` within `createServerRenderer` within the server side JS code.
-                    // See https://docs.microsoft.com/en-us/aspnet/core/spa/angular?tabs=visual-studio#pass-data-from-net-code-into-typescript-code
-                    options.SupplyData = (context, data) =>
-                    {
-                        data["isHttpsRequest"] = context.Request.IsHttps;
-                        var cookieForSSR = context.Request.Cookies[NICE.Auth.NetCore.Helpers.Constants.DefaultCookieName];
-                        if (cookieForSSR != null)
-                        {
-                            data["cookies"] = $"{NICE.Auth.NetCore.Helpers.Constants.DefaultCookieName}={cookieForSSR}";
-                        }
-                        data["isAuthorised"] = context.User.Identity.IsAuthenticated;
-	                    data["displayName"] = context.User.Identity.Name;
-	                    data["signInURL"] = authenticateService.GetLoginURL(context.Request.Path);
-	                    data["registerURL"] = authenticateService.GetRegisterURL(context.Request.Path);
-	                    data["requestURL"] = context.Request.Path;
-	                    data["accountsEnvironment"] = AppSettings.Environment.AccountsEnvironment;
-	                    //data["user"] = context.User; - possible security implications here, surfacing claims to the front end. might be ok, if just server-side.
-	                    // Pass further data in e.g. user/authentication data
-                    };
-                    options.BootModulePath = $"{spa.Options.SourcePath}/src/server/index.js";
-                });
+				        spa.UseSpaPrerendering(options =>
+				        {
+					        options.ExcludeUrls = new[] {"/sockjs-node"};
+					        // Pass data in from .NET into the SSR. These come through as `params` within `createServerRenderer` within the server side JS code.
+					        // See https://docs.microsoft.com/en-us/aspnet/core/spa/angular?tabs=visual-studio#pass-data-from-net-code-into-typescript-code
+					        options.SupplyData = (context, data) =>
+					        {
+						        data["isHttpsRequest"] = context.Request.IsHttps;
+						        var cookieForSSR = context.Request.Cookies[NICE.Auth.NetCore.Helpers.Constants.DefaultCookieName];
+						        if (cookieForSSR != null)
+						        {
+							        data["cookies"] = $"{NICE.Auth.NetCore.Helpers.Constants.DefaultCookieName}={cookieForSSR}";
+						        }
 
-                if (env.IsDevelopment())
-                {
-                    // Default timeout is 30 seconds so extend it in dev mode because sometimes the react server can take a while to start up
-                    spa.Options.StartupTimeout = TimeSpan.FromMinutes(1);
+						        data["isAuthorised"] = context.User.Identity.IsAuthenticated;
+						        data["displayName"] = context.User.Identity.Name;
+						        data["signInURL"] = authenticateService.GetLoginURL(context.Request.Path);
+						        data["registerURL"] = authenticateService.GetRegisterURL(context.Request.Path);
+						        data["requestURL"] = context.Request.Path;
+						        data["accountsEnvironment"] = AppSettings.Environment.AccountsEnvironment;
+						        //data["user"] = context.User; - possible security implications here, surfacing claims to the front end. might be ok, if just server-side.
+						        // Pass further data in e.g. user/authentication data
+					        };
+					        options.BootModulePath = $"{spa.Options.SourcePath}/src/server/index.js";
+				        });
 
-                    // If you have trouble with the react server in dev mode (sometime in can be slow and you get timeout error, then use
-                    // `UseProxyToSpaDevelopmentServer` below rather than `UseReactDevelopmentServer`.
-                    // This proxies to a manual CRA server (run `npm start` from the ClientApp folder) instead of DotNetCore launching one automatically.
-                    // This can be quicker. See https://docs.microsoft.com/en-us/aspnet/core/spa/react?tabs=visual-studio#run-the-cra-server-independently
-                    spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");
-                   // spa.UseReactDevelopmentServer(npmScript: "start");
-                }
-            });
 
-            //try
-            //{
-            //    using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            //    {
-            //         serviceScope.ServiceProvider.GetService<ConsultationsContext>().Database.Migrate();
-            //    }
-            //}
-            //catch(Exception ex)
-            //{
-            //    startupLogger.LogError(String.Format("EF Migrations Error: {0}", ex));
-            //}
-		}
+				        if (env.IsDevelopment())
+				        {
+					        // Default timeout is 30 seconds so extend it in dev mode because sometimes the react server can take a while to start up
+					        spa.Options.StartupTimeout = TimeSpan.FromMinutes(1);
+
+					        // If you have trouble with the react server in dev mode (sometime in can be slow and you get timeout error, then use
+					        // `UseProxyToSpaDevelopmentServer` below rather than `UseReactDevelopmentServer`.
+					        // This proxies to a manual CRA server (run `npm start` from the ClientApp folder) instead of DotNetCore launching one automatically.
+					        // This can be quicker. See https://docs.microsoft.com/en-us/aspnet/core/spa/react?tabs=visual-studio#run-the-cra-server-independently
+					        spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");
+					        // spa.UseReactDevelopmentServer(npmScript: "start");
+				        }
+			        });
+		        });
+
+			//try
+			//{
+			//    using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+			//    {
+			//         serviceScope.ServiceProvider.GetService<ConsultationsContext>().Database.Migrate();
+			//    }
+			//}
+			//catch(Exception ex)
+			//{
+			//    startupLogger.LogError(String.Format("EF Migrations Error: {0}", ex));
+			//}
+			app.UseSwagger(configure =>
+	        {
+		        configure.DocumentName = "openapi";
+		        configure.Path = "/comments-api/v1/comments-api.json";
+	        });
+
+	        app.UseReDoc(configure =>
+	        {
+		        configure.Path = "/comments-api/docs";
+		        configure.DocumentPath = "/comments-api/v1/comments-api.json";
+	        });
+        }
     }
 }

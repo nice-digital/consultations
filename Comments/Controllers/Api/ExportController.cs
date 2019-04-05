@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Comments.Controllers.Api
 {
-
+	[ApiExplorerSettings(IgnoreApi = true)]
 	public class ExportControllerBase : ControllerBase
 	{
 		protected readonly ILogger<ExportControllerBase> _logger;

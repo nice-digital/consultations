@@ -5,6 +5,7 @@ using Newtonsoft.Json.Converters;
 
 namespace Comments.Controllers.Api
 {
+	
 	public class LogPostModel
 	{
 		public string Message { get; set; }
@@ -15,7 +16,8 @@ namespace Comments.Controllers.Api
 	/// the front-end can call this either during the server-side render or client-side.
 	/// </summary>
 	[Produces("application/json")]
-    [Route("consultations/api/[controller]")]
+	[ApiExplorerSettings(IgnoreApi = true)]
+	[Route("consultations/api/[controller]")]
     public class LoggingController : ControllerBase
     {
         private readonly ILogger<LoggingController> _logger;

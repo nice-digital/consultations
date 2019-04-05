@@ -6,7 +6,7 @@ using System;
 namespace Comments.Controllers.Web
 {
 	[Authorize(Roles="Administrator")]
-	
+	[ApiExplorerSettings(IgnoreApi = true)]
 	public class AdminController : Controller
     {
 	    private readonly IUserService _userService;

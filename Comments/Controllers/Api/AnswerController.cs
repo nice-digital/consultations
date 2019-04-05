@@ -1,4 +1,5 @@
 using Comments.Services;
+using Comments.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -18,7 +19,8 @@ namespace Comments.Controllers.Api
 
         // GET: consultations/api/Answer/5 
         [HttpGet("{answerId}")]
-        public IActionResult GetAnswer([FromRoute] int answerId)
+        [ProducesResponseType(200, Type= typeof(Answer))]
+		public IActionResult GetAnswer([FromRoute] int answerId)
         {
             if (!ModelState.IsValid)
             {
