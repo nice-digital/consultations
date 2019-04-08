@@ -132,17 +132,17 @@ namespace Comments
 				options.KnownProxies.Clear();
 			});
 
-	        services.AddCors(); //options =>
-      //      {
-      //          options.AddPolicy("CorsPolicy",
-      //              builder => builder
-						//.AllowAnyOrigin()
-      //                  .AllowAnyMethod()
-      //                  .AllowAnyHeader()
-      //                  .AllowCredentials());
-      //      }); //adding CORS for Warren. todo: maybe move this into the isDevelopment block..
-            
-            services.AddOptions();
+	        services.AddCors(options =>
+            {
+				options.AddPolicy("CorsPolicy",
+					builder => builder
+						.AllowAnyOrigin()
+						.AllowAnyMethod()
+						.AllowAnyHeader()
+						.AllowCredentials());
+			}); //adding CORS for Warren. todo: maybe move this into the isDevelopment block..
+
+			services.AddOptions();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -166,13 +166,14 @@ namespace Comments
 
 	            app.UseStatusCodePagesWithReExecute(Constants.ErrorPath + "/{0}");
 			}
-			
-			app.UseCors(builder => builder
-				.AllowAnyOrigin()
-				.AllowAnyMethod()
-				.AllowAnyHeader()
-				.AllowCredentials()
-				);
+
+            app.UseCors("CorsPolicy");
+			//app.UseCors(builder => builder
+			//	.AllowAnyOrigin()
+			//	.AllowAnyMethod()
+			//	.AllowAnyHeader()
+			//	.AllowCredentials()
+			//	);
 
             // Because in dev mode we proxy to a react dev server (which has to run in the root e.g. http://localhost:3000)
             // we re-write paths for static files to map them to the root
