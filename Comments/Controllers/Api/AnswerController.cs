@@ -1,5 +1,6 @@
 using Comments.Services;
 using Comments.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -17,9 +18,14 @@ namespace Comments.Controllers.Api
             _logger = logger;
         }
 
-        // GET: consultations/api/Answer/5 
-        [HttpGet("{answerId}")]
-        [ProducesResponseType(200, Type= typeof(Answer))]
+		// GET: consultations/api/Answer/5
+		/// <summary>
+		/// Get single answer from id
+		/// </summary>
+		/// <param name="answerId">id of the answer</param>
+		/// <returns>Returns the answer view model</returns>
+		[HttpGet("{answerId}")]
+        [ProducesResponseType(typeof(Answer), StatusCodes.Status200OK)]
 		public IActionResult GetAnswer([FromRoute] int answerId)
         {
             if (!ModelState.IsValid)
@@ -38,9 +44,15 @@ namespace Comments.Controllers.Api
             return invalidResult ?? Ok(result.answer);
         }
 
-        // POST: consultations/api/Answer
-        [HttpPost]
-        public IActionResult PostAnswer([FromBody] ViewModels.Answer answer) 
+		// POST: consultations/api/Answer
+		/// <summary>
+		/// Adds a single answer
+		/// </summary>
+		/// <param name="answer">answer view model</param>
+		/// <returns>Returns the answer view model and Validate model</returns>
+		[HttpPost]
+		[ProducesResponseType(typeof((Answer, Validate)), StatusCodes.Status200OK)]
+		public IActionResult PostAnswer([FromBody] ViewModels.Answer answer) 
         {
             if (!ModelState.IsValid)
             {
@@ -54,9 +66,16 @@ namespace Comments.Controllers.Api
             return invalidResult ?? CreatedAtAction("GetAnswer", new { id = result.answer.AnswerId }, result.answer);
         }
 
-        // PUT: consultations/api/Answer/5
-        [HttpPut("{answerId}")]
-        public IActionResult PutAnswer([FromRoute] int answerId, [FromBody] ViewModels.Answer answer)
+		// PUT: consultations/api/Answer/5
+		/// <summary>
+		/// Updates an individual answer based on answer Id
+		/// </summary>
+		/// <param name="answerId">ID of the answer to be updated</param>
+		/// <param name="answer">The values the answer is to be updated with</param>
+		/// <returns>Returns the answer view model of the updated answer</returns>
+		[HttpPut("{answerId}")]
+		[ProducesResponseType(typeof(Answer), StatusCodes.Status200OK)]
+		public IActionResult PutAnswer([FromRoute] int answerId, [FromBody] ViewModels.Answer answer)
         {
             if (!ModelState.IsValid)
             {
@@ -74,9 +93,15 @@ namespace Comments.Controllers.Api
             return invalidResult ?? Ok(answer);
         }
 
-        // DELETE: consultations/api/Answer/5
-        [HttpDelete("{answerId}")]
-        public IActionResult DeleteAnswer([FromRoute] int answerId)
+		// DELETE: consultations/api/Answer/5
+		/// <summary>
+		/// Deletes an individual answer specified by answer Id
+		/// </summary>
+		/// <param name="answerId">Id of the answer to be deleted</param>
+		/// <returns>Returns the number of rows affected</returns>
+		[HttpDelete("{answerId}")]
+		[ProducesResponseType(typeof((int, Validate)), StatusCodes.Status200OK)]
+		public IActionResult DeleteAnswer([FromRoute] int answerId)
         {
             if (!ModelState.IsValid)
             {

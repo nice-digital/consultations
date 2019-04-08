@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using Comments.Services;
 using Comments.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -17,15 +19,18 @@ namespace Comments.Controllers.Api
         {
 	        _consultationListService = consultationListService;
             _logger = logger;
-        }
+		}
 
+	    // GET: eg. consultations/api/ConsultationList?Status=Open&Status=Closed
+	    // Note: the repeated querystring parameter. this is how default model binding to an array works. don't pass a CSV list and expect it to work without writing something custom (like I did)
 		/// <summary>
-		/// GET: eg. consultations/api/ConsultationList?Status=Open&Status=Closed
-		/// note: the repeated querystring parameter. this is how default model binding to an array works. don't pass a CSV list and expect it to work without writing something custom (like I did)
+		/// Returns a list of consultations for the download page.
 		/// </summary>
-		/// <returns></returns>
+		/// <param name="consultationListViewModel"></param>
+		/// <returns>ConsultationListViewModel, Valdate</returns>
 		[HttpGet]
-        public IActionResult Get(ConsultationListViewModel consultationListViewModel)
+		[ProducesResponseType(typeof((ConsultationListViewModel consultationListViewModel, Validate validate)), StatusCodes.Status200OK)]
+		public IActionResult Get(ConsultationListViewModel consultationListViewModel)
 		{
 			var result = _consultationListService.GetConsultationListViewModel(consultationListViewModel);
 

@@ -1,5 +1,7 @@
 using Comments.Services;
+using Comments.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -19,8 +21,16 @@ namespace Comments.Controllers.Api
         }
 
 		// GET: consultations/api/Questions?consultationId=22
+		/// <summary>
+		/// Gets all questions for a given consulation
+		/// </summary>
+		/// <param name="consultationId">ID of the consultation</param>
+		/// <param name="draft">Is the consultation a draft consultation</param>
+		/// <param name="reference">If the consultation is a draft, consultation reference must be supplied</param>
+		/// <returns>Returns the QuestionAdmin view model</returns>
 		[HttpGet]
-        public IActionResult GetQuestions(int consultationId, bool draft, string reference)
+		[ProducesResponseType(typeof(QuestionAdmin), StatusCodes.Status200OK)]
+		public IActionResult GetQuestions(int consultationId, bool draft, string reference)
         {
             if (!ModelState.IsValid)
             {

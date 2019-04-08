@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace Comments.Controllers.Api
 {
@@ -19,14 +20,15 @@ namespace Comments.Controllers.Api
         {
             _consultationService = consultationService;
             _logger = logger;
-        }
+		}
 
+        // GET: eg. consultations/api/Consultation?consultationId=1
 		/// <summary>
-		/// GET: eg. consultations/api/Consultation?consultationId=1
+		/// Returns details of a single consultation
 		/// </summary>
-		/// <param name="consultationId"></param>
-		/// <param name="isReview">boolean indicating if the feed isbeing accessed for reviewing purposes</param>
-		/// <returns></returns>
+		/// <param name="consultationId"> Id of the consultation</param>
+		/// <param name="isReview">Boolean indicating if the feed isbeing accessed for reviewing purposes</param>
+		/// <returns>Consultation ViewModel</returns>
 		[HttpGet]
         public ViewModels.Consultation Get(int consultationId, bool isReview = false)
         {
@@ -51,15 +53,17 @@ namespace Comments.Controllers.Api
 			_logger = logger;
 		}
 
+		// GET: eg. consultations/api/DraftConsultation?consultationId=1&documentId=1&reference=GID-TA1232
 		/// <summary>
-		/// GET: eg. consultations/api/DraftConsultation?consultationId=1&documentId=1&reference=GID-TA1232
+		/// Returns details for a single consultation that has never been published.
 		/// </summary>
-		/// <param name="consultationId"></param>
-		/// <param name="documentId"></param>
-		/// <param name="reference"></param>
-		/// <param name="isReview">boolean indicating if the feed isbeing accessed for reviewing purposes</param>
-		/// <returns></returns>
+		/// <param name="consultationId">Id of the consultation</param>
+		/// <param name="documentId"> Id of the document</param>
+		/// <param name="reference">Reference Id of the consultation e.g. GID-TA1232</param>
+		/// <param name="isReview">Boolean indicating if the feed is being accessed for reviewing purposes</param>
+		/// <returns>Consultation ViewModel</returns>
 		[HttpGet]
+		[ProducesResponseType(typeof(Consultation), StatusCodes.Status200OK)]
 		public ViewModels.Consultation Get(int consultationId, int documentId, string reference, bool isReview = false)
 		{
 			if (consultationId < 1)
