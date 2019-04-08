@@ -1,9 +1,14 @@
 using Comments.Services;
+using Comments.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace Comments.Controllers.Api
 {
+	/// <summary>
+	/// Operations for a single question
+	/// </summary>
     [Produces("application/json")]
     [Route("consultations/api/[controller]")]
     public class QuestionController : ControllerBase
@@ -17,7 +22,16 @@ namespace Comments.Controllers.Api
         }
 
         // GET: consultations/api/Question/5
+        /// <summary>
+        /// Get single question from id
+        /// </summary>
+        /// <param name="questionId">id of the question</param>
+        /// <returns>Return the question view model</returns>
         [HttpGet("{questionId}")]
+        [ProducesResponseType(typeof(Question), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(SerializableError), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(SerializableError), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(SerializableError), StatusCodes.Status404NotFound)]
         public IActionResult GetQuestion([FromRoute] int questionId)
         {
             if (!ModelState.IsValid)

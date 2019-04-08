@@ -33,7 +33,7 @@ namespace Comments
             Environment = env;
             _logger = logger;
         }
-        
+
         public IConfiguration Configuration { get; }
 
         public IHostingEnvironment Environment { get; }
@@ -43,7 +43,7 @@ namespace Comments
         {
             if (Environment.IsDevelopment())
             {
-                AppSettings.Configure(services, Configuration, @"c:\"); 
+                AppSettings.Configure(services, Configuration, @"c:\");
             }
             else
             {
@@ -63,7 +63,7 @@ namespace Comments
 
             services.TryAddTransient<ICommentService, CommentService>();
             services.TryAddTransient<IConsultationService, ConsultationService>();
-            
+
             services.TryAddTransient<IFeedReaderService>(provider => new FeedReaderService(new RemoteSystemReader(null), AppSettings.Feed));
             services.TryAddTransient<IFeedService, FeedService>();
             services.TryAddTransient<IAnswerService, AnswerService>();
@@ -76,7 +76,7 @@ namespace Comments
 	        services.TryAddTransient<IStatusService, StatusService>();
 			services.TryAddTransient<IConsultationListService, ConsultationListService>();
 
-			// Add authentication 
+			// Add authentication
 			services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = AuthOptions.DefaultScheme;
@@ -140,20 +140,22 @@ namespace Comments
                         .AllowAnyHeader()
                         .AllowCredentials());
             }); //adding CORS for Warren. todo: maybe move this into the isDevelopment block..
-            
+
             services.AddOptions();
 
-	        services.AddOpenApiDocument(document =>
-	        {
-		        document.DocumentName = "openapi";
-		        document.Title = "Comments API";
-	        });
-
+            if (Environment.IsDevelopment())
+            {
+	            services.AddOpenApiDocument(document =>
+	            {
+		            document.DocumentName = "openapi";
+		            document.Title = "Comments API";
+	            });
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ISeriLogger seriLogger, IApplicationLifetime appLifetime, IAuthenticateService authenticateService)
-        {           
+        {
             seriLogger.Configure(loggerFactory, Configuration, appLifetime, env);
             var startupLogger = loggerFactory.CreateLogger<Startup>();
 
@@ -173,7 +175,7 @@ namespace Comments
 	            app.UseStatusCodePagesWithReExecute(Constants.ErrorPath + "/{0}");
 			}
 
-	        
+
 
 
 			app.UseCors("CorsPolicy");
@@ -187,7 +189,7 @@ namespace Comments
                     var reqPath = context.Request.Path;
                     if (reqPath.HasValue && reqPath.Value.Contains(".") && !reqPath.Value.Contains("comments-api"))
                     {
-						// Map static files paths to the root, for use within the 
+						// Map static files paths to the root, for use within the
 						if (reqPath.Value.Contains("/consultations"))
 						{
 							context.Request.Path = reqPath.Value.Replace("/consultations", "");
@@ -319,17 +321,27 @@ namespace Comments
 			//{
 			//    startupLogger.LogError(String.Format("EF Migrations Error: {0}", ex));
 			//}
-			app.UseSwagger(configure =>
-	        {
-		        configure.DocumentName = "openapi";
-		        configure.Path = "/comments-api/v1/comments-api.json";
-	        });
 
-	        app.UseReDoc(configure =>
-	        {
-		        configure.Path = "/comments-api/docs";
-		        configure.DocumentPath = "/comments-api/v1/comments-api.json";
-	        });
+			if (env.IsDevelopment())
+			{
+				app.UseSwagger(configure =>
+				{
+					configure.DocumentName = "openapi";
+					configure.Path = "/comments-api/v1/comments-api.json";
+				});
+
+				app.UseReDoc(configure =>
+				{
+					configure.Path = "/comments-api/redoc";
+					configure.DocumentPath = "/comments-api/v1/comments-api.json";
+				});
+
+				app.UseSwaggerUi3(configure =>
+				{
+					configure.Path = "/comments-api/swagger";
+					configure.DocumentPath = "/comments-api/v1/comments-api.json";
+				});
+			}
         }
     }
 }
