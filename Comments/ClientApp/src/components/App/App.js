@@ -29,10 +29,16 @@ class App extends React.Component<PropsType, StateType> {
 	render() {
 		return (
 			<Fragment>
-				<PhaseBanner
-					phase={projectInformation.phase}
-					name={projectInformation.name}
-				/>
+				<div className="container">
+					<div className="grid">
+						<div data-g="12">
+							<PhaseBanner
+								phase={projectInformation.phase}
+								name={projectInformation.name}
+							/>
+						</div>
+					</div>
+				</div>
 				<UserProviderWithRouter>
 					<Helmet titleTemplate="%s | Consultations | NICE">
 						<html lang="en-GB"/>
@@ -44,7 +50,7 @@ class App extends React.Component<PropsType, StateType> {
 								{/*Admin Routes*/}
 								{/*Download*/}
 								<Route exact path="/admin">
-									<Redirect to={"/admin/download"} />
+									<Redirect to={"/admin/download"}/>
 								</Route>
 
 								{/*Download*/}
@@ -52,14 +58,25 @@ class App extends React.Component<PropsType, StateType> {
 									<DownloadWithRouter basename={this.props.basename}/>
 								</Route>
 
-								{/*Questions*/}
-								<Route path="/admin/questions/:consultationId">
-									<QuestionsWithRouter />
+								{/*Questions admin - this route is hit when the 'Add question' button is pressed in indev on a draft project.*/}
+								<Route exact path="/admin/questions/preview/:reference/:consultationId">
+									<QuestionsWithRouter draftProject={true}/>
+								</Route>
+								{/*Questions admin - viewing a documents questions on a draft project */}
+								<Route exact path="/admin/questions/preview/:reference/:consultationId/:documentId">
+									<QuestionsWithRouter draftProject={true}/>
+								</Route>
+								{/*Questions admin - this route is hit when the 'Add question' button is pressed in indev on a published project.*/}
+								<Route exact path="/admin/questions/:consultationId">
+									<QuestionsWithRouter draftProject={false}/>
+								</Route>
+								{/*Questions admin - viewing a documents questions on a published project */}
+								<Route exact path="/admin/questions/:consultationId/:documentId">
+									<QuestionsWithRouter draftProject={false}/>
 								</Route>
 
-								{/*Document View*/}			
-								<Route exact
-											 path="/:consultationId/:documentId/:chapterSlug">
+								{/*Document View*/}
+								<Route exact path="/:consultationId/:documentId/:chapterSlug">
 									<DocumentViewWithRouter/>
 								</Route>
 
@@ -108,7 +125,7 @@ class App extends React.Component<PropsType, StateType> {
 						</LiveAnnouncer>
 					</ErrorBoundary>
 				</UserProviderWithRouter>
-				<FooterWithRouter />
+				<FooterWithRouter/>
 			</Fragment>
 		);
 	}

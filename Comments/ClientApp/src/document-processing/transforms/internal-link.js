@@ -1,6 +1,6 @@
 import React from "react";
 import { NavHashLink } from "react-router-hash-link";
-import { pullFocusById } from "../../helpers/accessibility-helpers";
+import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
 
 export default function processInternalLink(node) {
 	const props = node.attribs;
@@ -17,7 +17,7 @@ export default function processInternalLink(node) {
 			scroll={el => {
 				el.scrollIntoView({behavior: "smooth", block: "start"});
 				const element = el.attributes.id.value;
-				pullFocusById(element);
+				pullFocusByQuerySelector(`#${element}`);
 			}}>
 			{label}
 		</NavHashLink>

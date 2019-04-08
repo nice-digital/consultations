@@ -92,7 +92,12 @@ Array [
                                         href="/preview/GID-NG10186/consultation/113/document/1/chapter/draftappendicesa-tcleandocx"
                                         onClick={[Function]}
                                     >
-                                        DRAFT_Appendices_A-T_CLEAN.docx
+                                        <span
+                                            className="pl--0"
+                                            data-g="10"
+                                        >
+                                            DRAFT_Appendices_A-T_CLEAN.docx
+                                        </span>
                                     </a>
                                 </li>
                                 <li
@@ -100,10 +105,16 @@ Array [
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/preview/GID-NG10186/consultation/113/document/1/chapter/appendices"
                                         onClick={[Function]}
                                     >
-                                        Appendices
+                                        <span
+                                            className="pl--0"
+                                            data-g="10"
+                                        >
+                                            Appendices
+                                        </span>
                                     </a>
                                 </li>
                                 <li
@@ -111,10 +122,16 @@ Array [
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/preview/GID-NG10186/consultation/113/document/1/chapter/scope"
                                         onClick={[Function]}
                                     >
-                                        1 Scope
+                                        <span
+                                            className="pl--0"
+                                            data-g="10"
+                                        >
+                                            1 Scope
+                                        </span>
                                     </a>
                                 </li>
                             </ul>

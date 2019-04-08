@@ -1,6 +1,6 @@
 // @flow
 
-import React, {Fragment, PureComponent} from "react";
+import React, { Fragment, PureComponent } from "react";
 import Moment from "react-moment";
 
 type PropsType = {
@@ -12,7 +12,7 @@ type PropsType = {
 	consultationState?: {
 		endDate: string,
 		consultationIsOpen: boolean,
-		consultationHasNotStartedYet: ?boolean,
+		consultationHasNotStartedYet?: boolean,
 	},
 }
 
@@ -41,21 +41,23 @@ export class Header extends PureComponent<PropsType> {
 			<Fragment>
 				<h1 data-qa-sel="changeable-page-header" className="page-header__heading mt--0">{title}</h1>
 				{this.props.consultationState &&
-				<p className="page-header__lead mb--d">
+				<div className="mb--d">
 					{isOpen ?
-						<Fragment>
-							Open until{" "}<Moment format="D MMMM YYYY" date={endDate}/>
-						</Fragment>
+						<p><span className="tag tag--open">Open for comments</span> Open until{" "}
+							<Moment format="D MMMM YYYY" date={endDate}/>
+						</p>
 						:
-						<Fragment>
-							This consultation {startOrEnd} on <Moment format="D MMMM YYYY" date={endDate}/> at {" "}
+						<p>
+							{startOrEnd === "starts" && <span className="tag">Not yet open for comments</span>}
+							{startOrEnd === "ended" && <span className="tag">Closed for comments</span>}{" "}
+							This consultation {startOrEnd} on <Moment format="D MMMM YYYY" date={endDate}/> at{" "}
 							<Moment format="HH:mm" date={endDate}/>
-						</Fragment>
+						</p>
 					}
-				</p>
+				</div>
 				}
 				{subtitle1 && <p>{subtitle1}</p>}
-				{subtitle2 &&	<p>{subtitle2}</p>}
+				{subtitle2 && <p>{subtitle2}</p>}
 			</ Fragment>
 		);
 	}

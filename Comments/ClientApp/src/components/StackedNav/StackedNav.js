@@ -8,7 +8,8 @@ type LinkType = {
 	label: string,
 	url: string,
 	current?: boolean,
-	isReactRoute: boolean
+	isReactRoute: boolean,
+	marker?: string | null,
 };
 
 type PropsType = {
@@ -20,7 +21,7 @@ type PropsType = {
 
 export class StackedNav extends PureComponent<PropsType> {
 
-	trackClick = (e: SyntheticEvent) => {
+	trackClick = (e: SyntheticEvent<any>) => {
 		tagManager({
 			event: "generic",
 			category: "Consultation comments page",
@@ -39,17 +40,25 @@ export class StackedNav extends PureComponent<PropsType> {
 					{links.map((item, index) => (
 						<li key={index} data-qa-sel="nav-list-item" className="stacked-nav__list-item">
 							{item.isReactRoute ?
-								item.current ?
-									<Link to={item.url} aria-current="page">{item.label}</Link>
-									:
-									// if !item.current
-									<Link to={item.url}>{item.label}</Link>
+								<Link
+									to={item.url}
+									aria-current={item.current ? "page" : null}
+								>
+									<span data-g="10" className="pl--0">{item.label}</span>
+									{item.marker &&
+										<span className="text-right" data-g="2">({item.marker})</span>
+									}
+								</Link>
 								:
 								// if !item.isReactRoute
 								<a href={item.url}
 									 target="_blank"
 									 onClick={this.trackClick}
-									 rel="noopener noreferrer">{item.label}</a>
+									 rel="noopener noreferrer">
+									<span data-g="10" className="pl--0">
+										{item.label}
+									</span>
+									</a>
 							}
 						</li>
 					))}

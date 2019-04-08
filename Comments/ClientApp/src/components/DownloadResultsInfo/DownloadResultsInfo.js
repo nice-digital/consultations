@@ -15,10 +15,6 @@ type PropsType = {
 
 export class DownloadResultsInfo extends Component<PropsType, StateType> {
 
-	constructor(props: PropsType) {
-		super(props);
-	}
-
 	shouldShowFilter = (appliedFilters: AppliedFilterType[], filterText: string) => {
 		const typeFilters = appliedFilters.filter(f => f.groupId === "Type");
 		if (typeFilters.length === 1){
@@ -27,10 +23,10 @@ export class DownloadResultsInfo extends Component<PropsType, StateType> {
 		}
 		return true;
 	};
-	
+
 	getShowingText = (props: PropsType) => {
 		//TODO: "Showing Open consultations" etc.
-		//const appliedFilters = props.appliedFilters	
+		//const appliedFilters = props.appliedFilters
 		return `Showing ${props.consultationCount} consultation${props.consultationCount === 1 ? "": "s"}`;
 	};
 
@@ -59,10 +55,10 @@ export class DownloadResultsInfo extends Component<PropsType, StateType> {
 				</h2>
 				{this.props.appliedFilters.length > 0 &&
 					<ul className="results-info__filters hide-print">
-						{this.props.appliedFilters.map(filter => 
+						{this.props.appliedFilters.map(filter =>
 							<AppliedFilter key={`${filter.groupId}:${filter.optionId}`}
-								appliedFilter={filter} 
-								path={this.props.path} 
+								appliedFilter={filter}
+								path={this.props.path}
 								onRemoveFilter={this.onRemoveFilter} />)}
 					</ul>
 				}

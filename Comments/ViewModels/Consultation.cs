@@ -20,9 +20,8 @@ namespace Comments.ViewModels
             RelevantTo = consultation.RelevantTo;
             ConsultationId = consultation.ConsultationId;
             Process = consultation.Process;
-	        HasDocumentsWhichAllowConsultationQuestions = consultation.HasDocumentsWhichAllowConsultationQuestions;
-	        SupportsComments = consultation.SupportsComments;
-	        SupportsQuestions = consultation.SupportsQuestions;
+	        //HasDocumentsWhichAllowConsultationQuestions = consultation.HasDocumentsWhichAllowConsultationQuestions;
+	        //SupportsQuestions = consultation.SupportsQuestions;
 			PartiallyUpdatedProjectReference = consultation.PartiallyUpdatedProjectReference;
             OrigProjectReference = consultation.OrigProjectReference;
             User = user;
@@ -47,9 +46,8 @@ namespace Comments.ViewModels
             RelevantTo = relevantTo;
             ConsultationId = consultationId;
             Process = process;
-	        HasDocumentsWhichAllowConsultationQuestions = allowConsultationQuestions;
-	        SupportsComments = supportsComments;
-	        SupportsQuestions = supportsQuestions;
+	        //HasDocumentsWhichAllowConsultationQuestions = allowConsultationQuestions;
+	        //SupportsQuestions = supportsQuestions;
 			PartiallyUpdatedProjectReference = partiallyUpdatedProjectReference;
             OrigProjectReference = origProjectReference;
             User = user;
@@ -69,9 +67,6 @@ namespace Comments.ViewModels
         public int ConsultationId { get; private set; }
         public string Process { get; private set; }
         public bool HasDocumentsWhichAllowConsultationComments { get; private set; }
-	    public bool HasDocumentsWhichAllowConsultationQuestions { get; private set; }
-	    public bool SupportsQuestions { get; private set; }
-	    public bool SupportsComments { get; private set; }
 		public string PartiallyUpdatedProjectReference { get; private set; } //not needed?
         public string OrigProjectReference { get; private set; }
 

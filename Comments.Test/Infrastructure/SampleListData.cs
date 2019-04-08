@@ -27,7 +27,7 @@ namespace Comments.Test.Infrastructure
 					},
 					true,
 					"sign in url",
-					new ConsultationState(false, DateTime.MinValue, DateTime.MaxValue, true, true, true, false, true, true, null, null)
+					new ConsultationState(false, DateTime.MinValue, DateTime.MaxValue, true, true, true, false, null)
 					)
 			};
 	    }

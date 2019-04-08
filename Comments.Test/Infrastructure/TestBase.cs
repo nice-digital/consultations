@@ -114,7 +114,7 @@ namespace Comments.Test.Infrastructure
 	        {
 				_context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption);
 			}
-            
+
             _context.Database.EnsureCreatedAsync();
 
 			var builder = new WebHostBuilder()
@@ -302,7 +302,7 @@ namespace Comments.Test.Infrastructure
                     context.SaveChanges();
                 }
             }
-            
+
             return answer.AnswerId;
         }
         protected void AddCommentsAndQuestionsAndAnswers(string sourceURI, string commentText, string questionText, string answerText, Guid createdByUserId, int status = (int)StatusName.Draft, ConsultationsContext passedInContext = null)
@@ -321,7 +321,7 @@ namespace Comments.Test.Infrastructure
             var commentText = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
             var userId = Guid.NewGuid();
-	        
+
 			AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId); //Add records for Foreign key constraints
         }
 

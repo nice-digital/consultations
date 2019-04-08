@@ -26,7 +26,7 @@ Array [
                 className="grid"
             >
                 <div
-                    data-g="12 sm:6 lg:4"
+                    data-g="12 sm:4"
                 >
                     <p
                         className="mt--0"
@@ -36,20 +36,35 @@ Array [
                     <img
                         alt="Mouse pointer hovering over commenting icon"
                         className="Tutorial__buttonImage"
-                        src="images/tutorial_graphic_800.png"
+                        src="images/tutorial-1.png"
                     />
                 </div>
                 <div
-                    data-g="12 sm:6 lg:4"
+                    data-g="12 sm:4"
                 >
                     <p
-                        className="mt--0 mb--0"
+                        className="mt--0"
                     >
-                        Highlight a selection of text using the cursor to make a comment on it
+                        You can also highlight a selection of text using the cursor to make a comment on it
                     </p>
                     <img
                         alt="Animation showing an example of highlighting text and clicking comment"
-                        src="images/text-selection.gif"
+                        className="Tutorial__buttonImage"
+                        src="images/tutorial-2.gif"
+                    />
+                </div>
+                <div
+                    data-g="12 sm:4"
+                >
+                    <p
+                        className="mt--0"
+                    >
+                        Review your comments or answers before submitting your response
+                    </p>
+                    <img
+                        alt="Indication of how to get to the review page"
+                        className="Tutorial__buttonImage"
+                        src="images/tutorial-3.png"
                     />
                 </div>
             </div>
@@ -164,7 +179,12 @@ Array [
                                         href="/1/1/introduction"
                                         onClick={[Function]}
                                     >
-                                        Introduction
+                                        <span
+                                            className="pl--0"
+                                            data-g="10"
+                                        >
+                                            Introduction
+                                        </span>
                                     </a>
                                 </li>
                                 <li
@@ -172,10 +192,16 @@ Array [
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/1/patient-centred-care"
                                         onClick={[Function]}
                                     >
-                                        Patient-centred care
+                                        <span
+                                            className="pl--0"
+                                            data-g="10"
+                                        >
+                                            Patient-centred care
+                                        </span>
                                     </a>
                                 </li>
                                 <li
@@ -183,10 +209,16 @@ Array [
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/1/key-priorities-for-implementation"
                                         onClick={[Function]}
                                     >
-                                        Key priorities for implementation
+                                        <span
+                                            className="pl--0"
+                                            data-g="10"
+                                        >
+                                            Key priorities for implementation
+                                        </span>
                                     </a>
                                 </li>
                                 <li
@@ -194,10 +226,16 @@ Array [
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/1/guidance"
                                         onClick={[Function]}
                                     >
-                                        1 Guidance
+                                        <span
+                                            className="pl--0"
+                                            data-g="10"
+                                        >
+                                            1 Guidance
+                                        </span>
                                     </a>
                                 </li>
                                 <li
@@ -205,10 +243,16 @@ Array [
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/1/notes-on-the-scope-of-the-guidance"
                                         onClick={[Function]}
                                     >
-                                        2 Notes on the scope of the guidance
+                                        <span
+                                            className="pl--0"
+                                            data-g="10"
+                                        >
+                                            2 Notes on the scope of the guidance
+                                        </span>
                                     </a>
                                 </li>
                                 <li
@@ -216,10 +260,16 @@ Array [
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/1/implementation"
                                         onClick={[Function]}
                                     >
-                                        3 Implementation
+                                        <span
+                                            className="pl--0"
+                                            data-g="10"
+                                        >
+                                            3 Implementation
+                                        </span>
                                     </a>
                                 </li>
                                 <li
@@ -227,10 +277,16 @@ Array [
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/1/research-recommendations"
                                         onClick={[Function]}
                                     >
-                                        4 Research recommendations
+                                        <span
+                                            className="pl--0"
+                                            data-g="10"
+                                        >
+                                            4 Research recommendations
+                                        </span>
                                     </a>
                                 </li>
                                 <li
@@ -238,10 +294,16 @@ Array [
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/1/other-versions-of-this-guideline"
                                         onClick={[Function]}
                                     >
-                                        5 Other versions of this guideline
+                                        <span
+                                            className="pl--0"
+                                            data-g="10"
+                                        >
+                                            5 Other versions of this guideline
+                                        </span>
                                     </a>
                                 </li>
                                 <li
@@ -249,10 +311,16 @@ Array [
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/1/related-nice-guidance"
                                         onClick={[Function]}
                                     >
-                                        6 Related NICE guidance
+                                        <span
+                                            className="pl--0"
+                                            data-g="10"
+                                        >
+                                            6 Related NICE guidance
+                                        </span>
                                     </a>
                                 </li>
                                 <li
@@ -260,10 +328,16 @@ Array [
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/1/updating-the-guideline"
                                         onClick={[Function]}
                                     >
-                                        7 Updating the guideline
+                                        <span
+                                            className="pl--0"
+                                            data-g="10"
+                                        >
+                                            7 Updating the guideline
+                                        </span>
                                     </a>
                                 </li>
                                 <li
@@ -271,10 +345,16 @@ Array [
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/1/appendix-a-the-guideline-development-group-and-nice-project-team"
                                         onClick={[Function]}
                                     >
-                                        Appendix A: The Guideline Development Group and NICE project team
+                                        <span
+                                            className="pl--0"
+                                            data-g="10"
+                                        >
+                                            Appendix A: The Guideline Development Group and NICE project team
+                                        </span>
                                     </a>
                                 </li>
                                 <li
@@ -282,10 +362,16 @@ Array [
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/1/appendix-b-the-guideline-review-panel"
                                         onClick={[Function]}
                                     >
-                                        Appendix B: The Guideline Review Panel
+                                        <span
+                                            className="pl--0"
+                                            data-g="10"
+                                        >
+                                            Appendix B: The Guideline Review Panel
+                                        </span>
                                     </a>
                                 </li>
                                 <li
@@ -293,10 +379,16 @@ Array [
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/1/appendix-c-the-algorithm"
                                         onClick={[Function]}
                                     >
-                                        Appendix C: The algorithm
+                                        <span
+                                            className="pl--0"
+                                            data-g="10"
+                                        >
+                                            Appendix C: The algorithm
+                                        </span>
                                     </a>
                                 </li>
                                 <li
@@ -304,10 +396,16 @@ Array [
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/1/changes-after-publication"
                                         onClick={[Function]}
                                     >
-                                        Changes after publication
+                                        <span
+                                            className="pl--0"
+                                            data-g="10"
+                                        >
+                                            Changes after publication
+                                        </span>
                                     </a>
                                 </li>
                                 <li
@@ -315,10 +413,16 @@ Array [
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/1/about-this-guideline"
                                         onClick={[Function]}
                                     >
-                                        About this guideline
+                                        <span
+                                            className="pl--0"
+                                            data-g="10"
+                                        >
+                                            About this guideline
+                                        </span>
                                     </a>
                                 </li>
                             </ul>
@@ -340,10 +444,16 @@ Array [
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/2/overview"
                                         onClick={[Function]}
                                     >
-                                        Sinusitis (acute): antimicrobial prescribing
+                                        <span
+                                            className="pl--0"
+                                            data-g="10"
+                                        >
+                                            Sinusitis (acute): antimicrobial prescribing
+                                        </span>
                                     </a>
                                 </li>
                                 <li
@@ -351,10 +461,16 @@ Array [
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/3/product-intros-056fc427-7484-4d78-8d55-0070aaa12061-2-2docx"
                                         onClick={[Function]}
                                     >
-                                        Download Document
+                                        <span
+                                            className="pl--0"
+                                            data-g="10"
+                                        >
+                                            Download Document
+                                        </span>
                                     </a>
                                 </li>
                                 <li
@@ -362,10 +478,16 @@ Array [
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/4/messaging-service-restartdocx"
                                         onClick={[Function]}
                                     >
-                                        Download Document
+                                        <span
+                                            className="pl--0"
+                                            data-g="10"
+                                        >
+                                            Download Document
+                                        </span>
                                     </a>
                                 </li>
                                 <li
@@ -373,10 +495,16 @@ Array [
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/5/introduction"
                                         onClick={[Function]}
                                     >
-                                        Unstable angina and NSTEMI
+                                        <span
+                                            className="pl--0"
+                                            data-g="10"
+                                        >
+                                            Unstable angina and NSTEMI
+                                        </span>
                                     </a>
                                 </li>
                                 <li
@@ -384,10 +512,16 @@ Array [
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/6/messaging-service-restartdocx"
                                         onClick={[Function]}
                                     >
-                                        Download Document
+                                        <span
+                                            className="pl--0"
+                                            data-g="10"
+                                        >
+                                            Download Document
+                                        </span>
                                     </a>
                                 </li>
                                 <li
@@ -395,10 +529,16 @@ Array [
                                     data-qa-sel="nav-list-item"
                                 >
                                     <a
+                                        aria-current={null}
                                         href="/1/7/supervisor-self-service-nice-guide-2018docx"
                                         onClick={[Function]}
                                     >
-                                        Download Document
+                                        <span
+                                            className="pl--0"
+                                            data-g="10"
+                                        >
+                                            Download Document
+                                        </span>
                                     </a>
                                 </li>
                             </ul>

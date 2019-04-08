@@ -637,7 +637,10 @@ Array [
                                                             Are you responding on behalf of an organisation?
                                                       </strong>
                                                 </p>
-                                                <div>
+                                                <div
+                                                      aria-label="Are you responding on behalf of an organisation?"
+                                                      role="radiogroup"
+                                                >
                                                       <div
                                                             className="form__group form__group--radio form__group--inline"
                                                       >
@@ -701,7 +704,10 @@ Array [
                                                             receiving funding from the tobacco industry.
                                                       </li>
                                                 </ul>
-                                                <div>
+                                                <div
+                                                      aria-label="Do you or the organisation you represent have any links with the tobacco industry?"
+                                                      role="radiogroup"
+                                                >
                                                       <div
                                                             className="form__group form__group--radio form__group--inline"
                                                       >
@@ -753,7 +759,6 @@ Array [
                                                 <button
                                                       className="btn btn--cta"
                                                       data-qa-sel="submit-comment-button"
-                                                      disabled={true}
                                                       onClick={[Function]}
                                                 >
                                                       Submit my response

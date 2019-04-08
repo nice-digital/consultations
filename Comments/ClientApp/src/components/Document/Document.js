@@ -34,7 +34,7 @@ type StateType = {
 	loading: boolean,
 	documentsData: any, // the list of other documents in this consultation
 	chapterData: any, // the current chapter's details - markup and sections,
-	consultationData: any, // the top level info - title etc
+	consultationData: ConsultationStateType, // the top level info - title etc
 	currentInPageNavItem: null | string,
 	hasInitialData: boolean,
 	onboarded: boolean,
@@ -43,10 +43,7 @@ type StateType = {
 		slug: string
 	},
 	allowComments: boolean,
-	error: {
-		hasError: boolean,
-		message: string | null,
-	}
+	error: ErrorType,
 };
 
 type DocumentsType = Array<Object>;
@@ -104,13 +101,14 @@ export class Document extends Component<PropsType, StateType> {
 			);
 
 			if (preloadedChapter && preloadedDocuments && preloadedConsultation) {
+				// Set up globals for analytics tracking of SSR props
 				if (this.props.staticContext) {
 					this.props.staticContext.analyticsGlobals.gidReference = preloadedConsultation.reference;
 					this.props.staticContext.analyticsGlobals.consultationTitle = preloadedConsultation.title;
 					this.props.staticContext.analyticsGlobals.stage = "preview";
 
 				}
-				const allowComments = preloadedConsultation.supportsComments &&
+				const allowComments = preloadedConsultation.consultationState.hasAnyDocumentsSupportingComments &&
 					preloadedConsultation.consultationState.consultationIsOpen &&
 					!preloadedConsultation.consultationState.userHasSubmitted;
 
@@ -135,7 +133,7 @@ export class Document extends Component<PropsType, StateType> {
 		}
 	}
 
-	getChapterData = (params) => {
+	getChapterData = (params: Object) => {
 		return load("chapter", undefined, [], {...params});
 	};
 
@@ -194,7 +192,7 @@ export class Document extends Component<PropsType, StateType> {
 			this.gatherData()
 				.then(data => {
 					const allowComments =
-						data.consultationData.supportsComments &&
+						data.consultationData.consultationState.hasAnyDocumentsSupportingComments &&
 						data.consultationData.consultationState.consultationIsOpen &&
 						!data.consultationData.consultationState.userHasSubmitted;
 					this.addChapterDetailsToSections(data.chapterData);
@@ -211,6 +209,7 @@ export class Document extends Component<PropsType, StateType> {
 							stage: "preview",
 						});
 					});
+					pullFocusByQuerySelector("#root");
 				})
 				.catch(err => {
 					this.setState({
@@ -248,7 +247,7 @@ export class Document extends Component<PropsType, StateType> {
 							stage: "preview",
 						});
 					});
-					pullFocusByQuerySelector(".document-comment-container");
+					pullFocusByQuerySelector(".document-comment-container", true);
 				});
 		} else {
 			this.gatherData()
@@ -267,7 +266,6 @@ export class Document extends Component<PropsType, StateType> {
 							stage: "preview",
 						});
 					});
-					pullFocusByQuerySelector(".document-comment-container");
 				})
 				.catch(err => {
 					this.setState({
@@ -379,12 +377,12 @@ export class Document extends Component<PropsType, StateType> {
 		return currentDocumentDetails.title;
 	};
 
-	getPageTitle = (isForAnalytics = false) => {
+	getPageTitle = (isForAnalytics: boolean = false) => {
 		if (isForAnalytics) return this.state.consultationData.title;
 		return `${this.state.chapterData.title} | ${this.getCurrentDocumentTitle()} | ${this.state.consultationData.title}`;
 	};
 
-	trackInPageNav = (e: SyntheticEvent, item: Object) => {
+	trackInPageNav = (e: SyntheticEvent<any>, item: Object) => {
 		tagManager({
 			event: "generic",
 			category: "Consultation comments page",
@@ -503,7 +501,7 @@ export class Document extends Component<PropsType, StateType> {
 												documentId,
 												consultationId
 											)}/>
-										{supportingDocs.links && supportingDocs.links.length !== 0 ?
+										{supportingDocs && supportingDocs.links && supportingDocs.links.length !== 0 ?
 											<StackedNav links={supportingDocs}/>
 											: null}
 									</div>

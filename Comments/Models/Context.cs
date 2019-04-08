@@ -58,18 +58,16 @@ namespace Comments.Models
 
 			    partialSourceURIToUse = $"{partialMatchExactSourceURIToUse}/";
 		    }
-
-			//Answer.Where(a => a.Status = 1 && a.Question.Location.SourceURI)
-
+			
 			var data = Location.Where(l => partialMatchSourceURI
 					? (l.SourceURI.Equals(partialMatchExactSourceURIToUse) || l.SourceURI.Contains(partialSourceURIToUse))
-					: sourceURIs.Contains(l.SourceURI))
+					: sourceURIs.Contains(l.SourceURI, StringComparer.OrdinalIgnoreCase))
 				.Include(l => l.Comment)
 					.ThenInclude(s => s.SubmissionComment)
 					.ThenInclude(s => s.Submission)
 
 				.Include(l => l.Comment)
-					.ThenInclude(s => s.Status)	
+					.ThenInclude(s => s.Status)
 
 				.Include(l => l.Question)
 					.ThenInclude(q => q.QuestionType)
@@ -87,32 +85,35 @@ namespace Comments.Models
 			return data;
 		}
 
-	    public int GetAllSubmittedResponses(string sourceURI)
-	    {
-			var submissions = Submission.Where(s => (s.SubmissionComment.Any(sc => sc.Comment.IsDeleted == false) &&
-			                                               s.SubmissionComment.Any(sc => sc.Comment.Location.SourceURI.Contains(sourceURI)) &&
-			                                               s.SubmissionComment.Any(sc => sc.Comment.StatusId == (int) StatusName.Submitted))
-													||
-			                                        (s.SubmissionAnswer.Any(sa => sa.Answer.IsDeleted == false) &&
-															s.SubmissionAnswer.Any(sa => sa.Answer.Question.Location.SourceURI.Contains(sourceURI)) &&
-															s.SubmissionAnswer.Any(sa => sa.Answer.StatusId == (int)StatusName.Submitted))
-												)
+		public IEnumerable<Location> GetQuestionsForDocument(IList<string> sourceURIs, bool partialMatchSourceURI)
+		{
+			string partialSourceURIToUse = null, partialMatchExactSourceURIToUse = null;
+			if (partialMatchSourceURI)
+			{
+				partialMatchExactSourceURIToUse = sourceURIs.SingleOrDefault();
+				if (partialMatchExactSourceURIToUse == null)
+					throw new ArgumentException("There should be one and only one source uri passed when doing a partial match.");
 
-				//these includes aren't needed when they're not used in the resultset. since we've switched it to return the count from the SQL then the joins aren't needed.
-				//.Include(sc => sc.SubmissionComment)
-				//	.ThenInclude(c => c.Comment)
-				//		.ThenInclude(l => l.Location)
+				partialSourceURIToUse = $"{partialMatchExactSourceURIToUse}/";
+			}
 
-				//.Include(sa => sa.SubmissionAnswer)
-				//.ThenInclude(a => a.Answer)
-				//	.ThenInclude(q => q.Question)
-				//		.ThenInclude(l => l.Location)
-						
-				.IgnoreQueryFilters()
-				.Select(s => s.SubmissionId).Distinct().Count();
+			var data = Location.Where(l => partialMatchSourceURI
+					? (l.SourceURI.Equals(partialMatchExactSourceURIToUse) || l.SourceURI.Contains(partialSourceURIToUse))
+					: sourceURIs.Contains(l.SourceURI, StringComparer.OrdinalIgnoreCase))
 
-		    return submissions;
-	    }
+				.Include(l => l.Question)
+					.ThenInclude(q => q.QuestionType)
+
+					.OrderBy(l => l.Order)
+
+				.ThenByDescending(l =>
+					l.Question.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault())
+
+				.ToList();
+
+			return data;
+		}
+
 
 	    public virtual IList<SubmittedCommentsAndAnswerCount> GetSubmittedCommentsAndAnswerCounts()
 	    {
@@ -122,7 +123,7 @@ namespace Comments.Models
 		public List<Comment> GetAllSubmittedCommentsForURI(string  sourceURI)
 	    {
 			var comment = Comment.Where(c =>
-					c.StatusId == (int) StatusName.Submitted && c.Location.SourceURI.Contains(sourceURI) && c.IsDeleted == false)
+					c.StatusId == (int) StatusName.Submitted && (c.Location.SourceURI.Contains($"{sourceURI}/") || c.Location.SourceURI.Equals(sourceURI)) && c.IsDeleted == false)
 				.Include(l => l.Location)
 				.Include(s => s.Status)
 				.Include(sc => sc.SubmissionComment)
@@ -135,7 +136,7 @@ namespace Comments.Models
 
 	    public List<Comment> GetUsersCommentsForURI(string sourceURI)
 	    {
-		   var comment = Comment.Where(c => c.Location.SourceURI.Contains(sourceURI))
+		   var comment = Comment.Where(c => (c.Location.SourceURI.Contains($"{sourceURI}/") || c.Location.SourceURI.Equals(sourceURI)))
 				.Include(l => l.Location)
 				.Include(s => s.Status)
 				.Include(sc => sc.SubmissionComment)
@@ -148,7 +149,7 @@ namespace Comments.Models
 		public List<Answer> GetAllSubmittedAnswersForURI(string sourceURI)
 	    {
 			var answer = Answer.Where(a =>
-					a.StatusId == (int) StatusName.Submitted && a.Question.Location.SourceURI.Contains(sourceURI) &&
+					a.StatusId == (int) StatusName.Submitted && (a.Question.Location.SourceURI.Contains($"{sourceURI}/") || a.Question.Location.SourceURI.Equals(sourceURI)) &&
 					a.IsDeleted == false)
 				.Include(q => q.Question)
 				.ThenInclude(l => l.Location)
@@ -162,7 +163,7 @@ namespace Comments.Models
 
 	    public List<Answer> GetUsersAnswersForURI(string sourceURI)
 	    {
-			var answer = Answer.Where(a => a.Question.Location.SourceURI.Contains(sourceURI))
+			var answer = Answer.Where(a => (a.Question.Location.SourceURI.Contains($"{sourceURI}/") || a.Question.Location.SourceURI.Equals(sourceURI)))
 				.Include(q => q.Question)
 				.ThenInclude(l => l.Location)
 				.Include(sc => sc.SubmissionAnswer)
@@ -171,10 +172,21 @@ namespace Comments.Models
 
 			return answer;
 	    }
+
+	    public List<Question> GetQuestionsForURI(string sourceURI)
+	    {
+		    return Question.Where(q => q.Location.SourceURI.Equals(sourceURI))
+			    .Include(q => q.Location)
+			    .Include(q => q.QuestionType)
+			    .IgnoreQueryFilters()
+			    .OrderBy(q => q.Location.Order)
+			    .ToList();
+	    }
+
 		public List<Question> GetUnansweredQuestionsForURI(string sourceURI)
 	    {
 			var question = Question.Where(q =>
-					q.Answer.Count == 0 && q.Location.SourceURI.Contains(sourceURI) && q.IsDeleted == false)
+					q.Answer.Count == 0 && (q.Location.SourceURI.Contains($"{sourceURI}/") || q.Location.SourceURI.Equals(sourceURI)) && q.IsDeleted == false)
 				.Include(l => l.Location)
 				.IgnoreQueryFilters()
 				.ToList();
@@ -184,7 +196,7 @@ namespace Comments.Models
 
 	    public List<Question> GetUsersUnansweredQuestionsForURI(string sourceURI)
 	    {
-		    var question = Question.Where(q => q.Answer.Count == 0 && q.Location.SourceURI.Contains(sourceURI))
+		    var question = Question.Where(q => q.Answer.Count == 0 && (q.Location.SourceURI.Contains($"{sourceURI}/") || q.Location.SourceURI.Equals(sourceURI)))
 				    .Include(l => l.Location)
 				    .ToList();
 
@@ -311,12 +323,12 @@ namespace Comments.Models
 
 			var submissions = Submission.Where(s => s.SubmissionByUserId.Equals(usersSubmissionsToDelete))
 			    .Include(s => s.SubmissionComment)
-					.ThenInclude(sc => sc.Comment) 
+					.ThenInclude(sc => sc.Comment)
 				.Include(s => s.SubmissionAnswer)
 					.ThenInclude(sa => sa.Answer)
 				.IgnoreQueryFilters() //without this you'd only be able to delete your own data..
 				.ToList();
-			
+
 		    var submissionCommentsToDelete = new List<SubmissionComment>();
 		    var submissionAnswersToDelete = new List<SubmissionAnswer>();
 		    foreach (var submission in submissions)
@@ -371,7 +383,7 @@ namespace Comments.Models
 				FROM QuestionType
 				WHERE [Description] = @questionTextDescription
 
-				IF @questionTypeID IS NULL 
+				IF @questionTypeID IS NULL
 				BEGIN
 					INSERT INTO QuestionType ([Description], HasBooleanAnswer, HasTextAnswer)
 					VALUES (@questionTextDescription, 0, 1)
@@ -412,8 +424,8 @@ namespace Comments.Models
 
 
 					INSERT INTO Question (LocationID, QuestionText, QuestionTypeID, CreatedByUserID, LastModifiedByUserID, LastModifiedDate)
-					VALUES (@locationID3, 'Would implementation of any of the draft recommendations have cost implications?', @questionTypeID, @userID, @userID, GETDATE())			
-		
+					VALUES (@locationID3, 'Would implementation of any of the draft recommendations have cost implications?', @questionTypeID, @userID, @userID, GETDATE())
+
 				END
 			", new SqlParameter("@consultationId", consultationId));
 	    }
@@ -449,7 +461,7 @@ namespace Comments.Models
 				FROM QuestionType
 				WHERE [Description] = @questionTextDescription
 
-				IF @questionTypeID IS NULL 
+				IF @questionTypeID IS NULL
 				BEGIN
 					INSERT INTO QuestionType ([Description], HasBooleanAnswer, HasTextAnswer)
 					VALUES (@questionTextDescription, 0, 1)
@@ -488,8 +500,8 @@ namespace Comments.Models
 					VALUES (@locationID2, 'Are the summaries of clinical and cost effectiveness reasonable interpretations of the evidence?', @questionTypeID, @userID, @userID, GETDATE())
 
 					INSERT INTO Question (LocationID, QuestionText, QuestionTypeID, CreatedByUserID, LastModifiedByUserID, LastModifiedDate)
-					VALUES (@locationID3, 'Are the recommendations sound and a suitable basis for guidance to the NHS?', @questionTypeID, @userID, @userID, GETDATE())			
-		
+					VALUES (@locationID3, 'Are the recommendations sound and a suitable basis for guidance to the NHS?', @questionTypeID, @userID, @userID, GETDATE())
+
 				END
 
 			", new SqlParameter("@consultationId", consultationId));
@@ -558,6 +570,11 @@ namespace Comments.Models
 			    totalSubmissions: Submission.IgnoreQueryFilters().Count());
 	    }
 
+	    public IEnumerable<QuestionType> GetQuestionTypes()
+	    {
+		    return QuestionType;
+	    }
+
 		/// <summary>
 		/// this question insert script is temporary, until the question administration features are built.
 		/// </summary>
@@ -589,7 +606,7 @@ namespace Comments.Models
 				FROM QuestionType
 				WHERE [Description] = @questionTextDescription
 
-				IF @questionTypeID IS NULL 
+				IF @questionTypeID IS NULL
 				BEGIN
 					INSERT INTO QuestionType ([Description], HasBooleanAnswer, HasTextAnswer)
 					VALUES (@questionTextDescription, 0, 1)
@@ -628,8 +645,8 @@ namespace Comments.Models
 					VALUES (@locationID2, 'Do you have any comments on areas excluded from the scope of the guideline?', @questionTypeID, @userID, @userID, GETDATE())
 
 					INSERT INTO Question (LocationID, QuestionText, QuestionTypeID, CreatedByUserID, LastModifiedByUserID, LastModifiedDate)
-					VALUES (@locationID3, 'Do you have any comments on equalities issues?', @questionTypeID, @userID, @userID, GETDATE())			
-		
+					VALUES (@locationID3, 'Do you have any comments on equalities issues?', @questionTypeID, @userID, @userID, GETDATE())
+
 				END
 
 			", new SqlParameter("@consultationId", consultationId));
@@ -666,7 +683,7 @@ namespace Comments.Models
 				FROM QuestionType
 				WHERE [Description] = @questionTextDescription
 
-				IF @questionTypeID IS NULL 
+				IF @questionTypeID IS NULL
 				BEGIN
 					INSERT INTO QuestionType ([Description], HasBooleanAnswer, HasTextAnswer)
 					VALUES (@questionTextDescription, 0, 1)
@@ -705,8 +722,8 @@ namespace Comments.Models
 					VALUES (@locationID2, 'Are local systems and structures in place to collect data for the proposed quality measures? If not, how feasible would it be for these to be put in place?', @questionTypeID, @userID, @userID, GETDATE())
 
 					INSERT INTO Question (LocationID, QuestionText, QuestionTypeID, CreatedByUserID, LastModifiedByUserID, LastModifiedDate)
-					VALUES (@locationID3, 'Do you think each of the statements in this draft quality standard would be achievable by local services given the net resources needed to deliver them? Please describe any resource requirements that you think would be necessary for any statement. Please describe any potential cost savings or opportunities for disinvestment', @questionTypeID, @userID, @userID, GETDATE())			
-		
+					VALUES (@locationID3, 'Do you think each of the statements in this draft quality standard would be achievable by local services given the net resources needed to deliver them? Please describe any resource requirements that you think would be necessary for any statement. Please describe any potential cost savings or opportunities for disinvestment', @questionTypeID, @userID, @userID, GETDATE())
+
 				END
 
 			", new SqlParameter("@consultationId", consultationId));

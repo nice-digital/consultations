@@ -24,10 +24,6 @@ type PropsType = {
 
 export class ConsultationItem extends Component<PropsType, StateType> {
 
-	constructor(props: PropsType) {
-		super(props);
-	}
-
 	render() {
 
 		const {
@@ -59,9 +55,9 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 				<article className="card">
 					<header className="card__header">
 						<h3 className="card__heading">
-							{ 
+							{
 								documentId != null && chapterSlug != null ?
-									<Link to={`/${consultationId}/${documentId}/${chapterSlug}`}>{title}</Link> 
+									<Link to={`/${consultationId}/${documentId}/${chapterSlug}`}>{title}</Link>
 									: title
 							}
 						</h3>
