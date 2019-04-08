@@ -112,9 +112,6 @@ class App extends React.Component<PropsType, StateType> {
 									</LiveMessenger>
 								</Route>
 
-								<Route exact path="/CommentingOnOtherThings">
-									<ExternalResourceWithRouter />
-								</Route>
 								<Route exact path="/guidance/conditions-and-diseases/cancer/breast-cancer/products">
 									<ExternalResourceWithRouter />
 								</Route>
