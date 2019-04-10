@@ -52,6 +52,7 @@ type StateType = {
 	shouldShowQuestionsTab: boolean,
 	error: string,
 	unsavedIds: Array<number>,
+	unauthenticatedAllowed: boolean, //adding for the spike week
 };
 
 export class CommentList extends Component<PropsType, StateType> {
@@ -71,6 +72,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			shouldShowCommentsTab: false,
 			shouldShowQuestionsTab: false,
 			unsavedIds: [],
+			unauthenticatedAllowed: true, //spike
 		};
 
 		let preloadedData = {};
@@ -102,6 +104,7 @@ export class CommentList extends Component<PropsType, StateType> {
 				drawerOpen: false,
 				drawerMobile: false,
 				unsavedIds: [],
+				unauthenticatedAllowed: true, //spike
 			};
 		}
 	}
@@ -357,7 +360,7 @@ export class CommentList extends Component<PropsType, StateType> {
 								return (
 									<div data-qa-sel="comment-list-wrapper">
 
-										{contextValue.isAuthorised &&
+										{(this.state.unauthenticatedAllowed || contextValue.isAuthorised) &&
 												<Link
 													to={`/${this.props.match.params.consultationId}/review`}
 													data-qa-sel="review-all-comments"
@@ -375,7 +378,7 @@ export class CommentList extends Component<PropsType, StateType> {
 											: null}
 
 										{this.state.loading ? <p>Loading...</p> :
-											contextValue.isAuthorised ?
+											(this.state.unauthenticatedAllowed || contextValue.isAuthorised) ?
 
 												<Fragment>
 

@@ -77,8 +77,9 @@ namespace Comments.Services
 
         public (ViewModels.Comment comment, Validate validate) CreateComment(ViewModels.Comment comment)
         {
-            if (!_currentUser.IsAuthorised)
-                return (comment: null, validate: new Validate(valid: false, unauthorised: true, message: "Not logged in creating comment"));
+			//spike
+            //if (!_currentUser.IsAuthorised)
+            //    return (comment: null, validate: new Validate(valid: false, unauthorised: true, message: "Not logged in creating comment"));
 
 	        var sourceURI = comment.SourceURI;
 	        if (ConsultationsUri.IsValidRelativeURL(comment.SourceURI))
@@ -96,7 +97,8 @@ namespace Comments.Services
 			_context.Location.Add(locationToSave);
 
 	        var status = _context.GetStatus(StatusName.Draft);
-			var commentToSave = new Models.Comment(comment.LocationId, _currentUser.UserId.Value, comment.CommentText, _currentUser.UserId.Value, locationToSave, status.StatusId, null);
+	        var currentUserId = _currentUser?.UserId.Value ?? Guid.Empty; //spike
+			var commentToSave = new Models.Comment(comment.LocationId, currentUserId, comment.CommentText, currentUserId, locationToSave, status.StatusId, null);
             _context.Comment.Add(commentToSave);
             _context.SaveChanges();
 
