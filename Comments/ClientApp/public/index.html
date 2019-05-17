@@ -74,37 +74,31 @@
 	<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NR4W7NR"
 			height="0" width="0" style="display:none;visibility:hidden"></iframe>
 </noscript>
-<!-- End Google Tag Manager (noscript) -->
 
-<div id="root"></div>
-
-<!-- Jump to main content (end of tophat) -->
+<!-- Global nav -->
 <script>
-	document.onTophatReady = function () {
-		document
-				.querySelector("#skip-to-content")
-				.addEventListener("click", function (e) {
-							e.preventDefault();
-							var tophatEnd = document.querySelector("#tophat-end");
-							tophatEnd.setAttribute("tabindex", "-1");
-							tophatEnd.focus();
-						}
-				);
-	};
-</script>
+        var global_nav_config = {
+            header: {
+                skipLinkId: "content-start",
+                auth: {
+                    environment: "test" //TODO: variable
+                }
+            },
+            footer: false
+        };
+    </script>
 
-<!-- Tophat -->
-<script src="//cdn.nice.org.uk/V3.1/Scripts/nice/NICE.TopHat.min.js"
-		data-environment="Live"
-		data-search="/search?q=%term"
-		data-typeaheadtype="remote"
-		data-typeaheadsource="/autocomplete?%query"
-		data-search-placeholder="Search NICE..."
-		data-cookie="true"
-		async></script>
+<!-- TODO: variables for cdn locations -->
+<!--[if lt IE 9]>
+	<script src="//alpha-cdn.nice.org.uk/global-nav/global-nav.ie8.min.js"></script>
+<![endif]-->
+<script src="//alpha-cdn.nice.org.uk/global-nav/global-nav.min.js"></script>
 
-<!--! scripts -->
-<script src="//www.nice.org.uk/Themes/NICE.Bootstrap/scripts/jquery/jquery-1.12.4.min.js" type="text/javascript"></script>
-<script src="//cdn.nice.org.uk/V3.1/Scripts/NICE.bootstrap.min.js" type="text/javascript"></script>
+<!-- End Google Tag Manager (noscript) -->
+<div id="global-nav-header"></div>
+<div id="root"></div>
+<div id="global-nav-footer"></div>
+
+
 </body>
 </html>

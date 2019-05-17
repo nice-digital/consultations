@@ -222,7 +222,14 @@ export class Document extends Component<PropsType, StateType> {
 		}
 	}
 
-	componentDidUpdate(prevProps: PropsType) {
+	componentDidUpdate(prevProps: PropsType, prevState) {
+		Object.entries(this.props).forEach(([key, val]) =>
+			prevProps[key] !== val && console.log(`Prop '${key}' changed`)
+		);
+		Object.entries(this.state).forEach(([key, val]) =>
+			prevState[key] !== val && console.log(`State '${key}' changed`)
+		);
+
 		const oldRoute = prevProps.location.pathname;
 		const newRoute = this.props.location.pathname;
 		if (oldRoute === newRoute) return;
@@ -475,6 +482,7 @@ export class Document extends Component<PropsType, StateType> {
 
 								<button
 									className="screenreader-button"
+									id=""
 									onClick={() => {
 										pullFocusByQuerySelector(".document-comment-container");
 									}}>
@@ -542,7 +550,7 @@ export class Document extends Component<PropsType, StateType> {
 
 									{/* document column */}
 									<div data-g="12 md:6 md:pull:3" className="documentColumn">
-										<div
+										<div id="content-start"
 											className={`document-comment-container ${
 												this.state.loading ? "loading" : ""}`}>
 											<Selection newCommentFunc={this.props.onNewCommentClick}

@@ -147,6 +147,7 @@ Array [
                 </div>
                 <button
                     className="screenreader-button"
+                    id=""
                     onClick={[Function]}
                 >
                     Skip navigation
@@ -655,6 +656,7 @@ Array [
                     >
                         <div
                             className="document-comment-container "
+                            id="content-start"
                         >
                             <div
                                 onMouseUp={[Function]}
