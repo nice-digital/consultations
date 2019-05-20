@@ -76,12 +76,13 @@
 </noscript>
 
 <!-- Global nav -->
-<script>
+<script data-accounts-env="%REACT_APP_ACCOUNTS_ENVIRONMENT%" id="globalnavScript">
+	
 	var global_nav_config = {
 		header: {
 			skipLinkId: "content-start",
 			auth: {
-				environment: "test" //TODO: variable
+				environment: document.getElementById("globalnavScript").getAttribute("data-accounts-env")
 			}
 		},
 		footer: false
