@@ -222,14 +222,7 @@ export class Document extends Component<PropsType, StateType> {
 		}
 	}
 
-	componentDidUpdate(prevProps: PropsType, prevState) {
-		Object.entries(this.props).forEach(([key, val]) =>
-			prevProps[key] !== val && console.log(`Prop '${key}' changed`)
-		);
-		Object.entries(this.state).forEach(([key, val]) =>
-			prevState[key] !== val && console.log(`State '${key}' changed`)
-		);
-
+	componentDidUpdate(prevProps: PropsType) {
 		const oldRoute = prevProps.location.pathname;
 		const newRoute = this.props.location.pathname;
 		if (oldRoute === newRoute) return;
@@ -448,7 +441,7 @@ export class Document extends Component<PropsType, StateType> {
 						<div data-g="12">
 							<BreadCrumbsWithRouter links={this.state.consultationData.breadcrumbs}/>
 							<main role="main">
-								<div className="page-header" data-andy="here">
+								<div className="page-header">
 									<Header
 										title={currentDocumentTitle}
 										reference={reference}
