@@ -28,7 +28,7 @@ export class PhaseBanner extends PureComponent<PropsType> {
 	render() {
 		const {phase, name} = this.props;
 		return (
-			<div className="container">
+			<div className="container phase-banner-container">
 				<div className="grid">
 					<div data-g="12">
 						<aside className="phase-banner mt--b">
