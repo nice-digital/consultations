@@ -147,7 +147,6 @@ Array [
                 </div>
                 <button
                     className="screenreader-button"
-                    id=""
                     onClick={[Function]}
                 >
                     Skip navigation

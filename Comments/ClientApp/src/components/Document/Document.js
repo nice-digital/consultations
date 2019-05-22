@@ -475,7 +475,6 @@ export class Document extends Component<PropsType, StateType> {
 
 								<button
 									className="screenreader-button"
-									id=""
 									onClick={() => {
 										pullFocusByQuerySelector(".document-comment-container");
 									}}>
