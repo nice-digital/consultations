@@ -1,3 +1,4 @@
+<!-- NOTE: Do not remove the "loud comments" in this page (comments starting with an exclamation mark).  They are used by server side rendering. -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -96,11 +97,20 @@
 <div id="root"></div>
 <div id="global-nav-footer"></div>
 
+<!-- Content of src in script tags below are replaced by parameters in the .env file for local development only.
+	
+	On all other servers, the .env.production file is used. During the build, the src attributes will get the substitution variable strings
+	in the .env.production file i.e. "#{GlobalNavScript}". Then when the release is deployed to the servers, this substitution string is 
+	replaced by the variable from Octopus Deploy, which is the actual URL to use.
+
+	note: custom environment variables in .env files must have have the prefix of "REACT_APP_".
+	-->
 <!--[if lt IE 9]>
 	<script src="%REACT_APP_GLOBAL_NAV_SCRIPT_IE8%"></script>
 <![endif]-->
 <script src="%REACT_APP_GLOBAL_NAV_SCRIPT%"></script>
 
+<!-- NOTE: Do not remove the "loud comments" in this page. eg. the scripts tag below. They are used by server side rendering. -->
 <!--! scripts -->
 
 </body>
