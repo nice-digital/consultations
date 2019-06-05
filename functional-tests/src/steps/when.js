@@ -7,7 +7,7 @@ import enterQuestionAnswer, { enterQuestionAnswerAndSubmit, enterQuestionAnswerT
 import navigateToReviewPage, { clickReviewPageLink } from "../support/action/navigateToReviewPage";
 import submitResponse, { completeResponseMandatoryQuestions, clickSubmitResponseButton } from "../support/action/submitResponse";
 import { reviewResponse } from "../support/action/reviewResponse";
-import { Login } from "../support/action/tophatLogin";
+import { Login } from "../support/action/globalNavLogin";
 import { openQuestionPanel } from "../support/action/openQuestionPanel";
 
 // E.g. When I click on text "Title here" in ".ancestor"
