@@ -33,8 +33,10 @@ Loosley based on the [WebdriverIO Cucumber Boilerplate](https://github.com/webdr
 ## Required software
 
 - Node >= 8.11.1 (latest LTS as of May 2018) and npm >= 5.6.0
+- Java Development Kit (JDK) version 8 (selenium standalone is not compatible with later versions)
 - Chrome, any version
-- Firefox, optional, any versoin
+- Firefox, optional, any version
+
 
 ## Running locally
 
