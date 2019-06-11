@@ -655,6 +655,7 @@ Array [
                     >
                         <div
                             className="document-comment-container "
+                            id="content-start"
                         >
                             <div
                                 onMouseUp={[Function]}

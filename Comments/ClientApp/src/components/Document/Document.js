@@ -542,7 +542,7 @@ export class Document extends Component<PropsType, StateType> {
 
 									{/* document column */}
 									<div data-g="12 md:6 md:pull:3" className="documentColumn">
-										<div
+										<div id="content-start"
 											className={`document-comment-container ${
 												this.state.loading ? "loading" : ""}`}>
 											<Selection newCommentFunc={this.props.onNewCommentClick}
