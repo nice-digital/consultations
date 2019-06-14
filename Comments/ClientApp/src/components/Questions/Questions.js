@@ -173,7 +173,7 @@ export class Questions extends Component<PropsType, StateType> {
 	};
 
 	newQuestion = (e: SyntheticEvent<HTMLElement>, consultationId: string, documentId: number | null, questionTypeId: number) => {
-		console.log("creating a question of type " + questionTypeId);
+		alert(documentId);
 		const newQuestion = {
 			questionId: -1,
 			questionTypeId,
@@ -356,7 +356,7 @@ export default withRouter(Questions);
 const AddQuestionButton = (props) => {
 	const {hasBooleanAnswer, questionTypeId, loading, currentDocumentId, currentConsultationId, newQuestion} = props;
 	const buttonText = hasBooleanAnswer ? "Add Yes/No Question" : "Add text response question";
-	const documentId = currentDocumentId === "consultation" ? null : currentDocumentId;
+	const documentId = currentDocumentId === "consultation" ? null : parseInt(currentDocumentId, 10);
 	return (
 		<button
 			className="btn btn--cta"
