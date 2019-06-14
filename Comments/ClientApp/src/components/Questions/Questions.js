@@ -9,6 +9,7 @@ import { UserContext } from "../../context/UserContext";
 import preload from "../../data/pre-loader";
 import { load } from "../../data/loader";
 import { TextQuestion } from "../QuestionTypes/TextQuestion/TextQuestion";
+import { YNQuestion } from "../QuestionTypes/YNQuestion/YNQuestion";
 import { saveQuestionHandler, deleteQuestionHandler, moveQuestionHandler } from "../../helpers/editing-and-deleting";
 import { updateUnsavedIds } from "../../helpers/unsaved-comments";
 
@@ -54,7 +55,11 @@ export class Questions extends Component<PropsType, StateType> {
 				this.props.staticContext,
 				"questions",
 				[],
-				{consultationId: this.props.match.params.consultationId, draft: this.props.draftProject, reference: this.props.match.params.reference},
+				{
+					consultationId: this.props.match.params.consultationId,
+					draft: this.props.draftProject,
+					reference: this.props.match.params.reference
+				},
 				preloadedData,
 			);
 			if (preloadedQuestionsData) {
@@ -78,7 +83,11 @@ export class Questions extends Component<PropsType, StateType> {
 			"questions",
 			undefined,
 			[],
-			{consultationId: this.props.match.params.consultationId, draft: this.props.draftProject, reference: this.props.match.params.reference}
+			{
+				consultationId: this.props.match.params.consultationId,
+				draft: this.props.draftProject,
+				reference: this.props.match.params.reference
+			}
 		)
 			.then(response => response.data)
 			.catch(err => {
@@ -164,17 +173,19 @@ export class Questions extends Component<PropsType, StateType> {
 	};
 
 	newQuestion = (e: SyntheticEvent<HTMLElement>, consultationId: string, documentId: number | null, questionTypeId: number) => {
+		console.log("creating a question of type " + questionTypeId);
 		const newQuestion = {
 			questionId: -1,
 			questionTypeId,
 			documentId,
 			questionText: "",
 			sourceURI: "",
+			questionYnAllowComments: false,
+			questionBoolean: null,
 		};
 
 		const questionsData = this.state.questionsData;
 		let currentQuestions;
-
 		if (documentId === null) {
 			//	this is a consultation level question
 			currentQuestions = questionsData.consultationQuestions;
@@ -188,7 +199,6 @@ export class Questions extends Component<PropsType, StateType> {
 		this.saveQuestion(e, newQuestion);
 		currentQuestions.push(newQuestion);
 		this.setState({questionsData});
-
 	};
 
 	createConsultationNavigation = (questionsData: Object, currentConsultationId: string, currentDocumentId: string | null) => {
@@ -222,7 +232,7 @@ export class Questions extends Component<PropsType, StateType> {
 				.map(consultationDocument => {
 					return {
 						label: consultationDocument.title,
-						 //`/admin/questions/${currentConsultationId}/${consultationDocument.documentId}`,
+						//`/admin/questions/${currentConsultationId}/${consultationDocument.documentId}`,
 						url: this.getUrlForNavigation(this.props.draftProject, currentConsultationId, consultationDocument.documentId, this.props.match.params.reference),
 						isReactRoute: true,
 						marker: consultationDocument.documentQuestions.length || null,
@@ -233,14 +243,10 @@ export class Questions extends Component<PropsType, StateType> {
 	};
 
 	getUrlForNavigation = (isDraft, currentConsultationId, documentId, reference) => {
-
-		if (isDraft){
-			return `/admin/questions/preview/${reference}/${currentConsultationId}/${documentId}`;
-		}
-		else{
-			return `/admin/questions/${currentConsultationId}/${documentId}`;
-		}		
-	}
+		return isDraft ?
+			`/admin/questions/preview/${reference}/${currentConsultationId}/${documentId}`
+			: `/admin/questions/${currentConsultationId}/${documentId}`;
+	};
 
 	render() {
 		if (!this.state.hasInitialData && this.state.loading) return <h1>Loading...</h1>;
@@ -249,6 +255,7 @@ export class Questions extends Component<PropsType, StateType> {
 		const currentDocumentId =
 			this.props.match.params.documentId === undefined ? null : this.props.match.params.documentId;
 		const currentConsultationId = this.props.match.params.consultationId;
+
 		let questionsToDisplay, textQuestionTypeId;
 		if (questionsData.consultationQuestions) {
 			questionsToDisplay = this.getQuestionsToDisplay(currentDocumentId, questionsData);
@@ -303,7 +310,7 @@ export class Questions extends Component<PropsType, StateType> {
 														{questionsToDisplay && questionsToDisplay.length ?
 															<ul className="list--unstyled mt--0">
 																{questionsToDisplay.map(question => (
-																	<TextQuestion
+																	<YNQuestion
 																		readOnly={!this.state.editingAllowed}
 																		updateUnsavedIds={this.updateUnsavedIds}
 																		key={question.questionId}
@@ -316,19 +323,16 @@ export class Questions extends Component<PropsType, StateType> {
 																))}
 															</ul> : <p>Click button to add a question.</p>
 														}
-														{this.state.editingAllowed &&
-														<button
-															className="btn btn--cta"
-															disabled={this.state.loading}
-															onClick={(e) => {
-																if (currentDocumentId === "consultation") {
-																	this.newQuestion(e, currentConsultationId, null, textQuestionTypeId);
-																} else {
-																	this.newQuestion(e, currentConsultationId, parseInt(currentDocumentId, 10), textQuestionTypeId);
-																}
-															}}
-														>Add text response question
-														</button>
+														{this.state.editingAllowed &&	questionsData.questionTypes.map(item => (
+															<AddQuestionButton
+																newQuestion={this.newQuestion}
+																key={`key-${item.questionTypeId}`}
+																{...item}
+																loading={this.state.loading}
+																currentDocumentId={currentDocumentId}
+																currentConsultationId={currentConsultationId}
+															/>
+														))
 														}
 													</Fragment>
 													:
@@ -348,3 +352,23 @@ export class Questions extends Component<PropsType, StateType> {
 }
 
 export default withRouter(Questions);
+
+const AddQuestionButton = (props) => {
+	const {hasBooleanAnswer, questionTypeId, loading, currentDocumentId, currentConsultationId, newQuestion} = props;
+	const buttonText = hasBooleanAnswer ? "Add Yes/No Question" : "Add text response question";
+	const documentId = currentDocumentId === "consultation" ? null : currentDocumentId;
+	return (
+		<button
+			className="btn btn--cta"
+			disabled={loading}
+			onClick={e => {
+				newQuestion(
+					e,
+					currentConsultationId,
+					documentId,
+					questionTypeId);
+			}
+			}
+		>{buttonText}</button>
+	);
+};
