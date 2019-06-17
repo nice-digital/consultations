@@ -51,6 +51,9 @@ jq \
     appsettings.json > _appsettings.json \
     && mv _appsettings.json appsettings.json
 
+replace "#{GlobalNavScript}" "$GlobalNavScript" ClientApp/build/index.html
+replace "#{GlobalNavScriptIE8}" "$GlobalNavScriptIE8" ClientApp/build/index.html
+
 dotnet Comments.dll
 
 # See https://stackoverflow.com/questions/39082768/what-does-set-e-and-exec-do-for-docker-entrypoint-scripts
