@@ -51,8 +51,8 @@ jq \
     appsettings.json > _appsettings.json \
     && mv _appsettings.json appsettings.json
 
-replace "#{GlobalNavScript}" "$GlobalNavScript" ClientApp/build/index.html
-replace "#{GlobalNavScriptIE8}" "$GlobalNavScriptIE8" ClientApp/build/index.html
+replace "#{GlobalNavScript}" "$GLOBALNAVSCRIPT" ClientApp/build/index.html
+replace "#{GlobalNavScriptIE8}" "$GLOBALNAVSCRIPTIE8" ClientApp/build/index.html
 
 dotnet Comments.dll
 
