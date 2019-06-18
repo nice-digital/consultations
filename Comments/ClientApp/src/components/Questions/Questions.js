@@ -12,6 +12,7 @@ import { TextQuestion } from "../QuestionTypes/TextQuestion/TextQuestion";
 import { YNQuestion } from "../QuestionTypes/YNQuestion/YNQuestion";
 import { saveQuestionHandler, deleteQuestionHandler, moveQuestionHandler } from "../../helpers/editing-and-deleting";
 import { updateUnsavedIds } from "../../helpers/unsaved-comments";
+import { canUseDOM } from "../../helpers/utils";
 
 type PropsType = {
 	staticContext: ContextType;
@@ -173,15 +174,12 @@ export class Questions extends Component<PropsType, StateType> {
 	};
 
 	newQuestion = (e: SyntheticEvent<HTMLElement>, consultationId: string, documentId: number | null, questionTypeId: number) => {
-		alert(documentId);
 		const newQuestion = {
 			questionId: -1,
 			questionTypeId,
 			documentId,
 			questionText: "",
 			sourceURI: "",
-			questionYnAllowComments: false,
-			questionBoolean: null,
 		};
 
 		const questionsData = this.state.questionsData;
@@ -195,7 +193,6 @@ export class Questions extends Component<PropsType, StateType> {
 			currentQuestions = questionsData.documents.filter(item => item.documentId === documentId)[0].documentQuestions;
 			newQuestion.sourceURI = `consultations://./consultation/${consultationId}/document/${documentId}`;
 		}
-
 		this.saveQuestion(e, newQuestion);
 		currentQuestions.push(newQuestion);
 		this.setState({questionsData});
@@ -249,20 +246,14 @@ export class Questions extends Component<PropsType, StateType> {
 	};
 
 	render() {
-		if (!this.state.hasInitialData && this.state.loading) return <h1>Loading...</h1>;
 		const {questionsData, unsavedIds} = this.state;
 		// If there's no documentId, set currentDocumentId to null
 		const currentDocumentId =
 			this.props.match.params.documentId === undefined ? null : this.props.match.params.documentId;
 		const currentConsultationId = this.props.match.params.consultationId;
-
-		let questionsToDisplay, textQuestionTypeId;
+		let questionsToDisplay;
 		if (questionsData.consultationQuestions) {
 			questionsToDisplay = this.getQuestionsToDisplay(currentDocumentId, questionsData);
-		}
-		if (questionsData.questionTypes) {
-			// only one question type for the time being
-			textQuestionTypeId = questionsData.questionTypes[0].questionTypeId;
 		}
 
 		return (
@@ -309,21 +300,37 @@ export class Questions extends Component<PropsType, StateType> {
 													<Fragment>
 														{questionsToDisplay && questionsToDisplay.length ?
 															<ul className="list--unstyled mt--0">
-																{questionsToDisplay.map(question => (
-																	<YNQuestion
-																		readOnly={!this.state.editingAllowed}
-																		updateUnsavedIds={this.updateUnsavedIds}
-																		key={question.questionId}
-																		question={question}
-																		saveQuestion={this.saveQuestion}
-																		deleteQuestion={this.deleteQuestion}
-																		moveQuestion={this.moveQuestion}
-																		totalQuestionQty={questionsToDisplay.length}
-																	/>
-																))}
+																{questionsToDisplay.map(question => {
+																	if (question.questionId <= 0) return null;
+																	const questionProps = {
+																		readOnly: !this.state.editingAllowed,
+																		updateUnsavedIds: this.updateUnsavedIds,
+																		key: question.questionId,
+																		question: question,
+																		saveQuestion: this.saveQuestion,
+																		deleteQuestion: this.deleteQuestion,
+																		moveQuestion: this.moveQuestion,
+																		totalQuestionQty: questionsToDisplay.length,
+																	};
+
+																	// Question types ------------
+																	// if the question type has a text answer and a bool answer then it's a Y/N question
+																	if (question.questionType.hasTextAnswer && question.questionType.hasBooleanAnswer) {
+																		return (
+																			<YNQuestion {...questionProps}/>
+																		);
+																	}
+																	// if the question type has a text answer and no boolean answer then it's a text question
+																	if (question.questionType.hasTextAnswer && !question.questionType.hasBooleanAnswer) {
+																		return (
+																			<TextQuestion {...questionProps}/>
+																		);
+																	}
+
+																})}
 															</ul> : <p>Click button to add a question.</p>
 														}
-														{this.state.editingAllowed &&	questionsData.questionTypes.map(item => (
+														{this.state.editingAllowed && questionsData.questionTypes.map(item => (
 															<AddQuestionButton
 																newQuestion={this.newQuestion}
 																key={`key-${item.questionTypeId}`}
