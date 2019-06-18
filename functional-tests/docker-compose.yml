@@ -81,6 +81,8 @@ services:
       - ENCRYPTION_KEY
       - ENCRYPTION_IV
       - ACCOUNTS_ENVIRONMENT
+      - GLOBALNAVSCRIPT
+      - GLOBALNAVSCRIPTIE8
 
 
   # MS SQL Server database
