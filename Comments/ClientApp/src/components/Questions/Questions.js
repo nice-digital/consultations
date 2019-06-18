@@ -246,6 +246,7 @@ export class Questions extends Component<PropsType, StateType> {
 	};
 
 	render() {
+		if (!this.state.hasInitialData && this.state.loading) return <h1>Loading...</h1>;
 		const {questionsData, unsavedIds} = this.state;
 		// If there's no documentId, set currentDocumentId to null
 		const currentDocumentId =
