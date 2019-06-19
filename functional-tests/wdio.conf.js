@@ -11,14 +11,15 @@ exports.config = {
         "./src/features/**/*.feature"
     ],
 	exclude: [
+		// "./src/features/**/commentOnDocument.feature",
 		// "./src/features/**/unsavedCommentReviewPage.feature",
 		// "./src/features/**/answerQuestion.feature",
 		// "./src/features/**/unsavedCommentDocPage.feature",
 		// "./src/features/**/submitComments.feature",
 		// "./src/features/**/orderingOnReviewPage.feature",
 		// "./src/features/**/commentOnSubSection.feature",
-		// "./src/features/**/commentOnDocument.feature",
 		// "./src/features/**/commentOnChapter.feature",
+		// "./src/features/**/submitResponseNoManQuestions.feature",
 		// "./src/features/**/commentOnSection.feature"
 	],
 
@@ -36,7 +37,7 @@ exports.config = {
 	// Change this to verbose if you want more detailed logging in the terminal
     coloredLogs: true,
     screenshotPath: "./errorShots/",
-    baseUrl: "https://test.nice.org.uk/consultations/",
+	baseUrl: "https://niceorg/consultations/",
     reporters: ["spec"],
 
     // Use BDD with Cucumber
