@@ -5,6 +5,7 @@ export default {
 	documentPage: {
 		pageHeader: ".page-header",
 		globalNavSigin: "body #header-menu-button+* a[href*='accounts.nice.org.uk/signin']",
+		globalNavSiginMenuSignInButton: "#header-menu a[href*='accounts.nice.org.uk/signin']",
 		openQuestionPanel: toDataQASelAttr("open-questions-panel"),
 		commentPanel: toDataQASelAttr("comment-panel"),
 		commentBoxTitle: toDataQASelAttr("comment-box-title"),
