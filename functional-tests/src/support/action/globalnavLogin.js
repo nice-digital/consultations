@@ -1,4 +1,4 @@
-import globalnavLogin from "@nice-digital/wdio-cucumber-steps/lib/support/action/globalnavLogin";
+import globalnavLogin from "./globalnavLogin_Local";
 import waitForVisible from "@nice-digital/wdio-cucumber-steps/lib/support/action/waitForVisible";
 import scroll from "@nice-digital/wdio-cucumber-steps/lib/support/action/scroll";
 import waitFor from "@nice-digital/wdio-cucumber-steps/lib/support/action/waitFor";
