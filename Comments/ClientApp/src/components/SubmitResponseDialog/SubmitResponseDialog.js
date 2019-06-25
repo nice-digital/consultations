@@ -153,6 +153,10 @@ export class SubmitResponseDialog extends PureComponent {
 					</div>
 				</div>
 
+				{this.props.showExpressionOfInterestSubmissionQuestion && 
+					<h1>question goes here</h1>
+				}
+				
 				{hasTobaccoLinks === "yes" &&
 				<div className="form__group form__group--textarea">
 					<label htmlFor="tobaccoDisclosure" className="form__label">

@@ -564,6 +564,7 @@ export class Review extends Component<PropsType, StateType> {
 																organisationName={this.state.organisationName}
 																hasTobaccoLinks={this.state.hasTobaccoLinks}
 																tobaccoDisclosure={this.state.tobaccoDisclosure}
+																showExpressionOfInterestSubmissionQuestion={this.state.consultationData.showExpressionOfInterestSubmissionQuestion}
 															/>
 														</div>
 													</div>
