@@ -10,15 +10,22 @@ export class SubmitResponseDialog extends PureComponent {
 
 	mandatoryQuestionsAreValid = () => {
 		let organisationIsValid = false;
-		let tobaccoIsValid = false;
-		if (
-			(this.props.respondingAsOrganisation === "yes" && this.props.organisationName.length > 0) || this.props.respondingAsOrganisation === "no") {
+		if ((this.props.respondingAsOrganisation === "yes" && this.props.organisationName.length > 0) || this.props.respondingAsOrganisation === "no") {
 			organisationIsValid = true;
 		}
+
+		let tobaccoIsValid = false;
 		if ((this.props.hasTobaccoLinks === "yes" && this.props.tobaccoDisclosure.length > 0) || this.props.hasTobaccoLinks === "no") {
 			tobaccoIsValid = true;
 		}
-		return organisationIsValid && tobaccoIsValid;
+
+		let organisationExpressionOfInterestIsValid = false;
+		if (this.props.respondingAsOrganisation === "no" || !this.props.showExpressionOfInterestSubmissionQuestion || 
+			this.props.organisationExpressionOfInterest === "yes"  || this.props.organisationExpressionOfInterest === "no"){
+			organisationExpressionOfInterestIsValid = true;
+		}
+		
+		return organisationIsValid && tobaccoIsValid && organisationExpressionOfInterestIsValid;
 	};
 
 
@@ -108,7 +115,10 @@ export class SubmitResponseDialog extends PureComponent {
 
 					{showExpressionOfInterestSubmissionQuestion && 
 						<Fragment>
-							<p><strong>Would your organisation like to express an interest in formally supporting this quality standard?</strong></p>
+							<p>
+								<strong>Would your organisation like to express an interest in formally supporting this quality standard?</strong><br/>
+								<a href="/standards-and-indicators/timeline-developing-quality-standards" target="_new">More information</a>
+							</p>							
 							<div role="radiogroup" aria-label="Would your organisation like to express an interest in formally supporting this quality standard?">
 								<div className="form__group form__group--radio form__group--inline">
 									<input
