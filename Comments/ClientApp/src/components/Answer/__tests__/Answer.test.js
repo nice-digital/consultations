@@ -1,13 +1,13 @@
 /* global jest */
 import React from "react";
 import { shallow, mount } from "enzyme";
-import { AnswerBox } from "../AnswerBox";
+import { Answer } from "../Answer";
 import answerWithAnswer from "./answerWithAnswer.json";
 import answerWithoutAnswer from "./answerWithoutAnswer.json";
 import toJson from "enzyme-to-json";
 
 describe("[ClientApp] ", () => {
-	describe("AnswerBox Component", () => {
+	describe("Answer Component", () => {
 
 		const answerPropsWithAnswer = {
 			isVisible: true,
@@ -30,13 +30,13 @@ describe("[ClientApp] ", () => {
 		};
 
 		it("sets text area with comment text correctly", () => {
-			const wrapper = shallow(<AnswerBox {...answerPropsWithAnswer} />);
+			const wrapper = shallow(<Answer {...answerPropsWithAnswer} />);
 			expect(wrapper.find("textarea").length).toEqual(1);
 			expect(wrapper.find("textarea").props().defaultValue).toEqual("some answer text");
 		});
 
 		it("unsavedChanges function is fired correctly on text area change", () => {
-			const wrapper = mount(<AnswerBox {...answerPropsWithAnswer} />);
+			const wrapper = mount(<Answer {...answerPropsWithAnswer} />);
 			expect(wrapper.state().unsavedChanges).toEqual(false);
 			const textArea = wrapper.find("textarea");
 			textArea.simulate("input", {
@@ -49,7 +49,7 @@ describe("[ClientApp] ", () => {
 		});
 
 		it("should update UnsavedChanges if lastupdateddate has changed", () => {
-			const wrapper = mount(<AnswerBox {...answerPropsWithAnswer} />);
+			const wrapper = mount(<Answer {...answerPropsWithAnswer} />);
 			wrapper.setState({unsavedChanges: true});
 			const updatedProps = {
 				answer: {
@@ -63,14 +63,14 @@ describe("[ClientApp] ", () => {
 		});
 
 		it("should not update UnsavedChanges if lastupdateddate has not changed", () => {
-			const wrapper = mount(<AnswerBox {...answerPropsWithAnswer} />);
+			const wrapper = mount(<Answer {...answerPropsWithAnswer} />);
 			wrapper.setState({unsavedChanges: true});
 			wrapper.setProps(answerPropsWithAnswer);
 			expect(wrapper.state().unsavedChanges).toEqual(true);
 		});
 
 		it("updated comment text in state after new props received", () => {
-			const wrapper = mount(<AnswerBox {...answerPropsWithAnswer} />);
+			const wrapper = mount(<Answer {...answerPropsWithAnswer} />);
 			const updatedProps = {
 				answer: {
 					answerId: answerWithoutAnswer.answerId,
@@ -83,22 +83,22 @@ describe("[ClientApp] ", () => {
 
 		it("should match snapshot with answer", () => {
 			const wrapper = mount(
-				<AnswerBox {...answerPropsWithAnswer} />
+				<Answer {...answerPropsWithAnswer} />
 			);
 			expect(toJson(wrapper, {
 				noKey: true,
 				mode: "deep",
-			})).toMatchSnapshot();			
+			})).toMatchSnapshot();
 		});
 
 		it("should match snapshot without answer", () => {
 			const wrapper = mount(
-				<AnswerBox {...answerPropsWithoutAnswer} />
+				<Answer {...answerPropsWithoutAnswer} />
 			);
 			expect(toJson(wrapper, {
 				noKey: true,
 				mode: "deep",
-			})).toMatchSnapshot();			
+			})).toMatchSnapshot();
 		});
 	});
 });
