@@ -59,6 +59,7 @@ type StateType = {
 	organisationName: string,
 	hasTobaccoLinks: boolean,
 	tobaccoDisclosure: string,
+	organisationExpressionOfInterest: boolean | null,
 	unsavedIds: Array<number>,
 	documentTitles: "undefined" | Array<any>,
 	justSubmitted: boolean,
@@ -85,6 +86,7 @@ export class Review extends Component<PropsType, StateType> {
 			organisationName: "",
 			hasTobaccoLinks: false,
 			tobaccoDisclosure: "",
+			organisationExpressionOfInterest: null,
 			unsavedIds: [],
 			documentTitles: [],
 			justSubmitted: false,
@@ -117,7 +119,7 @@ export class Review extends Component<PropsType, StateType> {
 			if (this.props.staticContext) {
 				this.props.staticContext.analyticsGlobals.gidReference = preloadedConsultationData.reference;
 				this.props.staticContext.analyticsGlobals.consultationId = preloadedConsultationData.consultationId;
-				this.props.staticContext.analyticsGlobals.consultationTitle = preloadedConsultationData.title
+				this.props.staticContext.analyticsGlobals.consultationTitle = preloadedConsultationData.title;
 				this.props.staticContext.analyticsGlobals.stage = preloadedConsultationData.consultationState.userHasSubmitted ? "postsubmission" : "presubmission";
 			}
 			this.state = {
@@ -137,6 +139,7 @@ export class Review extends Component<PropsType, StateType> {
 				respondingAsOrganisation: false,
 				hasTobaccoLinks: false,
 				tobaccoDisclosure: "",
+				organisationExpressionOfInterest: null,
 				unsavedIds: [],
 				documentTitles: this.getListOfDocuments(preloadedCommentsData.filters),
 				justSubmitted: false,
@@ -285,6 +288,7 @@ export class Review extends Component<PropsType, StateType> {
 		const tobaccoDisclosure = this.state.tobaccoDisclosure;
 		const respondingAsOrganisation = this.state.respondingAsOrganisation === "yes";
 		const hasTobaccoLinks = this.state.hasTobaccoLinks === "yes";
+		const organisationExpressionOfInterest = (this.state.consultationData.showExpressionOfInterestSubmissionQuestion ? (this.state.organisationExpressionOfInterest === "yes") : null);
 
 		let answersToSubmit = [];
 		questions.forEach(function (question) {
@@ -299,6 +303,7 @@ export class Review extends Component<PropsType, StateType> {
 			tobaccoDisclosure: hasTobaccoLinks ? tobaccoDisclosure : null,
 			respondingAsOrganisation,
 			hasTobaccoLinks,
+			organisationExpressionOfInterest,
 		};
 		load("submit", undefined, [], {}, "POST", submission, true)
 			.then(response => {
@@ -565,6 +570,7 @@ export class Review extends Component<PropsType, StateType> {
 																hasTobaccoLinks={this.state.hasTobaccoLinks}
 																tobaccoDisclosure={this.state.tobaccoDisclosure}
 																showExpressionOfInterestSubmissionQuestion={this.state.consultationData.showExpressionOfInterestSubmissionQuestion}
+																organisationExpressionOfInterest={this.state.organisationExpressionOfInterest}
 															/>
 														</div>
 													</div>

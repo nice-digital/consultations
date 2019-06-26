@@ -43,6 +43,8 @@ export class SubmitResponseDialog extends PureComponent {
 			tobaccoDisclosure,
 			respondingAsOrganisation,
 			hasTobaccoLinks,
+			showExpressionOfInterestSubmissionQuestion,
+			organisationExpressionOfInterest,
 		} = this.props;
 
 
@@ -95,13 +97,57 @@ export class SubmitResponseDialog extends PureComponent {
 				</div>
 
 				{respondingAsOrganisation === "yes" &&
-				<div className="form__group form__group--text">
-					<label htmlFor="organisationName" className="form__label">
-						<strong>Enter the name of your organisation</strong>
-					</label>
-					<input data-hj-whitelist id="organisationName" name="organisationName" value={organisationName}
-								 className="form__input" type="text" onChange={fieldsChangeHandler}/>
-				</div>
+				<Fragment>
+					<div className="form__group form__group--text">
+						<label htmlFor="organisationName" className="form__label">
+							<strong>Enter the name of your organisation</strong>
+						</label>
+						<input data-hj-whitelist id="organisationName" name="organisationName" value={organisationName}
+							className="form__input" type="text" onChange={fieldsChangeHandler}/>
+					</div>
+
+					{showExpressionOfInterestSubmissionQuestion && 
+						<Fragment>
+							<p><strong>Would your organisation like to express an interest in formally supporting this quality standard?</strong></p>
+							<div role="radiogroup" aria-label="Would your organisation like to express an interest in formally supporting this quality standard?">
+								<div className="form__group form__group--radio form__group--inline">
+									<input
+										className="form__radio"
+										id="organisationExpressionOfInterest--true"
+										type="radio"
+										name="organisationExpressionOfInterest"
+										checked={organisationExpressionOfInterest === "yes"}
+										onChange={fieldsChangeHandler}
+										value={"yes"}
+									/>
+									<label
+										className="form__label form__label--radio"
+										htmlFor="organisationExpressionOfInterest--true">
+										Yes
+									</label>
+								</div>
+			
+								<div className="form__group form__group--radio form__group--inline">
+									<input
+										className="form__radio"
+										id="organisationExpressionOfInterest--false"
+										type="radio"
+										name="organisationExpressionOfInterest"
+										checked={organisationExpressionOfInterest === "no"}
+										onChange={fieldsChangeHandler}
+										value={"no"}
+									/>
+									<label
+										data-qa-sel="respond-no-responding-as-org"
+										className="form__label form__label--radio"
+										htmlFor="organisationExpressionOfInterest--false">
+										No
+									</label>
+								</div>		
+							</div>
+						</Fragment>
+					}
+				</Fragment>
 				}
 
 				<p><strong>Do you or the organisation you represent have any links with the tobacco industry?</strong></p>
@@ -152,10 +198,6 @@ export class SubmitResponseDialog extends PureComponent {
 						</label>
 					</div>
 				</div>
-
-				{this.props.showExpressionOfInterestSubmissionQuestion && 
-					<h1>question goes here</h1>
-				}
 				
 				{hasTobaccoLinks === "yes" &&
 				<div className="form__group form__group--textarea">
