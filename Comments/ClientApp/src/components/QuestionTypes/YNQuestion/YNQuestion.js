@@ -68,20 +68,6 @@ export class YNQuestion extends Component<PropsType, StateType> {
 		);
 	};
 
-	handleCheckbox = (e: SyntheticInputEvent<any>) => {
-		const question = this.state.question;
-		question.ynAllowComments = e.target.value;
-		this.setState(
-			() => {
-				this.props.updateUnsavedIds(`${question.questionId}q`, true);
-				return {
-					question,
-					unsavedChanges: true,
-				};
-			}
-		);
-	};
-
 	render() {
 		if (!this.state.question) {
 			return null;
@@ -93,6 +79,7 @@ export class YNQuestion extends Component<PropsType, StateType> {
 
 		return (
 			<li className="CommentBox">
+				<h1>Yes no question</h1>
 				<section role="form">
 					<form onSubmit={e => this.props.saveQuestion(e, question)} className="mb--0">
 						<div className="form__group form__group--textarea mb--b">
@@ -108,21 +95,6 @@ export class YNQuestion extends Component<PropsType, StateType> {
 								onChange={this.textareaChangeHandler}
 								tabIndex={0}
 								value={question.questionText}/>
-
-							<div className="checkbox mb--d">
-								<input
-									onChange={this.handleCheckbox}
-									checked={question.YnAllowComments}
-									type="checkbox"
-									className="checkbox__input"
-									id={`id${question.questionId}`}/>
-								<label
-									htmlFor={`id${question.questionId}`}
-									className="checkbox__label">
-									Allow respondents to leave a comment when selecting an answer
-								</label>
-							</div>
-
 						</div>
 						{!readOnly &&
 						<div>

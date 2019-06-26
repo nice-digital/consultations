@@ -12,7 +12,6 @@ import { TextQuestion } from "../QuestionTypes/TextQuestion/TextQuestion";
 import { YNQuestion } from "../QuestionTypes/YNQuestion/YNQuestion";
 import { saveQuestionHandler, deleteQuestionHandler, moveQuestionHandler } from "../../helpers/editing-and-deleting";
 import { updateUnsavedIds } from "../../helpers/unsaved-comments";
-import { canUseDOM } from "../../helpers/utils";
 
 type PropsType = {
 	staticContext: ContextType;
@@ -59,7 +58,7 @@ export class Questions extends Component<PropsType, StateType> {
 				{
 					consultationId: this.props.match.params.consultationId,
 					draft: this.props.draftProject,
-					reference: this.props.match.params.reference
+					reference: this.props.match.params.reference,
 				},
 				preloadedData,
 			);
@@ -87,8 +86,8 @@ export class Questions extends Component<PropsType, StateType> {
 			{
 				consultationId: this.props.match.params.consultationId,
 				draft: this.props.draftProject,
-				reference: this.props.match.params.reference
-			}
+				reference: this.props.match.params.reference,
+			},
 		)
 			.then(response => response.data)
 			.catch(err => {
@@ -316,18 +315,18 @@ export class Questions extends Component<PropsType, StateType> {
 
 																	// Question types ------------
 																	// if the question type has a text answer and a bool answer then it's a Y/N question
-																	if (question.questionType.hasTextAnswer && question.questionType.hasBooleanAnswer) {
+																	console.log(question);
+																	if (question.questionType.type === "YesNo") {
 																		return (
 																			<YNQuestion {...questionProps}/>
 																		);
 																	}
 																	// if the question type has a text answer and no boolean answer then it's a text question
-																	if (question.questionType.hasTextAnswer && !question.questionType.hasBooleanAnswer) {
+																	if (question.questionType.type === "Text") {
 																		return (
 																			<TextQuestion {...questionProps}/>
 																		);
 																	}
-
 																})}
 															</ul> : <p>Click button to add a question.</p>
 														}
@@ -361,9 +360,9 @@ export class Questions extends Component<PropsType, StateType> {
 
 export default withRouter(Questions);
 
-const AddQuestionButton = (props) => {
-	const {hasBooleanAnswer, questionTypeId, loading, currentDocumentId, currentConsultationId, newQuestion} = props;
-	const buttonText = hasBooleanAnswer ? "Add Yes/No Question" : "Add text response question";
+const AddQuestionButton = props => {
+	const {type, questionTypeId, loading, currentDocumentId, currentConsultationId, newQuestion} = props;
+	const buttonText = type == "YesNo" ? "Add yes/no question" : "Add text response question";
 	const documentId = currentDocumentId === "consultation" ? null : parseInt(currentDocumentId, 10);
 	return (
 		<button
@@ -379,4 +378,12 @@ const AddQuestionButton = (props) => {
 			}
 		>{buttonText}</button>
 	);
+};
+
+const workOutQuestionType = questionType => {
+	const {hasBooleanAnswer, hasTextAnswer} = questionType;
+	if (hasTextAnswer && !hasBooleanAnswer) return "text";
+	if (hasTextAnswer && hasBooleanAnswer) return "yesNoWithComment";
+	if (!hasTextAnswer && hasBooleanAnswer) return "yesNo";
+	return null;
 };

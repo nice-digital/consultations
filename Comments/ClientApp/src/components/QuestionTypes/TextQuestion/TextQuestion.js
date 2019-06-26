@@ -79,6 +79,7 @@ export class TextQuestion extends Component<PropsType, StateType> {
 
 		return (
 			<li className="CommentBox">
+				<h1>Text question</h1>
 				<section role="form">
 					<form onSubmit={e => this.props.saveQuestion(e, question)} className="mb--0">
 						<div className="form__group form__group--textarea mb--b">
