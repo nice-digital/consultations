@@ -303,6 +303,7 @@ export class Questions extends Component<PropsType, StateType> {
 																{questionsToDisplay.map((question, index) => {
 																	if (question.questionId <= 0) return null;
 																	const questionProps = {
+																		isLast: questionsToDisplay.length === index + 1,
 																		counter: index + 1,
 																		readOnly: !this.state.editingAllowed,
 																		updateUnsavedIds: this.updateUnsavedIds,

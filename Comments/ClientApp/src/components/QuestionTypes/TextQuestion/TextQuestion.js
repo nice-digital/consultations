@@ -73,12 +73,12 @@ export class TextQuestion extends Component<PropsType, StateType> {
 			return null;
 		}
 
-		const {counter, readOnly, totalQuestionQty} = this.props;
+		const {counter, isLast, readOnly, totalQuestionQty} = this.props;
 
 		const {question, unsavedChanges} = this.state;
 
 		return (
-			<li className="CommentBox mb--e">
+			<li className={isLast ? "CommentBox" : "CommentBox mb--e"}>
 				<h1 className="CommentBox__title CommentBox__title--legend">Question {counter} - Text Question</h1>
 				<section role="form">
 					<form onSubmit={e => this.props.saveQuestion(e, question)} className="mb--0">
