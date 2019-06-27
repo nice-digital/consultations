@@ -12,9 +12,9 @@ export const YesNoAnswer = (props) => {
 						id={`${props.unique}--radio--yes`}
 						type="radio"
 						name={`${props.unique}--radio`}
-						checked={props.answerBoolean === "yes"}
+						checked={props.answerBoolean === true}
 						onChange={props.yesNoChangeHandler}
-						value={"yes"}
+						value={true}
 					/>
 					<label
 						className="form__label form__label--radio"
@@ -30,9 +30,9 @@ export const YesNoAnswer = (props) => {
 						id={`${props.unique}--radio--no`}
 						type="radio"
 						name={`${props.unique}--radio`}
-						checked={props.answerBoolean === "no"}
+						checked={props.answerBoolean === false}
 						onChange={props.yesNoChangeHandler}
-						value={"no"}
+						value={false}
 					/>
 					<label
 						className="form__label form__label--radio"
@@ -45,9 +45,9 @@ export const YesNoAnswer = (props) => {
 
 			<div className="form__group form__group--textarea mb--b">
 				<label
-					className="form__label visually-hidden"
+					className="form__label mb-d"
 					htmlFor={`${props.unique}--text`}>
-					{props.questionText}
+					Do you want to add further information?
 				</label>
 				<textarea
 					data-hj-whitelist

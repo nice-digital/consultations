@@ -48,7 +48,7 @@ export class Answer extends Component<PropsType, StateType> {
 
 	yesNoChangeHandler = (e: SyntheticEvent) => {
 		const answer = this.state.answer;
-		answer.answerBoolean = e.target.value;
+		answer.answerBoolean = (e.target.value === "true");
 		const unsavedChanges = !(answer.answerId === -1 && answer.answerBoolean === undefined);
 		this.props.updateUnsavedIds(`${answer.questionId}q`, unsavedChanges);
 		this.setState({
