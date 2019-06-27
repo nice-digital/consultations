@@ -73,13 +73,13 @@ export class YNQuestion extends Component<PropsType, StateType> {
 			return null;
 		}
 
-		const {readOnly, totalQuestionQty} = this.props;
+		const {counter, readOnly, totalQuestionQty} = this.props;
 
 		const {question, unsavedChanges} = this.state;
 
 		return (
-			<li className="CommentBox">
-				<h1>Yes no question</h1>
+			<li className="CommentBox mb--e">
+				<h1 className="CommentBox__title CommentBox__title--legend">Question {counter} - Yes/no question</h1>
 				<section role="form">
 					<form onSubmit={e => this.props.saveQuestion(e, question)} className="mb--0">
 						<div className="form__group form__group--textarea mb--b">

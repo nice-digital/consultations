@@ -81,7 +81,6 @@ export class CommentBox extends Component<PropsType, StateType> {
 		return (
 			<li className={unsavedChanges ? "CommentBox CommentBox--unsavedChanges" : "CommentBox"}>
 				<section role="form">
-
 					{!this.isTextSelection(comment) &&
 					<Fragment>
 						{documentTitle && <h1 className="CommentBox__title mv--0">{documentTitle}</h1>}

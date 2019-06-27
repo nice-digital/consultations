@@ -300,9 +300,10 @@ export class Questions extends Component<PropsType, StateType> {
 													<Fragment>
 														{questionsToDisplay && questionsToDisplay.length ?
 															<ul className="list--unstyled mt--0">
-																{questionsToDisplay.map(question => {
+																{questionsToDisplay.map((question, index) => {
 																	if (question.questionId <= 0) return null;
 																	const questionProps = {
+																		counter: index + 1,
 																		readOnly: !this.state.editingAllowed,
 																		updateUnsavedIds: this.updateUnsavedIds,
 																		key: question.questionId,
@@ -315,7 +316,6 @@ export class Questions extends Component<PropsType, StateType> {
 
 																	// Question types ------------
 																	// if the question type has a text answer and a bool answer then it's a Y/N question
-																	console.log(question);
 																	if (question.questionType.type === "YesNo") {
 																		return (
 																			<YNQuestion {...questionProps}/>
@@ -327,6 +327,8 @@ export class Questions extends Component<PropsType, StateType> {
 																			<TextQuestion {...questionProps}/>
 																		);
 																	}
+
+																	return null;
 																})}
 															</ul> : <p>Click button to add a question.</p>
 														}
@@ -362,7 +364,7 @@ export default withRouter(Questions);
 
 const AddQuestionButton = props => {
 	const {type, questionTypeId, loading, currentDocumentId, currentConsultationId, newQuestion} = props;
-	const buttonText = type == "YesNo" ? "Add yes/no question" : "Add text response question";
+	const buttonText = type === "YesNo" ? "Add yes/no question" : "Add text response question";
 	const documentId = currentDocumentId === "consultation" ? null : parseInt(currentDocumentId, 10);
 	return (
 		<button
@@ -378,12 +380,4 @@ const AddQuestionButton = props => {
 			}
 		>{buttonText}</button>
 	);
-};
-
-const workOutQuestionType = questionType => {
-	const {hasBooleanAnswer, hasTextAnswer} = questionType;
-	if (hasTextAnswer && !hasBooleanAnswer) return "text";
-	if (hasTextAnswer && hasBooleanAnswer) return "yesNoWithComment";
-	if (!hasTextAnswer && hasBooleanAnswer) return "yesNo";
-	return null;
 };
