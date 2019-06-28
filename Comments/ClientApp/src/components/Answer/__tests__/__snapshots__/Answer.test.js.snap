@@ -1,81 +1,71 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`[ClientApp]  Answer Component should match snapshot with answer 1`] = `
-Array [
-  <span>
-    hello?
-</span>,
-  <section
-    role="form"
+<section
+  role="form"
 >
-    <form
-        className="mb--0"
-        onSubmit={[Function]}
+  <form
+    className="mb--0"
+    onSubmit={[Function]}
+  >
+    <div
+      className="form__group form__group--textarea mb--b"
     >
-        <div
-            className="form__group form__group--textarea mb--b"
-        >
-            <label
-                className="form__label visually-hidden"
-                htmlFor="string"
-            />
-            <textarea
-                className="form__input form__input--textarea"
-                data-hj-whitelist={true}
-                data-qa-sel="Comment-text-area"
-                defaultValue="an updated answer"
-                disabled={false}
-                id="string"
-                onInput={[Function]}
-            />
-        </div>
-        <span
-            className="ml--0 mb--0 CommentBox__savedIndicator"
-        >
-            Saved
-        </span>
-        <button
-            className="btn mr--0 mb--0 right"
-            data-qa-sel="delete-comment-button"
-            onClick={[Function]}
-        >
-            Delete
-        </button>
-    </form>
-</section>,
-]
+      <label
+        className="form__label visually-hidden"
+        htmlFor="string"
+      />
+      <textarea
+        className="form__input form__input--textarea"
+        data-hj-whitelist={true}
+        data-qa-sel="Comment-text-area"
+        defaultValue="an updated answer"
+        disabled={false}
+        id="string"
+        onInput={[Function]}
+      />
+    </div>
+    <span
+      className="ml--0 mb--0 CommentBox__savedIndicator"
+    >
+      Saved
+    </span>
+    <button
+      className="btn mr--0 mb--0 right"
+      data-qa-sel="delete-comment-button"
+      onClick={[Function]}
+    >
+      Delete
+    </button>
+  </form>
+</section>
 `;
 
 exports[`[ClientApp]  Answer Component should match snapshot without answer 1`] = `
-Array [
-  <span>
-    hello?
-</span>,
-  <section
-    role="form"
+<section
+  role="form"
 >
-    <form
-        className="mb--0"
-        onSubmit={[Function]}
+  <form
+    className="mb--0"
+    onSubmit={[Function]}
+  >
+    <div
+      className="form__group form__group--textarea mb--b"
     >
-        <div
-            className="form__group form__group--textarea mb--b"
-        >
-            <label
-                className="form__label visually-hidden"
-                htmlFor="string"
-            />
-            <textarea
-                className="form__input form__input--textarea"
-                data-hj-whitelist={true}
-                data-qa-sel="Comment-text-area"
-                defaultValue=""
-                disabled={false}
-                id="string"
-                onInput={[Function]}
-            />
-        </div>
-    </form>
-</section>,
-]
+      <label
+        className="form__label visually-hidden"
+        htmlFor="string"
+      />
+      <textarea
+        className="form__input form__input--textarea"
+        data-hj-whitelist={true}
+        data-qa-sel="Comment-text-area"
+        defaultValue=""
+        disabled={false}
+        id="string"
+        onInput={[Function]}
+      />
+    </div>
+  </form>
+</section>
 `;

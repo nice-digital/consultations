@@ -112,33 +112,6 @@ export class Answer extends Component<PropsType, StateType> {
 						/>
 						}
 
-						{/*<div className="form__group form__group--textarea mb--b">*/}
-						{/*	<label*/}
-						{/*		className="form__label visually-hidden"*/}
-						{/*		htmlFor={this.props.unique}>*/}
-						{/*		{questionText}*/}
-						{/*	</label>*/}
-						{/*	<textarea*/}
-						{/*		data-hj-whitelist*/}
-						{/*		data-qa-sel="Comment-text-area"*/}
-						{/*		disabled={readOnly}*/}
-						{/*		id={this.props.unique}*/}
-						{/*		className="form__input form__input--textarea"*/}
-						{/*		onInput={this.textareaChangeHandler}*/}
-						{/*		defaultValue={answerText}/>*/}
-						{/*</div>*/}
-
-
-
-
-
-
-
-
-
-
-
-
 						{!readOnly && answerText && answerText.length > 0 ?
 							unsavedChanges ?
 								<input
