@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Packaging;
 using System.Linq;
+using Comments.Common;
 using Comments.Models;
 using Comments.Services;
 using Comments.ViewModels;
@@ -252,7 +253,7 @@ namespace Comments.Export
 			{
 				cell = new Cell();
 				cell.DataType = CellValues.String;
-				cell.CellValue = new CellValue("Organisation interested in formal support");
+				cell.CellValue = new CellValue(Constants.Export.ExpressionOfInterestColumnDescription);
 				cell.StyleIndex = 2;
 				headerRow.AppendChild(cell);
 			}
@@ -330,7 +331,7 @@ namespace Comments.Export
 
 				cell = new Cell();
 				cell.DataType = CellValues.String;
-				cell.CellValue = new CellValue(row.RepresentsOrganisation == true ? "Yes" : row.RepresentsOrganisation == false ? "No" : null);
+				cell.CellValue = new CellValue(row.RepresentsOrganisation == true ? Constants.Export.Yes : row.RepresentsOrganisation == false ? Constants.Export.No : null);
 				cell.StyleIndex = 1;
 				dataRow.AppendChild(cell);
 
@@ -342,7 +343,7 @@ namespace Comments.Export
 
 				cell = new Cell();
 				cell.DataType = CellValues.String;
-				cell.CellValue = new CellValue(row.HasTobaccoLinks == true ? "Yes" : row.HasTobaccoLinks == false ? "No" : null);
+				cell.CellValue = new CellValue(row.HasTobaccoLinks == true ? Constants.Export.Yes : row.HasTobaccoLinks == false ? Constants.Export.No : null);
 				cell.StyleIndex = 1;
 				dataRow.AppendChild(cell);
 
@@ -356,7 +357,7 @@ namespace Comments.Export
 				{
 					cell = new Cell();
 					cell.DataType = CellValues.String;
-					cell.CellValue = new CellValue(row.OrganisationExpressionOfInterest.HasValue ? (row.OrganisationExpressionOfInterest.Value ? "Yes" : "No") : null);
+					cell.CellValue = new CellValue(row.OrganisationExpressionOfInterest.HasValue ? (row.OrganisationExpressionOfInterest.Value ? Constants.Export.Yes : Constants.Export.No) : null);
 					cell.StyleIndex = 1;
 					dataRow.AppendChild(cell);
 				}
@@ -547,7 +548,7 @@ namespace Comments.Export
 			{
 				Id = relationshipId,
 				SheetId = 1,
-				Name = "Comments"
+				Name = Constants.Export.SheetName
 			};
 			sheets.Append(sheet);
 

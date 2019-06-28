@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Comments.Common;
 using Comments.Configuration;
 using Comments.Models;
 using Comments.Test.Infrastructure;
@@ -75,13 +77,12 @@ namespace Comments.Test.IntegrationTests.API.Export
 			ResetDatabase();
 			_context.Database.EnsureCreated();
 			var commentText = Guid.NewGuid().ToString();
+			const int consultationId = 1;
 
-			var locationId = AddLocation("consultations://./consultation/1", _context, "001.000.000.000");
+			var locationId = AddLocation($"consultations://./consultation/{consultationId}", _context, "001.000.000.000");
 			var commentId = AddComment(locationId, commentText, false, _userId.Value, (int)StatusName.Submitted);
 			var submissionId = AddSubmission(_userId.Value);
 			AddSubmissionComments(submissionId, commentId);
-
-			const int consultationId = 1;
 
 			// Act
 			var response = await _client.GetAsync($"consultations/api/ExportExternal/{consultationId}");
@@ -95,10 +96,14 @@ namespace Comments.Test.IntegrationTests.API.Export
 				var data = workSheet.Tables;
 
 				//Assert
-				var headerRow = data["Comments"].Rows[2].ItemArray;
-				headerRow.Length.ShouldBe(14);
+				var rows = data[Constants.Export.SheetName].Rows;
+				rows.Count.ShouldBe(4);
 
-				var commentRow = data["Comments"].Rows[3].ItemArray;
+				var headerRow = rows[2].ItemArray;
+				headerRow.Length.ShouldBe(14);
+				headerRow.Any(header => header.ToString().Equals(Constants.Export.ExpressionOfInterestColumnDescription, StringComparison.OrdinalIgnoreCase)).ShouldBeFalse();
+
+				var commentRow = rows[3].ItemArray;
 				commentRow[7].ShouldBe(commentText);
 			}
 		}
@@ -110,13 +115,12 @@ namespace Comments.Test.IntegrationTests.API.Export
 			ResetDatabase();
 			_context.Database.EnsureCreated();
 			var commentText = Guid.NewGuid().ToString();
-			
-			var locationId = AddLocation("consultations://./consultation/1", _context, "001.000.000.000");
-			var commentId = AddComment(locationId, commentText, false, _userId.Value, (int)StatusName.Submitted);
-			var submissionId = AddSubmission(_userId.Value, null, true);
-			AddSubmissionComments(submissionId, commentId);
-
 			const int consultationId = 1;
+
+			var locationId = AddLocation($"consultations://./consultation/{consultationId}", _context, "001.000.000.000");
+			var commentId = AddComment(locationId, commentText, false, _userId.Value, (int)StatusName.Submitted);
+			var submissionId = AddSubmission(_userId.Value, null, organisationExpressionOfInterest: true);
+			AddSubmissionComments(submissionId, commentId);
 
 			// Act
 			var response = await _client.GetAsync($"consultations/api/ExportExternal/{consultationId}");
@@ -130,14 +134,57 @@ namespace Comments.Test.IntegrationTests.API.Export
 				var data = workSheet.Tables;
 
 				//Assert
-				var headerRow = data["Comments"].Rows[2].ItemArray;
+				var rows = data[Constants.Export.SheetName].Rows;
+				rows.Count.ShouldBe(4);
+
+				var headerRow = rows[2].ItemArray;
 				headerRow.Length.ShouldBe(15);
 
-				headerRow[14].ToString().ShouldBe("Organisation interested in formal support");
+				headerRow[14].ToString().ShouldBe(Constants.Export.ExpressionOfInterestColumnDescription);
 
-				var commentRow = data["Comments"].Rows[3].ItemArray;
+				var commentRow = rows[3].ItemArray;
 				commentRow[7].ShouldBe(commentText);
-				commentRow[14].ShouldBe("Yes");
+				commentRow[14].ShouldBe(Constants.Export.Yes);
+			}
+		}
+
+		[Fact]
+		public async Task Create_Spreadsheet_Which_has_the_express_interest_set_to_no()
+		{
+			// Arrange
+			ResetDatabase();
+			_context.Database.EnsureCreated();
+			var commentText = Guid.NewGuid().ToString();
+			const int consultationId = 1;
+
+			var locationId = AddLocation($"consultations://./consultation/{consultationId}", _context, "001.000.000.000");
+			var commentId = AddComment(locationId, commentText, false, _userId.Value, (int)StatusName.Submitted);
+			var submissionId = AddSubmission(_userId.Value, null, organisationExpressionOfInterest: false);
+			AddSubmissionComments(submissionId, commentId);
+
+			// Act
+			var response = await _client.GetAsync($"consultations/api/ExportExternal/{consultationId}");
+			response.EnsureSuccessStatusCode();
+
+			var excelStream = response.Content.ReadAsStreamAsync().Result;
+
+			using (var reader = ExcelReaderFactory.CreateReader(excelStream))
+			{
+				var workSheet = reader.AsDataSet();
+				var data = workSheet.Tables;
+
+				//Assert
+				var rows = data[Constants.Export.SheetName].Rows;
+				rows.Count.ShouldBe(4);
+
+				var headerRow = rows[2].ItemArray;
+				headerRow.Length.ShouldBe(15);
+
+				headerRow[14].ToString().ShouldBe(Constants.Export.ExpressionOfInterestColumnDescription);
+
+				var commentRow = rows[3].ItemArray;
+				commentRow[7].ShouldBe(commentText);
+				commentRow[14].ShouldBe(Constants.Export.No);
 			}
 		}
 	}
