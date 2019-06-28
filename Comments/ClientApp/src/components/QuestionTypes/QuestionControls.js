@@ -23,27 +23,27 @@ export const QuestionControls = (props) => {
 				:
 				null
 			}
-			{totalQuestionQty > 1 && question.questionText && question.questionText.length > 0 && !unsavedChanges &&
-			<Fragment>
-				<button
-					className="btn btn--inverse ml--0 mb--0"
-					onClick={e => moveQuestion(e, question, "up")}>
-					<span className="icon icon--chevron-up" aria-hidden="true"/>
-					<span className="visually-hidden">Move Up</span>
-				</button>
-				<button
-					className="btn btn--inverse ml--0 mb--0"
-					onClick={e => moveQuestion(e, question, "down")}>
-					<span className="icon icon--chevron-down" aria-hidden="true"/>
-					<span className="visually-hidden">Move Down</span>
-				</button>
-			</Fragment>
-			}
 			<button
-				className="btn mr--0 mb--0 pull-right"
+				className="btn mr--0 mb--0 ml--0"
 				onClick={e => deleteQuestion(e, question)}>
 				Delete
 			</button>
+			{totalQuestionQty > 1 && question.questionText && question.questionText.length > 0 && !unsavedChanges &&
+			<div className="right">
+				<button
+					className="btn btn--inverse mb--0 mr--0"
+					onClick={e => moveQuestion(e, question, "up")}>
+					{/* <span className="icon icon--chevron-up" aria-hidden="true"/> */}
+					Move Up
+				</button>
+				<button
+					className="btn btn--inverse ml--c mr--0 ml--0 mb--0"
+					onClick={e => moveQuestion(e, question, "down")}>
+					{/* <span className="icon icon--chevron-down" aria-hidden="true"/> */}
+					Move Down
+				</button>
+			</div>
+			}
 		</div>
 	);
 };
