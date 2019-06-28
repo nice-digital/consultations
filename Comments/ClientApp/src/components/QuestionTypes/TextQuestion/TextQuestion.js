@@ -1,5 +1,6 @@
 // @flow
-import React, {Component, Fragment} from "react";
+import React, { Component, Fragment } from "react";
+import { QuestionControls } from "../QuestionControls";
 
 type StateType = {
 	question: QuestionType;
@@ -64,7 +65,7 @@ export class TextQuestion extends Component<PropsType, StateType> {
 					question,
 					unsavedChanges: true,
 				};
-			}
+			},
 		);
 	};
 
@@ -97,46 +98,13 @@ export class TextQuestion extends Component<PropsType, StateType> {
 								value={question.questionText}/>
 						</div>
 						{!readOnly &&
-						<div>
-							{question.questionText && question.questionText.length > 0 ?
-								unsavedChanges ?
-									<input
-										className="btn ml--0 mb--0"
-										type="submit"
-										value="Save Question"
-									/>
-									:
-									<span className="ml--0 mb--0 CommentBox__savedIndicator">Saved</span>
-								:
-								null
-							}
-							{totalQuestionQty > 1 && question.questionText && question.questionText.length > 0 && !unsavedChanges &&
-								<Fragment>
-									<button
-										className="btn btn--inverse ml--0 mb--0"
-										onClick={e => this.props.moveQuestion(e, question, "up")}>
-										<span className="icon icon--chevron-up" aria-hidden="true" />
-										<span className="visually-hidden">
-											Move Up
-										</span>
-									</button>
-									<button
-										className="btn btn--inverse ml--0 mb--0"
-										onClick={e => this.props.moveQuestion(e, question, "down")}>
-										<span className="icon icon--chevron-down" aria-hidden="true" />
-										<span className="visually-hidden">
-											Move Down
-										</span>
-									</button>
-								</Fragment>
-							}
-							<button
-								className="btn mr--0 mb--0 pull-right"
-								onClick={e => this.props.deleteQuestion(e, question)}>
-								Delete
-							</button>
-						</div>
-						}
+						<QuestionControls
+							question={question}
+							unsavedChanges={unsavedChanges}
+							totalQuestionQty={totalQuestionQty}
+							moveQuestion={this.props.moveQuestion}
+							deleteQuestion={this.props.deleteQuestion}
+						/>}
 					</form>
 				</section>
 			</li>
