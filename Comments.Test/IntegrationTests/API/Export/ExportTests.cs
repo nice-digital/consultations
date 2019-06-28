@@ -4,6 +4,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Comments.Configuration;
+using Comments.Models;
 using Comments.Test.Infrastructure;
 using Comments.ViewModels;
 using ExcelDataReader;
@@ -32,7 +33,6 @@ namespace Comments.Test.IntegrationTests.API.Export
 	{
 		public ExportTests() : base(TestUserType.CustomFictionalRole)
 		{
-			System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 		}
 
 		[Fact]
@@ -59,6 +59,14 @@ namespace Comments.Test.IntegrationTests.API.Export
 			//Assert
 			response.IsSuccessStatusCode.ShouldBeTrue();
 		}
+	}
+	public class ExportTestsWithData : TestBase
+	{
+		public ExportTestsWithData(bool useRealSubmitService = false, TestUserType testUserType = TestUserType.Authenticated, bool useFakeConsultationService = false, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null)
+			: base(useRealSubmitService, testUserType, useFakeConsultationService, submittedCommentsAndAnswerCounts)
+		{
+			System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+		}
 
 		[Fact]
 		public async Task Create_Spreadsheet_Which_does_not_have_the_express_interest_checked()
@@ -66,14 +74,12 @@ namespace Comments.Test.IntegrationTests.API.Export
 			// Arrange
 			ResetDatabase();
 			_context.Database.EnsureCreated();
-
-			var userId = Guid.NewGuid();
+			var commentText = Guid.NewGuid().ToString();
 
 			var locationId = AddLocation("consultations://./consultation/1", _context, "001.000.000.000");
-			var commentId = AddComment(locationId, "Submitted comment", false, userId, (int)StatusName.Submitted,
-				_context);
-			var submissionId = AddSubmission(userId, _context);
-			AddSubmissionComments(submissionId, commentId, _context);
+			var commentId = AddComment(locationId, commentText, false, _userId.Value, (int)StatusName.Submitted);
+			var submissionId = AddSubmission(_userId.Value);
+			AddSubmissionComments(submissionId, commentId);
 
 			const int consultationId = 1;
 
@@ -90,8 +96,10 @@ namespace Comments.Test.IntegrationTests.API.Export
 
 				//Assert
 				var headerRow = data["Comments"].Rows[2].ItemArray;
-
 				headerRow.Length.ShouldBe(14);
+
+				var commentRow = data["Comments"].Rows[3].ItemArray;
+				commentRow[7].ShouldBe(commentText);
 			}
 		}
 
@@ -101,14 +109,12 @@ namespace Comments.Test.IntegrationTests.API.Export
 			// Arrange
 			ResetDatabase();
 			_context.Database.EnsureCreated();
-
-			var userId = Guid.NewGuid();
-
+			var commentText = Guid.NewGuid().ToString();
+			
 			var locationId = AddLocation("consultations://./consultation/1", _context, "001.000.000.000");
-			var commentId = AddComment(locationId, "Submitted comment", false, userId, (int)StatusName.Submitted,
-				_context);
-			var submissionId = AddSubmission(userId, _context, true);
-			AddSubmissionComments(submissionId, commentId, _context);
+			var commentId = AddComment(locationId, commentText, false, _userId.Value, (int)StatusName.Submitted);
+			var submissionId = AddSubmission(_userId.Value, null, true);
+			AddSubmissionComments(submissionId, commentId);
 
 			const int consultationId = 1;
 
@@ -125,9 +131,13 @@ namespace Comments.Test.IntegrationTests.API.Export
 
 				//Assert
 				var headerRow = data["Comments"].Rows[2].ItemArray;
-
 				headerRow.Length.ShouldBe(15);
+
 				headerRow[14].ToString().ShouldBe("Organisation interested in formal support");
+
+				var commentRow = data["Comments"].Rows[3].ItemArray;
+				commentRow[7].ShouldBe(commentText);
+				commentRow[14].ShouldBe("Yes");
 			}
 		}
 	}
