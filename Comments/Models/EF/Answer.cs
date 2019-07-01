@@ -20,6 +20,12 @@ namespace Comments.Models
 		public Status Status { get; set; }
 
 		public ICollection<SubmissionAnswer> SubmissionAnswer { get; set; }
+
+		public string Sentiment { get; set; }
+		public float SentimentScorePositive { get; set; }
+		public float SentimentScoreNegative { get; set; }
+		public float SentimentScoreNeutral { get; set; }
+		public float SentimentScoreMixed { get; set; }
 	}
 }
 

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using Comments.Configuration;
 using Comments.Migrations;
+using Comments.Models.EF;
 using Comments.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
@@ -256,6 +257,31 @@ namespace Comments.Models
 			modelBuilder
 				.Query<SubmittedCommentsAndAnswerCount>()
 				.ToView(MigrationConstants.Views.SubmittedCommentAndAnswerCount);
+
+
+			modelBuilder.Entity<KeyPhrase>(entity =>
+			{
+				entity.Property(e => e.KeyPhraseId)
+					.HasColumnName("KeyPhraseID")
+					.ValueGeneratedNever();
+
+				entity.Property(e => e.Text)
+					.IsRequired();
+			});
+
+			modelBuilder.Entity<CommentKeyPhrase>(entity =>
+			{
+				entity.Property(e => e.CommentKeyPhraseId)
+					.HasColumnName("CommentKeyPhraseID")
+					.ValueGeneratedNever();
+			});
+
+			modelBuilder.Entity<AnswerKeyPhrase>(entity =>
+			{
+				entity.Property(e => e.AnswerKeyPhraseId)
+					.HasColumnName("AnswerKeyPhraseID")
+					.ValueGeneratedNever();
+			});
 		}
 	}
 }
