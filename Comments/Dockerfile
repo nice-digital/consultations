@@ -45,6 +45,7 @@ RUN curl -SL "$WAITFORIT_DOWNLOAD_URL" --output waitforit.tar.gz \
 
 # Install frontend packages with node
 COPY ./published-app/ClientApp/package.json ./app/ClientApp/
+COPY ./wwwroot/Media/Default/html/HtmlWidget/Footer.html ./app/wwwroot/Media/Default/html/HtmlWidget/
 #COPY ./published-app/ClientApp/package-lock.json ./app/ClientApp/
 WORKDIR /app/ClientApp
 RUN npm i --production

@@ -53,6 +53,7 @@ jq \
 
 replace "#{GlobalNavScript}" "$GLOBALNAVSCRIPT" ClientApp/build/index.html
 replace "#{GlobalNavScriptIE8}" "$GLOBALNAVSCRIPTIE8" ClientApp/build/index.html
+replace "#{AppSettings:Environment:AccountsEnvironment}" "$REACT_APP_ACCOUNTS_ENVIRONMENT" ClientApp/build/index.html
 
 dotnet Comments.dll
 

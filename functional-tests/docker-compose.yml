@@ -83,6 +83,7 @@ services:
       - ACCOUNTS_ENVIRONMENT
       - GLOBALNAVSCRIPT
       - GLOBALNAVSCRIPTIE8
+      - $REACT_APP_ACCOUNTS_ENVIRONMENT
 
 
   # MS SQL Server database
