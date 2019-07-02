@@ -15,6 +15,7 @@ using Amazon.Comprehend;
 using Comments.Auth;
 using Comments.Common;
 using Comments.Export;
+using Comments.Services.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
@@ -51,7 +52,9 @@ namespace Comments
                 AppSettings.Configure(services, Configuration, Environment.ContentRootPath);
             }
 
-            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            //adding services to support hitting AWS in a background task.
+            
+			services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.TryAddSingleton<ISeriLogger, SeriLogger>();
             services.TryAddSingleton<IAuthenticateService, AuthService>();
             services.TryAddTransient<IUserService, UserService>();
@@ -64,8 +67,8 @@ namespace Comments
 
             services.TryAddTransient<ICommentService, CommentService>();
             services.TryAddTransient<IConsultationService, ConsultationService>();
-            
-            services.TryAddTransient<IFeedReaderService>(provider => new FeedReaderService(new RemoteSystemReader(null), AppSettings.Feed));
+
+			services.TryAddTransient<IFeedReaderService>(provider => new FeedReaderService(new RemoteSystemReader(null), AppSettings.Feed));
             services.TryAddTransient<IFeedService, FeedService>();
             services.TryAddTransient<IAnswerService, AnswerService>();
             services.TryAddTransient<IQuestionService, QuestionService>();
@@ -76,6 +79,10 @@ namespace Comments
 	        services.TryAddTransient<IExportToExcel, ExportToExcel>();
 	        services.TryAddTransient<IStatusService, StatusService>();
 			services.TryAddTransient<IConsultationListService, ConsultationListService>();
+
+			services.AddHostedService<QueuedHostedService>();
+			services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
+			services.TryAddSingleton<IAnalysisService, AnalysisService>();
 
 			// Add authentication 
 			services.AddAuthentication(options =>
