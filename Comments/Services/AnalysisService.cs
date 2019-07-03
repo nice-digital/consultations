@@ -1,14 +1,13 @@
 using System;
-using System.Collections;
 using Comments.Models;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Amazon.Comprehend;
 using Amazon.Comprehend.Model;
 using Answer = Comments.ViewModels.Answer;
 using Comment = Comments.ViewModels.Comment;
+using CommentKeyPhrase = Comments.Models.CommentKeyPhrase;
 
 namespace Comments.Services
 {
@@ -77,7 +76,7 @@ namespace Comments.Services
 
 			await SentimentAnalysis(context, batchedUpCommentsAndAnswers);
 
-			KeyPhraseAnalysis(context, batchedUpCommentsAndAnswers);
+			await KeyPhraseAnalysis(context, batchedUpCommentsAndAnswers);
 		}
 
 		private static Batches BatchUp(IList<Comment> submissionComments, IList<Answer> submissionAnswers)
@@ -106,24 +105,29 @@ namespace Comments.Services
 			}
 		}
 
+		private (List<String> textList, List<Models.Comment> comments, List<Models.Answer> answers) GetTextCommentsAndAnswersInBatch(ConsultationsContext context,
+			Batch batch)
+		{
+			var commentIds = batch.ItemsInBatch.Where(item => item.Type == CommentOrAnswer.Comment).Select(item => item.Id).ToList();
+			var commentsToUpdate = context.Comment.Where(comment => commentIds.Contains(comment.CommentId)).ToList();
+
+			var answerIds = batch.ItemsInBatch.Where(item => item.Type == CommentOrAnswer.Answer).Select(item => item.Id).ToList();
+			var answersToUpdate = context.Answer.Where(answer => answerIds.Contains(answer.AnswerId)).ToList();
+
+			return (batch.ItemsInBatch.Select(item => item.Text).ToList(), commentsToUpdate, answersToUpdate);
+		}
+
 		private async Task SentimentAnalysis(ConsultationsContext context, Batches batches)
 		{
 			foreach (var batch in batches.AllBatches)
 			{
+				var itemsInBatch = GetTextCommentsAndAnswersInBatch(context, batch);
+
 				var batchDetectSentimentRequest = new BatchDetectSentimentRequest()
 				{
 					LanguageCode = LanguageCode,
-					TextList = batch.ItemsInBatch.Select(item => item.Text).ToList()
+					TextList = itemsInBatch.textList
 				};
-
-				var commentIds = batch.ItemsInBatch.Where(item => item.Type == CommentOrAnswer.Comment).Select(item => item.Id).ToList();
-
-				var oneComment = context.Comment.FirstOrDefault(comment => comment.CommentId.Equals(45013));
-
-				var commentsToUpdate = context.Comment.Where(comment => commentIds.Contains(comment.CommentId)).ToList();
-
-				var answerIds = batch.ItemsInBatch.Where(item => item.Type == CommentOrAnswer.Answer).Select(item => item.Id).ToList();
-				var answersToUpdate = context.Answer.Where(answer => answerIds.Contains(answer.AnswerId)).ToList();
 
 				var batchDetectSentimentResponse = await _amazonComprehend.BatchDetectSentimentAsync(batchDetectSentimentRequest);
 
@@ -133,7 +137,7 @@ namespace Comments.Services
 
 					if (batch.ItemsInBatch[result.Index].Type == CommentOrAnswer.Comment)
 					{
-						var commentToUpdate = commentsToUpdate.Single(comment => comment.CommentId == id);
+						var commentToUpdate = itemsInBatch.comments.Single(comment => comment.CommentId == id);
 
 						commentToUpdate.Sentiment = result.Sentiment.Value;
 						commentToUpdate.SentimentScorePositive = result.SentimentScore.Positive;
@@ -143,7 +147,7 @@ namespace Comments.Services
 					}
 					else
 					{
-						var answerToUpdate = answersToUpdate.Single(answer => answer.AnswerId == id);
+						var answerToUpdate = itemsInBatch.answers.Single(answer => answer.AnswerId == id);
 
 						answerToUpdate.Sentiment = result.Sentiment.Value;
 						answerToUpdate.SentimentScorePositive = result.SentimentScore.Positive;
@@ -152,21 +156,57 @@ namespace Comments.Services
 						answerToUpdate.SentimentScoreMixed = result.SentimentScore.Mixed;
 					}
 				}
-				context.Comment.UpdateRange(commentsToUpdate);
-				context.Answer.UpdateRange(answersToUpdate);
+				context.Comment.UpdateRange(itemsInBatch.comments);
+				context.Answer.UpdateRange(itemsInBatch.answers);
 				await context.SaveChangesAsync();
 			}
 		}
 
-
-		private void SaveToDatabase(object sentiments, object keyPhrases)
+		private async Task KeyPhraseAnalysis(ConsultationsContext context, Batches batches)
 		{
-			throw new NotImplementedException();
-		}
+			foreach (var batch in batches.AllBatches)
+			{
+				var itemsInBatch = GetTextCommentsAndAnswersInBatch(context, batch);
 
-		private object KeyPhraseAnalysis(ConsultationsContext context, Batches batches)
-		{
-			throw new NotImplementedException();
+				var request = new BatchDetectKeyPhrasesRequest()
+				{
+					LanguageCode = LanguageCode,
+					TextList = itemsInBatch.textList
+				};
+
+				var commentKeyPhrasesToAdd = new List<CommentKeyPhrase>();
+				var answerKeyPhrasesToAdd = new List<AnswerKeyPhrase>();
+
+				var batchDetectKeyPhrasesResponse = _amazonComprehend.BatchDetectKeyPhrasesAsync(request);
+
+				foreach (var result in batchDetectKeyPhrasesResponse.Result.ResultList) //foreach comment or answer
+				{
+					var id = batch.ItemsInBatch[result.Index].Id;
+
+					foreach (var keyPhrase in result.KeyPhrases) //for each keyphrase found in each comment or answer
+					{
+						var keyPhraseId = context.KeyPhrase.FirstOrDefault(existingKeyPhrase => existingKeyPhrase.Text.Equals(keyPhrase.Text, StringComparison.OrdinalIgnoreCase))?.KeyPhraseId;
+						if (keyPhraseId == null)
+						{
+							var savedKeyPhrase = context.KeyPhrase.Add(new Models.KeyPhrase(keyPhrase.Text));
+							context.SaveChanges();
+							keyPhraseId = savedKeyPhrase.Entity.KeyPhraseId;
+						}
+
+						if (batch.ItemsInBatch[result.Index].Type == CommentOrAnswer.Comment)
+						{
+							commentKeyPhrasesToAdd.Add(new CommentKeyPhrase(keyPhraseId.Value, keyPhrase.Score));
+						}
+						else
+						{
+							answerKeyPhrasesToAdd.Add(new AnswerKeyPhrase(keyPhraseId.Value, keyPhrase.Score));
+						}
+					}
+				}
+				context.CommentKeyPhrase.AddRange(commentKeyPhrasesToAdd);
+				context.AnswerKeyPhrase.AddRange(answerKeyPhrasesToAdd);
+				await context.SaveChangesAsync();
+			}
 		}
 	}
 }

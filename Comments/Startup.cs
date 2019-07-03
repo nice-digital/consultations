@@ -15,7 +15,6 @@ using Amazon.Comprehend;
 using Comments.Auth;
 using Comments.Common;
 using Comments.Export;
-using Comments.Services.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +28,7 @@ namespace Comments
     {
         ILogger _logger;
 
-        public Startup(IConfiguration configuration, IHostingEnvironment env, ILogger<Startup> logger)
+		public Startup(IConfiguration configuration, IHostingEnvironment env, ILogger<Startup> logger)
         {
             Configuration = configuration;
             Environment = env;
@@ -80,8 +79,6 @@ namespace Comments
 	        services.TryAddTransient<IStatusService, StatusService>();
 			services.TryAddTransient<IConsultationListService, ConsultationListService>();
 
-			services.AddHostedService<QueuedHostedService>();
-			services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
 			services.TryAddSingleton<IAnalysisService, AnalysisService>();
 
 			// Add authentication 
@@ -163,7 +160,7 @@ namespace Comments
             seriLogger.Configure(loggerFactory, Configuration, appLifetime, env);
             var startupLogger = loggerFactory.CreateLogger<Startup>();
 
-            if (env.IsDevelopment())
+			if (env.IsDevelopment())
             {
 	            app.UseExceptionHandler(Constants.ErrorPath);
 				//app.UseDeveloperExceptionPage();
@@ -178,9 +175,6 @@ namespace Comments
 
 	            app.UseStatusCodePagesWithReExecute(Constants.ErrorPath + "/{0}");
 			}
-
-	        
-
 
 			app.UseCors("CorsPolicy");
 
@@ -217,7 +211,6 @@ namespace Comments
 		    {
 			    app.UseHttpsRedirection();
 		    }
-
 
 	        app.UseMvc(routes =>
             {
@@ -307,18 +300,6 @@ namespace Comments
                    // spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
-
-            //try
-            //{
-            //    using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            //    {
-            //         serviceScope.ServiceProvider.GetService<ConsultationsContext>().Database.Migrate();
-            //    }
-            //}
-            //catch(Exception ex)
-            //{
-            //    startupLogger.LogError(String.Format("EF Migrations Error: {0}", ex));
-            //}
-		}
+        }
     }
 }

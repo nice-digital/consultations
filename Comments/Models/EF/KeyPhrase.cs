@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Comments.Models.EF
+namespace Comments.Models
 {
-	public class KeyPhrase
+	public partial class KeyPhrase
 	{
 		public int KeyPhraseId { get; set; }
 		public string Text { get; set; }

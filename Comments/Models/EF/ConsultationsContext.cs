@@ -1,13 +1,9 @@
-using System;
-using System.Linq;
-using System.Text;
 using Comments.Configuration;
 using Comments.Migrations;
-using Comments.Models.EF;
 using Comments.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Text;
 
 namespace Comments.Models
 {
@@ -23,6 +19,9 @@ namespace Comments.Models
 		public virtual DbSet<Submission> Submission { get; set; }
 		public virtual DbSet<SubmissionAnswer> SubmissionAnswer { get; set; }
 		public virtual DbSet<SubmissionComment> SubmissionComment { get; set; }
+		public virtual DbSet<CommentKeyPhrase> CommentKeyPhrase { get; set; }
+		public virtual DbSet<AnswerKeyPhrase> AnswerKeyPhrase { get; set; }
+		public virtual DbSet<KeyPhrase> KeyPhrase { get; set; }
 
 		/// <summary>
 		/// Query type - see here for more info https://docs.microsoft.com/en-us/ef/core/modeling/query-types
@@ -261,6 +260,8 @@ namespace Comments.Models
 
 			modelBuilder.Entity<KeyPhrase>(entity =>
 			{
+				entity.HasIndex(e => e.KeyPhraseId);
+
 				entity.Property(e => e.KeyPhraseId)
 					.HasColumnName("KeyPhraseID")
 					.ValueGeneratedNever();
@@ -271,15 +272,32 @@ namespace Comments.Models
 
 			modelBuilder.Entity<CommentKeyPhrase>(entity =>
 			{
+				entity.HasIndex(e => e.CommentKeyPhraseId);
+				entity.HasIndex(e => e.KeyPhraseId);
+				entity.HasIndex(e => e.CommentId);
+
 				entity.Property(e => e.CommentKeyPhraseId)
 					.HasColumnName("CommentKeyPhraseID")
 					.ValueGeneratedNever();
+
+				entity.Property(e => e.CommentId)
+					.HasColumnName("CommentID")
+					.ValueGeneratedNever();
+
 			});
 
 			modelBuilder.Entity<AnswerKeyPhrase>(entity =>
 			{
+				entity.HasIndex(e => e.AnswerKeyPhraseId);
+				entity.HasIndex(e => e.KeyPhraseId);
+				entity.HasIndex(e => e.AnswerId);
+
 				entity.Property(e => e.AnswerKeyPhraseId)
 					.HasColumnName("AnswerKeyPhraseID")
+					.ValueGeneratedNever();
+
+				entity.Property(e => e.AnswerId)
+					.HasColumnName("AnswerID")
 					.ValueGeneratedNever();
 			});
 		}

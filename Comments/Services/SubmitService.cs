@@ -1,14 +1,13 @@
-using System;
 using Comments.Models;
 using Comments.ViewModels;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading;
-using Comments.Services.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NICE.Feeds;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Comments.Services
 {
@@ -27,10 +26,9 @@ namespace Comments.Services
 		private readonly IAnalysisService _analysisService;
 		private readonly ILogger<SubmitService> _logger;
 		private readonly IServiceProvider _services;
-		public IBackgroundTaskQueue Queue { get; }
 
 		public SubmitService(ConsultationsContext context, IUserService userService, IConsultationService consultationService,
-			IServiceScopeFactory serviceScopeFactory, IAnalysisService analysisService, IBackgroundTaskQueue queue, ILogger<SubmitService> logger, IServiceProvider services)
+			IServiceScopeFactory serviceScopeFactory, IAnalysisService analysisService, ILogger<SubmitService> logger)
 		{
 			_context = context;
 			_consultationService = consultationService;
@@ -38,8 +36,6 @@ namespace Comments.Services
 			_serviceScopeFactory = serviceScopeFactory;
 			_analysisService = analysisService;
 			_logger = logger;
-			_services = services;
-			Queue = queue;
 		}
 
 		public (int rowsUpdated, Validate validate) Submit(ViewModels.Submission submission)
@@ -78,17 +74,14 @@ namespace Comments.Services
 			}
 			submission.DurationBetweenFirstCommentOrAnswerSavedAndSubmissionInSeconds = (submissionToSave.SubmissionDateTime - earliestDate).TotalSeconds;
 
-			//now analyse the data using Machine learning at AWS. this bit runs in a background task so the user doesn't have to wait.
-			Queue.QueueBackgroundWorkItem(async token =>
+			Task.Run(async () =>
 			{
 				using (var scope = _serviceScopeFactory.CreateScope())
 				{
 					var context = scope.ServiceProvider.GetRequiredService<ConsultationsContext>();
-					//var context = scopedServices.GetRequiredService<ConsultationsContext>();
-
+					var analysisTimer = Stopwatch.StartNew();
 					try
 					{
-						var analysisTimer = Stopwatch.StartNew();
 						await _analysisService.AnalyseAndUpdateDatabase(context, submission.Comments, submission.Answers);
 						analysisTimer.Stop();
 
@@ -128,6 +121,6 @@ namespace Comments.Services
 				answerInViewModel.UpdateStatusFromDBModel(status);
 			}
 			_context.AddSubmissionAnswers(answerIds, submission.SubmissionId);
-		}	
+		}
 	}
 }
