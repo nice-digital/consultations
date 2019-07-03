@@ -115,7 +115,7 @@ namespace Comments.Models
 					.HasForeignKey(d => d.StatusId)
 					.OnDelete(DeleteBehavior.ClientSetNull)
 					.HasConstraintName("FK_Comment_Status");
-
+				
 				//JW. automatically filter out deleted rows and other people's comments. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
 				//note: only 1 filter is supported. you must combine the logic into one expression.
 				entity.HasQueryFilter(c => !c.IsDeleted && c.CreatedByUserId == _createdByUserID);
@@ -264,7 +264,7 @@ namespace Comments.Models
 
 				entity.Property(e => e.KeyPhraseId)
 					.HasColumnName("KeyPhraseID")
-					.ValueGeneratedNever();
+					.ValueGeneratedOnAdd();
 
 				entity.Property(e => e.Text)
 					.IsRequired();
@@ -278,11 +278,23 @@ namespace Comments.Models
 
 				entity.Property(e => e.CommentKeyPhraseId)
 					.HasColumnName("CommentKeyPhraseID")
-					.ValueGeneratedNever();
+					.ValueGeneratedOnAdd();
 
 				entity.Property(e => e.CommentId)
 					.HasColumnName("CommentID")
 					.ValueGeneratedNever();
+
+				entity.HasOne(d => d.KeyPhrase)
+					.WithMany(p => p.CommentKeyPhrase)
+					.HasForeignKey(d => d.KeyPhraseId)
+					.OnDelete(DeleteBehavior.ClientSetNull)
+					.HasConstraintName("FK_CommentKeyPhrase_KeyPhraseId");
+
+				entity.HasOne(d => d.Comment)
+					.WithMany(p => p.CommentKeyPhrase)
+					.HasForeignKey(d => d.CommentId)
+					.OnDelete(DeleteBehavior.ClientSetNull)
+					.HasConstraintName("FK_CommentKeyPhrase_CommentKeyPhraseID");
 
 			});
 
@@ -294,11 +306,23 @@ namespace Comments.Models
 
 				entity.Property(e => e.AnswerKeyPhraseId)
 					.HasColumnName("AnswerKeyPhraseID")
-					.ValueGeneratedNever();
+					.ValueGeneratedOnAdd();
 
 				entity.Property(e => e.AnswerId)
 					.HasColumnName("AnswerID")
 					.ValueGeneratedNever();
+
+				entity.HasOne(d => d.KeyPhrase)
+					.WithMany(p => p.AnswerKeyPhrase)
+					.HasForeignKey(d => d.KeyPhraseId)
+					.OnDelete(DeleteBehavior.ClientSetNull)
+					.HasConstraintName("FK_AnswerKeyPhrase_KeyPhraseId");
+
+				entity.HasOne(d => d.Answer)
+					.WithMany(p => p.AnswerKeyPhrase)
+					.HasForeignKey(d => d.AnswerId)
+					.OnDelete(DeleteBehavior.ClientSetNull)
+					.HasConstraintName("FK_AnswerKeyPhrase_AnswerKeyPhraseID");
 			});
 		}
 	}

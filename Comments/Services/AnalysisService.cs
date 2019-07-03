@@ -174,6 +174,7 @@ namespace Comments.Services
 					TextList = itemsInBatch.textList
 				};
 
+				var allKeyPhrases = context.KeyPhrase.ToList();
 				var commentKeyPhrasesToAdd = new List<CommentKeyPhrase>();
 				var answerKeyPhrasesToAdd = new List<AnswerKeyPhrase>();
 
@@ -185,24 +186,49 @@ namespace Comments.Services
 
 					foreach (var keyPhrase in result.KeyPhrases) //for each keyphrase found in each comment or answer
 					{
-						var keyPhraseId = context.KeyPhrase.FirstOrDefault(existingKeyPhrase => existingKeyPhrase.Text.Equals(keyPhrase.Text, StringComparison.OrdinalIgnoreCase))?.KeyPhraseId;
+						var keyPhraseId = allKeyPhrases.FirstOrDefault(existingKeyPhrase => existingKeyPhrase.Text.Equals(keyPhrase.Text, StringComparison.OrdinalIgnoreCase))?.KeyPhraseId;
 						if (keyPhraseId == null)
 						{
 							var savedKeyPhrase = context.KeyPhrase.Add(new Models.KeyPhrase(keyPhrase.Text));
-							context.SaveChanges();
+							await context.SaveChangesAsync();
 							keyPhraseId = savedKeyPhrase.Entity.KeyPhraseId;
+							allKeyPhrases = context.KeyPhrase.ToList(); 
 						}
 
 						if (batch.ItemsInBatch[result.Index].Type == CommentOrAnswer.Comment)
 						{
-							commentKeyPhrasesToAdd.Add(new CommentKeyPhrase(keyPhraseId.Value, keyPhrase.Score));
+							if (!commentKeyPhrasesToAdd.Any(commentKeyPhrase => commentKeyPhrase.KeyPhraseId == keyPhraseId && commentKeyPhrase.CommentId == id))
+							{
+								//var commentKeyPhraseToAdd = new CommentKeyPhrase(id, keyPhraseId.Value, keyPhrase.Score);
+								//context.CommentKeyPhrase.Add(commentKeyPhraseToAdd);
+								//await context.SaveChangesAsync();
+
+								commentKeyPhrasesToAdd.Add(new CommentKeyPhrase(id, keyPhraseId.Value, keyPhrase.Score));
+							}
 						}
 						else
 						{
-							answerKeyPhrasesToAdd.Add(new AnswerKeyPhrase(keyPhraseId.Value, keyPhrase.Score));
+							if (!answerKeyPhrasesToAdd.Any(answerKeyPhrase => answerKeyPhrase.KeyPhraseId == keyPhraseId && answerKeyPhrase.AnswerId == id))
+							{
+								answerKeyPhrasesToAdd.Add(new AnswerKeyPhrase(id, keyPhraseId.Value, keyPhrase.Score));
+							}
 						}
 					}
 				}
+
+				//foreach (var c in commentKeyPhrasesToAdd)
+				//{
+				//	context.CommentKeyPhrase.Add(c);
+				//	try
+				//	{
+				//		context.SaveChanges();
+				//	}
+				//	catch (Exception ex)
+				//	{
+				//		var j = ex;
+				//	}
+				//}
+
 				context.CommentKeyPhrase.AddRange(commentKeyPhrasesToAdd);
 				context.AnswerKeyPhrase.AddRange(answerKeyPhrasesToAdd);
 				await context.SaveChangesAsync();

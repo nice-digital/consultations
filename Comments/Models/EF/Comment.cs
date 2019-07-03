@@ -19,6 +19,7 @@ namespace Comments.Models
 		public Status Status { get; set; }
 
 		public ICollection<SubmissionComment> SubmissionComment { get; set; }
+		public ICollection<CommentKeyPhrase> CommentKeyPhrase { get; set; }
 
 		public string Sentiment { get; set; }
 		public float SentimentScorePositive { get; set; }

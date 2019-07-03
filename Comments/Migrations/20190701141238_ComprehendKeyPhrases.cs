@@ -33,7 +33,7 @@ namespace Comments.Migrations
 				},
 		        constraints: table =>
 		        {
-			        table.PrimaryKey("PK_CommentKeyPhrase", x => x.KeyPhraseID);
+			        table.PrimaryKey("PK_CommentKeyPhrase", x => x.CommentKeyPhraseID);
 			        table.ForeignKey(
 				        name: "FK_CommentKeyPhrase_CommentID",
 				        column: x => x.CommentID,
@@ -60,7 +60,7 @@ namespace Comments.Migrations
 		        },
 		        constraints: table =>
 		        {
-			        table.PrimaryKey("PK_AnswerKeyPhrase", x => x.KeyPhraseID);
+			        table.PrimaryKey("PK_AnswerKeyPhrase", x => x.AnswerKeyPhraseID);
 			        table.ForeignKey(
 				        name: "FK_AnswerKeyPhrase_CommentID",
 				        column: x => x.AnswerID,
