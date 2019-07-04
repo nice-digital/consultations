@@ -8,7 +8,8 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Comments.Controllers.Api
 {
-    [Produces("application/json")]
+	[Authorize(Roles = "Administrator,CommentAdminTeam,IndevUser")]
+	[Produces("application/json")]
     [Route("consultations/api/[controller]")]
     public class AnalysisController : Controller
     {

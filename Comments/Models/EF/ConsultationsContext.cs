@@ -268,6 +268,12 @@ namespace Comments.Models
 
 				entity.Property(e => e.Text)
 					.IsRequired();
+
+				//entity.HasOne(d => d.CommentKeyPhrase)
+				//	.WithMany(p => p.KeyPhrase)
+				//	.HasForeignKey(d => d.)
+				//	.OnDelete(DeleteBehavior.ClientSetNull)
+				//	.HasConstraintName("FK_SubmissionComment_CommentID");
 			});
 
 			modelBuilder.Entity<CommentKeyPhrase>(entity =>
@@ -290,11 +296,11 @@ namespace Comments.Models
 					.OnDelete(DeleteBehavior.ClientSetNull)
 					.HasConstraintName("FK_CommentKeyPhrase_KeyPhraseId");
 
-				entity.HasOne(d => d.Comment)
-					.WithMany(p => p.CommentKeyPhrase)
-					.HasForeignKey(d => d.CommentId)
-					.OnDelete(DeleteBehavior.ClientSetNull)
-					.HasConstraintName("FK_CommentKeyPhrase_CommentKeyPhraseID");
+				//entity.HasOne(d => d.Comment)
+				//	.WithMany(p => p.CommentKeyPhrase)
+				//	.HasForeignKey(d => d.CommentId)
+				//	.OnDelete(DeleteBehavior.ClientSetNull)
+				//	.HasConstraintName("FK_CommentKeyPhrase_CommentKeyPhraseID");
 
 			});
 

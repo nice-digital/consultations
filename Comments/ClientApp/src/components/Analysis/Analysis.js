@@ -1,10 +1,9 @@
 // @flow
 
 import React, { Component, Fragment } from "react";
-import { Prompt, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import Helmet from "react-helmet";
 import { LoginBanner } from "../LoginBanner/LoginBanner";
-import { StackedNav } from "../StackedNav/StackedNav";
 import { UserContext } from "../../context/UserContext";
 import { load } from "../../data/loader";
 
@@ -18,6 +17,10 @@ type StateType = {
 	error: ErrorType;
 	loading: boolean;
 	hasInitialData: boolean;
+	comments: Array<CommentType>,
+	questions: Array<QuestionType>,
+	allSentiments: Array<string>,
+	allKeyPhrases: Array<Object>, //todo: specify type
 };
 
 export class Analysis extends Component<PropsType, StateType> {
@@ -26,7 +29,6 @@ export class Analysis extends Component<PropsType, StateType> {
 
 		this.state = {
 			editingAllowed: true,
-			questionsData: {},
 			loading: true,
 			hasInitialData: false,
 			unsavedIds: [],
@@ -34,30 +36,30 @@ export class Analysis extends Component<PropsType, StateType> {
 				hasError: false,
 				message: null,
 			},
+			questions: {},
+			comments: {},
 		};
 	}
 
 	gatherData = async () => {
-		//TODO: gather data!
-		
-		// const questionsData = load(
-		// 	"questions",
-		// 	undefined,
-		// 	[],
-		// 	{consultationId: this.props.match.params.consultationId, draft: this.props.draftProject, reference: this.props.match.params.reference}
-		// )
-		// 	.then(response => response.data)
-		// 	.catch(err => {
-		// 		this.setState({
-		// 			error: {
-		// 				hasError: true,
-		// 				message: "questionsData " + err,
-		// 			},
-		// 		});
-		// 	});
-		// return {
-		// 	questionsData: await questionsData,
-		// };
+		const questionsData = load(
+			"analysis",
+			undefined,
+			[],
+			{consultationId: this.props.match.params.consultationId}
+		)
+			.then(response => response.data)
+			.catch(err => {
+				this.setState({
+					error: {
+						hasError: true,
+						message: "analysisData " + err,
+					},
+				});
+			});
+		return {
+			questionsData: await questionsData,
+		};
 	};
 
 	componentDidMount() {
@@ -81,30 +83,30 @@ export class Analysis extends Component<PropsType, StateType> {
 		}
 	}
 
-	componentDidUpdate(prevProps: PropsType) {
-		const oldRoute = prevProps.location.pathname;
-		const newRoute = this.props.location.pathname;
-		if (oldRoute === newRoute) return;
-		this.setState({
-			loading: true,
-		});
-		this.gatherData()
-			.then(data => {
-				this.setState({
-					...data,
-					loading: false,
-					unsavedIds: [],
-				});
-			})
-			.catch(err => {
-				this.setState({
-					error: {
-						hasError: true,
-						message: "gatherData in componentDidMount failed " + err,
-					},
-				});
-			});
-	}
+	// componentDidUpdate(prevProps: PropsType) {
+	// 	const oldRoute = prevProps.location.pathname;
+	// 	const newRoute = this.props.location.pathname;
+	// 	if (oldRoute === newRoute) return;
+	// 	this.setState({
+	// 		loading: true,
+	// 	});
+	// 	this.gatherData()
+	// 		.then(data => {
+	// 			this.setState({
+	// 				...data,
+	// 				loading: false,
+	// 				unsavedIds: [],
+	// 			});
+	// 		})
+	// 		.catch(err => {
+	// 			this.setState({
+	// 				error: {
+	// 					hasError: true,
+	// 					message: "gatherData in componentDidMount failed " + err,
+	// 				},
+	// 			});
+	// 		});
+	// }
 	
 	render() {
 		if (!this.state.hasInitialData && this.state.loading) return <h1>Loading...</h1>;
