@@ -199,10 +199,6 @@ namespace Comments.Services
 						{
 							if (!commentKeyPhrasesToAdd.Any(commentKeyPhrase => commentKeyPhrase.KeyPhraseId == keyPhraseId && commentKeyPhrase.CommentId == id))
 							{
-								//var commentKeyPhraseToAdd = new CommentKeyPhrase(id, keyPhraseId.Value, keyPhrase.Score);
-								//context.CommentKeyPhrase.Add(commentKeyPhraseToAdd);
-								//await context.SaveChangesAsync();
-
 								commentKeyPhrasesToAdd.Add(new CommentKeyPhrase(id, keyPhraseId.Value, keyPhrase.Score));
 							}
 						}
@@ -215,20 +211,6 @@ namespace Comments.Services
 						}
 					}
 				}
-
-				//foreach (var c in commentKeyPhrasesToAdd)
-				//{
-				//	context.CommentKeyPhrase.Add(c);
-				//	try
-				//	{
-				//		context.SaveChanges();
-				//	}
-				//	catch (Exception ex)
-				//	{
-				//		var j = ex;
-				//	}
-				//}
-
 				context.CommentKeyPhrase.AddRange(commentKeyPhrasesToAdd);
 				context.AnswerKeyPhrase.AddRange(answerKeyPhrasesToAdd);
 				await context.SaveChangesAsync();
