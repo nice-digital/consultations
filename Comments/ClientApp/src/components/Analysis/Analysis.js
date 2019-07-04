@@ -17,10 +17,11 @@ type StateType = {
 	error: ErrorType;
 	loading: boolean;
 	hasInitialData: boolean;
-	comments: Array<CommentType>,
-	questions: Array<QuestionType>,
+	comments: Array<CommentWithAnalysisType>, 
+	questions: Array<QuestioWithAnalysisType>,
 	allSentiments: Array<string>,
-	allKeyPhrases: Array<Object>, //todo: specify type
+	allKeyPhrases: Array<KeyPhrase>,
+	consultationTitle: string,
 };
 
 export class Analysis extends Component<PropsType, StateType> {
@@ -38,11 +39,12 @@ export class Analysis extends Component<PropsType, StateType> {
 			},
 			questions: {},
 			comments: {},
+			consultationTitle: "",
 		};
 	}
 
 	gatherData = async () => {
-		const questionsData = load(
+		const data = load(
 			"analysis",
 			undefined,
 			[],
@@ -57,15 +59,19 @@ export class Analysis extends Component<PropsType, StateType> {
 					},
 				});
 			});
-		return {
-			questionsData: await questionsData,
-		};
+		return await data;
 	};
 
 	componentDidMount() {
+		console.log("cdm");
 		if (!this.state.hasInitialData) {
+			console.log("calling gather data");
 			this.gatherData()
 				.then(data => {
+
+					console.log("data gathered:");
+					console.log(data);
+
 					this.setState({
 						...data,
 						loading: false,
@@ -134,15 +140,23 @@ export class Analysis extends Component<PropsType, StateType> {
 						<div className="container">
 							<div className="grid">
 								<div data-g="12">
-									<h1 className="h3">title goes here</h1>
+									<h1 className="h3">{this.state.consultationTitle}</h1>
+									<h2>Combined analysis for all comments and answers</h2>
+									<h3>Sentiments</h3>
+									
+
+									<h3>Key phrases</h3>
+									
+									<h2>Individual comment and answer analysis</h2>
+
+									<h3>Answers</h3>
+
+
+									<h3>Comments</h3>
+
 									<div className="grid">
-										<div data-g="12 md:6">
-											<p>remove this?</p>
-										</div>
-										<div data-g="12 md:6">
-											<div>
-												main content here
-											</div>
+										<div data-g="12">
+											main content here
 										</div>
 									</div>
 								</div>

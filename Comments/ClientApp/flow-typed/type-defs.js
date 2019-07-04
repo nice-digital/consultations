@@ -55,6 +55,12 @@ declare type ConsultationDataType = {
 	reference: string,
 };
 
+declare type KeyPhrase = {
+	keyPhraseId: number,
+	text: string,
+	score: number,
+};
+
 declare type CommentType = {
 	commentId: number,
 	lastModifiedDate: Date,
@@ -75,6 +81,33 @@ declare type CommentType = {
 	section: string,
 };
 
+declare type CommentWithAnalysisType = {
+	commentId: number,
+	lastModifiedDate: Date,
+	lastModifiedByUserId: string,
+	commentText: string,
+	locationId: number,
+	sourceURI: string,
+	htmlElementID: string,
+	rangeStart: string,
+	rangeStartOffset: string,
+	rangeEnd: string,
+	rangeEndOffset: string,
+	quote: string,
+	commentOn: string,
+	show: boolean,
+	status: StatusType,
+	order: string,
+	section: string,
+	//just like CommentType, except for:
+	sentiment: string,
+	sentimentScorePositive: number,
+	sentimentScoreNegative: number,
+	sentimentScoreNeutral: number,
+	sentimentScoreMixed: number,
+	keyPhrases: Array<KeyPhrase>,
+};
+
 type StatusType = {
 	statusId: number,
 	name: string
@@ -89,6 +122,25 @@ type AnswerType = {
 	lastModifiedByUserId: string,
 	statusId: number,
 	status: StatusType
+};
+
+type AnswerWithAnalysisType = {
+	answerId: number,
+	answerText: string,
+	answerBoolean: boolean,
+	questionId: number,
+	lastModifiedDate: Date,
+	lastModifiedByUserId: string,
+	statusId: number,
+	status: StatusType,
+	
+	//just like AnswerType, except for:
+	sentiment: string,
+	sentimentScorePositive: number,
+	sentimentScoreNegative: number,
+	sentimentScoreNeutral: number,
+	sentimentScoreMixed: number,
+	keyPhrases: Array<KeyPhrase>,
 };
 
 type QuestionTypeType = {
@@ -170,3 +222,4 @@ declare type ErrorType = {
 	hasError: boolean,
 	message: string | null,
 };
+

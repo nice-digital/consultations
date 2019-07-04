@@ -158,7 +158,7 @@ namespace Comments.Services
 		    {
 			    consultationState = _consultationService.GetConsultationState(consultationSourceURI, PreviewState.NonPreview);
 			    return new CommentsAndQuestionsForAnalysis(new List<ViewModels.Comment>(), new List<ViewModels.Question>(),
-				    user.IsAuthorised, signInURL, consultationState, new List<QuestionWithAnalysis>(), new List<CommentWithAnalysis>());
+				    user.IsAuthorised, signInURL, consultationState, new List<QuestionWithAnalysis>(), new List<CommentWithAnalysis>(), string.Empty);
 		    }
 
 		    var sourceURIs = new List<string> { consultationSourceURI };
@@ -169,7 +169,9 @@ namespace Comments.Services
 		    var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsAnalysisViewModels(locations);
 		    var resortedComments = data.comments.OrderByDescending(c => c.LastModifiedDate).ToList(); //comments should be sorted in date by default, questions by document order.
 
-		    return new CommentsAndQuestionsForAnalysis(null, null, user.IsAuthorised, signInURL, consultationState, data.questions.ToList(), resortedComments);
+		    var documentsAndConsultationTitle = _consultationService.GetDocuments(consultationId);
+
+			return new CommentsAndQuestionsForAnalysis(null, null, user.IsAuthorised, signInURL, consultationState, data.questions.ToList(), resortedComments, documentsAndConsultationTitle.consultationTitle);
 		}
 
 	    public ReviewPageViewModel GetCommentsAndQuestionsForReview(string relativeURL, ReviewPageViewModel model)

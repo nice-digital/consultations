@@ -5,14 +5,20 @@ namespace Comments.ViewModels
 {
 	public class CommentsAndQuestionsForAnalysis : CommentsAndQuestions
 	{
-		public CommentsAndQuestionsForAnalysis(List<Comment> comments, List<Question> questions, bool isAuthorised, string signInURL, ConsultationState consultationState, IEnumerable<QuestionWithAnalysis> questionsWithAnalysis, IEnumerable<CommentWithAnalysis> commentsWithAnalysis) : base(comments, questions, isAuthorised, signInURL, consultationState)
+		public CommentsAndQuestionsForAnalysis(List<Comment> comments, List<Question> questions, bool isAuthorised, string signInURL, ConsultationState consultationState,
+			IEnumerable<QuestionWithAnalysis> questionsWithAnalysis, IEnumerable<CommentWithAnalysis> commentsWithAnalysis,
+			string consultationTitle)
+			: base(comments, questions, isAuthorised, signInURL, consultationState)
 		{
 			Questions = questionsWithAnalysis;
 			Comments = commentsWithAnalysis;
+			ConsultationTitle = consultationTitle;
 		}
 
 		public new IEnumerable<ViewModels.QuestionWithAnalysis> Questions { get; private set; }
 		public new IEnumerable<ViewModels.CommentWithAnalysis> Comments { get; private set; }
+
+		public string ConsultationTitle { get; set; }
 
 		public IEnumerable<string> AllSentiments
 		{
