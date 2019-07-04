@@ -68,13 +68,23 @@ namespace Comments.Models
 				.Include(l => l.Comment)
 					.ThenInclude(s => s.Status)
 
+				.Include(l => l.Comment)
+					.ThenInclude(ckp => ckp.CommentKeyPhrase)
+						.ThenInclude(kp => kp.KeyPhrase)
+
 				.Include(l => l.Question)
 					.ThenInclude(q => q.QuestionType)
+
 				.Include(l => l.Question)
 					.ThenInclude(q => q.Answer)
-					.ThenInclude(s => s.SubmissionAnswer)
+						.ThenInclude(s => s.SubmissionAnswer)
 
-					.OrderBy(l => l.Order)
+				.Include(l => l.Question)
+					.ThenInclude(a => a.Answer)
+						.ThenInclude(akp => akp.AnswerKeyPhrase)
+							.ThenInclude(kp => kp.KeyPhrase)
+
+				.OrderBy(l => l.Order)
 
 				.ThenByDescending(l =>
 					l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault())

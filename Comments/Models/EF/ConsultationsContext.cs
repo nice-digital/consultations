@@ -258,29 +258,13 @@ namespace Comments.Models
 				.ToView(MigrationConstants.Views.SubmittedCommentAndAnswerCount);
 
 
-			modelBuilder.Entity<KeyPhrase>(entity =>
-			{
-				entity.HasIndex(e => e.KeyPhraseId);
-
-				entity.Property(e => e.KeyPhraseId)
-					.HasColumnName("KeyPhraseID")
-					.ValueGeneratedOnAdd();
-
-				entity.Property(e => e.Text)
-					.IsRequired();
-
-				//entity.HasOne(d => d.CommentKeyPhrase)
-				//	.WithMany(p => p.KeyPhrase)
-				//	.HasForeignKey(d => d.)
-				//	.OnDelete(DeleteBehavior.ClientSetNull)
-				//	.HasConstraintName("FK_SubmissionComment_CommentID");
-			});
+			
 
 			modelBuilder.Entity<CommentKeyPhrase>(entity =>
 			{
-				entity.HasIndex(e => e.CommentKeyPhraseId);
-				entity.HasIndex(e => e.KeyPhraseId);
-				entity.HasIndex(e => e.CommentId);
+				//entity.HasIndex(e => e.CommentKeyPhraseId);
+				//entity.HasIndex(e => e.KeyPhraseId);
+				//entity.HasIndex(e => e.CommentId);
 
 				entity.Property(e => e.CommentKeyPhraseId)
 					.HasColumnName("CommentKeyPhraseID")
@@ -290,25 +274,25 @@ namespace Comments.Models
 					.HasColumnName("CommentID")
 					.ValueGeneratedNever();
 
+				entity.HasOne(d => d.Comment)
+					.WithMany(p => p.CommentKeyPhrase)
+					.HasForeignKey(d => d.CommentId)
+					.OnDelete(DeleteBehavior.ClientSetNull)
+					.HasConstraintName("FK_CommentKeyPhrase_CommentID");
+
 				entity.HasOne(d => d.KeyPhrase)
 					.WithMany(p => p.CommentKeyPhrase)
 					.HasForeignKey(d => d.KeyPhraseId)
 					.OnDelete(DeleteBehavior.ClientSetNull)
-					.HasConstraintName("FK_CommentKeyPhrase_KeyPhraseId");
-
-				//entity.HasOne(d => d.Comment)
-				//	.WithMany(p => p.CommentKeyPhrase)
-				//	.HasForeignKey(d => d.CommentId)
-				//	.OnDelete(DeleteBehavior.ClientSetNull)
-				//	.HasConstraintName("FK_CommentKeyPhrase_CommentKeyPhraseID");
+					.HasConstraintName("FK_CommentKeyPhrase_KeyPhraseID");
 
 			});
 
 			modelBuilder.Entity<AnswerKeyPhrase>(entity =>
 			{
-				entity.HasIndex(e => e.AnswerKeyPhraseId);
-				entity.HasIndex(e => e.KeyPhraseId);
-				entity.HasIndex(e => e.AnswerId);
+				//entity.HasIndex(e => e.AnswerKeyPhraseId);
+				//entity.HasIndex(e => e.KeyPhraseId);
+				//entity.HasIndex(e => e.AnswerId);
 
 				entity.Property(e => e.AnswerKeyPhraseId)
 					.HasColumnName("AnswerKeyPhraseID")
@@ -329,6 +313,24 @@ namespace Comments.Models
 					.HasForeignKey(d => d.AnswerId)
 					.OnDelete(DeleteBehavior.ClientSetNull)
 					.HasConstraintName("FK_AnswerKeyPhrase_AnswerKeyPhraseID");
+			});
+
+			modelBuilder.Entity<KeyPhrase>(entity =>
+			{
+				entity.HasIndex(e => e.KeyPhraseId);
+
+				entity.Property(e => e.KeyPhraseId)
+					.HasColumnName("KeyPhraseID")
+					.ValueGeneratedOnAdd();
+
+				entity.Property(e => e.Text)
+					.IsRequired();
+
+				//entity.HasOne(d => d.CommentKeyPhrase)
+				//	.WithMany(p => p.KeyPhrase)
+				//	.HasForeignKey(d => d.)
+				//	.OnDelete(DeleteBehavior.ClientSetNull)
+				//	.HasConstraintName("FK_SubmissionComment_CommentID");
 			});
 		}
 	}

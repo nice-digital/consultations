@@ -2,7 +2,7 @@ namespace Comments.Models
 {
 	public partial class AnswerKeyPhrase
 	{
-		//public AnswerKeyPhrase() {}
+		public AnswerKeyPhrase() {}
 
 		public AnswerKeyPhrase(int answerId, int keyPhraseId, float score)
 		{
