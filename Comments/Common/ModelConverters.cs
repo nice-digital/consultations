@@ -16,5 +16,17 @@ namespace Comments.Common
 		    }
 		    return (commentsData, questionsData);
 	    }
+
+	    public static (IList<ViewModels.CommentWithAnalysis> comments, IList<ViewModels.QuestionWithAnalysis> questions) ConvertLocationsToCommentsAndQuestionsAnalysisViewModels(IEnumerable<Models.Location> locations)
+	    {
+		    var commentsData = new List<ViewModels.CommentWithAnalysis>();
+		    var questionsData = new List<ViewModels.QuestionWithAnalysis>();
+		    foreach (var location in locations)
+		    {
+			    commentsData.AddRange(location.Comment.Select(comment => new ViewModels.CommentWithAnalysis(location, comment)));
+			    questionsData.AddRange(location.Question.Select(question => new ViewModels.QuestionWithAnalysis(location, question)));
+		    }
+		    return (commentsData, questionsData);
+	    }
 	}
 }

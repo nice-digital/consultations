@@ -13,6 +13,7 @@ import FooterWithRouter from "../Footer/Footer";
 import DocumentPreviewWithRouter from "../DocumentPreview/DocumentPreview";
 import DownloadWithRouter from "../Download/Download";
 import QuestionsWithRouter from "../Questions/Questions";
+import AnalysisWithRouter from "../Analysis/Analysis";
 import {ErrorBoundary} from "../ErrorBoundary/ErrorBoundary";
 import {LiveAnnouncer, LiveMessenger} from "react-aria-live";
 import { projectInformation } from "../../constants";
@@ -72,6 +73,11 @@ class App extends React.Component<PropsType, StateType> {
 								{/*Questions admin - viewing a documents questions on a published project */}
 								<Route exact path="/admin/questions/:consultationId/:documentId">
 									<QuestionsWithRouter draftProject={false}/>
+								</Route>
+
+								{/*Consultation analysis  - views sentiment analysis and key phrases */}
+								<Route exact path="/admin/consultation/:consultationId">
+									<AnalysisWithRouter />
 								</Route>
 
 								{/*Document View*/}

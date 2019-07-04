@@ -1,11 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Comments.ViewModels
 {
-	public class Answer
+	public class Answer 
 	{
 		public Answer() { } //only here for model binding. don't use it in code.
 		public Answer(int answerId, string answerText, bool answerBoolean, DateTime lastModifiedDate, Guid lastModifiedByUserId, int questionId, int statusId)
@@ -35,6 +33,12 @@ namespace Comments.ViewModels
 				SourceURI = question.Location.SourceURI;
 			else if (answer.Question?.Location != null)
 				SourceURI = answer.Question.Location.SourceURI;
+
+			//Sentiment = answer.Sentiment;
+			//SentimentScorePositive = answer.SentimentScorePositive;
+			//SentimentScoreNegative = answer.SentimentScoreNegative;
+			//SentimentScoreNeutral = answer.SentimentScoreNeutral;
+			//SentimentScoreMixed = answer.SentimentScoreMixed;
 		}
 
 		public int AnswerId { get; set; }
@@ -54,6 +58,12 @@ namespace Comments.ViewModels
 		/// This property doesn't match the database. it's only in a denormalised capacity to make things easier for the front-end.
 		/// </summary>
 		public string SourceURI { get; set; }
+
+		//public string Sentiment { get; set; }
+		//public float SentimentScorePositive { get; set; }
+		//public float SentimentScoreNegative { get; set; }
+		//public float SentimentScoreNeutral { get; set; }
+		//public float SentimentScoreMixed { get; set; }
 
 		public void UpdateStatusFromDBModel(Models.Status status)
 		{
