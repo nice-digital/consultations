@@ -55,7 +55,11 @@ export class Questions extends Component<PropsType, StateType> {
 				this.props.staticContext,
 				"questions",
 				[],
-				{consultationId: this.props.match.params.consultationId, draft: this.props.draftProject, reference: this.props.match.params.reference},
+				{
+					consultationId: this.props.match.params.consultationId,
+					draft: this.props.draftProject,
+					reference: this.props.match.params.reference,
+				},
 				preloadedData,
 			);
 			if (preloadedQuestionsData) {
@@ -79,7 +83,11 @@ export class Questions extends Component<PropsType, StateType> {
 			"questions",
 			undefined,
 			[],
-			{consultationId: this.props.match.params.consultationId, draft: this.props.draftProject, reference: this.props.match.params.reference}
+			{
+				consultationId: this.props.match.params.consultationId,
+				draft: this.props.draftProject,
+				reference: this.props.match.params.reference,
+			},
 		)
 			.then(response => response.data)
 			.catch(err => {
@@ -235,13 +243,12 @@ export class Questions extends Component<PropsType, StateType> {
 
 	getUrlForNavigation = (isDraft, currentConsultationId, documentId, reference) => {
 
-		if (isDraft){
+		if (isDraft) {
 			return `/admin/questions/preview/${reference}/${currentConsultationId}/${documentId}`;
-		}
-		else{
+		} else {
 			return `/admin/questions/${currentConsultationId}/${documentId}`;
 		}
-	}
+	};
 
 	render() {
 		if (!this.state.hasInitialData && this.state.loading) return <h1>Loading...</h1>;
@@ -283,7 +290,7 @@ export class Questions extends Component<PropsType, StateType> {
 								<div data-g="12">
 									<h1 className="h3">{questionsData.consultationTitle}</h1>
 									<div className="grid">
-										<div data-g="12 md:6">
+										<div data-g="12 md:5">
 											<StackedNav
 												links={
 													this.createConsultationNavigation(
@@ -296,33 +303,29 @@ export class Questions extends Component<PropsType, StateType> {
 														questionsData,
 														currentConsultationId,
 														currentDocumentId)}/>
-											<QuestionTemplates
-												textQuestionTypeId={textQuestionTypeId}
-												currentConsultationId={currentConsultationId}
-												currentDocumentId={currentDocumentId}
-												newQuestion={this.newQuestion}/>
 										</div>
-										<div data-g="12 md:6">
-											<div>
-												{currentDocumentId ?
+
+										<div data-g="12 md:7">
+											{currentDocumentId ?
+												<Fragment>
+													{questionsToDisplay && questionsToDisplay.length ?
+														<ul className="list--unstyled mt--0">
+															{questionsToDisplay.map(question => (
+																<TextQuestion
+																	readOnly={!this.state.editingAllowed}
+																	updateUnsavedIds={this.updateUnsavedIds}
+																	key={question.questionId}
+																	question={question}
+																	saveQuestion={this.saveQuestion}
+																	deleteQuestion={this.deleteQuestion}
+																	moveQuestion={this.moveQuestion}
+																	totalQuestionQty={questionsToDisplay.length}
+																/>
+															))}
+														</ul> : <p>Click button to add a question.</p>
+													}
+													{this.state.editingAllowed &&
 													<Fragment>
-														{questionsToDisplay && questionsToDisplay.length ?
-															<ul className="list--unstyled mt--0">
-																{questionsToDisplay.map(question => (
-																	<TextQuestion
-																		readOnly={!this.state.editingAllowed}
-																		updateUnsavedIds={this.updateUnsavedIds}
-																		key={question.questionId}
-																		question={question}
-																		saveQuestion={this.saveQuestion}
-																		deleteQuestion={this.deleteQuestion}
-																		moveQuestion={this.moveQuestion}
-																		totalQuestionQty={questionsToDisplay.length}
-																	/>
-																))}
-															</ul> : <p>Click button to add a question.</p>
-														}
-														{this.state.editingAllowed &&
 														<button
 															className="btn btn--cta"
 															disabled={this.state.loading}
@@ -335,12 +338,18 @@ export class Questions extends Component<PropsType, StateType> {
 															}}
 														>Add text response question
 														</button>
-														}
+
+														<QuestionTemplates
+															textQuestionTypeId={textQuestionTypeId}
+															currentConsultationId={currentConsultationId}
+															currentDocumentId={currentDocumentId}
+															newQuestion={this.newQuestion}/>
 													</Fragment>
-													:
-													<p>Choose consultation title or document to add questions.</p>
-												}
-											</div>
+													}
+												</Fragment>
+												:
+												<p>Choose consultation title or document to add questions.</p>
+											}
 										</div>
 									</div>
 								</div>

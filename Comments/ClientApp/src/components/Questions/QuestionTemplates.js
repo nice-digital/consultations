@@ -1,5 +1,5 @@
 import React from "react";
-import fakeTemplateData from "./fake-template-data";
+import fakeTemplateData from "./fake-template-data.json";
 
 export class QuestionTemplates extends React.Component {
 	state = {
@@ -74,15 +74,17 @@ const TemplateItem = (props) => {
 
 const TemplateFilter = (props) => {
 	return (
-		<div className="form__group form__group--textarea mb--b">
+		<div className="form__group mb--b">
 			<label
-				className="form__label" htmlFor="filter">
-				Filter questions by question text
+				className="form__label"
+				htmlFor="filter">
+				Search by question
 			</label>
-			<input className="form__input"
-						 onChange={props.filterQuestions}
-						 id="filter"
-						 tabIndex={0}/>
+			<input
+				className="form__input"
+				onChange={props.filterQuestions}
+				id="filter"
+				tabIndex={0}/>
 		</div>
 	);
 };
