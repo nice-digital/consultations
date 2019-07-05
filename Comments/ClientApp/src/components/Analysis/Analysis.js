@@ -3,11 +3,13 @@
 import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import Helmet from "react-helmet";
+
 import { LoginBanner } from "../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
 import { load } from "../../data/loader";
 import { CommentBox } from "../CommentBox/CommentBox";
 import { Question } from "../Question/Question";
+import { KeyPhrases } from "../KeyPhrases/KeyPhrases";
 
 type PropsType = {
 	staticContext: ContextType;
@@ -143,23 +145,24 @@ export class Analysis extends Component<PropsType, StateType> {
 									<h1 className="h3">{this.state.consultationTitle}</h1>
 									<h2>Combined analysis for all comments and answers</h2>
 									<h3>Sentiments</h3>									
-									{this.state.allSentiments.map((sentiment) => {
+									{this.state.allSentiments.map((sentiment, index) => {
 										return (
-											<img className="sentiment" src={`images/${sentiment}.png`}/>
+											<img key={index} className="sentiment" src={`images/${sentiment}.png`}/>
 										);
 									})}
 									<h3>Key phrases</h3>
-									{this.state.allKeyPhrases.map((keyPhrase) => {
+									<KeyPhrases keyPhrases={this.state.allKeyPhrases} />
+									{/* {this.state.allKeyPhrases.map((keyPhrase) => {
 										return (
 											<span> {keyPhrase.text} </span>
 										);
-									})}
+									})} */}
 									<h2>Individual comment and answer analysis</h2>
 
 									<h3>Questions</h3>
 									{this.state.questions.map((question) => {
 										return (
-											<ul className="AnalysisList CommentList list--unstyled mt--0 analysis-item">
+											<ul className="AnalysisList CommentList list--unstyled mt--0 analysis-item" key={question.questionId}>
 												<Question
 													isUnsaved={false}
 													updateUnsavedIds={this.updateUnsavedIds}
@@ -175,7 +178,7 @@ export class Analysis extends Component<PropsType, StateType> {
 													<Fragment>
 														{question.answers.map((answer) => {
 															return (
-																<li className="analysis-item">
+																<li className="analysis-item" key={`analysis-${answer.answerId}`}>
 																	<p>Overall: <img className="sentiment" src={`images/${answer.sentiment}.png`}/></p>
 																	<p>Individual scores: <br/>
 																		<img className="sentiment" src={`images/positive.png`}/> Positive: {answer.sentimentScorePositive} <br/>
@@ -183,11 +186,12 @@ export class Analysis extends Component<PropsType, StateType> {
 																		<img className="sentiment" src={`images/neutral.png`}/> Neutral: {answer.sentimentScoreNeutral} <br/>
 																		<img className="sentiment" src={`images/mixed.png`}/> Mixed: {answer.sentimentScoreMixed}
 																	</p>
-																	{answer.keyPhrases.map((keyPhrase) => {
+																	<KeyPhrases keyPhrases={answer.keyPhrases} />
+																	{/* {answer.keyPhrases.map((keyPhrase) => {
 																		return (
 																			<span> {keyPhrase.text} </span>
 																		);
-																	})}
+																	})} */}
 																</li>
 															);
 														})}
@@ -203,7 +207,7 @@ export class Analysis extends Component<PropsType, StateType> {
 										<Fragment>
 											{this.state.comments.map((comment) => {
 												return (
-													<ul className="AnalysisList CommentList list--unstyled mt--0 analysis-item">
+													<ul className="AnalysisList CommentList list--unstyled mt--0 analysis-item" key={`analysis-${comment.commentId}`}>
 														<CommentBox
 															updateUnsavedIds={this.updateUnsavedIds}
 															readOnly={true}
@@ -222,11 +226,12 @@ export class Analysis extends Component<PropsType, StateType> {
 																	<img className="sentiment" src={`images/neutral.png`}/> Neutral: {comment.sentimentScoreNeutral} <br/>
 																	<img className="sentiment" src={`images/mixed.png`}/> Mixed: {comment.sentimentScoreMixed}
 																</p>
-																{comment.keyPhrases.map((keyPhrase) => {
+																<KeyPhrases keyPhrases={comment.keyPhrases} />
+																{/* {comment.keyPhrases.map((keyPhrase) => {
 																	return (
 																		<span> {keyPhrase.text} </span>
 																	);
-																})}
+																})} */}
 															</li>
 															:
 															<li className="analysis-item">This comment has not been analysed</li>
