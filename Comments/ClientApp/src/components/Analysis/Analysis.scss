@@ -1,6 +1,9 @@
 img.sentiment{
   width: 3em;
   padding-right: 1em;
+  &.header{
+    width: 6em;
+  }
 }
 .sentiment-overall{
   width: 4em;

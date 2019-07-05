@@ -146,7 +146,7 @@ export class Analysis extends Component<PropsType, StateType> {
 									<h3>Sentiments</h3>									
 									{this.state.allSentiments.map((sentiment, index) => {
 										return (
-											<img key={index} className="sentiment" src={`images/${sentiment}.png`}/>
+											<img key={index} className="sentiment header" src={`images/${sentiment}.png`}/>
 										);
 									})}
 									<h3>Key phrases</h3>
