@@ -14,7 +14,7 @@ namespace Comments.Services
 	public interface ICommentService
     {
 	    CommentsAndQuestions GetCommentsAndQuestions(string relativeURL);
-	    CommentsAndQuestionsForAnalysis GetCommentsAndQuestionsWithAnalysis(int consultationId);
+	    CommentsAndQuestionsWithAnalysis GetCommentsAndQuestionsWithAnalysis(int consultationId);
 		ReviewPageViewModel GetCommentsAndQuestionsForReview(string relativeURL, ReviewPageViewModel model);
 		(ViewModels.Comment comment, Validate validate) GetComment(int commentId);
         (int rowsUpdated, Validate validate) EditComment(int commentId, ViewModels.Comment comment);
@@ -147,7 +147,7 @@ namespace Comments.Services
 			return new CommentsAndQuestions(resortedComments, data.questions.ToList(), user.IsAuthorised, signInURL, consultationState);
 	    }
 
-		public CommentsAndQuestionsForAnalysis GetCommentsAndQuestionsWithAnalysis(int consultationId)
+		public CommentsAndQuestionsWithAnalysis GetCommentsAndQuestionsWithAnalysis(int consultationId)
 	    {
 		    var user = _userService.GetCurrentUser();
 		    var consultationSourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
@@ -157,7 +157,7 @@ namespace Comments.Services
 		    if (!user.IsAuthorised)
 		    {
 			    consultationState = _consultationService.GetConsultationState(consultationSourceURI, PreviewState.NonPreview);
-			    return new CommentsAndQuestionsForAnalysis(new List<ViewModels.Comment>(), new List<ViewModels.Question>(),
+			    return new CommentsAndQuestionsWithAnalysis(new List<ViewModels.Comment>(), new List<ViewModels.Question>(),
 				    user.IsAuthorised, signInURL, consultationState, new List<QuestionWithAnalysis>(), new List<CommentWithAnalysis>(), string.Empty);
 		    }
 
@@ -169,7 +169,7 @@ namespace Comments.Services
 
 		    var documentsAndConsultationTitle = _consultationService.GetDocuments(consultationId);
 
-			return new CommentsAndQuestionsForAnalysis(null, null, user.IsAuthorised, signInURL, consultationState, data.questions.ToList(), resortedComments, documentsAndConsultationTitle.consultationTitle);
+			return new CommentsAndQuestionsWithAnalysis(null, null, user.IsAuthorised, signInURL, consultationState, data.questions.ToList(), resortedComments, documentsAndConsultationTitle.consultationTitle);
 		}
 
 	    public ReviewPageViewModel GetCommentsAndQuestionsForReview(string relativeURL, ReviewPageViewModel model)

@@ -34,11 +34,7 @@ namespace Comments.ViewModels
 			else if (answer.Question?.Location != null)
 				SourceURI = answer.Question.Location.SourceURI;
 
-			//Sentiment = answer.Sentiment;
-			//SentimentScorePositive = answer.SentimentScorePositive;
-			//SentimentScoreNegative = answer.SentimentScoreNegative;
-			//SentimentScoreNeutral = answer.SentimentScoreNeutral;
-			//SentimentScoreMixed = answer.SentimentScoreMixed;
+			Analysed = !string.IsNullOrEmpty(answer.Sentiment);
 		}
 
 		public int AnswerId { get; set; }
@@ -59,11 +55,7 @@ namespace Comments.ViewModels
 		/// </summary>
 		public string SourceURI { get; set; }
 
-		//public string Sentiment { get; set; }
-		//public float SentimentScorePositive { get; set; }
-		//public float SentimentScoreNegative { get; set; }
-		//public float SentimentScoreNeutral { get; set; }
-		//public float SentimentScoreMixed { get; set; }
+		public bool Analysed { get; private set; }
 
 		public void UpdateStatusFromDBModel(Models.Status status)
 		{

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using DocumentFormat.OpenXml.Office2013.Drawing.ChartStyle;
 
 namespace Comments.ViewModels
 {
@@ -13,9 +14,12 @@ namespace Comments.ViewModels
 			if (!(question.Answer is null))
 			{
 				Answers = question.Answer.Select(answer => new AnswerWithAnalysis(answer)).ToList();
+
+				Analysed = Answers.Any(answer => answer.Analysed);
 			}
 		}
 
-		public new IList<ViewModels.AnswerWithAnalysis> Answers { get; set; }
+		public new IList<ViewModels.AnswerWithAnalysis> Answers { get; private set; }
+		public bool Analysed { get; private set; }
 	}
 }

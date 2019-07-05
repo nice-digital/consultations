@@ -45,14 +45,21 @@ namespace Comments.Services
 				{
 					if (isAdminUser || userRoles.Contains(consultation.AllowedRole))
 					{
+						var responseCount = 0;
+						var analysed = false;
 						var sourceURI = ConsultationsUri.CreateConsultationURI(consultation.ConsultationId);
-						var responseCount = submittedCommentsAndAnswerCounts.FirstOrDefault(s => s.SourceURI.Equals(sourceURI))?.TotalCount ?? 0;
+						var consultationData = submittedCommentsAndAnswerCounts.FirstOrDefault(s => s.SourceURI.Equals(sourceURI));
+						if (consultationData != null)
+						{
+							responseCount = consultationData.TotalCount;
+							analysed = consultationData.Analysed;
+						}
 
 						consultationListRows.Add(
 							new ConsultationListRow(consultation.Title,
 								consultation.StartDate, consultation.EndDate, responseCount, consultation.ConsultationId,
 								consultation.FirstConvertedDocumentId, consultation.FirstChapterSlugOfFirstConvertedDocument, consultation.Reference,
-								consultation.ProductTypeName));
+								consultation.ProductTypeName, analysed));
 					}
 				}
 

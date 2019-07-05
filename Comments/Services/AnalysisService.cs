@@ -22,7 +22,8 @@ namespace Comments.Services
 		private const int MaximumBatchSize = 25;
 		private readonly IAmazonComprehend _amazonComprehend;
 
-		#region Batching types
+		#region Batching - this is here since AWS can analyse 25 blocks of text at a time.
+
 		private enum CommentOrAnswer
 		{
 			Comment,
@@ -61,22 +62,6 @@ namespace Comments.Services
 			public CommentOrAnswer Type { get; }
 			public int Id { get; }
 			public string Text { get;  }
-		}
-		#endregion Batching types
-
-		public AnalysisService(IAmazonComprehend amazonComprehend)
-		{
-			_amazonComprehend = amazonComprehend;
-		}
-
-		public async Task AnalyseAndUpdateDatabase(ConsultationsContext context, IList<Comment> submissionComments,
-			IList<Answer> submissionAnswers)
-		{
-			var batchedUpCommentsAndAnswers = BatchUp(submissionComments, submissionAnswers);
-
-			await SentimentAnalysis(context, batchedUpCommentsAndAnswers);
-
-			await KeyPhraseAnalysis(context, batchedUpCommentsAndAnswers);
 		}
 
 		private static Batches BatchUp(IList<Comment> submissionComments, IList<Answer> submissionAnswers)
@@ -117,6 +102,32 @@ namespace Comments.Services
 			return (batch.ItemsInBatch.Select(item => item.Text).ToList(), commentsToUpdate, answersToUpdate);
 		}
 
+		#endregion Batching
+
+		public AnalysisService(IAmazonComprehend amazonComprehend)
+		{
+			_amazonComprehend = amazonComprehend;
+		}
+
+		public async Task AnalyseAndUpdateDatabase(ConsultationsContext context, IList<Comment> submissionComments,
+			IList<Answer> submissionAnswers)
+		{
+			var batchedUpCommentsAndAnswers = BatchUp(submissionComments, submissionAnswers);
+
+			await SentimentAnalysis(context, batchedUpCommentsAndAnswers);
+
+			await KeyPhraseAnalysis(context, batchedUpCommentsAndAnswers);
+		}
+
+		/// <summary>
+		/// SentimentAnalysis - calls BatchDetectSentimentAsync which returns the Sentiment (positive, negative, neutral or mixed) along with a
+		/// SentimentScore - which contains the score of each sentiment as a float.
+		///
+		/// Then the database is updated. the sentiments are stored in the Comment and Answer tables.
+		/// </summary>
+		/// <param name="context"></param>
+		/// <param name="batches"></param>
+		/// <returns></returns>
 		private async Task SentimentAnalysis(ConsultationsContext context, Batches batches)
 		{
 			foreach (var batch in batches.AllBatches)
@@ -162,6 +173,16 @@ namespace Comments.Services
 			}
 		}
 
+		/// <summary>
+		/// KeyPhraseAnalysis - calls BatchDetectKeyPhrasesAsync to pull out all the keyphrases from each comment and answer.
+		///
+		/// note that it might pull out duplicate keyphrases from each comment. in that case we ignore the duplicates.
+		///
+		/// the DB is then updated, that's the KeyPhrase, CommentKeyPhrase and AnswerKeyPhrase tables.
+		/// </summary>
+		/// <param name="context"></param>
+		/// <param name="batches"></param>
+		/// <returns></returns>
 		private async Task KeyPhraseAnalysis(ConsultationsContext context, Batches batches)
 		{
 			foreach (var batch in batches.AllBatches)

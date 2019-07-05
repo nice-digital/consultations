@@ -3,9 +3,9 @@ using System.Linq;
 
 namespace Comments.ViewModels
 {
-	public class CommentsAndQuestionsForAnalysis : CommentsAndQuestions
+	public class CommentsAndQuestionsWithAnalysis : CommentsAndQuestions
 	{
-		public CommentsAndQuestionsForAnalysis(List<Comment> comments, List<Question> questions, bool isAuthorised, string signInURL, ConsultationState consultationState,
+		public CommentsAndQuestionsWithAnalysis(List<Comment> comments, List<Question> questions, bool isAuthorised, string signInURL, ConsultationState consultationState,
 			IEnumerable<QuestionWithAnalysis> questionsWithAnalysis, IEnumerable<CommentWithAnalysis> commentsWithAnalysis,
 			string consultationTitle)
 			: base(comments, questions, isAuthorised, signInURL, consultationState)
@@ -29,7 +29,7 @@ namespace Comments.ViewModels
 				{
 					sentiments.AddRange(question.Answers.Select(answer => answer.Sentiment).ToList());
 				}
-				return sentiments;
+				return sentiments.Where(sentiment => sentiment != null);
 			}
 		}
 
@@ -42,7 +42,7 @@ namespace Comments.ViewModels
 				{
 					keyPhrases.AddRange(question.Answers.SelectMany(answer => answer.KeyPhrases));
 				}
-				return keyPhrases;
+				return keyPhrases.Where(keyPhrase => keyPhrase != null);
 			}
 		}
 	}

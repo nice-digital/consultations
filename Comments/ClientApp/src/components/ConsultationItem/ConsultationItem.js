@@ -109,7 +109,9 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 								</dd>
 							</div>
 						}
-						<Link to={`/admin/consultation/${consultationId}`}>Analysis</Link>
+						{this.props.analysed &&
+							<Link to={`/admin/consultation/${consultationId}`}>Analysis</Link>
+						}
 					</dl>
 				</article>
 			</li>

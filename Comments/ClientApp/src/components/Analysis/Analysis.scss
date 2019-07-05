@@ -1,0 +1,16 @@
+img.sentiment{
+  height: 40px;
+}
+
+.AnalysisList{
+  .CommentBox{
+    display: inline-block;
+    width: 50%;
+    vertical-align: top;
+  }
+  .analysis-item{
+    display: inline-block;
+    width: 50%;
+    padding-left: 1em;
+  }
+}

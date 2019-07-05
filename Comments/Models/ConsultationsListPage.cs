@@ -4,7 +4,7 @@ namespace Comments.Models
 {
 	public class ConsultationListRow
 	{
-		public ConsultationListRow(string title, DateTime startDate, DateTime endDate, int responses, int consultationId, int? documentId, string chapterSlug, string gidReference, string productTypeName)
+		public ConsultationListRow(string title, DateTime startDate, DateTime endDate, int responses, int consultationId, int? documentId, string chapterSlug, string gidReference, string productTypeName, bool analysed)
 		{
 			Title = title;
 			StartDate = startDate;
@@ -15,6 +15,7 @@ namespace Comments.Models
 			ChapterSlug = chapterSlug;
 			GidReference = gidReference;
 			ProductTypeName = productTypeName;
+			Analysed = analysed;
 		}
 
 		public string Title { get; private set; }
@@ -28,11 +29,11 @@ namespace Comments.Models
 		public string GidReference { get; private set; }
 		public string ProductTypeName { get; private set; }
 
+		public bool Analysed { get; private set; }
 
 		public bool IsOpen => StartDate <= DateTime.UtcNow && EndDate > DateTime.UtcNow;
 		public bool IsClosed => EndDate < DateTime.UtcNow;
 		public bool IsUpcoming => StartDate > DateTime.UtcNow;
 		public bool Show { get; set; } = true;
-
 	}
 }

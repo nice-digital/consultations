@@ -28,7 +28,7 @@ namespace Comments.Controllers.Api
 		/// <param name="consultationId"></param>
 		/// <returns></returns>
 		[HttpGet]
-		public CommentsAndQuestionsForAnalysis Get(int consultationId)
+		public CommentsAndQuestionsWithAnalysis Get(int consultationId)
 		{
 			if (consultationId < 1)
 				throw new ArgumentException(nameof(consultationId));

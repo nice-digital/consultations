@@ -26,12 +26,8 @@ namespace Comments.ViewModels
 		        Status = new Status(comment.Status);
 	        StatusId = comment.StatusId;
 
-	        //Sentiment = comment.Sentiment;
-	        //SentimentScorePositive = comment.SentimentScorePositive;
-	        //SentimentScoreNegative = comment.SentimentScoreNegative;
-	        //SentimentScoreNeutral = comment.SentimentScoreNeutral;
-	        //SentimentScoreMixed = comment.SentimentScoreMixed;
-		}
+	        Analysed = !string.IsNullOrEmpty(comment.Sentiment);
+        }
 
         public int CommentId { get; set; }
         public DateTime LastModifiedDate { get; set; }
@@ -40,12 +36,7 @@ namespace Comments.ViewModels
 
 	    public ViewModels.Status Status { get; set; }
 		public int StatusId { get; set; }
-
-		//public string Sentiment { get; set; }
-		//public float SentimentScorePositive { get; set; }
-		//public float SentimentScoreNegative { get; set; }
-		//public float SentimentScoreNeutral { get; set; }
-		//public float SentimentScoreMixed { get; set; }
+		public bool Analysed { get; private set; }
 
 		public void UpdateStatusFromDBModel(Models.Status status)
 	    {

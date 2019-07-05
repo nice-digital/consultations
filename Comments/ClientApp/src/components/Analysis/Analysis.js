@@ -65,15 +65,13 @@ export class Analysis extends Component<PropsType, StateType> {
 	};
 
 	componentDidMount() {
-		console.log("cdm");
+		//console.log("cdm");
 		if (!this.state.hasInitialData) {
-			console.log("calling gather data");
+			//console.log("calling gather data");
 			this.gatherData()
 				.then(data => {
-
-					console.log("data gathered:");
-					console.log(data);
-
+					// console.log("data gathered:");
+					// console.log(data);
 					this.setState({
 						...data,
 						loading: false,
@@ -91,30 +89,30 @@ export class Analysis extends Component<PropsType, StateType> {
 		}
 	}
 
-	// componentDidUpdate(prevProps: PropsType) {
-	// 	const oldRoute = prevProps.location.pathname;
-	// 	const newRoute = this.props.location.pathname;
-	// 	if (oldRoute === newRoute) return;
-	// 	this.setState({
-	// 		loading: true,
-	// 	});
-	// 	this.gatherData()
-	// 		.then(data => {
-	// 			this.setState({
-	// 				...data,
-	// 				loading: false,
-	// 				unsavedIds: [],
-	// 			});
-	// 		})
-	// 		.catch(err => {
-	// 			this.setState({
-	// 				error: {
-	// 					hasError: true,
-	// 					message: "gatherData in componentDidMount failed " + err,
-	// 				},
-	// 			});
-	// 		});
-	// }
+	componentDidUpdate(prevProps: PropsType) {
+		const oldRoute = prevProps.location.pathname;
+		const newRoute = this.props.location.pathname;
+		if (oldRoute === newRoute) return;
+		this.setState({
+			loading: true,
+		});
+		this.gatherData()
+			.then(data => {
+				this.setState({
+					...data,
+					loading: false,
+					unsavedIds: [],
+				});
+			})
+			.catch(err => {
+				this.setState({
+					error: {
+						hasError: true,
+						message: "gatherData in componentDidMount failed " + err,
+					},
+				});
+			});
+	}
 	
 	render() {
 		if (!this.state.hasInitialData && this.state.loading) return <h1>Loading...</h1>;
@@ -161,41 +159,64 @@ export class Analysis extends Component<PropsType, StateType> {
 									<h3>Questions</h3>
 									{this.state.questions.map((question) => {
 										return (
-											<Question
-												isUnsaved={false}
-												updateUnsavedIds={this.updateUnsavedIds}
-												readOnly={!this.state.allowComments}
-												key={question.questionId}
-												unique={`Comment${question.questionId}`}
-												question={question}
-												saveAnswerHandler={this.saveAnswerHandler}
-												deleteAnswerHandler={this.deleteAnswerHandler}
-											/>
+											<div className="analysis-item">
+												<Question
+													isUnsaved={false}
+													updateUnsavedIds={this.updateUnsavedIds}
+													readOnly={true}
+													key={question.questionId}
+													unique={`Comment${question.questionId}`}
+													question={question}
+													saveAnswerHandler={null}
+													deleteAnswerHandler={null}
+													showAnalysis={true}
+												/>												
+											</div>
 										);
 									})}
 									<h3>Comments</h3>
 									{this.state.comments.length === 0 ? <p>No comments</p> :
-										<ul className="CommentList list--unstyled mt--0">
+										<div className="analysis-container">
 											{this.state.comments.map((comment) => {
 												return (
-													<CommentBox
-														updateUnsavedIds={this.updateUnsavedIds}
-														readOnly={!this.state.allowComments}
-														key={comment.commentId}
-														unique={`Comment${comment.commentId}`}
-														comment={comment}
-														saveHandler={this.saveCommentHandler}
-														deleteHandler={this.deleteCommentHandler}
-													/>
+													<ul className="AnalysisList CommentList list--unstyled mt--0 analysis-item">
+														<CommentBox
+															updateUnsavedIds={this.updateUnsavedIds}
+															readOnly={true}
+															key={comment.commentId}
+															unique={`Comment${comment.commentId}`}
+															comment={comment}
+															saveHandler={null}
+															deleteHandler={null}
+														/>
+														{comment.analysed ? 
+															<li className="analysis-item">
+																<p>Overall: <img className="sentiment" src={`images/${comment.sentiment}.png`}/></p>
+																<p>Individual scores: <br/>
+																	<img className="sentiment" src={`images/positive.png`}/> Positive: {comment.sentimentScorePositive} <br/>
+																	<img className="sentiment" src={`images/negative.png`}/> Negative: {comment.sentimentScoreNegative} <br/>
+																	<img className="sentiment" src={`images/neutral.png`}/> Neutral: {comment.sentimentScoreNeutral} <br/>
+																	<img className="sentiment" src={`images/mixed.png`}/> Mixed: {comment.sentimentScoreMixed}
+																</p>
+																{comment.keyPhrases.map((keyPhrase) => {
+																	return (
+																		<span> {keyPhrase.text} </span>
+																	);
+																})}
+															</li>
+															:
+															<li className="analysis-item">This comment has not been analysed</li>
+														}
+													</ul>
 												);
 											})}
-										</ul>
+										</div>
 									}
-									<div className="grid">
+									{/* <div className="grid">
 										<div data-g="12">
 											main content here
 										</div>
-									</div>
+									</div> */}
 								</div>
 							</div>
 						</div>
