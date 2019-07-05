@@ -161,9 +161,7 @@ namespace Comments.Services
 				    user.IsAuthorised, signInURL, consultationState, new List<QuestionWithAnalysis>(), new List<CommentWithAnalysis>(), string.Empty);
 		    }
 
-		    var sourceURIs = new List<string> { consultationSourceURI };
-
-		    var locations = _context.GetAllCommentsAndQuestionsForDocument(sourceURIs, partialMatchSourceURI: true).ToList();
+		    var locations = _context.GetAllCommentsAndQuestionsOfAllUsersForAnalysis(consultationSourceURI).ToList();
 		    consultationState = _consultationService.GetConsultationState(consultationSourceURI, PreviewState.NonPreview, locations);
 
 		    var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsAnalysisViewModels(locations);

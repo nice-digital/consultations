@@ -4,17 +4,7 @@ using System.Linq;
 
 namespace Comments.ViewModels
 {
-	/// <summary>
-	/// This view model is here to provide the answer with analysis on. only for use by the admin side, not the user side.
-	/// </summary>
-	public class QuestionWithAnalysis : Question
-	{
-		public QuestionWithAnalysis(Models.Location location, Models.Question question) : base(location, question) {}
-
-		public new IList<ViewModels.AnswerWithAnalysis> Answers { get; set; }
-	}
-
-    public class Question : Location
+	public class Question : Location
     {
         public Question() { } //only here for model binding. don't use it in code.
         public Question(Models.Location location, Models.Question question) : base(location.LocationId, location.SourceURI, location.HtmlElementID,

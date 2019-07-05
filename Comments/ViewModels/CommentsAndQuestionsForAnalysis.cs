@@ -25,7 +25,7 @@ namespace Comments.ViewModels
 			get
 			{
 				var sentiments = Comments.Select(comment => comment.Sentiment).ToList();
-				foreach (var question in Questions)
+				foreach (ViewModels.QuestionWithAnalysis question in Questions)
 				{
 					sentiments.AddRange(question.Answers.Select(answer => answer.Sentiment).ToList());
 				}
