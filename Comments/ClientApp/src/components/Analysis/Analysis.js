@@ -159,7 +159,7 @@ export class Analysis extends Component<PropsType, StateType> {
 									<h3>Questions</h3>
 									{this.state.questions.map((question) => {
 										return (
-											<div className="analysis-item">
+											<ul className="AnalysisList CommentList list--unstyled mt--0 analysis-item">
 												<Question
 													isUnsaved={false}
 													updateUnsavedIds={this.updateUnsavedIds}
@@ -170,13 +170,37 @@ export class Analysis extends Component<PropsType, StateType> {
 													saveAnswerHandler={null}
 													deleteAnswerHandler={null}
 													showAnalysis={true}
-												/>												
-											</div>
+												/>		
+												{question.analysed ? 
+													<Fragment>
+														{question.answers.map((answer) => {
+															return (
+																<li className="analysis-item">
+																	<p>Overall: <img className="sentiment" src={`images/${answer.sentiment}.png`}/></p>
+																	<p>Individual scores: <br/>
+																		<img className="sentiment" src={`images/positive.png`}/> Positive: {answer.sentimentScorePositive} <br/>
+																		<img className="sentiment" src={`images/negative.png`}/> Negative: {answer.sentimentScoreNegative} <br/>
+																		<img className="sentiment" src={`images/neutral.png`}/> Neutral: {answer.sentimentScoreNeutral} <br/>
+																		<img className="sentiment" src={`images/mixed.png`}/> Mixed: {answer.sentimentScoreMixed}
+																	</p>
+																	{answer.keyPhrases.map((keyPhrase) => {
+																		return (
+																			<span> {keyPhrase.text} </span>
+																		);
+																	})}
+																</li>
+															);
+														})}
+													</Fragment>
+													:
+													<li className="analysis-item">This question has not been analysed</li>
+												}
+											</ul>
 										);
 									})}
 									<h3>Comments</h3>
 									{this.state.comments.length === 0 ? <p>No comments</p> :
-										<div className="analysis-container">
+										<Fragment>
 											{this.state.comments.map((comment) => {
 												return (
 													<ul className="AnalysisList CommentList list--unstyled mt--0 analysis-item">
@@ -210,7 +234,7 @@ export class Analysis extends Component<PropsType, StateType> {
 													</ul>
 												);
 											})}
-										</div>
+										</Fragment>
 									}
 									{/* <div className="grid">
 										<div data-g="12">
