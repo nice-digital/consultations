@@ -15,7 +15,7 @@ namespace Comments.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
+                .HasAnnotation("ProductVersion", "2.1.8-servicing-32085")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -49,6 +49,16 @@ namespace Comments.Migrations
                     b.Property<int>("QuestionId")
                         .HasColumnName("QuestionID");
 
+                    b.Property<string>("Sentiment");
+
+                    b.Property<float>("SentimentScoreMixed");
+
+                    b.Property<float>("SentimentScoreNegative");
+
+                    b.Property<float>("SentimentScoreNeutral");
+
+                    b.Property<float>("SentimentScorePositive");
+
                     b.Property<int>("StatusId")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("StatusID")
@@ -61,6 +71,29 @@ namespace Comments.Migrations
                     b.HasIndex("StatusId");
 
                     b.ToTable("Answer");
+                });
+
+            modelBuilder.Entity("Comments.Models.AnswerKeyPhrase", b =>
+                {
+                    b.Property<int>("AnswerKeyPhraseId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("AnswerKeyPhraseID")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AnswerId")
+                        .HasColumnName("AnswerID");
+
+                    b.Property<int>("KeyPhraseId");
+
+                    b.Property<float>("Score");
+
+                    b.HasKey("AnswerKeyPhraseId");
+
+                    b.HasIndex("AnswerId");
+
+                    b.HasIndex("KeyPhraseId");
+
+                    b.ToTable("AnswerKeyPhrase");
                 });
 
             modelBuilder.Entity("Comments.Models.Comment", b =>
@@ -92,6 +125,16 @@ namespace Comments.Migrations
                     b.Property<int>("LocationId")
                         .HasColumnName("LocationID");
 
+                    b.Property<string>("Sentiment");
+
+                    b.Property<float>("SentimentScoreMixed");
+
+                    b.Property<float>("SentimentScoreNegative");
+
+                    b.Property<float>("SentimentScoreNeutral");
+
+                    b.Property<float>("SentimentScorePositive");
+
                     b.Property<int>("StatusId")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("StatusID")
@@ -104,6 +147,46 @@ namespace Comments.Migrations
                     b.HasIndex("StatusId");
 
                     b.ToTable("Comment");
+                });
+
+            modelBuilder.Entity("Comments.Models.CommentKeyPhrase", b =>
+                {
+                    b.Property<int>("CommentKeyPhraseId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("CommentKeyPhraseID")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CommentId")
+                        .HasColumnName("CommentID");
+
+                    b.Property<int>("KeyPhraseId");
+
+                    b.Property<float>("Score");
+
+                    b.HasKey("CommentKeyPhraseId");
+
+                    b.HasIndex("CommentId");
+
+                    b.HasIndex("KeyPhraseId");
+
+                    b.ToTable("CommentKeyPhrase");
+                });
+
+            modelBuilder.Entity("Comments.Models.KeyPhrase", b =>
+                {
+                    b.Property<int>("KeyPhraseId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("KeyPhraseID")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Text")
+                        .IsRequired();
+
+                    b.HasKey("KeyPhraseId");
+
+                    b.HasIndex("KeyPhraseId");
+
+                    b.ToTable("KeyPhrase");
                 });
 
             modelBuilder.Entity("Comments.Models.Location", b =>
@@ -300,6 +383,19 @@ namespace Comments.Migrations
                         .HasConstraintName("FK_Answer_Status");
                 });
 
+            modelBuilder.Entity("Comments.Models.AnswerKeyPhrase", b =>
+                {
+                    b.HasOne("Comments.Models.Answer", "Answer")
+                        .WithMany("AnswerKeyPhrase")
+                        .HasForeignKey("AnswerId")
+                        .HasConstraintName("FK_AnswerKeyPhrase_AnswerKeyPhraseID");
+
+                    b.HasOne("Comments.Models.KeyPhrase", "KeyPhrase")
+                        .WithMany("AnswerKeyPhrase")
+                        .HasForeignKey("KeyPhraseId")
+                        .HasConstraintName("FK_AnswerKeyPhrase_KeyPhraseId");
+                });
+
             modelBuilder.Entity("Comments.Models.Comment", b =>
                 {
                     b.HasOne("Comments.Models.Location", "Location")
@@ -311,6 +407,19 @@ namespace Comments.Migrations
                         .WithMany("Comment")
                         .HasForeignKey("StatusId")
                         .HasConstraintName("FK_Comment_Status");
+                });
+
+            modelBuilder.Entity("Comments.Models.CommentKeyPhrase", b =>
+                {
+                    b.HasOne("Comments.Models.Comment", "Comment")
+                        .WithMany("CommentKeyPhrase")
+                        .HasForeignKey("CommentId")
+                        .HasConstraintName("FK_CommentKeyPhrase_CommentID");
+
+                    b.HasOne("Comments.Models.KeyPhrase", "KeyPhrase")
+                        .WithMany("CommentKeyPhrase")
+                        .HasForeignKey("KeyPhraseId")
+                        .HasConstraintName("FK_CommentKeyPhrase_KeyPhraseID");
                 });
 
             modelBuilder.Entity("Comments.Models.Question", b =>

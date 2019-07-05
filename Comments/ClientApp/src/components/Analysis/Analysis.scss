@@ -1,0 +1,34 @@
+img.sentiment{
+  width: 3em;
+  padding-right: 1em;
+  &.header{
+    width: 6em;
+  }
+}
+.sentiment-overall{
+  width: 4em;
+}
+
+.AnalysisList{
+  .CommentBox{
+    display: inline-block;
+    width: 40%;
+    vertical-align: top;
+  }
+  .analysis-item{
+    display: inline-block;
+    padding-left: 1em;
+    vertical-align: top;
+
+    &.sentiment{
+      width: 18%;
+    }
+    &.keyphrases{
+      width: 42%;
+    }
+  }
+}
+
+.tag-cloud-tag {
+  padding: 8px 9px 8px 9px;
+}

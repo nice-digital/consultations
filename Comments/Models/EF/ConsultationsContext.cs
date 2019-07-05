@@ -1,12 +1,9 @@
-using System;
-using System.Linq;
-using System.Text;
 using Comments.Configuration;
 using Comments.Migrations;
 using Comments.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Text;
 
 namespace Comments.Models
 {
@@ -22,6 +19,9 @@ namespace Comments.Models
 		public virtual DbSet<Submission> Submission { get; set; }
 		public virtual DbSet<SubmissionAnswer> SubmissionAnswer { get; set; }
 		public virtual DbSet<SubmissionComment> SubmissionComment { get; set; }
+		public virtual DbSet<CommentKeyPhrase> CommentKeyPhrase { get; set; }
+		public virtual DbSet<AnswerKeyPhrase> AnswerKeyPhrase { get; set; }
+		public virtual DbSet<KeyPhrase> KeyPhrase { get; set; }
 
 		/// <summary>
 		/// Query type - see here for more info https://docs.microsoft.com/en-us/ef/core/modeling/query-types
@@ -115,7 +115,7 @@ namespace Comments.Models
 					.HasForeignKey(d => d.StatusId)
 					.OnDelete(DeleteBehavior.ClientSetNull)
 					.HasConstraintName("FK_Comment_Status");
-
+				
 				//JW. automatically filter out deleted rows and other people's comments. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
 				//note: only 1 filter is supported. you must combine the logic into one expression.
 				entity.HasQueryFilter(c => !c.IsDeleted && c.CreatedByUserId == _createdByUserID);
@@ -256,6 +256,82 @@ namespace Comments.Models
 			modelBuilder
 				.Query<SubmittedCommentsAndAnswerCount>()
 				.ToView(MigrationConstants.Views.SubmittedCommentAndAnswerCount);
+
+
+			
+
+			modelBuilder.Entity<CommentKeyPhrase>(entity =>
+			{
+				//entity.HasIndex(e => e.CommentKeyPhraseId);
+				//entity.HasIndex(e => e.KeyPhraseId);
+				//entity.HasIndex(e => e.CommentId);
+
+				entity.Property(e => e.CommentKeyPhraseId)
+					.HasColumnName("CommentKeyPhraseID")
+					.ValueGeneratedOnAdd();
+
+				entity.Property(e => e.CommentId)
+					.HasColumnName("CommentID")
+					.ValueGeneratedNever();
+
+				entity.HasOne(d => d.Comment)
+					.WithMany(p => p.CommentKeyPhrase)
+					.HasForeignKey(d => d.CommentId)
+					.OnDelete(DeleteBehavior.ClientSetNull)
+					.HasConstraintName("FK_CommentKeyPhrase_CommentID");
+
+				entity.HasOne(d => d.KeyPhrase)
+					.WithMany(p => p.CommentKeyPhrase)
+					.HasForeignKey(d => d.KeyPhraseId)
+					.OnDelete(DeleteBehavior.ClientSetNull)
+					.HasConstraintName("FK_CommentKeyPhrase_KeyPhraseID");
+
+			});
+
+			modelBuilder.Entity<AnswerKeyPhrase>(entity =>
+			{
+				//entity.HasIndex(e => e.AnswerKeyPhraseId);
+				//entity.HasIndex(e => e.KeyPhraseId);
+				//entity.HasIndex(e => e.AnswerId);
+
+				entity.Property(e => e.AnswerKeyPhraseId)
+					.HasColumnName("AnswerKeyPhraseID")
+					.ValueGeneratedOnAdd();
+
+				entity.Property(e => e.AnswerId)
+					.HasColumnName("AnswerID")
+					.ValueGeneratedNever();
+
+				entity.HasOne(d => d.KeyPhrase)
+					.WithMany(p => p.AnswerKeyPhrase)
+					.HasForeignKey(d => d.KeyPhraseId)
+					.OnDelete(DeleteBehavior.ClientSetNull)
+					.HasConstraintName("FK_AnswerKeyPhrase_KeyPhraseId");
+
+				entity.HasOne(d => d.Answer)
+					.WithMany(p => p.AnswerKeyPhrase)
+					.HasForeignKey(d => d.AnswerId)
+					.OnDelete(DeleteBehavior.ClientSetNull)
+					.HasConstraintName("FK_AnswerKeyPhrase_AnswerKeyPhraseID");
+			});
+
+			modelBuilder.Entity<KeyPhrase>(entity =>
+			{
+				entity.HasIndex(e => e.KeyPhraseId);
+
+				entity.Property(e => e.KeyPhraseId)
+					.HasColumnName("KeyPhraseID")
+					.ValueGeneratedOnAdd();
+
+				entity.Property(e => e.Text)
+					.IsRequired();
+
+				//entity.HasOne(d => d.CommentKeyPhrase)
+				//	.WithMany(p => p.KeyPhrase)
+				//	.HasForeignKey(d => d.)
+				//	.OnDelete(DeleteBehavior.ClientSetNull)
+				//	.HasConstraintName("FK_SubmissionComment_CommentID");
+			});
 		}
 	}
 }

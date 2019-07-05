@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Comments.Configuration;
 using Comments.Services;
 using Comments.Test.Infrastructure;
 using Comments.ViewModels;
@@ -15,7 +16,10 @@ namespace Comments.Test.IntegrationTests.API.Submit
 {
     public class SubmitTests: TestBase
     {
-	    public SubmitTests() : base(useRealSubmitService:true) {}
+	    public SubmitTests() : base(useRealSubmitService: true)
+	    {
+		    AppSettings.AWSConfig.EnableAnalysis = false;
+	    }
 
 	    [Fact]
 	    public async Task Submit_Comment_And_Answers()

@@ -14,12 +14,13 @@ namespace Comments.Services
 	public interface ICommentService
     {
 	    CommentsAndQuestions GetCommentsAndQuestions(string relativeURL);
-	    ReviewPageViewModel GetCommentsAndQuestionsForReview(string relativeURL, ReviewPageViewModel model);
+	    CommentsAndQuestionsWithAnalysis GetCommentsAndQuestionsWithAnalysis(int consultationId);
+		ReviewPageViewModel GetCommentsAndQuestionsForReview(string relativeURL, ReviewPageViewModel model);
 		(ViewModels.Comment comment, Validate validate) GetComment(int commentId);
         (int rowsUpdated, Validate validate) EditComment(int commentId, ViewModels.Comment comment);
         (ViewModels.Comment comment, Validate validate) CreateComment(ViewModels.Comment comment);
         (int rowsUpdated, Validate validate) DeleteComment(int commentId);
-	}
+    }
 
     public class CommentService : ICommentService
     {
@@ -115,7 +116,7 @@ namespace Comments.Services
             return (rowsUpdated: _context.SaveChanges(), validate: null);
         }
 
-	    public CommentsAndQuestions GetCommentsAndQuestions(string relativeURL)
+        public CommentsAndQuestions GetCommentsAndQuestions(string relativeURL)
 	    {
 		    var user = _userService.GetCurrentUser();
 		    var signInURL = _authenticateService.GetLoginURL(relativeURL.ToConsultationsRelativeUrl());
@@ -146,7 +147,32 @@ namespace Comments.Services
 			return new CommentsAndQuestions(resortedComments, data.questions.ToList(), user.IsAuthorised, signInURL, consultationState);
 	    }
 
-		public ReviewPageViewModel GetCommentsAndQuestionsForReview(string relativeURL, ReviewPageViewModel model)
+		public CommentsAndQuestionsWithAnalysis GetCommentsAndQuestionsWithAnalysis(int consultationId)
+	    {
+		    var user = _userService.GetCurrentUser();
+		    var consultationSourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
+		    var signInURL = _authenticateService.GetLoginURL($"/admin/consultation/{consultationId}");
+			ConsultationState consultationState;
+
+		    if (!user.IsAuthorised)
+		    {
+			    consultationState = _consultationService.GetConsultationState(consultationSourceURI, PreviewState.NonPreview);
+			    return new CommentsAndQuestionsWithAnalysis(new List<ViewModels.Comment>(), new List<ViewModels.Question>(),
+				    user.IsAuthorised, signInURL, consultationState, new List<QuestionWithAnalysis>(), new List<CommentWithAnalysis>(), string.Empty);
+		    }
+
+		    var locations = _context.GetAllCommentsAndQuestionsOfAllUsersForAnalysis(consultationSourceURI).ToList();
+		    consultationState = _consultationService.GetConsultationState(consultationSourceURI, PreviewState.NonPreview, locations);
+
+		    var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsAnalysisViewModels(locations);
+		    var resortedComments = data.comments.OrderByDescending(c => c.LastModifiedDate).ToList(); //comments should be sorted in date by default, questions by document order.
+
+		    var documentsAndConsultationTitle = _consultationService.GetDocuments(consultationId);
+
+			return new CommentsAndQuestionsWithAnalysis(null, null, user.IsAuthorised, signInURL, consultationState, data.questions.ToList(), resortedComments, documentsAndConsultationTitle.consultationTitle);
+		}
+
+	    public ReviewPageViewModel GetCommentsAndQuestionsForReview(string relativeURL, ReviewPageViewModel model)
 		{
 			var commentsAndQuestions = GetCommentsAndQuestions(relativeURL);
 

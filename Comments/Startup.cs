@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using NICE.Feeds;
 using System;
 using System.IO;
+using Amazon.Comprehend;
 using Comments.Auth;
 using Comments.Common;
 using Comments.Export;
@@ -27,7 +28,7 @@ namespace Comments
     {
         ILogger _logger;
 
-        public Startup(IConfiguration configuration, IHostingEnvironment env, ILogger<Startup> logger)
+		public Startup(IConfiguration configuration, IHostingEnvironment env, ILogger<Startup> logger)
         {
             Configuration = configuration;
             Environment = env;
@@ -50,7 +51,9 @@ namespace Comments
                 AppSettings.Configure(services, Configuration, Environment.ContentRootPath);
             }
 
-            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            //adding services to support hitting AWS in a background task.
+            
+			services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.TryAddSingleton<ISeriLogger, SeriLogger>();
             services.TryAddSingleton<IAuthenticateService, AuthService>();
             services.TryAddTransient<IUserService, UserService>();
@@ -63,8 +66,8 @@ namespace Comments
 
             services.TryAddTransient<ICommentService, CommentService>();
             services.TryAddTransient<IConsultationService, ConsultationService>();
-            
-            services.TryAddTransient<IFeedReaderService>(provider => new FeedReaderService(new RemoteSystemReader(null), AppSettings.Feed));
+
+			services.TryAddTransient<IFeedReaderService>(provider => new FeedReaderService(new RemoteSystemReader(null), AppSettings.Feed));
             services.TryAddTransient<IFeedService, FeedService>();
             services.TryAddTransient<IAnswerService, AnswerService>();
             services.TryAddTransient<IQuestionService, QuestionService>();
@@ -75,6 +78,8 @@ namespace Comments
 	        services.TryAddTransient<IExportToExcel, ExportToExcel>();
 	        services.TryAddTransient<IStatusService, StatusService>();
 			services.TryAddTransient<IConsultationListService, ConsultationListService>();
+
+			services.TryAddSingleton<IAnalysisService, AnalysisService>();
 
 			// Add authentication 
 			services.AddAuthentication(options =>
@@ -91,6 +96,11 @@ namespace Comments
             {
                 options.Filters.Add(new ResponseCacheAttribute() { NoStore = true, Location = ResponseCacheLocation.None });
             });
+
+
+            services.AddDefaultAWSOptions(Configuration.GetAWSOptions());
+            services.AddAWSService<IAmazonComprehend>();
+
 
             // In production, static files are served from the pre-built files, rather than proxied via react dev server
             services.AddSpaStaticFiles(configuration =>
@@ -150,7 +160,7 @@ namespace Comments
             seriLogger.Configure(loggerFactory, Configuration, appLifetime, env);
             var startupLogger = loggerFactory.CreateLogger<Startup>();
 
-            if (env.IsDevelopment())
+			if (env.IsDevelopment())
             {
 	            app.UseExceptionHandler(Constants.ErrorPath);
 				//app.UseDeveloperExceptionPage();
@@ -165,9 +175,6 @@ namespace Comments
 
 	            app.UseStatusCodePagesWithReExecute(Constants.ErrorPath + "/{0}");
 			}
-
-	        
-
 
 			app.UseCors("CorsPolicy");
 
@@ -204,7 +211,6 @@ namespace Comments
 		    {
 			    app.UseHttpsRedirection();
 		    }
-
 
 	        app.UseMvc(routes =>
             {
@@ -294,18 +300,6 @@ namespace Comments
                    // spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
-
-            //try
-            //{
-            //    using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            //    {
-            //         serviceScope.ServiceProvider.GetService<ConsultationsContext>().Database.Migrate();
-            //    }
-            //}
-            //catch(Exception ex)
-            //{
-            //    startupLogger.LogError(String.Format("EF Migrations Error: {0}", ex));
-            //}
-		}
+        }
     }
 }

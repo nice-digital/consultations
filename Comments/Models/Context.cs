@@ -31,7 +31,6 @@ namespace Comments.Models
 		//	optionsBuilder.UseSqlServer("[you don't need a valid connection string when creating migrations. the real connection string should never be put here though. it should be kept in secrets.json]");
 		//}
 
-
 		public ConsultationsContext(DbContextOptions options, IUserService userService, IEncryption encryption) : base(options)
         {
 	        _encryption = encryption;
@@ -69,16 +68,67 @@ namespace Comments.Models
 				.Include(l => l.Comment)
 					.ThenInclude(s => s.Status)
 
+
 				.Include(l => l.Question)
 					.ThenInclude(q => q.QuestionType)
+
 				.Include(l => l.Question)
 					.ThenInclude(q => q.Answer)
-					.ThenInclude(s => s.SubmissionAnswer)
+						.ThenInclude(s => s.SubmissionAnswer)
 
-					.OrderBy(l => l.Order)
+				.OrderBy(l => l.Order)
 
 				.ThenByDescending(l =>
 					l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault())
+
+				.ToList();
+
+			return data;
+		}
+
+		/// <summary>
+		/// This is similar to GetAllCommentsAndQuestionsForDocument except it's used on the analysis page, so always expects a consultation sourceuri
+		/// it joins to the keyphrase tables, and it returns all users data, not just the current user.
+		/// </summary>
+		/// <param name="sourceURIs">a consultation source uri. </param>
+		/// <returns></returns>
+		public IEnumerable<Location> GetAllCommentsAndQuestionsOfAllUsersForAnalysis(string consultationSourceURI)
+		{
+			if (consultationSourceURI == null)
+				throw new ArgumentException("Invalid source uri");
+
+			var partialSourceURIToUse = $"{consultationSourceURI}/";
+
+			var data = Location.Where(l => (l.SourceURI.Equals(consultationSourceURI) || l.SourceURI.Contains(partialSourceURIToUse)))
+				.Include(l => l.Comment)
+					.ThenInclude(s => s.SubmissionComment)
+					.ThenInclude(s => s.Submission)
+
+				.Include(l => l.Comment)
+					.ThenInclude(s => s.Status)
+
+				.Include(l => l.Comment)
+					.ThenInclude(ckp => ckp.CommentKeyPhrase)
+						.ThenInclude(kp => kp.KeyPhrase)
+
+				.Include(l => l.Question)
+					.ThenInclude(q => q.QuestionType)
+
+				.Include(l => l.Question)
+					.ThenInclude(q => q.Answer)
+						.ThenInclude(s => s.SubmissionAnswer)
+
+				.Include(l => l.Question)
+					.ThenInclude(a => a.Answer)
+						.ThenInclude(akp => akp.AnswerKeyPhrase)
+							.ThenInclude(kp => kp.KeyPhrase)
+
+				.OrderBy(l => l.Order)
+
+				.ThenByDescending(l =>
+					l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault())
+
+				.IgnoreQueryFilters() //this bit is going to return all users comments and answers
 
 				.ToList();
 

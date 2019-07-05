@@ -1,9 +1,14 @@
-using System;
 using Comments.Models;
 using Comments.ViewModels;
-using System.Collections.Generic;
-using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using NICE.Feeds;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+using Comments.Configuration;
 
 namespace Comments.Services
 {
@@ -18,11 +23,20 @@ namespace Comments.Services
 		private readonly IConsultationService _consultationService;
 		private readonly User _currentUser;
 
-		public SubmitService(ConsultationsContext context, IUserService userService, IConsultationService consultationService)
+		private readonly IServiceScopeFactory _serviceScopeFactory;
+		private readonly IAnalysisService _analysisService;
+		private readonly ILogger<SubmitService> _logger;
+		private readonly IServiceProvider _services;
+
+		public SubmitService(ConsultationsContext context, IUserService userService, IConsultationService consultationService,
+			IServiceScopeFactory serviceScopeFactory, IAnalysisService analysisService, ILogger<SubmitService> logger)
 		{
 			_context = context;
 			_consultationService = consultationService;
 			_currentUser = userService.GetCurrentUser();
+			_serviceScopeFactory = serviceScopeFactory;
+			_analysisService = analysisService;
+			_logger = logger;
 		}
 
 		public (int rowsUpdated, Validate validate) Submit(ViewModels.Submission submission)
@@ -61,6 +75,32 @@ namespace Comments.Services
 			}
 			submission.DurationBetweenFirstCommentOrAnswerSavedAndSubmissionInSeconds = (submissionToSave.SubmissionDateTime - earliestDate).TotalSeconds;
 
+			if (AppSettings.AWSConfig.EnableAnalysis)
+			{
+				Task.Run(async () =>
+				{
+					using (var scope = _serviceScopeFactory.CreateScope())
+					{
+						var context = scope.ServiceProvider.GetRequiredService<ConsultationsContext>();
+						var analysisTimer = Stopwatch.StartNew();
+						try
+						{
+							await _analysisService.AnalyseAndUpdateDatabase(context, submission.Comments,
+								submission.Answers);
+							analysisTimer.Stop();
+
+							_logger.LogInformation(
+								$"Successfully analysed {submission.Comments.Count} comment(s) and {submission.Answers.Count} answer(s) in {analysisTimer.ElapsedMilliseconds} milliseconds.");
+						}
+						catch (Exception ex)
+						{
+							_logger.LogError(ex,
+								$"Failure to analyse comments and answers for submission {submissionToSave.SubmissionId}");
+						}
+					}
+				});
+			}
+
 			return (rowsUpdated: _context.SaveChanges(), validate: null);
 		}
 
@@ -86,6 +126,6 @@ namespace Comments.Services
 				answerInViewModel.UpdateStatusFromDBModel(status);
 			}
 			_context.AddSubmissionAnswers(answerIds, submission.SubmissionId);
-		}	
+		}
 	}
 }

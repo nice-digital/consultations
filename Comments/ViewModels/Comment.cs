@@ -25,6 +25,8 @@ namespace Comments.ViewModels
 	        if (!(comment.Status is null))
 		        Status = new Status(comment.Status);
 	        StatusId = comment.StatusId;
+
+	        Analysed = !string.IsNullOrEmpty(comment.Sentiment);
         }
 
         public int CommentId { get; set; }
@@ -34,8 +36,9 @@ namespace Comments.ViewModels
 
 	    public ViewModels.Status Status { get; set; }
 		public int StatusId { get; set; }
+		public bool Analysed { get; private set; }
 
-	    public void UpdateStatusFromDBModel(Models.Status status)
+		public void UpdateStatusFromDBModel(Models.Status status)
 	    {
 		    StatusId = status.StatusId;
 		    Status = new Status(status);
