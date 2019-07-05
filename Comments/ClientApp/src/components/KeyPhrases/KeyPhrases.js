@@ -22,9 +22,9 @@ export class KeyPhrases extends Component<PropsType, StateType> {
           
 		return (
             <TagCloud minSize={12}
-                maxSize={35}
+                maxSize={45}
                 tags={data}
-                onClick={tag => alert(`'${tag.value}' was selected!`)} />
+                onClick={tag => console.log(`'${tag.value}' was selected!`)} />
 		);
 	}
 }

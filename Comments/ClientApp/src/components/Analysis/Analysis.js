@@ -143,7 +143,6 @@ export class Analysis extends Component<PropsType, StateType> {
 							<div className="grid">
 								<div data-g="12">
 									<h1 className="h3">{this.state.consultationTitle}</h1>
-									<h2>Combined analysis for all comments and answers</h2>
 									<h3>Sentiments</h3>									
 									{this.state.allSentiments.map((sentiment, index) => {
 										return (
@@ -152,13 +151,6 @@ export class Analysis extends Component<PropsType, StateType> {
 									})}
 									<h3>Key phrases</h3>
 									<KeyPhrases keyPhrases={this.state.allKeyPhrases} />
-									{/* {this.state.allKeyPhrases.map((keyPhrase) => {
-										return (
-											<span> {keyPhrase.text} </span>
-										);
-									})} */}
-									<h2>Individual comment and answer analysis</h2>
-
 									<h3>Questions</h3>
 									{this.state.questions.map((question) => {
 										return (
@@ -178,21 +170,22 @@ export class Analysis extends Component<PropsType, StateType> {
 													<Fragment>
 														{question.answers.map((answer) => {
 															return (
-																<li className="analysis-item" key={`analysis-${answer.answerId}`}>
-																	<p>Overall: <img className="sentiment" src={`images/${answer.sentiment}.png`}/></p>
-																	<p>Individual scores: <br/>
-																		<img className="sentiment" src={`images/positive.png`}/> Positive: {answer.sentimentScorePositive} <br/>
-																		<img className="sentiment" src={`images/negative.png`}/> Negative: {answer.sentimentScoreNegative} <br/>
-																		<img className="sentiment" src={`images/neutral.png`}/> Neutral: {answer.sentimentScoreNeutral} <br/>
-																		<img className="sentiment" src={`images/mixed.png`}/> Mixed: {answer.sentimentScoreMixed}
-																	</p>
-																	<KeyPhrases keyPhrases={answer.keyPhrases} />
-																	{/* {answer.keyPhrases.map((keyPhrase) => {
-																		return (
-																			<span> {keyPhrase.text} </span>
-																		);
-																	})} */}
-																</li>
+																<Fragment>
+																	<li className="analysis-item sentiment" key={`analysis-${answer.answerId}1`}>
+																		<div className="sentiments">
+																			<img className="sentiment-overall" src={`images/${answer.sentiment}.png`}/>
+																			<p>Individual scores: <br/>
+																				<img className="sentiment" src={`images/positive.png`}/> Positive: {(answer.sentimentScorePositive * 100).toFixed(2)}% <br/>
+																				<img className="sentiment" src={`images/negative.png`}/> Negative: {(answer.sentimentScoreNegative * 100).toFixed(2)}% <br/>
+																				<img className="sentiment" src={`images/neutral.png`}/> Neutral: {(answer.sentimentScoreNeutral  * 100).toFixed(2)}% <br/>
+																				<img className="sentiment" src={`images/mixed.png`}/> Mixed: {(answer.sentimentScoreMixed  * 100).toFixed(2)}% 
+																			</p>
+																		</div>
+																	</li>
+																	<li className="analysis-item keyphrases" key={`analysis-${answer.answerId}2`}>
+																		<KeyPhrases keyPhrases={answer.keyPhrases} />
+																	</li>
+																</Fragment>
 															);
 														})}
 													</Fragment>
@@ -218,21 +211,22 @@ export class Analysis extends Component<PropsType, StateType> {
 															deleteHandler={null}
 														/>
 														{comment.analysed ? 
-															<li className="analysis-item">
-																<p>Overall: <img className="sentiment" src={`images/${comment.sentiment}.png`}/></p>
-																<p>Individual scores: <br/>
-																	<img className="sentiment" src={`images/positive.png`}/> Positive: {comment.sentimentScorePositive} <br/>
-																	<img className="sentiment" src={`images/negative.png`}/> Negative: {comment.sentimentScoreNegative} <br/>
-																	<img className="sentiment" src={`images/neutral.png`}/> Neutral: {comment.sentimentScoreNeutral} <br/>
-																	<img className="sentiment" src={`images/mixed.png`}/> Mixed: {comment.sentimentScoreMixed}
-																</p>
-																<KeyPhrases keyPhrases={comment.keyPhrases} />
-																{/* {comment.keyPhrases.map((keyPhrase) => {
-																	return (
-																		<span> {keyPhrase.text} </span>
-																	);
-																})} */}
-															</li>
+															<Fragment>
+																<li className="analysis-item sentiment">
+																	<div className="sentiments">
+																		<img className="sentiment-overall" src={`images/${comment.sentiment}.png`}/>
+																		<p>Individual scores: <br/>
+																			<img className="sentiment" src={`images/positive.png`}/> Positive: {(comment.sentimentScorePositive * 100).toFixed(2)}% <br/>
+																			<img className="sentiment" src={`images/negative.png`}/> Negative: {(comment.sentimentScoreNegative * 100).toFixed(2)}% <br/>
+																			<img className="sentiment" src={`images/neutral.png`}/> Neutral: {(comment.sentimentScoreNeutral  * 100).toFixed(2)}% <br/>
+																			<img className="sentiment" src={`images/mixed.png`}/> Mixed: {(comment.sentimentScoreMixed  * 100).toFixed(2)}% 
+																		</p>
+																	</div>
+																</li>
+																<li className="analysis-item keyphrases">
+																	<KeyPhrases keyPhrases={comment.keyPhrases} />
+																</li>
+															</Fragment>
 															:
 															<li className="analysis-item">This comment has not been analysed</li>
 														}

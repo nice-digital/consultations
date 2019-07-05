@@ -1,16 +1,27 @@
 img.sentiment{
-  height: 40px;
+  width: 3em;
+  padding-right: 1em;
+}
+.sentiment-overall{
+  width: 4em;
 }
 
 .AnalysisList{
   .CommentBox{
     display: inline-block;
-    width: 50%;
+    width: 40%;
     vertical-align: top;
   }
   .analysis-item{
     display: inline-block;
-    width: 50%;
     padding-left: 1em;
+    vertical-align: top;
+
+    &.sentiment{
+      width: 18%;
+    }
+    &.keyphrases{
+      width: 42%;
+    }
   }
 }
