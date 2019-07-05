@@ -11,6 +11,7 @@ import { load } from "../../data/loader";
 import { TextQuestion } from "../QuestionTypes/TextQuestion/TextQuestion";
 import { saveQuestionHandler, deleteQuestionHandler, moveQuestionHandler } from "../../helpers/editing-and-deleting";
 import { updateUnsavedIds } from "../../helpers/unsaved-comments";
+import { QuestionTemplates } from "./QuestionTemplates";
 
 type PropsType = {
 	staticContext: ContextType;
@@ -163,12 +164,12 @@ export class Questions extends Component<PropsType, StateType> {
 		moveQuestionHandler(event, question, direction, this);
 	};
 
-	newQuestion = (e: SyntheticEvent<HTMLElement>, consultationId: string, documentId: number | null, questionTypeId: number) => {
+	newQuestion = (e: SyntheticEvent<HTMLElement>, consultationId: string, documentId: number | null, questionTypeId: number, questionContent: string = "") => {
 		const newQuestion = {
 			questionId: -1,
 			questionTypeId,
 			documentId,
-			questionText: "",
+			questionText: questionContent,
 			sourceURI: "",
 		};
 
@@ -222,7 +223,7 @@ export class Questions extends Component<PropsType, StateType> {
 				.map(consultationDocument => {
 					return {
 						label: consultationDocument.title,
-						 //`/admin/questions/${currentConsultationId}/${consultationDocument.documentId}`,
+						//`/admin/questions/${currentConsultationId}/${consultationDocument.documentId}`,
 						url: this.getUrlForNavigation(this.props.draftProject, currentConsultationId, consultationDocument.documentId, this.props.match.params.reference),
 						isReactRoute: true,
 						marker: consultationDocument.documentQuestions.length || null,
@@ -239,7 +240,7 @@ export class Questions extends Component<PropsType, StateType> {
 		}
 		else{
 			return `/admin/questions/${currentConsultationId}/${documentId}`;
-		}		
+		}
 	}
 
 	render() {
@@ -295,6 +296,11 @@ export class Questions extends Component<PropsType, StateType> {
 														questionsData,
 														currentConsultationId,
 														currentDocumentId)}/>
+											<QuestionTemplates
+												textQuestionTypeId={textQuestionTypeId}
+												currentConsultationId={currentConsultationId}
+												currentDocumentId={currentDocumentId}
+												newQuestion={this.newQuestion}/>
 										</div>
 										<div data-g="12 md:6">
 											<div>
