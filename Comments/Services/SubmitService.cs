@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Comments.Configuration;
 
 namespace Comments.Services
 {
@@ -74,27 +75,31 @@ namespace Comments.Services
 			}
 			submission.DurationBetweenFirstCommentOrAnswerSavedAndSubmissionInSeconds = (submissionToSave.SubmissionDateTime - earliestDate).TotalSeconds;
 
-			Task.Run(async () =>
+			if (AppSettings.AWSConfig.EnableAnalysis)
 			{
-				using (var scope = _serviceScopeFactory.CreateScope())
+				Task.Run(async () =>
 				{
-					var context = scope.ServiceProvider.GetRequiredService<ConsultationsContext>();
-					var analysisTimer = Stopwatch.StartNew();
-					try
+					using (var scope = _serviceScopeFactory.CreateScope())
 					{
-						await _analysisService.AnalyseAndUpdateDatabase(context, submission.Comments, submission.Answers);
-						analysisTimer.Stop();
+						var context = scope.ServiceProvider.GetRequiredService<ConsultationsContext>();
+						var analysisTimer = Stopwatch.StartNew();
+						try
+						{
+							await _analysisService.AnalyseAndUpdateDatabase(context, submission.Comments,
+								submission.Answers);
+							analysisTimer.Stop();
 
-						_logger.LogInformation(
-							$"Successfully analysed {submission.Comments.Count} comment(s) and {submission.Answers.Count} answer(s) in {analysisTimer.ElapsedMilliseconds} milliseconds.");
+							_logger.LogInformation(
+								$"Successfully analysed {submission.Comments.Count} comment(s) and {submission.Answers.Count} answer(s) in {analysisTimer.ElapsedMilliseconds} milliseconds.");
+						}
+						catch (Exception ex)
+						{
+							_logger.LogError(ex,
+								$"Failure to analyse comments and answers for submission {submissionToSave.SubmissionId}");
+						}
 					}
-					catch (Exception ex)
-					{
-						_logger.LogError(ex,
-							$"Failure to analyse comments and answers for submission {submissionToSave.SubmissionId}");
-					}
-				}
-			});
+				});
+			}
 
 			return (rowsUpdated: _context.SaveChanges(), validate: null);
 		}

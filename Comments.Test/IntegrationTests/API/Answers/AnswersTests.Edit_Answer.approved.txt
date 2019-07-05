@@ -10,5 +10,6 @@
         "statusId":1,
         "name":"Draft"
     },
-    "sourceURI":null
+    "sourceURI":null,
+    "analysed":false
 }

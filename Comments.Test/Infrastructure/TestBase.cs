@@ -94,8 +94,9 @@ namespace Comments.Test.Infrastructure
 
 		public TestBase(bool useRealSubmitService = false, TestUserType testUserType = TestUserType.Authenticated, bool useFakeConsultationService = false, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null)
         {
-            // Arrange
-            _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId, testUserType);
+			// Arrange
+
+			_fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId, testUserType);
 			_fakeHttpContextAccessor = FakeHttpContextAccessor.Get(_authenticated, _displayName, _userId, testUserType);
 	        _consultationService = new FakeConsultationService();
 	        _useRealSubmitService = useRealSubmitService;
