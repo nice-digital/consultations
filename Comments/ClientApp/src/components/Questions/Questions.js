@@ -192,6 +192,9 @@ export class Questions extends Component<PropsType, StateType> {
 			currentQuestions = questionsData.documents.filter(item => item.documentId === documentId)[0].documentQuestions;
 			newQuestion.sourceURI = `consultations://./consultation/${consultationId}/document/${documentId}`;
 		}
+		this.setState({
+			loading: true,
+		});
 		this.saveQuestion(e, newQuestion);
 		currentQuestions.push(newQuestion);
 		this.setState({questionsData});

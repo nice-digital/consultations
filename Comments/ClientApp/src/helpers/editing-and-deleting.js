@@ -227,6 +227,10 @@ export function saveQuestionHandler(event: Event, question: QuestionType, self: 
 
 	let error = "";
 
+	self.setState({
+		loading: true,
+	});
+
 	load(endpoint, undefined, urlParameters, {}, method, question, true)
 		.then(res => {
 			if (res.status === 201 || res.status === 200) {
@@ -247,7 +251,7 @@ export function saveQuestionHandler(event: Event, question: QuestionType, self: 
 				relevantQuestions[index] = updatedQuestion;
 
 				self.setState({
-					questionsData,
+					loading: false,
 				});
 				self.updateUnsavedIds(`${originalQuestionId}q`, false);
 			}
