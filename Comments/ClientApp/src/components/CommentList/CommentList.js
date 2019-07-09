@@ -406,9 +406,11 @@ export class CommentList extends Component<PropsType, StateType> {
 												)}
 												
 												<div className={`${this.state.viewComments ? "hide" : "show"}`}>
-													{contextValue.isAuthorised &&
+													{contextValue.isAuthorised ?
 														<p className="mt--0">Please answer the following questions</p> 
-													}													
+														:
+														<p className="CommentBox__validationMessage">You must be signed in to answer questions</p>
+													}
 													<ul className={`CommentList list--unstyled ${contextValue.isAuthorised ? "mt--0" : ""}`}>
 														{this.state.questions.map((question) => {
 															const isUnsaved = this.state.unsavedIds.includes(`${question.questionId}q`);
@@ -428,9 +430,7 @@ export class CommentList extends Component<PropsType, StateType> {
 															);
 														})}
 													</ul>
-													{!contextValue.isAuthorised && 
-														<p className="CommentBox__validationMessage">You must be signed in to answer questions</p> 
-													}
+
 												</div>
 											</Fragment>
 										)}
