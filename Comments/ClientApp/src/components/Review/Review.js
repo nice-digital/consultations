@@ -527,6 +527,7 @@ export class Review extends Component<PropsType, StateType> {
 																					saveAnswerHandler={this.saveAnswerHandler}
 																					deleteAnswerHandler={this.deleteAnswerHandler}
 																					documentTitle={this.getDocumentTitle(question.documentId)}
+																					showAnswer={contextValue.isAuthorised}
 																				/>
 																			);
 																		})}
