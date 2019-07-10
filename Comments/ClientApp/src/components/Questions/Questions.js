@@ -195,7 +195,7 @@ export class Questions extends Component<PropsType, StateType> {
 		this.setState({
 			loading: true,
 		});
-		this.saveQuestion(e, newQuestion);
+		// this.saveQuestion(e, newQuestion);
 		currentQuestions.push(newQuestion);
 		this.setState({questionsData});
 	};

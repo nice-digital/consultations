@@ -9,7 +9,7 @@ import { nextTick } from "../../../helpers/utils";
 import toJson from "enzyme-to-json";
 import QuestionsData from "./QuestionsData.json";
 import { Questions } from "../Questions";
-import {TextQuestion} from "../../QuestionTypes/TextQuestion/TextQuestion";
+import { TextQuestion } from "../../QuestionTypes/TextQuestion/TextQuestion";
 import { LiveAnnouncer } from "react-aria-live";
 
 const mock = new MockAdapter(axios);
@@ -46,7 +46,7 @@ describe("[ClientApp] ", () => {
 				.reply(200, QuestionsData);
 		});
 
-		afterEach(()=>{
+		afterEach(() => {
 			mock.reset();
 		});
 
@@ -54,7 +54,7 @@ describe("[ClientApp] ", () => {
 			const wrapper = mount(
 				<MemoryRouter>
 					<Questions {...fakeProps}/>
-				</MemoryRouter>
+				</MemoryRouter>,
 			);
 
 			await nextTick();
@@ -64,32 +64,31 @@ describe("[ClientApp] ", () => {
 				toJson(wrapper, {
 					noKey: true,
 					mode: "deep",
-				})
+				}),
 			).toMatchSnapshot();
 		});
 
-		it(`should not render an add question button at the default URL (e.g. 'questions/1)`, async () => {
+		it("should not render an add question button at the default URL (e.g. 'questions/1)", async () => {
 			const wrapper = mount(
 				<MemoryRouter>
 					<Questions {...fakeProps}/>
-				</MemoryRouter>
+				</MemoryRouter>,
 			);
 
 			await nextTick();
 			wrapper.update();
 
-			expect(wrapper.find(<TextQuestion />).length).toEqual(0);
+			expect(wrapper.find(<TextQuestion/>).length).toEqual(0);
 		});
 
-		it(`should render a single consultation question`, async () => {
+		it("should render a single consultation question", async () => {
 			const localProps = Object.assign({}, fakeProps);
 			localProps.match.params.documentId = "consultation";
-
 
 			const wrapper = mount(
 				<MemoryRouter>
 					<Questions {...localProps}/>
-				</MemoryRouter>
+				</MemoryRouter>,
 			);
 
 			await nextTick();
@@ -108,58 +107,90 @@ describe("[ClientApp] ", () => {
 			const wrapper = mount(
 				<MemoryRouter>
 					<Questions {...localProps}/>
-				</MemoryRouter>
+				</MemoryRouter>,
 			);
 
 			await nextTick();
 			wrapper.update();
 
-			const text = wrapper.find(`[aria-current="page"]`).find("span.text-right").text();
+			const text = wrapper.find("[aria-current='page']").find("span.text-right").text();
 			expect(text).toEqual("(1)");
 
 		});
 
-		it("should increment a marker and add a new TextQuestion box when the add question button is clicked ", async () => {
+		it("should increment the question count marker when the add question button is clicked ", async () => {
 			const localProps = Object.assign({}, fakeProps);
 			localProps.match.params.documentId = "consultation";
 
 			const wrapper = mount(
 				<MemoryRouter>
 					<Questions {...localProps}/>
-				</MemoryRouter>
+				</MemoryRouter>,
 			);
 
 			await nextTick();
 			wrapper.update();
 
-			wrapper.find(".btn--cta").simulate("click");
+			expect(wrapper.find("[aria-current='page']").find("span.text-right").text()).toEqual("(1)");
+
+			wrapper.find(".btn--cta").first().simulate("click");
 
 			await nextTick();
 			wrapper.update();
 
-			const text = wrapper.find(`[aria-current="page"]`).find("span.text-right").text();
-			expect(text).toEqual("(2)");
-
-			const length = wrapper.find(TextQuestion).length;
-			expect(length).toEqual(2);
+			expect(wrapper.find("[aria-current='page']").find("span.text-right").text()).toEqual("(2)");
 		});
 
-		it("get consultation level questions", ()=>{
+		it("get consultation level questions", () => {
 			const thing = new Questions();
 			const result = thing.getQuestionsToDisplay(
 				"consultation",
-				QuestionsData
+				QuestionsData,
 			);
 			expect(result).toEqual(QuestionsData.consultationQuestions);
 		});
 
-		it("get document level questions", ()=>{
+		it("get document level questions", () => {
 			const thing = new Questions();
 			const result = thing.getQuestionsToDisplay(
 				"1",
-				QuestionsData
+				QuestionsData,
 			);
 			expect(result).toEqual(QuestionsData.documents[0].documentQuestions);
+		});
+
+		it("should add a text question when the text question button is clicked", async () => {
+			const localProps = Object.assign({}, fakeProps);
+			localProps.match.params.documentId = "consultation";
+
+			const wrapper = mount(
+				<MemoryRouter>
+					<Questions {...localProps}/>
+				</MemoryRouter>,
+			);
+
+			await nextTick();
+			wrapper.update();
+
+			// existing question from the data
+			expect(wrapper.find(TextQuestion).length).toEqual(1);
+
+			const textQuestionButton = wrapper.find("button[children='Add text response question']");
+
+			textQuestionButton.simulate("click");
+
+			await nextTick();
+			wrapper.update();
+
+			expect(wrapper.find(TextQuestion).length).toEqual(2);
+		});
+
+		it("should add a yes / no question when the yes / no button is clicked", () => {
+			expect(1).toEqual(2);
+		});
+
+		it("should render an add question button for each of the question types in the data", function () {
+			expect(1).toEqual(2);
 		});
 
 	});
