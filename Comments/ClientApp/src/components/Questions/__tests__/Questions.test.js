@@ -1,16 +1,18 @@
 /* global jest */
 
 import React from "react";
-import { shallow, mount } from "enzyme";
+import { mount } from "enzyme";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { MemoryRouter } from "react-router";
 import { nextTick } from "../../../helpers/utils";
 import toJson from "enzyme-to-json";
 import QuestionsData from "./QuestionsData.json";
-import { Questions } from "../Questions";
+import { Questions, AddQuestionButton } from "../Questions";
 import { TextQuestion } from "../../QuestionTypes/TextQuestion/TextQuestion";
-import { LiveAnnouncer } from "react-aria-live";
+
+const textQuestionId = QuestionsData.questionTypes[0].questionTypeId;
+const yesNoQuestionId = QuestionsData.questionTypes[1].questionTypeId;
 
 const mock = new MockAdapter(axios);
 
@@ -97,7 +99,6 @@ describe("[ClientApp] ", () => {
 			const length = wrapper.find(TextQuestion).length;
 
 			expect(length).toEqual(1);
-
 		});
 
 		it("should render a marker with the correct quantity of questions", async () => {
@@ -115,7 +116,6 @@ describe("[ClientApp] ", () => {
 
 			const text = wrapper.find("[aria-current='page']").find("span.text-right").text();
 			expect(text).toEqual("(1)");
-
 		});
 
 		it("should increment the question count marker when the add question button is clicked ", async () => {
@@ -159,38 +159,43 @@ describe("[ClientApp] ", () => {
 			expect(result).toEqual(QuestionsData.documents[0].documentQuestions);
 		});
 
-		it("should add a text question when the text question button is clicked", async () => {
+		it("should add a blank text response question to state when the text question button is clicked", async () => {
 			const localProps = Object.assign({}, fakeProps);
 			localProps.match.params.documentId = "consultation";
-
-			const wrapper = mount(
-				<MemoryRouter>
-					<Questions {...localProps}/>
-				</MemoryRouter>,
-			);
-
+			const wrapper = mount(<MemoryRouter><Questions {...localProps}/></MemoryRouter>);
 			await nextTick();
 			wrapper.update();
-
-			// existing question from the data
-			expect(wrapper.find(TextQuestion).length).toEqual(1);
-
+			const questionInstance = wrapper.find(Questions).instance();
+			expect(questionInstance.state.questionsData.consultationQuestions.length).toEqual(1);
 			const textQuestionButton = wrapper.find("button[children='Add text response question']");
-
 			textQuestionButton.simulate("click");
-
 			await nextTick();
 			wrapper.update();
-
-			expect(wrapper.find(TextQuestion).length).toEqual(2);
+			expect(questionInstance.state.questionsData.consultationQuestions.length).toEqual(2);
+			expect(questionInstance.state.questionsData.consultationQuestions[1].questionTypeId).toEqual(textQuestionId);
 		});
 
-		it("should add a yes / no question when the yes / no button is clicked", () => {
-			expect(1).toEqual(2);
+		it("should add a yes / no question when the yes / no button is clicked", async () => {
+			const localProps = Object.assign({}, fakeProps);
+			localProps.match.params.documentId = "consultation";
+			const wrapper = mount(<MemoryRouter><Questions {...localProps}/></MemoryRouter>);
+			await nextTick();
+			wrapper.update();
+			const questionInstance = wrapper.find(Questions).instance();
+			const textQuestionButton = wrapper.find("button[children='Add yes/no question']");
+			textQuestionButton.simulate("click");
+			await nextTick();
+			wrapper.update();
+			expect(questionInstance.state.questionsData.consultationQuestions[1].questionTypeId).toEqual(yesNoQuestionId);
 		});
 
-		it("should render an add question button for each of the question types in the data", function () {
-			expect(1).toEqual(2);
+		it("should render an add question button for each of the question types in the data", async () => {
+			const localProps = Object.assign({}, fakeProps);
+			localProps.match.params.documentId = "consultation";
+			const wrapper = mount(<MemoryRouter><Questions {...localProps}/></MemoryRouter>);
+			await nextTick();
+			wrapper.update();
+			expect(wrapper.find(AddQuestionButton).length).toEqual(QuestionsData.questionTypes.length);
 		});
 
 	});

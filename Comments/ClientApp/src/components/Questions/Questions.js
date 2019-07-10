@@ -366,7 +366,7 @@ export class Questions extends Component<PropsType, StateType> {
 
 export default withRouter(Questions);
 
-const AddQuestionButton = props => {
+export const AddQuestionButton = props => {
 	const {type, questionTypeId, loading, currentDocumentId, currentConsultationId, newQuestion} = props;
 	const buttonText = type === "YesNo" ? "Add yes/no question" : "Add text response question";
 	const documentId = currentDocumentId === "consultation" ? null : parseInt(currentDocumentId, 10);
