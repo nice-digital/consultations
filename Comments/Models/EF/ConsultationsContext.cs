@@ -175,6 +175,9 @@ namespace Comments.Models
 					.HasMaxLength(100);
 			});
 
+			modelBuilder.Entity<QuestionType>().HasData(
+				new { QuestionTypeId = 99, Description = "A yes / no answer without a text answer", HasTextAnswer = true, HasBooleanAnswer = true });
+
 			modelBuilder.Entity<Status>(entity =>
 			{
 				entity.Property(e => e.StatusId)
