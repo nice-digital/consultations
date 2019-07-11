@@ -4,7 +4,7 @@ import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import Helmet from "react-helmet";
 import Cookies from "js-cookie";
-//import stringifyObject from "stringify-object";
+import stringifyObject from "stringify-object";
 
 import { queryStringToObject, canUseDOM } from "../../helpers/utils";
 import { UserContext } from "../../context/UserContext";
@@ -100,6 +100,7 @@ export class Download extends Component<PropsType, StateType> {
 			);
 	
 			if (preloadedConsultations) {	
+
 				this.state = {
 					searchTerm: "",
 					path: this.props.basename + this.props.location.pathname + this.props.location.search,
@@ -111,7 +112,7 @@ export class Download extends Component<PropsType, StateType> {
 						hasError: false,
 						message: null,
 					},
-					indevReturnPath: "",
+					indevReturnPath: preloadedConsultations.indevBasePath,
 					search: this.props.location.search,
 					keywordToFilterBy: null,
 				};
@@ -159,9 +160,7 @@ export class Download extends Component<PropsType, StateType> {
 			const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;
 
 			if (!this.state.path || path !== this.state.path) {
-				
 				this.loadDataAndUpdateState();
-				
 			}
 		});
 
