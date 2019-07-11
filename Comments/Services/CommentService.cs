@@ -123,6 +123,11 @@ namespace Comments.Services
 			var consultationSourceURI = ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Consultation);
 		    ConsultationState consultationState;
 		    var sourceURIs = new List<string> { consultationSourceURI };
+		    if (!isReview)
+		    {
+			    sourceURIs.Add(ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Document));
+			    sourceURIs.Add(ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Chapter));
+		    }
 
 			if (!user.IsAuthorised)
 		    {
@@ -132,13 +137,6 @@ namespace Comments.Services
 				return new CommentsAndQuestions(new List<ViewModels.Comment>(), questions,
 				    user.IsAuthorised, signInURL, consultationState);
 		    }
-
-		    
-		    if (!isReview)
-		    {
-				sourceURIs.Add(ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Document));
-			    sourceURIs.Add(ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Chapter));
-			}
 
 			var locations = _context.GetAllCommentsAndQuestionsForDocument(sourceURIs, isReview).ToList();
 		    consultationState = _consultationService.GetConsultationState(consultationSourceURI, PreviewState.NonPreview, locations);
