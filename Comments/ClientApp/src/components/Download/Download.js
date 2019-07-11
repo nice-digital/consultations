@@ -4,7 +4,7 @@ import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import Helmet from "react-helmet";
 import Cookies from "js-cookie";
-import stringifyObject from "stringify-object";
+//import stringifyObject from "stringify-object";
 
 import { queryStringToObject, canUseDOM } from "../../helpers/utils";
 import { UserContext } from "../../context/UserContext";
