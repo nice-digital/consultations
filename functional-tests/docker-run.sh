@@ -16,7 +16,6 @@ docker-compose run tests waitforit -t 120 --strict comments:8080 -- npm run test
 mkdir -p docker-output
 docker cp functional-tests_tests_1:/tests/errorShots ./docker-output/errorShots
 docker cp functional-tests_comments_1:/app/logs ./docker-output
-docker cp functional-tests_comments_1:/app/Clientapp/build/index.html ./docker-output/
 docker-compose logs --no-color > ./docker-output/logs.txt
 
 # Clean up
