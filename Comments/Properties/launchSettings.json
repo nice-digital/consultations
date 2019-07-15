@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://niceorg:8080/",
+      "applicationUrl": "http://niceorg/",
       "sslPort": 0
     }
   },
