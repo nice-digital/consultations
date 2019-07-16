@@ -153,7 +153,9 @@ namespace Comments.Services
 		    var documentId = draft ? Constants.DummyDocumentNumberForPreviewProject : (int?)null;
 			var consultationState = _consultationService.GetConsultationState(consultationId, documentId, reference, previewState);
 
-			return new QuestionAdmin(documentsAndConsultationTitle.consultationTitle, consultationQuestions, questionAdminDocuments, questionTypes, consultationState);
+			var previousQuestions = _context.GetAllPreviousUniqueQuestions().Select(q => new Question(q.Location, q));
+
+			return new QuestionAdmin(documentsAndConsultationTitle.consultationTitle, consultationQuestions, questionAdminDocuments, questionTypes, consultationState, previousQuestions);
 	    }
 
 	    public IEnumerable<QuestionType> GetQuestionTypes()

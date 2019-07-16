@@ -5,7 +5,7 @@ namespace Comments.ViewModels
 {
 	public class QuestionAdmin
 	{
-		public QuestionAdmin(string consultationTitle, IEnumerable<Question> consultationQuestions, IEnumerable<QuestionAdminDocument> documents, IEnumerable<QuestionType> questionTypes, ConsultationState consultationState)
+		public QuestionAdmin(string consultationTitle, IEnumerable<Question> consultationQuestions, IEnumerable<QuestionAdminDocument> documents, IEnumerable<QuestionType> questionTypes, ConsultationState consultationState, IEnumerable<Question> previousQuestions)
 		{
 			ConsultationTitle = consultationTitle;
 			//ConsultationSupportsQuestions = consultationSupportsQuestions;
@@ -13,6 +13,7 @@ namespace Comments.ViewModels
 			Documents = documents;
 			QuestionTypes = questionTypes;
 			ConsultationState = consultationState;
+			PreviousQuestions = previousQuestions;
 		}
 
 		public string ConsultationTitle{ get; private set; }
@@ -27,5 +28,7 @@ namespace Comments.ViewModels
 		public IEnumerable<QuestionType> QuestionTypes { get; private set; }
 
 		public ConsultationState ConsultationState { get; private set; }
+
+		public IEnumerable<Question> PreviousQuestions { get; private set; }
 	}
 }
