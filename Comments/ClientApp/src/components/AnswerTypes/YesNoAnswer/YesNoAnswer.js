@@ -62,11 +62,3 @@ export const YesNoAnswer = (props) => {
 		</Fragment>
 	);
 };
-
-// unique={unique}
-// questionText={questionText}
-// readOnly={readOnly}
-// textareaChangeHandler={this.textareaChangeHandler}
-// yesNoChangeHandler={this.yesNoChangeHandler}
-// answerText={answerText}
-// answerBoolean={answerBoolean}
