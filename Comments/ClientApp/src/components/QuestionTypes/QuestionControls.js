@@ -1,13 +1,16 @@
-import React, { Fragment } from "react";
+import React from "react";
 
 export const QuestionControls = (props) => {
 
 	const {
+		isFirst,
+		isLast,
 		question,
 		unsavedChanges,
 		totalQuestionQty,
 		moveQuestion,
-		deleteQuestion } = props;
+		deleteQuestion,
+	} = props;
 
 	return (
 		<div>
@@ -30,18 +33,20 @@ export const QuestionControls = (props) => {
 			</button>
 			{totalQuestionQty > 1 && question.questionText && question.questionText.length > 0 && !unsavedChanges &&
 			<div className="right">
+				{!isFirst &&
 				<button
 					className="btn btn--inverse mb--0 mr--0"
 					onClick={e => moveQuestion(e, question, "up")}>
-					{/* <span className="icon icon--chevron-up" aria-hidden="true"/> */}
 					Move Up
 				</button>
+				}
+				{!isLast &&
 				<button
 					className="btn btn--inverse ml--c mr--0 ml--0 mb--0"
 					onClick={e => moveQuestion(e, question, "down")}>
-					{/* <span className="icon icon--chevron-down" aria-hidden="true"/> */}
 					Move Down
 				</button>
+				}
 			</div>
 			}
 		</div>

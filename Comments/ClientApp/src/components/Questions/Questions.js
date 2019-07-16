@@ -195,7 +195,7 @@ export class Questions extends Component<PropsType, StateType> {
 		this.setState({
 			loading: true,
 		});
-		// this.saveQuestion(e, newQuestion);
+		this.saveQuestion(e, newQuestion);
 		currentQuestions.push(newQuestion);
 		this.setState({questionsData});
 	};
@@ -306,6 +306,7 @@ export class Questions extends Component<PropsType, StateType> {
 																{questionsToDisplay.map((question, index) => {
 																	if (question.questionId <= 0) return null;
 																	const questionProps = {
+																		isFirst: index === 0,
 																		isLast: questionsToDisplay.length === index + 1,
 																		counter: index + 1,
 																		readOnly: !this.state.editingAllowed,

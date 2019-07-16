@@ -1,5 +1,5 @@
 // @flow
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { QuestionControls } from "../QuestionControls";
 
 type StateType = {
@@ -74,7 +74,7 @@ export class YNQuestion extends Component<PropsType, StateType> {
 			return null;
 		}
 
-		const {counter, isLast, readOnly, totalQuestionQty} = this.props;
+		const {counter, isLast, isFirst, readOnly, totalQuestionQty} = this.props;
 
 		const {question, unsavedChanges} = this.state;
 
@@ -99,6 +99,8 @@ export class YNQuestion extends Component<PropsType, StateType> {
 						</div>
 						{!readOnly &&
 						<QuestionControls
+							isFirst={isFirst}
+							isLast={isLast}
 							question={question}
 							unsavedChanges={unsavedChanges}
 							totalQuestionQty={totalQuestionQty}
