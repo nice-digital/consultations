@@ -567,7 +567,7 @@ namespace Comments.Export
 			AppendDataRow(sheetData, collatedDataAndExpressionOfInterestFlag.collatedData, collatedDataAndExpressionOfInterestFlag.showOrganisationExpressionOfInterest);
 
 			// Add filtering to the worksheet
-			var headerCells = "A3:N3";
+			var headerCells = collatedDataAndExpressionOfInterestFlag.showOrganisationExpressionOfInterest ? "A3:O3" : "A3:N3";
 			AutoFilter autoFilter = new AutoFilter() { Reference = headerCells };
 
 			worksheetPart.Worksheet.Save();
