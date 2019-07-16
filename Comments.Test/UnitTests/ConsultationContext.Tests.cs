@@ -388,5 +388,32 @@ namespace Comments.Test.UnitTests
 		    results.Skip(1).First().QuestionTypeId.ShouldBe(booleanQuestionTypeId);
 		}
 
+		[Fact]
+		public void Get_Previous_Questions()
+		{
+			// Arrange
+			ResetDatabase();
+
+			var questionTypeId = AddQuestionType("Question Type", false, true);
+			var identicalQuestionText =
+				"This question text is used in multiple questions. It should be distincted out so only 1 such question appears in the set";
+
+			var locationId1 = AddLocation("consultations://./consultation/1");
+			var questionId1 = AddQuestion(locationId1, questionTypeId, identicalQuestionText);
+
+			var locationId2 = AddLocation("consultations://./consultation/2");
+			AddQuestion(locationId2, questionTypeId, identicalQuestionText);
+
+			var questionId2 = AddQuestion(locationId2, questionTypeId, "unique question");
+
+			// Act
+			var consultationsContext = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption);
+			var results = consultationsContext.GetAllPreviousUniqueQuestions().ToList();
+
+			//Assert
+			results.Count.ShouldBe(2);
+			results[0].QuestionId.ShouldBe(questionId1);
+			results[1].QuestionId.ShouldBe(questionId2);
+		}
 	}
 }
