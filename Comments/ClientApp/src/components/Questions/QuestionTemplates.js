@@ -1,10 +1,10 @@
 import React from "react";
-import fakeTemplateData from "./fake-template-data.json";
+import fakeTemplateData from "./fake-template-data2.json";
 
 export class QuestionTemplates extends React.Component {
 	state = {
-		questions: fakeTemplateData,
-		filteredQuestions: fakeTemplateData,
+		questions: fakeTemplateData.questions,
+		filteredQuestions: fakeTemplateData.questions,
 	};
 
 	filterQuestions = (e) => {
@@ -21,6 +21,7 @@ export class QuestionTemplates extends React.Component {
 	};
 
 	render() {
+		const {textQuestionTypeId, currentConsultationId, currentDocumentId, newQuestion} = this.props;
 		return (
 			<div className="card">
 				<h3>Previously set questions</h3>
@@ -35,10 +36,10 @@ export class QuestionTemplates extends React.Component {
 						(<TemplateItem
 							{...item}
 							key={item._id}
-							textQuestionTypeId={this.props.textQuestionTypeId}
-							currentConsultationId={this.props.currentConsultationId}
-							currentDocumentId={this.props.currentDocumentId}
-							newQuestion={this.props.newQuestion}/>))}
+							textQuestionTypeId={textQuestionTypeId}
+							currentConsultationId={currentConsultationId}
+							currentDocumentId={currentDocumentId}
+							newQuestion={newQuestion}/>))}
 				</ul>
 			</div>
 		);
@@ -46,20 +47,20 @@ export class QuestionTemplates extends React.Component {
 }
 
 const TemplateItem = (props) => {
-	const question = props.question;
+	const {questionText, newQuestion, currentDocumentId,currentConsultationId, textQuestionTypeId } = props;
 	return (
 		<li>
 			<div className="card">
 				<div className="card__body">
 					<div className="grid">
-						<div data-g="9">{question}</div>
+						<div data-g="9">{questionText}</div>
 						<div data-g="3">
 							<button
 								onClick={e => {
-									if (props.currentDocumentId === "consultation") {
-										props.newQuestion(e, props.currentConsultationId, null, props.textQuestionTypeId, question);
+									if (currentDocumentId === "consultation") {
+										newQuestion(e, currentConsultationId, null, textQuestionTypeId, questionText);
 									} else {
-										props.newQuestion(e, props.currentConsultationId, parseInt(props.currentDocumentId, 10), props.textQuestionTypeId, question);
+										newQuestion(e, currentConsultationId, parseInt(currentDocumentId, 10), textQuestionTypeId, questionText);
 									}
 								}}
 								className="btn btn-small right mr--0">Insert
