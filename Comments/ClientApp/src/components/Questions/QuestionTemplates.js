@@ -20,8 +20,7 @@ export class QuestionTemplates extends Component {
 	};
 
 	render() {
-		const {questions, textQuestionTypeId, currentConsultationId, currentDocumentId, newQuestion} = this.props;
-		console.log(questions);
+		const {textQuestionTypeId, currentConsultationId, currentDocumentId, newQuestion} = this.props;
 		return (
 			<div className="card">
 				<h3>Previously set questions</h3>
@@ -36,7 +35,6 @@ export class QuestionTemplates extends Component {
 						(<TemplateItem
 							{...item}
 							key={item._id}
-							textQuestionTypeId={textQuestionTypeId}
 							currentConsultationId={currentConsultationId}
 							currentDocumentId={currentDocumentId}
 							newQuestion={newQuestion}/>))}
@@ -46,21 +44,30 @@ export class QuestionTemplates extends Component {
 	}
 }
 
+// todo: lowercase() the filter terms and questions!
+
 const TemplateItem = (props) => {
-	const {questionText, newQuestion, currentDocumentId,currentConsultationId, textQuestionTypeId } = props;
+	const {
+		questionType,
+		questionText,
+		newQuestion,
+		currentDocumentId,
+		currentConsultationId,
+		questionTypeId } = props;
 	return (
 		<li>
 			<div className="card">
 				<div className="card__body">
 					<div className="grid">
-						<div data-g="9">{questionText}</div>
-						<div data-g="3">
+						<div data-g="8">{questionText}</div>
+						<div data-g="2">{questionType.type === "YesNo" ? "Yes / No Question" : "Open Question"}</div>
+						<div data-g="2">
 							<button
 								onClick={e => {
 									if (currentDocumentId === "consultation") {
-										newQuestion(e, currentConsultationId, null, textQuestionTypeId, questionText);
+										newQuestion(e, currentConsultationId, null, questionTypeId, questionText);
 									} else {
-										newQuestion(e, currentConsultationId, parseInt(currentDocumentId, 10), textQuestionTypeId, questionText);
+										newQuestion(e, currentConsultationId, parseInt(currentDocumentId, 10), questionTypeId, questionText);
 									}
 								}}
 								className="btn btn-small right mr--0">Insert

@@ -16,7 +16,7 @@ type PropsType = {
 	readOnly: boolean;
 }
 
-export class TextQuestion extends Component<PropsType, StateType> {
+export class YNQuestion extends Component<PropsType, StateType> {
 
 	constructor() {
 		super();
@@ -80,7 +80,7 @@ export class TextQuestion extends Component<PropsType, StateType> {
 
 		return (
 			<li className={isLast ? "CommentBox" : "CommentBox mb--e"}>
-				<h1 className="CommentBox__title CommentBox__title--legend">Question {counter} - Text Question</h1>
+				<h1 className="CommentBox__title CommentBox__title--legend">Question {counter} - Yes/no question</h1>
 				<section role="form">
 					<form onSubmit={e => this.props.saveQuestion(e, question)} className="mb--0">
 						<div className="form__group form__group--textarea mb--b">
@@ -106,7 +106,8 @@ export class TextQuestion extends Component<PropsType, StateType> {
 							totalQuestionQty={totalQuestionQty}
 							moveQuestion={this.props.moveQuestion}
 							deleteQuestion={this.props.deleteQuestion}
-						/>}
+						/>
+						}
 					</form>
 				</section>
 			</li>

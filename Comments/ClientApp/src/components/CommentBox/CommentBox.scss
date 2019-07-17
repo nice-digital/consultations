@@ -1,5 +1,6 @@
 .CommentBox {
   &__validationMessage {
+    clear: left;
     &:before {
       content: "";
       display: inline-block;
@@ -17,6 +18,17 @@
   border: rem($spacing-xx-small) solid $colour-border;
   &__title{
     @include font-size(0);
+    &--legend {
+      // the magic numbers here pull the title in line with the border to make it look a bit like a legend
+      position: relative;
+      margin-bottom: -0.5rem;
+      top: -1.3rem;
+      background: $colour-body;
+      float: left;
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+      display: inline-block;
+    }
   }
   &__quote {
     font-style: italic;
@@ -28,6 +40,6 @@
     background-color: $colour-nice-dark-grey;
     color: $colour-nice-white;
     opacity: 0.5;
-    border: rem($spacing-xx-small) solid $colour-nice-white; // todo: find border width!
+    border: 1px solid $colour-nice-white; // todo: find border width!
   }
 }
