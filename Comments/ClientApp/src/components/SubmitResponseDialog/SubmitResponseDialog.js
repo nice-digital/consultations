@@ -10,15 +10,22 @@ export class SubmitResponseDialog extends PureComponent {
 
 	mandatoryQuestionsAreValid = () => {
 		let organisationIsValid = false;
-		let tobaccoIsValid = false;
-		if (
-			(this.props.respondingAsOrganisation === "yes" && this.props.organisationName.length > 0) || this.props.respondingAsOrganisation === "no") {
+		if ((this.props.respondingAsOrganisation === "yes" && this.props.organisationName.length > 0) || this.props.respondingAsOrganisation === "no") {
 			organisationIsValid = true;
 		}
+
+		let tobaccoIsValid = false;
 		if ((this.props.hasTobaccoLinks === "yes" && this.props.tobaccoDisclosure.length > 0) || this.props.hasTobaccoLinks === "no") {
 			tobaccoIsValid = true;
 		}
-		return organisationIsValid && tobaccoIsValid;
+
+		let organisationExpressionOfInterestIsValid = false;
+		if (this.props.respondingAsOrganisation === "no" || !this.props.showExpressionOfInterestSubmissionQuestion || 
+			this.props.organisationExpressionOfInterest === "yes"  || this.props.organisationExpressionOfInterest === "no"){
+			organisationExpressionOfInterestIsValid = true;
+		}
+		
+		return organisationIsValid && tobaccoIsValid && organisationExpressionOfInterestIsValid;
 	};
 
 
@@ -43,6 +50,8 @@ export class SubmitResponseDialog extends PureComponent {
 			tobaccoDisclosure,
 			respondingAsOrganisation,
 			hasTobaccoLinks,
+			showExpressionOfInterestSubmissionQuestion,
+			organisationExpressionOfInterest,
 		} = this.props;
 
 
@@ -95,13 +104,60 @@ export class SubmitResponseDialog extends PureComponent {
 				</div>
 
 				{respondingAsOrganisation === "yes" &&
-				<div className="form__group form__group--text">
-					<label htmlFor="organisationName" className="form__label">
-						<strong>Enter the name of your organisation</strong>
-					</label>
-					<input data-hj-whitelist id="organisationName" name="organisationName" value={organisationName}
-								 className="form__input" type="text" onChange={fieldsChangeHandler}/>
-				</div>
+				<Fragment>
+					<div className="form__group form__group--text">
+						<label htmlFor="organisationName" className="form__label">
+							<strong>Enter the name of your organisation</strong>
+						</label>
+						<input data-hj-whitelist id="organisationName" name="organisationName" value={organisationName}
+							className="form__input" type="text" onChange={fieldsChangeHandler}/>
+					</div>
+
+					{showExpressionOfInterestSubmissionQuestion && 
+						<Fragment>
+							<p>
+								<strong>Would your organisation like to express an interest in formally supporting this quality standard?</strong><br/>
+								<a href="/standards-and-indicators/timeline-developing-quality-standards" target="_new">More information</a>
+							</p>							
+							<div role="radiogroup" aria-label="Would your organisation like to express an interest in formally supporting this quality standard?">
+								<div className="form__group form__group--radio form__group--inline">
+									<input
+										className="form__radio"
+										id="organisationExpressionOfInterest--true"
+										type="radio"
+										name="organisationExpressionOfInterest"
+										checked={organisationExpressionOfInterest === "yes"}
+										onChange={fieldsChangeHandler}
+										value={"yes"}
+									/>
+									<label
+										className="form__label form__label--radio"
+										htmlFor="organisationExpressionOfInterest--true">
+										Yes
+									</label>
+								</div>
+			
+								<div className="form__group form__group--radio form__group--inline">
+									<input
+										className="form__radio"
+										id="organisationExpressionOfInterest--false"
+										type="radio"
+										name="organisationExpressionOfInterest"
+										checked={organisationExpressionOfInterest === "no"}
+										onChange={fieldsChangeHandler}
+										value={"no"}
+									/>
+									<label
+										data-qa-sel="respond-no-responding-as-org"
+										className="form__label form__label--radio"
+										htmlFor="organisationExpressionOfInterest--false">
+										No
+									</label>
+								</div>		
+							</div>
+						</Fragment>
+					}
+				</Fragment>
 				}
 
 				<p><strong>Do you or the organisation you represent have any links with the tobacco industry?</strong></p>
@@ -152,7 +208,7 @@ export class SubmitResponseDialog extends PureComponent {
 						</label>
 					</div>
 				</div>
-
+				
 				{hasTobaccoLinks === "yes" &&
 				<div className="form__group form__group--textarea">
 					<label htmlFor="tobaccoDisclosure" className="form__label">
