@@ -1,17 +1,16 @@
-import React from "react";
-import fakeTemplateData from "./fake-template-data2.json";
+import React, { Component } from "react";
 
-export class QuestionTemplates extends React.Component {
+export class QuestionTemplates extends Component {
 	state = {
-		questions: fakeTemplateData.questions,
-		filteredQuestions: fakeTemplateData.questions,
+		questions: this.props.questions,
+		filteredQuestions: this.props.questions,
 	};
 
 	filterQuestions = (e) => {
 		const filterQuery = e.target.value;
 		let filteredQuestions = this.state.questions;
 		filteredQuestions = filteredQuestions.filter(question => {
-			return question.question.indexOf(
+			return question.questionText.indexOf(
 				filterQuery,
 			) !== -1;
 		});
@@ -21,7 +20,8 @@ export class QuestionTemplates extends React.Component {
 	};
 
 	render() {
-		const {textQuestionTypeId, currentConsultationId, currentDocumentId, newQuestion} = this.props;
+		const {questions, textQuestionTypeId, currentConsultationId, currentDocumentId, newQuestion} = this.props;
+		console.log(questions);
 		return (
 			<div className="card">
 				<h3>Previously set questions</h3>

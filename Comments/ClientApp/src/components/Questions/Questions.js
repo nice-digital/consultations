@@ -343,6 +343,7 @@ export class Questions extends Component<PropsType, StateType> {
 															textQuestionTypeId={textQuestionTypeId}
 															currentConsultationId={currentConsultationId}
 															currentDocumentId={currentDocumentId}
+															questions={questionsData.previousQuestions}
 															newQuestion={this.newQuestion}/>
 													</Fragment>
 													}
