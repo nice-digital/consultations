@@ -389,7 +389,7 @@ namespace Comments.Test.UnitTests
 		}
 
 		[Fact]
-		public void Get_Previous_Questions()
+		public void Get_Previous_Questions_Filtering_out_duplicates()
 		{
 			// Arrange
 			ResetDatabase();
@@ -405,7 +405,7 @@ namespace Comments.Test.UnitTests
 			AddQuestion(locationId2, questionTypeId, identicalQuestionText);
 
 			var questionId2 = AddQuestion(locationId2, questionTypeId, "unique question");
-
+			
 			// Act
 			var consultationsContext = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption);
 			var results = consultationsContext.GetAllPreviousUniqueQuestions().ToList();
@@ -414,6 +414,31 @@ namespace Comments.Test.UnitTests
 			results.Count.ShouldBe(2);
 			results[0].QuestionId.ShouldBe(questionId1);
 			results[1].QuestionId.ShouldBe(questionId2);
+		}
+
+		[Fact]
+		public void Get_Previous_Questions_Filtering_out_deletions()
+		{
+			// Arrange
+			ResetDatabase();
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: Guid.NewGuid());
+			var context = CreateContext(userService);
+
+			var questionTypeId = AddQuestionType("Question Type", false, true, 1, context);
+
+			var locationId = AddLocation("consultations://./consultation/1", context);
+
+			var questionId1 = AddQuestion(locationId, questionTypeId, "question 1", context);
+			var questionId2 = AddQuestion(locationId, questionTypeId, "question 2", context);
+
+			var question2 = context.GetQuestion(questionId2);
+			question2.IsDeleted = true;
+
+			// Act
+			var results = context.GetAllPreviousUniqueQuestions().ToList();
+
+			//Assert
+			results.Single().QuestionId.ShouldBe(questionId1);
 		}
 	}
 }
