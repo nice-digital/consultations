@@ -290,7 +290,7 @@ namespace Comments.Models
 		    return submission;
 	    }
 
-	    public bool HasSubmitted(string consultationSourceURI, Guid currentUser)
+	    public bool GetSubmittedDate(string consultationSourceURI, Guid currentUser)
 	    {
 		    var submissions = Submission.Where(s => s.SubmissionByUserId.Equals(currentUser))
 			    .Include(s => s.SubmissionComment)
@@ -304,7 +304,6 @@ namespace Comments.Models
 
 				.ToList();
 
-
 		    var allQuestionSourceUrisForThisUser = submissions.SelectMany(s => s.SubmissionAnswer,
 			    ((submission, answer) => answer.Answer.Question.Location.SourceURI)).ToList();
 
@@ -312,11 +311,10 @@ namespace Comments.Models
 			    ((submission, comment) => comment.Comment.Location.SourceURI)).ToList();
 
 		    var allSourceUris = allQuestionSourceUrisForThisUser.Concat(allCommentSourceUrisForThisUser).ToList();
-
-		    return allSourceUris.Any(sourceURI => sourceURI.StartsWith(consultationSourceURI, StringComparison.OrdinalIgnoreCase));
-
-	    }
-
+		    
+			return allSourceUris.Any(sourceURI => sourceURI.StartsWith(consultationSourceURI, StringComparison.OrdinalIgnoreCase));
+		}
+		
 	    public int DeleteAllSubmissionsFromUser(Guid usersSubmissionsToDelete)
 	    {
 		    var draftStatus = GetStatus(StatusName.Draft);

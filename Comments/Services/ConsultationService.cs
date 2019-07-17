@@ -35,7 +35,7 @@ namespace Comments.Services
 	    ConsultationState GetConsultationState(string sourceURI, PreviewState previewState, IEnumerable<Models.Location> locations = null, ConsultationBase consultation = null);
 	    ConsultationState GetConsultationState(int consultationId, int? documentId, string reference, PreviewState previewState, IEnumerable<Models.Location> locations = null, ConsultationBase consultationDetail = null);
 
-		bool HasSubmittedCommentsOrQuestions(string consultationSourceURI, Guid userId);
+		bool GetSubmittedDate(string consultationSourceURI, Guid userId);
 	    IEnumerable<BreadcrumbLink> GetBreadcrumbs(ConsultationDetail consultation, BreadcrumbType breadcrumbType);
 
 	    (int? documentId, string chapterSlug) GetFirstConvertedDocumentAndChapterSlug(int consultationId);
@@ -208,7 +208,7 @@ namespace Comments.Services
 			    locations = new List<Models.Location>(0);
 		    }
 
-		    var hasSubmitted = currentUser != null && currentUser.IsAuthorised && currentUser.UserId.HasValue ? HasSubmittedCommentsOrQuestions(sourceURI, currentUser.UserId.Value) : false;
+		    var hasSubmitted = currentUser != null && currentUser.IsAuthorised && currentUser.UserId.HasValue ? GetSubmittedDate(sourceURI, currentUser.UserId.Value) : false;
 
 		    var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);
 
@@ -219,7 +219,7 @@ namespace Comments.Services
 		    return consultationState;
 	    }
 
-		public bool HasSubmittedCommentsOrQuestions(string anySourceURI, Guid userId)
+		public bool GetSubmittedDate(string anySourceURI, Guid userId)
 	    {
 		    if (string.IsNullOrWhiteSpace(anySourceURI))
 			    return false;
@@ -228,7 +228,7 @@ namespace Comments.Services
 
 		    var consultationSourceURI = ConsultationsUri.CreateConsultationURI(consultationsUriElements.ConsultationId);
 
-		    return _context.HasSubmitted(consultationSourceURI, userId);
+		    return _context.GetSubmittedDate(consultationSourceURI, userId);
 	    }
 
 	    /// <summary>
@@ -277,7 +277,7 @@ namespace Comments.Services
 			  //  locations = new List<Models.Location>(0);
 		   // }
 
-		   // var hasSubmitted = currentUser != null && currentUser.IsAuthorised && currentUser.UserId.HasValue ? HasSubmittedCommentsOrQuestions(sourceURI, currentUser.UserId.Value) : false;
+		   // var hasSubmitted = currentUser != null && currentUser.IsAuthorised && currentUser.UserId.HasValue ? GetSubmittedDate(sourceURI, currentUser.UserId.Value) : false;
 
 		   // var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);
 

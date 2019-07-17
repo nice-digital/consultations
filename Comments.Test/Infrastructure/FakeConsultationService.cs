@@ -25,7 +25,7 @@ namespace Comments.Test.Infrastructure
 		    return _consultationIsOpen;
 	    }
 
-	    public bool HasSubmittedCommentsOrQuestions(string consultationSourceURI, Guid userId)
+	    public bool GetSubmittedDate(string consultationSourceURI, Guid userId)
 	    {
 		    return false;
 	    }
