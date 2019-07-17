@@ -15,8 +15,6 @@ namespace Comments.ViewModels
 			HasUserSuppliedAnswers = hasUserSuppliedAnswers;
 			HasUserSuppliedComments = hasUserSuppliedComments;
 			UserHasSubmitted = userHasSubmitted;
-			//ConsultationSupportsQuestions = consultationSupportsQuestions;
-			//_documentIdsWhichSupportQuestions = documentIdsWhichSupportQuestions;
 			_documentIdsWhichSupportComments = documentIdsWhichSupportComments;
 		}
 
@@ -27,11 +25,6 @@ namespace Comments.ViewModels
 		public bool HasUserSuppliedAnswers { get; private set; }
 		public bool HasUserSuppliedComments { get; private set; }
 		public bool UserHasSubmitted { get; private set; }
-
-		//public bool ConsultationSupportsQuestions { get; private set; }
-
-		//private readonly IEnumerable<int> _documentIdsWhichSupportQuestions;
-		//public IEnumerable<int> DocumentIdsWhichSupportQuestions => _documentIdsWhichSupportQuestions ?? new List<int>();
 
 		private readonly IEnumerable<int> _documentIdsWhichSupportComments;
 		public IEnumerable<int> DocumentIdsWhichSupportComments => _documentIdsWhichSupportComments ?? new List<int>();

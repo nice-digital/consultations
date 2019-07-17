@@ -71,6 +71,7 @@ namespace Comments.Models
 
 				.Include(l => l.Question)
 					.ThenInclude(q => q.QuestionType)
+
 				.Include(l => l.Question)
 					.ThenInclude(q => q.Answer)
 					.ThenInclude(s => s.SubmissionAnswer)
@@ -104,7 +105,7 @@ namespace Comments.Models
 				.Include(l => l.Question)
 					.ThenInclude(q => q.QuestionType)
 
-					.OrderBy(l => l.Order)
+				.OrderBy(l => l.Order)
 
 				.ThenByDescending(l =>
 					l.Question.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault())
