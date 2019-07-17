@@ -13,6 +13,7 @@ type PropsType = {
 	readOnly: boolean,
 	isUnsaved: boolean,
 	documentTitle?: string,
+	showAnswer: boolean,
 };
 
 type StateType = {
@@ -69,6 +70,24 @@ export class Question extends Component<PropsType, StateType> {
 					);
 				})}
 
+				{this.props.showAnswer && 
+					answers.map((answer) => {
+						return (
+							<AnswerBox
+								questionText={this.props.question.questionText}
+								updateUnsavedIds={this.props.updateUnsavedIds}
+								questionId={this.props.question.questionId}
+								readOnly={this.props.readOnly}
+								isVisible={this.props.isVisible}
+								key={answer.answerId}
+								unique={`Answer${answer.answerId}`}
+								answer={answer}
+								saveAnswerHandler={this.props.saveAnswerHandler}
+								deleteAnswerHandler={this.props.deleteAnswerHandler}
+							/>
+						);
+					})
+				}
 			</li>
 		);
 	}

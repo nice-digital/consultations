@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Comments.Configuration;
 using Comments.Models;
 using Comments.Services;
@@ -9,6 +6,9 @@ using Comments.ViewModels;
 using NICE.Feeds;
 using NICE.Feeds.Models.Indev.List;
 using Shouldly;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 using TestBase = Comments.Test.Infrastructure.TestBase;
 
@@ -25,6 +25,7 @@ namespace Comments.Test.UnitTests
 				new ConsultationList { ConsultationId = 1, AllowedRole = TestUserType.IndevUser.ToString() }
 			};
 			_feedService = new FakeFeedService(consultationList);
+			System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 		}
 
 		[Fact]
