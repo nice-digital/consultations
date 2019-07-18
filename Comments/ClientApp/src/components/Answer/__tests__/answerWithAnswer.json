@@ -1,0 +1,14 @@
+{
+  "answerId": 1007,
+  "answerText": "some answer text",
+  "answerBoolean": null,
+  "questionId": 22,
+  "lastModifiedDate": "2018-07-13T08:01:41.522596",
+  "lastModifiedByUserId": "b65e1398-0c46-4511-a870-acba729a3dd0",
+  "statusId": 1,
+  "status": {
+    "statusId": 1,
+    "name": "Draft"
+  },
+  "sourceURI": "consultations://./consultation/1"
+}

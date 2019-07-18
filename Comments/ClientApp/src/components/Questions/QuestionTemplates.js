@@ -1,17 +1,16 @@
-import React from "react";
-import fakeTemplateData from "./fake-template-data.json";
+import React, { Component } from "react";
 
-export class QuestionTemplates extends React.Component {
+export class QuestionTemplates extends Component {
 	state = {
-		questions: fakeTemplateData,
-		filteredQuestions: fakeTemplateData,
+		questions: this.props.questions,
+		filteredQuestions: this.props.questions,
 	};
 
 	filterQuestions = (e) => {
 		const filterQuery = e.target.value;
 		let filteredQuestions = this.state.questions;
 		filteredQuestions = filteredQuestions.filter(question => {
-			return question.question.indexOf(
+			return question.questionText.indexOf(
 				filterQuery,
 			) !== -1;
 		});
@@ -21,6 +20,7 @@ export class QuestionTemplates extends React.Component {
 	};
 
 	render() {
+		const {currentConsultationId, currentDocumentId, newQuestion} = this.props;
 		return (
 			<div className="card">
 				<h3>Previously set questions</h3>
@@ -35,31 +35,39 @@ export class QuestionTemplates extends React.Component {
 						(<TemplateItem
 							{...item}
 							key={item._id}
-							textQuestionTypeId={this.props.textQuestionTypeId}
-							currentConsultationId={this.props.currentConsultationId}
-							currentDocumentId={this.props.currentDocumentId}
-							newQuestion={this.props.newQuestion}/>))}
+							currentConsultationId={currentConsultationId}
+							currentDocumentId={currentDocumentId}
+							newQuestion={newQuestion}/>))}
 				</ul>
 			</div>
 		);
 	}
 }
 
+// todo: lowercase() the filter terms and questions!
+
 const TemplateItem = (props) => {
-	const question = props.question;
+	const {
+		questionType,
+		questionText,
+		newQuestion,
+		currentDocumentId,
+		currentConsultationId,
+		questionTypeId } = props;
 	return (
 		<li>
 			<div className="card">
 				<div className="card__body">
 					<div className="grid">
-						<div data-g="9">{question}</div>
-						<div data-g="3">
+						<div data-g="8">{questionText}</div>
+						<div data-g="2">{questionType.type === "YesNo" ? "Yes / No Question" : "Open Question"}</div>
+						<div data-g="2">
 							<button
 								onClick={e => {
-									if (props.currentDocumentId === "consultation") {
-										props.newQuestion(e, props.currentConsultationId, null, props.textQuestionTypeId, question);
+									if (currentDocumentId === "consultation") {
+										newQuestion(e, currentConsultationId, null, questionTypeId, questionText);
 									} else {
-										props.newQuestion(e, props.currentConsultationId, parseInt(props.currentDocumentId, 10), props.textQuestionTypeId, question);
+										newQuestion(e, currentConsultationId, parseInt(currentDocumentId, 10), questionTypeId, questionText);
 									}
 								}}
 								className="btn btn-small right mr--0">Insert

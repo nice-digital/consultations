@@ -9,6 +9,7 @@ import { UserContext } from "../../context/UserContext";
 import preload from "../../data/pre-loader";
 import { load } from "../../data/loader";
 import { TextQuestion } from "../QuestionTypes/TextQuestion/TextQuestion";
+import { YNQuestion } from "../QuestionTypes/YNQuestion/YNQuestion";
 import { saveQuestionHandler, deleteQuestionHandler, moveQuestionHandler } from "../../helpers/editing-and-deleting";
 import { updateUnsavedIds } from "../../helpers/unsaved-comments";
 import { QuestionTemplates } from "./QuestionTemplates";
@@ -183,7 +184,6 @@ export class Questions extends Component<PropsType, StateType> {
 
 		const questionsData = this.state.questionsData;
 		let currentQuestions;
-
 		if (documentId === null) {
 			//	this is a consultation level question
 			currentQuestions = questionsData.consultationQuestions;
@@ -193,11 +193,12 @@ export class Questions extends Component<PropsType, StateType> {
 			currentQuestions = questionsData.documents.filter(item => item.documentId === documentId)[0].documentQuestions;
 			newQuestion.sourceURI = `consultations://./consultation/${consultationId}/document/${documentId}`;
 		}
-
+		this.setState({
+			loading: true,
+		});
 		this.saveQuestion(e, newQuestion);
 		currentQuestions.push(newQuestion);
 		this.setState({questionsData});
-
 	};
 
 	createConsultationNavigation = (questionsData: Object, currentConsultationId: string, currentDocumentId: string | null) => {
@@ -231,7 +232,6 @@ export class Questions extends Component<PropsType, StateType> {
 				.map(consultationDocument => {
 					return {
 						label: consultationDocument.title,
-						//`/admin/questions/${currentConsultationId}/${consultationDocument.documentId}`,
 						url: this.getUrlForNavigation(this.props.draftProject, currentConsultationId, consultationDocument.documentId, this.props.match.params.reference),
 						isReactRoute: true,
 						marker: consultationDocument.documentQuestions.length || null,
@@ -242,12 +242,9 @@ export class Questions extends Component<PropsType, StateType> {
 	};
 
 	getUrlForNavigation = (isDraft, currentConsultationId, documentId, reference) => {
-
-		if (isDraft) {
-			return `/admin/questions/preview/${reference}/${currentConsultationId}/${documentId}`;
-		} else {
-			return `/admin/questions/${currentConsultationId}/${documentId}`;
-		}
+		return isDraft ?
+			`/admin/questions/preview/${reference}/${currentConsultationId}/${documentId}`
+			: `/admin/questions/${currentConsultationId}/${documentId}`;
 	};
 
 	render() {
@@ -257,13 +254,9 @@ export class Questions extends Component<PropsType, StateType> {
 		const currentDocumentId =
 			this.props.match.params.documentId === undefined ? null : this.props.match.params.documentId;
 		const currentConsultationId = this.props.match.params.consultationId;
-		let questionsToDisplay, textQuestionTypeId;
+		let questionsToDisplay = [];
 		if (questionsData.consultationQuestions) {
 			questionsToDisplay = this.getQuestionsToDisplay(currentDocumentId, questionsData);
-		}
-		if (questionsData.questionTypes) {
-			// only one question type for the time being
-			textQuestionTypeId = questionsData.questionTypes[0].questionTypeId;
 		}
 
 		return (
@@ -304,48 +297,53 @@ export class Questions extends Component<PropsType, StateType> {
 														currentConsultationId,
 														currentDocumentId)}/>
 										</div>
-
 										<div data-g="12 md:7">
 											{currentDocumentId ?
 												<Fragment>
-													{questionsToDisplay && questionsToDisplay.length ?
-														<ul className="list--unstyled mt--0">
-															{questionsToDisplay.map(question => (
-																<TextQuestion
-																	readOnly={!this.state.editingAllowed}
-																	updateUnsavedIds={this.updateUnsavedIds}
-																	key={question.questionId}
-																	question={question}
-																	saveQuestion={this.saveQuestion}
-																	deleteQuestion={this.deleteQuestion}
-																	moveQuestion={this.moveQuestion}
-																	totalQuestionQty={questionsToDisplay.length}
-																/>
-															))}
-														</ul> : <p>Click button to add a question.</p>
-													}
-													{this.state.editingAllowed &&
-													<Fragment>
-														<button
-															className="btn btn--cta"
-															disabled={this.state.loading}
-															onClick={(e) => {
-																if (currentDocumentId === "consultation") {
-																	this.newQuestion(e, currentConsultationId, null, textQuestionTypeId);
-																} else {
-																	this.newQuestion(e, currentConsultationId, parseInt(currentDocumentId, 10), textQuestionTypeId);
-																}
-															}}
-														>Add text response question
-														</button>
-
-														<QuestionTemplates
-															textQuestionTypeId={textQuestionTypeId}
-															currentConsultationId={currentConsultationId}
+													{questionsToDisplay && questionsToDisplay.map((question, index) => {
+														if (question.questionId <= 0) return null;
+														const questionProps = {
+															isFirst: index === 0,
+															isLast: questionsToDisplay.length === index + 1,
+															counter: index + 1,
+															readOnly: !this.state.editingAllowed,
+															updateUnsavedIds: this.updateUnsavedIds,
+															key: question.questionId,
+															question: question,
+															saveQuestion: this.saveQuestion,
+															deleteQuestion: this.deleteQuestion,
+															moveQuestion: this.moveQuestion,
+															totalQuestionQty: questionsToDisplay.length,
+														};
+														if (question.questionType.type === "YesNo") {
+															return (
+																<YNQuestion {...questionProps}/>
+															);
+														}
+														if (question.questionType.type === "Text") {
+															return (
+																<TextQuestion {...questionProps}/>
+															);
+														}
+														return null;
+													})}
+													{questionsData.questionTypes.map(item => (
+														<AddQuestionButton
+															newQuestion={this.newQuestion}
+															key={`key-${item.questionTypeId}`}
+															{...item}
+															loading={this.state.loading}
 															currentDocumentId={currentDocumentId}
-															newQuestion={this.newQuestion}/>
-													</Fragment>
-													}
+															currentConsultationId={currentConsultationId}
+														/>
+													))}
+
+													<QuestionTemplates
+														currentConsultationId={currentConsultationId}
+														currentDocumentId={currentDocumentId}
+														questions={questionsData.previousQuestions}
+														newQuestion={this.newQuestion}/>
+
 												</Fragment>
 												:
 												<p>Choose consultation title or document to add questions.</p>
@@ -363,3 +361,23 @@ export class Questions extends Component<PropsType, StateType> {
 }
 
 export default withRouter(Questions);
+
+export const AddQuestionButton = props => {
+	const {type, questionTypeId, loading, currentDocumentId, currentConsultationId, newQuestion} = props;
+	const buttonText = type === "YesNo" ? "Add yes/no question" : "Add text response question";
+	const documentId = currentDocumentId === "consultation" ? null : parseInt(currentDocumentId, 10);
+	return (
+		<button
+			className="btn btn--cta"
+			disabled={loading}
+			onClick={e => {
+				newQuestion(
+					e,
+					currentConsultationId,
+					documentId,
+					questionTypeId);
+			}
+			}
+		>{buttonText}</button>
+	);
+};
