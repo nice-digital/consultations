@@ -172,8 +172,8 @@ namespace Comments.Services
 			var questionWithRoles = new List<QuestionWithRoles>();
 			foreach (var question in previousQuestions)
 			{
-				var createdByRoles = usersWithRoles.ContainsKey(question.CreatedByUserId) ? usersWithRoles[question.CreatedByUserId] : new List<string>();
-				var lastModifiedByRoles = usersWithRoles.ContainsKey(question.LastModifiedByUserId) ? usersWithRoles[question.LastModifiedByUserId] : new List<string>();
+				var createdByRoles = usersWithRoles != null && usersWithRoles.ContainsKey(question.CreatedByUserId) ? usersWithRoles[question.CreatedByUserId] : new List<string>();
+				var lastModifiedByRoles = usersWithRoles != null && usersWithRoles.ContainsKey(question.LastModifiedByUserId) ? usersWithRoles[question.LastModifiedByUserId] : new List<string>();
 				
 				questionWithRoles.Add(new QuestionWithRoles(question.Location, question, createdByRoles, lastModifiedByRoles));
 			}
