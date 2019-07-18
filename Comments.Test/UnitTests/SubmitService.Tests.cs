@@ -136,7 +136,7 @@ namespace Comments.Test.UnitTests
 			AddSubmittedCommentsAndAnswers("consultations://./consultation/1/document/1/chapter/introduction", "Comment Label", "Question Label", "Answer Label", userId, consultationContext);
 
 			//Act
-			var actualResult = consultationService.GetSubmittedDate(consultationSourceURI, userId);
+			var actualResult = consultationService.GetSubmittedDate(consultationSourceURI, userId).HasValue;
 
 			//Assert
 			actualResult.ShouldBe(expectedResult);
@@ -163,7 +163,7 @@ namespace Comments.Test.UnitTests
 			AddSubmittedCommentsAndAnswers("consultations://./consultation/1/document/1", "Comment Label", "Question Label", "Answer Label", userId, consultationContext);
 
 			//Act
-			var actualResult = consultationService.GetSubmittedDate(consultationSourceURI, userId);
+			var actualResult = consultationService.GetSubmittedDate(consultationSourceURI, userId).HasValue;
 
 			//Assert
 			actualResult.ShouldBe(expectedResult);
@@ -190,7 +190,7 @@ namespace Comments.Test.UnitTests
 			AddSubmittedCommentsAndAnswers("consultations://./consultation/1", "Comment Label", "Question Label", "Answer Label", userId, consultationContext);
 
 			//Act
-			var actualResult = consultationService.GetSubmittedDate(consultationSourceURI, userId);
+			var actualResult = consultationService.GetSubmittedDate(consultationSourceURI, userId).HasValue;
 
 			//Assert
 			actualResult.ShouldBe(expectedResult);

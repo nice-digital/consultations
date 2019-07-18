@@ -25,9 +25,9 @@ namespace Comments.Test.Infrastructure
 		    return _consultationIsOpen;
 	    }
 
-	    public bool GetSubmittedDate(string consultationSourceURI, Guid userId)
+	    public DateTime? GetSubmittedDate(string consultationSourceURI, Guid userId)
 	    {
-		    return false;
+		    return null;
 	    }
 
 
