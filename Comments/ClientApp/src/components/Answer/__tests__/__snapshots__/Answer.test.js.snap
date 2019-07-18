@@ -66,6 +66,11 @@ exports[`[ClientApp]  Answer Component should match snapshot without answer 1`] 
         onInput={[Function]}
       />
     </div>
+    <span
+      className="ml--0 mb--0 CommentBox__savedIndicator"
+    >
+      Saved
+    </span>
   </form>
 </section>
 `;

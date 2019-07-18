@@ -3,8 +3,6 @@
 import React, { Component, Fragment } from "react";
 import { Answer } from "../Answer/Answer";
 
-//import stringifyObject from "stringify-object";
-
 type PropsType = {
 	staticContext?: any,
 	saveAnswerHandler: Function,
@@ -52,29 +50,13 @@ export class Question extends Component<PropsType, StateType> {
 				{this.props.isUnsaved &&
 				<p className="CommentBox__validationMessage">You have unsaved changes</p>
 				}
-				{answers.map(answer => {
-					return (
-						<Answer
-							questionText={this.props.question.questionText}
-							questionType={this.props.question.questionType}
-							updateUnsavedIds={this.props.updateUnsavedIds}
-							questionId={this.props.question.questionId}
-							readOnly={this.props.readOnly}
-							isVisible={this.props.isVisible}
-							key={answer.answerId}
-							unique={`Answer${answer.answerId}`}
-							answer={answer}
-							saveAnswerHandler={this.props.saveAnswerHandler}
-							deleteAnswerHandler={this.props.deleteAnswerHandler}
-						/>
-					);
-				})}
 
-				{this.props.showAnswer && 
+				{this.props.showAnswer &&
 					answers.map((answer) => {
 						return (
-							<AnswerBox
+							<Answer
 								questionText={this.props.question.questionText}
+								questionType={this.props.question.questionType}
 								updateUnsavedIds={this.props.updateUnsavedIds}
 								questionId={this.props.question.questionId}
 								readOnly={this.props.readOnly}
