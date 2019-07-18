@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Comments.Configuration;
 using Microsoft.AspNetCore.Http;
 using NICE.Auth.NetCore.Models;
@@ -43,5 +44,10 @@ namespace Comments.Auth
 	    {
 		    return _authenticateService.FindUser(userId);
 	    }
+
+	    public Dictionary<Guid, IEnumerable<string>> FindRoles(IEnumerable<Guid> userIds)
+	    {
+			return _authenticateService.FindRoles(userIds);
+		}
     }
 }
