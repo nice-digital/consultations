@@ -5,8 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Comments.Common;
 using Comments.Configuration;
+using Microsoft.AspNetCore.Http;
+using NICE.Auth.NetCore.Helpers;
 using NICE.Auth.NetCore.Services;
 using NICE.Feeds;
+using Constants = Comments.Common.Constants;
 using Location = Comments.Models.Location;
 using Question = Comments.ViewModels.Question;
 using QuestionType = Comments.ViewModels.QuestionType;
@@ -29,14 +32,17 @@ namespace Comments.Services
         private readonly IUserService _userService;
 	    private readonly IConsultationService _consultationService;
 	    private readonly IAuthenticateService _authenticateService;
+	    private readonly IHttpContextAccessor _httpContextAccessor;
 	    private readonly User _currentUser;
 
-        public QuestionService(ConsultationsContext consultationsContext, IUserService userService, IConsultationService consultationService, IAuthenticateService authenticateService)
+        public QuestionService(ConsultationsContext consultationsContext, IUserService userService, IConsultationService consultationService,
+	        IAuthenticateService authenticateService, IHttpContextAccessor httpContextAccessor)
         {
             _context = consultationsContext;
             _userService = userService;
 	        _consultationService = consultationService;
 	        _authenticateService = authenticateService;
+	        _httpContextAccessor = httpContextAccessor;
 	        _currentUser = _userService.GetCurrentUser();
         }
 
@@ -157,7 +163,10 @@ namespace Comments.Services
 
 			var previousQuestionsWithRoles = GetRoles(previousQuestions);
 
-			return new QuestionAdmin(documentsAndConsultationTitle.consultationTitle, consultationQuestions, questionAdminDocuments, questionTypes, consultationState, previousQuestionsWithRoles);
+			var currentUserRoles = _httpContextAccessor.HttpContext.User.Roles();
+
+			return new QuestionAdmin(documentsAndConsultationTitle.consultationTitle, consultationQuestions,
+				questionAdminDocuments, questionTypes, consultationState, previousQuestionsWithRoles, currentUserRoles);
 	    }
 
 	    private IEnumerable<QuestionWithRoles> GetRoles(IEnumerable<Models.Question> previousQuestions)

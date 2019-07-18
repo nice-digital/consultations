@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Comments.Common;
 using Comments.Configuration;
 
 namespace Comments.ViewModels
@@ -8,25 +9,13 @@ namespace Comments.ViewModels
 	{
 		public QuestionWithRoles(Models.Location location, Models.Question question, IEnumerable<string> createdByRoles, IEnumerable<string> lastModifiedByRoles) : base(location, question)
 		{
-			CreatedByRoles = FilterRoles(createdByRoles);
-			LastModifiedByRoles = FilterRoles(lastModifiedByRoles);
+			CreatedByRoles = createdByRoles.FilterRoles();
+			LastModifiedByRoles = lastModifiedByRoles.FilterRoles();
 		}
 
 		public IEnumerable<string> CreatedByRoles { get; private set; }
 		public IEnumerable<string> LastModifiedByRoles { get; private set; }
 
 		public IEnumerable<string> AllRoles => CreatedByRoles.Concat(LastModifiedByRoles).Distinct();
-
-		private static IEnumerable<string> FilterRoles(IEnumerable<string> roles)
-		{
-			if (roles == null)
-				return new List<string>();
-
-			var roleList = roles.ToList();
-			if (!roleList.Any())
-				return new List<string>();
-
-			return roleList.Where(role => AppSettings.ConsultationListConfig.DownloadRoles.AllRoles.Contains(role));
-		}
 	}
 }
