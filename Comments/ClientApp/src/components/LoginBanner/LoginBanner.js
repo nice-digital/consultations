@@ -11,7 +11,7 @@ type PropsType = {
 export class LoginBanner extends PureComponent<PropsType> {
 	render(){
 		return (
-			<div className="panel panel--inverse mt--0 mb--0"
+			<div className="panel panel--inverse mt--0 mb--0 sign-in-banner"
 					 data-qa-sel="sign-in-banner">
 				<div className="container">
 					<div className="grid">

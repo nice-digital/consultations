@@ -17,5 +17,13 @@ namespace Comments.Common
 	    {
 		    public const string Keyword = "Keyword";
 	    }
+
+	    public static class Export
+	    {
+		    public const string SheetName = "Comments";
+		    public const string ExpressionOfInterestColumnDescription = "Organisation interested in formal support";
+		    public const string Yes = "Yes";
+		    public const string No = "No";
+		}
 	}
 }

@@ -9,6 +9,8 @@ export const SubmitResponseFeedback = (props) => {
 		tobaccoDisclosure,
 		respondingAsOrganisation,
 		hasTobaccoLinks,
+		showExpressionOfInterestSubmissionQuestion,
+		organisationExpressionOfInterest,
 	} = props;
 
 	let items = [];
@@ -24,6 +26,9 @@ export const SubmitResponseFeedback = (props) => {
 
 	if (respondingAsOrganisation === "yes" && organisationName.length < 1)
 		items.push("You have stated that you are responding on behalf of an organisation but you haven't entered the organisation name");
+
+	if (respondingAsOrganisation === "yes" && showExpressionOfInterestSubmissionQuestion && organisationExpressionOfInterest === null)
+		items.push("You have not disclosed whether your organisation would like to express an interest in formally supporting this quality standard");
 
 	if (!hasTobaccoLinks)
 		items.push("You have not disclosed whether you or the organisation you represent have links to the tobacco industry");

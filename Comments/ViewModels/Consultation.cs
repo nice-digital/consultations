@@ -16,7 +16,8 @@ namespace Comments.ViewModels
             ConsultationType = consultation.ConsultationType;
             ProjectType = consultation.ProjectType;
             ProductTypeName = consultation.ProductTypeName;
-            DevelopedAs = consultation.DevelopedAs;
+            ShowExpressionOfInterestSubmissionQuestion = consultation.ShowExpressionOfInterestSubmissionQuestion;
+			DevelopedAs = consultation.DevelopedAs;
             RelevantTo = consultation.RelevantTo;
             ConsultationId = consultation.ConsultationId;
             Process = consultation.Process;
@@ -31,7 +32,7 @@ namespace Comments.ViewModels
         }
 
         [JsonConstructor]
-        public Consultation(string reference, string title, string consultationName, DateTime startDate, DateTime endDate, string consultationType, string resourceTitleId, string projectType, string productTypeName, string developedAs, string relevantTo, int consultationId, string process, bool allowConsultationComments, bool allowConsultationQuestions, bool supportsComments, bool supportsQuestions, string partiallyUpdatedProjectReference, string origProjectReference, User user)
+        public Consultation(string reference, string title, string consultationName, DateTime startDate, DateTime endDate, string consultationType, string resourceTitleId, string projectType, string productTypeName, bool showExpressionOfInterestSubmissionQuestion, string developedAs, string relevantTo, int consultationId, string process, bool allowConsultationComments, bool allowConsultationQuestions, bool supportsComments, bool supportsQuestions, string partiallyUpdatedProjectReference, string origProjectReference, User user)
         {
             Reference = reference;
             Title = title;
@@ -42,7 +43,8 @@ namespace Comments.ViewModels
             ResourceTitleId = resourceTitleId;
             ProjectType = projectType;
             ProductTypeName = productTypeName;
-            DevelopedAs = developedAs;
+            ShowExpressionOfInterestSubmissionQuestion = showExpressionOfInterestSubmissionQuestion;
+			DevelopedAs = developedAs;
             RelevantTo = relevantTo;
             ConsultationId = consultationId;
             Process = process;
@@ -62,7 +64,8 @@ namespace Comments.ViewModels
         public string ResourceTitleId { get; private set; }
         public string ProjectType { get; private set; }
         public string ProductTypeName { get; private set; }
-        public string DevelopedAs { get; private set; }
+		public bool ShowExpressionOfInterestSubmissionQuestion { get; private set; }
+		public string DevelopedAs { get; private set; }
         public string RelevantTo { get; private set; }
         public int ConsultationId { get; private set; }
         public string Process { get; private set; }

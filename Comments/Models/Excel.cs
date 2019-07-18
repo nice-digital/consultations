@@ -19,6 +19,7 @@ namespace Comments.Models
 	    public string OrganisationName { get; set; }
 	    public bool? HasTobaccoLinks { get; set; }
 	    public string TobaccoIndustryDetails { get; set; }
+		public bool? OrganisationExpressionOfInterest { get; set; }
 		public string Order { get; set; }
 
 	}
