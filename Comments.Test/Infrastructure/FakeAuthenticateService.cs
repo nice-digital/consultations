@@ -71,7 +71,7 @@ namespace Comments.Test.Infrastructure
 
 	    public Dictionary<Guid, IEnumerable<string>> FindRoles(IEnumerable<Guid> userIds)
 	    {
-		    throw new NotImplementedException();
+		    return new Dictionary<Guid, IEnumerable<string>>();
 	    }
     }
 }

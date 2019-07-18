@@ -7,6 +7,8 @@ namespace Comments.ViewModels
 {
 	public class QuestionWithRoles : Question
 	{
+		public QuestionWithRoles() {} //this constructor's only here for the tests
+
 		public QuestionWithRoles(Models.Location location, Models.Question question, IEnumerable<string> createdByRoles, IEnumerable<string> lastModifiedByRoles) : base(location, question)
 		{
 			CreatedByRoles = createdByRoles.FilterRoles();
@@ -16,6 +18,8 @@ namespace Comments.ViewModels
 		public IEnumerable<string> CreatedByRoles { get; private set; }
 		public IEnumerable<string> LastModifiedByRoles { get; private set; }
 
-		public IEnumerable<string> AllRoles => CreatedByRoles.Concat(LastModifiedByRoles).Distinct();
+		public IEnumerable<string> AllRoles => (CreatedByRoles ?? new List<string>())
+										.Concat(LastModifiedByRoles ?? new List<string>())
+										.Distinct();
 	}
 }
