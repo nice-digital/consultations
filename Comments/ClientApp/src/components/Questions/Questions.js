@@ -174,7 +174,6 @@ export class Questions extends Component<PropsType, StateType> {
 	};
 
 	newQuestion = (e: SyntheticEvent<HTMLElement>, consultationId: string, documentId: number | null, questionTypeId: number, questionContent: string = "") => {
-		debugger;
 		const newQuestion = {
 			questionId: -1,
 			questionTypeId,

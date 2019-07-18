@@ -20,7 +20,7 @@ export class QuestionTemplates extends Component {
 	};
 
 	render() {
-		const {textQuestionTypeId, currentConsultationId, currentDocumentId, newQuestion} = this.props;
+		const {currentConsultationId, currentDocumentId, newQuestion} = this.props;
 		return (
 			<div className="card">
 				<h3>Previously set questions</h3>

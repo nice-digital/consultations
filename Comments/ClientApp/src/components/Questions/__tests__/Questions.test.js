@@ -95,7 +95,6 @@ describe("[ClientApp] ", () => {
 
 			await nextTick();
 			wrapper.update();
-
 			const length = wrapper.find(TextQuestion).length;
 
 			expect(length).toEqual(1);
