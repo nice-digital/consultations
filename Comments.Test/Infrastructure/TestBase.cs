@@ -337,7 +337,27 @@ namespace Comments.Test.Infrastructure
 		    AddSubmissionAnswers(submissionId, answerId, passedInContext);
 	    }
 
-	    protected int AddSubmission(Guid userId, ConsultationsContext passedInContext = null)
+	    protected void AddSubmittedComments(string sourceURI, string commentText, string questionText, string answerText, Guid createdByUserId, ConsultationsContext passedInContext = null)
+	    {
+		    var locationId = AddLocation(sourceURI, passedInContext);
+		    var commentId = AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId, status: (int)StatusName.Submitted, passedInContext: passedInContext);
+		    var questionTypeId = AddQuestionType(description: "text", hasBooleanAnswer: false, hasTextAnswer: true, passedInContext: passedInContext);
+		    var questionId = AddQuestion(locationId, questionTypeId, questionText, passedInContext);
+		    var submissionId = AddSubmission(createdByUserId, passedInContext);
+		    AddSubmissionComments(submissionId, commentId, passedInContext);
+	    }
+
+	    protected void AddSubmittedQuestionsWithAnswers(string sourceURI, string commentText, string questionText, string answerText, Guid createdByUserId, ConsultationsContext passedInContext = null)
+	    {
+		    var locationId = AddLocation(sourceURI, passedInContext);
+		    var questionTypeId = AddQuestionType(description: "text", hasBooleanAnswer: false, hasTextAnswer: true, passedInContext: passedInContext);
+		    var questionId = AddQuestion(locationId, questionTypeId, questionText, passedInContext);
+		    var answerId = AddAnswer(questionId, createdByUserId, answerText, (int)StatusName.Submitted, passedInContext);
+		    var submissionId = AddSubmission(createdByUserId, passedInContext);
+		    AddSubmissionAnswers(submissionId, answerId, passedInContext);
+	    }
+
+		protected int AddSubmission(Guid userId, ConsultationsContext passedInContext = null)
 	    {
 			var submission = new Models.Submission(userId, DateTime.Now, false, null, false, null);
 			if (passedInContext != null)

@@ -290,38 +290,31 @@ namespace Comments.Models
 		    return submission;
 	    }
 
-	    public DateTime? GetSubmittedDate(string consultationSourceURI, Guid currentUser)
+	    public DateTime? GetSubmittedDate(string sourceURI)
 	    {
-		    var submissions = Submission.Where(s => s.SubmissionByUserId.Equals(currentUser))
-			    .Include(s => s.SubmissionComment)
-					.ThenInclude(sc => sc.Comment)
-						.ThenInclude(c => c.Location)
+		    var partialSourceURIToUse = $"{sourceURI}/";
 
-			    .Include(s => s.SubmissionAnswer)
-					.ThenInclude(sa => sa.Answer)
-						.ThenInclude(a => a.Question)
-							.ThenInclude(q => q.Location)
+		    var firstMatchingLocation = Location.Where(l => (l.SourceURI.Equals(sourceURI) || l.SourceURI.StartsWith(partialSourceURIToUse)))
+			    .Include(l => l.Comment)
+					.ThenInclude(s => s.SubmissionComment)
+						.ThenInclude(s => s.Submission)
 
-			    .ToList();
+			    .Include(l => l.Question)
+					.ThenInclude(q => q.Answer)
+						.ThenInclude(s => s.SubmissionAnswer)
+							.ThenInclude(s => s.Submission)
 
-		    var allQuestionSourceUrisForThisUser = submissions.SelectMany(s => s.SubmissionAnswer,
-			    ((submission, answer) => answer.Answer.Question.Location.SourceURI)).ToList();
+			    .FirstOrDefault();
 
-		    var allCommentSourceUrisForThisUser = submissions.SelectMany(s => s.SubmissionComment,
-			    ((submission, comment) => comment.Comment.Location.SourceURI)).ToList();
+		    if (firstMatchingLocation == null)
+			    return (DateTime?)null;
 
-		    var allSourceUris = allQuestionSourceUrisForThisUser.Concat(allCommentSourceUrisForThisUser).ToList();
-
-
-
-		    //return allSourceUris.FirstOrDefault(sourceURI => sourceURI.StartsWith(consultationSourceURI, StringComparison.OrdinalIgnoreCase));
-
-
-			return submissions.FirstOrDefault()?.SubmissionDateTime;
-
+		    return firstMatchingLocation.Comment?.FirstOrDefault()?.SubmissionComment.FirstOrDefault()?.Submission.SubmissionDateTime ??
+		           firstMatchingLocation.Question?.FirstOrDefault(q => q.Answer.Any())?.Answer.FirstOrDefault()?.SubmissionAnswer.FirstOrDefault()?.Submission.SubmissionDateTime;
+			
 		}
-		
-	    public int DeleteAllSubmissionsFromUser(Guid usersSubmissionsToDelete)
+
+		public int DeleteAllSubmissionsFromUser(Guid usersSubmissionsToDelete)
 	    {
 		    var draftStatus = GetStatus(StatusName.Draft);
 
@@ -398,21 +391,21 @@ namespace Comments.Models
 				--3 location inserts
 				IF NOT EXISTS (SELECT * FROM [Location] L
 								INNER JOIN Question Q ON Q.LocationID = L.LocationID
-								WHERE L.SourceURI = 'consultations://./consultation/' + CAST(@consultationId AS varchar) AND
+								WHERE L.sourceURI = 'consultations://./consultation/' + CAST(@consultationId AS varchar) AND
 								Q.QuestionText = @questionOneText)
 				BEGIN
 
-					INSERT INTO [Location] (SourceURI, [Order])
+					INSERT INTO [Location] (sourceURI, [Order])
 					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar), @consultationIdPaddedForOrder + '.000.000.000')
 
 					SET @locationID1 = SCOPE_IDENTITY();
 
-					INSERT INTO [Location] (SourceURI, [Order])
+					INSERT INTO [Location] (sourceURI, [Order])
 					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar) + '/document/1', @consultationIdPaddedForOrder + '.001.000.000')
 
 					SET @locationID2 = SCOPE_IDENTITY();
 
-					INSERT INTO [Location] (SourceURI, [Order])
+					INSERT INTO [Location] (sourceURI, [Order])
 					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar) + '/document/2', @consultationIdPaddedForOrder + '.002.000.000')
 
 					SET @locationID3 = SCOPE_IDENTITY();
@@ -476,21 +469,21 @@ namespace Comments.Models
 				--3 location inserts. the questions are all consultation level, but there's an order to preserve.
 				IF NOT EXISTS (SELECT * FROM [Location] L
 								INNER JOIN Question Q ON Q.LocationID = L.LocationID
-								WHERE L.SourceURI = 'consultations://./consultation/' + CAST(@consultationId AS varchar) AND
+								WHERE L.sourceURI = 'consultations://./consultation/' + CAST(@consultationId AS varchar) AND
 								Q.QuestionText = @questionOneText)
 				BEGIN
 
-					INSERT INTO [Location] (SourceURI, [Order])
+					INSERT INTO [Location] (sourceURI, [Order])
 					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar), @consultationIdPaddedForOrder + '.000.000.000.001')
 
 					SET @locationID1 = SCOPE_IDENTITY();
 
-					INSERT INTO [Location] (SourceURI, [Order])
+					INSERT INTO [Location] (sourceURI, [Order])
 					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar), @consultationIdPaddedForOrder + '.000.000.000.002')
 
 					SET @locationID2 = SCOPE_IDENTITY();
 
-					INSERT INTO [Location] (SourceURI, [Order])
+					INSERT INTO [Location] (sourceURI, [Order])
 					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar), @consultationIdPaddedForOrder + '.000.000.000.003')
 
 					SET @locationID3 = SCOPE_IDENTITY();
@@ -621,21 +614,21 @@ namespace Comments.Models
 				--3 location inserts. the questions are all consultation level, but there's an order to preserve.
 				IF NOT EXISTS (SELECT * FROM [Location] L
 								INNER JOIN Question Q ON Q.LocationID = L.LocationID
-								WHERE L.SourceURI = 'consultations://./consultation/' + CAST(@consultationId AS varchar) AND
+								WHERE L.sourceURI = 'consultations://./consultation/' + CAST(@consultationId AS varchar) AND
 								Q.QuestionText = @questionOneText)
 				BEGIN
 
-					INSERT INTO [Location] (SourceURI, [Order])
+					INSERT INTO [Location] (sourceURI, [Order])
 					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar), @consultationIdPaddedForOrder + '.000.000.000.001')
 
 					SET @locationID1 = SCOPE_IDENTITY();
 
-					INSERT INTO [Location] (SourceURI, [Order])
+					INSERT INTO [Location] (sourceURI, [Order])
 					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar), @consultationIdPaddedForOrder + '.000.000.000.002')
 
 					SET @locationID2 = SCOPE_IDENTITY();
 
-					INSERT INTO [Location] (SourceURI, [Order])
+					INSERT INTO [Location] (sourceURI, [Order])
 					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar), @consultationIdPaddedForOrder + '.000.000.000.003')
 
 					SET @locationID3 = SCOPE_IDENTITY();
@@ -698,21 +691,21 @@ namespace Comments.Models
 				--3 location inserts. the questions are all consultation level, but there's an order to preserve.
 				IF NOT EXISTS (SELECT * FROM [Location] L
 								INNER JOIN Question Q ON Q.LocationID = L.LocationID
-								WHERE L.SourceURI = 'consultations://./consultation/' + CAST(@consultationId AS varchar) AND
+								WHERE L.sourceURI = 'consultations://./consultation/' + CAST(@consultationId AS varchar) AND
 								Q.QuestionText = @questionOneText)
 				BEGIN
 
-					INSERT INTO [Location] (SourceURI, [Order])
+					INSERT INTO [Location] (sourceURI, [Order])
 					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar), @consultationIdPaddedForOrder + '.000.000.000.001')
 
 					SET @locationID1 = SCOPE_IDENTITY();
 
-					INSERT INTO [Location] (SourceURI, [Order])
+					INSERT INTO [Location] (sourceURI, [Order])
 					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar), @consultationIdPaddedForOrder + '.000.000.000.002')
 
 					SET @locationID2 = SCOPE_IDENTITY();
 
-					INSERT INTO [Location] (SourceURI, [Order])
+					INSERT INTO [Location] (sourceURI, [Order])
 					VALUES ('consultations://./consultation/' + CAST(@consultationId AS varchar), @consultationIdPaddedForOrder + '.000.000.000.003')
 
 					SET @locationID3 = SCOPE_IDENTITY();

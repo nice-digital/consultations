@@ -35,7 +35,7 @@ namespace Comments.Services
 	    ConsultationState GetConsultationState(string sourceURI, PreviewState previewState, IEnumerable<Models.Location> locations = null, ConsultationBase consultation = null);
 	    ConsultationState GetConsultationState(int consultationId, int? documentId, string reference, PreviewState previewState, IEnumerable<Models.Location> locations = null, ConsultationBase consultationDetail = null);
 
-		DateTime? GetSubmittedDate(string consultationSourceURI, Guid userId);
+		DateTime? GetSubmittedDate(string consultationSourceURI);
 	    IEnumerable<BreadcrumbLink> GetBreadcrumbs(ConsultationDetail consultation, BreadcrumbType breadcrumbType);
 
 	    (int? documentId, string chapterSlug) GetFirstConvertedDocumentAndChapterSlug(int consultationId);
@@ -208,7 +208,7 @@ namespace Comments.Services
 			    locations = new List<Models.Location>(0);
 		    }
 
-		    var hasSubmitted = currentUser != null && currentUser.IsAuthorised && currentUser.UserId.HasValue ? GetSubmittedDate(sourceURI, currentUser.UserId.Value).HasValue : false;
+		    var hasSubmitted = currentUser != null && currentUser.IsAuthorised && currentUser.UserId.HasValue ? GetSubmittedDate(sourceURI).HasValue : false;
 
 		    var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);
 
@@ -219,7 +219,7 @@ namespace Comments.Services
 		    return consultationState;
 	    }
 
-		public DateTime? GetSubmittedDate(string anySourceURI, Guid userId)
+		public DateTime? GetSubmittedDate(string anySourceURI)
 	    {
 		    if (string.IsNullOrWhiteSpace(anySourceURI))
 			    return null;
@@ -228,7 +228,7 @@ namespace Comments.Services
 
 		    var consultationSourceURI = ConsultationsUri.CreateConsultationURI(consultationsUriElements.ConsultationId);
 
-		    return _context.GetSubmittedDate(consultationSourceURI, userId);
+		    return _context.GetSubmittedDate(consultationSourceURI);
 	    }
 
 	    /// <summary>
