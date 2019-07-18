@@ -79,7 +79,7 @@ export class YNQuestion extends Component<PropsType, StateType> {
 		const {question, unsavedChanges} = this.state;
 
 		return (
-			<li className={isLast ? "CommentBox" : "CommentBox mb--e"}>
+			<li className="CommentBox mb--e">
 				<h1 className="CommentBox__title CommentBox__title--legend">Question {counter} - Yes/no question</h1>
 				<section role="form">
 					<form onSubmit={e => this.props.saveQuestion(e, question)} className="mb--0">

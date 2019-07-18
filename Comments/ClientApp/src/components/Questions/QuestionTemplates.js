@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { DebounceInput } from "react-debounce-input";
 
 export class QuestionTemplates extends Component {
 	state = {
@@ -7,10 +8,10 @@ export class QuestionTemplates extends Component {
 	};
 
 	filterQuestions = (e) => {
-		const filterQuery = e.target.value;
+		const filterQuery = e.target.value.toLowerCase();
 		let filteredQuestions = this.state.questions;
 		filteredQuestions = filteredQuestions.filter(question => {
-			return question.questionText.indexOf(
+			return question.questionText.toLowerCase().indexOf(
 				filterQuery,
 			) !== -1;
 		});
@@ -44,35 +45,50 @@ export class QuestionTemplates extends Component {
 	}
 }
 
-// todo: lowercase() the filter terms and questions!
-
 const TemplateItem = (props) => {
 	const {
-		questionType,
 		questionText,
 		newQuestion,
 		currentDocumentId,
 		currentConsultationId,
-		questionTypeId } = props;
+		questionTypeId,
+		questionType,
+	} = props;
+	const getQuestionType = (type) => {
+		return type === "Text" ? "Open Question" : "Yes/No Question";
+	};
 	return (
 		<li>
 			<div className="card">
-				<div className="card__body">
-					<div className="grid">
-						<div data-g="8">{questionText}</div>
-						<div data-g="2">{questionType.type === "YesNo" ? "Yes / No Question" : "Open Question"}</div>
-						<div data-g="2">
-							<button
-								onClick={e => {
-									if (currentDocumentId === "consultation") {
-										newQuestion(e, currentConsultationId, null, questionTypeId, questionText);
-									} else {
-										newQuestion(e, currentConsultationId, parseInt(currentDocumentId, 10), questionTypeId, questionText);
-									}
-								}}
-								className="btn btn-small right mr--0">Insert
-							</button>
+				<div className="grid">
+					<div data-g="9">
+						<div className="card__header">
+							<p className="card__heading">
+								{questionText}
+							</p>
 						</div>
+						<dl className="card__metadata">
+							<div className="card__metadatum">
+								<dt>
+									<span className="card__tag tag tag--consultation tag--flush">
+										{getQuestionType(questionType.type)}
+									</span>
+								</dt>
+								<dd className="visually-hidden">{questionType.type}</dd>
+							</div>
+						</dl>
+					</div>
+					<div data-g="3">
+						<button
+							onClick={e => {
+								if (currentDocumentId === "consultation") {
+									newQuestion(e, currentConsultationId, null, questionTypeId, questionText);
+								} else {
+									newQuestion(e, currentConsultationId, parseInt(currentDocumentId, 10), questionTypeId, questionText);
+								}
+							}}
+							className="btn btn-small right mr--0">Insert
+						</button>
 					</div>
 				</div>
 			</div>
@@ -80,20 +96,17 @@ const TemplateItem = (props) => {
 	);
 };
 
-const TemplateFilter = (props) => {
+const TemplateFilter = props => {
 	return (
-		<div className="form__group mb--b">
-			<label
-				className="form__label"
-				htmlFor="filter">
-				Search by question
-			</label>
-			<input
-				className="form__input"
-				onChange={props.filterQuestions}
-				id="filter"
-				tabIndex={0}/>
+		<div className="panel mb--d">
+			<div className="form__group form__group--text">
+				<label htmlFor="textFilter" className="form__label">Filter by question text</label>
+				<input
+					className="form__input"
+					onChange={props.filterQuestions}
+					id="filter"
+					tabIndex={0}/>
+			</div>
 		</div>
 	);
 };
-
