@@ -1,11 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
+using Comments.Common;
 
 namespace Comments.ViewModels
 {
 	public class QuestionAdmin
 	{
-		public QuestionAdmin(string consultationTitle, IEnumerable<Question> consultationQuestions, IEnumerable<QuestionAdminDocument> documents, IEnumerable<QuestionType> questionTypes, ConsultationState consultationState, IEnumerable<Question> previousQuestions)
+		public QuestionAdmin(string consultationTitle, IEnumerable<Question> consultationQuestions, IEnumerable<QuestionAdminDocument> documents,
+			IEnumerable<QuestionType> questionTypes, ConsultationState consultationState, IEnumerable<QuestionWithRoles> previousQuestions,
+			IEnumerable<string> currentUserRoles)
 		{
 			ConsultationTitle = consultationTitle;
 			//ConsultationSupportsQuestions = consultationSupportsQuestions;
@@ -14,6 +17,7 @@ namespace Comments.ViewModels
 			QuestionTypes = questionTypes;
 			ConsultationState = consultationState;
 			PreviousQuestions = previousQuestions;
+			CurrentUserRoles = currentUserRoles.FilterRoles();
 		}
 
 		public string ConsultationTitle{ get; private set; }
@@ -29,6 +33,8 @@ namespace Comments.ViewModels
 
 		public ConsultationState ConsultationState { get; private set; }
 
-		public IEnumerable<Question> PreviousQuestions { get; private set; }
+		public IEnumerable<QuestionWithRoles> PreviousQuestions { get; private set; }
+
+		public IEnumerable<string> CurrentUserRoles { get; private set; }
 	}
 }

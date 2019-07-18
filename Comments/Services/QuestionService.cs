@@ -4,7 +4,12 @@ using Comments.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 using Comments.Common;
+using Comments.Configuration;
+using Microsoft.AspNetCore.Http;
+using NICE.Auth.NetCore.Helpers;
+using NICE.Auth.NetCore.Services;
 using NICE.Feeds;
+using Constants = Comments.Common.Constants;
 using Location = Comments.Models.Location;
 using Question = Comments.ViewModels.Question;
 using QuestionType = Comments.ViewModels.QuestionType;
@@ -26,13 +31,18 @@ namespace Comments.Services
         private readonly ConsultationsContext _context;
         private readonly IUserService _userService;
 	    private readonly IConsultationService _consultationService;
+	    private readonly IAuthenticateService _authenticateService;
+	    private readonly IHttpContextAccessor _httpContextAccessor;
 	    private readonly User _currentUser;
 
-        public QuestionService(ConsultationsContext consultationsContext, IUserService userService, IConsultationService consultationService)
+        public QuestionService(ConsultationsContext consultationsContext, IUserService userService, IConsultationService consultationService,
+	        IAuthenticateService authenticateService, IHttpContextAccessor httpContextAccessor)
         {
             _context = consultationsContext;
             _userService = userService;
 	        _consultationService = consultationService;
+	        _authenticateService = authenticateService;
+	        _httpContextAccessor = httpContextAccessor;
 	        _currentUser = _userService.GetCurrentUser();
         }
 
@@ -108,9 +118,6 @@ namespace Comments.Services
 
 	    public QuestionAdmin GetQuestionAdmin(int consultationId, bool draft, string reference)
 	    {
-
-		    /*var consultation = _consultationService.GetConsultation(consultationId, BreadcrumbType.None, useFilters:false);*/
-
 		    var consultationSourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
 
 			var locationsWithQuestions = _context.GetQuestionsForDocument(new List<string>{ consultationSourceURI }, partialMatchSourceURI: true).ToList();
@@ -135,7 +142,6 @@ namespace Comments.Services
 
 				questionAdminDocuments.Add(
 					new QuestionAdminDocument(document.DocumentId,
-						//document.SupportsQuestions,
 						document.Title,
 						listOfQuestions
 					)
@@ -153,11 +159,37 @@ namespace Comments.Services
 		    var documentId = draft ? Constants.DummyDocumentNumberForPreviewProject : (int?)null;
 			var consultationState = _consultationService.GetConsultationState(consultationId, documentId, reference, previewState);
 
-			var previousQuestions = _context.GetAllPreviousUniqueQuestions().Select(q => new Question(q.Location, q));
+			var previousQuestions = _context.GetAllPreviousUniqueQuestions();
 
-			return new QuestionAdmin(documentsAndConsultationTitle.consultationTitle, consultationQuestions, questionAdminDocuments, questionTypes, consultationState, previousQuestions);
+			var previousQuestionsWithRoles = GetRoles(previousQuestions);
+
+			var currentUserRoles = _httpContextAccessor.HttpContext.User.Roles();
+
+			return new QuestionAdmin(documentsAndConsultationTitle.consultationTitle, consultationQuestions,
+				questionAdminDocuments, questionTypes, consultationState, previousQuestionsWithRoles, currentUserRoles);
 	    }
 
+	    private IEnumerable<QuestionWithRoles> GetRoles(IEnumerable<Models.Question> previousQuestions)
+		{
+			var distinctUserIds =   previousQuestions.Select(question => question.CreatedByUserId)
+							.Concat(previousQuestions.Select(question => question.LastModifiedByUserId))
+							.Distinct();
+
+			var usersWithRoles = _authenticateService.FindRoles(distinctUserIds); //send the distinctUserIds to nice accounts and get back all the groups.
+
+			//accounts only returns the users that match. non-matching users are silently discarded from the result. 
+			var questionWithRoles = new List<QuestionWithRoles>();
+			foreach (var question in previousQuestions)
+			{
+				var createdByRoles = usersWithRoles != null && usersWithRoles.ContainsKey(question.CreatedByUserId) ? usersWithRoles[question.CreatedByUserId] : new List<string>();
+				var lastModifiedByRoles = usersWithRoles != null && usersWithRoles.ContainsKey(question.LastModifiedByUserId) ? usersWithRoles[question.LastModifiedByUserId] : new List<string>();
+				
+				questionWithRoles.Add(new QuestionWithRoles(question.Location, question, createdByRoles, lastModifiedByRoles));
+			}
+
+			return questionWithRoles;
+		}
+		
 	    public IEnumerable<QuestionType> GetQuestionTypes()
 	    {
 		    return _context.GetQuestionTypes().Select(modelQuestionType => new ViewModels.QuestionType(modelQuestionType));
