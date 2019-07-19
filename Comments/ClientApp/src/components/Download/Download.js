@@ -133,6 +133,7 @@ export class Download extends Component<PropsType, StateType> {
 					consultationListData: response.data,
 					hasInitialData: true,
 					loading: false,
+					indevReturnPath: response.data.indevBasePath,
 				});
 			})
 			.catch(err => { //TODO: maybe this should log?
