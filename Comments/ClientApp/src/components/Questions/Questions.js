@@ -339,6 +339,7 @@ export class Questions extends Component<PropsType, StateType> {
 													))}
 
 													<QuestionTemplates
+														currentUserRoles={questionsData.currentUserRoles}
 														currentConsultationId={currentConsultationId}
 														currentDocumentId={currentDocumentId}
 														questions={questionsData.previousQuestions}
