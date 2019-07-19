@@ -207,13 +207,11 @@ namespace Comments.Services
 		    {
 			    locations = new List<Models.Location>(0);
 		    }
-
-		    var hasSubmitted = currentUser != null && currentUser.IsAuthorised && currentUser.UserId.HasValue ? GetSubmittedDate(sourceURI).HasValue : false;
-
+		    
 		    var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);
 
 		    var consultationState = new ConsultationState(consultationDetail.StartDate, consultationDetail.EndDate,
-			    data.questions.Any(), data.questions.Any(q => q.Answers.Any()), data.comments.Any(), hasSubmitted,
+			    data.questions.Any(), data.questions.Any(q => q.Answers.Any()), data.comments.Any(),GetSubmittedDate(sourceURI),
 			    documentsWhichSupportComments);
 
 		    return consultationState;

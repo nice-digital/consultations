@@ -7,14 +7,14 @@ namespace Comments.ViewModels
 	public class ConsultationState
 	{
 		public ConsultationState(DateTime startDate, DateTime endDate, bool hasQuestions, bool hasUserSuppliedAnswers, bool hasUserSuppliedComments,
-			bool userHasSubmitted, IEnumerable<int> documentIdsWhichSupportComments)
+			 DateTime? submittedDate, IEnumerable<int> documentIdsWhichSupportComments)
 		{
 			StartDate = startDate;
 			EndDate = endDate;
 			HasQuestions = hasQuestions;
 			HasUserSuppliedAnswers = hasUserSuppliedAnswers;
 			HasUserSuppliedComments = hasUserSuppliedComments;
-			UserHasSubmitted = userHasSubmitted;
+			SubmittedDate = submittedDate;
 			//ConsultationSupportsQuestions = consultationSupportsQuestions;
 			//_documentIdsWhichSupportQuestions = documentIdsWhichSupportQuestions;
 			_documentIdsWhichSupportComments = documentIdsWhichSupportComments;
@@ -26,7 +26,7 @@ namespace Comments.ViewModels
 		public bool HasQuestions { get; private set; }
 		public bool HasUserSuppliedAnswers { get; private set; }
 		public bool HasUserSuppliedComments { get; private set; }
-		public bool UserHasSubmitted { get; private set; }
+		public DateTime? SubmittedDate { get; private set; }
 
 		//public bool ConsultationSupportsQuestions { get; private set; }
 
@@ -41,7 +41,7 @@ namespace Comments.ViewModels
 		public bool ConsultationIsOpen => DateTime.Now >= StartDate && DateTime.Now <= EndDate;
 		public bool ConsultationHasNotStartedYet => DateTime.Now < StartDate;  //admin's in preview mode can see the consultation before the start date
 		public bool ConsultationHasEnded => DateTime.Now > EndDate;
-		public bool SupportsSubmission => ConsultationIsOpen && !UserHasSubmitted && (HasUserSuppliedAnswers || HasUserSuppliedComments);
+		public bool SupportsSubmission => ConsultationIsOpen && SubmittedDate==null && (HasUserSuppliedAnswers || HasUserSuppliedComments);
 		public bool SupportsDownload => (HasUserSuppliedAnswers || HasUserSuppliedComments);
 
 		public bool ShouldShowDrawer => HasQuestions || DocumentIdsWhichSupportComments.Any() || 
