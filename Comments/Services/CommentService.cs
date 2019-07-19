@@ -122,20 +122,21 @@ namespace Comments.Services
 		    var isReview = ConsultationsUri.IsReviewPageRelativeUrl(relativeURL);
 			var consultationSourceURI = ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Consultation);
 		    ConsultationState consultationState;
-
-		    if (!user.IsAuthorised)
-		    {
-			    consultationState = _consultationService.GetConsultationState(consultationSourceURI, PreviewState.NonPreview);
-				return new CommentsAndQuestions(new List<ViewModels.Comment>(), new List<ViewModels.Question>(),
-				    user.IsAuthorised, signInURL, consultationState);
-		    }
-
 		    var sourceURIs = new List<string> { consultationSourceURI };
 		    if (!isReview)
 		    {
-				sourceURIs.Add(ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Document));
+			    sourceURIs.Add(ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Document));
 			    sourceURIs.Add(ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Chapter));
-			}
+		    }
+
+			if (!user.IsAuthorised)
+		    {
+			    consultationState = _consultationService.GetConsultationState(consultationSourceURI, PreviewState.NonPreview);
+			    var locationsQuestionsOnly = _context.GetQuestionsForDocument(sourceURIs, isReview);
+			    var questions = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locationsQuestionsOnly).questions.ToList();
+				return new CommentsAndQuestions(new List<ViewModels.Comment>(), questions,
+				    user.IsAuthorised, signInURL, consultationState);
+		    }
 
 			var locations = _context.GetAllCommentsAndQuestionsForDocument(sourceURIs, isReview).ToList();
 		    consultationState = _consultationService.GetConsultationState(consultationSourceURI, PreviewState.NonPreview, locations);

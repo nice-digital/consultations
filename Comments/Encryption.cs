@@ -15,8 +15,8 @@ namespace Comments
 	    public string EncryptString(string plainText, byte[] key, byte[] iv)
 	    {
 		    if (plainText == null || plainText.Length <= 0)
-			    throw new ArgumentNullException(nameof(plainText));
-		    if (key == null || key.Length <= 0)
+			    return string.Empty; //throw new ArgumentNullException(nameof(plainText));
+			if (key == null || key.Length <= 0)
 			    throw new ArgumentNullException(nameof(key));
 		    if (iv == null || iv.Length <= 0)
 			    throw new ArgumentNullException(nameof(iv));
@@ -52,7 +52,7 @@ namespace Comments
 	    {
 
 		    if (cipherText == null || cipherText.Length <= 0)
-			    throw new ArgumentNullException(nameof(cipherText));
+			    return string.Empty; //throw new ArgumentNullException(nameof(cipherText));
 		    if (key == null || key.Length <= 0)
 			    throw new ArgumentNullException(nameof(key));
 		    if (iv == null || iv.Length <= 0)

@@ -64,13 +64,5 @@ exports[`[ClientApp]  Question Component should match snapshot without answer 1`
       Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
     </strong>
   </p>
-  <section
-    role="form"
-  >
-    <form
-      className="mb--0"
-      onSubmit={[Function]}
-    />
-  </section>
 </li>
 `;

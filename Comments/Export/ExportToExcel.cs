@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Packaging;
 using System.Linq;
+using Comments.Common;
 using Comments.Models;
 using Comments.Services;
 using Comments.ViewModels;
@@ -146,12 +147,19 @@ namespace Comments.Export
 					Max = 14,
 					Width = 25,
 					CustomWidth = true
+				},
+				new Column // Organisation interested in formal support. might not actually be shown depending on the data.
+				{
+					Min = 15,
+					Max = 15,
+					Width = 35,
+					CustomWidth = true
 				});
 
 			return columns;
 		}
 
-		private void AppendHeaderRow(SheetData sheet)
+		private void AppendHeaderRow(SheetData sheet, bool showOrganisationExpressionOfInterest)
 		{
 			var headerRow = new Row();
 
@@ -241,14 +249,21 @@ namespace Comments.Export
 			cell.StyleIndex = 2;
 			headerRow.AppendChild(cell);
 
+			if (showOrganisationExpressionOfInterest)
+			{
+				cell = new Cell();
+				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue(Constants.Export.ExpressionOfInterestColumnDescription);
+				cell.StyleIndex = 2;
+				headerRow.AppendChild(cell);
+			}
+
 			sheet.AppendChild(headerRow);
 		}
 
-		private void AppendDataRow(SheetData sheet, IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions)
+		private void AppendDataRow(SheetData sheet, List<Excel> collatedData, bool showOrganisationExpressionOfInterest)
 		{
-			var data = CollateData(comments, answers, questions);
-
-			foreach (var row in data)
+			foreach (var row in collatedData)
 			{
 				var dataRow = new Row();
 
@@ -316,7 +331,7 @@ namespace Comments.Export
 
 				cell = new Cell();
 				cell.DataType = CellValues.String;
-				cell.CellValue = new CellValue(row.RepresentsOrganisation == true ? "Yes" : row.RepresentsOrganisation == false ? "No" : null);
+				cell.CellValue = new CellValue(row.RepresentsOrganisation == true ? Constants.Export.Yes : row.RepresentsOrganisation == false ? Constants.Export.No : null);
 				cell.StyleIndex = 1;
 				dataRow.AppendChild(cell);
 
@@ -328,7 +343,7 @@ namespace Comments.Export
 
 				cell = new Cell();
 				cell.DataType = CellValues.String;
-				cell.CellValue = new CellValue(row.HasTobaccoLinks == true ? "Yes" : row.HasTobaccoLinks == false ? "No" : null);
+				cell.CellValue = new CellValue(row.HasTobaccoLinks == true ? Constants.Export.Yes : row.HasTobaccoLinks == false ? Constants.Export.No : null);
 				cell.StyleIndex = 1;
 				dataRow.AppendChild(cell);
 
@@ -338,11 +353,20 @@ namespace Comments.Export
 				cell.StyleIndex = 1;
 				dataRow.AppendChild(cell);
 
+				if (showOrganisationExpressionOfInterest)
+				{
+					cell = new Cell();
+					cell.DataType = CellValues.String;
+					cell.CellValue = new CellValue(row.OrganisationExpressionOfInterest.HasValue ? (row.OrganisationExpressionOfInterest.Value ? Constants.Export.Yes : Constants.Export.No) : null);
+					cell.StyleIndex = 1;
+					dataRow.AppendChild(cell);
+				}
+
 				sheet.AppendChild(dataRow);
 			}
 		}
 
-		private List<Excel> CollateData(IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions)
+		private (List<Excel> collatedData, bool showOrganisationExpressionOfInterest) CollateData(IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions)
 		{
 			List<Excel> excel = new List<Excel>();
 			foreach (var comment in comments)
@@ -369,6 +393,7 @@ namespace Comments.Export
 					OrganisationName =  comment.SubmissionComment.Count > 0 ? comment.SubmissionComment?.First().Submission.OrganisationName : null,
 					HasTobaccoLinks =  comment.SubmissionComment.Count> 0 ? comment.SubmissionComment?.First().Submission.HasTobaccoLinks : null,
 					TobaccoIndustryDetails = comment.SubmissionComment.Count > 0? comment.SubmissionComment?.First().Submission.TobaccoDisclosure : null,
+					OrganisationExpressionOfInterest = comment.SubmissionComment.Count > 0 ? comment.SubmissionComment?.First().Submission.OrganisationExpressionOfInterest : null,
 					Order = comment.Location.Order,
 
 					
@@ -398,6 +423,7 @@ namespace Comments.Export
 					RepresentsOrganisation = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.RespondingAsOrganisation : null,
 					HasTobaccoLinks = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.HasTobaccoLinks : null,
 					TobaccoIndustryDetails = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.TobaccoDisclosure : null,
+					OrganisationExpressionOfInterest = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.OrganisationExpressionOfInterest : null,
 					Order = answer.Question.Location.Order
 				};
 				excel.Add(excelrow);
@@ -425,6 +451,7 @@ namespace Comments.Export
 					OrganisationName = null,
 					HasTobaccoLinks = null,
 					TobaccoIndustryDetails = null,
+					OrganisationExpressionOfInterest = null,
 					Order = question.Location.Order
 				};
 				excel.Add(excelrow);
@@ -432,7 +459,9 @@ namespace Comments.Export
 
 			var orderedData = excel.OrderBy(o => o.UserName).ThenBy(o => o.Order).ToList();
 
-			return orderedData;
+			var showOrganisationExpressionOfInterest = orderedData.Any(data => data.OrganisationExpressionOfInterest.HasValue);
+
+			return (orderedData, showOrganisationExpressionOfInterest);
 		}
 
 		private Stylesheet CreateStyleSheet()
@@ -519,7 +548,7 @@ namespace Comments.Export
 			{
 				Id = relationshipId,
 				SheetId = 1,
-				Name = "Comments"
+				Name = Constants.Export.SheetName
 			};
 			sheets.Append(sheet);
 
@@ -531,12 +560,14 @@ namespace Comments.Export
 			var ConsultationTitle = GetConsultationTitle(comments, questions);
 			AppendTitleRow(sheetData, ConsultationTitle);
 
-			AppendHeaderRow(sheetData);
+			var collatedDataAndExpressionOfInterestFlag = CollateData(comments, answers, questions);
 
-			AppendDataRow(sheetData, comments, answers, questions);
+			AppendHeaderRow(sheetData, collatedDataAndExpressionOfInterestFlag.showOrganisationExpressionOfInterest);
+
+			AppendDataRow(sheetData, collatedDataAndExpressionOfInterestFlag.collatedData, collatedDataAndExpressionOfInterestFlag.showOrganisationExpressionOfInterest);
 
 			// Add filtering to the worksheet
-			var headerCells = "A3:N3";
+			var headerCells = collatedDataAndExpressionOfInterestFlag.showOrganisationExpressionOfInterest ? "A3:O3" : "A3:N3";
 			AutoFilter autoFilter = new AutoFilter() { Reference = headerCells };
 
 			worksheetPart.Worksheet.Save();

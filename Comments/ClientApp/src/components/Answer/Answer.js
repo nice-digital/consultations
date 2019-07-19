@@ -83,7 +83,6 @@ export class Answer extends Component<PropsType, StateType> {
 		const readOnly = this.props.readOnly;
 		const questionText = this.props.questionText;
 		const unique = this.props.unique;
-
 		return (
 
 			<Fragment>
@@ -112,7 +111,7 @@ export class Answer extends Component<PropsType, StateType> {
 						/>
 						}
 
-						{!readOnly && answerText && answerText.length > 0 ?
+						{!readOnly && (answerText && answerText.length > 0) || (answerBoolean !== undefined) ?
 							unsavedChanges ?
 								<input
 									data-qa-sel="submit-button"
@@ -125,6 +124,7 @@ export class Answer extends Component<PropsType, StateType> {
 							:
 							null
 						}
+
 						{!readOnly && answerId > 0 &&
 						<button
 							data-qa-sel="delete-comment-button"
@@ -133,6 +133,7 @@ export class Answer extends Component<PropsType, StateType> {
 							Delete
 						</button>
 						}
+
 					</form>
 				</section>
 			</Fragment>

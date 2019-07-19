@@ -43,6 +43,8 @@ namespace Comments.ViewModels
 	    public bool HasTobaccoLinks { get; set; }
 	    public string TobaccoDisclosure { get; set; }
 
+	    public bool? OrganisationExpressionOfInterest { get; set; }
+
 		public IList<string> SourceURIs
 	    {
 		    get
