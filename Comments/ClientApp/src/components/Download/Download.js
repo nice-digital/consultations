@@ -100,6 +100,7 @@ export class Download extends Component<PropsType, StateType> {
 			);
 	
 			if (preloadedConsultations) {	
+
 				this.state = {
 					searchTerm: "",
 					path: this.props.basename + this.props.location.pathname + this.props.location.search,
@@ -111,7 +112,7 @@ export class Download extends Component<PropsType, StateType> {
 						hasError: false,
 						message: null,
 					},
-					indevReturnPath: "",
+					indevReturnPath: preloadedConsultations.indevBasePath,
 					search: this.props.location.search,
 					keywordToFilterBy: null,
 				};
@@ -132,6 +133,7 @@ export class Download extends Component<PropsType, StateType> {
 					consultationListData: response.data,
 					hasInitialData: true,
 					loading: false,
+					indevReturnPath: response.data.indevBasePath,
 				});
 			})
 			.catch(err => { //TODO: maybe this should log?
@@ -159,9 +161,7 @@ export class Download extends Component<PropsType, StateType> {
 			const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;
 
 			if (!this.state.path || path !== this.state.path) {
-				
 				this.loadDataAndUpdateState();
-				
 			}
 		});
 
