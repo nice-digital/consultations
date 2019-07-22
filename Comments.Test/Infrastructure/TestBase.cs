@@ -314,7 +314,7 @@ namespace Comments.Test.Infrastructure
             AddAnswer(questionId, createdByUserId, answerText, status, passedInContext);
         }
 
-        protected void SetupTestDataInDB()
+        protected int SetupTestDataInDB()
         {
             var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var answerText = Guid.NewGuid().ToString();
@@ -322,7 +322,13 @@ namespace Comments.Test.Infrastructure
             var questionText = Guid.NewGuid().ToString();
             var userId = Guid.NewGuid();
 
-			AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId); //Add records for Foreign key constraints
+			var locationId = AddLocation(sourceURI);
+			AddComment(locationId, commentText, isDeleted: false, createdByUserId: userId);
+			var questionTypeId = AddQuestionType(description: "text", hasBooleanAnswer: false, hasTextAnswer: true);
+			var questionId = AddQuestion(locationId, questionTypeId, questionText);
+			AddAnswer(questionId, userId, answerText);
+
+			return questionId;
         }
 
 	    protected void AddSubmittedCommentsAndAnswers(string sourceURI, string commentText, string questionText, string answerText, Guid createdByUserId, ConsultationsContext passedInContext = null)

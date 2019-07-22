@@ -27,8 +27,8 @@ namespace Comments.Test.UnitTests
             var userId = Guid.Empty;
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
-            SetupTestDataInDB();
-            var answerId = AddAnswer(1, userId, answerText);
+            var questionId = SetupTestDataInDB();
+            var answerId = AddAnswer(questionId, userId, answerText);
 
             //Act
             var viewModel = new AnswerService(new ConsultationsContext(_options, userService, _fakeEncryption), userService).GetAnswer(answerId);
@@ -82,8 +82,8 @@ namespace Comments.Test.UnitTests
             var userId = Guid.Empty;
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
-            SetupTestDataInDB();
-            var answerId = AddAnswer(1, userId, answerText);
+            var questionId = SetupTestDataInDB();
+            var answerId = AddAnswer(questionId, userId, answerText);
 
             var answerService = new AnswerService(new ConsultationsContext(_options, userService, _fakeEncryption), userService);
             var viewModel = answerService.GetAnswer(answerId);
@@ -111,8 +111,8 @@ namespace Comments.Test.UnitTests
             var userId = Guid.Empty;
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
             
-            SetupTestDataInDB();
-            var answerId = AddAnswer(1, userId, answerText);
+            var questionId = SetupTestDataInDB();
+            var answerId = AddAnswer(questionId, userId, answerText);
 
             var answerService = new AnswerService(new ConsultationsContext(_options, userService, _fakeEncryption), userService);
 
