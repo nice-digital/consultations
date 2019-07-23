@@ -6,53 +6,53 @@ import React, { Component, Fragment } from "react";
 
 export class QuestionTemplates extends Component {
 	state = {
-		questions: this.props.questions,
-		filteredQuestions: this.props.questions,
-		onlyMyDirectorate: true,
+		filter: {
+			string: "",
+			directorate: true,
+		},
 	};
 
-	filterQuestions = e => {
-		let filteredQuestions = this.state.questions;
-		console.log("inititally...", filteredQuestions);
-		const filterQuery = e.target.value.toLowerCase();
-		if (this.state.onlyMyDirectorate) {
-			filteredQuestions = filteredQuestions.filter(question => {
-				return question.allRoles.some(item => this.props.currentUserRoles.includes(item));
+	handleFilter = (event, filterByDirectorate) => {
+		if (filterByDirectorate === null) {
+			this.setState({
+				filter: {
+					string: event.target.value,
+					directorate: this.state.filter.directorate,
+				},
+			});
+		} else {
+			this.setState({
+				filter: {
+					string: this.state.filter.string,
+					directorate: filterByDirectorate,
+				},
 			});
 		}
-		console.log("after only my directorate", filteredQuestions);
-		filteredQuestions = filteredQuestions.filter(question => {
-			return question.questionText.toLowerCase().indexOf(
-				filterQuery,
-			) !== -1;
-		});
-		console.log("after filtering by text", filteredQuestions);
-		this.setState({
-			filteredQuestions,
-		});
 	};
 
-	filterByDirectorate = bool => {
-		this.setState(
-			{onlyMyDirectorate: bool},
+	filteredQuestions = () => {
+		return this.props.questions.filter(question =>
+			question.questionText.toLowerCase().indexOf(this.state.filter.string.toLowerCase()) !== -1
+			&&
+			question.allRoles // todo: carry on here!
 		);
 	};
 
 	render() {
 		const {currentConsultationId, currentDocumentId, newQuestion} = this.props;
+		const filteredQuestions = this.filteredQuestions();
 		return (
 			<div className="card">
 				<h3>Previously set questions</h3>
 				<QuestionsFilter
-					onlyMyDirectorate={this.state.onlyMyDirectorate}
-					filterByDirectorate={this.filterByDirectorate}
-					filterQuestions={this.filterQuestions}/>
-				{this.state.filteredQuestions.length === 0 ? <p><i>No matches</i></p> :
+					handleFilter={this.handleFilter}
+					filter={this.state.filter}/>
+				{filteredQuestions.length === 0 ? <p><i>No matches</i></p> :
 					<ul className="list--unstyled">
-						{this.state.filteredQuestions.map(item =>
+						{filteredQuestions.map(item =>
 							(<TemplateItem
 								{...item}
-								key={item._id}
+								key={item.questionId}
 								currentConsultationId={currentConsultationId}
 								currentDocumentId={currentDocumentId}
 								newQuestion={newQuestion}/>))}
@@ -128,14 +128,15 @@ const TemplateItem = (props) => {
 };
 
 const QuestionsFilter = props => {
-	const {filterQuestions, filterByDirectorate, onlyMyDirectorate} = props;
+	const {handleFilter, filter} = props;
 	return (
 		<div className="panel mb--d">
 			<div className="form__group form__group--text">
 				<label htmlFor="textFilter" className="form__label"><b>Filter by question text</b></label>
 				<input
+					value={filter.string}
 					className="form__input"
-					onChange={filterQuestions}
+					onChange={e => handleFilter(e, null)}
 					id="textFilter"
 					tabIndex={0}/>
 			</div>
@@ -147,8 +148,8 @@ const QuestionsFilter = props => {
 						id="filterByRole--mine"
 						type="radio"
 						name="filterByRole"
-						checked={onlyMyDirectorate === true}
-						onChange={e => filterByDirectorate(true)}
+						checked={filter.directorate === true}
+						onChange={e => handleFilter(e, true)}
 						value={true}
 					/>
 					<label
@@ -163,8 +164,8 @@ const QuestionsFilter = props => {
 						id="filterByRole--all"
 						type="radio"
 						name="filterByRole"
-						checked={onlyMyDirectorate === false}
-						onChange={e => filterByDirectorate(false)}
+						checked={filter.directorate === false}
+						onChange={e => handleFilter(e, false)}
 						value={false}
 					/>
 					<label
