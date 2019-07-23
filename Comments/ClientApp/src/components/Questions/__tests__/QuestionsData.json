@@ -290,7 +290,7 @@
     "hasQuestions": true,
     "hasUserSuppliedAnswers": false,
     "hasUserSuppliedComments": true,
-    "userHasSubmitted": false,
+    "submittedDate": null,
     "consultationSupportsQuestions": false,
     "consultationSupportsComments": false,
     "documentIdsWhichSupportQuestions": [

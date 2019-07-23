@@ -47,6 +47,7 @@ declare type ConsultationStateType = {
 	supportsDownload: boolean,
 	reference?: string,
 	userHasSubmitted: boolean,
+	submittedDate: Date,
 };
 
 declare type ConsultationDataType = {

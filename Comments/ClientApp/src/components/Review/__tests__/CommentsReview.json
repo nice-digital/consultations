@@ -146,7 +146,7 @@
             "hasQuestions": false,
             "hasUserSuppliedAnswers": false,
             "hasUserSuppliedComments": false,
-            "userHasSubmitted": false,
+            "submittedDate": null,
             "consultationSupportsQuestions": false,
             "consultationSupportsComments": true,
             "documentIdsWhichSupportComments": [

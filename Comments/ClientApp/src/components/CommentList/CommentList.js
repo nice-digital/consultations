@@ -86,7 +86,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		);
 
 		if (preloadedCommentsData) {
-			let allowComments = preloadedCommentsData.consultationState.consultationIsOpen && !preloadedCommentsData.consultationState.userHasSubmitted;
+			let allowComments = preloadedCommentsData.consultationState.consultationIsOpen && !preloadedCommentsData.consultationState.submittedDate;
 			this.state = {
 				comments: preloadedCommentsData.comments,
 				questions: preloadedCommentsData.questions,
@@ -108,7 +108,7 @@ export class CommentList extends Component<PropsType, StateType> {
 	loadComments() {
 		load("comments", undefined, [], {sourceURI: this.props.match.url}).then(
 			response => {
-				let allowComments = response.data.consultationState.consultationIsOpen && !response.data.consultationState.userHasSubmitted;
+				let allowComments = response.data.consultationState.consultationIsOpen && !response.data.consultationState.submittedDate;
 				this.setState({
 					comments: response.data.comments,
 					questions: response.data.questions,

@@ -9,7 +9,7 @@ describe("[ClientApp] ", () => {
 
 		const fakeProps = {
 			isAuthorised: true,
-			userHasSubmitted: false,
+			submittedDate: null,
 			validToSubmit: true,
 			submitConsultation: jest.fn(),
 			fieldsChangeHandler: jest.fn(),
@@ -131,7 +131,7 @@ describe("[ClientApp] ", () => {
 		it("should fire parent submit function when the submit button is clicked", () => {
 			const localProps = {
 				isAuthorised: true,
-				userHasSubmitted: false,
+				submittedDate: null,
 				validToSubmit: true,
 				organisationName: "",
 				tobaccoDisclosure: "",
@@ -174,7 +174,7 @@ describe("[ClientApp] ", () => {
 
 		it("should show nothing if user has submitted", () => {
 			const localProps = fakeProps;
-			localProps.userHasSubmitted = true;
+			localProps.submittedDate = "2019-07-15T14:24:18.4735291";
 			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
 			expect(wrapper.html()).toEqual(null);
 		});

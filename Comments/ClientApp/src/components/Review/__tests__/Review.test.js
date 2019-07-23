@@ -145,7 +145,7 @@ describe("[ClientApp] ", () => {
 
 		});
 
-		it("should match snapshot with supplied data", () => {
+		it("should match snapshot with supplied data pre-submission", () => {
 			const mock = new MockAdapter(axios);
 
 			const wrapper = mount(
@@ -171,6 +171,56 @@ describe("[ClientApp] ", () => {
 					.reply(() => {
 						resolve();
 						return [200, ConsultationData];
+					});
+			});
+
+			return Promise.all([
+				commentsReviewPromise,
+				consultationPromise,
+			]).then(async () => {
+				await nextTick();
+				wrapper.update();
+				expect(
+					toJson(wrapper, {
+						noKey: true,
+						mode: "deep",
+					})
+				).toMatchSnapshot();
+			});
+		});
+
+		it("should match snapshot with supplied data post-submission", () => {
+			const mock = new MockAdapter(axios);
+
+			const localConsultationData = Object.assign({},ConsultationData);
+
+			localConsultationData.consultationState.submittedDate = "2019-07-23T13:50:40.7043147";
+
+			console.log(localConsultationData);
+
+			const wrapper = mount(
+				<MemoryRouter>
+					<LiveAnnouncer>
+						<Review {...fakeProps} />
+					</LiveAnnouncer>
+				</MemoryRouter>
+			);
+
+			let commentsReviewPromise = new Promise(resolve => {
+				mock
+					.onGet("/consultations/api/CommentsForReview?relativeURL=%2F1%2Freview")
+					.reply(() => {
+						resolve();
+						return [200, CommentsReviewData];
+					});
+			});
+
+			let consultationPromise = new Promise(resolve => {
+				mock
+					.onGet("/consultations/api/Consultation?consultationId=1&isReview=true")
+					.reply(() => {
+						resolve();
+						return [200, localConsultationData];
 					});
 			});
 

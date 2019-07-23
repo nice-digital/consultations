@@ -309,6 +309,7 @@ namespace Comments.Models
 		    if (firstMatchingLocation == null)
 			    return (DateTime?)null;
 
+
 		    return firstMatchingLocation.Comment?.FirstOrDefault()?.SubmissionComment.FirstOrDefault()?.Submission.SubmissionDateTime ??
 		           firstMatchingLocation.Question?.FirstOrDefault(q => q.Answer.Any())?.Answer.FirstOrDefault()?.SubmissionAnswer.FirstOrDefault()?.Submission.SubmissionDateTime;
 			
