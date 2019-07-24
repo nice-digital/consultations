@@ -14,13 +14,13 @@ namespace Comments.Models
 		public int? CommentId { get; set; }
 	    public string Comment { get; set; }
 	    public int? AnswerId { get; set; }
-	    public string Answer { get; set; }
+		public bool? AnswerBoolean { get; set; }
+		public string Answer { get; set; }
 		public bool? RepresentsOrganisation { get; set; }
 	    public string OrganisationName { get; set; }
 	    public bool? HasTobaccoLinks { get; set; }
 	    public string TobaccoIndustryDetails { get; set; }
 		public bool? OrganisationExpressionOfInterest { get; set; }
 		public string Order { get; set; }
-
 	}
 }
