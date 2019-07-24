@@ -105,7 +105,9 @@ namespace Comments.Services
 	        var orderDocument = !consultationsUri.DocumentId.HasValue ? "000" : consultationsUri.DocumentId.Value.ToString("D3");
 	        var orderQuestion = locationQuestions.Count.Equals(0) ? "000": locationQuestions.Count.ToString("D3");
 
-	        questionToSave.LastModifiedByUserId = _currentUser.UserId.Value;
+			questionToSave.CreatedByUserId = _currentUser.UserId.Value;
+			questionToSave.CreatedDate = DateTime.UtcNow;
+			questionToSave.LastModifiedByUserId = _currentUser.UserId.Value;
 	        questionToSave.LastModifiedDate = DateTime.UtcNow;
 	        questionToSave.Location.Order = $"{orderConsultation}.{orderDocument}.{orderQuestion}";
 
