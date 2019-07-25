@@ -46,7 +46,7 @@ type PropsType = {
 type StateType = {
 	consultationData: ConsultationDataType | null,
 	commentsData: ReviewPageViewModelType | null,
-	submittedDate: boolean,
+	submittedDate: Date,
 	validToSubmit: false,
 	path: string | null,
 	hasInitialData: boolean,
@@ -73,7 +73,7 @@ export class Review extends Component<PropsType, StateType> {
 			loading: true,
 			consultationData: null,
 			commentsData: null,
-			submittedDate: false,
+			submittedDate: null,
 			validToSubmit: false,
 			path: null,
 			hasInitialData: false,

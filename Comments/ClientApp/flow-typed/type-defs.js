@@ -45,8 +45,7 @@ declare type ConsultationStateType = {
 	shouldShowCommentsTab: boolean,
 	shouldShowQuestionsTab: boolean,
 	supportsDownload: boolean,
-	reference?: string,
-	userHasSubmitted: boolean,
+	reference?: string,	
 	submittedDate: Date,
 };
 
