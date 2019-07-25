@@ -30,17 +30,24 @@ export class QuestionTemplates extends Component {
 		}
 	};
 
-	filteredQuestions = () => {
-		return this.props.questions.filter(question =>
-			question.questionText.toLowerCase().indexOf(this.state.filter.string.toLowerCase()) !== -1
-			&&
-			question.allRoles // todo: carry on here!
-		);
+	getFilteredQuestions = (questions, searchString, filterByDirectorate, currentUserRoles) => {
+		return questions.filter(question => {
+			if (filterByDirectorate) {
+				return (
+					(question.questionText.toLowerCase().indexOf(searchString.toLowerCase()) !== -1)
+					&&
+					(currentUserRoles.find(currentRole => question.createdByRoles.includes(currentRole)))
+				);
+			} else {
+				return question.questionText.toLowerCase().indexOf(searchString.toLowerCase()) !== -1;
+			}
+		});
 	};
 
 	render() {
-		const {currentConsultationId, currentDocumentId, newQuestion} = this.props;
-		const filteredQuestions = this.filteredQuestions();
+		const {string, directorate} = this.state.filter;
+		const {currentConsultationId, currentDocumentId, newQuestion, currentUserRoles, questions} = this.props;
+		const filteredQuestions = this.getFilteredQuestions(questions, string, directorate, currentUserRoles);
 		return (
 			<div className="card">
 				<h3>Previously set questions</h3>
@@ -89,7 +96,7 @@ const TemplateItem = (props) => {
 						<dl className="card__metadata">
 							<div className="card__metadatum">
 								<dt>
-									<span className="card__tag tag tag--flush">
+									<span className="card__tag tag tag--flush tag--beta">
 										{getQuestionType(questionType.type)}
 									</span>
 								</dt>
@@ -99,7 +106,7 @@ const TemplateItem = (props) => {
 								<Fragment key={role}>
 									<div className="card__metadatum">
 										<dt>
-											<span className="card__tag tag tag--flush">
+											<span className="card__tag tag tag--flush tag--alpha">
 												{role}
 											</span>
 										</dt>
