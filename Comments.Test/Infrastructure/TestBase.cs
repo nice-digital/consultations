@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using Comments.Migrations;
 using Comments.Services;
@@ -314,7 +315,7 @@ namespace Comments.Test.Infrastructure
             AddAnswer(questionId, createdByUserId, answerText, status, passedInContext);
         }
 
-        protected int SetupTestDataInDB()
+        protected void SetupTestDataInDB()
         {
             var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var answerText = Guid.NewGuid().ToString();
@@ -327,9 +328,15 @@ namespace Comments.Test.Infrastructure
 			var questionTypeId = AddQuestionType(description: "text", hasBooleanAnswer: false, hasTextAnswer: true);
 			var questionId = AddQuestion(locationId, questionTypeId, questionText);
 			AddAnswer(questionId, userId, answerText);
-
-			return questionId;
         }
+
+		protected Question GetQuestion()
+		{
+			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
+			{
+				return context.Question.FirstOrDefault();
+			}
+		}
 
 	    protected void AddSubmittedCommentsAndAnswers(string sourceURI, string commentText, string questionText, string answerText, Guid createdByUserId, ConsultationsContext passedInContext = null)
 	    {

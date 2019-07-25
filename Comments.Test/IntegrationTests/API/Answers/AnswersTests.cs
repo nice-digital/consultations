@@ -40,14 +40,16 @@ namespace Comments.Test.IntegrationTests.API.Answers
         {
             // Arrange
             ResetDatabase();
-	        _context.Database.EnsureCreated();
+            _context.Database.EnsureCreated();
 
-			var answerText = Guid.NewGuid().ToString();
+            var answerText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
 
-			var questionId = SetupTestDataInDB();
-			var answerId = AddAnswer(questionId, userId, answerText);
-            
+            SetupTestDataInDB();
+
+            var question = GetQuestion();
+            var answerId = AddAnswer(question.QuestionId, userId, answerText);
+
             // Act
             var response = await _client.GetAsync($"consultations/api/answer/{answerId}");
             response.EnsureSuccessStatusCode();
@@ -69,9 +71,11 @@ namespace Comments.Test.IntegrationTests.API.Answers
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
-			var questionId = SetupTestDataInDB();
-			var answerId =  AddAnswer(questionId, userId, answerText, (int)StatusName.Draft, _context);
-            
+            SetupTestDataInDB();
+
+            var question = GetQuestion();
+            var answerId =  AddAnswer(question.QuestionId, userId, answerText, (int)StatusName.Draft, _context);
+
             var answerService = new AnswerService(_context, userService);
             var viewModel = answerService.GetAnswer(answerId);
 
@@ -98,8 +102,11 @@ namespace Comments.Test.IntegrationTests.API.Answers
             //Arrange
             var userId = Guid.Empty;
             var answerText = Guid.NewGuid().ToString();
-			var questionId = SetupTestDataInDB();
-			var answerId = AddAnswer(questionId, userId, answerText);
+
+            SetupTestDataInDB();
+
+            var question = GetQuestion();
+            var answerId = AddAnswer(question.QuestionId, userId, answerText);
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
             var answerService = new AnswerService(new ConsultationsContext(_options, userService, _fakeEncryption), userService);
@@ -109,7 +116,7 @@ namespace Comments.Test.IntegrationTests.API.Answers
             response.EnsureSuccessStatusCode();
 
             var result =  answerService.GetAnswer(answerId);
-           
+
             //Assert
             result.validate.NotFound.ShouldBeTrue();
         }

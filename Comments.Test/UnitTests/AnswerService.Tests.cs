@@ -21,14 +21,16 @@ namespace Comments.Test.UnitTests
         {
             //Arrange
             ResetDatabase();
-	        _context.Database.EnsureCreated();
+            _context.Database.EnsureCreated();
 
-			var answerText = Guid.NewGuid().ToString();
+            var answerText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
-            var questionId = SetupTestDataInDB();
-            var answerId = AddAnswer(questionId, userId, answerText);
+            SetupTestDataInDB();
+
+            var question = GetQuestion();
+            var answerId = AddAnswer(question.QuestionId, userId, answerText);
 
             //Act
             var viewModel = new AnswerService(new ConsultationsContext(_options, userService, _fakeEncryption), userService).GetAnswer(answerId);
@@ -61,7 +63,7 @@ namespace Comments.Test.UnitTests
         {
             //Arrange
             ResetDatabase();
-            
+
             var userService = FakeUserService.Get(isAuthenticated: false);
 
             //Act
@@ -82,8 +84,10 @@ namespace Comments.Test.UnitTests
             var userId = Guid.Empty;
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
-            var questionId = SetupTestDataInDB();
-            var answerId = AddAnswer(questionId, userId, answerText);
+            SetupTestDataInDB();
+
+            var question = GetQuestion();
+            var answerId = AddAnswer(question.QuestionId, userId, answerText);
 
             var answerService = new AnswerService(new ConsultationsContext(_options, userService, _fakeEncryption), userService);
             var viewModel = answerService.GetAnswer(answerId);
@@ -110,9 +114,11 @@ namespace Comments.Test.UnitTests
 			var answerText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            
-            var questionId = SetupTestDataInDB();
-            var answerId = AddAnswer(questionId, userId, answerText);
+
+            SetupTestDataInDB();
+
+            var question = GetQuestion();
+            var answerId = AddAnswer(question.QuestionId, userId, answerText);
 
             var answerService = new AnswerService(new ConsultationsContext(_options, userService, _fakeEncryption), userService);
 
