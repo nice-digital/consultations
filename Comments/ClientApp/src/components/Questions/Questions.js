@@ -12,7 +12,7 @@ import { TextQuestion } from "../QuestionTypes/TextQuestion/TextQuestion";
 import { YNQuestion } from "../QuestionTypes/YNQuestion/YNQuestion";
 import { saveQuestionHandler, deleteQuestionHandler, moveQuestionHandler } from "../../helpers/editing-and-deleting";
 import { updateUnsavedIds } from "../../helpers/unsaved-comments";
-import { QuestionTemplates } from "./QuestionTemplates";
+import { PreviouslySetQuestions } from "../PreviouslySetQuestions/PreviouslySetQuestions";
 
 type PropsType = {
 	staticContext: ContextType;
@@ -338,7 +338,7 @@ export class Questions extends Component<PropsType, StateType> {
 														/>
 													))}
 
-													<QuestionTemplates
+													<PreviouslySetQuestions
 														currentUserRoles={questionsData.currentUserRoles}
 														currentConsultationId={currentConsultationId}
 														currentDocumentId={currentDocumentId}
