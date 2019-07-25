@@ -171,13 +171,5 @@ describe("[ClientApp] ", () => {
 			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
 			expect(wrapper.find("button").length).toEqual(0);
 		});
-
-		it("should show nothing if user has submitted", () => {
-			const localProps = fakeProps;
-			localProps.submittedDate = "2019-07-15T14:24:18.4735291";
-			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			expect(wrapper.html()).toEqual(null);
-		});
-
 	});
 });
