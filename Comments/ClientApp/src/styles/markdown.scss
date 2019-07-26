@@ -1,0 +1,9 @@
+.markdown {
+  ul {
+    margin: rem($spacing-small) 0 rem($spacing-small) rem($spacing-small);
+    list-style-position: inside;
+    li {
+      list-style-type: disc;
+    }
+  }
+}

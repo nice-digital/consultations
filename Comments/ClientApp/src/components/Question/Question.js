@@ -1,9 +1,8 @@
 // @flow
 
 import React, { Component, Fragment } from "react";
+import ReactMarkdown from "react-markdown";
 import { AnswerBox } from "../AnswerBox/AnswerBox";
-
-//import stringifyObject from "stringify-object";
 
 type PropsType = {
 	staticContext?: any,
@@ -59,12 +58,20 @@ export class Question extends Component<PropsType, StateType> {
 					<div className="CommentBox__quote mb--d">{quote}</div>
 				</Fragment>
 				}
-				<p><strong>{this.props.question.questionText}</strong></p>
+
+				<div className="font-weight-bold markdown mt--d mb--d">
+					<ReactMarkdown
+						allowedTypes={["root", "text", "list", "listItem"]}
+						unwrapDisallowed="true"
+						source={this.props.question.questionText}
+					/>
+				</div>
+
 				{this.props.isUnsaved &&
 				<p className="CommentBox__validationMessage">You have unsaved changes</p>
 				}
 
-				{this.props.showAnswer && 
+				{this.props.showAnswer &&
 					answers.map((answer) => {
 						return (
 							<AnswerBox
