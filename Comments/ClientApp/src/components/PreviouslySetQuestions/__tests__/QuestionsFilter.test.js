@@ -37,7 +37,6 @@ describe("[ClientApp] ", () => {
 		it("should match the snapshot when the filter is set to all", () => {
 			const localProps = Object.assign({}, fakeProps);
 			localProps.filter.directorate = false;
-			console.log(localProps);
 			const wrapper = shallow(<QuestionsFilter {...localProps} />);
 			expect(
 				toJson(wrapper, {

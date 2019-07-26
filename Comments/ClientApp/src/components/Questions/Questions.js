@@ -8,7 +8,7 @@ import { StackedNav } from "../StackedNav/StackedNav";
 import { UserContext } from "../../context/UserContext";
 import preload from "../../data/pre-loader";
 import { load } from "../../data/loader";
-import { TextQuestion } from "../QuestionTypes/TextQuestion/TextQuestion";
+import { OpenQuestion } from "../QuestionTypes/OpenQuestion/OpenQuestion";
 import { YNQuestion } from "../QuestionTypes/YNQuestion/YNQuestion";
 import { saveQuestionHandler, deleteQuestionHandler, moveQuestionHandler } from "../../helpers/editing-and-deleting";
 import { updateUnsavedIds } from "../../helpers/unsaved-comments";
@@ -322,7 +322,7 @@ export class Questions extends Component<PropsType, StateType> {
 														}
 														if (question.questionType.type === "Text") {
 															return (
-																<TextQuestion {...questionProps}/>
+																<OpenQuestion {...questionProps}/>
 															);
 														}
 														return null;
@@ -365,7 +365,7 @@ export default withRouter(Questions);
 
 export const AddQuestionButton = props => {
 	const {type, questionTypeId, loading, currentDocumentId, currentConsultationId, newQuestion} = props;
-	const buttonText = type === "YesNo" ? "Add yes/no question" : "Add text response question";
+	const buttonText = type === "YesNo" ? "Add a yes/no question" : "Add an open question";
 	const documentId = currentDocumentId === "consultation" ? null : parseInt(currentDocumentId, 10);
 	return (
 		<button
