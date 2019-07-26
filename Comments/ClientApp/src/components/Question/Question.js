@@ -62,7 +62,7 @@ export class Question extends Component<PropsType, StateType> {
 				<div className="font-weight-bold markdown mt--d mb--d">
 					<ReactMarkdown
 						allowedTypes={["root", "text", "list", "listItem"]}
-						unwrapDisallowed="true"
+						unwrapDisallowed={true}
 						source={this.props.question.questionText}
 					/>
 				</div>

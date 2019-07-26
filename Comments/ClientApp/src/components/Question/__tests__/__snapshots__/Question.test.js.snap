@@ -15,11 +15,11 @@ exports[`[ClientApp]  Question Component should match snapshot with answer 1`] =
       Consultation
     </span>
   </h4>
-  <p>
-    <strong>
-      Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
-    </strong>
-  </p>
+  <div
+    className="font-weight-bold markdown mt--d mb--d"
+  >
+    Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
+  </div>
   <section
     role="form"
   >
@@ -78,10 +78,10 @@ exports[`[ClientApp]  Question Component should match snapshot without answer 1`
       Consultation
     </span>
   </h4>
-  <p>
-    <strong>
-      Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
-    </strong>
-  </p>
+  <div
+    className="font-weight-bold markdown mt--d mb--d"
+  >
+    Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
+  </div>
 </li>
 `;

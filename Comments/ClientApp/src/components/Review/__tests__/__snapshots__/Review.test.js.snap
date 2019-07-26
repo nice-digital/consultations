@@ -331,11 +331,11 @@ Array [
                                                                               Consultation
                                                                         </span>
                                                                   </h4>
-                                                                  <p>
-                                                                        <strong>
-                                                                              Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
-                                                                        </strong>
-                                                                  </p>
+                                                                  <div
+                                                                        className="font-weight-bold markdown mt--d mb--d"
+                                                                  >
+                                                                        Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
+                                                                  </div>
                                                                   <section
                                                                         role="form"
                                                                   >
@@ -396,11 +396,11 @@ Array [
                                                                               Document
                                                                         </span>
                                                                   </h4>
-                                                                  <p>
-                                                                        <strong>
-                                                                              Would implementation of any of the draft recommendations have significant cost implications?
-                                                                        </strong>
-                                                                  </p>
+                                                                  <div
+                                                                        className="font-weight-bold markdown mt--d mb--d"
+                                                                  >
+                                                                        Would implementation of any of the draft recommendations have significant cost implications?
+                                                                  </div>
                                                                   <section
                                                                         role="form"
                                                                   >
@@ -448,11 +448,11 @@ Array [
                                                                               Document
                                                                         </span>
                                                                   </h4>
-                                                                  <p>
-                                                                        <strong>
-                                                                              Would implementation of any of the draft recommendations have cost implications?
-                                                                        </strong>
-                                                                  </p>
+                                                                  <div
+                                                                        className="font-weight-bold markdown mt--d mb--d"
+                                                                  >
+                                                                        Would implementation of any of the draft recommendations have cost implications?
+                                                                  </div>
                                                                   <section
                                                                         role="form"
                                                                   >
