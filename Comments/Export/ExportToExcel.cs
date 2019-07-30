@@ -110,48 +110,55 @@ namespace Comments.Export
 				{
 					Min = 9,
 					Max = 9,
-					Width = 25,
+					Width = 50,
+					CustomWidth = true
+				},
+				new Column // Yes/No Answer Text
+				{
+					Min = 10,
+					Max = 10,
+					Width = 15,
 					CustomWidth = true
 				},
 				new Column // Answer Text
 				{
-					Min = 10,
-					Max = 10,
+					Min = 11,
+					Max = 11,
 					Width = 50,
 					CustomWidth = true
 				},
 				new Column // Represent An Organisation
 				{
-					Min = 11,
-					Max = 11,
+					Min = 12,
+					Max = 12,
 					Width = 20,
 					CustomWidth = true
 				},
 				new Column // Organisation Name
 				{
-					Min = 12,
-					Max = 12,
+					Min = 13,
+					Max = 13,
 					Width = 25,
 					CustomWidth = true
 				},
 				new Column // Has Tobacco Links
 				{
-					Min = 13,
-					Max = 13,
+					Min = 14,
+					Max = 14,
 					Width = 20,
 					CustomWidth = true
 				},
 				new Column // Tobacco Link Details
 				{
-					Min = 14,
-					Max = 14,
+					Min = 15,
+					Max = 15,
 					Width = 25,
 					CustomWidth = true
 				},
 				new Column // Organisation interested in formal support. might not actually be shown depending on the data.
 				{
-					Min = 15,
-					Max = 15,
+					Min = 16,
+					Max = 16,
 					Width = 35,
 					CustomWidth = true
 				});
@@ -216,6 +223,12 @@ namespace Comments.Export
 			cell = new Cell();
 			cell.DataType = CellValues.String;
 			cell.CellValue = new CellValue("Question Text");
+			cell.StyleIndex = 2;
+			headerRow.AppendChild(cell);
+
+			cell = new Cell();
+			cell.DataType = CellValues.String;
+			cell.CellValue = new CellValue("Yes/No Answer");
 			cell.StyleIndex = 2;
 			headerRow.AppendChild(cell);
 
@@ -325,6 +338,12 @@ namespace Comments.Export
 
 				cell = new Cell();
 				cell.DataType = CellValues.String;
+				cell.CellValue = new CellValue(row.AnswerBoolean == true ? Constants.Export.Yes : row.AnswerBoolean == false ? Constants.Export.No : null);
+				cell.StyleIndex = 1;
+				dataRow.AppendChild(cell);
+
+				cell = new Cell();
+				cell.DataType = CellValues.String;
 				cell.CellValue = new CellValue(row.Answer);
 				cell.StyleIndex = 1;
 				dataRow.AppendChild(cell);
@@ -388,6 +407,7 @@ namespace Comments.Export
 					QuestionId = null,
 					Question = null,
 					AnswerId = null,
+					AnswerBoolean = null,
 					Answer = null,
 					RepresentsOrganisation = comment.SubmissionComment.Count > 0 ? comment.SubmissionComment?.First().Submission.RespondingAsOrganisation : null,
 					OrganisationName =  comment.SubmissionComment.Count > 0 ? comment.SubmissionComment?.First().Submission.OrganisationName : null,
@@ -418,6 +438,7 @@ namespace Comments.Export
 					QuestionId = answer.Question.QuestionId,
 					Question = answer.Question.QuestionText,
 					AnswerId = answer.AnswerId,
+					AnswerBoolean = answer.AnswerBoolean,
 					Answer = answer.AnswerText,
 					OrganisationName = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.OrganisationName : null,
 					RepresentsOrganisation = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.RespondingAsOrganisation : null,
@@ -446,6 +467,7 @@ namespace Comments.Export
 					QuestionId = question.QuestionId,
 					Question = question.QuestionText,
 					AnswerId = null,
+					AnswerBoolean = null,
 					Answer = null,
 					RepresentsOrganisation = null,
 					OrganisationName = null,

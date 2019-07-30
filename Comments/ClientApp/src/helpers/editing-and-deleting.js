@@ -51,7 +51,6 @@ export function saveCommentHandler(event: Event, comment: CommentType, self: any
 			}
 		})
 		.catch(err => {
-			console.log(err);
 			if (err.response) {
 				error = "save";
 				self.setState({
@@ -76,7 +75,6 @@ export function deleteCommentHandler(event: Event, commentId: number, self: any)
 				}
 			})
 			.catch(err => {
-				console.log(err);
 				if (err.response) {
 					const error = "delete";
 					self.setState({
@@ -166,7 +164,6 @@ export function saveAnswerHandler(event: Event, answer: AnswerType, questionId: 
 			}
 		})
 		.catch(err => {
-			console.log(err);
 			if (typeof self.issueA11yMessage === "function") {
 				self.issueA11yMessage("There was a problem saving this answer");
 			}
@@ -186,7 +183,6 @@ export function deleteAnswerHandler(event: Event, questionId: number, answerId: 
 				}
 			})
 			.catch(err => {
-				console.log(err);
 				if (err.response) alert(err.response.statusText);
 				if (typeof self.issueA11yMessage === "function") {
 					self.issueA11yMessage("There was a problem deleting this answer");
@@ -227,6 +223,10 @@ export function saveQuestionHandler(event: Event, question: QuestionType, self: 
 
 	let error = "";
 
+	self.setState({
+		loading: true,
+	});
+
 	load(endpoint, undefined, urlParameters, {}, method, question, true)
 		.then(res => {
 			if (res.status === 201 || res.status === 200) {
@@ -247,13 +247,12 @@ export function saveQuestionHandler(event: Event, question: QuestionType, self: 
 				relevantQuestions[index] = updatedQuestion;
 
 				self.setState({
-					questionsData,
+					loading: false,
 				});
 				self.updateUnsavedIds(`${originalQuestionId}q`, false);
 			}
 		})
 		.catch(err => {
-			console.log(err);
 			if (err.response) {
 				error = "save";
 				self.setState({
@@ -281,7 +280,6 @@ export function deleteQuestionHandler(event: Event, question: QuestionType, self
 				}
 			})
 			.catch(err => {
-				console.log(err);
 				if (err.response) alert(err.response.statusText);
 			});
 	}
@@ -344,7 +342,6 @@ export function moveQuestionHandler(event: Event, question: QuestionType, direct
 							}
 						})
 						.catch(err => {
-							console.log(err);
 							if (err.response) {
 								error = "save";
 								self.setState({
@@ -359,7 +356,6 @@ export function moveQuestionHandler(event: Event, question: QuestionType, direct
 				}
 			})
 			.catch(err => {
-				console.log(err);
 				if (err.response) {
 					error = "save";
 					self.setState({

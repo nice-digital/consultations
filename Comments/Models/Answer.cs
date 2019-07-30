@@ -12,11 +12,16 @@ namespace Comments.Models
 
         public Answer(int questionId, Guid createdByUserId, string answerText, bool? answerBoolean, Question question, int statusId, Status status)
         {
-            QuestionId = questionId;
+	        if (answerText == null && question.QuestionType.TextIsMandatory)
+	        {
+		        throw new ArgumentNullException(nameof(answerText));
+	        }
+
+	        QuestionId = questionId;
             CreatedByUserId = createdByUserId;
 	        CreatedDate = DateTime.UtcNow;
 	        LastModifiedDate = DateTime.UtcNow;
-			AnswerText = answerText ?? throw new ArgumentNullException(nameof(answerText));
+			AnswerText = answerText;
             AnswerBoolean = answerBoolean;
             Question = question;
 	        StatusId = statusId;
@@ -26,9 +31,14 @@ namespace Comments.Models
 
         public void UpdateFromViewModel(ViewModels.Answer answer)
         {
-            LastModifiedByUserId = answer.LastModifiedByUserId;
+	        if (answer.AnswerText == null && Question.QuestionType.TextIsMandatory)
+	        {
+		        throw new ArgumentNullException(nameof(answer.AnswerText));
+	        }
+
+			LastModifiedByUserId = answer.LastModifiedByUserId;
 	        LastModifiedDate = answer.LastModifiedDate;
-            AnswerText = answer.AnswerText ?? throw new ArgumentNullException(nameof(answer.AnswerText)); 
+            AnswerText = answer.AnswerText; 
             AnswerBoolean = answer.AnswerBoolean;
 	        StatusId = answer.StatusId;
 			//Status.UpdateFromViewModel(answer.Status);

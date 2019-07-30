@@ -6,6 +6,7 @@
     "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
     "questionType":{
         "questionTypeId":"scrubbed by ScrubQuestionTypeId",
+        "type":"Text",
         "description":"00000000-0000-0000-0000-000000000000",
         "hasTextAnswer":true,
         "hasBooleanAnswer":false

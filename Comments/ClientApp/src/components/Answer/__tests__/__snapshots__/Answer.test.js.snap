@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`[ClientApp]  AnswerBox Component should match snapshot with answer 1`] = `
+exports[`[ClientApp]  Answer Component should match snapshot with answer 1`] = `
 <section
   role="form"
 >
@@ -41,7 +41,7 @@ exports[`[ClientApp]  AnswerBox Component should match snapshot with answer 1`] 
 </section>
 `;
 
-exports[`[ClientApp]  AnswerBox Component should match snapshot without answer 1`] = `
+exports[`[ClientApp]  Answer Component should match snapshot without answer 1`] = `
 <section
   role="form"
 >
@@ -66,6 +66,11 @@ exports[`[ClientApp]  AnswerBox Component should match snapshot without answer 1
         onInput={[Function]}
       />
     </div>
+    <span
+      className="ml--0 mb--0 CommentBox__savedIndicator"
+    >
+      Saved
+    </span>
   </form>
 </section>
 `;

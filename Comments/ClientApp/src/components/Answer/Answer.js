@@ -1,6 +1,8 @@
 // @flow
 
 import React, { Component, Fragment } from "react";
+import { TextAnswer } from "./../AnswerTypes/TextAnswer/TextAnswer";
+import { YesNoAnswer } from "./../AnswerTypes/YesNoAnswer/YesNoAnswer";
 
 type PropsType = {
 	staticContext?: any,
@@ -18,7 +20,7 @@ type StateType = {
 	unsavedChanges: boolean,
 };
 
-export class AnswerBox extends Component<PropsType, StateType> {
+export class Answer extends Component<PropsType, StateType> {
 	constructor() {
 		super();
 		this.state = {
@@ -44,6 +46,17 @@ export class AnswerBox extends Component<PropsType, StateType> {
 		});
 	};
 
+	yesNoChangeHandler = (e: SyntheticEvent) => {
+		const answer = this.state.answer;
+		answer.answerBoolean = (e.target.value === "true");
+		const unsavedChanges = !(answer.answerId === -1 && answer.answerBoolean === undefined);
+		this.props.updateUnsavedIds(`${answer.questionId}q`, unsavedChanges);
+		this.setState({
+			answer,
+			unsavedChanges,
+		});
+	};
+
 	static getDerivedStateFromProps(nextProps: any, prevState: any) {
 		const prevTimestamp = prevState.answer.lastModifiedDate;
 		const nextTimestamp = nextProps.answer.lastModifiedDate;
@@ -60,6 +73,7 @@ export class AnswerBox extends Component<PropsType, StateType> {
 	render() {
 		if (!this.state.answer) return null;
 		const {
+			answerBoolean,
 			answerText,
 			answerId,
 			questionId,
@@ -68,28 +82,36 @@ export class AnswerBox extends Component<PropsType, StateType> {
 		const answer = this.state.answer;
 		const readOnly = this.props.readOnly;
 		const questionText = this.props.questionText;
-
+		const unique = this.props.unique;
 		return (
 
 			<Fragment>
 				<section role="form">
 					<form onSubmit={e => this.props.saveAnswerHandler(e, answer, this.props.questionId)} className="mb--0">
-						<div className="form__group form__group--textarea mb--b">
-							<label
-								className="form__label visually-hidden"
-								htmlFor={this.props.unique}>
-								{questionText}
-							</label>
-							<textarea
-								data-hj-whitelist
-								data-qa-sel="Comment-text-area"
-								disabled={readOnly}
-								id={this.props.unique}
-								className="form__input form__input--textarea"
-								onInput={this.textareaChangeHandler}
-								defaultValue={answerText}/>
-						</div>
-						{!readOnly && answerText && answerText.length > 0 ?
+
+						{this.props.questionType.type === "YesNo" &&
+						<YesNoAnswer
+							unique={unique}
+							questionText={questionText}
+							readOnly={readOnly}
+							textareaChangeHandler={this.textareaChangeHandler}
+							yesNoChangeHandler={this.yesNoChangeHandler}
+							answerText={answerText}
+							answerBoolean={answerBoolean}
+						/>
+						}
+
+						{this.props.questionType.type === "Text" &&
+						<TextAnswer
+							unique={unique}
+							questionText={questionText}
+							readOnly={readOnly}
+							textareaChangeHandler={this.textareaChangeHandler}
+							answerText={answerText}
+						/>
+						}
+
+						{!readOnly && (answerText && answerText.length > 0) || (answerBoolean !== undefined) ?
 							unsavedChanges ?
 								<input
 									data-qa-sel="submit-button"
@@ -102,6 +124,7 @@ export class AnswerBox extends Component<PropsType, StateType> {
 							:
 							null
 						}
+
 						{!readOnly && answerId > 0 &&
 						<button
 							data-qa-sel="delete-comment-button"
@@ -110,6 +133,7 @@ export class AnswerBox extends Component<PropsType, StateType> {
 							Delete
 						</button>
 						}
+
 					</form>
 				</section>
 			</Fragment>
