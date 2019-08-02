@@ -728,5 +728,15 @@ namespace Comments.Models
 
 			", new SqlParameter("@consultationId", consultationId));
 		}
+
+		public IEnumerable<Question> GetAllPreviousUniqueQuestions()
+		{
+			return Question
+				.Include(q => q.Location)
+				.Include(q => q.QuestionType)
+				.GroupBy(q => q.QuestionText)
+				.Select(q => q.OrderByDescending(x => x.CreatedDate).First())
+				.OrderByDescending(q => q.CreatedDate);
+		}
 	}
 }

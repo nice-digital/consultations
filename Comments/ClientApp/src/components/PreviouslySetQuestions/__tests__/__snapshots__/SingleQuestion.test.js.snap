@@ -1,0 +1,89 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[ClientApp]  SingleQuestion Component should match the snapshot 1`] = `
+<li>
+  <div
+    className="card"
+  >
+    <div
+      className="grid"
+    >
+      <div
+        data-g="9"
+      >
+        <div
+          className="card__header"
+        >
+          <p
+            className="card__heading"
+          >
+            fake question text
+          </p>
+        </div>
+        <dl
+          className="card__metadata"
+        >
+          <div
+            className="card__metadatum"
+          >
+            <dt>
+              <span
+                className="card__tag tag tag--flush tag--beta"
+              >
+                Open Question
+              </span>
+            </dt>
+            <dd
+              className="visually-hidden"
+            >
+              Text
+            </dd>
+          </div>
+          <div
+            className="card__metadatum"
+          >
+            <dt>
+              <span
+                className="card__tag tag tag--flush tag--alpha"
+              >
+                Administrator
+              </span>
+            </dt>
+            <dd
+              className="visually-hidden"
+            >
+              Administrator
+            </dd>
+          </div>
+          <div
+            className="card__metadatum"
+          >
+            <dt>
+              <span
+                className="card__tag tag tag--flush tag--alpha"
+              >
+                SCSTeam
+              </span>
+            </dt>
+            <dd
+              className="visually-hidden"
+            >
+              SCSTeam
+            </dd>
+          </div>
+        </dl>
+      </div>
+      <div
+        data-g="3"
+      >
+        <button
+          className="btn btn-small right mr--0"
+          onClick={[Function]}
+        >
+          Insert
+        </button>
+      </div>
+    </div>
+  </div>
+</li>
+`;

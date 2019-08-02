@@ -22,7 +22,7 @@ Array [
                 className="grid"
             >
                 <div
-                    data-g="12 md:6"
+                    data-g="12 md:5"
                 >
                     <nav
                         aria-label="Add questions to consultation"
@@ -179,13 +179,11 @@ Array [
                     </nav>
                 </div>
                 <div
-                    data-g="12 md:6"
+                    data-g="12 md:7"
                 >
-                    <div>
-                        <p>
-                            Choose consultation title or document to add questions.
-                        </p>
-                    </div>
+                    <p>
+                        Choose consultation title or document to add questions.
+                    </p>
                 </div>
             </div>
         </div>

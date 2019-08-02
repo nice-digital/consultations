@@ -8,7 +8,7 @@ using System.Runtime.Serialization;
 
 namespace Comments.ViewModels
 {
-    public class Question : Location
+	public class Question : Location
     {
         public Question() { } //only here for model binding. don't use it in code.
         public Question(Models.Location location, Models.Question question) : base(location.LocationId, location.SourceURI, location.HtmlElementID,

@@ -35,7 +35,6 @@ export class Question extends Component<PropsType, StateType> {
 		}
 
 		return (
-
 			<li className={this.props.isUnsaved ? "CommentBox CommentBox--unsavedChanges" : "CommentBox"}>
 				<Fragment>
 					{documentTitle &&
@@ -45,12 +44,10 @@ export class Question extends Component<PropsType, StateType> {
 						Question on <span className="text-lowercase">{commentOn}</span>
 					</h4>
 				</Fragment>
-
 				<p><strong>{this.props.question.questionText}</strong></p>
 				{this.props.isUnsaved &&
 				<p className="CommentBox__validationMessage">You have unsaved changes</p>
 				}
-
 				{this.props.showAnswer &&
 					answers.map((answer) => {
 						return (

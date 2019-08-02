@@ -111,7 +111,7 @@ export class Answer extends Component<PropsType, StateType> {
 						/>
 						}
 
-						{!readOnly && (answerText && answerText.length > 0) || (answerBoolean !== undefined) ?
+						{!readOnly && ((answerText && answerText.length > 0) || (answerBoolean !== undefined)) ?
 							unsavedChanges ?
 								<input
 									data-qa-sel="submit-button"

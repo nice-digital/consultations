@@ -68,5 +68,10 @@ namespace Comments.Test.Infrastructure
 		    }
 		    return _userDictionary[userId];
 	    }
+
+	    public Dictionary<Guid, IEnumerable<string>> FindRoles(IEnumerable<Guid> userIds)
+	    {
+		    return new Dictionary<Guid, IEnumerable<string>>();
+	    }
     }
 }

@@ -329,5 +329,6 @@
     "shouldShowDrawer": true,
     "shouldShowCommentsTab": true,
     "shouldShowQuestionsTab": true
-  }
+  },
+  "previousQuestions": []
 }

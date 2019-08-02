@@ -9,7 +9,7 @@ import { nextTick } from "../../../helpers/utils";
 import toJson from "enzyme-to-json";
 import QuestionsData from "./QuestionsData.json";
 import { Questions, AddQuestionButton } from "../Questions";
-import { TextQuestion } from "../../QuestionTypes/TextQuestion/TextQuestion";
+import { OpenQuestion } from "../../QuestionTypes/OpenQuestion/OpenQuestion";
 
 const textQuestionId = QuestionsData.questionTypes[0].questionTypeId;
 const yesNoQuestionId = QuestionsData.questionTypes[1].questionTypeId;
@@ -80,7 +80,7 @@ describe("[ClientApp] ", () => {
 			await nextTick();
 			wrapper.update();
 
-			expect(wrapper.find(<TextQuestion/>).length).toEqual(0);
+			expect(wrapper.find(<OpenQuestion/>).length).toEqual(0);
 		});
 
 		it("should render a single consultation question", async () => {
@@ -95,8 +95,7 @@ describe("[ClientApp] ", () => {
 
 			await nextTick();
 			wrapper.update();
-
-			const length = wrapper.find(TextQuestion).length;
+			const length = wrapper.find(OpenQuestion).length;
 
 			expect(length).toEqual(1);
 		});
@@ -159,7 +158,7 @@ describe("[ClientApp] ", () => {
 			expect(result).toEqual(QuestionsData.documents[0].documentQuestions);
 		});
 
-		it("should add a blank text response question to state when the text question button is clicked", async () => {
+		it("should add a blank open question to state when the add open question button is clicked", async () => {
 			const localProps = Object.assign({}, fakeProps);
 			localProps.match.params.documentId = "consultation";
 			const wrapper = mount(<MemoryRouter><Questions {...localProps}/></MemoryRouter>);
@@ -167,7 +166,7 @@ describe("[ClientApp] ", () => {
 			wrapper.update();
 			const questionInstance = wrapper.find(Questions).instance();
 			expect(questionInstance.state.questionsData.consultationQuestions.length).toEqual(1);
-			const textQuestionButton = wrapper.find("button[children='Add text response question']");
+			const textQuestionButton = wrapper.find("button[children='Add an open question']");
 			textQuestionButton.simulate("click");
 			await nextTick();
 			wrapper.update();
@@ -182,7 +181,7 @@ describe("[ClientApp] ", () => {
 			await nextTick();
 			wrapper.update();
 			const questionInstance = wrapper.find(Questions).instance();
-			const textQuestionButton = wrapper.find("button[children='Add yes/no question']");
+			const textQuestionButton = wrapper.find("button[children='Add a yes/no question']");
 			textQuestionButton.simulate("click");
 			await nextTick();
 			wrapper.update();
