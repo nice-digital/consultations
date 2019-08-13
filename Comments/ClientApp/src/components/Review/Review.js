@@ -520,6 +520,7 @@ export class Review extends Component<PropsType, StateType> {
 																			const isUnsaved = this.state.unsavedIds.includes(`${question.questionId}q`);
 																			return (
 																				<Question
+																					showAnswer={contextValue.isAuthorised}
 																					updateUnsavedIds={this.updateUnsavedIds}
 																					isUnsaved={isUnsaved}
 																					readOnly={!this.state.allowComments || this.state.submittedDate}

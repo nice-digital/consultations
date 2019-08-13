@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { DebounceInput } from "react-debounce-input";
 import queryString from "query-string";
-//import stringifyObject from "stringify-object";
-
 import { withHistory } from "../HistoryContext/HistoryContext";
 import { appendQueryParameter, removeQueryParameter, removeQuerystring } from "../../helpers/utils";
 
@@ -29,18 +27,11 @@ export class TextFilter extends Component {
 		this.handleKeywordChange("");
 	};
 
-	componentDidUpdate(prevProps, prevState){
+	componentDidUpdate(prevProps){
 		if (prevProps.keyword !== "" && this.props.keyword === ""){
 			this.removeKeyword();
 		}
 	}
-
-	// UNSAFE_componentWillReceiveProps(nextProps) {
-	// 	console.log(`nextProps: ${stringifyObject(nextProps)}`);
-	// 	// this.setState({
-	// 	// 	isSelected: nextProps.option.isSelected
-	// 	// });
-	// }
 
 	getHref = (keyword) => {
 		const pathWithoutQuerystring = removeQuerystring(this.props.path);
@@ -58,7 +49,6 @@ export class TextFilter extends Component {
 		this.setState({
 			keyword,
 		}, () => {
-			console.log('handle keyword change');
 			this.props.history.push(this.getHref(keyword)); //TODO: fix the history!!!
 			this.props.onKeywordUpdated(keyword);
 		});
@@ -88,6 +78,4 @@ export class TextFilter extends Component {
 	}
 }
 
-//export default TextFilter;
 export default withHistory(TextFilter);
-//export default withRouter(withHistory(TextFilter));

@@ -27,25 +27,6 @@ exports[`[ClientApp]  Question Component should match snapshot with answer 1`] =
       className="mb--0"
       onSubmit={[Function]}
     >
-      <div
-        className="form__group form__group--textarea mb--b"
-      >
-        <label
-          className="form__label visually-hidden"
-          htmlFor="Answer1007"
-        >
-          Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
-        </label>
-        <textarea
-          className="form__input form__input--textarea"
-          data-hj-whitelist={true}
-          data-qa-sel="Comment-text-area"
-          defaultValue="some answer text"
-          disabled={false}
-          id="Answer1007"
-          onInput={[Function]}
-        />
-      </div>
       <span
         className="ml--0 mb--0 CommentBox__savedIndicator"
       >
@@ -83,32 +64,5 @@ exports[`[ClientApp]  Question Component should match snapshot without answer 1`
       Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
     </strong>
   </p>
-  <section
-    role="form"
-  >
-    <form
-      className="mb--0"
-      onSubmit={[Function]}
-    >
-      <div
-        className="form__group form__group--textarea mb--b"
-      >
-        <label
-          className="form__label visually-hidden"
-          htmlFor="Answer-1"
-        >
-          Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
-        </label>
-        <textarea
-          className="form__input form__input--textarea"
-          data-hj-whitelist={true}
-          data-qa-sel="Comment-text-area"
-          disabled={false}
-          id="Answer-1"
-          onInput={[Function]}
-        />
-      </div>
-    </form>
-  </section>
 </li>
 `;

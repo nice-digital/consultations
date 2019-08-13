@@ -196,8 +196,6 @@ describe("[ClientApp] ", () => {
 
 			localConsultationData.consultationState.submittedDate = "2019-07-23T13:50:40.7043147";
 
-			console.log(localConsultationData);
-
 			const wrapper = mount(
 				<MemoryRouter>
 					<LiveAnnouncer>
