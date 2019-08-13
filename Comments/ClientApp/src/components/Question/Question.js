@@ -26,7 +26,7 @@ export class Question extends Component<PropsType, StateType> {
 	render() {
 		if (!this.props.question) return null;
 		const { documentTitle } = this.props;
-		const { commentOn } = this.props.question;
+		const { commentOn, quote } = this.props.question;
 		let answers = this.props.question.answers;
 		if (answers === null || answers.length < 1){
 			answers = [{
@@ -45,16 +45,15 @@ export class Question extends Component<PropsType, StateType> {
 						Question on <span className="text-lowercase">{commentOn}</span>
 					</h4>
 				</Fragment>
-				}
 
 				{this.isTextSelection(this.props.question) &&
-				<Fragment>
-					<h3 className="CommentBox__title mt--0 mb--0">{documentTitle}</h3>
-					<h4 data-qa-sel="comment-box-title" className="CommentBox__title mt--0 mb--0">
-						Question on: <span className="text-lowercase">{commentOn}</span>
-					</h4>
-					<div className="CommentBox__quote mb--d">{quote}</div>
-				</Fragment>
+					<Fragment>
+						<h3 className="CommentBox__title mt--0 mb--0">{documentTitle}</h3>
+						<h4 data-qa-sel="comment-box-title" className="CommentBox__title mt--0 mb--0">
+							Question on: <span className="text-lowercase">{commentOn}</span>
+						</h4>
+						<div className="CommentBox__quote mb--d">{quote}</div>
+					</Fragment>
 				}
 
 				<div className="font-weight-bold markdown mt--d mb--d">
@@ -66,7 +65,7 @@ export class Question extends Component<PropsType, StateType> {
 				</div>
 
 				{this.props.isUnsaved &&
-				<p className="CommentBox__validationMessage">You have unsaved changes</p>
+					<p className="CommentBox__validationMessage">You have unsaved changes</p>
 				}
 
 				{this.props.showAnswer &&
