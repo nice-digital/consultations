@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using Comments.Migrations;
 using Comments.Services;
@@ -322,8 +323,20 @@ namespace Comments.Test.Infrastructure
             var questionText = Guid.NewGuid().ToString();
             var userId = Guid.NewGuid();
 
-			AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId); //Add records for Foreign key constraints
+			var locationId = AddLocation(sourceURI);
+			AddComment(locationId, commentText, isDeleted: false, createdByUserId: userId);
+			var questionTypeId = AddQuestionType(description: "text", hasBooleanAnswer: false, hasTextAnswer: true);
+			var questionId = AddQuestion(locationId, questionTypeId, questionText);
+			AddAnswer(questionId, userId, answerText);
         }
+
+		protected Question GetQuestion()
+		{
+			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
+			{
+				return context.Question.FirstOrDefault();
+			}
+		}
 
 	    protected void AddSubmittedCommentsAndAnswers(string sourceURI, string commentText, string questionText, string answerText, Guid createdByUserId, ConsultationsContext passedInContext = null)
 	    {
@@ -357,9 +370,9 @@ namespace Comments.Test.Infrastructure
 		    AddSubmissionAnswers(submissionId, answerId, passedInContext);
 	    }
 
-		protected int AddSubmission(Guid userId, ConsultationsContext passedInContext = null)
+		protected int AddSubmission(Guid userId, ConsultationsContext passedInContext = null, bool? organisationExpressionOfInterest = null)
 	    {
-			var submission = new Models.Submission(userId, DateTime.Now, false, null, false, null);
+			var submission = new Models.Submission(userId, DateTime.Now, false, null, false, null, organisationExpressionOfInterest);
 			if (passedInContext != null)
 			{
 				passedInContext.Submission.Add(submission);
@@ -415,6 +428,20 @@ namespace Comments.Test.Infrastructure
 		    }
 
 		    return submissionAnswer.SubmissionAnswerId;
+	    }
+
+	    protected ConsultationListContext CreateContext(IUserService userService, int totalCount = 1)
+	    {
+		    var consultationListContext = new ConsultationListContext(_options, userService, _fakeEncryption,
+			    new List<SubmittedCommentsAndAnswerCount>
+			    {
+				    new SubmittedCommentsAndAnswerCount
+				    {
+					    SourceURI = "consultations://./consultation/1",
+					    TotalCount = totalCount
+				    }
+			    });
+		    return consultationListContext;
 	    }
 
 		#endregion database stuff

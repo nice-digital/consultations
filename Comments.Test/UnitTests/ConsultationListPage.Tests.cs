@@ -26,20 +26,6 @@ namespace Comments.Test.UnitTests
 			_consultationListContext = new ConsultationListContext(_options, _fakeUserService, _fakeEncryption);
 		}
 
-		private ConsultationListContext CreateContext(IUserService userService, int totalCount = 1)
-		{
-			var consultationListContext = new ConsultationListContext(_options, userService, _fakeEncryption,
-				new List<SubmittedCommentsAndAnswerCount>
-				{
-					new SubmittedCommentsAndAnswerCount
-					{
-						SourceURI = "consultations://./consultation/1",
-						TotalCount = totalCount
-					}
-				});
-			return consultationListContext;
-		}
-
 #region earlier tests
 
 		[Fact]

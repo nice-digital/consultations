@@ -71,6 +71,7 @@ namespace Comments.Models
 
 				.Include(l => l.Question)
 					.ThenInclude(q => q.QuestionType)
+
 				.Include(l => l.Question)
 					.ThenInclude(q => q.Answer)
 					.ThenInclude(s => s.SubmissionAnswer)
@@ -104,7 +105,7 @@ namespace Comments.Models
 				.Include(l => l.Question)
 					.ThenInclude(q => q.QuestionType)
 
-					.OrderBy(l => l.Order)
+				.OrderBy(l => l.Order)
 
 				.ThenByDescending(l =>
 					l.Question.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault())
@@ -217,6 +218,8 @@ namespace Comments.Models
         {
 	        var answer = Answer.Where(a => a.AnswerId.Equals(answerId))
 		        .Include(s => s.Status)
+		        .Include(q => q.Question)
+					.ThenInclude(qt => qt.QuestionType)
 		        .FirstOrDefault();
 
 	        return answer;
@@ -279,13 +282,10 @@ namespace Comments.Models
 		    SubmissionAnswer.AddRange(submissionAnswersToInsert);
 	    }
 
-	    public Submission InsertSubmission(Guid currentUser, bool respondingAsOrganisation, string organisationName, bool hasTobaccoLinks, string tobaccoDisclosure)
+	    public Submission InsertSubmission(Guid currentUser, bool respondingAsOrganisation, string organisationName, bool hasTobaccoLinks, string tobaccoDisclosure, bool? organisationExpressionOfInterest)
 	    {
-		    var submission = new Models.Submission(currentUser, DateTime.UtcNow, respondingAsOrganisation, organisationName, hasTobaccoLinks, tobaccoDisclosure);
+		    var submission = new Models.Submission(currentUser, DateTime.UtcNow, respondingAsOrganisation, organisationName, hasTobaccoLinks, tobaccoDisclosure, organisationExpressionOfInterest);
 		    Submission.Add(submission);
-
-
-
 
 		    return submission;
 	    }
@@ -725,6 +725,16 @@ namespace Comments.Models
 				END
 
 			", new SqlParameter("@consultationId", consultationId));
+		}
+
+		public IEnumerable<Question> GetAllPreviousUniqueQuestions()
+		{
+			return Question
+				.Include(q => q.Location)
+				.Include(q => q.QuestionType)
+				.GroupBy(q => q.QuestionText)
+				.Select(q => q.OrderByDescending(x => x.CreatedDate).First())
+				.OrderByDescending(q => q.CreatedDate);
 		}
 	}
 }

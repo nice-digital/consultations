@@ -28,11 +28,6 @@ namespace Comments.ViewModels
 		public bool HasUserSuppliedComments { get; private set; }
 		public DateTime? SubmittedDate { get; private set; }
 
-		//public bool ConsultationSupportsQuestions { get; private set; }
-
-		//private readonly IEnumerable<int> _documentIdsWhichSupportQuestions;
-		//public IEnumerable<int> DocumentIdsWhichSupportQuestions => _documentIdsWhichSupportQuestions ?? new List<int>();
-
 		private readonly IEnumerable<int> _documentIdsWhichSupportComments;
 		public IEnumerable<int> DocumentIdsWhichSupportComments => _documentIdsWhichSupportComments ?? new List<int>();
 

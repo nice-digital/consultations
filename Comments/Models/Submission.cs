@@ -13,7 +13,7 @@ namespace Comments.Models
 		    SubmissionComment = new HashSet<SubmissionComment>();
 		}
 
-		public Submission(Guid submissionByUserId, DateTime submissioDateTime, bool respondingAsOrganisation, string organisationName, bool hasTobaccoLinks, string tobaccoDisclosure)
+		public Submission(Guid submissionByUserId, DateTime submissioDateTime, bool respondingAsOrganisation, string organisationName, bool hasTobaccoLinks, string tobaccoDisclosure, bool? organisationExpressionOfInterest)
 	    {
 		    SubmissionByUserId = submissionByUserId;
 		    SubmissionDateTime = submissioDateTime;
@@ -23,6 +23,7 @@ namespace Comments.Models
 		    TobaccoDisclosure = tobaccoDisclosure;
 		    SubmissionAnswer = new HashSet<SubmissionAnswer>();
 		    SubmissionComment = new HashSet<SubmissionComment>();
-		}
+		    OrganisationExpressionOfInterest = organisationExpressionOfInterest;
+	    }
     }
 }

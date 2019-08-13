@@ -205,7 +205,7 @@ namespace Comments.Services
 		    }
 		    else
 		    {
-			    locations = new List<Models.Location>(0);
+			    locations = _context.GetQuestionsForDocument(new[] {sourceURI}, partialMatchSourceURI: true);
 		    }
 		    
 		    var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);

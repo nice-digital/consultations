@@ -15,7 +15,8 @@ namespace Comments.Models
 		public bool HasTobaccoLinks { get; set; }
 		public string TobaccoDisclosure { get; set; }
 
-		
+		public bool? OrganisationExpressionOfInterest { get; set; }
+
 		public ICollection<SubmissionComment> SubmissionComment { get; set; }
 	    public ICollection<SubmissionAnswer> SubmissionAnswer { get; set; }
 	}

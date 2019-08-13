@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Comments.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 
@@ -101,6 +102,18 @@ namespace Comments.Common
 	    public static bool IsIntegrationTest(this IHostingEnvironment hostingEnvironment)
 	    {
 		    return hostingEnvironment.ContentRootPath.IndexOf(".Test", StringComparison.OrdinalIgnoreCase) != -1;
+	    }
+
+	    public static IEnumerable<string> FilterRoles(this IEnumerable<string> roles)
+	    {
+		    if (roles == null)
+			    return new List<string>();
+
+		    var roleList = roles.ToList();
+		    if (!roleList.Any())
+			    return new List<string>();
+
+		    return roleList.Where(role => AppSettings.ConsultationListConfig.DownloadRoles.AllRoles.Contains(role));
 	    }
 	}
 }

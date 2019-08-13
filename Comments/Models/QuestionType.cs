@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Comments.Models
@@ -13,5 +13,10 @@ namespace Comments.Models
             HasBooleanAnswer = hasBooleanAnswer;
             Question = question;
         }
+
+		/// <summary>
+		/// text response questions enforce the user to type something into the text box. yes/no questions don't.
+		/// </summary>
+        public bool TextIsMandatory => !HasBooleanAnswer;
     }
 }
