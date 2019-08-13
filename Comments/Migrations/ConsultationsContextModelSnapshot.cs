@@ -195,6 +195,10 @@ namespace Comments.Migrations
                     b.HasKey("QuestionTypeId");
 
                     b.ToTable("QuestionType");
+
+                    b.HasData(
+                        new { QuestionTypeId = 99, Description = "A yes / no answer without a text answer", HasBooleanAnswer = true, HasTextAnswer = true }
+                    );
                 });
 
             modelBuilder.Entity("Comments.Models.Status", b =>

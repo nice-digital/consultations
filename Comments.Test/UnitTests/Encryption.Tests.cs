@@ -30,17 +30,19 @@ namespace Comments.Test.UnitTests
 		}
 
 		[Fact]
-		public void Blank_String_Throws_Error()
+		public void Blank_String_Returns_Empty_String()
 		{
 			//Arrange
 			string original = "";
+			string encrypted= null;
 			var encryption = new Encryption();
 
 			using (Aes myAes = Aes.Create())
 			{
-				//Act + Assert
-				Should.Throw<ArgumentNullException>(() => encryption.EncryptString(original, myAes.Key, myAes.IV));
+				encrypted = encryption.EncryptString(original, myAes.Key, myAes.IV);
 			}
+
+			encrypted.ShouldBe(string.Empty);
 		}
 	}
 }

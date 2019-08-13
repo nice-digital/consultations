@@ -2,7 +2,7 @@
 
 import React, { Component, Fragment } from "react";
 import ReactMarkdown from "react-markdown";
-import { AnswerBox } from "../AnswerBox/AnswerBox";
+import { Answer } from "../Answer/Answer";
 
 type PropsType = {
 	staticContext?: any,
@@ -26,7 +26,7 @@ export class Question extends Component<PropsType, StateType> {
 	render() {
 		if (!this.props.question) return null;
 		const { documentTitle } = this.props;
-		const { commentOn, quote } = this.props.question;
+		const { commentOn } = this.props.question;
 		let answers = this.props.question.answers;
 		if (answers === null || answers.length < 1){
 			answers = [{
@@ -36,9 +36,7 @@ export class Question extends Component<PropsType, StateType> {
 		}
 
 		return (
-
 			<li className={this.props.isUnsaved ? "CommentBox CommentBox--unsavedChanges" : "CommentBox"}>
-				{!this.isTextSelection(this.props.question) &&
 				<Fragment>
 					{documentTitle &&
 						<h3 className="CommentBox__title mt--0 mb--0">{documentTitle}</h3>
@@ -74,8 +72,9 @@ export class Question extends Component<PropsType, StateType> {
 				{this.props.showAnswer &&
 					answers.map((answer) => {
 						return (
-							<AnswerBox
+							<Answer
 								questionText={this.props.question.questionText}
+								questionType={this.props.question.questionType}
 								updateUnsavedIds={this.props.updateUnsavedIds}
 								questionId={this.props.question.questionId}
 								readOnly={this.props.readOnly}

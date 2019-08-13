@@ -218,6 +218,8 @@ namespace Comments.Models
         {
 	        var answer = Answer.Where(a => a.AnswerId.Equals(answerId))
 		        .Include(s => s.Status)
+		        .Include(q => q.Question)
+					.ThenInclude(qt => qt.QuestionType)
 		        .FirstOrDefault();
 
 	        return answer;
@@ -725,6 +727,16 @@ namespace Comments.Models
 				END
 
 			", new SqlParameter("@consultationId", consultationId));
+		}
+
+		public IEnumerable<Question> GetAllPreviousUniqueQuestions()
+		{
+			return Question
+				.Include(q => q.Location)
+				.Include(q => q.QuestionType)
+				.GroupBy(q => q.QuestionText)
+				.Select(q => q.OrderByDescending(x => x.CreatedDate).First())
+				.OrderByDescending(q => q.CreatedDate);
 		}
 	}
 }

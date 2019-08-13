@@ -40,14 +40,16 @@ namespace Comments.Test.IntegrationTests.API.Answers
         {
             // Arrange
             ResetDatabase();
-	        _context.Database.EnsureCreated();
+            _context.Database.EnsureCreated();
 
-			var answerText = Guid.NewGuid().ToString();
+            var answerText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
 
             SetupTestDataInDB();
-            var answerId = AddAnswer(1, userId, answerText);
-            
+
+            var question = GetQuestion();
+            var answerId = AddAnswer(question.QuestionId, userId, answerText);
+
             // Act
             var response = await _client.GetAsync($"consultations/api/answer/{answerId}");
             response.EnsureSuccessStatusCode();
@@ -70,9 +72,10 @@ namespace Comments.Test.IntegrationTests.API.Answers
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
             SetupTestDataInDB();
-	        AddStatus(StatusName.Draft.ToString(), (int)StatusName.Draft);
-			var answerId =  AddAnswer(1, userId, answerText, (int)StatusName.Draft, _context);
-            
+
+            var question = GetQuestion();
+            var answerId =  AddAnswer(question.QuestionId, userId, answerText, (int)StatusName.Draft, _context);
+
             var answerService = new AnswerService(_context, userService);
             var viewModel = answerService.GetAnswer(answerId);
 
@@ -88,7 +91,7 @@ namespace Comments.Test.IntegrationTests.API.Answers
             var result = answerService.GetAnswer(answerId);
 
             //Assert
-            responseString.ShouldMatchApproved(new Func<string, string>[]{ Scrubbers.ScrubLastModifiedDate, Scrubbers.ScrubAnswerId });
+            responseString.ShouldMatchApproved(new Func<string, string>[]{ Scrubbers.ScrubLastModifiedDate, Scrubbers.ScrubAnswerId, Scrubbers.ScrubQuestionId });
             result.answer.AnswerText.ShouldBe(updatedAnswerText);
 
         }
@@ -99,8 +102,11 @@ namespace Comments.Test.IntegrationTests.API.Answers
             //Arrange
             var userId = Guid.Empty;
             var answerText = Guid.NewGuid().ToString();
+
             SetupTestDataInDB();
-            var answerId = AddAnswer(1, userId, answerText);
+
+            var question = GetQuestion();
+            var answerId = AddAnswer(question.QuestionId, userId, answerText);
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
             var answerService = new AnswerService(new ConsultationsContext(_options, userService, _fakeEncryption), userService);
@@ -110,7 +116,7 @@ namespace Comments.Test.IntegrationTests.API.Answers
             response.EnsureSuccessStatusCode();
 
             var result =  answerService.GetAnswer(answerId);
-           
+
             //Assert
             result.validate.NotFound.ShouldBeTrue();
         }

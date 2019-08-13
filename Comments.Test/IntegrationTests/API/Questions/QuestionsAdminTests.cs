@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Comments.Configuration;
 using Comments.Test.Infrastructure;
 using Xunit;
 using Newtonsoft.Json;
@@ -11,7 +13,15 @@ namespace Comments.Test.IntegrationTests.API.Questions
 	public class QuestionsAdminTests : TestBase
 	{
 		private static readonly int DocumentCount = 1;
-		public QuestionsAdminTests() : base(false, TestUserType.Administrator, true) { }
+
+		public QuestionsAdminTests() : base(false, TestUserType.Administrator, true)
+		{
+			AppSettings.ConsultationListConfig.DownloadRoles = new RoleTypes()
+			{
+				AdminRoles = new List<string>(),
+				TeamRoles = new List<string>()
+			};
+		}
 
 		[Fact]
 		public async Task GetQuestions()

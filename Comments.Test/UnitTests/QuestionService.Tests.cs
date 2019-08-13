@@ -32,7 +32,7 @@ namespace Comments.Test.UnitTests
 
 
 			var questionService =
-				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService);
+				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService, null, null);
 
 			//Act
 			var viewModel = questionService.GetQuestion(questionId);
@@ -51,7 +51,7 @@ namespace Comments.Test.UnitTests
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
 			var questionService =
-				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService);
+				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService, null, null);
 
 			//Act
 			var viewModel = questionService.GetQuestion(1);
@@ -76,7 +76,7 @@ namespace Comments.Test.UnitTests
 			var questionId = AddQuestion(locationId, questionTypeId, questionText);
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var questionService =
-				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService);
+				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService, null, null);
 
 			var viewModel = questionService.GetQuestion(questionId);
 			var updatedQuestionText = Guid.NewGuid().ToString();
@@ -109,7 +109,7 @@ namespace Comments.Test.UnitTests
 			var questionId = AddQuestion(locationId, questionTypeId, questionText);
 
 			var questionService =
-				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService);
+				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService, null, null);
 
 			//Act
 			var result = questionService.DeleteQuestion(questionId);
@@ -130,7 +130,7 @@ namespace Comments.Test.UnitTests
 			var userId = Guid.Empty;
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var questionService =
-				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService);
+				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService, null, null);
 
 			//Act
 			var result = questionService.DeleteQuestion(questionId);
@@ -153,7 +153,7 @@ namespace Comments.Test.UnitTests
 			var questionTypeId = AddQuestionType(description, false, true);
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var questionService =
-				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService);
+				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService, null, null);
 
 			var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
 			var questionType = new QuestionType(description, false, true, null);
@@ -182,7 +182,8 @@ namespace Comments.Test.UnitTests
 
 			var userId = Guid.Empty;
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-			var questionService = new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService);
+			var authenticateService = new FakeAuthenticateService(authenticated: true);
+			var questionService = new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService, authenticateService, _fakeHttpContextAccessor);
 
 			//Act
 			var result = questionService.GetQuestionAdmin(1, false, null);
@@ -213,7 +214,7 @@ namespace Comments.Test.UnitTests
 			var questionId = AddQuestion(locationId, questionTypeId, questionText);
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var questionService =
-				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService);
+				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService, null, null);
 
 			var viewModel = questionService.GetQuestion(questionId);
 			var updatedQuestionText = Guid.NewGuid().ToString();
@@ -240,7 +241,7 @@ namespace Comments.Test.UnitTests
 			ResetDatabase();
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: Guid.NewGuid());
 			var questionService =
-				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService);
+				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService, null, null);
 
 			var textQuestionTypeId = AddQuestionType("Text", hasBooleanAnswer: false, hasTextAnswer: true);
 			var booleanQuestionTypeId = AddQuestionType("Boolean", hasBooleanAnswer: true, hasTextAnswer: false);

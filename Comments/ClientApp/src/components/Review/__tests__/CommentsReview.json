@@ -1,218 +1,221 @@
 {
-    "commentsAndQuestions": {
-        "comments": [
-            {
-                "commentId": 5,
-                "lastModifiedDate": "2018-08-06T14:47:06.6382317",
-                "lastModifiedByUserId": "b65e1398-0c46-4511-a870-acba729a3dd0",
-                "commentText": "ffffc",
-                "status": {
-                    "statusId": 1,
-                    "name": "Draft"
-                },
-                "statusId": 1,
-                "locationId": 11,
-                "sourceURI": "consultations://./consultation/22/document/1",
-                "htmlElementID": null,
-                "rangeStart": null,
-                "rangeStartOffset": null,
-                "rangeEnd": null,
-                "rangeEndOffset": null,
-                "quote": "Unstable angina and NSTEMI",
-                "commentOn": "Document",
-                "documentId": 1,
-                "show": true
+  "commentsAndQuestions": {
+    "comments": [
+      {
+        "commentId": 5,
+        "lastModifiedDate": "2018-08-06T14:47:06.6382317",
+        "lastModifiedByUserId": "b65e1398-0c46-4511-a870-acba729a3dd0",
+        "commentText": "ffffc",
+        "status": {
+          "statusId": 1,
+          "name": "Draft"
+        },
+        "statusId": 1,
+        "locationId": 11,
+        "sourceURI": "consultations://./consultation/22/document/1",
+        "htmlElementID": null,
+        "rangeStart": null,
+        "rangeStartOffset": null,
+        "rangeEnd": null,
+        "rangeEndOffset": null,
+        "quote": "Unstable angina and NSTEMI",
+        "commentOn": "Document",
+        "documentId": 1,
+        "show": true
+      },
+      {
+        "commentId": 7,
+        "lastModifiedDate": "2018-08-06T13:11:38.7643983",
+        "lastModifiedByUserId": "b65e1398-0c46-4511-a870-acba729a3dd0",
+        "commentText": "ffff",
+        "status": {
+          "statusId": 1,
+          "name": "Draft"
+        },
+        "statusId": 1,
+        "locationId": 13,
+        "sourceURI": "consultations://./consultation/22/document/1/chapter/introduction",
+        "htmlElementID": "",
+        "rangeStart": null,
+        "rangeStartOffset": null,
+        "rangeEnd": null,
+        "rangeEndOffset": null,
+        "quote": "Introduction ",
+        "commentOn": "Chapter",
+        "documentId": 1,
+        "show": true
+      }
+    ],
+    "questions": [
+      {
+        "questionId": 4,
+        "questionText": "Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.",
+        "questionTypeId": 1,
+        "questionOrder": 1,
+        "lastModifiedByUserId": "00000000-0000-0000-0000-000000000000",
+        "lastModifiedDate": "2018-08-03T22:44:58.45",
+        "questionType": {
+          "type": "Text",
+          "description": "A text question requiring a text answer.",
+          "hasTextAnswer": true,
+          "hasBooleanAnswer": false
+        },
+        "answers": [
+          {
+            "answerId": 11,
+            "answerText": "gg",
+            "answerBoolean": null,
+            "questionId": 4,
+            "lastModifiedDate": "2018-08-06T14:41:57.9301354",
+            "lastModifiedByUserId": "b65e1398-0c46-4511-a870-acba729a3dd0",
+            "statusId": 1,
+            "status": {
+              "statusId": 1,
+              "name": "Draft"
             },
-            {
-                "commentId": 7,
-                "lastModifiedDate": "2018-08-06T13:11:38.7643983",
-                "lastModifiedByUserId": "b65e1398-0c46-4511-a870-acba729a3dd0",
-                "commentText": "ffff",
-                "status": {
-                    "statusId": 1,
-                    "name": "Draft"
-                },
-                "statusId": 1,
-                "locationId": 13,
-                "sourceURI": "consultations://./consultation/22/document/1/chapter/introduction",
-                "htmlElementID": "",
-                "rangeStart": null,
-                "rangeStartOffset": null,
-                "rangeEnd": null,
-                "rangeEndOffset": null,
-                "quote": "Introduction ",
-                "commentOn": "Chapter",
-                "documentId": 1,
-                "show": true
-            }
+            "sourceURI": "consultations://./consultation/22"
+          }
         ],
-        "questions": [
-            {
-                "questionId": 4,
-                "questionText": "Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.",
-                "questionTypeId": 1,
-                "questionOrder": 1,
-                "lastModifiedByUserId": "00000000-0000-0000-0000-000000000000",
-                "lastModifiedDate": "2018-08-03T22:44:58.45",
-                "questionType": {
-                    "description": "A text question requiring a text answer.",
-                    "hasTextAnswer": true,
-                    "hasBooleanAnswer": false
-                },
-                "answers": [
-                    {
-                        "answerId": 11,
-                        "answerText": "gg",
-                        "answerBoolean": null,
-                        "questionId": 4,
-                        "lastModifiedDate": "2018-08-06T14:41:57.9301354",
-                        "lastModifiedByUserId": "b65e1398-0c46-4511-a870-acba729a3dd0",
-                        "statusId": 1,
-                        "status": {
-                            "statusId": 1,
-                            "name": "Draft"
-                        },
-                        "sourceURI": "consultations://./consultation/22"
-                    }
-                ],
-                "locationId": 7,
-                "sourceURI": "consultations://./consultation/22",
-                "htmlElementID": null,
-                "rangeStart": null,
-                "rangeStartOffset": null,
-                "rangeEnd": null,
-                "rangeEndOffset": null,
-                "quote": null,
-                "commentOn": "Consultation",
-                "documentId": null,
-                "show": true
-            },
-            {
-                "questionId": 5,
-                "questionText": "Would implementation of any of the draft recommendations have significant cost implications?",
-                "questionTypeId": 1,
-                "questionOrder": 2,
-                "lastModifiedByUserId": "00000000-0000-0000-0000-000000000000",
-                "lastModifiedDate": "2018-08-03T22:44:58.45",
-                "questionType": {
-                    "description": "A text question requiring a text answer.",
-                    "hasTextAnswer": true,
-                    "hasBooleanAnswer": false
-                },
-                "answers": [],
-                "locationId": 8,
-                "sourceURI": "consultations://./consultation/22/document/1",
-                "htmlElementID": null,
-                "rangeStart": null,
-                "rangeStartOffset": null,
-                "rangeEnd": null,
-                "rangeEndOffset": null,
-                "quote": null,
-                "commentOn": "Document",
-                "documentId": 1,
-                "show": true
-            },
-            {
-                "questionId": 6,
-                "questionText": "Would implementation of any of the draft recommendations have cost implications?",
-                "questionTypeId": 1,
-                "questionOrder": 3,
-                "lastModifiedByUserId": "00000000-0000-0000-0000-000000000000",
-                "lastModifiedDate": "2018-08-03T22:44:58.45",
-                "questionType": {
-                    "description": "A text question requiring a text answer.",
-                    "hasTextAnswer": true,
-                    "hasBooleanAnswer": false
-                },
-                "answers": [],
-                "locationId": 9,
-                "sourceURI": "consultations://./consultation/22/document/2",
-                "htmlElementID": null,
-                "rangeStart": null,
-                "rangeStartOffset": null,
-                "rangeEnd": null,
-                "rangeEndOffset": null,
-                "quote": null,
-                "commentOn": "Document",
-                "documentId": 2,
-                "show": true
-            }
-        ],
-        "isAuthorised": true,
-        "signInURL": "https://beta-accounts.nice.org.uk/signin?returnURL=%2Fconsultations%2F22%2Freview&wctx=ru%3D%2Fconsultations%2F22%2Freview",
-        "consultationState": {
-            "startDate": "2018-07-02T00:00:00",
-            "endDate": "2056-12-24T17:00:00",
-            "hasQuestions": false,
-            "hasUserSuppliedAnswers": false,
-            "hasUserSuppliedComments": false,
-            "userHasSubmitted": false,
-            "consultationSupportsQuestions": false,
-            "consultationSupportsComments": true,
-            "documentIdsWhichSupportComments": [
-                1,
-                2,
-                3
-            ],
-            "consultationIsOpen": true,
-            "consultationHasNotStartedYet": false,
-            "consultationHasEnded": false,
-            "supportsSubmission": false,
-            "supportsDownload": false,
-            "shouldShowDrawer": true,
-            "shouldShowCommentsTab": true,
-            "shouldShowQuestionsTab": true
-        }
-    },
-    "filters": [
+        "locationId": 7,
+        "sourceURI": "consultations://./consultation/22",
+        "htmlElementID": null,
+        "rangeStart": null,
+        "rangeStartOffset": null,
+        "rangeEnd": null,
+        "rangeEndOffset": null,
+        "quote": null,
+        "commentOn": "Consultation",
+        "documentId": null,
+        "show": true
+      },
+      {
+        "questionId": 5,
+        "questionText": "Would implementation of any of the draft recommendations have significant cost implications?",
+        "questionTypeId": 1,
+        "questionOrder": 2,
+        "lastModifiedByUserId": "00000000-0000-0000-0000-000000000000",
+        "lastModifiedDate": "2018-08-03T22:44:58.45",
+        "questionType": {
+          "type": "Text",
+          "description": "A text question requiring a text answer.",
+          "hasTextAnswer": true,
+          "hasBooleanAnswer": false
+        },
+        "answers": [],
+        "locationId": 8,
+        "sourceURI": "consultations://./consultation/22/document/1",
+        "htmlElementID": null,
+        "rangeStart": null,
+        "rangeStartOffset": null,
+        "rangeEnd": null,
+        "rangeEndOffset": null,
+        "quote": null,
+        "commentOn": "Document",
+        "documentId": 1,
+        "show": true
+      },
+      {
+        "questionId": 6,
+        "questionText": "Would implementation of any of the draft recommendations have cost implications?",
+        "questionTypeId": 1,
+        "questionOrder": 3,
+        "lastModifiedByUserId": "00000000-0000-0000-0000-000000000000",
+        "lastModifiedDate": "2018-08-03T22:44:58.45",
+        "questionType": {
+          "type": "Text",
+          "description": "A text question requiring a text answer.",
+          "hasTextAnswer": true,
+          "hasBooleanAnswer": false
+        },
+        "answers": [],
+        "locationId": 9,
+        "sourceURI": "consultations://./consultation/22/document/2",
+        "htmlElementID": null,
+        "rangeStart": null,
+        "rangeStartOffset": null,
+        "rangeEnd": null,
+        "rangeEndOffset": null,
+        "quote": null,
+        "commentOn": "Document",
+        "documentId": 2,
+        "show": true
+      }
+    ],
+    "isAuthorised": true,
+    "signInURL": "https://beta-accounts.nice.org.uk/signin?returnURL=%2Fconsultations%2F22%2Freview&wctx=ru%3D%2Fconsultations%2F22%2Freview",
+    "consultationState": {
+      "startDate": "2018-07-02T00:00:00",
+      "endDate": "2056-12-24T17:00:00",
+      "hasQuestions": false,
+      "hasUserSuppliedAnswers": false,
+      "hasUserSuppliedComments": false,
+      "userHasSubmitted": false,
+      "consultationSupportsQuestions": false,
+      "consultationSupportsComments": true,
+      "documentIdsWhichSupportComments": [
+        1,
+        2,
+        3
+      ],
+      "consultationIsOpen": true,
+      "consultationHasNotStartedYet": false,
+      "consultationHasEnded": false,
+      "supportsSubmission": false,
+      "supportsDownload": false,
+      "shouldShowDrawer": true,
+      "shouldShowCommentsTab": true,
+      "shouldShowQuestionsTab": true
+    }
+  },
+  "filters": [
+    {
+      "id": "QuestionsOrComments",
+      "title": "Response type",
+      "options": [
         {
-            "id": "QuestionsOrComments",
-            "title": "Response type",
-            "options": [
-                {
-                    "id": "Questions",
-                    "label": "Questions",
-                    "isSelected": false,
-                    "filteredResultCount": 3,
-                    "unfilteredResultCount": 3
-                },
-                {
-                    "id": "Comments",
-                    "label": "Comments",
-                    "isSelected": false,
-                    "filteredResultCount": 2,
-                    "unfilteredResultCount": 2
-                }
-            ]
+          "id": "Questions",
+          "label": "Questions",
+          "isSelected": false,
+          "filteredResultCount": 3,
+          "unfilteredResultCount": 3
         },
         {
-            "id": "Document",
-            "title": "Document",
-            "options": [
-                {
-                    "id": "1",
-                    "label": "Unstable angina and NSTEMI",
-                    "isSelected": false,
-                    "filteredResultCount": 3,
-                    "unfilteredResultCount": 3
-                },
-                {
-                    "id": "2",
-                    "label": "Glaucoma: diagnosis and management – Full Guideline",
-                    "isSelected": false,
-                    "filteredResultCount": 1,
-                    "unfilteredResultCount": 1
-                },
-                {
-                    "id": "3",
-                    "label": "Emergency and acute medical care in over 16s: service delivery and organisation",
-                    "isSelected": false,
-                    "filteredResultCount": 0,
-                    "unfilteredResultCount": 0
-                }
-            ]
+          "id": "Comments",
+          "label": "Comments",
+          "isSelected": false,
+          "filteredResultCount": 2,
+          "unfilteredResultCount": 2
         }
-    ],
-    "questionsOrComments": [],
-    "documents": null
+      ]
+    },
+    {
+      "id": "Document",
+      "title": "Document",
+      "options": [
+        {
+          "id": "1",
+          "label": "Unstable angina and NSTEMI",
+          "isSelected": false,
+          "filteredResultCount": 3,
+          "unfilteredResultCount": 3
+        },
+        {
+          "id": "2",
+          "label": "Glaucoma: diagnosis and management – Full Guideline",
+          "isSelected": false,
+          "filteredResultCount": 1,
+          "unfilteredResultCount": 1
+        },
+        {
+          "id": "3",
+          "label": "Emergency and acute medical care in over 16s: service delivery and organisation",
+          "isSelected": false,
+          "filteredResultCount": 0,
+          "unfilteredResultCount": 0
+        }
+      ]
+    }
+  ],
+  "questionsOrComments": [],
+  "documents": null
 }

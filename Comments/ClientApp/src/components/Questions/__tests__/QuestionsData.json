@@ -12,7 +12,8 @@
         "questionTypeId": 2117,
         "description": "A text question requiring a text answer.",
         "hasTextAnswer": true,
-        "hasBooleanAnswer": false
+        "hasBooleanAnswer": false,
+        "type": "Text"
       },
       "answers": [],
       "locationId": 5472,
@@ -48,7 +49,8 @@
             "questionTypeId": 2117,
             "description": "A text question requiring a text answer.",
             "hasTextAnswer": true,
-            "hasBooleanAnswer": false
+            "hasBooleanAnswer": false,
+            "type": "Text"
           },
           "answers": [],
           "locationId": 5480,
@@ -84,7 +86,8 @@
             "questionTypeId": 2117,
             "description": "A text question requiring a text answer.",
             "hasTextAnswer": true,
-            "hasBooleanAnswer": false
+            "hasBooleanAnswer": false,
+            "type": "Text"
           },
           "answers": [],
           "locationId": 5473,
@@ -112,7 +115,8 @@
             "questionTypeId": 2117,
             "description": "A text question requiring a text answer.",
             "hasTextAnswer": true,
-            "hasBooleanAnswer": false
+            "hasBooleanAnswer": false,
+            "type": "Text"
           },
           "answers": [],
           "locationId": 5462,
@@ -155,7 +159,8 @@
             "questionTypeId": 2117,
             "description": "A text question requiring a text answer.",
             "hasTextAnswer": true,
-            "hasBooleanAnswer": false
+            "hasBooleanAnswer": false,
+            "type": "Text"
           },
           "answers": [],
           "locationId": 5479,
@@ -198,7 +203,8 @@
             "questionTypeId": 2117,
             "description": "A text question requiring a text answer.",
             "hasTextAnswer": true,
-            "hasBooleanAnswer": false
+            "hasBooleanAnswer": false,
+            "type": "Text"
           },
           "answers": [],
           "locationId": 5482,
@@ -226,7 +232,8 @@
             "questionTypeId": 2117,
             "description": "A text question requiring a text answer.",
             "hasTextAnswer": true,
-            "hasBooleanAnswer": false
+            "hasBooleanAnswer": false,
+            "type": "Text"
           },
           "answers": [],
           "locationId": 5483,
@@ -254,7 +261,8 @@
             "questionTypeId": 2117,
             "description": "A text question requiring a text answer.",
             "hasTextAnswer": true,
-            "hasBooleanAnswer": false
+            "hasBooleanAnswer": false,
+            "type": "Text"
           },
           "answers": [],
           "locationId": 5478,
@@ -281,7 +289,15 @@
       "questionTypeId": 2117,
       "description": "A text question requiring a text answer.",
       "hasTextAnswer": true,
-      "hasBooleanAnswer": false
+      "hasBooleanAnswer": false,
+      "type": "Text"
+    },
+    {
+      "questionTypeId": 2118,
+      "description": "A yes no question",
+      "hasTextAnswer": true,
+      "hasBooleanAnswer": true,
+      "type": "YesNo"
     }
   ],
   "consultationState": {
@@ -313,5 +329,6 @@
     "shouldShowDrawer": true,
     "shouldShowCommentsTab": true,
     "shouldShowQuestionsTab": true
-  }
+  },
+  "previousQuestions": []
 }
