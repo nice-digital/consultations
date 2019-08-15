@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using DocumentFormat.OpenXml.Drawing.Diagrams;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Comments.Models
@@ -294,26 +295,37 @@ namespace Comments.Models
 	    {
 		    var partialSourceURIToUse = $"{sourceURI}/";
 
-		    var firstMatchingLocation = Location.Where(l => (l.SourceURI.Equals(sourceURI) || l.SourceURI.StartsWith(partialSourceURIToUse)))
-			    .Include(l => l.Comment)
-					.ThenInclude(s => s.SubmissionComment)
-						.ThenInclude(s => s.Submission)
+		    var comments = Comment.Where(loc => loc.Location.SourceURI.Equals(sourceURI) || loc.Location.SourceURI.StartsWith(partialSourceURIToUse))
+				.Include(l => l.Location)
+				.Include(s => s.SubmissionComment)
+				.ThenInclude(s => s.Submission)
+				.ToList();
 
-			    .Include(l => l.Question)
-					.ThenInclude(q => q.Answer)
-						.ThenInclude(s => s.SubmissionAnswer)
-							.ThenInclude(s => s.Submission)
+			if (comments.Count > 0 )
+			{
+				if (comments.FirstOrDefault().SubmissionComment.Count > 0)
+				{
+					return comments.FirstOrDefault().SubmissionComment.FirstOrDefault().Submission.SubmissionDateTime;
+				}
+			}
 
-			    .FirstOrDefault();
+			var answers = Answer.Where(q => q.Question.Location.SourceURI.Equals(sourceURI) || q.Question.Location.SourceURI.StartsWith(partialSourceURIToUse))
+				.Include(q => q.Question)
+				.ThenInclude(l => l.Location)
+				.Include(s => s.SubmissionAnswer)
+				.ThenInclude(s => s.Submission)
+				.ToList();
 
-		    if (firstMatchingLocation == null)
-			    return (DateTime?)null;
+			if (answers.Count > 0)
+			{
+				if (answers.FirstOrDefault().SubmissionAnswer.Count > 0)
+				{
+					return answers.FirstOrDefault().SubmissionAnswer.FirstOrDefault().Submission.SubmissionDateTime;
+				}
+			}
 
-
-		    return firstMatchingLocation.Comment?.FirstOrDefault()?.SubmissionComment.FirstOrDefault()?.Submission.SubmissionDateTime ??
-		           firstMatchingLocation.Question?.FirstOrDefault(q => q.Answer.Any())?.Answer.FirstOrDefault()?.SubmissionAnswer.FirstOrDefault()?.Submission.SubmissionDateTime;
-			
-		}
+			return (DateTime?)null;
+	    }
 
 		public int DeleteAllSubmissionsFromUser(Guid usersSubmissionsToDelete)
 	    {
