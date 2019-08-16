@@ -26,6 +26,7 @@ import { LoginBanner } from "../LoginBanner/LoginBanner";
 import { SubmitResponseDialog } from "../SubmitResponseDialog/SubmitResponseDialog";
 import { updateUnsavedIds } from "../../helpers/unsaved-comments";
 import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
+import Moment from "react-moment";
 
 type PropsType = {
 	staticContext?: any,
@@ -45,7 +46,7 @@ type PropsType = {
 type StateType = {
 	consultationData: ConsultationDataType | null,
 	commentsData: ReviewPageViewModelType | null,
-	userHasSubmitted: boolean,
+	submittedDate: Date,
 	validToSubmit: false,
 	path: string | null,
 	hasInitialData: boolean,
@@ -59,7 +60,6 @@ type StateType = {
 	organisationName: string,
 	hasTobaccoLinks: boolean,
 	tobaccoDisclosure: string,
-	organisationExpressionOfInterest: boolean | null,
 	unsavedIds: Array<number>,
 	documentTitles: "undefined" | Array<any>,
 	justSubmitted: boolean,
@@ -73,7 +73,7 @@ export class Review extends Component<PropsType, StateType> {
 			loading: true,
 			consultationData: null,
 			commentsData: null,
-			userHasSubmitted: false,
+			submittedDate: null,
 			validToSubmit: false,
 			path: null,
 			hasInitialData: false,
@@ -86,7 +86,6 @@ export class Review extends Component<PropsType, StateType> {
 			organisationName: "",
 			hasTobaccoLinks: false,
 			tobaccoDisclosure: "",
-			organisationExpressionOfInterest: null,
 			unsavedIds: [],
 			documentTitles: [],
 			justSubmitted: false,
@@ -119,18 +118,18 @@ export class Review extends Component<PropsType, StateType> {
 			if (this.props.staticContext) {
 				this.props.staticContext.analyticsGlobals.gidReference = preloadedConsultationData.reference;
 				this.props.staticContext.analyticsGlobals.consultationId = preloadedConsultationData.consultationId;
-				this.props.staticContext.analyticsGlobals.consultationTitle = preloadedConsultationData.title;
-				this.props.staticContext.analyticsGlobals.stage = preloadedConsultationData.consultationState.userHasSubmitted ? "postsubmission" : "presubmission";
+				this.props.staticContext.analyticsGlobals.consultationTitle = preloadedConsultationData.title
+				this.props.staticContext.analyticsGlobals.stage = preloadedConsultationData.consultationState.submittedDate ? "postsubmission" : "presubmission";
 			}
 			this.state = {
 				path: this.props.basename + this.props.location.pathname,
 				commentsData: preloadedCommentsData,
 				consultationData: preloadedConsultationData,
-				userHasSubmitted: preloadedConsultationData.consultationState.userHasSubmitted,
+				submittedDate: preloadedConsultationData.consultationState.submittedDate,
 				validToSubmit: preloadedConsultationData.consultationState.supportsSubmission,
 				loading: false,
 				hasInitialData: true,
-				allowComments: (preloadedConsultationData.consultationState.consultationIsOpen && !preloadedConsultationData.consultationState.userHasSubmitted),
+				allowComments: (preloadedConsultationData.consultationState.consultationIsOpen && !preloadedConsultationData.consultationState.submittedDate),
 				comments: preloadedCommentsData.commentsAndQuestions.comments,
 				questions: preloadedCommentsData.commentsAndQuestions.questions,
 				sort: preloadedCommentsData.sort,
@@ -139,7 +138,6 @@ export class Review extends Component<PropsType, StateType> {
 				respondingAsOrganisation: false,
 				hasTobaccoLinks: false,
 				tobaccoDisclosure: "",
-				organisationExpressionOfInterest: null,
 				unsavedIds: [],
 				documentTitles: this.getListOfDocuments(preloadedCommentsData.filters),
 				justSubmitted: false,
@@ -218,10 +216,10 @@ export class Review extends Component<PropsType, StateType> {
 						commentsData: data.commentsData,
 						comments: data.commentsData.commentsAndQuestions.comments,
 						questions: data.commentsData.commentsAndQuestions.questions,
-						userHasSubmitted: data.consultationData.consultationState.userHasSubmitted,
+						submittedDate: data.consultationData.consultationState.submittedDate,
 						validToSubmit: data.consultationData.consultationState.supportsSubmission,
 						loading: false,
-						allowComments: (data.consultationData.consultationState.consultationIsOpen && !data.consultationData.consultationState.userHasSubmitted),
+						allowComments: (data.consultationData.consultationState.consultationIsOpen && !data.consultationData.consultationState.submittedDate),
 						supportsDownload: data.consultationData.consultationState.supportsDownload,
 						sort: data.commentsData.sort,
 						organisationName: data.commentsData.organisationName || "",
@@ -250,7 +248,7 @@ export class Review extends Component<PropsType, StateType> {
 						event: "pageview",
 						gidReference: this.state.consultationData.reference,
 						title: this.getPageTitle(true),
-						stage: this.state.consultationData.consultationState.userHasSubmitted ? "postsubmission" : "presubmission",
+						stage: this.state.consultationData.consultationState.submittedDate ? "postsubmission" : "presubmission",
 					});
 				}
 				if (callback) callback();
@@ -288,7 +286,6 @@ export class Review extends Component<PropsType, StateType> {
 		const tobaccoDisclosure = this.state.tobaccoDisclosure;
 		const respondingAsOrganisation = this.state.respondingAsOrganisation === "yes";
 		const hasTobaccoLinks = this.state.hasTobaccoLinks === "yes";
-		const organisationExpressionOfInterest = (this.state.consultationData.showExpressionOfInterestSubmissionQuestion ? (this.state.organisationExpressionOfInterest === "yes") : null);
 
 		let answersToSubmit = [];
 		questions.forEach(function (question) {
@@ -303,7 +300,6 @@ export class Review extends Component<PropsType, StateType> {
 			tobaccoDisclosure: hasTobaccoLinks ? tobaccoDisclosure : null,
 			respondingAsOrganisation,
 			hasTobaccoLinks,
-			organisationExpressionOfInterest,
 		};
 		load("submit", undefined, [], {}, "POST", submission, true)
 			.then(response => {
@@ -327,7 +323,7 @@ export class Review extends Component<PropsType, StateType> {
 					label: `${response.data.respondingAsOrganisation ? "Yes" : "No"}, ${response.data.hasTobaccoLinks ? "Yes" : "No"}`,
 				});
 				this.setState({
-					userHasSubmitted: true,
+					submittedDate: true,
 					validToSubmit: false,
 					allowComments: false,
 					justSubmitted: true,
@@ -470,13 +466,13 @@ export class Review extends Component<PropsType, StateType> {
 											<main role="main">
 												<div className="page-header">
 													<Header
-														title={this.state.userHasSubmitted ? "Response submitted" : "Review your response"}
-														subtitle1={this.state.userHasSubmitted ? "" : "Review and edit your question responses and comments before you submit them to us."}
-														subtitle2={this.state.userHasSubmitted ? "" : "Once they have been submitted you will not be able to edit them further or add any extra comments."}
+														title={this.state.submittedDate ? "Response submitted" : "Review your response"}
+														subtitle1={this.state.submittedDate ? "" : "Review and edit your question responses and comments before you submit them to us."}
+														subtitle2={this.state.submittedDate ? "" : "Once they have been submitted you will not be able to edit them further or add any extra comments."}
 														reference={reference}
 														consultationState={this.state.consultationData.consultationState}
 													/>
-													{this.state.userHasSubmitted &&
+													{this.state.submittedDate &&
 													<Fragment>
 														{this.state.consultationData.consultationState.supportsDownload &&
 														<a
@@ -492,12 +488,13 @@ export class Review extends Component<PropsType, StateType> {
 															href={`${this.props.basename}/api/exportexternal/${this.props.match.params.consultationId}`}>Download
 															your response</a>
 														}
+														<p>Your response was submitted on <Moment format="D MMMM YYYY" date={this.state.submittedDate}/>.</p>
 														<h2>What happens next?</h2>
 														<p>We will review all the submissions received for this consultation. Our response	will be published on the website around the time the guidance is published.</p>
 														<hr/>
 													</Fragment>
 													}
-													{/* /userHasSubmitted */}
+													{/* /submittedDate */}
 
 													{/*Review Comments Columns */}
 													<div className="grid">
@@ -523,16 +520,16 @@ export class Review extends Component<PropsType, StateType> {
 																			const isUnsaved = this.state.unsavedIds.includes(`${question.questionId}q`);
 																			return (
 																				<Question
+																					showAnswer={contextValue.isAuthorised}
 																					updateUnsavedIds={this.updateUnsavedIds}
 																					isUnsaved={isUnsaved}
-																					readOnly={!this.state.allowComments || this.state.userHasSubmitted}
+																					readOnly={!this.state.allowComments || this.state.submittedDate}
 																					key={question.questionId}
 																					unique={`Comment${question.questionId}`}
 																					question={question}
 																					saveAnswerHandler={this.saveAnswerHandler}
 																					deleteAnswerHandler={this.deleteAnswerHandler}
 																					documentTitle={this.getDocumentTitle(question.documentId)}
-																					showAnswer={contextValue.isAuthorised}
 																				/>
 																			);
 																		})}
@@ -544,7 +541,7 @@ export class Review extends Component<PropsType, StateType> {
 																		{commentsToShow.map((comment) => {
 																			return (
 																				<CommentBox
-																					readOnly={!this.state.allowComments || this.state.userHasSubmitted}
+																					readOnly={!this.state.allowComments || this.state.submittedDate}
 																					isVisible={this.props.isVisible}
 																					key={comment.commentId}
 																					unique={`Comment${comment.commentId}`}
@@ -559,10 +556,11 @@ export class Review extends Component<PropsType, StateType> {
 																	</ul>
 																}
 															</div>
+															{!this.state.consultationData.consultationState.submittedDate &&
 															<SubmitResponseDialog
 																unsavedIds={this.state.unsavedIds}
 																isAuthorised={contextValue.isAuthorised}
-																userHasSubmitted={this.state.userHasSubmitted}
+																submittedDate={this.state.submittedDate}
 																validToSubmit={this.state.validToSubmit}
 																submitConsultation={this.submitConsultation}
 																fieldsChangeHandler={this.fieldsChangeHandler}
@@ -570,9 +568,8 @@ export class Review extends Component<PropsType, StateType> {
 																organisationName={this.state.organisationName}
 																hasTobaccoLinks={this.state.hasTobaccoLinks}
 																tobaccoDisclosure={this.state.tobaccoDisclosure}
-																showExpressionOfInterestSubmissionQuestion={this.state.consultationData.showExpressionOfInterestSubmissionQuestion}
-																organisationExpressionOfInterest={this.state.organisationExpressionOfInterest}
 															/>
+															}
 														</div>
 													</div>
 												</div>

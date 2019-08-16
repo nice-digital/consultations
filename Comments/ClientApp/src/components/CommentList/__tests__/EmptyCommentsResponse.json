@@ -8,7 +8,7 @@
         "hasQuestions": false,
         "hasUserSuppliedAnswers": false,
         "hasUserSuppliedComments": false,
-        "userHasSubmitted": false,
+        "submittedDate": null,
         "consultationSupportsComments": false,
         "documentIdsWhichSupportComments": [
             2,

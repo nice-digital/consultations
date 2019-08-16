@@ -10,6 +10,7 @@ import { UserContext } from "../../context/UserContext";
 import { LoginBanner } from "../LoginBanner/LoginBanner";
 import preload from "../../data/pre-loader";
 import { load } from "../../data/loader";
+import Moment from "react-moment";
 
 type PropsType = any;
 
@@ -21,6 +22,7 @@ type StateType = {
 		hasError: boolean,
 		message: string,
 	},
+	
 }
 
 export class Submitted extends Component<PropsType, StateType> {
@@ -35,7 +37,7 @@ export class Submitted extends Component<PropsType, StateType> {
 			error: {
 				hasError: false,
 				message: "",
-			},
+			},			
 		};
 
 		if (this.props) {
@@ -172,6 +174,7 @@ export class Submitted extends Component<PropsType, StateType> {
 															href={`${this.props.basename}/api/exportexternal/${this.props.match.params.consultationId}`}>Download
 															your response</a>
 														}
+														<p>Your response was submitted on <Moment format="D MMMM YYYY" date={this.state.consultationData.consultationState.submittedDate}/>.</p>
 														<h2>What happens next?</h2>
 														<p>We will review all the submissions received for this consultation. Our response
 															will

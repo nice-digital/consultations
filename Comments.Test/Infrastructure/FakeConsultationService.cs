@@ -25,9 +25,9 @@ namespace Comments.Test.Infrastructure
 		    return _consultationIsOpen;
 	    }
 
-	    public bool HasSubmittedCommentsOrQuestions(string consultationSourceURI, Guid userId)
+	    public DateTime? GetSubmittedDate(string consultationSourceURI)
 	    {
-		    return false;
+		    return null;
 	    }
 
 
@@ -39,12 +39,12 @@ namespace Comments.Test.Infrastructure
 	    public ConsultationState GetConsultationState(string sourceURI, PreviewState previewState, IEnumerable<Location> locations = null,
 		    ConsultationBase consultation = null)
 	    {
-			return new ConsultationState(DateTime.MinValue, _consultationIsOpen ? DateTime.MaxValue : DateTime.MinValue, true, true, true, false, null);
+			return new ConsultationState(DateTime.MinValue, _consultationIsOpen ? DateTime.MaxValue : DateTime.MinValue, true, true, true, null, null);
 		}
 	    public ConsultationState GetConsultationState(int consultationId, int? documentId, string reference, PreviewState previewState, IEnumerable<Location> locations = null,
 		    ConsultationBase consultation = null)
 	    {
-		    return new ConsultationState(DateTime.MinValue, _consultationIsOpen ? DateTime.MaxValue : DateTime.MinValue, true, true, true, false, null);
+		    return new ConsultationState(DateTime.MinValue, _consultationIsOpen ? DateTime.MaxValue : DateTime.MinValue, true, true, true, null, null);
 	    }
 
 	    public IEnumerable<Consultation> GetConsultations()

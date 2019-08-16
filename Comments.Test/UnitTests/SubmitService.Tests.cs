@@ -119,11 +119,12 @@ namespace Comments.Test.UnitTests
 		[InlineData(null, false)]
 		[InlineData("", false)]
 		[InlineData("  ", false)]
-		[InlineData("consultations://./consultation/1/document/1/chapter/introduction", true)]
-		[InlineData("consultations://./consultation/1/document/2/chapter/introduction", true)]
-		[InlineData("consultations://./consultation/1/document/1/chapter/anotherchaptertitle", true)]
-		[InlineData("consultations://./consultation/1/document/1", true)]
-		[InlineData("consultations://./consultation/1", true)]
+		[InlineData("consultations://./consultation/10/document/1/chapter/introduction", true)]
+		[InlineData("consultations://./consultation/10/document/2/chapter/introduction", true)]
+		[InlineData("consultations://./consultation/10/document/1/chapter/anotherchaptertitle", true)]
+		[InlineData("consultations://./consultation/10/document/1", true)]
+		[InlineData("consultations://./consultation/10", true)]
+		[InlineData("consultations://./consultation/1", false)]
 		[InlineData("consultations://./consultation/2", false)]
 		public void Has_Submitted_Comments_Or_Answers_For_Chapter_SourceURI(string consultationSourceURI, bool expectedResult)
 		{
@@ -133,10 +134,10 @@ namespace Comments.Test.UnitTests
 			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 			var consultationService = new ConsultationService(consultationContext, null, null, userService);
 			//var submitService = new SubmitService(consultationContext, userService, _consultationService);
-			AddSubmittedCommentsAndAnswers("consultations://./consultation/1/document/1/chapter/introduction", "Comment Label", "Question Label", "Answer Label", userId, consultationContext);
+			AddSubmittedCommentsAndAnswers("consultations://./consultation/10/document/1/chapter/introduction", "Comment Label", "Question Label", "Answer Label", userId, consultationContext);
 
 			//Act
-			var actualResult = consultationService.HasSubmittedCommentsOrQuestions(consultationSourceURI, userId);
+			var actualResult = consultationService.GetSubmittedDate(consultationSourceURI).HasValue;
 
 			//Assert
 			actualResult.ShouldBe(expectedResult);
@@ -146,11 +147,13 @@ namespace Comments.Test.UnitTests
 		[InlineData(null, false)]
 		[InlineData("", false)]
 		[InlineData("  ", false)]
-		[InlineData("consultations://./consultation/1/document/1/chapter/introduction", true)]
-		[InlineData("consultations://./consultation/1/document/2/chapter/introduction", true)]
-		[InlineData("consultations://./consultation/1/document/1/chapter/anotherchaptertitle", true)]
-		[InlineData("consultations://./consultation/1/document/1", true)]
-		[InlineData("consultations://./consultation/1", true)]
+		[InlineData("consultations://./consultation/10/document/10/chapter/introduction", true)]
+		[InlineData("consultations://./consultation/10/document/2/chapter/introduction", true)]
+		[InlineData("consultations://./consultation/10/document/10/chapter/anotherchaptertitle", true)]
+		[InlineData("consultations://./consultation/10/document/10", true)]
+		[InlineData("consultations://./consultation/10/document/1", true)]
+		[InlineData("consultations://./consultation/10", true)]
+		[InlineData("consultations://./consultation/1", false)]
 		[InlineData("consultations://./consultation/2", false)]
 		public void Has_Submitted_Comments_Or_Answers_For_Document_SourceURI(string consultationSourceURI, bool expectedResult)
 		{
@@ -160,10 +163,10 @@ namespace Comments.Test.UnitTests
 			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 			//var submitService = new SubmitService(consultationContext, userService, _consultationService);
 			var consultationService = new Services.ConsultationService(consultationContext, null, null, userService);
-			AddSubmittedCommentsAndAnswers("consultations://./consultation/1/document/1", "Comment Label", "Question Label", "Answer Label", userId, consultationContext);
+			AddSubmittedCommentsAndAnswers("consultations://./consultation/10/document/10", "Comment Label", "Question Label", "Answer Label", userId, consultationContext);
 
 			//Act
-			var actualResult = consultationService.HasSubmittedCommentsOrQuestions(consultationSourceURI, userId);
+			var actualResult = consultationService.GetSubmittedDate(consultationSourceURI).HasValue;
 
 			//Assert
 			actualResult.ShouldBe(expectedResult);
@@ -173,11 +176,12 @@ namespace Comments.Test.UnitTests
 		[InlineData(null, false)]
 		[InlineData("", false)]
 		[InlineData("  ", false)]
-		[InlineData("consultations://./consultation/1/document/1/chapter/introduction", true)]
-		[InlineData("consultations://./consultation/1/document/2/chapter/introduction", true)]
-		[InlineData("consultations://./consultation/1/document/1/chapter/anotherchaptertitle", true)]
-		[InlineData("consultations://./consultation/1/document/1", true)]
-		[InlineData("consultations://./consultation/1", true)]
+		[InlineData("consultations://./consultation/10/document/1/chapter/introduction", true)]
+		[InlineData("consultations://./consultation/10/document/2/chapter/introduction", true)]
+		[InlineData("consultations://./consultation/10/document/1/chapter/anotherchaptertitle", true)]
+		[InlineData("consultations://./consultation/10/document/1", true)]
+		[InlineData("consultations://./consultation/10", true)]
+		[InlineData("consultations://./consultation/1", false)]
 		[InlineData("consultations://./consultation/2", false)]
 		public void Has_Submitted_Comments_Or_Answers_For_Consultation_SourceURI(string consultationSourceURI, bool expectedResult)
 		{
@@ -187,10 +191,64 @@ namespace Comments.Test.UnitTests
 			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 			var consultationService = new ConsultationService(consultationContext, null, null, userService);
 			//var submitService = new SubmitService(consultationContext, userService, _consultationService);
-			AddSubmittedCommentsAndAnswers("consultations://./consultation/1", "Comment Label", "Question Label", "Answer Label", userId, consultationContext);
+			AddSubmittedCommentsAndAnswers("consultations://./consultation/10", "Comment Label", "Question Label", "Answer Label", userId, consultationContext);
 
 			//Act
-			var actualResult = consultationService.HasSubmittedCommentsOrQuestions(consultationSourceURI, userId);
+			var actualResult = consultationService.GetSubmittedDate(consultationSourceURI).HasValue;
+
+			//Assert
+			actualResult.ShouldBe(expectedResult);
+		}
+
+		[Theory]
+		[InlineData(null, false)]
+		[InlineData("", false)]
+		[InlineData("  ", false)]
+		[InlineData("consultations://./consultation/10/document/1/chapter/introduction", true)]
+		[InlineData("consultations://./consultation/10/document/2/chapter/introduction", true)]
+		[InlineData("consultations://./consultation/10/document/1/chapter/anotherchaptertitle", true)]
+		[InlineData("consultations://./consultation/10/document/1", true)]
+		[InlineData("consultations://./consultation/10", true)]
+		[InlineData("consultations://./consultation/1", false)]
+		[InlineData("consultations://./consultation/2", false)]
+		public void Has_Submitted_Comments_Or_Answers_For_Consultation_SourceURI_With_Only_Comments(string consultationSourceURI, bool expectedResult)
+		{
+			//Arrange
+			var userId = Guid.NewGuid();
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
+			var consultationService = new ConsultationService(consultationContext, null, null, userService);
+			AddSubmittedComments("consultations://./consultation/10", "Comment Label", "Question Label", "Answer Label", userId, consultationContext);
+
+			//Act
+			var actualResult = consultationService.GetSubmittedDate(consultationSourceURI).HasValue;
+
+			//Assert
+			actualResult.ShouldBe(expectedResult);
+		}
+
+		[Theory]
+		[InlineData(null, false)]
+		[InlineData("", false)]
+		[InlineData("  ", false)]
+		[InlineData("consultations://./consultation/10/document/1/chapter/introduction", true)]
+		[InlineData("consultations://./consultation/10/document/2/chapter/introduction", true)]
+		[InlineData("consultations://./consultation/10/document/1/chapter/anotherchaptertitle", true)]
+		[InlineData("consultations://./consultation/10/document/1", true)]
+		[InlineData("consultations://./consultation/10", true)]
+		[InlineData("consultations://./consultation/1", false)]
+		[InlineData("consultations://./consultation/2", false)]
+		public void Has_Submitted_Comments_Or_Answers_For_Consultation_SourceURI_With_Only_Answers(string consultationSourceURI, bool expectedResult)
+		{
+			//Arrange
+			var userId = Guid.NewGuid();
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
+			var consultationService = new ConsultationService(consultationContext, null, null, userService);
+			AddSubmittedQuestionsWithAnswers("consultations://./consultation/10", "Comment Label", "Question Label", "Answer Label", userId, consultationContext);
+
+			//Act
+			var actualResult = consultationService.GetSubmittedDate(consultationSourceURI).HasValue;
 
 			//Assert
 			actualResult.ShouldBe(expectedResult);

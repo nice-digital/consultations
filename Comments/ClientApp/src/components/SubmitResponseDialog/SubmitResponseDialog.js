@@ -44,7 +44,7 @@ export class SubmitResponseDialog extends PureComponent {
 	render() {
 		const {
 			isAuthorised,
-			userHasSubmitted,
+			submittedDate,
 			fieldsChangeHandler,
 			organisationName,
 			tobaccoDisclosure,
@@ -53,9 +53,6 @@ export class SubmitResponseDialog extends PureComponent {
 			showExpressionOfInterestSubmissionQuestion,
 			organisationExpressionOfInterest,
 		} = this.props;
-
-
-		if (userHasSubmitted) return null;
 
 		return (
 			<div className="panel">
@@ -238,7 +235,7 @@ export class SubmitResponseDialog extends PureComponent {
 						className="btn btn--cta"
 						data-qa-sel="submit-comment-button"
 						onClick={this.submitConsultation}>
-						{userHasSubmitted ? "Responses submitted" : "Submit my response"}
+						{submittedDate ? "Responses submitted" : "Submit my response"}
 					</button>
 				</Fragment>
 				}
