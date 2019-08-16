@@ -20,7 +20,7 @@ Scenario: User makes a multiple comments and submits
 		When I navigate to the Review Page
 		And I submit my response
 		And I review my response
-		Then I expect the comment box is inactive
+		Then I expect all comment boxes are inactive
 		Given I delete submissions for userid "38bb6df2-9ab8-4248-bb63-251b5424711a"
 		And I delete all comments on the page
 

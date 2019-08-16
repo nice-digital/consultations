@@ -34,9 +34,18 @@ export const validateCommentSaved = (commentText) => {
 };
 
 export const validateCommentBoxInactive = () => {
-	isEnabled(selectors.reviewPage.commentTextArea, 1);
+	isEnabled(selectors.reviewPage.firstCommentTextArea, 1);
 	pause(1000);
 };
+
+export const validateAllCommentBoxesInactive = () => {
+	isEnabled(selectors.reviewPage.firstCommentTextArea, 1);
+	pause(1000);
+	isEnabled(selectors.reviewPage.secondCommentTextArea, 1);
+	pause(1000);
+	isEnabled(selectors.reviewPage.thirdCommentTextArea, 1);
+	pause(1000);
+}
 
 export default validateCommentBoxText;
 
