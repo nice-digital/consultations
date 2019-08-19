@@ -7,7 +7,10 @@ using TestBase = Comments.Test.Infrastructure.TestBase;
 
 namespace Comments.Test.UnitTests
 {
-    public class EncryptionTests : TestBase
+	// All tests classes with the same Test Collection attribute
+	// will not run in parallel with each other.
+	[Collection("Comments.Test")]
+	public class EncryptionTests : TestBase
 	{
 		[Fact]
 		public void Encrypt_And_Decrypt_String()

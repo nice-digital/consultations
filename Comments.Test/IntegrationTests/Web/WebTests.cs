@@ -1,10 +1,13 @@
-﻿using Comments.Test.Infrastructure;
+using Comments.Test.Infrastructure;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace Comments.Test.IntegrationTests
 {
-    public class WebTests : TestBase
+	// All tests classes with the same Test Collection attribute
+	// will not run in parallel with each other.
+	[Collection("Comments.Test")]
+	public class WebTests : TestBase
     {
         //[Fact]
         //public async Task Get_Consultations_Homepage()

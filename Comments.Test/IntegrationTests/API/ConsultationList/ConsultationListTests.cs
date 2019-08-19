@@ -11,6 +11,9 @@ using TestBase = Comments.Test.Infrastructure.TestBase;
 
 namespace Comments.Test.IntegrationTests.API.ConsultationList
 {
+	// All tests classes with the same Test Collection attribute
+	// will not run in parallel with each other.
+	[Collection("Comments.Test")]
 	public class ConsultationListTests : TestBase
     {
 	    public ConsultationListTests() : base(TestUserType.Administrator, Feed.ConsultationCommentsListMultiple,

@@ -16,7 +16,10 @@ using Microsoft.AspNetCore.WebUtilities;
 
 namespace Comments.Test.IntegrationTests.API.User
 {
-    public class UserTestsLoggedIn : TestBase
+	// All tests classes with the same Test Collection attribute
+	// will not run in parallel with each other.
+	[Collection("Comments.Test")]
+	public class UserTestsLoggedIn : TestBase
     {
 	    public UserTestsLoggedIn() : base(authenticated: true, userId: Guid.Empty, displayName: "Quentin Taratino") { }
 

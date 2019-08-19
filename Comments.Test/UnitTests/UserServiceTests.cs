@@ -8,7 +8,10 @@ using UserInfo = NICE.Auth.NetCore.Models.UserInfo;
 
 namespace Comments.Test.UnitTests
 {
-    public class UserServiceTests : TestBase
+	// All tests classes with the same Test Collection attribute
+	// will not run in parallel with each other.
+	[Collection("Comments.Test")]
+	public class UserServiceTests : TestBase
     {
         [Fact]
         public void User_Can_be_created_from_context_authenticated()

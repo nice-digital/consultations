@@ -16,7 +16,10 @@ using Xunit;
 
 namespace Comments.Test.IntegrationTests.API.Review
 {
-    public class ReviewTests : TestBase
+	// All tests classes with the same Test Collection attribute
+	// will not run in parallel with each other.
+	[Collection("Comments.Test")]
+	public class ReviewTests : TestBase
     {
 	    private static ReviewConfig GetTestReviewConfig()
 	    {

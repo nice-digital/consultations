@@ -1,11 +1,14 @@
-﻿using Comments.Common;
+using Comments.Common;
 using Comments.Test.Infrastructure;
 using Shouldly;
 using Xunit;
 
 namespace Comments.Test.UnitTests
 {
-    public class Extensions : TestBase
+	// All tests classes with the same Test Collection attribute
+	// will not run in parallel with each other.
+	[Collection("Comments.Test")]
+	public class Extensions : TestBase
     {
         [Theory]
         [InlineData("/1/1/introduction", "/consultations/1/1/introduction")]

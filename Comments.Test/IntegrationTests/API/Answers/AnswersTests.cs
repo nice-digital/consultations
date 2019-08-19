@@ -14,7 +14,10 @@ using Xunit;
 
 namespace Comments.Test.IntegrationTests.API.Answers
 {
-    public class AnswersTests : TestBase
+	// All tests classes with the same Test Collection attribute
+	// will not run in parallel with each other.
+	[Collection("Comments.Test")]
+	public class AnswersTests : TestBase
     {
         [Fact]
         public async Task Create_Answer()

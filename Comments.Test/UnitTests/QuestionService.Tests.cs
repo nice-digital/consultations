@@ -12,6 +12,9 @@ using DocumentFormat.OpenXml.Office2010.Word;
 
 namespace Comments.Test.UnitTests
 {
+	// All tests classes with the same Test Collection attribute
+	// will not run in parallel with each other.
+	[Collection("Comments.Test")]
 	public class QuestionServiceTests : Infrastructure.TestBase
 	{
 		[Fact]

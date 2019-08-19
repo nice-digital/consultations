@@ -9,7 +9,10 @@ using TestBase = Comments.Test.Infrastructure.TestBase;
 
 namespace Comments.Test.IntegrationTests.API.Documents
 {
-    public class DocumentsTests : TestBase
+	// All tests classes with the same Test Collection attribute
+	// will not run in parallel with each other.
+	[Collection("Comments.Test")]
+	public class DocumentsTests : TestBase
     {
         [Theory]
         [InlineData(0)]

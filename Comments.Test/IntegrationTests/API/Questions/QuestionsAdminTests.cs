@@ -10,6 +10,9 @@ using Shouldly;
 
 namespace Comments.Test.IntegrationTests.API.Questions
 {
+	// All tests classes with the same Test Collection attribute
+	// will not run in parallel with each other.
+	[Collection("Comments.Test")]
 	public class QuestionsAdminTests : TestBase
 	{
 		private static readonly int DocumentCount = 1;

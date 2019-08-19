@@ -12,7 +12,10 @@ using Xunit;
 
 namespace Comments.Test.UnitTests
 {
-    public class SubmitServiceTests : Infrastructure.TestBase
+	// All tests classes with the same Test Collection attribute
+	// will not run in parallel with each other.
+	[Collection("Comments.Test")]
+	public class SubmitServiceTests : Infrastructure.TestBase
 	{
 		[Fact]
 		public void Update_Comment_When_Submitted()

@@ -18,6 +18,9 @@ using TestBase = Comments.Test.Infrastructure.TestBase;
 
 namespace Comments.Test.IntegrationTests.API.Export
 {
+	// All tests classes with the same Test Collection attribute
+	// will not run in parallel with each other.
+	[Collection("Comments.Test")]
 	public class ExportBase : TestBase
 	{
 		protected readonly IFeedService FeedService;

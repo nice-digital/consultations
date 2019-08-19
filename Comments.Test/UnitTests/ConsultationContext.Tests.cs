@@ -14,7 +14,10 @@ using Xunit;
 
 namespace Comments.Test.UnitTests
 {
-    public class ConsultationContext : TestBase
+	// All tests classes with the same Test Collection attribute
+	// will not run in parallel with each other.
+	[Collection("Comments.Test")]
+	public class ConsultationContext : TestBase
     {
         [Fact]
         public void Comments_IsDeleted_Flag_is_not_Filtering_in_the_context()

@@ -12,7 +12,10 @@ using Location = Comments.Models.Location;
 
 namespace Comments.Test.UnitTests
 {
-    public class CommentServiceTests : Infrastructure.TestBase
+	// All tests classes with the same Test Collection attribute
+	// will not run in parallel with each other.
+	[Collection("Comments.Test")]
+	public class CommentServiceTests : Infrastructure.TestBase
     {
         [Fact]
         public void Comments_Get()

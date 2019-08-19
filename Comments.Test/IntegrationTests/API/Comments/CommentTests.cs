@@ -16,7 +16,10 @@ using Microsoft.AspNetCore.WebUtilities;
 
 namespace Comments.Test.IntegrationTests.API.Comments
 {
-    public class CommentTests : TestBase
+	// All tests classes with the same Test Collection attribute
+	// will not run in parallel with each other.
+	[Collection("Comments.Test")]
+	public class CommentTests : TestBase
     {
         [Fact]
         public async Task Get_Comments_Feed_ReturnsEmptyFeed()

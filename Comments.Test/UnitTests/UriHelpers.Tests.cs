@@ -7,7 +7,10 @@ using Xunit;
 
 namespace Comments.Test.UnitTests
 {
-    public class UriHelpers : TestBase
+	// All tests classes with the same Test Collection attribute
+	// will not run in parallel with each other.
+	[Collection("Comments.Test")]
+	public class UriHelpers : TestBase
     {
         [Theory]
         [InlineData("consultations://./consultation/1/document/1/chapter/introduction", null, null, CommentOn.Chapter)]

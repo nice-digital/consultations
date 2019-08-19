@@ -14,7 +14,10 @@ using TestBase = Comments.Test.Infrastructure.TestBase;
 
 namespace Comments.Test.UnitTests
 {
-    public class AnswerServiceTests : TestBase
+	// All tests classes with the same Test Collection attribute
+	// will not run in parallel with each other.
+	[Collection("Comments.Test")]
+	public class AnswerServiceTests : TestBase
     {
         [Fact]
         public void Answer_Get()
