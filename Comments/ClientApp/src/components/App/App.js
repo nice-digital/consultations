@@ -9,7 +9,6 @@ import NotFound from "../NotFound/NotFound";
 import ReviewWithRouter from "../Review/Review";
 import SubmittedWithRouter from "../Submitted/Submitted";
 import UserProviderWithRouter from "../../context/UserContext";
-import FooterWithRouter from "../Footer/Footer";
 import DocumentPreviewWithRouter from "../DocumentPreview/DocumentPreview";
 import DownloadWithRouter from "../Download/Download";
 import QuestionsWithRouter from "../Questions/Questions";
@@ -117,7 +116,6 @@ class App extends React.Component<PropsType, StateType> {
 						</LiveAnnouncer>
 					</ErrorBoundary>
 				</UserProviderWithRouter>
-				<FooterWithRouter/>
 			</Fragment>
 		);
 	}

@@ -39,8 +39,16 @@
   
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Compile Remove="ClientApp\src\components\Footer\**" />
     <Content Remove="$(SpaRoot)**" />
+    <Content Remove="ClientApp\src\components\Footer\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+  </ItemGroup>
+
+  
+  <ItemGroup>
+    <EmbeddedResource Remove="ClientApp\src\components\Footer\**" />
+    <None Remove="ClientApp\src\components\Footer\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -52,6 +60,10 @@
   <ItemGroup>
     <None Remove="Views\main.css" />
     <None Remove="Views\main.css.map" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Media\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
