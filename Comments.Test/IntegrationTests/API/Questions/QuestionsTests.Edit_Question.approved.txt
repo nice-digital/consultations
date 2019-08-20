@@ -6,10 +6,10 @@
     "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
     "questionType":{
         "questionTypeId":"scrubbed by ScrubQuestionTypeId",
-        "type":"Text",
-        "description":"00000000-0000-0000-0000-000000000000",
+        "type":"YesNo",
+        "description":"A yes / no answer without a text answer",
         "hasTextAnswer":true,
-        "hasBooleanAnswer":false
+        "hasBooleanAnswer":true
     },
     "answers":[
         

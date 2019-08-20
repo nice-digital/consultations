@@ -19,6 +19,7 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			ResetDatabase();
+			_context.Database.EnsureCreated();
 			var sourceUri = "consultations://./consultation/1/document/1/chapter/introduction";
 			var description = Guid.NewGuid().ToString();
 			var questionText = Guid.NewGuid().ToString();
@@ -27,7 +28,7 @@ namespace Comments.Test.UnitTests
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
 			var locationId = AddLocation(sourceUri);
-			var questionTypeId = AddQuestionType(description, false, true, 1);
+			var questionTypeId = 99;
 			var questionId = AddQuestion(locationId, questionTypeId, questionText);
 
 
@@ -46,6 +47,7 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			ResetDatabase();
+			_context.Database.EnsureCreated();
 
 			var userId = Guid.Empty;
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
@@ -66,13 +68,14 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			ResetDatabase();
+			_context.Database.EnsureCreated();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var description = Guid.NewGuid().ToString();
 			var questionText = Guid.NewGuid().ToString();
 			var userId = Guid.Empty;
 
 			var locationId = AddLocation(sourceURI);
-			var questionTypeId = AddQuestionType(description, false, true);
+			var questionTypeId = 99;
 			var questionId = AddQuestion(locationId, questionTypeId, questionText);
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var questionService =
@@ -97,6 +100,7 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			ResetDatabase();
+			_context.Database.EnsureCreated();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var description = Guid.NewGuid().ToString();
 			var questionText = Guid.NewGuid().ToString();
@@ -105,7 +109,7 @@ namespace Comments.Test.UnitTests
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
 			var locationId = AddLocation(sourceURI);
-			var questionTypeId = AddQuestionType(description, false, true, 1);
+			var questionTypeId = 99;
 			var questionId = AddQuestion(locationId, questionTypeId, questionText);
 
 			var questionService =
@@ -126,6 +130,7 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			ResetDatabase();
+			_context.Database.EnsureCreated();
 			var questionId = 1;
 			var userId = Guid.Empty;
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
@@ -144,13 +149,14 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			ResetDatabase();
+			_context.Database.EnsureCreated();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var description = Guid.NewGuid().ToString();
 			var questionText = Guid.NewGuid().ToString();
 			var userId = Guid.Empty;
 
 			var locationId = AddLocation(sourceURI);
-			var questionTypeId = AddQuestionType(description, false, true);
+			var questionTypeId = 99;
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var questionService =
 				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService, null, null);
@@ -172,7 +178,8 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			ResetDatabase();
-			var questionTypeId = AddQuestionType("Question Type", false, true);
+			_context.Database.EnsureCreated();
+			var questionTypeId = 99;
 
 			var consultationLevelLocationId = AddLocation("consultations://./consultation/1");
 			AddQuestion(consultationLevelLocationId, questionTypeId, "Question Label");
@@ -204,13 +211,14 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			ResetDatabase();
+			_context.Database.EnsureCreated();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var description = Guid.NewGuid().ToString();
 			var questionText = Guid.NewGuid().ToString();
 			var userId = Guid.NewGuid();
 
 			var locationId = AddLocation(sourceURI);
-			var questionTypeId = AddQuestionType(description, false, true);
+			var questionTypeId = 99;
 			var questionId = AddQuestion(locationId, questionTypeId, questionText);
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var questionService =

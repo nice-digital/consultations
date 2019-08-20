@@ -64,7 +64,9 @@ namespace Comments.Test.IntegrationTests.API.Consultation
 	    {
 		    // Arrange
 		    ResetDatabase();
-		    var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+			_context.Database.EnsureCreated();
+
+			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 		    var commentText = Guid.NewGuid().ToString();
 		    var questionText = Guid.NewGuid().ToString();
 		    var answerText = Guid.NewGuid().ToString();
