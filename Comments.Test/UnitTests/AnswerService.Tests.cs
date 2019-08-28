@@ -210,7 +210,8 @@ namespace Comments.Test.UnitTests
         {
             //Arrange
             ResetDatabase();
-            var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+			_context.Database.EnsureCreated();
+			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var questionText = Guid.NewGuid().ToString();
             var userId = Guid.NewGuid();
 
@@ -218,7 +219,7 @@ namespace Comments.Test.UnitTests
             var authenticateService = new FakeAuthenticateService(authenticated: true);
 
             var locationId = AddLocation(sourceURI);
-            var questionTypeId = AddQuestionType(Guid.NewGuid().ToString(), false, true);
+			var questionTypeId = 99;
             var questionId = AddQuestion(locationId, questionTypeId, questionText);
             var expectedAnswerId = AddAnswer(questionId, userId, "current user's answer");
             AddAnswer(questionId, Guid.NewGuid(), "another user's answer");

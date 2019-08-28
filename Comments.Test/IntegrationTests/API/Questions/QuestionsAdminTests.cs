@@ -27,6 +27,7 @@ namespace Comments.Test.IntegrationTests.API.Questions
 		public async Task GetQuestions()
 		{
 			ResetDatabase();
+			_context.Database.EnsureCreated();
 
 			//Arrange
 			const string sourceURI = "consultations://./consultation/1/document/1";
@@ -35,7 +36,7 @@ namespace Comments.Test.IntegrationTests.API.Questions
 			var userId = Guid.Empty;
 
 			var locationId = AddLocation(sourceURI, _context);
-			var questionTypeId = AddQuestionType(description, false, true, 1, _context);
+			var questionTypeId = 99;
 			var questionId = AddQuestion(locationId, questionTypeId, questionText, _context);
 
 			var consultationId = 1;

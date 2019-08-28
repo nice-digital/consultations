@@ -21,13 +21,14 @@ namespace Comments.Test.IntegrationTests.API.Questions
 		{
 			//Arrange
 			ResetDatabase();
+			_context.Database.EnsureCreated();
 
 			const string sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var description = Guid.NewGuid().ToString();
 			var questionText = Guid.NewGuid().ToString();
 
 			var locationId = AddLocation(sourceURI);
-			var questionTypeId = AddQuestionType(description, false, true, 1);
+			var questionTypeId = 99;
 			var questionId = AddQuestion(locationId, questionTypeId, questionText);
 
 			//Act
@@ -83,7 +84,7 @@ namespace Comments.Test.IntegrationTests.API.Questions
 			var userId = Guid.Empty;
 
 			var locationId = AddLocation(sourceURI, _context);
-			var questionTypeId = AddQuestionType(description, false, true, 1, _context);
+			var questionTypeId = 99;
 			var questionId = AddQuestion(locationId, questionTypeId, questionText, _context);
 
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
@@ -117,7 +118,7 @@ namespace Comments.Test.IntegrationTests.API.Questions
 			var questionText = Guid.NewGuid().ToString();
 
 			var locationId = AddLocation(sourceURI);
-			var questionTypeId = AddQuestionType(description, false, true, 1);
+			var questionTypeId = 99;
 			var questionId = AddQuestion(locationId, questionTypeId, questionText);
 
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);

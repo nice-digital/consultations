@@ -127,7 +127,7 @@ namespace Comments.Test.UnitTests
 			var context =  CreateContext(userService);
 
 			var locationId = AddLocation(sourceURI, context);
-			var questionTypeId = AddQuestionType("Question Type ", false, true, 1, context);
+			var questionTypeId = 99;
 			var questionId = AddQuestion(locationId, questionTypeId, "Question Text", context);
 			var AnswerId = AddAnswer(questionId, userId, "my answer", 2, context);
 			var submissionId = AddSubmission(userId, context);

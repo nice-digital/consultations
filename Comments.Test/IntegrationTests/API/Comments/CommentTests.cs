@@ -114,7 +114,9 @@ namespace Comments.Test.IntegrationTests.API.Comments
         {
             // Arrange
             ResetDatabase();
-            const string sourceURI = "consultations://./consultation/1/document/2/chapter/introduction";
+			_context.Database.EnsureCreated();
+
+			const string sourceURI = "consultations://./consultation/1/document/2/chapter/introduction";
             var commentText = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
             var answerText = Guid.NewGuid().ToString();

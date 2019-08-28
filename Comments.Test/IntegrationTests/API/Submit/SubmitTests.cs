@@ -30,7 +30,7 @@ namespace Comments.Test.IntegrationTests.API.Submit
 		    var locationId = AddLocation(sourceURI, _context);
 
 			var commentId = AddComment(locationId, commentText, false, userId, (int)StatusName.Draft, _context);
-		    var questionTypeId = AddQuestionType("Question type description", false, true);
+			var questionTypeId = 99;
 		    var questionId = AddQuestion(locationId, questionTypeId, "Question Label");
 		    var answerId = AddAnswer(questionId, userId, "Answer Label");
 

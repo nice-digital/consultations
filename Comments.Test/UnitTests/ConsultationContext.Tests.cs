@@ -151,12 +151,13 @@ namespace Comments.Test.UnitTests
 	    {
 		    // Arrange
 		    ResetDatabase();
+			_context.Database.EnsureCreated();
 
-		    var expectedQuestionIdsInResultSet = new List<int>();
+			var expectedQuestionIdsInResultSet = new List<int>();
 
 			//these questions should appear in the resultset
 		    var locationId = AddLocation("consultations://./consultation/1/document/1/chapter/introduction");
-			var questionTypeId = AddQuestionType("Question Type", false, true);
+			var questionTypeId = 99;
 		    expectedQuestionIdsInResultSet.Add(AddQuestion(locationId, questionTypeId, "Question Label"));		
 
 			locationId = AddLocation("consultations://./consultation/1/document/1");
@@ -202,12 +203,13 @@ namespace Comments.Test.UnitTests
 		{
 			// Arrange
 			ResetDatabase();
+			_context.Database.EnsureCreated();
 
 			var expectedQuestionIdsInResultSet = new List<int>();
 
 			//these questions should appear in the resultset
 			var locationId = AddLocation("consultations://./consultation/1/document/1/chapter/introduction");
-			var questionTypeId = AddQuestionType("Question Type", false, true);
+			var questionTypeId = 99;
 			expectedQuestionIdsInResultSet.Add(AddQuestion(locationId, questionTypeId, "Question Label"));
 
 			locationId = AddLocation("consultations://./consultation/1/document/1");
@@ -253,10 +255,11 @@ namespace Comments.Test.UnitTests
 		{
 			// Arrange
 			ResetDatabase();
+			_context.Database.EnsureCreated();
 
 			var expectedQuestionIdsInResultSet = new List<int>();
 
-			var questionTypeId = AddQuestionType("Question Type", false, true);
+			var questionTypeId = 99;
 
 			//these questions should appear in the resultset
 			var consultationLevelLocationId = AddLocation("consultations://./consultation/1");
@@ -306,10 +309,11 @@ namespace Comments.Test.UnitTests
 		{
 			// Arrange
 			ResetDatabase();
+			_context.Database.EnsureCreated();
 
 			var expectedQuestionIdsInResultSet = new List<int>();
 
-			var questionTypeId = AddQuestionType("Question Type", false, true);
+			var questionTypeId = 99;
 
 			//these questions should appear in the resultset
 			var consultationLevelLocationId = AddLocation("consultations://./consultation/1");
@@ -393,8 +397,9 @@ namespace Comments.Test.UnitTests
 		{
 			// Arrange
 			ResetDatabase();
+			_context.Database.EnsureCreated();
 
-			var questionTypeId = AddQuestionType("Question Type", false, true);
+			var questionTypeId = 99;
 			var identicalQuestionText =
 				"This question text is used in multiple questions. It should be distincted out so only 1 such question appears in the set";
 
@@ -421,10 +426,12 @@ namespace Comments.Test.UnitTests
 		{
 			// Arrange
 			ResetDatabase();
+
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: Guid.NewGuid());
 			var context = CreateContext(userService);
+			context.Database.EnsureCreated();
 
-			var questionTypeId = AddQuestionType("Question Type", false, true, 1, context);
+			var questionTypeId = 99;
 
 			var locationId = AddLocation("consultations://./consultation/1", context);
 

@@ -310,7 +310,7 @@ namespace Comments.Test.Infrastructure
         {
             var locationId = AddLocation(sourceURI, passedInContext);
             AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId, passedInContext: passedInContext, status: status);
-            var questionTypeId = AddQuestionType(description: "text", hasBooleanAnswer: false, hasTextAnswer: true, passedInContext: passedInContext);
+			var questionTypeId = 99;
             var questionId = AddQuestion(locationId, questionTypeId, questionText, passedInContext);
             AddAnswer(questionId, createdByUserId, answerText, status, passedInContext);
         }
@@ -325,7 +325,7 @@ namespace Comments.Test.Infrastructure
 
 			var locationId = AddLocation(sourceURI);
 			AddComment(locationId, commentText, isDeleted: false, createdByUserId: userId);
-			var questionTypeId = AddQuestionType(description: "text", hasBooleanAnswer: false, hasTextAnswer: true);
+			var questionTypeId = 99;
 			var questionId = AddQuestion(locationId, questionTypeId, questionText);
 			AddAnswer(questionId, userId, answerText);
         }
@@ -342,7 +342,7 @@ namespace Comments.Test.Infrastructure
 	    {
 		    var locationId = AddLocation(sourceURI, passedInContext);
 		    var commentId = AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId, status: (int)StatusName.Submitted, passedInContext: passedInContext);
-		    var questionTypeId = AddQuestionType(description: "text", hasBooleanAnswer: false, hasTextAnswer: true, passedInContext: passedInContext);
+			var questionTypeId = 99;
 		    var questionId = AddQuestion(locationId, questionTypeId, questionText, passedInContext);
 		    var answerId = AddAnswer(questionId, createdByUserId, answerText, (int)StatusName.Submitted, passedInContext);
 			var submissionId = AddSubmission(createdByUserId, passedInContext);
@@ -354,7 +354,7 @@ namespace Comments.Test.Infrastructure
 	    {
 		    var locationId = AddLocation(sourceURI, passedInContext);
 		    var commentId = AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId, status: (int)StatusName.Submitted, passedInContext: passedInContext);
-		    var questionTypeId = AddQuestionType(description: "text", hasBooleanAnswer: false, hasTextAnswer: true, passedInContext: passedInContext);
+			var questionTypeId = 99;
 		    var questionId = AddQuestion(locationId, questionTypeId, questionText, passedInContext);
 		    var submissionId = AddSubmission(createdByUserId, passedInContext);
 		    AddSubmissionComments(submissionId, commentId, passedInContext);
@@ -363,7 +363,7 @@ namespace Comments.Test.Infrastructure
 	    protected void AddSubmittedQuestionsWithAnswers(string sourceURI, string commentText, string questionText, string answerText, Guid createdByUserId, ConsultationsContext passedInContext = null)
 	    {
 		    var locationId = AddLocation(sourceURI, passedInContext);
-		    var questionTypeId = AddQuestionType(description: "text", hasBooleanAnswer: false, hasTextAnswer: true, passedInContext: passedInContext);
+			var questionTypeId = 99;
 		    var questionId = AddQuestion(locationId, questionTypeId, questionText, passedInContext);
 		    var answerId = AddAnswer(questionId, createdByUserId, answerText, (int)StatusName.Submitted, passedInContext);
 		    var submissionId = AddSubmission(createdByUserId, passedInContext);
