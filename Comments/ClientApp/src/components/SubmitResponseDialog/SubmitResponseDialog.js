@@ -20,11 +20,11 @@ export class SubmitResponseDialog extends PureComponent {
 		}
 
 		let organisationExpressionOfInterestIsValid = false;
-		if (this.props.respondingAsOrganisation === "no" || !this.props.showExpressionOfInterestSubmissionQuestion || 
+		if (this.props.respondingAsOrganisation === "no" || !this.props.showExpressionOfInterestSubmissionQuestion ||
 			this.props.organisationExpressionOfInterest === "yes"  || this.props.organisationExpressionOfInterest === "no"){
 			organisationExpressionOfInterestIsValid = true;
 		}
-		
+
 		return organisationIsValid && tobaccoIsValid && organisationExpressionOfInterestIsValid;
 	};
 
@@ -74,6 +74,7 @@ export class SubmitResponseDialog extends PureComponent {
 							value={"yes"}
 						/>
 						<label
+							data-qa-sel="respond-yes-responding-as-org"
 							className="form__label form__label--radio"
 							htmlFor="respondingAsOrganisation--true">
 							Yes
@@ -106,16 +107,16 @@ export class SubmitResponseDialog extends PureComponent {
 						<label htmlFor="organisationName" className="form__label">
 							<strong>Enter the name of your organisation</strong>
 						</label>
-						<input data-hj-whitelist id="organisationName" name="organisationName" value={organisationName}
+						<input data-qa-sel="organisation-name" data-hj-whitelist id="organisationName" name="organisationName" value={organisationName}
 							className="form__input" type="text" onChange={fieldsChangeHandler}/>
 					</div>
 
-					{showExpressionOfInterestSubmissionQuestion && 
+					{showExpressionOfInterestSubmissionQuestion &&
 						<Fragment>
 							<p>
 								<strong>Would your organisation like to express an interest in formally supporting this quality standard?</strong><br/>
-								<a href="/standards-and-indicators/timeline-developing-quality-standards" target="_new">More information</a>
-							</p>							
+								<a href="/standards-and-indicators/get-involved/support-a-quality-standard" target="_new">More information</a>
+							</p>
 							<div role="radiogroup" aria-label="Would your organisation like to express an interest in formally supporting this quality standard?">
 								<div className="form__group form__group--radio form__group--inline">
 									<input
@@ -128,12 +129,13 @@ export class SubmitResponseDialog extends PureComponent {
 										value={"yes"}
 									/>
 									<label
+										data-qa-sel="express-interest-yes"
 										className="form__label form__label--radio"
 										htmlFor="organisationExpressionOfInterest--true">
 										Yes
 									</label>
 								</div>
-			
+
 								<div className="form__group form__group--radio form__group--inline">
 									<input
 										className="form__radio"
@@ -145,12 +147,12 @@ export class SubmitResponseDialog extends PureComponent {
 										value={"no"}
 									/>
 									<label
-										data-qa-sel="respond-no-responding-as-org"
+										data-qa-sel="express-interest-no"
 										className="form__label form__label--radio"
 										htmlFor="organisationExpressionOfInterest--false">
 										No
 									</label>
-								</div>		
+								</div>
 							</div>
 						</Fragment>
 					}
@@ -205,20 +207,20 @@ export class SubmitResponseDialog extends PureComponent {
 						</label>
 					</div>
 				</div>
-				
+
 				{hasTobaccoLinks === "yes" &&
-				<div className="form__group form__group--textarea">
-					<label htmlFor="tobaccoDisclosure" className="form__label">
-						<strong>Please provide details</strong>
-					</label>
-					<textarea
-						data-hj-whitelist
-						id="tobaccoDisclosure"
-						name="tobaccoDisclosure"
-						value={tobaccoDisclosure}
-						className="form__input form__input--textarea"
-						onChange={fieldsChangeHandler}/>
-				</div>
+					<div data-qa-sel="respond-yes-has-tobac-links" className="form__group form__group--textarea">
+						<label htmlFor="tobaccoDisclosure" className="form__label">
+							<strong>Please provide details</strong>
+						</label>
+						<textarea
+							data-hj-whitelist
+							id="tobaccoDisclosure"
+							name="tobaccoDisclosure"
+							value={tobaccoDisclosure}
+							className="form__input form__input--textarea"
+							onChange={fieldsChangeHandler}/>
+					</div>
 				}
 
 				{isAuthorised &&

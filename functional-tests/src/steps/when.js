@@ -5,7 +5,7 @@ import { When } from "cucumber";
 import enterComment, { enterCommentAndSubmit, enterCommentToFirstInListAndSubmit, enterCommentToFirstInList, enterCommentToFirstInListReviewPage } from "../support/action/enterComment";
 import enterQuestionAnswer, { enterQuestionAnswerAndSubmit, enterQuestionAnswerToFirstInListAndSubmit, enterQuestionAnswerToFirstInList, enterQuestionAnswerToSecondInListAndSubmit } from "../support/action/enterQuestionAnswer";
 import navigateToReviewPage, { clickReviewPageLink } from "../support/action/navigateToReviewPage";
-import submitResponse, { completeResponseMandatoryQuestions, clickSubmitResponseButton } from "../support/action/submitResponse";
+import submitResponse, { completeResponseMandatoryQuestions, clickSubmitResponseButton, responseMandatoryQuestions_answerYestoOrg } from "../support/action/submitResponse";
 import { reviewResponse } from "../support/action/reviewResponse";
 import { Login } from "../support/action/globalnavLogin";
 import { openQuestionPanel } from "../support/action/openQuestionPanel";
@@ -99,4 +99,9 @@ When(
 When(
 	/^I open question panel$/,
 	openQuestionPanel
+);
+
+When(
+	/^I answer Yes to Organisation question and complete the organisation name$/,
+	responseMandatoryQuestions_answerYestoOrg
 );
