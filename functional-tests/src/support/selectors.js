@@ -32,6 +32,7 @@ export default {
 		answerNoTobacLink: toDataQASelAttr("respond-no-has-tobac-links"),
 		submitResponseButton: toDataQASelAttr("submit-comment-button"),
 		reviewSubmittedCommentsButton: toDataQASelAttr("review-submitted-comments"),
+		deletebutton: toDataQASelAttr("delete-comment-button"),
 		responseSubmittedHeader: toDataQASelAttr("changeable-page-header"),
 		submitResponseFeedback: toDataQASelAttr("Submit-response-feedback")
 	}

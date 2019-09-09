@@ -9,6 +9,7 @@ import submitResponse, { completeResponseMandatoryQuestions, clickSubmitResponse
 import { reviewResponse } from "../support/action/reviewResponse";
 import { Login } from "../support/action/globalnavLogin";
 import { openQuestionPanel } from "../support/action/openQuestionPanel";
+import { scrollDeleteButtonIntoView } from "../support/action/scrollDeleteButtonIntoView";
 
 // E.g. When I click on text "Title here" in ".ancestor"
 When(
@@ -104,4 +105,9 @@ When(
 When(
 	/^I answer Yes to Organisation question and complete the organisation name$/,
 	responseMandatoryQuestions_answerYestoOrg
+);
+
+When(
+	/^I scroll the delete button into view$/,
+	scrollDeleteButtonIntoView
 );

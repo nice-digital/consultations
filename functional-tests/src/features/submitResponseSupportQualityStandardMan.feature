@@ -16,4 +16,5 @@ Feature: User unable to submit when they have not completed mandatory questions 
 		And I answer Yes to Organisation question and complete the organisation name
 		And I click submit my response button
 		Then I expect the feedback message "You have not disclosed whether your organisation would like to express an interest in formally supporting this quality standard" to be displayed
+		When I scroll the delete button into view
 		Given I delete all comments on the page
