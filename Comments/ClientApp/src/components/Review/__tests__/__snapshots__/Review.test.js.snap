@@ -1,6 +1,618 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied data 1`] = `
+exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied data post-submission 1`] = `
+Array [
+  <div>
+    <div
+        aria-live="assertive"
+        role="log"
+        style={
+            Object {
+                "border": 0,
+                "clip": "rect(0 0 0 0)",
+                "height": "1px",
+                "margin": "-1px",
+                "overflow": "hidden",
+                "padding": 0,
+                "position": "absolute",
+                "width": "1px",
+              }
+        }
+    />
+    <div
+        aria-live="assertive"
+        role="log"
+        style={
+            Object {
+                "border": 0,
+                "clip": "rect(0 0 0 0)",
+                "height": "1px",
+                "margin": "-1px",
+                "overflow": "hidden",
+                "padding": 0,
+                "position": "absolute",
+                "width": "1px",
+              }
+        }
+    />
+    <div
+        aria-live="polite"
+        role="log"
+        style={
+            Object {
+                "border": 0,
+                "clip": "rect(0 0 0 0)",
+                "height": "1px",
+                "margin": "-1px",
+                "overflow": "hidden",
+                "padding": 0,
+                "position": "absolute",
+                "width": "1px",
+              }
+        }
+    >
+        Showing 3 questions and 2 comments
+    </div>
+    <div
+        aria-live="polite"
+        role="log"
+        style={
+            Object {
+                "border": 0,
+                "clip": "rect(0 0 0 0)",
+                "height": "1px",
+                "margin": "-1px",
+                "overflow": "hidden",
+                "padding": 0,
+                "position": "absolute",
+                "width": "1px",
+              }
+        }
+    />
+</div>,
+  Array [
+    "",
+    "",
+    <div
+      className="container"
+>
+      <div
+            className="grid"
+      >
+            <div
+                  data-g="12"
+            >
+                  <nav
+                        aria-label="Breadcrumbs"
+                  >
+                        <p
+                              className="visually-hidden"
+                        >
+                              You are here:
+                        </p>
+                        <ol
+                              className="breadcrumbs"
+                              itemScope={true}
+                              itemType="http://schema.org/BreadcrumbList"
+                        >
+                              <li
+                                    className="breadcrumbs__crumb"
+                                    itemProp="itemListElement"
+                                    itemScope={true}
+                                    itemType="http://schema.org/ListItem"
+                                    onClick={[Function]}
+                              >
+                                    <a
+                                          href="/"
+                                    >
+                                          Home
+                                    </a>
+                                    <meta
+                                          content={0}
+                                          itemProp="position"
+                                    />
+                              </li>
+                              <li
+                                    className="breadcrumbs__crumb"
+                                    itemProp="itemListElement"
+                                    itemScope={true}
+                                    itemType="http://schema.org/ListItem"
+                                    onClick={[Function]}
+                              >
+                                    <a
+                                          href="/guidance/indevelopment/gid-ta10232/consultation/"
+                                    >
+                                          Consultation title
+                                    </a>
+                                    <meta
+                                          content={1}
+                                          itemProp="position"
+                                    />
+                              </li>
+                              <li
+                                    className="breadcrumbs__crumb"
+                                    itemProp="itemListElement"
+                                    itemScope={true}
+                                    itemType="http://schema.org/ListItem"
+                                    onClick={[Function]}
+                              >
+                                    <a
+                                          href="/consultations/1/1/introduction"
+                                    >
+                                          Consultation documents
+                                    </a>
+                                    <meta
+                                          content={2}
+                                          itemProp="position"
+                                    />
+                              </li>
+                        </ol>
+                  </nav>
+                  <main
+                        role="main"
+                  >
+                        <div
+                              className="page-header"
+                        >
+                              <undefined />
+                              <p>
+                                    Your response was submitted on 
+                                    <time
+                                          dateTime={"2019-07-23T12:50:40.704Z"}
+                                    >
+                                          23 July 2019
+                                    </time>
+                                    .
+                              </p>
+                              <h2>
+                                    What happens next?
+                              </h2>
+                              <p>
+                                    We will review all the submissions received for this consultation. Our response will be published on the website around the time the guidance is published.
+                              </p>
+                              <hr />
+                              <div
+                                    className="grid"
+                              >
+                                    <div
+                                          className="sticky"
+                                          data-g="12 md:3"
+                                    >
+                                          <h2
+                                                className="h5 mt--0"
+                                          >
+                                                Filter
+                                          </h2>
+                                          <div
+                                                className="filter-panel"
+                                          >
+                                                <div
+                                                      className="filter-panel__body"
+                                                      id="filter-panel-body"
+                                                >
+                                                      <div
+                                                            className="filter-group"
+                                                      >
+                                                            <button
+                                                                  aria-controls="group-QuestionsOrComments"
+                                                                  aria-expanded={true}
+                                                                  className="filter-group__heading gtm-topic-list-filter-group-collapse"
+                                                                  onClick={[Function]}
+                                                                  type="button"
+                                                            >
+                                                                  <div
+                                                                        id="group-title-QuestionsOrComments"
+                                                                  >
+                                                                        Response type
+                                                                  </div>
+                                                            </button>
+                                                            <div
+                                                                  aria-hidden={false}
+                                                                  aria-labelledby="group-title-QuestionsOrComments"
+                                                                  className="filter-group__options"
+                                                                  id="group-QuestionsOrComments"
+                                                                  role="group"
+                                                            >
+                                                                  <label
+                                                                        className="filter-group__option"
+                                                                        htmlFor="filter_QuestionsOrComments_Questions"
+                                                                  >
+                                                                        <input
+                                                                              aria-controls="results-info-count"
+                                                                              checked={false}
+                                                                              className="gtm-topic-list-filter-select"
+                                                                              id="filter_QuestionsOrComments_Questions"
+                                                                              name="QuestionsOrComments"
+                                                                              onChange={[Function]}
+                                                                              title="Response type - Questions"
+                                                                              type="checkbox"
+                                                                              value="Questions"
+                                                                        />
+                                                                        Questions
+                                                                  </label>
+                                                                  <label
+                                                                        className="filter-group__option"
+                                                                        htmlFor="filter_QuestionsOrComments_Comments"
+                                                                  >
+                                                                        <input
+                                                                              aria-controls="results-info-count"
+                                                                              checked={false}
+                                                                              className="gtm-topic-list-filter-select"
+                                                                              id="filter_QuestionsOrComments_Comments"
+                                                                              name="QuestionsOrComments"
+                                                                              onChange={[Function]}
+                                                                              title="Response type - Comments"
+                                                                              type="checkbox"
+                                                                              value="Comments"
+                                                                        />
+                                                                        Comments
+                                                                  </label>
+                                                            </div>
+                                                      </div>
+                                                      <div
+                                                            className="filter-group"
+                                                      >
+                                                            <button
+                                                                  aria-controls="group-Document"
+                                                                  aria-expanded={true}
+                                                                  className="filter-group__heading gtm-topic-list-filter-group-collapse"
+                                                                  onClick={[Function]}
+                                                                  type="button"
+                                                            >
+                                                                  <div
+                                                                        id="group-title-Document"
+                                                                  >
+                                                                        Document
+                                                                  </div>
+                                                            </button>
+                                                            <div
+                                                                  aria-hidden={false}
+                                                                  aria-labelledby="group-title-Document"
+                                                                  className="filter-group__options"
+                                                                  id="group-Document"
+                                                                  role="group"
+                                                            >
+                                                                  <label
+                                                                        className="filter-group__option"
+                                                                        htmlFor="filter_Document_1"
+                                                                  >
+                                                                        <input
+                                                                              aria-controls="results-info-count"
+                                                                              checked={false}
+                                                                              className="gtm-topic-list-filter-select"
+                                                                              id="filter_Document_1"
+                                                                              name="Document"
+                                                                              onChange={[Function]}
+                                                                              title="Document - Unstable angina and NSTEMI"
+                                                                              type="checkbox"
+                                                                              value="1"
+                                                                        />
+                                                                        Unstable angina and NSTEMI
+                                                                  </label>
+                                                                  <label
+                                                                        className="filter-group__option"
+                                                                        htmlFor="filter_Document_2"
+                                                                  >
+                                                                        <input
+                                                                              aria-controls="results-info-count"
+                                                                              checked={false}
+                                                                              className="gtm-topic-list-filter-select"
+                                                                              id="filter_Document_2"
+                                                                              name="Document"
+                                                                              onChange={[Function]}
+                                                                              title="Document - Glaucoma: diagnosis and management – Full Guideline"
+                                                                              type="checkbox"
+                                                                              value="2"
+                                                                        />
+                                                                        Glaucoma: diagnosis and management – Full Guideline
+                                                                  </label>
+                                                            </div>
+                                                      </div>
+                                                </div>
+                                          </div>
+                                    </div>
+                                    <div
+                                          data-g="12 md:9"
+                                    >
+                                          <div
+                                                className="results-info"
+                                          >
+                                                <h2
+                                                      className="results-info__count"
+                                                      id="results-info-count"
+                                                >
+                                                      <span>
+                                                            Showing 3 questions and 2 comments
+                                                      </span>
+                                                </h2>
+                                          </div>
+                                          <div
+                                                data-qa-sel="comment-list-wrapper"
+                                          >
+                                                <div>
+                                                      <ul
+                                                            className="CommentList list--unstyled"
+                                                      >
+                                                            <li
+                                                                  className="CommentBox"
+                                                            >
+                                                                  <h4
+                                                                        className="CommentBox__title mt--0 mb--0"
+                                                                        data-qa-sel="comment-box-title"
+                                                                  >
+                                                                        Question on 
+                                                                        <span
+                                                                              className="text-lowercase"
+                                                                        >
+                                                                              Consultation
+                                                                        </span>
+                                                                  </h4>
+                                                                  <div
+                                                                        className="font-weight-bold markdown mt--d mb--d"
+                                                                  >
+                                                                        Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
+                                                                  </div>
+                                                                  <section
+                                                                        role="form"
+                                                                  >
+                                                                        <form
+                                                                              className="mb--0"
+                                                                              onSubmit={[Function]}
+                                                                        >
+                                                                              <div
+                                                                                    className="form__group form__group--textarea mb--b"
+                                                                              >
+                                                                                    <label
+                                                                                          className="form__label visually-hidden"
+                                                                                          htmlFor="Answer11"
+                                                                                    >
+                                                                                          Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
+                                                                                    </label>
+                                                                                    <textarea
+                                                                                          className="form__input form__input--textarea"
+                                                                                          data-hj-whitelist={true}
+                                                                                          data-qa-sel="Comment-text-area"
+                                                                                          defaultValue="gg"
+                                                                                          disabled={true}
+                                                                                          id="Answer11"
+                                                                                          onInput={[Function]}
+                                                                                    />
+                                                                              </div>
+                                                                        </form>
+                                                                  </section>
+                                                            </li>
+                                                            <li
+                                                                  className="CommentBox"
+                                                            >
+                                                                  <h3
+                                                                        className="CommentBox__title mt--0 mb--0"
+                                                                  >
+                                                                        Unstable angina and NSTEMI
+                                                                  </h3>
+                                                                  <h4
+                                                                        className="CommentBox__title mt--0 mb--0"
+                                                                        data-qa-sel="comment-box-title"
+                                                                  >
+                                                                        Question on 
+                                                                        <span
+                                                                              className="text-lowercase"
+                                                                        >
+                                                                              Document
+                                                                        </span>
+                                                                  </h4>
+                                                                  <div
+                                                                        className="font-weight-bold markdown mt--d mb--d"
+                                                                  >
+                                                                        Would implementation of any of the draft recommendations have significant cost implications?
+                                                                  </div>
+                                                                  <section
+                                                                        role="form"
+                                                                  >
+                                                                        <form
+                                                                              className="mb--0"
+                                                                              onSubmit={[Function]}
+                                                                        >
+                                                                              <div
+                                                                                    className="form__group form__group--textarea mb--b"
+                                                                              >
+                                                                                    <label
+                                                                                          className="form__label visually-hidden"
+                                                                                          htmlFor="Answer-1"
+                                                                                    >
+                                                                                          Would implementation of any of the draft recommendations have significant cost implications?
+                                                                                    </label>
+                                                                                    <textarea
+                                                                                          className="form__input form__input--textarea"
+                                                                                          data-hj-whitelist={true}
+                                                                                          data-qa-sel="Comment-text-area"
+                                                                                          disabled={true}
+                                                                                          id="Answer-1"
+                                                                                          onInput={[Function]}
+                                                                                    />
+                                                                              </div>
+                                                                        </form>
+                                                                  </section>
+                                                            </li>
+                                                            <li
+                                                                  className="CommentBox"
+                                                            >
+                                                                  <h3
+                                                                        className="CommentBox__title mt--0 mb--0"
+                                                                  >
+                                                                        Glaucoma: diagnosis and management – Full Guideline
+                                                                  </h3>
+                                                                  <h4
+                                                                        className="CommentBox__title mt--0 mb--0"
+                                                                        data-qa-sel="comment-box-title"
+                                                                  >
+                                                                        Question on 
+                                                                        <span
+                                                                              className="text-lowercase"
+                                                                        >
+                                                                              Document
+                                                                        </span>
+                                                                  </h4>
+                                                                  <div
+                                                                        className="font-weight-bold markdown mt--d mb--d"
+                                                                  >
+                                                                        Would implementation of any of the draft recommendations have cost implications?
+                                                                  </div>
+                                                                  <section
+                                                                        role="form"
+                                                                  >
+                                                                        <form
+                                                                              className="mb--0"
+                                                                              onSubmit={[Function]}
+                                                                        >
+                                                                              <div
+                                                                                    className="form__group form__group--textarea mb--b"
+                                                                              >
+                                                                                    <label
+                                                                                          className="form__label visually-hidden"
+                                                                                          htmlFor="Answer-1"
+                                                                                    >
+                                                                                          Would implementation of any of the draft recommendations have cost implications?
+                                                                                    </label>
+                                                                                    <textarea
+                                                                                          className="form__input form__input--textarea"
+                                                                                          data-hj-whitelist={true}
+                                                                                          data-qa-sel="Comment-text-area"
+                                                                                          disabled={true}
+                                                                                          id="Answer-1"
+                                                                                          onInput={[Function]}
+                                                                                    />
+                                                                              </div>
+                                                                        </form>
+                                                                  </section>
+                                                            </li>
+                                                      </ul>
+                                                </div>
+                                                <ul
+                                                      className="CommentList list--unstyled"
+                                                >
+                                                      <li
+                                                            className="CommentBox"
+                                                      >
+                                                            <section
+                                                                  role="form"
+                                                            >
+                                                                  <h1
+                                                                        className="CommentBox__title mv--0"
+                                                                  >
+                                                                        Unstable angina and NSTEMI
+                                                                  </h1>
+                                                                  <h3
+                                                                        className="CommentBox__title mt--0 mb--d"
+                                                                        data-qa-sel="comment-box-title"
+                                                                  >
+                                                                        Comment on 
+                                                                        <span
+                                                                              className="text-lowercase"
+                                                                        >
+                                                                              Document
+                                                                        </span>
+                                                                  </h3>
+                                                                  <form
+                                                                        className="mb--0"
+                                                                        onSubmit={[Function]}
+                                                                  >
+                                                                        <div
+                                                                              className="form__group form__group--textarea mb--b"
+                                                                        >
+                                                                              <label
+                                                                                    className="form__label visually-hidden"
+                                                                                    htmlFor="Comment5"
+                                                                              >
+                                                                                    Comment on 
+                                                                                    Document
+                                                                                    , 
+                                                                                    Unstable angina and NSTEMI
+                                                                              </label>
+                                                                              <textarea
+                                                                                    className="form__input form__input--textarea"
+                                                                                    data-hj-whitelist={true}
+                                                                                    data-qa-sel="Comment-text-area"
+                                                                                    defaultValue="ffffc"
+                                                                                    disabled={true}
+                                                                                    id="Comment5"
+                                                                                    onInput={[Function]}
+                                                                                    tabIndex={0}
+                                                                              />
+                                                                        </div>
+                                                                  </form>
+                                                            </section>
+                                                      </li>
+                                                      <li
+                                                            className="CommentBox"
+                                                      >
+                                                            <section
+                                                                  role="form"
+                                                            >
+                                                                  <h1
+                                                                        className="CommentBox__title mv--0"
+                                                                  >
+                                                                        Unstable angina and NSTEMI
+                                                                  </h1>
+                                                                  <h3
+                                                                        className="CommentBox__title mt--0 mb--d"
+                                                                        data-qa-sel="comment-box-title"
+                                                                  >
+                                                                        Comment on 
+                                                                        <span
+                                                                              className="text-lowercase"
+                                                                        >
+                                                                              Chapter
+                                                                        </span>
+                                                                        <span>
+                                                                               - "
+                                                                              Introduction
+                                                                              "
+                                                                        </span>
+                                                                  </h3>
+                                                                  <form
+                                                                        className="mb--0"
+                                                                        onSubmit={[Function]}
+                                                                  >
+                                                                        <div
+                                                                              className="form__group form__group--textarea mb--b"
+                                                                        >
+                                                                              <label
+                                                                                    className="form__label visually-hidden"
+                                                                                    htmlFor="Comment7"
+                                                                              >
+                                                                                    Comment on 
+                                                                                    Chapter
+                                                                                    , 
+                                                                                    Introduction 
+                                                                              </label>
+                                                                              <textarea
+                                                                                    className="form__input form__input--textarea"
+                                                                                    data-hj-whitelist={true}
+                                                                                    data-qa-sel="Comment-text-area"
+                                                                                    defaultValue="ffff"
+                                                                                    disabled={true}
+                                                                                    id="Comment7"
+                                                                                    onInput={[Function]}
+                                                                                    tabIndex={0}
+                                                                              />
+                                                                        </div>
+                                                                  </form>
+                                                            </section>
+                                                      </li>
+                                                </ul>
+                                          </div>
+                                    </div>
+                              </div>
+                        </div>
+                  </main>
+            </div>
+      </div>
+</div>,
+  ],
+]
+`;
+
+exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied data pre-submission 1`] = `
 Array [
   <div>
     <div
@@ -331,11 +943,11 @@ Array [
                                                                               Consultation
                                                                         </span>
                                                                   </h4>
-                                                                  <p>
-                                                                        <strong>
-                                                                              Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
-                                                                        </strong>
-                                                                  </p>
+                                                                  <div
+                                                                        className="font-weight-bold markdown mt--d mb--d"
+                                                                  >
+                                                                        Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
+                                                                  </div>
                                                                   <section
                                                                         role="form"
                                                                   >
@@ -357,7 +969,7 @@ Array [
                                                                                           data-hj-whitelist={true}
                                                                                           data-qa-sel="Comment-text-area"
                                                                                           defaultValue="gg"
-                                                                                          disabled={false}
+                                                                                          disabled={null}
                                                                                           id="Answer11"
                                                                                           onInput={[Function]}
                                                                                     />
@@ -396,11 +1008,11 @@ Array [
                                                                               Document
                                                                         </span>
                                                                   </h4>
-                                                                  <p>
-                                                                        <strong>
-                                                                              Would implementation of any of the draft recommendations have significant cost implications?
-                                                                        </strong>
-                                                                  </p>
+                                                                  <div
+                                                                        className="font-weight-bold markdown mt--d mb--d"
+                                                                  >
+                                                                        Would implementation of any of the draft recommendations have significant cost implications?
+                                                                  </div>
                                                                   <section
                                                                         role="form"
                                                                   >
@@ -421,7 +1033,7 @@ Array [
                                                                                           className="form__input form__input--textarea"
                                                                                           data-hj-whitelist={true}
                                                                                           data-qa-sel="Comment-text-area"
-                                                                                          disabled={false}
+                                                                                          disabled={null}
                                                                                           id="Answer-1"
                                                                                           onInput={[Function]}
                                                                                     />
@@ -448,11 +1060,11 @@ Array [
                                                                               Document
                                                                         </span>
                                                                   </h4>
-                                                                  <p>
-                                                                        <strong>
-                                                                              Would implementation of any of the draft recommendations have cost implications?
-                                                                        </strong>
-                                                                  </p>
+                                                                  <div
+                                                                        className="font-weight-bold markdown mt--d mb--d"
+                                                                  >
+                                                                        Would implementation of any of the draft recommendations have cost implications?
+                                                                  </div>
                                                                   <section
                                                                         role="form"
                                                                   >
@@ -473,7 +1085,7 @@ Array [
                                                                                           className="form__input form__input--textarea"
                                                                                           data-hj-whitelist={true}
                                                                                           data-qa-sel="Comment-text-area"
-                                                                                          disabled={false}
+                                                                                          disabled={null}
                                                                                           id="Answer-1"
                                                                                           onInput={[Function]}
                                                                                     />
@@ -529,7 +1141,7 @@ Array [
                                                                                     data-hj-whitelist={true}
                                                                                     data-qa-sel="Comment-text-area"
                                                                                     defaultValue="ffffc"
-                                                                                    disabled={false}
+                                                                                    disabled={null}
                                                                                     id="Comment5"
                                                                                     onInput={[Function]}
                                                                                     tabIndex={0}
@@ -598,7 +1210,7 @@ Array [
                                                                                     data-hj-whitelist={true}
                                                                                     data-qa-sel="Comment-text-area"
                                                                                     defaultValue="ffff"
-                                                                                    disabled={false}
+                                                                                    disabled={null}
                                                                                     id="Comment7"
                                                                                     onInput={[Function]}
                                                                                     tabIndex={0}
@@ -655,6 +1267,7 @@ Array [
                                                             />
                                                             <label
                                                                   className="form__label form__label--radio"
+                                                                  data-qa-sel="respond-yes-responding-as-org"
                                                                   htmlFor="respondingAsOrganisation--true"
                                                             >
                                                                   Yes

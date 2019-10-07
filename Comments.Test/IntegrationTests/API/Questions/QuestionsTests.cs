@@ -21,13 +21,14 @@ namespace Comments.Test.IntegrationTests.API.Questions
 		{
 			//Arrange
 			ResetDatabase();
+			_context.Database.EnsureCreated();
 
 			const string sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var description = Guid.NewGuid().ToString();
 			var questionText = Guid.NewGuid().ToString();
 
 			var locationId = AddLocation(sourceURI);
-			var questionTypeId = AddQuestionType(description, false, true, 1);
+			var questionTypeId = 99;
 			var questionId = AddQuestion(locationId, questionTypeId, questionText);
 
 			//Act
@@ -83,11 +84,11 @@ namespace Comments.Test.IntegrationTests.API.Questions
 			var userId = Guid.Empty;
 
 			var locationId = AddLocation(sourceURI, _context);
-			var questionTypeId = AddQuestionType(description, false, true, 1, _context);
+			var questionTypeId = 99;
 			var questionId = AddQuestion(locationId, questionTypeId, questionText, _context);
 
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-			var questionService = new QuestionService(_context, userService, _consultationService);
+			var questionService = new QuestionService(_context, userService, _consultationService, null, null);
 			var viewModel = questionService.GetQuestion(questionId);
 
 			var updatedQuestionText = Guid.Parse("{FCA1BA48-59F8-43E4-B413-6F89E2F0B73F}").ToString();
@@ -117,12 +118,12 @@ namespace Comments.Test.IntegrationTests.API.Questions
 			var questionText = Guid.NewGuid().ToString();
 
 			var locationId = AddLocation(sourceURI);
-			var questionTypeId = AddQuestionType(description, false, true, 1);
+			var questionTypeId = 99;
 			var questionId = AddQuestion(locationId, questionTypeId, questionText);
 
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var questionService = new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption),
-				userService, _consultationService);
+				userService, _consultationService, null, null);
 
 			//Act
 			var response = await _client.DeleteAsync($"consultations/api/question/{questionId}");

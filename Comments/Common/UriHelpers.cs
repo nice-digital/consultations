@@ -13,7 +13,7 @@ namespace Comments.Common
         public const string ChapterUriFormat = DocumentUriFormat + "/chapter/{2}";
 
 	    public const string ConsultationsUriRegEx =
-			@"^consultations:\/\/.+\/consultation\/(?<consultationId>\d+)(\/document\/)?(?<documentId>\d?)(\/chapter\/)?(?<chapterSlug>.*)$";
+			@"^consultations:\/\/.+\/consultation\/(?<consultationId>\d+)(\/document\/)?(?<documentId>\d*)(\/chapter\/)?(?<chapterSlug>.*)$";
 //                "^consultations:\\/\\/.+\\/consultation\\/(?<consultationId>\\d+)(\\/document\\/)?(?<documentId>\\d?)(\\/chapter\\/)?(?<chapterSlug>.*)$"
             
 	    public const string ConsultationsDocumentPageRelativeUrlRegEx =

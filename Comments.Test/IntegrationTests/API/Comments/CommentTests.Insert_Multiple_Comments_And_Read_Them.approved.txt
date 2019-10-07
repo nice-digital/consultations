@@ -87,7 +87,7 @@
         "hasQuestions":false,
         "hasUserSuppliedAnswers":false,
         "hasUserSuppliedComments":true,
-        "userHasSubmitted":false,
+        "submittedDate":null,
         "documentIdsWhichSupportComments":[
             2,
             2

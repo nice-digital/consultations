@@ -87,7 +87,7 @@ exports[`[ClientApp]  Header  should display correctly when consulation hasn't s
       <t
         ago={false}
         calendar={false}
-        date="1994-11-05T08:15:30-05:00"
+        date=""
         decimal={false}
         element="time"
         filter={[Function]}
@@ -105,7 +105,7 @@ exports[`[ClientApp]  Header  should display correctly when consulation hasn't s
       <t
         ago={false}
         calendar={false}
-        date="1994-11-05T08:15:30-05:00"
+        date=""
         decimal={false}
         element="time"
         filter={[Function]}

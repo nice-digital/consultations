@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Comments.Configuration;
 using Comments.Models;
 using Comments.Services;
@@ -9,6 +6,9 @@ using Comments.ViewModels;
 using NICE.Feeds;
 using NICE.Feeds.Models.Indev.List;
 using Shouldly;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 using TestBase = Comments.Test.Infrastructure.TestBase;
 
@@ -25,6 +25,7 @@ namespace Comments.Test.UnitTests
 				new ConsultationList { ConsultationId = 1, AllowedRole = TestUserType.IndevUser.ToString() }
 			};
 			_feedService = new FakeFeedService(consultationList);
+			System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 		}
 
 		[Fact]
@@ -57,17 +58,16 @@ namespace Comments.Test.UnitTests
 		public void GetAllSubmittedAnswersForURI_OnlyReturnsOneConsultation()
 		{
 			//Arrange
-			int locationId, questionTypeId, questionId, answerId;
+			int locationId, questionId, answerId;
 			var userId = Guid.NewGuid();
 			var submissionId = AddSubmission(userId, _context);
+			var questionTypeId = 99;
 
-			questionTypeId = AddQuestionType("Question Type", false, true, 1, _context);
 			locationId = AddLocation("consultations://./consultation/1", _context, "001.002.001.000");
 			questionId = AddQuestion(locationId, questionTypeId, "Consultation Level Question for Consultation 1", _context);
 			answerId = AddAnswer(questionId, userId, "answering a consultation level question for Consultation 1", (int)StatusName.Submitted, _context);
 			AddSubmissionAnswers(submissionId, answerId, _context);
 
-			questionTypeId = AddQuestionType("Question Type", false, true, 1, _context);
 			locationId = AddLocation("consultations://./consultation/154", _context, "001.002.001.000");
 			questionId = AddQuestion(locationId, questionTypeId, "Consultation Level Question for Consultation 154", _context);
 			answerId = AddAnswer(questionId, userId, "answering a consultation level question for consultation 154", (int)StatusName.Submitted, _context);
@@ -86,13 +86,12 @@ namespace Comments.Test.UnitTests
 		public void GetUnansweredQuestionsForURI_OnlyReturnsQuestionsForOneConsultation()
 		{
 			//Arrange
-			int locationId, questionTypeId;
+			int locationId;
+			var questionTypeId = 99; ;
 			locationId = AddLocation("consultations://./consultation/1", _context, "001.002.000.000");
-			questionTypeId = AddQuestionType("another Question Type", false, true, 1, _context);
 			AddQuestion(locationId, questionTypeId, "Without an answer for consultation 1", _context);
 
 			locationId = AddLocation("consultations://./consultation/154", _context, "001.002.000.000");
-			questionTypeId = AddQuestionType("another Question Type", false, true, 1, _context);
 			AddQuestion(locationId, questionTypeId, "Without an answer for consultation 154", _context);
 
 			const string sourceURI = "consultations://./consultation/1";
@@ -147,7 +146,7 @@ namespace Comments.Test.UnitTests
 			var userId = Guid.NewGuid();
 			var submissionId = AddSubmission(userId, _context);
 
-			var questionTypeId = AddQuestionType("My Question Type", false, true, 1, _context);
+			var questionTypeId = 99;
 			locationId = AddLocation("consultations://./consultation/1/document/2/chapter/guidance", _context, "001.002.001.000");
 			var questionId = AddQuestion(locationId, questionTypeId, "Question 1", _context);
 
@@ -212,7 +211,7 @@ namespace Comments.Test.UnitTests
 			var userId = Guid.Empty;
 			var submissionId = AddSubmission(userId, _context);
 
-			var questionTypeId = AddQuestionType("My Question Type", false, true, 1, _context);
+			var questionTypeId = 99;
 			locationId = AddLocation("consultations://./consultation/1/document/2/chapter/guidance", _context, "001.002.001.000");
 			var questionId = AddQuestion(locationId, questionTypeId, "Question 1", _context);
 
@@ -239,24 +238,22 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 
-			int locationId, questionTypeId, questionId, answerId;
+			int locationId,  questionId, answerId;
 			var userId = Guid.Empty;
 			var submissionId = AddSubmission(userId, _context);
+			var questionTypeId = 99;
 
-			questionTypeId = AddQuestionType("Question Type", false, true, 1, _context);
 			locationId = AddLocation("consultations://./consultation/1/document/2/chapter/guidance", _context, "001.002.001.000");
 			questionId = AddQuestion(locationId, questionTypeId, "Question Answered ", _context);
 			answerId = AddAnswer(questionId, userId, "Current Users answer", (int)StatusName.Draft, _context);
 			AddSubmissionAnswers(submissionId, answerId, _context);
 
-			questionTypeId = AddQuestionType("Question Type", false, true, 1, _context);
 			locationId = AddLocation("consultations://./consultation/1/document/3/chapter/intro", _context, "001.002.001.000");
 			questionId = AddQuestion(locationId, questionTypeId, "Question Answered By different user", _context);
 			answerId = AddAnswer(questionId, Guid.NewGuid(), "different Users answer", (int)StatusName.Draft, _context);
 			AddSubmissionAnswers(submissionId, answerId, _context);
 
 			locationId = AddLocation("consultations://./consultation/1/document/2", _context, "001.002.000.000");
-			questionTypeId = AddQuestionType("another Question Type", false, true, 1, _context);
 			AddQuestion(locationId, questionTypeId, "Without an answer", _context);
 
 			const string sourceURI = "consultations://./consultation/1";
@@ -302,7 +299,8 @@ namespace Comments.Test.UnitTests
 			ResetDatabase();
 			_context.Database.EnsureCreated();
 			var userId = Guid.NewGuid();
-			int locationId, submissionId, commentId, questionTypeId, questionId, answerId;
+			int locationId, submissionId, commentId, questionId, answerId;
+			var questionTypeId = 99;
 
 			//Add a comment
 			locationId = AddLocation("consultations://./consultation/1/document/1", _context, "001.001.000.000");
@@ -311,7 +309,6 @@ namespace Comments.Test.UnitTests
 			AddSubmissionComments(submissionId, commentId, _context);
 
 			//Add a question with an answer
-			questionTypeId = AddQuestionType("Question Type", false, true, 1, _context);
 			locationId = AddLocation("consultations://./consultation/1", _context, "001.002.001.000");
 			questionId = AddQuestion(locationId, questionTypeId, "Consultation Level Question for Consultation 1", _context);
 			answerId = AddAnswer(questionId, userId, "answering a consultation level question for Consultation 1", (int)StatusName.Submitted, _context);
@@ -319,7 +316,6 @@ namespace Comments.Test.UnitTests
 
 			//Add an unanswered question
 			locationId = AddLocation("consultations://./consultation/1", _context, "001.002.000.000");
-			questionTypeId = AddQuestionType("another Question Type", false, true, 1, _context);
 			AddQuestion(locationId, questionTypeId, "Without an answer for consultation 1", _context);
 
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
@@ -345,8 +341,9 @@ namespace Comments.Test.UnitTests
 			AppSettings.ConsultationListConfig = TestAppSettings.GetConsultationListConfig();
 			_context.Database.EnsureCreated();
 
-			int locationId, submissionId, commentId, answerId, questionTypeId, questionId;
+			int locationId, submissionId, commentId, answerId, questionId;
 			var userId = Guid.NewGuid();
+			int questionTypeId = 99;
 
 			// Add comment
 			locationId = AddLocation("consultations://./consultation/1/document/1", _context, "001.001.000.000");
@@ -355,7 +352,6 @@ namespace Comments.Test.UnitTests
 			AddSubmissionComments(submissionId, commentId, _context);
 
 			//Add question and answer
-			questionTypeId = AddQuestionType("My Question Type", false, true, 1, _context);
 			locationId = AddLocation("consultations://./consultation/1/document/2/chapter/guidance", _context, "001.002.001.000");
 			questionId = AddQuestion(locationId, questionTypeId, "Question 1", _context);
 			answerId = AddAnswer(questionId, userId, "This is a submitted answer", (int)StatusName.Submitted, _context);
@@ -363,7 +359,6 @@ namespace Comments.Test.UnitTests
 
 			//Add unanswered question
 			locationId = AddLocation("consultations://./consultation/1/document/2", _context, "001.002.000.000");
-			questionTypeId = AddQuestionType("another Question Type", false, true, 1, _context);
 			AddQuestion(locationId, questionTypeId, "Without an answer", _context);
 
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);

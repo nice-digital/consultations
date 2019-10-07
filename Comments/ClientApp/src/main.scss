@@ -14,6 +14,8 @@ $nice-font-base-path: "/consultations/fonts/";
 @import "styles/forms";
 @import "styles/accessibility";
 @import "styles/non-design-system";
+@import "styles/global-nav";
+@import "styles/markdown";
 
 // Component folder structure imports here
 @import "./components/App/App";
@@ -23,11 +25,11 @@ $nice-font-base-path: "/consultations/fonts/";
 @import "./components/CommentBox/CommentBox";
 @import "./components/PhaseBanner/PhaseBanner";
 @import "./components/Selection/Selection";
-@import "./components/Footer/Footer";
 @import "./components/Review/Review";
 @import "./components/Tutorial/Tutorial";
 @import "./components/ConsultationItem/ConsultationItem";
 @import "./components/SubmitResponseFeedback/SubmitResponseFeedback";
+@import "./components/LoginBanner/LoginBanner";
 
 // Document transform styling (comments buttons etc)
 @import "./document-processing/transforms/comment";

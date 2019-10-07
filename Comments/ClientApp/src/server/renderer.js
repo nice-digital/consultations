@@ -121,11 +121,19 @@ export const serverRenderer = (params): Promise => {
 			const error = <Error error={e}/>;
 			let html = params.data.originalHtml;
 			if (typeof(html) !== "undefined"){
-				html = processHtml(params.data.originalHtml,
-					{
-						rootContent: renderToString(error),
-						accountsEnvironment: params.data.accountsEnvironment,
-					});
+				const errorAsString = renderToString(error);
+				try{
+					html = processHtml(params.data.originalHtml,
+						{
+							rootContent: errorAsString,
+							accountsEnvironment: params.data.accountsEnvironment,
+							htmlAttributes: "",
+							bodyAttributes: "",
+						});
+				}
+				catch(e){ //failure during showing an error. just show the error itself. this is not for production anyway.
+					html = errorAsString;
+				}
 			} else{
 				html = renderToString(error);
 			}

@@ -25,9 +25,9 @@ namespace Comments.Test.Infrastructure
 		    return _consultationIsOpen;
 	    }
 
-	    public bool HasSubmittedCommentsOrQuestions(string consultationSourceURI, Guid userId)
+	    public DateTime? GetSubmittedDate(string consultationSourceURI)
 	    {
-		    return false;
+		    return null;
 	    }
 
 
@@ -39,18 +39,18 @@ namespace Comments.Test.Infrastructure
 	    public ConsultationState GetConsultationState(string sourceURI, PreviewState previewState, IEnumerable<Location> locations = null,
 		    ConsultationBase consultation = null)
 	    {
-			return new ConsultationState(DateTime.MinValue, _consultationIsOpen ? DateTime.MaxValue : DateTime.MinValue, true, true, true, false, null);
+			return new ConsultationState(DateTime.MinValue, _consultationIsOpen ? DateTime.MaxValue : DateTime.MinValue, true, true, true, null, null);
 		}
 	    public ConsultationState GetConsultationState(int consultationId, int? documentId, string reference, PreviewState previewState, IEnumerable<Location> locations = null,
 		    ConsultationBase consultation = null)
 	    {
-		    return new ConsultationState(DateTime.MinValue, _consultationIsOpen ? DateTime.MaxValue : DateTime.MinValue, true, true, true, false, null);
+		    return new ConsultationState(DateTime.MinValue, _consultationIsOpen ? DateTime.MaxValue : DateTime.MinValue, true, true, true, null, null);
 	    }
 
 	    public IEnumerable<Consultation> GetConsultations()
 	    {
 		    return new List<Consultation>(){ new Consultation("GID-WAVE", "title", "some name", DateTime.MinValue, DateTime.MaxValue, "consultation type", "resource title id", "project type",
-				"product type name", "developed as", "relevant to", 1, "process", true, true, true, true, "partially updated reference", "original reference", new User(true, "Benjamin Button", Guid.Empty, "org name"))};
+				"product type name", true, "developed as", "relevant to", 1, "process", true, true, true, true, "partially updated reference", "original reference", new User(true, "Benjamin Button", Guid.Empty, "org name"))};
 		}
 
 	    public (int? documentId, string chapterSlug) GetFirstConvertedDocumentAndChapterSlug(int consultationId)

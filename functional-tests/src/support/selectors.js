@@ -23,10 +23,16 @@ export default {
 		firstCommentTextArea: toChildAndQASel(1, "Comment-text-area"),
 		secondCommentTextArea: toChildAndQASel(2, "Comment-text-area"),
 		thirdCommentTextArea: toChildAndQASel(3, "Comment-text-area"),
+		answerYesRepresentOrg: toDataQASelAttr("respond-yes-responding-as-org"),
 		answerNoRepresentOrg: toDataQASelAttr("respond-no-responding-as-org"),
+		enterOrg: toDataQASelAttr("organisation-name"),
+		expressInterestQsYes: toDataQASelAttr("express-interest-yes"),
+		expressInterestQsNo: toDataQASelAttr("express-interest-no"),
+		answerYesTobacLink: toDataQASelAttr("respond-yes-has-tobac-links"),
 		answerNoTobacLink: toDataQASelAttr("respond-no-has-tobac-links"),
 		submitResponseButton: toDataQASelAttr("submit-comment-button"),
 		reviewSubmittedCommentsButton: toDataQASelAttr("review-submitted-comments"),
+		deletebutton: toDataQASelAttr("delete-comment-button"),
 		responseSubmittedHeader: toDataQASelAttr("changeable-page-header"),
 		submitResponseFeedback: toDataQASelAttr("Submit-response-feedback")
 	}

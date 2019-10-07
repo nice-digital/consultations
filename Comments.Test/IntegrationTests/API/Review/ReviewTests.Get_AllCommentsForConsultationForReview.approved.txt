@@ -61,9 +61,10 @@
                 "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
                 "questionType":{
                     "questionTypeId":"scrubbed by ScrubQuestionTypeId",
-                    "description":"text",
+                    "type":"YesNo",
+                    "description":"A yes / no answer without a text answer",
                     "hasTextAnswer":true,
-                    "hasBooleanAnswer":false
+                    "hasBooleanAnswer":true
                 },
                 "answers":[
                     {
@@ -104,9 +105,10 @@
                 "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
                 "questionType":{
                     "questionTypeId":"scrubbed by ScrubQuestionTypeId",
-                    "description":"text",
+                    "type":"YesNo",
+                    "description":"A yes / no answer without a text answer",
                     "hasTextAnswer":true,
-                    "hasBooleanAnswer":false
+                    "hasBooleanAnswer":true
                 },
                 "answers":[
                     {
@@ -147,9 +149,10 @@
                 "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
                 "questionType":{
                     "questionTypeId":"scrubbed by ScrubQuestionTypeId",
-                    "description":"text",
+                    "type":"YesNo",
+                    "description":"A yes / no answer without a text answer",
                     "hasTextAnswer":true,
-                    "hasBooleanAnswer":false
+                    "hasBooleanAnswer":true
                 },
                 "answers":[
                     
@@ -178,7 +181,7 @@
             "hasQuestions":true,
             "hasUserSuppliedAnswers":true,
             "hasUserSuppliedComments":true,
-            "userHasSubmitted":false,
+            "submittedDate":null,
             "documentIdsWhichSupportComments":[
                 2,
                 2

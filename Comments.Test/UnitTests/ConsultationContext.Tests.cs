@@ -151,12 +151,13 @@ namespace Comments.Test.UnitTests
 	    {
 		    // Arrange
 		    ResetDatabase();
+			_context.Database.EnsureCreated();
 
-		    var expectedQuestionIdsInResultSet = new List<int>();
+			var expectedQuestionIdsInResultSet = new List<int>();
 
 			//these questions should appear in the resultset
 		    var locationId = AddLocation("consultations://./consultation/1/document/1/chapter/introduction");
-			var questionTypeId = AddQuestionType("Question Type", false, true);
+			var questionTypeId = 99;
 		    expectedQuestionIdsInResultSet.Add(AddQuestion(locationId, questionTypeId, "Question Label"));		
 
 			locationId = AddLocation("consultations://./consultation/1/document/1");
@@ -202,12 +203,13 @@ namespace Comments.Test.UnitTests
 		{
 			// Arrange
 			ResetDatabase();
+			_context.Database.EnsureCreated();
 
 			var expectedQuestionIdsInResultSet = new List<int>();
 
 			//these questions should appear in the resultset
 			var locationId = AddLocation("consultations://./consultation/1/document/1/chapter/introduction");
-			var questionTypeId = AddQuestionType("Question Type", false, true);
+			var questionTypeId = 99;
 			expectedQuestionIdsInResultSet.Add(AddQuestion(locationId, questionTypeId, "Question Label"));
 
 			locationId = AddLocation("consultations://./consultation/1/document/1");
@@ -253,10 +255,11 @@ namespace Comments.Test.UnitTests
 		{
 			// Arrange
 			ResetDatabase();
+			_context.Database.EnsureCreated();
 
 			var expectedQuestionIdsInResultSet = new List<int>();
 
-			var questionTypeId = AddQuestionType("Question Type", false, true);
+			var questionTypeId = 99;
 
 			//these questions should appear in the resultset
 			var consultationLevelLocationId = AddLocation("consultations://./consultation/1");
@@ -306,10 +309,11 @@ namespace Comments.Test.UnitTests
 		{
 			// Arrange
 			ResetDatabase();
+			_context.Database.EnsureCreated();
 
 			var expectedQuestionIdsInResultSet = new List<int>();
 
-			var questionTypeId = AddQuestionType("Question Type", false, true);
+			var questionTypeId = 99;
 
 			//these questions should appear in the resultset
 			var consultationLevelLocationId = AddLocation("consultations://./consultation/1");
@@ -388,5 +392,60 @@ namespace Comments.Test.UnitTests
 		    results.Skip(1).First().QuestionTypeId.ShouldBe(booleanQuestionTypeId);
 		}
 
+		[Fact]
+		public void Get_Previous_Questions_Filtering_out_duplicates()
+		{
+			// Arrange
+			ResetDatabase();
+			_context.Database.EnsureCreated();
+
+			var questionTypeId = 99;
+			var identicalQuestionText =
+				"This question text is used in multiple questions. It should be distincted out so only 1 such question appears in the set";
+
+			var locationId1 = AddLocation("consultations://./consultation/1");
+			var questionId1 = AddQuestion(locationId1, questionTypeId, identicalQuestionText);
+
+			var locationId2 = AddLocation("consultations://./consultation/2");
+			AddQuestion(locationId2, questionTypeId, identicalQuestionText);
+
+			var questionId2 = AddQuestion(locationId2, questionTypeId, "unique question");
+			
+			// Act
+			var consultationsContext = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption);
+			var results = consultationsContext.GetAllPreviousUniqueQuestions().ToList();
+
+			//Assert
+			results.Count.ShouldBe(2);
+			results[0].QuestionId.ShouldBe(questionId1);
+			results[1].QuestionId.ShouldBe(questionId2);
+		}
+
+		[Fact]
+		public void Get_Previous_Questions_Filtering_out_deletions()
+		{
+			// Arrange
+			ResetDatabase();
+
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: Guid.NewGuid());
+			var context = CreateContext(userService);
+			context.Database.EnsureCreated();
+
+			var questionTypeId = 99;
+
+			var locationId = AddLocation("consultations://./consultation/1", context);
+
+			var questionId1 = AddQuestion(locationId, questionTypeId, "question 1", context);
+			var questionId2 = AddQuestion(locationId, questionTypeId, "question 2", context);
+
+			var question2 = context.GetQuestion(questionId2);
+			question2.IsDeleted = true;
+
+			// Act
+			var results = context.GetAllPreviousUniqueQuestions().ToList();
+
+			//Assert
+			results.Single().QuestionId.ShouldBe(questionId1);
+		}
 	}
 }

@@ -2,7 +2,7 @@
 
 exports[`[ClientApp]  PhaseBanner  Matches snapshot 1`] = `
 <div
-  className="container"
+  className="container phase-banner-container"
 >
   <div
     className="grid"

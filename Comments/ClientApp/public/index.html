@@ -1,3 +1,4 @@
+<!-- NOTE: Do not remove the "loud comments" in this page (comments starting with an exclamation mark).  They are used by server side rendering. -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -57,10 +58,10 @@
 	<![endif]-->
 
 	<!-- Hotjar Tracking Code for Consultations -->
-	<script data-hotjarid="%REACT_APP_HOTJARID%" id="hotjarScript">
+	<script>
 		(function(h,o,t,j,a,r){
 			h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-			h._hjSettings={hjid:document.getElementById("hotjarScript").getAttribute("data-hotjarid"),hjsv:6};
+			h._hjSettings={hjid:"%REACT_APP_HOTJARID%",hjsv:6};
 			a=o.getElementsByTagName('head')[0];
 			r=o.createElement('script');r.async=1;
 			r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
@@ -74,37 +75,43 @@
 	<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NR4W7NR"
 			height="0" width="0" style="display:none;visibility:hidden"></iframe>
 </noscript>
-<!-- End Google Tag Manager (noscript) -->
 
-<div id="root"></div>
-
-<!-- Jump to main content (end of tophat) -->
-<script>
-	document.onTophatReady = function () {
-		document
-				.querySelector("#skip-to-content")
-				.addEventListener("click", function (e) {
-							e.preventDefault();
-							var tophatEnd = document.querySelector("#tophat-end");
-							tophatEnd.setAttribute("tabindex", "-1");
-							tophatEnd.focus();
-						}
-				);
+<!-- Global nav -->
+<script>	
+	var global_nav_config = {
+		service: "guidance",
+		header: {
+			search: {
+				autocomplete: "/autocomplete?ajax=ajax",
+			},
+			auth: {
+				environment: "%REACT_APP_ACCOUNTS_ENVIRONMENT%"
+			}
+		},
+		footer: true
 	};
 </script>
 
-<!-- Tophat -->
-<script src="//cdn.nice.org.uk/V3.1/Scripts/nice/NICE.TopHat.min.js"
-		data-environment="Live"
-		data-search="/search?q=%term"
-		data-typeaheadtype="remote"
-		data-typeaheadsource="/autocomplete?%query"
-		data-search-placeholder="Search NICE..."
-		data-cookie="true"
-		async></script>
+<!-- End Google Tag Manager (noscript) -->
+<div id="global-nav-header"></div>
+<div id="root"></div>
+<div id="global-nav-footer"></div>
 
+<!-- Content of src in script tags below are replaced by parameters in the .env file for local development only.
+	
+	On all other servers, the .env.production file is used. During the build, the src attributes will get the substitution variable strings
+	in the .env.production file i.e. "#{GlobalNavScript}". Then when the release is deployed to the servers, this substitution string is 
+	replaced by the variable from Octopus Deploy, which is the actual URL to use.
+
+	note: custom environment variables in .env files must have have the prefix of "REACT_APP_".
+	-->
+<!--[if lt IE 9]>
+	<script src="%REACT_APP_GLOBAL_NAV_SCRIPT_IE8%"></script>
+<![endif]-->
+<script src="%REACT_APP_GLOBAL_NAV_SCRIPT%"></script>
+
+<!-- NOTE: Do not remove the "loud comments" in this page. eg. the scripts tag below. They are used by server side rendering. -->
 <!--! scripts -->
-<script src="//www.nice.org.uk/Themes/NICE.Bootstrap/scripts/jquery/jquery-1.12.4.min.js" type="text/javascript"></script>
-<script src="//cdn.nice.org.uk/V3.1/Scripts/NICE.bootstrap.min.js" type="text/javascript"></script>
+
 </body>
 </html>

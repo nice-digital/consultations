@@ -21,14 +21,16 @@ namespace Comments.Test.UnitTests
         {
             //Arrange
             ResetDatabase();
-	        _context.Database.EnsureCreated();
+            _context.Database.EnsureCreated();
 
-			var answerText = Guid.NewGuid().ToString();
+            var answerText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
             SetupTestDataInDB();
-            var answerId = AddAnswer(1, userId, answerText);
+
+            var question = GetQuestion();
+            var answerId = AddAnswer(question.QuestionId, userId, answerText);
 
             //Act
             var viewModel = new AnswerService(new ConsultationsContext(_options, userService, _fakeEncryption), userService).GetAnswer(answerId);
@@ -61,7 +63,7 @@ namespace Comments.Test.UnitTests
         {
             //Arrange
             ResetDatabase();
-            
+
             var userService = FakeUserService.Get(isAuthenticated: false);
 
             //Act
@@ -83,7 +85,9 @@ namespace Comments.Test.UnitTests
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
             SetupTestDataInDB();
-            var answerId = AddAnswer(1, userId, answerText);
+
+            var question = GetQuestion();
+            var answerId = AddAnswer(question.QuestionId, userId, answerText);
 
             var answerService = new AnswerService(new ConsultationsContext(_options, userService, _fakeEncryption), userService);
             var viewModel = answerService.GetAnswer(answerId);
@@ -110,9 +114,11 @@ namespace Comments.Test.UnitTests
 			var answerText = Guid.NewGuid().ToString();
             var userId = Guid.Empty;
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            
+
             SetupTestDataInDB();
-            var answerId = AddAnswer(1, userId, answerText);
+
+            var question = GetQuestion();
+            var answerId = AddAnswer(question.QuestionId, userId, answerText);
 
             var answerService = new AnswerService(new ConsultationsContext(_options, userService, _fakeEncryption), userService);
 
@@ -204,7 +210,8 @@ namespace Comments.Test.UnitTests
         {
             //Arrange
             ResetDatabase();
-            var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+			_context.Database.EnsureCreated();
+			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var questionText = Guid.NewGuid().ToString();
             var userId = Guid.NewGuid();
 
@@ -212,7 +219,7 @@ namespace Comments.Test.UnitTests
             var authenticateService = new FakeAuthenticateService(authenticated: true);
 
             var locationId = AddLocation(sourceURI);
-            var questionTypeId = AddQuestionType(Guid.NewGuid().ToString(), false, true);
+			var questionTypeId = 99;
             var questionId = AddQuestion(locationId, questionTypeId, questionText);
             var expectedAnswerId = AddAnswer(questionId, userId, "current user's answer");
             AddAnswer(questionId, Guid.NewGuid(), "another user's answer");

@@ -19,6 +19,7 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			ResetDatabase();
+			_context.Database.EnsureCreated();
 			var sourceUri = "consultations://./consultation/1/document/1/chapter/introduction";
 			var description = Guid.NewGuid().ToString();
 			var questionText = Guid.NewGuid().ToString();
@@ -27,12 +28,12 @@ namespace Comments.Test.UnitTests
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
 			var locationId = AddLocation(sourceUri);
-			var questionTypeId = AddQuestionType(description, false, true, 1);
+			var questionTypeId = 99;
 			var questionId = AddQuestion(locationId, questionTypeId, questionText);
 
 
 			var questionService =
-				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService);
+				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService, null, null);
 
 			//Act
 			var viewModel = questionService.GetQuestion(questionId);
@@ -46,12 +47,13 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			ResetDatabase();
+			_context.Database.EnsureCreated();
 
 			var userId = Guid.Empty;
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
 			var questionService =
-				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService);
+				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService, null, null);
 
 			//Act
 			var viewModel = questionService.GetQuestion(1);
@@ -66,17 +68,18 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			ResetDatabase();
+			_context.Database.EnsureCreated();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var description = Guid.NewGuid().ToString();
 			var questionText = Guid.NewGuid().ToString();
 			var userId = Guid.Empty;
 
 			var locationId = AddLocation(sourceURI);
-			var questionTypeId = AddQuestionType(description, false, true);
+			var questionTypeId = 99;
 			var questionId = AddQuestion(locationId, questionTypeId, questionText);
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var questionService =
-				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService);
+				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService, null, null);
 
 			var viewModel = questionService.GetQuestion(questionId);
 			var updatedQuestionText = Guid.NewGuid().ToString();
@@ -97,6 +100,7 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			ResetDatabase();
+			_context.Database.EnsureCreated();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var description = Guid.NewGuid().ToString();
 			var questionText = Guid.NewGuid().ToString();
@@ -105,11 +109,11 @@ namespace Comments.Test.UnitTests
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
 			var locationId = AddLocation(sourceURI);
-			var questionTypeId = AddQuestionType(description, false, true, 1);
+			var questionTypeId = 99;
 			var questionId = AddQuestion(locationId, questionTypeId, questionText);
 
 			var questionService =
-				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService);
+				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService, null, null);
 
 			//Act
 			var result = questionService.DeleteQuestion(questionId);
@@ -126,11 +130,12 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			ResetDatabase();
+			_context.Database.EnsureCreated();
 			var questionId = 1;
 			var userId = Guid.Empty;
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var questionService =
-				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService);
+				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService, null, null);
 
 			//Act
 			var result = questionService.DeleteQuestion(questionId);
@@ -144,16 +149,17 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			ResetDatabase();
+			_context.Database.EnsureCreated();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var description = Guid.NewGuid().ToString();
 			var questionText = Guid.NewGuid().ToString();
 			var userId = Guid.Empty;
 
 			var locationId = AddLocation(sourceURI);
-			var questionTypeId = AddQuestionType(description, false, true);
+			var questionTypeId = 99;
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var questionService =
-				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService);
+				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService, null, null);
 
 			var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
 			var questionType = new QuestionType(description, false, true, null);
@@ -172,7 +178,8 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			ResetDatabase();
-			var questionTypeId = AddQuestionType("Question Type", false, true);
+			_context.Database.EnsureCreated();
+			var questionTypeId = 99;
 
 			var consultationLevelLocationId = AddLocation("consultations://./consultation/1");
 			AddQuestion(consultationLevelLocationId, questionTypeId, "Question Label");
@@ -182,7 +189,8 @@ namespace Comments.Test.UnitTests
 
 			var userId = Guid.Empty;
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-			var questionService = new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService);
+			var authenticateService = new FakeAuthenticateService(authenticated: true);
+			var questionService = new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService, authenticateService, _fakeHttpContextAccessor);
 
 			//Act
 			var result = questionService.GetQuestionAdmin(1, false, null);
@@ -203,17 +211,18 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			ResetDatabase();
+			_context.Database.EnsureCreated();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var description = Guid.NewGuid().ToString();
 			var questionText = Guid.NewGuid().ToString();
 			var userId = Guid.NewGuid();
 
 			var locationId = AddLocation(sourceURI);
-			var questionTypeId = AddQuestionType(description, false, true);
+			var questionTypeId = 99;
 			var questionId = AddQuestion(locationId, questionTypeId, questionText);
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var questionService =
-				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService);
+				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService, null, null);
 
 			var viewModel = questionService.GetQuestion(questionId);
 			var updatedQuestionText = Guid.NewGuid().ToString();
@@ -240,7 +249,7 @@ namespace Comments.Test.UnitTests
 			ResetDatabase();
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: Guid.NewGuid());
 			var questionService =
-				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService);
+				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService, null, null);
 
 			var textQuestionTypeId = AddQuestionType("Text", hasBooleanAnswer: false, hasTextAnswer: true);
 			var booleanQuestionTypeId = AddQuestionType("Boolean", hasBooleanAnswer: true, hasTextAnswer: false);

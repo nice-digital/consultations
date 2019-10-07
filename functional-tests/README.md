@@ -33,8 +33,11 @@ Loosley based on the [WebdriverIO Cucumber Boilerplate](https://github.com/webdr
 ## Required software
 
 - Node >= 8.11.1 (latest LTS as of May 2018) and npm >= 5.6.0
+- Java Development Kit (JDK) version 8 (selenium standalone is not compatible with later versions)
 - Chrome, any version
-- Firefox, optional, any versoin
+- Firefox, optional, any version
+- Docker for windows, optional
+
 
 ## Running locally
 
@@ -80,24 +83,14 @@ dotnet publish -c Release -o published-app /property:PublishWithAspNetCoreTarget
 
 ### Environment variables
 
-When we deploy the webapp with Octo we use variable substitution to change settings in [appsettings.json](Comments/appsettings.json). When we're running via Docker, we don't have this luxury. So we have to use environment variables when we run the container(s) to pass in these settings. Run the following, with the correct values, from your terminal:
+When we deploy the webapp with Octo we use variable substitution to change settings in [appsettings.json](Comments/appsettings.json). When we're running via Docker, we don't have this luxury. So we have to use environment variables when we run the container(s) to pass in these settings. Obtain all the current environment variables from another team member, then add them to your terminal by using either export for bash, or set for cmd, e.g.
 
 ```sh
-export DEFAULT_CONNECTION=""
-export LOGGING_LOG_FILE_PATH=""
-export APPSETTINGS_ENVIRONMENT_NAME=""
-export APPSETTINGS_ENVIRONMENT_SECURESITE=""
-export APPSETTINGS_ENVIRONMENT_REALM=""
-export INDEV_APIKEY=""
-export INDEV_BASEPATH=""
-export INDEV_CHAPTER=""
-export INDEV_DETAIL=""
-export INDEV_LIST=""
-export GILLIAM_CLIENT_CERTIFICATE_BASE64=""
-export GILLIAM_BASE_PATH=""
-export GILLIAM_GET_CLAIMS_URL=""
-export GILLIAM_REALM=""
-export MSSQL_SA_PASSWORD=""
+export DEFAULT_CONNECTION="Beta"
+```
+or
+```sh
+set ACCOUNTS_ENVIRONMENT=Beta
 ```
 
 > Note: you can get the values from your local User Secrets in Visual Studio.

@@ -26,20 +26,6 @@ namespace Comments.Test.UnitTests
 			_consultationListContext = new ConsultationListContext(_options, _fakeUserService, _fakeEncryption);
 		}
 
-		private ConsultationListContext CreateContext(IUserService userService, int totalCount = 1)
-		{
-			var consultationListContext = new ConsultationListContext(_options, userService, _fakeEncryption,
-				new List<SubmittedCommentsAndAnswerCount>
-				{
-					new SubmittedCommentsAndAnswerCount
-					{
-						SourceURI = "consultations://./consultation/1",
-						TotalCount = totalCount
-					}
-				});
-			return consultationListContext;
-		}
-
 #region earlier tests
 
 		[Fact]
@@ -141,7 +127,7 @@ namespace Comments.Test.UnitTests
 			var context =  CreateContext(userService);
 
 			var locationId = AddLocation(sourceURI, context);
-			var questionTypeId = AddQuestionType("Question Type ", false, true, 1, context);
+			var questionTypeId = 99;
 			var questionId = AddQuestion(locationId, questionTypeId, "Question Text", context);
 			var AnswerId = AddAnswer(questionId, userId, "my answer", 2, context);
 			var submissionId = AddSubmission(userId, context);

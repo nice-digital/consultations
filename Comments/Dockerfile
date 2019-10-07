@@ -23,6 +23,9 @@ RUN curl -SL "$NODE_DOWNLOAD_URL" --output nodejs.tar.gz \
 RUN node -v
 RUN npm -v
 
+# Install replace globally for index.html replacement
+RUN npm i -g replace
+
 # Install jq for JSON file replacement and nc for checking sql port is available
 RUN apt-get update && apt-get install jq -y \
   && rm -rf /var/lib/apt/lists/*
@@ -42,6 +45,7 @@ RUN curl -SL "$WAITFORIT_DOWNLOAD_URL" --output waitforit.tar.gz \
 
 # Install frontend packages with node
 COPY ./published-app/ClientApp/package.json ./app/ClientApp/
+# COPY ./wwwroot/Media/Default/html/HtmlWidget/Footer.html ./app/wwwroot/Media/Default/html/HtmlWidget/
 #COPY ./published-app/ClientApp/package-lock.json ./app/ClientApp/
 WORKDIR /app/ClientApp
 RUN npm i --production

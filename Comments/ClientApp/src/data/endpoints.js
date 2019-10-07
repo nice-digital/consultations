@@ -19,7 +19,6 @@ export const Endpoints = {
 	review: "/api/Review/{0}", //list of all comments for a consultation (inc Consultation, Document, Chapter and Section levels) given a URI, restricted by current user
 	user: "/api/User", // get details of currently logged in user
 	submit: "/api/Submit", // submit on the review page.
-	footer: "/../media/default/html/htmlwidget/Footer.html", //the double dots at the start of this line make it work whether serverd under consultations or not.
 	exportExternal: "/api/ExportExternal/{0}", //Creates an excel spread sheet for external users of the system that contains only their responses
 	logging: "/api/Logging", // sends a message to the server for logging. expects the body to be the message and the loglevel to be in the querystring eg ?logLevel=Error
 	questions: "/api/Questions", // get complete page structure for the admin of questions for a given consultation. /api/Questions?consultationId=22

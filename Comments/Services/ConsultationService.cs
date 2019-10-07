@@ -35,7 +35,7 @@ namespace Comments.Services
 	    ConsultationState GetConsultationState(string sourceURI, PreviewState previewState, IEnumerable<Models.Location> locations = null, ConsultationBase consultation = null);
 	    ConsultationState GetConsultationState(int consultationId, int? documentId, string reference, PreviewState previewState, IEnumerable<Models.Location> locations = null, ConsultationBase consultationDetail = null);
 
-		bool HasSubmittedCommentsOrQuestions(string consultationSourceURI, Guid userId);
+		DateTime? GetSubmittedDate(string consultationSourceURI);
 	    IEnumerable<BreadcrumbLink> GetBreadcrumbs(ConsultationDetail consultation, BreadcrumbType breadcrumbType);
 
 	    (int? documentId, string chapterSlug) GetFirstConvertedDocumentAndChapterSlug(int consultationId);
@@ -205,30 +205,28 @@ namespace Comments.Services
 		    }
 		    else
 		    {
-			    locations = new List<Models.Location>(0);
+			    locations = _context.GetQuestionsForDocument(new[] {sourceURI}, partialMatchSourceURI: true);
 		    }
-
-		    var hasSubmitted = currentUser != null && currentUser.IsAuthorised && currentUser.UserId.HasValue ? HasSubmittedCommentsOrQuestions(sourceURI, currentUser.UserId.Value) : false;
-
+		    
 		    var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);
 
 		    var consultationState = new ConsultationState(consultationDetail.StartDate, consultationDetail.EndDate,
-			    data.questions.Any(), data.questions.Any(q => q.Answers.Any()), data.comments.Any(), hasSubmitted,
+			    data.questions.Any(), data.questions.Any(q => q.Answers.Any()), data.comments.Any(),GetSubmittedDate(sourceURI),
 			    documentsWhichSupportComments);
 
 		    return consultationState;
 	    }
 
-		public bool HasSubmittedCommentsOrQuestions(string anySourceURI, Guid userId)
+		public DateTime? GetSubmittedDate(string anySourceURI)
 	    {
 		    if (string.IsNullOrWhiteSpace(anySourceURI))
-			    return false;
+			    return null;
 
 		    var consultationsUriElements = ConsultationsUri.ParseConsultationsUri(anySourceURI);
 
 		    var consultationSourceURI = ConsultationsUri.CreateConsultationURI(consultationsUriElements.ConsultationId);
 
-		    return _context.HasSubmitted(consultationSourceURI, userId);
+		    return _context.GetSubmittedDate(consultationSourceURI);
 	    }
 
 	    /// <summary>
@@ -277,7 +275,7 @@ namespace Comments.Services
 			  //  locations = new List<Models.Location>(0);
 		   // }
 
-		   // var hasSubmitted = currentUser != null && currentUser.IsAuthorised && currentUser.UserId.HasValue ? HasSubmittedCommentsOrQuestions(sourceURI, currentUser.UserId.Value) : false;
+		   // var hasSubmitted = currentUser != null && currentUser.IsAuthorised && currentUser.UserId.HasValue ? GetSubmittedDate(sourceURI, currentUser.UserId.Value) : false;
 
 		   // var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);
 

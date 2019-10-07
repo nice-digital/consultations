@@ -8,6 +8,7 @@
     "resourceTitleId":null,
     "projectType":"TA",
     "productTypeName":"Technology appraisal guidance",
+    "showExpressionOfInterestSubmissionQuestion":true,
     "developedAs":null,
     "relevantTo":null,
     "consultationId":1,
@@ -27,7 +28,7 @@
         "hasQuestions":false,
         "hasUserSuppliedAnswers":false,
         "hasUserSuppliedComments":false,
-        "userHasSubmitted":false,
+        "submittedDate":null,
         "documentIdsWhichSupportComments":[
             2,
             2

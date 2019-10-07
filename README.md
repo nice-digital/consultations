@@ -1,8 +1,10 @@
 <!-- NB: run `npx doctoc .` to re-generate the ToC -->
 
 # Comment collection
+ > Our goal is to provide a simple and consistent way of contributing to and collecting stakeholder comments from NICE consultations
   
- > Provide a way for NICE stakeholders to comment directly on NICE consultations and documents to provide their viewpoint, both generally and on specific parts; and a way for NICE teams to collate the comments for response which doesn’t require repetitive manual handling.
+
+ 
 
 <details>
 <summary><strong>Table of contents</strong></summary>
@@ -31,7 +33,7 @@
 </details>
   
 ## What is it?
-TODO
+This service provides a way for NICE stakeholders to comment directly on NICE consultations and documents to provide their viewpoint; and a way for NICE teams to request comments and process them for response which doesn’t require repetitive manual handling.
 
 ### Background
 Consultation is a key part of developing NICE guidance, including NICE quality standards. The consultation processes enable external organisations and individuals to comment on guidance content at specific stages in the development process, and feed into the decision-making process.
@@ -41,12 +43,10 @@ What is our motivation for building this product or service?
 - NICE efficiencies
 - Increase stakeholder engagement
 - Improve quality of responses given by NICE
-- Reduce time taken for consultation
 
 ### Who are our users?
-Who do we think would need to use this product or service?
-- NICE teams collecting comments on consultations for response
-- Stakeholders who want to provide their views on a NICE document
+- Internal teams at NICE who consult on the guidance they are producing by collecting comments from external stakeholders
+- Our external stakeholders are the people who the guidance and standards that NICE produces affect and who want to provide their views on the development of these, so that their needs and priorities are reflected in the final guidance
 
 ### What outcome will users get from this service?
 What problem will it solve for people?

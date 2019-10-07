@@ -12,7 +12,8 @@ describe("[ClientApp] ", () => {
 			isVisible: true,
 			key: 1,
 			unique: "unique",
-			question: questionWithAnswer
+			question: questionWithAnswer,
+			showAnswer: true,
 		};
 
 		const fakePropsWithoutAnswer = {
@@ -20,7 +21,8 @@ describe("[ClientApp] ", () => {
 			isVisible: true,
 			key: 1,
 			unique: "unique",
-			question: questionWithoutAnswer
+			question: questionWithoutAnswer,
+			showAnswer: false,
 		};
 
 		it("should match snapshot with answer", () => {

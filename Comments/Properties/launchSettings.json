@@ -11,7 +11,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "consultations/323/6/overview-of-2018-surveillance-methods",
+      "launchUrl": "consultations/admin/download",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

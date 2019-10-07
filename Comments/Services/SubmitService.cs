@@ -41,11 +41,11 @@ namespace Comments.Services
 			if (!consultationState.ConsultationIsOpen)
 				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "Consultation is not open for submissions"));
 
-			var hasSubmitted = _consultationService.HasSubmittedCommentsOrQuestions(anySourceURI, _currentUser.UserId.Value);
-			if (hasSubmitted)
+			var hasSubmitted = _consultationService.GetSubmittedDate(anySourceURI);
+			if (hasSubmitted !=null)
 				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "User has already submitted."));
 
-			var submissionToSave = _context.InsertSubmission(_currentUser.UserId.Value, submission.RespondingAsOrganisation, submission.OrganisationName, submission.HasTobaccoLinks, submission.TobaccoDisclosure);
+			var submissionToSave = _context.InsertSubmission(_currentUser.UserId.Value, submission.RespondingAsOrganisation, submission.OrganisationName, submission.HasTobaccoLinks, submission.TobaccoDisclosure, submission.OrganisationExpressionOfInterest);
 
 			var submittedStatus = _context.GetStatus(StatusName.Submitted);
 

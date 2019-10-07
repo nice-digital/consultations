@@ -23,7 +23,7 @@
 		"hasUserSuppliedAnswers": false,
         "hasUserSuppliedComments": false,
         "hasAnyDocumentsSupportingComments": false,
-		"userHasSubmitted": false,
+		"submittedDate": null,
 		"consultationIsOpen": true,
 		"consultationHasNotStartedYet": false,
 		"consultationHasEnded": false,

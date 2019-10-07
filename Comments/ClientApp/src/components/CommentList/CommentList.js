@@ -86,7 +86,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		);
 
 		if (preloadedCommentsData) {
-			let allowComments = preloadedCommentsData.consultationState.consultationIsOpen && !preloadedCommentsData.consultationState.userHasSubmitted;
+			let allowComments = preloadedCommentsData.consultationState.consultationIsOpen && !preloadedCommentsData.consultationState.submittedDate;
 			this.state = {
 				comments: preloadedCommentsData.comments,
 				questions: preloadedCommentsData.questions,
@@ -108,7 +108,7 @@ export class CommentList extends Component<PropsType, StateType> {
 	loadComments() {
 		load("comments", undefined, [], {sourceURI: this.props.match.url}).then(
 			response => {
-				let allowComments = response.data.consultationState.consultationIsOpen && !response.data.consultationState.userHasSubmitted;
+				let allowComments = response.data.consultationState.consultationIsOpen && !response.data.consultationState.submittedDate;
 				this.setState({
 					comments: response.data.comments,
 					questions: response.data.questions,
@@ -373,11 +373,9 @@ export class CommentList extends Component<PropsType, StateType> {
 											</div>
 											: null}
 
-										{this.state.loading ? <p>Loading...</p> :
-											contextValue.isAuthorised ?
-
-												<Fragment>
-
+										{this.state.loading ? <p>Loading...</p> : (					
+											<Fragment>						
+												{contextValue.isAuthorised ? (
 													<div className={`${this.state.viewComments ? "show" : "hide"}`}>
 														{this.state.comments.length === 0 ? <p>No comments yet</p> :
 															<ul className="CommentList list--unstyled mt--0">
@@ -397,36 +395,45 @@ export class CommentList extends Component<PropsType, StateType> {
 															</ul>
 														}
 													</div>
+												) : (
+													<LoginBanner
+														signInButton={true}
+														currentURL={this.props.match.url}
+														signInURL={contextValue.signInURL}
+														registerURL={contextValue.registerURL}
+														
+													/>
+												)}
+												
+												<div className={`${this.state.viewComments ? "hide" : "show"}`}>
+													{contextValue.isAuthorised ?
+														<p className="mt--0">Please answer the following questions</p> 
+														:
+														<p className="CommentBox__validationMessage">You must be signed in to answer questions</p>
+													}
+													<ul className={`CommentList list--unstyled ${contextValue.isAuthorised ? "mt--0" : ""}`}>
+														{this.state.questions.map((question) => {
+															const isUnsaved = this.state.unsavedIds.includes(`${question.questionId}q`);
+															
+															return (
+																<Question
+																	isUnsaved={isUnsaved}
+																	updateUnsavedIds={this.updateUnsavedIds}
+																	readOnly={!this.state.allowComments}
+																	key={question.questionId}
+																	unique={`Comment${question.questionId}`}
+																	question={question}
+																	saveAnswerHandler={this.saveAnswerHandler}
+																	deleteAnswerHandler={this.deleteAnswerHandler}
+																	showAnswer={contextValue.isAuthorised}
+																/>
+															);
+														})}
+													</ul>
 
-													<div className={`${this.state.viewComments ? "hide" : "show"}`}>
-														<p className="mt--0">Please answer the following questions</p>
-														<ul className="CommentList list--unstyled mt--0">
-															{this.state.questions.map((question) => {
-																const isUnsaved = this.state.unsavedIds.includes(`${question.questionId}q`);
-																return (
-																	<Question
-																		isUnsaved={isUnsaved}
-																		updateUnsavedIds={this.updateUnsavedIds}
-																		readOnly={!this.state.allowComments}
-																		key={question.questionId}
-																		unique={`Comment${question.questionId}`}
-																		question={question}
-																		saveAnswerHandler={this.saveAnswerHandler}
-																		deleteAnswerHandler={this.deleteAnswerHandler}
-																	/>
-																);
-															})}
-														</ul>
-													</div>
-												</Fragment>
-												:
-												<LoginBanner
-													signInButton={true}
-													currentURL={this.props.match.url}
-													signInURL={contextValue.signInURL}
-													registerURL={contextValue.registerURL}
-												/>
-										}
+												</div>
+											</Fragment>
+										)}
 									</div>
 								);
 							}}
