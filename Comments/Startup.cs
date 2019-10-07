@@ -38,8 +38,10 @@ namespace Comments
 
         public IHostingEnvironment Environment { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        private const string APIDocumentationPathRoot = "comments-api";
+
+		// This method gets called by the runtime. Use this method to add services to the container.
+		public void ConfigureServices(IServiceCollection services)
         {
             if (Environment.IsDevelopment())
             {
@@ -187,7 +189,7 @@ namespace Comments
                 app.Use((context, next) =>
                 {
                     var reqPath = context.Request.Path;
-                    if (reqPath.HasValue && reqPath.Value.Contains(".") && !reqPath.Value.Contains("comments-api"))
+                    if (reqPath.HasValue && reqPath.Value.Contains(".") && !reqPath.Value.Contains(APIDocumentationPathRoot))
                     {
 						// Map static files paths to the root, for use within the
 						if (reqPath.Value.Contains("/consultations"))
@@ -251,7 +253,7 @@ namespace Comments
 
             // DotNetCore SpaServices requires RawTarget property, which isn't set on a TestServer.
             // So set it here to allow integration tests to work with SSR via SpaServices
-	        app.MapWhen(x => !x.Request.Path.Value.StartsWith("/comments-api", StringComparison.OrdinalIgnoreCase),
+	        app.MapWhen(x => !x.Request.Path.Value.StartsWith($"/{APIDocumentationPathRoot}", StringComparison.OrdinalIgnoreCase),
 		        builder =>
 		        {
 			        builder.Use((context, next) =>
@@ -327,19 +329,19 @@ namespace Comments
 				app.UseSwagger(configure =>
 				{
 					configure.DocumentName = "openapi";
-					configure.Path = "/comments-api/v1/comments-api.json";
+					configure.Path = $"/{APIDocumentationPathRoot}/v1/comments-api.json";
 				});
 
 				app.UseReDoc(configure =>
 				{
-					configure.Path = "/comments-api/redoc";
-					configure.DocumentPath = "/comments-api/v1/comments-api.json";
+					configure.Path = $"/{APIDocumentationPathRoot}/redoc";
+					configure.DocumentPath = $"/{APIDocumentationPathRoot}/v1/comments-api.json";
 				});
 
 				app.UseSwaggerUi3(configure =>
 				{
-					configure.Path = "/comments-api/swagger";
-					configure.DocumentPath = "/comments-api/v1/comments-api.json";
+					configure.Path = $"/{APIDocumentationPathRoot}/swagger";
+					configure.DocumentPath = $"/{APIDocumentationPathRoot}/v1/comments-api.json";
 				});
 			}
         }
