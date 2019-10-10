@@ -1,9 +1,14 @@
 using Comments.Services;
+using Comments.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace Comments.Controllers.Api
 {
+	/// <summary>
+	/// Operations for a single question
+	/// </summary>
     [Produces("application/json")]
     [Route("consultations/api/[controller]")]
     public class QuestionController : ControllerBase
@@ -17,7 +22,16 @@ namespace Comments.Controllers.Api
         }
 
         // GET: consultations/api/Question/5
+        /// <summary>
+        /// Get single question from id
+        /// </summary>
+        /// <param name="questionId">id of the question</param>
+        /// <returns>Returns the question view model</returns>
         [HttpGet("{questionId}")]
+        [ProducesResponseType(typeof(Question), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(SerializableError), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(SerializableError), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(SerializableError), StatusCodes.Status404NotFound)]
         public IActionResult GetQuestion([FromRoute] int questionId)
         {
             if (!ModelState.IsValid)
@@ -32,9 +46,15 @@ namespace Comments.Controllers.Api
             return invalidResult ?? Ok(result.question);
         }
 
-        // POST: consultations/api/Question
-        [HttpPost]
-        public IActionResult PostQuestion([FromBody] ViewModels.Question question)
+		// POST: consultations/api/Question
+	    /// <summary>
+	    /// Adds a single question
+	    /// </summary>
+	    /// <param name="question">question view model</param>
+	    /// <returns>Returns the question view model and Validate model</returns>
+		[HttpPost]
+		[ProducesResponseType(typeof((Question, Validate)), StatusCodes.Status200OK)]
+		public IActionResult PostQuestion([FromBody] ViewModels.Question question)
         {
             if (!ModelState.IsValid)
             {
@@ -47,9 +67,16 @@ namespace Comments.Controllers.Api
             return invalidResult ?? CreatedAtAction("GetQuestion", new { id = result.question.QuestionId }, result.question);
         }
 
-        // PUT: consultations/api/Question/5
-        [HttpPut("{questionId}")]
-        public IActionResult PutQuestion([FromRoute] int questionId, [FromBody] ViewModels.Question question)
+		// PUT: consultations/api/Question/5
+		/// <summary>
+		/// Updates an individual question based on question Id
+		/// </summary>
+		/// <param name="questionId">ID of the question to be updated</param>
+		/// <param name="question">The values the question is to be updated with</param>
+		/// <returns>Returns the question view model of the updated question</returns>
+		[HttpPut("{questionId}")]
+		[ProducesResponseType(typeof(Question), StatusCodes.Status200OK)]
+		public IActionResult PutQuestion([FromRoute] int questionId, [FromBody] ViewModels.Question question)
         {
             if (!ModelState.IsValid)
             {
@@ -67,9 +94,15 @@ namespace Comments.Controllers.Api
             return invalidResult ?? Ok(question);
         }
 
-        // DELETE: consultations/api/Question/5
-        [HttpDelete("{QuestionId}")]
-        public IActionResult DeleteQuestion([FromRoute] int questionId)
+		// DELETE: consultations/api/Question/5
+		/// <summary>
+		/// Deletes an individual question specified by question ID
+		/// </summary>
+		/// <param name="questionId">Id of the question to be deleted</param>
+		/// <returns>Returns the number of rows affected</returns>
+		[HttpDelete("{QuestionId}")]
+		[ProducesResponseType(typeof((int, Validate)), StatusCodes.Status200OK)]
+		public IActionResult DeleteQuestion([FromRoute] int questionId)
         {
             if (!ModelState.IsValid)
             {

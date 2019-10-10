@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Comments.Controllers.Api
 {
+	[ApiExplorerSettings(IgnoreApi = true)]
 	[Produces("application/json")]
     [Route("consultations/api/[controller]")]
     public class UserController : ControllerBase

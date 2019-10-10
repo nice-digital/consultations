@@ -15,7 +15,8 @@ namespace Comments.Controllers.Web
     /// the reason for that is that nice accounts posts to the root of the website after logging in, then redirects after that. 
     /// </summary>
     [Route("")]
-    public class RootController : Controller
+    [ApiExplorerSettings(IgnoreApi = true)]
+	public class RootController : Controller
     {
         private readonly ILogger<RootController> _logger;
 

@@ -14,7 +14,8 @@ namespace Comments.Controllers.Web
     /// This controller is just here for test purposes
     /// </summary>
     [Route("secure")]
-    [Authorize]
+    [ApiExplorerSettings(IgnoreApi = true)]
+	[Authorize]
     public class SecureController : Controller
     {
         private readonly ILogger<RootController> _logger;

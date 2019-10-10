@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Comments.Controllers.Api
 {
-    [Route("consultations/api/[controller]")]
+	[ApiExplorerSettings(IgnoreApi = true)]
+	[Route("consultations/api/[controller]")]
     [Authorize]
     public class TestController : Controller
     {

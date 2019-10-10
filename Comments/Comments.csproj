@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -8,6 +8,8 @@
     <SpaRoot>ClientApp\</SpaRoot>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
     <UserSecretsId>69e0e9e3-debe-4946-a1fe-f8956079c9fa</UserSecretsId>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,6 +31,7 @@
     <PackageReference Include="NICE.Auth.NetCore" Version="1.0.106" />
     <PackageReference Include="NICE.Feeds" Version="1.0.136" />
     <PackageReference Include="NICE.Logging" Version="5.0.52" />
+    <PackageReference Include="NSwag.AspNetCore" Version="12.0.13" />
     <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
   </ItemGroup>
 

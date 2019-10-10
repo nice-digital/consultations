@@ -9,6 +9,7 @@ namespace Comments.Controllers.Api
 {
 	[Produces("application/json")]
 	[Route("consultations/api/[controller]")]
+	[ApiExplorerSettings(IgnoreApi = true)]
 	[Authorize]
 	public class SubmitController : ControllerBase
 	{

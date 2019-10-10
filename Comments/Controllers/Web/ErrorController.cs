@@ -14,7 +14,7 @@ namespace Comments.Controllers.Web
 	/// <summary>
 	/// This error controller is only shown if there's a problem showing the error using react..
 	/// </summary>
-	
+	[ApiExplorerSettings(IgnoreApi = true)]
 	public class ErrorController : Controller
     {
 	    private readonly ILogger _logger;

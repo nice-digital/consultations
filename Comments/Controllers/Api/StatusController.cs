@@ -11,7 +11,8 @@ namespace Comments.Controllers.Api
 	/// <summary>
 	/// This Status controller isn't for the Status table. It's for the status health check page.
 	/// </summary>
-    [Produces("application/json")]
+	[ApiExplorerSettings(IgnoreApi = true)]
+	[Produces("application/json")]
     [Route("consultations/api/[controller]")]
     public class StatusAPIController : ControllerBase
     {
@@ -44,6 +45,7 @@ namespace Comments.Controllers.Api
 	[Produces("application/json")]
 	[Route("consultations/api/[controller]")]
 	[Authorize(Roles = "Administrator")]
+	[ApiExplorerSettings(IgnoreApi = true)]
 	public class StatusController : ControllerBase
 	{
 		private readonly IStatusService _statusService;

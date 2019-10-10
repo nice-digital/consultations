@@ -1,7 +1,9 @@
-﻿using Comments.Services;
+using Comments.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using Comments.ViewModels;
+using Microsoft.AspNetCore.Http;
 
 namespace Comments.Controllers.Api
 {
@@ -16,14 +18,16 @@ namespace Comments.Controllers.Api
         {
             _consultationService = consultationService;
             _logger = logger;
-        }
+		}
 
+        // GET: eg. consultations/api/Consultations
         /// <summary>
-        /// GET: eg. consultations/api/Consultations
+        /// Returns a list of all published consultations
         /// </summary>
-        /// <returns></returns>
+        /// <returns>IEnumerable of ViewModel.Consultation</returns>
         [HttpGet]
-        public IEnumerable<ViewModels.Consultation> Get()
+        [ProducesResponseType(typeof(IEnumerable<Consultation>), StatusCodes.Status200OK)]
+		public IEnumerable<ViewModels.Consultation> Get()
         {
             return _consultationService.GetConsultations();
         }

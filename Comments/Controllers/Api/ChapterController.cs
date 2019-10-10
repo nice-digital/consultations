@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace Comments.Controllers.Api
 {
@@ -18,17 +19,19 @@ namespace Comments.Controllers.Api
         {
             _consultationService = consultationService;
             _logger = logger;
-        }
+		}
 
+		// GET: eg. consultations/api/Chapter?consultationId=1&documentId=2&chapterSlug=introduction
 		/// <summary>
-		/// GET: eg. consultations/api/Chapter?consultationId=1&documentId=2&chapterSlug=introduction
+		/// Returns chapter content for a document
 		/// </summary>
 		/// <param name="consultationId">int</param>
 		/// <param name="documentId">int</param>
 		/// <param name="chapterSlug">non-empty string</param>
 		/// <returns></returns>
 		[HttpGet]
-        public ChapterContent Get(int consultationId, int documentId, string chapterSlug)
+		[ProducesResponseType(typeof(ChapterContent), StatusCodes.Status200OK)]
+		public ChapterContent Get(int consultationId, int documentId, string chapterSlug)
         {
             if (string.IsNullOrWhiteSpace(chapterSlug))
                 throw new ArgumentNullException(nameof(chapterSlug));
@@ -51,8 +54,9 @@ namespace Comments.Controllers.Api
 			_logger = logger;
 		}
 
+		// GET: eg. consultations/api/PreviewChapter?consultationId=1&documentId=2&chapterSlug=introduction&reference=GID-TA10232
 		/// <summary>
-		/// GET: eg. consultations/api/PreviewChapter?consultationId=1&documentId=2&chapterSlug=introduction&reference=GID-TA10232
+		/// Returns Chapter content for a document in preview mode
 		/// </summary>
 		/// <param name="consultationId">int</param>
 		/// <param name="documentId">int</param>
@@ -60,6 +64,7 @@ namespace Comments.Controllers.Api
 		/// <param name="reference">non-empty string</param>
 		/// <returns></returns>
 		[HttpGet]
+		[ProducesResponseType(typeof(ChapterContent), StatusCodes.Status200OK)]
 		public ChapterContent Get(int consultationId, int documentId, string chapterSlug, string reference)
 		{
 			if (string.IsNullOrWhiteSpace(chapterSlug))

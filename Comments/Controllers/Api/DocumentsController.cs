@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace Comments.Controllers.Api
 {
@@ -19,15 +20,17 @@ namespace Comments.Controllers.Api
         {
             _consultationService = consultationService;
             _logger = logger;
-        }
+		}
 
-	    /// <summary>
-	    /// GET: eg. consultations/api/Documents?consultationId=1
-	    /// </summary>
-	    /// <param name="consultationId"></param>
-	    /// <returns></returns>
-	    [HttpGet]
-	    public IEnumerable<Document> Get(int consultationId)
+		// GET: eg. consultations/api/Documents?consultationId=1
+		/// <summary>
+		/// Get all documents contained within a specified consultation
+		/// </summary>
+		/// <param name="consultationId">Id of the consultation</param>
+		/// <returns>IEnumerable of Document</returns>
+		[HttpGet]
+		[ProducesResponseType(typeof(IEnumerable<Document>), StatusCodes.Status200OK)]
+		public IEnumerable<Document> Get(int consultationId)
 	    {
 		    if (consultationId < 1)
 			    throw new ArgumentException(nameof(consultationId));
@@ -50,14 +53,16 @@ namespace Comments.Controllers.Api
 			_logger = logger;
 		}
 
+		// GET: eg. consultations/api/PreviewDocuments?consultationId=1&documentId=1&reference=GID-TA1232
 		/// <summary>
-		/// GET: eg. consultations/api/PreviewDocuments?consultationId=1&documentId=1&reference=GID-TA1232
+		/// Returns preview documents contained within a specified consultation.
 		/// </summary>
-		/// <param name="consultationId"></param>
-		/// <param name="documentId"></param>
-		/// <param name="reference"></param>
-		/// <returns></returns>
+		/// <param name="consultationId">Id of the consultation</param>
+		/// <param name="documentId"> Id of the document</param>
+		/// <param name="reference">Reference Id of the consultation e.g. GID-TA1232</param>
+		/// <returns>IEnumerable of Document</returns>
 		[HttpGet]
+		[ProducesResponseType(typeof(IEnumerable<Document>), StatusCodes.Status200OK)]
 		public IEnumerable<Document> Get(int consultationId, int documentId, string reference)
 		{
 			if (consultationId < 1)
@@ -87,14 +92,15 @@ namespace Comments.Controllers.Api
 			_logger = logger;
 		}
 
+		// GET: eg. consultations/api/PreviewDocuments?consultationId=1&documentId=1&reference=GID-TA1232
 		/// <summary>
-		/// GET: eg. consultations/api/PreviewDocuments?consultationId=1&documentId=1&reference=GID-TA1232
+		/// Returns published documents contained within a specified consultation.
 		/// </summary>
-		/// <param name="consultationId"></param>
-		/// <param name="documentId"></param>
-		/// <param name="reference"></param>
-		/// <returns></returns>
+		/// <param name="consultationId">Id of the consultation</param>
+		/// <param name="documentId"> Id of the document</param>
+		/// <returns>IEnumerable of Document</returns>
 		[HttpGet]
+		[ProducesResponseType(typeof(IEnumerable<Document>), StatusCodes.Status200OK)]
 		public IEnumerable<Document> Get(int consultationId, int documentId)
 		{
 			if (consultationId < 1)
