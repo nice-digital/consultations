@@ -12,6 +12,7 @@ import UserProviderWithRouter from "../../context/UserContext";
 import DocumentPreviewWithRouter from "../DocumentPreview/DocumentPreview";
 import DownloadWithRouter from "../Download/Download";
 import QuestionsWithRouter from "../Questions/Questions";
+import QuestionViewWithRouter from "../QuestionView/QuestionView";
 import {ErrorBoundary} from "../ErrorBoundary/ErrorBoundary";
 import {LiveAnnouncer, LiveMessenger} from "react-aria-live";
 import { projectInformation } from "../../constants";
@@ -103,6 +104,19 @@ class App extends React.Component<PropsType, StateType> {
 									<LiveMessenger>
 										{({announcePolite, announceAssertive}) =>
 											<SubmittedWithRouter
+												announcePolite={announcePolite}
+												announceAssertive={announceAssertive}
+												basename={this.props.basename}/>
+										}
+									</LiveMessenger>
+								</Route>
+
+								{/*List of questions*/}
+								<Route exact
+											 path="/:consultationId/questions">
+									<LiveMessenger>
+										{({announcePolite, announceAssertive}) =>
+											<QuestionViewWithRouter
 												announcePolite={announcePolite}
 												announceAssertive={announceAssertive}
 												basename={this.props.basename}/>
