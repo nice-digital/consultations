@@ -24,6 +24,8 @@ import { Question } from "../Question/Question";
 import { LoginBanner } from "../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
 
+import CreateQuestionPdf from '../QuestionView/QuestionViewDocument';
+
 type PropsType = {
 	staticContext?: any,
 	match: {
@@ -264,6 +266,12 @@ export class CommentList extends Component<PropsType, StateType> {
 				pullFocusByQuerySelector("#js-drawer-toggleopen-questions");
 				break;
 
+				
+			case "createQuestionPDF":
+				var questionsForPDF = this.state.questions;
+				CreateQuestionPdf(questionsForPDF);
+				break;
+
 			default:
 				return;
 		}
@@ -406,11 +414,22 @@ export class CommentList extends Component<PropsType, StateType> {
 												)}
 												
 												<div className={`${this.state.viewComments ? "hide" : "show"}`}>
+
+													<button
+														data-qa-sel="create-question-pdf"
+														id="js-create-question-pdf"
+														className="btn btn--cta"
+														onClick={() => this.handleClick("createQuestionPDF")}
+														aria-label="Creates a PDF of the questions"
+														tabIndex="0">
+													PDF of questions
+													</button>
 													{contextValue.isAuthorised ?
 														<p className="mt--0">Please answer the following questions</p> 
 														:
 														<p className="CommentBox__validationMessage">You must be signed in to answer questions</p>
 													}
+
 													<ul className={`CommentList list--unstyled ${contextValue.isAuthorised ? "mt--0" : ""}`}>
 														{this.state.questions.map((question) => {
 															const isUnsaved = this.state.unsavedIds.includes(`${question.questionId}q`);
