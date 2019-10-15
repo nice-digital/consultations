@@ -53,6 +53,8 @@ type StateType = {
 	shouldShowQuestionsTab: boolean,
 	error: string,
 	unsavedIds: Array<number>,
+	consultationData: ConsultationStateType, // the top level info - title etc
+	endDate: string,
 };
 
 export class CommentList extends Component<PropsType, StateType> {
@@ -72,6 +74,8 @@ export class CommentList extends Component<PropsType, StateType> {
 			shouldShowCommentsTab: false,
 			shouldShowQuestionsTab: false,
 			unsavedIds: [],
+			consultationData: null,
+			endDate: "",
 		};
 
 		let preloadedData = {};
@@ -85,6 +89,14 @@ export class CommentList extends Component<PropsType, StateType> {
 			[],
 			{sourceURI: this.props.match.url},
 			preloadedData
+		);
+
+		const preloadedConsultation = preload(
+			this.props.staticContext,
+			"consultation",
+			[],
+			{consultationId: this.props.match.params.consultationId, isReview: false},
+			preloadedData,
 		);
 
 		if (preloadedCommentsData) {
@@ -103,6 +115,8 @@ export class CommentList extends Component<PropsType, StateType> {
 				drawerOpen: false,
 				drawerMobile: false,
 				unsavedIds: [],
+				consultationData: preloadedConsultation,
+				endDate: preloadedCommentsData.consultationState.endDate,
 			};
 		}
 	}
@@ -119,10 +133,34 @@ export class CommentList extends Component<PropsType, StateType> {
 					shouldShowDrawer: response.data.consultationState.shouldShowDrawer,
 					shouldShowCommentsTab: response.data.consultationState.shouldShowCommentsTab,
 					shouldShowQuestionsTab: response.data.consultationState.shouldShowQuestionsTab,
+					endDate: response.data.consultationState.endDate,
 				});
 			})
 			.catch(err => console.log("load comments in commentlist " + err));
 	}
+
+	gatherData = async () => {
+		const {consultationId} = this.props.match.params;
+
+		const consultationData = load("consultation", undefined, [], {
+			consultationId,
+			isReview: false,
+		})
+			.then(response => response.data)
+			.catch(err => {
+				this.setState({
+					error: {
+						hasError: true,
+						message: "consultationData " + err,
+					},
+				});
+			});
+
+		return {
+			consultationData: await consultationData,
+		};
+	};
+
 
 	componentDidMount() {
 		if (!this.state.initialDataLoaded) {
@@ -269,13 +307,16 @@ export class CommentList extends Component<PropsType, StateType> {
 				
 			case "createQuestionPDF":
 				var questionsForPDF = this.state.questions;
-				CreateQuestionPdf(questionsForPDF);
+				var titleForPDF = this.state.consultationData.title;
+				var endDate = this.state.endDate;
+				CreateQuestionPdf(questionsForPDF, titleForPDF, endDate);
 				break;
 
 			default:
 				return;
 		}
 	};
+
 
 	render() {
 		if (!this.state.shouldShowDrawer) {
@@ -293,6 +334,7 @@ export class CommentList extends Component<PropsType, StateType> {
 				}
 			}
 		};
+
 
 		return (
 			<Fragment>
@@ -418,11 +460,11 @@ export class CommentList extends Component<PropsType, StateType> {
 													<button
 														data-qa-sel="create-question-pdf"
 														id="js-create-question-pdf"
-														className="btn btn--cta"
+														className="btn btn--primary"
 														onClick={() => this.handleClick("createQuestionPDF")}
 														aria-label="Creates a PDF of the questions"
 														tabIndex="0">
-													PDF of questions
+													Download questions
 													</button>
 													{contextValue.isAuthorised ?
 														<p className="mt--0">Please answer the following questions</p> 
