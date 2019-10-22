@@ -13,7 +13,7 @@ const _format = (questions) => {
 	});
 }
 
-export default (questionsForPDF, titleForPDF, endDate) => {
+export const CreateQuestionPdf = (questionsForPDF, titleForPDF, endDate) => {
 	const {vfs} = vfsFonts.pdfMake;
     pdfMake.vfs = vfs;
     

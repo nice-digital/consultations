@@ -24,7 +24,7 @@ import { Question } from "../Question/Question";
 import { LoginBanner } from "../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
 
-import CreateQuestionPdf from '../QuestionView/QuestionViewDocument';
+import { CreateQuestionPdf } from '../QuestionView/QuestionViewDocument';
 
 type PropsType = {
 	staticContext?: any,
@@ -139,32 +139,36 @@ export class CommentList extends Component<PropsType, StateType> {
 			.catch(err => console.log("load comments in commentlist " + err));
 	}
 
-	gatherData = async () => {
+	loadConsultation = async () => {
 		const {consultationId} = this.props.match.params;
 
 		const consultationData = load("consultation", undefined, [], {
 			consultationId,
 			isReview: false,
 		})
-			.then(response => response.data)
+			.then(response => {
+				this.setState({
+					consultationData: response.data
+				})
+			})
 			.catch(err => {
 				this.setState({
 					error: {
 						hasError: true,
 						message: "consultationData " + err,
 					},
+
 				});
 			});
 
-		return {
-			consultationData: await consultationData,
-		};
+		
 	};
 
 
 	componentDidMount() {
 		if (!this.state.initialDataLoaded) {
 			this.loadComments();
+			this.loadConsultation();
 		}
 		// We can't prerender whether we're on mobile cos SSR doesn't have a window
 		this.setState({
@@ -243,9 +247,6 @@ export class CommentList extends Component<PropsType, StateType> {
 		updateUnsavedIds(commentId, dirty, this);
 	};
 
-	componentWillUnmount(){
-		console.log("componentWillUnmount called");
-	}
 
 	//old drawer code:
 	isMobile = () => {
@@ -306,9 +307,9 @@ export class CommentList extends Component<PropsType, StateType> {
 
 				
 			case "createQuestionPDF":
-				var questionsForPDF = this.state.questions;
-				var titleForPDF = this.state.consultationData.title;
-				var endDate = this.state.endDate;
+				const questionsForPDF = this.state.questions;
+				const titleForPDF = this.state.consultationData.title;
+				const endDate = this.state.endDate;
 				CreateQuestionPdf(questionsForPDF, titleForPDF, endDate);
 				break;
 
