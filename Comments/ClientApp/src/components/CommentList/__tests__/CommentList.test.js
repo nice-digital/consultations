@@ -366,12 +366,46 @@ describe("[ClientApp] ", () => {
 			wrapper.update();
 
 			const button = wrapper.find("#js-create-question-pdf");
-			console.log(button.html());
+			// console.log(button.html());
 			// act
 			button.simulate("click");
-			console.log(CreateQuestionPdf);
+			// console.log(CreateQuestionPdf);
 			// assert
 			expect(CreateQuestionPdf).toHaveBeenCalledTimes(1);
+
+		})
+
+		it.only("should call createQuestionPDF with title, end date, and questions", async () => {
+			// assemble
+			mock.reset();
+			mock
+				.onGet("/consultations/api/Comments?sourceURI=%2F1%2F1%2Fintroduction")
+				.reply(200, sampleComments)
+				.onGet("/consultations/api/Consultation?consultationId=1&isReview=false")
+				.reply(200, sampleConsultation);
+
+			const questionsForPDF = sampleComments.questions;
+			const titleForPDF = sampleConsultation.title;
+			const endDate = sampleComments.consultationState.endDate;
+
+			const wrapper = mount(
+				<MemoryRouter>
+					<LiveAnnouncer>
+						<CommentList {...fakeProps} />
+					</LiveAnnouncer>
+				</MemoryRouter>
+			);
+
+			await nextTick();
+			wrapper.update();
+
+			const button = wrapper.find("#js-create-question-pdf");
+			// console.log(button.html());
+			// act
+			button.simulate("click");
+			// console.log(CreateQuestionPdf);
+			// assert
+			expect(CreateQuestionPdf).toHaveBeenCalledWith(questionsForPDF, titleForPDF, endDate);
 
 		})
 
