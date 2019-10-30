@@ -24,7 +24,7 @@ import { Question } from "../Question/Question";
 import { LoginBanner } from "../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
 
-import { CreateQuestionPdf } from '../QuestionView/QuestionViewDocument';
+import { createQuestionPdf } from '../QuestionView/QuestionViewDocument';
 
 type PropsType = {
 	staticContext?: any,
@@ -310,7 +310,7 @@ export class CommentList extends Component<PropsType, StateType> {
 				const questionsForPDF = this.state.questions;
 				const titleForPDF = this.state.consultationData.title;
 				const endDate = this.state.endDate;
-				CreateQuestionPdf(questionsForPDF, titleForPDF, endDate);
+				createQuestionPdf(questionsForPDF, titleForPDF, endDate);
 				break;
 
 			default:
@@ -462,10 +462,8 @@ export class CommentList extends Component<PropsType, StateType> {
 														data-qa-sel="create-question-pdf"
 														id="js-create-question-pdf"
 														className="btn btn--primary"
-														onClick={() => this.handleClick("createQuestionPDF")}
-														aria-label="Creates a PDF of the questions"
-														tabIndex="0">
-													Download questions
+														onClick={() => this.handleClick("createQuestionPDF")}>
+													Download questions (PDF)
 													</button>
 													{contextValue.isAuthorised ?
 														<p className="mt--0">Please answer the following questions</p> 
