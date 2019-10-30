@@ -22,7 +22,7 @@ namespace Comments.Common
 
 
 		public const string ConsultationsReviewPageRelativeUrlRegEx =
-			@"^\/(?<consultationId>\d+)\/(review|questions)$";
+			@"^\/(?<consultationId>\d+)\/review$";
 
 		public static ConsultationsUriElements ParseConsultationsUri(string consultationsURI)
         {
