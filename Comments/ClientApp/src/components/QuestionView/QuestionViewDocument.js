@@ -2,28 +2,29 @@ import pdfMake from 'pdfmake/build/pdfmake';
 import vfsFonts from 'pdfmake/build/vfs_fonts';
 
 var moment = require('moment');
-moment().format();
 
-const _format = (questions) => {
-	return questions.map(item => {
-		return ([
-            {text: item.questionText},
-            '\n',
-		]);
-	});
-}
 
 export const createQuestionPdf = (questionsForPDF, titleForPDF, endDate) => {
 	const {vfs} = vfsFonts.pdfMake;
     pdfMake.vfs = vfs;
+    const documentDefinition = createDocumentDefinition(questionsForPDF, titleForPDF, endDate);
+    pdfMake.createPdf(documentDefinition).open();
+
+}
+
+export const createDocumentDefinition = (questionsForPDF, titleForPDF, endDate) => {
+
+    const formattedQuestions = questionsForPDF.map(item => [
+            {text: item.questionText},
+            '\n',
+		]
+    );
     
-    const questions = questionsForPDF;
-    const formattedQuestions = _format(questions);
     const consultationEndDate = moment(endDate).format("D MMMM YYYY");
 
-    const documentDefinition = {
+    return {
             info: {
-                title: 'Questions for "' + titleForPDF +'"',
+                title: `Questions for "${titleForPDF}"`,
             },
             pageSize: 'A4',
             pageOrientation: 'portrait',
@@ -55,6 +56,4 @@ export const createQuestionPdf = (questionsForPDF, titleForPDF, endDate) => {
                 fontSize: 12
             }
     };
-
-	pdfMake.createPdf(documentDefinition).open();
 }
