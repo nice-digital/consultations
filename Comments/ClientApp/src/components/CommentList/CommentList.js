@@ -153,11 +153,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			})
 			.catch(err => {
 				this.setState({
-					error: {
-						hasError: true,
-						message: "consultationData " + err,
-					},
-
+					error: "consultationData " + err,
 				});
 			});
 
