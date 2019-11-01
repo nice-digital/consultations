@@ -38,17 +38,5 @@ describe("[ClientApp] ", () => {
 			expect(definition).toMatchSnapshot();
 		})
 
-
-		// it("createPdf should be called with the document definition", () => {
-		// 	//assemble
-
-		// 	//act
-		// 	createQuestionPdf(questionsForPDF, titleForPDF, endDate);
-
-		// 	//assert
-		// 	expect(pdfMake.createPdf).toHaveBeenCalledWith(documentDefinition);
-
-		// })
-
 	});
 });
