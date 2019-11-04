@@ -229,6 +229,8 @@ namespace Comments.Migrations
 
                     b.Property<bool>("HasTobaccoLinks");
 
+                    b.Property<bool?>("OrganisationExpressionOfInterest");
+
                     b.Property<string>("OrganisationName");
 
                     b.Property<bool>("RespondingAsOrganisation");
