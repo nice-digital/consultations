@@ -6,8 +6,6 @@ using System.Linq;
 using Comments.Common;
 using Comments.Configuration;
 using Microsoft.AspNetCore.Http;
-using NICE.Auth.NetCore.Helpers;
-using NICE.Auth.NetCore.Services;
 using NICE.Feeds;
 using Constants = Comments.Common.Constants;
 using Location = Comments.Models.Location;
@@ -31,17 +29,15 @@ namespace Comments.Services
         private readonly ConsultationsContext _context;
         private readonly IUserService _userService;
 	    private readonly IConsultationService _consultationService;
-	    private readonly IAuthenticateService _authenticateService;
 	    private readonly IHttpContextAccessor _httpContextAccessor;
 	    private readonly User _currentUser;
 
         public QuestionService(ConsultationsContext consultationsContext, IUserService userService, IConsultationService consultationService,
-	        IAuthenticateService authenticateService, IHttpContextAccessor httpContextAccessor)
+	        IHttpContextAccessor httpContextAccessor)
         {
             _context = consultationsContext;
             _userService = userService;
 	        _consultationService = consultationService;
-	        _authenticateService = authenticateService;
 	        _httpContextAccessor = httpContextAccessor;
 	        _currentUser = _userService.GetCurrentUser();
         }
@@ -165,7 +161,8 @@ namespace Comments.Services
 
 			var previousQuestionsWithRoles = GetRoles(previousQuestions);
 
-			var currentUserRoles = _httpContextAccessor.HttpContext.User.Roles();
+			//TODO: get roles
+			var currentUserRoles = new List<string>(); //_httpContextAccessor.HttpContext.User.Roles();
 
 			return new QuestionAdmin(documentsAndConsultationTitle.consultationTitle, consultationQuestions,
 				questionAdminDocuments, questionTypes, consultationState, previousQuestionsWithRoles, currentUserRoles);

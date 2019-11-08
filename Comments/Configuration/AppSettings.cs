@@ -11,7 +11,7 @@ namespace Comments.Configuration
 
         public static EnvironmentConfig Environment { get; private set; }
         public static FeedConfig Feed { get; set; }
-        public static GilliamConfig GilliamConfig { get; private set; }
+        //public static GilliamConfig GilliamConfig { get; private set; }
 		public static EncryptionConfig EncryptionConfig { get; private set; }
 	    public static ReviewConfig ReviewConfig { get; set; }
 	    public static StatusConfig StatusConfig { get; private set; }
@@ -21,7 +21,7 @@ namespace Comments.Configuration
         {
             services.Configure<EnvironmentConfig>(configuration.GetSection("AppSettings:Environment"));
             services.Configure<FeedConfig>(configuration.GetSection("Feeds")); 
-            services.Configure<GilliamConfig>(configuration.GetSection("Gilliam"));
+            //services.Configure<GilliamConfig>(configuration.GetSection("Gilliam"));
 	        services.Configure<EncryptionConfig>(configuration.GetSection("Encryption"));
 	        services.Configure<ReviewConfig>(configuration.GetSection("Review"));
 	        services.Configure<StatusConfig>(configuration.GetSection("Status"));
@@ -30,8 +30,8 @@ namespace Comments.Configuration
 			var sp = services.BuildServiceProvider();
             Environment = sp.GetService<IOptions<EnvironmentConfig>>().Value;
             Feed = sp.GetService<IOptions<FeedConfig>>().Value;
-            GilliamConfig = sp.GetService<IOptions<GilliamConfig>>().Value;
-            GilliamConfig.ContentRootPath = contentRootPath;
+            //GilliamConfig = sp.GetService<IOptions<GilliamConfig>>().Value;
+            //GilliamConfig.ContentRootPath = contentRootPath;
 	        EncryptionConfig = sp.GetService<IOptions<EncryptionConfig>>().Value;
 	        ReviewConfig = sp.GetService<IOptions<ReviewConfig>>().Value;
 	        StatusConfig = sp.GetService<IOptions<StatusConfig>>().Value;

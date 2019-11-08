@@ -11,15 +11,16 @@ using Microsoft.Extensions.Logging;
 using NICE.Feeds;
 using System;
 using System.IO;
-using Comments.Auth;
 using Comments.Common;
 using Comments.Export;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using NICE.Auth.NetCore.Services;
+using NICE.Identity.Authentication.Sdk.Configuration;
+using NICE.Identity.Authentication.Sdk.Extensions;
 
 namespace Comments
 {
@@ -52,7 +53,7 @@ namespace Comments
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.TryAddSingleton<ISeriLogger, SeriLogger>();
-            services.TryAddSingleton<IAuthenticateService, AuthService>();
+            //services.TryAddSingleton<IAuthenticateService, AuthService>();
             services.TryAddTransient<IUserService, UserService>();
 
 			var contextOptionsBuilder = new DbContextOptionsBuilder<ConsultationsContext>();
@@ -76,18 +77,24 @@ namespace Comments
 	        services.TryAddTransient<IStatusService, StatusService>();
 			services.TryAddTransient<IConsultationListService, ConsultationListService>();
 
-			// Add authentication 
-			services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = AuthOptions.DefaultScheme;
-                options.DefaultChallengeScheme = AuthOptions.DefaultScheme;
-            })
-            .AddNICEAuth(options =>
-            {
-                // todo: Configure options here from AppSettings
-            });
+			// Add authentication
 
-            services.AddMvc(options =>
+			var authConfiguration = new AuthConfiguration(Configuration, "WebAppConfiguration");
+			services.AddAuthentication(authConfiguration);
+			services.AddAuthorisation(new AuthConfiguration(Configuration, "WebAppConfiguration"));
+
+
+			//services.AddAuthentication(options =>
+			//         {
+			//             options.DefaultAuthenticateScheme = AuthOptions.DefaultScheme;
+			//             options.DefaultChallengeScheme = AuthOptions.DefaultScheme;
+			//         })
+			//         .AddNICEAuth(options =>
+			//         {
+			//             // todo: Configure options here from AppSettings
+			//         });
+
+			services.AddMvc(options =>
             {
                 options.Filters.Add(new ResponseCacheAttribute() { NoStore = true, Location = ResponseCacheLocation.None });
             });
@@ -145,7 +152,7 @@ namespace Comments
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ISeriLogger seriLogger, IApplicationLifetime appLifetime, IAuthenticateService authenticateService)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ISeriLogger seriLogger, IApplicationLifetime appLifetime, LinkGenerator linkGenerator)
         {           
             seriLogger.Configure(loggerFactory, Configuration, appLifetime, env);
             var startupLogger = loggerFactory.CreateLogger<Startup>();
@@ -264,15 +271,16 @@ namespace Comments
                     options.SupplyData = (context, data) =>
                     {
                         data["isHttpsRequest"] = context.Request.IsHttps;
-                        var cookieForSSR = context.Request.Cookies[NICE.Auth.NetCore.Helpers.Constants.DefaultCookieName];
-                        if (cookieForSSR != null)
-                        {
-                            data["cookies"] = $"{NICE.Auth.NetCore.Helpers.Constants.DefaultCookieName}={cookieForSSR}";
-                        }
+						//TODO: cookie for auth!
+                        //var cookieForSSR = context.Request.Cookies[NICE.Auth.NetCore.Helpers.Constants.DefaultCookieName];
+                        //if (cookieForSSR != null)
+                        //{
+                        //    data["cookies"] = $"{NICE.Auth.NetCore.Helpers.Constants.DefaultCookieName}={cookieForSSR}";
+                        //}
                         data["isAuthorised"] = context.User.Identity.IsAuthenticated;
 	                    data["displayName"] = context.User.Identity.Name;
-	                    data["signInURL"] = authenticateService.GetLoginURL(context.Request.Path);
-	                    data["registerURL"] = authenticateService.GetRegisterURL(context.Request.Path);
+	                    data["signInURL"] = linkGenerator.GetPathByAction(context, "Login", "Account", new { returnUrl = context.Request.Path }); // authenticateService.GetLoginURL(context.Request.Path);
+	                    //data["registerURL"] = authenticateService.GetRegisterURL(context.Request.Path);
 	                    data["requestURL"] = context.Request.Path;
 	                    data["accountsEnvironment"] = AppSettings.Environment.AccountsEnvironment;
 	                    //data["user"] = context.User; - possible security implications here, surfacing claims to the front end. might be ok, if just server-side.

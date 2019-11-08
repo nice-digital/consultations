@@ -1,13 +1,13 @@
 using Comments.Common;
+using Comments.Configuration;
 using Comments.Models;
 using Comments.ViewModels;
-using NICE.Auth.NetCore.Services;
+using NICE.Feeds;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Comments.Configuration;
-using NICE.Auth.NetCore.Helpers;
-using NICE.Feeds;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 
 namespace Comments.Services
 {
@@ -25,17 +25,19 @@ namespace Comments.Services
     {
         private readonly ConsultationsContext _context;
         private readonly IUserService _userService;
-        private readonly IAuthenticateService _authenticateService;
 	    private readonly IConsultationService _consultationService;
+	    private readonly LinkGenerator _linkGenerator;
+	    private readonly IHttpContextAccessor _httpContextAccessor;
 	    private readonly ISubmitService _submitService;
 	    private readonly User _currentUser;
 
-        public CommentService(ConsultationsContext context, IUserService userService, IAuthenticateService authenticateService, IConsultationService consultationService)
+        public CommentService(ConsultationsContext context, IUserService userService, IConsultationService consultationService, LinkGenerator linkGenerator, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _userService = userService;
-            _authenticateService = authenticateService;
 	        _consultationService = consultationService;
+	        _linkGenerator = linkGenerator;
+	        _httpContextAccessor = httpContextAccessor;
 	        _currentUser = _userService.GetCurrentUser();
         }
 
@@ -118,8 +120,9 @@ namespace Comments.Services
 	    public CommentsAndQuestions GetCommentsAndQuestions(string relativeURL)
 	    {
 		    var user = _userService.GetCurrentUser();
-		    var signInURL = _authenticateService.GetLoginURL(relativeURL.ToConsultationsRelativeUrl());
-		    var isReview = ConsultationsUri.IsReviewPageRelativeUrl(relativeURL);
+		    var signInURL = _linkGenerator.GetPathByAction(_httpContextAccessor.HttpContext, "Login", "Account", new {returnUrl = relativeURL.ToConsultationsRelativeUrl() });
+
+			var isReview = ConsultationsUri.IsReviewPageRelativeUrl(relativeURL);
 			var consultationSourceURI = ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Consultation);
 		    ConsultationState consultationState;
 		    var sourceURIs = new List<string> { consultationSourceURI };
