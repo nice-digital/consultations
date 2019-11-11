@@ -1,11 +1,10 @@
 using Comments.Common;
 using Comments.ViewModels;
 using Microsoft.AspNetCore.Http;
-using NICE.Auth.NetCore.Helpers;
-using NICE.Auth.NetCore.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Routing;
 
 namespace Comments.Services
 {
@@ -23,28 +22,28 @@ namespace Comments.Services
     public class UserService : IUserService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-	    private readonly IAuthenticateService _authenticateService;
+        private readonly LinkGenerator _linkGenerator;
 
-	    public UserService(IHttpContextAccessor httpContextAccessor, IAuthenticateService authenticateService)
-	    {
-		    _httpContextAccessor = httpContextAccessor;
-		    _authenticateService = authenticateService;
-	    }
+        public UserService(IHttpContextAccessor httpContextAccessor, LinkGenerator linkGenerator)
+        {
+	        _httpContextAccessor = httpContextAccessor;
+	        _linkGenerator = linkGenerator;
+        }
 
         public User GetCurrentUser()
         {
             var contextUser = _httpContextAccessor.HttpContext?.User;
 
-            return new User(contextUser?.Identity.IsAuthenticated ?? false, contextUser?.DisplayName(), contextUser?.Id(), contextUser?.Organisation());
+            return new User(contextUser?.Identity.IsAuthenticated ?? false, "TODO: display name", 1, "TODO: organisation name"); //contextUser?.DisplayName(), contextUser?.Id(), contextUser?.Organisation());
         }
 
 		public SignInDetails GetCurrentUserSignInDetails(string returnURL)
 	    {
 			var user = GetCurrentUser();
 
-		    var signInURL = _authenticateService.GetLoginURL(returnURL.ToConsultationsRelativeUrl());
-		    var registerURL = _authenticateService.GetRegisterURL(returnURL.ToConsultationsRelativeUrl());
-
+		    var signInURL = _linkGenerator.GetPathByAction(_httpContextAccessor.HttpContext, "Login", "Account", new { returnURL = returnURL.ToConsultationsRelativeUrl() });
+		    var registerURL = "TODO: register url";
+			
 			return new SignInDetails(user, signInURL, registerURL);
 		}
 
