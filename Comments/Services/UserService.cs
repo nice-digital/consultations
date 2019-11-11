@@ -4,7 +4,10 @@ using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Routing;
+using NICE.Identity.Authentication.Sdk.API;
+using NICE.Identity.Authentication.Sdk.Extensions;
 
 namespace Comments.Services
 {
@@ -12,9 +15,9 @@ namespace Comments.Services
     {
         User GetCurrentUser();
 		SignInDetails GetCurrentUserSignInDetails(string returnURL);
-	    string GetDisplayNameForUserId(Guid userId);
-	    string GetEmailForUserId(Guid userId);
-		IDictionary<Guid, string> GetDisplayNamesForMultipleUserIds(IEnumerable<Guid> userIds);
+		Task<string> GetDisplayNameForUserId(string userId);
+		Task<string> GetEmailForUserId(string userId);
+		Task<IDictionary<string, Task<string>>> GetDisplayNamesForMultipleUserIds(IEnumerable<string> userIds);
 	    ICollection<string> GetUserRoles();
 	    Validate IsAllowedAccess(ICollection<string> permittedRoles);
 	}
@@ -23,18 +26,20 @@ namespace Comments.Services
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly LinkGenerator _linkGenerator;
+        private readonly IAPIService _apiService;
 
-        public UserService(IHttpContextAccessor httpContextAccessor, LinkGenerator linkGenerator)
+        public UserService(IHttpContextAccessor httpContextAccessor, LinkGenerator linkGenerator, IAPIService apiService)
         {
 	        _httpContextAccessor = httpContextAccessor;
 	        _linkGenerator = linkGenerator;
+	        _apiService = apiService;
         }
 
         public User GetCurrentUser()
         {
             var contextUser = _httpContextAccessor.HttpContext?.User;
 
-            return new User(contextUser?.Identity.IsAuthenticated ?? false, "TODO: display name", 1, "TODO: organisation name"); //contextUser?.DisplayName(), contextUser?.Id(), contextUser?.Organisation());
+            return new User(contextUser?.Identity.IsAuthenticated ?? false, contextUser?.DisplayName(), contextUser?.NameIdentifier());
         }
 
 		public SignInDetails GetCurrentUserSignInDetails(string returnURL)
@@ -47,25 +52,28 @@ namespace Comments.Services
 			return new SignInDetails(user, signInURL, registerURL);
 		}
 
-	    public string GetDisplayNameForUserId(Guid userId)
+	    public async Task<string> GetDisplayNameForUserId(string userId)
 	    {
-		    return _authenticateService.FindUser(userId)?.DisplayName;
+		    var users = await _apiService.FindUsers(new List<string> {userId});
+			return users?.FirstOrDefault()?.DisplayName;
 	    }
 
-	    public string GetEmailForUserId(Guid userId)
+	    public async Task<string> GetEmailForUserId(string userId)
 	    {
-		    return _authenticateService.FindUser(userId)?.EmailAddress;
+		    var users = await _apiService.FindUsers(new List<string> { userId });
+		    return users?.FirstOrDefault()?.EmailAddress;
 	    }
 
-		public IDictionary<Guid, string> GetDisplayNamesForMultipleUserIds(IEnumerable<Guid> userIds)
+		public async Task<IDictionary<string, Task<string>>> GetDisplayNamesForMultipleUserIds(IEnumerable<string> userIds)
 	    {
-		    return userIds.Distinct().ToDictionary(userId => userId, GetDisplayNameForUserId);
+		    return userIds.Distinct().ToDictionary(userId => userId, async userId => await GetDisplayNameForUserId(userId));
 	    }
 
 	    public ICollection<string> GetUserRoles()
 	    {
 			var niceUser = _httpContextAccessor.HttpContext?.User;
-		    return niceUser?.Roles().ToList() ?? new List<string>();
+			var host = _httpContextAccessor.HttpContext?.Request.Host.Host;
+			return niceUser?.Roles(host).ToList() ?? new List<string>();
 	    }
 
 	    public Validate IsAllowedAccess(ICollection<string> permittedRoles)
@@ -85,7 +93,8 @@ namespace Comments.Services
 		    {
 			    return new Validate(false, false, false, "Not authenticated");
 		    }
-		    var userRoles = niceUser.Roles();
+		    var host = _httpContextAccessor.HttpContext?.Request.Host.Host;
+			var userRoles = niceUser.Roles(host);
 
 		    if (!userRoles.Any(permittedRoles.Contains))
 		    {

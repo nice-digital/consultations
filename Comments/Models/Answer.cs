@@ -10,7 +10,7 @@ namespace Comments.Models
 			SubmissionAnswer = new HashSet<SubmissionAnswer>();
 		} 
 
-        public Answer(int questionId, Guid createdByUserId, string answerText, bool? answerBoolean, Question question, int statusId, Status status)
+        public Answer(int questionId, string createdByUserId, string answerText, bool? answerBoolean, Question question, int statusId, Status status)
         {
 	        if (answerText == null && question.QuestionType.TextIsMandatory)
 	        {

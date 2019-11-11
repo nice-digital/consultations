@@ -51,7 +51,7 @@ namespace Comments.Services
             if (commentInDatabase == null)
                 return (comment: null, validate: new Validate(valid: false, notFound: true, message: $"Comment id:{commentId} not found trying to get comment for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
 
-            if (!commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId.Value))
+            if (!commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId, StringComparison.OrdinalIgnoreCase))
                 return (comment: null, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to access comment id: {commentId}, but it's not their comment"));
 
             return (comment: new ViewModels.Comment(commentInDatabase.Location, commentInDatabase), validate: null); 
@@ -67,10 +67,10 @@ namespace Comments.Services
             if (commentInDatabase == null)
                 return (rowsUpdated: 0, validate: new Validate(valid: false, notFound: true, message: $"Comment id:{commentId} not found trying to edit comment for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
 
-            if (!commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId.Value))
+            if (!commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId, StringComparison.OrdinalIgnoreCase))
                 return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to edit comment id: {commentId}, but it's not their comment"));
 
-            comment.LastModifiedByUserId = _currentUser.UserId.Value;
+            comment.LastModifiedByUserId = _currentUser.UserId;
             comment.LastModifiedDate = DateTime.UtcNow;
             commentInDatabase.UpdateFromViewModel(comment);
             return (rowsUpdated: _context.SaveChanges(), validate: null);
@@ -91,7 +91,7 @@ namespace Comments.Services
 			_context.Location.Add(locationToSave);
 
 	        var status = _context.GetStatus(StatusName.Draft);
-			var commentToSave = new Models.Comment(comment.LocationId, _currentUser.UserId.Value, comment.CommentText, _currentUser.UserId.Value, locationToSave, status.StatusId, null);
+			var commentToSave = new Models.Comment(comment.LocationId, _currentUser.UserId, comment.CommentText, _currentUser.UserId, locationToSave, status.StatusId, null);
             _context.Comment.Add(commentToSave);
             _context.SaveChanges();
 
@@ -108,12 +108,12 @@ namespace Comments.Services
             if (commentInDatabase == null)
                 return (rowsUpdated: 0, validate: new Validate(valid: false, notFound: true, message: $"Comment id:{commentId} not found trying to delete comment for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
 
-            if (!commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId.Value))
+            if (!commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId))
                 return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to delete comment id: {commentId}, but it's not their comment"));
 
             commentInDatabase.IsDeleted = true;
             commentInDatabase.LastModifiedDate = DateTime.UtcNow;
-            commentInDatabase.LastModifiedByUserId = _currentUser.UserId.Value;
+            commentInDatabase.LastModifiedByUserId = _currentUser.UserId;
             return (rowsUpdated: _context.SaveChanges(), validate: null);
         }
 

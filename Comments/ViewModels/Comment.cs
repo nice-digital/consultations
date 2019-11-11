@@ -6,7 +6,7 @@ namespace Comments.ViewModels
     {
         public Comment() { } //only here for model binding. don't use it in code.
 
-        public Comment(int locationId, string sourceUri, string htmlElementId, string rangeStart, int? rangeStartOffset, string rangeEnd, int? rangeEndOffset, string quote, string order, int commentId, DateTime lastModifiedDate, Guid lastModifiedByUserId, string commentText, int statusId, bool show, string section) : base(locationId, sourceUri, htmlElementId, rangeStart, rangeStartOffset, rangeEnd, rangeEndOffset, quote, order, show, section)
+        public Comment(int locationId, string sourceUri, string htmlElementId, string rangeStart, int? rangeStartOffset, string rangeEnd, int? rangeEndOffset, string quote, string order, int commentId, DateTime lastModifiedDate, string lastModifiedByUserId, string commentText, int statusId, bool show, string section) : base(locationId, sourceUri, htmlElementId, rangeStart, rangeStartOffset, rangeEnd, rangeEndOffset, quote, order, show, section)
         {
             CommentId = commentId;
             LastModifiedDate = lastModifiedDate;
@@ -29,7 +29,7 @@ namespace Comments.ViewModels
 
         public int CommentId { get; set; }
         public DateTime LastModifiedDate { get; set; }
-        public Guid LastModifiedByUserId { get; set; }
+        public string LastModifiedByUserId { get; set; }
         public string CommentText { get; set; }
 
 	    public ViewModels.Status Status { get; set; }

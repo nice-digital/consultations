@@ -7,12 +7,12 @@ namespace Comments.Models
 	{
 		public int AnswerId { get; set; }
 		public int QuestionId { get; set; }
-		public Guid CreatedByUserId { get; set; }
+		public string CreatedByUserId { get; set; }
 		public string AnswerText { get; set; }
 		public bool? AnswerBoolean { get; set; }
 		public DateTime CreatedDate { get; set; }
 		public DateTime LastModifiedDate { get; set; }
-		public Guid LastModifiedByUserId { get; set; }
+		public string LastModifiedByUserId { get; set; }
 		public bool IsDeleted { get; set; }
 		public int StatusId { get; set; }
 

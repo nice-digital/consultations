@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,7 +7,7 @@ namespace Comments.ViewModels
 {
     public class SecureTestViewModel
     {
-        public SecureTestViewModel(string signInUrl, string signOutUrl, bool isLoggedIn, Guid? userId, string displayName, string givenName, string surname, string email, string organisation, string pageDescription)
+        public SecureTestViewModel(string signInUrl, string signOutUrl, bool isLoggedIn, string userId, string displayName, string givenName, string surname, string email, string organisation, string pageDescription)
         {
             SignInUrl = signInUrl;
             SignOutUrl = signOutUrl;
@@ -26,7 +26,7 @@ namespace Comments.ViewModels
 
         public bool IsLoggedIn { get; private set; }
 
-        public Guid? UserId { get; private set; }
+        public string UserId { get; private set; }
         public string DisplayName { get; private set; }
         public string GivenName { get; private set; }
         public string Surname { get; private set; }

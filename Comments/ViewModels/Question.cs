@@ -28,7 +28,7 @@ namespace Comments.ViewModels
         public int QuestionId { get; set; }
         public string QuestionText { get; set; }
         public int QuestionTypeId { get; set; }
-        public Guid LastModifiedByUserId { get; set; }
+        public string LastModifiedByUserId { get; set; }
         public DateTime LastModifiedDate { get; set; }
 		public QuestionType QuestionType { get; set; }
 		public IList<ViewModels.Answer> Answers { get; set; }

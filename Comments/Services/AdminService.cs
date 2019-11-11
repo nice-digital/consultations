@@ -9,7 +9,7 @@ namespace Comments.Services
 	public interface IAdminService
 	{
 		int DeleteAllData();
-		int DeleteAllSubmissionsFromUser(Guid usersSubmissionsToDelete);
+		int DeleteAllSubmissionsFromUser(string usersSubmissionsToDelete);
 		int InsertQuestionsForDocument1And2InConsultation(int consultationId);
 		int InsertQuestionsForConsultation(int consultationId);
 		int InsertQuestionsForCfGConsultation(int consultationId);
@@ -44,7 +44,7 @@ namespace Comments.Services
 		    return _dbContext.DeleteEverything();
 	    }
 
-	    public int DeleteAllSubmissionsFromUser(Guid usersSubmissionsToDelete)
+	    public int DeleteAllSubmissionsFromUser(string usersSubmissionsToDelete)
 	    {
 		    return _dbContext.DeleteAllSubmissionsFromUser(usersSubmissionsToDelete);
 	    }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Packaging;
 using System.Linq;
+using System.Threading.Tasks;
 using Comments.Common;
 using Comments.Models;
 using Comments.Services;
@@ -385,7 +386,7 @@ namespace Comments.Export
 			}
 		}
 
-		private (List<Excel> collatedData, bool showOrganisationExpressionOfInterest) CollateData(IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions)
+		private async Task<(List<Excel> collatedData, bool showOrganisationExpressionOfInterest)> CollateData(IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions)
 		{
 			List<Excel> excel = new List<Excel>();
 			foreach (var comment in comments)
@@ -400,8 +401,8 @@ namespace Comments.Export
 					ChapterTitle = locationDetails.ChapterName,
 					Section = commentOn == CommentOn.Section || commentOn == CommentOn.SubSection || commentOn == CommentOn.Selection ? comment.Location.Section : null,
 					Quote = commentOn  == CommentOn.Selection ? comment.Location.Quote : null,
-					UserName =  _userService.GetDisplayNameForUserId(comment.CreatedByUserId),
-					Email = _userService.GetEmailForUserId(comment.CreatedByUserId),
+					UserName =  await _userService.GetDisplayNameForUserId(comment.CreatedByUserId),
+					Email = await _userService.GetEmailForUserId(comment.CreatedByUserId),
 					CommentId = comment.CommentId,
 					Comment =  comment.CommentText,
 					QuestionId = null,
@@ -431,8 +432,8 @@ namespace Comments.Export
 					ChapterTitle = locationDetails.ChapterName,
 					Section = answer.Question.Location.Section,
 					Quote = answer.Question.Location.Quote,
-					UserName = _userService.GetDisplayNameForUserId(answer.CreatedByUserId),
-					Email = _userService.GetEmailForUserId(answer.CreatedByUserId),
+					UserName = await _userService.GetDisplayNameForUserId(answer.CreatedByUserId),
+					Email = await _userService.GetEmailForUserId(answer.CreatedByUserId),
 					CommentId = null,
 					Comment = null,
 					QuestionId = answer.Question.QuestionId,
@@ -537,7 +538,7 @@ namespace Comments.Export
 			return styleSheet;
 		}
 
-		private void CreateSheet(SpreadsheetDocument spreadsheetDocument, IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions)
+		private async void CreateSheet(SpreadsheetDocument spreadsheetDocument, IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions)
 		{
 			// Add a WorkbookPart to the document.
 			WorkbookPart workbookpart = spreadsheetDocument.AddWorkbookPart();
@@ -582,7 +583,7 @@ namespace Comments.Export
 			var ConsultationTitle = GetConsultationTitle(comments, questions);
 			AppendTitleRow(sheetData, ConsultationTitle);
 
-			var collatedDataAndExpressionOfInterestFlag = CollateData(comments, answers, questions);
+			var collatedDataAndExpressionOfInterestFlag = await CollateData(comments, answers, questions);
 
 			AppendHeaderRow(sheetData, collatedDataAndExpressionOfInterestFlag.showOrganisationExpressionOfInterest);
 

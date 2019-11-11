@@ -226,9 +226,9 @@ namespace Comments.Test.Infrastructure
 
 		    return statusModel.StatusId;
 	    }
-		protected int AddComment(int locationId, string commentText, bool isDeleted, Guid createdByUserId, int status = (int)StatusName.Draft, ConsultationsContext passedInContext = null)
+		protected int AddComment(int locationId, string commentText, bool isDeleted, string createdByUserId, int status = (int)StatusName.Draft, ConsultationsContext passedInContext = null)
         {
-            var comment = new Comment(locationId, createdByUserId, commentText, Guid.Empty, location: null, statusId: status, status: null);
+            var comment = new Comment(locationId, createdByUserId, commentText, null, location: null, statusId: status, status: null);
             comment.IsDeleted = isDeleted;
             if (passedInContext != null)
             {
@@ -284,7 +284,7 @@ namespace Comments.Test.Infrastructure
 
             return question.QuestionId;
         }
-        protected int AddAnswer(int questionId, Guid userId, string answerText, int status = (int)StatusName.Draft, ConsultationsContext passedInContext = null)
+        protected int AddAnswer(int questionId, string userId, string answerText, int status = (int)StatusName.Draft, ConsultationsContext passedInContext = null)
         {
             var answer = new Answer(questionId, userId, answerText, null, null, status, null);
             answer.LastModifiedDate = DateTime.Now;
@@ -304,7 +304,7 @@ namespace Comments.Test.Infrastructure
 
             return answer.AnswerId;
         }
-        protected void AddCommentsAndQuestionsAndAnswers(string sourceURI, string commentText, string questionText, string answerText, Guid createdByUserId, int status = (int)StatusName.Draft, ConsultationsContext passedInContext = null)
+        protected void AddCommentsAndQuestionsAndAnswers(string sourceURI, string commentText, string questionText, string answerText, string createdByUserId, int status = (int)StatusName.Draft, ConsultationsContext passedInContext = null)
         {
             var locationId = AddLocation(sourceURI, passedInContext);
             AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId, passedInContext: passedInContext, status: status);
@@ -319,7 +319,7 @@ namespace Comments.Test.Infrastructure
             var answerText = Guid.NewGuid().ToString();
             var commentText = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
-            var userId = Guid.NewGuid();
+            var userId = Guid.NewGuid().ToString();
 
 			var locationId = AddLocation(sourceURI);
 			AddComment(locationId, commentText, isDeleted: false, createdByUserId: userId);
@@ -336,7 +336,7 @@ namespace Comments.Test.Infrastructure
 			}
 		}
 
-	    protected void AddSubmittedCommentsAndAnswers(string sourceURI, string commentText, string questionText, string answerText, Guid createdByUserId, ConsultationsContext passedInContext = null)
+	    protected void AddSubmittedCommentsAndAnswers(string sourceURI, string commentText, string questionText, string answerText, string createdByUserId, ConsultationsContext passedInContext = null)
 	    {
 		    var locationId = AddLocation(sourceURI, passedInContext);
 		    var commentId = AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId, status: (int)StatusName.Submitted, passedInContext: passedInContext);
@@ -348,7 +348,7 @@ namespace Comments.Test.Infrastructure
 		    AddSubmissionAnswers(submissionId, answerId, passedInContext);
 	    }
 
-	    protected void AddSubmittedComments(string sourceURI, string commentText, string questionText, string answerText, Guid createdByUserId, ConsultationsContext passedInContext = null)
+	    protected void AddSubmittedComments(string sourceURI, string commentText, string questionText, string answerText, string createdByUserId, ConsultationsContext passedInContext = null)
 	    {
 		    var locationId = AddLocation(sourceURI, passedInContext);
 		    var commentId = AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId, status: (int)StatusName.Submitted, passedInContext: passedInContext);
@@ -358,7 +358,7 @@ namespace Comments.Test.Infrastructure
 		    AddSubmissionComments(submissionId, commentId, passedInContext);
 	    }
 
-	    protected void AddSubmittedQuestionsWithAnswers(string sourceURI, string commentText, string questionText, string answerText, Guid createdByUserId, ConsultationsContext passedInContext = null)
+	    protected void AddSubmittedQuestionsWithAnswers(string sourceURI, string commentText, string questionText, string answerText, string createdByUserId, ConsultationsContext passedInContext = null)
 	    {
 		    var locationId = AddLocation(sourceURI, passedInContext);
 			var questionTypeId = 99;
@@ -368,7 +368,7 @@ namespace Comments.Test.Infrastructure
 		    AddSubmissionAnswers(submissionId, answerId, passedInContext);
 	    }
 
-		protected int AddSubmission(Guid userId, ConsultationsContext passedInContext = null, bool? organisationExpressionOfInterest = null)
+		protected int AddSubmission(string userId, ConsultationsContext passedInContext = null, bool? organisationExpressionOfInterest = null)
 	    {
 			var submission = new Models.Submission(userId, DateTime.Now, false, null, false, null, organisationExpressionOfInterest);
 			if (passedInContext != null)
