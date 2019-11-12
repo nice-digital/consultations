@@ -1,23 +1,28 @@
-﻿@model Comments.ViewModels.SecureTestViewModel
+@model Comments.ViewModels.SecureTestViewModel
 @{
-    Layout = "~/Views/_Layout.cshtml";
+	Layout = "~/Views/_Layout.cshtml";
 }
 
 
 @Model.PageDescription
 
-<br /><br /><br />
+<br />
+<br />
+<br />
 
 @if (Model.IsLoggedIn)
 {
-    <p> You are signed in as (display name): @Model.DisplayName</p>
-    <p> NICE account id: @Model.UserId.ToString()</p>
-    <p> Given name: @Model.GivenName</p>
-    <p> Surname: @Model.Surname</p>
-    <p> Email: @Model.Email</p>
-    <p> Organisation: @Model.Organisation</p>
+	<p> You are signed in as (display name): @Model.DisplayName</p>
+	<p> NICE account id: @Model.UserId.ToString()</p>
+	<p> Given name: @Model.GivenName</p>
+	<p> Surname: @Model.Surname</p>
+	<p> Email: @Model.Email</p>
+	<p> Organisation: @Model.Organisation</p>
 }
 else
 {
-    <p> You are not signed in.</p>
+	<p>
+		You are not signed in.
+	</p>
+	<a href="@Url.Action("Login", "Account", new {returnUrl = "/secure"})">Go to secure page</a>
 }

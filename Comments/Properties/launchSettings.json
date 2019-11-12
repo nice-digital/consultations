@@ -11,7 +11,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "consultations/admin/download",
+      "launchUrl": "unsecure",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

@@ -1,13 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29503.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Comments", "Comments\Comments.csproj", "{222AED41-3F65-415F-9C6E-F4124638890C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Comments.Test", "Comments.Test\Comments.Test.csproj", "{16435EA8-8B15-4F8F-9E08-85D527872DAD}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "ConsultationsDatabase", "ConsultationsDatabase\ConsultationsDatabase.sqlproj", "{FAE0C81B-CC97-4F18-81CF-8B64E280F748}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NICE.Identity.Authentication.Sdk", "..\identity\NICE.Identity.Authentication.Sdk\NICE.Identity.Authentication.Sdk.csproj", "{4F98DA93-AF8C-478F-AFA9-10A66F8479D3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NICE.Identity.Authorisation.WebAPI", "..\identity\NICE.Identity.Authorisation.WebAPI\NICE.Identity.Authorisation.WebAPI.csproj", "{F235499A-91D4-492F-9F07-822682656F12}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +31,14 @@ Global
 		{FAE0C81B-CC97-4F18-81CF-8B64E280F748}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FAE0C81B-CC97-4F18-81CF-8B64E280F748}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FAE0C81B-CC97-4F18-81CF-8B64E280F748}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{4F98DA93-AF8C-478F-AFA9-10A66F8479D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F98DA93-AF8C-478F-AFA9-10A66F8479D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F98DA93-AF8C-478F-AFA9-10A66F8479D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F98DA93-AF8C-478F-AFA9-10A66F8479D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F235499A-91D4-492F-9F07-822682656F12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F235499A-91D4-492F-9F07-822682656F12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F235499A-91D4-492F-9F07-822682656F12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F235499A-91D4-492F-9F07-822682656F12}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
