@@ -160,7 +160,7 @@ namespace Comments
             if (env.IsDevelopment())
             {
 	            app.UseExceptionHandler(Constants.ErrorPath);
-				//app.UseDeveloperExceptionPage();
+				app.UseDeveloperExceptionPage();
                 loggerFactory.AddConsole(Configuration.GetSection("Logging"));
                 loggerFactory.AddDebug();
 
