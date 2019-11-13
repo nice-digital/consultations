@@ -389,6 +389,10 @@ namespace Comments.Export
 		private async Task<(List<Excel> collatedData, bool showOrganisationExpressionOfInterest)> CollateData(IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions)
 		{
 			List<Excel> excel = new List<Excel>();
+
+			var userIds = comments.Select(comment => comment.CreatedByUserId).Concat(answers.Select(answer => answer.CreatedByUserId)).Distinct();
+			var userDetailsForUserIds = await _userService.GetUserDetailsForUserIds(userIds);
+
 			foreach (var comment in comments)
 			{
 				var locationDetails = _exportService.GetLocationData(comment.Location);
@@ -401,8 +405,8 @@ namespace Comments.Export
 					ChapterTitle = locationDetails.ChapterName,
 					Section = commentOn == CommentOn.Section || commentOn == CommentOn.SubSection || commentOn == CommentOn.Selection ? comment.Location.Section : null,
 					Quote = commentOn  == CommentOn.Selection ? comment.Location.Quote : null,
-					UserName =  await _userService.GetDisplayNameForUserId(comment.CreatedByUserId),
-					Email = await _userService.GetEmailForUserId(comment.CreatedByUserId),
+					UserName = userDetailsForUserIds[comment.CreatedByUserId].displayName,
+					Email = userDetailsForUserIds[comment.CreatedByUserId].emailAddress,
 					CommentId = comment.CommentId,
 					Comment =  comment.CommentText,
 					QuestionId = null,
@@ -416,8 +420,6 @@ namespace Comments.Export
 					TobaccoIndustryDetails = comment.SubmissionComment.Count > 0? comment.SubmissionComment?.First().Submission.TobaccoDisclosure : null,
 					OrganisationExpressionOfInterest = comment.SubmissionComment.Count > 0 ? comment.SubmissionComment?.First().Submission.OrganisationExpressionOfInterest : null,
 					Order = comment.Location.Order,
-
-					
 			};
 				excel.Add(excelrow);
 			}
@@ -432,8 +434,8 @@ namespace Comments.Export
 					ChapterTitle = locationDetails.ChapterName,
 					Section = answer.Question.Location.Section,
 					Quote = answer.Question.Location.Quote,
-					UserName = await _userService.GetDisplayNameForUserId(answer.CreatedByUserId),
-					Email = await _userService.GetEmailForUserId(answer.CreatedByUserId),
+					UserName = userDetailsForUserIds[answer.CreatedByUserId].displayName,
+					Email = userDetailsForUserIds[answer.CreatedByUserId].emailAddress,
 					CommentId = null,
 					Comment = null,
 					QuestionId = answer.Question.QuestionId,

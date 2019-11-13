@@ -1,3 +1,4 @@
+@using Comments.Common
 @model Comments.ViewModels.SecureTestViewModel
 @{
 	Layout = "~/Views/_Layout.cshtml";
@@ -22,8 +23,8 @@
 else
 {
 	<p>
-		You are not signed in.
+		This is the unsecure page.
 	</p>
-	<a href="@Url.Action("Login", "Account", new {returnUrl = "/secure"})">Go to secure page</a><br./>
+	<a href="@Url.Action(Constants.Auth.LoginAction, Constants.Auth.ControllerName, new {returnUrl = "/secure"})">Go to secure page</a><br./>
 }
 <a href="/consultations/admin/download">Go to download page</a>

@@ -76,7 +76,15 @@
 			height="0" width="0" style="display:none;visibility:hidden"></iframe>
 </noscript>
 
-<!-- Global nav -->
+<!-- End Google Tag Manager (noscript) -->
+<div id="global-nav-header"></div>
+<div id="root"></div>
+<div id="global-nav-footer"></div>
+
+<!-- NOTE: Do not remove the "loud comments" in this page. eg. the scripts tag below. They are used by server side rendering. -->
+<!--! scripts -->
+
+<!-- Global nav - this block must be below the "loud" scipts comment above, as it relies on window.__PRELOADED__ which is set in that block. -->
 <script>	
 	var global_nav_config = {
 		service: "guidance",
@@ -85,18 +93,15 @@
 				autocomplete: "/autocomplete?ajax=ajax",
 			},
 			auth: {
-				environment: "%REACT_APP_ACCOUNTS_ENVIRONMENT%"
+				provider: "idam",
+				environment: "%REACT_APP_ACCOUNTS_ENVIRONMENT%",
+				links: window.__PRELOADED__.isAuthorised ? [{ text: "Sign out", url: window.__PRELOADED__.signOutURL }] : [{ text: "Sign in", url: window.__PRELOADED__.signInURL }],
+				displayName: window.__PRELOADED__.displayName
 			}
 		},
 		footer: true
 	};
 </script>
-
-<!-- End Google Tag Manager (noscript) -->
-<div id="global-nav-header"></div>
-<div id="root"></div>
-<div id="global-nav-footer"></div>
-
 <!-- Content of src in script tags below are replaced by parameters in the .env file for local development only.
 	
 	On all other servers, the .env.production file is used. During the build, the src attributes will get the substitution variable strings
@@ -109,9 +114,6 @@
 	<script src="%REACT_APP_GLOBAL_NAV_SCRIPT_IE8%"></script>
 <![endif]-->
 <script src="%REACT_APP_GLOBAL_NAV_SCRIPT%"></script>
-
-<!-- NOTE: Do not remove the "loud comments" in this page. eg. the scripts tag below. They are used by server side rendering. -->
-<!--! scripts -->
 
 </body>
 </html>

@@ -11,15 +11,19 @@ using Microsoft.Extensions.Logging;
 using NICE.Feeds;
 using System;
 using System.IO;
+using System.Web;
 using Comments.Common;
 using Comments.Export;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using NICE.Identity.Authentication.Sdk.Configuration;
+using NICE.Identity.Authentication.Sdk.Domain;
 using NICE.Identity.Authentication.Sdk.Extensions;
 
 namespace Comments
@@ -42,7 +46,7 @@ namespace Comments
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            if (Environment.IsDevelopment())
+			if (Environment.IsDevelopment())
             {
                 AppSettings.Configure(services, Configuration, @"c:\"); 
             }
@@ -83,7 +87,7 @@ namespace Comments
 			services.AddAuthentication(authConfiguration);
 			services.AddAuthorisation(new AuthConfiguration(Configuration, "WebAppConfiguration"));
 
-
+			//services.AddRouting(options => options.LowercaseUrls = true);
 			//services.AddAuthentication(options =>
 			//         {
 			//             options.DefaultAuthenticateScheme = AuthOptions.DefaultScheme;
@@ -97,7 +101,7 @@ namespace Comments
 			services.AddMvc(options =>
             {
                 options.Filters.Add(new ResponseCacheAttribute() { NoStore = true, Location = ResponseCacheLocation.None });
-            });
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2); 
 
             // In production, static files are served from the pre-built files, rather than proxied via react dev server
             services.AddSpaStaticFiles(configuration =>
@@ -259,7 +263,8 @@ namespace Comments
                 return next();
             });
 
-            app.UseSpa(spa =>
+
+			app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "ClientApp";
 
@@ -272,16 +277,18 @@ namespace Comments
                     {
                         data["isHttpsRequest"] = context.Request.IsHttps;
 						//TODO: cookie for auth!
-                        //var cookieForSSR = context.Request.Cookies[NICE.Auth.NetCore.Helpers.Constants.DefaultCookieName];
-                        //if (cookieForSSR != null)
-                        //{
-                        //    data["cookies"] = $"{NICE.Auth.NetCore.Helpers.Constants.DefaultCookieName}={cookieForSSR}";
-                        //}
+                        var cookieForSSR = context.Request.Cookies[Cookie.Name];
+                        if (cookieForSSR != null)
+                        {
+                            data["cookies"] = $"{Cookie.Name}={cookieForSSR}";
+                        }
                         data["isAuthorised"] = context.User.Identity.IsAuthenticated;
-	                    data["displayName"] = context.User.Identity.Name;
-	                    data["signInURL"] = linkGenerator.GetPathByAction(context, "Login", "Account", new { returnUrl = context.Request.Path }); // authenticateService.GetLoginURL(context.Request.Path);
-	                    //data["registerURL"] = authenticateService.GetRegisterURL(context.Request.Path);
-	                    data["requestURL"] = context.Request.Path;
+	                    data["displayName"] = context.User.DisplayName();
+
+						data["signInURL"] = linkGenerator.GetPathByAction(Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnUrl = context.Request.Path });
+						data["signOutURL"] = linkGenerator.GetPathByAction(Constants.Auth.LogoutAction, Constants.Auth.ControllerName); //auth0 needs logout urls configured. it won't let you redirect dynamically.
+						//data["registerURL"] = authenticateService.GetRegisterURL(context.Request.Path);
+						data["requestURL"] = context.Request.Path;
 	                    data["accountsEnvironment"] = AppSettings.Environment.AccountsEnvironment;
 	                    //data["user"] = context.User; - possible security implications here, surfacing claims to the front end. might be ok, if just server-side.
 	                    // Pass further data in e.g. user/authentication data

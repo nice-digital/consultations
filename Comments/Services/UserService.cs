@@ -17,7 +17,7 @@ namespace Comments.Services
 		SignInDetails GetCurrentUserSignInDetails(string returnURL);
 		Task<string> GetDisplayNameForUserId(string userId);
 		Task<string> GetEmailForUserId(string userId);
-		Task<IDictionary<string, Task<string>>> GetDisplayNamesForMultipleUserIds(IEnumerable<string> userIds);
+		Task<Dictionary<string, (string displayName, string emailAddress)>> GetUserDetailsForUserIds(IEnumerable<string> userIds);
 	    ICollection<string> GetUserRoles();
 	    Validate IsAllowedAccess(ICollection<string> permittedRoles);
 	}
@@ -46,27 +46,28 @@ namespace Comments.Services
 	    {
 			var user = GetCurrentUser();
 
-		    var signInURL = _linkGenerator.GetPathByAction(_httpContextAccessor.HttpContext, "Login", "Account", new { returnURL = returnURL.ToConsultationsRelativeUrl() });
+		    var signInURL = _linkGenerator.GetPathByAction(_httpContextAccessor.HttpContext, Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnURL = returnURL.ToConsultationsRelativeUrl() });
 		    var registerURL = "TODO: register url";
 			
 			return new SignInDetails(user, signInURL, registerURL);
 		}
 
-	    public async Task<string> GetDisplayNameForUserId(string userId)
+	    public async Task<Dictionary<string, (string displayName, string emailAddress)>> GetUserDetailsForUserIds(IEnumerable<string> userIds)
 	    {
-		    var users = await _apiService.FindUsers(new List<string> {userId});
-			return users?.FirstOrDefault()?.DisplayName;
+		    var users = await _apiService.FindUsers(userIds);
+		    return users.ToDictionary(user => user.NameIdentifier, user => (displayName: user.DisplayName,  emailAddress : user.EmailAddress));
 	    }
 
-	    public async Task<string> GetEmailForUserId(string userId)
+	    public async Task<string> GetDisplayNameForUserId(string userId)
+		{
+			var user = await GetUserDetailsForUserIds(new List<string> {userId});
+			return user[userId].displayName;
+		}
+
+		public async Task<string> GetEmailForUserId(string userId)
 	    {
 		    var users = await _apiService.FindUsers(new List<string> { userId });
 		    return users?.FirstOrDefault()?.EmailAddress;
-	    }
-
-		public async Task<IDictionary<string, Task<string>>> GetDisplayNamesForMultipleUserIds(IEnumerable<string> userIds)
-	    {
-		    return userIds.Distinct().ToDictionary(userId => userId, async userId => await GetDisplayNameForUserId(userId));
 	    }
 
 	    public ICollection<string> GetUserRoles()

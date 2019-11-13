@@ -25,5 +25,12 @@ namespace Comments.Common
 		    public const string Yes = "Yes";
 		    public const string No = "No";
 		}
+
+	    public static class Auth
+	    {
+		    public const string ControllerName = "Account";
+		    public const string LoginAction = "Login";
+		    public const string LogoutAction = "Logout";
+	    }
 	}
 }

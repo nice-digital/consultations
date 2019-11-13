@@ -36,8 +36,8 @@ namespace Comments.Controllers.Web
 			var user = _httpContextAccessor.HttpContext.User;
 			var isLoggedOn = (user != null && user.Identity.IsAuthenticated);
 			// var xReferer = Request.GetUri().GetComponents(UriComponents.Scheme | UriComponents.Host, UriFormat.UriEscaped);
-			var signInUrl = _linkGenerator.GetPathByAction(_httpContextAccessor.HttpContext, "Login", "Account",new {returnUrl = Request.GetUri().PathAndQuery });
-			var signOutUrl = _linkGenerator.GetPathByAction(_httpContextAccessor.HttpContext, "Login", "Account", new { returnUrl = Request.GetUri().PathAndQuery});
+			var signInUrl = _linkGenerator.GetPathByAction(_httpContextAccessor.HttpContext, Constants.Auth.LoginAction, Constants.Auth.ControllerName, new {returnUrl = Request.GetUri().PathAndQuery });
+			var signOutUrl = _linkGenerator.GetPathByAction(_httpContextAccessor.HttpContext, Constants.Auth.LogoutAction, Constants.Auth.ControllerName, new { returnUrl = Request.GetUri().PathAndQuery});
 
 			SecureTestViewModel model;
 

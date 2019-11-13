@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Comments.Controllers.Web
 {
+	[Route("consultations/[controller]/[action]")]
 	public class AccountController : Controller
     {
 	    private readonly IHttpContextAccessor _httpContextAccessor;
@@ -17,7 +18,7 @@ namespace Comments.Controllers.Web
 		    _niceAuthenticationService = niceAuthenticationService;
 	    }
 
-	    public async Task Login(string returnUrl = "/")
+		public async Task Login(string returnUrl = "/")
 	    {
 		    await _niceAuthenticationService.Login(_httpContextAccessor.HttpContext, returnUrl);
 	    }

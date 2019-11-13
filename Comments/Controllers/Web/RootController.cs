@@ -52,7 +52,7 @@ namespace Comments.Controllers.Web
 		        }
 	        }
 	        //return Content("root controller hit");
-			return Redirect("/consultations/22/1/guidance");
+			return Redirect("/consultations/admin/download");
         }
     }
 }

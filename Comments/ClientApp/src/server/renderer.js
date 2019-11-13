@@ -59,6 +59,7 @@ export const serverRenderer = (params): Promise => {
 					isAuthorised: params.data.isAuthorised,
 					displayName: params.data.displayName,
 					signInURL: params.data.signInURL,
+					signOutURL: params.data.signOutURL,
 					registerURL: params.data.registerURL,
 					requestURL: params.data.requestURL,
 				}, // Key value pairs of preloaded data sets
