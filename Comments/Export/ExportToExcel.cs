@@ -18,7 +18,7 @@ namespace Comments.Export
 {
 	public interface IExportToExcel
 	{
-		Stream ToSpreadsheet(IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions);
+		Task<Stream> ToSpreadsheet(IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions);
 	}
 
 	public class ExportToExcel : IExportToExcel
@@ -33,14 +33,14 @@ namespace Comments.Export
 			_exportService = exportService;
 			_logger = logger;
 		}
-		public Stream ToSpreadsheet(IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions)
+		public async Task<Stream> ToSpreadsheet(IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions)
 		{
 			//SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Create("C:/Test/TestExcel" + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second + ".xlsx", SpreadsheetDocumentType.Workbook);
 
 			var stream = new MemoryStream();
 			using (var workbook = SpreadsheetDocument.Create(stream, SpreadsheetDocumentType.Workbook))
 			{
-				CreateSheet(workbook, comments, answers, questions);
+				await CreateSheet(workbook, comments, answers, questions);
 			}
 
 			stream.Position = 0;
@@ -405,8 +405,8 @@ namespace Comments.Export
 					ChapterTitle = locationDetails.ChapterName,
 					Section = commentOn == CommentOn.Section || commentOn == CommentOn.SubSection || commentOn == CommentOn.Selection ? comment.Location.Section : null,
 					Quote = commentOn  == CommentOn.Selection ? comment.Location.Quote : null,
-					UserName = userDetailsForUserIds[comment.CreatedByUserId].displayName,
-					Email = userDetailsForUserIds[comment.CreatedByUserId].emailAddress,
+					UserName = userDetailsForUserIds.ContainsKey(comment.CreatedByUserId) ? userDetailsForUserIds[comment.CreatedByUserId].displayName : "Not found",
+					Email = userDetailsForUserIds.ContainsKey(comment.CreatedByUserId) ? userDetailsForUserIds[comment.CreatedByUserId].emailAddress : "Not found",
 					CommentId = comment.CommentId,
 					Comment =  comment.CommentText,
 					QuestionId = null,
@@ -434,8 +434,8 @@ namespace Comments.Export
 					ChapterTitle = locationDetails.ChapterName,
 					Section = answer.Question.Location.Section,
 					Quote = answer.Question.Location.Quote,
-					UserName = userDetailsForUserIds[answer.CreatedByUserId].displayName,
-					Email = userDetailsForUserIds[answer.CreatedByUserId].emailAddress,
+					UserName = userDetailsForUserIds.ContainsKey(answer.CreatedByUserId) ? userDetailsForUserIds[answer.CreatedByUserId].displayName : "Not found",
+					Email = userDetailsForUserIds.ContainsKey(answer.CreatedByUserId) ? userDetailsForUserIds[answer.CreatedByUserId].emailAddress : "Not found",
 					CommentId = null,
 					Comment = null,
 					QuestionId = answer.Question.QuestionId,
@@ -540,7 +540,7 @@ namespace Comments.Export
 			return styleSheet;
 		}
 
-		private async void CreateSheet(SpreadsheetDocument spreadsheetDocument, IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions)
+		private async Task CreateSheet(SpreadsheetDocument spreadsheetDocument, IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions)
 		{
 			// Add a WorkbookPart to the document.
 			WorkbookPart workbookpart = spreadsheetDocument.AddWorkbookPart();
