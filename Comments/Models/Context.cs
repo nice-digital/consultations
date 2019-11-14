@@ -122,7 +122,7 @@ namespace Comments.Models
 		    return SubmittedCommentsAndAnswerCounts.ToList();
 	    }
 
-		public List<Comment> GetAllSubmittedCommentsForURI(string  sourceURI)
+		public List<Comment> GetAllSubmittedCommentsForURI(string sourceURI)
 	    {
 			var comment = Comment.Where(c =>
 					c.StatusId == (int) StatusName.Submitted && (c.Location.SourceURI.Contains($"{sourceURI}/") || c.Location.SourceURI.Equals(sourceURI)) && c.IsDeleted == false)
