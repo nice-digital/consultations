@@ -21,17 +21,16 @@ namespace Comments.Models
 		//public ConsultationsContext(DbContextOptions options)
 		//	: base(options)
 		//{
-		//	_createdByUserID = Guid.Empty;
+		//	_createdByUserID = Guid.Empty.ToString();
 		//}
 		//public ConsultationsContext() : base()
 		//{
-		//	_createdByUserID = Guid.Empty;
+		//	_createdByUserID = Guid.Empty.ToString();
 		//}
 		//protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		//{
 		//	optionsBuilder.UseSqlServer("[you don't need a valid connection string when creating migrations. the real connection string should never be put here though. it should be kept in secrets.json]");
 		//}
-
 
 		public ConsultationsContext(DbContextOptions options, IUserService userService, IEncryption encryption) : base(options)
         {
