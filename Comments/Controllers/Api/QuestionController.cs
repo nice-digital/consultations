@@ -44,7 +44,7 @@ namespace Comments.Controllers.Api
             var result = _questionService.CreateQuestion(question);
             var invalidResult = Validate(result.validate, _logger);
 
-            return invalidResult ?? CreatedAtAction("GetQuestion", new { id = result.question.QuestionId }, result.question);
+            return invalidResult ?? CreatedAtAction("GetQuestion", new { questionId = result.question.QuestionId }, result.question);
         }
 
         // PUT: consultations/api/Question/5

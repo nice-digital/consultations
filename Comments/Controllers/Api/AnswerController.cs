@@ -49,7 +49,7 @@ namespace Comments.Controllers.Api
             var result = _answerService.CreateAnswer(answer);
             var invalidResult = Validate(result.validate, _logger);
 
-            return invalidResult ?? CreatedAtAction("GetAnswer", new { id = result.answer.AnswerId }, result.answer);
+            return invalidResult ?? CreatedAtAction("GetAnswer", new { answerId = result.answer.AnswerId }, result.answer);
         }
 
         // PUT: consultations/api/Answer/5
