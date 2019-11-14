@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using NICE.Feeds;
 using System;
 using System.IO;
+using System.Linq;
 using System.Web;
 using Comments.Common;
 using Comments.Export;
@@ -276,11 +277,10 @@ namespace Comments
                     options.SupplyData = (context, data) =>
                     {
                         data["isHttpsRequest"] = context.Request.IsHttps;
-						//TODO: cookie for auth!
-                        var cookieForSSR = context.Request.Cookies[Cookie.Name];
-                        if (cookieForSSR != null)
+                        var cookiesForSSR = context.Request.Cookies.Where(cookie => cookie.Key.StartsWith(Cookie.Name)).ToList();
+                        if (cookiesForSSR.Any())
                         {
-                            data["cookies"] = $"{Cookie.Name}={cookieForSSR}";
+                            data["cookies"] = $"{string.Join("; ", cookiesForSSR.Select(cookie => $"{cookie.Key}={cookie.Value}"))};";
                         }
                         data["isAuthorised"] = context.User.Identity.IsAuthenticated;
 	                    data["displayName"] = context.User.DisplayName();

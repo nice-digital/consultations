@@ -35,7 +35,7 @@ export const generateUrl = (endpointName, baseUrl = BaseUrl, urlParameters = [],
 export const load = (endpoint, baseUrl = BaseUrl, urlParameters = [],  query = {}, method = "GET", data = {}, isJson = false, cookie = "", headers = {}) => {
 	return new Promise((resolve, reject) => {
 		const url = generateUrl(endpoint, baseUrl, urlParameters, query);
-		//console.log(`about to hit url:${url}`);
+		//console.log(`about to hit url:${url} with cookie:${cookie}`);
 		if (isJson){
 			headers = Object.assign({ "Content-Type": "application/json"}, headers);
 		}

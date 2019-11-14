@@ -70,12 +70,12 @@ export const serverRenderer = (params): Promise => {
 			// Base url is used for 'server' ajax requests so we can hit the .NET instance from the Node process
 		};
 
+		//a quick way to disable server side rendering for dev purposes is to just remove the App component from the inside the StaticRouter component
+		//the static router will still be there but won't try to render anything.
 		let app = (
 			<StaticRouter basename={BaseUrlRelative} location={params.url} context={staticContext}>
-				
+				<App basename={BaseUrlRelative}/> 
 			</StaticRouter>);
-//<App basename={BaseUrlRelative}/>
-
 
 		let rootContent = "";
 		try {
