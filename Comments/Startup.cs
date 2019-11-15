@@ -83,21 +83,9 @@ namespace Comments
 			services.TryAddTransient<IConsultationListService, ConsultationListService>();
 
 			// Add authentication
-
-			var authConfiguration = new AuthConfiguration(Configuration, "WebAppConfiguration");
+			var authConfiguration = AppSettings.AuthenticationConfig.GetAuthConfiguration(); 
 			services.AddAuthentication(authConfiguration);
-			services.AddAuthorisation(new AuthConfiguration(Configuration, "WebAppConfiguration"));
-
-			//services.AddRouting(options => options.LowercaseUrls = true);
-			//services.AddAuthentication(options =>
-			//         {
-			//             options.DefaultAuthenticateScheme = AuthOptions.DefaultScheme;
-			//             options.DefaultChallengeScheme = AuthOptions.DefaultScheme;
-			//         })
-			//         .AddNICEAuth(options =>
-			//         {
-			//             // todo: Configure options here from AppSettings
-			//         });
+			services.AddAuthorisation(authConfiguration);
 
 			services.AddMvc(options =>
             {
@@ -177,9 +165,6 @@ namespace Comments
 
 	            app.UseStatusCodePagesWithReExecute(Constants.ErrorPath + "/{0}");
 			}
-
-	        
-
 
 			app.UseCors("CorsPolicy");
 

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using Comments.Configuration;
 using Comments.Migrations;
 using Comments.Services;
 using Comments.ViewModels;
@@ -17,12 +18,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using NICE.Feeds;
-using NICE.Feeds.Configuration;
 using NICE.Feeds.Tests.Infrastructure;
 using Microsoft.Data.Sqlite;
 using NICE.Identity.Authentication.Sdk.API;
 using Answer = Comments.Models.Answer;
 using Comment = Comments.Models.Comment;
+using FeedConfig = NICE.Feeds.Configuration.FeedConfig;
 using Location = Comments.Models.Location;
 using Question = Comments.Models.Question;
 using QuestionType = Comments.Models.QuestionType;
@@ -96,6 +97,7 @@ namespace Comments.Test.Infrastructure
 
 		public TestBase(bool useRealSubmitService = false, TestUserType testUserType = TestUserType.Authenticated, bool useFakeConsultationService = false, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null)
         {
+			AppSettings.AuthenticationConfig = new AuthenticationConfig{ ClientId = "test client id"};
             // Arrange
             _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId, testUserType);
 			_fakeHttpContextAccessor = FakeHttpContextAccessor.Get(_authenticated, _displayName, _userId, testUserType);

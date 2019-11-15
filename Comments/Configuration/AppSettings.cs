@@ -17,6 +17,8 @@ namespace Comments.Configuration
 	    public static StatusConfig StatusConfig { get; private set; }
 	    public static ConsultationListConfig ConsultationListConfig { get; set; }
 
+	    public static AuthenticationConfig AuthenticationConfig { get; set; }
+
 		public static void Configure(IServiceCollection services, IConfiguration configuration, string contentRootPath)
         {
             services.Configure<EnvironmentConfig>(configuration.GetSection("AppSettings:Environment"));
@@ -26,6 +28,7 @@ namespace Comments.Configuration
 	        services.Configure<ReviewConfig>(configuration.GetSection("Review"));
 	        services.Configure<StatusConfig>(configuration.GetSection("Status"));
 	        services.Configure<ConsultationListConfig>(configuration.GetSection("ConsultationList"));
+	        services.Configure<AuthenticationConfig>(configuration.GetSection("WebAppConfiguration"));
 
 			var sp = services.BuildServiceProvider();
             Environment = sp.GetService<IOptions<EnvironmentConfig>>().Value;
@@ -36,6 +39,7 @@ namespace Comments.Configuration
 	        ReviewConfig = sp.GetService<IOptions<ReviewConfig>>().Value;
 	        StatusConfig = sp.GetService<IOptions<StatusConfig>>().Value;
 	        ConsultationListConfig = sp.GetService<IOptions<ConsultationListConfig>>().Value;
+			AuthenticationConfig = sp.GetService<IOptions<AuthenticationConfig>>().Value;
 		}
     }
 }

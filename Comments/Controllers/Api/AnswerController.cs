@@ -1,4 +1,5 @@
 using Comments.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -6,7 +7,8 @@ namespace Comments.Controllers.Api
 {
     [Produces("application/json")]
     [Route("consultations/api/[controller]")]
-    public class AnswerController : ControllerBase
+    [Authorize] //TODO: validate this works!
+	public class AnswerController : ControllerBase
     {
         private readonly IAnswerService _answerService;
         private readonly ILogger<AnswerController> _logger;
