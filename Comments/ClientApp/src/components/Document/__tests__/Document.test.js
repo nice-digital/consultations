@@ -230,6 +230,57 @@ describe("[ClientApp] ", () => {
 					},
 				]);
 			});
+
+			it("should not caution that guidance is draft if the consultation is open", () => {
+				const mock = new MockAdapter(axios);
+	
+				const wrapper = mount(
+					<MemoryRouter>
+						<Document {...fakeProps} />
+					</MemoryRouter>
+				);
+	
+				let documentsPromise = new Promise(resolve => {
+					mock
+						.onGet("/consultations/api/Documents?consultationId=1")
+						.reply(() => {
+							resolve();
+							return [200, DocumentsData];
+						});
+				});
+
+				let consulatationPromise = new Promise(resolve => {
+					mock
+						.onGet("/consultations/api/Consultation?consultationId=1&isReview=false")
+						.reply(() => {
+							resolve();
+							return [200, ConsultationData];
+						});
+				});
+	
+				let chapterPromise = new Promise(resolve => {
+					mock
+						.onGet(
+							"/consultations/api/Chapter?consultationId=1&documentId=1&chapterSlug=introduction"
+						)
+						.reply(() => {
+							resolve();
+							return [200, ChapterData];
+						});
+				});
+	
+				return Promise.all([
+					documentsPromise,
+					consulatationPromise,
+					chapterPromise,
+				]).then(async () => {
+					await nextTick();
+					wrapper.update();
+	
+					expect(wrapper.find(".caution").length).toEqual(0);
+	
+				});
+			});
 		});
 	});
 });
