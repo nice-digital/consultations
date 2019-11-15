@@ -102,8 +102,13 @@ Array [
                     >
                         <a
                             href="/"
+                            itemProp="item"
                         >
-                            Home
+                            <span
+                                itemprop="name"
+                            >
+                                Home
+                            </span>
                         </a>
                         <meta
                             content={0}
@@ -119,8 +124,13 @@ Array [
                     >
                         <a
                             href="/guidance/indevelopment/gid-ta10232/consultation/"
+                            itemProp="item"
                         >
-                            Consultation title
+                            <span
+                                itemprop="name"
+                            >
+                                Consultation title
+                            </span>
                         </a>
                         <meta
                             content={1}
