@@ -43,6 +43,7 @@ type StateType = {
 		slug: string
 	},
 	allowComments: boolean,
+	consultationIsOpen: boolean,
 	error: ErrorType,
 };
 
@@ -61,6 +62,7 @@ export class Document extends Component<PropsType, StateType> {
 			currentInPageNavItem: null,
 			onboarded: false,
 			allowComments: true,
+			consultationIsOpen: true,
 			children: null,
 			error: {
 				hasError: false,
@@ -112,6 +114,8 @@ export class Document extends Component<PropsType, StateType> {
 					preloadedConsultation.consultationState.consultationIsOpen &&
 					!preloadedConsultation.consultationState.userHasSubmitted;
 
+				const consultationIsOpen = preloadedConsultation.consultationState.consultationIsOpen;
+
 				if (preloadedChapter) {
 					preloadedChapter = this.addChapterDetailsToSections(preloadedChapter);
 				}
@@ -124,6 +128,7 @@ export class Document extends Component<PropsType, StateType> {
 					currentInPageNavItem: null,
 					onboarded: false,
 					allowComments,
+					consultationIsOpen,
 					error: {
 						hasError: false,
 						message: null,
@@ -195,12 +200,14 @@ export class Document extends Component<PropsType, StateType> {
 						data.consultationData.consultationState.hasAnyDocumentsSupportingComments &&
 						data.consultationData.consultationState.consultationIsOpen &&
 						!data.consultationData.consultationState.userHasSubmitted;
+					const consultationIsOpen = data.consultationData.consultationState.consultationIsOpen;
 					this.addChapterDetailsToSections(data.chapterData);
 					this.setState({
 						...data,
 						loading: false,
 						hasInitialData: true,
 						allowComments: allowComments,
+						consultationIsOpen: consultationIsOpen,
 					}, () => {
 						tagManager({
 							event: "pageview",
@@ -411,6 +418,7 @@ export class Document extends Component<PropsType, StateType> {
 			onNewCommentClick: this.props.onNewCommentClick,
 			url: this.props.match.url,
 			allowComments: this.state.allowComments,
+			consultationIsOpen: this.state.consultationIsOpen,
 		};
 
 		const supportingDocs = this.getDocumentLinks(
@@ -440,6 +448,11 @@ export class Document extends Component<PropsType, StateType> {
 					<div className="grid">
 						<div data-g="12">
 							<BreadCrumbsWithRouter links={this.state.consultationData.breadcrumbs}/>
+							{!this.state.consultationIsOpen &&
+								<div className="caution">
+									<strong>The content on this page is not current guidance and is only for the purposes of the consultation process.</strong>
+								</div>
+							}
 							<main role="main">
 								<div className="page-header">
 									<Header
@@ -472,6 +485,7 @@ export class Document extends Component<PropsType, StateType> {
 									</button>
 									}
 								</div>
+
 
 								<button
 									className="screenreader-button"
