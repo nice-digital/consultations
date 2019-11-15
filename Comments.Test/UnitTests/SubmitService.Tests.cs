@@ -21,14 +21,13 @@ namespace Comments.Test.UnitTests
 			ResetDatabase();
 			_context.Database.EnsureCreated();
 
-			var userId = Guid.NewGuid();
+			var userId = Guid.NewGuid().ToString();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-			var authenticateService = new FakeAuthenticateService(authenticated: true);
 			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 			var submitService = new SubmitService(consultationContext, userService, _consultationService);
-			var commentService = new CommentService(consultationContext, userService, authenticateService, _consultationService);
+			var commentService = new CommentService(consultationContext, userService, _consultationService, null, _fakeHttpContextAccessor);
 
 			var locationId = AddLocation(sourceURI, _context);
 			var commentId = AddComment(locationId, "Comment text", false, userId, (int)StatusName.Draft, _context);
@@ -57,14 +56,13 @@ namespace Comments.Test.UnitTests
 			ResetDatabase();
 			_context.Database.EnsureCreated();
 
-			var userId = Guid.NewGuid();
+			var userId = Guid.NewGuid().ToString();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-			var authenticateService = new FakeAuthenticateService(authenticated: true);
 			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 			var submitService = new SubmitService(consultationContext, userService, _consultationService);
-			var commentService = new CommentService(consultationContext, userService, authenticateService, _consultationService);
+			var commentService = new CommentService(consultationContext, userService, _consultationService, null, _fakeHttpContextAccessor);
 			var answerService = new AnswerService(consultationContext, userService);
 
 			var locationId = AddLocation(sourceURI, _context);
@@ -96,7 +94,7 @@ namespace Comments.Test.UnitTests
 			ResetDatabase();
 			_context.Database.EnsureCreated();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
-			var userId = Guid.NewGuid();
+			var userId = Guid.NewGuid().ToString();
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 
@@ -129,7 +127,7 @@ namespace Comments.Test.UnitTests
 		public void Has_Submitted_Comments_Or_Answers_For_Chapter_SourceURI(string consultationSourceURI, bool expectedResult)
 		{
 			//Arrange
-			var userId = Guid.NewGuid();
+			var userId = Guid.NewGuid().ToString();
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 			var consultationService = new ConsultationService(consultationContext, null, null, userService);
@@ -158,7 +156,7 @@ namespace Comments.Test.UnitTests
 		public void Has_Submitted_Comments_Or_Answers_For_Document_SourceURI(string consultationSourceURI, bool expectedResult)
 		{
 			//Arrange
-			var userId = Guid.NewGuid();
+			var userId = Guid.NewGuid().ToString();
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 			//var submitService = new SubmitService(consultationContext, userService, _consultationService);
@@ -186,7 +184,7 @@ namespace Comments.Test.UnitTests
 		public void Has_Submitted_Comments_Or_Answers_For_Consultation_SourceURI(string consultationSourceURI, bool expectedResult)
 		{
 			//Arrange
-			var userId = Guid.NewGuid();
+			var userId = Guid.NewGuid().ToString();
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 			var consultationService = new ConsultationService(consultationContext, null, null, userService);
@@ -214,7 +212,7 @@ namespace Comments.Test.UnitTests
 		public void Has_Submitted_Comments_Or_Answers_For_Consultation_SourceURI_With_Only_Comments(string consultationSourceURI, bool expectedResult)
 		{
 			//Arrange
-			var userId = Guid.NewGuid();
+			var userId = Guid.NewGuid().ToString();
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 			var consultationService = new ConsultationService(consultationContext, null, null, userService);
@@ -241,7 +239,7 @@ namespace Comments.Test.UnitTests
 		public void Has_Submitted_Comments_Or_Answers_For_Consultation_SourceURI_With_Only_Answers(string consultationSourceURI, bool expectedResult)
 		{
 			//Arrange
-			var userId = Guid.NewGuid();
+			var userId = Guid.NewGuid().ToString();
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 			var consultationService = new ConsultationService(consultationContext, null, null, userService);

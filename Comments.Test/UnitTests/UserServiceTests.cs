@@ -69,7 +69,7 @@ namespace Comments.Test.UnitTests
 		//		{ Guid.NewGuid(), new UserInfo { DisplayName ="Robert Paulson" }},
 		//		{ marlasUserId, new UserInfo { DisplayName = "Marla Singer" }}
 		//	}));
-		//    var angelFaceUserId = Guid.NewGuid();
+		//    var angelFaceUserId = Guid.NewGuid().ToString();
 
 		//	// Act
 		//	var displayNamesReturned = userService.GetDisplayNamesForMultipleUserIds(new List<Guid>(){ tylersUserId, marlasUserId, angelFaceUserId });

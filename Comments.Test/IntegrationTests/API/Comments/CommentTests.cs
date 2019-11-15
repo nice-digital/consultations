@@ -38,7 +38,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
         public async Task Create_Comment(int locationId, string sourceURI)
         {
             //Arrange
-            var comment = new ViewModels.Comment(locationId, sourceURI, null, null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty, "comment text", 1, show: true, section: null);
+            var comment = new ViewModels.Comment(locationId, sourceURI, null, null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty.ToString(), "comment text", 1, show: true, section: null);
             var content = new StringContent(JsonConvert.SerializeObject(comment), Encoding.UTF8, "application/json");
 
             // Act
@@ -58,7 +58,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
         public async Task Comment_ViewModel_Fails_To_Serialise_With_Invalid_SourceURI(int locationId, string sourceURI)
         {
             //Arrange
-            var comment = new ViewModels.Comment(locationId, sourceURI, null, null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty, "comment text", 1, show: true, section: null);
+            var comment = new ViewModels.Comment(locationId, sourceURI, null, null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty.ToString(), "comment text", 1, show: true, section: null);
             Exception _ex = null;
 
             // Act
@@ -86,17 +86,17 @@ namespace Comments.Test.IntegrationTests.API.Comments
 			string sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 
             var locationId = AddLocation(sourceURI);
-            AddComment(locationId, "comment text", false, Guid.Empty);
-            AddComment(locationId, "comment text", false, Guid.Empty); //duplicate comment. totally valid.
+            AddComment(locationId, "comment text", false, Guid.Empty.ToString());
+            AddComment(locationId, "comment text", false, Guid.Empty.ToString()); //duplicate comment. totally valid.
 
             locationId = AddLocation(sourceURI);
-            AddComment(locationId, "comment text", false, Guid.Empty); //different location id, same sourceURI, this should be in the result set
+            AddComment(locationId, "comment text", false, Guid.Empty.ToString()); //different location id, same sourceURI, this should be in the result set
             
             locationId = AddLocation("/2/1/introduction");
-            AddComment(locationId, "comment text", false, Guid.Empty); //different consultation id, this shouldn't be in the result set
+            AddComment(locationId, "comment text", false, Guid.Empty.ToString()); //different consultation id, this shouldn't be in the result set
             
             locationId = AddLocation("/1/2/introduction");
-            AddComment(locationId, "comment text", false, Guid.Empty); //different document id, this shouldn't be in the result set
+            AddComment(locationId, "comment text", false, Guid.Empty.ToString()); //different document id, this shouldn't be in the result set
             
             // Act
             var response = await _client.GetAsync($"/consultations/api/Comments?sourceURI={WebUtility.UrlEncode(sourceURI)}");
@@ -120,7 +120,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
             var commentText = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
             var answerText = Guid.NewGuid().ToString();
-            var userId = Guid.NewGuid();
+            var userId = Guid.NewGuid().ToString();
            
             AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId, (int)StatusName.Draft, _context);
 
@@ -145,15 +145,14 @@ namespace Comments.Test.IntegrationTests.API.Comments
 
 			const string sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var commentText = Guid.NewGuid().ToString();
-            var userId = Guid.Empty;
+            var userId = Guid.Empty.ToString();
             var locationId = AddLocation(sourceURI);
             var commentId = AddComment(locationId, commentText, false, userId);
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var authenticateService = new FakeAuthenticateService(authenticated: true);
 	        var context = new ConsultationsContext(_options, userService, _fakeEncryption);
 			//var submitService = new SubmitService(context, userService, _consultationService);
-            var commentService = new CommentService(context, userService, authenticateService, _consultationService);
+            var commentService = new CommentService(context, userService, _consultationService,null, _fakeHttpContextAccessor);
 
             //Act
             var response = await _client.DeleteAsync($"consultations/api/Comment/{commentId}");
@@ -174,14 +173,13 @@ namespace Comments.Test.IntegrationTests.API.Comments
 
 			const string sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var commentText = Guid.NewGuid().ToString();
-            var userId = Guid.Empty;
+            var userId = Guid.Empty.ToString();
             var locationId = AddLocation(sourceURI, _context);
             var commentId = AddComment(locationId, commentText, false, userId, (int)StatusName.Draft, _context);
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var authenticateService = new FakeAuthenticateService(authenticated: true);
 	       // var submitService = new SubmitService(_context, userService, _consultationService);
-			var commentService = new CommentService(_context, userService, authenticateService, _consultationService);
+			var commentService = new CommentService(_context, userService, _consultationService, null, _fakeHttpContextAccessor);
 
             var viewModel = commentService.GetComment(commentId);
 

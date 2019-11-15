@@ -23,7 +23,7 @@ namespace Comments.Test.UnitTests
 			var sourceUri = "consultations://./consultation/1/document/1/chapter/introduction";
 			var description = Guid.NewGuid().ToString();
 			var questionText = Guid.NewGuid().ToString();
-			var userId = Guid.Empty;
+			var userId = Guid.Empty.ToString();
 
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
@@ -49,7 +49,7 @@ namespace Comments.Test.UnitTests
 			ResetDatabase();
 			_context.Database.EnsureCreated();
 
-			var userId = Guid.Empty;
+			var userId = Guid.Empty.ToString();
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
 			var questionService =
@@ -72,7 +72,7 @@ namespace Comments.Test.UnitTests
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var description = Guid.NewGuid().ToString();
 			var questionText = Guid.NewGuid().ToString();
-			var userId = Guid.Empty;
+			var userId = Guid.Empty.ToString();
 
 			var locationId = AddLocation(sourceURI);
 			var questionTypeId = 99;
@@ -104,7 +104,7 @@ namespace Comments.Test.UnitTests
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var description = Guid.NewGuid().ToString();
 			var questionText = Guid.NewGuid().ToString();
-			var userId = Guid.Empty;
+			var userId = Guid.Empty.ToString();
 
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
@@ -132,7 +132,7 @@ namespace Comments.Test.UnitTests
 			ResetDatabase();
 			_context.Database.EnsureCreated();
 			var questionId = 1;
-			var userId = Guid.Empty;
+			var userId = Guid.Empty.ToString();
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var questionService =
 				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService, null, null);
@@ -153,7 +153,7 @@ namespace Comments.Test.UnitTests
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var description = Guid.NewGuid().ToString();
 			var questionText = Guid.NewGuid().ToString();
-			var userId = Guid.Empty;
+			var userId = Guid.Empty.ToString();
 
 			var locationId = AddLocation(sourceURI);
 			var questionTypeId = 99;
@@ -174,7 +174,7 @@ namespace Comments.Test.UnitTests
 		}
 
 		[Fact]
-		public void PopulateQuestionAdmin()
+		public async void PopulateQuestionAdmin()
 		{
 			//Arrange
 			ResetDatabase();
@@ -187,13 +187,12 @@ namespace Comments.Test.UnitTests
 			var documentLevelLocationId = AddLocation("consultations://./consultation/1/document/1");
 			AddQuestion(documentLevelLocationId, questionTypeId, "Document Question Label");
 
-			var userId = Guid.Empty;
+			var userId = Guid.Empty.ToString();
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-			var authenticateService = new FakeAuthenticateService(authenticated: true);
-			var questionService = new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService, authenticateService, _fakeHttpContextAccessor);
+			var questionService = new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService, _fakeHttpContextAccessor, _fakeApiService);
 
 			//Act
-			var result = questionService.GetQuestionAdmin(1, false, null);
+			var result = await questionService.GetQuestionAdmin(1, false, null);
 
 			//Assert
 			result.ConsultationTitle.ShouldBe("Consultation Title");
@@ -215,7 +214,7 @@ namespace Comments.Test.UnitTests
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var description = Guid.NewGuid().ToString();
 			var questionText = Guid.NewGuid().ToString();
-			var userId = Guid.NewGuid();
+			var userId = Guid.NewGuid().ToString();
 
 			var locationId = AddLocation(sourceURI);
 			var questionTypeId = 99;
@@ -247,7 +246,7 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			ResetDatabase();
-			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: Guid.NewGuid());
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: Guid.NewGuid().ToString());
 			var questionService =
 				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService, null, null);
 

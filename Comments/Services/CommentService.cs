@@ -28,7 +28,6 @@ namespace Comments.Services
 	    private readonly IConsultationService _consultationService;
 	    private readonly LinkGenerator _linkGenerator;
 	    private readonly IHttpContextAccessor _httpContextAccessor;
-	    private readonly ISubmitService _submitService;
 	    private readonly User _currentUser;
 
         public CommentService(ConsultationsContext context, IUserService userService, IConsultationService consultationService, LinkGenerator linkGenerator, IHttpContextAccessor httpContextAccessor)

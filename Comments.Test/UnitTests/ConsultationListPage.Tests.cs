@@ -48,7 +48,7 @@ namespace Comments.Test.UnitTests
 			ResetDatabase();
 			_context.Database.EnsureCreated();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
-			var userId = Guid.NewGuid();
+			var userId = Guid.NewGuid().ToString();
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var context = CreateContext(userService);
 			AddSubmittedCommentsAndAnswers(sourceURI, "Comment Label", "Question Label", "Answer Label", userId, context);
@@ -70,7 +70,7 @@ namespace Comments.Test.UnitTests
 			ResetDatabase();
 			_context.Database.EnsureCreated();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
-			var userId = Guid.NewGuid();
+			var userId = Guid.NewGuid().ToString();
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var context = CreateContext(userService, 2);
 			AddSubmittedCommentsAndAnswers(sourceURI, "Comment Label", "Question Label", "Answer Label", userId, context);
@@ -95,7 +95,7 @@ namespace Comments.Test.UnitTests
 			ResetDatabase();
 			_context.Database.EnsureCreated();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
-			var userId = Guid.NewGuid();
+			var userId = Guid.NewGuid().ToString();
 			var context = CreateContext(_fakeUserService);
 			var locationId = AddLocation(sourceURI, context);
 			var commentId = AddComment(locationId, "Just a comment", false, userId, 2, context);
@@ -122,7 +122,7 @@ namespace Comments.Test.UnitTests
 			ResetDatabase();
 			_context.Database.EnsureCreated();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
-			var userId = Guid.NewGuid();
+			var userId = Guid.NewGuid().ToString();
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var context =  CreateContext(userService);
 
@@ -528,7 +528,7 @@ namespace Comments.Test.UnitTests
 
 		private IUserService GetFakeUserServiceWithAdministratorRights()
 		{
-			var userId = Guid.NewGuid();
+			var userId = Guid.NewGuid().ToString();
 			return FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId, testUserType: TestUserType.Administrator);
 		}
 
@@ -546,7 +546,7 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			var consultationList = AddConsultationsToList();
-			var userId = Guid.NewGuid();
+			var userId = Guid.NewGuid().ToString();
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId, testUserType: testUserType);
 			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 
@@ -565,7 +565,7 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			var consultationList = AddConsultationsToList();
-			var userService = FakeUserService.Get(true, "Jeffrey Goines", Guid.NewGuid(), TestUserType.ConsultationListTestRole);
+			var userService = FakeUserService.Get(true, "Jeffrey Goines", Guid.NewGuid().ToString(), TestUserType.ConsultationListTestRole);
 			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), userService);
 
 			//Act

@@ -20,6 +20,7 @@ using NICE.Feeds;
 using NICE.Feeds.Configuration;
 using NICE.Feeds.Tests.Infrastructure;
 using Microsoft.Data.Sqlite;
+using NICE.Identity.Authentication.Sdk.API;
 using Answer = Comments.Models.Answer;
 using Comment = Comments.Models.Comment;
 using Location = Comments.Models.Location;
@@ -51,9 +52,10 @@ namespace Comments.Test.Infrastructure
         protected Feed FeedToUse = Feed.ConsultationCommentsPublishedDetailMulitpleDoc;
         protected readonly bool _authenticated = true;
         protected readonly string _displayName = "Benjamin Button";
-        protected readonly Guid? _userId = Guid.Empty;
+        protected readonly string _userId = Guid.Empty.ToString();
         protected readonly IUserService _fakeUserService;
         protected readonly IHttpContextAccessor _fakeHttpContextAccessor;
+        protected readonly IAPIService _fakeApiService;
 
 	    protected readonly IConsultationService _consultationService;
         protected readonly DbContextOptionsBuilder<ConsultationsContext> _contextOptions;
@@ -69,17 +71,17 @@ namespace Comments.Test.Infrastructure
             _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
 	        _consultationService = new FakeConsultationService();
 		}
-        public TestBase(Feed feed, bool authenticated, Guid userId, string displayName = null) : this()
+        public TestBase(Feed feed, bool authenticated, string userId, string displayName = null) : this()
         {
             FeedToUse = feed;
             _authenticated = authenticated;
             _displayName = displayName;
-            _userId = Guid.Empty;
+            _userId = Guid.Empty.ToString();
             _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
 	        _consultationService = new FakeConsultationService();
 		}
 
-	    public TestBase(bool authenticated, Guid? userId = null, string displayName = null) : this()
+	    public TestBase(bool authenticated, string userId = null, string displayName = null) : this()
 	    {
 			_authenticated = authenticated;
 		    _displayName = displayName;
@@ -97,7 +99,8 @@ namespace Comments.Test.Infrastructure
             // Arrange
             _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId, testUserType);
 			_fakeHttpContextAccessor = FakeHttpContextAccessor.Get(_authenticated, _displayName, _userId, testUserType);
-	        _consultationService = new FakeConsultationService();
+			_fakeApiService = new FakeAPIService();
+			_consultationService = new FakeConsultationService();
 	        _useRealSubmitService = useRealSubmitService;
 	        _fakeEncryption = new FakeEncryption();
 			var databaseName = DatabaseName + Guid.NewGuid();

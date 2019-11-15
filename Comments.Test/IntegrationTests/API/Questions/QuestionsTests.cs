@@ -81,7 +81,7 @@ namespace Comments.Test.IntegrationTests.API.Questions
 			const string sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var description = Guid.Empty.ToString();
 			var questionText = Guid.NewGuid().ToString();
-			var userId = Guid.Empty;
+			var userId = Guid.Empty.ToString();
 
 			var locationId = AddLocation(sourceURI, _context);
 			var questionTypeId = 99;
@@ -112,7 +112,7 @@ namespace Comments.Test.IntegrationTests.API.Questions
 		public async Task Delete_Question()
 		{
 			//Arrange
-			var userId = Guid.Empty;
+			var userId = Guid.Empty.ToString();
 			const string sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var description = Guid.NewGuid().ToString();
 			var questionText = Guid.NewGuid().ToString();

@@ -10,7 +10,7 @@ namespace Comments.Test.Infrastructure
 {
     public static class FakeHttpContextAccessor
     {
-        public static IHttpContextAccessor Get(bool isAuthenticated, string displayName = null, Guid? userId = null, TestUserType testUserType = TestUserType.NotAuthenticated)
+        public static IHttpContextAccessor Get(bool isAuthenticated, string displayName = null, string userId = null, TestUserType testUserType = TestUserType.NotAuthenticated)
         {
             var context = new Mock<HttpContext>();
 
