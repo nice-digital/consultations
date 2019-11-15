@@ -29,7 +29,7 @@ namespace Comments.Test.Infrastructure
 						claims.Add(new Claim(ClaimType.Role, "IndevUser", null, "http://consultations.nice.org.uk"));
 						break;
 					case TestUserType.Administrator:
-						claims.Add(new Claim(ClaimType.Role, "Administrator", null, "http://consultations.nice.org.uk"));
+						claims.Add(new Claim(Claim Type.Role, "Administrator", null, "http://consultations.nice.org.uk"));
 						break;
 					case TestUserType.CustomFictionalRole:
 						claims.Add(new Claim(ClaimType.Role, "CustomFictionalRole", null, "http://consultations.nice.org.uk"));
