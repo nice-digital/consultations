@@ -94,12 +94,13 @@ namespace Comments.Test.Infrastructure
 		    _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
 		}
 
-	    public TestBase(TestUserType testUserType, Feed feed, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null) : this(false, testUserType, true, submittedCommentsAndAnswerCounts)
+	    public TestBase(TestUserType testUserType, Feed feed, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null, bool bypassAuthentication = true)
+		    : this(false, testUserType, true, submittedCommentsAndAnswerCounts, bypassAuthentication)
 	    {
 			FeedToUse = feed;
 		}
 
-		public TestBase(bool useRealSubmitService = false, TestUserType testUserType = TestUserType.Authenticated, bool useFakeConsultationService = false, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null)
+		public TestBase(bool useRealSubmitService = false, TestUserType testUserType = TestUserType.Authenticated, bool useFakeConsultationService = false, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null, bool bypassAuthentication = true)
         {
 			
 			AppSettings.AuthenticationConfig = new AuthenticationConfig{ ClientId = "test client id"};
@@ -150,8 +151,12 @@ namespace Comments.Test.Infrastructure
 	                {
 		                services.TryAddTransient<IConsultationService>(provider => _consultationService);
 	                }
-	                services.AddMvc(opt => opt.Filters.Add(new AllowAnonymousFilter())); //bypass authentication
-				})
+
+	                if (bypassAuthentication)
+	                {
+		                services.AddMvc(opt => opt.Filters.Add(new AllowAnonymousFilter())); //bypass authentication
+	                }
+                })
                 .Configure(app =>
                 {
                     app.UseStaticFiles();

@@ -65,7 +65,7 @@ namespace Comments.Test.IntegrationTests.API.ConsultationList
 
 	public class ConsultationListAuthTests : TestBase
 	{
-		public ConsultationListAuthTests() : base(TestUserType.Authenticated, Feed.ConsultationCommentsListMultiple)
+		public ConsultationListAuthTests() : base(TestUserType.Authenticated, Feed.ConsultationCommentsListMultiple, bypassAuthentication: false)
 		{
 			AppSettings.ConsultationListConfig = TestAppSettings.GetConsultationListConfig();
 			AppSettings.Feed = TestAppSettings.GetFeedConfig();
