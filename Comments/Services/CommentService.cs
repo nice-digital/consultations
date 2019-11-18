@@ -119,7 +119,8 @@ namespace Comments.Services
 	    public CommentsAndQuestions GetCommentsAndQuestions(string relativeURL)
 	    {
 		    var user = _userService.GetCurrentUser();
-		    var signInURL = _linkGenerator.GetPathByAction(_httpContextAccessor.HttpContext, Constants.Auth.LoginAction, Constants.Auth.ControllerName, new {returnUrl = relativeURL.ToConsultationsRelativeUrl() });
+
+			var signInURL = _linkGenerator.GetPathByAction(_httpContextAccessor.HttpContext, Constants.Auth.LoginAction, Constants.Auth.ControllerName, new {returnUrl = relativeURL.ToConsultationsRelativeUrl() });
 
 			var isReview = ConsultationsUri.IsReviewPageRelativeUrl(relativeURL);
 			var consultationSourceURI = ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Consultation);

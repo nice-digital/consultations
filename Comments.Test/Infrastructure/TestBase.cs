@@ -136,9 +136,11 @@ namespace Comments.Test.Infrastructure
 
                     services.TryAddSingleton<ConsultationsContext>(_context);
                     services.TryAddSingleton<ISeriLogger, FakeSerilogger>();
-                    services.TryAddSingleton<IHttpContextAccessor>(provider => _fakeHttpContextAccessor);
+                    services.TryAddSingleton<LinkGenerator>(_linkGenerator);
+					services.TryAddSingleton<IHttpContextAccessor>(provider => _fakeHttpContextAccessor);
                     services.TryAddTransient<IUserService>(provider => _fakeUserService);
                     services.TryAddTransient<IFeedReaderService>(provider => new FeedReader(FeedToUse));
+					
 
 					if (!_useRealSubmitService)
 	                {

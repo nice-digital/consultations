@@ -3,6 +3,7 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http.Features;
 using NICE.Identity.Authentication.Sdk.Domain;
 using Claim = System.Security.Claims.Claim;
 
@@ -41,7 +42,10 @@ namespace Comments.Test.Infrastructure
 
 				context.Setup(r => r.User)
                     .Returns(() => new ClaimsPrincipal(new ClaimsIdentity(claims, AuthenticationConstants.AuthenticationScheme)));
-			}
+
+				context.Setup(r => r.Features)
+					.Returns(() => new FeatureCollection());
+            }
             else
             {
                 context.Setup(r => r.User).Returns(() => null);

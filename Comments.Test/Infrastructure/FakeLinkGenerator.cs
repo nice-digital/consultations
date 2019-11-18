@@ -11,12 +11,11 @@ namespace Comments.Test.Infrastructure
 			
 			var linkGenerator = new Mock<LinkGenerator>();
 
-			linkGenerator.Setup(g => g.GetPathByAddress(It.IsAny<HttpContext>(),
+			linkGenerator.Setup(g => g.GetPathByAddress<RouteValuesAddress>(It.IsAny<HttpContext>(),
 						It.IsAny<RouteValuesAddress>(), It.IsAny<RouteValueDictionary>(),
 						It.IsAny<RouteValueDictionary>(), It.IsAny<PathString?>(),
 						It.IsAny<FragmentString>(), It.IsAny<LinkOptions>()))
 						.Returns("/");
-
 
 				//.Setup(g => g.GetPathByAddress(
 				//	It.IsAny<httpcontext>(),
