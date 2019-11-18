@@ -27,7 +27,7 @@ namespace Comments.Test.UnitTests
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 			var submitService = new SubmitService(consultationContext, userService, _consultationService);
-			var commentService = new CommentService(consultationContext, userService, _consultationService, null, _fakeHttpContextAccessor);
+			var commentService = new CommentService(consultationContext, userService, _consultationService, _linkGenerator, _fakeHttpContextAccessor);
 
 			var locationId = AddLocation(sourceURI, _context);
 			var commentId = AddComment(locationId, "Comment text", false, userId, (int)StatusName.Draft, _context);
@@ -62,7 +62,7 @@ namespace Comments.Test.UnitTests
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 			var submitService = new SubmitService(consultationContext, userService, _consultationService);
-			var commentService = new CommentService(consultationContext, userService, _consultationService, null, _fakeHttpContextAccessor);
+			var commentService = new CommentService(consultationContext, userService, _consultationService, _linkGenerator, _fakeHttpContextAccessor);
 			var answerService = new AnswerService(consultationContext, userService);
 
 			var locationId = AddLocation(sourceURI, _context);

@@ -18,9 +18,9 @@ namespace Comments.Test.Infrastructure
             {
                 var claims = new List<Claim>
                 {
-                    //new Claim(ClaimType.DisplayName, displayName, null, "http://consultations.nice.org.uk"),
-                    new Claim(ClaimType.NameIdentifier, userId.ToString(), null, "http://consultations.nice.org.uk"),
-	                new Claim(ClaimType.Role, "IndevUser", null, "http://consultations.nice.org.uk"),
+                    new Claim(ClaimType.DisplayName, displayName, null, AuthenticationConstants.IdAMIssuer),
+                    new Claim(ClaimType.NameIdentifier, userId.ToString(), null, AuthenticationConstants.IdAMIssuer),
+	                new Claim(ClaimType.Role, "IndevUser", null, AuthenticationConstants.IdAMIssuer),
 	               // new Claim(ClaimType.Role, "Administrator", null, "http://consultations.nice.org.uk")
 				};
 				switch (testUserType)

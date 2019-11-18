@@ -225,7 +225,7 @@ namespace Comments.Test.UnitTests
 
 	        var context = new ConsultationsContext(_options, userService, _fakeEncryption);
 			//var submitService = new SubmitService(context, userService, _consultationService);
-			var commentService = new CommentService(context, userService, _consultationService, null, _fakeHttpContextAccessor);
+			var commentService = new CommentService(context, userService, _consultationService, _linkGenerator, _fakeHttpContextAccessor);
 
             // Act
             var viewModel = commentService.GetCommentsAndQuestions(sourceURI);

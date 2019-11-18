@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
@@ -67,6 +68,8 @@ namespace Comments.Test.Infrastructure
 
 	    protected IEncryption _fakeEncryption;
 
+	    protected readonly LinkGenerator _linkGenerator;
+
 		public TestBase(Feed feed) : this()
         {
             FeedToUse = feed;
@@ -100,8 +103,9 @@ namespace Comments.Test.Infrastructure
         {
 			
 			AppSettings.AuthenticationConfig = new AuthenticationConfig{ ClientId = "test client id"};
-            // Arrange
-            _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId, testUserType);
+			// Arrange
+			_linkGenerator = FakeLinkGenerator.Get();
+			_fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId, testUserType);
 			_fakeHttpContextAccessor = FakeHttpContextAccessor.Get(_authenticated, _displayName, _userId, testUserType);
 			_fakeApiService = new FakeAPIService();
 			_consultationService = new FakeConsultationService();
@@ -236,7 +240,7 @@ namespace Comments.Test.Infrastructure
 	    }
 		protected int AddComment(int locationId, string commentText, bool isDeleted, string createdByUserId, int status = (int)StatusName.Draft, ConsultationsContext passedInContext = null)
         {
-            var comment = new Comment(locationId, createdByUserId, commentText, null, location: null, statusId: status, status: null);
+            var comment = new Comment(locationId, createdByUserId, commentText, Guid.Empty.ToString(), location: null, statusId: status, status: null);
             comment.IsDeleted = isDeleted;
             if (passedInContext != null)
             {

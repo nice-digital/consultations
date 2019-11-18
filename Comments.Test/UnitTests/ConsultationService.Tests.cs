@@ -33,7 +33,7 @@ namespace Comments.Test.UnitTests
             AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId);
 
 	        var context = new ConsultationsContext(_options, userService, _fakeEncryption);
-            var commentService = new CommentService(context, userService, _consultationService, null, _fakeHttpContextAccessor);
+            var commentService = new CommentService(context, userService, _consultationService, _linkGenerator, _fakeHttpContextAccessor);
             
             // Act
             var viewModel = commentService.GetCommentsAndQuestions(sourceURI);

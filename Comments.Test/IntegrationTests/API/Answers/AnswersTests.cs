@@ -65,8 +65,9 @@ namespace Comments.Test.IntegrationTests.API.Answers
         [Fact]
         public async Task Edit_Answer()
         {
-            //Arrange
-            var userId = Guid.Empty.ToString();
+			//Arrange
+
+			var userId = Guid.Empty.ToString();
             var answerText = Guid.NewGuid().ToString();
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);

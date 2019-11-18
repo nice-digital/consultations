@@ -74,7 +74,7 @@ namespace Comments.Test.IntegrationTests.API.Consultation
 
 		    AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, createdByUserId, (int)StatusName.Draft, _context);
 		    //var submitService = new SubmitService(_context, _fakeUserService, _consultationService);
-		    var commentService = new CommentService(_context, _fakeUserService, _consultationService, null, _fakeHttpContextAccessor);
+		    var commentService = new CommentService(_context, _fakeUserService, _consultationService, _linkGenerator, _fakeHttpContextAccessor);
 
 		    // Act    
 		    var viewModel = commentService.GetCommentsAndQuestions(sourceURI);
