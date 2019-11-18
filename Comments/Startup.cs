@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using NICE.Identity.Authentication.Sdk.API;
 using NICE.Identity.Authentication.Sdk.Configuration;
 using NICE.Identity.Authentication.Sdk.Domain;
 using NICE.Identity.Authentication.Sdk.Extensions;
@@ -81,6 +82,8 @@ namespace Comments
 	        services.TryAddTransient<IExportToExcel, ExportToExcel>();
 	        services.TryAddTransient<IStatusService, StatusService>();
 			services.TryAddTransient<IConsultationListService, ConsultationListService>();
+
+			services.TryAddTransient<IAPIService, APIService>();
 
 			// Add authentication
 			var authConfiguration = AppSettings.AuthenticationConfig.GetAuthConfiguration(); 

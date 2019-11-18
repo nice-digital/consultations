@@ -57,7 +57,7 @@
                 "questionId":"scrubbed by ScrubQuestionId",
                 "questionText":"00000000-0000-0000-0000-000000000000",
                 "questionTypeId":"scrubbed by ScrubQuestionTypeId",
-                "lastModifiedByUserId":null,
+                "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
                 "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
                 "questionType":{
                     "questionTypeId":"scrubbed by ScrubQuestionTypeId",
@@ -101,7 +101,7 @@
                 "questionId":"scrubbed by ScrubQuestionId",
                 "questionText":"00000000-0000-0000-0000-000000000000",
                 "questionTypeId":"scrubbed by ScrubQuestionTypeId",
-                "lastModifiedByUserId":null,
+                "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
                 "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
                 "questionType":{
                     "questionTypeId":"scrubbed by ScrubQuestionTypeId",
@@ -145,7 +145,7 @@
                 "questionId":"scrubbed by ScrubQuestionId",
                 "questionText":"00000000-0000-0000-0000-000000000000",
                 "questionTypeId":"scrubbed by ScrubQuestionTypeId",
-                "lastModifiedByUserId":null,
+                "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
                 "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
                 "questionType":{
                     "questionTypeId":"scrubbed by ScrubQuestionTypeId",

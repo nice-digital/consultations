@@ -165,8 +165,7 @@ namespace Comments.Services
 
 			var previousQuestionsWithRoles = await GetRoles(previousQuestions);
 
-			//TODO: get roles
-			var currentUserRoles = new List<string>(); //_httpContextAccessor.HttpContext.User.Roles();
+			var currentUserRoles = _userService.GetUserRoles(); 
 
 			return new QuestionAdmin(documentsAndConsultationTitle.consultationTitle, consultationQuestions,
 				questionAdminDocuments, questionTypes, consultationState, previousQuestionsWithRoles, currentUserRoles);

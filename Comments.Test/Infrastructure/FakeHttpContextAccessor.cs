@@ -3,8 +3,11 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Http.Internal;
+using Microsoft.Extensions.DependencyInjection;
 using NICE.Identity.Authentication.Sdk.Domain;
 using Claim = System.Security.Claims.Claim;
 
@@ -12,7 +15,8 @@ namespace Comments.Test.Infrastructure
 {
     public static class FakeHttpContextAccessor
     {
-        public static IHttpContextAccessor Get(bool isAuthenticated, string displayName = null, string userId = null, TestUserType testUserType = TestUserType.NotAuthenticated)
+	    private static string AuthenticationTokenExtensions_TokenKeyPrefix = ".Token.";
+		public static IHttpContextAccessor Get(bool isAuthenticated, string displayName = null, string userId = null, TestUserType testUserType = TestUserType.NotAuthenticated)
         {
 	        var context = new Mock<HttpContext>();
 
@@ -41,13 +45,35 @@ namespace Comments.Test.Infrastructure
 						break;
 				}
 
+				var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(claims, AuthenticationConstants.AuthenticationScheme));
 				context.Setup(r => r.User)
                     .Returns(() => new ClaimsPrincipal(new ClaimsIdentity(claims, AuthenticationConstants.AuthenticationScheme)));
 
 				context.Setup(r => r.Features)
 					.Returns(() => new FeatureCollection());
 
-				context.Setup(r => r.Request).Returns(new DefaultHttpRequest(new DefaultHttpContext()){Host = new HostString(roleIssuer)});
+				context.Setup(r => r.Request)
+					.Returns(new DefaultHttpRequest(new DefaultHttpContext()){Host = new HostString(roleIssuer)});
+
+				
+				var authServiceMock = new Mock<IAuthenticationService>();
+				authServiceMock
+					.Setup(_ => _.AuthenticateAsync(It.IsAny<HttpContext>(), It.IsAny<string>()))
+					.Returns(Task.FromResult(AuthenticateResult.Success(new AuthenticationTicket(claimsPrincipal,
+						new AuthenticationProperties(new Dictionary<string, string>() {{ AuthenticationTokenExtensions_TokenKeyPrefix + "access_token", "fake access token"}}), AuthenticationConstants.AuthenticationScheme))));
+
+
+				var serviceProviderMock = new Mock<IServiceProvider>();
+
+				serviceProviderMock
+						.Setup(_ => _.GetService(typeof(IAuthenticationService)))
+						.Returns(authServiceMock.Object);
+
+				//serviceProviderMock
+				//	.Setup(_ => _.GetRequiredService(typeof(IAuthenticationService)))
+				//	.Returns(authServiceMock.Object);
+
+				context.Setup(r => r.RequestServices).Returns(serviceProviderMock.Object);
             }
             else
             {

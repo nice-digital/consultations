@@ -103,7 +103,7 @@ namespace Comments.Test.Infrastructure
 		public TestBase(bool useRealSubmitService = false, TestUserType testUserType = TestUserType.Authenticated, bool useFakeConsultationService = false, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null, bool bypassAuthentication = true)
         {
 			
-			AppSettings.AuthenticationConfig = new AuthenticationConfig{ ClientId = "test client id"};
+			AppSettings.AuthenticationConfig = new AuthenticationConfig{ ClientId = "test client id", AuthorisationServiceUri = "http://www.example.com"};
 			// Arrange
 			_linkGenerator = FakeLinkGenerator.Get();
 			_fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId, testUserType);
@@ -134,14 +134,14 @@ namespace Comments.Test.Infrastructure
                 .ConfigureServices(services =>
                 {
                     services.AddEntityFrameworkSqlite();
-
-                    services.TryAddSingleton<ConsultationsContext>(_context);
+                   
+					services.TryAddSingleton<ConsultationsContext>(_context);
                     services.TryAddSingleton<ISeriLogger, FakeSerilogger>();
                     services.TryAddSingleton<LinkGenerator>(_linkGenerator);
 					services.TryAddSingleton<IHttpContextAccessor>(provider => _fakeHttpContextAccessor);
                     services.TryAddTransient<IUserService>(provider => _fakeUserService);
                     services.TryAddTransient<IFeedReaderService>(provider => new FeedReader(FeedToUse));
-					
+                    services.TryAddTransient<IAPIService>(provider => _fakeApiService);
 
 					if (!_useRealSubmitService)
 	                {
@@ -284,10 +284,12 @@ namespace Comments.Test.Infrastructure
 
             return questionType.QuestionTypeId;
         }
-        protected int AddQuestion(int locationId, int questionTypeId, string questionText, ConsultationsContext passedInContext = null)
+        protected int AddQuestion(int locationId, int questionTypeId, string questionText, ConsultationsContext passedInContext = null, string createdByUserId = null)
         {
             var question = new Question(locationId, questionText, questionTypeId, null, null, null);
-            if (passedInContext != null)
+            question.CreatedByUserId = createdByUserId ?? Guid.Empty.ToString();
+			question.LastModifiedByUserId = createdByUserId ?? Guid.Empty.ToString();
+			if (passedInContext != null)
             {
                 passedInContext.Question.Add(question);
                 passedInContext.SaveChanges();
