@@ -12,7 +12,7 @@ namespace Comments.Test.Infrastructure
     {
         public static IHttpContextAccessor Get(bool isAuthenticated, string displayName = null, string userId = null, TestUserType testUserType = TestUserType.NotAuthenticated)
         {
-            var context = new Mock<HttpContext>();
+	        var context = new Mock<HttpContext>();
 
             if (isAuthenticated || testUserType == TestUserType.Authenticated || testUserType == TestUserType.Administrator || testUserType == TestUserType.IndevUser)
             {
@@ -29,7 +29,7 @@ namespace Comments.Test.Infrastructure
 						claims.Add(new Claim(ClaimType.Role, "IndevUser", null, "http://consultations.nice.org.uk"));
 						break;
 					case TestUserType.Administrator:
-						claims.Add(new Claim(Claim Type.Role, "Administrator", null, "http://consultations.nice.org.uk"));
+						claims.Add(new Claim(ClaimType.Role, "Administrator", null, "http://consultations.nice.org.uk"));
 						break;
 					case TestUserType.CustomFictionalRole:
 						claims.Add(new Claim(ClaimType.Role, "CustomFictionalRole", null, "http://consultations.nice.org.uk"));
@@ -38,8 +38,9 @@ namespace Comments.Test.Infrastructure
 						claims.Add(new Claim(ClaimType.Role, "ConsultationListTestRole", null, "http://consultations.nice.org.uk"));
 						break;
 				}
+
 				context.Setup(r => r.User)
-                    .Returns(() => new ClaimsPrincipal(new ClaimsIdentity(claims))); //, Constants.DefaultScheme
+                    .Returns(() => new ClaimsPrincipal(new ClaimsIdentity(claims, AuthenticationConstants.AuthenticationScheme)));
 			}
             else
             {

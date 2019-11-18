@@ -39,7 +39,7 @@ namespace Comments.Configuration
 	        ReviewConfig = sp.GetService<IOptions<ReviewConfig>>().Value;
 	        StatusConfig = sp.GetService<IOptions<StatusConfig>>().Value;
 	        ConsultationListConfig = sp.GetService<IOptions<ConsultationListConfig>>().Value;
-			AuthenticationConfig = sp.GetService<IOptions<AuthenticationConfig>>().Value;
+			AuthenticationConfig = AuthenticationConfig ?? sp.GetService<IOptions<AuthenticationConfig>>().Value;
 		}
     }
 }

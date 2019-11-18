@@ -28,8 +28,8 @@ namespace Comments.Configuration
 				postLogoutRedirectUri: PostLogoutRedirectUri,
 				apiIdentifier:ApiIdentifier,
 				authorisationServiceUri: AuthorisationServiceUri,
-				grantType: null, callBackPath:
-				CallBackPath
+				grantType: null,
+				callBackPath: CallBackPath
 				);
         }
 	}

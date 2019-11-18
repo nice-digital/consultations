@@ -14,6 +14,7 @@ using Comments.ViewModels;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
@@ -97,6 +98,7 @@ namespace Comments.Test.Infrastructure
 
 		public TestBase(bool useRealSubmitService = false, TestUserType testUserType = TestUserType.Authenticated, bool useFakeConsultationService = false, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null)
         {
+			
 			AppSettings.AuthenticationConfig = new AuthenticationConfig{ ClientId = "test client id"};
             // Arrange
             _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId, testUserType);
@@ -142,6 +144,7 @@ namespace Comments.Test.Infrastructure
 	                {
 		                services.TryAddTransient<IConsultationService>(provider => _consultationService);
 	                }
+	                services.AddMvc(opt => opt.Filters.Add(new AllowAnonymousFilter())); //bypass authentication
 				})
                 .Configure(app =>
                 {
