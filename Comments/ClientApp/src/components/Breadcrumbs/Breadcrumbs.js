@@ -47,12 +47,10 @@ export class Breadcrumbs extends PureComponent<PropsType> {
 								onClick={()=>this.trackBreadcrumb(segment)}
 							>
 								{(isHttpLink(url) || (url.indexOf("/") === 0 && !localRoute)) ?
-									<a href={url} itemProp="item">
-										<span itemprop="name">{label}</span>
-									</a>
+									<a href={url}>{label}</a>
 									:
-									<Link to={url} itemProp="item">
-										<span itemprop="name">{label}</span>
+									<Link to={url} itemProp="name">
+										{label}
 									</Link>
 								}
 								<meta itemProp="position" content={index}/>
