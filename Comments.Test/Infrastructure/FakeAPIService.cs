@@ -1,3 +1,4 @@
+using System;
 using NICE.Identity.Authentication.Sdk.API;
 using NICE.Identity.Authentication.Sdk.Domain;
 using System.Collections.Generic;
@@ -13,8 +14,8 @@ namespace Comments.Test.Infrastructure
 
 	    public FakeAPIService(IEnumerable<UserDetails> usersToFind = null, Dictionary<string, IEnumerable<string>> rolesToFind = null)
 	    {
-		    _usersToFind = new List<UserDetails>() {new UserDetails("some name id", "display name", "emailAddress")};
-		    _rolesToFind = rolesToFind;
+		    _usersToFind = usersToFind ?? new List<UserDetails> {new UserDetails("some name id", "display name", "emailAddress")};
+		    _rolesToFind = rolesToFind ?? new Dictionary<string, IEnumerable<string>>{{Guid.Empty.ToString(), new List<string>{"Administrator"}}};
 	    }
 
 	    public Task<IEnumerable<UserDetails>> FindUsers(IEnumerable<string> nameIdentifiers, HttpClient httpClient = null)

@@ -83,7 +83,7 @@ namespace Comments
 	        services.TryAddTransient<IStatusService, StatusService>();
 			services.TryAddTransient<IConsultationListService, ConsultationListService>();
 
-			services.TryAddTransient<IAPIService, APIService>();
+			//services.TryAddTransient<IAPIService, APIService>(); //this is already done in the nugget
 
 			// Add authentication
 			var authConfiguration = AppSettings.AuthenticationConfig.GetAuthConfiguration(); 

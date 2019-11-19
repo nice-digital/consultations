@@ -18,7 +18,7 @@ namespace Comments.Test.IntegrationTests.API.User
 {
     public class UserTestsLoggedIn : TestBase
     {
-	    public UserTestsLoggedIn() : base(authenticated: true, userId: Guid.Empty.ToString(), displayName: "Quentin Taratino") { }
+	    public UserTestsLoggedIn() : base(authenticated: true, userId: Guid.Empty.ToString(), displayName: "Quentin Tarantino") { }
 
 		[Fact]
         public async Task Get_UserLoginDetails_Feed_Returns_Expected_Response_When_logged_in()

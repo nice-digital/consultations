@@ -141,7 +141,12 @@ namespace Comments.Test.Infrastructure
 					services.TryAddSingleton<IHttpContextAccessor>(provider => _fakeHttpContextAccessor);
                     services.TryAddTransient<IUserService>(provider => _fakeUserService);
                     services.TryAddTransient<IFeedReaderService>(provider => new FeedReader(FeedToUse));
-                    services.TryAddTransient<IAPIService>(provider => _fakeApiService);
+                    services.TryAddScoped<IAPIService>(provider => _fakeApiService);
+
+                    //services.AddAuthentication();
+
+                   //services.Decorate<IAPIService, FakeAPIService>();
+                   //services.Decorate<IAPIService>(provider => _fakeApiService);
 
 					if (!_useRealSubmitService)
 	                {

@@ -1,6 +1,6 @@
 ﻿{
-    "signInURL":"/signin?returnURL=/",
-    "registerURL":"/register?returnURL=/",
+    "signInURL":"/",
+    "registerURL":"TODO: register url",
     "isAuthorised":false,
     "displayName":null,
     "userId":null,

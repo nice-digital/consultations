@@ -16,11 +16,12 @@ namespace Comments.Test.IntegrationTests.API.Questions
 
 		public QuestionsAdminTests() : base(false, TestUserType.Administrator, true)
 		{
-			AppSettings.ConsultationListConfig.DownloadRoles = new RoleTypes()
-			{
-				AdminRoles = new List<string>(),
-				TeamRoles = new List<string>()
-			};
+			//AppSettings.ConsultationListConfig.DownloadRoles = new RoleTypes()
+			//{
+			//	AdminRoles = new List<string>(),
+			//	TeamRoles = new List<string>()
+			//};
+			AppSettings.ConsultationListConfig = TestAppSettings.GetConsultationListConfig();
 		}
 
 		[Fact]

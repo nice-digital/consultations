@@ -7,7 +7,7 @@ namespace Comments.Test.Infrastructure
     {
         public static IUserService Get(bool isAuthenticated, string displayName = null, string userId = null, TestUserType testUserType  = TestUserType.NotAuthenticated)
         {
-            return new UserService(FakeHttpContextAccessor.Get(isAuthenticated, displayName, userId, testUserType), null, new FakeAPIService());
+            return new UserService(FakeHttpContextAccessor.Get(isAuthenticated, displayName, userId, testUserType), FakeLinkGenerator.Get(), new FakeAPIService());
         }
     }
 }

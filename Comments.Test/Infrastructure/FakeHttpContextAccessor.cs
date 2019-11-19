@@ -19,10 +19,11 @@ namespace Comments.Test.Infrastructure
 		public static IHttpContextAccessor Get(bool isAuthenticated, string displayName = null, string userId = null, TestUserType testUserType = TestUserType.NotAuthenticated)
         {
 	        var context = new Mock<HttpContext>();
+	        var roleIssuer = "www.example.com"; //the issuer of the role is the domain for which the role is setup.
 
-            if (isAuthenticated || testUserType == TestUserType.Authenticated || testUserType == TestUserType.Administrator || testUserType == TestUserType.IndevUser)
+			if (isAuthenticated || testUserType == TestUserType.Authenticated || testUserType == TestUserType.Administrator || testUserType == TestUserType.IndevUser)
             {
-	            var roleIssuer = "www.example.com"; //the issuer of the role is the domain for which the role is setup.
+	            
 				var claims = new List<Claim>
                 {
                     new Claim(ClaimType.DisplayName, displayName, null, AuthenticationConstants.IdAMIssuer),
@@ -49,38 +50,34 @@ namespace Comments.Test.Infrastructure
 				context.Setup(r => r.User)
                     .Returns(() => new ClaimsPrincipal(new ClaimsIdentity(claims, AuthenticationConstants.AuthenticationScheme)));
 
-				context.Setup(r => r.Features)
-					.Returns(() => new FeatureCollection());
-
-				context.Setup(r => r.Request)
-					.Returns(new DefaultHttpRequest(new DefaultHttpContext()){Host = new HostString(roleIssuer)});
-
-				
 				var authServiceMock = new Mock<IAuthenticationService>();
 				authServiceMock
 					.Setup(_ => _.AuthenticateAsync(It.IsAny<HttpContext>(), It.IsAny<string>()))
 					.Returns(Task.FromResult(AuthenticateResult.Success(new AuthenticationTicket(claimsPrincipal,
-						new AuthenticationProperties(new Dictionary<string, string>() {{ AuthenticationTokenExtensions_TokenKeyPrefix + "access_token", "fake access token"}}), AuthenticationConstants.AuthenticationScheme))));
+						new AuthenticationProperties(new Dictionary<string, string>() { { AuthenticationTokenExtensions_TokenKeyPrefix + "access_token", "fake access token" } }), AuthenticationConstants.AuthenticationScheme))));
 
 
 				var serviceProviderMock = new Mock<IServiceProvider>();
 
 				serviceProviderMock
-						.Setup(_ => _.GetService(typeof(IAuthenticationService)))
-						.Returns(authServiceMock.Object);
-
-				//serviceProviderMock
-				//	.Setup(_ => _.GetRequiredService(typeof(IAuthenticationService)))
-				//	.Returns(authServiceMock.Object);
+					.Setup(_ => _.GetService(typeof(IAuthenticationService)))
+					.Returns(authServiceMock.Object);
 
 				context.Setup(r => r.RequestServices).Returns(serviceProviderMock.Object);
-            }
+			}
             else
             {
                 context.Setup(r => r.User).Returns(() => null);
             }
 
-            var contextAccessor = new Mock<IHttpContextAccessor>();
+            context.Setup(r => r.Features)
+	            .Returns(() => new FeatureCollection());
+
+            context.Setup(r => r.Request)
+	            .Returns(new DefaultHttpRequest(new DefaultHttpContext()) { Host = new HostString(roleIssuer) });
+           
+
+			var contextAccessor = new Mock<IHttpContextAccessor>();
             contextAccessor.Setup(ca => ca.HttpContext).Returns(context.Object);
 
             return contextAccessor.Object;
