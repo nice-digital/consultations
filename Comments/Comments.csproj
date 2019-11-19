@@ -27,6 +27,7 @@
 	<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
     <PackageReference Include="NICE.Feeds" Version="1.0.136" />
+    <PackageReference Include="NICE.Identity.Authentication.Sdk" Version="1.0.312" />
     <PackageReference Include="NICE.Logging" Version="5.0.52" />
     <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
   </ItemGroup>
@@ -59,10 +60,6 @@
   <ItemGroup>
     <None Remove="Views\main.css" />
     <None Remove="Views\main.css.map" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\identity\NICE.Identity.Authentication.Sdk\NICE.Identity.Authentication.Sdk.csproj" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
