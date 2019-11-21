@@ -10,11 +10,14 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using NICE.Feeds;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
 using Comments.Common;
 using Comments.Export;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
@@ -84,11 +87,15 @@ namespace Comments
 			services.TryAddTransient<IConsultationListService, ConsultationListService>();
 
 			//services.TryAddTransient<IAPIService, APIService>(); //this is already done in the nugget
+			services.AddRouting(options => options.LowercaseUrls = true);
 
 			// Add authentication
 			var authConfiguration = AppSettings.AuthenticationConfig.GetAuthConfiguration(); 
 			services.AddAuthentication(authConfiguration);
-			services.AddAuthorisation(authConfiguration);
+			services.AddAuthorisation(authConfiguration, options =>
+			{
+				options.AddPolicy("AdminUsersPolicy", new AuthorizationPolicy(new List<IAuthorizationRequirement>(){ new AssertionRequirement()}, )); // builder =>  builder.// PolicyClaimCheck.Any, new string[2] { "Administrator", "CommentAdminTeam", "IndevUser" });
+			});
 
 			services.AddMvc(options =>
             {

@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Comments.Controllers.Api
 {
-	[Authorize(Roles = "Administrator,CommentAdminTeam,IndevUser")]
+	[Authorize(Policy = "Administrator,CommentAdminTeam,IndevUser")]
 	[Produces("application/json")]
     [Route("consultations/api/[controller]")]
     public class QuestionsController : ControllerBase
