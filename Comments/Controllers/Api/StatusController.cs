@@ -43,7 +43,7 @@ namespace Comments.Controllers.Api
 
 	[Produces("application/json")]
 	[Route("consultations/api/[controller]")]
-	[Authorize(Roles = "Administrator")]
+	[Authorize(Policy = "Administrator")]
 	public class StatusController : ControllerBase
 	{
 		private readonly IStatusService _statusService;

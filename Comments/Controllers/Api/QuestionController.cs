@@ -35,7 +35,7 @@ namespace Comments.Controllers.Api
 
         // POST: consultations/api/Question
         [HttpPost]
-        [Authorize(Roles = "Administrator,CommentAdminTeam,IndevUser")]
+        [Authorize(Policy = "Administrator,CommentAdminTeam,IndevUser")]
 		public IActionResult PostQuestion([FromBody] ViewModels.Question question)
         {
             if (!ModelState.IsValid)
@@ -51,7 +51,7 @@ namespace Comments.Controllers.Api
 
         // PUT: consultations/api/Question/5
         [HttpPut("{questionId}")]
-        [Authorize(Roles = "Administrator,CommentAdminTeam,IndevUser")]
+        [Authorize(Policy = "Administrator,CommentAdminTeam,IndevUser")]
 		public IActionResult PutQuestion([FromRoute] int questionId, [FromBody] ViewModels.Question question)
         {
             if (!ModelState.IsValid)
@@ -72,7 +72,7 @@ namespace Comments.Controllers.Api
 
         // DELETE: consultations/api/Question/5
         [HttpDelete("{QuestionId}")]
-        [Authorize(Roles = "Administrator,CommentAdminTeam,IndevUser")]
+        [Authorize(Policy = "Administrator,CommentAdminTeam,IndevUser")]
 		public IActionResult DeleteQuestion([FromRoute] int questionId)
         {
             if (!ModelState.IsValid)

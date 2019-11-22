@@ -38,7 +38,7 @@ namespace Comments.Controllers.Api
 
 	[Produces("application/json")]
 	[Route("consultations/api/[controller]")]
-	[Authorize(Roles="IndevUser")]
+	[Authorize(Policy = "IndevUser")]
 	public class PreviewDraftDocumentsController : Controller
 	{
 		private readonly IConsultationService _consultationService;
@@ -75,7 +75,7 @@ namespace Comments.Controllers.Api
 
 	[Produces("application/json")]
 	[Route("consultations/api/[controller]")]
-	[Authorize(Roles="IndevUser")]
+	[Authorize(Policy = "IndevUser")]
 	public class PreviewPublishedDocumentsController : Controller
 	{
 		private readonly IConsultationService _consultationService;

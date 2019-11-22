@@ -5,7 +5,7 @@ using System;
 
 namespace Comments.Controllers.Web
 {
-	[Authorize(Roles="Administrator")]
+	[Authorize(Policy = "Administrator")]
 	
 	public class AdminController : Controller
     {

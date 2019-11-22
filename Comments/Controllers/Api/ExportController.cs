@@ -20,7 +20,7 @@ namespace Comments.Controllers.Api
 		}
 	}
 
-	//[Authorize(Roles = "Administrator")] - authorisation is in the service as the role list is configurable in appsettings.json
+	//[Authorize(Policy = "Administrator")] - authorisation is in the service as the role list is configurable in appsettings.json
 	[Route("consultations/api/[controller]")]
 	public class ExportController: ExportControllerBase
 	{

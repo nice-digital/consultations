@@ -92,10 +92,7 @@ namespace Comments
 			// Add authentication
 			var authConfiguration = AppSettings.AuthenticationConfig.GetAuthConfiguration(); 
 			services.AddAuthentication(authConfiguration);
-			services.AddAuthorisation(authConfiguration, options =>
-			{
-				options.AddPolicy("AdminUsersPolicy", new AuthorizationPolicy(new List<IAuthorizationRequirement>(){ new AssertionRequirement()}, )); // builder =>  builder.// PolicyClaimCheck.Any, new string[2] { "Administrator", "CommentAdminTeam", "IndevUser" });
-			});
+			services.AddAuthorisation(authConfiguration);
 
 			services.AddMvc(options =>
             {

@@ -7,8 +7,8 @@ namespace Comments.Controllers.Api
 {
 	[Produces("application/json")]
     [Route("consultations/api/[controller]")]
-	//[Authorize(Roles = "Administrator")] - authorisation is in the service as the role list is configurable in appsettings.json
-    public class ConsultationListController : ControllerBase
+	//[Authorize(Policy = "Administrator")] - authorisation is in the service as the role list is configurable in appsettings.json
+	public class ConsultationListController : ControllerBase
 	{
         private readonly IConsultationListService _consultationListService;
         private readonly ILogger<ConsultationListController> _logger;
