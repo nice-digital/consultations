@@ -2,6 +2,7 @@ using Comments.Models;
 using Microsoft.AspNetCore.Hosting;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Authentication;
 
 namespace Comments.Services
@@ -15,6 +16,7 @@ namespace Comments.Services
 		int InsertQuestionsForCfGConsultation(int consultationId);
 		int InsertQuestionsForQSConsultation(int consultationId);
 		IList<object> GetData(string tableName);
+		IEnumerable<Guid> GetUniqueUsers();
 	}
 
 	/// <summary>
@@ -73,5 +75,10 @@ namespace Comments.Services
 	    {
 		    return _dbContext.GetAllOfATable(tableName);
 	    }
-	}
+
+		public IEnumerable<Guid> GetUniqueUsers()
+		{
+			return _dbContext.GetUniqueUsers();
+		}
+    }
 }
