@@ -16,7 +16,7 @@ namespace Comments.Services
 		int InsertQuestionsForCfGConsultation(int consultationId);
 		int InsertQuestionsForQSConsultation(int consultationId);
 		IList<object> GetData(string tableName);
-		IEnumerable<Guid> GetUniqueUsers();
+		IEnumerable<AdminUserDetails> GetUniqueUsers();
 	}
 
 	/// <summary>
@@ -26,10 +26,12 @@ namespace Comments.Services
     {
 	    private readonly ConsultationsContext _dbContext;
 	    private readonly IHostingEnvironment _hostingEnvironment;
+	    private readonly IUserService _userService;
 
 	    public AdminService(ConsultationsContext dbContext, IHostingEnvironment hostingEnvironment, IUserService userService)
 	    {
-		    if (!userService.IsAllowedAccess(new List<string> {"Administrator"}).Valid)
+		    _userService = userService;
+			if (!_userService.IsAllowedAccess(new List<string> {"Administrator"}).Valid)
 		    {
 			    throw new AuthenticationException("Not authenticated");
 			}
@@ -76,9 +78,15 @@ namespace Comments.Services
 		    return _dbContext.GetAllOfATable(tableName);
 	    }
 
-		public IEnumerable<Guid> GetUniqueUsers()
+		public IEnumerable<AdminUserDetails> GetUniqueUsers()
 		{
-			return _dbContext.GetUniqueUsers();
+			var uniqueUserIds = _dbContext.GetUniqueUsers();
+			var userIdsAndDisplayNames = _userService.GetDisplayNamesForMultipleUserIds(uniqueUserIds);
+
+			foreach (var (userId, displayName) in userIdsAndDisplayNames)
+			{
+				yield return new AdminUserDetails(userId, displayName, _userService.GetEmailForUserId(userId));
+			}
 		}
     }
 }
