@@ -415,7 +415,7 @@ export class Document extends Component<PropsType, StateType> {
 
 		const supportingDocs = this.getDocumentLinks(
 			false,
-			"Supporting documents (for information only)",
+			"Supporting documents",
 			documentsData,
 			documentId,
 			consultationId
