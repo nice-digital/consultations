@@ -47,8 +47,8 @@ namespace Comments.Services
 			var user = GetCurrentUser();
 
 		    var signInURL = _linkGenerator.GetPathByAction(_httpContextAccessor.HttpContext, Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnURL = returnURL.ToConsultationsRelativeUrl() });
-		    var registerURL = "TODO: register url";
-			
+		    var registerURL = _linkGenerator.GetPathByAction(_httpContextAccessor.HttpContext, Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnURL = returnURL.ToConsultationsRelativeUrl(), goToRegisterPage = true });
+
 			return new SignInDetails(user, signInURL, registerURL);
 		}
 

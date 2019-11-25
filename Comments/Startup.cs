@@ -279,7 +279,7 @@ namespace Comments
 
 						data["signInURL"] = linkGenerator.GetPathByAction(Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnUrl = context.Request.Path });
 						data["signOutURL"] = linkGenerator.GetPathByAction(Constants.Auth.LogoutAction, Constants.Auth.ControllerName); //auth0 needs logout urls configured. it won't let you redirect dynamically.
-						//data["registerURL"] = authenticateService.GetRegisterURL(context.Request.Path);
+						data["registerURL"] = linkGenerator.GetPathByAction(Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnUrl = context.Request.Path, goToRegisterPage = true });
 						data["requestURL"] = context.Request.Path;
 	                    data["accountsEnvironment"] = AppSettings.Environment.AccountsEnvironment;
 	                    //data["user"] = context.User; - possible security implications here, surfacing claims to the front end. might be ok, if just server-side.

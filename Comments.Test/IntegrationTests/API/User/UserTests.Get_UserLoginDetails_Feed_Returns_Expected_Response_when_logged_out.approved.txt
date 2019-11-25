@@ -1,6 +1,6 @@
 ﻿{
     "signInURL":"/",
-    "registerURL":"TODO: register url",
+    "registerURL":"/",
     "isAuthorised":false,
     "displayName":null,
     "userId":null,

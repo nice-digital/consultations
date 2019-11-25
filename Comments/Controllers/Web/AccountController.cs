@@ -18,9 +18,9 @@ namespace Comments.Controllers.Web
 		    _niceAuthenticationService = niceAuthenticationService;
 	    }
 
-		public async Task Login(string returnUrl = "/")
+		public async Task Login(string returnUrl = "/", bool goToRegisterPage = false)
 	    {
-		    await _niceAuthenticationService.Login(_httpContextAccessor.HttpContext, returnUrl);
+		    await _niceAuthenticationService.Login(_httpContextAccessor.HttpContext, returnUrl, goToRegisterPage);
 	    }
 
 	    [Authorize]
