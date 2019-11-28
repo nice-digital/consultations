@@ -6,7 +6,8 @@ Feature: User unable to submit when they have not completed mandatory questions 
 
 	Background:
 		Given I open the url "234/1/recommendations"
-		When I log into accounts with username "ACCOUNTS_EMAIL" and password "ACCOUNTS_PASSWORD"
+		When I log into accounts with username "IDAM_EMAIL1" and password "IDAM_PASSWORD"
+		Given I open the url "234/1/recommendations"
 
 	Scenario: User is unable to Submit when they have not answered the default response questions
 		Given I comment on a Document
