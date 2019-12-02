@@ -142,5 +142,17 @@ namespace Comments.Controllers.Web
 
 			return Json(allData);
 		}
+
+		/// <summary>
+		/// /consultations/admin/GetUniqueUsers
+		/// </summary>
+		/// <returns></returns>
+		[Route("consultations/admin/GetUniqueUsers")]
+		public JsonResult GetUniqueUsers()
+		{
+			var allData = _adminService.GetUniqueUsers();
+
+			return Json(allData);
+		}
 	}
 }
