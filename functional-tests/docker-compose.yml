@@ -50,6 +50,11 @@ services:
       - ACCOUNTS_EMAIL3
       - ACCOUNTS_EMAIL4
       - ACCOUNTS_PASSWORD
+      - IDAM_EMAIL1
+      - IDAM_EMAIL2
+      - IDAM_EMAIL3
+      - IDAM_EMAIL4
+      - IDAM_PASSWORD
 
   # Comment Collection dotnet core web app
   comments:
