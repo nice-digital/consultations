@@ -747,5 +747,21 @@ namespace Comments.Models
 				.Select(q => q.OrderByDescending(x => x.CreatedDate).First())
 				.OrderByDescending(q => q.CreatedDate);
 		}
+
+		public IEnumerable<Guid> GetUniqueUsers()
+		{
+			var allUserIds =    Answer.IgnoreQueryFilters().Select(answer => answer.CreatedByUserId).Distinct().Concat(
+								Answer.IgnoreQueryFilters().Select(answer => answer.LastModifiedByUserId).Distinct().Concat(
+
+								Comment.IgnoreQueryFilters().Select(comment => comment.CreatedByUserId).Distinct().Concat(
+								Comment.IgnoreQueryFilters().Select(comment => comment.LastModifiedByUserId).Distinct().Concat(
+
+								Question.IgnoreQueryFilters().Select(question => question.CreatedByUserId).Distinct().Concat(
+								Question.IgnoreQueryFilters().Select(question => question.LastModifiedByUserId).Distinct().Concat(
+
+								Submission.IgnoreQueryFilters().Select(comment => comment.SubmissionByUserId).Distinct()))))));
+
+			return allUserIds.Distinct();
+		}
 	}
 }
