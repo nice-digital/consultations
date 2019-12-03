@@ -115,17 +115,17 @@ namespace Comments.Controllers.Web
 		    return Content($"Row count deleted/updated: {rowCount}");
 	    }
 
-		/// <summary>
-		/// /consultations/admin/DeleteAllData
-		/// </summary>
-		/// <returns></returns>
-		[Route("consultations/admin/DeleteAllData")]
-	    public ActionResult DeleteAllData()
-	    {
-		    var rowCount = _adminService.DeleteAllData();
+		///// <summary>
+		///// /consultations/admin/DeleteAllData
+		///// </summary>
+		///// <returns></returns>
+		//[Route("consultations/admin/DeleteAllData")]
+	 //   public ActionResult DeleteAllData()
+	 //   {
+		//    var rowCount = _adminService.DeleteAllData();
 
-		    return Content($"Row count deleted/updated: {rowCount}");
-	    }
+		//    return Content($"Row count deleted/updated: {rowCount}");
+	 //   }
 
 
 		/// <summary>

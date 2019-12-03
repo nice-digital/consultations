@@ -9,14 +9,14 @@ namespace Comments.Services
 {
 	public interface IAdminService
 	{
-		int DeleteAllData();
+		//int DeleteAllData();
 		int DeleteAllSubmissionsFromUser(string usersSubmissionsToDelete);
 		int InsertQuestionsForDocument1And2InConsultation(int consultationId);
 		int InsertQuestionsForConsultation(int consultationId);
 		int InsertQuestionsForCfGConsultation(int consultationId);
 		int InsertQuestionsForQSConsultation(int consultationId);
 		IList<object> GetData(string tableName);
-		IEnumerable<AdminUserDetails> GetUniqueUsers();
+		IEnumerable<string> GetUniqueUsers();
 	}
 
 	/// <summary>
@@ -39,14 +39,14 @@ namespace Comments.Services
 		    _hostingEnvironment = hostingEnvironment;
 	    }
 
-	    public int DeleteAllData()
-	    {
-		    if (_hostingEnvironment.IsProduction())
-		    {
-			    throw new Exception("Not allowed to do this on production");
-		    }
-		    return _dbContext.DeleteEverything();
-	    }
+	    //public int DeleteAllData()
+	    //{
+		   // if (_hostingEnvironment.IsProduction())
+		   // {
+			  //  throw new Exception("Not allowed to do this on production");
+		   // }
+		   // return _dbContext.DeleteEverything();
+	    //}
 
 	    public int DeleteAllSubmissionsFromUser(string usersSubmissionsToDelete)
 	    {
@@ -78,15 +78,9 @@ namespace Comments.Services
 		    return _dbContext.GetAllOfATable(tableName);
 	    }
 
-		public IEnumerable<AdminUserDetails> GetUniqueUsers()
+		public IEnumerable<string> GetUniqueUsers()
 		{
-			var uniqueUserIds = _dbContext.GetUniqueUsers();
-			var userIdsAndDisplayNames = _userService.GetDisplayNamesForMultipleUserIds(uniqueUserIds);
-
-			foreach (var (userId, displayName) in userIdsAndDisplayNames)
-			{
-				yield return new AdminUserDetails(userId, displayName, _userService.GetEmailForUserId(userId));
-			}
+			return _dbContext.GetUniqueUsers();
 		}
     }
 }

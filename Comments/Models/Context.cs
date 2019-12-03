@@ -748,7 +748,7 @@ namespace Comments.Models
 				.OrderByDescending(q => q.CreatedDate);
 		}
 
-		public IEnumerable<Guid> GetUniqueUsers()
+		public IEnumerable<string> GetUniqueUsers()
 		{
 			var allUserIds =    Answer.IgnoreQueryFilters().Select(answer => answer.CreatedByUserId).Distinct().Concat(
 								Answer.IgnoreQueryFilters().Select(answer => answer.LastModifiedByUserId).Distinct().Concat(
