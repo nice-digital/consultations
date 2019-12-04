@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using Comments.Common;
 using Comments.ViewModels;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 
 namespace Comments.Controllers.Web
@@ -18,11 +20,15 @@ namespace Comments.Controllers.Web
 	public class ErrorController : Controller
     {
 	    private readonly ILogger _logger;
+	    private readonly IHttpContextAccessor _httpContextAccessor;
+	    private readonly LinkGenerator _linkGenerator;
 
-		public ErrorController(ILogger<ErrorController> logger)
+	    public ErrorController(ILogger<ErrorController> logger, IHttpContextAccessor httpContextAccessor, LinkGenerator linkGenerator)
 	    {
-			_logger = logger;
-		}
+		    _logger = logger;
+		    _httpContextAccessor = httpContextAccessor;
+		    _linkGenerator = linkGenerator;
+	    }
 
 	    [Route(Constants.ErrorPath)]
 	    [Route(Constants.ErrorPath + "/{statusCode}")]
@@ -49,7 +55,10 @@ namespace Comments.Controllers.Web
 
 	        _logger.LogError($"Exception for Url: {requestedPath}, Exception: {exception}");
 
-			var viewModel = new Error(requestedPath, exception);
+	        var signInURL = _linkGenerator.GetPathByAction(Constants.Auth.LoginAction, Constants.Auth.ControllerName);
+	        var signOutURL = _linkGenerator.GetPathByAction(Constants.Auth.LogoutAction, Constants.Auth.ControllerName);
+
+			var viewModel = new Error(requestedPath, exception, _httpContextAccessor.HttpContext.User, signInURL, signOutURL);
 			return View(viewModel);
         }
     }

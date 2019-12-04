@@ -1,4 +1,10 @@
 @using Comments.Configuration
+@model Comments.ViewModels.LayoutBaseModel
+@*
+Note: this layout view is only ever shown when there's been an error rendering any front-end at all.
+
+	most errors encountered by the front end will show an error in the react app, and won't hit this page.
+*@
 <!DOCTYPE html>
 
 <html>
@@ -9,10 +15,32 @@
 	<title>@ViewBag.Title</title>
 </head>
 <body>
-    <div>
-        @RenderBody()
-    </div>
+	<div>
+		@RenderBody()
+	</div>
 
-<script src="//cdn.nice.org.uk/V3.1/Scripts/nice/NICE.TopHat.min.js" data-environment="@AppSettings.Environment.AccountsEnvironment" data-search="/search?q=%term" data-typeaheadtype="remote" data-typeaheadsource="/autocomplete?%query" data-search-placeholder="Search NICE..." data-cookie="true" async=""></script>
+	<!-- Global nav - this block must be below the "loud" scipts comment above, as it relies on window.__AUTH__ which is set in that block. -->
+	<script>
+		//var global_nav_config_
+		var global_nav_config = {
+			service: "guidance",
+			header: {
+				search: {
+					autocomplete: "/autocomplete?ajax=ajax",
+				},
+				auth: {
+					provider: "idam",
+					environment: "@Model.AccountsEnvironment",
+					links: [{ text: "@Model.LinkText", url: "@Model.LinkURL" }],
+					displayName: "@Model.DisplayName"
+				}
+			},
+			footer: true
+		};
+	</script>
+	<!--[if lt IE 9]>
+		<script src="@Model.GlobalNavScriptIE8"></script>
+	<![endif]-->
+	<script src="@Model.GlobalNavScript"></script>
 </body>
 </html>

@@ -106,7 +106,7 @@
 <!-- Content of src in script tags below are replaced by parameters in the .env file for local development only.
 	
 	On all other servers, the .env.production file is used. During the build, the src attributes will get the substitution variable strings
-	in the .env.production file i.e. "#{GlobalNavScript}". Then when the release is deployed to the servers, this substitution string is 
+	in the .env.production file i.e. "#{GlobalNav:Script}". Then when the release is deployed to the servers, this substitution string is 
 	replaced by the variable from Octopus Deploy, which is the actual URL to use.
 
 	note: custom environment variables in .env files must have have the prefix of "REACT_APP_".
