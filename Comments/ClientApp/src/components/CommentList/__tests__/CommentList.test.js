@@ -9,10 +9,14 @@ import MockAdapter from "axios-mock-adapter";
 import { LiveAnnouncer } from "react-aria-live";
 
 import { generateUrl } from "../../../data/loader";
-import sampleComments from "./sample.json";
-import EmptyCommentsResponse from "./EmptyCommentsResponse.json";
+import sampleComments from "./sampleComments.json";
+import sampleConsultation from "./sampleConsultation.json";
+import emptyCommentsResponse from "./emptyCommentsResponse.json";
 import { nextTick } from "../../../helpers/utils";
 import toJson from "enzyme-to-json";
+
+import { createQuestionPdf } from '../../QuestionView/QuestionViewDocument';
+
 
 const mock = new MockAdapter(axios);
 
@@ -27,6 +31,8 @@ jest.mock("../../../context/UserContext", () => {
 		},
 	};
 });
+
+jest.mock('../../QuestionView/QuestionViewDocument')
 
 describe("[ClientApp] ", () => {
 	describe("CommentList Component", () => {
@@ -45,7 +51,6 @@ describe("[ClientApp] ", () => {
 			comment: {
 				commentId: 1,
 			},
-			viewComments: true,
 		};
 
 		afterEach(() => {
@@ -71,7 +76,7 @@ describe("[ClientApp] ", () => {
 		});
 
 		it("has state with an empty array of comments", () => {
-			mock.onGet().reply(200, EmptyCommentsResponse);
+			mock.onGet().reply(200, emptyCommentsResponse);
 			const wrapper = shallow(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>).find("CommentList").dive();
 			expect(Array.isArray(wrapper.state().comments)).toEqual(true);
 		});
@@ -194,7 +199,7 @@ describe("[ClientApp] ", () => {
 						sourceURI: fakeProps.match.url,
 					})
 				)
-				.reply(200, EmptyCommentsResponse);
+				.reply(200, emptyCommentsResponse);
 			mock
 				.onPost(
 					generateUrl("newcomment")
@@ -339,6 +344,42 @@ describe("[ClientApp] ", () => {
 
 			 mount(<CommentList {...fakeProps} isReviewPage={true} />);
 		});
+
+
+		it("should call createQuestionPDF with title, end date, and questions when the download questions button is clicked", async () => {
+			// assemble
+			mock.reset();
+			mock
+				.onGet("/consultations/api/Comments?sourceURI=%2F1%2F1%2Fintroduction")
+				.reply(200, sampleComments)
+				.onGet("/consultations/api/Consultation?consultationId=1&isReview=false")
+				.reply(200, sampleConsultation);
+
+			const questionsForPDF = sampleComments.questions;
+			const titleForPDF = sampleConsultation.title;
+			const endDate = sampleComments.consultationState.endDate;
+
+			const wrapper = mount(
+				<MemoryRouter>
+					<LiveAnnouncer>
+						<CommentList {...fakeProps} />
+					</LiveAnnouncer>
+				</MemoryRouter>
+			);
+
+			await nextTick();
+			wrapper.update();
+
+			const button = wrapper.find("#js-create-question-pdf");
+
+			// act
+			button.simulate("click");
+
+			// assert
+			expect(createQuestionPdf).toHaveBeenCalledTimes(1);
+			expect(createQuestionPdf).toHaveBeenCalledWith(questionsForPDF, titleForPDF, endDate);
+
+		})
 
 	});
 });

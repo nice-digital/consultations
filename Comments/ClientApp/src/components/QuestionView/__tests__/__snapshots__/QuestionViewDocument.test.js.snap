@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[ClientApp]  Question View Document document should be correctly formatted 1`] = `
+Object {
+  "content": Array [
+    Object {
+      "image": "nice-logo.png",
+      "width": 250,
+    },
+    "
+",
+    "
+",
+    Object {
+      "style": "header",
+      "text": "Our test consultation title",
+    },
+    "
+",
+    Object {
+      "text": "This consultation includes the following questions:",
+    },
+    "
+",
+    Object {
+      "ul": Array [
+        Array [
+          Object {
+            "text": "First Question",
+          },
+          "
+",
+        ],
+      ],
+    },
+    "
+",
+    Object {
+      "text": "Please note: Responses to this consultation need to be submitted online. This consultation closes on 14 December 2019.",
+    },
+  ],
+  "defaultStyle": Object {
+    "fontSize": 12,
+  },
+  "info": Object {
+    "title": "Questions for \\"Our test consultation title\\"",
+  },
+  "pageMargins": 60,
+  "pageOrientation": "portrait",
+  "pageSize": "A4",
+  "styles": Object {
+    "header": Object {
+      "bold": true,
+      "fontSize": 16,
+    },
+  },
+}
+`;
