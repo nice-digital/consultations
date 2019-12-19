@@ -45,6 +45,13 @@
   }
 }
 
+.caution {
+  background-color: $colour-caution-our-version;
+  border: em($spacing-xx-small) solid black;
+  display: inline-block;
+  padding: 	rem($spacing-small);
+}
+
 .visuallyhidden { 
   position: absolute; 
   overflow: hidden; 

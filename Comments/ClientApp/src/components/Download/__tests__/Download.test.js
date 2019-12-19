@@ -43,6 +43,8 @@ describe("[ClientApp] ", () => {
 					mode: "deep",
 				})
 			).toMatchSnapshot();
+
+			wrapper.unmount();
 		});
 
 	});

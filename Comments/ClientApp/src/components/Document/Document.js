@@ -112,6 +112,7 @@ export class Document extends Component<PropsType, StateType> {
 					preloadedConsultation.consultationState.consultationIsOpen &&
 					!preloadedConsultation.consultationState.userHasSubmitted;
 
+
 				if (preloadedChapter) {
 					preloadedChapter = this.addChapterDetailsToSections(preloadedChapter);
 				}
@@ -440,6 +441,11 @@ export class Document extends Component<PropsType, StateType> {
 					<div className="grid">
 						<div data-g="12">
 							<BreadCrumbsWithRouter links={this.state.consultationData.breadcrumbs}/>
+							{!this.state.consultationData.consultationState.consultationIsOpen &&
+								<div className="caution">
+									<strong>The content on this page is not current guidance and is only for the purposes of the consultation process.</strong>
+								</div>
+							}
 							<main role="main">
 								<div className="page-header">
 									<Header
@@ -472,6 +478,7 @@ export class Document extends Component<PropsType, StateType> {
 									</button>
 									}
 								</div>
+
 
 								<button
 									className="screenreader-button"
