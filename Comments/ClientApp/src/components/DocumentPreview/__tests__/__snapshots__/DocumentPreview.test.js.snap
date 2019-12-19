@@ -34,8 +34,13 @@ Array [
                     >
                         <a
                             href="/guidance/inconsultation"
+                            itemProp="item"
                         >
-                            All consultations
+                            <span
+                                itemprop="name"
+                            >
+                                All consultations
+                            </span>
                         </a>
                         <meta
                             content={0}
@@ -51,8 +56,13 @@ Array [
                     >
                         <a
                             href="/guidance/indevelopment/gid-ng10186/consultation/"
+                            itemProp="item"
                         >
-                            Consultation
+                            <span
+                                itemprop="name"
+                            >
+                                Consultation
+                            </span>
                         </a>
                         <meta
                             content={1}

@@ -36,8 +36,13 @@ Array [
                               >
                                     <a
                                           href="/"
+                                          itemProp="item"
                                     >
-                                          Home
+                                          <span
+                                                itemprop="name"
+                                          >
+                                                Home
+                                          </span>
                                     </a>
                                     <meta
                                           content={0}
@@ -53,8 +58,13 @@ Array [
                               >
                                     <a
                                           href="/guidance/indevelopment/gid-ta10232/consultation/"
+                                          itemProp="item"
                                     >
-                                          Consultation title
+                                          <span
+                                                itemprop="name"
+                                          >
+                                                Consultation title
+                                          </span>
                                     </a>
                                     <meta
                                           content={1}
@@ -70,8 +80,13 @@ Array [
                               >
                                     <a
                                           href="/consultations/1/1/introduction"
+                                          itemProp="item"
                                     >
-                                          Consultation documents
+                                          <span
+                                                itemprop="name"
+                                          >
+                                                Consultation documents
+                                          </span>
                                     </a>
                                     <meta
                                           content={2}
@@ -652,8 +667,13 @@ Array [
                               >
                                     <a
                                           href="/"
+                                          itemProp="item"
                                     >
-                                          Home
+                                          <span
+                                                itemprop="name"
+                                          >
+                                                Home
+                                          </span>
                                     </a>
                                     <meta
                                           content={0}
@@ -669,8 +689,13 @@ Array [
                               >
                                     <a
                                           href="/guidance/indevelopment/gid-ta10232/consultation/"
+                                          itemProp="item"
                                     >
-                                          Consultation title
+                                          <span
+                                                itemprop="name"
+                                          >
+                                                Consultation title
+                                          </span>
                                     </a>
                                     <meta
                                           content={1}
@@ -686,8 +711,13 @@ Array [
                               >
                                     <a
                                           href="/consultations/1/1/introduction"
+                                          itemProp="item"
                                     >
-                                          Consultation documents
+                                          <span
+                                                itemprop="name"
+                                          >
+                                                Consultation documents
+                                          </span>
                                     </a>
                                     <meta
                                           content={2}
