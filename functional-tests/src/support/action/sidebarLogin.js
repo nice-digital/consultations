@@ -11,8 +11,8 @@ export const sidebarLogin = (username, password) => {
 	waitForVisible(".LoginBanner");
 	clickElement("click", "selector", "a[href*='/consultations/account/login?returnURL=']");
 	waitForVisible("[data-qa-sel='login-email']");
-	setInputField("set", process.env[username], "[data-qa-sel='login-email']");
-	setInputField("set", process.env[password], "[data-qa-sel='login-password']");
+	browser.setValue("[data-qa-sel='login-email']", process.env[username]);
+	browser.setValue("[data-qa-sel='login-password']", process.env[password]);
 	clickElement("click", "selector", "[data-qa-sel='login-button']");
 	browser.pause(2000);
 	waitForVisible("[data-qa-sel='open-commenting-panel']");
