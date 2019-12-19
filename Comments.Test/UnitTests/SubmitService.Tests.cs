@@ -27,13 +27,13 @@ namespace Comments.Test.UnitTests
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 			var submitService = new SubmitService(consultationContext, userService, _consultationService);
-			var commentService = new CommentService(consultationContext, userService, _consultationService, _linkGenerator, _fakeHttpContextAccessor);
+			var commentService = new CommentService(consultationContext, userService, _consultationService, _fakeHttpContextAccessor);
 
 			var locationId = AddLocation(sourceURI, _context);
 			var commentId = AddComment(locationId, "Comment text", false, userId, (int)StatusName.Draft, _context);
 
 			//Act
-			var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI);
+			var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
 			var result = submitService.Submit(new ViewModels.Submission(commentsAndQuestions.Comments, new List<ViewModels.Answer>()));
 
 			var comment = commentService.GetComment(commentId);
@@ -62,7 +62,7 @@ namespace Comments.Test.UnitTests
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 			var submitService = new SubmitService(consultationContext, userService, _consultationService);
-			var commentService = new CommentService(consultationContext, userService, _consultationService, _linkGenerator, _fakeHttpContextAccessor);
+			var commentService = new CommentService(consultationContext, userService, _consultationService, _fakeHttpContextAccessor);
 			var answerService = new AnswerService(consultationContext, userService);
 
 			var locationId = AddLocation(sourceURI, _context);
@@ -71,7 +71,7 @@ namespace Comments.Test.UnitTests
 			var answerId = AddAnswer(questionId, userId, "Answer Label");
 
 			//Act
-			var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI);
+			var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
 			var result = submitService.Submit(new ViewModels.Submission(new List<ViewModels.Comment>(), commentsAndQuestions.Questions.First().Answers));
 
 			var answer = answerService.GetAnswer(answerId);

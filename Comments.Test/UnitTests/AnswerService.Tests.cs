@@ -225,10 +225,10 @@ namespace Comments.Test.UnitTests
 
 	        var context = new ConsultationsContext(_options, userService, _fakeEncryption);
 			//var submitService = new SubmitService(context, userService, _consultationService);
-			var commentService = new CommentService(context, userService, _consultationService, _linkGenerator, _fakeHttpContextAccessor);
+			var commentService = new CommentService(context, userService, _consultationService, _fakeHttpContextAccessor);
 
             // Act
-            var viewModel = commentService.GetCommentsAndQuestions(sourceURI);
+            var viewModel = commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
             var questionViewModel = viewModel.Questions.SingleOrDefault(q => q.QuestionId.Equals(questionId));
 
             //Assert

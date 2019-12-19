@@ -21,6 +21,9 @@ using NICE.Identity.Authentication.Sdk.Extensions;
 using System;
 using System.IO;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
 
 namespace Comments
@@ -53,7 +56,8 @@ namespace Comments
             }
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.TryAddSingleton<ISeriLogger, SeriLogger>();
+            services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
+			services.TryAddSingleton<ISeriLogger, SeriLogger>();
             //services.TryAddSingleton<IAuthenticateService, AuthService>();
             services.TryAddTransient<IUserService, UserService>();
 
@@ -89,7 +93,7 @@ namespace Comments
 			services.AddMvc(options =>
             {
                 options.Filters.Add(new ResponseCacheAttribute() { NoStore = true, Location = ResponseCacheLocation.None });
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2); 
+            }); //.SetCompatibilityVersion(CompatibilityVersion.Version_2_2); 
 
             // In production, static files are served from the pre-built files, rather than proxied via react dev server
             services.AddSpaStaticFiles(configuration =>
@@ -144,7 +148,7 @@ namespace Comments
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ISeriLogger seriLogger, IApplicationLifetime appLifetime, LinkGenerator linkGenerator)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ISeriLogger seriLogger, IApplicationLifetime appLifetime, IUrlHelperFactory urlHelperFactory, IActionContextAccessor actionContextAccessor)
         {           
             seriLogger.Configure(loggerFactory, Configuration, appLifetime, env);
             var startupLogger = loggerFactory.CreateLogger<Startup>();
@@ -201,10 +205,10 @@ namespace Comments
 			    app.UseHttpsRedirection();
 		    }
 
-
-	        app.UseMvc(routes =>
+		    IRouteBuilder defaultRoute = null;
+			app.UseMvc(routes =>
             {
-                routes.MapRoute(
+                defaultRoute = routes.MapRoute(
                     name: "default",
                     template: "{controller}/{action=Index}/{id?}");
 
@@ -258,21 +262,28 @@ namespace Comments
                     options.ExcludeUrls = new[] { "/sockjs-node" };
                     // Pass data in from .NET into the SSR. These come through as `params` within `createServerRenderer` within the server side JS code.
                     // See https://docs.microsoft.com/en-us/aspnet/core/spa/angular?tabs=visual-studio#pass-data-from-net-code-into-typescript-code
-                    options.SupplyData = (context, data) =>
+                    options.SupplyData = (httpContext, data) =>
                     {
-                        data["isHttpsRequest"] = context.Request.IsHttps;
-                        var cookiesForSSR = context.Request.Cookies.Where(cookie => cookie.Key.StartsWith(AuthenticationConstants.CookieName)).ToList();
+                        data["isHttpsRequest"] = httpContext.Request.IsHttps;
+                        var cookiesForSSR = httpContext.Request.Cookies.Where(cookie => cookie.Key.StartsWith(AuthenticationConstants.CookieName)).ToList();
                         if (cookiesForSSR.Any())
                         {
                             data["cookies"] = $"{string.Join("; ", cookiesForSSR.Select(cookie => $"{cookie.Key}={cookie.Value}"))};";
                         }
-                        data["isAuthorised"] = context.User.Identity.IsAuthenticated;
-	                    data["displayName"] = context.User.DisplayName();
+                        data["isAuthorised"] = httpContext.User.Identity.IsAuthenticated;
+	                    data["displayName"] = httpContext.User.DisplayName();
 
-						data["signInURL"] = linkGenerator.GetPathByAction(Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnUrl = context.Request.Path });
-						data["signOutURL"] = linkGenerator.GetPathByAction(Constants.Auth.LogoutAction, Constants.Auth.ControllerName); //auth0 needs logout urls configured. it won't let you redirect dynamically.
-						data["registerURL"] = linkGenerator.GetPathByAction(Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnUrl = context.Request.Path, goToRegisterPage = true });
-						data["requestURL"] = context.Request.Path;
+						var actionContext = new ActionContext {
+							HttpContext = httpContext,
+							RouteData = new RouteData { Routers = { defaultRoute.Build() } },
+							ActionDescriptor = new ActionDescriptor(),
+						};
+						var urlHelper = urlHelperFactory.GetUrlHelper(actionContext);
+
+						data["signInURL"] = urlHelper.Action(Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnUrl = httpContext.Request.Path });
+						data["signOutURL"] = urlHelper.Action(Constants.Auth.LogoutAction, Constants.Auth.ControllerName); //auth0 needs logout urls configured. it won't let you redirect dynamically.
+						data["registerURL"] = urlHelper.Action(Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnUrl = httpContext.Request.Path, goToRegisterPage = true });
+						data["requestURL"] = httpContext.Request.Path;
 	                    data["accountsEnvironment"] = AppSettings.Environment.AccountsEnvironment;
 	                    //data["user"] = context.User; - possible security implications here, surfacing claims to the front end. might be ok, if just server-side.
 	                    // Pass further data in e.g. user/authentication data

@@ -74,10 +74,10 @@ namespace Comments.Test.IntegrationTests.API.Consultation
 
 		    AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, createdByUserId, (int)StatusName.Draft, _context);
 		    //var submitService = new SubmitService(_context, _fakeUserService, _consultationService);
-		    var commentService = new CommentService(_context, _fakeUserService, _consultationService, _linkGenerator, _fakeHttpContextAccessor);
+		    var commentService = new CommentService(_context, _fakeUserService, _consultationService, _fakeHttpContextAccessor);
 
 		    // Act    
-		    var viewModel = commentService.GetCommentsAndQuestions(sourceURI);
+		    var viewModel = commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
 
 		    //Assert
 		    viewModel.Comments.Single().CommentText.ShouldBe(commentText);

@@ -1,20 +1,20 @@
 using Comments.Common;
 using Comments.ViewModels;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using NICE.Identity.Authentication.Sdk.API;
+using NICE.Identity.Authentication.Sdk.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Routing;
-using NICE.Identity.Authentication.Sdk.API;
-using NICE.Identity.Authentication.Sdk.Extensions;
 
 namespace Comments.Services
 {
 	public interface IUserService
     {
         User GetCurrentUser();
-		SignInDetails GetCurrentUserSignInDetails(string returnURL);
+		SignInDetails GetCurrentUserSignInDetails(string returnURL, IUrlHelper urlHelper);
 		Task<string> GetDisplayNameForUserId(string userId);
 		Task<string> GetEmailForUserId(string userId);
 		Task<Dictionary<string, (string displayName, string emailAddress)>> GetUserDetailsForUserIds(IEnumerable<string> userIds);
@@ -25,13 +25,11 @@ namespace Comments.Services
     public class UserService : IUserService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly LinkGenerator _linkGenerator;
         private readonly IAPIService _apiService;
 
-        public UserService(IHttpContextAccessor httpContextAccessor, LinkGenerator linkGenerator, IAPIService apiService)
+        public UserService(IHttpContextAccessor httpContextAccessor, IAPIService apiService)
         {
 	        _httpContextAccessor = httpContextAccessor;
-	        _linkGenerator = linkGenerator;
 	        _apiService = apiService;
         }
 
@@ -42,12 +40,12 @@ namespace Comments.Services
             return new User(contextUser?.Identity.IsAuthenticated ?? false, contextUser?.DisplayName(), contextUser?.NameIdentifier());
         }
 
-		public SignInDetails GetCurrentUserSignInDetails(string returnURL)
+		public SignInDetails GetCurrentUserSignInDetails(string returnURL, IUrlHelper urlHelper)
 	    {
 			var user = GetCurrentUser();
 
-		    var signInURL = _linkGenerator.GetPathByAction(_httpContextAccessor.HttpContext, Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnURL = returnURL.ToConsultationsRelativeUrl() });
-		    var registerURL = _linkGenerator.GetPathByAction(_httpContextAccessor.HttpContext, Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnURL = returnURL.ToConsultationsRelativeUrl(), goToRegisterPage = true });
+		    var signInURL = urlHelper.Action(Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnURL = returnURL.ToConsultationsRelativeUrl() });
+		    var registerURL = urlHelper.Action(Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnURL = returnURL.ToConsultationsRelativeUrl(), goToRegisterPage = true });
 
 			return new SignInDetails(user, signInURL, registerURL);
 		}

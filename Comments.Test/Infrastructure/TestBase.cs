@@ -14,7 +14,9 @@ using Comments.ViewModels;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -68,7 +70,7 @@ namespace Comments.Test.Infrastructure
 
 	    protected IEncryption _fakeEncryption;
 
-	    protected readonly LinkGenerator _linkGenerator;
+	    protected IUrlHelper _urlHelper;
 
 		public TestBase(Feed feed) : this()
         {
@@ -105,7 +107,7 @@ namespace Comments.Test.Infrastructure
 			
 			AppSettings.AuthenticationConfig = new AuthenticationConfig{ ClientId = "test client id", AuthorisationServiceUri = "http://www.example.com"};
 			// Arrange
-			_linkGenerator = FakeLinkGenerator.Get();
+			_urlHelper = new FakeUrlHelper();
 			_fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId, testUserType);
 			_fakeHttpContextAccessor = FakeHttpContextAccessor.Get(_authenticated, _displayName, _userId, testUserType);
 			_fakeApiService = new FakeAPIService();
@@ -137,8 +139,7 @@ namespace Comments.Test.Infrastructure
                    
 					services.TryAddSingleton<ConsultationsContext>(_context);
                     services.TryAddSingleton<ISeriLogger, FakeSerilogger>();
-                    services.TryAddSingleton<LinkGenerator>(_linkGenerator);
-					services.TryAddSingleton<IHttpContextAccessor>(provider => _fakeHttpContextAccessor);
+                    services.TryAddSingleton<IHttpContextAccessor>(provider => _fakeHttpContextAccessor);
                     services.TryAddTransient<IUserService>(provider => _fakeUserService);
                     services.TryAddTransient<IFeedReaderService>(provider => new FeedReader(FeedToUse));
                     services.TryAddScoped<IAPIService>(provider => _fakeApiService);

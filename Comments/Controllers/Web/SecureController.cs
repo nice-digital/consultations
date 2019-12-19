@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using Comments.Common;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
 using NICE.Identity.Authentication.Sdk.Extensions;
 
@@ -19,13 +20,11 @@ namespace Comments.Controllers.Web
 	{
 		private readonly ILogger<RootController> _logger;
 		private readonly IHttpContextAccessor _httpContextAccessor;
-		private readonly LinkGenerator _linkGenerator;
 
-		public SecureController(ILogger<RootController> logger, IHttpContextAccessor httpContextAccessor, LinkGenerator linkGenerator)
+		public SecureController(ILogger<RootController> logger, IHttpContextAccessor httpContextAccessor)
 		{
 			_logger = logger;
 			_httpContextAccessor = httpContextAccessor;
-			_linkGenerator = linkGenerator;
 		}
 
 		public IActionResult Index()
@@ -36,8 +35,8 @@ namespace Comments.Controllers.Web
 			var user = _httpContextAccessor.HttpContext.User;
 			var isLoggedOn = (user != null && user.Identity.IsAuthenticated);
 			// var xReferer = Request.GetUri().GetComponents(UriComponents.Scheme | UriComponents.Host, UriFormat.UriEscaped);
-			var signInUrl = _linkGenerator.GetPathByAction(_httpContextAccessor.HttpContext, Constants.Auth.LoginAction, Constants.Auth.ControllerName, new {returnUrl = Request.GetUri().PathAndQuery });
-			var signOutUrl = _linkGenerator.GetPathByAction(_httpContextAccessor.HttpContext, Constants.Auth.LogoutAction, Constants.Auth.ControllerName, new { returnUrl = Request.GetUri().PathAndQuery});
+			var signInUrl = Url.Action(Constants.Auth.LoginAction, Constants.Auth.ControllerName, new {returnUrl = Request.GetUri().PathAndQuery });
+			var signOutUrl = Url.Action(Constants.Auth.LogoutAction, Constants.Auth.ControllerName, new { returnUrl = Request.GetUri().PathAndQuery});
 
 			SecureTestViewModel model;
 

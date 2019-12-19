@@ -2,19 +2,19 @@ using Comments.Common;
 using Comments.Configuration;
 using Comments.Models;
 using Comments.ViewModels;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using NICE.Feeds;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
 
 namespace Comments.Services
 {
 	public interface ICommentService
     {
-	    CommentsAndQuestions GetCommentsAndQuestions(string relativeURL);
-	    ReviewPageViewModel GetCommentsAndQuestionsForReview(string relativeURL, ReviewPageViewModel model);
+	    CommentsAndQuestions GetCommentsAndQuestions(string relativeURL, IUrlHelper urlHelper);
+	    ReviewPageViewModel GetCommentsAndQuestionsForReview(string relativeURL, IUrlHelper urlHelper, ReviewPageViewModel model);
 		(ViewModels.Comment comment, Validate validate) GetComment(int commentId);
         (int rowsUpdated, Validate validate) EditComment(int commentId, ViewModels.Comment comment);
         (ViewModels.Comment comment, Validate validate) CreateComment(ViewModels.Comment comment);
@@ -26,16 +26,14 @@ namespace Comments.Services
         private readonly ConsultationsContext _context;
         private readonly IUserService _userService;
 	    private readonly IConsultationService _consultationService;
-	    private readonly LinkGenerator _linkGenerator;
 	    private readonly IHttpContextAccessor _httpContextAccessor;
 	    private readonly User _currentUser;
 
-        public CommentService(ConsultationsContext context, IUserService userService, IConsultationService consultationService, LinkGenerator linkGenerator, IHttpContextAccessor httpContextAccessor)
+        public CommentService(ConsultationsContext context, IUserService userService, IConsultationService consultationService, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _userService = userService;
 	        _consultationService = consultationService;
-	        _linkGenerator = linkGenerator;
 	        _httpContextAccessor = httpContextAccessor;
 	        _currentUser = _userService.GetCurrentUser();
         }
@@ -116,11 +114,11 @@ namespace Comments.Services
             return (rowsUpdated: _context.SaveChanges(), validate: null);
         }
 
-	    public CommentsAndQuestions GetCommentsAndQuestions(string relativeURL)
+	    public CommentsAndQuestions GetCommentsAndQuestions(string relativeURL, IUrlHelper urlHelper)
 	    {
 		    var user = _userService.GetCurrentUser();
 
-			var signInURL = _linkGenerator.GetPathByAction(_httpContextAccessor.HttpContext, Constants.Auth.LoginAction, Constants.Auth.ControllerName, new {returnUrl = relativeURL.ToConsultationsRelativeUrl() });
+			var signInURL = urlHelper.Action(Constants.Auth.LoginAction, Constants.Auth.ControllerName, new {returnUrl = relativeURL.ToConsultationsRelativeUrl() });
 
 			var isReview = ConsultationsUri.IsReviewPageRelativeUrl(relativeURL);
 			var consultationSourceURI = ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Consultation);
@@ -150,9 +148,9 @@ namespace Comments.Services
 			return new CommentsAndQuestions(resortedComments, data.questions.ToList(), user.IsAuthorised, signInURL, consultationState);
 	    }
 
-		public ReviewPageViewModel GetCommentsAndQuestionsForReview(string relativeURL, ReviewPageViewModel model)
+		public ReviewPageViewModel GetCommentsAndQuestionsForReview(string relativeURL, IUrlHelper urlHelper, ReviewPageViewModel model)
 		{
-			var commentsAndQuestions = GetCommentsAndQuestions(relativeURL);
+			var commentsAndQuestions = GetCommentsAndQuestions(relativeURL, urlHelper);
 
 			if (model.Sort == ReviewSortOrder.DocumentAsc)
 			{

@@ -37,9 +37,9 @@ namespace Comments.Test.IntegrationTests.API.Submit
 
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 			//var submitService = new SubmitService(_context, userService, _consultationService);
-			var commentService = new CommentService(_context, userService, _consultationService, _linkGenerator, _fakeHttpContextAccessor);
+			var commentService = new CommentService(_context, userService, _consultationService, _fakeHttpContextAccessor);
 
-		    var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI);
+		    var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
 		    var viewModel = new ViewModels.Submission(commentsAndQuestions.Comments, commentsAndQuestions.Questions.First().Answers);
 		
 			var content = new StringContent(JsonConvert.SerializeObject(viewModel), Encoding.UTF8, "application/json");
