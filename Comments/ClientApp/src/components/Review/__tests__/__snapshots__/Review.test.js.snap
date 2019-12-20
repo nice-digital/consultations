@@ -2,6 +2,74 @@
 
 exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied data post-submission 1`] = `
 Array [
+  <div>
+    <div
+        aria-live="assertive"
+        role="log"
+        style={
+            Object {
+                "border": 0,
+                "clip": "rect(0 0 0 0)",
+                "height": "1px",
+                "margin": "-1px",
+                "overflow": "hidden",
+                "padding": 0,
+                "position": "absolute",
+                "width": "1px",
+              }
+        }
+    />
+    <div
+        aria-live="assertive"
+        role="log"
+        style={
+            Object {
+                "border": 0,
+                "clip": "rect(0 0 0 0)",
+                "height": "1px",
+                "margin": "-1px",
+                "overflow": "hidden",
+                "padding": 0,
+                "position": "absolute",
+                "width": "1px",
+              }
+        }
+    />
+    <div
+        aria-live="polite"
+        role="log"
+        style={
+            Object {
+                "border": 0,
+                "clip": "rect(0 0 0 0)",
+                "height": "1px",
+                "margin": "-1px",
+                "overflow": "hidden",
+                "padding": 0,
+                "position": "absolute",
+                "width": "1px",
+              }
+        }
+    >
+        Showing 3 questions and 2 comments
+    </div>
+    <div
+        aria-live="polite"
+        role="log"
+        style={
+            Object {
+                "border": 0,
+                "clip": "rect(0 0 0 0)",
+                "height": "1px",
+                "margin": "-1px",
+                "overflow": "hidden",
+                "padding": 0,
+                "position": "absolute",
+                "width": "1px",
+              }
+        }
+    />
+</div>,
   Array [
     "",
     "",
@@ -541,6 +609,11 @@ Array [
       </div>
 </div>,
   ],
+]
+`;
+
+exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied data pre-submission 1`] = `
+Array [
   <div>
     <div
         aria-live="assertive"
@@ -554,7 +627,6 @@ Array [
                 "overflow": "hidden",
                 "padding": 0,
                 "position": "absolute",
-                "whiteSpace": "nowrap",
                 "width": "1px",
               }
         }
@@ -571,7 +643,6 @@ Array [
                 "overflow": "hidden",
                 "padding": 0,
                 "position": "absolute",
-                "whiteSpace": "nowrap",
                 "width": "1px",
               }
         }
@@ -588,7 +659,6 @@ Array [
                 "overflow": "hidden",
                 "padding": 0,
                 "position": "absolute",
-                "whiteSpace": "nowrap",
                 "width": "1px",
               }
         }
@@ -607,17 +677,11 @@ Array [
                 "overflow": "hidden",
                 "padding": 0,
                 "position": "absolute",
-                "whiteSpace": "nowrap",
                 "width": "1px",
               }
         }
     />
 </div>,
-]
-`;
-
-exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied data pre-submission 1`] = `
-Array [
   Array [
     "",
     "",
@@ -1321,77 +1385,5 @@ Array [
       </div>
 </div>,
   ],
-  <div>
-    <div
-        aria-live="assertive"
-        role="log"
-        style={
-            Object {
-                "border": 0,
-                "clip": "rect(0 0 0 0)",
-                "height": "1px",
-                "margin": "-1px",
-                "overflow": "hidden",
-                "padding": 0,
-                "position": "absolute",
-                "whiteSpace": "nowrap",
-                "width": "1px",
-              }
-        }
-    />
-    <div
-        aria-live="assertive"
-        role="log"
-        style={
-            Object {
-                "border": 0,
-                "clip": "rect(0 0 0 0)",
-                "height": "1px",
-                "margin": "-1px",
-                "overflow": "hidden",
-                "padding": 0,
-                "position": "absolute",
-                "whiteSpace": "nowrap",
-                "width": "1px",
-              }
-        }
-    />
-    <div
-        aria-live="polite"
-        role="log"
-        style={
-            Object {
-                "border": 0,
-                "clip": "rect(0 0 0 0)",
-                "height": "1px",
-                "margin": "-1px",
-                "overflow": "hidden",
-                "padding": 0,
-                "position": "absolute",
-                "whiteSpace": "nowrap",
-                "width": "1px",
-              }
-        }
-    >
-        Showing 3 questions and 2 comments
-    </div>
-    <div
-        aria-live="polite"
-        role="log"
-        style={
-            Object {
-                "border": 0,
-                "clip": "rect(0 0 0 0)",
-                "height": "1px",
-                "margin": "-1px",
-                "overflow": "hidden",
-                "padding": 0,
-                "position": "absolute",
-                "whiteSpace": "nowrap",
-                "width": "1px",
-              }
-        }
-    />
-</div>,
 ]
 `;
