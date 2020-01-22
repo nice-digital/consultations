@@ -391,7 +391,17 @@ namespace Comments.Export
 			List<Excel> excel = new List<Excel>();
 
 			var userIds = comments.Select(comment => comment.CreatedByUserId).Concat(answers.Select(answer => answer.CreatedByUserId)).Distinct();
-			var userDetailsForUserIds = await _userService.GetUserDetailsForUserIds(userIds);
+			var currentUserDetails = _userService.GetCurrentUserDetails();
+
+			Dictionary<string, (string displayName, string emailAddress)> userDetailsForUserIds;
+			if (userIds.Count() == 1 && userIds.Single().Equals(currentUserDetails.userId, StringComparison.OrdinalIgnoreCase))
+			{
+				userDetailsForUserIds = new Dictionary<string, (string displayName, string emailAddress)>() { {currentUserDetails.userId, (currentUserDetails.displayName, currentUserDetails.emailAddress) }};
+			}
+			else
+			{
+				userDetailsForUserIds = await _userService.GetUserDetailsForUserIds(userIds);
+			}
 
 			foreach (var comment in comments)
 			{

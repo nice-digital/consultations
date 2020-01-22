@@ -20,7 +20,8 @@ namespace Comments.Services
 		Task<Dictionary<string, (string displayName, string emailAddress)>> GetUserDetailsForUserIds(IEnumerable<string> userIds);
 	    ICollection<string> GetUserRoles();
 	    Validate IsAllowedAccess(ICollection<string> permittedRoles);
-	}
+	    (string userId, string displayName, string emailAddress) GetCurrentUserDetails();
+    }
 
     public class UserService : IUserService
     {
@@ -38,6 +39,16 @@ namespace Comments.Services
             var contextUser = _httpContextAccessor.HttpContext?.User;
 
             return new User(contextUser?.Identity.IsAuthenticated ?? false, contextUser?.DisplayName(), contextUser?.NameIdentifier());
+        }
+
+        public (string userId, string displayName, string emailAddress) GetCurrentUserDetails()
+        {
+	        var contextUser = _httpContextAccessor.HttpContext?.User;
+	        if (contextUser != null && contextUser.Identity.IsAuthenticated)
+	        {
+		        return (contextUser.NameIdentifier(), contextUser.DisplayName(), contextUser.EmailAddress());
+	        }
+	        return (null, null, null);
         }
 
 		public SignInDetails GetCurrentUserSignInDetails(string returnURL, IUrlHelper urlHelper)
