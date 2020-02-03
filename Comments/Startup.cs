@@ -87,7 +87,7 @@ namespace Comments
 
 			// Add authentication
 			var authConfiguration = AppSettings.AuthenticationConfig.GetAuthConfiguration(); 
-			services.AddAuthentication(authConfiguration);
+			services.AddAuthentication(authConfiguration, "/consultations/account/login", "/consultations/account/logout");
 			services.AddAuthorisation(authConfiguration);
 
 			services.AddMvc(options =>
