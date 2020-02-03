@@ -255,7 +255,7 @@ export class Questions extends Component<PropsType, StateType> {
 			this.props.match.params.documentId === undefined ? null : this.props.match.params.documentId;
 		const currentConsultationId = this.props.match.params.consultationId;
 		let questionsToDisplay = [];
-		if (questionsData.consultationQuestions) {
+		if (questionsData && questionsData.consultationQuestions) {
 			questionsToDisplay = this.getQuestionsToDisplay(currentDocumentId, questionsData);
 		}
 
