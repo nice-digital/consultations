@@ -62,6 +62,7 @@ export class Questions extends Component<PropsType, StateType> {
 					reference: this.props.match.params.reference,
 				},
 				preloadedData,
+				false //don't throw on exception.
 			);
 			if (preloadedQuestionsData) {
 				this.state = {
