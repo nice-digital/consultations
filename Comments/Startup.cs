@@ -152,8 +152,10 @@ namespace Comments
         {           
             seriLogger.Configure(loggerFactory, Configuration, appLifetime, env);
             var startupLogger = loggerFactory.CreateLogger<Startup>();
+            startupLogger.LogWarning("Consultations starting up");
 
-            if (env.IsDevelopment())
+
+			if (env.IsDevelopment())
             {
 	            app.UseExceptionHandler(Constants.ErrorPath);
 				app.UseDeveloperExceptionPage();
@@ -270,8 +272,11 @@ namespace Comments
                         {
                             data["cookies"] = $"{string.Join("; ", cookiesForSSR.Select(cookie => $"{cookie.Key}={cookie.Value}"))};";
                         }
-                        data["isAuthorised"] = httpContext.User.Identity.IsAuthenticated;
+                        startupLogger.LogWarning("Consultations ssr isauthorised set to:" + httpContext.User.Identity.IsAuthenticated);
+						data["isAuthorised"] = httpContext.User.Identity.IsAuthenticated;
 	                    data["displayName"] = httpContext.User.DisplayName();
+
+	                    startupLogger.LogWarning("Consultations ssr email address set to:" + httpContext.User.EmailAddress());
 
 						var actionContext = new ActionContext {
 							HttpContext = httpContext,
