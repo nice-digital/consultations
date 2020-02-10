@@ -47,35 +47,42 @@ export class Questions extends Component<PropsType, StateType> {
 		};
 
 		if (this.props) {
+			
 			let preloadedQuestionsData;
 			let preloadedData = {};
 			if (this.props.staticContext && this.props.staticContext.preload) {
 				preloadedData = this.props.staticContext.preload.data;
 			}
-			preloadedQuestionsData = preload(
-				this.props.staticContext,
-				"questions",
-				[],
-				{
-					consultationId: this.props.match.params.consultationId,
-					draft: this.props.draftProject,
-					reference: this.props.match.params.reference,
-				},
-				preloadedData,
-				false //don't throw on exception.
-			);
-			if (preloadedQuestionsData) {
-				this.state = {
-					editingAllowed: true,
-					questionsData: preloadedQuestionsData,
-					loading: false,
-					hasInitialData: true,
-					unsavedIds: [],
-					error: {
-						hasError: false,
-						message: null,
+			const isAuthorised = ((preloadedData && preloadedData.isAuthorised) || (canUseDOM() && window.__PRELOADED__["isAuthorised"]));
+
+			if (isAuthorised){
+
+				preloadedQuestionsData = preload(
+					this.props.staticContext,
+					"questions",
+					[],
+					{
+						consultationId: this.props.match.params.consultationId,
+						draft: this.props.draftProject,
+						reference: this.props.match.params.reference,
 					},
-				};
+					preloadedData,
+					false //don't throw on exception, this could happen if the user has authenticated but doesn't have permission to access the feed.
+				);
+
+				if (preloadedQuestionsData) {
+					this.state = {
+						editingAllowed: true,
+						questionsData: preloadedQuestionsData,
+						loading: false,
+						hasInitialData: true,
+						unsavedIds: [],
+						error: {
+							hasError: false,
+							message: null,
+						},
+					};
+				}
 			}
 		}
 	}
