@@ -37,6 +37,13 @@ describe("[ClientApp] ", () => {
 					reference: "GID-NG10186",
 				},
 			},
+			staticContext: {
+				preload: {
+					data:{
+						isAuthorised: true
+					}
+				}
+			}
 		};
 
 		it("should render the loading message", () => {
