@@ -107,7 +107,7 @@ Array [
                                           itemProp="item"
                                     >
                                           <span
-                                                itemprop="name"
+                                                itemProp="name"
                                           >
                                                 Home
                                           </span>
@@ -129,7 +129,7 @@ Array [
                                           itemProp="item"
                                     >
                                           <span
-                                                itemprop="name"
+                                                itemProp="name"
                                           >
                                                 Consultation title
                                           </span>
@@ -151,7 +151,7 @@ Array [
                                           itemProp="item"
                                     >
                                           <span
-                                                itemprop="name"
+                                                itemProp="name"
                                           >
                                                 Consultation documents
                                           </span>
@@ -734,7 +734,7 @@ Array [
                                           itemProp="item"
                                     >
                                           <span
-                                                itemprop="name"
+                                                itemProp="name"
                                           >
                                                 Home
                                           </span>
@@ -756,7 +756,7 @@ Array [
                                           itemProp="item"
                                     >
                                           <span
-                                                itemprop="name"
+                                                itemProp="name"
                                           >
                                                 Consultation title
                                           </span>
@@ -778,7 +778,7 @@ Array [
                                           itemProp="item"
                                     >
                                           <span
-                                                itemprop="name"
+                                                itemProp="name"
                                           >
                                                 Consultation documents
                                           </span>
