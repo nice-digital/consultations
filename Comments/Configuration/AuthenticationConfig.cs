@@ -5,7 +5,14 @@ namespace Comments.Configuration
 {
     public class AuthenticationConfig
 	{
-        public string ApiIdentifier { get; set; }
+		public class RedisConfiguration
+		{
+			public string IpConfig { get; set; }
+			public int? Port { get; set; }
+			public bool? Enabled { get; set; }
+		}
+
+		public string ApiIdentifier { get; set; }
         public string ClientId { get; set; }
         public string ClientSecret { get; set; }
         public string AuthorisationServiceUri { get; set; }
@@ -13,12 +20,16 @@ namespace Comments.Configuration
         public string PostLogoutRedirectUri { get; set; }
         public string RedirectUri { get; set; }
         public string CallBackPath { get; set; }
+        public string LoginPath { get; set; }
+		public string LogoutPath { get; set; }
+
+		public RedisConfiguration RedisServiceConfiguration { get; set; }
 
 		/// <summary>
 		/// This returns the IAuthConfiguration object required for IdAM.
 		/// </summary>
 		/// <returns></returns>
-        public IAuthConfiguration GetAuthConfiguration()
+		public IAuthConfiguration GetAuthConfiguration()
         {
 			return new AuthConfiguration(
 				tenantDomain: Domain,
@@ -29,7 +40,12 @@ namespace Comments.Configuration
 				apiIdentifier:ApiIdentifier,
 				authorisationServiceUri: AuthorisationServiceUri,
 				grantType: null,
-				callBackPath: CallBackPath
+				callBackPath: CallBackPath,
+				loginPath: LoginPath,
+				logoutPath: LogoutPath,
+				redisIpConfig: RedisServiceConfiguration.IpConfig,
+				redisPort: RedisServiceConfiguration.Port ?? 6379,
+				redisEnabled: RedisServiceConfiguration.Enabled ?? false
 				);
         }
 	}

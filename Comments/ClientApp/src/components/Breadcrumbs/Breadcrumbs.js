@@ -48,11 +48,11 @@ export class Breadcrumbs extends PureComponent<PropsType> {
 							>
 								{(isHttpLink(url) || (url.indexOf("/") === 0 && !localRoute)) ?
 									<a href={url} itemProp="item">
-										<span itemprop="name">{label}</span>
+										<span itemProp="name">{label}</span>
 									</a>
 									:
 									<Link to={url} itemProp="item">
-										<span itemprop="name">{label}</span>
+										<span itemProp="name">{label}</span>
 									</Link>
 								}
 								<meta itemProp="position" content={index}/>

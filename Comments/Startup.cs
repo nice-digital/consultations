@@ -86,8 +86,8 @@ namespace Comments
 			services.AddRouting(options => options.LowercaseUrls = true);
 
 			// Add authentication
-			var authConfiguration = AppSettings.AuthenticationConfig.GetAuthConfiguration(); 
-			services.AddAuthentication(authConfiguration, "/consultations/account/login", "/consultations/account/logout");
+			var authConfiguration = AppSettings.AuthenticationConfig.GetAuthConfiguration();
+			services.AddAuthentication(authConfiguration);
 			services.AddAuthorisation(authConfiguration);
 
 			services.AddMvc(options =>

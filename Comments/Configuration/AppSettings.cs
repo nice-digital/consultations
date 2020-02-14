@@ -17,7 +17,7 @@ namespace Comments.Configuration
 	    public static ConsultationListConfig ConsultationListConfig { get; set; }
 
 	    public static AuthenticationConfig AuthenticationConfig { get; set; }
-	    public static GlobalNavConfig GlobalNavConfig { get; set; }
+		public static GlobalNavConfig GlobalNavConfig { get; set; }
 
 		public static void Configure(IServiceCollection services, IConfiguration configuration, string contentRootPath)
         {

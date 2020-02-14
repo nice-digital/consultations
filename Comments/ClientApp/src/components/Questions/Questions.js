@@ -13,6 +13,7 @@ import { YNQuestion } from "../QuestionTypes/YNQuestion/YNQuestion";
 import { saveQuestionHandler, deleteQuestionHandler, moveQuestionHandler } from "../../helpers/editing-and-deleting";
 import { updateUnsavedIds } from "../../helpers/unsaved-comments";
 import { PreviouslySetQuestions } from "../PreviouslySetQuestions/PreviouslySetQuestions";
+import { canUseDOM } from "../../helpers/utils";
 
 type PropsType = {
 	staticContext: ContextType;
@@ -53,7 +54,7 @@ export class Questions extends Component<PropsType, StateType> {
 			if (this.props.staticContext && this.props.staticContext.preload) {
 				preloadedData = this.props.staticContext.preload.data;
 			}
-			const isAuthorised = ((preloadedData && preloadedData.isAuthorised) || (canUseDOM() && window.__PRELOADED__["isAuthorised"]));
+			const isAuthorised = ((preloadedData && preloadedData.isAuthorised) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["isAuthorised"]));
 
 			if (isAuthorised){
 
