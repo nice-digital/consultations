@@ -7,8 +7,7 @@ namespace Comments.Configuration
 	{
 		public class RedisConfiguration
 		{
-			public string IpConfig { get; set; }
-			public int? Port { get; set; }
+			public string ConnectionString { get; set; }
 			public bool? Enabled { get; set; }
 		}
 
@@ -43,8 +42,7 @@ namespace Comments.Configuration
 				callBackPath: CallBackPath,
 				loginPath: LoginPath,
 				logoutPath: LogoutPath,
-				redisIpConfig: RedisServiceConfiguration?.IpConfig,
-				redisPort: RedisServiceConfiguration?.Port,
+				redisConnectionString: RedisServiceConfiguration?.ConnectionString,
 				redisEnabled: RedisServiceConfiguration?.Enabled ?? false
 			);
         }
