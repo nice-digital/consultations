@@ -43,10 +43,10 @@ namespace Comments.Configuration
 				callBackPath: CallBackPath,
 				loginPath: LoginPath,
 				logoutPath: LogoutPath,
-				redisIpConfig: RedisServiceConfiguration.IpConfig,
-				redisPort: RedisServiceConfiguration.Port ?? 6379,
-				redisEnabled: RedisServiceConfiguration.Enabled ?? false
-				);
+				redisIpConfig: RedisServiceConfiguration?.IpConfig,
+				redisPort: RedisServiceConfiguration?.Port,
+				redisEnabled: RedisServiceConfiguration?.Enabled ?? false
+			);
         }
 	}
 }
