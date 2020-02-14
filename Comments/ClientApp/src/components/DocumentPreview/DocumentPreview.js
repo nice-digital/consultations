@@ -14,6 +14,7 @@ import { UserContext } from "../../context/UserContext";
 import { DocumentPreviewErrorOverview } from "./DocumentPreviewErrorOverview";
 import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
 import { Header } from "../Header/Header";
+import { canUseDOM } from "../../helpers/utils";
 
 type PropsType = {
 	staticContext?: any,
@@ -39,7 +40,8 @@ type StateType = {
 	error: {
 		hasError: boolean,
 		message: string | null,
-	}
+	},
+	isAuthorised: boolean,
 };
 
 export class DocumentPreview extends Component<PropsType, StateType> {
@@ -60,6 +62,7 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 				hasError: false,
 				message: null,
 			},
+			isAuthorised: false,
 		};
 
 		if (this.props) {
@@ -70,47 +73,70 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 
 			let preloadedChapter, preloadedDocuments, preloadedConsultation;
 
-			preloadedChapter = preload(
-				this.props.staticContext,
-				"previewchapter",
-				[],
-				{ ...this.props.match.params },
-				preloadedData,
-			);
-			preloadedDocuments = preload(
-				this.props.staticContext,
-				"previewdraftdocuments",
-				[],
-				{ ...this.props.match.params },
-				preloadedData,
-			);
+			const isAuthorised = ((preloadedData && preloadedData.isAuthorised) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["isAuthorised"]));
 
-			preloadedConsultation = preload(
-				this.props.staticContext,
-				"draftconsultation",
-				[],
-				{ ...this.props.match.params },
-				preloadedData,
-			);
+			if (isAuthorised){
 
-			if (preloadedChapter && preloadedDocuments && preloadedConsultation) {
-				const allowComments = preloadedConsultation.supportsComments &&
-					preloadedConsultation.consultationState.consultationIsOpen &&
-					!preloadedConsultation.consultationState.userHasSubmitted;
 				this.state = {
-					chapterData: preloadedChapter,
-					documentsData: preloadedDocuments,
-					consultationData: preloadedConsultation,
-					loading: false,
-					hasInitialData: true,
+					chapterData: null,
+					documentsData: [],
+					consultationData: null,
+					loading: true,
+					hasInitialData: false,
 					currentInPageNavItem: null,
 					onboarded: false,
-					allowComments: allowComments,
+					allowComments: true,
+					children: null,
 					error: {
 						hasError: false,
 						message: null,
 					},
+					isAuthorised: true,
 				};
+
+				preloadedChapter = preload(
+					this.props.staticContext,
+					"previewchapter",
+					[],
+					{ ...this.props.match.params },
+					preloadedData,
+				);
+				preloadedDocuments = preload(
+					this.props.staticContext,
+					"previewdraftdocuments",
+					[],
+					{ ...this.props.match.params },
+					preloadedData,
+				);
+
+				preloadedConsultation = preload(
+					this.props.staticContext,
+					"draftconsultation",
+					[],
+					{ ...this.props.match.params },
+					preloadedData,
+				);
+
+				if (preloadedChapter && preloadedDocuments && preloadedConsultation) {
+					const allowComments = preloadedConsultation.supportsComments &&
+						preloadedConsultation.consultationState.consultationIsOpen &&
+						!preloadedConsultation.consultationState.userHasSubmitted;
+					this.state = {
+						chapterData: preloadedChapter,
+						documentsData: preloadedDocuments,
+						consultationData: preloadedConsultation,
+						loading: false,
+						hasInitialData: true,
+						currentInPageNavItem: null,
+						onboarded: false,
+						allowComments: allowComments,
+						error: {
+							hasError: false,
+							message: null,
+						},
+						isAuthorised: true,
+					};
+				}
 			}
 		}
 	}
@@ -177,12 +203,13 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 	};
 
 	componentDidMount() {
-		if (!this.state.hasInitialData) {
+		if (!this.state.hasInitialData && this.state.isAuthorised) {
 			this.gatherData()
 				.then(data => {
 					const allowComments = data.consultationData.supportsComments &&
 						data.consultationData.consultationState.consultationIsOpen &&
 						!data.consultationData.consultationState.userHasSubmitted;
+
 					this.setState({
 						...data,
 						loading: false,
@@ -192,6 +219,7 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 					this.addChapterDetailsToSections(this.state.chapterData);
 				})
 				.catch(err => {
+					console.log("cdm error was: " + JSON.stringify(err));
 					//throw new Error("gatherData in componentDidMount failed " + err);
 					this.setState({
 						error: {
@@ -211,9 +239,10 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 		this.setState({
 			loading: true,
 		});
-
+		if (this.state.isAuthorised){
 		this.gatherData()
 			.then(data => {
+
 				this.setState({
 					...data,
 					loading: false,
@@ -223,6 +252,7 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 				pullFocusByQuerySelector(".document-comment-container");
 			})
 			.catch(err => {
+				console.log("cdu error was: " + JSON.stringify(err));
 				//throw new Error("gatherData in componentDidUpdate failed " + err);
 				this.setState({
 					error: {
@@ -231,6 +261,7 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 					},
 				});
 			});
+		}
 	}
 
 	getPreviewDocumentChapterLinks = (
@@ -268,9 +299,9 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 
 	render() {
 		if (this.state.error.hasError) { throw new Error(this.state.error.message); }
-		if (!this.state.hasInitialData) return <h1>Loading...</h1>;
-		const { title, reference } = this.state.consultationData;
-		const { content } = this.state.chapterData;
+		if (!this.state.hasInitialData && this.state.isAuthorised) return <h1>Loading...</h1>;
+		const { title, reference } = this.state.consultationData || {};
+		const { content } = this.state.chapterData || {};
 		const documentId = parseInt(this.props.match.params.documentId, 0);
 		return (
 			<Fragment>
@@ -288,7 +319,7 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 						<div className="container">
 							<div className="grid">
 								<div data-g="12">
-									{this.state.consultationData.breadcrumbs &&
+									{this.state.consultationData && this.state.consultationData.breadcrumbs &&
 										<BreadCrumbsWithRouter links={this.state.consultationData.breadcrumbs}/>
 									}
 									<main role="main">
