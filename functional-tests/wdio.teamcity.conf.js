@@ -11,7 +11,8 @@ config.capabilities = [
 	 	acceptSslCerts: true,
 		maxInstances: 2,
 		browserName: "chrome",
-		chromeOptions: {
+		'goog:chromeOptions': {
+			'w3c': false,
 			args: ["--headless", "--window-size=1366,768"]
 		}
 	}//,

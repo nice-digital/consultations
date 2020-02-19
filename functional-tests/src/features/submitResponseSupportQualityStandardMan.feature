@@ -6,7 +6,7 @@ Feature: User unable to submit when they have not completed mandatory questions 
 
 	Background:
 		Given I open the url "404/1/overview"
-		When I log in using sidebar with username "IDAM_EMAIL1" and password "IDAM_PASSWORD"
+		When I log into accounts with username "IDAM_EMAIL1" and password "IDAM_PASSWORD"
 
 	Scenario: User is unable to Submit when they have not answered the default response questions when answering on behalf of an Organisation on a QS Consultation
 		Given I comment on a Document

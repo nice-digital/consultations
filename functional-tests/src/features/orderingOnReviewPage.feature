@@ -6,7 +6,7 @@ Feature: Comment Ordering on the Review Page
 
 Background:
   	Given I open the url "1/1/introduction"
-		When I log in using sidebar with username "IDAM_EMAIL1" and password "IDAM_PASSWORD"
+		When I log into accounts with username "IDAM_EMAIL1" and password "IDAM_PASSWORD"
 		Given I delete all comments on the page
 
 Scenario: User makes multiple comments and views them on the Review page

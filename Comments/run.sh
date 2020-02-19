@@ -61,8 +61,8 @@ jq \
     appsettings.json > _appsettings.json \
     && mv _appsettings.json appsettings.json
 
-replace "#{GlobalNavScript}" "$REACT_APP_GLOBAL_NAV_SCRIPT" ClientApp/build/index.html
-replace "#{GlobalNavScriptIE8}" "$REACT_APP_GLOBAL_NAV_SCRIPT_IE8" ClientApp/build/index.html
+replace "#{GlobalNav:Script}" "$REACT_APP_GLOBAL_NAV_SCRIPT" ClientApp/build/index.html
+replace "#{GlobalNav:ScriptIE8}" "$REACT_APP_GLOBAL_NAV_SCRIPT_IE8" ClientApp/build/index.html
 replace "#{AppSettings:Environment:AccountsEnvironment}" "$REACT_APP_ACCOUNTS_ENVIRONMENT" ClientApp/build/index.html
 
 dotnet Comments.dll
