@@ -71,8 +71,10 @@ export const serverRenderer = (params): Promise => {
 
 		let app = (
 			<StaticRouter basename={BaseUrlRelative} location={params.url} context={staticContext}>
-				<App basename={BaseUrlRelative}/>
+				
 			</StaticRouter>);
+
+			//<App basename={BaseUrlRelative}/>
 
 		let rootContent = "";
 		try {
