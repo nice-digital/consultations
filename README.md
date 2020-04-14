@@ -116,16 +116,20 @@ Consultations sits below [Varnish](https://github.com/nhsevidence/varnish) so is
  
 ## Set up
 1. Install [KDiff](http://kdiff3.sourceforge.net/) to be able see diffs from integration tests
-2. Clone the project `git clone git@github.com:nhsevidence/consultations.git`
-3. Open *Consultations.sln*
-4. Press F5 to run the project in debug mode
-5. Dependencies will download (npm and NuGet) so be patient on first run
-6. The app will run in IIS Express on http://localhost:52679/
-7. cd into *consultations\Comments\ClientApp* and run `npm start` if Startup is using `UseProxyToSpaDevelopmentServer`. This runs a react dev server on http://localhost:3000/.
-8. Run `npm test` in a separate window to run client side tests in watch mode
+2. Install [SQL Server](https://www.microsoft.com/sql-server) and [SQL Server Management Studio (SSMS)](https://docs.microsoft.com/sql/ssms/download-sql-server-management-studio-ssms)
+3. Restore Consultations database in SSMS and copy database connection string
+4. Clone the project `git clone git@github.com:nhsevidence/consultations.git`
+5. Open *Consultations.sln*
+6. Paste database connection string into DefaultConnection in secrets.json file
+7. Press F5 to run the project in debug mode
+8. Dependencies will download (npm and NuGet) so be patient on first run
+9. The app will run in IIS Express on http://localhost:52679/
+10. cd into *consultations\Comments\ClientApp* and run `npm start` if Startup is using `UseProxyToSpaDevelopmentServer`. This runs a react dev server on http://localhost:3000/.
+11. Run `npm test` in a separate window to run client side tests in watch mode
 
 ### Gotchas
 - `spa.UseReactDevelopmentServer` can be slow so try using `spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");` instead within [Startup.cs](Comments/Startup.cs).
+- Need to ensure that nothing else is running on port 80, otherwise you will encounter a socket exception error when running in debug.
 
 ## Tests
 
