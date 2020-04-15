@@ -39,6 +39,8 @@ namespace Comments.ViewModels
 
 		public TextFilterGroup TextFilter { get; set; }
 
+		public ViewModels.User User { get; set; }
+
 
 		#region Filter options from the check boxes
 

@@ -50,8 +50,14 @@ namespace Comments.Test.IntegrationTests.API.ConsultationList
 			AppSettings.Feed = TestAppSettings.GetFeedConfig();
 		}
 
+		/// <summary>
+		/// This tests to see what is returned for the consultation list page (i.e. the download page) when a user is not signed in
+		///
+		/// the functionality here has changed. previously it'd return unauthorised. but now the page is public facing, so the test is changed.
+		/// </summary>
+		/// <returns></returns>
 		[Fact]
-		public async Task Get_Consultation_Feed_Returns_Populated_Feed()
+		public async Task Get_Consultation_Feed_Returns_Feed_For_not_signed_in_users()
 		{
 			//Arrange in constructor
 
@@ -59,7 +65,10 @@ namespace Comments.Test.IntegrationTests.API.ConsultationList
 			var response = await _client.GetAsync("/consultations/api/ConsultationList?Status=Open");
 
 			//Assert
-			response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+			//response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+			response.StatusCode.ShouldBe(HttpStatusCode.OK);
+			var responseString = await response.Content.ReadAsStringAsync();
+			responseString.ShouldMatchApproved();
 		}
 	}
 
@@ -71,8 +80,14 @@ namespace Comments.Test.IntegrationTests.API.ConsultationList
 			AppSettings.Feed = TestAppSettings.GetFeedConfig();
 		}
 
+		/// <summary>
+		/// This tests to see what is returned for the consultation list page (i.e. the download page) when a user is signed in, but not an admin.
+		///
+		/// the functionality here has changed. previously it'd return unauthorised. but now the page is public facing, so the test is changed.
+		/// </summary>
+		/// <returns></returns>
 		[Fact]
-		public async Task Get_Consultation_Feed_Returns_Populated_Feed()
+		public async Task Get_Consultation_Feed_Returns_Feed_For_Signed_in_but_not_authorised_users()
 		{
 			//Arrange
 
@@ -80,7 +95,10 @@ namespace Comments.Test.IntegrationTests.API.ConsultationList
 			var response = await _client.GetAsync("/consultations/api/ConsultationList?Status=Open");
 
 			//Assert
-			response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+			//response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+			response.StatusCode.ShouldBe(HttpStatusCode.OK);
+			var responseString = await response.Content.ReadAsStringAsync();
+			responseString.ShouldMatchApproved();
 		}
 	}
 }

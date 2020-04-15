@@ -35,7 +35,7 @@ namespace Comments.Test.UnitTests
 			var consultationListService = GetConsultationListService();
 
 			//Act
-			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null) { Status = new List<ConsultationStatus>() }).consultationListViewModel;
+			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null) { Status = new List<ConsultationStatus>() });
 
 			//Assert
 			viewModel.Consultations.OrderBy(c => c.ConsultationId).First().ConsultationId.ShouldBe(123);
@@ -60,7 +60,7 @@ namespace Comments.Test.UnitTests
 			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null) { Status = new List<ConsultationStatus>() });
 
 			//Assert
-			viewModel.consultationListViewModel.Consultations.First().SubmissionCount.ShouldBe(1);
+			viewModel.Consultations.First().SubmissionCount.ShouldBe(1);
 		}
 
 		[Fact]
@@ -84,7 +84,7 @@ namespace Comments.Test.UnitTests
 			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null) { Status = new List<ConsultationStatus>() });
 
 			//Assert
-			viewModel.consultationListViewModel.Consultations.First().SubmissionCount.ShouldBe(2);
+			viewModel.Consultations.First().SubmissionCount.ShouldBe(2);
 		}
 
 
@@ -110,7 +110,7 @@ namespace Comments.Test.UnitTests
 			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null) { Status = new List<ConsultationStatus>() });
 
 			//Assert
-			viewModel.consultationListViewModel.Consultations.First().SubmissionCount.ShouldBe(1);
+			viewModel.Consultations.First().SubmissionCount.ShouldBe(1);
 		}
 
 
@@ -141,7 +141,7 @@ namespace Comments.Test.UnitTests
 			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null) { Status = new List<ConsultationStatus>() });
 
 			//Assert
-			viewModel.consultationListViewModel.Consultations.First().SubmissionCount.ShouldBe(1);
+			viewModel.Consultations.First().SubmissionCount.ShouldBe(1);
 		}
 		
 		[Fact]
@@ -152,7 +152,7 @@ namespace Comments.Test.UnitTests
 			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), GetFakeUserServiceWithAdministratorRights());
 
 			//Act
-			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null){ Status = new List<ConsultationStatus>() }).consultationListViewModel;
+			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null){ Status = new List<ConsultationStatus>() });
 
 			//Assert
 			viewModel.Consultations.First().DocumentId.ShouldBe(1);
@@ -167,7 +167,7 @@ namespace Comments.Test.UnitTests
 			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), GetFakeUserServiceWithAdministratorRights());
 
 			//Act
-			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null){Status = new List<ConsultationStatus>()}).consultationListViewModel;
+			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null){Status = new List<ConsultationStatus>()});
 
 			//Assert
 			var firstFilter = viewModel.OptionFilters.First();
@@ -188,7 +188,7 @@ namespace Comments.Test.UnitTests
 			viewModel.Status = new List<ConsultationStatus>(){ ConsultationStatus.Open };
 
 			//Act
-			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel).consultationListViewModel;
+			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
 
 			//Assert
 			updatedViewModel.OptionFilters.First().Options.First(f => f.Id == "Open").IsSelected.ShouldBeTrue();
@@ -205,7 +205,7 @@ namespace Comments.Test.UnitTests
 			viewModel.Status = new List<ConsultationStatus>() { ConsultationStatus.Closed };
 
 			//Act
-			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel).consultationListViewModel;
+			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
 
 			//Assert
 			updatedViewModel.OptionFilters.First().Options.Skip(1).First(f => f.Id == "Closed").IsSelected.ShouldBeTrue();
@@ -222,7 +222,7 @@ namespace Comments.Test.UnitTests
 			viewModel.Status = new List<ConsultationStatus>() { ConsultationStatus.Upcoming };
 
 			//Act
-			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel).consultationListViewModel;
+			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
 
 			//Assert
 			updatedViewModel.OptionFilters.First().Options.Skip(1).First(f => f.Id == "Upcoming").IsSelected.ShouldBeTrue();
@@ -239,7 +239,7 @@ namespace Comments.Test.UnitTests
 			};
 
 			//Act
-			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel).consultationListViewModel;
+			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
 
 			//Assert
 			updatedViewModel.OptionFilters.First().Options.First(f => f.Id == "Open").FilteredResultCount.ShouldBe(1);
@@ -258,7 +258,7 @@ namespace Comments.Test.UnitTests
 			};
 
 			//Act
-			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel).consultationListViewModel;
+			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
 
 			//Assert
 			updatedViewModel.OptionFilters.First().Options.First(f => f.Id == "Closed").FilteredResultCount.ShouldBe(1);
@@ -276,7 +276,7 @@ namespace Comments.Test.UnitTests
 			};
 
 			//Act
-			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel).consultationListViewModel;
+			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
 
 			//Assert
 			updatedViewModel.OptionFilters.First().Options.First(f => f.Id == "Upcoming").FilteredResultCount.ShouldBe(1);
@@ -294,7 +294,7 @@ namespace Comments.Test.UnitTests
 			};
 
 			//Act
-			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel).consultationListViewModel;
+			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
 
 			//Assert
 			updatedViewModel.OptionFilters.First().Options.First(f => f.Id == "Open").FilteredResultCount.ShouldBe(1);
@@ -316,7 +316,7 @@ namespace Comments.Test.UnitTests
 			};
 
 			//Act
-			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel).consultationListViewModel;
+			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
 
 			//Assert
 			updatedViewModel.TextFilter.FilteredResultCount.ShouldBe(1);
@@ -334,7 +334,7 @@ namespace Comments.Test.UnitTests
 			};
 
 			//Act
-			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel).consultationListViewModel;
+			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
 
 			//Assert
 			updatedViewModel.TextFilter.FilteredResultCount.ShouldBe(3);
@@ -355,7 +355,7 @@ namespace Comments.Test.UnitTests
 			};
 
 			//Act
-			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel).consultationListViewModel;
+			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
 
 			//Assert
 			updatedViewModel.TextFilter.IsSelected.ShouldBeFalse();
@@ -372,7 +372,7 @@ namespace Comments.Test.UnitTests
 			};
 
 			//Act
-			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel).consultationListViewModel;
+			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
 
 			//Assert
 			updatedViewModel.TextFilter.FilteredResultCount.ShouldBe(3);
@@ -390,7 +390,7 @@ namespace Comments.Test.UnitTests
 			};
 
 			//Act
-			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel).consultationListViewModel;
+			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
 
 			//Assert
 			updatedViewModel.TextFilter.FilteredResultCount.ShouldBe(1);
@@ -411,7 +411,7 @@ namespace Comments.Test.UnitTests
 			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
 
 			//Assert
-			updatedViewModel.consultationListViewModel.Consultations.Count(c => c.Show).ShouldBe(1);
+			updatedViewModel.Consultations.Count(c => c.Show).ShouldBe(1);
 		}
 
 		[Fact]
@@ -428,7 +428,7 @@ namespace Comments.Test.UnitTests
 			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
 
 			//Assert
-			updatedViewModel.consultationListViewModel.Consultations.Count(c => c.Show).ShouldBe(1);
+			updatedViewModel.Consultations.Count(c => c.Show).ShouldBe(1);
 		}
 
 		[Fact]
@@ -445,7 +445,7 @@ namespace Comments.Test.UnitTests
 			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
 
 			//Assert
-			updatedViewModel.consultationListViewModel.Consultations.Count(c => c.Show).ShouldBe(2);
+			updatedViewModel.Consultations.Count(c => c.Show).ShouldBe(2);
 		}
 
 		[Fact]
@@ -463,7 +463,7 @@ namespace Comments.Test.UnitTests
 			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
 
 			//Assert
-			updatedViewModel.consultationListViewModel.Consultations.Count(c => c.Show).ShouldBe(1);
+			updatedViewModel.Consultations.Count(c => c.Show).ShouldBe(1);
 		}
 
 		[Fact]
@@ -480,7 +480,7 @@ namespace Comments.Test.UnitTests
 			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
 
 			//Assert
-			updatedViewModel.consultationListViewModel.Consultations.Count(c => c.Show).ShouldBe(1);
+			updatedViewModel.Consultations.Count(c => c.Show).ShouldBe(1);
 		}
 
 		private List<ConsultationList> AddConsultationsToList()
@@ -569,7 +569,7 @@ namespace Comments.Test.UnitTests
 			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), userService);
 
 			//Act
-			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null) { Status = new List<ConsultationStatus>() }).consultationListViewModel;
+			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null) { Status = new List<ConsultationStatus>() });
 
 			//Assert
 			viewModel.Consultations.Count().ShouldBe(2);
