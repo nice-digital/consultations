@@ -11,10 +11,12 @@ namespace Comments.Controllers.Api
 	public class ConsultationListController : ControllerBase
 	{
         private readonly IConsultationListService _consultationListService;
+        private readonly ILogger<ConsultationListController> _logger;
 
-	    public ConsultationListController(IConsultationListService consultationListService)
+	    public ConsultationListController(IConsultationListService consultationListService, ILogger<ConsultationListController> logger)
         {
 	        _consultationListService = consultationListService;
+            _logger = logger;
         }
 
 		/// <summary>
@@ -25,9 +27,11 @@ namespace Comments.Controllers.Api
 		[HttpGet]
         public IActionResult Get(ConsultationListViewModel consultationListViewModel)
 		{
-			var model = _consultationListService.GetConsultationListViewModel(consultationListViewModel);
+			var result = _consultationListService.GetConsultationListViewModel(consultationListViewModel);
 
-			return Ok(model);
+			var invalidResult = Validate(result.validate, _logger);
+
+			return invalidResult ?? Ok(result.consultationListViewModel);
 		}
     }
 }

@@ -6,12 +6,13 @@ using NICE.Feeds;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NICE.Feeds.Models.Indev.List;
 
 namespace Comments.Services
 {
 	public interface IConsultationListService
 	{
-		ConsultationListViewModel GetConsultationListViewModel(ConsultationListViewModel model);
+		(ConsultationListViewModel consultationListViewModel, Validate validate)  GetConsultationListViewModel(ConsultationListViewModel model);
 	}
 
 	public class ConsultationListService : IConsultationListService
@@ -29,47 +30,38 @@ namespace Comments.Services
 			_userService = userService;
 		}
 
-		public ConsultationListViewModel GetConsultationListViewModel(ConsultationListViewModel model)
+		public (ConsultationListViewModel consultationListViewModel, Validate validate) GetConsultationListViewModel(ConsultationListViewModel model)
 		{
-			var isAnAdminOrTeamRoleUser = _userService.IsAllowedAccess(AppSettings.ConsultationListConfig.DownloadRoles.AllRoles).Valid;
-		
-			var consultationsFromIndev = _feedService.GetConsultationList().ToList();
-			IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null;
-			if (isAnAdminOrTeamRoleUser)
+			var validate = _userService.IsAllowedAccess(AppSettings.ConsultationListConfig.DownloadRoles.AllRoles);
+			if (validate.Valid)
 			{
-				submittedCommentsAndAnswerCounts = _context.GetSubmittedCommentsAndAnswerCounts();
-			}
+				var consultationsFromIndev = _feedService.GetConsultationList().ToList();
+				var submittedCommentsAndAnswerCounts = _context.GetSubmittedCommentsAndAnswerCounts();
+				var consultationListRows = new List<ConsultationListRow>();
+				var userRoles = _userService.GetUserRoles().ToList();
+				var isAdminUser = userRoles.Any(role => AppSettings.ConsultationListConfig.DownloadRoles.AdminRoles.Contains(role));
 
-			var consultationListRows = new List<ConsultationListRow>();
-			var userRoles = _userService.GetUserRoles().ToList();
-			var isAdminUser = userRoles.Any(role => AppSettings.ConsultationListConfig.DownloadRoles.AdminRoles.Contains(role));
-
-			foreach (var consultation in consultationsFromIndev)
-			{
-				//if (isAdminUser || userRoles.Contains(consultation.AllowedRole)) //the indev feed contains an "AllowedRole" property, which will be something like "CHTETeam", so then non-admin, team role members, e.g. CHTETeam will only be able to see their own consultations.
-				//{
-					int? responseCount = null;
-
-					if (isAnAdminOrTeamRoleUser) //non-admin and non-team roles don't get the response count or the option to download responses.
+				foreach (var consultation in consultationsFromIndev)
+				{
+					if (isAdminUser || userRoles.Contains(consultation.AllowedRole))
 					{
 						var sourceURI = ConsultationsUri.CreateConsultationURI(consultation.ConsultationId);
-						responseCount = submittedCommentsAndAnswerCounts.FirstOrDefault(s => s.SourceURI.Equals(sourceURI))?.TotalCount ?? 0;
-					}
+						var responseCount = submittedCommentsAndAnswerCounts.FirstOrDefault(s => s.SourceURI.Equals(sourceURI))?.TotalCount ?? 0;
 
-					consultationListRows.Add(
-						new ConsultationListRow(consultation.Title,
-							consultation.StartDate, consultation.EndDate, responseCount, consultation.ConsultationId,
-							consultation.FirstConvertedDocumentId, consultation.FirstChapterSlugOfFirstConvertedDocument, consultation.Reference,
-							consultation.ProductTypeName));
-				//}
+						consultationListRows.Add(
+							new ConsultationListRow(consultation.Title,
+								consultation.StartDate, consultation.EndDate, responseCount, consultation.ConsultationId,
+								consultation.FirstConvertedDocumentId, consultation.FirstChapterSlugOfFirstConvertedDocument, consultation.Reference,
+								consultation.ProductTypeName));
+					}
+				}
+
+				model.OptionFilters = GetOptionFilterGroups(model.Status?.ToList(), consultationListRows);
+				model.TextFilter = GetTextFilterGroups(model.Keyword, consultationListRows);
+				model.Consultations = FilterAndOrderConsultationList(consultationListRows, model.Status, model.Keyword);
 			}
 
-			model.OptionFilters = GetOptionFilterGroups(model.Status?.ToList(), consultationListRows);
-			model.TextFilter = GetTextFilterGroups(model.Keyword, consultationListRows);
-			model.Consultations = FilterAndOrderConsultationList(consultationListRows, model.Status, model.Keyword);
-			model.User = _userService.GetCurrentUser();
-
-			return model;
+			return (model, validate);
 		}
 
 		private static IEnumerable<OptionFilterGroup> GetOptionFilterGroups(IList<ConsultationStatus> status, IList<ConsultationListRow> consultationListRows)

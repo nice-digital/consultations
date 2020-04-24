@@ -4,7 +4,7 @@ namespace Comments.Models
 {
 	public class ConsultationListRow
 	{
-		public ConsultationListRow(string title, DateTime startDate, DateTime endDate, int? responses, int consultationId, int? documentId, string chapterSlug, string gidReference, string productTypeName)
+		public ConsultationListRow(string title, DateTime startDate, DateTime endDate, int responses, int consultationId, int? documentId, string chapterSlug, string gidReference, string productTypeName)
 		{
 			Title = title;
 			StartDate = startDate;
@@ -20,7 +20,7 @@ namespace Comments.Models
 		public string Title { get; private set; }
 		public DateTime StartDate { get; private set; }
 		public DateTime EndDate { get; private set; }
-		public int? SubmissionCount { get; private set; } //nullable now, null if the user doesn't have access to see this or download.
+		public int SubmissionCount { get; private set; }
 		public int ConsultationId { get; private set; }
 		public int? DocumentId { get; private set; }
 		public string ChapterSlug { get; private set; }
