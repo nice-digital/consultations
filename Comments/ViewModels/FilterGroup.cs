@@ -22,10 +22,15 @@ namespace Comments.ViewModels
 		public bool IsSelected { get; set; }
 
 		/// <summary>
-		/// These properties gets set after filtering.
+		/// These properties get set after filtering.
 		/// </summary>
 		public int FilteredResultCount { get; set; }
 		public int UnfilteredResultCount { get; set; }
 
 	}
+
+	//public class SingleOptionFilterGroup : FilterGroup
+	//{
+	//	public FilterOption Option { get; set; }
+	//}
 }

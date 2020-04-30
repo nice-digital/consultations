@@ -28,7 +28,7 @@ namespace Comments.Test.IntegrationTests.API.ConsultationList
 		}
 
         [Fact]
-        public async Task Get_Consultation_Feed_Returns_Populated_Feed()
+        public async Task Get_Consultation_Feed_Returns_Populated_Feed_For_Administrators()
         {
 			//Arrange
 
@@ -51,7 +51,7 @@ namespace Comments.Test.IntegrationTests.API.ConsultationList
 		}
 
 		[Fact]
-		public async Task Get_Consultation_Feed_Returns_Populated_Feed()
+		public async Task Get_Consultation_Feed_Returns_Unauthorized_for_unauthorised_users()
 		{
 			//Arrange in constructor
 
@@ -72,15 +72,17 @@ namespace Comments.Test.IntegrationTests.API.ConsultationList
 		}
 
 		[Fact]
-		public async Task Get_Consultation_Feed_Returns_Populated_Feed()
+		public async Task Get_Consultation_Feed_Returns_Populated_Feed_For_Authenticated_User()
 		{
 			//Arrange
 
-			// Act 
+			// Act
 			var response = await _client.GetAsync("/consultations/api/ConsultationList?Status=Open");
+			response.EnsureSuccessStatusCode();
+			var responseString = await response.Content.ReadAsStringAsync();
 
 			//Assert
-			response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+			responseString.ShouldMatchApproved();
 		}
 	}
 }

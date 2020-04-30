@@ -16,6 +16,18 @@ namespace Comments.ViewModels
 		Upcoming = 3,
 	}
 
+	[Flags]
+	public enum ContributionStatus
+	{
+		HasContributed = 1
+	}
+
+	[Flags]
+	public enum TeamStatus
+	{
+		MyTeam = 1
+	}
+
 	public class ConsultationListViewModel
 	{
 		//default constructor needed for model binding.
@@ -39,9 +51,14 @@ namespace Comments.ViewModels
 
 		public TextFilterGroup TextFilter { get; set; }
 
+		public IEnumerable<OptionFilterGroup> ContributionFilter { get; set; }
+
+		public IEnumerable<OptionFilterGroup> TeamFilter { get; set; }
+
+		public ViewModels.DownloadUser User { get; set; }
+
 
 		#region Filter options from the check boxes
-
 
 		[JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
 		public IEnumerable<ConsultationStatus> Status
@@ -51,6 +68,20 @@ namespace Comments.ViewModels
 		}
 
 		public string Keyword { get; set; }
+
+		[JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
+		public IEnumerable<ContributionStatus> Contribution
+		{
+			get;
+			set;
+		}
+
+		[JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
+		public IEnumerable<TeamStatus> Team
+		{
+			get;
+			set;
+		}
 
 		#endregion Filter options
 	}
