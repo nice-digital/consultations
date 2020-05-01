@@ -1,0 +1,142 @@
+﻿{
+    "IndevBasePath":"http://www.nice.org.uk",
+    "Consultations":[
+        {
+            "Title":"Consultation Title 3",
+            "StartDate":"scrubbed by ScrubStartDate",
+            "EndDate":"scrubbed by ScrubEndDate",
+            "SubmissionCount":0,
+            "ConsultationId":125,
+            "DocumentId":1,
+            "ChapterSlug":"my-chapter-slug",
+            "GidReference":"GID-3",
+            "ProductTypeName":null,
+            "HasCurrentUserEnteredCommentsOrAnsweredQuestions":false,
+            "HasCurrentUserSubmittedCommentsOrAnswers":false,
+            "AllowedRole":"Some other role",
+            "IsOpen":false,
+            "IsClosed":false,
+            "IsUpcoming":true,
+            "Show":false
+        },
+        {
+            "Title":"Consultation title 1",
+            "StartDate":"scrubbed by ScrubStartDate",
+            "EndDate":"scrubbed by ScrubEndDate",
+            "SubmissionCount":0,
+            "ConsultationId":123,
+            "DocumentId":null,
+            "ChapterSlug":null,
+            "GidReference":"GID-1",
+            "ProductTypeName":null,
+            "HasCurrentUserEnteredCommentsOrAnsweredQuestions":false,
+            "HasCurrentUserSubmittedCommentsOrAnswers":false,
+            "AllowedRole":"ConsultationListTestRole",
+            "IsOpen":true,
+            "IsClosed":false,
+            "IsUpcoming":false,
+            "Show":true
+        },
+        {
+            "Title":"Consultation Title 1",
+            "StartDate":"scrubbed by ScrubStartDate",
+            "EndDate":"scrubbed by ScrubEndDate",
+            "SubmissionCount":0,
+            "ConsultationId":124,
+            "DocumentId":null,
+            "ChapterSlug":null,
+            "GidReference":"GID-2",
+            "ProductTypeName":null,
+            "HasCurrentUserEnteredCommentsOrAnsweredQuestions":false,
+            "HasCurrentUserSubmittedCommentsOrAnswers":false,
+            "AllowedRole":"ConsultationListTestRole",
+            "IsOpen":false,
+            "IsClosed":true,
+            "IsUpcoming":false,
+            "Show":true
+        }
+    ],
+    "OptionFilters":[
+        {
+            "Options":[
+                {
+                    "Id":"Open",
+                    "Label":"Open",
+                    "IsSelected":false,
+                    "FilteredResultCount":1,
+                    "UnfilteredResultCount":3
+                },
+                {
+                    "Id":"Closed",
+                    "Label":"Closed",
+                    "IsSelected":false,
+                    "FilteredResultCount":1,
+                    "UnfilteredResultCount":3
+                },
+                {
+                    "Id":"Upcoming",
+                    "Label":"Upcoming",
+                    "IsSelected":false,
+                    "FilteredResultCount":1,
+                    "UnfilteredResultCount":3
+                }
+            ],
+            "Id":"Status",
+            "Title":"Status"
+        }
+    ],
+    "TextFilter":{
+        "FilterText":null,
+        "IsSelected":false,
+        "FilteredResultCount":3,
+        "UnfilteredResultCount":3,
+        "Id":"Keyword",
+        "Title":"Keyword"
+    },
+    "ContributionFilter":[
+        {
+            "Options":[
+                {
+                    "Id":"HasContributed",
+                    "Label":"I have commented on",
+                    "IsSelected":false,
+                    "FilteredResultCount":0,
+                    "UnfilteredResultCount":3
+                }
+            ],
+            "Id":"Contribution",
+            "Title":"Contribution filter group"
+        }
+    ],
+    "TeamFilter":[
+        {
+            "Options":[
+                {
+                    "Id":"MyTeam",
+                    "Label":"My team's consultations",
+                    "IsSelected":true,
+                    "FilteredResultCount":2,
+                    "UnfilteredResultCount":3
+                }
+            ],
+            "Id":"Team",
+            "Title":"Team filter"
+        }
+    ],
+    "User":{
+        "IsAdminUser":false,
+        "IsTeamUser":true,
+        "IsAuthorised":true,
+        "DisplayName":"Jeffrey Goines",
+        "UserId":"00000000-0000-0000-0000-000000000000",
+        "OrganisationName":null
+    },
+    "Status":[
+        
+    ],
+    "Keyword":null,
+    "Contribution":null,
+    "Team":[
+        "MyTeam"
+    ]
+}

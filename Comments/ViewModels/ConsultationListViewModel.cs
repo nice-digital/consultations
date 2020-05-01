@@ -33,11 +33,13 @@ namespace Comments.ViewModels
 		//default constructor needed for model binding.
 		public ConsultationListViewModel() {}
 
-		public ConsultationListViewModel(IEnumerable<ConsultationListRow> consultations, IEnumerable<OptionFilterGroup> optionFilters, TextFilterGroup textFilters)
+		public ConsultationListViewModel(IEnumerable<ConsultationListRow> consultations, IEnumerable<OptionFilterGroup> optionFilters, TextFilterGroup textFilters, IEnumerable<OptionFilterGroup> contributionFilter, IEnumerable<OptionFilterGroup> teamFilter)
 		{
 			Consultations = consultations;
 			OptionFilters = optionFilters;
 			TextFilter = textFilters;
+			ContributionFilter = contributionFilter;
+			TeamFilter = teamFilter;
 		}
 
 		public string IndevBasePath => AppSettings.Feed.IndevBasePath.OriginalString; 

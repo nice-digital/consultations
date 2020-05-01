@@ -12,7 +12,11 @@ namespace Comments.Configuration
 		public TextFilterGroup TextFilters { get; set; }
 		
 		public RoleTypes DownloadRoles { get; set; }
-		
+
+		public IEnumerable<OptionFilterGroup> ContributionFilter { get; set; }
+
+		public IEnumerable<OptionFilterGroup> TeamFilter { get; set; }
+
 	}
 
 	public class RoleTypes

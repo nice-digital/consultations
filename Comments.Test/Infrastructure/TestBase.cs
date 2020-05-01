@@ -102,9 +102,20 @@ namespace Comments.Test.Infrastructure
 			FeedToUse = feed;
 		}
 
+		/// <summary>
+		/// this is the default constructor, albeit with a load of optional parameters.
+		/// </summary>
+		/// <param name="useRealSubmitService"></param>
+		/// <param name="testUserType"></param>
+		/// <param name="useFakeConsultationService"></param>
+		/// <param name="submittedCommentsAndAnswerCounts"></param>
+		/// <param name="bypassAuthentication"></param>
 		public TestBase(bool useRealSubmitService = false, TestUserType testUserType = TestUserType.Authenticated, bool useFakeConsultationService = false, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null, bool bypassAuthentication = true)
         {
-			
+	        if (testUserType == TestUserType.NotAuthenticated)
+	        {
+		        _authenticated = false;
+	        }
 			AppSettings.AuthenticationConfig = new AuthenticationConfig{ ClientId = "test client id", AuthorisationServiceUri = "http://www.example.com"};
 			// Arrange
 			_urlHelper = new FakeUrlHelper();

@@ -80,6 +80,8 @@ namespace Comments.Services
 
 			model.OptionFilters = GetOptionFilterGroups(model.Status?.ToList(), consultationListRows);
 			model.TextFilter = GetTextFilterGroups(model.Keyword, consultationListRows);
+			model.ContributionFilter = GetContributionFilter(model.Contribution?.ToList(), consultationListRows);
+			model.TeamFilter = isTeamUser ? GetTeamFilter(model.Team?.ToList(), consultationListRows, teamRoles) : null;
 			model.Consultations = FilterAndOrderConsultationList(consultationListRows, model.Status, model.Keyword, model.Contribution, model.Team, (isTeamUser ? teamRoles : null));
 			model.User = new DownloadUser(isAdminUser, isTeamUser, _userService.GetCurrentUser());
 			
@@ -96,7 +98,7 @@ namespace Comments.Services
 			if (foundCommentOrAnswer.Equals(default(KeyValuePair<string, Models.Status>)))
 				return (hasEnteredCommentsOrAnsweredQuestions: false, hasSubmittedCommentsOrAnswers: false);
 
-			if (foundCommentOrAnswer.Value.Name.Equals(Constants.Submitted))
+			if (foundCommentOrAnswer.Value.StatusId.Equals((int)StatusName.Submitted))
 			{
 				return (hasEnteredCommentsOrAnsweredQuestions: true, hasSubmittedCommentsOrAnswers: true);
 			}
@@ -131,6 +133,44 @@ namespace Comments.Services
 			return optionFilters;
 		}
 
+		private IEnumerable<OptionFilterGroup> GetContributionFilter(List<ContributionStatus> contribution, IList<ConsultationListRow> consultationListRows)
+		{
+			var contributionFilter = AppSettings.ConsultationListConfig.ContributionFilter.ToList();
+
+			var hasContributedOption = contributionFilter
+				.Single(option => option.Id.Equals("Contribution", StringComparison.OrdinalIgnoreCase))
+				.Options
+				.Single(option => option.Id.Equals("HasContributed", StringComparison.OrdinalIgnoreCase));
+
+			hasContributedOption.IsSelected = contribution != null && contribution.Contains(ContributionStatus.HasContributed);
+			hasContributedOption.UnfilteredResultCount = consultationListRows.Count;
+			hasContributedOption.FilteredResultCount = consultationListRows.Count(c => c.HasCurrentUserEnteredCommentsOrAnsweredQuestions);
+
+			return contributionFilter;
+		}
+
+		private IEnumerable<OptionFilterGroup> GetTeamFilter(List<TeamStatus> team, IList<ConsultationListRow> consultationListRows, List<string> currentUsersTeamRoles)
+		{
+			var teamFilters = AppSettings.ConsultationListConfig.TeamFilter.ToList();
+
+			var myTeamOption = teamFilters
+				.Single(option => option.Id.Equals("Team", StringComparison.OrdinalIgnoreCase))
+				.Options
+				.Single(option => option.Id.Equals("MyTeam", StringComparison.OrdinalIgnoreCase));
+
+			myTeamOption.IsSelected = team != null && team.Contains(TeamStatus.MyTeam);
+			myTeamOption.UnfilteredResultCount = consultationListRows.Count;
+			if (currentUsersTeamRoles != null && currentUsersTeamRoles.Any())
+			{
+				myTeamOption.FilteredResultCount = consultationListRows.Count(c => currentUsersTeamRoles.Contains(c.AllowedRole, StringComparer.OrdinalIgnoreCase));
+			}
+			else //it shouldn't be shown on the front end if there's no team filter
+			{
+				myTeamOption.FilteredResultCount = consultationListRows.Count;
+			}
+			return teamFilters;
+		}
+
 		private static TextFilterGroup GetTextFilterGroups(string keyword, IList<ConsultationListRow> consultationListRows)
 		{
 			var textFilter = AppSettings.ConsultationListConfig.TextFilters;
@@ -141,7 +181,7 @@ namespace Comments.Services
 			return textFilter;
 		}
 
-		private static IEnumerable<ConsultationListRow> FilterAndOrderConsultationList(List<ConsultationListRow> consultationListRows, IEnumerable<ConsultationStatus> status, string keyword, IEnumerable<ContributionStatus> contribution, IEnumerable<TeamStatus> team, List<string> teamRoles)
+		private static IEnumerable<ConsultationListRow> FilterAndOrderConsultationList(List<ConsultationListRow> consultationListRows, IEnumerable<ConsultationStatus> status, string keyword, IEnumerable<ContributionStatus> contribution, IEnumerable<TeamStatus> team, List<string> currentUsersTeamRoles)
 		{
 			var statuses = status?.ToList() ?? new List<ConsultationStatus>();
 			if (statuses.Any())
@@ -157,15 +197,19 @@ namespace Comments.Services
 																		c.GidReference.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) != -1));
 			}
 
-			if (contribution.Any())
+			var contributions = contribution?.ToList() ?? new List<ContributionStatus>();
+			if (contributions.Any())
 			{
 				consultationListRows.ForEach(c => c.Show = c.Show && c.HasCurrentUserEnteredCommentsOrAnsweredQuestions);
 			}
 
-			if (teamRoles != null && teamRoles.Any() && team.Any())
+			if (currentUsersTeamRoles != null && currentUsersTeamRoles.Any())
 			{
-				
-				consultationListRows.ForEach(c => c.Show = c.Show && teamRoles.Contains(c.AllowedRole, StringComparer.OrdinalIgnoreCase));
+				var teams = team?.ToList() ?? new List<TeamStatus>();
+				if (teams.Any()) //the user has a team role, and there's a filter coming in, meaning only display own teams roles
+				{
+					consultationListRows.ForEach(c => c.Show = c.Show && currentUsersTeamRoles.Contains(c.AllowedRole, StringComparer.OrdinalIgnoreCase));
+				}
 			}
 
 			return consultationListRows.OrderByDescending(c => c.EndDate).ToList(); 
