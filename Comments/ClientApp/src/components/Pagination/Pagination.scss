@@ -1,0 +1,50 @@
+.pagination {
+  margin: 0;
+
+  &__pager, &__truncate {
+    list-style: none;
+    display: inline-block;
+  }
+
+  &__pager {
+    a {
+      @extend .btn;
+
+      background: none;
+      border: 1px solid transparent;
+      background: none;
+      color: $colour-link;
+      margin: 0;
+      text-transform: capitalize;
+
+      &:hover {
+        border: 1px solid #eee;
+        background: none;
+        color: $colour-link;
+      }
+      &:focus {
+        background: none;
+        color: $colour-link;
+        z-index: 3000;
+        top: 0;
+      }
+    }
+
+    &.active {
+      a {
+        background: #eee;
+        color: #000;
+      }
+    }
+  }
+
+  &__truncate {
+    span {
+      font-size: 1rem;
+      line-height: 1.5rem;
+      padding: 0.5em 0.25em;
+      vertical-align: top;
+      display: inline-block;
+    }
+  }
+}
