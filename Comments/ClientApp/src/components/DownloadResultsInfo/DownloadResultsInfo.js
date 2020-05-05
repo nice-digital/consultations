@@ -11,6 +11,7 @@ type PropsType = {
 	path: string,
 	isLoading: boolean,
 	onRemoveFilter: Function,
+	paginationPositions: {}
 };
 
 export class DownloadResultsInfo extends Component<PropsType, StateType> {
@@ -27,7 +28,9 @@ export class DownloadResultsInfo extends Component<PropsType, StateType> {
 	getShowingText = (props: PropsType) => {
 		//TODO: "Showing Open consultations" etc.
 		//const appliedFilters = props.appliedFilters
-		return `Showing ${props.consultationCount} consultation${props.consultationCount === 1 ? "": "s"}`;
+		const paginationExtract = props.consultationCount > 0 ? `${props.paginationPositions.start + 1} to ${props.paginationPositions.finish} of`: "";
+
+		return `Showing ${paginationExtract} ${props.consultationCount} consultation${props.consultationCount === 1 ? "": "s"}`;
 	};
 
 	onRemoveFilter = (optionId) => {
