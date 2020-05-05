@@ -18,6 +18,7 @@ import { load } from "../../data/loader";
 import { withHistory } from "../HistoryContext/HistoryContext";
 import TextFilterWithHistory from "../TextFilter/TextFilter";
 import { DownloadResultsInfo } from "../DownloadResultsInfo/DownloadResultsInfo";
+import { Pagination } from "../Pagination/Pagination";
 
 type StateType = {
 	path: string,
@@ -37,7 +38,9 @@ type StateType = {
 	},
 	indevReturnPath: string,
 	search: string,
-	keywordToFilterBy: string
+	keywordToFilterBy: string,
+	pageNumber: number,
+	itemsPerPage: number
 }
 
 type PropsType = {
@@ -55,10 +58,10 @@ type PropsType = {
 }
 
 export class Download extends Component<PropsType, StateType> {
-	
+
 	constructor(props: PropsType) {
 		super(props);
-		
+
 		let preloadedData;
 		if (this.props.staticContext && this.props.staticContext.preload) {
 			preloadedData = this.props.staticContext.preload.data;
@@ -87,9 +90,11 @@ export class Download extends Component<PropsType, StateType> {
 			indevReturnPath: "",
 			search: this.props.location.search,
 			keywordToFilterBy: null,
+			pageNumber: 1,
+			itemsPerPage: 30,
 		};
 
-		if (isAuthorised){			
+		if (isAuthorised){
 
 			const preloadedConsultations = preload(
 				this.props.staticContext,
@@ -98,8 +103,8 @@ export class Download extends Component<PropsType, StateType> {
 				Object.assign({relativeURL: this.props.match.url}, queryStringToObject(querystring)),
 				preloadedData
 			);
-	
-			if (preloadedConsultations) {	
+
+			if (preloadedConsultations) {
 
 				this.state = {
 					searchTerm: "",
@@ -115,9 +120,11 @@ export class Download extends Component<PropsType, StateType> {
 					indevReturnPath: preloadedConsultations.indevBasePath,
 					search: this.props.location.search,
 					keywordToFilterBy: null,
+					pageNumber: 1,
+					itemsPerPage: 30,
 				};
 			}
-		}		
+		}
 	}
 
 	loadDataAndUpdateState = () => {
@@ -134,6 +141,7 @@ export class Download extends Component<PropsType, StateType> {
 					hasInitialData: true,
 					loading: false,
 					indevReturnPath: response.data.indevBasePath,
+					pageNumber: 1
 				});
 			})
 			.catch(err => { //TODO: maybe this should log?
@@ -157,7 +165,7 @@ export class Download extends Component<PropsType, StateType> {
 			this.loadDataAndUpdateState();
 		}
 		this.unlisten = this.props.history.listen(() => {
-		
+
 			const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;
 
 			if (!this.state.path || path !== this.state.path) {
@@ -181,8 +189,8 @@ export class Download extends Component<PropsType, StateType> {
 					indevReturnPath = cookieReferrer;
 				}
 			}
-		} 
-		this.setState({indevReturnPath: indevReturnPath});		
+		}
+		this.setState({indevReturnPath: indevReturnPath});
 	}
 
 	keywordToFilterByUpdated = (keywordToFilterBy) => {
@@ -205,7 +213,7 @@ export class Download extends Component<PropsType, StateType> {
 					groupId: group.id,
 					optionId: opt.id,
 				}));
-				
+
 		let filters = this.state.consultationListData.optionFilters
 			.map(mapOptions)
 			.reduce((arr, group) => arr.concat(group), []);
@@ -225,6 +233,32 @@ export class Download extends Component<PropsType, StateType> {
 		return filters;
 	}
 
+	getPaginateStartAndFinishPosition = (consultationsCount, pageNumber, itemsPerPage) => {
+		let paginationPositions = {};
+
+		paginationPositions.start = (pageNumber - 1) * itemsPerPage;
+		paginationPositions.finish = (paginationPositions.start + itemsPerPage) <= consultationsCount ? (paginationPositions.start + itemsPerPage) : consultationsCount;
+
+		return paginationPositions;
+	}
+
+	changePage = (e) => {
+		e.preventDefault();
+
+		let pageNumber = e.target.getAttribute("data-pager");
+
+		if (pageNumber === "previous") {
+			pageNumber = this.state.pageNumber - 1;
+		}
+		if (pageNumber === "next") {
+			pageNumber = this.state.pageNumber + 1;
+		}
+
+		pageNumber = parseInt(pageNumber, 10);
+
+		this.setState({ pageNumber });
+	}
+
 	render() {
 		const BackToIndevLink = [
 			{
@@ -240,6 +274,8 @@ export class Download extends Component<PropsType, StateType> {
 			hasInitialData,
 			consultationListData,
 			isAuthorised,
+			pageNumber,
+			itemsPerPage,
 		} = this.state;
 
 		const {
@@ -249,9 +285,13 @@ export class Download extends Component<PropsType, StateType> {
 
 		const consultationsToShow = this.state.consultationListData.consultations.filter(consultation => consultation.show);
 
+		const paginationPositions = this.getPaginateStartAndFinishPosition(consultationsToShow.length, pageNumber, itemsPerPage);
+
+		const consultationsPaginated = consultationsToShow.slice(paginationPositions.start, paginationPositions.finish);
+
 		if (isAuthorised && loading) return <h1>Loading...</h1>;
 
-		if (isAuthorised && !hasInitialData) return null;		
+		if (isAuthorised && !hasInitialData) return null;
 
 		return (
 			<UserContext.Consumer>
@@ -276,9 +316,9 @@ export class Download extends Component<PropsType, StateType> {
 									<div className="grid mt--d">
 										<div data-g="12 md:3">
 											<h2 className="h5 mt--0">Filter</h2>
-											{textFilter && 
+											{textFilter &&
 												<TextFilterWithHistory
-													onKeywordUpdated={this.keywordToFilterByUpdated} 
+													onKeywordUpdated={this.keywordToFilterByUpdated}
 													keyword={this.state.keywordToFilterBy}
 													search={this.state.search}
 													path={this.state.path}
@@ -290,17 +330,24 @@ export class Download extends Component<PropsType, StateType> {
 										<div data-g="12 md:9">
 											<DownloadResultsInfo
 												consultationCount={consultationsToShow.length}
+												paginationPositions={paginationPositions}
 												appliedFilters={this.getAppliedFilters()}
 												path={this.state.path}
 												isLoading={this.state.loading}
 												onRemoveFilter={this.removeFilter}
 											/>
+											<Pagination
+												onChangePage={this.changePage}
+												itemsPerPage={itemsPerPage}
+												consultationCount={consultationsToShow.length}
+												currentPage={pageNumber}
+											/>
 											{consultationsToShow.length > 0 ? (
 												<ul className="list--unstyled">
-													{consultationsToShow.map((item, idx) =>
-														<ConsultationItem key={idx} 
-															basename={this.props.basename} 
-															{...item} 
+													{consultationsPaginated.map((item, idx) =>
+														<ConsultationItem key={idx}
+															basename={this.props.basename}
+															{...item}
 														/>
 													)}
 												</ul>
