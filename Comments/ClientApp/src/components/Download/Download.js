@@ -336,12 +336,7 @@ export class Download extends Component<PropsType, StateType> {
 												isLoading={this.state.loading}
 												onRemoveFilter={this.removeFilter}
 											/>
-											<Pagination
-												onChangePage={this.changePage}
-												itemsPerPage={itemsPerPage}
-												consultationCount={consultationsToShow.length}
-												currentPage={pageNumber}
-											/>
+
 											{consultationsToShow.length > 0 ? (
 												<ul className="list--unstyled">
 													{consultationsPaginated.map((item, idx) =>
@@ -354,6 +349,12 @@ export class Download extends Component<PropsType, StateType> {
 											) : (
 												<p>No consultations found matching supplied filters.</p>
 											)}
+											<Pagination
+												onChangePage={this.changePage}
+												itemsPerPage={itemsPerPage}
+												consultationCount={consultationsToShow.length}
+												currentPage={pageNumber}
+											/>
 										</div>
 									</div>
 								</div>

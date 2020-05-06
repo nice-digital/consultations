@@ -17,6 +17,14 @@
       margin: 0;
       text-transform: capitalize;
 
+      &[data-pager="previous"]:before {
+        content: "< ";
+      }
+
+      &[data-pager="next"]:after {
+        content: " >";
+      }
+
       &:hover {
         border: 1px solid #eee;
         background: none;
