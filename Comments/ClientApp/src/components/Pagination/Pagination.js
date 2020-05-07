@@ -5,6 +5,7 @@ import { Pager } from "../Pager/Pager";
 
 type PaginationProps = {
 	onChangePage: Function,
+	onChangeAmount: Function,
 	itemsPerPage: number,
 	consultationCount: number,
 	currentPage: number
@@ -31,6 +32,7 @@ export const Pagination = (props: PaginationProps) => {
 
 	const {
 		onChangePage,
+		onChangeAmount,
 		itemsPerPage,
 		consultationCount,
 		currentPage,
@@ -42,37 +44,48 @@ export const Pagination = (props: PaginationProps) => {
 	const pageListArray = generatePageList(pageCount, currentPage);
 
 	return (
-		<nav>
-			{paginationNeeded &&
-				<ul className="pagination">
-					{currentPage > 1 &&
-						<Pager active={false} label="previous" type="normal" onChangePage={onChangePage} />
-					}
+		<div className="flex flex--align-center">
+			<div className="mr--e">
+				<label htmlFor="itemsPerPage" className="bold mr--c">Show</label>
+				<select id="itemsPerPage" name="itemsPerPage" onChange={onChangeAmount}>
+					<option value="25" selected="selected">25</option>
+					<option value="50">50</option>
+					<option value="all">All</option>
+				</select>
+			</div>
 
-					{pageListArray.map((page, index) => {
-						let showFirstLink = (index === 0) && (page > 1) && pageCount > 5,
-							showLastLink = (index === (pageListArray.length - 1)) && (page < pageCount) && pageCount > 5;
+			<nav>
+				{paginationNeeded &&
+					<ul className="pagination">
+						{currentPage > 1 &&
+							<Pager active={false} label="previous" type="normal" onChangePage={onChangePage} />
+						}
 
-						return (
-							<Fragment key={page}>
-								{showFirstLink &&
-									<Pager active={false} label="1" type="first" onChangePage={onChangePage} />
-								}
+						{pageListArray.map((page, index) => {
+							let showFirstLink = (index === 0) && (page > 1) && pageCount > 5,
+								showLastLink = (index === (pageListArray.length - 1)) && (page < pageCount) && pageCount > 5;
 
-								<Pager active={page === currentPage} label={page} type="normal" onChangePage={onChangePage} />
+							return (
+								<Fragment key={page}>
+									{showFirstLink &&
+										<Pager active={false} label="1" type="first" onChangePage={onChangePage} />
+									}
 
-								{showLastLink &&
-									<Pager active={false} label={pageCount} type="last" onChangePage={onChangePage} />
-								}
-							</Fragment>
-						);
-					})}
+									<Pager active={page === currentPage} label={page} type="normal" onChangePage={onChangePage} />
 
-					{currentPage < pageCount &&
-						<Pager active={false} label="next" type="normal" onChangePage={onChangePage} />
-					}
-				</ul>
-			}
-		</nav>
+									{showLastLink &&
+										<Pager active={false} label={pageCount} type="last" onChangePage={onChangePage} />
+									}
+								</Fragment>
+							);
+						})}
+
+						{currentPage < pageCount &&
+							<Pager active={false} label="next" type="normal" onChangePage={onChangePage} />
+						}
+					</ul>
+				}
+			</nav>
+		</div>
 	);
 };
