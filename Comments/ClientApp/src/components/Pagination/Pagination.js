@@ -5,6 +5,7 @@ import { Pager } from "../Pager/Pager";
 
 type PaginationProps = {
 	onChangePage: Function,
+	onChangeAmount: Function,
 	itemsPerPage: number,
 	consultationCount: number,
 	currentPage: number
@@ -12,14 +13,18 @@ type PaginationProps = {
 
 export const Pagination = (props: PaginationProps) => {
 	let generatePageList = (pageCount, currentPage) => {
-		let pageListArray = [{pageNumber: currentPage - 1, active: false}, {pageNumber: currentPage, active: true}, {pageNumber: currentPage + 1, active: false}];
+		let pageListArray = [currentPage - 1, currentPage, currentPage + 1];
 
-		if (currentPage === 1) {
-			pageListArray = [{pageNumber: currentPage, active: true}, {pageNumber: currentPage + 1, active: false}, {pageNumber: currentPage + 2, active: false}];
+		if (currentPage <= 2) {
+			pageListArray = [1, 2, 3, 4];
 		}
 
-		if (currentPage === pageCount) {
-			pageListArray = [{pageNumber: currentPage - 2, active: false}, {pageNumber: currentPage - 1, active: false}, {pageNumber: currentPage, active: true}];
+		if (currentPage >= (pageCount - 1)) {
+			pageListArray = [pageCount - 3, pageCount - 2, pageCount - 1, pageCount];
+		}
+
+		if (pageCount <= 5) {
+			pageListArray = Array.from({ length: pageCount }, (x, y) => y + 1);
 		}
 
 		return pageListArray;
@@ -27,6 +32,7 @@ export const Pagination = (props: PaginationProps) => {
 
 	const {
 		onChangePage,
+		onChangeAmount,
 		itemsPerPage,
 		consultationCount,
 		currentPage,
@@ -35,41 +41,51 @@ export const Pagination = (props: PaginationProps) => {
 	const paginationNeeded = consultationCount > itemsPerPage,
 		pageCount = Math.ceil(consultationCount / itemsPerPage);
 
-	// should this set empty or function
 	const pageListArray = generatePageList(pageCount, currentPage);
 
 	return (
-		<nav>
-			{paginationNeeded &&
-				<ul className="pagination">
-					{currentPage > 1 &&
-						<Pager active={false} label="previous" onChangePage={onChangePage} />
-					}
+		<div className="flex flex--align-center">
+			<div className="mr--e">
+				<label htmlFor="itemsPerPage" className="bold mr--c">Show</label>
+				<select id="itemsPerPage" name="itemsPerPage" onChange={onChangeAmount}>
+					<option value="25" selected="selected">25</option>
+					<option value="50">50</option>
+					<option value="all">All</option>
+				</select>
+			</div>
 
-					{pageListArray.map((page, index) => {
-						let showFirstLink = (index === 0) && (page.pageNumber > 1),
-							showLastLink = (index === (pageListArray.length - 1)) && (page.pageNumber < pageCount);
+			<nav>
+				{paginationNeeded &&
+					<ul className="pagination">
+						{currentPage > 1 &&
+							<Pager active={false} label="previous" type="normal" onChangePage={onChangePage} />
+						}
 
-						return (
-							<Fragment key={page.pageNumber}>
-								{showFirstLink &&
-									<Pager active={false} label="1" type="first" onChangePage={onChangePage} />
-								}
+						{pageListArray.map((page, index) => {
+							let showFirstLink = (index === 0) && (page > 1) && pageCount > 5,
+								showLastLink = (index === (pageListArray.length - 1)) && (page < pageCount) && pageCount > 5;
 
-								<Pager active={page.active} label={page.pageNumber} type="normal" onChangePage={onChangePage} />
+							return (
+								<Fragment key={page}>
+									{showFirstLink &&
+										<Pager active={false} label="1" type="first" onChangePage={onChangePage} />
+									}
 
-								{showLastLink &&
-									<Pager active={false} label={pageCount} type="last" onChangePage={onChangePage} />
-								}
-							</Fragment>
-						);
-					})}
+									<Pager active={page === currentPage} label={page} type="normal" onChangePage={onChangePage} />
 
-					{currentPage < pageCount &&
-						<Pager active={false} label="next" type="normal" onChangePage={onChangePage} />
-					}
-				</ul>
-			}
-		</nav>
+									{showLastLink &&
+										<Pager active={false} label={pageCount} type="last" onChangePage={onChangePage} />
+									}
+								</Fragment>
+							);
+						})}
+
+						{currentPage < pageCount &&
+							<Pager active={false} label="next" type="normal" onChangePage={onChangePage} />
+						}
+					</ul>
+				}
+			</nav>
+		</div>
 	);
 };

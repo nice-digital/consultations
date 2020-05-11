@@ -91,7 +91,7 @@ export class Download extends Component<PropsType, StateType> {
 			search: this.props.location.search,
 			keywordToFilterBy: null,
 			pageNumber: 1,
-			itemsPerPage: 30,
+			itemsPerPage: 25,
 		};
 
 		if (isAuthorised){
@@ -121,7 +121,7 @@ export class Download extends Component<PropsType, StateType> {
 					search: this.props.location.search,
 					keywordToFilterBy: null,
 					pageNumber: 1,
-					itemsPerPage: 30,
+					itemsPerPage: 25,
 				};
 			}
 		}
@@ -242,6 +242,19 @@ export class Download extends Component<PropsType, StateType> {
 		return paginationPositions;
 	}
 
+	changeAmount = (e) => {
+		let itemsPerPage = e.target.value;
+
+		if (itemsPerPage === "all") {
+			itemsPerPage = 5000003;
+		}
+
+		itemsPerPage = parseInt(itemsPerPage, 10);
+
+		this.setState({ itemsPerPage });
+		//this.setState({ pageNumber: 1 });
+	}
+
 	changePage = (e) => {
 		e.preventDefault();
 
@@ -336,12 +349,7 @@ export class Download extends Component<PropsType, StateType> {
 												isLoading={this.state.loading}
 												onRemoveFilter={this.removeFilter}
 											/>
-											<Pagination
-												onChangePage={this.changePage}
-												itemsPerPage={itemsPerPage}
-												consultationCount={consultationsToShow.length}
-												currentPage={pageNumber}
-											/>
+
 											{consultationsToShow.length > 0 ? (
 												<ul className="list--unstyled">
 													{consultationsPaginated.map((item, idx) =>
@@ -354,6 +362,13 @@ export class Download extends Component<PropsType, StateType> {
 											) : (
 												<p>No consultations found matching supplied filters.</p>
 											)}
+											<Pagination
+												onChangePage={this.changePage}
+												onChangeAmount={this.changeAmount}
+												itemsPerPage={itemsPerPage}
+												consultationCount={consultationsToShow.length}
+												currentPage={pageNumber}
+											/>
 										</div>
 									</div>
 								</div>
