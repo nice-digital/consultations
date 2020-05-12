@@ -10,3 +10,5 @@ Feature: The list of consultations is reduced when filter is completed
 		Given I expect the result list count contains "Showing 1 to 25 of 227 consultations"
 		When I add the indev GID "This is for testing unsaved comments" to the filter
 		Then I expect the result list count contains "Showing 1 to 2 of 2 consultations"
+		When I click on the cancel filter
+		Then I expect the result list count contains "Showing 1 to 25 of 227 consultations"
