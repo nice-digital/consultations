@@ -3,13 +3,11 @@ var path = require("path");
 exports.config = {
 	// debug: true,
 	// execArgv: ['--debug=127.0.0.1:9229'],
-    // Use selenium standalone server so we don't have spawn a separate server
-    services: ["selenium-standalone"],
-    seleniumLogs: "./logs",
+	// Use selenium standalone server so we don't have spawn a separate server
+	services: ["selenium-standalone"],
+	seleniumLogs: "./logs",
 
-    specs: [
-        "./src/features/**/*.feature"
-    ],
+	specs: ["./src/features/**/*.feature"],
 	exclude: [
 		// "./src/features/**/unsavedCommentReviewPage.feature",
 		// "./src/features/**/answerQuestion.feature",
@@ -22,41 +20,41 @@ exports.config = {
 		// "./src/features/**/commentOnSection.feature"
 	],
 
-    // Assume user has Chrome and Firefox installed.
-    capabilities: [
-        {
-            browserName: "chrome"
-        },
-       // {
-         //   browserName: "firefox"
-        //}
-    ],
+	// Assume user has Chrome and Firefox installed.
+	capabilities: [
+		{
+			browserName: "chrome",
+		},
+		// {
+		//   browserName: "firefox"
+		//}
+	],
 
 	logLevel: "verbose",
 	// Change this to verbose if you want more detailed logging in the terminal
-    coloredLogs: true,
-    screenshotPath: "./errorShots/",
-    baseUrl: "https://test.nice.org.uk/consultations/",
-    reporters: ["spec"],
+	coloredLogs: true,
+	screenshotPath: "./errorShots/",
+	baseUrl: "https://test.nice.org.uk/consultations/",
+	reporters: ["spec"],
 
-    // Use BDD with Cucumber
-    framework: "cucumber",
-    cucumberOpts: {
-        compiler: ["js:babel-register"], // Babel so we can use ES6 in tests
-        require: [
-            "./src/steps/given.js",
-            "./src/steps/when.js",
-            "./src/steps/then.js"
-        ],
-        tagExpression: "not @pending", // See https://docs.cucumber.io/tag-expressions/
-        timeout: 30000,
-    },
+	// Use BDD with Cucumber
+	framework: "cucumber",
+	cucumberOpts: {
+		compiler: ["js:babel-register"], // Babel so we can use ES6 in tests
+		require: [
+			"./src/steps/given.js",
+			"./src/steps/when.js",
+			"./src/steps/then.js",
+		],
+		tagExpression: "not @pending", // See https://docs.cucumber.io/tag-expressions/
+		timeout: 30000,
+	},
 
-    // Set up global asssertion libraries
-    before: function before() {
-        const chai = require("chai");
-        global.expect = chai.expect;
-        global.assert = chai.assert;
-        global.should = chai.should();
-	}
-}
+	// Set up global asssertion libraries
+	before: function before() {
+		const chai = require("chai");
+		global.expect = chai.expect;
+		global.assert = chai.assert;
+		global.should = chai.should();
+	},
+};

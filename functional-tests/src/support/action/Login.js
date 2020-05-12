@@ -4,10 +4,9 @@ import waitFor from "@nice-digital/wdio-cucumber-steps/lib/support/action/waitFo
 import selectors from "../selectors";
 
 export const Login = (username, password) => {
-	browser.refresh();
+	// browser.refresh();
 	idamGlobalnavLogin(username, password);
 	browser.pause(2000);
 	waitForVisible("[data-qa-sel='changeable-page-header']");
 	browser.pause(2000);
-}
-
+};
