@@ -28,11 +28,17 @@ import { Login } from "../support/action/Login";
 import { sidebarLogin } from "../support/action/sidebarLogin";
 import { openQuestionPanel } from "../support/action/openQuestionPanel";
 import { scrollDeleteButtonIntoView } from "../support/action/scrollDeleteButtonIntoView";
+import { selectValueFromDropdown } from "../support/action/selectFromDropdownByIndex";
 
 // E.g. When I click on text "Title here" in ".ancestor"
 When(/^I add the comment "([^"]*)"$/, enterComment);
 
 When(/^I add the indev GID "([^"]*)" to the filter$/, enterGIDToFilter);
+
+When(
+	/^I change the number of results on the page by selecting index "([^"]*)"$/,
+	selectValueFromDropdown
+);
 
 When(/^I add the question answer "([^"]*)"$/, enterQuestionAnswer);
 
