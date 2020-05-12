@@ -10,3 +10,5 @@ Feature: The list of consultations is reduced when filter is completed
 		Given I expect the result list count contains "Showing 1 to 25 of 227 consultations"
 		When I add the indev GID "GID-TA10269" to the filter
 		Then I expect the result list count contains "Showing 1 to 1 of 1 consultation"
+		When I click on the cancel filter
+		Then I expect the result list count contains "Showing 1 to 25 of 227 consultations"

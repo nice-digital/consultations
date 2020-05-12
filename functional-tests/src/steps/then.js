@@ -16,6 +16,7 @@ import validateSubmitResponseButtonInactive, {
 	validateSubmitResponseValidationMessage,
 } from "../support/check/validateSubmitResponseButton";
 import validateDownloadPageResultCount from "../support/check/validateAdminDownloadPage";
+import clickCancelFilter from "../support/action/clickCancelFilter";
 // import validateCommentSaved from "../support/check/validateCommentSaved";
 
 /*Then(
@@ -67,6 +68,8 @@ Then(
 );
 
 Then(/^I click delete comment$/, deleteOneComment);
+
+Then(/^I click on the cancel filter$/, clickCancelFilter);
 
 Then(
 	/^I expect the result list count contains "([^"]*)"$/,

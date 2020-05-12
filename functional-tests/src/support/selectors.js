@@ -40,5 +40,6 @@ export default {
 	adminDownloadPage: {
 		filterByGID: toDataQASelAttr("FilerByTitleOrGID"),
 		pageResultCount: toDataQASelAttr("admin-download-page-count"),
+		cancelFilter: toDataQASelAttr("filter-keyword"),
 	},
 };
