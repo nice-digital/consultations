@@ -6,7 +6,7 @@ import Helmet from "react-helmet";
 import Cookies from "js-cookie";
 //import stringifyObject from "stringify-object";
 
-import { queryStringToObject, canUseDOM } from "../../helpers/utils";
+import { appendQueryParameter, removeQueryParameter, queryStringToObject, canUseDOM } from "../../helpers/utils";
 import { UserContext } from "../../context/UserContext";
 import { LoginBanner } from "../LoginBanner/LoginBanner";
 import { Header } from "../Header/Header";
@@ -69,6 +69,12 @@ export class Download extends Component<PropsType, StateType> {
 
 		const querystring = this.props.location.search;
 
+		const querystringObject = queryStringToObject(querystring);
+
+		const pageNumber = "page" in querystringObject ? querystringObject.page : 1;
+
+		const itemsPerPage = "amount" in querystringObject ? querystringObject.amount : 25;
+
 		const isAuthorised = ((preloadedData && preloadedData.isAuthorised) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["isAuthorised"]));
 
 		this.state = {
@@ -90,12 +96,11 @@ export class Download extends Component<PropsType, StateType> {
 			indevReturnPath: "",
 			search: this.props.location.search,
 			keywordToFilterBy: null,
-			pageNumber: 1,
-			itemsPerPage: 25,
+			pageNumber: pageNumber,
+			itemsPerPage: itemsPerPage,
 		};
 
-		if (isAuthorised){
-
+		if (isAuthorised) {
 			const preloadedConsultations = preload(
 				this.props.staticContext,
 				"consultationList",
@@ -120,8 +125,8 @@ export class Download extends Component<PropsType, StateType> {
 					indevReturnPath: preloadedConsultations.indevBasePath,
 					search: this.props.location.search,
 					keywordToFilterBy: null,
-					pageNumber: 1,
-					itemsPerPage: 25,
+					pageNumber: pageNumber,
+					itemsPerPage: itemsPerPage,
 				};
 			}
 		}
@@ -134,6 +139,7 @@ export class Download extends Component<PropsType, StateType> {
 			path,
 			search: this.props.history.location.search,
 		});
+
 		load("consultationList", undefined, [], Object.assign({relativeURL: this.props.match.url}, queryStringToObject(querystring)))
 			.then(response => {
 				this.setState({
@@ -154,6 +160,16 @@ export class Download extends Component<PropsType, StateType> {
 			});
 	};
 
+	stripQueries = (path, queries) => {
+		let strippedPath = path;
+
+		strippedPath = queries.map((query) => {
+			return removeQueryParameter(strippedPath, query);
+		});
+
+		return strippedPath;
+	}
+
 	unlisten = () => {};
 
 	componentWillUnmount(){
@@ -166,9 +182,14 @@ export class Download extends Component<PropsType, StateType> {
 		}
 		this.unlisten = this.props.history.listen(() => {
 
-			const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;
+			let path = this.props.basename + this.props.location.pathname + this.props.history.location.search,
+				paginationQueries = ["page", "amount"];
 
-			if (!this.state.path || path !== this.state.path) {
+			path = this.stripQueries(path, paginationQueries);
+
+			const statePath = this.stripQueries(this.state.path, paginationQueries);
+
+			if (!path || path !== statePath) {
 				this.loadDataAndUpdateState();
 			}
 		});
@@ -234,31 +255,47 @@ export class Download extends Component<PropsType, StateType> {
 	}
 
 	getPaginateStartAndFinishPosition = (consultationsCount, pageNumber, itemsPerPage) => {
-		let paginationPositions = {};
+		let paginationPositions = {
+			start: 0,
+			finish: consultationsCount,
+		};
 
-		paginationPositions.start = (pageNumber - 1) * itemsPerPage;
-		paginationPositions.finish = (paginationPositions.start + itemsPerPage) <= consultationsCount ? (paginationPositions.start + itemsPerPage) : consultationsCount;
+		if (!isNaN(itemsPerPage)) {
+			paginationPositions.start = (pageNumber - 1) * itemsPerPage;
+			paginationPositions.finish = (paginationPositions.start + itemsPerPage) <= consultationsCount ? (paginationPositions.start + itemsPerPage) : consultationsCount;
+		}
 
 		return paginationPositions;
 	}
 
 	changeAmount = (e) => {
-		let itemsPerPage = e.target.value;
+		let itemsPerPage = e.target.value,
+			pastPageRange = false,
+			pageNumber = this.state.pageNumber,
+			path = this.stripQueries(this.state.path, ["amount", "page"]);
 
-		if (itemsPerPage === "all") {
-			itemsPerPage = 5000003;
+		if (!isNaN(itemsPerPage)) {
+			itemsPerPage = parseInt(itemsPerPage, 10);
+			pastPageRange = (this.state.pageNumber * itemsPerPage) > (this.state.consultationListData.consultations.filter(consultation => consultation.show).length);
 		}
 
-		itemsPerPage = parseInt(itemsPerPage, 10);
+		if ((pastPageRange) || (itemsPerPage === "all")) {
+			pageNumber = 1;
+		}
 
-		this.setState({ itemsPerPage });
-		//this.setState({ pageNumber: 1 });
+		path = appendQueryParameter(path, "amount", itemsPerPage.toString());
+		path = appendQueryParameter(path, "page", pageNumber);
+
+		this.setState({ itemsPerPage, path, pageNumber }, () => {
+			this.props.history.push(path);
+		});
 	}
 
 	changePage = (e) => {
 		e.preventDefault();
 
-		let pageNumber = e.target.getAttribute("data-pager");
+		let pageNumber = e.target.getAttribute("data-pager"),
+			path = removeQueryParameter(this.state.path, "page");
 
 		if (pageNumber === "previous") {
 			pageNumber = this.state.pageNumber - 1;
@@ -268,8 +305,11 @@ export class Download extends Component<PropsType, StateType> {
 		}
 
 		pageNumber = parseInt(pageNumber, 10);
+		path = appendQueryParameter(path, "page", pageNumber.toString());
 
-		this.setState({ pageNumber });
+		this.setState({ pageNumber, path }, () => {
+			this.props.history.push(path);
+		});
 	}
 
 	render() {
