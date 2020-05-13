@@ -56,7 +56,7 @@ export const Pagination = (props: PaginationProps) => {
 
 			{paginationNeeded &&
 				<nav>
-					<ul className="pagination">
+					<ul className="pagination" data-qa-sel="pagination-section">
 						{currentPage > 1 && (
 							<Pager
 								active={false}

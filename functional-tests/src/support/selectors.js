@@ -42,5 +42,6 @@ export default {
 		pageResultCount: toDataQASelAttr("admin-download-page-count"),
 		cancelFilter: toDataQASelAttr("filter-keyword"),
 		numberResultsOnPage: toDataQASelAttr("result-on-the-page-index"),
+		paginationSection: toDataQASelAttr("pagination-section"),
 	},
 };
