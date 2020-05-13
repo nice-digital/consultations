@@ -31,6 +31,10 @@ jq \
     --arg webAppDomain "$WEBAPP_DOMAIN" \
     --arg encryptionKey "$ENCRYPTION_KEY" \
     --arg encryptionIV "$ENCRYPTION_IV" \
+    --arg adminRole "$ADMINROLE" \
+    --arg teamRoles1 "$TEAMROLES1" \
+    --arg teamRoles2 "$TEAMROLES2" \
+    --arg teamRoles3 "$TEAMROLES3" \
     '
     .ConnectionStrings.DefaultConnection = $defaultConnection |
     .Logging.LogFilePath = $loggingLogFilePath |
@@ -56,7 +60,11 @@ jq \
     .WebAppConfiguration.AuthorisationServiceUri = $webAppAuthorisationServiceUri |
     .WebAppConfiguration.Domain = $webAppDomain |
     .Encryption.Key = $encryptionKey |
-    .Encryption.IV = $encryptionIV
+    .Encryption.IV = $encryptionIV |
+    .ConsultationList.DownloadRoles.AdminRoles |= .+ [$adminRole] |
+    .ConsultationList.DownloadRoles.TeamRoles |= .+ [$teamRoles1] |
+    .ConsultationList.DownloadRoles.TeamRoles |= .+ [$teamRoles2] |
+    .ConsultationList.DownloadRoles.TeamRoles |= .+ [$teamRoles3]
     '\
     appsettings.json > _appsettings.json \
     && mv _appsettings.json appsettings.json

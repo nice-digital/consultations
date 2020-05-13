@@ -1,19 +1,29 @@
 import "@nice-digital/wdio-cucumber-steps/lib/then";
 import { Then } from "cucumber";
 
-import validateCommentBox, { validateCommentBoxText, validateCommentBoxTitle, validateCommentSaved, validateFirstCommentBox, validateSecondCommentBox, validateThirdCommentBox, validateCommentBoxInactive, validateAllCommentBoxesInactive }  from '../support/check/validateCommentBox';
-import deleteOneComment from '../support/action/deleteOneComment';
-import validateSubmitResponseButtonInactive, { validateSubmitResponseValidationMessage } from '../support/check/validateSubmitResponseButton';
+import validateCommentBox, {
+	validateCommentBoxText,
+	validateCommentBoxTitle,
+	validateCommentSaved,
+	validateFirstCommentBox,
+	validateSecondCommentBox,
+	validateThirdCommentBox,
+	validateCommentBoxInactive,
+	validateAllCommentBoxesInactive,
+} from "../support/check/validateCommentBox";
+import deleteOneComment from "../support/action/deleteOneComment";
+import validateSubmitResponseButtonInactive, {
+	validateSubmitResponseValidationMessage,
+} from "../support/check/validateSubmitResponseButton";
+import validateDownloadPageResultCount from "../support/check/validateAdminDownloadPage";
+import clickCancelFilter from "../support/action/clickCancelFilter";
 // import validateCommentSaved from "../support/check/validateCommentSaved";
 
 /*Then(
     /^I expect that (button|element) "([^"]*)?"( not)* matches the text "([^"]*)?"$/,
     checkContainsText
 );*/
-Then(
-	/^I expect the comment box contains "([^"]*)"$/,
-	validateCommentBox
-);
+Then(/^I expect the comment box contains "([^"]*)"$/, validateCommentBox);
 
 Then(
 	/^I expect the first comment box contains "([^"]*)"$/,
@@ -33,17 +43,14 @@ Then(
 Then(
 	/^I expect the comment box title contains "([^"]*)"$/,
 	validateCommentBoxTitle
-)
+);
 
 Then(
 	/^I expect the comment save button displays "([^"]*)"$/,
 	validateCommentSaved
 );
 
-Then(
-	/^I expect the comment box is inactive$/,
-	validateCommentBoxInactive
-);
+Then(/^I expect the comment box is inactive$/, validateCommentBoxInactive);
 
 Then(
 	/^I expect all comment boxes are inactive$/,
@@ -60,7 +67,11 @@ Then(
 	validateSubmitResponseValidationMessage
 );
 
+Then(/^I click delete comment$/, deleteOneComment);
+
+Then(/^I click on the cancel filter$/, clickCancelFilter);
+
 Then(
-	/^I click delete comment$/,
-	deleteOneComment
+	/^I expect the result list count contains "([^"]*)"$/,
+	validateDownloadPageResultCount
 );
