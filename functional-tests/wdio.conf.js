@@ -7,7 +7,7 @@ exports.config = {
 	services: ["selenium-standalone"],
 	seleniumLogs: "./logs",
 
-	specs: ["./src/features/**/*.feature"],
+	specs: ["./src/features/**/filterAdminPageByTitle.feature"],
 	exclude: [
 		// "./src/features/**/unsavedCommentReviewPage.feature",
 		// "./src/features/**/answerQuestion.feature",
@@ -34,7 +34,7 @@ exports.config = {
 	// Change this to verbose if you want more detailed logging in the terminal
 	coloredLogs: true,
 	screenshotPath: "./errorShots/",
-	baseUrl: "https://test.nice.org.uk/consultations/",
+	baseUrl: "https://niceorg/consultations/",
 	reporters: ["spec"],
 
 	// Use BDD with Cucumber
