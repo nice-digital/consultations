@@ -15,7 +15,9 @@ import deleteOneComment from "../support/action/deleteOneComment";
 import validateSubmitResponseButtonInactive, {
 	validateSubmitResponseValidationMessage,
 } from "../support/check/validateSubmitResponseButton";
-import validateDownloadPageResultCount from "../support/check/validateAdminDownloadPage";
+import validateDownloadPageResultCount, {
+	validateDownloadPageAllResults,
+} from "../support/check/validateAdminDownloadPage";
 import clickCancelFilter from "../support/action/clickCancelFilter";
 // import validateCommentSaved from "../support/check/validateCommentSaved";
 
@@ -75,3 +77,5 @@ Then(
 	/^I expect the result list count contains "([^"]*)"$/,
 	validateDownloadPageResultCount
 );
+
+Then(/^I expect all results are displayed$/, validateDownloadPageAllResults);
