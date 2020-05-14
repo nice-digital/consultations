@@ -17,4 +17,14 @@ export const validateDownloadPageAllResults = () => {
 	pause(1000);
 };
 
+export const validateFirstLinkInPagination = (linkText) => {
+	waitForVisible(selectors.adminDownloadPage.firstPager);
+	checkContainsText(
+		"selector",
+		selectors.adminDownloadPage.firstPager,
+		linkText
+	);
+	pause(1000);
+};
+
 export default validateDownloadPageResultCount;

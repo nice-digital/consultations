@@ -62,6 +62,7 @@ export const Pagination = (props: PaginationProps) => {
 								active={false}
 								label="previous"
 								type="normal"
+								data-qa-sel="pagination-previous"
 								onChangePage={onChangePage}
 							/>
 						)}
@@ -80,6 +81,7 @@ export const Pagination = (props: PaginationProps) => {
 											active={false}
 											label="1"
 											type="first"
+											data-qa-sel="pagination-first"
 											onChangePage={onChangePage}
 										/>
 									)}
@@ -96,6 +98,7 @@ export const Pagination = (props: PaginationProps) => {
 											active={false}
 											label={pageCount}
 											type="last"
+											data-qa-sel="pagination-last"
 											onChangePage={onChangePage}
 										/>
 									)}
@@ -106,6 +109,7 @@ export const Pagination = (props: PaginationProps) => {
 						{currentPage < pageCount && (
 							<Pager
 								active={false}
+								data-qa-sel="pagination-next"
 								label="next"
 								type="normal"
 								onChangePage={onChangePage}

@@ -1,7 +1,10 @@
 const toDataQASelAttr = (attrValue) => `[data-qa-sel='${attrValue}']`;
 const toNthChildAttr = (attrValue) => `.CommentBox:nth-child(${attrValue})`;
+const onlyToNthChildAttr = (attrValue) => `:nth-child(${attrValue})`;
 const toChildAndQASel = (childIndex, attrValue) =>
 	toNthChildAttr(childIndex) + " " + toDataQASelAttr(attrValue);
+const toQAselAndChild = (attrValue, childIndex) =>
+	toDataQASelAttr(attrValue) + " > li" + onlyToNthChildAttr(childIndex) + " a";
 export default {
 	documentPage: {
 		pageHeader: ".page-header",
@@ -43,5 +46,8 @@ export default {
 		cancelFilter: toDataQASelAttr("filter-keyword"),
 		numberResultsOnPage: toDataQASelAttr("result-on-the-page-index"),
 		paginationSection: toDataQASelAttr("pagination-section"),
+		firstPager: toQAselAndChild("pagination-section", 1),
+		secondPager: toQAselAndChild("pagination-section", 2),
+		nextPager: toQAselAndChild("pagination-section", 8),
 	},
 };
