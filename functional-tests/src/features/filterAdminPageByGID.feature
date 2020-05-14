@@ -7,8 +7,8 @@ Feature: Admin users can search by using the InDev GID ID
 		When I log into accounts with username "IDAM_EMAIL1" and password "IDAM_PASSWORD"
 
 	Scenario: User can search for a consultation by using its InDev GID ID
-		Given I expect the result list count contains "Showing 1 to 25 of 227 consultations"
+		Given I expect the result list count contains "Showing 1 to 25"
 		When I add the indev GID "GID-TA10269" to the filter
 		Then I expect the result list count contains "Showing 1 to 1 of 1 consultation"
 		When I click on the cancel filter
-		Then I expect the result list count contains "Showing 1 to 25 of 227 consultations"
+		Then I expect the result list count contains "Showing 1 to 25"
