@@ -6,7 +6,7 @@ import { Pager } from "../Pager/Pager";
 type PaginationProps = {
 	onChangePage: Function,
 	onChangeAmount: Function,
-	itemsPerPage: number,
+	itemsPerPage: number | string,
 	consultationCount: number,
 	currentPage: number,
 };
@@ -38,7 +38,7 @@ export const Pagination = (props: PaginationProps) => {
 		currentPage,
 	} = props;
 
-	const paginationNeeded = consultationCount > itemsPerPage,
+	const paginationNeeded = typeof itemsPerPage === "string" ? false : consultationCount > itemsPerPage,
 		pageCount = Math.ceil(consultationCount / itemsPerPage);
 
 	const pageListArray = generatePageList(pageCount, currentPage);
@@ -46,25 +46,16 @@ export const Pagination = (props: PaginationProps) => {
 	return (
 		<div className="flex flex--align-center">
 			<div className="mr--e" data-qa-sel="number-of-results-on-page">
-				<label htmlFor="itemsPerPage" className="bold mr--c">
-					Show
-				</label>
-				<select
-					id="itemsPerPage"
-					name="itemsPerPage"
-					onChange={onChangeAmount}
-					data-qa-sel="result-on-the-page-index"
-				>
-					<option value="25" selected="selected">
-						25
-					</option>
+				<label htmlFor="itemsPerPage" className="bold mr--c">Show</label>
+				<select id="itemsPerPage" name="itemsPerPage" onChange={onChangeAmount} data-qa-sel="result-on-the-page-index" value={itemsPerPage}>
+					<option value="25">25</option>
 					<option value="50">50</option>
 					<option value="all">All</option>
 				</select>
 			</div>
 
-			<nav>
-				{paginationNeeded && (
+			{paginationNeeded &&
+				<nav>
 					<ul className="pagination" data-qa-sel="pagination-section">
 						{currentPage > 1 && (
 							<Pager
@@ -125,8 +116,8 @@ export const Pagination = (props: PaginationProps) => {
 							/>
 						)}
 					</ul>
-				)}
-			</nav>
+				</nav>
+			}
 		</div>
 	);
 };
