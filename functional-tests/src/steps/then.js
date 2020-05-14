@@ -17,8 +17,14 @@ import validateSubmitResponseButtonInactive, {
 } from "../support/check/validateSubmitResponseButton";
 import validateDownloadPageResultCount, {
 	validateDownloadPageAllResults,
+	validateFirstLinkInPagination,
 } from "../support/check/validateAdminDownloadPage";
 import clickCancelFilter from "../support/action/clickCancelFilter";
+import clickPaginationOption, {
+	clickSecondPaginationOption,
+	clickNextPagination,
+	clickPreviousPagination,
+} from "../support/action/clickPaginationOption";
 // import validateCommentSaved from "../support/check/validateCommentSaved";
 
 /*Then(
@@ -73,9 +79,20 @@ Then(/^I click delete comment$/, deleteOneComment);
 
 Then(/^I click on the cancel filter$/, clickCancelFilter);
 
+Then(/^I click the second pagination option$/, clickSecondPaginationOption);
+
+Then(/^I click the previous pagination option$/, clickPreviousPagination);
+
+Then(/^I click the next pagination option$/, clickNextPagination);
+
 Then(
 	/^I expect the result list count contains "([^"]*)"$/,
 	validateDownloadPageResultCount
+);
+
+Then(
+	/^I expect the first pagination option is "([^"]*)"$/,
+	validateFirstLinkInPagination
 );
 
 Then(/^I expect all results are displayed$/, validateDownloadPageAllResults);
