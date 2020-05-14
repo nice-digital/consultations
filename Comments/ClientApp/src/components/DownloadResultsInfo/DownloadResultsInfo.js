@@ -31,13 +31,13 @@ export class DownloadResultsInfo extends Component<PropsType, StateType> {
 		//TODO: "Showing Open consultations" etc.
 		//const appliedFilters = props.appliedFilters
 		const paginationExtract =
-			props.consultationCount > 0
+			props.consultationCount > 1
 				? `${props.paginationPositions.start + 1} to ${
 					props.paginationPositions.finish
-				  } of`
+				  } of `
 				: "";
 
-		return `Showing ${paginationExtract} ${
+		return `Showing ${paginationExtract}${
 			props.consultationCount
 		} consultation${props.consultationCount === 1 ? "" : "s"}`;
 	};

@@ -38,7 +38,7 @@ export const Pagination = (props: PaginationProps) => {
 		currentPage,
 	} = props;
 
-	const paginationNeeded = typeof paginationNeeded === "string" ? false : consultationCount > itemsPerPage,
+	const paginationNeeded = typeof itemsPerPage === "string" ? false : consultationCount > itemsPerPage,
 		pageCount = Math.ceil(consultationCount / itemsPerPage);
 
 	const pageListArray = generatePageList(pageCount, currentPage);
