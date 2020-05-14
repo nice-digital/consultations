@@ -85,4 +85,27 @@ namespace Comments.Test.IntegrationTests.API.ConsultationList
 			responseString.ShouldMatchApproved();
 		}
 	}
+
+	public class ConsultationListAuthWithNoRolesTests : TestBase
+	{
+		public ConsultationListAuthWithNoRolesTests() : base(TestUserType.Authenticated, Feed.ConsultationCommentsListMultiple, bypassAuthentication: false, addRoleClaim: false)
+		{
+			AppSettings.ConsultationListConfig = TestAppSettings.GetConsultationListConfig();
+			AppSettings.Feed = TestAppSettings.GetFeedConfig();
+		}
+
+		[Fact]
+		public async Task Get_Consultation_Feed_Returns_Populated_Feed_For_Authenticated_User()
+		{
+			//Arrange
+
+			// Act
+			var response = await _client.GetAsync("/consultations/api/ConsultationList?Status=Open");
+			response.EnsureSuccessStatusCode();
+			var responseString = await response.Content.ReadAsStringAsync();
+
+			//Assert
+			responseString.ShouldMatchApproved();
+		}
+	}
 }

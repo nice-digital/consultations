@@ -96,8 +96,8 @@ namespace Comments.Test.Infrastructure
 		    _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
 		}
 
-	    public TestBase(TestUserType testUserType, Feed feed, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null, bool bypassAuthentication = true)
-		    : this(false, testUserType, true, submittedCommentsAndAnswerCounts, bypassAuthentication)
+	    public TestBase(TestUserType testUserType, Feed feed, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null, bool bypassAuthentication = true, bool addRoleClaim = true)
+		    : this(false, testUserType, true, submittedCommentsAndAnswerCounts, bypassAuthentication, addRoleClaim)
 	    {
 			FeedToUse = feed;
 		}
@@ -110,7 +110,7 @@ namespace Comments.Test.Infrastructure
 		/// <param name="useFakeConsultationService"></param>
 		/// <param name="submittedCommentsAndAnswerCounts"></param>
 		/// <param name="bypassAuthentication"></param>
-		public TestBase(bool useRealSubmitService = false, TestUserType testUserType = TestUserType.Authenticated, bool useFakeConsultationService = false, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null, bool bypassAuthentication = true)
+		public TestBase(bool useRealSubmitService = false, TestUserType testUserType = TestUserType.Authenticated, bool useFakeConsultationService = false, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null, bool bypassAuthentication = true, bool addRoleClaim = true)
         {
 	        if (testUserType == TestUserType.NotAuthenticated)
 	        {
@@ -119,8 +119,8 @@ namespace Comments.Test.Infrastructure
 			AppSettings.AuthenticationConfig = new AuthenticationConfig{ ClientId = "test client id", AuthorisationServiceUri = "http://www.example.com"};
 			// Arrange
 			_urlHelper = new FakeUrlHelper();
-			_fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId, testUserType);
-			_fakeHttpContextAccessor = FakeHttpContextAccessor.Get(_authenticated, _displayName, _userId, testUserType);
+			_fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId, testUserType, addRoleClaim);
+			_fakeHttpContextAccessor = FakeHttpContextAccessor.Get(_authenticated, _displayName, _userId, testUserType, addRoleClaim);
 			_fakeApiService = new FakeAPIService();
 			_consultationService = new FakeConsultationService();
 	        _useRealSubmitService = useRealSubmitService;
