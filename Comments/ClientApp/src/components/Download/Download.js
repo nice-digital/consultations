@@ -163,8 +163,8 @@ export class Download extends Component<PropsType, StateType> {
 	stripQueries = (path, queries) => {
 		let strippedPath = path;
 
-		strippedPath = queries.map((query) => {
-			return removeQueryParameter(strippedPath, query);
+		queries.forEach((query) => {
+			strippedPath = removeQueryParameter(strippedPath, query);
 		});
 
 		return strippedPath;

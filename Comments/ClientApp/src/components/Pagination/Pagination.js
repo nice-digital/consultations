@@ -38,7 +38,7 @@ export const Pagination = (props: PaginationProps) => {
 		currentPage,
 	} = props;
 
-	const paginationNeeded = typeof paginationNeeded === "string" ? false : consultationCount > itemsPerPage,
+	const paginationNeeded = typeof itemsPerPage === "string" ? false : consultationCount > itemsPerPage,
 		pageCount = Math.ceil(consultationCount / itemsPerPage);
 
 	const pageListArray = generatePageList(pageCount, currentPage);
@@ -56,7 +56,7 @@ export const Pagination = (props: PaginationProps) => {
 
 			{paginationNeeded &&
 				<nav>
-					<ul className="pagination"  data-qa-sel="pagination-section">
+					<ul className="pagination" data-qa-sel="pagination-section">
 						{currentPage > 1 && (
 							<Pager
 								active={false}

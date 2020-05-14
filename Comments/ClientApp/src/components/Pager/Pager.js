@@ -25,7 +25,7 @@ export const Pager = (props: PagerProps) => {
 				</li>
 			}
 
-			<li className={`pagination__pager ${active ? "active" : ""}`} key={label}>
+			<li className={`pagination__pager ${type !== "normal" ? type : ""} ${active ? "active" : ""}`} key={label}>
 				<a onClick={onChangePage} data-pager={label} href={`#${label}`}>{label}</a>
 			</li>
 
