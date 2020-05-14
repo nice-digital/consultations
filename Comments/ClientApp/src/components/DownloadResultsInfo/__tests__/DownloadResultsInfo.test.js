@@ -32,11 +32,11 @@ describe("[Consultations]", () => {
 			});
 
 		 	it("product count shows plural with comments and questions when not loading", () => {
-		 		const resultsInfo = shallow(<DownloadResultsInfo consultationCount={2} appliedFilters={[]} path="" history={null} isLoading={false} />);
+				const resultsInfo = shallow(<DownloadResultsInfo consultationCount={2} paginationPositions={{ start: 0, finish: 2 }} appliedFilters={[]} path="" history={null} isLoading={false} />);
 
-		 		expect(resultsInfo.find("#results-info-count span").text()).toEqual("Showing 2 consultations");
+		 		expect(resultsInfo.find("#results-info-count span").text()).toEqual("Showing 1 to 2 of 2 consultations");
 		 	});
-		
+
 		});
 	});
 });
