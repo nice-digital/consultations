@@ -39,7 +39,7 @@ namespace Comments.Controllers.Api
 
 	[Produces("application/json")]
 	[Route("consultations/api/[controller]")]
-	[Authorize(Roles="IndevUser")]
+	[Authorize(Policy = "Administrator,CommentAdminTeam,IndevUser")]
 	public class DraftConsultationController : Controller
 	{
 		private readonly IConsultationService _consultationService;

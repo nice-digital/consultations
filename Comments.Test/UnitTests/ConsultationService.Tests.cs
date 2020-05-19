@@ -25,19 +25,18 @@ namespace Comments.Test.UnitTests
 
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var commentText = Guid.NewGuid().ToString();
-            var createdByUserId = Guid.NewGuid();
+            var createdByUserId = Guid.NewGuid().ToString();
 
             var userService = FakeUserService.Get(true, "Benjamin Button", createdByUserId);
-            var authenticateService = new FakeAuthenticateService(authenticated: true);
 
             var locationId = AddLocation(sourceURI);
             AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId);
 
 	        var context = new ConsultationsContext(_options, userService, _fakeEncryption);
-            var commentService = new CommentService(context, userService, authenticateService, _consultationService);
+            var commentService = new CommentService(context, userService, _consultationService, _fakeHttpContextAccessor);
             
             // Act
-            var viewModel = commentService.GetCommentsAndQuestions(sourceURI);
+            var viewModel = commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
 
             //Assert
             viewModel.Comments.Single().CommentText.ShouldBe(commentText);

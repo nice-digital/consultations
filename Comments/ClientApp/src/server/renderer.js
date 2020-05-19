@@ -27,6 +27,18 @@ const getPreloadedDataHtml = (data): string => {
 	return scriptTag;
 };
 
+//returns a script tag with stringified authentication data for loading on the client.
+const getAuthDataHtml = (data): string => {
+	let scriptTag: string = `<script>window.__AUTH__=${JSON.stringify(data)};</script>`;
+
+	// Wrap new lines in dev mode so it's easier to scan over html source for debugging purposes
+	if (process.env.NODE_ENV === "development") {
+		scriptTag = `\r\n\r\n${scriptTag}\r\n\r\n`;
+	}
+
+	return scriptTag;
+};
+
 const getAnalyticsGlobalsData = (data): string => {
 	let scriptTag: string = `<script>window.analyticsGlobals=${JSON.stringify(data)};</script>`;
 
@@ -59,6 +71,7 @@ export const serverRenderer = (params): Promise => {
 					isAuthorised: params.data.isAuthorised,
 					displayName: params.data.displayName,
 					signInURL: params.data.signInURL,
+					signOutURL: params.data.signOutURL,
 					registerURL: params.data.registerURL,
 					requestURL: params.data.requestURL,
 				}, // Key value pairs of preloaded data sets
@@ -68,10 +81,18 @@ export const serverRenderer = (params): Promise => {
 			baseUrl: params.origin + BaseUrlRelative,
 			// Base url is used for 'server' ajax requests so we can hit the .NET instance from the Node process
 		};
+		const authData = {
+			isAuthorised: staticContext.preload.data.isAuthorised, 
+			displayName: staticContext.preload.data.displayName,
+			signInURL: staticContext.preload.data.signInURL,
+			signOutURL: staticContext.preload.data.signOutURL,
+		}
 
+		//a quick way to disable server side rendering for dev purposes is to just remove the App component from the inside the StaticRouter component
+		//the static router will still be there but won't try to render anything.
 		let app = (
 			<StaticRouter basename={BaseUrlRelative} location={params.url} context={staticContext}>
-				<App basename={BaseUrlRelative}/>
+				<App basename={BaseUrlRelative}/> 
 			</StaticRouter>);
 
 		let rootContent = "";
@@ -105,7 +126,7 @@ export const serverRenderer = (params): Promise => {
 					metas: helmet.meta.toString(),
 					links: helmet.link.toString(),
 					analyticsGlobals: getAnalyticsGlobalsData(staticContext.analyticsGlobals),
-					scripts: getPreloadedDataHtml(staticContext.preload.data) + helmet.script.toString(),
+					scripts: getPreloadedDataHtml(staticContext.preload.data) + helmet.script.toString() + getAuthDataHtml(authData),
 					accountsEnvironment: params.data.accountsEnvironment,
 				});
 
@@ -129,6 +150,7 @@ export const serverRenderer = (params): Promise => {
 							accountsEnvironment: params.data.accountsEnvironment,
 							htmlAttributes: "",
 							bodyAttributes: "",
+							scripts: getAuthDataHtml(authData),
 						});
 				}
 				catch(e){ //failure during showing an error. just show the error itself. this is not for production anyway.

@@ -24,7 +24,7 @@ namespace Comments.Test.UnitTests
             _context.Database.EnsureCreated();
 
             var answerText = Guid.NewGuid().ToString();
-            var userId = Guid.Empty;
+            var userId = Guid.Empty.ToString();
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
             SetupTestDataInDB();
@@ -45,7 +45,7 @@ namespace Comments.Test.UnitTests
             //Arrange
             ResetDatabase();
 
-            var userId = Guid.Empty;
+            var userId = Guid.Empty.ToString();
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
             var answerService = new AnswerService(new ConsultationsContext(_options, userService, _fakeEncryption), userService);
@@ -81,7 +81,7 @@ namespace Comments.Test.UnitTests
 	        _context.Database.EnsureCreated();
 
 			var answerText = Guid.NewGuid().ToString();
-            var userId = Guid.Empty;
+            var userId = Guid.Empty.ToString();
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
             SetupTestDataInDB();
@@ -112,7 +112,7 @@ namespace Comments.Test.UnitTests
 	        _context.Database.EnsureCreated();
 
 			var answerText = Guid.NewGuid().ToString();
-            var userId = Guid.Empty;
+            var userId = Guid.Empty.ToString();
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
             SetupTestDataInDB();
@@ -137,7 +137,7 @@ namespace Comments.Test.UnitTests
             //Arrange
             ResetDatabase();
             var answerId = 1;
-            var userId = Guid.Empty;
+            var userId = Guid.Empty.ToString();
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
             var answerService = new AnswerService(new ConsultationsContext(_options, userService, _fakeEncryption), userService);
 
@@ -157,7 +157,7 @@ namespace Comments.Test.UnitTests
             var answerText = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
             var description = Guid.NewGuid().ToString();
-            var userId = Guid.Empty;
+            var userId = Guid.Empty.ToString();
 
 	        AddStatus(StatusName.Draft.ToString(), (int)StatusName.Draft);
 			var locationId = AddLocation(sourceURI);
@@ -192,7 +192,7 @@ namespace Comments.Test.UnitTests
             var commentText = Guid.NewGuid().ToString();
             var answerText = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
-            var userId = Guid.Empty;
+            var userId = Guid.Empty.ToString();
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
             AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, userId);
@@ -213,23 +213,22 @@ namespace Comments.Test.UnitTests
 			_context.Database.EnsureCreated();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var questionText = Guid.NewGuid().ToString();
-            var userId = Guid.NewGuid();
+            var userId = Guid.NewGuid().ToString();
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-            var authenticateService = new FakeAuthenticateService(authenticated: true);
 
             var locationId = AddLocation(sourceURI);
 			var questionTypeId = 99;
             var questionId = AddQuestion(locationId, questionTypeId, questionText);
             var expectedAnswerId = AddAnswer(questionId, userId, "current user's answer");
-            AddAnswer(questionId, Guid.NewGuid(), "another user's answer");
+            AddAnswer(questionId, Guid.NewGuid().ToString(), "another user's answer");
 
 	        var context = new ConsultationsContext(_options, userService, _fakeEncryption);
 			//var submitService = new SubmitService(context, userService, _consultationService);
-			var commentService = new CommentService(context, userService, authenticateService, _consultationService);
+			var commentService = new CommentService(context, userService, _consultationService, _fakeHttpContextAccessor);
 
             // Act
-            var viewModel = commentService.GetCommentsAndQuestions(sourceURI);
+            var viewModel = commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
             var questionViewModel = viewModel.Questions.SingleOrDefault(q => q.QuestionId.Equals(questionId));
 
             //Assert

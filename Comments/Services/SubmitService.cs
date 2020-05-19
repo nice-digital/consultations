@@ -27,7 +27,7 @@ namespace Comments.Services
 
 		public (int rowsUpdated, Validate validate) Submit(ViewModels.Submission submission)
 		{
-			if (!_currentUser.IsAuthorised || !_currentUser.UserId.HasValue)
+			if (!_currentUser.IsAuthorised || string.IsNullOrEmpty(_currentUser.UserId))
 				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"Not logged in submitting comments and answers"));
 
 			//if a user is submitting a different users comment, the context will throw an exception.
@@ -45,7 +45,7 @@ namespace Comments.Services
 			if (hasSubmitted !=null)
 				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "User has already submitted."));
 
-			var submissionToSave = _context.InsertSubmission(_currentUser.UserId.Value, submission.RespondingAsOrganisation, submission.OrganisationName, submission.HasTobaccoLinks, submission.TobaccoDisclosure, submission.OrganisationExpressionOfInterest);
+			var submissionToSave = _context.InsertSubmission(_currentUser.UserId, submission.RespondingAsOrganisation, submission.OrganisationName, submission.HasTobaccoLinks, submission.TobaccoDisclosure, submission.OrganisationExpressionOfInterest);
 
 			var submittedStatus = _context.GetStatus(StatusName.Submitted);
 

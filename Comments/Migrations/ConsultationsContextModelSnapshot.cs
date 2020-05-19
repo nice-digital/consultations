@@ -15,7 +15,7 @@ namespace Comments.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.11-servicing-32099")
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -30,7 +30,7 @@ namespace Comments.Migrations
 
                     b.Property<string>("AnswerText");
 
-                    b.Property<Guid>("CreatedByUserId")
+                    b.Property<string>("CreatedByUserId")
                         .HasColumnName("CreatedByUserID");
 
                     b.Property<DateTime>("CreatedDate")
@@ -39,7 +39,7 @@ namespace Comments.Migrations
 
                     b.Property<bool>("IsDeleted");
 
-                    b.Property<Guid>("LastModifiedByUserId")
+                    b.Property<string>("LastModifiedByUserId")
                         .HasColumnName("LastModifiedByUserID");
 
                     b.Property<DateTime>("LastModifiedDate")
@@ -73,7 +73,7 @@ namespace Comments.Migrations
                     b.Property<string>("CommentText")
                         .IsRequired();
 
-                    b.Property<Guid>("CreatedByUserId")
+                    b.Property<string>("CreatedByUserId")
                         .HasColumnName("CreatedByUserID");
 
                     b.Property<DateTime>("CreatedDate")
@@ -82,7 +82,7 @@ namespace Comments.Migrations
 
                     b.Property<bool>("IsDeleted");
 
-                    b.Property<Guid>("LastModifiedByUserId")
+                    b.Property<string>("LastModifiedByUserId")
                         .HasColumnName("LastModifiedByUserID");
 
                     b.Property<DateTime>("LastModifiedDate")
@@ -145,7 +145,7 @@ namespace Comments.Migrations
                         .HasColumnName("QuestionID")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<Guid>("CreatedByUserId")
+                    b.Property<string>("CreatedByUserId")
                         .HasColumnName("CreatedByUserID");
 
                     b.Property<DateTime>("CreatedDate")
@@ -154,7 +154,7 @@ namespace Comments.Migrations
 
                     b.Property<bool>("IsDeleted");
 
-                    b.Property<Guid>("LastModifiedByUserId")
+                    b.Property<string>("LastModifiedByUserId")
                         .HasColumnName("LastModifiedByUserID");
 
                     b.Property<DateTime>("LastModifiedDate");
@@ -197,8 +197,13 @@ namespace Comments.Migrations
                     b.ToTable("QuestionType");
 
                     b.HasData(
-                        new { QuestionTypeId = 99, Description = "A yes / no answer without a text answer", HasBooleanAnswer = true, HasTextAnswer = true }
-                    );
+                        new
+                        {
+                            QuestionTypeId = 99,
+                            Description = "A yes / no answer without a text answer",
+                            HasBooleanAnswer = true,
+                            HasTextAnswer = true
+                        });
                 });
 
             modelBuilder.Entity("Comments.Models.Status", b =>
@@ -215,9 +220,16 @@ namespace Comments.Migrations
                     b.ToTable("Status");
 
                     b.HasData(
-                        new { StatusId = 1, Name = "Draft" },
-                        new { StatusId = 2, Name = "Submitted" }
-                    );
+                        new
+                        {
+                            StatusId = 1,
+                            Name = "Draft"
+                        },
+                        new
+                        {
+                            StatusId = 2,
+                            Name = "Submitted"
+                        });
                 });
 
             modelBuilder.Entity("Comments.Models.Submission", b =>
@@ -229,11 +241,13 @@ namespace Comments.Migrations
 
                     b.Property<bool>("HasTobaccoLinks");
 
+                    b.Property<bool?>("OrganisationExpressionOfInterest");
+
                     b.Property<string>("OrganisationName");
 
                     b.Property<bool>("RespondingAsOrganisation");
 
-                    b.Property<Guid>("SubmissionByUserId")
+                    b.Property<string>("SubmissionByUserId")
                         .HasColumnName("SubmissionByUserID");
 
                     b.Property<DateTime>("SubmissionDateTime")

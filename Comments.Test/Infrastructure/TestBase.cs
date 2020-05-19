@@ -7,22 +7,27 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using Comments.Configuration;
 using Comments.Migrations;
 using Comments.Services;
 using Comments.ViewModels;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
-using NICE.Auth.NetCore.Services;
 using NICE.Feeds;
-using NICE.Feeds.Configuration;
 using NICE.Feeds.Tests.Infrastructure;
 using Microsoft.Data.Sqlite;
+using NICE.Identity.Authentication.Sdk.API;
 using Answer = Comments.Models.Answer;
 using Comment = Comments.Models.Comment;
+using FeedConfig = NICE.Feeds.Configuration.FeedConfig;
 using Location = Comments.Models.Location;
 using Question = Comments.Models.Question;
 using QuestionType = Comments.Models.QuestionType;
@@ -52,9 +57,10 @@ namespace Comments.Test.Infrastructure
         protected Feed FeedToUse = Feed.ConsultationCommentsPublishedDetailMulitpleDoc;
         protected readonly bool _authenticated = true;
         protected readonly string _displayName = "Benjamin Button";
-        protected readonly Guid? _userId = Guid.Empty;
+        protected readonly string _userId = Guid.Empty.ToString();
         protected readonly IUserService _fakeUserService;
         protected readonly IHttpContextAccessor _fakeHttpContextAccessor;
+        protected readonly IAPIService _fakeApiService;
 
 	    protected readonly IConsultationService _consultationService;
         protected readonly DbContextOptionsBuilder<ConsultationsContext> _contextOptions;
@@ -64,23 +70,25 @@ namespace Comments.Test.Infrastructure
 
 	    protected IEncryption _fakeEncryption;
 
+	    protected IUrlHelper _urlHelper;
+
 		public TestBase(Feed feed) : this()
         {
             FeedToUse = feed;
             _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
 	        _consultationService = new FakeConsultationService();
 		}
-        public TestBase(Feed feed, bool authenticated, Guid userId, string displayName = null) : this()
+        public TestBase(Feed feed, bool authenticated, string userId, string displayName = null) : this()
         {
             FeedToUse = feed;
             _authenticated = authenticated;
             _displayName = displayName;
-            _userId = Guid.Empty;
+            _userId = Guid.Empty.ToString();
             _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
 	        _consultationService = new FakeConsultationService();
 		}
 
-	    public TestBase(bool authenticated, Guid? userId = null, string displayName = null) : this()
+	    public TestBase(bool authenticated, string userId = null, string displayName = null) : this()
 	    {
 			_authenticated = authenticated;
 		    _displayName = displayName;
@@ -88,17 +96,22 @@ namespace Comments.Test.Infrastructure
 		    _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
 		}
 
-	    public TestBase(TestUserType testUserType, Feed feed, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null) : this(false, testUserType, true, submittedCommentsAndAnswerCounts)
+	    public TestBase(TestUserType testUserType, Feed feed, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null, bool bypassAuthentication = true)
+		    : this(false, testUserType, true, submittedCommentsAndAnswerCounts, bypassAuthentication)
 	    {
 			FeedToUse = feed;
 		}
 
-		public TestBase(bool useRealSubmitService = false, TestUserType testUserType = TestUserType.Authenticated, bool useFakeConsultationService = false, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null)
+		public TestBase(bool useRealSubmitService = false, TestUserType testUserType = TestUserType.Authenticated, bool useFakeConsultationService = false, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null, bool bypassAuthentication = true)
         {
-            // Arrange
-            _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId, testUserType);
+			
+			AppSettings.AuthenticationConfig = new AuthenticationConfig{ ClientId = "test client id", AuthorisationServiceUri = "http://www.example.com"};
+			// Arrange
+			_urlHelper = new FakeUrlHelper();
+			_fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId, testUserType);
 			_fakeHttpContextAccessor = FakeHttpContextAccessor.Get(_authenticated, _displayName, _userId, testUserType);
-	        _consultationService = new FakeConsultationService();
+			_fakeApiService = new FakeAPIService();
+			_consultationService = new FakeConsultationService();
 	        _useRealSubmitService = useRealSubmitService;
 	        _fakeEncryption = new FakeEncryption();
 			var databaseName = DatabaseName + Guid.NewGuid();
@@ -123,13 +136,18 @@ namespace Comments.Test.Infrastructure
                 .ConfigureServices(services =>
                 {
                     services.AddEntityFrameworkSqlite();
-
-                    services.TryAddSingleton<ConsultationsContext>(_context);
+                   
+					services.TryAddSingleton<ConsultationsContext>(_context);
                     services.TryAddSingleton<ISeriLogger, FakeSerilogger>();
-                    services.TryAddSingleton<IAuthenticateService, FakeAuthenticateService>();
                     services.TryAddSingleton<IHttpContextAccessor>(provider => _fakeHttpContextAccessor);
                     services.TryAddTransient<IUserService>(provider => _fakeUserService);
                     services.TryAddTransient<IFeedReaderService>(provider => new FeedReader(FeedToUse));
+                    services.TryAddScoped<IAPIService>(provider => _fakeApiService);
+
+                    //services.AddAuthentication();
+
+                   //services.Decorate<IAPIService, FakeAPIService>();
+                   //services.Decorate<IAPIService>(provider => _fakeApiService);
 
 					if (!_useRealSubmitService)
 	                {
@@ -139,7 +157,12 @@ namespace Comments.Test.Infrastructure
 	                {
 		                services.TryAddTransient<IConsultationService>(provider => _consultationService);
 	                }
-				})
+
+	                if (bypassAuthentication)
+	                {
+		                services.AddMvc(opt => opt.Filters.Add(new AllowAnonymousFilter())); //bypass authentication
+	                }
+                })
                 .Configure(app =>
                 {
                     app.UseStaticFiles();
@@ -228,9 +251,9 @@ namespace Comments.Test.Infrastructure
 
 		    return statusModel.StatusId;
 	    }
-		protected int AddComment(int locationId, string commentText, bool isDeleted, Guid createdByUserId, int status = (int)StatusName.Draft, ConsultationsContext passedInContext = null)
+		protected int AddComment(int locationId, string commentText, bool isDeleted, string createdByUserId, int status = (int)StatusName.Draft, ConsultationsContext passedInContext = null)
         {
-            var comment = new Comment(locationId, createdByUserId, commentText, Guid.Empty, location: null, statusId: status, status: null);
+            var comment = new Comment(locationId, createdByUserId, commentText, Guid.Empty.ToString(), location: null, statusId: status, status: null);
             comment.IsDeleted = isDeleted;
             if (passedInContext != null)
             {
@@ -267,10 +290,12 @@ namespace Comments.Test.Infrastructure
 
             return questionType.QuestionTypeId;
         }
-        protected int AddQuestion(int locationId, int questionTypeId, string questionText, ConsultationsContext passedInContext = null)
+        protected int AddQuestion(int locationId, int questionTypeId, string questionText, ConsultationsContext passedInContext = null, string createdByUserId = null)
         {
             var question = new Question(locationId, questionText, questionTypeId, null, null, null);
-            if (passedInContext != null)
+            question.CreatedByUserId = createdByUserId ?? Guid.Empty.ToString();
+			question.LastModifiedByUserId = createdByUserId ?? Guid.Empty.ToString();
+			if (passedInContext != null)
             {
                 passedInContext.Question.Add(question);
                 passedInContext.SaveChanges();
@@ -286,7 +311,7 @@ namespace Comments.Test.Infrastructure
 
             return question.QuestionId;
         }
-        protected int AddAnswer(int questionId, Guid userId, string answerText, int status = (int)StatusName.Draft, ConsultationsContext passedInContext = null)
+        protected int AddAnswer(int questionId, string userId, string answerText, int status = (int)StatusName.Draft, ConsultationsContext passedInContext = null)
         {
             var answer = new Answer(questionId, userId, answerText, null, null, status, null);
             answer.LastModifiedDate = DateTime.Now;
@@ -306,7 +331,7 @@ namespace Comments.Test.Infrastructure
 
             return answer.AnswerId;
         }
-        protected void AddCommentsAndQuestionsAndAnswers(string sourceURI, string commentText, string questionText, string answerText, Guid createdByUserId, int status = (int)StatusName.Draft, ConsultationsContext passedInContext = null)
+        protected void AddCommentsAndQuestionsAndAnswers(string sourceURI, string commentText, string questionText, string answerText, string createdByUserId, int status = (int)StatusName.Draft, ConsultationsContext passedInContext = null)
         {
             var locationId = AddLocation(sourceURI, passedInContext);
             AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId, passedInContext: passedInContext, status: status);
@@ -321,7 +346,7 @@ namespace Comments.Test.Infrastructure
             var answerText = Guid.NewGuid().ToString();
             var commentText = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
-            var userId = Guid.NewGuid();
+            var userId = Guid.NewGuid().ToString();
 
 			var locationId = AddLocation(sourceURI);
 			AddComment(locationId, commentText, isDeleted: false, createdByUserId: userId);
@@ -338,7 +363,7 @@ namespace Comments.Test.Infrastructure
 			}
 		}
 
-	    protected void AddSubmittedCommentsAndAnswers(string sourceURI, string commentText, string questionText, string answerText, Guid createdByUserId, ConsultationsContext passedInContext = null)
+	    protected void AddSubmittedCommentsAndAnswers(string sourceURI, string commentText, string questionText, string answerText, string createdByUserId, ConsultationsContext passedInContext = null)
 	    {
 		    var locationId = AddLocation(sourceURI, passedInContext);
 		    var commentId = AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId, status: (int)StatusName.Submitted, passedInContext: passedInContext);
@@ -350,7 +375,7 @@ namespace Comments.Test.Infrastructure
 		    AddSubmissionAnswers(submissionId, answerId, passedInContext);
 	    }
 
-	    protected void AddSubmittedComments(string sourceURI, string commentText, string questionText, string answerText, Guid createdByUserId, ConsultationsContext passedInContext = null)
+	    protected void AddSubmittedComments(string sourceURI, string commentText, string questionText, string answerText, string createdByUserId, ConsultationsContext passedInContext = null)
 	    {
 		    var locationId = AddLocation(sourceURI, passedInContext);
 		    var commentId = AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId, status: (int)StatusName.Submitted, passedInContext: passedInContext);
@@ -360,7 +385,7 @@ namespace Comments.Test.Infrastructure
 		    AddSubmissionComments(submissionId, commentId, passedInContext);
 	    }
 
-	    protected void AddSubmittedQuestionsWithAnswers(string sourceURI, string commentText, string questionText, string answerText, Guid createdByUserId, ConsultationsContext passedInContext = null)
+	    protected void AddSubmittedQuestionsWithAnswers(string sourceURI, string commentText, string questionText, string answerText, string createdByUserId, ConsultationsContext passedInContext = null)
 	    {
 		    var locationId = AddLocation(sourceURI, passedInContext);
 			var questionTypeId = 99;
@@ -370,7 +395,7 @@ namespace Comments.Test.Infrastructure
 		    AddSubmissionAnswers(submissionId, answerId, passedInContext);
 	    }
 
-		protected int AddSubmission(Guid userId, ConsultationsContext passedInContext = null, bool? organisationExpressionOfInterest = null)
+		protected int AddSubmission(string userId, ConsultationsContext passedInContext = null, bool? organisationExpressionOfInterest = null)
 	    {
 			var submission = new Models.Submission(userId, DateTime.Now, false, null, false, null, organisationExpressionOfInterest);
 			if (passedInContext != null)

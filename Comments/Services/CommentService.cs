@@ -1,20 +1,20 @@
 using Comments.Common;
+using Comments.Configuration;
 using Comments.Models;
 using Comments.ViewModels;
-using NICE.Auth.NetCore.Services;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using NICE.Feeds;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Comments.Configuration;
-using NICE.Auth.NetCore.Helpers;
-using NICE.Feeds;
 
 namespace Comments.Services
 {
 	public interface ICommentService
     {
-	    CommentsAndQuestions GetCommentsAndQuestions(string relativeURL);
-	    ReviewPageViewModel GetCommentsAndQuestionsForReview(string relativeURL, ReviewPageViewModel model);
+	    CommentsAndQuestions GetCommentsAndQuestions(string relativeURL, IUrlHelper urlHelper);
+	    ReviewPageViewModel GetCommentsAndQuestionsForReview(string relativeURL, IUrlHelper urlHelper, ReviewPageViewModel model);
 		(ViewModels.Comment comment, Validate validate) GetComment(int commentId);
         (int rowsUpdated, Validate validate) EditComment(int commentId, ViewModels.Comment comment);
         (ViewModels.Comment comment, Validate validate) CreateComment(ViewModels.Comment comment);
@@ -25,17 +25,16 @@ namespace Comments.Services
     {
         private readonly ConsultationsContext _context;
         private readonly IUserService _userService;
-        private readonly IAuthenticateService _authenticateService;
 	    private readonly IConsultationService _consultationService;
-	    private readonly ISubmitService _submitService;
+	    private readonly IHttpContextAccessor _httpContextAccessor;
 	    private readonly User _currentUser;
 
-        public CommentService(ConsultationsContext context, IUserService userService, IAuthenticateService authenticateService, IConsultationService consultationService)
+        public CommentService(ConsultationsContext context, IUserService userService, IConsultationService consultationService, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _userService = userService;
-            _authenticateService = authenticateService;
 	        _consultationService = consultationService;
+	        _httpContextAccessor = httpContextAccessor;
 	        _currentUser = _userService.GetCurrentUser();
         }
 
@@ -49,7 +48,7 @@ namespace Comments.Services
             if (commentInDatabase == null)
                 return (comment: null, validate: new Validate(valid: false, notFound: true, message: $"Comment id:{commentId} not found trying to get comment for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
 
-            if (!commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId.Value))
+            if (!commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId, StringComparison.OrdinalIgnoreCase))
                 return (comment: null, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to access comment id: {commentId}, but it's not their comment"));
 
             return (comment: new ViewModels.Comment(commentInDatabase.Location, commentInDatabase), validate: null); 
@@ -65,10 +64,10 @@ namespace Comments.Services
             if (commentInDatabase == null)
                 return (rowsUpdated: 0, validate: new Validate(valid: false, notFound: true, message: $"Comment id:{commentId} not found trying to edit comment for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
 
-            if (!commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId.Value))
+            if (!commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId, StringComparison.OrdinalIgnoreCase))
                 return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to edit comment id: {commentId}, but it's not their comment"));
 
-            comment.LastModifiedByUserId = _currentUser.UserId.Value;
+            comment.LastModifiedByUserId = _currentUser.UserId;
             comment.LastModifiedDate = DateTime.UtcNow;
             commentInDatabase.UpdateFromViewModel(comment);
             return (rowsUpdated: _context.SaveChanges(), validate: null);
@@ -89,7 +88,7 @@ namespace Comments.Services
 			_context.Location.Add(locationToSave);
 
 	        var status = _context.GetStatus(StatusName.Draft);
-			var commentToSave = new Models.Comment(comment.LocationId, _currentUser.UserId.Value, comment.CommentText, _currentUser.UserId.Value, locationToSave, status.StatusId, null);
+			var commentToSave = new Models.Comment(comment.LocationId, _currentUser.UserId, comment.CommentText, _currentUser.UserId, locationToSave, status.StatusId, null);
             _context.Comment.Add(commentToSave);
             _context.SaveChanges();
 
@@ -106,20 +105,22 @@ namespace Comments.Services
             if (commentInDatabase == null)
                 return (rowsUpdated: 0, validate: new Validate(valid: false, notFound: true, message: $"Comment id:{commentId} not found trying to delete comment for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
 
-            if (!commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId.Value))
+            if (!commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId))
                 return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to delete comment id: {commentId}, but it's not their comment"));
 
             commentInDatabase.IsDeleted = true;
             commentInDatabase.LastModifiedDate = DateTime.UtcNow;
-            commentInDatabase.LastModifiedByUserId = _currentUser.UserId.Value;
+            commentInDatabase.LastModifiedByUserId = _currentUser.UserId;
             return (rowsUpdated: _context.SaveChanges(), validate: null);
         }
 
-	    public CommentsAndQuestions GetCommentsAndQuestions(string relativeURL)
+	    public CommentsAndQuestions GetCommentsAndQuestions(string relativeURL, IUrlHelper urlHelper)
 	    {
 		    var user = _userService.GetCurrentUser();
-		    var signInURL = _authenticateService.GetLoginURL(relativeURL.ToConsultationsRelativeUrl());
-		    var isReview = ConsultationsUri.IsReviewPageRelativeUrl(relativeURL);
+
+			var signInURL = urlHelper.Action(Constants.Auth.LoginAction, Constants.Auth.ControllerName, new {returnUrl = relativeURL.ToConsultationsRelativeUrl() });
+
+			var isReview = ConsultationsUri.IsReviewPageRelativeUrl(relativeURL);
 			var consultationSourceURI = ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Consultation);
 		    ConsultationState consultationState;
 		    var sourceURIs = new List<string> { consultationSourceURI };
@@ -147,9 +148,9 @@ namespace Comments.Services
 			return new CommentsAndQuestions(resortedComments, data.questions.ToList(), user.IsAuthorised, signInURL, consultationState);
 	    }
 
-		public ReviewPageViewModel GetCommentsAndQuestionsForReview(string relativeURL, ReviewPageViewModel model)
+		public ReviewPageViewModel GetCommentsAndQuestionsForReview(string relativeURL, IUrlHelper urlHelper, ReviewPageViewModel model)
 		{
-			var commentsAndQuestions = GetCommentsAndQuestions(relativeURL);
+			var commentsAndQuestions = GetCommentsAndQuestions(relativeURL, urlHelper);
 
 			if (model.Sort == ReviewSortOrder.DocumentAsc)
 			{

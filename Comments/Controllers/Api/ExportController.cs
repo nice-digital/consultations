@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Comments.Export;
 using Comments.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +20,7 @@ namespace Comments.Controllers.Api
 		}
 	}
 
-	//[Authorize(Roles = "Administrator")] - authorisation is in the service as the role list is configurable in appsettings.json
+	//[Authorize(Policy = "Administrator")] - authorisation is in the service as the role list is configurable in appsettings.json
 	[Route("consultations/api/[controller]")]
 	public class ExportController: ExportControllerBase
 	{
@@ -27,7 +28,7 @@ namespace Comments.Controllers.Api
 
 		//GET: consultations/api/Export/5 
 		[HttpGet("{consultationId}")]
-		public IActionResult Get([FromRoute] int consultationId)
+		public async Task<IActionResult> Get([FromRoute] int consultationId)
 		{
 			var result = _exportService.GetAllDataForConsulation(consultationId);
 
@@ -36,7 +37,7 @@ namespace Comments.Controllers.Api
 				return Validate(result.valid, _logger);
 			}
 
-			var stream = _exportToExcel.ToSpreadsheet(result.comment, result.answer, result.question);
+			var stream = await _exportToExcel.ToSpreadsheet(result.comment, result.answer, result.question);
 			return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 		}
 	}
@@ -48,11 +49,11 @@ namespace Comments.Controllers.Api
 
 		//GET: consultations/api/ExportExternal/5 
 		[HttpGet("{consultationId}")]
-		public IActionResult Get([FromRoute] int consultationId)
+		public async Task<IActionResult> Get([FromRoute] int consultationId)
 		{
 			var result = _exportService.GetAllDataForConsulationForCurrentUser(consultationId);
 
-			var stream = _exportToExcel.ToSpreadsheet(result.comment, result.answer, result.question);
+			var stream = await _exportToExcel.ToSpreadsheet(result.comment, result.answer, result.question);
 			return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 		}
 	}

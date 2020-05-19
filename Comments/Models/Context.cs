@@ -21,17 +21,16 @@ namespace Comments.Models
 		//public ConsultationsContext(DbContextOptions options)
 		//	: base(options)
 		//{
-		//	_createdByUserID = Guid.Empty;
+		//	_createdByUserID = Guid.Empty.ToString();
 		//}
 		//public ConsultationsContext() : base()
 		//{
-		//	_createdByUserID = Guid.Empty;
+		//	_createdByUserID = Guid.Empty.ToString();
 		//}
 		//protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		//{
 		//	optionsBuilder.UseSqlServer("[you don't need a valid connection string when creating migrations. the real connection string should never be put here though. it should be kept in secrets.json]");
 		//}
-
 
 		public ConsultationsContext(DbContextOptions options, IUserService userService, IEncryption encryption) : base(options)
         {
@@ -122,7 +121,7 @@ namespace Comments.Models
 		    return SubmittedCommentsAndAnswerCounts.ToList();
 	    }
 
-		public List<Comment> GetAllSubmittedCommentsForURI(string  sourceURI)
+		public List<Comment> GetAllSubmittedCommentsForURI(string sourceURI)
 	    {
 			var comment = Comment.Where(c =>
 					c.StatusId == (int) StatusName.Submitted && (c.Location.SourceURI.Contains($"{sourceURI}/") || c.Location.SourceURI.Equals(sourceURI)) && c.IsDeleted == false)
@@ -283,7 +282,7 @@ namespace Comments.Models
 		    SubmissionAnswer.AddRange(submissionAnswersToInsert);
 	    }
 
-	    public Submission InsertSubmission(Guid currentUser, bool respondingAsOrganisation, string organisationName, bool hasTobaccoLinks, string tobaccoDisclosure, bool? organisationExpressionOfInterest)
+	    public Submission InsertSubmission(string currentUser, bool respondingAsOrganisation, string organisationName, bool hasTobaccoLinks, string tobaccoDisclosure, bool? organisationExpressionOfInterest)
 	    {
 		    var submission = new Models.Submission(currentUser, DateTime.UtcNow, respondingAsOrganisation, organisationName, hasTobaccoLinks, tobaccoDisclosure, organisationExpressionOfInterest);
 		    Submission.Add(submission);
@@ -327,7 +326,7 @@ namespace Comments.Models
 			return (DateTime?)null;
 	    }
 
-		public int DeleteAllSubmissionsFromUser(Guid usersSubmissionsToDelete)
+		public int DeleteAllSubmissionsFromUser(string usersSubmissionsToDelete)
 	    {
 		    var draftStatus = GetStatus(StatusName.Draft);
 
@@ -749,7 +748,7 @@ namespace Comments.Models
 				.OrderByDescending(q => q.CreatedDate);
 		}
 
-		public IEnumerable<Guid> GetUniqueUsers()
+		public IEnumerable<string> GetUniqueUsers()
 		{
 			var allUserIds =    Answer.IgnoreQueryFilters().Select(answer => answer.CreatedByUserId).Distinct().Concat(
 								Answer.IgnoreQueryFilters().Select(answer => answer.LastModifiedByUserId).Distinct().Concat(

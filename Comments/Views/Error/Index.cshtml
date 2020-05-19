@@ -4,7 +4,11 @@
 @{
 	Layout = "~/Views/_Layout.cshtml";
 }
+@*
+	Note: this view is only ever shown when there's been an error rendering any front-end at all.
 
+		most errors encountered by the front end will show an error in the react app, and won't hit this page.
+*@
 <main role="main">
 	<div class="container">
 		<div class="panel page-header">

@@ -1,14 +1,13 @@
 using Comments.Services;
 using Comments.ViewModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 
 namespace Comments.Controllers.Api
 {
-    [Produces("application/json")]
+	[Produces("application/json")]
     public class CommentsController : ControllerBase
     {
         private readonly ICommentService _commentService;
@@ -32,7 +31,7 @@ namespace Comments.Controllers.Api
             if (string.IsNullOrWhiteSpace(sourceURI))
                 throw new ArgumentNullException(nameof(sourceURI));
 
-            return _commentService.GetCommentsAndQuestions(relativeURL: sourceURI);
+            return _commentService.GetCommentsAndQuestions(relativeURL: sourceURI, urlHelper: Url);
         }
 
 		/// <summary>
@@ -48,8 +47,7 @@ namespace Comments.Controllers.Api
 			if (string.IsNullOrWhiteSpace(relativeURL))
 				throw new ArgumentNullException(nameof(relativeURL));
 
-			return _commentService.GetCommentsAndQuestionsForReview(relativeURL, reviewPageViewModel);
+			return _commentService.GetCommentsAndQuestionsForReview(relativeURL, urlHelper: Url, reviewPageViewModel);
 	    }
-
 	}
 }

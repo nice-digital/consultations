@@ -1,4 +1,5 @@
 using Comments.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -34,7 +35,8 @@ namespace Comments.Controllers.Api
 
         // POST: consultations/api/Question
         [HttpPost]
-        public IActionResult PostQuestion([FromBody] ViewModels.Question question)
+        [Authorize(Policy = "Administrator,CommentAdminTeam,IndevUser")]
+		public IActionResult PostQuestion([FromBody] ViewModels.Question question)
         {
             if (!ModelState.IsValid)
             {
@@ -44,12 +46,13 @@ namespace Comments.Controllers.Api
             var result = _questionService.CreateQuestion(question);
             var invalidResult = Validate(result.validate, _logger);
 
-            return invalidResult ?? CreatedAtAction("GetQuestion", new { id = result.question.QuestionId }, result.question);
+            return invalidResult ?? CreatedAtAction("GetQuestion", new { questionId = result.question.QuestionId }, result.question);
         }
 
         // PUT: consultations/api/Question/5
         [HttpPut("{questionId}")]
-        public IActionResult PutQuestion([FromRoute] int questionId, [FromBody] ViewModels.Question question)
+        [Authorize(Policy = "Administrator,CommentAdminTeam,IndevUser")]
+		public IActionResult PutQuestion([FromRoute] int questionId, [FromBody] ViewModels.Question question)
         {
             if (!ModelState.IsValid)
             {
@@ -69,7 +72,8 @@ namespace Comments.Controllers.Api
 
         // DELETE: consultations/api/Question/5
         [HttpDelete("{QuestionId}")]
-        public IActionResult DeleteQuestion([FromRoute] int questionId)
+        [Authorize(Policy = "Administrator,CommentAdminTeam,IndevUser")]
+		public IActionResult DeleteQuestion([FromRoute] int questionId)
         {
             if (!ModelState.IsValid)
             {

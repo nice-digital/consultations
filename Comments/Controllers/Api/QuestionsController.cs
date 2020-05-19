@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Comments.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -5,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Comments.Controllers.Api
 {
-	[Authorize(Roles = "Administrator,CommentAdminTeam,IndevUser")]
+	[Authorize(Policy = "Administrator,CommentAdminTeam,IndevUser")]
 	[Produces("application/json")]
     [Route("consultations/api/[controller]")]
     public class QuestionsController : ControllerBase
@@ -20,14 +21,14 @@ namespace Comments.Controllers.Api
 
 		// GET: consultations/api/Questions?consultationId=22
 		[HttpGet]
-        public IActionResult GetQuestions(int consultationId, bool draft, string reference)
+        public async Task<IActionResult> GetQuestions(int consultationId, bool draft, string reference)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var result = _questionService.GetQuestionAdmin(consultationId, draft, reference);
+            var result = await _questionService.GetQuestionAdmin(consultationId, draft, reference);
 
             return Ok(result);
         }

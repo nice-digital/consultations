@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Packaging;
 using System.Linq;
+using System.Threading.Tasks;
 using Comments.Common;
 using Comments.Models;
 using Comments.Services;
@@ -17,7 +18,7 @@ namespace Comments.Export
 {
 	public interface IExportToExcel
 	{
-		Stream ToSpreadsheet(IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions);
+		Task<Stream> ToSpreadsheet(IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions);
 	}
 
 	public class ExportToExcel : IExportToExcel
@@ -32,14 +33,14 @@ namespace Comments.Export
 			_exportService = exportService;
 			_logger = logger;
 		}
-		public Stream ToSpreadsheet(IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions)
+		public async Task<Stream> ToSpreadsheet(IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions)
 		{
 			//SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Create("C:/Test/TestExcel" + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second + ".xlsx", SpreadsheetDocumentType.Workbook);
 
 			var stream = new MemoryStream();
 			using (var workbook = SpreadsheetDocument.Create(stream, SpreadsheetDocumentType.Workbook))
 			{
-				CreateSheet(workbook, comments, answers, questions);
+				await CreateSheet(workbook, comments, answers, questions);
 			}
 
 			stream.Position = 0;
@@ -385,9 +386,23 @@ namespace Comments.Export
 			}
 		}
 
-		private (List<Excel> collatedData, bool showOrganisationExpressionOfInterest) CollateData(IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions)
+		private async Task<(List<Excel> collatedData, bool showOrganisationExpressionOfInterest)> CollateData(IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions)
 		{
 			List<Excel> excel = new List<Excel>();
+
+			var userIds = comments.Select(comment => comment.CreatedByUserId).Concat(answers.Select(answer => answer.CreatedByUserId)).Distinct();
+			var currentUserDetails = _userService.GetCurrentUserDetails();
+
+			Dictionary<string, (string displayName, string emailAddress)> userDetailsForUserIds;
+			if (userIds.Count() == 1 && userIds.Single().Equals(currentUserDetails.userId, StringComparison.OrdinalIgnoreCase))
+			{
+				userDetailsForUserIds = new Dictionary<string, (string displayName, string emailAddress)>() { {currentUserDetails.userId, (currentUserDetails.displayName, currentUserDetails.emailAddress) }};
+			}
+			else
+			{
+				userDetailsForUserIds = await _userService.GetUserDetailsForUserIds(userIds);
+			}
+
 			foreach (var comment in comments)
 			{
 				var locationDetails = _exportService.GetLocationData(comment.Location);
@@ -400,8 +415,8 @@ namespace Comments.Export
 					ChapterTitle = locationDetails.ChapterName,
 					Section = commentOn == CommentOn.Section || commentOn == CommentOn.SubSection || commentOn == CommentOn.Selection ? comment.Location.Section : null,
 					Quote = commentOn  == CommentOn.Selection ? comment.Location.Quote : null,
-					UserName =  _userService.GetDisplayNameForUserId(comment.CreatedByUserId),
-					Email = _userService.GetEmailForUserId(comment.CreatedByUserId),
+					UserName = userDetailsForUserIds.ContainsKey(comment.CreatedByUserId) ? userDetailsForUserIds[comment.CreatedByUserId].displayName : "Not found",
+					Email = userDetailsForUserIds.ContainsKey(comment.CreatedByUserId) ? userDetailsForUserIds[comment.CreatedByUserId].emailAddress : "Not found",
 					CommentId = comment.CommentId,
 					Comment =  comment.CommentText,
 					QuestionId = null,
@@ -415,8 +430,6 @@ namespace Comments.Export
 					TobaccoIndustryDetails = comment.SubmissionComment.Count > 0? comment.SubmissionComment?.First().Submission.TobaccoDisclosure : null,
 					OrganisationExpressionOfInterest = comment.SubmissionComment.Count > 0 ? comment.SubmissionComment?.First().Submission.OrganisationExpressionOfInterest : null,
 					Order = comment.Location.Order,
-
-					
 			};
 				excel.Add(excelrow);
 			}
@@ -431,8 +444,8 @@ namespace Comments.Export
 					ChapterTitle = locationDetails.ChapterName,
 					Section = answer.Question.Location.Section,
 					Quote = answer.Question.Location.Quote,
-					UserName = _userService.GetDisplayNameForUserId(answer.CreatedByUserId),
-					Email = _userService.GetEmailForUserId(answer.CreatedByUserId),
+					UserName = userDetailsForUserIds.ContainsKey(answer.CreatedByUserId) ? userDetailsForUserIds[answer.CreatedByUserId].displayName : "Not found",
+					Email = userDetailsForUserIds.ContainsKey(answer.CreatedByUserId) ? userDetailsForUserIds[answer.CreatedByUserId].emailAddress : "Not found",
 					CommentId = null,
 					Comment = null,
 					QuestionId = answer.Question.QuestionId,
@@ -537,7 +550,7 @@ namespace Comments.Export
 			return styleSheet;
 		}
 
-		private void CreateSheet(SpreadsheetDocument spreadsheetDocument, IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions)
+		private async Task CreateSheet(SpreadsheetDocument spreadsheetDocument, IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions)
 		{
 			// Add a WorkbookPart to the document.
 			WorkbookPart workbookpart = spreadsheetDocument.AddWorkbookPart();
@@ -582,7 +595,7 @@ namespace Comments.Export
 			var ConsultationTitle = GetConsultationTitle(comments, questions);
 			AppendTitleRow(sheetData, ConsultationTitle);
 
-			var collatedDataAndExpressionOfInterestFlag = CollateData(comments, answers, questions);
+			var collatedDataAndExpressionOfInterestFlag = await CollateData(comments, answers, questions);
 
 			AppendHeaderRow(sheetData, collatedDataAndExpressionOfInterestFlag.showOrganisationExpressionOfInterest);
 

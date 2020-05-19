@@ -73,7 +73,7 @@
                         "answerBoolean":null,
                         "questionId":"scrubbed by ScrubQuestionId",
                         "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
-                        "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
+                        "lastModifiedByUserId":null,
                         "statusId":1,
                         "status":{
                             "statusId":1,
@@ -117,7 +117,7 @@
                         "answerBoolean":null,
                         "questionId":"scrubbed by ScrubQuestionId",
                         "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
-                        "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
+                        "lastModifiedByUserId":null,
                         "statusId":1,
                         "status":{
                             "statusId":1,
@@ -174,7 +174,7 @@
             }
         ],
         "isAuthorised":true,
-        "signInURL":"/signin?returnURL=/",
+        "signInURL":"/consultations/account/login?returnUrl=%2Fconsultations%2F1%2Freview",
         "consultationState":{
             "startDate":"2018-04-01T00:00:00",
             "endDate":"2028-05-31T17:00:00",

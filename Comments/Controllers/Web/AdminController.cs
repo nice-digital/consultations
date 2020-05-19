@@ -5,7 +5,7 @@ using System;
 
 namespace Comments.Controllers.Web
 {
-	[Authorize(Roles="Administrator")]
+	[Authorize(Policy = "Administrator")]
 	
 	public class AdminController : Controller
     {
@@ -29,11 +29,8 @@ namespace Comments.Controllers.Web
 		    if (string.IsNullOrWhiteSpace(userId))
 			    throw new ArgumentNullException(nameof(userId));
 
-		    if (!Guid.TryParse(userId, out Guid parsedGuid))
-			    throw new ArgumentException("Cannot parse guid", nameof(userId));
 
-
-		    var rowCount = _adminService.DeleteAllSubmissionsFromUser(parsedGuid);
+		    var rowCount = _adminService.DeleteAllSubmissionsFromUser(userId);
 
 		    return Content($"Row count deleted/updated: {rowCount}");
 	    }
@@ -46,10 +43,10 @@ namespace Comments.Controllers.Web
 	    public ActionResult DeleteAllSubmissionsFromSelf()
 		{
 			var user = _userService.GetCurrentUser();
-			if (!user.IsAuthorised || !user.UserId.HasValue)
+			if (!user.IsAuthorised || string.IsNullOrEmpty(user.UserId))
 				throw new Exception("Cannot get logged on user id");
 
-			var rowCount = _adminService.DeleteAllSubmissionsFromUser(user.UserId.Value);
+			var rowCount = _adminService.DeleteAllSubmissionsFromUser(user.UserId);
 
 		    return Content($"Row count deleted/updated: {rowCount}");
 	    }
@@ -118,17 +115,17 @@ namespace Comments.Controllers.Web
 		    return Content($"Row count deleted/updated: {rowCount}");
 	    }
 
-		/// <summary>
-		/// /consultations/admin/DeleteAllData
-		/// </summary>
-		/// <returns></returns>
-		[Route("consultations/admin/DeleteAllData")]
-	    public ActionResult DeleteAllData()
-	    {
-		    var rowCount = _adminService.DeleteAllData();
+		///// <summary>
+		///// /consultations/admin/DeleteAllData
+		///// </summary>
+		///// <returns></returns>
+		//[Route("consultations/admin/DeleteAllData")]
+	 //   public ActionResult DeleteAllData()
+	 //   {
+		//    var rowCount = _adminService.DeleteAllData();
 
-		    return Content($"Row count deleted/updated: {rowCount}");
-	    }
+		//    return Content($"Row count deleted/updated: {rowCount}");
+	 //   }
 
 
 		/// <summary>

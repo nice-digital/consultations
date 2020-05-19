@@ -3,12 +3,12 @@ using Comments.Models;
 using Comments.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Comments.Common;
 using Comments.Configuration;
 using Microsoft.AspNetCore.Http;
-using NICE.Auth.NetCore.Helpers;
-using NICE.Auth.NetCore.Services;
 using NICE.Feeds;
+using NICE.Identity.Authentication.Sdk.API;
 using Constants = Comments.Common.Constants;
 using Location = Comments.Models.Location;
 using Question = Comments.ViewModels.Question;
@@ -22,7 +22,7 @@ namespace Comments.Services
         (int rowsUpdated, Validate validate) EditQuestion(int questionId, ViewModels.Question question);
         (int rowsUpdated, Validate validate) DeleteQuestion(int questionId);
         (ViewModels.Question question, Validate validate) CreateQuestion(ViewModels.Question question);
-	    QuestionAdmin GetQuestionAdmin(int consultationId, bool draft, string reference);
+        Task<QuestionAdmin> GetQuestionAdmin(int consultationId, bool draft, string reference);
 
 		IEnumerable<QuestionType> GetQuestionTypes();
     }
@@ -31,18 +31,18 @@ namespace Comments.Services
         private readonly ConsultationsContext _context;
         private readonly IUserService _userService;
 	    private readonly IConsultationService _consultationService;
-	    private readonly IAuthenticateService _authenticateService;
 	    private readonly IHttpContextAccessor _httpContextAccessor;
+	    private readonly IAPIService _apiService;
 	    private readonly User _currentUser;
 
         public QuestionService(ConsultationsContext consultationsContext, IUserService userService, IConsultationService consultationService,
-	        IAuthenticateService authenticateService, IHttpContextAccessor httpContextAccessor)
+	        IHttpContextAccessor httpContextAccessor, IAPIService apiService)
         {
             _context = consultationsContext;
             _userService = userService;
 	        _consultationService = consultationService;
-	        _authenticateService = authenticateService;
 	        _httpContextAccessor = httpContextAccessor;
+	        _apiService = apiService;
 	        _currentUser = _userService.GetCurrentUser();
         }
 
@@ -66,7 +66,7 @@ namespace Comments.Services
             if (questionInDatabase == null)
                 return (rowsUpdated: 0, validate: new Validate(valid: false, notFound: true, message: $"Question id:{questionId} not found trying to edit question for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
 
-	        question.LastModifiedByUserId = _currentUser.UserId.Value;
+	        question.LastModifiedByUserId = _currentUser.UserId;
 	        question.LastModifiedDate = DateTime.UtcNow;
             questionInDatabase.UpdateFromViewModel(question);
             return (rowsUpdated: _context.SaveChanges(), validate: null);
@@ -105,9 +105,9 @@ namespace Comments.Services
 	        var orderDocument = !consultationsUri.DocumentId.HasValue ? "000" : consultationsUri.DocumentId.Value.ToString("D3");
 	        var orderQuestion = locationQuestions.Count.Equals(0) ? "000": locationQuestions.Count.ToString("D3");
 
-			questionToSave.CreatedByUserId = _currentUser.UserId.Value;
+			questionToSave.CreatedByUserId = _currentUser.UserId;
 			questionToSave.CreatedDate = DateTime.UtcNow;
-			questionToSave.LastModifiedByUserId = _currentUser.UserId.Value;
+			questionToSave.LastModifiedByUserId = _currentUser.UserId;
 	        questionToSave.LastModifiedDate = DateTime.UtcNow;
 	        questionToSave.Location.Order = $"{orderConsultation}.{orderDocument}.{orderQuestion}";
 
@@ -118,7 +118,7 @@ namespace Comments.Services
             return (question: new ViewModels.Question(locationToSave, questionToSave), validate: null);
         }
 
-	    public QuestionAdmin GetQuestionAdmin(int consultationId, bool draft, string reference)
+	    public async Task<QuestionAdmin> GetQuestionAdmin(int consultationId, bool draft, string reference)
 	    {
 		    var consultationSourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
 
@@ -163,21 +163,21 @@ namespace Comments.Services
 
 			var previousQuestions = _context.GetAllPreviousUniqueQuestions();
 
-			var previousQuestionsWithRoles = GetRoles(previousQuestions);
+			var previousQuestionsWithRoles = await GetRoles(previousQuestions);
 
-			var currentUserRoles = _httpContextAccessor.HttpContext.User.Roles();
+			var currentUserRoles = _userService.GetUserRoles(); 
 
 			return new QuestionAdmin(documentsAndConsultationTitle.consultationTitle, consultationQuestions,
 				questionAdminDocuments, questionTypes, consultationState, previousQuestionsWithRoles, currentUserRoles);
 	    }
 
-	    private IEnumerable<QuestionWithRoles> GetRoles(IEnumerable<Models.Question> previousQuestions)
+	    private async Task<IEnumerable<QuestionWithRoles>> GetRoles(IEnumerable<Models.Question> previousQuestions)
 		{
 			var distinctUserIds =   previousQuestions.Select(question => question.CreatedByUserId)
 							.Concat(previousQuestions.Select(question => question.LastModifiedByUserId))
 							.Distinct();
 
-			var usersWithRoles = _authenticateService.FindRoles(distinctUserIds); //send the distinctUserIds to nice accounts and get back all the groups.
+			var usersWithRoles = await _apiService.FindRoles(distinctUserIds, _httpContextAccessor.HttpContext.Request.Host.Host); //send the distinctUserIds to nice accounts and get back all the groups.
 
 			//accounts only returns the users that match. non-matching users are silently discarded from the result. 
 			var questionWithRoles = new List<QuestionWithRoles>();

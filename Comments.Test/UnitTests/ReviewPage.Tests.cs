@@ -38,7 +38,7 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			var unfilteredCommentsAndQuestions = SampleListData.GetReviewPageViewModelWith1CommentAnd1Question().CommentsAndQuestions;
-			var commentService = new CommentService(null, _fakeUserService, null, null);
+			var commentService = new CommentService(null, _fakeUserService, null, _fakeHttpContextAccessor);
 
 			//Act
 			var filteredCommentsAndQuestions = commentService.FilterCommentsAndQuestions(unfilteredCommentsAndQuestions, typesToFilter, documentIdsToFilter);
@@ -56,7 +56,7 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			var unfilteredCommentsAndQuestions = SampleListData.GetReviewPageViewModelWith1CommentAnd1Question().CommentsAndQuestions;
-			var commentService = new CommentService(null, _fakeUserService, null, null);
+			var commentService = new CommentService(null, _fakeUserService, null, _fakeHttpContextAccessor);
 
 			//Act
 			var filteredCommentsAndQuestions = commentService.FilterCommentsAndQuestions(unfilteredCommentsAndQuestions, new List<QuestionsOrComments> { QuestionsOrComments.Comments }, null);
@@ -71,7 +71,7 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			var unfilteredCommentsAndQuestions = SampleListData.GetReviewPageViewModelWith1CommentAnd1Question().CommentsAndQuestions;
-			var commentService = new CommentService(null, _fakeUserService, null, null);
+			var commentService = new CommentService(null, _fakeUserService, null, _fakeHttpContextAccessor);
 
 			//Act
 			var filteredCommentsAndQuestions = commentService.FilterCommentsAndQuestions(unfilteredCommentsAndQuestions, new List<QuestionsOrComments> { QuestionsOrComments.Questions }, null);
@@ -86,7 +86,7 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			var unfilteredCommentsAndQuestions = SampleListData.GetReviewPageViewModelWith1CommentAnd1Question().CommentsAndQuestions;
-			var commentService = new CommentService(null, _fakeUserService, null, null);
+			var commentService = new CommentService(null, _fakeUserService, null, _fakeHttpContextAccessor);
 
 			//Act
 			var filteredCommentsAndQuestions = commentService.FilterCommentsAndQuestions(unfilteredCommentsAndQuestions, null, new List<int>(){ 1 });
@@ -101,7 +101,7 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			var unfilteredCommentsAndQuestions = SampleListData.GetReviewPageViewModelWith1CommentAnd1Question().CommentsAndQuestions;
-			var commentService = new CommentService(null, _fakeUserService, null, null);
+			var commentService = new CommentService(null, _fakeUserService, null, _fakeHttpContextAccessor);
 
 			//Act
 			var filteredCommentsAndQuestions = commentService.FilterCommentsAndQuestions(unfilteredCommentsAndQuestions, null, new List<int>() { 99 });

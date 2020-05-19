@@ -7,7 +7,8 @@ import enterQuestionAnswer, { enterQuestionAnswerAndSubmit, enterQuestionAnswerT
 import navigateToReviewPage, { clickReviewPageLink } from "../support/action/navigateToReviewPage";
 import submitResponse, { completeResponseMandatoryQuestions, clickSubmitResponseButton, responseMandatoryQuestions_answerYestoOrg } from "../support/action/submitResponse";
 import { reviewResponse } from "../support/action/reviewResponse";
-import { Login } from "../support/action/globalnavLogin";
+import { Login } from "../support/action/Login";
+import { sidebarLogin } from "../support/action/sidebarLogin";
 import { openQuestionPanel } from "../support/action/openQuestionPanel";
 import { scrollDeleteButtonIntoView } from "../support/action/scrollDeleteButtonIntoView";
 
@@ -95,6 +96,11 @@ When(
 When(
 	/^I log into accounts with username "([A-Z0-9_]+)" and password "([A-Z0-9_]+)"$/,
 	Login
+);
+
+When(
+	/^I log in using sidebar with username "([A-Z0-9_]+)" and password "([A-Z0-9_]+)"$/,
+	sidebarLogin
 );
 
 When(

@@ -28,7 +28,7 @@ namespace Comments.Models
 		/// </summary>
 		public virtual DbQuery<SubmittedCommentsAndAnswerCount> SubmittedCommentsAndAnswerCounts { get; set; }
 
-		private Guid? _createdByUserID;
+		private string _createdByUserID;
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{

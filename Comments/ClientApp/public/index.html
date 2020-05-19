@@ -76,8 +76,17 @@
 			height="0" width="0" style="display:none;visibility:hidden"></iframe>
 </noscript>
 
-<!-- Global nav -->
+<!-- End Google Tag Manager (noscript) -->
+<div id="global-nav-header"></div>
+<div id="root"></div>
+<div id="global-nav-footer"></div>
+
+<!-- NOTE: Do not remove the "loud comments" in this page. eg. the scripts tag below. They are used by server side rendering. -->
+<!--! scripts -->
+
+<!-- Global nav - this block must be below the "loud" scripts comment above, as it relies on window.__AUTH__ which is set in that block. -->
 <script>	
+	//var global_nav_config_
 	var global_nav_config = {
 		service: "guidance",
 		header: {
@@ -85,22 +94,19 @@
 				autocomplete: "/autocomplete?ajax=ajax",
 			},
 			auth: {
-				environment: "%REACT_APP_ACCOUNTS_ENVIRONMENT%"
+				provider: "idam",
+				environment: "%REACT_APP_ACCOUNTS_ENVIRONMENT%",
+				links: window.__AUTH__.isAuthorised ? [{ text: "Sign out", url: window.__AUTH__.signOutURL }] : [{ text: "Sign in", url: window.__AUTH__.signInURL }],
+				displayName: window.__AUTH__.displayName
 			}
 		},
 		footer: true
 	};
 </script>
-
-<!-- End Google Tag Manager (noscript) -->
-<div id="global-nav-header"></div>
-<div id="root"></div>
-<div id="global-nav-footer"></div>
-
 <!-- Content of src in script tags below are replaced by parameters in the .env file for local development only.
 	
 	On all other servers, the .env.production file is used. During the build, the src attributes will get the substitution variable strings
-	in the .env.production file i.e. "#{GlobalNavScript}". Then when the release is deployed to the servers, this substitution string is 
+	in the .env.production file i.e. "#{GlobalNav:Script}". Then when the release is deployed to the servers, this substitution string is 
 	replaced by the variable from Octopus Deploy, which is the actual URL to use.
 
 	note: custom environment variables in .env files must have have the prefix of "REACT_APP_".
@@ -109,9 +115,6 @@
 	<script src="%REACT_APP_GLOBAL_NAV_SCRIPT_IE8%"></script>
 <![endif]-->
 <script src="%REACT_APP_GLOBAL_NAV_SCRIPT%"></script>
-
-<!-- NOTE: Do not remove the "loud comments" in this page. eg. the scripts tag below. They are used by server side rendering. -->
-<!--! scripts -->
 
 </body>
 </html>

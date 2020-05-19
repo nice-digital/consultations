@@ -1,72 +1,89 @@
 using Comments.Common;
 using Comments.ViewModels;
 using Microsoft.AspNetCore.Http;
-using NICE.Auth.NetCore.Helpers;
-using NICE.Auth.NetCore.Services;
+using Microsoft.AspNetCore.Mvc;
+using NICE.Identity.Authentication.Sdk.API;
+using NICE.Identity.Authentication.Sdk.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Comments.Services
 {
 	public interface IUserService
     {
         User GetCurrentUser();
-		SignInDetails GetCurrentUserSignInDetails(string returnURL);
-	    string GetDisplayNameForUserId(Guid userId);
-	    string GetEmailForUserId(Guid userId);
-		IDictionary<Guid, string> GetDisplayNamesForMultipleUserIds(IEnumerable<Guid> userIds);
+		SignInDetails GetCurrentUserSignInDetails(string returnURL, IUrlHelper urlHelper);
+		Task<string> GetDisplayNameForUserId(string userId);
+		Task<string> GetEmailForUserId(string userId);
+		Task<Dictionary<string, (string displayName, string emailAddress)>> GetUserDetailsForUserIds(IEnumerable<string> userIds);
 	    ICollection<string> GetUserRoles();
 	    Validate IsAllowedAccess(ICollection<string> permittedRoles);
-	}
+	    (string userId, string displayName, string emailAddress) GetCurrentUserDetails();
+    }
 
     public class UserService : IUserService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-	    private readonly IAuthenticateService _authenticateService;
+        private readonly IAPIService _apiService;
 
-	    public UserService(IHttpContextAccessor httpContextAccessor, IAuthenticateService authenticateService)
-	    {
-		    _httpContextAccessor = httpContextAccessor;
-		    _authenticateService = authenticateService;
-	    }
+        public UserService(IHttpContextAccessor httpContextAccessor, IAPIService apiService)
+        {
+	        _httpContextAccessor = httpContextAccessor;
+	        _apiService = apiService;
+        }
 
         public User GetCurrentUser()
         {
             var contextUser = _httpContextAccessor.HttpContext?.User;
 
-            return new User(contextUser?.Identity.IsAuthenticated ?? false, contextUser?.DisplayName(), contextUser?.Id(), contextUser?.Organisation());
+            return new User(contextUser?.Identity.IsAuthenticated ?? false, contextUser?.DisplayName(), contextUser?.NameIdentifier());
         }
 
-		public SignInDetails GetCurrentUserSignInDetails(string returnURL)
+        public (string userId, string displayName, string emailAddress) GetCurrentUserDetails()
+        {
+	        var contextUser = _httpContextAccessor.HttpContext?.User;
+	        if (contextUser != null && contextUser.Identity.IsAuthenticated)
+	        {
+		        return (contextUser.NameIdentifier(), contextUser.DisplayName(), contextUser.EmailAddress());
+	        }
+	        return (null, null, null);
+        }
+
+		public SignInDetails GetCurrentUserSignInDetails(string returnURL, IUrlHelper urlHelper)
 	    {
 			var user = GetCurrentUser();
 
-		    var signInURL = _authenticateService.GetLoginURL(returnURL.ToConsultationsRelativeUrl());
-		    var registerURL = _authenticateService.GetRegisterURL(returnURL.ToConsultationsRelativeUrl());
+		    var signInURL = urlHelper.Action(Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnURL = returnURL.ToConsultationsRelativeUrl() });
+		    var registerURL = urlHelper.Action(Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnURL = returnURL.ToConsultationsRelativeUrl(), goToRegisterPage = true });
 
 			return new SignInDetails(user, signInURL, registerURL);
 		}
 
-	    public string GetDisplayNameForUserId(Guid userId)
+	    public async Task<Dictionary<string, (string displayName, string emailAddress)>> GetUserDetailsForUserIds(IEnumerable<string> userIds)
 	    {
-		    return _authenticateService.FindUser(userId)?.DisplayName;
+		    var users = await _apiService.FindUsers(userIds);
+		    return users.ToDictionary(user => user.NameIdentifier, user => (displayName: user.DisplayName,  emailAddress : user.EmailAddress));
 	    }
 
-	    public string GetEmailForUserId(Guid userId)
-	    {
-		    return _authenticateService.FindUser(userId)?.EmailAddress;
-	    }
+	    public async Task<string> GetDisplayNameForUserId(string userId)
+		{
+			var user = await GetUserDetailsForUserIds(new List<string> {userId});
+			return user[userId].displayName;
+		}
 
-		public IDictionary<Guid, string> GetDisplayNamesForMultipleUserIds(IEnumerable<Guid> userIds)
+		public async Task<string> GetEmailForUserId(string userId)
 	    {
-		    return userIds.Distinct().ToDictionary(userId => userId, GetDisplayNameForUserId);
+		    var users = await _apiService.FindUsers(new List<string> { userId });
+		    return users?.FirstOrDefault()?.EmailAddress;
 	    }
 
 	    public ICollection<string> GetUserRoles()
 	    {
 			var niceUser = _httpContextAccessor.HttpContext?.User;
-		    return niceUser?.Roles().ToList() ?? new List<string>();
+			var host = _httpContextAccessor.HttpContext?.Request.Host.Host;
+			return niceUser?.Roles(host).ToList() ?? new List<string>();
 	    }
 
 	    public Validate IsAllowedAccess(ICollection<string> permittedRoles)
@@ -86,7 +103,8 @@ namespace Comments.Services
 		    {
 			    return new Validate(false, false, false, "Not authenticated");
 		    }
-		    var userRoles = niceUser.Roles();
+		    var host = _httpContextAccessor.HttpContext?.Request.Host.Host;
+			var userRoles = niceUser.Roles(host);
 
 		    if (!userRoles.Any(permittedRoles.Contains))
 		    {

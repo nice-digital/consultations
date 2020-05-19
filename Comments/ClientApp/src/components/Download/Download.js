@@ -66,7 +66,7 @@ export class Download extends Component<PropsType, StateType> {
 
 		const querystring = this.props.location.search;
 
-		const isAuthorised = ((preloadedData && preloadedData.isAuthorised) || (canUseDOM() && window.__PRELOADED__["isAuthorised"]));
+		const isAuthorised = ((preloadedData && preloadedData.isAuthorised) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["isAuthorised"]));
 
 		this.state = {
 			searchTerm: "",

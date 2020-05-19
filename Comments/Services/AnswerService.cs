@@ -33,7 +33,7 @@ namespace Comments.Services
             if (answerInDatabase == null)
                 return (answer: null, validate: new Validate(valid: false, notFound: true, message: $"Answer id:{answerId} not found trying to get answer for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
 
-	        if (!answerInDatabase.CreatedByUserId.Equals(_currentUser.UserId.Value))
+	        if (!answerInDatabase.CreatedByUserId.Equals(_currentUser.UserId, StringComparison.OrdinalIgnoreCase))
 		        return (answer: null, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to access answer id: {answerId}, but it's not their answer"));
 			
 			return (answer: new ViewModels.Answer(answerInDatabase), validate: null);
@@ -49,11 +49,11 @@ namespace Comments.Services
             if (answerInDatabase == null)
                 return (rowsUpdated: 0, validate: new Validate(valid: false, notFound: true, message: $"Answer id:{answerId} not found trying to edit answer for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
 
-	        if (!answerInDatabase.CreatedByUserId.Equals(_currentUser.UserId.Value))
+	        if (!answerInDatabase.CreatedByUserId.Equals(_currentUser.UserId, StringComparison.OrdinalIgnoreCase))
 		        return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to edit answer id: {answerId}, but it's not their answer"));
 
 
-			answer.LastModifiedByUserId = _currentUser.UserId.Value;
+			answer.LastModifiedByUserId = _currentUser.UserId;
 	        answer.LastModifiedDate = DateTime.UtcNow;
 			answerInDatabase.UpdateFromViewModel(answer);
             return (rowsUpdated: _context.SaveChanges(), validate: null);
@@ -69,12 +69,12 @@ namespace Comments.Services
             if (answerInDatabase == null)
                 return (rowsUpdated: 0, validate: new Validate(valid: false, notFound: true, message: $"Answer id:{answerId} not found trying to delete answer for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
 
-	        if (!answerInDatabase.CreatedByUserId.Equals(_currentUser.UserId.Value))
+	        if (!answerInDatabase.CreatedByUserId.Equals(_currentUser.UserId))
 		        return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to delete answer id: {answerId}, but it's not their answer"));
 
 			answerInDatabase.IsDeleted = true;
 	        answerInDatabase.LastModifiedDate = DateTime.UtcNow;
-	        answerInDatabase.LastModifiedByUserId = _currentUser.UserId.Value;
+	        answerInDatabase.LastModifiedByUserId = _currentUser.UserId;
 			return (rowsUpdated: _context.SaveChanges(), validate: null);
         }
 
@@ -86,8 +86,8 @@ namespace Comments.Services
 	        var status = _context.GetStatus(StatusName.Draft);
 	        var question = _context.GetQuestion(answer.QuestionId);
 
-            var answerToSave = new Models.Answer(answer.QuestionId, _currentUser.UserId.Value, answer.AnswerText, answer.AnswerBoolean, question, status.StatusId, null);
-	        answerToSave.LastModifiedByUserId = _currentUser.UserId.Value;
+            var answerToSave = new Models.Answer(answer.QuestionId, _currentUser.UserId, answer.AnswerText, answer.AnswerBoolean, question, status.StatusId, null);
+	        answerToSave.LastModifiedByUserId = _currentUser.UserId;
 	        answerToSave.LastModifiedDate = DateTime.UtcNow;
 			_context.Answer.Add(answerToSave);
             _context.SaveChanges();

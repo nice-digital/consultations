@@ -8,7 +8,7 @@ namespace Comments.ViewModels
 	public class Answer
 	{
 		public Answer() { } //only here for model binding. don't use it in code.
-		public Answer(int answerId, string answerText, bool answerBoolean, DateTime lastModifiedDate, Guid lastModifiedByUserId, int questionId, int statusId)
+		public Answer(int answerId, string answerText, bool answerBoolean, DateTime lastModifiedDate, string lastModifiedByUserId, int questionId, int statusId)
 		{
 			AnswerId = answerId;
 			AnswerText = answerText;
@@ -45,7 +45,7 @@ namespace Comments.ViewModels
 		//public ViewModels.Question Question { get; set; }
 
 		public DateTime LastModifiedDate { get; set; }
-		public Guid LastModifiedByUserId { get; set; }
+		public string LastModifiedByUserId { get; set; }
 
 		public int StatusId { get; set; }
 		public ViewModels.Status Status { get; set; }

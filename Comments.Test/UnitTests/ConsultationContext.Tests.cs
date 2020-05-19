@@ -23,7 +23,7 @@ namespace Comments.Test.UnitTests
             ResetDatabase();
             var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var commentText = Guid.NewGuid().ToString();
-            var createdByUserId = Guid.NewGuid();
+            var createdByUserId = Guid.NewGuid().ToString();
 
             var locationId = AddLocation(sourceURI);
             AddComment(locationId, commentText, true, createdByUserId);
@@ -49,7 +49,7 @@ namespace Comments.Test.UnitTests
             ResetDatabase();
             var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var commentText = Guid.NewGuid().ToString();
-            var createdByUserId = Guid.NewGuid();
+            var createdByUserId = Guid.NewGuid().ToString();
 
             var locationId = AddLocation(sourceURI);
             AddComment(locationId, commentText, true, createdByUserId);
@@ -73,7 +73,7 @@ namespace Comments.Test.UnitTests
 		    // Arrange
 		    ResetDatabase();
 		    var commentText = Guid.NewGuid().ToString();
-		    var createdByUserId = Guid.NewGuid();
+		    var createdByUserId = Guid.NewGuid().ToString();
 
 		    var locationId = AddLocation("consultations://./consultation/1/document/1/chapter/introduction");
 		    AddComment(locationId, commentText, true, createdByUserId);
@@ -110,7 +110,7 @@ namespace Comments.Test.UnitTests
 		    // Arrange
 		    ResetDatabase();
 		    var commentText = Guid.NewGuid().ToString();
-		    var createdByUserId = Guid.NewGuid();
+		    var createdByUserId = Guid.NewGuid().ToString();
 
 		    var locationId = AddLocation("consultations://./consultation/1/document/1/chapter/introduction");
 		    AddComment(locationId, commentText, true, createdByUserId);
@@ -427,7 +427,7 @@ namespace Comments.Test.UnitTests
 			// Arrange
 			ResetDatabase();
 
-			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: Guid.NewGuid());
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: Guid.NewGuid().ToString());
 			var context = CreateContext(userService);
 			context.Database.EnsureCreated();
 

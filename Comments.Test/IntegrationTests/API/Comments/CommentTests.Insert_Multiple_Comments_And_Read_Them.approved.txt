@@ -80,7 +80,7 @@
         
     ],
     "isAuthorised":true,
-    "signInURL":"/signin?returnURL=/",
+    "signInURL":"/consultations/account/login?returnUrl=%2Fconsultations%2Fconsultations%3A%2F%2F.%2Fconsultation%2F1%2Fdocument%2F1%2Fchapter%2Fintroduction",
     "consultationState":{
         "startDate":"2018-04-01T00:00:00",
         "endDate":"2028-05-31T17:00:00",

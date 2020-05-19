@@ -5,7 +5,7 @@ Feature: Submit Comments on a Consultation
 
 Background:
     Given I open the url "1/1/introduction"
-		When I log into accounts with username "ACCOUNTS_EMAIL3" and password "ACCOUNTS_PASSWORD"
+		When I log into accounts with username "IDAM_EMAIL3" and password "IDAM_PASSWORD"
 
 Scenario: User makes a multiple comments and submits
 		Given I comment on a Document

@@ -42,11 +42,11 @@ namespace Comments.Test.IntegrationTests.API.Review
 	        var relativeURIForReviewPage = "/1/review";
 			var answerText = Guid.Empty.ToString();
 	        var questionText = Guid.Empty.ToString();
-	        var userId = Guid.Empty;
+	        var userId = Guid.Empty.ToString();
 
 	        AddCommentsAndQuestionsAndAnswers(sourceURI, "My Comment", questionText, answerText, userId);
 	        AddCommentsAndQuestionsAndAnswers(sourceURI, "My Second Comment", questionText, answerText, userId);
-	        AddCommentsAndQuestionsAndAnswers(sourceURI, "Another users Comment", questionText, answerText, Guid.NewGuid());
+	        AddCommentsAndQuestionsAndAnswers(sourceURI, "Another users Comment", questionText, answerText, Guid.NewGuid().ToString());
 
 			// Act
 			var response = await _client.GetAsync(string.Format("/consultations/api/CommentsForReview?relativeURL={0}", relativeURIForReviewPage));

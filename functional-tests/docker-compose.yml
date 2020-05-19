@@ -14,7 +14,7 @@ services:
 
   chrome:
     container_name: functional-tests_chrome_1
-    image: selenium/node-chrome:3.11.0-dysprosium
+    image: selenium/node-chrome:3.141.59
     volumes:
       - /dev/shm:/dev/shm
     depends_on:
@@ -50,6 +50,11 @@ services:
       - ACCOUNTS_EMAIL3
       - ACCOUNTS_EMAIL4
       - ACCOUNTS_PASSWORD
+      - IDAM_EMAIL1
+      - IDAM_EMAIL2
+      - IDAM_EMAIL3
+      - IDAM_EMAIL4
+      - IDAM_PASSWORD
 
   # Comment Collection dotnet core web app
   comments:
@@ -84,6 +89,13 @@ services:
       - REACT_APP_ACCOUNTS_ENVIRONMENT
       - REACT_APP_GLOBAL_NAV_SCRIPT
       - REACT_APP_GLOBAL_NAV_SCRIPT_IE8
+      - WEBAPP_DOMAIN
+      - WEBAPP_CLIENTID
+      - WEBAPP_CLIENTSECRECT
+      - WEBAPP_REDIRECT_URI
+      - WEBAPP_LOGOUT_REDIRECT_URI
+      - WEBAPP_API_IDENTIFIER
+      - WEBAPP_AUTH_SERVICE_URI
 
 
   # MS SQL Server database

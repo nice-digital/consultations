@@ -17,7 +17,7 @@ namespace Comments.Test.Infrastructure
 				CommentsAndQuestions = new CommentsAndQuestions(
 					new List<Comment>()
 					{
-						new Comment(0, "consultations://./consultation/1/document/1/chapter/introduction", null, null, null, null, null, null, null, 1, DateTime.MinValue, Guid.Empty, "some comment", 1, true, null)
+						new Comment(0, "consultations://./consultation/1/document/1/chapter/introduction", null, null, null, null, null, null, null, 1, DateTime.MinValue, Guid.Empty.ToString(), "some comment", 1, true, null)
 					},
 					new List<Question>()
 					{

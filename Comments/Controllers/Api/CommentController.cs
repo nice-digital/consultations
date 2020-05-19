@@ -1,4 +1,4 @@
-﻿using Comments.Services;
+using Comments.Services;
 using Comments.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -56,7 +56,7 @@ namespace Comments.Controllers.Api
         }
 
         // POST: consultations/api/Comment
-        [HttpPost]
+        [HttpPost("")]
         public IActionResult PostComment([FromBody] ViewModels.Comment comment)
         {
             if (!ModelState.IsValid)
@@ -67,7 +67,7 @@ namespace Comments.Controllers.Api
             var result = _commentService.CreateComment(comment);
             var invalidResult = Validate(result.validate, _logger);
 
-            return invalidResult ?? CreatedAtAction("GetComment", new { id = result.comment.CommentId }, result.comment);
+            return invalidResult ?? CreatedAtAction("GetComment", new { commentId = result.comment.CommentId }, result.comment);
         }
 
         // DELETE: consultations/api/Comment/5

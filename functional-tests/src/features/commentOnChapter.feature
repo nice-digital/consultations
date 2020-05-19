@@ -5,7 +5,7 @@
 
  Background:
     Given I open the url "158/3/introduction"
-		When I log into accounts with username "ACCOUNTS_EMAIL2" and password "ACCOUNTS_PASSWORD"
+		When I log into accounts with username "IDAM_EMAIL2" and password "IDAM_PASSWORD"
 		Given I delete all comments on the page
 
 Scenario: User makes a comment at chapter level

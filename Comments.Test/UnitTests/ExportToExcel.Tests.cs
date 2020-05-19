@@ -33,7 +33,7 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			int locationId, submissionId, commentId;
-			var userId = Guid.NewGuid();
+			var userId = Guid.NewGuid().ToString();
 
 			locationId = AddLocation("consultations://./consultation/1/document/1", _context, "001.001.000.000");
 			commentId = AddComment(locationId, "Submitted comment consultation 1", false, userId, (int)StatusName.Submitted, _context);
@@ -59,7 +59,7 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			int locationId, questionId, answerId;
-			var userId = Guid.NewGuid();
+			var userId = Guid.NewGuid().ToString();
 			var submissionId = AddSubmission(userId, _context);
 			var questionTypeId = 99;
 
@@ -108,7 +108,7 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			int locationId, commentId;
-			var userId = Guid.NewGuid();
+			var userId = Guid.NewGuid().ToString();
 			var submissionId = AddSubmission(userId, _context);
 
 			locationId = AddLocation("consultations://./consultation/1", _context, "001.000.000.000");
@@ -126,7 +126,7 @@ namespace Comments.Test.UnitTests
 			AddSubmissionComments(submissionId, commentId, _context);
 			
 			locationId = AddLocation("consultations://./consultation/1/document/1/chapter/chapter-slug", _context, "001.002.000.000");
-			commentId = AddComment(locationId, "Another Users Submitted comment", false, Guid.NewGuid(), (int)StatusName.Submitted, _context);
+			commentId = AddComment(locationId, "Another Users Submitted comment", false, Guid.NewGuid().ToString(), (int)StatusName.Submitted, _context);
 			AddSubmissionComments(submissionId, commentId, _context);
 
 			const string sourceURI = "consultations://./consultation/1";
@@ -143,7 +143,7 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			int locationId, answerId;
-			var userId = Guid.NewGuid();
+			var userId = Guid.NewGuid().ToString();
 			var submissionId = AddSubmission(userId, _context);
 
 			var questionTypeId = 99;
@@ -153,7 +153,7 @@ namespace Comments.Test.UnitTests
 			answerId = AddAnswer(questionId, userId, "This is a submitted answer", (int)StatusName.Submitted, _context);
 			AddSubmissionAnswers(submissionId, answerId, _context);
 
-			answerId = AddAnswer(questionId, Guid.NewGuid(), "An answer to the same question by another user", (int)StatusName.Submitted, _context);
+			answerId = AddAnswer(questionId, Guid.NewGuid().ToString(), "An answer to the same question by another user", (int)StatusName.Submitted, _context);
 			AddSubmissionAnswers(submissionId, answerId, _context);
 
 			answerId = AddAnswer(questionId, userId, "This is a draft answer", (int)StatusName.Draft, _context);
@@ -173,7 +173,7 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			int locationId, commentId;
-			var userId = Guid.Empty;
+			var userId = Guid.Empty.ToString();
 			var submissionId = AddSubmission(userId, _context);
 
 			locationId = AddLocation("consultations://./consultation/1", _context, "001.000.000.000");
@@ -191,7 +191,7 @@ namespace Comments.Test.UnitTests
 			AddSubmissionComments(submissionId, commentId, _context);
 
 			locationId = AddLocation("consultations://./consultation/1/document/1/chapter/chapter-slug", _context, "001.002.000.000");
-			commentId = AddComment(locationId, "Another Users Submitted comment", false, Guid.NewGuid(), (int)StatusName.Submitted, _context);
+			commentId = AddComment(locationId, "Another Users Submitted comment", false, Guid.NewGuid().ToString(), (int)StatusName.Submitted, _context);
 			AddSubmissionComments(submissionId, commentId, _context);
 
 			const string sourceURI = "consultations://./consultation/1";
@@ -208,7 +208,7 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			int locationId, answerId;
-			var userId = Guid.Empty;
+			var userId = Guid.Empty.ToString();
 			var submissionId = AddSubmission(userId, _context);
 
 			var questionTypeId = 99;
@@ -218,7 +218,7 @@ namespace Comments.Test.UnitTests
 			answerId = AddAnswer(questionId, userId, "This is a submitted answer", (int)StatusName.Submitted, _context);
 			AddSubmissionAnswers(submissionId, answerId, _context);
 
-			answerId = AddAnswer(questionId, Guid.NewGuid(), "An answer to the same question by another user", (int)StatusName.Submitted, _context);
+			answerId = AddAnswer(questionId, Guid.NewGuid().ToString(), "An answer to the same question by another user", (int)StatusName.Submitted, _context);
 			AddSubmissionAnswers(submissionId, answerId, _context);
 
 			answerId = AddAnswer(questionId, userId, "This is a draft answer", (int)StatusName.Draft, _context);
@@ -239,7 +239,7 @@ namespace Comments.Test.UnitTests
 			//Arrange
 
 			int locationId,  questionId, answerId;
-			var userId = Guid.Empty;
+			var userId = Guid.Empty.ToString();
 			var submissionId = AddSubmission(userId, _context);
 			var questionTypeId = 99;
 
@@ -250,7 +250,7 @@ namespace Comments.Test.UnitTests
 
 			locationId = AddLocation("consultations://./consultation/1/document/3/chapter/intro", _context, "001.002.001.000");
 			questionId = AddQuestion(locationId, questionTypeId, "Question Answered By different user", _context);
-			answerId = AddAnswer(questionId, Guid.NewGuid(), "different Users answer", (int)StatusName.Draft, _context);
+			answerId = AddAnswer(questionId, Guid.NewGuid().ToString(), "different Users answer", (int)StatusName.Draft, _context);
 			AddSubmissionAnswers(submissionId, answerId, _context);
 
 			locationId = AddLocation("consultations://./consultation/1/document/2", _context, "001.002.000.000");
@@ -271,7 +271,7 @@ namespace Comments.Test.UnitTests
 			// Arrange
 			ResetDatabase();
 			_context.Database.EnsureCreated();
-			var userId = Guid.Empty;
+			var userId = Guid.Empty.ToString();
 
 			var locationId = AddLocation("consultations://./consultation/1/document/1/chapter/chapter-slug", _context, "001.000.000.000");
 			var commentId = AddComment(locationId, "Submitted comment", false, userId, (int)StatusName.Submitted, _context);
@@ -298,7 +298,7 @@ namespace Comments.Test.UnitTests
 			// Arrange
 			ResetDatabase();
 			_context.Database.EnsureCreated();
-			var userId = Guid.NewGuid();
+			var userId = Guid.NewGuid().ToString();
 			int locationId, submissionId, commentId, questionId, answerId;
 			var questionTypeId = 99;
 
@@ -342,7 +342,7 @@ namespace Comments.Test.UnitTests
 			_context.Database.EnsureCreated();
 
 			int locationId, submissionId, commentId, answerId, questionId;
-			var userId = Guid.NewGuid();
+			var userId = Guid.NewGuid().ToString();
 			int questionTypeId = 99;
 
 			// Add comment

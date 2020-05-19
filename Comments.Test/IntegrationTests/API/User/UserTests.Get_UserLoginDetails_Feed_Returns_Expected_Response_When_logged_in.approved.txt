@@ -1,8 +1,8 @@
 ﻿{
-    "signInURL":"/signin?returnURL=/",
-    "registerURL":"/register?returnURL=/",
+    "signInURL":"/consultations/account/login?returnURL=%2Fconsultations%2F1%2F1%2Fintroduction",
+    "registerURL":"/consultations/account/login?returnURL=%2Fconsultations%2F1%2F1%2Fintroduction&goToRegisterPage=True",
     "isAuthorised":true,
-    "displayName":"Quentin Taratino",
+    "displayName":"Quentin Tarantino",
     "userId":"00000000-0000-0000-0000-000000000000",
     "organisationName":null
 }

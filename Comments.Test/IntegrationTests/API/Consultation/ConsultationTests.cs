@@ -15,7 +15,7 @@ namespace Comments.Test.IntegrationTests.API.Consultation
 {
     public class ConsultationTests : TestBase
     {
-        public ConsultationTests() : base(Feed.ConsultationCommentsPublishedDetailMulitpleDoc, true, Guid.Empty, "Benjamin Button") { }
+        public ConsultationTests() : base(Feed.ConsultationCommentsPublishedDetailMulitpleDoc, true, Guid.Empty.ToString(), "Benjamin Button") { }
 
         [Theory]
         [InlineData(0)]
@@ -70,15 +70,14 @@ namespace Comments.Test.IntegrationTests.API.Consultation
 		    var commentText = Guid.NewGuid().ToString();
 		    var questionText = Guid.NewGuid().ToString();
 		    var answerText = Guid.NewGuid().ToString();
-		    var createdByUserId = Guid.Empty;
-		    var authenticateService = new FakeAuthenticateService(authenticated: true);
+		    var createdByUserId = Guid.Empty.ToString();
 
 		    AddCommentsAndQuestionsAndAnswers(sourceURI, commentText, questionText, answerText, createdByUserId, (int)StatusName.Draft, _context);
 		    //var submitService = new SubmitService(_context, _fakeUserService, _consultationService);
-		    var commentService = new CommentService(_context, _fakeUserService, authenticateService, _consultationService);
+		    var commentService = new CommentService(_context, _fakeUserService, _consultationService, _fakeHttpContextAccessor);
 
 		    // Act    
-		    var viewModel = commentService.GetCommentsAndQuestions(sourceURI);
+		    var viewModel = commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
 
 		    //Assert
 		    viewModel.Comments.Single().CommentText.ShouldBe(commentText);

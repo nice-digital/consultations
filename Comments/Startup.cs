@@ -1,29 +1,34 @@
+using Comments.Common;
 using Comments.Configuration;
+using Comments.Export;
 using Comments.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using NICE.Feeds;
+using NICE.Identity.Authentication.Sdk.Domain;
+using NICE.Identity.Authentication.Sdk.Extensions;
 using System;
 using System.IO;
-using Comments.Auth;
-using Comments.Common;
-using Comments.Export;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using NICE.Auth.NetCore.Services;
 
 namespace Comments
 {
-    public class Startup
+	public class Startup
     {
         ILogger _logger;
 
@@ -41,7 +46,7 @@ namespace Comments
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            if (Environment.IsDevelopment())
+			if (Environment.IsDevelopment())
             {
                 AppSettings.Configure(services, Configuration, @"c:\"); 
             }
@@ -51,8 +56,9 @@ namespace Comments
             }
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.TryAddSingleton<ISeriLogger, SeriLogger>();
-            services.TryAddSingleton<IAuthenticateService, AuthService>();
+            services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
+			services.TryAddSingleton<ISeriLogger, SeriLogger>();
+            //services.TryAddSingleton<IAuthenticateService, AuthService>();
             services.TryAddTransient<IUserService, UserService>();
 
 			var contextOptionsBuilder = new DbContextOptionsBuilder<ConsultationsContext>();
@@ -76,21 +82,18 @@ namespace Comments
 	        services.TryAddTransient<IStatusService, StatusService>();
 			services.TryAddTransient<IConsultationListService, ConsultationListService>();
 
-			// Add authentication 
-			services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = AuthOptions.DefaultScheme;
-                options.DefaultChallengeScheme = AuthOptions.DefaultScheme;
-            })
-            .AddNICEAuth(options =>
-            {
-                // todo: Configure options here from AppSettings
-            });
+			//services.TryAddTransient<IAPIService, APIService>(); //this is already done in the nugget
+			services.AddRouting(options => options.LowercaseUrls = true);
 
-            services.AddMvc(options =>
+			// Add authentication
+			var authConfiguration = AppSettings.AuthenticationConfig.GetAuthConfiguration();
+			services.AddAuthentication(authConfiguration);
+			services.AddAuthorisation(authConfiguration);
+
+			services.AddMvc(options =>
             {
                 options.Filters.Add(new ResponseCacheAttribute() { NoStore = true, Location = ResponseCacheLocation.None });
-            });
+            }); //.SetCompatibilityVersion(CompatibilityVersion.Version_2_2); 
 
             // In production, static files are served from the pre-built files, rather than proxied via react dev server
             services.AddSpaStaticFiles(configuration =>
@@ -145,15 +148,17 @@ namespace Comments
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ISeriLogger seriLogger, IApplicationLifetime appLifetime, IAuthenticateService authenticateService)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ISeriLogger seriLogger, IApplicationLifetime appLifetime, IUrlHelperFactory urlHelperFactory, IActionContextAccessor actionContextAccessor)
         {           
             seriLogger.Configure(loggerFactory, Configuration, appLifetime, env);
             var startupLogger = loggerFactory.CreateLogger<Startup>();
+            startupLogger.LogWarning("Consultations starting up");
 
-            if (env.IsDevelopment())
+
+			if (env.IsDevelopment())
             {
 	            app.UseExceptionHandler(Constants.ErrorPath);
-				//app.UseDeveloperExceptionPage();
+				app.UseDeveloperExceptionPage();
                 loggerFactory.AddConsole(Configuration.GetSection("Logging"));
                 loggerFactory.AddDebug();
 
@@ -165,9 +170,6 @@ namespace Comments
 
 	            app.UseStatusCodePagesWithReExecute(Constants.ErrorPath + "/{0}");
 			}
-
-	        
-
 
 			app.UseCors("CorsPolicy");
 
@@ -205,10 +207,10 @@ namespace Comments
 			    app.UseHttpsRedirection();
 		    }
 
-
-	        app.UseMvc(routes =>
+		    IRouteBuilder defaultRoute = null;
+			app.UseMvc(routes =>
             {
-                routes.MapRoute(
+                defaultRoute = routes.MapRoute(
                     name: "default",
                     template: "{controller}/{action=Index}/{id?}");
 
@@ -252,7 +254,8 @@ namespace Comments
                 return next();
             });
 
-            app.UseSpa(spa =>
+
+			app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "ClientApp";
 
@@ -261,19 +264,28 @@ namespace Comments
                     options.ExcludeUrls = new[] { "/sockjs-node" };
                     // Pass data in from .NET into the SSR. These come through as `params` within `createServerRenderer` within the server side JS code.
                     // See https://docs.microsoft.com/en-us/aspnet/core/spa/angular?tabs=visual-studio#pass-data-from-net-code-into-typescript-code
-                    options.SupplyData = (context, data) =>
+                    options.SupplyData = (httpContext, data) =>
                     {
-                        data["isHttpsRequest"] = context.Request.IsHttps;
-                        var cookieForSSR = context.Request.Cookies[NICE.Auth.NetCore.Helpers.Constants.DefaultCookieName];
-                        if (cookieForSSR != null)
+                        data["isHttpsRequest"] = httpContext.Request.IsHttps;
+                        var cookiesForSSR = httpContext.Request.Cookies.Where(cookie => cookie.Key.StartsWith(AuthenticationConstants.CookieName)).ToList();
+                        if (cookiesForSSR.Any())
                         {
-                            data["cookies"] = $"{NICE.Auth.NetCore.Helpers.Constants.DefaultCookieName}={cookieForSSR}";
+                            data["cookies"] = $"{string.Join("; ", cookiesForSSR.Select(cookie => $"{cookie.Key}={cookie.Value}"))};";
                         }
-                        data["isAuthorised"] = context.User.Identity.IsAuthenticated;
-	                    data["displayName"] = context.User.Identity.Name;
-	                    data["signInURL"] = authenticateService.GetLoginURL(context.Request.Path);
-	                    data["registerURL"] = authenticateService.GetRegisterURL(context.Request.Path);
-	                    data["requestURL"] = context.Request.Path;
+						data["isAuthorised"] = httpContext.User.Identity.IsAuthenticated;
+	                    data["displayName"] = httpContext.User.DisplayName();
+
+	                    var actionContext = new ActionContext {
+							HttpContext = httpContext,
+							RouteData = new RouteData { Routers = { defaultRoute.Build() } },
+							ActionDescriptor = new ActionDescriptor(),
+						};
+						var urlHelper = urlHelperFactory.GetUrlHelper(actionContext);
+
+						data["signInURL"] = urlHelper.Action(Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnUrl = httpContext.Request.Path });
+						data["signOutURL"] = urlHelper.Action(Constants.Auth.LogoutAction, Constants.Auth.ControllerName); //auth0 needs logout urls configured. it won't let you redirect dynamically.
+						data["registerURL"] = urlHelper.Action(Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnUrl = httpContext.Request.Path, goToRegisterPage = true });
+						data["requestURL"] = httpContext.Request.Path;
 	                    data["accountsEnvironment"] = AppSettings.Environment.AccountsEnvironment;
 	                    //data["user"] = context.User; - possible security implications here, surfacing claims to the front end. might be ok, if just server-side.
 	                    // Pass further data in e.g. user/authentication data

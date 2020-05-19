@@ -7,7 +7,7 @@ namespace Comments.Models
     {
 		public int SubmissionId { get; set; }
 		public DateTime SubmissionDateTime { get; set; }
-		public Guid SubmissionByUserId { get; set; }
+		public string SubmissionByUserId { get; set; }
 
 	    public bool RespondingAsOrganisation { get; set; }
 		public string OrganisationName { get; set; }

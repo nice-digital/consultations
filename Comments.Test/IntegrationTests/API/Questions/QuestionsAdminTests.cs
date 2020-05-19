@@ -16,11 +16,12 @@ namespace Comments.Test.IntegrationTests.API.Questions
 
 		public QuestionsAdminTests() : base(false, TestUserType.Administrator, true)
 		{
-			AppSettings.ConsultationListConfig.DownloadRoles = new RoleTypes()
-			{
-				AdminRoles = new List<string>(),
-				TeamRoles = new List<string>()
-			};
+			//AppSettings.ConsultationListConfig.DownloadRoles = new RoleTypes()
+			//{
+			//	AdminRoles = new List<string>(),
+			//	TeamRoles = new List<string>()
+			//};
+			AppSettings.ConsultationListConfig = TestAppSettings.GetConsultationListConfig();
 		}
 
 		[Fact]
@@ -33,7 +34,7 @@ namespace Comments.Test.IntegrationTests.API.Questions
 			const string sourceURI = "consultations://./consultation/1/document/1";
 			var description = Guid.NewGuid().ToString();
 			var questionText = Guid.NewGuid().ToString();
-			var userId = Guid.Empty;
+			var userId = Guid.Empty.ToString();
 
 			var locationId = AddLocation(sourceURI, _context);
 			var questionTypeId = 99;

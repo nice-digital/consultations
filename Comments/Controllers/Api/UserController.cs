@@ -1,5 +1,6 @@
 using Comments.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Logging;
 
 namespace Comments.Controllers.Api
@@ -27,7 +28,7 @@ namespace Comments.Controllers.Api
                 return BadRequest(ModelState);
             }
 
-	        var signInDetails = _userService.GetCurrentUserSignInDetails(returnURL);
+	        var signInDetails = _userService.GetCurrentUserSignInDetails(returnURL, Url);
 
             return Ok(signInDetails);
         }

@@ -7,7 +7,7 @@ namespace Comments.ViewModels
 {
     public class User
     {
-        public User(bool isAuthorised, string displayName, Guid? userId, string organisationName)
+        public User(bool isAuthorised, string displayName, string userId, string organisationName = null)
         {
             IsAuthorised = isAuthorised;
             DisplayName = displayName;
@@ -17,7 +17,7 @@ namespace Comments.ViewModels
 
         public bool IsAuthorised { get; private set; }
         public string DisplayName { get; private set; }
-        public Guid? UserId { get; private set; }
+        public string UserId { get; private set; }
 		public string OrganisationName { get; private set; }
     }
 }
