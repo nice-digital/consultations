@@ -15,11 +15,11 @@ export const Pagination = (props: PaginationProps) => {
 	let generatePageList = (pageCount, currentPage) => {
 		let pageListArray = [currentPage - 1, currentPage, currentPage + 1];
 
-		if (currentPage <= 2) {
+		if (currentPage <= 3) {
 			pageListArray = [1, 2, 3, 4];
 		}
 
-		if (currentPage >= pageCount - 1) {
+		if (currentPage >= pageCount - 2) {
 			pageListArray = [pageCount - 3, pageCount - 2, pageCount - 1, pageCount];
 		}
 

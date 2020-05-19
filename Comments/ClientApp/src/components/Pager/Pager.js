@@ -21,7 +21,7 @@ export const Pager = (props: PagerProps) => {
 		<Fragment>
 			{type === "last" &&
 				<li className="pagination__truncate">
-					<span>...</span>
+					<span>&hellip;</span>
 				</li>
 			}
 
@@ -31,7 +31,7 @@ export const Pager = (props: PagerProps) => {
 
 			{type === "first" &&
 				<li className="pagination__truncate">
-					<span>...</span>
+					<span>&hellip;</span>
 				</li>
 			}
 		</Fragment>

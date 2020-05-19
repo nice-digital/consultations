@@ -6,7 +6,7 @@ import Helmet from "react-helmet";
 import Cookies from "js-cookie";
 //import stringifyObject from "stringify-object";
 
-import { appendQueryParameter, removeQueryParameter, queryStringToObject, canUseDOM } from "../../helpers/utils";
+import { appendQueryParameter, removeQueryParameter, stripMultipleQueries, queryStringToObject, canUseDOM } from "../../helpers/utils";
 import { UserContext } from "../../context/UserContext";
 import { LoginBanner } from "../LoginBanner/LoginBanner";
 import { Header } from "../Header/Header";
@@ -71,9 +71,11 @@ export class Download extends Component<PropsType, StateType> {
 
 		const querystringObject = queryStringToObject(querystring);
 
-		const pageNumber = "page" in querystringObject ? querystringObject.page : 1;
+		const pageNumber = "page" in querystringObject ? parseInt(querystringObject.page, 10) : 1;
 
-		const itemsPerPage = "amount" in querystringObject ? querystringObject.amount : 25;
+		let itemsPerPage = "amount" in querystringObject ? querystringObject.amount : "";
+
+		itemsPerPage = !isNaN(itemsPerPage) ? parseInt(itemsPerPage, 10) : itemsPerPage;
 
 		const isAuthorised = ((preloadedData && preloadedData.isAuthorised) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["isAuthorised"]));
 
@@ -105,7 +107,7 @@ export class Download extends Component<PropsType, StateType> {
 				this.props.staticContext,
 				"consultationList",
 				[],
-				Object.assign({relativeURL: this.props.match.url}, queryStringToObject(querystring)),
+				Object.assign({ relativeURL: this.props.match.url }, queryStringToObject(querystring)),
 				preloadedData
 			);
 
@@ -140,7 +142,7 @@ export class Download extends Component<PropsType, StateType> {
 			search: this.props.history.location.search,
 		});
 
-		load("consultationList", undefined, [], Object.assign({relativeURL: this.props.match.url}, queryStringToObject(querystring)))
+		load("consultationList", undefined, [], Object.assign({ relativeURL: this.props.match.url }, queryStringToObject(querystring)))
 			.then(response => {
 				this.setState({
 					consultationListData: response.data,
@@ -160,19 +162,9 @@ export class Download extends Component<PropsType, StateType> {
 			});
 	};
 
-	stripQueries = (path, queries) => {
-		let strippedPath = path;
+	unlisten = () => { };
 
-		queries.forEach((query) => {
-			strippedPath = removeQueryParameter(strippedPath, query);
-		});
-
-		return strippedPath;
-	}
-
-	unlisten = () => {};
-
-	componentWillUnmount(){
+	componentWillUnmount() {
 		this.unlisten();
 	}
 
@@ -185,9 +177,9 @@ export class Download extends Component<PropsType, StateType> {
 			let path = this.props.basename + this.props.location.pathname + this.props.history.location.search,
 				paginationQueries = ["page", "amount"];
 
-			path = this.stripQueries(path, paginationQueries);
+			path = stripMultipleQueries(path, paginationQueries);
 
-			const statePath = this.stripQueries(this.state.path, paginationQueries);
+			const statePath = stripMultipleQueries(this.state.path, paginationQueries);
 
 			if (!path || path !== statePath) {
 				this.loadDataAndUpdateState();
@@ -195,7 +187,7 @@ export class Download extends Component<PropsType, StateType> {
 		});
 
 		let indevReturnPath = this.state.consultationListData.indevBasePath;
-		if (typeof(document) !== "undefined"){
+		if (typeof (document) !== "undefined") {
 			const documentReferrer = document.referrer;
 			if (documentReferrer.toLowerCase().indexOf("indev") !== -1) {
 				indevReturnPath = documentReferrer;
@@ -206,21 +198,21 @@ export class Download extends Component<PropsType, StateType> {
 			}
 			else {
 				const cookieReferrer = Cookies.get("documentReferrer");
-				if (cookieReferrer != null){
+				if (cookieReferrer != null) {
 					indevReturnPath = cookieReferrer;
 				}
 			}
 		}
-		this.setState({indevReturnPath: indevReturnPath});
+		this.setState({ indevReturnPath: indevReturnPath });
 	}
 
 	keywordToFilterByUpdated = (keywordToFilterBy) => {
-		this.setState({keywordToFilterBy});
+		this.setState({ keywordToFilterBy });
 	}
 
 	removeFilter = (optionId) => {
-		if (optionId === "Keyword"){
-			this.setState({keywordToFilterBy: ""});
+		if (optionId === "Keyword") {
+			this.setState({ keywordToFilterBy: "" });
 		}
 	}
 
@@ -239,8 +231,8 @@ export class Download extends Component<PropsType, StateType> {
 			.map(mapOptions)
 			.reduce((arr, group) => arr.concat(group), []);
 
-		if (this.state.keywordToFilterBy){
-			if (!filters.length){
+		if (this.state.keywordToFilterBy) {
+			if (!filters.length) {
 				filters = [];
 			}
 
@@ -272,7 +264,7 @@ export class Download extends Component<PropsType, StateType> {
 		let itemsPerPage = e.target.value,
 			pastPageRange = false,
 			pageNumber = this.state.pageNumber,
-			path = this.stripQueries(this.state.path, ["amount", "page"]);
+			path = stripMultipleQueries(this.state.path, ["amount", "page"]);
 
 		if (!isNaN(itemsPerPage)) {
 			itemsPerPage = parseInt(itemsPerPage, 10);
@@ -305,7 +297,7 @@ export class Download extends Component<PropsType, StateType> {
 		}
 
 		pageNumber = parseInt(pageNumber, 10);
-		path = appendQueryParameter(path, "page", pageNumber.toString());
+		path = appendQueryParameter(path, "page", pageNumber);
 
 		this.setState({ pageNumber, path }, () => {
 			this.props.history.push(path);
@@ -364,8 +356,8 @@ export class Download extends Component<PropsType, StateType> {
 						<div className="container">
 							<div className="grid">
 								<div data-g="12">
-									<Breadcrumbs links={BackToIndevLink}/>
-									<Header title="Download Responses"/>
+									<Breadcrumbs links={BackToIndevLink} />
+									<Header title="Download Responses" />
 									<div className="grid mt--d">
 										<div data-g="12 md:3">
 											<h2 className="h5 mt--0">Filter</h2>
@@ -378,7 +370,7 @@ export class Download extends Component<PropsType, StateType> {
 													{...textFilter}
 												/>
 											}
-											<FilterPanel filters={optionFilters} path={path}/>
+											<FilterPanel filters={optionFilters} path={path} />
 										</div>
 										<div data-g="12 md:9">
 											<DownloadResultsInfo
@@ -399,9 +391,7 @@ export class Download extends Component<PropsType, StateType> {
 														/>
 													)}
 												</ul>
-											) : (
-												<p>No consultations found matching supplied filters.</p>
-											)}
+											) : (<p>No consultations found matching supplied filters.</p>)}
 											<Pagination
 												onChangePage={this.changePage}
 												onChangeAmount={this.changeAmount}

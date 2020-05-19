@@ -30,16 +30,13 @@ export class DownloadResultsInfo extends Component<PropsType, StateType> {
 	getShowingText = (props: PropsType) => {
 		//TODO: "Showing Open consultations" etc.
 		//const appliedFilters = props.appliedFilters
+		const amountPerPage = props.paginationPositions.finish - props.paginationPositions.start;
 		const paginationExtract =
-			props.consultationCount > 1
-				? `${props.paginationPositions.start + 1} to ${
-					props.paginationPositions.finish
-				  } of `
+			props.consultationCount > amountPerPage
+				? `${props.paginationPositions.start + 1} to ${props.paginationPositions.finish} of `
 				: "";
 
-		return `Showing ${paginationExtract}${
-			props.consultationCount
-		} consultation${props.consultationCount === 1 ? "" : "s"}`;
+		return `Showing ${paginationExtract}${props.consultationCount} consultation${props.consultationCount === 1 ? "" : "s"}`;
 	};
 
 	onRemoveFilter = optionId => {
@@ -59,7 +56,7 @@ export class DownloadResultsInfo extends Component<PropsType, StateType> {
 					data-qa-sel="admin-download-page-count"
 				>
 					{(this.props.showCommentsCount || this.props.showQuestionsCount) &&
-					this.props.isLoading ? (
+						this.props.isLoading ? (
 							<span aria-busy="true">Loading…</span>
 						) : (
 							<Fragment>
