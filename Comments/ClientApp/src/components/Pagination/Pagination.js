@@ -46,7 +46,7 @@ export const Pagination = (props: PaginationProps) => {
 	return (
 		<div className="flex flex--align-center">
 			<div className="mr--e" data-qa-sel="number-of-results-on-page">
-				<label htmlFor="itemsPerPage" className="bold mr--c">Show</label>
+				<label htmlFor="itemsPerPage" className="bold mr--c">Items per page</label>
 				<select id="itemsPerPage" name="itemsPerPage" onChange={onChangeAmount} value={itemsPerPage} data-qa-sel="result-on-the-page-index">
 					<option value="25">25</option>
 					<option value="50">50</option>
@@ -61,7 +61,7 @@ export const Pagination = (props: PaginationProps) => {
 							<Pager
 								active={false}
 								label="previous"
-								type="normal"
+								type="previous"
 								data-qa-sel="pagination-previous"
 								onChangePage={onChangePage}
 							/>
@@ -106,12 +106,14 @@ export const Pagination = (props: PaginationProps) => {
 							);
 						})}
 
+						<span className="pagination__counter">{`Page ${currentPage} of ${pageCount}`}</span>
+
 						{currentPage < pageCount && (
 							<Pager
 								active={false}
 								data-qa-sel="pagination-next"
 								label="next"
-								type="normal"
+								type="next"
 								onChangePage={onChangePage}
 							/>
 						)}

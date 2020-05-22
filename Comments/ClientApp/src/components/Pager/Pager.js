@@ -17,6 +17,13 @@ export const Pager = (props: PagerProps) => {
 		onChangePage,
 	} = props;
 
+
+	const listClasses = `pagination__pager ${type !== "normal" ? type : ""} ${active ? "active" : ""}`.trimRight();
+
+	let ariaLabel = type === "normal" ? `Go to page ${label}` : `Go to ${type} page`;
+
+	ariaLabel = active ? `Current page, page ${label}` : ariaLabel;
+
 	return (
 		<Fragment>
 			{type === "last" &&
@@ -25,8 +32,8 @@ export const Pager = (props: PagerProps) => {
 				</li>
 			}
 
-			<li className={`pagination__pager ${type !== "normal" ? type : ""} ${active ? "active" : ""}`} key={label}>
-				<a onClick={onChangePage} data-pager={label} href={`#${label}`}>{label}</a>
+			<li className={listClasses} key={label}>
+				<a onClick={onChangePage} data-pager={label} href={`#${label}`} aria-label={ariaLabel}>{label}</a>
 			</li>
 
 			{type === "first" &&

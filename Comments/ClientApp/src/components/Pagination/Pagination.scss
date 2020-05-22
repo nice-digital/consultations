@@ -3,10 +3,15 @@
 
   &__pager, &__truncate {
     list-style: none;
-    display: inline-block;
+    display: none;
   }
 
   &__pager {
+
+    &.next, &.previous {
+      display: inline-block;
+    }
+
     a {
       @extend .btn;
 
@@ -53,6 +58,27 @@
       padding: 0.5em 0.25em;
       vertical-align: top;
       display: inline-block;
+    }
+  }
+
+  &__counter {
+      font-size: 1rem;
+      font-weight: bold;
+      line-height: 1.5rem;
+      padding: 0.5em 1em;
+      vertical-align: top;
+      display: inline-block;
+  }
+}
+
+@media (min-width: 56.25em) {
+  .pagination {
+    &__pager, &__truncate {
+      display: inline-block;
+    }
+
+    &__counter {
+      display: none;
     }
   }
 }
