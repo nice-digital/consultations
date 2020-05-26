@@ -73,7 +73,7 @@ export class Download extends Component<PropsType, StateType> {
 
 		const pageNumber = "page" in querystringObject ? parseInt(querystringObject.page, 10) : 1;
 
-		let itemsPerPage = "amount" in querystringObject ? querystringObject.amount : "";
+		let itemsPerPage = "amount" in querystringObject ? querystringObject.amount : 25;
 
 		itemsPerPage = !isNaN(itemsPerPage) ? parseInt(itemsPerPage, 10) : itemsPerPage;
 
