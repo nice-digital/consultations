@@ -48,6 +48,6 @@ export default {
 		paginationSection: toDataQASelAttr("pagination-section"),
 		firstPager: toQAselAndChild("pagination-section", 1),
 		secondPager: toQAselAndChild("pagination-section", 2),
-		nextPager: toQAselAndChild("pagination-section", 8),
+		nextPager: "body .pagination__pager.next",
 	},
 };
