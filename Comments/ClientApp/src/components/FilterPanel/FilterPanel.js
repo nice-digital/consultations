@@ -52,7 +52,7 @@ export class FilterPanel extends Component<PropsType, StateType> {
 					}
 				</div>
 			</div>
-		)
+		);
 	}
 }
 

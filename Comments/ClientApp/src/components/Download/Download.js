@@ -55,10 +55,10 @@ type PropsType = {
 }
 
 export class Download extends Component<PropsType, StateType> {
-	
+
 	constructor(props: PropsType) {
 		super(props);
-		
+
 		let preloadedData;
 		if (this.props.staticContext && this.props.staticContext.preload) {
 			preloadedData = this.props.staticContext.preload.data;
@@ -75,6 +75,8 @@ export class Download extends Component<PropsType, StateType> {
 				consultations: [], //if you don't set this to an empty array, the filter line below will fail in the first SSR render.
 				optionFilters: [],
 				textFilter: {},
+				contributionFilter: [],
+				teamFilter: [],
 				indevBasePath: "",
 			},
 			hasInitialData: false,
@@ -89,7 +91,7 @@ export class Download extends Component<PropsType, StateType> {
 			keywordToFilterBy: null,
 		};
 
-		if (isAuthorised){			
+		if (isAuthorised){
 
 			const preloadedConsultations = preload(
 				this.props.staticContext,
@@ -98,8 +100,8 @@ export class Download extends Component<PropsType, StateType> {
 				Object.assign({relativeURL: this.props.match.url}, queryStringToObject(querystring)),
 				preloadedData
 			);
-	
-			if (preloadedConsultations) {	
+
+			if (preloadedConsultations) {
 
 				this.state = {
 					searchTerm: "",
@@ -117,7 +119,7 @@ export class Download extends Component<PropsType, StateType> {
 					keywordToFilterBy: null,
 				};
 			}
-		}		
+		}
 	}
 
 	loadDataAndUpdateState = () => {
@@ -157,7 +159,7 @@ export class Download extends Component<PropsType, StateType> {
 			this.loadDataAndUpdateState();
 		}
 		this.unlisten = this.props.history.listen(() => {
-		
+
 			const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;
 
 			if (!this.state.path || path !== this.state.path) {
@@ -181,8 +183,8 @@ export class Download extends Component<PropsType, StateType> {
 					indevReturnPath = cookieReferrer;
 				}
 			}
-		} 
-		this.setState({indevReturnPath: indevReturnPath});		
+		}
+		this.setState({indevReturnPath: indevReturnPath});
 	}
 
 	keywordToFilterByUpdated = (keywordToFilterBy) => {
@@ -205,7 +207,7 @@ export class Download extends Component<PropsType, StateType> {
 					groupId: group.id,
 					optionId: opt.id,
 				}));
-				
+
 		let filters = this.state.consultationListData.optionFilters
 			.map(mapOptions)
 			.reduce((arr, group) => arr.concat(group), []);
@@ -245,13 +247,15 @@ export class Download extends Component<PropsType, StateType> {
 		const {
 			optionFilters,
 			textFilter,
+			contributionFilter,
+			teamFilter
 		} = consultationListData;
 
 		const consultationsToShow = this.state.consultationListData.consultations.filter(consultation => consultation.show);
 
 		if (isAuthorised && loading) return <h1>Loading...</h1>;
 
-		if (isAuthorised && !hasInitialData) return null;		
+		if (isAuthorised && !hasInitialData) return null;
 
 		return (
 			<UserContext.Consumer>
@@ -276,16 +280,18 @@ export class Download extends Component<PropsType, StateType> {
 									<div className="grid mt--d">
 										<div data-g="12 md:3">
 											<h2 className="h5 mt--0">Filter</h2>
-											{textFilter && 
+											{textFilter &&
 												<TextFilterWithHistory
-													onKeywordUpdated={this.keywordToFilterByUpdated} 
+													onKeywordUpdated={this.keywordToFilterByUpdated}
 													keyword={this.state.keywordToFilterBy}
 													search={this.state.search}
 													path={this.state.path}
 													{...textFilter}
 												/>
 											}
+											<FilterPanel filters={contributionFilter} path={path} />
 											<FilterPanel filters={optionFilters} path={path}/>
+											{/* <FilterPanel filters={contributionFilter} path={path} /> */}
 										</div>
 										<div data-g="12 md:9">
 											<DownloadResultsInfo
@@ -298,9 +304,9 @@ export class Download extends Component<PropsType, StateType> {
 											{consultationsToShow.length > 0 ? (
 												<ul className="list--unstyled">
 													{consultationsToShow.map((item, idx) =>
-														<ConsultationItem key={idx} 
-															basename={this.props.basename} 
-															{...item} 
+														<ConsultationItem key={idx}
+															basename={this.props.basename}
+															{...item}
 														/>
 													)}
 												</ul>
