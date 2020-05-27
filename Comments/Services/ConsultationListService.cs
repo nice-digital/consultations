@@ -92,7 +92,7 @@ namespace Comments.Services
 		private (bool hasEnteredCommentsOrAnsweredQuestions, bool hasSubmittedCommentsOrAnswers)
 			GetFlagsForWhetherTheCurrentUserHasCommentedOrAnsweredThisConsultation(IEnumerable<KeyValuePair<string, Models.Status>> sourceURIsCommentedOrAnswered, string consultationSourceURI)
 		{
-			var foundCommentOrAnswer = sourceURIsCommentedOrAnswered.SingleOrDefault(s =>
+			var foundCommentOrAnswer = sourceURIsCommentedOrAnswered.FirstOrDefault(s =>
 				s.Key.Equals(consultationSourceURI) || s.Key.StartsWith(consultationSourceURI + "/"));
 
 			if (foundCommentOrAnswer.Equals(default(KeyValuePair<string, Models.Status>)))
