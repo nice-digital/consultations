@@ -25,6 +25,7 @@ import submitResponse, {
 } from "../support/action/submitResponse";
 import { reviewResponse } from "../support/action/reviewResponse";
 import { Login } from "../support/action/Login";
+import { LoginAdmin } from "../support/action/LoginAdmin";
 import { sidebarLogin } from "../support/action/sidebarLogin";
 import { openQuestionPanel } from "../support/action/openQuestionPanel";
 import { scrollDeleteButtonIntoView } from "../support/action/scrollDeleteButtonIntoView";
@@ -97,6 +98,11 @@ When(/^I review my response$/, reviewResponse);
 When(
 	/^I log into accounts with username "([A-Z0-9_]+)" and password "([A-Z0-9_]+)"$/,
 	Login
+);
+
+When(
+	/^I log into the admin page with username "([A-Z0-9_]+)" and password "([A-Z0-9_]+)"$/,
+	LoginAdmin
 );
 
 When(

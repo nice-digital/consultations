@@ -4,7 +4,7 @@ Feature: The number or results in the list of consultations can be controlled by
 
 	Background:
 		Given I open the url "admin"
-		When I log into accounts with username "IDAM_EMAIL1" and password "IDAM_PASSWORD"
+		When I log into the admin page with username "IDAM_EMAIL1" and password "IDAM_PASSWORD"
 
 	Scenario: User can change the number of results displayed on each page
 		Given I expect the result list count contains "Showing 1 to 25"
