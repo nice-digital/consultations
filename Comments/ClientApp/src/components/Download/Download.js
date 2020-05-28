@@ -6,7 +6,7 @@ import Helmet from "react-helmet";
 import Cookies from "js-cookie";
 //import stringifyObject from "stringify-object";
 
-import { queryStringToObject, canUseDOM } from "../../helpers/utils";
+import { appendQueryParameter, removeQueryParameter, stripMultipleQueries, queryStringToObject, canUseDOM } from "../../helpers/utils";
 import { UserContext } from "../../context/UserContext";
 import { LoginBanner } from "../LoginBanner/LoginBanner";
 import { Header } from "../Header/Header";
@@ -18,6 +18,7 @@ import { load } from "../../data/loader";
 import { withHistory } from "../HistoryContext/HistoryContext";
 import TextFilterWithHistory from "../TextFilter/TextFilter";
 import { DownloadResultsInfo } from "../DownloadResultsInfo/DownloadResultsInfo";
+import { Pagination } from "../Pagination/Pagination";
 
 type StateType = {
 	path: string,
@@ -37,7 +38,9 @@ type StateType = {
 	},
 	indevReturnPath: string,
 	search: string,
-	keywordToFilterBy: string
+	keywordToFilterBy: string,
+	pageNumber: number,
+	itemsPerPage: number
 }
 
 type PropsType = {
@@ -55,16 +58,24 @@ type PropsType = {
 }
 
 export class Download extends Component<PropsType, StateType> {
-	
+
 	constructor(props: PropsType) {
 		super(props);
-		
+
 		let preloadedData;
 		if (this.props.staticContext && this.props.staticContext.preload) {
 			preloadedData = this.props.staticContext.preload.data;
 		}
 
 		const querystring = this.props.location.search;
+
+		const querystringObject = queryStringToObject(querystring);
+
+		const pageNumber = "page" in querystringObject ? parseInt(querystringObject.page, 10) : 1;
+
+		let itemsPerPage = "amount" in querystringObject ? querystringObject.amount : 25;
+
+		itemsPerPage = !isNaN(itemsPerPage) ? parseInt(itemsPerPage, 10) : itemsPerPage;
 
 		const isAuthorised = ((preloadedData && preloadedData.isAuthorised) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["isAuthorised"]));
 
@@ -87,19 +98,20 @@ export class Download extends Component<PropsType, StateType> {
 			indevReturnPath: "",
 			search: this.props.location.search,
 			keywordToFilterBy: null,
+			pageNumber: pageNumber,
+			itemsPerPage: itemsPerPage,
 		};
 
-		if (isAuthorised){			
-
+		if (isAuthorised) {
 			const preloadedConsultations = preload(
 				this.props.staticContext,
 				"consultationList",
 				[],
-				Object.assign({relativeURL: this.props.match.url}, queryStringToObject(querystring)),
+				Object.assign({ relativeURL: this.props.match.url }, queryStringToObject(querystring)),
 				preloadedData
 			);
-	
-			if (preloadedConsultations) {	
+
+			if (preloadedConsultations) {
 
 				this.state = {
 					searchTerm: "",
@@ -115,9 +127,11 @@ export class Download extends Component<PropsType, StateType> {
 					indevReturnPath: preloadedConsultations.indevBasePath,
 					search: this.props.location.search,
 					keywordToFilterBy: null,
+					pageNumber: pageNumber,
+					itemsPerPage: itemsPerPage,
 				};
 			}
-		}		
+		}
 	}
 
 	loadDataAndUpdateState = () => {
@@ -127,13 +141,15 @@ export class Download extends Component<PropsType, StateType> {
 			path,
 			search: this.props.history.location.search,
 		});
-		load("consultationList", undefined, [], Object.assign({relativeURL: this.props.match.url}, queryStringToObject(querystring)))
+
+		load("consultationList", undefined, [], Object.assign({ relativeURL: this.props.match.url }, queryStringToObject(querystring)))
 			.then(response => {
 				this.setState({
 					consultationListData: response.data,
 					hasInitialData: true,
 					loading: false,
 					indevReturnPath: response.data.indevBasePath,
+					pageNumber: 1
 				});
 			})
 			.catch(err => { //TODO: maybe this should log?
@@ -146,9 +162,9 @@ export class Download extends Component<PropsType, StateType> {
 			});
 	};
 
-	unlisten = () => {};
+	unlisten = () => { };
 
-	componentWillUnmount(){
+	componentWillUnmount() {
 		this.unlisten();
 	}
 
@@ -157,16 +173,21 @@ export class Download extends Component<PropsType, StateType> {
 			this.loadDataAndUpdateState();
 		}
 		this.unlisten = this.props.history.listen(() => {
-		
-			const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;
 
-			if (!this.state.path || path !== this.state.path) {
+			let path = this.props.basename + this.props.location.pathname + this.props.history.location.search,
+				paginationQueries = ["page", "amount"];
+
+			path = stripMultipleQueries(path, paginationQueries);
+
+			const statePath = stripMultipleQueries(this.state.path, paginationQueries);
+
+			if (!path || path !== statePath) {
 				this.loadDataAndUpdateState();
 			}
 		});
 
 		let indevReturnPath = this.state.consultationListData.indevBasePath;
-		if (typeof(document) !== "undefined"){
+		if (typeof (document) !== "undefined") {
 			const documentReferrer = document.referrer;
 			if (documentReferrer.toLowerCase().indexOf("indev") !== -1) {
 				indevReturnPath = documentReferrer;
@@ -177,21 +198,21 @@ export class Download extends Component<PropsType, StateType> {
 			}
 			else {
 				const cookieReferrer = Cookies.get("documentReferrer");
-				if (cookieReferrer != null){
+				if (cookieReferrer != null) {
 					indevReturnPath = cookieReferrer;
 				}
 			}
-		} 
-		this.setState({indevReturnPath: indevReturnPath});		
+		}
+		this.setState({ indevReturnPath: indevReturnPath });
 	}
 
 	keywordToFilterByUpdated = (keywordToFilterBy) => {
-		this.setState({keywordToFilterBy});
+		this.setState({ keywordToFilterBy });
 	}
 
 	removeFilter = (optionId) => {
-		if (optionId === "Keyword"){
-			this.setState({keywordToFilterBy: ""});
+		if (optionId === "Keyword") {
+			this.setState({ keywordToFilterBy: "" });
 		}
 	}
 
@@ -205,13 +226,13 @@ export class Download extends Component<PropsType, StateType> {
 					groupId: group.id,
 					optionId: opt.id,
 				}));
-				
+
 		let filters = this.state.consultationListData.optionFilters
 			.map(mapOptions)
 			.reduce((arr, group) => arr.concat(group), []);
 
-		if (this.state.keywordToFilterBy){
-			if (!filters.length){
+		if (this.state.keywordToFilterBy) {
+			if (!filters.length) {
 				filters = [];
 			}
 
@@ -223,6 +244,64 @@ export class Download extends Component<PropsType, StateType> {
 			});
 		}
 		return filters;
+	}
+
+	getPaginateStartAndFinishPosition = (consultationsCount, pageNumber, itemsPerPage) => {
+		let paginationPositions = {
+			start: 0,
+			finish: consultationsCount,
+		};
+
+		if (!isNaN(itemsPerPage)) {
+			paginationPositions.start = (pageNumber - 1) * itemsPerPage;
+			paginationPositions.finish = (paginationPositions.start + itemsPerPage) <= consultationsCount ? (paginationPositions.start + itemsPerPage) : consultationsCount;
+		}
+
+		return paginationPositions;
+	}
+
+	changeAmount = (e) => {
+		let itemsPerPage = e.target.value,
+			pastPageRange = false,
+			pageNumber = this.state.pageNumber,
+			path = stripMultipleQueries(this.state.path, ["amount", "page"]);
+
+		if (!isNaN(itemsPerPage)) {
+			itemsPerPage = parseInt(itemsPerPage, 10);
+			pastPageRange = (this.state.pageNumber * itemsPerPage) > (this.state.consultationListData.consultations.filter(consultation => consultation.show).length);
+		}
+
+		if ((pastPageRange) || (itemsPerPage === "all")) {
+			pageNumber = 1;
+		}
+
+		path = appendQueryParameter(path, "amount", itemsPerPage.toString());
+		path = appendQueryParameter(path, "page", pageNumber);
+
+		this.setState({ itemsPerPage, path, pageNumber }, () => {
+			this.props.history.push(path);
+		});
+	}
+
+	changePage = (e) => {
+		e.preventDefault();
+
+		let pageNumber = e.target.getAttribute("data-pager"),
+			path = removeQueryParameter(this.state.path, "page");
+
+		if (pageNumber === "previous") {
+			pageNumber = this.state.pageNumber - 1;
+		}
+		if (pageNumber === "next") {
+			pageNumber = this.state.pageNumber + 1;
+		}
+
+		pageNumber = parseInt(pageNumber, 10);
+		path = appendQueryParameter(path, "page", pageNumber);
+
+		this.setState({ pageNumber, path }, () => {
+			this.props.history.push(path);
+		});
 	}
 
 	render() {
@@ -240,6 +319,8 @@ export class Download extends Component<PropsType, StateType> {
 			hasInitialData,
 			consultationListData,
 			isAuthorised,
+			pageNumber,
+			itemsPerPage,
 		} = this.state;
 
 		const {
@@ -249,9 +330,13 @@ export class Download extends Component<PropsType, StateType> {
 
 		const consultationsToShow = this.state.consultationListData.consultations.filter(consultation => consultation.show);
 
+		const paginationPositions = this.getPaginateStartAndFinishPosition(consultationsToShow.length, pageNumber, itemsPerPage);
+
+		const consultationsPaginated = consultationsToShow.slice(paginationPositions.start, paginationPositions.finish);
+
 		if (isAuthorised && loading) return <h1>Loading...</h1>;
 
-		if (isAuthorised && !hasInitialData) return null;		
+		if (isAuthorised && !hasInitialData) return null;
 
 		return (
 			<UserContext.Consumer>
@@ -271,42 +356,49 @@ export class Download extends Component<PropsType, StateType> {
 						<div className="container">
 							<div className="grid">
 								<div data-g="12">
-									<Breadcrumbs links={BackToIndevLink}/>
-									<Header title="Download Responses"/>
+									<Breadcrumbs links={BackToIndevLink} />
+									<Header title="Download Responses" />
 									<div className="grid mt--d">
 										<div data-g="12 md:3">
 											<h2 className="h5 mt--0">Filter</h2>
-											{textFilter && 
+											{textFilter &&
 												<TextFilterWithHistory
-													onKeywordUpdated={this.keywordToFilterByUpdated} 
+													onKeywordUpdated={this.keywordToFilterByUpdated}
 													keyword={this.state.keywordToFilterBy}
 													search={this.state.search}
 													path={this.state.path}
 													{...textFilter}
 												/>
 											}
-											<FilterPanel filters={optionFilters} path={path}/>
+											<FilterPanel filters={optionFilters} path={path} />
 										</div>
 										<div data-g="12 md:9">
 											<DownloadResultsInfo
 												consultationCount={consultationsToShow.length}
+												paginationPositions={paginationPositions}
 												appliedFilters={this.getAppliedFilters()}
 												path={this.state.path}
 												isLoading={this.state.loading}
 												onRemoveFilter={this.removeFilter}
 											/>
+
 											{consultationsToShow.length > 0 ? (
 												<ul className="list--unstyled">
-													{consultationsToShow.map((item, idx) =>
-														<ConsultationItem key={idx} 
-															basename={this.props.basename} 
-															{...item} 
+													{consultationsPaginated.map((item, idx) =>
+														<ConsultationItem key={idx}
+															basename={this.props.basename}
+															{...item}
 														/>
 													)}
 												</ul>
-											) : (
-												<p>No consultations found matching supplied filters.</p>
-											)}
+											) : (<p>No consultations found matching supplied filters.</p>)}
+											<Pagination
+												onChangePage={this.changePage}
+												onChangeAmount={this.changeAmount}
+												itemsPerPage={itemsPerPage}
+												consultationCount={consultationsToShow.length}
+												currentPage={pageNumber}
+											/>
 										</div>
 									</div>
 								</div>

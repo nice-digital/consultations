@@ -12,11 +12,11 @@ export function objectToQueryString(obj) {
 	let str = [];
 	for (let p in obj)
 		if (obj.hasOwnProperty(p)) {
-			if (Array.isArray(obj[p])){
-				for (let index in obj[p]){
+			if (Array.isArray(obj[p])) {
+				for (let index in obj[p]) {
 					str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p][index]));
 				}
-			} else{
+			} else {
 				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
 			}
 		}
@@ -50,14 +50,14 @@ export const nextTick = async () => {
  * @returns {String}
  */
 export function replaceFormat(stringToReplace, args) {
-	if (typeof(stringToReplace) === undefined || stringToReplace === null)
+	if (typeof (stringToReplace) === undefined || stringToReplace === null)
 		return stringToReplace;
 
-	return stringToReplace.replace(/{(\d+)}/g, function(match, number) {
+	return stringToReplace.replace(/{(\d+)}/g, function (match, number) {
 		return typeof args[number] !== undefined
 			? args[number]
 			: match
-		;
+			;
 	});
 }
 
@@ -91,6 +91,16 @@ export const removeQueryParameter =
 		return urlParts[0] + queryString;
 	};
 
+export const stripMultipleQueries = (path, queries) => {
+	let strippedPath = path;
+
+	queries.forEach((query) => {
+		strippedPath = removeQueryParameter(strippedPath, query);
+	});
+
+	return strippedPath;
+};
+
 export const appendQueryParameter =
 	(url: string, parameter: string, value: string): string => `${url}${url.indexOf("?") === -1 ? "?" : "&"}${parameter}=${value}`;
 
@@ -104,8 +114,8 @@ export const canUseDOM = (): boolean => (
 	));
 
 const whichChild = (elem) => {
-	let  i= 0;
-	while ((elem=elem.previousSibling)!=null) ++i;
+	let i = 0;
+	while ((elem = elem.previousSibling) != null) ++i;
 	return i;
 };
 
@@ -119,7 +129,7 @@ export const getElementPositionWithinDocument = (elem) => {
 	if (elem.parentElement) {
 		do {
 			curindex += whichChild(elem).toString() + " "; // add elem.tagName to see what the element is.
-			if (elem.id === "root"){
+			if (elem.id === "root") {
 				break;
 			}
 		} while (elem = elem.parentElement); // eslint-disable-line
@@ -130,13 +140,13 @@ export const getElementPositionWithinDocument = (elem) => {
 //this gets the title of the nearest section above the passed in element (or the element itself). it can also return the chapter title.
 export const getSectionTitle = (elem) => {
 	do {
-		if (elem.classList.contains("section")){
+		if (elem.classList.contains("section")) {
 			return elem.title;
 		}
-		if (elem.classList.contains("chapter")){
+		if (elem.classList.contains("chapter")) {
 			return elem.title;
 		}
-		if (elem.id === "root"){ //it won't look higher than root.
+		if (elem.id === "root") { //it won't look higher than root.
 			return null;
 		}
 	} while (elem = elem.parentNode); // eslint-disable-line

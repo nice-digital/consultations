@@ -69,6 +69,7 @@ export class TextFilter extends Component {
 						type="text"
 						onChange={e => this.handleKeywordChange(e.target.value)}
 						className="form__input form__input--text"
+						data-qa-sel="FilerByTitleOrGID"
 						id="textFilter"
 						value={keyword}
 					/>
