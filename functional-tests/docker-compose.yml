@@ -1,5 +1,5 @@
 # See https://github.com/SeleniumHQ/docker-selenium#via-docker-compose
-version: '2'
+version: "2"
 services:
   firefox:
     container_name: functional-tests_firefox_1
@@ -30,8 +30,8 @@ services:
     environment:
       GRID_DEBUG: "true"
       #GRID_MAX_SESSION: 2
-#    ports:
-#      - 4444:4444
+  #    ports:
+  #      - 4444:4444
 
   # The tests themselves
   tests:
@@ -64,7 +64,7 @@ services:
       - database
     # Enable browsing from the host machine on http://localhost:8080/consultations
     ports:
-        - 8080:8080
+      - 8080:8080
     environment:
       - DEFAULT_CONNECTION
       - LOGGING_LOG_FILE_PATH=logs/Serilog-{Date}.json
@@ -96,7 +96,11 @@ services:
       - WEBAPP_LOGOUT_REDIRECT_URI
       - WEBAPP_API_IDENTIFIER
       - WEBAPP_AUTH_SERVICE_URI
-
+      - ADMINROLE
+      - TEAMROLES
+      - TEAMROLES1
+      - TEAMROLES2
+      - TEAMROLES3
 
   # MS SQL Server database
   database:

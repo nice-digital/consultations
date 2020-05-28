@@ -3,9 +3,13 @@ import waitFor from "@nice-digital/wdio-cucumber-steps/lib/support/action/waitFo
 import selectors from "../selectors";
 
 export const addQuestionsToConsultation = (consultationId) => {
-	openWebsite("url", "admin/InsertQuestionsForDocument1And2InConsultation?consultationId=" + consultationId);
+	openWebsite(
+		"url",
+		"admin/InsertQuestionsForDocument1And2InConsultation?consultationId=" +
+			consultationId
+	);
 	openWebsite("url", "" + consultationId);
-	waitFor(".page-header");
+	waitFor(".page-header", 3000);
 	browser.pause(2000);
 };
 
