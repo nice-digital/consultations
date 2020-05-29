@@ -620,11 +620,15 @@ namespace Comments.Test.UnitTests
 			_context.Database.EnsureCreated();
 
 			var sourceURIConsultation1 = "consultations://./consultation/1/document/1/chapter/introduction";
+			var sourceURIConsultation1DocumentLevel = "consultations://./consultation/1/document/1";
 			var sourceURIConsultation2 = "consultations://./consultation/2";
 			var userId = Guid.Empty.ToString();
 
 			var locationId1 = AddLocation(sourceURIConsultation1, _context);
 			AddComment(locationId1, "the current users comment", false, userId, 2, _context);
+
+			var locationId1Doc = AddLocation(sourceURIConsultation1DocumentLevel, _context);
+			AddComment(locationId1Doc, "another comment similar source uri", false, userId, 2, _context);
 
 			var locationId2 = AddLocation(sourceURIConsultation2, _context);
 			AddComment(locationId2, "a comment that should be filtered out", false, "not the current user's id", 2, _context);
