@@ -197,7 +197,20 @@ export class Download extends Component<PropsType, StateType> {
 		}
 	}
 
+	generateFilters = (filters, mapOptions) => {
+		return filters
+			.map(mapOptions)
+			.reduce((arr, group) => arr.concat(group), []);
+	}
+
 	getAppliedFilters(): AppliedFilterType[] {
+		const {
+			optionFilters,
+			contributionFilter,
+		} = this.state.consultationListData;
+
+		let teamFilter = [];
+
 		const mapOptions =
 			(group: ReviewFilterGroupType) => group.options
 				.filter(opt => opt.isSelected)
@@ -208,9 +221,13 @@ export class Download extends Component<PropsType, StateType> {
 					optionId: opt.id,
 				}));
 
-		let filters = this.state.consultationListData.optionFilters
-			.map(mapOptions)
-			.reduce((arr, group) => arr.concat(group), []);
+		if (this.state.consultationListData.teamFilter) {
+			teamFilter = this.state.consultationListData.teamFilter;
+		}
+
+		let filters = contributionFilter.concat(teamFilter, optionFilters);
+
+		filters = this.generateFilters(filters, mapOptions);
 
 		if (this.state.keywordToFilterBy){
 			if (!filters.length){
@@ -248,7 +265,7 @@ export class Download extends Component<PropsType, StateType> {
 			optionFilters,
 			textFilter,
 			contributionFilter,
-			teamFilter
+			teamFilter,
 		} = consultationListData;
 
 		const consultationsToShow = this.state.consultationListData.consultations.filter(consultation => consultation.show);
@@ -290,8 +307,10 @@ export class Download extends Component<PropsType, StateType> {
 												/>
 											}
 											<FilterPanel filters={contributionFilter} path={path} />
-											<FilterPanel filters={optionFilters} path={path}/>
-											{/* <FilterPanel filters={contributionFilter} path={path} /> */}
+											{teamFilter &&
+												<FilterPanel filters={teamFilter} path={path} />
+											}
+											<FilterPanel filters={optionFilters} path={path} />
 										</div>
 										<div data-g="12 md:9">
 											<DownloadResultsInfo
