@@ -147,7 +147,7 @@ namespace Comments.Test.Infrastructure
                 .ConfigureServices(services =>
                 {
                     services.AddEntityFrameworkSqlite();
-                   
+
 					services.TryAddSingleton<ConsultationsContext>(_context);
                     services.TryAddSingleton<ISeriLogger, FakeSerilogger>();
                     services.TryAddSingleton<IHttpContextAccessor>(provider => _fakeHttpContextAccessor);

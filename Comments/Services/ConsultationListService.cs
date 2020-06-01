@@ -49,7 +49,7 @@ namespace Comments.Services
 			if (!currentUser.IsAuthorised)
 				return (model, new Validate(valid: false, unauthorised: true));
 
-			
+
 			var userRoles = _userService.GetUserRoles().ToList();
 			var isAdminUser = userRoles.Any(role => AppSettings.ConsultationListConfig.DownloadRoles.AdminRoles.Contains(role));
 			var teamRoles = userRoles.Where(role => AppSettings.ConsultationListConfig.DownloadRoles.TeamRoles.Contains(role)).Select(role => role).ToList();
@@ -61,14 +61,14 @@ namespace Comments.Services
 			var submittedCommentsAndAnswerCounts = canSeeSubmissionCount ? _context.GetSubmittedCommentsAndAnswerCounts() : null;
 			var sourceURIsCommentedOrAnswered = _context.GetAllSourceURIsTheCurrentUserHasCommentedOrAnsweredAQuestion();
 			var consultationListRows = new List<ConsultationListRow>();
-			
+
 			foreach (var consultation in consultationsFromIndev)
 			{
 				var sourceURI = ConsultationsUri.CreateConsultationURI(consultation.ConsultationId);
 
 				var (hasCurrentUserEnteredCommentsOrAnsweredQuestions, hasCurrentUserSubmittedCommentsOrAnswers)
 					= GetFlagsForWhetherTheCurrentUserHasCommentedOrAnsweredThisConsultation(sourceURIsCommentedOrAnswered, sourceURI);
-				
+
 				var responseCount = canSeeSubmissionCount ? submittedCommentsAndAnswerCounts.FirstOrDefault(s => s.SourceURI.Equals(sourceURI))?.TotalCount ?? 0 : (int?)null;
 
 				consultationListRows.Add(
@@ -83,8 +83,8 @@ namespace Comments.Services
 			model.ContributionFilter = GetContributionFilter(model.Contribution?.ToList(), consultationListRows);
 			model.TeamFilter = isTeamUser ? GetTeamFilter(model.Team?.ToList(), consultationListRows, teamRoles) : null;
 			model.Consultations = FilterAndOrderConsultationList(consultationListRows, model.Status, model.Keyword, model.Contribution, model.Team, (isTeamUser ? teamRoles : null));
-			model.User = new DownloadUser(isAdminUser, isTeamUser, _userService.GetCurrentUser());
-			
+			model.User = new DownloadUser(isAdminUser, isTeamUser, _userService.GetCurrentUser(), teamRoles);
+
 
 			return (model, new Validate(valid: true));
 		}
@@ -212,7 +212,7 @@ namespace Comments.Services
 				}
 			}
 
-			return consultationListRows.OrderByDescending(c => c.EndDate).ToList(); 
+			return consultationListRows.OrderByDescending(c => c.EndDate).ToList();
 		}
 	}
 }

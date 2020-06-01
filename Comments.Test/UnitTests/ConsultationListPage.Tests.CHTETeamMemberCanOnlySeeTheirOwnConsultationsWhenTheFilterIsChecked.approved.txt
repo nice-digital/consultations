@@ -126,6 +126,9 @@
     "User":{
         "IsAdminUser":false,
         "IsTeamUser":true,
+        "TeamNames":[
+            "ConsultationListTestRole"
+        ],
         "IsAuthorised":true,
         "DisplayName":"Jeffrey Goines",
         "UserId":"00000000-0000-0000-0000-000000000000",

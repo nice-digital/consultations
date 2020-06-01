@@ -23,7 +23,7 @@ namespace Comments.Test.Infrastructure
 
 			if (isAuthenticated || testUserType == TestUserType.Authenticated || testUserType == TestUserType.Administrator || testUserType == TestUserType.IndevUser)
             {
-	            
+
 				var claims = new List<Claim>
                 {
                     new Claim(ClaimType.DisplayName, displayName, null, AuthenticationConstants.IdAMIssuer),
@@ -79,7 +79,7 @@ namespace Comments.Test.Infrastructure
 
             context.Setup(r => r.Request)
 	            .Returns(new DefaultHttpRequest(new DefaultHttpContext()) { Host = new HostString(roleIssuer) });
-           
+
 
 			var contextAccessor = new Mock<IHttpContextAccessor>();
             contextAccessor.Setup(ca => ca.HttpContext).Returns(context.Object);
@@ -87,6 +87,6 @@ namespace Comments.Test.Infrastructure
             return contextAccessor.Object;
         }
 
-		
+
 	}
 }

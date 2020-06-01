@@ -148,7 +148,7 @@ namespace Comments.Test.UnitTests
 			//Assert
 			viewModel.consultationListViewModel.Consultations.First().SubmissionCount.ShouldBe(1);
 		}
-		
+
 		[Fact]
 		public void ConsultationListPageModel_HasDocumentIdAndChapterSlugPopulatedCorrectly()
 		{
@@ -554,7 +554,7 @@ namespace Comments.Test.UnitTests
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId, testUserType: testUserType);
 			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 
-			//Act 
+			//Act
 			var consultationService = new ConsultationListService(consultationContext, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeUserService);
 
 			//Assert
@@ -650,7 +650,7 @@ namespace Comments.Test.UnitTests
 				Contribution = new List<ContributionStatus>() { ContributionStatus.HasContributed }
 			});
 			var serialisedViewModel = JsonConvert.SerializeObject(viewModel); //saves checking all the properties
-			
+
 
 			//Assert
 			viewModel.consultationListViewModel.Consultations.Count().ShouldBe(2);

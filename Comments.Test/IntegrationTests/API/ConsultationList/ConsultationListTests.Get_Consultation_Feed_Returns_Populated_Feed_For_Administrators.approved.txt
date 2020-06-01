@@ -94,6 +94,9 @@
     "user":{
         "isAdminUser":true,
         "isTeamUser":false,
+        "teamNames":[
+            
+        ],
         "isAuthorised":true,
         "displayName":"Benjamin Button",
         "userId":"00000000-0000-0000-0000-000000000000",
