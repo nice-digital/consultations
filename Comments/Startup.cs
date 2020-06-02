@@ -25,6 +25,7 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
+using System.Collections.Generic;
 
 namespace Comments
 {
@@ -272,10 +273,20 @@ namespace Comments
                         {
                             data["cookies"] = $"{string.Join("; ", cookiesForSSR.Select(cookie => $"{cookie.Key}={cookie.Value}"))};";
                         }
-						data["isAuthorised"] = httpContext.User.Identity.IsAuthenticated;
-	                    data["displayName"] = httpContext.User.DisplayName();
+						var user = httpContext.User;
+						data["isAuthorised"] = user.Identity.IsAuthenticated;
+	                    data["displayName"] = user.DisplayName();
 
-	                    var actionContext = new ActionContext {
+						var host = httpContext.Request.Host.Host;
+						var userRoles = user?.Roles(host).ToList() ?? new List<string>();
+
+						var isAdminUser = userRoles.Any(role => AppSettings.ConsultationListConfig.DownloadRoles.AdminRoles.Contains(role));
+						var teamRoles = userRoles.Where(role => AppSettings.ConsultationListConfig.DownloadRoles.TeamRoles.Contains(role)).Select(role => role).ToList();
+						var isTeamUser = !isAdminUser && teamRoles.Any(); //an admin with team roles is still just considered an admin.
+						data["isAdminUser"] = isAdminUser;
+						data["isTeamUser"] = isTeamUser;
+
+						var actionContext = new ActionContext {
 							HttpContext = httpContext,
 							RouteData = new RouteData { Routers = { defaultRoute.Build() } },
 							ActionDescriptor = new ActionDescriptor(),
