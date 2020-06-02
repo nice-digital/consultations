@@ -55,10 +55,10 @@ namespace Comments.Services
 			var teamRoles = userRoles.Where(role => AppSettings.ConsultationListConfig.DownloadRoles.TeamRoles.Contains(role)).Select(role => role).ToList();
 			var isTeamUser = !isAdminUser && teamRoles.Any(); //an admin with team roles is still just considered an admin.
 
-			var canSeeSubmissionCount = isAdminUser || isTeamUser;
+			var canSeeAnySubmissionCounts = isAdminUser || isTeamUser;
 
 			var consultationsFromIndev = _feedService.GetConsultationList().ToList();
-			var submittedCommentsAndAnswerCounts = canSeeSubmissionCount ? _context.GetSubmittedCommentsAndAnswerCounts() : null;
+			var submittedCommentsAndAnswerCounts = canSeeAnySubmissionCounts ? _context.GetSubmittedCommentsAndAnswerCounts() : null;
 			var sourceURIsCommentedOrAnswered = _context.GetAllSourceURIsTheCurrentUserHasCommentedOrAnsweredAQuestion();
 			var consultationListRows = new List<ConsultationListRow>();
 
@@ -69,7 +69,9 @@ namespace Comments.Services
 				var (hasCurrentUserEnteredCommentsOrAnsweredQuestions, hasCurrentUserSubmittedCommentsOrAnswers)
 					= GetFlagsForWhetherTheCurrentUserHasCommentedOrAnsweredThisConsultation(sourceURIsCommentedOrAnswered, sourceURI);
 
-				var responseCount = canSeeSubmissionCount ? submittedCommentsAndAnswerCounts.FirstOrDefault(s => s.SourceURI.Equals(sourceURI))?.TotalCount ?? 0 : (int?)null;
+				var canSeeSubmissionCountForThisConsultation = (isAdminUser || (isTeamUser && teamRoles.Contains(consultation.AllowedRole)));
+
+				var responseCount = canSeeSubmissionCountForThisConsultation ? submittedCommentsAndAnswerCounts.FirstOrDefault(s => s.SourceURI.Equals(sourceURI))?.TotalCount ?? 0 : (int?)null;
 
 				consultationListRows.Add(
 					new ConsultationListRow(consultation.Title,

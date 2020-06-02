@@ -5,7 +5,7 @@
             "Title":"Consultation Title 3",
             "StartDate":"scrubbed by ScrubStartDate",
             "EndDate":"scrubbed by ScrubEndDate",
-            "SubmissionCount":0,
+            "SubmissionCount":null,
             "ConsultationId":125,
             "DocumentId":1,
             "ChapterSlug":"my-chapter-slug",
