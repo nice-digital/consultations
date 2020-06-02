@@ -96,18 +96,18 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 								}
 							</dd>
 						</div>
-						{consultationStatus !== "Upcoming" &&
-						<div className="card__metadatum">
-							<dd>
-								{submissionCount > 0 ?
-									<a href={`${this.props.basename}/api/Export/${this.props.consultationId}`} target="_blank" rel="noopener noreferrer">
-										Download <strong>{submissionCount}</strong> response{submissionCount > 1 ? "s" : ""}
-									</a>
-									:
-									<span>No responses</span>
-								}
-							</dd>
-						</div>
+						{((consultationStatus !== "Upcoming") && (submissionCount !== null)) &&
+							<div className="card__metadatum">
+								<dd>
+									{submissionCount > 0 ?
+										<a href={`${this.props.basename}/api/Export/${this.props.consultationId}`} target="_blank" rel="noopener noreferrer">
+											Download <strong>{submissionCount}</strong> response{submissionCount > 1 ? "s" : ""}
+										</a>
+										:
+										<span>No responses</span>
+									}
+								</dd>
+							</div>
 						}
 					</dl>
 				</article>
