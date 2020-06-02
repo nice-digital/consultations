@@ -6,7 +6,7 @@ import Helmet from "react-helmet";
 import Cookies from "js-cookie";
 //import stringifyObject from "stringify-object";
 
-import { queryStringToObject, canUseDOM } from "../../helpers/utils";
+import { queryStringToObject, objectToQueryString, canUseDOM } from "../../helpers/utils";
 import { UserContext } from "../../context/UserContext";
 import { LoginBanner } from "../LoginBanner/LoginBanner";
 import { Header } from "../Header/Header";
@@ -26,6 +26,8 @@ type StateType = {
 		consultations: Array<ConsultationListRow>,
 		optionFilters: Array<OptionFilterGroup>,
 		textFilter: TextFilterGroup,
+		contributionFilter: Array,
+		teamFilter: Array,
 		indevBasePath: string,
 	};
 	hasInitialData: boolean,
@@ -64,9 +66,23 @@ export class Download extends Component<PropsType, StateType> {
 			preloadedData = this.props.staticContext.preload.data;
 		}
 
+		const isAuthorised = ((preloadedData && preloadedData.isAuthorised) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["isAuthorised"])),
+			isAdminUser = ((preloadedData && preloadedData.isAdminUser) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["isAdminUser"])),
+			isTeamUser = ((preloadedData && preloadedData.isTeamUser) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["isTeamUser"]));
+
 		const querystring = this.props.location.search;
 
-		const isAuthorised = ((preloadedData && preloadedData.isAuthorised) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["isAuthorised"]));
+		let querystringObject = queryStringToObject(querystring);
+
+		// add team to querystring on initial load - if user is part of a team
+		if ((isTeamUser) && (!("team" in querystringObject))) {
+			querystringObject.Team = "MyTeam";
+		}
+
+		// add contribution to querystring on initial load - if user is not part of a team
+		if ((!(isTeamUser)) && (!("contribution" in querystringObject))) {
+			querystringObject.Contribution = "HasContributed";
+		}
 
 		this.state = {
 			searchTerm: "",
@@ -76,7 +92,7 @@ export class Download extends Component<PropsType, StateType> {
 				optionFilters: [],
 				textFilter: {},
 				contributionFilter: [],
-				teamFilter: [],
+				teamFilter: null,
 				indevBasePath: "",
 			},
 			hasInitialData: false,
@@ -91,21 +107,19 @@ export class Download extends Component<PropsType, StateType> {
 			keywordToFilterBy: null,
 		};
 
-		if (isAuthorised){
-
+		if (isAuthorised) {
 			const preloadedConsultations = preload(
 				this.props.staticContext,
 				"consultationList",
 				[],
-				Object.assign({relativeURL: this.props.match.url}, queryStringToObject(querystring)),
+				Object.assign({ relativeURL: this.props.match.url }, querystringObject),
 				preloadedData
 			);
 
 			if (preloadedConsultations) {
-
 				this.state = {
 					searchTerm: "",
-					path: this.props.basename + this.props.location.pathname + this.props.location.search,
+					path: this.props.basename + this.props.location.pathname + objectToQueryString({ ...querystringObject }),
 					consultationListData: preloadedConsultations,
 					loading: false,
 					isAuthorised: isAuthorised,
@@ -124,12 +138,14 @@ export class Download extends Component<PropsType, StateType> {
 
 	loadDataAndUpdateState = () => {
 		const querystring = this.props.history.location.search;
+		let querystringObject = queryStringToObject(querystring);
+
 		const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;
 		this.setState({
 			path,
 			search: this.props.history.location.search,
 		});
-		load("consultationList", undefined, [], Object.assign({relativeURL: this.props.match.url}, queryStringToObject(querystring)))
+		load("consultationList", undefined, [], Object.assign({relativeURL: this.props.match.url}, querystringObject))
 			.then(response => {
 				this.setState({
 					consultationListData: response.data,
@@ -159,7 +175,6 @@ export class Download extends Component<PropsType, StateType> {
 			this.loadDataAndUpdateState();
 		}
 		this.unlisten = this.props.history.listen(() => {
-
 			const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;
 
 			if (!this.state.path || path !== this.state.path) {
