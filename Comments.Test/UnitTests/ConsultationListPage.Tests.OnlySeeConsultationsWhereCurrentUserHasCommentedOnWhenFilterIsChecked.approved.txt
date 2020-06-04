@@ -81,7 +81,7 @@
                 "Options":[
                     {
                         "Id":"HasContributed",
-                        "Label":"I have commented on",
+                        "Label":"Your responses",
                         "IsSelected":true,
                         "FilteredResultCount":1,
                         "UnfilteredResultCount":2
