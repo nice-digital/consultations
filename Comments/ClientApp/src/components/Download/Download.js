@@ -34,6 +34,7 @@ type StateType = {
 	hasInitialData: boolean,
 	loading: boolean,
 	isAuthorised: boolean,
+	isAdminUser: Boolean,
 	error: {
 		hasError: boolean,
 		message: string | null,
@@ -71,7 +72,8 @@ export class Download extends Component<PropsType, StateType> {
 
 		const isAuthorised = ((preloadedData && preloadedData.isAuthorised) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["isAuthorised"])),
 			isAdminUser = ((preloadedData && preloadedData.isAdminUser) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["isAdminUser"])),
-			isTeamUser = ((preloadedData && preloadedData.isTeamUser) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["isTeamUser"]));
+			isTeamUser = ((preloadedData && preloadedData.isTeamUser) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["isTeamUser"])),
+			isStandardUser = !isAdminUser && !isTeamUser;
 
 		const querystring = this.props.location.search;
 
@@ -83,7 +85,7 @@ export class Download extends Component<PropsType, StateType> {
 		}
 
 		// add contribution to querystring on initial load - if user is not part of a team
-		if ((!(isTeamUser)) && (!("contribution" in querystringObject))) {
+		if ((isStandardUser) && (!("contribution" in querystringObject))) {
 			querystringObject.Contribution = "HasContributed";
 		}
 
@@ -107,6 +109,7 @@ export class Download extends Component<PropsType, StateType> {
 			hasInitialData: false,
 			loading: true,
 			isAuthorised: isAuthorised,
+			isAdminUser: false,
 			error: {
 				hasError: false,
 				message: null,
@@ -134,6 +137,7 @@ export class Download extends Component<PropsType, StateType> {
 					consultationListData: preloadedConsultations,
 					loading: false,
 					isAuthorised: isAuthorised,
+					isAdminUser: isAdminUser,
 					hasInitialData: true,
 					error: {
 						hasError: false,
@@ -353,6 +357,7 @@ export class Download extends Component<PropsType, StateType> {
 			hasInitialData,
 			consultationListData,
 			isAuthorised,
+			isAdminUser,
 			pageNumber,
 			itemsPerPage,
 		} = this.state;
@@ -406,7 +411,9 @@ export class Download extends Component<PropsType, StateType> {
 													{...textFilter}
 												/>
 											}
-											<FilterPanel filters={contributionFilter} path={path} />
+											{!isAdminUser &&
+												<FilterPanel filters={contributionFilter} path={path} />
+											}
 											{teamFilter &&
 												<FilterPanel filters={teamFilter} path={path} />
 											}
