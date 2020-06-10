@@ -7,7 +7,7 @@ namespace Comments.ViewModels
 {
 	public class DownloadUser : User
 	{
-
+		public DownloadUser() {}
 
 		public DownloadUser(bool isAdminUser, bool isTeamUser, User user, List<string> teamNames) : base(user.IsAuthorised, user.DisplayName, user.UserId, user.OrganisationName)
 		{

@@ -54,6 +54,7 @@ namespace Comments.Services
 			var isAdminUser = userRoles.Any(role => AppSettings.ConsultationListConfig.DownloadRoles.AdminRoles.Contains(role));
 			var teamRoles = userRoles.Where(role => AppSettings.ConsultationListConfig.DownloadRoles.TeamRoles.Contains(role)).Select(role => role).ToList();
 			var isTeamUser = !isAdminUser && teamRoles.Any(); //an admin with team roles is still just considered an admin.
+			var hasAccessToViewUpcomingConsultations = isAdminUser || isTeamUser;
 
 			var canSeeAnySubmissionCounts = isAdminUser || isTeamUser;
 
@@ -80,13 +81,12 @@ namespace Comments.Services
 						consultation.ProductTypeName, hasCurrentUserEnteredCommentsOrAnsweredQuestions, hasCurrentUserSubmittedCommentsOrAnswers, consultation.AllowedRole));
 			}
 
-			model.OptionFilters = GetOptionFilterGroups(model.Status?.ToList(), consultationListRows);
+			model.OptionFilters = GetOptionFilterGroups(model.Status?.ToList(), consultationListRows, hasAccessToViewUpcomingConsultations);
 			model.TextFilter = GetTextFilterGroups(model.Keyword, consultationListRows);
 			model.ContributionFilter = GetContributionFilter(model.Contribution?.ToList(), consultationListRows);
 			model.TeamFilter = isTeamUser ? GetTeamFilter(model.Team?.ToList(), consultationListRows, teamRoles) : null;
-			model.Consultations = FilterAndOrderConsultationList(consultationListRows, model.Status, model.Keyword, model.Contribution, model.Team, (isTeamUser ? teamRoles : null));
+			model.Consultations = FilterAndOrderConsultationList(consultationListRows, model.Status, model.Keyword, model.Contribution, model.Team, (isTeamUser ? teamRoles : null), hasAccessToViewUpcomingConsultations);
 			model.User = new DownloadUser(isAdminUser, isTeamUser, _userService.GetCurrentUser(), teamRoles);
-
 
 			return (model, new Validate(valid: true));
 		}
@@ -109,29 +109,41 @@ namespace Comments.Services
 		}
 
 
-		private static IEnumerable<OptionFilterGroup> GetOptionFilterGroups(IList<ConsultationStatus> status, IList<ConsultationListRow> consultationListRows)
+		private static IEnumerable<OptionFilterGroup> GetOptionFilterGroups(IList<ConsultationStatus> status, IList<ConsultationListRow> consultationListRows, bool hasAccessToViewUpcomingConsultations)
 		{
-			var optionFilters = AppSettings.ConsultationListConfig.OptionFilters.ToList();
+			var defaultOptionFilter = AppSettings.ConsultationListConfig.OptionFilters.Single(); //there should always just be 1 optionfilter. if there's not, throwing an exception is valid.
+			var optionFilters = new List<OptionFilterGroup> { new OptionFilterGroup(defaultOptionFilter) };
 
 			var consultationListFilter = optionFilters.Single(f => f.Id.Equals("Status", StringComparison.OrdinalIgnoreCase));
-			var openOption = consultationListFilter.Options.Single(o => o.Id.Equals("Open", StringComparison.OrdinalIgnoreCase));
-			var closedOption = consultationListFilter.Options.Single(o => o.Id.Equals("Closed", StringComparison.OrdinalIgnoreCase));
-			var upcomingOption = consultationListFilter.Options.Single(o => o.Id.Equals("Upcoming", StringComparison.OrdinalIgnoreCase));
-
+			
 			//status - open
+			var openOption = consultationListFilter.Options.Single(o => o.Id.Equals("Open", StringComparison.OrdinalIgnoreCase));
 			openOption.IsSelected = status != null && status.Contains(ConsultationStatus.Open);
 			openOption.UnfilteredResultCount = consultationListRows.Count;
 			openOption.FilteredResultCount = consultationListRows.Count(c => c.IsOpen);
 
 			//status - closed
+			var closedOption = consultationListFilter.Options.Single(o => o.Id.Equals("Closed", StringComparison.OrdinalIgnoreCase));
 			closedOption.IsSelected = status != null && status.Contains(ConsultationStatus.Closed);
 			closedOption.UnfilteredResultCount = consultationListRows.Count;
 			closedOption.FilteredResultCount = consultationListRows.Count(c => c.IsClosed);
 
 			//status - upcoming
-			upcomingOption.IsSelected = status != null && status.Contains(ConsultationStatus.Upcoming);
-			upcomingOption.UnfilteredResultCount = consultationListRows.Count;
-			upcomingOption.FilteredResultCount = consultationListRows.Count(c => c.IsUpcoming);
+			var upcomingOption = consultationListFilter.Options.SingleOrDefault(o => o.Id.Equals("Upcoming", StringComparison.OrdinalIgnoreCase));
+			if (upcomingOption != null)
+			{
+				if (hasAccessToViewUpcomingConsultations)
+				{
+					upcomingOption.IsSelected = status != null && status.Contains(ConsultationStatus.Upcoming);
+					upcomingOption.UnfilteredResultCount = consultationListRows.Count;
+					upcomingOption.FilteredResultCount = consultationListRows.Count(c => c.IsUpcoming);
+				}
+				else
+				{
+					consultationListFilter.Options.Remove(upcomingOption);
+				}
+			}
+
 			return optionFilters;
 		}
 
@@ -183,14 +195,20 @@ namespace Comments.Services
 			return textFilter;
 		}
 
-		private static IEnumerable<ConsultationListRow> FilterAndOrderConsultationList(List<ConsultationListRow> consultationListRows, IEnumerable<ConsultationStatus> status, string keyword, IEnumerable<ContributionStatus> contribution, IEnumerable<TeamStatus> team, List<string> currentUsersTeamRoles)
+		private static IEnumerable<ConsultationListRow> FilterAndOrderConsultationList(List<ConsultationListRow> consultationListRows, IEnumerable<ConsultationStatus> status, string keyword,
+			IEnumerable<ContributionStatus> contribution, IEnumerable<TeamStatus> team, List<string> currentUsersTeamRoles, bool hasAccessToViewUpcomingConsultations)
 		{
+			if (!hasAccessToViewUpcomingConsultations)
+			{
+				consultationListRows.RemoveAll(clr => clr.IsUpcoming);
+			}
+
 			var statuses = status?.ToList() ?? new List<ConsultationStatus>();
 			if (statuses.Any())
 			{
 				consultationListRows.ForEach(clr => clr.Show = (clr.IsOpen && statuses.Contains(ConsultationStatus.Open)) ||
 				                                               (clr.IsClosed && statuses.Contains(ConsultationStatus.Closed)) ||
-				                                               (clr.IsUpcoming && statuses.Contains(ConsultationStatus.Upcoming)));
+				                                               (clr.IsUpcoming && statuses.Contains(ConsultationStatus.Upcoming) && hasAccessToViewUpcomingConsultations));
 			}
 
 			if (!string.IsNullOrWhiteSpace(keyword))

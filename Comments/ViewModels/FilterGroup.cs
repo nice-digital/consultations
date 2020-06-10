@@ -12,7 +12,16 @@ namespace Comments.ViewModels
 
     public class OptionFilterGroup : FilterGroup
 	{
-        public IList<FilterOption> Options { get; set; }	    
+		public OptionFilterGroup() {}
+
+		public OptionFilterGroup(OptionFilterGroup optionFilterGroupToCopyFrom)
+		{
+			Id = optionFilterGroupToCopyFrom.Id;
+			Title = optionFilterGroupToCopyFrom.Title;
+			Options = new List<FilterOption>(optionFilterGroupToCopyFrom.Options);
+		}
+
+		public IList<FilterOption> Options { get; set; }	    
     }
 
 	public class TextFilterGroup : FilterGroup

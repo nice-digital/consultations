@@ -55,13 +55,6 @@
                         "IsSelected":false,
                         "FilteredResultCount":2,
                         "UnfilteredResultCount":2
-                    },
-                    {
-                        "Id":"Upcoming",
-                        "Label":"Upcoming",
-                        "IsSelected":false,
-                        "FilteredResultCount":0,
-                        "UnfilteredResultCount":2
                     }
                 ],
                 "Id":"Status",
