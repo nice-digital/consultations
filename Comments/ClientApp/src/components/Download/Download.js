@@ -34,7 +34,7 @@ type StateType = {
 	hasInitialData: boolean,
 	loading: boolean,
 	isAuthorised: boolean,
-	isAdminUser: Boolean,
+	isAdminUser: boolean,
 	error: {
 		hasError: boolean,
 		message: string | null,
@@ -75,25 +75,13 @@ export class Download extends Component<PropsType, StateType> {
 			isTeamUser = ((preloadedData && preloadedData.isTeamUser) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["isTeamUser"])),
 			isStandardUser = !isAdminUser && !isTeamUser;
 
-		const querystring = this.props.location.search;
-
-		let querystringObject = queryStringToObject(querystring);
-
-		// add team to querystring on initial load - if user is part of a team
-		if ((isTeamUser) && (!("team" in querystringObject))) {
-			querystringObject.Team = "MyTeam";
-		}
-
-		// add contribution to querystring on initial load - if user is not part of a team
-		if ((isStandardUser) && (!("contribution" in querystringObject))) {
-			querystringObject.Contribution = "HasContributed";
-		}
-
-		const pageNumber = "page" in querystringObject ? parseInt(querystringObject.page, 10) : 1;
+		let querystringObject = queryStringToObject(this.props.location.search);
+		querystringObject = this.loadFilterDefaults(querystringObject, isTeamUser, isStandardUser);
 
 		let itemsPerPage = "amount" in querystringObject ? querystringObject.amount : 25;
-
 		itemsPerPage = !isNaN(itemsPerPage) ? parseInt(itemsPerPage, 10) : itemsPerPage;
+
+		const pageNumber = "page" in querystringObject ? parseInt(querystringObject.page, 10) : 1;
 
 		this.state = {
 			searchTerm: "",
@@ -109,7 +97,9 @@ export class Download extends Component<PropsType, StateType> {
 			hasInitialData: false,
 			loading: true,
 			isAuthorised: isAuthorised,
-			isAdminUser: false,
+			isAdminUser: isAdminUser,
+			isTeamUser: isTeamUser,
+			isStandardUser: isStandardUser,
 			error: {
 				hasError: false,
 				message: null,
@@ -138,6 +128,8 @@ export class Download extends Component<PropsType, StateType> {
 					loading: false,
 					isAuthorised: isAuthorised,
 					isAdminUser: isAdminUser,
+					isTeamUser: isTeamUser,
+					isStandardUser: isStandardUser,
 					hasInitialData: true,
 					error: {
 						hasError: false,
@@ -153,9 +145,8 @@ export class Download extends Component<PropsType, StateType> {
 		}
 	}
 
-	loadDataAndUpdateState = () => {
-		const querystring = this.props.history.location.search;
-		let querystringObject = queryStringToObject(querystring);
+	loadDataAndUpdateState = (defaultedQuerystringObject) => {
+		let querystringObject = defaultedQuerystringObject  || queryStringToObject(this.props.history.location.search);
 
 		const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;
 		this.setState({
@@ -170,7 +161,7 @@ export class Download extends Component<PropsType, StateType> {
 					hasInitialData: true,
 					loading: false,
 					indevReturnPath: response.data.indevBasePath,
-					pageNumber: 1
+					pageNumber: 1,
 				});
 			})
 			.catch(err => { //TODO: maybe this should log?
@@ -183,6 +174,20 @@ export class Download extends Component<PropsType, StateType> {
 			});
 	};
 
+	loadFilterDefaults = (querystringObject, isTeamUser, isStandardUser) => {
+		// add team to querystring on initial load - if user is part of a team
+		if ((isTeamUser) && (!("team" in querystringObject))) {
+			querystringObject.Team = "MyTeam";
+		}
+
+		// add contribution to querystring on initial load - if user is not part of a team
+		if ((isStandardUser) && (!("contribution" in querystringObject))) {
+			querystringObject.Contribution = "HasContributed";
+		}
+
+		return querystringObject;
+	};
+
 	unlisten = () => { };
 
 	componentWillUnmount() {
@@ -190,9 +195,13 @@ export class Download extends Component<PropsType, StateType> {
 	}
 
 	componentDidMount() {
+		let querystringObject = queryStringToObject(this.props.location.search);
+		querystringObject = this.loadFilterDefaults(querystringObject, this.state.isTeamUser, this.state.isStandardUser);
+
 		if (!this.state.hasInitialData) {
-			this.loadDataAndUpdateState();
+			this.loadDataAndUpdateState(querystringObject);
 		}
+
 		this.unlisten = this.props.history.listen(() => {
 			let path = this.props.basename + this.props.location.pathname + this.props.history.location.search,
 				paginationQueries = ["page", "amount"];
@@ -207,6 +216,7 @@ export class Download extends Component<PropsType, StateType> {
 		});
 
 		let indevReturnPath = this.state.consultationListData.indevBasePath;
+
 		if (typeof (document) !== "undefined") {
 			const documentReferrer = document.referrer;
 			if (documentReferrer.toLowerCase().indexOf("indev") !== -1) {
