@@ -148,7 +148,7 @@ export class Download extends Component<PropsType, StateType> {
 	loadDataAndUpdateState = (defaultedQuerystringObject) => {
 		let querystringObject = defaultedQuerystringObject  || queryStringToObject(this.props.history.location.search);
 
-		const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;
+		const path = this.props.basename + this.props.location.pathname + objectToQueryString({ ...querystringObject });
 		this.setState({
 			path,
 			search: this.props.history.location.search,
