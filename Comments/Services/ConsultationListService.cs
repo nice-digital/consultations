@@ -61,6 +61,26 @@ namespace Comments.Services
 			var consultationsFromIndev = _feedService.GetConsultationList().ToList();
 			var submittedCommentsAndAnswerCounts = canSeeAnySubmissionCounts ? _context.GetSubmittedCommentsAndAnswerCounts() : null;
 			var sourceURIsCommentedOrAnswered = _context.GetAllSourceURIsTheCurrentUserHasCommentedOrAnsweredAQuestion();
+
+			if (model.InitialPageView) //set defaults here for the filters
+			{
+				//if unset (by querystring) set the default for the contribution filter. - the filter should be enabled (HasContributed), for regular users (i.e. not admins or team users) and the user has contributed to any.
+				if (model.Contribution == null)
+				{
+					var userHasCommentedOrAnswered = sourceURIsCommentedOrAnswered.Any();
+					if ((!isAdminUser && !isTeamUser) && userHasCommentedOrAnswered)
+					{
+						model.Contribution = new List<ContributionStatus> {ContributionStatus.HasContributed};
+					}
+				}
+
+				//if unset (by querystring) set the default for the team filter - only for team users. if a user has admin and team rights, then admin overrules team and the filter will be unset.
+				if (model.Team == null && isTeamUser)
+				{
+					model.Team = new List<TeamStatus> { TeamStatus.MyTeam };
+				}
+			}
+
 			var consultationListRows = new List<ConsultationListRow>();
 
 			foreach (var consultation in consultationsFromIndev)

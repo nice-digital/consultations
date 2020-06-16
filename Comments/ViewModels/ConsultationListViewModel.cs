@@ -59,6 +59,12 @@ namespace Comments.ViewModels
 
 		public ViewModels.DownloadUser User { get; set; }
 
+		/// <summary>
+		/// This boolean is true when the page is first loaded (1st SSR and 1st client-side hit). it's here in order for the backend to control
+		/// the default logic - i.e. regular users should show have the ContributionFilter set to HasContributed by default, but team + admin users should have it unset.
+		/// </summary>
+		public bool InitialPageView { get; set; }
+
 
 		#region Filter options from the check boxes
 
