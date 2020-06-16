@@ -25,6 +25,7 @@ import clickPaginationOption, {
 	clickNextPagination,
 	clickPreviousPagination,
 } from "../support/action/clickPaginationOption";
+import validateResponsesFilterChecked from "../support/check/validateResponsesFilterChecked";
 // import validateCommentSaved from "../support/check/validateCommentSaved";
 
 /*Then(
@@ -96,3 +97,8 @@ Then(
 );
 
 Then(/^I expect all results are displayed$/, validateDownloadPageAllResults);
+
+Then(
+	/^I expect the your responses filter to be selected by default$/,
+	validateResponsesFilterChecked
+);

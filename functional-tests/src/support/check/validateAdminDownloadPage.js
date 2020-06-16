@@ -4,6 +4,7 @@ import pause from "@nice-digital/wdio-cucumber-steps/lib/support/action/pause";
 import selectors from "../selectors";
 
 export const validateDownloadPageResultCount = (countText) => {
+	waitForVisible(selectors.adminDownloadPage.pageResultCount);
 	checkContainsText(
 		"element",
 		selectors.adminDownloadPage.pageResultCount,

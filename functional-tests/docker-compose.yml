@@ -54,6 +54,7 @@ services:
       - IDAM_EMAIL2
       - IDAM_EMAIL3
       - IDAM_EMAIL4
+      - IDAM_EMAIL5
       - IDAM_PASSWORD
 
   # Comment Collection dotnet core web app
