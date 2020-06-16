@@ -116,7 +116,7 @@ export class Download extends Component<PropsType, StateType> {
 				this.props.staticContext,
 				"consultationList",
 				[],
-				Object.assign({ relativeURL: this.props.match.url }, querystringObject),
+				Object.assign({ relativeURL: this.props.match.url }, querystringObject, {initialPageView: !this.state.hasInitialData}),
 				preloadedData
 			);
 
@@ -154,7 +154,7 @@ export class Download extends Component<PropsType, StateType> {
 			search: this.props.history.location.search,
 		});
 
-		load("consultationList", undefined, [], Object.assign({relativeURL: this.props.match.url}, querystringObject))
+		load("consultationList", undefined, [], Object.assign({relativeURL: this.props.match.url}, querystringObject, {initialPageView: !this.state.hasInitialData}))
 			.then(response => {
 				this.setState({
 					consultationListData: response.data,
@@ -176,14 +176,14 @@ export class Download extends Component<PropsType, StateType> {
 
 	loadFilterDefaults = (querystringObject, isTeamUser, isStandardUser) => {
 		// add team to querystring on initial load - if user is part of a team
-		if ((isTeamUser) && (!("team" in querystringObject))) {
-			querystringObject.Team = "MyTeam";
-		}
+		// if ((isTeamUser) && (!("team" in querystringObject))) {
+		// 	querystringObject.Team = "MyTeam";
+		// }
 
-		// add contribution to querystring on initial load - if user is not part of a team
-		if ((isStandardUser) && (!("contribution" in querystringObject))) {
-			querystringObject.Contribution = "HasContributed";
-		}
+		// // add contribution to querystring on initial load - if user is not part of a team
+		// if ((isStandardUser) && (!("contribution" in querystringObject))) {
+		// 	querystringObject.Contribution = "HasContributed";
+		// }
 
 		return querystringObject;
 	};
