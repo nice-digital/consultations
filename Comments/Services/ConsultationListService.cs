@@ -62,7 +62,7 @@ namespace Comments.Services
 			var submittedCommentsAndAnswerCounts = canSeeAnySubmissionCounts ? _context.GetSubmittedCommentsAndAnswerCounts() : null;
 			var sourceURIsCommentedOrAnswered = _context.GetAllSourceURIsTheCurrentUserHasCommentedOrAnsweredAQuestion();
 
-			if (model.InitialPageView) //set defaults here for the filters
+			if (model.InitialPageView) //set defaults here for the filters - this code might be called by the SSR or by the client-side.
 			{
 				//if unset (by querystring) set the default for the contribution filter. - the filter should be enabled (HasContributed), for regular users (i.e. not admins or team users) and the user has contributed to any.
 				if (model.Contribution == null)
