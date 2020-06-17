@@ -76,7 +76,6 @@ export class Download extends Component<PropsType, StateType> {
 			isStandardUser = !isAdminUser && !isTeamUser;
 
 		let querystringObject = queryStringToObject(this.props.location.search);
-		querystringObject = this.loadFilterDefaults(querystringObject, isTeamUser, isStandardUser);
 
 		let itemsPerPage = "amount" in querystringObject ? querystringObject.amount : 25;
 		itemsPerPage = !isNaN(itemsPerPage) ? parseInt(itemsPerPage, 10) : itemsPerPage;
@@ -121,6 +120,8 @@ export class Download extends Component<PropsType, StateType> {
 			);
 
 			if (preloadedConsultations) {
+				querystringObject = this.setInitialPath(preloadedConsultations, querystringObject);
+
 				this.state = {
 					searchTerm: "",
 					path: this.props.basename + this.props.location.pathname + objectToQueryString({ ...querystringObject }),
@@ -145,23 +146,27 @@ export class Download extends Component<PropsType, StateType> {
 		}
 	}
 
-	loadDataAndUpdateState = (defaultedQuerystringObject) => {
-		let querystringObject = defaultedQuerystringObject  || queryStringToObject(this.props.history.location.search);
+	loadDataAndUpdateState = () => {
+		let querystringObject = queryStringToObject(this.props.history.location.search);
 
-		const path = this.props.basename + this.props.location.pathname + objectToQueryString({ ...querystringObject });
 		this.setState({
-			path,
+			path: this.props.basename + this.props.location.pathname + this.props.history.location.search,
 			search: this.props.history.location.search,
 		});
 
-		load("consultationList", undefined, [], Object.assign({relativeURL: this.props.match.url}, querystringObject, {initialPageView: !this.state.hasInitialData}))
+		load("consultationList", undefined, [], Object.assign({ relativeURL: this.props.match.url }, querystringObject, {initialPageView: !this.state.hasInitialData}))
 			.then(response => {
+				querystringObject = this.setInitialPath(response.data, querystringObject);
+
+				const path = this.props.basename + this.props.location.pathname + objectToQueryString({ ...querystringObject });
+
 				this.setState({
 					consultationListData: response.data,
 					hasInitialData: true,
 					loading: false,
 					indevReturnPath: response.data.indevBasePath,
 					pageNumber: 1,
+					path,
 				});
 			})
 			.catch(err => { //TODO: maybe this should log?
@@ -174,19 +179,17 @@ export class Download extends Component<PropsType, StateType> {
 			});
 	};
 
-	loadFilterDefaults = (querystringObject, isTeamUser, isStandardUser) => {
-		// add team to querystring on initial load - if user is part of a team
-		// if ((isTeamUser) && (!("team" in querystringObject))) {
-		// 	querystringObject.Team = "MyTeam";
-		// }
+	setInitialPath = (data, querystringObject) => {
+		if (data.contribution) {
+			querystringObject.Contribution = "HasContributed";
+		}
 
-		// // add contribution to querystring on initial load - if user is not part of a team
-		// if ((isStandardUser) && (!("contribution" in querystringObject))) {
-		// 	querystringObject.Contribution = "HasContributed";
-		// }
+		if (data.team) {
+			querystringObject.Team = "MyTeam";
+		}
 
 		return querystringObject;
-	};
+	}
 
 	unlisten = () => { };
 
@@ -195,11 +198,8 @@ export class Download extends Component<PropsType, StateType> {
 	}
 
 	componentDidMount() {
-		let querystringObject = queryStringToObject(this.props.location.search);
-		querystringObject = this.loadFilterDefaults(querystringObject, this.state.isTeamUser, this.state.isStandardUser);
-
 		if (!this.state.hasInitialData) {
-			this.loadDataAndUpdateState(querystringObject);
+			this.loadDataAndUpdateState();
 		}
 
 		this.unlisten = this.props.history.listen(() => {
