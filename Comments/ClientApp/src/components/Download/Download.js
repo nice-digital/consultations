@@ -361,6 +361,14 @@ export class Download extends Component<PropsType, StateType> {
 			},
 		];
 
+		const allConsultationsLink = [
+			{
+				label: "All consultations",
+				url: "/guidance/inconsultation",
+				localRoute: false,
+			},
+		];
+
 		const {
 			path,
 			loading,
@@ -407,7 +415,7 @@ export class Download extends Component<PropsType, StateType> {
 						<div className="container">
 							<div className="grid">
 								<div data-g="12">
-									<Breadcrumbs links={BackToIndevLink} />
+									<Breadcrumbs links={allConsultationsLink} />
 									<Header title="Download Responses" />
 									<div className="grid mt--d">
 										<div data-g="12 md:3">

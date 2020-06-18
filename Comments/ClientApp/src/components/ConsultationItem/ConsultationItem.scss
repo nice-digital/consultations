@@ -1,8 +1,11 @@
 .ConsultationItem {
- .tag--open {
-   @extend .tag--live;
- }
+  .tag--open {
+    @extend .tag--live;
+  }
   .tag--upcoming {
     @extend .tag--beta;
+  }
+  .tag--unsubmitted {
+    @extend .tag--alpha;
   }
 }

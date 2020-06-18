@@ -1,20 +1,23 @@
+// @flow
+
 import React, { Component, Fragment } from "react";
 import Moment from "react-moment";
 import { Link } from "react-router-dom";
 
-
 type StateType = {}
 
 type PropsType = {
-	title:string,
-	startDate : Date,
-	endDate : Date,
-	submissionCount:number,
-	consultationId :number,
-	documentId:number,
-	chapterSlug :string,
-	gidReference :string,
-	productTypeName :string,
+	title: string,
+	startDate: Date,
+	endDate: Date,
+	submissionCount: number,
+	consultationId: number,
+	documentId: number,
+	chapterSlug: string,
+	gidReference: string,
+	productTypeName: string,
+	hasCurrentUserEnteredCommentsOrAnsweredQuestions: boolean,
+	hasCurrentUserSubmittedCommentsOrAnswers: boolean,
 	isOpen: boolean,
 	isClosed: boolean,
 	isUpcoming: boolean,
@@ -36,6 +39,8 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 			chapterSlug,
 			gidReference,
 			productTypeName,
+			hasCurrentUserEnteredCommentsOrAnsweredQuestions,
+			hasCurrentUserSubmittedCommentsOrAnswers,
 			isOpen,
 			isClosed,
 			isUpcoming,
@@ -48,6 +53,7 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 			return "?";
 		};
 
+		const userHasRespondedButNotSubmitted = hasCurrentUserEnteredCommentsOrAnsweredQuestions & !hasCurrentUserSubmittedCommentsOrAnswers;
 		const consultationStatus = status(isOpen, isClosed, isUpcoming);
 
 		return (
@@ -69,6 +75,14 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 								<span className={`tag tag--${consultationStatus.toLowerCase()}`}>{consultationStatus}</span>
 							</dd>
 						</div>
+						{userHasRespondedButNotSubmitted && (
+							<div className="card__metadatum">
+								<dt className="visually-hidden">Unsubmitted questions or answers</dt>
+								<dd>
+									<span className="tag tag--unsubmitted">Unsubmitted</span>
+								</dd>
+							</div>
+						)}
 						<div className="card__metadatum">
 							<dt className="visually-hidden">Project ID</dt>
 							<dd title={`Consultation ID ${consultationId}`}>
