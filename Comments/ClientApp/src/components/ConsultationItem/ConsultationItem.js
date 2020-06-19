@@ -75,7 +75,7 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 								<span className={`tag tag--${consultationStatus.toLowerCase()}`}>{consultationStatus}</span>
 							</dd>
 						</div>
-						{userHasRespondedButNotSubmitted && (
+						{Boolean(userHasRespondedButNotSubmitted) && (
 							<div className="card__metadatum">
 								<dt className="visually-hidden">Unsubmitted questions or answers</dt>
 								<dd>

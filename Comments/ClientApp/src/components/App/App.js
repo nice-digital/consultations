@@ -46,14 +46,20 @@ class App extends React.Component<PropsType, StateType> {
 							<Switch>
 
 								{/*Admin Routes*/}
+
+								{/*Download*/}
+								<Route exact path="/">
+									<DownloadWithRouter basename={this.props.basename} />
+								</Route>
+
 								{/*Download*/}
 								<Route exact path="/admin">
-									<Redirect to={"/admin/download"}/>
+									<Redirect to={"/"}/>
 								</Route>
 
 								{/*Download*/}
 								<Route exact path="/admin/download">
-									<DownloadWithRouter basename={this.props.basename}/>
+									<Redirect to={"/"} />
 								</Route>
 
 								{/*Questions admin - this route is hit when the 'Add question' button is pressed in indev on a draft project.*/}
