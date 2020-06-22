@@ -39,7 +39,7 @@ type StateType = {
 		hasError: boolean,
 		message: string | null,
 	},
-	indevReturnPath: string,
+	indevReturnPath: string | null,
 	search: string,
 	keywordToFilterBy: string,
 	pageNumber: number,
@@ -103,7 +103,7 @@ export class Download extends Component<PropsType, StateType> {
 				hasError: false,
 				message: null,
 			},
-			indevReturnPath: "",
+			indevReturnPath: null,
 			search: this.props.location.search,
 			keywordToFilterBy: null,
 			pageNumber: pageNumber,
@@ -136,7 +136,7 @@ export class Download extends Component<PropsType, StateType> {
 						hasError: false,
 						message: null,
 					},
-					indevReturnPath: preloadedConsultations.indevBasePath,
+					indevReturnPath: null,
 					search: this.props.location.search,
 					keywordToFilterBy: null,
 					pageNumber: pageNumber,
@@ -164,7 +164,7 @@ export class Download extends Component<PropsType, StateType> {
 					consultationListData: response.data,
 					hasInitialData: true,
 					loading: false,
-					indevReturnPath: response.data.indevBasePath,
+					indevReturnPath: null,
 					pageNumber: 1,
 					path,
 				});
@@ -215,7 +215,7 @@ export class Download extends Component<PropsType, StateType> {
 			}
 		});
 
-		let indevReturnPath = this.state.consultationListData.indevBasePath;
+		let indevReturnPath = null;
 
 		if (typeof (document) !== "undefined") {
 			const documentReferrer = document.referrer;
@@ -234,7 +234,7 @@ export class Download extends Component<PropsType, StateType> {
 			}
 		}
 
-		this.setState({ indevReturnPath: indevReturnPath });
+		this.setState({ indevReturnPath });
 	}
 
 	keywordToFilterByUpdated = (keywordToFilterBy) => {
@@ -353,21 +353,11 @@ export class Download extends Component<PropsType, StateType> {
 	}
 
 	render() {
-		const BackToIndevLink = [
-			{
-				label: "Back to InDev",
-				url: this.state.indevReturnPath,
-				localRoute: false,
-			},
-		];
-
-		const allConsultationsLink = [
-			{
-				label: "All consultations",
-				url: "/guidance/inconsultation",
-				localRoute: false,
-			},
-		];
+		const breadcrumbLinkParams = [{
+			label: this.state.indevReturnPath ? "Back to InDev" : "All consultations",
+			url: this.state.indevReturnPath ? this.state.indevReturnPath : "/guidance/inconsultation",
+			localRoute: false,
+		}];
 
 		const {
 			path,
@@ -415,7 +405,7 @@ export class Download extends Component<PropsType, StateType> {
 						<div className="container">
 							<div className="grid">
 								<div data-g="12">
-									<Breadcrumbs links={allConsultationsLink} />
+									<Breadcrumbs links={breadcrumbLinkParams} />
 									<Header title="Download Responses" />
 									<div className="grid mt--d">
 										<div data-g="12 md:3">
