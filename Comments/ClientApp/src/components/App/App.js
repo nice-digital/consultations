@@ -53,14 +53,14 @@ class App extends React.Component<PropsType, StateType> {
 								</Route>
 
 								{/*Download*/}
-								<Route exact path="/admin">
-									<Redirect to={"/"}/>
-								</Route>
+								<Route exact path="/admin" render={props => (
+									<Redirect to={`/${props.location.search}`} />
+								)} />
 
 								{/*Download*/}
-								<Route exact path="/admin/download">
-									<Redirect to={"/"} />
-								</Route>
+								<Route exact path="/admin/download" render={props => (
+									<Redirect to={`/${props.location.search}`} />
+								)} />
 
 								{/*Questions admin - this route is hit when the 'Add question' button is pressed in indev on a draft project.*/}
 								<Route exact path="/admin/questions/preview/:reference/:consultationId">
