@@ -146,8 +146,32 @@ export class Download extends Component<PropsType, StateType> {
 		}
 	}
 
+	setIndevReturnPath = () => {
+		let indevReturnPath = null;
+
+		if (typeof (document) !== "undefined") {
+			const documentReferrer = document.referrer;
+			if (documentReferrer.toLowerCase().indexOf("indev") !== -1) {
+				indevReturnPath = documentReferrer;
+				const inTenMinutes = new Date(new Date().getTime() + 10 * 60 * 1000);
+				Cookies.set("documentReferrer", documentReferrer, {
+					expires: inTenMinutes,
+				});
+			}
+			else {
+				const cookieReferrer = Cookies.get("documentReferrer");
+				if (cookieReferrer != null) {
+					indevReturnPath = cookieReferrer;
+				}
+			}
+		}
+		return indevReturnPath;
+	};
+
 	loadDataAndUpdateState = () => {
 		let querystringObject = queryStringToObject(this.props.history.location.search);
+
+		const indevReturnPath = this.setIndevReturnPath();
 
 		this.setState({
 			path: this.props.basename + this.props.location.pathname + this.props.history.location.search,
@@ -164,7 +188,7 @@ export class Download extends Component<PropsType, StateType> {
 					consultationListData: response.data,
 					hasInitialData: true,
 					loading: false,
-					indevReturnPath: null,
+					indevReturnPath: indevReturnPath,
 					pageNumber: 1,
 					path,
 				});
@@ -198,8 +222,11 @@ export class Download extends Component<PropsType, StateType> {
 	}
 
 	componentDidMount() {
+		let setIndevReturnPathCalled = false;
+
 		if (!this.state.hasInitialData) {
 			this.loadDataAndUpdateState();
+			setIndevReturnPathCalled = true;
 		}
 
 		this.unlisten = this.props.history.listen(() => {
@@ -215,26 +242,10 @@ export class Download extends Component<PropsType, StateType> {
 			}
 		});
 
-		let indevReturnPath = null;
-
-		if (typeof (document) !== "undefined") {
-			const documentReferrer = document.referrer;
-			if (documentReferrer.toLowerCase().indexOf("indev") !== -1) {
-				indevReturnPath = documentReferrer;
-				const inTenMinutes = new Date(new Date().getTime() + 10 * 60 * 1000);
-				Cookies.set("documentReferrer", documentReferrer, {
-					expires: inTenMinutes,
-				});
-			}
-			else {
-				const cookieReferrer = Cookies.get("documentReferrer");
-				if (cookieReferrer != null) {
-					indevReturnPath = cookieReferrer;
-				}
-			}
+		if (!setIndevReturnPathCalled) {
+			const indevReturnPath = this.setIndevReturnPath();
+			this.setState({ indevReturnPath });
 		}
-
-		this.setState({ indevReturnPath });
 	}
 
 	keywordToFilterByUpdated = (keywordToFilterBy) => {
