@@ -16,20 +16,24 @@ namespace Comments.Test.Infrastructure
     public static class FakeHttpContextAccessor
     {
 	    private static string AuthenticationTokenExtensions_TokenKeyPrefix = ".Token.";
-		public static IHttpContextAccessor Get(bool isAuthenticated, string displayName = null, string userId = null, TestUserType testUserType = TestUserType.NotAuthenticated)
+		public static IHttpContextAccessor Get(bool isAuthenticated, string displayName = null, string userId = null, TestUserType testUserType = TestUserType.NotAuthenticated, bool addRoleClaim = true)
         {
 	        var context = new Mock<HttpContext>();
 	        var roleIssuer = "www.example.com"; //the issuer of the role is the domain for which the role is setup.
 
 			if (isAuthenticated || testUserType == TestUserType.Authenticated || testUserType == TestUserType.Administrator || testUserType == TestUserType.IndevUser)
             {
-	            
+
 				var claims = new List<Claim>
                 {
                     new Claim(ClaimType.DisplayName, displayName, null, AuthenticationConstants.IdAMIssuer),
-                    new Claim(ClaimType.NameIdentifier, userId.ToString(), null, AuthenticationConstants.IdAMIssuer),
-	                new Claim(ClaimType.Role, "IndevUser", null, roleIssuer),
-				};
+                    new Claim(ClaimType.NameIdentifier, userId.ToString(), null, AuthenticationConstants.IdAMIssuer)
+                };
+				if (addRoleClaim)
+				{
+					claims.Add(new Claim(ClaimType.Role, "IndevUser", null, roleIssuer));
+				}
+
 				switch (testUserType)
 				{
 					case TestUserType.IndevUser:
@@ -75,7 +79,7 @@ namespace Comments.Test.Infrastructure
 
             context.Setup(r => r.Request)
 	            .Returns(new DefaultHttpRequest(new DefaultHttpContext()) { Host = new HostString(roleIssuer) });
-           
+
 
 			var contextAccessor = new Mock<IHttpContextAccessor>();
             contextAccessor.Setup(ca => ca.HttpContext).Returns(context.Object);
@@ -83,6 +87,6 @@ namespace Comments.Test.Infrastructure
             return contextAccessor.Object;
         }
 
-		
+
 	}
 }

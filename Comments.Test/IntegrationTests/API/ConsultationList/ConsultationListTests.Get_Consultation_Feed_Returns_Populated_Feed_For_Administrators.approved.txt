@@ -75,16 +75,38 @@
         "id":"Keyword",
         "title":"Keyword"
     },
+    "contributionFilter":[
+        {
+            "options":[
+                {
+                    "id":"HasContributed",
+                    "label":"Your responses",
+                    "isSelected":false,
+                    "filteredResultCount":0,
+                    "unfilteredResultCount":2
+                }
+            ],
+            "id":"Contribution",
+            "title":"Contribution filter group"
+        }
+    ],
+    "teamFilter":null,
     "user":{
         "isAdminUser":true,
         "isTeamUser":false,
+        "teamNames":[
+            
+        ],
         "isAuthorised":true,
         "displayName":"Benjamin Button",
         "userId":"00000000-0000-0000-0000-000000000000",
         "organisationName":null
     },
+    "initialPageView":false,
     "status":[
         "Open"
     ],
-    "keyword":null
+    "keyword":null,
+    "contribution":null,
+    "team":null
 }

@@ -6,7 +6,7 @@ import Helmet from "react-helmet";
 import Cookies from "js-cookie";
 //import stringifyObject from "stringify-object";
 
-import { appendQueryParameter, removeQueryParameter, stripMultipleQueries, queryStringToObject, canUseDOM } from "../../helpers/utils";
+import { appendQueryParameter, removeQueryParameter, stripMultipleQueries, queryStringToObject, objectToQueryString, canUseDOM } from "../../helpers/utils";
 import { UserContext } from "../../context/UserContext";
 import { LoginBanner } from "../LoginBanner/LoginBanner";
 import { Header } from "../Header/Header";
@@ -27,16 +27,19 @@ type StateType = {
 		consultations: Array<ConsultationListRow>,
 		optionFilters: Array<OptionFilterGroup>,
 		textFilter: TextFilterGroup,
+		contributionFilter: Array,
+		teamFilter: Array,
 		indevBasePath: string,
 	};
 	hasInitialData: boolean,
 	loading: boolean,
 	isAuthorised: boolean,
+	isAdminUser: boolean,
 	error: {
 		hasError: boolean,
 		message: string | null,
 	},
-	indevReturnPath: string,
+	indevReturnPath: string | null,
 	search: string,
 	keywordToFilterBy: string,
 	pageNumber: number,
@@ -67,17 +70,17 @@ export class Download extends Component<PropsType, StateType> {
 			preloadedData = this.props.staticContext.preload.data;
 		}
 
-		const querystring = this.props.location.search;
+		const isAuthorised = ((preloadedData && preloadedData.isAuthorised) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["isAuthorised"])),
+			isAdminUser = ((preloadedData && preloadedData.isAdminUser) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["isAdminUser"])),
+			isTeamUser = ((preloadedData && preloadedData.isTeamUser) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["isTeamUser"])),
+			isStandardUser = !isAdminUser && !isTeamUser;
 
-		const querystringObject = queryStringToObject(querystring);
-
-		const pageNumber = "page" in querystringObject ? parseInt(querystringObject.page, 10) : 1;
+		let querystringObject = queryStringToObject(this.props.location.search);
 
 		let itemsPerPage = "amount" in querystringObject ? querystringObject.amount : 25;
-
 		itemsPerPage = !isNaN(itemsPerPage) ? parseInt(itemsPerPage, 10) : itemsPerPage;
 
-		const isAuthorised = ((preloadedData && preloadedData.isAuthorised) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["isAuthorised"]));
+		const pageNumber = "page" in querystringObject ? parseInt(querystringObject.page, 10) : 1;
 
 		this.state = {
 			searchTerm: "",
@@ -86,16 +89,21 @@ export class Download extends Component<PropsType, StateType> {
 				consultations: [], //if you don't set this to an empty array, the filter line below will fail in the first SSR render.
 				optionFilters: [],
 				textFilter: {},
+				contributionFilter: [],
+				teamFilter: null,
 				indevBasePath: "",
 			},
 			hasInitialData: false,
 			loading: true,
 			isAuthorised: isAuthorised,
+			isAdminUser: isAdminUser,
+			isTeamUser: isTeamUser,
+			isStandardUser: isStandardUser,
 			error: {
 				hasError: false,
 				message: null,
 			},
-			indevReturnPath: "",
+			indevReturnPath: null,
 			search: this.props.location.search,
 			keywordToFilterBy: null,
 			pageNumber: pageNumber,
@@ -107,24 +115,28 @@ export class Download extends Component<PropsType, StateType> {
 				this.props.staticContext,
 				"consultationList",
 				[],
-				Object.assign({ relativeURL: this.props.match.url }, queryStringToObject(querystring)),
+				Object.assign({ relativeURL: this.props.match.url }, querystringObject, {initialPageView: !this.state.hasInitialData}),
 				preloadedData
 			);
 
 			if (preloadedConsultations) {
+				querystringObject = this.setInitialPath(preloadedConsultations, querystringObject);
 
 				this.state = {
 					searchTerm: "",
-					path: this.props.basename + this.props.location.pathname + this.props.location.search,
+					path: this.props.basename + this.props.location.pathname + objectToQueryString({ ...querystringObject }),
 					consultationListData: preloadedConsultations,
 					loading: false,
 					isAuthorised: isAuthorised,
+					isAdminUser: isAdminUser,
+					isTeamUser: isTeamUser,
+					isStandardUser: isStandardUser,
 					hasInitialData: true,
 					error: {
 						hasError: false,
 						message: null,
 					},
-					indevReturnPath: preloadedConsultations.indevBasePath,
+					indevReturnPath: null,
 					search: this.props.location.search,
 					keywordToFilterBy: null,
 					pageNumber: pageNumber,
@@ -134,59 +146,9 @@ export class Download extends Component<PropsType, StateType> {
 		}
 	}
 
-	loadDataAndUpdateState = () => {
-		const querystring = this.props.history.location.search;
-		const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;
-		this.setState({
-			path,
-			search: this.props.history.location.search,
-		});
+	setIndevReturnPath = () => {
+		let indevReturnPath = null;
 
-		load("consultationList", undefined, [], Object.assign({ relativeURL: this.props.match.url }, queryStringToObject(querystring)))
-			.then(response => {
-				this.setState({
-					consultationListData: response.data,
-					hasInitialData: true,
-					loading: false,
-					indevReturnPath: response.data.indevBasePath,
-					pageNumber: 1
-				});
-			})
-			.catch(err => { //TODO: maybe this should log?
-				this.setState({
-					error: {
-						hasError: true,
-						message: "consultationsList error  " + err,
-					},
-				});
-			});
-	};
-
-	unlisten = () => { };
-
-	componentWillUnmount() {
-		this.unlisten();
-	}
-
-	componentDidMount() {
-		if (!this.state.hasInitialData) {
-			this.loadDataAndUpdateState();
-		}
-		this.unlisten = this.props.history.listen(() => {
-
-			let path = this.props.basename + this.props.location.pathname + this.props.history.location.search,
-				paginationQueries = ["page", "amount"];
-
-			path = stripMultipleQueries(path, paginationQueries);
-
-			const statePath = stripMultipleQueries(this.state.path, paginationQueries);
-
-			if (!path || path !== statePath) {
-				this.loadDataAndUpdateState();
-			}
-		});
-
-		let indevReturnPath = this.state.consultationListData.indevBasePath;
 		if (typeof (document) !== "undefined") {
 			const documentReferrer = document.referrer;
 			if (documentReferrer.toLowerCase().indexOf("indev") !== -1) {
@@ -203,7 +165,87 @@ export class Download extends Component<PropsType, StateType> {
 				}
 			}
 		}
-		this.setState({ indevReturnPath: indevReturnPath });
+		return indevReturnPath;
+	};
+
+	loadDataAndUpdateState = () => {
+		let querystringObject = queryStringToObject(this.props.history.location.search);
+
+		const indevReturnPath = this.setIndevReturnPath();
+
+		this.setState({
+			path: this.props.basename + this.props.location.pathname + this.props.history.location.search,
+			search: this.props.history.location.search,
+		});
+
+		load("consultationList", undefined, [], Object.assign({ relativeURL: this.props.match.url }, querystringObject, {initialPageView: !this.state.hasInitialData}))
+			.then(response => {
+				querystringObject = this.setInitialPath(response.data, querystringObject);
+
+				const path = this.props.basename + this.props.location.pathname + objectToQueryString({ ...querystringObject });
+
+				this.setState({
+					consultationListData: response.data,
+					hasInitialData: true,
+					loading: false,
+					indevReturnPath: indevReturnPath,
+					pageNumber: 1,
+					path,
+				});
+			})
+			.catch(err => { //TODO: maybe this should log?
+				this.setState({
+					error: {
+						hasError: true,
+						message: "consultationsList error  " + err,
+					},
+				});
+			});
+	};
+
+	setInitialPath = (data, querystringObject) => {
+		if (data.contribution) {
+			querystringObject.Contribution = "HasContributed";
+		}
+
+		if (data.team) {
+			querystringObject.Team = "MyTeam";
+		}
+
+		return querystringObject;
+	}
+
+	unlisten = () => { };
+
+	componentWillUnmount() {
+		this.unlisten();
+	}
+
+	componentDidMount() {
+		let setIndevReturnPathCalled = false;
+
+		if (!this.state.hasInitialData) {
+			this.loadDataAndUpdateState();
+			setIndevReturnPathCalled = true;
+		}
+
+		this.unlisten = this.props.history.listen(() => {
+			let path = this.props.basename + this.props.location.pathname + this.props.history.location.search,
+				paginationQueries = ["page", "amount"];
+
+			path = stripMultipleQueries(path, paginationQueries);
+
+			const statePath = stripMultipleQueries(this.state.path, paginationQueries);
+
+			if (!path || path !== statePath) {
+				this.loadDataAndUpdateState();
+			}
+		});
+
+		if (!setIndevReturnPathCalled) {
+			const indevReturnPath = this.setIndevReturnPath();
+			this.setState({ indevReturnPath });
+		}
 	}
 
 	keywordToFilterByUpdated = (keywordToFilterBy) => {
@@ -216,7 +258,20 @@ export class Download extends Component<PropsType, StateType> {
 		}
 	}
 
+	generateFilters = (filters, mapOptions) => {
+		return filters
+			.map(mapOptions)
+			.reduce((arr, group) => arr.concat(group), []);
+	}
+
 	getAppliedFilters(): AppliedFilterType[] {
+		const {
+			optionFilters,
+			contributionFilter,
+		} = this.state.consultationListData;
+
+		let teamFilter = [];
+
 		const mapOptions =
 			(group: ReviewFilterGroupType) => group.options
 				.filter(opt => opt.isSelected)
@@ -227,9 +282,13 @@ export class Download extends Component<PropsType, StateType> {
 					optionId: opt.id,
 				}));
 
-		let filters = this.state.consultationListData.optionFilters
-			.map(mapOptions)
-			.reduce((arr, group) => arr.concat(group), []);
+		if (this.state.consultationListData.teamFilter) {
+			teamFilter = this.state.consultationListData.teamFilter;
+		}
+
+		let filters = contributionFilter.concat(teamFilter, optionFilters);
+
+		filters = this.generateFilters(filters, mapOptions);
 
 		if (this.state.keywordToFilterBy) {
 			if (!filters.length) {
@@ -305,13 +364,11 @@ export class Download extends Component<PropsType, StateType> {
 	}
 
 	render() {
-		const BackToIndevLink = [
-			{
-				label: "Back to InDev",
-				url: this.state.indevReturnPath,
-				localRoute: false,
-			},
-		];
+		const breadcrumbLinkParams = [{
+			label: this.state.indevReturnPath ? "Back to InDev" : "All consultations",
+			url: this.state.indevReturnPath ? this.state.indevReturnPath : "/guidance/inconsultation",
+			localRoute: false,
+		}];
 
 		const {
 			path,
@@ -319,6 +376,7 @@ export class Download extends Component<PropsType, StateType> {
 			hasInitialData,
 			consultationListData,
 			isAuthorised,
+			isAdminUser,
 			pageNumber,
 			itemsPerPage,
 		} = this.state;
@@ -326,6 +384,8 @@ export class Download extends Component<PropsType, StateType> {
 		const {
 			optionFilters,
 			textFilter,
+			contributionFilter,
+			teamFilter,
 		} = consultationListData;
 
 		const consultationsToShow = this.state.consultationListData.consultations.filter(consultation => consultation.show);
@@ -356,7 +416,7 @@ export class Download extends Component<PropsType, StateType> {
 						<div className="container">
 							<div className="grid">
 								<div data-g="12">
-									<Breadcrumbs links={BackToIndevLink} />
+									<Breadcrumbs links={breadcrumbLinkParams} />
 									<Header title="Download Responses" />
 									<div className="grid mt--d">
 										<div data-g="12 md:3">
@@ -369,6 +429,12 @@ export class Download extends Component<PropsType, StateType> {
 													path={this.state.path}
 													{...textFilter}
 												/>
+											}
+											{!isAdminUser &&
+												<FilterPanel filters={contributionFilter} path={path} />
+											}
+											{teamFilter &&
+												<FilterPanel filters={teamFilter} path={path} />
 											}
 											<FilterPanel filters={optionFilters} path={path} />
 										</div>

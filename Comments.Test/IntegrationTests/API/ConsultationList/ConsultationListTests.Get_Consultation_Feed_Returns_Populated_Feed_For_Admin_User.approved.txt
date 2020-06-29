@@ -5,7 +5,7 @@
             "title":"For consultation comments",
             "startDate":"2018-04-01T00:00:00",
             "endDate":"2028-05-31T17:00:00",
-            "submissionCount":1,
+            "submissionCount":0,
             "consultationId":1,
             "documentId":1,
             "chapterSlug":"introduction",
@@ -75,16 +75,38 @@
         "id":"Keyword",
         "title":"Keyword"
     },
+    "contributionFilter":[
+        {
+            "options":[
+                {
+                    "id":"HasContributed",
+                    "label":"Your responses",
+                    "isSelected":false,
+                    "filteredResultCount":0,
+                    "unfilteredResultCount":2
+                }
+            ],
+            "id":"Contribution",
+            "title":"Contribution filter group"
+        }
+    ],
+    "teamFilter":null,
     "user":{
         "isAdminUser":true,
         "isTeamUser":false,
+        "teamNames":[
+            
+        ],
         "isAuthorised":true,
         "displayName":"Benjamin Button",
         "userId":"00000000-0000-0000-0000-000000000000",
         "organisationName":null
     },
+    "initialPageView":false,
     "status":[
         "Open"
     ],
-    "keyword":null
+    "keyword":null,
+    "contribution":null,
+    "team":null
 }

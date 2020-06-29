@@ -763,5 +763,29 @@ namespace Comments.Models
 
 			return allUserIds.Distinct();
 		}
+
+
+		/// <summary>
+		/// Returns a list of all the source uri's and the status of each for the current users comments and answers
+		/// note: there could be duplicate source uris. this list will likely need filtering in the service.
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerable<KeyValuePair<string, Status>> GetAllSourceURIsTheCurrentUserHasCommentedOrAnsweredAQuestion()
+		{
+			var comments = Comment 
+				.Include(l => l.Location)
+				.Include(s => s.Status)
+				.ToList();
+
+			var answers = Answer 
+				.Include(q => q.Question)
+				.ThenInclude(l => l.Location)
+				.Include(s => s.Status)
+				.ToList();
+
+			var commentSourceURIsAndStatus = comments.Select(comment => new KeyValuePair<string, Status>(comment.Location.SourceURI, comment.Status));
+			var answerSourceURIsAndStatus = answers.Select(answer => new KeyValuePair<string, Status>(answer.Question.Location.SourceURI, answer.Status));
+			return commentSourceURIsAndStatus.Concat(answerSourceURIsAndStatus);
+		}
 	}
 }

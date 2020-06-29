@@ -7,7 +7,9 @@ namespace Comments.ViewModels
 {
     public class User
     {
-        public User(bool isAuthorised, string displayName, string userId, string organisationName = null)
+	    public User() {}
+
+	    public User(bool isAuthorised, string displayName, string userId, string organisationName = null)
         {
             IsAuthorised = isAuthorised;
             DisplayName = displayName;
