@@ -68,6 +68,7 @@ export class DownloadResultsInfo extends Component<PropsType, StateType> {
 							</Fragment>
 						)}
 				</h2>
+				<a href="/guidance/inconsultation" className="right">See all open consultations</a>
 				{this.props.appliedFilters.length > 0 && (
 					<ul className="results-info__filters hide-print">
 						{this.props.appliedFilters.map(filter => (

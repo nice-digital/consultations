@@ -364,11 +364,18 @@ export class Download extends Component<PropsType, StateType> {
 	}
 
 	render() {
-		const breadcrumbLinkParams = [{
-			label: this.state.indevReturnPath ? "Back to InDev" : "All consultations",
-			url: this.state.indevReturnPath ? this.state.indevReturnPath : "/guidance/inconsultation",
-			localRoute: false,
-		}];
+		const breadcrumbLinkParams = [
+			{
+				label: "Home",
+				url: "/",
+				localRoute: false,
+			},
+			{
+				label: this.state.indevReturnPath ? "Back to InDev" : "All consultations",
+				url: this.state.indevReturnPath ? this.state.indevReturnPath : "/guidance/inconsultation",
+				localRoute: false,
+			},
+		];
 
 		const {
 			path,
@@ -411,13 +418,14 @@ export class Download extends Component<PropsType, StateType> {
 					:
 					<Fragment>
 						<Helmet>
-							<title>Download Responses</title>
+							<title>Consultation responses</title>
 						</Helmet>
 						<div className="container">
 							<div className="grid">
 								<div data-g="12">
 									<Breadcrumbs links={breadcrumbLinkParams} />
-									<Header title="Download Responses" />
+									<Header title="Consultation responses" />
+									<p className="lead">Only online consultations responses appear in the results below.</p>
 									<div className="grid mt--d">
 										<div data-g="12 md:3">
 											<h2 className="h5 mt--0">Filter</h2>
