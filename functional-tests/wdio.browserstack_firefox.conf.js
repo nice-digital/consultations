@@ -25,8 +25,8 @@ exports.config = {
 			acceptInsecureCerts: true, // Because of self-signed cert inside Docker
 			acceptSslCerts: true,
 			maxInstances: 2,
-			browserstack.console: "verbose",
-			browserstack.networkLogs: true,
+			// browserstack.console: "verbose",
+			// browserstack.networkLogs: true,
 		},
 	],
 
