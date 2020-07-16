@@ -15,19 +15,6 @@ exports.config = {
 	capabilities: [
 		{
 			project: "Comment Collection",
-			name: "Functional tests - Firefox",
-			build: "Comment Collection" + " Firefox 78.0 " + process.env.BUILD_NUMBER,
-			browser: "Firefox",
-			os: "Windows",
-			os_version: "10",
-			browser_version: "78.0",
-			resolution: "1024x768",
-			acceptInsecureCerts: true, // Because of self-signed cert inside Docker
-			acceptSslCerts: true,
-			maxInstances: 2,
-		},
-		{
-			project: "Comment Collection",
 			name: "Functional tests - Edge",
 			build:
 				"Comment Collection" + " EDGE 84.0 beta " + process.env.BUILD_NUMBER,
@@ -43,7 +30,8 @@ exports.config = {
 		},
 	],
 
-	logLevel: "verbose",
+	browserstack.console: "verbose",
+	browserstack.networkLogs: true,
 	// Change this to verbose if you want more detailed logging in the terminal
 	coloredLogs: true,
 	screenshotPath: "./errorShots/",

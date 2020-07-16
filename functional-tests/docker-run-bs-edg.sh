@@ -11,7 +11,7 @@ docker-compose down --remove-orphans && docker-compose rm -vf
 docker-compose build && docker-compose up -d
 
 # Wait for comments webapp before running the tests
-docker-compose run tests waitforit -t 120 --strict comments:8080 -- npm run test:browserstack
+docker-compose run tests waitforit -t 120 --strict comments:8080 -- npm run test:browserstack:edge
 
 # Copy error shots and logs to use as a TeamCity artifact for debugging purposes
 mkdir -p docker-output

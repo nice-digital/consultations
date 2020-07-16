@@ -6,7 +6,8 @@
   "scripts": {
     "test": "node node_modules/webdriverio/bin/wdio",
     "test:teamcity": "node node_modules/webdriverio/bin/wdio wdio.teamcity.conf.js",
-    "test:browserstack": "node node_modules/webdriverio/bin/wdio wdio.browserstack.conf.js"
+    "test:browserstack:edge": "node node_modules/webdriverio/bin/wdio wdio.browserstack_edge.conf.js",
+    "test:browserstack:firefox": "node node_modules/webdriverio/bin/wdio wdio.browserstack_firefox.conf.js"
   },
   "author": "NICE Digital Services",
   "contributors": [
