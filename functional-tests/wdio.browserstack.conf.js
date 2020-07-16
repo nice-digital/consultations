@@ -29,7 +29,8 @@ exports.config = {
 		{
 			project: "Comment Collection",
 			name: "Functional tests - Edge",
-			build: "Comment Collection" + " " + process.env.ACCOUNTS_EMAIL,
+			build:
+				"Comment Collection" + " EDGE 84.0 beta " + process.env.BUILD_NUMBER,
 			os: "Windows",
 			os_version: "10",
 			browser: "Edge",
