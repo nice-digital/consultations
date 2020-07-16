@@ -56,6 +56,8 @@ services:
       - IDAM_EMAIL4
       - IDAM_EMAIL5
       - IDAM_PASSWORD
+      - BROWSERSTACK_ACCESS_KEY
+      - BROWSERSTACK_USERNAME
 
   # Comment Collection dotnet core web app
   comments:
