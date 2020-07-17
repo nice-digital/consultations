@@ -13,7 +13,7 @@ import { processHtml } from "./html-processor";
 import App from "./../components/App/App";
 import { Error } from "./../components/Error/Error";
 
-const BaseUrlRelative: string = "/consultations";
+const BaseUrlRelative: string = "/";
 
 // Returns a script tag with the stringified data for loading on the client
 const getPreloadedDataHtml = (data): string => {
