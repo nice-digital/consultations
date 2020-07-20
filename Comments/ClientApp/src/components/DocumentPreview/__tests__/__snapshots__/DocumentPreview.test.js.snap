@@ -5,633 +5,658 @@ Array [
   "",
   <div
     className="container"
->
+  >
     <div
-        className="grid"
+      className="grid"
     >
-        <div
-            data-g="12"
+      <div
+        data-g="12"
+      >
+        <nav
+          aria-label="Breadcrumbs"
         >
-            <nav
-                aria-label="Breadcrumbs"
+          <p
+            className="visually-hidden"
+          >
+            You are here:
+          </p>
+          <ol
+            className="breadcrumbs"
+            itemScope={true}
+            itemType="http://schema.org/BreadcrumbList"
+          >
+            <li
+              className="breadcrumbs__crumb"
+              itemProp="itemListElement"
+              itemScope={true}
+              itemType="http://schema.org/ListItem"
+              onClick={[Function]}
             >
-                <p
-                    className="visually-hidden"
+              <a
+                href="/guidance/inconsultation"
+                itemProp="item"
+              >
+                <span
+                  itemProp="name"
                 >
-                    You are here:
-                </p>
-                <ol
-                    className="breadcrumbs"
-                    itemScope={true}
-                    itemType="http://schema.org/BreadcrumbList"
-                >
-                    <li
-                        className="breadcrumbs__crumb"
-                        itemProp="itemListElement"
-                        itemScope={true}
-                        itemType="http://schema.org/ListItem"
-                        onClick={[Function]}
-                    >
-                        <a
-                            href="/guidance/inconsultation"
-                            itemProp="item"
-                        >
-                            <span
-                                itemProp="name"
-                            >
-                                All consultations
-                            </span>
-                        </a>
-                        <meta
-                            content={0}
-                            itemProp="position"
-                        />
-                    </li>
-                    <li
-                        className="breadcrumbs__crumb"
-                        itemProp="itemListElement"
-                        itemScope={true}
-                        itemType="http://schema.org/ListItem"
-                        onClick={[Function]}
-                    >
-                        <a
-                            href="/guidance/indevelopment/gid-ng10186/consultation/"
-                            itemProp="item"
-                        >
-                            <span
-                                itemProp="name"
-                            >
-                                Consultation
-                            </span>
-                        </a>
-                        <meta
-                            content={1}
-                            itemProp="position"
-                        />
-                    </li>
-                </ol>
-            </nav>
-            <main
-                role="main"
+                  All consultations
+                </span>
+              </a>
+              <meta
+                content={0}
+                itemProp="position"
+              />
+            </li>
+            <li
+              className="breadcrumbs__crumb"
+              itemProp="itemListElement"
+              itemScope={true}
+              itemType="http://schema.org/ListItem"
+              onClick={[Function]}
             >
-                <undefined />
+              <a
+                href="/guidance/indevelopment/gid-ng10186/consultation/"
+                itemProp="item"
+              >
+                <span
+                  itemProp="name"
+                >
+                  Consultation
+                </span>
+              </a>
+              <meta
+                content={1}
+                itemProp="position"
+              />
+            </li>
+          </ol>
+        </nav>
+        <main
+          role="main"
+        >
+          Array [
+            <h1
+              className="page-header__heading mt--0"
+              data-qa-sel="changeable-page-header"
+            >
+              Warren's Project
+            </h1>,
+            <div
+              className="mb--d"
+            >
+              <p>
+                <span
+                  className="tag tag--open"
+                >
+                  Open for comments
+                </span>
+                 Open until
+                 
+                <time
+                  dateTime={"2018-11-24T00:01:00.000Z"}
+                >
+                  24 November 2018
+                </time>
+              </p>
+            </div>,
+          ]
+          <div
+            className="grid"
+          >
+            <div
+              data-g="12 md:3"
+            >
+              <nav
+                aria-label="Chapters in this document"
+                className="stacked-nav"
+              >
+                <h2
+                  className="stacked-nav__root"
+                >
+                  Chapters in this document
+                </h2>
+                <ul
+                  className="stacked-nav__list"
+                >
+                  <li
+                    className="stacked-nav__list-item"
+                    data-qa-sel="nav-list-item"
+                  >
+                    <a
+                      aria-current="page"
+                      href="/preview/GID-NG10186/consultation/113/document/1/chapter/draftappendicesa-tcleandocx"
+                      onClick={[Function]}
+                    >
+                      <span
+                        className="pl--0"
+                        data-g="10"
+                      >
+                        DRAFT_Appendices_A-T_CLEAN.docx
+                      </span>
+                    </a>
+                  </li>
+                  <li
+                    className="stacked-nav__list-item"
+                    data-qa-sel="nav-list-item"
+                  >
+                    <a
+                      aria-current={null}
+                      href="/preview/GID-NG10186/consultation/113/document/1/chapter/appendices"
+                      onClick={[Function]}
+                    >
+                      <span
+                        className="pl--0"
+                        data-g="10"
+                      >
+                        Appendices
+                      </span>
+                    </a>
+                  </li>
+                  <li
+                    className="stacked-nav__list-item"
+                    data-qa-sel="nav-list-item"
+                  >
+                    <a
+                      aria-current={null}
+                      href="/preview/GID-NG10186/consultation/113/document/1/chapter/scope"
+                      onClick={[Function]}
+                    >
+                      <span
+                        className="pl--0"
+                        data-g="10"
+                      >
+                        1 Scope
+                      </span>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+            <div
+              className="documentColumn"
+              data-g="12 md:9"
+            >
+              <div
+                className="document-comment-container "
+              >
                 <div
-                    className="grid"
+                  className="panel panel--inverse"
                 >
-                    <div
-                        data-g="12 md:3"
-                    >
-                        <nav
-                            aria-label="Chapters in this document"
-                            className="stacked-nav"
-                        >
-                            <h2
-                                className="stacked-nav__root"
-                            >
-                                Chapters in this document
-                            </h2>
-                            <ul
-                                className="stacked-nav__list"
-                            >
-                                <li
-                                    className="stacked-nav__list-item"
-                                    data-qa-sel="nav-list-item"
-                                >
-                                    <a
-                                        aria-current="page"
-                                        href="/preview/GID-NG10186/consultation/113/document/1/chapter/draftappendicesa-tcleandocx"
-                                        onClick={[Function]}
-                                    >
-                                        <span
-                                            className="pl--0"
-                                            data-g="10"
-                                        >
-                                            DRAFT_Appendices_A-T_CLEAN.docx
-                                        </span>
-                                    </a>
-                                </li>
-                                <li
-                                    className="stacked-nav__list-item"
-                                    data-qa-sel="nav-list-item"
-                                >
-                                    <a
-                                        aria-current={null}
-                                        href="/preview/GID-NG10186/consultation/113/document/1/chapter/appendices"
-                                        onClick={[Function]}
-                                    >
-                                        <span
-                                            className="pl--0"
-                                            data-g="10"
-                                        >
-                                            Appendices
-                                        </span>
-                                    </a>
-                                </li>
-                                <li
-                                    className="stacked-nav__list-item"
-                                    data-qa-sel="nav-list-item"
-                                >
-                                    <a
-                                        aria-current={null}
-                                        href="/preview/GID-NG10186/consultation/113/document/1/chapter/scope"
-                                        onClick={[Function]}
-                                    >
-                                        <span
-                                            className="pl--0"
-                                            data-g="10"
-                                        >
-                                            1 Scope
-                                        </span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                    <div
-                        className="documentColumn"
-                        data-g="12 md:9"
-                    >
-                        <div
-                            className="document-comment-container "
-                        >
-                            <div
-                                className="panel panel--inverse"
-                            >
-                                <p>
-                                    <b>
-                                        There 
-                                        are 4 types of error
-                                         in this chapter.
-                                    </b>
-                                </p>
-                                <ul>
-                                    <li>
-                                        [E] - Error: This document contains neither a recognisable issue date nor a recognisable revision date, so appears to be completely undated
-                                    </li>
-                                    <li>
-                                        [E] - Error: No recognisable issue date found
-                                    </li>
-                                    <li>
-                                        [E] - Error: No main title found
-                                    </li>
-                                    <li>
-                                        [W] - Warning: Text found before first section heading, so software inserted section heading with title 'DRAFT_Appendices_A-T_CLEAN.docx'
-                                    </li>
-                                </ul>
-                            </div>
-                            <div
-                                className="chapter"
-                                title="DRAFT_Appendices_A-T_CLEAN.docx"
-                                xmlns="http://www.w3.org/1999/xhtml"
-                            >
-                                <h2
-                                    className="title"
-                                >
-                                    <a
-                                        className="annotator-chapter"
-                                        data-heading-type="chapter"
-                                        id="draftappendicesa-tcleandocx"
-                                        style={
-                                            Object {
-                                                "position": "relative",
-                                              }
-                                        }
-                                        title="Comment on chapter"
-                                        xmlns=""
-                                    >
-                                        DRAFT_Appendices_A-T_CLEAN.docx
-                                        <span
-                                            className="annotator-adder"
-                                        />
-                                    </a>
-                                    <div
-                                        className="ConversionError ConversionError--E"
-                                    >
-                                        <button
-                                            className="ConversionError__Button ConversionError__Button--E"
-                                            onClick={[Function]}
-                                        >
-                                            E
-                                        </button>
-                                        <ul
-                                            className="ConversionError__details ConversionError__details--E"
-                                        >
-                                            <li
-                                                className="ml--d"
-                                            >
-                                                This document contains neither a recognisable issue date nor a recognisable revision date, so appears to be completely undated
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div
-                                        className="ConversionError ConversionError--E"
-                                    >
-                                        <button
-                                            className="ConversionError__Button ConversionError__Button--E"
-                                            onClick={[Function]}
-                                        >
-                                            E
-                                        </button>
-                                        <ul
-                                            className="ConversionError__details ConversionError__details--E"
-                                        >
-                                            <li
-                                                className="ml--d"
-                                            >
-                                                No recognisable issue date found
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div
-                                        className="ConversionError ConversionError--E"
-                                    >
-                                        <button
-                                            className="ConversionError__Button ConversionError__Button--E"
-                                            onClick={[Function]}
-                                        >
-                                            E
-                                        </button>
-                                        <ul
-                                            className="ConversionError__details ConversionError__details--E"
-                                        >
-                                            <li
-                                                className="ml--d"
-                                            >
-                                                No main title found
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div
-                                        className="ConversionError ConversionError--E"
-                                    >
-                                        <button
-                                            className="ConversionError__Button ConversionError__Button--E"
-                                            onClick={[Function]}
-                                        >
-                                            E
-                                        </button>
-                                        <ul
-                                            className="ConversionError__details ConversionError__details--E"
-                                        >
-                                            <li
-                                                className="ml--d"
-                                            >
-                                                This document contains neither a recognisable issue date nor a recognisable revision date, so appears to be completely undated
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div
-                                        className="ConversionError ConversionError--E"
-                                    >
-                                        <button
-                                            className="ConversionError__Button ConversionError__Button--E"
-                                            onClick={[Function]}
-                                        >
-                                            E
-                                        </button>
-                                        <ul
-                                            className="ConversionError__details ConversionError__details--E"
-                                        >
-                                            <li
-                                                className="ml--d"
-                                            >
-                                                No recognisable issue date found
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div
-                                        className="ConversionError ConversionError--E"
-                                    >
-                                        <button
-                                            className="ConversionError__Button ConversionError__Button--E"
-                                            onClick={[Function]}
-                                        >
-                                            E
-                                        </button>
-                                        <ul
-                                            className="ConversionError__details ConversionError__details--E"
-                                        >
-                                            <li
-                                                className="ml--d"
-                                            >
-                                                No main title found
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div
-                                        className="ConversionError ConversionError--E"
-                                    >
-                                        <button
-                                            className="ConversionError__Button ConversionError__Button--E"
-                                            onClick={[Function]}
-                                        >
-                                            E
-                                        </button>
-                                        <ul
-                                            className="ConversionError__details ConversionError__details--E"
-                                        >
-                                            <li
-                                                className="ml--d"
-                                            >
-                                                This document contains neither a recognisable issue date nor a recognisable revision date, so appears to be completely undated
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div
-                                        className="ConversionError ConversionError--E"
-                                    >
-                                        <button
-                                            className="ConversionError__Button ConversionError__Button--E"
-                                            onClick={[Function]}
-                                        >
-                                            E
-                                        </button>
-                                        <ul
-                                            className="ConversionError__details ConversionError__details--E"
-                                        >
-                                            <li
-                                                className="ml--d"
-                                            >
-                                                No recognisable issue date found
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div
-                                        className="ConversionError ConversionError--E"
-                                    >
-                                        <button
-                                            className="ConversionError__Button ConversionError__Button--E"
-                                            onClick={[Function]}
-                                        >
-                                            E
-                                        </button>
-                                        <ul
-                                            className="ConversionError__details ConversionError__details--E"
-                                        >
-                                            <li
-                                                className="ml--d"
-                                            >
-                                                No main title found
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div
-                                        className="ConversionError ConversionError--E"
-                                    >
-                                        <button
-                                            className="ConversionError__Button ConversionError__Button--E"
-                                            onClick={[Function]}
-                                        >
-                                            E
-                                        </button>
-                                        <ul
-                                            className="ConversionError__details ConversionError__details--E"
-                                        >
-                                            <li
-                                                className="ml--d"
-                                            >
-                                                This document contains neither a recognisable issue date nor a recognisable revision date, so appears to be completely undated
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div
-                                        className="ConversionError ConversionError--E"
-                                    >
-                                        <button
-                                            className="ConversionError__Button ConversionError__Button--E"
-                                            onClick={[Function]}
-                                        >
-                                            E
-                                        </button>
-                                        <ul
-                                            className="ConversionError__details ConversionError__details--E"
-                                        >
-                                            <li
-                                                className="ml--d"
-                                            >
-                                                No recognisable issue date found
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div
-                                        className="ConversionError ConversionError--E"
-                                    >
-                                        <button
-                                            className="ConversionError__Button ConversionError__Button--E"
-                                            onClick={[Function]}
-                                        >
-                                            E
-                                        </button>
-                                        <ul
-                                            className="ConversionError__details ConversionError__details--E"
-                                        >
-                                            <li
-                                                className="ml--d"
-                                            >
-                                                No main title found
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div
-                                        className="ConversionError ConversionError--E"
-                                    >
-                                        <button
-                                            className="ConversionError__Button ConversionError__Button--E"
-                                            onClick={[Function]}
-                                        >
-                                            E
-                                        </button>
-                                        <ul
-                                            className="ConversionError__details ConversionError__details--E"
-                                        >
-                                            <li
-                                                className="ml--d"
-                                            >
-                                                This document contains neither a recognisable issue date nor a recognisable revision date, so appears to be completely undated
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div
-                                        className="ConversionError ConversionError--E"
-                                    >
-                                        <button
-                                            className="ConversionError__Button ConversionError__Button--E"
-                                            onClick={[Function]}
-                                        >
-                                            E
-                                        </button>
-                                        <ul
-                                            className="ConversionError__details ConversionError__details--E"
-                                        >
-                                            <li
-                                                className="ml--d"
-                                            >
-                                                No recognisable issue date found
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div
-                                        className="ConversionError ConversionError--E"
-                                    >
-                                        <button
-                                            className="ConversionError__Button ConversionError__Button--E"
-                                            onClick={[Function]}
-                                        >
-                                            E
-                                        </button>
-                                        <ul
-                                            className="ConversionError__details ConversionError__details--E"
-                                        >
-                                            <li
-                                                className="ml--d"
-                                            >
-                                                No main title found
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div
-                                        className="ConversionError ConversionError--E"
-                                    >
-                                        <button
-                                            className="ConversionError__Button ConversionError__Button--E"
-                                            onClick={[Function]}
-                                        >
-                                            E
-                                        </button>
-                                        <ul
-                                            className="ConversionError__details ConversionError__details--E"
-                                        >
-                                            <li
-                                                className="ml--d"
-                                            >
-                                                This document contains neither a recognisable issue date nor a recognisable revision date, so appears to be completely undated
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div
-                                        className="ConversionError ConversionError--E"
-                                    >
-                                        <button
-                                            className="ConversionError__Button ConversionError__Button--E"
-                                            onClick={[Function]}
-                                        >
-                                            E
-                                        </button>
-                                        <ul
-                                            className="ConversionError__details ConversionError__details--E"
-                                        >
-                                            <li
-                                                className="ml--d"
-                                            >
-                                                No recognisable issue date found
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div
-                                        className="ConversionError ConversionError--E"
-                                    >
-                                        <button
-                                            className="ConversionError__Button ConversionError__Button--E"
-                                            onClick={[Function]}
-                                        >
-                                            E
-                                        </button>
-                                        <ul
-                                            className="ConversionError__details ConversionError__details--E"
-                                        >
-                                            <li
-                                                className="ml--d"
-                                            >
-                                                No main title found
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div
-                                        className="ConversionError ConversionError--E"
-                                    >
-                                        <button
-                                            className="ConversionError__Button ConversionError__Button--E"
-                                            onClick={[Function]}
-                                        >
-                                            E
-                                        </button>
-                                        <ul
-                                            className="ConversionError__details ConversionError__details--E"
-                                        >
-                                            <li
-                                                className="ml--d"
-                                            >
-                                                This document contains neither a recognisable issue date nor a recognisable revision date, so appears to be completely undated
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div
-                                        className="ConversionError ConversionError--E"
-                                    >
-                                        <button
-                                            className="ConversionError__Button ConversionError__Button--E"
-                                            onClick={[Function]}
-                                        >
-                                            E
-                                        </button>
-                                        <ul
-                                            className="ConversionError__details ConversionError__details--E"
-                                        >
-                                            <li
-                                                className="ml--d"
-                                            >
-                                                No recognisable issue date found
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div
-                                        className="ConversionError ConversionError--E"
-                                    >
-                                        <button
-                                            className="ConversionError__Button ConversionError__Button--E"
-                                            onClick={[Function]}
-                                        >
-                                            E
-                                        </button>
-                                        <ul
-                                            className="ConversionError__details ConversionError__details--E"
-                                        >
-                                            <li
-                                                className="ml--d"
-                                            >
-                                                No main title found
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div
-                                        className="ConversionError ConversionError--W"
-                                    >
-                                        <button
-                                            className="ConversionError__Button ConversionError__Button--W"
-                                            onClick={[Function]}
-                                        >
-                                            W
-                                        </button>
-                                        <ul
-                                            className="ConversionError__details ConversionError__details--W"
-                                        >
-                                            <li
-                                                className="ml--d"
-                                            >
-                                                Text found before first section heading, so software inserted section heading with title 'DRAFT_Appendices_A-T_CLEAN.docx'
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </h2>
-                                <p />
-                                <p />
-                            </div>
-                        </div>
-                    </div>
+                  <p>
+                    <b>
+                      There 
+                      are 4 types of error
+                       in this chapter.
+                    </b>
+                  </p>
+                  <ul>
+                    <li>
+                      [E] - Error: This document contains neither a recognisable issue date nor a recognisable revision date, so appears to be completely undated
+                    </li>
+                    <li>
+                      [E] - Error: No recognisable issue date found
+                    </li>
+                    <li>
+                      [E] - Error: No main title found
+                    </li>
+                    <li>
+                      [W] - Warning: Text found before first section heading, so software inserted section heading with title 'DRAFT_Appendices_A-T_CLEAN.docx'
+                    </li>
+                  </ul>
                 </div>
-            </main>
-        </div>
+                <div
+                  className="chapter"
+                  title="DRAFT_Appendices_A-T_CLEAN.docx"
+                  xmlns="http://www.w3.org/1999/xhtml"
+                >
+                  <h2
+                    className="title"
+                  >
+                    <a
+                      className="annotator-chapter"
+                      data-heading-type="chapter"
+                      id="draftappendicesa-tcleandocx"
+                      style={
+                        Object {
+                          "position": "relative",
+                        }
+                      }
+                      title="Comment on chapter"
+                      xmlns=""
+                    >
+                      DRAFT_Appendices_A-T_CLEAN.docx
+                      <span
+                        className="annotator-adder"
+                      />
+                    </a>
+                    <div
+                      className="ConversionError ConversionError--E"
+                    >
+                      <button
+                        className="ConversionError__Button ConversionError__Button--E"
+                        onClick={[Function]}
+                      >
+                        E
+                      </button>
+                      <ul
+                        className="ConversionError__details ConversionError__details--E"
+                      >
+                        <li
+                          className="ml--d"
+                        >
+                          This document contains neither a recognisable issue date nor a recognisable revision date, so appears to be completely undated
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                      className="ConversionError ConversionError--E"
+                    >
+                      <button
+                        className="ConversionError__Button ConversionError__Button--E"
+                        onClick={[Function]}
+                      >
+                        E
+                      </button>
+                      <ul
+                        className="ConversionError__details ConversionError__details--E"
+                      >
+                        <li
+                          className="ml--d"
+                        >
+                          No recognisable issue date found
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                      className="ConversionError ConversionError--E"
+                    >
+                      <button
+                        className="ConversionError__Button ConversionError__Button--E"
+                        onClick={[Function]}
+                      >
+                        E
+                      </button>
+                      <ul
+                        className="ConversionError__details ConversionError__details--E"
+                      >
+                        <li
+                          className="ml--d"
+                        >
+                          No main title found
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                      className="ConversionError ConversionError--E"
+                    >
+                      <button
+                        className="ConversionError__Button ConversionError__Button--E"
+                        onClick={[Function]}
+                      >
+                        E
+                      </button>
+                      <ul
+                        className="ConversionError__details ConversionError__details--E"
+                      >
+                        <li
+                          className="ml--d"
+                        >
+                          This document contains neither a recognisable issue date nor a recognisable revision date, so appears to be completely undated
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                      className="ConversionError ConversionError--E"
+                    >
+                      <button
+                        className="ConversionError__Button ConversionError__Button--E"
+                        onClick={[Function]}
+                      >
+                        E
+                      </button>
+                      <ul
+                        className="ConversionError__details ConversionError__details--E"
+                      >
+                        <li
+                          className="ml--d"
+                        >
+                          No recognisable issue date found
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                      className="ConversionError ConversionError--E"
+                    >
+                      <button
+                        className="ConversionError__Button ConversionError__Button--E"
+                        onClick={[Function]}
+                      >
+                        E
+                      </button>
+                      <ul
+                        className="ConversionError__details ConversionError__details--E"
+                      >
+                        <li
+                          className="ml--d"
+                        >
+                          No main title found
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                      className="ConversionError ConversionError--E"
+                    >
+                      <button
+                        className="ConversionError__Button ConversionError__Button--E"
+                        onClick={[Function]}
+                      >
+                        E
+                      </button>
+                      <ul
+                        className="ConversionError__details ConversionError__details--E"
+                      >
+                        <li
+                          className="ml--d"
+                        >
+                          This document contains neither a recognisable issue date nor a recognisable revision date, so appears to be completely undated
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                      className="ConversionError ConversionError--E"
+                    >
+                      <button
+                        className="ConversionError__Button ConversionError__Button--E"
+                        onClick={[Function]}
+                      >
+                        E
+                      </button>
+                      <ul
+                        className="ConversionError__details ConversionError__details--E"
+                      >
+                        <li
+                          className="ml--d"
+                        >
+                          No recognisable issue date found
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                      className="ConversionError ConversionError--E"
+                    >
+                      <button
+                        className="ConversionError__Button ConversionError__Button--E"
+                        onClick={[Function]}
+                      >
+                        E
+                      </button>
+                      <ul
+                        className="ConversionError__details ConversionError__details--E"
+                      >
+                        <li
+                          className="ml--d"
+                        >
+                          No main title found
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                      className="ConversionError ConversionError--E"
+                    >
+                      <button
+                        className="ConversionError__Button ConversionError__Button--E"
+                        onClick={[Function]}
+                      >
+                        E
+                      </button>
+                      <ul
+                        className="ConversionError__details ConversionError__details--E"
+                      >
+                        <li
+                          className="ml--d"
+                        >
+                          This document contains neither a recognisable issue date nor a recognisable revision date, so appears to be completely undated
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                      className="ConversionError ConversionError--E"
+                    >
+                      <button
+                        className="ConversionError__Button ConversionError__Button--E"
+                        onClick={[Function]}
+                      >
+                        E
+                      </button>
+                      <ul
+                        className="ConversionError__details ConversionError__details--E"
+                      >
+                        <li
+                          className="ml--d"
+                        >
+                          No recognisable issue date found
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                      className="ConversionError ConversionError--E"
+                    >
+                      <button
+                        className="ConversionError__Button ConversionError__Button--E"
+                        onClick={[Function]}
+                      >
+                        E
+                      </button>
+                      <ul
+                        className="ConversionError__details ConversionError__details--E"
+                      >
+                        <li
+                          className="ml--d"
+                        >
+                          No main title found
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                      className="ConversionError ConversionError--E"
+                    >
+                      <button
+                        className="ConversionError__Button ConversionError__Button--E"
+                        onClick={[Function]}
+                      >
+                        E
+                      </button>
+                      <ul
+                        className="ConversionError__details ConversionError__details--E"
+                      >
+                        <li
+                          className="ml--d"
+                        >
+                          This document contains neither a recognisable issue date nor a recognisable revision date, so appears to be completely undated
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                      className="ConversionError ConversionError--E"
+                    >
+                      <button
+                        className="ConversionError__Button ConversionError__Button--E"
+                        onClick={[Function]}
+                      >
+                        E
+                      </button>
+                      <ul
+                        className="ConversionError__details ConversionError__details--E"
+                      >
+                        <li
+                          className="ml--d"
+                        >
+                          No recognisable issue date found
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                      className="ConversionError ConversionError--E"
+                    >
+                      <button
+                        className="ConversionError__Button ConversionError__Button--E"
+                        onClick={[Function]}
+                      >
+                        E
+                      </button>
+                      <ul
+                        className="ConversionError__details ConversionError__details--E"
+                      >
+                        <li
+                          className="ml--d"
+                        >
+                          No main title found
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                      className="ConversionError ConversionError--E"
+                    >
+                      <button
+                        className="ConversionError__Button ConversionError__Button--E"
+                        onClick={[Function]}
+                      >
+                        E
+                      </button>
+                      <ul
+                        className="ConversionError__details ConversionError__details--E"
+                      >
+                        <li
+                          className="ml--d"
+                        >
+                          This document contains neither a recognisable issue date nor a recognisable revision date, so appears to be completely undated
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                      className="ConversionError ConversionError--E"
+                    >
+                      <button
+                        className="ConversionError__Button ConversionError__Button--E"
+                        onClick={[Function]}
+                      >
+                        E
+                      </button>
+                      <ul
+                        className="ConversionError__details ConversionError__details--E"
+                      >
+                        <li
+                          className="ml--d"
+                        >
+                          No recognisable issue date found
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                      className="ConversionError ConversionError--E"
+                    >
+                      <button
+                        className="ConversionError__Button ConversionError__Button--E"
+                        onClick={[Function]}
+                      >
+                        E
+                      </button>
+                      <ul
+                        className="ConversionError__details ConversionError__details--E"
+                      >
+                        <li
+                          className="ml--d"
+                        >
+                          No main title found
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                      className="ConversionError ConversionError--E"
+                    >
+                      <button
+                        className="ConversionError__Button ConversionError__Button--E"
+                        onClick={[Function]}
+                      >
+                        E
+                      </button>
+                      <ul
+                        className="ConversionError__details ConversionError__details--E"
+                      >
+                        <li
+                          className="ml--d"
+                        >
+                          This document contains neither a recognisable issue date nor a recognisable revision date, so appears to be completely undated
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                      className="ConversionError ConversionError--E"
+                    >
+                      <button
+                        className="ConversionError__Button ConversionError__Button--E"
+                        onClick={[Function]}
+                      >
+                        E
+                      </button>
+                      <ul
+                        className="ConversionError__details ConversionError__details--E"
+                      >
+                        <li
+                          className="ml--d"
+                        >
+                          No recognisable issue date found
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                      className="ConversionError ConversionError--E"
+                    >
+                      <button
+                        className="ConversionError__Button ConversionError__Button--E"
+                        onClick={[Function]}
+                      >
+                        E
+                      </button>
+                      <ul
+                        className="ConversionError__details ConversionError__details--E"
+                      >
+                        <li
+                          className="ml--d"
+                        >
+                          No main title found
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                      className="ConversionError ConversionError--W"
+                    >
+                      <button
+                        className="ConversionError__Button ConversionError__Button--W"
+                        onClick={[Function]}
+                      >
+                        W
+                      </button>
+                      <ul
+                        className="ConversionError__details ConversionError__details--W"
+                      >
+                        <li
+                          className="ml--d"
+                        >
+                          Text found before first section heading, so software inserted section heading with title 'DRAFT_Appendices_A-T_CLEAN.docx'
+                        </li>
+                      </ul>
+                    </div>
+                  </h2>
+                  <p />
+                  <p />
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
     </div>
-</div>,
+  </div>,
 ]
 `;
