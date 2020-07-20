@@ -57,13 +57,6 @@ export const replaceRootContent = (html: string, rootContent: string): string =>
 	return html.replace("<div id=\"root\"></div>", `<div id="root">${rootContent}</div>`);
 };
 
-// Replaces non consultation paths
-export const replaceRelativePaths = (html: string): string => {
-	/* eslint-disable no-useless-escape */
-	return html.replace(/"(\/(?:[^\/].*)?)"/g, "\"/consultations$1\"");
-	/* eslint-enable no-useless-escape */
-};
-
 export const replaceAccountsEnvironment = (html: string, accountsEnvironment: string): string => {
 	return html.replace(/data-environment="[^"]*"/g, `data-environment="${accountsEnvironment}"`);
 };
@@ -71,11 +64,6 @@ export const replaceAccountsEnvironment = (html: string, accountsEnvironment: st
 export const processHtml = (html: string, {
 	title, metas, links, analyticsGlobals, scripts, htmlAttributes, bodyAttributes, rootContent, accountsEnvironment
 }): string => {
-	// In dev mode we proxy requests to react dev server, which runs in the root. So we prepend relative URLs.
-	// We don't need to do this in production because we use PUBLIC_URL=/consultations with `npm run build`.
-	if (process.env.NODE_ENV === "development")
-		html = replaceRelativePaths(html);
-
 	html = replaceOpeningHtmlTag(html, htmlAttributes);
 	html = replaceOpeningBodyTag(html, bodyAttributes);
 	html = replaceAccountsEnvironment(html, accountsEnvironment);
