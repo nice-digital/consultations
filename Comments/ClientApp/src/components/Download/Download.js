@@ -364,7 +364,7 @@ export class Download extends Component<PropsType, StateType> {
 	}
 
 	render() {
-		const breadcrumbLinkParams = [
+		let breadcrumbLinkParams = [
 			{
 				label: "Home",
 				url: "/",
@@ -376,6 +376,10 @@ export class Download extends Component<PropsType, StateType> {
 				localRoute: false,
 			},
 		];
+
+		if (this.state.indevReturnPath ) {
+			breadcrumbLinkParams.shift();
+		}
 
 		const {
 			path,
