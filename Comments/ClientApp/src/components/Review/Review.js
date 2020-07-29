@@ -105,7 +105,7 @@ export class Review extends Component<PropsType, StateType> {
 			"commentsreview",
 			[],
 			Object.assign({relativeURL: this.props.match.url}, queryStringToObject(querystring)),
-			preloadedData
+			preloadedData,
 		);
 		const consultationId = this.props.match.params.consultationId;
 		const preloadedConsultationData = preload(
@@ -113,7 +113,7 @@ export class Review extends Component<PropsType, StateType> {
 			"consultation",
 			[],
 			{consultationId, isReview: true},
-			preloadedData
+			preloadedData,
 		);
 
 		if (preloadedCommentsData && preloadedConsultationData) {

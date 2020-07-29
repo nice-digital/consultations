@@ -63,7 +63,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 					for (var i=0; i < signInLinks.length; i++) {
 						signInLinks[i].setAttribute("href", signInURL);
 					}
-				}
+				},
 			);
 	};
 

@@ -24,5 +24,5 @@ ReactDOM.hydrate(
 	<BrowserRouter basename={baseUrl}>
 		<App basename={baseUrl}/>
 	</BrowserRouter>,
-	rootElement
+	rootElement,
 );

@@ -10,39 +10,39 @@ describe("[ClientApp] ", () => {
 	describe("Tutorial Component", () => {
 		it("should match snapshot and display the tutorial when no cookie is set", () => {
 			const wrapper = shallow(
-				<Tutorial />
+				<Tutorial />,
 			);
 			expect(
 				toJson(wrapper, {
 					noKey: true,
 					mode: "deep",
-				})
+				}),
 			).toMatchSnapshot();
 		});
 
 		it("should match snapshot and display the tutorial when no cookie is set to true", () => {
 			Cookies.get = jest.fn().mockImplementation(() => "true");
 			const wrapper = shallow(
-				<Tutorial />
+				<Tutorial />,
 			);
 			expect(
 				toJson(wrapper, {
 					noKey: true,
 					mode: "deep",
-				})
+				}),
 			).toMatchSnapshot();
 		});
 
 		it("should match snapshot and display the tutorial when no cookie is set to false", () => {
 			Cookies.get = jest.fn().mockImplementation(() => "false");
 			const wrapper = shallow(
-				<Tutorial />
+				<Tutorial />,
 			);
 			expect(
 				toJson(wrapper, {
 					noKey: true,
 					mode: "deep",
-				})
+				}),
 			).toMatchSnapshot();
 		});
 	});

@@ -68,7 +68,7 @@ export class Questions extends Component<PropsType, StateType> {
 						reference: this.props.match.params.reference,
 					},
 					preloadedData,
-					false //don't throw on exception, this could happen if the user has authenticated but doesn't have permission to access the feed.
+					false, //don't throw on exception, this could happen if the user has authenticated but doesn't have permission to access the feed.
 				);
 
 				if (preloadedQuestionsData) {

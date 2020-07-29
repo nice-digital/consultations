@@ -23,7 +23,7 @@ export class Selection extends Component<PropsType, StateType> {
 		this.state = {
 			toolTipVisible: false,
 			comment: {},
-			position: {}
+			position: {},
 		};
 		this.selectionContainer = React.createRef();
 	}
@@ -84,7 +84,7 @@ export class Selection extends Component<PropsType, StateType> {
 				y: event.pageY - (boundingRectOfContainer.top + scrollTop) + arrowSize,
 			};
 			this.setState({ comment, position, toolTipVisible: true });
-			setTimeout(() => { pullFocusByQuerySelector(".selection-container button") }, 0);
+			setTimeout(() => { pullFocusByQuerySelector(".selection-container button"); }, 0);
 		} else{
 			this.setState({ toolTipVisible: false });
 		}
@@ -118,8 +118,8 @@ export class Selection extends Component<PropsType, StateType> {
 			this.setState({
 				toolTipVisible: false,
 				comment: {},
-				position: {}
-			})
+				position: {},
+			});
 		}
 	}
 

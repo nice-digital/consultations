@@ -21,7 +21,7 @@ export class FilterGroup extends Component<PropsType, StateType> {
 
 		this.state = {
 			isExpanded: true,
-			canUseDOM: false
+			canUseDOM: false,
 		};
 
 		this.handleTitleClick = this.handleTitleClick.bind(this);
@@ -37,7 +37,7 @@ export class FilterGroup extends Component<PropsType, StateType> {
 	handleTitleClick: () => void;
 	handleTitleClick() {
 		this.setState(prevState => ({
-			isExpanded: !prevState.isExpanded
+			isExpanded: !prevState.isExpanded,
 		  }));
 	}
 
@@ -88,7 +88,7 @@ export class FilterGroup extends Component<PropsType, StateType> {
 						groupId={this.props.filterGroup.id}
 						groupName={this.props.filterGroup.title}
 						path={this.props.path}
-						option={opt} />
+						option={opt} />,
 				)}
 			</div>
 		</div>;

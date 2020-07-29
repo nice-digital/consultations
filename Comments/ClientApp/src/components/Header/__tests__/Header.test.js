@@ -18,13 +18,13 @@ describe("[ClientApp] ", () => {
 				},
 			};
 			const wrapper = shallow(
-				<Header {...FakeProps}/>
+				<Header {...FakeProps}/>,
 			);
 			expect(
 				toJson(wrapper, {
 					noKey: true,
 					mode: "deep",
-				})
+				}),
 			).toMatchSnapshot();
 		});
 
@@ -39,13 +39,13 @@ describe("[ClientApp] ", () => {
 				},
 			};
 			const wrapper = shallow(
-				<Header {...FakeProps}/>
+				<Header {...FakeProps}/>,
 			);
 			expect(
 				toJson(wrapper, {
 					noKey: true,
 					mode: "deep",
-				})
+				}),
 			).toMatchSnapshot();
 		});
 
@@ -60,13 +60,13 @@ describe("[ClientApp] ", () => {
 				},
 			};
 			const wrapper = shallow(
-				<Header {...FakeProps}/>
+				<Header {...FakeProps}/>,
 			);
 			expect(
 				toJson(wrapper, {
 					noKey: true,
 					mode: "deep",
-				})
+				}),
 			).toMatchSnapshot();
 		});
 	});

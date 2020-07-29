@@ -40,7 +40,7 @@ describe("[ClientApp] ", () => {
 			const wrapper = mount(
 				<MemoryRouter>
 					<Submitted {...fakeProps} />
-				</MemoryRouter>
+				</MemoryRouter>,
 			);
 
 			let consultationPromise = new Promise(resolve => {

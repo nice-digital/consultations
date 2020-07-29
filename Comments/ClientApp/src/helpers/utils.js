@@ -57,7 +57,7 @@ export function replaceFormat(stringToReplace, args) {
 		return typeof args[number] !== undefined
 			? args[number]
 			: match
-			;
+		;
 	});
 }
 

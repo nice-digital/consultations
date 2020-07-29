@@ -41,7 +41,7 @@ export class FilterPanel extends Component<PropsType, StateType> {
 						<FilterGroup
 							key={filterGroup.id}
 							path={this.props.path}
-							filterGroup={filterGroup}/>
+							filterGroup={filterGroup}/>,
 					)}
 					{!this.state.canUseDOM &&
 					<button

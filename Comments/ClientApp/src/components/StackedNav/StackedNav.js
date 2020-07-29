@@ -58,7 +58,7 @@ export class StackedNav extends PureComponent<PropsType> {
 									<span data-g="10" className="pl--0">
 										{item.label}
 									</span>
-									</a>
+								</a>
 							}
 						</li>
 					))}

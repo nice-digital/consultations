@@ -34,14 +34,14 @@ describe("[ClientApp] ", () => {
 			const wrapper = mount(
 				<MemoryRouter>
 					<Download {...fakeProps} />
-				</MemoryRouter>
+				</MemoryRouter>,
 			);
 			
 			expect(
 				toJson(wrapper, {
 					noKey: true,
 					mode: "deep",
-				})
+				}),
 			).toMatchSnapshot();
 
 			wrapper.unmount();

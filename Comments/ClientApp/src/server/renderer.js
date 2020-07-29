@@ -88,7 +88,7 @@ export const serverRenderer = (params): Promise => {
 			displayName: staticContext.preload.data.displayName,
 			signInURL: staticContext.preload.data.signInURL,
 			signOutURL: staticContext.preload.data.signOutURL,
-		}
+		};
 
 		//a quick way to disable server side rendering for dev purposes is to just remove the App component from the inside the StaticRouter component
 		//the static router will still be there but won't try to render anything.

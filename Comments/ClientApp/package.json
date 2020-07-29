@@ -15,7 +15,7 @@
     "build": "npm run modernizr && npm run sass:build && npm run bless && react-scripts build",
     "test": "react-scripts test --env=node",
     "bless": "blessc ./public/styles/main.css --output ./public/styles/main-ie9.css",
-    "eslint": "node node_modules/eslint/bin/eslint 'src/'",
+    "eslint": "eslint src/ --fix",
     "esw": "node node_modules/eslint-watch/bin/esw 'src/' --watch",
     "test:ci": "cross-env CI=true react-scripts test --env=jsdom --testResultsProcessor=jest-teamcity-reporter",
     "test:ci:coverage": "npm run test:ci -- --coverage ",

@@ -240,27 +240,27 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 			loading: true,
 		});
 		if (this.state.isAuthorised){
-		this.gatherData()
-			.then(data => {
+			this.gatherData()
+				.then(data => {
 
-				this.setState({
-					...data,
-					loading: false,
+					this.setState({
+						...data,
+						loading: false,
+					});
+					this.addChapterDetailsToSections(this.state.chapterData);
+					// once we've loaded, pull focus to the document container
+					pullFocusByQuerySelector(".document-comment-container");
+				})
+				.catch(err => {
+					console.log("cdu error was: " + JSON.stringify(err));
+					//throw new Error("gatherData in componentDidUpdate failed " + err);
+					this.setState({
+						error: {
+							hasError: true,
+							message: "gatherData in componentDidUpdate failed  " + err,
+						},
+					});
 				});
-				this.addChapterDetailsToSections(this.state.chapterData);
-				// once we've loaded, pull focus to the document container
-				pullFocusByQuerySelector(".document-comment-container");
-			})
-			.catch(err => {
-				console.log("cdu error was: " + JSON.stringify(err));
-				//throw new Error("gatherData in componentDidUpdate failed " + err);
-				this.setState({
-					error: {
-						hasError: true,
-						message: "gatherData in componentDidUpdate failed  " + err,
-					},
-				});
-			});
 		}
 	}
 

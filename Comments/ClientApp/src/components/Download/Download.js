@@ -116,7 +116,7 @@ export class Download extends Component<PropsType, StateType> {
 				"consultationList",
 				[],
 				Object.assign({ relativeURL: this.props.match.url }, querystringObject, {initialPageView: !this.state.hasInitialData}),
-				preloadedData
+				preloadedData,
 			);
 
 			if (preloadedConsultations) {
@@ -454,7 +454,7 @@ export class Download extends Component<PropsType, StateType> {
 														<ConsultationItem key={idx}
 															basename={this.props.basename}
 															{...item}
-														/>
+														/>,
 													)}
 												</ul>
 											) : (<p>No consultations found matching supplied filters.</p>)}

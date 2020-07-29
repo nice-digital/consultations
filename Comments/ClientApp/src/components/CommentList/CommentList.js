@@ -24,7 +24,7 @@ import { Question } from "../Question/Question";
 import { LoginBanner } from "../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
 
-import { createQuestionPdf } from '../QuestionView/QuestionViewDocument';
+import { createQuestionPdf } from "../QuestionView/QuestionViewDocument";
 
 type PropsType = {
 	staticContext?: any,
@@ -88,7 +88,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			"comments",
 			[],
 			{sourceURI: this.props.match.url},
-			preloadedData
+			preloadedData,
 		);
 
 		const preloadedConsultation = preload(
@@ -148,18 +148,16 @@ export class CommentList extends Component<PropsType, StateType> {
 		})
 			.then(response => {
 				this.setState({
-					consultationData: response.data
-				})
+					consultationData: response.data,
+				});
 			})
 			.catch(err => {
 				this.setState({
 					error: "consultationData " + err,
 				});
 			});
-
 		
 	};
-
 
 	componentDidMount() {
 		if (!this.state.initialDataLoaded) {
@@ -243,7 +241,6 @@ export class CommentList extends Component<PropsType, StateType> {
 		updateUnsavedIds(commentId, dirty, this);
 	};
 
-
 	//old drawer code:
 	isMobile = () => {
 		if (typeof document !== "undefined") {
@@ -300,7 +297,6 @@ export class CommentList extends Component<PropsType, StateType> {
 				});
 				pullFocusByQuerySelector("#js-drawer-toggleopen-questions");
 				break;
-
 				
 			case "createQuestionPDF":
 				const questionsForPDF = this.state.questions;
@@ -313,7 +309,6 @@ export class CommentList extends Component<PropsType, StateType> {
 				return;
 		}
 	};
-
 
 	render() {
 		if (!this.state.shouldShowDrawer) {
@@ -331,7 +326,6 @@ export class CommentList extends Component<PropsType, StateType> {
 				}
 			}
 		};
-
 
 		return (
 			<Fragment>

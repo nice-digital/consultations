@@ -16,7 +16,7 @@ describe("[ClientApp] ", () => {
 
 		//   });
 
-		it('should clear the comment and selection if the route (sourceURI) changes', function () {
+		it("should clear the comment and selection if the route (sourceURI) changes", function () {
 			let wrapper = mount(<Selection sourceUri="/test/1/1"><p>some paragraph content</p></Selection>);
 			expect(wrapper.state().toolTipVisible).toEqual(false);
 			wrapper.setState({toolTipVisible: true});
@@ -32,7 +32,7 @@ describe("[ClientApp] ", () => {
 					  removeAllRanges: () => {},
 					  getRangeAt: () => {},
 					  isCollapsed: false,
-					  rangeCount: 0
+					  rangeCount: 0,
 				};
 			  };
 
@@ -51,7 +51,7 @@ describe("[ClientApp] ", () => {
 					removeAllRanges: () => {},
 					getRangeAt: function(number){ return "paragraph content";},
 					isCollapsed: false,
-					rangeCount: 1
+					rangeCount: 1,
 				};
 			};
 			// jest.mock("xpath-range", () => ({
@@ -76,8 +76,6 @@ describe("[ClientApp] ", () => {
 			// expect(wrapper.state().toolTipVisible).toEqual(false);
 		});
 
-
-
 		// const paragraph = document.createElement("p");
 		// paragraph.setAttribute("id", "myparagraph");
 		// paragraph.textContent = "some paragraph content";
@@ -92,7 +90,6 @@ describe("[ClientApp] ", () => {
 		//let parentDiv = document.getElementById("parentDiv");
 		// grabbedParagraph.dispatchEvent(new Event("mouseup"));
 
-
 		//console.log(grabbedParagraph);
 
 		// const selection = window.getSelection();
@@ -103,8 +100,6 @@ describe("[ClientApp] ", () => {
 		// range.selectNodeContents(parentDiv);
 		// selection.removeAllRanges();
 		// selection.addRange(range);
-
-
 
 		//console.log(window.getSelection());
 	});

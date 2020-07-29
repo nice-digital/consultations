@@ -17,7 +17,7 @@ type PropsType = {
 export class DownloadResultsInfo extends Component<PropsType, StateType> {
 	shouldShowFilter = (
 		appliedFilters: AppliedFilterType[],
-		filterText: string
+		filterText: string,
 	) => {
 		const typeFilters = appliedFilters.filter(f => f.groupId === "Type");
 		if (typeFilters.length === 1) {
