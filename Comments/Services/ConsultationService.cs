@@ -124,6 +124,7 @@ namespace Comments.Services
 
 			var breadcrumbs = new List<BreadcrumbLink>{
 					new BreadcrumbLink("Home", Routes.External.HomePage),
+					new BreadcrumbLink("All consultations", Routes.External.InconsultationListPage),
 					new BreadcrumbLink("Consultation responses", Routes.Internal.DownloadPageRoute, localRoute: true),
 					new BreadcrumbLink(consultation.Title, Routes.External.ConsultationUrl(consultation))
 			};

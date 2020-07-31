@@ -377,7 +377,7 @@ export class Download extends Component<PropsType, StateType> {
 			},
 		];
 
-		if (this.state.indevReturnPath ) {
+		if (this.state.indevReturnPath) {
 			breadcrumbLinkParams.shift();
 		}
 

@@ -50,6 +50,11 @@
             "localRoute":false
         },
         {
+            "label":"All consultations",
+            "url":"/guidance/inconsultation",
+            "localRoute":false
+        },
+        {
             "label":"Consultation responses",
             "url":"/",
             "localRoute":true
