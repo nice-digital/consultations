@@ -68,17 +68,21 @@ namespace Comments.Test.UnitTests
 
 			//Assert
 			actualBreadcrumb.ShouldNotBeNull();
-		    actualBreadcrumb.Count().ShouldBe(3);
+		    actualBreadcrumb.Count().ShouldBe(4);
 
 		    actualBreadcrumb.First().Label.ShouldBe("Home");
 		    actualBreadcrumb.First().Url.ShouldBe("/");
 
-		    actualBreadcrumb.Skip(1).First().Label.ShouldBe("Consultation responses");
-		    actualBreadcrumb.Skip(1).First().Url.ShouldBe("/");
-		    actualBreadcrumb.Skip(1).First().LocalRoute.ShouldBeTrue();
+		    actualBreadcrumb.Skip(1).First().Label.ShouldBe("All consultations");
+		    actualBreadcrumb.Skip(1).First().Url.ShouldBe("/guidance/inconsultation");
+		    actualBreadcrumb.Skip(1).First().LocalRoute.ShouldBeFalse();
 
-			actualBreadcrumb.Skip(2).First().Label.ShouldBe(consultationTitle);
-		    actualBreadcrumb.Skip(2).First().Url.ShouldBe(expectedConsultationUrl);
+			actualBreadcrumb.Skip(2).First().Label.ShouldBe("Consultation responses");
+		    actualBreadcrumb.Skip(2).First().Url.ShouldBe("/");
+		    actualBreadcrumb.Skip(2).First().LocalRoute.ShouldBeTrue();
+
+			actualBreadcrumb.Skip(3).First().Label.ShouldBe(consultationTitle);
+		    actualBreadcrumb.Skip(3).First().Url.ShouldBe(expectedConsultationUrl);
 		}
 
 		[Theory]
@@ -96,20 +100,24 @@ namespace Comments.Test.UnitTests
 
 			//Assert
 			actualBreadcrumb.ShouldNotBeNull();
-			actualBreadcrumb.Count().ShouldBe(4);
+			actualBreadcrumb.Count().ShouldBe(5);
 
 			actualBreadcrumb.First().Label.ShouldBe("Home");
 			actualBreadcrumb.First().Url.ShouldBe("/");
 
-			actualBreadcrumb.Skip(1).First().Label.ShouldBe("Consultation responses");
-			actualBreadcrumb.Skip(1).First().Url.ShouldBe("/");
-			actualBreadcrumb.Skip(1).First().LocalRoute.ShouldBeTrue();
+			actualBreadcrumb.Skip(1).First().Label.ShouldBe("All consultations");
+			actualBreadcrumb.Skip(1).First().Url.ShouldBe("/guidance/inconsultation");
+			actualBreadcrumb.Skip(1).First().LocalRoute.ShouldBeFalse();
 
-			actualBreadcrumb.Skip(2).First().Label.ShouldBe("For consultation comments");
-			//actualBreadcrumb.Skip(2).First().Url.ShouldBe(expectedConsultationUrl); //TODO: uncomment this, when the indev feed is fixed in ID-215
+			actualBreadcrumb.Skip(2).First().Label.ShouldBe("Consultation responses");
+			actualBreadcrumb.Skip(2).First().Url.ShouldBe("/");
+			actualBreadcrumb.Skip(2).First().LocalRoute.ShouldBeTrue();
 
-			actualBreadcrumb.Skip(3).First().Label.ShouldBe("Consultation documents");
-			actualBreadcrumb.Skip(3).First().Url.ShouldBe(expectedDocumentsUrl);
+			actualBreadcrumb.Skip(3).First().Label.ShouldBe("For consultation comments");
+			//actualBreadcrumb.Skip(3).First().Url.ShouldBe(expectedConsultationUrl); //TODO: uncomment this, when the indev feed is fixed in ID-215
+
+			actualBreadcrumb.Skip(4).First().Label.ShouldBe("Consultation documents");
+			actualBreadcrumb.Skip(4).First().Url.ShouldBe(expectedDocumentsUrl);
 		}
 
 	    [Fact]
