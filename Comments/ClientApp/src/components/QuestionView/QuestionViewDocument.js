@@ -1,11 +1,20 @@
 import pdfMake from "pdfmake/build/pdfmake";
-//import pdfFonts from "pdfmake/build/vfs_fonts"; //webpack has an issue with this
 import niceLogoBase64 from './nice-logo.png';
-
 var moment = require('moment');
 
 export const createQuestionPdf = (questionsForPDF, titleForPDF, endDate) => {
-	// pdfMake.vfs = pdfFonts.pdfMake.vfs;
+	// webpack seems to have an issue with importing the vfs (virtual file system) fonts file from the package
+	// so had to import the defaults font via cdn
+	// https://pdfmake.github.io/docs/fonts/custom-fonts-client-side/
+	pdfMake.fonts = {
+		Roboto: {
+			normal: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Regular.ttf',
+			bold: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Medium.ttf',
+			italics: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Italic.ttf',
+			bolditalics: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-MediumItalic.ttf'
+		}
+	};
+
 	const documentDefinition = createDocumentDefinition(questionsForPDF, titleForPDF, endDate);
 	pdfMake.createPdf(documentDefinition).open();
 };
