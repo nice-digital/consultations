@@ -6,7 +6,6 @@ export const Login = (username, password) => {
 	browser.refresh();
 	tophatLogin(username, password);
 	browser.pause(2000);
-	waitFor(".page-header");
+	waitFor(".page-header", 3000);
 	browser.pause(2000);
-}
-
+};

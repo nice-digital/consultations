@@ -22,10 +22,31 @@ namespace Comments.Test.Infrastructure
 					}}
 				},
 				TextFilters = new TextFilterGroup {  Id = Constants.AppSettings.Keyword, Title = Constants.AppSettings.Keyword  },
-					DownloadRoles = new RoleTypes {
-						AdminRoles = new List<string> { TestUserType.Administrator.ToString()},
-						TeamRoles = new List<string> { TestUserType.CustomFictionalRole.ToString(), TestUserType.ConsultationListTestRole.ToString() } }
-				};
+				DownloadRoles = new RoleTypes {
+					AdminRoles = new List<string> { TestUserType.Administrator.ToString()},
+					TeamRoles = new List<string> { TestUserType.CustomFictionalRole.ToString(), TestUserType.ConsultationListTestRole.ToString() }
+				},
+				ContributionFilter = new List<OptionFilterGroup>()
+				{
+					new OptionFilterGroup()
+					{
+						Id = "Contribution", Title = "Contribution filter group", Options = new List<FilterOption>()
+						{
+							new FilterOption("HasContributed", "Your responses")
+						}
+					}
+				},
+				TeamFilter = new List<OptionFilterGroup>()
+				{
+					new OptionFilterGroup()
+					{
+						Id = "Team", Title = "Team filter", Options = new List<FilterOption>()
+						{
+							new FilterOption("MyTeam", "My team's consultations")
+						}
+					}
+				}
+			};
 		}
 
 		internal static FeedConfig GetFeedConfig()

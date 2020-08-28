@@ -69,6 +69,8 @@ export const serverRenderer = (params): Promise => {
 				data: {
 					cookies: params.data.cookies,
 					isAuthorised: params.data.isAuthorised,
+					isAdminUser: params.data.isAdminUser,
+					isTeamUser: params.data.isTeamUser,
 					displayName: params.data.displayName,
 					signInURL: params.data.signInURL,
 					signOutURL: params.data.signOutURL,
@@ -82,7 +84,7 @@ export const serverRenderer = (params): Promise => {
 			// Base url is used for 'server' ajax requests so we can hit the .NET instance from the Node process
 		};
 		const authData = {
-			isAuthorised: staticContext.preload.data.isAuthorised, 
+			isAuthorised: staticContext.preload.data.isAuthorised,
 			displayName: staticContext.preload.data.displayName,
 			signInURL: staticContext.preload.data.signInURL,
 			signOutURL: staticContext.preload.data.signOutURL,
@@ -92,7 +94,7 @@ export const serverRenderer = (params): Promise => {
 		//the static router will still be there but won't try to render anything.
 		let app = (
 			<StaticRouter basename={BaseUrlRelative} location={params.url} context={staticContext}>
-				<App basename={BaseUrlRelative}/> 
+				<App basename={BaseUrlRelative}/>
 			</StaticRouter>);
 
 		let rootContent = "";

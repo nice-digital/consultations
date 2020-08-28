@@ -1,0 +1,112 @@
+﻿{
+    "indevBasePath":"https://indevnice.org",
+    "consultations":[
+        {
+            "title":"For consultation comments",
+            "startDate":"2018-04-01T00:00:00",
+            "endDate":"2028-05-31T17:00:00",
+            "submissionCount":0,
+            "consultationId":1,
+            "documentId":1,
+            "chapterSlug":"introduction",
+            "gidReference":"GID-TA10232",
+            "productTypeName":"Technology appraisal guidance",
+            "hasCurrentUserEnteredCommentsOrAnsweredQuestions":false,
+            "hasCurrentUserSubmittedCommentsOrAnswers":false,
+            "allowedRole":"CHTETeam",
+            "isOpen":true,
+            "isClosed":false,
+            "isUpcoming":false,
+            "show":true
+        },
+        {
+            "title":"Transcutaneous microwave ablation for severe primary axillary hyperhidrosis ",
+            "startDate":"2018-02-28T00:00:00",
+            "endDate":"2028-03-23T00:00:00",
+            "submissionCount":0,
+            "consultationId":2,
+            "documentId":2,
+            "chapterSlug":"guidance",
+            "gidReference":"GID-IPG10038",
+            "productTypeName":"Interventional procedures guidance",
+            "hasCurrentUserEnteredCommentsOrAnsweredQuestions":false,
+            "hasCurrentUserSubmittedCommentsOrAnswers":false,
+            "allowedRole":"CHTETeam",
+            "isOpen":true,
+            "isClosed":false,
+            "isUpcoming":false,
+            "show":true
+        }
+    ],
+    "optionFilters":[
+        {
+            "options":[
+                {
+                    "id":"Open",
+                    "label":"Open",
+                    "isSelected":true,
+                    "filteredResultCount":2,
+                    "unfilteredResultCount":2
+                },
+                {
+                    "id":"Closed",
+                    "label":"Closed",
+                    "isSelected":false,
+                    "filteredResultCount":0,
+                    "unfilteredResultCount":2
+                },
+                {
+                    "id":"Upcoming",
+                    "label":"Upcoming",
+                    "isSelected":false,
+                    "filteredResultCount":0,
+                    "unfilteredResultCount":2
+                }
+            ],
+            "id":"Status",
+            "title":"Status"
+        }
+    ],
+    "textFilter":{
+        "filterText":null,
+        "isSelected":false,
+        "filteredResultCount":2,
+        "unfilteredResultCount":2,
+        "id":"Keyword",
+        "title":"Keyword"
+    },
+    "contributionFilter":[
+        {
+            "options":[
+                {
+                    "id":"HasContributed",
+                    "label":"Your responses",
+                    "isSelected":false,
+                    "filteredResultCount":0,
+                    "unfilteredResultCount":2
+                }
+            ],
+            "id":"Contribution",
+            "title":"Contribution filter group"
+        }
+    ],
+    "teamFilter":null,
+    "user":{
+        "isAdminUser":true,
+        "isTeamUser":false,
+        "teamNames":[
+            
+        ],
+        "isAuthorised":true,
+        "displayName":"Benjamin Button",
+        "userId":"00000000-0000-0000-0000-000000000000",
+        "organisationName":null
+    },
+    "initialPageView":false,
+    "status":[
+        "Open"
+    ],
+    "keyword":null,
+    "contribution":null,
+    "team":null
+}

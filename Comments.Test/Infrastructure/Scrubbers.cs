@@ -14,7 +14,17 @@ namespace Comments.Test.Infrastructure
             return Regex.Replace(str, "\\\"lastModifiedDate\\\":\\\"([0-9\\-TZ+:\\.]+)\\\"", "\"lastModifiedDate\":\"scrubbed by ScrubLastModifiedDate\""); //unescaped regex is: \"lastModifiedDate\":\"([0-9\-TZ:\.]+)\"
         }
 
-	    public static string ScrubCommentId(string str)
+        public static string ScrubStartDate(string str)
+        {
+	        return Regex.Replace(str, "\\\"StartDate\\\":\\\"([0-9\\-TZ+:\\.]+)\\\"", "\"StartDate\":\"scrubbed by ScrubStartDate\""); //unescaped regex is: \"StartDate\":\"([0-9\-TZ:\.]+)\"
+		}
+
+        public static string ScrubEndDate(string str)
+        {
+	        return Regex.Replace(str, "\\\"EndDate\\\":\\\"([0-9\\-TZ+:\\.]+)\\\"", "\"EndDate\":\"scrubbed by ScrubEndDate\""); //unescaped regex is: \"StartDate\":\"([0-9\-TZ:\.]+)\"
+		}
+
+		public static string ScrubCommentId(string str)
 	    {
 		    return Regex.Replace(str, @"""commentId"":(\d+)", @"""commentId"":""scrubbed by ScrubCommentId""");
 	    }

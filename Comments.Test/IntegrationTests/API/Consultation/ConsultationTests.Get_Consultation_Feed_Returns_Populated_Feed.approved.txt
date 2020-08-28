@@ -50,6 +50,16 @@
             "localRoute":false
         },
         {
+            "label":"All consultations",
+            "url":"/guidance/inconsultation",
+            "localRoute":false
+        },
+        {
+            "label":"Consultation responses",
+            "url":"/",
+            "localRoute":true
+        },
+        {
             "label":"For consultation comments",
             "url":"/guidance/indevelopment/gid-ta10232/consultation/",
             "localRoute":false

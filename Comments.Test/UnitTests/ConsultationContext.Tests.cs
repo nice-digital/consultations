@@ -447,5 +447,56 @@ namespace Comments.Test.UnitTests
 			//Assert
 			results.Single().QuestionId.ShouldBe(questionId1);
 		}
+
+		[Fact]
+		public void GetAllSourceURIsTheCurrentUserHasCommentedOrAnsweredAQuestion_returns_current_users_only()
+		{
+			// Arrange
+			ResetDatabase();
+			_context.Database.EnsureCreated();
+
+			var chapterLevelSourceURI = "consultations://./consultation/1/document/1/chapter/intro";
+			var anotherChapterLevelSourceURI = "consultations://./consultation/1/document/1/chapter/nextchap";
+			var anotherConsultationSourceURI = "consultations://./consultation/2";
+
+			var sourceURINotUsedByCurrentUser = "consultations://./consultation/1/document/1";
+
+			var createdByUserId = Guid.Empty.ToString();
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: createdByUserId);
+
+			///source uri's that should be in the resultset:
+			var chapterLocationId = AddLocation(chapterLevelSourceURI, _context);
+			AddComment(chapterLocationId, "", false, createdByUserId);
+			var questionId = AddQuestion(chapterLocationId, 99, "", _context);
+			AddAnswer(questionId, createdByUserId, "", 1, _context);
+
+			var anotherChapterLevelSourceURILocationId = AddLocation(anotherChapterLevelSourceURI, _context);
+			AddComment(anotherChapterLevelSourceURILocationId, "", false, createdByUserId);
+
+			var anotherConsultationSourceURILocationId = AddLocation(anotherConsultationSourceURI, _context);
+			AddComment(anotherConsultationSourceURILocationId, "", false, createdByUserId, (int)StatusName.Submitted);
+
+			//source uri that shouldn't be in the resultset.
+			var sourceURINotUsedByCurrentUserLocationId = AddLocation(sourceURINotUsedByCurrentUser, _context);
+			AddComment(sourceURINotUsedByCurrentUserLocationId, "", false, Guid.NewGuid().ToString()); //note the user is random.
+			
+			var context = new ConsultationsContext(_options, userService, _fakeEncryption);
+
+			// Act    
+			var data = context.GetAllSourceURIsTheCurrentUserHasCommentedOrAnsweredAQuestion().ToList();
+
+			//Assert
+			data.Count(x => x.Key.Equals(chapterLevelSourceURI)).ShouldBe(2); //1 for the comment another 1 for the answer
+			data.Count(x => x.Key.Equals(anotherChapterLevelSourceURI)).ShouldBe(1); //1 for comment on same consultation
+			data.Count(x => x.Key.Equals(anotherConsultationSourceURI)).ShouldBe(1); //1 for comment on different consultation
+
+			data.First(x => x.Key.Equals(chapterLevelSourceURI)).Value.StatusId.ShouldBe((int)StatusName.Draft); //now check the status returned
+			data.Where(x => x.Key.Equals(chapterLevelSourceURI)).Skip(1).Single().Value.StatusId.ShouldBe((int)StatusName.Draft); 
+			data.Single(x => x.Key.Equals(anotherChapterLevelSourceURI)).Value.StatusId.ShouldBe((int)StatusName.Draft);
+			data.Single(x => x.Key.Equals(anotherConsultationSourceURI)).Value.StatusId.ShouldBe((int)StatusName.Submitted);
+
+			data.Count(x => x.Key.Equals(sourceURINotUsedByCurrentUser)).ShouldBe(0);
+		}
+
 	}
 }

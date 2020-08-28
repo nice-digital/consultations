@@ -19,7 +19,7 @@ namespace Comments.Services
 		Task<string> GetEmailForUserId(string userId);
 		Task<Dictionary<string, (string displayName, string emailAddress)>> GetUserDetailsForUserIds(IEnumerable<string> userIds);
 	    ICollection<string> GetUserRoles();
-	    Validate IsAllowedAccess(ICollection<string> permittedRoles);
+	    Validate IsAllowedAccess(ICollection<string> permittedRoles, User user = null);
 	    (string userId, string displayName, string emailAddress) GetCurrentUserDetails();
     }
 
@@ -86,15 +86,15 @@ namespace Comments.Services
 			return niceUser?.Roles(host).ToList() ?? new List<string>();
 	    }
 
-	    public Validate IsAllowedAccess(ICollection<string> permittedRoles)
+	    public Validate IsAllowedAccess(ICollection<string> permittedRoles, User user = null)
 	    {
 		    if (!permittedRoles.Any())
 		    {
 			    throw new ArgumentException("There is expected to be at least one permitted role", nameof(permittedRoles));
 		    }
 
-		    var user = GetCurrentUser();
-		    if (!user.IsAuthorised)
+		    var currentUser = user ?? GetCurrentUser();
+		    if (!currentUser.IsAuthorised)
 		    {
 			    return new Validate(false, true, false, "User is not authorised");
 		    }

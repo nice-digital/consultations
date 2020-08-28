@@ -96,20 +96,31 @@ namespace Comments.Test.Infrastructure
 		    _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
 		}
 
-	    public TestBase(TestUserType testUserType, Feed feed, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null, bool bypassAuthentication = true)
-		    : this(false, testUserType, true, submittedCommentsAndAnswerCounts, bypassAuthentication)
+	    public TestBase(TestUserType testUserType, Feed feed, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null, bool bypassAuthentication = true, bool addRoleClaim = true)
+		    : this(false, testUserType, true, submittedCommentsAndAnswerCounts, bypassAuthentication, addRoleClaim)
 	    {
 			FeedToUse = feed;
 		}
 
-		public TestBase(bool useRealSubmitService = false, TestUserType testUserType = TestUserType.Authenticated, bool useFakeConsultationService = false, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null, bool bypassAuthentication = true)
+		/// <summary>
+		/// this is the default constructor, albeit with a load of optional parameters.
+		/// </summary>
+		/// <param name="useRealSubmitService"></param>
+		/// <param name="testUserType"></param>
+		/// <param name="useFakeConsultationService"></param>
+		/// <param name="submittedCommentsAndAnswerCounts"></param>
+		/// <param name="bypassAuthentication"></param>
+		public TestBase(bool useRealSubmitService = false, TestUserType testUserType = TestUserType.Authenticated, bool useFakeConsultationService = false, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null, bool bypassAuthentication = true, bool addRoleClaim = true)
         {
-			
+	        if (testUserType == TestUserType.NotAuthenticated)
+	        {
+		        _authenticated = false;
+	        }
 			AppSettings.AuthenticationConfig = new AuthenticationConfig{ ClientId = "test client id", AuthorisationServiceUri = "http://www.example.com"};
 			// Arrange
 			_urlHelper = new FakeUrlHelper();
-			_fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId, testUserType);
-			_fakeHttpContextAccessor = FakeHttpContextAccessor.Get(_authenticated, _displayName, _userId, testUserType);
+			_fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId, testUserType, addRoleClaim);
+			_fakeHttpContextAccessor = FakeHttpContextAccessor.Get(_authenticated, _displayName, _userId, testUserType, addRoleClaim);
 			_fakeApiService = new FakeAPIService();
 			_consultationService = new FakeConsultationService();
 	        _useRealSubmitService = useRealSubmitService;
@@ -136,7 +147,7 @@ namespace Comments.Test.Infrastructure
                 .ConfigureServices(services =>
                 {
                     services.AddEntityFrameworkSqlite();
-                   
+
 					services.TryAddSingleton<ConsultationsContext>(_context);
                     services.TryAddSingleton<ISeriLogger, FakeSerilogger>();
                     services.TryAddSingleton<IHttpContextAccessor>(provider => _fakeHttpContextAccessor);

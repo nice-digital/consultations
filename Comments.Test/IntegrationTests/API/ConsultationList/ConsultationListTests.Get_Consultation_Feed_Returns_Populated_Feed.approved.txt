@@ -11,6 +11,9 @@
             "chapterSlug":"introduction",
             "gidReference":"GID-TA10232",
             "productTypeName":"Technology appraisal guidance",
+            "hasCurrentUserEnteredCommentsOrAnsweredQuestions":false,
+            "hasCurrentUserSubmittedCommentsOrAnswers":false,
+            "allowedRole":"CHTETeam",
             "isOpen":true,
             "isClosed":false,
             "isUpcoming":false,
@@ -26,6 +29,9 @@
             "chapterSlug":"guidance",
             "gidReference":"GID-IPG10038",
             "productTypeName":"Interventional procedures guidance",
+            "hasCurrentUserEnteredCommentsOrAnsweredQuestions":false,
+            "hasCurrentUserSubmittedCommentsOrAnswers":false,
+            "allowedRole":"CHTETeam",
             "isOpen":true,
             "isClosed":false,
             "isUpcoming":false,
@@ -68,6 +74,14 @@
         "unfilteredResultCount":2,
         "id":"Keyword",
         "title":"Keyword"
+    },
+    "user":{
+        "isAdminUser":true,
+        "isTeamUser":false,
+        "isAuthorised":true,
+        "displayName":"Benjamin Button",
+        "userId":"00000000-0000-0000-0000-000000000000",
+        "organisationName":null
     },
     "status":[
         "Open"

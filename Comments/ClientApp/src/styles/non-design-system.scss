@@ -5,3 +5,15 @@
 .tag--open {
   background: $colour-success !important;
 }
+
+.flex {
+  display: flex;
+
+  &--align-center {
+    align-items: center;
+  }
+}
+
+.bold {
+  font-weight: bold;
+}
