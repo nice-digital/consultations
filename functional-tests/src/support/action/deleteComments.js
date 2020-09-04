@@ -14,22 +14,27 @@ module.exports = () => {
 
 	if (browser.isVisibleWithinViewport("[data-qa-sel='comment-list-wrapper']")) {
 		clickAllDeleteButtons();
+	} else if (
+		!browser.isVisibleWithinViewport("[data-qa-sel='delete-comment-button']")
+	) {
+		browser.scroll("[data-qa-sel='delete-comment-button']");
+		clickAllDeleteButtons();
 	} else {
 		browser.click("[data-qa-sel='open-commenting-panel']");
 		browser.pause(1000);
 		browser.waitForExist("[data-qa-sel='comment-list-wrapper']");
 		clickAllDeleteButtons();
-	};
+	}
 
 	function clickAllDeleteButtons() {
-		const deleteButtons = browser.elements("[data-qa-sel='delete-comment-button']").value;
+		const deleteButtons = browser.elements(
+			"[data-qa-sel='delete-comment-button']"
+		).value;
 		browser.waitForExist("[data-qa-sel='delete-comment-button']");
 		for (let button of deleteButtons) {
 			browser.elementIdClick(button.ELEMENT);
 		}
-	};
-
-
+	}
 
 	// browser.click([data-qa-sel='delete-comment-button']);
 };
