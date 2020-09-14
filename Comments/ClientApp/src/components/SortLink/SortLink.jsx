@@ -23,7 +23,7 @@ export class SortLink extends Component<PropsType> {
 		this.handleClick = this.handleClick.bind(this);
 	}
 
-	handleClick: () => void;
+	//handleClick: () => void;
 	handleClick(e: DOMEvent) {
 		e.preventDefault();
 
