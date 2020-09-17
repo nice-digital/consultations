@@ -28,6 +28,7 @@ jq \
     --arg webAppClientId "$WEBAPP_CLIENTID" \
     --arg webAppClientSecret "$WEBAPP_CLIENTSECRECT" \
     --arg webAppAuthorisationServiceUri "$WEBAPP_AUTH_SERVICE_URI" \
+    --arg googleTrackingId "$WEBAPP_GOOGLE_TRACKING_ID" \
     --arg webAppDomain "$WEBAPP_DOMAIN" \
     --arg encryptionKey "$ENCRYPTION_KEY" \
     --arg encryptionIV "$ENCRYPTION_IV" \
@@ -59,6 +60,7 @@ jq \
     .WebAppConfiguration.ClientSecret = $webAppClientSecret |
     .WebAppConfiguration.AuthorisationServiceUri = $webAppAuthorisationServiceUri |
     .WebAppConfiguration.Domain = $webAppDomain |
+    .WebAppConfiguration.GoogleTrackingId = $googleTrackingId |
     .Encryption.Key = $encryptionKey |
     .Encryption.IV = $encryptionIV |
     .ConsultationList.DownloadRoles.AdminRoles |= .+ [$adminRole] |
