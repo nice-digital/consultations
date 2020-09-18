@@ -278,7 +278,7 @@ export class CommentList extends Component<PropsType, StateType> {
 						}
 					);
 				});
-				pullFocusByQuerySelector("#js-drawer-toggleopen-comments", false, "#comments-panel");
+				pullFocusByQuerySelector("#comments-panel");
 				break;
 
 			case "toggleOpenQuestions":
@@ -298,7 +298,7 @@ export class CommentList extends Component<PropsType, StateType> {
 						}
 					);
 				});
-				pullFocusByQuerySelector("#js-drawer-toggleopen-questions", false, "#comments-panel");
+				pullFocusByQuerySelector("#comments-panel");
 				break;
 
 
