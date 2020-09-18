@@ -218,7 +218,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		comments.unshift(generatedComment);
 		this.setState({comments});
 		setTimeout(() => {
-			pullFocusByQuerySelector(`#Comment${idToUseForNewBox}`, false, '#comments-panel');
+			pullFocusByQuerySelector(`#Comment${idToUseForNewBox}`, false, "#comments-panel");
 		}, 0);
 	};
 
@@ -278,7 +278,7 @@ export class CommentList extends Component<PropsType, StateType> {
 						}
 					);
 				});
-				pullFocusByQuerySelector("#js-drawer-toggleopen-comments");
+				pullFocusByQuerySelector("#js-drawer-toggleopen-comments", false, "#comments-panel");
 				break;
 
 			case "toggleOpenQuestions":
@@ -298,7 +298,7 @@ export class CommentList extends Component<PropsType, StateType> {
 						}
 					);
 				});
-				pullFocusByQuerySelector("#js-drawer-toggleopen-questions");
+				pullFocusByQuerySelector("#js-drawer-toggleopen-questions", false, "#comments-panel");
 				break;
 
 
