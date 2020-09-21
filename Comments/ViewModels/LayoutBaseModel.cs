@@ -17,6 +17,8 @@ namespace Comments.ViewModels
 
 			LinkText = IsAuthenticated ? "Sign out" : "Sign in";
 			LinkURL = IsAuthenticated ? signOutURL : signInURL;
+
+			CookieBannerScript = AppSettings.GlobalNavConfig.CookieBannerScript;
 		}
 
 		public bool IsAuthenticated { get; private set; }
@@ -32,5 +34,7 @@ namespace Comments.ViewModels
 		public string LinkURL { get; private set; }
 
 		public string DisplayName { get; private set; }
+
+		public string CookieBannerScript { get; private set; }
 	}
 }
