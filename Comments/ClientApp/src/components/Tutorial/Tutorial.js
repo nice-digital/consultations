@@ -24,7 +24,7 @@ export class Tutorial extends Component<PropsType, StateType> {
 	}
 
 	setCookie = (isPanelVisible: boolean) => {
-		if(typeof window.CookieControl !== "undefined" && window.CookieControl.getCategoryConsent(0)){
+		if(window.CookieControl.preferenceCookies){
 			Cookies.set("TutorialVisible", isPanelVisible);
 		}
 	};
