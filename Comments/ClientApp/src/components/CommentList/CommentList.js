@@ -157,7 +157,7 @@ export class CommentList extends Component<PropsType, StateType> {
 				});
 			});
 
-		
+
 	};
 
 
@@ -218,7 +218,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		comments.unshift(generatedComment);
 		this.setState({comments});
 		setTimeout(() => {
-			pullFocusByQuerySelector(`#Comment${idToUseForNewBox}`);
+			pullFocusByQuerySelector(`#Comment${idToUseForNewBox}`, false, "#comments-panel");
 		}, 0);
 	};
 
@@ -278,7 +278,7 @@ export class CommentList extends Component<PropsType, StateType> {
 						}
 					);
 				});
-				pullFocusByQuerySelector("#js-drawer-toggleopen-comments");
+				pullFocusByQuerySelector("#comments-panel");
 				break;
 
 			case "toggleOpenQuestions":
@@ -298,10 +298,10 @@ export class CommentList extends Component<PropsType, StateType> {
 						}
 					);
 				});
-				pullFocusByQuerySelector("#js-drawer-toggleopen-questions");
+				pullFocusByQuerySelector("#comments-panel");
 				break;
 
-				
+
 			case "createQuestionPDF":
 				const questionsForPDF = this.state.questions;
 				const titleForPDF = this.state.consultationData.title;
@@ -420,8 +420,8 @@ export class CommentList extends Component<PropsType, StateType> {
 											</div>
 											: null}
 
-										{this.state.loading ? <p>Loading...</p> : (					
-											<Fragment>						
+										{this.state.loading ? <p>Loading...</p> : (
+											<Fragment>
 												{contextValue.isAuthorised ? (
 													<div className={`${this.state.viewComments ? "show" : "hide"}`}>
 														{this.state.comments.length === 0 ? <p>No comments yet</p> :
@@ -448,10 +448,10 @@ export class CommentList extends Component<PropsType, StateType> {
 														currentURL={this.props.match.url}
 														signInURL={contextValue.signInURL}
 														registerURL={contextValue.registerURL}
-														
+
 													/>
 												)}
-												
+
 												<div className={`${this.state.viewComments ? "hide" : "show"}`}>
 
 													<button
@@ -462,7 +462,7 @@ export class CommentList extends Component<PropsType, StateType> {
 													Download questions (PDF)
 													</button>
 													{contextValue.isAuthorised ?
-														<p className="mt--0">Please answer the following questions</p> 
+														<p className="mt--0">Please answer the following questions</p>
 														:
 														<p className="CommentBox__validationMessage">You must be signed in to answer questions</p>
 													}
@@ -470,7 +470,7 @@ export class CommentList extends Component<PropsType, StateType> {
 													<ul className={`CommentList list--unstyled ${contextValue.isAuthorised ? "mt--0" : ""}`}>
 														{this.state.questions.map((question) => {
 															const isUnsaved = this.state.unsavedIds.includes(`${question.questionId}q`);
-															
+
 															return (
 																<Question
 																	isUnsaved={isUnsaved}

@@ -83,12 +83,11 @@ namespace Comments
 	        services.TryAddTransient<IStatusService, StatusService>();
 			services.TryAddTransient<IConsultationListService, ConsultationListService>();
 
-			//services.TryAddTransient<IAPIService, APIService>(); //this is already done in the nugget
 			services.AddRouting(options => options.LowercaseUrls = true);
 
 			// Add authentication
 			var authConfiguration = AppSettings.AuthenticationConfig.GetAuthConfiguration();
-			services.AddAuthentication(authConfiguration);
+			services.AddAuthentication(authConfiguration, allowNonSecureCookie: Environment.IsDevelopment());
 			services.AddAuthorisation(authConfiguration);
 
 			services.AddMvc(options =>
