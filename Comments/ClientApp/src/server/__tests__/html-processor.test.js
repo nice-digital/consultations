@@ -3,7 +3,6 @@ import { prepTags,
 	replaceOpeningHtmlTag,
 	replaceOpeningBodyTag,
 	replaceRootContent,
-	replaceRelativePaths,
 	replaceAccountsEnvironment,
 } from "../html-processor";
 
@@ -87,17 +86,6 @@ describe("HTML processor", () => {
 		it("replaces react root div with content", () => {
 			let result = replaceRootContent("<body><div id=\"root\"></div><span>", "TEST");
 			expect(result).toEqual("<body><div id=\"root\">TEST</div><span>");
-		});
-	});
-
-	describe("replaceRelativePaths", () => {
-		it("prepends relative paths", () => {
-			let result = replaceRelativePaths("<body><script href=\"/test\"></script><span>");
-			expect(result).toEqual("<body><script href=\"/consultations/test\"></script><span>");
-		});
-		it("doesn't prepend for double slash URLs", () => {
-			let result = replaceRelativePaths("<body><script href=\"//cdn.\"></script><span>");
-			expect(result).toEqual("<body><script href=\"//cdn.\"></script><span>");
 		});
 	});
 
