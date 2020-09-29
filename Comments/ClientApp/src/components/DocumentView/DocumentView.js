@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { withRouter } from "react-router";
 import { LiveMessenger } from "react-aria-live";
 
@@ -43,7 +43,7 @@ export class DocumentView extends Component<PropsType, StateType> {
 		if (this.state.error.hasError) { throw new Error(this.state.error.message); }
 
 		return (
-			<Fragment>
+			<div>
 				<LiveMessenger>
 					{({announceAssertive, announcePolite}) =>
 						<CommentListWithRouter
@@ -54,7 +54,7 @@ export class DocumentView extends Component<PropsType, StateType> {
 				
 				{/* Passing the function we're using from <CommentListWithRouter /> to DocWithRouter via props*/}
 				<DocumentWithRouter onNewCommentClick={this.newCommentHandler} />
-			</Fragment>
+			</div>
 		);
 	}
 }
