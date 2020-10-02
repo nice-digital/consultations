@@ -1,4 +1,7 @@
+import acceptCookieBanner from "./acceptCookieBanner";
+
 export const idamLogin = (username, password) => {
+	acceptCookieBanner();
 	browser.waitForVisible("body [data-qa-sel='login-email']", 40000);
 	browser.setValue("[data-qa-sel='login-email']", process.env[username]);
 	browser.setValue("[data-qa-sel='login-password']", process.env[password]);
