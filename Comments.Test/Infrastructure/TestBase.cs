@@ -117,6 +117,7 @@ namespace Comments.Test.Infrastructure
 		        _authenticated = false;
 	        }
 			AppSettings.AuthenticationConfig = new AuthenticationConfig{ ClientId = "test client id", AuthorisationServiceUri = "http://www.example.com"};
+			AppSettings.GlobalNavConfig = new GlobalNavConfig {CookieBannerScript = "//a-fake-cookiebannerscript-url"};
 			// Arrange
 			_urlHelper = new FakeUrlHelper();
 			_fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId, testUserType, addRoleClaim);

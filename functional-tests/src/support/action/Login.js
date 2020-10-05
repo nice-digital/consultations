@@ -5,6 +5,7 @@ import selectors from "../selectors";
 
 export const Login = (username, password) => {
 	browser.refresh();
+	browser.pause(2000);
 	idamGlobalnavLogin(username, password);
 	browser.pause(2000);
 	waitForVisible("[data-qa-sel='changeable-page-header']");

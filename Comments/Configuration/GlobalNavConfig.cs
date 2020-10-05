@@ -7,5 +7,8 @@ namespace Comments.Configuration
         public string Script { get; set; }
 
         public string ScriptIE8 { get; set; }
-    }
+
+		public string CookieBannerScript { get; set; }
+
+	}
 }
