@@ -8,6 +8,6 @@ namespace Comments.Configuration
 
 	    public string AccountsEnvironment { get; set; } = "Live";
 
-		public string HealthCheckEndpoint { get; set; }
+	    public string HealthCheckEndpoint { get; set; } = "healthcheck-api";
     }
 }
