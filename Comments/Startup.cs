@@ -26,6 +26,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
 using System.Collections.Generic;
+using Microsoft.Extensions.HealthChecks;
 
 namespace Comments
 {
@@ -145,6 +146,11 @@ namespace Comments
             }); //adding CORS for Warren. todo: maybe move this into the isDevelopment block..
             
             services.AddOptions();
+
+            services.AddHealthChecks(checks =>
+            {
+	            checks.AddUrlCheck(AppSettings.Environment.HealthCheckEndpoint);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

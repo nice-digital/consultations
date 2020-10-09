@@ -35,6 +35,7 @@ namespace Comments
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+	            .UseHealthChecks("/consultations/healthcheck-api", TimeSpan.FromSeconds(10))
                 .UseStartup<Startup>()
                 .Build();
     }
