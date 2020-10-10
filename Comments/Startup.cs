@@ -66,8 +66,8 @@ namespace Comments
 			var contextOptionsBuilder = new DbContextOptionsBuilder<ConsultationsContext>();
             services.TryAddSingleton<IDbContextOptionsBuilderInfrastructure>(contextOptionsBuilder);
 
-            services.AddDbContext<ConsultationsContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            var dbConnectionString = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<ConsultationsContext>(options => options.UseSqlServer(dbConnectionString));
 
             services.TryAddTransient<ICommentService, CommentService>();
             services.TryAddTransient<IConsultationService, ConsultationService>();
@@ -150,6 +150,7 @@ namespace Comments
             services.AddHealthChecks(checks =>
             {
 	            checks.AddUrlCheck(AppSettings.Environment.HealthCheckEndpoint);
+	            checks.AddSqlCheck("Consultations DB", dbConnectionString);
             });
         }
 
