@@ -16,7 +16,7 @@ docker-compose build && docker-compose up -d
 docker-compose run tests waitforit -t 120 --strict comments:8080 -- npm run test:teamcity -- --host hub -b https://niceorg/consultations/
 
 # Generate an Allure test report
-docker-compose run -T test-runner allure generate --clean
+docker-compose run -T tests allure generate --clean
 
 # Copy error shots and logs to use as a TeamCity artifact for debugging purposes
 mkdir -p docker-output
