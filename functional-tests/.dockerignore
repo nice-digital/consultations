@@ -13,3 +13,4 @@ docker-compose.*.yml
 node_modules
 docker-run.sh
 docker-output
+allure-results

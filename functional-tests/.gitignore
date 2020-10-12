@@ -67,3 +67,6 @@ errorShots
 
 # Screenshots copied from inside a docker container
 docker-output
+
+# Allure reports
+allure-results
