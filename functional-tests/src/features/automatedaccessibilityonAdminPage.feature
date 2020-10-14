@@ -8,5 +8,5 @@ Background:
 		When I log into accounts with username "IDAM_EMAIL1" and password "IDAM_PASSWORD"
 
 Scenario: User login to consultation Admin page and check there is no accessibility issues
-		Then the page should have no A accessibility issues
-		# Then the page should have no AA accessibility issues
+		# Then the page should have no A accessibility issues
+		Then the page should have no AA accessibility issues
