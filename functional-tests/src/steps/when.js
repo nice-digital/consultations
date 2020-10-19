@@ -97,6 +97,7 @@ When(/^I review my response$/, reviewResponse);
 
 When(
 	/^I log into accounts with username "([A-Z0-9_]+)" and password "([A-Z0-9_]+)"$/,
+	{ wrapperOptions: { retry: 2 } },
 	Login
 );
 
