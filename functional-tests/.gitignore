@@ -70,3 +70,4 @@ docker-output
 
 # Allure reports
 allure-results
+allure-report

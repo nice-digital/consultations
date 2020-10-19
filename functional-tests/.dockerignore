@@ -14,3 +14,5 @@ node_modules
 docker-run.sh
 docker-output
 allure-results
+allure-report
+
