@@ -26,7 +26,7 @@ namespace Comments.Test.UnitTests
             var createdByUserId = Guid.NewGuid().ToString();
 
             var locationId = AddLocation(sourceURI);
-            AddComment(locationId, commentText, true, createdByUserId);
+            AddComment(locationId, commentText, createdByUserId);
 
             // Act
             using (var consultationsContext = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
@@ -52,7 +52,7 @@ namespace Comments.Test.UnitTests
             var createdByUserId = Guid.NewGuid().ToString();
 
             var locationId = AddLocation(sourceURI);
-            AddComment(locationId, commentText, true, createdByUserId);
+            AddComment(locationId, commentText, createdByUserId);
 
             // Act
             using (var consultationsContext = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
@@ -76,19 +76,19 @@ namespace Comments.Test.UnitTests
 		    var createdByUserId = Guid.NewGuid().ToString();
 
 		    var locationId = AddLocation("consultations://./consultation/1/document/1/chapter/introduction");
-		    AddComment(locationId, commentText, true, createdByUserId);
+		    AddComment(locationId, commentText, createdByUserId);
 
 		    locationId = AddLocation("consultations://./consultation/1/document/1");
-		    AddComment(locationId, commentText, true, createdByUserId);
+		    AddComment(locationId, commentText, createdByUserId);
 
 		    locationId = AddLocation("consultations://./consultation/1/document/2");
-		    AddComment(locationId, commentText, true, createdByUserId);
+		    AddComment(locationId, commentText, createdByUserId);
 
 			locationId = AddLocation("consultations://./consultation/1");
-		    AddComment(locationId, commentText, true, createdByUserId);
+		    AddComment(locationId, commentText, createdByUserId);
 
 		    locationId = AddLocation("consultations://./consultation/2");
-		    AddComment(locationId, commentText, true, createdByUserId);
+		    AddComment(locationId, commentText, createdByUserId);
 
 
 			var sourceURIs = new List<string>
@@ -113,22 +113,22 @@ namespace Comments.Test.UnitTests
 		    var createdByUserId = Guid.NewGuid().ToString();
 
 		    var locationId = AddLocation("consultations://./consultation/1/document/1/chapter/introduction");
-		    AddComment(locationId, commentText, true, createdByUserId);
+		    AddComment(locationId, commentText, createdByUserId);
 
 		    locationId = AddLocation("consultations://./consultation/1/document/1/chapter/overview");
-		    AddComment(locationId, commentText, true, createdByUserId);
+		    AddComment(locationId, commentText, createdByUserId);
 
 			locationId = AddLocation("consultations://./consultation/1/document/1");
-		    AddComment(locationId, commentText, true, createdByUserId);
+		    AddComment(locationId, commentText, createdByUserId);
 
 		    locationId = AddLocation("consultations://./consultation/1/document/2");
-		    AddComment(locationId, commentText, true, createdByUserId);
+		    AddComment(locationId, commentText, createdByUserId);
 
 		    locationId = AddLocation("consultations://./consultation/1");
-		    AddComment(locationId, commentText, true, createdByUserId);
+		    AddComment(locationId, commentText, createdByUserId);
 
 		    locationId = AddLocation("consultations://./consultation/2");
-		    AddComment(locationId, commentText, true, createdByUserId);
+		    AddComment(locationId, commentText, createdByUserId);
 
 
 		    var sourceURIs = new List<string>
@@ -466,19 +466,19 @@ namespace Comments.Test.UnitTests
 
 			///source uri's that should be in the resultset:
 			var chapterLocationId = AddLocation(chapterLevelSourceURI, _context);
-			AddComment(chapterLocationId, "", false, createdByUserId);
+			AddComment(chapterLocationId, "", createdByUserId);
 			var questionId = AddQuestion(chapterLocationId, 99, "", _context);
 			AddAnswer(questionId, createdByUserId, "", 1, _context);
 
 			var anotherChapterLevelSourceURILocationId = AddLocation(anotherChapterLevelSourceURI, _context);
-			AddComment(anotherChapterLevelSourceURILocationId, "", false, createdByUserId);
+			AddComment(anotherChapterLevelSourceURILocationId, "", createdByUserId);
 
 			var anotherConsultationSourceURILocationId = AddLocation(anotherConsultationSourceURI, _context);
-			AddComment(anotherConsultationSourceURILocationId, "", false, createdByUserId, (int)StatusName.Submitted);
+			AddComment(anotherConsultationSourceURILocationId, "", createdByUserId, (int)StatusName.Submitted);
 
 			//source uri that shouldn't be in the resultset.
 			var sourceURINotUsedByCurrentUserLocationId = AddLocation(sourceURINotUsedByCurrentUser, _context);
-			AddComment(sourceURINotUsedByCurrentUserLocationId, "", false, Guid.NewGuid().ToString()); //note the user is random.
+			AddComment(sourceURINotUsedByCurrentUserLocationId, "", Guid.NewGuid().ToString()); //note the user is random.
 			
 			var context = new ConsultationsContext(_options, userService, _fakeEncryption);
 

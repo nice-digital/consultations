@@ -36,12 +36,12 @@ namespace Comments.Test.UnitTests
 			var userId = Guid.NewGuid().ToString();
 
 			locationId = AddLocation("consultations://./consultation/1/document/1", _context, "001.001.000.000");
-			commentId = AddComment(locationId, "Submitted comment consultation 1", false, userId, (int)StatusName.Submitted, _context);
+			commentId = AddComment(locationId, "Submitted comment consultation 1", userId, (int)StatusName.Submitted, _context);
 			submissionId = AddSubmission(userId, _context);
 			AddSubmissionComments(submissionId, commentId, _context);
 
 			locationId = AddLocation("consultations://./consultation/154/document/1", _context, "001.001.000.000");
-			commentId = AddComment(locationId, "Submitted comment consultation 154", false, userId, (int)StatusName.Submitted, _context);
+			commentId = AddComment(locationId, "Submitted comment consultation 154", userId, (int)StatusName.Submitted, _context);
 			submissionId = AddSubmission(userId, _context);
 			AddSubmissionComments(submissionId, commentId, _context);
 
@@ -112,21 +112,16 @@ namespace Comments.Test.UnitTests
 			var submissionId = AddSubmission(userId, _context);
 
 			locationId = AddLocation("consultations://./consultation/1", _context, "001.000.000.000");
-			commentId = AddComment(locationId, "Submitted comment", false, userId, (int)StatusName.Submitted, _context);
-			submissionId = AddSubmission(userId, _context);
-			AddSubmissionComments(submissionId, commentId, _context);
-
-			locationId = AddLocation("consultations://./consultation/1", _context, "001.000.000.000");
-			commentId = AddComment(locationId, "Deleted comment", true, userId, (int)StatusName.Submitted, _context);
+			commentId = AddComment(locationId, "Submitted comment", userId, (int)StatusName.Submitted, _context);
 			submissionId = AddSubmission(userId, _context);
 			AddSubmissionComments(submissionId, commentId, _context);
 
 			locationId = AddLocation("consultations://./consultation/1/document/2/chapter/introduction", _context, "001.002.002.000");
-			commentId = AddComment(locationId, "Draft comment", false, userId, (int)StatusName.Draft, _context);
+			commentId = AddComment(locationId, "Draft comment", userId, (int)StatusName.Draft, _context);
 			AddSubmissionComments(submissionId, commentId, _context);
 			
 			locationId = AddLocation("consultations://./consultation/1/document/1/chapter/chapter-slug", _context, "001.002.000.000");
-			commentId = AddComment(locationId, "Another Users Submitted comment", false, Guid.NewGuid().ToString(), (int)StatusName.Submitted, _context);
+			commentId = AddComment(locationId, "Another Users Submitted comment", Guid.NewGuid().ToString(), (int)StatusName.Submitted, _context);
 			AddSubmissionComments(submissionId, commentId, _context);
 
 			const string sourceURI = "consultations://./consultation/1";
@@ -177,21 +172,16 @@ namespace Comments.Test.UnitTests
 			var submissionId = AddSubmission(userId, _context);
 
 			locationId = AddLocation("consultations://./consultation/1", _context, "001.000.000.000");
-			commentId = AddComment(locationId, "Submitted comment", false, userId, (int)StatusName.Submitted, _context);
-			submissionId = AddSubmission(userId, _context);
-			AddSubmissionComments(submissionId, commentId, _context);
-
-			locationId = AddLocation("consultations://./consultation/1", _context, "001.000.000.000");
-			commentId = AddComment(locationId, "Deleted comment", true, userId, (int)StatusName.Submitted, _context);
+			commentId = AddComment(locationId, "Submitted comment", userId, (int)StatusName.Submitted, _context);
 			submissionId = AddSubmission(userId, _context);
 			AddSubmissionComments(submissionId, commentId, _context);
 
 			locationId = AddLocation("consultations://./consultation/1/document/2/chapter/introduction", _context, "001.002.002.000");
-			commentId = AddComment(locationId, "Draft comment", false, userId, (int)StatusName.Draft, _context);
+			commentId = AddComment(locationId, "Draft comment", userId, (int)StatusName.Draft, _context);
 			AddSubmissionComments(submissionId, commentId, _context);
 
 			locationId = AddLocation("consultations://./consultation/1/document/1/chapter/chapter-slug", _context, "001.002.000.000");
-			commentId = AddComment(locationId, "Another Users Submitted comment", false, Guid.NewGuid().ToString(), (int)StatusName.Submitted, _context);
+			commentId = AddComment(locationId, "Another Users Submitted comment", Guid.NewGuid().ToString(), (int)StatusName.Submitted, _context);
 			AddSubmissionComments(submissionId, commentId, _context);
 
 			const string sourceURI = "consultations://./consultation/1";
@@ -274,7 +264,7 @@ namespace Comments.Test.UnitTests
 			var userId = Guid.Empty.ToString();
 
 			var locationId = AddLocation("consultations://./consultation/1/document/1/chapter/chapter-slug", _context, "001.000.000.000");
-			var commentId = AddComment(locationId, "Submitted comment", false, userId, (int)StatusName.Submitted, _context);
+			var commentId = AddComment(locationId, "Submitted comment", userId, (int)StatusName.Submitted, _context);
 			var submissionId = AddSubmission(userId, _context);
 			AddSubmissionComments(submissionId, commentId, _context);
 
@@ -304,7 +294,7 @@ namespace Comments.Test.UnitTests
 
 			//Add a comment
 			locationId = AddLocation("consultations://./consultation/1/document/1", _context, "001.001.000.000");
-			commentId = AddComment(locationId, "Submitted comment consultation 1", false, userId, (int)StatusName.Submitted, _context);
+			commentId = AddComment(locationId, "Submitted comment consultation 1", userId, (int)StatusName.Submitted, _context);
 			submissionId = AddSubmission(userId, _context);
 			AddSubmissionComments(submissionId, commentId, _context);
 
@@ -347,7 +337,7 @@ namespace Comments.Test.UnitTests
 
 			// Add comment
 			locationId = AddLocation("consultations://./consultation/1/document/1", _context, "001.001.000.000");
-			commentId = AddComment(locationId, "Submitted comment consultation 1", false, userId, (int)StatusName.Submitted, _context);
+			commentId = AddComment(locationId, "Submitted comment consultation 1", userId, (int)StatusName.Submitted, _context);
 			submissionId = AddSubmission(userId, _context);
 			AddSubmissionComments(submissionId, commentId, _context);
 

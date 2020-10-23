@@ -47,7 +47,7 @@ namespace Comments.Test.IntegrationTests.API.Export
 			var userId = Guid.NewGuid().ToString();
 
 			var locationId = AddLocation("consultations://./consultation/1", _context, "001.000.000.000");
-			var commentId = AddComment(locationId, "Submitted comment", false, userId, (int) StatusName.Submitted,
+			var commentId = AddComment(locationId, "Submitted comment", userId, (int) StatusName.Submitted,
 				_context);
 			var submissionId = AddSubmission(userId, _context);
 			AddSubmissionComments(submissionId, commentId, _context);
@@ -80,7 +80,7 @@ namespace Comments.Test.IntegrationTests.API.Export
 			const int consultationId = 1;
 
 			var locationId = AddLocation($"consultations://./consultation/{consultationId}", _context, "001.000.000.000");
-			var commentId = AddComment(locationId, commentText, false, _userId, (int)StatusName.Submitted);
+			var commentId = AddComment(locationId, commentText, _userId, (int)StatusName.Submitted);
 			var submissionId = AddSubmission(_userId);
 			AddSubmissionComments(submissionId, commentId);
 
@@ -118,7 +118,7 @@ namespace Comments.Test.IntegrationTests.API.Export
 			const int consultationId = 1;
 
 			var locationId = AddLocation($"consultations://./consultation/{consultationId}", _context, "001.000.000.000");
-			var commentId = AddComment(locationId, commentText, false, _userId, (int)StatusName.Submitted);
+			var commentId = AddComment(locationId, commentText, _userId, (int)StatusName.Submitted);
 			var submissionId = AddSubmission(_userId, null, organisationExpressionOfInterest: true);
 			AddSubmissionComments(submissionId, commentId);
 
@@ -158,7 +158,7 @@ namespace Comments.Test.IntegrationTests.API.Export
 			const int consultationId = 1;
 
 			var locationId = AddLocation($"consultations://./consultation/{consultationId}", _context, "001.000.000.000");
-			var commentId = AddComment(locationId, commentText, false, _userId, (int)StatusName.Submitted);
+			var commentId = AddComment(locationId, commentText, _userId, (int)StatusName.Submitted);
 			var submissionId = AddSubmission(_userId, null, organisationExpressionOfInterest: false);
 			AddSubmissionComments(submissionId, commentId);
 
@@ -207,7 +207,7 @@ namespace Comments.Test.IntegrationTests.API.Export
 			var userId = Guid.NewGuid().ToString();
 
 			var locationId = AddLocation("consultations://./consultation/1", _context, "001.000.000.000");
-			var commentId = AddComment(locationId, "Submitted comment", false, userId, (int)StatusName.Submitted, _context);
+			var commentId = AddComment(locationId, "Submitted comment", userId, (int)StatusName.Submitted, _context);
 			var submissionId = AddSubmission(userId, _context);
 			AddSubmissionComments(submissionId, commentId, _context);
 
