@@ -13,7 +13,6 @@ namespace Comments.Models
 		public DateTime CreatedDate { get; set; }
 		public DateTime LastModifiedDate { get; set; }
 		public string LastModifiedByUserId { get; set; }
-		public bool IsDeleted { get; set; }
 		public int StatusId { get; set; }
 
 		public Question Question { get; set; }

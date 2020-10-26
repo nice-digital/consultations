@@ -150,8 +150,7 @@ namespace Comments.Models
 		public List<Answer> GetAllSubmittedAnswersForURI(string sourceURI)
 	    {
 			var answer = Answer.Where(a =>
-					a.StatusId == (int) StatusName.Submitted && (a.Question.Location.SourceURI.Contains($"{sourceURI}/") || a.Question.Location.SourceURI.Equals(sourceURI)) &&
-					a.IsDeleted == false)
+					a.StatusId == (int) StatusName.Submitted && (a.Question.Location.SourceURI.Contains($"{sourceURI}/") || a.Question.Location.SourceURI.Equals(sourceURI)))
 				.Include(q => q.Question)
 				.ThenInclude(l => l.Location)
 				.Include(sc => sc.SubmissionAnswer)
@@ -575,7 +574,7 @@ namespace Comments.Models
 	    public (int totalComments, int totalAnswers, int totalSubmissions) GetStatusData()
 	    {
 		    return (totalComments: Comment.IgnoreQueryFilters().Count(),
-			    totalAnswers: Answer.IgnoreQueryFilters().Count(a => a.IsDeleted == false),
+			    totalAnswers: Answer.IgnoreQueryFilters().Count(),
 			    totalSubmissions: Submission.IgnoreQueryFilters().Count());
 	    }
 
