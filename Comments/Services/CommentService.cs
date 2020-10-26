@@ -108,7 +108,7 @@ namespace Comments.Services
             if (!commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId))
                 return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to delete comment id: {commentId}, but it's not their comment"));
 
-			_context.Comment.RemoveRange(commentInDatabase);
+			_context.Comment.Remove(commentInDatabase);
 			
             return (rowsUpdated: _context.SaveChanges(), validate: null);
         }
