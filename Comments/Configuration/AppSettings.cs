@@ -37,8 +37,8 @@ namespace Comments.Configuration
 	        ReviewConfig = sp.GetService<IOptions<ReviewConfig>>().Value;
 	        StatusConfig = sp.GetService<IOptions<StatusConfig>>().Value;
 	        ConsultationListConfig = sp.GetService<IOptions<ConsultationListConfig>>().Value;
-			AuthenticationConfig = AuthenticationConfig ?? sp.GetService<IOptions<AuthenticationConfig>>().Value; //null coalesce here to support tests
-			GlobalNavConfig = sp.GetService<IOptions<GlobalNavConfig>>().Value;
+			AuthenticationConfig = AuthenticationConfig ?? sp.GetService<IOptions<AuthenticationConfig>>().Value; //null coalesces here to support tests
+			GlobalNavConfig = GlobalNavConfig ?? sp.GetService<IOptions<GlobalNavConfig>>().Value;
 		}
     }
 }

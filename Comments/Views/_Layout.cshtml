@@ -13,6 +13,7 @@ Note: this layout view is only ever shown when there's been an error rendering a
 	<link href="//fonts.googleapis.com/css?family=Lato:400,700,900" rel="stylesheet" type="text/css">
 	<meta name="viewport" content="width=device-width" />
 	<title>@ViewBag.Title</title>
+	<script src="@Model.CookieBannerScript"></script>
 </head>
 <body>
 	<div>
@@ -33,7 +34,8 @@ Note: this layout view is only ever shown when there's been an error rendering a
 					environment: "@Model.AccountsEnvironment",
 					links: [{ text: "@Model.LinkText", url: "@Model.LinkURL" }],
 					displayName: "@Model.DisplayName"
-				}
+				},
+				cookie: false
 			},
 			footer: true
 		};

@@ -6,906 +6,931 @@ Array [
   "",
   <aside
     className="Tutorial mt--0 pt--d pb--d"
->
+  >
     <div
-        className="container"
+      className="container"
     >
-        <button
-            className="buttonAsLink"
-            onClick={[Function]}
+      <button
+        className="buttonAsLink"
+        onClick={[Function]}
+      >
+        Hide how to comment
+      </button>
+      <div>
+        <h1
+          className="pt--c"
         >
-            Hide how to comment
-        </button>
-        <div>
-            <h1
-                className="pt--c"
+          How to comment
+        </h1>
+        <div
+          className="grid"
+        >
+          <div
+            data-g="12 sm:4"
+          >
+            <p
+              className="mt--0"
             >
-                How to comment
-            </h1>
-            <div
-                className="grid"
+              Use the icon next to chapters, subsections and recommendations to comment on them
+            </p>
+            <img
+              alt="Mouse pointer hovering over commenting icon"
+              className="Tutorial__buttonImage"
+              src="images/tutorial-1.png"
+            />
+          </div>
+          <div
+            data-g="12 sm:4"
+          >
+            <p
+              className="mt--0"
             >
-                <div
-                    data-g="12 sm:4"
-                >
-                    <p
-                        className="mt--0"
-                    >
-                        Use the icon next to chapters, subsections and recommendations to comment on them
-                    </p>
-                    <img
-                        alt="Mouse pointer hovering over commenting icon"
-                        className="Tutorial__buttonImage"
-                        src="images/tutorial-1.png"
-                    />
-                </div>
-                <div
-                    data-g="12 sm:4"
-                >
-                    <p
-                        className="mt--0"
-                    >
-                        You can also highlight a selection of text using the cursor to make a comment on it
-                    </p>
-                    <img
-                        alt="Animation showing an example of highlighting text and clicking comment"
-                        className="Tutorial__buttonImage"
-                        src="images/tutorial-2.gif"
-                    />
-                </div>
-                <div
-                    data-g="12 sm:4"
-                >
-                    <p
-                        className="mt--0"
-                    >
-                        Review your comments or answers before submitting your response
-                    </p>
-                    <img
-                        alt="Indication of how to get to the review page"
-                        className="Tutorial__buttonImage"
-                        src="images/tutorial-3.png"
-                    />
-                </div>
-            </div>
+              You can also highlight a selection of text using the cursor to make a comment on it
+            </p>
+            <img
+              alt="Animation showing an example of highlighting text and clicking comment"
+              className="Tutorial__buttonImage"
+              src="images/tutorial-2.gif"
+            />
+          </div>
+          <div
+            data-g="12 sm:4"
+          >
+            <p
+              className="mt--0"
+            >
+              Review your comments or answers before submitting your response
+            </p>
+            <img
+              alt="Indication of how to get to the review page"
+              className="Tutorial__buttonImage"
+              src="images/tutorial-3.png"
+            />
+          </div>
         </div>
+      </div>
     </div>
-</aside>,
+  </aside>,
   <div
     className="container"
->
+  >
     <div
-        className="grid"
+      className="grid"
     >
-        <div
-            data-g="12"
+      <div
+        data-g="12"
+      >
+        <nav
+          aria-label="Breadcrumbs"
         >
-            <nav
-                aria-label="Breadcrumbs"
+          <p
+            className="visually-hidden"
+          >
+            You are here:
+          </p>
+          <ol
+            className="breadcrumbs"
+            itemScope={true}
+            itemType="http://schema.org/BreadcrumbList"
+          >
+            <li
+              className="breadcrumbs__crumb"
+              itemProp="itemListElement"
+              itemScope={true}
+              itemType="http://schema.org/ListItem"
+              onClick={[Function]}
             >
-                <p
-                    className="visually-hidden"
+              <a
+                href="/"
+                itemProp="item"
+              >
+                <span
+                  itemProp="name"
                 >
-                    You are here:
+                  Home
+                </span>
+              </a>
+              <meta
+                content={0}
+                itemProp="position"
+              />
+            </li>
+            <li
+              className="breadcrumbs__crumb"
+              itemProp="itemListElement"
+              itemScope={true}
+              itemType="http://schema.org/ListItem"
+              onClick={[Function]}
+            >
+              <a
+                href="/guidance/indevelopment/gid-ta10232/consultation/"
+                itemProp="item"
+              >
+                <span
+                  itemProp="name"
+                >
+                  Consultation title
+                </span>
+              </a>
+              <meta
+                content={1}
+                itemProp="position"
+              />
+            </li>
+          </ol>
+        </nav>
+        <main
+          role="main"
+        >
+          <div
+            className="page-header"
+          >
+            Array [
+              <h1
+                className="page-header__heading mt--0"
+                data-qa-sel="changeable-page-header"
+              >
+                Unstable angina and NSTEMI
+              </h1>,
+              <div
+                className="mb--d"
+              >
+                <p>
+                  <span
+                    className="tag tag--open"
+                  >
+                    Open for comments
+                  </span>
+                   Open until
+                   
+                  <time
+                    dateTime={"2029-05-31T16:00:00.000Z"}
+                  >
+                    31 May 2029
+                  </time>
                 </p>
-                <ol
-                    className="breadcrumbs"
-                    itemScope={true}
-                    itemType="http://schema.org/BreadcrumbList"
-                >
-                    <li
-                        className="breadcrumbs__crumb"
-                        itemProp="itemListElement"
-                        itemScope={true}
-                        itemType="http://schema.org/ListItem"
-                        onClick={[Function]}
-                    >
-                        <a
-                            href="/"
-                            itemProp="item"
-                        >
-                            <span
-                                itemProp="name"
-                            >
-                                Home
-                            </span>
-                        </a>
-                        <meta
-                            content={0}
-                            itemProp="position"
-                        />
-                    </li>
-                    <li
-                        className="breadcrumbs__crumb"
-                        itemProp="itemListElement"
-                        itemScope={true}
-                        itemType="http://schema.org/ListItem"
-                        onClick={[Function]}
-                    >
-                        <a
-                            href="/guidance/indevelopment/gid-ta10232/consultation/"
-                            itemProp="item"
-                        >
-                            <span
-                                itemProp="name"
-                            >
-                                Consultation title
-                            </span>
-                        </a>
-                        <meta
-                            content={1}
-                            itemProp="position"
-                        />
-                    </li>
-                </ol>
-            </nav>
-            <main
-                role="main"
+              </div>,
+            ]
+            <button
+              className="btn btn--cta"
+              data-gtm="comment-on-document-button"
+              data-qa-sel="comment-on-consultation-document"
+              onClick={[Function]}
             >
-                <div
-                    className="page-header"
+              Comment on this document
+            </button>
+          </div>
+          <button
+            className="screenreader-button"
+            onClick={[Function]}
+          >
+            Skip navigation
+          </button>
+          <div
+            className="grid"
+          >
+            <div
+              className="navigationColumn"
+              data-g="12 md:3"
+            >
+              <nav
+                aria-label="Chapters in this document"
+                className="stacked-nav"
+              >
+                <h2
+                  className="stacked-nav__root"
                 >
-                    <undefined />
-                    <button
-                        className="btn btn--cta"
-                        data-gtm="comment-on-document-button"
-                        data-qa-sel="comment-on-consultation-document"
-                        onClick={[Function]}
+                  Chapters in this document
+                </h2>
+                <ul
+                  className="stacked-nav__list"
+                >
+                  <li
+                    className="stacked-nav__list-item"
+                    data-qa-sel="nav-list-item"
+                  >
+                    <a
+                      aria-current="page"
+                      href="/1/1/introduction"
+                      onClick={[Function]}
                     >
-                        Comment on this document
-                    </button>
-                </div>
-                <button
-                    className="screenreader-button"
+                      <span
+                        className="pl--0"
+                        data-g="10"
+                      >
+                        Introduction
+                      </span>
+                    </a>
+                  </li>
+                  <li
+                    className="stacked-nav__list-item"
+                    data-qa-sel="nav-list-item"
+                  >
+                    <a
+                      aria-current={null}
+                      href="/1/1/patient-centred-care"
+                      onClick={[Function]}
+                    >
+                      <span
+                        className="pl--0"
+                        data-g="10"
+                      >
+                        Patient-centred care
+                      </span>
+                    </a>
+                  </li>
+                  <li
+                    className="stacked-nav__list-item"
+                    data-qa-sel="nav-list-item"
+                  >
+                    <a
+                      aria-current={null}
+                      href="/1/1/key-priorities-for-implementation"
+                      onClick={[Function]}
+                    >
+                      <span
+                        className="pl--0"
+                        data-g="10"
+                      >
+                        Key priorities for implementation
+                      </span>
+                    </a>
+                  </li>
+                  <li
+                    className="stacked-nav__list-item"
+                    data-qa-sel="nav-list-item"
+                  >
+                    <a
+                      aria-current={null}
+                      href="/1/1/guidance"
+                      onClick={[Function]}
+                    >
+                      <span
+                        className="pl--0"
+                        data-g="10"
+                      >
+                        1 Guidance
+                      </span>
+                    </a>
+                  </li>
+                  <li
+                    className="stacked-nav__list-item"
+                    data-qa-sel="nav-list-item"
+                  >
+                    <a
+                      aria-current={null}
+                      href="/1/1/notes-on-the-scope-of-the-guidance"
+                      onClick={[Function]}
+                    >
+                      <span
+                        className="pl--0"
+                        data-g="10"
+                      >
+                        2 Notes on the scope of the guidance
+                      </span>
+                    </a>
+                  </li>
+                  <li
+                    className="stacked-nav__list-item"
+                    data-qa-sel="nav-list-item"
+                  >
+                    <a
+                      aria-current={null}
+                      href="/1/1/implementation"
+                      onClick={[Function]}
+                    >
+                      <span
+                        className="pl--0"
+                        data-g="10"
+                      >
+                        3 Implementation
+                      </span>
+                    </a>
+                  </li>
+                  <li
+                    className="stacked-nav__list-item"
+                    data-qa-sel="nav-list-item"
+                  >
+                    <a
+                      aria-current={null}
+                      href="/1/1/research-recommendations"
+                      onClick={[Function]}
+                    >
+                      <span
+                        className="pl--0"
+                        data-g="10"
+                      >
+                        4 Research recommendations
+                      </span>
+                    </a>
+                  </li>
+                  <li
+                    className="stacked-nav__list-item"
+                    data-qa-sel="nav-list-item"
+                  >
+                    <a
+                      aria-current={null}
+                      href="/1/1/other-versions-of-this-guideline"
+                      onClick={[Function]}
+                    >
+                      <span
+                        className="pl--0"
+                        data-g="10"
+                      >
+                        5 Other versions of this guideline
+                      </span>
+                    </a>
+                  </li>
+                  <li
+                    className="stacked-nav__list-item"
+                    data-qa-sel="nav-list-item"
+                  >
+                    <a
+                      aria-current={null}
+                      href="/1/1/related-nice-guidance"
+                      onClick={[Function]}
+                    >
+                      <span
+                        className="pl--0"
+                        data-g="10"
+                      >
+                        6 Related NICE guidance
+                      </span>
+                    </a>
+                  </li>
+                  <li
+                    className="stacked-nav__list-item"
+                    data-qa-sel="nav-list-item"
+                  >
+                    <a
+                      aria-current={null}
+                      href="/1/1/updating-the-guideline"
+                      onClick={[Function]}
+                    >
+                      <span
+                        className="pl--0"
+                        data-g="10"
+                      >
+                        7 Updating the guideline
+                      </span>
+                    </a>
+                  </li>
+                  <li
+                    className="stacked-nav__list-item"
+                    data-qa-sel="nav-list-item"
+                  >
+                    <a
+                      aria-current={null}
+                      href="/1/1/appendix-a-the-guideline-development-group-and-nice-project-team"
+                      onClick={[Function]}
+                    >
+                      <span
+                        className="pl--0"
+                        data-g="10"
+                      >
+                        Appendix A: The Guideline Development Group and NICE project team
+                      </span>
+                    </a>
+                  </li>
+                  <li
+                    className="stacked-nav__list-item"
+                    data-qa-sel="nav-list-item"
+                  >
+                    <a
+                      aria-current={null}
+                      href="/1/1/appendix-b-the-guideline-review-panel"
+                      onClick={[Function]}
+                    >
+                      <span
+                        className="pl--0"
+                        data-g="10"
+                      >
+                        Appendix B: The Guideline Review Panel
+                      </span>
+                    </a>
+                  </li>
+                  <li
+                    className="stacked-nav__list-item"
+                    data-qa-sel="nav-list-item"
+                  >
+                    <a
+                      aria-current={null}
+                      href="/1/1/appendix-c-the-algorithm"
+                      onClick={[Function]}
+                    >
+                      <span
+                        className="pl--0"
+                        data-g="10"
+                      >
+                        Appendix C: The algorithm
+                      </span>
+                    </a>
+                  </li>
+                  <li
+                    className="stacked-nav__list-item"
+                    data-qa-sel="nav-list-item"
+                  >
+                    <a
+                      aria-current={null}
+                      href="/1/1/changes-after-publication"
+                      onClick={[Function]}
+                    >
+                      <span
+                        className="pl--0"
+                        data-g="10"
+                      >
+                        Changes after publication
+                      </span>
+                    </a>
+                  </li>
+                  <li
+                    className="stacked-nav__list-item"
+                    data-qa-sel="nav-list-item"
+                  >
+                    <a
+                      aria-current={null}
+                      href="/1/1/about-this-guideline"
+                      onClick={[Function]}
+                    >
+                      <span
+                        className="pl--0"
+                        data-g="10"
+                      >
+                        About this guideline
+                      </span>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+              <nav
+                aria-label="Other consultation documents you can comment on"
+                className="stacked-nav"
+              >
+                <h2
+                  className="stacked-nav__root"
+                >
+                  Other consultation documents you can comment on
+                </h2>
+                <ul
+                  className="stacked-nav__list"
+                >
+                  <li
+                    className="stacked-nav__list-item"
+                    data-qa-sel="nav-list-item"
+                  >
+                    <a
+                      aria-current={null}
+                      href="/1/2/overview"
+                      onClick={[Function]}
+                    >
+                      <span
+                        className="pl--0"
+                        data-g="10"
+                      >
+                        Sinusitis (acute): antimicrobial prescribing
+                      </span>
+                    </a>
+                  </li>
+                  <li
+                    className="stacked-nav__list-item"
+                    data-qa-sel="nav-list-item"
+                  >
+                    <a
+                      aria-current={null}
+                      href="/1/3/product-intros-056fc427-7484-4d78-8d55-0070aaa12061-2-2docx"
+                      onClick={[Function]}
+                    >
+                      <span
+                        className="pl--0"
+                        data-g="10"
+                      >
+                        Download Document
+                      </span>
+                    </a>
+                  </li>
+                  <li
+                    className="stacked-nav__list-item"
+                    data-qa-sel="nav-list-item"
+                  >
+                    <a
+                      aria-current={null}
+                      href="/1/4/messaging-service-restartdocx"
+                      onClick={[Function]}
+                    >
+                      <span
+                        className="pl--0"
+                        data-g="10"
+                      >
+                        Download Document
+                      </span>
+                    </a>
+                  </li>
+                  <li
+                    className="stacked-nav__list-item"
+                    data-qa-sel="nav-list-item"
+                  >
+                    <a
+                      aria-current={null}
+                      href="/1/5/introduction"
+                      onClick={[Function]}
+                    >
+                      <span
+                        className="pl--0"
+                        data-g="10"
+                      >
+                        Unstable angina and NSTEMI
+                      </span>
+                    </a>
+                  </li>
+                  <li
+                    className="stacked-nav__list-item"
+                    data-qa-sel="nav-list-item"
+                  >
+                    <a
+                      aria-current={null}
+                      href="/1/6/messaging-service-restartdocx"
+                      onClick={[Function]}
+                    >
+                      <span
+                        className="pl--0"
+                        data-g="10"
+                      >
+                        Download Document
+                      </span>
+                    </a>
+                  </li>
+                  <li
+                    className="stacked-nav__list-item"
+                    data-qa-sel="nav-list-item"
+                  >
+                    <a
+                      aria-current={null}
+                      href="/1/7/supervisor-self-service-nice-guide-2018docx"
+                      onClick={[Function]}
+                    >
+                      <span
+                        className="pl--0"
+                        data-g="10"
+                      >
+                        Download Document
+                      </span>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+            <div
+              className="inPageNavColumn"
+              data-g="12 md:3 md:push:6"
+            >
+              <nav
+                aria-labelledby="inpagenav-title"
+                className="in-page-nav"
+              >
+                <h2
+                  className="in-page-nav__title"
+                  id="inpagenav-title"
+                >
+                  On this page
+                </h2>
+                <ol
+                  className="in-page-nav__list"
+                  role="menubar"
+                >
+                  <li
+                    className="in-page-nav__item"
                     onClick={[Function]}
-                >
-                    Skip navigation
-                </button>
+                    role="presentation"
+                  >
+                    <a
+                      aria-current={null}
+                      href="/#introduction"
+                      onClick={[Function]}
+                      role="menuitem"
+                    >
+                      Introduction
+                    </a>
+                  </li>
+                  <li
+                    className="in-page-nav__item"
+                    onClick={[Function]}
+                    role="presentation"
+                  >
+                    <a
+                      aria-current={null}
+                      href="/#provision-of-information"
+                      onClick={[Function]}
+                      role="menuitem"
+                    >
+                      1.1 Provision of information
+                    </a>
+                  </li>
+                  <li
+                    className="in-page-nav__item"
+                    onClick={[Function]}
+                    role="presentation"
+                  >
+                    <a
+                      aria-current={null}
+                      href="/#assessment-of-a-patients-risk-of-future-adverse-cardiovascular-events"
+                      onClick={[Function]}
+                      role="menuitem"
+                    >
+                      1.2 Assessment of a patient's risk of future adverse cardiovascular events
+                    </a>
+                  </li>
+                  <li
+                    className="in-page-nav__item"
+                    onClick={[Function]}
+                    role="presentation"
+                  >
+                    <a
+                      aria-current={null}
+                      href="/#antiplatelet-therapy"
+                      onClick={[Function]}
+                      role="menuitem"
+                    >
+                      1.3 Antiplatelet therapy
+                    </a>
+                  </li>
+                  <li
+                    className="in-page-nav__item"
+                    onClick={[Function]}
+                    role="presentation"
+                  >
+                    <a
+                      aria-current={null}
+                      href="/#antithrombin-therapy"
+                      onClick={[Function]}
+                      role="menuitem"
+                    >
+                      1.4 Antithrombin therapy
+                    </a>
+                  </li>
+                  <li
+                    className="in-page-nav__item"
+                    onClick={[Function]}
+                    role="presentation"
+                  >
+                    <a
+                      aria-current={null}
+                      href="/#management-strategies"
+                      onClick={[Function]}
+                      role="menuitem"
+                    >
+                      1.5 Management strategies
+                    </a>
+                  </li>
+                </ol>
+              </nav>
+            </div>
+            <div
+              className="documentColumn"
+              data-g="12 md:6 md:pull:3"
+            >
+              <div
+                className="document-comment-container "
+                id="content-start"
+              >
                 <div
-                    className="grid"
+                  onMouseUp={[Function]}
                 >
-                    <div
-                        className="navigationColumn"
-                        data-g="12 md:3"
+                  <div
+                    className="selection-container unselectable"
+                    style={
+                      Object {
+                        "display": "none",
+                        "left": undefined,
+                        "top": undefined,
+                      }
+                    }
+                  >
+                    <button
+                      className="btn"
+                      onClick={[Function]}
                     >
-                        <nav
-                            aria-label="Chapters in this document"
-                            className="stacked-nav"
-                        >
-                            <h2
-                                className="stacked-nav__root"
-                            >
-                                Chapters in this document
-                            </h2>
-                            <ul
-                                className="stacked-nav__list"
-                            >
-                                <li
-                                    className="stacked-nav__list-item"
-                                    data-qa-sel="nav-list-item"
-                                >
-                                    <a
-                                        aria-current="page"
-                                        href="/1/1/introduction"
-                                        onClick={[Function]}
-                                    >
-                                        <span
-                                            className="pl--0"
-                                            data-g="10"
-                                        >
-                                            Introduction
-                                        </span>
-                                    </a>
-                                </li>
-                                <li
-                                    className="stacked-nav__list-item"
-                                    data-qa-sel="nav-list-item"
-                                >
-                                    <a
-                                        aria-current={null}
-                                        href="/1/1/patient-centred-care"
-                                        onClick={[Function]}
-                                    >
-                                        <span
-                                            className="pl--0"
-                                            data-g="10"
-                                        >
-                                            Patient-centred care
-                                        </span>
-                                    </a>
-                                </li>
-                                <li
-                                    className="stacked-nav__list-item"
-                                    data-qa-sel="nav-list-item"
-                                >
-                                    <a
-                                        aria-current={null}
-                                        href="/1/1/key-priorities-for-implementation"
-                                        onClick={[Function]}
-                                    >
-                                        <span
-                                            className="pl--0"
-                                            data-g="10"
-                                        >
-                                            Key priorities for implementation
-                                        </span>
-                                    </a>
-                                </li>
-                                <li
-                                    className="stacked-nav__list-item"
-                                    data-qa-sel="nav-list-item"
-                                >
-                                    <a
-                                        aria-current={null}
-                                        href="/1/1/guidance"
-                                        onClick={[Function]}
-                                    >
-                                        <span
-                                            className="pl--0"
-                                            data-g="10"
-                                        >
-                                            1 Guidance
-                                        </span>
-                                    </a>
-                                </li>
-                                <li
-                                    className="stacked-nav__list-item"
-                                    data-qa-sel="nav-list-item"
-                                >
-                                    <a
-                                        aria-current={null}
-                                        href="/1/1/notes-on-the-scope-of-the-guidance"
-                                        onClick={[Function]}
-                                    >
-                                        <span
-                                            className="pl--0"
-                                            data-g="10"
-                                        >
-                                            2 Notes on the scope of the guidance
-                                        </span>
-                                    </a>
-                                </li>
-                                <li
-                                    className="stacked-nav__list-item"
-                                    data-qa-sel="nav-list-item"
-                                >
-                                    <a
-                                        aria-current={null}
-                                        href="/1/1/implementation"
-                                        onClick={[Function]}
-                                    >
-                                        <span
-                                            className="pl--0"
-                                            data-g="10"
-                                        >
-                                            3 Implementation
-                                        </span>
-                                    </a>
-                                </li>
-                                <li
-                                    className="stacked-nav__list-item"
-                                    data-qa-sel="nav-list-item"
-                                >
-                                    <a
-                                        aria-current={null}
-                                        href="/1/1/research-recommendations"
-                                        onClick={[Function]}
-                                    >
-                                        <span
-                                            className="pl--0"
-                                            data-g="10"
-                                        >
-                                            4 Research recommendations
-                                        </span>
-                                    </a>
-                                </li>
-                                <li
-                                    className="stacked-nav__list-item"
-                                    data-qa-sel="nav-list-item"
-                                >
-                                    <a
-                                        aria-current={null}
-                                        href="/1/1/other-versions-of-this-guideline"
-                                        onClick={[Function]}
-                                    >
-                                        <span
-                                            className="pl--0"
-                                            data-g="10"
-                                        >
-                                            5 Other versions of this guideline
-                                        </span>
-                                    </a>
-                                </li>
-                                <li
-                                    className="stacked-nav__list-item"
-                                    data-qa-sel="nav-list-item"
-                                >
-                                    <a
-                                        aria-current={null}
-                                        href="/1/1/related-nice-guidance"
-                                        onClick={[Function]}
-                                    >
-                                        <span
-                                            className="pl--0"
-                                            data-g="10"
-                                        >
-                                            6 Related NICE guidance
-                                        </span>
-                                    </a>
-                                </li>
-                                <li
-                                    className="stacked-nav__list-item"
-                                    data-qa-sel="nav-list-item"
-                                >
-                                    <a
-                                        aria-current={null}
-                                        href="/1/1/updating-the-guideline"
-                                        onClick={[Function]}
-                                    >
-                                        <span
-                                            className="pl--0"
-                                            data-g="10"
-                                        >
-                                            7 Updating the guideline
-                                        </span>
-                                    </a>
-                                </li>
-                                <li
-                                    className="stacked-nav__list-item"
-                                    data-qa-sel="nav-list-item"
-                                >
-                                    <a
-                                        aria-current={null}
-                                        href="/1/1/appendix-a-the-guideline-development-group-and-nice-project-team"
-                                        onClick={[Function]}
-                                    >
-                                        <span
-                                            className="pl--0"
-                                            data-g="10"
-                                        >
-                                            Appendix A: The Guideline Development Group and NICE project team
-                                        </span>
-                                    </a>
-                                </li>
-                                <li
-                                    className="stacked-nav__list-item"
-                                    data-qa-sel="nav-list-item"
-                                >
-                                    <a
-                                        aria-current={null}
-                                        href="/1/1/appendix-b-the-guideline-review-panel"
-                                        onClick={[Function]}
-                                    >
-                                        <span
-                                            className="pl--0"
-                                            data-g="10"
-                                        >
-                                            Appendix B: The Guideline Review Panel
-                                        </span>
-                                    </a>
-                                </li>
-                                <li
-                                    className="stacked-nav__list-item"
-                                    data-qa-sel="nav-list-item"
-                                >
-                                    <a
-                                        aria-current={null}
-                                        href="/1/1/appendix-c-the-algorithm"
-                                        onClick={[Function]}
-                                    >
-                                        <span
-                                            className="pl--0"
-                                            data-g="10"
-                                        >
-                                            Appendix C: The algorithm
-                                        </span>
-                                    </a>
-                                </li>
-                                <li
-                                    className="stacked-nav__list-item"
-                                    data-qa-sel="nav-list-item"
-                                >
-                                    <a
-                                        aria-current={null}
-                                        href="/1/1/changes-after-publication"
-                                        onClick={[Function]}
-                                    >
-                                        <span
-                                            className="pl--0"
-                                            data-g="10"
-                                        >
-                                            Changes after publication
-                                        </span>
-                                    </a>
-                                </li>
-                                <li
-                                    className="stacked-nav__list-item"
-                                    data-qa-sel="nav-list-item"
-                                >
-                                    <a
-                                        aria-current={null}
-                                        href="/1/1/about-this-guideline"
-                                        onClick={[Function]}
-                                    >
-                                        <span
-                                            className="pl--0"
-                                            data-g="10"
-                                        >
-                                            About this guideline
-                                        </span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                        <nav
-                            aria-label="Other consultation documents you can comment on"
-                            className="stacked-nav"
-                        >
-                            <h2
-                                className="stacked-nav__root"
-                            >
-                                Other consultation documents you can comment on
-                            </h2>
-                            <ul
-                                className="stacked-nav__list"
-                            >
-                                <li
-                                    className="stacked-nav__list-item"
-                                    data-qa-sel="nav-list-item"
-                                >
-                                    <a
-                                        aria-current={null}
-                                        href="/1/2/overview"
-                                        onClick={[Function]}
-                                    >
-                                        <span
-                                            className="pl--0"
-                                            data-g="10"
-                                        >
-                                            Sinusitis (acute): antimicrobial prescribing
-                                        </span>
-                                    </a>
-                                </li>
-                                <li
-                                    className="stacked-nav__list-item"
-                                    data-qa-sel="nav-list-item"
-                                >
-                                    <a
-                                        aria-current={null}
-                                        href="/1/3/product-intros-056fc427-7484-4d78-8d55-0070aaa12061-2-2docx"
-                                        onClick={[Function]}
-                                    >
-                                        <span
-                                            className="pl--0"
-                                            data-g="10"
-                                        >
-                                            Download Document
-                                        </span>
-                                    </a>
-                                </li>
-                                <li
-                                    className="stacked-nav__list-item"
-                                    data-qa-sel="nav-list-item"
-                                >
-                                    <a
-                                        aria-current={null}
-                                        href="/1/4/messaging-service-restartdocx"
-                                        onClick={[Function]}
-                                    >
-                                        <span
-                                            className="pl--0"
-                                            data-g="10"
-                                        >
-                                            Download Document
-                                        </span>
-                                    </a>
-                                </li>
-                                <li
-                                    className="stacked-nav__list-item"
-                                    data-qa-sel="nav-list-item"
-                                >
-                                    <a
-                                        aria-current={null}
-                                        href="/1/5/introduction"
-                                        onClick={[Function]}
-                                    >
-                                        <span
-                                            className="pl--0"
-                                            data-g="10"
-                                        >
-                                            Unstable angina and NSTEMI
-                                        </span>
-                                    </a>
-                                </li>
-                                <li
-                                    className="stacked-nav__list-item"
-                                    data-qa-sel="nav-list-item"
-                                >
-                                    <a
-                                        aria-current={null}
-                                        href="/1/6/messaging-service-restartdocx"
-                                        onClick={[Function]}
-                                    >
-                                        <span
-                                            className="pl--0"
-                                            data-g="10"
-                                        >
-                                            Download Document
-                                        </span>
-                                    </a>
-                                </li>
-                                <li
-                                    className="stacked-nav__list-item"
-                                    data-qa-sel="nav-list-item"
-                                >
-                                    <a
-                                        aria-current={null}
-                                        href="/1/7/supervisor-self-service-nice-guide-2018docx"
-                                        onClick={[Function]}
-                                    >
-                                        <span
-                                            className="pl--0"
-                                            data-g="10"
-                                        >
-                                            Download Document
-                                        </span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                    <div
-                        className="inPageNavColumn"
-                        data-g="12 md:3 md:push:6"
+                      <span
+                        aria-hidden="true"
+                        className="icon icon--comment unselectable"
+                      />
+                        Comment
+                    </button>
+                  </div>
+                  <div
+                    className="chapter"
+                    title="Introduction"
+                    xmlns="http://www.w3.org/1999/xhtml"
+                  >
+                    <h2
+                      className="title"
                     >
-                        <nav
-                            aria-labelledby="inpagenav-title"
-                            className="in-page-nav"
+                      <button
+                        className="document-comment-container__commentButton"
+                        data-gtm="button"
+                        data-gtm-action="Clicked"
+                        data-gtm-category="Consultation comments page"
+                        data-gtm-label="Comment on chapter"
+                        data-qa-sel="in-text-comment-button"
+                        onClick={[Function]}
+                        tabIndex={0}
+                        title="Comment on chapter"
+                      >
+                        <span
+                          aria-hidden="true"
+                          className="icon icon--comment"
+                        />
+                        <span
+                          className="visually-hidden"
                         >
-                            <h2
-                                className="in-page-nav__title"
-                                id="inpagenav-title"
-                            >
-                                On this page
-                            </h2>
-                            <ol
-                                className="in-page-nav__list"
-                                role="menubar"
-                            >
-                                <li
-                                    className="in-page-nav__item"
-                                    onClick={[Function]}
-                                    role="presentation"
-                                >
-                                    <a
-                                        aria-current={null}
-                                        href="/#introduction"
-                                        onClick={[Function]}
-                                        role="menuitem"
-                                    >
-                                        Introduction
-                                    </a>
-                                </li>
-                                <li
-                                    className="in-page-nav__item"
-                                    onClick={[Function]}
-                                    role="presentation"
-                                >
-                                    <a
-                                        aria-current={null}
-                                        href="/#provision-of-information"
-                                        onClick={[Function]}
-                                        role="menuitem"
-                                    >
-                                        1.1 Provision of information
-                                    </a>
-                                </li>
-                                <li
-                                    className="in-page-nav__item"
-                                    onClick={[Function]}
-                                    role="presentation"
-                                >
-                                    <a
-                                        aria-current={null}
-                                        href="/#assessment-of-a-patients-risk-of-future-adverse-cardiovascular-events"
-                                        onClick={[Function]}
-                                        role="menuitem"
-                                    >
-                                        1.2 Assessment of a patient's risk of future adverse cardiovascular events
-                                    </a>
-                                </li>
-                                <li
-                                    className="in-page-nav__item"
-                                    onClick={[Function]}
-                                    role="presentation"
-                                >
-                                    <a
-                                        aria-current={null}
-                                        href="/#antiplatelet-therapy"
-                                        onClick={[Function]}
-                                        role="menuitem"
-                                    >
-                                        1.3 Antiplatelet therapy
-                                    </a>
-                                </li>
-                                <li
-                                    className="in-page-nav__item"
-                                    onClick={[Function]}
-                                    role="presentation"
-                                >
-                                    <a
-                                        aria-current={null}
-                                        href="/#antithrombin-therapy"
-                                        onClick={[Function]}
-                                        role="menuitem"
-                                    >
-                                        1.4 Antithrombin therapy
-                                    </a>
-                                </li>
-                                <li
-                                    className="in-page-nav__item"
-                                    onClick={[Function]}
-                                    role="presentation"
-                                >
-                                    <a
-                                        aria-current={null}
-                                        href="/#management-strategies"
-                                        onClick={[Function]}
-                                        role="menuitem"
-                                    >
-                                        1.5 Management strategies
-                                    </a>
-                                </li>
-                            </ol>
-                        </nav>
-                    </div>
+                          Comment on 
+                          chapter
+                          : 
+                          Introduction 
+                        </span>
+                      </button>
+                      <a
+                        className="annotator-chapter"
+                        data-heading-type="chapter"
+                        id="introduction"
+                        style={
+                          Object {
+                            "position": "relative",
+                          }
+                        }
+                        title=""
+                        xmlns=""
+                      >
+                        Introduction 
+                        <span
+                          className="annotator-adder"
+                        />
+                      </a>
+                    </h2>
                     <div
-                        className="documentColumn"
-                        data-g="12 md:6 md:pull:3"
+                      className="informaltable"
                     >
-                        <div
-                            className="document-comment-container "
-                            id="content-start"
-                        >
-                            <div
-                                onMouseUp={[Function]}
+                      <table
+                        border="1"
+                      >
+                        <colgroup>
+                          <col />
+                        </colgroup>
+                        <tbody>
+                          <tr>
+                            <td
+                              align="left"
+                              valign="top"
                             >
-                                <div
-                                    className="selection-container unselectable"
-                                    style={
-                                        Object {
-                                            "display": "none",
-                                            "left": undefined,
-                                            "top": undefined,
-                                          }
-                                    }
+                              <p>
+                                This guideline updates and replaces recommendations for the early management of unstable angina and NSTEMI from NICE technology appraisal guidance 
+                                <a
+                                  className="link"
+                                  href="http://guidance.nice.org.uk/TA47"
+                                  target="_top"
                                 >
-                                    <button
-                                        className="btn"
-                                        onClick={[Function]}
-                                    >
-                                        <span
-                                            aria-hidden="true"
-                                            className="icon icon--comment unselectable"
-                                        />
-                                          Comment
-                                    </button>
-                                </div>
-                                <div
-                                    className="chapter"
-                                    title="Introduction"
-                                    xmlns="http://www.w3.org/1999/xhtml"
+                                  47
+                                </a>
+                                 and 
+                                <a
+                                  className="link"
+                                  href="http://guidance.nice.org.uk/TA80"
+                                  target="_top"
                                 >
-                                    <h2
-                                        className="title"
-                                    >
-                                        <button
-                                            className="document-comment-container__commentButton"
-                                            data-gtm="button"
-                                            data-gtm-action="Clicked"
-                                            data-gtm-category="Consultation comments page"
-                                            data-gtm-label="Comment on chapter"
-                                            data-qa-sel="in-text-comment-button"
-                                            onClick={[Function]}
-                                            tabIndex={0}
-                                            title="Comment on chapter"
-                                        >
-                                            <span
-                                                aria-hidden="true"
-                                                className="icon icon--comment"
-                                            />
-                                            <span
-                                                className="visually-hidden"
-                                            >
-                                                Comment on 
-                                                chapter
-                                                : 
-                                                Introduction 
-                                            </span>
-                                        </button>
-                                        <a
-                                            className="annotator-chapter"
-                                            data-heading-type="chapter"
-                                            id="introduction"
-                                            style={
-                                                Object {
-                                                    "position": "relative",
-                                                  }
-                                            }
-                                            title=""
-                                            xmlns=""
-                                        >
-                                            Introduction 
-                                            <span
-                                                className="annotator-adder"
-                                            />
-                                        </a>
-                                    </h2>
-                                    <div
-                                        className="informaltable"
-                                    >
-                                        <table
-                                            border="1"
-                                        >
-                                            <colgroup>
-                                                <col />
-                                            </colgroup>
-                                            <tbody>
-                                                <tr>
-                                                    <td
-                                                        align="left"
-                                                        valign="top"
-                                                    >
-                                                        <p>
-                                                            This guideline updates and replaces recommendations for the early management of unstable angina and NSTEMI from NICE technology appraisal guidance 
-                                                            <a
-                                                                className="link"
-                                                                href="http://guidance.nice.org.uk/TA47"
-                                                                target="_top"
-                                                            >
-                                                                47
-                                                            </a>
-                                                             and 
-                                                            <a
-                                                                className="link"
-                                                                href="http://guidance.nice.org.uk/TA80"
-                                                                target="_top"
-                                                            >
-                                                                80
-                                                            </a>
-                                                            .
-                                                        </p>
-                                                        <p>
-                                                            Recommendation 1.3.6 has been replaced by recommendation 1.3.18 in 
-                                                            <a
-                                                                className="link"
-                                                                href="http://guidance.nice.org.uk/cg172"
-                                                                target="_top"
-                                                            >
-                                                                MI – secondary prevention: Secondary prevention in primary and secondary care for patients following a myocardial infarction
-                                                            </a>
-                                                            .
-                                                        </p>
-                                                        <p>
-                                                            Recommendation 1.5.11 has been updated to take into account people with a learning disability.
-                                                        </p>
-                                                        <p>
-                                                            See 
-                                                            <a
-                                                                className="link"
-                                                                href="http://publications.nice.org.uk/unstable-angina-and-nstemi-cg94/changes-after-publication"
-                                                                target="_top"
-                                                            >
-                                                                Changes after publication
-                                                            </a>
-                                                             for details.
-                                                        </p>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <p>
-                                        The term 'acute coronary syndromes' encompasses a range of conditions from unstable angina to ST-segment-elevation myocardial infarction (STEMI), arising from thrombus formation on an atheromatous plaque. This guideline addresses the early management of unstable angina and non-ST-segment-elevation myocardial infarction (NSTEMI) once a firm diagnosis has been made and before discharge from hospital. If untreated, the prognosis is poor and mortality high, particularly in people who have had myocardial damage. Appropriate triage, risk assessment and timely use of acute pharmacological or invasive interventions are critical for the prevention of future adverse cardiovascular events (myocardial infarction, stroke, repeat revascularisation or death). The guideline does not cover the management of STEMI or specific complications of unstable angina and NSTEMI such as cardiac arrest or acute heart failure. Assessment and classification of people presenting with undifferentiated chest pain are covered in 'Chest pain of recent onset' (NICE clinical guideline 95)
-                                        <sup>
-                                            [
-                                            <a
-                                                aria-current={null}
-                                                className="footnote"
-                                                data-identified-as="internal-link"
-                                                href="/#ftn.footnote_1"
-                                                id="footnote_1"
-                                                name="footnote_1"
-                                                onClick={[Function]}
-                                                rel="internal"
-                                                tabIndex="0"
-                                            >
-                                                1
-                                            </a>
-                                            ]
-                                        </sup>
-                                        .
-                                    </p>
-                                    <p>
-                                        The guideline will assume that prescribers will use a drug's summary of product characteristics to inform decisions made with individual patients.
-                                    </p>
-                                    <p>
-                                        This guideline recommends some drugs for indications for which they do not have a UK marketing authorisation at the date of publication, if there is good evidence to support that use. Unlicensed or off-label use is indicated by a footnote. 
-                                    </p>
-                                    <p>
-                                        Throughout the guideline, the term 'angiography' refers to invasive angiography.
-                                    </p>
-                                    <p>
-                                        Recommendations 1.3.4 to 1.3.8 update and replace recommendations for the early management of unstable angina and NSTEMI from '
-                                        <a
-                                            className="link"
-                                            href="http://guidance.nice.org.uk/TA80"
-                                            target="_top"
-                                        >
-                                            Clopidogrel in the treatment of non-ST-segment-elevation acute coronary syndrome
-                                        </a>
-                                        ', NICE technology appraisal guidance 80 (TA 80)
-                                    </p>
-                                    <p>
-                                        Recommendations 1.3.9 to 1.3.11 update and replace recommendations for the early management of unstable angina and NSTEMI from '
-                                        <a
-                                            className="link"
-                                            href="http://guidance.nice.org.uk/TA47"
-                                            target="_top"
-                                        >
-                                            Guidance on the use of glycoprotein IIb/IIIa inhibitors in the treatment of acute coronary syndrome
-                                        </a>
-                                        ', NICE technology appraisal guidance 47 (TA 47).
-                                    </p>
-                                    <div
-                                        className="footnotes"
-                                    >
-                                        <br />
-                                        <hr
-                                            align="left"
-                                            width="100"
-                                        />
-                                        <div
-                                            className="footnote"
-                                        >
-                                            <p>
-                                                <sup>
-                                                    [
-                                                    <a
-                                                        aria-current={null}
-                                                        className="para"
-                                                        data-identified-as="internal-link"
-                                                        href="/#footnote_1"
-                                                        id="ftn.footnote_1"
-                                                        name="ftn.footnote_1"
-                                                        onClick={[Function]}
-                                                        rel="internal"
-                                                        tabIndex="0"
-                                                    >
-                                                        1
-                                                    </a>
-                                                    ] 
-                                                </sup>
-                                                 More information on 'Chest pain of recent onset' (
-                                                <a
-                                                    className="link"
-                                                    href="http://www.nice.org.uk/guidance/CG95"
-                                                    target="_top"
-                                                >
-                                                    NICE clinical guideline 95
-                                                </a>
-                                                ) is available. 
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                  80
+                                </a>
+                                .
+                              </p>
+                              <p>
+                                Recommendation 1.3.6 has been replaced by recommendation 1.3.18 in 
+                                <a
+                                  className="link"
+                                  href="http://guidance.nice.org.uk/cg172"
+                                  target="_top"
+                                >
+                                  MI – secondary prevention: Secondary prevention in primary and secondary care for patients following a myocardial infarction
+                                </a>
+                                .
+                              </p>
+                              <p>
+                                Recommendation 1.5.11 has been updated to take into account people with a learning disability.
+                              </p>
+                              <p>
+                                See 
+                                <a
+                                  className="link"
+                                  href="http://publications.nice.org.uk/unstable-angina-and-nstemi-cg94/changes-after-publication"
+                                  target="_top"
+                                >
+                                  Changes after publication
+                                </a>
+                                 for details.
+                              </p>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
                     </div>
+                    <p>
+                      The term 'acute coronary syndromes' encompasses a range of conditions from unstable angina to ST-segment-elevation myocardial infarction (STEMI), arising from thrombus formation on an atheromatous plaque. This guideline addresses the early management of unstable angina and non-ST-segment-elevation myocardial infarction (NSTEMI) once a firm diagnosis has been made and before discharge from hospital. If untreated, the prognosis is poor and mortality high, particularly in people who have had myocardial damage. Appropriate triage, risk assessment and timely use of acute pharmacological or invasive interventions are critical for the prevention of future adverse cardiovascular events (myocardial infarction, stroke, repeat revascularisation or death). The guideline does not cover the management of STEMI or specific complications of unstable angina and NSTEMI such as cardiac arrest or acute heart failure. Assessment and classification of people presenting with undifferentiated chest pain are covered in 'Chest pain of recent onset' (NICE clinical guideline 95)
+                      <sup>
+                        [
+                        <a
+                          aria-current={null}
+                          className="footnote"
+                          data-identified-as="internal-link"
+                          href="/#ftn.footnote_1"
+                          id="footnote_1"
+                          name="footnote_1"
+                          onClick={[Function]}
+                          rel="internal"
+                          tabIndex="0"
+                        >
+                          1
+                        </a>
+                        ]
+                      </sup>
+                      .
+                    </p>
+                    <p>
+                      The guideline will assume that prescribers will use a drug's summary of product characteristics to inform decisions made with individual patients.
+                    </p>
+                    <p>
+                      This guideline recommends some drugs for indications for which they do not have a UK marketing authorisation at the date of publication, if there is good evidence to support that use. Unlicensed or off-label use is indicated by a footnote. 
+                    </p>
+                    <p>
+                      Throughout the guideline, the term 'angiography' refers to invasive angiography.
+                    </p>
+                    <p>
+                      Recommendations 1.3.4 to 1.3.8 update and replace recommendations for the early management of unstable angina and NSTEMI from '
+                      <a
+                        className="link"
+                        href="http://guidance.nice.org.uk/TA80"
+                        target="_top"
+                      >
+                        Clopidogrel in the treatment of non-ST-segment-elevation acute coronary syndrome
+                      </a>
+                      ', NICE technology appraisal guidance 80 (TA 80)
+                    </p>
+                    <p>
+                      Recommendations 1.3.9 to 1.3.11 update and replace recommendations for the early management of unstable angina and NSTEMI from '
+                      <a
+                        className="link"
+                        href="http://guidance.nice.org.uk/TA47"
+                        target="_top"
+                      >
+                        Guidance on the use of glycoprotein IIb/IIIa inhibitors in the treatment of acute coronary syndrome
+                      </a>
+                      ', NICE technology appraisal guidance 47 (TA 47).
+                    </p>
+                    <div
+                      className="footnotes"
+                    >
+                      <br />
+                      <hr
+                        align="left"
+                        width="100"
+                      />
+                      <div
+                        className="footnote"
+                      >
+                        <p>
+                          <sup>
+                            [
+                            <a
+                              aria-current={null}
+                              className="para"
+                              data-identified-as="internal-link"
+                              href="/#footnote_1"
+                              id="ftn.footnote_1"
+                              name="ftn.footnote_1"
+                              onClick={[Function]}
+                              rel="internal"
+                              tabIndex="0"
+                            >
+                              1
+                            </a>
+                            ] 
+                          </sup>
+                           More information on 'Chest pain of recent onset' (
+                          <a
+                            className="link"
+                            href="http://www.nice.org.uk/guidance/CG95"
+                            target="_top"
+                          >
+                            NICE clinical guideline 95
+                          </a>
+                          ) is available. 
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-            </main>
-        </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
     </div>
-</div>,
+  </div>,
 ]
 `;
