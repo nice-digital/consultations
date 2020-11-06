@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
@@ -48,8 +48,8 @@ namespace Comments.Migrations
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     OrganisationID = table.Column<int>(nullable: false),
                     LocationID = table.Column<int>(nullable: false),
-                    CollationCode = table.Column<int>(nullable: false)
-                },
+                    CollationCode = table.Column<string>(maxLength: 12, nullable: false)
+				},
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_OrganisationAuthorisation", x => x.OrganisationAuthorisationID);

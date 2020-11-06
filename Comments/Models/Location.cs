@@ -7,7 +7,7 @@ namespace Comments.Models
 {
     public partial class Location
     {
-		public Location() //Just for EF
+		private Location() //Just for EF
 		{
 			Comment = new HashSet<Comment>();
 			OrganisationAuthorisation = new HashSet<OrganisationAuthorisation>();

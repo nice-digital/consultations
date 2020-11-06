@@ -10,7 +10,7 @@ namespace Comments.Models
         public DateTime CreatedDate { get; set; }
         public int OrganisationId { get; set; }
         public int LocationId { get; set; }
-        public int CollationCode { get; set; }
+        public string CollationCode { get; set; }
 
         public Location Location { get; set; }
         public ICollection<Answer> Answer { get; set; }
