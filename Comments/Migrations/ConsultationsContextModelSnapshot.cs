@@ -15,7 +15,7 @@ namespace Comments.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
+                .HasAnnotation("ProductVersion", "2.1.14-servicing-32113")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -36,8 +36,6 @@ namespace Comments.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValueSql("(getdate())");
-
-                    b.Property<bool>("IsDeleted");
 
                     b.Property<string>("LastModifiedByUserId")
                         .HasColumnName("LastModifiedByUserID");
@@ -79,8 +77,6 @@ namespace Comments.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValueSql("(getdate())");
-
-                    b.Property<bool>("IsDeleted");
 
                     b.Property<string>("LastModifiedByUserId")
                         .HasColumnName("LastModifiedByUserID");
@@ -197,13 +193,8 @@ namespace Comments.Migrations
                     b.ToTable("QuestionType");
 
                     b.HasData(
-                        new
-                        {
-                            QuestionTypeId = 99,
-                            Description = "A yes / no answer without a text answer",
-                            HasBooleanAnswer = true,
-                            HasTextAnswer = true
-                        });
+                        new { QuestionTypeId = 99, Description = "A yes / no answer without a text answer", HasBooleanAnswer = true, HasTextAnswer = true }
+                    );
                 });
 
             modelBuilder.Entity("Comments.Models.Status", b =>
@@ -220,16 +211,9 @@ namespace Comments.Migrations
                     b.ToTable("Status");
 
                     b.HasData(
-                        new
-                        {
-                            StatusId = 1,
-                            Name = "Draft"
-                        },
-                        new
-                        {
-                            StatusId = 2,
-                            Name = "Submitted"
-                        });
+                        new { StatusId = 1, Name = "Draft" },
+                        new { StatusId = 2, Name = "Submitted" }
+                    );
                 });
 
             modelBuilder.Entity("Comments.Models.Submission", b =>

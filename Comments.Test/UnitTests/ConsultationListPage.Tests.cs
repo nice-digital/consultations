@@ -103,7 +103,7 @@ namespace Comments.Test.UnitTests
 			var userId = Guid.NewGuid().ToString();
 			var context = CreateContext(_fakeUserService);
 			var locationId = AddLocation(sourceURI, context);
-			var commentId = AddComment(locationId, "Just a comment", false, userId, 2, context);
+			var commentId = AddComment(locationId, "Just a comment", userId, 2, context);
 			var submissionId = AddSubmission(userId, context);
 			AddSubmissionComments(submissionId, commentId, context);
 
@@ -625,13 +625,13 @@ namespace Comments.Test.UnitTests
 			var userId = Guid.Empty.ToString();
 
 			var locationId1 = AddLocation(sourceURIConsultation1, _context);
-			AddComment(locationId1, "the current users comment", false, userId, 2, _context);
+			AddComment(locationId1, "the current users comment", userId, 2, _context);
 
 			var locationId1Doc = AddLocation(sourceURIConsultation1DocumentLevel, _context);
-			AddComment(locationId1Doc, "another comment similar source uri", false, userId, 2, _context);
+			AddComment(locationId1Doc, "another comment similar source uri", userId, 2, _context);
 
 			var locationId2 = AddLocation(sourceURIConsultation2, _context);
-			AddComment(locationId2, "a comment that should be filtered out", false, "not the current user's id", 2, _context);
+			AddComment(locationId2, "a comment that should be filtered out", "not the current user's id", 2, _context);
 
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList { ConsultationId = 1 });

@@ -30,7 +30,7 @@ namespace Comments.Test.UnitTests
 			var commentService = new CommentService(consultationContext, userService, _consultationService, _fakeHttpContextAccessor);
 
 			var locationId = AddLocation(sourceURI, _context);
-			var commentId = AddComment(locationId, "Comment text", false, userId, (int)StatusName.Draft, _context);
+			var commentId = AddComment(locationId, "Comment text", userId, (int)StatusName.Draft, _context);
 
 			//Act
 			var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
