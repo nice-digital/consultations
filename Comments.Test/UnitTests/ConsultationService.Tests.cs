@@ -30,7 +30,7 @@ namespace Comments.Test.UnitTests
             var userService = FakeUserService.Get(true, "Benjamin Button", createdByUserId);
 
             var locationId = AddLocation(sourceURI);
-            AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId);
+            AddComment(locationId, commentText, createdByUserId: createdByUserId);
 
 	        var context = new ConsultationsContext(_options, userService, _fakeEncryption);
             var commentService = new CommentService(context, userService, _consultationService, _fakeHttpContextAccessor);

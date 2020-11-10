@@ -37,8 +37,6 @@ namespace Comments.Migrations
                         .ValueGeneratedOnAdd()
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<bool>("IsDeleted");
-
                     b.Property<string>("LastModifiedByUserId")
                         .HasColumnName("LastModifiedByUserID");
 
@@ -94,8 +92,6 @@ namespace Comments.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValueSql("(getdate())");
-
-                    b.Property<bool>("IsDeleted");
 
                     b.Property<string>("LastModifiedByUserId")
                         .HasColumnName("LastModifiedByUserID");
