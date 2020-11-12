@@ -3,15 +3,9 @@ using System.Collections.Generic;
 
 namespace Comments.Models
 {
-	public partial class Location
-	{
-		private Location()
-		{
-			Comment = new HashSet<Comment>();
-			Question = new HashSet<Question>();
-		}
-
-		public int LocationId { get; set; }
+    public partial class Location
+    {
+        public int LocationId { get; set; }
 		public string SourceURI { get; set; }
 		public string HtmlElementID { get; set; }
 		public string RangeStart { get; set; }
@@ -19,10 +13,11 @@ namespace Comments.Models
 		public string RangeEnd { get; set; }
 		public int? RangeEndOffset { get; set; }
 		public string Quote { get; set; }
-		public string Order { get; set; }
-		public string Section { get; set; }
+        public string Order { get; set; }
+        public string Section { get; set; }
 
-		public ICollection<Comment> Comment { get; set; }
-		public ICollection<Question> Question { get; set; }
-	}
+        public ICollection<Comment> Comment { get; set; }
+        public ICollection<OrganisationAuthorisation> OrganisationAuthorisation { get; set; }
+        public ICollection<Question> Question { get; set; }
+    }
 }

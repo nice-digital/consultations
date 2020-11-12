@@ -7,6 +7,7 @@ namespace Comments.Models
     {
 	    private Comment() //Just for EF
 		{
+			ChildComments = new HashSet<Comment>();
 			SubmissionComment = new HashSet<SubmissionComment>();
 		} 
 
