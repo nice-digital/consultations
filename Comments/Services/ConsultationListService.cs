@@ -81,6 +81,8 @@ namespace Comments.Services
 				}
 			}
 
+			var allOrganisationCodes = GetConsultationCodesForAllConsultations(consultationsFromIndev.Select(c => c.ConsultationId));
+
 			var consultationListRows = new List<ConsultationListRow>();
 
 			foreach (var consultation in consultationsFromIndev)
@@ -98,7 +100,7 @@ namespace Comments.Services
 					new ConsultationListRow(consultation.Title,
 						consultation.StartDate, consultation.EndDate, responseCount, consultation.ConsultationId,
 						consultation.FirstConvertedDocumentId, consultation.FirstChapterSlugOfFirstConvertedDocument, consultation.Reference,
-						consultation.ProductTypeName, hasCurrentUserEnteredCommentsOrAnsweredQuestions, hasCurrentUserSubmittedCommentsOrAnswers, consultation.AllowedRole));
+						consultation.ProductTypeName, hasCurrentUserEnteredCommentsOrAnsweredQuestions, hasCurrentUserSubmittedCommentsOrAnswers, consultation.AllowedRole, allOrganisationCodes[consultation.ConsultationId]));
 			}
 
 			model.OptionFilters = GetOptionFilterGroups(model.Status?.ToList(), consultationListRows, hasAccessToViewUpcomingConsultations);
@@ -253,6 +255,34 @@ namespace Comments.Services
 			}
 
 			return consultationListRows.OrderByDescending(c => c.EndDate).ToList();
+		}
+
+		private Dictionary<int, IList<OrganisationCode>> GetConsultationCodesForAllConsultations(IEnumerable<int> consultationIds)
+		{
+			var consultationSourceURIs = consultationIds.Select(consultationId => ConsultationsUri.CreateConsultationURI(consultationId)).ToList();
+
+			var organisationAuthorisations = _context.GetOrganisationAuthorisations(consultationSourceURIs);
+
+			var distinctOrganisationIds = organisationAuthorisations.Select(oa => oa.OrganisationId).Distinct();
+
+			//todo: get organisation name + ids from idam that the current user has access to.
+
+
+			var codesPerConsultation = new Dictionary<int, IList<OrganisationCode>>();
+			foreach (var consultationId in consultationIds)
+			{
+				var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
+
+				var organisationAuthorisationsForThisConsultation = organisationAuthorisations
+					.Where(oa => oa.Location.SourceURI.Equals(sourceURI, StringComparison.OrdinalIgnoreCase)).ToList();
+
+				codesPerConsultation.Add(consultationId,
+					organisationAuthorisationsForThisConsultation.Select(oa =>
+						new OrganisationCode(oa.OrganisationId, "TODO: get organisation name from the list from idam", oa.CollationCode))
+					.ToList());
+			}
+
+			return codesPerConsultation;
 		}
 	}
 }

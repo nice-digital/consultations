@@ -786,5 +786,15 @@ namespace Comments.Models
 			var answerSourceURIsAndStatus = answers.Select(answer => new KeyValuePair<string, Status>(answer.Question.Location.SourceURI, answer.Status));
 			return commentSourceURIsAndStatus.Concat(answerSourceURIsAndStatus);
 		}
+
+		public IEnumerable<OrganisationAuthorisation> GetOrganisationAuthorisations(IList<string> consultationSourceURIs)
+		{
+			var organisationAuthorisations = OrganisationAuthorisation
+				.Include(oa => oa.Location)
+				.Where(oa => consultationSourceURIs.Contains(oa.Location.SourceURI, StringComparer.OrdinalIgnoreCase))
+				.ToList();
+
+			return organisationAuthorisations;
+		}
 	}
 }
