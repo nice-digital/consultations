@@ -625,7 +625,7 @@ namespace Comments.Test.UnitTests
 
 				//Act
 				ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null) { Status = new List<ConsultationStatus>() }).consultationListViewModel;
-				var serialisedViewModel = JsonConvert.SerializeObject(viewModel); //doing this in order to validate the filters coming back in the model.
+				var serialisedViewModel = JsonConvert.SerializeObject(viewModel); 
 
 				//Assert
 				var consultationRow = viewModel.Consultations.Single(c => c.ConsultationId == firstConsultation.ConsultationId);

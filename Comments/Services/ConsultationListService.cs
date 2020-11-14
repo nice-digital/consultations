@@ -277,7 +277,7 @@ namespace Comments.Services
 
 				codesPerConsultation.Add(consultationId,
 					organisationAuthorisationsForThisConsultation.Select(oa =>
-						new OrganisationCode(oa.OrganisationId, "TODO: get organisation name from the list from idam", oa.CollationCode))
+						new OrganisationCode(oa.OrganisationAuthorisationId, oa.OrganisationId, "TODO: get organisation name from the list from idam", oa.CollationCode))
 					.ToList());
 			}
 
