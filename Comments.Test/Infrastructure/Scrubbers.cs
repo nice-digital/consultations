@@ -49,7 +49,13 @@ namespace Comments.Test.Infrastructure
 		    return Regex.Replace(str, @"""questionTypeId"":(\d+)", @"""questionTypeId"":""scrubbed by ScrubQuestionTypeId""");
 	    }
 
-	    public static string ScrubIds(string str)
+	    public static string ScrubUserId(string str)
+	    {
+		    return Regex.Replace(str, @"""UserId"":""([a-z0-9A-Z-]+)""", @"""UserId"":""scrubbed by ScrubUserId""");
+	    }
+
+
+		public static string ScrubIds(string str)
 	    {
 		    str = ScrubCommentId(str);
 		    str = ScrubLocationId(str);

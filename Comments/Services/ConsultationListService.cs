@@ -6,7 +6,6 @@ using NICE.Feeds;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NICE.Feeds.Models.Indev.List;
 
 namespace Comments.Services
 {
@@ -81,7 +80,7 @@ namespace Comments.Services
 				}
 			}
 
-			var allOrganisationCodes = GetConsultationCodesForAllConsultations(consultationsFromIndev.Select(c => c.ConsultationId));
+			var allOrganisationCodes = GetConsultationCodesForAllConsultations(consultationsFromIndev.Select(c => c.ConsultationId).ToList());
 
 			var consultationListRows = new List<ConsultationListRow>();
 
@@ -257,7 +256,7 @@ namespace Comments.Services
 			return consultationListRows.OrderByDescending(c => c.EndDate).ToList();
 		}
 
-		private Dictionary<int, IList<OrganisationCode>> GetConsultationCodesForAllConsultations(IEnumerable<int> consultationIds)
+		private Dictionary<int, IList<OrganisationCode>> GetConsultationCodesForAllConsultations(IList<int> consultationIds)
 		{
 			var consultationSourceURIs = consultationIds.Select(consultationId => ConsultationsUri.CreateConsultationURI(consultationId)).ToList();
 

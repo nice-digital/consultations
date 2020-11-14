@@ -1,0 +1,146 @@
+﻿{
+    "IndevBasePath":"http://www.nice.org.uk",
+    "Consultations":[
+        {
+            "Title":"Consultation Title 3",
+            "StartDate":"scrubbed by ScrubStartDate",
+            "EndDate":"scrubbed by ScrubEndDate",
+            "SubmissionCount":0,
+            "ConsultationId":125,
+            "DocumentId":1,
+            "ChapterSlug":"my-chapter-slug",
+            "GidReference":"GID-3",
+            "ProductTypeName":null,
+            "HasCurrentUserEnteredCommentsOrAnsweredQuestions":false,
+            "HasCurrentUserSubmittedCommentsOrAnswers":false,
+            "AllowedRole":"Some other role",
+            "IsOpen":false,
+            "IsClosed":false,
+            "IsUpcoming":true,
+            "Show":true,
+            "OrganisationCodes":[
+                
+            ],
+            "ShowShareWithOrganisationButton":false
+        },
+        {
+            "Title":"Consultation title 1",
+            "StartDate":"scrubbed by ScrubStartDate",
+            "EndDate":"scrubbed by ScrubEndDate",
+            "SubmissionCount":0,
+            "ConsultationId":123,
+            "DocumentId":null,
+            "ChapterSlug":null,
+            "GidReference":"GID-1",
+            "ProductTypeName":null,
+            "HasCurrentUserEnteredCommentsOrAnsweredQuestions":false,
+            "HasCurrentUserSubmittedCommentsOrAnswers":false,
+            "AllowedRole":"ConsultationListTestRole",
+            "IsOpen":true,
+            "IsClosed":false,
+            "IsUpcoming":false,
+            "Show":true,
+            "OrganisationCodes":[
+                {
+                    "OrganisationId":1,
+                    "OrganisationName":"TODO: get organisation name from the list from idam",
+                    "CollationCode":"FAKE CODE"
+                }
+            ],
+            "ShowShareWithOrganisationButton":true
+        },
+        {
+            "Title":"Consultation Title 1",
+            "StartDate":"scrubbed by ScrubStartDate",
+            "EndDate":"scrubbed by ScrubEndDate",
+            "SubmissionCount":0,
+            "ConsultationId":124,
+            "DocumentId":null,
+            "ChapterSlug":null,
+            "GidReference":"GID-2",
+            "ProductTypeName":null,
+            "HasCurrentUserEnteredCommentsOrAnsweredQuestions":false,
+            "HasCurrentUserSubmittedCommentsOrAnswers":false,
+            "AllowedRole":"ConsultationListTestRole",
+            "IsOpen":false,
+            "IsClosed":true,
+            "IsUpcoming":false,
+            "Show":true,
+            "OrganisationCodes":[
+                
+            ],
+            "ShowShareWithOrganisationButton":false
+        }
+    ],
+    "OptionFilters":[
+        {
+            "Options":[
+                {
+                    "Id":"Open",
+                    "Label":"Open",
+                    "IsSelected":false,
+                    "FilteredResultCount":1,
+                    "UnfilteredResultCount":3
+                },
+                {
+                    "Id":"Closed",
+                    "Label":"Closed",
+                    "IsSelected":false,
+                    "FilteredResultCount":1,
+                    "UnfilteredResultCount":3
+                },
+                {
+                    "Id":"Upcoming",
+                    "Label":"Upcoming",
+                    "IsSelected":false,
+                    "FilteredResultCount":1,
+                    "UnfilteredResultCount":3
+                }
+            ],
+            "Id":"Status",
+            "Title":"Status"
+        }
+    ],
+    "TextFilter":{
+        "FilterText":null,
+        "IsSelected":false,
+        "FilteredResultCount":3,
+        "UnfilteredResultCount":3,
+        "Id":"Keyword",
+        "Title":"Keyword"
+    },
+    "ContributionFilter":[
+        {
+            "Options":[
+                {
+                    "Id":"HasContributed",
+                    "Label":"Your responses",
+                    "IsSelected":false,
+                    "FilteredResultCount":0,
+                    "UnfilteredResultCount":3
+                }
+            ],
+            "Id":"Contribution",
+            "Title":"Contribution filter group"
+        }
+    ],
+    "TeamFilter":null,
+    "User":{
+        "IsAdminUser":true,
+        "IsTeamUser":false,
+        "TeamNames":[
+            
+        ],
+        "IsAuthorised":true,
+        "DisplayName":"Benjamin Button",
+        "UserId":"scrubbed by ScrubUserId",
+        "OrganisationName":null
+    },
+    "InitialPageView":false,
+    "Status":[
+        
+    ],
+    "Keyword":null,
+    "Contribution":null,
+    "Team":null
+}

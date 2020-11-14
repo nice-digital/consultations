@@ -602,6 +602,37 @@ namespace Comments.Test.UnitTests
 			serialisedViewModel.ShouldMatchApproved(new Func<string, string>[] { Scrubbers.ScrubStartDate, Scrubbers.ScrubEndDate });
 		}
 
+		[Fact]
+		public void ConsultationListPageModel_HasOrganisationCodesSetCorrectly()
+		{
+			//Arrange
+			const string collationCode = "FAKE CODE";
+			var consultationList = AddConsultationsToList();
+
+			using (var consultationListContext = new ConsultationListContext(_options, _fakeUserService, _fakeEncryption))
+			{
+				var firstConsultation = consultationList.First();
+				var sourceURI = ConsultationsUri.CreateConsultationURI(firstConsultation.ConsultationId);
+
+				consultationListContext.Location.Add(new Models.Location(sourceURI, null, null, null, null, null, null,
+					null, null, null, null));
+
+				consultationListContext.OrganisationAuthorisation.Add(new OrganisationAuthorisation(Guid.Empty.ToString(),
+					DateTime.Now, organisationId: 1, locationId: 1, collationCode: collationCode));
+				consultationListContext.SaveChanges();
+
+				var consultationListService = new ConsultationListService(consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), GetFakeUserService());
+
+				//Act
+				ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null) { Status = new List<ConsultationStatus>() }).consultationListViewModel;
+				var serialisedViewModel = JsonConvert.SerializeObject(viewModel); //doing this in order to validate the filters coming back in the model.
+
+				//Assert
+				var consultationRow = viewModel.Consultations.Single(c => c.ConsultationId == firstConsultation.ConsultationId);
+				consultationRow.OrganisationCodes.Single().CollationCode.ShouldBe(collationCode);
+				serialisedViewModel.ShouldMatchApproved(new Func<string, string>[] { Scrubbers.ScrubStartDate, Scrubbers.ScrubEndDate, Scrubbers.ScrubUserId });
+			}
+		}
 	}
 
 	public class ConsultationListFilterTests : TestBase
