@@ -17,7 +17,11 @@
             "IsOpen":false,
             "IsClosed":false,
             "IsUpcoming":true,
-            "Show":false
+            "Show":false,
+            "OrganisationCodes":[
+                
+            ],
+            "ShowShareWithOrganisationButton":false
         },
         {
             "Title":"Consultation title 1",
@@ -35,7 +39,11 @@
             "IsOpen":true,
             "IsClosed":false,
             "IsUpcoming":false,
-            "Show":true
+            "Show":true,
+            "OrganisationCodes":[
+                
+            ],
+            "ShowShareWithOrganisationButton":false
         },
         {
             "Title":"Consultation Title 1",
@@ -53,7 +61,11 @@
             "IsOpen":false,
             "IsClosed":true,
             "IsUpcoming":false,
-            "Show":true
+            "Show":true,
+            "OrganisationCodes":[
+                
+            ],
+            "ShowShareWithOrganisationButton":false
         }
     ],
     "OptionFilters":[
