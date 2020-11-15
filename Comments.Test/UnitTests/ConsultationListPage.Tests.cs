@@ -614,18 +614,19 @@ namespace Comments.Test.UnitTests
 				var firstConsultation = consultationList.First();
 				var sourceURI = ConsultationsUri.CreateConsultationURI(firstConsultation.ConsultationId);
 
-				consultationListContext.Location.Add(new Models.Location(sourceURI, null, null, null, null, null, null,
-					null, null, null, null));
+				var location = new Models.Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
+				consultationListContext.Location.Add(location);
+				consultationListContext.SaveChanges();
 
 				consultationListContext.OrganisationAuthorisation.Add(new OrganisationAuthorisation(Guid.Empty.ToString(),
-					DateTime.Now, organisationId: 1, locationId: 1, collationCode: collationCode));
+					DateTime.Now, organisationId: 1, locationId: location.LocationId, collationCode: collationCode));
 				consultationListContext.SaveChanges();
 
 				var consultationListService = new ConsultationListService(consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), GetFakeUserService());
 
 				//Act
 				ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null) { Status = new List<ConsultationStatus>() }).consultationListViewModel;
-				var serialisedViewModel = JsonConvert.SerializeObject(viewModel); 
+				var serialisedViewModel = JsonConvert.SerializeObject(viewModel);
 
 				//Assert
 				var consultationRow = viewModel.Consultations.Single(c => c.ConsultationId == firstConsultation.ConsultationId);
@@ -689,4 +690,57 @@ namespace Comments.Test.UnitTests
 			serialisedViewModel.ShouldMatchApproved();
 		}
 	}
+
+	//public class OrganisationAuthorisationTests : TestBase
+	//{
+	//	private List<ConsultationList> AddConsultationsToList()
+	//	{
+	//		var consultationList = new List<ConsultationList>();
+	//		consultationList.Add(new ConsultationList
+	//		{
+	//			ConsultationId = 123,
+	//			ConsultationName = "open consultation",
+	//			StartDate = DateTime.Now.AddDays(-1),
+	//			EndDate = DateTime.Now.AddDays(1),
+	//			Reference = "GID-1",
+	//			Title = "Consultation title 1",
+	//			AllowedRole = "ConsultationListTestRole",
+	//			FirstConvertedDocumentId = null,
+	//			FirstChapterSlugOfFirstConvertedDocument = null
+	//		});
+	//		return consultationList;
+	//	}
+
+	//	[Fact]
+	//	public void ConsultationListPageModel_HasOrganisationCodesSetCorrectly()
+	//	{
+	//		//Arrange
+	//		const string collationCode = "FAKE CODE";
+	//		var consultationList = AddConsultationsToList();
+
+	//		using (var consultationListContext = new ConsultationListContext(_options, _fakeUserService, _fakeEncryption))
+	//		{
+	//			var firstConsultation = consultationList.First();
+	//			var sourceURI = ConsultationsUri.CreateConsultationURI(firstConsultation.ConsultationId);
+
+	//			consultationListContext.Location.Add(new Models.Location(sourceURI, null, null, null, null, null, null,
+	//				null, null, null, null));
+
+	//			consultationListContext.OrganisationAuthorisation.Add(new OrganisationAuthorisation(Guid.Empty.ToString(),
+	//				DateTime.Now, organisationId: 1, locationId: 1, collationCode: collationCode));
+	//			consultationListContext.SaveChanges();
+
+	//			var consultationListService = new ConsultationListService(consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: Guid.NewGuid().ToString(), testUserType: TestUserType.Authenticated));
+
+	//			//Act
+	//			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null) { Status = new List<ConsultationStatus>() }).consultationListViewModel;
+	//			var serialisedViewModel = JsonConvert.SerializeObject(viewModel);
+
+	//			//Assert
+	//			var consultationRow = viewModel.Consultations.Single(c => c.ConsultationId == firstConsultation.ConsultationId);
+	//			consultationRow.OrganisationCodes.Single().CollationCode.ShouldBe(collationCode);
+	//			serialisedViewModel.ShouldMatchApproved(new Func<string, string>[] { Scrubbers.ScrubStartDate, Scrubbers.ScrubEndDate, Scrubbers.ScrubUserId });
+	//		}
+	//	}
+	//}
 }
