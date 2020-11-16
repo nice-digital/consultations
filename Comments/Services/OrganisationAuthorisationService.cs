@@ -42,7 +42,7 @@ namespace Comments.Services
 			//then check to see if the organisation already has an collation code for this consultation.
 			var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
 			var existingOrganisationAuthorisation = _context.GetOrganisationAuthorisations(new List<string> {sourceURI});
-			if (existingOrganisationAuthorisation != null)
+			if (existingOrganisationAuthorisation.Any(oa => oa.OrganisationId.Equals(organisationId))) 
 			{
 				throw new ApplicationException($"There is already a collation code for consultation: {consultationId} and organisation: {organisationId}");
 			}

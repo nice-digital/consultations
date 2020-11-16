@@ -136,7 +136,11 @@
         "DisplayName":"Benjamin Button",
         "UserId":"scrubbed by ScrubUserId",
         "OrganisationsAssignedAsLead":[
-            
+            {
+                "OrganisationId":1,
+                "OrganisationName":"NICE",
+                "IsLead":true
+            }
         ]
     },
     "InitialPageView":false,

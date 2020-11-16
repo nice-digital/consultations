@@ -473,6 +473,7 @@ namespace Comments.Test.Infrastructure
 		    var locationId = AddLocation(sourceURI, passedInContext);
 		    passedInContext.SaveChanges();
 			var organisationAuthorisation = new OrganisationAuthorisation(userId, DateTime.Now, organisationId, locationId, collationCode);
+			passedInContext.OrganisationAuthorisation.Add(organisationAuthorisation);
 			passedInContext.SaveChanges();
 			return organisationAuthorisation.OrganisationAuthorisationId;
 	    }

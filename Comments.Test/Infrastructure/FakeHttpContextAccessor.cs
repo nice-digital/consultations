@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using NICE.Identity.Authentication.Sdk.Domain;
 using Claim = System.Security.Claims.Claim;
 
@@ -27,7 +28,8 @@ namespace Comments.Test.Infrastructure
 				var claims = new List<Claim>
                 {
                     new Claim(ClaimType.DisplayName, displayName, null, AuthenticationConstants.IdAMIssuer),
-                    new Claim(ClaimType.NameIdentifier, userId.ToString(), null, AuthenticationConstants.IdAMIssuer)
+                    new Claim(ClaimType.NameIdentifier, userId.ToString(), null, AuthenticationConstants.IdAMIssuer),
+					new Claim(ClaimType.Organisations, JsonConvert.SerializeObject(new List<Organisation>(){ new Organisation(1, "NICE", true)}), "www.nice.org.uk", AuthenticationConstants.IdAMIssuer)
                 };
 				if (addRoleClaim)
 				{
