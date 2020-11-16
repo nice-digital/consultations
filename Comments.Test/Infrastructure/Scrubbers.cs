@@ -54,6 +54,11 @@ namespace Comments.Test.Infrastructure
 		    return Regex.Replace(str, @"""UserId"":""([a-z0-9A-Z-]+)""", @"""UserId"":""scrubbed by ScrubUserId""");
 	    }
 
+	    public static string ScrubCollationCode(string str)
+	    {
+		    return Regex.Replace(str, @"\d{4}\s\d{4}\s\d{4}", @"1234 1234 1234");
+	    }
+
 
 		public static string ScrubIds(string str)
 	    {

@@ -1,3 +1,4 @@
+using System;
 using Comments.Test.Infrastructure;
 using System.Threading.Tasks;
 using Xunit;
@@ -17,8 +18,7 @@ namespace Comments.Test.IntegrationTests.API.OrganisationAuthorisation
 			var responseString = await response.Content.ReadAsStringAsync();
 
 			// Assert
-			responseString.ShouldMatchApproved();
+			responseString.ShouldMatchApproved(new Func<string, string>[]{ Scrubbers.ScrubCollationCode });
 		}
-
 	}
 }

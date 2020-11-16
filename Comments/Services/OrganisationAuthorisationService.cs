@@ -1,10 +1,8 @@
+using Comments.Common;
+using Comments.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Comments.Common;
-using Comments.Models;
-using Comments.ViewModels;
-using Microsoft.AspNetCore.Http;
 
 namespace Comments.Services
 {
@@ -17,17 +15,12 @@ namespace Comments.Services
 	{
         private readonly ConsultationsContext _context;
         private readonly IUserService _userService;
-	    private readonly IHttpContextAccessor _httpContextAccessor;
-	    private readonly User _currentUser;
 
-        public OrganisationAuthorisationService(ConsultationsContext context, IUserService userService, IHttpContextAccessor httpContextAccessor)
+        public OrganisationAuthorisationService(ConsultationsContext context, IUserService userService)
         {
             _context = context;
             _userService = userService;
-	        _httpContextAccessor = httpContextAccessor;
-	        _currentUser = _userService.GetCurrentUser();
         }
-
 
         public string GenerateOrganisationCode(int organisationId, int consultationId)
         {
@@ -46,20 +39,33 @@ namespace Comments.Services
 			{
 				throw new ApplicationException($"There is already a collation code for consultation: {consultationId} and organisation: {organisationId}");
 			}
-			
-			
+
 			//then generate a new code. ensure it's unique and valid according to some rules.
-			var collationCode = GenerateCollationCode(organisationId, consultationId);
+			string collationCode;
+			bool collision; //it's very unlikely the 12 digit random number generator will generate the same one twice, but it's possible. so try 10 times.
+			const int maxTriesAtUnique = 10;
+			var counter = 0;
+			do
+			{
+				counter++;
+				collationCode = GenerateCollationCode(organisationId, consultationId);
+				collision = _context.CheckCollationCodeExists(collationCode);
+			} while (collision && counter <= maxTriesAtUnique);
 			
 
 			//then save it to the db
+			//TODO
 
 			return collationCode;
         }
 
-        public string GenerateCollationCode(int organisationId, int consultationId)
+        private string GenerateCollationCode(int organisationId, int consultationId)
         {
-	        return "TODO: generate a real code";
+	        var random = new Random();
+	        var firstPart = random.Next(100000, 999999);
+	        var secondPart = random.Next(000000, 999999);
+	        var collationCode = $"{firstPart:#### ##}{secondPart:## ####}";
+	        return collationCode;
         }
 	}
 }

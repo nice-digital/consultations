@@ -796,5 +796,17 @@ namespace Comments.Models
 
 			return organisationAuthorisations;
 		}
-    }
+
+		public bool CheckCollationCodeExists(string collationCode)
+		{
+			collationCode = collationCode.Replace(" ", "");
+
+			var organisationAuthorisations = OrganisationAuthorisation
+				.Where(oa => oa.CollationCode.Equals(collationCode))
+				.ToList();
+
+			return organisationAuthorisations.Any();
+		}
+		
+	}
 }
