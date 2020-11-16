@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Comments.Common;
 
 namespace Comments.Models
 {

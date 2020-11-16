@@ -3,7 +3,10 @@ using Comments.Services;
 using Comments.Test.Infrastructure;
 using Shouldly;
 using System;
+using System.Collections.Generic;
 using Comments.ViewModels;
+using Microsoft.AspNetCore.Http;
+using NICE.Identity.Authentication.Sdk.Domain;
 using Xunit;
 
 namespace Comments.Test.UnitTests
@@ -11,56 +14,56 @@ namespace Comments.Test.UnitTests
 	public class OrganisationAuthorisationServiceTests : TestBase
     {
 
-		//[Fact]
-		//public void UserIsLeadOfOrganisationPassedIn()
-		//{
-		//	//Arrange
-		//	ResetDatabase();
-		//	_context.Database.EnsureCreated();
-		//	const int organisationId = 1;
+		[Fact]
+		public void UserIsLeadOfOrganisationPassedIn()
+		{
+			//Arrange
+			ResetDatabase();
+			_context.Database.EnsureCreated();
+			const int organisationId = 1;
 
-		//	var userService = new StubUserService(new User(isAuthorised: true, displayName: "Carl Spackler", userId: "1", organisationName: "Bushwood Country Club"));
-			
-		//	using (var consultationsContext = new ConsultationsContext(_options, userService, _fakeEncryption))
-		//	{
-		//		var serviceUnderTest = new OrganisationAuthorisationService(consultationsContext, userService, _fakeHttpContextAccessor);
+			var userService = new StubUserService(new User(isAuthorised: true, displayName: "Carl Spackler",
+				userId: "001", new List<Organisation>() {new Organisation(organisationId, "Bushwood Country Club", isLead: false)})); 
 
+			using (var consultationsContext = new ConsultationsContext(_options, userService, _fakeEncryption))
+			{
+				var serviceUnderTest = new OrganisationAuthorisationService(consultationsContext, userService, _fakeHttpContextAccessor);
 
-		//		//Act
-		//		var returnedCollationCode = serviceUnderTest.GenerateCollationCode(1, 1);
+				//Act + Assert
+				Assert.Throws<UnauthorizedAccessException>(() => serviceUnderTest.GenerateOrganisationCode(organisationId, consultationId: 1));
+			}
+		}
 
-		//		//Assert
-		//		returnedCollationCode.ShouldNotBe(existingCollationCode);
-		//	}
-		//}
+		[Fact]
+		public void OrganisationAlreadyHasACollationCodeForThisConsultation()
+		{
+			//Arrange
+			ResetDatabase();
+			_context.Database.EnsureCreated();
+			const int organisationId = 1;
+			const int consultationId = 1;
 
+			var userService = new StubUserService(new User(isAuthorised: true, displayName: "Carl Spackler",
+				userId: "001", new List<Organisation>() { new Organisation(organisationId, "Bushwood Country Club", isLead: true) }));
 
-		//  [Fact]
-		//     public void CollationCodeNotInDatabaseAlready()
-		//     {
-		////Arrange
-		//ResetDatabase();
-		//_context.Database.EnsureCreated();
-		//const string existingCollationCode = "existing code";
+			using (var context = new ConsultationsContext(_options, userService, _fakeEncryption))
+			{
+				AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context);
+				
+				var serviceUnderTest = new OrganisationAuthorisationService(context, userService, _fakeHttpContextAccessor);
 
-		//using (var consultationsContext = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
-		//{
-		//	consultationsContext.OrganisationAuthorisation.Add(
-		//		new OrganisationAuthorisation(null, DateTime.Now, 1, 1, existingCollationCode));
-		//	consultationsContext.SaveChanges();
+				//Act + Assert
+				Assert.Throws<ApplicationException>(() => serviceUnderTest.GenerateOrganisationCode(organisationId, consultationId));
+			}
+		}
 
-		//	var serviceUnderTest = new OrganisationAuthorisationService(consultationsContext, _fakeUserService, _fakeHttpContextAccessor);
-
-
-		//	//Act
-		//	var returnedCollationCode = serviceUnderTest.GenerateCollationCode(1, 1);
-
-		//	//Assert
-		//	returnedCollationCode.ShouldNotBe(existingCollationCode);
-		//}
-		//     }
+		
 	}
+
+	//public class CollationCodeTests : OrganisationAuthorisationService
+	//{
+	//	public CollationCodeTests() : base(context, userService, httpContextAccessor)
+	//	{
+	//	}
+	//}
 }
-
-
-

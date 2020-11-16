@@ -796,5 +796,5 @@ namespace Comments.Models
 
 			return organisationAuthorisations;
 		}
-	}
+    }
 }

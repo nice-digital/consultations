@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using Comments.Common;
 using Comments.Configuration;
 using Comments.Migrations;
 using Comments.Services;
@@ -465,6 +466,17 @@ namespace Comments.Test.Infrastructure
 
 		    return submissionAnswer.SubmissionAnswerId;
 	    }
+
+	    protected int AddOrganisationAuthorisationWithLocation(int organisationId, int consultationId, ConsultationsContext passedInContext, string userId = "someUserId", string collationCode = null)
+	    {
+		    var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
+		    var locationId = AddLocation(sourceURI, passedInContext);
+		    passedInContext.SaveChanges();
+			var organisationAuthorisation = new OrganisationAuthorisation(userId, DateTime.Now, organisationId, locationId, collationCode);
+			passedInContext.SaveChanges();
+			return organisationAuthorisation.OrganisationAuthorisationId;
+	    }
+
 
 	    protected ConsultationListContext CreateContext(IUserService userService, int totalCount = 1)
 	    {
