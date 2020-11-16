@@ -27,13 +27,18 @@ namespace Comments.Services
 
         public string GenerateOrganisationCode(int organisationId, int consultationId)
         {
-			//first we need to check the current user is an organisation lead.
+			//first we need to check the current user is an organisation lead of the organisation id passed in.
 			
 			//then check to see if the organisation already has an collation code for this consultation.
 			
 			//then generate a new code. ensure it's unique and valid according to some rules.
 
-			return "TODO: generate a real code";
+			return GenerateCollationCode(organisationId, consultationId);
+        }
+
+        public string GenerateCollationCode(int organisationId, int consultationId)
+        {
+	        return "TODO: generate a real code";
         }
 	}
 }
