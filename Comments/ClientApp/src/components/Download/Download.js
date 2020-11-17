@@ -8,7 +8,7 @@ import Cookies from "js-cookie";
 
 import { appendQueryParameter, removeQueryParameter, stripMultipleQueries, queryStringToObject, objectToQueryString, canUseDOM } from "../../helpers/utils";
 import { UserContext } from "../../context/UserContext";
-import { LoginBanner } from "../LoginBanner/LoginBanner";
+import LoginBannerWithRouter from "../LoginBanner/LoginBanner";
 import { Header } from "../Header/Header";
 import { Breadcrumbs } from "../Breadcrumbs/Breadcrumbs";
 import { ConsultationItem } from "../ConsultationItem/ConsultationItem";
@@ -412,12 +412,13 @@ export class Download extends Component<PropsType, StateType> {
 		return (
 			<UserContext.Consumer>
 				{(contextValue: any) => !contextValue.isAuthorised ?
-					<LoginBanner
+					<LoginBannerWithRouter
 						signInButton={false}
 						currentURL={this.props.match.url}
 						signInURL={contextValue.signInURL}
 						registerURL={contextValue.registerURL}
 						signInText="to administer a consultation"
+						key={"download"}
 					/>
 					:
 					<Fragment>

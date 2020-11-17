@@ -1,15 +1,89 @@
 // @flow
-import React, { PureComponent } from "react";
+import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
+import { DebounceInput } from "react-debounce-input";
+import queryString from "query-string";
+//import { withHistory } from "../HistoryContext/HistoryContext";
+import { appendQueryParameter, removeQueryParameter, removeQuerystring } from "../../helpers/utils";
 
 type PropsType = {
 	signInURL: string,
 	registerURL: string,
 	signInButton: boolean,
 	signInText?: string,
+	match: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
+	history: PropTypes.object.isRequired,
+	key: string
 }
 
-export class LoginBanner extends PureComponent<PropsType> {
+type StateType = {
+	organisationCode: string
+}
+
+export class LoginBanner extends Component<PropsType, StateType> {
+
+	constructor(props: PropsType) {
+		super(props);
+
+		this.state = {
+			organisationCode: "",
+		};
+	}
+
+	componentDidMount() {
+		const organisationCode = queryString.parse(this.props.location.search).organisationCode;
+		console.log(this.props.location.search);
+
+		if (organisationCode){
+			this.setState({
+				organisationCode,
+			}, () => {
+				this.checkOrganisationCode(organisationCode);
+			});
+		}
+	}
+
+	removeOrganisationCode = () => {
+		this.handleOrganisationCodeChange("");
+	};
+
+	componentDidUpdate(prevProps){
+		if (prevProps.organisationCode !== "" && this.props.organisationCode === ""){
+			this.removeOrganisationCode();
+		}
+	}
+
+	getHref = (organisationCode) => {
+		const pathWithoutQuerystring = removeQuerystring(this.props.path);
+		const querystringWithRemovedKeyword = removeQueryParameter(this.props.search, "OrganisationCode");
+
+		if (organisationCode.length <= 0){
+			return pathWithoutQuerystring + querystringWithRemovedKeyword;
+		}
+
+		const querystringWithKeywordAdded = appendQueryParameter(querystringWithRemovedKeyword, "OrganisationCode", organisationCode);
+		return pathWithoutQuerystring + querystringWithKeywordAdded;
+	};
+
+	handleOrganisationCodeChange = (organisationCode) => {
+		this.setState({
+			organisationCode,
+		}, () => {
+			//this.props.history.push(this.getHref(organisationCode)); //TODO: fix the history!!!
+			this.checkOrganisationCode(organisationCode);
+		});
+	};
+
+	checkOrganisationCode = () => {
+		console.log("check organisation code" + this.state.organisationCode);
+	}
+
+
 	render(){
+		const {organisationCode} = this.state;
+		const { match, location, history } = this.props
+
 		return (
 			<div className="panel panel--inverse mt--0 mb--0 sign-in-banner"
 					 data-qa-sel="sign-in-banner">
@@ -19,8 +93,17 @@ export class LoginBanner extends PureComponent<PropsType> {
 							<div className="LoginBanner">
 								<p>If you would like to comment on this consultation as part of an organisation, please enter your organisation code here:</p>
 								<label>
-									Organisation code
-									<input type="text" name="collationCode" />
+									Organisation code 
+									<DebounceInput
+										minLength={6}
+										debounceTimeout={400}
+										type="text"
+										onChange={e => this.handleOrganisationCodeChange(e.target.value)}
+										className="form__input form__input--text"
+										data-qa-sel="OrganisationCodeLogin"
+										id="organisationCode"
+										value={organisationCode}
+									/>
 								</label>
 								<br/><br/>
 								<a href={this.props.signInURL} title="Sign in to your NICE account">
@@ -43,3 +126,5 @@ export class LoginBanner extends PureComponent<PropsType> {
 		);
 	}
 }
+
+export default withRouter(LoginBanner); //withHistory(LoginBanner);

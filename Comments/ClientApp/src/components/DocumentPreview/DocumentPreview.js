@@ -9,7 +9,7 @@ import { load } from "./../../data/loader";
 import BreadCrumbsWithRouter from "./../Breadcrumbs/Breadcrumbs";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { processPreviewHtml } from "../../document-processing/process-preview-html";
-import { LoginBanner } from "./../LoginBanner/LoginBanner";
+import LoginBannerWithRouter from "./../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
 import { DocumentPreviewErrorOverview } from "./DocumentPreviewErrorOverview";
 import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
@@ -310,11 +310,12 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 				</Helmet>
 				<UserContext.Consumer>
 					{(contextValue: any) => !contextValue.isAuthorised ?
-						<LoginBanner signInButton={false}
+						<LoginBannerWithRouter signInButton={false}
 									 currentURL={this.props.match.url}
 									 signInURL={contextValue.signInURL}
 									 registerURL={contextValue.registerURL}
-									 signInText="to view the document preview" />
+									 signInText="to view the document preview"
+									 key={"preview"} />
 						: 
 						<div className="container">
 							<div className="grid">

@@ -12,7 +12,7 @@ import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
 import { tagManager } from "../../helpers/tag-manager";
 import { ProcessDocumentHtml } from "../../document-processing/ProcessDocumentHtml";
-import { LoginBanner } from "./../LoginBanner/LoginBanner";
+import LoginBannerWithRouter from "./../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
 import { Selection } from "../Selection/Selection";
 import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
@@ -429,7 +429,7 @@ export class Document extends Component<PropsType, StateType> {
 				</Helmet>
 				<UserContext.Consumer>
 					{(contextValue: any) => !contextValue.isAuthorised ?
-						<LoginBanner signInButton={false}
+						<LoginBannerWithRouter signInButton={false}
 												 currentURL={this.props.match.url}
 												 signInURL={contextValue.signInURL}
 												 registerURL={contextValue.registerURL}/>

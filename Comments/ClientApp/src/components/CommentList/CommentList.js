@@ -21,7 +21,7 @@ import { tagManager } from "../../helpers/tag-manager";
 
 import { CommentBox } from "../CommentBox/CommentBox";
 import { Question } from "../Question/Question";
-import { LoginBanner } from "../LoginBanner/LoginBanner";
+import LoginBannerWithRouter from "../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
 
 import { createQuestionPdf } from '../QuestionView/QuestionViewDocument';
@@ -443,12 +443,11 @@ export class CommentList extends Component<PropsType, StateType> {
 														}
 													</div>
 												) : (
-													<LoginBanner
+													<LoginBannerWithRouter
 														signInButton={true}
 														currentURL={this.props.match.url}
 														signInURL={contextValue.signInURL}
 														registerURL={contextValue.registerURL}
-
 													/>
 												)}
 

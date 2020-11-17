@@ -22,7 +22,7 @@ import { ReviewResultsInfo } from "../ReviewResultsInfo/ReviewResultsInfo";
 import { withHistory } from "../HistoryContext/HistoryContext";
 import { CommentBox } from "../CommentBox/CommentBox";
 import { Question } from "../Question/Question";
-import { LoginBanner } from "../LoginBanner/LoginBanner";
+import LoginBannerWithRouter from "../LoginBanner/LoginBanner";
 import { SubmitResponseDialog } from "../SubmitResponseDialog/SubmitResponseDialog";
 import { updateUnsavedIds } from "../../helpers/unsaved-comments";
 import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
@@ -462,11 +462,12 @@ export class Review extends Component<PropsType, StateType> {
 								{(contextValue: ContextType) => {
 									return (
 										!contextValue.isAuthorised ?
-											<LoginBanner
+											<LoginBannerWithRouter
 												signInButton={true}
 												currentURL={this.props.match.url}
 												signInURL={contextValue.signInURL}
 												registerURL={contextValue.registerURL}
+												key={"review"}
 											/> :
 											<main role="main">
 												<div className="page-header">

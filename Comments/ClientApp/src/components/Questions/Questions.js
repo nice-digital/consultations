@@ -3,7 +3,7 @@
 import React, { Component, Fragment } from "react";
 import { Prompt, withRouter } from "react-router-dom";
 import Helmet from "react-helmet";
-import { LoginBanner } from "../LoginBanner/LoginBanner";
+import LoginBannerWithRouter from "../LoginBanner/LoginBanner";
 import { StackedNav } from "../StackedNav/StackedNav";
 import { UserContext } from "../../context/UserContext";
 import preload from "../../data/pre-loader";
@@ -271,12 +271,13 @@ export class Questions extends Component<PropsType, StateType> {
 		return (
 			<UserContext.Consumer>
 				{(contextValue: any) => !contextValue.isAuthorised ?
-					<LoginBanner
+					<LoginBannerWithRouter
 						signInButton={false}
 						currentURL={this.props.match.url}
 						signInURL={contextValue.signInURL}
 						registerURL={contextValue.registerURL}
 						signInText="to administer a consultation"
+						key={"questions"}
 					/>
 					:
 					<Fragment>
