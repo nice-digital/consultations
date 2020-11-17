@@ -18,7 +18,7 @@ namespace Comments.Test.IntegrationTests.API.OrganisationAuthorisation
 			var responseString = await response.Content.ReadAsStringAsync();
 
 			// Assert
-			responseString.ShouldMatchApproved(new Func<string, string>[]{ Scrubbers.ScrubCollationCode });
+			responseString.ShouldMatchApproved(new Func<string, string>[]{ Scrubbers.ScrubCollationCode, Scrubbers.ScrubOrganisationAuthorisationId });
 		}
 	}
 }

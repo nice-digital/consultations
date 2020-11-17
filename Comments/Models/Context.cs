@@ -797,7 +797,7 @@ namespace Comments.Models
 			return organisationAuthorisations;
 		}
 
-		public bool CheckCollationCodeExists(string collationCode)
+		public OrganisationAuthorisation GetOrganisationAuthorisationByCollationCode(string collationCode)
 		{
 			collationCode = collationCode.Replace(" ", "");
 
@@ -805,7 +805,7 @@ namespace Comments.Models
 				.Where(oa => oa.CollationCode.Equals(collationCode))
 				.ToList();
 
-			return organisationAuthorisations.Any();
+			return organisationAuthorisations.FirstOrDefault(); //there should only be 1 with a given collation code.
 		}
 
 		public OrganisationAuthorisation SaveCollationCode(string sourceURI, string createdByUserId, DateTime createdDate, int organisationId, string collationCode)

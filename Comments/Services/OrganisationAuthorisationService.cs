@@ -10,6 +10,7 @@ namespace Comments.Services
 	public interface IOrganisationAuthorisationService
 	{
 		OrganisationCode GenerateOrganisationCode(int organisationId, int consultationId);
+		OrganisationCode CheckValidCodeForConsultation(string collationCode, int consultationId);
 	}
 
     public class OrganisationAuthorisationService : IOrganisationAuthorisationService
@@ -50,15 +51,15 @@ namespace Comments.Services
 
 			//then generate a new code. ensure it's unique and valid according to some rules.
 			string collationCode;
-			bool collision; //it's _very_ unlikely the 12 digit random number generator will generate the same one twice, but it's possible. so let's try 10 times.
+			OrganisationAuthorisation collision; //it's _very_ unlikely the 12 digit random number generator will generate the same one twice, but it's possible. so let's try 10 times.
 			const int maxTriesAtUnique = 10;
 			var counter = 0;
 			do
 			{
 				counter++;
 				collationCode = GenerateCollationCode();
-				collision = _context.CheckCollationCodeExists(collationCode);
-			} while (collision && counter <= maxTriesAtUnique);
+				collision = _context.GetOrganisationAuthorisationByCollationCode(collationCode);
+			} while (collision != null && counter <= maxTriesAtUnique);
 			
 			//then save it to the db
 			var organisationAuthorisation =_context.SaveCollationCode(sourceURI, currentUser.UserId, DateTime.UtcNow, organisationId, collationCode);
@@ -80,5 +81,17 @@ namespace Comments.Services
 	        var collationCode = $"{firstPart:#### ##}{secondPart:## ####}";
 	        return collationCode;
         }
+
+		/// <summary>
+		/// Checks a collation code is valid for a given consultation, by hitting the database.
+		/// Returns null if the collation code is not valid.
+		/// </summary>
+		/// <param name="collationCode"></param>
+		/// <param name="consultationId"></param>
+		/// <returns>null if the collation code is not valid.</returns>
+		public OrganisationCode CheckValidCodeForConsultation(string collationCode, int consultationId)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

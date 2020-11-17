@@ -59,6 +59,10 @@ namespace Comments.Test.Infrastructure
 		    return Regex.Replace(str, @"\d{4}\s\d{4}\s\d{4}", @"1234 1234 1234");
 	    }
 
+	    public static string ScrubOrganisationAuthorisationId(string str)
+	    {
+			return Regex.Replace(str, @"""organisationAuthorisationId"":(\d+)", @"""organisationAuthorisationId"":""scrubbed by ScrubUserId""");
+		}
 
 		public static string ScrubIds(string str)
 	    {
@@ -75,5 +79,7 @@ namespace Comments.Test.Infrastructure
 		    return Regex.Replace(str, "(<!--)([\\d\\D]+)(-->)", "\"Error Message\":\"scrubbed by ScrubErrorMessage\"");
 
 		}
-	}
+
+		
+    }
 }

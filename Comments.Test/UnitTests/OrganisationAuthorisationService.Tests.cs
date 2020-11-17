@@ -114,5 +114,58 @@ namespace Comments.Test.UnitTests
 				context.OrganisationAuthorisation.Count().ShouldBe(1);
 			}
 		}
+
+		[Theory]
+		[InlineData("123412341234", 1)]
+		[InlineData("1234 1234 1234", 1)] //the user is going to be shown the code like this, chunked into 4 digit groups.
+		[InlineData("12 34 12 34 12 34", 1)]
+		[InlineData("1 2 3 4 1 2 3 4 1 2 3 4", 1)] //but we ignore all spaces, if they choose to add some more.
+		public void CheckValidCodeForConsultationReturnsValid(string collationCode, int consultationId)
+		{
+			//Arrange
+			ResetDatabase();
+			_context.Database.EnsureCreated();
+			const string collationCodeInDB = "123412341234";
+			const int organisationId = 1;
+
+			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
+			{
+				AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, collationCode: collationCodeInDB);
+				var serviceUnderTest = new OrganisationAuthorisationService(context, _fakeUserService);
+
+				//Act 
+				var organisationCode = serviceUnderTest.CheckValidCodeForConsultation(collationCode, consultationId);
+
+				//Assert
+				organisationCode.ShouldNotBeNull();
+				organisationCode.CollationCode.ShouldBe(collationCodeInDB);
+			}
+		}
+
+		[Theory]
+		[InlineData("111111111111", 1)]
+		[InlineData("123412341234", 2)]
+		[InlineData("1234", 1)]
+		[InlineData("1234123412341", 1)]
+		public void CheckValidCodeForConsultationReturnsInvalid(string collationCode, int consultationId)
+		{
+			//Arrange
+			ResetDatabase();
+			_context.Database.EnsureCreated();
+			const string collationCodeInDB = "123412341234";
+			const int organisationId = 1;
+
+			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
+			{
+				AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, collationCode: collationCodeInDB);
+				var serviceUnderTest = new OrganisationAuthorisationService(context, _fakeUserService);
+
+				//Act 
+				var organisationCode = serviceUnderTest.CheckValidCodeForConsultation(collationCode, consultationId);
+
+				//Assert
+				organisationCode.ShouldBeNull();
+			}
+		}
 	}
 }
