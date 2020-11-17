@@ -17,8 +17,15 @@ export class LoginBanner extends PureComponent<PropsType> {
 					<div className="grid">
 						<div data-g="12">
 							<div className="LoginBanner">
+								<p>If you would like to comment on this consultation as part of an organisation, please enter your organisation code here:</p>
+								<label>
+									Organisation code
+									<input type="text" name="collationCode" />
+								</label>
+								<br/><br/>
 								<a href={this.props.signInURL} title="Sign in to your NICE account">
 									Sign in to your NICE account</a> {this.props.signInText || "to comment on this consultation"}.{" "}
+								<br/>
 								Don't have an account?{" "}
 								<a href={this.props.registerURL} title="Register for a NICE account">
 									Register
