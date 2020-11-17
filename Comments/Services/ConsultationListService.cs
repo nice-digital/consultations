@@ -6,6 +6,7 @@ using NICE.Feeds;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NICE.Identity.Authentication.Sdk.Domain;
 
 namespace Comments.Services
 {
@@ -80,7 +81,7 @@ namespace Comments.Services
 				}
 			}
 
-			var allOrganisationCodes = GetConsultationCodesForAllConsultations(consultationsFromIndev.Select(c => c.ConsultationId).ToList());
+			var allOrganisationCodes = GetConsultationCodesForAllConsultations(consultationsFromIndev.Select(c => c.ConsultationId).ToList(), currentUser.OrganisationsAssignedAsLead);
 
 			var consultationListRows = new List<ConsultationListRow>();
 
@@ -256,17 +257,12 @@ namespace Comments.Services
 			return consultationListRows.OrderByDescending(c => c.EndDate).ToList();
 		}
 
-		private Dictionary<int, IList<OrganisationCode>> GetConsultationCodesForAllConsultations(IList<int> consultationIds)
+		private Dictionary<int, IList<OrganisationCode>> GetConsultationCodesForAllConsultations(IList<int> consultationIds, IEnumerable<Organisation> organisationsAssignedAsLead)
 		{
 			var consultationSourceURIs = consultationIds.Select(consultationId => ConsultationsUri.CreateConsultationURI(consultationId)).ToList();
 
 			var organisationAuthorisations = _context.GetOrganisationAuthorisations(consultationSourceURIs);
-
-			var distinctOrganisationIds = organisationAuthorisations.Select(oa => oa.OrganisationId).Distinct();
-
-			//todo: get organisation name + ids from idam that the current user has access to.
-
-
+			
 			var codesPerConsultation = new Dictionary<int, IList<OrganisationCode>>();
 			foreach (var consultationId in consultationIds)
 			{
@@ -277,8 +273,11 @@ namespace Comments.Services
 
 				codesPerConsultation.Add(consultationId,
 					organisationAuthorisationsForThisConsultation.Select(oa =>
-						new OrganisationCode(oa.OrganisationAuthorisationId, oa.OrganisationId, "TODO: get organisation name from the list from idam", oa.CollationCode))
-					.ToList());
+						new OrganisationCode(oa.OrganisationAuthorisationId,
+							oa.OrganisationId,
+							organisationsAssignedAsLead.FirstOrDefault(org => org.OrganisationId.Equals(oa.OrganisationId))?.OrganisationName, oa.CollationCode))
+						.OrderBy(org => org.OrganisationName)
+						.ToList());
 			}
 
 			return codesPerConsultation;

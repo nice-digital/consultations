@@ -44,7 +44,7 @@
                 {
                     "OrganisationAuthorisationId":1,
                     "OrganisationId":1,
-                    "OrganisationName":"TODO: get organisation name from the list from idam",
+                    "OrganisationName":"NICE",
                     "CollationCode":"FAKE CODE"
                 }
             ],
