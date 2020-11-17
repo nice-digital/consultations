@@ -807,6 +807,16 @@ namespace Comments.Models
 
 			return organisationAuthorisations.Any();
 		}
-		
+
+		public OrganisationAuthorisation SaveCollationCode(string sourceURI, string createdByUserId, DateTime createdDate, int organisationId, string collationCode)
+		{
+			var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
+			Location.Add(location);
+			SaveChanges();
+			var organisationAuthorisation = new OrganisationAuthorisation(createdByUserId, createdDate, organisationId, location.LocationId, collationCode);
+			OrganisationAuthorisation.Add(organisationAuthorisation);
+			SaveChanges();
+			return organisationAuthorisation;
+		}
 	}
 }

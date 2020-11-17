@@ -7,7 +7,7 @@ namespace Comments.Controllers.Api
 {
 	[Produces("application/json")]
     [Route("consultations/api/[controller]")]
-   // [Authorize]
+    [Authorize]
     public class OrganisationAuthorisationController : ControllerBase
     {
 	    private readonly IOrganisationAuthorisationService _organisationAuthorisationService;

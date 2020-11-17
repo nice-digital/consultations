@@ -1,3 +1,5 @@
+using Comments.Models;
+
 namespace Comments.ViewModels
 {
 	public class OrganisationCode
@@ -8,6 +10,15 @@ namespace Comments.ViewModels
 			OrganisationId = organisationId;
 			OrganisationName = organisationName;
 			CollationCode = collationCode;
+		}
+
+		public OrganisationCode(Models.OrganisationAuthorisation organisationAuthorisation, string organisationName)
+		{
+			OrganisationAuthorisationId = organisationAuthorisation.OrganisationAuthorisationId;
+			OrganisationId = organisationAuthorisation.OrganisationId;
+			CollationCode = organisationAuthorisation.CollationCode;
+
+			OrganisationName = organisationName;
 		}
 
 		public int OrganisationAuthorisationId { get; private set; }

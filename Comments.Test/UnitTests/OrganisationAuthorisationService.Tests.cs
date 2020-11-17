@@ -67,7 +67,7 @@ namespace Comments.Test.UnitTests
 			var regex = new Regex(validRegexForCollationCode);
 
 			//Act
-			var collationCode = serviceUnderTest.GenerateOrganisationCode(1, 1);
+			var collationCode = serviceUnderTest.GenerateOrganisationCode(1, 1).CollationCode;
 			
 			//Assert
 			regex.IsMatch(collationCode).ShouldBeTrue();
@@ -84,35 +84,35 @@ namespace Comments.Test.UnitTests
 			var collationCodes = new List<string>();
 			for (var counter = 0; counter < numberOfTimesToGetCollationCode; counter++)
 			{
-				collationCodes.Add(serviceUnderTest.GenerateOrganisationCode(1, consultationId: counter));
+				collationCodes.Add(serviceUnderTest.GenerateOrganisationCode(1, consultationId: counter).CollationCode);
 			}
 
 			//Assert
 			collationCodes.Distinct().Count().ShouldBe(numberOfTimesToGetCollationCode);
 		}
 
-		//[Fact]
-		//public void CollationCodeDoesNotAlreadyExistInDatabase()
-		//{
-		//	//Arrange
-		//	ResetDatabase();
-		//	_context.Database.EnsureCreated();
-		//	const int organisationId = 1;
-		//	const int consultationId = 1;
-		//	const string collationCode = "1234 1234 1234";
+		[Fact]
+		public void CollationCodeGetsSavedInDatabase()
+		{
+			//Arrange
+			ResetDatabase();
+			_context.Database.EnsureCreated();
+			const int organisationId = 1;
+			const int consultationId = 1;
 
-		//	var userService = new StubUserService(new User(isAuthorised: true, displayName: "Carl Spackler",
-		//		userId: "001", new List<Organisation>() { new Organisation(organisationId, "Bushwood Country Club", isLead: true) }));
+			var userService = new StubUserService(new User(isAuthorised: true, displayName: "Carl Spackler",
+				userId: "001", new List<Organisation> { new Organisation(organisationId, "Bushwood Country Club", isLead: true) }));
 
-		//	using (var context = new ConsultationsContext(_options, userService, _fakeEncryption))
-		//	{
-		//		AddOrganisationAuthorisationWithLocation(2, consultationId, context, collationCode: collationCode);
+			using (var context = new ConsultationsContext(_options, userService, _fakeEncryption))
+			{
+				var serviceUnderTest = new OrganisationAuthorisationService(context, userService);
 
-		//		var serviceUnderTest = new OrganisationAuthorisationService(context, userService, _fakeHttpContextAccessor);
+				//Act 
+				serviceUnderTest.GenerateOrganisationCode(organisationId, consultationId);
 
-		//		//Act + Assert
-		//		collationCode = serviceUnderTest.GenerateOrganisationCode(organisationId, consultationId);
-		//	}
-		//}
+				//Assert
+				context.OrganisationAuthorisation.Count().ShouldBe(1);
+			}
+		}
 	}
 }
