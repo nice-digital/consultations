@@ -4,6 +4,8 @@ namespace Comments.ViewModels
 {
 	public class OrganisationCode
 	{
+		public OrganisationCode(){}
+
 		public OrganisationCode(int organisationAuthorisationId, int organisationId, string organisationName, string collationCode)
 		{
 			OrganisationAuthorisationId = organisationAuthorisationId;
@@ -35,13 +37,13 @@ namespace Comments.ViewModels
 		{
 			get
 			{
-				if (_collationCode.Length == 12)
+				if (!string.IsNullOrEmpty(_collationCode) && _collationCode.Length == 12)
 				{
 					return $"{_collationCode.Substring(0, 4)} {_collationCode.Substring(4, 4)} {_collationCode.Substring(8, 4)}";
 				}
 				return _collationCode;
 			}
-			set => _collationCode = value.Replace(" ", "");
+			set => _collationCode = !string.IsNullOrEmpty(value) ? value.Replace(" ", "") : value;
 		}
 	}
 }

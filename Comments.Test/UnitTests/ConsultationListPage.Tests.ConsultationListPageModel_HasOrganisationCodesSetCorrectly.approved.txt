@@ -19,7 +19,12 @@
             "IsUpcoming":true,
             "Show":true,
             "OrganisationCodes":[
-                
+                {
+                    "OrganisationAuthorisationId":0,
+                    "OrganisationId":1,
+                    "OrganisationName":"NICE",
+                    "CollationCode":null
+                }
             ],
             "ShowShareWithOrganisationButton":false,
             "CanGenerateOrganisationCodes":true
@@ -70,7 +75,12 @@
             "IsUpcoming":false,
             "Show":true,
             "OrganisationCodes":[
-                
+                {
+                    "OrganisationAuthorisationId":0,
+                    "OrganisationId":1,
+                    "OrganisationName":"NICE",
+                    "CollationCode":null
+                }
             ],
             "ShowShareWithOrganisationButton":false,
             "CanGenerateOrganisationCodes":true

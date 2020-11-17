@@ -81,7 +81,7 @@ namespace Comments.Services
 				}
 			}
 
-			var allOrganisationCodes = GetConsultationCodesForAllConsultations(consultationsFromIndev.Select(c => c.ConsultationId).ToList(), isAdminUser, currentUser.OrganisationsAssignedAsLead);
+			var allOrganisationCodes = GetConsultationCodesForAllConsultations(consultationsFromIndev.Select(c => c.ConsultationId).ToList(), isAdminUser, currentUser.OrganisationsAssignedAsLead.ToList());
 
 			var consultationListRows = new List<ConsultationListRow>();
 
@@ -258,11 +258,11 @@ namespace Comments.Services
 			return consultationListRows.OrderByDescending(c => c.EndDate).ToList();
 		}
 
-		private Dictionary<int, IList<OrganisationCode>> GetConsultationCodesForAllConsultations(IList<int> consultationIds, bool isAdminUser, IEnumerable<Organisation> organisationsAssignedAsLead)
+		private Dictionary<int, IList<OrganisationCode>> GetConsultationCodesForAllConsultations(IList<int> consultationIds, bool isAdminUser, IList<Organisation> organisationsAssignedAsLead)
 		{
 			var consultationSourceURIs = consultationIds.Select(consultationId => ConsultationsUri.CreateConsultationURI(consultationId)).ToList();
 
-			var organisationAuthorisations = _context.GetOrganisationAuthorisations(consultationSourceURIs);
+			var organisationAuthorisationsInDB = _context.GetOrganisationAuthorisations(consultationSourceURIs);
 			
 			var codesPerConsultation = new Dictionary<int, IList<OrganisationCode>>();
 			foreach (var consultationId in consultationIds)
@@ -270,20 +270,34 @@ namespace Comments.Services
 				var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
 
 				List<OrganisationAuthorisation> organisationAuthorisationsToShowForUser;
-				if (isAdminUser) //admin's can see all collation codes. they can't generate them though.
+				if (isAdminUser) //admin's can see all collation codes. 
 				{
-					organisationAuthorisationsToShowForUser = organisationAuthorisations
+					organisationAuthorisationsToShowForUser = organisationAuthorisationsInDB
 						.Where(oa => oa.Location.SourceURI.Equals(sourceURI, StringComparison.OrdinalIgnoreCase))
 						.ToList();
 				}
-				else
+				else //non-admin's who are organisation leads 
 				{
-					organisationAuthorisationsToShowForUser = organisationAuthorisations
+					organisationAuthorisationsToShowForUser = organisationAuthorisationsInDB
 						.Where(oa => oa.Location.SourceURI.Equals(sourceURI, StringComparison.OrdinalIgnoreCase) &&
 						             organisationsAssignedAsLead.Any(org => org.OrganisationId.Equals(oa.OrganisationId)))
 						.ToList();
 				}
-				
+
+				//now to add blank rows.
+				if (organisationsAssignedAsLead.Any())
+				{
+					var eachOrganisationTheUserIsLinkedToHasACode = organisationAuthorisationsToShowForUser.Count >= organisationsAssignedAsLead.Count();
+					if (!eachOrganisationTheUserIsLinkedToHasACode)
+					{
+						var extraRowsToAdd = organisationsAssignedAsLead.Where(oa =>
+								!organisationAuthorisationsToShowForUser.Exists(o => o.OrganisationId == oa.OrganisationId))
+							.Select(oa => new OrganisationAuthorisation(null, DateTime.UtcNow, oa.OrganisationId, 0, collationCode: null));
+
+						organisationAuthorisationsToShowForUser.AddRange(extraRowsToAdd);
+					}
+				}
+
 				codesPerConsultation.Add(consultationId,
 					organisationAuthorisationsToShowForUser.Select(oa =>
 						new OrganisationCode(oa.OrganisationAuthorisationId,

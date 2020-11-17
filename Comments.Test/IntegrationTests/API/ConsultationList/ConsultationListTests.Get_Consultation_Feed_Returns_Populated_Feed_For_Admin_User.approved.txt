@@ -19,7 +19,12 @@
             "isUpcoming":false,
             "show":true,
             "organisationCodes":[
-                
+                {
+                    "organisationAuthorisationId":0,
+                    "organisationId":1,
+                    "organisationName":"NICE",
+                    "collationCode":null
+                }
             ],
             "showShareWithOrganisationButton":true,
             "canGenerateOrganisationCodes":true
@@ -42,7 +47,12 @@
             "isUpcoming":false,
             "show":true,
             "organisationCodes":[
-                
+                {
+                    "organisationAuthorisationId":0,
+                    "organisationId":1,
+                    "organisationName":"NICE",
+                    "collationCode":null
+                }
             ],
             "showShareWithOrganisationButton":true,
             "canGenerateOrganisationCodes":true
