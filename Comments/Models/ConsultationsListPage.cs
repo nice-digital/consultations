@@ -7,7 +7,7 @@ namespace Comments.Models
 {
 	public class ConsultationListRow
 	{
-		public ConsultationListRow(string title, DateTime startDate, DateTime endDate, int? responses, int consultationId, int? documentId, string chapterSlug, string gidReference, string productTypeName, bool hasCurrentUserEnteredCommentsOrAnsweredQuestions, bool hasCurrentUserSubmittedCommentsOrAnswers, string allowedRole, IList<OrganisationCode> organisationCodes, bool canGenerateOrganisationCodes)
+		public ConsultationListRow(string title, DateTime startDate, DateTime endDate, int? responses, int consultationId, int? documentId, string chapterSlug, string gidReference, string productTypeName, bool hasCurrentUserEnteredCommentsOrAnsweredQuestions, bool hasCurrentUserSubmittedCommentsOrAnswers, string allowedRole, IList<OrganisationCode> organisationCodes)
 		{
 			Title = title;
 			StartDate = startDate;
@@ -22,7 +22,6 @@ namespace Comments.Models
 			HasCurrentUserSubmittedCommentsOrAnswers = hasCurrentUserSubmittedCommentsOrAnswers;
 			AllowedRole = allowedRole;
 			OrganisationCodes = organisationCodes;
-			CanGenerateOrganisationCodes = canGenerateOrganisationCodes;
 		}
 
 		public string Title { get; private set; }
@@ -61,7 +60,5 @@ namespace Comments.Models
 
 		public IList<OrganisationCode> OrganisationCodes { get; private set; }
 		public bool ShowShareWithOrganisationButton => IsOpen;
-		public bool CanGenerateOrganisationCodes { get; private set; }
-
 	}
 }

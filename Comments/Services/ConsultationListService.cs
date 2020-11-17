@@ -54,7 +54,6 @@ namespace Comments.Services
 			var teamRoles = userRoles.Where(role => AppSettings.ConsultationListConfig.DownloadRoles.TeamRoles.Contains(role)).Select(role => role).ToList();
 			var isTeamUser = !isAdminUser && teamRoles.Any(); //an admin with team roles is still just considered an admin.
 			var hasAccessToViewUpcomingConsultations = isAdminUser || isTeamUser;
-			var canGenerateOrganisationCodes = currentUser.OrganisationsAssignedAsLead.Any();
 
 			var canSeeAnySubmissionCounts = isAdminUser || isTeamUser;
 
@@ -101,7 +100,7 @@ namespace Comments.Services
 						consultation.StartDate, consultation.EndDate, responseCount, consultation.ConsultationId,
 						consultation.FirstConvertedDocumentId, consultation.FirstChapterSlugOfFirstConvertedDocument, consultation.Reference,
 						consultation.ProductTypeName, hasCurrentUserEnteredCommentsOrAnsweredQuestions, hasCurrentUserSubmittedCommentsOrAnswers, consultation.AllowedRole,
-						allOrganisationCodes[consultation.ConsultationId], canGenerateOrganisationCodes));
+						allOrganisationCodes[consultation.ConsultationId]));
 			}
 
 			model.OptionFilters = GetOptionFilterGroups(model.Status?.ToList(), consultationListRows, hasAccessToViewUpcomingConsultations);
@@ -302,7 +301,10 @@ namespace Comments.Services
 					organisationAuthorisationsToShowForUser.Select(oa =>
 						new OrganisationCode(oa.OrganisationAuthorisationId,
 							oa.OrganisationId,
-							organisationsAssignedAsLead.FirstOrDefault(org => org.OrganisationId.Equals(oa.OrganisationId))?.OrganisationName, oa.CollationCode))
+							organisationsAssignedAsLead.FirstOrDefault(org => org.OrganisationId.Equals(oa.OrganisationId))?.OrganisationName,
+							oa.CollationCode,
+							organisationsAssignedAsLead.Any(leadOrgs => leadOrgs.OrganisationId.Equals(oa.OrganisationId) && leadOrgs.IsLead)
+							))
 						.OrderBy(org => org.OrganisationName)
 						.ToList());
 			}

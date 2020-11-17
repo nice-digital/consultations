@@ -24,11 +24,11 @@
                         "OrganisationAuthorisationId":0,
                         "OrganisationId":1,
                         "OrganisationName":"NICE",
+                        "CanGenerateCollationCode":true,
                         "CollationCode":null
                     }
                 ],
-                "ShowShareWithOrganisationButton":false,
-                "CanGenerateOrganisationCodes":true
+                "ShowShareWithOrganisationButton":false
             },
             {
                 "Title":null,
@@ -52,11 +52,11 @@
                         "OrganisationAuthorisationId":0,
                         "OrganisationId":1,
                         "OrganisationName":"NICE",
+                        "CanGenerateCollationCode":true,
                         "CollationCode":null
                     }
                 ],
-                "ShowShareWithOrganisationButton":false,
-                "CanGenerateOrganisationCodes":true
+                "ShowShareWithOrganisationButton":false
             }
         ],
         "OptionFilters":[

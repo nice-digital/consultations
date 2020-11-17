@@ -23,11 +23,11 @@
                     "OrganisationAuthorisationId":0,
                     "OrganisationId":1,
                     "OrganisationName":"NICE",
+                    "CanGenerateCollationCode":true,
                     "CollationCode":null
                 }
             ],
-            "ShowShareWithOrganisationButton":false,
-            "CanGenerateOrganisationCodes":true
+            "ShowShareWithOrganisationButton":false
         },
         {
             "Title":"Consultation title 1",
@@ -51,11 +51,11 @@
                     "OrganisationAuthorisationId":0,
                     "OrganisationId":1,
                     "OrganisationName":"NICE",
+                    "CanGenerateCollationCode":true,
                     "CollationCode":null
                 }
             ],
-            "ShowShareWithOrganisationButton":true,
-            "CanGenerateOrganisationCodes":true
+            "ShowShareWithOrganisationButton":true
         },
         {
             "Title":"Consultation Title 1",
@@ -79,11 +79,11 @@
                     "OrganisationAuthorisationId":0,
                     "OrganisationId":1,
                     "OrganisationName":"NICE",
+                    "CanGenerateCollationCode":true,
                     "CollationCode":null
                 }
             ],
-            "ShowShareWithOrganisationButton":false,
-            "CanGenerateOrganisationCodes":true
+            "ShowShareWithOrganisationButton":false
         }
     ],
     "OptionFilters":[

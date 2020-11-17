@@ -6,12 +6,14 @@ namespace Comments.ViewModels
 	{
 		public OrganisationCode(){}
 
-		public OrganisationCode(int organisationAuthorisationId, int organisationId, string organisationName, string collationCode)
+		public OrganisationCode(int organisationAuthorisationId, int organisationId, string organisationName, string collationCode, bool userIsALeadOfThisOrganisation)
 		{
 			OrganisationAuthorisationId = organisationAuthorisationId;
 			OrganisationId = organisationId;
 			OrganisationName = organisationName;
 			_collationCode = collationCode;
+
+			CanGenerateCollationCode = string.IsNullOrEmpty(collationCode) && userIsALeadOfThisOrganisation;
 		}
 
 		public OrganisationCode(Models.OrganisationAuthorisation organisationAuthorisation, string organisationName)
@@ -27,6 +29,7 @@ namespace Comments.ViewModels
 		public int OrganisationId { get; private set; }
 		public string OrganisationName { get; private set; }
 
+		public bool CanGenerateCollationCode { get; private set; }
 
 		private string _collationCode;
 		/// <summary>
