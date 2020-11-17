@@ -9,14 +9,14 @@ namespace Comments.ViewModels
 			OrganisationAuthorisationId = organisationAuthorisationId;
 			OrganisationId = organisationId;
 			OrganisationName = organisationName;
-			CollationCode = collationCode;
+			_collationCode = collationCode;
 		}
 
 		public OrganisationCode(Models.OrganisationAuthorisation organisationAuthorisation, string organisationName)
 		{
 			OrganisationAuthorisationId = organisationAuthorisation.OrganisationAuthorisationId;
 			OrganisationId = organisationAuthorisation.OrganisationId;
-			CollationCode = organisationAuthorisation.CollationCode;
+			_collationCode = organisationAuthorisation.CollationCode;
 
 			OrganisationName = organisationName;
 		}
@@ -24,6 +24,24 @@ namespace Comments.ViewModels
 		public int OrganisationAuthorisationId { get; private set; }
 		public int OrganisationId { get; private set; }
 		public string OrganisationName { get; private set; }
-		public string CollationCode { get; private set; }
+
+
+		private string _collationCode;
+		/// <summary>
+		/// The user in the front end should see the collation code chunked up like this: "1234 1234 1234".
+		/// database-wise though, we ignore spaces and just save the 12 numbers.
+		/// </summary>
+		public string CollationCode
+		{
+			get
+			{
+				if (_collationCode.Length == 12)
+				{
+					return $"{_collationCode.Substring(0, 4)} {_collationCode.Substring(4, 4)} {_collationCode.Substring(8, 4)}";
+				}
+				return _collationCode;
+			}
+			set => _collationCode = value.Replace(" ", "");
+		}
 	}
 }
