@@ -6,7 +6,7 @@ using NICE.Feeds;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NICE.Feeds.Models.Indev.List;
+using NICE.Identity.Authentication.Sdk.Domain;
 
 namespace Comments.Services
 {
@@ -49,7 +49,6 @@ namespace Comments.Services
 			if (!currentUser.IsAuthorised)
 				return (model, new Validate(valid: false, unauthorised: true));
 
-
 			var userRoles = _userService.GetUserRoles().ToList();
 			var isAdminUser = userRoles.Any(role => AppSettings.ConsultationListConfig.DownloadRoles.AdminRoles.Contains(role));
 			var teamRoles = userRoles.Where(role => AppSettings.ConsultationListConfig.DownloadRoles.TeamRoles.Contains(role)).Select(role => role).ToList();
@@ -81,6 +80,8 @@ namespace Comments.Services
 				}
 			}
 
+			var allOrganisationCodes = GetConsultationCodesForAllConsultations(consultationsFromIndev.Select(c => c.ConsultationId).ToList(), isAdminUser, currentUser.OrganisationsAssignedAsLead.ToList());
+
 			var consultationListRows = new List<ConsultationListRow>();
 
 			foreach (var consultation in consultationsFromIndev)
@@ -98,7 +99,8 @@ namespace Comments.Services
 					new ConsultationListRow(consultation.Title,
 						consultation.StartDate, consultation.EndDate, responseCount, consultation.ConsultationId,
 						consultation.FirstConvertedDocumentId, consultation.FirstChapterSlugOfFirstConvertedDocument, consultation.Reference,
-						consultation.ProductTypeName, hasCurrentUserEnteredCommentsOrAnsweredQuestions, hasCurrentUserSubmittedCommentsOrAnswers, consultation.AllowedRole));
+						consultation.ProductTypeName, hasCurrentUserEnteredCommentsOrAnsweredQuestions, hasCurrentUserSubmittedCommentsOrAnswers, consultation.AllowedRole,
+						allOrganisationCodes[consultation.ConsultationId]));
 			}
 
 			model.OptionFilters = GetOptionFilterGroups(model.Status?.ToList(), consultationListRows, hasAccessToViewUpcomingConsultations);
@@ -253,6 +255,61 @@ namespace Comments.Services
 			}
 
 			return consultationListRows.OrderByDescending(c => c.EndDate).ToList();
+		}
+
+		private Dictionary<int, IList<OrganisationCode>> GetConsultationCodesForAllConsultations(IList<int> consultationIds, bool isAdminUser, IList<Organisation> organisationsAssignedAsLead)
+		{
+			var consultationSourceURIs = consultationIds.Select(consultationId => ConsultationsUri.CreateConsultationURI(consultationId)).ToList();
+
+			var organisationAuthorisationsInDB = _context.GetOrganisationAuthorisations(consultationSourceURIs);
+			
+			var codesPerConsultation = new Dictionary<int, IList<OrganisationCode>>();
+			foreach (var consultationId in consultationIds)
+			{
+				var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
+
+				List<OrganisationAuthorisation> organisationAuthorisationsToShowForUser;
+				if (isAdminUser) //admin's can see all collation codes. 
+				{
+					organisationAuthorisationsToShowForUser = organisationAuthorisationsInDB
+						.Where(oa => oa.Location.SourceURI.Equals(sourceURI, StringComparison.OrdinalIgnoreCase))
+						.ToList();
+				}
+				else //non-admin's who are organisation leads 
+				{
+					organisationAuthorisationsToShowForUser = organisationAuthorisationsInDB
+						.Where(oa => oa.Location.SourceURI.Equals(sourceURI, StringComparison.OrdinalIgnoreCase) &&
+						             organisationsAssignedAsLead.Any(org => org.OrganisationId.Equals(oa.OrganisationId)))
+						.ToList();
+				}
+
+				//now to add blank rows.
+				if (organisationsAssignedAsLead.Any())
+				{
+					var eachOrganisationTheUserIsLinkedToHasACode = organisationAuthorisationsToShowForUser.Count >= organisationsAssignedAsLead.Count();
+					if (!eachOrganisationTheUserIsLinkedToHasACode)
+					{
+						var extraRowsToAdd = organisationsAssignedAsLead.Where(oa =>
+								!organisationAuthorisationsToShowForUser.Exists(o => o.OrganisationId == oa.OrganisationId))
+							.Select(oa => new OrganisationAuthorisation(null, DateTime.UtcNow, oa.OrganisationId, 0, collationCode: null));
+
+						organisationAuthorisationsToShowForUser.AddRange(extraRowsToAdd);
+					}
+				}
+
+				codesPerConsultation.Add(consultationId,
+					organisationAuthorisationsToShowForUser.Select(oa =>
+						new OrganisationCode(oa.OrganisationAuthorisationId,
+							oa.OrganisationId,
+							organisationsAssignedAsLead.FirstOrDefault(org => org.OrganisationId.Equals(oa.OrganisationId))?.OrganisationName,
+							oa.CollationCode,
+							organisationsAssignedAsLead.Any(leadOrgs => leadOrgs.OrganisationId.Equals(oa.OrganisationId) && leadOrgs.IsLead)
+							))
+						.OrderBy(org => org.OrganisationName)
+						.ToList());
+			}
+
+			return codesPerConsultation;
 		}
 	}
 }

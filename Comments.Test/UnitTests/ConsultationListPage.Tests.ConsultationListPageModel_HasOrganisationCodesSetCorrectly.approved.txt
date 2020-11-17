@@ -5,7 +5,7 @@
             "Title":"Consultation Title 3",
             "StartDate":"scrubbed by ScrubStartDate",
             "EndDate":"scrubbed by ScrubEndDate",
-            "SubmissionCount":null,
+            "SubmissionCount":0,
             "ConsultationId":125,
             "DocumentId":1,
             "ChapterSlug":"my-chapter-slug",
@@ -17,7 +17,7 @@
             "IsOpen":false,
             "IsClosed":false,
             "IsUpcoming":true,
-            "Show":false,
+            "Show":true,
             "OrganisationCodes":[
                 {
                     "OrganisationAuthorisationId":0,
@@ -48,11 +48,11 @@
             "Show":true,
             "OrganisationCodes":[
                 {
-                    "OrganisationAuthorisationId":0,
+                    "OrganisationAuthorisationId":1,
                     "OrganisationId":1,
                     "OrganisationName":"NICE",
-                    "CanGenerateCollationCode":true,
-                    "CollationCode":null
+                    "CanGenerateCollationCode":false,
+                    "CollationCode":"FAKE CODE"
                 }
             ],
             "ShowShareWithOrganisationButton":true
@@ -138,30 +138,16 @@
             "Title":"Contribution filter group"
         }
     ],
-    "TeamFilter":[
-        {
-            "Options":[
-                {
-                    "Id":"MyTeam",
-                    "Label":"My team's consultations",
-                    "IsSelected":true,
-                    "FilteredResultCount":2,
-                    "UnfilteredResultCount":3
-                }
-            ],
-            "Id":"Team",
-            "Title":"Team filter"
-        }
-    ],
+    "TeamFilter":null,
     "User":{
-        "IsAdminUser":false,
-        "IsTeamUser":true,
+        "IsAdminUser":true,
+        "IsTeamUser":false,
         "TeamNames":[
-            "ConsultationListTestRole"
+            
         ],
         "IsAuthorised":true,
-        "DisplayName":"Jeffrey Goines",
-        "UserId":"00000000-0000-0000-0000-000000000000",
+        "DisplayName":"Benjamin Button",
+        "UserId":"scrubbed by ScrubUserId",
         "OrganisationsAssignedAsLead":[
             {
                 "OrganisationId":1,
@@ -176,7 +162,5 @@
     ],
     "Keyword":null,
     "Contribution":null,
-    "Team":[
-        "MyTeam"
-    ]
+    "Team":null
 }

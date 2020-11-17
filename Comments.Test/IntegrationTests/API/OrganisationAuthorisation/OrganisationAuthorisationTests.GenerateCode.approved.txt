@@ -1,0 +1,7 @@
+﻿{
+    "organisationAuthorisationId":1,
+    "organisationId":1,
+    "organisationName":"NICE",
+    "canGenerateCollationCode":false,
+    "collationCode":"1234 1234 1234"
+}

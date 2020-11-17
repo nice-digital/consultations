@@ -18,7 +18,17 @@
                 "IsOpen":false,
                 "IsClosed":true,
                 "IsUpcoming":false,
-                "Show":true
+                "Show":true,
+                "OrganisationCodes":[
+                    {
+                        "OrganisationAuthorisationId":0,
+                        "OrganisationId":1,
+                        "OrganisationName":"NICE",
+                        "CanGenerateCollationCode":true,
+                        "CollationCode":null
+                    }
+                ],
+                "ShowShareWithOrganisationButton":false
             },
             {
                 "Title":null,
@@ -36,7 +46,17 @@
                 "IsOpen":false,
                 "IsClosed":true,
                 "IsUpcoming":false,
-                "Show":false
+                "Show":false,
+                "OrganisationCodes":[
+                    {
+                        "OrganisationAuthorisationId":0,
+                        "OrganisationId":1,
+                        "OrganisationName":"NICE",
+                        "CanGenerateCollationCode":true,
+                        "CollationCode":null
+                    }
+                ],
+                "ShowShareWithOrganisationButton":false
             }
         ],
         "OptionFilters":[
@@ -94,7 +114,13 @@
             "IsAuthorised":true,
             "DisplayName":"Benjamin Button",
             "UserId":"00000000-0000-0000-0000-000000000000",
-            "OrganisationName":null
+            "OrganisationsAssignedAsLead":[
+                {
+                    "OrganisationId":1,
+                    "OrganisationName":"NICE",
+                    "IsLead":true
+                }
+            ]
         },
         "InitialPageView":false,
         "Status":[
