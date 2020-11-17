@@ -49,12 +49,12 @@ namespace Comments.Services
 			if (!currentUser.IsAuthorised)
 				return (model, new Validate(valid: false, unauthorised: true));
 
-
 			var userRoles = _userService.GetUserRoles().ToList();
 			var isAdminUser = userRoles.Any(role => AppSettings.ConsultationListConfig.DownloadRoles.AdminRoles.Contains(role));
 			var teamRoles = userRoles.Where(role => AppSettings.ConsultationListConfig.DownloadRoles.TeamRoles.Contains(role)).Select(role => role).ToList();
 			var isTeamUser = !isAdminUser && teamRoles.Any(); //an admin with team roles is still just considered an admin.
 			var hasAccessToViewUpcomingConsultations = isAdminUser || isTeamUser;
+			var canGenerateOrganisationCodes = currentUser.OrganisationsAssignedAsLead.Any();
 
 			var canSeeAnySubmissionCounts = isAdminUser || isTeamUser;
 
@@ -81,7 +81,7 @@ namespace Comments.Services
 				}
 			}
 
-			var allOrganisationCodes = GetConsultationCodesForAllConsultations(consultationsFromIndev.Select(c => c.ConsultationId).ToList(), currentUser.OrganisationsAssignedAsLead);
+			var allOrganisationCodes = GetConsultationCodesForAllConsultations(consultationsFromIndev.Select(c => c.ConsultationId).ToList(), isAdminUser, currentUser.OrganisationsAssignedAsLead);
 
 			var consultationListRows = new List<ConsultationListRow>();
 
@@ -100,7 +100,8 @@ namespace Comments.Services
 					new ConsultationListRow(consultation.Title,
 						consultation.StartDate, consultation.EndDate, responseCount, consultation.ConsultationId,
 						consultation.FirstConvertedDocumentId, consultation.FirstChapterSlugOfFirstConvertedDocument, consultation.Reference,
-						consultation.ProductTypeName, hasCurrentUserEnteredCommentsOrAnsweredQuestions, hasCurrentUserSubmittedCommentsOrAnswers, consultation.AllowedRole, allOrganisationCodes[consultation.ConsultationId]));
+						consultation.ProductTypeName, hasCurrentUserEnteredCommentsOrAnsweredQuestions, hasCurrentUserSubmittedCommentsOrAnswers, consultation.AllowedRole,
+						allOrganisationCodes[consultation.ConsultationId], canGenerateOrganisationCodes));
 			}
 
 			model.OptionFilters = GetOptionFilterGroups(model.Status?.ToList(), consultationListRows, hasAccessToViewUpcomingConsultations);
@@ -257,7 +258,7 @@ namespace Comments.Services
 			return consultationListRows.OrderByDescending(c => c.EndDate).ToList();
 		}
 
-		private Dictionary<int, IList<OrganisationCode>> GetConsultationCodesForAllConsultations(IList<int> consultationIds, IEnumerable<Organisation> organisationsAssignedAsLead)
+		private Dictionary<int, IList<OrganisationCode>> GetConsultationCodesForAllConsultations(IList<int> consultationIds, bool isAdminUser, IEnumerable<Organisation> organisationsAssignedAsLead)
 		{
 			var consultationSourceURIs = consultationIds.Select(consultationId => ConsultationsUri.CreateConsultationURI(consultationId)).ToList();
 
@@ -268,11 +269,23 @@ namespace Comments.Services
 			{
 				var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
 
-				var organisationAuthorisationsForThisConsultation = organisationAuthorisations
-					.Where(oa => oa.Location.SourceURI.Equals(sourceURI, StringComparison.OrdinalIgnoreCase)).ToList();
-
+				List<OrganisationAuthorisation> organisationAuthorisationsToShowForUser;
+				if (isAdminUser) //admin's can see all collation codes. they can't generate them though.
+				{
+					organisationAuthorisationsToShowForUser = organisationAuthorisations
+						.Where(oa => oa.Location.SourceURI.Equals(sourceURI, StringComparison.OrdinalIgnoreCase))
+						.ToList();
+				}
+				else
+				{
+					organisationAuthorisationsToShowForUser = organisationAuthorisations
+						.Where(oa => oa.Location.SourceURI.Equals(sourceURI, StringComparison.OrdinalIgnoreCase) &&
+						             organisationsAssignedAsLead.Any(org => org.OrganisationId.Equals(oa.OrganisationId)))
+						.ToList();
+				}
+				
 				codesPerConsultation.Add(consultationId,
-					organisationAuthorisationsForThisConsultation.Select(oa =>
+					organisationAuthorisationsToShowForUser.Select(oa =>
 						new OrganisationCode(oa.OrganisationAuthorisationId,
 							oa.OrganisationId,
 							organisationsAssignedAsLead.FirstOrDefault(org => org.OrganisationId.Equals(oa.OrganisationId))?.OrganisationName, oa.CollationCode))

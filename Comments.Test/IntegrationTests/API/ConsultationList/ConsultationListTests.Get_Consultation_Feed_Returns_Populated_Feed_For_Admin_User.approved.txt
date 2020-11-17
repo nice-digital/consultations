@@ -21,7 +21,8 @@
             "organisationCodes":[
                 
             ],
-            "showShareWithOrganisationButton":true
+            "showShareWithOrganisationButton":true,
+            "canGenerateOrganisationCodes":true
         },
         {
             "title":"Transcutaneous microwave ablation for severe primary axillary hyperhidrosis ",
@@ -43,7 +44,8 @@
             "organisationCodes":[
                 
             ],
-            "showShareWithOrganisationButton":true
+            "showShareWithOrganisationButton":true,
+            "canGenerateOrganisationCodes":true
         }
     ],
     "optionFilters":[

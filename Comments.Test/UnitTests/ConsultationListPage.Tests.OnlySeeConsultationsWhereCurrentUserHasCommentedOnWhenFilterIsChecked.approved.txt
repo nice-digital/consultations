@@ -22,7 +22,8 @@
                 "OrganisationCodes":[
                     
                 ],
-                "ShowShareWithOrganisationButton":false
+                "ShowShareWithOrganisationButton":false,
+                "CanGenerateOrganisationCodes":true
             },
             {
                 "Title":null,
@@ -44,7 +45,8 @@
                 "OrganisationCodes":[
                     
                 ],
-                "ShowShareWithOrganisationButton":false
+                "ShowShareWithOrganisationButton":false,
+                "CanGenerateOrganisationCodes":true
             }
         ],
         "OptionFilters":[

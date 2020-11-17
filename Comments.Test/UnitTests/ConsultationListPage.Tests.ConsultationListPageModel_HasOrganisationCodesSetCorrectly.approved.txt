@@ -21,7 +21,8 @@
             "OrganisationCodes":[
                 
             ],
-            "ShowShareWithOrganisationButton":false
+            "ShowShareWithOrganisationButton":false,
+            "CanGenerateOrganisationCodes":true
         },
         {
             "Title":"Consultation title 1",
@@ -48,7 +49,8 @@
                     "CollationCode":"FAKE CODE"
                 }
             ],
-            "ShowShareWithOrganisationButton":true
+            "ShowShareWithOrganisationButton":true,
+            "CanGenerateOrganisationCodes":true
         },
         {
             "Title":"Consultation Title 1",
@@ -70,7 +72,8 @@
             "OrganisationCodes":[
                 
             ],
-            "ShowShareWithOrganisationButton":false
+            "ShowShareWithOrganisationButton":false,
+            "CanGenerateOrganisationCodes":true
         }
     ],
     "OptionFilters":[
