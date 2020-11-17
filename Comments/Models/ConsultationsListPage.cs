@@ -59,7 +59,7 @@ namespace Comments.Models
 		public bool Show { get; set; } = true;
 
 		public IList<OrganisationCode> OrganisationCodes { get; private set; }
-		public bool ShowShareWithOrganisationButton => OrganisationCodes.Any() && IsOpen;
+		public bool ShowShareWithOrganisationButton => IsOpen;
 
 	}
 }
