@@ -7,7 +7,6 @@ namespace Comments.Controllers.Api
 {
 	[Produces("application/json")]
     [Route("consultations/api/[controller]")]
-    [Authorize]
     public class OrganisationAuthorisationController : ControllerBase
     {
 	    private readonly IOrganisationAuthorisationService _organisationAuthorisationService;
@@ -28,7 +27,8 @@ namespace Comments.Controllers.Api
 		/// <param name="consultationId"></param>
 		/// <returns></returns>
 		[HttpPost("")]
-        public IActionResult GenerateCode(int organisationId, int consultationId)
+		[Authorize]
+		public IActionResult GenerateCode(int organisationId, int consultationId)
         {
             if (!ModelState.IsValid)
             {
@@ -43,6 +43,8 @@ namespace Comments.Controllers.Api
 		/// <summary>
 		/// This method is called when the user types in the collation/organisation code in the LoginBanner react component.
 		/// It's called by ajax, potentially every 400msec, as the user types (there's some debouncing going on to limit it).
+		///
+		/// This method does not have the Authorize attribute as the user won't be logged in.
 		///
 		/// GET: consultations/api/OrganisationAuthorisation?collationCode=123412341234&consultationId=1
 		/// </summary>

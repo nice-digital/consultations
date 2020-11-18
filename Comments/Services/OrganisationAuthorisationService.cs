@@ -83,15 +83,25 @@ namespace Comments.Services
         }
 
 		/// <summary>
-		/// Checks a collation code is valid for a given consultation, by hitting the database.
-		/// Returns null if the collation code is not valid.
+		/// Checks a collation code is valid for a given consultation
 		/// </summary>
 		/// <param name="collationCode"></param>
 		/// <param name="consultationId"></param>
-		/// <returns>null if the collation code is not valid.</returns>
+		/// <returns>Returns null if the collation code is not valid</returns>
 		public OrganisationCode CheckValidCodeForConsultation(string collationCode, int consultationId)
 		{
-			throw new NotImplementedException();
+			var organisationAuthorisation = _context.GetOrganisationAuthorisationByCollationCode(collationCode);
+
+			if (organisationAuthorisation == null)
+				return null;
+
+			var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
+			if (!organisationAuthorisation.Location.SourceURI.Equals(sourceURI, StringComparison.OrdinalIgnoreCase))
+				return null;
+
+			var organisationName = "todo: get the organisation name using the organisationAuthorisation.OrganisationId, from idam.";
+
+			return new OrganisationCode(organisationAuthorisation, organisationName);
 		}
 	}
 }

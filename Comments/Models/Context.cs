@@ -802,6 +802,7 @@ namespace Comments.Models
 			collationCode = collationCode.Replace(" ", "");
 
 			var organisationAuthorisations = OrganisationAuthorisation
+				.Include(oa => oa.Location)
 				.Where(oa => oa.CollationCode.Equals(collationCode))
 				.ToList();
 

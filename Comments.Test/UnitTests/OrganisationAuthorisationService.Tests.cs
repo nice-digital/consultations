@@ -138,7 +138,6 @@ namespace Comments.Test.UnitTests
 
 				//Assert
 				organisationCode.ShouldNotBeNull();
-				organisationCode.CollationCode.ShouldBe(collationCodeInDB);
 			}
 		}
 
@@ -154,10 +153,11 @@ namespace Comments.Test.UnitTests
 			_context.Database.EnsureCreated();
 			const string collationCodeInDB = "123412341234";
 			const int organisationId = 1;
+			const int validConsultationId = 1;
 
 			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
 			{
-				AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, collationCode: collationCodeInDB);
+				AddOrganisationAuthorisationWithLocation(organisationId, validConsultationId, context, collationCode: collationCodeInDB);
 				var serviceUnderTest = new OrganisationAuthorisationService(context, _fakeUserService);
 
 				//Act 
