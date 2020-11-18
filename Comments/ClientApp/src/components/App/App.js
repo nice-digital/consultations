@@ -16,6 +16,7 @@ import {ErrorBoundary} from "../ErrorBoundary/ErrorBoundary";
 import {LiveAnnouncer, LiveMessenger} from "react-aria-live";
 import { projectInformation } from "../../constants";
 import { PhaseBanner } from "../PhaseBanner/PhaseBanner";
+import LeadInfo from "../LeadInfo/LeadInfo";
 
 type PropsType = any;
 
@@ -114,6 +115,11 @@ class App extends React.Component<PropsType, StateType> {
 												basename={this.props.basename}/>
 										}
 									</LiveMessenger>
+								</Route>
+
+								{/*Lead Info Page*/}
+								<Route exact path="/LeadInformation">
+									<LeadInfo />
 								</Route>
 
 								{/*404*/}
