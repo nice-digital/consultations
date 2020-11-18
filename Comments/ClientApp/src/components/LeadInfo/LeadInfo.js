@@ -1,7 +1,6 @@
-import React, { Component } from "react";
+﻿import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import Cookies from "js-cookie";
-
 import { withHistory } from "../HistoryContext/HistoryContext";
 import { Breadcrumbs } from "../Breadcrumbs/Breadcrumbs";
 
@@ -12,6 +11,7 @@ type StateType = {
 export class LeadInfo extends Component<null, StateType> {
 	constructor(props: PropsType) {
 		super(props);
+
 		this.state = {
 			indevReturnPath: null
 		}
@@ -39,7 +39,11 @@ export class LeadInfo extends Component<null, StateType> {
 		return indevReturnPath;
 	};
 
-
+	componentDidMount() {
+		this.setState({
+			indevReturnPath: this.setIndevReturnPath()
+		});
+	}
 
 	render() {
 		let breadcrumbLinkParams = [
@@ -56,8 +60,8 @@ export class LeadInfo extends Component<null, StateType> {
 		];
 
 		const emailAddress = "DITApplicationSupport@nice.org.uk"
-		const emailSubject = "New commenting lead request";
-		const emailBody = "Dear Sir/Madam";
+		const emailSubject = encodeURIComponent("New commenting lead request");
+		const emailBody = encodeURIComponent("Dear Sir/Madam\r\rMy name:\rI want to be commenting lead for\r\rKind regards");
 
 		return (
 			<div className="container">
