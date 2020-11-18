@@ -811,6 +811,8 @@ namespace Comments.Models
 
 		public OrganisationAuthorisation SaveCollationCode(string sourceURI, string createdByUserId, DateTime createdDate, int organisationId, string collationCode)
 		{
+			collationCode = collationCode.Replace(" ", "");
+
 			var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
 			Location.Add(location);
 			SaveChanges();
