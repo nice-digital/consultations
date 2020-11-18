@@ -76,9 +76,9 @@ namespace Comments.Services
 		private string GenerateCollationCode()
         {
 	        var random = new Random();
-	        var firstPart = random.Next(100000, 999999);
-	        var secondPart = random.Next(000000, 999999);
-	        var collationCode = $"{firstPart:#### ##}{secondPart:## ####}";
+	        var firstPart = random.Next(100000, 999999); //preventing a leading zero, which a user might not type, if they consider it a number.
+	        var secondPart = random.Next(0, 999999);
+	        var collationCode = $"{firstPart:0000 00}{secondPart:00 0000}";
 	        return collationCode;
         }
 
