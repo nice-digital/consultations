@@ -78,7 +78,7 @@ export class LoginBanner extends Component<PropsType, StateType> {
 			.catch(err => {
 				this.setState({
 					hasError: true,
-					errorMessage: err,
+					errorMessage: err, //err is a whole object, not just a message. todo: fix.
 					showAuthorisationOrganisation: false,					
 				});
 			});
@@ -113,11 +113,15 @@ export class LoginBanner extends Component<PropsType, StateType> {
 			});		
 	}
 
+	handleConfirmClick = () => {
+		console.log("confirm was clicked. set cookie here.");		
+	}
+
 
 	render(){
 		const {userEnteredCollationCode} = this.state;
 		const { match, location, history } = this.props
-// this.state.authorisationOrganisationFound.organisationName
+
 		return (
 			<div className="panel panel--inverse mt--0 mb--0 sign-in-banner"
 					 data-qa-sel="sign-in-banner">
@@ -143,10 +147,10 @@ export class LoginBanner extends Component<PropsType, StateType> {
 								{this.state.showAuthorisationOrganisation && 
 									<Fragment>
 										<label>Confirm organisation name
-											<strong>name goes here</strong>
+											<strong>{this.state.authorisationOrganisationFound.organisationName}</strong>
 										</label>
 										<br/>
-										<a className="btn btn--inverse" href={this.props.signInURL} title={"Confirm your organisation is " + "todo"}>Confirm</a>
+										<button className="btn btn--cta" onClick={() => this.handleConfirmClick()}  title={"Confirm your organisation is " + this.state.authorisationOrganisationFound.organisationName}>Confirm</button>
 									</Fragment>
 								}
 								<a href={this.props.signInURL} title="Sign in to your NICE account">

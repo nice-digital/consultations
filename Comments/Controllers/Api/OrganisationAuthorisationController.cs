@@ -75,7 +75,7 @@ namespace Comments.Controllers.Api
 			{
 				var organisationCode = await _organisationAuthorisationService.CheckValidCodeForConsultation(collationCode, consultationId);
 
-				return Ok(organisationCode);
+				 return Ok(organisationCode);
 			}
 			catch (ApplicationException ae)
 			{
