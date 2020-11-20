@@ -2,6 +2,7 @@ using System;
 using System.Data;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Comments.Common;
 using Comments.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -58,7 +59,7 @@ namespace Comments.Controllers.Api
 		/// <param name="consultationId"></param>
 		/// <returns></returns>
 		[HttpGet("")]
-		public IActionResult CheckOrganisationCode(string collationCode, int consultationId)
+		public async Task<IActionResult> CheckOrganisationCode(string collationCode, int consultationId)
 		{
 			if (consultationId < 1)
 				throw new ArgumentException("Consultation id must be a positive integer", nameof(consultationId));
@@ -72,7 +73,7 @@ namespace Comments.Controllers.Api
 			
 			try
 			{
-				var organisationCode = _organisationAuthorisationService.CheckValidCodeForConsultation(collationCode, consultationId);
+				var organisationCode = await _organisationAuthorisationService.CheckValidCodeForConsultation(collationCode, consultationId);
 
 				return Ok(organisationCode);
 			}

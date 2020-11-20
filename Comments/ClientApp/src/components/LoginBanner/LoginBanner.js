@@ -77,11 +77,9 @@ export class LoginBanner extends Component<PropsType, StateType> {
 			.then(response => response.data)
 			.catch(err => {
 				this.setState({
-					error: {
-						hasError: true,
-						errorMessage: err,
-						showAuthorisationOrganisation: false,
-					},
+					hasError: true,
+					errorMessage: err,
+					showAuthorisationOrganisation: false,					
 				});
 			});
 		return {
@@ -92,14 +90,23 @@ export class LoginBanner extends Component<PropsType, StateType> {
 	checkOrganisationCode = () => {
 		this.gatherData()
 			.then(data => {
-				if (data.organisationCode !== null) {
+				if (data.organisationCode != null) {
 					this.setState({
 						hasError: false,
 						errorMessage: "",
 						showAuthorisationOrganisation: true,
 						authorisationOrganisationFound: data.organisationCode,
 					});
-				} 
+				} else{
+					console.log("in the else, data is:");
+					console.log(JSON.stringify(data));
+					this.setState({
+						hasError: true,
+						errorMessage: "",
+						showAuthorisationOrganisation: false,
+						authorisationOrganisationFound: null,
+					});
+				}
 			})
 			.catch(err => {
 				throw new Error("gatherData in checkOrganisationCode failed " + err);
@@ -110,7 +117,7 @@ export class LoginBanner extends Component<PropsType, StateType> {
 	render(){
 		const {userEnteredCollationCode} = this.state;
 		const { match, location, history } = this.props
-
+// this.state.authorisationOrganisationFound.organisationName
 		return (
 			<div className="panel panel--inverse mt--0 mb--0 sign-in-banner"
 					 data-qa-sel="sign-in-banner">
@@ -136,10 +143,10 @@ export class LoginBanner extends Component<PropsType, StateType> {
 								{this.state.showAuthorisationOrganisation && 
 									<Fragment>
 										<label>Confirm organisation name
-											<strong>{this.state.authorisationOrganisationFound.organisationName}</strong>
+											<strong>name goes here</strong>
 										</label>
 										<br/>
-										<a className="btn btn--inverse" href={this.props.signInURL} title={"Confirm your organisation is " + this.state.authorisationOrganisationFound.organisationName}>Confirm</a>
+										<a className="btn btn--inverse" href={this.props.signInURL} title={"Confirm your organisation is " + "todo"}>Confirm</a>
 									</Fragment>
 								}
 								<a href={this.props.signInURL} title="Sign in to your NICE account">

@@ -110,19 +110,31 @@ namespace Comments.Services
 			if (!organisationAuthorisation.Location.SourceURI.Equals(sourceURI, StringComparison.OrdinalIgnoreCase))
 				throw new AccessViolationException("The supplied collation code is for a different consultation.");
 
-			var machineToMachineAccessToken = await _apiTokenService.GetAccessToken(AppSettings.AuthenticationConfig.GetAuthConfiguration());
-			var httpClientWithPooledMessageHandler = _httpClientFactory.CreateClient();
 
-			var organisations = await _apiService.GetOrganisations(
-				new List<int> { organisationAuthorisation.OrganisationId },
-				machineToMachineAccessToken,
-				httpClientWithPooledMessageHandler);
+			try
+			{
+				var machineToMachineAccessToken =
+					await _apiTokenService.GetAccessToken(AppSettings.AuthenticationConfig
+						.GetAuthConfiguration()); //TODO: this needs caching!!!!!
+				var httpClientWithPooledMessageHandler = _httpClientFactory.CreateClient();
 
-			var organisation = organisations.FirstOrDefault();
-			if (organisation == null) 
-				throw new DataException("Organisation name could not be retrieved.");
+				var organisations = await _apiService.GetOrganisations(
+					new List<int> {organisationAuthorisation.OrganisationId},
+					machineToMachineAccessToken,
+					httpClientWithPooledMessageHandler);
 
-			return new OrganisationCode(organisationAuthorisation, organisation.OrganisationName);
+				var organisation = organisations.FirstOrDefault();
+				if (organisation == null)
+					throw new DataException("Organisation name could not be retrieved.");
+
+				return new OrganisationCode(organisationAuthorisation, organisation.OrganisationName);
+			}
+			catch (Exception ex)
+			{
+
+				throw;
+			}
+
 		}
 	}
 }
