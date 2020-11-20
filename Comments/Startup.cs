@@ -59,8 +59,9 @@ namespace Comments
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
 			services.TryAddSingleton<ISeriLogger, SeriLogger>();
-            //services.TryAddSingleton<IAuthenticateService, AuthService>();
-            services.TryAddTransient<IUserService, UserService>();
+			services.AddHttpClient();
+
+			services.TryAddTransient<IUserService, UserService>();
 
 			var contextOptionsBuilder = new DbContextOptionsBuilder<ConsultationsContext>();
             services.TryAddSingleton<IDbContextOptionsBuilderInfrastructure>(contextOptionsBuilder);

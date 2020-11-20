@@ -7,7 +7,9 @@ using Shouldly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text.RegularExpressions;
+using Moq;
 using Xunit;
 
 namespace Comments.Test.UnitTests
@@ -28,7 +30,7 @@ namespace Comments.Test.UnitTests
 
 			using (var consultationsContext = new ConsultationsContext(_options, userService, _fakeEncryption))
 			{
-				var serviceUnderTest = new OrganisationAuthorisationService(consultationsContext, userService);
+				var serviceUnderTest = new OrganisationAuthorisationService(consultationsContext, userService, null, null, null);
 
 				//Act + Assert
 				Assert.Throws<UnauthorizedAccessException>(() => serviceUnderTest.GenerateOrganisationCode(organisationId, consultationId: 1));
@@ -51,7 +53,7 @@ namespace Comments.Test.UnitTests
 			{
 				AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context);
 				
-				var serviceUnderTest = new OrganisationAuthorisationService(context, userService);
+				var serviceUnderTest = new OrganisationAuthorisationService(context, userService, null, null, null);
 
 				//Act + Assert
 				Assert.Throws<ApplicationException>(() => serviceUnderTest.GenerateOrganisationCode(organisationId, consultationId));
@@ -62,7 +64,7 @@ namespace Comments.Test.UnitTests
 		public void CollationCodeIsCorrectFormat()
 		{
 			//Arrange
-			var serviceUnderTest = new OrganisationAuthorisationService(_context, _fakeUserService);
+			var serviceUnderTest = new OrganisationAuthorisationService(_context, _fakeUserService, null, null, null);
 			const string validRegexForCollationCode = @"\d{4}\s\d{4}\s\d{4}"; //[4 numbers][space][4 numbers][space][4 numbers]
 			var regex = new Regex(validRegexForCollationCode);
 
@@ -77,7 +79,7 @@ namespace Comments.Test.UnitTests
 		public void CollationCodeIsReturnedDifferentInRepeatedCalls()
 		{
 			//Arrange
-			var serviceUnderTest = new OrganisationAuthorisationService(_context, _fakeUserService);
+			var serviceUnderTest = new OrganisationAuthorisationService(_context, _fakeUserService, null, null, null);
 			const int numberOfTimesToGetCollationCode = 100;
 
 			//Act
@@ -105,7 +107,7 @@ namespace Comments.Test.UnitTests
 
 			using (var context = new ConsultationsContext(_options, userService, _fakeEncryption))
 			{
-				var serviceUnderTest = new OrganisationAuthorisationService(context, userService);
+				var serviceUnderTest = new OrganisationAuthorisationService(context, userService, null, null, null);
 
 				//Act 
 				serviceUnderTest.GenerateOrganisationCode(organisationId, consultationId);
@@ -120,21 +122,22 @@ namespace Comments.Test.UnitTests
 		[InlineData("1234 1234 1234", 1)] //the user is going to be shown the code like this, chunked into 4 digit groups.
 		[InlineData("12 34 12 34 12 34", 1)]
 		[InlineData("1 2 3 4 1 2 3 4 1 2 3 4", 1)] //but we ignore all spaces, if they choose to add some more.
-		public void CheckValidCodeForConsultationReturnsValid(string collationCode, int consultationId)
+		public async void CheckValidCodeForConsultationReturnsValid(string collationCode, int consultationId)
 		{
 			//Arrange
 			ResetDatabase();
 			_context.Database.EnsureCreated();
 			const string collationCodeInDB = "123412341234";
 			const int organisationId = 1;
+			var mockFactory = new Mock<IHttpClientFactory>();
 
 			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
 			{
 				AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, collationCode: collationCodeInDB);
-				var serviceUnderTest = new OrganisationAuthorisationService(context, _fakeUserService);
+				var serviceUnderTest = new OrganisationAuthorisationService(context, _fakeUserService, new FakeAPITokenService(), _fakeApiService, mockFactory.Object);
 
 				//Act 
-				var organisationCode = serviceUnderTest.CheckValidCodeForConsultation(collationCode, consultationId);
+				var organisationCode = await serviceUnderTest.CheckValidCodeForConsultation(collationCode, consultationId);
 
 				//Assert
 				organisationCode.ShouldNotBeNull();
@@ -146,7 +149,7 @@ namespace Comments.Test.UnitTests
 		[InlineData("123412341234", 2)]
 		[InlineData("1234", 1)]
 		[InlineData("1234123412341", 1)]
-		public void CheckValidCodeForConsultationReturnsInvalid(string collationCode, int consultationId)
+		public async void CheckValidCodeForConsultationReturnsInvalid(string collationCode, int consultationId)
 		{
 			//Arrange
 			ResetDatabase();
@@ -158,10 +161,10 @@ namespace Comments.Test.UnitTests
 			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
 			{
 				AddOrganisationAuthorisationWithLocation(organisationId, validConsultationId, context, collationCode: collationCodeInDB);
-				var serviceUnderTest = new OrganisationAuthorisationService(context, _fakeUserService);
+				var serviceUnderTest = new OrganisationAuthorisationService(context, _fakeUserService, null, null, null);
 
 				//Act 
-				var organisationCode = serviceUnderTest.CheckValidCodeForConsultation(collationCode, consultationId);
+				var organisationCode = await serviceUnderTest.CheckValidCodeForConsultation(collationCode, consultationId);
 
 				//Assert
 				organisationCode.ShouldBeNull();

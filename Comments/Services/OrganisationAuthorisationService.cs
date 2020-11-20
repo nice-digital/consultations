@@ -3,25 +3,36 @@ using Comments.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Comments.Configuration;
 using Comments.ViewModels;
+using NICE.Identity.Authentication.Sdk.API;
+using NICE.Identity.Authentication.Sdk.Authorisation;
 
 namespace Comments.Services
 {
 	public interface IOrganisationAuthorisationService
 	{
 		OrganisationCode GenerateOrganisationCode(int organisationId, int consultationId);
-		OrganisationCode CheckValidCodeForConsultation(string collationCode, int consultationId);
+		Task<OrganisationCode> CheckValidCodeForConsultation(string collationCode, int consultationId);
 	}
 
     public class OrganisationAuthorisationService : IOrganisationAuthorisationService
 	{
         private readonly ConsultationsContext _context;
         private readonly IUserService _userService;
-
-        public OrganisationAuthorisationService(ConsultationsContext context, IUserService userService)
+        private readonly IApiToken _apiTokenService;
+        private readonly IAPIService _apiService;
+        private readonly IHttpClientFactory _httpClientFactory;
+		
+        public OrganisationAuthorisationService(ConsultationsContext context, IUserService userService, IApiToken apiTokenService, IAPIService apiService, IHttpClientFactory httpClientFactory)
         {
             _context = context;
             _userService = userService;
+            _apiTokenService = apiTokenService;
+            _apiService = apiService;
+            _httpClientFactory = httpClientFactory;
         }
 
 		/// <summary>
@@ -88,7 +99,7 @@ namespace Comments.Services
 		/// <param name="collationCode"></param>
 		/// <param name="consultationId"></param>
 		/// <returns>Returns null if the collation code is not valid</returns>
-		public OrganisationCode CheckValidCodeForConsultation(string collationCode, int consultationId)
+		public async Task<OrganisationCode> CheckValidCodeForConsultation(string collationCode, int consultationId)
 		{
 			var organisationAuthorisation = _context.GetOrganisationAuthorisationByCollationCode(collationCode);
 
@@ -99,9 +110,20 @@ namespace Comments.Services
 			if (!organisationAuthorisation.Location.SourceURI.Equals(sourceURI, StringComparison.OrdinalIgnoreCase))
 				return null;
 
-			var organisationName = "todo: get the organisation name using the organisationAuthorisation.OrganisationId, from idam.";
+			var machineToMachineAccessToken = await _apiTokenService.GetAccessToken(AppSettings.AuthenticationConfig.GetAuthConfiguration());
 
-			return new OrganisationCode(organisationAuthorisation, organisationName);
+			var httpClientWithPooledMessageHandler = _httpClientFactory.CreateClient();
+
+			var organisations = await _apiService.GetOrganisations(
+				new List<int> { organisationAuthorisation.OrganisationId },
+				machineToMachineAccessToken,
+				httpClientWithPooledMessageHandler);
+
+			var organisation = organisations.FirstOrDefault();
+			if (organisation == null)
+				return null;
+
+			return new OrganisationCode(organisationAuthorisation, organisation.OrganisationName);
 		}
 	}
 }
