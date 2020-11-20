@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
+using Comments.Common;
 using Moq;
 using Xunit;
 
@@ -65,8 +66,7 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			var serviceUnderTest = new OrganisationAuthorisationService(_context, _fakeUserService, null, null, null);
-			const string validRegexForCollationCode = @"\d{4}\s\d{4}\s\d{4}"; //[4 numbers][space][4 numbers][space][4 numbers]
-			var regex = new Regex(validRegexForCollationCode);
+			var regex = new Regex(Constants.CollationCode.RegExChunkedWithSpaces);
 
 			//Act
 			var collationCode = serviceUnderTest.GenerateOrganisationCode(1, 1).CollationCode;
@@ -149,7 +149,7 @@ namespace Comments.Test.UnitTests
 		[InlineData("123412341234", 2)]
 		[InlineData("1234", 1)]
 		[InlineData("1234123412341", 1)]
-		public async void CheckValidCodeForConsultationReturnsInvalid(string collationCode, int consultationId)
+		public void CheckValidCodeForConsultationReturnsInvalid(string collationCode, int consultationId)
 		{
 			//Arrange
 			ResetDatabase();
@@ -163,11 +163,8 @@ namespace Comments.Test.UnitTests
 				AddOrganisationAuthorisationWithLocation(organisationId, validConsultationId, context, collationCode: collationCodeInDB);
 				var serviceUnderTest = new OrganisationAuthorisationService(context, _fakeUserService, null, null, null);
 
-				//Act 
-				var organisationCode = await serviceUnderTest.CheckValidCodeForConsultation(collationCode, consultationId);
-
-				//Assert
-				organisationCode.ShouldBeNull();
+				//Act + Assert
+				Assert.ThrowsAsync<ApplicationException>(async () =>  { await serviceUnderTest.CheckValidCodeForConsultation(collationCode, consultationId); });
 			}
 		}
 	}

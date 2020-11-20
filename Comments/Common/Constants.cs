@@ -7,7 +7,8 @@ namespace Comments.Common
 	    public const string ConsultationsPreviewReplaceableRelativeUrl = ConsultationsBasePath + "/preview/{0}/consultation/{1}/document/{2}/chapter/{3}";
 		public const string ErrorPath = "/error";
 	    public const string StatusAPIKeyName = "ECStatusApiKey";
-		/// <summary>
+		
+	    /// <summary>
 		/// This document number is here to pass to indev to call the "Draft preview detail" feed. The preview feed cannot be called without a document id, and if you do pass one
 		/// all it sets is the SelectedDocumentId and the DocumentId properties on the returned json.
 		/// </summary>
@@ -31,6 +32,19 @@ namespace Comments.Common
 		    public const string ControllerName = "Account";
 		    public const string LoginAction = "Login";
 		    public const string LogoutAction = "Logout";
+	    }
+
+	    public static class CollationCode
+	    {
+			/// <summary>
+			/// we show to the user chunked with space
+			/// </summary>
+			public const string RegExChunkedWithSpaces = @"\d{4}\s\d{4}\s\d{4}";
+
+			/// <summary>
+			/// after they enter the code, we remove spaces.
+			/// </summary>
+			public const string RegExSpacesRemoved = @"\d{12}";
 	    }
 	}
 }

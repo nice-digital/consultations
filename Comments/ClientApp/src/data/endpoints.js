@@ -23,5 +23,6 @@ export const Endpoints = {
 	logging: "/api/Logging", // sends a message to the server for logging. expects the body to be the message and the loglevel to be in the querystring eg ?logLevel=Error
 	questions: "/api/Questions", // get complete page structure for the admin of questions for a given consultation. /api/Questions?consultationId=22
 	question: "/api/Question/{0}", // GET PUT for individual questions
-	newquestion: "/api/Question" // POST for new questions
+	newquestion: "/api/Question", // POST for new questions
+	checkcollationcode: "/api/OrganisationAuthorisation", //GET checks for valid collation code and consultation id in querystring. can return a valid object with a 200, or a 403/404/500.
 };

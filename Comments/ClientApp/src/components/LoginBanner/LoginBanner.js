@@ -1,10 +1,10 @@
 // @flow
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import { DebounceInput } from "react-debounce-input";
 import queryString from "query-string";
-//import { withHistory } from "../HistoryContext/HistoryContext";
 import { appendQueryParameter, removeQueryParameter, removeQuerystring } from "../../helpers/utils";
+import { load } from "../../data/loader";
 
 type PropsType = {
 	signInURL: string,
@@ -17,8 +17,19 @@ type PropsType = {
 	key: string
 }
 
+type OrganisationCode = {
+	organisationAuthorisationId: number,
+	organisationId: number,
+	organisationName: string,
+	collationCode: string,
+}
+
 type StateType = {
-	organisationCode: string
+	organisationCode: string,
+	hasError: bool,
+	errorMessage: string,
+	showAuthorisationOrganisation: bool,
+	authorisationOrganisationFound: OrganisationCode, 
 }
 
 export class LoginBanner extends Component<PropsType, StateType> {
@@ -27,61 +38,77 @@ export class LoginBanner extends Component<PropsType, StateType> {
 		super(props);
 
 		this.state = {
-			organisationCode: "",
+			userEnteredCollationCode: "",
+			hasError: false,
+			errorMessage: "",
+			showAuthorisationOrganisation: false,
+			authorisationOrganisationFound: null,
 		};
 	}
 
 	componentDidMount() {
-		const organisationCode = queryString.parse(this.props.location.search).organisationCode;
-		console.log(this.props.location.search);
-
-		if (organisationCode){
+		const userEnteredCollationCode = queryString.parse(this.props.location.search).code;
+		if (userEnteredCollationCode){
 			this.setState({
-				organisationCode,
+				userEnteredCollationCode,
 			}, () => {
-				this.checkOrganisationCode(organisationCode);
+				this.checkOrganisationCode(userEnteredCollationCode);
 			});
 		}
 	}
 
-	removeOrganisationCode = () => {
-		this.handleOrganisationCodeChange("");
-	};
-
-	componentDidUpdate(prevProps){
-		if (prevProps.organisationCode !== "" && this.props.organisationCode === ""){
-			this.removeOrganisationCode();
-		}
-	}
-
-	getHref = (organisationCode) => {
-		const pathWithoutQuerystring = removeQuerystring(this.props.path);
-		const querystringWithRemovedKeyword = removeQueryParameter(this.props.search, "OrganisationCode");
-
-		if (organisationCode.length <= 0){
-			return pathWithoutQuerystring + querystringWithRemovedKeyword;
-		}
-
-		const querystringWithKeywordAdded = appendQueryParameter(querystringWithRemovedKeyword, "OrganisationCode", organisationCode);
-		return pathWithoutQuerystring + querystringWithKeywordAdded;
-	};
-
-	handleOrganisationCodeChange = (organisationCode) => {
+	handleOrganisationCodeChange = (userEnteredCollationCode) => {
 		this.setState({
-			organisationCode,
+			userEnteredCollationCode,
 		}, () => {
-			//this.props.history.push(this.getHref(organisationCode)); //TODO: fix the history!!!
-			this.checkOrganisationCode(organisationCode);
+			this.checkOrganisationCode(userEnteredCollationCode);
 		});
 	};
 
+	gatherData = async () => {
+		const organisationCode = load(
+			"checkcollationcode",
+			undefined,
+			[],
+			{
+				collationCode: this.state.userEnteredCollationCode,
+				consultationId: this.props.match.params.consultationId, 
+			})
+			.then(response => response.data)
+			.catch(err => {
+				this.setState({
+					error: {
+						hasError: true,
+						errorMessage: err,
+						showAuthorisationOrganisation: false,
+					},
+				});
+			});
+		return {
+			organisationCode: await organisationCode,
+		};
+	}
+
 	checkOrganisationCode = () => {
-		console.log("check organisation code" + this.state.organisationCode);
+		this.gatherData()
+			.then(data => {
+				if (data.organisationCode !== null) {
+					this.setState({
+						hasError: false,
+						errorMessage: "",
+						showAuthorisationOrganisation: true,
+						authorisationOrganisationFound: data.organisationCode,
+					});
+				} 
+			})
+			.catch(err => {
+				throw new Error("gatherData in checkOrganisationCode failed " + err);
+			});		
 	}
 
 
 	render(){
-		const {organisationCode} = this.state;
+		const {userEnteredCollationCode} = this.state;
 		const { match, location, history } = this.props
 
 		return (
@@ -101,11 +128,20 @@ export class LoginBanner extends Component<PropsType, StateType> {
 										onChange={e => this.handleOrganisationCodeChange(e.target.value)}
 										className="form__input form__input--text"
 										data-qa-sel="OrganisationCodeLogin"
-										id="organisationCode"
-										value={organisationCode}
+										id="collationCode"
+										value={userEnteredCollationCode}
 									/>
 								</label>
 								<br/><br/>
+								{this.state.showAuthorisationOrganisation && 
+									<Fragment>
+										<label>Confirm organisation name
+											<strong>{this.state.authorisationOrganisationFound.organisationName}</strong>
+										</label>
+										<br/>
+										<a className="btn btn--inverse" href={this.props.signInURL} title={"Confirm your organisation is " + this.state.authorisationOrganisationFound.organisationName}>Confirm</a>
+									</Fragment>
+								}
 								<a href={this.props.signInURL} title="Sign in to your NICE account">
 									Sign in to your NICE account</a> {this.props.signInText || "to comment on this consultation"}.{" "}
 								<br/>
@@ -127,4 +163,4 @@ export class LoginBanner extends Component<PropsType, StateType> {
 	}
 }
 
-export default withRouter(LoginBanner); //withHistory(LoginBanner);
+export default withRouter(LoginBanner); 

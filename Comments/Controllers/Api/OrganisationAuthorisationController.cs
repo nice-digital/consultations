@@ -1,3 +1,8 @@
+using System;
+using System.Data;
+using System.Net;
+using System.Text.RegularExpressions;
+using Comments.Common;
 using Comments.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,12 +35,13 @@ namespace Comments.Controllers.Api
 		[Authorize]
 		public IActionResult GenerateCode(int organisationId, int consultationId)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+	        if (organisationId < 1)
+		        throw new ArgumentException("Organisation id must be a positive integer", nameof(organisationId));
+			if (consultationId < 1)
+				throw new ArgumentException("Consultation id must be a positive integer", nameof(consultationId));
 
-            var collationCode = _organisationAuthorisationService.GenerateOrganisationCode(organisationId, consultationId);
+
+			var collationCode = _organisationAuthorisationService.GenerateOrganisationCode(organisationId, consultationId);
 
             return Ok(collationCode);
         }
@@ -54,14 +60,34 @@ namespace Comments.Controllers.Api
 		[HttpGet("")]
 		public IActionResult CheckOrganisationCode(string collationCode, int consultationId)
 		{
-			if (!ModelState.IsValid)
+			if (consultationId < 1)
+				throw new ArgumentException("Consultation id must be a positive integer", nameof(consultationId));
+
+			if (string.IsNullOrEmpty(collationCode))
+				throw new ArgumentException("Collation code cannot be null or empty string.", nameof(collationCode));
+
+			var regex = new Regex(Constants.CollationCode.RegExSpacesRemoved);
+			if (!regex.IsMatch(collationCode.Replace(" ", "")))
+				throw new ArgumentException("Collation code is not correct format.");
+			
+			try
 			{
-				return BadRequest(ModelState);
+				var organisationCode = _organisationAuthorisationService.CheckValidCodeForConsultation(collationCode, consultationId);
+
+				return Ok(organisationCode);
 			}
-
-			var organisationCode = _organisationAuthorisationService.CheckValidCodeForConsultation(collationCode, consultationId);
-
-			return Ok(organisationCode);
+			catch (ApplicationException ae)
+			{
+				return NotFound(ae.Message);
+			}
+			catch (AccessViolationException ave)
+			{
+				return Forbid(ave.Message);
+			}
+			catch (DataException de)
+			{
+				return StatusCode((int)HttpStatusCode.InternalServerError, de.Message);
+			}
 		}
 	}
 }

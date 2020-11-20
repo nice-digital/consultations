@@ -2,6 +2,7 @@ using Comments.Common;
 using Comments.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -102,16 +103,14 @@ namespace Comments.Services
 		public async Task<OrganisationCode> CheckValidCodeForConsultation(string collationCode, int consultationId)
 		{
 			var organisationAuthorisation = _context.GetOrganisationAuthorisationByCollationCode(collationCode);
-
 			if (organisationAuthorisation == null)
-				return null;
+				throw new ApplicationException("Collation code not found");
 
 			var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
 			if (!organisationAuthorisation.Location.SourceURI.Equals(sourceURI, StringComparison.OrdinalIgnoreCase))
-				return null;
+				throw new AccessViolationException("The supplied collation code is for a different consultation.");
 
 			var machineToMachineAccessToken = await _apiTokenService.GetAccessToken(AppSettings.AuthenticationConfig.GetAuthConfiguration());
-
 			var httpClientWithPooledMessageHandler = _httpClientFactory.CreateClient();
 
 			var organisations = await _apiService.GetOrganisations(
@@ -120,8 +119,8 @@ namespace Comments.Services
 				httpClientWithPooledMessageHandler);
 
 			var organisation = organisations.FirstOrDefault();
-			if (organisation == null)
-				return null;
+			if (organisation == null) 
+				throw new DataException("Organisation name could not be retrieved.");
 
 			return new OrganisationCode(organisationAuthorisation, organisation.OrganisationName);
 		}
