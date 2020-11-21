@@ -70,12 +70,7 @@ describe("[ClientApp] ", () => {
 			await nextTick();
 			wrapper.update();
 
-			expect(
-				toJson(wrapper, {
-					noKey: true,
-					mode: "deep",
-				})
-			).toMatchSnapshot();
+			expect(toJson(wrapper, {noKey: true, mode: "deep",})).toMatchSnapshot();
 
 			wrapper.unmount();
 		});
@@ -94,12 +89,7 @@ describe("[ClientApp] ", () => {
 
 			expect(wrapper.state().userEnteredCollationCode).toEqual(expectedOrganisationCode);
 
-			expect(
-				toJson(wrapper, {
-					noKey: true,
-					mode: "deep",
-				})
-			).toMatchSnapshot();		
+			expect(toJson(wrapper, {noKey: true, mode: "deep",})).toMatchSnapshot();
 
 			wrapper.unmount();
 		});
