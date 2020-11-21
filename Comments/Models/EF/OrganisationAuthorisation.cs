@@ -13,7 +13,6 @@ namespace Comments.Models
         public string CollationCode { get; set; }
 
         public Location Location { get; set; }
-        public ICollection<Answer> Answer { get; set; }
-        public ICollection<Comment> Comment { get; set; }
+        public ICollection<OrganisationUser> OrganisationUsers { get; set; }
     }
 }

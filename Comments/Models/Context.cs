@@ -33,11 +33,11 @@ namespace Comments.Models
 		//}
 
 		public ConsultationsContext(DbContextOptions options, IUserService userService, IEncryption encryption) : base(options)
-        {
-	        _encryption = encryption;
-	        _userService = userService;
-            _createdByUserID = _userService.GetCurrentUser().UserId;
-        }
+		{
+			_encryption = encryption;
+			_userService = userService;
+			_createdByUserID = _userService.GetCurrentUser().UserId;
+		}
 
 		/// <summary>
 		/// It's not obvious from this code, but this it actually filtering on more than it looks like. There's global filters defined in the context, specifically

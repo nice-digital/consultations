@@ -7,8 +7,7 @@ namespace Comments.Models
 	{
 		private OrganisationAuthorisation() //Just for EF
 		{
-			Answer = new HashSet<Answer>();
-			Comment = new HashSet<Comment>();
+			OrganisationUsers = new HashSet<OrganisationUser>();
 		}
 
 		public OrganisationAuthorisation(string createdByUserId, DateTime createdDate, int organisationId, int locationId, string collationCode)
