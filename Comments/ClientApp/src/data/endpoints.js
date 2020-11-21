@@ -24,5 +24,5 @@ export const Endpoints = {
 	questions: "/api/Questions", // get complete page structure for the admin of questions for a given consultation. /api/Questions?consultationId=22
 	question: "/api/Question/{0}", // GET PUT for individual questions
 	newquestion: "/api/Question", // POST for new questions
-	checkcollationcode: "/api/OrganisationAuthorisation", //GET checks for valid collation code and consultation id in querystring. can return a valid object with a 200, or a 403/404/500.
+	organisation: "/api/Organisation", //GET checks for valid collation code and consultation id in querystring. can return a valid object with a 200, or a 403/404/500.
 };

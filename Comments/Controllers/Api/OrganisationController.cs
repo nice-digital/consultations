@@ -13,21 +13,21 @@ namespace Comments.Controllers.Api
 {
 	[Produces("application/json")]
     [Route("consultations/api/[controller]")]
-    public class OrganisationAuthorisationController : ControllerBase
+    public class OrganisationController : ControllerBase
     {
-	    private readonly IOrganisationAuthorisationService _organisationAuthorisationService;
-        private readonly ILogger<OrganisationAuthorisationController> _logger;
+	    private readonly IOrganisationService _organisationService;
+        private readonly ILogger<OrganisationController> _logger;
 
-        public OrganisationAuthorisationController(IOrganisationAuthorisationService organisationAuthorisationService, ILogger<OrganisationAuthorisationController> logger)
+        public OrganisationController(IOrganisationService organisationService, ILogger<OrganisationController> logger)
         {
-	        _organisationAuthorisationService = organisationAuthorisationService;
+	        _organisationService = organisationService;
 	        _logger = logger;
         }
 
 		/// <summary>
 		/// This method is called by the front-end when the user clicks the generate code button, next to an organisation, on a consultation, on the download page.
 		/// 
-		/// POST: consultations/api/OrganisationAuthorisation?organisationId=1&consultationId=1
+		/// POST: consultations/api/Organisation?organisationId=1&consultationId=1
 		/// </summary>
 		/// <param name="organisationId"></param>
 		/// <param name="consultationId"></param>
@@ -42,7 +42,7 @@ namespace Comments.Controllers.Api
 				throw new ArgumentException("Consultation id must be a positive integer", nameof(consultationId));
 
 
-			var collationCode = _organisationAuthorisationService.GenerateOrganisationCode(organisationId, consultationId);
+			var collationCode = _organisationService.GenerateOrganisationCode(organisationId, consultationId);
 
             return Ok(collationCode);
         }
@@ -53,7 +53,7 @@ namespace Comments.Controllers.Api
 		///
 		/// This method does not have the Authorize attribute as the user won't be logged in.
 		///
-		/// GET: consultations/api/OrganisationAuthorisation?collationCode=123412341234&consultationId=1
+		/// GET: consultations/api/Organisation?collationCode=123412341234&consultationId=1
 		/// </summary>
 		/// <param name="collationCode"></param>
 		/// <param name="consultationId"></param>
@@ -73,7 +73,7 @@ namespace Comments.Controllers.Api
 			
 			try
 			{
-				var organisationCode = await _organisationAuthorisationService.CheckValidCodeForConsultation(collationCode, consultationId);
+				var organisationCode = await _organisationService.CheckValidCodeForConsultation(collationCode, consultationId);
 
 				 return Ok(organisationCode);
 			}

@@ -3,6 +3,7 @@ import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import { DebounceInput } from "react-debounce-input";
 import queryString from "query-string";
+import Cookies from "js-cookie";
 import { appendQueryParameter, removeQueryParameter, removeQuerystring } from "../../helpers/utils";
 import { load } from "../../data/loader";
 
@@ -67,7 +68,7 @@ export class LoginBanner extends Component<PropsType, StateType> {
 
 	gatherData = async () => {
 		const organisationCode = load(
-			"checkcollationcode",
+			"organisation",
 			undefined,
 			[],
 			{
@@ -115,6 +116,10 @@ export class LoginBanner extends Component<PropsType, StateType> {
 
 	handleConfirmClick = () => {
 		console.log("confirm was clicked. set cookie here.");		
+		
+		var session = "todo: a guid"; //todo: call the server here to get a session id.
+
+		Cookies.set("OrganisationUser", session);
 	}
 
 

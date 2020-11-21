@@ -13,13 +13,13 @@ using NICE.Identity.Authentication.Sdk.Authorisation;
 
 namespace Comments.Services
 {
-	public interface IOrganisationAuthorisationService
+	public interface IOrganisationService
 	{
 		OrganisationCode GenerateOrganisationCode(int organisationId, int consultationId);
 		Task<OrganisationCode> CheckValidCodeForConsultation(string collationCode, int consultationId);
 	}
 
-    public class OrganisationAuthorisationService : IOrganisationAuthorisationService
+    public class OrganisationService : IOrganisationService
 	{
         private readonly ConsultationsContext _context;
         private readonly IUserService _userService;
@@ -27,7 +27,7 @@ namespace Comments.Services
         private readonly IAPIService _apiService;
         private readonly IHttpClientFactory _httpClientFactory;
 		
-        public OrganisationAuthorisationService(ConsultationsContext context, IUserService userService, IApiToken apiTokenService, IAPIService apiService, IHttpClientFactory httpClientFactory)
+        public OrganisationService(ConsultationsContext context, IUserService userService, IApiToken apiTokenService, IAPIService apiService, IHttpClientFactory httpClientFactory)
         {
             _context = context;
             _userService = userService;

@@ -31,7 +31,7 @@ namespace Comments.Test.UnitTests
 
 			using (var consultationsContext = new ConsultationsContext(_options, userService, _fakeEncryption))
 			{
-				var serviceUnderTest = new OrganisationAuthorisationService(consultationsContext, userService, null, null, null);
+				var serviceUnderTest = new OrganisationService(consultationsContext, userService, null, null, null);
 
 				//Act + Assert
 				Assert.Throws<UnauthorizedAccessException>(() => serviceUnderTest.GenerateOrganisationCode(organisationId, consultationId: 1));
@@ -54,7 +54,7 @@ namespace Comments.Test.UnitTests
 			{
 				AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context);
 				
-				var serviceUnderTest = new OrganisationAuthorisationService(context, userService, null, null, null);
+				var serviceUnderTest = new OrganisationService(context, userService, null, null, null);
 
 				//Act + Assert
 				Assert.Throws<ApplicationException>(() => serviceUnderTest.GenerateOrganisationCode(organisationId, consultationId));
@@ -65,7 +65,7 @@ namespace Comments.Test.UnitTests
 		public void CollationCodeIsCorrectFormat()
 		{
 			//Arrange
-			var serviceUnderTest = new OrganisationAuthorisationService(_context, _fakeUserService, null, null, null);
+			var serviceUnderTest = new OrganisationService(_context, _fakeUserService, null, null, null);
 			var regex = new Regex(Constants.CollationCode.RegExChunkedWithSpaces);
 
 			//Act
@@ -79,7 +79,7 @@ namespace Comments.Test.UnitTests
 		public void CollationCodeIsReturnedDifferentInRepeatedCalls()
 		{
 			//Arrange
-			var serviceUnderTest = new OrganisationAuthorisationService(_context, _fakeUserService, null, null, null);
+			var serviceUnderTest = new OrganisationService(_context, _fakeUserService, null, null, null);
 			const int numberOfTimesToGetCollationCode = 100;
 
 			//Act
@@ -107,7 +107,7 @@ namespace Comments.Test.UnitTests
 
 			using (var context = new ConsultationsContext(_options, userService, _fakeEncryption))
 			{
-				var serviceUnderTest = new OrganisationAuthorisationService(context, userService, null, null, null);
+				var serviceUnderTest = new OrganisationService(context, userService, null, null, null);
 
 				//Act 
 				serviceUnderTest.GenerateOrganisationCode(organisationId, consultationId);
@@ -134,7 +134,7 @@ namespace Comments.Test.UnitTests
 			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
 			{
 				AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, collationCode: collationCodeInDB);
-				var serviceUnderTest = new OrganisationAuthorisationService(context, _fakeUserService, new FakeAPITokenService(), _fakeApiService, mockFactory.Object);
+				var serviceUnderTest = new OrganisationService(context, _fakeUserService, new FakeAPITokenService(), _fakeApiService, mockFactory.Object);
 
 				//Act 
 				var organisationCode = await serviceUnderTest.CheckValidCodeForConsultation(collationCode, consultationId);
@@ -161,7 +161,7 @@ namespace Comments.Test.UnitTests
 			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
 			{
 				AddOrganisationAuthorisationWithLocation(organisationId, validConsultationId, context, collationCode: collationCodeInDB);
-				var serviceUnderTest = new OrganisationAuthorisationService(context, _fakeUserService, null, null, null);
+				var serviceUnderTest = new OrganisationService(context, _fakeUserService, null, null, null);
 
 				//Act + Assert
 				Assert.ThrowsAsync<ApplicationException>(async () =>  { await serviceUnderTest.CheckValidCodeForConsultation(collationCode, consultationId); });
