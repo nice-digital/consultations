@@ -108,32 +108,23 @@ namespace Comments.Services
 
 			var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
 			if (!organisationAuthorisation.Location.SourceURI.Equals(sourceURI, StringComparison.OrdinalIgnoreCase))
-				throw new AccessViolationException("The supplied collation code is for a different consultation.");
+				throw new ApplicationException("The supplied collation code is for a different consultation.");
 
-			try
-			{
-				var machineToMachineAccessToken =
-					await _apiTokenService.GetAccessToken(AppSettings.AuthenticationConfig
-						.GetAuthConfiguration()); //TODO: this needs caching!!!!!
-				var httpClientWithPooledMessageHandler = _httpClientFactory.CreateClient();
+			var machineToMachineAccessToken =
+				await _apiTokenService.GetAccessToken(AppSettings.AuthenticationConfig
+					.GetAuthConfiguration()); //TODO: this needs caching!!!!!
+			var httpClientWithPooledMessageHandler = _httpClientFactory.CreateClient();
 
-				var organisations = await _apiService.GetOrganisations(
-					new List<int> {organisationAuthorisation.OrganisationId},
-					machineToMachineAccessToken,
-					httpClientWithPooledMessageHandler);
+			var organisations = await _apiService.GetOrganisations(
+				new List<int> {organisationAuthorisation.OrganisationId},
+				machineToMachineAccessToken,
+				httpClientWithPooledMessageHandler);
 
-				var organisation = organisations.FirstOrDefault();
-				if (organisation == null)
-					throw new DataException("Organisation name could not be retrieved.");
+			var organisation = organisations.FirstOrDefault();
+			if (organisation == null)
+				throw new ApplicationException("Organisation name could not be retrieved."); //might occur if the org has been deleted from idam and CC hasn't been updated.
 
-				return new OrganisationCode(organisationAuthorisation, organisation.OrganisationName);
-			}
-			catch (Exception ex)
-			{
-
-				throw;
-			}
-
+			return new OrganisationCode(organisationAuthorisation, organisation.OrganisationName);
 		}
 	}
 }

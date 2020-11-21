@@ -1,0 +1,155 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[ClientApp]  LoginBanner Component organisation code should be prepopulated from querystring 1`] = `
+<div
+  className="panel panel--inverse mt--0 mb--0 sign-in-banner"
+  data-qa-sel="sign-in-banner"
+>
+  <div
+    className="container"
+  >
+    <div
+      className="grid"
+    >
+      <div
+        data-g="12"
+      >
+        <div
+          className="LoginBanner"
+        >
+          <p>
+            If you would like to comment on this consultation as part of an organisation, please enter your organisation code here:
+          </p>
+          <label>
+            Organisation code
+            <input
+              className="form__input form__input--text"
+              data-qa-sel="OrganisationCodeLogin"
+              id="collationCode"
+              onBlur={[Function]}
+              onChange={[Function]}
+              onKeyDown={[Function]}
+              type="text"
+              value="123412341234"
+            />
+          </label>
+          <br />
+          <br />
+          <label>
+            Confirm organisation name
+            <strong>
+              NICE
+            </strong>
+          </label>
+          <br />
+          <button
+            className="btn btn--cta"
+            onClick={[Function]}
+            title="Confirm your organisation is NICE"
+          >
+            Confirm
+          </button>
+          <a
+            href="/signin-url"
+            title="Sign in to your NICE account"
+          >
+            Sign in to your NICE account
+          </a>
+           
+          signin text
+          .
+           
+          <br />
+          Don't have an account?
+           
+          <a
+            href="/register-url"
+            title="Register for a NICE account"
+          >
+            Register
+          </a>
+        </div>
+        <p>
+          <a
+            className="btn btn--inverse"
+            href="/signin-url"
+            title="Sign in to your NICE account"
+          >
+            Sign in
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`[ClientApp]  LoginBanner Component should match snapshot. no querystring 1`] = `
+<div
+  className="panel panel--inverse mt--0 mb--0 sign-in-banner"
+  data-qa-sel="sign-in-banner"
+>
+  <div
+    className="container"
+  >
+    <div
+      className="grid"
+    >
+      <div
+        data-g="12"
+      >
+        <div
+          className="LoginBanner"
+        >
+          <p>
+            If you would like to comment on this consultation as part of an organisation, please enter your organisation code here:
+          </p>
+          <label>
+            Organisation code
+            <input
+              className="form__input form__input--text"
+              data-qa-sel="OrganisationCodeLogin"
+              id="collationCode"
+              onBlur={[Function]}
+              onChange={[Function]}
+              onKeyDown={[Function]}
+              type="text"
+              value=""
+            />
+          </label>
+          <br />
+          <br />
+          <a
+            href="/signin-url"
+            title="Sign in to your NICE account"
+          >
+            Sign in to your NICE account
+          </a>
+           
+          signin text
+          .
+           
+          <br />
+          Don't have an account?
+           
+          <a
+            href="/register-url"
+            title="Register for a NICE account"
+          >
+            Register
+          </a>
+        </div>
+        <p>
+          <a
+            className="btn btn--inverse"
+            href="/signin-url"
+            title="Sign in to your NICE account"
+          >
+            Sign in
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;

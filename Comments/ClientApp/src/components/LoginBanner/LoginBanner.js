@@ -15,7 +15,6 @@ type PropsType = {
 	match: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
 	history: PropTypes.object.isRequired,
-	key: string
 }
 
 type OrganisationCode = {
@@ -53,7 +52,7 @@ export class LoginBanner extends Component<PropsType, StateType> {
 			this.setState({
 				userEnteredCollationCode,
 			}, () => {
-				this.checkOrganisationCode(userEnteredCollationCode);
+				this.checkOrganisationCode();
 			});
 		}
 	}
@@ -67,6 +66,7 @@ export class LoginBanner extends Component<PropsType, StateType> {
 	};
 
 	gatherData = async () => {
+		console.log("gathering data");
 		const organisationCode = load(
 			"organisation",
 			undefined,
@@ -77,6 +77,8 @@ export class LoginBanner extends Component<PropsType, StateType> {
 			}) //, "GET", {}, true)
 			.then(response => response.data)
 			.catch(err => {
+				console.log("error gathering data in loginbanner");
+				console.log(JSON.stringify(err));
 				this.setState({
 					hasError: true,
 					errorMessage: err.response.data.errorException.Message, 
@@ -91,16 +93,21 @@ export class LoginBanner extends Component<PropsType, StateType> {
 	checkOrganisationCode = () => {
 		this.gatherData()
 			.then(data => {
+				console.log("after gathering data");
+				console.log(JSON.stringify(data));
 				if (data.organisationCode != null) {
+					console.log(data.organisationCode.organisationId);
 					this.setState({
 						hasError: false,
 						errorMessage: "",
 						showAuthorisationOrganisation: true,
 						authorisationOrganisationFound: data.organisationCode,
 					});
+					console.log("after set state");
 				}
 			})
 			.catch(err => {
+				console.log("catch in check");
 				throw new Error("gatherData in checkOrganisationCode failed " + err);
 			});		
 	}
@@ -111,6 +118,8 @@ export class LoginBanner extends Component<PropsType, StateType> {
 		var session = "todo: a guid"; //todo: call the server here to get a session id.
 
 		Cookies.set("OrganisationUser", session);
+
+		//then update the Context, to recognise the cookie.
 	}
 
 
