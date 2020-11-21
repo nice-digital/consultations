@@ -74,12 +74,12 @@ export class LoginBanner extends Component<PropsType, StateType> {
 			{
 				collationCode: this.state.userEnteredCollationCode,
 				consultationId: this.props.match.params.consultationId, 
-			})
+			}) //, "GET", {}, true)
 			.then(response => response.data)
 			.catch(err => {
 				this.setState({
 					hasError: true,
-					errorMessage: err, //err is a whole object, not just a message. todo: fix.
+					errorMessage: err.response.data.errorException.Message, 
 					showAuthorisationOrganisation: false,					
 				});
 			});
@@ -97,15 +97,6 @@ export class LoginBanner extends Component<PropsType, StateType> {
 						errorMessage: "",
 						showAuthorisationOrganisation: true,
 						authorisationOrganisationFound: data.organisationCode,
-					});
-				} else{
-					console.log("in the else, data is:");
-					console.log(JSON.stringify(data));
-					this.setState({
-						hasError: true,
-						errorMessage: "",
-						showAuthorisationOrganisation: false,
-						authorisationOrganisationFound: null,
 					});
 				}
 			})
@@ -137,6 +128,9 @@ export class LoginBanner extends Component<PropsType, StateType> {
 								<p>If you would like to comment on this consultation as part of an organisation, please enter your organisation code here:</p>
 								<label>
 									Organisation code 
+									{this.state.hasError && 
+										<div>{this.state.errorMessage}</div>
+									}
 									<DebounceInput
 										minLength={6}
 										debounceTimeout={400}
@@ -157,7 +151,7 @@ export class LoginBanner extends Component<PropsType, StateType> {
 										<br/>
 										<button className="btn btn--cta" onClick={() => this.handleConfirmClick()}  title={"Confirm your organisation is " + this.state.authorisationOrganisationFound.organisationName}>Confirm</button>
 									</Fragment>
-								}
+								}								
 								<a href={this.props.signInURL} title="Sign in to your NICE account">
 									Sign in to your NICE account</a> {this.props.signInText || "to comment on this consultation"}.{" "}
 								<br/>

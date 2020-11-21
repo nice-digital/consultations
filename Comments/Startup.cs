@@ -159,9 +159,9 @@ namespace Comments
 
 			if (env.IsDevelopment())
             {
-	            app.UseExceptionHandler(Constants.ErrorPath);
-				app.UseDeveloperExceptionPage();
-                loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+	            app.UseDeveloperExceptionPage();
+				app.UseExceptionHandler(Constants.ErrorPath);
+				loggerFactory.AddConsole(Configuration.GetSection("Logging"));
                 loggerFactory.AddDebug();
 
 				app.UseStaticFiles(); //uses the wwwroot folder, only for dev. on other service the root is varnish

@@ -71,24 +71,24 @@ namespace Comments.Controllers.Api
 			if (!regex.IsMatch(collationCode.Replace(" ", "")))
 				throw new ArgumentException("Collation code is not correct format.");
 			
-			try
-			{
+			//try
+			//{
 				var organisationCode = await _organisationService.CheckValidCodeForConsultation(collationCode, consultationId);
 
 				 return Ok(organisationCode);
-			}
-			catch (ApplicationException ae)
-			{
-				return NotFound(ae.Message);
-			}
-			catch (AccessViolationException ave)
-			{
-				return Forbid(ave.Message);
-			}
-			catch (DataException de)
-			{
-				return StatusCode((int)HttpStatusCode.InternalServerError, de.Message);
-			}
+			//}
+			//catch (ApplicationException ae)
+			//{
+			//	return NotFound(n ae.Message);
+			//}
+			//catch (AccessViolationException ave)
+			//{
+			//	return Forbid("", new { message = ave.Message});
+			//}
+			//catch (DataException de)
+			//{
+			//	return StatusCode((int)HttpStatusCode.InternalServerError, new {message = de.Message});
+			//}
 		}
 	}
 }

@@ -110,7 +110,6 @@ namespace Comments.Services
 			if (!organisationAuthorisation.Location.SourceURI.Equals(sourceURI, StringComparison.OrdinalIgnoreCase))
 				throw new AccessViolationException("The supplied collation code is for a different consultation.");
 
-
 			try
 			{
 				var machineToMachineAccessToken =

@@ -45,11 +45,12 @@ namespace Comments.Controllers.Web
 		        return View("NotFound");
 	        }
 
-			var ehFeat = HttpContext.Features.Get<IExceptionHandlerFeature>();
+			var ehpFeat = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
 	        Exception exception = null;
-	        if (ehFeat != null)
+	        if (ehpFeat != null)
 	        {
-		        exception = ehFeat.Error;
+		        exception = ehpFeat.Error;
+		        requestedPath = requestedPath ?? ehpFeat.Path;
 	        }
 
 	        _logger.LogError($"Exception for Url: {requestedPath}, Exception: {exception}");
@@ -57,8 +58,15 @@ namespace Comments.Controllers.Web
 	        var signInURL = Url.Action(Constants.Auth.LoginAction, Constants.Auth.ControllerName);
 	        var signOutURL = Url.Action(Constants.Auth.LogoutAction, Constants.Auth.ControllerName);
 
-			var viewModel = new Error(requestedPath, exception, _httpContextAccessor.HttpContext.User, signInURL, signOutURL);
-			return View(viewModel);
+			var errorModel = new Error(requestedPath, exception, _httpContextAccessor.HttpContext.User, signInURL, signOutURL);
+
+			var errorCallingAPISoShouldReturnJson = (!string.IsNullOrEmpty(requestedPath) && requestedPath.StartsWith(Constants.ConsultationAPIBasePath));
+
+			if (errorCallingAPISoShouldReturnJson)
+			{
+				return Json(errorModel);
+			}
+			return View(errorModel);
         }
     }
 }
