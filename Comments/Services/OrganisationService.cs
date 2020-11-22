@@ -17,6 +17,7 @@ namespace Comments.Services
 	{
 		OrganisationCode GenerateOrganisationCode(int organisationId, int consultationId);
 		Task<OrganisationCode> CheckValidCodeForConsultation(string collationCode, int consultationId);
+		Guid CreateOrganisationUserSession(int organisationAuthorisationId);
 	}
 
     public class OrganisationService : IOrganisationService
@@ -125,6 +126,12 @@ namespace Comments.Services
 				throw new ApplicationException("Organisation name could not be retrieved."); //might occur if the org has been deleted from idam and CC hasn't been updated.
 
 			return new OrganisationCode(organisationAuthorisation, organisation.OrganisationName);
+		}
+
+		public Guid CreateOrganisationUserSession(int organisationAuthorisationId)
+		{
+			var organisationUser = _context.CreateOrganisationUser(organisationAuthorisationId, Guid.NewGuid());
+			return organisationUser.AuthorisationSession;
 		}
 	}
 }

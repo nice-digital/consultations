@@ -75,5 +75,24 @@ namespace Comments.Controllers.Api
 
 			return Ok(organisationCode);
 		}
+
+		/// <summary>
+		/// This action adds a record in the OrganisationUser table. It's used to create a session for an organisational commenter.
+		/// It's called when the user clicks the confirm button when using an organisation/collation code on the LoginBanner react component.
+		///
+		/// POST: consultations/api/Organisation/CreateOrganisationUserSession?organisationAuthorisationId=1
+		/// </summary>
+		/// <param name="organisationAuthorisationId"></param>
+		/// <returns>a GUID, which is the session id: OrganisationUser.AuthorisationSession</returns>
+		[HttpPost("CreateOrganisationUserSession")]
+		public IActionResult CreateOrganisationUserSession(int organisationAuthorisationId)
+		{
+			if (organisationAuthorisationId < 1)
+				throw new ArgumentException("OrganisationAuthorisation id must be a positive integer", nameof(organisationAuthorisationId));
+			
+			var authorisationSession = _organisationService.CreateOrganisationUserSession(organisationAuthorisationId);
+
+			return Ok(authorisationSession);
+		}
 	}
 }

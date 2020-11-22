@@ -821,5 +821,13 @@ namespace Comments.Models
 			SaveChanges();
 			return organisationAuthorisation;
 		}
+
+		public OrganisationUser CreateOrganisationUser(int organisationAuthorisationID, Guid authorisationSession)
+		{
+			var organisationUser = new OrganisationUser(organisationAuthorisationID, authorisationSession);
+			OrganisationUser.Add(organisationUser);
+			SaveChanges();
+			return organisationUser;
+		}
 	}
 }

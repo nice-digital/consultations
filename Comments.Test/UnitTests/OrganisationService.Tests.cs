@@ -15,7 +15,7 @@ using Xunit;
 
 namespace Comments.Test.UnitTests
 {
-	public class OrganisationAuthorisationServiceTests : TestBase
+	public class OrganisationServiceTests : TestBase
     {
 
 		[Fact]
@@ -167,5 +167,42 @@ namespace Comments.Test.UnitTests
 				Assert.ThrowsAsync<ApplicationException>(async () =>  { await serviceUnderTest.CheckValidCodeForConsultation(collationCode, consultationId); });
 			}
 		}
-	}
+
+		[Fact]
+		public void OrganisationUserCreatesAUniqueSessionIdWhenCalledMultipleTimesAndAllSessionsAreSavedToDatabaseAndReturned()
+		{
+			//Arrange
+			ResetDatabase();
+			_context.Database.EnsureCreated();
+
+			const int numberOfSessionsToCreate = 100;
+			var sessionIdsReturned = new List<Guid>();
+
+			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
+			{
+				var serviceUnderTest = new OrganisationService(context, _fakeUserService, null, null, null);
+
+				//Act
+				for (var organisationAuthorisationId = 1;
+					organisationAuthorisationId <= numberOfSessionsToCreate;
+					organisationAuthorisationId++)
+				{
+					sessionIdsReturned.Add(serviceUnderTest.CreateOrganisationUserSession(organisationAuthorisationId));
+				}
+
+
+				//Assert
+				sessionIdsReturned.Distinct().Count().ShouldBe(numberOfSessionsToCreate);
+				var sessionIdsInDatabase = _context.OrganisationUser.Select(ou => ou.AuthorisationSession).ToList();
+				sessionIdsInDatabase.Count().ShouldBe(numberOfSessionsToCreate);
+
+
+				var inDatabaseButNotReturned = sessionIdsInDatabase.Except(sessionIdsReturned);
+				inDatabaseButNotReturned.Count().ShouldBe(0);
+
+				var returnedButNotInDatabase = sessionIdsReturned.Except(sessionIdsInDatabase);
+				returnedButNotInDatabase.Count().ShouldBe(0);
+			}
+		}
+    }
 }

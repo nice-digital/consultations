@@ -89,8 +89,6 @@ describe("[ClientApp] ", () => {
 
 			expect(wrapper.state().userEnteredCollationCode).toEqual(expectedOrganisationCode);
 
-			expect(toJson(wrapper, {noKey: true, mode: "deep",})).toMatchSnapshot();
-
 			wrapper.unmount();
 		});
 
