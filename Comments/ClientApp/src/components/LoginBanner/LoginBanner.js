@@ -65,8 +65,7 @@ export class LoginBanner extends Component<PropsType, StateType> {
 		});
 	};
 
-	gatherData = async () => {
-		console.log("gathering data");
+	gatherDataForCheckOrganisationCode = async () => {
 		const organisationCode = load(
 			"organisation",
 			undefined,
@@ -74,11 +73,9 @@ export class LoginBanner extends Component<PropsType, StateType> {
 			{
 				collationCode: this.state.userEnteredCollationCode,
 				consultationId: this.props.match.params.consultationId, 
-			}) //, "GET", {}, true)
+			})
 			.then(response => response.data)
 			.catch(err => {
-				console.log("error gathering data in loginbanner");
-				console.log(JSON.stringify(err));
 				this.setState({
 					hasError: true,
 					errorMessage: err.response.data.errorException.Message, 
@@ -91,35 +88,84 @@ export class LoginBanner extends Component<PropsType, StateType> {
 	}
 
 	checkOrganisationCode = () => {
-		this.gatherData()
+		this.gatherDataForCheckOrganisationCode()
 			.then(data => {
-				console.log("after gathering data");
-				console.log(JSON.stringify(data));
 				if (data.organisationCode != null) {
-					console.log(data.organisationCode.organisationId);
 					this.setState({
 						hasError: false,
 						errorMessage: "",
 						showAuthorisationOrganisation: true,
 						authorisationOrganisationFound: data.organisationCode,
 					});
-					console.log("after set state");
 				}
 			})
 			.catch(err => {
-				console.log("catch in check");
-				throw new Error("gatherData in checkOrganisationCode failed " + err);
+				throw new Error("checkOrganisationCode failed " + err);
 			});		
 	}
 
+	gatherDataForCreateOrganisationUserSession = async () => {
+		const sessionId = load(
+			"organisationsession",
+			undefined,
+			[],
+			{
+				collationCode: this.state.userEnteredCollationCode,
+				organisationAuthorisationId: this.state.authorisationOrganisationFound.organisationAuthorisationId, 
+			}, 
+			"POST")
+			.then(response => response.data)
+			.catch(err => {
+				this.setState({
+					hasError: true,
+					errorMessage: err.response.data.errorException.Message, 
+					showAuthorisationOrganisation: false,
+				});
+			});
+		return {
+			sessionId: await sessionId,
+		};
+	}
+
+	CreateOrganisationUserSession = async () => {
+		const sessionId = this.gatherDataForCreateOrganisationUserSession()
+			.then(data => {
+				if (data.sessionId != null) {
+					this.setState({
+						hasError: false,
+						errorMessage: "",						
+					});
+					return data.sessionId;
+				}
+			})
+			.catch(err => {
+				throw new Error("checkOrganisationCode failed " + err);
+			});		
+		return {
+			sessionId: await sessionId,
+		};
+	}
+
 	handleConfirmClick = () => {
-		console.log("confirm was clicked. set cookie here.");		
-		
-		var session = "todo: a guid"; //todo: call the server here to get a session id.
+		var consultationId = this.props.match.params.consultationId;
+		this.CreateOrganisationUserSession().then(data => {
+			Cookies.set(`ConsultationSession-${consultationId}`, data.sessionId); //TODO: add to cookie policy !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-		Cookies.set("OrganisationUser", session);
+			//now, set state to show logged in. 
+			this.setState({
+				showAuthorisationOrganisation: false,
+				//TODO: new property here for hiding the org code entry.
+			})
 
-		//then update the Context, to recognise the cookie.
+			//TODO: then update the Context, to recognise the cookie.
+
+		})
+		.catch(err => {
+			this.setState({
+				hasError: true,
+				errorMessage: "Unable to confirm",
+			})
+		});			
 	}
 
 

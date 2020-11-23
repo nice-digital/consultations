@@ -17,7 +17,7 @@ namespace Comments.Services
 	{
 		OrganisationCode GenerateOrganisationCode(int organisationId, int consultationId);
 		Task<OrganisationCode> CheckValidCodeForConsultation(string collationCode, int consultationId);
-		Guid CreateOrganisationUserSession(int organisationAuthorisationId);
+		Guid CreateOrganisationUserSession(int organisationAuthorisationId, string collationCode);
 	}
 
     public class OrganisationService : IOrganisationService
@@ -128,8 +128,12 @@ namespace Comments.Services
 			return new OrganisationCode(organisationAuthorisation, organisation.OrganisationName);
 		}
 
-		public Guid CreateOrganisationUserSession(int organisationAuthorisationId)
+		public Guid CreateOrganisationUserSession(int organisationAuthorisationId, string collationCode)
 		{
+			var organisationAuthorisationForSuppliedCollationCode = _context.GetOrganisationAuthorisationByCollationCode(collationCode);
+			if (!organisationAuthorisationForSuppliedCollationCode.OrganisationAuthorisationId.Equals(organisationAuthorisationId))
+				throw new ApplicationException($"Supplied collation code: {collationCode} is not valid for the supplied organisation authorisation id:{organisationAuthorisationId}");
+			
 			var organisationUser = _context.CreateOrganisationUser(organisationAuthorisationId, Guid.NewGuid());
 			return organisationUser.AuthorisationSession;
 		}

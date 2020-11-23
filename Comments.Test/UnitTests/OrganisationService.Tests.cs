@@ -174,7 +174,6 @@ namespace Comments.Test.UnitTests
 			//Arrange
 			ResetDatabase();
 			_context.Database.EnsureCreated();
-
 			const int numberOfSessionsToCreate = 100;
 			var sessionIdsReturned = new List<Guid>();
 
@@ -183,19 +182,19 @@ namespace Comments.Test.UnitTests
 				var serviceUnderTest = new OrganisationService(context, _fakeUserService, null, null, null);
 
 				//Act
-				for (var organisationAuthorisationId = 1;
-					organisationAuthorisationId <= numberOfSessionsToCreate;
-					organisationAuthorisationId++)
+				for (var counter = 1; counter <= numberOfSessionsToCreate; counter++)
 				{
-					sessionIdsReturned.Add(serviceUnderTest.CreateOrganisationUserSession(organisationAuthorisationId));
-				}
+					var collationCodeToUse = counter.ToString("000000000000");
 
+					var organisationAuthorisationId = AddOrganisationAuthorisationWithLocation(1, 1, _context, collationCode: collationCodeToUse);
+
+					sessionIdsReturned.Add(serviceUnderTest.CreateOrganisationUserSession(organisationAuthorisationId, collationCodeToUse));
+				}
 
 				//Assert
 				sessionIdsReturned.Distinct().Count().ShouldBe(numberOfSessionsToCreate);
 				var sessionIdsInDatabase = _context.OrganisationUser.Select(ou => ou.AuthorisationSession).ToList();
 				sessionIdsInDatabase.Count().ShouldBe(numberOfSessionsToCreate);
-
 
 				var inDatabaseButNotReturned = sessionIdsInDatabase.Except(sessionIdsReturned);
 				inDatabaseButNotReturned.Count().ShouldBe(0);
