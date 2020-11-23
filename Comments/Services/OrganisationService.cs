@@ -19,6 +19,7 @@ namespace Comments.Services
 		OrganisationCode GenerateOrganisationCode(int organisationId, int consultationId);
 		Task<OrganisationCode> CheckValidCodeForConsultation(string collationCode, int consultationId);
 		Guid CreateOrganisationUserSession(int organisationAuthorisationId, string collationCode);
+		bool CheckOrganisationUserSession(int consultationId, Guid sessionId);
 	}
 
     public class OrganisationService : IOrganisationService
@@ -138,6 +139,20 @@ namespace Comments.Services
 			
 			var organisationUser = _context.CreateOrganisationUser(organisationAuthorisationId, Guid.NewGuid());
 			return organisationUser.AuthorisationSession;
+		}
+
+		public bool CheckOrganisationUserSession(int consultationId, Guid sessionId)
+		{
+			var organisationUser = _context.GetOrganisationUser(sessionId);
+
+			if (organisationUser == null)
+				return false;
+
+			var parsedUri = ConsultationsUri.ParseConsultationsUri(organisationUser.OrganisationAuthorisation.Location.SourceURI);
+			if (!parsedUri.ConsultationId.Equals(consultationId))
+				return false;
+
+			return true;
 		}
 	}
 }

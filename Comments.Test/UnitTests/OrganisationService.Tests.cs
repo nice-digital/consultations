@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Comments.Common;
 using Moq;
 using Xunit;
@@ -203,5 +204,36 @@ namespace Comments.Test.UnitTests
 				returnedButNotInDatabase.Count().ShouldBe(0);
 			}
 		}
-    }
+
+		[Fact]
+		public void CheckOrganisationUserSessionRecognisesValidAndInvalidSessions()
+		{
+			//Arrange
+			ResetDatabase();
+			_context.Database.EnsureCreated();
+			var sessionId = Guid.NewGuid();
+			var consultationId = 1;
+
+			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
+			{
+				var serviceUnderTest = new OrganisationService(context, _fakeUserService, null, null, null);
+
+				var organisationAuthorisationId = AddOrganisationAuthorisationWithLocation(1, consultationId, context, collationCode: "123412341234");
+				AddOrganisationUser(context, organisationAuthorisationId, sessionId);
+
+				//Act
+				var valid = serviceUnderTest.CheckOrganisationUserSession(consultationId, sessionId);
+
+				var invalid1 = serviceUnderTest.CheckOrganisationUserSession(consultationId, Guid.NewGuid());
+				var invalid2 = serviceUnderTest.CheckOrganisationUserSession(2, sessionId);
+				var invalid3 = serviceUnderTest.CheckOrganisationUserSession(2, Guid.NewGuid());
+
+				//Assert
+				valid.ShouldBe(true);
+				invalid1.ShouldBe(false);
+				invalid2.ShouldBe(false);
+				invalid3.ShouldBe(false);
+			}
+		}
+	}
 }

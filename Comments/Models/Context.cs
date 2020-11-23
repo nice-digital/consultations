@@ -829,5 +829,14 @@ namespace Comments.Models
 			SaveChanges();
 			return organisationUser;
 		}
-	}
+
+		public OrganisationUser GetOrganisationUser(Guid sessionId)
+		{
+			return
+				OrganisationUser
+				.Include(ou => ou.OrganisationAuthorisation).
+					ThenInclude(a => a.Location)
+				.FirstOrDefault(ou => ou.AuthorisationSession.Equals(sessionId));
+		}
+    }
 }

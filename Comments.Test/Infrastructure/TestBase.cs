@@ -478,6 +478,14 @@ namespace Comments.Test.Infrastructure
 			return organisationAuthorisation.OrganisationAuthorisationId;
 	    }
 
+	    protected int AddOrganisationUser(ConsultationsContext passedInContext, int organisationAuthorisationId, Guid authorisationSession)
+	    {
+			var organisationUser = new OrganisationUser(organisationAuthorisationId, authorisationSession);
+			passedInContext.OrganisationUser.Add(organisationUser);
+			passedInContext.SaveChanges();
+			return organisationUser.OrganisationUserId;
+	    }
+
 
 	    protected ConsultationListContext CreateContext(IUserService userService, int totalCount = 1)
 	    {
