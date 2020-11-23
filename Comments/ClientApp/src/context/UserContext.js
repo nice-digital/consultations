@@ -4,7 +4,9 @@ import React from "react";
 import { load } from "../data/loader";
 import { withRouter } from "react-router";
 
-export const UserContext = React.createContext();
+export const UserContext = React.createContext({
+	updateContext: () => {}
+});
 
 type PropsType = {
 	location: any,
@@ -29,6 +31,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 			displayName: "",
 			signInURL: "",
 			registerURL: "",
+			updateContext: this.updateContext,
 		};
 
 		const isServerSideRender = (this.props.staticContext && this.props.staticContext.preload);
@@ -40,6 +43,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 				displayName: preloadSource.displayName,
 				signInURL: preloadSource.signInURL,
 				registerURL: preloadSource.registerURL,
+				updateContext: this.updateContext,
 			};
 			if (this.props.staticContext) {
 				this.props.staticContext.analyticsGlobals.isSignedIn = preloadSource.isAuthorised;
@@ -66,6 +70,14 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 				}
 			);
 	};
+
+	//a child component can call this method to update the context.
+	updateContext = () => {
+		console.log("updateContext hit");
+
+		//const cookieReferrer = Cookies.get("documentReferrer");
+
+	}
 
 	// fire when route changes
 

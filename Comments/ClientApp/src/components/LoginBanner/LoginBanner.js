@@ -4,7 +4,7 @@ import { withRouter } from "react-router-dom";
 import { DebounceInput } from "react-debounce-input";
 import queryString from "query-string";
 import Cookies from "js-cookie";
-import { appendQueryParameter, removeQueryParameter, removeQuerystring } from "../../helpers/utils";
+import { UserContext } from "../../context/UserContext";
 import { load } from "../../data/loader";
 
 type PropsType = {
@@ -14,7 +14,6 @@ type PropsType = {
 	signInText?: string,
 	match: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
-	history: PropTypes.object.isRequired,
 }
 
 type OrganisationCode = {
@@ -28,6 +27,7 @@ type StateType = {
 	organisationCode: string,
 	hasError: bool,
 	errorMessage: string,
+	showOrganisationLoginSection: bool,
 	showAuthorisationOrganisation: bool,
 	authorisationOrganisationFound: OrganisationCode, 
 }
@@ -41,6 +41,7 @@ export class LoginBanner extends Component<PropsType, StateType> {
 			userEnteredCollationCode: "",
 			hasError: false,
 			errorMessage: "",
+			showOrganisationLoginSection: true,
 			showAuthorisationOrganisation: false,
 			authorisationOrganisationFound: null,
 		};
@@ -146,19 +147,17 @@ export class LoginBanner extends Component<PropsType, StateType> {
 		};
 	}
 
-	handleConfirmClick = () => {
-		var consultationId = this.props.match.params.consultationId;
+	handleConfirmClick = (updateContextFunction) => {
+		const consultationId = this.props.match.params.consultationId;
 		this.CreateOrganisationUserSession().then(data => {
-			Cookies.set(`ConsultationSession-${consultationId}`, data.sessionId); //TODO: add to cookie policy !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			Cookies.set(`ConsultationSession-${consultationId}`, data.sessionId); //TODO: add to cookie policy + expiration time of end date + 28 days !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 			//now, set state to show logged in. 
 			this.setState({
+				showOrganisationLoginSection: false,
 				showAuthorisationOrganisation: false,
-				//TODO: new property here for hiding the org code entry.
 			})
-
-			//TODO: then update the Context, to recognise the cookie.
-
+			updateContextFunction();
 		})
 		.catch(err => {
 			this.setState({
@@ -170,8 +169,6 @@ export class LoginBanner extends Component<PropsType, StateType> {
 
 
 	render(){
-		const {userEnteredCollationCode} = this.state;
-		const { match, location, history } = this.props
 
 		return (
 			<div className="panel panel--inverse mt--0 mb--0 sign-in-banner"
@@ -180,33 +177,42 @@ export class LoginBanner extends Component<PropsType, StateType> {
 					<div className="grid">
 						<div data-g="12">
 							<div className="LoginBanner">
-								<p>If you would like to comment on this consultation as part of an organisation, please enter your organisation code here:</p>
-								<label>
-									Organisation code 
-									{this.state.hasError && 
-										<div>{this.state.errorMessage}</div>
-									}
-									<DebounceInput
-										minLength={6}
-										debounceTimeout={400}
-										type="text"
-										onChange={e => this.handleOrganisationCodeChange(e.target.value)}
-										className="form__input form__input--text"
-										data-qa-sel="OrganisationCodeLogin"
-										id="collationCode"
-										value={userEnteredCollationCode}
-									/>
-								</label>
-								<br/><br/>
-								{this.state.showAuthorisationOrganisation && 
+								{this.state.showOrganisationLoginSection &&
 									<Fragment>
-										<label>Confirm organisation name
-											<strong>{this.state.authorisationOrganisationFound.organisationName}</strong>
+										<p>If you would like to comment on this consultation as part of an organisation, please enter your organisation code here:</p>
+										<label>
+											Organisation code<br/>
+											{this.state.hasError && 
+												<div>{this.state.errorMessage}</div>
+											}
+											<DebounceInput
+												minLength={6}
+												debounceTimeout={400}
+												type="text"
+												onChange={e => this.handleOrganisationCodeChange(e.target.value)}
+												className="form__input form__input--text limitWidth"
+												data-qa-sel="OrganisationCodeLogin"
+												id="collationCode"
+												value={this.state.userEnteredCollationCode}
+											/>
 										</label>
-										<br/>
-										<button className="btn btn--cta" onClick={() => this.handleConfirmClick()}  title={"Confirm your organisation is " + this.state.authorisationOrganisationFound.organisationName}>Confirm</button>
-									</Fragment>
-								}								
+										<br/><br/>
+										{this.state.showAuthorisationOrganisation && 
+											<Fragment>
+												<label>Confirm organisation name<br/>
+													<strong>{this.state.authorisationOrganisationFound.organisationName}</strong>
+												</label>
+												<br/>												
+												<UserContext.Consumer>
+													{({ contextValue: ContextType, updateContext }) => (
+														<button className="btn btn--cta" onClick={() => this.handleConfirmClick(updateContext)}  title={"Confirm your organisation is " + this.state.authorisationOrganisationFound.organisationName}>Confirm</button>
+													)}
+												</UserContext.Consumer>
+												<br/>
+											</Fragment>
+										}	
+									</Fragment>							
+								}
 								<a href={this.props.signInURL} title="Sign in to your NICE account">
 									Sign in to your NICE account</a> {this.props.signInText || "to comment on this consultation"}.{" "}
 								<br/>

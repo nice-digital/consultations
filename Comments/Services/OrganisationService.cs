@@ -10,6 +10,7 @@ using Comments.Configuration;
 using Comments.ViewModels;
 using NICE.Identity.Authentication.Sdk.API;
 using NICE.Identity.Authentication.Sdk.Authorisation;
+using NICE.Identity.Authentication.Sdk.Domain;
 
 namespace Comments.Services
 {
@@ -111,15 +112,16 @@ namespace Comments.Services
 			if (!organisationAuthorisation.Location.SourceURI.Equals(sourceURI, StringComparison.OrdinalIgnoreCase))
 				throw new ApplicationException("The supplied collation code is for a different consultation.");
 
-			var machineToMachineAccessToken =
-				await _apiTokenService.GetAccessToken(AppSettings.AuthenticationConfig
-					.GetAuthConfiguration()); //TODO: this needs caching!!!!!
-			var httpClientWithPooledMessageHandler = _httpClientFactory.CreateClient();
+			//var machineToMachineAccessToken =
+			//	await _apiTokenService.GetAccessToken(AppSettings.AuthenticationConfig
+			//		.GetAuthConfiguration()); //TODO: this needs caching!!!!!
+			//var httpClientWithPooledMessageHandler = _httpClientFactory.CreateClient();
 
-			var organisations = await _apiService.GetOrganisations(
-				new List<int> {organisationAuthorisation.OrganisationId},
-				machineToMachineAccessToken,
-				httpClientWithPooledMessageHandler);
+			//var organisations = await _apiService.GetOrganisations(
+			//	new List<int> {organisationAuthorisation.OrganisationId},
+			//	machineToMachineAccessToken,
+			//	httpClientWithPooledMessageHandler);
+			var organisations = new List<Organisation> {new Organisation(1, "NICE", false)}; //TODO: remove. this is only here since we're not currently caching the token.
 
 			var organisation = organisations.FirstOrDefault();
 			if (organisation == null)
