@@ -27,5 +27,10 @@ namespace Comments.Test.Infrastructure
 	    {
 		    return Task.Run(() => _rolesToFind ?? new Dictionary<string, IEnumerable<string>>());
 	    }
-    }
+
+		public Task<string> RevokeRefreshTokensForUser(string nameIdentifier, HttpClient httpClient = null)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }
