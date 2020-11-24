@@ -22,8 +22,9 @@ exports[`[ClientApp]  LoginBanner Component should match snapshot. no querystrin
           </p>
           <label>
             Organisation code
+            <br />
             <input
-              className="form__input form__input--text"
+              className="form__input form__input--text limitWidth"
               data-qa-sel="OrganisationCodeLogin"
               id="collationCode"
               onBlur={[Function]}
