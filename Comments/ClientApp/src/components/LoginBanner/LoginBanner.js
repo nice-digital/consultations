@@ -106,7 +106,7 @@ export class LoginBanner extends Component<PropsType, StateType> {
 	}
 
 	gatherDataForCreateOrganisationUserSession = async () => {
-		const sessionId = load(
+		const session = load(
 			"organisationsession",
 			undefined,
 			[],
@@ -124,14 +124,14 @@ export class LoginBanner extends Component<PropsType, StateType> {
 				});
 			});
 		return {
-			sessionId: await sessionId,
+			session: await session,
 		};
 	}
 
 	CreateOrganisationUserSession = async () => {
 		const session = this.gatherDataForCreateOrganisationUserSession()
 			.then(data => {
-				if (data.session != null) { //todo: the shape of this has changed. it's now probably an object with sessionId in it plus a datetime.
+				if (data.session != null) { 
 					this.setState({
 						hasError: false,
 						errorMessage: "",						
@@ -151,7 +151,10 @@ export class LoginBanner extends Component<PropsType, StateType> {
 		const consultationId = this.props.match.params.consultationId;
 		this.CreateOrganisationUserSession().then(data => {
 			console.log("data is:" + JSON.stringify(data));
-			Cookies.set(`ConsultationSession-${consultationId}`, data.sessionId); //TODO: add to cookie policy + expiration time of end date + 28 days !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+			var expirationDate = new Date(data.session.expirationDateTicks);
+
+			Cookies.set(`ConsultationSession-${consultationId}`, data.session.sessionId, {expires: expirationDate}); //TODO: add to cookie policy
 
 			//now, set state to show logged in. 
 			this.setState({

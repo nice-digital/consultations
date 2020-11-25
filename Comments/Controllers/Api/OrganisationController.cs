@@ -93,7 +93,7 @@ namespace Comments.Controllers.Api
 			
 			var session = _organisationService.CreateOrganisationUserSession(organisationAuthorisationId, collationCode);
 
-			return Ok(session);
+			return Ok(new {session.sessionId, expirationDateTicks = session.expirationDate.ToJavaScriptTicksSinceEpoch()});
 		}
 
 
