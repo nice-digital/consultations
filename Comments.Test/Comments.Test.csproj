@@ -14,6 +14,7 @@
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.1.14" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.14" />
+    <PackageReference Include="Microsoft.FeatureManagement.AspNetCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
     <PackageReference Include="Moq" Version="4.8.1" />
     <PackageReference Include="NICE.Feeds" Version="1.0.136" />
@@ -63,5 +64,15 @@
       <DiffAssertionsFilePath Include="$([System.IO.Path]::ChangeExtension('%(_ResolvedProjectReferencePaths.FullPath)', 'diff-assertions.json'))" />
     </ItemGroup>
     <Copy SourceFiles="%(DiffAssertionsFilePath.FullPath)" DestinationFolder="$(OutputPath)" Condition="Exists('%(DiffAssertionsFilePath.FullPath)')" />
+  </Target>
+
+  <Target Name="AddAssemblyAliasToReactiveAsync"
+          AfterTargets="ResolveAssemblyReferences"
+          Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
+	  <ItemGroup>
+		  <ReferencePath Condition=" '%(FileName)' == 'System.Interactive.Async' ">
+			  <Aliases>reactive</Aliases>
+		  </ReferencePath>
+	  </ItemGroup>
   </Target>
 </Project>

@@ -26,6 +26,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
 using System.Collections.Generic;
+using Microsoft.FeatureManagement;
 
 namespace Comments
 {
@@ -147,10 +148,12 @@ namespace Comments
             }); //adding CORS for Warren. todo: maybe move this into the isDevelopment block..
             
             services.AddOptions();
+
+            services.AddFeatureManagement();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ISeriLogger seriLogger, IApplicationLifetime appLifetime, IUrlHelperFactory urlHelperFactory, IActionContextAccessor actionContextAccessor)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ISeriLogger seriLogger, IApplicationLifetime appLifetime, IUrlHelperFactory urlHelperFactory, IFeatureManager featureManager)
         {           
             seriLogger.Configure(loggerFactory, Configuration, appLifetime, env);
             var startupLogger = loggerFactory.CreateLogger<Startup>();
@@ -266,7 +269,7 @@ namespace Comments
                     options.ExcludeUrls = new[] { "/sockjs-node" };
                     // Pass data in from .NET into the SSR. These come through as `params` within `createServerRenderer` within the server side JS code.
                     // See https://docs.microsoft.com/en-us/aspnet/core/spa/angular?tabs=visual-studio#pass-data-from-net-code-into-typescript-code
-                    options.SupplyData = (httpContext, data) =>
+                    options.SupplyData = async (httpContext, data) =>
                     {
                         data["isHttpsRequest"] = httpContext.Request.IsHttps;
                         var cookiesForSSR = httpContext.Request.Cookies.Where(cookie => cookie.Key.StartsWith(AuthenticationConstants.CookieName)).ToList();
@@ -299,9 +302,12 @@ namespace Comments
 						data["registerURL"] = urlHelper.Action(Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnUrl = httpContext.Request.Path, goToRegisterPage = true });
 						data["requestURL"] = httpContext.Request.Path;
 	                    data["accountsEnvironment"] = AppSettings.Environment.AccountsEnvironment;
-	                    //data["user"] = context.User; - possible security implications here, surfacing claims to the front end. might be ok, if just server-side.
-	                    // Pass further data in e.g. user/authentication data
-                    };
+
+						data["OrganisationalCommentingFeature"] = await featureManager.IsEnabledAsync(nameof(Features.OrganisationalCommenting));
+
+						//data["user"] = context.User; - possible security implications here, surfacing claims to the front end. might be ok, if just server-side.
+						// Pass further data in e.g. user/authentication data
+					};
                     options.BootModulePath = $"{spa.Options.SourcePath}/src/server/index.js";
                 });
 

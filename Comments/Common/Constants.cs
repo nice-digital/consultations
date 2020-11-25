@@ -47,5 +47,5 @@ namespace Comments.Common
 			/// </summary>
 			public const string RegExSpacesRemoved = @"\d{12}";
 	    }
-	}
+    }
 }

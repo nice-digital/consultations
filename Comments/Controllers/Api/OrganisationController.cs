@@ -1,25 +1,26 @@
-using System;
-using System.Data;
-using System.Net;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Comments.Common;
 using Comments.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.FeatureManagement.Mvc;
+using System;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Comments.Controllers.Api
 {
 	[Produces("application/json")]
     [Route("consultations/api/[controller]")]
-    public class OrganisationController : ControllerBase
+	[FeatureGate(Features.OrganisationalCommenting)]
+	public class OrganisationController : ControllerBase
     {
 	    private readonly IOrganisationService _organisationService;
         private readonly ILogger<OrganisationController> _logger;
 
         public OrganisationController(IOrganisationService organisationService, ILogger<OrganisationController> logger)
         {
+
 	        _organisationService = organisationService;
 	        _logger = logger;
         }

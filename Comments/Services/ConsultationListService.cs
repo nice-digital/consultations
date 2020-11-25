@@ -6,13 +6,15 @@ using NICE.Feeds;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.FeatureManagement;
 using NICE.Identity.Authentication.Sdk.Domain;
 
 namespace Comments.Services
 {
 	public interface IConsultationListService
 	{
-		(ConsultationListViewModel consultationListViewModel, Validate validate)  GetConsultationListViewModel(ConsultationListViewModel model);
+		Task<(ConsultationListViewModel consultationListViewModel, Validate validate)>  GetConsultationListViewModel(ConsultationListViewModel model);
 	}
 
 	public class ConsultationListService : IConsultationListService
@@ -21,13 +23,15 @@ namespace Comments.Services
 		private readonly IFeedService _feedService;
 		private readonly IConsultationService _consultationService;
 		private readonly IUserService _userService;
+		private readonly IFeatureManager _featureManager;
 
-		public ConsultationListService(ConsultationsContext consultationsContext, IFeedService feedService, IConsultationService consultationService, IUserService userService)
+		public ConsultationListService(ConsultationsContext consultationsContext, IFeedService feedService, IConsultationService consultationService, IUserService userService, IFeatureManager featureManager)
 		{
 			_context = consultationsContext;
 			_feedService = feedService;
 			_consultationService = consultationService;
 			_userService = userService;
+			_featureManager = featureManager;
 		}
 
 		/// <summary>
@@ -43,7 +47,7 @@ namespace Comments.Services
 		/// </summary>
 		/// <param name="model"></param>
 		/// <returns></returns>
-		public (ConsultationListViewModel consultationListViewModel, Validate validate) GetConsultationListViewModel(ConsultationListViewModel model)
+		public async Task<(ConsultationListViewModel consultationListViewModel, Validate validate)> GetConsultationListViewModel(ConsultationListViewModel model)
 		{
 			var currentUser = _userService.GetCurrentUser();
 			if (!currentUser.IsAuthorised)
@@ -79,8 +83,13 @@ namespace Comments.Services
 					model.Team = new List<TeamStatus> { TeamStatus.MyTeam };
 				}
 			}
-
-			var allOrganisationCodes = GetConsultationCodesForAllConsultations(consultationsFromIndev.Select(c => c.ConsultationId).ToList(), isAdminUser, currentUser.OrganisationsAssignedAsLead.ToList());
+			
+			var isOrganisationalCommentingEnabled = await _featureManager.IsEnabledAsync(nameof(Features.OrganisationalCommenting));
+			Dictionary<int, List<OrganisationCode>> allOrganisationCodes;
+			if (isOrganisationalCommentingEnabled)
+				allOrganisationCodes = GetConsultationCodesForAllConsultations(consultationsFromIndev.Select(c => c.ConsultationId).ToList(), isAdminUser, currentUser.OrganisationsAssignedAsLead.ToList());
+			else
+				allOrganisationCodes = consultationsFromIndev.ToDictionary(key => key.ConsultationId, val => new List<OrganisationCode>(0)); ;
 
 			var consultationListRows = new List<ConsultationListRow>();
 
@@ -257,13 +266,13 @@ namespace Comments.Services
 			return consultationListRows.OrderByDescending(c => c.EndDate).ToList();
 		}
 
-		private Dictionary<int, IList<OrganisationCode>> GetConsultationCodesForAllConsultations(IList<int> consultationIds, bool isAdminUser, IList<Organisation> organisationsAssignedAsLead)
+		private Dictionary<int, List<OrganisationCode>> GetConsultationCodesForAllConsultations(IList<int> consultationIds, bool isAdminUser, IList<Organisation> organisationsAssignedAsLead)
 		{
 			var consultationSourceURIs = consultationIds.Select(consultationId => ConsultationsUri.CreateConsultationURI(consultationId)).ToList();
 
 			var organisationAuthorisationsInDB = _context.GetOrganisationAuthorisations(consultationSourceURIs);
 			
-			var codesPerConsultation = new Dictionary<int, IList<OrganisationCode>>();
+			var codesPerConsultation = new Dictionary<int, List<OrganisationCode>>();
 			foreach (var consultationId in consultationIds)
 			{
 				var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);

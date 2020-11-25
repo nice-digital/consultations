@@ -13,7 +13,8 @@ type PropsType = {
 	signInButton: boolean,
 	signInText?: string,
 	match: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
+	location: PropTypes.object.isRequired,
+	allowOrganiationCodeLogin: boolean,
 }
 
 type OrganisationCode = {
@@ -27,7 +28,7 @@ type StateType = {
 	organisationCode: string,
 	hasError: bool,
 	errorMessage: string,
-	showOrganisationLoginSection: bool,
+	showOrganisationCodeLogin: bool,
 	showAuthorisationOrganisation: bool,
 	authorisationOrganisationFound: OrganisationCode, 
 }
@@ -41,7 +42,7 @@ export class LoginBanner extends Component<PropsType, StateType> {
 			userEnteredCollationCode: "",
 			hasError: false,
 			errorMessage: "",
-			showOrganisationLoginSection: true,
+			showOrganisationCodeLogin: true,
 			showAuthorisationOrganisation: false,
 			authorisationOrganisationFound: null,
 		};
@@ -158,7 +159,7 @@ export class LoginBanner extends Component<PropsType, StateType> {
 
 			//now, set state to show logged in. 
 			this.setState({
-				showOrganisationLoginSection: false,
+				showOrganisationCodeLogin: false,
 				showAuthorisationOrganisation: false,
 			})
 			updateContextFunction();
@@ -181,7 +182,7 @@ export class LoginBanner extends Component<PropsType, StateType> {
 					<div className="grid">
 						<div data-g="12">
 							<div className="LoginBanner">
-								{this.state.showOrganisationLoginSection &&
+								{this.props.allowOrganiationCodeLogin && this.state.showOrganisationCodeLogin &&
 									<Fragment>
 										<p>If you would like to comment on this consultation as part of an organisation, please enter your organisation code here:</p>
 										<label>
