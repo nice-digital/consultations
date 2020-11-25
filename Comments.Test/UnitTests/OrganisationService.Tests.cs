@@ -244,7 +244,7 @@ namespace Comments.Test.UnitTests
 		}
 
 		[Fact]
-		public void CheckOrganisationUserSessionRecognisesExpiredSessionsCorrectly()
+		public void CheckOrganisationUserSessionRecognisesNonExpiredSessionCorrectly()
 		{
 			//Arrange
 			ResetDatabase();
@@ -265,6 +265,31 @@ namespace Comments.Test.UnitTests
 				
 				//Assert
 				valid.ShouldBe(true);
+			}
+		}
+
+		[Fact]
+		public void CheckOrganisationUserSessionRecognisesExpiredSessionCorrectly()
+		{
+			//Arrange
+			ResetDatabase();
+			_context.Database.EnsureCreated();
+			var sessionId = Guid.NewGuid();
+			var consultationId = 1;
+			var expirationDate = DateTime.UtcNow.AddDays(-1);
+
+			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
+			{
+				var serviceUnderTest = new OrganisationService(context, _fakeUserService, null, null, null, null);
+
+				var organisationAuthorisationId = AddOrganisationAuthorisationWithLocation(1, consultationId, context, collationCode: "123412341234");
+				AddOrganisationUser(context, organisationAuthorisationId, sessionId, expirationDate);
+
+				//Act
+				var invalid = serviceUnderTest.CheckOrganisationUserSession(consultationId, sessionId);
+
+				//Assert
+				invalid.ShouldBe(false);
 			}
 		}
 	}
