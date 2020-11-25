@@ -116,16 +116,12 @@ namespace Comments.Services
 			if (!organisationAuthorisation.Location.SourceURI.Equals(sourceURI, StringComparison.OrdinalIgnoreCase))
 				throw new ApplicationException("The supplied collation code is for a different consultation.");
 
-			//var machineToMachineAccessToken =
-			//	await _apiTokenService.GetAccessToken(AppSettings.AuthenticationConfig
-			//		.GetAuthConfiguration()); //TODO: this needs caching!!!!!
+			//var machineToMachineAccessToken =	await _apiTokenService.GetAccessToken(AppSettings.AuthenticationConfig.GetAuthConfiguration()); 
 			//var httpClientWithPooledMessageHandler = _httpClientFactory.CreateClient();
 
-			//var organisations = await _apiService.GetOrganisations(
-			//	new List<int> {organisationAuthorisation.OrganisationId},
-			//	machineToMachineAccessToken,
-			//	httpClientWithPooledMessageHandler);
-			var organisations = new List<Organisation> {new Organisation(1, "NICE", false)}; //TODO: remove. this is only here since we're not currently caching the token.
+			//var organisations = await _apiService.GetOrganisations(new List<int> {organisationAuthorisation.OrganisationId}, machineToMachineAccessToken,	httpClientWithPooledMessageHandler);
+
+			var organisations = new List<Organisation> {new Organisation(1, "Not NICE", false)}; //TODO: remove. this is only here since we're not currently caching the token. Once idam's been updated with m2m token caching we can restore the above code and remove this.
 
 			var organisation = organisations.FirstOrDefault();
 			if (organisation == null)
@@ -154,7 +150,7 @@ namespace Comments.Services
 			if (organisationUser == null)
 				return false;
 
-			if (organisationUser.ExpirationDate < DateTime.UtcNow) //is expiration date utc? - it depends how indev stores it. there's a potential of this being an hour out anyway, but given its end date + 28 days, an hour doesn't make much difference.
+			if (organisationUser.ExpirationDate < DateTime.UtcNow) 
 				return false;
 
 			var parsedUri = ConsultationsUri.ParseConsultationsUri(organisationUser.OrganisationAuthorisation.Location.SourceURI);
