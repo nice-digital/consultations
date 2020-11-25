@@ -180,7 +180,11 @@ namespace Comments.Models
 
                 entity.Property(e => e.OrganisationAuthorisationId).HasColumnName("OrganisationAuthorisationID");
 
-                entity.HasOne(d => d.OrganisationAuthorisation)
+                entity.Property(e => e.CreatedDate).IsRequired().HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.ExpirationDate).IsRequired();
+
+				entity.HasOne(d => d.OrganisationAuthorisation)
 	                .WithMany(p => p.OrganisationUsers)
 	                .HasForeignKey(d => d.OrganisationAuthorisationId)
 	                .HasConstraintName("FK_OrganisationUser_OrganisationAuthorisation");

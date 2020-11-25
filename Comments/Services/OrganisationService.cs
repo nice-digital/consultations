@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Comments.Configuration;
 using Comments.ViewModels;
+using NICE.Feeds;
 using NICE.Identity.Authentication.Sdk.API;
 using NICE.Identity.Authentication.Sdk.Authorisation;
 using NICE.Identity.Authentication.Sdk.Domain;
@@ -18,7 +19,7 @@ namespace Comments.Services
 	{
 		OrganisationCode GenerateOrganisationCode(int organisationId, int consultationId);
 		Task<OrganisationCode> CheckValidCodeForConsultation(string collationCode, int consultationId);
-		Guid CreateOrganisationUserSession(int organisationAuthorisationId, string collationCode);
+		(Guid sessionId, DateTime expirationDate) CreateOrganisationUserSession(int organisationAuthorisationId, string collationCode);
 		bool CheckOrganisationUserSession(int consultationId, Guid sessionId);
 	}
 
@@ -29,14 +30,16 @@ namespace Comments.Services
         private readonly IApiToken _apiTokenService;
         private readonly IAPIService _apiService;
         private readonly IHttpClientFactory _httpClientFactory;
-		
-        public OrganisationService(ConsultationsContext context, IUserService userService, IApiToken apiTokenService, IAPIService apiService, IHttpClientFactory httpClientFactory)
+        private readonly IConsultationService _consultationService;
+
+        public OrganisationService(ConsultationsContext context, IUserService userService, IApiToken apiTokenService, IAPIService apiService, IHttpClientFactory httpClientFactory, IConsultationService consultationService)
         {
             _context = context;
             _userService = userService;
             _apiTokenService = apiTokenService;
             _apiService = apiService;
             _httpClientFactory = httpClientFactory;
+            _consultationService = consultationService;
         }
 
 		/// <summary>
@@ -131,14 +134,17 @@ namespace Comments.Services
 			return new OrganisationCode(organisationAuthorisation, organisation.OrganisationName);
 		}
 
-		public Guid CreateOrganisationUserSession(int organisationAuthorisationId, string collationCode)
+		public (Guid sessionId, DateTime expirationDate) CreateOrganisationUserSession(int organisationAuthorisationId, string collationCode)
 		{
 			var organisationAuthorisationForSuppliedCollationCode = _context.GetOrganisationAuthorisationByCollationCode(collationCode);
 			if (!organisationAuthorisationForSuppliedCollationCode.OrganisationAuthorisationId.Equals(organisationAuthorisationId))
 				throw new ApplicationException($"Supplied collation code: {collationCode} is not valid for the supplied organisation authorisation id:{organisationAuthorisationId}");
-			
-			var organisationUser = _context.CreateOrganisationUser(organisationAuthorisationId, Guid.NewGuid());
-			return organisationUser.AuthorisationSession;
+
+			var consultationDetails = _consultationService.GetConsultationState(organisationAuthorisationForSuppliedCollationCode.Location.SourceURI, PreviewState.NonPreview);
+			var expirationDate = consultationDetails.EndDate.AddDays(28);
+
+			var organisationUser = _context.CreateOrganisationUser(organisationAuthorisationId, Guid.NewGuid(), expirationDate);
+			return (organisationUser.AuthorisationSession, expirationDate);
 		}
 
 		public bool CheckOrganisationUserSession(int consultationId, Guid sessionId)
@@ -146,6 +152,9 @@ namespace Comments.Services
 			var organisationUser = _context.GetOrganisationUser(sessionId);
 
 			if (organisationUser == null)
+				return false;
+
+			if (organisationUser.ExpirationDate < DateTime.UtcNow) //is expiration date utc? - it depends how indev stores it. there's a potential of this being an hour out anyway, but given its end date + 28 days, an hour doesn't make much difference.
 				return false;
 
 			var parsedUri = ConsultationsUri.ParseConsultationsUri(organisationUser.OrganisationAuthorisation.Location.SourceURI);

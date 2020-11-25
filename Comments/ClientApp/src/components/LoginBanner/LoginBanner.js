@@ -129,27 +129,28 @@ export class LoginBanner extends Component<PropsType, StateType> {
 	}
 
 	CreateOrganisationUserSession = async () => {
-		const sessionId = this.gatherDataForCreateOrganisationUserSession()
+		const session = this.gatherDataForCreateOrganisationUserSession()
 			.then(data => {
-				if (data.sessionId != null) {
+				if (data.session != null) { //todo: the shape of this has changed. it's now probably an object with sessionId in it plus a datetime.
 					this.setState({
 						hasError: false,
 						errorMessage: "",						
 					});
-					return data.sessionId;
+					return data.session;
 				}
 			})
 			.catch(err => {
 				throw new Error("checkOrganisationCode failed " + err);
 			});		
 		return {
-			sessionId: await sessionId,
+			session: await session,
 		};
 	}
 
 	handleConfirmClick = (updateContextFunction) => {
 		const consultationId = this.props.match.params.consultationId;
 		this.CreateOrganisationUserSession().then(data => {
+			console.log("data is:" + JSON.stringify(data));
 			Cookies.set(`ConsultationSession-${consultationId}`, data.sessionId); //TODO: add to cookie policy + expiration time of end date + 28 days !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 			//now, set state to show logged in. 

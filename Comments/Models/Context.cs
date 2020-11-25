@@ -822,9 +822,9 @@ namespace Comments.Models
 			return organisationAuthorisation;
 		}
 
-		public OrganisationUser CreateOrganisationUser(int organisationAuthorisationID, Guid authorisationSession)
+		public OrganisationUser CreateOrganisationUser(int organisationAuthorisationID, Guid authorisationSession, DateTime expirationDate)
 		{
-			var organisationUser = new OrganisationUser(organisationAuthorisationID, authorisationSession);
+			var organisationUser = new OrganisationUser(organisationAuthorisationID, authorisationSession, expirationDate);
 			OrganisationUser.Add(organisationUser);
 			SaveChanges();
 			return organisationUser;

@@ -191,8 +191,14 @@ namespace Comments.Migrations
 
                     b.Property<Guid>("AuthorisationSession");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("(getdate())");
+
                     b.Property<string>("EmailAddress")
                         .HasMaxLength(100);
+
+                    b.Property<DateTime>("ExpirationDate");
 
                     b.Property<int>("OrganisationAuthorisationId")
                         .HasColumnName("OrganisationAuthorisationID");

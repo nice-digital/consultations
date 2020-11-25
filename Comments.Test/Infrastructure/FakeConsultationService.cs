@@ -13,11 +13,13 @@ namespace Comments.Test.Infrastructure
     {
 	    private readonly bool _consultationIsOpen;
 	    private readonly int _documentCount;
+	    private readonly DateTime? _consultationEndDate;
 
-	    public FakeConsultationService(bool consultationIsOpen = true, int documentCount = 1)
+	    public FakeConsultationService(bool consultationIsOpen = true, int documentCount = 1, DateTime? consultationEndDate = null)
 	    {
 		    _consultationIsOpen = consultationIsOpen;
 		    _documentCount = documentCount;
+		    _consultationEndDate = consultationEndDate ?? DateTime.MaxValue;
 	    }
 
 	    public bool ConsultationIsOpen(string sourceURI)
@@ -39,7 +41,7 @@ namespace Comments.Test.Infrastructure
 	    public ConsultationState GetConsultationState(string sourceURI, PreviewState previewState, IEnumerable<Location> locations = null,
 		    ConsultationBase consultation = null)
 	    {
-			return new ConsultationState(DateTime.MinValue, _consultationIsOpen ? DateTime.MaxValue : DateTime.MinValue, true, true, true, null, null);
+			return new ConsultationState(DateTime.MinValue, _consultationIsOpen ? _consultationEndDate.Value : DateTime.MinValue, true, true, true, null, null);
 		}
 	    public ConsultationState GetConsultationState(int consultationId, int? documentId, string reference, PreviewState previewState, IEnumerable<Location> locations = null,
 		    ConsultationBase consultation = null)

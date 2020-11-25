@@ -82,7 +82,7 @@ namespace Comments.Controllers.Api
 		/// </summary>
 		/// <param name="collationCode">collation code is required here for security purposes. the service does a lookup to check the collation code matches the OrganisationAuthorisationId</param>
 		/// <param name="organisationAuthorisationId"></param>
-		/// <returns>a GUID, which is the session id: OrganisationUser.AuthorisationSession</returns>
+		/// <returns>a tuple of GUID (which is the session id: OrganisationUser.AuthorisationSession) and DateTime (which is the cookie expiration date)</returns>
 		[HttpPost("CreateOrganisationUserSession")]
 		public IActionResult CreateOrganisationUserSession(string collationCode, int organisationAuthorisationId)
 		{
@@ -91,9 +91,9 @@ namespace Comments.Controllers.Api
 			if (organisationAuthorisationId < 1)
 				throw new ArgumentException("OrganisationAuthorisation id must be a positive integer", nameof(organisationAuthorisationId));
 			
-			var authorisationSession = _organisationService.CreateOrganisationUserSession(organisationAuthorisationId, collationCode);
+			var session = _organisationService.CreateOrganisationUserSession(organisationAuthorisationId, collationCode);
 
-			return Ok(authorisationSession);
+			return Ok(session);
 		}
 
 

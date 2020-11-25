@@ -8,10 +8,11 @@ namespace Comments.Models
 		{
 		}
 
-		public OrganisationUser(int organisationAuthorisationId, Guid authorisationSession)
+		public OrganisationUser(int organisationAuthorisationId, Guid authorisationSession, DateTime expirationDate)
 		{
 			OrganisationAuthorisationId = organisationAuthorisationId;
 			AuthorisationSession = authorisationSession;
+			ExpirationDate = expirationDate;
 		}
 	}
 }

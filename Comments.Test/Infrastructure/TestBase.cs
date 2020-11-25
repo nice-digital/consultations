@@ -478,9 +478,9 @@ namespace Comments.Test.Infrastructure
 			return organisationAuthorisation.OrganisationAuthorisationId;
 	    }
 
-	    protected int AddOrganisationUser(ConsultationsContext passedInContext, int organisationAuthorisationId, Guid authorisationSession)
+	    protected int AddOrganisationUser(ConsultationsContext passedInContext, int organisationAuthorisationId, Guid authorisationSession, DateTime? expirationDate)
 	    {
-			var organisationUser = new OrganisationUser(organisationAuthorisationId, authorisationSession);
+			var organisationUser = new OrganisationUser(organisationAuthorisationId, authorisationSession, expirationDate ?? DateTime.Now.AddDays(28));
 			passedInContext.OrganisationUser.Add(organisationUser);
 			passedInContext.SaveChanges();
 			return organisationUser.OrganisationUserId;

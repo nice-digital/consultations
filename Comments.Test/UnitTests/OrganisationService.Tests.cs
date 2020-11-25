@@ -6,6 +6,7 @@ using NICE.Identity.Authentication.Sdk.Domain;
 using Shouldly;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
@@ -32,7 +33,7 @@ namespace Comments.Test.UnitTests
 
 			using (var consultationsContext = new ConsultationsContext(_options, userService, _fakeEncryption))
 			{
-				var serviceUnderTest = new OrganisationService(consultationsContext, userService, null, null, null);
+				var serviceUnderTest = new OrganisationService(consultationsContext, userService, null, null, null, null);
 
 				//Act + Assert
 				Assert.Throws<UnauthorizedAccessException>(() => serviceUnderTest.GenerateOrganisationCode(organisationId, consultationId: 1));
@@ -55,7 +56,7 @@ namespace Comments.Test.UnitTests
 			{
 				AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context);
 				
-				var serviceUnderTest = new OrganisationService(context, userService, null, null, null);
+				var serviceUnderTest = new OrganisationService(context, userService, null, null, null, null);
 
 				//Act + Assert
 				Assert.Throws<ApplicationException>(() => serviceUnderTest.GenerateOrganisationCode(organisationId, consultationId));
@@ -66,7 +67,7 @@ namespace Comments.Test.UnitTests
 		public void CollationCodeIsCorrectFormat()
 		{
 			//Arrange
-			var serviceUnderTest = new OrganisationService(_context, _fakeUserService, null, null, null);
+			var serviceUnderTest = new OrganisationService(_context, _fakeUserService, null, null, null, null);
 			var regex = new Regex(Constants.CollationCode.RegExChunkedWithSpaces);
 
 			//Act
@@ -80,7 +81,7 @@ namespace Comments.Test.UnitTests
 		public void CollationCodeIsReturnedDifferentInRepeatedCalls()
 		{
 			//Arrange
-			var serviceUnderTest = new OrganisationService(_context, _fakeUserService, null, null, null);
+			var serviceUnderTest = new OrganisationService(_context, _fakeUserService, null, null, null, null);
 			const int numberOfTimesToGetCollationCode = 100;
 
 			//Act
@@ -108,7 +109,7 @@ namespace Comments.Test.UnitTests
 
 			using (var context = new ConsultationsContext(_options, userService, _fakeEncryption))
 			{
-				var serviceUnderTest = new OrganisationService(context, userService, null, null, null);
+				var serviceUnderTest = new OrganisationService(context, userService, null, null, null, null);
 
 				//Act 
 				serviceUnderTest.GenerateOrganisationCode(organisationId, consultationId);
@@ -135,7 +136,7 @@ namespace Comments.Test.UnitTests
 			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
 			{
 				AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, collationCode: collationCodeInDB);
-				var serviceUnderTest = new OrganisationService(context, _fakeUserService, new FakeAPITokenService(), _fakeApiService, mockFactory.Object);
+				var serviceUnderTest = new OrganisationService(context, _fakeUserService, new FakeAPITokenService(), _fakeApiService, mockFactory.Object, null);
 
 				//Act 
 				var organisationCode = await serviceUnderTest.CheckValidCodeForConsultation(collationCode, consultationId);
@@ -162,7 +163,7 @@ namespace Comments.Test.UnitTests
 			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
 			{
 				AddOrganisationAuthorisationWithLocation(organisationId, validConsultationId, context, collationCode: collationCodeInDB);
-				var serviceUnderTest = new OrganisationService(context, _fakeUserService, null, null, null);
+				var serviceUnderTest = new OrganisationService(context, _fakeUserService, null, null, null, null);
 
 				//Act + Assert
 				Assert.ThrowsAsync<ApplicationException>(async () =>  { await serviceUnderTest.CheckValidCodeForConsultation(collationCode, consultationId); });
@@ -176,11 +177,13 @@ namespace Comments.Test.UnitTests
 			ResetDatabase();
 			_context.Database.EnsureCreated();
 			const int numberOfSessionsToCreate = 100;
-			var sessionIdsReturned = new List<Guid>();
+			var sessionsReturned = new Dictionary<Guid, DateTime>();
+			var consultationEndDate = DateTime.ParseExact("25-Nov-2020", "dd-MMM-yyyy", DateTimeFormatInfo.InvariantInfo);
+			var expectedExpirationDate = consultationEndDate.AddDays(28);
 
 			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
 			{
-				var serviceUnderTest = new OrganisationService(context, _fakeUserService, null, null, null);
+				var serviceUnderTest = new OrganisationService(context, _fakeUserService, null, null, null, new FakeConsultationService(consultationEndDate: consultationEndDate));
 
 				//Act
 				for (var counter = 1; counter <= numberOfSessionsToCreate; counter++)
@@ -189,19 +192,23 @@ namespace Comments.Test.UnitTests
 
 					var organisationAuthorisationId = AddOrganisationAuthorisationWithLocation(1, 1, _context, collationCode: collationCodeToUse);
 
-					sessionIdsReturned.Add(serviceUnderTest.CreateOrganisationUserSession(organisationAuthorisationId, collationCodeToUse));
+					var session = serviceUnderTest.CreateOrganisationUserSession(organisationAuthorisationId, collationCodeToUse);
+					sessionsReturned.Add(session.sessionId, session.expirationDate);
 				}
 
+				var uniqueSessionIdsReturned = sessionsReturned.Keys.ToList();
+
 				//Assert
-				sessionIdsReturned.Distinct().Count().ShouldBe(numberOfSessionsToCreate);
 				var sessionIdsInDatabase = _context.OrganisationUser.Select(ou => ou.AuthorisationSession).ToList();
 				sessionIdsInDatabase.Count().ShouldBe(numberOfSessionsToCreate);
 
-				var inDatabaseButNotReturned = sessionIdsInDatabase.Except(sessionIdsReturned);
+				var inDatabaseButNotReturned = sessionIdsInDatabase.Except(uniqueSessionIdsReturned);
 				inDatabaseButNotReturned.Count().ShouldBe(0);
 
-				var returnedButNotInDatabase = sessionIdsReturned.Except(sessionIdsInDatabase);
+				var returnedButNotInDatabase = uniqueSessionIdsReturned.Except(sessionIdsInDatabase);
 				returnedButNotInDatabase.Count().ShouldBe(0);
+
+				sessionsReturned.First().Value.ShouldBe(expectedExpirationDate);
 			}
 		}
 
@@ -216,10 +223,10 @@ namespace Comments.Test.UnitTests
 
 			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
 			{
-				var serviceUnderTest = new OrganisationService(context, _fakeUserService, null, null, null);
+				var serviceUnderTest = new OrganisationService(context, _fakeUserService, null, null, null, null);
 
 				var organisationAuthorisationId = AddOrganisationAuthorisationWithLocation(1, consultationId, context, collationCode: "123412341234");
-				AddOrganisationUser(context, organisationAuthorisationId, sessionId);
+				AddOrganisationUser(context, organisationAuthorisationId, sessionId, null);
 
 				//Act
 				var valid = serviceUnderTest.CheckOrganisationUserSession(consultationId, sessionId);
@@ -233,6 +240,31 @@ namespace Comments.Test.UnitTests
 				invalid1.ShouldBe(false);
 				invalid2.ShouldBe(false);
 				invalid3.ShouldBe(false);
+			}
+		}
+
+		[Fact]
+		public void CheckOrganisationUserSessionRecognisesExpiredSessionsCorrectly()
+		{
+			//Arrange
+			ResetDatabase();
+			_context.Database.EnsureCreated();
+			var sessionId = Guid.NewGuid();
+			var consultationId = 1;
+			var expirationDate = DateTime.UtcNow.AddDays(1);
+
+			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
+			{
+				var serviceUnderTest = new OrganisationService(context, _fakeUserService, null, null, null, null);
+
+				var organisationAuthorisationId = AddOrganisationAuthorisationWithLocation(1, consultationId, context, collationCode: "123412341234");
+				AddOrganisationUser(context, organisationAuthorisationId, sessionId, expirationDate);
+
+				//Act
+				var valid = serviceUnderTest.CheckOrganisationUserSession(consultationId, sessionId);
+				
+				//Assert
+				valid.ShouldBe(true);
 			}
 		}
 	}
