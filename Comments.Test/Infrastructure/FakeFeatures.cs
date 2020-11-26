@@ -66,7 +66,4 @@ namespace Comments.Test.Infrastructure
 			return Task.Run(() => (bool?)_features[featureName]);
 		}
 	}
-
-	
-
 }

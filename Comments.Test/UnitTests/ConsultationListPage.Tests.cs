@@ -28,7 +28,7 @@ namespace Comments.Test.UnitTests
 			_consultationListContext = new ConsultationListContext(_options, _fakeUserService, _fakeEncryption);
 		}
 
-#region earlier tests
+		#region earlier tests
 
 		[Fact]
 		public async Task ConsultationListPageModel_HasConsultationsPopulated()
@@ -484,55 +484,7 @@ namespace Comments.Test.UnitTests
 			//Assert
 			updatedViewModel.consultationListViewModel.Consultations.Count(c => c.Show).ShouldBe(1);
 		}
-
-		private List<ConsultationList> AddConsultationsToList()
-		{
-			var consultationList = new List<ConsultationList>();
-			consultationList.Add(new ConsultationList
-			{
-				ConsultationId = 123,
-				ConsultationName = "open consultation",
-				StartDate = DateTime.Now.AddDays(-1),
-				EndDate = DateTime.Now.AddDays(1),
-				Reference = "GID-1",
-				Title = "Consultation title 1",
-				AllowedRole = "ConsultationListTestRole",
-				FirstConvertedDocumentId = null,
-				FirstChapterSlugOfFirstConvertedDocument = null
-			});
-			consultationList.Add(new ConsultationList()
-			{
-				ConsultationId = 124,
-				ConsultationName = "closed consultation",
-				StartDate = DateTime.Now.AddDays(-3),
-				EndDate = DateTime.Now.AddDays(-2),
-				Reference = "GID-2",
-				Title = "Consultation Title 1",
-				AllowedRole = "ConsultationListTestRole",
-				FirstConvertedDocumentId = null,
-				FirstChapterSlugOfFirstConvertedDocument = null
-			});
-			consultationList.Add(new ConsultationList()
-			{
-				ConsultationId = 125,
-				ConsultationName = "upcoming consultation",
-				StartDate = DateTime.Now.AddDays(3),
-				EndDate = DateTime.Now.AddDays(5),
-				Reference = "GID-3",
-				Title = "Consultation Title 3",
-				AllowedRole = "Some other role",
-				FirstConvertedDocumentId = 1,
-				FirstChapterSlugOfFirstConvertedDocument = "my-chapter-slug"
-			});
-
-			return consultationList;
-		}
-
-		private IUserService GetFakeUserService(string userId = null, TestUserType testUserType = TestUserType.Administrator)
-		{
-			return FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId ?? Guid.NewGuid().ToString(), testUserType: testUserType);
-		}
-
+		
 		private ConsultationListService GetConsultationListService()
 		{
 			var consultationList = AddConsultationsToList();
@@ -562,22 +514,6 @@ namespace Comments.Test.UnitTests
 
 
 		[Fact]
-		public async Task CHTETeamMemberSeeAllConsultationsWhenTheFilterIsUnchecked()
-		{
-			//Arrange
-			var consultationList = AddConsultationsToList();
-			var userService = FakeUserService.Get(true, "Jeffrey Goines", Guid.NewGuid().ToString(), TestUserType.ConsultationListTestRole);
-			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), userService, _fakeFeatureManager);
-
-			//Act
-			ConsultationListViewModel viewModel = (await consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null) { Status = new List<ConsultationStatus>() })).consultationListViewModel;
-
-			//Assert
-			viewModel.Consultations.Count().ShouldBe(3);
-			viewModel.Consultations.Count(c => c.Show).ShouldBe(3);
-		}
-
-		[Fact]
 		public async Task CHTETeamMemberCanOnlySeeTheirOwnConsultationsWhenTheFilterIsChecked()
 		{
 			//Arrange
@@ -597,6 +533,35 @@ namespace Comments.Test.UnitTests
 			viewModel.Consultations.Count().ShouldBe(3);
 			viewModel.Consultations.Count(c => c.Show).ShouldBe(2);
 			serialisedViewModel.ShouldMatchApproved(new Func<string, string>[] { Scrubbers.ScrubStartDate, Scrubbers.ScrubEndDate });
+		}
+
+		[Fact]
+		public async Task CHTETeamMemberSeeAllConsultationsWhenTheFilterIsUnchecked()
+		{
+			//Arrange
+			var consultationList = AddConsultationsToList();
+			var userService = FakeUserService.Get(true, "Jeffrey Goines", Guid.NewGuid().ToString(), TestUserType.ConsultationListTestRole);
+			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), userService, _fakeFeatureManager);
+
+			//Act
+			ConsultationListViewModel viewModel = (await consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null) { Status = new List<ConsultationStatus>() })).consultationListViewModel;
+
+			//Assert
+			viewModel.Consultations.Count().ShouldBe(3);
+			viewModel.Consultations.Count(c => c.Show).ShouldBe(3);
+		}
+
+	}
+
+	public class ConsultationListOrganisationCodeTests : TestBase
+	{
+		private readonly ConsultationsContext _consultationListContext;
+
+		public ConsultationListOrganisationCodeTests() : base(TestUserType.Administrator, Feed.ConsultationCommentsPublishedDetailMulitpleDoc, enableOrganisationalCommentingFeature: true)
+		{
+			AppSettings.ConsultationListConfig = TestAppSettings.GetConsultationListConfig();
+			AppSettings.Feed.IndevBasePath = new Uri("http://www.nice.org.uk");
+			_consultationListContext = new ConsultationListContext(_options, _fakeUserService, _fakeEncryption);
 		}
 
 		[Fact]

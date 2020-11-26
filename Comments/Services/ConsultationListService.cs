@@ -89,7 +89,7 @@ namespace Comments.Services
 			if (isOrganisationalCommentingEnabled)
 				allOrganisationCodes = GetConsultationCodesForAllConsultations(consultationsFromIndev.Select(c => c.ConsultationId).ToList(), isAdminUser, currentUser.OrganisationsAssignedAsLead.ToList());
 			else
-				allOrganisationCodes = consultationsFromIndev.ToDictionary(key => key.ConsultationId, val => new List<OrganisationCode>(0)); ;
+				allOrganisationCodes = consultationsFromIndev.ToDictionary(key => key.ConsultationId, val => new List<OrganisationCode>(0));
 
 			var consultationListRows = new List<ConsultationListRow>();
 

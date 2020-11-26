@@ -26,6 +26,7 @@ using NICE.Feeds;
 using NICE.Feeds.Tests.Infrastructure;
 using Microsoft.Data.Sqlite;
 using Microsoft.FeatureManagement;
+using NICE.Feeds.Models.Indev.List;
 using NICE.Identity.Authentication.Sdk.API;
 using Answer = Comments.Models.Answer;
 using Comment = Comments.Models.Comment;
@@ -99,8 +100,9 @@ namespace Comments.Test.Infrastructure
 		    _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
 		}
 
-	    public TestBase(TestUserType testUserType, Feed feed, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null, bool bypassAuthentication = true, bool addRoleClaim = true)
-		    : this(false, testUserType, true, submittedCommentsAndAnswerCounts, bypassAuthentication, addRoleClaim)
+	    public TestBase(TestUserType testUserType, Feed feed, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null, bool bypassAuthentication = true,
+		    bool addRoleClaim = true, bool enableOrganisationalCommentingFeature = false)
+		    : this(false, testUserType, true, submittedCommentsAndAnswerCounts, bypassAuthentication, addRoleClaim, enableOrganisationalCommentingFeature)
 	    {
 			FeedToUse = feed;
 		}
@@ -114,7 +116,7 @@ namespace Comments.Test.Infrastructure
 		/// <param name="submittedCommentsAndAnswerCounts"></param>
 		/// <param name="bypassAuthentication"></param>
 		public TestBase(bool useRealSubmitService = false, TestUserType testUserType = TestUserType.Authenticated, bool useFakeConsultationService = false, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null,
-			bool bypassAuthentication = true, bool addRoleClaim = true, bool enableOrganisationalCommentingFeature = true)
+			bool bypassAuthentication = true, bool addRoleClaim = true, bool enableOrganisationalCommentingFeature = false)
         {
 	        if (testUserType == TestUserType.NotAuthenticated)
 	        {
@@ -168,8 +170,7 @@ namespace Comments.Test.Infrastructure
 
 					services.AddSingleton<IFeatureManager>(provider => _fakeFeatureManager);
 					services.AddSingleton<ISessionManager>(provider => _fakeSessionManager);
-				
-
+					
 					//services.AddAuthentication();
 
 					//services.Decorate<IAPIService, FakeAPIService>();
@@ -502,8 +503,56 @@ namespace Comments.Test.Infrastructure
 			return organisationUser.OrganisationUserId;
 	    }
 
+	    protected List<ConsultationList> AddConsultationsToList()
+	    {
+		    var consultationList = new List<ConsultationList>();
+		    consultationList.Add(new ConsultationList
+		    {
+			    ConsultationId = 123,
+			    ConsultationName = "open consultation",
+			    StartDate = DateTime.Now.AddDays(-1),
+			    EndDate = DateTime.Now.AddDays(1),
+			    Reference = "GID-1",
+			    Title = "Consultation title 1",
+			    AllowedRole = "ConsultationListTestRole",
+			    FirstConvertedDocumentId = null,
+			    FirstChapterSlugOfFirstConvertedDocument = null
+		    });
+		    consultationList.Add(new ConsultationList()
+		    {
+			    ConsultationId = 124,
+			    ConsultationName = "closed consultation",
+			    StartDate = DateTime.Now.AddDays(-3),
+			    EndDate = DateTime.Now.AddDays(-2),
+			    Reference = "GID-2",
+			    Title = "Consultation Title 1",
+			    AllowedRole = "ConsultationListTestRole",
+			    FirstConvertedDocumentId = null,
+			    FirstChapterSlugOfFirstConvertedDocument = null
+		    });
+		    consultationList.Add(new ConsultationList()
+		    {
+			    ConsultationId = 125,
+			    ConsultationName = "upcoming consultation",
+			    StartDate = DateTime.Now.AddDays(3),
+			    EndDate = DateTime.Now.AddDays(5),
+			    Reference = "GID-3",
+			    Title = "Consultation Title 3",
+			    AllowedRole = "Some other role",
+			    FirstConvertedDocumentId = 1,
+			    FirstChapterSlugOfFirstConvertedDocument = "my-chapter-slug"
+		    });
 
-	    protected ConsultationListContext CreateContext(IUserService userService, int totalCount = 1)
+		    return consultationList;
+	    }
+
+
+	    protected IUserService GetFakeUserService(string userId = null, TestUserType testUserType = TestUserType.Administrator)
+	    {
+		    return FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId ?? Guid.NewGuid().ToString(), testUserType: testUserType);
+	    }
+
+		protected ConsultationListContext CreateContext(IUserService userService, int totalCount = 1)
 	    {
 		    var consultationListContext = new ConsultationListContext(_options, userService, _fakeEncryption,
 			    new List<SubmittedCommentsAndAnswerCount>

@@ -1,17 +1,15 @@
 using Comments.Common;
 using Comments.Models;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Comments.Configuration;
 using Comments.ViewModels;
 using NICE.Feeds;
 using NICE.Identity.Authentication.Sdk.API;
 using NICE.Identity.Authentication.Sdk.Authorisation;
 using NICE.Identity.Authentication.Sdk.Domain;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace Comments.Services
 {
@@ -78,6 +76,8 @@ namespace Comments.Services
 				collationCode = GenerateCollationCode();
 				collision = _context.GetOrganisationAuthorisationByCollationCode(collationCode);
 			} while (collision != null && counter <= maxTriesAtUnique);
+			if (counter >= maxTriesAtUnique)
+				throw new ApplicationException("Couldn't generate a random number which doesn't match an existing collation code");
 			
 			//then save it to the db
 			var organisationAuthorisation =_context.SaveCollationCode(sourceURI, currentUser.UserId, DateTime.UtcNow, organisationId, collationCode);
