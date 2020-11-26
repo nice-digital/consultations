@@ -19,13 +19,7 @@
             "IsUpcoming":true,
             "Show":false,
             "OrganisationCodes":[
-                {
-                    "OrganisationAuthorisationId":0,
-                    "OrganisationId":1,
-                    "OrganisationName":"NICE",
-                    "CanGenerateCollationCode":true,
-                    "CollationCode":null
-                }
+                
             ],
             "ShowShareWithOrganisationButton":false
         },
@@ -47,13 +41,7 @@
             "IsUpcoming":false,
             "Show":true,
             "OrganisationCodes":[
-                {
-                    "OrganisationAuthorisationId":0,
-                    "OrganisationId":1,
-                    "OrganisationName":"NICE",
-                    "CanGenerateCollationCode":true,
-                    "CollationCode":null
-                }
+                
             ],
             "ShowShareWithOrganisationButton":true
         },
@@ -75,13 +63,7 @@
             "IsUpcoming":false,
             "Show":true,
             "OrganisationCodes":[
-                {
-                    "OrganisationAuthorisationId":0,
-                    "OrganisationId":1,
-                    "OrganisationName":"NICE",
-                    "CanGenerateCollationCode":true,
-                    "CollationCode":null
-                }
+                
             ],
             "ShowShareWithOrganisationButton":false
         }

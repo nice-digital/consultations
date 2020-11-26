@@ -467,7 +467,7 @@ export class Review extends Component<PropsType, StateType> {
 												currentURL={this.props.match.url}
 												signInURL={contextValue.signInURL}
 												registerURL={contextValue.registerURL}
-												key={"review"}
+												allowOrganisationCodeLogin={false}
 											/> :
 											<main role="main">
 												<div className="page-header">

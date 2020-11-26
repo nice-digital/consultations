@@ -55,6 +55,7 @@ type StateType = {
 	unsavedIds: Array<number>,
 	consultationData: ConsultationStateType, // the top level info - title etc
 	endDate: string,
+	enableOrganisationalCommentingFeature: boolean,
 };
 
 export class CommentList extends Component<PropsType, StateType> {
@@ -76,11 +77,17 @@ export class CommentList extends Component<PropsType, StateType> {
 			unsavedIds: [],
 			consultationData: null,
 			endDate: "",
+			enableOrganisationalCommentingFeature: false
 		};
 
+		let enableOrganisationalCommentingFeature = false;
+
+
 		let preloadedData = {};
+		
 		if (this.props.staticContext && this.props.staticContext.preload) {
 			preloadedData = this.props.staticContext.preload.data; //this is data from Configure => SupplyData in Startup.cs. the main thing it contains for this call is the cookie for the current user.
+			enableOrganisationalCommentingFeature = preloadedData.organisationalCommentingFeature;
 		}
 
 		const preloadedCommentsData = preload(
@@ -117,6 +124,7 @@ export class CommentList extends Component<PropsType, StateType> {
 				unsavedIds: [],
 				consultationData: preloadedConsultation,
 				endDate: preloadedCommentsData.consultationState.endDate,
+				enableOrganisationalCommentingFeature: enableOrganisationalCommentingFeature,
 			};
 		}
 	}
@@ -448,6 +456,7 @@ export class CommentList extends Component<PropsType, StateType> {
 														currentURL={this.props.match.url}
 														signInURL={contextValue.signInURL}
 														registerURL={contextValue.registerURL}
+														allowOrganisationCodeLogin={this.state.enableOrganisationalCommentingFeature}
 													/>
 												)}
 

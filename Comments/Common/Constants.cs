@@ -47,5 +47,14 @@ namespace Comments.Common
 			/// </summary>
 			public const string RegExSpacesRemoved = @"\d{12}";
 	    }
+
+
+	    /// <summary>
+	    /// The values of the string must match the name of the features in the FeatureManagement section of appsettings.json / secrets.json.
+	    /// </summary>
+		public static class Features
+	    {
+		    public const string OrganisationalCommenting = "OrganisationalCommenting";
+	    }
     }
 }

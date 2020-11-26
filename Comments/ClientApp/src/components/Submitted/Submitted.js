@@ -152,7 +152,7 @@ export class Submitted extends Component<PropsType, StateType> {
 														currentURL={this.props.match.url}
 														signInURL={contextValue.signInURL}
 														registerURL={contextValue.registerURL}
-														key={"submitted"}
+														allowOrganisationCodeLogin={false}
 													/> :
 													<Fragment>
 														<Link
