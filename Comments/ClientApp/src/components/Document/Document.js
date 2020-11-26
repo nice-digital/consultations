@@ -18,6 +18,7 @@ import { Selection } from "../Selection/Selection";
 import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
 import { Header } from "../Header/Header";
 import { Tutorial } from "../Tutorial/Tutorial";
+import { canUseDOM } from "../../helpers/utils";
 
 type PropsType = {
 	staticContext: {
@@ -73,13 +74,13 @@ export class Document extends Component<PropsType, StateType> {
 		if (this.props) {
 
 			let preloadedChapter, preloadedDocuments, preloadedConsultation;
-
-			let enableOrganisationalCommentingFeature = false;
+			
 			let preloadedData = {};
 			if (this.props.staticContext && this.props.staticContext.preload) {
 				preloadedData = this.props.staticContext.preload.data; //this is data from Configure => SupplyData in Startup.cs. the main thing it contains for this call is the cookie for the current user.
-				enableOrganisationalCommentingFeature = preloadedData.organisationalCommentingFeature;
 			}
+
+			const enableOrganisationalCommentingFeature = ((preloadedData && preloadedData.organisationalCommentingFeature) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["organisationalCommentingFeature"]));
 
 			preloadedChapter = preload(
 				this.props.staticContext,
@@ -137,6 +138,10 @@ export class Document extends Component<PropsType, StateType> {
 				};
 			}
 		}
+	}
+
+	getDocumentTitle = () => {
+		return this.state.consultationData.title;
 	}
 
 	getChapterData = (params: Object) => {
