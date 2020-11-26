@@ -17,25 +17,6 @@ exports[`[ClientApp]  LoginBanner Component should match snapshot. no querystrin
         <div
           className="LoginBanner"
         >
-          <p>
-            If you would like to comment on this consultation as part of an organisation, please enter your organisation code here:
-          </p>
-          <label>
-            Organisation code
-            <br />
-            <input
-              className="form__input form__input--text limitWidth"
-              data-qa-sel="OrganisationCodeLogin"
-              id="collationCode"
-              onBlur={[Function]}
-              onChange={[Function]}
-              onKeyDown={[Function]}
-              type="text"
-              value=""
-            />
-          </label>
-          <br />
-          <br />
           <a
             href="/signin-url"
             title="Sign in to your NICE account"
