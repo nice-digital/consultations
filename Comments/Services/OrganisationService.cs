@@ -2,26 +2,44 @@ using Comments.Common;
 using Comments.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Comments.Configuration;
 using Comments.ViewModels;
+using NICE.Feeds;
+using NICE.Identity.Authentication.Sdk.API;
+using NICE.Identity.Authentication.Sdk.Authorisation;
+using NICE.Identity.Authentication.Sdk.Domain;
 
 namespace Comments.Services
 {
-	public interface IOrganisationAuthorisationService
+	public interface IOrganisationService
 	{
 		OrganisationCode GenerateOrganisationCode(int organisationId, int consultationId);
-		OrganisationCode CheckValidCodeForConsultation(string collationCode, int consultationId);
+		Task<OrganisationCode> CheckValidCodeForConsultation(string collationCode, int consultationId);
+		(Guid sessionId, DateTime expirationDate) CreateOrganisationUserSession(int organisationAuthorisationId, string collationCode);
+		bool CheckOrganisationUserSession(int consultationId, Guid sessionId);
 	}
 
-    public class OrganisationAuthorisationService : IOrganisationAuthorisationService
+    public class OrganisationService : IOrganisationService
 	{
         private readonly ConsultationsContext _context;
         private readonly IUserService _userService;
+        private readonly IApiToken _apiTokenService;
+        private readonly IAPIService _apiService;
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IConsultationService _consultationService;
 
-        public OrganisationAuthorisationService(ConsultationsContext context, IUserService userService)
+        public OrganisationService(ConsultationsContext context, IUserService userService, IApiToken apiTokenService, IAPIService apiService, IHttpClientFactory httpClientFactory, IConsultationService consultationService)
         {
             _context = context;
             _userService = userService;
+            _apiTokenService = apiTokenService;
+            _apiService = apiService;
+            _httpClientFactory = httpClientFactory;
+            _consultationService = consultationService;
         }
 
 		/// <summary>
@@ -88,20 +106,58 @@ namespace Comments.Services
 		/// <param name="collationCode"></param>
 		/// <param name="consultationId"></param>
 		/// <returns>Returns null if the collation code is not valid</returns>
-		public OrganisationCode CheckValidCodeForConsultation(string collationCode, int consultationId)
+		public async Task<OrganisationCode> CheckValidCodeForConsultation(string collationCode, int consultationId)
 		{
 			var organisationAuthorisation = _context.GetOrganisationAuthorisationByCollationCode(collationCode);
-
 			if (organisationAuthorisation == null)
-				return null;
+				throw new ApplicationException("Collation code not found");
 
 			var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
 			if (!organisationAuthorisation.Location.SourceURI.Equals(sourceURI, StringComparison.OrdinalIgnoreCase))
-				return null;
+				throw new ApplicationException("The supplied collation code is for a different consultation.");
 
-			var organisationName = "todo: get the organisation name using the organisationAuthorisation.OrganisationId, from idam.";
+			//var machineToMachineAccessToken =	await _apiTokenService.GetAccessToken(AppSettings.AuthenticationConfig.GetAuthConfiguration()); 
+			//var httpClientWithPooledMessageHandler = _httpClientFactory.CreateClient();
 
-			return new OrganisationCode(organisationAuthorisation, organisationName);
+			//var organisations = await _apiService.GetOrganisations(new List<int> {organisationAuthorisation.OrganisationId}, machineToMachineAccessToken,	httpClientWithPooledMessageHandler);
+
+			var organisations = new List<Organisation> {new Organisation(1, "Not NICE", false)}; //TODO: remove. this is only here since we're not currently caching the token. Once idam's been updated with m2m token caching we can restore the above code and remove this.
+
+			var organisation = organisations.FirstOrDefault();
+			if (organisation == null)
+				throw new ApplicationException("Organisation name could not be retrieved."); //might occur if the org has been deleted from idam and CC hasn't been updated.
+
+			return new OrganisationCode(organisationAuthorisation, organisation.OrganisationName);
+		}
+
+		public (Guid sessionId, DateTime expirationDate) CreateOrganisationUserSession(int organisationAuthorisationId, string collationCode)
+		{
+			var organisationAuthorisationForSuppliedCollationCode = _context.GetOrganisationAuthorisationByCollationCode(collationCode);
+			if (!organisationAuthorisationForSuppliedCollationCode.OrganisationAuthorisationId.Equals(organisationAuthorisationId))
+				throw new ApplicationException($"Supplied collation code: {collationCode} is not valid for the supplied organisation authorisation id:{organisationAuthorisationId}");
+
+			var consultationDetails = _consultationService.GetConsultationState(organisationAuthorisationForSuppliedCollationCode.Location.SourceURI, PreviewState.NonPreview);
+			var expirationDate = consultationDetails.EndDate.AddDays(28);
+
+			var organisationUser = _context.CreateOrganisationUser(organisationAuthorisationId, Guid.NewGuid(), expirationDate);
+			return (organisationUser.AuthorisationSession, expirationDate);
+		}
+
+		public bool CheckOrganisationUserSession(int consultationId, Guid sessionId)
+		{
+			var organisationUser = _context.GetOrganisationUser(sessionId);
+
+			if (organisationUser == null)
+				return false;
+
+			if (organisationUser.ExpirationDate < DateTime.UtcNow) 
+				return false;
+
+			var parsedUri = ConsultationsUri.ParseConsultationsUri(organisationUser.OrganisationAuthorisation.Location.SourceURI);
+			if (!parsedUri.ConsultationId.Equals(consultationId))
+				return false;
+
+			return true;
 		}
 	}
 }

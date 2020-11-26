@@ -25,6 +25,7 @@ using Microsoft.Extensions.Logging;
 using NICE.Feeds;
 using NICE.Feeds.Tests.Infrastructure;
 using Microsoft.Data.Sqlite;
+using Microsoft.FeatureManagement;
 using NICE.Identity.Authentication.Sdk.API;
 using Answer = Comments.Models.Answer;
 using Comment = Comments.Models.Comment;
@@ -62,6 +63,7 @@ namespace Comments.Test.Infrastructure
         protected readonly IUserService _fakeUserService;
         protected readonly IHttpContextAccessor _fakeHttpContextAccessor;
         protected readonly IAPIService _fakeApiService;
+        protected readonly IFeatureManager _fakeFeatureManager;
 
 	    protected readonly IConsultationService _consultationService;
         protected readonly DbContextOptionsBuilder<ConsultationsContext> _contextOptions;
@@ -127,6 +129,7 @@ namespace Comments.Test.Infrastructure
 			_consultationService = new FakeConsultationService();
 	        _useRealSubmitService = useRealSubmitService;
 	        _fakeEncryption = new FakeEncryption();
+	        _fakeFeatureManager = new FakeFeatureManager(new Dictionary<Features, bool>{{Features.OrganisationalCommenting, true}});
 			var databaseName = DatabaseName + Guid.NewGuid();
 
 			_options = new DbContextOptionsBuilder<ConsultationsContext>()
@@ -156,6 +159,7 @@ namespace Comments.Test.Infrastructure
                     services.TryAddTransient<IUserService>(provider => _fakeUserService);
                     services.TryAddTransient<IFeedReaderService>(provider => new FeedReader(FeedToUse));
                     services.TryAddScoped<IAPIService>(provider => _fakeApiService);
+					//services.TryAddSingleton<IFeatureManager>
 
                     //services.AddAuthentication();
 
@@ -175,7 +179,9 @@ namespace Comments.Test.Infrastructure
 	                {
 		                services.AddMvc(opt => opt.Filters.Add(new AllowAnonymousFilter())); //bypass authentication
 	                }
-                })
+
+	                services.AddFeatureManagement();
+				})
                 .Configure(app =>
                 {
                     app.UseStaticFiles();
@@ -476,6 +482,14 @@ namespace Comments.Test.Infrastructure
 			passedInContext.OrganisationAuthorisation.Add(organisationAuthorisation);
 			passedInContext.SaveChanges();
 			return organisationAuthorisation.OrganisationAuthorisationId;
+	    }
+
+	    protected int AddOrganisationUser(ConsultationsContext passedInContext, int organisationAuthorisationId, Guid authorisationSession, DateTime? expirationDate)
+	    {
+			var organisationUser = new OrganisationUser(organisationAuthorisationId, authorisationSession, expirationDate ?? DateTime.Now.AddDays(28));
+			passedInContext.OrganisationUser.Add(organisationUser);
+			passedInContext.SaveChanges();
+			return organisationUser.OrganisationUserId;
 	    }
 
 

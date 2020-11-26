@@ -1,20 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Security.Authentication;
-using System.Text;
 using Comments.Common;
 using Comments.Configuration;
 using Comments.Models;
 using Comments.Services;
 using Comments.Test.Infrastructure;
 using Comments.ViewModels;
-using Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore;
 using Newtonsoft.Json;
 using NICE.Feeds.Models.Indev.List;
 using NICE.Feeds.Tests.Infrastructure;
 using Shouldly;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 using TestBase = Comments.Test.Infrastructure.TestBase;
 
@@ -34,20 +31,20 @@ namespace Comments.Test.UnitTests
 #region earlier tests
 
 		[Fact]
-		public void ConsultationListPageModel_HasConsultationsPopulated()
+		public async Task ConsultationListPageModel_HasConsultationsPopulated()
 		{
 			//Arrange
 			var consultationListService = GetConsultationListService();
 
 			//Act
-			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null) { Status = new List<ConsultationStatus>() }).consultationListViewModel;
+			var viewModel = (await consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null) { Status = new List<ConsultationStatus>() })).consultationListViewModel;
 
 			//Assert
 			viewModel.Consultations.OrderBy(c => c.ConsultationId).First().ConsultationId.ShouldBe(123);
 		}
 
 		[Fact]
-		public void ConsultationListPageModel_HasCorrectlySetResponseCount()
+		public async Task ConsultationListPageModel_HasCorrectlySetResponseCount()
 		{
 			//Arrange
 			ResetDatabase();
@@ -60,16 +57,16 @@ namespace Comments.Test.UnitTests
 
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList { ConsultationId = 1 });
-			var consultationListService = new ConsultationListService(context, new FakeFeedService(consultationList), new FakeConsultationService(), GetFakeUserService());
+			var consultationListService = new ConsultationListService(context, new FakeFeedService(consultationList), new FakeConsultationService(), GetFakeUserService(), _fakeFeatureManager);
 			//Act
-			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null) { Status = new List<ConsultationStatus>() });
+			var viewModel = await consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null) { Status = new List<ConsultationStatus>() });
 
 			//Assert
 			viewModel.consultationListViewModel.Consultations.First().SubmissionCount.ShouldBe(1);
 		}
 
 		[Fact]
-		public void ConsultationListPageModel_HasCorrectlySetResponseCountWithMulitpleSubmissions()
+		public async Task ConsultationListPageModel_HasCorrectlySetResponseCountWithMulitpleSubmissions()
 		{
 			//Arrange
 			ResetDatabase();
@@ -83,10 +80,10 @@ namespace Comments.Test.UnitTests
 
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList { ConsultationId = 1 });
-			var consultationListService = new ConsultationListService(context, new FakeFeedService(consultationList), new FakeConsultationService(), GetFakeUserService());
+			var consultationListService = new ConsultationListService(context, new FakeFeedService(consultationList), new FakeConsultationService(), GetFakeUserService(), _fakeFeatureManager);
 
 			//Act
-			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null) { Status = new List<ConsultationStatus>() });
+			var viewModel = await consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null) { Status = new List<ConsultationStatus>() });
 
 			//Assert
 			viewModel.consultationListViewModel.Consultations.First().SubmissionCount.ShouldBe(2);
@@ -94,7 +91,7 @@ namespace Comments.Test.UnitTests
 
 
 		[Fact]
-		public void ConsultationListPageModel_HasCorrectlySetResponseCountWithComments()
+		public async Task ConsultationListPageModel_HasCorrectlySetResponseCountWithComments()
 		{
 			//Arrange
 			ResetDatabase();
@@ -109,10 +106,10 @@ namespace Comments.Test.UnitTests
 
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList { ConsultationId = 1 });
-			var consultationListService = new ConsultationListService(context, new FakeFeedService(consultationList), new FakeConsultationService(), GetFakeUserService());
+			var consultationListService = new ConsultationListService(context, new FakeFeedService(consultationList), new FakeConsultationService(), GetFakeUserService(), _fakeFeatureManager);
 
 			//Act
-			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null) { Status = new List<ConsultationStatus>() });
+			var viewModel = await consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null) { Status = new List<ConsultationStatus>() });
 
 			//Assert
 			viewModel.consultationListViewModel.Consultations.First().SubmissionCount.ShouldBe(1);
@@ -121,7 +118,7 @@ namespace Comments.Test.UnitTests
 
 
 		[Fact]
-		public void ConsultationListPageModel_HasCorrectlySetResponseCountWithAnswers()
+		public async Task ConsultationListPageModel_HasCorrectlySetResponseCountWithAnswers()
 		{
 			//Arrange
 			ResetDatabase();
@@ -140,24 +137,24 @@ namespace Comments.Test.UnitTests
 
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList { ConsultationId = 1 });
-			var consultationListService = new ConsultationListService(context, new FakeFeedService(consultationList), new FakeConsultationService(), GetFakeUserService());
+			var consultationListService = new ConsultationListService(context, new FakeFeedService(consultationList), new FakeConsultationService(), GetFakeUserService(), _fakeFeatureManager);
 
 			//Act
-			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null) { Status = new List<ConsultationStatus>() });
+			var viewModel = await consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null) { Status = new List<ConsultationStatus>() });
 
 			//Assert
 			viewModel.consultationListViewModel.Consultations.First().SubmissionCount.ShouldBe(1);
 		}
 
 		[Fact]
-		public void ConsultationListPageModel_HasDocumentIdAndChapterSlugPopulatedCorrectly()
+		public async Task ConsultationListPageModel_HasDocumentIdAndChapterSlugPopulatedCorrectly()
 		{
 			//Arrange
 			var consultationList = AddConsultationsToList();
-			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), GetFakeUserService());
+			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), GetFakeUserService(), _fakeFeatureManager);
 
 			//Act
-			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null) { Status = new List<ConsultationStatus>() }).consultationListViewModel;
+			ConsultationListViewModel viewModel = (await consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null) { Status = new List<ConsultationStatus>() })).consultationListViewModel;
 
 			//Assert
 			viewModel.Consultations.First().DocumentId.ShouldBe(1);
@@ -165,14 +162,14 @@ namespace Comments.Test.UnitTests
 		}
 
 		[Fact]
-		public void ConsultationListPageModel_HasFilterOptions()
+		public async Task ConsultationListPageModel_HasFilterOptions()
 		{
 			//Arrange
 			var consultationList = AddConsultationsToList();
-			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), GetFakeUserService());
+			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), GetFakeUserService(), _fakeFeatureManager);
 
 			//Act
-			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null) {Status = new List<ConsultationStatus>()}).consultationListViewModel;
+			ConsultationListViewModel viewModel = (await consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null) {Status = new List<ConsultationStatus>()})).consultationListViewModel;
 
 			//Assert
 			var firstFilter = viewModel.OptionFilters.First();
@@ -184,57 +181,57 @@ namespace Comments.Test.UnitTests
 		}
 
 		[Fact]
-		public void ConsultationListPageModel_HasFilterOptionOpenSetToSelected()
+		public async Task ConsultationListPageModel_HasFilterOptionOpenSetToSelected()
 		{
 			//Arrange
 			var consultationList = AddConsultationsToList();
-			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), GetFakeUserService());
+			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), GetFakeUserService(), _fakeFeatureManager);
 			var viewModel = new ConsultationListViewModel(null, null, null, null, null);
 			viewModel.Status = new List<ConsultationStatus>(){ ConsultationStatus.Open };
 
 			//Act
-			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel).consultationListViewModel;
+			var updatedViewModel = (await consultationListService.GetConsultationListViewModel(viewModel)).consultationListViewModel;
 
 			//Assert
 			updatedViewModel.OptionFilters.First().Options.First(f => f.Id == "Open").IsSelected.ShouldBeTrue();
 		}
 
 		[Fact]
-		public void ConsultationListPageModel_HasFilterOptionClosedSetToSelected()
+		public async Task ConsultationListPageModel_HasFilterOptionClosedSetToSelected()
 		{
 			//Arrange
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList { ConsultationId = 123 });
-			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), GetFakeUserService());
+			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), GetFakeUserService(), _fakeFeatureManager);
 			var viewModel = new ConsultationListViewModel(null, null, null, null, null);
 			viewModel.Status = new List<ConsultationStatus>() { ConsultationStatus.Closed };
 
 			//Act
-			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel).consultationListViewModel;
+			var updatedViewModel = (await consultationListService.GetConsultationListViewModel(viewModel)).consultationListViewModel;
 
 			//Assert
 			updatedViewModel.OptionFilters.First().Options.Skip(1).First(f => f.Id == "Closed").IsSelected.ShouldBeTrue();
 		}
 
 		[Fact]
-		public void ConsultationListPageModel_HasFilterOptionUpcomingSetToSelected()
+		public async Task ConsultationListPageModel_HasFilterOptionUpcomingSetToSelected()
 		{
 			//Arrange
 			var consultationList = new List<ConsultationList>();
 			consultationList.Add(new ConsultationList { ConsultationId = 123 });
-			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), GetFakeUserService());
+			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), GetFakeUserService(), _fakeFeatureManager);
 			var viewModel = new ConsultationListViewModel(null, null, null, null, null);
 			viewModel.Status = new List<ConsultationStatus>() { ConsultationStatus.Upcoming };
 
 			//Act
-			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel).consultationListViewModel;
+			var updatedViewModel = (await consultationListService.GetConsultationListViewModel(viewModel)).consultationListViewModel;
 
 			//Assert
 			updatedViewModel.OptionFilters.First().Options.Skip(1).First(f => f.Id == "Upcoming").IsSelected.ShouldBeTrue();
 		}
 
 		[Fact]
-		public void ConsultationListPageModel_WithFilterOptionOpenHasCorrectResultCounts()
+		public async Task ConsultationListPageModel_WithFilterOptionOpenHasCorrectResultCounts()
 		{
 			//Arrange
 			var consultationListService = GetConsultationListService();
@@ -244,7 +241,7 @@ namespace Comments.Test.UnitTests
 			};
 
 			//Act
-			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel).consultationListViewModel;
+			var updatedViewModel = (await consultationListService.GetConsultationListViewModel(viewModel)).consultationListViewModel;
 
 			//Assert
 			updatedViewModel.OptionFilters.First().Options.First(f => f.Id == "Open").FilteredResultCount.ShouldBe(1);
@@ -253,7 +250,7 @@ namespace Comments.Test.UnitTests
 
 
 		[Fact]
-		public void ConsultationListPageModel_WithFilterOptionClosedHasCorrectResultCounts()
+		public async Task ConsultationListPageModel_WithFilterOptionClosedHasCorrectResultCounts()
 		{
 			//Arrange
 			var consultationListService = GetConsultationListService();
@@ -263,7 +260,7 @@ namespace Comments.Test.UnitTests
 			};
 
 			//Act
-			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel).consultationListViewModel;
+			var updatedViewModel = (await consultationListService.GetConsultationListViewModel(viewModel)).consultationListViewModel;
 
 			//Assert
 			updatedViewModel.OptionFilters.First().Options.First(f => f.Id == "Closed").FilteredResultCount.ShouldBe(1);
@@ -271,7 +268,7 @@ namespace Comments.Test.UnitTests
 		}
 
 		[Fact]
-		public void ConsultationListPageModel_WithFilterOptionUpcomingHasCorrectResultCounts()
+		public async Task ConsultationListPageModel_WithFilterOptionUpcomingHasCorrectResultCounts()
 		{
 			//Arrange
 			var consultationListService = GetConsultationListService();
@@ -281,7 +278,7 @@ namespace Comments.Test.UnitTests
 			};
 
 			//Act
-			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel).consultationListViewModel;
+			var updatedViewModel = (await consultationListService.GetConsultationListViewModel(viewModel)).consultationListViewModel;
 
 			//Assert
 			updatedViewModel.OptionFilters.First().Options.First(f => f.Id == "Upcoming").FilteredResultCount.ShouldBe(1);
@@ -289,7 +286,7 @@ namespace Comments.Test.UnitTests
 		}
 
 		[Fact]
-		public void ConsultationListPageModel_WithFilterOptionOpenAndClosedHasCorrectResultCounts()
+		public async Task ConsultationListPageModel_WithFilterOptionOpenAndClosedHasCorrectResultCounts()
 		{
 			//Arrange
 			var consultationListService = GetConsultationListService();
@@ -299,7 +296,7 @@ namespace Comments.Test.UnitTests
 			};
 
 			//Act
-			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel).consultationListViewModel;
+			var updatedViewModel = (await consultationListService.GetConsultationListViewModel(viewModel)).consultationListViewModel;
 
 			//Assert
 			updatedViewModel.OptionFilters.First().Options.First(f => f.Id == "Open").FilteredResultCount.ShouldBe(1);
@@ -311,7 +308,7 @@ namespace Comments.Test.UnitTests
 		}
 
 		[Fact]
-   		public void ConsultationListPageModel_WithFilterReferenceTextSetToValue()
+   		public async Task ConsultationListPageModel_WithFilterReferenceTextSetToValue()
 		{
 			//Arrange
 			var consultationListService = GetConsultationListService();
@@ -321,7 +318,7 @@ namespace Comments.Test.UnitTests
 			};
 
 			//Act
-			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel).consultationListViewModel;
+			var updatedViewModel = (await consultationListService.GetConsultationListViewModel(viewModel)).consultationListViewModel;
 
 			//Assert
 			updatedViewModel.TextFilter.FilteredResultCount.ShouldBe(1);
@@ -329,7 +326,7 @@ namespace Comments.Test.UnitTests
 		}
 
 		[Fact]
-		public void ConsultationListPageModel_WithFilterReferenceTextSetToPartialValue()
+		public async Task ConsultationListPageModel_WithFilterReferenceTextSetToPartialValue()
 		{
 			//Arrange
 			var consultationListService = GetConsultationListService();
@@ -339,7 +336,7 @@ namespace Comments.Test.UnitTests
 			};
 
 			//Act
-			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel).consultationListViewModel;
+			var updatedViewModel = (await consultationListService.GetConsultationListViewModel(viewModel)).consultationListViewModel;
 
 			//Assert
 			updatedViewModel.TextFilter.FilteredResultCount.ShouldBe(3);
@@ -350,7 +347,7 @@ namespace Comments.Test.UnitTests
 		[InlineData(null)]
 		[InlineData(" ")]
 		[InlineData("")]
-		public void ConsultationListPageModel_WithFilterReferenceTextSetToNull(string reference)
+		public async Task ConsultationListPageModel_WithFilterReferenceTextSetToNull(string reference)
 		{
 			//Arrange
 			var consultationListService = GetConsultationListService();
@@ -360,14 +357,14 @@ namespace Comments.Test.UnitTests
 			};
 
 			//Act
-			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel).consultationListViewModel;
+			var updatedViewModel = (await consultationListService.GetConsultationListViewModel(viewModel)).consultationListViewModel;
 
 			//Assert
 			updatedViewModel.TextFilter.IsSelected.ShouldBeFalse();
 		}
 
 		[Fact]
-		public void ConsultationListPageModel_WithFilterReferenceTextSetToPartialTitle()
+		public async Task ConsultationListPageModel_WithFilterReferenceTextSetToPartialTitle()
 		{
 			//Arrange
 			var consultationListService = GetConsultationListService();
@@ -377,7 +374,7 @@ namespace Comments.Test.UnitTests
 			};
 
 			//Act
-			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel).consultationListViewModel;
+			var updatedViewModel = (await consultationListService.GetConsultationListViewModel(viewModel)).consultationListViewModel;
 
 			//Assert
 			updatedViewModel.TextFilter.FilteredResultCount.ShouldBe(3);
@@ -385,7 +382,7 @@ namespace Comments.Test.UnitTests
 		}
 
 		[Fact]
-		public void ConsultationListPageModel_WithFilterReferenceTextSetToSpecificTitle()
+		public async Task ConsultationListPageModel_WithFilterReferenceTextSetToSpecificTitle()
 		{
 			//Arrange
 			var consultationListService = GetConsultationListService();
@@ -395,7 +392,7 @@ namespace Comments.Test.UnitTests
 			};
 
 			//Act
-			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel).consultationListViewModel;
+			var updatedViewModel = (await consultationListService.GetConsultationListViewModel(viewModel)).consultationListViewModel;
 
 			//Assert
 			updatedViewModel.TextFilter.FilteredResultCount.ShouldBe(1);
@@ -403,7 +400,7 @@ namespace Comments.Test.UnitTests
 		}
 
 		[Fact]
-		public void ConsultationListPageModel_FilterDataByKeyword()
+		public async Task ConsultationListPageModel_FilterDataByKeyword()
 		{
 			//Arrange
 			var consultationListService = GetConsultationListService();
@@ -413,14 +410,14 @@ namespace Comments.Test.UnitTests
 			};
 
 			//Act
-			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
+			var updatedViewModel = await consultationListService.GetConsultationListViewModel(viewModel);
 
 			//Assert
 			updatedViewModel.consultationListViewModel.Consultations.Count(c => c.Show).ShouldBe(1);
 		}
 
 		[Fact]
-		public void ConsultationListPageModel_FilterDataByOpenStatus()
+		public async Task ConsultationListPageModel_FilterDataByOpenStatus()
 		{
 			//Arrange
 			var consultationListService = GetConsultationListService();
@@ -430,14 +427,14 @@ namespace Comments.Test.UnitTests
 			};
 
 			//Act
-			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
+			var updatedViewModel = await consultationListService.GetConsultationListViewModel(viewModel);
 
 			//Assert
 			updatedViewModel.consultationListViewModel.Consultations.Count(c => c.Show).ShouldBe(1);
 		}
 
 		[Fact]
-		public void ConsultationListPageModel_FilterDataByOpenandUpcomingStatus()
+		public async Task ConsultationListPageModel_FilterDataByOpenandUpcomingStatus()
 		{
 			//Arrange
 			var consultationListService = GetConsultationListService();
@@ -447,14 +444,14 @@ namespace Comments.Test.UnitTests
 			};
 
 			//Act
-			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
+			var updatedViewModel = await consultationListService.GetConsultationListViewModel(viewModel);
 
 			//Assert
 			updatedViewModel.consultationListViewModel.Consultations.Count(c => c.Show).ShouldBe(2);
 		}
 
 		[Fact]
-		public void ConsultationListPageModel_FilterDataByOpenStatusAndKeyword()
+		public async Task ConsultationListPageModel_FilterDataByOpenStatusAndKeyword()
 		{
 			//Arrange
 			var consultationListService = GetConsultationListService();
@@ -465,14 +462,14 @@ namespace Comments.Test.UnitTests
 			};
 
 			//Act
-			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
+			var updatedViewModel = await consultationListService.GetConsultationListViewModel(viewModel);
 
 			//Assert
 			updatedViewModel.consultationListViewModel.Consultations.Count(c => c.Show).ShouldBe(1);
 		}
 
 		[Fact]
-		public void ConsultationListPageModel_FilterDataByGidReferenceKeyword()
+		public async Task ConsultationListPageModel_FilterDataByGidReferenceKeyword()
 		{
 			//Arrange
 			var consultationListService = GetConsultationListService();
@@ -482,7 +479,7 @@ namespace Comments.Test.UnitTests
 			};
 
 			//Act
-			var updatedViewModel = consultationListService.GetConsultationListViewModel(viewModel);
+			var updatedViewModel = await consultationListService.GetConsultationListViewModel(viewModel);
 
 			//Assert
 			updatedViewModel.consultationListViewModel.Consultations.Count(c => c.Show).ShouldBe(1);
@@ -539,7 +536,7 @@ namespace Comments.Test.UnitTests
 		private ConsultationListService GetConsultationListService()
 		{
 			var consultationList = AddConsultationsToList();
-			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), GetFakeUserService());
+			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), GetFakeUserService(), _fakeFeatureManager);
 			return consultationListService;
 		}
 
@@ -555,7 +552,7 @@ namespace Comments.Test.UnitTests
 			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 
 			//Act
-			var consultationService = new ConsultationListService(consultationContext, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeUserService);
+			var consultationService = new ConsultationListService(consultationContext, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeUserService, null);
 
 			//Assert
 			consultationService.ShouldNotBeNull();
@@ -565,15 +562,15 @@ namespace Comments.Test.UnitTests
 
 
 		[Fact]
-		public void CHTETeamMemberSeeAllConsultationsWhenTheFilterIsUnchecked()
+		public async Task CHTETeamMemberSeeAllConsultationsWhenTheFilterIsUnchecked()
 		{
 			//Arrange
 			var consultationList = AddConsultationsToList();
 			var userService = FakeUserService.Get(true, "Jeffrey Goines", Guid.NewGuid().ToString(), TestUserType.ConsultationListTestRole);
-			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), userService);
+			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), userService, null);
 
 			//Act
-			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null) { Status = new List<ConsultationStatus>() }).consultationListViewModel;
+			ConsultationListViewModel viewModel = (await consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null) { Status = new List<ConsultationStatus>() })).consultationListViewModel;
 
 			//Assert
 			viewModel.Consultations.Count().ShouldBe(3);
@@ -581,19 +578,19 @@ namespace Comments.Test.UnitTests
 		}
 
 		[Fact]
-		public void CHTETeamMemberCanOnlySeeTheirOwnConsultationsWhenTheFilterIsChecked()
+		public async Task CHTETeamMemberCanOnlySeeTheirOwnConsultationsWhenTheFilterIsChecked()
 		{
 			//Arrange
 			var consultationList = AddConsultationsToList();
 			var userService = FakeUserService.Get(true, "Jeffrey Goines", Guid.Empty.ToString(), TestUserType.ConsultationListTestRole);
-			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), userService);
+			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), userService, null);
 
 			//Act
-			ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null)
+			ConsultationListViewModel viewModel = (await consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null)
 			{
 				Status = new List<ConsultationStatus>(),
 				Team = new List<TeamStatus>() { TeamStatus.MyTeam }
-			}).consultationListViewModel;
+			})).consultationListViewModel;
 			var serialisedViewModel = JsonConvert.SerializeObject(viewModel); //doing this in order to validate the filters coming back in the model.
 
 			//Assert
@@ -603,7 +600,7 @@ namespace Comments.Test.UnitTests
 		}
 
 		[Fact]
-		public void ConsultationListPageModel_HasOrganisationCodesSetCorrectly()
+		public async Task ConsultationListPageModel_HasOrganisationCodesSetCorrectly()
 		{
 			//Arrange
 			const string collationCode = "FAKE CODE";
@@ -622,10 +619,10 @@ namespace Comments.Test.UnitTests
 					DateTime.Now, organisationId: 1, locationId: location.LocationId, collationCode: collationCode));
 				consultationListContext.SaveChanges();
 
-				var consultationListService = new ConsultationListService(consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), GetFakeUserService());
+				var consultationListService = new ConsultationListService(consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), GetFakeUserService(), _fakeFeatureManager);
 
 				//Act
-				ConsultationListViewModel viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null) { Status = new List<ConsultationStatus>() }).consultationListViewModel;
+				ConsultationListViewModel viewModel = (await consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null) { Status = new List<ConsultationStatus>() })).consultationListViewModel;
 				var serialisedViewModel = JsonConvert.SerializeObject(viewModel);
 
 				//Assert
@@ -645,7 +642,7 @@ namespace Comments.Test.UnitTests
 		}
 
 		[Fact]
-		public void OnlySeeConsultationsWhereCurrentUserHasCommentedOnWhenFilterIsChecked()
+		public async Task OnlySeeConsultationsWhereCurrentUserHasCommentedOnWhenFilterIsChecked()
 		{
 			//Arrange
 			ResetDatabase();
@@ -673,14 +670,14 @@ namespace Comments.Test.UnitTests
 
 			var context = new ConsultationsContext(_options, userService, _fakeEncryption);
 
-			var consultationListService = new ConsultationListService(context, new FakeFeedService(consultationList), new FakeConsultationService(), userService);
+			var consultationListService = new ConsultationListService(context, new FakeFeedService(consultationList), new FakeConsultationService(), userService, null);
 
 			//Act
-			var viewModel = consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null)
+			var viewModel = (await consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null)
 			{
 				Status = new List<ConsultationStatus>(),
 				Contribution = new List<ContributionStatus>() { ContributionStatus.HasContributed }
-			});
+			}));
 			var serialisedViewModel = JsonConvert.SerializeObject(viewModel); //saves checking all the properties
 
 

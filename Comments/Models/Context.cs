@@ -33,11 +33,11 @@ namespace Comments.Models
 		//}
 
 		public ConsultationsContext(DbContextOptions options, IUserService userService, IEncryption encryption) : base(options)
-        {
-	        _encryption = encryption;
-	        _userService = userService;
-            _createdByUserID = _userService.GetCurrentUser().UserId;
-        }
+		{
+			_encryption = encryption;
+			_userService = userService;
+			_createdByUserID = _userService.GetCurrentUser().UserId;
+		}
 
 		/// <summary>
 		/// It's not obvious from this code, but this it actually filtering on more than it looks like. There's global filters defined in the context, specifically
@@ -821,5 +821,22 @@ namespace Comments.Models
 			SaveChanges();
 			return organisationAuthorisation;
 		}
-	}
+
+		public OrganisationUser CreateOrganisationUser(int organisationAuthorisationID, Guid authorisationSession, DateTime expirationDate)
+		{
+			var organisationUser = new OrganisationUser(organisationAuthorisationID, authorisationSession, expirationDate);
+			OrganisationUser.Add(organisationUser);
+			SaveChanges();
+			return organisationUser;
+		}
+
+		public OrganisationUser GetOrganisationUser(Guid sessionId)
+		{
+			return
+				OrganisationUser
+				.Include(ou => ou.OrganisationAuthorisation).
+					ThenInclude(a => a.Location)
+				.FirstOrDefault(ou => ou.AuthorisationSession.Equals(sessionId));
+		}
+    }
 }

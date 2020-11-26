@@ -1,25 +1,30 @@
-﻿
-<!DOCTYPE html>
-
-<html>
-<head>
-	<link rel="stylesheet" href="/consultations/styles/main.css" />
-	<link href="//fonts.googleapis.com/css?family=Lato:400,700,900" rel="stylesheet" type="text/css">
-	<meta name="viewport" content="width=device-width" />
-	<title></title>
-	<script src="//a-fake-cookiebannerscript-url"></script>
-</head>
-<body>
-	<div>
-		
-<main role="main">
-	<div class="container">
-		<div class="panel page-header">
-			<h1 class="heading mt--c">Something's gone wrong</h1>
-			<p class="lead">We'll look into it right away. Please try again in a few minutes. And if it's still not fixed, <a href="/get-involved/contact-us">contact us</a>.</p>
-			<p><a href="/guidance/inconsultation">Back to consultations</a></p>
-			<div class="hide">
-					"Error Message":"scrubbed by ScrubErrorMessage"
-	<script></script>
-</body>
-</html>
+﻿{
+    "requestedPath":"/consultations/api/Consultation",
+    "errorException":{
+        "ClassName":"System.ArgumentException",
+        "Message":"consultationId",
+        "Data":null,
+        "InnerException":null,
+        "HelpURL":null,
+        "StackTraceString":"   at Comments.Controllers.Api.ConsultationController.Get(Int32 consultationId, Boolean isReview) in C:\\_src\\consultations\\Comments\\Controllers\\Api\\ConsultationController.cs:line 36\r\n   at lambda_method(Closure , Object , Object[
+            
+        ] )\r\n   at Microsoft.AspNetCore.Mvc.Internal.ActionMethodExecutor.SyncObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[
+            
+        ] arguments)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.InvokeActionMethodAsync()\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.InvokeNextActionFilterAsync()\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Rethrow(ActionExecutedContext context)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.InvokeInnerFilterAsync()\r\n   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.InvokeNextResourceFilter()\r\n   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.Rethrow(ResourceExecutedContext context)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.InvokeFilterPipelineAsync()\r\n   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.InvokeAsync()\r\n   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)\r\n   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)\r\n   at Microsoft.AspNetCore.Cors.Infrastructure.CorsMiddleware.Invoke(HttpContext context)\r\n   at Microsoft.AspNetCore.Diagnostics.StatusCodePagesMiddleware.Invoke(HttpContext context)\r\n   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.Invoke(HttpContext context)",
+        "RemoteStackTraceString":null,
+        "RemoteStackIndex":0,
+        "ExceptionMethod":null,
+        "HResult":-2147024809,
+        "Source":"Comments",
+        "WatsonBuckets":null,
+        "ParamName":null
+    },
+    "isAuthenticated":true,
+    "accountsEnvironment":"live",
+    "globalNavScript":null,
+    "globalNavScriptIE8":null,
+    "linkText":"Sign out",
+    "linkURL":"/consultations/account/logout",
+    "displayName":"",
+    "cookieBannerScript":"//a-fake-cookiebannerscript-url"
+}

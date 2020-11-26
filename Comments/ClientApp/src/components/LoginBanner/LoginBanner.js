@@ -1,10 +1,11 @@
 // @flow
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import { DebounceInput } from "react-debounce-input";
 import queryString from "query-string";
-//import { withHistory } from "../HistoryContext/HistoryContext";
-import { appendQueryParameter, removeQueryParameter, removeQuerystring } from "../../helpers/utils";
+import Cookies from "js-cookie";
+import { UserContext } from "../../context/UserContext";
+import { load } from "../../data/loader";
 
 type PropsType = {
 	signInURL: string,
@@ -12,13 +13,24 @@ type PropsType = {
 	signInButton: boolean,
 	signInText?: string,
 	match: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
-	history: PropTypes.object.isRequired,
-	key: string
+	location: PropTypes.object.isRequired,
+	allowOrganiationCodeLogin: boolean,
+}
+
+type OrganisationCode = {
+	organisationAuthorisationId: number,
+	organisationId: number,
+	organisationName: string,
+	collationCode: string,
 }
 
 type StateType = {
-	organisationCode: string
+	organisationCode: string,
+	hasError: bool,
+	errorMessage: string,
+	showOrganisationCodeLogin: bool,
+	showAuthorisationOrganisation: bool,
+	authorisationOrganisationFound: OrganisationCode, 
 }
 
 export class LoginBanner extends Component<PropsType, StateType> {
@@ -27,62 +39,141 @@ export class LoginBanner extends Component<PropsType, StateType> {
 		super(props);
 
 		this.state = {
-			organisationCode: "",
+			userEnteredCollationCode: "",
+			hasError: false,
+			errorMessage: "",
+			showOrganisationCodeLogin: true,
+			showAuthorisationOrganisation: false,
+			authorisationOrganisationFound: null,
 		};
 	}
 
 	componentDidMount() {
-		const organisationCode = queryString.parse(this.props.location.search).organisationCode;
-		console.log(this.props.location.search);
-
-		if (organisationCode){
+		const userEnteredCollationCode = queryString.parse(this.props.location.search).code;
+		if (userEnteredCollationCode){
 			this.setState({
-				organisationCode,
+				userEnteredCollationCode,
 			}, () => {
-				this.checkOrganisationCode(organisationCode);
+				this.checkOrganisationCode();
 			});
 		}
 	}
 
-	removeOrganisationCode = () => {
-		this.handleOrganisationCodeChange("");
-	};
-
-	componentDidUpdate(prevProps){
-		if (prevProps.organisationCode !== "" && this.props.organisationCode === ""){
-			this.removeOrganisationCode();
-		}
-	}
-
-	getHref = (organisationCode) => {
-		const pathWithoutQuerystring = removeQuerystring(this.props.path);
-		const querystringWithRemovedKeyword = removeQueryParameter(this.props.search, "OrganisationCode");
-
-		if (organisationCode.length <= 0){
-			return pathWithoutQuerystring + querystringWithRemovedKeyword;
-		}
-
-		const querystringWithKeywordAdded = appendQueryParameter(querystringWithRemovedKeyword, "OrganisationCode", organisationCode);
-		return pathWithoutQuerystring + querystringWithKeywordAdded;
-	};
-
-	handleOrganisationCodeChange = (organisationCode) => {
+	handleOrganisationCodeChange = (userEnteredCollationCode) => {
 		this.setState({
-			organisationCode,
+			userEnteredCollationCode,
 		}, () => {
-			//this.props.history.push(this.getHref(organisationCode)); //TODO: fix the history!!!
-			this.checkOrganisationCode(organisationCode);
+			this.checkOrganisationCode(userEnteredCollationCode);
 		});
 	};
 
+	gatherDataForCheckOrganisationCode = async () => {
+		const organisationCode = load(
+			"organisation",
+			undefined,
+			[],
+			{
+				collationCode: this.state.userEnteredCollationCode,
+				consultationId: this.props.match.params.consultationId, 
+			})
+			.then(response => response.data)
+			.catch(err => {
+				this.setState({
+					hasError: true,
+					errorMessage: err.response.data.errorException.Message, 
+					showAuthorisationOrganisation: false,					
+				});
+			});
+		return {
+			organisationCode: await organisationCode,
+		};
+	}
+
 	checkOrganisationCode = () => {
-		console.log("check organisation code" + this.state.organisationCode);
+		this.gatherDataForCheckOrganisationCode()
+			.then(data => {
+				if (data.organisationCode != null) {
+					this.setState({
+						hasError: false,
+						errorMessage: "",
+						showAuthorisationOrganisation: true,
+						authorisationOrganisationFound: data.organisationCode,
+					});
+				}
+			})
+			.catch(err => {
+				throw new Error("checkOrganisationCode failed " + err);
+			});		
+	}
+
+	gatherDataForCreateOrganisationUserSession = async () => {
+		const session = load(
+			"organisationsession",
+			undefined,
+			[],
+			{
+				collationCode: this.state.userEnteredCollationCode,
+				organisationAuthorisationId: this.state.authorisationOrganisationFound.organisationAuthorisationId, 
+			}, 
+			"POST")
+			.then(response => response.data)
+			.catch(err => {
+				this.setState({
+					hasError: true,
+					errorMessage: err.response.data.errorException.Message, 
+					showAuthorisationOrganisation: false,
+				});
+			});
+		return {
+			session: await session,
+		};
+	}
+
+	CreateOrganisationUserSession = async () => {
+		const session = this.gatherDataForCreateOrganisationUserSession()
+			.then(data => {
+				if (data.session != null) { 
+					this.setState({
+						hasError: false,
+						errorMessage: "",						
+					});
+					return data.session;
+				}
+			})
+			.catch(err => {
+				throw new Error("checkOrganisationCode failed " + err);
+			});		
+		return {
+			session: await session,
+		};
+	}
+
+	handleConfirmClick = (updateContextFunction) => {
+		const consultationId = this.props.match.params.consultationId;
+		this.CreateOrganisationUserSession().then(data => {
+			console.log("data is:" + JSON.stringify(data));
+
+			var expirationDate = new Date(data.session.expirationDateTicks);
+
+			Cookies.set(`ConsultationSession-${consultationId}`, data.session.sessionId, {expires: expirationDate}); //TODO: add to cookie policy
+
+			//now, set state to show logged in. 
+			this.setState({
+				showOrganisationCodeLogin: false,
+				showAuthorisationOrganisation: false,
+			})
+			updateContextFunction();
+		})
+		.catch(err => {
+			this.setState({
+				hasError: true,
+				errorMessage: "Unable to confirm",
+			})
+		});			
 	}
 
 
 	render(){
-		const {organisationCode} = this.state;
-		const { match, location, history } = this.props
 
 		return (
 			<div className="panel panel--inverse mt--0 mb--0 sign-in-banner"
@@ -91,21 +182,42 @@ export class LoginBanner extends Component<PropsType, StateType> {
 					<div className="grid">
 						<div data-g="12">
 							<div className="LoginBanner">
-								<p>If you would like to comment on this consultation as part of an organisation, please enter your organisation code here:</p>
-								<label>
-									Organisation code 
-									<DebounceInput
-										minLength={6}
-										debounceTimeout={400}
-										type="text"
-										onChange={e => this.handleOrganisationCodeChange(e.target.value)}
-										className="form__input form__input--text"
-										data-qa-sel="OrganisationCodeLogin"
-										id="organisationCode"
-										value={organisationCode}
-									/>
-								</label>
-								<br/><br/>
+								{this.props.allowOrganiationCodeLogin && this.state.showOrganisationCodeLogin &&
+									<Fragment>
+										<p>If you would like to comment on this consultation as part of an organisation, please enter your organisation code here:</p>
+										<label>
+											Organisation code<br/>
+											{this.state.hasError && 
+												<div>{this.state.errorMessage}</div>
+											}
+											<DebounceInput
+												minLength={6}
+												debounceTimeout={400}
+												type="text"
+												onChange={e => this.handleOrganisationCodeChange(e.target.value)}
+												className="form__input form__input--text limitWidth"
+												data-qa-sel="OrganisationCodeLogin"
+												id="collationCode"
+												value={this.state.userEnteredCollationCode}
+											/>
+										</label>
+										<br/><br/>
+										{this.state.showAuthorisationOrganisation && 
+											<Fragment>
+												<label>Confirm organisation name<br/>
+													<strong>{this.state.authorisationOrganisationFound.organisationName}</strong>
+												</label>
+												<br/>												
+												<UserContext.Consumer>
+													{({ contextValue: ContextType, updateContext }) => (
+														<button className="btn btn--cta" onClick={() => this.handleConfirmClick(updateContext)}  title={"Confirm your organisation is " + this.state.authorisationOrganisationFound.organisationName}>Confirm</button>
+													)}
+												</UserContext.Consumer>
+												<br/>
+											</Fragment>
+										}	
+									</Fragment>							
+								}
 								<a href={this.props.signInURL} title="Sign in to your NICE account">
 									Sign in to your NICE account</a> {this.props.signInText || "to comment on this consultation"}.{" "}
 								<br/>
@@ -127,4 +239,4 @@ export class LoginBanner extends Component<PropsType, StateType> {
 	}
 }
 
-export default withRouter(LoginBanner); //withHistory(LoginBanner);
+export default withRouter(LoginBanner); 

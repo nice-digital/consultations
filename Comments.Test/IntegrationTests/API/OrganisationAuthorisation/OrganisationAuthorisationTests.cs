@@ -13,7 +13,7 @@ namespace Comments.Test.IntegrationTests.API.OrganisationAuthorisation
 			//Arrange (in the base constructor for this one.)
 
 			// Act
-			var response = await _client.PostAsync("/consultations/api/OrganisationAuthorisation?organisationId=1&consultationId=1", null);
+			var response = await _client.PostAsync("/consultations/api/Organisation?organisationId=1&consultationId=1", null);
 			response.EnsureSuccessStatusCode();
 			var responseString = await response.Content.ReadAsStringAsync();
 
