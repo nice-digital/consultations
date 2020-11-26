@@ -44,6 +44,7 @@ type StateType = {
 	},
 	allowComments: boolean,
 	error: ErrorType,
+	enableOrganisationalCommentingFeature: boolean
 };
 
 type DocumentsType = Array<Object>;
@@ -66,15 +67,18 @@ export class Document extends Component<PropsType, StateType> {
 				hasError: false,
 				message: null,
 			},
+			enableOrganisationalCommentingFeature: false,
 		};
 
 		if (this.props) {
 
 			let preloadedChapter, preloadedDocuments, preloadedConsultation;
 
+			let enableOrganisationalCommentingFeature = false;
 			let preloadedData = {};
 			if (this.props.staticContext && this.props.staticContext.preload) {
 				preloadedData = this.props.staticContext.preload.data; //this is data from Configure => SupplyData in Startup.cs. the main thing it contains for this call is the cookie for the current user.
+				enableOrganisationalCommentingFeature = preloadedData.organisationalCommentingFeature;
 			}
 
 			preloadedChapter = preload(
@@ -129,6 +133,7 @@ export class Document extends Component<PropsType, StateType> {
 						hasError: false,
 						message: null,
 					},
+					enableOrganisationalCommentingFeature,
 				};
 			}
 		}
@@ -432,7 +437,8 @@ export class Document extends Component<PropsType, StateType> {
 						<LoginBannerWithRouter signInButton={false}
 												 currentURL={this.props.match.url}
 												 signInURL={contextValue.signInURL}
-												 registerURL={contextValue.registerURL}/>
+												 registerURL={contextValue.registerURL}
+												 allowOrganisationCodeLogin={this.state.enableOrganisationalCommentingFeature}/>
 						: /* if contextValue.isAuthorised... */ null}
 				</UserContext.Consumer>
 				{ this.state.allowComments &&

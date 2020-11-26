@@ -278,6 +278,7 @@ export class Questions extends Component<PropsType, StateType> {
 						registerURL={contextValue.registerURL}
 						signInText="to administer a consultation"
 						key={"questions"}
+						allowOrganisationCodeLogin={false}
 					/>
 					:
 					<Fragment>

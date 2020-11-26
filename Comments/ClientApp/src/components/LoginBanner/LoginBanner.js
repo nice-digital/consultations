@@ -14,7 +14,7 @@ type PropsType = {
 	signInText?: string,
 	match: PropTypes.object.isRequired,
 	location: PropTypes.object.isRequired,
-	allowOrganiationCodeLogin: boolean,
+	allowOrganisationCodeLogin: boolean,
 }
 
 type OrganisationCode = {
@@ -182,7 +182,7 @@ export class LoginBanner extends Component<PropsType, StateType> {
 					<div className="grid">
 						<div data-g="12">
 							<div className="LoginBanner">
-								{this.props.allowOrganiationCodeLogin && this.state.showOrganisationCodeLogin &&
+								{this.props.allowOrganisationCodeLogin && this.state.showOrganisationCodeLogin &&
 									<Fragment>
 										<p>If you would like to comment on this consultation as part of an organisation, please enter your organisation code here:</p>
 										<label>
@@ -197,7 +197,6 @@ export class LoginBanner extends Component<PropsType, StateType> {
 												onChange={e => this.handleOrganisationCodeChange(e.target.value)}
 												className="form__input form__input--text limitWidth"
 												data-qa-sel="OrganisationCodeLogin"
-												id="collationCode"
 												value={this.state.userEnteredCollationCode}
 											/>
 										</label>

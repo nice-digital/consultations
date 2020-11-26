@@ -418,7 +418,7 @@ export class Download extends Component<PropsType, StateType> {
 						signInURL={contextValue.signInURL}
 						registerURL={contextValue.registerURL}
 						signInText="to administer a consultation"
-						key={"download"}
+						allowOrganisationCodeLogin={false}
 					/>
 					:
 					<Fragment>
