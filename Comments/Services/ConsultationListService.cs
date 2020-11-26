@@ -84,7 +84,7 @@ namespace Comments.Services
 				}
 			}
 			
-			var isOrganisationalCommentingEnabled = await _featureManager.IsEnabledAsync(nameof(Features.OrganisationalCommenting));
+			var isOrganisationalCommentingEnabled = await _featureManager.IsEnabledAsync(Constants.Features.OrganisationalCommenting);
 			Dictionary<int, List<OrganisationCode>> allOrganisationCodes;
 			if (isOrganisationalCommentingEnabled)
 				allOrganisationCodes = GetConsultationCodesForAllConsultations(consultationsFromIndev.Select(c => c.ConsultationId).ToList(), isAdminUser, currentUser.OrganisationsAssignedAsLead.ToList());

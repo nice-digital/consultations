@@ -552,7 +552,7 @@ namespace Comments.Test.UnitTests
 			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 
 			//Act
-			var consultationService = new ConsultationListService(consultationContext, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeUserService, null);
+			var consultationService = new ConsultationListService(consultationContext, new FakeFeedService(consultationList), new FakeConsultationService(), _fakeUserService, _fakeFeatureManager);
 
 			//Assert
 			consultationService.ShouldNotBeNull();
@@ -567,7 +567,7 @@ namespace Comments.Test.UnitTests
 			//Arrange
 			var consultationList = AddConsultationsToList();
 			var userService = FakeUserService.Get(true, "Jeffrey Goines", Guid.NewGuid().ToString(), TestUserType.ConsultationListTestRole);
-			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), userService, null);
+			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), userService, _fakeFeatureManager);
 
 			//Act
 			ConsultationListViewModel viewModel = (await consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null) { Status = new List<ConsultationStatus>() })).consultationListViewModel;
@@ -583,7 +583,7 @@ namespace Comments.Test.UnitTests
 			//Arrange
 			var consultationList = AddConsultationsToList();
 			var userService = FakeUserService.Get(true, "Jeffrey Goines", Guid.Empty.ToString(), TestUserType.ConsultationListTestRole);
-			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), userService, null);
+			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), new FakeConsultationService(), userService, _fakeFeatureManager);
 
 			//Act
 			ConsultationListViewModel viewModel = (await consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null)
@@ -670,7 +670,7 @@ namespace Comments.Test.UnitTests
 
 			var context = new ConsultationsContext(_options, userService, _fakeEncryption);
 
-			var consultationListService = new ConsultationListService(context, new FakeFeedService(consultationList), new FakeConsultationService(), userService, null);
+			var consultationListService = new ConsultationListService(context, new FakeFeedService(consultationList), new FakeConsultationService(), userService, _fakeFeatureManager);
 
 			//Act
 			var viewModel = (await consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null)

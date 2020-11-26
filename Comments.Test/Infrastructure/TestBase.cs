@@ -64,8 +64,8 @@ namespace Comments.Test.Infrastructure
         protected readonly IHttpContextAccessor _fakeHttpContextAccessor;
         protected readonly IAPIService _fakeApiService;
         protected readonly IFeatureManager _fakeFeatureManager;
-
-	    protected readonly IConsultationService _consultationService;
+        protected readonly ISessionManager _fakeSessionManager;
+		protected readonly IConsultationService _consultationService;
         protected readonly DbContextOptionsBuilder<ConsultationsContext> _contextOptions;
 
         protected readonly ConsultationsContext _context;
@@ -113,7 +113,8 @@ namespace Comments.Test.Infrastructure
 		/// <param name="useFakeConsultationService"></param>
 		/// <param name="submittedCommentsAndAnswerCounts"></param>
 		/// <param name="bypassAuthentication"></param>
-		public TestBase(bool useRealSubmitService = false, TestUserType testUserType = TestUserType.Authenticated, bool useFakeConsultationService = false, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null, bool bypassAuthentication = true, bool addRoleClaim = true)
+		public TestBase(bool useRealSubmitService = false, TestUserType testUserType = TestUserType.Authenticated, bool useFakeConsultationService = false, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null,
+			bool bypassAuthentication = true, bool addRoleClaim = true, bool enableOrganisationalCommentingFeature = true)
         {
 	        if (testUserType == TestUserType.NotAuthenticated)
 	        {
@@ -129,7 +130,10 @@ namespace Comments.Test.Infrastructure
 			_consultationService = new FakeConsultationService();
 	        _useRealSubmitService = useRealSubmitService;
 	        _fakeEncryption = new FakeEncryption();
-	        _fakeFeatureManager = new FakeFeatureManager(new Dictionary<Features, bool>{{Features.OrganisationalCommenting, true}});
+			var featureDictionary = new System.Collections.Generic.Dictionary<string, bool> { { Constants.Features.OrganisationalCommenting, enableOrganisationalCommentingFeature } };
+			_fakeFeatureManager = new FakeFeatureManager(featureDictionary);
+	        _fakeSessionManager = new FakeSessionManager(featureDictionary);
+
 			var databaseName = DatabaseName + Guid.NewGuid();
 
 			_options = new DbContextOptionsBuilder<ConsultationsContext>()
@@ -156,15 +160,20 @@ namespace Comments.Test.Infrastructure
 					services.TryAddSingleton<ConsultationsContext>(_context);
                     services.TryAddSingleton<ISeriLogger, FakeSerilogger>();
                     services.TryAddSingleton<IHttpContextAccessor>(provider => _fakeHttpContextAccessor);
-                    services.TryAddTransient<IUserService>(provider => _fakeUserService);
+                   
+					services.TryAddTransient<IUserService>(provider => _fakeUserService);
                     services.TryAddTransient<IFeedReaderService>(provider => new FeedReader(FeedToUse));
                     services.TryAddScoped<IAPIService>(provider => _fakeApiService);
 					//services.TryAddSingleton<IFeatureManager>
 
-                    //services.AddAuthentication();
+					services.AddSingleton<IFeatureManager>(provider => _fakeFeatureManager);
+					services.AddSingleton<ISessionManager>(provider => _fakeSessionManager);
+				
 
-                   //services.Decorate<IAPIService, FakeAPIService>();
-                   //services.Decorate<IAPIService>(provider => _fakeApiService);
+					//services.AddAuthentication();
+
+					//services.Decorate<IAPIService, FakeAPIService>();
+					//services.Decorate<IAPIService>(provider => _fakeApiService);
 
 					if (!_useRealSubmitService)
 	                {
@@ -180,7 +189,8 @@ namespace Comments.Test.Infrastructure
 		                services.AddMvc(opt => opt.Filters.Add(new AllowAnonymousFilter())); //bypass authentication
 	                }
 
-	                services.AddFeatureManagement();
+	                //services.AddFeatureManagement();
+					
 				})
                 .Configure(app =>
                 {
