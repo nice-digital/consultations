@@ -8,4 +8,14 @@
   .tag--unsubmitted {
     @extend .tag--alpha;
   }
+
+  .card {
+    overflow: visible;
+
+    &__heading a {
+      &:before {
+        display: none;
+      }
+    }
+  }
 }
