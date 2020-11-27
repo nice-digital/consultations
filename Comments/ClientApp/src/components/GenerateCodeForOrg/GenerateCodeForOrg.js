@@ -103,7 +103,7 @@ export class GenerateCodeForOrg extends Component<GenerateCodeForOrgProps, Gener
 
 					{!showGenerateButton && (
 						<CopyToClipboard text={generatedCollationCode} onCopy={this.showCopiedLabel}>
-          					<Tag role="button" tabIndex="0" className="tag tag--copied" aria-live="polite" disabled={hasBeenCopied}>{hasBeenCopied ? "Copied" : "Copy code"}</Tag>
+          					<Tag role="button" tabIndex="0" className="tag tag--copied" aria-live="polite">{hasBeenCopied ? "Copied" : "Copy code"}</Tag>
         				</CopyToClipboard>
 					)}
 				</div>

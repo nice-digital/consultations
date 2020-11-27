@@ -1,0 +1,115 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GenerateCode should match snapshot with code having been generated 1`] = `
+<div>
+  <button
+    aria-controls="organisation-codes-111"
+    aria-expanded={true}
+    className="btn btn--inverse"
+    id="share-organisation-111"
+    onClick={[Function]}
+    type="button"
+  >
+    Share with organisation 
+    <span
+      className="arrow-icon"
+    />
+  </button>
+  <div
+    className="panel organisation-codes mv--b"
+    id="organisation-codes-111"
+  >
+    <h2
+      className="h5"
+    >
+      Generate code
+    </h2>
+    <p>
+      Select an organisation
+    </p>
+    <div
+      className="organisation-codes__row"
+    >
+      <div
+        className="organisation-codes__name"
+      >
+        <p>
+          Super Magic Club
+        </p>
+      </div>
+      <div
+        className="organisation-codes__generate pl--b"
+      >
+        <span>
+          1234 5678 9123
+        </span>
+        <span
+          aria-live="polite"
+          className="tag tag--copied"
+          onClick={[Function]}
+          role="button"
+          tabIndex="0"
+        >
+          Copy code
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`GenerateCode should match snapshot with no code having been generated 1`] = `
+<div>
+  <button
+    aria-controls="organisation-codes-111"
+    aria-expanded={true}
+    className="btn btn--inverse"
+    id="share-organisation-111"
+    onClick={[Function]}
+    type="button"
+  >
+    Share with organisation 
+    <span
+      className="arrow-icon"
+    />
+  </button>
+  <div
+    className="panel organisation-codes mv--b"
+    id="organisation-codes-111"
+  >
+    <h2
+      className="h5"
+    >
+      Generate code
+    </h2>
+    <p>
+      Select an organisation
+    </p>
+    <div
+      className="organisation-codes__row"
+    >
+      <div
+        className="organisation-codes__name"
+      >
+        <p>
+          Super Magic Club
+        </p>
+      </div>
+      <div
+        className="organisation-codes__generate pl--b"
+      >
+        <button
+          aria-live="polite"
+          className="btn"
+          disabled={false}
+          onClick={[Function]}
+          type="button"
+        >
+          Generate
+        </button>
+        <span />
+      </div>
+    </div>
+  </div>
+</div>
+`;
