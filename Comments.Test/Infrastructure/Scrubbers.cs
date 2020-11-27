@@ -64,6 +64,12 @@ namespace Comments.Test.Infrastructure
 			return Regex.Replace(str, @"""organisationAuthorisationId"":(\d+)", @"""organisationAuthorisationId"":""scrubbed by ScrubUserId""");
 		}
 
+		public static string ScrubStackTraceString(string str)
+		{
+			//unescaped regex is: "StackTraceString":"[^"]+"
+			return Regex.Replace(str, @"""StackTraceString"":""[^""]+""", @"""StackTraceString"":""scrubbed by ScrubStackTraceString""");
+		}
+
 		public static string ScrubIds(string str)
 	    {
 		    str = ScrubCommentId(str);
@@ -79,6 +85,7 @@ namespace Comments.Test.Infrastructure
 		    return Regex.Replace(str, "(<!--)([\\d\\D]+)(-->)", "\"Error Message\":\"scrubbed by ScrubErrorMessage\"");
 
 		}
+
 
 		
     }
