@@ -11,7 +11,7 @@ namespace Comments.Models
 			SubmissionComment = new HashSet<SubmissionComment>();
 		} 
 
-        public Comment(int locationId, string createdByUserId, string commentText, string lastModifiedByUserId, Location location, int statusId, Status status)
+        public Comment(int locationId, string createdByUserId, string commentText, string lastModifiedByUserId, Location location, int statusId, Status status, int? organisationUserId = null, int? parentCommentId = null)
         {
             LocationId = locationId;
             CreatedByUserId = createdByUserId;
@@ -23,10 +23,12 @@ namespace Comments.Models
 	        StatusId = statusId;
 	        Status = status;
 	        SubmissionComment = new HashSet<SubmissionComment>();
-		}
+	        OrganisationUserId = organisationUserId;
+	        ParentCommentId = parentCommentId;
+        }
 
 	    public Comment(ViewModels.Comment comment, string createdByUserId) : this(comment.LocationId, createdByUserId,
-		    comment.CommentText, comment.LastModifiedByUserId, location: null, statusId: comment.StatusId, status: null)
+		    comment.CommentText, comment.LastModifiedByUserId, location: null, statusId: comment.StatusId, status: null, organisationUserId: null, parentCommentId: null)
 	    {
 			SubmissionComment = new HashSet<SubmissionComment>();
 		}

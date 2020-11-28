@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Comment = Comments.Models.Comment;
 
 namespace Comments.Services
 {
@@ -108,13 +109,19 @@ namespace Comments.Services
 		/// <returns>Returns null if the collation code is not valid</returns>
 		public async Task<OrganisationCode> CheckValidCodeForConsultation(string collationCode, int consultationId)
 		{
+			var genericCodeErrorMessage = "Incorrect code. Verify the code with your organisation's commenting lead and try again.";
+
 			var organisationAuthorisation = _context.GetOrganisationAuthorisationByCollationCode(collationCode);
 			if (organisationAuthorisation == null)
-				throw new ApplicationException("Collation code not found");
+				throw new ApplicationException(genericCodeErrorMessage); //old message: "Collation code not found"
 
 			var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
 			if (!organisationAuthorisation.Location.SourceURI.Equals(sourceURI, StringComparison.OrdinalIgnoreCase))
-				throw new ApplicationException("The supplied collation code is for a different consultation.");
+				throw new ApplicationException(genericCodeErrorMessage); //old message: "The supplied code is for a different consultation."
+
+			var hasOrganisationSubmittedForThisConsultation = HasOrganisationSubmittedForConsultation(organisationAuthorisation.OrganisationId, sourceURI);
+			if (hasOrganisationSubmittedForThisConsultation)
+				throw new ApplicationException("Your organisation has already responded to this consultation. Contact your organisation's commenting lead for further information.");
 
 			//var machineToMachineAccessToken =	await _apiTokenService.GetAccessToken(AppSettings.AuthenticationConfig.GetAuthConfiguration()); 
 			//var httpClientWithPooledMessageHandler = _httpClientFactory.CreateClient();
@@ -125,10 +132,23 @@ namespace Comments.Services
 
 			var organisation = organisations.FirstOrDefault();
 			if (organisation == null)
-				throw new ApplicationException("Organisation name could not be retrieved."); //might occur if the org has been deleted from idam and CC hasn't been updated.
+				throw new ApplicationException("Organisation name could not be retrieved. Please contact app support."); //might occur if the org has been deleted from idam and CC hasn't been updated.
 
 			return new OrganisationCode(organisationAuthorisation, organisation.OrganisationName);
 		}
+
+		private bool HasOrganisationSubmittedForConsultation(int organisationId, string sourceURI)
+		{
+			var submittedCommentParentIds = _context.GetAllSubmittedCommentsForURI(sourceURI).Where(comment => comment.ParentCommentId.HasValue).Select(comment => comment.ParentCommentId.Value).ToList();
+
+			var anySubmittedCommentsForThisOrgnisation = _context.AreCommentsForThisOrganisation(submittedCommentParentIds, organisationId);
+			if (anySubmittedCommentsForThisOrgnisation)
+				return true;
+
+			var submittedAnswerParentIds = _context.GetAllSubmittedAnswersForURI(sourceURI).Where(answer => answer.ParentAnswerId.HasValue).Select(answer => answer.ParentAnswerId.Value).ToList();
+			return  _context.AreAnswersForThisOrganisation(submittedAnswerParentIds, organisationId);
+		}
+
 
 		public (Guid sessionId, DateTime expirationDate) CreateOrganisationUserSession(int organisationAuthorisationId, string collationCode)
 		{

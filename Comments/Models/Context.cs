@@ -838,5 +838,30 @@ namespace Comments.Models
 					ThenInclude(a => a.Location)
 				.FirstOrDefault(ou => ou.AuthorisationSession.Equals(sessionId));
 		}
+
+		public bool AreCommentsForThisOrganisation(IEnumerable<int> commentIds, int organisationId)
+		{
+			var comments = Comment
+				.Include(c => c.OrganisationUser)
+					.ThenInclude(ou => ou.OrganisationAuthorisation)
+				.IgnoreQueryFilters()
+				.Where(c => commentIds.Contains(c.CommentId)).ToList();
+
+			return comments.Where(c => c.OrganisationUser?.OrganisationAuthorisation != null)
+				.Any(c => c.OrganisationUser.OrganisationAuthorisation.OrganisationId.Equals(organisationId));
+		}
+
+		public bool AreAnswersForThisOrganisation(List<int> answerIds, int organisationId)
+		{
+			var answers = Answer
+				.Include(a => a.OrganisationUser)
+					.ThenInclude(ou => ou.OrganisationAuthorisation)
+				.IgnoreQueryFilters()
+				.Where(a => answerIds.Contains(a.AnswerId)).ToList();
+
+			return answers.Where(c => c.OrganisationUser?.OrganisationAuthorisation != null)
+				.Any(c => c.OrganisationUser.OrganisationAuthorisation.OrganisationId.Equals(organisationId));
+
+		}
     }
 }

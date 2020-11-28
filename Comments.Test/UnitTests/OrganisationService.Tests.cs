@@ -151,7 +151,7 @@ namespace Comments.Test.UnitTests
 		[InlineData("123412341234", 2)]
 		[InlineData("1234", 1)]
 		[InlineData("1234123412341", 1)]
-		public void CheckValidCodeForConsultationReturnsInvalid(string collationCode, int consultationId)
+		public async Task CheckValidCodeForConsultationReturnsInvalid(string collationCode, int consultationId)
 		{
 			//Arrange
 			ResetDatabase();
@@ -166,7 +166,65 @@ namespace Comments.Test.UnitTests
 				var serviceUnderTest = new OrganisationService(context, _fakeUserService, null, null, null, null);
 
 				//Act + Assert
-				Assert.ThrowsAsync<ApplicationException>(async () =>  { await serviceUnderTest.CheckValidCodeForConsultation(collationCode, consultationId); });
+				await Assert.ThrowsAsync<ApplicationException>(() => serviceUnderTest.CheckValidCodeForConsultation(collationCode, consultationId));
+			}
+		}
+
+		[Fact]
+		public async Task CheckValidCodeThrowsErrorWhenTheOrganisationHasAlreadySubmittedACommentForThisConsultationToNICE()
+		{
+			//Arrange
+			ResetDatabase();
+			_context.Database.EnsureCreated();
+			const string collationCodeInDB = "123412341234";
+			const int organisationId = 1;
+			const int validConsultationId = 1;
+
+			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
+			{
+				var organisationAuthorisationId = AddOrganisationAuthorisationWithLocation(organisationId, validConsultationId, context, collationCode: collationCodeInDB);
+				var organisationUserId = AddOrganisationUser(context, organisationAuthorisationId, Guid.NewGuid(), null);
+				
+				var sourceURI = ConsultationsUri.CreateConsultationURI(validConsultationId);
+				var commentLocationId = AddLocation(sourceURI, context);
+				var orgCommentersCommentId = AddComment(commentLocationId, "comment text", "Carl Spackler", (int)StatusName.Submitted, context, organisationUserId);
+
+				AddComment(commentLocationId, "org lead comment text", "Judge Smails", (int)StatusName.Submitted, context, organisationUserId: null, parentCommentId: orgCommentersCommentId);
+
+				var serviceUnderTest = new OrganisationService(context, _fakeUserService, null, null, null, null);
+
+				//Act + Assert
+				await Assert.ThrowsAsync<ApplicationException>(() => serviceUnderTest.CheckValidCodeForConsultation(collationCodeInDB, validConsultationId));
+			}
+		}
+
+		[Fact]
+		public async Task CheckValidCodeThrowsErrorWhenTheOrganisationHasAlreadySubmittedAnAnswerForThisConsultationToNICE()
+		{
+			//Arrange
+			ResetDatabase();
+			_context.Database.EnsureCreated();
+			const string collationCodeInDB = "123412341234";
+			const int organisationId = 1;
+			const int validConsultationId = 1;
+
+			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
+			{
+				var organisationAuthorisationId = AddOrganisationAuthorisationWithLocation(organisationId, validConsultationId, context, collationCode: collationCodeInDB);
+				var organisationUserId = AddOrganisationUser(context, organisationAuthorisationId, Guid.NewGuid(), null);
+
+				var sourceURI = ConsultationsUri.CreateConsultationURI(validConsultationId);
+				var answerLocationId = AddLocation(sourceURI, context);
+				var questionId = AddQuestion(answerLocationId, 1, "question text", context);
+
+				var orgCommentersAnswerId = AddAnswer(questionId, "Carl Spackler", "answer text", (int)StatusName.Submitted ,context, organisationUserId);
+
+				AddAnswer(questionId, "Judge Smails", "answer text", (int)StatusName.Submitted, context, organisationUserId: null, parentAnswerId: orgCommentersAnswerId);
+
+				var serviceUnderTest = new OrganisationService(context, _fakeUserService, null, null, null, null);
+
+				//Act + Assert
+				await Assert.ThrowsAsync<ApplicationException>(() => serviceUnderTest.CheckValidCodeForConsultation(collationCodeInDB, validConsultationId));
 			}
 		}
 
