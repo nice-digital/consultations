@@ -137,6 +137,7 @@ namespace Comments.Services
 			return new OrganisationCode(organisationAuthorisation, organisation.OrganisationName);
 		}
 
+		//TODO: refactor this to be 1 DB hit instead of 2-4.
 		private bool HasOrganisationSubmittedForConsultation(int organisationId, string sourceURI)
 		{
 			var submittedCommentParentIds = _context.GetAllSubmittedCommentsForURI(sourceURI).Where(comment => comment.ParentCommentId.HasValue).Select(comment => comment.ParentCommentId.Value).ToList();
