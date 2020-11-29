@@ -8,8 +8,9 @@ namespace Comments.Common
 	    public const string ConsultationsPreviewReplaceableRelativeUrl = ConsultationsBasePath + "/preview/{0}/consultation/{1}/document/{2}/chapter/{3}";
 		public const string ErrorPath = "/error";
 	    public const string StatusAPIKeyName = "ECStatusApiKey";
-		
-	    /// <summary>
+	    public const string SessionCookieName = "ConsultationSession-";
+
+		/// <summary>
 		/// This document number is here to pass to indev to call the "Draft preview detail" feed. The preview feed cannot be called without a document id, and if you do pass one
 		/// all it sets is the SelectedDocumentId and the DocumentId properties on the returned json.
 		/// </summary>
