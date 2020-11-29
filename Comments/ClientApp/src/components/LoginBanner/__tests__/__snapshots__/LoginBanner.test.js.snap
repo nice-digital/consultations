@@ -2,51 +2,42 @@
 
 exports[`[ClientApp]  LoginBanner Component should match snapshot. no querystring 1`] = `
 <div
-  className="panel panel--inverse mt--0 mb--0 sign-in-banner"
+  className="panel panel-white mt--0 mb--0 sign-in-banner"
   data-qa-sel="sign-in-banner"
 >
   <div
     className="container"
   >
     <div
-      className="grid"
+      className="LoginBanner"
     >
-      <div
-        data-g="12"
+      <a
+        href="/signin-url"
+        title="Sign in to your NICE account"
       >
-        <div
-          className="LoginBanner"
+        Sign in to your NICE account
+      </a>
+       
+      signin text
+      .
+       
+      <p>
+        <a
+          className="btn"
+          href="/signin-url"
+          title="Sign in to your NICE account"
         >
-          <a
-            href="/signin-url"
-            title="Sign in to your NICE account"
-          >
-            Sign in to your NICE account
-          </a>
-           
-          signin text
-          .
-           
-          <br />
-          Don't have an account?
-           
-          <a
-            href="/register-url"
-            title="Register for a NICE account"
-          >
-            Register
-          </a>
-        </div>
-        <p>
-          <a
-            className="btn btn--inverse"
-            href="/signin-url"
-            title="Sign in to your NICE account"
-          >
-            Sign in
-          </a>
-        </p>
-      </div>
+          Sign in
+        </a>
+      </p>
+      Don't have an account?
+       
+      <a
+        href="/register-url"
+        title="Register for a NICE account"
+      >
+        Register
+      </a>
     </div>
   </div>
 </div>

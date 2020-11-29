@@ -6,6 +6,7 @@ import queryString from "query-string";
 import Cookies from "js-cookie";
 import { UserContext } from "../../context/UserContext";
 import { load } from "../../data/loader";
+import { Input } from "@nice-digital/nds-input";
 
 type PropsType = {
 	signInURL: string,
@@ -28,7 +29,6 @@ type StateType = {
 	organisationCode: string,
 	hasError: bool,
 	errorMessage: string,
-	showOrganisationCodeLogin: bool,
 	showAuthorisationOrganisation: bool,
 	authorisationOrganisationFound: OrganisationCode, 
 }
@@ -42,7 +42,6 @@ export class LoginBanner extends Component<PropsType, StateType> {
 			userEnteredCollationCode: "",
 			hasError: false,
 			errorMessage: "",
-			showOrganisationCodeLogin: true,
 			showAuthorisationOrganisation: false,
 			authorisationOrganisationFound: null,
 		};
@@ -63,7 +62,11 @@ export class LoginBanner extends Component<PropsType, StateType> {
 		this.setState({
 			userEnteredCollationCode,
 		}, () => {
-			this.checkOrganisationCode(userEnteredCollationCode);
+			if (userEnteredCollationCode){ //if there's a blank value, don't bother hitting the server.
+				this.checkOrganisationCode(userEnteredCollationCode);
+			}else{
+				this.setState({hasError: false});
+			}
 		});
 	};
 
@@ -159,7 +162,6 @@ export class LoginBanner extends Component<PropsType, StateType> {
 
 			//now, set state to show logged in. 
 			this.setState({
-				showOrganisationCodeLogin: false,
 				showAuthorisationOrganisation: false,
 			})
 			updateContextFunction();
@@ -174,63 +176,70 @@ export class LoginBanner extends Component<PropsType, StateType> {
 
 
 	render(){
+		const limitWidthOfButton = !this.props.signInButton; //the sign-in button isn't shown when we're trying to save space.
 
 		return (
-			<div className="panel panel--inverse mt--0 mb--0 sign-in-banner"
-					 data-qa-sel="sign-in-banner">
+			<div className="panel panel-white mt--0 mb--0 sign-in-banner" data-qa-sel="sign-in-banner">
 				<div className="container">
-					<div className="grid">
-						<div data-g="12">
-							<div className="LoginBanner">
-								{this.props.allowOrganisationCodeLogin && this.state.showOrganisationCodeLogin &&
+					<div className="LoginBanner">
+						{this.props.allowOrganisationCodeLogin &&
+							<Fragment>
+								<p>To comment as part of an organisation, please enter your organisation code:</p>
+								<div className={this.state.hasError ? "input input--error" : "input"}>
+									<DebounceInput
+										minLength={8}
+										debounceTimeout={400}
+										type="text"
+										onChange={e => this.handleOrganisationCodeChange(e.target.value)}
+										className={limitWidthOfButton ? "limitWidth input__input" : "input__input"}
+										data-qa-sel="OrganisationCodeLogin"
+										value={this.state.userEnteredCollationCode}
+										element={Input}
+										error={this.state.hasError}
+										errorMessage={this.state.errorMessage}
+										label="Organisation code"
+									/>											
+								</div>
+								{this.state.showAuthorisationOrganisation && 
 									<Fragment>
-										<p>If you would like to comment on this consultation as part of an organisation, please enter your organisation code here:</p>
-										<label>
-											Organisation code<br/>
-											{this.state.hasError && 
-												<div>{this.state.errorMessage}</div>
-											}
-											<DebounceInput
-												minLength={6}
-												debounceTimeout={400}
-												type="text"
-												onChange={e => this.handleOrganisationCodeChange(e.target.value)}
-												className="form__input form__input--text limitWidth"
-												data-qa-sel="OrganisationCodeLogin"
-												value={this.state.userEnteredCollationCode}
-											/>
-										</label>
-										<br/><br/>
-										{this.state.showAuthorisationOrganisation && 
-											<Fragment>
-												<label>Confirm organisation name<br/>
-													<strong>{this.state.authorisationOrganisationFound.organisationName}</strong>
-												</label>
-												<br/>												
-												<UserContext.Consumer>
-													{({ contextValue: ContextType, updateContext }) => (
-														<button className="btn btn--cta" onClick={() => this.handleConfirmClick(updateContext)}  title={"Confirm your organisation is " + this.state.authorisationOrganisationFound.organisationName}>Confirm</button>
-													)}
-												</UserContext.Consumer>
-												<br/>
-											</Fragment>
-										}	
-									</Fragment>							
+										<p>Confirm organisation name
+											<p><strong>{this.state.authorisationOrganisationFound.organisationName}</strong></p>
+										</p>							
+										<UserContext.Consumer>
+											{({ contextValue: ContextType, updateContext }) => (
+												<button className="btn btn--cta" onClick={() => this.handleConfirmClick(updateContext)}  title={"Confirm your organisation is " + this.state.authorisationOrganisationFound.organisationName}>Confirm</button>
+											)}
+										</UserContext.Consumer>
+									</Fragment>
 								}
-								<a href={this.props.signInURL} title="Sign in to your NICE account">
-									Sign in to your NICE account</a> {this.props.signInText || "to comment on this consultation"}.{" "}
-								<br/>
-								Don't have an account?{" "}
-								<a href={this.props.registerURL} title="Register for a NICE account">
-									Register
-								</a>
-							</div>
-							{this.props.signInButton &&
+							</Fragment>
+						}
+						{this.props.allowOrganisationCodeLogin && this.props.signInButton && 
+							<Fragment>
+								<p>If you don't have an organisation code, sign in to your NICE account.</p>
 								<p>
-									<a className="btn btn--inverse" href={this.props.signInURL} title="Sign in to your NICE account">Sign in</a>
+									<a className="btn" href={this.props.signInURL} title="Sign in to your NICE account">Sign in</a>
 								</p>
-							}
-						</div>
+							</Fragment>
+						}
+						{this.props.allowOrganisationCodeLogin && !this.props.signInButton && 
+							<p>If you don't have an organisation code, <a href={this.props.signInURL} title="Sign in to your NICE account">sign in to your NICE account.</a></p>
+						}
+						{!this.props.allowOrganisationCodeLogin && this.props.signInButton && 
+							<Fragment>
+								<a href={this.props.signInURL} title="Sign in to your NICE account">Sign in to your NICE account</a> {this.props.signInText || "to comment on this consultation"}.{" "}								
+								<p>
+									<a className="btn" href={this.props.signInURL} title="Sign in to your NICE account">Sign in</a>
+								</p>
+							</Fragment>
+						}
+						{!this.props.allowOrganisationCodeLogin && !this.props.signInButton && 
+							<p>If you don't have an organisation code, <a href={this.props.signInURL} title="Sign in to your NICE account">Sign in to your NICE account.</a></p>
+						}
+						Don't have an account?{" "}
+						<a href={this.props.registerURL} title="Register for a NICE account">
+							Register
+						</a>
 					</div>
 				</div>
 			</div>

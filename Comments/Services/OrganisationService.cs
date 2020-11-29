@@ -77,8 +77,8 @@ namespace Comments.Services
 				collationCode = GenerateCollationCode();
 				collision = _context.GetOrganisationAuthorisationByCollationCode(collationCode);
 			} while (collision != null && counter <= maxTriesAtUnique);
-			if (counter >= maxTriesAtUnique)
-				throw new ApplicationException("Couldn't generate a random number which doesn't match an existing collation code");
+			if (collision != null && counter >= maxTriesAtUnique)
+				throw new ApplicationException("Couldn't generate a random number. Please contact app support.");
 			
 			//then save it to the db
 			var organisationAuthorisation =_context.SaveCollationCode(sourceURI, currentUser.UserId, DateTime.UtcNow, organisationId, collationCode);
@@ -95,7 +95,7 @@ namespace Comments.Services
 		private string GenerateCollationCode()
         {
 	        var random = new Random();
-	        var firstPart = random.Next(100000, 999999); //preventing a leading zero, which a user might not type, if they consider it a number.
+	        var firstPart = random.Next(100000, 999999); //preventing a leading zero, which a user might not type if they consider it a number.
 	        var secondPart = random.Next(0, 999999);
 	        var collationCode = $"{firstPart:0000 00}{secondPart:00 0000}";
 	        return collationCode;
