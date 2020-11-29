@@ -132,7 +132,7 @@ export class LoginBanner extends Component<PropsType, StateType> {
 		};
 	}
 
-	CreateOrganisationUserSession = async () => {
+	createOrganisationUserSession = async () => {
 		const session = this.gatherDataForCreateOrganisationUserSession()
 			.then(data => {
 				if (data.session != null) { 
@@ -153,12 +153,12 @@ export class LoginBanner extends Component<PropsType, StateType> {
 
 	handleConfirmClick = (updateContextFunction) => {
 		const consultationId = this.props.match.params.consultationId;
-		this.CreateOrganisationUserSession().then(data => {
+		this.createOrganisationUserSession().then(data => {
 			console.log("data is:" + JSON.stringify(data));
 
 			var expirationDate = new Date(data.session.expirationDateTicks);
 
-			Cookies.set(`ConsultationSession-${consultationId}`, data.session.sessionId, {expires: expirationDate}); //TODO: add to cookie policy
+			Cookies.set(`ConsultationSession-${consultationId}`, data.session.sessionId, {expires: expirationDate}); 
 
 			//now, set state to show logged in. 
 			this.setState({
