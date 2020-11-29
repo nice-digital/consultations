@@ -225,16 +225,15 @@ export class LoginBanner extends Component<PropsType, StateType> {
 						{this.props.allowOrganisationCodeLogin && !this.props.signInButton && 
 							<p>If you don't have an organisation code, <a href={this.props.signInURL} title="Sign in to your NICE account">sign in to your NICE account.</a></p>
 						}
-						{!this.props.allowOrganisationCodeLogin && this.props.signInButton && 
+						{!this.props.allowOrganisationCodeLogin && 
 							<Fragment>
 								<a href={this.props.signInURL} title="Sign in to your NICE account">Sign in to your NICE account</a> {this.props.signInText || "to comment on this consultation"}.{" "}								
-								<p>
-									<a className="btn" href={this.props.signInURL} title="Sign in to your NICE account">Sign in</a>
-								</p>
+								{this.props.signInButton && 
+									<p>
+										<a className="btn" href={this.props.signInURL} title="Sign in to your NICE account">Sign in</a>
+									</p>
+								}
 							</Fragment>
-						}
-						{!this.props.allowOrganisationCodeLogin && !this.props.signInButton && 
-							<p>If you don't have an organisation code, <a href={this.props.signInURL} title="Sign in to your NICE account">Sign in to your NICE account.</a></p>
 						}
 						Don't have an account?{" "}
 						<a href={this.props.registerURL} title="Register for a NICE account">

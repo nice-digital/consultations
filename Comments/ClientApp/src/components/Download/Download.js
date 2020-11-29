@@ -417,7 +417,7 @@ export class Download extends Component<PropsType, StateType> {
 						currentURL={this.props.match.url}
 						signInURL={contextValue.signInURL}
 						registerURL={contextValue.registerURL}
-						signInText="to administer a consultation"
+						signInText="to view a list of consultations"
 						allowOrganisationCodeLogin={false}
 					/>
 					:
