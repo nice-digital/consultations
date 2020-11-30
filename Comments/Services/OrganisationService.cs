@@ -57,6 +57,7 @@ namespace Comments.Services
 			{
 				throw new UnauthorizedAccessException($"User: {currentUser.UserId} is not a lead of the organisation with id: {organisationId}");
 			}
+			var currentUsersOrganisationName = currentUser.OrganisationsAssignedAsLead.FirstOrDefault(org => org.OrganisationId.Equals(organisationId))?.OrganisationName;
 
 			//then check to see if the organisation already has an collation code for this consultation.
 			var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
@@ -83,7 +84,7 @@ namespace Comments.Services
 			//then save it to the db
 			var organisationAuthorisation =_context.SaveCollationCode(sourceURI, currentUser.UserId, DateTime.UtcNow, organisationId, collationCode);
 
-			return new OrganisationCode(organisationAuthorisation, currentUser.OrganisationsAssignedAsLead.FirstOrDefault(org => org.OrganisationId.Equals(organisationId))?.OrganisationName);
+			return new OrganisationCode(organisationAuthorisation, currentUsersOrganisationName);
         }
 
 		/// <summary>
@@ -137,7 +138,7 @@ namespace Comments.Services
 			return new OrganisationCode(organisationAuthorisation, organisation.OrganisationName);
 		}
 
-		//TODO: refactor this to be 1 DB hit instead of 2-4.
+		//TODO: if performance is an issue, refactor this to be 1 DB hit instead of 2-4.
 		private bool HasOrganisationSubmittedForConsultation(int organisationId, string sourceURI)
 		{
 			var submittedCommentParentIds = _context.GetAllSubmittedCommentsForURI(sourceURI).Where(comment => comment.ParentCommentId.HasValue).Select(comment => comment.ParentCommentId.Value).ToList();

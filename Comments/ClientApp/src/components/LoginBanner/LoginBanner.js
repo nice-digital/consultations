@@ -65,7 +65,10 @@ export class LoginBanner extends Component<PropsType, StateType> {
 			if (userEnteredCollationCode){ //if there's a blank value, don't bother hitting the server.
 				this.checkOrganisationCode(userEnteredCollationCode);
 			}else{
-				this.setState({hasError: false});
+				this.setState({
+					hasError: false, 
+					showAuthorisationOrganisation: false
+				});
 			}
 		});
 	};
