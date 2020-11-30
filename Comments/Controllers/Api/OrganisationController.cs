@@ -128,9 +128,9 @@ namespace Comments.Controllers.Api
 				throw new ArgumentException("Session id is not valid", nameof(sessionId));
 
 
-			var valid = _organisationService.CheckOrganisationUserSession(consultationId, sessionId);
+			var validityAndOrganisationName = _organisationService.CheckOrganisationUserSession(consultationId, sessionId);
 
-			return Ok(valid);
+			return Ok(validityAndOrganisationName);
 		}
 	}
 }

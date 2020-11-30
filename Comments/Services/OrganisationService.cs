@@ -1,4 +1,5 @@
 using Comments.Common;
+using Comments.Configuration;
 using Comments.Models;
 using Comments.ViewModels;
 using NICE.Feeds;
@@ -19,7 +20,7 @@ namespace Comments.Services
 		OrganisationCode GenerateOrganisationCode(int organisationId, int consultationId);
 		Task<OrganisationCode> CheckValidCodeForConsultation(string collationCode, int consultationId);
 		(Guid sessionId, DateTime expirationDate) CreateOrganisationUserSession(int organisationAuthorisationId, string collationCode);
-		bool CheckOrganisationUserSession(int consultationId, Guid sessionId);
+		Task<(bool valid, string organisationName)> CheckOrganisationUserSession(int consultationId, Guid sessionId);
 	}
 
     public class OrganisationService : IOrganisationService
@@ -124,18 +125,9 @@ namespace Comments.Services
 			if (hasOrganisationSubmittedForThisConsultation)
 				throw new ApplicationException("Your organisation has already responded to this consultation. Contact your organisation's commenting lead for further information.");
 
-			//var machineToMachineAccessToken =	await _apiTokenService.GetAccessToken(AppSettings.AuthenticationConfig.GetAuthConfiguration()); 
-			//var httpClientWithPooledMessageHandler = _httpClientFactory.CreateClient();
+			var organisationName = await GetOrganisationName(organisationAuthorisation.OrganisationId);
 
-			//var organisations = await _apiService.GetOrganisations(new List<int> {organisationAuthorisation.OrganisationId}, machineToMachineAccessToken,	httpClientWithPooledMessageHandler);
-
-			var organisations = new List<Organisation> {new Organisation(1, "Not NICE", false)}; //TODO: remove. this is only here since we're not currently caching the token. Once idam's been updated with m2m token caching we can restore the above code and remove this.
-
-			var organisation = organisations.FirstOrDefault();
-			if (organisation == null)
-				throw new ApplicationException("Organisation name could not be retrieved. Please contact app support."); //might occur if the org has been deleted from idam and CC hasn't been updated.
-
-			return new OrganisationCode(organisationAuthorisation, organisation.OrganisationName);
+			return new OrganisationCode(organisationAuthorisation, organisationName);
 		}
 
 		//TODO: if performance is an issue, refactor this to be 1 DB hit instead of 2-4.
@@ -165,21 +157,37 @@ namespace Comments.Services
 			return (organisationUser.AuthorisationSession, expirationDate);
 		}
 
-		public bool CheckOrganisationUserSession(int consultationId, Guid sessionId)
+		public async Task<(bool valid, string organisationName)> CheckOrganisationUserSession(int consultationId, Guid sessionId)
 		{
 			var organisationUser = _context.GetOrganisationUser(sessionId);
 
 			if (organisationUser == null)
-				return false;
+				return (valid: false, organisationName: null);
 
 			if (organisationUser.ExpirationDate < DateTime.UtcNow) 
-				return false;
+				return (valid: false, organisationName: null);
 
 			var parsedUri = ConsultationsUri.ParseConsultationsUri(organisationUser.OrganisationAuthorisation.Location.SourceURI);
 			if (!parsedUri.ConsultationId.Equals(consultationId))
-				return false;
+				return (valid: false, organisationName: null);
 
-			return true;
+			var organisationName = await GetOrganisationName(organisationUser.OrganisationAuthorisation.OrganisationId);
+			
+			return (valid: true, organisationName: organisationName);
+		}
+
+		private async Task<string> GetOrganisationName(int organisationId)
+		{
+			var machineToMachineAccessToken = await _apiTokenService.GetAccessToken(AppSettings.AuthenticationConfig.GetAuthConfiguration());
+			var httpClientWithPooledMessageHandler = _httpClientFactory.CreateClient();
+
+			var organisations = await _apiService.GetOrganisations(new List<int> { organisationId }, machineToMachineAccessToken, httpClientWithPooledMessageHandler);
+
+			var organisation = organisations.FirstOrDefault();
+			if (organisation == null)
+				throw new ApplicationException("Organisation name could not be retrieved. Please contact app support."); //might occur if the org has been deleted from idam and CC hasn't been updated.
+
+			return organisation.OrganisationName;
 		}
 	}
 }
