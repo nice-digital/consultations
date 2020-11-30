@@ -43,7 +43,8 @@ type StateType = {
 	search: string,
 	keywordToFilterBy: string,
 	pageNumber: number,
-	itemsPerPage: number
+	itemsPerPage: number,
+	enableOrganisationalCommentingFeature: boolean
 }
 
 type PropsType = {
@@ -69,6 +70,8 @@ export class Download extends Component<PropsType, StateType> {
 		if (this.props.staticContext && this.props.staticContext.preload) {
 			preloadedData = this.props.staticContext.preload.data;
 		}
+
+		const enableOrganisationalCommentingFeature = ((preloadedData && preloadedData.organisationalCommentingFeature) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["organisationalCommentingFeature"]));
 
 		const isAuthorised = ((preloadedData && preloadedData.isAuthorised) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["isAuthorised"])),
 			isAdminUser = ((preloadedData && preloadedData.isAdminUser) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["isAdminUser"])),
@@ -108,6 +111,7 @@ export class Download extends Component<PropsType, StateType> {
 			keywordToFilterBy: null,
 			pageNumber: pageNumber,
 			itemsPerPage: itemsPerPage,
+			enableOrganisationalCommentingFeature
 		};
 
 		if (isAuthorised) {
@@ -141,6 +145,7 @@ export class Download extends Component<PropsType, StateType> {
 					keywordToFilterBy: null,
 					pageNumber: pageNumber,
 					itemsPerPage: itemsPerPage,
+					enableOrganisationalCommentingFeature
 				};
 			}
 		}
@@ -390,6 +395,7 @@ export class Download extends Component<PropsType, StateType> {
 			isAdminUser,
 			pageNumber,
 			itemsPerPage,
+			enableOrganisationalCommentingFeature
 		} = this.state;
 
 		const {
@@ -466,6 +472,7 @@ export class Download extends Component<PropsType, StateType> {
 													{consultationsPaginated.map((item, idx) =>
 														<ConsultationItem key={idx}
 															basename={this.props.basename}
+															allowGenerateOrganisationCode={enableOrganisationalCommentingFeature}
 															{...item}
 														/>
 													)}
