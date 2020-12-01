@@ -1,4 +1,4 @@
-﻿import React { Fragment } from "react";
+﻿import React, { Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import { withHistory } from "../HistoryContext/HistoryContext";
 import { Breadcrumbs } from "../Breadcrumbs/Breadcrumbs";
@@ -13,7 +13,7 @@ export const LeadInfo = () => {
 			<Helmet>
 				<title>What is a commenting lead?</title>
 			</Helmet>
-			<main role="main"></main>
+			<main role="main">
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">
