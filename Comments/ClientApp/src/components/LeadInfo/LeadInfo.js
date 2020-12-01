@@ -17,7 +17,7 @@ export const LeadInfo = () => {
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">
-							<Breadcrumbs links={[{label:"Home",url:"/"},{label:"All consultations", url:"/guidance/inconsulation"}]} />
+							<Breadcrumbs links={[{label:"Home",url:"/"},{label:"All consultations", url:"/guidance/inconsultation"}]} />
 
 							<Header title="What is a commenting lead?" />
 							<p>Commenting leads are representatives of an organisation who collate feedback on NICE consultations from colleagues within their organisation. They are also responsible for submitting their organisation's consultation response to NICE.</p>
