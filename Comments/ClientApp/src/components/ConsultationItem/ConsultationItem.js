@@ -138,7 +138,7 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 				</article>
 			</li>
 		);
-	}
-}
+	};
+};
 
 export default ConsultationItem;
