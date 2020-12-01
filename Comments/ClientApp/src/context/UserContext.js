@@ -14,14 +14,16 @@ type PropsType = {
 	location: any,
 	children: any,
 	staticContext: any,
-	match: any
+	match: any,
 };
 
 type StateType = {
 	isAuthorised: boolean,
+	isOrganisationCommenter: boolean,
 	displayName: string,
 	signInURL: string,
-	registerURL: string
+	registerURL: string,
+	organisationName: string,
 };
 
 export class UserProvider extends React.Component<PropsType, StateType> {
@@ -30,10 +32,12 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 
 		this.state = {
 			isAuthorised: false,
+			isOrganisationCommenter: false,
 			displayName: "",
 			signInURL: "",
 			registerURL: "",
 			updateContext: this.updateContext,
+			organisationName: null,
 		};
 
 		const isServerSideRender = (this.props.staticContext && this.props.staticContext.preload);
@@ -42,10 +46,12 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 		if (preloadSource){
 			this.state = {
 				isAuthorised: preloadSource.isAuthorised,
+				isOrganisationCommenter: false,
 				displayName: preloadSource.displayName,
 				signInURL: preloadSource.signInURL,
 				registerURL: preloadSource.registerURL,
 				updateContext: this.updateContext,
+				organisationName: null,
 			};
 			if (this.props.staticContext) {
 				this.props.staticContext.analyticsGlobals.isSignedIn = preloadSource.isAuthorised;
@@ -53,9 +59,11 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 		}
 	}
 
-	setStateForValidSessionCookie = () => {
+	setStateForValidSessionCookie = (organisationName) => {
 		this.setState({
 			isAuthorised: true,
+			isOrganisationCommenter: true,
+			organisationName,
 		});
 	}
 
@@ -64,7 +72,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 		this.checkSessionId()
 		.then(data => {
 			if (data.validityAndOrganisationName.valid === true) {
-				this.setStateForValidSessionCookie();
+				this.setStateForValidSessionCookie(data.validityAndOrganisationName.organisationName);
 			}
 			else{
 				load("user", undefined, [], { returnURL, cachebust: new Date().getTime() })
@@ -137,7 +145,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 		this.checkSessionId()
 		.then(data => {
 			if (data.validityAndOrganisationName.valid === true) {
-				this.setStateForValidSessionCookie();
+				this.setStateForValidSessionCookie(data.validityAndOrganisationName.organisationName);
 			}
 		});
 	}
