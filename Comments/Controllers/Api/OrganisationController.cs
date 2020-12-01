@@ -119,7 +119,7 @@ namespace Comments.Controllers.Api
 		/// <param name="sessionId"></param>
 		/// <returns></returns>
 		[HttpGet("CheckOrganisationUserSession")]
-		public IActionResult CheckOrganisationUserSession(int consultationId, Guid sessionId)
+		public async Task<IActionResult> CheckOrganisationUserSession(int consultationId, Guid sessionId)
 		{
 			if (consultationId < 1)
 				throw new ArgumentException("ConsultationId id must be a positive integer", nameof(consultationId));
@@ -128,9 +128,9 @@ namespace Comments.Controllers.Api
 				throw new ArgumentException("Session id is not valid", nameof(sessionId));
 
 
-			var validityAndOrganisationName = _organisationService.CheckOrganisationUserSession(consultationId, sessionId);
+			var validityAndOrganisationName = await _organisationService.CheckOrganisationUserSession(consultationId, sessionId);
 
-			return Ok(validityAndOrganisationName);
+			return Ok(new { validityAndOrganisationName.valid, validityAndOrganisationName.organisationName });
 		}
 	}
 }

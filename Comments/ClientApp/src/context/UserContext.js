@@ -63,7 +63,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 	loadUser = (returnURL) => {
 		this.checkSessionId()
 		.then(data => {
-			if (data.valid === true) {
+			if (data.validityAndOrganisationName.valid === true) {
 				this.setStateForValidSessionCookie();
 			}
 			else{
@@ -86,7 +86,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 				);
 
 			}
-		});		
+		});
 	}
 
 	//unfortunately the context is above the routes, so this.props.match is always null, so we can't pull the consultation id out of there. hence we're falling back to regex.
@@ -98,7 +98,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 			return;
 
 		const matches = regex.exec(pathname);
-		if (!matches || matches.length !== 2)		
+		if (!matches || matches.length !== 2)
 			return;
 
 		return matches[1];
@@ -106,29 +106,28 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 
 	checkSessionId = async () => {
 
-		const consultationId = this.getConsultationId();	
+		const consultationId = this.getConsultationId();
 		if (!consultationId)
-			return await false;
-		
+			return await {validityAndOrganisationName: {valid: false}};
+
 		const sessionId = Cookies.get(`ConsultationSession-${consultationId}`);
 		if (!sessionId)
-			return await false;
+			return await {validityAndOrganisationName: {valid: false}};
 
-		const valid = load(
+		const validityAndOrganisationName = load(
 			"checkorganisationusersession",
 			undefined,
 			[],
 			{
-				consultationId: consultationId, 
+				consultationId: consultationId,
 				sessionId: sessionId,
 			})
 			.then(response => response.data)
 			.catch(err => {
 				console.log(JSON.stringify(err));
 			});
-
 		return {
-			valid: await valid,
+			validityAndOrganisationName: await validityAndOrganisationName,
 		};
 	}
 
@@ -137,7 +136,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 	updateContext = () => {
 		this.checkSessionId()
 		.then(data => {
-			if (data.valid === true) {
+			if (data.validityAndOrganisationName.valid === true) {
 				this.setStateForValidSessionCookie();
 			}
 		});
