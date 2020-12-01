@@ -27,7 +27,7 @@ export const LeadInfo = () => {
 						
 							<div className="grid">
 								<div data-g="8">
-									<h3>How does it work?</h3>
+									<h2>How does it work?</h2>
 									<p>
 										Once you have signed up to be the lead for a consultation, you will be able to:
 										<ul>
@@ -43,7 +43,7 @@ export const LeadInfo = () => {
 								</div>
 								<div data-g="4">
 									<div className="panel">
-										<h3>How do I become a lead?</h3>
+										<h2>How do I become a lead?</h2>
 										<p>
 											<a href={`mailto:${emailAddress}?subject=${emailSubject}&body=${emailBody}`}>Email us</a> at DITApplicationSupport@nice.org.uk with:
 											<ul>
