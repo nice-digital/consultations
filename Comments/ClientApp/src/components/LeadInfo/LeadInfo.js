@@ -8,7 +8,7 @@ import { Header } from "../Header/Header";
 export const LeadInfo = () => {
 	const emailAddress = "DITApplicationSupport@nice.org.uk"
 	const emailSubject = encodeURIComponent("New commenting lead request");
-	const emailBody = encodeURIComponent("Dear Sir/Madam\r\rMy name is:\rI want to be a commenting lead for the following organisation:\r\rKind regards");
+	const emailBody = encodeURIComponent("Dear Application Support\r\rMy name is:\rI want to be a commenting lead for the following organisation:\r\rKind regards");
 
 	return (
 		<Fragment>
