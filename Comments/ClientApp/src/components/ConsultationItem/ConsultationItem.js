@@ -27,6 +27,7 @@ type PropsType = {
 	showShareWithOrganisationButton: boolean,
 	show: boolean,
 	basename: string,
+	allowGenerateOrganisationCode: boolean
 }
 
 export class ConsultationItem extends Component<PropsType, StateType> {
@@ -49,7 +50,8 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 			isClosed,
 			isUpcoming,
 			organisationCodes,
-			showShareWithOrganisationButton
+			showShareWithOrganisationButton,
+			allowGenerateOrganisationCode
 		} = this.props;
 
 		const status = (isOpen, isClosed, isUpcoming) => {
@@ -130,13 +132,13 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 							</div>
 						}
 					</dl>
-					{showShareWithOrganisationButton &&
+					{showShareWithOrganisationButton && allowGenerateOrganisationCode &&
 						<GenerateCode organisationCodes={organisationCodes} consultationId={consultationId} />
 					}
 				</article>
 			</li>
 		);
-	}
-}
+	};
+};
 
 export default ConsultationItem;

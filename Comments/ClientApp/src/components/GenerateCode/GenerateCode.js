@@ -5,8 +5,16 @@ import { GenerateCodeForOrg } from "../GenerateCodeForOrg/GenerateCodeForOrg";
 
 import { Button } from "@nice-digital/nds-button";
 
+type organisationCodeProps = {
+	organisationAuthorisationId: number,
+	organisationId: number,
+	organisationName: string,
+	canGenerateCollationCode: boolean,
+	collationCode: string
+};
+
 type GenerateCodeProps = {
-	organisationCodes: Array,
+	organisationCodes: Array<organisationCodeProps>,
 	consultationId: number
 };
 
