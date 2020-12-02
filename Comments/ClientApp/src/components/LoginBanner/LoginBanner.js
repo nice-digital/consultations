@@ -26,7 +26,7 @@ type OrganisationCode = {
 }
 
 type StateType = {
-	organisationCode: string,
+	userEnteredCollationCode: string,
 	hasError: bool,
 	errorMessage: string,
 	showAuthorisationOrganisation: bool,

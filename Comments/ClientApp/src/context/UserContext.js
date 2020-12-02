@@ -21,7 +21,8 @@ type StateType = {
 	isAuthorised: boolean,
 	displayName: string,
 	signInURL: string,
-	registerURL: string
+	registerURL: string,
+	updateContext: () => void,
 };
 
 export class UserProvider extends React.Component<PropsType, StateType> {
