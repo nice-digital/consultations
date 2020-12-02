@@ -118,7 +118,7 @@ class App extends React.Component<PropsType, StateType> {
 								</Route>
 
 								{/*Lead Info Page*/}
-								<Route exact path="/LeadInformation">
+								<Route exact path="/leadinformation">
 									<LeadInfo />
 								</Route>
 

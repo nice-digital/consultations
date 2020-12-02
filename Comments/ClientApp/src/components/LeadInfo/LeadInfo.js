@@ -24,33 +24,29 @@ export const LeadInfo = () => {
 							<Header title="What is a commenting lead?" />
 							<p>Commenting leads are representatives of an organisation who collate feedback on NICE consultations from colleagues within their organisation. They are also responsible for submitting their organisation's consultation response to NICE.</p>
 							<p>Leads are now able to do this online using our commenting system, but will require a set of permissions which can be assigned on request.</p>
-						
+
 							<div className="grid">
 								<div data-g="8">
 									<h2>How does it work?</h2>
-									<p>
-										Once you have signed up to be the lead for a consultation, you will be able to:
+									<p>Once you have signed up to be the lead for a consultation, you will be able to:</p>
 										<ul>
 											<li>share the online consultation with colleagues from your organisation</li>
 											<li>review and edit their comments</li>
 											<li>combine the collated comments into a single response</li>
 											<li>submit your organisation's final response.</li>
 										</ul>
-										You can be the lead for multiple consultations.
-									</p>
+									<p>You can be the lead for multiple consultations.</p>
 									<p>Ideally each consultation will only have one commenting lead. If you need to add a second lead for a consultation then you can, but only one of you will be able to submit the final response to NICE.</p>
 									<p>If you need to change the lead during a consultation you can email us. However, if the outgoing lead has already submitted a response then the new lead will not be able to edit it or submit another response.</p>
 								</div>
 								<div data-g="4">
 									<div className="panel">
 										<h2>How do I become a lead?</h2>
-										<p>
-											<a href={`mailto:${emailAddress}?subject=${emailSubject}&body=${emailBody}`}>Email us</a> at DITApplicationSupport@nice.org.uk with:
-											<ul>
-												<li>your name</li>
-												<li>your organisation's name</li>
-											</ul>
-										</p>
+										<p><a href={`mailto:${emailAddress}?subject=${emailSubject}&body=${emailBody}`}>Email us</a> at DITApplicationSupport@nice.org.uk with:</p>
+										<ul>
+											<li>your name</li>
+											<li>your organisation's name</li>
+										</ul>
 									</div>
 								</div>
 							</div>
