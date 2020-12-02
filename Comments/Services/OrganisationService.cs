@@ -129,7 +129,7 @@ namespace Comments.Services
 
 			//var organisations = await _apiService.GetOrganisations(new List<int> {organisationAuthorisation.OrganisationId}, machineToMachineAccessToken,	httpClientWithPooledMessageHandler);
 
-			var organisations = new List<Organisation> {new Organisation(1, "Not NICE", false)}; //TODO: remove. this is only here since we're not currently caching the token. Once idam's been updated with m2m token caching we can restore the above code and remove this.
+			var organisations = new List<Organisation> {new Organisation(1, "Faculty of Pain Medicine of the Royal College of Anaesthetists", false)}; //TODO: remove. this is only here since we're not currently caching the token. Once idam's been updated with m2m token caching we can restore the above code and remove this.
 
 			var organisation = organisations.FirstOrDefault();
 			if (organisation == null)

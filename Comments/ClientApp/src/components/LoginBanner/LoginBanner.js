@@ -210,7 +210,9 @@ export class LoginBanner extends Component<PropsType, StateType> {
 										</p>							
 										<UserContext.Consumer>
 											{({ contextValue: ContextType, updateContext }) => (
-												<button className="btn btn--cta" onClick={() => this.handleConfirmClick(updateContext)}  title={"Confirm your organisation is " + this.state.authorisationOrganisationFound.organisationName}>Confirm</button>
+												<div>
+													<button className="btn btn--cta" onClick={() => this.handleConfirmClick(updateContext)}  title={"Confirm your organisation is " + this.state.authorisationOrganisationFound.organisationName}>Confirm</button>
+												</div>
 											)}
 										</UserContext.Consumer>
 									</Fragment>
@@ -226,7 +228,7 @@ export class LoginBanner extends Component<PropsType, StateType> {
 							</Fragment>
 						}
 						{this.props.allowOrganisationCodeLogin && !this.props.signInButton && 
-							<p>If you don't have an organisation code, <a href={this.props.signInURL} title="Sign in to your NICE account">sign in to your NICE account.</a></p>
+							<Fragment>If you don't have an organisation code, <a href={this.props.signInURL} title="Sign in to your NICE account">sign in to your NICE account.</a>&nbsp;&nbsp;</Fragment>
 						}
 						{!this.props.allowOrganisationCodeLogin && 
 							<Fragment>
