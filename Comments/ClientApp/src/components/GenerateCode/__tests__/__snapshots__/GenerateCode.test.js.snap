@@ -24,9 +24,6 @@ exports[`GenerateCode should match snapshot with code having been generated 1`] 
     >
       Generate code
     </h2>
-    <p>
-      Select an organisation
-    </p>
     <div
       className="organisation-codes__row"
     >
@@ -82,9 +79,6 @@ exports[`GenerateCode should match snapshot with no code having been generated 1
     >
       Generate code
     </h2>
-    <p>
-      Select an organisation
-    </p>
     <div
       className="organisation-codes__row"
     >
