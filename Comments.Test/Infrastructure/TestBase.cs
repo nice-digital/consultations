@@ -132,7 +132,7 @@ namespace Comments.Test.Infrastructure
 			_consultationService = new FakeConsultationService();
 	        _useRealSubmitService = useRealSubmitService;
 	        _fakeEncryption = new FakeEncryption();
-			var featureDictionary = new System.Collections.Generic.Dictionary<string, bool> { { Constants.Features.OrganisationalCommenting, enableOrganisationalCommentingFeature } };
+			var featureDictionary = new Dictionary<string, bool> { { Constants.Features.OrganisationalCommenting, enableOrganisationalCommentingFeature } };
 			_fakeFeatureManager = new FakeFeatureManager(featureDictionary);
 	        _fakeSessionManager = new FakeSessionManager(featureDictionary);
 
@@ -166,16 +166,10 @@ namespace Comments.Test.Infrastructure
 					services.TryAddTransient<IUserService>(provider => _fakeUserService);
                     services.TryAddTransient<IFeedReaderService>(provider => new FeedReader(FeedToUse));
                     services.TryAddScoped<IAPIService>(provider => _fakeApiService);
-					//services.TryAddSingleton<IFeatureManager>
-
+					
 					services.AddSingleton<IFeatureManager>(provider => _fakeFeatureManager);
 					services.AddSingleton<ISessionManager>(provider => _fakeSessionManager);
 					
-					//services.AddAuthentication();
-
-					//services.Decorate<IAPIService, FakeAPIService>();
-					//services.Decorate<IAPIService>(provider => _fakeApiService);
-
 					if (!_useRealSubmitService)
 	                {
 						services.TryAddTransient<ISubmitService>(provider => new FakeSubmitService());
@@ -189,10 +183,7 @@ namespace Comments.Test.Infrastructure
 	                {
 		                services.AddMvc(opt => opt.Filters.Add(new AllowAnonymousFilter())); //bypass authentication
 	                }
-
-	                //services.AddFeatureManagement();
-					
-				})
+                })
                 .Configure(app =>
                 {
                     app.UseStaticFiles();

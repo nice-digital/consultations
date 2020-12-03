@@ -16,13 +16,11 @@ namespace Comments.Controllers.Api
 	public class OrganisationController : ControllerBase
     {
 	    private readonly IOrganisationService _organisationService;
-        private readonly ILogger<OrganisationController> _logger;
 
         public OrganisationController(IOrganisationService organisationService, ILogger<OrganisationController> logger)
         {
 
 	        _organisationService = organisationService;
-	        _logger = logger;
         }
 
 		/// <summary>

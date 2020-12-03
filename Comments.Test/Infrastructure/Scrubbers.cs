@@ -61,7 +61,7 @@ namespace Comments.Test.Infrastructure
 
 	    public static string ScrubOrganisationAuthorisationId(string str)
 	    {
-			return Regex.Replace(str, @"""organisationAuthorisationId"":(\d+)", @"""organisationAuthorisationId"":""scrubbed by ScrubUserId""");
+			return Regex.Replace(str, @"""organisationAuthorisationId"":(\d+)", @"""organisationAuthorisationId"":""scrubbed by ScrubOrganisationAuthorisationId""");
 		}
 
 		public static string ScrubStackTraceString(string str)
