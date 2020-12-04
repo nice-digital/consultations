@@ -3,6 +3,7 @@ $nice-font-base-path: "/consultations/fonts/";
 
 @import "nice-design-system";
 @import "nice-icons";
+//@import "~@nice-digital/nds-alert/scss/alert.scss";
 
  // Design System Overrides
 @import "./components/StackedNav/StackedNav";

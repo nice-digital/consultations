@@ -1,7 +1,7 @@
 // @flow
 
 import React from "react";
-import Cookies from "js-cookie";
+//import Cookies from "js-cookie";
 import { withRouter } from "react-router";
 
 import { load } from "../data/loader";
@@ -46,32 +46,46 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 		const isServerSideRender = (this.props.staticContext && this.props.staticContext.preload);
 		const preloadSource = isServerSideRender ? this.props.staticContext.preload.data : window.__PRELOADED__; // TODO: extract this preloaded line out to (or near) the preload endpoint method.
 
-		const userSessionParameters = this.getUserSessionParameters();
-		console.log("User session parameters 1: " + JSON.stringify(userSessionParameters));
+		//const userSessionParameters = this.getUserSessionParameters();
+		const consultationId = this.getConsultationId();
+
+		console.log("cookie is:" + JSON.stringify(preloadSource?.cookies));
+
+
+		var cookieString = preloadSource.cookies || ""; //this function only ever executes client-side. 
+
+		var sessionCookieExistsForThisConsultation =  (cookieString.indexOf(`ConsultationSession-${consultationId}`) !== -1);
+ 
+
 		let isOrganisationCommenter = false;
 		let organisationName = null;
+		let isAuthorised = preloadSource ? preloadSource.isAuthorised : false;
 
-		console.log("before the if statement")
-		if (userSessionParameters.sessionId){
-			console.log("User session parameters 2: " + JSON.stringify(userSessionParameters));
-				const preloadedUserSessionData = preload(
-				this.props.staticContext,
-				"checkorganisationusersession",
-				[],
-				{
-					consultationId: userSessionParameters.consultationId,
-					sessionId: userSessionParameters.sessionId,
-				},
-				preloadSource
-			)
-			console.log("Preloaded user session data: " + JSON.stringify(preloadedUserSessionData))
-			isOrganisationCommenter = preloadedUserSessionData.valid;
-			organisationName = preloadedUserSessionData.organisationName;
+		console.log("before the if statement: " + sessionCookieExistsForThisConsultation);
+
+
+		if (sessionCookieExistsForThisConsultation){
+			//console.log("User session parameters 2: " + JSON.stringify(userSessionParameters));
+			const preloadedUserSessionData = preload(
+					this.props.staticContext,
+					"checkorganisationusersession",
+					[],
+					{
+						consultationId: consultationId,
+					},
+					preloadSource
+				);
+			
+			if (preloadedUserSessionData){
+				isOrganisationCommenter = preloadedUserSessionData.valid;
+				isAuthorised = isAuthorised || preloadedUserSessionData.valid ; //you could be authorised by idam or by organisation session cookie.
+				organisationName = preloadedUserSessionData.organisationName;
+			}
 		};
 
 		if (preloadSource){
 			this.state = {
-				isAuthorised: preloadSource.isAuthorised,
+				isAuthorised,
 				isOrganisationCommenter: isOrganisationCommenter,
 				displayName: preloadSource.displayName,
 				signInURL: preloadSource.signInURL,
@@ -96,9 +110,11 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 
 
 	loadUser = (returnURL) => {
+		console.log("load user");
 		this.checkSessionId()
 		.then(data => {
-			if (data.validityAndOrganisationName.valid === true) {
+			console.log("load user:" + JSON.stringify(data.validityAndOrganisationName));
+			if (data.validityAndOrganisationName?.valid === true) {
 				this.setStateForValidSessionCookie(data.validityAndOrganisationName.organisationName);
 			}
 			else{
@@ -141,16 +157,22 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 
 	checkSessionId = async () => {
 
-		const userSessionParameters = this.getUserSessionParameters();
-		if (!userSessionParameters.sessionId)
+		//const userSessionParameters = this.getUserSessionParameters();
+		const consultationId = this.getConsultationId();
+
+		var cookieString = window.__PRELOADED__.cookies || ""; //this function only ever executes client-side. 
+
+		var sessionCookieExistsForThisConsultation =  (cookieString.indexOf(`ConsultationSession-${consultationId}`) !== -1);
+
+		if (!sessionCookieExistsForThisConsultation)
 			return await {validityAndOrganisationName: {valid: false}};
+
 		const validityAndOrganisationName = load(
 			"checkorganisationusersession",
 			undefined,
 			[],
 			{
-				consultationId: userSessionParameters.consultationId,
-				sessionId: userSessionParameters.sessionId,
+				consultationId: consultationId,
 			})
 			.then(response => response.data)
 			.catch(err => {
@@ -161,12 +183,12 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 		};
 	}
 
-	getUserSessionParameters = () => {
-		const consultationId = this.getConsultationId();
-		const sessionId = Cookies.get(`ConsultationSession-${consultationId}`);
-		console.log("Session id: " + sessionId);
-		return {consultationId, sessionId};
-	}
+	// getUserSessionParameters = () => {
+	// 	const consultationId = this.getConsultationId();
+	// 	const sessionId = Cookies.get(`ConsultationSession-${consultationId}`);
+	// 	console.log("Session id: " + sessionId);
+	// 	return {consultationId, sessionId};
+	// }
 
 
 	//a child component can call this method to update the context in case a session cookie has been set.
@@ -182,7 +204,10 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 	// fire when route changes
 
 	componentDidMount() {
+		console.log("CDM");
 		if(!this.state.initialDataLoaded){
+
+			console.log("CDM: initial data not loaded");
 			this.loadUser(this.props.location.pathname); //this is currently only needed as the sign in url isn't right on SSR. TODO: fix SSR.
 		}
 	}
