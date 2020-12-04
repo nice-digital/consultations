@@ -11,8 +11,11 @@ const preload = (staticContext, endpoint,  urlParameters = [], query = {}, prelo
 	// Client - get data from global var
 	if (typeof window !== "undefined") {
 		if (!window.__PRELOADED__) return null;
+		console.log("The end point is: " + endpoint);
+		console.log(JSON.stringify(window.__PRELOADED__));
 		data = window.__PRELOADED__[endpoint];
 		delete window.__PRELOADED__[endpoint]; //this is deleted since the preloaded data should only be used on the initial page render and not persist beyond that
+		console.log("Data being returned because type of window is not undefined: " + JSON.stringify(data));
 		return data;
 	}
 
@@ -24,6 +27,7 @@ const preload = (staticContext, endpoint,  urlParameters = [], query = {}, prelo
 
 	// Data with that key already preloaded on the server
 	if (staticContext.preload.data[endpoint]) {
+		console.log("Data being returned because data with that key is already preloaded on the server");
 		return staticContext.preload.data[endpoint];
 	}
 	let cookies = "";
@@ -34,9 +38,12 @@ const preload = (staticContext, endpoint,  urlParameters = [], query = {}, prelo
 	const promise = load(endpoint, staticContext.baseUrl, urlParameters, query,  method, content, isJson, cookies, headers)
 		.then(response => {
 			staticContext.preload.data[endpoint] = response.data;
+			console.log("The endpoint from the promise: " + endpoint);
+			console.log("The response data: " + JSON.stringify(response.data));
 			return response.data;
 		})
 		.catch(err => {
+			console.log("we've hit the catch");
 			if (throwOnException){
 				// todo: no pages loading on dev / alpha poss to do with the footer erroring...?
 				 throw new Error(err);

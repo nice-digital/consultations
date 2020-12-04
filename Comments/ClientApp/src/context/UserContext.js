@@ -2,9 +2,10 @@
 
 import React from "react";
 import Cookies from "js-cookie";
+import { withRouter } from "react-router";
 
 import { load } from "../data/loader";
-import { withRouter } from "react-router";
+import preload from "../data/pre-loader";
 
 export const UserContext = React.createContext({
 	updateContext: () => {}
@@ -24,6 +25,7 @@ type StateType = {
 	signInURL: string,
 	registerURL: string,
 	organisationName: string,
+	initialDataLoaded: boolean,
 };
 
 export class UserProvider extends React.Component<PropsType, StateType> {
@@ -38,20 +40,45 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 			registerURL: "",
 			updateContext: this.updateContext,
 			organisationName: null,
+			initialDataLoaded: false,
 		};
 
 		const isServerSideRender = (this.props.staticContext && this.props.staticContext.preload);
 		const preloadSource = isServerSideRender ? this.props.staticContext.preload.data : window.__PRELOADED__; // TODO: extract this preloaded line out to (or near) the preload endpoint method.
 
+		const userSessionParameters = this.getUserSessionParameters();
+		console.log("User session parameters 1: " + JSON.stringify(userSessionParameters));
+		let isOrganisationCommenter = false;
+		let organisationName = null;
+
+		console.log("before the if statement")
+		if (userSessionParameters.sessionId){
+			console.log("User session parameters 2: " + JSON.stringify(userSessionParameters));
+				const preloadedUserSessionData = preload(
+				this.props.staticContext,
+				"checkorganisationusersession",
+				[],
+				{
+					consultationId: userSessionParameters.consultationId,
+					sessionId: userSessionParameters.sessionId,
+				},
+				preloadSource
+			)
+			console.log("Preloaded user session data: " + JSON.stringify(preloadedUserSessionData))
+			isOrganisationCommenter = preloadedUserSessionData.valid;
+			organisationName = preloadedUserSessionData.organisationName;
+		};
+
 		if (preloadSource){
 			this.state = {
 				isAuthorised: preloadSource.isAuthorised,
-				isOrganisationCommenter: false,
+				isOrganisationCommenter: isOrganisationCommenter,
 				displayName: preloadSource.displayName,
 				signInURL: preloadSource.signInURL,
 				registerURL: preloadSource.registerURL,
 				updateContext: this.updateContext,
-				organisationName: null,
+				organisationName: organisationName,
+				initialDataLoaded: true,
 			};
 			if (this.props.staticContext) {
 				this.props.staticContext.analyticsGlobals.isSignedIn = preloadSource.isAuthorised;
@@ -114,21 +141,16 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 
 	checkSessionId = async () => {
 
-		const consultationId = this.getConsultationId();
-		if (!consultationId)
+		const userSessionParameters = this.getUserSessionParameters();
+		if (!userSessionParameters.sessionId)
 			return await {validityAndOrganisationName: {valid: false}};
-
-		const sessionId = Cookies.get(`ConsultationSession-${consultationId}`);
-		if (!sessionId)
-			return await {validityAndOrganisationName: {valid: false}};
-
 		const validityAndOrganisationName = load(
 			"checkorganisationusersession",
 			undefined,
 			[],
 			{
-				consultationId: consultationId,
-				sessionId: sessionId,
+				consultationId: userSessionParameters.consultationId,
+				sessionId: userSessionParameters.sessionId,
 			})
 			.then(response => response.data)
 			.catch(err => {
@@ -137,6 +159,13 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 		return {
 			validityAndOrganisationName: await validityAndOrganisationName,
 		};
+	}
+
+	getUserSessionParameters = () => {
+		const consultationId = this.getConsultationId();
+		const sessionId = Cookies.get(`ConsultationSession-${consultationId}`);
+		console.log("Session id: " + sessionId);
+		return {consultationId, sessionId};
 	}
 
 
@@ -153,7 +182,9 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 	// fire when route changes
 
 	componentDidMount() {
-		this.loadUser(this.props.location.pathname); //this is currently only needed as the sign in url isn't right on SSR. TODO: fix SSR.
+		if(!this.state.initialDataLoaded){
+			this.loadUser(this.props.location.pathname); //this is currently only needed as the sign in url isn't right on SSR. TODO: fix SSR.
+		}
 	}
 
 	render() {
