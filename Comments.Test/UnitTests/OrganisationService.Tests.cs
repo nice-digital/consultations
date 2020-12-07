@@ -29,7 +29,7 @@ namespace Comments.Test.UnitTests
 			const int organisationId = 1;
 
 			var userService = new StubUserService(new User(isAuthorised: true, displayName: "Carl Spackler",
-				userId: "001", new List<Organisation>() {new Organisation(organisationId, "Bushwood Country Club", isLead: false)})); 
+				userId: "001", new List<Organisation>() {new Organisation(organisationId, "Bushwood Country Club", isLead: false)}, organisationUserId: null)); 
 
 			using (var consultationsContext = new ConsultationsContext(_options, userService, _fakeEncryption))
 			{
@@ -50,7 +50,7 @@ namespace Comments.Test.UnitTests
 			const int consultationId = 1;
 
 			var userService = new StubUserService(new User(isAuthorised: true, displayName: "Carl Spackler",
-				userId: "001", new List<Organisation>() { new Organisation(organisationId, "Bushwood Country Club", isLead: true) }));
+				userId: "001", new List<Organisation>() { new Organisation(organisationId, "Bushwood Country Club", isLead: true) }, organisationUserId: null));
 
 			using (var context = new ConsultationsContext(_options, userService, _fakeEncryption))
 			{
@@ -105,7 +105,7 @@ namespace Comments.Test.UnitTests
 			const int consultationId = 1;
 
 			var userService = new StubUserService(new User(isAuthorised: true, displayName: "Carl Spackler",
-				userId: "001", new List<Organisation> { new Organisation(organisationId, "Bushwood Country Club", isLead: true) }));
+				userId: "001", new List<Organisation> { new Organisation(organisationId, "Bushwood Country Club", isLead: true) }, organisationUserId: null));
 
 			using (var context = new ConsultationsContext(_options, userService, _fakeEncryption))
 			{

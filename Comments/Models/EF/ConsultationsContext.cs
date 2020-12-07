@@ -32,6 +32,7 @@ namespace Comments.Models
 		public virtual DbQuery<SubmittedCommentsAndAnswerCount> SubmittedCommentsAndAnswerCounts { get; set; }
 
 		private string _createdByUserID;
+		private int? _organisationUserID;
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -139,7 +140,8 @@ namespace Comments.Models
 
 				//JW. automatically filter out deleted rows and other people's comments. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
 				//note: only 1 filter is supported. you must combine the logic into one expression.
-				entity.HasQueryFilter(c => c.CreatedByUserId == _createdByUserID);
+				entity.HasQueryFilter(c => (c.CreatedByUserId != null && _createdByUserID != null && c.CreatedByUserId == _createdByUserID));
+				                           //|| (_organisationUserID.HasValue && c.OrganisationUserId.HasValue && c.OrganisationUserId == _organisationUserID));
 			});
 
             modelBuilder.Entity<Location>(entity =>

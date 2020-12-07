@@ -267,31 +267,33 @@ namespace Comments.Test.UnitTests
 
 
 
-		//[Fact]
-		//   public void CommentsAndAnswers_ReturnAllOwnCommentsAndAnswersForConsultation()
-		//   {
-		//    //Arrange
-		//    ResetDatabase();
-		//    var userId = Guid.NewGuid().ToString();
-		//    var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
-		//    var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-		//    var authenticateService = new FakeAuthenticateService(authenticated: true);
-		//    var consultationId = 1;
-		//    var consultationContext = new ConsultationsContext(_options, userService);
+        [Fact]
+        public void Only_own_Comments_returned_when_has_organisation_session_cookie()
+        {
+	        // Arrange
+	        ResetDatabase();
+	        _context.Database.EnsureCreated();
 
-		//	var commentService = new CommentService(new ConsultationsContext(_options, userService), userService, authenticateService);
+	        var sessionId = Guid.NewGuid();
+	        var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+	        const int organisationUserId = 1;
 
-		//    AddCommentsAndQuestionsAndAnswers(sourceURI, "Comment Label 1", "Question Label 1", "Answer Label 1", userId, StatusName.Draft, consultationContext);
-		//    AddCommentsAndQuestionsAndAnswers(sourceURI, "Comment Label 2", "Question Label 2", "Answer Label 2", userId, StatusName.Draft, consultationContext);
-		//    AddCommentsAndQuestionsAndAnswers(sourceURI, "Someone elses Comment Label", "Question Label 2", "Someone elese Answer Label ", Guid.NewGuid().ToString(), StatusName.Draft, consultationContext);
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: null, organisationUserId: organisationUserId);
+	        var context = new ConsultationsContext(_options, userService, _fakeEncryption);
+	        var commentService = new CommentService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService, _fakeHttpContextAccessor);
+	        var locationId = AddLocation(sourceURI);
 
-		//	//Act
-		//	var result = commentService.GetCommentsAndAnswers(sourceURI , true);
+	        var expectedCommentId = AddComment(locationId, "current user's comment", createdByUserId: null, organisationUserId: organisationUserId);
+	        AddComment(locationId, "another user's comment logged in using auth", createdByUserId: Guid.NewGuid().ToString());
+	        AddComment(locationId, "another user's comment logged in with cookie", createdByUserId: null, organisationUserId: 9999);
 
-		//	//Assert
-		//	result.Answers.Count().ShouldBe(2);
-		//	result.Comments.Count().ShouldBe(2);
-		//   }
+			// Act
+			var viewModel = commentService.GetCommentsAndQuestions("consultations://./consultation/1/document/1/chapter/introduction", _urlHelper);
+
+	        //Assert
+	        viewModel.Comments.Single().CommentId.ShouldBe(expectedCommentId);
+        }
 	}
 }
+
 

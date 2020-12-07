@@ -5,7 +5,7 @@ namespace Comments.ViewModels
     public class SignInDetails : User
     {
 	    public SignInDetails(User user, string signInURL, string registerURL)
-		    : base(user.IsAuthorised, user.DisplayName, user.UserId, user.OrganisationsAssignedAsLead)
+		    : base(user.IsAuthorised, user.DisplayName, user.UserId, user.OrganisationsAssignedAsLead, user.OrganisationUserId)
 	    {
 		    SignInURL = signInURL;
 		    RegisterURL = registerURL;

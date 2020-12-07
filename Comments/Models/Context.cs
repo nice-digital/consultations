@@ -36,7 +36,9 @@ namespace Comments.Models
 		{
 			_encryption = encryption;
 			_userService = userService;
-			_createdByUserID = _userService.GetCurrentUser().UserId;
+			var currentUserInThisScope = _userService.GetCurrentUser(); //this dbcontext's service lifetime is scoped, i.e. new for every request.
+			_createdByUserID = currentUserInThisScope.UserId;
+			_organisationUserID = currentUserInThisScope.OrganisationUserId;
 		}
 
 		/// <summary>

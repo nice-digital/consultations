@@ -43,7 +43,9 @@ namespace Comments.ViewModels
 				{
 					foreach (var (cookieKey, cookieValue) in cookies)
 					{
-						if (int.TryParse(cookieKey.Substring(Constants.SessionCookieName.Length), out var consultationId) && Guid.TryParse(cookieValue, out var sessionId))
+						if (int.TryParse(cookieKey.Substring(Constants.SessionCookieName.Length), out var consultationId)
+						    && Guid.TryParse(cookieValue, out var sessionId)
+							&& !sessions.ContainsKey(consultationId))
 						{
 							sessions.Add(consultationId, sessionId);
 						}

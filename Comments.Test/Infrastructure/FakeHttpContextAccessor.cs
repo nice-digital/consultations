@@ -17,7 +17,7 @@ namespace Comments.Test.Infrastructure
     public static class FakeHttpContextAccessor
     {
 	    private static string AuthenticationTokenExtensions_TokenKeyPrefix = ".Token.";
-		public static IHttpContextAccessor Get(bool isAuthenticated, string displayName = null, string userId = null, TestUserType testUserType = TestUserType.NotAuthenticated, bool addRoleClaim = true)
+		public static IHttpContextAccessor Get(bool isAuthenticated, string displayName = null, string userId = null, TestUserType testUserType = TestUserType.NotAuthenticated, bool addRoleClaim = true, int? organisationUserId = null)
         {
 	        var context = new Mock<HttpContext>();
 	        var roleIssuer = "www.example.com"; //the issuer of the role is the domain for which the role is setup.
@@ -28,12 +28,20 @@ namespace Comments.Test.Infrastructure
 				var claims = new List<Claim>
                 {
                     new Claim(ClaimType.DisplayName, displayName, null, AuthenticationConstants.IdAMIssuer),
-                    new Claim(ClaimType.NameIdentifier, userId.ToString(), null, AuthenticationConstants.IdAMIssuer),
-					new Claim(ClaimType.Organisations, JsonConvert.SerializeObject(new List<Organisation>(){ new Organisation(1, "NICE", true)}), "www.nice.org.uk", AuthenticationConstants.IdAMIssuer)
+                    new Claim(ClaimType.Organisations, JsonConvert.SerializeObject(new List<Organisation>(){ new Organisation(1, "NICE", true)}), "www.nice.org.uk", AuthenticationConstants.IdAMIssuer)
                 };
+				if (userId != null)
+				{
+					claims.Add(new Claim(ClaimType.NameIdentifier, userId.ToString(), null, AuthenticationConstants.IdAMIssuer));
+				}
 				if (addRoleClaim)
 				{
 					claims.Add(new Claim(ClaimType.Role, "IndevUser", null, roleIssuer));
+				}
+
+				if (organisationUserId.HasValue)
+				{
+					claims.Add(new Claim("OrganisationUserId", organisationUserId.Value.ToString(), null, "Comments Issuer"));
 				}
 
 				switch (testUserType)
