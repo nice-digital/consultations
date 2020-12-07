@@ -288,7 +288,7 @@ namespace Comments.Test.UnitTests
 	        AddComment(locationId, "another user's comment logged in with cookie", createdByUserId: null, organisationUserId: 9999);
 
 			// Act
-			var viewModel = commentService.GetCommentsAndQuestions("consultations://./consultation/1/document/1/chapter/introduction", _urlHelper);
+			var viewModel = commentService.GetCommentsAndQuestions("/1/1/introduction", _urlHelper);
 
 	        //Assert
 	        viewModel.Comments.Single().CommentId.ShouldBe(expectedCommentId);

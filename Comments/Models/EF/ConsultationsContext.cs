@@ -138,10 +138,10 @@ namespace Comments.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Comment_Status");
 
-				//JW. automatically filter out deleted rows and other people's comments. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
+				//JW. automatically filter out other people's comments. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
 				//note: only 1 filter is supported. you must combine the logic into one expression.
-				entity.HasQueryFilter(c => (c.CreatedByUserId != null && _createdByUserID != null && c.CreatedByUserId == _createdByUserID));
-				                           //|| (_organisationUserID.HasValue && c.OrganisationUserId.HasValue && c.OrganisationUserId == _organisationUserID));
+				entity.HasQueryFilter(c => (c.CreatedByUserId != null && _createdByUserID != null && c.CreatedByUserId == _createdByUserID)
+				                           || (_organisationUserID.HasValue && c.OrganisationUserId.HasValue && c.OrganisationUserId == _organisationUserID));
 			});
 
             modelBuilder.Entity<Location>(entity =>
