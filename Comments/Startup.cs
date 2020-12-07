@@ -272,7 +272,7 @@ namespace Comments
                     options.SupplyData = async (httpContext, data) =>
                     {
                         data["isHttpsRequest"] = httpContext.Request.IsHttps;
-                        var cookiesForSSR = httpContext.Request.Cookies.Where(cookie => cookie.Key.StartsWith(AuthenticationConstants.CookieName) || cookie.Key.StartsWith("ConsultationSession")).ToList();
+                        var cookiesForSSR = httpContext.Request.Cookies.Where(cookie => cookie.Key.StartsWith(AuthenticationConstants.CookieName) || cookie.Key.StartsWith(Constants.SessionCookieName)).ToList();
                         if (cookiesForSSR.Any())
                         {
                             data["cookies"] = $"{string.Join("; ", cookiesForSSR.Select(cookie => $"{cookie.Key}={cookie.Value}"))};";
