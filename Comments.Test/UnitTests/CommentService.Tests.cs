@@ -268,7 +268,7 @@ namespace Comments.Test.UnitTests
 
 
         [Fact]
-        public void Only_own_Comments_returned_when_has_organisation_session_cookie()
+        public void Only_own_Comments_returned_for_comment_list_when_has_organisation_session_cookie_exists()
         {
 	        // Arrange
 	        ResetDatabase();

@@ -116,7 +116,7 @@ namespace Comments.Test.Infrastructure
 		/// <param name="submittedCommentsAndAnswerCounts"></param>
 		/// <param name="bypassAuthentication"></param>
 		public TestBase(bool useRealSubmitService = false, TestUserType testUserType = TestUserType.Authenticated, bool useFakeConsultationService = false, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null,
-			bool bypassAuthentication = true, bool addRoleClaim = true, bool enableOrganisationalCommentingFeature = false)
+			bool bypassAuthentication = true, bool addRoleClaim = true, bool enableOrganisationalCommentingFeature = false, Dictionary<int, Guid> validSessions = null)
         {
 	        if (testUserType == TestUserType.NotAuthenticated)
 	        {
@@ -152,6 +152,11 @@ namespace Comments.Test.Infrastructure
 			}
 
             _context.Database.EnsureCreatedAsync();
+
+            if (validSessions != null)
+            {
+	            AddSessions(ref _context, validSessions);
+            }
 
 			var builder = new WebHostBuilder()
                 .UseContentRoot("../../../../Comments")
@@ -216,7 +221,27 @@ namespace Comments.Test.Infrastructure
             };
         }
 
-        #region database stuff
+		private void AddSessions(ref ConsultationsContext context, Dictionary<int, Guid> validSessions)
+		{
+			foreach (var session in validSessions)
+			{
+				var sourceURI = ConsultationsUri.CreateConsultationURI(session.Key);
+
+				var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
+				context.Location.Add(location);
+				context.SaveChanges();
+
+				var organisationAuthorisation = new OrganisationAuthorisation("Carl Spackler", DateTime.UtcNow, 1, location.LocationId, "123412341234");
+				context.OrganisationAuthorisation.Add(organisationAuthorisation);
+				context.SaveChanges();
+
+				var organisationUser = new OrganisationUser(organisationAuthorisation.OrganisationAuthorisationId, session.Value, DateTime.MaxValue);
+				context.OrganisationUser.Add(organisationUser);
+				context.SaveChanges();
+			}
+		}
+
+		#region database stuff
 
         protected void ResetDatabase()
         {

@@ -8,7 +8,7 @@ namespace Comments.Controllers.Api
 {
     [Produces("application/json")]
     [Route("consultations/api/[controller]")]
-    [Authorize] //organisational comment needs this removed. - todo: make this conditional on the feature flag somehow.
+    [Authorize] //todo: make this conditional on the feature flag somehow.
     public class CommentController : ControllerBase
     {
         private readonly ICommentService _commentService;
