@@ -44,28 +44,31 @@ export class GenerateCodeForOrg extends Component<GenerateCodeForOrgProps, Gener
 	};
 
 	generateCode = () => {
-		this.setState({ isLoading: true });
-
-		load("generateOrganisationCode", undefined, [], {
-				organisationId: this.props.organisationId,
-				consultationId: this.props.consultationId
-			}, "POST", {}, true)
-			.then(response => {
-				this.setState({
-					generatedCollationCode: response.data.collationCode,
-					showGenerateButton: response.data.canGenerateCollationCode
-				})
-			})
-			.catch(err => {
-				this.setState({
-					error: {
-						hasError: true,
-						message: "generateCodeForOrg error  " + err
-					},
-				});
-			});
-
-		this.setState({ isLoading: false })
+		this.setState({
+				isLoading: true
+			}, async () => {
+				await load("organisation", undefined, [], {
+						organisationId: this.props.organisationId,
+						consultationId: this.props.consultationId
+					}, "POST", {}, true)
+					.then(response => {
+						this.setState({
+							generatedCollationCode: response.data.collationCode,
+							showGenerateButton: response.data.canGenerateCollationCode,
+							isLoading: false
+						})
+					})
+					.catch(err => {
+						this.setState({
+							error: {
+								hasError: true,
+								message: "generateCodeForOrg error  " + err,
+							},
+							isLoading: false
+						});
+					});
+			}
+		);
 	};
 
 	showCopiedLabel = () => {
@@ -108,6 +111,6 @@ export class GenerateCodeForOrg extends Component<GenerateCodeForOrgProps, Gener
 					)}
 				</div>
 			</div>
-		)
-	}
-}
+		);
+	};
+};

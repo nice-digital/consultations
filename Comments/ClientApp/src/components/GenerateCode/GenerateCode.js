@@ -5,8 +5,16 @@ import { GenerateCodeForOrg } from "../GenerateCodeForOrg/GenerateCodeForOrg";
 
 import { Button } from "@nice-digital/nds-button";
 
+type organisationCodeProps = {
+	organisationAuthorisationId: number,
+	organisationId: number,
+	organisationName: string,
+	canGenerateCollationCode: boolean,
+	collationCode: string
+};
+
 type GenerateCodeProps = {
-	organisationCodes: Array,
+	organisationCodes: Array<organisationCodeProps>,
 	consultationId: number
 };
 
@@ -44,7 +52,9 @@ export class GenerateCode extends Component<GenerateCodeProps, GenerateCodeState
 				{showCodeGenerators && (
 					<div className="panel organisation-codes mv--b" id={`organisation-codes-${consultationId}`}>
 						<h2 className="h5">Generate code</h2>
-						<p>Select an organisation</p>
+						{organisationCodes.length > 1 && (
+							<p>Select an organisation</p>
+						)}
 						{organisationCodes.map((item, index) =>
 							<GenerateCodeForOrg key={index} {...item} consultationId={consultationId} />
 						)}

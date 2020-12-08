@@ -1,5 +1,5 @@
 ﻿{
-    "organisationAuthorisationId":"scrubbed by ScrubUserId",
+    "organisationAuthorisationId":"scrubbed by ScrubOrganisationAuthorisationId",
     "organisationId":1,
     "organisationName":"NICE",
     "canGenerateCollationCode":false,

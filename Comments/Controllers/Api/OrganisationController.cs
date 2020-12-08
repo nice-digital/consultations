@@ -17,13 +17,11 @@ namespace Comments.Controllers.Api
 	public class OrganisationController : ControllerBase
     {
 	    private readonly IOrganisationService _organisationService;
-        private readonly ILogger<OrganisationController> _logger;
 
         public OrganisationController(IOrganisationService organisationService, ILogger<OrganisationController> logger)
         {
 
 	        _organisationService = organisationService;
-	        _logger = logger;
         }
 
 		/// <summary>
@@ -106,11 +104,11 @@ namespace Comments.Controllers.Api
 		private static void ValidateCollationCode(string collationCode)
 		{
 			if (string.IsNullOrEmpty(collationCode))
-				throw new ArgumentException("Collation code cannot be null or empty string.", nameof(collationCode));
+				throw new ArgumentException("Organisation code field is empty. Please enter a code.", nameof(collationCode)); //the front-end _should_ prevent this ever occurring.
 
 			var regex = new Regex(Constants.CollationCode.RegExSpacesRemoved);
 			if (!regex.IsMatch(collationCode.Replace(" ", "")))
-				throw new ArgumentException("Collation code is not correct format.");
+				throw new ArgumentException("Incorrect code format. Verify the code with your organisation's commenting lead and try again.");
 		}
 
 		/// <summary>
