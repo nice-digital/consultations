@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[ClientApp]  LoginBanner Component should match snapshot. no querystring 1`] = `
+<div
+  className="panel panel-white mt--0 mb--0 sign-in-banner"
+  data-qa-sel="sign-in-banner"
+>
+  <div
+    className="container"
+  >
+    <div
+      className="LoginBanner"
+    >
+      <a
+        href="/signin-url"
+        title="Sign in to your NICE account"
+      >
+        Sign in to your NICE account
+      </a>
+       
+      signin text
+      .
+       
+      <p>
+        <a
+          className="btn"
+          href="/signin-url"
+          title="Sign in to your NICE account"
+        >
+          Sign in
+        </a>
+      </p>
+      Don't have an account?
+       
+      <a
+        href="/register-url"
+        title="Register for a NICE account"
+      >
+        Register
+      </a>
+    </div>
+  </div>
+</div>
+`;

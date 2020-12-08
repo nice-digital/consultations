@@ -1,25 +1,26 @@
-﻿
-<!DOCTYPE html>
-
-<html>
-<head>
-	<link rel="stylesheet" href="/consultations/styles/main.css" />
-	<link href="//fonts.googleapis.com/css?family=Lato:400,700,900" rel="stylesheet" type="text/css">
-	<meta name="viewport" content="width=device-width" />
-	<title></title>
-	<script src="//a-fake-cookiebannerscript-url"></script>
-</head>
-<body>
-	<div>
-		
-<main role="main">
-	<div class="container">
-		<div class="panel page-header">
-			<h1 class="heading mt--c">Something's gone wrong</h1>
-			<p class="lead">We'll look into it right away. Please try again in a few minutes. And if it's still not fixed, <a href="/get-involved/contact-us">contact us</a>.</p>
-			<p><a href="/guidance/inconsultation">Back to consultations</a></p>
-			<div class="hide">
-					"Error Message":"scrubbed by ScrubErrorMessage"
-	<script></script>
-</body>
-</html>
+﻿{
+    "requestedPath":"/consultations/api/Consultation",
+    "errorException":{
+        "ClassName":"System.ArgumentException",
+        "Message":"consultationId",
+        "Data":null,
+        "InnerException":null,
+        "HelpURL":null,
+        "StackTraceString":"scrubbed by ScrubStackTraceString",
+        "RemoteStackTraceString":null,
+        "RemoteStackIndex":0,
+        "ExceptionMethod":null,
+        "HResult":-2147024809,
+        "Source":"Comments",
+        "WatsonBuckets":null,
+        "ParamName":null
+    },
+    "isAuthenticated":true,
+    "accountsEnvironment":"live",
+    "globalNavScript":null,
+    "globalNavScriptIE8":null,
+    "linkText":"Sign out",
+    "linkURL":"/consultations/account/logout",
+    "displayName":"",
+    "cookieBannerScript":"//a-fake-cookiebannerscript-url"
+}

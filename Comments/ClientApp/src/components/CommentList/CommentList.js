@@ -21,10 +21,11 @@ import { tagManager } from "../../helpers/tag-manager";
 
 import { CommentBox } from "../CommentBox/CommentBox";
 import { Question } from "../Question/Question";
-import { LoginBanner } from "../LoginBanner/LoginBanner";
+import LoginBannerWithRouter from "../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
 
 import { createQuestionPdf } from '../QuestionView/QuestionViewDocument';
+import { canUseDOM } from "../../helpers/utils";
 
 type PropsType = {
 	staticContext?: any,
@@ -37,6 +38,7 @@ type PropsType = {
 		search: string
 	},
 	announceAssertive: Function,
+	getTitleFunction: Function,
 };
 
 type StateType = {
@@ -53,8 +55,8 @@ type StateType = {
 	shouldShowQuestionsTab: boolean,
 	error: string,
 	unsavedIds: Array<number>,
-	consultationData: ConsultationStateType, // the top level info - title etc
 	endDate: string,
+	enableOrganisationalCommentingFeature: boolean,
 };
 
 export class CommentList extends Component<PropsType, StateType> {
@@ -74,14 +76,17 @@ export class CommentList extends Component<PropsType, StateType> {
 			shouldShowCommentsTab: false,
 			shouldShowQuestionsTab: false,
 			unsavedIds: [],
-			consultationData: null,
 			endDate: "",
+			enableOrganisationalCommentingFeature: false
 		};
 
 		let preloadedData = {};
+		
 		if (this.props.staticContext && this.props.staticContext.preload) {
 			preloadedData = this.props.staticContext.preload.data; //this is data from Configure => SupplyData in Startup.cs. the main thing it contains for this call is the cookie for the current user.
 		}
+
+		const enableOrganisationalCommentingFeature = ((preloadedData && preloadedData.organisationalCommentingFeature) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["organisationalCommentingFeature"]));
 
 		const preloadedCommentsData = preload(
 			this.props.staticContext,
@@ -89,14 +94,6 @@ export class CommentList extends Component<PropsType, StateType> {
 			[],
 			{sourceURI: this.props.match.url},
 			preloadedData
-		);
-
-		const preloadedConsultation = preload(
-			this.props.staticContext,
-			"consultation",
-			[],
-			{consultationId: this.props.match.params.consultationId, isReview: false},
-			preloadedData,
 		);
 
 		if (preloadedCommentsData) {
@@ -115,8 +112,8 @@ export class CommentList extends Component<PropsType, StateType> {
 				drawerOpen: false,
 				drawerMobile: false,
 				unsavedIds: [],
-				consultationData: preloadedConsultation,
 				endDate: preloadedCommentsData.consultationState.endDate,
+				enableOrganisationalCommentingFeature,
 			};
 		}
 	}
@@ -139,32 +136,9 @@ export class CommentList extends Component<PropsType, StateType> {
 			.catch(err => console.log("load comments in commentlist " + err));
 	}
 
-	loadConsultation = async () => {
-		const {consultationId} = this.props.match.params;
-
-		const consultationData = load("consultation", undefined, [], {
-			consultationId,
-			isReview: false,
-		})
-			.then(response => {
-				this.setState({
-					consultationData: response.data
-				})
-			})
-			.catch(err => {
-				this.setState({
-					error: "consultationData " + err,
-				});
-			});
-
-
-	};
-
-
 	componentDidMount() {
 		if (!this.state.initialDataLoaded) {
 			this.loadComments();
-			this.loadConsultation();
 		}
 		// We can't prerender whether we're on mobile cos SSR doesn't have a window
 		this.setState({
@@ -261,6 +235,7 @@ export class CommentList extends Component<PropsType, StateType> {
 	};
 
 	handleClick = (event: string) => {
+
 		switch (event) {
 			case "toggleOpenComments":
 				this.setState(prevState => {
@@ -304,7 +279,7 @@ export class CommentList extends Component<PropsType, StateType> {
 
 			case "createQuestionPDF":
 				const questionsForPDF = this.state.questions;
-				const titleForPDF = this.state.consultationData.title;
+				const titleForPDF = this.props.getTitleFunction();
 				const endDate = this.state.endDate;
 				createQuestionPdf(questionsForPDF, titleForPDF, endDate);
 				break;
@@ -443,12 +418,12 @@ export class CommentList extends Component<PropsType, StateType> {
 														}
 													</div>
 												) : (
-													<LoginBanner
+													<LoginBannerWithRouter
 														signInButton={true}
 														currentURL={this.props.match.url}
 														signInURL={contextValue.signInURL}
 														registerURL={contextValue.registerURL}
-
+														allowOrganisationCodeLogin={this.state.enableOrganisationalCommentingFeature}
 													/>
 												)}
 

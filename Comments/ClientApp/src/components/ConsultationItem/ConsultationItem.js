@@ -4,6 +4,8 @@ import React, { Component, Fragment } from "react";
 import Moment from "react-moment";
 import { Link } from "react-router-dom";
 
+import { GenerateCode } from "../GenerateCode/GenerateCode";
+
 type StateType = {}
 
 type PropsType = {
@@ -21,8 +23,11 @@ type PropsType = {
 	isOpen: boolean,
 	isClosed: boolean,
 	isUpcoming: boolean,
+	organisationCodes: Array,
+	showShareWithOrganisationButton: boolean,
 	show: boolean,
 	basename: string,
+	allowGenerateOrganisationCode: boolean
 }
 
 export class ConsultationItem extends Component<PropsType, StateType> {
@@ -44,6 +49,9 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 			isOpen,
 			isClosed,
 			isUpcoming,
+			organisationCodes,
+			showShareWithOrganisationButton,
+			allowGenerateOrganisationCode
 		} = this.props;
 
 		const status = (isOpen, isClosed, isUpcoming) => {
@@ -124,10 +132,13 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 							</div>
 						}
 					</dl>
+					{showShareWithOrganisationButton && allowGenerateOrganisationCode &&
+						<GenerateCode organisationCodes={organisationCodes} consultationId={consultationId} />
+					}
 				</article>
 			</li>
 		);
-	}
-}
+	};
+};
 
 export default ConsultationItem;

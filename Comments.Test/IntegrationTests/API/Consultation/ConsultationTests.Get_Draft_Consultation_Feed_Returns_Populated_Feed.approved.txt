@@ -20,7 +20,13 @@
         "isAuthorised":true,
         "displayName":"Benjamin Button",
         "userId":"00000000-0000-0000-0000-000000000000",
-        "organisationName":null
+        "organisationsAssignedAsLead":[
+            {
+                "organisationId":1,
+                "organisationName":"NICE",
+                "isLead":true
+            }
+        ]
     },
     "consultationState":{
         "startDate":"2018-04-01T00:00:00",

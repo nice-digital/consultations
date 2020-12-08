@@ -8,7 +8,7 @@ namespace Comments.Controllers.Api
 {
     [Produces("application/json")]
     [Route("consultations/api/[controller]")]
-    [Authorize]
+    [Authorize] //organisational comment needs this removed. - todo: make this conditional on the feature flag somehow.
     public class CommentController : ControllerBase
     {
         private readonly ICommentService _commentService;
@@ -37,8 +37,8 @@ namespace Comments.Controllers.Api
 
         // PUT: consultations/api/Comment/5
         [HttpPut("{commentId}")]
-        public IActionResult PutComment([FromRoute] int commentId, [FromBody] ViewModels.Comment comment)
-        {
+        public IActionResult PutComment([FromRoute] int commentId, [FromBody] ViewModels.Comment comment, Session session)  //todo: use the session
+		{
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -57,7 +57,7 @@ namespace Comments.Controllers.Api
 
         // POST: consultations/api/Comment
         [HttpPost("")]
-        public IActionResult PostComment([FromBody] ViewModels.Comment comment)
+        public IActionResult PostComment([FromBody] ViewModels.Comment comment, Session session) //todo: use the session
         {
             if (!ModelState.IsValid)
             {

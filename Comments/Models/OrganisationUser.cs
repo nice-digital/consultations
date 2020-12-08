@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Comments.Models
 {
@@ -9,8 +6,13 @@ namespace Comments.Models
 	{
 		public OrganisationUser() //Just for EF
 		{
-			Answer = new HashSet<Answer>();
-			Comment = new HashSet<Comment>();
+		}
+
+		public OrganisationUser(int organisationAuthorisationId, Guid authorisationSession, DateTime expirationDate)
+		{
+			OrganisationAuthorisationId = organisationAuthorisationId;
+			AuthorisationSession = authorisationSession;
+			ExpirationDate = expirationDate;
 		}
 	}
 }

@@ -33,11 +33,11 @@ namespace Comments.Models
 		//}
 
 		public ConsultationsContext(DbContextOptions options, IUserService userService, IEncryption encryption) : base(options)
-        {
-	        _encryption = encryption;
-	        _userService = userService;
-            _createdByUserID = _userService.GetCurrentUser().UserId;
-        }
+		{
+			_encryption = encryption;
+			_userService = userService;
+			_createdByUserID = _userService.GetCurrentUser().UserId;
+		}
 
 		/// <summary>
 		/// It's not obvious from this code, but this it actually filtering on more than it looks like. There's global filters defined in the context, specifically
@@ -786,5 +786,82 @@ namespace Comments.Models
 			var answerSourceURIsAndStatus = answers.Select(answer => new KeyValuePair<string, Status>(answer.Question.Location.SourceURI, answer.Status));
 			return commentSourceURIsAndStatus.Concat(answerSourceURIsAndStatus);
 		}
-	}
+
+		public IEnumerable<OrganisationAuthorisation> GetOrganisationAuthorisations(IList<string> consultationSourceURIs)
+		{
+			var organisationAuthorisations = OrganisationAuthorisation
+				.Include(oa => oa.Location)
+				.Where(oa => consultationSourceURIs.Contains(oa.Location.SourceURI, StringComparer.OrdinalIgnoreCase))
+				.ToList();
+
+			return organisationAuthorisations;
+		}
+
+		public OrganisationAuthorisation GetOrganisationAuthorisationByCollationCode(string collationCode)
+		{
+			collationCode = collationCode.Replace(" ", "");
+
+			var organisationAuthorisations = OrganisationAuthorisation
+				.Include(oa => oa.Location)
+				.Where(oa => oa.CollationCode.Equals(collationCode))
+				.ToList();
+
+			return organisationAuthorisations.FirstOrDefault(); //there should only be 1 with a given collation code.
+		}
+
+		public OrganisationAuthorisation SaveCollationCode(string sourceURI, string createdByUserId, DateTime createdDate, int organisationId, string collationCode)
+		{
+			collationCode = collationCode.Replace(" ", "");
+
+			var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
+			Location.Add(location);
+			SaveChanges();
+			var organisationAuthorisation = new OrganisationAuthorisation(createdByUserId, createdDate, organisationId, location.LocationId, collationCode);
+			OrganisationAuthorisation.Add(organisationAuthorisation);
+			SaveChanges();
+			return organisationAuthorisation;
+		}
+
+		public OrganisationUser CreateOrganisationUser(int organisationAuthorisationID, Guid authorisationSession, DateTime expirationDate)
+		{
+			var organisationUser = new OrganisationUser(organisationAuthorisationID, authorisationSession, expirationDate);
+			OrganisationUser.Add(organisationUser);
+			SaveChanges();
+			return organisationUser;
+		}
+
+		public OrganisationUser GetOrganisationUser(Guid sessionId)
+		{
+			return
+				OrganisationUser
+				.Include(ou => ou.OrganisationAuthorisation).
+					ThenInclude(a => a.Location)
+				.FirstOrDefault(ou => ou.AuthorisationSession.Equals(sessionId));
+		}
+
+		public bool AreCommentsForThisOrganisation(IEnumerable<int> commentIds, int organisationId)
+		{
+			var comments = Comment
+				.Include(c => c.OrganisationUser)
+					.ThenInclude(ou => ou.OrganisationAuthorisation)
+				.IgnoreQueryFilters()
+				.Where(c => commentIds.Contains(c.CommentId)).ToList();
+
+			return comments.Where(c => c.OrganisationUser?.OrganisationAuthorisation != null)
+				.Any(c => c.OrganisationUser.OrganisationAuthorisation.OrganisationId.Equals(organisationId));
+		}
+
+		public bool AreAnswersForThisOrganisation(List<int> answerIds, int organisationId)
+		{
+			var answers = Answer
+				.Include(a => a.OrganisationUser)
+					.ThenInclude(ou => ou.OrganisationAuthorisation)
+				.IgnoreQueryFilters()
+				.Where(a => answerIds.Contains(a.AnswerId)).ToList();
+
+			return answers.Where(c => c.OrganisationUser?.OrganisationAuthorisation != null)
+				.Any(c => c.OrganisationUser.OrganisationAuthorisation.OrganisationId.Equals(organisationId));
+
+		}
+    }
 }

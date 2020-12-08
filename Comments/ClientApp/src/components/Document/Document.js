@@ -12,12 +12,13 @@ import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
 import { tagManager } from "../../helpers/tag-manager";
 import { ProcessDocumentHtml } from "../../document-processing/ProcessDocumentHtml";
-import { LoginBanner } from "./../LoginBanner/LoginBanner";
+import LoginBannerWithRouter from "./../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
 import { Selection } from "../Selection/Selection";
 import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
 import { Header } from "../Header/Header";
 import { Tutorial } from "../Tutorial/Tutorial";
+import { canUseDOM } from "../../helpers/utils";
 
 type PropsType = {
 	staticContext: {
@@ -44,6 +45,7 @@ type StateType = {
 	},
 	allowComments: boolean,
 	error: ErrorType,
+	enableOrganisationalCommentingFeature: boolean
 };
 
 type DocumentsType = Array<Object>;
@@ -66,16 +68,19 @@ export class Document extends Component<PropsType, StateType> {
 				hasError: false,
 				message: null,
 			},
+			enableOrganisationalCommentingFeature: false,
 		};
 
 		if (this.props) {
 
 			let preloadedChapter, preloadedDocuments, preloadedConsultation;
-
+			
 			let preloadedData = {};
 			if (this.props.staticContext && this.props.staticContext.preload) {
 				preloadedData = this.props.staticContext.preload.data; //this is data from Configure => SupplyData in Startup.cs. the main thing it contains for this call is the cookie for the current user.
 			}
+
+			const enableOrganisationalCommentingFeature = ((preloadedData && preloadedData.organisationalCommentingFeature) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["organisationalCommentingFeature"]));
 
 			preloadedChapter = preload(
 				this.props.staticContext,
@@ -129,9 +134,14 @@ export class Document extends Component<PropsType, StateType> {
 						hasError: false,
 						message: null,
 					},
+					enableOrganisationalCommentingFeature,
 				};
 			}
 		}
+	}
+
+	getDocumentTitle = () => {
+		return this.state.consultationData.title;
 	}
 
 	getChapterData = (params: Object) => {
@@ -429,10 +439,11 @@ export class Document extends Component<PropsType, StateType> {
 				</Helmet>
 				<UserContext.Consumer>
 					{(contextValue: any) => !contextValue.isAuthorised ?
-						<LoginBanner signInButton={false}
+						<LoginBannerWithRouter signInButton={false}
 												 currentURL={this.props.match.url}
 												 signInURL={contextValue.signInURL}
-												 registerURL={contextValue.registerURL}/>
+												 registerURL={contextValue.registerURL}
+												 allowOrganisationCodeLogin={this.state.enableOrganisationalCommentingFeature}/>
 						: /* if contextValue.isAuthorised... */ null}
 				</UserContext.Consumer>
 				{ this.state.allowComments &&
