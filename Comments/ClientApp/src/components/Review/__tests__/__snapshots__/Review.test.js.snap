@@ -111,19 +111,30 @@ Array [
                 <div
                   className="mb--d"
                 >
-                  <p>
-                    <span
-                      className="tag tag--open"
-                    >
-                      Open for comments
+                  <p
+                    className="container container-full ml--0"
+                  >
+                    <span>
+                      <span
+                        className="tag tag--open"
+                      >
+                        Open for comments
+                      </span>
+                       Open until
+                       
+                      <time
+                        dateTime={"2029-05-31T16:00:00.000Z"}
+                      >
+                        31 May 2029
+                      </time>
                     </span>
-                     Open until
-                     
-                    <time
-                      dateTime={"2029-05-31T16:00:00.000Z"}
+                      
+                    <a
+                      href="/leadinformation"
+                      onClick={[Function]}
                     >
-                      31 May 2029
-                    </time>
+                      Request commenting lead permission
+                    </a>
                   </p>
                 </div>,
                 "",
@@ -769,19 +780,30 @@ Array [
                 <div
                   className="mb--d"
                 >
-                  <p>
-                    <span
-                      className="tag tag--open"
-                    >
-                      Open for comments
+                  <p
+                    className="container container-full ml--0"
+                  >
+                    <span>
+                      <span
+                        className="tag tag--open"
+                      >
+                        Open for comments
+                      </span>
+                       Open until
+                       
+                      <time
+                        dateTime={"2029-05-31T16:00:00.000Z"}
+                      >
+                        31 May 2029
+                      </time>
                     </span>
-                     Open until
-                     
-                    <time
-                      dateTime={"2029-05-31T16:00:00.000Z"}
+                      
+                    <a
+                      href="/leadinformation"
+                      onClick={[Function]}
                     >
-                      31 May 2029
-                    </time>
+                      Request commenting lead permission
+                    </a>
                   </p>
                 </div>,
                 <p>
