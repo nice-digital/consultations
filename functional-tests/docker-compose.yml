@@ -106,6 +106,7 @@ services:
       - TEAMROLES1
       - TEAMROLES2
       - TEAMROLES3
+      - ORGCOMENTING
 
   # MS SQL Server database
   database:
