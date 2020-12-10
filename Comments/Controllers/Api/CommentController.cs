@@ -1,14 +1,16 @@
+using Comments.Common;
 using Comments.Services;
 using Comments.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NICE.Identity.Authentication.Sdk.Domain;
 
 namespace Comments.Controllers.Api
 {
     [Produces("application/json")]
     [Route("consultations/api/[controller]")]
-    [Authorize] //todo: make this conditional on the feature flag somehow.
+    [Authorize(AuthenticationSchemes = AuthenticationConstants.AuthenticationScheme + "," + OrganisationCookieAuthenticationOptions.DefaultScheme)] //todo: make this conditional on the feature flag somehow.
     public class CommentController : ControllerBase
     {
         private readonly ICommentService _commentService;
@@ -22,7 +24,7 @@ namespace Comments.Controllers.Api
 
         // GET: consultations/api/Comment/5 
         [HttpGet("{commentId}")]
-        public IActionResult GetComment([FromRoute] int commentId)
+        public IActionResult GetComment([FromRoute] int commentId, Session session)
         {
             if (!ModelState.IsValid)
             {
@@ -72,7 +74,7 @@ namespace Comments.Controllers.Api
 
         // DELETE: consultations/api/Comment/5
         [HttpDelete("{commentId}")]
-        public IActionResult DeleteComment([FromRoute] int commentId)
+        public IActionResult DeleteComment([FromRoute] int commentId, Session session)
         {
             if (!ModelState.IsValid)
             {

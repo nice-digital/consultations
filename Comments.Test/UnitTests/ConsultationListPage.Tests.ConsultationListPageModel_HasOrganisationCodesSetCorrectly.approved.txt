@@ -148,7 +148,9 @@
         "IsAuthorised":true,
         "DisplayName":"Benjamin Button",
         "UserId":"scrubbed by ScrubUserId",
-        "OrganisationUserId":null,
+        "OrganisationUserIds":[
+            
+        ],
         "OrganisationsAssignedAsLead":[
             {
                 "OrganisationId":1,

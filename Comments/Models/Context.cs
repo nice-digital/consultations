@@ -38,7 +38,7 @@ namespace Comments.Models
 			_userService = userService;
 			var currentUserInThisScope = _userService.GetCurrentUser(); //this dbcontext's service lifetime is scoped, i.e. new for every request.
 			_createdByUserID = currentUserInThisScope.UserId;
-			_organisationUserID = currentUserInThisScope.OrganisationUserId;
+			_organisationUserIDs = currentUserInThisScope.OrganisationUserIds;
 		}
 
 		/// <summary>
@@ -834,12 +834,18 @@ namespace Comments.Models
 
 		public OrganisationUser GetOrganisationUser(Guid sessionId)
 		{
+			return GetOrganisationUsers(new List<Guid> {sessionId}).FirstOrDefault();
+		}
+
+		public IEnumerable<OrganisationUser> GetOrganisationUsers(IEnumerable<Guid> sessionIds)
+		{
 			return
 				OrganisationUser
-				.Include(ou => ou.OrganisationAuthorisation).
+					.Include(ou => ou.OrganisationAuthorisation).
 					ThenInclude(a => a.Location)
-				.FirstOrDefault(ou => ou.AuthorisationSession.Equals(sessionId));
+					.Where(ou => sessionIds.Contains(ou.AuthorisationSession));
 		}
+
 
 		public bool AreCommentsForThisOrganisation(IEnumerable<int> commentIds, int organisationId)
 		{

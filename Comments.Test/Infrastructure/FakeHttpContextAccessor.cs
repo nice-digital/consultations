@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Comments.Common;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Http.Internal;
@@ -41,7 +42,7 @@ namespace Comments.Test.Infrastructure
 
 				if (organisationUserId.HasValue)
 				{
-					claims.Add(new Claim("OrganisationUserId", organisationUserId.Value.ToString(), null, "Comments Issuer"));
+					claims.Add(new Claim(Constants.OrgansationAuthentication.OrganisationUserIdsCSVClaim, organisationUserId.Value.ToString(), null, Constants.OrgansationAuthentication.Issuer));
 				}
 
 				switch (testUserType)

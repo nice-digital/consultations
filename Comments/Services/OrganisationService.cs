@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using DocumentFormat.OpenXml.Vml.Spreadsheet;
 using Comment = Comments.Models.Comment;
 
 namespace Comments.Services
@@ -20,6 +21,7 @@ namespace Comments.Services
 		Task<OrganisationCode> CheckValidCodeForConsultation(string collationCode, int consultationId);
 		(Guid sessionId, DateTime expirationDate) CreateOrganisationUserSession(int organisationAuthorisationId, string collationCode);
 		bool CheckOrganisationUserSession(int consultationId, Guid sessionId);
+		IEnumerable<(bool valid, int consultationId, Guid session, int? organisationUserId)> CheckValidCodesForConsultation(Session unvalidatedSessions);
 	}
 
     public class OrganisationService : IOrganisationService
@@ -155,7 +157,7 @@ namespace Comments.Services
 		public (Guid sessionId, DateTime expirationDate) CreateOrganisationUserSession(int organisationAuthorisationId, string collationCode)
 		{
 			var organisationAuthorisationForSuppliedCollationCode = _context.GetOrganisationAuthorisationByCollationCode(collationCode);
-			if (!organisationAuthorisationForSuppliedCollationCode.OrganisationAuthorisationId.Equals(organisationAuthorisationId))
+			if (organisationAuthorisationForSuppliedCollationCode == null || !organisationAuthorisationForSuppliedCollationCode.OrganisationAuthorisationId.Equals(organisationAuthorisationId))
 				throw new ApplicationException($"Supplied collation code: {collationCode} is not valid for the supplied organisation authorisation id:{organisationAuthorisationId}");
 
 			var consultationDetails = _consultationService.GetConsultationState(organisationAuthorisationForSuppliedCollationCode.Location.SourceURI, PreviewState.NonPreview);
@@ -167,19 +169,31 @@ namespace Comments.Services
 
 		public bool CheckOrganisationUserSession(int consultationId, Guid sessionId)
 		{
-			var organisationUser = _context.GetOrganisationUser(sessionId);
+			var validatedSession = CheckValidCodesForConsultation(new Session(new Dictionary<int, Guid>() {{consultationId, sessionId}})).FirstOrDefault();
+			
+			return validatedSession.valid;
+		}
 
-			if (organisationUser == null)
-				return false;
+		public IEnumerable<(bool valid, int consultationId, Guid session, int? organisationUserId)> CheckValidCodesForConsultation(Session unvalidatedSessions)
+		{
+			var organisationUsers = _context.GetOrganisationUsers(unvalidatedSessions.SessionCookies.Select(session => session.Value)).ToList();
 
-			if (organisationUser.ExpirationDate < DateTime.UtcNow) 
-				return false;
-
-			var parsedUri = ConsultationsUri.ParseConsultationsUri(organisationUser.OrganisationAuthorisation.Location.SourceURI);
-			if (!parsedUri.ConsultationId.Equals(consultationId))
-				return false;
-
-			return true;
+			return unvalidatedSessions.SessionCookies.Select(session =>
+			{
+				var valid = false;
+				int? organisationUserId = null;
+				var organisationUserForThisSession = organisationUsers.FirstOrDefault(ou => ou.AuthorisationSession.Equals(session.Value));
+				if (organisationUserForThisSession != null && organisationUserForThisSession.ExpirationDate > DateTime.UtcNow)
+				{
+					var parsedUri = ConsultationsUri.ParseConsultationsUri(organisationUserForThisSession.OrganisationAuthorisation.Location.SourceURI);
+					if (parsedUri.ConsultationId.Equals(session.Key))
+					{
+						valid = true;
+						organisationUserId = organisationUserForThisSession.OrganisationUserId;
+					}
+				}
+				return (valid, consultationId: session.Key, session: session.Value, organisationUserId: organisationUserId);
+			});
 		}
 	}
 }

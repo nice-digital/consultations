@@ -9,7 +9,7 @@ namespace Comments.ViewModels
 	{
 		public DownloadUser() {}
 
-		public DownloadUser(bool isAdminUser, bool isTeamUser, User user, List<string> teamNames) : base(user.IsAuthorised, user.DisplayName, user.UserId, user.OrganisationsAssignedAsLead, user.OrganisationUserId)
+		public DownloadUser(bool isAdminUser, bool isTeamUser, User user, List<string> teamNames) : base(user.IsAuthorised, user.DisplayName, user.UserId, user.OrganisationsAssignedAsLead, user.OrganisationUserIds)
 		{
 			IsAdminUser = isAdminUser;
 			IsTeamUser = isTeamUser;

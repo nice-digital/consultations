@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Text.RegularExpressions;
 using Comments.Configuration;
@@ -115,13 +116,45 @@ namespace Comments.Common
 
 		    return roleList.Where(role => AppSettings.ConsultationListConfig.DownloadRoles.AllRoles.Contains(role));
 	    }
-
-	    
-
+		
 	    public static long ToJavaScriptTicksSinceEpoch(this DateTime datetime)
 	    {
 			var javascriptEpochTicks = (new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).Ticks; //c#'s date epoch is MinDate, whereas js is 1-1-1970
 		    return (datetime.ToUniversalTime().Ticks - javascriptEpochTicks) / 10000;
+	    }
+
+	    public static Dictionary<int, Guid> GetSessionCookies(this IRequestCookieCollection requestCookies)
+	    {
+		    var sessions = new Dictionary<int, Guid>();
+			if (requestCookies != null && requestCookies.Count > 0)
+		    {
+			    var cookies = requestCookies.Where(cookie => cookie.Key.StartsWith(Constants.SessionCookieName)).ToList();
+
+			    if (cookies.Any())
+			    {
+				    foreach (var (cookieKey, cookieValue) in cookies)
+				    {
+					    if (int.TryParse(cookieKey.Substring(Constants.SessionCookieName.Length), out var consultationId)
+					        && Guid.TryParse(cookieValue, out var sessionId)
+					        && !sessions.ContainsKey(consultationId))
+					    {
+						    sessions.Add(consultationId, sessionId);
+					    }
+				    }
+			    }
+		    }
+			return sessions;
+	    }
+
+	    public static IEnumerable<int> ValidatedOrganisationUserIds(this ClaimsPrincipal claimsPrincipal)
+	    {
+		    var organisationUserIdsCSV = claimsPrincipal.Claims.FirstOrDefault(claim => claim.Type.Equals(Constants.OrgansationAuthentication.OrganisationUserIdsCSVClaim) && claim.Issuer.Equals(Constants.OrgansationAuthentication.Issuer))?.Value;
+		    if (string.IsNullOrEmpty(organisationUserIdsCSV))
+		    {
+			    return new List<int>();
+		    }
+
+		    return organisationUserIdsCSV.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
 	    }
 	}
 }

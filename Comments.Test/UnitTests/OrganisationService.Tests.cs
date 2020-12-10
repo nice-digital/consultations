@@ -29,7 +29,7 @@ namespace Comments.Test.UnitTests
 			const int organisationId = 1;
 
 			var userService = new StubUserService(new User(isAuthorised: true, displayName: "Carl Spackler",
-				userId: "001", new List<Organisation>() {new Organisation(organisationId, "Bushwood Country Club", isLead: false)}, organisationUserId: null)); 
+				userId: "001", new List<Organisation>() {new Organisation(organisationId, "Bushwood Country Club", isLead: false)}, organisationUserIds: null)); 
 
 			using (var consultationsContext = new ConsultationsContext(_options, userService, _fakeEncryption))
 			{
@@ -50,7 +50,7 @@ namespace Comments.Test.UnitTests
 			const int consultationId = 1;
 
 			var userService = new StubUserService(new User(isAuthorised: true, displayName: "Carl Spackler",
-				userId: "001", new List<Organisation>() { new Organisation(organisationId, "Bushwood Country Club", isLead: true) }, organisationUserId: null));
+				userId: "001", new List<Organisation>() { new Organisation(organisationId, "Bushwood Country Club", isLead: true) }, organisationUserIds: null));
 
 			using (var context = new ConsultationsContext(_options, userService, _fakeEncryption))
 			{
@@ -105,7 +105,7 @@ namespace Comments.Test.UnitTests
 			const int consultationId = 1;
 
 			var userService = new StubUserService(new User(isAuthorised: true, displayName: "Carl Spackler",
-				userId: "001", new List<Organisation> { new Organisation(organisationId, "Bushwood Country Club", isLead: true) }, organisationUserId: null));
+				userId: "001", new List<Organisation> { new Organisation(organisationId, "Bushwood Country Club", isLead: true) }, organisationUserIds: null));
 
 			using (var context = new ConsultationsContext(_options, userService, _fakeEncryption))
 			{
@@ -350,5 +350,41 @@ namespace Comments.Test.UnitTests
 				invalid.ShouldBe(false);
 			}
 		}
+
+		[Fact]
+		public void CheckValidCodeForMultipleSessions()
+		{
+			//Arrange
+			ResetDatabase();
+			_context.Database.EnsureCreated();
+			const string collationCodeInDB = "123412341234";
+			const int organisationId = 1;
+			var consultationId = 1;
+			var mockFactory = new Mock<IHttpClientFactory>();
+			var sessionId = Guid.NewGuid();
+
+			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
+			{
+				var organisationAuthorisationId = AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, collationCode: collationCodeInDB);
+				var serviceUnderTest = new OrganisationService(context, _fakeUserService, new FakeAPITokenService(), _fakeApiService, mockFactory.Object, null);
+				AddOrganisationUser(context, organisationAuthorisationId, sessionId, null);
+
+				var unvalidatedSessions = new Session(new Dictionary<int, Guid>
+				{
+					{consultationId, sessionId},
+					{99, Guid.NewGuid()},
+					{999, sessionId }
+				});
+
+				//Act 
+				var validatedSessions = serviceUnderTest.CheckValidCodesForConsultation(unvalidatedSessions);
+
+				//Assert
+				var validSession = validatedSessions.Single(session => session.valid);
+				validSession.session.Equals(sessionId);
+				validSession.consultationId.Equals(consultationId);
+			}
+		}
+
 	}
 }

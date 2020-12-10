@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Comments.Configuration;
@@ -32,7 +33,8 @@ namespace Comments.Models
 		public virtual DbQuery<SubmittedCommentsAndAnswerCount> SubmittedCommentsAndAnswerCounts { get; set; }
 
 		private string _createdByUserID;
-		private int? _organisationUserID;
+		private IEnumerable<int> _organisationUserIDs;
+//		private IList<int> _OrganisationalLeadOrganisationIDs;
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -141,7 +143,8 @@ namespace Comments.Models
 				//JW. automatically filter out other people's comments. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
 				//note: only 1 filter is supported. you must combine the logic into one expression.
 				entity.HasQueryFilter(c => (c.CreatedByUserId != null && _createdByUserID != null && c.CreatedByUserId == _createdByUserID)
-				                           || (_organisationUserID.HasValue && c.OrganisationUserId.HasValue && c.OrganisationUserId == _organisationUserID));
+				                           || (_organisationUserIDs != null && c.OrganisationUserId.HasValue && _organisationUserIDs.Any(organisationUserID => organisationUserID.Equals(c.OrganisationUserId)))); 
+				                         //  || (c.OrganisationId.HasValue && _OrganisationalLeadOrganisationIDs.Any(orgId => orgId.Equals(c.OrganisationId.Value))));
 			});
 
             modelBuilder.Entity<Location>(entity =>

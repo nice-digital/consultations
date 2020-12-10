@@ -4,6 +4,6 @@
     "isAuthorised":false,
     "displayName":null,
     "userId":null,
-    "organisationUserId":null,
+    "organisationUserIds":null,
     "organisationsAssignedAsLead":null
 }

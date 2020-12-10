@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Comments.ViewModels
@@ -33,25 +32,8 @@ namespace Comments.ViewModels
 			if (request == null)
 				throw new ArgumentNullException(nameof(bindingContext.HttpContext.Request));
 
-			var sessions = new Dictionary<int, Guid>();
+			var sessions = request.Cookies.GetSessionCookies();
 
-			if (request.Cookies != null && request.Cookies.Count > 0)
-			{
-				var cookies = request.Cookies.Where(cookie => cookie.Key.StartsWith(Constants.SessionCookieName)).ToList();
-
-				if (cookies.Any())
-				{
-					foreach (var (cookieKey, cookieValue) in cookies)
-					{
-						if (int.TryParse(cookieKey.Substring(Constants.SessionCookieName.Length), out var consultationId)
-						    && Guid.TryParse(cookieValue, out var sessionId)
-							&& !sessions.ContainsKey(consultationId))
-						{
-							sessions.Add(consultationId, sessionId);
-						}
-					}
-				}
-			}
 			bindingContext.Result = ModelBindingResult.Success(new Session(sessions));
 
 			return Task.CompletedTask;
