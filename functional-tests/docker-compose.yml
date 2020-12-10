@@ -106,6 +106,7 @@ services:
       - TEAMROLES1
       - TEAMROLES2
       - TEAMROLES3
+      - ORG_COMMENTING
 
   # MS SQL Server database
   database:

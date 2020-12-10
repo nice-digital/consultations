@@ -2,9 +2,10 @@
 
 import React from "react";
 import Cookies from "js-cookie";
+import { withRouter } from "react-router";
 
 import { load } from "../data/loader";
-import { withRouter } from "react-router";
+import preload from "../data/pre-loader";
 
 export const UserContext = React.createContext({
 	updateContext: () => {}
@@ -14,15 +15,17 @@ type PropsType = {
 	location: any,
 	children: any,
 	staticContext: any,
-	match: any
+	match: any,
 };
 
 type StateType = {
 	isAuthorised: boolean,
+	isOrganisationCommenter: boolean,
 	displayName: string,
 	signInURL: string,
 	registerURL: string,
-	updateContext: () => void,
+	organisationName: string,
+	initialDataLoaded: boolean,
 };
 
 export class UserProvider extends React.Component<PropsType, StateType> {
@@ -31,22 +34,52 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 
 		this.state = {
 			isAuthorised: false,
+			isOrganisationCommenter: false,
 			displayName: "",
 			signInURL: "",
 			registerURL: "",
 			updateContext: this.updateContext,
+			organisationName: null,
+			initialDataLoaded: false,
 		};
 
 		const isServerSideRender = (this.props.staticContext && this.props.staticContext.preload);
 		const preloadSource = isServerSideRender ? this.props.staticContext.preload.data : window.__PRELOADED__; // TODO: extract this preloaded line out to (or near) the preload endpoint method.
 
+		const userSessionParameters = this.getUserSessionParameters(preloadSource);
+
+		let isOrganisationCommenter = false;
+		let organisationName = null;
+		let isAuthorised = preloadSource ? preloadSource.isAuthorised : false;
+
+		if (userSessionParameters.sessionCookieExistsForThisConsultation){
+			const preloadedUserSessionData = preload(
+					this.props.staticContext,
+					"checkorganisationusersession",
+					[],
+					{
+						consultationId: userSessionParameters.consultationId,
+					},
+					preloadSource
+				);
+
+			if (preloadedUserSessionData){
+				isOrganisationCommenter = preloadedUserSessionData.valid;
+				isAuthorised = isAuthorised || preloadedUserSessionData.valid ; //you could be authorised by idam or by organisation session cookie.
+				organisationName = preloadedUserSessionData.organisationName;
+			}
+		};
+
 		if (preloadSource){
 			this.state = {
-				isAuthorised: preloadSource.isAuthorised,
+				isAuthorised,
+				isOrganisationCommenter: isOrganisationCommenter,
 				displayName: preloadSource.displayName,
 				signInURL: preloadSource.signInURL,
 				registerURL: preloadSource.registerURL,
 				updateContext: this.updateContext,
+				organisationName: organisationName,
+				initialDataLoaded: true,
 			};
 			if (this.props.staticContext) {
 				this.props.staticContext.analyticsGlobals.isSignedIn = preloadSource.isAuthorised;
@@ -54,9 +87,11 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 		}
 	}
 
-	setStateForValidSessionCookie = () => {
+	setStateForValidSessionCookie = (organisationName) => {
 		this.setState({
 			isAuthorised: true,
+			isOrganisationCommenter: true,
+			organisationName,
 		});
 	}
 
@@ -64,8 +99,8 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 	loadUser = (returnURL) => {
 		this.checkSessionId()
 		.then(data => {
-			if (data.valid === true) {
-				this.setStateForValidSessionCookie();
+			if (data.validityAndOrganisationName?.valid === true) {
+				this.setStateForValidSessionCookie(data.validityAndOrganisationName.organisationName);
 			}
 			else{
 				load("user", undefined, [], { returnURL, cachebust: new Date().getTime() })
@@ -87,7 +122,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 				);
 
 			}
-		});		
+		});
 	}
 
 	//unfortunately the context is above the routes, so this.props.match is always null, so we can't pull the consultation id out of there. hence we're falling back to regex.
@@ -99,38 +134,40 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 			return;
 
 		const matches = regex.exec(pathname);
-		if (!matches || matches.length !== 2)		
+		if (!matches || matches.length !== 2)
 			return;
 
 		return matches[1];
 	}
 
 	checkSessionId = async () => {
+		const userSessionParameters = this.getUserSessionParameters(window.__PRELOADED__);
 
-		const consultationId = this.getConsultationId();	
-		if (!consultationId)
-			return await false;
-		
-		const sessionId = Cookies.get(`ConsultationSession-${consultationId}`);
-		if (!sessionId)
-			return await false;
+		if (!userSessionParameters.sessionCookieExistsForThisConsultation)
+			return await {validityAndOrganisationName: {valid: false}};
 
-		const valid = load(
+		const validityAndOrganisationName = load(
 			"checkorganisationusersession",
 			undefined,
 			[],
 			{
-				consultationId: consultationId, 
-				sessionId: sessionId,
+				consultationId: userSessionParameters.consultationId,
 			})
 			.then(response => response.data)
 			.catch(err => {
 				console.log(JSON.stringify(err));
 			});
-
 		return {
-			valid: await valid,
+			validityAndOrganisationName: await validityAndOrganisationName,
 		};
+	}
+
+	getUserSessionParameters = (preloadSource) => {
+		const consultationId = this.getConsultationId();
+		const cookieName = `ConsultationSession-${consultationId}`;
+		const cookieString = preloadSource?.cookies || "";
+		const sessionCookieExistsForThisConsultation =  (Cookies.get(cookieName) || cookieString.indexOf(cookieName) !== -1);
+		return {consultationId, sessionCookieExistsForThisConsultation};
 	}
 
 
@@ -138,14 +175,13 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 	updateContext = () => {
 		this.checkSessionId()
 		.then(data => {
-			if (data.valid === true) {
-				this.setStateForValidSessionCookie();
+			if (data.validityAndOrganisationName.valid === true) {
+				this.setStateForValidSessionCookie(data.validityAndOrganisationName.organisationName);
 			}
 		});
 	}
 
 	// fire when route changes
-
 	componentDidMount() {
 		this.loadUser(this.props.location.pathname); //this is currently only needed as the sign in url isn't right on SSR. TODO: fix SSR.
 	}

@@ -26,6 +26,7 @@ import { UserContext } from "../../context/UserContext";
 
 import { createQuestionPdf } from '../QuestionView/QuestionViewDocument';
 import { canUseDOM } from "../../helpers/utils";
+import { Alert } from '@nice-digital/nds-alert';
 
 type PropsType = {
 	staticContext?: any,
@@ -81,7 +82,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		};
 
 		let preloadedData = {};
-		
+
 		if (this.props.staticContext && this.props.staticContext.preload) {
 			preloadedData = this.props.staticContext.preload.data; //this is data from Configure => SupplyData in Startup.cs. the main thing it contains for this call is the cookie for the current user.
 		}
@@ -386,6 +387,13 @@ export class CommentList extends Component<PropsType, StateType> {
 													Review and submit your response &nbsp;&nbsp;
 													<span className="icon icon--chevron-right" aria-hidden="true" />
 												</Link>
+										}
+
+										{contextValue.isOrganisationCommenter &&
+											<Alert type="info" role="alert">
+												<p>You are commenting on behalf of {contextValue.organisationName}.</p>
+												<p>When you submit your response it will be submitted to the organisational lead at {contextValue.organisationName}.</p>
+											</Alert>
 										}
 
 										{this.state.error !== "" ?
