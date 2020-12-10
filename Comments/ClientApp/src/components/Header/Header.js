@@ -21,10 +21,11 @@ type PropsType = {
 export class Header extends PureComponent<PropsType> {
 
 	render() {
-		const title = this.props.title;
-		const subtitle1 = this.props.subtitle1;
-		const subtitle2 = this.props.subtitle2;
-		const allowRegisterOrganisationLeadLink = this.props.allowRegisterOrganisationLeadLink;
+		const {
+			title,
+			subtitle1,
+			subtitle2,
+			allowRegisterOrganisationLeadLink} = this.props;
 
 		let startDate, endDate, isOpen, notStartedYet;
 
