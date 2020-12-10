@@ -173,12 +173,6 @@ Array [
                     </time>
                   </span>
                     
-                  <a
-                    href="/leadinformation"
-                    onClick={[Function]}
-                  >
-                    Request commenting lead permission
-                  </a>
                 </p>
               </div>,
             ]

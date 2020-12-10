@@ -74,7 +74,7 @@ export class Document extends Component<PropsType, StateType> {
 		if (this.props) {
 
 			let preloadedChapter, preloadedDocuments, preloadedConsultation;
-			
+
 			let preloadedData = {};
 			if (this.props.staticContext && this.props.staticContext.preload) {
 				preloadedData = this.props.staticContext.preload.data; //this is data from Configure => SupplyData in Startup.cs. the main thing it contains for this call is the cookie for the current user.
@@ -462,7 +462,8 @@ export class Document extends Component<PropsType, StateType> {
 									<Header
 										title={currentDocumentTitle}
 										reference={reference}
-										consultationState={this.state.consultationData.consultationState}/>
+										consultationState={this.state.consultationData.consultationState}
+										allowRegisterOrganisationLeadLink={this.state.enableOrganisationalCommentingFeature}/>
 									{this.state.allowComments &&
 									<button
 										data-gtm="comment-on-document-button"

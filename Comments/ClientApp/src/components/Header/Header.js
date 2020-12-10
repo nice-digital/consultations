@@ -15,6 +15,7 @@ type PropsType = {
 		consultationIsOpen: boolean,
 		consultationHasNotStartedYet?: boolean,
 	},
+	allowRegisterOrganisationLeadLink: boolean,
 }
 
 export class Header extends PureComponent<PropsType> {
@@ -23,6 +24,7 @@ export class Header extends PureComponent<PropsType> {
 		const title = this.props.title;
 		const subtitle1 = this.props.subtitle1;
 		const subtitle2 = this.props.subtitle2;
+		const allowRegisterOrganisationLeadLink = this.props.allowRegisterOrganisationLeadLink;
 
 		let startDate, endDate, isOpen, notStartedYet;
 
@@ -61,9 +63,11 @@ export class Header extends PureComponent<PropsType> {
 							</span>
 						}
 						&nbsp;&nbsp;
-						<Link to={"/leadinformation"}>
-							Request commenting lead permission
-						</Link>
+						{allowRegisterOrganisationLeadLink &&
+							<Link to={"/leadinformation"}>
+								Request commenting lead permission
+							</Link>
+						}
 					</p>
 				</div>
 				}
