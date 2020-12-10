@@ -110,13 +110,9 @@ namespace Comments.Test.Infrastructure
 		/// <summary>
 		/// this is the default constructor, albeit with a load of optional parameters.
 		/// </summary>
-		/// <param name="useRealSubmitService"></param>
-		/// <param name="testUserType"></param>
-		/// <param name="useFakeConsultationService"></param>
-		/// <param name="submittedCommentsAndAnswerCounts"></param>
-		/// <param name="bypassAuthentication"></param>
 		public TestBase(bool useRealSubmitService = false, TestUserType testUserType = TestUserType.Authenticated, bool useFakeConsultationService = false, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null,
-			bool bypassAuthentication = true, bool addRoleClaim = true, bool enableOrganisationalCommentingFeature = false, Dictionary<int, Guid> validSessions = null)
+			bool bypassAuthentication = true, bool addRoleClaim = true, bool enableOrganisationalCommentingFeature = false, Dictionary<int, Guid> validSessions = null,
+			bool useRealHttpContextAccessor = false, bool useRealUserService = false)
         {
 	        if (testUserType == TestUserType.NotAuthenticated)
 	        {
@@ -166,9 +162,14 @@ namespace Comments.Test.Infrastructure
 
 					services.TryAddSingleton<ConsultationsContext>(_context);
                     services.TryAddSingleton<ISeriLogger, FakeSerilogger>();
-                    services.TryAddSingleton<IHttpContextAccessor>(provider => _fakeHttpContextAccessor);
-                   
-					services.TryAddTransient<IUserService>(provider => _fakeUserService);
+                    if (!useRealHttpContextAccessor)
+                    {
+	                    services.TryAddSingleton<IHttpContextAccessor>(provider => _fakeHttpContextAccessor);
+                    }
+                    if (!useRealUserService)
+                    {
+	                    services.TryAddTransient<IUserService>(provider => _fakeUserService);
+					}
                     services.TryAddTransient<IFeedReaderService>(provider => new FeedReader(FeedToUse));
                     services.TryAddScoped<IAPIService>(provider => _fakeApiService);
 					

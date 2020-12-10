@@ -18,7 +18,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
 		private static readonly Guid _sessionId = Guid.Parse("11111111-1111-1111-1111-111111111111");
 
 		public CommentUsingOrganisationSessionCookieTests() : base(enableOrganisationalCommentingFeature: true, testUserType: TestUserType.NotAuthenticated,
-			validSessions: new Dictionary<int, Guid>{{1, _sessionId }})
+			validSessions: new Dictionary<int, Guid>{{1, _sessionId }}, useRealUserService: true, useRealHttpContextAccessor: true)
 		{
 		}
 
