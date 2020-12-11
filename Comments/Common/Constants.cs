@@ -51,7 +51,8 @@ namespace Comments.Common
 		
 	    public static class OrgansationAuthentication
 	    {
-		    public const string OrganisationUserIdsCSVClaim = "http://www.nice.org.uk/consultations/claims/organisation-userids";
+		    public const string ConsultationIdsCSVClaim = "http://www.nice.org.uk/consultations/claims/consultation-ids";
+			public const string OrganisationUserIdsCSVClaim = "http://www.nice.org.uk/consultations/claims/organisation-userids";
 		    public const string Issuer = "ConsultationsIssuer";
 	    }
 
