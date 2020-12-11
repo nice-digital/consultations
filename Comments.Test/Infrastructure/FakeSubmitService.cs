@@ -28,5 +28,10 @@ namespace Comments.Test.Infrastructure
 	    {
 		    return new ConsultationState(DateTime.MinValue, DateTime.MaxValue, true, true, true, DateTime.MaxValue, null);
 	    }
-    }
+
+		public (int rowsUpdated, Validate validate) SubmitToLead(Submission submission)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

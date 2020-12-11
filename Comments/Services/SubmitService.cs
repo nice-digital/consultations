@@ -10,6 +10,7 @@ namespace Comments.Services
 	public interface ISubmitService
 	{
 		(int rowsUpdated, Validate validate) Submit(ViewModels.Submission submission);
+		(int rowsUpdated, Validate validate) SubmitToLead(ViewModels.Submission submission);
 	}
 
 	public class SubmitService : ISubmitService
@@ -62,6 +63,39 @@ namespace Comments.Services
 			submission.DurationBetweenFirstCommentOrAnswerSavedAndSubmissionInSeconds = (submissionToSave.SubmissionDateTime - earliestDate).TotalSeconds;
 
 			return (rowsUpdated: _context.SaveChanges(), validate: null);
+		}
+
+		public (int rowsUpdated, Validate validate) SubmitToLead(ViewModels.Submission submission)
+		{
+			// TODO: Validate users cookie
+
+			var anySourceURI = submission.SourceURIs.FirstOrDefault();
+			if (anySourceURI == null)
+				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "Could not find SourceURI"));
+
+			var consultationState = _consultationService.GetConsultationState(anySourceURI, PreviewState.NonPreview);
+
+			if (!consultationState.ConsultationIsOpen)
+				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "Consultation is not open for submissions"));
+
+			var hasSubmitted = _consultationService.GetSubmittedDate(anySourceURI);
+			if (hasSubmitted != null)
+				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "User has already submitted."));
+
+			// TODO: Ask Zanele do we need to save to submission table
+
+			var submittedStatus = _context.GetStatus(StatusName.Submitted);
+
+			UpdateCommentsModelAndDuplicate(submission.Comments, submittedStatus);
+
+			return (rowsUpdated: _context.SaveChanges(), validate: null);
+		}
+
+		private void UpdateCommentsModelAndDuplicate(IList<ViewModels.Comment> comments, Models.Status status)
+		{
+			var commentIds = comments.Select(c => c.CommentId).ToList();
+			_context.UpdateCommentStatus(commentIds, status);
+			_context.DuplicateComment(commentIds);
 		}
 
 		private void UpdateCommentsModel(IList<ViewModels.Comment> comments, Models.Submission submission, Models.Status status)

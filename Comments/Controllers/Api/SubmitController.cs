@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using Comments.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -27,7 +28,7 @@ namespace Comments.Controllers.Api
 		[HttpPost]
 	    public IActionResult Post([FromBody] ViewModels.Submission submission)
 	    {
-			if (!ModelState.IsValid)
+		    if (!ModelState.IsValid)
 			{
 				return BadRequest(ModelState);
 			}
@@ -48,5 +49,30 @@ namespace Comments.Controllers.Api
 
 			return invalidResult ?? Ok(submission); //should return comments and answers, might need submission object too
 	    }
+
+		// POST: consultations/api/submitToLead
+		[HttpPost]
+		[Route("consultations/api/[controller]ToLead")]
+		public IActionResult PostSubmitToLead([FromBody] ViewModels.Submission submission)
+	    {
+		    if (!ModelState.IsValid)
+		    {
+			    return BadRequest(ModelState);
+		    }
+		   
+		    var result = _submitService.SubmitToLead(submission);
+		    var invalidResult = Validate(result.validate, _logger);
+
+		    //just some temporary debug here:
+		    _logger.LogWarning($"submitted using environment: {_hostingEnvironment.EnvironmentName}");
+		    if (_hostingEnvironment.IsProduction())
+		    {
+			    _logger.LogWarning($"submitted a comment in production! environment name: {_hostingEnvironment.EnvironmentName}");
+		    }
+
+		    return invalidResult ?? Ok(submission); //should return comments and answers, might need submission object too
+	    }
 	}
+
+
 }
