@@ -65,6 +65,7 @@ type StateType = {
 	documentTitles: "undefined" | Array<any>,
 	justSubmitted: boolean,
 	path: null | string,
+	emailAddress: string | null
 };
 
 export class Review extends Component<PropsType, StateType> {
@@ -91,6 +92,7 @@ export class Review extends Component<PropsType, StateType> {
 			unsavedIds: [],
 			documentTitles: [],
 			justSubmitted: false,
+			emailAddress: null
 		};
 
 		let preloadedData = {};
@@ -341,6 +343,29 @@ export class Review extends Component<PropsType, StateType> {
 			});
 	};
 
+	submitToOrgLead = () => {
+		const emailAddress = this.state.emailAddress;
+
+		let submission = {
+			emailAddress
+		};
+
+		// load("submitToOrgLead", undefined, [], {}, "POST", submission, true)
+		// 	.then(response => {
+		// 		this.setState({
+		// 			submittedDate: true,
+		// 			validToSubmit: false,
+		// 			allowComments: false,
+		// 			justSubmitted: true,
+		// 		});
+		// 		//this.logStuff();
+		// 	})
+		// 	.catch(err => {
+		// 		console.log(err);
+		// 		//if (err.response) alert(err.response.statusText);
+		// 	});
+	};
+
 	//this validation handler code is going to have to get a bit more advanced when questions are introduced, as it'll be possible
 	//to answer a question on the review page and the submit button should then enable - if the consultation is open + hasn't already been submitted + all the mandatory questions are answered.
 	//(plus there's the whole unsaved changes to deal with. what happens there?)
@@ -570,12 +595,14 @@ export class Review extends Component<PropsType, StateType> {
 																validToSubmit={this.state.validToSubmit}
 																submitConsultation={this.submitConsultation}
 																fieldsChangeHandler={this.fieldsChangeHandler}
+																submitToOrgLead={this.submitToOrgLead}
 																respondingAsOrganisation={this.state.respondingAsOrganisation}
 																organisationName={this.state.organisationName}
 																hasTobaccoLinks={this.state.hasTobaccoLinks}
 																tobaccoDisclosure={this.state.tobaccoDisclosure}
 																showExpressionOfInterestSubmissionQuestion={this.state.consultationData.showExpressionOfInterestSubmissionQuestion}
 																organisationExpressionOfInterest={this.state.organisationExpressionOfInterest}
+																isOrganisationCommenter={contextValue.isOrganisationCommenter}
 															/>
 															}
 														</div>
