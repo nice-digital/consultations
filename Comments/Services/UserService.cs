@@ -94,7 +94,7 @@ namespace Comments.Services
 		    }
 
 		    var currentUser = user ?? GetCurrentUser();
-		    if (!currentUser.IsAuthorised)
+		    if (!currentUser.IsAuthenticated)
 		    {
 			    return new Validate(false, true, false, "User is not authorised");
 		    }

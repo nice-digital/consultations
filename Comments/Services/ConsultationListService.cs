@@ -50,7 +50,7 @@ namespace Comments.Services
 		public async Task<(ConsultationListViewModel consultationListViewModel, Validate validate)> GetConsultationListViewModel(ConsultationListViewModel model)
 		{
 			var currentUser = _userService.GetCurrentUser();
-			if (!currentUser.IsAuthorised)
+			if (!currentUser.IsAuthenticated)
 				return (model, new Validate(valid: false, unauthorised: true));
 
 			var userRoles = _userService.GetUserRoles().ToList();

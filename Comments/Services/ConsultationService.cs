@@ -201,7 +201,7 @@ namespace Comments.Services
 
 		    var currentUser = _userService.GetCurrentUser();
 
-		    if (currentUser.IsAuthorised && !string.IsNullOrEmpty(currentUser.UserId))
+		    if (currentUser.IsAuthenticated && !string.IsNullOrEmpty(currentUser.UserId))
 		    {
 			    locations = locations ?? _context.GetAllCommentsAndQuestionsForDocument(new[] { sourceURI }, partialMatchSourceURI: true);
 		    }
@@ -268,7 +268,7 @@ namespace Comments.Services
 
 		   // var currentUser = _userService.GetCurrentUser();
 
-		   // if (locations == null && currentUser.IsAuthorised && currentUser.UserId.HasValue)
+		   // if (locations == null && currentUser.IsAuthenticated && currentUser.UserId.HasValue)
 		   // {
 			  //  locations = _context.GetAllCommentsAndQuestionsForDocument(new[] { sourceURI }, partialMatchSourceURI: true);
 		   // }
@@ -277,7 +277,7 @@ namespace Comments.Services
 			  //  locations = new List<Models.Location>(0);
 		   // }
 
-		   // var hasSubmitted = currentUser != null && currentUser.IsAuthorised && currentUser.UserId.HasValue ? GetSubmittedDate(sourceURI, currentUser.UserId.Value) : false;
+		   // var hasSubmitted = currentUser != null && currentUser.IsAuthenticated && currentUser.UserId.HasValue ? GetSubmittedDate(sourceURI, currentUser.UserId.Value) : false;
 
 		   // var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);
 

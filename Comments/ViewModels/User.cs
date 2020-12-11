@@ -8,16 +8,16 @@ namespace Comments.ViewModels
     {
 	    public User() {}
 
-	    public User(bool isAuthorised, string displayName, string userId, IEnumerable<Organisation> organisationsAssignedAsLead, IEnumerable<int> organisationUserIds)
+	    public User(bool isAuthenticated, string displayName, string userId, IEnumerable<Organisation> organisationsAssignedAsLead, IEnumerable<int> organisationUserIds)
 		{
-            IsAuthorised = isAuthorised;
+            IsAuthenticated = isAuthenticated;
             DisplayName = displayName;
             UserId = userId;
 	        OrganisationsAssignedAsLead = organisationsAssignedAsLead;
 	        OrganisationUserIds = organisationUserIds;
 		}
 
-        public bool IsAuthorised { get; private set; }
+        public bool IsAuthenticated { get; private set; }
         public string DisplayName { get; private set; }
         public string UserId { get; private set; }
 		public IEnumerable<int> OrganisationUserIds { get; private set; } 

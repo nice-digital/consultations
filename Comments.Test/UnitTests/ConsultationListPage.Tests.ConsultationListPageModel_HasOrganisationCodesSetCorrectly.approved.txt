@@ -145,7 +145,7 @@
         "TeamNames":[
             
         ],
-        "IsAuthorised":true,
+        "IsAuthenticated":true,
         "DisplayName":"Benjamin Button",
         "UserId":"scrubbed by ScrubUserId",
         "OrganisationUserIds":[
