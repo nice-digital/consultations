@@ -136,6 +136,12 @@
         }
     ],
     "User":{
+        "ValidatedOrganisationUserIds":[
+            
+        ],
+        "ValidatedConsultationIds":[
+            
+        ],
         "IsAdminUser":false,
         "IsTeamUser":true,
         "TeamNames":[
@@ -144,9 +150,6 @@
         "IsAuthenticated":true,
         "DisplayName":"Jeffrey Goines",
         "UserId":"00000000-0000-0000-0000-000000000000",
-        "OrganisationUserIds":[
-            
-        ],
         "OrganisationsAssignedAsLead":[
             {
                 "OrganisationId":1,

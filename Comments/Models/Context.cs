@@ -38,7 +38,7 @@ namespace Comments.Models
 			_userService = userService;
 			var currentUserInThisScope = _userService.GetCurrentUser(); //this dbcontext's service lifetime is scoped, i.e. new for every request.
 			_createdByUserID = currentUserInThisScope.UserId;
-			_organisationUserIDs = currentUserInThisScope.OrganisationUserIds;
+			_organisationUserIDs = currentUserInThisScope.ValidatedOrganisationUserIds;
 		}
 
 		/// <summary>

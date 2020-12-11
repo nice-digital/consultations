@@ -41,7 +41,7 @@ namespace Comments.Services
 	    public (ViewModels.Comment comment, Validate validate) GetComment(int commentId)
         {
             if (!_currentUser.IsAuthenticated)
-                return (comment: null, validate: new Validate(valid: false, unauthorised: true, message: $"Not logged in accessing comment id:{commentId}"));
+                return (comment: null, validate: new Validate(valid: false, unauthenticated: true, message: $"Not logged in accessing comment id:{commentId}"));
 
             var commentInDatabase = _context.GetComment(commentId);
 
@@ -49,7 +49,7 @@ namespace Comments.Services
                 return (comment: null, validate: new Validate(valid: false, notFound: true, message: $"Comment id:{commentId} not found trying to get comment for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
 
             if (!commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId, StringComparison.OrdinalIgnoreCase))
-                return (comment: null, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to access comment id: {commentId}, but it's not their comment"));
+                return (comment: null, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to access comment id: {commentId}, but it's not their comment"));
 
             return (comment: new ViewModels.Comment(commentInDatabase.Location, commentInDatabase), validate: null); 
         }
@@ -57,7 +57,7 @@ namespace Comments.Services
         public (int rowsUpdated, Validate validate) EditComment(int commentId, ViewModels.Comment comment)
         {
             if (!_currentUser.IsAuthenticated)
-                return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"Not logged in editing comment id:{commentId}"));
+                return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"Not logged in editing comment id:{commentId}"));
 
             var commentInDatabase = _context.GetComment(commentId);
 
@@ -65,7 +65,7 @@ namespace Comments.Services
                 return (rowsUpdated: 0, validate: new Validate(valid: false, notFound: true, message: $"Comment id:{commentId} not found trying to edit comment for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
 
             if (!commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId, StringComparison.OrdinalIgnoreCase))
-                return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to edit comment id: {commentId}, but it's not their comment"));
+                return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to edit comment id: {commentId}, but it's not their comment"));
 
             comment.LastModifiedByUserId = _currentUser.UserId;
             comment.LastModifiedDate = DateTime.UtcNow;
@@ -76,11 +76,15 @@ namespace Comments.Services
         public (ViewModels.Comment comment, Validate validate) CreateComment(ViewModels.Comment comment)
         {
             if (!_currentUser.IsAuthenticated)
-                return (comment: null, validate: new Validate(valid: false, unauthorised: true, message: "Not logged in creating comment"));
+                return (comment: null, validate: new Validate(valid: false, unauthenticated: true, message: "Not logged in creating comment"));
 
+            var sourceURI = ConsultationsUri.ConvertToConsultationsUri(comment.SourceURI, CommentOnHelpers.GetCommentOn(comment.CommentOn));
 
-			var sourceURI = ConsultationsUri.ConvertToConsultationsUri(comment.SourceURI, CommentOnHelpers.GetCommentOn(comment.CommentOn));
-	        comment.Order = UpdateOrderWithSourceURI(comment.Order, sourceURI);
+			var consultationId = ConsultationsUri.ParseConsultationsUri(sourceURI).ConsultationId;
+			if (!_currentUser.IsAuthorisedByConsultationId(consultationId))
+				return (comment: null, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: "Not authorised to create comment on this consultation"));
+
+			comment.Order = UpdateOrderWithSourceURI(comment.Order, sourceURI);
 	        var locationToSave = new Models.Location(comment as ViewModels.Location)
 	        {
 		        SourceURI = sourceURI
@@ -98,7 +102,7 @@ namespace Comments.Services
         public (int rowsUpdated, Validate validate) DeleteComment(int commentId)
         {
             if (!_currentUser.IsAuthenticated)
-                return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"Not logged in deleting comment id:{commentId}"));
+                return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"Not logged in deleting comment id:{commentId}"));
 
             var commentInDatabase = _context.GetComment(commentId);
 
@@ -106,7 +110,7 @@ namespace Comments.Services
                 return (rowsUpdated: 0, validate: new Validate(valid: false, notFound: true, message: $"Comment id:{commentId} not found trying to delete comment for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
 
             if (!commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId))
-                return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to delete comment id: {commentId}, but it's not their comment"));
+                return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to delete comment id: {commentId}, but it's not their comment"));
 
 			_context.Comment.Remove(commentInDatabase);
 			

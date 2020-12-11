@@ -100,6 +100,12 @@
     ],
     "teamFilter":null,
     "user":{
+        "validatedOrganisationUserIds":[
+            
+        ],
+        "validatedConsultationIds":[
+            
+        ],
         "isAdminUser":true,
         "isTeamUser":false,
         "teamNames":[
@@ -108,9 +114,6 @@
         "isAuthenticated":true,
         "displayName":"Benjamin Button",
         "userId":"00000000-0000-0000-0000-000000000000",
-        "organisationUserIds":[
-            
-        ],
         "organisationsAssignedAsLead":[
             {
                 "organisationId":1,

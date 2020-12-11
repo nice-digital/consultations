@@ -51,7 +51,7 @@ namespace Comments.Services
 		{
 			var currentUser = _userService.GetCurrentUser();
 			if (!currentUser.IsAuthenticated)
-				return (model, new Validate(valid: false, unauthorised: true));
+				return (model, new Validate(valid: false, unauthenticated: true));
 
 			var userRoles = _userService.GetUserRoles().ToList();
 			var isAdminUser = userRoles.Any(role => AppSettings.ConsultationListConfig.DownloadRoles.AdminRoles.Contains(role));

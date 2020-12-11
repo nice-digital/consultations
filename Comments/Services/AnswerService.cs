@@ -26,7 +26,7 @@ namespace Comments.Services
         public (ViewModels.Answer answer, Validate validate) GetAnswer(int answerId)
         {
             if (!_currentUser.IsAuthenticated)
-                return (answer: null, validate: new Validate(valid: false, unauthorised: true, message: $"Not logged in accessing answer id:{answerId}"));
+                return (answer: null, validate: new Validate(valid: false, unauthenticated: true, message: $"Not logged in accessing answer id:{answerId}"));
 
             var answerInDatabase = _context.GetAnswer(answerId);
 
@@ -34,7 +34,7 @@ namespace Comments.Services
                 return (answer: null, validate: new Validate(valid: false, notFound: true, message: $"Answer id:{answerId} not found trying to get answer for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
 
 	        if (!answerInDatabase.CreatedByUserId.Equals(_currentUser.UserId, StringComparison.OrdinalIgnoreCase))
-		        return (answer: null, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to access answer id: {answerId}, but it's not their answer"));
+		        return (answer: null, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to access answer id: {answerId}, but it's not their answer"));
 			
 			return (answer: new ViewModels.Answer(answerInDatabase), validate: null);
         }
@@ -42,7 +42,7 @@ namespace Comments.Services
         public (int rowsUpdated, Validate validate) EditAnswer(int answerId, ViewModels.Answer answer)
         {
             if (!_currentUser.IsAuthenticated)
-                return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"Not logged in editing answer id:{answerId}"));
+                return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"Not logged in editing answer id:{answerId}"));
 
             var answerInDatabase = _context.GetAnswer(answerId);
 
@@ -50,7 +50,7 @@ namespace Comments.Services
                 return (rowsUpdated: 0, validate: new Validate(valid: false, notFound: true, message: $"Answer id:{answerId} not found trying to edit answer for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
 
 	        if (!answerInDatabase.CreatedByUserId.Equals(_currentUser.UserId, StringComparison.OrdinalIgnoreCase))
-		        return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to edit answer id: {answerId}, but it's not their answer"));
+		        return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to edit answer id: {answerId}, but it's not their answer"));
 
 
 			answer.LastModifiedByUserId = _currentUser.UserId;
@@ -62,7 +62,7 @@ namespace Comments.Services
         public (int rowsUpdated, Validate validate) DeleteAnswer(int answerId)
         {
             if (!_currentUser.IsAuthenticated)
-                return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"Not logged in deleting answer id:{answerId}"));
+                return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"Not logged in deleting answer id:{answerId}"));
 
             var answerInDatabase = _context.GetAnswer(answerId);
 
@@ -70,7 +70,7 @@ namespace Comments.Services
                 return (rowsUpdated: 0, validate: new Validate(valid: false, notFound: true, message: $"Answer id:{answerId} not found trying to delete answer for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
 
 	        if (!answerInDatabase.CreatedByUserId.Equals(_currentUser.UserId))
-		        return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to delete answer id: {answerId}, but it's not their answer"));
+		        return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to delete answer id: {answerId}, but it's not their answer"));
 
 			_context.Answer.Remove(answerInDatabase);
 
@@ -80,7 +80,7 @@ namespace Comments.Services
         public (ViewModels.Answer answer, Validate validate) CreateAnswer(ViewModels.Answer answer)
         {
             if (!_currentUser.IsAuthenticated)
-                return (answer: null, validate: new Validate(valid: false, unauthorised: true, message: "Not logged in creating answer"));
+                return (answer: null, validate: new Validate(valid: false, unauthenticated: true, message: "Not logged in creating answer"));
 
 	        var status = _context.GetStatus(StatusName.Draft);
 	        var question = _context.GetQuestion(answer.QuestionId);

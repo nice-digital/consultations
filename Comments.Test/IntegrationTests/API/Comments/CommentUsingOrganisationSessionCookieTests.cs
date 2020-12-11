@@ -71,5 +71,28 @@ namespace Comments.Test.IntegrationTests.API.Comments
 			var deserialisedComment = JsonConvert.DeserializeObject<ViewModels.Comment>(responseString);
 			deserialisedComment.CommentId.ShouldBeGreaterThan(0);
 		}
+
+		[Fact]
+		public async Task Create_Comment_With_Valid_Organisation_Session_Cookie_For_Incorrect_Consultation_Returns_403()
+		{
+			//Arrange
+			const int consultationId = 1;
+			var comment = new ViewModels.Comment(1, $"consultations://./consultation/2/document/1/chapter/introduction", null, null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty.ToString(), "comment text", 1, show: true, section: null);
+
+			var builder = _server.CreateRequest("/consultations/api/Comment");
+
+			builder.AddHeader(HeaderNames.Cookie, $"{Constants.SessionCookieName}{consultationId}={_sessionId}");
+
+			builder.And(request =>
+			{
+				request.Content = new StringContent(JsonConvert.SerializeObject(comment), Encoding.UTF8, "application/json");
+			});
+
+			// Act
+			var response = await builder.PostAsync();
+			
+			// Assert
+			response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
+		}
 	}
 }

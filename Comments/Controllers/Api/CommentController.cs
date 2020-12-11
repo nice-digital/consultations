@@ -10,7 +10,7 @@ namespace Comments.Controllers.Api
 {
     [Produces("application/json")]
     [Route("consultations/api/[controller]")]
-    [Authorize(AuthenticationSchemes = AuthenticationConstants.AuthenticationScheme + "," + OrganisationCookieAuthenticationOptions.DefaultScheme)] //todo: make this conditional on the feature flag somehow.
+    [Authorize(AuthenticationSchemes = AuthenticationConstants.AuthenticationScheme + "," + OrganisationCookieAuthenticationOptions.DefaultScheme)] 
     public class CommentController : ControllerBase
     {
         private readonly ICommentService _commentService;
@@ -39,7 +39,7 @@ namespace Comments.Controllers.Api
 
         // PUT: consultations/api/Comment/5
         [HttpPut("{commentId}")]
-        public IActionResult PutComment([FromRoute] int commentId, [FromBody] ViewModels.Comment comment, Session session)  //todo: use the session
+        public IActionResult PutComment([FromRoute] int commentId, [FromBody] ViewModels.Comment comment)  
 		{
             if (!ModelState.IsValid)
             {
@@ -59,7 +59,7 @@ namespace Comments.Controllers.Api
 
         // POST: consultations/api/Comment
         [HttpPost("")]
-        public IActionResult PostComment([FromBody] ViewModels.Comment comment, Session session) //todo: use the session
+        public IActionResult PostComment([FromBody] ViewModels.Comment comment) 
         {
             if (!ModelState.IsValid)
             {
@@ -74,7 +74,7 @@ namespace Comments.Controllers.Api
 
         // DELETE: consultations/api/Comment/5
         [HttpDelete("{commentId}")]
-        public IActionResult DeleteComment([FromRoute] int commentId, Session session)
+        public IActionResult DeleteComment([FromRoute] int commentId)
         {
             if (!ModelState.IsValid)
             {

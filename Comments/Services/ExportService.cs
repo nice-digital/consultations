@@ -55,7 +55,7 @@ namespace Comments.Services
 			var consultation = _feedService.GetConsultationList().Single(c => c.ConsultationId.Equals(consultationId));
 		    if (!isAdminUser && !userRoles.Contains(consultation.AllowedRole))
 		    {
-				return (null, null, null, new Validate(valid: false, unauthorised: true, message: $"User does not have access to download this type of consultation."));
+				return (null, null, null, new Validate(valid: false, unauthenticated: true, message: $"User does not have access to download this type of consultation."));
 			}
 
 			var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);

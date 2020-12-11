@@ -13,8 +13,11 @@ namespace Comments.Controllers.Api
 
             logger.LogWarning(validate.Message);
 
-            if (validate.Unauthorised)
-                return Unauthorized();
+            if (validate.Unauthenticated)
+	            return Unauthorized();
+
+			if (validate.Unauthorised)
+                return Forbid();
 
             if (validate.NotFound)
                 return NotFound();

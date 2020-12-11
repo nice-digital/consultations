@@ -156,5 +156,16 @@ namespace Comments.Common
 
 		    return organisationUserIdsCSV.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
 	    }
+
+	    public static IEnumerable<int> ValidatedConsultationIds(this ClaimsPrincipal claimsPrincipal)
+	    {
+		    var consultationIdsCSV = claimsPrincipal.Claims.FirstOrDefault(claim => claim.Type.Equals(Constants.OrgansationAuthentication.ConsultationIdsCSVClaim) && claim.Issuer.Equals(Constants.OrgansationAuthentication.Issuer))?.Value;
+		    if (string.IsNullOrEmpty(consultationIdsCSV))
+		    {
+			    return new List<int>();
+		    }
+
+		    return consultationIdsCSV.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
+	    }
 	}
 }

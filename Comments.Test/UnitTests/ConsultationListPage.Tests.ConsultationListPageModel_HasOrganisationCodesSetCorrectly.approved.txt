@@ -140,6 +140,12 @@
     ],
     "TeamFilter":null,
     "User":{
+        "ValidatedOrganisationUserIds":[
+            
+        ],
+        "ValidatedConsultationIds":[
+            
+        ],
         "IsAdminUser":true,
         "IsTeamUser":false,
         "TeamNames":[
@@ -148,9 +154,6 @@
         "IsAuthenticated":true,
         "DisplayName":"Benjamin Button",
         "UserId":"scrubbed by ScrubUserId",
-        "OrganisationUserIds":[
-            
-        ],
         "OrganisationsAssignedAsLead":[
             {
                 "OrganisationId":1,

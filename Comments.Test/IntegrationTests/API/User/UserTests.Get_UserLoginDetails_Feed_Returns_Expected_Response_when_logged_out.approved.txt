@@ -1,9 +1,10 @@
 ﻿{
+    "validatedOrganisationUserIds":null,
+    "validatedConsultationIds":null,
     "signInURL":"/consultations/account/login?returnURL=%2Fconsultations%2F1%2F1%2Fintroduction",
     "registerURL":"/consultations/account/login?returnURL=%2Fconsultations%2F1%2F1%2Fintroduction&goToRegisterPage=True",
     "isAuthenticated":false,
     "displayName":null,
     "userId":null,
-    "organisationUserIds":null,
     "organisationsAssignedAsLead":null
 }
