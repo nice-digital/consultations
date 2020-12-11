@@ -56,7 +56,7 @@ namespace Comments.Test.UnitTests
 
 			using (var context = new ConsultationsContext(_options, userService, _fakeEncryption))
 			{
-				AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context);
+				TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context);
 				
 				var serviceUnderTest = new OrganisationService(context, userService, null, null, null, null);
 
@@ -138,7 +138,7 @@ namespace Comments.Test.UnitTests
 
 			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
 			{
-				AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, collationCode: collationCodeInDB);
+				TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, collationCode: collationCodeInDB);
 				var serviceUnderTest = new OrganisationService(context, _fakeUserService, new FakeAPITokenService(), _fakeApiService, mockFactory.Object, null);
 
 				//Act 
@@ -165,7 +165,7 @@ namespace Comments.Test.UnitTests
 
 			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
 			{
-				AddOrganisationAuthorisationWithLocation(organisationId, validConsultationId, context, collationCode: collationCodeInDB);
+				TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, validConsultationId, context, collationCode: collationCodeInDB);
 				var serviceUnderTest = new OrganisationService(context, _fakeUserService, null, null, null, null);
 
 				//Act + Assert
@@ -185,8 +185,8 @@ namespace Comments.Test.UnitTests
 
 			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
 			{
-				var organisationAuthorisationId = AddOrganisationAuthorisationWithLocation(organisationId, validConsultationId, context, collationCode: collationCodeInDB);
-				var organisationUserId = AddOrganisationUser(context, organisationAuthorisationId, Guid.NewGuid(), null);
+				var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, validConsultationId, context, collationCode: collationCodeInDB);
+				var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, Guid.NewGuid(), null);
 				
 				var sourceURI = ConsultationsUri.CreateConsultationURI(validConsultationId);
 				var commentLocationId = AddLocation(sourceURI, context);
@@ -213,8 +213,8 @@ namespace Comments.Test.UnitTests
 
 			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
 			{
-				var organisationAuthorisationId = AddOrganisationAuthorisationWithLocation(organisationId, validConsultationId, context, collationCode: collationCodeInDB);
-				var organisationUserId = AddOrganisationUser(context, organisationAuthorisationId, Guid.NewGuid(), null);
+				var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, validConsultationId, context, collationCode: collationCodeInDB);
+				var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, Guid.NewGuid(), null);
 
 				var sourceURI = ConsultationsUri.CreateConsultationURI(validConsultationId);
 				var answerLocationId = AddLocation(sourceURI, context);
@@ -251,7 +251,7 @@ namespace Comments.Test.UnitTests
 				{
 					var collationCodeToUse = counter.ToString("000000000000");
 
-					var organisationAuthorisationId = AddOrganisationAuthorisationWithLocation(1, 1, _context, collationCode: collationCodeToUse);
+					var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(1, 1, _context, collationCode: collationCodeToUse);
 
 					var session = serviceUnderTest.CreateOrganisationUserSession(organisationAuthorisationId, collationCodeToUse);
 					sessionsReturned.Add(session.sessionId, session.expirationDate);
@@ -286,8 +286,8 @@ namespace Comments.Test.UnitTests
 			{
 				var serviceUnderTest = new OrganisationService(context, _fakeUserService, null, null, null, null);
 
-				var organisationAuthorisationId = AddOrganisationAuthorisationWithLocation(1, consultationId, context, collationCode: "123412341234");
-				AddOrganisationUser(context, organisationAuthorisationId, sessionId, null);
+				var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(1, consultationId, context, collationCode: "123412341234");
+				TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, sessionId, null);
 
 				//Act
 				var valid = serviceUnderTest.CheckOrganisationUserSession(consultationId, sessionId);
@@ -318,8 +318,8 @@ namespace Comments.Test.UnitTests
 			{
 				var serviceUnderTest = new OrganisationService(context, _fakeUserService, null, null, null, null);
 
-				var organisationAuthorisationId = AddOrganisationAuthorisationWithLocation(1, consultationId, context, collationCode: "123412341234");
-				AddOrganisationUser(context, organisationAuthorisationId, sessionId, expirationDate);
+				var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(1, consultationId, context, collationCode: "123412341234");
+				TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, sessionId, expirationDate);
 
 				//Act
 				var valid = serviceUnderTest.CheckOrganisationUserSession(consultationId, sessionId);
@@ -343,8 +343,8 @@ namespace Comments.Test.UnitTests
 			{
 				var serviceUnderTest = new OrganisationService(context, _fakeUserService, null, null, null, null);
 
-				var organisationAuthorisationId = AddOrganisationAuthorisationWithLocation(1, consultationId, context, collationCode: "123412341234");
-				AddOrganisationUser(context, organisationAuthorisationId, sessionId, expirationDate);
+				var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(1, consultationId, context, collationCode: "123412341234");
+				TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, sessionId, expirationDate);
 
 				//Act
 				var invalid = serviceUnderTest.CheckOrganisationUserSession(consultationId, sessionId);
@@ -368,9 +368,9 @@ namespace Comments.Test.UnitTests
 
 			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
 			{
-				var organisationAuthorisationId = AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, collationCode: collationCodeInDB);
+				var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, collationCode: collationCodeInDB);
 				var serviceUnderTest = new OrganisationService(context, _fakeUserService, new FakeAPITokenService(), _fakeApiService, mockFactory.Object, null);
-				AddOrganisationUser(context, organisationAuthorisationId, sessionId, null);
+				TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, sessionId, null);
 
 				var unvalidatedSessions = new Session(new Dictionary<int, Guid>
 				{

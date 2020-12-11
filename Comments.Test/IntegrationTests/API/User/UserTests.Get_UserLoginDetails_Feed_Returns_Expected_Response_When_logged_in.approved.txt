@@ -16,5 +16,7 @@
             "organisationName":"NICE",
             "isLead":true
         }
-    ]
+    ],
+    "isAuthenticatedByAccounts":true,
+    "isAuthenticatedByOrganisationCookie":false
 }

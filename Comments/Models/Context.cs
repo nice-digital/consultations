@@ -42,6 +42,15 @@ namespace Comments.Models
 		}
 
 		/// <summary>
+		/// This is only for use by the tests.
+		/// </summary>
+		/// <param name="organisationUserIds"></param>
+		public void UpdateFilter(List<int> organisationUserIds)
+		{
+			_organisationUserIDs = organisationUserIds;
+		}
+
+		/// <summary>
 		/// It's not obvious from this code, but this it actually filtering on more than it looks like. There's global filters defined in the context, specifically
 		/// for the IsDeleted flag and the CreatedByUserId. So, this is only going to return data that isn't deleted and belongs to the current user.
 		/// This behaviour can be overridden with the IgnoreQueryFilters command. See the ConsultationContext.Tests for example usage.

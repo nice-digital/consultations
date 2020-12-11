@@ -5,20 +5,24 @@ using Newtonsoft.Json;
 using Shouldly;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Comments.Services;
+using Comments.ViewModels;
 using Xunit;
 
 namespace Comments.Test.IntegrationTests.API.Comments
 {
-	public class CommentUsingOrganisationSessionCookieTests : TestBase
+	public class CreateCommentUsingOrganisationSessionCookieTests : TestBase
 	{
 		private static readonly Guid _sessionId = Guid.Parse("11111111-1111-1111-1111-111111111111");
+		private const int _consultationId = 1;
 
-		public CommentUsingOrganisationSessionCookieTests() : base(enableOrganisationalCommentingFeature: true, testUserType: TestUserType.NotAuthenticated,
-			validSessions: new Dictionary<int, Guid>{{1, _sessionId }}, useRealUserService: true, useRealHttpContextAccessor: true)
+		public CreateCommentUsingOrganisationSessionCookieTests() : base(enableOrganisationalCommentingFeature: true, testUserType: TestUserType.NotAuthenticated,
+			validSessions: new Dictionary<int, Guid>{{ _consultationId, _sessionId }}, useRealUserService: true, useRealHttpContextAccessor: true)
 		{
 		}
 
@@ -49,12 +53,11 @@ namespace Comments.Test.IntegrationTests.API.Comments
 		public async Task Create_Comment_With_Valid_Organisation_Session_Cookie_Returns_Correctly()
 		{
 			//Arrange
-			const int consultationId = 1;
-			var comment = new ViewModels.Comment(1, $"consultations://./consultation/{consultationId}/document/1/chapter/introduction", null, null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty.ToString(), "comment text", 1, show: true, section: null);
+			var comment = new ViewModels.Comment(1, $"consultations://./consultation/{_consultationId}/document/1/chapter/introduction", null, null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty.ToString(), "comment text", 1, show: true, section: null);
 
 			var builder = _server.CreateRequest("/consultations/api/Comment");
 
-			builder.AddHeader(HeaderNames.Cookie, $"{Constants.SessionCookieName}{consultationId}={_sessionId}");
+			builder.AddHeader(HeaderNames.Cookie, $"{Constants.SessionCookieName}{_consultationId}={_sessionId}");
 
 			builder.And(request =>
 			{

@@ -113,7 +113,9 @@
                 "organisationName":"NICE",
                 "isLead":true
             }
-        ]
+        ],
+        "isAuthenticatedByAccounts":true,
+        "isAuthenticatedByOrganisationCookie":false
     },
     "initialPageView":false,
     "status":[

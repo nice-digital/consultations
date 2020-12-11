@@ -27,8 +27,8 @@ namespace Comments.ViewModels
 		public readonly IEnumerable<int> ValidatedOrganisationUserIds; 
 		public readonly IEnumerable<int> ValidatedConsultationIds;
 
-		private bool IsAuthenticatedByAccounts => (IsAuthenticated && UserId != null);
-		private bool IsAuthenticatedByOrganisationCookie => (IsAuthenticated && UserId == null);
+		public bool IsAuthenticatedByAccounts => (IsAuthenticated && UserId != null);
+		public bool IsAuthenticatedByOrganisationCookie => (IsAuthenticated && UserId == null);
 
 		/// <summary>
 		/// Determines whether a user is authorised to e.g. comment, on a given consultation.

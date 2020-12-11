@@ -122,9 +122,16 @@ namespace Comments.Test.Infrastructure
 			AppSettings.GlobalNavConfig = new GlobalNavConfig {CookieBannerScript = "//a-fake-cookiebannerscript-url"};
 			// Arrange
 			_urlHelper = new FakeUrlHelper();
-			_fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId, testUserType, addRoleClaim);
 			_fakeHttpContextAccessor = FakeHttpContextAccessor.Get(_authenticated, _displayName, _userId, testUserType, addRoleClaim);
 			_fakeApiService = new FakeAPIService();
+			if (useRealUserService)
+			{
+				_fakeUserService = new UserService(_fakeHttpContextAccessor, _fakeApiService);
+			}
+			else
+			{
+				_fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId, testUserType, addRoleClaim);
+			}
 			_consultationService = new FakeConsultationService();
 	        _useRealSubmitService = useRealSubmitService;
 	        _fakeEncryption = new FakeEncryption();
@@ -259,7 +266,7 @@ namespace Comments.Test.Infrastructure
                 context.Database.EnsureDeleted();
 			}
         }
-        protected int AddLocation(string sourceURI, ConsultationsContext passedInContext = null, string order = "0")
+        public int AddLocation(string sourceURI, ConsultationsContext passedInContext = null, string order = "0")
         {
             var location = new Location(sourceURI, null, null, null, null, null, null, order, null, null, null);
             if (passedInContext != null)
@@ -500,25 +507,6 @@ namespace Comments.Test.Infrastructure
 		    }
 
 		    return submissionAnswer.SubmissionAnswerId;
-	    }
-
-	    protected int AddOrganisationAuthorisationWithLocation(int organisationId, int consultationId, ConsultationsContext passedInContext, string userId = "someUserId", string collationCode = null)
-	    {
-		    var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
-		    var locationId = AddLocation(sourceURI, passedInContext);
-		    passedInContext.SaveChanges();
-			var organisationAuthorisation = new OrganisationAuthorisation(userId, DateTime.Now, organisationId, locationId, collationCode);
-			passedInContext.OrganisationAuthorisation.Add(organisationAuthorisation);
-			passedInContext.SaveChanges();
-			return organisationAuthorisation.OrganisationAuthorisationId;
-	    }
-
-	    protected int AddOrganisationUser(ConsultationsContext passedInContext, int organisationAuthorisationId, Guid authorisationSession, DateTime? expirationDate)
-	    {
-			var organisationUser = new OrganisationUser(organisationAuthorisationId, authorisationSession, expirationDate ?? DateTime.Now.AddDays(28));
-			passedInContext.OrganisationUser.Add(organisationUser);
-			passedInContext.SaveChanges();
-			return organisationUser.OrganisationUserId;
 	    }
 
 	    protected List<ConsultationList> AddConsultationsToList()

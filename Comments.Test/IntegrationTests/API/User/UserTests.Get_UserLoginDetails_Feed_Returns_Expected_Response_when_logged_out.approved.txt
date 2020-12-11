@@ -6,5 +6,7 @@
     "isAuthenticated":false,
     "displayName":null,
     "userId":null,
-    "organisationsAssignedAsLead":null
+    "organisationsAssignedAsLead":null,
+    "isAuthenticatedByAccounts":false,
+    "isAuthenticatedByOrganisationCookie":false
 }

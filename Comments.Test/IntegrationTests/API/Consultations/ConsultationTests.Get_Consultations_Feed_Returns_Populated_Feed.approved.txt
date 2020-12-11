@@ -33,7 +33,9 @@
                     "organisationName":"NICE",
                     "isLead":true
                 }
-            ]
+            ],
+            "isAuthenticatedByAccounts":true,
+            "isAuthenticatedByOrganisationCookie":false
         },
         "consultationState":null,
         "breadcrumbs":null,
@@ -73,7 +75,9 @@
                     "organisationName":"NICE",
                     "isLead":true
                 }
-            ]
+            ],
+            "isAuthenticatedByAccounts":true,
+            "isAuthenticatedByOrganisationCookie":false
         },
         "consultationState":null,
         "breadcrumbs":null,

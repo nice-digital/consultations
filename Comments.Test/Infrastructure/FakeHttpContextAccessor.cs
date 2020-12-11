@@ -79,8 +79,30 @@ namespace Comments.Test.Infrastructure
 					.Returns(authServiceMock.Object);
 
 				context.Setup(r => r.RequestServices).Returns(serviceProviderMock.Object);
+			} else if (organisationUserId.HasValue)
+			{
+				var claims = new List<Claim> {new Claim(Constants.OrgansationAuthentication.OrganisationUserIdsCSVClaim, organisationUserId.Value.ToString(), null, Constants.OrgansationAuthentication.Issuer)};
+
+				var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(claims, AuthenticationConstants.AuthenticationScheme));
+				context.Setup(r => r.User)
+					.Returns(() => new ClaimsPrincipal(new ClaimsIdentity(claims, AuthenticationConstants.AuthenticationScheme)));
+
+				var authServiceMock = new Mock<IAuthenticationService>();
+				authServiceMock
+					.Setup(_ => _.AuthenticateAsync(It.IsAny<HttpContext>(), It.IsAny<string>()))
+					.Returns(Task.FromResult(AuthenticateResult.Success(new AuthenticationTicket(claimsPrincipal,
+						new AuthenticationProperties(new Dictionary<string, string>() { { AuthenticationTokenExtensions_TokenKeyPrefix + "access_token", "fake access token" } }), AuthenticationConstants.AuthenticationScheme))));
+
+
+				var serviceProviderMock = new Mock<IServiceProvider>();
+
+				serviceProviderMock
+					.Setup(_ => _.GetService(typeof(IAuthenticationService)))
+					.Returns(authServiceMock.Object);
+
+				context.Setup(r => r.RequestServices).Returns(serviceProviderMock.Object);
 			}
-            else
+			else
             {
                 context.Setup(r => r.User).Returns(() => null);
             }
