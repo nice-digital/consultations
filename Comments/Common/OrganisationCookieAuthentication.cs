@@ -61,7 +61,7 @@ namespace Comments.Common
 			
 			if (!validatedOrganisationUserIds.Any() || !validatedConsultationIds.Any())
 			{
-				return AuthenticateResult.Fail("Access denied.");
+				return AuthenticateResult.NoResult(); //return AuthenticateResult.Fail("Access denied.");
 			}
 
 			var validatedOrganisationUserIdsCSV = string.Join(",", validatedOrganisationUserIds);

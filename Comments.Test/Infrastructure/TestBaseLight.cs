@@ -42,6 +42,8 @@ namespace Comments.Test.Infrastructure
 					services.AddEntityFrameworkSqlite();
 
 					services.TryAddSingleton<ConsultationsContext>(dbContext);
+
+					services.AddMvc(opt => opt.Filters.Add(new AllowAnonymousFilter()));
 				})
 				.Configure(app =>
 				{
