@@ -65,7 +65,9 @@ namespace Comments.Models
 
                 entity.Property(e => e.QuestionId).HasColumnName("QuestionID");
 
-                entity.Property(e => e.StatusId)
+                entity.Property(e => e.OrganisationId).HasColumnName("OrganisationID");
+
+				entity.Property(e => e.StatusId)
                     .HasColumnName("StatusID")
                     .HasDefaultValueSql("((1))");
 
@@ -119,7 +121,9 @@ namespace Comments.Models
 
                 entity.Property(e => e.ParentCommentId).HasColumnName("ParentCommentID");
 
-                entity.Property(e => e.StatusId)
+                entity.Property(e => e.OrganisationId).HasColumnName("OrganisationID");
+
+				entity.Property(e => e.StatusId)
                     .HasColumnName("StatusID")
                     .HasDefaultValueSql("((1))");
 
