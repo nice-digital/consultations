@@ -71,7 +71,7 @@ namespace Comments.Services
 			}
             else //organisation cookie auth
             {
-				if (!commentInDatabase.OrganisationUserId.HasValue || !_currentUser.ValidatedOrganisationUserIds.Contains(commentInDatabase.OrganisationUserId.Value))
+				if (!commentInDatabase.OrganisationUserId.HasValue || !_currentUser.IsAuthorisedByOrganisationUserId(commentInDatabase.OrganisationUserId.Value))
 					return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: $"Organisation cookie user tried to edit comment id: {commentId}, but it's not their comment"));
             }
 
@@ -99,8 +99,14 @@ namespace Comments.Services
 	        };
 			_context.Location.Add(locationToSave);
 
+			int? organisationUserId = null;
+			if (_currentUser.IsAuthenticatedByOrganisationCookieForThisConsultation(consultationId))
+			{
+				organisationUserId = 9999; //TODO!!! need the right organisation user id for this consultation..
+			}
+
 	        var status = _context.GetStatus(StatusName.Draft);
-			var commentToSave = new Models.Comment(comment.LocationId, _currentUser.UserId, comment.CommentText, _currentUser.UserId, locationToSave, status.StatusId, null);
+			var commentToSave = new Models.Comment(comment.LocationId, _currentUser.UserId, comment.CommentText, _currentUser.UserId, locationToSave, status.StatusId, null, organisationUserId: organisationUserId);
             _context.Comment.Add(commentToSave);
             _context.SaveChanges();
 
@@ -124,7 +130,7 @@ namespace Comments.Services
             }
 			else //organisation cookie auth
             {
-	            if (!commentInDatabase.OrganisationUserId.HasValue || !_currentUser.ValidatedOrganisationUserIds.Contains(commentInDatabase.OrganisationUserId.Value))
+	            if (!commentInDatabase.OrganisationUserId.HasValue || !_currentUser.IsAuthorisedByOrganisationUserId(commentInDatabase.OrganisationUserId.Value))
 		            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: $"Organisation cookie user tried to delete comment id: {commentId}, but it's not their comment"));
             }
 

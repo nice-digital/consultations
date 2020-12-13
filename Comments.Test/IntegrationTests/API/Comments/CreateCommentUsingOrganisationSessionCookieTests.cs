@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Comments.Services;
 using Comments.ViewModels;
+using Microsoft.EntityFrameworkCore;
 using Xunit;
 
 namespace Comments.Test.IntegrationTests.API.Comments
@@ -71,8 +72,15 @@ namespace Comments.Test.IntegrationTests.API.Comments
 
 			// Assert
 			response.StatusCode.ShouldBe(HttpStatusCode.Created);
-			var deserialisedComment = JsonConvert.DeserializeObject<ViewModels.Comment>(responseString);
+			Comment deserialisedComment = JsonConvert.DeserializeObject<ViewModels.Comment>(responseString);
 			deserialisedComment.CommentId.ShouldBeGreaterThan(0);
+			var commentInDatabase = _context.Comment.IgnoreQueryFilters().Single(dbComment => dbComment.CommentId.Equals(deserialisedComment.CommentId));
+
+			commentInDatabase.CreatedByUserId.ShouldBeNull();
+			commentInDatabase.OrganisationUserId.ShouldNotBeNull();
+			commentInDatabase.OrganisationUserId.Value.ShouldBeGreaterThan(0);
+			commentInDatabase.ParentCommentId.ShouldBeNull();
+			commentInDatabase.OrganisationId.ShouldBeNull();
 		}
 
 		[Fact]

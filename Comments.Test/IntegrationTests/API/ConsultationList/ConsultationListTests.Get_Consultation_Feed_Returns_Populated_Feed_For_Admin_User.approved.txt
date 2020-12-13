@@ -123,8 +123,7 @@
                 "isLead":true
             }
         ],
-        "isAuthenticatedByAccounts":true,
-        "isAuthenticatedByOrganisationCookie":false
+        "isAuthenticatedByAccounts":true
     },
     "initialPageView":false,
     "status":[

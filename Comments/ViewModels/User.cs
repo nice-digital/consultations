@@ -2,6 +2,7 @@ using System;
 using NICE.Identity.Authentication.Sdk.Domain;
 using System.Collections.Generic;
 using System.Linq;
+using Comments.Models;
 
 namespace Comments.ViewModels
 {
@@ -9,14 +10,13 @@ namespace Comments.ViewModels
     {
 	    public User() {}
 
-	    public User(bool isAuthenticated, string displayName, string userId, IEnumerable<Organisation> organisationsAssignedAsLead, IEnumerable<int> validatedOrganisationUserIds, Session validatedSession)
+	    public User(bool isAuthenticated, string displayName, string userId, IEnumerable<Organisation> organisationsAssignedAsLead, IList<ValidatedSession> validatedSessions)
 		{
             IsAuthenticated = isAuthenticated;
             DisplayName = displayName;
             UserId = userId;
 	        OrganisationsAssignedAsLead = organisationsAssignedAsLead;
-	        ValidatedOrganisationUserIds = validatedOrganisationUserIds;
-	        ValidatedSession = validatedSession;
+	        ValidatedSessions = validatedSessions;
 		}
 
         public bool IsAuthenticated { get; private set; }
@@ -25,11 +25,19 @@ namespace Comments.ViewModels
 		
 		public IEnumerable<Organisation> OrganisationsAssignedAsLead { get; private set; }
 
-		public readonly IEnumerable<int> ValidatedOrganisationUserIds; 
-		public readonly Session ValidatedSession;
+		public IList<ValidatedSession> ValidatedSessions { get; private set; }
+
+		public IList<int> ValidatedOrganisationUserIds => ValidatedSessions != null ? ValidatedSessions.Select(session => session.OrganisationUserId).ToList() : new List<int>();
 
 		public bool IsAuthenticatedByAccounts => (IsAuthenticated && UserId != null);
-		public bool IsAuthenticatedByOrganisationCookie => (IsAuthenticated && UserId == null);
+
+		public bool IsAuthenticatedByOrganisationCookieForThisConsultation(int consultationId)
+		{
+			if (!IsAuthenticated || IsAuthenticatedByAccounts)
+				return true;
+
+			return ValidatedSessions.Any(session => session.ConsultationId.Equals(consultationId));
+		}
 
 		/// <summary>
 		/// Determines whether a user is authorised to e.g. comment, on a given consultation.
@@ -48,7 +56,7 @@ namespace Comments.ViewModels
 			{
 				return true;
 			}
-			return ValidatedSession.SessionCookies.Any(cookie => cookie.Key.Equals(consultationId));
+			return ValidatedSessions.Any(session => session.ConsultationId.Equals(consultationId));
 		}
 
 		/// <summary>
@@ -64,22 +72,17 @@ namespace Comments.ViewModels
 				return false;
 			}
 
-			return ValidatedOrganisationUserIds.Any(ouid => ouid.Equals(organisationUserId));
+			return ValidatedSessions.Any(session => session.OrganisationUserId.Equals(organisationUserId));
 		}
 
 		public Guid? GetValidatedSessionIdForConsultation(int consultationId)
 		{
-			if (!IsAuthenticatedByOrganisationCookie)
+			if (!IsAuthenticatedByOrganisationCookieForThisConsultation(consultationId))
 			{
 				return null;
 			}
 
-			if (!ValidatedSession.SessionCookies.ContainsKey(consultationId))
-			{
-				return null;
-			}
-
-			return ValidatedSession.SessionCookies[consultationId];
+			return ValidatedSessions.FirstOrDefault(session => session.ConsultationId.Equals(consultationId))?.SessionId;
 		}
 	}
 }

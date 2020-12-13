@@ -36,8 +36,7 @@
                     "isLead":true
                 }
             ],
-            "isAuthenticatedByAccounts":true,
-            "isAuthenticatedByOrganisationCookie":false
+            "isAuthenticatedByAccounts":true
         },
         "consultationState":null,
         "breadcrumbs":null,
@@ -80,8 +79,7 @@
                     "isLead":true
                 }
             ],
-            "isAuthenticatedByAccounts":true,
-            "isAuthenticatedByOrganisationCookie":false
+            "isAuthenticatedByAccounts":true
         },
         "consultationState":null,
         "breadcrumbs":null,

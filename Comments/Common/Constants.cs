@@ -51,10 +51,9 @@ namespace Comments.Common
 		
 	    public static class OrgansationAuthentication
 	    {
-		    public const string SesssionClaim = "http://www.nice.org.uk/consultations/claims/session";
-			public const string OrganisationUserIdsCSVClaim = "http://www.nice.org.uk/consultations/claims/organisation-userids";
 		    public const string Issuer = "ConsultationsIssuer";
-	    }
+		    public const string ValidatedSessionsClaim = "http://www.nice.org.uk/consultations/claims/validated-sessions";
+		}
 
 	    /// <summary>
 	    /// The values of the string must match the name of the features in the FeatureManagement section of appsettings.json / secrets.json.

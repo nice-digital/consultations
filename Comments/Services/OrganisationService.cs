@@ -22,7 +22,7 @@ namespace Comments.Services
 		Task<OrganisationCode> CheckValidCodeForConsultation(string collationCode, int consultationId);
 		(Guid sessionId, DateTime expirationDate) CreateOrganisationUserSession(int organisationAuthorisationId, string collationCode);
 		Task<(bool valid, string organisationName)> CheckOrganisationUserSession(int consultationId);//, Guid sessionId);
-		IEnumerable<(bool valid, int consultationId, Guid session, int? organisationUserId, int? organisationId)> CheckValidCodesForConsultation(Session unvalidatedSessions);
+		IList<ValidatedSession> CheckValidCodesForConsultation(Session unvalidatedSessions);
 	}
 
     public class OrganisationService : IOrganisationService
@@ -180,28 +180,25 @@ namespace Comments.Services
 			return (valid: true, organisationName: organisationName);
 		}
 
-		public IEnumerable<(bool valid, int consultationId, Guid session, int? organisationUserId, int? organisationId)> CheckValidCodesForConsultation(Session unvalidatedSessions)
+		public IList<ValidatedSession> CheckValidCodesForConsultation(Session unvalidatedSessions)
 		{
 			var organisationUsers = _context.GetOrganisationUsers(unvalidatedSessions.SessionCookies.Select(session => session.Value)).ToList();
 
 			return unvalidatedSessions.SessionCookies.Select(session =>
 			{
-				var valid = false;
-				int? organisationUserId = null;
-				int? organisationId = null;
 				var organisationUserForThisSession = organisationUsers.FirstOrDefault(ou => ou.AuthorisationSession.Equals(session.Value));
 				if (organisationUserForThisSession != null && organisationUserForThisSession.ExpirationDate > DateTime.UtcNow)
 				{
 					var parsedUri = ConsultationsUri.ParseConsultationsUri(organisationUserForThisSession.OrganisationAuthorisation.Location.SourceURI);
 					if (parsedUri.ConsultationId.Equals(session.Key))
 					{
-						valid = true;
-						organisationUserId = organisationUserForThisSession.OrganisationUserId;
-						organisationId = organisationUserForThisSession.OrganisationAuthorisation.OrganisationId;
+						var organisationUserId = organisationUserForThisSession.OrganisationUserId;
+						var organisationId = organisationUserForThisSession.OrganisationAuthorisation.OrganisationId;
+						return new ValidatedSession(organisationUserId, session.Key, session.Value, organisationId);
 					}
 				}
-				return (valid, consultationId: session.Key, session: session.Value, organisationUserId: organisationUserId, organisationId: organisationId);
-			});
+				return null;
+			}).ToList();
 		}
 
 		private async Task<string> GetOrganisationName(int organisationId)

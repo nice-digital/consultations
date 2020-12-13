@@ -163,8 +163,7 @@
                 "IsLead":true
             }
         ],
-        "IsAuthenticatedByAccounts":true,
-        "IsAuthenticatedByOrganisationCookie":false
+        "IsAuthenticatedByAccounts":true
     },
     "InitialPageView":false,
     "Status":[

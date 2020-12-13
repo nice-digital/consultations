@@ -9,6 +9,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Comments.Models;
 using Newtonsoft.Json;
 
 namespace Comments.Common
@@ -46,33 +47,19 @@ namespace Comments.Common
 			{
 				return AuthenticateResult.NoResult();
 			}
-
-			var validatedOrganisationUserIds = new List<int>();
-			var validatedSession = new Dictionary<int, Guid>();
-
-			List<(bool valid, int consultationId, Guid session, int? organisationUserId, int? organisationId)> validatedSessions = _organisationService.CheckValidCodesForConsultation(new Session(unvalidatedSessionCookies)).ToList();
-
-			foreach (var session in validatedSessions)
-			{
-				if (session.valid && session.organisationUserId.HasValue)
-				{
-					validatedOrganisationUserIds.Add(session.organisationUserId.Value);
-					validatedSession.Add(session.consultationId, session.session);
-				}
-			}
 			
-			if (!validatedOrganisationUserIds.Any() || !validatedSession.Any())
+			var validatedSessions = _organisationService.CheckValidCodesForConsultation(new Session(unvalidatedSessionCookies));
+
+			if (!validatedSessions.Any())
 			{
 				return AuthenticateResult.NoResult(); //return AuthenticateResult.Fail("Access denied.");
 			}
 
-			var validatedOrganisationUserIdsCSV = string.Join(",", validatedOrganisationUserIds);
-			var validatedSessionSerialised = JsonConvert.SerializeObject(new Session(validatedSession));
+			var validatedSessionsSerialised = JsonConvert.SerializeObject(validatedSessions);
 
 			var claims = new List<Claim>
 				{
-					new Claim(Constants.OrgansationAuthentication.OrganisationUserIdsCSVClaim, validatedOrganisationUserIdsCSV, null, Constants.OrgansationAuthentication.Issuer),
-					new Claim(Constants.OrgansationAuthentication.SesssionClaim, validatedSessionSerialised, null, Constants.OrgansationAuthentication.Issuer)
+					new Claim(Constants.OrgansationAuthentication.ValidatedSessionsClaim, validatedSessionsSerialised, null, Constants.OrgansationAuthentication.Issuer)
 				};
 			var identity = new ClaimsIdentity(claims, Options.AuthenticationType);
 			var identities = new List<ClaimsIdentity> { identity };

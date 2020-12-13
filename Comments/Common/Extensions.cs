@@ -7,6 +7,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.RegularExpressions;
 using Comments.Configuration;
+using Comments.Models;
 using Comments.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -148,26 +149,15 @@ namespace Comments.Common
 			return sessions;
 	    }
 
-	    public static IEnumerable<int> ValidatedOrganisationUserIds(this ClaimsPrincipal claimsPrincipal)
+	    public static IList<ValidatedSession> ValidatedSessions(this ClaimsPrincipal claimsPrincipal)
 	    {
-		    var organisationUserIdsCSV = claimsPrincipal.Claims.FirstOrDefault(claim => claim.Type.Equals(Constants.OrgansationAuthentication.OrganisationUserIdsCSVClaim) && claim.Issuer.Equals(Constants.OrgansationAuthentication.Issuer))?.Value;
-		    if (string.IsNullOrEmpty(organisationUserIdsCSV))
+		    var serialisedSessions = claimsPrincipal.Claims.FirstOrDefault(claim => claim.Type.Equals(Constants.OrgansationAuthentication.ValidatedSessionsClaim) && claim.Issuer.Equals(Constants.OrgansationAuthentication.Issuer))?.Value;
+		    if (string.IsNullOrEmpty(serialisedSessions))
 		    {
-			    return new List<int>();
+			    return new List<ValidatedSession>();
 		    }
 
-		    return organisationUserIdsCSV.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
-	    }
-
-	    public static Session ValidatedSession(this ClaimsPrincipal claimsPrincipal)
-	    {
-		    var serialisedSession = claimsPrincipal.Claims.FirstOrDefault(claim => claim.Type.Equals(Constants.OrgansationAuthentication.SesssionClaim) && claim.Issuer.Equals(Constants.OrgansationAuthentication.Issuer))?.Value;
-		    if (string.IsNullOrEmpty(serialisedSession))
-		    {
-			    return new Session(new Dictionary<int, Guid>());
-		    }
-
-		    return JsonConvert.DeserializeObject<Session>(serialisedSession);
+		    return JsonConvert.DeserializeObject<IList<ValidatedSession>>(serialisedSessions);
 	    }
 	}
 }

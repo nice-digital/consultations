@@ -35,8 +35,7 @@
                 "isLead":true
             }
         ],
-        "isAuthenticatedByAccounts":true,
-        "isAuthenticatedByOrganisationCookie":false
+        "isAuthenticatedByAccounts":true
     },
     "consultationState":{
         "startDate":"2018-04-01T00:00:00",
