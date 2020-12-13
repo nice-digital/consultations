@@ -85,7 +85,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
 
 			var comment = new ViewModels.Comment(locationId, sourceURI, null, null, null, null, null, null, null, 0,
 					DateTime.Now, Guid.Empty.ToString(), "comment text", 1, show: true, section: null)
-				{ CommentId = commentId };
+			{ CommentId = commentId };
 
 			var builder = _server.CreateRequest($"/consultations/api/Comment/{comment.CommentId}");
 			builder.AddHeader(HeaderNames.Cookie, $"{Constants.SessionCookieName}{consultationId}={Guid.NewGuid()}");
@@ -120,7 +120,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
 
 			var comment = new ViewModels.Comment(locationId, sourceURI, null, null, null, null, null, null, null, 0,
 					DateTime.Now, Guid.Empty.ToString(), "comment text", 1, show: true, section: null)
-				{ CommentId = commentId };
+			{ CommentId = commentId };
 
 			var builder = _server.CreateRequest($"/consultations/api/Comment/{comment.CommentId}");
 			builder.AddHeader(HeaderNames.Cookie, $"{Constants.SessionCookieName}{999}={_sessionId}");

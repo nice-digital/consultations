@@ -1,4 +1,5 @@
 using Comments.Common;
+using Comments.Configuration;
 using Comments.Models;
 using Comments.ViewModels;
 using NICE.Feeds;
@@ -20,8 +21,8 @@ namespace Comments.Services
 		OrganisationCode GenerateOrganisationCode(int organisationId, int consultationId);
 		Task<OrganisationCode> CheckValidCodeForConsultation(string collationCode, int consultationId);
 		(Guid sessionId, DateTime expirationDate) CreateOrganisationUserSession(int organisationAuthorisationId, string collationCode);
-		bool CheckOrganisationUserSession(int consultationId, Guid sessionId);
-		IEnumerable<(bool valid, int consultationId, Guid session, int? organisationUserId)> CheckValidCodesForConsultation(Session unvalidatedSessions);
+		Task<(bool valid, string organisationName)> CheckOrganisationUserSession(int consultationId, Guid sessionId);
+		IEnumerable<(bool valid, int consultationId, Guid session, int? organisationUserId, int? organisationId)> CheckValidCodesForConsultation(Session unvalidatedSessions);
 	}
 
     public class OrganisationService : IOrganisationService
@@ -126,18 +127,9 @@ namespace Comments.Services
 			if (hasOrganisationSubmittedForThisConsultation)
 				throw new ApplicationException("Your organisation has already responded to this consultation. Contact your organisation's commenting lead for further information.");
 
-			//var machineToMachineAccessToken =	await _apiTokenService.GetAccessToken(AppSettings.AuthenticationConfig.GetAuthConfiguration()); 
-			//var httpClientWithPooledMessageHandler = _httpClientFactory.CreateClient();
+			var organisationName = await GetOrganisationName(organisationAuthorisation.OrganisationId);
 
-			//var organisations = await _apiService.GetOrganisations(new List<int> {organisationAuthorisation.OrganisationId}, machineToMachineAccessToken,	httpClientWithPooledMessageHandler);
-
-			var organisations = new List<Organisation> {new Organisation(1, "Faculty of Pain Medicine of the Royal College of Anaesthetists", false)}; //TODO: remove. this is only here since we're not currently caching the token. Once idam's been updated with m2m token caching we can restore the above code and remove this.
-
-			var organisation = organisations.FirstOrDefault();
-			if (organisation == null)
-				throw new ApplicationException("Organisation could not be found. Contact NICE nice@nice.org.uk to report the issue."); //might could technically occur if the org has been deleted from idam and CC hasn't been updated.
-
-			return new OrganisationCode(organisationAuthorisation, organisation.OrganisationName);
+			return new OrganisationCode(organisationAuthorisation, organisationName);
 		}
 
 		//TODO: if performance is an issue, refactor this to be 1 DB hit instead of 2-4.
@@ -167,14 +159,20 @@ namespace Comments.Services
 			return (organisationUser.AuthorisationSession, expirationDate);
 		}
 
-		public bool CheckOrganisationUserSession(int consultationId, Guid sessionId)
+		public async Task<(bool valid, string organisationName)> CheckOrganisationUserSession(int consultationId, Guid sessionId)
 		{
-			var validatedSession = CheckValidCodesForConsultation(new Session(new Dictionary<int, Guid>() {{consultationId, sessionId}})).FirstOrDefault();
-			
-			return validatedSession.valid;
+			var validatedSession = CheckValidCodesForConsultation(new Session(new Dictionary<int, Guid>() {{consultationId, sessionId}})).ToList().FirstOrDefault();
+
+			if (!validatedSession.valid && !validatedSession.organisationId.HasValue)
+			{
+				return (valid: false, organisationName: null);
+			}
+
+			var organisationName = await GetOrganisationName(validatedSession.organisationId.Value);
+			return (valid: true, organisationName: organisationName);
 		}
 
-		public IEnumerable<(bool valid, int consultationId, Guid session, int? organisationUserId)> CheckValidCodesForConsultation(Session unvalidatedSessions)
+		public IEnumerable<(bool valid, int consultationId, Guid session, int? organisationUserId, int? organisationId)> CheckValidCodesForConsultation(Session unvalidatedSessions)
 		{
 			var organisationUsers = _context.GetOrganisationUsers(unvalidatedSessions.SessionCookies.Select(session => session.Value)).ToList();
 
@@ -182,6 +180,7 @@ namespace Comments.Services
 			{
 				var valid = false;
 				int? organisationUserId = null;
+				int? organisationId = null;
 				var organisationUserForThisSession = organisationUsers.FirstOrDefault(ou => ou.AuthorisationSession.Equals(session.Value));
 				if (organisationUserForThisSession != null && organisationUserForThisSession.ExpirationDate > DateTime.UtcNow)
 				{
@@ -190,10 +189,25 @@ namespace Comments.Services
 					{
 						valid = true;
 						organisationUserId = organisationUserForThisSession.OrganisationUserId;
+						organisationId = organisationUserForThisSession.OrganisationAuthorisation.OrganisationId;
 					}
 				}
-				return (valid, consultationId: session.Key, session: session.Value, organisationUserId: organisationUserId);
+				return (valid, consultationId: session.Key, session: session.Value, organisationUserId: organisationUserId, organisationId: organisationId);
 			});
+		}
+
+		private async Task<string> GetOrganisationName(int organisationId)
+		{
+			var machineToMachineAccessToken = await _apiTokenService.GetAccessToken(AppSettings.AuthenticationConfig.GetAuthConfiguration());
+			var httpClientWithPooledMessageHandler = _httpClientFactory.CreateClient();
+
+			var organisations = await _apiService.GetOrganisations(new List<int> { organisationId }, machineToMachineAccessToken, httpClientWithPooledMessageHandler);
+
+			var organisation = organisations.FirstOrDefault();
+			if (organisation == null)
+				throw new ApplicationException("Organisation name could not be retrieved. Please contact app support."); //might occur if the org has been deleted from idam and CC hasn't been updated.
+
+			return organisation.OrganisationName;
 		}
 	}
 }

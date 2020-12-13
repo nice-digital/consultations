@@ -274,38 +274,46 @@ namespace Comments.Test.UnitTests
 		}
 
 		[Fact]
-		public void CheckOrganisationUserSessionRecognisesValidAndInvalidSessions()
+		public async Task CheckOrganisationUserSessionRecognisesValidAndInvalidSessions()
 		{
 			//Arrange
 			ResetDatabase();
 			_context.Database.EnsureCreated();
 			var sessionId = Guid.NewGuid();
 			var consultationId = 1;
+			var organisationId = 1;
+			var organisationName = "NICE";
+			var fakeAPIService = new FakeAPIService(null, null, new List<Organisation> { new Organisation(organisationId, organisationName, true) });
+			var mockFactory = new Mock<IHttpClientFactory>();
 
 			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
 			{
-				var serviceUnderTest = new OrganisationService(context, _fakeUserService, null, null, null, null);
+				var serviceUnderTest = new OrganisationService(context, _fakeUserService, new FakeAPITokenService(), fakeAPIService, mockFactory.Object, null);
 
-				var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(1, consultationId, context, collationCode: "123412341234");
+				var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, collationCode: "123412341234");
 				TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, sessionId, null);
 
 				//Act
-				var valid = serviceUnderTest.CheckOrganisationUserSession(consultationId, sessionId);
+				var validAndOrganisationName = await serviceUnderTest.CheckOrganisationUserSession(consultationId, sessionId);
 
-				var invalid1 = serviceUnderTest.CheckOrganisationUserSession(consultationId, Guid.NewGuid());
-				var invalid2 = serviceUnderTest.CheckOrganisationUserSession(2, sessionId);
-				var invalid3 = serviceUnderTest.CheckOrganisationUserSession(2, Guid.NewGuid());
+				var invalid1andNoOrganisationName = await serviceUnderTest.CheckOrganisationUserSession(consultationId, Guid.NewGuid());
+				var invalid2andNoOrganisationName = await serviceUnderTest.CheckOrganisationUserSession(2, sessionId);
+				var invalid3andNoOrganisationName = await serviceUnderTest.CheckOrganisationUserSession(2, Guid.NewGuid());
 
 				//Assert
-				valid.ShouldBe(true);
-				invalid1.ShouldBe(false);
-				invalid2.ShouldBe(false);
-				invalid3.ShouldBe(false);
+				validAndOrganisationName.valid.ShouldBe(true);
+				validAndOrganisationName.organisationName.ShouldBe(organisationName);
+				invalid1andNoOrganisationName.valid.ShouldBe(false);
+				invalid1andNoOrganisationName.organisationName.ShouldBe(null);
+				invalid2andNoOrganisationName.valid.ShouldBe(false);
+				invalid2andNoOrganisationName.organisationName.ShouldBe(null);
+				invalid3andNoOrganisationName.valid.ShouldBe(false);
+				invalid3andNoOrganisationName.organisationName.ShouldBe(null);
 			}
 		}
 
 		[Fact]
-		public void CheckOrganisationUserSessionRecognisesNonExpiredSessionCorrectly()
+		public async Task CheckOrganisationUserSessionRecognisesNonExpiredSessionCorrectly()
 		{
 			//Arrange
 			ResetDatabase();
@@ -313,24 +321,25 @@ namespace Comments.Test.UnitTests
 			var sessionId = Guid.NewGuid();
 			var consultationId = 1;
 			var expirationDate = DateTime.UtcNow.AddDays(1);
+			var mockFactory = new Mock<IHttpClientFactory>();
 
 			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
 			{
-				var serviceUnderTest = new OrganisationService(context, _fakeUserService, null, null, null, null);
+				var serviceUnderTest = new OrganisationService(context, _fakeUserService, new FakeAPITokenService(), _fakeApiService, mockFactory.Object, null);
 
 				var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(1, consultationId, context, collationCode: "123412341234");
 				TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, sessionId, expirationDate);
 
 				//Act
-				var valid = serviceUnderTest.CheckOrganisationUserSession(consultationId, sessionId);
+				var validityAndOrganisationName = await serviceUnderTest.CheckOrganisationUserSession(consultationId, sessionId);
 				
 				//Assert
-				valid.ShouldBe(true);
+				validityAndOrganisationName.valid.ShouldBe(true);
 			}
 		}
 
 		[Fact]
-		public void CheckOrganisationUserSessionRecognisesExpiredSessionCorrectly()
+		public async Task CheckOrganisationUserSessionRecognisesExpiredSessionCorrectly()
 		{
 			//Arrange
 			ResetDatabase();
@@ -347,10 +356,10 @@ namespace Comments.Test.UnitTests
 				TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, sessionId, expirationDate);
 
 				//Act
-				var invalid = serviceUnderTest.CheckOrganisationUserSession(consultationId, sessionId);
+				var invalidAndOrganisationName = await serviceUnderTest.CheckOrganisationUserSession(consultationId, sessionId);
 
 				//Assert
-				invalid.ShouldBe(false);
+				invalidAndOrganisationName.valid.ShouldBe(false);
 			}
 		}
 

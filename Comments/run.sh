@@ -36,6 +36,7 @@ jq \
     --arg teamRoles1 "$TEAMROLES1" \
     --arg teamRoles2 "$TEAMROLES2" \
     --arg teamRoles3 "$TEAMROLES3" \
+    --arg OrgCommenting "$ORG_COMMENTING" \
     '
     .ConnectionStrings.DefaultConnection = $defaultConnection |
     .Logging.LogFilePath = $loggingLogFilePath |
@@ -63,6 +64,7 @@ jq \
     .WebAppConfiguration.GoogleTrackingId = $googleTrackingId |
     .Encryption.Key = $encryptionKey |
     .Encryption.IV = $encryptionIV |
+    .FeatureManagement.OrganisationalCommenting = $OrgCommenting |
     .ConsultationList.DownloadRoles.AdminRoles |= .+ [$adminRole] |
     .ConsultationList.DownloadRoles.TeamRoles |= .+ [$teamRoles1] |
     .ConsultationList.DownloadRoles.TeamRoles |= .+ [$teamRoles2] |
