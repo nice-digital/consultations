@@ -26,12 +26,14 @@ namespace Comments.Test.IntegrationTests.API.Comments
 
 		public EditCommentUsingOrganisationSessionCookieTests()
 		{
-			var context = new ConsultationsContext(GetContextOptions(), FakeUserService.Get(isAuthenticated: false, testUserType: TestUserType.NotAuthenticated, organisationUserId: 1), new FakeEncryption());
+			const int organisationUserId = 1;
+			var context = new ConsultationsContext(GetContextOptions(), FakeUserService.Get(isAuthenticated: false, testUserType: TestUserType.NotAuthenticated, organisationUserId: organisationUserId), new FakeEncryption());
+			context.Database.EnsureDeleted();
 
 			var sourceURI = $"consultations://./consultation/{consultationId}/document/1/chapter/introduction";
 
 			var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(1, consultationId, context, null, "123412341234");
-			var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, _sessionId, null);
+			TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, _sessionId, null);
 
 			var locationId = TestBaseDBHelpers.AddLocation(context, sourceURI);
 			var commentId = TestBaseDBHelpers.AddComment(context, locationId, "comment text", createdByUserId: null, organisationUserId: organisationUserId);
@@ -79,7 +81,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
 
 			//Act
 			var response = await builder.SendAsync(HttpMethod.Put.Method);
-			
+
 			// Assert
 			response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
 		}

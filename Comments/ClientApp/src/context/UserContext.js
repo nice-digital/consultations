@@ -156,6 +156,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 			.then(response => response.data)
 			.catch(err => {
 				console.log(JSON.stringify(err));
+				return {valid: false};
 			});
 		return {
 			validityAndOrganisationName: await validityAndOrganisationName,

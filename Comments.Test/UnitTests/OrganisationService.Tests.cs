@@ -30,7 +30,7 @@ namespace Comments.Test.UnitTests
 
 			var userService = new StubUserService(new User(isAuthenticated: true, displayName: "Carl Spackler",
 				userId: "001", new List<Organisation>() {new Organisation(organisationId, "Bushwood Country Club", isLead: false)},
-				validatedOrganisationUserIds: null, validatedConsultationIds: null)); 
+				validatedOrganisationUserIds: null, validatedSession: null)); 
 
 			using (var consultationsContext = new ConsultationsContext(_options, userService, _fakeEncryption))
 			{
@@ -52,7 +52,7 @@ namespace Comments.Test.UnitTests
 
 			var userService = new StubUserService(new User(isAuthenticated: true, displayName: "Carl Spackler",
 				userId: "001", new List<Organisation>() { new Organisation(organisationId, "Bushwood Country Club", isLead: true) },
-				validatedOrganisationUserIds: null, validatedConsultationIds: null));
+				validatedOrganisationUserIds: null, validatedSession: null));
 
 			using (var context = new ConsultationsContext(_options, userService, _fakeEncryption))
 			{
@@ -108,7 +108,7 @@ namespace Comments.Test.UnitTests
 
 			var userService = new StubUserService(new User(isAuthenticated: true, displayName: "Carl Spackler",
 				userId: "001", new List<Organisation> { new Organisation(organisationId, "Bushwood Country Club", isLead: true) },
-				validatedOrganisationUserIds: null, validatedConsultationIds: null));
+				validatedOrganisationUserIds: null, validatedSession: null));
 
 			using (var context = new ConsultationsContext(_options, userService, _fakeEncryption))
 			{
@@ -274,41 +274,122 @@ namespace Comments.Test.UnitTests
 		}
 
 		[Fact]
-		public async Task CheckOrganisationUserSessionRecognisesValidAndInvalidSessions()
+		public async Task CheckOrganisationUserSessionRecognisesValidSessions()
 		{
 			//Arrange
 			ResetDatabase();
 			_context.Database.EnsureCreated();
 			var sessionId = Guid.NewGuid();
-			var consultationId = 1;
-			var organisationId = 1;
-			var organisationName = "NICE";
+			const int consultationId = 1;
+			const int organisationId = 1;
+			const string organisationName = "NICE";
 			var fakeAPIService = new FakeAPIService(null, null, new List<Organisation> { new Organisation(organisationId, organisationName, true) });
 			var mockFactory = new Mock<IHttpClientFactory>();
 
 			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
 			{
-				var serviceUnderTest = new OrganisationService(context, _fakeUserService, new FakeAPITokenService(), fakeAPIService, mockFactory.Object, null);
-
 				var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, collationCode: "123412341234");
-				TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, sessionId, null);
+				var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, sessionId, null);
+
+				var userService = new StubUserService(new User(true, null, null, null, new List<int>() { organisationUserId }, new Session(new Dictionary<int, Guid> {{consultationId, sessionId } } ) ));
+				var serviceUnderTest = new OrganisationService(context, userService, new FakeAPITokenService(), fakeAPIService, mockFactory.Object, null);
 
 				//Act
-				var validAndOrganisationName = await serviceUnderTest.CheckOrganisationUserSession(consultationId, sessionId);
-
-				var invalid1andNoOrganisationName = await serviceUnderTest.CheckOrganisationUserSession(consultationId, Guid.NewGuid());
-				var invalid2andNoOrganisationName = await serviceUnderTest.CheckOrganisationUserSession(2, sessionId);
-				var invalid3andNoOrganisationName = await serviceUnderTest.CheckOrganisationUserSession(2, Guid.NewGuid());
-
+				var validAndOrganisationName = await serviceUnderTest.CheckOrganisationUserSession(consultationId);
+				
 				//Assert
 				validAndOrganisationName.valid.ShouldBe(true);
 				validAndOrganisationName.organisationName.ShouldBe(organisationName);
-				invalid1andNoOrganisationName.valid.ShouldBe(false);
-				invalid1andNoOrganisationName.organisationName.ShouldBe(null);
-				invalid2andNoOrganisationName.valid.ShouldBe(false);
-				invalid2andNoOrganisationName.organisationName.ShouldBe(null);
-				invalid3andNoOrganisationName.valid.ShouldBe(false);
-				invalid3andNoOrganisationName.organisationName.ShouldBe(null);
+			}
+		}
+
+		[Fact]
+		public async Task CheckOrganisationUserSessionRecognisesInvalidSessionId()
+		{
+			//Arrange
+			ResetDatabase();
+			_context.Database.EnsureCreated();
+			var sessionId = Guid.NewGuid();
+			const int consultationId = 1;
+			const int organisationId = 1;
+			const string organisationName = "NICE";
+			var fakeAPIService = new FakeAPIService(null, null, new List<Organisation> { new Organisation(organisationId, organisationName, true) });
+			var mockFactory = new Mock<IHttpClientFactory>();
+
+			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
+			{
+				var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, collationCode: "123412341234");
+				var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, sessionId, null);
+
+				var userService = new StubUserService(new User(true, null, null, null, new List<int>() { organisationUserId }, new Session(new Dictionary<int, Guid> { { consultationId, Guid.NewGuid() } })));
+				var serviceUnderTest = new OrganisationService(context, userService, new FakeAPITokenService(), fakeAPIService, mockFactory.Object, null);
+
+				//Act
+				var actual = await serviceUnderTest.CheckOrganisationUserSession(consultationId);
+
+				//Assert
+				actual.valid.ShouldBe(false);
+				actual.organisationName.ShouldBe(null);
+			}
+		}
+
+		[Fact]
+		public async Task CheckOrganisationUserSessionRecognisesInvalidConsultationId()
+		{
+			//Arrange
+			ResetDatabase();
+			_context.Database.EnsureCreated();
+			var sessionId = Guid.NewGuid();
+			const int consultationId = 1;
+			const int organisationId = 1;
+			const string organisationName = "NICE";
+			var fakeAPIService = new FakeAPIService(null, null, new List<Organisation> { new Organisation(organisationId, organisationName, true) });
+			var mockFactory = new Mock<IHttpClientFactory>();
+
+			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
+			{
+				var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, collationCode: "123412341234");
+				var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, sessionId, null);
+
+				var userService = new StubUserService(new User(true, null, null, null, new List<int>() { organisationUserId }, new Session(new Dictionary<int, Guid> { { 9999, sessionId } })));
+				var serviceUnderTest = new OrganisationService(context, userService, new FakeAPITokenService(), fakeAPIService, mockFactory.Object, null);
+
+				//Act
+				var actual = await serviceUnderTest.CheckOrganisationUserSession(2);
+
+				//Assert
+				actual.valid.ShouldBe(false);
+				actual.organisationName.ShouldBe(null);
+			}
+		}
+
+		[Fact]
+		public async Task CheckOrganisationUserSessionRecognisesInvalidSessionAndConsultationId()
+		{
+			//Arrange
+			ResetDatabase();
+			_context.Database.EnsureCreated();
+			var sessionId = Guid.NewGuid();
+			const int consultationId = 1;
+			const int organisationId = 1;
+			const string organisationName = "NICE";
+			var fakeAPIService = new FakeAPIService(null, null, new List<Organisation> { new Organisation(organisationId, organisationName, true) });
+			var mockFactory = new Mock<IHttpClientFactory>();
+
+			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
+			{
+				var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, collationCode: "123412341234");
+				var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, sessionId, null);
+
+				var userService = new StubUserService(new User(true, null, null, null, new List<int>() { organisationUserId }, new Session(new Dictionary<int, Guid> { { 999, Guid.NewGuid() } })));
+				var serviceUnderTest = new OrganisationService(context, userService, new FakeAPITokenService(), fakeAPIService, mockFactory.Object, null);
+
+				//Act
+				var actual = await serviceUnderTest.CheckOrganisationUserSession(2);
+
+				//Assert
+				actual.valid.ShouldBe(false);
+				actual.organisationName.ShouldBe(null);
 			}
 		}
 
@@ -325,13 +406,14 @@ namespace Comments.Test.UnitTests
 
 			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
 			{
-				var serviceUnderTest = new OrganisationService(context, _fakeUserService, new FakeAPITokenService(), _fakeApiService, mockFactory.Object, null);
-
 				var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(1, consultationId, context, collationCode: "123412341234");
-				TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, sessionId, expirationDate);
+				var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, sessionId, expirationDate);
+
+				var userService = new StubUserService(new User(true, null, null, null, new List<int>() { organisationUserId }, new Session(new Dictionary<int, Guid> { { consultationId, sessionId } })));
+				var serviceUnderTest = new OrganisationService(context, userService, new FakeAPITokenService(), _fakeApiService, mockFactory.Object, null);
 
 				//Act
-				var validityAndOrganisationName = await serviceUnderTest.CheckOrganisationUserSession(consultationId, sessionId);
+				var validityAndOrganisationName = await serviceUnderTest.CheckOrganisationUserSession(consultationId);
 				
 				//Assert
 				validityAndOrganisationName.valid.ShouldBe(true);
@@ -339,27 +421,36 @@ namespace Comments.Test.UnitTests
 		}
 
 		[Fact]
-		public async Task CheckOrganisationUserSessionRecognisesExpiredSessionCorrectly()
+		public async Task CheckValidCodesForConsultationRecognisesExpiredSessionCorrectly()
 		{
 			//Arrange
 			ResetDatabase();
 			_context.Database.EnsureCreated();
-			var sessionId = Guid.NewGuid();
+			const string collationCodeInDB = "123412341234";
+			const int organisationId = 1;
 			var consultationId = 1;
+			var mockFactory = new Mock<IHttpClientFactory>();
+			var sessionId = Guid.NewGuid();
 			var expirationDate = DateTime.UtcNow.AddDays(-1);
 
 			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
 			{
-				var serviceUnderTest = new OrganisationService(context, _fakeUserService, null, null, null, null);
-
-				var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(1, consultationId, context, collationCode: "123412341234");
+				var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, collationCode: collationCodeInDB);
+				var serviceUnderTest = new OrganisationService(context, _fakeUserService, new FakeAPITokenService(), _fakeApiService, mockFactory.Object, null);
 				TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, sessionId, expirationDate);
 
-				//Act
-				var invalidAndOrganisationName = await serviceUnderTest.CheckOrganisationUserSession(consultationId, sessionId);
+				var unvalidatedSessions = new Session(new Dictionary<int, Guid>
+				{
+					{consultationId, sessionId},
+					{99, Guid.NewGuid()},
+					{999, sessionId }
+				});
+
+				//Act 
+				var validatedSessions = serviceUnderTest.CheckValidCodesForConsultation(unvalidatedSessions);
 
 				//Assert
-				invalidAndOrganisationName.valid.ShouldBe(false);
+				validatedSessions.Count(s => s.valid).ShouldBe(0);
 			}
 		}
 
@@ -397,6 +488,5 @@ namespace Comments.Test.UnitTests
 				validSession.consultationId.Equals(consultationId);
 			}
 		}
-
-	}
+    }
 }

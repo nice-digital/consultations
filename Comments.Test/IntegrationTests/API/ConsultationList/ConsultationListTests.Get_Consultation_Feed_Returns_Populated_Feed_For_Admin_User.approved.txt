@@ -103,9 +103,11 @@
         "validatedOrganisationUserIds":[
             
         ],
-        "validatedConsultationIds":[
-            
-        ],
+        "validatedSession":{
+            "sessionCookies":{
+                
+            }
+        },
         "isAdminUser":true,
         "isTeamUser":false,
         "teamNames":[

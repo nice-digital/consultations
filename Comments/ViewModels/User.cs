@@ -1,3 +1,4 @@
+using System;
 using NICE.Identity.Authentication.Sdk.Domain;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,14 +9,14 @@ namespace Comments.ViewModels
     {
 	    public User() {}
 
-	    public User(bool isAuthenticated, string displayName, string userId, IEnumerable<Organisation> organisationsAssignedAsLead, IEnumerable<int> validatedOrganisationUserIds, IEnumerable<int> validatedConsultationIds)
+	    public User(bool isAuthenticated, string displayName, string userId, IEnumerable<Organisation> organisationsAssignedAsLead, IEnumerable<int> validatedOrganisationUserIds, Session validatedSession)
 		{
             IsAuthenticated = isAuthenticated;
             DisplayName = displayName;
             UserId = userId;
 	        OrganisationsAssignedAsLead = organisationsAssignedAsLead;
 	        ValidatedOrganisationUserIds = validatedOrganisationUserIds;
-	        ValidatedConsultationIds = validatedConsultationIds;
+	        ValidatedSession = validatedSession;
 		}
 
         public bool IsAuthenticated { get; private set; }
@@ -25,7 +26,7 @@ namespace Comments.ViewModels
 		public IEnumerable<Organisation> OrganisationsAssignedAsLead { get; private set; }
 
 		public readonly IEnumerable<int> ValidatedOrganisationUserIds; 
-		public readonly IEnumerable<int> ValidatedConsultationIds;
+		public readonly Session ValidatedSession;
 
 		public bool IsAuthenticatedByAccounts => (IsAuthenticated && UserId != null);
 		public bool IsAuthenticatedByOrganisationCookie => (IsAuthenticated && UserId == null);
@@ -47,7 +48,7 @@ namespace Comments.ViewModels
 			{
 				return true;
 			}
-			return ValidatedConsultationIds.Any(cid => cid.Equals(consultationId));
+			return ValidatedSession.SessionCookies.Any(cookie => cookie.Key.Equals(consultationId));
 		}
 
 		/// <summary>
@@ -64,6 +65,21 @@ namespace Comments.ViewModels
 			}
 
 			return ValidatedOrganisationUserIds.Any(ouid => ouid.Equals(organisationUserId));
+		}
+
+		public Guid? GetValidatedSessionIdForConsultation(int consultationId)
+		{
+			if (!IsAuthenticatedByOrganisationCookie)
+			{
+				return null;
+			}
+
+			if (!ValidatedSession.SessionCookies.ContainsKey(consultationId))
+			{
+				return null;
+			}
+
+			return ValidatedSession.SessionCookies[consultationId];
 		}
 	}
 }

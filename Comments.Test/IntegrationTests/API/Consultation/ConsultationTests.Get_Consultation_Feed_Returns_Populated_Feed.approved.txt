@@ -20,9 +20,11 @@
         "validatedOrganisationUserIds":[
             
         ],
-        "validatedConsultationIds":[
-            
-        ],
+        "validatedSession":{
+            "sessionCookies":{
+                
+            }
+        },
         "isAuthenticated":true,
         "displayName":"Benjamin Button",
         "userId":"00000000-0000-0000-0000-000000000000",

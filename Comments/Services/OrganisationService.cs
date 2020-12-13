@@ -21,7 +21,7 @@ namespace Comments.Services
 		OrganisationCode GenerateOrganisationCode(int organisationId, int consultationId);
 		Task<OrganisationCode> CheckValidCodeForConsultation(string collationCode, int consultationId);
 		(Guid sessionId, DateTime expirationDate) CreateOrganisationUserSession(int organisationAuthorisationId, string collationCode);
-		Task<(bool valid, string organisationName)> CheckOrganisationUserSession(int consultationId, Guid sessionId);
+		Task<(bool valid, string organisationName)> CheckOrganisationUserSession(int consultationId);//, Guid sessionId);
 		IEnumerable<(bool valid, int consultationId, Guid session, int? organisationUserId, int? organisationId)> CheckValidCodesForConsultation(Session unvalidatedSessions);
 	}
 
@@ -159,16 +159,24 @@ namespace Comments.Services
 			return (organisationUser.AuthorisationSession, expirationDate);
 		}
 
-		public async Task<(bool valid, string organisationName)> CheckOrganisationUserSession(int consultationId, Guid sessionId)
+		public async Task<(bool valid, string organisationName)> CheckOrganisationUserSession(int consultationId) //, Guid sessionId)
 		{
-			var validatedSession = CheckValidCodesForConsultation(new Session(new Dictionary<int, Guid>() {{consultationId, sessionId}})).ToList().FirstOrDefault();
+			var currentUser = _userService.GetCurrentUser();
+			var sessionId = currentUser.GetValidatedSessionIdForConsultation(consultationId);
 
-			if (!validatedSession.valid && !validatedSession.organisationId.HasValue)
+			if (!sessionId.HasValue)
 			{
 				return (valid: false, organisationName: null);
 			}
 
-			var organisationName = await GetOrganisationName(validatedSession.organisationId.Value);
+			var organisationUser = _context.GetOrganisationUsers(new List<Guid> {sessionId.Value}).FirstOrDefault();
+
+			if (organisationUser == null)
+			{
+				return (valid: false, organisationName: null);
+			}
+
+			var organisationName = await GetOrganisationName(organisationUser.OrganisationAuthorisation.OrganisationId);
 			return (valid: true, organisationName: organisationName);
 		}
 

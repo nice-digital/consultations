@@ -1,3 +1,4 @@
+using System;
 using Comments.Services;
 using Comments.ViewModels;
 using Microsoft.AspNetCore.Authentication;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Comments.Common
 {
@@ -25,11 +27,11 @@ namespace Comments.Common
 	///
 	/// If so, you'll be authenticated. However you'll only be authorised for the specific consultations you have cookies for.
 	/// </summary>
-	public class OrganisationCookieHandler : AuthenticationHandler<OrganisationCookieAuthenticationOptions>
+	public class OrganisationCookieAuthenticationHandler : AuthenticationHandler<OrganisationCookieAuthenticationOptions>
 	{
 		private readonly IOrganisationService _organisationService;
 
-		public OrganisationCookieHandler(IOptionsMonitor<OrganisationCookieAuthenticationOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock, IOrganisationService organisationService)
+		public OrganisationCookieAuthenticationHandler(IOptionsMonitor<OrganisationCookieAuthenticationOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock, IOrganisationService organisationService)
 			: base(options, logger, encoder, clock)
 		{
 			_organisationService = organisationService;
@@ -46,31 +48,31 @@ namespace Comments.Common
 			}
 
 			var validatedOrganisationUserIds = new List<int>();
-			var validatedConsultationIds = new List<int>();
+			var validatedSession = new Dictionary<int, Guid>();
 
-			var validatedSessions = _organisationService.CheckValidCodesForConsultation(new Session(unvalidatedSessionCookies));
+			List<(bool valid, int consultationId, Guid session, int? organisationUserId, int? organisationId)> validatedSessions = _organisationService.CheckValidCodesForConsultation(new Session(unvalidatedSessionCookies)).ToList();
 
 			foreach (var session in validatedSessions)
 			{
 				if (session.valid && session.organisationUserId.HasValue)
 				{
 					validatedOrganisationUserIds.Add(session.organisationUserId.Value);
-					validatedConsultationIds.Add(session.consultationId);
+					validatedSession.Add(session.consultationId, session.session);
 				}
 			}
 			
-			if (!validatedOrganisationUserIds.Any() || !validatedConsultationIds.Any())
+			if (!validatedOrganisationUserIds.Any() || !validatedSession.Any())
 			{
 				return AuthenticateResult.NoResult(); //return AuthenticateResult.Fail("Access denied.");
 			}
 
 			var validatedOrganisationUserIdsCSV = string.Join(",", validatedOrganisationUserIds);
-			var validatedConsultationIdsCSV = string.Join(",", validatedConsultationIds);
+			var validatedSessionSerialised = JsonConvert.SerializeObject(new Session(validatedSession));
 
 			var claims = new List<Claim>
 				{
 					new Claim(Constants.OrgansationAuthentication.OrganisationUserIdsCSVClaim, validatedOrganisationUserIdsCSV, null, Constants.OrgansationAuthentication.Issuer),
-					new Claim(Constants.OrgansationAuthentication.ConsultationIdsCSVClaim, validatedConsultationIdsCSV, null, Constants.OrgansationAuthentication.Issuer)
+					new Claim(Constants.OrgansationAuthentication.SesssionClaim, validatedSessionSerialised, null, Constants.OrgansationAuthentication.Issuer)
 				};
 			var identity = new ClaimsIdentity(claims, Options.AuthenticationType);
 			var identities = new List<ClaimsIdentity> { identity };

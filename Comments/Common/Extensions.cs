@@ -7,8 +7,10 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.RegularExpressions;
 using Comments.Configuration;
+using Comments.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace Comments.Common
 {
@@ -157,15 +159,15 @@ namespace Comments.Common
 		    return organisationUserIdsCSV.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
 	    }
 
-	    public static IEnumerable<int> ValidatedConsultationIds(this ClaimsPrincipal claimsPrincipal)
+	    public static Session ValidatedSession(this ClaimsPrincipal claimsPrincipal)
 	    {
-		    var consultationIdsCSV = claimsPrincipal.Claims.FirstOrDefault(claim => claim.Type.Equals(Constants.OrgansationAuthentication.ConsultationIdsCSVClaim) && claim.Issuer.Equals(Constants.OrgansationAuthentication.Issuer))?.Value;
-		    if (string.IsNullOrEmpty(consultationIdsCSV))
+		    var serialisedSession = claimsPrincipal.Claims.FirstOrDefault(claim => claim.Type.Equals(Constants.OrgansationAuthentication.SesssionClaim) && claim.Issuer.Equals(Constants.OrgansationAuthentication.Issuer))?.Value;
+		    if (string.IsNullOrEmpty(serialisedSession))
 		    {
-			    return new List<int>();
+			    return new Session(new Dictionary<int, Guid>());
 		    }
 
-		    return consultationIdsCSV.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
+		    return JsonConvert.DeserializeObject<Session>(serialisedSession);
 	    }
 	}
 }

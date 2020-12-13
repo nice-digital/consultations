@@ -2,9 +2,11 @@
     "validatedOrganisationUserIds":[
         
     ],
-    "validatedConsultationIds":[
-        
-    ],
+    "validatedSession":{
+        "sessionCookies":{
+            
+        }
+    },
     "signInURL":"/consultations/account/login?returnURL=%2Fconsultations%2F1%2F1%2Fintroduction",
     "registerURL":"/consultations/account/login?returnURL=%2Fconsultations%2F1%2F1%2Fintroduction&goToRegisterPage=True",
     "isAuthenticated":true,

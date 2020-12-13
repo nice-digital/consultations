@@ -52,9 +52,11 @@ namespace Comments.Test.Infrastructure
 			return organisationAuthorisation.OrganisationAuthorisationId;
 		}
 
-		public static int AddOrganisationUser(ConsultationsContext passedInContext, int organisationAuthorisationId, Guid authorisationSession, DateTime? expirationDate)
+		public static int AddOrganisationUser(ConsultationsContext passedInContext, int organisationAuthorisationId, Guid authorisationSession, DateTime? expirationDate, int organisationUserId = 0)
 		{
-			var organisationUser = new OrganisationUser(organisationAuthorisationId, authorisationSession, expirationDate ?? DateTime.Now.AddDays(28));
+			var organisationUser = new OrganisationUser(organisationAuthorisationId, authorisationSession, expirationDate ?? DateTime.Now.AddDays(28))
+				{OrganisationUserId = organisationUserId};
+
 			passedInContext.OrganisationUser.Add(organisationUser);
 			passedInContext.SaveChanges();
 			return organisationUser.OrganisationUserId;

@@ -91,7 +91,7 @@ namespace Comments
 			// Add authentication
 			var authConfiguration = AppSettings.AuthenticationConfig.GetAuthConfiguration();
 			services.AddAuthentication(authConfiguration, allowNonSecureCookie: Environment.IsDevelopment())
-				.AddScheme<OrganisationCookieAuthenticationOptions, OrganisationCookieHandler>(OrganisationCookieAuthenticationOptions.DefaultScheme, options => {  });
+				.AddScheme<OrganisationCookieAuthenticationOptions, OrganisationCookieAuthenticationHandler>(OrganisationCookieAuthenticationOptions.DefaultScheme, options => {  });
 			services.AddAuthorisation(authConfiguration);
 
 			services.AddMvc(options =>

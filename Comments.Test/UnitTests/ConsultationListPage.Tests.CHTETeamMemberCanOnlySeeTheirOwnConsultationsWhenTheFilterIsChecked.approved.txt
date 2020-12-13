@@ -139,9 +139,11 @@
         "ValidatedOrganisationUserIds":[
             
         ],
-        "ValidatedConsultationIds":[
-            
-        ],
+        "ValidatedSession":{
+            "SessionCookies":{
+                
+            }
+        },
         "IsAdminUser":false,
         "IsTeamUser":true,
         "TeamNames":[

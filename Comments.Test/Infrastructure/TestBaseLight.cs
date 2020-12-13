@@ -30,7 +30,7 @@ namespace Comments.Test.Infrastructure
 	public class TestBaseLight
 	{
 
-		protected static (TestServer testServer, HttpClient httpClient) InitialiseServerAndClient(ConsultationsContext dbContext)
+		protected (TestServer testServer, HttpClient httpClient) InitialiseServerAndClient(ConsultationsContext dbContext)
 		{
 			AppSettings.AuthenticationConfig = new AuthenticationConfig { ClientId = "test client id", AuthorisationServiceUri = "http://www.example.com" };
 			AppSettings.GlobalNavConfig = new GlobalNavConfig { CookieBannerScript = "//a-fake-cookiebannerscript-url" };
@@ -41,7 +41,7 @@ namespace Comments.Test.Infrastructure
 				{
 					services.AddEntityFrameworkSqlite();
 
-					services.TryAddSingleton<ConsultationsContext>(dbContext);
+					services.TryAddScoped<ConsultationsContext>(provider => dbContext);
 
 					services.AddMvc(opt => opt.Filters.Add(new AllowAnonymousFilter()));
 				})
@@ -67,7 +67,7 @@ namespace Comments.Test.Infrastructure
 			return (testServer: server, httpClient: server.CreateClient());
 		}
 
-		protected static DbContextOptions<ConsultationsContext> GetContextOptions()
+		protected DbContextOptions<ConsultationsContext> GetContextOptions()
 		{
 			var databaseName = "ConsultationsDB" + Guid.NewGuid();
 			return new DbContextOptionsBuilder<ConsultationsContext>()
@@ -76,10 +76,5 @@ namespace Comments.Test.Infrastructure
 				.Options;
 		}
 
-		#region DB functions. similar to the ones in TestBase, but lighter. (they all require a context passed in).
-
-		
-
-		#endregion  DB functions.
 	}
 }
