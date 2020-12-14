@@ -19,13 +19,7 @@
             "IsUpcoming":true,
             "Show":true,
             "OrganisationCodes":[
-                {
-                    "OrganisationAuthorisationId":0,
-                    "OrganisationId":1,
-                    "OrganisationName":"NICE",
-                    "CanGenerateCollationCode":true,
-                    "CollationCode":null
-                }
+                
             ],
             "ShowShareWithOrganisationButton":false
         },
@@ -50,7 +44,7 @@
                 {
                     "OrganisationAuthorisationId":1,
                     "OrganisationId":1,
-                    "OrganisationName":"NICE",
+                    "OrganisationName":null,
                     "CanGenerateCollationCode":false,
                     "CollationCode":"FAKE CODE"
                 }
@@ -75,13 +69,7 @@
             "IsUpcoming":false,
             "Show":true,
             "OrganisationCodes":[
-                {
-                    "OrganisationAuthorisationId":0,
-                    "OrganisationId":1,
-                    "OrganisationName":"NICE",
-                    "CanGenerateCollationCode":true,
-                    "CollationCode":null
-                }
+                
             ],
             "ShowShareWithOrganisationButton":false
         }
@@ -140,14 +128,6 @@
     ],
     "TeamFilter":null,
     "User":{
-        "ValidatedOrganisationUserIds":[
-            
-        ],
-        "ValidatedSession":{
-            "SessionCookies":{
-                
-            }
-        },
         "IsAdminUser":true,
         "IsTeamUser":false,
         "TeamNames":[
@@ -157,13 +137,16 @@
         "DisplayName":"Benjamin Button",
         "UserId":"scrubbed by ScrubUserId",
         "OrganisationsAssignedAsLead":[
-            {
-                "OrganisationId":1,
-                "OrganisationName":"NICE",
-                "IsLead":true
-            }
+            
         ],
-        "IsAuthenticatedByAccounts":true
+        "ValidatedSessions":[
+            
+        ],
+        "ValidatedOrganisationUserIds":[
+            
+        ],
+        "IsAuthenticatedByAccounts":true,
+        "IsAuthenticatedByOrganisationCookie":false
     },
     "InitialPageView":false,
     "Status":[

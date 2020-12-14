@@ -18,25 +18,20 @@
         "partiallyUpdatedProjectReference":null,
         "origProjectReference":null,
         "user":{
-            "validatedOrganisationUserIds":[
-                
-            ],
-            "validatedSession":{
-                "sessionCookies":{
-                    
-                }
-            },
             "isAuthenticated":true,
             "displayName":"Benjamin Button",
             "userId":"00000000-0000-0000-0000-000000000000",
             "organisationsAssignedAsLead":[
-                {
-                    "organisationId":1,
-                    "organisationName":"NICE",
-                    "isLead":true
-                }
+                
             ],
-            "isAuthenticatedByAccounts":true
+            "validatedSessions":[
+                
+            ],
+            "validatedOrganisationUserIds":[
+                
+            ],
+            "isAuthenticatedByAccounts":true,
+            "isAuthenticatedByOrganisationCookie":false
         },
         "consultationState":null,
         "breadcrumbs":null,
@@ -61,25 +56,20 @@
         "partiallyUpdatedProjectReference":null,
         "origProjectReference":null,
         "user":{
-            "validatedOrganisationUserIds":[
-                
-            ],
-            "validatedSession":{
-                "sessionCookies":{
-                    
-                }
-            },
             "isAuthenticated":true,
             "displayName":"Benjamin Button",
             "userId":"00000000-0000-0000-0000-000000000000",
             "organisationsAssignedAsLead":[
-                {
-                    "organisationId":1,
-                    "organisationName":"NICE",
-                    "isLead":true
-                }
+                
             ],
-            "isAuthenticatedByAccounts":true
+            "validatedSessions":[
+                
+            ],
+            "validatedOrganisationUserIds":[
+                
+            ],
+            "isAuthenticatedByAccounts":true,
+            "isAuthenticatedByOrganisationCookie":false
         },
         "consultationState":null,
         "breadcrumbs":null,

@@ -93,14 +93,6 @@
     ],
     "teamFilter":null,
     "user":{
-        "validatedOrganisationUserIds":[
-            
-        ],
-        "validatedSession":{
-            "sessionCookies":{
-                
-            }
-        },
         "isAdminUser":false,
         "isTeamUser":false,
         "teamNames":[
@@ -110,13 +102,16 @@
         "displayName":"Benjamin Button",
         "userId":"00000000-0000-0000-0000-000000000000",
         "organisationsAssignedAsLead":[
-            {
-                "organisationId":1,
-                "organisationName":"NICE",
-                "isLead":true
-            }
+            
         ],
-        "isAuthenticatedByAccounts":true
+        "validatedSessions":[
+            
+        ],
+        "validatedOrganisationUserIds":[
+            
+        ],
+        "isAuthenticatedByAccounts":true,
+        "isAuthenticatedByOrganisationCookie":false
     },
     "initialPageView":false,
     "status":[

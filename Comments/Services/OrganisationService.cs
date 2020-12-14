@@ -198,7 +198,7 @@ namespace Comments.Services
 					}
 				}
 				return null;
-			}).ToList();
+			}).Where(session => session != null).ToList();
 		}
 
 		private async Task<string> GetOrganisationName(int organisationId)

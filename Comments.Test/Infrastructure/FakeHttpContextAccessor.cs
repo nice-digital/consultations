@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Comments.Common;
+using Comments.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Http.Internal;
@@ -18,7 +19,7 @@ namespace Comments.Test.Infrastructure
     public static class FakeHttpContextAccessor
     {
 	    private static string AuthenticationTokenExtensions_TokenKeyPrefix = ".Token.";
-		public static IHttpContextAccessor Get(bool isAuthenticated, string displayName = null, string userId = null, TestUserType testUserType = TestUserType.NotAuthenticated, bool addRoleClaim = true, int? organisationUserId = null)
+		public static IHttpContextAccessor Get(bool isAuthenticated, string displayName = null, string userId = null, TestUserType testUserType = TestUserType.NotAuthenticated, bool addRoleClaim = true, int? organisationUserId = null, int? organisationIdUserIsLeadOf = null)
         {
 	        var context = new Mock<HttpContext>();
 	        var roleIssuer = "www.example.com"; //the issuer of the role is the domain for which the role is setup.
@@ -29,7 +30,7 @@ namespace Comments.Test.Infrastructure
 				var claims = new List<Claim>
                 {
                     new Claim(ClaimType.DisplayName, displayName, null, AuthenticationConstants.IdAMIssuer),
-                    new Claim(ClaimType.Organisations, JsonConvert.SerializeObject(new List<Organisation>(){ new Organisation(1, "NICE", true)}), "www.nice.org.uk", AuthenticationConstants.IdAMIssuer)
+                    //new Claim(ClaimType.Organisations, JsonConvert.SerializeObject(new List<Organisation>(){ new Organisation(1, "NICE", true)}), "www.nice.org.uk", AuthenticationConstants.IdAMIssuer)
                 };
 				if (userId != null)
 				{
@@ -42,7 +43,14 @@ namespace Comments.Test.Infrastructure
 
 				if (organisationUserId.HasValue)
 				{
-					claims.Add(new Claim(Constants.OrgansationAuthentication.OrganisationUserIdsCSVClaim, organisationUserId.Value.ToString(), null, Constants.OrgansationAuthentication.Issuer));
+					var validatedSessions = new List<ValidatedSession>() { new ValidatedSession(organisationUserId.Value, 1, Guid.NewGuid(), 1)};
+					claims.Add(new Claim(Constants.OrgansationAuthentication.ValidatedSessionsClaim, JsonConvert.SerializeObject(validatedSessions), null, Constants.OrgansationAuthentication.Issuer));
+				}
+
+				if (organisationIdUserIsLeadOf.HasValue)
+				{
+					var organisations = new List<Organisation>() { new Organisation(organisationIdUserIsLeadOf.Value, "Test org", isLead: true)};
+					claims.Add(new Claim(ClaimType.Organisations, JsonConvert.SerializeObject(organisations), "www.nice.org.uk", AuthenticationConstants.IdAMIssuer));
 				}
 
 				switch (testUserType)
@@ -81,7 +89,8 @@ namespace Comments.Test.Infrastructure
 				context.Setup(r => r.RequestServices).Returns(serviceProviderMock.Object);
 			} else if (organisationUserId.HasValue)
 			{
-				var claims = new List<Claim> {new Claim(Constants.OrgansationAuthentication.OrganisationUserIdsCSVClaim, organisationUserId.Value.ToString(), null, Constants.OrgansationAuthentication.Issuer)};
+				var validatedSessions = new List<ValidatedSession>() { new ValidatedSession(organisationUserId.Value, 1, Guid.NewGuid(), 1) };
+				var claims = new List<Claim> {new Claim(Constants.OrgansationAuthentication.ValidatedSessionsClaim, JsonConvert.SerializeObject(validatedSessions), null, Constants.OrgansationAuthentication.Issuer)};
 
 				var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(claims, AuthenticationConstants.AuthenticationScheme));
 				context.Setup(r => r.User)

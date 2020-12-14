@@ -30,14 +30,7 @@ namespace Comments.ViewModels
 		public IList<int> ValidatedOrganisationUserIds => ValidatedSessions != null ? ValidatedSessions.Select(session => session.OrganisationUserId).ToList() : new List<int>();
 
 		public bool IsAuthenticatedByAccounts => (IsAuthenticated && UserId != null);
-
-		public bool IsAuthenticatedByOrganisationCookieForThisConsultation(int consultationId)
-		{
-			if (!IsAuthenticated || IsAuthenticatedByAccounts)
-				return true;
-
-			return ValidatedSessions.Any(session => session.ConsultationId.Equals(consultationId));
-		}
+		public bool IsAuthenticatedByOrganisationCookie => (IsAuthenticated && UserId == null && ValidatedSessions.Any());
 
 		/// <summary>
 		/// Determines whether a user is authorised to e.g. comment, on a given consultation.
@@ -77,7 +70,7 @@ namespace Comments.ViewModels
 
 		public Guid? GetValidatedSessionIdForConsultation(int consultationId)
 		{
-			if (!IsAuthenticatedByOrganisationCookieForThisConsultation(consultationId))
+			if (!IsAuthorisedByConsultationId(consultationId))
 			{
 				return null;
 			}

@@ -30,7 +30,7 @@ namespace Comments.Test.UnitTests
 
 			var userService = new StubUserService(new User(isAuthenticated: true, displayName: "Carl Spackler",
 				userId: "001", new List<Organisation>() {new Organisation(organisationId, "Bushwood Country Club", isLead: false)},
-				validatedOrganisationUserIds: null, validatedSession: null)); 
+				validatedSessions: null)); 
 
 			using (var consultationsContext = new ConsultationsContext(_options, userService, _fakeEncryption))
 			{
@@ -52,7 +52,7 @@ namespace Comments.Test.UnitTests
 
 			var userService = new StubUserService(new User(isAuthenticated: true, displayName: "Carl Spackler",
 				userId: "001", new List<Organisation>() { new Organisation(organisationId, "Bushwood Country Club", isLead: true) },
-				validatedOrganisationUserIds: null, validatedSession: null));
+				validatedSessions: null));
 
 			using (var context = new ConsultationsContext(_options, userService, _fakeEncryption))
 			{
@@ -69,7 +69,8 @@ namespace Comments.Test.UnitTests
 		public void CollationCodeIsCorrectFormat()
 		{
 			//Arrange
-			var serviceUnderTest = new OrganisationService(_context, _fakeUserService, null, null, null, null);
+			var fakeUserService = FakeUserService.Get(isAuthenticated: true, displayName: "The Judge", testUserType: TestUserType.Authenticated, organisationUserId: null, organisationIdUserIsLeadOf: 1);
+			var serviceUnderTest = new OrganisationService(_context, fakeUserService, null, null, null, null);
 			var regex = new Regex(Constants.CollationCode.RegExChunkedWithSpaces);
 
 			//Act
@@ -83,7 +84,8 @@ namespace Comments.Test.UnitTests
 		public void CollationCodeIsReturnedDifferentInRepeatedCalls()
 		{
 			//Arrange
-			var serviceUnderTest = new OrganisationService(_context, _fakeUserService, null, null, null, null);
+			var fakeUserService = FakeUserService.Get(isAuthenticated: true, displayName: "The Judge", testUserType: TestUserType.Authenticated, organisationUserId: null, organisationIdUserIsLeadOf: 1);
+			var serviceUnderTest = new OrganisationService(_context, fakeUserService, null, null, null, null);
 			const int numberOfTimesToGetCollationCode = 100;
 
 			//Act
@@ -108,7 +110,7 @@ namespace Comments.Test.UnitTests
 
 			var userService = new StubUserService(new User(isAuthenticated: true, displayName: "Carl Spackler",
 				userId: "001", new List<Organisation> { new Organisation(organisationId, "Bushwood Country Club", isLead: true) },
-				validatedOrganisationUserIds: null, validatedSession: null));
+				validatedSessions: null));
 
 			using (var context = new ConsultationsContext(_options, userService, _fakeEncryption))
 			{
@@ -291,7 +293,7 @@ namespace Comments.Test.UnitTests
 				var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, collationCode: "123412341234");
 				var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, sessionId, null);
 
-				var userService = new StubUserService(new User(true, null, null, null, new List<int>() { organisationUserId }, new Session(new Dictionary<int, Guid> {{consultationId, sessionId } } ) ));
+				var userService = new StubUserService(new User(true, null, null, null, new List<ValidatedSession>() { new ValidatedSession(organisationUserId, consultationId, sessionId, organisationId) }));
 				var serviceUnderTest = new OrganisationService(context, userService, new FakeAPITokenService(), fakeAPIService, mockFactory.Object, null);
 
 				//Act
@@ -321,7 +323,7 @@ namespace Comments.Test.UnitTests
 				var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, collationCode: "123412341234");
 				var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, sessionId, null);
 
-				var userService = new StubUserService(new User(true, null, null, null, new List<int>() { organisationUserId }, new Session(new Dictionary<int, Guid> { { consultationId, Guid.NewGuid() } })));
+				var userService = new StubUserService(new User(true, null, null, null, new List<ValidatedSession>() { new ValidatedSession(organisationUserId, consultationId, Guid.NewGuid(), organisationId) }));
 				var serviceUnderTest = new OrganisationService(context, userService, new FakeAPITokenService(), fakeAPIService, mockFactory.Object, null);
 
 				//Act
@@ -351,7 +353,7 @@ namespace Comments.Test.UnitTests
 				var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, collationCode: "123412341234");
 				var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, sessionId, null);
 
-				var userService = new StubUserService(new User(true, null, null, null, new List<int>() { organisationUserId }, new Session(new Dictionary<int, Guid> { { 9999, sessionId } })));
+				var userService = new StubUserService(new User(true, null, null, null, new List<ValidatedSession>() { new ValidatedSession(organisationUserId, 9999, sessionId, organisationId) }));
 				var serviceUnderTest = new OrganisationService(context, userService, new FakeAPITokenService(), fakeAPIService, mockFactory.Object, null);
 
 				//Act
@@ -381,7 +383,7 @@ namespace Comments.Test.UnitTests
 				var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, collationCode: "123412341234");
 				var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, sessionId, null);
 
-				var userService = new StubUserService(new User(true, null, null, null, new List<int>() { organisationUserId }, new Session(new Dictionary<int, Guid> { { 999, Guid.NewGuid() } })));
+				var userService = new StubUserService(new User(true, null, null, null, new List<ValidatedSession>() { new ValidatedSession(organisationUserId, 9999, Guid.NewGuid(), organisationId) }));
 				var serviceUnderTest = new OrganisationService(context, userService, new FakeAPITokenService(), fakeAPIService, mockFactory.Object, null);
 
 				//Act
@@ -400,16 +402,17 @@ namespace Comments.Test.UnitTests
 			ResetDatabase();
 			_context.Database.EnsureCreated();
 			var sessionId = Guid.NewGuid();
-			var consultationId = 1;
+			const int consultationId = 1;
+			const int organisationId = 1;
 			var expirationDate = DateTime.UtcNow.AddDays(1);
 			var mockFactory = new Mock<IHttpClientFactory>();
 
 			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
 			{
-				var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(1, consultationId, context, collationCode: "123412341234");
+				var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, collationCode: "123412341234");
 				var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, sessionId, expirationDate);
 
-				var userService = new StubUserService(new User(true, null, null, null, new List<int>() { organisationUserId }, new Session(new Dictionary<int, Guid> { { consultationId, sessionId } })));
+				var userService = new StubUserService(new User(true, null, null, null, new List<ValidatedSession>() { new ValidatedSession(organisationUserId, consultationId, sessionId, organisationId) }));
 				var serviceUnderTest = new OrganisationService(context, userService, new FakeAPITokenService(), _fakeApiService, mockFactory.Object, null);
 
 				//Act
@@ -450,7 +453,7 @@ namespace Comments.Test.UnitTests
 				var validatedSessions = serviceUnderTest.CheckValidCodesForConsultation(unvalidatedSessions);
 
 				//Assert
-				validatedSessions.Count(s => s.valid).ShouldBe(0);
+				validatedSessions.Count.ShouldBe(0);
 			}
 		}
 
@@ -483,9 +486,9 @@ namespace Comments.Test.UnitTests
 				var validatedSessions = serviceUnderTest.CheckValidCodesForConsultation(unvalidatedSessions);
 
 				//Assert
-				var validSession = validatedSessions.Single(session => session.valid);
-				validSession.session.Equals(sessionId);
-				validSession.consultationId.Equals(consultationId);
+				var validSession = validatedSessions.Single();
+				validSession.SessionId.Equals(sessionId);
+				validSession.ConsultationId.Equals(consultationId);
 			}
 		}
     }

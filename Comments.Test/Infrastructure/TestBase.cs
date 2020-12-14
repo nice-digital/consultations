@@ -112,7 +112,7 @@ namespace Comments.Test.Infrastructure
 		/// </summary>
 		public TestBase(bool useRealSubmitService = false, TestUserType testUserType = TestUserType.Authenticated, bool useFakeConsultationService = false, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null,
 			bool bypassAuthentication = true, bool addRoleClaim = true, bool enableOrganisationalCommentingFeature = false, Dictionary<int, Guid> validSessions = null,
-			bool useRealHttpContextAccessor = false, bool useRealUserService = false)
+			bool useRealHttpContextAccessor = false, bool useRealUserService = false, int? organisationIdUserIsLeadOf = null)
         {
 	        if (testUserType == TestUserType.NotAuthenticated)
 	        {
@@ -130,7 +130,7 @@ namespace Comments.Test.Infrastructure
 			}
 			else
 			{
-				_fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId, testUserType, addRoleClaim);
+				_fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId, testUserType, addRoleClaim, organisationIdUserIsLeadOf: organisationIdUserIsLeadOf);
 			}
 			_consultationService = new FakeConsultationService();
 	        _useRealSubmitService = useRealSubmitService;

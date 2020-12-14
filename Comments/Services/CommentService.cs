@@ -100,13 +100,13 @@ namespace Comments.Services
 			_context.Location.Add(locationToSave);
 
 			int? organisationUserId = null;
-			if (_currentUser.IsAuthenticatedByOrganisationCookieForThisConsultation(consultationId))
+			if (_currentUser.IsAuthenticatedByOrganisationCookie)
 			{
-				organisationUserId = 9999; //TODO!!! need the right organisation user id for this consultation..
+				organisationUserId = _currentUser.ValidatedSessions.FirstOrDefault(session => session.ConsultationId.Equals(consultationId))?.OrganisationUserId;
 			}
-
-	        var status = _context.GetStatus(StatusName.Draft);
-			var commentToSave = new Models.Comment(comment.LocationId, _currentUser.UserId, comment.CommentText, _currentUser.UserId, locationToSave, status.StatusId, null, organisationUserId: organisationUserId);
+			var organisationId = _currentUser.OrganisationsAssignedAsLead?.FirstOrDefault()?.OrganisationId;
+			var status = _context.GetStatus(StatusName.Draft);
+			var commentToSave = new Models.Comment(comment.LocationId, _currentUser.UserId, comment.CommentText, _currentUser.UserId, locationToSave, status.StatusId, null, organisationUserId: organisationUserId, organisationId: organisationId);
             _context.Comment.Add(commentToSave);
             _context.SaveChanges();
 

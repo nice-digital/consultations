@@ -11,7 +11,7 @@ namespace Comments.Test.IntegrationTests.API.OrganisationAuthorisation
 	{
 		
 		public OrganisationAuthorisationTests(bool useRealSubmitService = false, TestUserType testUserType = TestUserType.Authenticated, bool useFakeConsultationService = false, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null, bool bypassAuthentication = true, bool addRoleClaim = true)
-			: base(useRealSubmitService, testUserType, useFakeConsultationService, submittedCommentsAndAnswerCounts, bypassAuthentication, addRoleClaim, true)
+			: base(useRealSubmitService, testUserType, useFakeConsultationService, submittedCommentsAndAnswerCounts, bypassAuthentication, addRoleClaim, true, organisationIdUserIsLeadOf: 1)
 		{
 		}
 

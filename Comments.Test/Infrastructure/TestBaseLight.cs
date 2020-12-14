@@ -1,26 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
 using Comments.Configuration;
 using Comments.Models;
 using Comments.Services;
-using Comments.ViewModels;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.FeatureManagement;
-using NICE.Feeds;
-using NICE.Feeds.Tests.Infrastructure;
-using NICE.Identity.Authentication.Sdk.API;
-using Comment = Comments.Models.Comment;
-using Location = Comments.Models.Location;
+using System;
+using System.Net.Http;
 
 namespace Comments.Test.Infrastructure
 {
@@ -30,7 +20,7 @@ namespace Comments.Test.Infrastructure
 	public class TestBaseLight
 	{
 
-		protected (TestServer testServer, HttpClient httpClient) InitialiseServerAndClient(ConsultationsContext dbContext)
+		protected (TestServer testServer, HttpClient httpClient) InitialiseServerAndClient(ConsultationsContext dbContext, IUserService fakeUserService = null)
 		{
 			AppSettings.AuthenticationConfig = new AuthenticationConfig { ClientId = "test client id", AuthorisationServiceUri = "http://www.example.com" };
 			AppSettings.GlobalNavConfig = new GlobalNavConfig { CookieBannerScript = "//a-fake-cookiebannerscript-url" };
@@ -41,7 +31,12 @@ namespace Comments.Test.Infrastructure
 				{
 					services.AddEntityFrameworkSqlite();
 
-					services.TryAddScoped<ConsultationsContext>(provider => dbContext);
+					services.TryAddSingleton<ConsultationsContext>(dbContext);
+
+					if (fakeUserService != null)
+					{
+						services.TryAddTransient<IUserService>(provider => fakeUserService);
+					}
 
 					services.AddMvc(opt => opt.Filters.Add(new AllowAnonymousFilter()));
 				})

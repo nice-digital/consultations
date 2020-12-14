@@ -28,7 +28,7 @@ namespace Comments.Test.Infrastructure
 			passedInContext.SaveChanges();
 			if (!passedInContext.Status.Any(s => s.StatusId.Equals(status)))
 			{
-				AddStatus(passedInContext, "adding status: " + status, status);
+				AddStatus(passedInContext, nameof(StatusName.Draft), status);
 			}
 			return comment.CommentId;
 		}
