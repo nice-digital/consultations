@@ -72,12 +72,6 @@ namespace Comments.Models
 			    partialSourceURIToUse = $"{partialMatchExactSourceURIToUse}/";
 		    }
 
-		    var dataLocations = Location.Where(l => ((l.Order != null) && (partialMatchSourceURI
-			    ? (l.SourceURI.Equals(partialMatchExactSourceURIToUse) || l.SourceURI.Contains(partialSourceURIToUse))
-			    : sourceURIs.Contains(l.SourceURI, StringComparer.OrdinalIgnoreCase)))).ToList();
-
-		   // var allDataLocations = Location.Where(l => l.Order != null).tol;
-
 			var data = Location.Where(l => ((l.Order != null) && (partialMatchSourceURI
 					? (l.SourceURI.Equals(partialMatchExactSourceURIToUse) || l.SourceURI.Contains(partialSourceURIToUse))
 					: sourceURIs.Contains(l.SourceURI, StringComparer.OrdinalIgnoreCase))))
@@ -95,14 +89,13 @@ namespace Comments.Models
 					.ThenInclude(q => q.Answer)
 					.ThenInclude(s => s.SubmissionAnswer)
 
-				//.Where(l => l.Comment.Count > 0 || l.Question.Count > 0) //this is to filter out OrganisationAuthorisation's which have a location, but aren't comments or questions.
-
 				.OrderBy(l => l.Order)
-					.ThenByDescending(l => l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault())
+					.ThenByDescending(l => l.Comment.Count > 0 ? l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault() : DateTime.MinValue)
+					//.ThenByDescending(l => l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault())
 
 				.ToList();
 
-			return data; //.OrderBy(l => l.Order).ThenByDescending(l => l.Comment);
+			return data; 
 		}
 
 		public IEnumerable<Location> GetQuestionsForDocument(IList<string> sourceURIs, bool partialMatchSourceURI)
