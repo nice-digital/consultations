@@ -22,7 +22,7 @@ exports[`GenerateCode should match snapshot with code having been generated 1`] 
     <h2
       className="h5"
     >
-      Generate code
+      Generate a code to share the consultation
     </h2>
     <div
       className="organisation-codes__row"
@@ -77,7 +77,7 @@ exports[`GenerateCode should match snapshot with no code having been generated 1
     <h2
       className="h5"
     >
-      Generate code
+      Generate a code to share the consultation
     </h2>
     <div
       className="organisation-codes__row"

@@ -51,10 +51,7 @@ export class GenerateCode extends Component<GenerateCodeProps, GenerateCodeState
 
 				{showCodeGenerators && (
 					<div className="panel organisation-codes mv--b" id={`organisation-codes-${consultationId}`}>
-						<h2 className="h5">Generate code</h2>
-						{organisationCodes.length > 1 && (
-							<p>Select an organisation</p>
-						)}
+						<h2 className="h5">Generate a code to share the consultation</h2>
 						{organisationCodes.map((item, index) =>
 							<GenerateCodeForOrg key={index} {...item} consultationId={consultationId} />
 						)}
