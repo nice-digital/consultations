@@ -1,5 +1,7 @@
 using Comments.Common;
 using Comments.Test.Infrastructure;
+using Comments.ViewModels;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using Shouldly;
@@ -10,9 +12,6 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Comments.Services;
-using Comments.ViewModels;
-using Microsoft.EntityFrameworkCore;
 using Xunit;
 
 namespace Comments.Test.IntegrationTests.API.Comments
@@ -54,7 +53,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
 		public async Task Create_Comment_With_Valid_Organisation_Session_Cookie_Returns_Correctly()
 		{
 			//Arrange
-			var comment = new ViewModels.Comment(1, $"consultations://./consultation/{_consultationId}/document/1/chapter/introduction", null, null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty.ToString(), "comment text", 1, show: true, section: null);
+			var comment = new Comment(1, $"consultations://./consultation/{_consultationId}/document/1/chapter/introduction", null, null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty.ToString(), "comment text", 1, show: true, section: null);
 
 			var builder = _server.CreateRequest("/consultations/api/Comment");
 
@@ -72,7 +71,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
 
 			// Assert
 			response.StatusCode.ShouldBe(HttpStatusCode.Created);
-			Comment deserialisedComment = JsonConvert.DeserializeObject<ViewModels.Comment>(responseString);
+			var deserialisedComment = JsonConvert.DeserializeObject<Comment>(responseString);
 			deserialisedComment.CommentId.ShouldBeGreaterThan(0);
 			var commentInDatabase = _context.Comment.IgnoreQueryFilters().Single(dbComment => dbComment.CommentId.Equals(deserialisedComment.CommentId));
 
