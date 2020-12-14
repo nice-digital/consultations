@@ -51,20 +51,19 @@ namespace Comments.Services
             if (answerInDatabase == null)
                 return (rowsUpdated: 0, validate: new Validate(valid: false, notFound: true, message: $"Answer id:{answerId} not found trying to edit answer for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
 
-
-            if (_currentUser.IsAuthenticatedByAccounts)
-            {
-				if (!answerInDatabase.CreatedByUserId.Equals(_currentUser.UserId, StringComparison.OrdinalIgnoreCase))
-					return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to edit answer id: {answerId}, but it's not their answer"));
-
+			var consultationId = ConsultationsUri.ParseConsultationsUri(answerInDatabase.Question.Location.SourceURI).ConsultationId;
+			if (_currentUser.IsAuthenticatedByOrganisationCookieForThisConsultation(consultationId))
+			{
+				if (!answerInDatabase.OrganisationUserId.HasValue || !_currentUser.IsAuthorisedByOrganisationUserId(answerInDatabase.OrganisationUserId.Value))
+					return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: $"Organisation cookie user tried to edit answer id: {answerId}, but it's not their answer"));
 			}
-			else //organisation cookie auth
-            {
-	            if (!answerInDatabase.OrganisationUserId.HasValue || !_currentUser.IsAuthorisedByOrganisationUserId(answerInDatabase.OrganisationUserId.Value))
-		            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: $"Organisation cookie user tried to edit answer id: {answerId}, but it's not their answer"));
+			else //accounts auth
+			{
+	            if (!answerInDatabase.CreatedByUserId.Equals(_currentUser.UserId, StringComparison.OrdinalIgnoreCase))
+		            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to edit answer id: {answerId}, but it's not their answer"));
             }
 
-            answer.LastModifiedByUserId = _currentUser.UserId;
+			answer.LastModifiedByUserId = _currentUser.UserId;
 	        answer.LastModifiedDate = DateTime.UtcNow;
 			answerInDatabase.UpdateFromViewModel(answer);
             return (rowsUpdated: _context.SaveChanges(), validate: null);
@@ -80,18 +79,18 @@ namespace Comments.Services
             if (answerInDatabase == null)
                 return (rowsUpdated: 0, validate: new Validate(valid: false, notFound: true, message: $"Answer id:{answerId} not found trying to delete answer for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
 
-            if (_currentUser.IsAuthenticatedByAccounts)
+			var consultationId = ConsultationsUri.ParseConsultationsUri(answerInDatabase.Question.Location.SourceURI).ConsultationId;
+            if (_currentUser.IsAuthenticatedByOrganisationCookieForThisConsultation(consultationId))
+            {
+				if (!answerInDatabase.OrganisationUserId.HasValue || !_currentUser.IsAuthorisedByOrganisationUserId(answerInDatabase.OrganisationUserId.Value))
+					return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: $"Organisation cookie user tried to delete answer id: {answerId}, but it's not their answer"));
+			}
+            else //accounts auth
             {
 				if (!answerInDatabase.CreatedByUserId.Equals(_currentUser.UserId))
 					return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to delete answer id: {answerId}, but it's not their answer"));
-
 			}
-			else //organisation cookie auth
-            {
-	            if (!answerInDatabase.OrganisationUserId.HasValue || !_currentUser.IsAuthorisedByOrganisationUserId(answerInDatabase.OrganisationUserId.Value))
-		            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: $"Organisation cookie user tried to delete answer id: {answerId}, but it's not their answer"));
-            }
-
+			
             _context.Answer.Remove(answerInDatabase);
 
 			return (rowsUpdated: _context.SaveChanges(), validate: null);
@@ -110,22 +109,20 @@ namespace Comments.Services
 			var status = _context.GetStatus(StatusName.Draft);
 
 	        int? organisationUserId = null;
-			if (_currentUser.IsAuthenticatedByOrganisationCookie)
+	        int? organisationId;
+	        var userId = _currentUser.UserId;
+			if (_currentUser.IsAuthenticatedByOrganisationCookieForThisConsultation(consultationId))
 			{
 				organisationUserId = _currentUser.ValidatedSessions.FirstOrDefault(session => session.ConsultationId.Equals(consultationId))?.OrganisationUserId;
-			}
-
-			int? organisationId;
-			if (_currentUser.IsAuthenticatedByOrganisationCookie)
-			{
 				organisationId = _currentUser.ValidatedSessions.FirstOrDefault(session => session.ConsultationId.Equals(consultationId))?.OrganisationId;
+				userId = null;
 			}
 			else
 			{
 				organisationId = _currentUser.OrganisationsAssignedAsLead?.FirstOrDefault()?.OrganisationId;
 			}
-
-			var answerToSave = new Models.Answer(answer.QuestionId, _currentUser.UserId, answer.AnswerText, answer.AnswerBoolean, question, status.StatusId, null, organisationUserId, null, organisationId);
+			
+			var answerToSave = new Models.Answer(answer.QuestionId, userId, answer.AnswerText, answer.AnswerBoolean, question, status.StatusId, null, organisationUserId, null, organisationId);
 	        answerToSave.LastModifiedByUserId = _currentUser.UserId;
 	        answerToSave.LastModifiedDate = DateTime.UtcNow;
 			_context.Answer.Add(answerToSave);

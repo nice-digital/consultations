@@ -116,9 +116,7 @@
         ],
         "validatedOrganisationUserIds":[
             
-        ],
-        "isAuthenticatedByAccounts":true,
-        "isAuthenticatedByOrganisationCookie":false
+        ]
     },
     "initialPageView":false,
     "status":[

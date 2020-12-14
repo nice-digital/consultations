@@ -71,10 +71,16 @@ namespace Comments.Models
 
 			    partialSourceURIToUse = $"{partialMatchExactSourceURIToUse}/";
 		    }
-			
-			var data = Location.Where(l => partialMatchSourceURI
+
+		    var dataLocations = Location.Where(l => ((l.Order != null) && (partialMatchSourceURI
+			    ? (l.SourceURI.Equals(partialMatchExactSourceURIToUse) || l.SourceURI.Contains(partialSourceURIToUse))
+			    : sourceURIs.Contains(l.SourceURI, StringComparer.OrdinalIgnoreCase)))).ToList();
+
+		   // var allDataLocations = Location.Where(l => l.Order != null).tol;
+
+			var data = Location.Where(l => ((l.Order != null) && (partialMatchSourceURI
 					? (l.SourceURI.Equals(partialMatchExactSourceURIToUse) || l.SourceURI.Contains(partialSourceURIToUse))
-					: sourceURIs.Contains(l.SourceURI, StringComparer.OrdinalIgnoreCase))
+					: sourceURIs.Contains(l.SourceURI, StringComparer.OrdinalIgnoreCase))))
 				.Include(l => l.Comment)
 					.ThenInclude(s => s.SubmissionComment)
 					.ThenInclude(s => s.Submission)
@@ -89,14 +95,14 @@ namespace Comments.Models
 					.ThenInclude(q => q.Answer)
 					.ThenInclude(s => s.SubmissionAnswer)
 
-					.OrderBy(l => l.Order)
+				//.Where(l => l.Comment.Count > 0 || l.Question.Count > 0) //this is to filter out OrganisationAuthorisation's which have a location, but aren't comments or questions.
 
-				.ThenByDescending(l =>
-					l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault())
+				.OrderBy(l => l.Order)
+					.ThenByDescending(l => l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault())
 
 				.ToList();
 
-			return data;
+			return data; //.OrderBy(l => l.Order).ThenByDescending(l => l.Comment);
 		}
 
 		public IEnumerable<Location> GetQuestionsForDocument(IList<string> sourceURIs, bool partialMatchSourceURI)
@@ -232,6 +238,8 @@ namespace Comments.Models
 		        .Include(s => s.Status)
 		        .Include(q => q.Question)
 					.ThenInclude(qt => qt.QuestionType)
+		        .Include(q => q.Question)
+					.ThenInclude(l => l.Location)
 		        .FirstOrDefault();
 
 	        return answer;

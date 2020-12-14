@@ -47,7 +47,7 @@ namespace Comments.Test.Infrastructure
 		public static int AddOrganisationAuthorisationWithLocation(int organisationId, int consultationId, ConsultationsContext passedInContext, string userId = "someUserId", string collationCode = null)
 		{
 			var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
-			var locationId = AddLocation(passedInContext, sourceURI);
+			var locationId = AddLocation(passedInContext, sourceURI, null);
 			passedInContext.SaveChanges();
 			var organisationAuthorisation = new OrganisationAuthorisation(userId, DateTime.Now, organisationId, locationId, collationCode);
 			passedInContext.OrganisationAuthorisation.Add(organisationAuthorisation);

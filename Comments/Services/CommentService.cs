@@ -64,16 +64,17 @@ namespace Comments.Services
             if (commentInDatabase == null)
                 return (rowsUpdated: 0, validate: new Validate(valid: false, notFound: true, message: $"Comment id:{commentId} not found trying to edit comment for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
 
-            if (_currentUser.IsAuthenticatedByAccounts)
+            var consultationId = ConsultationsUri.ParseConsultationsUri(commentInDatabase.Location.SourceURI).ConsultationId;
+			if (_currentUser.IsAuthenticatedByOrganisationCookieForThisConsultation(consultationId))
+            {
+	            if (!commentInDatabase.OrganisationUserId.HasValue || !_currentUser.IsAuthorisedByOrganisationUserId(commentInDatabase.OrganisationUserId.Value))
+		            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: $"Organisation cookie user tried to edit comment id: {commentId}, but it's not their comment"));
+            }
+            else //accounts auth
             {
 	            if (!commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId, StringComparison.OrdinalIgnoreCase))
 		            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to edit comment id: {commentId}, but it's not their comment"));
 			}
-            else //organisation cookie auth
-            {
-				if (!commentInDatabase.OrganisationUserId.HasValue || !_currentUser.IsAuthorisedByOrganisationUserId(commentInDatabase.OrganisationUserId.Value))
-					return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: $"Organisation cookie user tried to edit comment id: {commentId}, but it's not their comment"));
-            }
 
             comment.LastModifiedByUserId = _currentUser.UserId;
             comment.LastModifiedDate = DateTime.UtcNow;
@@ -100,22 +101,20 @@ namespace Comments.Services
 			_context.Location.Add(locationToSave);
 
 			int? organisationUserId = null;
-			if (_currentUser.IsAuthenticatedByOrganisationCookie)
+			int? organisationId;
+			var userId = _currentUser.UserId;
+			if (_currentUser.IsAuthenticatedByOrganisationCookieForThisConsultation(consultationId))
 			{
 				organisationUserId = _currentUser.ValidatedSessions.FirstOrDefault(session => session.ConsultationId.Equals(consultationId))?.OrganisationUserId;
-			}
-
-			int? organisationId;
-			if (_currentUser.IsAuthenticatedByOrganisationCookie)
-			{
 				organisationId = _currentUser.ValidatedSessions.FirstOrDefault(session => session.ConsultationId.Equals(consultationId))?.OrganisationId;
+				userId = null;
 			}
 			else
 			{
 				organisationId = _currentUser.OrganisationsAssignedAsLead?.FirstOrDefault()?.OrganisationId;
-	        }
+			}
 			var status = _context.GetStatus(StatusName.Draft);
-			var commentToSave = new Models.Comment(comment.LocationId, _currentUser.UserId, comment.CommentText, _currentUser.UserId, locationToSave, status.StatusId, null, organisationUserId: organisationUserId, organisationId: organisationId);
+			var commentToSave = new Models.Comment(comment.LocationId, userId, comment.CommentText, _currentUser.UserId, locationToSave, status.StatusId, null, organisationUserId: organisationUserId, organisationId: organisationId);
             _context.Comment.Add(commentToSave);
             _context.SaveChanges();
 
@@ -132,16 +131,17 @@ namespace Comments.Services
             if (commentInDatabase == null)
                 return (rowsUpdated: 0, validate: new Validate(valid: false, notFound: true, message: $"Comment id:{commentId} not found trying to delete comment for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
 
-            if (_currentUser.IsAuthenticatedByAccounts)
-            {
-				if (!commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId))
-					return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to delete comment id: {commentId}, but it's not their comment"));
-            }
-			else //organisation cookie auth
+            var consultationId = ConsultationsUri.ParseConsultationsUri(commentInDatabase.Location.SourceURI).ConsultationId;
+            if (_currentUser.IsAuthenticatedByOrganisationCookieForThisConsultation(consultationId))
             {
 	            if (!commentInDatabase.OrganisationUserId.HasValue || !_currentUser.IsAuthorisedByOrganisationUserId(commentInDatabase.OrganisationUserId.Value))
 		            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: $"Organisation cookie user tried to delete comment id: {commentId}, but it's not their comment"));
-            }
+			}
+            else //accounts auth
+            {
+	            if (!commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId))
+		            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to delete comment id: {commentId}, but it's not their comment"));
+			}
 
             _context.Comment.Remove(commentInDatabase);
 			

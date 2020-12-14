@@ -22,22 +22,21 @@ namespace Comments.Test.UnitTests
 		    // Arrange
 		    ResetDatabase();
 		    var commentText = Guid.NewGuid().ToString();
-		    var createdByUserId = Guid.NewGuid().ToString();
-
+		    
 		    var locationId = AddLocation("consultations://./consultation/1/document/1/chapter/introduction");
-		    AddComment(locationId, commentText, createdByUserId);
+		    AddComment(locationId, commentText, _userId);
 
 		    locationId = AddLocation("consultations://./consultation/1/document/1");
-		    AddComment(locationId, commentText, createdByUserId);
+		    AddComment(locationId, commentText, _userId);
 
 		    locationId = AddLocation("consultations://./consultation/1/document/2");
-		    AddComment(locationId, commentText, createdByUserId);
+		    AddComment(locationId, commentText, _userId);
 
 			locationId = AddLocation("consultations://./consultation/1");
-		    AddComment(locationId, commentText, createdByUserId);
+		    AddComment(locationId, commentText, _userId);
 
 		    locationId = AddLocation("consultations://./consultation/2");
-		    AddComment(locationId, commentText, createdByUserId);
+		    AddComment(locationId, commentText, _userId);
 
 
 			var sourceURIs = new List<string>
@@ -59,25 +58,24 @@ namespace Comments.Test.UnitTests
 		    // Arrange
 		    ResetDatabase();
 		    var commentText = Guid.NewGuid().ToString();
-		    var createdByUserId = Guid.NewGuid().ToString();
 
 		    var locationId = AddLocation("consultations://./consultation/1/document/1/chapter/introduction");
-		    AddComment(locationId, commentText, createdByUserId);
+		    AddComment(locationId, commentText, _userId);
 
 		    locationId = AddLocation("consultations://./consultation/1/document/1/chapter/overview");
-		    AddComment(locationId, commentText, createdByUserId);
+		    AddComment(locationId, commentText, _userId);
 
 			locationId = AddLocation("consultations://./consultation/1/document/1");
-		    AddComment(locationId, commentText, createdByUserId);
+		    AddComment(locationId, commentText, _userId);
 
 		    locationId = AddLocation("consultations://./consultation/1/document/2");
-		    AddComment(locationId, commentText, createdByUserId);
+		    AddComment(locationId, commentText, _userId);
 
 		    locationId = AddLocation("consultations://./consultation/1");
-		    AddComment(locationId, commentText, createdByUserId);
+		    AddComment(locationId, commentText, _userId);
 
 		    locationId = AddLocation("consultations://./consultation/2");
-		    AddComment(locationId, commentText, createdByUserId);
+		    AddComment(locationId, commentText, _userId);
 
 
 		    var sourceURIs = new List<string>

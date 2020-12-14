@@ -29,9 +29,7 @@
             ],
             "validatedOrganisationUserIds":[
                 
-            ],
-            "isAuthenticatedByAccounts":true,
-            "isAuthenticatedByOrganisationCookie":false
+            ]
         },
         "consultationState":null,
         "breadcrumbs":null,
@@ -67,9 +65,7 @@
             ],
             "validatedOrganisationUserIds":[
                 
-            ],
-            "isAuthenticatedByAccounts":true,
-            "isAuthenticatedByOrganisationCookie":false
+            ]
         },
         "consultationState":null,
         "breadcrumbs":null,

@@ -29,8 +29,12 @@ namespace Comments.ViewModels
 
 		public IList<int> ValidatedOrganisationUserIds => ValidatedSessions != null ? ValidatedSessions.Select(session => session.OrganisationUserId).ToList() : new List<int>();
 
-		public bool IsAuthenticatedByAccounts => (IsAuthenticated && UserId != null);
-		public bool IsAuthenticatedByOrganisationCookie => (IsAuthenticated && UserId == null && ValidatedSessions.Any());
+		private bool IsAuthenticatedByAccounts => (IsAuthenticated && UserId != null);
+
+		public bool IsAuthenticatedByOrganisationCookieForThisConsultation(int consultationId)
+		{
+			return ValidatedSessions.Any(session => session.ConsultationId.Equals(consultationId));
+		}
 
 		/// <summary>
 		/// Determines whether a user is authorised to e.g. comment, on a given consultation.

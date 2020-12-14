@@ -12,7 +12,5 @@
     ],
     "validatedOrganisationUserIds":[
         
-    ],
-    "isAuthenticatedByAccounts":true,
-    "isAuthenticatedByOrganisationCookie":false
+    ]
 }

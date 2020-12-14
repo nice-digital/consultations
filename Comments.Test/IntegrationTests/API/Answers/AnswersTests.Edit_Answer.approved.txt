@@ -10,5 +10,5 @@
         "statusId":1,
         "name":"Draft"
     },
-    "sourceURI":null
+    "sourceURI":"consultations://./consultation/1/document/1/chapter/introduction"
 }

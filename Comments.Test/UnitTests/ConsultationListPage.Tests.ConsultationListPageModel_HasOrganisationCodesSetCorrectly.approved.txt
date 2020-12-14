@@ -144,9 +144,7 @@
         ],
         "ValidatedOrganisationUserIds":[
             
-        ],
-        "IsAuthenticatedByAccounts":true,
-        "IsAuthenticatedByOrganisationCookie":false
+        ]
     },
     "InitialPageView":false,
     "Status":[

@@ -8,7 +8,5 @@
     "validatedSessions":null,
     "validatedOrganisationUserIds":[
         
-    ],
-    "isAuthenticatedByAccounts":false,
-    "isAuthenticatedByOrganisationCookie":false
+    ]
 }

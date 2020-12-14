@@ -1,6 +1,8 @@
 using Comments.Common;
 using Comments.Models;
 using Comments.Test.Infrastructure;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using Shouldly;
@@ -10,10 +12,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.EntityFrameworkCore;
 using Xunit;
-using Answer = Comments.ViewModels.Answer;
 
 namespace Comments.Test.IntegrationTests.API.Comments
 {

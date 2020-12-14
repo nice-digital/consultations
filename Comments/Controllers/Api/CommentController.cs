@@ -10,7 +10,7 @@ namespace Comments.Controllers.Api
 {
     [Produces("application/json")]
     [Route("consultations/api/[controller]")]
-    [Authorize(AuthenticationSchemes = AuthenticationConstants.AuthenticationScheme + "," + OrganisationCookieAuthenticationOptions.DefaultScheme)] 
+    [Authorize(AuthenticationSchemes = OrganisationCookieAuthenticationOptions.DefaultScheme + "," + AuthenticationConstants.AuthenticationScheme)] 
     public class CommentController : ControllerBase
     {
         private readonly ICommentService _commentService;
