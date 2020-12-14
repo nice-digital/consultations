@@ -79,7 +79,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
 			commentInDatabase.OrganisationUserId.ShouldNotBeNull();
 			commentInDatabase.OrganisationUserId.Value.ShouldBeGreaterThan(0);
 			commentInDatabase.ParentCommentId.ShouldBeNull();
-			commentInDatabase.OrganisationId.ShouldBeNull();
+			commentInDatabase.OrganisationId.ShouldNotBeNull();
 		}
 
 		[Fact]

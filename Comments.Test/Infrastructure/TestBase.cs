@@ -327,7 +327,7 @@ namespace Comments.Test.Infrastructure
         }
         protected int AddQuestionType(string description, bool hasBooleanAnswer, bool hasTextAnswer, int questionTypeId = 1, ConsultationsContext passedInContext = null)
         {
-            var questionType = new QuestionType(description, hasTextAnswer, hasBooleanAnswer, null);
+            var questionType = new QuestionType(description, hasTextAnswer, hasBooleanAnswer, null) { QuestionTypeId = questionTypeId };
             if (passedInContext != null)
             {
                 passedInContext.QuestionType.Add(questionType);
@@ -394,7 +394,7 @@ namespace Comments.Test.Infrastructure
             AddAnswer(questionId, createdByUserId, answerText, status, passedInContext);
         }
 
-        protected void SetupTestDataInDB()
+        protected int SetupTestDataInDB()
         {
             var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
             var answerText = Guid.NewGuid().ToString();
@@ -404,9 +404,12 @@ namespace Comments.Test.Infrastructure
 
 			var locationId = AddLocation(sourceURI);
 			AddComment(locationId, commentText, createdByUserId: userId);
-			var questionTypeId = 99;
+			var questionTypeId = 1;
+			AddQuestionType("Text question", false, true, questionTypeId);
 			var questionId = AddQuestion(locationId, questionTypeId, questionText);
 			AddAnswer(questionId, userId, answerText);
+			AddStatus("Draft", 1);
+			return questionId;
         }
 
 		protected Question GetQuestion()

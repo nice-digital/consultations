@@ -328,8 +328,8 @@ namespace Comments.Test.UnitTests
 		    // Arrange
 		    ResetDatabase();
 
-		    var textQuestionTypeId = AddQuestionType("Text", hasBooleanAnswer: false, hasTextAnswer: true);
-		    var booleanQuestionTypeId = AddQuestionType("Boolean", hasBooleanAnswer: true, hasTextAnswer: false);
+		    var textQuestionTypeId = AddQuestionType("Text", hasBooleanAnswer: false, hasTextAnswer: true, questionTypeId: 1);
+		    var booleanQuestionTypeId = AddQuestionType("Boolean", hasBooleanAnswer: true, hasTextAnswer: false, questionTypeId: 2);
 
 			// Act
 			var consultationsContext = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption);

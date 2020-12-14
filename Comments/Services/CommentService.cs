@@ -104,7 +104,16 @@ namespace Comments.Services
 			{
 				organisationUserId = _currentUser.ValidatedSessions.FirstOrDefault(session => session.ConsultationId.Equals(consultationId))?.OrganisationUserId;
 			}
-			var organisationId = _currentUser.OrganisationsAssignedAsLead?.FirstOrDefault()?.OrganisationId;
+
+			int? organisationId;
+			if (_currentUser.IsAuthenticatedByOrganisationCookie)
+			{
+				organisationId = _currentUser.ValidatedSessions.FirstOrDefault(session => session.ConsultationId.Equals(consultationId))?.OrganisationId;
+			}
+			else
+			{
+				organisationId = _currentUser.OrganisationsAssignedAsLead?.FirstOrDefault()?.OrganisationId;
+	        }
 			var status = _context.GetStatus(StatusName.Draft);
 			var commentToSave = new Models.Comment(comment.LocationId, _currentUser.UserId, comment.CommentText, _currentUser.UserId, locationToSave, status.StatusId, null, organisationUserId: organisationUserId, organisationId: organisationId);
             _context.Comment.Add(commentToSave);

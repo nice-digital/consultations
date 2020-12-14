@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using Comments.Common;
 using Comments.ViewModels;
 using Comments.Models;
 
@@ -82,10 +84,30 @@ namespace Comments.Services
             if (!_currentUser.IsAuthenticated)
                 return (answer: null, validate: new Validate(valid: false, unauthenticated: true, message: "Not logged in creating answer"));
 
-	        var status = _context.GetStatus(StatusName.Draft);
-	        var question = _context.GetQuestion(answer.QuestionId);
+            var question = _context.GetQuestion(answer.QuestionId);
+            var consultationId = ConsultationsUri.ParseConsultationsUri(question.Location.SourceURI).ConsultationId;
+			if (!_currentUser.IsAuthorisedByConsultationId(consultationId))
+				return (answer: null, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: "Not authorised to create answer on this consultation"));
 
-            var answerToSave = new Models.Answer(answer.QuestionId, _currentUser.UserId, answer.AnswerText, answer.AnswerBoolean, question, status.StatusId, null);
+			var status = _context.GetStatus(StatusName.Draft);
+
+	        int? organisationUserId = null;
+			if (_currentUser.IsAuthenticatedByOrganisationCookie)
+			{
+				organisationUserId = _currentUser.ValidatedSessions.FirstOrDefault(session => session.ConsultationId.Equals(consultationId))?.OrganisationUserId;
+			}
+
+			int? organisationId;
+			if (_currentUser.IsAuthenticatedByOrganisationCookie)
+			{
+				organisationId = _currentUser.ValidatedSessions.FirstOrDefault(session => session.ConsultationId.Equals(consultationId))?.OrganisationId;
+			}
+			else
+			{
+				organisationId = _currentUser.OrganisationsAssignedAsLead?.FirstOrDefault()?.OrganisationId;
+			}
+
+			var answerToSave = new Models.Answer(answer.QuestionId, _currentUser.UserId, answer.AnswerText, answer.AnswerBoolean, question, status.StatusId, null, organisationUserId, null, organisationId);
 	        answerToSave.LastModifiedByUserId = _currentUser.UserId;
 	        answerToSave.LastModifiedDate = DateTime.UtcNow;
 			_context.Answer.Add(answerToSave);

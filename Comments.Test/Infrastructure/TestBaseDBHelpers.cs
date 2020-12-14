@@ -5,6 +5,8 @@ using System;
 using System.Linq;
 using Comment = Comments.Models.Comment;
 using Location = Comments.Models.Location;
+using Question = Comments.Models.Question;
+using QuestionType = Comments.Models.QuestionType;
 
 namespace Comments.Test.Infrastructure
 {
@@ -61,5 +63,32 @@ namespace Comments.Test.Infrastructure
 			passedInContext.SaveChanges();
 			return organisationUser.OrganisationUserId;
 		}
+
+		public static int AddQuestionType(ConsultationsContext context, int questionTypeId = 1, string description = "Text", bool hasBooleanAnswer = false, bool hasTextAnswer = true)
+		{
+			var questionType = new QuestionType(description, hasTextAnswer, hasBooleanAnswer, null){ QuestionTypeId = questionTypeId };
+			context.QuestionType.Add(questionType);
+			context.SaveChanges();
+			return questionType.QuestionTypeId;
+		}
+
+
+		public static int AddQuestion(ConsultationsContext context, int locationId, string questionText = "question text", int questionTypeId = 1, int questionId = 0)
+		{
+			if (!context.QuestionType.Any(qt => qt.QuestionTypeId.Equals(questionTypeId)))
+			{
+				AddQuestionType(context, questionTypeId);
+			}
+			var question = new Question(locationId, questionText, questionTypeId, null, null, null)
+			{
+				QuestionId = questionId,
+				CreatedByUserId = Guid.Empty.ToString(),
+				LastModifiedByUserId = Guid.Empty.ToString()
+			};
+			context.Question.Add(question);
+			context.SaveChanges();
+			return question.QuestionId;
+		}
+
 	}
 }
