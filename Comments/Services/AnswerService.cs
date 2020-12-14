@@ -80,10 +80,19 @@ namespace Comments.Services
             if (answerInDatabase == null)
                 return (rowsUpdated: 0, validate: new Validate(valid: false, notFound: true, message: $"Answer id:{answerId} not found trying to delete answer for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
 
-	        if (!answerInDatabase.CreatedByUserId.Equals(_currentUser.UserId))
-		        return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to delete answer id: {answerId}, but it's not their answer"));
+            if (_currentUser.IsAuthenticatedByAccounts)
+            {
+				if (!answerInDatabase.CreatedByUserId.Equals(_currentUser.UserId))
+					return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to delete answer id: {answerId}, but it's not their answer"));
 
-			_context.Answer.Remove(answerInDatabase);
+			}
+			else //organisation cookie auth
+            {
+	            if (!answerInDatabase.OrganisationUserId.HasValue || !_currentUser.IsAuthorisedByOrganisationUserId(answerInDatabase.OrganisationUserId.Value))
+		            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: $"Organisation cookie user tried to delete answer id: {answerId}, but it's not their answer"));
+            }
+
+            _context.Answer.Remove(answerInDatabase);
 
 			return (rowsUpdated: _context.SaveChanges(), validate: null);
 		}
