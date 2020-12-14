@@ -3,6 +3,7 @@ using Comments.Models;
 using Comments.ViewModels;
 using System;
 using System.Linq;
+using Answer = Comments.Models.Answer;
 using Comment = Comments.Models.Comment;
 using Location = Comments.Models.Location;
 using Question = Comments.Models.Question;
@@ -90,5 +91,20 @@ namespace Comments.Test.Infrastructure
 			return question.QuestionId;
 		}
 
+		public static int AddAnswer(ConsultationsContext context, int questionId, string answerText = "answer text", int statusId = 1, string userId = null, int? organisationUserId = null)
+		{
+			if (!context.Status.Any(s => s.StatusId.Equals(statusId)))
+			{
+				AddStatus(context, "Draft", statusId);
+			}
+			var answer = new Answer(questionId, userId, answerText, null, null, statusId, null, organisationUserId, null)
+			{
+				LastModifiedDate = DateTime.Now
+			};
+			context.Answer.Add(answer);
+			context.SaveChanges();
+			return answer.AnswerId;
+
+		}
 	}
 }

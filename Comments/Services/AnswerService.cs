@@ -51,11 +51,20 @@ namespace Comments.Services
             if (answerInDatabase == null)
                 return (rowsUpdated: 0, validate: new Validate(valid: false, notFound: true, message: $"Answer id:{answerId} not found trying to edit answer for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
 
-	        if (!answerInDatabase.CreatedByUserId.Equals(_currentUser.UserId, StringComparison.OrdinalIgnoreCase))
-		        return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to edit answer id: {answerId}, but it's not their answer"));
 
+            if (_currentUser.IsAuthenticatedByAccounts)
+            {
+				if (!answerInDatabase.CreatedByUserId.Equals(_currentUser.UserId, StringComparison.OrdinalIgnoreCase))
+					return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to edit answer id: {answerId}, but it's not their answer"));
 
-			answer.LastModifiedByUserId = _currentUser.UserId;
+			}
+			else //organisation cookie auth
+            {
+	            if (!answerInDatabase.OrganisationUserId.HasValue || !_currentUser.IsAuthorisedByOrganisationUserId(answerInDatabase.OrganisationUserId.Value))
+		            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: $"Organisation cookie user tried to edit answer id: {answerId}, but it's not their answer"));
+            }
+
+            answer.LastModifiedByUserId = _currentUser.UserId;
 	        answer.LastModifiedDate = DateTime.UtcNow;
 			answerInDatabase.UpdateFromViewModel(answer);
             return (rowsUpdated: _context.SaveChanges(), validate: null);
