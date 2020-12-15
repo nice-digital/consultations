@@ -117,7 +117,7 @@ namespace Comments.Models
 
                 entity.Property(e => e.LastModifiedDate).HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.LocationId).HasColumnName("LocationID");
+                entity.Property(e => e.LocationId).IsRequired().HasColumnName("LocationID");
 
                 entity.Property(e => e.OrganisationUserId).HasColumnName("OrganisationUserID");
 
@@ -149,8 +149,8 @@ namespace Comments.Models
 				//JW. automatically filter out other people's comments. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
 				//note: only 1 filter is supported. you must combine the logic into one expression.
 				entity.HasQueryFilter(c => (c.CreatedByUserId != null && _createdByUserID != null && c.CreatedByUserId == _createdByUserID)
-				                           || (_organisationUserIDs != null && c.OrganisationUserId.HasValue && _organisationUserIDs.Any(organisationUserID => organisationUserID.Equals(c.OrganisationUserId)))
-				                           || (c.OrganisationId.HasValue && _organisationalLeadOrganisationID.HasValue && c.OrganisationId.Equals(_organisationalLeadOrganisationID)));
+										      || (_organisationUserIDs != null && c.OrganisationUserId.HasValue && _organisationUserIDs.Any(organisationUserID => organisationUserID.Equals(c.OrganisationUserId)))
+										      || (c.OrganisationId.HasValue && _organisationalLeadOrganisationID.HasValue && c.OrganisationId.Equals(_organisationalLeadOrganisationID)));
 			});
 
             modelBuilder.Entity<Location>(entity =>
@@ -160,7 +160,13 @@ namespace Comments.Models
                 entity.Property(e => e.HtmlElementID).HasColumnName("HtmlElementID");
 
                 entity.Property(e => e.SourceURI).HasColumnName("SourceURI");
-            });
+
+            //    entity.HasQueryFilter(l => (l.Comment.Count == 0 ?   && l.Comment..CreatedByUserId != null && _createdByUserID != null && c.CreatedByUserId == _createdByUserID)
+											//(c.CreatedByUserId != null && _createdByUserID != null && c.CreatedByUserId == _createdByUserID)
+           //                                || (_organisationUserIDs != null && c.OrganisationUserId.HasValue && _organisationUserIDs.Any(organisationUserID => organisationUserID.Equals(c.OrganisationUserId)))
+           //                                || (c.OrganisationId.HasValue && _organisationalLeadOrganisationID.HasValue && c.OrganisationId.Equals(_organisationalLeadOrganisationID)));
+
+			});
 
             modelBuilder.Entity<OrganisationAuthorisation>(entity =>
             {
@@ -216,7 +222,7 @@ namespace Comments.Models
 
                 entity.Property(e => e.LastModifiedByUserId).HasColumnName("LastModifiedByUserID");
 
-                entity.Property(e => e.LocationId).HasColumnName("LocationID");
+                entity.Property(e => e.LocationId).HasColumnName("LocationID").IsRequired();
 
                 entity.Property(e => e.QuestionText).IsRequired();
 

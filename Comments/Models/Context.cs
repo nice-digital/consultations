@@ -44,15 +44,6 @@ namespace Comments.Models
 		}
 
 		/// <summary>
-		/// This is only for use by the tests.
-		/// </summary>
-		/// <param name="organisationUserIds"></param>
-		public void UpdateFilter(List<int> organisationUserIds)
-		{
-			_organisationUserIDs = organisationUserIds;
-		}
-
-		/// <summary>
 		/// It's not obvious from this code, but this it actually filtering on more than it looks like. There's global filters defined in the context, specifically
 		/// for the IsDeleted flag and the CreatedByUserId. So, this is only going to return data that isn't deleted and belongs to the current user.
 		/// This behaviour can be overridden with the IgnoreQueryFilters command. See the ConsultationContext.Tests for example usage.
@@ -71,6 +62,20 @@ namespace Comments.Models
 
 			    partialSourceURIToUse = $"{partialMatchExactSourceURIToUse}/";
 		    }
+
+			var authorisedComments = Location
+				.Include(l => l.Comment)
+				.ToList()
+				.SelectMany(l => l.Comment)
+				.ToList();
+
+			var authorisedAnswers = Location
+				.Include(l => l.Question)
+					.ThenInclude(q => q.Answer)
+				.ToList()
+				.SelectMany(l => l.Question.SelectMany(q => q.Answer))
+				.ToList();
+
 
 			var data = Location.Where(l => ((l.Order != null) && (partialMatchSourceURI
 					? (l.SourceURI.Equals(partialMatchExactSourceURIToUse) || l.SourceURI.Contains(partialSourceURIToUse))
@@ -95,8 +100,9 @@ namespace Comments.Models
 				.ToList();
 
 			//EF can't translate the thenbydescending properly, so moving it out and doing it in memory.
-			var sortedData = data.OrderBy(l => l.Order).ThenByDescending(l =>
-				l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault());
+			var sortedData = data.Where(l => l.Comment.Count > 0 || l.Question.Count > 0)
+				.OrderBy(l => l.Order).ThenByDescending(l =>
+					l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault());
 			
 			return sortedData; 
 		}

@@ -38,8 +38,11 @@ namespace Comments.Test.UnitTests
 		    locationId = AddLocation("consultations://./consultation/2");
 		    AddComment(locationId, commentText, _userId);
 
+		    locationId = AddLocation("consultations://./consultation/2");
+		    AddComment(locationId, commentText, "Different user id");
 
-			var sourceURIs = new List<string>
+
+		    var sourceURIs = new List<string>
 		    {
 			    ConsultationsUri.ConvertToConsultationsUri("/1/Review", CommentOn.Consultation)
 		    };
