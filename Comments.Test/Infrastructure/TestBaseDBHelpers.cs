@@ -24,9 +24,9 @@ namespace Comments.Test.Infrastructure
 			return location.LocationId;
 		}
 
-		public static int AddComment(ConsultationsContext passedInContext, int locationId, string commentText, string createdByUserId, int status = (int)StatusName.Draft, int? organisationUserId = null, int? parentCommentId = null)
+		public static int AddComment(ConsultationsContext passedInContext, int locationId, string commentText, string createdByUserId, int status = (int)StatusName.Draft, int? organisationUserId = null, int? parentCommentId = null, int? organisationId = null)
 		{
-			var comment = new Comment(locationId, createdByUserId, commentText, Guid.Empty.ToString(), location: null, statusId: status, status: null, organisationUserId, parentCommentId);
+			var comment = new Comment(locationId, createdByUserId, commentText, Guid.Empty.ToString(), location: null, statusId: status, status: null, organisationUserId, parentCommentId, organisationId);
 			passedInContext.Comment.Add(comment);
 			passedInContext.SaveChanges();
 			if (!passedInContext.Status.Any(s => s.StatusId.Equals(status)))
