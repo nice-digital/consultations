@@ -469,7 +469,7 @@ export class Review extends Component<PropsType, StateType> {
 												registerURL={contextValue.registerURL}
 												allowOrganisationCodeLogin={false}
 											/> :
-											<main role="main">
+											<main>
 												<div className="page-header">
 													<Header
 														title={this.state.submittedDate ? "Response submitted" : "Review your response"}

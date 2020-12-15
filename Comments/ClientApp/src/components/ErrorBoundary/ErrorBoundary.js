@@ -40,7 +40,7 @@ export class ErrorBoundary extends Component<PropsType, StateType> {
 		},
 		() => {
 			this.logError(error);
-		});		
+		});
 	}
 
 	logError = async (error) => {
@@ -56,7 +56,7 @@ export class ErrorBoundary extends Component<PropsType, StateType> {
 		if (this.state.hasError) {
 			const { message, stack } = this.state.error;
 			return (
-				<main role="main">
+				<main>
 					<div className="container">
 						<div className="panel page-header">
 							<h1 className="heading mt--c">Something's gone wrong</h1>

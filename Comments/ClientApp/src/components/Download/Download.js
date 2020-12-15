@@ -435,58 +435,60 @@ export class Download extends Component<PropsType, StateType> {
 							<div className="grid">
 								<div data-g="12">
 									<Breadcrumbs links={breadcrumbLinkParams} />
-									<Header title="Consultation responses" />
-									<p className="lead">Only online consultations responses appear in the results below.</p>
-									<div className="grid mt--d">
-										<div data-g="12 md:3">
-											<h2 className="h5 mt--0">Filter</h2>
-											{textFilter &&
-												<TextFilterWithHistory
-													onKeywordUpdated={this.keywordToFilterByUpdated}
-													keyword={this.state.keywordToFilterBy}
-													search={this.state.search}
+									<main>
+										<Header title="Consultation responses" />
+										<p className="lead">Only online consultations responses appear in the results below.</p>
+										<div className="grid mt--d">
+											<div data-g="12 md:3">
+												<h2 className="h5 mt--0">Filter</h2>
+												{textFilter &&
+													<TextFilterWithHistory
+														onKeywordUpdated={this.keywordToFilterByUpdated}
+														keyword={this.state.keywordToFilterBy}
+														search={this.state.search}
+														path={this.state.path}
+														{...textFilter}
+													/>
+												}
+												{!isAdminUser &&
+													<FilterPanel filters={contributionFilter} path={path} />
+												}
+												{teamFilter &&
+													<FilterPanel filters={teamFilter} path={path} />
+												}
+												<FilterPanel filters={optionFilters} path={path} />
+											</div>
+											<div data-g="12 md:9">
+												<DownloadResultsInfo
+													consultationCount={consultationsToShow.length}
+													paginationPositions={paginationPositions}
+													appliedFilters={this.getAppliedFilters()}
 													path={this.state.path}
-													{...textFilter}
+													isLoading={this.state.loading}
+													onRemoveFilter={this.removeFilter}
 												/>
-											}
-											{!isAdminUser &&
-												<FilterPanel filters={contributionFilter} path={path} />
-											}
-											{teamFilter &&
-												<FilterPanel filters={teamFilter} path={path} />
-											}
-											<FilterPanel filters={optionFilters} path={path} />
-										</div>
-										<div data-g="12 md:9">
-											<DownloadResultsInfo
-												consultationCount={consultationsToShow.length}
-												paginationPositions={paginationPositions}
-												appliedFilters={this.getAppliedFilters()}
-												path={this.state.path}
-												isLoading={this.state.loading}
-												onRemoveFilter={this.removeFilter}
-											/>
 
-											{consultationsToShow.length > 0 ? (
-												<ul className="list--unstyled">
-													{consultationsPaginated.map((item, idx) =>
-														<ConsultationItem key={idx}
-															basename={this.props.basename}
-															allowGenerateOrganisationCode={enableOrganisationalCommentingFeature}
-															{...item}
-														/>
-													)}
-												</ul>
-											) : (<p>No consultations found matching supplied filters.</p>)}
-											<Pagination
-												onChangePage={this.changePage}
-												onChangeAmount={this.changeAmount}
-												itemsPerPage={itemsPerPage}
-												consultationCount={consultationsToShow.length}
-												currentPage={pageNumber}
-											/>
+												{consultationsToShow.length > 0 ? (
+													<ul className="list--unstyled">
+														{consultationsPaginated.map((item, idx) =>
+															<ConsultationItem key={idx}
+																basename={this.props.basename}
+																allowGenerateOrganisationCode={enableOrganisationalCommentingFeature}
+																{...item}
+															/>
+														)}
+													</ul>
+												) : (<p>No consultations found matching supplied filters.</p>)}
+												<Pagination
+													onChangePage={this.changePage}
+													onChangeAmount={this.changeAmount}
+													itemsPerPage={itemsPerPage}
+													consultationCount={consultationsToShow.length}
+													currentPage={pageNumber}
+												/>
+											</div>
 										</div>
-									</div>
+									</main>
 								</div>
 							</div>
 						</div>
