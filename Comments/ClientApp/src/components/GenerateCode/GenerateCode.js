@@ -45,7 +45,13 @@ export class GenerateCode extends Component<GenerateCodeProps, GenerateCodeState
 
 		return (
 			<div>
-				<Button variant="inverse" id={`share-organisation-${consultationId}`} onClick={this.handleCodeButtonClick} aria-expanded={showCodeGenerators} aria-controls={`organisation-codes-${consultationId}`}>
+				<Button
+					variant="inverse"
+					id={`share-organisation-${consultationId}`}
+					onClick={this.handleCodeButtonClick}
+					aria-expanded={showCodeGenerators}
+					aria-controls={`organisation-codes-${consultationId}`}
+					data-qa-sel="share-with-org-button">
 					Share with organisation <span className="arrow-icon"></span>
 				</Button>
 

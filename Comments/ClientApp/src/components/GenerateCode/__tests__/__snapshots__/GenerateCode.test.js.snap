@@ -6,6 +6,7 @@ exports[`GenerateCode should match snapshot with code having been generated 1`] 
     aria-controls="organisation-codes-111"
     aria-expanded={true}
     className="btn btn--inverse"
+    data-qa-sel="share-with-org-button"
     id="share-organisation-111"
     onClick={[Function]}
     type="button"
@@ -43,6 +44,7 @@ exports[`GenerateCode should match snapshot with code having been generated 1`] 
         <span
           aria-live="polite"
           className="tag tag--copied"
+          data-qa-sel="copy-code-button"
           onClick={[Function]}
           role="button"
           tabIndex="0"
@@ -61,6 +63,7 @@ exports[`GenerateCode should match snapshot with no code having been generated 1
     aria-controls="organisation-codes-111"
     aria-expanded={true}
     className="btn btn--inverse"
+    data-qa-sel="share-with-org-button"
     id="share-organisation-111"
     onClick={[Function]}
     type="button"
@@ -95,6 +98,7 @@ exports[`GenerateCode should match snapshot with no code having been generated 1
         <button
           aria-live="polite"
           className="btn"
+          data-qa-sel="generate-code-button"
           disabled={false}
           onClick={[Function]}
           type="button"
