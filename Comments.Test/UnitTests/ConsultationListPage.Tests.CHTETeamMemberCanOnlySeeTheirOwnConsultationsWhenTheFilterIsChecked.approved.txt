@@ -17,7 +17,11 @@
             "IsOpen":false,
             "IsClosed":false,
             "IsUpcoming":true,
-            "Show":false
+            "Show":false,
+            "OrganisationCodes":[
+                
+            ],
+            "ShowShareWithOrganisationButton":false
         },
         {
             "Title":"Consultation title 1",
@@ -35,7 +39,11 @@
             "IsOpen":true,
             "IsClosed":false,
             "IsUpcoming":false,
-            "Show":true
+            "Show":true,
+            "OrganisationCodes":[
+                
+            ],
+            "ShowShareWithOrganisationButton":true
         },
         {
             "Title":"Consultation Title 1",
@@ -53,7 +61,11 @@
             "IsOpen":false,
             "IsClosed":true,
             "IsUpcoming":false,
-            "Show":true
+            "Show":true,
+            "OrganisationCodes":[
+                
+            ],
+            "ShowShareWithOrganisationButton":false
         }
     ],
     "OptionFilters":[
@@ -132,7 +144,13 @@
         "IsAuthorised":true,
         "DisplayName":"Jeffrey Goines",
         "UserId":"00000000-0000-0000-0000-000000000000",
-        "OrganisationName":null
+        "OrganisationsAssignedAsLead":[
+            {
+                "OrganisationId":1,
+                "OrganisationName":"NICE",
+                "IsLead":true
+            }
+        ]
     },
     "InitialPageView":false,
     "Status":[

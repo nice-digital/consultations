@@ -24,7 +24,9 @@ export class Tutorial extends Component<PropsType, StateType> {
 	}
 
 	setCookie = (isPanelVisible: boolean) => {
-		Cookies.set("TutorialVisible", isPanelVisible);
+		if(window.CookieControl.preferenceCookies){
+			Cookies.set("TutorialVisible", isPanelVisible);
+		}
 	};
 
 	getCookie = () => {

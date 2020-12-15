@@ -115,5 +115,13 @@ namespace Comments.Common
 
 		    return roleList.Where(role => AppSettings.ConsultationListConfig.DownloadRoles.AllRoles.Contains(role));
 	    }
+
+	    
+
+	    public static long ToJavaScriptTicksSinceEpoch(this DateTime datetime)
+	    {
+			var javascriptEpochTicks = (new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).Ticks; //c#'s date epoch is MinDate, whereas js is 1-1-1970
+		    return (datetime.ToUniversalTime().Ticks - javascriptEpochTicks) / 10000;
+	    }
 	}
 }

@@ -22,7 +22,7 @@ export class AppliedFilter extends Component<PropsType> {
 		);
 	}
 
-	handleRemoveFilterLinkClick: () => void;
+	//handleRemoveFilterLinkClick: () => void;
 	handleRemoveFilterLinkClick(e: DOMEvent) {
 		e.preventDefault();
 		this.props.history.push(this.getHref());

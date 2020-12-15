@@ -76,6 +76,7 @@ export const serverRenderer = (params): Promise => {
 					signOutURL: params.data.signOutURL,
 					registerURL: params.data.registerURL,
 					requestURL: params.data.requestURL,
+					organisationalCommentingFeature: params.data.organisationalCommentingFeature,
 				}, // Key value pairs of preloaded data sets
 				loaders: [], // List of promises where we track preloading data
 			},

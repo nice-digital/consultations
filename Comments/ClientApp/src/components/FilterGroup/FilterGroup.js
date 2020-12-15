@@ -34,7 +34,6 @@ export class FilterGroup extends Component<PropsType, StateType> {
 		});
 	}
 
-	handleTitleClick: () => void;
 	handleTitleClick() {
 		this.setState(prevState => ({
 			isExpanded: !prevState.isExpanded,

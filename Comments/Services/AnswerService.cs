@@ -72,11 +72,10 @@ namespace Comments.Services
 	        if (!answerInDatabase.CreatedByUserId.Equals(_currentUser.UserId))
 		        return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to delete answer id: {answerId}, but it's not their answer"));
 
-			answerInDatabase.IsDeleted = true;
-	        answerInDatabase.LastModifiedDate = DateTime.UtcNow;
-	        answerInDatabase.LastModifiedByUserId = _currentUser.UserId;
+			_context.Answer.Remove(answerInDatabase);
+
 			return (rowsUpdated: _context.SaveChanges(), validate: null);
-        }
+		}
 
         public (ViewModels.Answer answer, Validate validate) CreateAnswer(ViewModels.Answer answer)
         {

@@ -26,6 +26,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
 using System.Collections.Generic;
+using Microsoft.FeatureManagement;
 
 namespace Comments
 {
@@ -59,8 +60,9 @@ namespace Comments
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
 			services.TryAddSingleton<ISeriLogger, SeriLogger>();
-            //services.TryAddSingleton<IAuthenticateService, AuthService>();
-            services.TryAddTransient<IUserService, UserService>();
+			services.AddHttpClient();
+
+			services.TryAddTransient<IUserService, UserService>();
 
 			var contextOptionsBuilder = new DbContextOptionsBuilder<ConsultationsContext>();
             services.TryAddSingleton<IDbContextOptionsBuilderInfrastructure>(contextOptionsBuilder);
@@ -82,13 +84,13 @@ namespace Comments
 	        services.TryAddTransient<IExportToExcel, ExportToExcel>();
 	        services.TryAddTransient<IStatusService, StatusService>();
 			services.TryAddTransient<IConsultationListService, ConsultationListService>();
+			services.TryAddTransient<IOrganisationService, OrganisationService>();
 
-			//services.TryAddTransient<IAPIService, APIService>(); //this is already done in the nugget
 			services.AddRouting(options => options.LowercaseUrls = true);
 
 			// Add authentication
 			var authConfiguration = AppSettings.AuthenticationConfig.GetAuthConfiguration();
-			services.AddAuthentication(authConfiguration);
+			services.AddAuthentication(authConfiguration, allowNonSecureCookie: Environment.IsDevelopment());
 			services.AddAuthorisation(authConfiguration);
 
 			services.AddMvc(options =>
@@ -146,10 +148,12 @@ namespace Comments
             }); //adding CORS for Warren. todo: maybe move this into the isDevelopment block..
             
             services.AddOptions();
+
+            services.AddFeatureManagement();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ISeriLogger seriLogger, IApplicationLifetime appLifetime, IUrlHelperFactory urlHelperFactory, IActionContextAccessor actionContextAccessor)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ISeriLogger seriLogger, IApplicationLifetime appLifetime, IUrlHelperFactory urlHelperFactory, IFeatureManager featureManager)
         {           
             seriLogger.Configure(loggerFactory, Configuration, appLifetime, env);
             var startupLogger = loggerFactory.CreateLogger<Startup>();
@@ -158,9 +162,9 @@ namespace Comments
 
 			if (env.IsDevelopment())
             {
-	            app.UseExceptionHandler(Constants.ErrorPath);
-				app.UseDeveloperExceptionPage();
-                loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+	            app.UseDeveloperExceptionPage();
+				app.UseExceptionHandler(Constants.ErrorPath);
+				loggerFactory.AddConsole(Configuration.GetSection("Logging"));
                 loggerFactory.AddDebug();
 
 				app.UseStaticFiles(); //uses the wwwroot folder, only for dev. on other service the root is varnish
@@ -265,10 +269,10 @@ namespace Comments
                     options.ExcludeUrls = new[] { "/sockjs-node" };
                     // Pass data in from .NET into the SSR. These come through as `params` within `createServerRenderer` within the server side JS code.
                     // See https://docs.microsoft.com/en-us/aspnet/core/spa/angular?tabs=visual-studio#pass-data-from-net-code-into-typescript-code
-                    options.SupplyData = (httpContext, data) =>
+                    options.SupplyData = async (httpContext, data) =>
                     {
                         data["isHttpsRequest"] = httpContext.Request.IsHttps;
-                        var cookiesForSSR = httpContext.Request.Cookies.Where(cookie => cookie.Key.StartsWith(AuthenticationConstants.CookieName)).ToList();
+                        var cookiesForSSR = httpContext.Request.Cookies.Where(cookie => cookie.Key.StartsWith(AuthenticationConstants.CookieName) || cookie.Key.StartsWith(Constants.SessionCookieName)).ToList();
                         if (cookiesForSSR.Any())
                         {
                             data["cookies"] = $"{string.Join("; ", cookiesForSSR.Select(cookie => $"{cookie.Key}={cookie.Value}"))};";
@@ -298,9 +302,12 @@ namespace Comments
 						data["registerURL"] = urlHelper.Action(Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnUrl = httpContext.Request.Path, goToRegisterPage = true });
 						data["requestURL"] = httpContext.Request.Path;
 	                    data["accountsEnvironment"] = AppSettings.Environment.AccountsEnvironment;
-	                    //data["user"] = context.User; - possible security implications here, surfacing claims to the front end. might be ok, if just server-side.
-	                    // Pass further data in e.g. user/authentication data
-                    };
+
+						data["OrganisationalCommentingFeature"] = await featureManager.IsEnabledAsync(Constants.Features.OrganisationalCommenting);
+
+						//data["user"] = context.User; - possible security implications here, surfacing claims to the front end. might be ok, if just server-side.
+						// Pass further data in e.g. user/authentication data
+					};
                     options.BootModulePath = $"{spa.Options.SourcePath}/src/server/index.js";
                 });
 

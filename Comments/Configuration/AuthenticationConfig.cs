@@ -21,6 +21,7 @@ namespace Comments.Configuration
         public string CallBackPath { get; set; }
         public string LoginPath { get; set; }
 		public string LogoutPath { get; set; }
+		public string GoogleTrackingId { get; set; }
 
 		public RedisConfiguration RedisServiceConfiguration { get; set; }
 
@@ -43,7 +44,8 @@ namespace Comments.Configuration
 				loginPath: LoginPath,
 				logoutPath: LogoutPath,
 				redisConnectionString: RedisServiceConfiguration?.ConnectionString,
-				redisEnabled: RedisServiceConfiguration?.Enabled ?? false
+				redisEnabled: RedisServiceConfiguration?.Enabled ?? false,
+				googleTrackingId: GoogleTrackingId	
 			);
         }
 	}

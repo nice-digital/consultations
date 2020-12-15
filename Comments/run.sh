@@ -28,6 +28,7 @@ jq \
     --arg webAppClientId "$WEBAPP_CLIENTID" \
     --arg webAppClientSecret "$WEBAPP_CLIENTSECRECT" \
     --arg webAppAuthorisationServiceUri "$WEBAPP_AUTH_SERVICE_URI" \
+    --arg googleTrackingId "$WEBAPP_GOOGLE_TRACKING_ID" \
     --arg webAppDomain "$WEBAPP_DOMAIN" \
     --arg encryptionKey "$ENCRYPTION_KEY" \
     --arg encryptionIV "$ENCRYPTION_IV" \
@@ -35,6 +36,7 @@ jq \
     --arg teamRoles1 "$TEAMROLES1" \
     --arg teamRoles2 "$TEAMROLES2" \
     --arg teamRoles3 "$TEAMROLES3" \
+    --arg OrgCommenting "$ORG_COMMENTING" \
     '
     .ConnectionStrings.DefaultConnection = $defaultConnection |
     .Logging.LogFilePath = $loggingLogFilePath |
@@ -59,8 +61,10 @@ jq \
     .WebAppConfiguration.ClientSecret = $webAppClientSecret |
     .WebAppConfiguration.AuthorisationServiceUri = $webAppAuthorisationServiceUri |
     .WebAppConfiguration.Domain = $webAppDomain |
+    .WebAppConfiguration.GoogleTrackingId = $googleTrackingId |
     .Encryption.Key = $encryptionKey |
     .Encryption.IV = $encryptionIV |
+    .FeatureManagement.OrganisationalCommenting = $OrgCommenting |
     .ConsultationList.DownloadRoles.AdminRoles |= .+ [$adminRole] |
     .ConsultationList.DownloadRoles.TeamRoles |= .+ [$teamRoles1] |
     .ConsultationList.DownloadRoles.TeamRoles |= .+ [$teamRoles2] |

@@ -49,7 +49,28 @@ namespace Comments.Test.Infrastructure
 		    return Regex.Replace(str, @"""questionTypeId"":(\d+)", @"""questionTypeId"":""scrubbed by ScrubQuestionTypeId""");
 	    }
 
-	    public static string ScrubIds(string str)
+	    public static string ScrubUserId(string str)
+	    {
+		    return Regex.Replace(str, @"""UserId"":""([a-z0-9A-Z-]+)""", @"""UserId"":""scrubbed by ScrubUserId""");
+	    }
+
+	    public static string ScrubCollationCode(string str)
+	    {
+		    return Regex.Replace(str, @"\d{4}\s\d{4}\s\d{4}", @"1234 1234 1234");
+	    }
+
+	    public static string ScrubOrganisationAuthorisationId(string str)
+	    {
+			return Regex.Replace(str, @"""organisationAuthorisationId"":(\d+)", @"""organisationAuthorisationId"":""scrubbed by ScrubOrganisationAuthorisationId""");
+		}
+
+		public static string ScrubStackTraceString(string str)
+		{
+			//unescaped regex is: "StackTraceString":"[^"]+"
+			return Regex.Replace(str, @"""StackTraceString"":""[^""]+""", @"""StackTraceString"":""scrubbed by ScrubStackTraceString""");
+		}
+
+		public static string ScrubIds(string str)
 	    {
 		    str = ScrubCommentId(str);
 		    str = ScrubLocationId(str);
@@ -64,5 +85,8 @@ namespace Comments.Test.Infrastructure
 		    return Regex.Replace(str, "(<!--)([\\d\\D]+)(-->)", "\"Error Message\":\"scrubbed by ScrubErrorMessage\"");
 
 		}
-	}
+
+
+		
+    }
 }

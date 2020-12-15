@@ -7,10 +7,11 @@ namespace Comments.Models
     {
 	    private Answer() //just for EF
 		{
+			ChildAnswers = new HashSet<Answer>();
 			SubmissionAnswer = new HashSet<SubmissionAnswer>();
-		} 
+		}
 
-        public Answer(int questionId, string createdByUserId, string answerText, bool? answerBoolean, Question question, int statusId, Status status)
+		public Answer(int questionId, string createdByUserId, string answerText, bool? answerBoolean, Question question, int statusId, Status status, int? organisationUserId = null, int? parentAnswerId = null)
         {
 	        if (answerText == null && question.QuestionType.TextIsMandatory)
 	        {
@@ -27,7 +28,9 @@ namespace Comments.Models
 	        StatusId = statusId;
 	        Status = status;
 	        SubmissionAnswer = new HashSet<SubmissionAnswer>();
-		}
+	        OrganisationUserId = organisationUserId;
+	        ParentAnswerId = parentAnswerId;
+        }
 
         public void UpdateFromViewModel(ViewModels.Answer answer)
         {

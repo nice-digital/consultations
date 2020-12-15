@@ -15,7 +15,7 @@ namespace Comments.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
+                .HasAnnotation("ProductVersion", "2.1.14-servicing-32113")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -37,14 +37,18 @@ namespace Comments.Migrations
                         .ValueGeneratedOnAdd()
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<bool>("IsDeleted");
-
                     b.Property<string>("LastModifiedByUserId")
                         .HasColumnName("LastModifiedByUserID");
 
                     b.Property<DateTime>("LastModifiedDate")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValueSql("(getdate())");
+
+                    b.Property<int?>("OrganisationUserId")
+                        .HasColumnName("OrganisationUserID");
+
+                    b.Property<int?>("ParentAnswerId")
+                        .HasColumnName("ParentAnswerID");
 
                     b.Property<int>("QuestionId")
                         .HasColumnName("QuestionID");
@@ -55,6 +59,10 @@ namespace Comments.Migrations
                         .HasDefaultValueSql("((1))");
 
                     b.HasKey("AnswerId");
+
+                    b.HasIndex("OrganisationUserId");
+
+                    b.HasIndex("ParentAnswerId");
 
                     b.HasIndex("QuestionId");
 
@@ -80,8 +88,6 @@ namespace Comments.Migrations
                         .ValueGeneratedOnAdd()
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<bool>("IsDeleted");
-
                     b.Property<string>("LastModifiedByUserId")
                         .HasColumnName("LastModifiedByUserID");
 
@@ -92,6 +98,12 @@ namespace Comments.Migrations
                     b.Property<int>("LocationId")
                         .HasColumnName("LocationID");
 
+                    b.Property<int?>("OrganisationUserId")
+                        .HasColumnName("OrganisationUserID");
+
+                    b.Property<int?>("ParentCommentId")
+                        .HasColumnName("ParentCommentID");
+
                     b.Property<int>("StatusId")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("StatusID")
@@ -100,6 +112,10 @@ namespace Comments.Migrations
                     b.HasKey("CommentId");
 
                     b.HasIndex("LocationId");
+
+                    b.HasIndex("OrganisationUserId");
+
+                    b.HasIndex("ParentCommentId");
 
                     b.HasIndex("StatusId");
 
@@ -136,6 +152,62 @@ namespace Comments.Migrations
                     b.HasKey("LocationId");
 
                     b.ToTable("Location");
+                });
+
+            modelBuilder.Entity("Comments.Models.OrganisationAuthorisation", b =>
+                {
+                    b.Property<int>("OrganisationAuthorisationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("OrganisationAuthorisationID")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CollationCode");
+
+                    b.Property<string>("CreatedByUserId")
+                        .IsRequired()
+                        .HasColumnName("CreatedByUserID");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<int>("LocationId")
+                        .HasColumnName("LocationID");
+
+                    b.Property<int>("OrganisationId")
+                        .HasColumnName("OrganisationID");
+
+                    b.HasKey("OrganisationAuthorisationId");
+
+                    b.HasIndex("LocationId");
+
+                    b.ToTable("OrganisationAuthorisation");
+                });
+
+            modelBuilder.Entity("Comments.Models.OrganisationUser", b =>
+                {
+                    b.Property<int>("OrganisationUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("OrganisationUserID")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<Guid>("AuthorisationSession");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<string>("EmailAddress")
+                        .HasMaxLength(100);
+
+                    b.Property<DateTime>("ExpirationDate");
+
+                    b.Property<int>("OrganisationAuthorisationId")
+                        .HasColumnName("OrganisationAuthorisationID");
+
+                    b.HasKey("OrganisationUserId");
+
+                    b.HasIndex("OrganisationAuthorisationId");
+
+                    b.ToTable("OrganisationUser");
                 });
 
             modelBuilder.Entity("Comments.Models.Question", b =>
@@ -197,13 +269,8 @@ namespace Comments.Migrations
                     b.ToTable("QuestionType");
 
                     b.HasData(
-                        new
-                        {
-                            QuestionTypeId = 99,
-                            Description = "A yes / no answer without a text answer",
-                            HasBooleanAnswer = true,
-                            HasTextAnswer = true
-                        });
+                        new { QuestionTypeId = 99, Description = "A yes / no answer without a text answer", HasBooleanAnswer = true, HasTextAnswer = true }
+                    );
                 });
 
             modelBuilder.Entity("Comments.Models.Status", b =>
@@ -220,16 +287,9 @@ namespace Comments.Migrations
                     b.ToTable("Status");
 
                     b.HasData(
-                        new
-                        {
-                            StatusId = 1,
-                            Name = "Draft"
-                        },
-                        new
-                        {
-                            StatusId = 2,
-                            Name = "Submitted"
-                        });
+                        new { StatusId = 1, Name = "Draft" },
+                        new { StatusId = 2, Name = "Submitted" }
+                    );
                 });
 
             modelBuilder.Entity("Comments.Models.Submission", b =>
@@ -307,6 +367,15 @@ namespace Comments.Migrations
 
             modelBuilder.Entity("Comments.Models.Answer", b =>
                 {
+                    b.HasOne("Comments.Models.OrganisationUser", "OrganisationUser")
+                        .WithMany()
+                        .HasForeignKey("OrganisationUserId");
+
+                    b.HasOne("Comments.Models.Answer", "ParentAnswer")
+                        .WithMany("ChildAnswers")
+                        .HasForeignKey("ParentAnswerId")
+                        .HasConstraintName("FK_Answer_Answer");
+
                     b.HasOne("Comments.Models.Question", "Question")
                         .WithMany("Answer")
                         .HasForeignKey("QuestionId")
@@ -325,10 +394,36 @@ namespace Comments.Migrations
                         .HasForeignKey("LocationId")
                         .HasConstraintName("FK_Comment_Location");
 
+                    b.HasOne("Comments.Models.OrganisationUser", "OrganisationUser")
+                        .WithMany()
+                        .HasForeignKey("OrganisationUserId");
+
+                    b.HasOne("Comments.Models.Comment", "ParentComment")
+                        .WithMany("ChildComments")
+                        .HasForeignKey("ParentCommentId")
+                        .HasConstraintName("FK_Comment_Comment");
+
                     b.HasOne("Comments.Models.Status", "Status")
                         .WithMany("Comment")
                         .HasForeignKey("StatusId")
                         .HasConstraintName("FK_Comment_Status");
+                });
+
+            modelBuilder.Entity("Comments.Models.OrganisationAuthorisation", b =>
+                {
+                    b.HasOne("Comments.Models.Location", "Location")
+                        .WithMany("OrganisationAuthorisation")
+                        .HasForeignKey("LocationId")
+                        .HasConstraintName("FK_OrganisationAuthorisation_Location");
+                });
+
+            modelBuilder.Entity("Comments.Models.OrganisationUser", b =>
+                {
+                    b.HasOne("Comments.Models.OrganisationAuthorisation", "OrganisationAuthorisation")
+                        .WithMany("OrganisationUsers")
+                        .HasForeignKey("OrganisationAuthorisationId")
+                        .HasConstraintName("FK_OrganisationUser_OrganisationAuthorisation")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Comments.Models.Question", b =>

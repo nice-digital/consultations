@@ -36,7 +36,6 @@ export class FilterOption extends Component<PropsType, StateType> {
 		});
 	}
 
-	handleCheckboxChange: () => void;
 	handleCheckboxChange() {
 		this.setState(prevState => ({
 			isSelected: !prevState.isSelected,

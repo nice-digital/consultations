@@ -7,10 +7,16 @@ namespace Comments.Models
 {
     public partial class Location
     {
-        public Location(string sourceUri, string htmlElementId, string rangeStart, int? rangeStartOffset, string rangeEnd, int? rangeEndOffset, string quote, string order, string section, ICollection<Comment> comment, ICollection<Question> question)
+		private Location() //Just for EF
+		{
+			Comment = new HashSet<Comment>();
+			OrganisationAuthorisation = new HashSet<OrganisationAuthorisation>();
+			Question = new HashSet<Question>();
+		}
+		public Location(string sourceUri, string htmlElementId, string rangeStart, int? rangeStartOffset, string rangeEnd, int? rangeEndOffset, string quote, string order, string section, ICollection<Comment> comment, ICollection<Question> question)
         {
             SourceURI = sourceUri;
-            HtmlElementID = htmlElementId;
+			HtmlElementID = htmlElementId;
             RangeStart = rangeStart;
             RangeStartOffset = rangeStartOffset;
             RangeEnd = rangeEnd;

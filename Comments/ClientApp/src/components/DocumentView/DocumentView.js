@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { withRouter } from "react-router";
 import { LiveMessenger } from "react-aria-live";
 
@@ -39,22 +39,28 @@ export class DocumentView extends Component<PropsType, StateType> {
 		this.commentList.newComment(e, incomingComment);
 	};
 
+	getDocumentTitle = () => {
+		return this.documentComponent.getDocumentTitle();
+	}
+
 	render() {
 		if (this.state.error.hasError) { throw new Error(this.state.error.message); }
 
 		return (
-			<Fragment>
+			<div>
 				<LiveMessenger>
 					{({announceAssertive, announcePolite}) =>
 						<CommentListWithRouter
 							announceAssertive={announceAssertive}
 							announcePolite={announcePolite}
-							wrappedComponentRef={component => (this.commentList = component)} />}
+							wrappedComponentRef={component => (this.commentList = component)}
+							getTitleFunction={this.getDocumentTitle} />}
 				</LiveMessenger>
 				
 				{/* Passing the function we're using from <CommentListWithRouter /> to DocWithRouter via props*/}
-				<DocumentWithRouter onNewCommentClick={this.newCommentHandler} />
-			</Fragment>
+				<DocumentWithRouter onNewCommentClick={this.newCommentHandler} 
+					wrappedComponentRef={component => (this.documentComponent = component)}/>
+			</div>
 		);
 	}
 }

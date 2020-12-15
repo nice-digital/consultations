@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using Comments.Common;
 using Comments.Configuration;
 using Comments.Migrations;
 using Comments.Services;
@@ -24,6 +25,8 @@ using Microsoft.Extensions.Logging;
 using NICE.Feeds;
 using NICE.Feeds.Tests.Infrastructure;
 using Microsoft.Data.Sqlite;
+using Microsoft.FeatureManagement;
+using NICE.Feeds.Models.Indev.List;
 using NICE.Identity.Authentication.Sdk.API;
 using Answer = Comments.Models.Answer;
 using Comment = Comments.Models.Comment;
@@ -61,8 +64,9 @@ namespace Comments.Test.Infrastructure
         protected readonly IUserService _fakeUserService;
         protected readonly IHttpContextAccessor _fakeHttpContextAccessor;
         protected readonly IAPIService _fakeApiService;
-
-	    protected readonly IConsultationService _consultationService;
+        protected readonly IFeatureManager _fakeFeatureManager;
+        protected readonly ISessionManager _fakeSessionManager;
+		protected readonly IConsultationService _consultationService;
         protected readonly DbContextOptionsBuilder<ConsultationsContext> _contextOptions;
 
         protected readonly ConsultationsContext _context;
@@ -96,8 +100,9 @@ namespace Comments.Test.Infrastructure
 		    _fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId);
 		}
 
-	    public TestBase(TestUserType testUserType, Feed feed, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null, bool bypassAuthentication = true, bool addRoleClaim = true)
-		    : this(false, testUserType, true, submittedCommentsAndAnswerCounts, bypassAuthentication, addRoleClaim)
+	    public TestBase(TestUserType testUserType, Feed feed, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null, bool bypassAuthentication = true,
+		    bool addRoleClaim = true, bool enableOrganisationalCommentingFeature = false)
+		    : this(false, testUserType, true, submittedCommentsAndAnswerCounts, bypassAuthentication, addRoleClaim, enableOrganisationalCommentingFeature)
 	    {
 			FeedToUse = feed;
 		}
@@ -110,13 +115,15 @@ namespace Comments.Test.Infrastructure
 		/// <param name="useFakeConsultationService"></param>
 		/// <param name="submittedCommentsAndAnswerCounts"></param>
 		/// <param name="bypassAuthentication"></param>
-		public TestBase(bool useRealSubmitService = false, TestUserType testUserType = TestUserType.Authenticated, bool useFakeConsultationService = false, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null, bool bypassAuthentication = true, bool addRoleClaim = true)
+		public TestBase(bool useRealSubmitService = false, TestUserType testUserType = TestUserType.Authenticated, bool useFakeConsultationService = false, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null,
+			bool bypassAuthentication = true, bool addRoleClaim = true, bool enableOrganisationalCommentingFeature = false)
         {
 	        if (testUserType == TestUserType.NotAuthenticated)
 	        {
 		        _authenticated = false;
 	        }
 			AppSettings.AuthenticationConfig = new AuthenticationConfig{ ClientId = "test client id", AuthorisationServiceUri = "http://www.example.com"};
+			AppSettings.GlobalNavConfig = new GlobalNavConfig {CookieBannerScript = "//a-fake-cookiebannerscript-url"};
 			// Arrange
 			_urlHelper = new FakeUrlHelper();
 			_fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId, testUserType, addRoleClaim);
@@ -125,6 +132,10 @@ namespace Comments.Test.Infrastructure
 			_consultationService = new FakeConsultationService();
 	        _useRealSubmitService = useRealSubmitService;
 	        _fakeEncryption = new FakeEncryption();
+			var featureDictionary = new Dictionary<string, bool> { { Constants.Features.OrganisationalCommenting, enableOrganisationalCommentingFeature } };
+			_fakeFeatureManager = new FakeFeatureManager(featureDictionary);
+	        _fakeSessionManager = new FakeSessionManager(featureDictionary);
+
 			var databaseName = DatabaseName + Guid.NewGuid();
 
 			_options = new DbContextOptionsBuilder<ConsultationsContext>()
@@ -151,15 +162,14 @@ namespace Comments.Test.Infrastructure
 					services.TryAddSingleton<ConsultationsContext>(_context);
                     services.TryAddSingleton<ISeriLogger, FakeSerilogger>();
                     services.TryAddSingleton<IHttpContextAccessor>(provider => _fakeHttpContextAccessor);
-                    services.TryAddTransient<IUserService>(provider => _fakeUserService);
+                   
+					services.TryAddTransient<IUserService>(provider => _fakeUserService);
                     services.TryAddTransient<IFeedReaderService>(provider => new FeedReader(FeedToUse));
                     services.TryAddScoped<IAPIService>(provider => _fakeApiService);
-
-                    //services.AddAuthentication();
-
-                   //services.Decorate<IAPIService, FakeAPIService>();
-                   //services.Decorate<IAPIService>(provider => _fakeApiService);
-
+					
+					services.AddSingleton<IFeatureManager>(provider => _fakeFeatureManager);
+					services.AddSingleton<ISessionManager>(provider => _fakeSessionManager);
+					
 					if (!_useRealSubmitService)
 	                {
 						services.TryAddTransient<ISubmitService>(provider => new FakeSubmitService());
@@ -262,10 +272,10 @@ namespace Comments.Test.Infrastructure
 
 		    return statusModel.StatusId;
 	    }
-		protected int AddComment(int locationId, string commentText, bool isDeleted, string createdByUserId, int status = (int)StatusName.Draft, ConsultationsContext passedInContext = null)
+		protected int AddComment(int locationId, string commentText, string createdByUserId, int status = (int)StatusName.Draft, ConsultationsContext passedInContext = null, int? organisationUserId = null, int? parentCommentId = null)
         {
-            var comment = new Comment(locationId, createdByUserId, commentText, Guid.Empty.ToString(), location: null, statusId: status, status: null);
-            comment.IsDeleted = isDeleted;
+            var comment = new
+	            Comment(locationId, createdByUserId, commentText, Guid.Empty.ToString(), location: null, statusId: status, status: null, organisationUserId, parentCommentId);
             if (passedInContext != null)
             {
                 passedInContext.Comment.Add(comment);
@@ -322,9 +332,9 @@ namespace Comments.Test.Infrastructure
 
             return question.QuestionId;
         }
-        protected int AddAnswer(int questionId, string userId, string answerText, int status = (int)StatusName.Draft, ConsultationsContext passedInContext = null)
+        protected int AddAnswer(int questionId, string userId, string answerText, int status = (int)StatusName.Draft, ConsultationsContext passedInContext = null, int? organisationUserId = null, int? parentAnswerId = null)
         {
-            var answer = new Answer(questionId, userId, answerText, null, null, status, null);
+            var answer = new Answer(questionId, userId, answerText, null, null, status, null, organisationUserId, parentAnswerId);
             answer.LastModifiedDate = DateTime.Now;
             if (passedInContext != null)
             {
@@ -345,7 +355,7 @@ namespace Comments.Test.Infrastructure
         protected void AddCommentsAndQuestionsAndAnswers(string sourceURI, string commentText, string questionText, string answerText, string createdByUserId, int status = (int)StatusName.Draft, ConsultationsContext passedInContext = null)
         {
             var locationId = AddLocation(sourceURI, passedInContext);
-            AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId, passedInContext: passedInContext, status: status);
+            AddComment(locationId, commentText, createdByUserId: createdByUserId, passedInContext: passedInContext, status: status);
 			var questionTypeId = 99;
             var questionId = AddQuestion(locationId, questionTypeId, questionText, passedInContext);
             AddAnswer(questionId, createdByUserId, answerText, status, passedInContext);
@@ -360,7 +370,7 @@ namespace Comments.Test.Infrastructure
             var userId = Guid.NewGuid().ToString();
 
 			var locationId = AddLocation(sourceURI);
-			AddComment(locationId, commentText, isDeleted: false, createdByUserId: userId);
+			AddComment(locationId, commentText, createdByUserId: userId);
 			var questionTypeId = 99;
 			var questionId = AddQuestion(locationId, questionTypeId, questionText);
 			AddAnswer(questionId, userId, answerText);
@@ -377,7 +387,7 @@ namespace Comments.Test.Infrastructure
 	    protected void AddSubmittedCommentsAndAnswers(string sourceURI, string commentText, string questionText, string answerText, string createdByUserId, ConsultationsContext passedInContext = null)
 	    {
 		    var locationId = AddLocation(sourceURI, passedInContext);
-		    var commentId = AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId, status: (int)StatusName.Submitted, passedInContext: passedInContext);
+		    var commentId = AddComment(locationId, commentText, createdByUserId: createdByUserId, status: (int)StatusName.Submitted, passedInContext: passedInContext);
 			var questionTypeId = 99;
 		    var questionId = AddQuestion(locationId, questionTypeId, questionText, passedInContext);
 		    var answerId = AddAnswer(questionId, createdByUserId, answerText, (int)StatusName.Submitted, passedInContext);
@@ -389,7 +399,7 @@ namespace Comments.Test.Infrastructure
 	    protected void AddSubmittedComments(string sourceURI, string commentText, string questionText, string answerText, string createdByUserId, ConsultationsContext passedInContext = null)
 	    {
 		    var locationId = AddLocation(sourceURI, passedInContext);
-		    var commentId = AddComment(locationId, commentText, isDeleted: false, createdByUserId: createdByUserId, status: (int)StatusName.Submitted, passedInContext: passedInContext);
+		    var commentId = AddComment(locationId, commentText, createdByUserId: createdByUserId, status: (int)StatusName.Submitted, passedInContext: passedInContext);
 			var questionTypeId = 99;
 		    var questionId = AddQuestion(locationId, questionTypeId, questionText, passedInContext);
 		    var submissionId = AddSubmission(createdByUserId, passedInContext);
@@ -466,7 +476,75 @@ namespace Comments.Test.Infrastructure
 		    return submissionAnswer.SubmissionAnswerId;
 	    }
 
-	    protected ConsultationListContext CreateContext(IUserService userService, int totalCount = 1)
+	    protected int AddOrganisationAuthorisationWithLocation(int organisationId, int consultationId, ConsultationsContext passedInContext, string userId = "someUserId", string collationCode = null)
+	    {
+		    var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
+		    var locationId = AddLocation(sourceURI, passedInContext);
+		    passedInContext.SaveChanges();
+			var organisationAuthorisation = new OrganisationAuthorisation(userId, DateTime.Now, organisationId, locationId, collationCode);
+			passedInContext.OrganisationAuthorisation.Add(organisationAuthorisation);
+			passedInContext.SaveChanges();
+			return organisationAuthorisation.OrganisationAuthorisationId;
+	    }
+
+	    protected int AddOrganisationUser(ConsultationsContext passedInContext, int organisationAuthorisationId, Guid authorisationSession, DateTime? expirationDate)
+	    {
+			var organisationUser = new OrganisationUser(organisationAuthorisationId, authorisationSession, expirationDate ?? DateTime.Now.AddDays(28));
+			passedInContext.OrganisationUser.Add(organisationUser);
+			passedInContext.SaveChanges();
+			return organisationUser.OrganisationUserId;
+	    }
+
+	    protected List<ConsultationList> AddConsultationsToList()
+	    {
+		    var consultationList = new List<ConsultationList>();
+		    consultationList.Add(new ConsultationList
+		    {
+			    ConsultationId = 123,
+			    ConsultationName = "open consultation",
+			    StartDate = DateTime.Now.AddDays(-1),
+			    EndDate = DateTime.Now.AddDays(1),
+			    Reference = "GID-1",
+			    Title = "Consultation title 1",
+			    AllowedRole = "ConsultationListTestRole",
+			    FirstConvertedDocumentId = null,
+			    FirstChapterSlugOfFirstConvertedDocument = null
+		    });
+		    consultationList.Add(new ConsultationList()
+		    {
+			    ConsultationId = 124,
+			    ConsultationName = "closed consultation",
+			    StartDate = DateTime.Now.AddDays(-3),
+			    EndDate = DateTime.Now.AddDays(-2),
+			    Reference = "GID-2",
+			    Title = "Consultation Title 1",
+			    AllowedRole = "ConsultationListTestRole",
+			    FirstConvertedDocumentId = null,
+			    FirstChapterSlugOfFirstConvertedDocument = null
+		    });
+		    consultationList.Add(new ConsultationList()
+		    {
+			    ConsultationId = 125,
+			    ConsultationName = "upcoming consultation",
+			    StartDate = DateTime.Now.AddDays(3),
+			    EndDate = DateTime.Now.AddDays(5),
+			    Reference = "GID-3",
+			    Title = "Consultation Title 3",
+			    AllowedRole = "Some other role",
+			    FirstConvertedDocumentId = 1,
+			    FirstChapterSlugOfFirstConvertedDocument = "my-chapter-slug"
+		    });
+
+		    return consultationList;
+	    }
+
+
+	    protected IUserService GetFakeUserService(string userId = null, TestUserType testUserType = TestUserType.Administrator)
+	    {
+		    return FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId ?? Guid.NewGuid().ToString(), testUserType: testUserType);
+	    }
+
+		protected ConsultationListContext CreateContext(IUserService userService, int totalCount = 1)
 	    {
 		    var consultationListContext = new ConsultationListContext(_options, userService, _fakeEncryption,
 			    new List<SubmittedCommentsAndAnswerCount>

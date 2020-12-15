@@ -108,9 +108,8 @@ namespace Comments.Services
             if (!commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId))
                 return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to delete comment id: {commentId}, but it's not their comment"));
 
-            commentInDatabase.IsDeleted = true;
-            commentInDatabase.LastModifiedDate = DateTime.UtcNow;
-            commentInDatabase.LastModifiedByUserId = _currentUser.UserId;
+			_context.Comment.Remove(commentInDatabase);
+			
             return (rowsUpdated: _context.SaveChanges(), validate: null);
         }
 
@@ -158,7 +157,7 @@ namespace Comments.Services
 			}
 
 			model.CommentsAndQuestions = FilterCommentsAndQuestions(commentsAndQuestions, model.Type, model.Document);
-			model.OrganisationName = _currentUser.OrganisationName;
+			model.OrganisationName = _currentUser?.OrganisationsAssignedAsLead.FirstOrDefault()?.OrganisationName;
 
 			var consultationId = ConsultationsUri.ParseRelativeUrl(relativeURL).ConsultationId;
 			model.Filters = GetFilterGroups(consultationId, commentsAndQuestions, model.Type, model.Document);

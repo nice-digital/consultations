@@ -21,10 +21,12 @@ import { tagManager } from "../../helpers/tag-manager";
 
 import { CommentBox } from "../CommentBox/CommentBox";
 import { Question } from "../Question/Question";
-import { LoginBanner } from "../LoginBanner/LoginBanner";
+import LoginBannerWithRouter from "../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
 
-import { createQuestionPdf } from "../QuestionView/QuestionViewDocument";
+import { createQuestionPdf } from '../QuestionView/QuestionViewDocument';
+import { canUseDOM } from "../../helpers/utils";
+import { Alert } from '@nice-digital/nds-alert';
 
 type PropsType = {
 	staticContext?: any,
@@ -37,6 +39,7 @@ type PropsType = {
 		search: string
 	},
 	announceAssertive: Function,
+	getTitleFunction: Function,
 };
 
 type StateType = {
@@ -53,8 +56,8 @@ type StateType = {
 	shouldShowQuestionsTab: boolean,
 	error: string,
 	unsavedIds: Array<number>,
-	consultationData: ConsultationStateType, // the top level info - title etc
 	endDate: string,
+	enableOrganisationalCommentingFeature: boolean,
 };
 
 export class CommentList extends Component<PropsType, StateType> {
@@ -74,28 +77,23 @@ export class CommentList extends Component<PropsType, StateType> {
 			shouldShowCommentsTab: false,
 			shouldShowQuestionsTab: false,
 			unsavedIds: [],
-			consultationData: null,
 			endDate: "",
+			enableOrganisationalCommentingFeature: false
 		};
 
 		let preloadedData = {};
+
 		if (this.props.staticContext && this.props.staticContext.preload) {
 			preloadedData = this.props.staticContext.preload.data; //this is data from Configure => SupplyData in Startup.cs. the main thing it contains for this call is the cookie for the current user.
 		}
+
+		const enableOrganisationalCommentingFeature = ((preloadedData && preloadedData.organisationalCommentingFeature) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["organisationalCommentingFeature"]));
 
 		const preloadedCommentsData = preload(
 			this.props.staticContext,
 			"comments",
 			[],
 			{sourceURI: this.props.match.url},
-			preloadedData,
-		);
-
-		const preloadedConsultation = preload(
-			this.props.staticContext,
-			"consultation",
-			[],
-			{consultationId: this.props.match.params.consultationId, isReview: false},
 			preloadedData,
 		);
 
@@ -115,8 +113,8 @@ export class CommentList extends Component<PropsType, StateType> {
 				drawerOpen: false,
 				drawerMobile: false,
 				unsavedIds: [],
-				consultationData: preloadedConsultation,
 				endDate: preloadedCommentsData.consultationState.endDate,
+				enableOrganisationalCommentingFeature,
 			};
 		}
 	}
@@ -139,30 +137,9 @@ export class CommentList extends Component<PropsType, StateType> {
 			.catch(err => console.log("load comments in commentlist " + err));
 	}
 
-	loadConsultation = async () => {
-		const {consultationId} = this.props.match.params;
-
-		const consultationData = load("consultation", undefined, [], {
-			consultationId,
-			isReview: false,
-		})
-			.then(response => {
-				this.setState({
-					consultationData: response.data,
-				});
-			})
-			.catch(err => {
-				this.setState({
-					error: "consultationData " + err,
-				});
-			});
-		
-	};
-
 	componentDidMount() {
 		if (!this.state.initialDataLoaded) {
 			this.loadComments();
-			this.loadConsultation();
 		}
 		// We can't prerender whether we're on mobile cos SSR doesn't have a window
 		this.setState({
@@ -216,7 +193,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		comments.unshift(generatedComment);
 		this.setState({comments});
 		setTimeout(() => {
-			pullFocusByQuerySelector(`#Comment${idToUseForNewBox}`);
+			pullFocusByQuerySelector(`#Comment${idToUseForNewBox}`, false, "#comments-panel");
 		}, 0);
 	};
 
@@ -258,6 +235,7 @@ export class CommentList extends Component<PropsType, StateType> {
 	};
 
 	handleClick = (event: string) => {
+
 		switch (event) {
 			case "toggleOpenComments":
 				this.setState(prevState => {
@@ -275,11 +253,10 @@ export class CommentList extends Component<PropsType, StateType> {
 						}
 					);
 				});
-				pullFocusByQuerySelector("#js-drawer-toggleopen-comments");
+				pullFocusByQuerySelector("#comments-panel");
 				break;
 
 			case "toggleOpenQuestions":
-
 				this.setState(prevState => {
 					const drawerOpen = prevState.drawerOpen && !prevState.viewComments ? !prevState.drawerOpen : true;
 					tagManager({
@@ -295,12 +272,12 @@ export class CommentList extends Component<PropsType, StateType> {
 						}
 					);
 				});
-				pullFocusByQuerySelector("#js-drawer-toggleopen-questions");
+				pullFocusByQuerySelector("#comments-panel");
 				break;
-				
+
 			case "createQuestionPDF":
 				const questionsForPDF = this.state.questions;
-				const titleForPDF = this.state.consultationData.title;
+				const titleForPDF = this.props.getTitleFunction();
 				const endDate = this.state.endDate;
 				createQuestionPdf(questionsForPDF, titleForPDF, endDate);
 				break;
@@ -407,6 +384,13 @@ export class CommentList extends Component<PropsType, StateType> {
 												</Link>
 										}
 
+										{contextValue.isOrganisationCommenter &&
+											<Alert type="info" role="alert">
+												<p>You are commenting on behalf of {contextValue.organisationName}.</p>
+												<p>When you submit your response it will be submitted to the organisational lead at {contextValue.organisationName}.</p>
+											</Alert>
+										}
+
 										{this.state.error !== "" ?
 											<div className="errorBox">
 												<p>We couldn{"'"}t {this.state.error} your comment. Please try again in a few minutes.</p>
@@ -414,8 +398,8 @@ export class CommentList extends Component<PropsType, StateType> {
 											</div>
 											: null}
 
-										{this.state.loading ? <p>Loading...</p> : (					
-											<Fragment>						
+										{this.state.loading ? <p>Loading...</p> : (
+											<Fragment>
 												{contextValue.isAuthorised ? (
 													<div className={`${this.state.viewComments ? "show" : "hide"}`}>
 														{this.state.comments.length === 0 ? <p>No comments yet</p> :
@@ -437,15 +421,15 @@ export class CommentList extends Component<PropsType, StateType> {
 														}
 													</div>
 												) : (
-													<LoginBanner
+													<LoginBannerWithRouter
 														signInButton={true}
 														currentURL={this.props.match.url}
 														signInURL={contextValue.signInURL}
 														registerURL={contextValue.registerURL}
-														
+														allowOrganisationCodeLogin={this.state.enableOrganisationalCommentingFeature}
 													/>
 												)}
-												
+
 												<div className={`${this.state.viewComments ? "hide" : "show"}`}>
 
 													<button
@@ -456,7 +440,7 @@ export class CommentList extends Component<PropsType, StateType> {
 													Download questions (PDF)
 													</button>
 													{contextValue.isAuthorised ?
-														<p className="mt--0">Please answer the following questions</p> 
+														<p className="mt--0">Please answer the following questions</p>
 														:
 														<p className="CommentBox__validationMessage">You must be signed in to answer questions</p>
 													}
@@ -464,7 +448,7 @@ export class CommentList extends Component<PropsType, StateType> {
 													<ul className={`CommentList list--unstyled ${contextValue.isAuthorised ? "mt--0" : ""}`}>
 														{this.state.questions.map((question) => {
 															const isUnsaved = this.state.unsavedIds.includes(`${question.questionId}q`);
-															
+
 															return (
 																<Question
 																	isUnsaved={isUnsaved}

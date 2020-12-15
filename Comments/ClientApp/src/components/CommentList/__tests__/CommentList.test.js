@@ -15,7 +15,8 @@ import emptyCommentsResponse from "./emptyCommentsResponse.json";
 import { nextTick } from "../../../helpers/utils";
 import toJson from "enzyme-to-json";
 
-import { createQuestionPdf } from "../../QuestionView/QuestionViewDocument";
+import { createQuestionPdf } from '../../QuestionView/QuestionViewDocument';
+
 
 const mock = new MockAdapter(axios);
 
@@ -31,7 +32,7 @@ jest.mock("../../../context/UserContext", () => {
 	};
 });
 
-jest.mock("../../QuestionView/QuestionViewDocument");
+jest.mock('../../QuestionView/QuestionViewDocument')
 
 describe("[ClientApp] ", () => {
 	describe("CommentList Component", () => {
@@ -66,7 +67,7 @@ describe("[ClientApp] ", () => {
 					<LiveAnnouncer>
 						<CommentList {...fakeProps} />
 					</LiveAnnouncer>
-				</MemoryRouter>,
+				</MemoryRouter>
 			);
 
 			await nextTick();
@@ -86,11 +87,11 @@ describe("[ClientApp] ", () => {
 				.onGet(
 					generateUrl("comments", undefined, [], {
 						sourceURI: fakeProps.match.url,
-					}),
+					})
 				)
 				.reply(config => {
 					expect(config.url).toEqual(
-						"/consultations/api/Comments?sourceURI=%2F1%2F1%2Fintroduction",
+						"/consultations/api/Comments?sourceURI=%2F1%2F1%2Fintroduction"
 					);
 					return [200, { comments: [] }];
 				});
@@ -112,7 +113,7 @@ describe("[ClientApp] ", () => {
 				.onGet(
 					generateUrl("comments", undefined, [], {
 						sourceURI: fakeProps.match.url,
-					}),
+					})
 				)
 				.reply(200, sampleComments);
 			//console.log(sampleComments);
@@ -138,7 +139,7 @@ describe("[ClientApp] ", () => {
 			await nextTick();
 			wrapper.update();
 			expect(wrapper.state().comments[1].commentText).toEqual(
-				"New updated text",
+				"New updated text"
 			);
 		});
 
@@ -174,7 +175,7 @@ describe("[ClientApp] ", () => {
 				.onGet(
 					generateUrl("comments", undefined, [], {
 						sourceURI: fakeProps.match.url,
-					}),
+					})
 				)
 				.reply(200, sampleComments);
 			const wrapper = shallow(<MemoryRouter><CommentList {...fakeProps} /></MemoryRouter>).find("CommentList").dive();
@@ -196,12 +197,12 @@ describe("[ClientApp] ", () => {
 				.onGet(
 					generateUrl("comments", undefined, [], {
 						sourceURI: fakeProps.match.url,
-					}),
+					})
 				)
 				.reply(200, emptyCommentsResponse);
 			mock
 				.onPost(
-					generateUrl("newcomment"),
+					generateUrl("newcomment")
 				)
 				.reply(config => {
 					expect(config.url).toEqual("/consultations/api/Comment");
@@ -227,7 +228,7 @@ describe("[ClientApp] ", () => {
 					<LiveAnnouncer>
 						<CommentList {...fakeProps} />
 					</LiveAnnouncer>
-				</MemoryRouter>,
+				</MemoryRouter>
 			).find("CommentList").dive();
 
 			await nextTick();
@@ -266,7 +267,7 @@ describe("[ClientApp] ", () => {
 					<LiveAnnouncer>
 						<CommentList {...fakeProps} />
 					</LiveAnnouncer>
-				</MemoryRouter>,
+				</MemoryRouter>
 			).find("CommentList").dive();
 
 			await nextTick();
@@ -294,7 +295,7 @@ describe("[ClientApp] ", () => {
 				.reply(200, sampleComments);
 			mock
 				.onDelete(
-					generateUrl("editcomment", undefined, [1004]),
+					generateUrl("editcomment", undefined, [1004])
 				)
 				.reply(config => {
 					expect(config.url).toEqual("/consultations/api/Comment/1004");
@@ -317,11 +318,11 @@ describe("[ClientApp] ", () => {
 			mock.reset();
 			mock
 				.onGet(
-					generateUrl("comments", undefined, [], {}),
+					generateUrl("comments", undefined, [], {})
 				)
 				.reply(config => {
 					expect(config.url).toEqual(
-						"/consultations/api/Comments",
+						"/consultations/api/Comments"
 					);
 					return [200, { comments: [] }];
 				});
@@ -332,17 +333,18 @@ describe("[ClientApp] ", () => {
 			 mock.reset();
 			 mock
 			 	.onGet(
-					generateUrl("comments", undefined, [], {sourceURI: "/1/0/Review", isReview: true}),
+					generateUrl("comments", undefined, [], {sourceURI: "/1/0/Review", isReview: true})
 			 	)
 			 	.reply(config => {
 			 		expect(config.url).toEqual(
-			 			"/consultations/api/Comments?sourceURI=%2F1%2F0%2FReview&isReview=true",
+			 			"/consultations/api/Comments?sourceURI=%2F1%2F0%2FReview&isReview=true"
 					 );
 			 		return [200, { comments: [] }];
 				 });
 
 			 mount(<CommentList {...fakeProps} isReviewPage={true} />);
 		});
+
 
 		it("should call createQuestionPDF with title, end date, and questions when the download questions button is clicked", async () => {
 			// assemble
@@ -356,13 +358,14 @@ describe("[ClientApp] ", () => {
 			const questionsForPDF = sampleComments.questions;
 			const titleForPDF = sampleConsultation.title;
 			const endDate = sampleComments.consultationState.endDate;
+			const getTitleFunction = () => { return titleForPDF;};
 
 			const wrapper = mount(
 				<MemoryRouter>
 					<LiveAnnouncer>
-						<CommentList {...fakeProps} />
+						<CommentList {...fakeProps} getTitleFunction={getTitleFunction} />
 					</LiveAnnouncer>
-				</MemoryRouter>,
+				</MemoryRouter>
 			);
 
 			await nextTick();
@@ -376,8 +379,7 @@ describe("[ClientApp] ", () => {
 			// assert
 			expect(createQuestionPdf).toHaveBeenCalledTimes(1);
 			expect(createQuestionPdf).toHaveBeenCalledWith(questionsForPDF, titleForPDF, endDate);
-
-		});
+		})
 
 	});
 });
