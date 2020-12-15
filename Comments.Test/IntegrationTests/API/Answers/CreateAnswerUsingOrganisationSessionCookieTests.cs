@@ -1,18 +1,16 @@
 using Comments.Common;
+using Comments.Models;
 using Comments.Test.Infrastructure;
-using Comments.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using Shouldly;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Comments.Models;
 using Xunit;
 using Answer = Comments.ViewModels.Answer;
 
@@ -22,17 +20,10 @@ namespace Comments.Test.IntegrationTests.API.Comments
 	{
 		private static readonly Guid _sessionId = Guid.Parse("11111111-1111-1111-1111-111111111111");
 
-		//public CreateAnswerUsingOrganisationSessionCookieTests() : base(enableOrganisationalCommentingFeature: true, testUserType: TestUserType.NotAuthenticated,
-		//	validSessions: new Dictionary<int, Guid>{{ _consultationId, _sessionId }}, useRealUserService: true, useRealHttpContextAccessor: true)
-		//{
-		//}
-
 		[Fact]
 		public async Task Create_Answer_With_Invalid_Organisation_Session_Cookie_Returns_401()
 		{
 			//Arrange
-			//var locationId = TestBaseDBHelpers.AddLocation(context, sourceURI);
-			//var questionId = TestBaseDBHelpers.AddQuestion(context, locationId);
 			const int consultationId = 1;
 			var fakeUserService = FakeUserService.Get(isAuthenticated: false, userId: null, displayName: null, testUserType: TestUserType.NotAuthenticated, organisationUserId: null, organisationIdUserIsLeadOf: null);
 

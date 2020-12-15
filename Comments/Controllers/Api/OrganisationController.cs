@@ -126,9 +126,6 @@ namespace Comments.Controllers.Api
 			if (consultationId < 1)
 				throw new ArgumentException("ConsultationId id must be a positive integer", nameof(consultationId));
 			
-			//if (!session.SessionCookies.ContainsKey(consultationId))
-//				throw new ArgumentException($"There isn't a session cookie for consultation: {consultationId}", nameof(session));
-
 			var validityAndOrganisationName = await _organisationService.CheckOrganisationUserSession(consultationId);//, session.SessionCookies[consultationId]);
 
 			return Ok(new { validityAndOrganisationName.valid, validityAndOrganisationName.organisationName });

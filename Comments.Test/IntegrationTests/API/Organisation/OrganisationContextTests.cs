@@ -1,14 +1,9 @@
+using Comments.Models;
+using Comments.Test.Infrastructure;
+using Shouldly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using Comments.Models;
-using Comments.Test.Infrastructure;
-using Microsoft.Net.Http.Headers;
-using Newtonsoft.Json;
-using Shouldly;
 using Xunit;
 
 namespace Comments.Test.IntegrationTests.API.Organisation
@@ -28,10 +23,7 @@ namespace Comments.Test.IntegrationTests.API.Organisation
 
 			var sourceURI = $"consultations://./consultation/{consultationId}";
 
-			var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, null, "123412341234");
-
-			//var locationId = TestBaseDBHelpers.AddLocation(context, sourceURI);
-			//TestBaseDBHelpers.AddComment(context, locationId, "comment text", createdByUserId: null, organisationUserId: organisationUserId);
+			TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, null, "123412341234");
 
 			//Act
 			var locations = context.GetAllCommentsAndQuestionsForDocument(new List<string>() {sourceURI}, true);
@@ -39,6 +31,5 @@ namespace Comments.Test.IntegrationTests.API.Organisation
 			// Assert
 			locations.Count().ShouldBe(0);
 		}
-
 	}
 }
