@@ -90,12 +90,15 @@ namespace Comments.Models
 					.ThenInclude(s => s.SubmissionAnswer)
 
 				.OrderBy(l => l.Order)
-					.ThenByDescending(l => l.Comment.Count > 0 ? l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault() : DateTime.MinValue)
 					//.ThenByDescending(l => l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault())
 
 				.ToList();
 
-			return data; 
+			//EF can't translate the thenbydescending properly, so moving it out and doing it in memory.
+			var sortedData = data.OrderBy(l => l.Order).ThenByDescending(l =>
+				l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault());
+			
+			return sortedData; 
 		}
 
 		public IEnumerable<Location> GetQuestionsForDocument(IList<string> sourceURIs, bool partialMatchSourceURI)
