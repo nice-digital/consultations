@@ -20,7 +20,7 @@ namespace Comments.Test.Infrastructure
 	public class TestBaseLight
 	{
 
-		protected (TestServer testServer, HttpClient httpClient) InitialiseServerAndClient(ConsultationsContext dbContext, IUserService fakeUserService = null)
+		protected static (TestServer testServer, HttpClient httpClient) InitialiseServerAndClient(ConsultationsContext dbContext, IUserService fakeUserService = null)
 		{
 			AppSettings.AuthenticationConfig = new AuthenticationConfig { ClientId = "test client id", AuthorisationServiceUri = "http://www.example.com" };
 			AppSettings.GlobalNavConfig = new GlobalNavConfig { CookieBannerScript = "//a-fake-cookiebannerscript-url" };
@@ -62,7 +62,7 @@ namespace Comments.Test.Infrastructure
 			return (testServer: server, httpClient: server.CreateClient());
 		}
 
-		protected DbContextOptions<ConsultationsContext> GetContextOptions()
+		protected static DbContextOptions<ConsultationsContext> GetContextOptions()
 		{
 			var databaseName = "ConsultationsDB" + Guid.NewGuid();
 			return new DbContextOptionsBuilder<ConsultationsContext>()

@@ -53,23 +53,23 @@ namespace Comments.Models
 						v => _encryption.EncryptString(v, Encoding.ASCII.GetBytes(AppSettings.EncryptionConfig.Key), Encoding.ASCII.GetBytes(AppSettings.EncryptionConfig.IV)),
 						v => _encryption.DecryptString(v, Encoding.ASCII.GetBytes(AppSettings.EncryptionConfig.Key), Encoding.ASCII.GetBytes(AppSettings.EncryptionConfig.IV)));
 
-				entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
+				entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())").IsRequired();
 
                 entity.Property(e => e.LastModifiedByUserId).HasColumnName("LastModifiedByUserID");
 
-                entity.Property(e => e.LastModifiedDate).HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.LastModifiedDate).HasDefaultValueSql("(getdate())").IsRequired();
 
                 entity.Property(e => e.OrganisationUserId).HasColumnName("OrganisationUserID");
 
                 entity.Property(e => e.ParentAnswerId).HasColumnName("ParentAnswerID");
 
-                entity.Property(e => e.QuestionId).HasColumnName("QuestionID");
+                entity.Property(e => e.QuestionId).HasColumnName("QuestionID").IsRequired();
 
                 entity.Property(e => e.OrganisationId).HasColumnName("OrganisationID");
 
 				entity.Property(e => e.StatusId)
                     .HasColumnName("StatusID")
-                    .HasDefaultValueSql("((1))");
+                    .HasDefaultValueSql("((1))").IsRequired();
 
                 entity.HasOne(d => d.ParentAnswer)
                     .WithMany(p => p.ChildAnswers)
@@ -80,13 +80,15 @@ namespace Comments.Models
                     .WithMany(p => p.Answer)
                     .HasForeignKey(d => d.QuestionId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Answer_Question");
+                    .HasConstraintName("FK_Answer_Question")
+                    .IsRequired();
 
                 entity.HasOne(d => d.Status)
                     .WithMany(p => p.Answer)
                     .HasForeignKey(d => d.StatusId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Answer_Status");
+                    .HasConstraintName("FK_Answer_Status")
+                    .IsRequired();
 
 				//JW. automatically filter out deleted rows and other people's comments. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
 				//note: only 1 filter is supported. you must combine the logic into one expression.
@@ -111,13 +113,13 @@ namespace Comments.Models
 
 				entity.Property(e => e.CreatedByUserId).HasColumnName("CreatedByUserID");
 
-                entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())").IsRequired();
 
                 entity.Property(e => e.LastModifiedByUserId).HasColumnName("LastModifiedByUserID");
 
-                entity.Property(e => e.LastModifiedDate).HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.LastModifiedDate).HasDefaultValueSql("(getdate())").IsRequired();
 
-                entity.Property(e => e.LocationId).IsRequired().HasColumnName("LocationID");
+                entity.Property(e => e.LocationId).HasColumnName("LocationID").IsRequired();
 
                 entity.Property(e => e.OrganisationUserId).HasColumnName("OrganisationUserID");
 
@@ -127,13 +129,13 @@ namespace Comments.Models
 
 				entity.Property(e => e.StatusId)
                     .HasColumnName("StatusID")
-                    .HasDefaultValueSql("((1))");
+                    .HasDefaultValueSql("((1))").IsRequired();
 
                 entity.HasOne(d => d.Location)
                     .WithMany(p => p.Comment)
                     .HasForeignKey(d => d.LocationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Comment_Location");
+                    .HasConstraintName("FK_Comment_Location").IsRequired();
 
                 entity.HasOne(d => d.ParentComment)
                     .WithMany(p => p.ChildComments)
@@ -144,7 +146,7 @@ namespace Comments.Models
                     .WithMany(p => p.Comment)
                     .HasForeignKey(d => d.StatusId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Comment_Status");
+                    .HasConstraintName("FK_Comment_Status").IsRequired();
 
 				//JW. automatically filter out other people's comments. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
 				//note: only 1 filter is supported. you must combine the logic into one expression.
@@ -160,13 +162,7 @@ namespace Comments.Models
                 entity.Property(e => e.HtmlElementID).HasColumnName("HtmlElementID");
 
                 entity.Property(e => e.SourceURI).HasColumnName("SourceURI");
-
-            //    entity.HasQueryFilter(l => (l.Comment.Count == 0 ?   && l.Comment..CreatedByUserId != null && _createdByUserID != null && c.CreatedByUserId == _createdByUserID)
-											//(c.CreatedByUserId != null && _createdByUserID != null && c.CreatedByUserId == _createdByUserID)
-           //                                || (_organisationUserIDs != null && c.OrganisationUserId.HasValue && _organisationUserIDs.Any(organisationUserID => organisationUserID.Equals(c.OrganisationUserId)))
-           //                                || (c.OrganisationId.HasValue && _organisationalLeadOrganisationID.HasValue && c.OrganisationId.Equals(_organisationalLeadOrganisationID)));
-
-			});
+            });
 
             modelBuilder.Entity<OrganisationAuthorisation>(entity =>
             {
@@ -232,13 +228,15 @@ namespace Comments.Models
                     .WithMany(p => p.Question)
                     .HasForeignKey(d => d.LocationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Question_Location");
+                    .HasConstraintName("FK_Question_Location")
+                    .IsRequired();
 
                 entity.HasOne(d => d.QuestionType)
                     .WithMany(p => p.Question)
                     .HasForeignKey(d => d.QuestionTypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Question_QuestionType");
+                    .HasConstraintName("FK_Question_QuestionType")
+                    .IsRequired();
 
 				entity.HasQueryFilter(e => !e.IsDeleted); //JW. automatically filter out deleted rows. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
 			});

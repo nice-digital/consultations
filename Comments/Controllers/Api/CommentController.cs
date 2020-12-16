@@ -24,7 +24,7 @@ namespace Comments.Controllers.Api
 
         // GET: consultations/api/Comment/5 
         [HttpGet("{commentId}")]
-        public IActionResult GetComment([FromRoute] int commentId, Session session)
+        public IActionResult GetComment([FromRoute] int commentId)
         {
             if (!ModelState.IsValid)
             {

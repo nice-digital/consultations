@@ -63,26 +63,23 @@ namespace Comments.Models
 			    partialSourceURIToUse = $"{partialMatchExactSourceURIToUse}/";
 		    }
 
-			var authorisedComments = Location
-				.Include(l => l.Comment)
-				.ToList()
-				.SelectMany(l => l.Comment)
+			var authorisedComments = Comment
+				.Include(c => c.Location)
+				.Where(c => (partialMatchSourceURI
+					? (c.Location.SourceURI.Equals(partialMatchExactSourceURIToUse) || c.Location.SourceURI.Contains(partialSourceURIToUse))
+					: sourceURIs.Contains(c.Location.SourceURI, StringComparer.OrdinalIgnoreCase)))
 				.ToList();
 
-			var authorisedAnswers = Location
-				.Include(l => l.Question)
-					.ThenInclude(q => q.Answer)
-				.ToList()
-				.SelectMany(l => l.Question.SelectMany(q => q.Answer))
-				.ToList();
+			var data = Location.Where(l => (l.Order != null) &&
 
+			                               (partialMatchSourceURI
+				                               		? (l.SourceURI.Equals(partialMatchExactSourceURIToUse) || l.SourceURI.Contains(partialSourceURIToUse))
+				                               		: sourceURIs.Contains(l.SourceURI, StringComparer.OrdinalIgnoreCase)))
+				//(allAuthorisedLocations.Contains(l.LocationId)))
 
-			var data = Location.Where(l => ((l.Order != null) && (partialMatchSourceURI
-					? (l.SourceURI.Equals(partialMatchExactSourceURIToUse) || l.SourceURI.Contains(partialSourceURIToUse))
-					: sourceURIs.Contains(l.SourceURI, StringComparer.OrdinalIgnoreCase))))
 				.Include(l => l.Comment)
 					.ThenInclude(s => s.SubmissionComment)
-					.ThenInclude(s => s.Submission)
+						.ThenInclude(s => s.Submission)
 
 				.Include(l => l.Comment)
 					.ThenInclude(s => s.Status)
@@ -92,12 +89,13 @@ namespace Comments.Models
 
 				.Include(l => l.Question)
 					.ThenInclude(q => q.Answer)
-					.ThenInclude(s => s.SubmissionAnswer)
+						.ThenInclude(s => s.SubmissionAnswer)
 
 				.OrderBy(l => l.Order)
 					//.ThenByDescending(l => l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault())
 
 				.ToList();
+
 
 			//EF can't translate the thenbydescending properly, so moving it out and doing it in memory.
 			var sortedData = data.Where(l => l.Comment.Count > 0 || l.Question.Count > 0)
