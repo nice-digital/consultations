@@ -21,17 +21,18 @@ namespace Comments.Services
 	{
 		private readonly ConsultationsContext _context;
 		private readonly IFeedService _feedService;
-		private readonly IConsultationService _consultationService;
 		private readonly IUserService _userService;
 		private readonly IFeatureManager _featureManager;
+		private readonly IOrganisationService _organisationService;
 
-		public ConsultationListService(ConsultationsContext consultationsContext, IFeedService feedService, IConsultationService consultationService, IUserService userService, IFeatureManager featureManager)
+		public ConsultationListService(ConsultationsContext consultationsContext, IFeedService feedService, IUserService userService, IFeatureManager featureManager,
+			IOrganisationService organisationService)
 		{
 			_context = consultationsContext;
 			_feedService = feedService;
-			_consultationService = consultationService;
 			_userService = userService;
 			_featureManager = featureManager;
+			_organisationService = organisationService;
 		}
 
 		/// <summary>
@@ -87,7 +88,7 @@ namespace Comments.Services
 			var isOrganisationalCommentingEnabled = await _featureManager.IsEnabledAsync(Constants.Features.OrganisationalCommenting);
 			Dictionary<int, List<OrganisationCode>> allOrganisationCodes;
 			if (isOrganisationalCommentingEnabled)
-				allOrganisationCodes = GetConsultationCodesForAllConsultations(consultationsFromIndev.Select(c => c.ConsultationId).ToList(), isAdminUser, currentUser.OrganisationsAssignedAsLead.ToList());
+				allOrganisationCodes = await GetConsultationCodesForAllConsultations(consultationsFromIndev.Select(c => c.ConsultationId).ToList(), isAdminUser, currentUser.OrganisationsAssignedAsLead.ToList());
 			else
 				allOrganisationCodes = consultationsFromIndev.ToDictionary(key => key.ConsultationId, val => new List<OrganisationCode>(0));
 
@@ -266,7 +267,7 @@ namespace Comments.Services
 			return consultationListRows.OrderByDescending(c => c.EndDate).ToList();
 		}
 
-		private Dictionary<int, List<OrganisationCode>> GetConsultationCodesForAllConsultations(IList<int> consultationIds, bool isAdminUser, IList<Organisation> organisationsAssignedAsLead)
+		private async Task<Dictionary<int, List<OrganisationCode>>> GetConsultationCodesForAllConsultations(IList<int> consultationIds, bool isAdminUser, IList<Organisation> organisationsAssignedAsLead)
 		{
 			var consultationSourceURIs = consultationIds.Select(consultationId => ConsultationsUri.CreateConsultationURI(consultationId)).ToList();
 
@@ -306,11 +307,16 @@ namespace Comments.Services
 					}
 				}
 
+				var organsationsFromClaims = organisationsAssignedAsLead.ToDictionary(k => k.OrganisationId, v => v.OrganisationName);
+				var organisationsThatNeedLookingUp = organisationAuthorisationsToShowForUser.Where(oa => !organsationsFromClaims.ContainsKey(oa.OrganisationId)).Select(oa => oa.OrganisationId).Distinct().ToList();
+
+				var allOrganisationsThatMightBeShown = organsationsFromClaims.Merge(await _organisationService.GetOrganisationNames(organisationsThatNeedLookingUp));
+				
 				codesPerConsultation.Add(consultationId,
 					organisationAuthorisationsToShowForUser.Select(oa =>
 						new OrganisationCode(oa.OrganisationAuthorisationId,
 							oa.OrganisationId,
-							organisationsAssignedAsLead.FirstOrDefault(org => org.OrganisationId.Equals(oa.OrganisationId))?.OrganisationName,
+							allOrganisationsThatMightBeShown.ContainsKey(oa.OrganisationId) ? allOrganisationsThatMightBeShown[oa.OrganisationId] : null,
 							oa.CollationCode,
 							organisationsAssignedAsLead.Any(leadOrgs => leadOrgs.OrganisationId.Equals(oa.OrganisationId) && leadOrgs.IsLead)
 							))
