@@ -253,7 +253,7 @@ namespace Comments.Test.UnitTests
 		}
 
 		[Fact]
-		public void Duplicates_Comments()
+		public void Duplicate_Comment()
 		{
 			//Arrange
 			ResetDatabase();
@@ -261,21 +261,25 @@ namespace Comments.Test.UnitTests
 
 			var userId = Guid.NewGuid().ToString();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+			var consultationId = 1;
+			var organisationId = 1;
 
-			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
+			var userService = FakeUserService.Get(true, "Benjamin Button", userId);
 			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 			var submitService = new SubmitService(consultationContext, userService, _consultationService);
 			var commentService = new CommentService(consultationContext, userService, _consultationService, _fakeHttpContextAccessor);
 
 			var locationId = AddLocation(sourceURI, _context);
-			var commentId = AddComment(locationId, "Comment text", userId, (int)StatusName.Draft, _context);
+			var organisationAuthorisationId = AddOrganisationAuthorisationWithLocation(organisationId, consultationId, _context, userId);
+			var organisationUserId = AddOrganisationUser(_context, organisationAuthorisationId, Guid.NewGuid(), null);
+			AddComment(locationId, "Comment text", userId, (int)StatusName.Draft, _context, organisationUserId);
 
 			//Act
 			var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
 			var result = submitService.SubmitToLead(new ViewModels.Submission(commentsAndQuestions.Comments, new List<ViewModels.Answer>()));
 
-
 			//Assert
+			result.rowsUpdated.ShouldBe(2);
 		}
 	}
 }
