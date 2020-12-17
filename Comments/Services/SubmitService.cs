@@ -87,6 +87,7 @@ namespace Comments.Services
 			var submittedStatus = _context.GetStatus(StatusName.Submitted);
 
 			UpdateCommentsModelAndDuplicate(submission.Comments, submittedStatus);
+			UpdateAnswersModelAndDuplicate(submission.Answers, submittedStatus);
 
 			return (rowsUpdated: _context.SaveChanges(), validate: null);
 		}
@@ -96,6 +97,13 @@ namespace Comments.Services
 			var commentIds = comments.Select(c => c.CommentId).ToList();
 			_context.UpdateCommentStatus(commentIds, status);
 			_context.DuplicateComment(commentIds);
+		}
+
+		private void UpdateAnswersModelAndDuplicate(IList<ViewModels.Answer> answers, Models.Status status)
+		{
+			var answerIds = answers.Select(a => a.AnswerId).ToList();
+			_context.UpdateAnswerStatus(answerIds, status);
+			_context.DuplicateAnswer(answerIds);
 		}
 
 		private void UpdateCommentsModel(IList<ViewModels.Comment> comments, Models.Submission submission, Models.Status status)

@@ -281,5 +281,37 @@ namespace Comments.Test.UnitTests
 			//Assert
 			result.rowsUpdated.ShouldBe(2);
 		}
+
+		[Fact]
+		public void Duplicate_Answer()
+		{
+			//Arrange
+			ResetDatabase();
+			_context.Database.EnsureCreated();
+
+			var userId = Guid.NewGuid().ToString();
+			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+			var questionTypeId = 99;
+			var consultationId = 1;
+			var organisationId = 1;
+
+			var userService = FakeUserService.Get(true, "Benjamin Button", userId);
+			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
+			var submitService = new SubmitService(consultationContext, userService, _consultationService);
+			var commentService = new CommentService(consultationContext, userService, _consultationService, _fakeHttpContextAccessor);
+
+			var locationId = AddLocation(sourceURI, _context);
+			var organisationAuthorisationId = AddOrganisationAuthorisationWithLocation(organisationId, consultationId, _context, userId);
+			var organisationUserId = AddOrganisationUser(_context, organisationAuthorisationId, Guid.NewGuid(), null);
+			var questionId = AddQuestion(locationId, questionTypeId, "Question Label");
+			AddAnswer(questionId, userId, "Answer Label", (int)StatusName.Draft, _context, organisationUserId);
+
+			//Act
+			var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
+			var result = submitService.SubmitToLead(new ViewModels.Submission(new List<ViewModels.Comment>(), commentsAndQuestions.Questions.First().Answers));
+
+			//Assert
+			result.rowsUpdated.ShouldBe(2);
+		}
 	}
 }
