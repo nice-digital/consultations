@@ -19,6 +19,7 @@ import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
 import { Header } from "../Header/Header";
 import { Tutorial } from "../Tutorial/Tutorial";
 import { canUseDOM } from "../../helpers/utils";
+import { Alert } from '@nice-digital/nds-alert';
 
 type PropsType = {
 	staticContext: {
@@ -463,6 +464,14 @@ export class Document extends Component<PropsType, StateType> {
 										title={currentDocumentTitle}
 										reference={reference}
 										consultationState={this.state.consultationData.consultationState}/>
+									<UserContext.Consumer>
+										{(contextValue: any) => contextValue.isOrganisationCommenter ?
+											<Alert type="info" role="alert">
+												<p>You are commenting on behalf of {contextValue.organisationName}.</p>
+												<p>When you submit your response it will be submitted to the organisational lead at {contextValue.organisationName}.</p>
+											</Alert>
+										: /* if !contextValue.isOrganisationCommenter... */ null}
+									</UserContext.Consumer>
 									{this.state.allowComments &&
 									<button
 										data-gtm="comment-on-document-button"
