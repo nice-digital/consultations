@@ -463,7 +463,8 @@ export class Document extends Component<PropsType, StateType> {
 									<Header
 										title={currentDocumentTitle}
 										reference={reference}
-										consultationState={this.state.consultationData.consultationState}/>
+										consultationState={this.state.consultationData.consultationState}
+										allowRegisterOrganisationLeadLink={this.state.enableOrganisationalCommentingFeature}/>
 									<UserContext.Consumer>
 										{(contextValue: any) => contextValue.isOrganisationCommenter ?
 											<Alert type="info" role="alert">
