@@ -271,8 +271,16 @@ namespace Comments.Services
 		{
 			var consultationSourceURIs = consultationIds.Select(consultationId => ConsultationsUri.CreateConsultationURI(consultationId)).ToList();
 
-			var organisationAuthorisationsInDB = _context.GetOrganisationAuthorisations(consultationSourceURIs);
-			
+			var organisationAuthorisationsInDB = _context.GetOrganisationAuthorisations(consultationSourceURIs).ToList();
+
+			var organsationsFromClaims = organisationsAssignedAsLead.ToDictionary(k => k.OrganisationId, v => v.OrganisationName);
+			var organisationsThatNeedLookingUp = organisationAuthorisationsInDB.Select(oa => oa.OrganisationId).Distinct().Where(orgId => !organsationsFromClaims.ContainsKey(orgId)).ToList();
+
+			var lookedUpOrganisations = await _organisationService.GetOrganisationNames(organisationsThatNeedLookingUp);
+
+			var allOrganisationsThatMightBeShown = organsationsFromClaims.Merge(lookedUpOrganisations);
+
+
 			var codesPerConsultation = new Dictionary<int, List<OrganisationCode>>();
 			foreach (var consultationId in consultationIds)
 			{
@@ -307,11 +315,6 @@ namespace Comments.Services
 					}
 				}
 
-				var organsationsFromClaims = organisationsAssignedAsLead.ToDictionary(k => k.OrganisationId, v => v.OrganisationName);
-				var organisationsThatNeedLookingUp = organisationAuthorisationsToShowForUser.Where(oa => !organsationsFromClaims.ContainsKey(oa.OrganisationId)).Select(oa => oa.OrganisationId).Distinct().ToList();
-
-				var allOrganisationsThatMightBeShown = organsationsFromClaims.Merge(await _organisationService.GetOrganisationNames(organisationsThatNeedLookingUp));
-				
 				codesPerConsultation.Add(consultationId,
 					organisationAuthorisationsToShowForUser.Select(oa =>
 						new OrganisationCode(oa.OrganisationAuthorisationId,
