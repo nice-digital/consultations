@@ -13,7 +13,7 @@ namespace Comments.ViewModels
             LastModifiedByUserId = lastModifiedByUserId;
             CommentText = commentText;
 	        StatusId = statusId;
-        }
+		}
 
         public Comment(Models.Location location, Models.Comment comment) : base(location.LocationId, location.SourceURI, location.HtmlElementID,  
             location.RangeStart, location.RangeStartOffset, location.RangeEnd, location.RangeEndOffset, location.Quote, location.Order, show: true, section: location.Section )
@@ -25,7 +25,9 @@ namespace Comments.ViewModels
 	        if (!(comment.Status is null))
 		        Status = new Status(comment.Status);
 	        StatusId = comment.StatusId;
-        }
+			if(!(comment.OrganisationUser is null))
+				CommenterEmail = comment.OrganisationUser.EmailAddress;
+		}
 
         public int CommentId { get; set; }
         public DateTime LastModifiedDate { get; set; }
@@ -34,6 +36,7 @@ namespace Comments.ViewModels
 
 	    public ViewModels.Status Status { get; set; }
 		public int StatusId { get; set; }
+		public string CommenterEmail { get; set; }
 
 	    public void UpdateStatusFromDBModel(Models.Status status)
 	    {
