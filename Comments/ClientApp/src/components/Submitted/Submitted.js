@@ -153,6 +153,7 @@ export class Submitted extends Component<PropsType, StateType> {
 														signInURL={contextValue.signInURL}
 														registerURL={contextValue.registerURL}
 														allowOrganisationCodeLogin={false}
+														orgFieldName="submitted"
 													/> :
 													<Fragment>
 														<Link

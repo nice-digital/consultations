@@ -432,6 +432,7 @@ export class CommentList extends Component<PropsType, StateType> {
 														signInURL={contextValue.signInURL}
 														registerURL={contextValue.registerURL}
 														allowOrganisationCodeLogin={this.state.enableOrganisationalCommentingFeature}
+														orgFieldName="commentlist"
 													/>
 												)}
 

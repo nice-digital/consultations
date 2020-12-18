@@ -444,7 +444,8 @@ export class Document extends Component<PropsType, StateType> {
 												 currentURL={this.props.match.url}
 												 signInURL={contextValue.signInURL}
 												 registerURL={contextValue.registerURL}
-												 allowOrganisationCodeLogin={this.state.enableOrganisationalCommentingFeature}/>
+												 allowOrganisationCodeLogin={this.state.enableOrganisationalCommentingFeature}
+												 orgFieldName="document"/>
 						: /* if contextValue.isAuthorised... */ null}
 				</UserContext.Consumer>
 				{ this.state.allowComments &&

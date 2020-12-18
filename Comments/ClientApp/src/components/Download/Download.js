@@ -425,6 +425,7 @@ export class Download extends Component<PropsType, StateType> {
 						registerURL={contextValue.registerURL}
 						signInText="to view a list of consultations"
 						allowOrganisationCodeLogin={false}
+						orgFieldName="download"
 					/>
 					:
 					<Fragment>
