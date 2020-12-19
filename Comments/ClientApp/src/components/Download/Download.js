@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component, Fragment } from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import Helmet from "react-helmet";
 import Cookies from "js-cookie";
 //import stringifyObject from "stringify-object";
@@ -437,7 +437,17 @@ export class Download extends Component<PropsType, StateType> {
 								<div data-g="12">
 									<Breadcrumbs links={breadcrumbLinkParams} />
 									<Header title="Consultation responses" />
-									<p className="lead">Only online consultations responses appear in the results below.</p>
+									<p className="container container-full ml--0">
+										<span className="lead">
+											Only online consultations responses appear in the results below.
+										</span>
+										&nbsp;&nbsp;
+										{enableOrganisationalCommentingFeature &&
+											<Link to={"/leadinformation"}>
+												Request commenting lead permission
+											</Link>
+										}
+									</p>
 									<div className="grid mt--d">
 										<div data-g="12 md:3">
 											<h2 className="h5 mt--0">Filter</h2>
