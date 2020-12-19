@@ -185,7 +185,7 @@ namespace Comments.Services
 
 			var organisation = organisations.FirstOrDefault();
 			if (organisation == null)
-				throw new ApplicationException("Organisation name could not be retrieved. Please contact app support."); //might occur if the org has been deleted from idam and CC hasn't been updated.
+				throw new ApplicationException("Organisation could not be found. Contact NICE nice@nice.org.uk to report the issue."); //might occur if the org has been deleted from idam and CC hasn't been updated.
 
 			return organisation.OrganisationName;
 		}
