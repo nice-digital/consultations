@@ -58,6 +58,7 @@ type StateType = {
 	unsavedIds: Array<number>,
 	endDate: string,
 	enableOrganisationalCommentingFeature: boolean,
+	allowOrganisationCodeLogin: Boolean,
 };
 
 export class CommentList extends Component<PropsType, StateType> {
@@ -78,7 +79,8 @@ export class CommentList extends Component<PropsType, StateType> {
 			shouldShowQuestionsTab: false,
 			unsavedIds: [],
 			endDate: "",
-			enableOrganisationalCommentingFeature: false
+			enableOrganisationalCommentingFeature: false,
+			allowOrganisationCodeLogin: false,
 		};
 
 		let preloadedData = {};
@@ -115,13 +117,14 @@ export class CommentList extends Component<PropsType, StateType> {
 				unsavedIds: [],
 				endDate: preloadedCommentsData.consultationState.endDate,
 				enableOrganisationalCommentingFeature,
+				allowOrganisationCodeLogin: (preloadedCommentsData.consultationState.consultationIsOpen && enableOrganisationalCommentingFeature),
 			};
 		}
 	}
 
 	loadComments() {
 		load("comments", undefined, [], {sourceURI: this.props.match.url}).then(
-			response => {
+			function(response) {
 				let allowComments = response.data.consultationState.consultationIsOpen && !response.data.consultationState.submittedDate;
 				this.setState({
 					comments: response.data.comments,
@@ -132,8 +135,9 @@ export class CommentList extends Component<PropsType, StateType> {
 					shouldShowCommentsTab: response.data.consultationState.shouldShowCommentsTab,
 					shouldShowQuestionsTab: response.data.consultationState.shouldShowQuestionsTab,
 					endDate: response.data.consultationState.endDate,
+					allowOrganisationCodeLogin: (response.data.consultationState.consultationIsOpen && this.state.enableOrganisationalCommentingFeature),
 				});
-			})
+			}.bind(this))
 			.catch(err => console.log("load comments in commentlist " + err));
 	}
 
@@ -431,8 +435,7 @@ export class CommentList extends Component<PropsType, StateType> {
 														currentURL={this.props.match.url}
 														signInURL={contextValue.signInURL}
 														registerURL={contextValue.registerURL}
-														allowOrganisationCodeLogin={this.state.enableOrganisationalCommentingFeature}
-														orgFieldName="commentlist"
+														allowOrganisationCodeLogin={this.state.allowOrganisationCodeLogin}
 													/>
 												)}
 

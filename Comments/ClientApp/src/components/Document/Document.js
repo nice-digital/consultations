@@ -46,7 +46,8 @@ type StateType = {
 	},
 	allowComments: boolean,
 	error: ErrorType,
-	enableOrganisationalCommentingFeature: boolean
+	enableOrganisationalCommentingFeature: boolean,
+	allowOrganisationCodeLogin: boolean,
 };
 
 type DocumentsType = Array<Object>;
@@ -70,6 +71,7 @@ export class Document extends Component<PropsType, StateType> {
 				message: null,
 			},
 			enableOrganisationalCommentingFeature: false,
+			allowOrganisationCodeLogin: false,
 		};
 
 		if (this.props) {
@@ -136,6 +138,7 @@ export class Document extends Component<PropsType, StateType> {
 						message: null,
 					},
 					enableOrganisationalCommentingFeature,
+					allowOrganisationCodeLogin: (preloadedConsultation.consultationState.consultationIsOpen && enableOrganisationalCommentingFeature),
 				};
 			}
 		}
@@ -202,7 +205,7 @@ export class Document extends Component<PropsType, StateType> {
 	componentDidMount() {
 		if (!this.state.hasInitialData) {
 			this.gatherData()
-				.then(data => {
+				.then(function(data) {
 					const allowComments =
 						data.consultationData.consultationState.hasAnyDocumentsSupportingComments &&
 						data.consultationData.consultationState.consultationIsOpen &&
@@ -213,6 +216,7 @@ export class Document extends Component<PropsType, StateType> {
 						loading: false,
 						hasInitialData: true,
 						allowComments: allowComments,
+						allowOrganisationCodeLogin: (data.consultationData.consultationState.consultationIsOpen && this.state.enableOrganisationalCommentingFeature),
 					}, () => {
 						tagManager({
 							event: "pageview",
@@ -222,7 +226,7 @@ export class Document extends Component<PropsType, StateType> {
 						});
 					});
 					pullFocusByQuerySelector("#root");
-				})
+				}.bind(this))
 				.catch(err => {
 					this.setState({
 						error: {
@@ -444,7 +448,7 @@ export class Document extends Component<PropsType, StateType> {
 												 currentURL={this.props.match.url}
 												 signInURL={contextValue.signInURL}
 												 registerURL={contextValue.registerURL}
-												 allowOrganisationCodeLogin={this.state.enableOrganisationalCommentingFeature}
+												 allowOrganisationCodeLogin={this.state.allowOrganisationCodeLogin}
 												 orgFieldName="document"/>
 						: /* if contextValue.isAuthorised... */ null}
 				</UserContext.Consumer>
