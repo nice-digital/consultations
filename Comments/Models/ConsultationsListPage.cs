@@ -7,7 +7,9 @@ namespace Comments.Models
 {
 	public class ConsultationListRow
 	{
-		public ConsultationListRow(string title, DateTime startDate, DateTime endDate, int? responses, int consultationId, int? documentId, string chapterSlug, string gidReference, string productTypeName, bool hasCurrentUserEnteredCommentsOrAnsweredQuestions, bool hasCurrentUserSubmittedCommentsOrAnswers, string allowedRole, IList<OrganisationCode> organisationCodes)
+		public ConsultationListRow(string title, DateTime startDate, DateTime endDate, int? responses, int consultationId, int? documentId, string chapterSlug, string gidReference,
+			string productTypeName, bool hasCurrentUserEnteredCommentsOrAnsweredQuestions, bool hasCurrentUserSubmittedCommentsOrAnswers, string allowedRole,
+			IList<OrganisationCode> organisationCodes, bool currentUserIsAuthorisedToViewOrganisationCodes)
 		{
 			Title = title;
 			StartDate = startDate;
@@ -22,6 +24,7 @@ namespace Comments.Models
 			HasCurrentUserSubmittedCommentsOrAnswers = hasCurrentUserSubmittedCommentsOrAnswers;
 			AllowedRole = allowedRole;
 			OrganisationCodes = organisationCodes;
+			CurrentUserIsAuthorisedToViewOrganisationCodes = currentUserIsAuthorisedToViewOrganisationCodes;
 		}
 
 		public string Title { get; private set; }
@@ -38,7 +41,7 @@ namespace Comments.Models
 		public string ProductTypeName { get; private set; }
 
 		/// <summary>
-		/// Has the current user submitted comments or answers on the this consultation.
+		/// Has the current user submitted comments or answers on this consultation.
 		/// </summary>
 		public bool HasCurrentUserEnteredCommentsOrAnsweredQuestions { get; private set; }
 
@@ -59,6 +62,8 @@ namespace Comments.Models
 		public bool Show { get; set; } = true;
 
 		public IList<OrganisationCode> OrganisationCodes { get; private set; }
-		public bool ShowShareWithOrganisationButton => IsOpen;
+
+		private readonly bool CurrentUserIsAuthorisedToViewOrganisationCodes;
+		public bool ShowShareWithOrganisationButton => IsOpen && CurrentUserIsAuthorisedToViewOrganisationCodes;
 	}
 }

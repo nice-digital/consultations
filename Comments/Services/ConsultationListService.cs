@@ -59,6 +59,7 @@ namespace Comments.Services
 			var teamRoles = userRoles.Where(role => AppSettings.ConsultationListConfig.DownloadRoles.TeamRoles.Contains(role)).Select(role => role).ToList();
 			var isTeamUser = !isAdminUser && teamRoles.Any(); //an admin with team roles is still just considered an admin.
 			var hasAccessToViewUpcomingConsultations = isAdminUser || isTeamUser;
+			var currentUserIsAuthorisedToViewOrganisationCodes = isAdminUser || currentUser.OrganisationsAssignedAsLead.Any();
 
 			var canSeeAnySubmissionCounts = isAdminUser || isTeamUser;
 
@@ -110,7 +111,7 @@ namespace Comments.Services
 						consultation.StartDate, consultation.EndDate, responseCount, consultation.ConsultationId,
 						consultation.FirstConvertedDocumentId, consultation.FirstChapterSlugOfFirstConvertedDocument, consultation.Reference,
 						consultation.ProductTypeName, hasCurrentUserEnteredCommentsOrAnsweredQuestions, hasCurrentUserSubmittedCommentsOrAnswers, consultation.AllowedRole,
-						allOrganisationCodes[consultation.ConsultationId]));
+						allOrganisationCodes[consultation.ConsultationId], currentUserIsAuthorisedToViewOrganisationCodes));
 			}
 
 			model.OptionFilters = GetOptionFilterGroups(model.Status?.ToList(), consultationListRows, hasAccessToViewUpcomingConsultations);
