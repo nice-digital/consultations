@@ -99,6 +99,7 @@ Array [
               itemScope={true}
               itemType="http://schema.org/ListItem"
               onClick={[Function]}
+              role="presentation"
             >
               <a
                 href="/"
@@ -121,6 +122,7 @@ Array [
               itemScope={true}
               itemType="http://schema.org/ListItem"
               onClick={[Function]}
+              role="presentation"
             >
               <a
                 href="/guidance/indevelopment/gid-ta10232/consultation/"
@@ -694,6 +696,7 @@ Array [
               >
                 <div
                   onMouseUp={[Function]}
+                  role="presentation"
                 >
                   <div
                     className="selection-container unselectable"

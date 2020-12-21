@@ -14,7 +14,7 @@ describe("GenerateCodeForOrg", () => {
 		organisationAuthorisationId: 0,
 		organisationId: 999,
 		organisationName: "Super Magic Club",
-		consultationId: 111
+		consultationId: 111,
 	};
 
 	let fakePropsCode = {...fakePropsNoCode, consultationId: 111};

@@ -111,7 +111,7 @@ export class Download extends Component<PropsType, StateType> {
 			keywordToFilterBy: null,
 			pageNumber: pageNumber,
 			itemsPerPage: itemsPerPage,
-			enableOrganisationalCommentingFeature
+			enableOrganisationalCommentingFeature,
 		};
 
 		if (isAuthorised) {
@@ -145,7 +145,7 @@ export class Download extends Component<PropsType, StateType> {
 					keywordToFilterBy: null,
 					pageNumber: pageNumber,
 					itemsPerPage: itemsPerPage,
-					enableOrganisationalCommentingFeature
+					enableOrganisationalCommentingFeature,
 				};
 			}
 		}
@@ -395,7 +395,7 @@ export class Download extends Component<PropsType, StateType> {
 			isAdminUser,
 			pageNumber,
 			itemsPerPage,
-			enableOrganisationalCommentingFeature
+			enableOrganisationalCommentingFeature,
 		} = this.state;
 
 		const {

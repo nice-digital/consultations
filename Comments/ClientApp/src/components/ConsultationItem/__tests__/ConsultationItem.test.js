@@ -1,5 +1,3 @@
-/* global jest */
-
 import React from "react";
 import { mount } from "enzyme";
 import { MemoryRouter } from "react-router";
@@ -33,7 +31,7 @@ describe("[ClientApp] ", () => {
 					<ConsultationItem {...fakeProps} chapterSlug={null} documentId={null} />
 				</MemoryRouter>,
 			);
-			
+
 			expect(wrapper.find(".card__heading a").length).toEqual(0);
 		});
 
@@ -44,7 +42,7 @@ describe("[ClientApp] ", () => {
 					<ConsultationItem {...fakeProps} />
 				</MemoryRouter>,
 			);
-			
+
 			expect(
 				toJson(wrapper, {
 					noKey: true,

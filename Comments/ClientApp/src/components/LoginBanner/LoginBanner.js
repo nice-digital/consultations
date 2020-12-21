@@ -27,10 +27,10 @@ type OrganisationCode = {
 
 type StateType = {
 	userEnteredCollationCode: string,
-	hasError: bool,
+	hasError: boolean,
 	errorMessage: string,
-	showAuthorisationOrganisation: bool,
-	authorisationOrganisationFound: OrganisationCode, 
+	showAuthorisationOrganisation: boolean,
+	authorisationOrganisationFound: OrganisationCode,
 }
 
 export class LoginBanner extends Component<PropsType, StateType> {
@@ -66,8 +66,8 @@ export class LoginBanner extends Component<PropsType, StateType> {
 				this.checkOrganisationCode(userEnteredCollationCode);
 			}else{
 				this.setState({
-					hasError: false, 
-					showAuthorisationOrganisation: false
+					hasError: false,
+					showAuthorisationOrganisation: false,
 				});
 			}
 		});
@@ -80,14 +80,14 @@ export class LoginBanner extends Component<PropsType, StateType> {
 			[],
 			{
 				collationCode: this.state.userEnteredCollationCode,
-				consultationId: this.props.match.params.consultationId, 
+				consultationId: this.props.match.params.consultationId,
 			})
 			.then(response => response.data)
 			.catch(err => {
 				this.setState({
 					hasError: true,
-					errorMessage: err.response.data.errorException.Message, 
-					showAuthorisationOrganisation: false,					
+					errorMessage: err.response.data.errorException.Message,
+					showAuthorisationOrganisation: false,
 				});
 			});
 		return {
@@ -109,7 +109,7 @@ export class LoginBanner extends Component<PropsType, StateType> {
 			})
 			.catch(err => {
 				throw new Error("checkOrganisationCode failed " + err);
-			});		
+			});
 	}
 
 	gatherDataForCreateOrganisationUserSession = async () => {
@@ -119,14 +119,14 @@ export class LoginBanner extends Component<PropsType, StateType> {
 			[],
 			{
 				collationCode: this.state.userEnteredCollationCode,
-				organisationAuthorisationId: this.state.authorisationOrganisationFound.organisationAuthorisationId, 
-			}, 
+				organisationAuthorisationId: this.state.authorisationOrganisationFound.organisationAuthorisationId,
+			},
 			"POST")
 			.then(response => response.data)
 			.catch(err => {
 				this.setState({
 					hasError: true,
-					errorMessage: err.response.data.errorException.Message, 
+					errorMessage: err.response.data.errorException.Message,
 					showAuthorisationOrganisation: false,
 				});
 			});
@@ -138,17 +138,17 @@ export class LoginBanner extends Component<PropsType, StateType> {
 	createOrganisationUserSession = async () => {
 		const session = this.gatherDataForCreateOrganisationUserSession()
 			.then(data => {
-				if (data.session != null) { 
+				if (data.session != null) {
 					this.setState({
 						hasError: false,
-						errorMessage: "",						
+						errorMessage: "",
 					});
 					return data.session;
 				}
 			})
 			.catch(err => {
 				throw new Error("checkOrganisationCode failed " + err);
-			});		
+			});
 		return {
 			session: await session,
 		};
@@ -161,22 +161,21 @@ export class LoginBanner extends Component<PropsType, StateType> {
 
 			var expirationDate = new Date(data.session.expirationDateTicks);
 
-			Cookies.set(`ConsultationSession-${consultationId}`, data.session.sessionId, {expires: expirationDate}); 
+			Cookies.set(`ConsultationSession-${consultationId}`, data.session.sessionId, {expires: expirationDate});
 
-			//now, set state to show logged in. 
+			//now, set state to show logged in.
 			this.setState({
 				showAuthorisationOrganisation: false,
-			})
+			});
 			updateContextFunction();
 		})
-		.catch(err => {
-			this.setState({
-				hasError: true,
-				errorMessage: "Unable to confirm",
-			})
-		});			
+			.catch(() => {
+				this.setState({
+					hasError: true,
+					errorMessage: "Unable to confirm",
+				});
+			});
 	}
-
 
 	render(){
 		const limitWidthOfButton = !this.props.signInButton; //the sign-in button isn't shown when we're trying to save space.
@@ -201,14 +200,15 @@ export class LoginBanner extends Component<PropsType, StateType> {
 										error={this.state.hasError}
 										errorMessage={this.state.errorMessage}
 										label="Organisation code"
-									/>											
+									/>
 								</div>
-								{this.state.showAuthorisationOrganisation && 
+								{this.state.showAuthorisationOrganisation &&
 									<Fragment>
 										<p>Confirm organisation name
 											<p><strong>{this.state.authorisationOrganisationFound.organisationName}</strong></p>
-										</p>							
+										</p>
 										<UserContext.Consumer>
+											{/* eslint-disable-next-line*/}
 											{({ contextValue: ContextType, updateContext }) => (
 												<div>
 													<button className="btn btn--cta" onClick={() => this.handleConfirmClick(updateContext)}  title={"Confirm your organisation is " + this.state.authorisationOrganisationFound.organisationName}>Confirm</button>
@@ -219,7 +219,7 @@ export class LoginBanner extends Component<PropsType, StateType> {
 								}
 							</Fragment>
 						}
-						{this.props.allowOrganisationCodeLogin && this.props.signInButton && 
+						{this.props.allowOrganisationCodeLogin && this.props.signInButton &&
 							<Fragment>
 								<p>If you don't have an organisation code, sign in to your NICE account.</p>
 								<p>
@@ -227,13 +227,13 @@ export class LoginBanner extends Component<PropsType, StateType> {
 								</p>
 							</Fragment>
 						}
-						{this.props.allowOrganisationCodeLogin && !this.props.signInButton && 
+						{this.props.allowOrganisationCodeLogin && !this.props.signInButton &&
 							<Fragment>If you don't have an organisation code, <a href={this.props.signInURL} title="Sign in to your NICE account">sign in to your NICE account.</a>&nbsp;&nbsp;</Fragment>
 						}
-						{!this.props.allowOrganisationCodeLogin && 
+						{!this.props.allowOrganisationCodeLogin &&
 							<Fragment>
-								<a href={this.props.signInURL} title="Sign in to your NICE account">Sign in to your NICE account</a> {this.props.signInText || "to comment on this consultation"}.{" "}								
-								{this.props.signInButton && 
+								<a href={this.props.signInURL} title="Sign in to your NICE account">Sign in to your NICE account</a> {this.props.signInText || "to comment on this consultation"}.{" "}
+								{this.props.signInButton &&
 									<p>
 										<a className="btn" href={this.props.signInURL} title="Sign in to your NICE account">Sign in</a>
 									</p>
@@ -251,4 +251,4 @@ export class LoginBanner extends Component<PropsType, StateType> {
 	}
 }
 
-export default withRouter(LoginBanner); 
+export default withRouter(LoginBanner);

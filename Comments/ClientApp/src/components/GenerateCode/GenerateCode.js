@@ -27,7 +27,7 @@ export class GenerateCode extends Component<GenerateCodeProps, GenerateCodeState
 		super(props);
 
 		this.state = { showCodeGenerators: false };
-	};
+	}
 
 	handleCodeButtonClick = () => {
 		this.setState({ showCodeGenerators: !this.state.showCodeGenerators });
@@ -36,11 +36,11 @@ export class GenerateCode extends Component<GenerateCodeProps, GenerateCodeState
 	render() {
 		const {
 			organisationCodes,
-			consultationId
+			consultationId,
 		} = this.props;
 
 		const {
-			showCodeGenerators
+			showCodeGenerators,
 		} = this.state;
 
 		return (
@@ -56,11 +56,11 @@ export class GenerateCode extends Component<GenerateCodeProps, GenerateCodeState
 							<p>Select an organisation</p>
 						)}
 						{organisationCodes.map((item, index) =>
-							<GenerateCodeForOrg key={index} {...item} consultationId={consultationId} />
+							<GenerateCodeForOrg key={index} {...item} consultationId={consultationId} />,
 						)}
 					</div>
 				)}
 			</div>
 		);
-	};
-};
+	}
+}

@@ -1,13 +1,10 @@
 import React from "react";
 import { mount } from "enzyme";
-import { MemoryRouter } from "react-router";
 import { Selection } from "../Selection";
-import axios from "axios";
-import MockAdapter from "axios-mock-adapter";
-import { generateUrl } from "../../../data/loader";
-import { nextTick } from "../../../helpers/utils";
+// import axios from "axios";
+// import MockAdapter from "axios-mock-adapter";
 
-const mock = new MockAdapter(axios);
+//const mock = new MockAdapter(axios);
 
 describe("[ClientApp] ", () => {
 	describe("Selection Component", () => {
@@ -49,7 +46,7 @@ describe("[ClientApp] ", () => {
 			window.getSelection = () => {
 				return {
 					removeAllRanges: () => {},
-					getRangeAt: function(number){ return "paragraph content";},
+					getRangeAt: function() { return "paragraph content";},
 					isCollapsed: false,
 					rangeCount: 1,
 				};

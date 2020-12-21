@@ -31,6 +31,7 @@ Array [
               itemScope={true}
               itemType="http://schema.org/ListItem"
               onClick={[Function]}
+              role="presentation"
             >
               <a
                 href="/guidance/inconsultation"
@@ -53,6 +54,7 @@ Array [
               itemScope={true}
               itemType="http://schema.org/ListItem"
               onClick={[Function]}
+              role="presentation"
             >
               <a
                 href="/guidance/indevelopment/gid-ng10186/consultation/"

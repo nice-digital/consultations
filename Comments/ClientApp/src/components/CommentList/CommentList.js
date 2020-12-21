@@ -15,7 +15,7 @@ import {
 } from "../../helpers/editing-and-deleting";
 import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
 import { mobileWidth } from "../../constants";
-import { getElementPositionWithinDocument, getSectionTitle } from "../../helpers/utils";
+import { getElementPositionWithinDocument, getSectionTitle , canUseDOM } from "../../helpers/utils";
 import { updateUnsavedIds } from "../../helpers/unsaved-comments";
 import { tagManager } from "../../helpers/tag-manager";
 
@@ -24,9 +24,9 @@ import { Question } from "../Question/Question";
 import LoginBannerWithRouter from "../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
 
-import { createQuestionPdf } from '../QuestionView/QuestionViewDocument';
-import { canUseDOM } from "../../helpers/utils";
-import { Alert } from '@nice-digital/nds-alert';
+import { createQuestionPdf } from "../QuestionView/QuestionViewDocument";
+
+import { Alert } from "@nice-digital/nds-alert";
 
 type PropsType = {
 	staticContext?: any,
@@ -78,7 +78,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			shouldShowQuestionsTab: false,
 			unsavedIds: [],
 			endDate: "",
-			enableOrganisationalCommentingFeature: false
+			enableOrganisationalCommentingFeature: false,
 		};
 
 		let preloadedData = {};

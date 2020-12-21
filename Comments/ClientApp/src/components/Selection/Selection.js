@@ -112,7 +112,7 @@ export class Selection extends Component<PropsType, StateType> {
 		}
 	}
 
-	componentDidUpdate(prevProps: PropsType, prevState: StateType){
+	componentDidUpdate(prevProps: PropsType){
 		// if we're on a different page from when the selection was made, reinitialise the selection
 		if (this.props.sourceURI !== prevProps.sourceURI) {
 			this.setState({
@@ -131,7 +131,7 @@ export class Selection extends Component<PropsType, StateType> {
 			);
 
 		return (
-			<div onMouseUp={this.onMouseUp} ref={this.selectionContainer}>
+			<div onMouseUp={this.onMouseUp} ref={this.selectionContainer} role="presentation">
 				<MyToolTip visible={this.state.toolTipVisible} onButtonClick={this.onButtonClick} position={this.state.position}/>
 				{this.props.children}
 			</div>

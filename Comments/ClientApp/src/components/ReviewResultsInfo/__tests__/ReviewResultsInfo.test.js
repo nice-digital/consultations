@@ -2,7 +2,7 @@
 import React from "react";
 import { shallow } from "enzyme";
 
-import ReviewResultsInfo from "../ReviewResultsInfo";
+import { ReviewResultsInfo } from "../ReviewResultsInfo";
 //import Sort from "./../../Sort/Sort";
 import AppliedFilter from "./../../AppliedFilter/AppliedFilter";
 
@@ -36,7 +36,7 @@ describe("[Consultations]", () => {
 
 				expect(resultsInfo.find("#results-info-count span").text()).toEqual("Showing 2 questions and 2 comments");
 			});
-			
+
 			it("product count shows questions only when comments not allowed and zero passed", () => {
 				const resultsInfo = shallow(<ReviewResultsInfo commentCount={0} showCommentsCount={false} questionCount={2} showQuestionsCount={true}  sortOrder="" appliedFilters={[]} path="" history={null} isLoading={false} />);
 
@@ -72,7 +72,7 @@ describe("[Consultations]", () => {
 
 		//sort tests commented out since the sort links have been commented out too.
 		//describe("sort", () => {
-			
+
 		// it("sort links are hidden on print", () => {
 		// 	const resultsInfo = shallow(<ResultsInfo commentCount={1} showCommentsCount={true} questionCount={1} showQuestionsCount={true}  sortOrder="" appliedFilters={[]} path="" history={null} isLoading={false} />);
 

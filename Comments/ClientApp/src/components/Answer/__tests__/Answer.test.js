@@ -1,11 +1,10 @@
 /* global jest */
 import React from "react";
-import { shallow, mount } from "enzyme";
+import { mount } from "enzyme";
 import { Answer } from "../Answer";
 import answerWithAnswer from "./answerWithAnswer.json";
 import answerWithoutAnswer from "./answerWithoutAnswer.json";
 import toJson from "enzyme-to-json";
-import { nextTick } from "../../../helpers/utils";
 
 describe("[ClientApp] ", () => {
 	describe("Answer Component", () => {

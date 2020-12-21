@@ -7,10 +7,10 @@ import MockAdapter from "axios-mock-adapter";
 import { MemoryRouter } from "react-router";
 
 import { Document } from "../Document";
-import ChapterData from "./Chapter";
-import ConsultationData from "./Consultation";
-import ConsultationQuestionsOnlyData from "./ConsultationQuestionsOnly";
-import DocumentsData from "./Documents";
+import ChapterData from "./Chapter.json";
+import ConsultationData from "./Consultation.json";
+import ConsultationQuestionsOnlyData from "./ConsultationQuestionsOnly.json";
+import DocumentsData from "./Documents.json";
 import { nextTick } from "../../../helpers/utils";
 import toJson from "enzyme-to-json";
 
@@ -233,13 +233,13 @@ describe("[ClientApp] ", () => {
 
 			it("should not caution that guidance is draft if the consultation is open", () => {
 				const mock = new MockAdapter(axios);
-	
+
 				const wrapper = mount(
 					<MemoryRouter>
 						<Document {...fakeProps} />
 					</MemoryRouter>,
 				);
-	
+
 				let documentsPromise = new Promise(resolve => {
 					mock
 						.onGet("/consultations/api/Documents?consultationId=1")
@@ -257,7 +257,7 @@ describe("[ClientApp] ", () => {
 							return [200, ConsultationData];
 						});
 				});
-	
+
 				let chapterPromise = new Promise(resolve => {
 					mock
 						.onGet(
@@ -268,7 +268,7 @@ describe("[ClientApp] ", () => {
 							return [200, ChapterData];
 						});
 				});
-	
+
 				return Promise.all([
 					documentsPromise,
 					consulatationPromise,
@@ -276,9 +276,9 @@ describe("[ClientApp] ", () => {
 				]).then(async () => {
 					await nextTick();
 					wrapper.update();
-	
+
 					expect(wrapper.find(".caution").length).toEqual(0);
-	
+
 				});
 			});
 		});
