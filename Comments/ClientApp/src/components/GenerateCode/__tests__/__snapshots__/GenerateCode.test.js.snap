@@ -41,16 +41,15 @@ exports[`GenerateCode should match snapshot with code having been generated 1`] 
         <span>
           1234 5678 9123
         </span>
-        <span
+        <button
           aria-live="polite"
-          className="tag tag--copied"
+          className="btn btn--copied"
           data-qa-sel="copy-code-button"
           onClick={[Function]}
-          role="button"
-          tabIndex="0"
+          type="button"
         >
           Copy code
-        </span>
+        </button>
       </div>
     </div>
   </div>
