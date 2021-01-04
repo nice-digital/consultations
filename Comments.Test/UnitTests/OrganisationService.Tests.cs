@@ -279,7 +279,7 @@ namespace Comments.Test.UnitTests
 			var sessionId = Guid.NewGuid();
 			var consultationId = 1;
 			var organisationId = 1;
-			var organisationName = "NICE";
+			var organisationName = "Not NICE";
 			var fakeAPIService = new FakeAPIService(null, null, new List<Organisation> { new Organisation(organisationId, organisationName, true) });
 			var mockFactory = new Mock<IHttpClientFactory>();
 
