@@ -284,7 +284,7 @@ namespace Comments.Test.UnitTests
 			var sessionId = Guid.NewGuid();
 			const int consultationId = 1;
 			const int organisationId = 1;
-			const string organisationName = "NICE";
+			const string organisationName = "Not NICE";
 			var fakeAPIService = new FakeAPIService(null, null, new List<Organisation> { new Organisation(organisationId, organisationName, true) });
 			var mockFactory = new Mock<IHttpClientFactory>();
 
