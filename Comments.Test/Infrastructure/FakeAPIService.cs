@@ -36,7 +36,7 @@ namespace Comments.Test.Infrastructure
 		    return Task.Run(() => returnValue);
 	    }
 
-        public Task<string> RevokeRefreshTokensForUser(string nameIdentifier, HttpClient httpClient = null)
+        public Task<IEnumerable<string>> RevokeRefreshTokensForUser(string nameIdentifier, HttpClient httpClient = null)
 		{
 			throw new NotImplementedException();
 		}
