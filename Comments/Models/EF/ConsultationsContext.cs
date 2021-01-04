@@ -56,8 +56,6 @@ namespace Comments.Models
 
                 entity.Property(e => e.LastModifiedDate).HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.OrganisationAuthorisationId).HasColumnName("OrganisationAuthorisationID");
-
                 entity.Property(e => e.OrganisationUserId).HasColumnName("OrganisationUserID");
 
                 entity.Property(e => e.ParentAnswerId).HasColumnName("ParentAnswerID");
@@ -67,16 +65,6 @@ namespace Comments.Models
                 entity.Property(e => e.StatusId)
                     .HasColumnName("StatusID")
                     .HasDefaultValueSql("((1))");
-
-                entity.HasOne(d => d.OrganisationAuthorisation)
-                    .WithMany(p => p.Answer)
-                    .HasForeignKey(d => d.OrganisationAuthorisationId)
-                    .HasConstraintName("FK_Answer_OrganisationAuthorisation");
-
-                entity.HasOne(d => d.OrganisationUser)
-                    .WithMany(p => p.Answer)
-                    .HasForeignKey(d => d.OrganisationUserId)
-                    .HasConstraintName("FK_Answer_OrganisationUser");
 
                 entity.HasOne(d => d.ParentAnswer)
                     .WithMany(p => p.ChildAnswers)
@@ -124,8 +112,6 @@ namespace Comments.Models
 
                 entity.Property(e => e.LocationId).HasColumnName("LocationID");
 
-                entity.Property(e => e.OrganisationAuthorisationId).HasColumnName("OrganisationAuthorisationID");
-
                 entity.Property(e => e.OrganisationUserId).HasColumnName("OrganisationUserID");
 
                 entity.Property(e => e.ParentCommentId).HasColumnName("ParentCommentID");
@@ -139,16 +125,6 @@ namespace Comments.Models
                     .HasForeignKey(d => d.LocationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Comment_Location");
-
-                entity.HasOne(d => d.OrganisationAuthorisation)
-                    .WithMany(p => p.Comment)
-                    .HasForeignKey(d => d.OrganisationAuthorisationId)
-                    .HasConstraintName("FK_Comment_OrganisationAuthorisation");
-
-                entity.HasOne(d => d.OrganisationUser)
-                    .WithMany(p => p.Comment)
-                    .HasForeignKey(d => d.OrganisationUserId)
-                    .HasConstraintName("FK_Comment_OrganisationUser");
 
                 entity.HasOne(d => d.ParentComment)
                     .WithMany(p => p.ChildComments)
@@ -201,7 +177,19 @@ namespace Comments.Models
 					.HasColumnName("OrganisationUserID");
 
                 entity.Property(e => e.EmailAddress).HasMaxLength(100);
-            });
+
+                entity.Property(e => e.OrganisationAuthorisationId).HasColumnName("OrganisationAuthorisationID");
+
+                entity.Property(e => e.CreatedDate).IsRequired().HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.ExpirationDate).IsRequired();
+
+				entity.HasOne(d => d.OrganisationAuthorisation)
+	                .WithMany(p => p.OrganisationUsers)
+	                .HasForeignKey(d => d.OrganisationAuthorisationId)
+	                .HasConstraintName("FK_OrganisationUser_OrganisationAuthorisation");
+
+			});
 
             modelBuilder.Entity<Question>(entity =>
             {

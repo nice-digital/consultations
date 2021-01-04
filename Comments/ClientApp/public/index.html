@@ -1,4 +1,3 @@
-<!-- NOTE: Do not remove the "loud comments" in this page (comments starting with an exclamation mark).  They are used by server side rendering. -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,13 +5,19 @@
 	<meta name="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-
+	<!-- NOTE: Do not remove the "loud comments" in this page (comments starting with an exclamation mark).  They are used by server side rendering. -->
 	<!--! title -->
 
 	<base href="%PUBLIC_URL%/" />
 
 	<meta name="theme-color" content="#004650">
 	<!--! metas -->
+
+	<!-- [if !IE] -->
+	<link rel="stylesheet" href="%PUBLIC_URL%/styles/main.css"><!-- [endif] -->
+	<!--[if IE]>
+	<link rel="stylesheet" href="%PUBLIC_URL%/styles/main-ie9.css"><![endif]-->
+	<!--! links -->
 
 	<script src="%REACT_APP_COOKIE_BANNER_SCRIPT%"></script>
 
@@ -47,11 +52,7 @@
 	<link rel="apple-touch-icon-precomposed" sizes="152x152" href="//cdn.nice.org.uk/V3/Content/nice/favicon-152.png">
 	<link rel="apple-touch-icon" sizes="152x152" href="//cdn.nice.org.uk/V3/Content/nice/favicon-152.png">
 	<link href="//fonts.googleapis.com/css?family=Lato:400,700,900" rel="stylesheet" type="text/css" />
-	<!-- [if !IE] -->
-	<link rel="stylesheet" href="%PUBLIC_URL%/styles/main.css"><!-- [endif] -->
-	<!--[if IE]>
-	<link rel="stylesheet" href="%PUBLIC_URL%/styles/main-ie9.css"><![endif]-->
-	<!--! links -->
+	
 	<!--[if lt IE 9]>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-shim.min.js"></script>

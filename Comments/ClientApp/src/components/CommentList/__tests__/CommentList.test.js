@@ -358,11 +358,12 @@ describe("[ClientApp] ", () => {
 			const questionsForPDF = sampleComments.questions;
 			const titleForPDF = sampleConsultation.title;
 			const endDate = sampleComments.consultationState.endDate;
+			const getTitleFunction = () => { return titleForPDF;};
 
 			const wrapper = mount(
 				<MemoryRouter>
 					<LiveAnnouncer>
-						<CommentList {...fakeProps} />
+						<CommentList {...fakeProps} getTitleFunction={getTitleFunction} />
 					</LiveAnnouncer>
 				</MemoryRouter>
 			);
@@ -378,7 +379,6 @@ describe("[ClientApp] ", () => {
 			// assert
 			expect(createQuestionPdf).toHaveBeenCalledTimes(1);
 			expect(createQuestionPdf).toHaveBeenCalledWith(questionsForPDF, titleForPDF, endDate);
-
 		})
 
 	});

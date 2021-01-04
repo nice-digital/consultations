@@ -8,8 +8,11 @@ namespace Comments.Models
         public int OrganisationUserId { get; set; }
         public Guid AuthorisationSession { get; set; }
         public string EmailAddress { get; set; }
+        public int OrganisationAuthorisationId { get; set; }
 
-        public ICollection<Answer> Answer { get; set; }
-        public ICollection<Comment> Comment { get; set; }
+		public DateTime CreatedDate { get; set; }
+		public DateTime ExpirationDate { get; set; }
+
+        public OrganisationAuthorisation OrganisationAuthorisation { get; set; }
     }
 }

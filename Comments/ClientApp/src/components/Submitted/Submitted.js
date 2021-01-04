@@ -7,7 +7,7 @@ import Helmet from "react-helmet";
 import BreadCrumbsWithRouter from "../Breadcrumbs/Breadcrumbs";
 import { Header } from "../Header/Header";
 import { UserContext } from "../../context/UserContext";
-import { LoginBanner } from "../LoginBanner/LoginBanner";
+import LoginBannerWithRouter from "../LoginBanner/LoginBanner";
 import preload from "../../data/pre-loader";
 import { load } from "../../data/loader";
 import Moment from "react-moment";
@@ -147,11 +147,12 @@ export class Submitted extends Component<PropsType, StateType> {
 										{(contextValue: ContextType) => {
 											return (
 												!contextValue.isAuthorised ?
-													<LoginBanner
+													<LoginBannerWithRouter
 														signInButton={true}
 														currentURL={this.props.match.url}
 														signInURL={contextValue.signInURL}
 														registerURL={contextValue.registerURL}
+														allowOrganisationCodeLogin={false}
 													/> :
 													<Fragment>
 														<Link

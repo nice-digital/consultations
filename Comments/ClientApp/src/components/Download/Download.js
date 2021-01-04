@@ -1,14 +1,14 @@
 // @flow
 
 import React, { Component, Fragment } from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import Helmet from "react-helmet";
 import Cookies from "js-cookie";
 //import stringifyObject from "stringify-object";
 
 import { appendQueryParameter, removeQueryParameter, stripMultipleQueries, queryStringToObject, objectToQueryString, canUseDOM } from "../../helpers/utils";
 import { UserContext } from "../../context/UserContext";
-import { LoginBanner } from "../LoginBanner/LoginBanner";
+import LoginBannerWithRouter from "../LoginBanner/LoginBanner";
 import { Header } from "../Header/Header";
 import { Breadcrumbs } from "../Breadcrumbs/Breadcrumbs";
 import { ConsultationItem } from "../ConsultationItem/ConsultationItem";
@@ -43,7 +43,8 @@ type StateType = {
 	search: string,
 	keywordToFilterBy: string,
 	pageNumber: number,
-	itemsPerPage: number
+	itemsPerPage: number,
+	enableOrganisationalCommentingFeature: boolean
 }
 
 type PropsType = {
@@ -69,6 +70,8 @@ export class Download extends Component<PropsType, StateType> {
 		if (this.props.staticContext && this.props.staticContext.preload) {
 			preloadedData = this.props.staticContext.preload.data;
 		}
+
+		const enableOrganisationalCommentingFeature = ((preloadedData && preloadedData.organisationalCommentingFeature) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["organisationalCommentingFeature"]));
 
 		const isAuthorised = ((preloadedData && preloadedData.isAuthorised) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["isAuthorised"])),
 			isAdminUser = ((preloadedData && preloadedData.isAdminUser) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["isAdminUser"])),
@@ -108,6 +111,7 @@ export class Download extends Component<PropsType, StateType> {
 			keywordToFilterBy: null,
 			pageNumber: pageNumber,
 			itemsPerPage: itemsPerPage,
+			enableOrganisationalCommentingFeature
 		};
 
 		if (isAuthorised) {
@@ -141,6 +145,7 @@ export class Download extends Component<PropsType, StateType> {
 					keywordToFilterBy: null,
 					pageNumber: pageNumber,
 					itemsPerPage: itemsPerPage,
+					enableOrganisationalCommentingFeature
 				};
 			}
 		}
@@ -390,6 +395,7 @@ export class Download extends Component<PropsType, StateType> {
 			isAdminUser,
 			pageNumber,
 			itemsPerPage,
+			enableOrganisationalCommentingFeature
 		} = this.state;
 
 		const {
@@ -412,12 +418,13 @@ export class Download extends Component<PropsType, StateType> {
 		return (
 			<UserContext.Consumer>
 				{(contextValue: any) => !contextValue.isAuthorised ?
-					<LoginBanner
+					<LoginBannerWithRouter
 						signInButton={false}
 						currentURL={this.props.match.url}
 						signInURL={contextValue.signInURL}
 						registerURL={contextValue.registerURL}
-						signInText="to administer a consultation"
+						signInText="to view a list of consultations"
+						allowOrganisationCodeLogin={false}
 					/>
 					:
 					<Fragment>
@@ -429,7 +436,17 @@ export class Download extends Component<PropsType, StateType> {
 								<div data-g="12">
 									<Breadcrumbs links={breadcrumbLinkParams} />
 									<Header title="Consultation responses" />
-									<p className="lead">Only online consultations responses appear in the results below.</p>
+									<p className="container container-full ml--0">
+										<span className="lead">
+											Only online consultations responses appear in the results below.
+										</span>
+										&nbsp;&nbsp;
+										{enableOrganisationalCommentingFeature &&
+											<Link to={"/leadinformation"}>
+												Request commenting lead permission
+											</Link>
+										}
+									</p>
 									<div className="grid mt--d">
 										<div data-g="12 md:3">
 											<h2 className="h5 mt--0">Filter</h2>
@@ -465,6 +482,7 @@ export class Download extends Component<PropsType, StateType> {
 													{consultationsPaginated.map((item, idx) =>
 														<ConsultationItem key={idx}
 															basename={this.props.basename}
+															allowGenerateOrganisationCode={enableOrganisationalCommentingFeature}
 															{...item}
 														/>
 													)}

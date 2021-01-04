@@ -239,7 +239,7 @@
             "title":"Document"
         }
     ],
-    "organisationName":null,
+    "organisationName":"NICE",
     "type":null,
     "document":null,
     "sort":"DocumentAsc"

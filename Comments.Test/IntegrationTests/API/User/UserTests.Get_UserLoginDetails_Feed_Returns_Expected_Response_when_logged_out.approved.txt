@@ -4,5 +4,5 @@
     "isAuthorised":false,
     "displayName":null,
     "userId":null,
-    "organisationName":null
+    "organisationsAssignedAsLead":null
 }

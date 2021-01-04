@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Comments.Services;
 using Comments.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -25,9 +26,9 @@ namespace Comments.Controllers.Api
 		/// </summary>
 		/// <returns></returns>
 		[HttpGet]
-        public IActionResult Get(ConsultationListViewModel consultationListViewModel)
+        public async Task<IActionResult> Get(ConsultationListViewModel consultationListViewModel)
 		{
-			var result = _consultationListService.GetConsultationListViewModel(consultationListViewModel);
+			var result = await _consultationListService.GetConsultationListViewModel(consultationListViewModel);
 
 			var invalidResult = Validate(result.validate, _logger);
 

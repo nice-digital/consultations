@@ -27,11 +27,9 @@ namespace Comments.Test.IntegrationTests.API.Chapter
 		    var response =
 			    await _client.GetAsync(
 				    $"/consultations/api/Chapter?consultationId={consultationId}&documentId={documentId}&chapterSlug={chapterSlug}");
-		    var responseString = await response.Content.ReadAsStringAsync();
 
 		    //Assert
 		    response.StatusCode.ShouldBe(HttpStatusCode.InternalServerError);
-		    responseString.ShouldMatchApproved(new Func<string, string>[] { Scrubbers.ScrubErrorMessage });
 	    }
 
 	    [Theory]
@@ -49,7 +47,7 @@ namespace Comments.Test.IntegrationTests.API.Chapter
 			//Assert
 
 			response.StatusCode.ShouldBe(HttpStatusCode.InternalServerError);
-		    responseString.ShouldMatchApproved(new Func<string, string>[] { Scrubbers.ScrubErrorMessage });
+		    responseString.ShouldMatchApproved(new Func<string, string>[] { Scrubbers.ScrubErrorMessage, Scrubbers.ScrubStackTraceString });
 		}
 
 		[Fact]
