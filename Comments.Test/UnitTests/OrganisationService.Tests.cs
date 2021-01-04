@@ -342,9 +342,9 @@ namespace Comments.Test.UnitTests
 			ResetDatabase();
 			_context.Database.EnsureCreated();
 			var sessionId = Guid.NewGuid();
-			const int consultationId = 1;
-			const int organisationId = 1;
-			const string organisationName = "NICE";
+			var consultationId = 1;
+			var organisationId = 1;
+			var organisationName = "Not NICE";
 			var fakeAPIService = new FakeAPIService(null, null, new List<Organisation> { new Organisation(organisationId, organisationName, true) });
 			var mockFactory = new Mock<IHttpClientFactory>();
 
