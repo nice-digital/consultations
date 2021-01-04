@@ -2,8 +2,7 @@ import React from "react";
 import { mount } from "enzyme";
 import { MemoryRouter } from "react-router";
 import toJson from "enzyme-to-json";
-
-import { Download } from "../Download";
+import Download from "../Download"; // eslint-disable-line
 
 describe("[ClientApp] ", () => {
 	describe("Download Component", () => {
