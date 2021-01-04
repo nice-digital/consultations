@@ -1,21 +1,21 @@
-using Comments.Models;
-using Comments.Test.Infrastructure;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using Shouldly;
 using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Comments.Models;
+using Comments.Test.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Shouldly;
 using Xunit;
 
-namespace Comments.Test.IntegrationTests.API.Comments
+namespace Comments.Test.IntegrationTests.API.Answers
 {
 	public class CreateAnswerAsOrganisationalLead : TestBaseLight
 	{
-		private const int consultationId = 1;
+		private const int ConsultationId = 1;
 
 		[Fact]
 		public async Task Create_Answer_As_Lead_Sets_Answer_Fields_Correctly()
@@ -30,17 +30,17 @@ namespace Comments.Test.IntegrationTests.API.Comments
 			using (var context = new ConsultationsContext(GetContextOptions(), fakeUserService, new FakeEncryption()))
 			{
 				context.Database.EnsureDeleted();
-				var sourceURI = $"consultations://./consultation/{consultationId}/document/1";
+				var sourceURI = $"consultations://./consultation/{ConsultationId}/document/1";
 				TestBaseDBHelpers.AddStatus(context, "Draft", statusId);
 
 				var locationId = TestBaseDBHelpers.AddLocation(context, sourceURI);
 				var questionId = TestBaseDBHelpers.AddQuestion(context, locationId);
 
-				var (_server, _client) = InitialiseServerAndClient(context, fakeUserService);
+				var (server, client) = InitialiseServerAndClient(context, fakeUserService);
 
 				var answer = new ViewModels.Answer(0, "answer text", false, DateTime.UtcNow, orgLeadUserId, questionId, statusId);
 
-				var builder = _server.CreateRequest($"/consultations/api/Answer");
+				var builder = server.CreateRequest($"/consultations/api/Answer");
 				builder.And(request =>
 				{
 					request.Content = new StringContent(JsonConvert.SerializeObject(answer), Encoding.UTF8, "application/json");

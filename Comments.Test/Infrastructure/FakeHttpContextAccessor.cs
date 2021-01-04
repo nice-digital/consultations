@@ -30,7 +30,6 @@ namespace Comments.Test.Infrastructure
 				var claims = new List<Claim>
                 {
                     new Claim(ClaimType.DisplayName, displayName, null, AuthenticationConstants.IdAMIssuer),
-                    //new Claim(ClaimType.Organisations, JsonConvert.SerializeObject(new List<Organisation>(){ new Organisation(1, "NICE", true)}), "www.nice.org.uk", AuthenticationConstants.IdAMIssuer)
                 };
 				if (userId != null)
 				{
