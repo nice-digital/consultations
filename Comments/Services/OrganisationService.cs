@@ -178,10 +178,14 @@ namespace Comments.Services
 
 		private async Task<string> GetOrganisationName(int organisationId)
 		{
-			var machineToMachineAccessToken = await _apiTokenService.GetAccessToken(AppSettings.AuthenticationConfig.GetAuthConfiguration());
-			var httpClientWithPooledMessageHandler = _httpClientFactory.CreateClient();
+			//var machineToMachineAccessToken = await _apiTokenService.GetAccessToken(AppSettings.AuthenticationConfig.GetAuthConfiguration());
+			//var httpClientWithPooledMessageHandler = _httpClientFactory.CreateClient();
 
-			var organisations = await _apiService.GetOrganisations(new List<int> { organisationId }, machineToMachineAccessToken, httpClientWithPooledMessageHandler);
+			//var organisations = await _apiService.GetOrganisations(new List<int> { organisationId }, machineToMachineAccessToken, httpClientWithPooledMessageHandler);
+
+			//the above has been temporarily commented out until the m2m token caching branch in idam has been merged.
+
+			var organisations = new List<Organisation> {new Organisation(organisationId, "Not NICE", false)};
 
 			var organisation = organisations.FirstOrDefault();
 			if (organisation == null)

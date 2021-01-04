@@ -2,6 +2,7 @@
 
 import React, { Fragment, PureComponent } from "react";
 import Moment from "react-moment";
+import { Link } from "react-router-dom";
 
 type PropsType = {
 	title: string,
@@ -14,14 +15,17 @@ type PropsType = {
 		consultationIsOpen: boolean,
 		consultationHasNotStartedYet?: boolean,
 	},
+	allowRegisterOrganisationLeadLink: boolean,
 }
 
 export class Header extends PureComponent<PropsType> {
 
 	render() {
-		const title = this.props.title;
-		const subtitle1 = this.props.subtitle1;
-		const subtitle2 = this.props.subtitle2;
+		const {
+			title,
+			subtitle1,
+			subtitle2,
+			allowRegisterOrganisationLeadLink} = this.props;
 
 		let startDate, endDate, isOpen, notStartedYet;
 
@@ -45,18 +49,27 @@ export class Header extends PureComponent<PropsType> {
 				<h1 data-qa-sel="changeable-page-header" className="page-header__heading mt--0">{title}</h1>
 				{this.props.consultationState &&
 				<div className="mb--d">
-					{isOpen ?
-						<p><span className="tag tag--open">Open for comments</span> Open until{" "}
-							<Moment format="D MMMM YYYY" date={endDate}/>
-						</p>
-						:
-						<p>
-							{startOrEnd === "starts" && <span className="tag">Not yet open for comments</span>}
-							{startOrEnd === "ended" && <span className="tag">Closed for comments</span>}{" "}
-							This consultation {startOrEnd} on <Moment format="D MMMM YYYY" date={(showStartDate ? startDate : endDate)}/> at{" "}
-							<Moment format="HH:mm" date={(showStartDate ? startDate : endDate)}/>
-						</p>
-					}
+					<p className="container container-full ml--0">
+						{isOpen ?
+							<span>
+								<span className="tag tag--open">Open for comments</span> Open until{" "}
+								<Moment format="D MMMM YYYY" date={endDate}/>
+							</span>
+							:
+							<span>
+								{startOrEnd === "starts" && <span className="tag">Not yet open for comments</span>}
+								{startOrEnd === "ended" && <span className="tag">Closed for comments</span>}{" "}
+								This consultation {startOrEnd} on <Moment format="D MMMM YYYY" date={(showStartDate ? startDate : endDate)}/> at{" "}
+								<Moment format="HH:mm" date={(showStartDate ? startDate : endDate)}/>
+							</span>
+						}
+						&nbsp;&nbsp;
+						{allowRegisterOrganisationLeadLink &&
+							<Link to={"/leadinformation"}>
+								Request commenting lead permission
+							</Link>
+						}
+					</p>
 				</div>
 				}
 				{subtitle1 && <p>{subtitle1}</p>}

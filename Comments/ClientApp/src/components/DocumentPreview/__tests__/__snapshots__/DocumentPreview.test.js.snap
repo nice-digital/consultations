@@ -86,19 +86,24 @@ Array [
             <div
               className="mb--d"
             >
-              <p>
-                <span
-                  className="tag tag--open"
-                >
-                  Open for comments
+              <p
+                className="container container-full ml--0"
+              >
+                <span>
+                  <span
+                    className="tag tag--open"
+                  >
+                    Open for comments
+                  </span>
+                   Open until
+                   
+                  <time
+                    dateTime={"2018-11-24T00:01:00.000Z"}
+                  >
+                    24 November 2018
+                  </time>
                 </span>
-                 Open until
-                 
-                <time
-                  dateTime={"2018-11-24T00:01:00.000Z"}
-                >
-                  24 November 2018
-                </time>
+                  
               </p>
             </div>,
           ]
