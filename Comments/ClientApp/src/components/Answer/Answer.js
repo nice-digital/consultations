@@ -77,6 +77,7 @@ export class Answer extends Component<PropsType, StateType> {
 			answerText,
 			answerId,
 			questionId,
+			commenterEmail,
 		} = this.state.answer;
 		const unsavedChanges = this.state.unsavedChanges;
 		const answer = this.state.answer;
@@ -88,6 +89,10 @@ export class Answer extends Component<PropsType, StateType> {
 			<Fragment>
 				<section role="form">
 					<form onSubmit={e => this.props.saveAnswerHandler(e, answer, this.props.questionId)} className="mb--0">
+
+						{commenterEmail &&
+							<p className="CommentBox__commentBy">Answer by: {commenterEmail}</p>
+						}
 
 						{this.props.questionType.type === "YesNo" &&
 						<YesNoAnswer
