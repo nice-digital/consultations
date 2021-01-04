@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using NICE.Identity.Authentication.Sdk.Domain;
 
 namespace Comments.Services
 {
@@ -188,10 +189,14 @@ namespace Comments.Services
 
 		public async Task<Dictionary<int, string>> GetOrganisationNames(IEnumerable<int> organisationIds)
 		{
-			var machineToMachineAccessToken = await _apiTokenService.GetAccessToken(AppSettings.AuthenticationConfig.GetAuthConfiguration());
-			var httpClientWithPooledMessageHandler = _httpClientFactory.CreateClient();
+			//var machineToMachineAccessToken = await _apiTokenService.GetAccessToken(AppSettings.AuthenticationConfig.GetAuthConfiguration());
+			//var httpClientWithPooledMessageHandler = _httpClientFactory.CreateClient();
 
-			var organisations = await _apiService.GetOrganisations(organisationIds.Distinct(), machineToMachineAccessToken, httpClientWithPooledMessageHandler);
+			//var organisations = await _apiService.GetOrganisations(organisationIds.Distinct(), machineToMachineAccessToken, httpClientWithPooledMessageHandler);
+			
+			//the above has been temporarily commented out until the m2m token caching branch in idam has been merged.
+
+			var organisations = new List<Organisation> {new Organisation(organisationIds.First(), "Not NICE", false)};
 
 			return organisations.ToDictionary(k => k.OrganisationId, v => v.OrganisationName);
 		}
