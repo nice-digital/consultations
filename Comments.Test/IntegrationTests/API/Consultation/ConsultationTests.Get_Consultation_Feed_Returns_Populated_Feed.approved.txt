@@ -17,15 +17,17 @@
     "partiallyUpdatedProjectReference":null,
     "origProjectReference":null,
     "user":{
-        "isAuthorised":true,
+        "isAuthenticated":true,
         "displayName":"Benjamin Button",
         "userId":"00000000-0000-0000-0000-000000000000",
         "organisationsAssignedAsLead":[
-            {
-                "organisationId":1,
-                "organisationName":"NICE",
-                "isLead":true
-            }
+            
+        ],
+        "validatedSessions":[
+            
+        ],
+        "validatedOrganisationUserIds":[
+            
         ]
     },
     "consultationState":{

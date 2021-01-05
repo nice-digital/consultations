@@ -108,7 +108,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 					res => {
 						const signInURL = res.data.signInURL;
 						this.setState({
-							isAuthorised: res.data.isAuthorised,
+							isAuthorised: res.data.isAuthenticated,
 							displayName: res.data.displayName,
 							signInURL: signInURL,
 							registerURL: res.data.registerURL,
@@ -156,6 +156,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 			.then(response => response.data)
 			.catch(err => {
 				console.log(JSON.stringify(err));
+				return {valid: false};
 			});
 		return {
 			validityAndOrganisationName: await validityAndOrganisationName,

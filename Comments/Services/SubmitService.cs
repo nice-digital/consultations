@@ -28,23 +28,23 @@ namespace Comments.Services
 
 		public (int rowsUpdated, Validate validate) Submit(ViewModels.Submission submission)
 		{
-			if (!_currentUser.IsAuthorised || string.IsNullOrEmpty(_currentUser.UserId))
-				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"Not logged in submitting comments and answers"));
+			if (!_currentUser.IsAuthenticated || string.IsNullOrEmpty(_currentUser.UserId))
+				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"Not logged in submitting comments and answers"));
 
 			//if a user is submitting a different users comment, the context will throw an exception.
 
 			var anySourceURI = submission.SourceURIs.FirstOrDefault();
 			if (anySourceURI == null)
-				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "Could not find SourceURI"));
+				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, message: "Could not find SourceURI"));
 
 			var consultationState = _consultationService.GetConsultationState(anySourceURI, PreviewState.NonPreview);
 
 			if (!consultationState.ConsultationIsOpen)
-				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "Consultation is not open for submissions"));
+				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, message: "Consultation is not open for submissions"));
 
 			var hasSubmitted = _consultationService.GetSubmittedDate(anySourceURI);
 			if (hasSubmitted !=null)
-				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "User has already submitted."));
+				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, message: "User has already submitted."));
 
 			var submissionToSave = _context.InsertSubmission(_currentUser.UserId, submission.RespondingAsOrganisation, submission.OrganisationName, submission.HasTobaccoLinks, submission.TobaccoDisclosure, submission.OrganisationExpressionOfInterest);
 

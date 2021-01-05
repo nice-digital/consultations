@@ -99,15 +99,17 @@
             "TeamNames":[
                 
             ],
-            "IsAuthorised":true,
+            "IsAuthenticated":true,
             "DisplayName":"Benjamin Button",
             "UserId":"00000000-0000-0000-0000-000000000000",
             "OrganisationsAssignedAsLead":[
-                {
-                    "OrganisationId":1,
-                    "OrganisationName":"NICE",
-                    "IsLead":true
-                }
+                
+            ],
+            "ValidatedSessions":[
+                
+            ],
+            "ValidatedOrganisationUserIds":[
+                
             ]
         },
         "InitialPageView":false,
@@ -122,8 +124,9 @@
     },
     "Item2":{
         "Valid":true,
-        "Unauthorised":false,
+        "Unauthenticated":false,
         "NotFound":false,
-        "Message":null
+        "Message":null,
+        "Unauthorised":false
     }
 }

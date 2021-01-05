@@ -22,25 +22,27 @@ namespace Comments.Test.UnitTests
 		    // Arrange
 		    ResetDatabase();
 		    var commentText = Guid.NewGuid().ToString();
-		    var createdByUserId = Guid.NewGuid().ToString();
-
+		    
 		    var locationId = AddLocation("consultations://./consultation/1/document/1/chapter/introduction");
-		    AddComment(locationId, commentText, createdByUserId);
+		    AddComment(locationId, commentText, _userId);
 
 		    locationId = AddLocation("consultations://./consultation/1/document/1");
-		    AddComment(locationId, commentText, createdByUserId);
+		    AddComment(locationId, commentText, _userId);
 
 		    locationId = AddLocation("consultations://./consultation/1/document/2");
-		    AddComment(locationId, commentText, createdByUserId);
+		    AddComment(locationId, commentText, _userId);
 
 			locationId = AddLocation("consultations://./consultation/1");
-		    AddComment(locationId, commentText, createdByUserId);
+		    AddComment(locationId, commentText, _userId);
 
 		    locationId = AddLocation("consultations://./consultation/2");
-		    AddComment(locationId, commentText, createdByUserId);
+		    AddComment(locationId, commentText, _userId);
+
+		    locationId = AddLocation("consultations://./consultation/2");
+		    AddComment(locationId, commentText, "Different user id");
 
 
-			var sourceURIs = new List<string>
+		    var sourceURIs = new List<string>
 		    {
 			    ConsultationsUri.ConvertToConsultationsUri("/1/Review", CommentOn.Consultation)
 		    };
@@ -59,25 +61,24 @@ namespace Comments.Test.UnitTests
 		    // Arrange
 		    ResetDatabase();
 		    var commentText = Guid.NewGuid().ToString();
-		    var createdByUserId = Guid.NewGuid().ToString();
 
 		    var locationId = AddLocation("consultations://./consultation/1/document/1/chapter/introduction");
-		    AddComment(locationId, commentText, createdByUserId);
+		    AddComment(locationId, commentText, _userId);
 
 		    locationId = AddLocation("consultations://./consultation/1/document/1/chapter/overview");
-		    AddComment(locationId, commentText, createdByUserId);
+		    AddComment(locationId, commentText, _userId);
 
 			locationId = AddLocation("consultations://./consultation/1/document/1");
-		    AddComment(locationId, commentText, createdByUserId);
+		    AddComment(locationId, commentText, _userId);
 
 		    locationId = AddLocation("consultations://./consultation/1/document/2");
-		    AddComment(locationId, commentText, createdByUserId);
+		    AddComment(locationId, commentText, _userId);
 
 		    locationId = AddLocation("consultations://./consultation/1");
-		    AddComment(locationId, commentText, createdByUserId);
+		    AddComment(locationId, commentText, _userId);
 
 		    locationId = AddLocation("consultations://./consultation/2");
-		    AddComment(locationId, commentText, createdByUserId);
+		    AddComment(locationId, commentText, _userId);
 
 
 		    var sourceURIs = new List<string>
@@ -328,8 +329,8 @@ namespace Comments.Test.UnitTests
 		    // Arrange
 		    ResetDatabase();
 
-		    var textQuestionTypeId = AddQuestionType("Text", hasBooleanAnswer: false, hasTextAnswer: true);
-		    var booleanQuestionTypeId = AddQuestionType("Boolean", hasBooleanAnswer: true, hasTextAnswer: false);
+		    var textQuestionTypeId = AddQuestionType("Text", hasBooleanAnswer: false, hasTextAnswer: true, questionTypeId: 1);
+		    var booleanQuestionTypeId = AddQuestionType("Boolean", hasBooleanAnswer: true, hasTextAnswer: false, questionTypeId: 2);
 
 			// Act
 			var consultationsContext = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption);

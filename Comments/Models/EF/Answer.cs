@@ -16,8 +16,9 @@ namespace Comments.Models
 		public int StatusId { get; set; }
         public int? OrganisationUserId { get; set; }
         public int? ParentAnswerId { get; set; }
+        public int? OrganisationId { get; set; }
 
-        public OrganisationUser OrganisationUser { get; set; }
+		public OrganisationUser OrganisationUser { get; set; }
         public Answer ParentAnswer { get; set; }
         public Question Question { get; set; }
         public Status Status { get; set; }

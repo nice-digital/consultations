@@ -141,15 +141,17 @@
         "TeamNames":[
             "ConsultationListTestRole"
         ],
-        "IsAuthorised":true,
+        "IsAuthenticated":true,
         "DisplayName":"Jeffrey Goines",
         "UserId":"00000000-0000-0000-0000-000000000000",
         "OrganisationsAssignedAsLead":[
-            {
-                "OrganisationId":1,
-                "OrganisationName":"NICE",
-                "IsLead":true
-            }
+            
+        ],
+        "ValidatedSessions":[
+            
+        ],
+        "ValidatedOrganisationUserIds":[
+            
         ]
     },
     "InitialPageView":false,

@@ -44,6 +44,9 @@ namespace Comments.Migrations
                         .ValueGeneratedOnAdd()
                         .HasDefaultValueSql("(getdate())");
 
+                    b.Property<int?>("OrganisationId")
+                        .HasColumnName("OrganisationID");
+
                     b.Property<int?>("OrganisationUserId")
                         .HasColumnName("OrganisationUserID");
 
@@ -97,6 +100,9 @@ namespace Comments.Migrations
 
                     b.Property<int>("LocationId")
                         .HasColumnName("LocationID");
+
+                    b.Property<int?>("OrganisationId")
+                        .HasColumnName("OrganisationID");
 
                     b.Property<int?>("OrganisationUserId")
                         .HasColumnName("OrganisationUserID");
