@@ -28,7 +28,7 @@ namespace Comments.ViewModels
 			LastModifiedDate = answer.LastModifiedDate;
 			LastModifiedByUserId = answer.LastModifiedByUserId;
 			StatusId = answer.StatusId;
-			if (!(answer.Status is null))
+			if (answer.Status != null)
 				Status = new Status(answer.Status);
 
 			if (question != null)
@@ -36,7 +36,7 @@ namespace Comments.ViewModels
 			else if (answer.Question?.Location != null)
 				SourceURI = answer.Question.Location.SourceURI;
 
-			if (!(answer.OrganisationUser is null))
+			if (answer.OrganisationUser != null)
 				CommenterEmail = answer.OrganisationUser.EmailAddress;
 		}
 

@@ -22,10 +22,10 @@ namespace Comments.ViewModels
             LastModifiedDate = comment.LastModifiedDate;
             LastModifiedByUserId = comment.LastModifiedByUserId;
             CommentText = comment.CommentText;
-	        if (!(comment.Status is null))
+	        if (comment.Status != null)
 		        Status = new Status(comment.Status);
 	        StatusId = comment.StatusId;
-			if(!(comment.OrganisationUser is null))
+			if(comment.OrganisationUser != null)
 				CommenterEmail = comment.OrganisationUser.EmailAddress;
 		}
 
