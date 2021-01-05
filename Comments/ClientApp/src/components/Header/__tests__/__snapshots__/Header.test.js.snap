@@ -11,50 +11,55 @@ exports[`[ClientApp]  Header  should display correctly when consulation has ende
   <div
     className="mb--d"
   >
-    <p>
-      <span
-        className="tag"
-      >
-        Closed for comments
+    <p
+      className="container container-full ml--0"
+    >
+      <span>
+        <span
+          className="tag"
+        >
+          Closed for comments
+        </span>
+         
+        This consultation 
+        ended
+         on 
+        <t
+          ago={false}
+          calendar={false}
+          date="1994-11-05T08:15:30-05:00"
+          decimal={false}
+          element="time"
+          filter={[Function]}
+          format="D MMMM YYYY"
+          fromNow={false}
+          interval={60000}
+          onChange={[Function]}
+          toNow={false}
+          unit={null}
+          unix={false}
+          utc={false}
+        />
+         at
+         
+        <t
+          ago={false}
+          calendar={false}
+          date="1994-11-05T08:15:30-05:00"
+          decimal={false}
+          element="time"
+          filter={[Function]}
+          format="HH:mm"
+          fromNow={false}
+          interval={60000}
+          onChange={[Function]}
+          toNow={false}
+          unit={null}
+          unix={false}
+          utc={false}
+        />
       </span>
-       
-      This consultation 
-      ended
-       on 
-      <t
-        ago={false}
-        calendar={false}
-        date="1994-11-05T08:15:30-05:00"
-        decimal={false}
-        element="time"
-        filter={[Function]}
-        format="D MMMM YYYY"
-        fromNow={false}
-        interval={60000}
-        onChange={[Function]}
-        toNow={false}
-        unit={null}
-        unix={false}
-        utc={false}
-      />
-       at
-       
-      <t
-        ago={false}
-        calendar={false}
-        date="1994-11-05T08:15:30-05:00"
-        decimal={false}
-        element="time"
-        filter={[Function]}
-        format="HH:mm"
-        fromNow={false}
-        interval={60000}
-        onChange={[Function]}
-        toNow={false}
-        unit={null}
-        unix={false}
-        utc={false}
-      />
+        
     </p>
   </div>
   <p>
@@ -74,50 +79,55 @@ exports[`[ClientApp]  Header  should display correctly when consulation hasn't s
   <div
     className="mb--d"
   >
-    <p>
-      <span
-        className="tag"
-      >
-        Not yet open for comments
+    <p
+      className="container container-full ml--0"
+    >
+      <span>
+        <span
+          className="tag"
+        >
+          Not yet open for comments
+        </span>
+         
+        This consultation 
+        starts
+         on 
+        <t
+          ago={false}
+          calendar={false}
+          date=""
+          decimal={false}
+          element="time"
+          filter={[Function]}
+          format="D MMMM YYYY"
+          fromNow={false}
+          interval={60000}
+          onChange={[Function]}
+          toNow={false}
+          unit={null}
+          unix={false}
+          utc={false}
+        />
+         at
+         
+        <t
+          ago={false}
+          calendar={false}
+          date=""
+          decimal={false}
+          element="time"
+          filter={[Function]}
+          format="HH:mm"
+          fromNow={false}
+          interval={60000}
+          onChange={[Function]}
+          toNow={false}
+          unit={null}
+          unix={false}
+          utc={false}
+        />
       </span>
-       
-      This consultation 
-      starts
-       on 
-      <t
-        ago={false}
-        calendar={false}
-        date=""
-        decimal={false}
-        element="time"
-        filter={[Function]}
-        format="D MMMM YYYY"
-        fromNow={false}
-        interval={60000}
-        onChange={[Function]}
-        toNow={false}
-        unit={null}
-        unix={false}
-        utc={false}
-      />
-       at
-       
-      <t
-        ago={false}
-        calendar={false}
-        date=""
-        decimal={false}
-        element="time"
-        filter={[Function]}
-        format="HH:mm"
-        fromNow={false}
-        interval={60000}
-        onChange={[Function]}
-        toNow={false}
-        unit={null}
-        unix={false}
-        utc={false}
-      />
+        
     </p>
   </div>
   <p>
@@ -140,30 +150,35 @@ exports[`[ClientApp]  Header  should display correctly when consulation is in pr
   <div
     className="mb--d"
   >
-    <p>
-      <span
-        className="tag tag--open"
-      >
-        Open for comments
+    <p
+      className="container container-full ml--0"
+    >
+      <span>
+        <span
+          className="tag tag--open"
+        >
+          Open for comments
+        </span>
+         Open until
+         
+        <t
+          ago={false}
+          calendar={false}
+          date="1994-11-05T08:15:30-05:00"
+          decimal={false}
+          element="time"
+          filter={[Function]}
+          format="D MMMM YYYY"
+          fromNow={false}
+          interval={60000}
+          onChange={[Function]}
+          toNow={false}
+          unit={null}
+          unix={false}
+          utc={false}
+        />
       </span>
-       Open until
-       
-      <t
-        ago={false}
-        calendar={false}
-        date="1994-11-05T08:15:30-05:00"
-        decimal={false}
-        element="time"
-        filter={[Function]}
-        format="D MMMM YYYY"
-        fromNow={false}
-        interval={60000}
-        onChange={[Function]}
-        toNow={false}
-        unit={null}
-        unix={false}
-        utc={false}
-      />
+        
     </p>
   </div>
   <p>
