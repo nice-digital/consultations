@@ -110,7 +110,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 								Comment on {commentOn}, {quote}
 							</label>
 							{commenterEmail &&
-							<p className="CommentBox__commentBy">Comment by: {commenterEmail}</p>
+							<p className="CommentBox__commentBy mb--0">Comment by: {commenterEmail}</p>
 							}
 							{unsavedChanges &&
 							<p className="CommentBox__validationMessage">You have unsaved changes</p>

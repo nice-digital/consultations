@@ -88,10 +88,10 @@ export class Answer extends Component<PropsType, StateType> {
 
 			<Fragment>
 				<section role="form">
-					<form onSubmit={e => this.props.saveAnswerHandler(e, answer, this.props.questionId)} className="mb--0">
+					<form onSubmit={e => this.props.saveAnswerHandler(e, answer, this.props.questionId)} className="mb--0 mt--e">
 
 						{commenterEmail &&
-							<p className="CommentBox__commentBy">Answer by: {commenterEmail}</p>
+							<p className="CommentBox__commentBy mb--0">Answer by: {commenterEmail}</p>
 						}
 
 						{this.props.questionType.type === "YesNo" &&
