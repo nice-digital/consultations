@@ -315,7 +315,8 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 									 signInURL={contextValue.signInURL}
 									 registerURL={contextValue.registerURL}
 									 signInText="to view the document preview"
-									 allowOrganisationCodeLogin={false} />
+									 allowOrganisationCodeLogin={false}
+									 orgFieldName="documentpreview" />
 						: 
 						<div className="container">
 							<div className="grid">
