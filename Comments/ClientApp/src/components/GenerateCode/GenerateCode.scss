@@ -2,6 +2,7 @@
   &__row {
     display: flex;
     align-items: center;
+    padding: (1rem * ($spacing-small / 16));
   }
 
   &__name, &__generate {
@@ -16,13 +17,18 @@
   }
 }
 
-.tag {
-  &.tag--copied {
+.btn {
+  &.btn--copied {
     background-color: #e6faff;
     color: #000;
     padding: 0 (1rem * ($spacing-medium / 16));
     margin-bottom: 0;
-    cursor: pointer;
+    border: none;
+
+    &:focus, &:hover {
+      background-color: #e6faff;
+      color: #000;
+    }
   }
 }
 
