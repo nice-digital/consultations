@@ -196,7 +196,7 @@ namespace Comments.Services
 			
 			//the above has been temporarily commented out until the m2m token caching branch in idam has been merged.
 
-			var organisations = new List<Organisation> {new Organisation(organisationIds.First(), "Not NICE", false)};
+			var organisations = organisationIds.Distinct().Select(orgId => new Organisation(orgId, "Not NICE", false));
 
 			return organisations.ToDictionary(k => k.OrganisationId, v => v.OrganisationName);
 		}
