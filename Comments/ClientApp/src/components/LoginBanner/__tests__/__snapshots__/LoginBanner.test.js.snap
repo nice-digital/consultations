@@ -10,6 +10,7 @@ exports[`[ClientApp]  LoginBanner Component should match snapshot. no querystrin
   >
     <div
       className="LoginBanner"
+      role="form"
     >
       <a
         href="/signin-url"

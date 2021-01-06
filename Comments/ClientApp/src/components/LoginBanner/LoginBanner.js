@@ -16,6 +16,7 @@ type PropsType = {
 	match: PropTypes.object.isRequired,
 	location: PropTypes.object.isRequired,
 	allowOrganisationCodeLogin: boolean,
+	orgFieldName: string, //the organisation text input needs a unique name, however the login banner will be on the page twice. so passing in a unique name
 }
 
 type OrganisationCode = {
@@ -183,13 +184,13 @@ export class LoginBanner extends Component<PropsType, StateType> {
 		return (
 			<div className="panel panel-white mt--0 mb--0 sign-in-banner" data-qa-sel="sign-in-banner">
 				<div className="container">
-					<div className="LoginBanner">
+					<div className="LoginBanner" role="form">
 						{this.props.allowOrganisationCodeLogin &&
 							<Fragment>
 								<p>To comment as part of an organisation, please enter your organisation code:</p>
 								<div className={this.state.hasError ? "input input--error" : "input"}>
 									<DebounceInput
-										minLength={8}
+										minLength={5}
 										debounceTimeout={400}
 										type="text"
 										onChange={e => this.handleOrganisationCodeChange(e.target.value)}
@@ -200,6 +201,7 @@ export class LoginBanner extends Component<PropsType, StateType> {
 										error={this.state.hasError}
 										errorMessage={this.state.errorMessage}
 										label="Organisation code"
+										name={"orgCode-" + this.props.orgFieldName}
 									/>
 								</div>
 								{this.state.showAuthorisationOrganisation &&
