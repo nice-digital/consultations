@@ -270,8 +270,8 @@ namespace Comments.Test.UnitTests
 			var commentService = new CommentService(consultationContext, userService, _consultationService, _fakeHttpContextAccessor);
 
 			var locationId = AddLocation(sourceURI, _context);
-			var organisationAuthorisationId = AddOrganisationAuthorisationWithLocation(organisationId, consultationId, _context, userId);
-			var organisationUserId = AddOrganisationUser(_context, organisationAuthorisationId, Guid.NewGuid(), null);
+			var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, _context, userId);
+			var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(_context, organisationAuthorisationId, Guid.NewGuid(), null);
 			AddComment(locationId, "Comment text", userId, (int)StatusName.Draft, _context, organisationUserId);
 
 			//Act
@@ -301,8 +301,8 @@ namespace Comments.Test.UnitTests
 			var commentService = new CommentService(consultationContext, userService, _consultationService, _fakeHttpContextAccessor);
 
 			var locationId = AddLocation(sourceURI, _context);
-			var organisationAuthorisationId = AddOrganisationAuthorisationWithLocation(organisationId, consultationId, _context, userId);
-			var organisationUserId = AddOrganisationUser(_context, organisationAuthorisationId, Guid.NewGuid(), null);
+			var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, _context, userId);
+			var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(_context, organisationAuthorisationId, Guid.NewGuid(), null);
 			var questionId = AddQuestion(locationId, questionTypeId, "Question Label");
 			AddAnswer(questionId, userId, "Answer Label", (int)StatusName.Draft, _context, organisationUserId);
 

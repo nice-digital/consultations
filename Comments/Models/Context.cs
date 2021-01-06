@@ -275,9 +275,12 @@ namespace Comments.Models
 
 		    var status = GetStatus(StatusName.Draft);
 
-			foreach (var comment in commentsToDuplicate)
+		    var organisationUserId = (int)commentsToDuplicate.First().OrganisationUserId;
+		    var organisationId = GetOrganisationIdByOrganisationUserId(organisationUserId);
+
+		    foreach (var comment in commentsToDuplicate)
 			{
-				var commentToSave = new Models.Comment(comment.LocationId, null, comment.CommentText, comment.LastModifiedByUserId, comment.Location,status.StatusId, status, comment.OrganisationUserId, comment.CommentId);
+				var commentToSave = new Models.Comment(comment.LocationId, null, comment.CommentText, comment.LastModifiedByUserId, comment.Location,status.StatusId, status, comment.OrganisationUserId, comment.CommentId, organisationId);
 				Comment.Add(commentToSave);
 			}
 	    }
@@ -288,9 +291,12 @@ namespace Comments.Models
 
 			var status = GetStatus(StatusName.Draft);
 
+			var organisationUserId = (int)answersToDuplicate.First().OrganisationUserId;
+			var organisationId = GetOrganisationIdByOrganisationUserId(organisationUserId);
+
 			foreach (var answer in answersToDuplicate)
 			{
-				var answerToSave = new Models.Answer(answer.QuestionId, null, answer.AnswerText, answer.AnswerBoolean, answer.Question, status.StatusId, status, answer.OrganisationUserId, answer.AnswerId);
+				var answerToSave = new Models.Answer(answer.QuestionId, null, answer.AnswerText, answer.AnswerBoolean, answer.Question, status.StatusId, status, answer.OrganisationUserId, answer.AnswerId, organisationId);
 				Answer.Add(answerToSave);
 			}
 		}
@@ -891,7 +897,6 @@ namespace Comments.Models
 					.Where(ou => sessionIds.Contains(ou.AuthorisationSession));
 		}
 
-
 		public bool AreCommentsForThisOrganisation(IEnumerable<int> commentIds, int organisationId)
 		{
 			var comments = Comment
@@ -916,5 +921,14 @@ namespace Comments.Models
 				.Any(c => c.OrganisationUser.OrganisationAuthorisation.OrganisationId.Equals(organisationId));
 
 		}
-    }
+		public int GetOrganisationIdByOrganisationUserId(int organisationUserId)
+		{
+			var orgUser = OrganisationUser
+				.Include(ou => ou.OrganisationAuthorisation)
+				.Where(ou => ou.OrganisationUserId.Equals(organisationUserId))
+				.Single();
+			
+			return orgUser.OrganisationAuthorisation.OrganisationId;
+		}
+	}
 }

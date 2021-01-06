@@ -4,6 +4,7 @@ using Comments.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 using NICE.Feeds;
+using Submission = Comments.Models.Submission;
 
 namespace Comments.Services
 {
@@ -67,8 +68,6 @@ namespace Comments.Services
 
 		public (int rowsUpdated, Validate validate) SubmitToLead(ViewModels.Submission submission)
 		{
-			// TODO: Validate users cookie
-
 			var anySourceURI = submission.SourceURIs.FirstOrDefault();
 			if (anySourceURI == null)
 				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "Could not find SourceURI"));
@@ -82,12 +81,10 @@ namespace Comments.Services
 			if (hasSubmitted != null)
 				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "User has already submitted."));
 
-			// TODO: Ask Zanele do we need to save to submission table
-
 			var submittedStatus = _context.GetStatus(StatusName.Submitted);
 
-			UpdateCommentsModelAndDuplicate(submission.Comments, submittedStatus);
-			UpdateAnswersModelAndDuplicate(submission.Answers, submittedStatus);
+			if (submission.Comments.Count > 0) UpdateCommentsModelAndDuplicate(submission.Comments, submittedStatus);
+			if (submission.Answers.Count > 0) UpdateAnswersModelAndDuplicate(submission.Answers, submittedStatus);
 
 			return (rowsUpdated: _context.SaveChanges(), validate: null);
 		}
