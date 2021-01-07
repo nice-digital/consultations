@@ -486,7 +486,7 @@ export class Download extends Component<PropsType, StateType> {
 																basename={this.props.basename}
 																allowGenerateOrganisationCode={enableOrganisationalCommentingFeature}
 																{...item}
-															/>
+															/>,
 														)}
 													</ul>
 												) : (<p>No consultations found matching supplied filters.</p>)}

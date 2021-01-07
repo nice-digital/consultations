@@ -4,7 +4,6 @@ import React, { Component } from "react";
 import { load } from "../../data/loader";
 
 import { Button } from "@nice-digital/nds-button";
-import { Tag } from "@nice-digital/nds-tag";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
 type GenerateCodeForOrgProps = {
