@@ -5,13 +5,12 @@ using Comments.ViewModels;
 using NICE.Feeds;
 using NICE.Identity.Authentication.Sdk.API;
 using NICE.Identity.Authentication.Sdk.Authorisation;
-using NICE.Identity.Authentication.Sdk.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Comment = Comments.Models.Comment;
+using NICE.Identity.Authentication.Sdk.Domain;
 
 namespace Comments.Services
 {
@@ -21,6 +20,7 @@ namespace Comments.Services
 		Task<OrganisationCode> CheckValidCodeForConsultation(string collationCode, int consultationId);
 		(Guid sessionId, DateTime expirationDate) CreateOrganisationUserSession(int organisationAuthorisationId, string collationCode);
 		Task<(bool valid, string organisationName)> CheckOrganisationUserSession(int consultationId, Guid sessionId);
+		Task<Dictionary<int, string>> GetOrganisationNames(IEnumerable<int> organisationIds);
 	}
 
     public class OrganisationService : IOrganisationService
@@ -178,20 +178,27 @@ namespace Comments.Services
 
 		private async Task<string> GetOrganisationName(int organisationId)
 		{
+			var organisationIdAndNames = await GetOrganisationNames(new List<int> {organisationId});
+
+			if (!organisationIdAndNames.ContainsKey(organisationId))
+				throw new ApplicationException("Organisation name could not be retrieved. Please contact app support."); //might occur if the org has been deleted from idam and CC hasn't been updated.
+
+			return organisationIdAndNames[organisationId];
+
+		}
+
+		public async Task<Dictionary<int, string>> GetOrganisationNames(IEnumerable<int> organisationIds)
+		{
 			//var machineToMachineAccessToken = await _apiTokenService.GetAccessToken(AppSettings.AuthenticationConfig.GetAuthConfiguration());
 			//var httpClientWithPooledMessageHandler = _httpClientFactory.CreateClient();
 
-			//var organisations = await _apiService.GetOrganisations(new List<int> { organisationId }, machineToMachineAccessToken, httpClientWithPooledMessageHandler);
-
+			//var organisations = await _apiService.GetOrganisations(organisationIds.Distinct(), machineToMachineAccessToken, httpClientWithPooledMessageHandler);
+			
 			//the above has been temporarily commented out until the m2m token caching branch in idam has been merged.
 
-			var organisations = new List<Organisation> {new Organisation(organisationId, "Not NICE", false)};
+			var organisations = organisationIds.Distinct().Select(orgId => new Organisation(orgId, "Not NICE", false));
 
-			var organisation = organisations.FirstOrDefault();
-			if (organisation == null)
-				throw new ApplicationException("Organisation could not be found. Contact NICE nice@nice.org.uk to report the issue."); //might occur if the org has been deleted from idam and CC hasn't been updated.
-
-			return organisation.OrganisationName;
+			return organisations.ToDictionary(k => k.OrganisationId, v => v.OrganisationName);
 		}
 	}
 }

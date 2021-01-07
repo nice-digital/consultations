@@ -99,14 +99,26 @@ export class GenerateCodeForOrg extends Component<GenerateCodeForOrgProps, Gener
 				</div>
 				<div className="organisation-codes__generate pl--b">
 					{showGenerateButton && (
-						<Button onClick={this.generateCode} aria-live="polite" disabled={isButtonDisabled}>{isButtonDisabled ? "Loading" : "Generate"}</Button>
+						<Button
+							onClick={this.generateCode}
+							aria-live="polite"
+							disabled={isButtonDisabled}
+							data-qa-sel="generate-code-button">
+							{isButtonDisabled ? "Loading" : "Generate"}
+						</Button>
 					)}
 
 					<span>{generatedCollationCode}</span>
 
 					{!showGenerateButton && (
 						<CopyToClipboard text={generatedCollationCode} onCopy={this.showCopiedLabel}>
-          					<Tag role="button" tabIndex="0" className="tag tag--copied" aria-live="polite">{hasBeenCopied ? "Copied" : "Copy code"}</Tag>
+							<button
+								type="button"
+								className="btn btn--copied"
+								aria-live="polite"
+								data-qa-sel="copy-code-button">
+								{hasBeenCopied ? "Copied" : "Copy code"}
+							</button>
         				</CopyToClipboard>
 					)}
 				</div>

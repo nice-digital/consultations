@@ -462,7 +462,7 @@ export class Document extends Component<PropsType, StateType> {
 									<strong>The content on this page is not current guidance and is only for the purposes of the consultation process.</strong>
 								</div>
 							}
-							<main role="main">
+							<main>
 								<div className="page-header">
 									<Header
 										title={currentDocumentTitle}

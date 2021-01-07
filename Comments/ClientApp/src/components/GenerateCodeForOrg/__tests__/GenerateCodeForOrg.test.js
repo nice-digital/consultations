@@ -29,14 +29,14 @@ describe("GenerateCodeForOrg", () => {
 
 	it("should show the copy button when a code has been generated", () => {
 		const wrapper = shallow(<GenerateCodeForOrg {...fakePropsCode} />);
-		expect(wrapper.find(Tag).render().text()).toEqual("Copy code");
+		expect(wrapper.find('button').text()).toEqual("Copy code");
 	});
 
 	it("should show copied text after the code has been copied", () => {
 		const wrapper = mount(<GenerateCodeForOrg {...fakePropsCode} />);
 		const instance = wrapper.instance();
 		instance.showCopiedLabel();
-		expect(wrapper.find(Tag).render().text()).toEqual("Copied");
+		expect(wrapper.find('button').text()).toEqual("Copied");
 	});
 
 });

@@ -141,9 +141,7 @@ Array [
             </li>
           </ol>
         </nav>
-        <main
-          role="main"
-        >
+        <main>
           <div
             className="page-header"
           >
