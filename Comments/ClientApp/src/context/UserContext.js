@@ -181,10 +181,19 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 			}
 		});
 	}
+	
+	loadContext = () => {
+		this.loadUser(this.props.location.pathname);
+	}
 
-	// fire when route changes
 	componentDidMount() {
-		this.loadUser(this.props.location.pathname); //this is currently only needed as the sign in url isn't right on SSR. TODO: fix SSR.
+		this.loadContext(); //this is needed here as the sign in url isn't right on SSR. TODO: fix SSR.
+	}
+
+	componentDidUpdate(prevProps) {
+		if (this.props.location !== prevProps.location) { //fired when the route changes, as you might be authenticated for some routes, but not others (e.g. org commenting cookie)
+			this.loadContext(); 
+		}
 	}
 
 	render() {

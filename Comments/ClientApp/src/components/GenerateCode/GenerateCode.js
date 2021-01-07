@@ -45,16 +45,19 @@ export class GenerateCode extends Component<GenerateCodeProps, GenerateCodeState
 
 		return (
 			<div>
-				<Button variant="inverse" id={`share-organisation-${consultationId}`} onClick={this.handleCodeButtonClick} aria-expanded={showCodeGenerators} aria-controls={`organisation-codes-${consultationId}`}>
+				<Button
+					variant="inverse"
+					id={`share-organisation-${consultationId}`}
+					onClick={this.handleCodeButtonClick}
+					aria-expanded={showCodeGenerators}
+					aria-controls={`organisation-codes-${consultationId}`}
+					data-qa-sel="share-with-org-button">
 					Share with organisation <span className="arrow-icon"></span>
 				</Button>
 
 				{showCodeGenerators && (
 					<div className="panel organisation-codes mv--b" id={`organisation-codes-${consultationId}`}>
-						<h2 className="h5">Generate code</h2>
-						{organisationCodes.length > 1 && (
-							<p>Select an organisation</p>
-						)}
+						<h2 className="h5">Generate a code to share the consultation</h2>
 						{organisationCodes.map((item, index) =>
 							<GenerateCodeForOrg key={index} {...item} consultationId={consultationId} />
 						)}

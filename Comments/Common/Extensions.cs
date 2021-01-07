@@ -126,6 +126,11 @@ namespace Comments.Common
 		    return (datetime.ToUniversalTime().Ticks - javascriptEpochTicks) / 10000;
 	    }
 
+	    public static IDictionary<TKey, TValue> Merge<TKey, TValue>(this IDictionary<TKey, TValue> dictA, IDictionary<TKey, TValue> dictB) where TValue : class
+	    {
+		    return dictA.Keys.Union(dictB.Keys).ToDictionary(k => k, k => dictA.ContainsKey(k) ? dictA[k] : dictB[k]);
+	    }
+
 	    public static Dictionary<int, Guid> GetSessionCookies(this IRequestCookieCollection requestCookies)
 	    {
 		    var sessions = new Dictionary<int, Guid>();
