@@ -113,20 +113,20 @@ namespace Comments.Controllers.Api
 
 		/// <summary>
 		/// This method is called by the UserContext component to validate that an organisation user's cookie with a session id in it is valid for this consultation.
+		///
+		/// This doesn't use the OrganisationCookieAuthenticationHandler since it gets called
 		/// </summary>
 		/// <param name="consultationId"></param>
 		/// <param name="session"></param>
 		/// <returns></returns>
+		[Authorize(AuthenticationSchemes = OrganisationCookieAuthenticationOptions.DefaultScheme)]
 		[HttpGet("CheckOrganisationUserSession")]
-		public async Task<IActionResult> CheckOrganisationUserSession(int consultationId, Session session)
+		public async Task<IActionResult> CheckOrganisationUserSession(int consultationId)
 		{
 			if (consultationId < 1)
 				throw new ArgumentException("ConsultationId id must be a positive integer", nameof(consultationId));
 			
-			if (!session.SessionCookies.ContainsKey(consultationId))
-				throw new ArgumentException($"There isn't a session cookie for consultation: {consultationId}", nameof(session));
-
-			var validityAndOrganisationName = await _organisationService.CheckOrganisationUserSession(consultationId, session.SessionCookies[consultationId]);
+			var validityAndOrganisationName = await _organisationService.CheckOrganisationUserSession(consultationId);//, session.SessionCookies[consultationId]);
 
 			return Ok(new { validityAndOrganisationName.valid, validityAndOrganisationName.organisationName });
 		}

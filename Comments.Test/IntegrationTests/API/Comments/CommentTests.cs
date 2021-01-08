@@ -5,14 +5,17 @@ using System.Net.Http;
 using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
+using Comments.Common;
 using Comments.Models;
 using Comments.Services;
 using Comments.Test.Infrastructure;
 using Comments.ViewModels;
+using Microsoft.AspNetCore.TestHost;
 using Newtonsoft.Json;
 using Shouldly;
 using Xunit;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Net.Http.Headers;
 
 namespace Comments.Test.IntegrationTests.API.Comments
 {
@@ -191,13 +194,10 @@ namespace Comments.Test.IntegrationTests.API.Comments
             //Act
             var response = await _client.PutAsync($"consultations/api/Comment/{commentId}", content);
             response.EnsureSuccessStatusCode();
-            var responseString = await response.Content.ReadAsStringAsync();
             var result = commentService.GetComment(commentId);
 
             //Assert
             result.comment.CommentText.ShouldBe(updatedCommentText);
         }
-
-	    
-	}
+    }
 }

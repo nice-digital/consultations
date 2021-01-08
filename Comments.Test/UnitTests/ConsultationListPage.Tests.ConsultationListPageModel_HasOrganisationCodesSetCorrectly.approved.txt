@@ -19,13 +19,7 @@
             "IsUpcoming":true,
             "Show":true,
             "OrganisationCodes":[
-                {
-                    "OrganisationAuthorisationId":0,
-                    "OrganisationId":1,
-                    "OrganisationName":"NICE",
-                    "CanGenerateCollationCode":true,
-                    "CollationCode":null
-                }
+                
             ],
             "ShowShareWithOrganisationButton":false
         },
@@ -50,7 +44,7 @@
                 {
                     "OrganisationAuthorisationId":1,
                     "OrganisationId":1,
-                    "OrganisationName":"NICE",
+                    "OrganisationName":"Sherman Oaks",
                     "CanGenerateCollationCode":false,
                     "CollationCode":"FAKE CODE"
                 }
@@ -75,13 +69,7 @@
             "IsUpcoming":false,
             "Show":true,
             "OrganisationCodes":[
-                {
-                    "OrganisationAuthorisationId":0,
-                    "OrganisationId":1,
-                    "OrganisationName":"NICE",
-                    "CanGenerateCollationCode":true,
-                    "CollationCode":null
-                }
+                
             ],
             "ShowShareWithOrganisationButton":false
         }
@@ -145,15 +133,17 @@
         "TeamNames":[
             
         ],
-        "IsAuthorised":true,
+        "IsAuthenticated":true,
         "DisplayName":"Benjamin Button",
         "UserId":"scrubbed by ScrubUserId",
         "OrganisationsAssignedAsLead":[
-            {
-                "OrganisationId":1,
-                "OrganisationName":"NICE",
-                "IsLead":true
-            }
+            
+        ],
+        "ValidatedSessions":[
+            
+        ],
+        "ValidatedOrganisationUserIds":[
+            
         ]
     },
     "InitialPageView":false,

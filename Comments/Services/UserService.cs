@@ -38,7 +38,8 @@ namespace Comments.Services
         {
             var contextUser = _httpContextAccessor.HttpContext?.User;
 
-			return new User(contextUser?.Identity.IsAuthenticated ?? false, contextUser?.DisplayName(), contextUser?.NameIdentifier(), contextUser?.OrganisationsAssignedAsLead());
+			return new User(contextUser?.Identity.IsAuthenticated ?? false, contextUser?.DisplayName(), contextUser?.NameIdentifier(),
+				contextUser?.OrganisationsAssignedAsLead(), contextUser?.ValidatedSessions());
         }
 
         public (string userId, string displayName, string emailAddress) GetCurrentUserDetails()
@@ -94,7 +95,7 @@ namespace Comments.Services
 		    }
 
 		    var currentUser = user ?? GetCurrentUser();
-		    if (!currentUser.IsAuthorised)
+		    if (!currentUser.IsAuthenticated)
 		    {
 			    return new Validate(false, true, false, "User is not authorised");
 		    }

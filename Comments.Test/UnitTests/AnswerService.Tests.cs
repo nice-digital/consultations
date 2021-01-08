@@ -70,7 +70,7 @@ namespace Comments.Test.UnitTests
             var viewModel = new AnswerService(new ConsultationsContext(_options, userService, _fakeEncryption), userService).GetAnswer(1);
 
             //Assert
-            viewModel.validate.Unauthorised.ShouldBeTrue();
+            viewModel.validate.Unauthenticated.ShouldBeTrue();
         }
 
         [Fact]
@@ -201,7 +201,7 @@ namespace Comments.Test.UnitTests
             var viewModel = new AnswerService(new ConsultationsContext(_options, _fakeUserService, _fakeEncryption), FakeUserService.Get(isAuthenticated: false)).GetAnswer(1);
 
             //Assert
-            viewModel.validate.Unauthorised.ShouldBeTrue();
+            viewModel.validate.Unauthenticated.ShouldBeTrue();
             viewModel.answer.ShouldBeNull();
         }
 

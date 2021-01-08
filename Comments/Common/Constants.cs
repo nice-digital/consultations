@@ -1,6 +1,6 @@
 namespace Comments.Common
 {
-    public static class Constants
+	public static class Constants
     {
         public const string ConsultationsBasePath = "/consultations";
         public const string ConsultationAPIBasePath = ConsultationsBasePath + "/api/";
@@ -48,7 +48,12 @@ namespace Comments.Common
 			/// </summary>
 			public const string RegExSpacesRemoved = @"\d{12}";
 	    }
-
+		
+	    public static class OrgansationAuthentication
+	    {
+		    public const string Issuer = "ConsultationsIssuer";
+		    public const string ValidatedSessionsClaim = "http://www.nice.org.uk/consultations/claims/validated-sessions";
+		}
 
 	    /// <summary>
 	    /// The values of the string must match the name of the features in the FeatureManagement section of appsettings.json / secrets.json.
@@ -57,5 +62,7 @@ namespace Comments.Common
 	    {
 		    public const string OrganisationalCommenting = "OrganisationalCommenting";
 	    }
+
+
     }
 }
