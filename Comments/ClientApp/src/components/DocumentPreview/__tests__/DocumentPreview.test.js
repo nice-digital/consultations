@@ -40,10 +40,10 @@ describe("[ClientApp] ", () => {
 			staticContext: {
 				preload: {
 					data:{
-						isAuthorised: true
-					}
-				}
-			}
+						isAuthorised: true,
+					},
+				},
+			},
 		};
 
 		it("should render the loading message", () => {
@@ -59,7 +59,7 @@ describe("[ClientApp] ", () => {
 			const wrapper = mount(
 				<MemoryRouter>
 					<DocumentPreview {...fakeProps} />
-				</MemoryRouter>
+				</MemoryRouter>,
 			);
 
 			let documentsPromise = new Promise(resolve => {
@@ -83,7 +83,7 @@ describe("[ClientApp] ", () => {
 			let chapterPromise = new Promise(resolve => {
 				mock
 					.onGet(
-						"/consultations/api/PreviewChapter?consultationId=113&documentId=1&chapterSlug=draftappendicesa-tcleandocx&reference=GID-NG10186"
+						"/consultations/api/PreviewChapter?consultationId=113&documentId=1&chapterSlug=draftappendicesa-tcleandocx&reference=GID-NG10186",
 					)
 					.reply(() => {
 						resolve();
@@ -102,7 +102,7 @@ describe("[ClientApp] ", () => {
 					toJson(wrapper, {
 						noKey: true,
 						mode: "deep",
-					})
+					}),
 				).toMatchSnapshot();
 			});
 		});

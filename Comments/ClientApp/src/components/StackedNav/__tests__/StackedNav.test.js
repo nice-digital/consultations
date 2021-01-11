@@ -41,7 +41,7 @@ describe("[ClientApp] ", () => {
 			wrapper = mount(
 				<MemoryRouter>
 					<StackedNav {...props} />
-				</MemoryRouter>
+				</MemoryRouter>,
 			);
 		});
 

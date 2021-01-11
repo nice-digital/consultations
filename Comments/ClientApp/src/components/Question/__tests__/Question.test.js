@@ -27,23 +27,23 @@ describe("[ClientApp] ", () => {
 
 		it("should match snapshot with answer", () => {
 			const wrapper = mount(
-				<Question {...fakePropsWithAnswer} />					
+				<Question {...fakePropsWithAnswer} />,					
 			);
 
 			expect(toJson(wrapper, {
 				noKey: true,
-				mode: "deep"
+				mode: "deep",
 			})).toMatchSnapshot();			
 		});
 
 		it("should match snapshot without answer", () => {
 			const wrapper = mount(
-				<Question {...fakePropsWithoutAnswer} />					
+				<Question {...fakePropsWithoutAnswer} />,					
 			);
 
 			expect(toJson(wrapper, {
 				noKey: true,
-				mode: "deep"
+				mode: "deep",
 			})).toMatchSnapshot();			
 		});
 	});

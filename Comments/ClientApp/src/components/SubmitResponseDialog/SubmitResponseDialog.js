@@ -28,7 +28,6 @@ export class SubmitResponseDialog extends PureComponent {
 		return organisationIsValid && tobaccoIsValid && organisationExpressionOfInterestIsValid;
 	};
 
-
 	submitConsultation = () => {
 		if (this.props.validToSubmit && this.mandatoryQuestionsAreValid() && this.props.unsavedIds.length === 0) {
 			this.props.submitConsultation();
@@ -166,7 +165,6 @@ export class SubmitResponseDialog extends PureComponent {
 					<li>direct or indirect links</li>
 					<li>receiving funding from the tobacco industry.</li>
 				</ul>
-
 
 				<div role="radiogroup"
 						 aria-label="Do you or the organisation you represent have any links with the tobacco industry?">

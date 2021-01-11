@@ -111,7 +111,7 @@ export class Download extends Component<PropsType, StateType> {
 			keywordToFilterBy: null,
 			pageNumber: pageNumber,
 			itemsPerPage: itemsPerPage,
-			enableOrganisationalCommentingFeature
+			enableOrganisationalCommentingFeature,
 		};
 
 		if (isAuthorised) {
@@ -120,7 +120,7 @@ export class Download extends Component<PropsType, StateType> {
 				"consultationList",
 				[],
 				Object.assign({ relativeURL: this.props.match.url }, querystringObject, {initialPageView: !this.state.hasInitialData}),
-				preloadedData
+				preloadedData,
 			);
 
 			if (preloadedConsultations) {
@@ -145,7 +145,7 @@ export class Download extends Component<PropsType, StateType> {
 					keywordToFilterBy: null,
 					pageNumber: pageNumber,
 					itemsPerPage: itemsPerPage,
-					enableOrganisationalCommentingFeature
+					enableOrganisationalCommentingFeature,
 				};
 			}
 		}
@@ -395,7 +395,7 @@ export class Download extends Component<PropsType, StateType> {
 			isAdminUser,
 			pageNumber,
 			itemsPerPage,
-			enableOrganisationalCommentingFeature
+			enableOrganisationalCommentingFeature,
 		} = this.state;
 
 		const {
@@ -486,7 +486,7 @@ export class Download extends Component<PropsType, StateType> {
 																basename={this.props.basename}
 																allowGenerateOrganisationCode={enableOrganisationalCommentingFeature}
 																{...item}
-															/>
+															/>,
 														)}
 													</ul>
 												) : (<p>No consultations found matching supplied filters.</p>)}

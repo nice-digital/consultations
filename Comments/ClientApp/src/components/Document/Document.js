@@ -19,7 +19,7 @@ import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
 import { Header } from "../Header/Header";
 import { Tutorial } from "../Tutorial/Tutorial";
 import { canUseDOM } from "../../helpers/utils";
-import { Alert } from '@nice-digital/nds-alert';
+import { Alert } from "@nice-digital/nds-alert";
 
 type PropsType = {
 	staticContext: {
@@ -120,7 +120,6 @@ export class Document extends Component<PropsType, StateType> {
 					preloadedConsultation.consultationState.consultationIsOpen &&
 					!preloadedConsultation.consultationState.userHasSubmitted;
 
-
 				if (preloadedChapter) {
 					preloadedChapter = this.addChapterDetailsToSections(preloadedChapter);
 				}
@@ -167,7 +166,7 @@ export class Document extends Component<PropsType, StateType> {
 						message: "chapterData " + err,
 					},
 				});
-			}
+			},
 			);
 
 		documentsData = load("documents", undefined, [], {consultationId})
@@ -299,7 +298,7 @@ export class Document extends Component<PropsType, StateType> {
 		chapterSlug: string,
 		consultationId: number,
 		documents: any,
-		title: string
+		title: string,
 	) => {
 		if (!documentId) return null;
 		const isCurrentDocument = d => d.documentId === parseInt(documentId, 0);
@@ -325,7 +324,7 @@ export class Document extends Component<PropsType, StateType> {
 		title: string,
 		documents: DocumentsType,
 		currentDocumentFromRoute: number,
-		currentConsultationFromRoute: number
+		currentConsultationFromRoute: number,
 	) => {
 		if (!documents) return null;
 
@@ -434,7 +433,7 @@ export class Document extends Component<PropsType, StateType> {
 			"Supporting documents",
 			documentsData,
 			documentId,
-			consultationId
+			consultationId,
 		);
 
 		return (
@@ -476,7 +475,7 @@ export class Document extends Component<PropsType, StateType> {
 												<p>You are commenting on behalf of {contextValue.organisationName}.</p>
 												<p>When you submit your response it will be submitted to the organisational lead at {contextValue.organisationName}.</p>
 											</Alert>
-										: /* if !contextValue.isOrganisationCommenter... */ null}
+											: /* if !contextValue.isOrganisationCommenter... */ null}
 									</UserContext.Consumer>
 									{this.state.allowComments &&
 									<button
@@ -505,7 +504,6 @@ export class Document extends Component<PropsType, StateType> {
 									}
 								</div>
 
-
 								<button
 									className="screenreader-button"
 									onClick={() => {
@@ -524,7 +522,7 @@ export class Document extends Component<PropsType, StateType> {
 												this.props.match.params.chapterSlug,
 												consultationId,
 												documentsData,
-												"Chapters in this document"
+												"Chapters in this document",
 											)}/>
 										<StackedNav
 											links={this.getDocumentLinks(
@@ -532,7 +530,7 @@ export class Document extends Component<PropsType, StateType> {
 												"Other consultation documents you can comment on",
 												documentsData,
 												documentId,
-												consultationId
+												consultationId,
 											)}/>
 										{supportingDocs && supportingDocs.links && supportingDocs.links.length !== 0 ?
 											<StackedNav links={supportingDocs}/>

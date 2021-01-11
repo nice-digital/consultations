@@ -4,8 +4,7 @@ import React, { Component } from "react";
 import { load } from "../../data/loader";
 
 import { Button } from "@nice-digital/nds-button";
-import { Tag } from "@nice-digital/nds-tag";
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 type GenerateCodeForOrgProps = {
 	organisationAuthorisationId: number,
@@ -39,35 +38,35 @@ export class GenerateCodeForOrg extends Component<GenerateCodeForOrgProps, Gener
 			error: {
 				hasError: false,
 				message: null,
-			}
+			},
 		};
-	};
+	}
 
 	generateCode = () => {
 		this.setState({
-				isLoading: true
-			}, async () => {
-				await load("organisation", undefined, [], {
-						organisationId: this.props.organisationId,
-						consultationId: this.props.consultationId
-					}, "POST", {}, true)
-					.then(response => {
-						this.setState({
-							generatedCollationCode: response.data.collationCode,
-							showGenerateButton: response.data.canGenerateCollationCode,
-							isLoading: false
-						})
-					})
-					.catch(err => {
-						this.setState({
-							error: {
-								hasError: true,
-								message: "generateCodeForOrg error  " + err,
-							},
-							isLoading: false
-						});
+			isLoading: true,
+		}, async () => {
+			await load("organisation", undefined, [], {
+				organisationId: this.props.organisationId,
+				consultationId: this.props.consultationId,
+			}, "POST", {}, true)
+				.then(response => {
+					this.setState({
+						generatedCollationCode: response.data.collationCode,
+						showGenerateButton: response.data.canGenerateCollationCode,
+						isLoading: false,
 					});
-			}
+				})
+				.catch(err => {
+					this.setState({
+						error: {
+							hasError: true,
+							message: "generateCodeForOrg error  " + err,
+						},
+						isLoading: false,
+					});
+				});
+		},
 		);
 	};
 
@@ -124,5 +123,5 @@ export class GenerateCodeForOrg extends Component<GenerateCodeForOrgProps, Gener
 				</div>
 			</div>
 		);
-	};
-};
+	}
+}

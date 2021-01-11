@@ -1,5 +1,3 @@
-/* global jest */
-
 import React from "react";
 import { mount } from "enzyme";
 import { MemoryRouter } from "react-router";
@@ -31,9 +29,9 @@ describe("[ClientApp] ", () => {
 			const wrapper = mount(
 				<MemoryRouter>
 					<ConsultationItem {...fakeProps} chapterSlug={null} documentId={null} />
-				</MemoryRouter>
+				</MemoryRouter>,
 			);
-			
+
 			expect(wrapper.find(".card__heading a").length).toEqual(0);
 		});
 
@@ -42,14 +40,14 @@ describe("[ClientApp] ", () => {
 			const wrapper = mount(
 				<MemoryRouter>
 					<ConsultationItem {...fakeProps} />
-				</MemoryRouter>
+				</MemoryRouter>,
 			);
-			
+
 			expect(
 				toJson(wrapper, {
 					noKey: true,
 					mode: "deep",
-				})
+				}),
 			).toMatchSnapshot();
 		});
 

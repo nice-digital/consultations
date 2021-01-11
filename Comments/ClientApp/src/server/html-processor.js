@@ -62,7 +62,7 @@ export const replaceAccountsEnvironment = (html: string, accountsEnvironment: st
 };
 
 export const processHtml = (html: string, {
-	title, metas, links, analyticsGlobals, scripts, htmlAttributes, bodyAttributes, rootContent, accountsEnvironment
+	title, metas, links, analyticsGlobals, scripts, htmlAttributes, bodyAttributes, rootContent, accountsEnvironment,
 }): string => {
 	html = replaceOpeningHtmlTag(html, htmlAttributes);
 	html = replaceOpeningBodyTag(html, bodyAttributes);

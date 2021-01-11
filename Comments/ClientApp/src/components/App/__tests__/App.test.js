@@ -9,7 +9,7 @@ describe("[ClientApp] ", () => {
 			shallow(
 				<MemoryRouter>
 					<App />
-				</MemoryRouter>
+				</MemoryRouter>,
 			);
 		});
 	});

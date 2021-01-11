@@ -73,7 +73,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 			commentOn,
 			quote,
 			commentId,
-			commenterEmail
+			commenterEmail,
 		} = this.state.comment;
 		const { documentTitle } = this.props;
 		const unsavedChanges = this.state.unsavedChanges;

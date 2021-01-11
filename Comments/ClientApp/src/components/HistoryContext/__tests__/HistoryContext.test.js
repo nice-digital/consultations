@@ -21,9 +21,9 @@ function mockReact() {
 
 			return {
 				Provider: Provider,
-				Consumer: Consumer
+				Consumer: Consumer,
 			};
-		})
+		}),
 	};
 }
 jest.mock("react", () => mockReact());
@@ -45,7 +45,7 @@ describe("[Consultations]", () => {
 
 				const expectedProps = {
 					history: browserHistory,
-					testProp: "TestValue"
+					testProp: "TestValue",
 				};
 
 				const actualProps = historyApplied.find(TestComponent).props();
@@ -60,12 +60,12 @@ describe("[Consultations]", () => {
 				const historyApplied = mount(
 					<HistoryContext.Provider value={{history: "test"}}>
 						<WrappedTestComponent testProp="TestValue" />
-					</HistoryContext.Provider>
+					</HistoryContext.Provider>,
 				);
 
 				const expectedProps = {
 					history: "test",
-					testProp: "TestValue"
+					testProp: "TestValue",
 				};
 				const actualProps = historyApplied.find(TestComponent).props();
 

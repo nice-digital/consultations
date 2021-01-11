@@ -33,6 +33,7 @@ Array [
                 itemScope={true}
                 itemType="http://schema.org/ListItem"
                 onClick={[Function]}
+                role="presentation"
               >
                 <a
                   href="/"
@@ -55,6 +56,7 @@ Array [
                 itemScope={true}
                 itemType="http://schema.org/ListItem"
                 onClick={[Function]}
+                role="presentation"
               >
                 <a
                   href="/guidance/indevelopment/gid-ta10232/consultation/"
@@ -77,6 +79,7 @@ Array [
                 itemScope={true}
                 itemType="http://schema.org/ListItem"
                 onClick={[Function]}
+                role="presentation"
               >
                 <a
                   href="/consultations/1/1/introduction"
@@ -694,6 +697,7 @@ Array [
                 itemScope={true}
                 itemType="http://schema.org/ListItem"
                 onClick={[Function]}
+                role="presentation"
               >
                 <a
                   href="/"
@@ -716,6 +720,7 @@ Array [
                 itemScope={true}
                 itemType="http://schema.org/ListItem"
                 onClick={[Function]}
+                role="presentation"
               >
                 <a
                   href="/guidance/indevelopment/gid-ta10232/consultation/"
@@ -738,6 +743,7 @@ Array [
                 itemScope={true}
                 itemType="http://schema.org/ListItem"
                 onClick={[Function]}
+                role="presentation"
               >
                 <a
                   href="/consultations/1/1/introduction"
