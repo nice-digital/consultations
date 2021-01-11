@@ -40,13 +40,11 @@ namespace Comments.Test.IntegrationTests.API.Review
 	        AppSettings.ReviewConfig = GetTestReviewConfig();
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 	        var relativeURIForReviewPage = "/1/review";
-			var answerText = Guid.Empty.ToString();
-	        var questionText = Guid.Empty.ToString();
 	        var userId = Guid.Empty.ToString();
 
-	        AddCommentsAndQuestionsAndAnswers(sourceURI, "My Comment", questionText, answerText, userId);
-	        AddCommentsAndQuestionsAndAnswers(sourceURI, "My Second Comment", questionText, answerText, userId);
-	        AddCommentsAndQuestionsAndAnswers(sourceURI, "Another users Comment", questionText, answerText, Guid.NewGuid().ToString());
+	        AddCommentsAndQuestionsAndAnswers(sourceURI, "My Comment", "question 1", "answer 1", userId);
+	        AddCommentsAndQuestionsAndAnswers(sourceURI, "My Second Comment", "question 2", "answer 2", userId);
+	        AddCommentsAndQuestionsAndAnswers(sourceURI, "Another users Comment", "question 3", "answer 3", Guid.NewGuid().ToString());
 
 			// Act
 			var response = await _client.GetAsync(string.Format("/consultations/api/CommentsForReview?relativeURL={0}", relativeURIForReviewPage));

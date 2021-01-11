@@ -36,7 +36,11 @@ namespace Comments.Models
 		{
 			_encryption = encryption;
 			_userService = userService;
-			_createdByUserID = _userService.GetCurrentUser().UserId;
+			var currentUserInThisScope = _userService.GetCurrentUser(); //this dbcontext's service lifetime is scoped, i.e. new for every request.
+			_createdByUserID = currentUserInThisScope.UserId;
+			_organisationUserIDs = currentUserInThisScope.ValidatedOrganisationUserIds;
+			var currentUsersOrganisationTheyAreLeadOf = currentUserInThisScope.OrganisationsAssignedAsLead?.FirstOrDefault(); //the new plan is to only support being lead of 1 organisation.
+			_organisationalLeadOrganisationID = currentUsersOrganisationTheyAreLeadOf != null ? (int?)currentUsersOrganisationTheyAreLeadOf.OrganisationId : null;
 		}
 
 		/// <summary>
@@ -58,32 +62,54 @@ namespace Comments.Models
 
 			    partialSourceURIToUse = $"{partialMatchExactSourceURIToUse}/";
 		    }
-			
-			var data = Location.Where(l => partialMatchSourceURI
-					? (l.SourceURI.Equals(partialMatchExactSourceURIToUse) || l.SourceURI.Contains(partialSourceURIToUse))
-					: sourceURIs.Contains(l.SourceURI, StringComparer.OrdinalIgnoreCase))
+
+			var authorisedComments = Comment
+				.Include(c => c.Location)
+				.Where(c => (partialMatchSourceURI
+					? (c.Location.SourceURI.Equals(partialMatchExactSourceURIToUse) || c.Location.SourceURI.Contains(partialSourceURIToUse))
+					: sourceURIs.Contains(c.Location.SourceURI, StringComparer.OrdinalIgnoreCase)))
+				.ToList();
+
+			var data = Location.Where(l => (l.Order != null) &&
+
+			                               (partialMatchSourceURI
+				                               		? (l.SourceURI.Equals(partialMatchExactSourceURIToUse) || l.SourceURI.Contains(partialSourceURIToUse))
+				                               		: sourceURIs.Contains(l.SourceURI, StringComparer.OrdinalIgnoreCase)))
+				//(allAuthorisedLocations.Contains(l.LocationId)))
+
 				.Include(l => l.Comment)
 					.ThenInclude(s => s.SubmissionComment)
-					.ThenInclude(s => s.Submission)
+						.ThenInclude(s => s.Submission)
 
 				.Include(l => l.Comment)
 					.ThenInclude(s => s.Status)
+
+				.Include(l => l.Comment)
+					.ThenInclude(o => o.OrganisationUser)
 
 				.Include(l => l.Question)
 					.ThenInclude(q => q.QuestionType)
 
 				.Include(l => l.Question)
 					.ThenInclude(q => q.Answer)
-					.ThenInclude(s => s.SubmissionAnswer)
+						.ThenInclude(s => s.SubmissionAnswer)
 
-					.OrderBy(l => l.Order)
+				.Include(l => l.Question)
+					.ThenInclude(q => q.Answer)
+						.ThenInclude(o => o.OrganisationUser)
 
-				.ThenByDescending(l =>
-					l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault())
+				.OrderBy(l => l.Order)
+					//.ThenByDescending(l => l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault())
 
 				.ToList();
 
-			return data;
+
+			//EF can't translate the thenbydescending properly, so moving it out and doing it in memory.
+			var sortedData = data.Where(l => l.Comment.Count > 0 || l.Question.Count > 0)
+				.OrderBy(l => l.Order).ThenByDescending(l =>
+					l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault());
+			
+			return sortedData; 
 		}
 
 		public IEnumerable<Location> GetQuestionsForDocument(IList<string> sourceURIs, bool partialMatchSourceURI)
@@ -219,6 +245,8 @@ namespace Comments.Models
 		        .Include(s => s.Status)
 		        .Include(q => q.Question)
 					.ThenInclude(qt => qt.QuestionType)
+		        .Include(q => q.Question)
+					.ThenInclude(l => l.Location)
 		        .FirstOrDefault();
 
 	        return answer;
@@ -832,12 +860,18 @@ namespace Comments.Models
 
 		public OrganisationUser GetOrganisationUser(Guid sessionId)
 		{
+			return GetOrganisationUsers(new List<Guid> {sessionId}).FirstOrDefault();
+		}
+
+		public IEnumerable<OrganisationUser> GetOrganisationUsers(IEnumerable<Guid> sessionIds)
+		{
 			return
 				OrganisationUser
-				.Include(ou => ou.OrganisationAuthorisation).
+					.Include(ou => ou.OrganisationAuthorisation).
 					ThenInclude(a => a.Location)
-				.FirstOrDefault(ou => ou.AuthorisationSession.Equals(sessionId));
+					.Where(ou => sessionIds.Contains(ou.AuthorisationSession));
 		}
+
 
 		public bool AreCommentsForThisOrganisation(IEnumerable<int> commentIds, int organisationId)
 		{

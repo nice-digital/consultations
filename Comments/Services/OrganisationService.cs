@@ -11,6 +11,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using NICE.Identity.Authentication.Sdk.Domain;
+using DocumentFormat.OpenXml.Vml.Spreadsheet;
+using Comment = Comments.Models.Comment;
 
 namespace Comments.Services
 {
@@ -19,7 +21,8 @@ namespace Comments.Services
 		OrganisationCode GenerateOrganisationCode(int organisationId, int consultationId);
 		Task<OrganisationCode> CheckValidCodeForConsultation(string collationCode, int consultationId);
 		(Guid sessionId, DateTime expirationDate) CreateOrganisationUserSession(int organisationAuthorisationId, string collationCode);
-		Task<(bool valid, string organisationName)> CheckOrganisationUserSession(int consultationId, Guid sessionId);
+		Task<(bool valid, string organisationName)> CheckOrganisationUserSession(int consultationId);
+		IList<ValidatedSession> CheckValidCodesForConsultation(Session unvalidatedSessions);
 		Task<Dictionary<int, string>> GetOrganisationNames(IEnumerable<int> organisationIds);
 	}
 
@@ -147,7 +150,7 @@ namespace Comments.Services
 		public (Guid sessionId, DateTime expirationDate) CreateOrganisationUserSession(int organisationAuthorisationId, string collationCode)
 		{
 			var organisationAuthorisationForSuppliedCollationCode = _context.GetOrganisationAuthorisationByCollationCode(collationCode);
-			if (!organisationAuthorisationForSuppliedCollationCode.OrganisationAuthorisationId.Equals(organisationAuthorisationId))
+			if (organisationAuthorisationForSuppliedCollationCode == null || !organisationAuthorisationForSuppliedCollationCode.OrganisationAuthorisationId.Equals(organisationAuthorisationId))
 				throw new ApplicationException($"Supplied collation code: {collationCode} is not valid for the supplied organisation authorisation id:{organisationAuthorisationId}");
 
 			var consultationDetails = _consultationService.GetConsultationState(organisationAuthorisationForSuppliedCollationCode.Location.SourceURI, PreviewState.NonPreview);
@@ -157,23 +160,46 @@ namespace Comments.Services
 			return (organisationUser.AuthorisationSession, expirationDate);
 		}
 
-		public async Task<(bool valid, string organisationName)> CheckOrganisationUserSession(int consultationId, Guid sessionId)
+		public async Task<(bool valid, string organisationName)> CheckOrganisationUserSession(int consultationId) 
 		{
-			var organisationUser = _context.GetOrganisationUser(sessionId);
+			var currentUser = _userService.GetCurrentUser();
+			var sessionId = currentUser.GetValidatedSessionIdForConsultation(consultationId);
+
+			if (!sessionId.HasValue)
+			{
+				return (valid: false, organisationName: null);
+			}
+
+			var organisationUser = _context.GetOrganisationUsers(new List<Guid> {sessionId.Value}).FirstOrDefault();
 
 			if (organisationUser == null)
+			{
 				return (valid: false, organisationName: null);
-
-			if (organisationUser.ExpirationDate < DateTime.UtcNow) 
-				return (valid: false, organisationName: null);
-
-			var parsedUri = ConsultationsUri.ParseConsultationsUri(organisationUser.OrganisationAuthorisation.Location.SourceURI);
-			if (!parsedUri.ConsultationId.Equals(consultationId))
-				return (valid: false, organisationName: null);
+			}
 
 			var organisationName = await GetOrganisationName(organisationUser.OrganisationAuthorisation.OrganisationId);
-			
 			return (valid: true, organisationName: organisationName);
+		}
+
+		public IList<ValidatedSession> CheckValidCodesForConsultation(Session unvalidatedSessions)
+		{
+			var organisationUsers = _context.GetOrganisationUsers(unvalidatedSessions.SessionCookies.Select(session => session.Value)).ToList();
+
+			return unvalidatedSessions.SessionCookies.Select(session =>
+			{
+				var organisationUserForThisSession = organisationUsers.FirstOrDefault(ou => ou.AuthorisationSession.Equals(session.Value));
+				if (organisationUserForThisSession != null && organisationUserForThisSession.ExpirationDate > DateTime.UtcNow)
+				{
+					var parsedUri = ConsultationsUri.ParseConsultationsUri(organisationUserForThisSession.OrganisationAuthorisation.Location.SourceURI);
+					if (parsedUri.ConsultationId.Equals(session.Key))
+					{
+						var organisationUserId = organisationUserForThisSession.OrganisationUserId;
+						var organisationId = organisationUserForThisSession.OrganisationAuthorisation.OrganisationId;
+						return new ValidatedSession(organisationUserId, session.Key, session.Value, organisationId);
+					}
+				}
+				return null;
+			}).Where(session => session != null).ToList();
 		}
 
 		private async Task<string> GetOrganisationName(int organisationId)

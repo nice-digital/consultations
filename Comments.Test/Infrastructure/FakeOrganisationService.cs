@@ -3,6 +3,7 @@ using Comments.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Comments.Models;
 
 namespace Comments.Test.Infrastructure
 {
@@ -31,7 +32,12 @@ namespace Comments.Test.Infrastructure
 			throw new NotImplementedException();
 		}
 
-		public Task<(bool valid, string organisationName)> CheckOrganisationUserSession(int consultationId, Guid sessionId)
+		public Task<(bool valid, string organisationName)> CheckOrganisationUserSession(int consultationId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList<ValidatedSession> CheckValidCodesForConsultation(Session unvalidatedSessions)
 		{
 			throw new NotImplementedException();
 		}

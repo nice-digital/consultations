@@ -107,7 +107,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 							res => {
 								const signInURL = res.data.signInURL;
 								this.setState({
-									isAuthorised: res.data.isAuthorised,
+									isAuthorised: res.data.isAuthenticated,
 									displayName: res.data.displayName,
 									signInURL: signInURL,
 									registerURL: res.data.registerURL,
@@ -155,6 +155,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 			.then(response => response.data)
 			.catch(err => {
 				console.log(JSON.stringify(err));
+				return {valid: false};
 			});
 		return {
 			validityAndOrganisationName: await validityAndOrganisationName,
@@ -178,7 +179,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 				}
 			});
 	}
-	
+
 	loadContext = () => {
 		this.loadUser(this.props.location.pathname);
 	}
@@ -189,7 +190,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 
 	componentDidUpdate(prevProps) {
 		if (this.props.location !== prevProps.location) { //fired when the route changes, as you might be authenticated for some routes, but not others (e.g. org commenting cookie)
-			this.loadContext(); 
+			this.loadContext();
 		}
 	}
 

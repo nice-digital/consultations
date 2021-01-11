@@ -5,7 +5,7 @@ exports[`[ClientApp]  Answer Component should match snapshot with answer 1`] = `
   role="form"
 >
   <form
-    className="mb--0"
+    className="mb--0 mt--e"
     onSubmit={[Function]}
   >
     <div
@@ -46,7 +46,7 @@ exports[`[ClientApp]  Answer Component should match snapshot without answer 1`] 
   role="form"
 >
   <form
-    className="mb--0"
+    className="mb--0 mt--e"
     onSubmit={[Function]}
   >
     <div

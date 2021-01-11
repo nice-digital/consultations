@@ -250,8 +250,8 @@ namespace Comments.Test.UnitTests
 			var questionService =
 				new QuestionService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService, null, null);
 
-			var textQuestionTypeId = AddQuestionType("Text", hasBooleanAnswer: false, hasTextAnswer: true);
-			var booleanQuestionTypeId = AddQuestionType("Boolean", hasBooleanAnswer: true, hasTextAnswer: false);
+			var textQuestionTypeId = AddQuestionType("Text", hasBooleanAnswer: false, hasTextAnswer: true, questionTypeId: 1);
+			var booleanQuestionTypeId = AddQuestionType("Boolean", hasBooleanAnswer: true, hasTextAnswer: false, questionTypeId: 2);
 
 			//Act
 			IEnumerable<ViewModels.QuestionType> results = questionService.GetQuestionTypes();
