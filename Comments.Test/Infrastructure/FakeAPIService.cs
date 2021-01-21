@@ -35,5 +35,10 @@ namespace Comments.Test.Infrastructure
 		    var returnValue = _organisationsToReturn ?? new List<Organisation> {new Organisation(1, "NICE", false)};
 		    return Task.Run(() => returnValue);
 	    }
-    }
+
+        public Task<IEnumerable<string>> RevokeRefreshTokensForUser(string nameIdentifier, HttpClient httpClient = null)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

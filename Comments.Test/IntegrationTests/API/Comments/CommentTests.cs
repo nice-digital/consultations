@@ -194,16 +194,10 @@ namespace Comments.Test.IntegrationTests.API.Comments
             //Act
             var response = await _client.PutAsync($"consultations/api/Comment/{commentId}", content);
             response.EnsureSuccessStatusCode();
-            var responseString = await response.Content.ReadAsStringAsync();
             var result = commentService.GetComment(commentId);
 
             //Assert
             result.comment.CommentText.ShouldBe(updatedCommentText);
         }
-
-
-        
-
-
-	}
+    }
 }

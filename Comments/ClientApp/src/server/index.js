@@ -1,5 +1,5 @@
-const path = require('path');
-const rootPath = path.join(__dirname, '../../.babelrc');
+const path = require("path");
+const rootPath = path.join(__dirname, "../../.babelrc");
 
 // We use babel register so we can load ES6 code on the server without
 // having to have an extra build step ie through webpack.
@@ -7,7 +7,7 @@ const rootPath = path.join(__dirname, '../../.babelrc');
 require("@babel/register")({
 	extends: rootPath,
 	ignore: [/node_modules/],
-	cache: false
+	cache: false,
 });
 
 require("ignore-styles");

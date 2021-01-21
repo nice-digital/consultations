@@ -17,7 +17,6 @@ export const Pager = (props: PagerProps) => {
 		onChangePage,
 	} = props;
 
-
 	const listClasses = `pagination__pager ${type !== "normal" ? type : ""} ${active ? "active" : ""}`.trimRight();
 
 	let ariaLabel = type === "normal" ? `Go to page ${label}` : `Go to ${type} page`;

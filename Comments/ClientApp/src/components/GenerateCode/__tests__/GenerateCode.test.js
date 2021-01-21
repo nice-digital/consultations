@@ -14,14 +14,14 @@ describe("GenerateCode", () => {
 			collationCode: null,
 			organisationAuthorisationId: 0,
 			organisationId: 999,
-			organisationName: "Super Magic Club"
+			organisationName: "Super Magic Club",
 		}],
-		consultationId: 111
+		consultationId: 111,
 	};
 
 	let fakePropsCode = {
 		organisationCodes: [{...fakePropsNoCode.organisationCodes[0]}],
-		consultationId: 111
+		consultationId: 111,
 	};
 
 	fakePropsCode.organisationCodes[0].canGenerateCollationCode = false;

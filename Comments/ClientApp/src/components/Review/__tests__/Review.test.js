@@ -107,7 +107,7 @@ describe("[ClientApp] ", () => {
 					<LiveAnnouncer>
 						<Review {...fakeProps} />
 					</LiveAnnouncer>
-				</MemoryRouter>
+				</MemoryRouter>,
 			);
 
 			let commentsReviewPromise = new Promise(resolve => {
@@ -153,7 +153,7 @@ describe("[ClientApp] ", () => {
 					<LiveAnnouncer>
 						<Review {...fakeProps} />
 					</LiveAnnouncer>
-				</MemoryRouter>
+				</MemoryRouter>,
 			);
 
 			let commentsReviewPromise = new Promise(resolve => {
@@ -184,7 +184,7 @@ describe("[ClientApp] ", () => {
 					toJson(wrapper, {
 						noKey: true,
 						mode: "deep",
-					})
+					}),
 				).toMatchSnapshot();
 			});
 		});
@@ -201,7 +201,7 @@ describe("[ClientApp] ", () => {
 					<LiveAnnouncer>
 						<Review {...fakeProps} />
 					</LiveAnnouncer>
-				</MemoryRouter>
+				</MemoryRouter>,
 			);
 
 			let commentsReviewPromise = new Promise(resolve => {
@@ -232,7 +232,7 @@ describe("[ClientApp] ", () => {
 					toJson(wrapper, {
 						noKey: true,
 						mode: "deep",
-					})
+					}),
 				).toMatchSnapshot();
 			});
 		});

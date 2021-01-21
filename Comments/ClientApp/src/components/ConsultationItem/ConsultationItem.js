@@ -51,7 +51,7 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 			isUpcoming,
 			organisationCodes,
 			showShareWithOrganisationButton,
-			allowGenerateOrganisationCode
+			allowGenerateOrganisationCode,
 		} = this.props;
 
 		const status = (isOpen, isClosed, isUpcoming) => {
@@ -138,7 +138,7 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 				</article>
 			</li>
 		);
-	};
-};
+	}
+}
 
 export default ConsultationItem;

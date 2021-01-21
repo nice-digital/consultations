@@ -15,7 +15,7 @@ import {
 } from "../../helpers/editing-and-deleting";
 import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
 import { mobileWidth } from "../../constants";
-import { getElementPositionWithinDocument, getSectionTitle } from "../../helpers/utils";
+import { getElementPositionWithinDocument, getSectionTitle , canUseDOM } from "../../helpers/utils";
 import { updateUnsavedIds } from "../../helpers/unsaved-comments";
 import { tagManager } from "../../helpers/tag-manager";
 
@@ -24,9 +24,9 @@ import { Question } from "../Question/Question";
 import LoginBannerWithRouter from "../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
 
-import { createQuestionPdf } from '../QuestionView/QuestionViewDocument';
-import { canUseDOM } from "../../helpers/utils";
-import { Alert } from '@nice-digital/nds-alert';
+import { createQuestionPdf } from "../QuestionView/QuestionViewDocument";
+
+import { Alert } from "@nice-digital/nds-alert";
 
 type PropsType = {
 	staticContext?: any,
@@ -58,6 +58,7 @@ type StateType = {
 	unsavedIds: Array<number>,
 	endDate: string,
 	enableOrganisationalCommentingFeature: boolean,
+	allowOrganisationCodeLogin: Boolean,
 };
 
 export class CommentList extends Component<PropsType, StateType> {
@@ -78,7 +79,8 @@ export class CommentList extends Component<PropsType, StateType> {
 			shouldShowQuestionsTab: false,
 			unsavedIds: [],
 			endDate: "",
-			enableOrganisationalCommentingFeature: false
+			enableOrganisationalCommentingFeature: false,
+			allowOrganisationCodeLogin: false,
 		};
 
 		let preloadedData = {};
@@ -94,7 +96,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			"comments",
 			[],
 			{sourceURI: this.props.match.url},
-			preloadedData
+			preloadedData,
 		);
 
 		if (preloadedCommentsData) {
@@ -115,13 +117,14 @@ export class CommentList extends Component<PropsType, StateType> {
 				unsavedIds: [],
 				endDate: preloadedCommentsData.consultationState.endDate,
 				enableOrganisationalCommentingFeature,
+				allowOrganisationCodeLogin: (preloadedCommentsData.consultationState.consultationIsOpen && enableOrganisationalCommentingFeature),
 			};
 		}
 	}
 
 	loadComments() {
 		load("comments", undefined, [], {sourceURI: this.props.match.url}).then(
-			response => {
+			function(response) {
 				let allowComments = response.data.consultationState.consultationIsOpen && !response.data.consultationState.submittedDate;
 				this.setState({
 					comments: response.data.comments,
@@ -132,8 +135,9 @@ export class CommentList extends Component<PropsType, StateType> {
 					shouldShowCommentsTab: response.data.consultationState.shouldShowCommentsTab,
 					shouldShowQuestionsTab: response.data.consultationState.shouldShowQuestionsTab,
 					endDate: response.data.consultationState.endDate,
+					allowOrganisationCodeLogin: (response.data.consultationState.consultationIsOpen && this.state.enableOrganisationalCommentingFeature),
 				});
-			})
+			}.bind(this))
 			.catch(err => console.log("load comments in commentlist " + err));
 	}
 
@@ -218,7 +222,6 @@ export class CommentList extends Component<PropsType, StateType> {
 		updateUnsavedIds(commentId, dirty, this);
 	};
 
-
 	//old drawer code:
 	isMobile = () => {
 		if (typeof document !== "undefined") {
@@ -258,7 +261,6 @@ export class CommentList extends Component<PropsType, StateType> {
 				break;
 
 			case "toggleOpenQuestions":
-
 				this.setState(prevState => {
 					const drawerOpen = prevState.drawerOpen && !prevState.viewComments ? !prevState.drawerOpen : true;
 					tagManager({
@@ -277,7 +279,6 @@ export class CommentList extends Component<PropsType, StateType> {
 				pullFocusByQuerySelector("#comments-panel");
 				break;
 
-
 			case "createQuestionPDF":
 				const questionsForPDF = this.state.questions;
 				const titleForPDF = this.props.getTitleFunction();
@@ -289,7 +290,6 @@ export class CommentList extends Component<PropsType, StateType> {
 				return;
 		}
 	};
-
 
 	render() {
 		if (!this.state.shouldShowDrawer) {
@@ -307,7 +307,6 @@ export class CommentList extends Component<PropsType, StateType> {
 				}
 			}
 		};
-
 
 		return (
 			<Fragment>
@@ -431,7 +430,7 @@ export class CommentList extends Component<PropsType, StateType> {
 														currentURL={this.props.match.url}
 														signInURL={contextValue.signInURL}
 														registerURL={contextValue.registerURL}
-														allowOrganisationCodeLogin={this.state.enableOrganisationalCommentingFeature}
+														allowOrganisationCodeLogin={this.state.allowOrganisationCodeLogin}
 													/>
 												)}
 

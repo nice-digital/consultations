@@ -1,5 +1,3 @@
-/* global jest */
-
 import { PreviouslySetQuestions } from "../PreviouslySetQuestions";
 
 const getFilteredQuestions = new PreviouslySetQuestions().getFilteredQuestions;

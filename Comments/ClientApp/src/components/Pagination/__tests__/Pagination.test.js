@@ -25,7 +25,7 @@ describe("Pagination", () => {
 	it("shows first page pager when there are 6 pages or more", () => {
 		const pagination = mount(<Pagination {...paginationBaseFakeProps} {...paginationLargeFakeProps} />);
 
-		expect(pagination.find(".first").exists()).toBe(true);;
+		expect(pagination.find(".first").exists()).toBe(true);
 	});
 
 	it("shows last page pager when there are 6 pages or more", () => {

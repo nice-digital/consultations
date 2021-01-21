@@ -5,12 +5,12 @@ using Comments.ViewModels;
 using NICE.Feeds;
 using NICE.Identity.Authentication.Sdk.API;
 using NICE.Identity.Authentication.Sdk.Authorisation;
-using NICE.Identity.Authentication.Sdk.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using NICE.Identity.Authentication.Sdk.Domain;
 using DocumentFormat.OpenXml.Vml.Spreadsheet;
 using Comment = Comments.Models.Comment;
 
@@ -21,8 +21,9 @@ namespace Comments.Services
 		OrganisationCode GenerateOrganisationCode(int organisationId, int consultationId);
 		Task<OrganisationCode> CheckValidCodeForConsultation(string collationCode, int consultationId);
 		(Guid sessionId, DateTime expirationDate) CreateOrganisationUserSession(int organisationAuthorisationId, string collationCode);
-		Task<(bool valid, string organisationName)> CheckOrganisationUserSession(int consultationId);//, Guid sessionId);
+		Task<(bool valid, string organisationName)> CheckOrganisationUserSession(int consultationId);
 		IList<ValidatedSession> CheckValidCodesForConsultation(Session unvalidatedSessions);
+		Task<Dictionary<int, string>> GetOrganisationNames(IEnumerable<int> organisationIds);
 	}
 
     public class OrganisationService : IOrganisationService
@@ -159,7 +160,7 @@ namespace Comments.Services
 			return (organisationUser.AuthorisationSession, expirationDate);
 		}
 
-		public async Task<(bool valid, string organisationName)> CheckOrganisationUserSession(int consultationId) //, Guid sessionId)
+		public async Task<(bool valid, string organisationName)> CheckOrganisationUserSession(int consultationId) 
 		{
 			var currentUser = _userService.GetCurrentUser();
 			var sessionId = currentUser.GetValidatedSessionIdForConsultation(consultationId);
@@ -203,20 +204,27 @@ namespace Comments.Services
 
 		private async Task<string> GetOrganisationName(int organisationId)
 		{
+			var organisationIdAndNames = await GetOrganisationNames(new List<int> {organisationId});
+
+			if (!organisationIdAndNames.ContainsKey(organisationId))
+				throw new ApplicationException("Organisation name could not be retrieved. Please contact app support."); //might occur if the org has been deleted from idam and CC hasn't been updated.
+
+			return organisationIdAndNames[organisationId];
+
+		}
+
+		public async Task<Dictionary<int, string>> GetOrganisationNames(IEnumerable<int> organisationIds)
+		{
 			//var machineToMachineAccessToken = await _apiTokenService.GetAccessToken(AppSettings.AuthenticationConfig.GetAuthConfiguration());
 			//var httpClientWithPooledMessageHandler = _httpClientFactory.CreateClient();
 
-			//var organisations = await _apiService.GetOrganisations(new List<int> { organisationId }, machineToMachineAccessToken, httpClientWithPooledMessageHandler);
-
+			//var organisations = await _apiService.GetOrganisations(organisationIds.Distinct(), machineToMachineAccessToken, httpClientWithPooledMessageHandler);
+			
 			//the above has been temporarily commented out until the m2m token caching branch in idam has been merged.
 
-			var organisations = new List<Organisation> {new Organisation(organisationId, "Not NICE", false)};
+			var organisations = organisationIds.Distinct().Select(orgId => new Organisation(orgId, "Not NICE", false));
 
-			var organisation = organisations.FirstOrDefault();
-			if (organisation == null)
-				throw new ApplicationException("Organisation name could not be retrieved. Please contact app support."); //might occur if the org has been deleted from idam and CC hasn't been updated.
-
-			return organisation.OrganisationName;
+			return organisations.ToDictionary(k => k.OrganisationId, v => v.OrganisationName);
 		}
 	}
 }

@@ -1,21 +1,18 @@
 /* global jest */
 
-import { createQuestionPdf , createDocumentDefinition } from '../QuestionViewDocument';
+import { createQuestionPdf , createDocumentDefinition } from "../QuestionViewDocument";
 import questionsData from "./questionsData.json";
 
-
-
-jest.mock('pdfmake/build/pdfmake', ()=> {
+jest.mock("pdfmake/build/pdfmake", ()=> {
 	return {
 		createPdf: jest.fn(() => {
 			return {
-				open: jest.fn()
-			}
-		})
-	}
+				open: jest.fn(),
+			};
+		}),
+	};
 });
-import pdfMake from 'pdfmake/build/pdfmake';
-
+import pdfMake from "pdfmake/build/pdfmake";
 
 describe("[ClientApp] ", () => {
 	describe("Question View Document", () => {
@@ -23,7 +20,6 @@ describe("[ClientApp] ", () => {
 		const questionsForPDF = questionsData.consultationQuestions;
 		const titleForPDF = questionsData.consultationTitle;
 		const endDate = questionsData.consultationState.endDate;
-
 
 		it("createPdf should be called", () => {
 			//act
@@ -36,7 +32,7 @@ describe("[ClientApp] ", () => {
 			const definition = createDocumentDefinition(questionsForPDF, titleForPDF, endDate);
 
 			expect(definition).toMatchSnapshot();
-		})
+		});
 
 	});
 });

@@ -12,11 +12,11 @@ import UserProviderWithRouter from "../../context/UserContext";
 import DocumentPreviewWithRouter from "../DocumentPreview/DocumentPreview";
 import DownloadWithRouter from "../Download/Download";
 import QuestionsWithRouter from "../Questions/Questions";
-import {ErrorBoundary} from "../ErrorBoundary/ErrorBoundary";
-import {LiveAnnouncer, LiveMessenger} from "react-aria-live";
+import { ErrorBoundary } from "../ErrorBoundary/ErrorBoundary";
+import { LiveAnnouncer, LiveMessenger } from "react-aria-live";
 import { projectInformation } from "../../constants";
 import { PhaseBanner } from "../PhaseBanner/PhaseBanner";
-import LeadInfo from "../LeadInfo/LeadInfo";
+import { LeadInfo } from "../LeadInfo/LeadInfo";
 
 type PropsType = any;
 

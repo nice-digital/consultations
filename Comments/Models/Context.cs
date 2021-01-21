@@ -84,12 +84,19 @@ namespace Comments.Models
 				.Include(l => l.Comment)
 					.ThenInclude(s => s.Status)
 
+				.Include(l => l.Comment)
+					.ThenInclude(o => o.OrganisationUser)
+
 				.Include(l => l.Question)
 					.ThenInclude(q => q.QuestionType)
 
 				.Include(l => l.Question)
 					.ThenInclude(q => q.Answer)
 						.ThenInclude(s => s.SubmissionAnswer)
+
+				.Include(l => l.Question)
+					.ThenInclude(q => q.Answer)
+						.ThenInclude(o => o.OrganisationUser)
 
 				.OrderBy(l => l.Order)
 					//.ThenByDescending(l => l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault())
