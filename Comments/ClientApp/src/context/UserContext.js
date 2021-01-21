@@ -126,14 +126,14 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 
 	//unfortunately the context is above the routes, so this.props.match is always null, so we can't pull the consultation id out of there. hence we're falling back to regex.
 	getConsultationId = () =>{
-		const regex = /^\/(\d+)\/\d+\/[a-z-A-Z0-9]+/;
+		const regex = /^\/(\d+)\/(review|\d+\/[a-z-A-Z0-9]+)/;
 		const pathname = this.props.location.pathname;
 
 		if (!pathname)
 			return;
 
 		const matches = regex.exec(pathname);
-		if (!matches || matches.length !== 2)
+		if (!matches || matches.length !== 3)
 			return;
 
 		return matches[1];
