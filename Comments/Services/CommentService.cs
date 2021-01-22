@@ -193,6 +193,7 @@ namespace Comments.Services
 
 			model.CommentsAndQuestions = FilterCommentsAndQuestions(commentsAndQuestions, model.Type, model.Document);
 			model.OrganisationName = _currentUser?.OrganisationsAssignedAsLead.FirstOrDefault()?.OrganisationName;
+			model.IsLead = _currentUser?.OrganisationsAssignedAsLead.Any();
 
 			var consultationId = ConsultationsUri.ParseRelativeUrl(relativeURL).ConsultationId;
 			model.Filters = GetFilterGroups(consultationId, commentsAndQuestions, model.Type, model.Document);

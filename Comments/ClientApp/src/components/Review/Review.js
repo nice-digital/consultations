@@ -65,6 +65,8 @@ type StateType = {
 	documentTitles: "undefined" | Array<any>,
 	justSubmitted: boolean,
 	path: null | string,
+	isLead: boolean,
+	isLead: boolean,
 	emailAddress: string | null
 };
 
@@ -92,6 +94,7 @@ export class Review extends Component<PropsType, StateType> {
 			unsavedIds: [],
 			documentTitles: [],
 			justSubmitted: false,
+			isLead: false,
 			emailAddress: null
 		};
 
@@ -146,6 +149,7 @@ export class Review extends Component<PropsType, StateType> {
 				unsavedIds: [],
 				documentTitles: this.getListOfDocuments(preloadedCommentsData.filters),
 				justSubmitted: false,
+				isLead: preloadedCommentsData.isLead,
 			};
 		}
 
@@ -229,6 +233,7 @@ export class Review extends Component<PropsType, StateType> {
 						sort: data.commentsData.sort,
 						organisationName: data.commentsData.organisationName || "",
 						documentTitles: this.getListOfDocuments(data.commentsData.filters),
+						isLead: data.commentsData.isLead,
 					});
 				} else {
 					this.setState({
@@ -239,6 +244,7 @@ export class Review extends Component<PropsType, StateType> {
 						loading: false,
 						organisationName: data.commentsData.organisationName || "",
 						documentTitles: this.getListOfDocuments(data.commentsData.filters),
+						isLead: data.commentsData.isLead,
 					}, () => {
 						tagManager({
 							event: "generic",
@@ -603,6 +609,7 @@ export class Review extends Component<PropsType, StateType> {
 																tobaccoDisclosure={this.state.tobaccoDisclosure}
 																showExpressionOfInterestSubmissionQuestion={this.state.consultationData.showExpressionOfInterestSubmissionQuestion}
 																organisationExpressionOfInterest={this.state.organisationExpressionOfInterest}
+																isLead={this.state.isLead}
 																isOrganisationCommenter={contextValue.isOrganisationCommenter}
 															/>
 															}

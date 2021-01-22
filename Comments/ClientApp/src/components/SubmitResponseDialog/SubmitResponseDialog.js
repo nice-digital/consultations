@@ -56,12 +56,13 @@ export class SubmitResponseDialog extends PureComponent {
 			hasTobaccoLinks,
 			showExpressionOfInterestSubmissionQuestion,
 			organisationExpressionOfInterest,
-			isOrganisationCommenter
+			isOrganisationCommenter,
+			isLead,
 		} = this.props;
 
 		return (
 			<>
-				{!isOrganisationCommenter ? (
+				{isOrganisationCommenter ? (
 					<div className="panel">
 						<h2>You are about to submit your final response to {organisationName}</h2>
 						<p>Lorem</p>
@@ -80,105 +81,115 @@ export class SubmitResponseDialog extends PureComponent {
 					<div className="panel">
 						<p className="lead">You are about to submit your final response to NICE.</p>
 
-						<p>You must answer the following questions before you submit.</p>
+						{isLead &&
+							<>
+								<p>You are responding on behalf of <strong>{organisationName}</strong></p>
+							</>
+						}
 
-						<p><strong>Are you responding on behalf of an organisation?</strong></p>
+						<p>You must answer the following {(!isLead || showExpressionOfInterestSubmissionQuestion) ? "questions" : "question"} before you submit.</p>
 
-						<div role="radiogroup" aria-label="Are you responding on behalf of an organisation?">
-							<div className="form__group form__group--radio form__group--inline">
-								<input
-									className="form__radio"
-									id="respondingAsOrganisation--true"
-									type="radio"
-									name="respondingAsOrganisation"
-									checked={respondingAsOrganisation === "yes"}
-									onChange={fieldsChangeHandler}
-									value={"yes"}
-								/>
-								<label
-									data-qa-sel="respond-yes-responding-as-org"
-									className="form__label form__label--radio"
-									htmlFor="respondingAsOrganisation--true">
-									Yes
-								</label>
+						{!isLead &&
+						<>
+							<p><strong>Are you responding on behalf of an organisation?</strong></p>
+
+							<div role="radiogroup" aria-label="Are you responding on behalf of an organisation?">
+								<div className="form__group form__group--radio form__group--inline">
+									<input
+										className="form__radio"
+										id="respondingAsOrganisation--true"
+										type="radio"
+										name="respondingAsOrganisation"
+										checked={respondingAsOrganisation === "yes"}
+										onChange={fieldsChangeHandler}
+										value={"yes"}
+									/>
+									<label
+										data-qa-sel="respond-yes-responding-as-org"
+										className="form__label form__label--radio"
+										htmlFor="respondingAsOrganisation--true">
+										Yes
+									</label>
+								</div>
+
+								<div className="form__group form__group--radio form__group--inline">
+									<input
+										className="form__radio"
+										id="respondingAsOrganisation--false"
+										type="radio"
+										name="respondingAsOrganisation"
+										checked={respondingAsOrganisation === "no"}
+										onChange={fieldsChangeHandler}
+										value={"no"}
+									/>
+									<label
+										data-qa-sel="respond-no-responding-as-org"
+										className="form__label form__label--radio"
+										htmlFor="respondingAsOrganisation--false">
+										No
+									</label>
+								</div>
+
 							</div>
 
-							<div className="form__group form__group--radio form__group--inline">
-								<input
-									className="form__radio"
-									id="respondingAsOrganisation--false"
-									type="radio"
-									name="respondingAsOrganisation"
-									checked={respondingAsOrganisation === "no"}
-									onChange={fieldsChangeHandler}
-									value={"no"}
-								/>
-								<label
-									data-qa-sel="respond-no-responding-as-org"
-									className="form__label form__label--radio"
-									htmlFor="respondingAsOrganisation--false">
-									No
-								</label>
-							</div>
+							{respondingAsOrganisation === "yes" &&
+							<Fragment>
+								<div className="form__group form__group--text">
+									<label htmlFor="organisationName" className="form__label">
+										<strong>Enter the name of your organisation</strong>
+									</label>
+									<input data-qa-sel="organisation-name" data-hj-whitelist id="organisationName" name="organisationName" value={organisationName}
+										className="form__input" type="text" onChange={fieldsChangeHandler}/>
+								</div>
 
-						</div>
+								{showExpressionOfInterestSubmissionQuestion &&
+									<Fragment>
+										<p>
+											<strong>Would your organisation like to express an interest in formally supporting this quality standard?</strong><br/>
+											<a href="/standards-and-indicators/get-involved/support-a-quality-standard" target="_new">More information</a>
+										</p>
+										<div role="radiogroup" aria-label="Would your organisation like to express an interest in formally supporting this quality standard?">
+											<div className="form__group form__group--radio form__group--inline">
+												<input
+													className="form__radio"
+													id="organisationExpressionOfInterest--true"
+													type="radio"
+													name="organisationExpressionOfInterest"
+													checked={organisationExpressionOfInterest === "yes"}
+													onChange={fieldsChangeHandler}
+													value={"yes"}
+												/>
+												<label
+													data-qa-sel="express-interest-yes"
+													className="form__label form__label--radio"
+													htmlFor="organisationExpressionOfInterest--true">
+													Yes
+												</label>
+											</div>
 
-						{respondingAsOrganisation === "yes" &&
-						<Fragment>
-							<div className="form__group form__group--text">
-								<label htmlFor="organisationName" className="form__label">
-									<strong>Enter the name of your organisation</strong>
-								</label>
-								<input data-qa-sel="organisation-name" data-hj-whitelist id="organisationName" name="organisationName" value={organisationName}
-									className="form__input" type="text" onChange={fieldsChangeHandler}/>
-							</div>
-
-							{showExpressionOfInterestSubmissionQuestion &&
-								<Fragment>
-									<p>
-										<strong>Would your organisation like to express an interest in formally supporting this quality standard?</strong><br/>
-										<a href="/standards-and-indicators/get-involved/support-a-quality-standard" target="_new">More information</a>
-									</p>
-									<div role="radiogroup" aria-label="Would your organisation like to express an interest in formally supporting this quality standard?">
-										<div className="form__group form__group--radio form__group--inline">
-											<input
-												className="form__radio"
-												id="organisationExpressionOfInterest--true"
-												type="radio"
-												name="organisationExpressionOfInterest"
-												checked={organisationExpressionOfInterest === "yes"}
-												onChange={fieldsChangeHandler}
-												value={"yes"}
-											/>
-											<label
-												data-qa-sel="express-interest-yes"
-												className="form__label form__label--radio"
-												htmlFor="organisationExpressionOfInterest--true">
-												Yes
-											</label>
+											<div className="form__group form__group--radio form__group--inline">
+												<input
+													className="form__radio"
+													id="organisationExpressionOfInterest--false"
+													type="radio"
+													name="organisationExpressionOfInterest"
+													checked={organisationExpressionOfInterest === "no"}
+													onChange={fieldsChangeHandler}
+													value={"no"}
+												/>
+												<label
+													data-qa-sel="express-interest-no"
+													className="form__label form__label--radio"
+													htmlFor="organisationExpressionOfInterest--false">
+													No
+												</label>
+											</div>
 										</div>
-
-										<div className="form__group form__group--radio form__group--inline">
-											<input
-												className="form__radio"
-												id="organisationExpressionOfInterest--false"
-												type="radio"
-												name="organisationExpressionOfInterest"
-												checked={organisationExpressionOfInterest === "no"}
-												onChange={fieldsChangeHandler}
-												value={"no"}
-											/>
-											<label
-												data-qa-sel="express-interest-no"
-												className="form__label form__label--radio"
-												htmlFor="organisationExpressionOfInterest--false">
-												No
-											</label>
-										</div>
-									</div>
-								</Fragment>
+									</Fragment>
+								}
+							</Fragment>
 							}
-						</Fragment>
+						</>
 						}
 
 						<p><strong>Do you or the organisation you represent have any links with the tobacco industry?</strong></p>
@@ -190,7 +201,7 @@ export class SubmitResponseDialog extends PureComponent {
 						</ul>
 
 						<div role="radiogroup"
-								aria-label="Do you or the organisation you represent have any links with the tobacco industry?">
+							aria-label="Do you or the organisation you represent have any links with the tobacco industry?">
 
 							<div className="form__group form__group--radio form__group--inline">
 								<input
