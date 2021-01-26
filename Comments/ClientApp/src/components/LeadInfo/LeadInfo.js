@@ -6,7 +6,7 @@ import { Breadcrumbs } from "../Breadcrumbs/Breadcrumbs";
 import { Header } from "../Header/Header";
 
 export const LeadInfo = () => {
-	const emailAddress = "DITApplicationSupport@nice.org.uk"
+	const emailAddress = "DITApplicationSupport@nice.org.uk";
 	const emailSubject = encodeURIComponent("New commenting lead request");
 	const emailBody = encodeURIComponent("Dear Application Support\r\rMy name is:\rI want to be a commenting lead for the following organisation:\r\rKind regards");
 
@@ -29,12 +29,12 @@ export const LeadInfo = () => {
 								<div data-g="8">
 									<h2>How does it work?</h2>
 									<p>Once you have signed up to be the lead for a consultation, you will be able to:</p>
-										<ul>
-											<li>share the online consultation with colleagues from your organisation</li>
-											<li>review and edit their comments</li>
-											<li>combine the collated comments into a single response</li>
-											<li>submit your organisation's final response.</li>
-										</ul>
+									<ul>
+										<li>share the online consultation with colleagues from your organisation</li>
+										<li>review and edit their comments</li>
+										<li>combine the collated comments into a single response</li>
+										<li>submit your organisation's final response.</li>
+									</ul>
 									<p>You can be the lead for multiple consultations.</p>
 									<p>Ideally each consultation will only have one commenting lead. If you need to add a second lead for a consultation then you can, but only one of you will be able to submit the final response to NICE.</p>
 									<p>If you need to change the lead during a consultation you can email us. However, if the outgoing lead has already submitted a response then the new lead will not be able to edit it or submit another response.</p>
@@ -56,6 +56,7 @@ export const LeadInfo = () => {
 			</main>
 		</Fragment>
 	);
-}
+};
 
 export default withRouter(withHistory(LeadInfo));
+

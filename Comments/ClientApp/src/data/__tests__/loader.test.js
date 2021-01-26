@@ -17,8 +17,8 @@ describe("[ClientApp] ", () => {
 					{
 						value1: "value1",
 						value2: 2,
-						value3: ""
-					}
+						value3: "",
+					},
 				);
 				expect(url)
 					.toEqual("myEndpoint");
@@ -28,7 +28,7 @@ describe("[ClientApp] ", () => {
 				const url = loader.generateUrl(
 					"editcomment",
 					"consultations",
-					[ 1 ]
+					[ 1 ],
 				);
 				expect(url)
 					.toEqual("consultations/api/Comment/1");
@@ -42,8 +42,8 @@ describe("[ClientApp] ", () => {
 					{
 						value1: "value1",
 						value2: 2,
-						value3: ""
-					}
+						value3: "",
+					},
 				);
 				expect(url)
 					.toEqual("testing/api/Chapter?value1=value1&value2=2&value3=");
@@ -51,7 +51,7 @@ describe("[ClientApp] ", () => {
 
 			it("should only return an appended query string if the parameters are supplied", () => {
 				const url  = loader.generateUrl(
-					"chapter"
+					"chapter",
 				);
 				expect(url)
 					.toEqual(BaseUrl + "/api/Chapter");
@@ -65,8 +65,8 @@ describe("[ClientApp] ", () => {
 				[],
 				{
 					value1: "value1",
-					value2: 2
-				}
+					value2: 2,
+				},
 			];
 
 			it("axios should be called with the generated url", () => {

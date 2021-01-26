@@ -22,7 +22,7 @@ type StateType = {
 		hasError: boolean,
 		message: string,
 	},
-	
+
 }
 
 export class Submitted extends Component<PropsType, StateType> {
@@ -37,7 +37,7 @@ export class Submitted extends Component<PropsType, StateType> {
 			error: {
 				hasError: false,
 				message: "",
-			},			
+			},
 		};
 
 		if (this.props) {
@@ -137,7 +137,7 @@ export class Submitted extends Component<PropsType, StateType> {
 					<div className="grid">
 						<div data-g="12">
 							<BreadCrumbsWithRouter links={this.state.consultationData.breadcrumbs}/>
-							<main role="main">
+							<main>
 								<div className="page-header">
 									<Header
 										title="Response submitted"
@@ -153,6 +153,7 @@ export class Submitted extends Component<PropsType, StateType> {
 														signInURL={contextValue.signInURL}
 														registerURL={contextValue.registerURL}
 														allowOrganisationCodeLogin={false}
+														orgFieldName="submitted"
 													/> :
 													<Fragment>
 														<Link

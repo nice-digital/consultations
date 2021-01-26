@@ -44,7 +44,7 @@
                 {
                     "OrganisationAuthorisationId":1,
                     "OrganisationId":1,
-                    "OrganisationName":null,
+                    "OrganisationName":"Sherman Oaks",
                     "CanGenerateCollationCode":false,
                     "CollationCode":"FAKE CODE"
                 }

@@ -23,7 +23,7 @@ export class Selection extends Component<PropsType, StateType> {
 		this.state = {
 			toolTipVisible: false,
 			comment: {},
-			position: {}
+			position: {},
 		};
 		this.selectionContainer = React.createRef();
 	}
@@ -84,7 +84,7 @@ export class Selection extends Component<PropsType, StateType> {
 				y: event.pageY - (boundingRectOfContainer.top + scrollTop) + arrowSize,
 			};
 			this.setState({ comment, position, toolTipVisible: true });
-			setTimeout(() => { pullFocusByQuerySelector(".selection-container button") }, 0);
+			setTimeout(() => { pullFocusByQuerySelector(".selection-container button"); }, 0);
 		} else{
 			this.setState({ toolTipVisible: false });
 		}
@@ -112,14 +112,14 @@ export class Selection extends Component<PropsType, StateType> {
 		}
 	}
 
-	componentDidUpdate(prevProps: PropsType, prevState: StateType){
+	componentDidUpdate(prevProps: PropsType){
 		// if we're on a different page from when the selection was made, reinitialise the selection
 		if (this.props.sourceURI !== prevProps.sourceURI) {
 			this.setState({
 				toolTipVisible: false,
 				comment: {},
-				position: {}
-			})
+				position: {},
+			});
 		}
 	}
 
@@ -131,7 +131,7 @@ export class Selection extends Component<PropsType, StateType> {
 			);
 
 		return (
-			<div onMouseUp={this.onMouseUp} ref={this.selectionContainer}>
+			<div onMouseUp={this.onMouseUp} ref={this.selectionContainer} role="presentation">
 				<MyToolTip visible={this.state.toolTipVisible} onButtonClick={this.onButtonClick} position={this.state.position}/>
 				{this.props.children}
 			</div>

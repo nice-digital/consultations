@@ -27,5 +27,5 @@ export const Endpoints = {
 	newquestion: "/api/Question", // POST for new questions
 	organisation: "/api/Organisation", //GET checks for valid collation code and consultation id in querystring. returns OrganisationCode object
 	organisationsession: "/api/Organisation/CreateOrganisationUserSession", //POST. checks for valid collation code and organisation authorisation id in querystring. returns a guid if successful. error otherwise.
-	checkorganisationusersession: "/api/Organisation/CheckOrganisationUserSession" //GET. checks for valid session id for a given consultation id. returns a boolean for valid or not.
+	checkorganisationusersession: "/api/Organisation/CheckOrganisationUserSession", //GET. checks for valid session id for a given consultation id. returns a boolean for valid or not.
 };

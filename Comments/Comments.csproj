@@ -28,7 +28,7 @@
 	<PackageReference Include="Microsoft.FeatureManagement.AspNetCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.10" />
     <PackageReference Include="NICE.Feeds" Version="1.0.136" />
-    <PackageReference Include="NICE.Identity.Authentication.Sdk" Version="1.0.467" />
+    <PackageReference Include="NICE.Identity.Authentication.Sdk" Version="1.0.480" />
     <PackageReference Include="NICE.Logging" Version="6.0.23" />
     <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
   </ItemGroup>
@@ -61,6 +61,10 @@
   <ItemGroup>
     <None Remove="Views\main.css" />
     <None Remove="Views\main.css.map" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

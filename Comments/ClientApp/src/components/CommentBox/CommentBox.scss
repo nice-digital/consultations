@@ -42,4 +42,8 @@
     opacity: 0.5;
     border: 1px solid $colour-nice-white; // todo: find border width!
   }
+  &__commentBy{
+    position: relative;
+    margin-top: -1rem;
+  }
 }

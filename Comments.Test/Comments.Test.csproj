@@ -19,7 +19,7 @@
     <PackageReference Include="Moq" Version="4.8.1" />
     <PackageReference Include="NICE.Feeds" Version="1.0.136" />
     <PackageReference Include="NICE.Feeds.Tests" Version="1.0.136" />
-    <PackageReference Include="NICE.Identity.Authentication.Sdk" Version="1.0.467" />
+    <PackageReference Include="NICE.Identity.Authentication.Sdk" Version="1.0.480" />
     <PackageReference Include="Shouldly" Version="3.0.0" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="4.5.1" />
     <PackageReference Include="xunit" Version="2.4.0" />
@@ -66,9 +66,7 @@
     <Copy SourceFiles="%(DiffAssertionsFilePath.FullPath)" DestinationFolder="$(OutputPath)" Condition="Exists('%(DiffAssertionsFilePath.FullPath)')" />
   </Target>
 
-  <Target Name="AddAssemblyAliasToReactiveAsync"
-          AfterTargets="ResolveAssemblyReferences"
-          Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
+  <Target Name="AddAssemblyAliasToReactiveAsync" AfterTargets="ResolveAssemblyReferences" Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
 	  <ItemGroup>
 		  <ReferencePath Condition=" '%(FileName)' == 'System.Interactive.Async' ">
 			  <Aliases>reactive</Aliases>

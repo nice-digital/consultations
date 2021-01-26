@@ -8,7 +8,7 @@ jest.mock("../../HistoryContext/HistoryContext", () => {
 	return {
 		withHistory: (Component) => {
 			return Component;
-		}
+		},
 	};
 });
 
@@ -21,8 +21,8 @@ describe("[Consultations]", () => {
 				label: "Zero - no results",
 				isSelected: false,
 				filteredResultCount: 0,
-				unFilteredResultCount: 0
-			}
+				unFilteredResultCount: 0,
+			},
 		];
 
 		const selectedOptions = [
@@ -31,15 +31,15 @@ describe("[Consultations]", () => {
 				label: "One - selected",
 				isSelected: true,
 				filteredResultCount: 0,
-				unfilteredResultCount: 1
+				unfilteredResultCount: 1,
 			},
 			{
 				id: "2",
 				label: "Two - selected",
 				isSelected: true,
 				filteredResultCount: 0,
-				unfilteredResultCount: 1
-			}
+				unfilteredResultCount: 1,
+			},
 		];
 
 		const unSelectedOptions = [
@@ -48,15 +48,15 @@ describe("[Consultations]", () => {
 				label: "Three - unselected",
 				isSelected: false,
 				filteredResultCount: 0,
-				unfilteredResultCount: 1
+				unfilteredResultCount: 1,
 			},
 			{
 				id: "4",
 				label: "Four - unselected",
 				isSelected: false,
 				filteredResultCount: 0,
-				unfilteredResultCount: 1
-			}
+				unfilteredResultCount: 1,
+			},
 		];
 
 		const optionsWithResults = [].concat(selectedOptions, unSelectedOptions);
@@ -64,13 +64,13 @@ describe("[Consultations]", () => {
 		const filterGroupModel = {
 			id: "gId",
 			title: "Test",
-			options: [].concat(zeroResultsOptions, optionsWithResults)
+			options: [].concat(zeroResultsOptions, optionsWithResults),
 		};
 
 		const allOptionsUnselectedFilterGroupModel = {
 			id: "gId",
 			title: "Test",
-			options: unSelectedOptions
+			options: unSelectedOptions,
 		};
 
 		describe("getSelectedCount", () => {
@@ -185,8 +185,8 @@ describe("[Consultations]", () => {
 						label: "One - selected",
 						isSelected: true,
 						filteredResultCount: 0,
-						unfilteredResultCount: 1
-					}
+						unfilteredResultCount: 1,
+					},
 				};
 
 				expect(filterGroup.find("FilterOption").at(0).props()).toEqual(expectedProps);

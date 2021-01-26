@@ -1,13 +1,10 @@
 import React from "react";
 import { mount } from "enzyme";
-import { MemoryRouter } from "react-router";
 import { Selection } from "../Selection";
-import axios from "axios";
-import MockAdapter from "axios-mock-adapter";
-import { generateUrl } from "../../../data/loader";
-import { nextTick } from "../../../helpers/utils";
+// import axios from "axios";
+// import MockAdapter from "axios-mock-adapter";
 
-const mock = new MockAdapter(axios);
+//const mock = new MockAdapter(axios);
 
 describe("[ClientApp] ", () => {
 	describe("Selection Component", () => {
@@ -16,7 +13,7 @@ describe("[ClientApp] ", () => {
 
 		//   });
 
-		it('should clear the comment and selection if the route (sourceURI) changes', function () {
+		it("should clear the comment and selection if the route (sourceURI) changes", function () {
 			let wrapper = mount(<Selection sourceUri="/test/1/1"><p>some paragraph content</p></Selection>);
 			expect(wrapper.state().toolTipVisible).toEqual(false);
 			wrapper.setState({toolTipVisible: true});
@@ -32,7 +29,7 @@ describe("[ClientApp] ", () => {
 					  removeAllRanges: () => {},
 					  getRangeAt: () => {},
 					  isCollapsed: false,
-					  rangeCount: 0
+					  rangeCount: 0,
 				};
 			  };
 
@@ -49,9 +46,9 @@ describe("[ClientApp] ", () => {
 			window.getSelection = () => {
 				return {
 					removeAllRanges: () => {},
-					getRangeAt: function(number){ return "paragraph content";},
+					getRangeAt: function() { return "paragraph content";},
 					isCollapsed: false,
-					rangeCount: 1
+					rangeCount: 1,
 				};
 			};
 			// jest.mock("xpath-range", () => ({
@@ -76,8 +73,6 @@ describe("[ClientApp] ", () => {
 			// expect(wrapper.state().toolTipVisible).toEqual(false);
 		});
 
-
-
 		// const paragraph = document.createElement("p");
 		// paragraph.setAttribute("id", "myparagraph");
 		// paragraph.textContent = "some paragraph content";
@@ -92,7 +87,6 @@ describe("[ClientApp] ", () => {
 		//let parentDiv = document.getElementById("parentDiv");
 		// grabbedParagraph.dispatchEvent(new Event("mouseup"));
 
-
 		//console.log(grabbedParagraph);
 
 		// const selection = window.getSelection();
@@ -103,8 +97,6 @@ describe("[ClientApp] ", () => {
 		// range.selectNodeContents(parentDiv);
 		// selection.removeAllRanges();
 		// selection.addRange(range);
-
-
 
 		//console.log(window.getSelection());
 	});

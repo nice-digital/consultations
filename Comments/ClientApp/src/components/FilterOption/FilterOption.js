@@ -24,7 +24,7 @@ export class FilterOption extends Component<PropsType, StateType> {
 		super(props);
 
 		this.state = {
-			isSelected: this.props.option.isSelected
+			isSelected: this.props.option.isSelected,
 		};
 
 		this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
@@ -32,13 +32,13 @@ export class FilterOption extends Component<PropsType, StateType> {
 
 	UNSAFE_componentWillReceiveProps(nextProps: PropsType) {
 		this.setState({
-			isSelected: nextProps.option.isSelected
+			isSelected: nextProps.option.isSelected,
 		});
 	}
 
 	handleCheckboxChange() {
 		this.setState(prevState => ({
-			isSelected: !prevState.isSelected
+			isSelected: !prevState.isSelected,
 		  }), () => {
 			this.props.history.push(this.getHref());
 		  });

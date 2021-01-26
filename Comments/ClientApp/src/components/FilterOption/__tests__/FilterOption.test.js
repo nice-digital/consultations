@@ -11,7 +11,7 @@ describe("[Consultations]", () => {
 			it("appends query string to href when checkbox is selected", () => {
 				const optionModel = {
 					id: "oId",
-					isSelected: true
+					isSelected: true,
 				};
 				const filterOption = shallow(<FilterOption groupId="gId" option={optionModel} path="/test" />);
 				expect(filterOption.instance().getHref()).toEqual("/test?gId=oId");
@@ -20,7 +20,7 @@ describe("[Consultations]", () => {
 			it("removes query string from href when checkbox is unselected", () => {
 				const optionModel = {
 					id: "oId",
-					isSelected: false
+					isSelected: false,
 				};
 				const filterOption = shallow(<FilterOption groupId="gId" option={optionModel} path="/test?gId=oId" />);
 				expect(filterOption.instance().getHref()).toEqual("/test");
@@ -31,7 +31,7 @@ describe("[Consultations]", () => {
 			const optionModel = {
 				id: "oId",
 				isSelected: false,
-				label: "Test"
+				label: "Test",
 			};
 			const filterOption = shallow(<FilterOption groupId="gId" option={optionModel} />);
 			expect(filterOption.is("label")).toEqual(true);
@@ -42,7 +42,7 @@ describe("[Consultations]", () => {
 			const optionModel = {
 				id: "oId",
 				isSelected: false,
-				label: "Test"
+				label: "Test",
 			};
 			const filterOption = shallow(<FilterOption groupId="gId" option={optionModel} />);
 			const label = filterOption.find("label");
@@ -54,7 +54,7 @@ describe("[Consultations]", () => {
 			const optionModel = {
 				id: "oId",
 				isSelected: true,
-				label: "Test option"
+				label: "Test option",
 			};
 			const filterOption = shallow(<FilterOption groupId="gId" groupName="Test group" option={optionModel} />);
 			const input = filterOption.find("input");
@@ -68,7 +68,7 @@ describe("[Consultations]", () => {
 				"aria-controls": "results-info-count",
 				title: "Test group - Test option",
 				className: "gtm-topic-list-filter-deselect",
-				onChange: filterOption.instance().handleCheckboxChange
+				onChange: filterOption.instance().handleCheckboxChange,
 			};
 
 			expect(input.props()).toEqual(expectedProps);
@@ -76,7 +76,7 @@ describe("[Consultations]", () => {
 
 		it("label element text is option prop label", () => {
 			const optionModel = {
-				label: "Test"
+				label: "Test",
 			};
 			const filterOption = shallow(<FilterOption option={optionModel} />);
 			const label = filterOption.find("label");
@@ -86,7 +86,7 @@ describe("[Consultations]", () => {
 		it("pushes history state when checkbox is changed", () => {
 			const optionModel = {
 				id: "oId",
-				isSelected: false
+				isSelected: false,
 			};
 			const history = { push: jest.fn() };
 			const event = { preventDefault: jest.fn() };

@@ -10,21 +10,21 @@ describe("[ClientApp]", () => {
 		function setupHtml(html) {
 			return {
 				wrapper: mount(
-					<div>{processPreviewHtml(html)}</div>
+					<div>{processPreviewHtml(html)}</div>,
 				),
 			};
 		}
 
 		it("doesn't render a comment button if there's no comment in the markup", () => {
 			const instance = setupHtml(
-				"<p><a href='#'>Hey!</a> Ain't no comment anywhere <span>here</span></p>"
+				"<p><a href='#'>Hey!</a> Ain't no comment anywhere <span>here</span></p>",
 			);
 			expect(instance.wrapper.find("div.ConversionError").length).toEqual(0);
 		});
 
 		it("renders a comment box if the markup contains a preview error comment", () => {
 			const instance = setupHtml(
-				"<div><p>Here is a paragraph <!--[I] - Information: Soft return used in paragraph--></p></div>"
+				"<div><p>Here is a paragraph <!--[I] - Information: Soft return used in paragraph--></p></div>",
 			);
 			expect(instance.wrapper.find("div.ConversionError").length).toEqual(1);
 		});
@@ -53,7 +53,7 @@ describe("[ClientApp]", () => {
 						</tbody>
 					</table>
 
-				</div>`
+				</div>`,
 			);
 
 			expect(instance.wrapper.find("div.ConversionError").length).toEqual(4);
@@ -86,7 +86,7 @@ describe("[ClientApp]", () => {
 						</tbody>
 					</table>
 
-				</div>`
+				</div>`,
 			);
 			expect(instance.wrapper.find("div.ConversionError.ConversionError--W ul li").text()).toEqual("You have been warned!");
 			expect(instance.wrapper.find("div.ConversionError.ConversionError--E ul li").text()).toEqual("There's an error!");

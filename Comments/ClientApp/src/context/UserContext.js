@@ -8,7 +8,7 @@ import { load } from "../data/loader";
 import preload from "../data/pre-loader";
 
 export const UserContext = React.createContext({
-	updateContext: () => {}
+	updateContext: () => {},
 });
 
 type PropsType = {
@@ -54,21 +54,21 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 
 		if (userSessionParameters.sessionCookieExistsForThisConsultation){
 			const preloadedUserSessionData = preload(
-					this.props.staticContext,
-					"checkorganisationusersession",
-					[],
-					{
-						consultationId: userSessionParameters.consultationId,
-					},
-					preloadSource
-				);
+				this.props.staticContext,
+				"checkorganisationusersession",
+				[],
+				{
+					consultationId: userSessionParameters.consultationId,
+				},
+				preloadSource,
+			);
 
 			if (preloadedUserSessionData){
 				isOrganisationCommenter = preloadedUserSessionData.valid;
 				isAuthorised = isAuthorised || preloadedUserSessionData.valid ; //you could be authorised by idam or by organisation session cookie.
 				organisationName = preloadedUserSessionData.organisationName;
 			}
-		};
+		}
 
 		if (preloadSource){
 			this.state = {
@@ -95,46 +95,45 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 		});
 	}
 
-
 	loadUser = (returnURL) => {
 		this.checkSessionId()
-		.then(data => {
-			if (data.validityAndOrganisationName?.valid === true) {
-				this.setStateForValidSessionCookie(data.validityAndOrganisationName.organisationName);
-			}
-			else{
-				load("user", undefined, [], { returnURL, cachebust: new Date().getTime() })
-				.then(
-					res => {
-						const signInURL = res.data.signInURL;
-						this.setState({
-							isAuthorised: res.data.isAuthenticated,
-							displayName: res.data.displayName,
-							signInURL: signInURL,
-							registerURL: res.data.registerURL,
-						});
-						//update signin links in global nav here. because SSR isn't rendering them right on the server.
-						var signInLinks = document.getElementById("global-nav-header").querySelectorAll("a[href*='account/login']");
-						for (var i=0; i < signInLinks.length; i++) {
-							signInLinks[i].setAttribute("href", signInURL);
-						}
-					}
-				);
+			.then(data => {
+				if (data.validityAndOrganisationName?.valid === true) {
+					this.setStateForValidSessionCookie(data.validityAndOrganisationName.organisationName);
+				}
+				else{
+					load("user", undefined, [], { returnURL, cachebust: new Date().getTime() })
+						.then(
+							res => {
+								const signInURL = res.data.signInURL;
+								this.setState({
+									isAuthorised: res.data.isAuthenticated,
+									displayName: res.data.displayName,
+									signInURL: signInURL,
+									registerURL: res.data.registerURL,
+								});
+								//update signin links in global nav here. because SSR isn't rendering them right on the server.
+								var signInLinks = document.getElementById("global-nav-header").querySelectorAll("a[href*='account/login']");
+								for (var i=0; i < signInLinks.length; i++) {
+									signInLinks[i].setAttribute("href", signInURL);
+								}
+							},
+						);
 
-			}
-		});
+				}
+			});
 	}
 
 	//unfortunately the context is above the routes, so this.props.match is always null, so we can't pull the consultation id out of there. hence we're falling back to regex.
 	getConsultationId = () =>{
-		const regex = /^\/(\d+)\/\d+\/[a-z-A-Z0-9]+/;
+		const regex = /^\/(\d+)\/(review|\d+\/[a-z-A-Z0-9]+)/;
 		const pathname = this.props.location.pathname;
 
 		if (!pathname)
 			return;
 
 		const matches = regex.exec(pathname);
-		if (!matches || matches.length !== 2)
+		if (!matches || matches.length !== 3)
 			return;
 
 		return matches[1];
@@ -171,20 +170,28 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 		return {consultationId, sessionCookieExistsForThisConsultation};
 	}
 
-
 	//a child component can call this method to update the context in case a session cookie has been set.
 	updateContext = () => {
 		this.checkSessionId()
-		.then(data => {
-			if (data.validityAndOrganisationName.valid === true) {
-				this.setStateForValidSessionCookie(data.validityAndOrganisationName.organisationName);
-			}
-		});
+			.then(data => {
+				if (data.validityAndOrganisationName.valid === true) {
+					this.setStateForValidSessionCookie(data.validityAndOrganisationName.organisationName);
+				}
+			});
 	}
 
-	// fire when route changes
+	loadContext = () => {
+		this.loadUser(this.props.location.pathname);
+	}
+
 	componentDidMount() {
-		this.loadUser(this.props.location.pathname); //this is currently only needed as the sign in url isn't right on SSR. TODO: fix SSR.
+		this.loadContext(); //this is needed here as the sign in url isn't right on SSR. TODO: fix SSR.
+	}
+
+	componentDidUpdate(prevProps) {
+		if (this.props.location !== prevProps.location) { //fired when the route changes, as you might be authenticated for some routes, but not others (e.g. org commenting cookie)
+			this.loadContext();
+		}
 	}
 
 	render() {

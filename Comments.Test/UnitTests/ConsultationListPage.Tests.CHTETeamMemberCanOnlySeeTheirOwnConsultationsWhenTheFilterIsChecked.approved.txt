@@ -43,7 +43,7 @@
             "OrganisationCodes":[
                 
             ],
-            "ShowShareWithOrganisationButton":true
+            "ShowShareWithOrganisationButton":false
         },
         {
             "Title":"Consultation Title 1",

@@ -10,14 +10,14 @@ describe("[ClientApp] ", () => {
 			const FakeProps = {
 				name: "My Project",
 				repo: "http://mygitrepo.com",
-				phase: "delta"
+				phase: "delta",
 			};
 			const wrapper = shallow(<PhaseBanner {...FakeProps}/>);
 			expect(
 				toJson(wrapper, {
 					noKey: true,
-					mode: "deep"
-				})
+					mode: "deep",
+				}),
 			).toMatchSnapshot();
 		});
 	});

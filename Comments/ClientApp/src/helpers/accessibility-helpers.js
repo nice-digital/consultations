@@ -1,3 +1,5 @@
+// @flow
+
 /**
  * Pull focus to an element, principally for accessibility
  * @param {string} selection - The CSS-style query selector

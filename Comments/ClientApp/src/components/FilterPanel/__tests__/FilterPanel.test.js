@@ -15,12 +15,12 @@ describe("[Consultations]", () => {
 						id: "a",
 						options: [
 							{ isSelected: true, filteredResultCount: 0 },
-							{ isSelected: false, filteredResultCount: 1 }
-						]
+							{ isSelected: false, filteredResultCount: 1 },
+						],
 					},
 					{
-						id: "b", options: [ { isSelected: false, filteredResultCount: 0 } ]
-					}
+						id: "b", options: [ { isSelected: false, filteredResultCount: 0 } ],
+					},
 				];
 				const filterPanel = shallow(<FilterPanel filters={filters} />);
 				const groupsToDisplay = filterPanel.instance().getFilterGroupsToDisplay();
@@ -32,15 +32,15 @@ describe("[Consultations]", () => {
 				const filters = [
 					{
 						id: "a",
-						options: [ { filteredResultCount: 0 } ]
+						options: [ { filteredResultCount: 0 } ],
 					},
 					{
 						id: "b",
 						options: [
 							{ filteredResultCount: 1 },
-							{ filteredResultCount: 0 }
-						]
-					}
+							{ filteredResultCount: 0 },
+						],
+					},
 				];
 				const filterPanel = shallow(<FilterPanel filters={filters} />);
 				const groupsToDisplay = filterPanel.instance().getFilterGroupsToDisplay();
@@ -52,14 +52,14 @@ describe("[Consultations]", () => {
 				const filters = [
 					{
 						id: "a",
-						options: [ { filteredResultCount: 0 } ]
+						options: [ { filteredResultCount: 0 } ],
 					},
 					{
 						id: "b",
 						options: [
-							{ filteredResultCount: 0 }
-						]
-					}
+							{ filteredResultCount: 0 },
+						],
+					},
 				];
 				const filterPanel = shallow(<FilterPanel filters={filters} />);
 				const groupsToDisplay = filterPanel.instance().getFilterGroupsToDisplay();
@@ -92,7 +92,7 @@ describe("[Consultations]", () => {
 				const filterGroup = filterPanel.find(FilterGroup).at(0);
 				const expectedProps = {
 					path: "/test",
-					filterGroup: filters[0]
+					filterGroup: filters[0],
 				};
 				expect(filterGroup.props()).toEqual(expectedProps);
 			});

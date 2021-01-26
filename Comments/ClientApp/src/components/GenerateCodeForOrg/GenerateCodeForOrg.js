@@ -4,8 +4,7 @@ import React, { Component } from "react";
 import { load } from "../../data/loader";
 
 import { Button } from "@nice-digital/nds-button";
-import { Tag } from "@nice-digital/nds-tag";
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 type GenerateCodeForOrgProps = {
 	organisationAuthorisationId: number,
@@ -39,35 +38,35 @@ export class GenerateCodeForOrg extends Component<GenerateCodeForOrgProps, Gener
 			error: {
 				hasError: false,
 				message: null,
-			}
+			},
 		};
-	};
+	}
 
 	generateCode = () => {
 		this.setState({
-				isLoading: true
-			}, async () => {
-				await load("organisation", undefined, [], {
-						organisationId: this.props.organisationId,
-						consultationId: this.props.consultationId
-					}, "POST", {}, true)
-					.then(response => {
-						this.setState({
-							generatedCollationCode: response.data.collationCode,
-							showGenerateButton: response.data.canGenerateCollationCode,
-							isLoading: false
-						})
-					})
-					.catch(err => {
-						this.setState({
-							error: {
-								hasError: true,
-								message: "generateCodeForOrg error  " + err,
-							},
-							isLoading: false
-						});
+			isLoading: true,
+		}, async () => {
+			await load("organisation", undefined, [], {
+				organisationId: this.props.organisationId,
+				consultationId: this.props.consultationId,
+			}, "POST", {}, true)
+				.then(response => {
+					this.setState({
+						generatedCollationCode: response.data.collationCode,
+						showGenerateButton: response.data.canGenerateCollationCode,
+						isLoading: false,
 					});
-			}
+				})
+				.catch(err => {
+					this.setState({
+						error: {
+							hasError: true,
+							message: "generateCodeForOrg error  " + err,
+						},
+						isLoading: false,
+					});
+				});
+		},
 		);
 	};
 
@@ -99,18 +98,30 @@ export class GenerateCodeForOrg extends Component<GenerateCodeForOrgProps, Gener
 				</div>
 				<div className="organisation-codes__generate pl--b">
 					{showGenerateButton && (
-						<Button onClick={this.generateCode} aria-live="polite" disabled={isButtonDisabled}>{isButtonDisabled ? "Loading" : "Generate"}</Button>
+						<Button
+							onClick={this.generateCode}
+							aria-live="polite"
+							disabled={isButtonDisabled}
+							data-qa-sel="generate-code-button">
+							{isButtonDisabled ? "Loading" : "Generate"}
+						</Button>
 					)}
 
 					<span>{generatedCollationCode}</span>
 
 					{!showGenerateButton && (
 						<CopyToClipboard text={generatedCollationCode} onCopy={this.showCopiedLabel}>
-          					<Tag role="button" tabIndex="0" className="tag tag--copied" aria-live="polite">{hasBeenCopied ? "Copied" : "Copy code"}</Tag>
+							<button
+								type="button"
+								className="btn btn--copied"
+								aria-live="polite"
+								data-qa-sel="copy-code-button">
+								{hasBeenCopied ? "Copied" : "Copy code"}
+							</button>
         				</CopyToClipboard>
 					)}
 				</div>
 			</div>
 		);
-	};
-};
+	}
+}

@@ -2,24 +2,7 @@
 import React from "react";
 import { shallow } from "enzyme";
 
-import DownloadResultsInfo from "../DownloadResultsInfo";
-//import Sort from "./../../Sort/Sort";
-import AppliedFilter from "./../../AppliedFilter/AppliedFilter";
-
-const appliedFilters = [
-	{
-		groupId: "groupA",
-		groupTitle: "Group A",
-		optionId: "optionB",
-		optionLabel: "Option B",
-	},
-	{
-		groupId: "groupB",
-		groupTitle: "Group B",
-		optionId: "optionC",
-		optionLabel: "Option C",
-	},
-];
+import { DownloadResultsInfo } from "../DownloadResultsInfo";
 
 describe("[Consultations]", () => {
 	describe("DownloadResultsInfo", () => {
