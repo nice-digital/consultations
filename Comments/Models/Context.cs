@@ -273,7 +273,10 @@ namespace Comments.Models
 	    {
 		    var commentsToDuplicate = Comment.Where(c => commentIds.Contains(c.CommentId)).ToList();
 
-		    var status = GetStatus(StatusName.Draft);
+		    var status = GetStatus(StatusName.Submitted);
+			commentsToDuplicate.ForEach(c => c.StatusId = status.StatusId);
+
+			status = GetStatus(StatusName.Draft);
 
 		    var organisationUserId = (int)commentsToDuplicate.First().OrganisationUserId;
 		    var organisationId = GetOrganisationIdByOrganisationUserId(organisationUserId);
@@ -289,7 +292,10 @@ namespace Comments.Models
 		{
 			var answersToDuplicate = Answer.Where(c => answerIds.Contains(c.AnswerId)).ToList();
 
-			var status = GetStatus(StatusName.Draft);
+			var status = GetStatus(StatusName.Submitted);
+			answersToDuplicate.ForEach(c => c.StatusId = status.StatusId);
+
+			status = GetStatus(StatusName.Draft);
 
 			var organisationUserId = (int)answersToDuplicate.First().OrganisationUserId;
 			var organisationId = GetOrganisationIdByOrganisationUserId(organisationUserId);
