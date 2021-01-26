@@ -12,7 +12,7 @@ namespace Comments.Services
 	public interface ISubmitService
 	{
 		(int rowsUpdated, Validate validate) Submit(ViewModels.Submission submission);
-		(int rowsUpdated, Validate validate) SubmitToLead(ViewModels.Submission submission, string emailAddress, Guid authorisationSession);
+		(int rowsUpdated, Validate validate, ConsultationsContext context) SubmitToLead(ViewModels.Submission submission, string emailAddress, Guid authorisationSession);
 	}
 
 	public class SubmitService : ISubmitService
@@ -67,28 +67,28 @@ namespace Comments.Services
 			return (rowsUpdated: _context.SaveChanges(), validate: null);
 		}
 
-		public (int rowsUpdated, Validate validate) SubmitToLead(ViewModels.Submission submission, string emailAddress, Guid authorisationSession)
+		public (int rowsUpdated, Validate validate, ConsultationsContext context) SubmitToLead(ViewModels.Submission submission, string emailAddress, Guid authorisationSession)
 		{
 			var anySourceURI = submission.SourceURIs.FirstOrDefault();
 			if (anySourceURI == null)
-				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "Could not find SourceURI"));
+				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "Could not find SourceURI"), null);
 
 			var consultationState = _consultationService.GetConsultationState(anySourceURI, PreviewState.NonPreview);
 
 			if (!consultationState.ConsultationIsOpen)
-				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "Consultation is not open for submissions"));
+				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "Consultation is not open for submissions"), null);
 
 			var hasSubmitted = _consultationService.GetSubmittedDate(anySourceURI);
 			if (hasSubmitted != null)
-				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "User has already submitted."));
+				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "User has already submitted."), null);
 
 			var organisationUserId = _context.GetOrganisationUser(authorisationSession).OrganisationUserId;
 
+			_context.UpdateEmailAddressForOrganisationUser(emailAddress, organisationUserId);
 			if (submission.Comments.Count > 0) UpdateCommentsModelAndDuplicate(submission.Comments, organisationUserId);
 			if (submission.Answers.Count > 0) UpdateAnswersModelAndDuplicate(submission.Answers, organisationUserId);
-			_context.UpdateEmailAddressForOrganisationUser(emailAddress, organisationUserId);
-
-			return (rowsUpdated: _context.SaveChanges(), validate: null);
+			
+			return (rowsUpdated: _context.SaveChanges(), validate: null, _context);
 		}
 
 		private void UpdateCommentsModelAndDuplicate(IList<ViewModels.Comment> comments, int organisationUserId)

@@ -370,7 +370,7 @@ namespace Comments.Test.Infrastructure
             answer.LastModifiedDate = DateTime.Now;
             if (passedInContext != null)
             {
-                var a = passedInContext.Answer.Add(answer);
+                passedInContext.Answer.Add(answer);
                 passedInContext.SaveChanges();
             }
             else
