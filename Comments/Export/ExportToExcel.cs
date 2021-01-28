@@ -12,6 +12,7 @@ using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.Extensions.Logging;
+using Answer = Comments.Models.Answer;
 using Question = Comments.Models.Question;
 
 namespace Comments.Export
@@ -390,17 +391,21 @@ namespace Comments.Export
 		{
 			List<Excel> excel = new List<Excel>();
 
-			var userIds = comments.Select(comment => comment.CreatedByUserId).Concat(answers.Select(answer => answer.CreatedByUserId)).Distinct();
-			var currentUserDetails = _userService.GetCurrentUserDetails();
+			IEnumerable<string> userIdsForComments = comments.Select(comment => comment.SubmissionComment?.FirstOrDefault()?.Submission.SubmissionByUserId);
+			IEnumerable<string> userIdsForAnswers = answers.Select(answer => answer.SubmissionAnswer?.FirstOrDefault()?.Submission.SubmissionByUserId);
+			IEnumerable<string> allUserIds = userIdsForComments.Concat(userIdsForAnswers);
+			IEnumerable<string> uniqueUserIds = allUserIds.Where(id => id != null).Distinct();
 
+			var currentUserDetails = _userService.GetCurrentUserDetails();
+			
 			Dictionary<string, (string displayName, string emailAddress)> userDetailsForUserIds;
-			if (userIds.Count() == 1 && userIds.Single().Equals(currentUserDetails.userId, StringComparison.OrdinalIgnoreCase))
+			if (uniqueUserIds.Count() == 1 && uniqueUserIds.Single().Equals(currentUserDetails.userId, StringComparison.OrdinalIgnoreCase))
 			{
 				userDetailsForUserIds = new Dictionary<string, (string displayName, string emailAddress)>() { {currentUserDetails.userId, (currentUserDetails.displayName, currentUserDetails.emailAddress) }};
 			}
 			else
 			{
-				userDetailsForUserIds = await _userService.GetUserDetailsForUserIds(userIds);
+				userDetailsForUserIds = await _userService.GetUserDetailsForUserIds(uniqueUserIds);
 			}
 
 			foreach (var comment in comments)
@@ -415,8 +420,8 @@ namespace Comments.Export
 					ChapterTitle = locationDetails.ChapterName,
 					Section = commentOn == CommentOn.Section || commentOn == CommentOn.SubSection || commentOn == CommentOn.Selection ? comment.Location.Section : null,
 					Quote = commentOn  == CommentOn.Selection ? comment.Location.Quote : null,
-					UserName = userDetailsForUserIds.ContainsKey(comment.CreatedByUserId) ? userDetailsForUserIds[comment.CreatedByUserId].displayName : "Not found",
-					Email = userDetailsForUserIds.ContainsKey(comment.CreatedByUserId) ? userDetailsForUserIds[comment.CreatedByUserId].emailAddress : "Not found",
+					UserName = userDetailsForUserIds.ContainsKey(comment.SubmissionComment?.First().Submission.SubmissionByUserId) ? userDetailsForUserIds[comment.SubmissionComment?.First().Submission.SubmissionByUserId].displayName : "Not found",
+					Email = userDetailsForUserIds.ContainsKey(comment.SubmissionComment?.First().Submission.SubmissionByUserId) ? userDetailsForUserIds[comment.SubmissionComment?.First().Submission.SubmissionByUserId].emailAddress : "Not found",
 					CommentId = comment.CommentId,
 					Comment =  comment.CommentText,
 					QuestionId = null,
@@ -444,8 +449,8 @@ namespace Comments.Export
 					ChapterTitle = locationDetails.ChapterName,
 					Section = answer.Question.Location.Section,
 					Quote = answer.Question.Location.Quote,
-					UserName = userDetailsForUserIds.ContainsKey(answer.CreatedByUserId) ? userDetailsForUserIds[answer.CreatedByUserId].displayName : "Not found",
-					Email = userDetailsForUserIds.ContainsKey(answer.CreatedByUserId) ? userDetailsForUserIds[answer.CreatedByUserId].emailAddress : "Not found",
+					UserName = userDetailsForUserIds.ContainsKey(answer.SubmissionAnswer?.First().Submission.SubmissionByUserId) ? userDetailsForUserIds[answer.SubmissionAnswer?.First().Submission.SubmissionByUserId].displayName : "Not found",
+					Email = userDetailsForUserIds.ContainsKey(answer.SubmissionAnswer?.First().Submission.SubmissionByUserId) ? userDetailsForUserIds[answer.SubmissionAnswer?.First().Submission.SubmissionByUserId].emailAddress : "Not found",
 					CommentId = null,
 					Comment = null,
 					QuestionId = answer.Question.QuestionId,

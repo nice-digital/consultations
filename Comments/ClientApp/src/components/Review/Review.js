@@ -95,7 +95,7 @@ export class Review extends Component<PropsType, StateType> {
 			documentTitles: [],
 			justSubmitted: false,
 			isLead: false,
-			emailAddress: null
+			emailAddress: null,
 		};
 
 		let preloadedData = {};
@@ -142,7 +142,7 @@ export class Review extends Component<PropsType, StateType> {
 				sort: preloadedCommentsData.sort,
 				supportsDownload: preloadedConsultationData.consultationState.supportsDownload,
 				organisationName: preloadedCommentsData.organisationName || "",
-				respondingAsOrganisation: false,
+				respondingAsOrganisation: (preloadedCommentsData.isLead === true ? "yes" : false),
 				hasTobaccoLinks: false,
 				organisationExpressionOfInterest: null,
 				tobaccoDisclosure: "",
@@ -234,6 +234,7 @@ export class Review extends Component<PropsType, StateType> {
 						organisationName: data.commentsData.organisationName || "",
 						documentTitles: this.getListOfDocuments(data.commentsData.filters),
 						isLead: data.commentsData.isLead,
+						respondingAsOrganisation: (data.commentsData.isLead === true ? "yes" : false),
 					});
 				} else {
 					this.setState({
@@ -245,6 +246,7 @@ export class Review extends Component<PropsType, StateType> {
 						organisationName: data.commentsData.organisationName || "",
 						documentTitles: this.getListOfDocuments(data.commentsData.filters),
 						isLead: data.commentsData.isLead,
+						respondingAsOrganisation: (data.commentsData.isLead === true ? "yes" : false),
 					}, () => {
 						tagManager({
 							event: "generic",

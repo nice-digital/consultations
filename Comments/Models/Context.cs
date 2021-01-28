@@ -270,7 +270,7 @@ namespace Comments.Models
 	    {
 		    var commentsToUpdate = Comment.Where(c => commentIds.Contains(c.CommentId)).ToList();
 
-		    if (commentsToUpdate.Any(c => c.CreatedByUserId != _createdByUserID))
+		    if (commentsToUpdate.Any(c => (c.CreatedByUserId != _createdByUserID && c.OrganisationId != _organisationalLeadOrganisationID)))
 			    throw new Exception("Attempt to update status of a comment which doesn't belong to the current user");
 
 		    commentsToUpdate.ForEach(c => c.StatusId = status.StatusId);
@@ -323,7 +323,7 @@ namespace Comments.Models
 		{
 			var answersToUpdate = Answer.Where(a => answerIds.Contains(a.AnswerId)).ToList();
 
-			if (answersToUpdate.Any(a => a.CreatedByUserId != _createdByUserID))
+			if (answersToUpdate.Any(a => (a.CreatedByUserId != _createdByUserID && a.OrganisationId != _organisationalLeadOrganisationID)))
 				throw new Exception("Attempt to update status of an answer which doesn't belong to the current user");
 
 			answersToUpdate.ForEach(c => c.StatusId = status.StatusId);

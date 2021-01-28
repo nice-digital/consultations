@@ -41,6 +41,13 @@ describe("[ClientApp] ", () => {
 			expect(newWrapper.find("input#organisationName").length).toEqual(1);
 		});
 
+		it("should not reveal organisation questions if the user is a lead for an organisation", () => {
+			const localProps = fakeProps;
+			localProps.isLead = true;
+			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
+			expect(wrapper.find("input#respondingAsOrganisation--true").length).toEqual(0);
+		});
+
 		it("should not allow submission if the mandatory questions have not been answered 1", () => {
 			const localProps = fakeProps;
 			localProps.validToSubmit = true;
