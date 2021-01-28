@@ -448,5 +448,27 @@ namespace Comments.Test.UnitTests
 			data.Count(x => x.Key.Equals(sourceURINotUsedByCurrentUser)).ShouldBe(0);
 		}
 
+
+		[Fact]
+		public void UpdateEmailAddressForOrganisationUser()
+		{
+			//Arrange
+			var consultationId = 1;
+			var organisationId = 1;
+			var authorisationSession = Guid.NewGuid();
+			var emailAddress = "email@test.com";
+
+			var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, _context);
+			var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(_context, organisationAuthorisationId, authorisationSession, null);
+
+			var userService = FakeUserService.Get(true, "Benjamin Button", null, TestUserType.NotAuthenticated, false, organisationUserId, null);
+			var context = new ConsultationsContext(_options, userService, _fakeEncryption);
+
+			//Act
+			var OrgUser = context.UpdateEmailAddressForOrganisationUser(emailAddress, organisationUserId);
+
+			//Assert
+			OrgUser.EmailAddress.ShouldBe(emailAddress);
+		}
 	}
 }

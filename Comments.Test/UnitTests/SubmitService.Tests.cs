@@ -268,7 +268,7 @@ namespace Comments.Test.UnitTests
 			var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, _context);
 			var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(_context, organisationAuthorisationId, authorisationSession, null);
 
-			var userService = FakeUserService.Get(true, "Benjamin Button", null, TestUserType.NotAuthenticated, false, organisationUserId, organisationId);
+			var userService = FakeUserService.Get(true, "Benjamin Button", null, TestUserType.NotAuthenticated, false, organisationUserId);
 			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 			var submitService = new SubmitService(consultationContext, userService, _consultationService);
 			var commentService = new CommentService(consultationContext, userService, _consultationService, _fakeHttpContextAccessor);
@@ -307,7 +307,7 @@ namespace Comments.Test.UnitTests
 			var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, _context);
 			var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(_context, organisationAuthorisationId, authorisationSession, null);
 
-			var userService = FakeUserService.Get(true, "Benjamin Button", null, TestUserType.NotAuthenticated, false, organisationUserId, organisationId);
+			var userService = FakeUserService.Get(true, "Benjamin Button", null, TestUserType.NotAuthenticated, false, organisationUserId);
 			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
 			var submitService = new SubmitService(consultationContext, userService, _consultationService);
 			var commentService = new CommentService(consultationContext, userService, _consultationService, _fakeHttpContextAccessor);
@@ -325,7 +325,5 @@ namespace Comments.Test.UnitTests
 			result.context.Answer.First().StatusId = 2;
 			result.context.Answer.First().ChildAnswers.First().StatusId = 1;
 		}
-
-		//TODO Test Org User Email address has been updated
 	}
 }
