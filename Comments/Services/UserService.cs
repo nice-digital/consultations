@@ -38,14 +38,14 @@ namespace Comments.Services
         {
             var contextUser = _httpContextAccessor.HttpContext?.User;
 
-			return new User(contextUser?.Identity.IsAuthenticated ?? false, contextUser?.DisplayName(), contextUser?.NameIdentifier(),
+			return new User(contextUser?.Identity?.IsAuthenticated ?? false, contextUser?.DisplayName(), contextUser?.NameIdentifier(),
 				contextUser?.OrganisationsAssignedAsLead(), contextUser?.ValidatedSessions());
         }
 
         public (string userId, string displayName, string emailAddress) GetCurrentUserDetails()
         {
 	        var contextUser = _httpContextAccessor.HttpContext?.User;
-	        if (contextUser != null && contextUser.Identity.IsAuthenticated)
+	        if (contextUser != null && contextUser.Identity != null && contextUser.Identity.IsAuthenticated)
 	        {
 		        return (contextUser.NameIdentifier(), contextUser.DisplayName(), contextUser.EmailAddress());
 	        }
@@ -100,7 +100,7 @@ namespace Comments.Services
 			    return new Validate(false, true, false, "User is not authorised");
 		    }
 		    var niceUser = _httpContextAccessor.HttpContext.User;
-		    if (!niceUser.Identity.IsAuthenticated)
+		    if (niceUser.Identity == null || !niceUser.Identity.IsAuthenticated)
 		    {
 			    return new Validate(false, false, false, "Not authenticated");
 		    }

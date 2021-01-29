@@ -37,7 +37,7 @@ namespace Comments.Services
 			    throw new AuthenticationException("GetCurrentUser returned null");
 		    }
 		    _niceUser = httpContextAccessor.HttpContext.User;
-		    if (!_niceUser.Identity.IsAuthenticated)
+		    if (_niceUser.Identity == null || !_niceUser.Identity.IsAuthenticated)
 		    {
 			    throw new AuthenticationException("NICE user is not authenticated");
 		    }

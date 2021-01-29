@@ -305,7 +305,7 @@ namespace Comments
                             data["cookies"] = $"{string.Join("; ", cookiesForSSR.Select(cookie => $"{cookie.Key}={cookie.Value}"))};";
                         }
 						var user = httpContext.User;
-						data["isAuthorised"] = user.Identity.IsAuthenticated;
+						data["isAuthorised"] = user.Identity?.IsAuthenticated ?? false;
 	                    data["displayName"] = user.DisplayName();
 
 						var host = httpContext.Request.Host.Host;
