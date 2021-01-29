@@ -1,20 +1,16 @@
 using Comments.Services;
 using Comments.ViewModels;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using DocumentFormat.OpenXml.Drawing.Diagrams;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Comments.Models
 {
 	public partial class ConsultationsContext : DbContext
     {
 	    private readonly IEncryption _encryption;
-	    private readonly IConfiguration _configuration;
 
 		//these commented out constructors are just here for use when creating scaffolding with EF core. without them it won't work.
 		//don't leave them in uncommented though. and don't set that connection string to a valid value and commit it.
@@ -36,6 +32,11 @@ namespace Comments.Models
 		{
 			_encryption = encryption;
 			_userService = userService;
+			ConfigureContext();
+		}
+
+		public void ConfigureContext()
+		{
 			var currentUserInThisScope = _userService.GetCurrentUser(); //this dbcontext's service lifetime is scoped, i.e. new for every request.
 			_createdByUserID = currentUserInThisScope.UserId;
 			_organisationUserIDs = currentUserInThisScope.ValidatedOrganisationUserIds;
@@ -897,5 +898,6 @@ namespace Comments.Models
 				.Any(c => c.OrganisationUser.OrganisationAuthorisation.OrganisationId.Equals(organisationId));
 
 		}
+
     }
 }

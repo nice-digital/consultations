@@ -2,12 +2,16 @@ using Comments.Common;
 using Comments.Configuration;
 using Comments.Export;
 using Comments.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -15,18 +19,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using Microsoft.FeatureManagement;
 using NICE.Feeds;
 using NICE.Identity.Authentication.Sdk.Domain;
 using NICE.Identity.Authentication.Sdk.Extensions;
 using System;
-using System.IO;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc.Abstractions;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.Mvc.Routing;
-using ConsultationsContext = Comments.Models.ConsultationsContext;
 using System.Collections.Generic;
-using Microsoft.FeatureManagement;
+using System.Linq;
+using System.Security.Claims;
+using ConsultationsContext = Comments.Models.ConsultationsContext;
 
 namespace Comments
 {
@@ -206,7 +207,32 @@ namespace Comments
 
 	        app.UseForwardedHeaders();
             app.UseAuthentication();
-            app.UseSpaStaticFiles(new StaticFileOptions { RequestPath = "/consultations" });
+
+            app.Use(async (context, next) => //this middleware is here in order to combine the multiple authentication schemes we have - auth0 and organisation cookie, then update the context user values so that the query filters work properly.
+            {
+	            var principal = new ClaimsPrincipal();
+
+	            var result1 = await context.AuthenticateAsync(OrganisationCookieAuthenticationOptions.DefaultScheme);
+	            if (result1?.Principal != null)
+	            {
+		            principal.AddIdentities(result1.Principal.Identities);
+	            }
+
+	            var result2 = await context.AuthenticateAsync(AuthenticationConstants.AuthenticationScheme);
+	            if (result2?.Principal != null)
+	            {
+		            principal.AddIdentities(result2.Principal.Identities);
+	            }
+
+	            context.User = principal;
+
+	            var consultationsContext = context.RequestServices.GetService<ConsultationsContext>();
+	            consultationsContext.ConfigureContext();
+
+				await next();
+            });
+
+			app.UseSpaStaticFiles(new StaticFileOptions { RequestPath = "/consultations" });
 
 		    if (!env.IsDevelopment() && !env.IsIntegrationTest())
 		    {
