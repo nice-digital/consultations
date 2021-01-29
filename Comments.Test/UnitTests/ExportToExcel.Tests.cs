@@ -119,7 +119,11 @@ namespace Comments.Test.UnitTests
 			locationId = AddLocation("consultations://./consultation/1/document/2/chapter/introduction", _context, "001.002.002.000");
 			commentId = AddComment(locationId, "Draft comment", userId, (int)StatusName.Draft, _context);
 			AddSubmissionComments(submissionId, commentId, _context);
-			
+
+			locationId = AddLocation("consultations://./consultation/1/document/2/chapter/introduction", _context, "001.002.002.000");
+			commentId = AddComment(locationId, "Comment submitted to an organisational lead", userId, (int)StatusName.SubmittedToLead, _context);
+			AddSubmissionComments(submissionId, commentId, _context);
+
 			locationId = AddLocation("consultations://./consultation/1/document/1/chapter/chapter-slug", _context, "001.002.000.000");
 			commentId = AddComment(locationId, "Another Users Submitted comment", Guid.NewGuid().ToString(), (int)StatusName.Submitted, _context);
 			AddSubmissionComments(submissionId, commentId, _context);
@@ -152,6 +156,9 @@ namespace Comments.Test.UnitTests
 			AddSubmissionAnswers(submissionId, answerId, _context);
 
 			answerId = AddAnswer(questionId, userId, "This is a draft answer", (int)StatusName.Draft, _context);
+			AddSubmissionAnswers(submissionId, answerId, _context);
+
+			answerId = AddAnswer(questionId, userId, "This is an answer submitted to an organisational lead", (int)StatusName.SubmittedToLead, _context);
 			AddSubmissionAnswers(submissionId, answerId, _context);
 
 			const string sourceURI = "consultations://./consultation/1";
