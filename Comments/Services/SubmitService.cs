@@ -3,6 +3,7 @@ using Comments.Models;
 using Comments.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
+using Comments.Common;
 using NICE.Feeds;
 using Submission = Comments.Models.Submission;
 
@@ -11,7 +12,7 @@ namespace Comments.Services
 	public interface ISubmitService
 	{
 		(int rowsUpdated, Validate validate) Submit(ViewModels.Submission submission);
-		(int rowsUpdated, Validate validate) SubmitToLead(ViewModels.Submission submission);
+		(int rowsUpdated, Validate validate, ConsultationsContext context) SubmitToLead(ViewModels.Submission submission, string emailAddress, Guid authorisationSession);
 	}
 
 	public class SubmitService : ISubmitService
@@ -66,41 +67,40 @@ namespace Comments.Services
 			return (rowsUpdated: _context.SaveChanges(), validate: null);
 		}
 
-		public (int rowsUpdated, Validate validate) SubmitToLead(ViewModels.Submission submission)
+		public (int rowsUpdated, Validate validate, ConsultationsContext context) SubmitToLead(ViewModels.Submission submission, string emailAddress, Guid authorisationSession)
 		{
 			var anySourceURI = submission.SourceURIs.FirstOrDefault();
 			if (anySourceURI == null)
-				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "Could not find SourceURI"));
+				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "Could not find SourceURI"), null);
 
 			var consultationState = _consultationService.GetConsultationState(anySourceURI, PreviewState.NonPreview);
 
 			if (!consultationState.ConsultationIsOpen)
-				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "Consultation is not open for submissions"));
+				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "Consultation is not open for submissions"), null);
 
 			var hasSubmitted = _consultationService.GetSubmittedDate(anySourceURI);
 			if (hasSubmitted != null)
-				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "User has already submitted."));
+				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "User has already submitted."), null);
 
-			var submittedStatus = _context.GetStatus(StatusName.SubmittedToLead);
+			var organisationUserId = _context.GetOrganisationUser(authorisationSession).OrganisationUserId;
 
-			if (submission.Comments.Count > 0) UpdateCommentsModelAndDuplicate(submission.Comments, submittedStatus);
-			if (submission.Answers.Count > 0) UpdateAnswersModelAndDuplicate(submission.Answers, submittedStatus);
-
-			return (rowsUpdated: _context.SaveChanges(), validate: null);
+			_context.UpdateEmailAddressForOrganisationUser(emailAddress, organisationUserId);
+			if (submission.Comments.Count > 0) UpdateCommentsModelAndDuplicate(submission.Comments, organisationUserId);
+			if (submission.Answers.Count > 0) UpdateAnswersModelAndDuplicate(submission.Answers, organisationUserId);
+			
+			return (rowsUpdated: _context.SaveChanges(), validate: null, _context);
 		}
 
-		private void UpdateCommentsModelAndDuplicate(IList<ViewModels.Comment> comments, Models.Status status)
+		private void UpdateCommentsModelAndDuplicate(IList<ViewModels.Comment> comments, int organisationUserId)
 		{
 			var commentIds = comments.Select(c => c.CommentId).ToList();
-			_context.UpdateCommentStatus(commentIds, status);
-			_context.DuplicateComment(commentIds);
+			_context.DuplicateComment(commentIds, organisationUserId);
 		}
 
-		private void UpdateAnswersModelAndDuplicate(IList<ViewModels.Answer> answers, Models.Status status)
+		private void UpdateAnswersModelAndDuplicate(IList<ViewModels.Answer> answers, int organisationUserId)
 		{
 			var answerIds = answers.Select(a => a.AnswerId).ToList();
-			_context.UpdateAnswerStatus(answerIds, status);
-			_context.DuplicateAnswer(answerIds);
+			_context.DuplicateAnswer(answerIds, organisationUserId);
 		}
 
 		private void UpdateCommentsModel(IList<ViewModels.Comment> comments, Models.Submission submission, Models.Status status)

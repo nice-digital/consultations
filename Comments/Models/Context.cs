@@ -276,13 +276,15 @@ namespace Comments.Models
 		    commentsToUpdate.ForEach(c => c.StatusId = status.StatusId);
 		}
 
-	    public void DuplicateComment(IEnumerable<int> commentIds)
+	    public void DuplicateComment(IEnumerable<int> commentIds, int organisationUserId)
 	    {
 		    var commentsToDuplicate = Comment.Where(c => commentIds.Contains(c.CommentId)).ToList();
 
-		    var status = GetStatus(StatusName.Draft);
+		    var status = GetStatus(StatusName.Submitted);
+			commentsToDuplicate.ForEach(c => c.StatusId = status.StatusId);
 
-		    var organisationUserId = (int)commentsToDuplicate.First().OrganisationUserId;
+			status = GetStatus(StatusName.Draft);
+
 		    var organisationId = GetOrganisationIdByOrganisationUserId(organisationUserId);
 
 		    foreach (var comment in commentsToDuplicate)
@@ -292,13 +294,15 @@ namespace Comments.Models
 			}
 	    }
 
-		public void DuplicateAnswer(IEnumerable<int> answerIds)
+		public void DuplicateAnswer(IEnumerable<int> answerIds, int organisationUserId)
 		{
 			var answersToDuplicate = Answer.Where(c => answerIds.Contains(c.AnswerId)).ToList();
 
-			var status = GetStatus(StatusName.Draft);
+			var status = GetStatus(StatusName.Submitted);
+			answersToDuplicate.ForEach(c => c.StatusId = status.StatusId);
 
-			var organisationUserId = (int)answersToDuplicate.First().OrganisationUserId;
+			status = GetStatus(StatusName.Draft);
+
 			var organisationId = GetOrganisationIdByOrganisationUserId(organisationUserId);
 
 			foreach (var answer in answersToDuplicate)
@@ -886,6 +890,18 @@ namespace Comments.Models
 		{
 			var organisationUser = new OrganisationUser(organisationAuthorisationID, authorisationSession, expirationDate);
 			OrganisationUser.Add(organisationUser);
+			SaveChanges();
+			return organisationUser;
+		}
+
+		public OrganisationUser UpdateEmailAddressForOrganisationUser(string emailAddress, int organisationUserId)
+		{
+			var organisationUser = OrganisationUser
+				.Where(ou => ou.OrganisationUserId.Equals(organisationUserId))
+				.Single();
+
+			organisationUser.EmailAddress = emailAddress;
+
 			SaveChanges();
 			return organisationUser;
 		}

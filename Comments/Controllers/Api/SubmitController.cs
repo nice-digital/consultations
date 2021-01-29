@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 namespace Comments.Controllers.Api
 {
 	[Produces("application/json")]
-	[Route("consultations/api/[controller]")]
+
 	[Authorize]
 	public class SubmitController : ControllerBase
 	{
@@ -26,7 +26,8 @@ namespace Comments.Controllers.Api
 
 		// POST: consultations/api/submit
 		[HttpPost]
-	    public IActionResult Post([FromBody] ViewModels.Submission submission)
+		[Route("consultations/api/[controller]")]
+		public IActionResult Post([FromBody] ViewModels.Submission submission)
 	    {
 		    if (!ModelState.IsValid)
 			{
@@ -53,14 +54,14 @@ namespace Comments.Controllers.Api
 		// POST: consultations/api/submitToLead
 		[HttpPost]
 		[Route("consultations/api/[controller]ToLead")]
-		public IActionResult PostSubmitToLead([FromBody] ViewModels.Submission submission)
+		public IActionResult PostSubmitToLead([FromBody] ViewModels.Submission submission, string emailAddress, Guid authorisationSession)
 	    {
 		    if (!ModelState.IsValid)
 		    {
 			    return BadRequest(ModelState);
 		    }
 		   
-		    var result = _submitService.SubmitToLead(submission);
+		    var result = _submitService.SubmitToLead(submission, emailAddress, authorisationSession);
 		    var invalidResult = Validate(result.validate, _logger);
 
 		    //just some temporary debug here:
