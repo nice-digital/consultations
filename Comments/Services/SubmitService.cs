@@ -81,7 +81,7 @@ namespace Comments.Services
 			if (hasSubmitted != null)
 				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "User has already submitted."));
 
-			var submittedStatus = _context.GetStatus(StatusName.Submitted);
+			var submittedStatus = _context.GetStatus(StatusName.SubmittedToLead);
 
 			if (submission.Comments.Count > 0) UpdateCommentsModelAndDuplicate(submission.Comments, submittedStatus);
 			if (submission.Answers.Count > 0) UpdateAnswersModelAndDuplicate(submission.Answers, submittedStatus);

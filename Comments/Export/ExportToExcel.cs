@@ -497,7 +497,7 @@ namespace Comments.Export
 				excel.Add(excelrow);
 			}
 
-			var orderedData = excel.OrderBy(o => o.UserName).ThenBy(o => o.Order).ToList();
+			var orderedData = excel.OrderBy(o => o.Email).ThenBy(o => o.Order).ToList();
 
 			var showOrganisationExpressionOfInterest = orderedData.Any(data => data.OrganisationExpressionOfInterest.HasValue);
 

@@ -266,7 +266,8 @@ namespace Comments.Models
 
 			modelBuilder.Entity<Status>().HasData(
 				new {StatusId = 1, Name = "Draft"},
-				new {StatusId = 2, Name = "Submitted"});
+				new {StatusId = 2, Name = "Submitted"},
+				new {StatusId = 3, Name = "SubmittedToLead" });
 
 			modelBuilder.Entity<Submission>(entity =>
             {
