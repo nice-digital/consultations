@@ -282,7 +282,7 @@ namespace Comments.Test.UnitTests
 
 			//Assert
 			result.rowsUpdated.ShouldBe(2);
-			result.context.Comment.First().StatusId = 2;
+			result.context.Comment.First().StatusId.ShouldBe(3);
 			result.context.Comment.First().OrganisationId = null;
 			result.context.Comment.First().ParentCommentId = null;
 			result.context.Comment.First().ChildComments.First().StatusId = 1;
@@ -322,8 +322,8 @@ namespace Comments.Test.UnitTests
 
 			//Assert
 			result.rowsUpdated.ShouldBe(2);
-			result.context.Answer.First().StatusId = 2;
-			result.context.Answer.First().ChildAnswers.First().StatusId = 1;
+			result.context.Answer.First().StatusId.ShouldBe(3);
+			result.context.Answer.First().ChildAnswers.First().StatusId.ShouldBe(1);
 		}
 	}
 }

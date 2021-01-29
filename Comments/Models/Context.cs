@@ -280,7 +280,7 @@ namespace Comments.Models
 	    {
 		    var commentsToDuplicate = Comment.Where(c => commentIds.Contains(c.CommentId)).ToList();
 
-		    var status = GetStatus(StatusName.Submitted);
+		    var status = GetStatus(StatusName.SubmittedToLead);
 			commentsToDuplicate.ForEach(c => c.StatusId = status.StatusId);
 
 			status = GetStatus(StatusName.Draft);
@@ -298,7 +298,7 @@ namespace Comments.Models
 		{
 			var answersToDuplicate = Answer.Where(c => answerIds.Contains(c.AnswerId)).ToList();
 
-			var status = GetStatus(StatusName.Submitted);
+			var status = GetStatus(StatusName.SubmittedToLead);
 			answersToDuplicate.ForEach(c => c.StatusId = status.StatusId);
 
 			status = GetStatus(StatusName.Draft);
