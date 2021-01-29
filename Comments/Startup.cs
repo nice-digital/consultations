@@ -305,8 +305,34 @@ namespace Comments
                             data["cookies"] = $"{string.Join("; ", cookiesForSSR.Select(cookie => $"{cookie.Key}={cookie.Value}"))};";
                         }
 						var user = httpContext.User;
-						data["isAuthorised"] = user.Identity?.IsAuthenticated ?? false;
-	                    data["displayName"] = user.DisplayName();
+
+						var isAuthorised = false;
+						if (user.Identity != null && user.Identity.IsAuthenticated)
+						{
+							if (user.Identity.AuthenticationType.Equals(OrganisationCookieAuthenticationOptions.DefaultScheme))
+							{
+								var validatedSessions = user.ValidatedSessions();
+								var pathNoQuery = httpContext.Request.GetUri().AbsolutePath;
+								if (pathNoQuery.StartsWith(Constants.ConsultationsBasePath))
+								{
+									pathNoQuery = pathNoQuery.Substring(Constants.ConsultationsBasePath.Length);
+									if (ConsultationsUri.IsDocumentPageRelativeUrl(pathNoQuery) || ConsultationsUri.IsReviewPageRelativeUrl(pathNoQuery))
+									{
+										var consultationUriParts = ConsultationsUri.ParseRelativeUrl(pathNoQuery);
+										if (validatedSessions.Any(session => session.ConsultationId.Equals(consultationUriParts.ConsultationId)))
+										{
+											isAuthorised = true;
+										}
+									}
+								}
+							}
+							else
+							{
+								isAuthorised = true;
+							}
+						}
+						data["isAuthorised"] = isAuthorised;
+						data["displayName"] = user.DisplayName();
 
 						var host = httpContext.Request.Host.Host;
 						var userRoles = user?.Roles(host).ToList() ?? new List<string>();
