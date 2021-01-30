@@ -8,7 +8,7 @@ namespace Comments.ViewModels
 		public LayoutBaseModel(IPrincipal user, string signInURL, string signOutURL)
 		{
 			IsAuthenticated = user != null && user.Identity != null && user.Identity.IsAuthenticated;
-			DisplayName = user?.Identity.Name ?? "";
+			DisplayName = user?.Identity?.Name ?? "";
 
 			AccountsEnvironment = AppSettings.Environment.AccountsEnvironment.ToLower();
 
