@@ -5,6 +5,7 @@ using System.Text;
 using Comments.Configuration;
 using Comments.Migrations;
 using Comments.Services;
+using Comments.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
@@ -90,11 +91,11 @@ namespace Comments.Models
                     .HasConstraintName("FK_Answer_Status")
                     .IsRequired();
 
-				//JW. automatically filter out deleted rows and other people's comments. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
-				//note: only 1 filter is supported. you must combine the logic into one expression.
+				//global query filter. note: only 1 filter is supported. you must combine the logic into one expression.
+				//TODO: replace StatusName.Submitted with StatusName.SubmittedToLead, when ec-356 is merged in.
 				entity.HasQueryFilter(c => (c.CreatedByUserId != null && _createdByUserID != null && c.CreatedByUserId == _createdByUserID)
-				                           || (_organisationUserIDs != null && c.OrganisationUserId.HasValue && _organisationUserIDs.Any(organisationUserID => organisationUserID.Equals(c.OrganisationUserId)))
-				                           || (c.OrganisationId.HasValue && _organisationalLeadOrganisationID.HasValue && c.OrganisationId.Equals(_organisationalLeadOrganisationID)));
+				                           || (!c.ParentAnswerId.HasValue && _organisationUserIDs != null && c.OrganisationUserId.HasValue && _organisationUserIDs.Any(organisationUserID => organisationUserID.Equals(c.OrganisationUserId)))
+				                           || (c.StatusId == (int)StatusName.Submitted && c.OrganisationId.HasValue && _organisationalLeadOrganisationID.HasValue && c.OrganisationId.Equals(_organisationalLeadOrganisationID)));
 			});
 
             modelBuilder.Entity<Comment>(entity =>
@@ -148,11 +149,11 @@ namespace Comments.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Comment_Status").IsRequired();
 
-				//JW. automatically filter out other people's comments. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
-				//note: only 1 filter is supported. you must combine the logic into one expression.
+				//global query filter. note: only 1 filter is supported. you must combine the logic into one expression. can be ignored using IgnoreQueryFilters
+				//TODO: replace StatusName.Submitted with StatusName.SubmittedToLead, when ec-356 is merged in.
 				entity.HasQueryFilter(c => (c.CreatedByUserId != null && _createdByUserID != null && c.CreatedByUserId == _createdByUserID)
-										      || (_organisationUserIDs != null && c.OrganisationUserId.HasValue && _organisationUserIDs.Any(organisationUserID => organisationUserID.Equals(c.OrganisationUserId)))
-										      || (c.OrganisationId.HasValue && _organisationalLeadOrganisationID.HasValue && c.OrganisationId.Equals(_organisationalLeadOrganisationID)));
+				                           || (!c.ParentCommentId.HasValue && _organisationUserIDs != null && c.OrganisationUserId.HasValue && _organisationUserIDs.Any(organisationUserID => organisationUserID.Equals(c.OrganisationUserId)))
+				                           || (c.StatusId == (int)StatusName.Submitted && c.OrganisationId.HasValue && _organisationalLeadOrganisationID.HasValue && c.OrganisationId.Equals(_organisationalLeadOrganisationID)));
 			});
 
             modelBuilder.Entity<Location>(entity =>
