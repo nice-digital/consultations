@@ -2,7 +2,10 @@ using System;
 using NICE.Identity.Authentication.Sdk.Domain;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
+using Comments.Common;
 using Comments.Models;
+using NICE.Identity.Authentication.Sdk.Extensions;
 
 namespace Comments.ViewModels
 {
@@ -10,16 +13,56 @@ namespace Comments.ViewModels
     {
 	    public User() {}
 
-	    public User(bool isAuthenticated, string displayName, string userId, IEnumerable<Organisation> organisationsAssignedAsLead, IList<ValidatedSession> validatedSessions)
-		{
-            IsAuthenticated = isAuthenticated;
-            DisplayName = displayName;
-            UserId = userId;
-	        OrganisationsAssignedAsLead = organisationsAssignedAsLead;
-	        ValidatedSessions = validatedSessions;
-		}
+	    public User(ClaimsPrincipal claimsPrincipal)
+	    {
+		    if (claimsPrincipal?.Identity == null)
+		    {
+			    AuthenticatedBy = AuthenticationMechanism.None;
+		    }
+		    else
+		    {
+			    AuthenticationType = claimsPrincipal.Identity?.AuthenticationType;
+			    if (claimsPrincipal.Identities.Count() > 1) //it's possible to be authenticated by org cookie + idam, at the same time. 
+			    {
+				    AuthenticatedBy = AuthenticationMechanism.AccountsAndOrganisationCookie;
+			    }
+			    else
+			    {
+				    AuthenticatedBy = AuthenticationType == OrganisationCookieAuthenticationOptions.DefaultScheme
+					    ? AuthenticationMechanism.OrganisationCookie
+					    : AuthenticationMechanism.Accounts;
+			    }
+			    DisplayName = claimsPrincipal.DisplayName();
+			    UserId = claimsPrincipal.NameIdentifier();
+				OrganisationsAssignedAsLead = claimsPrincipal.OrganisationsAssignedAsLead();
+				ValidatedSessions = claimsPrincipal.ValidatedSessions();
+				IsAuthenticatedByAnyMechanism = claimsPrincipal?.Identity?.IsAuthenticated ?? false;
+		    }
+	    }
 
-        public bool IsAuthenticated { get; private set; }
+	    public User(AuthenticationMechanism authenticatedBy, string authenticationType, string displayName, string userId, IEnumerable<Organisation> organisationsAssignedAsLead, IList<ValidatedSession> validatedSessions)
+	    {
+		    AuthenticatedBy = authenticatedBy;
+		    AuthenticationType = authenticationType;
+		    IsAuthenticatedByAnyMechanism = (authenticatedBy != AuthenticationMechanism.None);
+		    DisplayName = displayName;
+		    UserId = userId;
+		    OrganisationsAssignedAsLead = organisationsAssignedAsLead;
+		    ValidatedSessions = validatedSessions;
+	    }
+
+	    public enum AuthenticationMechanism
+	    {
+		    None,
+		    Accounts,
+		    OrganisationCookie,
+		    AccountsAndOrganisationCookie
+	    }
+
+		public AuthenticationMechanism AuthenticatedBy { get; private set; }
+
+		public string AuthenticationType { get; private set; }
+		public bool IsAuthenticatedByAnyMechanism { get; private set; }
         public string DisplayName { get; private set; }
         public string UserId { get; private set; }
 		
@@ -29,7 +72,9 @@ namespace Comments.ViewModels
 
 		public IList<int> ValidatedOrganisationUserIds => ValidatedSessions != null ? ValidatedSessions.Select(session => session.OrganisationUserId).ToList() : new List<int>();
 
-		private bool IsAuthenticatedByAccounts => (IsAuthenticated && UserId != null);
+		public bool IsAuthenticatedByAccounts => (IsAuthenticatedByAnyMechanism && (AuthenticatedBy == AuthenticationMechanism.Accounts || AuthenticatedBy == AuthenticationMechanism.AccountsAndOrganisationCookie));
+
+		public bool IsAuthenticatedByOrganisationCookie => (IsAuthenticatedByAnyMechanism && (AuthenticatedBy == AuthenticationMechanism.OrganisationCookie || AuthenticatedBy == AuthenticationMechanism.AccountsAndOrganisationCookie));
 
 		public bool IsAuthenticatedByOrganisationCookieForThisConsultation(int consultationId)
 		{
@@ -44,7 +89,7 @@ namespace Comments.ViewModels
 		/// <returns></returns>
 		public bool IsAuthorisedByConsultationId(int consultationId)
 		{
-			if (!IsAuthenticated)
+			if (!IsAuthenticatedByAnyMechanism)
 			{
 				return false;
 			}
@@ -64,7 +109,7 @@ namespace Comments.ViewModels
 		/// <returns></returns>
 		public bool IsAuthorisedByOrganisationUserId(int organisationUserId)
 		{
-			if (!IsAuthenticated || IsAuthenticatedByAccounts)
+			if (!IsAuthenticatedByOrganisationCookie)
 			{
 				return false;
 			}

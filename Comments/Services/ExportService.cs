@@ -1,13 +1,11 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Authentication;
-using System.Security.Claims;
 using Comments.Common;
 using Comments.Configuration;
 using Comments.Models;
 using Comments.ViewModels;
-using Microsoft.AspNetCore.Http;
 using NICE.Feeds;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Authentication;
 using Location = Comments.Models.Location;
 
 namespace Comments.Services
@@ -27,19 +25,13 @@ namespace Comments.Services
 	    private readonly IUserService _userService;
 	    private readonly IConsultationService _consultationService;
 	    private readonly IFeedService _feedService;
-	    private readonly ClaimsPrincipal _niceUser;
 
-		public ExportService(ConsultationsContext consultationsContext, IUserService userService, IConsultationService consultationService, IHttpContextAccessor httpContextAccessor, IFeedService feedService)
+		public ExportService(ConsultationsContext consultationsContext, IUserService userService, IConsultationService consultationService, IFeedService feedService)
 	    {
 		    var user = userService.GetCurrentUser();
-		    if (!user.IsAuthenticated)
+		    if (!user.IsAuthenticatedByAnyMechanism)
 		    {
-			    throw new AuthenticationException("GetCurrentUser returned null");
-		    }
-		    _niceUser = httpContextAccessor.HttpContext.User;
-		    if (_niceUser.Identity == null || !_niceUser.Identity.IsAuthenticated)
-		    {
-			    throw new AuthenticationException("NICE user is not authenticated");
+			    throw new AuthenticationException("User not authenticated");
 		    }
 
 			_context = consultationsContext;

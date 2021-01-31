@@ -133,7 +133,9 @@
         "TeamNames":[
             
         ],
-        "IsAuthenticated":true,
+        "AuthenticatedBy":1,
+        "AuthenticationType":"Auth0",
+        "IsAuthenticatedByAnyMechanism":true,
         "DisplayName":"Benjamin Button",
         "UserId":"scrubbed by ScrubUserId",
         "OrganisationsAssignedAsLead":[
@@ -144,7 +146,9 @@
         ],
         "ValidatedOrganisationUserIds":[
             
-        ]
+        ],
+        "IsAuthenticatedByAccounts":true,
+        "IsAuthenticatedByOrganisationCookie":false
     },
     "InitialPageView":false,
     "Status":[

@@ -27,6 +27,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using Comments.ViewModels;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
 
 namespace Comments
@@ -208,22 +209,24 @@ namespace Comments
 	        app.UseForwardedHeaders();
             app.UseAuthentication();
 
-            app.Use(async (context, next) => //this middleware is here in order to combine the multiple authentication schemes we have - auth0 and organisation cookie, then update the context user values so that the query filters work properly.
+            app.Use(async (context, next) => 
             {
-	            var principal = new ClaimsPrincipal();
+				//this middleware is here because we have some controller api's that don't have the authorise attribute set. e.g. CommentsController. that controller still needs to work.
+				//without authentication. for authenticated users, the default scheme is used. however, we now have 2 schemes which can be used together (idam and organisation cookie).
+				//so this middleware combines the multiple authentication schemes we have, setting a single user.
+				//it then update the context user values in the DbContext so that the global query filters work.
+				var principal = new ClaimsPrincipal();
 
-	            var result1 = await context.AuthenticateAsync(OrganisationCookieAuthenticationOptions.DefaultScheme);
-	            if (result1?.Principal != null)
+	            var cookieAuthResult = await context.AuthenticateAsync(OrganisationCookieAuthenticationOptions.DefaultScheme);
+	            if (cookieAuthResult?.Principal != null)
 	            {
-		            principal.AddIdentities(result1.Principal.Identities);
+		            principal.AddIdentities(cookieAuthResult.Principal.Identities);
 	            }
-
-	            var result2 = await context.AuthenticateAsync(AuthenticationConstants.AuthenticationScheme);
-	            if (result2?.Principal != null)
+	            var accountsAuthResult = await context.AuthenticateAsync(AuthenticationConstants.AuthenticationScheme);
+	            if (accountsAuthResult?.Principal != null)
 	            {
-		            principal.AddIdentities(result2.Principal.Identities);
+		            principal.AddIdentities(accountsAuthResult.Principal.Identities);
 	            }
-
 	            context.User = principal;
 
 	            var consultationsContext = context.RequestServices.GetService<ConsultationsContext>();
@@ -304,38 +307,22 @@ namespace Comments
                         {
                             data["cookies"] = $"{string.Join("; ", cookiesForSSR.Select(cookie => $"{cookie.Key}={cookie.Value}"))};";
                         }
-						var user = httpContext.User;
-
-						var isAuthorised = false;
-						if (user.Identity != null && user.Identity.IsAuthenticated)
+						var user = new User(httpContext.User);
+						var isAuthorised = user.IsAuthenticatedByAccounts;
+						if (!isAuthorised)
 						{
-							if (user.Identity.AuthenticationType.Equals(OrganisationCookieAuthenticationOptions.DefaultScheme))
+							var pathNoQuery = httpContext.Request.GetUri().AbsolutePath.StripConsultationsFromPath();
+							if (ConsultationsUri.IsDocumentPageRelativeUrl(pathNoQuery) || ConsultationsUri.IsReviewPageRelativeUrl(pathNoQuery))
 							{
-								var validatedSessions = user.ValidatedSessions();
-								var pathNoQuery = httpContext.Request.GetUri().AbsolutePath;
-								if (pathNoQuery.StartsWith(Constants.ConsultationsBasePath))
-								{
-									pathNoQuery = pathNoQuery.Substring(Constants.ConsultationsBasePath.Length);
-									if (ConsultationsUri.IsDocumentPageRelativeUrl(pathNoQuery) || ConsultationsUri.IsReviewPageRelativeUrl(pathNoQuery))
-									{
-										var consultationUriParts = ConsultationsUri.ParseRelativeUrl(pathNoQuery);
-										if (validatedSessions.Any(session => session.ConsultationId.Equals(consultationUriParts.ConsultationId)))
-										{
-											isAuthorised = true;
-										}
-									}
-								}
-							}
-							else
-							{
-								isAuthorised = true;
+								var consultationUriParts = ConsultationsUri.ParseRelativeUrl(pathNoQuery);
+								isAuthorised = user.IsAuthorisedByConsultationId(consultationUriParts.ConsultationId);
 							}
 						}
 						data["isAuthorised"] = isAuthorised;
-						data["displayName"] = user.DisplayName();
+						data["displayName"] = user.DisplayName;
 
 						var host = httpContext.Request.Host.Host;
-						var userRoles = user?.Roles(host).ToList() ?? new List<string>();
+						var userRoles = httpContext.User?.Roles(host).ToList() ?? new List<string>();
 
 						var isAdminUser = userRoles.Any(role => AppSettings.ConsultationListConfig.DownloadRoles.AdminRoles.Contains(role));
 						var teamRoles = userRoles.Where(role => AppSettings.ConsultationListConfig.DownloadRoles.TeamRoles.Contains(role)).Select(role => role).ToList();

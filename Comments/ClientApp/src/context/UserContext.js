@@ -102,12 +102,13 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 					this.setStateForValidSessionCookie(data.validityAndOrganisationName.organisationName);
 				}
 				else{
+					const sessionCookieExistsForThisConsultation = data.userSessionParameters.sessionCookieExistsForThisConsultation;
 					load("user", undefined, [], { returnURL, cachebust: new Date().getTime() })
 						.then(
 							res => {
 								const signInURL = res.data.signInURL;
 								this.setState({
-									isAuthorised: res.data.isAuthenticated,
+									isAuthorised: (res.data.isAuthenticatedByAccounts || sessionCookieExistsForThisConsultation),
 									displayName: res.data.displayName,
 									signInURL: signInURL,
 									registerURL: res.data.registerURL,
@@ -143,7 +144,10 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 		const userSessionParameters = this.getUserSessionParameters(window.__PRELOADED__);
 
 		if (!userSessionParameters.sessionCookieExistsForThisConsultation)
-			return await {validityAndOrganisationName: {valid: false}};
+			return await {
+				validityAndOrganisationName: {valid: false}, 
+				userSessionParameters: userSessionParameters,
+			};
 
 		const validityAndOrganisationName = load(
 			"checkorganisationusersession",
@@ -159,6 +163,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 			});
 		return {
 			validityAndOrganisationName: await validityAndOrganisationName,
+			userSessionParameters: userSessionParameters,
 		};
 	}
 
