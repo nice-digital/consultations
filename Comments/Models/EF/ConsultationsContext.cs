@@ -1,19 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Comments.Configuration;
 using Comments.Migrations;
 using Comments.Services;
 using Comments.ViewModels;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace Comments.Models
 {
-    public partial class ConsultationsContext : DbContext
+	public partial class ConsultationsContext : DbContext
     {
 		private readonly IUserService _userService;
 		public virtual DbSet<Answer> Answer { get; set; }
@@ -92,10 +88,17 @@ namespace Comments.Models
                     .IsRequired();
 
 				//global query filter. note: only 1 filter is supported. you must combine the logic into one expression.
-				//TODO: replace StatusName.Submitted with StatusName.SubmittedToLead, when ec-356 is merged in.
-				entity.HasQueryFilter(c => (c.CreatedByUserId != null && _createdByUserID != null && c.CreatedByUserId == _createdByUserID)
-				                           || (!c.ParentAnswerId.HasValue && _organisationUserIDs != null && c.OrganisationUserId.HasValue && _organisationUserIDs.Any(organisationUserID => organisationUserID.Equals(c.OrganisationUserId)))
-				                           || (c.StatusId == (int)StatusName.Submitted && c.OrganisationId.HasValue && _organisationalLeadOrganisationID.HasValue && c.OrganisationId.Equals(_organisationalLeadOrganisationID)));
+				entity.HasQueryFilter(c =>
+
+					//created by user id is set for regular users and also org leads when they add new responses
+					(c.CreatedByUserId != null && _createdByUserID != null && c.CreatedByUserId == _createdByUserID)
+
+					//if the current user has an organisationuserid, then it's an organisational commenter (not a lead) with a cookie. the parent answer should be null. when the answers are copied to org lead, then the parent answer is populated.
+					|| (!c.ParentAnswerId.HasValue && _organisationUserIDs != null && c.OrganisationUserId.HasValue && _organisationUserIDs.Any(organisationUserID => organisationUserID.Equals(c.OrganisationUserId)))
+
+					//this condition is so that org leads can see answers submitted by organisation commenters. the record will be submitted and have an organisation id. also, the c.createdbyuserid != null, condition is so org leads can share answers between themselves.
+					|| ((c.StatusId == (int)StatusName.Submitted || c.CreatedByUserId != null) && c.OrganisationId.HasValue && _organisationalLeadOrganisationID.HasValue && c.OrganisationId.Equals(_organisationalLeadOrganisationID)) //TODO: replace StatusName.Submitted with StatusName.SubmittedToLead, when ec-356 is merged in.
+				);
 			});
 
             modelBuilder.Entity<Comment>(entity =>
@@ -150,11 +153,18 @@ namespace Comments.Models
                     .HasConstraintName("FK_Comment_Status").IsRequired();
 
 				//global query filter. note: only 1 filter is supported. you must combine the logic into one expression. can be ignored using IgnoreQueryFilters
-				//TODO: replace StatusName.Submitted with StatusName.SubmittedToLead, when ec-356 is merged in.
-				entity.HasQueryFilter(c => (c.CreatedByUserId != null && _createdByUserID != null && c.CreatedByUserId == _createdByUserID)
-				                           || (!c.ParentCommentId.HasValue && _organisationUserIDs != null && c.OrganisationUserId.HasValue && _organisationUserIDs.Any(organisationUserID => organisationUserID.Equals(c.OrganisationUserId)))
-				                           || (c.StatusId == (int)StatusName.Submitted && c.OrganisationId.HasValue && _organisationalLeadOrganisationID.HasValue && c.OrganisationId.Equals(_organisationalLeadOrganisationID)));
-			});
+				entity.HasQueryFilter(c =>
+
+						//created by user id is set for regular users and also org leads when they add new responses
+						(c.CreatedByUserId != null && _createdByUserID != null && c.CreatedByUserId == _createdByUserID)
+
+						//if the current user has an organisationuserid, then it's an organisational commenter (not a lead) with a cookie. the parent answer should be null. when the comments are copied to org lead, then the parent answer is populated.
+						|| (!c.ParentCommentId.HasValue && _organisationUserIDs != null && c.OrganisationUserId.HasValue && _organisationUserIDs.Any(organisationUserID => organisationUserID.Equals(c.OrganisationUserId)))
+
+						//this condition is so that org leads can see answers submitted by organisation commenters. the record will be submitted and have an organisation id. also, the c.createdbyuserid != null, condition is so org leads can share comments between themselves.
+						|| ((c.StatusId == (int)StatusName.Submitted || c.CreatedByUserId != null) && c.OrganisationId.HasValue && _organisationalLeadOrganisationID.HasValue && c.OrganisationId.Equals(_organisationalLeadOrganisationID)) //TODO: replace StatusName.Submitted with StatusName.SubmittedToLead, when ec-356 is merged in.
+				);
+            });
 
             modelBuilder.Entity<Location>(entity =>
             {
