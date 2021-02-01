@@ -30,7 +30,7 @@ namespace Comments.Services
 
 		public (int rowsUpdated, Validate validate) Submit(ViewModels.Submission submission)
 		{
-			if (!_currentUser.IsAuthenticated || string.IsNullOrEmpty(_currentUser.UserId))
+			if (!_currentUser.IsAuthenticatedByAnyMechanism)
 				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"Not logged in submitting comments and answers"));
 
 			//if a user is submitting a different users comment, the context will throw an exception.
