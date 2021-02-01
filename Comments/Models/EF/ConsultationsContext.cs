@@ -87,17 +87,20 @@ namespace Comments.Models
                     .HasConstraintName("FK_Answer_Status")
                     .IsRequired();
 
-				//global query filter. note: only 1 filter is supported. you must combine the logic into one expression.
-				entity.HasQueryFilter(c =>
+                //global query filter. note: only 1 filter is supported. you must combine the logic into one expression. can be ignored using IgnoreQueryFilters
+                entity.HasQueryFilter(c =>
 
-					//created by user id is set for regular users and also org leads when they add new responses
-					(c.CreatedByUserId != null && _createdByUserID != null && c.CreatedByUserId == _createdByUserID)
+	                //this condition is intended for regular users. it is also used for org leads viewing their own brand new answers.
+	                (c.CreatedByUserId != null && _createdByUserID != null && c.CreatedByUserId == _createdByUserID)
 
-					//if the current user has an organisationuserid, then it's an organisational commenter (not a lead) with a cookie. the parent answer should be null. when the answers are copied to org lead, then the parent answer is populated.
-					|| (!c.ParentAnswerId.HasValue && _organisationUserIDs != null && c.OrganisationUserId.HasValue && _organisationUserIDs.Any(organisationUserID => organisationUserID.Equals(c.OrganisationUserId)))
+	                //this condition is filter is here for organisation commenters (not leads). if they have a cookie, then the _orgnanisationUserIDs property will have a value and needs to match the record.
+	                //the reason for the !c.ParentCommentId.HasValue, is so that when comments are copied to org leads, the organisationUserId value is left. however we don't want the commenter to be able to view the org leads copied answer
+	                //so that filters them out.
+	                || (!c.ParentAnswerId.HasValue && _organisationUserIDs != null && c.OrganisationUserId.HasValue && _organisationUserIDs.Any(organisationUserID => organisationUserID.Equals(c.OrganisationUserId)))
 
-					//this condition is so that org leads can see answers submitted by organisation commenters. the record will be submitted and have an organisation id. also, the c.createdbyuserid != null, condition is so org leads can share answers between themselves.
-					|| ((c.StatusId == (int)StatusName.Submitted || c.CreatedByUserId != null) && c.OrganisationId.HasValue && _organisationalLeadOrganisationID.HasValue && c.OrganisationId.Equals(_organisationalLeadOrganisationID)) //TODO: replace StatusName.Submitted with StatusName.SubmittedToLead, when ec-356 is merged in.
+	                //this condition is for org leads. the c.ParentCommentId.HasValue, is so they can see answers submitted by organisation commenters as that gets set when the answer is copied.
+	                //the c.CreatedByUserId != null is so they can see brand new answers for the organisation, made by another org lead for the same organisation.
+	                || ((c.ParentAnswerId.HasValue || c.CreatedByUserId != null) && c.OrganisationId.HasValue && _organisationalLeadOrganisationID.HasValue && c.OrganisationId.Equals(_organisationalLeadOrganisationID))
 				);
 			});
 
@@ -155,14 +158,17 @@ namespace Comments.Models
 				//global query filter. note: only 1 filter is supported. you must combine the logic into one expression. can be ignored using IgnoreQueryFilters
 				entity.HasQueryFilter(c =>
 
-						//created by user id is set for regular users and also org leads when they add new responses
+						//this condition is intended for regular users. it is also used for org leads viewing their own brand new comments.
 						(c.CreatedByUserId != null && _createdByUserID != null && c.CreatedByUserId == _createdByUserID)
 
-						//if the current user has an organisationuserid, then it's an organisational commenter (not a lead) with a cookie. the parent answer should be null. when the comments are copied to org lead, then the parent answer is populated.
+						//this condition is filter is here for organisation commenters (not leads). if they have a cookie, then the _orgnanisationUserIDs property will have a value and needs to match the record.
+						//the reason for the !c.ParentCommentId.HasValue, is so that when comments are copied to org leads, the organisationUserId value is left. however we don't want the commenter to be able to view the org leads copied comment
+						//so that filters them out.
 						|| (!c.ParentCommentId.HasValue && _organisationUserIDs != null && c.OrganisationUserId.HasValue && _organisationUserIDs.Any(organisationUserID => organisationUserID.Equals(c.OrganisationUserId)))
 
-						//this condition is so that org leads can see answers submitted by organisation commenters. the record will be submitted and have an organisation id. also, the c.createdbyuserid != null, condition is so org leads can share comments between themselves.
-						|| ((c.StatusId == (int)StatusName.Submitted || c.CreatedByUserId != null) && c.OrganisationId.HasValue && _organisationalLeadOrganisationID.HasValue && c.OrganisationId.Equals(_organisationalLeadOrganisationID)) //TODO: replace StatusName.Submitted with StatusName.SubmittedToLead, when ec-356 is merged in.
+						//this condition is for org leads. the c.ParentCommentId.HasValue, is so they can see comments submitted by organisation commenters as that gets set when the comment is copied.
+						//the c.CreatedByUserId != null is so they can see brand new comments for the organisation, made by another org lead for the same organisation.
+						|| ((c.ParentCommentId.HasValue || c.CreatedByUserId != null) &&  c.OrganisationId.HasValue && _organisationalLeadOrganisationID.HasValue && c.OrganisationId.Equals(_organisationalLeadOrganisationID))
 				);
             });
 
