@@ -282,13 +282,13 @@ namespace Comments.Test.UnitTests
 
 			//Assert
 			result.rowsUpdated.ShouldBe(2);
-			result.context.Comment.First().StatusId = 2;
-			result.context.Comment.First().OrganisationId = null;
-			result.context.Comment.First().ParentCommentId = null;
-			result.context.Comment.First().ChildComments.First().StatusId = 1;
-			result.context.Comment.First().ChildComments.First().OrganisationId = 1;
-			result.context.Comment.First().ChildComments.First().ParentCommentId = 1;
-			result.context.Comment.First().ChildComments.First().CommentText = "Comment text";
+			result.context.Comment.First().StatusId.ShouldBe(2);
+			result.context.Comment.First().OrganisationId.ShouldBe(null);
+			result.context.Comment.First().ParentCommentId.ShouldBe(null);
+			result.context.Comment.First().ChildComments.First().StatusId.ShouldBe(1);
+			result.context.Comment.First().ChildComments.First().OrganisationId.ShouldBe(1);
+			result.context.Comment.First().ChildComments.First().ParentCommentId.ShouldBe(1);
+			result.context.Comment.First().ChildComments.First().CommentText.ShouldBe("Comment text");
 		}
 
 		[Fact]
@@ -322,8 +322,8 @@ namespace Comments.Test.UnitTests
 
 			//Assert
 			result.rowsUpdated.ShouldBe(2);
-			result.context.Answer.First().StatusId = 2;
-			result.context.Answer.First().ChildAnswers.First().StatusId = 1;
+			result.context.Answer.First().StatusId.ShouldBe(2);
+			result.context.Answer.First().ChildAnswers.First().StatusId.ShouldBe(1);
 		}
 	}
 }
