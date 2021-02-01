@@ -72,11 +72,14 @@ namespace Comments.Services
             }
             else //accounts auth
             {
-	            if (!commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId, StringComparison.OrdinalIgnoreCase))
+	            if (commentInDatabase.CreatedByUserId != null && !commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId, StringComparison.OrdinalIgnoreCase))
 		            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to edit comment id: {commentId}, but it's not their comment"));
-			}
 
-            comment.LastModifiedByUserId = _currentUser.UserId;
+	            if (commentInDatabase.CreatedByUserId == null && !commentInDatabase.OrganisationId.Equals(_currentUser.OrganisationsAssignedAsLead?.FirstOrDefault()?.OrganisationId))
+		            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to edit comment id: {commentId}, but they are not lead for that comment"));
+            }
+
+			comment.LastModifiedByUserId = _currentUser.UserId;
             comment.LastModifiedDate = DateTime.UtcNow;
             commentInDatabase.UpdateFromViewModel(comment);
             return (rowsUpdated: _context.SaveChanges(), validate: null);
@@ -139,8 +142,11 @@ namespace Comments.Services
 			}
             else //accounts auth
             {
-	            if (!commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId))
+	            if (commentInDatabase.CreatedByUserId != null && !commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId))
 		            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to delete comment id: {commentId}, but it's not their comment"));
+
+	            if (commentInDatabase.CreatedByUserId == null && !commentInDatabase.OrganisationId.Equals(_currentUser.OrganisationsAssignedAsLead?.FirstOrDefault()?.OrganisationId))
+		            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to delete comment id: {commentId}, but they are not lead for that comment"));
 			}
 
             _context.Comment.Remove(commentInDatabase);

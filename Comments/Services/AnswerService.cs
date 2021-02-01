@@ -3,6 +3,7 @@ using System.Linq;
 using Comments.Common;
 using Comments.ViewModels;
 using Comments.Models;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Comments.Services
 {
@@ -59,9 +60,12 @@ namespace Comments.Services
 			}
 			else //accounts auth
 			{
-	            if (!answerInDatabase.CreatedByUserId.Equals(_currentUser.UserId, StringComparison.OrdinalIgnoreCase))
+	            if (answerInDatabase.CreatedByUserId != null && !answerInDatabase.CreatedByUserId.Equals(_currentUser.UserId, StringComparison.OrdinalIgnoreCase))
 		            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to edit answer id: {answerId}, but it's not their answer"));
-            }
+
+	            if (answerInDatabase.CreatedByUserId == null && !answerInDatabase.OrganisationId.Equals(_currentUser.OrganisationsAssignedAsLead?.FirstOrDefault()?.OrganisationId))
+		            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to edit answer id: {answerId}, but they are not lead for that answer"));
+			}
 
 			answer.LastModifiedByUserId = _currentUser.UserId;
 	        answer.LastModifiedDate = DateTime.UtcNow;
@@ -87,10 +91,13 @@ namespace Comments.Services
 			}
             else //accounts auth
             {
-				if (!answerInDatabase.CreatedByUserId.Equals(_currentUser.UserId))
+				if (answerInDatabase.CreatedByUserId != null && !answerInDatabase.CreatedByUserId.Equals(_currentUser.UserId))
 					return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to delete answer id: {answerId}, but it's not their answer"));
+
+				if (answerInDatabase.CreatedByUserId == null && !answerInDatabase.OrganisationId.Equals(_currentUser.OrganisationsAssignedAsLead?.FirstOrDefault()?.OrganisationId))
+					return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to delete answer id: {answerId}, but they are not lead for that answer"));
 			}
-			
+
             _context.Answer.Remove(answerInDatabase);
 
 			return (rowsUpdated: _context.SaveChanges(), validate: null);
