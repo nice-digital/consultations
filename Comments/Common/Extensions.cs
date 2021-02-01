@@ -170,13 +170,5 @@ namespace Comments.Common
 	    {
 		    return path.StartsWith(Constants.ConsultationsBasePath) ? path.Substring(Constants.ConsultationsBasePath.Length) : path;
 	    }
-
-	 //   public static User GetUserFromClaimsPrincipal(this ClaimsPrincipal user)
-	 //   {
-
-
-
-		//    return new User(user?.Identity?.AuthenticationType, user?.Identity?.IsAuthenticated ?? false, user?.DisplayName(), user?.NameIdentifier(), user?.OrganisationsAssignedAsLead(), user?.ValidatedSessions());
-		//}
     }
 }
