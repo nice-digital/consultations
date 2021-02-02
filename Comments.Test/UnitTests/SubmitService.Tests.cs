@@ -283,7 +283,7 @@ namespace Comments.Test.UnitTests
 
 			//Assert
 			result.rowsUpdated.ShouldBe(2);
-			result.context.Comment.First().StatusId.ShouldBe((int)StatusName.Submitted);
+			result.context.Comment.First().StatusId.ShouldBe((int)StatusName.SubmittedToLead);
 			result.context.Comment.First().OrganisationId.ShouldBe(organisationId);
 			result.context.Comment.First().ParentCommentId.ShouldBe(null);
 			result.context.Comment.First().OrganisationUserId.ShouldBe(organisationUserId);
@@ -328,7 +328,7 @@ namespace Comments.Test.UnitTests
 
 			//Assert
 			result.rowsUpdated.ShouldBe(2);
-			result.context.Answer.First().StatusId.ShouldBe((int)StatusName.Submitted);
+			result.context.Answer.First().StatusId.ShouldBe((int)StatusName.SubmittedToLead);
 			result.context.Answer.First().OrganisationId.ShouldBe(organisationId);
 			result.context.Answer.First().ParentAnswerId.ShouldBe(null);
 			result.context.Answer.First().OrganisationUserId.ShouldBe(organisationUserId);
