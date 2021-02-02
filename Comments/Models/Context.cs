@@ -277,7 +277,7 @@ namespace Comments.Models
 		    commentsToUpdate.ForEach(c => c.StatusId = status.StatusId);
 		}
 
-	    public void DuplicateComment(IEnumerable<int> commentIds, int organisationUserId)
+	    public void DuplicateComment(IEnumerable<int> commentIds)
 	    {
 		    var commentsToDuplicate = Comment.Where(c => commentIds.Contains(c.CommentId)).ToList();
 
@@ -286,16 +286,14 @@ namespace Comments.Models
 
 			status = GetStatus(StatusName.Draft);
 
-		    var organisationId = GetOrganisationIdByOrganisationUserId(organisationUserId);
-
 		    foreach (var comment in commentsToDuplicate)
 			{
-				var commentToSave = new Models.Comment(comment.LocationId, null, comment.CommentText, comment.LastModifiedByUserId, comment.Location,status.StatusId, status, comment.OrganisationUserId, comment.CommentId, organisationId);
+				var commentToSave = new Models.Comment(comment.LocationId, null, comment.CommentText, comment.LastModifiedByUserId, comment.Location,status.StatusId, status, comment.OrganisationUserId, comment.CommentId, comment.OrganisationId);
 				Comment.Add(commentToSave);
 			}
 	    }
 
-		public void DuplicateAnswer(IEnumerable<int> answerIds, int organisationUserId)
+		public void DuplicateAnswer(IEnumerable<int> answerIds)
 		{
 			var answersToDuplicate = Answer.Where(c => answerIds.Contains(c.AnswerId)).ToList();
 
@@ -304,11 +302,9 @@ namespace Comments.Models
 
 			status = GetStatus(StatusName.Draft);
 
-			var organisationId = GetOrganisationIdByOrganisationUserId(organisationUserId);
-
 			foreach (var answer in answersToDuplicate)
 			{
-				var answerToSave = new Models.Answer(answer.QuestionId, null, answer.AnswerText, answer.AnswerBoolean, answer.Question, status.StatusId, status, answer.OrganisationUserId, answer.AnswerId, organisationId);
+				var answerToSave = new Models.Answer(answer.QuestionId, null, answer.AnswerText, answer.AnswerBoolean, answer.Question, status.StatusId, status, answer.OrganisationUserId, answer.AnswerId, answer.OrganisationId);
 				Answer.Add(answerToSave);
 			}
 		}
@@ -945,6 +941,5 @@ namespace Comments.Models
 				.Any(c => c.OrganisationUser.OrganisationAuthorisation.OrganisationId.Equals(organisationId));
 
 		}
-
-    }
+	}
 }

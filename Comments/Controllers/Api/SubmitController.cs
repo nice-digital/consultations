@@ -1,10 +1,12 @@
 using System;
 using System.Net;
+using Comments.Common;
 using Comments.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NICE.Identity.Authentication.Sdk.Domain;
 
 namespace Comments.Controllers.Api
 {
@@ -54,14 +56,15 @@ namespace Comments.Controllers.Api
 		// POST: consultations/api/submitToLead
 		[HttpPost]
 		[Route("consultations/api/[controller]ToLead")]
-		public IActionResult PostSubmitToLead([FromBody] ViewModels.Submission submission, string emailAddress, Guid authorisationSession)
+		[Authorize(AuthenticationSchemes = OrganisationCookieAuthenticationOptions.DefaultScheme + "," + AuthenticationConstants.AuthenticationScheme)]
+		public IActionResult PostSubmitToLead([FromBody] ViewModels.Submission submission, string emailAddress)
 	    {
 		    if (!ModelState.IsValid)
 		    {
 			    return BadRequest(ModelState);
 		    }
 		   
-		    var result = _submitService.SubmitToLead(submission, emailAddress, authorisationSession);
+		    var result = _submitService.SubmitToLead(submission, emailAddress);
 		    var invalidResult = Validate(result.validate, _logger);
 
 		    //just some temporary debug here:
