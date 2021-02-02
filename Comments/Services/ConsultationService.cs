@@ -201,7 +201,7 @@ namespace Comments.Services
 
 		    var currentUser = _userService.GetCurrentUser();
 
-		    if (currentUser.IsAuthenticated && !string.IsNullOrEmpty(currentUser.UserId))
+		    if (currentUser.IsAuthenticatedByAnyMechanism)
 		    {
 			    locations = locations ?? _context.GetAllCommentsAndQuestionsForDocument(new[] { sourceURI }, partialMatchSourceURI: true);
 		    }

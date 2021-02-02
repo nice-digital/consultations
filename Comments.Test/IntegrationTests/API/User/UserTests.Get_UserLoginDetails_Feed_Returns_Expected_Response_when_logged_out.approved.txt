@@ -1,12 +1,16 @@
 ﻿{
     "signInURL":"/consultations/account/login?returnURL=%2Fconsultations%2F1%2F1%2Fintroduction",
     "registerURL":"/consultations/account/login?returnURL=%2Fconsultations%2F1%2F1%2Fintroduction&goToRegisterPage=True",
-    "isAuthenticated":false,
+    "authenticatedBy":0,
+    "authenticationType":null,
+    "isAuthenticatedByAnyMechanism":false,
     "displayName":null,
     "userId":null,
     "organisationsAssignedAsLead":null,
     "validatedSessions":null,
     "validatedOrganisationUserIds":[
         
-    ]
+    ],
+    "isAuthenticatedByAccounts":false,
+    "isAuthenticatedByOrganisationCookie":false
 }

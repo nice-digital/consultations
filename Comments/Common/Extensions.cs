@@ -12,6 +12,7 @@ using Comments.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using NICE.Identity.Authentication.Sdk.Extensions;
 
 namespace Comments.Common
 {
@@ -164,5 +165,10 @@ namespace Comments.Common
 
 		    return JsonConvert.DeserializeObject<IList<ValidatedSession>>(serialisedSessions);
 	    }
-	}
+
+	    public static string StripConsultationsFromPath(this string path)
+	    {
+		    return path.StartsWith(Constants.ConsultationsBasePath) ? path.Substring(Constants.ConsultationsBasePath.Length) : path;
+	    }
+    }
 }

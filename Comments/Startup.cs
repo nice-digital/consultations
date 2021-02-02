@@ -2,12 +2,16 @@ using Comments.Common;
 using Comments.Configuration;
 using Comments.Export;
 using Comments.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -15,18 +19,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using Microsoft.FeatureManagement;
 using NICE.Feeds;
 using NICE.Identity.Authentication.Sdk.Domain;
 using NICE.Identity.Authentication.Sdk.Extensions;
 using System;
-using System.IO;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc.Abstractions;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.Mvc.Routing;
-using ConsultationsContext = Comments.Models.ConsultationsContext;
 using System.Collections.Generic;
-using Microsoft.FeatureManagement;
+using System.Linq;
+using System.Security.Claims;
+using Comments.ViewModels;
+using ConsultationsContext = Comments.Models.ConsultationsContext;
 
 namespace Comments
 {
@@ -206,7 +208,34 @@ namespace Comments
 
 	        app.UseForwardedHeaders();
             app.UseAuthentication();
-            app.UseSpaStaticFiles(new StaticFileOptions { RequestPath = "/consultations" });
+
+            app.Use(async (context, next) => 
+            {
+				//this middleware is here because we have some controller api's that don't have the authorise attribute set. e.g. CommentsController. that controller still needs to work.
+				//without authentication. for authenticated users, the default scheme is used. however, we now have 2 schemes which can be used together (idam and organisation cookie).
+				//so this middleware combines the multiple authentication schemes we have, setting a single user.
+				//it then update the context user values in the DbContext so that the global query filters work.
+				var principal = new ClaimsPrincipal();
+
+	            var cookieAuthResult = await context.AuthenticateAsync(OrganisationCookieAuthenticationOptions.DefaultScheme);
+	            if (cookieAuthResult?.Principal != null)
+	            {
+		            principal.AddIdentities(cookieAuthResult.Principal.Identities);
+	            }
+	            var accountsAuthResult = await context.AuthenticateAsync(AuthenticationConstants.AuthenticationScheme);
+	            if (accountsAuthResult?.Principal != null)
+	            {
+		            principal.AddIdentities(accountsAuthResult.Principal.Identities);
+	            }
+	            context.User = principal;
+
+	            var consultationsContext = context.RequestServices.GetService<ConsultationsContext>();
+	            consultationsContext.ConfigureContext();
+
+				await next();
+            });
+
+			app.UseSpaStaticFiles(new StaticFileOptions { RequestPath = "/consultations" });
 
 		    if (!env.IsDevelopment() && !env.IsIntegrationTest())
 		    {
@@ -278,12 +307,22 @@ namespace Comments
                         {
                             data["cookies"] = $"{string.Join("; ", cookiesForSSR.Select(cookie => $"{cookie.Key}={cookie.Value}"))};";
                         }
-						var user = httpContext.User;
-						data["isAuthorised"] = user.Identity.IsAuthenticated;
-	                    data["displayName"] = user.DisplayName();
+						var user = new User(httpContext.User);
+						var isAuthorised = user.IsAuthenticatedByAccounts;
+						if (!isAuthorised)
+						{
+							var pathNoQuery = httpContext.Request.GetUri().AbsolutePath.StripConsultationsFromPath();
+							if (ConsultationsUri.IsDocumentPageRelativeUrl(pathNoQuery) || ConsultationsUri.IsReviewPageRelativeUrl(pathNoQuery))
+							{
+								var consultationUriParts = ConsultationsUri.ParseRelativeUrl(pathNoQuery);
+								isAuthorised = user.IsAuthorisedByConsultationId(consultationUriParts.ConsultationId);
+							}
+						}
+						data["isAuthorised"] = isAuthorised;
+						data["displayName"] = user.DisplayName;
 
 						var host = httpContext.Request.Host.Host;
-						var userRoles = user?.Roles(host).ToList() ?? new List<string>();
+						var userRoles = httpContext.User?.Roles(host).ToList() ?? new List<string>();
 
 						var isAdminUser = userRoles.Any(role => AppSettings.ConsultationListConfig.DownloadRoles.AdminRoles.Contains(role));
 						var teamRoles = userRoles.Where(role => AppSettings.ConsultationListConfig.DownloadRoles.TeamRoles.Contains(role)).Select(role => role).ToList();

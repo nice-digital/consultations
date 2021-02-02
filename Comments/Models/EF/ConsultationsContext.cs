@@ -1,18 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Comments.Configuration;
 using Comments.Migrations;
 using Comments.Services;
+using Comments.ViewModels;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace Comments.Models
 {
-    public partial class ConsultationsContext : DbContext
+	public partial class ConsultationsContext : DbContext
     {
 		private readonly IUserService _userService;
 		public virtual DbSet<Answer> Answer { get; set; }
@@ -90,11 +87,21 @@ namespace Comments.Models
                     .HasConstraintName("FK_Answer_Status")
                     .IsRequired();
 
-				//JW. automatically filter out deleted rows and other people's comments. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
-				//note: only 1 filter is supported. you must combine the logic into one expression.
-				entity.HasQueryFilter(c => (c.CreatedByUserId != null && _createdByUserID != null && c.CreatedByUserId == _createdByUserID)
-				                           || (_organisationUserIDs != null && c.OrganisationUserId.HasValue && _organisationUserIDs.Any(organisationUserID => organisationUserID.Equals(c.OrganisationUserId)))
-				                           || (c.OrganisationId.HasValue && _organisationalLeadOrganisationID.HasValue && c.OrganisationId.Equals(_organisationalLeadOrganisationID)));
+                //global query filter. note: only 1 filter is supported. you must combine the logic into one expression. can be ignored using IgnoreQueryFilters
+                entity.HasQueryFilter(c =>
+
+	                //this condition is intended for regular users. it is also used for org leads viewing their own brand new answers.
+	                (c.CreatedByUserId != null && _createdByUserID != null && c.CreatedByUserId == _createdByUserID)
+
+	                //this condition is filter is here for organisation commenters (not leads). if they have a cookie, then the _orgnanisationUserIDs property will have a value and needs to match the record.
+	                //the reason for the !c.ParentCommentId.HasValue, is so that when comments are copied to org leads, the organisationUserId value is left. however we don't want the commenter to be able to view the org leads copied answer
+	                //so that filters them out.
+	                || (!c.ParentAnswerId.HasValue && _organisationUserIDs != null && c.OrganisationUserId.HasValue && _organisationUserIDs.Any(organisationUserID => organisationUserID.Equals(c.OrganisationUserId)))
+
+	                //this condition is for org leads. the c.ParentCommentId.HasValue, is so they can see answers submitted by organisation commenters as that gets set when the answer is copied.
+	                //the c.CreatedByUserId != null is so they can see brand new answers for the organisation, made by another org lead for the same organisation.
+	                || ((c.ParentAnswerId.HasValue || c.CreatedByUserId != null) && c.OrganisationId.HasValue && _organisationalLeadOrganisationID.HasValue && c.OrganisationId.Equals(_organisationalLeadOrganisationID))
+				);
 			});
 
             modelBuilder.Entity<Comment>(entity =>
@@ -148,12 +155,22 @@ namespace Comments.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Comment_Status").IsRequired();
 
-				//JW. automatically filter out other people's comments. this filter can be ignored using IgnoreQueryFilters. There's a unit test for this.
-				//note: only 1 filter is supported. you must combine the logic into one expression.
-				entity.HasQueryFilter(c => (c.CreatedByUserId != null && _createdByUserID != null && c.CreatedByUserId == _createdByUserID)
-										      || (_organisationUserIDs != null && c.OrganisationUserId.HasValue && _organisationUserIDs.Any(organisationUserID => organisationUserID.Equals(c.OrganisationUserId)))
-										      || (c.OrganisationId.HasValue && _organisationalLeadOrganisationID.HasValue && c.OrganisationId.Equals(_organisationalLeadOrganisationID)));
-			});
+				//global query filter. note: only 1 filter is supported. you must combine the logic into one expression. can be ignored using IgnoreQueryFilters
+				entity.HasQueryFilter(c =>
+
+						//this condition is intended for regular users. it is also used for org leads viewing their own brand new comments.
+						(c.CreatedByUserId != null && _createdByUserID != null && c.CreatedByUserId == _createdByUserID)
+
+						//this condition is filter is here for organisation commenters (not leads). if they have a cookie, then the _orgnanisationUserIDs property will have a value and needs to match the record.
+						//the reason for the !c.ParentCommentId.HasValue, is so that when comments are copied to org leads, the organisationUserId value is left. however we don't want the commenter to be able to view the org leads copied comment
+						//so that filters them out.
+						|| (!c.ParentCommentId.HasValue && _organisationUserIDs != null && c.OrganisationUserId.HasValue && _organisationUserIDs.Any(organisationUserID => organisationUserID.Equals(c.OrganisationUserId)))
+
+						//this condition is for org leads. the c.ParentCommentId.HasValue, is so they can see comments submitted by organisation commenters as that gets set when the comment is copied.
+						//the c.CreatedByUserId != null is so they can see brand new comments for the organisation, made by another org lead for the same organisation.
+						|| ((c.ParentCommentId.HasValue || c.CreatedByUserId != null) &&  c.OrganisationId.HasValue && _organisationalLeadOrganisationID.HasValue && c.OrganisationId.Equals(_organisationalLeadOrganisationID))
+				);
+            });
 
             modelBuilder.Entity<Location>(entity =>
             {

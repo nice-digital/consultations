@@ -1,20 +1,16 @@
 using Comments.Services;
 using Comments.ViewModels;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using DocumentFormat.OpenXml.Drawing.Diagrams;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Comments.Models
 {
 	public partial class ConsultationsContext : DbContext
     {
 	    private readonly IEncryption _encryption;
-	    private readonly IConfiguration _configuration;
 
 		//these commented out constructors are just here for use when creating scaffolding with EF core. without them it won't work.
 		//don't leave them in uncommented though. and don't set that connection string to a valid value and commit it.
@@ -36,6 +32,11 @@ namespace Comments.Models
 		{
 			_encryption = encryption;
 			_userService = userService;
+			ConfigureContext();
+		}
+
+		public void ConfigureContext()
+		{
 			var currentUserInThisScope = _userService.GetCurrentUser(); //this dbcontext's service lifetime is scoped, i.e. new for every request.
 			_createdByUserID = currentUserInThisScope.UserId;
 			_organisationUserIDs = currentUserInThisScope.ValidatedOrganisationUserIds;
@@ -108,8 +109,8 @@ namespace Comments.Models
 			var sortedData = data.Where(l => l.Comment.Count > 0 || l.Question.Count > 0)
 				.OrderBy(l => l.Order).ThenByDescending(l =>
 					l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault());
-			
-			return sortedData; 
+
+			return sortedData;
 		}
 
 		public IEnumerable<Location> GetQuestionsForDocument(IList<string> sourceURIs, bool partialMatchSourceURI)
@@ -276,7 +277,7 @@ namespace Comments.Models
 		    commentsToUpdate.ForEach(c => c.StatusId = status.StatusId);
 		}
 
-	    public void DuplicateComment(IEnumerable<int> commentIds, int organisationUserId)
+	    public void DuplicateComment(IEnumerable<int> commentIds)
 	    {
 		    var commentsToDuplicate = Comment.Where(c => commentIds.Contains(c.CommentId)).ToList();
 
@@ -285,16 +286,14 @@ namespace Comments.Models
 
 			status = GetStatus(StatusName.Draft);
 
-		    var organisationId = GetOrganisationIdByOrganisationUserId(organisationUserId);
-
 		    foreach (var comment in commentsToDuplicate)
 			{
-				var commentToSave = new Models.Comment(comment.LocationId, null, comment.CommentText, comment.LastModifiedByUserId, comment.Location,status.StatusId, status, comment.OrganisationUserId, comment.CommentId, organisationId);
+				var commentToSave = new Models.Comment(comment.LocationId, null, comment.CommentText, comment.LastModifiedByUserId, comment.Location,status.StatusId, status, comment.OrganisationUserId, comment.CommentId, comment.OrganisationId);
 				Comment.Add(commentToSave);
 			}
 	    }
 
-		public void DuplicateAnswer(IEnumerable<int> answerIds, int organisationUserId)
+		public void DuplicateAnswer(IEnumerable<int> answerIds)
 		{
 			var answersToDuplicate = Answer.Where(c => answerIds.Contains(c.AnswerId)).ToList();
 
@@ -303,11 +302,9 @@ namespace Comments.Models
 
 			status = GetStatus(StatusName.Draft);
 
-			var organisationId = GetOrganisationIdByOrganisationUserId(organisationUserId);
-
 			foreach (var answer in answersToDuplicate)
 			{
-				var answerToSave = new Models.Answer(answer.QuestionId, null, answer.AnswerText, answer.AnswerBoolean, answer.Question, status.StatusId, status, answer.OrganisationUserId, answer.AnswerId, organisationId);
+				var answerToSave = new Models.Answer(answer.QuestionId, null, answer.AnswerText, answer.AnswerBoolean, answer.Question, status.StatusId, status, answer.OrganisationUserId, answer.AnswerId, answer.OrganisationId);
 				Answer.Add(answerToSave);
 			}
 		}
@@ -835,12 +832,12 @@ namespace Comments.Models
 		/// <returns></returns>
 		public IEnumerable<KeyValuePair<string, Status>> GetAllSourceURIsTheCurrentUserHasCommentedOrAnsweredAQuestion()
 		{
-			var comments = Comment 
+			var comments = Comment
 				.Include(l => l.Location)
 				.Include(s => s.Status)
 				.ToList();
 
-			var answers = Answer 
+			var answers = Answer
 				.Include(q => q.Question)
 				.ThenInclude(l => l.Location)
 				.Include(s => s.Status)
@@ -943,15 +940,6 @@ namespace Comments.Models
 			return answers.Where(c => c.OrganisationUser?.OrganisationAuthorisation != null)
 				.Any(c => c.OrganisationUser.OrganisationAuthorisation.OrganisationId.Equals(organisationId));
 
-		}
-		public int GetOrganisationIdByOrganisationUserId(int organisationUserId)
-		{
-			var orgUser = OrganisationUser
-				.Include(ou => ou.OrganisationAuthorisation)
-				.Where(ou => ou.OrganisationUserId.Equals(organisationUserId))
-				.Single();
-			
-			return orgUser.OrganisationAuthorisation.OrganisationId;
 		}
 	}
 }

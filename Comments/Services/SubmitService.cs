@@ -5,14 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Comments.Common;
 using NICE.Feeds;
-using Submission = Comments.Models.Submission;
 
 namespace Comments.Services
 {
 	public interface ISubmitService
 	{
 		(int rowsUpdated, Validate validate) Submit(ViewModels.Submission submission);
-		(int rowsUpdated, Validate validate, ConsultationsContext context) SubmitToLead(ViewModels.Submission submission, string emailAddress, Guid authorisationSession);
+		(int rowsUpdated, Validate validate, ConsultationsContext context) SubmitToLead(ViewModels.Submission submission, string emailAddress);
 	}
 
 	public class SubmitService : ISubmitService
@@ -30,7 +29,7 @@ namespace Comments.Services
 
 		public (int rowsUpdated, Validate validate) Submit(ViewModels.Submission submission)
 		{
-			if (!_currentUser.IsAuthenticated || string.IsNullOrEmpty(_currentUser.UserId))
+			if (!_currentUser.IsAuthenticatedByAnyMechanism)
 				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"Not logged in submitting comments and answers"));
 
 			//if a user is submitting a different users comment, the context will throw an exception.
@@ -67,7 +66,7 @@ namespace Comments.Services
 			return (rowsUpdated: _context.SaveChanges(), validate: null);
 		}
 
-		public (int rowsUpdated, Validate validate, ConsultationsContext context) SubmitToLead(ViewModels.Submission submission, string emailAddress, Guid authorisationSession)
+		public (int rowsUpdated, Validate validate, ConsultationsContext context) SubmitToLead(ViewModels.Submission submission, string emailAddress)
 		{
 			var anySourceURI = submission.SourceURIs.FirstOrDefault();
 			if (anySourceURI == null)
@@ -82,25 +81,26 @@ namespace Comments.Services
 			if (hasSubmitted != null)
 				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "User has already submitted."), null);
 
-			var organisationUserId = _context.GetOrganisationUser(authorisationSession).OrganisationUserId;
+			var consultationId = ConsultationsUri.ParseConsultationsUri(anySourceURI).ConsultationId;
+			var organisationUserId = _currentUser.ValidatedSessions.FirstOrDefault(session => session.ConsultationId.Equals(consultationId))?.OrganisationUserId;
 
-			_context.UpdateEmailAddressForOrganisationUser(emailAddress, organisationUserId);
-			if (submission.Comments.Count > 0) UpdateCommentsModelAndDuplicate(submission.Comments, organisationUserId);
-			if (submission.Answers.Count > 0) UpdateAnswersModelAndDuplicate(submission.Answers, organisationUserId);
+			_context.UpdateEmailAddressForOrganisationUser(emailAddress, (int)organisationUserId);
+			if (submission.Comments.Count > 0) UpdateCommentsModelAndDuplicate(submission.Comments);
+			if (submission.Answers.Count > 0) UpdateAnswersModelAndDuplicate(submission.Answers);
 			
 			return (rowsUpdated: _context.SaveChanges(), validate: null, _context);
 		}
 
-		private void UpdateCommentsModelAndDuplicate(IList<ViewModels.Comment> comments, int organisationUserId)
+		private void UpdateCommentsModelAndDuplicate(IList<ViewModels.Comment> comments)
 		{
 			var commentIds = comments.Select(c => c.CommentId).ToList();
-			_context.DuplicateComment(commentIds, organisationUserId);
+			_context.DuplicateComment(commentIds);
 		}
 
-		private void UpdateAnswersModelAndDuplicate(IList<ViewModels.Answer> answers, int organisationUserId)
+		private void UpdateAnswersModelAndDuplicate(IList<ViewModels.Answer> answers)
 		{
 			var answerIds = answers.Select(a => a.AnswerId).ToList();
-			_context.DuplicateAnswer(answerIds, organisationUserId);
+			_context.DuplicateAnswer(answerIds);
 		}
 
 		private void UpdateCommentsModel(IList<ViewModels.Comment> comments, Models.Submission submission, Models.Status status)

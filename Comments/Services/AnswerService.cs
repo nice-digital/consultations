@@ -28,7 +28,7 @@ namespace Comments.Services
         }
         public (ViewModels.Answer answer, Validate validate) GetAnswer(int answerId)
         {
-            if (!_currentUser.IsAuthenticated)
+            if (!_currentUser.IsAuthenticatedByAnyMechanism)
                 return (answer: null, validate: new Validate(valid: false, unauthenticated: true, message: $"Not logged in accessing answer id:{answerId}"));
 
             var answerInDatabase = _context.GetAnswer(answerId);
@@ -36,15 +36,23 @@ namespace Comments.Services
             if (answerInDatabase == null)
                 return (answer: null, validate: new Validate(valid: false, notFound: true, message: $"Answer id:{answerId} not found trying to get answer for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
 
-	        if (!answerInDatabase.CreatedByUserId.Equals(_currentUser.UserId, StringComparison.OrdinalIgnoreCase))
-		        return (answer: null, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to access answer id: {answerId}, but it's not their answer"));
-			
+            var consultationId = ConsultationsUri.ParseConsultationsUri(answerInDatabase.Question.Location.SourceURI).ConsultationId;
+            if (_currentUser.IsAuthenticatedByOrganisationCookieForThisConsultation(consultationId))
+            {
+	            if (!answerInDatabase.OrganisationUserId.HasValue || !_currentUser.IsAuthorisedByOrganisationUserId(answerInDatabase.OrganisationUserId.Value))
+		            return (answer: null, validate: new Validate(valid: false, unauthenticated: true, message: $"Organisation cookie user tried to access answer id: {answerId}, but it's not their answer"));
+            }
+            else
+            {
+				if (!answerInDatabase.CreatedByUserId.Equals(_currentUser.UserId, StringComparison.OrdinalIgnoreCase))
+					return (answer: null, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to access answer id: {answerId}, but it's not their answer"));
+            }
 			return (answer: new ViewModels.Answer(answerInDatabase), validate: null);
-        }
+		}
 
         public (int rowsUpdated, Validate validate) EditAnswer(int answerId, ViewModels.Answer answer)
         {
-            if (!_currentUser.IsAuthenticated)
+            if (!_currentUser.IsAuthenticatedByAnyMechanism)
                 return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"Not logged in editing answer id:{answerId}"));
 
             var answerInDatabase = _context.GetAnswer(answerId);
@@ -75,7 +83,7 @@ namespace Comments.Services
 
         public (int rowsUpdated, Validate validate) DeleteAnswer(int answerId)
         {
-            if (!_currentUser.IsAuthenticated)
+            if (!_currentUser.IsAuthenticatedByAnyMechanism)
                 return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"Not logged in deleting answer id:{answerId}"));
 
             var answerInDatabase = _context.GetAnswer(answerId);
@@ -105,7 +113,7 @@ namespace Comments.Services
 
         public (ViewModels.Answer answer, Validate validate) CreateAnswer(ViewModels.Answer answer)
         {
-            if (!_currentUser.IsAuthenticated)
+            if (!_currentUser.IsAuthenticatedByAnyMechanism)
                 return (answer: null, validate: new Validate(valid: false, unauthenticated: true, message: "Not logged in creating answer"));
 
             var question = _context.GetQuestion(answer.QuestionId);

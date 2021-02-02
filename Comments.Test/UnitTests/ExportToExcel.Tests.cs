@@ -278,7 +278,7 @@ namespace Comments.Test.UnitTests
 			const string sourceURI = "consultations://./consultation/1/document/1/chapter/chapter-slug";
 
 			var comments = _context.GetAllSubmittedCommentsForURI(sourceURI);
-			var exportService = new ExportService(_context, _fakeUserService, _consultationService, _fakeHttpContextAccessor, _feedService);
+			var exportService = new ExportService(_context, _fakeUserService, _consultationService, _feedService);
 
 			//Act
 			var locationDetails = exportService.GetLocationData(comments.First().Location);
@@ -319,7 +319,7 @@ namespace Comments.Test.UnitTests
 			var context = new ConsultationsContext(_options, userService, _fakeEncryption);
 
 			var consultationService = new ConsultationService(_context, new FakeFeedService(), new FakeLogger<ConsultationService>(), _fakeUserService);
-			var export = new ExportService(context, _fakeUserService, consultationService, _fakeHttpContextAccessor, _feedService);
+			var export = new ExportService(context, _fakeUserService, consultationService, _feedService);
 
 			//Act
 			var resultTuple = export.GetAllDataForConsulationForCurrentUser(1);
@@ -362,7 +362,7 @@ namespace Comments.Test.UnitTests
 			var context = new ConsultationsContext(_options, userService, _fakeEncryption);
 
 			var consultationService = new ConsultationService(_context, new FakeFeedService(), new FakeLogger<ConsultationService>(), _fakeUserService);
-			var export = new ExportService(context, _fakeUserService, consultationService, _fakeHttpContextAccessor, _feedService);
+			var export = new ExportService(context, _fakeUserService, consultationService, _feedService);
 
 			//Act
 			var resultTuple = export.GetAllDataForConsulation(1);

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.FeatureManagement;
 using NICE.Identity.Authentication.Sdk.Domain;
 
@@ -51,7 +52,7 @@ namespace Comments.Services
 		public async Task<(ConsultationListViewModel consultationListViewModel, Validate validate)> GetConsultationListViewModel(ConsultationListViewModel model)
 		{
 			var currentUser = _userService.GetCurrentUser();
-			if (!currentUser.IsAuthenticated)
+			if (!currentUser.IsAuthenticatedByAnyMechanism)
 				return (model, new Validate(valid: false, unauthenticated: true));
 
 			var userRoles = _userService.GetUserRoles().ToList();
@@ -119,7 +120,7 @@ namespace Comments.Services
 			model.ContributionFilter = GetContributionFilter(model.Contribution?.ToList(), consultationListRows);
 			model.TeamFilter = isTeamUser ? GetTeamFilter(model.Team?.ToList(), consultationListRows, teamRoles) : null;
 			model.Consultations = FilterAndOrderConsultationList(consultationListRows, model.Status, model.Keyword, model.Contribution, model.Team, (isTeamUser ? teamRoles : null), hasAccessToViewUpcomingConsultations);
-			model.User = new DownloadUser(isAdminUser, isTeamUser, _userService.GetCurrentUser(), teamRoles);
+			model.User = new DownloadUser(isAdminUser, isTeamUser, currentUser, teamRoles);
 
 			return (model, new Validate(valid: true));
 		}

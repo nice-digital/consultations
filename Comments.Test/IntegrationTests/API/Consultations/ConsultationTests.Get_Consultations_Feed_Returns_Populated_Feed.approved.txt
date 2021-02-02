@@ -18,7 +18,9 @@
         "partiallyUpdatedProjectReference":null,
         "origProjectReference":null,
         "user":{
-            "isAuthenticated":true,
+            "authenticatedBy":1,
+            "authenticationType":"Auth0",
+            "isAuthenticatedByAnyMechanism":true,
             "displayName":"Benjamin Button",
             "userId":"00000000-0000-0000-0000-000000000000",
             "organisationsAssignedAsLead":[
@@ -29,7 +31,9 @@
             ],
             "validatedOrganisationUserIds":[
                 
-            ]
+            ],
+            "isAuthenticatedByAccounts":true,
+            "isAuthenticatedByOrganisationCookie":false
         },
         "consultationState":null,
         "breadcrumbs":null,
@@ -54,7 +58,9 @@
         "partiallyUpdatedProjectReference":null,
         "origProjectReference":null,
         "user":{
-            "isAuthenticated":true,
+            "authenticatedBy":1,
+            "authenticationType":"Auth0",
+            "isAuthenticatedByAnyMechanism":true,
             "displayName":"Benjamin Button",
             "userId":"00000000-0000-0000-0000-000000000000",
             "organisationsAssignedAsLead":[
@@ -65,7 +71,9 @@
             ],
             "validatedOrganisationUserIds":[
                 
-            ]
+            ],
+            "isAuthenticatedByAccounts":true,
+            "isAuthenticatedByOrganisationCookie":false
         },
         "consultationState":null,
         "breadcrumbs":null,

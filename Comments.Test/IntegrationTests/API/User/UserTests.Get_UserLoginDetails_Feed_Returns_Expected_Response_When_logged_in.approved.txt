@@ -1,7 +1,9 @@
 ﻿{
     "signInURL":"/consultations/account/login?returnURL=%2Fconsultations%2F1%2F1%2Fintroduction",
     "registerURL":"/consultations/account/login?returnURL=%2Fconsultations%2F1%2F1%2Fintroduction&goToRegisterPage=True",
-    "isAuthenticated":true,
+    "authenticatedBy":1,
+    "authenticationType":"Auth0",
+    "isAuthenticatedByAnyMechanism":true,
     "displayName":"Quentin Tarantino",
     "userId":"00000000-0000-0000-0000-000000000000",
     "organisationsAssignedAsLead":[
@@ -12,5 +14,7 @@
     ],
     "validatedOrganisationUserIds":[
         
-    ]
+    ],
+    "isAuthenticatedByAccounts":true,
+    "isAuthenticatedByOrganisationCookie":false
 }
