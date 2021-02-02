@@ -57,26 +57,15 @@ namespace Comments.Controllers.Api
 		[HttpPost]
 		[Route("consultations/api/[controller]ToLead")]
 		[Authorize(AuthenticationSchemes = OrganisationCookieAuthenticationOptions.DefaultScheme + "," + AuthenticationConstants.AuthenticationScheme)]
-		public IActionResult PostSubmitToLead([FromBody] ViewModels.Submission submission, string emailAddress)
+		public IActionResult PostSubmitToLead([FromBody] ViewModels.SubmissionToLead submissionToLead)
 	    {
 		    if (!ModelState.IsValid)
-		    {
 			    return BadRequest(ModelState);
-		    }
 		   
-		    var result = _submitService.SubmitToLead(submission, emailAddress);
+		    var result = _submitService.SubmitToLead(submissionToLead);
 		    var invalidResult = Validate(result.validate, _logger);
 
-		    //just some temporary debug here:
-		    _logger.LogWarning($"submitted using environment: {_hostingEnvironment.EnvironmentName}");
-		    if (_hostingEnvironment.IsProduction())
-		    {
-			    _logger.LogWarning($"submitted a comment in production! environment name: {_hostingEnvironment.EnvironmentName}");
-		    }
-
-		    return invalidResult ?? Ok(submission); //should return comments and answers, might need submission object too
+		    return invalidResult ?? Ok(submissionToLead);
 	    }
 	}
-
-
 }

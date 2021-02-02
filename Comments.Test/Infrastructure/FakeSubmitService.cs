@@ -31,7 +31,7 @@ namespace Comments.Test.Infrastructure
 		    return new ConsultationState(DateTime.MinValue, DateTime.MaxValue, true, true, true, DateTime.MaxValue, null);
 	    }
 
-		public (int rowsUpdated, Validate validate, ConsultationsContext context) SubmitToLead(Submission submission, string emailAddress)
+		public (int rowsUpdated, Validate validate, ConsultationsContext context) SubmitToLead(SubmissionToLead submission)
 		{
 			throw new NotImplementedException();
 		}

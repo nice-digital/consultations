@@ -11,7 +11,7 @@ namespace Comments.Services
 	public interface ISubmitService
 	{
 		(int rowsUpdated, Validate validate) Submit(ViewModels.Submission submission);
-		(int rowsUpdated, Validate validate, ConsultationsContext context) SubmitToLead(ViewModels.Submission submission, string emailAddress);
+		(int rowsUpdated, Validate validate, ConsultationsContext context) SubmitToLead(ViewModels.SubmissionToLead submission);
 	}
 
 	public class SubmitService : ISubmitService
@@ -66,8 +66,11 @@ namespace Comments.Services
 			return (rowsUpdated: _context.SaveChanges(), validate: null);
 		}
 
-		public (int rowsUpdated, Validate validate, ConsultationsContext context) SubmitToLead(ViewModels.Submission submission, string emailAddress)
+		public (int rowsUpdated, Validate validate, ConsultationsContext context) SubmitToLead(SubmissionToLead submission)
 		{
+			if (!_currentUser.IsAuthenticatedByOrganisationCookie)
+				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User not Authenticated"), null);
+
 			var anySourceURI = submission.SourceURIs.FirstOrDefault();
 			if (anySourceURI == null)
 				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "Could not find SourceURI"), null);
@@ -84,7 +87,7 @@ namespace Comments.Services
 			var consultationId = ConsultationsUri.ParseConsultationsUri(anySourceURI).ConsultationId;
 			var organisationUserId = _currentUser.ValidatedSessions.FirstOrDefault(session => session.ConsultationId.Equals(consultationId))?.OrganisationUserId;
 
-			_context.UpdateEmailAddressForOrganisationUser(emailAddress, (int)organisationUserId);
+			_context.UpdateEmailAddressForOrganisationUser(submission.EmailAddress, (int)organisationUserId);
 			if (submission.Comments.Count > 0) UpdateCommentsModelAndDuplicate(submission.Comments);
 			if (submission.Answers.Count > 0) UpdateAnswersModelAndDuplicate(submission.Answers);
 			
