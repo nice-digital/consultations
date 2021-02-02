@@ -67,7 +67,7 @@ type StateType = {
 	path: null | string,
 	isLead: boolean,
 	isLead: boolean,
-	emailAddress: string | null
+	emailAddress: string | null,
 };
 
 export class Review extends Component<PropsType, StateType> {
@@ -613,6 +613,7 @@ export class Review extends Component<PropsType, StateType> {
 																organisationExpressionOfInterest={this.state.organisationExpressionOfInterest}
 																isLead={this.state.isLead}
 																isOrganisationCommenter={contextValue.isOrganisationCommenter}
+																questions={this.state.questions}
 															/>
 															}
 														</div>

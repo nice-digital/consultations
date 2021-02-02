@@ -1,4 +1,6 @@
 import { SubmitResponseFeedback } from "../SubmitResponseFeedback";
+import questionsWithAnswer from "./questionsWithAnswer.json";
+import questionsWithMultipleAnswers from "./questionsWithMultipleAnswers.json";
 
 describe("[ClientApp", function () {
 	describe("Submit response feedback alert box", () => {
@@ -10,6 +12,7 @@ describe("[ClientApp", function () {
 			tobaccoDisclosure: "",
 			respondingAsOrganisation: false,
 			hasTobaccoLinks: false,
+			questions: questionsWithMultipleAnswers,
 		};
 
 		it("should match the snapshot when almost everything that can be wrong, is", function () {
@@ -26,6 +29,7 @@ describe("[ClientApp", function () {
 				tobaccoDisclosure: "",
 				respondingAsOrganisation: "no",
 				hasTobaccoLinks: "no",
+				questions: questionsWithAnswer,
 			};
 			const wrapper = SubmitResponseFeedback(props);
 			expect(wrapper).toMatchSnapshot();
@@ -60,6 +64,7 @@ describe("[ClientApp", function () {
 				tobaccoDisclosure: "",
 				respondingAsOrganisation: true,
 				hasTobaccoLinks: true,
+				questions: questionsWithAnswer,
 			};
 			const wrapper = SubmitResponseFeedback(props);
 			expect(wrapper).toMatchSnapshot();
@@ -73,6 +78,21 @@ describe("[ClientApp", function () {
 				tobaccoDisclosure: "",
 				respondingAsOrganisation: true,
 				hasTobaccoLinks: true,
+				questions: questionsWithAnswer,
+			};
+			const wrapper = SubmitResponseFeedback(props);
+			expect(wrapper).toMatchSnapshot();
+		});
+
+		it("should match the snapshot when everything is good apart from too many answers to one question", function () {
+			let props = {
+				validToSubmit: true,
+				unsavedIdsQty: 0,
+				organisationName: "",
+				tobaccoDisclosure: "",
+				respondingAsOrganisation: true,
+				hasTobaccoLinks: true,
+				questions: questionsWithMultipleAnswers,
 			};
 			const wrapper = SubmitResponseFeedback(props);
 			expect(wrapper).toMatchSnapshot();
@@ -86,6 +106,7 @@ describe("[ClientApp", function () {
 				tobaccoDisclosure: "Heavy smoker",
 				respondingAsOrganisation: "yes",
 				hasTobaccoLinks: "yes",
+				questions: questionsWithAnswer,
 			};
 			const wrapper = SubmitResponseFeedback(props);
 			expect(wrapper).toEqual(null);

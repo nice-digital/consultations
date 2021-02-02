@@ -3,6 +3,8 @@
 import React from "react";
 import { shallow } from "enzyme";
 import { SubmitResponseDialog } from "../SubmitResponseDialog";
+import questionsWithAnswer from "../../SubmitResponseFeedback/__tests__/questionsWithAnswer.json";
+import questionsWithMultipleAnswers from "../../SubmitResponseFeedback/__tests__/questionsWithMultipleAnswers.json";
 
 describe("[ClientApp] ", () => {
 	describe("Submit response dialog", () => {
@@ -18,6 +20,7 @@ describe("[ClientApp] ", () => {
 			hasTobaccoLinks: "no",
 			respondingAsOrganisation: "no",
 			unsavedIds: [],
+			questions: questionsWithAnswer,
 		};
 
 		it("should fire parent change handler if the input values change", () => {
@@ -146,6 +149,7 @@ describe("[ClientApp] ", () => {
 				respondingAsOrganisation: "no",
 				submitConsultation: jest.fn(),
 				unsavedIds: [],
+				questions: questionsWithAnswer,
 			};
 			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
 			expect(wrapper.state().feedbackVisible).toEqual(false);
@@ -172,11 +176,22 @@ describe("[ClientApp] ", () => {
 			expect(wrapper.state().feedbackVisible).toEqual(true);
 		});
 
+		it("should prevent submission if there are too many answers to a question",() => {
+			const localProps = fakeProps;
+			localProps.questions = questionsWithMultipleAnswers;
+			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
+			const button = wrapper.find("button");
+			button.simulate("click");
+			wrapper.update();
+			expect(wrapper.state().feedbackVisible).toEqual(true);
+		});
+
 		it("should not display a submit button if the current user isn't authorised", () => {
 			const localProps = fakeProps;
 			localProps.isAuthorised = false;
 			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
 			expect(wrapper.find("button").length).toEqual(0);
 		});
+
 	});
 });

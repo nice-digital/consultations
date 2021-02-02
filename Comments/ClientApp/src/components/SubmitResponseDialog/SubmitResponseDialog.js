@@ -1,9 +1,9 @@
-import React, { PureComponent } from "react";
+import React, { Component } from "react";
 import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
 import { SubmitResponseFeedback } from "../SubmitResponseFeedback/SubmitResponseFeedback";
 import { Input } from "@nice-digital/nds-input";
 
-export class SubmitResponseDialog extends PureComponent {
+export class SubmitResponseDialog extends Component {
 
 	state = {
 		feedbackVisible: false,
@@ -30,7 +30,9 @@ export class SubmitResponseDialog extends PureComponent {
 	};
 
 	submitConsultation = () => {
-		if (this.props.validToSubmit && this.mandatoryQuestionsAreValid() && this.props.unsavedIds.length === 0) {
+		const tooManyAnswersFilter = (question) => question.answers.length > 1;
+		const tooManyAnswersToAQuestion = this.props.questions.some(tooManyAnswersFilter);
+		if (this.props.validToSubmit && this.mandatoryQuestionsAreValid() && this.props.unsavedIds.length === 0 && !tooManyAnswersToAQuestion) {
 			this.props.submitConsultation();
 		}
 		else {

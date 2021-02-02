@@ -11,9 +11,17 @@ export const SubmitResponseFeedback = (props) => {
 		hasTobaccoLinks,
 		showExpressionOfInterestSubmissionQuestion,
 		organisationExpressionOfInterest,
+		questions,
 	} = props;
 
 	let items = [];
+
+	questions.forEach(question => {
+		if (question.answers.length > 1){
+			items.push(`You have too many answers for the question "${question.questionText}"`);
+		}
+
+	});
 
 	if (unsavedIdsQty)
 		items.push("You have unsaved changes. Please save or delete before submitting your response");

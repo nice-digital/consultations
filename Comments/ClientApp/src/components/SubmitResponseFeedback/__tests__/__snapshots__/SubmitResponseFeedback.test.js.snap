@@ -17,6 +17,9 @@ exports[`[ClientApp Submit response feedback alert box should match the snapshot
     className="mt--0"
   >
     <li>
+      You have too many answers for the question "Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why."
+    </li>
+    <li>
       You have unsaved changes. Please save or delete before submitting your response
     </li>
     <li>
@@ -46,6 +49,9 @@ exports[`[ClientApp Submit response feedback alert box should match the snapshot
   <ul
     className="mt--0"
   >
+    <li>
+      You have too many answers for the question "Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why."
+    </li>
     <li>
       You have unsaved changes. Please save or delete before submitting your response
     </li>
@@ -101,6 +107,27 @@ exports[`[ClientApp Submit response feedback alert box should match the snapshot
 </div>
 `;
 
+exports[`[ClientApp Submit response feedback alert box should match the snapshot when everything is good apart from too many answers to one question 1`] = `
+<div
+  className="SubmitResponseFeedback mb--d"
+  data-qa-sel="Submit-response-feedback"
+  id="SubmitResponseFeedback"
+>
+  <p
+    className="SubmitResponseFeedback__title"
+  >
+    You can't submit your response yet
+  </p>
+  <ul
+    className="mt--0"
+  >
+    <li>
+      You have too many answers for the question "Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why."
+    </li>
+  </ul>
+</div>
+`;
+
 exports[`[ClientApp Submit response feedback alert box should match the snapshot when responding as organisation is yes but there is no name 1`] = `
 <div
   className="SubmitResponseFeedback mb--d"
@@ -115,6 +142,9 @@ exports[`[ClientApp Submit response feedback alert box should match the snapshot
   <ul
     className="mt--0"
   >
+    <li>
+      You have too many answers for the question "Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why."
+    </li>
     <li>
       You have unsaved changes. Please save or delete before submitting your response
     </li>
@@ -145,6 +175,9 @@ exports[`[ClientApp Submit response feedback alert box should match the snapshot
   <ul
     className="mt--0"
   >
+    <li>
+      You have too many answers for the question "Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why."
+    </li>
     <li>
       You have unsaved changes. Please save or delete before submitting your response
     </li>
