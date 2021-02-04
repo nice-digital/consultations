@@ -1,6 +1,7 @@
 using Comments.Services;
 using Comments.ViewModels;
 using System.Collections.Generic;
+using Comments.Models;
 using Answer = Comments.Models.Answer;
 using Comment = Comments.Models.Comment;
 using Location = Comments.Models.Location;
@@ -21,16 +22,16 @@ namespace Comments.Test.Infrastructure
 			_questions = questions;
 		}
 
-		public (IEnumerable<Comment> comment, IEnumerable<Answer> answer, IEnumerable<Question> question, Validate valid) GetAllDataForConsulation(
+		public (IEnumerable<Comment> comment, IEnumerable<Answer> answer, IEnumerable<Question> question, Validate valid) GetAllDataForConsultation(
 			int consultationId)
 		{
 			return (_comments, _answers, _questions, new Validate(true));
 		}
 
-		public (IEnumerable<Comment> comment, IEnumerable<Answer> answer, IEnumerable<Question> question, Validate valid) GetAllDataForConsulationForCurrentUser(
+		public (IEnumerable<Comment> comment, IEnumerable<Answer> answer, IEnumerable<Question> question, Validate valid) GetAllDataForConsultationForCurrentUser(
 			int consultationId)
 		{
-			return GetAllDataForConsulation(consultationId);
+			return GetAllDataForConsultation(consultationId);
 		}
 
 		public (string ConsultationName, string DocumentName, string ChapterName) GetLocationData(Location location)
@@ -41,6 +42,11 @@ namespace Comments.Test.Infrastructure
 		public string GetConsultationName(Location location)
 		{
 			return "Test consultation";
+		}
+
+		public IEnumerable<Models.OrganisationUser> GetOrganisationUsersByOrganisationUserIds(IEnumerable<int> organisationUserIds)
+		{
+			return new List<OrganisationUser>();
 		}
 	}
 }

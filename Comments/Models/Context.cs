@@ -873,6 +873,11 @@ namespace Comments.Models
 					.Where(ou => sessionIds.Contains(ou.AuthorisationSession));
 		}
 
+		public IEnumerable<OrganisationUser> GetOrganisationUsersByOrganisationUserIds(IEnumerable<int> organisationUserIds)
+		{
+			return OrganisationUser.Where(ou => organisationUserIds.Contains(ou.OrganisationUserId));
+		}
+
 
 		public bool AreCommentsForThisOrganisation(IEnumerable<int> commentIds, int organisationId)
 		{

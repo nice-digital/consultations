@@ -390,7 +390,11 @@ namespace Comments.Export
 		{
 			List<Excel> excel = new List<Excel>();
 
-			var userIds = comments.Select(comment => comment.CreatedByUserId).Concat(answers.Select(answer => answer.CreatedByUserId)).Distinct();
+			var organisationUserIds = comments.Where(comment => comment.OrganisationUserId.HasValue).Select(comment => comment.OrganisationUserId.Value)
+				.Concat(answers.Where(answer => answer.OrganisationUserId.HasValue).Select(answer => answer.OrganisationUserId.Value)).Distinct();
+			var userDetailsForOrganisationUser = _exportService.GetOrganisationUsersByOrganisationUserIds(organisationUserIds);
+
+			var userIds = comments.Select(comment => comment.CreatedByUserId).Concat(answers.Select(answer => answer.CreatedByUserId)).Where(user => !string.IsNullOrEmpty(user)).Distinct();
 			var currentUserDetails = _userService.GetCurrentUserDetails();
 
 			Dictionary<string, (string displayName, string emailAddress)> userDetailsForUserIds;
