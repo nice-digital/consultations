@@ -355,14 +355,10 @@ export class Review extends Component<PropsType, StateType> {
 			}
 		});
 
-		let submission = {
+		load("submitToLead", undefined, [], {}, "POST", {
 			emailAddress,
 			comments,
 			answers: answersToSubmit,
-		};
-
-		load("submitToLead", undefined, [], {}, "POST", {
-			submission,
 		}, true)
 			.then(response => {
 				// this.setState({
