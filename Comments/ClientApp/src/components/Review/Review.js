@@ -65,7 +65,7 @@ type StateType = {
 	documentTitles: "undefined" | Array<any>,
 	justSubmitted: boolean,
 	path: null | string,
-	emailAddress: string | null
+	emailAddress: string | null,
 };
 
 export class Review extends Component<PropsType, StateType> {
@@ -92,7 +92,7 @@ export class Review extends Component<PropsType, StateType> {
 			unsavedIds: [],
 			documentTitles: [],
 			justSubmitted: false,
-			emailAddress: null
+			emailAddress: null,
 		};
 
 		let preloadedData = {};
@@ -343,27 +343,41 @@ export class Review extends Component<PropsType, StateType> {
 			});
 	};
 
-	submitToOrgLead = () => {
+	submitToLead = () => {
+		const comments = this.state.comments;
+		const questions = this.state.questions;
 		const emailAddress = this.state.emailAddress;
 
+		let answersToSubmit = [];
+		questions.forEach(function (question) {
+			if (question.answers != null) {
+				answersToSubmit = answersToSubmit.concat(question.answers);
+			}
+		});
+
 		let submission = {
-			emailAddress
+			emailAddress,
+			comments,
+			answers: answersToSubmit,
 		};
 
-		// load("submitToOrgLead", undefined, [], {}, "POST", submission, true)
-		// 	.then(response => {
-		// 		this.setState({
-		// 			submittedDate: true,
-		// 			validToSubmit: false,
-		// 			allowComments: false,
-		// 			justSubmitted: true,
-		// 		});
-		// 		//this.logStuff();
-		// 	})
-		// 	.catch(err => {
-		// 		console.log(err);
-		// 		//if (err.response) alert(err.response.statusText);
-		// 	});
+		load("submitToLead", undefined, [], {}, "POST", {
+			submission,
+		}, true)
+			.then(response => {
+				// this.setState({
+				// 	submittedDate: true,
+				// 	validToSubmit: false,
+				// 	allowComments: false,
+				// 	justSubmitted: true,
+				// });
+				console.log("response.data - " + response.data);
+				//this.logStuff();
+			})
+			.catch(err => {
+				console.log(err);
+				//if (err.response) alert(err.response.statusText);
+			});
 	};
 
 	//this validation handler code is going to have to get a bit more advanced when questions are introduced, as it'll be possible
@@ -596,9 +610,9 @@ export class Review extends Component<PropsType, StateType> {
 																validToSubmit={this.state.validToSubmit}
 																submitConsultation={this.submitConsultation}
 																fieldsChangeHandler={this.fieldsChangeHandler}
-																submitToOrgLead={this.submitToOrgLead}
+																submitToLead={this.submitToLead}
 																respondingAsOrganisation={this.state.respondingAsOrganisation}
-																organisationName={this.state.organisationName}
+																organisationName={contextValue.organisationName}
 																hasTobaccoLinks={this.state.hasTobaccoLinks}
 																tobaccoDisclosure={this.state.tobaccoDisclosure}
 																showExpressionOfInterestSubmissionQuestion={this.state.consultationData.showExpressionOfInterestSubmissionQuestion}

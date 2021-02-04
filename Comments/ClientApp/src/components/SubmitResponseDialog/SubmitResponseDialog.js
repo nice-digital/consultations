@@ -41,8 +41,8 @@ export class SubmitResponseDialog extends PureComponent {
 		}
 	};
 
-	handleSubmitToOrgLeadClick = () => {
-		this.props.submitToOrgLead();
+	handleSubmitToLeadClick = () => {
+		this.props.submitToLead();
 	};
 
 	render() {
@@ -56,12 +56,12 @@ export class SubmitResponseDialog extends PureComponent {
 			hasTobaccoLinks,
 			showExpressionOfInterestSubmissionQuestion,
 			organisationExpressionOfInterest,
-			isOrganisationCommenter
+			isOrganisationCommenter,
 		} = this.props;
 
 		return (
 			<>
-				{!isOrganisationCommenter ? (
+				{isOrganisationCommenter ? (
 					<div className="panel">
 						<h2>You are about to submit your final response to {organisationName}</h2>
 						<p>Lorem</p>
@@ -74,7 +74,7 @@ export class SubmitResponseDialog extends PureComponent {
 						/>
 						<h3>Now submit your response to {organisationName}</h3>
 						<p>Lorememememe</p>
-						<button onClick={this.handleSubmitToOrgLeadClick}>Submit to your organisation</button>
+						<button onClick={this.handleSubmitToLeadClick}>Submit to your organisation</button>
 					</div>
 				) : (
 					<div className="panel">
