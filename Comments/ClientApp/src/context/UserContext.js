@@ -102,12 +102,13 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 					this.setStateForValidSessionCookie(data.validityAndOrganisationName.organisationName);
 				}
 				else{
+					const sessionCookieExistsForThisConsultation = data.userSessionParameters.sessionCookieExistsForThisConsultation;
 					load("user", undefined, [], { returnURL, cachebust: new Date().getTime() })
 						.then(
 							res => {
 								const signInURL = res.data.signInURL;
 								this.setState({
-									isAuthorised: res.data.isAuthenticated,
+									isAuthorised: (res.data.isAuthenticatedByAccounts || sessionCookieExistsForThisConsultation),
 									displayName: res.data.displayName,
 									signInURL: signInURL,
 									registerURL: res.data.registerURL,
@@ -126,14 +127,14 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 
 	//unfortunately the context is above the routes, so this.props.match is always null, so we can't pull the consultation id out of there. hence we're falling back to regex.
 	getConsultationId = () =>{
-		const regex = /^\/(\d+)\/\d+\/[a-z-A-Z0-9]+/;
+		const regex = /^\/(\d+)\/(review|\d+\/[a-z-A-Z0-9]+)/;
 		const pathname = this.props.location.pathname;
 
 		if (!pathname)
 			return;
 
 		const matches = regex.exec(pathname);
-		if (!matches || matches.length !== 2)
+		if (!matches || matches.length !== 3)
 			return;
 
 		return matches[1];
@@ -143,7 +144,10 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 		const userSessionParameters = this.getUserSessionParameters(window.__PRELOADED__);
 
 		if (!userSessionParameters.sessionCookieExistsForThisConsultation)
-			return await {validityAndOrganisationName: {valid: false}};
+			return await {
+				validityAndOrganisationName: {valid: false}, 
+				userSessionParameters: userSessionParameters,
+			};
 
 		const validityAndOrganisationName = load(
 			"checkorganisationusersession",
@@ -159,6 +163,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 			});
 		return {
 			validityAndOrganisationName: await validityAndOrganisationName,
+			userSessionParameters: userSessionParameters,
 		};
 	}
 

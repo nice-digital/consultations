@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DocumentFormat.OpenXml.Office2010.ExcelAc;
 
 namespace Comments.ViewModels
 {
@@ -9,7 +8,7 @@ namespace Comments.ViewModels
 	{
 		public DownloadUser() {}
 
-		public DownloadUser(bool isAdminUser, bool isTeamUser, User user, List<string> teamNames) : base(user.IsAuthenticated, user.DisplayName, user.UserId, user.OrganisationsAssignedAsLead, user.ValidatedSessions)
+		public DownloadUser(bool isAdminUser, bool isTeamUser, User user, List<string> teamNames) : base(user.AuthenticatedBy, user.AuthenticationType, user.DisplayName, user.UserId, user.OrganisationsAssignedAsLead, user.ValidatedSessions)
 		{
 			IsAdminUser = isAdminUser;
 			IsTeamUser = isTeamUser;

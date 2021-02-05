@@ -28,7 +28,7 @@ namespace Comments.Test.UnitTests
 			_context.Database.EnsureCreated();
 			const int organisationId = 1;
 
-			var userService = new StubUserService(new User(isAuthenticated: true, displayName: "Carl Spackler",
+			var userService = new StubUserService(new User(authenticatedBy: User.AuthenticationMechanism.Accounts, authenticationType: AuthenticationConstants.AuthenticationScheme, displayName: "Carl Spackler",
 				userId: "001", new List<Organisation>() {new Organisation(organisationId, "Bushwood Country Club", isLead: false)},
 				validatedSessions: null)); 
 
@@ -50,7 +50,7 @@ namespace Comments.Test.UnitTests
 			const int organisationId = 1;
 			const int consultationId = 1;
 
-			var userService = new StubUserService(new User(isAuthenticated: true, displayName: "Carl Spackler",
+			var userService = new StubUserService(new User(User.AuthenticationMechanism.Accounts, AuthenticationConstants.AuthenticationScheme, displayName: "Carl Spackler",
 				userId: "001", new List<Organisation>() { new Organisation(organisationId, "Bushwood Country Club", isLead: true) },
 				validatedSessions: null));
 
@@ -108,7 +108,7 @@ namespace Comments.Test.UnitTests
 			const int organisationId = 1;
 			const int consultationId = 1;
 
-			var userService = new StubUserService(new User(isAuthenticated: true, displayName: "Carl Spackler",
+			var userService = new StubUserService(new User(User.AuthenticationMechanism.Accounts, AuthenticationConstants.AuthenticationScheme, displayName: "Carl Spackler",
 				userId: "001", new List<Organisation> { new Organisation(organisationId, "Bushwood Country Club", isLead: true) },
 				validatedSessions: null));
 
@@ -293,7 +293,7 @@ namespace Comments.Test.UnitTests
 				var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, collationCode: "123412341234");
 				var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, sessionId, null);
 
-				var userService = new StubUserService(new User(true, null, null, null, new List<ValidatedSession>() { new ValidatedSession(organisationUserId, consultationId, sessionId, organisationId) }));
+				var userService = new StubUserService(new User(User.AuthenticationMechanism.Accounts, AuthenticationConstants.AuthenticationScheme, null, null, null, new List<ValidatedSession>() { new ValidatedSession(organisationUserId, consultationId, sessionId, organisationId) }));
 				var serviceUnderTest = new OrganisationService(context, userService, new FakeAPITokenService(), fakeAPIService, mockFactory.Object, null);
 
 				//Act
@@ -323,7 +323,7 @@ namespace Comments.Test.UnitTests
 				var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, collationCode: "123412341234");
 				var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, sessionId, null);
 
-				var userService = new StubUserService(new User(true, null, null, null, new List<ValidatedSession>() { new ValidatedSession(organisationUserId, consultationId, Guid.NewGuid(), organisationId) }));
+				var userService = new StubUserService(new User(User.AuthenticationMechanism.Accounts, AuthenticationConstants.AuthenticationScheme, null, null, null, new List<ValidatedSession>() { new ValidatedSession(organisationUserId, consultationId, Guid.NewGuid(), organisationId) }));
 				var serviceUnderTest = new OrganisationService(context, userService, new FakeAPITokenService(), fakeAPIService, mockFactory.Object, null);
 
 				//Act
@@ -353,7 +353,7 @@ namespace Comments.Test.UnitTests
 				var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, collationCode: "123412341234");
 				var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, sessionId, null);
 
-				var userService = new StubUserService(new User(true, null, null, null, new List<ValidatedSession>() { new ValidatedSession(organisationUserId, 9999, sessionId, organisationId) }));
+				var userService = new StubUserService(new User(User.AuthenticationMechanism.Accounts, AuthenticationConstants.AuthenticationScheme, null, null, null, new List<ValidatedSession>() { new ValidatedSession(organisationUserId, 9999, sessionId, organisationId) }));
 				var serviceUnderTest = new OrganisationService(context, userService, new FakeAPITokenService(), fakeAPIService, mockFactory.Object, null);
 
 				//Act
@@ -383,7 +383,7 @@ namespace Comments.Test.UnitTests
 				var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, collationCode: "123412341234");
 				var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, sessionId, null);
 
-				var userService = new StubUserService(new User(true, null, null, null, new List<ValidatedSession>() { new ValidatedSession(organisationUserId, 9999, Guid.NewGuid(), organisationId) }));
+				var userService = new StubUserService(new User(User.AuthenticationMechanism.Accounts, AuthenticationConstants.AuthenticationScheme, null, null, null, new List<ValidatedSession>() { new ValidatedSession(organisationUserId, 9999, Guid.NewGuid(), organisationId) }));
 				var serviceUnderTest = new OrganisationService(context, userService, new FakeAPITokenService(), fakeAPIService, mockFactory.Object, null);
 
 				//Act
@@ -412,7 +412,7 @@ namespace Comments.Test.UnitTests
 				var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, collationCode: "123412341234");
 				var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, sessionId, expirationDate);
 
-				var userService = new StubUserService(new User(true, null, null, null, new List<ValidatedSession>() { new ValidatedSession(organisationUserId, consultationId, sessionId, organisationId) }));
+				var userService = new StubUserService(new User(User.AuthenticationMechanism.Accounts, AuthenticationConstants.AuthenticationScheme, null, null, null, new List<ValidatedSession>() { new ValidatedSession(organisationUserId, consultationId, sessionId, organisationId) }));
 				var serviceUnderTest = new OrganisationService(context, userService, new FakeAPITokenService(), _fakeApiService, mockFactory.Object, null);
 
 				//Act
