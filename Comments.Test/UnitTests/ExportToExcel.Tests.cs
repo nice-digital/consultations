@@ -14,6 +14,7 @@ using Xunit;
 using TestBase = Comments.Test.Infrastructure.TestBase;
 using ExcelDataReader;
 using Comments.Common;
+using Location = Comments.Models.Location;
 
 namespace Comments.Test.UnitTests
 {
@@ -372,10 +373,12 @@ namespace Comments.Test.UnitTests
 		public async void CreateSpreadsheetForOrganisationCodeUser()
 		{
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: null, organisationUserId: 1);
-
-			var locationId = AddLocation("consultations://./consultation/1/document/1", _context, "001.001.000.000");
+			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+			var locationId = AddLocation(sourceURI, _context, "001.001.000.000");
+			var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
 			var commentText = "A comment";
-			var comments = new List<Models.Comment>{new Models.Comment(locationId, null, commentText, null, null, 2, null, organisationUserId: 1)};
+			//do I need a submission comment?
+			var comments = new List<Models.Comment>{new Models.Comment(locationId, null, commentText, null, location, 2, null, organisationUserId: 1)};
 			var answers = new List<Models.Answer> { };
 			var questions = new List<Models.Question> { };
 			var fakeExportService = new FakeExportService(comments, answers, questions);

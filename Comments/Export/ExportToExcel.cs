@@ -390,23 +390,38 @@ namespace Comments.Export
 		{
 			List<Excel> excel = new List<Excel>();
 
+			Dictionary<string, (string displayName, string emailAddress)> userDetailsForUserIds;
+
 			var organisationUserIds = comments.Where(comment => comment.OrganisationUserId.HasValue).Select(comment => comment.OrganisationUserId.Value)
 				.Concat(answers.Where(answer => answer.OrganisationUserId.HasValue).Select(answer => answer.OrganisationUserId.Value)).Distinct();
-			var userDetailsForOrganisationUser = _exportService.GetOrganisationUsersByOrganisationUserIds(organisationUserIds);
+			
 
-			var userIds = comments.Select(comment => comment.CreatedByUserId).Concat(answers.Select(answer => answer.CreatedByUserId)).Where(user => !string.IsNullOrEmpty(user)).Distinct();
-			var currentUserDetails = _userService.GetCurrentUserDetails();
-
-			Dictionary<string, (string displayName, string emailAddress)> userDetailsForUserIds;
-			if (userIds.Count() == 1 && userIds.Single().Equals(currentUserDetails.userId, StringComparison.OrdinalIgnoreCase))
+			if (organisationUserIds.Count() != 0)
 			{
-				userDetailsForUserIds = new Dictionary<string, (string displayName, string emailAddress)>() { {currentUserDetails.userId, (currentUserDetails.displayName, currentUserDetails.emailAddress) }};
+				var userDetailsForOrganisationUser = _exportService.GetOrganisationUsersByOrganisationUserIds(organisationUserIds);
+
+				userDetailsForUserIds = new Dictionary<string, (string displayName, string emailAddress)>();
+				foreach (var user in userDetailsForOrganisationUser)
+				{
+					userDetailsForUserIds.Add(user.OrganisationUserId.ToString(), (user.EmailAddress, user.EmailAddress));
+				}
 			}
-			else
+			else 
 			{
-				userDetailsForUserIds = await _userService.GetUserDetailsForUserIds(userIds);
+				var userIds = comments.Select(comment => comment.CreatedByUserId).Concat(answers.Select(answer => answer.CreatedByUserId)).Where(user => !string.IsNullOrEmpty(user)).Distinct();
+				var currentUserDetails = _userService.GetCurrentUserDetails();
+
+				if (userIds.Count() == 1 && userIds.Single().Equals(currentUserDetails.userId, StringComparison.OrdinalIgnoreCase))
+				{
+					userDetailsForUserIds = new Dictionary<string, (string displayName, string emailAddress)>() { { currentUserDetails.userId, (currentUserDetails.displayName, currentUserDetails.emailAddress) } };
+				}
+				else
+				{
+					userDetailsForUserIds = await _userService.GetUserDetailsForUserIds(userIds);
+				}
 			}
 
+			
 			foreach (var comment in comments)
 			{
 				var locationDetails = _exportService.GetLocationData(comment.Location);
@@ -419,8 +434,8 @@ namespace Comments.Export
 					ChapterTitle = locationDetails.ChapterName,
 					Section = commentOn == CommentOn.Section || commentOn == CommentOn.SubSection || commentOn == CommentOn.Selection ? comment.Location.Section : null,
 					Quote = commentOn  == CommentOn.Selection ? comment.Location.Quote : null,
-					UserName = userDetailsForUserIds.ContainsKey(comment.CreatedByUserId) ? userDetailsForUserIds[comment.CreatedByUserId].displayName : "Not found",
-					Email = userDetailsForUserIds.ContainsKey(comment.CreatedByUserId) ? userDetailsForUserIds[comment.CreatedByUserId].emailAddress : "Not found",
+					UserName = userDetailsForUserIds.ContainsKey(comment.SubmissionComment?.First().Submission.SubmissionByUserId) ? userDetailsForUserIds[comment.SubmissionComment?.First().Submission.SubmissionByUserId].displayName : "Not found",
+					Email = userDetailsForUserIds.ContainsKey(comment.SubmissionComment?.First().Submission.SubmissionByUserId) ? userDetailsForUserIds[comment.SubmissionComment?.First().Submission.SubmissionByUserId].emailAddress : "Not found",
 					CommentId = comment.CommentId,
 					Comment =  comment.CommentText,
 					QuestionId = null,
