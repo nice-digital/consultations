@@ -87,23 +87,27 @@ namespace Comments.Services
 			var consultationId = ConsultationsUri.ParseConsultationsUri(anySourceURI).ConsultationId;
 			var organisationUserId = _currentUser.ValidatedSessions.FirstOrDefault(session => session.ConsultationId.Equals(consultationId))?.OrganisationUserId;
 
+			var submissionToSave = _context.InsertSubmission(_currentUser.UserId, null, null, null, null, null);
+
 			_context.UpdateEmailAddressForOrganisationUser(submission.EmailAddress, (int)organisationUserId);
-			if (submission.Comments.Count > 0) UpdateCommentsModelAndDuplicate(submission.Comments);
-			if (submission.Answers.Count > 0) UpdateAnswersModelAndDuplicate(submission.Answers);
+			if (submission.Comments.Count > 0) UpdateCommentsModelAndDuplicate(submission.Comments, submissionToSave);
+			if (submission.Answers.Count > 0) UpdateAnswersModelAndDuplicate(submission.Answers, submissionToSave);
 			
 			return (rowsUpdated: _context.SaveChanges(), validate: null, _context);
 		}
 
-		private void UpdateCommentsModelAndDuplicate(IList<ViewModels.Comment> comments)
+		private void UpdateCommentsModelAndDuplicate(IList<ViewModels.Comment> comments, Models.Submission submission)
 		{
 			var commentIds = comments.Select(c => c.CommentId).ToList();
 			_context.DuplicateComment(commentIds);
+			_context.AddSubmissionComments(commentIds, submission.SubmissionId);
 		}
 
-		private void UpdateAnswersModelAndDuplicate(IList<ViewModels.Answer> answers)
+		private void UpdateAnswersModelAndDuplicate(IList<ViewModels.Answer> answers, Models.Submission submission)
 		{
 			var answerIds = answers.Select(a => a.AnswerId).ToList();
 			_context.DuplicateAnswer(answerIds);
+			_context.AddSubmissionAnswers(answerIds, submission.SubmissionId);
 		}
 
 		private void UpdateCommentsModel(IList<ViewModels.Comment> comments, Models.Submission submission, Models.Status status)

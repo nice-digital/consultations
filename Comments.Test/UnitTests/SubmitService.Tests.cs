@@ -282,7 +282,7 @@ namespace Comments.Test.UnitTests
 			var result = submitService.SubmitToLead(new ViewModels.SubmissionToLead(commentsAndQuestions.Comments, new List<ViewModels.Answer>(), "testemail@nice.org.uk"));
 
 			//Assert
-			result.rowsUpdated.ShouldBe(2);
+			result.rowsUpdated.ShouldBe(3);
 			result.context.Comment.First().StatusId.ShouldBe((int)StatusName.Submitted);
 			result.context.Comment.First().OrganisationId.ShouldBe(organisationId);
 			result.context.Comment.First().ParentCommentId.ShouldBe(null);
@@ -327,7 +327,7 @@ namespace Comments.Test.UnitTests
 			var result = submitService.SubmitToLead(new ViewModels.SubmissionToLead(new List<ViewModels.Comment>(), commentsAndQuestions.Questions.First().Answers, "testemail@nice.org.uk"));
 
 			//Assert
-			result.rowsUpdated.ShouldBe(2);
+			result.rowsUpdated.ShouldBe(3);
 			result.context.Answer.First().StatusId.ShouldBe((int)StatusName.Submitted);
 			result.context.Answer.First().OrganisationId.ShouldBe(organisationId);
 			result.context.Answer.First().ParentAnswerId.ShouldBe(null);
