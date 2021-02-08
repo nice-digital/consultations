@@ -16,7 +16,7 @@ import { ErrorBoundary } from "../ErrorBoundary/ErrorBoundary";
 import { LiveAnnouncer, LiveMessenger } from "react-aria-live";
 import { projectInformation } from "../../constants";
 import { PhaseBanner } from "../PhaseBanner/PhaseBanner";
-import { LeadInfo } from "../LeadInfo/LeadInfo";
+import LeadInfoWithRouter from "../LeadInfo/LeadInfo";
 
 type PropsType = any;
 
@@ -119,7 +119,7 @@ class App extends React.Component<PropsType, StateType> {
 
 								{/*Lead Info Page*/}
 								<Route exact path="/leadinformation">
-									<LeadInfo />
+									<LeadInfoWithRouter />
 								</Route>
 
 								{/*404*/}
