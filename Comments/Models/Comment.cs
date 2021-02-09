@@ -45,19 +45,19 @@ namespace Comments.Models
 	        //Status.UpdateFromViewModel(comment.Status);
         }
 
-        public CommentType CommentType
+        public UserType CommentByUserType
         {
 	        get
 	        {
 		        if (OrganisationUserId.HasValue && !ParentCommentId.HasValue)
 		        {
-			        return CommentType.OrganisationalCommenter;
+			        return UserType.OrganisationalCommenter;
 		        }
 		        if (ParentCommentId.HasValue || (!string.IsNullOrEmpty(CreatedByUserId) && OrganisationId.HasValue))
 		        {
-			        return CommentType.OrganisationLead;
+			        return UserType.OrganisationLead;
 		        }
-		        return CommentType.IndividualCommenter;
+		        return UserType.IndividualCommenter;
 	        }
         }
     }

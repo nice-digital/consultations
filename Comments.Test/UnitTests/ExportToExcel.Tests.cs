@@ -373,13 +373,13 @@ namespace Comments.Test.UnitTests
 		[Fact]
 		public async void CreateSpreadsheetForOrganisationCodeUser()
 		{
+			//Arrange
 			const int organisationUserId = 1;
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: null, organisationUserId: organisationUserId);
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var locationId = AddLocation(sourceURI, _context, "001.001.000.000");
 			var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
 			var commentText = "A comment";
-			
 			var comments = new List<Models.Comment>{new Models.Comment(locationId, null, commentText, null, location, 2, null, organisationUserId: organisationUserId) }; // will need to be updated to submission to lead?
 			comments.First().SubmissionComment.Add(new SubmissionComment(1,1));
 			comments.First().SubmissionComment.First().Submission = new Submission(null, DateTime.Now, false, "organisation", false, null, null);
@@ -388,6 +388,8 @@ namespace Comments.Test.UnitTests
 			var fakeExportService = new FakeExportService(comments, answers, questions,
 				new List<OrganisationUser>{ new OrganisationUser(1, Guid.NewGuid(), DateTime.Now){ EmailAddress = "bob@bob.com", OrganisationUserId = organisationUserId } });
 			var exportToExcel = new ExportToExcel(userService, fakeExportService, null);
+
+			//Act
 			var spreadsheet = await exportToExcel.ToSpreadsheet(comments, answers, questions);
 
 			using (var reader = ExcelReaderFactory.CreateReader(spreadsheet))
@@ -406,7 +408,7 @@ namespace Comments.Test.UnitTests
 
 				var commentRow = rows[3].ItemArray;
 				commentRow[7].ShouldBe(commentText);
-				commentRow[1].ShouldBe("test@test.com");
+				commentRow[1].ShouldBe("bob@bob.com");
 			}
 		}
 

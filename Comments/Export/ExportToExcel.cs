@@ -462,8 +462,8 @@ namespace Comments.Export
 					ChapterTitle = locationDetails.ChapterName,
 					Section = answer.Question.Location.Section,
 					Quote = answer.Question.Location.Quote,
-					UserName = userDetailsForUserIds.ContainsKey(answer.CreatedByUserId) ? userDetailsForUserIds[answer.CreatedByUserId].displayName : "Not found",
-					Email = userDetailsForUserIds.ContainsKey(answer.CreatedByUserId) ? userDetailsForUserIds[answer.CreatedByUserId].emailAddress : "Not found",
+					UserName = GetUserNameForAnswer(answer, userDetailsForUserIds),
+					Email = GetEmailForAnswer(answer, userDetailsForUserIds, emailAddressesForOrganisationIds),
 					CommentId = null,
 					Comment = null,
 					QuestionId = answer.Question.QuestionId,
@@ -520,10 +520,9 @@ namespace Comments.Export
 
 		private string GetUserNameForComment(Models.Comment comment, Dictionary<string, (string displayName, string emailAddress)> userDetailsForUserIds)
 		{
-			if (comment.CommentType == CommentType.OrganisationalCommenter)
+			if (comment.CommentByUserType == UserType.OrganisationalCommenter)
 				return null;
 
-			
 			return userDetailsForUserIds.ContainsKey(comment.SubmissionComment?.First().Submission.SubmissionByUserId)
 				? userDetailsForUserIds[comment.SubmissionComment?.First().Submission.SubmissionByUserId].displayName
 				: "Not found";
@@ -531,7 +530,7 @@ namespace Comments.Export
 
 		private string GetEmailForComment(Models.Comment comment, Dictionary<string, (string displayName, string emailAddress)> userDetailsForUserIds, Dictionary<int, string> emailAddressesForOrganisationIds)
 		{
-			if (comment.CommentType == CommentType.OrganisationalCommenter)
+			if (comment.CommentByUserType == UserType.OrganisationalCommenter)
 			{
 				return emailAddressesForOrganisationIds.ContainsKey(comment.OrganisationUserId.Value)
 					? emailAddressesForOrganisationIds[comment.OrganisationUserId.Value]
@@ -540,6 +539,30 @@ namespace Comments.Export
 
 			return userDetailsForUserIds.ContainsKey(comment.SubmissionComment?.First().Submission.SubmissionByUserId)
 				? userDetailsForUserIds[comment.SubmissionComment?.First().Submission.SubmissionByUserId].emailAddress
+				: "Not found";
+		}
+
+		private string GetUserNameForAnswer(Models.Answer answer, Dictionary<string, (string displayName, string emailAddress)> userDetailsForUserIds)
+		{
+			if (answer.AnswerByUserType == UserType.OrganisationalCommenter)
+				return null;
+			
+			return userDetailsForUserIds.ContainsKey(answer.SubmissionAnswer?.First().Submission.SubmissionByUserId)
+				? userDetailsForUserIds[answer.SubmissionAnswer?.First().Submission.SubmissionByUserId].displayName
+				: "Not found";
+		}
+
+		private string GetEmailForAnswer(Models.Answer answer, Dictionary<string, (string displayName, string emailAddress)> userDetailsForUserIds, Dictionary<int, string> emailAddressesForOrganisationIds)
+		{
+			if (answer.AnswerByUserType == UserType.OrganisationalCommenter)
+			{
+				return emailAddressesForOrganisationIds.ContainsKey(answer.OrganisationUserId.Value)
+					? emailAddressesForOrganisationIds[answer.OrganisationUserId.Value]
+					: "Not found";
+			}
+
+			return userDetailsForUserIds.ContainsKey(answer.SubmissionAnswer?.First().Submission.SubmissionByUserId)
+				? userDetailsForUserIds[answer.SubmissionAnswer?.First().Submission.SubmissionByUserId].emailAddress
 				: "Not found";
 		}
 
