@@ -15,12 +15,14 @@ namespace Comments.Test.Infrastructure
 		private readonly IEnumerable<Comment> _comments;
 		private readonly IEnumerable<Answer> _answers;
 		private readonly IEnumerable<Question> _questions;
+		private readonly IEnumerable<OrganisationUser> _organisationUsers;
 
-		public FakeExportService(IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions)
+		public FakeExportService(IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions, IEnumerable<OrganisationUser> organisationUsers)
 		{
 			_comments = comments;
 			_answers = answers;
 			_questions = questions;
+			_organisationUsers = organisationUsers;
 		}
 
 		public (IEnumerable<Comment> comment, IEnumerable<Answer> answer, IEnumerable<Question> question, Validate valid) GetAllDataForConsultation(
@@ -47,7 +49,7 @@ namespace Comments.Test.Infrastructure
 
 		public IEnumerable<Models.OrganisationUser> GetOrganisationUsersByOrganisationUserIds(IEnumerable<int> organisationUserIds)
 		{
-			return new List<OrganisationUser>(){ new OrganisationUser(1, Guid.NewGuid(), DateTime.Now)};
+			return _organisationUsers;
 		}
 	}
 }

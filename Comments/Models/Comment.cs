@@ -44,5 +44,21 @@ namespace Comments.Models
 	        Location?.UpdateFromViewModel(comment as ViewModels.Location);
 	        //Status.UpdateFromViewModel(comment.Status);
         }
+
+        public CommentType CommentType
+        {
+	        get
+	        {
+		        if (OrganisationUserId.HasValue && !ParentCommentId.HasValue)
+		        {
+			        return CommentType.OrganisationalCommenter;
+		        }
+		        if (ParentCommentId.HasValue || (!string.IsNullOrEmpty(CreatedByUserId) && OrganisationId.HasValue))
+		        {
+			        return CommentType.OrganisationLead;
+		        }
+		        return CommentType.IndividualCommenter;
+	        }
+        }
     }
 }
