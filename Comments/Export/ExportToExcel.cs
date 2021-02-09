@@ -403,7 +403,7 @@ namespace Comments.Export
 				userDetailsForUserIds = new Dictionary<string, (string displayName, string emailAddress)>();
 				foreach (var user in userDetailsForOrganisationUser)
 				{
-					userDetailsForUserIds.Add(user.OrganisationUserId.ToString(), (user.EmailAddress, user.EmailAddress));
+					userDetailsForUserIds.Add(user.OrganisationUserId.ToString(), (null, user.EmailAddress));
 				}
 			}
 			else 

@@ -15,6 +15,7 @@ using TestBase = Comments.Test.Infrastructure.TestBase;
 using ExcelDataReader;
 using Comments.Common;
 using Location = Comments.Models.Location;
+using Submission = Comments.Models.Submission;
 
 namespace Comments.Test.UnitTests
 {
@@ -377,8 +378,10 @@ namespace Comments.Test.UnitTests
 			var locationId = AddLocation(sourceURI, _context, "001.001.000.000");
 			var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
 			var commentText = "A comment";
-			//do I need a submission comment?
-			var comments = new List<Models.Comment>{new Models.Comment(locationId, null, commentText, null, location, 2, null, organisationUserId: 1)};
+			
+			var comments = new List<Models.Comment>{new Models.Comment(locationId, null, commentText, null, location, 2, null, organisationUserId: 1)}; // will need to be updated to submission to lead?
+			comments.First().SubmissionComment.Add(new SubmissionComment(1,1));
+			comments.First().SubmissionComment.First().Submission = new Submission("test@test.com", DateTime.Now, false, "organisation", false, null, null);
 			var answers = new List<Models.Answer> { };
 			var questions = new List<Models.Question> { };
 			var fakeExportService = new FakeExportService(comments, answers, questions);
@@ -395,13 +398,13 @@ namespace Comments.Test.UnitTests
 				rows.Count.ShouldBe(4);
 
 				var headerRow = rows[2].ItemArray;
-				headerRow.Length.ShouldBe(16);
+				headerRow.Length.ShouldBe(15);
 
-				headerRow[15].ToString().ShouldBe(Constants.Export.ExpressionOfInterestColumnDescription);
+				headerRow[1].ToString().ShouldBe("Email Address");
 
 				var commentRow = rows[3].ItemArray;
 				commentRow[7].ShouldBe(commentText);
-				commentRow[15].ShouldBe(Constants.Export.Yes);
+				commentRow[1].ShouldBe("test@test.com");
 			}
 		}
 

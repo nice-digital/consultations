@@ -1,3 +1,4 @@
+using System;
 using Comments.Services;
 using Comments.ViewModels;
 using System.Collections.Generic;
@@ -46,7 +47,7 @@ namespace Comments.Test.Infrastructure
 
 		public IEnumerable<Models.OrganisationUser> GetOrganisationUsersByOrganisationUserIds(IEnumerable<int> organisationUserIds)
 		{
-			return new List<OrganisationUser>();
+			return new List<OrganisationUser>(){ new OrganisationUser(1, Guid.NewGuid(), DateTime.Now)};
 		}
 	}
 }
