@@ -29,6 +29,19 @@ export class SubmitResponseDialog extends PureComponent {
 		return organisationIsValid && tobaccoIsValid && organisationExpressionOfInterestIsValid;
 	};
 
+	emailIsValid = () => {
+		const emailRegex = /\S+@\S+\.\S+/;
+		const emailAddress = this.props.emailAddress;
+
+		let emailIsValid = false;
+
+		if ((emailAddress.length > 0) && (emailRegex.test(emailAddress.toLowerCase()))) {
+			emailIsValid = true;
+		}
+
+		return emailIsValid;
+	}
+
 	submitConsultation = () => {
 		if (this.props.validToSubmit && this.mandatoryQuestionsAreValid() && this.props.unsavedIds.length === 0) {
 			this.props.submitConsultation();
@@ -42,7 +55,14 @@ export class SubmitResponseDialog extends PureComponent {
 	};
 
 	handleSubmitToLeadClick = () => {
-		this.props.submitToLead();
+		if (this.props.validToSubmit && this.emailIsValid() && this.props.unsavedIds.length === 0) {
+			this.props.submitToLead();
+		} else {
+			this.setState({
+				feedbackVisible: true,
+			});
+			pullFocusByQuerySelector("#SubmitResponseFeedback");
+		}
 	};
 
 	render() {
@@ -63,18 +83,23 @@ export class SubmitResponseDialog extends PureComponent {
 			<>
 				{isOrganisationCommenter ? (
 					<div className="panel">
-						<h2>You are about to submit your final response to {organisationName}</h2>
-						<p>Lorem</p>
-						<h3>Another heading</h3>
-						<p>Ipsum</p>
+						<h2>You are about to send your final response to {organisationName}</h2>
+						<p>Enter your email address so that your organisation can contact you about your comments if they have any questions.</p>
 						<Input
 							label="Email address"
 							name="emailAddress"
+							type="email"
+							placeholder="eg: your.name@example.com..."
 							onChange={fieldsChangeHandler}
 						/>
-						<h3>Now submit your response to {organisationName}</h3>
-						<p>Lorememememe</p>
-						<button onClick={this.handleSubmitToLeadClick}>Submit to your organisation</button>
+						<p>Once you have sent your response you will not be able to edit it or add any more comments.</p>
+						{this.state.feedbackVisible &&
+							<SubmitResponseFeedback
+								{...this.props}
+								unsavedIdsQty={this.props.unsavedIds.length}
+							/>
+						}
+						<button onClick={this.handleSubmitToLeadClick} className="btn btn--cta">Send your response to your organisation</button>
 					</div>
 				) : (
 					<div className="panel">
@@ -190,7 +215,7 @@ export class SubmitResponseDialog extends PureComponent {
 						</ul>
 
 						<div role="radiogroup"
-								aria-label="Do you or the organisation you represent have any links with the tobacco industry?">
+							aria-label="Do you or the organisation you represent have any links with the tobacco industry?">
 
 							<div className="form__group form__group--radio form__group--inline">
 								<input
