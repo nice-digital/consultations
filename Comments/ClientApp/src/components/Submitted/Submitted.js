@@ -176,11 +176,18 @@ export class Submitted extends Component<PropsType, StateType> {
 															href={`${this.props.basename}/api/exportexternal/${this.props.match.params.consultationId}`}>Download
 															your response</a>
 														}
-														<p>Your response was submitted on <Moment format="D MMMM YYYY" date={this.state.consultationData.consultationState.submittedDate}/>.</p>
+														<p>Your response was submitted {contextValue.isOrganisationCommenter && `to ${contextValue.organisationName}`} on <Moment format="D MMMM YYYY" date={this.state.consultationData.consultationState.submittedDate}/>.</p>
 														<h2>What happens next?</h2>
-														<p>We will review all the submissions received for this consultation. Our response
-															will
-															be published on the website around the time the final guidance is published.</p>
+														{contextValue.isOrganisationCommenter ? (
+															<>
+																<p>{`${contextValue.organisationName}`} will review all the submissions received for this consultation.</p>
+																<p>NICE's response to all the submissions received will be published on the website around the time the final guidance is published.</p>
+															</>
+														) : (
+															<p>We will review all the submissions received for this consultation. Our response
+															will be published on the website around the time the final guidance is published.</p>
+														)}
+
 														<h2>Help us improve our online commenting service</h2>
 														<p>This is the first time we have used our new online commenting software. We'd really like to hear your feedback so that we can keep improving
 															it.</p>

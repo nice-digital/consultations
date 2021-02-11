@@ -306,13 +306,13 @@ namespace Comments.Migrations
                         .HasColumnName("SubmissionID")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool>("HasTobaccoLinks");
+                    b.Property<bool?>("HasTobaccoLinks");
 
                     b.Property<bool?>("OrganisationExpressionOfInterest");
 
                     b.Property<string>("OrganisationName");
 
-                    b.Property<bool>("RespondingAsOrganisation");
+                    b.Property<bool?>("RespondingAsOrganisation");
 
                     b.Property<string>("SubmissionByUserId")
                         .HasColumnName("SubmissionByUserID");

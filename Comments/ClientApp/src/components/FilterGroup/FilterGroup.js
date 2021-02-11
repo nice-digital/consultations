@@ -2,7 +2,7 @@
 
 import React, { Component } from "react";
 
-import { FilterOption } from "../FilterOption/FilterOption";
+import FilterOptionWithHistory from "../FilterOption/FilterOption";
 
 type PropsType = {
 	path: string,
@@ -83,7 +83,7 @@ export class FilterGroup extends Component<PropsType, StateType> {
 				aria-labelledby={`group-title-${this.props.filterGroup.id}`}
 				className="filter-group__options">
 				{this.getOptionsToRender().map(opt =>
-					<FilterOption key={opt.id}
+					<FilterOptionWithHistory key={opt.id}
 						groupId={this.props.filterGroup.id}
 						groupName={this.props.filterGroup.title}
 						path={this.props.path}
