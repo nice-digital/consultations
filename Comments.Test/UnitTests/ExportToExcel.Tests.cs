@@ -9,8 +9,13 @@ using Shouldly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Comments.Export;
 using Xunit;
 using TestBase = Comments.Test.Infrastructure.TestBase;
+using ExcelDataReader;
+using Comments.Common;
+using Location = Comments.Models.Location;
+using Submission = Comments.Models.Submission;
 
 namespace Comments.Test.UnitTests
 {
@@ -322,12 +327,96 @@ namespace Comments.Test.UnitTests
 			var export = new ExportService(context, _fakeUserService, consultationService, _feedService);
 
 			//Act
-			var resultTuple = export.GetAllDataForConsulationForCurrentUser(1);
+			var resultTuple = export.GetAllDataForConsultationForCurrentUser(1);
 
 			//Assert
 			resultTuple.comment.Count().ShouldBe(1);
 			resultTuple.answer.Count().ShouldBe(1);
 			resultTuple.question.Count().ShouldBe(1);
+		}
+
+		[Fact]
+		public void GetAllDataForConsulationForOrganisationCodeUser()
+		{
+			// Arrange
+			ResetDatabase();
+			_context.Database.EnsureCreated();
+			string userId = null;
+			var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(_context, 1, Guid.NewGuid(), DateTime.MaxValue);
+			int locationId, submissionId, commentId, questionId, answerId;
+			var questionTypeId = 99;
+
+			//Add a comment
+			locationId = AddLocation("consultations://./consultation/1/document/1", _context, "001.001.000.000");
+			commentId = AddComment(locationId, "Submitted comment consultation 1", userId, (int)StatusName.Submitted, _context, organisationUserId); //TODO Needs to be updated with submit to lead
+			submissionId = AddSubmission(userId, _context);
+			AddSubmissionComments(submissionId, commentId, _context);
+
+			//Add a question with an answer
+			locationId = AddLocation("consultations://./consultation/1", _context, "001.002.001.000");
+			questionId = AddQuestion(locationId, questionTypeId, "Consultation Level Question for Consultation 1", _context);
+			answerId = AddAnswer(questionId, userId, "answering a consultation level question for Consultation 1", (int)StatusName.Submitted, _context, organisationUserId); //TODO Needs to be updated with submit to lead
+			AddSubmissionAnswers(submissionId, answerId, _context);
+
+			//Add an unanswered question
+			locationId = AddLocation("consultations://./consultation/1", _context, "001.002.000.000");
+			AddQuestion(locationId, questionTypeId, "Without an answer for consultation 1", _context);
+
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId, organisationUserId: organisationUserId);
+			var context = new ConsultationsContext(_options, userService, _fakeEncryption);
+
+			var consultationService = new ConsultationService(_context, new FakeFeedService(), new FakeLogger<ConsultationService>(), _fakeUserService);
+			var export = new ExportService(context, _fakeUserService, consultationService, _feedService);
+
+			//Act
+			var resultTuple = export.GetAllDataForConsultationForCurrentUser(1);
+
+			//Assert
+			resultTuple.comment.Count().ShouldBe(1);
+			resultTuple.answer.Count().ShouldBe(1);
+			resultTuple.question.Count().ShouldBe(1);
+		}
+
+		[Fact]
+		public async void CreateSpreadsheetForOrganisationCodeUser()
+		{
+			//Arrange
+			const int organisationUserId = 1;
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: null, organisationUserId: organisationUserId);
+			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+			var locationId = AddLocation(sourceURI, _context, "001.001.000.000");
+			var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
+			var commentText = "A comment";
+			var comments = new List<Models.Comment>{new Models.Comment(locationId, null, commentText, null, location, 2, null, organisationUserId: organisationUserId) }; // will need to be updated to submission to lead?
+			comments.First().SubmissionComment.Add(new SubmissionComment(1,1));
+			comments.First().SubmissionComment.First().Submission = new Submission(null, DateTime.Now, false, "organisation", false, null, null);
+			var answers = new List<Models.Answer> { };
+			var questions = new List<Models.Question> { };
+			var fakeExportService = new FakeExportService(comments, answers, questions,
+				new List<OrganisationUser>{ new OrganisationUser(1, Guid.NewGuid(), DateTime.Now){ EmailAddress = "bob@bob.com", OrganisationUserId = organisationUserId } });
+			var exportToExcel = new ExportToExcel(userService, fakeExportService, null);
+
+			//Act
+			var spreadsheet = await exportToExcel.ToSpreadsheet(comments, answers, questions);
+
+			using (var reader = ExcelReaderFactory.CreateReader(spreadsheet))
+			{
+				var workSheet = reader.AsDataSet();
+				var data = workSheet.Tables;
+
+				//Assert
+				var rows = data[Constants.Export.SheetName].Rows;
+				rows.Count.ShouldBe(4);
+
+				var headerRow = rows[2].ItemArray;
+				headerRow.Length.ShouldBe(15);
+
+				headerRow[1].ToString().ShouldBe("Email Address");
+
+				var commentRow = rows[3].ItemArray;
+				commentRow[7].ShouldBe(commentText);
+				commentRow[1].ShouldBe("bob@bob.com");
+			}
 		}
 
 		[Fact]
@@ -365,7 +454,7 @@ namespace Comments.Test.UnitTests
 			var export = new ExportService(context, _fakeUserService, consultationService, _feedService);
 
 			//Act
-			var resultTuple = export.GetAllDataForConsulation(1);
+			var resultTuple = export.GetAllDataForConsultation(1);
 
 			//Assert
 			resultTuple.comment.Count().ShouldBe(1);
