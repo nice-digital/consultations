@@ -77,7 +77,7 @@ namespace Comments.Test.IntegrationTests.API.Submit
 
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var consultationId = 1;
-			
+
 			var authorisationSession = Guid.NewGuid();
 			var commentText = "Comment text";
 			var emailAddress = "me@test.com";
@@ -93,11 +93,13 @@ namespace Comments.Test.IntegrationTests.API.Submit
 			var commentService = new CommentService(context, userService, fakeConsultationService, fakeHttpContextAccessor);
 
 			var locationId = TestBaseDBHelpers.AddLocation(context, sourceURI);
-			var commentId = TestBaseDBHelpers.AddComment(context, locationId, commentText, null, (int)StatusName.Draft, organisationUserId, null, organisationId);
+			var questionId = TestBaseDBHelpers.AddQuestion(context, locationId);
+			TestBaseDBHelpers.AddComment(context, locationId, commentText, null, (int)StatusName.Draft, organisationUserId, null, organisationId);
+			TestBaseDBHelpers.AddAnswer(context, questionId, organisationUserId: organisationUserId);
 
 			var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI, new FakeUrlHelper());
 
-			var submissionToLead = new SubmissionToLead(commentsAndQuestions.Comments, new List<ViewModels.Answer>(), emailAddress);
+			var submissionToLead = new SubmissionToLead(commentsAndQuestions.Comments, commentsAndQuestions.Questions.First().Answers, emailAddress);
 			var content = new StringContent(JsonConvert.SerializeObject(submissionToLead), Encoding.UTF8, "application/json");
 
 			var (_server, _client) = InitialiseServerAndClient(context, userService, fakeConsultationService);
@@ -106,12 +108,13 @@ namespace Comments.Test.IntegrationTests.API.Submit
 			var response = await _client.PostAsync($"consultations/api/SubmitToLead", content);
 			response.EnsureSuccessStatusCode();
 			var responseString = await response.Content.ReadAsStringAsync();
-			var comment = commentService.GetComment(commentId);
-			var deserialisedCommentsAndAnswers = JsonConvert.DeserializeObject<ViewModels.Submission>(responseString);
+
+			var deserialisedCommentsAndAnswers = JsonConvert.DeserializeObject<ViewModels.SubmissionToLead>(responseString);
 
 			//Assert
 			deserialisedCommentsAndAnswers.Comments.First().Status.StatusId.ShouldBe((int)StatusName.Submitted);
 			deserialisedCommentsAndAnswers.Answers.First().Status.StatusId.ShouldBe((int)StatusName.Submitted);
+			deserialisedCommentsAndAnswers.EmailAddress.ShouldBe(emailAddress);
 		}
 	}
 }
