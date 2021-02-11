@@ -1,5 +1,4 @@
 using System;
-using System.Net;
 using Comments.Common;
 using Comments.Services;
 using Microsoft.AspNetCore.Authorization;
