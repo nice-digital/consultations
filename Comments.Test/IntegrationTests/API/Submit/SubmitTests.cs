@@ -84,7 +84,7 @@ namespace Comments.Test.IntegrationTests.API.Submit
 
 			var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context);
 			TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, authorisationSession, null, organisationUserId: organisationUserId);
-			TestBaseDBHelpers.AddStatus(context, nameof(StatusName.Submitted), (int)StatusName.Submitted);
+			TestBaseDBHelpers.AddStatus(context, nameof(StatusName.SubmittedToLead), (int)StatusName.SubmittedToLead);
 
 			var userService = FakeUserService.Get(true, "Benjamin Button", null, TestUserType.NotAuthenticated, false, organisationUserId);
 			
@@ -112,8 +112,8 @@ namespace Comments.Test.IntegrationTests.API.Submit
 			var deserialisedCommentsAndAnswers = JsonConvert.DeserializeObject<ViewModels.SubmissionToLead>(responseString);
 
 			//Assert
-			deserialisedCommentsAndAnswers.Comments.First().Status.StatusId.ShouldBe((int)StatusName.Submitted);
-			deserialisedCommentsAndAnswers.Answers.First().Status.StatusId.ShouldBe((int)StatusName.Submitted);
+			deserialisedCommentsAndAnswers.Comments.First().Status.StatusId.ShouldBe((int)StatusName.SubmittedToLead);
+			deserialisedCommentsAndAnswers.Answers.First().Status.StatusId.ShouldBe((int)StatusName.SubmittedToLead);
 			deserialisedCommentsAndAnswers.EmailAddress.ShouldBe(emailAddress);
 		}
 	}

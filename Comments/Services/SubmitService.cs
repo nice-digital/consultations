@@ -89,7 +89,7 @@ namespace Comments.Services
 
 			var submissionToSave = _context.InsertSubmission(_currentUser.UserId, null, null, null, null, null);
 
-			var submittedStatus = _context.GetStatus(StatusName.Submitted);
+			var submittedStatus = _context.GetStatus(StatusName.SubmittedToLead);
 
 			_context.UpdateEmailAddressForOrganisationUser(submission.EmailAddress, (int)organisationUserId);
 			if (submission.Comments.Count > 0)
