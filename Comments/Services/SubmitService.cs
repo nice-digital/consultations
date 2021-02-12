@@ -68,8 +68,8 @@ namespace Comments.Services
 
 		public (int rowsUpdated, Validate validate, ConsultationsContext context) SubmitToLead(SubmissionToLead submission)
 		{
-			//if (!_currentUser.IsAuthenticatedByOrganisationCookie)
-			//	return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User not Authenticated"), null);
+			if (!_currentUser.IsAuthenticatedByOrganisationCookie)
+				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User not Authenticated"), null);
 
 			var anySourceURI = submission.SourceURIs.FirstOrDefault();
 			if (anySourceURI == null)
