@@ -56,9 +56,9 @@ type StateType = {
 	sort: string,
 	supportsDownload: boolean,
 	loading: boolean,
-	respondingAsOrganisation: boolean,
+	respondingAsOrganisation: boolean | null,
 	organisationName: string,
-	hasTobaccoLinks: boolean,
+	hasTobaccoLinks: boolean | null,
 	tobaccoDisclosure: string,
 	organisationExpressionOfInterest: boolean | null,
 	unsavedIds: Array<number>,
@@ -85,9 +85,9 @@ export class Review extends Component<PropsType, StateType> {
 			questions: [], //this contains all the questions, not just the ones displayed to the user. the show property defines whether the question is filtered out from view.
 			sort: "DocumentAsc",
 			supportsDownload: false,
-			respondingAsOrganisation: false,
+			respondingAsOrganisation: null,
 			organisationName: "",
-			hasTobaccoLinks: false,
+			hasTobaccoLinks: null,
 			tobaccoDisclosure: "",
 			organisationExpressionOfInterest: null,
 			unsavedIds: [],
@@ -143,8 +143,8 @@ export class Review extends Component<PropsType, StateType> {
 				sort: preloadedCommentsData.sort,
 				supportsDownload: preloadedConsultationData.consultationState.supportsDownload,
 				organisationName: preloadedCommentsData.organisationName || "",
-				respondingAsOrganisation: (preloadedCommentsData.isLead === true ? "yes" : false),
-				hasTobaccoLinks: false,
+				respondingAsOrganisation: (preloadedCommentsData.isLead ? true : null),
+				hasTobaccoLinks: null,
 				organisationExpressionOfInterest: null,
 				tobaccoDisclosure: "",
 				unsavedIds: [],
@@ -237,7 +237,7 @@ export class Review extends Component<PropsType, StateType> {
 						organisationName: data.commentsData.organisationName || "",
 						documentTitles: this.getListOfDocuments(data.commentsData.filters),
 						isLead: data.commentsData.isLead,
-						respondingAsOrganisation: (data.commentsData.isLead === true ? "yes" : false),
+						respondingAsOrganisation: (data.isLead ? true : null),
 					});
 				} else {
 					this.setState({
@@ -249,7 +249,7 @@ export class Review extends Component<PropsType, StateType> {
 						organisationName: data.commentsData.organisationName || "",
 						documentTitles: this.getListOfDocuments(data.commentsData.filters),
 						isLead: data.commentsData.isLead,
-						respondingAsOrganisation: (data.commentsData.isLead === true ? "yes" : false),
+						respondingAsOrganisation: (data.isLead ? true : null),
 					}, () => {
 						tagManager({
 							event: "generic",
@@ -300,9 +300,9 @@ export class Review extends Component<PropsType, StateType> {
 		const questions = this.state.questions;
 		const organisationName = this.state.organisationName;
 		const tobaccoDisclosure = this.state.tobaccoDisclosure;
-		const respondingAsOrganisation = this.state.respondingAsOrganisation === "yes";
-		const hasTobaccoLinks = this.state.hasTobaccoLinks === "yes";
-		const organisationExpressionOfInterest = (this.state.consultationData.showExpressionOfInterestSubmissionQuestion ? (this.state.organisationExpressionOfInterest === "yes") : null);
+		const respondingAsOrganisation = this.state.respondingAsOrganisation;
+		const hasTobaccoLinks = this.state.hasTobaccoLinks;
+		const organisationExpressionOfInterest = (this.state.consultationData.showExpressionOfInterestSubmissionQuestion ? (this.state.organisationExpressionOfInterest) : null);
 
 		let answersToSubmit = [];
 		questions.forEach(function (question) {
