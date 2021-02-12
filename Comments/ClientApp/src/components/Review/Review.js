@@ -406,9 +406,17 @@ export class Review extends Component<PropsType, StateType> {
 	};
 
 	fieldsChangeHandler = (e: SyntheticInputEvent<*>) => {
-		this.setState({
-			[e.target.name]: e.target.value,
-		});
+		if(e.target.type == "radio" && typeof e.target.value === "string"){
+			let value = null;
+			e.target.value === "true" ? value = true : value = false;
+			this.setState({
+				[e.target.name]: value,
+			});
+		}else{
+			this.setState({
+				[e.target.name]: e.target.value,
+			});
+		}
 	};
 
 	issueA11yMessage = (message: string) => {
