@@ -406,9 +406,10 @@ export class Review extends Component<PropsType, StateType> {
 	};
 
 	fieldsChangeHandler = (e: SyntheticInputEvent<*>) => {
-		if(e.target.type == "radio" && typeof e.target.value === "string"){
-			let value = null;
-			e.target.value === "true" ? value = true : value = false;
+		if(e.target.type == "radio"){
+			let value = e.target.value;
+			if(e.target.value==="true") value = true;
+			if(e.target.value==="false") value = false;
 			this.setState({
 				[e.target.name]: value,
 			});
