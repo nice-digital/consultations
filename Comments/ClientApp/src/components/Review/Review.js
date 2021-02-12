@@ -119,8 +119,6 @@ export class Review extends Component<PropsType, StateType> {
 		);
 
 		if (preloadedCommentsData && preloadedConsultationData) {
-			console.log("preloadedCommentsData && preloadedConsultationData");
-
 			if (this.props.staticContext) {
 				this.props.staticContext.analyticsGlobals.gidReference = preloadedConsultationData.reference;
 				this.props.staticContext.analyticsGlobals.consultationId = preloadedConsultationData.consultationId;
@@ -216,7 +214,6 @@ export class Review extends Component<PropsType, StateType> {
 	};
 
 	loadDataAndUpdateState = (callback?: Function) => {
-		console.log("loadDataAndUpdateState");
 		this.gatherData()
 			.then(data => {
 				if (data.consultationData !== null) {
