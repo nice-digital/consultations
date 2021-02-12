@@ -149,6 +149,7 @@ Array [
               </a>,
               <p>
                 Your response was submitted 
+                to Really Cool Org
                  on 
                 <time
                   dateTime={"2019-07-15T13:24:18.473Z"}
@@ -161,7 +162,11 @@ Array [
                 What happens next?
               </h2>,
               <p>
-                We will review all the submissions received for this consultation. Our response will be published on the website around the time the final guidance is published.
+                Really Cool Org
+                 will review all the submissions received for this consultation.
+              </p>,
+              <p>
+                NICE's response to all the submissions received will be published on the website around the time the final guidance is published.
               </p>,
               <h2>
                 Help us improve our online commenting service
