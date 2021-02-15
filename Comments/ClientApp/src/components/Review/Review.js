@@ -237,7 +237,7 @@ export class Review extends Component<PropsType, StateType> {
 						organisationName: data.commentsData.organisationName || "",
 						documentTitles: this.getListOfDocuments(data.commentsData.filters),
 						isLead: data.commentsData.isLead,
-						respondingAsOrganisation: (data.isLead ? true : null),
+						respondingAsOrganisation: (data.commentsData.isLead ? true : null),
 					});
 				} else {
 					this.setState({
@@ -249,7 +249,7 @@ export class Review extends Component<PropsType, StateType> {
 						organisationName: data.commentsData.organisationName || "",
 						documentTitles: this.getListOfDocuments(data.commentsData.filters),
 						isLead: data.commentsData.isLead,
-						respondingAsOrganisation: (data.isLead ? true : null),
+						respondingAsOrganisation: (data.commentsData.isLead ? true : null),
 					}, () => {
 						tagManager({
 							event: "generic",

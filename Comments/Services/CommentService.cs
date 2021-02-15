@@ -8,6 +8,7 @@ using NICE.Feeds;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Comment = Comments.Models.Comment;
 
 namespace Comments.Services
 {
@@ -72,20 +73,17 @@ namespace Comments.Services
             if (commentInDatabase == null)
                 return (rowsUpdated: 0, validate: new Validate(valid: false, notFound: true, message: $"Comment id:{commentId} not found trying to edit comment for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
 
-            var consultationId = ConsultationsUri.ParseConsultationsUri(commentInDatabase.Location.SourceURI).ConsultationId;
-			if (_currentUser.IsAuthenticatedByOrganisationCookieForThisConsultation(consultationId))
-            {
-	            if (!commentInDatabase.OrganisationUserId.HasValue || !_currentUser.IsAuthorisedByOrganisationUserId(commentInDatabase.OrganisationUserId.Value))
-		            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: $"Organisation cookie user tried to edit comment id: {commentId}, but it's not their comment"));
-            }
-            else //accounts auth
-            {
-	            if (commentInDatabase.CreatedByUserId != null && !commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId, StringComparison.OrdinalIgnoreCase))
-		            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to edit comment id: {commentId}, but it's not their comment"));
+            // Comments created by individal commenters can only be edited by that commenter.
+            if (commentInDatabase.CommentByUserType == UserType.IndividualCommenter && !_currentUser.UserId.Equals(commentInDatabase.CreatedByUserId))
+	            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to edit comment id: {commentId}, but it's not their comment"));
 
-	            if (commentInDatabase.CreatedByUserId == null && !commentInDatabase.OrganisationId.Equals(_currentUser.OrganisationsAssignedAsLead?.FirstOrDefault()?.OrganisationId))
-		            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to edit comment id: {commentId}, but they are not lead for that comment"));
-            }
+            // Comments created by organisational commenters and not yet submitted to a lead can only be edited by that commenter
+            if (commentInDatabase.CommentByUserType == UserType.OrganisationalCommenter && !_currentUser.ValidatedOrganisationUserIds.Any(o => o.Equals(commentInDatabase.OrganisationUserId)))
+	            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: $"Organisation commenter tried to edit comment id: {commentId}, but it's not their comment"));
+
+            // Comments submitted to organisational leads or created by organisational leads can be edited by any leads for that organisation
+            if (commentInDatabase.CommentByUserType == UserType.OrganisationLead && !_currentUser.OrganisationsAssignedAsLead.Any(o => o.OrganisationId.Equals(commentInDatabase.OrganisationId)))
+	            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: $"Organisation lead tried to edit comment id: {commentId}, but it's not from their organisation"));
 
 			comment.LastModifiedByUserId = _currentUser.UserId;
             comment.LastModifiedDate = DateTime.UtcNow;
@@ -142,22 +140,19 @@ namespace Comments.Services
             if (commentInDatabase == null)
                 return (rowsUpdated: 0, validate: new Validate(valid: false, notFound: true, message: $"Comment id:{commentId} not found trying to delete comment for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
 
-            var consultationId = ConsultationsUri.ParseConsultationsUri(commentInDatabase.Location.SourceURI).ConsultationId;
-            if (_currentUser.IsAuthenticatedByOrganisationCookieForThisConsultation(consultationId))
-            {
-	            if (!commentInDatabase.OrganisationUserId.HasValue || !_currentUser.IsAuthorisedByOrganisationUserId(commentInDatabase.OrganisationUserId.Value))
-		            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: $"Organisation cookie user tried to delete comment id: {commentId}, but it's not their comment"));
-			}
-            else //accounts auth
-            {
-	            if (commentInDatabase.CreatedByUserId != null && !commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId))
-		            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to delete comment id: {commentId}, but it's not their comment"));
+            // Comments created by individal commenters can only be deleted by that commenter.
+            if (commentInDatabase.CommentByUserType == UserType.IndividualCommenter && !_currentUser.UserId.Equals(commentInDatabase.CreatedByUserId))
+	            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to delete comment id: {commentId}, but it's not their comment"));
 
-	            if (commentInDatabase.CreatedByUserId == null && !commentInDatabase.OrganisationId.Equals(_currentUser.OrganisationsAssignedAsLead?.FirstOrDefault()?.OrganisationId))
-		            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to delete comment id: {commentId}, but they are not lead for that comment"));
-			}
+            // Comments created by organisational commenters and not yet submitted to a lead can only be deleted by that commenter
+            if (commentInDatabase.CommentByUserType == UserType.OrganisationalCommenter && !_currentUser.ValidatedOrganisationUserIds.Any(o => o.Equals(commentInDatabase.OrganisationUserId)))
+	            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: $"Organisation commenter tried to delete comment id: {commentId}, but it's not their comment"));
 
-            _context.Comment.Remove(commentInDatabase);
+            // Comments submitted to organisational leads or created by organisational leads can be deleted by any leads for that organisation
+            if (commentInDatabase.CommentByUserType == UserType.OrganisationLead && !_currentUser.OrganisationsAssignedAsLead.Any(o => o.OrganisationId.Equals(commentInDatabase.OrganisationId)))
+	            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: $"Organisation lead tried to delete comment id: {commentId}, but it's not from their organisation"));
+
+			_context.Comment.Remove(commentInDatabase);
 			
             return (rowsUpdated: _context.SaveChanges(), validate: null);
         }

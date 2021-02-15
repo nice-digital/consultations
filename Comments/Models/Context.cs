@@ -271,10 +271,19 @@ namespace Comments.Models
 	    {
 		    var commentsToUpdate = Comment.Where(c => commentIds.Contains(c.CommentId)).ToList();
 
-		    if (commentsToUpdate.Any(c => (c.CreatedByUserId != _createdByUserID && c.OrganisationId != _organisationalLeadOrganisationID)))
-			    throw new Exception("Attempt to update status of a comment which doesn't belong to the current user");
+			// Comments created by individual commenters can only be submitted by that user, updating the status of those comments
+			if(commentsToUpdate.Any(c=>c.CommentByUserType == UserType.IndividualCommenter && c.CreatedByUserId != _createdByUserID))
+				throw new Exception("Attempt to update status of a comment which doesn't belong to the current user");
 
-		    commentsToUpdate.ForEach(c => c.StatusId = status.StatusId);
+			// Comments created by organisational commenters are submitted to their organisation lead only by that organisational commenter, updating the status of those comments
+			if(commentsToUpdate.Any(c => c.CommentByUserType == UserType.OrganisationalCommenter &&  !_organisationUserIDs.Any(o=> o.Equals(c.OrganisationUserId))))
+				throw new Exception("Attempt to update status of a comment which doesn't belong to the current organisation code user");
+
+			// Comments that have been submitted to organisational leads, or created by those leads, can be submitted by any lead in that organisation, updating the status of those comments
+			if (commentsToUpdate.Any(c => c.CommentByUserType == UserType.OrganisationLead && c.OrganisationId != _organisationalLeadOrganisationID))
+				throw new Exception("Attempt to update status of a comment which doesn't belong to the current organisation lead users organisation");
+
+			commentsToUpdate.ForEach(c => c.StatusId = status.StatusId);
 		}
 
 	    public void DuplicateComment(IEnumerable<int> commentIds)
