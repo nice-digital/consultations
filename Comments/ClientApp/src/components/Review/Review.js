@@ -621,7 +621,7 @@ export class Review extends Component<PropsType, StateType> {
 																fieldsChangeHandler={this.fieldsChangeHandler}
 																submitToLead={this.submitToLead}
 																respondingAsOrganisation={this.state.respondingAsOrganisation}
-																organisationName={this.state.organisationName || contextValue.organisationName}
+																organisationName={contextValue.isOrganisationCommenter ? contextValue.organisationName : this.state.organisationName}
 																hasTobaccoLinks={this.state.hasTobaccoLinks}
 																tobaccoDisclosure={this.state.tobaccoDisclosure}
 																showExpressionOfInterestSubmissionQuestion={this.state.consultationData.showExpressionOfInterestSubmissionQuestion}
