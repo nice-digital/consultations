@@ -1,7 +1,6 @@
 import React from "react";
 
 export const SubmitResponseFeedback = (props) => {
-
 	const {
 		validToSubmit,
 		unsavedIdsQty,
@@ -11,12 +10,12 @@ export const SubmitResponseFeedback = (props) => {
 		hasTobaccoLinks,
 		showExpressionOfInterestSubmissionQuestion,
 		organisationExpressionOfInterest,
-		emailAddress,
+		emailIsEmpty,
+		emailIsWrongFormat,
 		isOrganisationCommenter,
 	} = props;
 
 	let items = [];
-	const emailRegex = /\S+@\S+\.\S+/;
 
 	if (unsavedIdsQty)
 		items.push("You have unsaved changes. Please save or delete before submitting your response");
@@ -25,9 +24,9 @@ export const SubmitResponseFeedback = (props) => {
 		items.push("You have not saved any comments");
 
 	if (isOrganisationCommenter) {
-		if (emailAddress.length < 1) {
+		if (emailIsEmpty) {
 			items.push("You have not entered an email address");
-		} else if (!emailRegex.test(emailAddress.toLowerCase())) {
+		} else if (emailIsWrongFormat) {
 			items.push("Email address is in an invalid format");
 		}
 	}
