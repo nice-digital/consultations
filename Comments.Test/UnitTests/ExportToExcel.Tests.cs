@@ -382,12 +382,12 @@ namespace Comments.Test.UnitTests
 		{
 			//Arrange
 			const int organisationUserId = 1;
-			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: null, organisationUserId: organisationUserId);
+			var userService = FakeUserService.Get(isAuthenticated: false, displayName: null, userId: null, organisationUserId: organisationUserId);
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var locationId = AddLocation(sourceURI, _context, "001.001.000.000");
 			var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
 			var commentText = "A comment";
-			var comments = new List<Models.Comment>{new Models.Comment(locationId, null, commentText, null, location, 2, null, organisationUserId: organisationUserId) }; // will need to be updated to submission to lead?
+			var comments = new List<Models.Comment>{new Models.Comment(locationId, null, commentText, null, location, 3, null, organisationUserId: organisationUserId) }; 
 			comments.First().SubmissionComment.Add(new SubmissionComment(1,1));
 			comments.First().SubmissionComment.First().Submission = new Submission(null, DateTime.Now, false, "organisation", false, null, null);
 			var answers = new List<Models.Answer> { };
@@ -416,6 +416,49 @@ namespace Comments.Test.UnitTests
 				var commentRow = rows[3].ItemArray;
 				commentRow[7].ShouldBe(commentText);
 				commentRow[1].ShouldBe("bob@bob.com");
+			}
+		}
+
+		[Fact]
+		public async void CreateSpreadsheetForOrganisationLead()
+		{
+			//Arrange
+			const int organisationUserId = 1;
+			const string userId = "1";
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Sarah Jane Smith", userId: userId, organisationIdUserIsLeadOf: 1, emailAddress:"sarah@tardis.gov");
+			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+			var locationId = AddLocation(sourceURI, _context, "001.001.000.000");
+			var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
+			var commentText = "A comment";
+			var comments = new List<Models.Comment> { new Models.Comment(locationId, null, commentText, null, location, 3, null, organisationUserId: organisationUserId, parentCommentId: 1) };
+			comments.First().SubmissionComment.Add(new SubmissionComment(1, 1));
+			comments.First().SubmissionComment.First().Submission = new Submission(submissionByUserId: userId, DateTime.Now, true, "organisation", false, null, null);
+			var answers = new List<Models.Answer> { };
+			var questions = new List<Models.Question> { };
+			var fakeExportService = new FakeExportService(comments, answers, questions,
+				new List<OrganisationUser> { new OrganisationUser(1, Guid.NewGuid(), DateTime.Now) { EmailAddress = "sarah@tardis.gov", OrganisationUserId = organisationUserId } });
+			var exportToExcel = new ExportToExcel(userService, fakeExportService, null);
+
+			//Act
+			var spreadsheet = await exportToExcel.ToSpreadsheet(comments, answers, questions);
+
+			using (var reader = ExcelReaderFactory.CreateReader(spreadsheet))
+			{
+				var workSheet = reader.AsDataSet();
+				var data = workSheet.Tables;
+
+				//Assert
+				var rows = data[Constants.Export.SheetName].Rows;
+				rows.Count.ShouldBe(4);
+
+				var headerRow = rows[2].ItemArray;
+				headerRow.Length.ShouldBe(15);
+
+				headerRow[1].ToString().ShouldBe("Email Address");
+
+				var commentRow = rows[3].ItemArray;
+				commentRow[7].ShouldBe(commentText);
+				commentRow[1].ShouldBe("sarah@tardis.gov");
 			}
 		}
 

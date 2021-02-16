@@ -18,7 +18,7 @@ namespace Comments.Test.Infrastructure
 	public static class FakeHttpContextAccessor
     {
 	    private static string AuthenticationTokenExtensions_TokenKeyPrefix = ".Token.";
-		public static IHttpContextAccessor Get(bool isAuthenticated, string displayName = null, string userId = null, TestUserType testUserType = TestUserType.NotAuthenticated, bool addRoleClaim = true, int? organisationUserId = null, int? organisationIdUserIsLeadOf = null)
+		public static IHttpContextAccessor Get(bool isAuthenticated, string displayName = null, string userId = null, TestUserType testUserType = TestUserType.NotAuthenticated, bool addRoleClaim = true, int? organisationUserId = null, int? organisationIdUserIsLeadOf = null, string emailAddress = null)
         {
 	        var context = new Mock<HttpContext>();
 	        var roleIssuer = "www.example.com"; //the issuer of the role is the domain for which the role is setup.
@@ -50,6 +50,11 @@ namespace Comments.Test.Infrastructure
 				{
 					var organisations = new List<Organisation>() { new Organisation(organisationIdUserIsLeadOf.Value, "Test org", isLead: true)};
 					claims.Add(new Claim(ClaimType.Organisations, JsonConvert.SerializeObject(organisations), "www.nice.org.uk", AuthenticationConstants.IdAMIssuer));
+				}
+
+				if (emailAddress != null)
+				{
+					claims.Add(new Claim(ClaimType.EmailAddress, emailAddress, null, AuthenticationConstants.IdAMIssuer));
 				}
 
 				switch (testUserType)

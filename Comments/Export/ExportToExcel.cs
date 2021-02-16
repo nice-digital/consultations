@@ -396,21 +396,28 @@ namespace Comments.Export
 
 			var organisationUserIds = comments.Where(comment => comment.OrganisationUserId.HasValue).Select(comment => comment.OrganisationUserId.Value)
 				.Concat(answers.Where(answer => answer.OrganisationUserId.HasValue).Select(answer => answer.OrganisationUserId.Value)).Distinct();
-			
+
+			var currentUser = _userService.GetCurrentUser();
+			var currentUserDetails = _userService.GetCurrentUserDetails();
+			var userDetailsForOrganisationUser = _exportService.GetOrganisationUsersByOrganisationUserIds(organisationUserIds);
 
 			if (organisationUserIds.Count() != 0)
 			{
-				var userDetailsForOrganisationUser = _exportService.GetOrganisationUsersByOrganisationUserIds(organisationUserIds);
-
-				foreach (var user in userDetailsForOrganisationUser)
+				if (currentUser.IsAuthenticatedByAccounts)
 				{
-					emailAddressesForOrganisationIds.Add(user.OrganisationUserId, user.EmailAddress);
+					userDetailsForUserIds.Add(currentUserDetails.userId, (currentUserDetails.displayName, currentUserDetails.emailAddress));
+				}
+				else
+				{
+					foreach (var user in userDetailsForOrganisationUser)
+					{
+						emailAddressesForOrganisationIds.Add(user.OrganisationUserId, user.EmailAddress);
+					}
 				}
 			}
 			else 
 			{
 				var userIds = comments.Select(comment => comment.CreatedByUserId).Concat(answers.Select(answer => answer.CreatedByUserId)).Where(user => !string.IsNullOrEmpty(user)).Distinct();
-				var currentUserDetails = _userService.GetCurrentUserDetails();
 
 				if (userIds.Count() == 1 && userIds.Single().Equals(currentUserDetails.userId, StringComparison.OrdinalIgnoreCase))
 				{
