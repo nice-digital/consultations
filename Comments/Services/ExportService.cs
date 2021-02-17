@@ -15,6 +15,8 @@ namespace Comments.Services
 		(IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetAllDataForConsultation(int consultationId);
 
 		(IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetAllDataForConsultationForCurrentUser(int consultationId);
+
+		(IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetDataSubmittedToLeadForConsultation(int consultationId);
 		(string ConsultationName, string DocumentName, string ChapterName) GetLocationData(Comments.Models.Location location);
 		string GetConsultationName(Location location);
 		IEnumerable<OrganisationUser> GetOrganisationUsersByOrganisationUserIds(IEnumerable<int> organisationUserIds);
@@ -62,7 +64,27 @@ namespace Comments.Services
 			return (commentsInDB, answersInDB, questionsInDB, new Validate(true));
 	    }
 
-	    public (IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetAllDataForConsultationForCurrentUser(int consultationId)
+	    public (IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetDataSubmittedToLeadForConsultation(int consultationId)
+	    {
+		    var user = _userService.GetCurrentUser();
+		    var isLead = user.OrganisationsAssignedAsLead.Any();
+		    if (!isLead)
+		    {
+			    return (null, null, null, new Validate(valid: false, unauthenticated: true, message: $"User does not have access to download responses submitted to organisation leads."));
+			}
+
+		    var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
+		    var commentsInDB = _context.GetCommentsSubmittedToALeadForURI(sourceURI);
+		    var answersInDB = _context.GetAnswersSubmittedToALeadForURI(sourceURI);
+		    var questionsInDB = _context.GetUsersUnansweredQuestionsForURI(sourceURI); // TODO: This is wrong, but for now will pull through something rightish.
+
+		    if (commentsInDB == null && answersInDB == null && questionsInDB == null)
+			    return (null, null, null, new Validate(valid: false, notFound: true, message: $"Consultation id:{consultationId} not found trying to get all data for consultation"));
+
+		    return (commentsInDB, answersInDB, questionsInDB, new Validate(true));
+	    }
+
+		public (IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetAllDataForConsultationForCurrentUser(int consultationId)
 	    {
 
 		    var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);

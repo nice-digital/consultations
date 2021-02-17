@@ -162,7 +162,23 @@ namespace Comments.Models
 			return comment;
 	    }
 
-	    public List<Comment> GetUsersCommentsForURI(string sourceURI)
+		public List<Comment> GetCommentsSubmittedToALeadForURI(string sourceURI)
+		{
+			var comment = Comment.Where(c =>
+					c.StatusId == (int) StatusName.SubmittedToLead &&
+					(c.Location.SourceURI.Contains($"{sourceURI}/") || c.Location.SourceURI.Equals(sourceURI)) &&
+					c.OrganisationId.Equals(_organisationalLeadOrganisationID))
+				.Include(l => l.Location)
+				.Include(s => s.Status)
+				.Include(sc => sc.SubmissionComment)
+				.ThenInclude(s => s.Submission)
+				.IgnoreQueryFilters()
+				.ToList();
+
+			return comment;
+		}
+
+		public List<Comment> GetUsersCommentsForURI(string sourceURI)
 	    {
 		   var comment = Comment.Where(c => (c.Location.SourceURI.Contains($"{sourceURI}/") || c.Location.SourceURI.Equals(sourceURI)))
 				.Include(l => l.Location)
@@ -188,7 +204,24 @@ namespace Comments.Models
 			return answer;
 	    }
 
-	    public List<Answer> GetUsersAnswersForURI(string sourceURI)
+		public List<Answer> GetAnswersSubmittedToALeadForURI(string sourceURI)
+		{
+			var answer = Answer.Where(a =>
+					a.StatusId == (int) StatusName.SubmittedToLead &&
+					(a.Question.Location.SourceURI.Contains($"{sourceURI}/") ||
+					 a.Question.Location.SourceURI.Equals(sourceURI)) &&
+					a.OrganisationId.Equals(_organisationalLeadOrganisationID))
+				.Include(q => q.Question)
+				.ThenInclude(l => l.Location)
+				.Include(sc => sc.SubmissionAnswer)
+				.ThenInclude(s => s.Submission)
+				.IgnoreQueryFilters()
+				.ToList();
+
+			return answer;
+		}
+
+		public List<Answer> GetUsersAnswersForURI(string sourceURI)
 	    {
 			var answer = Answer.Where(a => (a.Question.Location.SourceURI.Contains($"{sourceURI}/") || a.Question.Location.SourceURI.Equals(sourceURI)))
 				.Include(q => q.Question)
