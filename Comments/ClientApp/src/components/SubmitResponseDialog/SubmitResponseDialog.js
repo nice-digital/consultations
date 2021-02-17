@@ -9,6 +9,8 @@ export class SubmitResponseDialog extends PureComponent {
 		feedbackVisible: false,
 	};
 
+	emailRef = React.createRef();
+
 	mandatoryQuestionsAreValid = () => {
 		let organisationIsValid = false;
 		if ((this.props.respondingAsOrganisation === "yes" && this.props.organisationName.length > 0) || this.props.respondingAsOrganisation === "no") {
@@ -29,19 +31,6 @@ export class SubmitResponseDialog extends PureComponent {
 		return organisationIsValid && tobaccoIsValid && organisationExpressionOfInterestIsValid;
 	};
 
-	emailIsValid = () => {
-		const emailRegex = /\S+@\S+\.\S+/;
-		const emailAddress = this.props.emailAddress;
-
-		let emailIsValid = false;
-
-		if ((emailAddress.length > 0) && (emailRegex.test(emailAddress.toLowerCase()))) {
-			emailIsValid = true;
-		}
-
-		return emailIsValid;
-	}
-
 	submitConsultation = () => {
 		if (this.props.validToSubmit && this.mandatoryQuestionsAreValid() && this.props.unsavedIds.length === 0) {
 			this.props.submitConsultation();
@@ -55,7 +44,7 @@ export class SubmitResponseDialog extends PureComponent {
 	};
 
 	handleSubmitToLeadClick = () => {
-		if (this.props.validToSubmit && this.emailIsValid() && this.props.unsavedIds.length === 0) {
+		if (this.props.validToSubmit && this.emailRef.current.validity.valid && this.props.unsavedIds.length === 0) {
 			this.props.submitToLead();
 		} else {
 			this.setState({
@@ -89,14 +78,18 @@ export class SubmitResponseDialog extends PureComponent {
 							label="Email address"
 							name="emailAddress"
 							type="email"
+							required
 							placeholder="eg: your.name@example.com..."
 							onChange={fieldsChangeHandler}
+							inputRef={this.emailRef}
 						/>
 						<p>Once you have sent your response you will not be able to edit it or add any more comments.</p>
 						{this.state.feedbackVisible &&
 							<SubmitResponseFeedback
 								{...this.props}
 								unsavedIdsQty={this.props.unsavedIds.length}
+								emailIsEmpty={this.emailRef.current.validity.valueMissing}
+								emailIsWrongFormat={this.emailRef.current.validity.typeMismatch}
 							/>
 						}
 						<button onClick={this.handleSubmitToLeadClick} className="btn btn--cta">Send your response to your organisation</button>
