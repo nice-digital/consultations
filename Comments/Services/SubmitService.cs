@@ -104,7 +104,16 @@ namespace Comments.Services
 				var answerIds = submission.Answers.Select(a => a.AnswerId).ToList();
 				_context.DuplicateAnswer(answerIds);
 			}
-			
+
+			//now for analytics calculate the number of seconds between the user's first comment or answer and the submission date
+			var earliestDate = submissionToSave.SubmissionComment.Any() ? submissionToSave.SubmissionComment.Min(sc => sc.Comment.CreatedDate) : DateTime.MaxValue;
+			var earliestAnswer = submissionToSave.SubmissionAnswer.Any() ? submissionToSave.SubmissionAnswer.Min(sa => sa.Answer.CreatedDate) : DateTime.MaxValue;
+			if (earliestAnswer < earliestDate)
+			{
+				earliestDate = earliestAnswer;
+			}
+			submission.DurationBetweenFirstCommentOrAnswerSavedAndSubmissionInSeconds = (submissionToSave.SubmissionDateTime - earliestDate).TotalSeconds;
+
 			return (rowsUpdated: _context.SaveChanges(), validate: null, _context);
 		}
 
