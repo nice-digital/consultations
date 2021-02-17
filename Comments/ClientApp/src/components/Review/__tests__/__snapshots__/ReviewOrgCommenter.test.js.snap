@@ -1300,6 +1300,7 @@ Array [
                         name="emailAddress"
                         onChange={[Function]}
                         placeholder="eg: your.name@example.com..."
+                        required={true}
                         type="email"
                       />
                     </div>
