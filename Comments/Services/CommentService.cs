@@ -28,13 +28,15 @@ namespace Comments.Services
 	    private readonly IConsultationService _consultationService;
 	    private readonly IHttpContextAccessor _httpContextAccessor;
 	    private readonly User _currentUser;
+		private readonly IOrganisationService _organisationService;
 
-        public CommentService(ConsultationsContext context, IUserService userService, IConsultationService consultationService, IHttpContextAccessor httpContextAccessor)
+        public CommentService(ConsultationsContext context, IUserService userService, IConsultationService consultationService, IOrganisationService organisationService, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _userService = userService;
 	        _consultationService = consultationService;
-	        _httpContextAccessor = httpContextAccessor;
+			_organisationService = organisationService;
+			_httpContextAccessor = httpContextAccessor;
 	        _currentUser = _userService.GetCurrentUser();
         }
 
@@ -239,15 +241,32 @@ namespace Comments.Services
 			
 		    var documentsFilter = filters.Single(f => f.Id.Equals("Document", StringComparison.OrdinalIgnoreCase));
 
+			var commentersFilter = filters.Single(f => f.Id.Equals("Commenters", StringComparison.OrdinalIgnoreCase));
+
 			//questions
-		    questionOption.IsSelected = type != null && type.Contains(QuestionsOrComments.Questions);
+			questionOption.IsSelected = type != null && type.Contains(QuestionsOrComments.Questions);
 		    questionOption.FilteredResultCount = commentsAndQuestions.Questions.Count(q => q.Show); 
 			questionOption.UnfilteredResultCount = commentsAndQuestions.Questions.Count();
 
 			//comments
 			commentsOption.IsSelected = type != null && type.Contains(QuestionsOrComments.Comments);
 			commentsOption.FilteredResultCount = commentsAndQuestions.Comments.Count(q => q.Show); 
-			commentsOption.UnfilteredResultCount = commentsAndQuestions.Comments.Count(); 
+			commentsOption.UnfilteredResultCount = commentsAndQuestions.Comments.Count();
+
+			//populate commenters
+			var commenters = _organisationService.GetEmailAddressForComment(commentsAndQuestions).ToList();
+			commentersFilter.Options = new List<FilterOption>(commenters.Count());
+
+			foreach (var commenter in commenters)
+			{
+				commentersFilter.Options.Add(
+					new FilterOption("1", commenter, false)
+					{
+						FilteredResultCount = commenters.Count(),
+						UnfilteredResultCount = commenters.Count()
+					}
+				);
+			}
 
 			//populate documents
 			var documents = _consultationService.GetDocuments(consultationId).documents.Where(d => d.ConvertedDocument).ToList();
@@ -260,13 +279,13 @@ namespace Comments.Services
 					new FilterOption(document.DocumentId.ToString(), document.Title, isSelected)
 					{
 						FilteredResultCount = commentsAndQuestions.Comments.Count(c => c.Show && c.DocumentId.HasValue && c.DocumentId.Equals(document.DocumentId)) +
-						                      commentsAndQuestions.Questions.Count(q => q.Show && q.DocumentId.HasValue && q.DocumentId.Equals(document.DocumentId)),
+											  commentsAndQuestions.Questions.Count(q => q.Show && q.DocumentId.HasValue && q.DocumentId.Equals(document.DocumentId)),
 
 						UnfilteredResultCount = commentsAndQuestions.Comments.Count(c => c.DocumentId.HasValue && c.DocumentId.Equals(document.DocumentId)) +
-						                        commentsAndQuestions.Questions.Count(q => q.DocumentId.HasValue && q.DocumentId.Equals(document.DocumentId))
+												commentsAndQuestions.Questions.Count(q => q.DocumentId.HasValue && q.DocumentId.Equals(document.DocumentId))
 					}
 				);
-		    }
+			}
 			return filters;
 	    }
 
