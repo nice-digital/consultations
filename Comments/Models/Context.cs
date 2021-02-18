@@ -109,8 +109,8 @@ namespace Comments.Models
 			var sortedData = data.Where(l => l.Comment.Count > 0 || l.Question.Count > 0)
 				.OrderBy(l => l.Order).ThenByDescending(l =>
 					l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault());
-			
-			return sortedData; 
+
+			return sortedData;
 		}
 
 		public IEnumerable<Location> GetQuestionsForDocument(IList<string> sourceURIs, bool partialMatchSourceURI)
@@ -277,7 +277,39 @@ namespace Comments.Models
 		    commentsToUpdate.ForEach(c => c.StatusId = status.StatusId);
 		}
 
-	    public void AddSubmissionComments(IEnumerable<int> commentIds, int submissionId)
+	    public void DuplicateComment(IEnumerable<int> commentIds)
+	    {
+		    var commentsToDuplicate = Comment.Where(c => commentIds.Contains(c.CommentId)).ToList();
+
+		    var status = GetStatus(StatusName.Submitted);
+			commentsToDuplicate.ForEach(c => c.StatusId = status.StatusId);
+
+			status = GetStatus(StatusName.Draft);
+
+		    foreach (var comment in commentsToDuplicate)
+			{
+				var commentToSave = new Models.Comment(comment.LocationId, null, comment.CommentText, comment.LastModifiedByUserId, comment.Location,status.StatusId, status, comment.OrganisationUserId, comment.CommentId, comment.OrganisationId);
+				Comment.Add(commentToSave);
+			}
+	    }
+
+		public void DuplicateAnswer(IEnumerable<int> answerIds)
+		{
+			var answersToDuplicate = Answer.Where(c => answerIds.Contains(c.AnswerId)).ToList();
+
+			var status = GetStatus(StatusName.Submitted);
+			answersToDuplicate.ForEach(c => c.StatusId = status.StatusId);
+
+			status = GetStatus(StatusName.Draft);
+
+			foreach (var answer in answersToDuplicate)
+			{
+				var answerToSave = new Models.Answer(answer.QuestionId, null, answer.AnswerText, answer.AnswerBoolean, answer.Question, status.StatusId, status, answer.OrganisationUserId, answer.AnswerId, answer.OrganisationId);
+				Answer.Add(answerToSave);
+			}
+		}
+
+		public void AddSubmissionComments(IEnumerable<int> commentIds, int submissionId)
 	    {
 			//the extra DB hit here is to ensure that duplicate rows aren't inserted. currently, you should only be able to submit a comment once. in the future though that might change as resubmitting is on the cards, and the DB supports that now.
 		    var existingSubmissionCommentIdsForPassedInComments = SubmissionComment.Where(sc => commentIds.Contains(sc.CommentId)).Select(sc => sc.CommentId).ToList();
@@ -310,7 +342,7 @@ namespace Comments.Models
 		    SubmissionAnswer.AddRange(submissionAnswersToInsert);
 	    }
 
-	    public Submission InsertSubmission(string currentUser, bool respondingAsOrganisation, string organisationName, bool hasTobaccoLinks, string tobaccoDisclosure, bool? organisationExpressionOfInterest)
+	    public Submission InsertSubmission(string currentUser, bool? respondingAsOrganisation, string organisationName, bool? hasTobaccoLinks, string tobaccoDisclosure, bool? organisationExpressionOfInterest)
 	    {
 		    var submission = new Models.Submission(currentUser, DateTime.UtcNow, respondingAsOrganisation, organisationName, hasTobaccoLinks, tobaccoDisclosure, organisationExpressionOfInterest);
 		    Submission.Add(submission);
@@ -800,12 +832,12 @@ namespace Comments.Models
 		/// <returns></returns>
 		public IEnumerable<KeyValuePair<string, Status>> GetAllSourceURIsTheCurrentUserHasCommentedOrAnsweredAQuestion()
 		{
-			var comments = Comment 
+			var comments = Comment
 				.Include(l => l.Location)
 				.Include(s => s.Status)
 				.ToList();
 
-			var answers = Answer 
+			var answers = Answer
 				.Include(q => q.Question)
 				.ThenInclude(l => l.Location)
 				.Include(s => s.Status)
@@ -859,6 +891,18 @@ namespace Comments.Models
 			return organisationUser;
 		}
 
+		public OrganisationUser UpdateEmailAddressForOrganisationUser(string emailAddress, int organisationUserId)
+		{
+			var organisationUser = OrganisationUser
+				.Where(ou => ou.OrganisationUserId.Equals(organisationUserId))
+				.Single();
+
+			organisationUser.EmailAddress = emailAddress;
+
+			SaveChanges();
+			return organisationUser;
+		}
+
 		public OrganisationUser GetOrganisationUser(Guid sessionId)
 		{
 			return GetOrganisationUsers(new List<Guid> {sessionId}).FirstOrDefault();
@@ -872,7 +916,6 @@ namespace Comments.Models
 					ThenInclude(a => a.Location)
 					.Where(ou => sessionIds.Contains(ou.AuthorisationSession));
 		}
-
 
 		public bool AreCommentsForThisOrganisation(IEnumerable<int> commentIds, int organisationId)
 		{
@@ -898,6 +941,5 @@ namespace Comments.Models
 				.Any(c => c.OrganisationUser.OrganisationAuthorisation.OrganisationId.Equals(organisationId));
 
 		}
-
-    }
+	}
 }

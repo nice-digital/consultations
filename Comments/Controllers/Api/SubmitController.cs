@@ -1,14 +1,16 @@
 using System;
+using Comments.Common;
 using Comments.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NICE.Identity.Authentication.Sdk.Domain;
 
 namespace Comments.Controllers.Api
 {
 	[Produces("application/json")]
-	[Route("consultations/api/[controller]")]
+
 	[Authorize]
 	public class SubmitController : ControllerBase
 	{
@@ -25,9 +27,10 @@ namespace Comments.Controllers.Api
 
 		// POST: consultations/api/submit
 		[HttpPost]
-	    public IActionResult Post([FromBody] ViewModels.Submission submission)
+		[Route("consultations/api/[controller]")]
+		public IActionResult Post([FromBody] ViewModels.Submission submission)
 	    {
-			if (!ModelState.IsValid)
+		    if (!ModelState.IsValid)
 			{
 				return BadRequest(ModelState);
 			}
@@ -47,6 +50,21 @@ namespace Comments.Controllers.Api
 			}
 
 			return invalidResult ?? Ok(submission); //should return comments and answers, might need submission object too
+	    }
+
+		// POST: consultations/api/submitToLead
+		[HttpPost]
+		[Route("consultations/api/[controller]ToLead")]
+		[Authorize(AuthenticationSchemes = OrganisationCookieAuthenticationOptions.DefaultScheme + "," + AuthenticationConstants.AuthenticationScheme)]
+		public IActionResult PostSubmitToLead([FromBody] ViewModels.SubmissionToLead submissionToLead)
+	    {
+		    if (!ModelState.IsValid)
+			    return BadRequest(ModelState);
+		   
+		    var result = _submitService.SubmitToLead(submissionToLead);
+		    var invalidResult = Validate(result.validate, _logger);
+
+		    return invalidResult ?? Ok(submissionToLead);
 	    }
 	}
 }
