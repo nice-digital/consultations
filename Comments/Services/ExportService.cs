@@ -76,7 +76,7 @@ namespace Comments.Services
 		    var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
 		    var commentsInDB = _context.GetCommentsSubmittedToALeadForURI(sourceURI);
 		    var answersInDB = _context.GetAnswersSubmittedToALeadForURI(sourceURI);
-		    var questionsInDB = _context.GetUsersUnansweredQuestionsForURI(sourceURI); // TODO: This is wrong, but for now will pull through something rightish.
+		    var questionsInDB = _context.GetOrganisationsUnansweredQuestionsForURI(sourceURI);
 
 		    if (commentsInDB == null && answersInDB == null && questionsInDB == null)
 			    return (null, null, null, new Validate(valid: false, notFound: true, message: $"Consultation id:{consultationId} not found trying to get all data for consultation"));

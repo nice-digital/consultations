@@ -263,6 +263,16 @@ namespace Comments.Models
 			return question;
 	    }
 
+	    public List<Question> GetOrganisationsUnansweredQuestionsForURI(string sourceURI)
+	    {
+			//I don't want to count questions where the answer is draft but that is included in Count
+		    var question = Question.Where(q => (q.Answer.Count == 0 || q.Answer.All(a=> a.StatusId == (int) StatusName.Draft)) && (q.Location.SourceURI.Contains($"{sourceURI}/") || q.Location.SourceURI.Equals(sourceURI)))
+			    .Include(l => l.Location)
+			    .ToList();
+
+		    return question;
+	    }
+
 		public Comment GetComment(int commentId)
         {
             var comment = Comment.Where(c => c.CommentId.Equals(commentId))

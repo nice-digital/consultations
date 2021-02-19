@@ -504,5 +504,258 @@ namespace Comments.Test.UnitTests
 			resultTuple.answer.Count().ShouldBe(1);
 			resultTuple.question.Count().ShouldBe(1);
 		}
+
+		[Fact]
+		public void GetAllSubmittedToLeadCommentsForURI_OnlyReturnsSubmittedToLeadComments()
+		{
+			//Arrange
+			int locationId, commentId;
+			var userId = Guid.NewGuid().ToString();
+			var submissionId = AddSubmission(userId, _context);
+			var organisationUserId = 1;
+			var organisationId = 1;
+
+			locationId = AddLocation("consultations://./consultation/1", _context, "001.000.000.000");
+			commentId = AddComment(locationId, "Submitted comment", userId, (int)StatusName.Submitted, _context);
+			submissionId = AddSubmission(userId, _context);
+			AddSubmissionComments(submissionId, commentId, _context);
+
+			locationId = AddLocation("consultations://./consultation/1/document/2/chapter/introduction", _context, "001.002.002.000");
+			commentId = AddComment(locationId, "Draft comment", null, (int)StatusName.Draft, _context, organisationUserId, null, organisationId);
+			AddSubmissionComments(submissionId, commentId, _context);
+
+			locationId = AddLocation("consultations://./consultation/1/document/2/chapter/introduction", _context, "001.002.002.000");
+			commentId = AddComment(locationId, "Comment submitted to an organisational lead", null, (int)StatusName.SubmittedToLead, _context, organisationUserId, null, organisationId);
+			AddSubmissionComments(submissionId, commentId, _context);
+
+			const string sourceURI = "consultations://./consultation/1";
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Rose Tyler", userId: Guid.NewGuid().ToString(), organisationIdUserIsLeadOf: organisationId);
+			var context = new ConsultationsContext(_options, userService, _fakeEncryption);
+
+			//Act
+			var comments = context.GetCommentsSubmittedToALeadForURI(sourceURI);
+
+			//Assert
+			comments.Count.ShouldBe(1);
+		}
+
+		[Fact]
+		public void GetAllSubmittedToLeadAnswersForURI_OnlyReturnsSubmittedToLeadAnswers()
+		{
+			//Arrange
+			int locationId, answerId;
+			var userId = Guid.NewGuid().ToString();
+			var submissionId = AddSubmission(userId, _context);
+			var organisationUserId = 1;
+			var organisationId = 1;
+
+			var questionTypeId = 99;
+			locationId = AddLocation("consultations://./consultation/1/document/2/chapter/guidance", _context, "001.002.001.000");
+			var questionId = AddQuestion(locationId, questionTypeId, "Question 1", _context);
+
+			answerId = AddAnswer(questionId, userId, "This is a submitted answer", (int)StatusName.Submitted, _context);
+			AddSubmissionAnswers(submissionId, answerId, _context);
+
+			answerId = AddAnswer(questionId, null, "This is a draft answer", (int)StatusName.Draft, _context, organisationUserId, null, organisationId);
+			AddSubmissionAnswers(submissionId, answerId, _context);
+
+			answerId = AddAnswer(questionId, userId, "This is an answer submitted to an organisational lead", (int)StatusName.SubmittedToLead, _context, organisationUserId, null, organisationId);
+			AddSubmissionAnswers(submissionId, answerId, _context);
+
+			const string sourceURI = "consultations://./consultation/1";
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Rose Tyler", userId: Guid.NewGuid().ToString(), organisationIdUserIsLeadOf: organisationId);
+			var context = new ConsultationsContext(_options, userService, _fakeEncryption);
+
+			//Act
+			var answers = context.GetAnswersSubmittedToALeadForURI(sourceURI);
+
+			//Assert
+			answers.Count.ShouldBe(1);
+		}
+
+		[Fact]
+		public void GetLeadsCommentsForURI_OnlyShowsCommentsSubmittedToCurrentLeadsOrg()
+		{
+			//Arrange
+			int locationId, commentId;
+			string userId = null;
+			var submissionId = AddSubmission(userId, _context);
+			var organisationUserId = 1;
+			var organisationId = 1;
+
+			locationId = AddLocation("consultations://./consultation/1", _context, "001.000.000.000");
+			commentId = AddComment(locationId, "Comment submitted to lead", null, (int)StatusName.SubmittedToLead, _context, organisationUserId, null, organisationId);
+			submissionId = AddSubmission(userId, _context);
+			AddSubmissionComments(submissionId, commentId, _context);
+
+			locationId = AddLocation("consultations://./consultation/1/document/1/chapter/chapter-slug", _context, "001.002.000.000");
+			commentId = AddComment(locationId, "Comment submitted to lead of a different organisation", Guid.NewGuid().ToString(), (int)StatusName.SubmittedToLead, _context, 2, null, 2);
+			AddSubmissionComments(submissionId, commentId, _context);
+
+			const string sourceURI = "consultations://./consultation/1";
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Rose Tyler", userId: Guid.NewGuid().ToString(), organisationIdUserIsLeadOf: organisationId);
+			var context = new ConsultationsContext(_options, userService, _fakeEncryption);
+
+			//Act
+			var comments = context.GetCommentsSubmittedToALeadForURI(sourceURI);
+
+			//Assert
+			comments.Count.ShouldBe(1);
+		}
+
+		[Fact]
+		public void GetLeadsAnswersForURI_OnlyShowsCommentsSubmittedToCurrentLeadsOrg()
+		{
+			//Arrange
+			int locationId, answerId;
+			var userId = Guid.Empty.ToString();
+			var submissionId = AddSubmission(userId, _context);
+			var organisationUserId = 1;
+			var organisationId = 1;
+
+			var questionTypeId = 99;
+			locationId = AddLocation("consultations://./consultation/1/document/2/chapter/guidance", _context, "001.002.001.000");
+			var questionId = AddQuestion(locationId, questionTypeId, "Question 1", _context);
+
+			answerId = AddAnswer(questionId, null, "Answer submitted to the lead", (int)StatusName.SubmittedToLead, _context, organisationUserId, null, organisationId);
+			AddSubmissionAnswers(submissionId, answerId, _context);
+
+			answerId = AddAnswer(questionId, null, "An answer to the same question submitted by an user from another org", (int)StatusName.SubmittedToLead, _context, 2, null, 2);
+			AddSubmissionAnswers(submissionId, answerId, _context);
+
+			const string sourceURI = "consultations://./consultation/1";
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Rose Tyler", userId: Guid.NewGuid().ToString(), organisationIdUserIsLeadOf: organisationId);
+			var context = new ConsultationsContext(_options, userService, _fakeEncryption);
+
+			//Act
+			var answers = context.GetAnswersSubmittedToALeadForURI(sourceURI);
+
+			//Assert
+			answers.Count.ShouldBe(1);
+		}
+
+		[Fact]
+		public void GetLeadsUnansweredQuestionsForURI_OnlyShowsQuestionsUnansweredByOrgCommenters()
+		{
+			//Arrange
+
+			int locationId, questionId, answerId;
+			var userId = Guid.Empty.ToString();
+			var submissionId = AddSubmission(userId, _context);
+			var questionTypeId = 99;
+
+			var organisationId = 1;
+			var otherOrganisationId = 2;
+
+			var organisationUserId = 1;
+			var anotherOrganisationUserId = 2;
+			var organisationUserIdFromDifferentOrg = 3;
+
+			// Add an answer to a question by one of our organisation code users
+			locationId = AddLocation("consultations://./consultation/1/document/2/chapter/guidance", _context, "001.002.001.000");
+			questionId = AddQuestion(locationId, questionTypeId, "Question answered by org user 1 ", _context);
+			answerId = AddAnswer(questionId, userId, "Org user 1s answer", (int)StatusName.SubmittedToLead, _context, organisationUserId, null, organisationId);
+			AddSubmissionAnswers(submissionId, answerId, _context);
+
+			// Add another answer to another question by another of our organisation code users
+			locationId = AddLocation("consultations://./consultation/1/document/3/chapter/intro", _context, "001.002.001.000");
+			questionId = AddQuestion(locationId, questionTypeId, "Question answered by org user 2", _context);
+			answerId = AddAnswer(questionId, Guid.NewGuid().ToString(), "Org user 2s answer", (int)StatusName.SubmittedToLead, _context, anotherOrganisationUserId, null, organisationId);
+			AddSubmissionAnswers(submissionId, answerId, _context);
+
+			// Add a question that doesn't get answered
+			locationId = AddLocation("consultations://./consultation/1/document/2", _context, "001.002.000.000");
+			AddQuestion(locationId, questionTypeId, "Question not answered by anyone in org", _context);
+
+			// Add another question that doesn't get answered by anyone in our org (but does get answered by someone in another org)
+			locationId = AddLocation("consultations://./consultation/1/document/3/chapter/intro", _context, "001.002.001.000");
+			questionId = AddQuestion(locationId, questionTypeId, "Question answered by commenter for a different org but not anyone from my org", _context);
+			answerId = AddAnswer(questionId, Guid.NewGuid().ToString(), "Different users answer", (int)StatusName.SubmittedToLead, _context, organisationUserIdFromDifferentOrg, null, otherOrganisationId);
+			AddSubmissionAnswers(submissionId, answerId, _context);
+
+			// Add another question which has had a draft answer by one of our org users
+			locationId = AddLocation("consultations://./consultation/1/document/1/chapter/guidance", _context, "001.002.001.000");
+			questionId = AddQuestion(locationId, questionTypeId, "Question answered by org user 1 that hasn't been submitted to lead", _context);
+			answerId = AddAnswer(questionId, userId, "Org user 1s answer", (int)StatusName.Draft, _context, organisationUserId, null, organisationId);
+			AddSubmissionAnswers(submissionId, answerId, _context);
+
+			// Add a question to a different consultation that gets answered by one of our organisation code users
+			locationId = AddLocation("consultations://./consultation/2/document/2/chapter/guidance", _context, "001.002.001.000");
+			questionId = AddQuestion(locationId, questionTypeId, "Question on different consultation answered by org user 1 ", _context);
+			answerId = AddAnswer(questionId, userId, "Org user 1s answer on different consultation", (int)StatusName.SubmittedToLead, _context, organisationUserId, null, organisationId);
+			AddSubmissionAnswers(submissionId, answerId, _context);
+
+			const string sourceURI = "consultations://./consultation/1";
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Rose Tyler", userId: Guid.NewGuid().ToString(), organisationIdUserIsLeadOf: organisationId);
+			var context = new ConsultationsContext(_options, userService, _fakeEncryption);
+
+			//Act
+			var questions = context.GetOrganisationsUnansweredQuestionsForURI(sourceURI);
+
+			//Assert
+			questions.Count.ShouldBe(3);
+			questions[0].QuestionText.ShouldBe("Question not answered by anyone in org");
+			questions[1].QuestionText.ShouldBe("Question answered by commenter for a different org but not anyone from my org");
+			questions[2].QuestionText.ShouldBe("Question answered by org user 1 that hasn't been submitted to lead");
+		}
+
+		//[Fact]
+		//public void GetSubmittedToLeadDataForConsulationForOrganisationLead()
+		//{
+		//	// Arrange
+		//	ResetDatabase();
+		//	_context.Database.EnsureCreated();
+		//	string userId = null;
+		//	var organisationId = 1;
+		//	var otherOrganisationId = 2;
+
+		//	var organisationUserId = 1;
+		//	var anotherOrganisationUserId = 2;
+		//	var organisationUserIdFromDifferentOrg = 3;
+
+		//	int commentId, questionId, answerId;
+		//	var questionTypeId = 99;
+		//	var locationId =AddLocation("consultations://./consultation/1/document/1", _context, "001.001.000.000");
+		//	var submissionId = AddSubmission(userId, _context);
+
+		//	//Add a comment
+		//	commentId = AddComment(locationId, "Submitted comment from org user 1", userId, (int)StatusName.SubmittedToLead, _context, organisationUserId, organisationId: organisationId);
+			
+		//	AddSubmissionComments(submissionId, commentId, _context);
+
+		//	//Add another comment from a different user from the same org
+		//	commentId = AddComment(locationId, "Submitted comment from org user 2", userId, (int)StatusName.SubmittedToLead, _context, anotherOrganisationUserId, organisationId: organisationId);
+		//	AddSubmissionComments(submissionId, commentId, _context);
+
+		//	//Add a comment from a user from a different org
+		//	commentId = AddComment(locationId, "Submitted comment from a org user to a different org", userId, (int)StatusName.SubmittedToLead, _context, organisationUserIdFromDifferentOrg, organisationId: otherOrganisationId);
+		//	AddSubmissionComments(submissionId, commentId, _context);
+
+		//	//Add a question with an answer
+		//	questionId = AddQuestion(locationId, questionTypeId, "Question answered by org user 1 ", _context);
+		//	answerId = AddAnswer(questionId, userId, "Org user 1s answer", (int)StatusName.SubmittedToLead, _context, organisationUserId, organisationId: organisationId);
+		//	AddSubmissionAnswers(submissionId, answerId, _context);
+
+		//	//Add a question with an answer from a user from a different org
+		//	questionId = AddQuestion(locationId, questionTypeId, "Question answered by user from other org ", _context);
+		//	answerId = AddAnswer(questionId, userId, "Other org users answer", (int)StatusName.SubmittedToLead, _context, organisationUserIdFromDifferentOrg, organisationId: otherOrganisationId);
+		//	AddSubmissionAnswers(submissionId, answerId, _context);
+
+		//	//Add an unanswered question
+		//	AddQuestion(locationId, questionTypeId, "Question not answered by anyone in org", _context);
+
+		//	var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Rose Tyler", userId: Guid.NewGuid().ToString(), organisationIdUserIsLeadOf: 1);
+		//	var context = new ConsultationsContext(_options, userService, _fakeEncryption);
+		//	var consultationService = new ConsultationService(context, new FakeFeedService(), new FakeLogger<ConsultationService>(), userService);
+		//	var export = new ExportService(context, userService, consultationService, _feedService);
+
+		//	//Act
+		//	var resultTuple = export.GetDataSubmittedToLeadForConsultation(1);
+
+		//	//Assert
+		//	resultTuple.comment.Count().ShouldBe(2);
+		//	resultTuple.answer.Count().ShouldBe(1);
+		//	resultTuple.question.Count().ShouldBe(1);
+		//}
 	}
 }

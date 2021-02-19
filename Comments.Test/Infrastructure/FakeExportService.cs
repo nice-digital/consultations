@@ -37,6 +37,12 @@ namespace Comments.Test.Infrastructure
 			return GetAllDataForConsultation(consultationId);
 		}
 
+		public (IEnumerable<Comment> comment, IEnumerable<Answer> answer, IEnumerable<Question> question, Validate valid) GetDataSubmittedToLeadForConsultation(
+			int consultationId)
+		{
+			return GetAllDataForConsultation(consultationId);
+		}
+
 		public (string ConsultationName, string DocumentName, string ChapterName) GetLocationData(Location location)
 		{
 			return ("Test consultation", "Test document", "Test chapter");
