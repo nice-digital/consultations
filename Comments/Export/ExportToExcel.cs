@@ -403,7 +403,7 @@ namespace Comments.Export
 
 			if (organisationUserIds.Count() != 0)
 			{
-				if (currentUser.IsAuthenticatedByAccounts)
+				if (currentUser.IsAuthenticatedByAccounts && !comments.Any(c => c.StatusId == (int) StatusName.SubmittedToLead))
 				{
 					userDetailsForUserIds.Add(currentUserDetails.userId, (currentUserDetails.displayName, currentUserDetails.emailAddress));
 				}

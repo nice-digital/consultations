@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { withRouter, Prompt, Redirect } from "react-router-dom";
 import Helmet from "react-helmet";
 
@@ -500,7 +500,7 @@ export class Review extends Component<PropsType, StateType> {
 		let headerSubtitle2 = "Once they have been submitted you will not be able to edit them further or add any extra comments.";
 
 		return (
-			<Fragment>
+			<>
 				<Helmet>
 					<title>{this.getPageTitle()}</title>
 				</Helmet>
@@ -539,8 +539,25 @@ export class Review extends Component<PropsType, StateType> {
 														reference={reference}
 														consultationState={this.state.consultationData.consultationState}
 													/>
+													{this.state.isLead &&
+														<>
+															<a
+																onClick={() => {
+																	tagManager({
+																		event: "generic",
+																		category: "Consultation comments page",
+																		action: "Clicked",
+																		label: "Download comments submitted to lead button",
+																	});
+																}}
+																className="btn btn--secondary"
+																href={`${this.props.basename}/api/exportlead/${this.props.match.params.consultationId}`}>
+																Download all comments submitted</a>
+														</>
+													}
+
 													{this.state.submittedDate &&
-													<Fragment>
+													<>
 														{this.state.consultationData.consultationState.supportsDownload &&
 														<a
 															onClick={() => {
@@ -566,7 +583,7 @@ export class Review extends Component<PropsType, StateType> {
 															<p>We will review all the submissions received for this consultation. Our response	will be published on the website around the time the guidance is published.</p>
 														)}
 														<hr/>
-													</Fragment>
+													</>
 													}
 													<div className="grid">
 														<div data-g="12 md:3" className="sticky">
@@ -658,7 +675,7 @@ export class Review extends Component<PropsType, StateType> {
 						</div>
 					</div>
 				</div>
-			</Fragment>
+			</>
 		);
 	}
 }
