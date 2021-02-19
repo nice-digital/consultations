@@ -1,7 +1,6 @@
 import React from "react";
 
 export const SubmitResponseFeedback = (props) => {
-
 	const {
 		validToSubmit,
 		unsavedIdsQty,
@@ -11,13 +10,14 @@ export const SubmitResponseFeedback = (props) => {
 		hasTobaccoLinks,
 		showExpressionOfInterestSubmissionQuestion,
 		organisationExpressionOfInterest,
+		emailIsEmpty,
+		emailIsWrongFormat,
 		questions,
 		emailAddress,
 		isOrganisationCommenter,
 	} = props;
 
 	let items = [];
-	const emailRegex = /\S+@\S+\.\S+/;
 
 	questions.forEach(question => {
 		if (question.answers.length > 1){
@@ -33,9 +33,9 @@ export const SubmitResponseFeedback = (props) => {
 		items.push("You have not saved any comments");
 
 	if (isOrganisationCommenter) {
-		if (emailAddress.length < 1) {
+		if (emailIsEmpty) {
 			items.push("You have not entered an email address");
-		} else if (!emailRegex.test(emailAddress.toLowerCase())) {
+		} else if (emailIsWrongFormat) {
 			items.push("Email address is in an invalid format");
 		}
 	}

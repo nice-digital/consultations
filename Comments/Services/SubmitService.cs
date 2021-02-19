@@ -54,14 +54,7 @@ namespace Comments.Services
 			UpdateCommentsModel(submission.Comments, submissionToSave, submittedStatus);
 			UpdateAnswersModel(submission.Answers, submissionToSave, submittedStatus);
 
-			//now for analytics calculate the number of seconds between the user's first comment or answer and the submission date
-			var earliestDate = submissionToSave.SubmissionComment.Any() ? submissionToSave.SubmissionComment.Min(sc => sc.Comment.CreatedDate) : DateTime.MaxValue;
-			var earliestAnswer = submissionToSave.SubmissionAnswer.Any() ? submissionToSave.SubmissionAnswer.Min(sa => sa.Answer.CreatedDate) : DateTime.MaxValue;
-			if (earliestAnswer < earliestDate)
-			{
-				earliestDate = earliestAnswer;
-			}
-			submission.DurationBetweenFirstCommentOrAnswerSavedAndSubmissionInSeconds = (submissionToSave.SubmissionDateTime - earliestDate).TotalSeconds;
+			submission.DurationBetweenFirstCommentOrAnswerSavedAndSubmissionInSeconds = GetDuration(submissionToSave);
 
 			return (rowsUpdated: _context.SaveChanges(), validate: null);
 		}
@@ -104,7 +97,9 @@ namespace Comments.Services
 				var answerIds = submission.Answers.Select(a => a.AnswerId).ToList();
 				_context.DuplicateAnswer(answerIds);
 			}
-			
+
+			submission.DurationBetweenFirstCommentOrAnswerSavedAndSubmissionInSeconds = GetDuration(submissionToSave);
+
 			return (rowsUpdated: _context.SaveChanges(), validate: null, _context);
 		}
 
@@ -130,6 +125,18 @@ namespace Comments.Services
 				answerInViewModel.UpdateStatusFromDBModel(status);
 			}
 			_context.AddSubmissionAnswers(answerIds, submission.SubmissionId);
-		}	
+		}
+
+		private double GetDuration(Models.Submission submissionToSave)
+		{
+			//now for analytics calculate the number of seconds between the user's first comment or answer and the submission date
+			var earliestDate = submissionToSave.SubmissionComment.Any() ? submissionToSave.SubmissionComment.Min(sc => sc.Comment.CreatedDate) : DateTime.MaxValue;
+			var earliestAnswer = submissionToSave.SubmissionAnswer.Any() ? submissionToSave.SubmissionAnswer.Min(sa => sa.Answer.CreatedDate) : DateTime.MaxValue;
+			if (earliestAnswer < earliestDate)
+			{
+				earliestDate = earliestAnswer;
+			}
+			return (submissionToSave.SubmissionDateTime - earliestDate).TotalSeconds;
+		}
 	}
 }

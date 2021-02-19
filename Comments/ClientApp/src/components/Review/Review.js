@@ -368,7 +368,20 @@ export class Review extends Component<PropsType, StateType> {
 			comments,
 			answers: answersToSubmit,
 		}, true)
-			.then(() => {
+			.then(response => {
+				tagManager({
+					event: "generic",
+					category: "Consultation comments page",
+					action: "Response submitted to lead",
+					label: `${response.data.comments ? response.data.comments.length : "0"} comments, ${response.data.answers ? response.data.answers.length : "0"} answers`,
+				});
+				tagManager({
+					event: "generic",
+					category: "Consultation comments page",
+					action: "Length to submit response to lead",
+					label: "Duration in minutes",
+					value: (Math.round(response.data.durationBetweenFirstCommentOrAnswerSavedAndSubmissionInSeconds / 60)),
+				});
 				this.setState({
 					submittedDate: true,
 					validToSubmit: false,
@@ -637,7 +650,7 @@ export class Review extends Component<PropsType, StateType> {
 																fieldsChangeHandler={this.fieldsChangeHandler}
 																submitToLead={this.submitToLead}
 																respondingAsOrganisation={this.state.respondingAsOrganisation}
-																organisationName={this.state.organisationName || contextValue.organisationName}
+																organisationName={contextValue.isOrganisationCommenter ? contextValue.organisationName : this.state.organisationName}
 																hasTobaccoLinks={this.state.hasTobaccoLinks}
 																tobaccoDisclosure={this.state.tobaccoDisclosure}
 																showExpressionOfInterestSubmissionQuestion={this.state.consultationData.showExpressionOfInterestSubmissionQuestion}
