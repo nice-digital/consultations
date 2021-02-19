@@ -366,10 +366,19 @@ namespace Comments.Models
 		{
 			var answersToUpdate = Answer.Where(a => answerIds.Contains(a.AnswerId)).ToList();
 
-			if (answersToUpdate.Any(a => (a.CreatedByUserId != _createdByUserID && a.OrganisationId != _organisationalLeadOrganisationID)))
+			// Answers created by individual commenters can only be submitted by that user, updating the status of those answers
+			if (answersToUpdate.Any(a => a.AnswerByUserType == UserType.IndividualCommenter && a.CreatedByUserId != _createdByUserID))
 				throw new Exception("Attempt to update status of an answer which doesn't belong to the current user");
 
-			answersToUpdate.ForEach(c => c.StatusId = status.StatusId);
+			// Answers created by organisational commenters are submitted to their organisation lead only by that organisational commenter, updating the status of those answers
+			if (answersToUpdate.Any(a => a.AnswerByUserType == UserType.OrganisationalCommenter && !_organisationUserIDs.Any(o => o.Equals(a.OrganisationUserId))))
+				throw new Exception("Attempt to update status of an answer which doesn't belong to the current organisation code user");
+
+			// Answers that have been submitted to organisational leads, or created by those leads, can be submitted by any lead in that organisation, updating the status of those answers
+			if (answersToUpdate.Any(a => a.AnswerByUserType == UserType.OrganisationLead && a.OrganisationId != _organisationalLeadOrganisationID))
+				throw new Exception("Attempt to update status of an answer which doesn't belong to the current organisation lead users organisation");
+
+			answersToUpdate.ForEach(a => a.StatusId = status.StatusId);
 		}
 
 	    public void AddSubmissionAnswers(IEnumerable<int> answerIds, int submissionId)
