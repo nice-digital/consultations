@@ -430,7 +430,7 @@ namespace Comments.Test.UnitTests
 			var locationId = AddLocation(sourceURI, _context, "001.001.000.000");
 			var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
 			var commentText = "A comment";
-			var comments = new List<Models.Comment> { new Models.Comment(locationId, null, commentText, null, location, 3, null, organisationUserId: organisationUserId, parentCommentId: 1) };
+			var comments = new List<Models.Comment> { new Models.Comment(locationId, null, commentText, null, location, 2, null, organisationUserId: organisationUserId, parentCommentId: 1) };
 			comments.First().SubmissionComment.Add(new SubmissionComment(1, 1));
 			comments.First().SubmissionComment.First().Submission = new Submission(submissionByUserId: userId, DateTime.Now, true, "organisation", false, null, null);
 			var answers = new List<Models.Answer> { };
