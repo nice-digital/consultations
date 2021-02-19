@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Authentication;
 using Location = Comments.Models.Location;
+using Question = Comments.Models.Question;
 
 namespace Comments.Services
 {
@@ -76,7 +77,7 @@ namespace Comments.Services
 		    var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
 		    var commentsInDB = _context.GetCommentsSubmittedToALeadForURI(sourceURI);
 		    var answersInDB = _context.GetAnswersSubmittedToALeadForURI(sourceURI);
-		    var questionsInDB = _context.GetOrganisationsUnansweredQuestionsForURI(sourceURI);
+		    var questionsInDB = new List<Question>();
 
 		    if (commentsInDB == null && answersInDB == null && questionsInDB == null)
 			    return (null, null, null, new Validate(valid: false, notFound: true, message: $"Consultation id:{consultationId} not found trying to get all data for consultation"));
