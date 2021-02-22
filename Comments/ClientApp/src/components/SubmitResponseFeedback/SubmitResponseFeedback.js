@@ -12,10 +12,19 @@ export const SubmitResponseFeedback = (props) => {
 		organisationExpressionOfInterest,
 		emailIsEmpty,
 		emailIsWrongFormat,
+		questions,
+		emailAddress,
 		isOrganisationCommenter,
 	} = props;
 
 	let items = [];
+
+	questions.forEach(question => {
+		if (question.answers.length > 1){
+			items.push(`You have too many answers for the question "${question.questionText}"`);
+		}
+
+	});
 
 	if (unsavedIdsQty)
 		items.push("You have unsaved changes. Please save or delete before submitting your response");
@@ -32,19 +41,19 @@ export const SubmitResponseFeedback = (props) => {
 	}
 
 	if (!isOrganisationCommenter) {
-		if (!respondingAsOrganisation)
+		if (respondingAsOrganisation === null)
 			items.push("You have not stated whether you are submitting the response on behalf of an organisation");
 
-		if (respondingAsOrganisation === "yes" && organisationName.length < 1)
+		if (respondingAsOrganisation && organisationName.length < 1)
 			items.push("You have stated that you are responding on behalf of an organisation but you haven't entered the organisation name");
 
-		if (respondingAsOrganisation === "yes" && showExpressionOfInterestSubmissionQuestion && organisationExpressionOfInterest === null)
+		if (respondingAsOrganisation && showExpressionOfInterestSubmissionQuestion && organisationExpressionOfInterest === null)
 			items.push("You have not disclosed whether your organisation would like to express an interest in formally supporting this quality standard");
 
-		if (!hasTobaccoLinks)
+		if (hasTobaccoLinks === null)
 			items.push("You have not disclosed whether you or the organisation you represent have links to the tobacco industry");
 
-		if (hasTobaccoLinks === "yes" && tobaccoDisclosure.length < 1)
+		if (hasTobaccoLinks && tobaccoDisclosure.length < 1)
 			items.push("You have indicated that you or the organisation you represent have links with the tobacco industry but you have not supplied any details");
 	}
 

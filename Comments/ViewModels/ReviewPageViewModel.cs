@@ -33,6 +33,8 @@ namespace Comments.ViewModels
 		/// </summary>
 	    public string OrganisationName { get; set; }
 
+		public bool? IsLead { get; set; }
+
 		#region Filter options from the check boxes
 
 		

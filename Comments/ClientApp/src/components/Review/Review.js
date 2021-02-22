@@ -56,16 +56,17 @@ type StateType = {
 	sort: string,
 	supportsDownload: boolean,
 	loading: boolean,
-	respondingAsOrganisation: boolean,
+	respondingAsOrganisation: boolean | null,
 	organisationName: string,
-	hasTobaccoLinks: boolean,
+	hasTobaccoLinks: boolean | null,
 	tobaccoDisclosure: string,
 	organisationExpressionOfInterest: boolean | null,
 	unsavedIds: Array<number>,
 	documentTitles: "undefined" | Array<any>,
 	justSubmitted: boolean,
 	path: null | string,
-	emailAddress: string,
+	isLead: boolean,
+	emailAddress: string | null,
 };
 
 export class Review extends Component<PropsType, StateType> {
@@ -84,15 +85,16 @@ export class Review extends Component<PropsType, StateType> {
 			questions: [], //this contains all the questions, not just the ones displayed to the user. the show property defines whether the question is filtered out from view.
 			sort: "DocumentAsc",
 			supportsDownload: false,
-			respondingAsOrganisation: false,
+			respondingAsOrganisation: null,
 			organisationName: "",
-			hasTobaccoLinks: false,
+			hasTobaccoLinks: null,
 			tobaccoDisclosure: "",
 			organisationExpressionOfInterest: null,
 			unsavedIds: [],
 			documentTitles: [],
 			justSubmitted: false,
-			emailAddress: "",
+			isLead: false,
+			emailAddress: null,
 		};
 
 		let preloadedData = {};
@@ -139,13 +141,14 @@ export class Review extends Component<PropsType, StateType> {
 				sort: preloadedCommentsData.sort,
 				supportsDownload: preloadedConsultationData.consultationState.supportsDownload,
 				organisationName: preloadedCommentsData.organisationName || "",
-				respondingAsOrganisation: false,
-				hasTobaccoLinks: false,
+				respondingAsOrganisation: (preloadedCommentsData.isLead ? true : null),
+				hasTobaccoLinks: null,
 				organisationExpressionOfInterest: null,
 				tobaccoDisclosure: "",
 				unsavedIds: [],
 				documentTitles: this.getListOfDocuments(preloadedCommentsData.filters),
 				justSubmitted: false,
+				isLead: preloadedCommentsData.isLead,
 				emailAddress: "",
 			};
 		}
@@ -230,6 +233,8 @@ export class Review extends Component<PropsType, StateType> {
 						sort: data.commentsData.sort,
 						organisationName: data.commentsData.organisationName || "",
 						documentTitles: this.getListOfDocuments(data.commentsData.filters),
+						isLead: data.commentsData.isLead,
+						respondingAsOrganisation: (data.commentsData.isLead ? true : null),
 					});
 				} else {
 					this.setState({
@@ -240,6 +245,8 @@ export class Review extends Component<PropsType, StateType> {
 						loading: false,
 						organisationName: data.commentsData.organisationName || "",
 						documentTitles: this.getListOfDocuments(data.commentsData.filters),
+						isLead: data.commentsData.isLead,
+						respondingAsOrganisation: (data.commentsData.isLead ? true : null),
 					}, () => {
 						tagManager({
 							event: "generic",
@@ -290,9 +297,9 @@ export class Review extends Component<PropsType, StateType> {
 		const questions = this.state.questions;
 		const organisationName = this.state.organisationName;
 		const tobaccoDisclosure = this.state.tobaccoDisclosure;
-		const respondingAsOrganisation = this.state.respondingAsOrganisation === "yes";
-		const hasTobaccoLinks = this.state.hasTobaccoLinks === "yes";
-		const organisationExpressionOfInterest = (this.state.consultationData.showExpressionOfInterestSubmissionQuestion ? (this.state.organisationExpressionOfInterest === "yes") : null);
+		const respondingAsOrganisation = this.state.respondingAsOrganisation;
+		const hasTobaccoLinks = this.state.hasTobaccoLinks;
+		const organisationExpressionOfInterest = (this.state.consultationData.showExpressionOfInterestSubmissionQuestion ? (this.state.organisationExpressionOfInterest) : null);
 
 		let answersToSubmit = [];
 		questions.forEach(function (question) {
@@ -409,9 +416,18 @@ export class Review extends Component<PropsType, StateType> {
 	};
 
 	fieldsChangeHandler = (e: SyntheticInputEvent<*>) => {
-		this.setState({
-			[e.target.name]: e.target.value,
-		});
+		if(e.target.type == "radio"){
+			let value = e.target.value;
+			if(e.target.value==="true") value = true;
+			if(e.target.value==="false") value = false;
+			this.setState({
+				[e.target.name]: value,
+			});
+		}else{
+			this.setState({
+				[e.target.name]: e.target.value,
+			});
+		}
 	};
 
 	issueA11yMessage = (message: string) => {
@@ -639,7 +655,9 @@ export class Review extends Component<PropsType, StateType> {
 																tobaccoDisclosure={this.state.tobaccoDisclosure}
 																showExpressionOfInterestSubmissionQuestion={this.state.consultationData.showExpressionOfInterestSubmissionQuestion}
 																organisationExpressionOfInterest={this.state.organisationExpressionOfInterest}
+																isLead={this.state.isLead}
 																isOrganisationCommenter={contextValue.isOrganisationCommenter}
+																questions={this.state.questions}
 																emailAddress={this.state.emailAddress}
 															/>
 															}
