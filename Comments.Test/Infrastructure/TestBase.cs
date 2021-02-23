@@ -28,6 +28,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.FeatureManagement;
 using NICE.Feeds.Models.Indev.List;
 using NICE.Identity.Authentication.Sdk.API;
+using NICE.Identity.Authentication.Sdk.TokenStore;
 using Answer = Comments.Models.Answer;
 using Comment = Comments.Models.Comment;
 using FeedConfig = NICE.Feeds.Configuration.FeedConfig;
@@ -196,6 +197,8 @@ namespace Comments.Test.Infrastructure
 	                {
 		                services.AddMvc(opt => opt.Filters.Add(new AllowAnonymousFilter())); //bypass authentication
 	                }
+
+					services.TryAddSingleton<IApiTokenStore, FakeApiTokenStore>();
                 })
                 .Configure(app =>
                 {

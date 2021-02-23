@@ -1,18 +1,15 @@
 using Comments.Common;
-using Comments.Configuration;
 using Comments.Models;
 using Comments.ViewModels;
 using NICE.Feeds;
 using NICE.Identity.Authentication.Sdk.API;
 using NICE.Identity.Authentication.Sdk.Authorisation;
+using NICE.Identity.Authentication.Sdk.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using NICE.Identity.Authentication.Sdk.Domain;
-using DocumentFormat.OpenXml.Vml.Spreadsheet;
-using Comment = Comments.Models.Comment;
 
 namespace Comments.Services
 {
@@ -30,16 +27,16 @@ namespace Comments.Services
 	{
         private readonly ConsultationsContext _context;
         private readonly IUserService _userService;
-        private readonly IApiToken _apiTokenService;
+        private readonly IApiTokenClient _apiTokenClient;
         private readonly IAPIService _apiService;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConsultationService _consultationService;
 
-        public OrganisationService(ConsultationsContext context, IUserService userService, IApiToken apiTokenService, IAPIService apiService, IHttpClientFactory httpClientFactory, IConsultationService consultationService)
+        public OrganisationService(ConsultationsContext context, IUserService userService, IApiTokenClient apiTokenClient, IAPIService apiService, IHttpClientFactory httpClientFactory, IConsultationService consultationService)
         {
             _context = context;
             _userService = userService;
-            _apiTokenService = apiTokenService;
+            _apiTokenClient = apiTokenClient;
             _apiService = apiService;
             _httpClientFactory = httpClientFactory;
             _consultationService = consultationService;
@@ -215,14 +212,11 @@ namespace Comments.Services
 
 		public async Task<Dictionary<int, string>> GetOrganisationNames(IEnumerable<int> organisationIds)
 		{
-			//var machineToMachineAccessToken = await _apiTokenService.GetAccessToken(AppSettings.AuthenticationConfig.GetAuthConfiguration());
-			//var httpClientWithPooledMessageHandler = _httpClientFactory.CreateClient();
+			var cachedM2MAccessToken = new JwtToken { AccessToken = await _apiTokenClient.GetAccessToken()};
 
-			//var organisations = await _apiService.GetOrganisations(organisationIds.Distinct(), machineToMachineAccessToken, httpClientWithPooledMessageHandler);
-			
-			//the above has been temporarily commented out until the m2m token caching branch in idam has been merged.
+			var httpClientWithPooledMessageHandler = _httpClientFactory.CreateClient();
 
-			var organisations = organisationIds.Distinct().Select(orgId => new Organisation(orgId, "Not NICE", false));
+			var organisations = await _apiService.GetOrganisations(organisationIds.Distinct(), cachedM2MAccessToken, httpClientWithPooledMessageHandler);
 
 			return organisations.ToDictionary(k => k.OrganisationId, v => v.OrganisationName);
 		}
