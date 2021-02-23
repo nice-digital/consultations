@@ -40,6 +40,7 @@ namespace Comments.Models
 			var currentUserInThisScope = _userService.GetCurrentUser(); //this dbcontext's service lifetime is scoped, i.e. new for every request.
 			_createdByUserID = currentUserInThisScope.UserId;
 			_organisationUserIDs = currentUserInThisScope.ValidatedOrganisationUserIds;
+			_organisationIDs = currentUserInThisScope.ValidatedOrganisationIds;
 			var currentUsersOrganisationTheyAreLeadOf = currentUserInThisScope.OrganisationsAssignedAsLead?.FirstOrDefault(); //the new plan is to only support being lead of 1 organisation.
 			_organisationalLeadOrganisationID = currentUsersOrganisationTheyAreLeadOf != null ? (int?)currentUsersOrganisationTheyAreLeadOf.OrganisationId : null;
 		}

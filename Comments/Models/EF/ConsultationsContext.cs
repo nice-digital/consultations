@@ -32,6 +32,7 @@ namespace Comments.Models
 		private string _createdByUserID;
 		private IEnumerable<int> _organisationUserIDs;
 		private int? _organisationalLeadOrganisationID;
+		private IEnumerable<int> _organisationIDs;
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -98,9 +99,12 @@ namespace Comments.Models
 	                //so that filters them out.
 	                || (!c.ParentAnswerId.HasValue && _organisationUserIDs != null && c.OrganisationUserId.HasValue && _organisationUserIDs.Any(organisationUserID => organisationUserID.Equals(c.OrganisationUserId)))
 
-	                //this condition is for org leads. the c.ParentCommentId.HasValue, is so they can see answers submitted by organisation commenters as that gets set when the answer is copied.
-	                //the c.CreatedByUserId != null is so they can see brand new answers for the organisation, made by another org lead for the same organisation.
-	                || ((c.ParentAnswerId.HasValue || c.CreatedByUserId != null) && c.OrganisationId.HasValue && _organisationalLeadOrganisationID.HasValue && c.OrganisationId.Equals(_organisationalLeadOrganisationID))
+					//this condition filter is also for organisation commenters. It allows them to see the submitted to lead comments of other organisation commenters in their organisation.
+					|| (!c.ParentAnswerId.HasValue && c.StatusId != (int) StatusName.Draft &&_organisationIDs != null && c.OrganisationId.HasValue && _organisationIDs.Any(organisationID => organisationID.Equals(c.OrganisationId))) //TODO: !draft needs to be updated to submittedtolead
+
+					//this condition is for org leads. the c.ParentCommentId.HasValue, is so they can see answers submitted by organisation commenters as that gets set when the answer is copied.
+					//the c.CreatedByUserId != null is so they can see brand new answers for the organisation, made by another org lead for the same organisation.
+					|| ((c.ParentAnswerId.HasValue || c.CreatedByUserId != null) && c.OrganisationId.HasValue && _organisationalLeadOrganisationID.HasValue && c.OrganisationId.Equals(_organisationalLeadOrganisationID))
 				);
 			});
 
