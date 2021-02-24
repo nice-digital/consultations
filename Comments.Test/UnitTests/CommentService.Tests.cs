@@ -5,6 +5,7 @@ using Comments.Test.Infrastructure;
 using Xunit;
 using Shouldly;
 using System.Linq;
+using System.Threading.Tasks;
 using Comments.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Comment = Comments.Models.Comment;
@@ -119,7 +120,7 @@ namespace Comments.Test.UnitTests
         }
 
         [Fact]
-        public void Comments_CanBeCreated()
+        public async Task Comments_CanBeCreated()
         {
             //Arrange
             ResetDatabase();
@@ -139,14 +140,14 @@ namespace Comments.Test.UnitTests
 			var commentService = new CommentService(context, userService, _consultationService, _fakeHttpContextAccessor);
 
             //Act
-            var result = commentService.CreateComment(viewModel);
+            var result = await commentService.CreateComment(viewModel);
 
             //Assert
             result.comment.CommentText.ShouldBe(commentText);
         }
 
         [Fact]
-        public void No_Comments_returned_when_not_logged_in()
+        public async Task No_Comments_returned_when_not_logged_in()
         {
             // Arrange
             ResetDatabase();
@@ -155,7 +156,7 @@ namespace Comments.Test.UnitTests
 			var commentService = new CommentService(new ConsultationsContext(_options, _fakeUserService, _fakeEncryption), FakeUserService.Get(isAuthenticated: false), _consultationService, _fakeHttpContextAccessor);
 
             // Act
-            var viewModel = commentService.GetCommentsAndQuestions("consultations://./consultation/1/document/1/chapter/introduction", _urlHelper);
+            var viewModel = await commentService.GetCommentsAndQuestions("consultations://./consultation/1/document/1/chapter/introduction", _urlHelper);
 
             //Assert
             viewModel.IsAuthorised.ShouldBeFalse();
@@ -164,7 +165,7 @@ namespace Comments.Test.UnitTests
         }
 
         [Fact]
-        public void Only_own_Comments_returned_when_logged_in()
+        public async Task Only_own_Comments_returned_when_logged_in()
         {
             // Arrange
             ResetDatabase();
@@ -182,14 +183,14 @@ namespace Comments.Test.UnitTests
             AddComment(locationId, "another user's comment", createdByUserId: Guid.NewGuid().ToString());
 
             // Act
-            var viewModel = commentService.GetCommentsAndQuestions("consultations://./consultation/1/document/1/chapter/introduction", _urlHelper);
+            var viewModel = await commentService.GetCommentsAndQuestions("consultations://./consultation/1/document/1/chapter/introduction", _urlHelper);
 
             //Assert
             viewModel.Comments.Single().CommentId.ShouldBe(expectedCommentId);
         }
 
         [Fact]
-        public void CommentsQuestionsAndAnswers_OnlyReturnOwnComments()
+        public async Task CommentsQuestionsAndAnswers_OnlyReturnOwnComments()
         {
             // Arrange
             ResetDatabase();
@@ -210,7 +211,7 @@ namespace Comments.Test.UnitTests
 			var commentService = new CommentService(context, _fakeUserService, _consultationService, _fakeHttpContextAccessor);
 
             // Act    
-            var viewModel = commentService.GetCommentsAndQuestions(URI, _urlHelper);
+            var viewModel = await commentService.GetCommentsAndQuestions(URI, _urlHelper);
 
 			//Assert
 			//commentService.GetComment(1).comment.CommentText.ShouldBe("My Comment");
@@ -219,7 +220,7 @@ namespace Comments.Test.UnitTests
         }
 
         [Fact]
-        public void CommentsQuestionsAndAnswers_ReturnAllOwnCommentsForReviewingConsultation()
+        public async Task CommentsQuestionsAndAnswers_ReturnAllOwnCommentsForReviewingConsultation()
         {
             // Arrange
             ResetDatabase();
@@ -257,7 +258,7 @@ namespace Comments.Test.UnitTests
 			var commentService = new CommentService(context, _fakeUserService, _consultationService, _fakeHttpContextAccessor);
 
             // Act    
-            var viewModel = commentService.GetCommentsAndQuestions("/1/review", _urlHelper);
+            var viewModel = await commentService.GetCommentsAndQuestions("/1/review", _urlHelper);
 
             //Assert
             //commentService.GetComment(6).comment.ShouldNotBeNull();
@@ -268,7 +269,7 @@ namespace Comments.Test.UnitTests
 
 
         [Fact]
-        public void Only_own_Comments_returned_for_comment_list_when_has_organisation_session_cookie_exists()
+        public async Task Only_own_Comments_returned_for_comment_list_when_has_organisation_session_cookie_exists()
         {
 	        // Arrange
 	        ResetDatabase();
@@ -288,7 +289,7 @@ namespace Comments.Test.UnitTests
 	        AddComment(locationId, "another user's comment logged in with cookie", createdByUserId: null, organisationUserId: 9999);
 
 			// Act
-			var viewModel = commentService.GetCommentsAndQuestions("/1/1/introduction", _urlHelper);
+			var viewModel = await commentService.GetCommentsAndQuestions("/1/1/introduction", _urlHelper);
 
 	        //Assert
 	        viewModel.Comments.Single().CommentId.ShouldBe(expectedCommentId);

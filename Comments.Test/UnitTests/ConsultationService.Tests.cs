@@ -7,8 +7,11 @@ using Shouldly;
 using System;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using NICE.Feeds;
-using NICE.Feeds.Models.Indev.Detail;
+using NICE.Feeds.Indev;
+using NICE.Feeds.Indev.Models;
+using NICE.Feeds.Indev.Models.Detail;
 using NICE.Feeds.Tests.Infrastructure;
 using Xunit;
 
@@ -17,7 +20,7 @@ namespace Comments.Test.UnitTests
 	public class ConsultationServiceTests : Comments.Test.Infrastructure.TestBase
     {
         [Fact]
-        public void Comments_CanBeRead()
+        public async Task Comments_CanBeRead()
         { 
             // Arrange
             ResetDatabase();
@@ -36,7 +39,7 @@ namespace Comments.Test.UnitTests
             var commentService = new CommentService(context, userService, _consultationService, _fakeHttpContextAccessor);
             
             // Act
-            var viewModel = commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
+            var viewModel = await commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
 
             //Assert
             viewModel.Comments.Single().CommentText.ShouldBe(commentText);
@@ -50,7 +53,7 @@ namespace Comments.Test.UnitTests
 	    [InlineData("", "gid-ng10107", "html-content", "/guidance/indevelopment/gid-ng10107/consultation/html-content", null)]
 	    [InlineData("orig-ref", "gid-ng10107", "html-content", "/guidance/orig-ref/update/gid-ng10107/consultation/html-content", null)] //an "update project"
 	    [InlineData(null, "ph24", "html-content", "/guidance/ph24/consultation/html-content", null)] //published product
-		public void GetBreadcrumbForDocumentPage(string origProjectReference, string reference, string resourceTitleId, string expectedConsultationUrl, string expectedDocumentsUrl)
+		public async Task GetBreadcrumbForDocumentPage(string origProjectReference, string reference, string resourceTitleId, string expectedConsultationUrl, string expectedDocumentsUrl)
 	    {
 			//Arrange
 		    var consultationService = new Services.ConsultationService(null, null, null, null);
@@ -64,7 +67,7 @@ namespace Comments.Test.UnitTests
 			};
 
 			//Act
-		    var actualBreadcrumb = consultationService.GetBreadcrumbs(consultationDetail, BreadcrumbType.DocumentPage);
+		    var actualBreadcrumb = await consultationService.GetBreadcrumbs(consultationDetail, BreadcrumbType.DocumentPage);
 
 			//Assert
 			actualBreadcrumb.ShouldNotBeNull();
@@ -88,15 +91,15 @@ namespace Comments.Test.UnitTests
 		[Theory]
 		[InlineData("/guidance/indevelopment/gid-ta10232/consultation/html-content", "/1/2/introduction")] //regular indev project
 		[InlineData("/guidance/orig-ref/update/gid-ta10232/consultation/html-content", "/1/2/introduction")] //an "update project"
-		public void GetBreadcrumbForReviewPage(string expectedConsultationUrl, string expectedDocumentsUrl)
+		public async Task GetBreadcrumbForReviewPage(string expectedConsultationUrl, string expectedDocumentsUrl)
 		{
 			//Arrange
-			var feedService = new FeedService(new FeedReader(Feed.ConsultationCommentsPublishedDetailMulitpleDoc));
+			var feedService = new IndevFeedService(new FeedReader(Feed.ConsultationCommentsPublishedDetailMulitpleDoc));
 			var consultationService = new Services.ConsultationService(null, feedService, null, null);
-			var consultationDetail = feedService.GetIndevConsultationDetailForPublishedProject(1, PreviewState.NonPreview, 2);
+			var consultationDetail = await feedService.GetIndevConsultationDetailForPublishedProject(1, PreviewState.NonPreview, 2);
 
 			//Act
-			var actualBreadcrumb = consultationService.GetBreadcrumbs(consultationDetail, BreadcrumbType.Review); 
+			var actualBreadcrumb = await consultationService.GetBreadcrumbs(consultationDetail, BreadcrumbType.Review); 
 
 			//Assert
 			actualBreadcrumb.ShouldNotBeNull();
@@ -121,15 +124,15 @@ namespace Comments.Test.UnitTests
 		}
 
 	    [Fact]
-	    public void GetBreadcrumbsReturnsNullForBreadcrumbTypeOfNone()
+	    public async Task GetBreadcrumbsReturnsNullForBreadcrumbTypeOfNone()
 	    {
 			//Arrange
-		    var feedService = new FeedService(new FeedReader(Feed.ConsultationCommentsPublishedDetailMulitpleDoc));
+		    var feedService = new IndevFeedService(new FeedReader(Feed.ConsultationCommentsPublishedDetailMulitpleDoc));
 			var consultationService = new Services.ConsultationService(null, feedService, null, null);
-		    var consultationDetail = feedService.GetIndevConsultationDetailForPublishedProject(1, PreviewState.NonPreview, 2);
+		    var consultationDetail = await feedService.GetIndevConsultationDetailForPublishedProject(1, PreviewState.NonPreview, 2);
 
 			//Act
-		    var breadcrumbs = consultationService.GetBreadcrumbs(consultationDetail, BreadcrumbType.None);
+		    var breadcrumbs = await consultationService.GetBreadcrumbs(consultationDetail, BreadcrumbType.None);
 
 		    //Act
 			breadcrumbs.ShouldBeNull();

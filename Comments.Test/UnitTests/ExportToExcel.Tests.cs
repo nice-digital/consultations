@@ -3,17 +3,18 @@ using Comments.Models;
 using Comments.Services;
 using Comments.Test.Infrastructure;
 using Comments.ViewModels;
-using NICE.Feeds;
-using NICE.Feeds.Models.Indev.List;
 using Shouldly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Comments.Export;
 using Xunit;
 using TestBase = Comments.Test.Infrastructure.TestBase;
 using ExcelDataReader;
 using Comments.Common;
+using NICE.Feeds.Indev;
+using NICE.Feeds.Indev.Models.List;
 using Location = Comments.Models.Location;
 using Submission = Comments.Models.Submission;
 
@@ -21,7 +22,7 @@ namespace Comments.Test.UnitTests
 {
 	public class ExcelTests : TestBase
 	{
-		private readonly IFeedService _feedService;
+		private readonly IIndevFeedService _feedService;
 
 		public ExcelTests()
 		{
@@ -268,7 +269,7 @@ namespace Comments.Test.UnitTests
 		}
 
 		[Fact]
-		public void GetLocationData()
+		public async Task GetLocationData()
 		{
 			// Arrange
 			ResetDatabase();
@@ -286,7 +287,7 @@ namespace Comments.Test.UnitTests
 			var exportService = new ExportService(_context, _fakeUserService, _consultationService, _feedService);
 
 			//Act
-			var locationDetails = exportService.GetLocationData(comments.First().Location);
+			var locationDetails = await exportService.GetLocationData(comments.First().Location);
 
 			//Assert
 			locationDetails.ConsultationName.ShouldBe("ConsultationName");
@@ -463,7 +464,7 @@ namespace Comments.Test.UnitTests
 		}
 
 		[Fact]
-		public void GetAllDataForConsulation()
+		public async Task GetAllDataForConsulation()
 		{
 			// Arrange
 			ResetDatabase();
@@ -497,7 +498,7 @@ namespace Comments.Test.UnitTests
 			var export = new ExportService(context, _fakeUserService, consultationService, _feedService);
 
 			//Act
-			var resultTuple = export.GetAllDataForConsultation(1);
+			var resultTuple = await export.GetAllDataForConsultation(1);
 
 			//Assert
 			resultTuple.comment.Count().ShouldBe(1);

@@ -234,7 +234,7 @@ namespace Comments.Test.UnitTests
 		}
 
 		[Fact]
-		public void OrganisationUserCreatesAUniqueSessionIdWhenCalledMultipleTimesAndAllSessionsAreSavedToDatabaseAndReturned()
+		public async Task OrganisationUserCreatesAUniqueSessionIdWhenCalledMultipleTimesAndAllSessionsAreSavedToDatabaseAndReturned()
 		{
 			//Arrange
 			ResetDatabase();
@@ -255,7 +255,7 @@ namespace Comments.Test.UnitTests
 
 					var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(1, 1, _context, collationCode: collationCodeToUse);
 
-					var session = serviceUnderTest.CreateOrganisationUserSession(organisationAuthorisationId, collationCodeToUse);
+					var session = await serviceUnderTest.CreateOrganisationUserSession(organisationAuthorisationId, collationCodeToUse);
 					sessionsReturned.Add(session.sessionId, session.expirationDate);
 				}
 

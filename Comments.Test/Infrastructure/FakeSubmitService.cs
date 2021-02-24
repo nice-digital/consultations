@@ -1,17 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Comments.Models;
 using Comments.Services;
 using Comments.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Location = Comments.Models.Location;
-using Submission = Comments.ViewModels.Submission;
 
 namespace Comments.Test.Infrastructure
 {
-    public class FakeSubmitService : ISubmitService
+	public class FakeSubmitService : ISubmitService
     {
-	    public (int rowsUpdated, Validate validate) Submit(ViewModels.Submission submission)
+	    public async Task<(int rowsUpdated, Validate validate)> Submit(ViewModels.Submission submission)
 	    {
 		    throw new NotImplementedException();
 	    }
@@ -31,7 +30,7 @@ namespace Comments.Test.Infrastructure
 		    return new ConsultationState(DateTime.MinValue, DateTime.MaxValue, true, true, true, DateTime.MaxValue, null);
 	    }
 
-		public (int rowsUpdated, Validate validate, ConsultationsContext context) SubmitToLead(SubmissionToLead submission)
+		public async Task<(int rowsUpdated, Validate validate, ConsultationsContext context)> SubmitToLead(SubmissionToLead submission)
 		{
 			throw new NotImplementedException();
 		}

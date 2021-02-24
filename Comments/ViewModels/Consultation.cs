@@ -6,7 +6,7 @@ namespace Comments.ViewModels
 {
 	public class Consultation
     {
-        public Consultation(NICE.Feeds.Models.Indev.List.ConsultationBase consultation, User user, IEnumerable<BreadcrumbLink> breadcrumbs = null, ConsultationState consultationState = null, IEnumerable<OptionFilterGroup> filters = null)
+        public Consultation(NICE.Feeds.Indev.Models.List.ConsultationBase consultation, User user, IEnumerable<BreadcrumbLink> breadcrumbs = null, ConsultationState consultationState = null, IEnumerable<OptionFilterGroup> filters = null)
         {
             Reference = consultation.Reference;
             Title = consultation.Title;

@@ -1,18 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using Comments.Common;
 using Comments.Configuration;
 using Comments.Models;
 using Comments.Test.Infrastructure;
 using Comments.ViewModels;
 using ExcelDataReader;
-using NICE.Feeds;
+using NICE.Feeds.Indev;
 using NICE.Feeds.Tests.Infrastructure;
 using Shouldly;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using Xunit;
 using TestBase = Comments.Test.Infrastructure.TestBase;
 
@@ -20,12 +19,12 @@ namespace Comments.Test.IntegrationTests.API.Export
 {
 	public class ExportBase : TestBase
 	{
-		protected readonly IFeedService FeedService;
+		protected readonly IIndevFeedService FeedService;
 		public ExportBase(TestUserType testUserType) : base(testUserType, Feed.ConsultationCommentsListMultiple)
 		{
-			var consultationList = new List<NICE.Feeds.Models.Indev.List.ConsultationList>
+			var consultationList = new List<NICE.Feeds.Indev.Models.List.ConsultationList>
 			{
-				new NICE.Feeds.Models.Indev.List.ConsultationList { ConsultationId = 1, AllowedRole = testUserType.ToString() }
+				new NICE.Feeds.Indev.Models.List.ConsultationList { ConsultationId = 1, AllowedRole = testUserType.ToString() }
 			};
 			FeedService = new FakeFeedService(consultationList);
 		}

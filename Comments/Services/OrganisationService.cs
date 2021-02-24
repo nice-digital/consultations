@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using NICE.Feeds.Indev.Models;
 
 namespace Comments.Services
 {
@@ -17,7 +18,7 @@ namespace Comments.Services
 	{
 		OrganisationCode GenerateOrganisationCode(int organisationId, int consultationId);
 		Task<OrganisationCode> CheckValidCodeForConsultation(string collationCode, int consultationId);
-		(Guid sessionId, DateTime expirationDate) CreateOrganisationUserSession(int organisationAuthorisationId, string collationCode);
+		Task<(Guid sessionId, DateTime expirationDate)> CreateOrganisationUserSession(int organisationAuthorisationId, string collationCode);
 		Task<(bool valid, string organisationName)> CheckOrganisationUserSession(int consultationId);
 		IList<ValidatedSession> CheckValidCodesForConsultation(Session unvalidatedSessions);
 		Task<Dictionary<int, string>> GetOrganisationNames(IEnumerable<int> organisationIds);
@@ -144,13 +145,13 @@ namespace Comments.Services
 		}
 
 
-		public (Guid sessionId, DateTime expirationDate) CreateOrganisationUserSession(int organisationAuthorisationId, string collationCode)
+		public async Task<(Guid sessionId, DateTime expirationDate)> CreateOrganisationUserSession(int organisationAuthorisationId, string collationCode)
 		{
 			var organisationAuthorisationForSuppliedCollationCode = _context.GetOrganisationAuthorisationByCollationCode(collationCode);
 			if (organisationAuthorisationForSuppliedCollationCode == null || !organisationAuthorisationForSuppliedCollationCode.OrganisationAuthorisationId.Equals(organisationAuthorisationId))
 				throw new ApplicationException($"Supplied collation code: {collationCode} is not valid for the supplied organisation authorisation id:{organisationAuthorisationId}");
 
-			var consultationDetails = _consultationService.GetConsultationState(organisationAuthorisationForSuppliedCollationCode.Location.SourceURI, PreviewState.NonPreview);
+			var consultationDetails = await _consultationService.GetConsultationState(organisationAuthorisationForSuppliedCollationCode.Location.SourceURI, PreviewState.NonPreview);
 			var expirationDate = consultationDetails.EndDate.AddDays(28);
 
 			var organisationUser = _context.CreateOrganisationUser(organisationAuthorisationId, Guid.NewGuid(), expirationDate);

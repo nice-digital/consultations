@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Comments.Models;
 using Comments.Services;
 using Comments.Test.Infrastructure;
@@ -206,7 +207,7 @@ namespace Comments.Test.UnitTests
         }
 
         [Fact]
-        public void Only_own_Answers_returned_when_logged_in()
+        public async Task Only_own_Answers_returned_when_logged_in()
         {
             //Arrange
             ResetDatabase();
@@ -228,7 +229,7 @@ namespace Comments.Test.UnitTests
 			var commentService = new CommentService(context, userService, _consultationService, _fakeHttpContextAccessor);
 
             // Act
-            var viewModel = commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
+            var viewModel = await commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
             var questionViewModel = viewModel.Questions.SingleOrDefault(q => q.QuestionId.Equals(questionId));
 
             //Assert

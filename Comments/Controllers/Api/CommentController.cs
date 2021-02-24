@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NICE.Identity.Authentication.Sdk.Domain;
+using System.Threading.Tasks;
 
 namespace Comments.Controllers.Api
 {
@@ -59,14 +60,14 @@ namespace Comments.Controllers.Api
 
         // POST: consultations/api/Comment
         [HttpPost("")]
-        public IActionResult PostComment([FromBody] ViewModels.Comment comment) 
+        public async Task<IActionResult> PostComment([FromBody] ViewModels.Comment comment) 
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var result = _commentService.CreateComment(comment);
+            var result = await _commentService.CreateComment(comment);
             var invalidResult = Validate(result.validate, _logger);
 
             return invalidResult ?? CreatedAtAction("GetComment", new { commentId = result.comment.CommentId }, result.comment);
