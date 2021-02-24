@@ -134,7 +134,7 @@ namespace Comments.Services
 			if (foundCommentOrAnswer.Equals(default(KeyValuePair<string, Models.Status>)))
 				return (hasEnteredCommentsOrAnsweredQuestions: false, hasSubmittedCommentsOrAnswers: false);
 
-			if (foundCommentOrAnswer.Value.StatusId.Equals((int)StatusName.Submitted))
+			if (!foundCommentOrAnswer.Value.StatusId.Equals((int)StatusName.Draft))
 			{
 				return (hasEnteredCommentsOrAnsweredQuestions: true, hasSubmittedCommentsOrAnswers: true);
 			}

@@ -244,6 +244,7 @@
         }
     ],
     "organisationName":null,
+    "isLead":false,
     "type":null,
     "document":null,
     "sort":"DocumentAsc"

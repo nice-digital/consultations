@@ -12,11 +12,12 @@ namespace Comments.Services
 {
 	public interface IExportService
 	{
-		(IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetAllDataForConsulation(int consultationId);
+		(IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetAllDataForConsultation(int consultationId);
 
-		(IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetAllDataForConsulationForCurrentUser(int consultationId);
+		(IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetAllDataForConsultationForCurrentUser(int consultationId);
 		(string ConsultationName, string DocumentName, string ChapterName) GetLocationData(Comments.Models.Location location);
 		string GetConsultationName(Location location);
+		IEnumerable<OrganisationUser> GetOrganisationUsersByOrganisationUserIds(IEnumerable<int> organisationUserIds);
 	}
 
     public class ExportService : IExportService
@@ -40,7 +41,7 @@ namespace Comments.Services
 		    _feedService = feedService;
 	    }
 
-	    public (IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetAllDataForConsulation(int consultationId)
+	    public (IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetAllDataForConsultation(int consultationId)
 	    {
 		    var userRoles = _userService.GetUserRoles().ToList();
 		    var isAdminUser = userRoles.Any(role => AppSettings.ConsultationListConfig.DownloadRoles.AdminRoles.Contains(role));
@@ -61,7 +62,7 @@ namespace Comments.Services
 			return (commentsInDB, answersInDB, questionsInDB, new Validate(true));
 	    }
 
-	    public (IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetAllDataForConsulationForCurrentUser(int consultationId)
+	    public (IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetAllDataForConsultationForCurrentUser(int consultationId)
 	    {
 
 		    var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
@@ -98,6 +99,11 @@ namespace Comments.Services
 
 		    var consultationDetails = _consultationService.GetConsultation(URIElements.ConsultationId,  BreadcrumbType.None, useFilters:false);
 		    return consultationDetails.ConsultationName;
+	    }
+
+	    public IEnumerable<OrganisationUser> GetOrganisationUsersByOrganisationUserIds(IEnumerable<int> organisationUserIds)
+	    {
+		    return _context.GetOrganisationUsersByOrganisationUserIds(organisationUserIds);
 	    }
 	}
 }

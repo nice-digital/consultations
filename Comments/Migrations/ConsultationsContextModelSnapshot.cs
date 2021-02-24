@@ -294,7 +294,8 @@ namespace Comments.Migrations
 
                     b.HasData(
                         new { StatusId = 1, Name = "Draft" },
-                        new { StatusId = 2, Name = "Submitted" }
+                        new { StatusId = 2, Name = "Submitted" },
+                        new { StatusId = 3, Name = "SubmittedToLead" }
                     );
                 });
 
