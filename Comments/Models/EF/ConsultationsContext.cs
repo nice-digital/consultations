@@ -100,7 +100,7 @@ namespace Comments.Models
 	                || (!c.ParentAnswerId.HasValue && _organisationUserIDs != null && c.OrganisationUserId.HasValue && _organisationUserIDs.Any(organisationUserID => organisationUserID.Equals(c.OrganisationUserId)))
 
 					//this condition filter is also for organisation commenters. It allows them to see the submitted to lead comments of other organisation commenters in their organisation.
-					|| (!c.ParentAnswerId.HasValue && c.StatusId != (int) StatusName.Draft &&_organisationIDs != null && c.OrganisationId.HasValue && _organisationIDs.Any(organisationID => organisationID.Equals(c.OrganisationId))) //TODO: !draft needs to be updated to submittedtolead
+					|| (!c.ParentAnswerId.HasValue && c.StatusId == (int) StatusName.SubmittedToLead &&_organisationIDs != null && c.OrganisationId.HasValue && _organisationIDs.Any(organisationID => organisationID.Equals(c.OrganisationId)))
 
 					//this condition is for org leads. the c.ParentCommentId.HasValue, is so they can see answers submitted by organisation commenters as that gets set when the answer is copied.
 					//the c.CreatedByUserId != null is so they can see brand new answers for the organisation, made by another org lead for the same organisation.
