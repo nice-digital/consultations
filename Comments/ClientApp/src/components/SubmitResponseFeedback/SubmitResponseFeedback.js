@@ -1,7 +1,6 @@
 import React from "react";
 
 export const SubmitResponseFeedback = (props) => {
-
 	const {
 		validToSubmit,
 		unsavedIdsQty,
@@ -11,9 +10,21 @@ export const SubmitResponseFeedback = (props) => {
 		hasTobaccoLinks,
 		showExpressionOfInterestSubmissionQuestion,
 		organisationExpressionOfInterest,
+		emailIsEmpty,
+		emailIsWrongFormat,
+		questions,
+		emailAddress,
+		isOrganisationCommenter,
 	} = props;
 
 	let items = [];
+
+	questions.forEach(question => {
+		if (question.answers.length > 1){
+			items.push(`You have too many answers for the question "${question.questionText}"`);
+		}
+
+	});
 
 	if (unsavedIdsQty)
 		items.push("You have unsaved changes. Please save or delete before submitting your response");
@@ -21,20 +32,30 @@ export const SubmitResponseFeedback = (props) => {
 	if (!validToSubmit)
 		items.push("You have not saved any comments");
 
-	if (!respondingAsOrganisation)
-		items.push("You have not stated whether you are submitting the response on behalf of an organisation");
+	if (isOrganisationCommenter) {
+		if (emailIsEmpty) {
+			items.push("You have not entered an email address");
+		} else if (emailIsWrongFormat) {
+			items.push("Email address is in an invalid format");
+		}
+	}
 
-	if (respondingAsOrganisation === "yes" && organisationName.length < 1)
-		items.push("You have stated that you are responding on behalf of an organisation but you haven't entered the organisation name");
+	if (!isOrganisationCommenter) {
+		if (respondingAsOrganisation === null)
+			items.push("You have not stated whether you are submitting the response on behalf of an organisation");
 
-	if (respondingAsOrganisation === "yes" && showExpressionOfInterestSubmissionQuestion && organisationExpressionOfInterest === null)
-		items.push("You have not disclosed whether your organisation would like to express an interest in formally supporting this quality standard");
+		if (respondingAsOrganisation && organisationName.length < 1)
+			items.push("You have stated that you are responding on behalf of an organisation but you haven't entered the organisation name");
 
-	if (!hasTobaccoLinks)
-		items.push("You have not disclosed whether you or the organisation you represent have links to the tobacco industry");
+		if (respondingAsOrganisation && showExpressionOfInterestSubmissionQuestion && organisationExpressionOfInterest === null)
+			items.push("You have not disclosed whether your organisation would like to express an interest in formally supporting this quality standard");
 
-	if (hasTobaccoLinks === "yes" && tobaccoDisclosure.length < 1)
-		items.push("You have indicated that you or the organisation you represent have links with the tobacco industry but you have not supplied any details");
+		if (hasTobaccoLinks === null)
+			items.push("You have not disclosed whether you or the organisation you represent have links to the tobacco industry");
+
+		if (hasTobaccoLinks && tobaccoDisclosure.length < 1)
+			items.push("You have indicated that you or the organisation you represent have links with the tobacco industry but you have not supplied any details");
+	}
 
 	if (!items.length) return null;
 

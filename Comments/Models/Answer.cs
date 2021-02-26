@@ -47,5 +47,21 @@ namespace Comments.Models
 	        StatusId = answer.StatusId;
 			//Status.UpdateFromViewModel(answer.Status);
         }
-    }
+
+        public UserType AnswerByUserType
+        {
+	        get
+	        {
+		        if (OrganisationUserId.HasValue && !ParentAnswerId.HasValue)
+		        {
+			        return UserType.OrganisationalCommenter;
+		        }
+		        if (ParentAnswerId.HasValue || (!string.IsNullOrEmpty(CreatedByUserId) && OrganisationId.HasValue))
+		        {
+			        return UserType.OrganisationLead;
+		        }
+		        return UserType.IndividualCommenter;
+	        }
+        }
+	}
 }

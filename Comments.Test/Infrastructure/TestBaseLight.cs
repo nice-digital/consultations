@@ -20,7 +20,7 @@ namespace Comments.Test.Infrastructure
 	public class TestBaseLight
 	{
 
-		protected static (TestServer testServer, HttpClient httpClient) InitialiseServerAndClient(ConsultationsContext dbContext, IUserService fakeUserService = null)
+		protected static (TestServer testServer, HttpClient httpClient) InitialiseServerAndClient(ConsultationsContext dbContext, IUserService fakeUserService = null, IConsultationService fakeConsultationService = null)
 		{
 			AppSettings.AuthenticationConfig = new AuthenticationConfig { ClientId = "test client id", AuthorisationServiceUri = "http://www.example.com" };
 			AppSettings.GlobalNavConfig = new GlobalNavConfig { CookieBannerScript = "//a-fake-cookiebannerscript-url" };
@@ -36,6 +36,11 @@ namespace Comments.Test.Infrastructure
 					if (fakeUserService != null)
 					{
 						services.TryAddTransient<IUserService>(provider => fakeUserService);
+					}
+
+					if (fakeConsultationService != null)
+					{
+						services.TryAddTransient<IConsultationService>(provider => fakeConsultationService);
 					}
 
 					services.AddMvc(opt => opt.Filters.Add(new AllowAnonymousFilter()));

@@ -3,6 +3,7 @@ using System.Linq;
 using Comments.Common;
 using Comments.ViewModels;
 using Comments.Models;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Comments.Services
 {
@@ -59,17 +60,18 @@ namespace Comments.Services
             if (answerInDatabase == null)
                 return (rowsUpdated: 0, validate: new Validate(valid: false, notFound: true, message: $"Answer id:{answerId} not found trying to edit answer for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
 
-			var consultationId = ConsultationsUri.ParseConsultationsUri(answerInDatabase.Question.Location.SourceURI).ConsultationId;
-			if (_currentUser.IsAuthenticatedByOrganisationCookieForThisConsultation(consultationId))
-			{
-				if (!answerInDatabase.OrganisationUserId.HasValue || !_currentUser.IsAuthorisedByOrganisationUserId(answerInDatabase.OrganisationUserId.Value))
-					return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: $"Organisation cookie user tried to edit answer id: {answerId}, but it's not their answer"));
-			}
-			else //accounts auth
-			{
-	            if (!answerInDatabase.CreatedByUserId.Equals(_currentUser.UserId, StringComparison.OrdinalIgnoreCase))
-		            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to edit answer id: {answerId}, but it's not their answer"));
-            }
+            // Answers created by individal commenters can only be edited by that commenter.
+            if (answerInDatabase.AnswerByUserType == UserType.IndividualCommenter && !_currentUser.UserId.Equals(answerInDatabase.CreatedByUserId))
+	            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to edit answer id: {answerId}, but it's not their answer"));
+
+            // Answers created by organisational commenters and not yet submitted to a lead can only be edited by that commenter
+            if (answerInDatabase.AnswerByUserType == UserType.OrganisationalCommenter && !_currentUser.ValidatedOrganisationUserIds.Any(o => o.Equals(answerInDatabase.OrganisationUserId)))
+	            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: $"Organisation commenter tried to edit answer id: {answerId}, but it's not their answer"));
+
+            // Answers submitted to organisational leads or created by organisational leads can be edited by any leads for that organisation
+            if (answerInDatabase.AnswerByUserType == UserType.OrganisationLead && !_currentUser.OrganisationsAssignedAsLead.Any(o => o.OrganisationId.Equals(answerInDatabase.OrganisationId)))
+	            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: $"Organisation lead tried to edit answer id: {answerId}, but it's not from their organisation"));
+
 
 			answer.LastModifiedByUserId = _currentUser.UserId;
 	        answer.LastModifiedDate = DateTime.UtcNow;
@@ -87,19 +89,19 @@ namespace Comments.Services
             if (answerInDatabase == null)
                 return (rowsUpdated: 0, validate: new Validate(valid: false, notFound: true, message: $"Answer id:{answerId} not found trying to delete answer for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
 
-			var consultationId = ConsultationsUri.ParseConsultationsUri(answerInDatabase.Question.Location.SourceURI).ConsultationId;
-            if (_currentUser.IsAuthenticatedByOrganisationCookieForThisConsultation(consultationId))
-            {
-				if (!answerInDatabase.OrganisationUserId.HasValue || !_currentUser.IsAuthorisedByOrganisationUserId(answerInDatabase.OrganisationUserId.Value))
-					return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: $"Organisation cookie user tried to delete answer id: {answerId}, but it's not their answer"));
-			}
-            else //accounts auth
-            {
-				if (!answerInDatabase.CreatedByUserId.Equals(_currentUser.UserId))
-					return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to delete answer id: {answerId}, but it's not their answer"));
-			}
-			
-            _context.Answer.Remove(answerInDatabase);
+            // Answers created by individal commenters can only be deleted by that commenter.
+			if (answerInDatabase.AnswerByUserType == UserType.IndividualCommenter && !_currentUser.UserId.Equals(answerInDatabase.CreatedByUserId))
+				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to delete answer id: {answerId}, but it's not their answer"));
+
+			// Answers created by organisational commenters and not yet submitted to a lead can only be deleted by that commenter
+			if (answerInDatabase.AnswerByUserType == UserType.OrganisationalCommenter && !_currentUser.ValidatedOrganisationUserIds.Any(o => o.Equals(answerInDatabase.OrganisationUserId)))
+				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: $"Organisation commenter tried to delete answer id: {answerId}, but it's not their answer"));
+
+			// Answers submitted to organisational leads or created by organisational leads can be deleted by any leads for that organisation
+			if (answerInDatabase.AnswerByUserType == UserType.OrganisationLead && !_currentUser.OrganisationsAssignedAsLead.Any(o => o.OrganisationId.Equals(answerInDatabase.OrganisationId)))
+				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: $"Organisation lead tried to delete answer id: {answerId}, but it's not from their organisation"));
+
+			_context.Answer.Remove(answerInDatabase);
 
 			return (rowsUpdated: _context.SaveChanges(), validate: null);
 		}

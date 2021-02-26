@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Comments.Models;
 using Comments.Services;
 using Comments.ViewModels;
 using Location = Comments.Models.Location;
+using Submission = Comments.ViewModels.Submission;
 
 namespace Comments.Test.Infrastructure
 {
@@ -28,5 +30,10 @@ namespace Comments.Test.Infrastructure
 	    {
 		    return new ConsultationState(DateTime.MinValue, DateTime.MaxValue, true, true, true, DateTime.MaxValue, null);
 	    }
-    }
+
+		public (int rowsUpdated, Validate validate, ConsultationsContext context) SubmitToLead(SubmissionToLead submission)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

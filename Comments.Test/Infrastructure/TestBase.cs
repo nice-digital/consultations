@@ -364,13 +364,13 @@ namespace Comments.Test.Infrastructure
 
             return question.QuestionId;
         }
-        protected int AddAnswer(int questionId, string userId, string answerText, int status = (int)StatusName.Draft, ConsultationsContext passedInContext = null, int? organisationUserId = null, int? parentAnswerId = null)
+        protected int AddAnswer(int questionId, string userId, string answerText, int status = (int)StatusName.Draft, ConsultationsContext passedInContext = null, int? organisationUserId = null, int? parentAnswerId = null, int? organisationId = null)
         {
-            var answer = new Answer(questionId, userId, answerText, null, null, status, null, organisationUserId, parentAnswerId);
+            var answer = new Answer(questionId, userId, answerText, null, null, status, null, organisationUserId, parentAnswerId, organisationId);
             answer.LastModifiedDate = DateTime.Now;
             if (passedInContext != null)
             {
-                var a = passedInContext.Answer.Add(answer);
+                passedInContext.Answer.Add(answer);
                 passedInContext.SaveChanges();
             }
             else

@@ -17,6 +17,8 @@ jest.mock("../../../context/UserContext", () => {
 			Consumer: (props) => {
 				return props.children({
 					isAuthorised: true,
+					isOrganisationCommenter: true,
+					organisationName: "Really Cool Org",
 				});
 			},
 		},

@@ -109,8 +109,8 @@ namespace Comments.Models
 			var sortedData = data.Where(l => l.Comment.Count > 0 || l.Question.Count > 0)
 				.OrderBy(l => l.Order).ThenByDescending(l =>
 					l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault());
-			
-			return sortedData; 
+
+			return sortedData;
 		}
 
 		public IEnumerable<Location> GetQuestionsForDocument(IList<string> sourceURIs, bool partialMatchSourceURI)
@@ -271,13 +271,54 @@ namespace Comments.Models
 	    {
 		    var commentsToUpdate = Comment.Where(c => commentIds.Contains(c.CommentId)).ToList();
 
-		    if (commentsToUpdate.Any(c => c.CreatedByUserId != _createdByUserID))
-			    throw new Exception("Attempt to update status of a comment which doesn't belong to the current user");
+			// Comments created by individual commenters can only be submitted by that user, updating the status of those comments
+			if(commentsToUpdate.Any(c=>c.CommentByUserType == UserType.IndividualCommenter && c.CreatedByUserId != _createdByUserID))
+				throw new Exception("Attempt to update status of a comment which doesn't belong to the current user");
 
-		    commentsToUpdate.ForEach(c => c.StatusId = status.StatusId);
+			// Comments created by organisational commenters are submitted to their organisation lead only by that organisational commenter, updating the status of those comments
+			if(commentsToUpdate.Any(c => c.CommentByUserType == UserType.OrganisationalCommenter &&  !_organisationUserIDs.Any(o=> o.Equals(c.OrganisationUserId))))
+				throw new Exception("Attempt to update status of a comment which doesn't belong to the current organisation code user");
+
+			// Comments that have been submitted to organisational leads, or created by those leads, can be submitted by any lead in that organisation, updating the status of those comments
+			if (commentsToUpdate.Any(c => c.CommentByUserType == UserType.OrganisationLead && c.OrganisationId != _organisationalLeadOrganisationID))
+				throw new Exception("Attempt to update status of a comment which doesn't belong to the current organisation lead users organisation");
+
+			commentsToUpdate.ForEach(c => c.StatusId = status.StatusId);
 		}
 
-	    public void AddSubmissionComments(IEnumerable<int> commentIds, int submissionId)
+	    public void DuplicateComment(IEnumerable<int> commentIds)
+	    {
+		    var commentsToDuplicate = Comment.Where(c => commentIds.Contains(c.CommentId)).ToList();
+
+		    var status = GetStatus(StatusName.SubmittedToLead);
+			commentsToDuplicate.ForEach(c => c.StatusId = status.StatusId);
+
+			status = GetStatus(StatusName.Draft);
+
+		    foreach (var comment in commentsToDuplicate)
+			{
+				var commentToSave = new Models.Comment(comment.LocationId, null, comment.CommentText, comment.LastModifiedByUserId, comment.Location,status.StatusId, status, comment.OrganisationUserId, comment.CommentId, comment.OrganisationId);
+				Comment.Add(commentToSave);
+			}
+	    }
+
+		public void DuplicateAnswer(IEnumerable<int> answerIds)
+		{
+			var answersToDuplicate = Answer.Where(c => answerIds.Contains(c.AnswerId)).ToList();
+
+			var status = GetStatus(StatusName.SubmittedToLead);
+			answersToDuplicate.ForEach(c => c.StatusId = status.StatusId);
+
+			status = GetStatus(StatusName.Draft);
+
+			foreach (var answer in answersToDuplicate)
+			{
+				var answerToSave = new Models.Answer(answer.QuestionId, null, answer.AnswerText, answer.AnswerBoolean, answer.Question, status.StatusId, status, answer.OrganisationUserId, answer.AnswerId, answer.OrganisationId);
+				Answer.Add(answerToSave);
+			}
+		}
+
+		public void AddSubmissionComments(IEnumerable<int> commentIds, int submissionId)
 	    {
 			//the extra DB hit here is to ensure that duplicate rows aren't inserted. currently, you should only be able to submit a comment once. in the future though that might change as resubmitting is on the cards, and the DB supports that now.
 		    var existingSubmissionCommentIdsForPassedInComments = SubmissionComment.Where(sc => commentIds.Contains(sc.CommentId)).Select(sc => sc.CommentId).ToList();
@@ -292,10 +333,19 @@ namespace Comments.Models
 		{
 			var answersToUpdate = Answer.Where(a => answerIds.Contains(a.AnswerId)).ToList();
 
-			if (answersToUpdate.Any(a => a.CreatedByUserId != _createdByUserID))
+			// Answers created by individual commenters can only be submitted by that user, updating the status of those answers
+			if (answersToUpdate.Any(a => a.AnswerByUserType == UserType.IndividualCommenter && a.CreatedByUserId != _createdByUserID))
 				throw new Exception("Attempt to update status of an answer which doesn't belong to the current user");
 
-			answersToUpdate.ForEach(c => c.StatusId = status.StatusId);
+			// Answers created by organisational commenters are submitted to their organisation lead only by that organisational commenter, updating the status of those answers
+			if (answersToUpdate.Any(a => a.AnswerByUserType == UserType.OrganisationalCommenter && !_organisationUserIDs.Any(o => o.Equals(a.OrganisationUserId))))
+				throw new Exception("Attempt to update status of an answer which doesn't belong to the current organisation code user");
+
+			// Answers that have been submitted to organisational leads, or created by those leads, can be submitted by any lead in that organisation, updating the status of those answers
+			if (answersToUpdate.Any(a => a.AnswerByUserType == UserType.OrganisationLead && a.OrganisationId != _organisationalLeadOrganisationID))
+				throw new Exception("Attempt to update status of an answer which doesn't belong to the current organisation lead users organisation");
+
+			answersToUpdate.ForEach(a => a.StatusId = status.StatusId);
 		}
 
 	    public void AddSubmissionAnswers(IEnumerable<int> answerIds, int submissionId)
@@ -310,7 +360,7 @@ namespace Comments.Models
 		    SubmissionAnswer.AddRange(submissionAnswersToInsert);
 	    }
 
-	    public Submission InsertSubmission(string currentUser, bool respondingAsOrganisation, string organisationName, bool hasTobaccoLinks, string tobaccoDisclosure, bool? organisationExpressionOfInterest)
+	    public Submission InsertSubmission(string currentUser, bool? respondingAsOrganisation, string organisationName, bool? hasTobaccoLinks, string tobaccoDisclosure, bool? organisationExpressionOfInterest)
 	    {
 		    var submission = new Models.Submission(currentUser, DateTime.UtcNow, respondingAsOrganisation, organisationName, hasTobaccoLinks, tobaccoDisclosure, organisationExpressionOfInterest);
 		    Submission.Add(submission);
@@ -800,12 +850,12 @@ namespace Comments.Models
 		/// <returns></returns>
 		public IEnumerable<KeyValuePair<string, Status>> GetAllSourceURIsTheCurrentUserHasCommentedOrAnsweredAQuestion()
 		{
-			var comments = Comment 
+			var comments = Comment
 				.Include(l => l.Location)
 				.Include(s => s.Status)
 				.ToList();
 
-			var answers = Answer 
+			var answers = Answer
 				.Include(q => q.Question)
 				.ThenInclude(l => l.Location)
 				.Include(s => s.Status)
@@ -859,6 +909,18 @@ namespace Comments.Models
 			return organisationUser;
 		}
 
+		public OrganisationUser UpdateEmailAddressForOrganisationUser(string emailAddress, int organisationUserId)
+		{
+			var organisationUser = OrganisationUser
+				.Where(ou => ou.OrganisationUserId.Equals(organisationUserId))
+				.Single();
+
+			organisationUser.EmailAddress = emailAddress;
+
+			SaveChanges();
+			return organisationUser;
+		}
+
 		public OrganisationUser GetOrganisationUser(Guid sessionId)
 		{
 			return GetOrganisationUsers(new List<Guid> {sessionId}).FirstOrDefault();
@@ -871,6 +933,11 @@ namespace Comments.Models
 					.Include(ou => ou.OrganisationAuthorisation).
 					ThenInclude(a => a.Location)
 					.Where(ou => sessionIds.Contains(ou.AuthorisationSession));
+		}
+
+		public IEnumerable<OrganisationUser> GetOrganisationUsersByOrganisationUserIds(IEnumerable<int> organisationUserIds)
+		{
+			return OrganisationUser.Where(ou => organisationUserIds.Contains(ou.OrganisationUserId));
 		}
 
 
@@ -898,6 +965,5 @@ namespace Comments.Models
 				.Any(c => c.OrganisationUser.OrganisationAuthorisation.OrganisationId.Equals(organisationId));
 
 		}
-
-    }
+	}
 }
