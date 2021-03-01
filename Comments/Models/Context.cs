@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using Comments.Common;
 
 namespace Comments.Models
 {
@@ -112,6 +113,54 @@ namespace Comments.Models
 					l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault());
 
 			return sortedData;
+		}
+
+		/// <summary>
+		/// Organisation users view each others submitted responses to inform their own, but can't interact with or submit them.
+		/// </summary>
+		/// <param name="sourceURIs"></param>
+		/// <param name="partialMatchSourceURI">True if data is being retrieved for the review page</param>
+		/// <returns></returns>
+		public OrganisationCommentsAndQuestions GetOtherOrganisationUsersCommentsAndQuestionsForDocument(IList<string> sourceURIs)
+		{
+
+			var comments = Comment.IgnoreQueryFilters()
+				.Where(c => c.Location.Order != null
+                       && sourceURIs.Contains(c.Location.SourceURI, StringComparer.OrdinalIgnoreCase)
+                       && c.StatusId == (int) StatusName.SubmittedToLead
+                       && _organisationIDs != null
+                       && c.OrganisationId.HasValue
+                       && _organisationIDs.Any(o => o.Equals(c.OrganisationId)))
+				.Include(c => c.SubmissionComment)
+					.ThenInclude(s => s.Submission)
+				.Include(c => c.Status)
+				.Include(c => c.OrganisationUser)
+				.Include(c=> c.Location)
+				.OrderBy(c => c.Location.Order)
+				.ToList();
+
+			var questions = Question.IgnoreQueryFilters()
+				.Where(q => q.Location.Order != null
+				            && sourceURIs.Contains(q.Location.SourceURI, StringComparer.OrdinalIgnoreCase)
+				            && q.Answer.Any(a => a.StatusId == (int) StatusName.SubmittedToLead)
+				            && _organisationIDs != null
+				            && q.Answer.Any(a => a.OrganisationId.HasValue)
+				            && q.Answer.Any(a => _organisationIDs.Contains((int)a.OrganisationId)))
+				.Include(q => q.QuestionType)
+				.Include(q => q.Answer)
+					.ThenInclude(a => a.SubmissionAnswer)
+				.Include(q => q.Answer)
+					.ThenInclude(a => a.OrganisationUser)
+				.Include(q => q.Location)
+				.OrderBy(q => q.Location.Order)
+				.ToList();
+
+			var convertedData =
+				ModelConverters.ConvertCommentsAndQuestionsToCommentsAndQuestionsViewModels(questions, comments);
+
+			var data = new OrganisationCommentsAndQuestions(convertedData.questions, convertedData.comments);
+
+			return data;
 		}
 
 		public IEnumerable<Location> GetQuestionsForDocument(IList<string> sourceURIs, bool partialMatchSourceURI)

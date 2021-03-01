@@ -16,6 +16,7 @@ namespace Comments.Services
     {
 	    CommentsAndQuestions GetCommentsAndQuestions(string relativeURL, IUrlHelper urlHelper);
 	    ReviewPageViewModel GetCommentsAndQuestionsForReview(string relativeURL, IUrlHelper urlHelper, ReviewPageViewModel model);
+	    OrganisationCommentsAndQuestions GetCommentsAndQuestionsFromOtherOrganisationCommenters(string relativeURL, IUrlHelper urlHelper);
 		(ViewModels.Comment comment, Validate validate) GetComment(int commentId);
         (int rowsUpdated, Validate validate) EditComment(int commentId, ViewModels.Comment comment);
         (ViewModels.Comment comment, Validate validate) CreateComment(ViewModels.Comment comment);
@@ -207,6 +208,20 @@ namespace Comments.Services
 			var consultationId = ConsultationsUri.ParseRelativeUrl(relativeURL).ConsultationId;
 			model.Filters = GetFilterGroups(consultationId, commentsAndQuestions, model.Type, model.Document);
 			return model;
+		}
+
+		public OrganisationCommentsAndQuestions GetCommentsAndQuestionsFromOtherOrganisationCommenters(string relativeURL, IUrlHelper urlHelper)
+		{
+			var user = _userService.GetCurrentUser();
+			
+			var consultationSourceURI = ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Consultation);
+			var sourceURIs = new List<string> { consultationSourceURI };
+			sourceURIs.Add(ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Document));
+			sourceURIs.Add(ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Chapter));
+
+			var data = _context.GetOtherOrganisationUsersCommentsAndQuestionsForDocument(sourceURIs);
+
+			return data;
 		}
 
 		/// <summary>

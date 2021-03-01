@@ -16,5 +16,22 @@ namespace Comments.Common
 		    }
 		    return (commentsData, questionsData);
 	    }
+
+	    public static (IList<ViewModels.Comment> comments, IList<ViewModels.Question> questions) ConvertCommentsAndQuestionsToCommentsAndQuestionsViewModels(List<Models.Question> questions, List<Models.Comment> comments)
+	    {
+		    var commentsData = new List<ViewModels.Comment>();
+		    foreach (var comment in comments)
+		    {
+			    commentsData.Add(new ViewModels.Comment(comment.Location, comment));
+		    }
+
+			var questionsData = new List<ViewModels.Question>();
+			foreach (var question in questions)
+			{
+				questionsData.Add(new ViewModels.Question(question.Location, question));
+			}
+
+			return (commentsData, questionsData);
+	    }
 	}
 }
