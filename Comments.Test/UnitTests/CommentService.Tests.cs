@@ -293,6 +293,35 @@ namespace Comments.Test.UnitTests
 	        //Assert
 	        viewModel.Comments.Single().CommentId.ShouldBe(expectedCommentId);
         }
+
+        [Fact] public void Only_return_comments_from_my_organisation_which_have_been_submitted_to_lead()
+        {
+	        // Arrange
+	        ResetDatabase();
+	        _context.Database.EnsureCreated();
+
+	        var sessionId = Guid.NewGuid();
+	        var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+	        const int organisationUserId = 1;
+			const int organisationId = 1;
+
+	        var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: null, organisationUserId: organisationUserId);
+	        var context = new ConsultationsContext(_options, userService, _fakeEncryption);
+	        var commentService = new CommentService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService, _fakeHttpContextAccessor);
+	        var locationId = AddLocation(sourceURI);
+
+	        AddComment(locationId, "current user's comment", createdByUserId: null, organisationUserId: organisationUserId, organisationId: organisationId);
+	        AddComment(locationId, "another user from my organisations comment logged in with cookie not submitted", null, status: (int)StatusName.Draft, organisationUserId: 9999, organisationId: organisationId);
+			AddComment(locationId, "another user from my organisations comment logged in with cookie", null, status: (int)StatusName.SubmittedToLead, organisationUserId: 8888, organisationId: organisationId);
+			AddComment(locationId, "another user from a different organisation comment logged in with cookie", createdByUserId: null, status: (int)StatusName.SubmittedToLead, organisationUserId: 7777, organisationId: 2);
+
+	        // Act
+	        var viewModel = commentService.GetCommentsAndQuestionsFromOtherOrganisationCommenters("/1/1/introduction", _urlHelper);
+
+	        //Assert
+	        viewModel.Comments.Count.Equals(1);
+			viewModel.Comments.Single().CommentText.ShouldBe("another user from my organisations comment logged in with cookie");
+        }
 	}
 }
 
