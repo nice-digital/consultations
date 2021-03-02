@@ -351,7 +351,7 @@ export class Review extends Component<PropsType, StateType> {
 			});
 	};
 
-	submitToLead = () => {
+	submitToLead = (organisationName) => {
 		const comments = this.state.comments;
 		const questions = this.state.questions;
 		const emailAddress = this.state.emailAddress;
@@ -367,6 +367,8 @@ export class Review extends Component<PropsType, StateType> {
 			emailAddress,
 			comments,
 			answers: answersToSubmit,
+			organisationName,
+			respondingAsOrganisation: true,
 		}, true)
 			.then(response => {
 				tagManager({

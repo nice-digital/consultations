@@ -47,7 +47,7 @@ export class SubmitResponseDialog extends Component {
 
 	handleSubmitToLeadClick = () => {
 		if (this.props.validToSubmit && this.emailRef.current.validity.valid && this.props.unsavedIds.length === 0) {
-			this.props.submitToLead();
+			this.props.submitToLead(this.props.organisationName);
 		} else {
 			this.setState({
 				feedbackVisible: true,

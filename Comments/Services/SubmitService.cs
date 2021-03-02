@@ -80,7 +80,7 @@ namespace Comments.Services
 			var consultationId = ConsultationsUri.ParseConsultationsUri(anySourceURI).ConsultationId;
 			var organisationUserId = _currentUser.ValidatedSessions.FirstOrDefault(session => session.ConsultationId.Equals(consultationId))?.OrganisationUserId;
 
-			var submissionToSave = _context.InsertSubmission(_currentUser.UserId, null, null, null, null, null);
+			var submissionToSave = _context.InsertSubmission(_currentUser.UserId, submission.RespondingAsOrganisation, submission.OrganisationName, null, null, null);
 
 			var submittedStatus = _context.GetStatus(StatusName.SubmittedToLead);
 
