@@ -280,7 +280,7 @@ namespace Comments.Test.UnitTests
 
 			//Act
 			var commentsAndQuestions = await commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
-			var result = await submitService.SubmitToLead(new ViewModels.SubmissionToLead(commentsAndQuestions.Comments, new List<ViewModels.Answer>(), "testemail@nice.org.uk"));
+			var result = await submitService.SubmitToLead(new ViewModels.SubmissionToLead(commentsAndQuestions.Comments, new List<ViewModels.Answer>(), "testemail@nice.org.uk", true, "Organisation"));
 
 			//Assert
 			result.rowsUpdated.ShouldBe(3);
@@ -325,7 +325,7 @@ namespace Comments.Test.UnitTests
 
 			//Act
 			var commentsAndQuestions = await commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
-			var result = await submitService.SubmitToLead(new ViewModels.SubmissionToLead(new List<ViewModels.Comment>(), commentsAndQuestions.Questions.First().Answers, "testemail@nice.org.uk"));
+			var result = await submitService.SubmitToLead(new ViewModels.SubmissionToLead(new List<ViewModels.Comment>(), commentsAndQuestions.Questions.First().Answers, "testemail@nice.org.uk", true, "Organisation"));
 
 			//Assert
 			result.rowsUpdated.ShouldBe(3);
