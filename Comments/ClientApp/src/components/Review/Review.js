@@ -355,7 +355,6 @@ export class Review extends Component<PropsType, StateType> {
 		const comments = this.state.comments;
 		const questions = this.state.questions;
 		const emailAddress = this.state.emailAddress;
-		const respondingAsOrganisation = true;
 
 		let answersToSubmit = [];
 		questions.forEach(function (question) {
