@@ -99,7 +99,7 @@ namespace Comments.Test.IntegrationTests.API.Submit
 
 			var commentsAndQuestions = await commentService.GetCommentsAndQuestions(sourceURI, new FakeUrlHelper());
 
-			var submissionToLead = new SubmissionToLead(commentsAndQuestions.Comments, commentsAndQuestions.Questions.First().Answers, emailAddress);
+			var submissionToLead = new SubmissionToLead(commentsAndQuestions.Comments, commentsAndQuestions.Questions.First().Answers, emailAddress, true, "Organisation");
 			var content = new StringContent(JsonConvert.SerializeObject(submissionToLead), Encoding.UTF8, "application/json");
 
 			var (_server, _client) = InitialiseServerAndClient(context, userService, fakeConsultationService);

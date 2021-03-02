@@ -7,11 +7,13 @@ namespace Comments.ViewModels
     {
 	    public SubmissionToLead() {} //this is here for the model binding.
 
-	    public SubmissionToLead(IList<Comment> comments, IList<Answer> answers, string emailAddress)
+	    public SubmissionToLead(IList<Comment> comments, IList<Answer> answers, string emailAddress, bool respondingAsOrganisation, string organisationName)
 		{
 			_comments = comments;
 			_answers = answers;
 			EmailAddress = emailAddress;
+			RespondingAsOrganisation = respondingAsOrganisation;
+			OrganisationName = organisationName;
 		}
 
 	    private IList<Comment> _comments = new List<Comment>();
@@ -39,7 +41,8 @@ namespace Comments.ViewModels
 		}
 
 	    public string EmailAddress { get; set; }
-
+	    public bool RespondingAsOrganisation { get; set; }
+	    public string OrganisationName { get; set; }
 
 		public IList<string> SourceURIs
 	    {
