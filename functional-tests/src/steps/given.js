@@ -17,7 +17,7 @@ Given(
 		browser.waitForVisible("[data-qa-sel='comment-on-consultation-document']");
 		browser.click("[data-qa-sel='comment-on-consultation-document']");
 		browser.pause(1000);
-		browser.waitForVisible("body [data-qa-sel='comment-box-title']", 10000);
+		browser.waitForVisible("body [data-qa-sel='comment-box-title']", 20000);
 	}
 );
 
@@ -28,7 +28,7 @@ Given(
 		browser.waitForVisible("[data-qa-sel='comment-on-consultation-document']");
 		browser.click("[data-qa-sel='comment-on-consultation-document']");
 		browser.pause(1000);
-		browser.waitForVisible("body [data-qa-sel='comment-box-title']", 10000);
+		browser.waitForVisible("body [data-qa-sel='comment-box-title']", 20000);
 	}
 );
 
