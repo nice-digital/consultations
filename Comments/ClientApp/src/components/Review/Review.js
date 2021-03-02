@@ -368,8 +368,8 @@ export class Review extends Component<PropsType, StateType> {
 			emailAddress,
 			comments,
 			answers: answersToSubmit,
-			organisationName: respondingAsOrganisation ? organisationName : null,
-			respondingAsOrganisation,
+			organisationName,
+			respondingAsOrganisation: true,
 		}, true)
 			.then(response => {
 				tagManager({
