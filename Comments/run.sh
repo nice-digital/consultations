@@ -45,7 +45,7 @@ jq \
     .AppSettings.Environment.SecureSite = $appSettingsEnvironmentSecureSite |
     .AppSettings.Environment.Realm = $appSettingsEnvironmentRealm |
     .AppSettings.Environment.AccountsEnvironment = $appSettingsEnvironmentAccountsEnv |
-    .Feeds.IndevApiKey = $indevApiKey |
+    .Feeds.ApiKey = $indevApiKey |
     .Feeds.IndevBasePath = $indevBasePath |
     .Feeds.IndevPublishedChapterFeedPath = $indevPublishedChapterFeedPath |
     .Feeds.IndevDraftPreviewChapterFeedPath = $indevDraftPreviewChapterFeedPath |
