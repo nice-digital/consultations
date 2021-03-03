@@ -59,6 +59,7 @@ type StateType = {
 	endDate: string,
 	enableOrganisationalCommentingFeature: boolean,
 	allowOrganisationCodeLogin: Boolean,
+	isCurrentlyAuthorised: boolean,
 };
 
 export class CommentList extends Component<PropsType, StateType> {
@@ -81,6 +82,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			endDate: "",
 			enableOrganisationalCommentingFeature: false,
 			allowOrganisationCodeLogin: false,
+			isCurrentlyAuthorised: false,
 		};
 
 		let preloadedData = {};
@@ -91,41 +93,77 @@ export class CommentList extends Component<PropsType, StateType> {
 
 		const enableOrganisationalCommentingFeature = ((preloadedData && preloadedData.organisationalCommentingFeature) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["organisationalCommentingFeature"]));
 
+		const isLoggedIn = ((preloadedData && preloadedData.displayName) || (canUseDOM() && window.__PRELOADED__ && (window.__PRELOADED__["displayName"] !== null)));
+
 		const preloadedCommentsData = preload(
 			this.props.staticContext,
-			"comments",
+			(isLoggedIn ? "comments" : "commentsForOtherOrgCommenters"),
 			[],
 			{sourceURI: this.props.match.url},
 			preloadedData,
 		);
 
 		if (preloadedCommentsData) {
-			let allowComments = preloadedCommentsData.consultationState.consultationIsOpen && !preloadedCommentsData.consultationState.submittedDate;
 			this.state = {
+				allowComments: true,
+				error: "",
 				comments: preloadedCommentsData.comments,
 				questions: preloadedCommentsData.questions,
 				loading: false,
-				allowComments: allowComments,
-				error: "",
 				initialDataLoaded: true,
-				viewComments: preloadedCommentsData.consultationState.shouldShowCommentsTab,
-				shouldShowDrawer: preloadedCommentsData.consultationState.shouldShowDrawer,
-				shouldShowCommentsTab: preloadedCommentsData.consultationState.shouldShowCommentsTab,
-				shouldShowQuestionsTab: preloadedCommentsData.consultationState.shouldShowQuestionsTab,
+				viewComments: true,
+				shouldShowDrawer: true,
+				shouldShowCommentsTab: true,
+				shouldShowQuestionsTab: true,
 				drawerOpen: false,
 				drawerMobile: false,
 				unsavedIds: [],
-				endDate: preloadedCommentsData.consultationState.endDate,
+				endDate: "",
 				enableOrganisationalCommentingFeature,
-				allowOrganisationCodeLogin: (preloadedCommentsData.consultationState.consultationIsOpen && enableOrganisationalCommentingFeature),
+				allowOrganisationCodeLogin: enableOrganisationalCommentingFeature,
+				isCurrentlyAuthorised: false,
 			};
+
+			if (isLoggedIn) {
+				let allowComments = preloadedCommentsData.consultationState.consultationIsOpen && !preloadedCommentsData.consultationState.submittedDate;
+
+				this.state = {
+					allowComments: allowComments,
+					//initialDataLoaded: true,
+					viewComments: preloadedCommentsData.consultationState.shouldShowCommentsTab,
+					shouldShowDrawer: preloadedCommentsData.consultationState.shouldShowDrawer,
+					shouldShowCommentsTab: preloadedCommentsData.consultationState.shouldShowCommentsTab,
+					shouldShowQuestionsTab: preloadedCommentsData.consultationState.shouldShowQuestionsTab,
+					// drawerOpen: false,
+					// drawerMobile: false,
+					// unsavedIds: [],
+					endDate: preloadedCommentsData.consultationState.endDate,
+					// enableOrganisationalCommentingFeature,
+					allowOrganisationCodeLogin: (preloadedCommentsData.consultationState.consultationIsOpen && enableOrganisationalCommentingFeature),
+				};
+			}
 		}
 	}
 
-	loadComments() {
+	// rename???
+	// need to set more state
+	loadCommentsFromOtherCodeUsers = () => {
+		load("commentsForOtherOrgCommenters", undefined, [], {sourceURI: this.props.match.url}).then(
+			function(response) {
+				this.setState({
+					comments: response.data.comments,
+					questions: response.data.questions,
+					loading: false,
+				});
+			}.bind(this))
+			.catch(err => console.log("load comments in commentlist " + err));
+	};
+
+	loadCommentsForCurrentUser = () => {
 		load("comments", undefined, [], {sourceURI: this.props.match.url}).then(
 			function(response) {
 				let allowComments = response.data.consultationState.consultationIsOpen && !response.data.consultationState.submittedDate;
+
 				this.setState({
 					comments: response.data.comments,
 					questions: response.data.questions,
@@ -139,27 +177,43 @@ export class CommentList extends Component<PropsType, StateType> {
 				});
 			}.bind(this))
 			.catch(err => console.log("load comments in commentlist " + err));
-	}
+	};
 
 	componentDidMount() {
+		const isCurrentlyAuthorised = this.context.isAuthorised;
+		const isOrganisationCommenter = this.context.isOrganisationCommenter;
+
+		let loadComments = isOrganisationCommenter ? this.loadCommentsFromOtherCodeUsers : this.loadCommentsForCurrentUser;
+
+		// condition for lead
+		// condition for codeUser unsubmitted if need to do two calls - use array instead
+
 		if (!this.state.initialDataLoaded) {
-			this.loadComments();
+			loadComments();
 		}
+
 		// We can't prerender whether we're on mobile cos SSR doesn't have a window
+		// sets isCurrentlyAuthorised from context
 		this.setState({
 			drawerMobile: this.isMobile(),
+			isCurrentlyAuthorised,
 		});
 	}
 
 	componentDidUpdate(prevProps: PropsType) {
-		const oldRoute = prevProps.location.pathname + prevProps.location.search;
-		const newRoute = this.props.location.pathname + this.props.location.search;
-		if (oldRoute !== newRoute) {
+		const routeChanged = (prevProps.location.pathname + prevProps.location.search) !== (this.props.location.pathname + this.props.location.search);
+		const authorisationChanged = this.state.isCurrentlyAuthorised !== this.context.isAuthorised;
+		const isOrganisationCommenter = this.context.isOrganisationCommenter;
+
+		let loadComments = isOrganisationCommenter ? this.loadCommentsFromOtherCodeUsers : this.loadCommentsForCurrentUser;
+
+		if (routeChanged || authorisationChanged) {
 			this.setState({
 				loading: true,
 				unsavedIds: [],
+				isCurrentlyAuthorised: this.context.isAuthorised,
 			});
-			this.loadComments();
+			loadComments();
 		}
 	}
 
@@ -484,3 +538,4 @@ export class CommentList extends Component<PropsType, StateType> {
 }
 
 export default withRouter(CommentList);
+CommentList.contextType = UserContext;
