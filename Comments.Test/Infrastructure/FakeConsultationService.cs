@@ -42,12 +42,12 @@ namespace Comments.Test.Infrastructure
 	    public ConsultationState GetConsultationState(string sourceURI, PreviewState previewState, IEnumerable<Location> locations = null,
 		    ConsultationBase consultation = null)
 	    {
-			return new ConsultationState(DateTime.MinValue, _consultationIsOpen ? _consultationEndDate.Value : DateTime.MinValue, true, true, true, null, null);
+			return new ConsultationState(DateTime.MinValue, _consultationIsOpen ? _consultationEndDate.Value : DateTime.MinValue, true, true, true, null, null, false);
 		}
 	    public ConsultationState GetConsultationState(int consultationId, int? documentId, string reference, PreviewState previewState, IEnumerable<Location> locations = null,
 		    ConsultationBase consultation = null)
 	    {
-		    return new ConsultationState(DateTime.MinValue, _consultationIsOpen ? DateTime.MaxValue : DateTime.MinValue, true, true, true, null, null);
+		    return new ConsultationState(DateTime.MinValue, _consultationIsOpen ? DateTime.MaxValue : DateTime.MinValue, true, true, true, null, null, false);
 	    }
 
 	    public IEnumerable<Consultation> GetConsultations()
