@@ -147,7 +147,6 @@ Array [
               >
                 <li>
                   <a
-                    className="btn btn--cta"
                     data-qa-sel="review-submitted-comments"
                     href="/1/review"
                     onClick={[Function]}
@@ -160,7 +159,7 @@ Array [
                     href="undefined/api/exportexternal/1"
                     onClick={[Function]}
                   >
-                    Download submitted response
+                    Download submitted response (Excel)
                   </a>
                 </li>
               </ul>,

@@ -553,6 +553,10 @@ export class Review extends Component<PropsType, StateType> {
 														consultationState={this.state.consultationData.consultationState}
 													/>
 
+													{this.state.submittedDate &&
+													<h2>Your response was submitted {contextValue.isOrganisationCommenter && !contextValue.isLead && `to ${contextValue.organisationName}`} on <Moment format="D MMMM YYYY" date={this.state.submittedDate}/>.</h2>
+													}
+
 													<ul className="list list--unstyled">
 														{this.state.submittedDate && this.state.consultationData.consultationState.supportsDownload &&
 															<li>
@@ -566,10 +570,10 @@ export class Review extends Component<PropsType, StateType> {
 																		});
 																	}}
 																	href={`${this.props.basename}/api/exportexternal/${this.props.match.params.consultationId}`}>
-																	Download submitted response</a>
+																	Download submitted response (Excel)</a>
 															</li>
 														}
-														{contextValue.isLead && 
+														{contextValue.isLead && this.state.consultationData.consultationState.leadHasBeenSentResponse &&
 															<li>
 																<a
 																	onClick={() => {
@@ -588,9 +592,8 @@ export class Review extends Component<PropsType, StateType> {
 
 													{this.state.submittedDate &&
 													<>
-														<p>Your response was submitted {contextValue.isOrganisationCommenter && `to ${contextValue.organisationName}`} on <Moment format="D MMMM YYYY" date={this.state.submittedDate}/>.</p>
 														<h2>What happens next?</h2>
-														{contextValue.isOrganisationCommenter ? (
+														{contextValue.isOrganisationCommenter && !contextValue.isLead ? (
 															<>
 																<p>{`${contextValue.organisationName}`} will review all the submissions received for this consultation.</p>
 																<p>NICE's response to all the submissions received will be published on the website around the time the final guidance is published.</p>

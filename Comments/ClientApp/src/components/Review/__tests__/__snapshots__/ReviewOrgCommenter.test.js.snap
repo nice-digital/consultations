@@ -135,10 +135,7 @@ Array [
                 "",
                 "",
               ]
-              <ul
-                className="list list--unstyled"
-              />
-              <p>
+              <h2>
                 Your response was submitted 
                 to Really Cool Org
                  on 
@@ -148,7 +145,10 @@ Array [
                   23 July 2019
                 </time>
                 .
-              </p>
+              </h2>
+              <ul
+                className="list list--unstyled"
+              />
               <h2>
                 What happens next?
               </h2>

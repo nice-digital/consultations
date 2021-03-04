@@ -163,8 +163,7 @@ export class Submitted extends Component<PropsType, StateType> {
 															<li>
 																<Link
 																	to={`/${this.props.match.params.consultationId}/review`}
-																	data-qa-sel="review-submitted-comments"
-																	className="btn btn--cta">
+																	data-qa-sel="review-submitted-comments">
 																	Review your response
 																</Link>
 															</li>
@@ -180,10 +179,10 @@ export class Submitted extends Component<PropsType, StateType> {
 																		});
 																	}}
 																	href={`${this.props.basename}/api/exportexternal/${this.props.match.params.consultationId}`}>
-																	Download submitted response</a>
+																	Download submitted response (Excel)</a>
 															</li>
 															}
-															{contextValue.isLead && 
+															{contextValue.isLead && this.state.consultationData.consultationState.leadHasBeenSentResponse &&
 															<li>
 																<a
 																	onClick={() => {
