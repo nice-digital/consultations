@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Comments.Common;
 using Comments.Models;
 using Comments.Services;
@@ -16,7 +17,7 @@ namespace Comments.Test.UnitTests
     public class SubmitServiceTests : Infrastructure.TestBase
 	{
 		[Fact]
-		public void Update_Comment_When_Submitted()
+		public async Task Update_Comment_When_Submitted()
 		{
 			//Arrange
 			ResetDatabase();
@@ -34,8 +35,8 @@ namespace Comments.Test.UnitTests
 			var commentId = AddComment(locationId, "Comment text", userId, (int)StatusName.Draft, _context);
 
 			//Act
-			var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
-			var result = submitService.Submit(new ViewModels.Submission(commentsAndQuestions.Comments, new List<ViewModels.Answer>()));
+			var commentsAndQuestions = await commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
+			var result = await submitService.Submit(new ViewModels.Submission(commentsAndQuestions.Comments, new List<ViewModels.Answer>()));
 
 			var comment = commentService.GetComment(commentId);
 
@@ -51,7 +52,7 @@ namespace Comments.Test.UnitTests
 		}
 
 		[Fact]
-		public void Update_Answer_When_Submitted()
+		public async Task Update_Answer_When_Submitted()
 		{
 			//Arrange
 			ResetDatabase();
@@ -72,8 +73,8 @@ namespace Comments.Test.UnitTests
 			var answerId = AddAnswer(questionId, userId, "Answer Label");
 
 			//Act
-			var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
-			var result = submitService.Submit(new ViewModels.Submission(new List<ViewModels.Comment>(), commentsAndQuestions.Questions.First().Answers));
+			var commentsAndQuestions = await commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
+			var result = await submitService.Submit(new ViewModels.Submission(new List<ViewModels.Comment>(), commentsAndQuestions.Questions.First().Answers));
 
 			var answer = answerService.GetAnswer(answerId);
 
@@ -254,7 +255,7 @@ namespace Comments.Test.UnitTests
 		}
 
 		[Fact]
-		public void SubmitToLead_CommentShouldBeDuplicatedAndStatusSetOnParentRecord()
+		public async Task SubmitToLead_CommentShouldBeDuplicatedAndStatusSetOnParentRecord()
 		{
 			//Arrange
 			ResetDatabase();
@@ -278,8 +279,8 @@ namespace Comments.Test.UnitTests
 			var commentId = AddComment(locationId, commentText, null, (int)StatusName.Draft, _context, organisationUserId, null, organisationId);
 
 			//Act
-			var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
-			var result = submitService.SubmitToLead(new ViewModels.SubmissionToLead(commentsAndQuestions.Comments, new List<ViewModels.Answer>(), "testemail@nice.org.uk", true, "Organisation"));
+			var commentsAndQuestions = await commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
+			var result = await submitService.SubmitToLead(new ViewModels.SubmissionToLead(commentsAndQuestions.Comments, new List<ViewModels.Answer>(), "testemail@nice.org.uk", true, "Organisation"));
 
 			//Assert
 			result.rowsUpdated.ShouldBe(3);
@@ -297,7 +298,7 @@ namespace Comments.Test.UnitTests
 		}
 
 		[Fact]
-		public void SubmitToLead_AnswerShouldBeDuplicatedAndStatusSetOnParentRecord()
+		public async Task SubmitToLead_AnswerShouldBeDuplicatedAndStatusSetOnParentRecord()
 		{
 			//Arrange
 			ResetDatabase();
@@ -323,8 +324,8 @@ namespace Comments.Test.UnitTests
 			var answerId = AddAnswer(questionId, null, answerText, (int)StatusName.Draft, _context, organisationUserId, null, organisationId);
 
 			//Act
-			var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
-			var result = submitService.SubmitToLead(new ViewModels.SubmissionToLead(new List<ViewModels.Comment>(), commentsAndQuestions.Questions.First().Answers, "testemail@nice.org.uk", true, "Organisation"));
+			var commentsAndQuestions = await commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
+			var result = await submitService.SubmitToLead(new ViewModels.SubmissionToLead(new List<ViewModels.Comment>(), commentsAndQuestions.Questions.First().Answers, "testemail@nice.org.uk", true, "Organisation"));
 
 			//Assert
 			result.rowsUpdated.ShouldBe(3);

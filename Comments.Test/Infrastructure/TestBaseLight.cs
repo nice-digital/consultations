@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using System.Net.Http;
+using NICE.Identity.Authentication.Sdk.TokenStore;
 
 namespace Comments.Test.Infrastructure
 {
@@ -32,6 +33,7 @@ namespace Comments.Test.Infrastructure
 					services.AddEntityFrameworkSqlite();
 
 					services.TryAddSingleton<ConsultationsContext>(dbContext);
+					services.TryAddSingleton<IApiTokenStore, FakeApiTokenStore>();
 
 					if (fakeUserService != null)
 					{

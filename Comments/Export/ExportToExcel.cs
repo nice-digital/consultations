@@ -431,7 +431,7 @@ namespace Comments.Export
 
 			foreach (var comment in comments)
 			{
-				var locationDetails = _exportService.GetLocationData(comment.Location);
+				var locationDetails = await _exportService.GetLocationData(comment.Location);
 				var commentOn = CommentOnHelpers.GetCommentOn(comment.Location.SourceURI, comment.Location.RangeStart, comment.Location.HtmlElementID);
 				
 				var excelrow = new Excel()
@@ -462,7 +462,7 @@ namespace Comments.Export
 
 			foreach (var answer in answers)
 			{
-				var locationDetails = _exportService.GetLocationData(answer.Question.Location);
+				var locationDetails = await _exportService.GetLocationData(answer.Question.Location);
 				var excelrow = new Excel()
 				{
 					ConsultationName = locationDetails.ConsultationName,
@@ -491,7 +491,7 @@ namespace Comments.Export
 
 			foreach (var question in questions)
 			{
-				var locationDetails = _exportService.GetLocationData(question.Location);
+				var locationDetails = await _exportService.GetLocationData(question.Location);
 				var excelrow = new Excel()
 				{
 					ConsultationName = locationDetails.ConsultationName,
@@ -667,7 +667,7 @@ namespace Comments.Export
 			// Add data to the worksheet
 			SheetData sheetData = worksheetPart.Worksheet.AppendChild(new SheetData());
 
-			var ConsultationTitle = GetConsultationTitle(comments, questions);
+			var ConsultationTitle = await GetConsultationTitle(comments, questions);
 			AppendTitleRow(sheetData, ConsultationTitle);
 
 			var collatedDataAndExpressionOfInterestFlag = await CollateData(comments, answers, questions);
@@ -686,13 +686,13 @@ namespace Comments.Export
 			spreadsheetDocument.Close();
 		}
 
-		private string GetConsultationTitle(IEnumerable<Models.Comment> comments, IEnumerable<Question> questions)
+		private async Task<string> GetConsultationTitle(IEnumerable<Models.Comment> comments, IEnumerable<Question> questions)
 		{
 			if (comments.Count() > 0)
-				return _exportService.GetConsultationName(comments.First().Location);
+				return await _exportService.GetConsultationName(comments.First().Location);
 				
 			if (questions.Count() > 0)
-				return _exportService.GetConsultationName(questions.First().Location);
+				return await _exportService.GetConsultationName(questions.First().Location);
 
 			return "";
 		}

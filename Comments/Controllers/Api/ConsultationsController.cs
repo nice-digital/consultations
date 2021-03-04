@@ -1,7 +1,8 @@
-﻿using Comments.Services;
+using Comments.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Comments.Controllers.Api
 {
@@ -23,9 +24,9 @@ namespace Comments.Controllers.Api
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public IEnumerable<ViewModels.Consultation> Get()
+        public async Task<IEnumerable<ViewModels.Consultation>> Get()
         {
-            return _consultationService.GetConsultations();
+            return await _consultationService.GetConsultations();
         }
     }
 }

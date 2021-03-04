@@ -3,15 +3,17 @@ using Comments.Models;
 using Comments.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Comments.Common;
 using NICE.Feeds;
+using NICE.Feeds.Indev.Models;
 
 namespace Comments.Services
 {
 	public interface ISubmitService
 	{
-		(int rowsUpdated, Validate validate) Submit(ViewModels.Submission submission);
-		(int rowsUpdated, Validate validate, ConsultationsContext context) SubmitToLead(ViewModels.SubmissionToLead submission);
+		Task<(int rowsUpdated, Validate validate)> Submit(ViewModels.Submission submission);
+		Task<(int rowsUpdated, Validate validate, ConsultationsContext context)> SubmitToLead(ViewModels.SubmissionToLead submission);
 	}
 
 	public class SubmitService : ISubmitService
@@ -27,7 +29,7 @@ namespace Comments.Services
 			_currentUser = userService.GetCurrentUser();
 		}
 
-		public (int rowsUpdated, Validate validate) Submit(ViewModels.Submission submission)
+		public async Task<(int rowsUpdated, Validate validate)> Submit(ViewModels.Submission submission)
 		{
 			if (!_currentUser.IsAuthenticatedByAnyMechanism)
 				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"Not logged in submitting comments and answers"));
@@ -38,7 +40,7 @@ namespace Comments.Services
 			if (anySourceURI == null)
 				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, message: "Could not find SourceURI"));
 
-			var consultationState = _consultationService.GetConsultationState(anySourceURI, PreviewState.NonPreview);
+			var consultationState = await _consultationService.GetConsultationState(anySourceURI, PreviewState.NonPreview);
 
 			if (!consultationState.ConsultationIsOpen)
 				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, message: "Consultation is not open for submissions"));
@@ -59,7 +61,7 @@ namespace Comments.Services
 			return (rowsUpdated: _context.SaveChanges(), validate: null);
 		}
 
-		public (int rowsUpdated, Validate validate, ConsultationsContext context) SubmitToLead(SubmissionToLead submission)
+		public async Task<(int rowsUpdated, Validate validate, ConsultationsContext context)> SubmitToLead(SubmissionToLead submission)
 		{
 			if (!_currentUser.IsAuthenticatedByOrganisationCookie)
 				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User not Authenticated"), null);
@@ -68,7 +70,7 @@ namespace Comments.Services
 			if (anySourceURI == null)
 				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "Could not find SourceURI"), null);
 
-			var consultationState = _consultationService.GetConsultationState(anySourceURI, PreviewState.NonPreview);
+			var consultationState = await _consultationService.GetConsultationState(anySourceURI, PreviewState.NonPreview);
 
 			if (!consultationState.ConsultationIsOpen)
 				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: false, message: "Consultation is not open for submissions"), null);

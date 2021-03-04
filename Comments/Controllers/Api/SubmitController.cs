@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Comments.Common;
 using Comments.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -28,7 +29,7 @@ namespace Comments.Controllers.Api
 		// POST: consultations/api/submit
 		[HttpPost]
 		[Route("consultations/api/[controller]")]
-		public IActionResult Post([FromBody] ViewModels.Submission submission)
+		public async Task<IActionResult> Post([FromBody] ViewModels.Submission submission)
 	    {
 		    if (!ModelState.IsValid)
 			{
@@ -39,7 +40,7 @@ namespace Comments.Controllers.Api
 				throw new ArgumentException(nameof(submission.TobaccoDisclosure));
 		    }
 
-			var result = _submitService.Submit(submission);
+			var result = await _submitService.Submit(submission);
 			var invalidResult = Validate(result.validate, _logger);
 
 			//just some temporary debug here:
@@ -56,12 +57,12 @@ namespace Comments.Controllers.Api
 		[HttpPost]
 		[Route("consultations/api/[controller]ToLead")]
 		[Authorize(AuthenticationSchemes = OrganisationCookieAuthenticationOptions.DefaultScheme + "," + AuthenticationConstants.AuthenticationScheme)]
-		public IActionResult PostSubmitToLead([FromBody] ViewModels.SubmissionToLead submissionToLead)
+		public async Task<IActionResult> PostSubmitToLead([FromBody] ViewModels.SubmissionToLead submissionToLead)
 	    {
 		    if (!ModelState.IsValid)
 			    return BadRequest(ModelState);
 		   
-		    var result = _submitService.SubmitToLead(submissionToLead);
+		    var result = await _submitService.SubmitToLead(submissionToLead);
 		    var invalidResult = Validate(result.validate, _logger);
 
 		    return invalidResult ?? Ok(submissionToLead);

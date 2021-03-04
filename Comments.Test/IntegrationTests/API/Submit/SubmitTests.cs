@@ -40,7 +40,7 @@ namespace Comments.Test.IntegrationTests.API.Submit
 
 			var commentService = new CommentService(_context, userService, _consultationService, _fakeHttpContextAccessor);
 
-			var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
+			var commentsAndQuestions = await commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
 			var viewModel = new ViewModels.Submission(commentsAndQuestions.Comments, commentsAndQuestions.Questions.First().Answers);
 
 			var content = new StringContent(JsonConvert.SerializeObject(viewModel), Encoding.UTF8, "application/json");
@@ -97,7 +97,7 @@ namespace Comments.Test.IntegrationTests.API.Submit
 			TestBaseDBHelpers.AddComment(context, locationId, commentText, null, (int)StatusName.Draft, organisationUserId, null, organisationId);
 			TestBaseDBHelpers.AddAnswer(context, questionId, organisationUserId: organisationUserId);
 
-			var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI, new FakeUrlHelper());
+			var commentsAndQuestions = await commentService.GetCommentsAndQuestions(sourceURI, new FakeUrlHelper());
 
 			var submissionToLead = new SubmissionToLead(commentsAndQuestions.Comments, commentsAndQuestions.Questions.First().Answers, emailAddress, true, "Organisation");
 			var content = new StringContent(JsonConvert.SerializeObject(submissionToLead), Encoding.UTF8, "application/json");

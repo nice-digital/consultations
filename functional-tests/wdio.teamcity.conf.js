@@ -9,7 +9,7 @@ config.capabilities = [
 	{
 		acceptInsecureCerts: true, // Because of self-signed cert inside Docker
 		acceptSslCerts: true,
-		maxInstances: 2,
+		maxInstances: 1,
 		browserName: "chrome",
 		"goog:chromeOptions": {
 			w3c: false,
