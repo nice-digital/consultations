@@ -135,6 +135,9 @@ Array [
                 "",
                 "",
               ]
+              <ul
+                className="list list--unstyled"
+              />
               <p>
                 Your response was submitted 
                  on 
@@ -804,6 +807,9 @@ Array [
                   Once they have been submitted you will not be able to edit them further or add any extra comments.
                 </p>,
               ]
+              <ul
+                className="list list--unstyled"
+              />
               <div
                 className="grid"
               >

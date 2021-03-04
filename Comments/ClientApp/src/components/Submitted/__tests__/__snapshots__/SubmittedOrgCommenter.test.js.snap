@@ -132,22 +132,7 @@ Array [
               </div>,
             ]
             Array [
-              <a
-                className="btn btn--cta"
-                data-qa-sel="review-submitted-comments"
-                href="/1/review"
-                onClick={[Function]}
-              >
-                Review your response
-              </a>,
-              <a
-                className="btn btn--secondary"
-                href="undefined/api/exportexternal/1"
-                onClick={[Function]}
-              >
-                Download your response
-              </a>,
-              <p>
+              <h2>
                 Your response was submitted 
                 to Really Cool Org
                  on 
@@ -157,7 +142,29 @@ Array [
                   15 July 2019
                 </time>
                 .
-              </p>,
+              </h2>,
+              <ul
+                className="list list--unstyled"
+              >
+                <li>
+                  <a
+                    className="btn btn--cta"
+                    data-qa-sel="review-submitted-comments"
+                    href="/1/review"
+                    onClick={[Function]}
+                  >
+                    Review your response
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="undefined/api/exportexternal/1"
+                    onClick={[Function]}
+                  >
+                    Download submitted response
+                  </a>
+                </li>
+              </ul>,
               <h2>
                 What happens next?
               </h2>,

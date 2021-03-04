@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Fragment, Component } from "react";
+import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { tagManager } from "../../helpers/tag-manager";
 import Helmet from "react-helmet";
@@ -129,7 +129,7 @@ export class Submitted extends Component<PropsType, StateType> {
 	render() {
 		if (!this.state.hasInitialData) return <h1>Loading...</h1>;
 		return (
-			<Fragment>
+			<>
 				<Helmet>
 					<title>{this.getPageTitle()}</title>
 				</Helmet>
@@ -155,30 +155,53 @@ export class Submitted extends Component<PropsType, StateType> {
 														allowOrganisationCodeLogin={false}
 														orgFieldName="submitted"
 													/> :
-													<Fragment>
-														<Link
-															to={`/${this.props.match.params.consultationId}/review`}
-															data-qa-sel="review-submitted-comments"
-															className="btn btn--cta">
-															Review your response
-														</Link>
-														{this.state.consultationData.consultationState.supportsDownload &&
-														<a
-															onClick={() => {
-																tagManager({
-																	event: "generic",
-																	category: "Consultation comments page",
-																	action: "Clicked",
-																	label: "Download your response button",
-																});
-															}}
-															className="btn btn--secondary"
-															href={`${this.props.basename}/api/exportexternal/${this.props.match.params.consultationId}`}>Download
-															your response</a>
-														}
-														<p>Your response was submitted {contextValue.isOrganisationCommenter && `to ${contextValue.organisationName}`} on <Moment format="D MMMM YYYY" date={this.state.consultationData.consultationState.submittedDate}/>.</p>
+													<>
+
+														<h2>Your response was submitted {contextValue.isOrganisationCommenter  && !contextValue.isLead && `to ${contextValue.organisationName}`} on <Moment format="D MMMM YYYY" date={this.state.consultationData.consultationState.submittedDate}/>.</h2>
+														
+														<ul className="list list--unstyled">
+															<li>
+																<Link
+																	to={`/${this.props.match.params.consultationId}/review`}
+																	data-qa-sel="review-submitted-comments"
+																	className="btn btn--cta">
+																	Review your response
+																</Link>
+															</li>
+															{this.state.consultationData.consultationState.supportsDownload &&
+															<li>
+																<a
+																	onClick={() => {
+																		tagManager({
+																			event: "generic",
+																			category: "Consultation comments page",
+																			action: "Clicked",
+																			label: "Download your response button",
+																		});
+																	}}
+																	href={`${this.props.basename}/api/exportexternal/${this.props.match.params.consultationId}`}>
+																	Download submitted response</a>
+															</li>
+															}
+															{contextValue.isLead && 
+															<li>
+																<a
+																	onClick={() => {
+																		tagManager({
+																			event: "generic",
+																			category: "Consultation comments page",
+																			action: "Clicked",
+																			label: "Download comments submitted to lead button",
+																		});
+																	}}
+																	href={`${this.props.basename}/api/exportlead/${this.props.match.params.consultationId}`}>
+																Download all responses from your organisation (Excel)</a>
+															</li>
+															}
+														</ul>
+
 														<h2>What happens next?</h2>
-														{contextValue.isOrganisationCommenter ? (
+														{contextValue.isOrganisationCommenter && !contextValue.isLead ? (
 															<>
 																<p>{`${contextValue.organisationName}`} will review all the submissions received for this consultation.</p>
 																<p>NICE's response to all the submissions received will be published on the website around the time the final guidance is published.</p>
@@ -199,7 +222,7 @@ export class Submitted extends Component<PropsType, StateType> {
 																Answer the survey
 															</a>
 														</p>
-													</Fragment>
+													</>
 											);
 										}}
 									</UserContext.Consumer>
@@ -208,7 +231,7 @@ export class Submitted extends Component<PropsType, StateType> {
 						</div>
 					</div>
 				</div>
-			</Fragment>
+			</>
 
 		);
 	}

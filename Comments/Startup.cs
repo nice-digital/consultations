@@ -320,6 +320,7 @@ namespace Comments
 						}
 						data["isAuthorised"] = isAuthorised;
 						data["displayName"] = user.DisplayName;
+						data["isLead"] = user.OrganisationsAssignedAsLead.Any();
 
 						var host = httpContext.Request.Host.Host;
 						var userRoles = httpContext.User?.Roles(host).ToList() ?? new List<string>();

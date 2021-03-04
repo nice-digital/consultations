@@ -135,6 +135,9 @@ Array [
                 "",
                 "",
               ]
+              <ul
+                className="list list--unstyled"
+              />
               <p>
                 Your response was submitted 
                 to Really Cool Org
@@ -809,6 +812,9 @@ Array [
                   Once you have sent your response you will not be able to edit it or add any more comments.
                 </p>,
               ]
+              <ul
+                className="list list--unstyled"
+              />
               <div
                 className="grid"
               >

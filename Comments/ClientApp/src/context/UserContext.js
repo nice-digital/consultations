@@ -21,6 +21,7 @@ type PropsType = {
 type StateType = {
 	isAuthorised: boolean,
 	isOrganisationCommenter: boolean,
+	isLead: boolean,
 	displayName: string,
 	signInURL: string,
 	registerURL: string,
@@ -35,6 +36,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 		this.state = {
 			isAuthorised: false,
 			isOrganisationCommenter: false,
+			isLead: false,
 			displayName: "",
 			signInURL: "",
 			registerURL: "",
@@ -51,6 +53,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 		let isOrganisationCommenter = false;
 		let organisationName = null;
 		let isAuthorised = preloadSource ? preloadSource.isAuthorised : false;
+		let isLead = false;
 
 		if (userSessionParameters.sessionCookieExistsForThisConsultation){
 			const preloadedUserSessionData = preload(
@@ -74,6 +77,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 			this.state = {
 				isAuthorised,
 				isOrganisationCommenter: isOrganisationCommenter,
+				isLead: preloadSource.isLead,
 				displayName: preloadSource.displayName,
 				signInURL: preloadSource.signInURL,
 				registerURL: preloadSource.registerURL,

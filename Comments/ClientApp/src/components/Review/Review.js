@@ -528,7 +528,7 @@ export class Review extends Component<PropsType, StateType> {
 							<UserContext.Consumer>
 								{(contextValue: ContextType) => {
 
-									if (contextValue.isOrganisationCommenter) {
+									if (contextValue.isOrganisationCommenter && !contextValue.isLead) {
 										headerSubtitle1 = `On this page you can review and edit your response to the consultation before you send them to ${contextValue.organisationName}.`;
 										headerSubtitle2 = "Once you have sent your response you will not be able to edit it or add any more comments.";
 									}
@@ -552,39 +552,42 @@ export class Review extends Component<PropsType, StateType> {
 														reference={reference}
 														consultationState={this.state.consultationData.consultationState}
 													/>
-													{this.state.isLead &&
-														<>
-															<a
-																onClick={() => {
-																	tagManager({
-																		event: "generic",
-																		category: "Consultation comments page",
-																		action: "Clicked",
-																		label: "Download comments submitted to lead button",
-																	});
-																}}
-																className="btn btn--secondary"
-																href={`${this.props.basename}/api/exportlead/${this.props.match.params.consultationId}`}>
-																Download all comments submitted</a>
-														</>
-													}
+
+													<ul className="list list--unstyled">
+														{this.state.submittedDate && this.state.consultationData.consultationState.supportsDownload &&
+															<li>
+																<a
+																	onClick={() => {
+																		tagManager({
+																			event: "generic",
+																			category: "Consultation comments page",
+																			action: "Clicked",
+																			label: "Download your response button",
+																		});
+																	}}
+																	href={`${this.props.basename}/api/exportexternal/${this.props.match.params.consultationId}`}>
+																	Download submitted response</a>
+															</li>
+														}
+														{contextValue.isLead && 
+															<li>
+																<a
+																	onClick={() => {
+																		tagManager({
+																			event: "generic",
+																			category: "Consultation comments page",
+																			action: "Clicked",
+																			label: "Download comments submitted to lead button",
+																		});
+																	}}
+																	href={`${this.props.basename}/api/exportlead/${this.props.match.params.consultationId}`}>
+																Download all responses from your organisation (Excel)</a>
+															</li>
+														}
+													</ul>
 
 													{this.state.submittedDate &&
 													<>
-														{this.state.consultationData.consultationState.supportsDownload &&
-														<a
-															onClick={() => {
-																tagManager({
-																	event: "generic",
-																	category: "Consultation comments page",
-																	action: "Clicked",
-																	label: "Download your response button",
-																});
-															}}
-															className="btn btn--secondary"
-															href={`${this.props.basename}/api/exportexternal/${this.props.match.params.consultationId}`}>Download
-															your response</a>
-														}
 														<p>Your response was submitted {contextValue.isOrganisationCommenter && `to ${contextValue.organisationName}`} on <Moment format="D MMMM YYYY" date={this.state.submittedDate}/>.</p>
 														<h2>What happens next?</h2>
 														{contextValue.isOrganisationCommenter ? (
