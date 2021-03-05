@@ -378,6 +378,91 @@ namespace Comments.Test.UnitTests
 		}
 
 		[Fact]
+		public async void CreateSpreadsheetForOrganisationCodeUser()
+		{
+			//Arrange
+			const int organisationUserId = 1;
+			var userService = FakeUserService.Get(isAuthenticated: false, displayName: null, userId: null, organisationUserId: organisationUserId);
+			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+			var locationId = AddLocation(sourceURI, _context, "001.001.000.000");
+			var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
+			var commentText = "A comment";
+			var comments = new List<Models.Comment> { new Models.Comment(locationId, null, commentText, null, location, 3, null, organisationUserId: organisationUserId) };
+			comments.First().SubmissionComment.Add(new SubmissionComment(1, 1));
+			comments.First().SubmissionComment.First().Submission = new Submission(null, DateTime.Now, false, "organisation", false, null, null);
+			var answers = new List<Models.Answer> { };
+			var questions = new List<Models.Question> { };
+			var fakeExportService = new FakeExportService(comments, answers, questions,
+				new List<OrganisationUser> { new OrganisationUser(1, Guid.NewGuid(), DateTime.Now) { EmailAddress = "bob@bob.com", OrganisationUserId = organisationUserId } });
+			var exportToExcel = new ExportToExcel(userService, fakeExportService, null);
+
+			//Act
+			var spreadsheet = await exportToExcel.ToSpreadsheet(comments, answers, questions);
+
+			using (var reader = ExcelReaderFactory.CreateReader(spreadsheet))
+			{
+				var workSheet = reader.AsDataSet();
+				var data = workSheet.Tables;
+
+				//Assert
+				var rows = data[Constants.Export.SheetName].Rows;
+				rows.Count.ShouldBe(4);
+
+				var headerRow = rows[2].ItemArray;
+				headerRow.Length.ShouldBe(15);
+
+				headerRow[1].ToString().ShouldBe("Email Address");
+
+				var commentRow = rows[3].ItemArray;
+				commentRow[7].ShouldBe(commentText);
+				commentRow[1].ShouldBe("bob@bob.com");
+			}
+		}
+
+		[Fact]
+		public async void CreateSpreadsheetForOrganisationLeadWithResponsesTheySubmittedToNICE()
+		{
+			//Arrange
+			const int organisationUserId = 1;
+			const string userId = "1";
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Sarah Jane Smith", userId: userId, organisationIdUserIsLeadOf: 1, emailAddress: "sarah@tardis.gov");
+			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+			var locationId = AddLocation(sourceURI, _context, "001.001.000.000");
+			var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
+			var commentText = "A comment";
+			var comments = new List<Models.Comment> { new Models.Comment(locationId, null, commentText, null, location, 2, null, organisationUserId: organisationUserId, parentCommentId: 1) };
+			comments.First().SubmissionComment.Add(new SubmissionComment(1, 1));
+			comments.First().SubmissionComment.First().Submission = new Submission(submissionByUserId: userId, DateTime.Now, true, "organisation", false, null, null);
+			var answers = new List<Models.Answer> { };
+			var questions = new List<Models.Question> { };
+			var fakeExportService = new FakeExportService(comments, answers, questions,
+				new List<OrganisationUser> { new OrganisationUser(1, Guid.NewGuid(), DateTime.Now) { EmailAddress = "sarah@tardis.gov", OrganisationUserId = organisationUserId } });
+			var exportToExcel = new ExportToExcel(userService, fakeExportService, null);
+
+			//Act
+			var spreadsheet = await exportToExcel.ToSpreadsheet(comments, answers, questions);
+
+			using (var reader = ExcelReaderFactory.CreateReader(spreadsheet))
+			{
+				var workSheet = reader.AsDataSet();
+				var data = workSheet.Tables;
+
+				//Assert
+				var rows = data[Constants.Export.SheetName].Rows;
+				rows.Count.ShouldBe(4);
+
+				var headerRow = rows[2].ItemArray;
+				headerRow.Length.ShouldBe(15);
+
+				headerRow[1].ToString().ShouldBe("Email Address");
+
+				var commentRow = rows[3].ItemArray;
+				commentRow[7].ShouldBe(commentText);
+				commentRow[1].ShouldBe("sarah@tardis.gov");
+			}
+		}
+
+		[Fact]
 		public void GetAllDataForConsulation()
 		{
 			// Arrange
@@ -518,7 +603,6 @@ namespace Comments.Test.UnitTests
 			comments.Count.ShouldBe(1);
 		}
 
-
 		[Fact]
 		public void GetSubmittedToLeadDataForConsulationForOrganisationLead()
 		{
@@ -571,91 +655,6 @@ namespace Comments.Test.UnitTests
 			//Assert
 			resultTuple.comment.Count().ShouldBe(2);
 			resultTuple.answer.Count().ShouldBe(1);
-		}
-
-		[Fact]
-		public async void CreateSpreadsheetForOrganisationCodeUser()
-		{
-			//Arrange
-			const int organisationUserId = 1;
-			var userService = FakeUserService.Get(isAuthenticated: false, displayName: null, userId: null, organisationUserId: organisationUserId);
-			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
-			var locationId = AddLocation(sourceURI, _context, "001.001.000.000");
-			var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
-			var commentText = "A comment";
-			var comments = new List<Models.Comment> { new Models.Comment(locationId, null, commentText, null, location, 3, null, organisationUserId: organisationUserId) };
-			comments.First().SubmissionComment.Add(new SubmissionComment(1, 1));
-			comments.First().SubmissionComment.First().Submission = new Submission(null, DateTime.Now, false, "organisation", false, null, null);
-			var answers = new List<Models.Answer> { };
-			var questions = new List<Models.Question> { };
-			var fakeExportService = new FakeExportService(comments, answers, questions,
-				new List<OrganisationUser> { new OrganisationUser(1, Guid.NewGuid(), DateTime.Now) { EmailAddress = "bob@bob.com", OrganisationUserId = organisationUserId } });
-			var exportToExcel = new ExportToExcel(userService, fakeExportService, null);
-
-			//Act
-			var spreadsheet = await exportToExcel.ToSpreadsheet(comments, answers, questions);
-
-			using (var reader = ExcelReaderFactory.CreateReader(spreadsheet))
-			{
-				var workSheet = reader.AsDataSet();
-				var data = workSheet.Tables;
-
-				//Assert
-				var rows = data[Constants.Export.SheetName].Rows;
-				rows.Count.ShouldBe(4);
-
-				var headerRow = rows[2].ItemArray;
-				headerRow.Length.ShouldBe(15);
-
-				headerRow[1].ToString().ShouldBe("Email Address");
-
-				var commentRow = rows[3].ItemArray;
-				commentRow[7].ShouldBe(commentText);
-				commentRow[1].ShouldBe("bob@bob.com");
-			}
-		}
-
-		[Fact]
-		public async void CreateSpreadsheetForOrganisationLeadWithResponsesTheySubmittedToNICE()
-		{
-			//Arrange
-			const int organisationUserId = 1;
-			const string userId = "1";
-			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Sarah Jane Smith", userId: userId, organisationIdUserIsLeadOf: 1, emailAddress: "sarah@tardis.gov");
-			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
-			var locationId = AddLocation(sourceURI, _context, "001.001.000.000");
-			var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
-			var commentText = "A comment";
-			var comments = new List<Models.Comment> { new Models.Comment(locationId, null, commentText, null, location, 2, null, organisationUserId: organisationUserId, parentCommentId: 1) };
-			comments.First().SubmissionComment.Add(new SubmissionComment(1, 1));
-			comments.First().SubmissionComment.First().Submission = new Submission(submissionByUserId: userId, DateTime.Now, true, "organisation", false, null, null);
-			var answers = new List<Models.Answer> { };
-			var questions = new List<Models.Question> { };
-			var fakeExportService = new FakeExportService(comments, answers, questions,
-				new List<OrganisationUser> { new OrganisationUser(1, Guid.NewGuid(), DateTime.Now) { EmailAddress = "sarah@tardis.gov", OrganisationUserId = organisationUserId } });
-			var exportToExcel = new ExportToExcel(userService, fakeExportService, null);
-
-			//Act
-			var spreadsheet = await exportToExcel.ToSpreadsheet(comments, answers, questions);
-
-			using (var reader = ExcelReaderFactory.CreateReader(spreadsheet))
-			{
-				var workSheet = reader.AsDataSet();
-				var data = workSheet.Tables;
-
-				//Assert
-				var rows = data[Constants.Export.SheetName].Rows;
-				rows.Count.ShouldBe(4);
-
-				var headerRow = rows[2].ItemArray;
-				headerRow.Length.ShouldBe(15);
-
-				headerRow[1].ToString().ShouldBe("Email Address");
-
-				var commentRow = rows[3].ItemArray;
-				commentRow[7].ShouldBe(commentText);
-				commentRow[1].ShouldBe("sarah@tardis.gov");
-			}
 		}
 
 		[Fact]
@@ -717,60 +716,6 @@ namespace Comments.Test.UnitTests
 				secondCommentRow[1].ShouldBe("mickey@smith.com");
 			}
 		}
-
-		//[Fact]
-		//public async void CreateSpreadsheetForNICEAdmin()
-		//{
-		//	//Arrange
-		//	const int organisationUserId = 1;
-		//	const string userId = "1";
-		//	const string secondUserId = "2";
-
-		//	var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
-		//	var locationId = AddLocation(sourceURI, _context, "001.001.000.000");
-		//	var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
-		//	var commentText = "A comment";
-		//	var comments = new List<Models.Comment>
-		//	{
-		//		new Models.Comment(locationId, userId, commentText, null, location, 2, null, organisationUserId: organisationUserId),
-		//		new Models.Comment(locationId, secondUserId, commentText, null, location, 2, null)
-		//	};
-		//	comments.First().SubmissionComment.Add(new SubmissionComment(1, 1));
-		//	comments.First().SubmissionComment.First().Submission = new Submission(null, DateTime.Now, true, "UNIT", false, null, null);
-		//	comments[1].SubmissionComment.Add(new SubmissionComment(1, 1));
-		//	comments[1].SubmissionComment.First().Submission = new Submission(null, DateTime.Now, true, "Torchwood", false, null, null);
-		//	var answers = new List<Models.Answer> { };
-		//	var questions = new List<Models.Question> { };
-
-		//	var userService = FakeUserService.Get(isAuthenticated: true, displayName: "The Doctor", userId: userId, testUserType: TestUserType.Administrator);
-		//	var fakeExportService = new FakeExportService(comments, answers, questions,new List<OrganisationUser>{ });
-		//	var exportToExcel = new ExportToExcel(userService, fakeExportService, null);
-
-		//	//Act
-		//	var spreadsheet = await exportToExcel.ToSpreadsheet(comments, answers, questions);
-
-		//	using (var reader = ExcelReaderFactory.CreateReader(spreadsheet))
-		//	{
-		//		var workSheet = reader.AsDataSet();
-		//		var data = workSheet.Tables;
-
-		//		//Assert
-		//		var rows = data[Constants.Export.SheetName].Rows;
-		//		rows.Count.ShouldBe(5);
-
-		//		var headerRow = rows[2].ItemArray;
-		//		headerRow.Length.ShouldBe(15);
-
-		//		headerRow[1].ToString().ShouldBe("Email Address");
-
-		//		var firstCommentRow = rows[3].ItemArray;
-		//		firstCommentRow[7].ShouldBe(commentText);
-		//		firstCommentRow[1].ShouldBe("martha@unit.com");
-
-		//		var secondCommentRow = rows[4].ItemArray;
-		//		secondCommentRow[7].ShouldBe(commentText);
-		//		secondCommentRow[1].ShouldBe("jack@torchwood.com");
-		//	}
-		//}
+		
 	}
 }
