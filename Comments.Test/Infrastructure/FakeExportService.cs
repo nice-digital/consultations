@@ -41,7 +41,7 @@ namespace Comments.Test.Infrastructure
 		public (IEnumerable<Comment> comment, IEnumerable<Answer> answer, IEnumerable<Question> question, Validate valid) GetDataSubmittedToLeadForConsultation(
 			int consultationId)
 		{
-			return GetAllDataForConsultation(consultationId);
+			return GetAllDataForConsultation(consultationId).Result;
 		}
 
 		public async Task<(string ConsultationName, string DocumentName, string ChapterName)> GetLocationData(Location location)
