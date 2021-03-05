@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using Comments.Common;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace Comments.Models
 {
@@ -130,7 +131,8 @@ namespace Comments.Models
                        && c.StatusId == (int) StatusName.SubmittedToLead
                        && _organisationIDs != null
                        && c.OrganisationId.HasValue
-                       && _organisationIDs.Any(o => o.Equals(c.OrganisationId)))
+                       && _organisationIDs.Any(o => o.Equals(c.OrganisationId))
+                       && !_organisationUserIDs.Contains((int)c.OrganisationUserId))
 				.Include(c => c.SubmissionComment)
 					.ThenInclude(s => s.Submission)
 				.Include(c => c.Status)
@@ -145,7 +147,8 @@ namespace Comments.Models
 				            && q.Answer.Any(a => a.StatusId == (int) StatusName.SubmittedToLead)
 				            && _organisationIDs != null
 				            && q.Answer.Any(a => a.OrganisationId.HasValue)
-				            && q.Answer.Any(a => _organisationIDs.Contains((int)a.OrganisationId)))
+				            && q.Answer.Any(a => _organisationIDs.Contains((int)a.OrganisationId))
+				            && !q.Answer.Any(a => _organisationUserIDs.Contains((int)a.OrganisationUserId)))
 				.Include(q => q.QuestionType)
 				.Include(q => q.Answer)
 					.ThenInclude(a => a.SubmissionAnswer)
