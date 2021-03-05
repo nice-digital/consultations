@@ -4,6 +4,7 @@ Feature: Users can page through the list of consultations
 
 	Background:
 		Given I open the url "admin"
+		And I refresh
 		When I log into the admin page with username "IDAM_EMAIL1" and password "IDAM_PASSWORD"
 
 	Scenario: User can page through the list of consultations

@@ -30,7 +30,7 @@ namespace Comments.Controllers.Api
 		[HttpGet("{consultationId}")]
 		public async Task<IActionResult> Get([FromRoute] int consultationId)
 		{
-			var result = _exportService.GetAllDataForConsultation(consultationId);
+			var result = await _exportService.GetAllDataForConsultation(consultationId);
 
 			if (!result.valid.Valid)
 			{

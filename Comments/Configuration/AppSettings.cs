@@ -1,6 +1,8 @@
+using Comments.Common;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using NICE.Feeds.Configuration;
 
 namespace Comments.Configuration
 {
@@ -22,23 +24,28 @@ namespace Comments.Configuration
 		public static void Configure(IServiceCollection services, IConfiguration configuration, string contentRootPath)
         {
             services.Configure<EnvironmentConfig>(configuration.GetSection("AppSettings:Environment"));
-            services.Configure<FeedConfig>(configuration.GetSection("Feeds")); 
-	        services.Configure<EncryptionConfig>(configuration.GetSection("Encryption"));
+            services.Configure<EncryptionConfig>(configuration.GetSection("Encryption"));
 	        services.Configure<ReviewConfig>(configuration.GetSection("Review"));
 	        services.Configure<StatusConfig>(configuration.GetSection("Status"));
 	        services.Configure<ConsultationListConfig>(configuration.GetSection("ConsultationList"));
 	        services.Configure<AuthenticationConfig>(configuration.GetSection("WebAppConfiguration"));
 	        services.Configure<GlobalNavConfig>(configuration.GetSection("GlobalNav"));
+	        services.Configure<FeedConfig>(configuration.GetSection("Feeds"));
 
 			var sp = services.BuildServiceProvider();
             Environment = sp.GetService<IOptions<EnvironmentConfig>>().Value;
-            Feed = sp.GetService<IOptions<FeedConfig>>().Value;
-	        EncryptionConfig = sp.GetService<IOptions<EncryptionConfig>>().Value;
+            EncryptionConfig = sp.GetService<IOptions<EncryptionConfig>>().Value;
 	        ReviewConfig = sp.GetService<IOptions<ReviewConfig>>().Value;
 	        StatusConfig = sp.GetService<IOptions<StatusConfig>>().Value;
 	        ConsultationListConfig = sp.GetService<IOptions<ConsultationListConfig>>().Value;
 			AuthenticationConfig = AuthenticationConfig ?? sp.GetService<IOptions<AuthenticationConfig>>().Value; //null coalesces here to support tests
 			GlobalNavConfig = GlobalNavConfig ?? sp.GetService<IOptions<GlobalNavConfig>>().Value;
+			Feed = sp.GetService<IOptions<FeedConfig>>().Value;
+
+			var idamOptions = new ApiConfig();
+			configuration.GetSection("Feeds:IndevIDAMConfig").Bind(idamOptions);
+			Feed.UseIDAM = configuration.GetValue<bool>("FeatureManagement:" + Constants.Features.IndevUsingIDAMAuth);
+			Feed.ApiConfig = idamOptions;
 		}
     }
 }

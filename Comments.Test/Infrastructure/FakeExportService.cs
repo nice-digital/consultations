@@ -2,6 +2,7 @@ using System;
 using Comments.Services;
 using Comments.ViewModels;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Comments.Models;
 using Answer = Comments.Models.Answer;
 using Comment = Comments.Models.Comment;
@@ -25,7 +26,7 @@ namespace Comments.Test.Infrastructure
 			_organisationUsers = organisationUsers;
 		}
 
-		public (IEnumerable<Comment> comment, IEnumerable<Answer> answer, IEnumerable<Question> question, Validate valid) GetAllDataForConsultation(
+		public async Task<(IEnumerable<Comment> comment, IEnumerable<Answer> answer, IEnumerable<Question> question, Validate valid)> GetAllDataForConsultation(
 			int consultationId)
 		{
 			return (_comments, _answers, _questions, new Validate(true));
@@ -34,21 +35,21 @@ namespace Comments.Test.Infrastructure
 		public (IEnumerable<Comment> comment, IEnumerable<Answer> answer, IEnumerable<Question> question, Validate valid) GetAllDataForConsultationForCurrentUser(
 			int consultationId)
 		{
-			return GetAllDataForConsultation(consultationId);
+			return GetAllDataForConsultation(consultationId).Result;
 		}
-
+		
 		public (IEnumerable<Comment> comment, IEnumerable<Answer> answer, IEnumerable<Question> question, Validate valid) GetDataSubmittedToLeadForConsultation(
 			int consultationId)
 		{
 			return GetAllDataForConsultation(consultationId);
 		}
 
-		public (string ConsultationName, string DocumentName, string ChapterName) GetLocationData(Location location)
+		public async Task<(string ConsultationName, string DocumentName, string ChapterName)> GetLocationData(Location location)
 		{
 			return ("Test consultation", "Test document", "Test chapter");
 		}
 
-		public string GetConsultationName(Location location)
+		public async Task<string> GetConsultationName(Location location)
 		{
 			return "Test consultation";
 		}

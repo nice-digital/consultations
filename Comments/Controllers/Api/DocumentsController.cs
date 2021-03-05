@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Comments.Controllers.Api
@@ -27,12 +28,12 @@ namespace Comments.Controllers.Api
 	    /// <param name="consultationId"></param>
 	    /// <returns></returns>
 	    [HttpGet]
-	    public IEnumerable<Document> Get(int consultationId)
+	    public async Task<IEnumerable<Document>> Get(int consultationId)
 	    {
 		    if (consultationId < 1)
 			    throw new ArgumentException(nameof(consultationId));
 
-		    return _consultationService.GetDocuments(consultationId).documents;
+		    return (await _consultationService.GetDocuments(consultationId)).documents;
 	    }
 	}
 
@@ -58,7 +59,7 @@ namespace Comments.Controllers.Api
 		/// <param name="reference"></param>
 		/// <returns></returns>
 		[HttpGet]
-		public IEnumerable<Document> Get(int consultationId, int documentId, string reference)
+		public async Task<IEnumerable<Document>> Get(int consultationId, int documentId, string reference)
 		{
 			if (consultationId < 1)
 				throw new ArgumentException(nameof(consultationId));
@@ -69,7 +70,7 @@ namespace Comments.Controllers.Api
 			if (string.IsNullOrWhiteSpace(reference))
 				throw new ArgumentNullException(nameof(reference));
 
-			return _consultationService.GetPreviewDraftDocuments(consultationId, documentId, reference);
+			return await _consultationService.GetPreviewDraftDocuments(consultationId, documentId, reference);
 		}
 	}
 
@@ -95,7 +96,7 @@ namespace Comments.Controllers.Api
 		/// <param name="reference"></param>
 		/// <returns></returns>
 		[HttpGet]
-		public IEnumerable<Document> Get(int consultationId, int documentId)
+		public async Task<IEnumerable<Document>> Get(int consultationId, int documentId)
 		{
 			if (consultationId < 1)
 				throw new ArgumentException(nameof(consultationId));
@@ -104,7 +105,7 @@ namespace Comments.Controllers.Api
 				throw new ArgumentException(nameof(documentId));
 			
 
-			return _consultationService.GetPreviewPublishedDocuments(consultationId, documentId);
+			return await _consultationService.GetPreviewPublishedDocuments(consultationId, documentId);
 		}
 	}
 }

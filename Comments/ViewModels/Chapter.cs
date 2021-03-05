@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
-using NICE.Feeds.Models.Indev;
-using NICE.Feeds.Models.Indev.Chapter;
-using NICE.Feeds.Models.Indev.Detail;
+using NICE.Feeds.Indev.Models.Chapter;
+using NICE.Feeds.Indev.Models.Detail;
+
 
 namespace Comments.ViewModels
 {

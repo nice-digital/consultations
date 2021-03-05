@@ -84,14 +84,14 @@ namespace Comments.Controllers.Api
 		/// <param name="organisationAuthorisationId"></param>
 		/// <returns>a tuple of GUID (which is the session id: OrganisationUser.AuthorisationSession) and DateTime (which is the cookie expiration date)</returns>
 		[HttpPost("CreateOrganisationUserSession")]
-		public IActionResult CreateOrganisationUserSession(string collationCode, int organisationAuthorisationId)
+		public async Task<IActionResult> CreateOrganisationUserSession(string collationCode, int organisationAuthorisationId)
 		{
 			ValidateCollationCode(collationCode);
 
 			if (organisationAuthorisationId < 1)
 				throw new ArgumentException("OrganisationAuthorisation id must be a positive integer", nameof(organisationAuthorisationId));
 			
-			var session = _organisationService.CreateOrganisationUserSession(organisationAuthorisationId, collationCode);
+			var session = await _organisationService.CreateOrganisationUserSession(organisationAuthorisationId, collationCode);
 
 			return Ok(new {session.sessionId, expirationDateTicks = session.expirationDate.ToJavaScriptTicksSinceEpoch()});
 		}

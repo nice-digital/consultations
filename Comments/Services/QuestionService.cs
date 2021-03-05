@@ -8,6 +8,7 @@ using Comments.Common;
 using Comments.Configuration;
 using Microsoft.AspNetCore.Http;
 using NICE.Feeds;
+using NICE.Feeds.Indev.Models;
 using NICE.Identity.Authentication.Sdk.API;
 using Constants = Comments.Common.Constants;
 using Location = Comments.Models.Location;
@@ -130,7 +131,7 @@ namespace Comments.Services
 			    allTheQuestions.AddRange(location.Question.Select(question => new Question(location, question)));
 		    }
 
-		    var documentsAndConsultationTitle = _consultationService.GetDocuments(consultationId, reference, draft);
+		    var documentsAndConsultationTitle = await _consultationService.GetDocuments(consultationId, reference, draft);
 		    var questionAdminDocuments = new List<QuestionAdminDocument>();
 			foreach (var document in documentsAndConsultationTitle.documents)
 			{
@@ -159,7 +160,7 @@ namespace Comments.Services
 
 		    var previewState = draft ? PreviewState.Preview : PreviewState.NonPreview;
 		    var documentId = draft ? Constants.DummyDocumentNumberForPreviewProject : (int?)null;
-			var consultationState = _consultationService.GetConsultationState(consultationId, documentId, reference, previewState);
+			var consultationState = await _consultationService.GetConsultationState(consultationId, documentId, reference, previewState);
 
 			var previousQuestions = _context.GetAllPreviousUniqueQuestions();
 

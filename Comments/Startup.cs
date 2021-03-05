@@ -28,6 +28,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using Comments.ViewModels;
+using NICE.Feeds.Configuration;
+using NICE.Feeds.Indev;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
 
 namespace Comments
@@ -74,10 +76,22 @@ namespace Comments
 
             services.TryAddTransient<ICommentService, CommentService>();
             services.TryAddTransient<IConsultationService, ConsultationService>();
-            
-            services.TryAddTransient<IFeedReaderService>(provider => new FeedReaderService(new RemoteSystemReader(null), AppSettings.Feed));
-            services.TryAddTransient<IFeedService, FeedService>();
-            services.TryAddTransient<IAnswerService, AnswerService>();
+
+            // Add authentication before adding the FeedReaderService
+            var authConfiguration = AppSettings.AuthenticationConfig.GetAuthConfiguration();
+            services.AddAuthentication(authConfiguration, allowNonSecureCookie: Environment.IsDevelopment())
+	            .AddScheme<OrganisationCookieAuthenticationOptions, OrganisationCookieAuthenticationHandler>(OrganisationCookieAuthenticationOptions.DefaultScheme, options => { });
+            services.AddAuthorisation(authConfiguration);
+
+            services.AddFeatureManagement();
+
+			services.TryAddSingleton<IIndevFeedConfig>(provider => AppSettings.Feed);
+			services.TryAddTransient<ICacheService, MemoryCacheService>();
+			services.TryAddTransient<IIndevFeedReaderService, IndevFeedReaderService>();
+			services.TryAddTransient<IRemoteSystemReader, RemoteSystemReader>();
+			services.TryAddTransient<IIndevFeedService, IndevFeedService>();
+
+			services.TryAddTransient<IAnswerService, AnswerService>();
             services.TryAddTransient<IQuestionService, QuestionService>();
 	        services.TryAddTransient<ISubmitService, SubmitService>();
 			services.TryAddTransient<IAdminService, AdminService>();
@@ -89,12 +103,6 @@ namespace Comments
 			services.TryAddTransient<IOrganisationService, OrganisationService>();
 
 			services.AddRouting(options => options.LowercaseUrls = true);
-
-			// Add authentication
-			var authConfiguration = AppSettings.AuthenticationConfig.GetAuthConfiguration();
-			services.AddAuthentication(authConfiguration, allowNonSecureCookie: Environment.IsDevelopment())
-				.AddScheme<OrganisationCookieAuthenticationOptions, OrganisationCookieAuthenticationHandler>(OrganisationCookieAuthenticationOptions.DefaultScheme, options => {  });
-			services.AddAuthorisation(authConfiguration);
 
 			services.AddMvc(options =>
             {
@@ -152,7 +160,7 @@ namespace Comments
             
             services.AddOptions();
 
-            services.AddFeatureManagement();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
