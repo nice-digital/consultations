@@ -1297,40 +1297,105 @@ Array [
                   <div
                     className="panel"
                   >
-                    <h2>
-                      You are about to send your final response to 
-                      Really Cool Org
-                    </h2>
+                    <p
+                      className="lead"
+                    >
+                      You are about to submit your final response to NICE.
+                    </p>
                     <p>
-                      Enter your email address so that your organisation can contact you about your comments if they have any questions.
+                      You are responding on behalf of 
+                      <strong>
+                        Really Cool Org
+                      </strong>
+                    </p>
+                    <p>
+                      You must answer the following 
+                      question
+                       before you submit.
                     </p>
                     <div
-                      className="input"
+                      aria-labelledby="tobacco_links"
+                      role="radiogroup"
                     >
-                      <label
-                        className="input__label"
-                        htmlFor="emailAddress"
+                      <p
+                        id="tobacco_links"
                       >
-                        Email address
-                      </label>
-                      <input
-                        className="input__input"
-                        id="emailAddress"
-                        name="emailAddress"
-                        onChange={[Function]}
-                        placeholder="eg: your.name@example.com..."
-                        required={true}
-                        type="email"
-                      />
+                        <strong>
+                          Do you or the organisation you represent have any links with the tobacco industry?
+                        </strong>
+                      </p>
+                      <p
+                        className="mb--0"
+                      >
+                        This includes:
+                      </p>
+                      <ul
+                        className="mt--0"
+                      >
+                        <li>
+                          current or past links
+                        </li>
+                        <li>
+                          direct or indirect links
+                        </li>
+                        <li>
+                          receiving funding from the tobacco industry.
+                        </li>
+                      </ul>
+                      <div
+                        className="form__group form__group--radio form__group--inline"
+                      >
+                        <input
+                          checked={null}
+                          className="form__radio"
+                          id="hasTobaccoLinks--true"
+                          name="hasTobaccoLinks"
+                          onChange={[Function]}
+                          type="radio"
+                          value={true}
+                        />
+                        <label
+                          className="form__label form__label--radio"
+                          htmlFor="hasTobaccoLinks--true"
+                        >
+                          Yes
+                        </label>
+                      </div>
+                      <div
+                        className="form__group form__group--radio form__group--inline"
+                      >
+                        <input
+                          checked={false}
+                          className="form__radio"
+                          id="hasTobaccoLinks--false"
+                          name="hasTobaccoLinks"
+                          onChange={[Function]}
+                          type="radio"
+                          value={false}
+                        />
+                        <label
+                          className="form__label form__label--radio"
+                          data-qa-sel="respond-no-has-tobac-links"
+                          htmlFor="hasTobaccoLinks--false"
+                        >
+                          No
+                        </label>
+                      </div>
                     </div>
                     <p>
-                      Once you have sent your response you will not be able to edit it or add any more comments.
+                      <strong>
+                        Now submit your response to NICE.
+                      </strong>
+                    </p>
+                    <p>
+                      After submission you won't be able to edit your comments further or add any extra comments.
                     </p>
                     <button
                       className="btn btn--cta"
+                      data-qa-sel="submit-comment-button"
                       onClick={[Function]}
                     >
-                      Send your response to your organisation
+                      Submit my response
                     </button>
                   </div>
                 </div>
