@@ -680,7 +680,7 @@ export class Review extends Component<PropsType, StateType> {
 																tobaccoDisclosure={this.state.tobaccoDisclosure}
 																showExpressionOfInterestSubmissionQuestion={this.state.consultationData.showExpressionOfInterestSubmissionQuestion}
 																organisationExpressionOfInterest={this.state.organisationExpressionOfInterest}
-																isLead={this.state.isLead}
+																isLead={contextValue.isLead}
 																isOrganisationCommenter={contextValue.isOrganisationCommenter}
 																questions={this.state.questions}
 																emailAddress={this.state.emailAddress}
