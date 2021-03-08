@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Packaging;
@@ -403,9 +403,10 @@ namespace Comments.Export
 			var userDetailsForOrganisationUser = _exportService.GetOrganisationUsersByOrganisationUserIds(organisationUserIds);
 
 			var userRoles = _userService.GetUserRoles().ToList();
-			var isAdminUser = userRoles.Any(role => role == "Administrator");
+            var isAdminUser = userRoles.Any(role => AppSettings.ConsultationListConfig.DownloadRoles.AdminRoles.Contains(role));
+            var hasTeamRole = userRoles.Any(role => AppSettings.ConsultationListConfig.DownloadRoles.TeamRoles.Contains(role));
 
-			if (organisationUserIds.Count() != 0 && !isAdminUser)
+            if (organisationUserIds.Count() != 0 && !isAdminUser &&!hasTeamRole)
 			{
 				// When the lead downloads the responses they have sent to NICE, the responses should have the Name and Email Address of that lead against them
 				if (currentUser.IsAuthenticatedByAccounts && !comments.Any(c => c.StatusId == (int) StatusName.SubmittedToLead))
@@ -432,7 +433,7 @@ namespace Comments.Export
 				}
 				else
 				{
-					// When the NICE admin users download responses, they are from multiple users and we need to go to IdAM to get the details for each of the comments
+					// When the NICE internal users download responses, they are from multiple users and we need to go to IdAM to get the details for each of the comments
 					userDetailsForUserIds = await _userService.GetUserDetailsForUserIds(userIds);
 				}
 			}

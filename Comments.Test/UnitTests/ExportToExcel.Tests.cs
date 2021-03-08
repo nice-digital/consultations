@@ -424,6 +424,7 @@ namespace Comments.Test.UnitTests
 		public async void CreateSpreadsheetForOrganisationLeadWithResponsesTheySubmittedToNICE()
 		{
 			//Arrange
+			AppSettings.ConsultationListConfig = TestAppSettings.GetConsultationListConfig();
 			const int organisationUserId = 1;
 			const string userId = "1";
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Sarah Jane Smith", userId: userId, organisationIdUserIsLeadOf: 1, emailAddress: "sarah@tardis.gov");
@@ -662,6 +663,7 @@ namespace Comments.Test.UnitTests
 		public async void CreateSpreadsheetForOrganisationLeadWithResponsesTheyRecieved()
 		{
 			//Arrange
+			AppSettings.ConsultationListConfig = TestAppSettings.GetConsultationListConfig();
 			const int organisationUserId = 1;
 			const int secondOrganisationUserId = 2;
 			const string userId = "1";
