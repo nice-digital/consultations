@@ -24,9 +24,9 @@ import { CommentBox } from "../CommentBox/CommentBox";
 import { Question } from "../Question/Question";
 import LoginBannerWithRouter from "../LoginBanner/LoginBanner";
 import { SubmitResponseDialog } from "../SubmitResponseDialog/SubmitResponseDialog";
+import { SubmittedContent}  from "../SubmittedContent/SubmittedContent";
 import { updateUnsavedIds } from "../../helpers/unsaved-comments";
 import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
-import Moment from "react-moment";
 
 type PropsType = {
 	staticContext?: any,
@@ -555,57 +555,17 @@ export class Review extends Component<PropsType, StateType> {
 														consultationState={this.state.consultationData.consultationState}
 													/>
 
-													{this.state.submittedDate &&
-													<h2>Your response was submitted {contextValue.isOrganisationCommenter && !contextValue.isLead && `to ${contextValue.organisationName}`} on <Moment format="D MMMM YYYY" date={this.state.submittedDate}/>.</h2>
-													}
+													<SubmittedContent 
+														organisationName={contextValue.organisationName}
+														isOrganisationCommenter={contextValue.isOrganisationCommenter}
+														isLead={contextValue.isLead}
+														consultationState={this.state.consultationData.consultationState}
+														consultationId={this.props.match.params.consultationId}
+														basename={this.props.basename}
+														isSubmitted={this.state.submittedDate}
+														linkToReviewPage={false}
+													/>
 
-													<ul className="list list--unstyled">
-														{this.state.submittedDate && this.state.consultationData.consultationState.supportsDownload &&
-															<li>
-																<a
-																	onClick={() => {
-																		tagManager({
-																			event: "generic",
-																			category: "Consultation comments page",
-																			action: "Clicked",
-																			label: "Download your response button",
-																		});
-																	}}
-																	href={`${this.props.basename}/api/exportexternal/${this.props.match.params.consultationId}`}>
-																	Download submitted response (Excel)</a>
-															</li>
-														}
-														{contextValue.isLead && this.state.consultationData.consultationState.leadHasBeenSentResponse &&
-															<li>
-																<a
-																	onClick={() => {
-																		tagManager({
-																			event: "generic",
-																			category: "Consultation comments page",
-																			action: "Clicked",
-																			label: "Download comments submitted to lead button",
-																		});
-																	}}
-																	href={`${this.props.basename}/api/exportlead/${this.props.match.params.consultationId}`}>
-																Download all responses from your organisation (Excel)</a>
-															</li>
-														}
-													</ul>
-
-													{this.state.submittedDate &&
-													<>
-														<h2>What happens next?</h2>
-														{contextValue.isOrganisationCommenter && !contextValue.isLead ? (
-															<>
-																<p>{`${contextValue.organisationName}`} will review all the submissions received for this consultation.</p>
-																<p>NICE's response to all the submissions received will be published on the website around the time the final guidance is published.</p>
-															</>
-														) : (
-															<p>We will review all the submissions received for this consultation. Our response	will be published on the website around the time the guidance is published.</p>
-														)}
-														<hr/>
-													</>
-													}
 													<div className="grid">
 														<div data-g="12 md:3" className="sticky">
 															<h2 className="h5 mt--0">Filter</h2>

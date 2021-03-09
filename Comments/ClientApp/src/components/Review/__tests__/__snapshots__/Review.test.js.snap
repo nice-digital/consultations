@@ -135,26 +135,28 @@ Array [
                 "",
                 "",
               ]
-              <h2>
-                Your response was submitted 
-                 on 
-                <time
-                  dateTime={"2019-07-23T12:50:40.704Z"}
-                >
-                  23 July 2019
-                </time>
-                .
-              </h2>
-              <ul
-                className="list list--unstyled"
-              />
-              <h2>
-                What happens next?
-              </h2>
-              <p>
-                We will review all the submissions received for this consultation. Our response will be published on the website around the time the guidance is published.
-              </p>
-              <hr />
+              Array [
+                <h2>
+                  Your response was submitted 
+                   on 
+                  <time
+                    dateTime={"2019-07-23T12:50:40.704Z"}
+                  >
+                    23 July 2019
+                  </time>
+                  .
+                </h2>,
+                <ul
+                  className="list list--unstyled"
+                />,
+                <h2>
+                  What happens next?
+                </h2>,
+                <p>
+                  We will review all the submissions received for this consultation. Our response will be published on the website around the time the guidance is published.
+                </p>,
+                <hr />,
+              ]
               <div
                 className="grid"
               >
