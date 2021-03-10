@@ -141,7 +141,7 @@ namespace Comments.Test.UnitTests
 			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
 			{
 				TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, collationCode: collationCodeInDB);
-				var serviceUnderTest = new OrganisationService(context, _fakeUserService, new FakeAPITokenService(), _fakeApiService, mockFactory.Object, null);
+				var serviceUnderTest = new OrganisationService(context, _fakeUserService, new FakeAPITokenClient(), _fakeApiService, mockFactory.Object, null);
 
 				//Act 
 				var organisationCode = await serviceUnderTest.CheckValidCodeForConsultation(collationCode, consultationId);
@@ -234,7 +234,7 @@ namespace Comments.Test.UnitTests
 		}
 
 		[Fact]
-		public void OrganisationUserCreatesAUniqueSessionIdWhenCalledMultipleTimesAndAllSessionsAreSavedToDatabaseAndReturned()
+		public async Task OrganisationUserCreatesAUniqueSessionIdWhenCalledMultipleTimesAndAllSessionsAreSavedToDatabaseAndReturned()
 		{
 			//Arrange
 			ResetDatabase();
@@ -255,7 +255,7 @@ namespace Comments.Test.UnitTests
 
 					var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(1, 1, _context, collationCode: collationCodeToUse);
 
-					var session = serviceUnderTest.CreateOrganisationUserSession(organisationAuthorisationId, collationCodeToUse);
+					var session = await serviceUnderTest.CreateOrganisationUserSession(organisationAuthorisationId, collationCodeToUse);
 					sessionsReturned.Add(session.sessionId, session.expirationDate);
 				}
 
@@ -294,7 +294,7 @@ namespace Comments.Test.UnitTests
 				var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, sessionId, null);
 
 				var userService = new StubUserService(new User(User.AuthenticationMechanism.Accounts, AuthenticationConstants.AuthenticationScheme, null, null, null, new List<ValidatedSession>() { new ValidatedSession(organisationUserId, consultationId, sessionId, organisationId) }));
-				var serviceUnderTest = new OrganisationService(context, userService, new FakeAPITokenService(), fakeAPIService, mockFactory.Object, null);
+				var serviceUnderTest = new OrganisationService(context, userService, new FakeAPITokenClient(), fakeAPIService, mockFactory.Object, null);
 
 				//Act
 				var validAndOrganisationName = await serviceUnderTest.CheckOrganisationUserSession(consultationId);
@@ -324,7 +324,7 @@ namespace Comments.Test.UnitTests
 				var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, sessionId, null);
 
 				var userService = new StubUserService(new User(User.AuthenticationMechanism.Accounts, AuthenticationConstants.AuthenticationScheme, null, null, null, new List<ValidatedSession>() { new ValidatedSession(organisationUserId, consultationId, Guid.NewGuid(), organisationId) }));
-				var serviceUnderTest = new OrganisationService(context, userService, new FakeAPITokenService(), fakeAPIService, mockFactory.Object, null);
+				var serviceUnderTest = new OrganisationService(context, userService, new FakeAPITokenClient(), fakeAPIService, mockFactory.Object, null);
 
 				//Act
 				var actual = await serviceUnderTest.CheckOrganisationUserSession(consultationId);
@@ -354,7 +354,7 @@ namespace Comments.Test.UnitTests
 				var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, sessionId, null);
 
 				var userService = new StubUserService(new User(User.AuthenticationMechanism.Accounts, AuthenticationConstants.AuthenticationScheme, null, null, null, new List<ValidatedSession>() { new ValidatedSession(organisationUserId, 9999, sessionId, organisationId) }));
-				var serviceUnderTest = new OrganisationService(context, userService, new FakeAPITokenService(), fakeAPIService, mockFactory.Object, null);
+				var serviceUnderTest = new OrganisationService(context, userService, new FakeAPITokenClient(), fakeAPIService, mockFactory.Object, null);
 
 				//Act
 				var actual = await serviceUnderTest.CheckOrganisationUserSession(2);
@@ -384,7 +384,7 @@ namespace Comments.Test.UnitTests
 				var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, sessionId, null);
 
 				var userService = new StubUserService(new User(User.AuthenticationMechanism.Accounts, AuthenticationConstants.AuthenticationScheme, null, null, null, new List<ValidatedSession>() { new ValidatedSession(organisationUserId, 9999, Guid.NewGuid(), organisationId) }));
-				var serviceUnderTest = new OrganisationService(context, userService, new FakeAPITokenService(), fakeAPIService, mockFactory.Object, null);
+				var serviceUnderTest = new OrganisationService(context, userService, new FakeAPITokenClient(), fakeAPIService, mockFactory.Object, null);
 
 				//Act
 				var actual = await serviceUnderTest.CheckOrganisationUserSession(2);
@@ -413,7 +413,7 @@ namespace Comments.Test.UnitTests
 				var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, sessionId, expirationDate);
 
 				var userService = new StubUserService(new User(User.AuthenticationMechanism.Accounts, AuthenticationConstants.AuthenticationScheme, null, null, null, new List<ValidatedSession>() { new ValidatedSession(organisationUserId, consultationId, sessionId, organisationId) }));
-				var serviceUnderTest = new OrganisationService(context, userService, new FakeAPITokenService(), _fakeApiService, mockFactory.Object, null);
+				var serviceUnderTest = new OrganisationService(context, userService, new FakeAPITokenClient(), _fakeApiService, mockFactory.Object, null);
 
 				//Act
 				var validityAndOrganisationName = await serviceUnderTest.CheckOrganisationUserSession(consultationId);
@@ -439,7 +439,7 @@ namespace Comments.Test.UnitTests
 			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
 			{
 				var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, collationCode: collationCodeInDB);
-				var serviceUnderTest = new OrganisationService(context, _fakeUserService, new FakeAPITokenService(), _fakeApiService, mockFactory.Object, null);
+				var serviceUnderTest = new OrganisationService(context, _fakeUserService, new FakeAPITokenClient(), _fakeApiService, mockFactory.Object, null);
 				TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, sessionId, expirationDate);
 
 				var unvalidatedSessions = new Session(new Dictionary<int, Guid>
@@ -472,7 +472,7 @@ namespace Comments.Test.UnitTests
 			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
 			{
 				var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, collationCode: collationCodeInDB);
-				var serviceUnderTest = new OrganisationService(context, _fakeUserService, new FakeAPITokenService(), _fakeApiService, mockFactory.Object, null);
+				var serviceUnderTest = new OrganisationService(context, _fakeUserService, new FakeAPITokenClient(), _fakeApiService, mockFactory.Object, null);
 				TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, sessionId, null);
 
 				var unvalidatedSessions = new Session(new Dictionary<int, Guid>

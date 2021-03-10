@@ -9,8 +9,7 @@ namespace Comments.Controllers.Api
     [Route("consultations/api/[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly ICommentService _commentService;
-	    private readonly IUserService _userService;
+        private readonly IUserService _userService;
 	    private readonly ILogger<UserController> _logger;
 
         public UserController(IUserService userService, ILogger<UserController> logger)

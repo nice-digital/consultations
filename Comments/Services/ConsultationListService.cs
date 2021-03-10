@@ -2,14 +2,13 @@ using Comments.Common;
 using Comments.Configuration;
 using Comments.Models;
 using Comments.ViewModels;
-using NICE.Feeds;
+using Microsoft.FeatureManagement;
+using NICE.Feeds.Indev;
+using NICE.Identity.Authentication.Sdk.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.FeatureManagement;
-using NICE.Identity.Authentication.Sdk.Domain;
 
 namespace Comments.Services
 {
@@ -21,12 +20,12 @@ namespace Comments.Services
 	public class ConsultationListService : IConsultationListService
 	{
 		private readonly ConsultationsContext _context;
-		private readonly IFeedService _feedService;
+		private readonly IIndevFeedService _feedService;
 		private readonly IUserService _userService;
 		private readonly IFeatureManager _featureManager;
 		private readonly IOrganisationService _organisationService;
 
-		public ConsultationListService(ConsultationsContext consultationsContext, IFeedService feedService, IUserService userService, IFeatureManager featureManager,
+		public ConsultationListService(ConsultationsContext consultationsContext, IIndevFeedService feedService, IUserService userService, IFeatureManager featureManager,
 			IOrganisationService organisationService)
 		{
 			_context = consultationsContext;
@@ -64,7 +63,7 @@ namespace Comments.Services
 
 			var canSeeAnySubmissionCounts = isAdminUser || isTeamUser;
 
-			var consultationsFromIndev = _feedService.GetConsultationList().ToList();
+			var consultationsFromIndev = (await _feedService.GetConsultationList()).ToList();
 			var submittedCommentsAndAnswerCounts = canSeeAnySubmissionCounts ? _context.GetSubmittedCommentsAndAnswerCounts() : null;
 			var sourceURIsCommentedOrAnswered = _context.GetAllSourceURIsTheCurrentUserHasCommentedOrAnsweredAQuestion();
 

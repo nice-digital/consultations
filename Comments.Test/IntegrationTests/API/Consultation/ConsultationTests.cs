@@ -60,7 +60,7 @@ namespace Comments.Test.IntegrationTests.API.Consultation
 	    }
 
 	    [Fact]
-	    public async void CommentsQuestionsAndAnswers_CanBeRead()
+	    public async Task CommentsQuestionsAndAnswers_CanBeRead()
 	    {
 		    // Arrange
 		    ResetDatabase();
@@ -77,7 +77,7 @@ namespace Comments.Test.IntegrationTests.API.Consultation
 		    var commentService = new CommentService(_context, _fakeUserService, _consultationService, _fakeHttpContextAccessor);
 
 		    // Act    
-		    var viewModel = commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
+		    var viewModel = await commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
 
 		    //Assert
 		    viewModel.Comments.Single().CommentText.ShouldBe(commentText);

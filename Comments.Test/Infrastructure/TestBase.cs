@@ -1,40 +1,35 @@
-using Comments.Models;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using Comments.Common;
 using Comments.Configuration;
-using Comments.Migrations;
+using Comments.Models;
 using Comments.Services;
 using Comments.ViewModels;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
-using NICE.Feeds;
-using NICE.Feeds.Tests.Infrastructure;
-using Microsoft.Data.Sqlite;
 using Microsoft.FeatureManagement;
-using NICE.Feeds.Models.Indev.List;
+using NICE.Feeds.Tests.Infrastructure;
 using NICE.Identity.Authentication.Sdk.API;
+using NICE.Identity.Authentication.Sdk.TokenStore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using NICE.Feeds.Indev;
+using NICE.Feeds.Indev.Models.List;
 using Answer = Comments.Models.Answer;
 using Comment = Comments.Models.Comment;
-using FeedConfig = NICE.Feeds.Configuration.FeedConfig;
 using Location = Comments.Models.Location;
 using Question = Comments.Models.Question;
 using QuestionType = Comments.Models.QuestionType;
-using Status = Comments.Models.Status;
 
 namespace Comments.Test.Infrastructure
 {
@@ -177,7 +172,7 @@ namespace Comments.Test.Infrastructure
                     {
 	                    services.TryAddTransient<IUserService>(provider => _fakeUserService);
 					}
-                    services.TryAddTransient<IFeedReaderService>(provider => new FeedReader(FeedToUse));
+                    services.TryAddTransient<IIndevFeedReaderService>(provider => new FeedReader(FeedToUse));
                     services.TryAddScoped<IAPIService>(provider => _fakeApiService);
 					
 					services.AddSingleton<IFeatureManager>(provider => _fakeFeatureManager);
@@ -196,6 +191,8 @@ namespace Comments.Test.Infrastructure
 	                {
 		                services.AddMvc(opt => opt.Filters.Add(new AllowAnonymousFilter())); //bypass authentication
 	                }
+
+					services.TryAddSingleton<IApiTokenStore, FakeApiTokenStore>();
                 })
                 .Configure(app =>
                 {
@@ -219,8 +216,8 @@ namespace Comments.Test.Infrastructure
 
             _feedConfig = new FeedConfig()
             {
-                AppCacheTimeSeconds = 30,
-                IndevApiKey = "api key goes here",
+                CacheDurationSeconds = 30,
+                ApiKey = "api key goes here",
                 IndevBasePath = new Uri("http://test-indev.nice.org.uk"),
                 IndevPublishedChapterFeedPath = "consultation-comments/{0}/document/{1}/chapter-slug/{2}",
 	            IndevDraftPreviewChapterFeedPath = "preview/{0}/consultation/{1}/document/{2}/chapter-slug/{3}",

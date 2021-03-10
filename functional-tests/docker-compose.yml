@@ -66,6 +66,7 @@ services:
     build: ./../Comments/
     links:
       - database
+      - redis
     # Enable browsing from the host machine on http://localhost:8080/consultations
     ports:
       - 8080:8080
@@ -107,6 +108,7 @@ services:
       - TEAMROLES2
       - TEAMROLES3
       - ORG_COMMENTING
+      - REDIS_CONNECTION_STRING
 
   # MS SQL Server database
   database:
@@ -134,3 +136,12 @@ services:
       default:
         aliases:
           - niceorg
+
+  redis:
+    container_name: functional-tests_redis_1
+    image: "redis:alpine"
+    #command: redis-server --requirepass sOmE_sEcUrE_pAsS
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    #command: ["redis-server", "--bind", "redis", "--port", "6379"]

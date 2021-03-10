@@ -8,7 +8,7 @@ export const idamGlobalNavLogin = (username, password) => {
 
 	browser.waitForExist(
 		"body #header-menu a[href*='/consultations/account/login?returnURL=']",
-		10000
+		20000
 	);
 	var headerMenuShown = browser.isVisible("body #header-menu-button");
 	if (headerMenuShown) {

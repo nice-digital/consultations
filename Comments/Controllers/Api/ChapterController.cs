@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using Microsoft.AspNetCore.Authorization;
+using System.Threading.Tasks;
 
 namespace Comments.Controllers.Api
 {
@@ -28,12 +29,12 @@ namespace Comments.Controllers.Api
 		/// <param name="chapterSlug">non-empty string</param>
 		/// <returns></returns>
 		[HttpGet]
-        public ChapterContent Get(int consultationId, int documentId, string chapterSlug)
+        public async Task<ChapterContent> Get(int consultationId, int documentId, string chapterSlug)
         {
             if (string.IsNullOrWhiteSpace(chapterSlug))
                 throw new ArgumentNullException(nameof(chapterSlug));
 			
-			return _consultationService.GetChapterContent(consultationId, documentId, chapterSlug);
+			return await _consultationService.GetChapterContent(consultationId, documentId, chapterSlug);
 		}
 	}
 
@@ -60,7 +61,7 @@ namespace Comments.Controllers.Api
 		/// <param name="reference">non-empty string</param>
 		/// <returns></returns>
 		[HttpGet]
-		public ChapterContent Get(int consultationId, int documentId, string chapterSlug, string reference)
+		public async Task<ChapterContent> Get(int consultationId, int documentId, string chapterSlug, string reference)
 		{
 			if (string.IsNullOrWhiteSpace(chapterSlug))
 				throw new ArgumentNullException(nameof(chapterSlug));
@@ -68,7 +69,7 @@ namespace Comments.Controllers.Api
 			if (string.IsNullOrWhiteSpace(reference))
 				throw new ArgumentNullException(nameof(reference));
 
-			return _consultationService.GetPreviewChapterContent(consultationId, documentId, chapterSlug, reference);
+			return await _consultationService.GetPreviewChapterContent(consultationId, documentId, chapterSlug, reference);
 		}
 	}
 }
