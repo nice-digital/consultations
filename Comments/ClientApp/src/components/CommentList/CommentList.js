@@ -132,8 +132,14 @@ export class CommentList extends Component<PropsType, StateType> {
 		);
 
 		if (preloadedCommentsFromOtherCodeUsers) {
+			const questions = this.state.questions.map((item, index) => {
+				let question = {...item};
+				question.answers = question.answers.concat(preloadedCommentsFromOtherCodeUsers.questions[index].answers);
+				return question;
+			});
+
 			this.state.comments = this.state.comments.concat(preloadedCommentsFromOtherCodeUsers.comments);
-			this.state.questions = this.state.questions.concat(preloadedCommentsFromOtherCodeUsers.questions);
+			this.state.questions = questions;
 		}
 	}
 
@@ -142,7 +148,11 @@ export class CommentList extends Component<PropsType, StateType> {
 		load("commentsForOtherOrgCommenters", undefined, [], {sourceURI: this.props.match.url}).then(
 			function(response) {
 				const comments = this.state.comments.concat(response.data.comments);
-				const questions = this.state.questions.concat(response.data.questions);
+				const questions = this.state.questions.map((item, index) => {
+					let question = {...item};
+					question.answers = question.answers.concat(response.data.questions[index].answers);
+					return question;
+				});
 
 				this.setState({
 					comments,
