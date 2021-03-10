@@ -2,21 +2,22 @@ using Comments.Common;
 using Comments.Configuration;
 using Comments.Models;
 using Comments.ViewModels;
-using NICE.Feeds;
+using NICE.Feeds.Indev;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Authentication;
+using System.Threading.Tasks;
 using Location = Comments.Models.Location;
 
 namespace Comments.Services
 {
 	public interface IExportService
 	{
-		(IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetAllDataForConsultation(int consultationId);
+		Task<(IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid)> GetAllDataForConsultation(int consultationId);
 
 		(IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetAllDataForConsultationForCurrentUser(int consultationId);
-		(string ConsultationName, string DocumentName, string ChapterName) GetLocationData(Comments.Models.Location location);
-		string GetConsultationName(Location location);
+		Task<(string ConsultationName, string DocumentName, string ChapterName)> GetLocationData(Comments.Models.Location location);
+		Task<string> GetConsultationName(Location location);
 		IEnumerable<OrganisationUser> GetOrganisationUsersByOrganisationUserIds(IEnumerable<int> organisationUserIds);
 	}
 
@@ -25,9 +26,9 @@ namespace Comments.Services
 	    private readonly ConsultationsContext _context;
 	    private readonly IUserService _userService;
 	    private readonly IConsultationService _consultationService;
-	    private readonly IFeedService _feedService;
+	    private readonly IIndevFeedService _feedService;
 
-		public ExportService(ConsultationsContext consultationsContext, IUserService userService, IConsultationService consultationService, IFeedService feedService)
+		public ExportService(ConsultationsContext consultationsContext, IUserService userService, IConsultationService consultationService, IIndevFeedService feedService)
 	    {
 		    var user = userService.GetCurrentUser();
 		    if (!user.IsAuthenticatedByAnyMechanism)
@@ -41,11 +42,11 @@ namespace Comments.Services
 		    _feedService = feedService;
 	    }
 
-	    public (IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetAllDataForConsultation(int consultationId)
+	    public async Task<(IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid)> GetAllDataForConsultation(int consultationId)
 	    {
 		    var userRoles = _userService.GetUserRoles().ToList();
 		    var isAdminUser = userRoles.Any(role => AppSettings.ConsultationListConfig.DownloadRoles.AdminRoles.Contains(role));
-			var consultation = _feedService.GetConsultationList().Single(c => c.ConsultationId.Equals(consultationId));
+			var consultation = (await _feedService.GetConsultationList()).Single(c => c.ConsultationId.Equals(consultationId));
 		    if (!isAdminUser && !userRoles.Contains(consultation.AllowedRole))
 		    {
 				return (null, null, null, new Validate(valid: false, unauthenticated: true, message: $"User does not have access to download this type of consultation."));
@@ -76,13 +77,13 @@ namespace Comments.Services
 		    return (commentsInDB, answersInDB, questionsInDB, new Validate(true));
 	    }
 
-		public (string ConsultationName, string DocumentName, string ChapterName) GetLocationData(Location location)
+		public async Task<(string ConsultationName, string DocumentName, string ChapterName)> GetLocationData(Location location)
 	    {
 		    var sourceURI = location.SourceURI;
 		    ConsultationsUriElements URIElements = ConsultationsUri.ParseConsultationsUri(sourceURI);
 
-		    var consultationDetails = _consultationService.GetConsultation(URIElements.ConsultationId, BreadcrumbType.None, useFilters:false);
-		    var documents = _consultationService.GetDocuments(URIElements.ConsultationId).documents;
+		    var consultationDetails = await _consultationService.GetConsultation(URIElements.ConsultationId, BreadcrumbType.None, useFilters:false);
+		    var documents = (await _consultationService.GetDocuments(URIElements.ConsultationId)).documents;
 		    var documentDetail = documents.FirstOrDefault(x => x.DocumentId == URIElements.DocumentId);
 
 		    Chapter chapterDetail = null;
@@ -92,12 +93,12 @@ namespace Comments.Services
 		    return (consultationDetails.ConsultationName, documentDetail?.Title, chapterDetail?.Slug);
 	    }
 
-	    public string GetConsultationName(Location location)
+	    public async Task<string> GetConsultationName(Location location)
 	    {
 		    var sourceURI = location.SourceURI;
 		    ConsultationsUriElements URIElements = ConsultationsUri.ParseConsultationsUri(sourceURI);
 
-		    var consultationDetails = _consultationService.GetConsultation(URIElements.ConsultationId,  BreadcrumbType.None, useFilters:false);
+		    var consultationDetails = await _consultationService.GetConsultation(URIElements.ConsultationId,  BreadcrumbType.None, useFilters:false);
 		    return consultationDetails.ConsultationName;
 	    }
 

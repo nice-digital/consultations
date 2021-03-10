@@ -3,6 +3,7 @@ using Comments.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Threading.Tasks;
 
 namespace Comments.Controllers.Api
 {
@@ -25,12 +26,12 @@ namespace Comments.Controllers.Api
 		/// <returns></returns>
 		[Route("consultations/api/[controller]")]
 		[HttpGet]
-        public CommentsAndQuestions Get(string sourceURI)
+        public async Task<CommentsAndQuestions> Get(string sourceURI)
         {
             if (string.IsNullOrWhiteSpace(sourceURI))
                 throw new ArgumentNullException(nameof(sourceURI));
 
-            return _commentService.GetCommentsAndQuestions(relativeURL: sourceURI, urlHelper: Url);
+            return await _commentService.GetCommentsAndQuestions(relativeURL: sourceURI, urlHelper: Url);
         }
 
 		/// <summary>
@@ -41,12 +42,12 @@ namespace Comments.Controllers.Api
 		/// <returns></returns>
 		[Route("consultations/api/[controller]ForReview")]
 	    [HttpGet]
-	    public ReviewPageViewModel Get(string relativeURL, ReviewPageViewModel reviewPageViewModel)
+	    public async Task<ReviewPageViewModel> Get(string relativeURL, ReviewPageViewModel reviewPageViewModel)
 	    {
 			if (string.IsNullOrWhiteSpace(relativeURL))
 				throw new ArgumentNullException(nameof(relativeURL));
 
-			return _commentService.GetCommentsAndQuestionsForReview(relativeURL, urlHelper: Url, reviewPageViewModel);
+			return await _commentService.GetCommentsAndQuestionsForReview(relativeURL, urlHelper: Url, reviewPageViewModel);
 	    }
 
 		/// <summary>

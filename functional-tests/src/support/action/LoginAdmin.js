@@ -7,6 +7,7 @@ export const LoginAdmin = (username, password) => {
 	// browser.refresh();
 	idamGlobalnavLogin(username, password);
 	browser.pause(2000);
+	browser.refresh();
 	waitForVisible("[data-qa-sel='changeable-page-header']");
 	browser.pause(2000);
 };

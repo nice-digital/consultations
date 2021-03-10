@@ -1,10 +1,11 @@
- Feature: Comment on a Sub-Section
-   	As a user of consultations
-  	We want to be able to login to make a comment
- 		We want to be able to comment at the Sub-section level
+Feature: Comment on a Sub-Section
+	As a user of consultations
+	We want to be able to login to make a comment
+	We want to be able to comment at the Sub-section level
 
- Background:
-    Given I open the url "158/3/guidance"
+	Background:
+		Given I open the url "158/3/guidance"
+		And I refresh
 		When I log into accounts with username "IDAM_EMAIL2" and password "IDAM_PASSWORD"
 		Given I delete all comments on the page
 

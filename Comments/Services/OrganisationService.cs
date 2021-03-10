@@ -1,18 +1,16 @@
 using Comments.Common;
-using Comments.Configuration;
 using Comments.Models;
 using Comments.ViewModels;
 using NICE.Feeds;
 using NICE.Identity.Authentication.Sdk.API;
 using NICE.Identity.Authentication.Sdk.Authorisation;
+using NICE.Identity.Authentication.Sdk.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using NICE.Identity.Authentication.Sdk.Domain;
-using DocumentFormat.OpenXml.Vml.Spreadsheet;
-using Comment = Comments.Models.Comment;
+using NICE.Feeds.Indev.Models;
 
 namespace Comments.Services
 {
@@ -20,7 +18,7 @@ namespace Comments.Services
 	{
 		OrganisationCode GenerateOrganisationCode(int organisationId, int consultationId);
 		Task<OrganisationCode> CheckValidCodeForConsultation(string collationCode, int consultationId);
-		(Guid sessionId, DateTime expirationDate) CreateOrganisationUserSession(int organisationAuthorisationId, string collationCode);
+		Task<(Guid sessionId, DateTime expirationDate)> CreateOrganisationUserSession(int organisationAuthorisationId, string collationCode);
 		Task<(bool valid, string organisationName)> CheckOrganisationUserSession(int consultationId);
 		IList<ValidatedSession> CheckValidCodesForConsultation(Session unvalidatedSessions);
 		Task<Dictionary<int, string>> GetOrganisationNames(IEnumerable<int> organisationIds);
@@ -30,16 +28,16 @@ namespace Comments.Services
 	{
         private readonly ConsultationsContext _context;
         private readonly IUserService _userService;
-        private readonly IApiToken _apiTokenService;
+        private readonly IApiTokenClient _apiTokenClient;
         private readonly IAPIService _apiService;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConsultationService _consultationService;
 
-        public OrganisationService(ConsultationsContext context, IUserService userService, IApiToken apiTokenService, IAPIService apiService, IHttpClientFactory httpClientFactory, IConsultationService consultationService)
+        public OrganisationService(ConsultationsContext context, IUserService userService, IApiTokenClient apiTokenClient, IAPIService apiService, IHttpClientFactory httpClientFactory, IConsultationService consultationService)
         {
             _context = context;
             _userService = userService;
-            _apiTokenService = apiTokenService;
+            _apiTokenClient = apiTokenClient;
             _apiService = apiService;
             _httpClientFactory = httpClientFactory;
             _consultationService = consultationService;
@@ -147,13 +145,13 @@ namespace Comments.Services
 		}
 
 
-		public (Guid sessionId, DateTime expirationDate) CreateOrganisationUserSession(int organisationAuthorisationId, string collationCode)
+		public async Task<(Guid sessionId, DateTime expirationDate)> CreateOrganisationUserSession(int organisationAuthorisationId, string collationCode)
 		{
 			var organisationAuthorisationForSuppliedCollationCode = _context.GetOrganisationAuthorisationByCollationCode(collationCode);
 			if (organisationAuthorisationForSuppliedCollationCode == null || !organisationAuthorisationForSuppliedCollationCode.OrganisationAuthorisationId.Equals(organisationAuthorisationId))
 				throw new ApplicationException($"Supplied collation code: {collationCode} is not valid for the supplied organisation authorisation id:{organisationAuthorisationId}");
 
-			var consultationDetails = _consultationService.GetConsultationState(organisationAuthorisationForSuppliedCollationCode.Location.SourceURI, PreviewState.NonPreview);
+			var consultationDetails = await _consultationService.GetConsultationState(organisationAuthorisationForSuppliedCollationCode.Location.SourceURI, PreviewState.NonPreview);
 			var expirationDate = consultationDetails.EndDate.AddDays(28);
 
 			var organisationUser = _context.CreateOrganisationUser(organisationAuthorisationId, Guid.NewGuid(), expirationDate);
@@ -215,14 +213,11 @@ namespace Comments.Services
 
 		public async Task<Dictionary<int, string>> GetOrganisationNames(IEnumerable<int> organisationIds)
 		{
-			//var machineToMachineAccessToken = await _apiTokenService.GetAccessToken(AppSettings.AuthenticationConfig.GetAuthConfiguration());
-			//var httpClientWithPooledMessageHandler = _httpClientFactory.CreateClient();
+			var cachedM2MAccessToken = new JwtToken { AccessToken = await _apiTokenClient.GetAccessToken()};
 
-			//var organisations = await _apiService.GetOrganisations(organisationIds.Distinct(), machineToMachineAccessToken, httpClientWithPooledMessageHandler);
-			
-			//the above has been temporarily commented out until the m2m token caching branch in idam has been merged.
+			var httpClientWithPooledMessageHandler = _httpClientFactory.CreateClient();
 
-			var organisations = organisationIds.Distinct().Select(orgId => new Organisation(orgId, "Not NICE", false));
+			var organisations = await _apiService.GetOrganisations(organisationIds.Distinct(), cachedM2MAccessToken, httpClientWithPooledMessageHandler);
 
 			return organisations.ToDictionary(k => k.OrganisationId, v => v.OrganisationName);
 		}

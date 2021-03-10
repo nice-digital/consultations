@@ -61,6 +61,8 @@ namespace Comments.Common
 		public static class Features
 	    {
 		    public const string OrganisationalCommenting = "OrganisationalCommenting";
+
+		    public const string IndevUsingIDAMAuth = "IndevUsingIDAMAuth";
 	    }
 
 

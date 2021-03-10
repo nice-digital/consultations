@@ -6,6 +6,7 @@ Feature: External User can access download page and only the consultations comme
 
 	Background:
 		Given I open the url "472/1/quality-statements"
+		And I refresh
 		When I log into accounts with username "IDAM_EMAIL5" and password "IDAM_PASSWORD"
 
 	Scenario: User makes a comment and submits it to NICE and when they view the download page it shows they have commented

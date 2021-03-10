@@ -1,13 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using Comments.Common;
-using Newtonsoft.Json;
-using NICE.Feeds.Models.Indev;
-using NICE.Feeds.Models.Indev.Detail;
 
 namespace Comments.ViewModels
 {
-    public class QuestionAdminDocument
+	public class QuestionAdminDocument
     {
 		public QuestionAdminDocument(int documentId, string title, IEnumerable<Question> documentQuestions)
 		{

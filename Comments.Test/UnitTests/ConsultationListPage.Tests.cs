@@ -5,13 +5,13 @@ using Comments.Services;
 using Comments.Test.Infrastructure;
 using Comments.ViewModels;
 using Newtonsoft.Json;
-using NICE.Feeds.Models.Indev.List;
 using NICE.Feeds.Tests.Infrastructure;
 using Shouldly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using NICE.Feeds.Indev.Models.List;
 using Xunit;
 using TestBase = Comments.Test.Infrastructure.TestBase;
 
