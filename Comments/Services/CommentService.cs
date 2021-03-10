@@ -1,4 +1,4 @@
-using Comments.Common;
+﻿using Comments.Common;
 using Comments.Configuration;
 using Comments.Models;
 using Comments.ViewModels;
@@ -207,7 +207,7 @@ namespace Comments.Services
 			model.IsLead = _currentUser?.OrganisationsAssignedAsLead.Any();
 
 			var consultationId = ConsultationsUri.ParseRelativeUrl(relativeURL).ConsultationId;
-			model.Filters = await GetFilterGroups(consultationId, commentsAndQuestions, model.Type, model.Document);
+			model.Filters = await GetFilterGroups(consultationId, commentsAndQuestions, model.Type, model.Document, model.Commenter);
 			return model;
 		}
 

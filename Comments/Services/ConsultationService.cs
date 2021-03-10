@@ -1,4 +1,4 @@
-using Comments.Common;
+﻿using Comments.Common;
 using Comments.Configuration;
 using Comments.Models;
 using Comments.ViewModels;
@@ -294,15 +294,25 @@ namespace Comments.Services
 		//TODO: Move to OrganisationService
 		public List<string> GetEmailAddressForComment(CommentsAndQuestions commentsAndQuestions)
 		{
-			var commentIds = commentsAndQuestions.Comments.Select(c => c.CommentId).ToList();
-			var questionIds = commentsAndQuestions.Questions.Select(q => q.QuestionId).ToList();
+            //TODO less DB hits
 
+			var commentIds = commentsAndQuestions.Comments.Select(c => c.CommentId).ToList();
+            var answerIds = commentsAndQuestions.Questions.SelectMany(q => q.Answers).Select(a => a.AnswerId).ToList();
+                                            
 			var organisationUserIds = _context.Comment.Where(c => commentIds.Contains(c.CommentId))
-													.Select(c => c.OrganisationUserId)
-													.Distinct()
+                                                    .Select(c => c.OrganisationUserId)
+                                                    .Distinct()
 													.ToList();
 
-			var emailAddresses = _context.OrganisationUser.Where(o => organisationUserIds.Contains(o.OrganisationUserId))
+            var moreOrganisationUserIds = _context.Answer.Where(a => answerIds.Contains(a.AnswerId))
+                                                    .Select(a => a.OrganisationUserId)
+                                                    .Distinct()
+                                                    .ToList();
+
+            var orgUserIds = organisationUserIds.Concat(moreOrganisationUserIds).Distinct();
+
+
+            var emailAddresses = _context.OrganisationUser.Where(o => orgUserIds.Contains(o.OrganisationUserId))
 														.Select(o => o.EmailAddress)
 														.ToList();
 
