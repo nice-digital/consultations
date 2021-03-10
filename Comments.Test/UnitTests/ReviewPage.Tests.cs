@@ -41,7 +41,7 @@ namespace Comments.Test.UnitTests
 			var commentService = new CommentService(null, _fakeUserService, null, _fakeHttpContextAccessor);
 
 			//Act
-			var filteredCommentsAndQuestions = commentService.FilterCommentsAndQuestions(unfilteredCommentsAndQuestions, typesToFilter, documentIdsToFilter);
+			var filteredCommentsAndQuestions = commentService.FilterCommentsAndQuestions(unfilteredCommentsAndQuestions, typesToFilter, documentIdsToFilter, null);
 
 			//Assert
 			filteredCommentsAndQuestions.Comments.Count.ShouldBe(unfilteredCommentsAndQuestions.Comments.Count);
@@ -59,7 +59,7 @@ namespace Comments.Test.UnitTests
 			var commentService = new CommentService(null, _fakeUserService, null, _fakeHttpContextAccessor);
 
 			//Act
-			var filteredCommentsAndQuestions = commentService.FilterCommentsAndQuestions(unfilteredCommentsAndQuestions, new List<QuestionsOrComments> { QuestionsOrComments.Comments }, null);
+			var filteredCommentsAndQuestions = commentService.FilterCommentsAndQuestions(unfilteredCommentsAndQuestions, new List<QuestionsOrComments> { QuestionsOrComments.Comments }, null, null);
 
 			//Assert
 			filteredCommentsAndQuestions.Comments.ForEach(c => c.Show.ShouldBeTrue());
@@ -74,7 +74,7 @@ namespace Comments.Test.UnitTests
 			var commentService = new CommentService(null, _fakeUserService, null, _fakeHttpContextAccessor);
 
 			//Act
-			var filteredCommentsAndQuestions = commentService.FilterCommentsAndQuestions(unfilteredCommentsAndQuestions, new List<QuestionsOrComments> { QuestionsOrComments.Questions }, null);
+			var filteredCommentsAndQuestions = commentService.FilterCommentsAndQuestions(unfilteredCommentsAndQuestions, new List<QuestionsOrComments> { QuestionsOrComments.Questions }, null, null);
 
 			//Assert
 			filteredCommentsAndQuestions.Comments.ForEach(c => c.Show.ShouldBeFalse());
@@ -89,7 +89,7 @@ namespace Comments.Test.UnitTests
 			var commentService = new CommentService(null, _fakeUserService, null, _fakeHttpContextAccessor);
 
 			//Act
-			var filteredCommentsAndQuestions = commentService.FilterCommentsAndQuestions(unfilteredCommentsAndQuestions, null, new List<int>(){ 1 });
+			var filteredCommentsAndQuestions = commentService.FilterCommentsAndQuestions(unfilteredCommentsAndQuestions, null, new List<int>(){ 1 }, null);
 
 			//Assert
 			filteredCommentsAndQuestions.Comments.ForEach(c => c.Show.ShouldBeTrue());
@@ -104,7 +104,7 @@ namespace Comments.Test.UnitTests
 			var commentService = new CommentService(null, _fakeUserService, null, _fakeHttpContextAccessor);
 
 			//Act
-			var filteredCommentsAndQuestions = commentService.FilterCommentsAndQuestions(unfilteredCommentsAndQuestions, null, new List<int>() { 99 });
+			var filteredCommentsAndQuestions = commentService.FilterCommentsAndQuestions(unfilteredCommentsAndQuestions, null, new List<int>() { 99 }, null);
 
 			//Assert
 			filteredCommentsAndQuestions.Comments.ForEach(c => c.Show.ShouldBeFalse());

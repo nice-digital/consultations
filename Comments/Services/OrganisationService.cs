@@ -24,7 +24,6 @@ namespace Comments.Services
 		Task<(bool valid, string organisationName)> CheckOrganisationUserSession(int consultationId);
 		IList<ValidatedSession> CheckValidCodesForConsultation(Session unvalidatedSessions);
 		Task<Dictionary<int, string>> GetOrganisationNames(IEnumerable<int> organisationIds);
-		List<string> GetEmailAddressForComment(CommentsAndQuestions commentsAndQuestions);
 	}
 
     public class OrganisationService : IOrganisationService
@@ -226,22 +225,6 @@ namespace Comments.Services
 			var organisations = organisationIds.Distinct().Select(orgId => new Organisation(orgId, "Not NICE", false));
 
 			return organisations.ToDictionary(k => k.OrganisationId, v => v.OrganisationName);
-		}
-
-		public List<string> GetEmailAddressForComment(CommentsAndQuestions commentsAndQuestions)
-		{
-			var commentIds = commentsAndQuestions.Comments.Select(c => c.CommentId).ToList();
-
-			var organisationUserIds = _context.Comment.Where(c => commentIds.Contains(c.CommentId))
-													.Select(c => c.OrganisationUserId)
-													.Distinct()
-													.ToList();
-
-			var emailAddresses = _context.OrganisationUser.Where(o => organisationUserIds.Contains(o.OrganisationUserId))
-														.Select(o => o.EmailAddress)
-														.ToList();
-
-			return emailAddresses;
 		}
 	}
 }

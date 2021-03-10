@@ -42,7 +42,8 @@ namespace Comments.Services
 		string GetFirstChapterSlug(int consultationId, int documentId);
 	    string GetFirstChapterSlugFromPreviewDocument(string reference, int consultationId, int documentId);
 
-    }
+		List<string> GetEmailAddressForComment(CommentsAndQuestions commentsAndQuestions);
+	}
 
 	public class ConsultationService : IConsultationService
     {
@@ -256,36 +257,54 @@ namespace Comments.Services
 	    }
 
 
-	    //public ConsultationState GetDraftConsultationState(int consultationId, int documentId, string reference, IEnumerable<Models.Location> locations = null, ConsultationPublishedPreviewDetail consultationDetail = null)
-	    //{
-		   // var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
-		   // if (consultationDetail == null)
-			  //  consultationDetail = GetDraftConsultationDetail(consultationId, documentId, reference);
+		//public ConsultationState GetDraftConsultationState(int consultationId, int documentId, string reference, IEnumerable<Models.Location> locations = null, ConsultationPublishedPreviewDetail consultationDetail = null)
+		//{
+		// var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
+		// if (consultationDetail == null)
+		//  consultationDetail = GetDraftConsultationDetail(consultationId, documentId, reference);
 
-		   // var documents = GetPreviewDraftDocuments(consultationId, documentId, reference).ToList();
-		   // var documentsWhichSupportQuestions = documents.Where(d => d.SupportsQuestions).Select(d => d.DocumentId).ToList();
-		   // var documentsWhichSupportComments = documents.Where(d => d.SupportsComments).Select(d => d.DocumentId).ToList();
+		// var documents = GetPreviewDraftDocuments(consultationId, documentId, reference).ToList();
+		// var documentsWhichSupportQuestions = documents.Where(d => d.SupportsQuestions).Select(d => d.DocumentId).ToList();
+		// var documentsWhichSupportComments = documents.Where(d => d.SupportsComments).Select(d => d.DocumentId).ToList();
 
-		   // var currentUser = _userService.GetCurrentUser();
+		// var currentUser = _userService.GetCurrentUser();
 
-		   // if (locations == null && currentUser.IsAuthenticated && currentUser.UserId.HasValue)
-		   // {
-			  //  locations = _context.GetAllCommentsAndQuestionsForDocument(new[] { sourceURI }, partialMatchSourceURI: true);
-		   // }
-		   // else
-		   // {
-			  //  locations = new List<Models.Location>(0);
-		   // }
+		// if (locations == null && currentUser.IsAuthenticated && currentUser.UserId.HasValue)
+		// {
+		//  locations = _context.GetAllCommentsAndQuestionsForDocument(new[] { sourceURI }, partialMatchSourceURI: true);
+		// }
+		// else
+		// {
+		//  locations = new List<Models.Location>(0);
+		// }
 
-		   // var hasSubmitted = currentUser != null && currentUser.IsAuthenticated && currentUser.UserId.HasValue ? GetSubmittedDate(sourceURI, currentUser.UserId.Value) : false;
+		// var hasSubmitted = currentUser != null && currentUser.IsAuthenticated && currentUser.UserId.HasValue ? GetSubmittedDate(sourceURI, currentUser.UserId.Value) : false;
 
-		   // var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);
+		// var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);
 
-		   // var consultationState = new ConsultationState(consultationDetail.StartDate, consultationDetail.EndDate,
-			  //  data.questions.Any(), data.questions.Any(q => q.Answers.Any()), data.comments.Any(), hasSubmitted,
-			  //  false, false, documentsWhichSupportQuestions, documentsWhichSupportComments);
+		// var consultationState = new ConsultationState(consultationDetail.StartDate, consultationDetail.EndDate,
+		//  data.questions.Any(), data.questions.Any(q => q.Answers.Any()), data.comments.Any(), hasSubmitted,
+		//  false, false, documentsWhichSupportQuestions, documentsWhichSupportComments);
 
-		   // return consultationState;
-	    //}
+		// return consultationState;
+		//}
+
+		//TODO: Move to OrganisationService
+		public List<string> GetEmailAddressForComment(CommentsAndQuestions commentsAndQuestions)
+		{
+			var commentIds = commentsAndQuestions.Comments.Select(c => c.CommentId).ToList();
+			var questionIds = commentsAndQuestions.Questions.Select(q => q.QuestionId).ToList();
+
+			var organisationUserIds = _context.Comment.Where(c => commentIds.Contains(c.CommentId))
+													.Select(c => c.OrganisationUserId)
+													.Distinct()
+													.ToList();
+
+			var emailAddresses = _context.OrganisationUser.Where(o => organisationUserIds.Contains(o.OrganisationUserId))
+														.Select(o => o.EmailAddress)
+														.ToList();
+
+			return emailAddresses;
+		}
 	}
 }

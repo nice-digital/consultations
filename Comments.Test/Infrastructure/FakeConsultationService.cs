@@ -133,6 +133,11 @@ namespace Comments.Test.Infrastructure
 		    throw new NotImplementedException();
 	    }
 
+		List<string> IConsultationService.GetEmailAddressForComment(CommentsAndQuestions commentsAndQuestions)
+		{
+			throw new NotImplementedException();
+		}
+
 		#endregion Not Implemented Members
 	}
 }

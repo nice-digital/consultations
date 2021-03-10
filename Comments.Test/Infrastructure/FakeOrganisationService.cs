@@ -46,10 +46,5 @@ namespace Comments.Test.Infrastructure
 		{
 			return Task.Run((() => _organisations));
 		}
-
-		public List<string> GetEmailAddressForComment(CommentsAndQuestions commentsAndQuestions)
-		{
-			throw new NotImplementedException();
-		}
 	}
 }
