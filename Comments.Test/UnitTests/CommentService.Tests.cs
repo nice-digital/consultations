@@ -253,7 +253,7 @@ namespace Comments.Test.UnitTests
             AddCommentsAndQuestionsAndAnswers(ConsultationTwoURI, commentText, questionText, answerText, createdByUserId, (int)StatusName.Draft, _context);
             AddCommentsAndQuestionsAndAnswers(ChaperOverviewURI, "Another Users Comment", questionText, answerText, anotherUserId, (int)StatusName.Draft, _context);
 
-	        var context = new ConsultationsContext(_options, userService, _fakeEncryption);
+            var context = new ConsultationsContext(_options, userService, _fakeEncryption);
 	        //var submitService = new SubmitService(context, _fakeUserService, _consultationService);
 			var commentService = new CommentService(context, _fakeUserService, _consultationService, _fakeHttpContextAccessor);
 
@@ -312,17 +312,19 @@ namespace Comments.Test.UnitTests
 	        var locationId = AddLocation(sourceURI);
 
 	        AddComment(locationId, "current user's comment", createdByUserId: null, organisationUserId: organisationUserId, organisationId: organisationId);
-	        AddComment(locationId, "another user from my organisations comment logged in with cookie not submitted", null, status: (int)StatusName.Draft, organisationUserId: 9999, organisationId: organisationId);
-			AddComment(locationId, "another user from my organisations comment logged in with cookie", null, status: (int)StatusName.SubmittedToLead, organisationUserId: 8888, organisationId: organisationId);
-			AddComment(locationId, "another user from a different organisation comment logged in with cookie", createdByUserId: null, status: (int)StatusName.SubmittedToLead, organisationUserId: 7777, organisationId: 2);
+	        AddComment(locationId, "another user from my organisations comment not submitted", null, status: (int)StatusName.Draft, organisationUserId: 9999, organisationId: organisationId);
+			AddComment(locationId, "another user from my organisations comment submitted to lead", null, status: (int)StatusName.SubmittedToLead, organisationUserId: 8888, organisationId: organisationId);
+			AddComment(locationId, "another user from a different organisation comment", createdByUserId: null, status: (int)StatusName.SubmittedToLead, organisationUserId: 7777, organisationId: 2);
+			AddComment(locationId, "an individual users comment", createdByUserId: "1", status: (int)StatusName.Submitted);
 
-	        // Act
-	        var viewModel = commentService.GetCommentsAndQuestionsFromOtherOrganisationCommenters("/1/1/introduction", _urlHelper);
+			// Act
+			var viewModel = commentService.GetCommentsAndQuestionsFromOtherOrganisationCommenters("/1/1/introduction", _urlHelper);
 
 	        //Assert
 	        viewModel.Comments.Count.Equals(1);
-			viewModel.Comments.Single().CommentText.ShouldBe("another user from my organisations comment logged in with cookie");
+			viewModel.Comments.Single().CommentText.ShouldBe("another user from my organisations comment submitted to lead");
         }
+		
 	}
 }
 

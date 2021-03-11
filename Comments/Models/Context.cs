@@ -1,4 +1,4 @@
-using Comments.Services;
+﻿using Comments.Services;
 using Comments.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using Comments.Common;
 using Microsoft.EntityFrameworkCore.Internal;
+using Z.EntityFramework.Plus;
 
 namespace Comments.Models
 {
@@ -142,24 +143,28 @@ namespace Comments.Models
 				.ToList();
 
 			var questions = Question.IgnoreQueryFilters()
-				.Where(q => q.Location.Order != null
-				            && sourceURIs.Contains(q.Location.SourceURI, StringComparer.OrdinalIgnoreCase)
-				            && q.Answer.Any(a => a.StatusId == (int) StatusName.SubmittedToLead)
-				            && _organisationIDs != null
-				            && q.Answer.Any(a => a.OrganisationId.HasValue)
-				            && q.Answer.Any(a => _organisationIDs.Contains((int)a.OrganisationId))
-				            && !q.Answer.Any(a => _organisationUserIDs.Contains((int)a.OrganisationUserId)))
-				.Include(q => q.QuestionType)
-				.Include(q => q.Answer)
-					.ThenInclude(a => a.SubmissionAnswer)
-				.Include(q => q.Answer)
-					.ThenInclude(a => a.OrganisationUser)
-				.Include(q => q.Location)
+                .IncludeFilter(q => q.QuestionType)
+                .IncludeFilter(q => q.Answer.Where(a => _organisationIDs.Contains((int)a.OrganisationId) && !_organisationUserIDs.Contains((int)a.OrganisationUserId)))
+                .IncludeFilter(q => q.Answer.Where(a => _organisationIDs.Contains((int)a.OrganisationId) && !_organisationUserIDs.Contains((int)a.OrganisationUserId)).Select(a => a.SubmissionAnswer))
+                .IncludeFilter(q => q.Answer.Where(a => _organisationIDs.Contains((int)a.OrganisationId) && !_organisationUserIDs.Contains((int)a.OrganisationUserId)).Select(a => a.OrganisationUser))
+                .IncludeFilter(q => q.Location)
 				.OrderBy(q => q.Location.Order)
-				.ToList();
+                .ToList();
 
-			var convertedData =
-				ModelConverters.ConvertCommentsAndQuestionsToCommentsAndQuestionsViewModels(questions, comments);
+            var filteredQuestions = questions.Where(q => q.Location.Order != null
+                                                         && sourceURIs.Contains(q.Location.SourceURI,
+                                                             StringComparer.OrdinalIgnoreCase)
+                                                         && q.Answer.Any(a =>
+                                                             a.StatusId == (int)StatusName.SubmittedToLead)
+                                                         && _organisationIDs != null
+                                                         && q.Answer.Any(a => a.OrganisationId.HasValue)
+                                                         && q.Answer.Any(a =>
+                                                             _organisationIDs.Contains((int)a.OrganisationId))
+                                                         && !q.Answer.Any(a =>
+                                                             _organisationUserIDs.Contains((int)a.OrganisationUserId))).ToList();
+
+            var convertedData =
+				ModelConverters.ConvertCommentsAndQuestionsToCommentsAndQuestionsViewModels(filteredQuestions, comments);
 
 			var data = new OrganisationCommentsAndQuestions(convertedData.questions, convertedData.comments);
 
