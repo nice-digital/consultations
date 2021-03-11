@@ -206,9 +206,8 @@ export class LoginBanner extends Component<PropsType, StateType> {
 								</div>
 								{this.state.showAuthorisationOrganisation &&
 									<Fragment>
-										<p>Confirm organisation name
-											<p><strong>{this.state.authorisationOrganisationFound.organisationName}</strong></p>
-										</p>
+										<p>Confirm organisation name</p>
+										<p><strong>{this.state.authorisationOrganisationFound.organisationName}</strong>										</p>
 										<UserContext.Consumer>
 											{/* eslint-disable-next-line*/}
 											{({ contextValue: ContextType, updateContext }) => (
