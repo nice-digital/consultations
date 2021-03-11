@@ -77,7 +77,6 @@ export class Question extends Component<PropsType, StateType> {
 								updateUnsavedIds={this.props.updateUnsavedIds}
 								questionId={this.props.question.questionId}
 								readOnly={this.props.readOnly}
-								isVisible={this.props.isVisible}
 								key={answer.answerId}
 								unique={`Answer${answer.answerId}`}
 								answer={answer}

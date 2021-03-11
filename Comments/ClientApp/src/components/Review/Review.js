@@ -628,7 +628,6 @@ export class Review extends Component<PropsType, StateType> {
 																			return (
 																				<CommentBox
 																					readOnly={!this.state.allowComments || this.state.submittedDate}
-																					isVisible={this.props.isVisible}
 																					key={comment.commentId}
 																					unique={`Comment${comment.commentId}`}
 																					comment={comment}
