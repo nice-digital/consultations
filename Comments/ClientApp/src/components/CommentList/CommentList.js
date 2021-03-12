@@ -207,8 +207,6 @@ export class CommentList extends Component<PropsType, StateType> {
 	};
 
 	componentDidMount() {
-		console.log("componentDidMount");
-		console.log(this.context);
 		const isCurrentlyAuthorised = this.context.isAuthorised;
 
 		if (!this.state.initialDataLoaded) {
