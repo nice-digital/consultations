@@ -15,8 +15,13 @@ import emptyCommentsResponse from "./EmptyCommentsResponse.json";
 import { nextTick } from "../../../helpers/utils";
 
 import { createQuestionPdf } from "../../QuestionView/QuestionViewDocument";
+// import { UserContext } from "../../../context/UserContext";
 
 const mock = new MockAdapter(axios);
+
+// CommentList.contextTypes = {
+// 	isAuthorised: true,
+// };
 
 jest.mock("../../../context/UserContext", () => {
 	return {
@@ -29,6 +34,28 @@ jest.mock("../../../context/UserContext", () => {
 		},
 	};
 });
+
+// function mockReact() {
+// 	const original = require.requireActual("react");
+// 	return {
+// 		...original,
+// 		// Mock react's create context because Enzyme doesn't support context in mount
+// 		createContext: jest.fn(defaultValue => {
+// 			var value = defaultValue;
+// 			const Provider = (props) => {
+// 				value = props.value;
+// 				return props.children;
+// 			};
+// 			const Consumer = (props) => props.children(value);
+
+// 			return {
+// 				Provider: Provider,
+// 				Consumer: Consumer,
+// 			};
+// 		}),
+// 	};
+// }
+// jest.mock("react", () => mockReact());
 
 jest.mock("../../QuestionView/QuestionViewDocument");
 
@@ -55,7 +82,7 @@ describe("[ClientApp] ", () => {
 			mock.reset();
 		});
 
-		it("should render a li tag with sample data ID", async () => {
+		it.only("should render a li tag with sample data ID", async () => {
 			mock
 				.onGet()
 				.reply(200, sampleComments);
@@ -63,7 +90,9 @@ describe("[ClientApp] ", () => {
 			const wrapper = mount(
 				<MemoryRouter>
 					<LiveAnnouncer>
+
 						<CommentList {...fakeProps} />
+
 					</LiveAnnouncer>
 				</MemoryRouter>,
 			);
