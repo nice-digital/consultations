@@ -235,7 +235,18 @@ namespace Comments.Services
 			if (commenters.Any())
 			{
 				commentsAndQuestions.Comments.ForEach(c => c.Show = (!c.Show || c.CommenterEmail.Length == 0) ? false : commenters.Contains(c.CommenterEmail));
-			}
+
+                foreach (var question in commentsAndQuestions.Questions)
+                {
+                    question.Show= false; //don't show question unless we have answer that match filter
+                    foreach (var answer in question.Answers)
+                    {
+                        answer.showWhenFiltered = commenters.Contains(answer.CommenterEmail);
+                        if (!question.Show && answer.showWhenFiltered)
+                            question.Show = true;
+                    }
+                }
+            }
 
 		    return commentsAndQuestions;
 	    }
@@ -263,7 +274,7 @@ namespace Comments.Services
 			commentsOption.UnfilteredResultCount = commentsAndQuestions.Comments.Count();
 
 			//populate commenters
-			if (_currentUser.IsAuthenticatedByAccounts)
+			if (_currentUser.IsAuthenticatedByAccounts)  //TODO is authenticated by accounts and is lead
 			{
 				var commenters = _consultationService.GetEmailAddressForComment(commentsAndQuestions).ToList();
 				commentersFilter.Options = new List<FilterOption>(commenters.Count());
@@ -279,7 +290,7 @@ namespace Comments.Services
 							UnfilteredResultCount = commentsAndQuestions.Comments.Count()
 						}
 					);
-				}
+                }
 			}
 			else
 			{
