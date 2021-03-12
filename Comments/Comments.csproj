@@ -36,6 +36,7 @@
     <PackageReference Include="NICE.Logging" Version="6.0.23" />
     <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.5.3" />
+    <PackageReference Include="Z.EntityFramework.Plus.EFCore" Version="2.1.23" />
   </ItemGroup>
 
   <ItemGroup>
