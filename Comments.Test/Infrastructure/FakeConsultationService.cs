@@ -135,11 +135,6 @@ namespace Comments.Test.Infrastructure
 		    throw new NotImplementedException();
 	    }
 
-		List<string> IConsultationService.GetEmailAddressForCommentsAndAnswers(CommentsAndQuestions commentsAndQuestions)
-		{
-			throw new NotImplementedException();
-		}
-
 		#endregion Not Implemented Members
 	}
 }

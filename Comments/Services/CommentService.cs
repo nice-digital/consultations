@@ -276,7 +276,7 @@ namespace Comments.Services
 			//populate commenters
 			if (_currentUser.IsAuthenticatedByAccounts && _currentUser.OrganisationsAssignedAsLead.Any())
 			{
-				var commenters = _consultationService.GetEmailAddressForCommentsAndAnswers(commentsAndQuestions).ToList();
+				var commenters = _context.GetEmailAddressForCommentsAndAnswers(commentsAndQuestions).ToList();
 				commentersFilter.Options = new List<FilterOption>(commenters.Count());
 
 				foreach (var commenter in commenters)

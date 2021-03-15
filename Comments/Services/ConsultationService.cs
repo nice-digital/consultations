@@ -43,8 +43,6 @@ namespace Comments.Services
 	    Task<(int? documentId, string chapterSlug)> GetFirstConvertedDocumentAndChapterSlug(int consultationId);
 	    Task<string> GetFirstChapterSlug(int consultationId, int documentId);
 	    Task<string> GetFirstChapterSlugFromPreviewDocument(string reference, int consultationId, int documentId);
-
-		List<string> GetEmailAddressForCommentsAndAnswers(CommentsAndQuestions commentsAndQuestions);
 	}
 
 	public class ConsultationService : IConsultationService
@@ -257,22 +255,5 @@ namespace Comments.Services
 		    var consultationDetail = await _feedService.GetIndevConsultationDetailForDraftProject(consultationId, documentId, reference);
 		    return consultationDetail;
 	    }
-
-		//TODO: Move to OrganisationService
-		public List<string> GetEmailAddressForCommentsAndAnswers(CommentsAndQuestions commentsAndQuestions)
-		{
-			var commentIds = commentsAndQuestions.Comments.Select(c => c.CommentId).ToList();
-            var answerIds = commentsAndQuestions.Questions.SelectMany(q => q.Answers).Select(a => a.AnswerId).ToList();
- 
-
-            var emailAddresses = _context.OrganisationUser
-                .Where(o => _context.Comment.Where(c => commentIds.Contains(c.CommentId)).Select(c => c.OrganisationUserId).Contains(o.OrganisationUserId) 
-                         || _context.Answer.Where(a => answerIds.Contains(a.AnswerId)).Select(a => a.OrganisationUserId).Contains(o.OrganisationUserId))
-                .Select(o => o.EmailAddress)
-                .Distinct()
-                .ToList();
-
-            return emailAddresses;
-		}
 	}
 }
