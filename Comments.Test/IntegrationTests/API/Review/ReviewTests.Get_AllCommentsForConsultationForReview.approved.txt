@@ -82,7 +82,8 @@
                             "name":"Draft"
                         },
                         "sourceURI":"consultations://./consultation/1/document/1/chapter/introduction",
-                        "commenterEmail":null
+                        "commenterEmail":null,
+                        "showWhenFiltered":true
                     }
                 ],
                 "commentId":"scrubbed by ScrubLocationId",
@@ -127,7 +128,8 @@
                             "name":"Draft"
                         },
                         "sourceURI":"consultations://./consultation/1/document/1/chapter/introduction",
-                        "commenterEmail":null
+                        "commenterEmail":null,
+                        "showWhenFiltered":true
                     }
                 ],
                 "commentId":"scrubbed by ScrubLocationId",
@@ -224,6 +226,13 @@
         },
         {
             "options":[
+                
+            ],
+            "id":"Commenter",
+            "title":"Commenters"
+        },
+        {
+            "options":[
                 {
                     "id":"2",
                     "label":"Unstable angina and NSTEMI",
@@ -247,5 +256,6 @@
     "isLead":false,
     "type":null,
     "document":null,
+    "commenter":null,
     "sort":"DocumentAsc"
 }
