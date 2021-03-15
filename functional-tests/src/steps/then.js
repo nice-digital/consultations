@@ -26,6 +26,8 @@ import clickPaginationOption, {
 	clickPreviousPagination,
 } from "../support/action/clickPaginationOption";
 import validateResponsesFilterChecked from "../support/check/validateResponsesFilterChecked";
+import { enterEmailaddress } from "../support/action/enterEmailaddress";
+
 // import validateCommentSaved from "../support/check/validateCommentSaved";
 
 /*Then(
@@ -102,3 +104,4 @@ Then(
 	/^I expect the your responses filter to be selected by default$/,
 	validateResponsesFilterChecked
 );
+Then(/^I enter code user emailaddress "([A-Z0-9_]+)"$/, enterEmailaddress);

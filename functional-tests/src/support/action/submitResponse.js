@@ -38,4 +38,9 @@ export const clickSubmitResponseButton = () => {
 	clickElement("click", "element", selectors.reviewPage.submitResponseButton);
 };
 
+export const clickSendYourResponseToYourOrganisationButton = () => {
+	waitForVisible(selectors.reviewPage.SendYourResponseToYourOrganisationButton);
+	clickElement("click", "element", selectors.reviewPage.SendYourResponseToYourOrganisationButton);
+};
+
 export default submitResponse;

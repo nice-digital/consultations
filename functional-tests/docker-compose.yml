@@ -59,6 +59,9 @@ services:
       - BROWSERSTACK_ACCESS_KEY
       - BROWSERSTACK_USERNAME
       - BUILD_NUMBER
+      - CONSULTATIONCODE1
+      - CONSULTATIONCODE2
+      - CODE_EMAIL1
 
   # Comment Collection dotnet core web app
   comments:
@@ -107,6 +110,9 @@ services:
       - TEAMROLES2
       - TEAMROLES3
       - ORG_COMMENTING
+      - CONSULTATIONCODE1
+      - CONSULTATIONCODE2
+      - CODE_EMAIL1
 
   # MS SQL Server database
   database:
@@ -126,7 +132,7 @@ services:
     volumes:
       - ./docker_ssl_proxy:/etc/nginx
     ports:
-      - 80:80
+      - 81:81
       - 443:443
     links:
       - comments

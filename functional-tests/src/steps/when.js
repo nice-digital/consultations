@@ -21,7 +21,7 @@ import navigateToReviewPage, {
 import submitResponse, {
 	completeResponseMandatoryQuestions,
 	clickSubmitResponseButton,
-	responseMandatoryQuestions_answerYestoOrg,
+	responseMandatoryQuestions_answerYestoOrg, clickSendYourResponseToYourOrganisationButton,
 } from "../support/action/submitResponse";
 import { reviewResponse } from "../support/action/reviewResponse";
 import { Login } from "../support/action/Login";
@@ -30,6 +30,7 @@ import { sidebarLogin } from "../support/action/sidebarLogin";
 import { openQuestionPanel } from "../support/action/openQuestionPanel";
 import { scrollDeleteButtonIntoView } from "../support/action/scrollDeleteButtonIntoView";
 import { selectValueFromDropdown } from "../support/action/selectFromDropdownByIndex";
+import { CodeLogin } from "../support/action/CodeLogin";
 
 // E.g. When I click on text "Title here" in ".ancestor"
 When(/^I add the comment "([^"]*)"$/, enterComment);
@@ -119,3 +120,7 @@ When(
 );
 
 When(/^I scroll the delete button into view$/, scrollDeleteButtonIntoView);
+
+When(/^I log into consultation with Organisationcode "([A-Z0-9_]+)"$/, CodeLogin);
+
+When(/^I click send your response to your organisation button$/, clickSendYourResponseToYourOrganisationButton);

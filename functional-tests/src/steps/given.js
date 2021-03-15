@@ -4,6 +4,7 @@ import { Given } from "cucumber";
 import deleteComments from '../support/action/deleteComments';
 import { deleteSubmissionUser } from "../support/action/deleteSubmissionUser";
 import { addQuestionsToConsultation } from "../support/action/addQuestionsToConsultation";
+import { validateStatusFilterChecked } from "../support/check/validateStatusFilterChecked";
 
 Given(
     /^I delete all comments on the page$/,
@@ -81,3 +82,6 @@ Given(
 	/^I add questions to Consultation "([^"]*)?"$/,
 	addQuestionsToConsultation
 );
+
+Given(
+	/^I select open and closed status filter$/, validateStatusFilterChecked);
