@@ -22,7 +22,7 @@ describe("[ClientApp] ", () => {
 			linkToReviewPage: false,
 		};
 
-        it("should match snapshot for individual commenters on the review page", () => {
+		it("should match snapshot for individual commenters when displayed on the review page", () => {
 			const wrapper = shallow(<SubmittedContent {...fakeProps} />);
 
 			expect(
@@ -32,7 +32,7 @@ describe("[ClientApp] ", () => {
 				})).toMatchSnapshot();
 		});
 
-		it("should match snapshot for individual commenters on the submitted page", () => {
+		it("should match snapshot for individual commenters when displayed on the submitted page", () => {
 			const localProps = fakeProps;
 			localProps.linkToReviewPage = true;
 			const wrapper = shallow(<SubmittedContent {...localProps} />);
@@ -44,10 +44,10 @@ describe("[ClientApp] ", () => {
 				})).toMatchSnapshot();
 		});
 
-		it("should match snapshot for organisation commenter on the review page", () => {
+		it("should match snapshot for organisation commenter when displayed on the review page", () => {
 			const localProps = fakeProps;
 			localProps.isOrganisationCommenter = true;
-            localProps.linkToReviewPage = false;
+			localProps.linkToReviewPage = false;
 			const wrapper = shallow(<SubmittedContent {...localProps} />);
 
 			expect(
@@ -57,7 +57,7 @@ describe("[ClientApp] ", () => {
 				})).toMatchSnapshot();
 		});
 
-		it("should match snapshot for organisation commenter on the submitted page", () => {
+		it("should match snapshot for organisation commenter when displayed on the submitted page", () => {
 			const localProps = fakeProps;
 			localProps.isOrganisationCommenter = true;
 			localProps.linkToReviewPage = true;
@@ -70,10 +70,10 @@ describe("[ClientApp] ", () => {
 				})).toMatchSnapshot();
 		});
 
-		it("should match snapshot for organisation lead on the review page without any responses from their org", () => {
+		it("should match snapshot for organisation lead when displayed on the review page without any responses from their org", () => {
 			const localProps = fakeProps;
 			localProps.isLead = true;
-            localProps.linkToReviewPage = false;
+			localProps.linkToReviewPage = false;
 			const wrapper = shallow(<SubmittedContent {...localProps} />);
 
 			expect(
@@ -83,11 +83,11 @@ describe("[ClientApp] ", () => {
 				})).toMatchSnapshot();
 		});
 
-		it("should match snapshot for organisation lead on the review page with responses from their org", () => {
+		it("should match snapshot for organisation lead when displayed on the review page with responses from their org", () => {
 			const localProps = fakeProps;
 			localProps.isLead = true;
 			localProps.consultationState.leadHasBeenSentResponse = true;
-            localProps.linkToReviewPage = false;
+			localProps.linkToReviewPage = false;
 			const wrapper = shallow(<SubmittedContent {...localProps} />);
 
 			expect(
@@ -97,7 +97,7 @@ describe("[ClientApp] ", () => {
 				})).toMatchSnapshot();
 		});
 
-		it("should match snapshot for organisation lead on the submitted page", () => {
+		it("should match snapshot for organisation lead when displayed on the submitted page", () => {
 			const localProps = fakeProps;
 			localProps.isLead = true;
 			localProps.linkToReviewPage = true;

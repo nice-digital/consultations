@@ -53,7 +53,6 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 		let isOrganisationCommenter = false;
 		let organisationName = null;
 		let isAuthorised = preloadSource ? preloadSource.isAuthorised : false;
-		let isLead = false;
 
 		if (userSessionParameters.sessionCookieExistsForThisConsultation){
 			const preloadedUserSessionData = preload(

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`[ClientApp]  Submitted page should match snapshot for individual commenters on the review page 1`] = `
+exports[`[ClientApp]  Submitted page should match snapshot for individual commenters when displayed on the review page 1`] = `
 <Fragment>
   <h2>
     Your response was submitted 
@@ -44,7 +44,7 @@ exports[`[ClientApp]  Submitted page should match snapshot for individual commen
 </Fragment>
 `;
 
-exports[`[ClientApp]  Submitted page should match snapshot for individual commenters on the submitted page 1`] = `
+exports[`[ClientApp]  Submitted page should match snapshot for individual commenters when displayed on the submitted page 1`] = `
 <Fragment>
   <h2>
     Your response was submitted 
@@ -97,7 +97,7 @@ exports[`[ClientApp]  Submitted page should match snapshot for individual commen
 </Fragment>
 `;
 
-exports[`[ClientApp]  Submitted page should match snapshot for organisation commenter on the review page 1`] = `
+exports[`[ClientApp]  Submitted page should match snapshot for organisation commenter when displayed on the review page 1`] = `
 <Fragment>
   <h2>
     Your response was submitted 
@@ -146,7 +146,7 @@ exports[`[ClientApp]  Submitted page should match snapshot for organisation comm
 </Fragment>
 `;
 
-exports[`[ClientApp]  Submitted page should match snapshot for organisation commenter on the submitted page 1`] = `
+exports[`[ClientApp]  Submitted page should match snapshot for organisation commenter when displayed on the submitted page 1`] = `
 <Fragment>
   <h2>
     Your response was submitted 
@@ -204,7 +204,7 @@ exports[`[ClientApp]  Submitted page should match snapshot for organisation comm
 </Fragment>
 `;
 
-exports[`[ClientApp]  Submitted page should match snapshot for organisation lead on the review page with responses from their org 1`] = `
+exports[`[ClientApp]  Submitted page should match snapshot for organisation lead when displayed on the review page with responses from their org 1`] = `
 <Fragment>
   <h2>
     Your response was submitted 
@@ -256,7 +256,7 @@ exports[`[ClientApp]  Submitted page should match snapshot for organisation lead
 </Fragment>
 `;
 
-exports[`[ClientApp]  Submitted page should match snapshot for organisation lead on the review page without any responses from their org 1`] = `
+exports[`[ClientApp]  Submitted page should match snapshot for organisation lead when displayed on the review page without any responses from their org 1`] = `
 <Fragment>
   <h2>
     Your response was submitted 
@@ -300,7 +300,7 @@ exports[`[ClientApp]  Submitted page should match snapshot for organisation lead
 </Fragment>
 `;
 
-exports[`[ClientApp]  Submitted page should match snapshot for organisation lead on the submitted page 1`] = `
+exports[`[ClientApp]  Submitted page should match snapshot for organisation lead when displayed on the submitted page 1`] = `
 <Fragment>
   <h2>
     Your response was submitted 
