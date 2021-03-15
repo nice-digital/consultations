@@ -127,7 +127,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 
 	//unfortunately the context is above the routes, so this.props.match is always null, so we can't pull the consultation id out of there. hence we're falling back to regex.
 	getConsultationId = () =>{
-		const regex = /^\/(\d+)\/(review|\d+\/[a-z-A-Z0-9]+)/;
+		const regex = /^\/(\d+)\/(review|submitted|\d+\/[a-z-A-Z0-9]+)/;
 		const pathname = this.props.location.pathname;
 
 		if (!pathname)
@@ -145,7 +145,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 
 		if (!userSessionParameters.sessionCookieExistsForThisConsultation)
 			return await {
-				validityAndOrganisationName: {valid: false}, 
+				validityAndOrganisationName: {valid: false},
 				userSessionParameters: userSessionParameters,
 			};
 

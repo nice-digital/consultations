@@ -26,7 +26,7 @@ namespace Comments.Test.Infrastructure
 			throw new NotImplementedException();
 		}
 
-		public (Guid sessionId, DateTime expirationDate) CreateOrganisationUserSession(int organisationAuthorisationId,
+		public Task<(Guid sessionId, DateTime expirationDate)> CreateOrganisationUserSession(int organisationAuthorisationId,
 			string collationCode)
 		{
 			throw new NotImplementedException();

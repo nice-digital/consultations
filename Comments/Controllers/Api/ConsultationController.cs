@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Comments.Controllers.Api
@@ -28,12 +29,12 @@ namespace Comments.Controllers.Api
 		/// <param name="isReview">boolean indicating if the feed isbeing accessed for reviewing purposes</param>
 		/// <returns></returns>
 		[HttpGet]
-        public ViewModels.Consultation Get(int consultationId, bool isReview = false)
+        public async Task<ViewModels.Consultation> Get(int consultationId, bool isReview = false)
         {
             if (consultationId < 1)
                 throw new ArgumentException(nameof(consultationId));
 
-            return _consultationService.GetConsultation(consultationId, (isReview ? BreadcrumbType.Review : BreadcrumbType.DocumentPage), useFilters: isReview);
+            return await _consultationService.GetConsultation(consultationId, (isReview ? BreadcrumbType.Review : BreadcrumbType.DocumentPage), useFilters: isReview);
         }
     }
 
@@ -60,12 +61,12 @@ namespace Comments.Controllers.Api
 		/// <param name="isReview">boolean indicating if the feed isbeing accessed for reviewing purposes</param>
 		/// <returns></returns>
 		[HttpGet]
-		public ViewModels.Consultation Get(int consultationId, int documentId, string reference, bool isReview = false)
+		public async Task<ViewModels.Consultation> Get(int consultationId, int documentId, string reference, bool isReview = false)
 		{
 			if (consultationId < 1)
 				throw new ArgumentException(nameof(consultationId));
 
-			return _consultationService.GetDraftConsultation(consultationId, documentId, reference, isReview);
+			return await _consultationService.GetDraftConsultation(consultationId, documentId, reference, isReview);
 		}
 	}
 }

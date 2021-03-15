@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -17,9 +17,9 @@
     <PackageReference Include="Microsoft.FeatureManagement.AspNetCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
     <PackageReference Include="Moq" Version="4.8.1" />
-    <PackageReference Include="NICE.Feeds" Version="1.0.136" />
-    <PackageReference Include="NICE.Feeds.Tests" Version="1.0.136" />
-    <PackageReference Include="NICE.Identity.Authentication.Sdk" Version="1.0.480" />
+    <PackageReference Include="NICE.Feeds" Version="1.0.147" />
+    <PackageReference Include="NICE.Feeds.Tests" Version="1.0.147" />
+    <PackageReference Include="NICE.Identity.Authentication.Sdk" Version="1.0.501" />
     <PackageReference Include="Shouldly" Version="3.0.0" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="4.5.1" />
     <PackageReference Include="xunit" Version="2.4.0" />

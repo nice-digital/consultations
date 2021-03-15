@@ -30,7 +30,7 @@ namespace Comments.Controllers.Api
 		[HttpGet("{consultationId}")]
 		public async Task<IActionResult> Get([FromRoute] int consultationId)
 		{
-			var result = _exportService.GetAllDataForConsulation(consultationId);
+			var result = await _exportService.GetAllDataForConsultation(consultationId);
 
 			if (!result.valid.Valid)
 			{
@@ -51,7 +51,7 @@ namespace Comments.Controllers.Api
 		[HttpGet("{consultationId}")]
 		public async Task<IActionResult> Get([FromRoute] int consultationId)
 		{
-			var result = _exportService.GetAllDataForConsulationForCurrentUser(consultationId);
+			var result = _exportService.GetAllDataForConsultationForCurrentUser(consultationId);
 
 			var stream = await _exportToExcel.ToSpreadsheet(result.comment, result.answer, result.question);
 			return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");

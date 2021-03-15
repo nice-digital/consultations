@@ -12,6 +12,7 @@ using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.Extensions.Logging;
+using Answer = Comments.Models.Answer;
 using Question = Comments.Models.Question;
 
 namespace Comments.Export
@@ -390,22 +391,47 @@ namespace Comments.Export
 		{
 			List<Excel> excel = new List<Excel>();
 
-			var userIds = comments.Select(comment => comment.CreatedByUserId).Concat(answers.Select(answer => answer.CreatedByUserId)).Distinct();
-			var currentUserDetails = _userService.GetCurrentUserDetails();
+			var userDetailsForUserIds = new Dictionary<string, (string displayName, string emailAddress)>();
+			var emailAddressesForOrganisationIds = new Dictionary<int, string>();
 
-			Dictionary<string, (string displayName, string emailAddress)> userDetailsForUserIds;
-			if (userIds.Count() == 1 && userIds.Single().Equals(currentUserDetails.userId, StringComparison.OrdinalIgnoreCase))
+			var organisationUserIds = comments.Where(comment => comment.OrganisationUserId.HasValue).Select(comment => comment.OrganisationUserId.Value)
+				.Concat(answers.Where(answer => answer.OrganisationUserId.HasValue).Select(answer => answer.OrganisationUserId.Value)).Distinct();
+
+			var currentUser = _userService.GetCurrentUser();
+			var currentUserDetails = _userService.GetCurrentUserDetails();
+			var userDetailsForOrganisationUser = _exportService.GetOrganisationUsersByOrganisationUserIds(organisationUserIds);
+
+			if (organisationUserIds.Count() != 0)
 			{
-				userDetailsForUserIds = new Dictionary<string, (string displayName, string emailAddress)>() { {currentUserDetails.userId, (currentUserDetails.displayName, currentUserDetails.emailAddress) }};
+				if (currentUser.IsAuthenticatedByAccounts)
+				{
+					userDetailsForUserIds.Add(currentUserDetails.userId, (currentUserDetails.displayName, currentUserDetails.emailAddress));
+				}
+				else
+				{
+					foreach (var user in userDetailsForOrganisationUser)
+					{
+						emailAddressesForOrganisationIds.Add(user.OrganisationUserId, user.EmailAddress);
+					}
+				}
 			}
-			else
+			else 
 			{
-				userDetailsForUserIds = await _userService.GetUserDetailsForUserIds(userIds);
+				var userIds = comments.Select(comment => comment.CreatedByUserId).Concat(answers.Select(answer => answer.CreatedByUserId)).Where(user => !string.IsNullOrEmpty(user)).Distinct();
+
+				if (userIds.Count() == 1 && userIds.Single().Equals(currentUserDetails.userId, StringComparison.OrdinalIgnoreCase))
+				{
+					userDetailsForUserIds.Add(currentUserDetails.userId, (currentUserDetails.displayName, currentUserDetails.emailAddress));
+				}
+				else
+				{
+					userDetailsForUserIds = await _userService.GetUserDetailsForUserIds(userIds);
+				}
 			}
 
 			foreach (var comment in comments)
 			{
-				var locationDetails = _exportService.GetLocationData(comment.Location);
+				var locationDetails = await _exportService.GetLocationData(comment.Location);
 				var commentOn = CommentOnHelpers.GetCommentOn(comment.Location.SourceURI, comment.Location.RangeStart, comment.Location.HtmlElementID);
 				
 				var excelrow = new Excel()
@@ -415,8 +441,8 @@ namespace Comments.Export
 					ChapterTitle = locationDetails.ChapterName,
 					Section = commentOn == CommentOn.Section || commentOn == CommentOn.SubSection || commentOn == CommentOn.Selection ? comment.Location.Section : null,
 					Quote = commentOn  == CommentOn.Selection ? comment.Location.Quote : null,
-					UserName = userDetailsForUserIds.ContainsKey(comment.CreatedByUserId) ? userDetailsForUserIds[comment.CreatedByUserId].displayName : "Not found",
-					Email = userDetailsForUserIds.ContainsKey(comment.CreatedByUserId) ? userDetailsForUserIds[comment.CreatedByUserId].emailAddress : "Not found",
+					UserName = GetUserNameForComment(comment, userDetailsForUserIds),
+					Email = GetEmailForComment(comment, userDetailsForUserIds, emailAddressesForOrganisationIds),
 					CommentId = comment.CommentId,
 					Comment =  comment.CommentText,
 					QuestionId = null,
@@ -436,7 +462,7 @@ namespace Comments.Export
 
 			foreach (var answer in answers)
 			{
-				var locationDetails = _exportService.GetLocationData(answer.Question.Location);
+				var locationDetails = await _exportService.GetLocationData(answer.Question.Location);
 				var excelrow = new Excel()
 				{
 					ConsultationName = locationDetails.ConsultationName,
@@ -444,8 +470,8 @@ namespace Comments.Export
 					ChapterTitle = locationDetails.ChapterName,
 					Section = answer.Question.Location.Section,
 					Quote = answer.Question.Location.Quote,
-					UserName = userDetailsForUserIds.ContainsKey(answer.CreatedByUserId) ? userDetailsForUserIds[answer.CreatedByUserId].displayName : "Not found",
-					Email = userDetailsForUserIds.ContainsKey(answer.CreatedByUserId) ? userDetailsForUserIds[answer.CreatedByUserId].emailAddress : "Not found",
+					UserName = GetUserNameForAnswer(answer, userDetailsForUserIds),
+					Email = GetEmailForAnswer(answer, userDetailsForUserIds, emailAddressesForOrganisationIds),
 					CommentId = null,
 					Comment = null,
 					QuestionId = answer.Question.QuestionId,
@@ -465,7 +491,7 @@ namespace Comments.Export
 
 			foreach (var question in questions)
 			{
-				var locationDetails = _exportService.GetLocationData(question.Location);
+				var locationDetails = await _exportService.GetLocationData(question.Location);
 				var excelrow = new Excel()
 				{
 					ConsultationName = locationDetails.ConsultationName,
@@ -492,11 +518,60 @@ namespace Comments.Export
 				excel.Add(excelrow);
 			}
 
-			var orderedData = excel.OrderBy(o => o.UserName).ThenBy(o => o.Order).ToList();
+			var orderedData = excel.OrderBy(o => o.Email).ThenBy(o => o.Order).ToList();
 
 			var showOrganisationExpressionOfInterest = orderedData.Any(data => data.OrganisationExpressionOfInterest.HasValue);
 
 			return (orderedData, showOrganisationExpressionOfInterest);
+		}
+
+
+		private string GetUserNameForComment(Models.Comment comment, Dictionary<string, (string displayName, string emailAddress)> userDetailsForUserIds)
+		{
+			if (comment.CommentByUserType == UserType.OrganisationalCommenter)
+				return null;
+
+			return userDetailsForUserIds.ContainsKey(comment.SubmissionComment?.First().Submission.SubmissionByUserId)
+				? userDetailsForUserIds[comment.SubmissionComment?.First().Submission.SubmissionByUserId].displayName
+				: "Not found";
+		}
+
+		private string GetEmailForComment(Models.Comment comment, Dictionary<string, (string displayName, string emailAddress)> userDetailsForUserIds, Dictionary<int, string> emailAddressesForOrganisationIds)
+		{
+			if (comment.CommentByUserType == UserType.OrganisationalCommenter)
+			{
+				return emailAddressesForOrganisationIds.ContainsKey(comment.OrganisationUserId.Value)
+					? emailAddressesForOrganisationIds[comment.OrganisationUserId.Value]
+					: "Not found";
+			}
+
+			return userDetailsForUserIds.ContainsKey(comment.SubmissionComment?.First().Submission.SubmissionByUserId)
+				? userDetailsForUserIds[comment.SubmissionComment?.First().Submission.SubmissionByUserId].emailAddress
+				: "Not found";
+		}
+
+		private string GetUserNameForAnswer(Models.Answer answer, Dictionary<string, (string displayName, string emailAddress)> userDetailsForUserIds)
+		{
+			if (answer.AnswerByUserType == UserType.OrganisationalCommenter)
+				return null;
+			
+			return userDetailsForUserIds.ContainsKey(answer.SubmissionAnswer?.First().Submission.SubmissionByUserId)
+				? userDetailsForUserIds[answer.SubmissionAnswer?.First().Submission.SubmissionByUserId].displayName
+				: "Not found";
+		}
+
+		private string GetEmailForAnswer(Models.Answer answer, Dictionary<string, (string displayName, string emailAddress)> userDetailsForUserIds, Dictionary<int, string> emailAddressesForOrganisationIds)
+		{
+			if (answer.AnswerByUserType == UserType.OrganisationalCommenter)
+			{
+				return emailAddressesForOrganisationIds.ContainsKey(answer.OrganisationUserId.Value)
+					? emailAddressesForOrganisationIds[answer.OrganisationUserId.Value]
+					: "Not found";
+			}
+
+			return userDetailsForUserIds.ContainsKey(answer.SubmissionAnswer?.First().Submission.SubmissionByUserId)
+				? userDetailsForUserIds[answer.SubmissionAnswer?.First().Submission.SubmissionByUserId].emailAddress
+				: "Not found";
 		}
 
 		private Stylesheet CreateStyleSheet()
@@ -592,7 +667,7 @@ namespace Comments.Export
 			// Add data to the worksheet
 			SheetData sheetData = worksheetPart.Worksheet.AppendChild(new SheetData());
 
-			var ConsultationTitle = GetConsultationTitle(comments, questions);
+			var ConsultationTitle = await GetConsultationTitle(comments, questions);
 			AppendTitleRow(sheetData, ConsultationTitle);
 
 			var collatedDataAndExpressionOfInterestFlag = await CollateData(comments, answers, questions);
@@ -611,13 +686,13 @@ namespace Comments.Export
 			spreadsheetDocument.Close();
 		}
 
-		private string GetConsultationTitle(IEnumerable<Models.Comment> comments, IEnumerable<Question> questions)
+		private async Task<string> GetConsultationTitle(IEnumerable<Models.Comment> comments, IEnumerable<Question> questions)
 		{
 			if (comments.Count() > 0)
-				return _exportService.GetConsultationName(comments.First().Location);
+				return await _exportService.GetConsultationName(comments.First().Location);
 				
 			if (questions.Count() > 0)
-				return _exportService.GetConsultationName(questions.First().Location);
+				return await _exportService.GetConsultationName(questions.First().Location);
 
 			return "";
 		}

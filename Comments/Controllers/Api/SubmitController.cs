@@ -1,14 +1,17 @@
 using System;
+using System.Threading.Tasks;
+using Comments.Common;
 using Comments.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NICE.Identity.Authentication.Sdk.Domain;
 
 namespace Comments.Controllers.Api
 {
 	[Produces("application/json")]
-	[Route("consultations/api/[controller]")]
+
 	[Authorize]
 	public class SubmitController : ControllerBase
 	{
@@ -25,9 +28,10 @@ namespace Comments.Controllers.Api
 
 		// POST: consultations/api/submit
 		[HttpPost]
-	    public IActionResult Post([FromBody] ViewModels.Submission submission)
+		[Route("consultations/api/[controller]")]
+		public async Task<IActionResult> Post([FromBody] ViewModels.Submission submission)
 	    {
-			if (!ModelState.IsValid)
+		    if (!ModelState.IsValid)
 			{
 				return BadRequest(ModelState);
 			}
@@ -36,7 +40,7 @@ namespace Comments.Controllers.Api
 				throw new ArgumentException(nameof(submission.TobaccoDisclosure));
 		    }
 
-			var result = _submitService.Submit(submission);
+			var result = await _submitService.Submit(submission);
 			var invalidResult = Validate(result.validate, _logger);
 
 			//just some temporary debug here:
@@ -47,6 +51,21 @@ namespace Comments.Controllers.Api
 			}
 
 			return invalidResult ?? Ok(submission); //should return comments and answers, might need submission object too
+	    }
+
+		// POST: consultations/api/submitToLead
+		[HttpPost]
+		[Route("consultations/api/[controller]ToLead")]
+		[Authorize(AuthenticationSchemes = OrganisationCookieAuthenticationOptions.DefaultScheme + "," + AuthenticationConstants.AuthenticationScheme)]
+		public async Task<IActionResult> PostSubmitToLead([FromBody] ViewModels.SubmissionToLead submissionToLead)
+	    {
+		    if (!ModelState.IsValid)
+			    return BadRequest(ModelState);
+		   
+		    var result = await _submitService.SubmitToLead(submissionToLead);
+		    var invalidResult = Validate(result.validate, _logger);
+
+		    return invalidResult ?? Ok(submissionToLead);
 	    }
 	}
 }

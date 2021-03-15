@@ -8,7 +8,8 @@ namespace Comments.ViewModels
 	public enum StatusName
 	{
 		Draft = 1,
-		Submitted
+		Submitted = 2,
+		SubmittedToLead = 3
 	}
 
 	public class Status

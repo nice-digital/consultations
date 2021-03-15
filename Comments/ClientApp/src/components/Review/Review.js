@@ -56,15 +56,17 @@ type StateType = {
 	sort: string,
 	supportsDownload: boolean,
 	loading: boolean,
-	respondingAsOrganisation: boolean,
+	respondingAsOrganisation: boolean | null,
 	organisationName: string,
-	hasTobaccoLinks: boolean,
+	hasTobaccoLinks: boolean | null,
 	tobaccoDisclosure: string,
 	organisationExpressionOfInterest: boolean | null,
 	unsavedIds: Array<number>,
 	documentTitles: "undefined" | Array<any>,
 	justSubmitted: boolean,
 	path: null | string,
+	isLead: boolean,
+	emailAddress: string | null,
 };
 
 export class Review extends Component<PropsType, StateType> {
@@ -83,14 +85,16 @@ export class Review extends Component<PropsType, StateType> {
 			questions: [], //this contains all the questions, not just the ones displayed to the user. the show property defines whether the question is filtered out from view.
 			sort: "DocumentAsc",
 			supportsDownload: false,
-			respondingAsOrganisation: false,
+			respondingAsOrganisation: null,
 			organisationName: "",
-			hasTobaccoLinks: false,
+			hasTobaccoLinks: null,
 			tobaccoDisclosure: "",
 			organisationExpressionOfInterest: null,
 			unsavedIds: [],
 			documentTitles: [],
 			justSubmitted: false,
+			isLead: false,
+			emailAddress: null,
 		};
 
 		let preloadedData = {};
@@ -137,13 +141,15 @@ export class Review extends Component<PropsType, StateType> {
 				sort: preloadedCommentsData.sort,
 				supportsDownload: preloadedConsultationData.consultationState.supportsDownload,
 				organisationName: preloadedCommentsData.organisationName || "",
-				respondingAsOrganisation: false,
-				hasTobaccoLinks: false,
+				respondingAsOrganisation: (preloadedCommentsData.isLead ? true : null),
+				hasTobaccoLinks: null,
 				organisationExpressionOfInterest: null,
 				tobaccoDisclosure: "",
 				unsavedIds: [],
 				documentTitles: this.getListOfDocuments(preloadedCommentsData.filters),
 				justSubmitted: false,
+				isLead: preloadedCommentsData.isLead,
+				emailAddress: "",
 			};
 		}
 
@@ -227,6 +233,8 @@ export class Review extends Component<PropsType, StateType> {
 						sort: data.commentsData.sort,
 						organisationName: data.commentsData.organisationName || "",
 						documentTitles: this.getListOfDocuments(data.commentsData.filters),
+						isLead: data.commentsData.isLead,
+						respondingAsOrganisation: (data.commentsData.isLead ? true : null),
 					});
 				} else {
 					this.setState({
@@ -237,6 +245,8 @@ export class Review extends Component<PropsType, StateType> {
 						loading: false,
 						organisationName: data.commentsData.organisationName || "",
 						documentTitles: this.getListOfDocuments(data.commentsData.filters),
+						isLead: data.commentsData.isLead,
+						respondingAsOrganisation: (data.commentsData.isLead ? true : null),
 					}, () => {
 						tagManager({
 							event: "generic",
@@ -287,9 +297,9 @@ export class Review extends Component<PropsType, StateType> {
 		const questions = this.state.questions;
 		const organisationName = this.state.organisationName;
 		const tobaccoDisclosure = this.state.tobaccoDisclosure;
-		const respondingAsOrganisation = this.state.respondingAsOrganisation === "yes";
-		const hasTobaccoLinks = this.state.hasTobaccoLinks === "yes";
-		const organisationExpressionOfInterest = (this.state.consultationData.showExpressionOfInterestSubmissionQuestion ? (this.state.organisationExpressionOfInterest === "yes") : null);
+		const respondingAsOrganisation = this.state.respondingAsOrganisation;
+		const hasTobaccoLinks = this.state.hasTobaccoLinks;
+		const organisationExpressionOfInterest = (this.state.consultationData.showExpressionOfInterestSubmissionQuestion ? (this.state.organisationExpressionOfInterest) : null);
 
 		let answersToSubmit = [];
 		questions.forEach(function (question) {
@@ -341,6 +351,53 @@ export class Review extends Component<PropsType, StateType> {
 			});
 	};
 
+	submitToLead = (organisationName) => {
+		const comments = this.state.comments;
+		const questions = this.state.questions;
+		const emailAddress = this.state.emailAddress;
+
+		let answersToSubmit = [];
+		questions.forEach(function (question) {
+			if (question.answers != null) {
+				answersToSubmit = answersToSubmit.concat(question.answers);
+			}
+		});
+
+		load("submitToLead", undefined, [], {}, "POST", {
+			emailAddress,
+			comments,
+			answers: answersToSubmit,
+			organisationName,
+			respondingAsOrganisation: true,
+		}, true)
+			.then(response => {
+				tagManager({
+					event: "generic",
+					category: "Consultation comments page",
+					action: "Response submitted to lead",
+					label: `${response.data.comments ? response.data.comments.length : "0"} comments, ${response.data.answers ? response.data.answers.length : "0"} answers`,
+				});
+				tagManager({
+					event: "generic",
+					category: "Consultation comments page",
+					action: "Length to submit response to lead",
+					label: "Duration in minutes",
+					value: (Math.round(response.data.durationBetweenFirstCommentOrAnswerSavedAndSubmissionInSeconds / 60)),
+				});
+				this.setState({
+					submittedDate: true,
+					validToSubmit: false,
+					allowComments: false,
+					justSubmitted: true,
+				});
+				this.logStuff();
+			})
+			.catch(err => {
+				console.log(err);
+				if (err.response) alert(err.response.statusText);
+			});
+	};
+
 	//this validation handler code is going to have to get a bit more advanced when questions are introduced, as it'll be possible
 	//to answer a question on the review page and the submit button should then enable - if the consultation is open + hasn't already been submitted + all the mandatory questions are answered.
 	//(plus there's the whole unsaved changes to deal with. what happens there?)
@@ -361,9 +418,18 @@ export class Review extends Component<PropsType, StateType> {
 	};
 
 	fieldsChangeHandler = (e: SyntheticInputEvent<*>) => {
-		this.setState({
-			[e.target.name]: e.target.value,
-		});
+		if(e.target.type == "radio"){
+			let value = e.target.value;
+			if(e.target.value==="true") value = true;
+			if(e.target.value==="false") value = false;
+			this.setState({
+				[e.target.name]: value,
+			});
+		}else{
+			this.setState({
+				[e.target.name]: e.target.value,
+			});
+		}
 	};
 
 	issueA11yMessage = (message: string) => {
@@ -445,6 +511,9 @@ export class Review extends Component<PropsType, StateType> {
 		const commentsToShow = this.state.comments.filter(comment => comment.show) || [];
 		const questionsToShow = this.state.questions.filter(question => question.show) || [];
 
+		let headerSubtitle1 = "Review and edit your question responses and comments before you submit them to us.";
+		let headerSubtitle2 = "Once they have been submitted you will not be able to edit them further or add any extra comments.";
+
 		return (
 			<Fragment>
 				<Helmet>
@@ -460,6 +529,12 @@ export class Review extends Component<PropsType, StateType> {
 							<BreadCrumbsWithRouter links={this.state.consultationData.breadcrumbs}/>
 							<UserContext.Consumer>
 								{(contextValue: ContextType) => {
+
+									if (contextValue.isOrganisationCommenter) {
+										headerSubtitle1 = `On this page you can review and edit your response to the consultation before you send them to ${contextValue.organisationName}.`;
+										headerSubtitle2 = "Once you have sent your response you will not be able to edit it or add any more comments.";
+									}
+
 									return (
 										!contextValue.isAuthorised ?
 											<LoginBannerWithRouter
@@ -474,8 +549,8 @@ export class Review extends Component<PropsType, StateType> {
 												<div className="page-header">
 													<Header
 														title={this.state.submittedDate ? "Response submitted" : "Review your response"}
-														subtitle1={this.state.submittedDate ? "" : "Review and edit your question responses and comments before you submit them to us."}
-														subtitle2={this.state.submittedDate ? "" : "Once they have been submitted you will not be able to edit them further or add any extra comments."}
+														subtitle1={this.state.submittedDate ? "" : headerSubtitle1}
+														subtitle2={this.state.submittedDate ? "" : headerSubtitle2}
 														reference={reference}
 														consultationState={this.state.consultationData.consultationState}
 													/>
@@ -495,15 +570,19 @@ export class Review extends Component<PropsType, StateType> {
 															href={`${this.props.basename}/api/exportexternal/${this.props.match.params.consultationId}`}>Download
 															your response</a>
 														}
-														<p>Your response was submitted on <Moment format="D MMMM YYYY" date={this.state.submittedDate}/>.</p>
+														<p>Your response was submitted {contextValue.isOrganisationCommenter && `to ${contextValue.organisationName}`} on <Moment format="D MMMM YYYY" date={this.state.submittedDate}/>.</p>
 														<h2>What happens next?</h2>
-														<p>We will review all the submissions received for this consultation. Our response	will be published on the website around the time the guidance is published.</p>
+														{contextValue.isOrganisationCommenter ? (
+															<>
+																<p>{`${contextValue.organisationName}`} will review all the submissions received for this consultation.</p>
+																<p>NICE's response to all the submissions received will be published on the website around the time the final guidance is published.</p>
+															</>
+														) : (
+															<p>We will review all the submissions received for this consultation. Our response	will be published on the website around the time the guidance is published.</p>
+														)}
 														<hr/>
 													</Fragment>
 													}
-													{/* /submittedDate */}
-
-													{/*Review Comments Columns */}
 													<div className="grid">
 														<div data-g="12 md:3" className="sticky">
 															<h2 className="h5 mt--0">Filter</h2>
@@ -571,12 +650,17 @@ export class Review extends Component<PropsType, StateType> {
 																validToSubmit={this.state.validToSubmit}
 																submitConsultation={this.submitConsultation}
 																fieldsChangeHandler={this.fieldsChangeHandler}
+																submitToLead={this.submitToLead}
 																respondingAsOrganisation={this.state.respondingAsOrganisation}
-																organisationName={this.state.organisationName}
+																organisationName={contextValue.isOrganisationCommenter ? contextValue.organisationName : this.state.organisationName}
 																hasTobaccoLinks={this.state.hasTobaccoLinks}
 																tobaccoDisclosure={this.state.tobaccoDisclosure}
 																showExpressionOfInterestSubmissionQuestion={this.state.consultationData.showExpressionOfInterestSubmissionQuestion}
 																organisationExpressionOfInterest={this.state.organisationExpressionOfInterest}
+																isLead={this.state.isLead}
+																isOrganisationCommenter={contextValue.isOrganisationCommenter}
+																questions={this.state.questions}
+																emailAddress={this.state.emailAddress}
 															/>
 															}
 														</div>

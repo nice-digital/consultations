@@ -8,16 +8,19 @@ using NICE.Feeds;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using NICE.Feeds.Indev.Models;
+using Comment = Comments.Models.Comment;
 
 namespace Comments.Services
 {
 	public interface ICommentService
     {
-	    CommentsAndQuestions GetCommentsAndQuestions(string relativeURL, IUrlHelper urlHelper);
-	    ReviewPageViewModel GetCommentsAndQuestionsForReview(string relativeURL, IUrlHelper urlHelper, ReviewPageViewModel model);
+	    Task<CommentsAndQuestions> GetCommentsAndQuestions(string relativeURL, IUrlHelper urlHelper);
+	    Task<ReviewPageViewModel> GetCommentsAndQuestionsForReview(string relativeURL, IUrlHelper urlHelper, ReviewPageViewModel model);
 		(ViewModels.Comment comment, Validate validate) GetComment(int commentId);
         (int rowsUpdated, Validate validate) EditComment(int commentId, ViewModels.Comment comment);
-        (ViewModels.Comment comment, Validate validate) CreateComment(ViewModels.Comment comment);
+        Task<(ViewModels.Comment comment, Validate validate)> CreateComment(ViewModels.Comment comment);
         (int rowsUpdated, Validate validate) DeleteComment(int commentId);
 	}
 
@@ -72,25 +75,25 @@ namespace Comments.Services
             if (commentInDatabase == null)
                 return (rowsUpdated: 0, validate: new Validate(valid: false, notFound: true, message: $"Comment id:{commentId} not found trying to edit comment for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
 
-            var consultationId = ConsultationsUri.ParseConsultationsUri(commentInDatabase.Location.SourceURI).ConsultationId;
-			if (_currentUser.IsAuthenticatedByOrganisationCookieForThisConsultation(consultationId))
-            {
-	            if (!commentInDatabase.OrganisationUserId.HasValue || !_currentUser.IsAuthorisedByOrganisationUserId(commentInDatabase.OrganisationUserId.Value))
-		            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: $"Organisation cookie user tried to edit comment id: {commentId}, but it's not their comment"));
-            }
-            else //accounts auth
-            {
-	            if (!commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId, StringComparison.OrdinalIgnoreCase))
-		            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to edit comment id: {commentId}, but it's not their comment"));
-			}
+            // Comments created by individal commenters can only be edited by that commenter.
+            if (commentInDatabase.CommentByUserType == UserType.IndividualCommenter && !_currentUser.UserId.Equals(commentInDatabase.CreatedByUserId))
+	            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to edit comment id: {commentId}, but it's not their comment"));
 
-            comment.LastModifiedByUserId = _currentUser.UserId;
+            // Comments created by organisational commenters and not yet submitted to a lead can only be edited by that commenter
+            if (commentInDatabase.CommentByUserType == UserType.OrganisationalCommenter && !_currentUser.ValidatedOrganisationUserIds.Any(o => o.Equals(commentInDatabase.OrganisationUserId)))
+	            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: $"Organisation commenter tried to edit comment id: {commentId}, but it's not their comment"));
+
+            // Comments submitted to organisational leads or created by organisational leads can be edited by any leads for that organisation
+            if (commentInDatabase.CommentByUserType == UserType.OrganisationLead && !_currentUser.OrganisationsAssignedAsLead.Any(o => o.OrganisationId.Equals(commentInDatabase.OrganisationId)))
+	            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: $"Organisation lead tried to edit comment id: {commentId}, but it's not from their organisation"));
+
+			comment.LastModifiedByUserId = _currentUser.UserId;
             comment.LastModifiedDate = DateTime.UtcNow;
             commentInDatabase.UpdateFromViewModel(comment);
             return (rowsUpdated: _context.SaveChanges(), validate: null);
         }
 
-        public (ViewModels.Comment comment, Validate validate) CreateComment(ViewModels.Comment comment)
+        public async Task<(ViewModels.Comment comment, Validate validate)> CreateComment(ViewModels.Comment comment)
         {
             if (!_currentUser.IsAuthenticatedByAnyMechanism)
                 return (comment: null, validate: new Validate(valid: false, unauthenticated: true, message: "Not logged in creating comment"));
@@ -101,7 +104,7 @@ namespace Comments.Services
 			if (!_currentUser.IsAuthorisedByConsultationId(consultationId))
 				return (comment: null, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: "Not authorised to create comment on this consultation"));
 
-			comment.Order = UpdateOrderWithSourceURI(comment.Order, sourceURI);
+			comment.Order = await UpdateOrderWithSourceURI(comment.Order, sourceURI);
 	        var locationToSave = new Models.Location(comment as ViewModels.Location)
 	        {
 		        SourceURI = sourceURI
@@ -139,24 +142,24 @@ namespace Comments.Services
             if (commentInDatabase == null)
                 return (rowsUpdated: 0, validate: new Validate(valid: false, notFound: true, message: $"Comment id:{commentId} not found trying to delete comment for user id: {_currentUser.UserId} display name: {_currentUser.DisplayName}"));
 
-            var consultationId = ConsultationsUri.ParseConsultationsUri(commentInDatabase.Location.SourceURI).ConsultationId;
-            if (_currentUser.IsAuthenticatedByOrganisationCookieForThisConsultation(consultationId))
-            {
-	            if (!commentInDatabase.OrganisationUserId.HasValue || !_currentUser.IsAuthorisedByOrganisationUserId(commentInDatabase.OrganisationUserId.Value))
-		            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: $"Organisation cookie user tried to delete comment id: {commentId}, but it's not their comment"));
-			}
-            else //accounts auth
-            {
-	            if (!commentInDatabase.CreatedByUserId.Equals(_currentUser.UserId))
-		            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to delete comment id: {commentId}, but it's not their comment"));
-			}
+            // Comments created by individal commenters can only be deleted by that commenter.
+            if (commentInDatabase.CommentByUserType == UserType.IndividualCommenter && !_currentUser.UserId.Equals(commentInDatabase.CreatedByUserId))
+	            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"User id: {_currentUser.UserId} display name: {_currentUser.DisplayName} tried to delete comment id: {commentId}, but it's not their comment"));
 
-            _context.Comment.Remove(commentInDatabase);
+            // Comments created by organisational commenters and not yet submitted to a lead can only be deleted by that commenter
+            if (commentInDatabase.CommentByUserType == UserType.OrganisationalCommenter && !_currentUser.ValidatedOrganisationUserIds.Any(o => o.Equals(commentInDatabase.OrganisationUserId)))
+	            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: $"Organisation commenter tried to delete comment id: {commentId}, but it's not their comment"));
+
+            // Comments submitted to organisational leads or created by organisational leads can be deleted by any leads for that organisation
+            if (commentInDatabase.CommentByUserType == UserType.OrganisationLead && !_currentUser.OrganisationsAssignedAsLead.Any(o => o.OrganisationId.Equals(commentInDatabase.OrganisationId)))
+	            return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: false, unauthorised: true, message: $"Organisation lead tried to delete comment id: {commentId}, but it's not from their organisation"));
+
+			_context.Comment.Remove(commentInDatabase);
 			
             return (rowsUpdated: _context.SaveChanges(), validate: null);
         }
 
-	    public CommentsAndQuestions GetCommentsAndQuestions(string relativeURL, IUrlHelper urlHelper)
+	    public async Task<CommentsAndQuestions> GetCommentsAndQuestions(string relativeURL, IUrlHelper urlHelper)
 	    {
 		    var user = _userService.GetCurrentUser();
 
@@ -174,7 +177,7 @@ namespace Comments.Services
 
 			if (!user.IsAuthenticatedByAnyMechanism)
 		    {
-			    consultationState = _consultationService.GetConsultationState(consultationSourceURI, PreviewState.NonPreview);
+			    consultationState = await _consultationService.GetConsultationState(consultationSourceURI, PreviewState.NonPreview);
 			    var locationsQuestionsOnly = _context.GetQuestionsForDocument(sourceURIs, isReview);
 			    var questions = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locationsQuestionsOnly).questions.ToList();
 				return new CommentsAndQuestions(new List<ViewModels.Comment>(), questions,
@@ -182,7 +185,7 @@ namespace Comments.Services
 		    }
 
 			var locations = _context.GetAllCommentsAndQuestionsForDocument(sourceURIs, isReview).ToList();
-		    consultationState = _consultationService.GetConsultationState(consultationSourceURI, PreviewState.NonPreview, locations);
+		    consultationState = await _consultationService.GetConsultationState(consultationSourceURI, PreviewState.NonPreview, locations);
 
 			var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);
 		    var resortedComments = data.comments.OrderByDescending(c => c.LastModifiedDate).ToList(); //comments should be sorted in date by default, questions by document order.
@@ -190,9 +193,9 @@ namespace Comments.Services
 			return new CommentsAndQuestions(resortedComments, data.questions.ToList(), user.IsAuthenticatedByAnyMechanism, signInURL, consultationState);
 	    }
 
-		public ReviewPageViewModel GetCommentsAndQuestionsForReview(string relativeURL, IUrlHelper urlHelper, ReviewPageViewModel model)
+		public async Task<ReviewPageViewModel> GetCommentsAndQuestionsForReview(string relativeURL, IUrlHelper urlHelper, ReviewPageViewModel model)
 		{
-			var commentsAndQuestions = GetCommentsAndQuestions(relativeURL, urlHelper);
+			var commentsAndQuestions = await GetCommentsAndQuestions(relativeURL, urlHelper);
 
 			if (model.Sort == ReviewSortOrder.DocumentAsc)
 			{
@@ -201,9 +204,10 @@ namespace Comments.Services
 
 			model.CommentsAndQuestions = FilterCommentsAndQuestions(commentsAndQuestions, model.Type, model.Document);
 			model.OrganisationName = _currentUser?.OrganisationsAssignedAsLead.FirstOrDefault()?.OrganisationName;
+			model.IsLead = _currentUser?.OrganisationsAssignedAsLead.Any();
 
 			var consultationId = ConsultationsUri.ParseRelativeUrl(relativeURL).ConsultationId;
-			model.Filters = GetFilterGroups(consultationId, commentsAndQuestions, model.Type, model.Document);
+			model.Filters = await GetFilterGroups(consultationId, commentsAndQuestions, model.Type, model.Document);
 			return model;
 		}
 
@@ -229,7 +233,7 @@ namespace Comments.Services
 		    return commentsAndQuestions;
 	    }
 
-	    private IEnumerable<OptionFilterGroup> GetFilterGroups(int consultationId, CommentsAndQuestions commentsAndQuestions, IEnumerable<QuestionsOrComments> type, IEnumerable<int> documentIdsToFilter)
+	    private async Task<IEnumerable<OptionFilterGroup>> GetFilterGroups(int consultationId, CommentsAndQuestions commentsAndQuestions, IEnumerable<QuestionsOrComments> type, IEnumerable<int> documentIdsToFilter)
 	    {
 		    var filters = AppSettings.ReviewConfig.Filters.ToList();
 
@@ -250,7 +254,7 @@ namespace Comments.Services
 			commentsOption.UnfilteredResultCount = commentsAndQuestions.Comments.Count(); 
 
 			//populate documents
-			var documents = _consultationService.GetDocuments(consultationId).documents.Where(d => d.ConvertedDocument).ToList();
+			var documents = (await _consultationService.GetDocuments(consultationId)).documents.Where(d => d.ConvertedDocument).ToList();
 		    documentsFilter.Options = new List<FilterOption>(documents.Count());
 
 			foreach (var document in documents)
@@ -271,7 +275,7 @@ namespace Comments.Services
 	    }
 
 	    public const string OrderFormat = "{0}.{1}.{2}.{3}";
-	    public string UpdateOrderWithSourceURI(string orderWithinChapter, string sourceURI)
+	    public async Task<string> UpdateOrderWithSourceURI(string orderWithinChapter, string sourceURI)
 	    {
 		    var consultationsUriElements = ConsultationsUri.ParseConsultationsUri(sourceURI);
 
@@ -281,7 +285,7 @@ namespace Comments.Services
 		    
 			if (consultationsUriElements.IsChapterLevel())
 			{
-				var document = _consultationService.GetDocuments(consultationsUriElements.ConsultationId).documents.FirstOrDefault(d => d.DocumentId.Equals(documentId));
+				var document = (await _consultationService.GetDocuments(consultationsUriElements.ConsultationId)).documents.FirstOrDefault(d => d.DocumentId.Equals(documentId));
 				var chapterSelected = document?.Chapters.FirstOrDefault(c => c.Slug.Equals(consultationsUriElements.ChapterSlug, StringComparison.OrdinalIgnoreCase));
 				if (chapterSelected != null)
 				{

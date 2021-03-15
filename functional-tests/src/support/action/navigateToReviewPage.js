@@ -5,6 +5,8 @@ import selectors from "../selectors";
 export const navigateToReviewPage = () => {
 	clickElement("click", "button", selectors.documentPage.reviewAllButton);
 	browser.pause(2000);
+	browser.refresh();
+	browser.pause(2000);
 	waitForVisible(selectors.reviewPage.commentTextArea);
 	waitForVisible(selectors.reviewPage.answerNoRepresentOrg);
 	waitForVisible(selectors.reviewPage.answerNoTobacLink);
@@ -16,4 +18,3 @@ export const clickReviewPageLink = () => {
 };
 
 export default navigateToReviewPage;
-

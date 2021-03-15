@@ -37,6 +37,7 @@ jq \
     --arg teamRoles2 "$TEAMROLES2" \
     --arg teamRoles3 "$TEAMROLES3" \
     --arg OrgCommenting "$ORG_COMMENTING" \
+    --arg RedisConnectionString "$REDIS_CONNECTION_STRING" \
     '
     .ConnectionStrings.DefaultConnection = $defaultConnection |
     .Logging.LogFilePath = $loggingLogFilePath |
@@ -44,7 +45,7 @@ jq \
     .AppSettings.Environment.SecureSite = $appSettingsEnvironmentSecureSite |
     .AppSettings.Environment.Realm = $appSettingsEnvironmentRealm |
     .AppSettings.Environment.AccountsEnvironment = $appSettingsEnvironmentAccountsEnv |
-    .Feeds.IndevApiKey = $indevApiKey |
+    .Feeds.ApiKey = $indevApiKey |
     .Feeds.IndevBasePath = $indevBasePath |
     .Feeds.IndevPublishedChapterFeedPath = $indevPublishedChapterFeedPath |
     .Feeds.IndevDraftPreviewChapterFeedPath = $indevDraftPreviewChapterFeedPath |
@@ -68,7 +69,9 @@ jq \
     .ConsultationList.DownloadRoles.AdminRoles |= .+ [$adminRole] |
     .ConsultationList.DownloadRoles.TeamRoles |= .+ [$teamRoles1] |
     .ConsultationList.DownloadRoles.TeamRoles |= .+ [$teamRoles2] |
-    .ConsultationList.DownloadRoles.TeamRoles |= .+ [$teamRoles3]
+    .ConsultationList.DownloadRoles.TeamRoles |= .+ [$teamRoles3] |
+    .WebAppConfiguration.RedisServiceConfiguration.ConnectionString = $RedisConnectionString |
+    .WebAppConfiguration.RedisServiceConfiguration.Enabled = true
     '\
     appsettings.json > _appsettings.json \
     && mv _appsettings.json appsettings.json

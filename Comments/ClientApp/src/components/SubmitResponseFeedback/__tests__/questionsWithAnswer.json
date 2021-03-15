@@ -1,0 +1,76 @@
+[{
+    "questionId": 22,
+    "questionText": "Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.",
+    "questionTypeId": 8,
+    "questionOrder": 1,
+    "lastModifiedByUserId": "00000000-0000-0000-0000-000000000000",
+    "lastModifiedDate": "2018-07-11T13:59:43.7766667",
+    "questionType": {
+        "description": "A text question requiring a text area.",
+        "hasTextAnswer": true,
+        "hasBooleanAnswer": false
+    },
+    "answers": [
+        {
+            "answerId": 1007,
+            "answerText": "some answer text",
+            "answerBoolean": null,
+            "questionId": 22,
+            "lastModifiedDate": "2018-07-13T08:01:41.522596",
+            "lastModifiedByUserId": "b65e1398-0c46-4511-a870-acba729a3dd0",
+            "statusId": 1,
+            "status": {
+                "statusId": 1,
+                "name": "Draft"
+            },
+            "sourceURI": "consultations://./consultation/1"
+        }
+    ],
+    "locationId": 15029,
+    "sourceURI": "consultations://./consultation/1",
+    "htmlElementID": null,
+    "rangeStart": null,
+    "rangeStartOffset": null,
+    "rangeEnd": null,
+    "rangeEndOffset": null,
+    "quote": null,
+    "commentOn": "Consultation"
+},
+{
+    "questionId": 23,
+    "questionText": "Is this good guidance?",
+    "questionTypeId": 8,
+    "questionOrder": 1,
+    "lastModifiedByUserId": "00000000-0000-0000-0000-000000000000",
+    "lastModifiedDate": "2018-07-11T13:59:43.7766667",
+    "questionType": {
+        "description": "A text question requiring a text area.",
+        "hasTextAnswer": true,
+        "hasBooleanAnswer": false
+    },
+    "answers": [
+        {
+            "answerId": 1008,
+            "answerText": "more answer text",
+            "answerBoolean": null,
+            "questionId": 23,
+            "lastModifiedDate": "2018-07-13T08:01:41.522596",
+            "lastModifiedByUserId": "b65e1398-0c46-4511-a870-acba729a3dd0",
+            "statusId": 1,
+            "status": {
+                "statusId": 1,
+                "name": "Draft"
+            },
+            "sourceURI": "consultations://./consultation/1"
+        }
+    ],
+    "locationId": 15029,
+    "sourceURI": "consultations://./consultation/1",
+    "htmlElementID": null,
+    "rangeStart": null,
+    "rangeStartOffset": null,
+    "rangeEnd": null,
+    "rangeEndOffset": null,
+    "quote": null,
+    "commentOn": "Consultation"
+}]

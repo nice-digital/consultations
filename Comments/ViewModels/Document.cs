@@ -2,8 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Comments.Common;
 using Newtonsoft.Json;
-using NICE.Feeds.Models.Indev;
-using NICE.Feeds.Models.Indev.Detail;
+using NICE.Feeds.Indev.Models.Detail;
 
 namespace Comments.ViewModels
 {
