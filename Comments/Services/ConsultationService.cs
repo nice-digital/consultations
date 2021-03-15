@@ -44,7 +44,7 @@ namespace Comments.Services
 	    Task<string> GetFirstChapterSlug(int consultationId, int documentId);
 	    Task<string> GetFirstChapterSlugFromPreviewDocument(string reference, int consultationId, int documentId);
 
-		List<string> GetEmailAddressForComment(CommentsAndQuestions commentsAndQuestions);
+		List<string> GetEmailAddressForCommentsAndAnswers(CommentsAndQuestions commentsAndQuestions);
 	}
 
 	public class ConsultationService : IConsultationService
@@ -259,7 +259,7 @@ namespace Comments.Services
 	    }
 
 		//TODO: Move to OrganisationService
-		public List<string> GetEmailAddressForComment(CommentsAndQuestions commentsAndQuestions)
+		public List<string> GetEmailAddressForCommentsAndAnswers(CommentsAndQuestions commentsAndQuestions)
 		{
 			var commentIds = commentsAndQuestions.Comments.Select(c => c.CommentId).ToList();
             var answerIds = commentsAndQuestions.Questions.SelectMany(q => q.Answers).Select(a => a.AnswerId).ToList();

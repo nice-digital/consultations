@@ -274,9 +274,9 @@ namespace Comments.Services
 			commentsOption.UnfilteredResultCount = commentsAndQuestions.Comments.Count();
 
 			//populate commenters
-			if (_currentUser.IsAuthenticatedByAccounts)  //TODO is authenticated by accounts and is lead
+			if (_currentUser.IsAuthenticatedByAccounts && _currentUser.OrganisationsAssignedAsLead.Any())
 			{
-				var commenters = _consultationService.GetEmailAddressForComment(commentsAndQuestions).ToList();
+				var commenters = _consultationService.GetEmailAddressForCommentsAndAnswers(commentsAndQuestions).ToList();
 				commentersFilter.Options = new List<FilterOption>(commenters.Count());
 
 				foreach (var commenter in commenters)
@@ -285,10 +285,9 @@ namespace Comments.Services
 					commentersFilter.Options.Add(
 						new FilterOption(commenter, commenter, isSelected)
 						{
-							FilteredResultCount = commentsAndQuestions.Comments.Count(c => c.Show && c.CommenterEmail.Length != 0 +
-												  commentsAndQuestions.Questions.Count()),
-							UnfilteredResultCount = commentsAndQuestions.Comments.Count()
-						}
+							FilteredResultCount = commentsAndQuestions.Comments.Count(c => c.Show) + commentsAndQuestions.Questions.Count(q => q.Show),
+							UnfilteredResultCount = commentsAndQuestions.Comments.Count() + commentsAndQuestions.Questions.Count()
+                        }
 					);
                 }
 			}

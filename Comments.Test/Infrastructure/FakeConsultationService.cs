@@ -135,7 +135,7 @@ namespace Comments.Test.Infrastructure
 		    throw new NotImplementedException();
 	    }
 
-		List<string> IConsultationService.GetEmailAddressForComment(CommentsAndQuestions commentsAndQuestions)
+		List<string> IConsultationService.GetEmailAddressForCommentsAndAnswers(CommentsAndQuestions commentsAndQuestions)
 		{
 			throw new NotImplementedException();
 		}
