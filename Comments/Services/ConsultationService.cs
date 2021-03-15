@@ -1,4 +1,4 @@
-using Comments.Common;
+﻿using Comments.Common;
 using Comments.Configuration;
 using Comments.Models;
 using Comments.ViewModels;
@@ -212,11 +212,9 @@ namespace Comments.Services
 			    locations = _context.GetQuestionsForDocument(new[] {sourceURI}, partialMatchSourceURI: true);
 		    }
 
-		    var commentsSubmittedToLead = _context.GetCommentsSubmittedToALeadForURI(sourceURI);
-		    var answersSubmittedToLead = _context.GetAnswersSubmittedToALeadForURI(sourceURI);
-		    var leadHasBeenSentResponse = commentsSubmittedToLead.Any() || answersSubmittedToLead.Any();
-		    
-		    var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);
+            var leadHasBeenSentResponse = _context.GetLeadHasBeenSentResponse(sourceURI);
+
+            var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);
 
 		    var consultationState = new ConsultationState(consultationDetail.StartDate, consultationDetail.EndDate,
 			    data.questions.Any(), data.questions.Any(q => q.Answers.Any()), data.comments.Any(),GetSubmittedDate(sourceURI),

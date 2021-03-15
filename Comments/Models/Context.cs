@@ -1,4 +1,4 @@
-using Comments.Services;
+﻿using Comments.Services;
 using Comments.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -177,6 +177,24 @@ namespace Comments.Models
 
 			return comment;
 		}
+
+        public bool GetLeadHasBeenSentResponse(string sourceURI)
+        {
+            var leadHasBeenSentComment = Comment.Where(c =>
+                c.StatusId == (int)StatusName.SubmittedToLead &&
+                (c.Location.SourceURI.Contains($"{sourceURI}/") || c.Location.SourceURI.Equals(sourceURI)) &&
+                c.OrganisationId.Equals(_organisationalLeadOrganisationID)).IgnoreQueryFilters().Any();
+
+            var leadHasBeenSentAnswer = Answer.Where(a =>
+                a.StatusId == (int)StatusName.SubmittedToLead &&
+                (a.Question.Location.SourceURI.Contains($"{sourceURI}/") ||
+                 a.Question.Location.SourceURI.Equals(sourceURI)) &&
+                a.OrganisationId.Equals(_organisationalLeadOrganisationID)).IgnoreQueryFilters().Any();
+
+            var leadHasBeenSentResponse = leadHasBeenSentComment || leadHasBeenSentAnswer;
+
+            return leadHasBeenSentResponse;
+        }
 
 		public List<Comment> GetUsersCommentsForURI(string sourceURI)
 	    {
