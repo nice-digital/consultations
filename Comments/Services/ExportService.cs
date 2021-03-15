@@ -74,8 +74,6 @@ namespace Comments.Services
 			}
 
 		    var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
-		    //var commentsInDB = _context.GetCommentsSubmittedToALeadForURI(sourceURI);
-		    //var answersInDB = _context.GetAnswersSubmittedToALeadForURI(sourceURI);
             var commentsAndAnswers = _context.GetCommentsAndAnswersSubmittedToALeadForURI(sourceURI);
 		    var questionsInDb = new List<Models.Question>();
 
