@@ -1,4 +1,4 @@
-using Comments.Common;
+﻿using Comments.Common;
 using Comments.Configuration;
 using Comments.Models;
 using Comments.ViewModels;
@@ -8,7 +8,6 @@ using System.Linq;
 using System.Security.Authentication;
 using System.Threading.Tasks;
 using Location = Comments.Models.Location;
-using Question = Comments.Models.Question;
 
 namespace Comments.Services
 {
@@ -75,14 +74,15 @@ namespace Comments.Services
 			}
 
 		    var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
-		    var commentsInDB = _context.GetCommentsSubmittedToALeadForURI(sourceURI);
-		    var answersInDB = _context.GetAnswersSubmittedToALeadForURI(sourceURI);
-		    var questionsInDB = new List<Question>();
+		    //var commentsInDB = _context.GetCommentsSubmittedToALeadForURI(sourceURI);
+		    //var answersInDB = _context.GetAnswersSubmittedToALeadForURI(sourceURI);
+            var commentsAndAnswers = _context.GetCommentsAndAnswersSubmittedToALeadForURI(sourceURI);
+		    var questionsInDb = new List<Models.Question>();
 
-		    if (commentsInDB == null && answersInDB == null && questionsInDB == null)
+		    if (commentsAndAnswers.comments == null && commentsAndAnswers.answers == null)
 			    return (null, null, null, new Validate(valid: false, notFound: true, message: $"Consultation id:{consultationId} not found trying to get all data for consultation"));
 
-		    return (commentsInDB, answersInDB, questionsInDB, new Validate(true));
+		    return (commentsAndAnswers.comments, commentsAndAnswers.answers, questionsInDb, new Validate(true));
 	    }
 
 		public (IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetAllDataForConsultationForCurrentUser(int consultationId)

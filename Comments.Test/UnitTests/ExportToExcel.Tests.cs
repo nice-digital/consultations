@@ -535,7 +535,7 @@ namespace Comments.Test.UnitTests
 			var context = new ConsultationsContext(_options, userService, _fakeEncryption);
 
 			//Act
-			var comments = context.GetCommentsSubmittedToALeadForURI(sourceURI);
+			var comments = context.GetCommentsAndAnswersSubmittedToALeadForURI(sourceURI).comments;
 
 			//Assert
 			comments.Count.ShouldBe(1);
@@ -569,7 +569,7 @@ namespace Comments.Test.UnitTests
 			var context = new ConsultationsContext(_options, userService, _fakeEncryption);
 
 			//Act
-			var answers = context.GetAnswersSubmittedToALeadForURI(sourceURI);
+			var answers = context.GetCommentsAndAnswersSubmittedToALeadForURI(sourceURI).answers;
 
 			//Assert
 			answers.Count.ShouldBe(1);
@@ -599,7 +599,7 @@ namespace Comments.Test.UnitTests
 			var context = new ConsultationsContext(_options, userService, _fakeEncryption);
 
 			//Act
-			var comments = context.GetCommentsSubmittedToALeadForURI(sourceURI);
+			var comments = context.GetCommentsAndAnswersSubmittedToALeadForURI(sourceURI).comments;
 
 			//Assert
 			comments.Count.ShouldBe(1);
