@@ -111,13 +111,10 @@ services:
       - TEAMROLES2
       - TEAMROLES3
       - ORG_COMMENTING
-<<<<<<< HEAD
       - CONSULTATIONCODE1
       - CONSULTATIONCODE2
       - CODE_EMAIL1
-=======
       - REDIS_CONNECTION_STRING
->>>>>>> master
 
   # MS SQL Server database
   database:
