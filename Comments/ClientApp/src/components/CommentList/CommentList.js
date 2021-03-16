@@ -137,21 +137,34 @@ export class CommentList extends Component<PropsType, StateType> {
 			console.log("preloadedCommentsFromOtherCodeUsers");
 			console.log("preloadedCommentsFromOtherCodeUsers.questions", preloadedCommentsFromOtherCodeUsers.questions);
 
-			const questions = this.state.questions.map((item, index) => {
-				let question = {...item};
-				const otherCodeUserCommentsExist = preloadedCommentsFromOtherCodeUsers.questions.length;
-
-				if (otherCodeUserCommentsExist) {
-					question.answers = question.answers.concat(preloadedCommentsFromOtherCodeUsers.questions[index].answers);
-				}
-
-				return question;
-			});
+			const questions = preloadedCommentsFromOtherCodeUsers.questions.length ? this.sortAnswers(preloadedCommentsFromOtherCodeUsers.questions) : this.state.questions;
 
 			this.state.comments = this.state.comments.concat(preloadedCommentsFromOtherCodeUsers.comments);
 			this.state.questions = questions;
 		}
 	}
+
+	sortAnswers = (responseQuestions) => {
+		const stateQuestions = this.state.questions;
+
+		const amendedQuestions = stateQuestions.map((question) => {
+			let stateQuestion = {...question};
+
+			let responseQuestion = responseQuestions.find((question) => {
+				if (question.questionId === stateQuestion.questionId) {
+					return true;
+				}
+			});
+
+			if (typeof responseQuestion !== "undefined") {
+				stateQuestion.answers = stateQuestion.answers.concat(responseQuestion.answers);
+			}
+
+			return stateQuestion;
+		});
+
+		return amendedQuestions;
+	};
 
 	// need to set more state?
 	loadCommentsFromOtherCodeUsers = () => {
@@ -159,16 +172,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		load("commentsForOtherOrgCommenters", undefined, [], {sourceURI: this.props.match.url}).then(
 			function(response) {
 				const comments = this.state.comments.concat(response.data.comments);
-				const questions = this.state.questions.map((item, index) => {
-					let question = {...item};
-					const otherCodeUserCommentsExist = response.data.questions.length;
-
-					if (otherCodeUserCommentsExist) {
-						question.answers = question.answers.concat(response.data.questions[index].answers);
-					}
-
-					return question;
-				});
+				const questions = response.data.questions.length ? this.sortAnswers(response.data.questions) : this.state.questions;
 
 				this.setState({
 					comments,
