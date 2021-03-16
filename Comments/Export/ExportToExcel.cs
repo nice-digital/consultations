@@ -1,10 +1,11 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Packaging;
 using System.Linq;
 using System.Threading.Tasks;
 using Comments.Common;
+using Comments.Configuration;
 using Comments.Models;
 using Comments.Services;
 using Comments.ViewModels;
@@ -401,14 +402,20 @@ namespace Comments.Export
 			var currentUserDetails = _userService.GetCurrentUserDetails();
 			var userDetailsForOrganisationUser = _exportService.GetOrganisationUsersByOrganisationUserIds(organisationUserIds);
 
-			if (organisationUserIds.Count() != 0)
+			var userRoles = _userService.GetUserRoles().ToList();
+            var isAdminUser = userRoles.Any(role => AppSettings.ConsultationListConfig.DownloadRoles.AdminRoles.Contains(role));
+            var hasTeamRole = userRoles.Any(role => AppSettings.ConsultationListConfig.DownloadRoles.TeamRoles.Contains(role));
+
+            if (organisationUserIds.Count() != 0 && !isAdminUser &&!hasTeamRole)
 			{
-				if (currentUser.IsAuthenticatedByAccounts)
+				// When the lead downloads the responses they have sent to NICE, the responses should have the Name and Email Address of that lead against them
+				if (currentUser.IsAuthenticatedByAccounts && !comments.Any(c => c.StatusId == (int) StatusName.SubmittedToLead))
 				{
 					userDetailsForUserIds.Add(currentUserDetails.userId, (currentUserDetails.displayName, currentUserDetails.emailAddress));
 				}
 				else
 				{
+					// When an organisation code user downloads their own responses, or a lead downloads the original responses that were sent to them, they should see the details of the organisational commenter against each response
 					foreach (var user in userDetailsForOrganisationUser)
 					{
 						emailAddressesForOrganisationIds.Add(user.OrganisationUserId, user.EmailAddress);
@@ -419,12 +426,14 @@ namespace Comments.Export
 			{
 				var userIds = comments.Select(comment => comment.CreatedByUserId).Concat(answers.Select(answer => answer.CreatedByUserId)).Where(user => !string.IsNullOrEmpty(user)).Distinct();
 
+				// When a normal user downloads their own comments, we can get their details without going to IdaM
 				if (userIds.Count() == 1 && userIds.Single().Equals(currentUserDetails.userId, StringComparison.OrdinalIgnoreCase))
 				{
 					userDetailsForUserIds.Add(currentUserDetails.userId, (currentUserDetails.displayName, currentUserDetails.emailAddress));
 				}
 				else
 				{
+					// When the NICE internal users download responses, they are from multiple users and we need to go to IdAM to get the details for each of the comments
 					userDetailsForUserIds = await _userService.GetUserDetailsForUserIds(userIds);
 				}
 			}

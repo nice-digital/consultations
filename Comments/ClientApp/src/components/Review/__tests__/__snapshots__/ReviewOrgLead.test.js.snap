@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied data post-submission 1`] = `
+exports[`[ClientApp]  ReviewPage (Organisation Commenter) Component should match snapshot when viewing as an organisation lead (post-submission) 1`] = `
 Array [
   Array [
     "",
@@ -148,7 +148,16 @@ Array [
                 </h2>,
                 <ul
                   className="list list--unstyled"
-                />,
+                >
+                  <li>
+                    <a
+                      href="/consultations/api/exportlead/1"
+                      onClick={[Function]}
+                    >
+                      Download all responses from your organisation (Excel)
+                    </a>
+                  </li>
+                </ul>,
                 <h2>
                   What happens next?
                 </h2>,
@@ -670,7 +679,7 @@ Array [
 ]
 `;
 
-exports[`[ClientApp]  ReviewPage Component should match snapshot with supplied data pre-submission 1`] = `
+exports[`[ClientApp]  ReviewPage (Organisation Commenter) Component should match snapshot when viewing as an organisation lead (pre-submission) 1`] = `
 Array [
   Array [
     "",
@@ -811,7 +820,16 @@ Array [
               ]
               <ul
                 className="list list--unstyled"
-              />
+              >
+                <li>
+                  <a
+                    href="/consultations/api/exportlead/1"
+                    onClick={[Function]}
+                  >
+                    Download all responses from your organisation (Excel)
+                  </a>
+                </li>
+              </ul>
               <div
                 className="grid"
               >
@@ -1287,62 +1305,16 @@ Array [
                       You are about to submit your final response to NICE.
                     </p>
                     <p>
+                      You are responding on behalf of 
+                      <strong>
+                        Really Cool Org
+                      </strong>
+                    </p>
+                    <p>
                       You must answer the following 
-                      questions
+                      question
                        before you submit.
                     </p>
-                    <div
-                      aria-labelledby="responding_as_organisation"
-                      role="radiogroup"
-                    >
-                      <p
-                        id="responding_as_organisation"
-                      >
-                        <strong>
-                          Are you responding on behalf of an organisation?
-                        </strong>
-                      </p>
-                      <div
-                        className="form__group form__group--radio form__group--inline"
-                      >
-                        <input
-                          checked={null}
-                          className="form__radio"
-                          id="respondingAsOrganisation--true"
-                          name="respondingAsOrganisation"
-                          onChange={[Function]}
-                          type="radio"
-                          value={true}
-                        />
-                        <label
-                          className="form__label form__label--radio"
-                          data-qa-sel="respond-yes-responding-as-org"
-                          htmlFor="respondingAsOrganisation--true"
-                        >
-                          Yes
-                        </label>
-                      </div>
-                      <div
-                        className="form__group form__group--radio form__group--inline"
-                      >
-                        <input
-                          checked={false}
-                          className="form__radio"
-                          id="respondingAsOrganisation--false"
-                          name="respondingAsOrganisation"
-                          onChange={[Function]}
-                          type="radio"
-                          value={false}
-                        />
-                        <label
-                          className="form__label form__label--radio"
-                          data-qa-sel="respond-no-responding-as-org"
-                          htmlFor="respondingAsOrganisation--false"
-                        >
-                          No
-                        </label>
-                      </div>
-                    </div>
                     <div
                       aria-labelledby="tobacco_links"
                       role="radiogroup"
