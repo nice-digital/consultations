@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Packaging;
@@ -433,8 +433,10 @@ namespace Comments.Export
 			{
 				var locationDetails = await _exportService.GetLocationData(comment.Location);
 				var commentOn = CommentOnHelpers.GetCommentOn(comment.Location.SourceURI, comment.Location.RangeStart, comment.Location.HtmlElementID);
-				
-				var excelrow = new Excel()
+                var email = GetEmailForComment(comment, userDetailsForUserIds, emailAddressesForOrganisationIds);
+                var order = comment.Location.Order;
+                
+                var excelrow = new Excel()
 				{
 					ConsultationName = locationDetails.ConsultationName,
 					DocumentName = locationDetails.DocumentName,
@@ -442,9 +444,9 @@ namespace Comments.Export
 					Section = commentOn == CommentOn.Section || commentOn == CommentOn.SubSection || commentOn == CommentOn.Selection ? comment.Location.Section : null,
 					Quote = commentOn  == CommentOn.Selection ? comment.Location.Quote : null,
 					UserName = GetUserNameForComment(comment, userDetailsForUserIds),
-					Email = GetEmailForComment(comment, userDetailsForUserIds, emailAddressesForOrganisationIds),
+					Email = email,
 					CommentId = comment.CommentId,
-					Comment =  comment.CommentText,
+					Comment =  comment.CommentText.Length > 32767 ? SplitLongContent(comment.CommentText, excel, email, order): comment.CommentText,
 					QuestionId = null,
 					Question = null,
 					AnswerId = null,
@@ -455,7 +457,7 @@ namespace Comments.Export
 					HasTobaccoLinks =  comment.SubmissionComment.Count> 0 ? comment.SubmissionComment?.First().Submission.HasTobaccoLinks : null,
 					TobaccoIndustryDetails = comment.SubmissionComment.Count > 0? comment.SubmissionComment?.First().Submission.TobaccoDisclosure : null,
 					OrganisationExpressionOfInterest = comment.SubmissionComment.Count > 0 ? comment.SubmissionComment?.First().Submission.OrganisationExpressionOfInterest : null,
-					Order = comment.Location.Order,
+					Order = order,
 			};
 				excel.Add(excelrow);
 			}
@@ -463,7 +465,10 @@ namespace Comments.Export
 			foreach (var answer in answers)
 			{
 				var locationDetails = await _exportService.GetLocationData(answer.Question.Location);
-				var excelrow = new Excel()
+                var email = GetEmailForAnswer(answer, userDetailsForUserIds, emailAddressesForOrganisationIds);
+                var order = answer.Question.Location.Order;
+
+                var excelrow = new Excel()
 				{
 					ConsultationName = locationDetails.ConsultationName,
 					DocumentName = locationDetails.DocumentName,
@@ -478,8 +483,8 @@ namespace Comments.Export
 					Question = answer.Question.QuestionText,
 					AnswerId = answer.AnswerId,
 					AnswerBoolean = answer.AnswerBoolean,
-					Answer = answer.AnswerText,
-					OrganisationName = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.OrganisationName : null,
+					Answer = answer.AnswerText.Length > 32767 ? SplitLongContent(answer.AnswerText, excel, email, order) : answer.AnswerText,
+                    OrganisationName = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.OrganisationName : null,
 					RepresentsOrganisation = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.RespondingAsOrganisation : null,
 					HasTobaccoLinks = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.HasTobaccoLinks : null,
 					TobaccoIndustryDetails = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.TobaccoDisclosure : null,
@@ -525,6 +530,42 @@ namespace Comments.Export
 			return (orderedData, showOrganisationExpressionOfInterest);
 		}
 
+        private string SplitLongContent(string text, List<Excel> excel, string email, string order)
+        {
+            var excelCellLimit = 32767;
+
+            if (text.Length > excelCellLimit)
+            {
+                var remainingText = "Comment continued... " + text.Substring(excelCellLimit, text.Length - excelCellLimit);
+
+                var excelrow = new Excel()
+                {
+                    ConsultationName = null,
+                    DocumentName = null,
+                    ChapterTitle = null,
+                    Section = null,
+                    Quote = null,
+                    UserName = null,
+                    Email = email,
+                    CommentId = null,
+                    Comment = remainingText.Length > excelCellLimit ? SplitLongContent(remainingText, excel, email, order) : remainingText,
+                    QuestionId = null,
+                    Question = null,
+                    AnswerId = null,
+                    AnswerBoolean = null,
+                    Answer = null,
+                    RepresentsOrganisation = null,
+                    OrganisationName = null,
+                    HasTobaccoLinks = null,
+                    TobaccoIndustryDetails = null,
+                    OrganisationExpressionOfInterest = null,
+                    Order = order + ".1",
+                };
+                excel.Add(excelrow);
+            }
+
+            return text.Substring(0, excelCellLimit);
+        }
 
 		private string GetUserNameForComment(Models.Comment comment, Dictionary<string, (string displayName, string emailAddress)> userDetailsForUserIds)
 		{
