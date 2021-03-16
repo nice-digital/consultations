@@ -110,5 +110,36 @@ namespace Comments.Test.UnitTests
 			filteredCommentsAndQuestions.Comments.ForEach(c => c.Show.ShouldBeFalse());
 			filteredCommentsAndQuestions.Questions.ForEach(c => c.Show.ShouldBeFalse());
 		}
+
+		[Fact]
+		public void FilterByCommenterThatMatchesEmailAddress()
+		{
+			//Arrange
+			var unfilteredCommentsAndQuestions = SampleListData.GetReviewPageViewModelWith1CommentAnd1Question().CommentsAndQuestions;
+			var commentService = new CommentService(null, _fakeUserService, null, _fakeHttpContextAccessor);
+
+			//Act
+			var filteredCommentsAndQuestions = commentService.FilterCommentsAndQuestions(unfilteredCommentsAndQuestions, null, null, new List<string> { "test@nice.org.uk" });
+
+			//Assert
+			filteredCommentsAndQuestions.Comments.ForEach(c => c.Show.ShouldBeTrue());
+			filteredCommentsAndQuestions.Questions.ForEach(c => c.Show.ShouldBeTrue());
+		}
+
+
+		[Fact]
+		public void FilterByCommenterThatDoesntMatchEmailAddress()
+		{
+			//Arrange
+			var unfilteredCommentsAndQuestions = SampleListData.GetReviewPageViewModelWith1CommentAnd1Question().CommentsAndQuestions;
+			var commentService = new CommentService(null, _fakeUserService, null, _fakeHttpContextAccessor);
+
+			//Act
+			var filteredCommentsAndQuestions = commentService.FilterCommentsAndQuestions(unfilteredCommentsAndQuestions, null, null, new List<string> { "unknownemail@nice.org.uk" });
+
+			//Assert
+			filteredCommentsAndQuestions.Comments.ForEach(c => c.Show.ShouldBeFalse());
+			filteredCommentsAndQuestions.Questions.ForEach(c => c.Show.ShouldBeFalse());
+		}
 	}
 }
