@@ -14,6 +14,7 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.Extensions.Logging;
 using Answer = Comments.Models.Answer;
+using Comment = Comments.Models.Comment;
 using Question = Comments.Models.Question;
 
 namespace Comments.Export
@@ -444,6 +445,7 @@ namespace Comments.Export
 				var commentOn = CommentOnHelpers.GetCommentOn(comment.Location.SourceURI, comment.Location.RangeStart, comment.Location.HtmlElementID);
                 var email = GetEmailForComment(comment, userDetailsForUserIds, emailAddressesForOrganisationIds);
                 var order = comment.Location.Order;
+                var userName = GetUserNameForComment(comment, userDetailsForUserIds);
                 
                 var excelrow = new Excel()
 				{
@@ -452,10 +454,10 @@ namespace Comments.Export
 					ChapterTitle = locationDetails.ChapterName,
 					Section = commentOn == CommentOn.Section || commentOn == CommentOn.SubSection || commentOn == CommentOn.Selection ? comment.Location.Section : null,
 					Quote = commentOn  == CommentOn.Selection ? comment.Location.Quote : null,
-					UserName = GetUserNameForComment(comment, userDetailsForUserIds),
+					UserName = userName,
 					Email = email,
 					CommentId = comment.CommentId,
-					Comment =  comment.CommentText.Length > 32767 ? SplitLongContent(comment.CommentText, excel, email, order): comment.CommentText,
+					Comment =  comment.CommentText.Length > 32767 ? SplitLongComment(comment.CommentText, excel, email, userName, order, locationDetails, comment, commentOn): comment.CommentText,
 					QuestionId = null,
 					Question = null,
 					AnswerId = null,
@@ -476,6 +478,7 @@ namespace Comments.Export
 				var locationDetails = await _exportService.GetLocationData(answer.Question.Location);
                 var email = GetEmailForAnswer(answer, userDetailsForUserIds, emailAddressesForOrganisationIds);
                 var order = answer.Question.Location.Order;
+                var userName = GetEmailForAnswer(answer, userDetailsForUserIds, emailAddressesForOrganisationIds);
 
                 var excelrow = new Excel()
 				{
@@ -484,15 +487,15 @@ namespace Comments.Export
 					ChapterTitle = locationDetails.ChapterName,
 					Section = answer.Question.Location.Section,
 					Quote = answer.Question.Location.Quote,
-					UserName = GetUserNameForAnswer(answer, userDetailsForUserIds),
-					Email = GetEmailForAnswer(answer, userDetailsForUserIds, emailAddressesForOrganisationIds),
+					UserName = userName,
+					Email = email,
 					CommentId = null,
 					Comment = null,
 					QuestionId = answer.Question.QuestionId,
 					Question = answer.Question.QuestionText,
 					AnswerId = answer.AnswerId,
 					AnswerBoolean = answer.AnswerBoolean,
-					Answer = answer.AnswerText.Length > 32767 ? SplitLongContent(answer.AnswerText, excel, email, order) : answer.AnswerText,
+					Answer = answer.AnswerText.Length > 32767 ? SplitLongAnswer(answer.AnswerText, excel, email, userName, order, locationDetails, answer) : answer.AnswerText,
                     OrganisationName = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.OrganisationName : null,
 					RepresentsOrganisation = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.RespondingAsOrganisation : null,
 					HasTobaccoLinks = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.HasTobaccoLinks : null,
@@ -539,7 +542,7 @@ namespace Comments.Export
 			return (orderedData, showOrganisationExpressionOfInterest);
 		}
 
-        private string SplitLongContent(string text, List<Excel> excel, string email, string order)
+        private string SplitLongComment(string text, List<Excel> excel, string email, string userName, string order, (string ConsultationName, string DocumentName, string ChapterName) locationDetails, Comment comment, CommentOn commentOn)
         {
             var excelCellLimit = 32767;
 
@@ -549,25 +552,25 @@ namespace Comments.Export
 
                 var excelrow = new Excel()
                 {
-                    ConsultationName = null,
-                    DocumentName = null,
-                    ChapterTitle = null,
-                    Section = null,
-                    Quote = null,
-                    UserName = null,
+                    ConsultationName = locationDetails.ConsultationName,
+                    DocumentName = locationDetails.DocumentName,
+                    ChapterTitle = locationDetails.ChapterName,
+                    Section = commentOn == CommentOn.Section || commentOn == CommentOn.SubSection || commentOn == CommentOn.Selection ? comment.Location.Section : null,
+                    Quote = commentOn == CommentOn.Selection ? comment.Location.Quote : null,
+                    UserName = userName,
                     Email = email,
-                    CommentId = null,
-                    Comment = remainingText.Length > excelCellLimit ? SplitLongContent(remainingText, excel, email, order) : remainingText,
+                    CommentId = comment.CommentId,
+                    Comment = remainingText.Length > excelCellLimit ? SplitLongComment(remainingText, excel, email, userName, order, locationDetails, comment, commentOn) : remainingText,
                     QuestionId = null,
                     Question = null,
                     AnswerId = null,
                     AnswerBoolean = null,
                     Answer = null,
-                    RepresentsOrganisation = null,
-                    OrganisationName = null,
-                    HasTobaccoLinks = null,
-                    TobaccoIndustryDetails = null,
-                    OrganisationExpressionOfInterest = null,
+                    RepresentsOrganisation = comment.SubmissionComment.Count > 0 ? comment.SubmissionComment?.First().Submission.RespondingAsOrganisation : null,
+                    OrganisationName = comment.SubmissionComment.Count > 0 ? comment.SubmissionComment?.First().Submission.OrganisationName : null,
+                    HasTobaccoLinks = comment.SubmissionComment.Count > 0 ? comment.SubmissionComment?.First().Submission.HasTobaccoLinks : null,
+                    TobaccoIndustryDetails = comment.SubmissionComment.Count > 0 ? comment.SubmissionComment?.First().Submission.TobaccoDisclosure : null,
+                    OrganisationExpressionOfInterest = comment.SubmissionComment.Count > 0 ? comment.SubmissionComment?.First().Submission.OrganisationExpressionOfInterest : null,
                     Order = order + ".1",
                 };
                 excel.Add(excelrow);
@@ -576,7 +579,44 @@ namespace Comments.Export
             return text.Substring(0, excelCellLimit);
         }
 
-		private string GetUserNameForComment(Models.Comment comment, Dictionary<string, (string displayName, string emailAddress)> userDetailsForUserIds)
+        private string SplitLongAnswer(string text, List<Excel> excel, string email, string userName, string order, (string ConsultationName, string DocumentName, string ChapterName) locationDetails, Answer answer)
+        {
+            var excelCellLimit = 32767;
+
+            if (text.Length > excelCellLimit)
+            {
+                var remainingText = "Answer continued... " + text.Substring(excelCellLimit, text.Length - excelCellLimit);
+
+                var excelrow = new Excel()
+                {
+                    ConsultationName = locationDetails.ConsultationName,
+                    DocumentName = locationDetails.DocumentName,
+                    ChapterTitle = locationDetails.ChapterName,
+                    Section = answer.Question.Location.Section,
+                    Quote = answer.Question.Location.Quote,
+                    UserName = userName,
+                    Email = email,
+                    CommentId = null,
+                    Comment = null,
+                    QuestionId = answer.Question.QuestionId,
+                    Question = answer.Question.QuestionText,
+                    AnswerId = answer.AnswerId,
+                    AnswerBoolean = answer.AnswerBoolean,
+                    Answer = remainingText.Length > excelCellLimit ? SplitLongAnswer(remainingText, excel, email, userName, order, locationDetails, answer) : remainingText,
+                    OrganisationName = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.OrganisationName : null,
+                    RepresentsOrganisation = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.RespondingAsOrganisation : null,
+                    HasTobaccoLinks = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.HasTobaccoLinks : null,
+                    TobaccoIndustryDetails = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.TobaccoDisclosure : null,
+                    OrganisationExpressionOfInterest = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.OrganisationExpressionOfInterest : null,
+                    Order = order + ".1",
+                };
+                excel.Add(excelrow);
+            }
+
+            return text.Substring(0, excelCellLimit);
+        }
+
+        private string GetUserNameForComment(Models.Comment comment, Dictionary<string, (string displayName, string emailAddress)> userDetailsForUserIds)
 		{
 			if (comment.CommentByUserType == UserType.OrganisationalCommenter)
 				return null;
