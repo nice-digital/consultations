@@ -72,6 +72,7 @@ export const serverRenderer = (params): Promise => {
 					isAdminUser: params.data.isAdminUser,
 					isTeamUser: params.data.isTeamUser,
 					displayName: params.data.displayName,
+					isLead: params.data.isLead,
 					signInURL: params.data.signInURL,
 					signOutURL: params.data.signOutURL,
 					registerURL: params.data.registerURL,

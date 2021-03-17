@@ -28,4 +28,5 @@ export const Endpoints = {
 	organisation: "/api/Organisation", //GET checks for valid collation code and consultation id in querystring. returns OrganisationCode object
 	organisationsession: "/api/Organisation/CreateOrganisationUserSession", //POST. checks for valid collation code and organisation authorisation id in querystring. returns a guid if successful. error otherwise.
 	checkorganisationusersession: "/api/Organisation/CheckOrganisationUserSession", //GET. checks for valid session id for a given consultation id. returns a boolean for valid or not.
+	exportLead: "/api/ExportLead/{0}", //Creates an excel spread sheet for organisation leads that contains the responses that have been submitted to them (ie not the copied ones they can work on). So they can keep an audit record.
 };

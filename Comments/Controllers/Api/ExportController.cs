@@ -57,4 +57,20 @@ namespace Comments.Controllers.Api
 			return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 		}
 	}
+
+	[Route("consultations/api/[controller]")]
+	public class ExportLeadController : ExportControllerBase
+	{
+		public ExportLeadController(IExportService exportService, IExportToExcel exportToExcel, ILogger<ExportExternalController> logger) : base(exportService, exportToExcel, logger) { }
+
+		//GET: consultations/api/ExportLead/5 
+		[HttpGet("{consultationId}")]
+		public async Task<IActionResult> Get([FromRoute] int consultationId)
+		{
+			var result = _exportService.GetDataSubmittedToLeadForConsultation(consultationId);
+
+			var stream = await _exportToExcel.ToSpreadsheet(result.comment, result.answer, result.question);
+			return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+		}
+	}
 }

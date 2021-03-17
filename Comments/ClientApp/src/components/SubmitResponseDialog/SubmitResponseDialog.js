@@ -73,7 +73,7 @@ export class SubmitResponseDialog extends Component {
 
 		return (
 			<>
-				{isOrganisationCommenter ? (
+				{isOrganisationCommenter && !isLead ? (
 					<div className="panel">
 						<h2>You are about to send your final response to {organisationName}</h2>
 						<p>Enter your email address so that your organisation can contact you about your comments if they have any questions.</p>

@@ -34,6 +34,7 @@ namespace Comments.Test.IntegrationTests.API.Export
 	{
 		public ExportTests() : base(TestUserType.CustomFictionalRole)
 		{
+			AppSettings.ConsultationListConfig = TestAppSettings.GetConsultationListConfig();
 		}
 
 		[Fact]
@@ -67,6 +68,7 @@ namespace Comments.Test.IntegrationTests.API.Export
 			: base(useRealSubmitService, testUserType, useFakeConsultationService, submittedCommentsAndAnswerCounts)
 		{
 			System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+			AppSettings.ConsultationListConfig = TestAppSettings.GetConsultationListConfig();
 		}
 
 		[Fact]

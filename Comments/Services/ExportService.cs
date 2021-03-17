@@ -1,4 +1,4 @@
-using Comments.Common;
+﻿using Comments.Common;
 using Comments.Configuration;
 using Comments.Models;
 using Comments.ViewModels;
@@ -16,6 +16,7 @@ namespace Comments.Services
 		Task<(IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid)> GetAllDataForConsultation(int consultationId);
 
 		(IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetAllDataForConsultationForCurrentUser(int consultationId);
+		(IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetDataSubmittedToLeadForConsultation(int consultationId);
 		Task<(string ConsultationName, string DocumentName, string ChapterName)> GetLocationData(Comments.Models.Location location);
 		Task<string> GetConsultationName(Location location);
 		IEnumerable<OrganisationUser> GetOrganisationUsersByOrganisationUserIds(IEnumerable<int> organisationUserIds);
@@ -63,7 +64,26 @@ namespace Comments.Services
 			return (commentsInDB, answersInDB, questionsInDB, new Validate(true));
 	    }
 
-	    public (IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetAllDataForConsultationForCurrentUser(int consultationId)
+	    public (IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetDataSubmittedToLeadForConsultation(int consultationId)
+	    {
+		    var user = _userService.GetCurrentUser();
+		    var isLead = user.OrganisationsAssignedAsLead.Any();
+		    if (!isLead)
+		    {
+			    return (null, null, null, new Validate(valid: false, unauthenticated: true, message: $"User does not have access to download responses submitted to organisation leads."));
+			}
+
+		    var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
+            var commentsAndAnswers = _context.GetCommentsAndAnswersSubmittedToALeadForURI(sourceURI);
+		    var questionsInDb = new List<Models.Question>();
+
+		    if (commentsAndAnswers.comments == null && commentsAndAnswers.answers == null)
+			    return (null, null, null, new Validate(valid: false, notFound: true, message: $"Consultation id:{consultationId} not found trying to get all data for consultation"));
+
+		    return (commentsAndAnswers.comments, commentsAndAnswers.answers, questionsInDb, new Validate(true));
+	    }
+
+		public (IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetAllDataForConsultationForCurrentUser(int consultationId)
 	    {
 
 		    var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
