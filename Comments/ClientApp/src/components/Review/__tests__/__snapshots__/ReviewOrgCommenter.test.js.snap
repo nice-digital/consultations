@@ -135,28 +135,33 @@ Array [
                 "",
                 "",
               ]
-              <p>
-                Your response was submitted 
-                to Really Cool Org
-                 on 
-                <time
-                  dateTime={"2019-07-23T12:50:40.704Z"}
-                >
-                  23 July 2019
-                </time>
-                .
-              </p>
-              <h2>
-                What happens next?
-              </h2>
-              <p>
-                Really Cool Org
-                 will review all the submissions received for this consultation.
-              </p>
-              <p>
-                NICE's response to all the submissions received will be published on the website around the time the final guidance is published.
-              </p>
-              <hr />
+              Array [
+                <h2>
+                  Your response was submitted 
+                  to Really Cool Org
+                   on 
+                  <time
+                    dateTime={"2019-07-23T12:50:40.704Z"}
+                  >
+                    23 July 2019
+                  </time>
+                  .
+                </h2>,
+                <ul
+                  className="list list--unstyled"
+                />,
+                <h2>
+                  What happens next?
+                </h2>,
+                <p>
+                  Really Cool Org
+                   will review all the submissions received for this consultation.
+                </p>,
+                <p>
+                  NICE's response to all the submissions received will be published on the website around the time the final guidance is published.
+                </p>,
+                <hr />,
+              ]
               <div
                 className="grid"
               >
@@ -809,6 +814,9 @@ Array [
                   Once you have sent your response you will not be able to edit it or add any more comments.
                 </p>,
               ]
+              <ul
+                className="list list--unstyled"
+              />
               <div
                 className="grid"
               >

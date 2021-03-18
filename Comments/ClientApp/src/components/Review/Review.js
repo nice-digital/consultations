@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { withRouter, Prompt, Redirect } from "react-router-dom";
 import Helmet from "react-helmet";
 
@@ -24,9 +24,9 @@ import { CommentBox } from "../CommentBox/CommentBox";
 import { Question } from "../Question/Question";
 import LoginBannerWithRouter from "../LoginBanner/LoginBanner";
 import { SubmitResponseDialog } from "../SubmitResponseDialog/SubmitResponseDialog";
+import { SubmittedContent}  from "../SubmittedContent/SubmittedContent";
 import { updateUnsavedIds } from "../../helpers/unsaved-comments";
 import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
-import Moment from "react-moment";
 
 type PropsType = {
 	staticContext?: any,
@@ -515,7 +515,7 @@ export class Review extends Component<PropsType, StateType> {
 		let headerSubtitle2 = "Once they have been submitted you will not be able to edit them further or add any extra comments.";
 
 		return (
-			<Fragment>
+			<>
 				<Helmet>
 					<title>{this.getPageTitle()}</title>
 				</Helmet>
@@ -530,7 +530,7 @@ export class Review extends Component<PropsType, StateType> {
 							<UserContext.Consumer>
 								{(contextValue: ContextType) => {
 
-									if (contextValue.isOrganisationCommenter) {
+									if (contextValue.isOrganisationCommenter && !contextValue.isLead) {
 										headerSubtitle1 = `On this page you can review and edit your response to the consultation before you send them to ${contextValue.organisationName}.`;
 										headerSubtitle2 = "Once you have sent your response you will not be able to edit it or add any more comments.";
 									}
@@ -554,35 +554,18 @@ export class Review extends Component<PropsType, StateType> {
 														reference={reference}
 														consultationState={this.state.consultationData.consultationState}
 													/>
-													{this.state.submittedDate &&
-													<Fragment>
-														{this.state.consultationData.consultationState.supportsDownload &&
-														<a
-															onClick={() => {
-																tagManager({
-																	event: "generic",
-																	category: "Consultation comments page",
-																	action: "Clicked",
-																	label: "Download your response button",
-																});
-															}}
-															className="btn btn--secondary"
-															href={`${this.props.basename}/api/exportexternal/${this.props.match.params.consultationId}`}>Download
-															your response</a>
-														}
-														<p>Your response was submitted {contextValue.isOrganisationCommenter && `to ${contextValue.organisationName}`} on <Moment format="D MMMM YYYY" date={this.state.submittedDate}/>.</p>
-														<h2>What happens next?</h2>
-														{contextValue.isOrganisationCommenter ? (
-															<>
-																<p>{`${contextValue.organisationName}`} will review all the submissions received for this consultation.</p>
-																<p>NICE's response to all the submissions received will be published on the website around the time the final guidance is published.</p>
-															</>
-														) : (
-															<p>We will review all the submissions received for this consultation. Our response	will be published on the website around the time the guidance is published.</p>
-														)}
-														<hr/>
-													</Fragment>
-													}
+
+													<SubmittedContent 
+														organisationName={contextValue.organisationName}
+														isOrganisationCommenter={contextValue.isOrganisationCommenter}
+														isLead={contextValue.isLead}
+														consultationState={this.state.consultationData.consultationState}
+														consultationId={this.props.match.params.consultationId}
+														basename={this.props.basename}
+														isSubmitted={this.state.submittedDate}
+														linkToReviewPage={false}
+													/>
+
 													<div className="grid">
 														<div data-g="12 md:3" className="sticky">
 															<h2 className="h5 mt--0">Filter</h2>
@@ -656,7 +639,7 @@ export class Review extends Component<PropsType, StateType> {
 																tobaccoDisclosure={this.state.tobaccoDisclosure}
 																showExpressionOfInterestSubmissionQuestion={this.state.consultationData.showExpressionOfInterestSubmissionQuestion}
 																organisationExpressionOfInterest={this.state.organisationExpressionOfInterest}
-																isLead={this.state.isLead}
+																isLead={contextValue.isLead}
 																isOrganisationCommenter={contextValue.isOrganisationCommenter}
 																questions={this.state.questions}
 																emailAddress={this.state.emailAddress}
@@ -672,7 +655,7 @@ export class Review extends Component<PropsType, StateType> {
 						</div>
 					</div>
 				</div>
-			</Fragment>
+			</>
 		);
 	}
 }

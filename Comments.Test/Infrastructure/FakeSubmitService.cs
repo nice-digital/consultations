@@ -27,7 +27,7 @@ namespace Comments.Test.Infrastructure
 
 	    public ConsultationState GetConsultationState(string sourceURI, IEnumerable<Location> locations = null)
 	    {
-		    return new ConsultationState(DateTime.MinValue, DateTime.MaxValue, true, true, true, DateTime.MaxValue, null);
+		    return new ConsultationState(DateTime.MinValue, DateTime.MaxValue, true, true, true, DateTime.MaxValue, null, false);
 	    }
 
 		public async Task<(int rowsUpdated, Validate validate, ConsultationsContext context)> SubmitToLead(SubmissionToLead submission)

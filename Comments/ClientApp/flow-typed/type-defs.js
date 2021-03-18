@@ -47,6 +47,7 @@ declare type ConsultationStateType = {
 	supportsDownload: boolean,
 	reference?: string,	
 	submittedDate: Date,
+	leadHasBeenSentResponse: boolean,
 };
 
 declare type ConsultationDataType = {

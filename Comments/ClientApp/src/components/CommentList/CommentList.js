@@ -465,7 +465,7 @@ export class CommentList extends Component<PropsType, StateType> {
 												</Link>
 										}
 
-										{contextValue.isOrganisationCommenter &&
+										{contextValue.isOrganisationCommenter && !contextValue.isLead &&
 											<Alert type="info" role="alert">
 												<p>You are commenting on behalf of {contextValue.organisationName}.</p>
 												<p>When you submit your response it will be submitted to the organisational lead at {contextValue.organisationName}.</p>
