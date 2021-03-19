@@ -40,63 +40,65 @@ exports[`[ClientApp]  Download Component should match snapshot with supplied dat
           </span>
         </dd>
       </div>
-      <div
-        className="card__metadatum"
-      >
-        <dt
-          className="visually-hidden"
+      <div>
+        <div
+          className="card__metadatum"
         >
-          Project ID
-        </dt>
-        <dd
-          title="Consultation ID 123"
-        >
-          TA-123
-        </dd>
-      </div>
-      <div
-        className="card__metadatum"
-      >
-        <dt
-          className="visually-hidden"
-        >
-          Product type name
-        </dt>
-        <dd>
-          TA
-        </dd>
-      </div>
-      <div
-        className="card__metadatum"
-      >
-        <dd>
-          Closes on
-           
-          <strong>
-            <time
-              dateTime={"2059-12-17T03:24:00.000Z"}
-            >
-              17 December 2059
-            </time>
-          </strong>
-        </dd>
-      </div>
-      <div
-        className="card__metadatum"
-      >
-        <dd>
-          <a
-            href="fdfd/api/Export/123"
-            rel="noopener noreferrer"
-            target="_blank"
+          <dt
+            className="visually-hidden"
           >
-            Download 
+            Project ID
+          </dt>
+          <dd
+            title="Consultation ID 123"
+          >
+            TA-123
+          </dd>
+        </div>
+        <div
+          className="card__metadatum"
+        >
+          <dt
+            className="visually-hidden"
+          >
+            Product type name
+          </dt>
+          <dd>
+            TA
+          </dd>
+        </div>
+        <div
+          className="card__metadatum"
+        >
+          <dd>
+            Closes on
+             
             <strong>
-              1
+              <time
+                dateTime={"2059-12-17T03:24:00.000Z"}
+              >
+                17 December 2059
+              </time>
             </strong>
-             response
-          </a>
-        </dd>
+          </dd>
+        </div>
+        <div
+          className="card__metadatum"
+        >
+          <dd>
+            <a
+              href="fdfd/api/Export/123"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              Download 
+              <strong>
+                1
+              </strong>
+               response
+            </a>
+          </dd>
+        </div>
       </div>
     </dl>
   </article>
