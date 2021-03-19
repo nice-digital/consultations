@@ -95,11 +95,8 @@ namespace Comments.Services
 
 			var consultationListRows = new List<ConsultationListRow>();
 
-            var getAllCommentsAndAnswersSubmittedToLeadForOrganisation = (new List<Models.Comment>(), new List<Models.Answer>());
-            if (currentUser.OrganisationsAssignedAsLead.Any())
-            {
-                getAllCommentsAndAnswersSubmittedToLeadForOrganisation = _context.GetCommentsAndAnswersSubmittedToLeadForOrganisation(currentUser.OrganisationsAssignedAsLead.First().OrganisationId);
-            }
+            var (commentsSubmittedToLead, answersSubmittedToLead) = currentUser.OrganisationsAssignedAsLead.Any() ?
+                _context.GetCommentsAndAnswersSubmittedToLeadForOrganisation(currentUser.OrganisationsAssignedAsLead.First().OrganisationId) : (null, null);
 
             foreach (var consultation in consultationsFromIndev)
 			{
@@ -112,11 +109,8 @@ namespace Comments.Services
 
 				var responseCount = canSeeSubmissionCountForThisConsultation ? submittedCommentsAndAnswerCounts.FirstOrDefault(s => s.SourceURI.Equals(sourceURI))?.TotalCount ?? 0 : (int?)null;
 
-                var numResponsesFromOrg = 0;
-                if (currentUser.OrganisationsAssignedAsLead.Any())
-                    numResponsesFromOrg = CountCommentsAndAnswerSubmissionsForThisOrganisation(sourceURI, getAllCommentsAndAnswersSubmittedToLeadForOrganisation);
+                var numResponsesFromOrg = commentsSubmittedToLead.Any() || answersSubmittedToLead.Any() ? CountCommentsAndAnswerSubmissionsForThisOrganisation(sourceURI, (commentsSubmittedToLead, answersSubmittedToLead)) : 0;
                 
-
                 consultationListRows.Add(
 					new ConsultationListRow(consultation.Title,
 						consultation.StartDate, consultation.EndDate, responseCount, consultation.ConsultationId,
