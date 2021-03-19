@@ -504,6 +504,7 @@ namespace Comments.Export
             if (text.Length > excelCellLimit)
             {
                 var remainingText = "Comment continued... " + text.Substring(excelCellLimit, text.Length - excelCellLimit);
+                var incrementedOrder = order + ".1";
 
                 var excelrow = new Excel()
                 {
@@ -515,7 +516,7 @@ namespace Comments.Export
                     UserName = userName,
                     Email = email,
                     CommentId = comment.CommentId,
-                    Comment = remainingText.Length > excelCellLimit ? SplitLongComment(remainingText, excel, email, userName, order, locationDetails, comment, commentOn, excelCellLimit) : remainingText,
+                    Comment = remainingText.Length > excelCellLimit ? SplitLongComment(remainingText, excel, email, userName, incrementedOrder, locationDetails, comment, commentOn, excelCellLimit) : remainingText,
                     QuestionId = null,
                     Question = null,
                     AnswerId = null,
@@ -526,7 +527,7 @@ namespace Comments.Export
                     HasTobaccoLinks = comment.SubmissionComment.Count > 0 ? comment.SubmissionComment?.First().Submission.HasTobaccoLinks : null,
                     TobaccoIndustryDetails = comment.SubmissionComment.Count > 0 ? comment.SubmissionComment?.First().Submission.TobaccoDisclosure : null,
                     OrganisationExpressionOfInterest = comment.SubmissionComment.Count > 0 ? comment.SubmissionComment?.First().Submission.OrganisationExpressionOfInterest : null,
-                    Order = order + ".1",
+                    Order = incrementedOrder,
                 };
                 excel.Add(excelrow);
             }
