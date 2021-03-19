@@ -408,10 +408,23 @@ namespace Comments.Export
 
             if (organisationUserIds.Count() != 0 && !isAdminUser &&!hasTeamRole)
 			{
+
 				// When the lead downloads the responses they have sent to NICE, the responses should have the Name and Email Address of that lead against them
-				if (currentUser.IsAuthenticatedByAccounts && !comments.Any(c => c.StatusId == (int) StatusName.SubmittedToLead))
+				if (currentUser.IsAuthenticatedByAccounts && !comments.Any(c => c.StatusId == (int)StatusName.SubmittedToLead) && !answers.Any(a => a.StatusId == (int)StatusName.SubmittedToLead))
 				{
-					userDetailsForUserIds.Add(currentUserDetails.userId, (currentUserDetails.displayName, currentUserDetails.emailAddress));
+                    // If the lead that is downloading isn't the lead that submitted to NICE, we need to get the submitters details
+                    if (comments.Any(c => c.SubmissionComment.First().Submission.SubmissionByUserId != currentUser.UserId) || answers.Any(a => a.SubmissionAnswer.First().Submission.SubmissionByUserId != currentUser.UserId))
+                    {
+                        var userIds = comments.Select(c => c.SubmissionComment.First().Submission.SubmissionByUserId)
+                            .Concat(answers.Select(a => a.SubmissionAnswer.First().Submission.SubmissionByUserId));
+                        userDetailsForUserIds = await _userService.GetUserDetailsForUserIds(userIds);
+                    }
+                    else
+                    {
+                        // If it is the same lead as submitted to NICE, we can just use their details
+                        userDetailsForUserIds.Add(currentUserDetails.userId, (currentUserDetails.displayName, currentUserDetails.emailAddress));
+                    }
+
 				}
 				else
 				{
