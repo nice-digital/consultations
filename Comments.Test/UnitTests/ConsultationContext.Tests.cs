@@ -470,5 +470,45 @@ namespace Comments.Test.UnitTests
 			//Assert
 			OrgUser.EmailAddress.ShouldBe(emailAddress);
 		}
+
+		[Fact]
+		public void CountNumberOfCommentsAndAnswerSubmissionsForAnOrganisation()
+		{
+			//Arrange
+			var consultationId = 1;
+			var organisationId = 1;
+			var authorisationSession = Guid.NewGuid();
+
+			var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, _context);
+			var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(_context, organisationAuthorisationId, authorisationSession, null);
+
+			var differentOrganisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId + 1, consultationId, _context);
+			var differentOrganisationUserId = TestBaseDBHelpers.AddOrganisationUser(_context, differentOrganisationAuthorisationId, authorisationSession, null);
+
+			var userService = FakeUserService.Get(true, "Benjamin Button", null, TestUserType.NotAuthenticated, false, organisationUserId, null);
+			var context = new ConsultationsContext(_options, userService, _fakeEncryption);
+
+			var sourceURI = "consultations://./consultation/1";
+			var locationId = AddLocation(sourceURI);
+			var LocationIdForDifferentConsulation = AddLocation("consultations://./consultation/2");
+
+			AddComment(locationId, "Comment Text", null, (int)StatusName.SubmittedToLead, context, organisationUserId);
+			AddComment(locationId, "Comment Text", null, (int)StatusName.Draft, context, organisationUserId);
+			AddComment(locationId, "Comment Text", null, (int)StatusName.SubmittedToLead, context, differentOrganisationUserId);
+			AddComment(LocationIdForDifferentConsulation, "Comment Text", null, (int)StatusName.SubmittedToLead, context, organisationUserId);
+
+
+			var questionId = AddQuestion(locationId, 99, "Question Text", context);
+			var QuestionIdForDifferentConsultation = AddQuestion(LocationIdForDifferentConsulation, 99, "Question Text", context);
+			AddAnswer(questionId, null, "Answer Text", (int)StatusName.SubmittedToLead, context, organisationUserId);
+			AddAnswer(questionId, null, "Answer Text", (int)StatusName.Draft, context, organisationUserId);
+			AddAnswer(QuestionIdForDifferentConsultation, null, "Answer Text", (int)StatusName.SubmittedToLead, context, organisationUserId);
+
+			//Act
+			var count = context.CountCommentsAndAnswerSubmissionsForThisOrganisation(sourceURI, organisationId);
+
+			//Assert
+			count.ShouldBe(2);
+		}
 	}
 }

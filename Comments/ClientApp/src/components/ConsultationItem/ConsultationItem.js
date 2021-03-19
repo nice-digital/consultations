@@ -27,7 +27,8 @@ type PropsType = {
 	showShareWithOrganisationButton: boolean,
 	show: boolean,
 	basename: string,
-	allowGenerateOrganisationCode: boolean
+	allowGenerateOrganisationCode: boolean,
+	numResponsesFromOrg: number
 }
 
 export class ConsultationItem extends Component<PropsType, StateType> {
@@ -52,6 +53,7 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 			organisationCodes,
 			showShareWithOrganisationButton,
 			allowGenerateOrganisationCode,
+			numResponsesFromOrg = 0,
 		} = this.props;
 
 		const status = (isOpen, isClosed, isUpcoming) => {
@@ -91,46 +93,53 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 								</dd>
 							</div>
 						)}
-						<div className="card__metadatum">
-							<dt className="visually-hidden">Project ID</dt>
-							<dd title={`Consultation ID ${consultationId}`}>
-								{gidReference}
-							</dd>
-						</div>
-						<div className="card__metadatum">
-							<dt className="visually-hidden">Product type name</dt>
-							<dd>
-								{productTypeName}
-							</dd>
-						</div>
-						<div className="card__metadatum">
-							<dd>
-								{consultationStatus === "Upcoming" ?
-									<Fragment>
-										Starts on{" "}
-										<strong><Moment format="D MMMM YYYY" date={startDate}/></strong>
-									</Fragment>
-									:
-									<Fragment>
-										Closes on{" "}
-										<strong><Moment format="D MMMM YYYY" date={endDate}/></strong>
-									</Fragment>
-								}
-							</dd>
-						</div>
-						{((consultationStatus !== "Upcoming") && (submissionCount !== null)) &&
+						{showShareWithOrganisationButton && allowGenerateOrganisationCode &&
+							<div className="card__metadatum">
+								{numResponsesFromOrg} {numResponsesFromOrg == 1 ? "response" : "responses"} from your organisation
+							</div>
+						}
+						<div>
+							<div className="card__metadatum">
+								<dt className="visually-hidden">Project ID</dt>
+								<dd title={`Consultation ID ${consultationId}`}>
+									{gidReference}
+								</dd>
+							</div>
+							<div className="card__metadatum">
+								<dt className="visually-hidden">Product type name</dt>
+								<dd>
+									{productTypeName}
+								</dd>
+							</div>
 							<div className="card__metadatum">
 								<dd>
-									{submissionCount > 0 ?
-										<a href={`${this.props.basename}/api/Export/${this.props.consultationId}`} target="_blank" rel="noopener noreferrer">
-											Download <strong>{submissionCount}</strong> response{submissionCount > 1 ? "s" : ""}
-										</a>
+									{consultationStatus === "Upcoming" ?
+										<Fragment>
+											Starts on{" "}
+											<strong><Moment format="D MMMM YYYY" date={startDate}/></strong>
+										</Fragment>
 										:
-										<span>No responses</span>
+										<Fragment>
+											Closes on{" "}
+											<strong><Moment format="D MMMM YYYY" date={endDate}/></strong>
+										</Fragment>
 									}
 								</dd>
 							</div>
-						}
+							{((consultationStatus !== "Upcoming") && (submissionCount !== null)) &&
+								<div className="card__metadatum">
+									<dd>
+										{submissionCount > 0 ?
+											<a href={`${this.props.basename}/api/Export/${this.props.consultationId}`} target="_blank" rel="noopener noreferrer">
+												Download <strong>{submissionCount}</strong> response{submissionCount > 1 ? "s" : ""}
+											</a>
+											:
+											<span>No responses</span>
+										}
+									</dd>
+								</div>
+							}
+						</div>
 					</dl>
 					{showShareWithOrganisationButton && allowGenerateOrganisationCode &&
 						<GenerateCode organisationCodes={organisationCodes} consultationId={consultationId} />

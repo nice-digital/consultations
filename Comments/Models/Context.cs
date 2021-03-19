@@ -1,4 +1,4 @@
-using Comments.Services;
+﻿using Comments.Services;
 using Comments.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -151,7 +151,7 @@ namespace Comments.Models
 		public List<Comment> GetAllSubmittedCommentsForURI(string sourceURI)
 	    {
 			var comment = Comment.Where(c =>
-					c.StatusId == (int) StatusName.Submitted && (c.Location.SourceURI.Contains($"{sourceURI}/") || c.Location.SourceURI.Equals(sourceURI)))
+					c.StatusId == (int)StatusName.Submitted && (c.Location.SourceURI.Contains($"{sourceURI}/") || c.Location.SourceURI.Equals(sourceURI)))
 				.Include(l => l.Location)
 				.Include(s => s.Status)
 				.Include(sc => sc.SubmissionComment)
@@ -177,7 +177,7 @@ namespace Comments.Models
 		public List<Answer> GetAllSubmittedAnswersForURI(string sourceURI)
 	    {
 			var answer = Answer.Where(a =>
-					a.StatusId == (int) StatusName.Submitted && (a.Question.Location.SourceURI.Contains($"{sourceURI}/") || a.Question.Location.SourceURI.Equals(sourceURI)))
+					a.StatusId == (int)StatusName.Submitted && (a.Question.Location.SourceURI.Contains($"{sourceURI}/") || a.Question.Location.SourceURI.Equals(sourceURI)))
 				.Include(q => q.Question)
 				.ThenInclude(l => l.Location)
 				.Include(sc => sc.SubmissionAnswer)
@@ -965,5 +965,36 @@ namespace Comments.Models
 				.Any(c => c.OrganisationUser.OrganisationAuthorisation.OrganisationId.Equals(organisationId));
 
 		}
+
+        public int CountCommentsAndAnswerSubmissionsForThisOrganisation(string sourceURI, int organisationId)
+        {
+            var comments = Comment
+                .Include(c => c.OrganisationUser)
+                    .ThenInclude(ou => ou.OrganisationAuthorisation)
+                .IgnoreQueryFilters()
+                .Where(c => (
+                            (c.Location.SourceURI.Contains($"{sourceURI}/") || c.Location.SourceURI.Equals(sourceURI))
+                            && c.StatusId == (int)StatusName.SubmittedToLead)
+                            )
+                .ToList();
+
+            var commentsCount = comments.Where(c => c.OrganisationUser?.OrganisationAuthorisation != null)
+                .Count(c => c.OrganisationUser.OrganisationAuthorisation.OrganisationId.Equals(organisationId));
+
+            var answers = Answer
+                .Include(a => a.OrganisationUser)
+                    .ThenInclude(ou => ou.OrganisationAuthorisation)
+                .IgnoreQueryFilters()
+                .Where(a => (
+                            (a.Question.Location.SourceURI.Contains($"{sourceURI}/") || a.Question.Location.SourceURI.Equals(sourceURI))
+                            && a.StatusId == (int)StatusName.SubmittedToLead)
+                            )
+                .ToList();
+
+            var answersCount =  answers.Where(a => a.OrganisationUser?.OrganisationAuthorisation != null)
+                .Count(a => a.OrganisationUser.OrganisationAuthorisation.OrganisationId.Equals(organisationId));
+
+            return commentsCount + answersCount;
+        }
 	}
 }
