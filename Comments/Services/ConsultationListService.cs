@@ -67,7 +67,7 @@ namespace Comments.Services
 			var submittedCommentsAndAnswerCounts = canSeeAnySubmissionCounts ? _context.GetSubmittedCommentsAndAnswerCounts() : null;
 			var sourceURIsCommentedOrAnswered = _context.GetAllSourceURIsTheCurrentUserHasCommentedOrAnsweredAQuestion();
 
-			if (model.InitialPageView) //set defaults here for the filters - this code might be called by the SSR or by the client-side.
+            if (model.InitialPageView) //set defaults here for the filters - this code might be called by the SSR or by the client-side.
 			{
 				//if unset (by querystring) set the default for the contribution filter. - the filter should be enabled (HasContributed), for regular users (i.e. not admins or team users) and the user has contributed to any.
 				if (model.Contribution == null)
@@ -95,7 +95,13 @@ namespace Comments.Services
 
 			var consultationListRows = new List<ConsultationListRow>();
 
-			foreach (var consultation in consultationsFromIndev)
+            var getAllCommentsAndAnswersSubmittedToLeadForOrganisation = (new List<Models.Comment>(), new List<Models.Answer>());
+            if (currentUser.OrganisationsAssignedAsLead.Any())
+            {
+                getAllCommentsAndAnswersSubmittedToLeadForOrganisation = _context.GetCommentsAndAnswersSubmittedToLeadForOrganisation(currentUser.OrganisationsAssignedAsLead.First().OrganisationId);
+            }
+
+            foreach (var consultation in consultationsFromIndev)
 			{
 				var sourceURI = ConsultationsUri.CreateConsultationURI(consultation.ConsultationId);
 
@@ -108,7 +114,7 @@ namespace Comments.Services
 
                 var numResponsesFromOrg = 0;
                 if (currentUser.OrganisationsAssignedAsLead.Any())
-                    numResponsesFromOrg = _context.CountCommentsAndAnswerSubmissionsForThisOrganisation(sourceURI, currentUser.OrganisationsAssignedAsLead.First().OrganisationId);
+                    numResponsesFromOrg = CountCommentsAndAnswerSubmissionsForThisOrganisation(sourceURI, getAllCommentsAndAnswersSubmittedToLeadForOrganisation);
                 
 
                 consultationListRows.Add(
@@ -129,7 +135,19 @@ namespace Comments.Services
 			return (model, new Validate(valid: true));
 		}
 
-		private (bool hasEnteredCommentsOrAnsweredQuestions, bool hasSubmittedCommentsOrAnswers)
+        private int CountCommentsAndAnswerSubmissionsForThisOrganisation(string sourceURI, (List<Models.Comment> comments, List<Models.Answer> answers) getAllCommentsAndAnswersSubmittedToLeadForOrganisation)
+        {
+       
+            var commentsCount =  getAllCommentsAndAnswersSubmittedToLeadForOrganisation.comments
+                .Count(c => c.Location.SourceURI.Contains($"{sourceURI}/") || c.Location.SourceURI.Equals(sourceURI));
+
+            var answersCount = getAllCommentsAndAnswersSubmittedToLeadForOrganisation.answers
+                .Count(a => a.Question.Location.SourceURI.Contains($"{sourceURI}/") || a.Question.Location.SourceURI.Equals(sourceURI));
+
+            return commentsCount + answersCount;
+        }
+
+        private (bool hasEnteredCommentsOrAnsweredQuestions, bool hasSubmittedCommentsOrAnswers)
 			GetFlagsForWhetherTheCurrentUserHasCommentedOrAnsweredThisConsultation(IEnumerable<KeyValuePair<string, Models.Status>> sourceURIsCommentedOrAnswered, string consultationSourceURI)
 		{
 			var foundCommentOrAnswer = sourceURIsCommentedOrAnswered.FirstOrDefault(s =>

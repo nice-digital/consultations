@@ -472,7 +472,7 @@ namespace Comments.Test.UnitTests
 		}
 
 		[Fact]
-		public void CountNumberOfCommentsAndAnswerSubmissionsForAnOrganisation()
+		public void GetAllCommentsAndAnswersSubmittedToALeadForGivenOrganisation()
 		{
 			//Arrange
 			var consultationId = 1;
@@ -502,13 +502,15 @@ namespace Comments.Test.UnitTests
 			var QuestionIdForDifferentConsultation = AddQuestion(LocationIdForDifferentConsulation, 99, "Question Text", context);
 			AddAnswer(questionId, null, "Answer Text", (int)StatusName.SubmittedToLead, context, organisationUserId);
 			AddAnswer(questionId, null, "Answer Text", (int)StatusName.Draft, context, organisationUserId);
+			AddAnswer(questionId, null, "Answer Text", (int)StatusName.SubmittedToLead, context, differentOrganisationUserId);
 			AddAnswer(QuestionIdForDifferentConsultation, null, "Answer Text", (int)StatusName.SubmittedToLead, context, organisationUserId);
 
 			//Act
-			var count = context.CountCommentsAndAnswerSubmissionsForThisOrganisation(sourceURI, organisationId);
+			var (comment, answer) = context.GetCommentsAndAnswersSubmittedToLeadForOrganisation(organisationId);
 
 			//Assert
-			count.ShouldBe(2);
+			comment.Count.ShouldBe(2);
+			answer.Count.ShouldBe(2);
 		}
 	}
 }

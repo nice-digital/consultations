@@ -113,7 +113,7 @@ namespace Comments.Models
 			return sortedData;
 		}
 
-		public IEnumerable<Location> GetQuestionsForDocument(IList<string> sourceURIs, bool partialMatchSourceURI)
+        public IEnumerable<Location> GetQuestionsForDocument(IList<string> sourceURIs, bool partialMatchSourceURI)
 		{
 			string partialSourceURIToUse = null, partialMatchExactSourceURIToUse = null;
 			if (partialMatchSourceURI)
@@ -1042,5 +1042,24 @@ namespace Comments.Models
 
             return commentsCount + answersCount;
         }
-	}
+
+        public (List<Comment>, List<Answer>) GetCommentsAndAnswersSubmittedToLeadForOrganisation(int organisationId)
+        {
+            var comments = Comment
+               .Include(c => c.OrganisationUser)
+                   .ThenInclude(ou => ou.OrganisationAuthorisation)
+               .IgnoreQueryFilters()
+               .Where(c => c.StatusId == (int)StatusName.SubmittedToLead && c.OrganisationUser.OrganisationAuthorisation.OrganisationId.Equals(organisationId))
+               .ToList();
+
+            var answers = Answer
+                .Include(a => a.OrganisationUser)
+                    .ThenInclude(ou => ou.OrganisationAuthorisation)
+                .IgnoreQueryFilters()
+                .Where(a => a.StatusId == (int)StatusName.SubmittedToLead && a.OrganisationUser.OrganisationAuthorisation.OrganisationId.Equals(organisationId))
+                .ToList();
+
+            return (comments, answers);
+        }
+    }
 }
