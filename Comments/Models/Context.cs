@@ -138,38 +138,28 @@ namespace Comments.Models
                                                          && !_organisationUserIDs.Contains((int)c.OrganisationUserId))
                     .Select(c=> c.SubmissionComment
                         .Select(s=> s.Submission)))
-                .IncludeFilter(l=> l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead
-                                                        && _organisationIDs.Any(o => o.Equals(c.OrganisationId))
-                                                        && !_organisationUserIDs.Contains((int)c.OrganisationUserId))
+                .IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead 
+                                                         && _organisationIDs.Any(o => o.Equals(c.OrganisationId)) 
+                                                         && !_organisationUserIDs.Contains((int)c.OrganisationUserId))
                     .Select(c=> c.Status))
                 .IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead
                                                          && _organisationIDs.Any(o => o.Equals(c.OrganisationId))
                                                          && !_organisationUserIDs.Contains((int)c.OrganisationUserId))
                     .Select(c=> c.OrganisationUser))
 
-                .IncludeFilter(l => l.Question.Where(q=> q.Answer.Any(a => a.StatusId == (int)StatusName.SubmittedToLead)
-                                                                    && q.Answer.Any(a => _organisationIDs.Contains((int)a.OrganisationId))
-                                                                    && !q.Answer.Any(a => _organisationUserIDs.Contains((int)a.OrganisationUserId))))
-                .IncludeFilter(l => l.Question.Where(q => q.Answer.Any(a => a.StatusId == (int)StatusName.SubmittedToLead)
-                                                          && q.Answer.Any(a => _organisationIDs.Contains((int)a.OrganisationId))
-                                                          && !q.Answer.Any(a => _organisationUserIDs.Contains((int)a.OrganisationUserId)))
+                .IncludeFilter(l => l.Question)
+                .IncludeFilter(l => l.Question
                     .Select(q => q.QuestionType))
-                .IncludeFilter(l => l.Question.Where(q => q.Answer.Any(a => a.StatusId == (int)StatusName.SubmittedToLead)
-                                                          && q.Answer.Any(a => _organisationIDs.Contains((int)a.OrganisationId))
-                                                          && !q.Answer.Any(a => _organisationUserIDs.Contains((int)a.OrganisationUserId)))
+                .IncludeFilter(l => l.Question
                     .Select(q => q.Answer.Where(a => a.StatusId == (int)StatusName.SubmittedToLead
-                                                                && _organisationIDs.Contains((int)a.OrganisationId) 
-                                                                 && !_organisationUserIDs.Contains((int)a.OrganisationUserId))))
-                .IncludeFilter(l => l.Question.Where(q => q.Answer.Any(a => a.StatusId == (int)StatusName.SubmittedToLead)
-                                                          && q.Answer.Any(a => _organisationIDs.Contains((int)a.OrganisationId))
-                                                          && !q.Answer.Any(a => _organisationUserIDs.Contains((int)a.OrganisationUserId)))
+                                                     && _organisationIDs.Contains((int)a.OrganisationId) 
+                                                     && !_organisationUserIDs.Contains((int)a.OrganisationUserId))))
+                .IncludeFilter(l => l.Question
                     .Select(q => q.Answer.Where(a => a.StatusId == (int)StatusName.SubmittedToLead
                                                      && _organisationIDs.Contains((int)a.OrganisationId)
                                                      && !_organisationUserIDs.Contains((int)a.OrganisationUserId))
                     .Select(a => a.SubmissionAnswer)))
-                .IncludeFilter(l=> l.Question.Where(q => q.Answer.Any(a => a.StatusId == (int)StatusName.SubmittedToLead)
-                                                         && q.Answer.Any(a => _organisationIDs.Contains((int)a.OrganisationId))
-                                                         && !q.Answer.Any(a => _organisationUserIDs.Contains((int)a.OrganisationUserId)))
+                .IncludeFilter(l=> l.Question
                     .Select(q => q.Answer.Where(a => a.StatusId == (int)StatusName.SubmittedToLead
                                                      && _organisationIDs.Contains((int)a.OrganisationId)
                                                      && !_organisationUserIDs.Contains((int)a.OrganisationUserId))
