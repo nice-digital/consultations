@@ -14,6 +14,7 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.Extensions.Logging;
 using Answer = Comments.Models.Answer;
+using Comment = Comments.Models.Comment;
 using Question = Comments.Models.Question;
 
 namespace Comments.Export
@@ -387,73 +388,33 @@ namespace Comments.Export
 				sheet.AppendChild(dataRow);
 			}
 		}
-
+        
 		private async Task<(List<Excel> collatedData, bool showOrganisationExpressionOfInterest)> CollateData(IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions)
 		{
-			List<Excel> excel = new List<Excel>();
+            var details = await GetUserDetailsAndEmails(comments, answers);
 
-			var userDetailsForUserIds = new Dictionary<string, (string displayName, string emailAddress)>();
-			var emailAddressesForOrganisationIds = new Dictionary<int, string>();
+            List<Excel> excel = new List<Excel>();
+            var excelCellLimit = 32767;
 
-			var organisationUserIds = comments.Where(comment => comment.OrganisationUserId.HasValue).Select(comment => comment.OrganisationUserId.Value)
-				.Concat(answers.Where(answer => answer.OrganisationUserId.HasValue).Select(answer => answer.OrganisationUserId.Value)).Distinct();
-
-			var currentUser = _userService.GetCurrentUser();
-			var currentUserDetails = _userService.GetCurrentUserDetails();
-			var userDetailsForOrganisationUser = _exportService.GetOrganisationUsersByOrganisationUserIds(organisationUserIds);
-
-			var userRoles = _userService.GetUserRoles().ToList();
-            var isAdminUser = userRoles.Any(role => AppSettings.ConsultationListConfig.DownloadRoles.AdminRoles.Contains(role));
-            var hasTeamRole = userRoles.Any(role => AppSettings.ConsultationListConfig.DownloadRoles.TeamRoles.Contains(role));
-
-            if (organisationUserIds.Count() != 0 && !isAdminUser &&!hasTeamRole)
-			{
-				// When the lead downloads the responses they have sent to NICE, the responses should have the Name and Email Address of that lead against them
-				if (currentUser.IsAuthenticatedByAccounts && !comments.Any(c => c.StatusId == (int) StatusName.SubmittedToLead))
-				{
-					userDetailsForUserIds.Add(currentUserDetails.userId, (currentUserDetails.displayName, currentUserDetails.emailAddress));
-				}
-				else
-				{
-					// When an organisation code user downloads their own responses, or a lead downloads the original responses that were sent to them, they should see the details of the organisational commenter against each response
-					foreach (var user in userDetailsForOrganisationUser)
-					{
-						emailAddressesForOrganisationIds.Add(user.OrganisationUserId, user.EmailAddress);
-					}
-				}
-			}
-			else 
-			{
-				var userIds = comments.Select(comment => comment.CreatedByUserId).Concat(answers.Select(answer => answer.CreatedByUserId)).Where(user => !string.IsNullOrEmpty(user)).Distinct();
-
-				// When a normal user downloads their own comments, we can get their details without going to IdaM
-				if (userIds.Count() == 1 && userIds.Single().Equals(currentUserDetails.userId, StringComparison.OrdinalIgnoreCase))
-				{
-					userDetailsForUserIds.Add(currentUserDetails.userId, (currentUserDetails.displayName, currentUserDetails.emailAddress));
-				}
-				else
-				{
-					// When the NICE internal users download responses, they are from multiple users and we need to go to IdAM to get the details for each of the comments
-					userDetailsForUserIds = await _userService.GetUserDetailsForUserIds(userIds);
-				}
-			}
-
-			foreach (var comment in comments)
+            foreach (var comment in comments)
 			{
 				var locationDetails = await _exportService.GetLocationData(comment.Location);
 				var commentOn = CommentOnHelpers.GetCommentOn(comment.Location.SourceURI, comment.Location.RangeStart, comment.Location.HtmlElementID);
-				
-				var excelrow = new Excel()
+                var email = GetEmailForComment(comment, details.userDetailsForUserIds, details.emailAddressesForOrganisationIds);
+                var order = comment.Location.Order;
+                var userName = GetUserNameForComment(comment, details.userDetailsForUserIds);
+                
+                var excelrow = new Excel()
 				{
 					ConsultationName = locationDetails.ConsultationName,
 					DocumentName = locationDetails.DocumentName,
 					ChapterTitle = locationDetails.ChapterName,
 					Section = commentOn == CommentOn.Section || commentOn == CommentOn.SubSection || commentOn == CommentOn.Selection ? comment.Location.Section : null,
 					Quote = commentOn  == CommentOn.Selection ? comment.Location.Quote : null,
-					UserName = GetUserNameForComment(comment, userDetailsForUserIds),
-					Email = GetEmailForComment(comment, userDetailsForUserIds, emailAddressesForOrganisationIds),
+					UserName = userName,
+					Email = email,
 					CommentId = comment.CommentId,
-					Comment =  comment.CommentText,
+					Comment =  comment.CommentText.Length > 32767 ? SplitLongComment(comment.CommentText, excel, email, userName, order, locationDetails, comment, commentOn, excelCellLimit): comment.CommentText,
 					QuestionId = null,
 					Question = null,
 					AnswerId = null,
@@ -464,7 +425,7 @@ namespace Comments.Export
 					HasTobaccoLinks =  comment.SubmissionComment.Count> 0 ? comment.SubmissionComment?.First().Submission.HasTobaccoLinks : null,
 					TobaccoIndustryDetails = comment.SubmissionComment.Count > 0? comment.SubmissionComment?.First().Submission.TobaccoDisclosure : null,
 					OrganisationExpressionOfInterest = comment.SubmissionComment.Count > 0 ? comment.SubmissionComment?.First().Submission.OrganisationExpressionOfInterest : null,
-					Order = comment.Location.Order,
+					Order = order,
 			};
 				excel.Add(excelrow);
 			}
@@ -472,23 +433,27 @@ namespace Comments.Export
 			foreach (var answer in answers)
 			{
 				var locationDetails = await _exportService.GetLocationData(answer.Question.Location);
-				var excelrow = new Excel()
+                var email = GetEmailForAnswer(answer, details.userDetailsForUserIds, details.emailAddressesForOrganisationIds);
+                var order = answer.Question.Location.Order;
+                var userName = GetUserNameForAnswer(answer, details.userDetailsForUserIds);
+
+                var excelrow = new Excel()
 				{
 					ConsultationName = locationDetails.ConsultationName,
 					DocumentName = locationDetails.DocumentName,
 					ChapterTitle = locationDetails.ChapterName,
 					Section = answer.Question.Location.Section,
 					Quote = answer.Question.Location.Quote,
-					UserName = GetUserNameForAnswer(answer, userDetailsForUserIds),
-					Email = GetEmailForAnswer(answer, userDetailsForUserIds, emailAddressesForOrganisationIds),
+					UserName = userName,
+					Email = email,
 					CommentId = null,
 					Comment = null,
 					QuestionId = answer.Question.QuestionId,
 					Question = answer.Question.QuestionText,
 					AnswerId = answer.AnswerId,
 					AnswerBoolean = answer.AnswerBoolean,
-					Answer = answer.AnswerText,
-					OrganisationName = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.OrganisationName : null,
+					Answer = answer.AnswerText.Length > 32767 ? SplitLongAnswer(answer.AnswerText, excel, email, userName, order, locationDetails, answer, excelCellLimit) : answer.AnswerText,
+                    OrganisationName = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.OrganisationName : null,
 					RepresentsOrganisation = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.RespondingAsOrganisation : null,
 					HasTobaccoLinks = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.HasTobaccoLinks : null,
 					TobaccoIndustryDetails = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.TobaccoDisclosure : null,
@@ -534,8 +499,129 @@ namespace Comments.Export
 			return (orderedData, showOrganisationExpressionOfInterest);
 		}
 
+        private string SplitLongComment(string text, List<Excel> excel, string email, string userName, string order, (string ConsultationName, string DocumentName, string ChapterName) locationDetails, Comment comment, CommentOn commentOn, int excelCellLimit)
+        {
+            if (text.Length > excelCellLimit)
+            {
+                var remainingText = "Comment continued... " + text.Substring(excelCellLimit, text.Length - excelCellLimit);
+                var incrementedOrder = order + ".1";
 
-		private string GetUserNameForComment(Models.Comment comment, Dictionary<string, (string displayName, string emailAddress)> userDetailsForUserIds)
+                var excelrow = new Excel()
+                {
+                    ConsultationName = locationDetails.ConsultationName,
+                    DocumentName = locationDetails.DocumentName,
+                    ChapterTitle = locationDetails.ChapterName,
+                    Section = commentOn == CommentOn.Section || commentOn == CommentOn.SubSection || commentOn == CommentOn.Selection ? comment.Location.Section : null,
+                    Quote = commentOn == CommentOn.Selection ? comment.Location.Quote : null,
+                    UserName = userName,
+                    Email = email,
+                    CommentId = comment.CommentId,
+                    Comment = remainingText.Length > excelCellLimit ? SplitLongComment(remainingText, excel, email, userName, incrementedOrder, locationDetails, comment, commentOn, excelCellLimit) : remainingText,
+                    QuestionId = null,
+                    Question = null,
+                    AnswerId = null,
+                    AnswerBoolean = null,
+                    Answer = null,
+                    RepresentsOrganisation = comment.SubmissionComment.Count > 0 ? comment.SubmissionComment?.First().Submission.RespondingAsOrganisation : null,
+                    OrganisationName = comment.SubmissionComment.Count > 0 ? comment.SubmissionComment?.First().Submission.OrganisationName : null,
+                    HasTobaccoLinks = comment.SubmissionComment.Count > 0 ? comment.SubmissionComment?.First().Submission.HasTobaccoLinks : null,
+                    TobaccoIndustryDetails = comment.SubmissionComment.Count > 0 ? comment.SubmissionComment?.First().Submission.TobaccoDisclosure : null,
+                    OrganisationExpressionOfInterest = comment.SubmissionComment.Count > 0 ? comment.SubmissionComment?.First().Submission.OrganisationExpressionOfInterest : null,
+                    Order = incrementedOrder,
+                };
+                excel.Add(excelrow);
+            }
+
+            return text.Substring(0, excelCellLimit);
+        }
+
+        private string SplitLongAnswer(string text, List<Excel> excel, string email, string userName, string order, (string ConsultationName, string DocumentName, string ChapterName) locationDetails, Answer answer, int excelCellLimit)
+        {
+            if (text.Length > excelCellLimit)
+            {
+                var remainingText = "Answer continued... " + text.Substring(excelCellLimit, text.Length - excelCellLimit);
+
+                var excelrow = new Excel()
+                {
+                    ConsultationName = locationDetails.ConsultationName,
+                    DocumentName = locationDetails.DocumentName,
+                    ChapterTitle = locationDetails.ChapterName,
+                    Section = answer.Question.Location.Section,
+                    Quote = answer.Question.Location.Quote,
+                    UserName = userName,
+                    Email = email,
+                    CommentId = null,
+                    Comment = null,
+                    QuestionId = answer.Question.QuestionId,
+                    Question = answer.Question.QuestionText,
+                    AnswerId = answer.AnswerId,
+                    AnswerBoolean = answer.AnswerBoolean,
+                    Answer = remainingText.Length > excelCellLimit ? SplitLongAnswer(remainingText, excel, email, userName, order, locationDetails, answer, excelCellLimit) : remainingText,
+                    OrganisationName = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.OrganisationName : null,
+                    RepresentsOrganisation = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.RespondingAsOrganisation : null,
+                    HasTobaccoLinks = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.HasTobaccoLinks : null,
+                    TobaccoIndustryDetails = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.TobaccoDisclosure : null,
+                    OrganisationExpressionOfInterest = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.OrganisationExpressionOfInterest : null,
+                    Order = order + ".1",
+                };
+                excel.Add(excelrow);
+            }
+
+            return text.Substring(0, excelCellLimit);
+        }
+
+        private async Task<(Dictionary<string, (string displayName, string emailAddress)> userDetailsForUserIds, Dictionary<int, string> emailAddressesForOrganisationIds)> GetUserDetailsAndEmails(IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers)
+        {
+            var userDetailsForUserIds = new Dictionary<string, (string displayName, string emailAddress)>();
+            var emailAddressesForOrganisationIds = new Dictionary<int, string>();
+
+            var organisationUserIds = comments.Where(comment => comment.OrganisationUserId.HasValue).Select(comment => comment.OrganisationUserId.Value)
+                .Concat(answers.Where(answer => answer.OrganisationUserId.HasValue).Select(answer => answer.OrganisationUserId.Value)).Distinct();
+
+            var currentUser = _userService.GetCurrentUser();
+            var currentUserDetails = _userService.GetCurrentUserDetails();
+            var userDetailsForOrganisationUser = _exportService.GetOrganisationUsersByOrganisationUserIds(organisationUserIds);
+
+            var userRoles = _userService.GetUserRoles().ToList();
+            var isAdminUser = userRoles.Any(role => AppSettings.ConsultationListConfig.DownloadRoles.AdminRoles.Contains(role));
+            var hasTeamRole = userRoles.Any(role => AppSettings.ConsultationListConfig.DownloadRoles.TeamRoles.Contains(role));
+
+            if (organisationUserIds.Count() != 0 && !isAdminUser && !hasTeamRole)
+            {
+                // When the lead downloads the responses they have sent to NICE, the responses should have the Name and Email Address of that lead against them
+                if (currentUser.IsAuthenticatedByAccounts && !comments.Any(c => c.StatusId == (int)StatusName.SubmittedToLead))
+                {
+                    userDetailsForUserIds.Add(currentUserDetails.userId, (currentUserDetails.displayName, currentUserDetails.emailAddress));
+                }
+                else
+                {
+                    // When an organisation code user downloads their own responses, or a lead downloads the original responses that were sent to them, they should see the details of the organisational commenter against each response
+                    foreach (var user in userDetailsForOrganisationUser)
+                    {
+                        emailAddressesForOrganisationIds.Add(user.OrganisationUserId, user.EmailAddress);
+                    }
+                }
+            }
+            else
+            {
+                var userIds = comments.Select(comment => comment.CreatedByUserId).Concat(answers.Select(answer => answer.CreatedByUserId)).Where(user => !string.IsNullOrEmpty(user)).Distinct();
+
+                // When a normal user downloads their own comments, we can get their details without going to IdaM
+                if (userIds.Count() == 1 && userIds.Single().Equals(currentUserDetails.userId, StringComparison.OrdinalIgnoreCase))
+                {
+                    userDetailsForUserIds.Add(currentUserDetails.userId, (currentUserDetails.displayName, currentUserDetails.emailAddress));
+                }
+                else
+                {
+                    // When the NICE internal users download responses, they are from multiple users and we need to go to IdAM to get the details for each of the comments
+                    userDetailsForUserIds = await _userService.GetUserDetailsForUserIds(userIds);
+                }
+            }
+
+            return (userDetailsForUserIds, emailAddressesForOrganisationIds);
+        }
+
+        private string GetUserNameForComment(Models.Comment comment, Dictionary<string, (string displayName, string emailAddress)> userDetailsForUserIds)
 		{
 			if (comment.CommentByUserType == UserType.OrganisationalCommenter)
 				return null;
