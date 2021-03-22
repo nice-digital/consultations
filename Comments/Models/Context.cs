@@ -157,25 +157,34 @@ namespace Comments.Models
                 .IncludeFilter(l => l.Question.Where(q => q.Answer.Any(a => a.StatusId == (int)StatusName.SubmittedToLead)
                                                           && q.Answer.Any(a => _organisationIDs.Contains((int)a.OrganisationId))
                                                           && !q.Answer.Any(a => _organisationUserIDs.Contains((int)a.OrganisationUserId)))
-                    .Select(q => q.Answer.Where(a => _organisationIDs.Contains((int)a.OrganisationId) 
+                    .Select(q => q.Answer.Where(a => a.StatusId == (int)StatusName.SubmittedToLead
+                                                                && _organisationIDs.Contains((int)a.OrganisationId) 
                                                                  && !_organisationUserIDs.Contains((int)a.OrganisationUserId))))
                 .IncludeFilter(l => l.Question.Where(q => q.Answer.Any(a => a.StatusId == (int)StatusName.SubmittedToLead)
                                                           && q.Answer.Any(a => _organisationIDs.Contains((int)a.OrganisationId))
                                                           && !q.Answer.Any(a => _organisationUserIDs.Contains((int)a.OrganisationUserId)))
-                    .Select(q => q.Answer.Select(a => a.SubmissionAnswer)))
+                    .Select(q => q.Answer.Where(a => a.StatusId == (int)StatusName.SubmittedToLead
+                                                     && _organisationIDs.Contains((int)a.OrganisationId)
+                                                     && !_organisationUserIDs.Contains((int)a.OrganisationUserId))
+                    .Select(a => a.SubmissionAnswer)))
                 .IncludeFilter(l=> l.Question.Where(q => q.Answer.Any(a => a.StatusId == (int)StatusName.SubmittedToLead)
                                                          && q.Answer.Any(a => _organisationIDs.Contains((int)a.OrganisationId))
                                                          && !q.Answer.Any(a => _organisationUserIDs.Contains((int)a.OrganisationUserId)))
-                    .Select(q => q.Answer.Select(a => a.OrganisationUser)))
+                    .Select(q => q.Answer.Where(a => a.StatusId == (int)StatusName.SubmittedToLead
+                                                     && _organisationIDs.Contains((int)a.OrganisationId)
+                                                     && !_organisationUserIDs.Contains((int)a.OrganisationUserId))
+                    .Select(a => a.OrganisationUser)))
                 .OrderBy(l => l.Order)
                 .ToList();
 
             var filteredLocations = commentsAndAnswers.Where(l =>
                 (l.Order != null) && sourceURIs.Contains(l.SourceURI, StringComparer.OrdinalIgnoreCase));
-            
+
             var sortedData = filteredLocations.Where(l => l.Comment.Count > 0 || l.Question.Count > 0)
                 .OrderBy(l => l.Order)
-                .ThenByDescending(l => l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault());
+                .ThenByDescending(l =>
+                    l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate)
+                        .FirstOrDefault());
 
             var convertedData =
                 ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(sortedData);
