@@ -9,6 +9,7 @@ type PropsType = {
 	saveAnswerHandler: Function,
 	deleteAnswerHandler: Function,
 	question: QuestionType,
+	otherUsersAnswers: Array<AnswerType>,
 	readOnly: boolean,
 	isUnsaved: boolean,
 	documentTitle?: string,
@@ -26,12 +27,20 @@ export class Question extends Component<PropsType, StateType> {
 	render() {
 		if (!this.props.question) return null;
 		const { documentTitle } = this.props;
+		//const { commentOn, quote, currentUserHasAnswered } = this.props.question;
 		const { commentOn, quote } = this.props.question;
+		//const allowComments = !this.props.readOnly;
+
 		let answers = this.props.question.answers;
-		if (answers === null || answers.length < 1){
+
+		let otherUsersAnswers = this.props.otherUsersAnswers || [];
+
+		if (answers === null || answers.length < 1) {
+		//if (!currentUserHasAnswered) {
 			answers = [{
 				answerId: -1,
 				questionId: this.props.question.questionId,
+				commenterEmail: null,
 			}];
 		}
 
@@ -68,24 +77,50 @@ export class Question extends Component<PropsType, StateType> {
 					<p className="CommentBox__validationMessage">You have unsaved changes</p>
 				}
 
-				{this.props.showAnswer &&
-					answers.map((answer) => {
-						return (
-							<Answer
-								questionText={this.props.question.questionText}
-								questionType={this.props.question.questionType}
-								updateUnsavedIds={this.props.updateUnsavedIds}
-								questionId={this.props.question.questionId}
-								readOnly={this.props.readOnly}
-								key={answer.answerId}
-								unique={`Answer${answer.answerId}`}
-								answer={answer}
-								saveAnswerHandler={this.props.saveAnswerHandler}
-								deleteAnswerHandler={this.props.deleteAnswerHandler}
-							/>
-						);
-					})
-				}
+				{this.props.showAnswer && (
+					<>
+						{answers.map((answer) => {
+							// let readOnly = true;
+
+							// if (allowComments) {
+							// 	readOnly = answer.commenterEmail ? true : false;
+							// }
+
+							return (
+								<Answer
+									questionText={this.props.question.questionText}
+									questionType={this.props.question.questionType}
+									updateUnsavedIds={this.props.updateUnsavedIds}
+									questionId={this.props.question.questionId}
+									readOnly={this.props.readOnly}
+									key={answer.answerId}
+									unique={`Answer${answer.answerId}`}
+									answer={answer}
+									saveAnswerHandler={this.props.saveAnswerHandler}
+									deleteAnswerHandler={this.props.deleteAnswerHandler}
+								/>
+							);
+						})}
+
+						{otherUsersAnswers.map((otherUsersAnswer) => {
+							return (
+								<Answer
+									questionText={this.props.question.questionText}
+									questionType={this.props.question.questionType}
+									updateUnsavedIds={this.props.updateUnsavedIds}
+									questionId={this.props.question.questionId}
+									readOnly={true}
+									key={otherUsersAnswer.answerId}
+									unique={`Answer${otherUsersAnswer.answerId}`}
+									answer={otherUsersAnswer}
+									saveAnswerHandler={this.props.saveAnswerHandler}
+									deleteAnswerHandler={this.props.deleteAnswerHandler}
+								/>
+							);
+						})}
+					</>
+				)}
+
 			</li>
 		);
 	}

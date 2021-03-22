@@ -60,6 +60,8 @@ type StateType = {
 	enableOrganisationalCommentingFeature: boolean,
 	allowOrganisationCodeLogin: Boolean,
 	isCurrentlyAuthorised: boolean,
+	otherUsersComments: Array<CommentType>,
+	otherUsersQuestions: Array<QuestionType>,
 };
 
 export class CommentList extends Component<PropsType, StateType> {
@@ -83,6 +85,8 @@ export class CommentList extends Component<PropsType, StateType> {
 			enableOrganisationalCommentingFeature: false,
 			allowOrganisationCodeLogin: false,
 			isCurrentlyAuthorised: false,
+			otherUsersComments: [],
+			otherUsersQuestions: [],
 		};
 
 		let preloadedData = {};
@@ -105,6 +109,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			console.log("preloadedCommentsForCurrentUser");
 			console.log("preloadedCommentsForCurrentUser.questions", preloadedCommentsForCurrentUser.questions);
 			let allowComments = preloadedCommentsForCurrentUser.consultationState.consultationIsOpen && !preloadedCommentsForCurrentUser.consultationState.submittedDate;
+
 			this.state = {
 				comments: preloadedCommentsForCurrentUser.comments,
 				questions: preloadedCommentsForCurrentUser.questions,
@@ -122,6 +127,8 @@ export class CommentList extends Component<PropsType, StateType> {
 				endDate: preloadedCommentsForCurrentUser.consultationState.endDate,
 				enableOrganisationalCommentingFeature,
 				allowOrganisationCodeLogin: (preloadedCommentsForCurrentUser.consultationState.consultationIsOpen && enableOrganisationalCommentingFeature),
+				otherUsersComments: [],
+				otherUsersQuestions: [],
 			};
 		}
 
@@ -137,46 +144,21 @@ export class CommentList extends Component<PropsType, StateType> {
 			console.log("preloadedCommentsFromOtherCodeUsers");
 			console.log("preloadedCommentsFromOtherCodeUsers.questions", preloadedCommentsFromOtherCodeUsers.questions);
 
-			const questions = preloadedCommentsFromOtherCodeUsers.questions.length ? this.sortAnswers(preloadedCommentsFromOtherCodeUsers.questions) : this.state.questions;
-
-			this.state.comments = this.state.comments.concat(preloadedCommentsFromOtherCodeUsers.comments);
-			this.state.questions = questions;
+			this.state.otherUsersComments = preloadedCommentsFromOtherCodeUsers.comments;
+			this.state.otherUsersQuestions = preloadedCommentsFromOtherCodeUsers.questions;
 		}
 	}
 
-	sortAnswers = (responseQuestions) => {
-		const stateQuestions = this.state.questions;
-
-		const amendedQuestions = stateQuestions.map((question) => {
-			let stateQuestion = {...question};
-
-			let responseQuestion = responseQuestions.find((question) => {
-				if (question.questionId === stateQuestion.questionId) {
-					return true;
-				}
-			});
-
-			if (typeof responseQuestion !== "undefined") {
-				stateQuestion.answers = stateQuestion.answers.concat(responseQuestion.answers);
-			}
-
-			return stateQuestion;
-		});
-
-		return amendedQuestions;
-	};
-
-	// need to set more state?
 	loadCommentsFromOtherCodeUsers = () => {
 		console.log("loadCommentsFromOtherCodeUsers");
 		load("commentsForOtherOrgCommenters", undefined, [], {sourceURI: this.props.match.url}).then(
 			function(response) {
-				const comments = this.state.comments.concat(response.data.comments);
-				const questions = response.data.questions.length ? this.sortAnswers(response.data.questions) : this.state.questions;
+				const otherUsersComments = response.data.comments;
+				const otherUsersQuestions = response.data.questions;
 
 				this.setState({
-					comments,
-					questions,
+					otherUsersComments,
+					otherUsersQuestions,
 					loading: false,
 				});
 			}.bind(this))
@@ -385,6 +367,8 @@ export class CommentList extends Component<PropsType, StateType> {
 			}
 		};
 
+		//console.log(this.state.otherUsersComments);
+
 		return (
 			<Fragment>
 				<Prompt
@@ -483,17 +467,32 @@ export class CommentList extends Component<PropsType, StateType> {
 											<Fragment>
 												{contextValue.isAuthorised ? (
 													<div className={`${this.state.viewComments ? "show" : "hide"}`}>
-														{this.state.comments.length === 0 ? <p>No comments yet</p> :
+														{(this.state.comments.length === 0 && this.state.otherUsersComments.length === 0) ? <p>No comments yet</p> :
 															<ul className="CommentList list--unstyled mt--0">
 																{this.state.comments.map((comment) => {
-																	let readOnly = contextValue.isOrganisationCommenter && comment.commenterEmail ? true : !this.state.allowComments;
+																	//let readOnly = contextValue.isOrganisationCommenter && comment.commenterEmail ? true : !this.state.allowComments;
 																	return (
 																		<CommentBox
 																			updateUnsavedIds={this.updateUnsavedIds}
-																			readOnly={readOnly}
+																			readOnly={!this.state.allowComments}
 																			key={comment.commentId}
 																			unique={`Comment${comment.commentId}`}
 																			comment={comment}
+																			saveHandler={this.saveCommentHandler}
+																			deleteHandler={this.deleteCommentHandler}
+																		/>
+																	);
+																})}
+																{this.state.otherUsersComments.map((otherUsersComment) => {
+																	//console.log(otherUsersComment);
+																	// some extra props???
+																	return (
+																		<CommentBox
+																			updateUnsavedIds={this.updateUnsavedIds}
+																			readOnly={true}
+																			key={otherUsersComment.commentId}
+																			unique={`Comment${otherUsersComment.commentId}`}
+																			comment={otherUsersComment}
 																			saveHandler={this.saveCommentHandler}
 																			deleteHandler={this.deleteCommentHandler}
 																		/>
@@ -531,6 +530,14 @@ export class CommentList extends Component<PropsType, StateType> {
 														{this.state.questions.map((question) => {
 															const isUnsaved = this.state.unsavedIds.includes(`${question.questionId}q`);
 
+															let matchingQuestion = this.state.otherUsersQuestions.find((otherUsersQuestion) => {
+																console.log("otherUsersQuestion.questionId", otherUsersQuestion.questionId);
+																console.log("question.questionId", question.questionId);
+																return otherUsersQuestion.questionId === question.questionId;
+															});
+
+															const otherUsersAnswers = matchingQuestion ? matchingQuestion.answers : []; // maybe null instead?
+
 															return (
 																<Question
 																	isUnsaved={isUnsaved}
@@ -539,6 +546,7 @@ export class CommentList extends Component<PropsType, StateType> {
 																	key={question.questionId}
 																	unique={`Comment${question.questionId}`}
 																	question={question}
+																	otherUsersAnswers={otherUsersAnswers}
 																	saveAnswerHandler={this.saveAnswerHandler}
 																	deleteAnswerHandler={this.deleteAnswerHandler}
 																	showAnswer={contextValue.isAuthorised}
