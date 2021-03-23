@@ -443,7 +443,7 @@ export class CommentList extends Component<PropsType, StateType> {
 											<Alert type="info" role="alert">
 												<p>You are commenting on behalf of {contextValue.organisationName}.</p>
 												<p>When you submit your response it will be submitted to the organisational lead at {contextValue.organisationName}.</p>
-												<p><strong>On submission your email address and comments will be visible to other members or associates of your organisation who are using the same commenting code.</strong></p>
+												<p><strong>On submission your email address and responses will be visible to other members or associates of your organisation who are using the same commenting code.</strong></p>
 											</Alert>
 										}
 
