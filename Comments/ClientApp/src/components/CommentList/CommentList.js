@@ -452,6 +452,7 @@ export class CommentList extends Component<PropsType, StateType> {
 										{contextValue.isOrganisationCommenter && !contextValue.isLead &&
 											<Alert type="info" role="alert">
 												<p>You are commenting on behalf of {contextValue.organisationName}.</p>
+												<p>Your comments will be seen by other members of your organisation who are using the same organisation code.</p>
 												<p>When you submit your response it will be submitted to the organisational lead at {contextValue.organisationName}.</p>
 											</Alert>
 										}
