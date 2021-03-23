@@ -719,6 +719,53 @@ namespace Comments.Test.UnitTests
 				secondCommentRow[1].ShouldBe("mickey@smith.com");
 			}
 		}
-		
+
+		[Theory]
+		[InlineData(35000)]
+		[InlineData(67000)]
+		[InlineData(120000)]
+		public async void SplitLongCommentsWhenCreatingSpreadsheet(int commentLength)
+		{
+			//Arrange
+			AppSettings.ConsultationListConfig = TestAppSettings.GetConsultationListConfig();
+			const int organisationUserId = 1;
+			const string userId = "1";
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Sarah Jane Smith", userId: userId, organisationIdUserIsLeadOf: 1, emailAddress: "sarah@tardis.gov");
+			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+			var locationId = AddLocation(sourceURI, _context, "001.001.000.000");
+			var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
+			var commentText = new string('A', commentLength);
+			var comments = new List<Models.Comment> { new Models.Comment(locationId, null, commentText, null, location, 2, null, organisationUserId: organisationUserId, parentCommentId: 1) };
+			comments.First().SubmissionComment.Add(new SubmissionComment(1, 1));
+			comments.First().SubmissionComment.First().Submission = new Submission(submissionByUserId: userId, DateTime.Now, true, "organisation", false, null, null);
+			var answers = new List<Models.Answer> { };
+			var questions = new List<Models.Question> { };
+			var fakeExportService = new FakeExportService(comments, answers, questions,
+				new List<OrganisationUser> { new OrganisationUser(1, Guid.NewGuid(), DateTime.Now) { EmailAddress = "sarah@tardis.gov", OrganisationUserId = organisationUserId } });
+			var exportToExcel = new ExportToExcel(userService, fakeExportService, null);
+
+			//Act
+			var spreadsheet = await exportToExcel.ToSpreadsheet(comments, answers, questions);
+
+			using (var reader = ExcelReaderFactory.CreateReader(spreadsheet))
+			{
+				var workSheet = reader.AsDataSet();
+				var data = workSheet.Tables;
+
+				//Assert
+				var excelCellCharacterLimit = 32767;
+				var numberOfRowsAtLimit = (commentLength / excelCellCharacterLimit);
+
+				var rows = data[Constants.Export.SheetName].Rows;
+				rows.Count.ShouldBe(4 + numberOfRowsAtLimit);
+
+				var commentRow1 = rows[3].ItemArray;
+				commentRow1[7].ToString().Length.ShouldBe(excelCellCharacterLimit);
+
+				var lastRow = 3 + numberOfRowsAtLimit;
+				var commentRow2 = rows[lastRow].ItemArray;
+				commentRow2[7].ToString().Length.ShouldBe(commentLength - (numberOfRowsAtLimit * excelCellCharacterLimit)  + (numberOfRowsAtLimit * "Comment continued... ".Length));
+			}
+		}
 	}
 }
