@@ -395,10 +395,10 @@ namespace Comments.Export
 			var userDetailsForUserIds = new Dictionary<string, (string displayName, string emailAddress)>();
 			var emailAddressesForOrganisationIds = new Dictionary<int, string>();
 
-			var organisationUserIds = comments.Where(comment => comment.OrganisationUserId.HasValue).Select(comment => comment.OrganisationUserId.Value)
-				.Concat(answers.Where(answer => answer.OrganisationUserId.HasValue).Select(answer => answer.OrganisationUserId.Value)).Distinct();
-
-			var currentUser = _userService.GetCurrentUser();
+            var organisationUserIds = comments.Where(comment => comment.OrganisationUserId.HasValue).Select(comment => comment.OrganisationUserId.Value)
+                .Concat(answers.Where(answer => answer.OrganisationUserId.HasValue).Select(answer => answer.OrganisationUserId.Value)).Distinct();
+            
+            var currentUser = _userService.GetCurrentUser();
 			var currentUserDetails = _userService.GetCurrentUserDetails();
 			var userDetailsForOrganisationUser = _exportService.GetOrganisationUsersByOrganisationUserIds(organisationUserIds);
 
@@ -407,25 +407,32 @@ namespace Comments.Export
             var hasTeamRole = userRoles.Any(role => AppSettings.ConsultationListConfig.DownloadRoles.TeamRoles.Contains(role));
 
             if (organisationUserIds.Count() != 0 && !isAdminUser &&!hasTeamRole)
-			{
+            {
+                var commentsSubmittedToLead = comments.Any(c => c.StatusId == (int)StatusName.SubmittedToLead);
+                var answersSubmittedToLead = answers.Any(a => a.StatusId == (int)StatusName.SubmittedToLead);
 
-				// When the lead downloads the responses they have sent to NICE, the responses should have the Name and Email Address of that lead against them
-				if (currentUser.IsAuthenticatedByAccounts && !comments.Any(c => c.StatusId == (int)StatusName.SubmittedToLead) && !answers.Any(a => a.StatusId == (int)StatusName.SubmittedToLead))
+                // When the lead downloads the responses they have sent to NICE, the responses should have the Name and Email Address of that lead against them
+                if (currentUser.IsAuthenticatedByAccounts && !commentsSubmittedToLead && !answersSubmittedToLead)
 				{
-                    // If the lead that is downloading isn't the lead that submitted to NICE, we need to get the submitters details
-                    if (comments.Any(c => c.SubmissionComment.First().Submission.SubmissionByUserId != currentUser.UserId) || answers.Any(a => a.SubmissionAnswer.First().Submission.SubmissionByUserId != currentUser.UserId))
+
+                    var userIds = comments.Select(c => c.SubmissionComment.First().Submission.SubmissionByUserId)
+                        .Concat(answers.Select(a => a.SubmissionAnswer.First().Submission.SubmissionByUserId)).Where(user => !string.IsNullOrEmpty(user)).Distinct();
+
+                    // If it is the same lead as submitted to NICE, we can just use their details
+                    if (userIds.Count() == 1 && userIds.Single().Equals(currentUserDetails.userId, StringComparison.OrdinalIgnoreCase))
                     {
-                        var userIds = comments.Select(c => c.SubmissionComment.First().Submission.SubmissionByUserId)
-                            .Concat(answers.Select(a => a.SubmissionAnswer.First().Submission.SubmissionByUserId));
-                        userDetailsForUserIds = await _userService.GetUserDetailsForUserIds(userIds);
+                        userDetailsForUserIds.Add(currentUserDetails.userId, (currentUserDetails.displayName, currentUserDetails.emailAddress));
                     }
                     else
                     {
-                        // If it is the same lead as submitted to NICE, we can just use their details
-                        userDetailsForUserIds.Add(currentUserDetails.userId, (currentUserDetails.displayName, currentUserDetails.emailAddress));
+                        // If the lead that is downloading isn't the lead that submitted to NICE, we need to get the submitters details
+                        // We can't get them the same way as we do for internal staff as external users can't get user details from IdAM, so we add a placeholder name
+                        foreach (var userId in userIds)
+                        {
+                            userDetailsForUserIds.Add(userId, ("Organisation lead", ""));
+                        }
                     }
-
-				}
+                }
 				else
 				{
 					// When an organisation code user downloads their own responses, or a lead downloads the original responses that were sent to them, they should see the details of the organisational commenter against each response
@@ -437,10 +444,12 @@ namespace Comments.Export
 			}
 			else 
 			{
-				var userIds = comments.Select(comment => comment.CreatedByUserId).Concat(answers.Select(answer => answer.CreatedByUserId)).Where(user => !string.IsNullOrEmpty(user)).Distinct();
+                var userIds = comments.Select(c => c.SubmissionComment.First().Submission.SubmissionByUserId)
+                    .Concat(answers.Select(a => a.SubmissionAnswer.First().Submission.SubmissionByUserId)).Where(user => !string.IsNullOrEmpty(user)).Distinct();
+                //var userIds = comments.Select(comment => comment.CreatedByUserId).Concat(answers.Select(answer => answer.CreatedByUserId)).Where(user => !string.IsNullOrEmpty(user)).Distinct();
 
-				// When a normal user downloads their own comments, we can get their details without going to IdaM
-				if (userIds.Count() == 1 && userIds.Single().Equals(currentUserDetails.userId, StringComparison.OrdinalIgnoreCase))
+                // When a normal user downloads their own comments, we can get their details without going to IdaM
+                if (userIds.Count() == 1 && userIds.Single().Equals(currentUserDetails.userId, StringComparison.OrdinalIgnoreCase))
 				{
 					userDetailsForUserIds.Add(currentUserDetails.userId, (currentUserDetails.displayName, currentUserDetails.emailAddress));
 				}
