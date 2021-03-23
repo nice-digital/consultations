@@ -106,8 +106,6 @@ export class CommentList extends Component<PropsType, StateType> {
 		);
 
 		if (preloadedCommentsForCurrentUser) {
-			console.log("preloadedCommentsForCurrentUser");
-			console.log("preloadedCommentsForCurrentUser.questions", preloadedCommentsForCurrentUser.questions);
 			let allowComments = preloadedCommentsForCurrentUser.consultationState.consultationIsOpen && !preloadedCommentsForCurrentUser.consultationState.submittedDate;
 
 			this.state = {
@@ -141,16 +139,12 @@ export class CommentList extends Component<PropsType, StateType> {
 		);
 
 		if (preloadedCommentsFromOtherCodeUsers) {
-			console.log("preloadedCommentsFromOtherCodeUsers");
-			console.log("preloadedCommentsFromOtherCodeUsers.questions", preloadedCommentsFromOtherCodeUsers.questions);
-
 			this.state.otherUsersComments = preloadedCommentsFromOtherCodeUsers.comments;
 			this.state.otherUsersQuestions = preloadedCommentsFromOtherCodeUsers.questions;
 		}
 	}
 
 	loadCommentsFromOtherCodeUsers = () => {
-		console.log("loadCommentsFromOtherCodeUsers");
 		load("commentsForOtherOrgCommenters", undefined, [], {sourceURI: this.props.match.url}).then(
 			function(response) {
 				const otherUsersComments = response.data.comments;
@@ -166,7 +160,6 @@ export class CommentList extends Component<PropsType, StateType> {
 	};
 
 	loadCommentsForCurrentUser = () => {
-		console.log("loadCommentsForCurrentUser");
 		const isOrganisationCommenter = this.context.isOrganisationCommenter;
 
 		load("comments", undefined, [], {sourceURI: this.props.match.url}).then(
@@ -208,7 +201,6 @@ export class CommentList extends Component<PropsType, StateType> {
 	}
 
 	componentDidUpdate(prevProps: PropsType) {
-		console.log("componentDidUpdate");
 		const routeChanged = (prevProps.location.pathname + prevProps.location.search) !== (this.props.location.pathname + this.props.location.search);
 		const authorisationChanged = this.state.isCurrentlyAuthorised !== this.context.isAuthorised;
 
@@ -367,8 +359,6 @@ export class CommentList extends Component<PropsType, StateType> {
 			}
 		};
 
-		//console.log(this.state.otherUsersComments);
-
 		return (
 			<Fragment>
 				<Prompt
@@ -485,7 +475,6 @@ export class CommentList extends Component<PropsType, StateType> {
 																	);
 																})}
 																{this.state.otherUsersComments.map((otherUsersComment) => {
-																	//console.log(otherUsersComment);
 																	// some extra props???
 																	return (
 																		<CommentBox
@@ -532,8 +521,6 @@ export class CommentList extends Component<PropsType, StateType> {
 															const isUnsaved = this.state.unsavedIds.includes(`${question.questionId}q`);
 
 															let matchingQuestion = this.state.otherUsersQuestions.find((otherUsersQuestion) => {
-																console.log("otherUsersQuestion.questionId", otherUsersQuestion.questionId);
-																console.log("question.questionId", question.questionId);
 																return otherUsersQuestion.questionId === question.questionId;
 															});
 
