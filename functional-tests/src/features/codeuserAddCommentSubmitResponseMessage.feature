@@ -6,11 +6,16 @@ Feature: Code user unable to submit when they have not completed mandatory quest
 
 
 Background:
-		Given I open the url "595/1/introduction"
-		#When I accept all cookies
-		When I log into consultation with Organisationcode "CONSULTATIONCODE1"
+	    Given I open the url "admin"
+		And I refresh
+		When I log into the admin page with username "IDAM_EMAIL6" and password "IDAM_PASSWORD"
 
 Scenario: User is unable to Submit when they have not answered the default response questions
+		Given I expect the result list count contains "Showing 1 to 25"
+		When I add the indev GID "GID-NG10361" to the filter
+		Then I click on consultation to generate and copy the organisation code
+		Given I open the url "595/1/introduction"
+        When I log into consultation with copied organisation code
 		Given I comment on a Document
 		When I add the comment "Test" and submit
 		Then I expect the comment save button displays "Saved"

@@ -7,7 +7,7 @@ exports.config = {
 	services: ["selenium-standalone"],
 	seleniumLogs: "./logs",
 
-	specs: ["./src/features/**/codeuserAddCommentSubmitResponseMessage.feature"],
+	specs: ["./src/features/**/*.feature"],
 	exclude: [
 		// "./src/features/**/unsavedCommentReviewPage.feature",
 		// "./src/features/**/answerQuestion.feature",

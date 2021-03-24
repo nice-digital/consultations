@@ -121,6 +121,6 @@ When(
 
 When(/^I scroll the delete button into view$/, scrollDeleteButtonIntoView);
 
-When(/^I log into consultation with Organisationcode "([A-Z0-9_]+)"$/, CodeLogin);
+When(/^I log into consultation with copied organisation code"$/, CodeLogin);
 
 When(/^I click send your response to your organisation button$/, clickSendYourResponseToYourOrganisationButton);
