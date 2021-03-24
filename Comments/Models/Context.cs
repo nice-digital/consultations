@@ -153,7 +153,8 @@ namespace Comments.Models
                 .IncludeFilter(l => l.Question
                     .Select(q => q.Answer.Where(a => a.StatusId == (int)StatusName.SubmittedToLead
                                                      && _organisationIDs.Contains((int)a.OrganisationId) 
-                                                     && !_organisationUserIDs.Contains((int)a.OrganisationUserId))))
+                                                     && !_organisationUserIDs.Contains((int)a.OrganisationUserId))
+                        .OrderByDescending(a=> a.LastModifiedDate).Select(a => a.LastModifiedDate).FirstOrDefault()))
                 .IncludeFilter(l => l.Question
                     .Select(q => q.Answer.Where(a => a.StatusId == (int)StatusName.SubmittedToLead
                                                      && _organisationIDs.Contains((int)a.OrganisationId)
