@@ -132,37 +132,46 @@ Array [
               </div>,
             ]
             Array [
-              <a
-                className="btn btn--cta"
-                data-qa-sel="review-submitted-comments"
-                href="/1/review"
-                onClick={[Function]}
-              >
-                Review your response
-              </a>,
-              <a
-                className="btn btn--secondary"
-                href="undefined/api/exportexternal/1"
-                onClick={[Function]}
-              >
-                Download your response
-              </a>,
-              <p>
-                Your response was submitted 
-                 on 
-                <time
-                  dateTime={"2019-07-15T13:24:18.473Z"}
+              Array [
+                <h2>
+                  Your response was submitted 
+                   on 
+                  <time
+                    dateTime={"2019-07-15T13:24:18.473Z"}
+                  >
+                    15 July 2019
+                  </time>
+                  .
+                </h2>,
+                <ul
+                  className="list list--unstyled"
                 >
-                  15 July 2019
-                </time>
-                .
-              </p>,
-              <h2>
-                What happens next?
-              </h2>,
-              <p>
-                We will review all the submissions received for this consultation. Our response will be published on the website around the time the final guidance is published.
-              </p>,
+                  <li>
+                    <a
+                      data-qa-sel="review-submitted-comments"
+                      href="/1/review"
+                      onClick={[Function]}
+                    >
+                      Review your response
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="undefined/api/exportexternal/1"
+                      onClick={[Function]}
+                    >
+                      Download submitted response (Excel)
+                    </a>
+                  </li>
+                </ul>,
+                <h2>
+                  What happens next?
+                </h2>,
+                <p>
+                  We will review all the submissions received for this consultation. Our response will be published on the website around the time the guidance is published.
+                </p>,
+                <hr />,
+              ],
               <h2>
                 Help us improve our online commenting service
               </h2>,

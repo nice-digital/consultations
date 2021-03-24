@@ -40,6 +40,7 @@
         "hasQuestions":false,
         "hasUserSuppliedAnswers":false,
         "hasUserSuppliedComments":false,
+        "leadHasBeenSentResponse":false,
         "submittedDate":null,
         "documentIdsWhichSupportComments":[
             

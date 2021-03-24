@@ -1,0 +1,362 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[ClientApp]  Submitted page should match snapshot for individual commenters when displayed on the review page 1`] = `
+<Fragment>
+  <h2>
+    Your response was submitted 
+     on 
+    <t
+      ago={false}
+      calendar={false}
+      decimal={false}
+      element="time"
+      filter={[Function]}
+      format="D MMMM YYYY"
+      fromNow={false}
+      interval={60000}
+      onChange={[Function]}
+      toNow={false}
+      unit={null}
+      unix={false}
+      utc={false}
+    />
+    .
+  </h2>
+  <ul
+    className="list list--unstyled"
+  >
+    <li>
+      <a
+        href="something/api/exportexternal/1"
+        onClick={[Function]}
+      >
+        Download submitted response (Excel)
+      </a>
+    </li>
+  </ul>
+  <h2>
+    What happens next?
+  </h2>
+  <p>
+    We will review all the submissions received for this consultation. Our response will be published on the website around the time the guidance is published.
+  </p>
+  <hr />
+</Fragment>
+`;
+
+exports[`[ClientApp]  Submitted page should match snapshot for individual commenters when displayed on the submitted page 1`] = `
+<Fragment>
+  <h2>
+    Your response was submitted 
+     on 
+    <t
+      ago={false}
+      calendar={false}
+      decimal={false}
+      element="time"
+      filter={[Function]}
+      format="D MMMM YYYY"
+      fromNow={false}
+      interval={60000}
+      onChange={[Function]}
+      toNow={false}
+      unit={null}
+      unix={false}
+      utc={false}
+    />
+    .
+  </h2>
+  <ul
+    className="list list--unstyled"
+  >
+    <li>
+      <Link
+        data-qa-sel="review-submitted-comments"
+        replace={false}
+        to="/1/review"
+      >
+        Review your response
+      </Link>
+    </li>
+    <li>
+      <a
+        href="something/api/exportexternal/1"
+        onClick={[Function]}
+      >
+        Download submitted response (Excel)
+      </a>
+    </li>
+  </ul>
+  <h2>
+    What happens next?
+  </h2>
+  <p>
+    We will review all the submissions received for this consultation. Our response will be published on the website around the time the guidance is published.
+  </p>
+  <hr />
+</Fragment>
+`;
+
+exports[`[ClientApp]  Submitted page should match snapshot for organisation commenter when displayed on the review page 1`] = `
+<Fragment>
+  <h2>
+    Your response was submitted 
+    to My Org
+     on 
+    <t
+      ago={false}
+      calendar={false}
+      decimal={false}
+      element="time"
+      filter={[Function]}
+      format="D MMMM YYYY"
+      fromNow={false}
+      interval={60000}
+      onChange={[Function]}
+      toNow={false}
+      unit={null}
+      unix={false}
+      utc={false}
+    />
+    .
+  </h2>
+  <ul
+    className="list list--unstyled"
+  >
+    <li>
+      <a
+        href="something/api/exportexternal/1"
+        onClick={[Function]}
+      >
+        Download submitted response (Excel)
+      </a>
+    </li>
+  </ul>
+  <h2>
+    What happens next?
+  </h2>
+  <p>
+    My Org
+     will review all the submissions received for this consultation.
+  </p>
+  <p>
+    NICE's response to all the submissions received will be published on the website around the time the final guidance is published.
+  </p>
+  <hr />
+</Fragment>
+`;
+
+exports[`[ClientApp]  Submitted page should match snapshot for organisation commenter when displayed on the submitted page 1`] = `
+<Fragment>
+  <h2>
+    Your response was submitted 
+    to My Org
+     on 
+    <t
+      ago={false}
+      calendar={false}
+      decimal={false}
+      element="time"
+      filter={[Function]}
+      format="D MMMM YYYY"
+      fromNow={false}
+      interval={60000}
+      onChange={[Function]}
+      toNow={false}
+      unit={null}
+      unix={false}
+      utc={false}
+    />
+    .
+  </h2>
+  <ul
+    className="list list--unstyled"
+  >
+    <li>
+      <Link
+        data-qa-sel="review-submitted-comments"
+        replace={false}
+        to="/1/review"
+      >
+        Review your response
+      </Link>
+    </li>
+    <li>
+      <a
+        href="something/api/exportexternal/1"
+        onClick={[Function]}
+      >
+        Download submitted response (Excel)
+      </a>
+    </li>
+  </ul>
+  <h2>
+    What happens next?
+  </h2>
+  <p>
+    My Org
+     will review all the submissions received for this consultation.
+  </p>
+  <p>
+    NICE's response to all the submissions received will be published on the website around the time the final guidance is published.
+  </p>
+  <hr />
+</Fragment>
+`;
+
+exports[`[ClientApp]  Submitted page should match snapshot for organisation lead when displayed on the review page with responses from their org 1`] = `
+<Fragment>
+  <h2>
+    Your response was submitted 
+     on 
+    <t
+      ago={false}
+      calendar={false}
+      decimal={false}
+      element="time"
+      filter={[Function]}
+      format="D MMMM YYYY"
+      fromNow={false}
+      interval={60000}
+      onChange={[Function]}
+      toNow={false}
+      unit={null}
+      unix={false}
+      utc={false}
+    />
+    .
+  </h2>
+  <ul
+    className="list list--unstyled"
+  >
+    <li>
+      <a
+        href="something/api/exportexternal/1"
+        onClick={[Function]}
+      >
+        Download submitted response (Excel)
+      </a>
+    </li>
+    <li>
+      <a
+        href="something/api/exportlead/1"
+        onClick={[Function]}
+      >
+        Download all responses from your organisation (Excel)
+      </a>
+    </li>
+  </ul>
+  <h2>
+    What happens next?
+  </h2>
+  <p>
+    We will review all the submissions received for this consultation. Our response will be published on the website around the time the guidance is published.
+  </p>
+  <hr />
+</Fragment>
+`;
+
+exports[`[ClientApp]  Submitted page should match snapshot for organisation lead when displayed on the review page without any responses from their org 1`] = `
+<Fragment>
+  <h2>
+    Your response was submitted 
+     on 
+    <t
+      ago={false}
+      calendar={false}
+      decimal={false}
+      element="time"
+      filter={[Function]}
+      format="D MMMM YYYY"
+      fromNow={false}
+      interval={60000}
+      onChange={[Function]}
+      toNow={false}
+      unit={null}
+      unix={false}
+      utc={false}
+    />
+    .
+  </h2>
+  <ul
+    className="list list--unstyled"
+  >
+    <li>
+      <a
+        href="something/api/exportexternal/1"
+        onClick={[Function]}
+      >
+        Download submitted response (Excel)
+      </a>
+    </li>
+  </ul>
+  <h2>
+    What happens next?
+  </h2>
+  <p>
+    We will review all the submissions received for this consultation. Our response will be published on the website around the time the guidance is published.
+  </p>
+  <hr />
+</Fragment>
+`;
+
+exports[`[ClientApp]  Submitted page should match snapshot for organisation lead when displayed on the submitted page 1`] = `
+<Fragment>
+  <h2>
+    Your response was submitted 
+     on 
+    <t
+      ago={false}
+      calendar={false}
+      decimal={false}
+      element="time"
+      filter={[Function]}
+      format="D MMMM YYYY"
+      fromNow={false}
+      interval={60000}
+      onChange={[Function]}
+      toNow={false}
+      unit={null}
+      unix={false}
+      utc={false}
+    />
+    .
+  </h2>
+  <ul
+    className="list list--unstyled"
+  >
+    <li>
+      <Link
+        data-qa-sel="review-submitted-comments"
+        replace={false}
+        to="/1/review"
+      >
+        Review your response
+      </Link>
+    </li>
+    <li>
+      <a
+        href="something/api/exportexternal/1"
+        onClick={[Function]}
+      >
+        Download submitted response (Excel)
+      </a>
+    </li>
+    <li>
+      <a
+        href="something/api/exportlead/1"
+        onClick={[Function]}
+      >
+        Download all responses from your organisation (Excel)
+      </a>
+    </li>
+  </ul>
+  <h2>
+    What happens next?
+  </h2>
+  <p>
+    We will review all the submissions received for this consultation. Our response will be published on the website around the time the guidance is published.
+  </p>
+  <hr />
+</Fragment>
+`;

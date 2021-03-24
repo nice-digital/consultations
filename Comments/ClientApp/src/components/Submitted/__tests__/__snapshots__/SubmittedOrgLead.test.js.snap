@@ -135,7 +135,6 @@ Array [
               Array [
                 <h2>
                   Your response was submitted 
-                  to Really Cool Org
                    on 
                   <time
                     dateTime={"2019-07-15T13:24:18.473Z"}
@@ -164,16 +163,20 @@ Array [
                       Download submitted response (Excel)
                     </a>
                   </li>
+                  <li>
+                    <a
+                      href="undefined/api/exportlead/1"
+                      onClick={[Function]}
+                    >
+                      Download all responses from your organisation (Excel)
+                    </a>
+                  </li>
                 </ul>,
                 <h2>
                   What happens next?
                 </h2>,
                 <p>
-                  Really Cool Org
-                   will review all the submissions received for this consultation.
-                </p>,
-                <p>
-                  NICE's response to all the submissions received will be published on the website around the time the final guidance is published.
+                  We will review all the submissions received for this consultation. Our response will be published on the website around the time the guidance is published.
                 </p>,
                 <hr />,
               ],
