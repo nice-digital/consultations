@@ -588,10 +588,30 @@ namespace Comments.Export
 
             if (organisationUserIds.Count() != 0 && !isAdminUser && !hasTeamRole)
             {
-                // When the lead downloads the responses they have sent to NICE, the responses should have the Name and Email Address of that lead against them
-                if (currentUser.IsAuthenticatedByAccounts && !comments.Any(c => c.StatusId == (int)StatusName.SubmittedToLead))
-                {
-                    userDetailsForUserIds.Add(currentUserDetails.userId, (currentUserDetails.displayName, currentUserDetails.emailAddress));
+            	var commentsSubmittedToLead = comments.Any(c => c.StatusId == (int)StatusName.SubmittedToLead);
+                var answersSubmittedToLead = answers.Any(a => a.StatusId == (int)StatusName.SubmittedToLead);
+                
+                 // When the lead downloads the responses they have sent to NICE, the responses should have the Name and Email Address of that lead against them
+                if (currentUser.IsAuthenticatedByAccounts && !commentsSubmittedToLead && !answersSubmittedToLead)
+				{
+
+                    var userIds = comments.Select(c => c.SubmissionComment.First().Submission.SubmissionByUserId)
+                        .Concat(answers.Select(a => a.SubmissionAnswer.First().Submission.SubmissionByUserId)).Where(user => !string.IsNullOrEmpty(user)).Distinct();
+
+                    // If it is the same lead as submitted to NICE, we can just use their details
+                    if (userIds.Count() == 1 && userIds.Single().Equals(currentUserDetails.userId, StringComparison.OrdinalIgnoreCase))
+                    {
+                        userDetailsForUserIds.Add(currentUserDetails.userId, (currentUserDetails.displayName, currentUserDetails.emailAddress));
+                    }
+                    else
+                    {
+                        // If the lead that is downloading isn't the lead that submitted to NICE, we need to get the submitters details
+                        // We can't get them the same way as we do for internal staff as external users can't get user details from IdAM, so we add a placeholder name
+                        foreach (var userId in userIds)
+                        {
+                            userDetailsForUserIds.Add(userId, ("Organisation lead", ""));
+                        }
+                    }
                 }
                 else
                 {
