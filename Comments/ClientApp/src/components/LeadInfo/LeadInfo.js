@@ -35,7 +35,7 @@ export const LeadInfo = () => {
 										<li>combine the collated comments into a single response</li>
 										<li>submit your organisation's final response.</li>
 									</ul>
-									<p>You can only be the lead for one organisation at a time. You can be the lead for multiple consultations simultaneously.</p>
+									<p>You can only be the lead for one organisation at a time. Once you are lead you can manage multiple consultations simultaneously.</p>
 									<p>Ideally each consultation will only have one commenting lead. If you need to add a second lead for a consultation then you can, but only one of you will be able to submit the final response to NICE.</p>
 									<p>If you need to change the lead during a consultation you can email us. However, if the outgoing lead has already submitted a response then the new lead will not be able to edit it or submit another response for that consultation.</p>
 								</div>
