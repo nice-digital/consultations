@@ -1,0 +1,682 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[ClientApp]  CommentList Component Authorisation should match snapshot post login, with 5 personal comments and 5 read only comments from others 1`] = `
+Array [
+  Array [
+    "",
+    "",
+    <section
+      aria-label="Commenting panel"
+      className="Drawer  Drawer--mobile"
+    >
+      <div
+        className="Drawer__controls"
+      >
+        <button
+          aria-controls="comments-panel"
+          aria-haspopup="true"
+          aria-label="Open the commenting panel"
+          className="Drawer__control Drawer__control--comments active"
+          data-qa-sel="open-commenting-panel"
+          id="js-drawer-toggleopen-comments"
+          onClick={[Function]}
+          tabIndex="0"
+        >
+          <span
+            aria-hidden="true"
+            className="icon icon--chevron-left"
+            data-qa-sel="close-commenting-panel"
+          />
+        </button>
+        <button
+          aria-controls="questions-panel"
+          aria-haspopup="true"
+          aria-label="Open the questions panel"
+          className="Drawer__control Drawer__control--questions active"
+          data-qa-sel="open-questions-panel"
+          id="js-drawer-toggleopen-questions"
+          onClick={[Function]}
+          tabIndex="0"
+        >
+          <span
+            aria-hidden="true"
+            className="icon icon--chevron-left"
+            data-qa-sel="close-questions-panel"
+          />
+        </button>
+      </div>
+      <div
+        aria-disabled={true}
+        className="Drawer__main Drawer__main--closed"
+        data-qa-sel="comment-panel"
+        id="comments-panel"
+      >
+        <div
+          data-qa-sel="comment-list-wrapper"
+        >
+          <a
+            className="btn btn--cta mt--c"
+            data-qa-sel="review-all-comments"
+            href="/1/review"
+            onClick={[Function]}
+          >
+            Review and submit your response   
+            <span
+              aria-hidden="true"
+              className="icon icon--chevron-right"
+            />
+          </a>
+          <div
+            className="alert alert--info"
+            role="alert"
+          >
+            <p>
+              You are commenting on behalf of 
+              .
+            </p>
+            <p>
+              When you submit your response it will be submitted to the organisational lead at 
+              .
+            </p>
+            <p>
+              <strong>
+                On submission your email address and responses will be visible to other members or associates of your organisation who are using the same commenting code.
+              </strong>
+            </p>
+          </div>
+          <div
+            className="show"
+          >
+            <ul
+              className="CommentList list--unstyled mt--0"
+            >
+              <li
+                className="CommentBox"
+              >
+                <section
+                  role="form"
+                >
+                  <h3
+                    className="CommentBox__title mt--0 mb--d"
+                    data-qa-sel="comment-box-title"
+                  >
+                    Comment on 
+                    <span
+                      className="text-lowercase"
+                    />
+                  </h3>
+                  <form
+                    className="mb--0"
+                    onSubmit={[Function]}
+                  >
+                    <div
+                      className="form__group form__group--textarea mb--b"
+                    >
+                      <label
+                        className="form__label visually-hidden"
+                        htmlFor="Comment1002"
+                      >
+                        Comment on 
+                        , 
+                      </label>
+                      <textarea
+                        className="form__input form__input--textarea"
+                        data-hj-whitelist={true}
+                        data-qa-sel="Comment-text-area"
+                        defaultValue="first comment"
+                        disabled={false}
+                        id="Comment1002"
+                        onInput={[Function]}
+                        tabIndex={0}
+                      />
+                    </div>
+                    <span
+                      className="ml--0 mb--0 CommentBox__savedIndicator"
+                    >
+                      Saved
+                    </span>
+                    <button
+                      className="btn mr--0 mb--0 right"
+                      data-qa-sel="delete-comment-button"
+                      onClick={[Function]}
+                    >
+                      Delete
+                    </button>
+                  </form>
+                </section>
+              </li>
+              <li
+                className="CommentBox"
+              >
+                <section
+                  role="form"
+                >
+                  <h3
+                    className="CommentBox__title mt--0 mb--d"
+                    data-qa-sel="comment-box-title"
+                  >
+                    Comment on 
+                    <span
+                      className="text-lowercase"
+                    />
+                  </h3>
+                  <form
+                    className="mb--0"
+                    onSubmit={[Function]}
+                  >
+                    <div
+                      className="form__group form__group--textarea mb--b"
+                    >
+                      <label
+                        className="form__label visually-hidden"
+                        htmlFor="Comment1003"
+                      >
+                        Comment on 
+                        , 
+                      </label>
+                      <textarea
+                        className="form__input form__input--textarea"
+                        data-hj-whitelist={true}
+                        data-qa-sel="Comment-text-area"
+                        defaultValue="second comment"
+                        disabled={false}
+                        id="Comment1003"
+                        onInput={[Function]}
+                        tabIndex={0}
+                      />
+                    </div>
+                    <span
+                      className="ml--0 mb--0 CommentBox__savedIndicator"
+                    >
+                      Saved
+                    </span>
+                    <button
+                      className="btn mr--0 mb--0 right"
+                      data-qa-sel="delete-comment-button"
+                      onClick={[Function]}
+                    >
+                      Delete
+                    </button>
+                  </form>
+                </section>
+              </li>
+              <li
+                className="CommentBox"
+              >
+                <section
+                  role="form"
+                >
+                  <h3
+                    className="CommentBox__title mt--0 mb--d"
+                    data-qa-sel="comment-box-title"
+                  >
+                    Comment on 
+                    <span
+                      className="text-lowercase"
+                    />
+                  </h3>
+                  <form
+                    className="mb--0"
+                    onSubmit={[Function]}
+                  >
+                    <div
+                      className="form__group form__group--textarea mb--b"
+                    >
+                      <label
+                        className="form__label visually-hidden"
+                        htmlFor="Comment1004"
+                      >
+                        Comment on 
+                        , 
+                      </label>
+                      <textarea
+                        className="form__input form__input--textarea"
+                        data-hj-whitelist={true}
+                        data-qa-sel="Comment-text-area"
+                        defaultValue="third comment"
+                        disabled={false}
+                        id="Comment1004"
+                        onInput={[Function]}
+                        tabIndex={0}
+                      />
+                    </div>
+                    <span
+                      className="ml--0 mb--0 CommentBox__savedIndicator"
+                    >
+                      Saved
+                    </span>
+                    <button
+                      className="btn mr--0 mb--0 right"
+                      data-qa-sel="delete-comment-button"
+                      onClick={[Function]}
+                    >
+                      Delete
+                    </button>
+                  </form>
+                </section>
+              </li>
+              <li
+                className="CommentBox"
+              >
+                <section
+                  role="form"
+                >
+                  <h3
+                    className="CommentBox__title mt--0 mb--d"
+                    data-qa-sel="comment-box-title"
+                  >
+                    Comment on 
+                    <span
+                      className="text-lowercase"
+                    />
+                  </h3>
+                  <form
+                    className="mb--0"
+                    onSubmit={[Function]}
+                  >
+                    <div
+                      className="form__group form__group--textarea mb--b"
+                    >
+                      <label
+                        className="form__label visually-hidden"
+                        htmlFor="Comment1005"
+                      >
+                        Comment on 
+                        , 
+                      </label>
+                      <textarea
+                        className="form__input form__input--textarea"
+                        data-hj-whitelist={true}
+                        data-qa-sel="Comment-text-area"
+                        defaultValue="fourth comment"
+                        disabled={false}
+                        id="Comment1005"
+                        onInput={[Function]}
+                        tabIndex={0}
+                      />
+                    </div>
+                    <span
+                      className="ml--0 mb--0 CommentBox__savedIndicator"
+                    >
+                      Saved
+                    </span>
+                    <button
+                      className="btn mr--0 mb--0 right"
+                      data-qa-sel="delete-comment-button"
+                      onClick={[Function]}
+                    >
+                      Delete
+                    </button>
+                  </form>
+                </section>
+              </li>
+              <li
+                className="CommentBox"
+              >
+                <section
+                  role="form"
+                >
+                  <h3
+                    className="CommentBox__title mt--0 mb--d"
+                    data-qa-sel="comment-box-title"
+                  >
+                    Comment on 
+                    <span
+                      className="text-lowercase"
+                    />
+                  </h3>
+                  <form
+                    className="mb--0"
+                    onSubmit={[Function]}
+                  >
+                    <div
+                      className="form__group form__group--textarea mb--b"
+                    >
+                      <label
+                        className="form__label visually-hidden"
+                        htmlFor="Comment1006"
+                      >
+                        Comment on 
+                        , 
+                      </label>
+                      <textarea
+                        className="form__input form__input--textarea"
+                        data-hj-whitelist={true}
+                        data-qa-sel="Comment-text-area"
+                        defaultValue="fifth comment"
+                        disabled={false}
+                        id="Comment1006"
+                        onInput={[Function]}
+                        tabIndex={0}
+                      />
+                    </div>
+                    <span
+                      className="ml--0 mb--0 CommentBox__savedIndicator"
+                    >
+                      Saved
+                    </span>
+                    <button
+                      className="btn mr--0 mb--0 right"
+                      data-qa-sel="delete-comment-button"
+                      onClick={[Function]}
+                    >
+                      Delete
+                    </button>
+                  </form>
+                </section>
+              </li>
+              <li
+                className="CommentBox"
+              >
+                <section
+                  role="form"
+                >
+                  <h3
+                    className="CommentBox__title mt--0 mb--d"
+                    data-qa-sel="comment-box-title"
+                  >
+                    Comment on 
+                    <span
+                      className="text-lowercase"
+                    />
+                  </h3>
+                  <form
+                    className="mb--0"
+                    onSubmit={[Function]}
+                  >
+                    <div
+                      className="form__group form__group--textarea mb--b"
+                    >
+                      <label
+                        className="form__label visually-hidden"
+                        htmlFor="Comment1002"
+                      >
+                        Comment on 
+                        , 
+                      </label>
+                      <textarea
+                        className="form__input form__input--textarea"
+                        data-hj-whitelist={true}
+                        data-qa-sel="Comment-text-area"
+                        defaultValue="first comment"
+                        disabled={true}
+                        id="Comment1002"
+                        onInput={[Function]}
+                        tabIndex={0}
+                      />
+                    </div>
+                  </form>
+                </section>
+              </li>
+              <li
+                className="CommentBox"
+              >
+                <section
+                  role="form"
+                >
+                  <h3
+                    className="CommentBox__title mt--0 mb--d"
+                    data-qa-sel="comment-box-title"
+                  >
+                    Comment on 
+                    <span
+                      className="text-lowercase"
+                    />
+                  </h3>
+                  <form
+                    className="mb--0"
+                    onSubmit={[Function]}
+                  >
+                    <div
+                      className="form__group form__group--textarea mb--b"
+                    >
+                      <label
+                        className="form__label visually-hidden"
+                        htmlFor="Comment1003"
+                      >
+                        Comment on 
+                        , 
+                      </label>
+                      <textarea
+                        className="form__input form__input--textarea"
+                        data-hj-whitelist={true}
+                        data-qa-sel="Comment-text-area"
+                        defaultValue="second comment"
+                        disabled={true}
+                        id="Comment1003"
+                        onInput={[Function]}
+                        tabIndex={0}
+                      />
+                    </div>
+                  </form>
+                </section>
+              </li>
+              <li
+                className="CommentBox"
+              >
+                <section
+                  role="form"
+                >
+                  <h3
+                    className="CommentBox__title mt--0 mb--d"
+                    data-qa-sel="comment-box-title"
+                  >
+                    Comment on 
+                    <span
+                      className="text-lowercase"
+                    />
+                  </h3>
+                  <form
+                    className="mb--0"
+                    onSubmit={[Function]}
+                  >
+                    <div
+                      className="form__group form__group--textarea mb--b"
+                    >
+                      <label
+                        className="form__label visually-hidden"
+                        htmlFor="Comment1004"
+                      >
+                        Comment on 
+                        , 
+                      </label>
+                      <textarea
+                        className="form__input form__input--textarea"
+                        data-hj-whitelist={true}
+                        data-qa-sel="Comment-text-area"
+                        defaultValue="third comment"
+                        disabled={true}
+                        id="Comment1004"
+                        onInput={[Function]}
+                        tabIndex={0}
+                      />
+                    </div>
+                  </form>
+                </section>
+              </li>
+              <li
+                className="CommentBox"
+              >
+                <section
+                  role="form"
+                >
+                  <h3
+                    className="CommentBox__title mt--0 mb--d"
+                    data-qa-sel="comment-box-title"
+                  >
+                    Comment on 
+                    <span
+                      className="text-lowercase"
+                    />
+                  </h3>
+                  <form
+                    className="mb--0"
+                    onSubmit={[Function]}
+                  >
+                    <div
+                      className="form__group form__group--textarea mb--b"
+                    >
+                      <label
+                        className="form__label visually-hidden"
+                        htmlFor="Comment1005"
+                      >
+                        Comment on 
+                        , 
+                      </label>
+                      <textarea
+                        className="form__input form__input--textarea"
+                        data-hj-whitelist={true}
+                        data-qa-sel="Comment-text-area"
+                        defaultValue="fourth comment"
+                        disabled={true}
+                        id="Comment1005"
+                        onInput={[Function]}
+                        tabIndex={0}
+                      />
+                    </div>
+                  </form>
+                </section>
+              </li>
+              <li
+                className="CommentBox"
+              >
+                <section
+                  role="form"
+                >
+                  <h3
+                    className="CommentBox__title mt--0 mb--d"
+                    data-qa-sel="comment-box-title"
+                  >
+                    Comment on 
+                    <span
+                      className="text-lowercase"
+                    />
+                  </h3>
+                  <form
+                    className="mb--0"
+                    onSubmit={[Function]}
+                  >
+                    <div
+                      className="form__group form__group--textarea mb--b"
+                    >
+                      <label
+                        className="form__label visually-hidden"
+                        htmlFor="Comment1006"
+                      >
+                        Comment on 
+                        , 
+                      </label>
+                      <textarea
+                        className="form__input form__input--textarea"
+                        data-hj-whitelist={true}
+                        data-qa-sel="Comment-text-area"
+                        defaultValue="fifth comment"
+                        disabled={true}
+                        id="Comment1006"
+                        onInput={[Function]}
+                        tabIndex={0}
+                      />
+                    </div>
+                  </form>
+                </section>
+              </li>
+            </ul>
+          </div>
+          <div
+            className="hide"
+          >
+            <button
+              className="btn btn--primary"
+              data-qa-sel="create-question-pdf"
+              id="js-create-question-pdf"
+              onClick={[Function]}
+            >
+              Download questions (PDF)
+            </button>
+            <p
+              className="mt--0"
+            >
+              Please answer the following questions
+            </p>
+            <ul
+              className="CommentList list--unstyled mt--0"
+            />
+          </div>
+        </div>
+      </div>
+    </section>,
+  ],
+  <div>
+    <div
+      aria-live="assertive"
+      role="log"
+      style={
+        Object {
+          "border": 0,
+          "clip": "rect(0 0 0 0)",
+          "height": "1px",
+          "margin": "-1px",
+          "overflow": "hidden",
+          "padding": 0,
+          "position": "absolute",
+          "whiteSpace": "nowrap",
+          "width": "1px",
+        }
+      }
+    >
+      Comments and questions panel closed
+    </div>
+    <div
+      aria-live="assertive"
+      role="log"
+      style={
+        Object {
+          "border": 0,
+          "clip": "rect(0 0 0 0)",
+          "height": "1px",
+          "margin": "-1px",
+          "overflow": "hidden",
+          "padding": 0,
+          "position": "absolute",
+          "whiteSpace": "nowrap",
+          "width": "1px",
+        }
+      }
+    />
+    <div
+      aria-live="polite"
+      role="log"
+      style={
+        Object {
+          "border": 0,
+          "clip": "rect(0 0 0 0)",
+          "height": "1px",
+          "margin": "-1px",
+          "overflow": "hidden",
+          "padding": 0,
+          "position": "absolute",
+          "whiteSpace": "nowrap",
+          "width": "1px",
+        }
+      }
+    />
+    <div
+      aria-live="polite"
+      role="log"
+      style={
+        Object {
+          "border": 0,
+          "clip": "rect(0 0 0 0)",
+          "height": "1px",
+          "margin": "-1px",
+          "overflow": "hidden",
+          "padding": 0,
+          "position": "absolute",
+          "whiteSpace": "nowrap",
+          "width": "1px",
+        }
+      }
+    />
+  </div>,
+]
+`;
