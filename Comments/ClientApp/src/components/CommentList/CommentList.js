@@ -461,7 +461,6 @@ export class CommentList extends Component<PropsType, StateType> {
 														{(this.state.comments.length === 0 && this.state.otherUsersComments.length === 0) ? <p>No comments yet</p> :
 															<ul className="CommentList list--unstyled mt--0">
 																{this.state.comments.map((comment) => {
-																	//let readOnly = contextValue.isOrganisationCommenter && comment.commenterEmail ? true : !this.state.allowComments;
 																	return (
 																		<CommentBox
 																			updateUnsavedIds={this.updateUnsavedIds}
@@ -475,7 +474,6 @@ export class CommentList extends Component<PropsType, StateType> {
 																	);
 																})}
 																{this.state.otherUsersComments.map((otherUsersComment) => {
-																	// some extra props???
 																	return (
 																		<CommentBox
 																			updateUnsavedIds={this.updateUnsavedIds}
