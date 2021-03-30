@@ -1017,14 +1017,14 @@ namespace Comments.Models
             var commentIds = commentsAndQuestions.Comments.Select(c => c.CommentId).ToList();
             var answerIds = commentsAndQuestions.Questions.SelectMany(q => q.Answers).Select(a => a.AnswerId).ToList();
 
+            var comments = Comment.Where(c => commentIds.Contains(c.CommentId)).ToList();
+            var answers = Answer.Where(a => answerIds.Contains(a.AnswerId)).ToList();
 
-            var emailAddresses = OrganisationUser
-                .Where(o => Comment.Where(c => commentIds.Contains(c.CommentId)).Select(c => c.OrganisationUserId).Contains(o.OrganisationUserId)
-                         || Answer.Where(a => answerIds.Contains(a.AnswerId)).Select(a => a.OrganisationUserId).Contains(o.OrganisationUserId))
-                .Select(o => o.EmailAddress)
-                .Distinct()
-                .ToList();
-
+            var emailAddresses = OrganisationUser.Where(o => comments.Select(c => c.OrganisationUserId).Contains(o.OrganisationUserId)
+                                                || answers.Select(a => a.OrganisationUserId).Contains(o.OrganisationUserId))
+                                                .Select(o => o.EmailAddress)
+                                                .Distinct()
+                                                .ToList();
             return emailAddresses;
         }
     }
