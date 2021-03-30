@@ -29,7 +29,7 @@ namespace Comments.Test.Infrastructure
 					new List<Question>() { question },
 					true,
 					"sign in url",
-					new ConsultationState(DateTime.MinValue, DateTime.MaxValue, true, true, true, null, null)
+					new ConsultationState(DateTime.MinValue, DateTime.MaxValue, true, true, true, null, null, false)
 					)
 			};
 		}

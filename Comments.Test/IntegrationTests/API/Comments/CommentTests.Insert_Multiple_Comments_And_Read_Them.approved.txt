@@ -90,6 +90,7 @@
         "hasQuestions":false,
         "hasUserSuppliedAnswers":false,
         "hasUserSuppliedComments":true,
+        "leadHasBeenSentResponse":false,
         "submittedDate":null,
         "documentIdsWhichSupportComments":[
             2,

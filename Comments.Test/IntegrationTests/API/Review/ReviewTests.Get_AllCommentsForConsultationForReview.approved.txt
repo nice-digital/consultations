@@ -187,6 +187,7 @@
             "hasQuestions":true,
             "hasUserSuppliedAnswers":true,
             "hasUserSuppliedComments":true,
+            "leadHasBeenSentResponse":false,
             "submittedDate":null,
             "documentIdsWhichSupportComments":[
                 2,

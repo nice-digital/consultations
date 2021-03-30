@@ -39,7 +39,8 @@
         "supportsDownload": false,
         "shouldShowDrawer":true,
         "shouldShowCommentsTab":true,
-        "shouldShowQuestionsTab":true
+        "shouldShowQuestionsTab":true,
+        "leadHasBeenSentResponse":true
   },
   "breadcrumbs": [
         {
