@@ -27,7 +27,8 @@ export class Question extends Component<PropsType, StateType> {
 		if (!this.props.question) return null;
 		const { documentTitle } = this.props;
 		const { commentOn, quote } = this.props.question;
-		let answersToShow = this.props.question.answers.filter(answer => answer.showWhenFiltered);
+		const answers = this.props.question.answers || [];
+		let answersToShow = answers.filter(answer => answer.showWhenFiltered);
 		if (answersToShow === null || answersToShow.length < 1){
 			answersToShow = [{
 				answerId: -1,
