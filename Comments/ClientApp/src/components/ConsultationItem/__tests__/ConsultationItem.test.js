@@ -22,6 +22,9 @@ describe("[ClientApp] ", () => {
 			isUpcoming: false,
 			show: true,
 			basename: "fdfd",
+			showShareWithOrganisationButton: true,
+			allowGenerateOrganisationCode: true,
+			numResponsesFromOrg: 15,
 		};
 
 		it("does not render link if document id or chapter slug is null", () => {
@@ -42,7 +45,7 @@ describe("[ClientApp] ", () => {
 					<ConsultationItem {...fakeProps} />
 				</MemoryRouter>,
 			);
-
+			
 			expect(
 				toJson(wrapper, {
 					noKey: true,

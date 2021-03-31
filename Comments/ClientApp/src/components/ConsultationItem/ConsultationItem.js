@@ -53,7 +53,7 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 			organisationCodes,
 			showShareWithOrganisationButton,
 			allowGenerateOrganisationCode,
-			numResponsesFromOrg = 0,
+			numResponsesFromOrg,
 		} = this.props;
 
 		const status = (isOpen, isClosed, isUpcoming) => {

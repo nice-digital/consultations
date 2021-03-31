@@ -40,6 +40,14 @@ exports[`[ClientApp]  Download Component should match snapshot with supplied dat
           </span>
         </dd>
       </div>
+      <div
+        className="card__metadatum"
+      >
+        15
+         
+        responses
+         from your organisation
+      </div>
       <div>
         <div
           className="card__metadatum"
@@ -101,6 +109,22 @@ exports[`[ClientApp]  Download Component should match snapshot with supplied dat
         </div>
       </div>
     </dl>
+    <div>
+      <button
+        aria-controls="organisation-codes-123"
+        aria-expanded={false}
+        className="btn btn--inverse"
+        data-qa-sel="share-with-org-button"
+        id="share-organisation-123"
+        onClick={[Function]}
+        type="button"
+      >
+        Share with organisation 
+        <span
+          className="arrow-icon"
+        />
+      </button>
+    </div>
   </article>
 </li>
 `;
