@@ -109,7 +109,8 @@ namespace Comments.Services
 
 				var responseCount = canSeeSubmissionCountForThisConsultation ? submittedCommentsAndAnswerCounts.FirstOrDefault(s => s.SourceURI.Equals(sourceURI))?.TotalCount ?? 0 : (int?)null;
 
-                var numResponsesFromOrg = commentsSubmittedToLead.Any() || answersSubmittedToLead.Any() ? CountCommentsAndAnswerSubmissionsForThisOrganisation(sourceURI, (commentsSubmittedToLead, answersSubmittedToLead)) : 0;
+                var numResponsesFromOrg = (commentsSubmittedToLead != null && commentsSubmittedToLead.Any()) || (answersSubmittedToLead != null && answersSubmittedToLead.Any()) 
+                    ? CountCommentsAndAnswerSubmissionsForThisOrganisation(sourceURI, (commentsSubmittedToLead, answersSubmittedToLead)) : 0;
                 
                 consultationListRows.Add(
 					new ConsultationListRow(consultation.Title,
