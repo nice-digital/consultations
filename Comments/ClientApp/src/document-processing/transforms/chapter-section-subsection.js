@@ -4,7 +4,7 @@ import {nodeIsTypeText, nodeIsSubsection, nodeIsSpanTag, nodeIsInternalLink} fro
 import processInternalLink from "./internal-link";
 import {tagManager} from "../../helpers/tag-manager";
 
-export const processChapterSectionSubsection = (node, onNewCommentClick, sourceURI, allowComments) => {
+export const processChapterSectionSubsection = (node, onNewCommentClick, sourceURI, allowComments, mostRecentSectionNumber) => {
 
 	let commentOn = node.attribs["data-heading-type"].toLowerCase();
 	let quote =  node.children.filter(nodeIsTypeText)[0].data;
@@ -29,6 +29,7 @@ export const processChapterSectionSubsection = (node, onNewCommentClick, sourceU
 					data-gtm-action="Clicked"
 					data-gtm-label={`Comment on ${commentOn || "chapter"}`}
 					data-qa-sel="in-text-comment-button"
+					data-sectionnumber={mostRecentSectionNumber}
 					title={`Comment on ${commentOn || "chapter"}`}
 					className="document-comment-container__commentButton"
 					tabIndex={0}
@@ -46,6 +47,7 @@ export const processChapterSectionSubsection = (node, onNewCommentClick, sourceU
 							commentOn,
 							htmlElementID,
 							quote,
+							mostRecentSectionNumber,
 						});
 					}}
 				>
@@ -62,4 +64,30 @@ const transform = (node) => {
 	if (nodeIsInternalLink(node)){
 		return processInternalLink(node);
 	}
+};
+
+//anchor tag with section number in the text of the node.
+export const getSectionNumberFromAnchor = (node) => {
+	if (node.children != null && node.children[0].data != null){
+		const chapterOrSectionText = node.children[0].data;
+		const regex = /^([\d\.]*)/;
+		const matches = chapterOrSectionText.match(regex);
+		if (matches !== null && matches[0] !== ""){
+			return matches[0];	
+		}
+	}
+	return null;
+};
+
+function nodeIsParagraphNumber(node) {
+	return node.name === "span" && node.attribs && node.attribs["class"] === "paragraph-number";
+}
+
+//subsection - paragraph element, with section number in a child span with class "paragraph-number"
+export const getSectionNumberFromParagraph = (node) => {
+	const paragraphNode = node.children.filter(nodeIsParagraphNumber);
+	if (paragraphNode !== null && paragraphNode[0].children != null){
+		return paragraphNode[0].children[0].data.trim();
+	}	
+	return null;	
 };
