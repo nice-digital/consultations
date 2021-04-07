@@ -1021,10 +1021,8 @@ namespace Comments.Models
                 .Where(c => (
                             (c.Location.SourceURI.Contains($"{sourceURI}/") || c.Location.SourceURI.Equals(sourceURI))
                             && c.StatusId == (int)StatusName.SubmittedToLead)
+                            && c.OrganisationUser.OrganisationAuthorisation != null
                             )
-                .ToList();
-
-            var commentsCount = comments.Where(c => c.OrganisationUser?.OrganisationAuthorisation != null)
                 .Count(c => c.OrganisationUser.OrganisationAuthorisation.OrganisationId.Equals(organisationId));
 
             var answers = Answer
@@ -1034,13 +1032,11 @@ namespace Comments.Models
                 .Where(a => (
                             (a.Question.Location.SourceURI.Contains($"{sourceURI}/") || a.Question.Location.SourceURI.Equals(sourceURI))
                             && a.StatusId == (int)StatusName.SubmittedToLead)
+                            && a.OrganisationUser.OrganisationAuthorisation != null
                             )
-                .ToList();
-
-            var answersCount =  answers.Where(a => a.OrganisationUser?.OrganisationAuthorisation != null)
                 .Count(a => a.OrganisationUser.OrganisationAuthorisation.OrganisationId.Equals(organisationId));
 
-            return commentsCount + answersCount;
+            return comments + answers;
         }
 
         public (List<Comment>, List<Answer>) GetCommentsAndAnswersSubmittedToLeadForOrganisation(int organisationId)
