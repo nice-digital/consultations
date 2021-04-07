@@ -1,4 +1,4 @@
-using Comments.Common;
+﻿using Comments.Common;
 using Comments.Configuration;
 using Comments.Models;
 using Comments.ViewModels;
@@ -221,9 +221,14 @@ namespace Comments.Services
 			sourceURIs.Add(ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Document));
 			sourceURIs.Add(ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Chapter));
 
-			var data = _context.GetOtherOrganisationUsersCommentsAndQuestionsForDocument(sourceURIs);
+			var collectedData = _context.GetOtherOrganisationUsersCommentsAndQuestionsForDocument(sourceURIs);
 
-			return data;
+            var convertedData =
+                ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(collectedData);
+
+            var data = new OrganisationCommentsAndQuestions(convertedData.questions, convertedData.comments);
+
+            return data;
 		}
 
 		/// <summary>
