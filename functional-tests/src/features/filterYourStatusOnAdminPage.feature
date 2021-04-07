@@ -4,7 +4,6 @@ Feature: User can filter the admin page using status filter
 
 	Background:
 		Given I open the url "admin"
-		#When I accept all cookies
 		When I log into the admin page with username "IDAM_EMAIL1" and password "IDAM_PASSWORD"
 
 	Scenario: User can view consultation lists using the team and status filter
