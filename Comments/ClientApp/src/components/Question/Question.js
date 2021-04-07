@@ -19,6 +19,32 @@ export class Question extends Component<PropsType> {
 
 	isTextSelection = (question) => question.commentOn && question.commentOn.toLowerCase() === "selection" && question.quote;
 
+	returnAnswers = (answers, readOnly = this.props.readOnly) => {
+		const {
+			question,
+			updateUnsavedIds,
+			saveAnswerHandler,
+			deleteAnswerHandler,
+		} = this.props;
+
+		const answerComponents = answers.map(answer => (
+			<Answer
+				questionText={question.questionText}
+				questionType={question.questionType}
+				updateUnsavedIds={updateUnsavedIds}
+				questionId={question.questionId}
+				readOnly={readOnly}
+				key={answer.answerId}
+				unique={`Answer${answer.answerId}`}
+				answer={answer}
+				saveAnswerHandler={saveAnswerHandler}
+				deleteAnswerHandler={deleteAnswerHandler}
+			/>
+		));
+
+		return answerComponents;
+	}
+
 	render() {
 		if (!this.props.question) return null;
 
@@ -70,38 +96,8 @@ export class Question extends Component<PropsType> {
 
 				{this.props.showAnswer && (
 					<>
-						{answers.map((answer) => {
-							return (
-								<Answer
-									questionText={this.props.question.questionText}
-									questionType={this.props.question.questionType}
-									updateUnsavedIds={this.props.updateUnsavedIds}
-									questionId={this.props.question.questionId}
-									readOnly={this.props.readOnly}
-									key={answer.answerId}
-									unique={`Answer${answer.answerId}`}
-									answer={answer}
-									saveAnswerHandler={this.props.saveAnswerHandler}
-									deleteAnswerHandler={this.props.deleteAnswerHandler}
-								/>
-							);
-						})}
-						{otherUsersAnswers.map((otherUsersAnswer) => {
-							return (
-								<Answer
-									questionText={this.props.question.questionText}
-									questionType={this.props.question.questionType}
-									updateUnsavedIds={this.props.updateUnsavedIds}
-									questionId={this.props.question.questionId}
-									readOnly={true}
-									key={otherUsersAnswer.answerId}
-									unique={`Answer${otherUsersAnswer.answerId}`}
-									answer={otherUsersAnswer}
-									saveAnswerHandler={this.props.saveAnswerHandler}
-									deleteAnswerHandler={this.props.deleteAnswerHandler}
-								/>
-							);
-						})}
+						{this.returnAnswers(answers)}
+						{this.returnAnswers(otherUsersAnswers, true)}
 					</>
 				)}
 			</li>

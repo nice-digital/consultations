@@ -59,7 +59,7 @@ type StateType = {
 	endDate: string,
 	enableOrganisationalCommentingFeature: boolean,
 	allowOrganisationCodeLogin: Boolean,
-	isCurrentlyAuthorised: boolean,
+	isAuthorised: boolean,
 	otherUsersComments: Array<CommentType>,
 	otherUsersQuestions: Array<QuestionType>,
 };
@@ -84,7 +84,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			endDate: "",
 			enableOrganisationalCommentingFeature: false,
 			allowOrganisationCodeLogin: false,
-			isCurrentlyAuthorised: false,
+			isAuthorised: false,
 			otherUsersComments: [],
 			otherUsersQuestions: [],
 		};
@@ -186,29 +186,29 @@ export class CommentList extends Component<PropsType, StateType> {
 	};
 
 	componentDidMount() {
-		const isCurrentlyAuthorised = this.context.isAuthorised;
+		const isAuthorised = this.context.isAuthorised;
 
 		if (!this.state.initialDataLoaded) {
 			this.loadCommentsForCurrentUser();
 		}
 
 		// We can't prerender whether we're on mobile cos SSR doesn't have a window
-		// sets isCurrentlyAuthorised from context
+		// sets isAuthorised from context
 		this.setState({
 			drawerMobile: this.isMobile(),
-			isCurrentlyAuthorised,
+			isAuthorised,
 		});
 	}
 
 	componentDidUpdate(prevProps: PropsType) {
 		const routeChanged = (prevProps.location.pathname + prevProps.location.search) !== (this.props.location.pathname + this.props.location.search);
-		const authorisationChanged = this.state.isCurrentlyAuthorised !== this.context.isAuthorised;
+		const authorisationChanged = this.state.isAuthorised !== this.context.isAuthorised;
 
 		if (routeChanged || authorisationChanged) {
 			this.setState({
 				loading: true,
 				unsavedIds: [],
-				isCurrentlyAuthorised: this.context.isAuthorised,
+				isAuthorised: this.context.isAuthorised,
 			});
 			this.loadCommentsForCurrentUser();
 		}
@@ -522,7 +522,7 @@ export class CommentList extends Component<PropsType, StateType> {
 																return otherUsersQuestion.questionId === question.questionId;
 															});
 
-															const otherUsersAnswers = matchingQuestion ? matchingQuestion.answers : []; // maybe null instead?
+															const otherUsersAnswers = matchingQuestion ? matchingQuestion.answers : [];
 
 															return (
 																<Question
