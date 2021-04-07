@@ -121,30 +121,20 @@ namespace Comments.Models
 		/// Organisation users view each others submitted responses to inform their own, but can't interact with or submit them.
 		/// </summary>
 		/// <param name="sourceURIs"></param>
-		/// <param name="partialMatchSourceURI">True if data is being retrieved for the review page</param>
-		/// <returns></returns>
-		public OrganisationCommentsAndQuestions GetOtherOrganisationUsersCommentsAndQuestionsForDocument(IList<string> sourceURIs)
+        /// <returns></returns>
+		public IEnumerable<Location> GetOtherOrganisationUsersCommentsAndQuestionsForDocument(IList<string> sourceURIs)
 		{
             var commentsAndAnswers = Location.IgnoreQueryFilters()
                 .IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead
                                                          && _organisationIDs.Any(o => o.Equals(c.OrganisationId))
-                                                         && !_organisationUserIDs.Contains((int)c.OrganisationUserId)))
-                .IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead
-                                                         && _organisationIDs.Any(o => o.Equals(c.OrganisationId))
-                                                         && !_organisationUserIDs.Contains((int)c.OrganisationUserId))
-                    .Select(c => c.SubmissionComment))
-                .IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead
-                                                         && _organisationIDs.Any(o => o.Equals(c.OrganisationId))
-                                                         && !_organisationUserIDs.Contains((int)c.OrganisationUserId))
-                    .Select(c=> c.SubmissionComment
-                        .Select(s=> s.Submission)))
+                                                         && !_organisationUserIDs.Contains(c.OrganisationUserId.Value)))
                 .IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead 
                                                          && _organisationIDs.Any(o => o.Equals(c.OrganisationId)) 
-                                                         && !_organisationUserIDs.Contains((int)c.OrganisationUserId))
+                                                         && !_organisationUserIDs.Contains(c.OrganisationUserId.Value))
                     .Select(c=> c.Status))
                 .IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead
                                                          && _organisationIDs.Any(o => o.Equals(c.OrganisationId))
-                                                         && !_organisationUserIDs.Contains((int)c.OrganisationUserId))
+                                                         && !_organisationUserIDs.Contains(c.OrganisationUserId.Value))
                     .Select(c=> c.OrganisationUser))
 
                 .IncludeFilter(l => l.Question)
@@ -152,18 +142,13 @@ namespace Comments.Models
                     .Select(q => q.QuestionType))
                 .IncludeFilter(l => l.Question
                     .Select(q => q.Answer.Where(a => a.StatusId == (int)StatusName.SubmittedToLead
-                                                     && _organisationIDs.Contains((int)a.OrganisationId) 
-                                                     && !_organisationUserIDs.Contains((int)a.OrganisationUserId))
+                                                     && _organisationIDs.Contains(a.OrganisationId.Value) 
+                                                     && !_organisationUserIDs.Contains(a.OrganisationUserId.Value))
                         .OrderByDescending(a=> a.LastModifiedDate).Select(a => a.LastModifiedDate).FirstOrDefault()))
-                .IncludeFilter(l => l.Question
-                    .Select(q => q.Answer.Where(a => a.StatusId == (int)StatusName.SubmittedToLead
-                                                     && _organisationIDs.Contains((int)a.OrganisationId)
-                                                     && !_organisationUserIDs.Contains((int)a.OrganisationUserId))
-                    .Select(a => a.SubmissionAnswer)))
                 .IncludeFilter(l=> l.Question
                     .Select(q => q.Answer.Where(a => a.StatusId == (int)StatusName.SubmittedToLead
-                                                     && _organisationIDs.Contains((int)a.OrganisationId)
-                                                     && !_organisationUserIDs.Contains((int)a.OrganisationUserId))
+                                                     && _organisationIDs.Contains(a.OrganisationId.Value)
+                                                     && !_organisationUserIDs.Contains(a.OrganisationUserId.Value))
                     .Select(a => a.OrganisationUser)))
                 .OrderBy(l => l.Order)
                 .ToList();
@@ -177,12 +162,7 @@ namespace Comments.Models
                     l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate)
                         .FirstOrDefault());
 
-            var convertedData =
-                ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(sortedData);
-
-			var data = new OrganisationCommentsAndQuestions(convertedData.questions, convertedData.comments);
-
-			return data;
+            return sortedData;
 		}
 
 		public IEnumerable<Location> GetQuestionsForDocument(IList<string> sourceURIs, bool partialMatchSourceURI)
