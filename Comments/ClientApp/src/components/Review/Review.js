@@ -480,8 +480,8 @@ export class Review extends Component<PropsType, StateType> {
 	getAppliedFilters(): ReviewAppliedFilterType[] {
 		const mapOptions = 
 		(group: ReviewFilterGroupType) => group.options
-			.filter((opt) => opt.isSelected)
-			.map((opt) => ({
+			.filter(opt => opt.isSelected)
+			.map(opt => ({
 				groupTitle: group.title,
 				optionLabel: opt.label,
 				groupId: group.id,
@@ -528,100 +528,101 @@ export class Review extends Component<PropsType, StateType> {
 										headerSubtitle2 = "Once you have sent your response you will not be able to edit it or add any more comments.";
 									}
 
-									return (!contextValue.isAuthorised ? 
-										<LoginBannerWithRouter
-											signInButton={true}
-											currentURL={this.props.match.url}
-											signInURL={contextValue.signInURL}
-											registerURL={contextValue.registerURL}
-											allowOrganisationCodeLogin={false}
-											orgFieldName="review"
-										/> : 
-										<main>
-											<div className="page-header">
-												<Header
-													title={this.state.submittedDate ? "Response submitted" : "Review your response"}
-													subtitle1={this.state.submittedDate ? "" : headerSubtitle1}
-													subtitle2={this.state.submittedDate ? "" : headerSubtitle2}
-													reference={reference}
-													consultationState={this.state.consultationData.consultationState}
-												/>
+									return (
+										!contextValue.isAuthorised ? 
+											<LoginBannerWithRouter
+												signInButton={true}
+												currentURL={this.props.match.url}
+												signInURL={contextValue.signInURL}
+												registerURL={contextValue.registerURL}
+												allowOrganisationCodeLogin={false}
+												orgFieldName="review"
+											/> : 
+											<main>
+												<div className="page-header">
+													<Header
+														title={this.state.submittedDate ? "Response submitted" : "Review your response"}
+														subtitle1={this.state.submittedDate ? "" : headerSubtitle1}
+														subtitle2={this.state.submittedDate ? "" : headerSubtitle2}
+														reference={reference}
+														consultationState={this.state.consultationData.consultationState}
+													/>
 
-												<SubmittedContent
-													organisationName={contextValue.organisationName}
-													isOrganisationCommenter={contextValue.isOrganisationCommenter}
-													isLead={contextValue.isLead}
-													consultationState={this.state.consultationData.consultationState}
-													consultationId={this.props.match.params.consultationId}
-													basename={this.props.basename}
-													isSubmitted={this.state.submittedDate}
-													linkToReviewPage={false}
-												/>
+													<SubmittedContent
+														organisationName={contextValue.organisationName}
+														isOrganisationCommenter={contextValue.isOrganisationCommenter}
+														isLead={contextValue.isLead}
+														consultationState={this.state.consultationData.consultationState}
+														consultationId={this.props.match.params.consultationId}
+														basename={this.props.basename}
+														isSubmitted={this.state.submittedDate}
+														linkToReviewPage={false}
+													/>
 
-												<div className="grid">
-													<div data-g="12 md:3" className="sticky">
-														<h2 className="h5 mt--0">Filter</h2>
-														<FilterPanel
-															filters={this.state.commentsData.filters}
-															path={this.state.path}
-														/>
-													</div>
-													<div data-g="12 md:9">
-														<ReviewResultsInfo
-															commentCount={commentsToShow.length}
-															showCommentsCount={this.state.consultationData.consultationState.shouldShowCommentsTab}
-															questionCount={questionsToShow.length}
-															showQuestionsCount={this.state.consultationData.consultationState.shouldShowQuestionsTab}
-															sortOrder={this.state.sort}
-															appliedFilters={this.getAppliedFilters()}
-															path={this.state.path}
-															isLoading={this.state.loading}
-														/>
-														<div data-qa-sel="comment-list-wrapper">
-															{questionsToShow.length > 0 && (
-																<div>
+													<div className="grid">
+														<div data-g="12 md:3" className="sticky">
+															<h2 className="h5 mt--0">Filter</h2>
+															<FilterPanel
+																filters={this.state.commentsData.filters}
+																path={this.state.path}
+															/>
+														</div>
+														<div data-g="12 md:9">
+															<ReviewResultsInfo
+																commentCount={commentsToShow.length}
+																showCommentsCount={this.state.consultationData.consultationState.shouldShowCommentsTab}
+																questionCount={questionsToShow.length}
+																showQuestionsCount={this.state.consultationData.consultationState.shouldShowQuestionsTab}
+																sortOrder={this.state.sort}
+																appliedFilters={this.getAppliedFilters()}
+																path={this.state.path}
+																isLoading={this.state.loading}
+															/>
+															<div data-qa-sel="comment-list-wrapper">
+																{questionsToShow.length > 0 &&
+																	<div>
+																		<ul className="CommentList list--unstyled">
+																			{questionsToShow.map((question) => {
+																				const isUnsaved = this.state.unsavedIds.includes(`${question.questionId}q`);
+																				return (
+																					<Question
+																						showAnswer={contextValue.isAuthorised}
+																						updateUnsavedIds={this.updateUnsavedIds}
+																						isUnsaved={isUnsaved}
+																						readOnly={!this.state.allowComments || this.state.submittedDate}
+																						key={question.questionId}
+																						unique={`Comment${question.questionId}`}
+																						question={question}
+																						saveAnswerHandler={this.saveAnswerHandler}
+																						deleteAnswerHandler={this.deleteAnswerHandler}
+																						documentTitle={this.getDocumentTitle(question.documentId)}
+																					/>
+																				);
+																			})}
+																		</ul>
+																	</div>
+																}
+																{commentsToShow.length === 0 ? <p>{/*No comments yet*/}</p> :
 																	<ul className="CommentList list--unstyled">
-																		{questionsToShow.map((question) => {
-																			const isUnsaved = this.state.unsavedIds.includes(`${question.questionId}q`);
+																		{commentsToShow.map((comment) => {
 																			return (
-																				<Question
-																					showAnswer={contextValue.isAuthorised}
-																					updateUnsavedIds={this.updateUnsavedIds}
-																					isUnsaved={isUnsaved}
+																				<CommentBox
 																					readOnly={!this.state.allowComments || this.state.submittedDate}
-																					key={question.questionId}
-																					unique={`Comment${question.questionId}`}
-																					question={question}
-																					saveAnswerHandler={this.saveAnswerHandler}
-																					deleteAnswerHandler={this.deleteAnswerHandler}
-																					documentTitle={this.getDocumentTitle(question.documentId)}
+																					isVisible={this.props.isVisible}
+																					key={comment.commentId}
+																					unique={`Comment${comment.commentId}`}
+																					comment={comment}
+																					documentTitle={this.getDocumentTitle(comment.documentId)}
+																					saveHandler={this.saveCommentHandler}
+																					deleteHandler={this.deleteCommentHandler}
+																					updateUnsavedIds={this.updateUnsavedIds}
 																				/>
 																			);
 																		})}
 																	</ul>
-																</div>
-															)}
-															{commentsToShow.length === 0 ? <p>{/*No comments yet*/}</p> : 
-																<ul className="CommentList list--unstyled">
-																	{commentsToShow.map((comment) => {
-																		return (
-																			<CommentBox
-																				readOnly={!this.state.allowComments || this.state.submittedDate}
-																				isVisible={this.props.isVisible}
-																				key={comment.commentId}
-																				unique={`Comment${comment.commentId}`}
-																				comment={comment}
-																				documentTitle={this.getDocumentTitle(comment.documentId)}
-																				saveHandler={this.saveCommentHandler}
-																				deleteHandler={this.deleteCommentHandler}
-																				updateUnsavedIds={this.updateUnsavedIds}
-																			/>
-																		);
-																	})}
-																</ul>
-															}
-														</div>
-														{!this.state.consultationData.consultationState.submittedDate &&
+																}
+															</div>
+															{!this.state.consultationData.consultationState.submittedDate &&
 															<SubmitResponseDialog
 																unsavedIds={this.state.unsavedIds}
 																isAuthorised={contextValue.isAuthorised}
@@ -641,11 +642,11 @@ export class Review extends Component<PropsType, StateType> {
 																questions={this.state.questions}
 																emailAddress={this.state.emailAddress}
 															/>
-														}
+															}
+														</div>
 													</div>
 												</div>
-											</div>
-										</main>
+											</main>
 									);
 								}}
 							</UserContext.Consumer>
