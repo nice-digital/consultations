@@ -108,11 +108,8 @@ export class Review extends Component<PropsType, StateType> {
 			this.props.staticContext,
 			"commentsreview",
 			[],
-			Object.assign(
-				{ relativeURL: this.props.match.url },
-				queryStringToObject(querystring)
-			),
-			preloadedData
+			Object.assign({ relativeURL: this.props.match.url }, queryStringToObject(querystring)),
+			preloadedData,
 		);
 		const consultationId = this.props.match.params.consultationId;
 		const preloadedConsultationData = preload(
@@ -120,40 +117,29 @@ export class Review extends Component<PropsType, StateType> {
 			"consultation",
 			[],
 			{ consultationId, isReview: true },
-			preloadedData
+			preloadedData,
 		);
 
 		if (preloadedCommentsData && preloadedConsultationData) {
 			if (this.props.staticContext) {
-				this.props.staticContext.analyticsGlobals.gidReference =
-					preloadedConsultationData.reference;
-				this.props.staticContext.analyticsGlobals.consultationId =
-					preloadedConsultationData.consultationId;
-				this.props.staticContext.analyticsGlobals.consultationTitle =
-					preloadedConsultationData.title;
-				this.props.staticContext.analyticsGlobals.stage = preloadedConsultationData
-					.consultationState.submittedDate
-					? "postsubmission"
-					: "presubmission";
+				this.props.staticContext.analyticsGlobals.gidReference = preloadedConsultationData.reference;
+				this.props.staticContext.analyticsGlobals.consultationId = preloadedConsultationData.consultationId;
+				this.props.staticContext.analyticsGlobals.consultationTitle = preloadedConsultationData.title;
+				this.props.staticContext.analyticsGlobals.stage = preloadedConsultationData.consultationState.submittedDate ? "postsubmission" : "presubmission";
 			}
 			this.state = {
 				path: this.props.basename + this.props.location.pathname,
 				commentsData: preloadedCommentsData,
 				consultationData: preloadedConsultationData,
-				submittedDate:
-					preloadedConsultationData.consultationState.submittedDate,
-				validToSubmit:
-					preloadedConsultationData.consultationState.supportsSubmission,
+				submittedDate: preloadedConsultationData.consultationState.submittedDate,
+				validToSubmit: preloadedConsultationData.consultationState.supportsSubmission,
 				loading: false,
 				hasInitialData: true,
-				allowComments:
-					preloadedConsultationData.consultationState.consultationIsOpen &&
-					!preloadedConsultationData.consultationState.submittedDate,
+				allowComments: preloadedConsultationData.consultationState.consultationIsOpen && !preloadedConsultationData.consultationState.submittedDate,
 				comments: preloadedCommentsData.commentsAndQuestions.comments,
 				questions: preloadedCommentsData.commentsAndQuestions.questions,
 				sort: preloadedCommentsData.sort,
-				supportsDownload:
-					preloadedConsultationData.consultationState.supportsDownload,
+				supportsDownload: preloadedConsultationData.consultationState.supportsDownload,
 				organisationName: preloadedCommentsData.organisationName || "",
 				respondingAsOrganisation: preloadedCommentsData.isLead ? true : null,
 				hasTobaccoLinks: null,
@@ -171,21 +157,8 @@ export class Review extends Component<PropsType, StateType> {
 		if (this.props.staticContext) {
 			isSSR = true;
 		}
-		const message = `Review page log hit at ${new Date().toJSON()}. running as ${
-			process.env.NODE_ENV
-		} SSR: ${isSSR}`;
-		preload(
-			this.props.staticContext,
-			"logging",
-			[],
-			{ logLevel: "Warning" },
-			null,
-			false,
-			"POST",
-			{},
-			{ message },
-			true
-		);
+		const message = `Review page log hit at ${new Date().toJSON()}. running as ${ process.env.NODE_ENV } SSR: ${isSSR}`;
+		preload(this.props.staticContext, "logging", [], { logLevel: "Warning" }, null, false, "POST", {}, { message }, true );
 	}
 
 	//this is temporary for debug purposes.
@@ -194,45 +167,24 @@ export class Review extends Component<PropsType, StateType> {
 		if (this.props.staticContext) {
 			isSSR = true;
 		}
-		const message = `Review page log hit at ${new Date().toJSON()}. running as ${
-			process.env.NODE_ENV
-		} SSR: ${isSSR}`;
+		const message = `Review page log hit at ${new Date().toJSON()}. running as ${ process.env.NODE_ENV } SSR: ${isSSR}`;
 
-		load(
-			"logging",
-			undefined,
-			[],
-			{ logLevel: "Warning" },
-			"POST",
-			{ message },
-			true
-		)
-			.then((response) => response.data)
-			.catch((err) => {
+		load( "logging", undefined, [], { logLevel: "Warning" }, "POST", { message }, true )
+			.then(response => response.data)
+			.catch(err => {
 				console.error(err);
 			});
 	};
 
 	gatherData = async () => {
 		const querystring = this.props.history.location.search;
-		const path =
-			this.props.basename +
-			this.props.location.pathname +
-			this.props.history.location.search;
+		const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;
 		this.setState({
 			path,
 		});
-		const commentsData = load(
-			"commentsreview",
-			undefined,
-			[],
-			Object.assign(
-				{ relativeURL: this.props.match.url },
-				queryStringToObject(querystring)
-			)
-		)
-			.then((response) => response.data)
-			.catch((err) => {
+		const commentsData = load( "commentsreview", undefined, [], Object.assign({ relativeURL: this.props.match.url }, queryStringToObject(querystring)))
+			.then(response => response.data)
+			.catch(err => {
 				if (window) {
 					//window.location.assign(path); // Fallback to full page reload if we fail to load data
 				} else {
@@ -243,11 +195,10 @@ export class Review extends Component<PropsType, StateType> {
 		if (this.state.consultationData === null) {
 			const consultationId = this.props.match.params.consultationId;
 			const consultationData = load("consultation", undefined, [], {
-				consultationId,
-				isReview: true,
+				consultationId, isReview: true,
 			})
-				.then((response) => response.data)
-				.catch((err) => {
+				.then(response => response.data)
+				.catch(err => {
 					throw new Error("consultationData " + err);
 				});
 
@@ -264,23 +215,18 @@ export class Review extends Component<PropsType, StateType> {
 
 	loadDataAndUpdateState = (callback?: Function) => {
 		this.gatherData()
-			.then((data) => {
+			.then(data => {
 				if (data.consultationData !== null) {
 					this.setState({
 						consultationData: data.consultationData,
 						commentsData: data.commentsData,
 						comments: data.commentsData.commentsAndQuestions.comments,
 						questions: data.commentsData.commentsAndQuestions.questions,
-						submittedDate:
-							data.consultationData.consultationState.submittedDate,
-						validToSubmit:
-							data.consultationData.consultationState.supportsSubmission,
+						submittedDate: data.consultationData.consultationState.submittedDate,
+						validToSubmit: data.consultationData.consultationState.supportsSubmission,
 						loading: false,
-						allowComments:
-							data.consultationData.consultationState.consultationIsOpen &&
-							!data.consultationData.consultationState.submittedDate,
-						supportsDownload:
-							data.consultationData.consultationState.supportsDownload,
+						allowComments: data.consultationData.consultationState.consultationIsOpen && !data.consultationData.consultationState.submittedDate,
+						supportsDownload: data.consultationData.consultationState.supportsDownload,
 						sort: data.commentsData.sort,
 						organisationName: data.commentsData.organisationName || "",
 						documentTitles: this.getListOfDocuments(data.commentsData.filters),
@@ -296,9 +242,7 @@ export class Review extends Component<PropsType, StateType> {
 							sort: data.commentsData.sort,
 							loading: false,
 							organisationName: data.commentsData.organisationName || "",
-							documentTitles: this.getListOfDocuments(
-								data.commentsData.filters
-							),
+							documentTitles: this.getListOfDocuments(data.commentsData.filters),
 							isLead: data.commentsData.isLead,
 							respondingAsOrganisation: data.commentsData.isLead ? true : null,
 						},
@@ -309,7 +253,7 @@ export class Review extends Component<PropsType, StateType> {
 								action: "Clicked",
 								label: "Review filter",
 							});
-						}
+						},
 					);
 				}
 				if (data.consultationData !== null) {
@@ -317,14 +261,12 @@ export class Review extends Component<PropsType, StateType> {
 						event: "pageview",
 						gidReference: this.state.consultationData.reference,
 						title: this.getPageTitle(true),
-						stage: this.state.consultationData.consultationState.submittedDate
-							? "postsubmission"
-							: "presubmission",
+						stage: this.state.consultationData.consultationState.submittedDate ? "postsubmission" : "presubmission",
 					});
 				}
 				if (callback) callback();
 			})
-			.catch((err) => {
+			.catch(err => {
 				throw new Error("gatherData in componentDidMount failed " + err);
 			});
 	};
@@ -334,17 +276,13 @@ export class Review extends Component<PropsType, StateType> {
 	}
 
 	componentDidMount() {
-		if (!this.state.hasInitialData) {
-			// if this statement is true then we know we've come from another page
+		if (!this.state.hasInitialData) {// if this statement is true then we know we've come from another page 
 			this.loadDataAndUpdateState(() => {
 				pullFocusByQuerySelector("#root");
 			});
 		}
 		this.unlisten = this.props.history.listen(() => {
-			const path =
-				this.props.basename +
-				this.props.location.pathname +
-				this.props.history.location.search;
+			const path = this.props.basename + this.props.location.pathname + this.props.history.location.search;
 			if (!this.state.path || path !== this.state.path) {
 				this.loadDataAndUpdateState();
 			}
@@ -360,10 +298,7 @@ export class Review extends Component<PropsType, StateType> {
 		const tobaccoDisclosure = this.state.tobaccoDisclosure;
 		const respondingAsOrganisation = this.state.respondingAsOrganisation;
 		const hasTobaccoLinks = this.state.hasTobaccoLinks;
-		const organisationExpressionOfInterest = this.state.consultationData
-			.showExpressionOfInterestSubmissionQuestion
-			? this.state.organisationExpressionOfInterest
-			: null;
+		const organisationExpressionOfInterest = this.state.consultationData.showExpressionOfInterestSubmissionQuestion ? this.state.organisationExpressionOfInterest : null;
 
 		let answersToSubmit = [];
 		questions.forEach(function (question) {
@@ -381,35 +316,25 @@ export class Review extends Component<PropsType, StateType> {
 			organisationExpressionOfInterest,
 		};
 		load("submit", undefined, [], {}, "POST", submission, true)
-			.then((response) => {
+			.then(response => {
 				tagManager({
 					event: "generic",
 					category: "Consultation comments page",
 					action: "Response submitted",
-					label: `${
-						response.data.comments ? response.data.comments.length : "0"
-					} comments, ${
-						response.data.answers ? response.data.answers.length : "0"
-					} answers`,
+					label: `${response.data.comments ? response.data.comments.length : "0"} comments, ${response.data.answers ? response.data.answers.length : "0"} answers`,
 				});
 				tagManager({
 					event: "generic",
 					category: "Consultation comments page",
 					action: "Length to submit response",
 					label: "Duration in minutes",
-					value: Math.round(
-						response.data
-							.durationBetweenFirstCommentOrAnswerSavedAndSubmissionInSeconds /
-							60
-					),
+					value: Math.round(response.data.durationBetweenFirstCommentOrAnswerSavedAndSubmissionInSeconds /60),
 				});
 				tagManager({
 					event: "generic",
 					category: "Consultation comments page",
 					action: "Submission mandatory questions",
-					label: `${response.data.respondingAsOrganisation ? "Yes" : "No"}, ${
-						response.data.hasTobaccoLinks ? "Yes" : "No"
-					}`,
+					label: `${response.data.respondingAsOrganisation ? "Yes" : "No"}, ${response.data.hasTobaccoLinks ? "Yes" : "No"}`,
 				});
 				this.setState({
 					submittedDate: true,
@@ -419,7 +344,7 @@ export class Review extends Component<PropsType, StateType> {
 				});
 				this.logStuff();
 			})
-			.catch((err) => {
+			.catch(err => {
 				console.log(err);
 				if (err.response) alert(err.response.statusText);
 			});
@@ -437,42 +362,26 @@ export class Review extends Component<PropsType, StateType> {
 			}
 		});
 
-		load(
-			"submitToLead",
-			undefined,
-			[],
-			{},
-			"POST",
-			{
-				emailAddress,
-				comments,
-				answers: answersToSubmit,
-				organisationName,
-				respondingAsOrganisation: true,
-			},
-			true
-		)
-			.then((response) => {
+		load("submitToLead",undefined,[],{},"POST", {
+			emailAddress,
+			comments,
+			answers: answersToSubmit,
+			organisationName,
+			respondingAsOrganisation: true,
+		},true)
+			.then(response => {
 				tagManager({
 					event: "generic",
 					category: "Consultation comments page",
 					action: "Response submitted to lead",
-					label: `${
-						response.data.comments ? response.data.comments.length : "0"
-					} comments, ${
-						response.data.answers ? response.data.answers.length : "0"
-					} answers`,
+					label: `${response.data.comments ? response.data.comments.length : "0"} comments, ${response.data.answers ? response.data.answers.length : "0"} answers`,
 				});
 				tagManager({
 					event: "generic",
 					category: "Consultation comments page",
 					action: "Length to submit response to lead",
 					label: "Duration in minutes",
-					value: Math.round(
-						response.data
-							.durationBetweenFirstCommentOrAnswerSavedAndSubmissionInSeconds /
-							60
-					),
+					value: Math.round(response.data.durationBetweenFirstCommentOrAnswerSavedAndSubmissionInSeconds /60),
 				});
 				this.setState({
 					submittedDate: true,
@@ -482,7 +391,7 @@ export class Review extends Component<PropsType, StateType> {
 				});
 				this.logStuff();
 			})
-			.catch((err) => {
+			.catch(err => {
 				console.log(err);
 				if (err.response) alert(err.response.statusText);
 			});
@@ -551,9 +460,8 @@ export class Review extends Component<PropsType, StateType> {
 
 	getListOfDocuments = (filters: Array<any>) => {
 		if (!filters) return;
-		return filters
-			.filter((item) => item.id === "Document")[0]
-			.options.map((item) => {
+		return filters.filter((item) => item.id === "Document")[0].options
+			.map((item) => {
 				return {
 					id: item.id,
 					title: item.label,
@@ -565,9 +473,7 @@ export class Review extends Component<PropsType, StateType> {
 		if (documentId && documentId !== null) {
 			// this catch is here temporarily until we have a way to administer questions (it's possible that questions have been placed on documents that are not set to support questions)
 			try {
-				return this.state.documentTitles.filter(
-					(item) => item.id === documentId.toString()
-				)[0].title;
+				return this.state.documentTitles.filter((item) => item.id === documentId.toString())[0].title;
 			} catch (err) {
 				return "Consultation document ID " + documentId;
 			}
@@ -599,15 +505,11 @@ export class Review extends Component<PropsType, StateType> {
 		if (this.state.loading) return <h1>Loading...</h1>;
 		if (this.state.justSubmitted) return <Redirect push to={"submitted"} />;
 		const { reference } = this.state.consultationData;
-		const commentsToShow =
-			this.state.comments.filter((comment) => comment.show) || [];
-		const questionsToShow =
-			this.state.questions.filter((question) => question.show) || [];
+		const commentsToShow = this.state.comments.filter((comment) => comment.show) || [];
+		const questionsToShow = this.state.questions.filter((question) => question.show) || [];
 
-		let headerSubtitle1 =
-			"Review and edit your question responses and comments before you submit them to us.";
-		let headerSubtitle2 =
-			"Once they have been submitted you will not be able to edit them further or add any extra comments.";
+		let headerSubtitle1 = "Review and edit your question responses and comments before you submit them to us.";
+		let headerSubtitle2 = "Once they have been submitted you will not be able to edit them further or add any extra comments.";
 
 		return (
 			<>
@@ -616,25 +518,17 @@ export class Review extends Component<PropsType, StateType> {
 				</Helmet>
 				<Prompt
 					when={this.state.unsavedIds.length > 0}
-					message={`You have ${this.state.unsavedIds.length} unsaved ${
-						this.state.unsavedIds.length === 1 ? "change" : "changes"
-					}. Continue without saving?`}
+					message={`You have ${this.state.unsavedIds.length} unsaved ${this.state.unsavedIds.length === 1 ? "change" : "changes"}. Continue without saving?`}
 				/>
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">
-							<BreadCrumbsWithRouter
-								links={this.state.consultationData.breadcrumbs}
-							/>
+							<BreadCrumbsWithRouter links={this.state.consultationData.breadcrumbs} />
 							<UserContext.Consumer>
 								{(contextValue: ContextType) => {
-									if (
-										contextValue.isOrganisationCommenter &&
-										!contextValue.isLead
-									) {
+									if (contextValue.isOrganisationCommenter && !contextValue.isLead ) {
 										headerSubtitle1 = `On this page you can review and edit your response to the consultation before you send them to ${contextValue.organisationName}.`;
-										headerSubtitle2 =
-											"Once you have sent your response you will not be able to edit it or add any more comments.";
+										headerSubtitle2 = "Once you have sent your response you will not be able to edit it or add any more comments.";
 									}
 
 									return !contextValue.isAuthorised ? (
@@ -650,35 +544,19 @@ export class Review extends Component<PropsType, StateType> {
 										<main>
 											<div className="page-header">
 												<Header
-													title={
-														this.state.submittedDate
-															? "Response submitted"
-															: "Review your response"
-													}
-													subtitle1={
-														this.state.submittedDate ? "" : headerSubtitle1
-													}
-													subtitle2={
-														this.state.submittedDate ? "" : headerSubtitle2
-													}
+													title={this.state.submittedDate ? "Response submitted" : "Review your response"}
+													subtitle1={this.state.submittedDate ? "" : headerSubtitle1}
+													subtitle2={this.state.submittedDate ? "" : headerSubtitle2}
 													reference={reference}
-													consultationState={
-														this.state.consultationData.consultationState
-													}
+													consultationState={this.state.consultationData.consultationState}
 												/>
 
 												<SubmittedContent
 													organisationName={contextValue.organisationName}
-													isOrganisationCommenter={
-														contextValue.isOrganisationCommenter
-													}
+													isOrganisationCommenter={contextValue.isOrganisationCommenter}
 													isLead={contextValue.isLead}
-													consultationState={
-														this.state.consultationData.consultationState
-													}
-													consultationId={
-														this.props.match.params.consultationId
-													}
+													consultationState={this.state.consultationData.consultationState}
+													consultationId={this.props.match.params.consultationId}
 													basename={this.props.basename}
 													isSubmitted={this.state.submittedDate}
 													linkToReviewPage={false}
@@ -695,15 +573,9 @@ export class Review extends Component<PropsType, StateType> {
 													<div data-g="12 md:9">
 														<ReviewResultsInfo
 															commentCount={commentsToShow.length}
-															showCommentsCount={
-																this.state.consultationData.consultationState
-																	.shouldShowCommentsTab
-															}
+															showCommentsCount={this.state.consultationData.consultationState.shouldShowCommentsTab}
 															questionCount={questionsToShow.length}
-															showQuestionsCount={
-																this.state.consultationData.consultationState
-																	.shouldShowQuestionsTab
-															}
+															showQuestionsCount={this.state.consultationData.consultationState.shouldShowQuestionsTab}
 															sortOrder={this.state.sort}
 															appliedFilters={this.getAppliedFilters()}
 															path={this.state.path}
@@ -714,69 +586,46 @@ export class Review extends Component<PropsType, StateType> {
 																<div>
 																	<ul className="CommentList list--unstyled">
 																		{questionsToShow.map((question) => {
-																			const isUnsaved = this.state.unsavedIds.includes(
-																				`${question.questionId}q`
-																			);
+																			const isUnsaved = this.state.unsavedIds.includes(`${question.questionId}q`);
 																			return (
 																				<Question
 																					showAnswer={contextValue.isAuthorised}
-																					updateUnsavedIds={
-																						this.updateUnsavedIds
-																					}
+																					updateUnsavedIds={this.updateUnsavedIds}
 																					isUnsaved={isUnsaved}
-																					readOnly={
-																						!this.state.allowComments ||
-																						this.state.submittedDate
-																					}
+																					readOnly={!this.state.allowComments || this.state.submittedDate}
 																					key={question.questionId}
 																					unique={`Comment${question.questionId}`}
 																					question={question}
-																					saveAnswerHandler={
-																						this.saveAnswerHandler
-																					}
-																					deleteAnswerHandler={
-																						this.deleteAnswerHandler
-																					}
-																					documentTitle={this.getDocumentTitle(
-																						question.documentId
-																					)}
+																					saveAnswerHandler={this.saveAnswerHandler}
+																					deleteAnswerHandler={this.deleteAnswerHandler}
+																					documentTitle={this.getDocumentTitle(question.documentId)}
 																				/>
 																			);
 																		})}
 																	</ul>
 																</div>
 															)}
-															{commentsToShow.length === 0 ? (
-																<p>{/*No comments yet*/}</p>
-															) : (
+															{commentsToShow.length === 0 ? <p>{/*No comments yet*/}</p> : 
 																<ul className="CommentList list--unstyled">
 																	{commentsToShow.map((comment) => {
 																		return (
 																			<CommentBox
-																				readOnly={
-																					!this.state.allowComments ||
-																					this.state.submittedDate
-																				}
+																				readOnly={!this.state.allowComments || this.state.submittedDate}
 																				isVisible={this.props.isVisible}
 																				key={comment.commentId}
 																				unique={`Comment${comment.commentId}`}
 																				comment={comment}
-																				documentTitle={this.getDocumentTitle(
-																					comment.documentId
-																				)}
+																				documentTitle={this.getDocumentTitle(comment.documentId)}
 																				saveHandler={this.saveCommentHandler}
-																				deleteHandler={
-																					this.deleteCommentHandler
-																				}
+																				deleteHandler={this.deleteCommentHandler}
 																				updateUnsavedIds={this.updateUnsavedIds}
 																			/>
 																		);
 																	})}
 																</ul>
-															)}
+															}
 														</div>
-														{!this.state.consultationData.consultationState
-															.submittedDate && (
+														{!this.state.consultationData.consultationState.submittedDate &&
 															<SubmitResponseDialog
 																unsavedIds={this.state.unsavedIds}
 																isAuthorised={contextValue.isAuthorised}
@@ -785,32 +634,18 @@ export class Review extends Component<PropsType, StateType> {
 																submitConsultation={this.submitConsultation}
 																fieldsChangeHandler={this.fieldsChangeHandler}
 																submitToLead={this.submitToLead}
-																respondingAsOrganisation={
-																	this.state.respondingAsOrganisation
-																}
-																organisationName={
-																	contextValue.isOrganisationCommenter &&
-																	!contextValue.isLead
-																		? contextValue.organisationName
-																		: this.state.organisationName
-																}
+																respondingAsOrganisation={this.state.respondingAsOrganisation}
+																organisationName={contextValue.isOrganisationCommenter && !contextValue.isLead ? contextValue.organisationName : this.state.organisationName}
 																hasTobaccoLinks={this.state.hasTobaccoLinks}
 																tobaccoDisclosure={this.state.tobaccoDisclosure}
-																showExpressionOfInterestSubmissionQuestion={
-																	this.state.consultationData
-																		.showExpressionOfInterestSubmissionQuestion
-																}
-																organisationExpressionOfInterest={
-																	this.state.organisationExpressionOfInterest
-																}
+																showExpressionOfInterestSubmissionQuestion={this.state.consultationData.showExpressionOfInterestSubmissionQuestion}
+																organisationExpressionOfInterest={this.state.organisationExpressionOfInterest}
 																isLead={contextValue.isLead}
-																isOrganisationCommenter={
-																	contextValue.isOrganisationCommenter
-																}
+																isOrganisationCommenter={contextValue.isOrganisationCommenter}
 																questions={this.state.questions}
 																emailAddress={this.state.emailAddress}
 															/>
-														)}
+														}
 													</div>
 												</div>
 											</div>
