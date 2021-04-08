@@ -32,6 +32,7 @@ $nice-font-base-path: "/consultations/fonts/";
 @import "./components/LoginBanner/LoginBanner";
 @import "./components/Pagination/Pagination";
 @import "./components/GenerateCode/GenerateCode";
+@import "./components/FilterPanel/FilterPanel";
 
 // Document transform styling (comments buttons etc)
 @import "./document-processing/transforms/comment";
