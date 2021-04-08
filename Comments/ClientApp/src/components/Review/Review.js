@@ -234,27 +234,24 @@ export class Review extends Component<PropsType, StateType> {
 						respondingAsOrganisation: data.commentsData.isLead ? true : null,
 					});
 				} else {
-					this.setState(
-						{
-							commentsData: data.commentsData,
-							comments: data.commentsData.commentsAndQuestions.comments,
-							questions: data.commentsData.commentsAndQuestions.questions,
-							sort: data.commentsData.sort,
-							loading: false,
-							organisationName: data.commentsData.organisationName || "",
-							documentTitles: this.getListOfDocuments(data.commentsData.filters),
-							isLead: data.commentsData.isLead,
-							respondingAsOrganisation: data.commentsData.isLead ? true : null,
-						},
-						() => {
-							tagManager({
-								event: "generic",
-								category: "Consultation comments page",
-								action: "Clicked",
-								label: "Review filter",
-							});
-						},
-					);
+					this.setState({
+						commentsData: data.commentsData,
+						comments: data.commentsData.commentsAndQuestions.comments,
+						questions: data.commentsData.commentsAndQuestions.questions,
+						sort: data.commentsData.sort,
+						loading: false,
+						organisationName: data.commentsData.organisationName || "",
+						documentTitles: this.getListOfDocuments(data.commentsData.filters),
+						isLead: data.commentsData.isLead,
+						respondingAsOrganisation: data.commentsData.isLead ? true : null,
+					}, () => {
+						tagManager({
+							event: "generic",
+							category: "Consultation comments page",
+							action: "Clicked",
+							label: "Review filter",
+						});
+					});
 				}
 				if (data.consultationData !== null) {
 					tagManager({
@@ -276,7 +273,7 @@ export class Review extends Component<PropsType, StateType> {
 	}
 
 	componentDidMount() {
-		if (!this.state.hasInitialData) {// if this statement is true then we know we've come from another page 
+		if (!this.state.hasInitialData) { // if this statement is true then we know we've come from another page 
 			this.loadDataAndUpdateState(() => {
 				pullFocusByQuerySelector("#root");
 			});
@@ -328,7 +325,7 @@ export class Review extends Component<PropsType, StateType> {
 					category: "Consultation comments page",
 					action: "Length to submit response",
 					label: "Duration in minutes",
-					value: Math.round(response.data.durationBetweenFirstCommentOrAnswerSavedAndSubmissionInSeconds /60),
+					value: Math.round(response.data.durationBetweenFirstCommentOrAnswerSavedAndSubmissionInSeconds / 60),
 				});
 				tagManager({
 					event: "generic",
@@ -362,13 +359,13 @@ export class Review extends Component<PropsType, StateType> {
 			}
 		});
 
-		load("submitToLead",undefined,[],{},"POST", {
+		load("submitToLead", undefined, [], {}, "POST", {
 			emailAddress,
 			comments,
 			answers: answersToSubmit,
 			organisationName,
 			respondingAsOrganisation: true,
-		},true)
+		}, true)
 			.then(response => {
 				tagManager({
 					event: "generic",
@@ -381,7 +378,7 @@ export class Review extends Component<PropsType, StateType> {
 					category: "Consultation comments page",
 					action: "Length to submit response to lead",
 					label: "Duration in minutes",
-					value: Math.round(response.data.durationBetweenFirstCommentOrAnswerSavedAndSubmissionInSeconds /60),
+					value: Math.round(response.data.durationBetweenFirstCommentOrAnswerSavedAndSubmissionInSeconds / 60),
 				});
 				this.setState({
 					submittedDate: true,
@@ -460,8 +457,8 @@ export class Review extends Component<PropsType, StateType> {
 
 	getListOfDocuments = (filters: Array<any>) => {
 		if (!filters) return;
-		return filters.filter((item) => item.id === "Document")[0].options
-			.map((item) => {
+		return filters.filter(item => item.id === "Document")[0].options
+			.map(item => {
 				return {
 					id: item.id,
 					title: item.label,
@@ -481,15 +478,15 @@ export class Review extends Component<PropsType, StateType> {
 	};
 
 	getAppliedFilters(): ReviewAppliedFilterType[] {
-		const mapOptions = (group: ReviewFilterGroupType) =>
-			group.options
-				.filter((opt) => opt.isSelected)
-				.map((opt) => ({
-					groupTitle: group.title,
-					optionLabel: opt.label,
-					groupId: group.id,
-					optionId: opt.id,
-				}));
+		const mapOptions = 
+		(group: ReviewFilterGroupType) => group.options
+			.filter((opt) => opt.isSelected)
+			.map((opt) => ({
+				groupTitle: group.title,
+				optionLabel: opt.label,
+				groupId: group.id,
+				optionId: opt.id,
+			}));
 
 		return this.state.commentsData.filters
 			.map(mapOptions)
@@ -505,8 +502,8 @@ export class Review extends Component<PropsType, StateType> {
 		if (this.state.loading) return <h1>Loading...</h1>;
 		if (this.state.justSubmitted) return <Redirect push to={"submitted"} />;
 		const { reference } = this.state.consultationData;
-		const commentsToShow = this.state.comments.filter((comment) => comment.show) || [];
-		const questionsToShow = this.state.questions.filter((question) => question.show) || [];
+		const commentsToShow = this.state.comments.filter(comment => comment.show) || [];
+		const questionsToShow = this.state.questions.filter(question => question.show) || [];
 
 		let headerSubtitle1 = "Review and edit your question responses and comments before you submit them to us.";
 		let headerSubtitle2 = "Once they have been submitted you will not be able to edit them further or add any extra comments.";
@@ -531,7 +528,7 @@ export class Review extends Component<PropsType, StateType> {
 										headerSubtitle2 = "Once you have sent your response you will not be able to edit it or add any more comments.";
 									}
 
-									return !contextValue.isAuthorised ? (
+									return (!contextValue.isAuthorised ? 
 										<LoginBannerWithRouter
 											signInButton={true}
 											currentURL={this.props.match.url}
@@ -539,8 +536,7 @@ export class Review extends Component<PropsType, StateType> {
 											registerURL={contextValue.registerURL}
 											allowOrganisationCodeLogin={false}
 											orgFieldName="review"
-										/>
-									) : (
+										/> : 
 										<main>
 											<div className="page-header">
 												<Header
