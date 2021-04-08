@@ -443,7 +443,7 @@ export class Download extends Component<PropsType, StateType> {
 												Only online consultations responses appear in the results below.
 											</span>
 											&nbsp;&nbsp;
-											{enableOrganisationalCommentingFeature &&
+											{contextValue.organisationalCommentingFeature &&
 												<Link to={"/leadinformation"}>
 													Request commenting lead permission
 												</Link>

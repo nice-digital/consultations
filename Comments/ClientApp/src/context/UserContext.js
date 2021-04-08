@@ -131,16 +131,16 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 			});
 	}
 
-	// getFeatureFlags = async () => {
-	// 	load("getfeatureflags", undefined, [], {})
-	// 		.then(response => 
-	// 			this.setState({
-	// 				organisationalCommentingFeature: response.data.OrganisationalCommenting,
-	// 			}))
-	// 		.catch(err => {
-	// 			console.log(JSON.stringify(err));
-	// 		});
-	// }
+	getFeatureFlags = async () => {
+		load("getfeatureflags", undefined, [], {})
+			.then(response => 
+				this.setState({
+					organisationalCommentingFeature: response.data.OrganisationalCommenting,
+				}))
+			.catch(err => {
+				console.log(JSON.stringify(err));
+			});
+	}
 
 	//unfortunately the context is above the routes, so this.props.match is always null, so we can't pull the consultation id out of there. hence we're falling back to regex.
 	getConsultationId = () =>{
