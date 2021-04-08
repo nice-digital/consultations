@@ -13,6 +13,7 @@ export const SubmitResponseFeedback = (props) => {
 		emailIsEmpty,
 		emailIsWrongFormat,
 		questions,
+		isLead,
 		isOrganisationCommenter,
 	} = props;
 
@@ -31,15 +32,13 @@ export const SubmitResponseFeedback = (props) => {
 	if (!validToSubmit)
 		items.push("You have not saved any comments");
 
-	if (isOrganisationCommenter) {
+	if (isOrganisationCommenter && !isLead) {
 		if (emailIsEmpty) {
 			items.push("You have not entered an email address");
 		} else if (emailIsWrongFormat) {
 			items.push("Email address is in an invalid format");
 		}
-	}
-
-	if (!isOrganisationCommenter) {
+	}else{
 		if (respondingAsOrganisation === null)
 			items.push("You have not stated whether you are submitting the response on behalf of an organisation");
 
