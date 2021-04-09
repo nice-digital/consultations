@@ -473,8 +473,7 @@ export class Document extends Component<PropsType, StateType> {
 										{(contextValue: ContextType) => contextValue.isOrganisationCommenter && !contextValue.isLead ?
 											<Alert type="info" role="alert">
 												<p>You are commenting on behalf of {contextValue.organisationName}.</p>
-												<p>When you submit your response it will be submitted to the organisational lead at {contextValue.organisationName}.</p>
-												<p><strong>On submission your email address and responses will be visible to other members or associates of your organisation who are using the same commenting code.</strong></p>
+												<p>When you submit your response it will be submitted to the organisational lead at {contextValue.organisationName}. <strong>On submission your email address and responses will be visible to other members or associates of your organisation who are using the same commenting code.</strong></p>
 											</Alert>
 											: null
 										}
