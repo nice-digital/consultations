@@ -64,7 +64,7 @@ describe("[ClientApp]", () => {
 				commentText: "",
 				commentOn: "chapter",
 				htmlElementID: "",
-				mostRecentSectionNumber: "1.1",
+				sectionNumber: "1.1",
 				quote: "1.1 Recommendations",
 			});
 		});
@@ -78,7 +78,7 @@ describe("[ClientApp]", () => {
 				commentText: "",
 				commentOn: "section",
 				htmlElementID: "bar",
-				mostRecentSectionNumber: undefined,
+				sectionNumber: undefined,
 				quote: "Foo",
 			});
 		});
@@ -91,7 +91,7 @@ describe("[ClientApp]", () => {
 				commentText: "",
 				commentOn: "subsection",
 				htmlElementID: "np-1-3-1",
-				mostRecentSectionNumber: "1.3.1",
+				sectionNumber: "1.3.1",
 				quote: "1.3.1 ",
 			});
 		});

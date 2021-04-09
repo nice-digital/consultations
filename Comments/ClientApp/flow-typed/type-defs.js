@@ -74,6 +74,7 @@ declare type CommentType = {
 	status: StatusType,
 	order: string,
 	section: string,
+	sectionNumber: string
 };
 
 type StatusType = {

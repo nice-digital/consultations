@@ -152,6 +152,8 @@ namespace Comments.Migrations
 
                     b.Property<string>("Section");
 
+                    b.Property<string>("SectionNumber");
+
                     b.Property<string>("SourceURI")
                         .HasColumnName("SourceURI");
 

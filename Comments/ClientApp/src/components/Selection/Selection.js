@@ -60,11 +60,11 @@ export class Selection extends Component<PropsType, StateType> {
 	getCommentForRange = (limitingElement: any, selection: any) =>{
 		let selectionRange = selection.getRangeAt(0);
 		let comment = null;
-		let mostRecentSectionNumber = "";
+		let sectionNumber = "";
 		try {
 			const closestCommentButton = this.findClosest(selectionRange.startContainer.parentElement, "button.document-comment-container__commentButton,button.document-comment-container__commentButton");
 			if (closestCommentButton != null){
-				mostRecentSectionNumber = closestCommentButton.getAttribute("data-sectionnumber");
+				sectionNumber = closestCommentButton.getAttribute("data-sectionnumber");
 			}
 			comment = {
 				quote: selectionRange.toString(),
@@ -78,7 +78,7 @@ export class Selection extends Component<PropsType, StateType> {
 				commentOn: "Selection",
 				order: getElementPositionWithinDocument(selectionRange.commonAncestorContainer.parentNode) + "." + selectionRange.startOffset.toString(),
 				section: getSectionTitle(selectionRange.commonAncestorContainer.parentNode),
-				mostRecentSectionNumber: mostRecentSectionNumber,
+				sectionNumber: sectionNumber,
 			};
 		} catch (error) {
 			console.error("getCommentForRange", error);

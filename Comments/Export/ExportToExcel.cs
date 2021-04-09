@@ -89,14 +89,21 @@ namespace Comments.Export
 					Width = 25,
 					CustomWidth = true
 				},
-				new Column // Section
+				new Column // SectionHeader
 				{
 					Min = 6,
 					Max = 6,
 					Width = 25,
 					CustomWidth = true
 				},
-				new Column // Selected text
+                new Column // SectionNumber
+                {
+                    Min = 6,
+                    Max = 6,
+                    Width = 25,
+                    CustomWidth = true
+                },
+                new Column // Selected text
 				{
 					Min = 7,
 					Max = 7,
@@ -208,11 +215,17 @@ namespace Comments.Export
 
 			cell = new Cell();
 			cell.DataType = CellValues.String;
-			cell.CellValue = new CellValue("Section");
+			cell.CellValue = new CellValue("Section Header");
 			cell.StyleIndex = 2;
 			headerRow.AppendChild(cell);
 
-			cell = new Cell();
+            cell = new Cell();
+            cell.DataType = CellValues.String;
+            cell.CellValue = new CellValue("Section Number");
+            cell.StyleIndex = 2;
+            headerRow.AppendChild(cell);
+
+            cell = new Cell();
 			cell.DataType = CellValues.String;
 			cell.CellValue = new CellValue("Selected Text");
 			cell.StyleIndex = 2;
@@ -318,11 +331,17 @@ namespace Comments.Export
 
 				cell = new Cell();
 				cell.DataType = CellValues.String;
-				cell.CellValue = new CellValue(row.Section);
+				cell.CellValue = new CellValue(row.SectionHeader);
 				cell.StyleIndex = 1;
 				dataRow.AppendChild(cell);
 
-				cell = new Cell();
+                cell = new Cell();
+                cell.DataType = CellValues.String;
+                cell.CellValue = new CellValue(row.SectionNumber);
+                cell.StyleIndex = 1;
+                dataRow.AppendChild(cell);
+
+                cell = new Cell();
 				cell.DataType = CellValues.String;
 				cell.CellValue = new CellValue(row.Quote);
 				cell.StyleIndex = 1;
@@ -409,7 +428,8 @@ namespace Comments.Export
 					ConsultationName = locationDetails.ConsultationName,
 					DocumentName = locationDetails.DocumentName,
 					ChapterTitle = locationDetails.ChapterName,
-					Section = commentOn == CommentOn.Section || commentOn == CommentOn.SubSection || commentOn == CommentOn.Selection ? comment.Location.Section : null,
+					SectionHeader = commentOn == CommentOn.Section || commentOn == CommentOn.SubSection || commentOn == CommentOn.Selection ? comment.Location.SectionHeader : null,
+                    SectionNumber = comment.Location.SectionNumber,
 					Quote = commentOn  == CommentOn.Selection ? comment.Location.Quote : null,
 					UserName = userName,
 					Email = email,
@@ -442,8 +462,9 @@ namespace Comments.Export
 					ConsultationName = locationDetails.ConsultationName,
 					DocumentName = locationDetails.DocumentName,
 					ChapterTitle = locationDetails.ChapterName,
-					Section = answer.Question.Location.Section,
-					Quote = answer.Question.Location.Quote,
+					SectionHeader = answer.Question.Location.SectionHeader,
+                    SectionNumber = answer.Question.Location.SectionNumber,
+                    Quote = answer.Question.Location.Quote,
 					UserName = userName,
 					Email = email,
 					CommentId = null,
@@ -471,8 +492,9 @@ namespace Comments.Export
 					ConsultationName = locationDetails.ConsultationName,
 					DocumentName = locationDetails.DocumentName,
 					ChapterTitle = locationDetails.ChapterName,
-					Section = question.Location.Section,
-					Quote = question.Location.Quote,
+					SectionHeader = question.Location.SectionHeader,
+                    SectionNumber = question.Location.SectionNumber,
+                    Quote = question.Location.Quote,
 					UserName = null,
 					Email = null,
 					CommentId = null,
@@ -511,7 +533,7 @@ namespace Comments.Export
                     ConsultationName = locationDetails.ConsultationName,
                     DocumentName = locationDetails.DocumentName,
                     ChapterTitle = locationDetails.ChapterName,
-                    Section = commentOn == CommentOn.Section || commentOn == CommentOn.SubSection || commentOn == CommentOn.Selection ? comment.Location.Section : null,
+                    SectionHeader = commentOn == CommentOn.Section || commentOn == CommentOn.SubSection || commentOn == CommentOn.Selection ? comment.Location.SectionHeader : null,
                     Quote = commentOn == CommentOn.Selection ? comment.Location.Quote : null,
                     UserName = userName,
                     Email = email,
@@ -546,7 +568,7 @@ namespace Comments.Export
                     ConsultationName = locationDetails.ConsultationName,
                     DocumentName = locationDetails.DocumentName,
                     ChapterTitle = locationDetails.ChapterName,
-                    Section = answer.Question.Location.Section,
+                    SectionHeader = answer.Question.Location.SectionHeader,
                     Quote = answer.Question.Location.Quote,
                     UserName = userName,
                     Email = email,

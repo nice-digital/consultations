@@ -4,7 +4,7 @@ import {nodeIsTypeText, nodeIsSubsection, nodeIsSpanTag, nodeIsInternalLink} fro
 import processInternalLink from "./internal-link";
 import {tagManager} from "../../helpers/tag-manager";
 
-export const processChapterSectionSubsection = (node, onNewCommentClick, sourceURI, allowComments, mostRecentSectionNumber) => {
+export const processChapterSectionSubsection = (node, onNewCommentClick, sourceURI, allowComments, sectionNumber) => {
 
 	let commentOn = node.attribs["data-heading-type"].toLowerCase();
 	let quote =  node.children.filter(nodeIsTypeText)[0].data;
@@ -29,7 +29,7 @@ export const processChapterSectionSubsection = (node, onNewCommentClick, sourceU
 					data-gtm-action="Clicked"
 					data-gtm-label={`Comment on ${commentOn || "chapter"}`}
 					data-qa-sel="in-text-comment-button"
-					data-sectionnumber={mostRecentSectionNumber}
+					data-sectionnumber={sectionNumber}
 					title={`Comment on ${commentOn || "chapter"}`}
 					className="document-comment-container__commentButton"
 					tabIndex={0}
@@ -47,7 +47,7 @@ export const processChapterSectionSubsection = (node, onNewCommentClick, sourceU
 							commentOn,
 							htmlElementID,
 							quote,
-							mostRecentSectionNumber,
+							sectionNumber,
 						});
 					}}
 				>
