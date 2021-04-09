@@ -205,7 +205,7 @@ Array [
                           role="group"
                         >
                           <label
-                            className="filter-group__option"
+                            className="filter-group__option break-word"
                             htmlFor="filter_QuestionsOrComments_Questions"
                           >
                             <input
@@ -222,7 +222,7 @@ Array [
                             Questions
                           </label>
                           <label
-                            className="filter-group__option"
+                            className="filter-group__option break-word"
                             htmlFor="filter_QuestionsOrComments_Comments"
                           >
                             <input
@@ -264,7 +264,7 @@ Array [
                           role="group"
                         >
                           <label
-                            className="filter-group__option"
+                            className="filter-group__option break-word"
                             htmlFor="filter_Document_1"
                           >
                             <input
@@ -281,7 +281,7 @@ Array [
                             Unstable angina and NSTEMI
                           </label>
                           <label
-                            className="filter-group__option"
+                            className="filter-group__option break-word"
                             htmlFor="filter_Document_2"
                           >
                             <input
@@ -859,7 +859,7 @@ Array [
                           role="group"
                         >
                           <label
-                            className="filter-group__option"
+                            className="filter-group__option break-word"
                             htmlFor="filter_QuestionsOrComments_Questions"
                           >
                             <input
@@ -876,7 +876,7 @@ Array [
                             Questions
                           </label>
                           <label
-                            className="filter-group__option"
+                            className="filter-group__option break-word"
                             htmlFor="filter_QuestionsOrComments_Comments"
                           >
                             <input
@@ -918,7 +918,7 @@ Array [
                           role="group"
                         >
                           <label
-                            className="filter-group__option"
+                            className="filter-group__option break-word"
                             htmlFor="filter_Document_1"
                           >
                             <input
@@ -935,7 +935,7 @@ Array [
                             Unstable angina and NSTEMI
                           </label>
                           <label
-                            className="filter-group__option"
+                            className="filter-group__option break-word"
                             htmlFor="filter_Document_2"
                           >
                             <input
