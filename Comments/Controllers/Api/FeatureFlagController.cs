@@ -22,7 +22,6 @@ namespace Comments.Controllers.Api
         // GET: consultations/api/FeatureFlags 
         public async Task<List<KeyValuePair<string, bool>>> GetFeatureFlag()
         {
-            var hello = "hello";
             var result = await _featureFlagService.GetFeatureFlags();
 
             return result;

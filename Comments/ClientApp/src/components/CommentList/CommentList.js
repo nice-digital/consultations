@@ -57,7 +57,6 @@ type StateType = {
 	error: string,
 	unsavedIds: Array<number>,
 	endDate: string,
-	enableOrganisationalCommentingFeature: boolean,
 	allowOrganisationCodeLogin: Boolean,
 };
 
@@ -79,7 +78,6 @@ export class CommentList extends Component<PropsType, StateType> {
 			shouldShowQuestionsTab: false,
 			unsavedIds: [],
 			endDate: "",
-			enableOrganisationalCommentingFeature: false,
 			allowOrganisationCodeLogin: false,
 		};
 
@@ -88,8 +86,6 @@ export class CommentList extends Component<PropsType, StateType> {
 		if (this.props.staticContext && this.props.staticContext.preload) {
 			preloadedData = this.props.staticContext.preload.data; //this is data from Configure => SupplyData in Startup.cs. the main thing it contains for this call is the cookie for the current user.
 		}
-
-		const enableOrganisationalCommentingFeature = ((preloadedData && preloadedData.organisationalCommentingFeature) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["organisationalCommentingFeature"]));
 
 		const preloadedCommentsData = preload(
 			this.props.staticContext,
@@ -116,8 +112,7 @@ export class CommentList extends Component<PropsType, StateType> {
 				drawerMobile: false,
 				unsavedIds: [],
 				endDate: preloadedCommentsData.consultationState.endDate,
-				enableOrganisationalCommentingFeature,
-				allowOrganisationCodeLogin: (preloadedCommentsData.consultationState.consultationIsOpen && enableOrganisationalCommentingFeature),
+				allowOrganisationCodeLogin: preloadedCommentsData.consultationState.consultationIsOpen,
 			};
 		}
 	}
@@ -135,7 +130,7 @@ export class CommentList extends Component<PropsType, StateType> {
 					shouldShowCommentsTab: response.data.consultationState.shouldShowCommentsTab,
 					shouldShowQuestionsTab: response.data.consultationState.shouldShowQuestionsTab,
 					endDate: response.data.consultationState.endDate,
-					allowOrganisationCodeLogin: (response.data.consultationState.consultationIsOpen && this.state.enableOrganisationalCommentingFeature),
+					allowOrganisationCodeLogin: response.data.consultationState.consultationIsOpen,
 				});
 			}.bind(this))
 			.catch(err => console.log("load comments in commentlist " + err));
@@ -430,7 +425,7 @@ export class CommentList extends Component<PropsType, StateType> {
 														currentURL={this.props.match.url}
 														signInURL={contextValue.signInURL}
 														registerURL={contextValue.registerURL}
-														allowOrganisationCodeLogin={this.state.allowOrganisationCodeLogin}
+														allowOrganisationCodeLogin={(this.state.allowOrganisationCodeLogin && contextValue.organisationalCommentingFeature)}
 													/>
 												)}
 
@@ -484,3 +479,4 @@ export class CommentList extends Component<PropsType, StateType> {
 }
 
 export default withRouter(CommentList);
+CommentList.contextType = UserContext;
