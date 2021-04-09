@@ -55,6 +55,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 		let isOrganisationCommenter = false;
 		let organisationName = null;
 		let isAuthorised = preloadSource ? preloadSource.isAuthorised : false;
+		let isLead = false;
 
 		if (userSessionParameters.sessionCookieExistsForThisConsultation){
 			const preloadedUserSessionData = preload(
@@ -71,6 +72,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 				isOrganisationCommenter = preloadedUserSessionData.valid;
 				isAuthorised = isAuthorised || preloadedUserSessionData.valid ; //you could be authorised by idam or by organisation session cookie.
 				organisationName = preloadedUserSessionData.organisationName;
+				isLead = preloadedUserSessionData.isLead;
 			}
 		}
 
