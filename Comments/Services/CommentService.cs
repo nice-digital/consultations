@@ -238,6 +238,9 @@ namespace Comments.Services
 
                 foreach (var question in commentsAndQuestions.Questions)
                 {
+                    if (question.Show == false) //if other filters have already excluded this question from showing we don't need to process its answers
+                        break;
+
                     question.Show= false; //don't show question unless we have answer that match filter
                     foreach (var answer in question.Answers)
                     {
