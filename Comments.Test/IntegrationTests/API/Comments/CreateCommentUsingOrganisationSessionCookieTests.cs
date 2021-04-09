@@ -31,7 +31,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
 		{
 			//Arrange
 			const int consultationId = 1;
-			var comment = new ViewModels.Comment(1, $"consultations://./consultation/{consultationId}/document/1/chapter/introduction", null, null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty.ToString(), "comment text", 1, show: true, section: null);
+			var comment = new ViewModels.Comment(1, $"consultations://./consultation/{consultationId}/document/1/chapter/introduction", null, null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty.ToString(), "comment text", 1, show: true, sectionHeader: null, sectionNumber: null);
 
 			var builder = _server.CreateRequest("/consultations/api/Comment");
 
@@ -53,7 +53,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
 		public async Task Create_Comment_With_Valid_Organisation_Session_Cookie_Returns_Correctly()
 		{
 			//Arrange
-			var comment = new Comment(1, $"consultations://./consultation/{_consultationId}/document/1/chapter/introduction", null, null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty.ToString(), "comment text", 1, show: true, section: null);
+			var comment = new Comment(1, $"consultations://./consultation/{_consultationId}/document/1/chapter/introduction", null, null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty.ToString(), "comment text", 1, show: true, sectionHeader: null, sectionNumber: null);
 
 			var builder = _server.CreateRequest("/consultations/api/Comment");
 
@@ -87,7 +87,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
 		{
 			//Arrange
 			const int consultationId = 1;
-			var comment = new ViewModels.Comment(1, $"consultations://./consultation/2/document/1/chapter/introduction", null, null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty.ToString(), "comment text", 1, show: true, section: null);
+			var comment = new ViewModels.Comment(1, $"consultations://./consultation/2/document/1/chapter/introduction", null, null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty.ToString(), "comment text", 1, show: true, sectionHeader: null, sectionNumber: null);
 
 			var builder = _server.CreateRequest("/consultations/api/Comment");
 

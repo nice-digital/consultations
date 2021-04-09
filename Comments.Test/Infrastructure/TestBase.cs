@@ -232,7 +232,7 @@ namespace Comments.Test.Infrastructure
 			{
 				var sourceURI = ConsultationsUri.CreateConsultationURI(session.Key);
 
-				var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
+				var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null, null);
 				context.Location.Add(location);
 				context.SaveChanges();
 
@@ -265,7 +265,7 @@ namespace Comments.Test.Infrastructure
         }
         public int AddLocation(string sourceURI, ConsultationsContext passedInContext = null, string order = "0")
         {
-            var location = new Location(sourceURI, null, null, null, null, null, null, order, null, null, null);
+            var location = new Location(sourceURI, null, null, null, null, null, null, order, null, null, null, null);
             if (passedInContext != null)
             {
                 passedInContext.Location.Add(location);

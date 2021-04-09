@@ -386,7 +386,7 @@ namespace Comments.Test.UnitTests
 			var userService = FakeUserService.Get(isAuthenticated: false, displayName: null, userId: null, organisationUserId: organisationUserId);
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var locationId = AddLocation(sourceURI, _context, "001.001.000.000");
-			var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
+			var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null, null);
 			var commentText = "A comment";
 			var comments = new List<Models.Comment> { new Models.Comment(locationId, null, commentText, null, location, 3, null, organisationUserId: organisationUserId) };
 			comments.First().SubmissionComment.Add(new SubmissionComment(1, 1));
@@ -410,12 +410,12 @@ namespace Comments.Test.UnitTests
 				rows.Count.ShouldBe(4);
 
 				var headerRow = rows[2].ItemArray;
-				headerRow.Length.ShouldBe(15);
+				headerRow.Length.ShouldBe(16);
 
 				headerRow[1].ToString().ShouldBe("Email Address");
 
 				var commentRow = rows[3].ItemArray;
-				commentRow[7].ShouldBe(commentText);
+				commentRow[8].ShouldBe(commentText);
 				commentRow[1].ShouldBe("bob@bob.com");
 			}
 		}
@@ -430,7 +430,7 @@ namespace Comments.Test.UnitTests
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Sarah Jane Smith", userId: userId, organisationIdUserIsLeadOf: 1, emailAddress: "sarah@tardis.gov");
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var locationId = AddLocation(sourceURI, _context, "001.001.000.000");
-			var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
+			var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null, null);
 			var commentText = "A comment";
 			var comments = new List<Models.Comment> { new Models.Comment(locationId, null, commentText, null, location, 2, null, organisationUserId: organisationUserId, parentCommentId: 1) };
 			comments.First().SubmissionComment.Add(new SubmissionComment(1, 1));
@@ -454,12 +454,12 @@ namespace Comments.Test.UnitTests
 				rows.Count.ShouldBe(4);
 
 				var headerRow = rows[2].ItemArray;
-				headerRow.Length.ShouldBe(15);
+				headerRow.Length.ShouldBe(16);
 
 				headerRow[1].ToString().ShouldBe("Email Address");
 
 				var commentRow = rows[3].ItemArray;
-				commentRow[7].ShouldBe(commentText);
+				commentRow[8].ShouldBe(commentText);
 				commentRow[1].ShouldBe("sarah@tardis.gov");
 			}
 		}
@@ -671,7 +671,7 @@ namespace Comments.Test.UnitTests
 
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var locationId = AddLocation(sourceURI, _context, "001.001.000.000");
-			var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
+			var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null, null);
 			var commentText = "A comment";
 			var comments = new List<Models.Comment>
 			{
@@ -706,16 +706,16 @@ namespace Comments.Test.UnitTests
 				rows.Count.ShouldBe(5);
 
 				var headerRow = rows[2].ItemArray;
-				headerRow.Length.ShouldBe(15);
+				headerRow.Length.ShouldBe(16);
 
 				headerRow[1].ToString().ShouldBe("Email Address");
 
 				var firstCommentRow = rows[3].ItemArray;
-				firstCommentRow[7].ShouldBe(commentText);
+				firstCommentRow[8].ShouldBe(commentText);
 				firstCommentRow[1].ShouldBe("luke@smith.com");
 
 				var secondCommentRow = rows[4].ItemArray;
-				secondCommentRow[7].ShouldBe(commentText);
+				secondCommentRow[8].ShouldBe(commentText);
 				secondCommentRow[1].ShouldBe("mickey@smith.com");
 			}
 		}
@@ -733,7 +733,7 @@ namespace Comments.Test.UnitTests
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Sarah Jane Smith", userId: userId, organisationIdUserIsLeadOf: 1, emailAddress: "sarah@tardis.gov");
 			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 			var locationId = AddLocation(sourceURI, _context, "001.001.000.000");
-			var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
+			var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null, null);
 			var commentText = new string('A', commentLength);
 			var comments = new List<Models.Comment> { new Models.Comment(locationId, null, commentText, null, location, 2, null, organisationUserId: organisationUserId, parentCommentId: 1) };
 			comments.First().SubmissionComment.Add(new SubmissionComment(1, 1));
@@ -760,11 +760,11 @@ namespace Comments.Test.UnitTests
 				rows.Count.ShouldBe(4 + numberOfRowsAtLimit);
 
 				var commentRow1 = rows[3].ItemArray;
-				commentRow1[7].ToString().Length.ShouldBe(excelCellCharacterLimit);
+				commentRow1[8].ToString().Length.ShouldBe(excelCellCharacterLimit);
 
 				var lastRow = 3 + numberOfRowsAtLimit;
 				var commentRow2 = rows[lastRow].ItemArray;
-				commentRow2[7].ToString().Length.ShouldBe(commentLength - (numberOfRowsAtLimit * excelCellCharacterLimit)  + (numberOfRowsAtLimit * "Comment continued... ".Length));
+				commentRow2[8].ToString().Length.ShouldBe(commentLength - (numberOfRowsAtLimit * excelCellCharacterLimit)  + (numberOfRowsAtLimit * "Comment continued... ".Length));
 			}
 		}
 	}
