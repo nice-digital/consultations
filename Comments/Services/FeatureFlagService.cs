@@ -24,9 +24,14 @@ namespace Comments.Services
         {
             var featureFlags = new List<KeyValuePair<string, bool>>();
 
-            featureFlags.Add(new KeyValuePair<string, bool>(Constants.Features.OrganisationalCommenting, await _featureManager.IsEnabledAsync(Constants.Features.OrganisationalCommenting)));
-            featureFlags.Add(new KeyValuePair<string, bool>(Constants.Features.IndevUsingIDAMAuth, await _featureManager.IsEnabledAsync(Constants.Features.IndevUsingIDAMAuth)));
+            var flags = typeof(Constants.Features).GetFields();
 
+            foreach (var flag in flags)
+            {
+                var featureFlag = flag.Name.ToString();
+                featureFlags.Add(new KeyValuePair<string, bool>(featureFlag, await _featureManager.IsEnabledAsync(featureFlag)));
+            }
+            
             return featureFlags;
 		}
 	}
