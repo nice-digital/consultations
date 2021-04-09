@@ -470,12 +470,13 @@ export class Document extends Component<PropsType, StateType> {
 										consultationState={this.state.consultationData.consultationState}
 										allowRegisterOrganisationLeadLink={this.state.enableOrganisationalCommentingFeature}/>
 									<UserContext.Consumer>
-										{(contextValue: any) => contextValue.isOrganisationCommenter && !contextValue.isLead ?
+										{(contextValue: ContextType) => contextValue.isOrganisationCommenter && !contextValue.isLead ?
 											<Alert type="info" role="alert">
 												<p>You are commenting on behalf of {contextValue.organisationName}.</p>
-												<p>When you submit your response it will be submitted to the organisational lead at {contextValue.organisationName}.</p>
+												<p>When you submit your response it will be submitted to the organisational lead at {contextValue.organisationName}. <strong>On submission your email address and responses will be visible to other members or associates of your organisation who are using the same commenting code.</strong></p>
 											</Alert>
-											: /* if !contextValue.isOrganisationCommenter... */ null}
+											: null
+										}
 									</UserContext.Consumer>
 									{this.state.allowComments &&
 									<button

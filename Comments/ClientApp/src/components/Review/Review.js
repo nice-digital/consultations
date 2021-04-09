@@ -273,7 +273,7 @@ export class Review extends Component<PropsType, StateType> {
 	}
 
 	componentDidMount() {
-		if (!this.state.hasInitialData) { // if this statement is true then we know we've come from another page 
+		if (!this.state.hasInitialData) { // if this statement is true then we know we've come from another page
 			this.loadDataAndUpdateState(() => {
 				pullFocusByQuerySelector("#root");
 			});
@@ -414,7 +414,7 @@ export class Review extends Component<PropsType, StateType> {
 	};
 
 	fieldsChangeHandler = (e: SyntheticInputEvent<*>) => {
-		if (e.target.type == "radio") {
+		if (e.target.type === "radio") {
 			let value = e.target.value;
 			if (e.target.value === "true") value = true;
 			if (e.target.value === "false") value = false;
@@ -478,7 +478,7 @@ export class Review extends Component<PropsType, StateType> {
 	};
 
 	getAppliedFilters(): ReviewAppliedFilterType[] {
-		const mapOptions = 
+		const mapOptions =
 		(group: ReviewFilterGroupType) => group.options
 			.filter(opt => opt.isSelected)
 			.map(opt => ({
@@ -529,7 +529,7 @@ export class Review extends Component<PropsType, StateType> {
 									}
 
 									return (
-										!contextValue.isAuthorised ? 
+										!contextValue.isAuthorised ?
 											<LoginBannerWithRouter
 												signInButton={true}
 												currentURL={this.props.match.url}
@@ -537,7 +537,7 @@ export class Review extends Component<PropsType, StateType> {
 												registerURL={contextValue.registerURL}
 												allowOrganisationCodeLogin={false}
 												orgFieldName="review"
-											/> : 
+											/> :
 											<main>
 												<div className="page-header">
 													<Header
@@ -608,7 +608,6 @@ export class Review extends Component<PropsType, StateType> {
 																			return (
 																				<CommentBox
 																					readOnly={!this.state.allowComments || this.state.submittedDate}
-																					isVisible={this.props.isVisible}
 																					key={comment.commentId}
 																					unique={`Comment${comment.commentId}`}
 																					comment={comment}

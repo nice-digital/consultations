@@ -1,0 +1,82 @@
+{
+  "comments": [],
+  "questions": [
+    {
+      "questionId": 55,
+      "questionText": "Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.",
+      "questionTypeId": 17,
+      "lastModifiedByUserId": "auth0|00000000-0000-0000-0000-000000000000",
+      "lastModifiedDate": "2018-10-01T14:53:08.947",
+      "questionType": {
+        "questionTypeId": 17,
+        "type": "Text",
+        "description": "A text question requiring a text answer.",
+        "hasTextAnswer": true,
+        "hasBooleanAnswer": false
+      },
+      "answers": [],
+      "locationId": 760,
+      "sourceURI": "consultations://./consultation/227",
+      "htmlElementID": null,
+      "rangeStart": null,
+      "rangeStartOffset": null,
+      "rangeEnd": null,
+      "rangeEndOffset": null,
+      "quote": null,
+      "commentOn": "Consultation",
+      "commentOnEnum": 0,
+      "documentId": null,
+      "show": true,
+      "order": "227.000.000",
+      "section": null
+    },
+    {
+      "questionId": 56,
+      "questionText": "Would implementation of any of the draft recommendations have significant cost implications?",
+      "questionTypeId": 17,
+      "lastModifiedByUserId": "auth0|00000000-0000-0000-0000-000000000000",
+      "lastModifiedDate": "2018-10-01T14:53:08.95",
+      "questionType": {
+        "questionTypeId": 17,
+        "type": "Text",
+        "description": "A text question requiring a text answer.",
+        "hasTextAnswer": true,
+        "hasBooleanAnswer": false
+      },
+      "answers": [],
+      "locationId": 761,
+      "sourceURI": "consultations://./consultation/227/document/1",
+      "htmlElementID": null,
+      "rangeStart": null,
+      "rangeStartOffset": null,
+      "rangeEnd": null,
+      "rangeEndOffset": null,
+      "quote": null,
+      "commentOn": "Document",
+      "commentOnEnum": 1,
+      "documentId": 1,
+      "show": true,
+      "order": "227.001.000",
+      "section": null
+    }
+  ],
+  "consultationState": {
+    "startDate": "2018-04-01T00:00:00",
+    "endDate": "2029-05-31T17:00:00",
+    "hasQuestions": false,
+    "hasUserSuppliedAnswers": false,
+    "hasUserSuppliedComments": false,
+    "submittedDate": null,
+    "consultationSupportsQuestions": false,
+    "consultationSupportsComments": false,
+    "documentIdsWhichSupportComments": [2, 2],
+    "consultationIsOpen": true,
+    "consultationHasNotStartedYet": false,
+    "consultationHasEnded": false,
+    "supportsSubmission": false,
+    "supportsDownload": false,
+    "shouldShowDrawer": true,
+    "shouldShowCommentsTab": true,
+    "shouldShowQuestionsTab": true
+  }
+}
