@@ -70,7 +70,7 @@ const transform = (node) => {
 export const getSectionNumberFromAnchor = (node) => {
 	if (node.children != null && node.children[0].data != null){
 		const chapterOrSectionText = node.children[0].data;
-		const regex = /^([\d\.]*)/;
+		const regex = /^([\d.]*)/;
 		const matches = chapterOrSectionText.match(regex);
 		if (matches !== null && matches[0] !== ""){
 			return matches[0];	
