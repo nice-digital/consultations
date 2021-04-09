@@ -234,7 +234,7 @@ namespace Comments.Services
 			var commenters = commentersToFilter?.ToList() ?? new List<string>(); ;
 			if (commenters.Any())
 			{
-				commentsAndQuestions.Comments.ForEach(c => c.Show = (!c.Show || c.CommenterEmail.Length == 0) ? false : commenters.Contains(c.CommenterEmail, StringComparer.OrdinalIgnoreCase));
+				commentsAndQuestions.Comments.ForEach(c => c.Show = (!c.Show || (c.CommenterEmail != null && c.CommenterEmail.Length == 0)) ? false : commenters.Contains(c.CommenterEmail, StringComparer.OrdinalIgnoreCase));
 
                 foreach (var question in commentsAndQuestions.Questions)
                 {
