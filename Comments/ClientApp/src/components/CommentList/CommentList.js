@@ -170,10 +170,11 @@ export class CommentList extends Component<PropsType, StateType> {
 	};
 
 	newComment = (e: Event, newComment: CommentType) => {
+
 		if ((typeof(newComment.order) === "undefined" || (newComment.order === null)) && e !== null) {
 			///these values are already set when user has selected text. when they've clicked a button though they'll be unset.
 			newComment.order = getElementPositionWithinDocument(e.currentTarget);
-			newComment.section = getSectionTitle(e.currentTarget);
+			newComment.sectionHeader = getSectionTitle(e.currentTarget);
 		}
 
 		this.setState({

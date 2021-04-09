@@ -77,7 +77,7 @@ export class Selection extends Component<PropsType, StateType> {
 				commentText: "",
 				commentOn: "Selection",
 				order: getElementPositionWithinDocument(selectionRange.commonAncestorContainer.parentNode) + "." + selectionRange.startOffset.toString(),
-				section: getSectionTitle(selectionRange.commonAncestorContainer.parentNode),
+				sectionHeader: getSectionTitle(selectionRange.commonAncestorContainer.parentNode),
 				sectionNumber: sectionNumber,
 			};
 		} catch (error) {
