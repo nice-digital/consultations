@@ -1,9 +1,7 @@
-﻿using Comments.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Comments.Common;
 using Microsoft.FeatureManagement;
 using System.Threading.Tasks;
-using Microsoft.FeatureManagement.Mvc;
 
 namespace Comments.Services
 {
