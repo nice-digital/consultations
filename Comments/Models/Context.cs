@@ -1019,22 +1019,24 @@ namespace Comments.Models
                     .ThenInclude(ou => ou.OrganisationAuthorisation)
                 .IgnoreQueryFilters()
                 .Where(c => (
-                            (c.Location.SourceURI.Contains($"{sourceURI}/") || c.Location.SourceURI.Equals(sourceURI))
-                            && c.StatusId == (int)StatusName.SubmittedToLead)
-                            && c.OrganisationUser.OrganisationAuthorisation != null
+                                (c.Location.SourceURI.Contains($"{sourceURI}/") || c.Location.SourceURI.Equals(sourceURI))
+                                && c.StatusId == (int)StatusName.SubmittedToLead)
+                                && c.OrganisationUser.OrganisationAuthorisation != null
+                                && c.OrganisationUser.OrganisationAuthorisation.OrganisationId.Equals(organisationId)
                             )
-                .Count(c => c.OrganisationUser.OrganisationAuthorisation.OrganisationId.Equals(organisationId));
+                .Count();
 
             var answers = Answer
                 .Include(a => a.OrganisationUser)
                     .ThenInclude(ou => ou.OrganisationAuthorisation)
                 .IgnoreQueryFilters()
                 .Where(a => (
-                            (a.Question.Location.SourceURI.Contains($"{sourceURI}/") || a.Question.Location.SourceURI.Equals(sourceURI))
-                            && a.StatusId == (int)StatusName.SubmittedToLead)
-                            && a.OrganisationUser.OrganisationAuthorisation != null
+                                (a.Question.Location.SourceURI.Contains($"{sourceURI}/") || a.Question.Location.SourceURI.Equals(sourceURI))
+                                && a.StatusId == (int)StatusName.SubmittedToLead)
+                                && a.OrganisationUser.OrganisationAuthorisation != null
+                                && a.OrganisationUser.OrganisationAuthorisation.OrganisationId.Equals(organisationId)
                             )
-                .Count(a => a.OrganisationUser.OrganisationAuthorisation.OrganisationId.Equals(organisationId));
+                .Count();
 
             return comments + answers;
         }
