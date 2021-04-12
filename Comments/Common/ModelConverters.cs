@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace Comments.Common
@@ -16,5 +16,5 @@ namespace Comments.Common
 		    }
 		    return (commentsData, questionsData);
 	    }
-	}
+    }
 }

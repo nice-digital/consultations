@@ -59,6 +59,9 @@ type StateType = {
 	endDate: string,
 	enableOrganisationalCommentingFeature: boolean,
 	allowOrganisationCodeLogin: boolean,
+	isAuthorised: boolean,
+	otherUsersComments: Array<CommentType>,
+	otherUsersQuestions: Array<QuestionType>,
 	consultationStatus: string,
 };
 
@@ -82,6 +85,9 @@ export class CommentList extends Component<PropsType, StateType> {
 			endDate: "",
 			enableOrganisationalCommentingFeature: false,
 			allowOrganisationCodeLogin: false,
+			isAuthorised: false,
+			otherUsersComments: [],
+			otherUsersQuestions: [],
 			consultationStatus: "",
 		};
 
@@ -93,7 +99,7 @@ export class CommentList extends Component<PropsType, StateType> {
 
 		const enableOrganisationalCommentingFeature = ((preloadedData && preloadedData.organisationalCommentingFeature) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["organisationalCommentingFeature"]));
 
-		const preloadedCommentsData = preload(
+		const preloadedCommentsForCurrentUser = preload(
 			this.props.staticContext,
 			"comments",
 			[],
@@ -101,33 +107,66 @@ export class CommentList extends Component<PropsType, StateType> {
 			preloadedData,
 		);
 
-		if (preloadedCommentsData) {
-			let allowComments = preloadedCommentsData.consultationState.consultationIsOpen && !preloadedCommentsData.consultationState.submittedDate;
-			let consultationStatus = preloadedCommentsData.consultationState.consultationIsOpen ? "open" :
-					preloadedCommentsData.consultationState.consultationHasNotStartedYet ? "upcoming" :	"closed";
+		if (preloadedCommentsForCurrentUser) {
+			let allowComments = preloadedCommentsForCurrentUser.consultationState.consultationIsOpen && !preloadedCommentsForCurrentUser.consultationState.submittedDate;
+			let consultationStatus = preloadedCommentsForCurrentUser.consultationState.consultationIsOpen ? "open" :
+				preloadedCommentsForCurrentUser.consultationState.consultationHasNotStartedYet ? "upcoming" :	"closed";
+
 			this.state = {
-				comments: preloadedCommentsData.comments,
-				questions: preloadedCommentsData.questions,
+				comments: preloadedCommentsForCurrentUser.comments,
+				questions: preloadedCommentsForCurrentUser.questions,
 				loading: false,
 				allowComments: allowComments,
 				error: "",
 				initialDataLoaded: true,
-				viewComments: preloadedCommentsData.consultationState.shouldShowCommentsTab,
-				shouldShowDrawer: preloadedCommentsData.consultationState.shouldShowDrawer,
-				shouldShowCommentsTab: preloadedCommentsData.consultationState.shouldShowCommentsTab,
-				shouldShowQuestionsTab: preloadedCommentsData.consultationState.shouldShowQuestionsTab,
+				viewComments: preloadedCommentsForCurrentUser.consultationState.shouldShowCommentsTab,
+				shouldShowDrawer: preloadedCommentsForCurrentUser.consultationState.shouldShowDrawer,
+				shouldShowCommentsTab: preloadedCommentsForCurrentUser.consultationState.shouldShowCommentsTab,
+				shouldShowQuestionsTab: preloadedCommentsForCurrentUser.consultationState.shouldShowQuestionsTab,
 				drawerOpen: false,
 				drawerMobile: false,
 				unsavedIds: [],
-				endDate: preloadedCommentsData.consultationState.endDate,
+				endDate: preloadedCommentsForCurrentUser.consultationState.endDate,
 				enableOrganisationalCommentingFeature,
-				allowOrganisationCodeLogin: (preloadedCommentsData.consultationState.consultationIsOpen && enableOrganisationalCommentingFeature),
+				allowOrganisationCodeLogin: (preloadedCommentsForCurrentUser.consultationState.consultationIsOpen && enableOrganisationalCommentingFeature),
+				otherUsersComments: [],
+				otherUsersQuestions: [],
 				consultationStatus,
 			};
 		}
+
+		const preloadedCommentsFromOtherCodeUsers = preload(
+			this.props.staticContext,
+			"commentsForOtherOrgCommenters",
+			[],
+			{sourceURI: this.props.match.url},
+			preloadedData,
+		);
+
+		if (preloadedCommentsFromOtherCodeUsers) {
+			this.state.otherUsersComments = preloadedCommentsFromOtherCodeUsers.comments;
+			this.state.otherUsersQuestions = preloadedCommentsFromOtherCodeUsers.questions;
+		}
 	}
 
-	loadComments() {
+	loadCommentsFromOtherCodeUsers = () => {
+		load("commentsForOtherOrgCommenters", undefined, [], {sourceURI: this.props.match.url}).then(
+			function(response) {
+				const otherUsersComments = response.data.comments;
+				const otherUsersQuestions = response.data.questions;
+
+				this.setState({
+					otherUsersComments,
+					otherUsersQuestions,
+					loading: false,
+				});
+			}.bind(this))
+			.catch(err => console.log("load comments in commentlist " + err));
+	};
+
+	loadCommentsForCurrentUser = () => {
+		const isOrganisationCommenter = this.context.isOrganisationCommenter;
+
 		load("comments", undefined, [], {sourceURI: this.props.match.url}).then(
 			function(response) {
 				let allowComments = response.data.consultationState.consultationIsOpen && !response.data.consultationState.submittedDate;
@@ -136,7 +175,7 @@ export class CommentList extends Component<PropsType, StateType> {
 				this.setState({
 					comments: response.data.comments,
 					questions: response.data.questions,
-					loading: false,
+					loading: (isOrganisationCommenter ? true : false),
 					allowComments: allowComments,
 					shouldShowDrawer: response.data.consultationState.shouldShowDrawer,
 					shouldShowCommentsTab: response.data.consultationState.shouldShowCommentsTab,
@@ -145,29 +184,40 @@ export class CommentList extends Component<PropsType, StateType> {
 					allowOrganisationCodeLogin: (response.data.consultationState.consultationIsOpen && this.state.enableOrganisationalCommentingFeature),
 					consultationStatus,
 				});
+
+				if (isOrganisationCommenter) {
+					this.loadCommentsFromOtherCodeUsers();
+				}
 			}.bind(this))
 			.catch(err => console.log("load comments in commentlist " + err));
-	}
+	};
 
 	componentDidMount() {
+		const isAuthorised = this.context.isAuthorised;
+
 		if (!this.state.initialDataLoaded) {
-			this.loadComments();
+			this.loadCommentsForCurrentUser();
 		}
+
 		// We can't prerender whether we're on mobile cos SSR doesn't have a window
+		// sets isAuthorised from context
 		this.setState({
 			drawerMobile: this.isMobile(),
+			isAuthorised,
 		});
 	}
 
 	componentDidUpdate(prevProps: PropsType) {
-		const oldRoute = prevProps.location.pathname + prevProps.location.search;
-		const newRoute = this.props.location.pathname + this.props.location.search;
-		if (oldRoute !== newRoute) {
+		const routeChanged = (prevProps.location.pathname + prevProps.location.search) !== (this.props.location.pathname + this.props.location.search);
+		const authorisationChanged = this.state.isAuthorised !== this.context.isAuthorised;
+
+		if (routeChanged || authorisationChanged) {
 			this.setState({
 				loading: true,
 				unsavedIds: [],
+				isAuthorised: this.context.isAuthorised,
 			});
-			this.loadComments();
+			this.loadCommentsForCurrentUser();
 		}
 	}
 
@@ -399,7 +449,7 @@ export class CommentList extends Component<PropsType, StateType> {
 										{contextValue.isOrganisationCommenter && !contextValue.isLead &&
 											<Alert type="info" role="alert">
 												<p>You are commenting on behalf of {contextValue.organisationName}.</p>
-												<p>When you submit your response it will be submitted to the organisational lead at {contextValue.organisationName}.</p>
+												<p>When you submit your response it will be submitted to the organisational lead at {contextValue.organisationName}. <strong>On submission your email address and responses will be visible to other members or associates of your organisation who are using the same commenting code.</strong></p>
 											</Alert>
 										}
 
@@ -414,7 +464,7 @@ export class CommentList extends Component<PropsType, StateType> {
 											<Fragment>
 												{contextValue.isAuthorised ? (
 													<div className={`${this.state.viewComments ? "show" : "hide"}`}>
-														{this.state.comments.length === 0 ? <p>No comments yet</p> :
+														{(this.state.comments.length === 0 && this.state.otherUsersComments.length === 0) ? <p>No comments yet</p> :
 															<ul className="CommentList list--unstyled mt--0">
 																{this.state.comments.map((comment) => {
 																	return (
@@ -424,6 +474,19 @@ export class CommentList extends Component<PropsType, StateType> {
 																			key={comment.commentId}
 																			unique={`Comment${comment.commentId}`}
 																			comment={comment}
+																			saveHandler={this.saveCommentHandler}
+																			deleteHandler={this.deleteCommentHandler}
+																		/>
+																	);
+																})}
+																{this.state.otherUsersComments.map((otherUsersComment) => {
+																	return (
+																		<CommentBox
+																			updateUnsavedIds={this.updateUnsavedIds}
+																			readOnly={true}
+																			key={otherUsersComment.commentId}
+																			unique={`Comment${otherUsersComment.commentId}`}
+																			comment={otherUsersComment}
 																			saveHandler={this.saveCommentHandler}
 																			deleteHandler={this.deleteCommentHandler}
 																		/>
@@ -458,6 +521,12 @@ export class CommentList extends Component<PropsType, StateType> {
 														{this.state.questions.map((question) => {
 															const isUnsaved = this.state.unsavedIds.includes(`${question.questionId}q`);
 
+															let matchingQuestion = this.state.otherUsersQuestions.find((otherUsersQuestion) => {
+																return otherUsersQuestion.questionId === question.questionId;
+															});
+
+															const otherUsersAnswers = matchingQuestion ? matchingQuestion.answers : [];
+
 															return (
 																<Question
 																	isUnsaved={isUnsaved}
@@ -466,6 +535,7 @@ export class CommentList extends Component<PropsType, StateType> {
 																	key={question.questionId}
 																	unique={`Comment${question.questionId}`}
 																	question={question}
+																	otherUsersAnswers={otherUsersAnswers}
 																	saveAnswerHandler={this.saveAnswerHandler}
 																	deleteAnswerHandler={this.deleteAnswerHandler}
 																	showAnswer={contextValue.isAuthorised}
@@ -489,3 +559,4 @@ export class CommentList extends Component<PropsType, StateType> {
 }
 
 export default withRouter(CommentList);
+CommentList.contextType = UserContext;
