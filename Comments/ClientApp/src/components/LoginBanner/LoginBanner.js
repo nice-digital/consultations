@@ -1,5 +1,5 @@
 // @flow
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { DebounceInput } from "react-debounce-input";
 import queryString from "query-string";
@@ -17,6 +17,9 @@ type PropsType = {
 	location: PropTypes.object.isRequired,
 	allowOrganisationCodeLogin: boolean,
 	orgFieldName: string, //the organisation text input needs a unique name, however the login banner will be on the page twice. so passing in a unique name
+	codeLoginOnly: boolean,
+	title: string,
+	showBorder: boolean,
 }
 
 type OrganisationCode = {
@@ -181,12 +184,19 @@ export class LoginBanner extends Component<PropsType, StateType> {
 	render(){
 		const limitWidthOfButton = !this.props.signInButton; //the sign-in button isn't shown when we're trying to save space.
 
+		const codeLoginOnly = this.props.codeLoginOnly ?? false;
+		const title = this.props.title ?? "";
+		const showBorder = this.props.showBorder ?? true;
+
 		return (
-			<div className="panel panel-white mt--0 mb--0 sign-in-banner" data-qa-sel="sign-in-banner">
+			<div className={`${showBorder && "panel panel-white"} mt--0 mb--0 sign-in-banner`} data-qa-sel="sign-in-banner">
 				<div className="container">
 					<div className="LoginBanner" role="form">
+						{title !== "" &&
+							<h4>{title}</h4>
+						}
 						{this.props.allowOrganisationCodeLogin &&
-							<Fragment>
+							<>
 								<p>To comment as part of an organisation, please enter your organisation code:</p>
 								<div className={this.state.hasError ? "input input--error" : "input"}>
 									<DebounceInput
@@ -205,7 +215,7 @@ export class LoginBanner extends Component<PropsType, StateType> {
 									/>
 								</div>
 								{this.state.showAuthorisationOrganisation &&
-									<Fragment>
+									<>
 										<p>Confirm organisation name
 											<p><strong>{this.state.authorisationOrganisationFound.organisationName}</strong></p>
 										</p>
@@ -217,35 +227,43 @@ export class LoginBanner extends Component<PropsType, StateType> {
 												</div>
 											)}
 										</UserContext.Consumer>
-									</Fragment>
+									</>
 								}
-							</Fragment>
+							</>
 						}
-						{this.props.allowOrganisationCodeLogin && this.props.signInButton &&
-							<Fragment>
-								<p>If you don't have an organisation code, sign in to your NICE account.</p>
-								<p>
-									<a className="btn" href={this.props.signInURL} title="Sign in to your NICE account">Sign in</a>
-								</p>
-							</Fragment>
-						}
-						{this.props.allowOrganisationCodeLogin && !this.props.signInButton &&
-							<Fragment>If you don't have an organisation code, <a href={this.props.signInURL} title="Sign in to your NICE account">sign in to your NICE account.</a>&nbsp;&nbsp;</Fragment>
+						{!codeLoginOnly &&
+							<>
+								{this.props.allowOrganisationCodeLogin && this.props.signInButton &&
+									<>
+										<p>If you don't have an organisation code, sign in to your NICE account.</p>
+										<p>
+											<a className="btn" href={this.props.signInURL} title="Sign in to your NICE account">Sign in</a>
+										</p>
+									</>
+								}
+								{this.props.allowOrganisationCodeLogin && !this.props.signInButton &&
+									<>If you don't have an organisation code, <a href={this.props.signInURL} title="Sign in to your NICE account">sign in to your NICE account.</a>&nbsp;&nbsp;</>
+								}
+							</>
 						}
 						{!this.props.allowOrganisationCodeLogin &&
-							<Fragment>
-								<a href={this.props.signInURL} title="Sign in to your NICE account">Sign in to your NICE account</a> {this.props.signInText || "to comment on this consultation"}.{" "}
+							<>
+								<a href={this.props.signInURL} title="Sign in to your NICE account">Sign in to your NICE account</a> {this.props.signInText ?? "to comment on this consultation"}.{" "}
 								{this.props.signInButton &&
 									<p>
 										<a className="btn" href={this.props.signInURL} title="Sign in to your NICE account">Sign in</a>
 									</p>
 								}
-							</Fragment>
+							</>
 						}
-						Don't have an account?{" "}
-						<a href={this.props.registerURL} title="Register for a NICE account">
-							Register
-						</a>
+						{!codeLoginOnly &&
+							<>
+								Don't have an account?{" "}
+								<a href={this.props.registerURL} title="Register for a NICE account">
+									Register
+								</a>
+							</>
+						}
 					</div>
 				</div>
 			</div>

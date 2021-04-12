@@ -12,7 +12,6 @@ import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
 import { tagManager } from "../../helpers/tag-manager";
 import { ProcessDocumentHtml } from "../../document-processing/ProcessDocumentHtml";
-import LoginBannerWithRouter from "./../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
 import { Selection } from "../Selection/Selection";
 import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
@@ -47,7 +46,6 @@ type StateType = {
 	allowComments: boolean,
 	error: ErrorType,
 	enableOrganisationalCommentingFeature: boolean,
-	allowOrganisationCodeLogin: boolean,
 };
 
 type DocumentsType = Array<Object>;
@@ -71,7 +69,6 @@ export class Document extends Component<PropsType, StateType> {
 				message: null,
 			},
 			enableOrganisationalCommentingFeature: false,
-			allowOrganisationCodeLogin: false,
 		};
 
 		if (this.props) {
@@ -137,7 +134,6 @@ export class Document extends Component<PropsType, StateType> {
 						message: null,
 					},
 					enableOrganisationalCommentingFeature,
-					allowOrganisationCodeLogin: (preloadedConsultation.consultationState.consultationIsOpen && enableOrganisationalCommentingFeature),
 				};
 			}
 		}
@@ -215,7 +211,6 @@ export class Document extends Component<PropsType, StateType> {
 						loading: false,
 						hasInitialData: true,
 						allowComments: allowComments,
-						allowOrganisationCodeLogin: (data.consultationData.consultationState.consultationIsOpen && this.state.enableOrganisationalCommentingFeature),
 					}, () => {
 						tagManager({
 							event: "pageview",
@@ -441,16 +436,6 @@ export class Document extends Component<PropsType, StateType> {
 				<Helmet>
 					<title>{this.getPageTitle()}</title>
 				</Helmet>
-				<UserContext.Consumer>
-					{(contextValue: any) => !contextValue.isAuthorised ?
-						<LoginBannerWithRouter signInButton={false}
-												 currentURL={this.props.match.url}
-												 signInURL={contextValue.signInURL}
-												 registerURL={contextValue.registerURL}
-												 allowOrganisationCodeLogin={this.state.allowOrganisationCodeLogin}
-												 orgFieldName="document"/>
-						: /* if contextValue.isAuthorised... */ null}
-				</UserContext.Consumer>
 				{ this.state.allowComments &&
 					<Tutorial/> }
 				<div className="container">

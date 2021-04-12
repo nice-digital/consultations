@@ -21,8 +21,8 @@ import { tagManager } from "../../helpers/tag-manager";
 
 import { CommentBox } from "../CommentBox/CommentBox";
 import { Question } from "../Question/Question";
-import LoginBannerWithRouter from "../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
+import LoginPanelWithRouter from "../LoginPanel/LoginPanel";
 
 import { createQuestionPdf } from "../QuestionView/QuestionViewDocument";
 
@@ -58,7 +58,8 @@ type StateType = {
 	unsavedIds: Array<number>,
 	endDate: string,
 	enableOrganisationalCommentingFeature: boolean,
-	allowOrganisationCodeLogin: Boolean,
+	allowOrganisationCodeLogin: boolean,
+	consultationStatus: string,
 };
 
 export class CommentList extends Component<PropsType, StateType> {
@@ -81,6 +82,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			endDate: "",
 			enableOrganisationalCommentingFeature: false,
 			allowOrganisationCodeLogin: false,
+			consultationStatus: "",
 		};
 
 		let preloadedData = {};
@@ -101,6 +103,8 @@ export class CommentList extends Component<PropsType, StateType> {
 
 		if (preloadedCommentsData) {
 			let allowComments = preloadedCommentsData.consultationState.consultationIsOpen && !preloadedCommentsData.consultationState.submittedDate;
+			let consultationStatus = preloadedCommentsData.consultationState.consultationIsOpen ? "open" :
+					preloadedCommentsData.consultationState.consultationHasNotStartedYet ? "upcoming" :	"closed";
 			this.state = {
 				comments: preloadedCommentsData.comments,
 				questions: preloadedCommentsData.questions,
@@ -118,6 +122,7 @@ export class CommentList extends Component<PropsType, StateType> {
 				endDate: preloadedCommentsData.consultationState.endDate,
 				enableOrganisationalCommentingFeature,
 				allowOrganisationCodeLogin: (preloadedCommentsData.consultationState.consultationIsOpen && enableOrganisationalCommentingFeature),
+				consultationStatus,
 			};
 		}
 	}
@@ -126,6 +131,8 @@ export class CommentList extends Component<PropsType, StateType> {
 		load("comments", undefined, [], {sourceURI: this.props.match.url}).then(
 			function(response) {
 				let allowComments = response.data.consultationState.consultationIsOpen && !response.data.consultationState.submittedDate;
+				let consultationStatus = response.data.consultationState.consultationIsOpen ? "open" :
+					response.data.consultationState.consultationHasNotStartedYet ? "upcoming" :	"closed";
 				this.setState({
 					comments: response.data.comments,
 					questions: response.data.questions,
@@ -136,6 +143,7 @@ export class CommentList extends Component<PropsType, StateType> {
 					shouldShowQuestionsTab: response.data.consultationState.shouldShowQuestionsTab,
 					endDate: response.data.consultationState.endDate,
 					allowOrganisationCodeLogin: (response.data.consultationState.consultationIsOpen && this.state.enableOrganisationalCommentingFeature),
+					consultationStatus,
 				});
 			}.bind(this))
 			.catch(err => console.log("load comments in commentlist " + err));
@@ -379,13 +387,13 @@ export class CommentList extends Component<PropsType, StateType> {
 									<div data-qa-sel="comment-list-wrapper">
 
 										{contextValue.isAuthorised &&
-												<Link
-													to={`/${this.props.match.params.consultationId}/review`}
-													data-qa-sel="review-all-comments"
-													className="btn btn--cta mt--c">
-													Review and submit your response &nbsp;&nbsp;
-													<span className="icon icon--chevron-right" aria-hidden="true" />
-												</Link>
+											<Link
+												to={`/${this.props.match.params.consultationId}/review`}
+												data-qa-sel="review-all-comments"
+												className="btn btn--cta mt--c">
+												Review and submit your response &nbsp;&nbsp;
+												<span className="icon icon--chevron-right" aria-hidden="true" />
+											</Link>
 										}
 
 										{contextValue.isOrganisationCommenter && !contextValue.isLead &&
@@ -425,12 +433,9 @@ export class CommentList extends Component<PropsType, StateType> {
 														}
 													</div>
 												) : (
-													<LoginBannerWithRouter
-														signInButton={true}
-														currentURL={this.props.match.url}
-														signInURL={contextValue.signInURL}
-														registerURL={contextValue.registerURL}
+													<LoginPanelWithRouter
 														allowOrganisationCodeLogin={this.state.allowOrganisationCodeLogin}
+														consultationStatus={this.state.consultationStatus}
 													/>
 												)}
 
