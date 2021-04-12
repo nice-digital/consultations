@@ -9,7 +9,6 @@ import toJson from "enzyme-to-json";
 describe("[ClientApp] ", () => {
 	describe("Answer Component", () => {
 		const answerPropsWithAnswer = {
-			isVisible: true,
 			answer: answerWithAnswer,
 			readOnly: false,
 			saveHandler: jest.fn(),
@@ -22,7 +21,6 @@ describe("[ClientApp] ", () => {
 		};
 
 		const answerPropsWithoutAnswer = {
-			isVisible: true,
 			answer: answerWithoutAnswer,
 			readOnly: false,
 			saveHandler: jest.fn(),

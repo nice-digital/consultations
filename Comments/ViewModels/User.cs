@@ -72,6 +72,10 @@ namespace Comments.ViewModels
 
 		public IList<int> ValidatedOrganisationUserIds => ValidatedSessions != null ? ValidatedSessions.Select(session => session.OrganisationUserId).ToList() : new List<int>();
 
+		public IList<int> ValidatedOrganisationIds => ValidatedSessions != null
+			? ValidatedSessions.Select(session => session.OrganisationId).ToList()
+			: new List<int>();
+
 		public bool IsAuthenticatedByAccounts => (IsAuthenticatedByAnyMechanism && (AuthenticatedBy == AuthenticationMechanism.Accounts || AuthenticatedBy == AuthenticationMechanism.AccountsAndOrganisationCookie));
 
 		public bool IsAuthenticatedByOrganisationCookie => (IsAuthenticatedByAnyMechanism && (AuthenticatedBy == AuthenticationMechanism.OrganisationCookie || AuthenticatedBy == AuthenticationMechanism.AccountsAndOrganisationCookie));
