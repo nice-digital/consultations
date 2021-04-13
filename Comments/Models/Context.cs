@@ -1018,24 +1018,20 @@ namespace Comments.Models
                 .Include(c => c.OrganisationUser)
                     .ThenInclude(ou => ou.OrganisationAuthorisation)
                 .IgnoreQueryFilters()
-                .Where(c => (
-                                (c.Location.SourceURI.Contains($"{sourceURI}/") || c.Location.SourceURI.Equals(sourceURI))
+                .Where(c => ((c.Location.SourceURI.Contains($"{sourceURI}/") || c.Location.SourceURI.Equals(sourceURI))
                                 && c.StatusId == (int)StatusName.SubmittedToLead)
                                 && c.OrganisationUser.OrganisationAuthorisation != null
-                                && c.OrganisationUser.OrganisationAuthorisation.OrganisationId.Equals(organisationId)
-                            )
+                                && c.OrganisationUser.OrganisationAuthorisation.OrganisationId.Equals(organisationId))
                 .Count();
 
             var answers = Answer
                 .Include(a => a.OrganisationUser)
                     .ThenInclude(ou => ou.OrganisationAuthorisation)
                 .IgnoreQueryFilters()
-                .Where(a => (
-                                (a.Question.Location.SourceURI.Contains($"{sourceURI}/") || a.Question.Location.SourceURI.Equals(sourceURI))
+                .Where(a => ((a.Question.Location.SourceURI.Contains($"{sourceURI}/") || a.Question.Location.SourceURI.Equals(sourceURI))
                                 && a.StatusId == (int)StatusName.SubmittedToLead)
                                 && a.OrganisationUser.OrganisationAuthorisation != null
-                                && a.OrganisationUser.OrganisationAuthorisation.OrganisationId.Equals(organisationId)
-                            )
+                                && a.OrganisationUser.OrganisationAuthorisation.OrganisationId.Equals(organisationId))
                 .Count();
 
             return comments + answers;

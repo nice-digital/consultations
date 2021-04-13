@@ -535,7 +535,6 @@ namespace Comments.Test.UnitTests
 			AddComment(locationId, "Comment Text", null, (int)StatusName.SubmittedToLead, context, differentOrganisationUserId);
 			AddComment(LocationIdForDifferentConsulation, "Comment Text", null, (int)StatusName.SubmittedToLead, context, organisationUserId);
 
-
 			var questionId = AddQuestion(locationId, 99, "Question Text", context);
 			var QuestionIdForDifferentConsultation = AddQuestion(LocationIdForDifferentConsulation, 99, "Question Text", context);
 			AddAnswer(questionId, null, "Answer Text", (int)StatusName.SubmittedToLead, context, organisationUserId);
