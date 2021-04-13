@@ -3,6 +3,7 @@
 import React, { Component } from "react";
 import ReactMarkdown from "react-markdown";
 import { Answer } from "../Answer/Answer";
+import { UserContext } from "../../context/UserContext";
 
 type PropsType = {
 	staticContext?: any,
@@ -93,13 +94,20 @@ export class Question extends Component<PropsType> {
 				{this.props.isUnsaved &&
 					<p className="CommentBox__validationMessage">You have unsaved changes</p>
 				}
+				<UserContext.Consumer>
+					{(contextValue: ContextType) => {
+						return (
+							this.props.showAnswer && (
+								<>
+									{this.returnAnswers(answers)}
+									{!contextValue.isLead &&
+										this.returnAnswers(otherUsersAnswers, true)
+									}
+								</>
+							)
+						);}}
+				</UserContext.Consumer>
 
-				{this.props.showAnswer && (
-					<>
-						{this.returnAnswers(answers)}
-						{this.returnAnswers(otherUsersAnswers, true)}
-					</>
-				)}
 			</li>
 		);
 	}
