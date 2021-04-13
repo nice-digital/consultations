@@ -6,7 +6,6 @@ import { YesNoAnswer } from "./../AnswerTypes/YesNoAnswer/YesNoAnswer";
 
 type PropsType = {
 	staticContext?: any,
-	isVisible: boolean,
 	answer: AnswerType,
 	readOnly: boolean,
 	saveAnswerHandler: Function,
