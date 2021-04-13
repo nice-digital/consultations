@@ -12,6 +12,7 @@ export const Endpoints = {
 	previewchapter: "/api/PreviewChapter", // chapter content for a document in preview mode
 	comments: "/api/Comments", // list of comments for a given URI, restricted by current user
 	commentsreview: "/api/CommentsForReview", // list of comments for a given URI, restricted by current user
+	commentsForOtherOrgCommenters: "/api/CommentsForOtherOrganisationCommenters", // list of comments or a given URI, from other org commenters
 	editcomment: "/api/Comment/{0}", // edits an existing comment. id must be positive int, restricted by current user
 	newcomment: "/api/Comment", // creates a new comment. body of message contains comment in json, restricted by current user
 	editanswer: "/api/Answer/{0}", // edits an existing answer. id must be positive int, restricted by current user

@@ -18,6 +18,7 @@ namespace Comments.Services
     {
 	    Task<CommentsAndQuestions> GetCommentsAndQuestions(string relativeURL, IUrlHelper urlHelper);
 	    Task<ReviewPageViewModel> GetCommentsAndQuestionsForReview(string relativeURL, IUrlHelper urlHelper, ReviewPageViewModel model);
+	    OrganisationCommentsAndQuestions GetCommentsAndQuestionsFromOtherOrganisationCommenters(string relativeURL, IUrlHelper urlHelper);
 		(ViewModels.Comment comment, Validate validate) GetComment(int commentId);
         (int rowsUpdated, Validate validate) EditComment(int commentId, ViewModels.Comment comment);
         Task<(ViewModels.Comment comment, Validate validate)> CreateComment(ViewModels.Comment comment);
@@ -209,6 +210,25 @@ namespace Comments.Services
 			var consultationId = ConsultationsUri.ParseRelativeUrl(relativeURL).ConsultationId;
 			model.Filters = await GetFilterGroups(consultationId, commentsAndQuestions, model.Type, model.Document, model.Commenter);
 			return model;
+		}
+
+		public OrganisationCommentsAndQuestions GetCommentsAndQuestionsFromOtherOrganisationCommenters(string relativeURL, IUrlHelper urlHelper)
+		{
+			var user = _userService.GetCurrentUser();
+			
+			var consultationSourceURI = ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Consultation);
+			var sourceURIs = new List<string> { consultationSourceURI };
+			sourceURIs.Add(ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Document));
+			sourceURIs.Add(ConsultationsUri.ConvertToConsultationsUri(relativeURL, CommentOn.Chapter));
+
+			var collectedData = _context.GetOtherOrganisationUsersCommentsAndQuestionsForDocument(sourceURIs);
+
+            var convertedData =
+                ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(collectedData);
+
+            var data = new OrganisationCommentsAndQuestions(convertedData.questions, convertedData.comments);
+
+            return data;
 		}
 
 		/// <summary>

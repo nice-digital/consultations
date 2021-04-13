@@ -470,5 +470,44 @@ namespace Comments.Test.UnitTests
 			//Assert
 			OrgUser.EmailAddress.ShouldBe(emailAddress);
 		}
+
+		[Fact]
+		public void Get_Other_Org_Users_Comments()
+		{
+			// Arrange
+			ResetDatabase();
+			var commentText = Guid.NewGuid().ToString();
+			var myOrganisationId = 1;
+			var anotherOrganisationId = 2;
+			var myOrganisationUserId = 1;
+			var anotherOrganisationUserId = 2;
+			var sourceURI = "consultations://./consultation/1";
+
+			// My comment
+			var locationId = AddLocation(sourceURI);
+			AddComment(locationId, commentText, null, status: (int)StatusName.SubmittedToLead, organisationUserId: myOrganisationUserId, organisationId: myOrganisationId);
+
+			// Another user in my organisation's submitted comment
+			AddComment(locationId, commentText, null, status: (int)StatusName.SubmittedToLead, organisationUserId: anotherOrganisationUserId, organisationId: myOrganisationId);
+
+			// Another user in my organisation's draft comment
+			AddComment(locationId, commentText, null, status: (int)StatusName.Draft, organisationUserId: anotherOrganisationUserId, organisationId: myOrganisationId);
+
+			// A user from a different organisation's comment
+			AddComment(locationId, commentText, null, status: (int)StatusName.SubmittedToLead, organisationUserId: anotherOrganisationUserId, organisationId: anotherOrganisationId);
+
+			var sourceURIs = new List<string>
+			{
+				ConsultationsUri.ConvertToConsultationsUri(sourceURI, CommentOn.Consultation)
+			};
+
+			// Act
+			var userService = FakeUserService.Get(isAuthenticated: false, organisationUserId: myOrganisationUserId);
+			var consultationsContext = new ConsultationsContext(_options, userService, _fakeEncryption);
+			var results = consultationsContext.GetOtherOrganisationUsersCommentsAndQuestionsForDocument(sourceURIs);
+
+			//Assert
+			results.Count().ShouldBe(1);
+		}
 	}
 }
