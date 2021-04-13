@@ -497,7 +497,7 @@ export class CommentList extends Component<PropsType, StateType> {
 													</div>
 												) : (
 													<LoginPanelWithRouter
-														allowOrganisationCodeLogin={this.state.allowOrganisationCodeLogin}
+														enableOrganisationalCommentingFeature={this.state.enableOrganisationalCommentingFeature}
 														consultationStatus={this.state.consultationStatus}
 													/>
 												)}

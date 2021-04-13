@@ -6,7 +6,7 @@ import { UserContext } from "../../context/UserContext";
 import  LoginBannerWithRouter from "../LoginBanner/LoginBanner";
 
 type PropsType = {
-	allowOrganisationCodeLogin: boolean,
+	enableOrganisationalCommentingFeature: boolean,
 	consultationStatus: string,
 }
 
@@ -54,11 +54,11 @@ export class LoginPanel extends Component<PropsType, StateType> {
 
 	render() {
 		const { organisationalResponder, responderCode } = this.state;
-		const { allowOrganisationCodeLogin, consultationStatus } = this.props;
+		const { enableOrganisationalCommentingFeature } = this.props;
 
 		const showFirstScreen = (organisationalResponder === null);
 		const showSecondScreen = (organisationalResponder === true && (responderCode === null || responderCode === "code"));
-		const showLogin = (organisationalResponder === false || responderCode !== null || !allowOrganisationCodeLogin);
+		const showLogin = (organisationalResponder === false || responderCode !== null || !enableOrganisationalCommentingFeature);
 		const showBackLink = (!showFirstScreen);
 
 		const loginBannerProps = {
@@ -80,17 +80,17 @@ export class LoginPanel extends Component<PropsType, StateType> {
 		if (responderCode === "code") {
 			loginBannerProps.allowOrganisationCodeLogin = true;
 			loginBannerProps.codeLoginOnly = true;
-			loginBannerProps.title = "";
+			loginBannerProps.title = null;
 		}
 
-		if (!allowOrganisationCodeLogin) {
-			loginBannerProps.title = consultationStatus === "closed" ? "Closed for comments" : "Not yet open for comments";
-			loginBannerProps.signInText = "";
+		if (!enableOrganisationalCommentingFeature) {
+			loginBannerProps.title = null;
+			loginBannerProps.signInText = null;
 		}
 
 		return (
 			<>
-				{allowOrganisationCodeLogin &&
+				{enableOrganisationalCommentingFeature &&
 					<>
 						{showFirstScreen &&
 							<LoginSelectionOrg
@@ -113,7 +113,9 @@ export class LoginPanel extends Component<PropsType, StateType> {
 				}
 
 				{showBackLink &&
-					<button onClick={this.goBack}>Back</button>
+					<div className="container">
+						<span role="button" className="login-panel__back" tabIndex={0} onMouseDown={this.goBack}>Back</span>
+					</div>
 				}
 			</>
 		);
@@ -138,7 +140,7 @@ const LoginSelectionOrg = (props) => {
 	];
 
 	return (
-		<>
+		<div className="container">
 			<h3>Are you commenting as an individual or as part of an organisation?</h3>
 			<p>You will not be able to change how you comment later.</p>
 			<LoginSelectionRadio
@@ -147,7 +149,7 @@ const LoginSelectionOrg = (props) => {
 				currentlySelected={currentlySelected}
 				onChangeOption={onChangeOption}
 			/>
-		</>
+		</div>
 	);
 };
 
@@ -173,7 +175,7 @@ const LoginSelectionCode = (props) => {
 	];
 
 	return (
-		<>
+		<div className="container">
 			<h3>Do you have a code from your organisation?</h3>
 			<LoginSelectionRadio
 				name="responderCode"
@@ -181,7 +183,7 @@ const LoginSelectionCode = (props) => {
 				currentlySelected={currentlySelected}
 				onChangeOption={onChangeOption}
 			/>
-		</>
+		</div>
 	);
 };
 

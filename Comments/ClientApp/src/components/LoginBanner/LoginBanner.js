@@ -193,7 +193,7 @@ export class LoginBanner extends Component<PropsType, StateType> {
 				<div className="container">
 					<div className="LoginBanner" role="form">
 						{title !== "" &&
-							<h4>{title}</h4>
+							<h3>{title}</h3>
 						}
 						{this.props.allowOrganisationCodeLogin &&
 							<>

@@ -1,0 +1,7 @@
+.login-panel {
+  &__back {
+    @extend a;
+
+    cursor: pointer;
+  }
+}
