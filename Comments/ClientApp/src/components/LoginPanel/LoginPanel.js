@@ -114,7 +114,7 @@ export class LoginPanel extends Component<PropsType, StateType> {
 
 				{showBackLink &&
 					<div className="container">
-						<span role="button" className="login-panel__back" tabIndex={0} onMouseDown={this.goBack}>Back</span>
+						<span role="button" className="login-panel__back" tabIndex={0} onMouseDown={this.goBack}>&lt; Back</span>
 					</div>
 				}
 			</>

@@ -108,27 +108,38 @@ export class CommentList extends Component<PropsType, StateType> {
 		);
 
 		if (preloadedCommentsForCurrentUser) {
-			let allowComments = preloadedCommentsForCurrentUser.consultationState.consultationIsOpen && !preloadedCommentsForCurrentUser.consultationState.submittedDate;
-			let consultationStatus = preloadedCommentsForCurrentUser.consultationState.consultationIsOpen ? "open" :
-				preloadedCommentsForCurrentUser.consultationState.consultationHasNotStartedYet ? "upcoming" :	"closed";
+			const { comments, questions, consultationState } = preloadedCommentsForCurrentUser;
+			const {
+				consultationIsOpen,
+				submittedDate,
+				consultationHasNotStartedYet,
+				shouldShowDrawer,
+				shouldShowCommentsTab,
+				shouldShowQuestionsTab,
+				endDate,
+			} = consultationState;
+
+			const allowComments = consultationIsOpen && !submittedDate;
+			const consultationStatus = consultationIsOpen ? "open" :	consultationHasNotStartedYet ? "upcoming" :	"closed";
+			const shouldShowCommentsTabOverride = !shouldShowCommentsTab && !shouldShowQuestionsTab ? true : shouldShowCommentsTab;
 
 			this.state = {
-				comments: preloadedCommentsForCurrentUser.comments,
-				questions: preloadedCommentsForCurrentUser.questions,
+				comments,
+				questions,
 				loading: false,
-				allowComments: allowComments,
+				allowComments,
 				error: "",
 				initialDataLoaded: true,
-				viewComments: preloadedCommentsForCurrentUser.consultationState.shouldShowCommentsTab,
-				shouldShowDrawer: preloadedCommentsForCurrentUser.consultationState.shouldShowDrawer,
-				shouldShowCommentsTab: preloadedCommentsForCurrentUser.consultationState.shouldShowCommentsTab,
-				shouldShowQuestionsTab: preloadedCommentsForCurrentUser.consultationState.shouldShowQuestionsTab,
+				viewComments: shouldShowCommentsTabOverride, // why is this not set below?
+				shouldShowDrawer,
+				shouldShowCommentsTab: shouldShowCommentsTabOverride,
+				shouldShowQuestionsTab,
 				drawerOpen: true,
 				drawerMobile: false,
 				unsavedIds: [],
-				endDate: preloadedCommentsForCurrentUser.consultationState.endDate,
+				endDate,
 				enableOrganisationalCommentingFeature,
-				allowOrganisationCodeLogin: (preloadedCommentsForCurrentUser.consultationState.consultationIsOpen && enableOrganisationalCommentingFeature),
+				allowOrganisationCodeLogin: (consultationIsOpen && enableOrganisationalCommentingFeature),
 				otherUsersComments: [],
 				otherUsersQuestions: [],
 				consultationStatus,
@@ -169,19 +180,31 @@ export class CommentList extends Component<PropsType, StateType> {
 
 		load("comments", undefined, [], {sourceURI: this.props.match.url}).then(
 			function(response) {
-				let allowComments = response.data.consultationState.consultationIsOpen && !response.data.consultationState.submittedDate;
-				let consultationStatus = response.data.consultationState.consultationIsOpen ? "open" :
-					response.data.consultationState.consultationHasNotStartedYet ? "upcoming" :	"closed";
+				const { comments, questions, consultationState } = response.data;
+				const {
+					consultationIsOpen,
+					submittedDate,
+					consultationHasNotStartedYet,
+					shouldShowDrawer,
+					shouldShowCommentsTab,
+					shouldShowQuestionsTab,
+					endDate,
+				} = consultationState;
+
+				const allowComments = consultationIsOpen && !submittedDate;
+				const consultationStatus = consultationIsOpen ? "open" : consultationHasNotStartedYet ? "upcoming" : "closed";
+				const shouldShowCommentsTabOverride = !shouldShowCommentsTab && !shouldShowQuestionsTab ? true : shouldShowCommentsTab;
+
 				this.setState({
-					comments: response.data.comments,
-					questions: response.data.questions,
+					comments,
+					questions,
 					loading: (isOrganisationCommenter ? true : false),
-					allowComments: allowComments,
-					shouldShowDrawer: response.data.consultationState.shouldShowDrawer,
-					shouldShowCommentsTab: response.data.consultationState.shouldShowCommentsTab,
-					shouldShowQuestionsTab: response.data.consultationState.shouldShowQuestionsTab,
-					endDate: response.data.consultationState.endDate,
-					allowOrganisationCodeLogin: (response.data.consultationState.consultationIsOpen && this.state.enableOrganisationalCommentingFeature),
+					allowComments,
+					shouldShowDrawer,
+					shouldShowCommentsTab: shouldShowCommentsTabOverride,
+					shouldShowQuestionsTab,
+					endDate,
+					allowOrganisationCodeLogin: (consultationIsOpen && this.state.enableOrganisationalCommentingFeature),
 					consultationStatus,
 				});
 
@@ -350,10 +373,6 @@ export class CommentList extends Component<PropsType, StateType> {
 	};
 
 	render() {
-		if (!this.state.shouldShowDrawer) {
-			return null;
-		}
-
 		const a11yMessage = () => {
 			if (!this.state.drawerOpen) {
 				return "Comments and questions panel closed";
@@ -377,52 +396,52 @@ export class CommentList extends Component<PropsType, StateType> {
 								 className={this.drawerClassnames()}>
 					<div className="Drawer__controls">
 						{this.state.shouldShowCommentsTab &&
-						<button
-							data-qa-sel="open-commenting-panel"
-							id="js-drawer-toggleopen-comments"
-							className={`Drawer__control Drawer__control--comments ${(this.state.viewComments ? "active" : "active")}`}
-							onClick={() => this.handleClick("toggleOpenComments")}
-							aria-controls="comments-panel"
-							aria-haspopup="true"
-							aria-label={this.state.drawerOpen ? "Close the commenting panel" : "Open the commenting panel"}
-							tabIndex="0">
-							{!this.state.drawerMobile ?
-								<span>{(this.state.drawerOpen && this.state.viewComments ? "Close comments" : "Open comments")}</span>
-								:
-								<span
-									className={`icon ${
-										this.state.drawerOpen
-											? "icon--chevron-right"
-											: "icon--chevron-left"}`}
-									aria-hidden="true"
-									data-qa-sel="close-commenting-panel"
-								/>
-							}
-						</button>
+							<button
+								data-qa-sel="open-commenting-panel"
+								id="js-drawer-toggleopen-comments"
+								className={`Drawer__control Drawer__control--comments ${(this.state.viewComments ? "active" : "active")}`}
+								onClick={() => this.handleClick("toggleOpenComments")}
+								aria-controls="comments-panel"
+								aria-haspopup="true"
+								aria-label={this.state.drawerOpen ? "Close the commenting panel" : "Open the commenting panel"}
+								tabIndex="0">
+								{!this.state.drawerMobile ?
+									<span>{(this.state.drawerOpen && this.state.viewComments ? "Close comments" : "Open comments")}</span>
+									:
+									<span
+										className={`icon ${
+											this.state.drawerOpen
+												? "icon--chevron-right"
+												: "icon--chevron-left"}`}
+										aria-hidden="true"
+										data-qa-sel="close-commenting-panel"
+									/>
+								}
+							</button>
 						}
 						{this.state.shouldShowQuestionsTab &&
-						<button
-							data-qa-sel="open-questions-panel"
-							id="js-drawer-toggleopen-questions"
-							className={`Drawer__control Drawer__control--questions ${(this.state.viewComments ? "active" : "active")}`}
-							onClick={() => this.handleClick("toggleOpenQuestions")}
-							aria-controls="questions-panel"
-							aria-haspopup="true"
-							aria-label={this.state.drawerOpen ? "Close the questions panel" : "Open the questions panel"}
-							tabIndex="0">
-							{!this.state.drawerMobile ?
-								<span>{(this.state.drawerOpen && !this.state.viewComments ? "Close questions" : "Open questions")}</span>
-								:
-								<span
-									className={`icon ${
-										this.state.drawerOpen
-											? "icon--chevron-right"
-											: "icon--chevron-left"}`}
-									aria-hidden="true"
-									data-qa-sel="close-questions-panel"
-								/>
-							}
-						</button>
+							<button
+								data-qa-sel="open-questions-panel"
+								id="js-drawer-toggleopen-questions"
+								className={`Drawer__control Drawer__control--questions ${(this.state.viewComments ? "active" : "active")}`}
+								onClick={() => this.handleClick("toggleOpenQuestions")}
+								aria-controls="questions-panel"
+								aria-haspopup="true"
+								aria-label={this.state.drawerOpen ? "Close the questions panel" : "Open the questions panel"}
+								tabIndex="0">
+								{!this.state.drawerMobile ?
+									<span>{(this.state.drawerOpen && !this.state.viewComments ? "Close questions" : "Open questions")}</span>
+									:
+									<span
+										className={`icon ${
+											this.state.drawerOpen
+												? "icon--chevron-right"
+												: "icon--chevron-left"}`}
+										aria-hidden="true"
+										data-qa-sel="close-questions-panel"
+									/>
+								}
+							</button>
 						}
 					</div>
 					<div
