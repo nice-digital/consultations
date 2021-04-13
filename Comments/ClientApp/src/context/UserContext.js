@@ -27,6 +27,7 @@ type StateType = {
 	registerURL: string,
 	organisationName: string,
 	initialDataLoaded: boolean,
+	organisationalCommentingFeature: boolean,
 };
 
 export class UserProvider extends React.Component<PropsType, StateType> {
@@ -43,6 +44,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 			updateContext: this.updateContext,
 			organisationName: null,
 			initialDataLoaded: false,
+			organisationalCommentingFeature: false,
 		};
 
 		const isServerSideRender = (this.props.staticContext && this.props.staticContext.preload);
@@ -53,6 +55,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 		let isOrganisationCommenter = false;
 		let organisationName = null;
 		let isAuthorised = preloadSource ? preloadSource.isAuthorised : false;
+		let isLead = false;
 
 		if (userSessionParameters.sessionCookieExistsForThisConsultation){
 			const preloadedUserSessionData = preload(
@@ -69,6 +72,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 				isOrganisationCommenter = preloadedUserSessionData.valid;
 				isAuthorised = isAuthorised || preloadedUserSessionData.valid ; //you could be authorised by idam or by organisation session cookie.
 				organisationName = preloadedUserSessionData.organisationName;
+				isLead = preloadedUserSessionData.isLead;
 			}
 		}
 
@@ -83,6 +87,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 				updateContext: this.updateContext,
 				organisationName: organisationName,
 				initialDataLoaded: true,
+				organisationalCommentingFeature: preloadSource.organisationalCommentingFeature,
 			};
 			if (this.props.staticContext) {
 				this.props.staticContext.analyticsGlobals.isSignedIn = preloadSource.isAuthorised;
@@ -125,6 +130,17 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 						);
 
 				}
+			});
+	}
+
+	getFeatureFlags = async () => {
+		load("getfeatureflags", undefined, [], {})
+			.then(response => 
+				this.setState({
+					organisationalCommentingFeature: response.data.OrganisationalCommenting,
+				}))
+			.catch(err => {
+				console.log(JSON.stringify(err));
 			});
 	}
 
