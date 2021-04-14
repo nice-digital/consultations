@@ -470,19 +470,21 @@ export class CommentList extends Component<PropsType, StateType> {
 																		/>
 																	);
 																})}
-																{this.state.otherUsersComments.map((otherUsersComment) => {
-																	return (
-																		<CommentBox
-																			updateUnsavedIds={this.updateUnsavedIds}
-																			readOnly={true}
-																			key={otherUsersComment.commentId}
-																			unique={`Comment${otherUsersComment.commentId}`}
-																			comment={otherUsersComment}
-																			saveHandler={this.saveCommentHandler}
-																			deleteHandler={this.deleteCommentHandler}
-																		/>
-																	);
-																})}
+																{!contextValue.isLead &&
+																	this.state.otherUsersComments.map((otherUsersComment) => {
+																		return (
+																			<CommentBox
+																				updateUnsavedIds={this.updateUnsavedIds}
+																				readOnly={true}
+																				key={otherUsersComment.commentId}
+																				unique={`Comment${otherUsersComment.commentId}`}
+																				comment={otherUsersComment}
+																				saveHandler={this.saveCommentHandler}
+																				deleteHandler={this.deleteCommentHandler}
+																			/>
+																		);
+																	})
+																}
 															</ul>
 														}
 													</div>
