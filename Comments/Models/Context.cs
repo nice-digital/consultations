@@ -1064,6 +1064,7 @@ namespace Comments.Models
 
 		}
 
+
         public int CountCommentsAndAnswerSubmissionsForThisOrganisation(string sourceURI, int organisationId)
         {
             var comments = Comment
@@ -1106,6 +1107,22 @@ namespace Comments.Models
                 .ToList();
 
             return (comments, answers);
+
+        public List<string> GetEmailAddressForCommentsAndAnswers(CommentsAndQuestions commentsAndQuestions)
+        {
+            var commentIds = commentsAndQuestions.Comments.Select(c => c.CommentId).ToList();
+            var answerIds = commentsAndQuestions.Questions.SelectMany(q => q.Answers).Select(a => a.AnswerId).ToList();
+
+            var comments = Comment.Where(c => commentIds.Contains(c.CommentId)).ToList();
+            var answers = Answer.Where(a => answerIds.Contains(a.AnswerId)).ToList();
+
+            var emailAddresses = OrganisationUser.Where(o => comments.Select(c => c.OrganisationUserId).Contains(o.OrganisationUserId)
+                                                || answers.Select(a => a.OrganisationUserId).Contains(o.OrganisationUserId))
+                                                .Select(o => o.EmailAddress)
+                                                .Distinct()
+                                                .ToList();
+            return emailAddresses;
+
         }
     }
 }

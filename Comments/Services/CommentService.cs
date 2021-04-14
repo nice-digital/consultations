@@ -38,7 +38,7 @@ namespace Comments.Services
             _context = context;
             _userService = userService;
 	        _consultationService = consultationService;
-	        _httpContextAccessor = httpContextAccessor;
+			_httpContextAccessor = httpContextAccessor;
 	        _currentUser = _userService.GetCurrentUser();
         }
 
@@ -203,12 +203,12 @@ namespace Comments.Services
 				commentsAndQuestions.Comments = commentsAndQuestions.Comments.OrderBy(c => c.Order).ToList();
 			}
 
-			model.CommentsAndQuestions = FilterCommentsAndQuestions(commentsAndQuestions, model.Type, model.Document);
+			model.CommentsAndQuestions = FilterCommentsAndQuestions(commentsAndQuestions, model.Type, model.Document, model.Commenter);
 			model.OrganisationName = _currentUser?.OrganisationsAssignedAsLead.FirstOrDefault()?.OrganisationName;
 			model.IsLead = _currentUser?.OrganisationsAssignedAsLead.Any();
 
 			var consultationId = ConsultationsUri.ParseRelativeUrl(relativeURL).ConsultationId;
-			model.Filters = await GetFilterGroups(consultationId, commentsAndQuestions, model.Type, model.Document);
+			model.Filters = await GetFilterGroups(consultationId, commentsAndQuestions, model.Type, model.Document, model.Commenter);
 			return model;
 		}
 
@@ -238,7 +238,7 @@ namespace Comments.Services
 		/// <param name="questionsOrComments"></param>
 		/// <param name="documentIdsToFilter"></param>
 		/// <returns></returns>
-		public CommentsAndQuestions FilterCommentsAndQuestions(CommentsAndQuestions commentsAndQuestions, IEnumerable<QuestionsOrComments> type, IEnumerable<int> documentIdsToFilter)
+		public CommentsAndQuestions FilterCommentsAndQuestions(CommentsAndQuestions commentsAndQuestions, IEnumerable<QuestionsOrComments> type, IEnumerable<int> documentIdsToFilter, IEnumerable<string> commentersToFilter)
 		{
 			var types = type?.ToList() ?? new List<QuestionsOrComments>(0);
 		    commentsAndQuestions.Questions.ForEach(q => q.Show = !types.Any() ||  types.Contains(QuestionsOrComments.Questions));
@@ -250,10 +250,31 @@ namespace Comments.Services
 			    commentsAndQuestions.Questions.ForEach(q => q.Show = (!q.Show || !q.DocumentId.HasValue) ? false : documentIds.Contains(q.DocumentId.Value));
 			    commentsAndQuestions.Comments.ForEach(c => c.Show = (!c.Show || !c.DocumentId.HasValue) ? false : documentIds.Contains(c.DocumentId.Value));
 			}
+
+			var commenters = commentersToFilter?.ToList() ?? new List<string>(); ;
+			if (commenters.Any())
+			{
+				commentsAndQuestions.Comments.ForEach(c => c.Show = (!c.Show || (c.CommenterEmail != null && c.CommenterEmail.Length == 0)) ? false : commenters.Contains(c.CommenterEmail, StringComparer.OrdinalIgnoreCase));
+
+                foreach (var question in commentsAndQuestions.Questions)
+                {
+                    if (question.Show == false) //if other filters have already excluded this question from showing we don't need to process its answers
+                        break;
+
+                    question.Show= false; //don't show question unless we have answer that match filter
+                    foreach (var answer in question.Answers)
+                    {
+                        answer.showWhenFiltered = commenters.Contains(answer.CommenterEmail);
+                        if (!question.Show && answer.showWhenFiltered)
+                            question.Show = true;
+                    }
+                }
+            }
+
 		    return commentsAndQuestions;
 	    }
 
-	    private async Task<IEnumerable<OptionFilterGroup>> GetFilterGroups(int consultationId, CommentsAndQuestions commentsAndQuestions, IEnumerable<QuestionsOrComments> type, IEnumerable<int> documentIdsToFilter)
+	    private async Task<IEnumerable<OptionFilterGroup>> GetFilterGroups(int consultationId, CommentsAndQuestions commentsAndQuestions, IEnumerable<QuestionsOrComments> type, IEnumerable<int> documentIdsToFilter, IEnumerable<string> commentersToFilter)
 	    {
 		    var filters = AppSettings.ReviewConfig.Filters.ToList();
 
@@ -263,15 +284,40 @@ namespace Comments.Services
 			
 		    var documentsFilter = filters.Single(f => f.Id.Equals("Document", StringComparison.OrdinalIgnoreCase));
 
+			var commentersFilter = filters.Single(f => f.Id.Equals("Commenter", StringComparison.OrdinalIgnoreCase));
+
 			//questions
-		    questionOption.IsSelected = type != null && type.Contains(QuestionsOrComments.Questions);
+			questionOption.IsSelected = type != null && type.Contains(QuestionsOrComments.Questions);
 		    questionOption.FilteredResultCount = commentsAndQuestions.Questions.Count(q => q.Show); 
 			questionOption.UnfilteredResultCount = commentsAndQuestions.Questions.Count();
 
 			//comments
 			commentsOption.IsSelected = type != null && type.Contains(QuestionsOrComments.Comments);
 			commentsOption.FilteredResultCount = commentsAndQuestions.Comments.Count(q => q.Show); 
-			commentsOption.UnfilteredResultCount = commentsAndQuestions.Comments.Count(); 
+			commentsOption.UnfilteredResultCount = commentsAndQuestions.Comments.Count();
+
+			//populate commenters
+			if (_currentUser.IsAuthenticatedByAccounts && _currentUser.OrganisationsAssignedAsLead.Any())
+			{
+				var commenters = _context.GetEmailAddressForCommentsAndAnswers(commentsAndQuestions).ToList();
+				commentersFilter.Options = new List<FilterOption>(commenters.Count());
+
+				foreach (var commenter in commenters)
+				{
+					var isSelected = commentersToFilter != null && commentersToFilter.Contains(commenter);
+					commentersFilter.Options.Add(
+						new FilterOption(commenter, commenter, isSelected)
+						{
+							FilteredResultCount = commentsAndQuestions.Comments.Count(c => c.Show) + commentsAndQuestions.Questions.Count(q => q.Show),
+							UnfilteredResultCount = commentsAndQuestions.Comments.Count() + commentsAndQuestions.Questions.Count()
+                        }
+					);
+                }
+			}
+			else
+			{
+				commentersFilter.Options = new List<FilterOption>(0);
+			}
 
 			//populate documents
 			var documents = (await _consultationService.GetDocuments(consultationId)).documents.Where(d => d.ConvertedDocument).ToList();
@@ -284,13 +330,13 @@ namespace Comments.Services
 					new FilterOption(document.DocumentId.ToString(), document.Title, isSelected)
 					{
 						FilteredResultCount = commentsAndQuestions.Comments.Count(c => c.Show && c.DocumentId.HasValue && c.DocumentId.Equals(document.DocumentId)) +
-						                      commentsAndQuestions.Questions.Count(q => q.Show && q.DocumentId.HasValue && q.DocumentId.Equals(document.DocumentId)),
+											  commentsAndQuestions.Questions.Count(q => q.Show && q.DocumentId.HasValue && q.DocumentId.Equals(document.DocumentId)),
 
 						UnfilteredResultCount = commentsAndQuestions.Comments.Count(c => c.DocumentId.HasValue && c.DocumentId.Equals(document.DocumentId)) +
-						                        commentsAndQuestions.Questions.Count(q => q.DocumentId.HasValue && q.DocumentId.Equals(document.DocumentId))
+												commentsAndQuestions.Questions.Count(q => q.DocumentId.HasValue && q.DocumentId.Equals(document.DocumentId))
 					}
 				);
-		    }
+			}
 			return filters;
 	    }
 

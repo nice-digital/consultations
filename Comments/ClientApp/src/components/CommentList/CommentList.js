@@ -57,7 +57,6 @@ type StateType = {
 	error: string,
 	unsavedIds: Array<number>,
 	endDate: string,
-	enableOrganisationalCommentingFeature: boolean,
 	allowOrganisationCodeLogin: Boolean,
 	isAuthorised: boolean,
 	otherUsersComments: Array<CommentType>,
@@ -82,7 +81,6 @@ export class CommentList extends Component<PropsType, StateType> {
 			shouldShowQuestionsTab: false,
 			unsavedIds: [],
 			endDate: "",
-			enableOrganisationalCommentingFeature: false,
 			allowOrganisationCodeLogin: false,
 			isAuthorised: false,
 			otherUsersComments: [],
@@ -124,7 +122,7 @@ export class CommentList extends Component<PropsType, StateType> {
 				unsavedIds: [],
 				endDate: preloadedCommentsForCurrentUser.consultationState.endDate,
 				enableOrganisationalCommentingFeature,
-				allowOrganisationCodeLogin: (preloadedCommentsForCurrentUser.consultationState.consultationIsOpen && enableOrganisationalCommentingFeature),
+				allowOrganisationCodeLogin: preloadedCommentsForCurrentUser.consultationState.consultationIsOpen,
 				otherUsersComments: [],
 				otherUsersQuestions: [],
 			};
@@ -175,7 +173,7 @@ export class CommentList extends Component<PropsType, StateType> {
 					shouldShowCommentsTab: response.data.consultationState.shouldShowCommentsTab,
 					shouldShowQuestionsTab: response.data.consultationState.shouldShowQuestionsTab,
 					endDate: response.data.consultationState.endDate,
-					allowOrganisationCodeLogin: (response.data.consultationState.consultationIsOpen && this.state.enableOrganisationalCommentingFeature),
+					allowOrganisationCodeLogin: response.data.consultationState.consultationIsOpen,
 				});
 
 				if (isOrganisationCommenter) {
@@ -472,19 +470,21 @@ export class CommentList extends Component<PropsType, StateType> {
 																		/>
 																	);
 																})}
-																{this.state.otherUsersComments.map((otherUsersComment) => {
-																	return (
-																		<CommentBox
-																			updateUnsavedIds={this.updateUnsavedIds}
-																			readOnly={true}
-																			key={otherUsersComment.commentId}
-																			unique={`Comment${otherUsersComment.commentId}`}
-																			comment={otherUsersComment}
-																			saveHandler={this.saveCommentHandler}
-																			deleteHandler={this.deleteCommentHandler}
-																		/>
-																	);
-																})}
+																{!contextValue.isLead &&
+																	this.state.otherUsersComments.map((otherUsersComment) => {
+																		return (
+																			<CommentBox
+																				updateUnsavedIds={this.updateUnsavedIds}
+																				readOnly={true}
+																				key={otherUsersComment.commentId}
+																				unique={`Comment${otherUsersComment.commentId}`}
+																				comment={otherUsersComment}
+																				saveHandler={this.saveCommentHandler}
+																				deleteHandler={this.deleteCommentHandler}
+																			/>
+																		);
+																	})
+																}
 															</ul>
 														}
 													</div>
@@ -494,7 +494,7 @@ export class CommentList extends Component<PropsType, StateType> {
 														currentURL={this.props.match.url}
 														signInURL={contextValue.signInURL}
 														registerURL={contextValue.registerURL}
-														allowOrganisationCodeLogin={this.state.allowOrganisationCodeLogin}
+														allowOrganisationCodeLogin={(this.state.allowOrganisationCodeLogin && contextValue.organisationalCommentingFeature)}
 													/>
 												)}
 

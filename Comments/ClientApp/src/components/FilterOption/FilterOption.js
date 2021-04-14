@@ -56,7 +56,7 @@ export class FilterOption extends Component<PropsType, StateType> {
 	render() {
 		return (
 			<label htmlFor={`filter_${this.props.groupId}_${this.props.option.id}`}
-				className="filter-group__option">
+				className="filter-group__option break-word">
 
 				<input id={`filter_${this.props.groupId}_${this.props.option.id}`}
 					type="checkbox"

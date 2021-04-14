@@ -1,4 +1,4 @@
-using Comments.Common;
+﻿using Comments.Common;
 using Comments.Models;
 using Comments.ViewModels;
 using NICE.Feeds;
@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Internal;
 using NICE.Feeds.Indev.Models;
 
 namespace Comments.Services
@@ -19,7 +20,7 @@ namespace Comments.Services
 		OrganisationCode GenerateOrganisationCode(int organisationId, int consultationId);
 		Task<OrganisationCode> CheckValidCodeForConsultation(string collationCode, int consultationId);
 		Task<(Guid sessionId, DateTime expirationDate)> CreateOrganisationUserSession(int organisationAuthorisationId, string collationCode);
-		Task<(bool valid, string organisationName)> CheckOrganisationUserSession(int consultationId);
+		Task<(bool valid, string organisationName, bool isLead)> CheckOrganisationUserSession(int consultationId);
 		IList<ValidatedSession> CheckValidCodesForConsultation(Session unvalidatedSessions);
 		Task<Dictionary<int, string>> GetOrganisationNames(IEnumerable<int> organisationIds);
 	}
@@ -158,25 +159,31 @@ namespace Comments.Services
 			return (organisationUser.AuthorisationSession, expirationDate);
 		}
 
-		public async Task<(bool valid, string organisationName)> CheckOrganisationUserSession(int consultationId) 
+		public async Task<(bool valid, string organisationName, bool isLead)> CheckOrganisationUserSession(int consultationId) 
 		{
 			var currentUser = _userService.GetCurrentUser();
 			var sessionId = currentUser.GetValidatedSessionIdForConsultation(consultationId);
+            var isLead = false;
+            
+            if (currentUser.OrganisationsAssignedAsLead != null)
+            {
+                isLead = currentUser.OrganisationsAssignedAsLead.Any();
+            }
 
-			if (!sessionId.HasValue)
+            if (!sessionId.HasValue)
 			{
-				return (valid: false, organisationName: null);
+				return (valid: false, organisationName: null, isLead: isLead);
 			}
 
 			var organisationUser = _context.GetOrganisationUsers(new List<Guid> {sessionId.Value}).FirstOrDefault();
 
 			if (organisationUser == null)
 			{
-				return (valid: false, organisationName: null);
+				return (valid: false, organisationName: null, isLead: isLead);
 			}
 
-			var organisationName = await GetOrganisationName(organisationUser.OrganisationAuthorisation.OrganisationId);
-			return (valid: true, organisationName: organisationName);
+            var organisationName = await GetOrganisationName(organisationUser.OrganisationAuthorisation.OrganisationId);
+			return (valid: true, organisationName: organisationName, isLead: isLead);
 		}
 
 		public IList<ValidatedSession> CheckValidCodesForConsultation(Session unvalidatedSessions)
