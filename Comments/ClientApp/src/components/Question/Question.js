@@ -52,7 +52,7 @@ export class Question extends Component<PropsType> {
 		const { documentTitle } = this.props;
 		const { commentOn, quote } = this.props.question;
 
-    let otherUsersAnswers = this.props.otherUsersAnswers || [];
+		let otherUsersAnswers = this.props.otherUsersAnswers || [];
 		const answers = this.props.question.answers || [];
 		let answersToShow = answers.filter(answer => answer.showWhenFiltered);
 		if (answersToShow === null || answersToShow.length < 1){
@@ -100,7 +100,7 @@ export class Question extends Component<PropsType> {
 						return (
 							this.props.showAnswer && (
 								<>
-									{this.returnAnswers(answers)}
+									{this.returnAnswers(answersToShow)}
 									{!contextValue.isLead &&
 										this.returnAnswers(otherUsersAnswers, true)
 									}

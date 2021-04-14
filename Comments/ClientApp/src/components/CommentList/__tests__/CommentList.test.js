@@ -49,7 +49,7 @@ describe("[ClientApp] ", () => {
 			contextWrapper = {
 				wrappingComponent: UserContext.Provider,
 				wrappingComponentProps: {
-					value: { isAuthorised: true, isOrganisationCommenter: false },
+					value: { isAuthorised: true, isOrganisationCommenter: false, isLead: false },
 				},
 			};
 		});
