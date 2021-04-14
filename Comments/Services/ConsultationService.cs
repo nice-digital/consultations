@@ -43,8 +43,7 @@ namespace Comments.Services
 	    Task<(int? documentId, string chapterSlug)> GetFirstConvertedDocumentAndChapterSlug(int consultationId);
 	    Task<string> GetFirstChapterSlug(int consultationId, int documentId);
 	    Task<string> GetFirstChapterSlugFromPreviewDocument(string reference, int consultationId, int documentId);
-
-    }
+	}
 
 	public class ConsultationService : IConsultationService
     {
@@ -258,38 +257,5 @@ namespace Comments.Services
 		    var consultationDetail = await _feedService.GetIndevConsultationDetailForDraftProject(consultationId, documentId, reference);
 		    return consultationDetail;
 	    }
-
-
-	    //public ConsultationState GetDraftConsultationState(int consultationId, int documentId, string reference, IEnumerable<Models.Location> locations = null, ConsultationPublishedPreviewDetail consultationDetail = null)
-	    //{
-		   // var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
-		   // if (consultationDetail == null)
-			  //  consultationDetail = GetDraftConsultationDetail(consultationId, documentId, reference);
-
-		   // var documents = GetPreviewDraftDocuments(consultationId, documentId, reference).ToList();
-		   // var documentsWhichSupportQuestions = documents.Where(d => d.SupportsQuestions).Select(d => d.DocumentId).ToList();
-		   // var documentsWhichSupportComments = documents.Where(d => d.SupportsComments).Select(d => d.DocumentId).ToList();
-
-		   // var currentUser = _userService.GetCurrentUser();
-
-		   // if (locations == null && currentUser.IsAuthenticated && currentUser.UserId.HasValue)
-		   // {
-			  //  locations = _context.GetAllCommentsAndQuestionsForDocument(new[] { sourceURI }, partialMatchSourceURI: true);
-		   // }
-		   // else
-		   // {
-			  //  locations = new List<Models.Location>(0);
-		   // }
-
-		   // var hasSubmitted = currentUser != null && currentUser.IsAuthenticated && currentUser.UserId.HasValue ? GetSubmittedDate(sourceURI, currentUser.UserId.Value) : false;
-
-		   // var data = ModelConverters.ConvertLocationsToCommentsAndQuestionsViewModels(locations);
-
-		   // var consultationState = new ConsultationState(consultationDetail.StartDate, consultationDetail.EndDate,
-			  //  data.questions.Any(), data.questions.Any(q => q.Answers.Any()), data.comments.Any(), hasSubmitted,
-			  //  false, false, documentsWhichSupportQuestions, documentsWhichSupportComments);
-
-		   // return consultationState;
-	    //}
 	}
 }

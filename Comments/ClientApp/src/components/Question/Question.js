@@ -51,11 +51,12 @@ export class Question extends Component<PropsType> {
 
 		const { documentTitle } = this.props;
 		const { commentOn, quote } = this.props.question;
-		let answers = this.props.question.answers;
-		let otherUsersAnswers = this.props.otherUsersAnswers || [];
 
-		if (answers === null || answers.length < 1) {
-			answers = [{
+    let otherUsersAnswers = this.props.otherUsersAnswers || [];
+		const answers = this.props.question.answers || [];
+		let answersToShow = answers.filter(answer => answer.showWhenFiltered);
+		if (answersToShow === null || answersToShow.length < 1){
+			answersToShow = [{
 				answerId: -1,
 				questionId: this.props.question.questionId,
 				commenterEmail: null,
