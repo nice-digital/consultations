@@ -55,7 +55,6 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 		let isOrganisationCommenter = false;
 		let organisationName = null;
 		let isAuthorised = preloadSource ? preloadSource.isAuthorised : false;
-		let isLead = false;
 
 		if (userSessionParameters.sessionCookieExistsForThisConsultation){
 			const preloadedUserSessionData = preload(
@@ -72,7 +71,6 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 				isOrganisationCommenter = preloadedUserSessionData.valid;
 				isAuthorised = isAuthorised || preloadedUserSessionData.valid ; //you could be authorised by idam or by organisation session cookie.
 				organisationName = preloadedUserSessionData.organisationName;
-				isLead = preloadedUserSessionData.isLead;
 			}
 		}
 
@@ -95,12 +93,11 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 		}
 	}
 
-	setStateForValidSessionCookie = (organisationName, isLead) => {
+	setStateForValidSessionCookie = (organisationName) => {
 		this.setState({
 			isAuthorised: true,
 			isOrganisationCommenter: true,
 			organisationName,
-			isLead,
 		});
 	}
 
@@ -114,6 +111,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 						displayName: res.data.displayName,
 						signInURL: signInURL,
 						registerURL: res.data.registerURL,
+						isLead: (res.data.organisationsAssignedAsLead && res.data.organisationsAssignedAsLead.length),
 					});
 					//update signin links in global nav here. because SSR isn't rendering them right on the server.
 					var signInLinks = document.getElementById("global-nav-header").querySelectorAll("a[href*='account/login']");
@@ -125,8 +123,8 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 			.then(
 				this.checkSessionId()
 					.then(data => {
-						if (data.validityAndOrganisation?.valid === true) {
-							this.setStateForValidSessionCookie(data.validityAndOrganisation.organisationName, data.validityAndOrganisation.isLead);
+						if (data.validityAndOrganisationName?.valid === true) {
+							this.setStateForValidSessionCookie(data.validityAndOrganisationName.organisationName);
 						}
 					}),
 			);
@@ -180,7 +178,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 				return {valid: false};
 			});
 		return {
-			validityAndOrganisation: await validityAndOrganisationName,
+			validityAndOrganisationName: await validityAndOrganisationName,
 			userSessionParameters: userSessionParameters,
 		};
 	}
@@ -197,8 +195,8 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 	updateContext = () => {
 		this.checkSessionId()
 			.then(data => {
-				if (data.validityAndOrganisation.valid === true) {
-					this.setStateForValidSessionCookie(data.validityAndOrganisation.organisationName);
+				if (data.validityAndOrganisationName.valid === true) {
+					this.setStateForValidSessionCookie(data.validityAndOrganisationName.organisationName);
 				}
 			});
 	}
