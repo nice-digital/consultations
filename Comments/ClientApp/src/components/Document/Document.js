@@ -119,7 +119,8 @@ export class Document extends Component<PropsType, StateType> {
 				}
 				const allowComments = preloadedConsultation.consultationState.hasAnyDocumentsSupportingComments &&
 					preloadedConsultation.consultationState.consultationIsOpen &&
-					!preloadedConsultation.consultationState.userHasSubmitted;
+					!preloadedConsultation.consultationState.userHasSubmitted && 
+					!preloadedConsultation.consultationState.submittedDate;
 
 				if (preloadedChapter) {
 					preloadedChapter = this.addChapterDetailsToSections(preloadedChapter);
@@ -209,7 +210,8 @@ export class Document extends Component<PropsType, StateType> {
 					const allowComments =
 						data.consultationData.consultationState.hasAnyDocumentsSupportingComments &&
 						data.consultationData.consultationState.consultationIsOpen &&
-						!data.consultationData.consultationState.userHasSubmitted;
+						!data.consultationData.consultationState.userHasSubmitted &&
+						!data.consultationData.consultationState.submittedDate;
 					this.addChapterDetailsToSections(data.chapterData);
 					this.setState({
 						...data,
