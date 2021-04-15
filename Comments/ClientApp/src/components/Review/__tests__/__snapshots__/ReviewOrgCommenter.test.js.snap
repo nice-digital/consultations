@@ -205,7 +205,7 @@ Array [
                           role="group"
                         >
                           <label
-                            className="filter-group__option"
+                            className="filter-group__option break-word"
                             htmlFor="filter_QuestionsOrComments_Questions"
                           >
                             <input
@@ -222,7 +222,7 @@ Array [
                             Questions
                           </label>
                           <label
-                            className="filter-group__option"
+                            className="filter-group__option break-word"
                             htmlFor="filter_QuestionsOrComments_Comments"
                           >
                             <input
@@ -264,7 +264,7 @@ Array [
                           role="group"
                         >
                           <label
-                            className="filter-group__option"
+                            className="filter-group__option break-word"
                             htmlFor="filter_Document_1"
                           >
                             <input
@@ -281,7 +281,7 @@ Array [
                             Unstable angina and NSTEMI
                           </label>
                           <label
-                            className="filter-group__option"
+                            className="filter-group__option break-word"
                             htmlFor="filter_Document_2"
                           >
                             <input
@@ -343,34 +343,36 @@ Array [
                           >
                             Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
                           </div>
-                          <section
-                            role="form"
-                          >
-                            <form
-                              className="mb--0 mt--e"
-                              onSubmit={[Function]}
+                          Array [
+                            <section
+                              role="form"
                             >
-                              <div
-                                className="form__group form__group--textarea mb--b"
+                              <form
+                                className="mb--0 mt--e"
+                                onSubmit={[Function]}
                               >
-                                <label
-                                  className="form__label visually-hidden"
-                                  htmlFor="Answer11"
+                                <div
+                                  className="form__group form__group--textarea mb--b"
                                 >
-                                  Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
-                                </label>
-                                <textarea
-                                  className="form__input form__input--textarea"
-                                  data-hj-whitelist={true}
-                                  data-qa-sel="Comment-text-area"
-                                  defaultValue="gg"
-                                  disabled={true}
-                                  id="Answer11"
-                                  onInput={[Function]}
-                                />
-                              </div>
-                            </form>
-                          </section>
+                                  <label
+                                    className="form__label visually-hidden"
+                                    htmlFor="Answer-1"
+                                  >
+                                    Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
+                                  </label>
+                                  <textarea
+                                    className="form__input form__input--textarea"
+                                    data-hj-whitelist={true}
+                                    data-qa-sel="Comment-text-area"
+                                    disabled={true}
+                                    id="Answer-1"
+                                    onInput={[Function]}
+                                  />
+                                </div>
+                              </form>
+                            </section>,
+                            "",
+                          ]
                         </li>
                         <li
                           className="CommentBox"
@@ -396,33 +398,36 @@ Array [
                           >
                             Would implementation of any of the draft recommendations have significant cost implications?
                           </div>
-                          <section
-                            role="form"
-                          >
-                            <form
-                              className="mb--0 mt--e"
-                              onSubmit={[Function]}
+                          Array [
+                            <section
+                              role="form"
                             >
-                              <div
-                                className="form__group form__group--textarea mb--b"
+                              <form
+                                className="mb--0 mt--e"
+                                onSubmit={[Function]}
                               >
-                                <label
-                                  className="form__label visually-hidden"
-                                  htmlFor="Answer-1"
+                                <div
+                                  className="form__group form__group--textarea mb--b"
                                 >
-                                  Would implementation of any of the draft recommendations have significant cost implications?
-                                </label>
-                                <textarea
-                                  className="form__input form__input--textarea"
-                                  data-hj-whitelist={true}
-                                  data-qa-sel="Comment-text-area"
-                                  disabled={true}
-                                  id="Answer-1"
-                                  onInput={[Function]}
-                                />
-                              </div>
-                            </form>
-                          </section>
+                                  <label
+                                    className="form__label visually-hidden"
+                                    htmlFor="Answer-1"
+                                  >
+                                    Would implementation of any of the draft recommendations have significant cost implications?
+                                  </label>
+                                  <textarea
+                                    className="form__input form__input--textarea"
+                                    data-hj-whitelist={true}
+                                    data-qa-sel="Comment-text-area"
+                                    disabled={true}
+                                    id="Answer-1"
+                                    onInput={[Function]}
+                                  />
+                                </div>
+                              </form>
+                            </section>,
+                            "",
+                          ]
                         </li>
                         <li
                           className="CommentBox"
@@ -448,33 +453,36 @@ Array [
                           >
                             Would implementation of any of the draft recommendations have cost implications?
                           </div>
-                          <section
-                            role="form"
-                          >
-                            <form
-                              className="mb--0 mt--e"
-                              onSubmit={[Function]}
+                          Array [
+                            <section
+                              role="form"
                             >
-                              <div
-                                className="form__group form__group--textarea mb--b"
+                              <form
+                                className="mb--0 mt--e"
+                                onSubmit={[Function]}
                               >
-                                <label
-                                  className="form__label visually-hidden"
-                                  htmlFor="Answer-1"
+                                <div
+                                  className="form__group form__group--textarea mb--b"
                                 >
-                                  Would implementation of any of the draft recommendations have cost implications?
-                                </label>
-                                <textarea
-                                  className="form__input form__input--textarea"
-                                  data-hj-whitelist={true}
-                                  data-qa-sel="Comment-text-area"
-                                  disabled={true}
-                                  id="Answer-1"
-                                  onInput={[Function]}
-                                />
-                              </div>
-                            </form>
-                          </section>
+                                  <label
+                                    className="form__label visually-hidden"
+                                    htmlFor="Answer-1"
+                                  >
+                                    Would implementation of any of the draft recommendations have cost implications?
+                                  </label>
+                                  <textarea
+                                    className="form__input form__input--textarea"
+                                    data-hj-whitelist={true}
+                                    data-qa-sel="Comment-text-area"
+                                    disabled={true}
+                                    id="Answer-1"
+                                    onInput={[Function]}
+                                  />
+                                </div>
+                              </form>
+                            </section>,
+                            "",
+                          ]
                         </li>
                       </ul>
                     </div>
@@ -865,7 +873,7 @@ Array [
                           role="group"
                         >
                           <label
-                            className="filter-group__option"
+                            className="filter-group__option break-word"
                             htmlFor="filter_QuestionsOrComments_Questions"
                           >
                             <input
@@ -882,7 +890,7 @@ Array [
                             Questions
                           </label>
                           <label
-                            className="filter-group__option"
+                            className="filter-group__option break-word"
                             htmlFor="filter_QuestionsOrComments_Comments"
                           >
                             <input
@@ -924,7 +932,7 @@ Array [
                           role="group"
                         >
                           <label
-                            className="filter-group__option"
+                            className="filter-group__option break-word"
                             htmlFor="filter_Document_1"
                           >
                             <input
@@ -941,7 +949,7 @@ Array [
                             Unstable angina and NSTEMI
                           </label>
                           <label
-                            className="filter-group__option"
+                            className="filter-group__option break-word"
                             htmlFor="filter_Document_2"
                           >
                             <input
@@ -1003,46 +1011,36 @@ Array [
                           >
                             Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
                           </div>
-                          <section
-                            role="form"
-                          >
-                            <form
-                              className="mb--0 mt--e"
-                              onSubmit={[Function]}
+                          Array [
+                            <section
+                              role="form"
                             >
-                              <div
-                                className="form__group form__group--textarea mb--b"
+                              <form
+                                className="mb--0 mt--e"
+                                onSubmit={[Function]}
                               >
-                                <label
-                                  className="form__label visually-hidden"
-                                  htmlFor="Answer11"
+                                <div
+                                  className="form__group form__group--textarea mb--b"
                                 >
-                                  Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
-                                </label>
-                                <textarea
-                                  className="form__input form__input--textarea"
-                                  data-hj-whitelist={true}
-                                  data-qa-sel="Comment-text-area"
-                                  defaultValue="gg"
-                                  disabled={null}
-                                  id="Answer11"
-                                  onInput={[Function]}
-                                />
-                              </div>
-                              <span
-                                className="ml--0 mb--0 CommentBox__savedIndicator"
-                              >
-                                Saved
-                              </span>
-                              <button
-                                className="btn mr--0 mb--0 right"
-                                data-qa-sel="delete-comment-button"
-                                onClick={[Function]}
-                              >
-                                Delete
-                              </button>
-                            </form>
-                          </section>
+                                  <label
+                                    className="form__label visually-hidden"
+                                    htmlFor="Answer-1"
+                                  >
+                                    Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
+                                  </label>
+                                  <textarea
+                                    className="form__input form__input--textarea"
+                                    data-hj-whitelist={true}
+                                    data-qa-sel="Comment-text-area"
+                                    disabled={null}
+                                    id="Answer-1"
+                                    onInput={[Function]}
+                                  />
+                                </div>
+                              </form>
+                            </section>,
+                            "",
+                          ]
                         </li>
                         <li
                           className="CommentBox"
@@ -1068,33 +1066,36 @@ Array [
                           >
                             Would implementation of any of the draft recommendations have significant cost implications?
                           </div>
-                          <section
-                            role="form"
-                          >
-                            <form
-                              className="mb--0 mt--e"
-                              onSubmit={[Function]}
+                          Array [
+                            <section
+                              role="form"
                             >
-                              <div
-                                className="form__group form__group--textarea mb--b"
+                              <form
+                                className="mb--0 mt--e"
+                                onSubmit={[Function]}
                               >
-                                <label
-                                  className="form__label visually-hidden"
-                                  htmlFor="Answer-1"
+                                <div
+                                  className="form__group form__group--textarea mb--b"
                                 >
-                                  Would implementation of any of the draft recommendations have significant cost implications?
-                                </label>
-                                <textarea
-                                  className="form__input form__input--textarea"
-                                  data-hj-whitelist={true}
-                                  data-qa-sel="Comment-text-area"
-                                  disabled={null}
-                                  id="Answer-1"
-                                  onInput={[Function]}
-                                />
-                              </div>
-                            </form>
-                          </section>
+                                  <label
+                                    className="form__label visually-hidden"
+                                    htmlFor="Answer-1"
+                                  >
+                                    Would implementation of any of the draft recommendations have significant cost implications?
+                                  </label>
+                                  <textarea
+                                    className="form__input form__input--textarea"
+                                    data-hj-whitelist={true}
+                                    data-qa-sel="Comment-text-area"
+                                    disabled={null}
+                                    id="Answer-1"
+                                    onInput={[Function]}
+                                  />
+                                </div>
+                              </form>
+                            </section>,
+                            "",
+                          ]
                         </li>
                         <li
                           className="CommentBox"
@@ -1120,33 +1121,36 @@ Array [
                           >
                             Would implementation of any of the draft recommendations have cost implications?
                           </div>
-                          <section
-                            role="form"
-                          >
-                            <form
-                              className="mb--0 mt--e"
-                              onSubmit={[Function]}
+                          Array [
+                            <section
+                              role="form"
                             >
-                              <div
-                                className="form__group form__group--textarea mb--b"
+                              <form
+                                className="mb--0 mt--e"
+                                onSubmit={[Function]}
                               >
-                                <label
-                                  className="form__label visually-hidden"
-                                  htmlFor="Answer-1"
+                                <div
+                                  className="form__group form__group--textarea mb--b"
                                 >
-                                  Would implementation of any of the draft recommendations have cost implications?
-                                </label>
-                                <textarea
-                                  className="form__input form__input--textarea"
-                                  data-hj-whitelist={true}
-                                  data-qa-sel="Comment-text-area"
-                                  disabled={null}
-                                  id="Answer-1"
-                                  onInput={[Function]}
-                                />
-                              </div>
-                            </form>
-                          </section>
+                                  <label
+                                    className="form__label visually-hidden"
+                                    htmlFor="Answer-1"
+                                  >
+                                    Would implementation of any of the draft recommendations have cost implications?
+                                  </label>
+                                  <textarea
+                                    className="form__input form__input--textarea"
+                                    data-hj-whitelist={true}
+                                    data-qa-sel="Comment-text-area"
+                                    disabled={null}
+                                    id="Answer-1"
+                                    onInput={[Function]}
+                                  />
+                                </div>
+                              </form>
+                            </section>,
+                            "",
+                          ]
                         </li>
                       </ul>
                     </div>
@@ -1296,7 +1300,10 @@ Array [
                       Really Cool Org
                     </h2>
                     <p>
-                      Enter your email address so that your organisation can contact you about your comments if they have any questions.
+                      Enter your email address so that your organisation can contact you about your comments if they have any questions. 
+                      <strong>
+                        On submission your email address and responses will be visible to other members or associates of your organisation who are using the same commenting code.
+                      </strong>
                     </p>
                     <div
                       className="input"

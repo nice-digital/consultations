@@ -84,7 +84,7 @@ export class SubmitResponseDialog extends Component {
 				{isOrganisationCommenter && !isLead ? (
 					<div className="panel">
 						<h2>You are about to send your final response to {organisationName}</h2>
-						<p>Enter your email address so that your organisation can contact you about your comments if they have any questions.</p>
+						<p>Enter your email address so that your organisation can contact you about your comments if they have any questions. <strong>On submission your email address and responses will be visible to other members or associates of your organisation who are using the same commenting code.</strong></p>
 						<Input
 							label="Email address"
 							name="emailAddress"

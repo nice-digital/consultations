@@ -47,7 +47,6 @@ type StateType = {
 	},
 	allowComments: boolean,
 	error: ErrorType,
-	enableOrganisationalCommentingFeature: boolean,
 	allowOrganisationCodeLogin: boolean,
 };
 
@@ -71,7 +70,6 @@ export class Document extends Component<PropsType, StateType> {
 				hasError: false,
 				message: null,
 			},
-			enableOrganisationalCommentingFeature: false,
 			allowOrganisationCodeLogin: false,
 		};
 
@@ -83,8 +81,6 @@ export class Document extends Component<PropsType, StateType> {
 			if (this.props.staticContext && this.props.staticContext.preload) {
 				preloadedData = this.props.staticContext.preload.data; //this is data from Configure => SupplyData in Startup.cs. the main thing it contains for this call is the cookie for the current user.
 			}
-
-			const enableOrganisationalCommentingFeature = ((preloadedData && preloadedData.organisationalCommentingFeature) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["organisationalCommentingFeature"]));
 
 			preloadedChapter = preload(
 				this.props.staticContext,
@@ -138,8 +134,7 @@ export class Document extends Component<PropsType, StateType> {
 						hasError: false,
 						message: null,
 					},
-					enableOrganisationalCommentingFeature,
-					allowOrganisationCodeLogin: (preloadedConsultation.consultationState.consultationIsOpen && enableOrganisationalCommentingFeature),
+					allowOrganisationCodeLogin: preloadedConsultation.consultationState.consultationIsOpen,
 				};
 			}
 		}
@@ -218,7 +213,7 @@ export class Document extends Component<PropsType, StateType> {
 						loading: false,
 						hasInitialData: true,
 						allowComments: allowComments,
-						allowOrganisationCodeLogin: (data.consultationData.consultationState.consultationIsOpen && this.state.enableOrganisationalCommentingFeature),
+						allowOrganisationCodeLogin: data.consultationData.consultationState.consultationIsOpen,
 					}, () => {
 						tagManager({
 							event: "pageview",
@@ -450,7 +445,7 @@ export class Document extends Component<PropsType, StateType> {
 												 currentURL={this.props.match.url}
 												 signInURL={contextValue.signInURL}
 												 registerURL={contextValue.registerURL}
-												 allowOrganisationCodeLogin={this.state.allowOrganisationCodeLogin}
+												 allowOrganisationCodeLogin={(this.state.allowOrganisationCodeLogin && contextValue.organisationalCommentingFeature)}
 												 orgFieldName="document"/>
 						: /* if contextValue.isAuthorised... */ null}
 				</UserContext.Consumer>
@@ -467,24 +462,26 @@ export class Document extends Component<PropsType, StateType> {
 							}
 							<main>
 								<div className="page-header">
-									<Header
-										title={currentDocumentTitle}
-										reference={reference}
-										consultationState={this.state.consultationData.consultationState}
-										allowRegisterOrganisationLeadLink={this.state.enableOrganisationalCommentingFeature}/>
-									{this.state.consultationData.consultationState.submittedDate &&
-										<Alert type="info" role="alert">
-											<p>You submitted your response to this consultation on <Moment format="D MMMM YYYY" date={this.state.consultationData.consultationState.submittedDate}/> you cannot add, edit or provide additional information.</p>
-										</Alert>
-									}
 									<UserContext.Consumer>
-										{(contextValue: any) => contextValue.isOrganisationCommenter && !contextValue.isLead && !this.state.consultationData.consultationState.submittedDate ?
-											<Alert type="info" role="alert">
-												<p>You are commenting on behalf of {contextValue.organisationName}.</p>
-												<p>When you submit your response it will be submitted to the organisational lead at {contextValue.organisationName}.</p>
-											</Alert>
-											: /* if !contextValue.isOrganisationCommenter... */ null}
+										{(contextValue: ContextType) => {
+											return (
+												<>
+													<Header
+														title={currentDocumentTitle}
+														reference={reference}
+														consultationState={this.state.consultationData.consultationState}
+														allowRegisterOrganisationLeadLink={contextValue.organisationalCommentingFeature}/>
+
+													{contextValue.isOrganisationCommenter && !contextValue.isLead &&
+														<Alert type="info" role="alert">
+															<p>You are commenting on behalf of {contextValue.organisationName}.</p>
+															<p>When you submit your response it will be submitted to the organisational lead at {contextValue.organisationName}. <strong>On submission your email address and responses will be visible to other members or associates of your organisation who are using the same commenting code.</strong></p>
+														</Alert>
+													}
+												</>
+											);}}
 									</UserContext.Consumer>
+
 									{this.state.allowComments &&
 									<button
 										data-gtm="comment-on-document-button"
@@ -603,3 +600,4 @@ export class Document extends Component<PropsType, StateType> {
 }
 
 export default withRouter(Document);
+Document.contextType = UserContext;

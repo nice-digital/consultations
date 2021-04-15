@@ -1,4 +1,4 @@
-using Comments.Common;
+﻿using Comments.Common;
 using Comments.Configuration;
 using Comments.Models;
 using Comments.ViewModels;
@@ -67,7 +67,7 @@ namespace Comments.Services
 			var submittedCommentsAndAnswerCounts = canSeeAnySubmissionCounts ? _context.GetSubmittedCommentsAndAnswerCounts() : null;
 			var sourceURIsCommentedOrAnswered = _context.GetAllSourceURIsTheCurrentUserHasCommentedOrAnsweredAQuestion();
 
-			if (model.InitialPageView) //set defaults here for the filters - this code might be called by the SSR or by the client-side.
+            if (model.InitialPageView) //set defaults here for the filters - this code might be called by the SSR or by the client-side.
 			{
 				//if unset (by querystring) set the default for the contribution filter. - the filter should be enabled (HasContributed), for regular users (i.e. not admins or team users) and the user has contributed to any.
 				if (model.Contribution == null)
@@ -95,7 +95,10 @@ namespace Comments.Services
 
 			var consultationListRows = new List<ConsultationListRow>();
 
-			foreach (var consultation in consultationsFromIndev)
+            var (commentsSubmittedToLead, answersSubmittedToLead) = currentUser.OrganisationsAssignedAsLead.Any() ?
+                _context.GetCommentsAndAnswersSubmittedToLeadForOrganisation(currentUser.OrganisationsAssignedAsLead.First().OrganisationId) : (null, null);
+
+            foreach (var consultation in consultationsFromIndev)
 			{
 				var sourceURI = ConsultationsUri.CreateConsultationURI(consultation.ConsultationId);
 
@@ -106,12 +109,15 @@ namespace Comments.Services
 
 				var responseCount = canSeeSubmissionCountForThisConsultation ? submittedCommentsAndAnswerCounts.FirstOrDefault(s => s.SourceURI.Equals(sourceURI))?.TotalCount ?? 0 : (int?)null;
 
-				consultationListRows.Add(
+                var numResponsesFromOrg = (commentsSubmittedToLead != null && commentsSubmittedToLead.Any()) || (answersSubmittedToLead != null && answersSubmittedToLead.Any()) 
+                    ? CountCommentsAndAnswerSubmissionsForThisOrganisation(sourceURI, (commentsSubmittedToLead, answersSubmittedToLead)) : 0;
+                
+                consultationListRows.Add(
 					new ConsultationListRow(consultation.Title,
 						consultation.StartDate, consultation.EndDate, responseCount, consultation.ConsultationId,
 						consultation.FirstConvertedDocumentId, consultation.FirstChapterSlugOfFirstConvertedDocument, consultation.Reference,
 						consultation.ProductTypeName, hasCurrentUserEnteredCommentsOrAnsweredQuestions, hasCurrentUserSubmittedCommentsOrAnswers, consultation.AllowedRole,
-						allOrganisationCodes[consultation.ConsultationId], currentUserIsAuthorisedToViewOrganisationCodes));
+						allOrganisationCodes[consultation.ConsultationId], currentUserIsAuthorisedToViewOrganisationCodes, numResponsesFromOrg));
 			}
 
 			model.OptionFilters = GetOptionFilterGroups(model.Status?.ToList(), consultationListRows, hasAccessToViewUpcomingConsultations);
@@ -124,7 +130,19 @@ namespace Comments.Services
 			return (model, new Validate(valid: true));
 		}
 
-		private (bool hasEnteredCommentsOrAnsweredQuestions, bool hasSubmittedCommentsOrAnswers)
+        private int CountCommentsAndAnswerSubmissionsForThisOrganisation(string sourceURI, (List<Models.Comment> comments, List<Models.Answer> answers) getAllCommentsAndAnswersSubmittedToLeadForOrganisation)
+        {
+       
+            var commentsCount =  getAllCommentsAndAnswersSubmittedToLeadForOrganisation.comments
+                .Count(c => c.Location.SourceURI.Contains($"{sourceURI}/") || c.Location.SourceURI.Equals(sourceURI));
+
+            var answersCount = getAllCommentsAndAnswersSubmittedToLeadForOrganisation.answers
+                .Count(a => a.Question.Location.SourceURI.Contains($"{sourceURI}/") || a.Question.Location.SourceURI.Equals(sourceURI));
+
+            return commentsCount + answersCount;
+        }
+
+        private (bool hasEnteredCommentsOrAnsweredQuestions, bool hasSubmittedCommentsOrAnswers)
 			GetFlagsForWhetherTheCurrentUserHasCommentedOrAnsweredThisConsultation(IEnumerable<KeyValuePair<string, Models.Status>> sourceURIsCommentedOrAnswered, string consultationSourceURI)
 		{
 			var foundCommentOrAnswer = sourceURIsCommentedOrAnswered.FirstOrDefault(s =>
