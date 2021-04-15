@@ -301,13 +301,14 @@ export class SubmitResponseDialog extends Component {
 							}
 							<button
 								className="btn btn--cta"
+								id="submitButton"
 								data-qa-sel="submit-comment-button"
 								onClick={this.submitConsultation}>
 								{submittedDate ? "Responses submitted" : this.state.showSubmitWarning ? "Yes submit my response" : "Submit my response"}
 							</button>
 							{this.state.showSubmitWarning &&
 								<button
-									className="btn"
+									className="btn btn--secondary"
 									data-qa-sel="cancel-comment-button"
 									onClick={() => {
 										this.setState({ showSubmitWarning: false, })

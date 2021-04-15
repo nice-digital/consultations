@@ -1428,6 +1428,7 @@ Array [
                     <button
                       className="btn btn--cta"
                       data-qa-sel="submit-comment-button"
+                      id="submitButton"
                       onClick={[Function]}
                     >
                       Submit my response

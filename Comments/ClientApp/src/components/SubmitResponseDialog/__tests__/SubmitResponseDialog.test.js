@@ -58,7 +58,11 @@ describe("[ClientApp] ", () => {
 			localProps.respondingAsOrganisation = null; // not answered at all
 			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
 			expect(wrapper.state().feedbackVisible).toEqual(false);
-			wrapper.find("button").simulate("click");
+			expect(wrapper.state().showSubmitWarning).toEqual(false);
+			wrapper.find("#submitButton").simulate("click");
+			wrapper.update();
+			expect(wrapper.state().showSubmitWarning).toEqual(true);
+			wrapper.find("#submitButton").simulate("click");
 			wrapper.update();
 			expect(wrapper.state().feedbackVisible).toEqual(true);
 		});
@@ -70,7 +74,11 @@ describe("[ClientApp] ", () => {
 			localProps.respondingAsOrganisation = null; // not answered at all
 			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
 			expect(wrapper.state().feedbackVisible).toEqual(false);
-			wrapper.find("button").simulate("click");
+			expect(wrapper.state().showSubmitWarning).toEqual(false);
+			wrapper.find("#submitButton").simulate("click");
+			wrapper.update();
+			expect(wrapper.state().showSubmitWarning).toEqual(true);
+			wrapper.find("#submitButton").simulate("click");
 			wrapper.update();
 			expect(wrapper.state().feedbackVisible).toEqual(true);
 		});
@@ -82,7 +90,11 @@ describe("[ClientApp] ", () => {
 			localProps.respondingAsOrganisation = false;
 			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
 			expect(wrapper.state().feedbackVisible).toEqual(false);
-			wrapper.find("button").simulate("click");
+			expect(wrapper.state().showSubmitWarning).toEqual(false);
+			wrapper.find("#submitButton").simulate("click");
+			wrapper.update();
+			expect(wrapper.state().showSubmitWarning).toEqual(true);
+			wrapper.find("#submitButton").simulate("click");
 			wrapper.update();
 			expect(wrapper.state().feedbackVisible).toEqual(true);
 		});
@@ -94,7 +106,11 @@ describe("[ClientApp] ", () => {
 			localProps.respondingAsOrganisation = false;
 			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
 			expect(wrapper.state().feedbackVisible).toEqual(false);
-			wrapper.find("button").simulate("click");
+			expect(wrapper.state().showSubmitWarning).toEqual(false);
+			wrapper.find("#submitButton").simulate("click");
+			wrapper.update();
+			expect(wrapper.state().showSubmitWarning).toEqual(true);
+			wrapper.find("#submitButton").simulate("click");
 			wrapper.update();
 			expect(wrapper.state().feedbackVisible).toEqual(false);
 		});
@@ -107,7 +123,11 @@ describe("[ClientApp] ", () => {
 			localProps.tobaccoDisclosure = "test";
 			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
 			expect(wrapper.state().feedbackVisible).toEqual(false);
-			wrapper.find("button").simulate("click");
+			expect(wrapper.state().showSubmitWarning).toEqual(false);
+			wrapper.find("#submitButton").simulate("click");
+			wrapper.update();
+			expect(wrapper.state().showSubmitWarning).toEqual(true);
+			wrapper.find("#submitButton").simulate("click");
 			wrapper.update();
 			expect(wrapper.state().feedbackVisible).toEqual(false);
 		});
@@ -120,7 +140,11 @@ describe("[ClientApp] ", () => {
 			localProps.organisationName = "test";
 			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
 			expect(wrapper.state().feedbackVisible).toEqual(false);
-			wrapper.find("button").simulate("click");
+			expect(wrapper.state().showSubmitWarning).toEqual(false);
+			wrapper.find("#submitButton").simulate("click");
+			wrapper.update();
+			expect(wrapper.state().showSubmitWarning).toEqual(true);
+			wrapper.find("#submitButton").simulate("click");
 			wrapper.update();
 			expect(wrapper.state().feedbackVisible).toEqual(false);
 		});
@@ -133,7 +157,11 @@ describe("[ClientApp] ", () => {
 			localProps.organisationName = "";
 			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
 			expect(wrapper.state().feedbackVisible).toEqual(false);
-			wrapper.find("button").simulate("click");
+			expect(wrapper.state().showSubmitWarning).toEqual(false);
+			wrapper.find("#submitButton").simulate("click");
+			wrapper.update();
+			expect(wrapper.state().showSubmitWarning).toEqual(true);
+			wrapper.find("#submitButton").simulate("click");
 			wrapper.update();
 			expect(wrapper.state().feedbackVisible).toEqual(true);
 		});
@@ -153,7 +181,12 @@ describe("[ClientApp] ", () => {
 			};
 			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
 			expect(wrapper.state().feedbackVisible).toEqual(false);
-			wrapper.find("button").simulate("click");
+			expect(wrapper.state().showSubmitWarning).toEqual(false);
+			wrapper.find("#submitButton").simulate("click");
+			wrapper.update();
+			expect(wrapper.state().showSubmitWarning).toEqual(true);
+			wrapper.find("#submitButton").simulate("click");
+			wrapper.update();
 			expect(wrapper.state().feedbackVisible).toEqual(false);
 		});
 
@@ -161,8 +194,12 @@ describe("[ClientApp] ", () => {
 			const localProps = fakeProps;
 			localProps.validToSubmit = false;
 			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			const button = wrapper.find("button");
-			button.simulate("click");
+			expect(wrapper.state().feedbackVisible).toEqual(false);
+			expect(wrapper.state().showSubmitWarning).toEqual(false);
+			wrapper.find("#submitButton").simulate("click");
+			wrapper.update();
+			expect(wrapper.state().showSubmitWarning).toEqual(true);
+			wrapper.find("#submitButton").simulate("click");
 			wrapper.update();
 			expect(wrapper.state().feedbackVisible).toEqual(true);
 		});
@@ -171,7 +208,12 @@ describe("[ClientApp] ", () => {
 			const localProps = fakeProps;
 			localProps.unsavedIds = ["1001q","2002c"];
 			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			wrapper.find("button").simulate("click");
+			expect(wrapper.state().feedbackVisible).toEqual(false);
+			expect(wrapper.state().showSubmitWarning).toEqual(false);
+			wrapper.find("#submitButton").simulate("click");
+			wrapper.update();
+			expect(wrapper.state().showSubmitWarning).toEqual(true);
+			wrapper.find("#submitButton").simulate("click");
 			wrapper.update();
 			expect(wrapper.state().feedbackVisible).toEqual(true);
 		});
@@ -180,8 +222,12 @@ describe("[ClientApp] ", () => {
 			const localProps = fakeProps;
 			localProps.questions = questionsWithMultipleAnswers;
 			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			const button = wrapper.find("button");
-			button.simulate("click");
+			expect(wrapper.state().feedbackVisible).toEqual(false);
+			expect(wrapper.state().showSubmitWarning).toEqual(false);
+			wrapper.find("#submitButton").simulate("click");
+			wrapper.update();
+			expect(wrapper.state().showSubmitWarning).toEqual(true);
+			wrapper.find("#submitButton").simulate("click");
 			wrapper.update();
 			expect(wrapper.state().feedbackVisible).toEqual(true);
 		});
