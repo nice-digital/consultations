@@ -814,9 +814,14 @@ Array [
                 <p>
                   Review and edit your question responses and comments before you submit them to us.
                 </p>,
-                <p>
-                  Once they have been submitted you will not be able to edit them further or add any extra comments.
-                </p>,
+                <div
+                  className="alert alert--caution"
+                  role="alert"
+                >
+                  <p>
+                    Once they have been submitted you will not be able to edit them further or add any extra comments.
+                  </p>
+                </div>,
               ]
               <ul
                 className="list list--unstyled"

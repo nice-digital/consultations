@@ -133,9 +133,14 @@ exports[`[ClientApp]  Header  should display correctly when consulation hasn't s
   <p>
     Subtitle 1
   </p>
-  <p>
-    Subtitle 2
-  </p>
+  <Alert
+    role="alert"
+    type="caution"
+  >
+    <p>
+      Subtitle 2
+    </p>
+  </Alert>
 </Fragment>
 `;
 

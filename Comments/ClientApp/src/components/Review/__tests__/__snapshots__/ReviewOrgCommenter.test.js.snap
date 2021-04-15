@@ -810,9 +810,14 @@ Array [
                 <p>
                   On this page you can review and edit your response to the consultation before you send them to Really Cool Org.
                 </p>,
-                <p>
-                  Once you have sent your response you will not be able to edit it or add any more comments.
-                </p>,
+                <div
+                  className="alert alert--caution"
+                  role="alert"
+                >
+                  <p>
+                    Once you have sent your response you will not be able to edit it or add any more comments.
+                  </p>
+                </div>,
               ]
               <ul
                 className="list list--unstyled"
