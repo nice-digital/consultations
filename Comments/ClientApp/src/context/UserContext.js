@@ -105,32 +105,31 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 	}
 
 	loadUser = (returnURL) => {
-		this.checkSessionId()
-			.then(data => {
-				if (data.validityAndOrganisation?.valid === true) {
-					this.setStateForValidSessionCookie(data.validityAndOrganisation.organisationName, data.validityAndOrganisation.isLead);
-				}
-				else{
-					const sessionCookieExistsForThisConsultation = data.userSessionParameters.sessionCookieExistsForThisConsultation;
-					load("user", undefined, [], { returnURL, cachebust: new Date().getTime() })
-						.then(
-							res => {
-								this.setState({
-									isAuthorised: (res.data.isAuthenticatedByAccounts || sessionCookieExistsForThisConsultation),
-									displayName: res.data.displayName,
-									signInURL: res.data.signInURL,
-									registerURL: res.data.registerURL,
-								});
-
-							},
-						);
-				}
-				//update signin links in global nav here. because SSR isn't rendering them right on the server.
-				var signInLinks = document.getElementById("global-nav-header").querySelectorAll("a[href*='account/login']");
-				for (var i=0; i < signInLinks.length; i++) {
-					signInLinks[i].setAttribute("href", this.state.signInURL);
-				}
-			});
+		load("user", undefined, [], { returnURL, cachebust: new Date().getTime() })
+			.then(
+				res => {
+					const signInURL = res.data.signInURL;
+					this.setState({
+						isAuthorised: res.data.isAuthenticatedByAccounts,
+						displayName: res.data.displayName,
+						signInURL: signInURL,
+						registerURL: res.data.registerURL,
+					});
+					//update signin links in global nav here. because SSR isn't rendering them right on the server.
+					var signInLinks = document.getElementById("global-nav-header").querySelectorAll("a[href*='account/login']");
+					for (var i=0; i < signInLinks.length; i++) {
+						signInLinks[i].setAttribute("href", signInURL);
+					}
+				},
+			)
+			.then(
+				this.checkSessionId()
+					.then(data => {
+						if (data.validityAndOrganisation?.valid === true) {
+							this.setStateForValidSessionCookie(data.validityAndOrganisation.organisationName, data.validityAndOrganisation.isLead);
+						}
+					}),
+			);
 	}
 
 	getFeatureFlags = async () => {
