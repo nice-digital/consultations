@@ -21,7 +21,8 @@
             "OrganisationCodes":[
                 
             ],
-            "ShowShareWithOrganisationButton":false
+            "ShowShareWithOrganisationButton":false,
+            "NumResponsesFromOrg":0
         },
         {
             "Title":"Consultation title 1",
@@ -43,7 +44,8 @@
             "OrganisationCodes":[
                 
             ],
-            "ShowShareWithOrganisationButton":false
+            "ShowShareWithOrganisationButton":false,
+            "NumResponsesFromOrg":0
         },
         {
             "Title":"Consultation Title 1",
@@ -65,7 +67,8 @@
             "OrganisationCodes":[
                 
             ],
-            "ShowShareWithOrganisationButton":false
+            "ShowShareWithOrganisationButton":false,
+            "NumResponsesFromOrg":0
         }
     ],
     "OptionFilters":[
