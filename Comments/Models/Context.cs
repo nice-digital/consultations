@@ -1107,6 +1107,7 @@ namespace Comments.Models
                 .ToList();
 
             return (comments, answers);
+        }
 
         public List<string> GetEmailAddressForCommentsAndAnswers(CommentsAndQuestions commentsAndQuestions)
         {
