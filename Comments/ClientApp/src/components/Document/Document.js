@@ -4,6 +4,7 @@ import React, { Component, Fragment } from "react";
 import { Helmet } from "react-helmet";
 import { withRouter } from "react-router";
 import objectHash from "object-hash";
+import Moment from "react-moment";
 
 import preload from "../../data/pre-loader";
 import { load } from "./../../data/loader";
@@ -469,8 +470,13 @@ export class Document extends Component<PropsType, StateType> {
 										reference={reference}
 										consultationState={this.state.consultationData.consultationState}
 										allowRegisterOrganisationLeadLink={this.state.enableOrganisationalCommentingFeature}/>
+									{this.state.consultationData.consultationState.submittedDate &&
+										<Alert type="info" role="alert">
+											<p>You submitted your response to this consultation on <Moment format="D MMMM YYYY" date={this.state.consultationData.consultationState.submittedDate}/> you cannot add, edit or provide additional information.</p>
+										</Alert>
+									}
 									<UserContext.Consumer>
-										{(contextValue: any) => contextValue.isOrganisationCommenter && !contextValue.isLead ?
+										{(contextValue: any) => contextValue.isOrganisationCommenter && !contextValue.isLead && !this.state.consultationData.consultationState.submittedDate ?
 											<Alert type="info" role="alert">
 												<p>You are commenting on behalf of {contextValue.organisationName}.</p>
 												<p>When you submit your response it will be submitted to the organisational lead at {contextValue.organisationName}.</p>
