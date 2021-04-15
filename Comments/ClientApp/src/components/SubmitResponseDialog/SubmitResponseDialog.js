@@ -305,6 +305,17 @@ export class SubmitResponseDialog extends Component {
 								onClick={this.submitConsultation}>
 								{submittedDate ? "Responses submitted" : this.state.showSubmitWarning ? "Yes submit my response" : "Submit my response"}
 							</button>
+							{this.state.showSubmitWarning &&
+								<button
+									className="btn"
+									data-qa-sel="cancel-comment-button"
+									onClick={() => {
+										this.setState({ showSubmitWarning: false, })
+									}}
+								>
+									Cancel
+								</button>
+							}
 						</>
 						}
 
