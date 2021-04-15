@@ -95,19 +95,20 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 		}
 	}
 
-	setStateForValidSessionCookie = (organisationName) => {
+	setStateForValidSessionCookie = (organisationName, isLead) => {
 		this.setState({
 			isAuthorised: true,
 			isOrganisationCommenter: true,
 			organisationName,
+			isLead,
 		});
 	}
 
 	loadUser = (returnURL) => {
 		this.checkSessionId()
 			.then(data => {
-				if (data.validityAndOrganisationName?.valid === true) {
-					this.setStateForValidSessionCookie(data.validityAndOrganisationName.organisationName);
+				if (data.validityAndOrganisation?.valid === true) {
+					this.setStateForValidSessionCookie(data.validityAndOrganisation.organisationName, data.validityAndOrganisation.isLead);
 				}
 				else{
 					const sessionCookieExistsForThisConsultation = data.userSessionParameters.sessionCookieExistsForThisConsultation;
@@ -180,7 +181,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 				return {valid: false};
 			});
 		return {
-			validityAndOrganisationName: await validityAndOrganisationName,
+			validityAndOrganisation: await validityAndOrganisationName,
 			userSessionParameters: userSessionParameters,
 		};
 	}
@@ -197,8 +198,8 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 	updateContext = () => {
 		this.checkSessionId()
 			.then(data => {
-				if (data.validityAndOrganisationName.valid === true) {
-					this.setStateForValidSessionCookie(data.validityAndOrganisationName.organisationName);
+				if (data.validityAndOrganisation.valid === true) {
+					this.setStateForValidSessionCookie(data.validityAndOrganisation.organisationName);
 				}
 			});
 	}
