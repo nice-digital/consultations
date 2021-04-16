@@ -1,4 +1,4 @@
-using Comments.Common;
+﻿using Comments.Common;
 using Comments.Services;
 using Comments.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -126,9 +126,9 @@ namespace Comments.Controllers.Api
 			if (consultationId < 1)
 				throw new ArgumentException("ConsultationId id must be a positive integer", nameof(consultationId));
 			
-			var validityAndOrganisationName = await _organisationService.CheckOrganisationUserSession(consultationId);//, session.SessionCookies[consultationId]);
+			var validityAndOrganisation = await _organisationService.CheckOrganisationUserSession(consultationId);
 
-			return Ok(new { validityAndOrganisationName.valid, validityAndOrganisationName.organisationName });
+			return Ok(new { validityAndOrganisation.valid, validityAndOrganisation.organisationName, validityAndOrganisation.isLead });
 		}
 	}
 }

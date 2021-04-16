@@ -32,7 +32,7 @@ namespace Comments.Test.Infrastructure
 			throw new NotImplementedException();
 		}
 
-		public Task<(bool valid, string organisationName)> CheckOrganisationUserSession(int consultationId)
+		public Task<(bool valid, string organisationName, bool isLead)> CheckOrganisationUserSession(int consultationId)
 		{
 			throw new NotImplementedException();
 		}

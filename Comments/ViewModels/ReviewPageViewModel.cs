@@ -47,6 +47,8 @@ namespace Comments.ViewModels
 
 	    public IEnumerable<int> Document { get; set; }
 
+		public IEnumerable<string> Commenter { get; set; }
+
 	    [JsonConverter(typeof(StringEnumConverter))]
 	    public ReviewSortOrder Sort { get; set; } = ReviewSortOrder.DocumentAsc;
 

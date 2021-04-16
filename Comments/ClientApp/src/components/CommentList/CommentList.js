@@ -57,7 +57,6 @@ type StateType = {
 	error: string,
 	unsavedIds: Array<number>,
 	endDate: string,
-	enableOrganisationalCommentingFeature: boolean,
 	allowOrganisationCodeLogin: boolean,
 	isAuthorised: boolean,
 	otherUsersComments: Array<CommentType>,
@@ -82,7 +81,6 @@ export class CommentList extends Component<PropsType, StateType> {
 			shouldShowQuestionsTab: false,
 			unsavedIds: [],
 			endDate: "",
-			enableOrganisationalCommentingFeature: false,
 			allowOrganisationCodeLogin: false,
 			isAuthorised: false,
 			otherUsersComments: [],
@@ -135,7 +133,7 @@ export class CommentList extends Component<PropsType, StateType> {
 				unsavedIds: [],
 				endDate,
 				enableOrganisationalCommentingFeature,
-				allowOrganisationCodeLogin: (consultationIsOpen && enableOrganisationalCommentingFeature),
+				allowOrganisationCodeLogin: consultationIsOpen,
 				otherUsersComments: [],
 				otherUsersQuestions: [],
 			};
@@ -197,7 +195,7 @@ export class CommentList extends Component<PropsType, StateType> {
 					shouldShowCommentsTab: shouldShowCommentsTabOverride,
 					shouldShowQuestionsTab,
 					endDate,
-					allowOrganisationCodeLogin: (consultationIsOpen && this.state.enableOrganisationalCommentingFeature),
+					allowOrganisationCodeLogin: consultationIsOpen,
 				});
 
 				if (isOrganisationCommenter) {
@@ -490,25 +488,27 @@ export class CommentList extends Component<PropsType, StateType> {
 																		/>
 																	);
 																})}
-																{this.state.otherUsersComments.map((otherUsersComment) => {
-																	return (
-																		<CommentBox
-																			updateUnsavedIds={this.updateUnsavedIds}
-																			readOnly={true}
-																			key={otherUsersComment.commentId}
-																			unique={`Comment${otherUsersComment.commentId}`}
-																			comment={otherUsersComment}
-																			saveHandler={this.saveCommentHandler}
-																			deleteHandler={this.deleteCommentHandler}
-																		/>
-																	);
-																})}
+																{!contextValue.isLead &&
+																	this.state.otherUsersComments.map((otherUsersComment) => {
+																		return (
+																			<CommentBox
+																				updateUnsavedIds={this.updateUnsavedIds}
+																				readOnly={true}
+																				key={otherUsersComment.commentId}
+																				unique={`Comment${otherUsersComment.commentId}`}
+																				comment={otherUsersComment}
+																				saveHandler={this.saveCommentHandler}
+																				deleteHandler={this.deleteCommentHandler}
+																			/>
+																		);
+																	})
+																}
 															</ul>
 														}
 													</div>
 												) : (
 													<LoginPanelWithRouter
-														enableOrganisationalCommentingFeature={this.state.enableOrganisationalCommentingFeature}
+														enableOrganisationalCommentingFeature={contextValue.organisationalCommentingFeature}
 														questionsTabIsOpen={this.state.drawerOpen && !this.state.viewComments}
 													/>
 												)}
