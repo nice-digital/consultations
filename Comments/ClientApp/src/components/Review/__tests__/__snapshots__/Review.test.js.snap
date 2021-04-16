@@ -200,7 +200,7 @@ Array [
                           role="group"
                         >
                           <label
-                            className="filter-group__option"
+                            className="filter-group__option break-word"
                             htmlFor="filter_QuestionsOrComments_Questions"
                           >
                             <input
@@ -217,7 +217,7 @@ Array [
                             Questions
                           </label>
                           <label
-                            className="filter-group__option"
+                            className="filter-group__option break-word"
                             htmlFor="filter_QuestionsOrComments_Comments"
                           >
                             <input
@@ -259,7 +259,7 @@ Array [
                           role="group"
                         >
                           <label
-                            className="filter-group__option"
+                            className="filter-group__option break-word"
                             htmlFor="filter_Document_1"
                           >
                             <input
@@ -276,7 +276,7 @@ Array [
                             Unstable angina and NSTEMI
                           </label>
                           <label
-                            className="filter-group__option"
+                            className="filter-group__option break-word"
                             htmlFor="filter_Document_2"
                           >
                             <input
@@ -350,7 +350,7 @@ Array [
                               >
                                 <label
                                   className="form__label visually-hidden"
-                                  htmlFor="Answer11"
+                                  htmlFor="Answer-1"
                                 >
                                   Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
                                 </label>
@@ -358,9 +358,8 @@ Array [
                                   className="form__input form__input--textarea"
                                   data-hj-whitelist={true}
                                   data-qa-sel="Comment-text-area"
-                                  defaultValue="gg"
                                   disabled={true}
-                                  id="Answer11"
+                                  id="Answer-1"
                                   onInput={[Function]}
                                 />
                               </div>
@@ -855,7 +854,7 @@ Array [
                           role="group"
                         >
                           <label
-                            className="filter-group__option"
+                            className="filter-group__option break-word"
                             htmlFor="filter_QuestionsOrComments_Questions"
                           >
                             <input
@@ -872,7 +871,7 @@ Array [
                             Questions
                           </label>
                           <label
-                            className="filter-group__option"
+                            className="filter-group__option break-word"
                             htmlFor="filter_QuestionsOrComments_Comments"
                           >
                             <input
@@ -914,7 +913,7 @@ Array [
                           role="group"
                         >
                           <label
-                            className="filter-group__option"
+                            className="filter-group__option break-word"
                             htmlFor="filter_Document_1"
                           >
                             <input
@@ -931,7 +930,7 @@ Array [
                             Unstable angina and NSTEMI
                           </label>
                           <label
-                            className="filter-group__option"
+                            className="filter-group__option break-word"
                             htmlFor="filter_Document_2"
                           >
                             <input
@@ -1005,7 +1004,7 @@ Array [
                               >
                                 <label
                                   className="form__label visually-hidden"
-                                  htmlFor="Answer11"
+                                  htmlFor="Answer-1"
                                 >
                                   Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
                                 </label>
@@ -1013,24 +1012,11 @@ Array [
                                   className="form__input form__input--textarea"
                                   data-hj-whitelist={true}
                                   data-qa-sel="Comment-text-area"
-                                  defaultValue="gg"
                                   disabled={null}
-                                  id="Answer11"
+                                  id="Answer-1"
                                   onInput={[Function]}
                                 />
                               </div>
-                              <span
-                                className="ml--0 mb--0 CommentBox__savedIndicator"
-                              >
-                                Saved
-                              </span>
-                              <button
-                                className="btn mr--0 mb--0 right"
-                                data-qa-sel="delete-comment-button"
-                                onClick={[Function]}
-                              >
-                                Delete
-                              </button>
                             </form>
                           </section>
                         </li>

@@ -1,0 +1,80 @@
+{
+  "comments": [],
+  "questions": [
+    {
+      "questionId": 55,
+      "questionText": "Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.",
+      "questionTypeId": 17,
+      "lastModifiedByUserId": "auth0|00000000-0000-0000-0000-000000000000",
+      "lastModifiedDate": "2018-10-01T14:53:08.947",
+      "questionType": {
+        "questionTypeId": 17,
+        "type": "Text",
+        "description": "A text question requiring a text answer.",
+        "hasTextAnswer": true,
+        "hasBooleanAnswer": false
+      },
+      "answers": [
+        {
+          "answerId": 2032,
+          "answerText": "yes",
+          "answerBoolean": null,
+          "questionId": 55,
+          "lastModifiedDate": "2021-03-22T10:33:52.1656229",
+          "lastModifiedByUserId": null,
+          "statusId": 3,
+          "status": {
+            "statusId": 3,
+            "name": "SubmittedToLead"
+          },
+          "sourceURI": "consultations://./consultation/227",
+          "commenterEmail": "john.holland@one.com"
+        },
+        {
+          "answerId": 2035,
+          "answerText": "no",
+          "answerBoolean": null,
+          "questionId": 55,
+          "lastModifiedDate": "2021-03-22T12:53:18.3598235",
+          "lastModifiedByUserId": null,
+          "statusId": 3,
+          "status": {
+            "statusId": 3,
+            "name": "SubmittedToLead"
+          },
+          "sourceURI": "consultations://./consultation/227",
+          "commenterEmail": "john.holland@two.com"
+        },
+        {
+          "answerId": 2043,
+          "answerText": "definitely maybe",
+          "answerBoolean": null,
+          "questionId": 55,
+          "lastModifiedDate": "2021-03-23T11:49:59.9612475",
+          "lastModifiedByUserId": null,
+          "statusId": 3,
+          "status": {
+            "statusId": 3,
+            "name": "SubmittedToLead"
+          },
+          "sourceURI": "consultations://./consultation/227",
+          "commenterEmail": "john.holland@three.com"
+        }
+      ],
+      "locationId": 760,
+      "sourceURI": "consultations://./consultation/227",
+      "htmlElementID": null,
+      "rangeStart": null,
+      "rangeStartOffset": null,
+      "rangeEnd": null,
+      "rangeEndOffset": null,
+      "quote": null,
+      "commentOn": "Consultation",
+      "commentOnEnum": 0,
+      "documentId": null,
+      "show": true,
+      "order": "227.000.000",
+      "section": null
+    }
+  ]
+}

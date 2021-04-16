@@ -11,5 +11,6 @@
         "name":"Draft"
     },
     "sourceURI":"consultations://./consultation/1/document/1/chapter/introduction",
-    "commenterEmail":null
+    "commenterEmail":null,
+    "showWhenFiltered":true
 }

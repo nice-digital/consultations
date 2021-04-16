@@ -27,6 +27,7 @@ namespace Comments.Test.IntegrationTests.API.Review
 					new FilterOption("Questions", "Questions"),
 					new FilterOption("Comments", "Comments"),
 				}},
+				new OptionFilterGroup(){Id =  "Commenter", Title = "Commenters", Options = new List<FilterOption>()},
 				new OptionFilterGroup(){Id =  "Document", Title = "Document", Options = new List<FilterOption>()}
 		    } };
 		}

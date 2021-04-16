@@ -5,6 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using Comments.Common;
+using Microsoft.EntityFrameworkCore.Internal;
+using Z.EntityFramework.Plus;
 
 namespace Comments.Models
 {
@@ -40,6 +43,7 @@ namespace Comments.Models
 			var currentUserInThisScope = _userService.GetCurrentUser(); //this dbcontext's service lifetime is scoped, i.e. new for every request.
 			_createdByUserID = currentUserInThisScope.UserId;
 			_organisationUserIDs = currentUserInThisScope.ValidatedOrganisationUserIds;
+			_organisationIDs = currentUserInThisScope.ValidatedOrganisationIds;
 			var currentUsersOrganisationTheyAreLeadOf = currentUserInThisScope.OrganisationsAssignedAsLead?.FirstOrDefault(); //the new plan is to only support being lead of 1 organisation.
 			_organisationalLeadOrganisationID = currentUsersOrganisationTheyAreLeadOf != null ? (int?)currentUsersOrganisationTheyAreLeadOf.OrganisationId : null;
 		}
@@ -111,6 +115,54 @@ namespace Comments.Models
 					l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault());
 
 			return sortedData;
+		}
+
+		/// <summary>
+		/// Organisation users view each others submitted responses to inform their own, but can't interact with or submit them.
+		/// </summary>
+		/// <param name="sourceURIs"></param>
+        /// <returns></returns>
+		public IEnumerable<Location> GetOtherOrganisationUsersCommentsAndQuestionsForDocument(IList<string> sourceURIs)
+		{
+            var commentsAndAnswers = Location.IgnoreQueryFilters()
+                .IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead
+                                                         && _organisationIDs.Any(o => o.Equals(c.OrganisationId))
+                                                         && !_organisationUserIDs.Contains(c.OrganisationUserId.Value)))
+                .IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead 
+                                                         && _organisationIDs.Any(o => o.Equals(c.OrganisationId)) 
+                                                         && !_organisationUserIDs.Contains(c.OrganisationUserId.Value))
+                    .Select(c=> c.Status))
+                .IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead
+                                                         && _organisationIDs.Any(o => o.Equals(c.OrganisationId))
+                                                         && !_organisationUserIDs.Contains(c.OrganisationUserId.Value))
+                    .Select(c=> c.OrganisationUser))
+
+                .IncludeFilter(l => l.Question)
+                .IncludeFilter(l => l.Question
+                    .Select(q => q.QuestionType))
+                .IncludeFilter(l => l.Question
+                    .Select(q => q.Answer.Where(a => a.StatusId == (int)StatusName.SubmittedToLead
+                                                     && _organisationIDs.Contains(a.OrganisationId.Value) 
+                                                     && !_organisationUserIDs.Contains(a.OrganisationUserId.Value))
+                        .OrderByDescending(a=> a.LastModifiedDate).Select(a => a.LastModifiedDate).FirstOrDefault()))
+                .IncludeFilter(l=> l.Question
+                    .Select(q => q.Answer.Where(a => a.StatusId == (int)StatusName.SubmittedToLead
+                                                     && _organisationIDs.Contains(a.OrganisationId.Value)
+                                                     && !_organisationUserIDs.Contains(a.OrganisationUserId.Value))
+                    .Select(a => a.OrganisationUser)))
+                .OrderBy(l => l.Order)
+                .ToList();
+
+            var filteredLocations = commentsAndAnswers.Where(l =>
+                (l.Order != null) && sourceURIs.Contains(l.SourceURI, StringComparer.OrdinalIgnoreCase));
+
+            var sortedData = filteredLocations.Where(l => l.Comment.Count > 0 || l.Question.Count > 0)
+                .OrderBy(l => l.Order)
+                .ThenByDescending(l =>
+                    l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate)
+                        .FirstOrDefault());
+
+            return sortedData;
 		}
 
 		public IEnumerable<Location> GetQuestionsForDocument(IList<string> sourceURIs, bool partialMatchSourceURI)
@@ -1011,5 +1063,21 @@ namespace Comments.Models
 				.Any(c => c.OrganisationUser.OrganisationAuthorisation.OrganisationId.Equals(organisationId));
 
 		}
-	}
+
+        public List<string> GetEmailAddressForCommentsAndAnswers(CommentsAndQuestions commentsAndQuestions)
+        {
+            var commentIds = commentsAndQuestions.Comments.Select(c => c.CommentId).ToList();
+            var answerIds = commentsAndQuestions.Questions.SelectMany(q => q.Answers).Select(a => a.AnswerId).ToList();
+
+            var comments = Comment.Where(c => commentIds.Contains(c.CommentId)).ToList();
+            var answers = Answer.Where(a => answerIds.Contains(a.AnswerId)).ToList();
+
+            var emailAddresses = OrganisationUser.Where(o => comments.Select(c => c.OrganisationUserId).Contains(o.OrganisationUserId)
+                                                || answers.Select(a => a.OrganisationUserId).Contains(o.OrganisationUserId))
+                                                .Select(o => o.EmailAddress)
+                                                .Distinct()
+                                                .ToList();
+            return emailAddresses;
+        }
+    }
 }
