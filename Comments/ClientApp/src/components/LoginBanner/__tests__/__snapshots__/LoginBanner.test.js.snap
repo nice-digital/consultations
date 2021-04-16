@@ -4,6 +4,7 @@ exports[`[ClientApp]  LoginBanner Component should match snapshot. no querystrin
 <div
   className="panel panel-white mt--0 mb--0 sign-in-banner"
   data-qa-sel="sign-in-banner"
+  id="loginBanner"
 >
   <div
     className="container"
@@ -31,14 +32,18 @@ exports[`[ClientApp]  LoginBanner Component should match snapshot. no querystrin
           Sign in
         </a>
       </p>
-      Don't have an account?
-       
-      <a
-        href="/register-url"
-        title="Register for a NICE account"
+      <p
+        className="display--inline"
       >
-        Register
-      </a>
+        <a
+          href="/register-url"
+          title="Register for a NICE account"
+        >
+          Register
+        </a>
+         
+        for a NICE account if you don't already have one.
+      </p>
     </div>
   </div>
 </div>

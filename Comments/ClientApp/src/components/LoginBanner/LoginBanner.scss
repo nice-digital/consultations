@@ -1,9 +1,13 @@
-@import '~@nice-digital/nds-input/scss/input.scss';
+@import "~@nice-digital/nds-input/scss/input.scss";
 
-.sign-in-banner{
-	margin-top: 0.5rem!important;
+.sign-in-banner {
+  margin-top: 0.5rem !important;
 }
 
-.panel-white{
-	background-color: #fff;
+.panel-white {
+  background-color: #fff;
+}
+
+.display--inline {
+  display: inline;
 }

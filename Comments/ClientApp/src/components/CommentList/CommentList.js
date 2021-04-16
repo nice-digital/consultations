@@ -62,7 +62,6 @@ type StateType = {
 	isAuthorised: boolean,
 	otherUsersComments: Array<CommentType>,
 	otherUsersQuestions: Array<QuestionType>,
-	consultationStatus: string,
 };
 
 export class CommentList extends Component<PropsType, StateType> {
@@ -88,7 +87,6 @@ export class CommentList extends Component<PropsType, StateType> {
 			isAuthorised: false,
 			otherUsersComments: [],
 			otherUsersQuestions: [],
-			consultationStatus: "",
 		};
 
 		let preloadedData = {};
@@ -112,7 +110,6 @@ export class CommentList extends Component<PropsType, StateType> {
 			const {
 				consultationIsOpen,
 				submittedDate,
-				consultationHasNotStartedYet,
 				shouldShowDrawer,
 				shouldShowCommentsTab,
 				shouldShowQuestionsTab,
@@ -120,7 +117,6 @@ export class CommentList extends Component<PropsType, StateType> {
 			} = consultationState;
 
 			const allowComments = consultationIsOpen && !submittedDate;
-			const consultationStatus = consultationIsOpen ? "open" :	consultationHasNotStartedYet ? "upcoming" :	"closed";
 			const shouldShowCommentsTabOverride = !shouldShowCommentsTab && !shouldShowQuestionsTab ? true : shouldShowCommentsTab;
 
 			this.state = {
@@ -142,7 +138,6 @@ export class CommentList extends Component<PropsType, StateType> {
 				allowOrganisationCodeLogin: (consultationIsOpen && enableOrganisationalCommentingFeature),
 				otherUsersComments: [],
 				otherUsersQuestions: [],
-				consultationStatus,
 			};
 		}
 
@@ -184,7 +179,6 @@ export class CommentList extends Component<PropsType, StateType> {
 				const {
 					consultationIsOpen,
 					submittedDate,
-					consultationHasNotStartedYet,
 					shouldShowDrawer,
 					shouldShowCommentsTab,
 					shouldShowQuestionsTab,
@@ -192,7 +186,6 @@ export class CommentList extends Component<PropsType, StateType> {
 				} = consultationState;
 
 				const allowComments = consultationIsOpen && !submittedDate;
-				const consultationStatus = consultationIsOpen ? "open" : consultationHasNotStartedYet ? "upcoming" : "closed";
 				const shouldShowCommentsTabOverride = !shouldShowCommentsTab && !shouldShowQuestionsTab ? true : shouldShowCommentsTab;
 
 				this.setState({
@@ -205,7 +198,6 @@ export class CommentList extends Component<PropsType, StateType> {
 					shouldShowQuestionsTab,
 					endDate,
 					allowOrganisationCodeLogin: (consultationIsOpen && this.state.enableOrganisationalCommentingFeature),
-					consultationStatus,
 				});
 
 				if (isOrganisationCommenter) {
@@ -517,7 +509,7 @@ export class CommentList extends Component<PropsType, StateType> {
 												) : (
 													<LoginPanelWithRouter
 														enableOrganisationalCommentingFeature={this.state.enableOrganisationalCommentingFeature}
-														consultationStatus={this.state.consultationStatus}
+														questionsTabIsOpen={this.state.drawerOpen && !this.state.viewComments}
 													/>
 												)}
 

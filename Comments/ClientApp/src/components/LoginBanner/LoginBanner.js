@@ -19,7 +19,7 @@ type PropsType = {
 	orgFieldName: string, //the organisation text input needs a unique name, however the login banner will be on the page twice. so passing in a unique name
 	codeLoginOnly: boolean,
 	title: string,
-	showBorder: boolean,
+	isInCommentsPanel: boolean,
 }
 
 type OrganisationCode = {
@@ -186,10 +186,10 @@ export class LoginBanner extends Component<PropsType, StateType> {
 
 		const codeLoginOnly = this.props.codeLoginOnly ?? false;
 		const title = this.props.title ?? "";
-		const showBorder = this.props.showBorder ?? true;
+		const isInCommentsPanel = this.props.isInCommentsPanel ?? false;
 
 		return (
-			<div className={`${showBorder && "panel panel-white"} mt--0 mb--0 sign-in-banner`} data-qa-sel="sign-in-banner">
+			<div className={`${!isInCommentsPanel  && "panel panel-white"} mt--0 mb--0 sign-in-banner`} id="loginBanner" data-qa-sel="sign-in-banner">
 				<div className="container">
 					<div className="LoginBanner" role="form">
 						{title !== "" &&
@@ -197,7 +197,6 @@ export class LoginBanner extends Component<PropsType, StateType> {
 						}
 						{this.props.allowOrganisationCodeLogin &&
 							<>
-								<p>To comment as part of an organisation, please enter your organisation code:</p>
 								<div className={this.state.hasError ? "input input--error" : "input"}>
 									<DebounceInput
 										minLength={5}
@@ -210,7 +209,7 @@ export class LoginBanner extends Component<PropsType, StateType> {
 										element={Input}
 										error={this.state.hasError}
 										errorMessage={this.state.errorMessage}
-										label="Organisation code"
+										label="Enter your organisation code"
 										name={"orgCode-" + this.props.orgFieldName}
 									/>
 								</div>
@@ -256,12 +255,13 @@ export class LoginBanner extends Component<PropsType, StateType> {
 							</>
 						}
 						{!codeLoginOnly &&
-							<>
-								Don't have an account?{" "}
+							<p className={`${!isInCommentsPanel && "display--inline"}`}>
 								<a href={this.props.registerURL} title="Register for a NICE account">
 									Register
 								</a>
-							</>
+								{" "}
+								for a NICE account if you don't already have one.
+							</p>
 						}
 					</div>
 				</div>

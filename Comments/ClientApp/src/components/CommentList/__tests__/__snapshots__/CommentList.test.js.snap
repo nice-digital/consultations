@@ -7,7 +7,7 @@ Array [
     "",
     <section
       aria-label="Commenting panel"
-      className="Drawer  Drawer--mobile"
+      className="Drawer Drawer--open Drawer--mobile"
     >
       <div
         className="Drawer__controls"
@@ -15,7 +15,7 @@ Array [
         <button
           aria-controls="comments-panel"
           aria-haspopup="true"
-          aria-label="Open the commenting panel"
+          aria-label="Close the commenting panel"
           className="Drawer__control Drawer__control--comments active"
           data-qa-sel="open-commenting-panel"
           id="js-drawer-toggleopen-comments"
@@ -24,14 +24,14 @@ Array [
         >
           <span
             aria-hidden="true"
-            className="icon icon--chevron-left"
+            className="icon icon--chevron-right"
             data-qa-sel="close-commenting-panel"
           />
         </button>
         <button
           aria-controls="questions-panel"
           aria-haspopup="true"
-          aria-label="Open the questions panel"
+          aria-label="Close the questions panel"
           className="Drawer__control Drawer__control--questions active"
           data-qa-sel="open-questions-panel"
           id="js-drawer-toggleopen-questions"
@@ -40,14 +40,14 @@ Array [
         >
           <span
             aria-hidden="true"
-            className="icon icon--chevron-left"
+            className="icon icon--chevron-right"
             data-qa-sel="close-questions-panel"
           />
         </button>
       </div>
       <div
-        aria-disabled={true}
-        className="Drawer__main Drawer__main--closed"
+        aria-disabled={false}
+        className="Drawer__main Drawer__main--open"
         data-qa-sel="comment-panel"
         id="comments-panel"
       >
@@ -622,7 +622,7 @@ Array [
         }
       }
     >
-      Comments and questions panel closed
+      Comments panel open
     </div>
     <div
       aria-live="assertive"
