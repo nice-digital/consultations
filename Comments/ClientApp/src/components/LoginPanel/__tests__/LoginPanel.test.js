@@ -7,7 +7,7 @@ import toJson from "enzyme-to-json";
 import { LoginPanel } from "../LoginPanel";
 
 const loginPanelFakeProps = {
-	enableOrganisationalCommentingFeature: true,
+	organisationalCommentingFeature: true,
 	match: {
 		url: "/1/1/introduction",
 	},

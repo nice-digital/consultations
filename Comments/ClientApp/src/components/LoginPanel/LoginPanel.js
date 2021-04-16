@@ -6,7 +6,7 @@ import { UserContext } from "../../context/UserContext";
 import  LoginBannerWithRouter from "../LoginBanner/LoginBanner";
 
 type PropsType = {
-	enableOrganisationalCommentingFeature: boolean,
+	organisationalCommentingFeature: boolean,
 	questionsTabIsOpen: boolean,
 }
 
@@ -54,11 +54,11 @@ export class LoginPanel extends Component<PropsType, StateType> {
 
 	render() {
 		const { respondingAsOrg, respondingAsOrgType } = this.state;
-		const { enableOrganisationalCommentingFeature, questionsTabIsOpen } = this.props;
+		const { organisationalCommentingFeature, questionsTabIsOpen } = this.props;
 
 		const showFirstScreen = (respondingAsOrg === null);
 		const showSecondScreen = (respondingAsOrg === true && (respondingAsOrgType === null || respondingAsOrgType === "code"));
-		const showLogin = (respondingAsOrg === false || respondingAsOrgType !== null || !enableOrganisationalCommentingFeature);
+		const showLogin = (respondingAsOrg === false || respondingAsOrgType !== null || !organisationalCommentingFeature);
 		const showBackLink = (!showFirstScreen);
 
 		const loginBannerProps = {
@@ -82,14 +82,14 @@ export class LoginPanel extends Component<PropsType, StateType> {
 			loginBannerProps.title = null;
 		}
 
-		if (!enableOrganisationalCommentingFeature) {
+		if (!organisationalCommentingFeature) {
 			loginBannerProps.title = null;
 			loginBannerProps.signInText = null;
 		}
 
 		return (
 			<>
-				{enableOrganisationalCommentingFeature &&
+				{organisationalCommentingFeature &&
 					<>
 						{showFirstScreen &&
 							<LoginSelectionOrg

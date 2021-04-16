@@ -508,7 +508,7 @@ export class CommentList extends Component<PropsType, StateType> {
 													</div>
 												) : (
 													<LoginPanelWithRouter
-														enableOrganisationalCommentingFeature={contextValue.organisationalCommentingFeature}
+														organisationalCommentingFeature={contextValue.organisationalCommentingFeature}
 														questionsTabIsOpen={this.state.drawerOpen && !this.state.viewComments}
 													/>
 												)}

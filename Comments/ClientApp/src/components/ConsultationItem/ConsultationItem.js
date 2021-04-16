@@ -95,7 +95,7 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 						)}
 						{showShareWithOrganisationButton && allowGenerateOrganisationCode &&
 							<div className="card__metadatum">
-								{numResponsesFromOrg} {numResponsesFromOrg == 1 ? "response" : "responses"} from your organisation
+								{numResponsesFromOrg} {numResponsesFromOrg === 1 ? "response" : "responses"} from your organisation
 							</div>
 						}
 						<div>
