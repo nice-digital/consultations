@@ -55,7 +55,6 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 		let isOrganisationCommenter = false;
 		let organisationName = null;
 		let isAuthorised = preloadSource ? preloadSource.isAuthorised : false;
-		//let isLead = false;
 
 		if (userSessionParameters.sessionCookieExistsForThisConsultation){
 			const preloadedUserSessionData = preload(
@@ -72,7 +71,6 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 				isOrganisationCommenter = preloadedUserSessionData.valid;
 				isAuthorised = isAuthorised || preloadedUserSessionData.valid ; //you could be authorised by idam or by organisation session cookie.
 				organisationName = preloadedUserSessionData.organisationName;
-				//isLead = preloadedUserSessionData.isLead;
 			}
 		}
 
@@ -104,33 +102,32 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 	}
 
 	loadUser = (returnURL) => {
-		this.checkSessionId()
-			.then(data => {
-				if (data.validityAndOrganisationName?.valid === true) {
-					this.setStateForValidSessionCookie(data.validityAndOrganisationName.organisationName);
-				}
-				else{
-					const sessionCookieExistsForThisConsultation = data.userSessionParameters.sessionCookieExistsForThisConsultation;
-					load("user", undefined, [], { returnURL, cachebust: new Date().getTime() })
-						.then(
-							res => {
-								const signInURL = res.data.signInURL;
-								this.setState({
-									isAuthorised: (res.data.isAuthenticatedByAccounts || sessionCookieExistsForThisConsultation),
-									displayName: res.data.displayName,
-									signInURL: signInURL,
-									registerURL: res.data.registerURL,
-								});
-								//update signin links in global nav here. because SSR isn't rendering them right on the server.
-								var signInLinks = document.getElementById("global-nav-header").querySelectorAll("a[href*='account/login']");
-								for (var i=0; i < signInLinks.length; i++) {
-									signInLinks[i].setAttribute("href", signInURL);
-								}
-							},
-						);
-
-				}
-			});
+		load("user", undefined, [], { returnURL, cachebust: new Date().getTime() })
+			.then(
+				res => {
+					const signInURL = res.data.signInURL;
+					this.setState({
+						isAuthorised: res.data.isAuthenticatedByAccounts,
+						displayName: res.data.displayName,
+						signInURL: signInURL,
+						registerURL: res.data.registerURL,
+						isLead: (res.data.organisationsAssignedAsLead && res.data.organisationsAssignedAsLead.length > 0),
+					});
+					//update signin links in global nav here. because SSR isn't rendering them right on the server.
+					var signInLinks = document.getElementById("global-nav-header").querySelectorAll("a[href*='account/login']");
+					for (var i=0; i < signInLinks.length; i++) {
+						signInLinks[i].setAttribute("href", signInURL);
+					}
+				},
+			)
+			.then(
+				this.checkSessionId()
+					.then(data => {
+						if (data.validityAndOrganisationName?.valid === true) {
+							this.setStateForValidSessionCookie(data.validityAndOrganisationName.organisationName);
+						}
+					}),
+			);
 	}
 
 	getFeatureFlags = async () => {
