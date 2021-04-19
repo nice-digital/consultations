@@ -51,7 +51,6 @@ type StateType = {
 	drawerOpen: boolean,
 	drawerMobile: boolean,
 	viewComments: boolean,
-	shouldShowDrawer: boolean,
 	shouldShowCommentsTab: boolean,
 	shouldShowQuestionsTab: boolean,
 	error: string,
@@ -76,7 +75,6 @@ export class CommentList extends Component<PropsType, StateType> {
 			drawerOpen: true,
 			drawerMobile: false,
 			viewComments: true,
-			shouldShowDrawer: false,
 			shouldShowCommentsTab: false,
 			shouldShowQuestionsTab: false,
 			unsavedIds: [],
@@ -108,7 +106,6 @@ export class CommentList extends Component<PropsType, StateType> {
 			const {
 				consultationIsOpen,
 				submittedDate,
-				shouldShowDrawer,
 				shouldShowCommentsTab,
 				shouldShowQuestionsTab,
 				endDate,
@@ -125,7 +122,6 @@ export class CommentList extends Component<PropsType, StateType> {
 				error: "",
 				initialDataLoaded: true,
 				viewComments: shouldShowCommentsTabOverride, // why is this not set below?
-				shouldShowDrawer,
 				shouldShowCommentsTab: shouldShowCommentsTabOverride,
 				shouldShowQuestionsTab,
 				drawerOpen: true,
@@ -177,7 +173,6 @@ export class CommentList extends Component<PropsType, StateType> {
 				const {
 					consultationIsOpen,
 					submittedDate,
-					shouldShowDrawer,
 					shouldShowCommentsTab,
 					shouldShowQuestionsTab,
 					endDate,
@@ -191,7 +186,6 @@ export class CommentList extends Component<PropsType, StateType> {
 					questions,
 					loading: (isOrganisationCommenter ? true : false),
 					allowComments,
-					shouldShowDrawer,
 					shouldShowCommentsTab: shouldShowCommentsTabOverride,
 					shouldShowQuestionsTab,
 					endDate,

@@ -55,7 +55,6 @@
         "consultationHasEnded":false,
         "supportsSubmission":false,
         "supportsDownload":false,
-        "shouldShowDrawer":true,
         "shouldShowCommentsTab":true,
         "shouldShowQuestionsTab":false
     },

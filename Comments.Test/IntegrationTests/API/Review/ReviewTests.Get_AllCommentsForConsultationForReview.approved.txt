@@ -199,7 +199,6 @@
             "consultationHasEnded":false,
             "supportsSubmission":true,
             "supportsDownload":true,
-            "shouldShowDrawer":true,
             "shouldShowCommentsTab":true,
             "shouldShowQuestionsTab":true
         }
