@@ -121,7 +121,7 @@ export class CommentList extends Component<PropsType, StateType> {
 				allowComments,
 				error: "",
 				initialDataLoaded: true,
-				viewComments: shouldShowCommentsTabOverride, // why is this not set below?
+				viewComments: shouldShowCommentsTabOverride,
 				shouldShowCommentsTab: shouldShowCommentsTabOverride,
 				shouldShowQuestionsTab,
 				drawerOpen: true,
@@ -383,7 +383,7 @@ export class CommentList extends Component<PropsType, StateType> {
 							<button
 								data-qa-sel="open-commenting-panel"
 								id="js-drawer-toggleopen-comments"
-								className={`Drawer__control Drawer__control--comments ${(this.state.viewComments ? "active" : "active")}`}
+								className="Drawer__control Drawer__control--comments active"
 								onClick={() => this.handleClick("toggleOpenComments")}
 								aria-controls="comments-panel"
 								aria-haspopup="true"
@@ -407,7 +407,7 @@ export class CommentList extends Component<PropsType, StateType> {
 							<button
 								data-qa-sel="open-questions-panel"
 								id="js-drawer-toggleopen-questions"
-								className={`Drawer__control Drawer__control--questions ${(this.state.viewComments ? "active" : "active")}`}
+								className="Drawer__control Drawer__control--questions active"
 								onClick={() => this.handleClick("toggleOpenQuestions")}
 								aria-controls="questions-panel"
 								aria-haspopup="true"

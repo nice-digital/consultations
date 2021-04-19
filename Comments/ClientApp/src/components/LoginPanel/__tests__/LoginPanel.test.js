@@ -96,7 +96,7 @@ describe("LoginPanel", () => {
 
 		const backButton = wrapper.find("#loginPanelBackButton");
 
-		backButton.simulate("mousedown");
+		backButton.simulate("click");
 		wrapper.update();
 
 		expect(wrapper.find("#loginBanner").exists()).toBe(false);
@@ -121,7 +121,7 @@ describe("LoginPanel", () => {
 
 		const backButton = wrapper.find("#loginPanelBackButton");
 
-		backButton.simulate("mousedown");
+		backButton.simulate("click");
 		wrapper.update();
 
 		expect(wrapper.find("#loginBanner").exists()).toBe(false);

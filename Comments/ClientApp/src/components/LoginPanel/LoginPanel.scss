@@ -1,7 +1,10 @@
 .login-panel {
   &__back {
-    @extend a;
-
+    border: none;
     cursor: pointer;
+    display: inline;
+    padding: 0;
+
+    @extend a;
   }
 }
