@@ -1,4 +1,4 @@
-namespace Comments.Common
+﻿namespace Comments.Common
 {
 	public static class Constants
     {
@@ -60,6 +60,9 @@ namespace Comments.Common
 	    /// </summary>
 		public static class Features
 	    {
+            // This constant is for testing the getFeatureFlags feature
+            public const string TestFeatureFlag = "TestFeatureFlag";
+
 		    public const string OrganisationalCommenting = "OrganisationalCommenting";
 
 		    public const string IndevUsingIDAMAuth = "IndevUsingIDAMAuth";

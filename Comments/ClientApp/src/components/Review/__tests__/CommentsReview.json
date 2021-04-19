@@ -152,11 +152,7 @@
       "submittedDate": null,
       "consultationSupportsQuestions": false,
       "consultationSupportsComments": true,
-      "documentIdsWhichSupportComments": [
-        1,
-        2,
-        3
-      ],
+      "documentIdsWhichSupportComments": [1, 2, 3],
       "consultationIsOpen": true,
       "consultationHasNotStartedYet": false,
       "consultationHasEnded": false,
@@ -167,6 +163,7 @@
       "shouldShowQuestionsTab": true
     }
   },
+  "organisationName": "Really Cool Org",
   "filters": [
     {
       "id": "QuestionsOrComments",

@@ -470,5 +470,119 @@ namespace Comments.Test.UnitTests
 			//Assert
 			OrgUser.EmailAddress.ShouldBe(emailAddress);
 		}
+    
+    		public void Get_Other_Org_Users_Comments()
+		{
+			// Arrange
+			ResetDatabase();
+			var commentText = Guid.NewGuid().ToString();
+			var myOrganisationId = 1;
+			var anotherOrganisationId = 2;
+			var myOrganisationUserId = 1;
+			var anotherOrganisationUserId = 2;
+			var sourceURI = "consultations://./consultation/1";
+
+			// My comment
+			var locationId = AddLocation(sourceURI);
+			AddComment(locationId, commentText, null, status: (int)StatusName.SubmittedToLead, organisationUserId: myOrganisationUserId, organisationId: myOrganisationId);
+
+			// Another user in my organisation's submitted comment
+			AddComment(locationId, commentText, null, status: (int)StatusName.SubmittedToLead, organisationUserId: anotherOrganisationUserId, organisationId: myOrganisationId);
+
+			// Another user in my organisation's draft comment
+			AddComment(locationId, commentText, null, status: (int)StatusName.Draft, organisationUserId: anotherOrganisationUserId, organisationId: myOrganisationId);
+
+			// A user from a different organisation's comment
+			AddComment(locationId, commentText, null, status: (int)StatusName.SubmittedToLead, organisationUserId: anotherOrganisationUserId, organisationId: anotherOrganisationId);
+
+			var sourceURIs = new List<string>
+			{
+				ConsultationsUri.ConvertToConsultationsUri(sourceURI, CommentOn.Consultation)
+			};
+
+			// Act
+			var userService = FakeUserService.Get(isAuthenticated: false, organisationUserId: myOrganisationUserId);
+			var consultationsContext = new ConsultationsContext(_options, userService, _fakeEncryption);
+			var results = consultationsContext.GetOtherOrganisationUsersCommentsAndQuestionsForDocument(sourceURIs);
+
+			//Assert
+			results.Count().ShouldBe(1);
+		}
+
+		[Fact]
+
+		public void Get_All_Comments_And_Answers_Submitted_To_A_Lead_For_Given_Organisation()
+		{
+			//Arrange
+			var organisationId = 1;
+			var sourceURI = "consultations://./consultation/1";
+			var context = AddCommentsAndAnwersToALead(sourceURI, organisationId);
+
+			//Act
+			var (comment, answer) = context.GetCommentsAndAnswersSubmittedToLeadForOrganisation(organisationId);
+
+			//Assert
+			comment.Count.ShouldBe(2);
+			answer.Count.ShouldBe(2);
+		}
+
+		[Fact]
+		public void Count_Comments_And_Answers_Submitted_To_A_Lead_For_Given_Organisation()
+		{
+			//Arrange
+			var organisationId = 1;
+			var sourceURI = "consultations://./consultation/1";
+			var context = AddCommentsAndAnwersToALead(sourceURI, organisationId);
+
+			//Act
+			var count = context.CountCommentsAndAnswerSubmissionsForThisOrganisation(sourceURI, organisationId);
+
+			//Assert
+			count.ShouldBe(2);
+		}
+
+		#region "Add test data"
+		/// <summary>
+		/// Setup test data, for answer and comment add
+		///  - one submitted to lead item for organisation
+		///  - one draft item for the same organisation
+		///  - one submitted to lead item for a different organisation
+		///  - one submitted to lead item but for a different consultation
+		/// </summary>
+		/// <param name="sourceURI"></param>
+		/// <param name="organisationId"></param>
+		/// <returns>context</returns>
+		private ConsultationsContext AddCommentsAndAnwersToALead(string sourceURI, int organisationId)
+		{
+			var consultationId = 1;
+			var authorisationSession = Guid.NewGuid();
+
+			var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, _context);
+			var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(_context, organisationAuthorisationId, authorisationSession, null);
+
+			var differentOrganisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId + 1, consultationId, _context);
+			var differentOrganisationUserId = TestBaseDBHelpers.AddOrganisationUser(_context, differentOrganisationAuthorisationId, authorisationSession, null);
+
+			var userService = FakeUserService.Get(true, "Benjamin Button", null, TestUserType.NotAuthenticated, false, organisationUserId, null);
+			var context = new ConsultationsContext(_options, userService, _fakeEncryption);
+
+			var locationId = AddLocation(sourceURI);
+			var LocationIdForDifferentConsulation = AddLocation("consultations://./consultation/2");
+
+			AddComment(locationId, "Comment Text", null, (int)StatusName.SubmittedToLead, context, organisationUserId);
+			AddComment(locationId, "Comment Text", null, (int)StatusName.Draft, context, organisationUserId);
+			AddComment(locationId, "Comment Text", null, (int)StatusName.SubmittedToLead, context, differentOrganisationUserId);
+			AddComment(LocationIdForDifferentConsulation, "Comment Text", null, (int)StatusName.SubmittedToLead, context, organisationUserId);
+
+			var questionId = AddQuestion(locationId, 99, "Question Text", context);
+			var QuestionIdForDifferentConsultation = AddQuestion(LocationIdForDifferentConsulation, 99, "Question Text", context);
+			AddAnswer(questionId, null, "Answer Text", (int)StatusName.SubmittedToLead, context, organisationUserId);
+			AddAnswer(questionId, null, "Answer Text", (int)StatusName.Draft, context, organisationUserId);
+			AddAnswer(questionId, null, "Answer Text", (int)StatusName.SubmittedToLead, context, differentOrganisationUserId);
+			AddAnswer(QuestionIdForDifferentConsultation, null, "Answer Text", (int)StatusName.SubmittedToLead, context, organisationUserId);
+
+			return context;
+		}
+		#endregion
 	}
 }

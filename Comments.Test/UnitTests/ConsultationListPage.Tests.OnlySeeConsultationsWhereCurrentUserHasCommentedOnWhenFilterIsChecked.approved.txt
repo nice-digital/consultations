@@ -22,7 +22,8 @@
                 "OrganisationCodes":[
                     
                 ],
-                "ShowShareWithOrganisationButton":false
+                "ShowShareWithOrganisationButton":false,
+                "NumResponsesFromOrg":0
             },
             {
                 "Title":null,
@@ -44,7 +45,8 @@
                 "OrganisationCodes":[
                     
                 ],
-                "ShowShareWithOrganisationButton":false
+                "ShowShareWithOrganisationButton":false,
+                "NumResponsesFromOrg":0
             }
         ],
         "OptionFilters":[
@@ -111,6 +113,9 @@
                 
             ],
             "ValidatedOrganisationUserIds":[
+                
+            ],
+            "ValidatedOrganisationIds":[
                 
             ],
             "IsAuthenticatedByAccounts":true,
