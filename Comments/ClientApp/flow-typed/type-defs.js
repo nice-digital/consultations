@@ -41,7 +41,6 @@ declare type ConsultationStateType = {
 	hasUserSuppliedComments: boolean,
 	hasAnyDocumentsSupportingComments: boolean,
 	documentIdsWhichSupportComments: Array<number>,
-	shouldShowDrawer: boolean,
 	shouldShowCommentsTab: boolean,
 	shouldShowQuestionsTab: boolean,
 	supportsDownload: boolean,
