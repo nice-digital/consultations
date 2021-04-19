@@ -111,7 +111,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 						displayName: res.data.displayName,
 						signInURL: signInURL,
 						registerURL: res.data.registerURL,
-						isLead: (res.data.organisationsAssignedAsLead && res.data.organisationsAssignedAsLead.length),
+						isLead: (res.data.organisationsAssignedAsLead && res.data.organisationsAssignedAsLead.length > 0),
 					});
 					//update signin links in global nav here. because SSR isn't rendering them right on the server.
 					var signInLinks = document.getElementById("global-nav-header").querySelectorAll("a[href*='account/login']");
