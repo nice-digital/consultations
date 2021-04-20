@@ -1102,6 +1102,8 @@ namespace Comments.Models
             var answers = Answer
                 .Include(a => a.OrganisationUser)
                     .ThenInclude(ou => ou.OrganisationAuthorisation)
+                .Include(q => q.Question)
+                    .ThenInclude(l => l.Location)
                 .IgnoreQueryFilters()
                 .Where(a => a.StatusId == (int)StatusName.SubmittedToLead && a.OrganisationUser.OrganisationAuthorisation.OrganisationId.Equals(organisationId))
                 .ToList();

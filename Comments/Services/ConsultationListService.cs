@@ -132,12 +132,13 @@ namespace Comments.Services
 
         private int CountCommentsAndAnswerSubmissionsForThisOrganisation(string sourceURI, (List<Models.Comment> comments, List<Models.Answer> answers) getAllCommentsAndAnswersSubmittedToLeadForOrganisation)
         {
-       
             var commentsCount =  getAllCommentsAndAnswersSubmittedToLeadForOrganisation.comments
-                .Count(c => c.Location.SourceURI.Contains($"{sourceURI}/") || c.Location.SourceURI.Equals(sourceURI));
+                .Where(c => c.Location.SourceURI.Contains($"{sourceURI}/") || c.Location.SourceURI.Equals(sourceURI))
+                .Count();
 
             var answersCount = getAllCommentsAndAnswersSubmittedToLeadForOrganisation.answers
-                .Count(a => a.Question.Location.SourceURI.Contains($"{sourceURI}/") || a.Question.Location.SourceURI.Equals(sourceURI));
+                .Where(a => a.Question != null && (a.Question.Location.SourceURI.Contains($"{sourceURI}/") || a.Question.Location.SourceURI.Equals(sourceURI)))
+                .Count();
 
             return commentsCount + answersCount;
         }
