@@ -189,6 +189,11 @@ Array [
                           <div
                             id="group-title-QuestionsOrComments"
                           >
+                            <span
+                              className="visually-hidden"
+                            >
+                              Filter by 
+                            </span>
                             Response type
                           </div>
                         </button>
@@ -248,6 +253,11 @@ Array [
                           <div
                             id="group-title-Document"
                           >
+                            <span
+                              className="visually-hidden"
+                            >
+                              Filter by 
+                            </span>
                             Document
                           </div>
                         </button>
@@ -852,6 +862,11 @@ Array [
                           <div
                             id="group-title-QuestionsOrComments"
                           >
+                            <span
+                              className="visually-hidden"
+                            >
+                              Filter by 
+                            </span>
                             Response type
                           </div>
                         </button>
@@ -911,6 +926,11 @@ Array [
                           <div
                             id="group-title-Document"
                           >
+                            <span
+                              className="visually-hidden"
+                            >
+                              Filter by 
+                            </span>
                             Document
                           </div>
                         </button>
