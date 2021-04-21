@@ -37,9 +37,8 @@
     display: inline-block;
     margin: rem(0 $spacing-small $spacing-small 0);
     padding: rem($spacing-small $spacing-medium);
-    background-color: $colour-nice-dark-grey;
+    background-color: $colour-btn-secondary;
     color: $colour-nice-white;
-    opacity: 0.5;
     border: 1px solid $colour-nice-white; // todo: find border width!
   }
   &__commentBy{
