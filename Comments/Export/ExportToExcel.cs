@@ -534,6 +534,7 @@ namespace Comments.Export
                     DocumentName = locationDetails.DocumentName,
                     ChapterTitle = locationDetails.ChapterName,
                     SectionHeader = commentOn == CommentOn.Section || commentOn == CommentOn.SubSection || commentOn == CommentOn.Selection ? comment.Location.SectionHeader : null,
+                    SectionNumber = comment.Location.SectionNumber,
                     Quote = commentOn == CommentOn.Selection ? comment.Location.Quote : null,
                     UserName = userName,
                     Email = email,
