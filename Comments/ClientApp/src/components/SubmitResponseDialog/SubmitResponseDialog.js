@@ -289,7 +289,7 @@ export class SubmitResponseDialog extends Component {
 							<p><strong>Now submit your response to NICE.</strong></p>
 							<p>After submission you won't be able to edit your comments further or add any extra comments.</p>
 							{this.state.showSubmitWarning &&
-								<Alert type="caution" role="alert">
+								<Alert type="caution" role="alert" data-qa-sel="submission-alert">
 									<p>I understand that once I have submitted my response, I will not be able to edit my comments or provide additional information.</p>
 								</Alert>
 							}
