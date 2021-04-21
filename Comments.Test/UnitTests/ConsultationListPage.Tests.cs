@@ -579,7 +579,7 @@ namespace Comments.Test.UnitTests
 				var firstConsultation = consultationList.First();
 				var sourceURI = ConsultationsUri.CreateConsultationURI(firstConsultation.ConsultationId);
 
-				var location = new Models.Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
+				var location = new Models.Location(sourceURI, null, null, null, null, null, null, null, null, null, null, null);
 				consultationListContext.Location.Add(location);
 				consultationListContext.SaveChanges();
 

@@ -101,11 +101,11 @@ namespace Comments.Test.IntegrationTests.API.Export
 				rows.Count.ShouldBe(4);
 
 				var headerRow = rows[2].ItemArray;
-				headerRow.Length.ShouldBe(15);
+				headerRow.Length.ShouldBe(16);
 				headerRow.Any(header => header.ToString().Equals(Constants.Export.ExpressionOfInterestColumnDescription, StringComparison.OrdinalIgnoreCase)).ShouldBeFalse();
 
 				var commentRow = rows[3].ItemArray;
-				commentRow[7].ShouldBe(commentText);
+				commentRow[8].ShouldBe(commentText);
 			}
 		}
 
@@ -139,13 +139,13 @@ namespace Comments.Test.IntegrationTests.API.Export
 				rows.Count.ShouldBe(4);
 
 				var headerRow = rows[2].ItemArray;
-				headerRow.Length.ShouldBe(16);
+				headerRow.Length.ShouldBe(17);
 
-				headerRow[15].ToString().ShouldBe(Constants.Export.ExpressionOfInterestColumnDescription);
+				headerRow[16].ToString().ShouldBe(Constants.Export.ExpressionOfInterestColumnDescription);
 
 				var commentRow = rows[3].ItemArray;
-				commentRow[7].ShouldBe(commentText);
-				commentRow[15].ShouldBe(Constants.Export.Yes);
+				commentRow[8].ShouldBe(commentText);
+				commentRow[16].ShouldBe(Constants.Export.Yes);
 			}
 		}
 
@@ -179,13 +179,13 @@ namespace Comments.Test.IntegrationTests.API.Export
 				rows.Count.ShouldBe(4);
 
 				var headerRow = rows[2].ItemArray;
-				headerRow.Length.ShouldBe(16);
+				headerRow.Length.ShouldBe(17);
 
-				headerRow[15].ToString().ShouldBe(Constants.Export.ExpressionOfInterestColumnDescription);
+				headerRow[16].ToString().ShouldBe(Constants.Export.ExpressionOfInterestColumnDescription);
 
 				var commentRow = rows[3].ItemArray;
-				commentRow[7].ShouldBe(commentText);
-				commentRow[15].ShouldBe(Constants.Export.No);
+				commentRow[8].ShouldBe(commentText);
+				commentRow[16].ShouldBe(Constants.Export.No);
 			}
 		}
 	}

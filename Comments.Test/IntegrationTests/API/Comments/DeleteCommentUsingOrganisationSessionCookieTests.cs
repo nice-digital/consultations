@@ -40,7 +40,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
 			(_server, _) = InitialiseServerAndClient(context);
 
 			_comment = new ViewModels.Comment(locationId, sourceURI, null, null, null, null, null, null, null, 0,
-					DateTime.Now, Guid.Empty.ToString(), "comment text", 1, show: true, section: null)
+					DateTime.Now, Guid.Empty.ToString(), "comment text", 1, show: true, sectionHeader: null, sectionNumber: null)
 				{ CommentId = commentId };
 
 		}

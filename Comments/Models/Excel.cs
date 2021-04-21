@@ -1,12 +1,13 @@
-namespace Comments.Models
+﻿namespace Comments.Models
 {
     public class Excel
     {
 	    public string ConsultationName { get; set; }
 	    public string DocumentName { get; set; }
 	    public string ChapterTitle { get; set; }
-	    public string Section { get; set; }
-	    public string Quote { get; set; }
+	    public string SectionHeader { get; set; }
+        public string SectionNumber { get; set; }
+        public string Quote { get; set; }
 	    public string UserName { get; set; }
 		public string Email { get; set; }
 	    public int? QuestionId { get; set; }
