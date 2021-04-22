@@ -198,6 +198,11 @@ Array [
                           <div
                             id="group-title-QuestionsOrComments"
                           >
+                            <span
+                              className="visually-hidden"
+                            >
+                              Filter by 
+                            </span>
                             Response type
                           </div>
                         </button>
@@ -257,6 +262,11 @@ Array [
                           <div
                             id="group-title-Document"
                           >
+                            <span
+                              className="visually-hidden"
+                            >
+                              Filter by 
+                            </span>
                             Document
                           </div>
                         </button>
@@ -359,7 +369,7 @@ Array [
                               >
                                 <label
                                   className="form__label visually-hidden"
-                                  htmlFor="Answer-1"
+                                  htmlFor="Question4-Answer-1"
                                 >
                                   Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
                                 </label>
@@ -368,7 +378,7 @@ Array [
                                   data-hj-whitelist={true}
                                   data-qa-sel="Comment-text-area"
                                   disabled={true}
-                                  id="Answer-1"
+                                  id="Question4-Answer-1"
                                   onInput={[Function]}
                                 />
                               </div>
@@ -411,7 +421,7 @@ Array [
                               >
                                 <label
                                   className="form__label visually-hidden"
-                                  htmlFor="Answer-1"
+                                  htmlFor="Question5-Answer-1"
                                 >
                                   Would implementation of any of the draft recommendations have significant cost implications?
                                 </label>
@@ -420,7 +430,7 @@ Array [
                                   data-hj-whitelist={true}
                                   data-qa-sel="Comment-text-area"
                                   disabled={true}
-                                  id="Answer-1"
+                                  id="Question5-Answer-1"
                                   onInput={[Function]}
                                 />
                               </div>
@@ -463,7 +473,7 @@ Array [
                               >
                                 <label
                                   className="form__label visually-hidden"
-                                  htmlFor="Answer-1"
+                                  htmlFor="Question6-Answer-1"
                                 >
                                   Would implementation of any of the draft recommendations have cost implications?
                                 </label>
@@ -472,7 +482,7 @@ Array [
                                   data-hj-whitelist={true}
                                   data-qa-sel="Comment-text-area"
                                   disabled={true}
-                                  id="Answer-1"
+                                  id="Question6-Answer-1"
                                   onInput={[Function]}
                                 />
                               </div>
@@ -866,6 +876,11 @@ Array [
                           <div
                             id="group-title-QuestionsOrComments"
                           >
+                            <span
+                              className="visually-hidden"
+                            >
+                              Filter by 
+                            </span>
                             Response type
                           </div>
                         </button>
@@ -925,6 +940,11 @@ Array [
                           <div
                             id="group-title-Document"
                           >
+                            <span
+                              className="visually-hidden"
+                            >
+                              Filter by 
+                            </span>
                             Document
                           </div>
                         </button>
@@ -1027,7 +1047,7 @@ Array [
                               >
                                 <label
                                   className="form__label visually-hidden"
-                                  htmlFor="Answer-1"
+                                  htmlFor="Question4-Answer-1"
                                 >
                                   Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
                                 </label>
@@ -1036,7 +1056,7 @@ Array [
                                   data-hj-whitelist={true}
                                   data-qa-sel="Comment-text-area"
                                   disabled={null}
-                                  id="Answer-1"
+                                  id="Question4-Answer-1"
                                   onInput={[Function]}
                                 />
                               </div>
@@ -1079,7 +1099,7 @@ Array [
                               >
                                 <label
                                   className="form__label visually-hidden"
-                                  htmlFor="Answer-1"
+                                  htmlFor="Question5-Answer-1"
                                 >
                                   Would implementation of any of the draft recommendations have significant cost implications?
                                 </label>
@@ -1088,7 +1108,7 @@ Array [
                                   data-hj-whitelist={true}
                                   data-qa-sel="Comment-text-area"
                                   disabled={null}
-                                  id="Answer-1"
+                                  id="Question5-Answer-1"
                                   onInput={[Function]}
                                 />
                               </div>
@@ -1131,7 +1151,7 @@ Array [
                               >
                                 <label
                                   className="form__label visually-hidden"
-                                  htmlFor="Answer-1"
+                                  htmlFor="Question6-Answer-1"
                                 >
                                   Would implementation of any of the draft recommendations have cost implications?
                                 </label>
@@ -1140,7 +1160,7 @@ Array [
                                   data-hj-whitelist={true}
                                   data-qa-sel="Comment-text-area"
                                   disabled={null}
-                                  id="Answer-1"
+                                  id="Question6-Answer-1"
                                   onInput={[Function]}
                                 />
                               </div>

@@ -19,7 +19,6 @@ import { Selection } from "../Selection/Selection";
 import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
 import { Header } from "../Header/Header";
 import { Tutorial } from "../Tutorial/Tutorial";
-import { canUseDOM } from "../../helpers/utils";
 import { Alert } from "@nice-digital/nds-alert";
 
 type PropsType = {
