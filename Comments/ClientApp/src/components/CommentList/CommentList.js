@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component, Fragment } from "react";
+import React, { Component} from "react";
 import { withRouter, Link, Prompt } from "react-router-dom";
 //import stringifyObject from "stringify-object";
 import { LiveMessage } from "react-aria-live";
@@ -358,7 +358,7 @@ export class CommentList extends Component<PropsType, StateType> {
 		};
 
 		return (
-			<Fragment>
+			<>
 				<Prompt
 					when={this.state.unsavedIds.length > 0}
 					message={`You have ${this.state.unsavedIds.length} unsaved ${this.state.unsavedIds.length === 1 ? "change" : "changes"}. Continue without saving?`}
@@ -452,7 +452,7 @@ export class CommentList extends Component<PropsType, StateType> {
 											: null}
 
 										{this.state.loading ? <p>Loading...</p> : (
-											<Fragment>
+											<>
 												{contextValue.isAuthorised ? (
 													<div className={`${this.state.viewComments ? "show" : "hide"}`}>
 														{(this.state.comments.length === 0 && this.state.otherUsersComments.length === 0) ? <p>No comments yet</p> :
@@ -487,6 +487,12 @@ export class CommentList extends Component<PropsType, StateType> {
 																}
 															</ul>
 														}
+
+														<button
+															className="drawer-screenreader-button"
+															onClick={() => this.handleClick("toggleOpenComments")}>
+																Close the commenting panel
+														</button>
 													</div>
 												) : (
 													<LoginBannerWithRouter
@@ -540,8 +546,13 @@ export class CommentList extends Component<PropsType, StateType> {
 														})}
 													</ul>
 
+													<button
+														className="drawer-screenreader-button"
+														onClick={() => this.handleClick("toggleOpenQuestions")}>
+															Close the questions panel
+													</button>
 												</div>
-											</Fragment>
+											</>
 										)}
 									</div>
 								);
@@ -549,7 +560,7 @@ export class CommentList extends Component<PropsType, StateType> {
 						</UserContext.Consumer>
 					</div>
 				</section>
-			</Fragment>
+			</>
 		);
 	}
 }
