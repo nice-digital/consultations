@@ -55,7 +55,7 @@ namespace Comments.Test.IntegrationTests.API.Questions
 			var locationId = AddLocation(sourceURI);
 			var questionTypeId = AddQuestionType(description, false, true);
 
-			var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
+			var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null, null);
 			var questionType = new QuestionType(description, false, true, null);
 			var question = new Question(locationId, questionText, questionTypeId, null, questionType, new List<Answer>());
 			var viewModel = new ViewModels.Question(location, question);

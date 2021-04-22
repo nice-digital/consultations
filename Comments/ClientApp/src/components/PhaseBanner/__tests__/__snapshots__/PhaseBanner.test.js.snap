@@ -15,8 +15,6 @@ exports[`[ClientApp]  PhaseBanner  Matches snapshot 1`] = `
       >
         <span
           className="phase-banner__tag"
-          onClick={[Function]}
-          role="button"
         >
           <span
             className="tag tag--impact tag--agile"

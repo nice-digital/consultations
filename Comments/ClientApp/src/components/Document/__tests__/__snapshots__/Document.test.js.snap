@@ -737,6 +737,7 @@ Array [
                         data-gtm-category="Consultation comments page"
                         data-gtm-label="Comment on chapter"
                         data-qa-sel="in-text-comment-button"
+                        data-sectionnumber={null}
                         onClick={[Function]}
                         tabIndex={0}
                         title="Comment on chapter"

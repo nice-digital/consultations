@@ -3,6 +3,7 @@
 import React, { Component } from "react";
 import ReactMarkdown from "react-markdown";
 import { Answer } from "../Answer/Answer";
+import { UserContext } from "../../context/UserContext";
 
 type PropsType = {
 	staticContext?: any,
@@ -35,7 +36,7 @@ export class Question extends Component<PropsType> {
 				questionId={question.questionId}
 				readOnly={readOnly}
 				key={answer.answerId}
-				unique={`Answer${answer.answerId}`}
+				unique={`Question${question.questionId}-Answer${answer.answerId}`}
 				answer={answer}
 				saveAnswerHandler={saveAnswerHandler}
 				deleteAnswerHandler={deleteAnswerHandler}
@@ -51,7 +52,7 @@ export class Question extends Component<PropsType> {
 		const { documentTitle } = this.props;
 		const { commentOn, quote } = this.props.question;
 
-    let otherUsersAnswers = this.props.otherUsersAnswers || [];
+		let otherUsersAnswers = this.props.otherUsersAnswers || [];
 		const answers = this.props.question.answers || [];
 		let answersToShow = answers.filter(answer => answer.showWhenFiltered);
 		if (answersToShow === null || answersToShow.length < 1){
@@ -94,14 +95,20 @@ export class Question extends Component<PropsType> {
 				{this.props.isUnsaved &&
 					<p className="CommentBox__validationMessage">You have unsaved changes</p>
 				}
+				<UserContext.Consumer>
+					{(contextValue: ContextType) => {
+						return (
+							this.props.showAnswer && (
+								<>
+									{this.returnAnswers(answersToShow)}
+									{!contextValue.isLead &&
+										this.returnAnswers(otherUsersAnswers, true)
+									}
+								</>
+							)
+						);}}
+				</UserContext.Consumer>
 
-
-				{this.props.showAnswer && (
-					<>
-						{this.returnAnswers(answersToShow)}
-						{this.returnAnswers(otherUsersAnswers, true)}
-					</>
-				)}
 			</li>
 		);
 	}

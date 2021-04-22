@@ -40,10 +40,32 @@ export class Selection extends Component<PropsType, StateType> {
 		return segs(element).join("/");
 	}
 
+	findClosest(element, selector){				
+		while (element.parentElement){
+			const result = element.querySelector(selector)
+			if (result != null){
+				return result;
+			}
+			while (element.previousSibling){
+				if (element.previousSibling.matches(selector)){
+					return element.previousSibling;
+				}
+				element = element.previousSibling;
+			}
+			element = element.parentElement;
+		}
+		return null;
+	}
+
 	getCommentForRange = (limitingElement: any, selection: any) =>{
 		let selectionRange = selection.getRangeAt(0);
 		let comment = null;
+		let sectionNumber = "";
 		try {
+			const closestCommentButton = this.findClosest(selectionRange.startContainer.parentElement, "button.document-comment-container__commentButton,button.document-comment-container__commentButton");
+			if (closestCommentButton != null){
+				sectionNumber = closestCommentButton.getAttribute("data-sectionnumber");
+			}
 			comment = {
 				quote: selectionRange.toString(),
 				rangeStart: this.getXPathForElement(selectionRange.startContainer.parentElement),
@@ -55,7 +77,8 @@ export class Selection extends Component<PropsType, StateType> {
 				commentText: "",
 				commentOn: "Selection",
 				order: getElementPositionWithinDocument(selectionRange.commonAncestorContainer.parentNode) + "." + selectionRange.startOffset.toString(),
-				section: getSectionTitle(selectionRange.commonAncestorContainer.parentNode),
+				sectionHeader: getSectionTitle(selectionRange.commonAncestorContainer.parentNode),
+				sectionNumber: sectionNumber,
 			};
 		} catch (error) {
 			console.error("getCommentForRange", error);

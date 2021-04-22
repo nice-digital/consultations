@@ -302,39 +302,6 @@ namespace Comments.Test.UnitTests
 				//Assert
 				validAndOrganisation.valid.ShouldBe(true);
 				validAndOrganisation.organisationName.ShouldBe(organisationName);
-				validAndOrganisation.isLead.ShouldBe(false);
-			}
-		}
-
-		[Fact]
-		public async Task CheckOrganisationUserSessionRecognisesLead()
-		{
-			//Arrange
-			ResetDatabase();
-			_context.Database.EnsureCreated();
-			var sessionId = Guid.NewGuid();
-			const int consultationId = 1;
-			const int organisationId = 1;
-			const string organisationName = "Not NICE";
-			var organisations = new List<Organisation> {new Organisation(organisationId, organisationName, true)};
-			var fakeAPIService = new FakeAPIService(null, null, organisations);
-			var mockFactory = new Mock<IHttpClientFactory>();
-
-			using (var context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
-			{
-				var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, collationCode: "123412341234");
-				var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, sessionId, null);
-
-				var userService = new StubUserService(new User(User.AuthenticationMechanism.Accounts, AuthenticationConstants.AuthenticationScheme, null, null, organisations, new List<ValidatedSession>() { new ValidatedSession(organisationUserId, consultationId, sessionId, organisationId) }));
-				var serviceUnderTest = new OrganisationService(context, userService, new FakeAPITokenClient(), fakeAPIService, mockFactory.Object, null);
-
-				//Act
-				var validAndOrganisation = await serviceUnderTest.CheckOrganisationUserSession(consultationId);
-
-				//Assert
-				validAndOrganisation.valid.ShouldBe(true);
-				validAndOrganisation.organisationName.ShouldBe(organisationName);
-				validAndOrganisation.isLead.ShouldBe(true);
 			}
 		}
 

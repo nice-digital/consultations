@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Comments.ViewModels;
@@ -9,7 +9,7 @@ namespace Comments.Models
 	{
 		public ConsultationListRow(string title, DateTime startDate, DateTime endDate, int? responses, int consultationId, int? documentId, string chapterSlug, string gidReference,
 			string productTypeName, bool hasCurrentUserEnteredCommentsOrAnsweredQuestions, bool hasCurrentUserSubmittedCommentsOrAnswers, string allowedRole,
-			IList<OrganisationCode> organisationCodes, bool currentUserIsAuthorisedToViewOrganisationCodes)
+			IList<OrganisationCode> organisationCodes, bool currentUserIsAuthorisedToViewOrganisationCodes, int numResponsesFromOrg)
 		{
 			Title = title;
 			StartDate = startDate;
@@ -25,6 +25,7 @@ namespace Comments.Models
 			AllowedRole = allowedRole;
 			OrganisationCodes = organisationCodes;
 			CurrentUserIsAuthorisedToViewOrganisationCodes = currentUserIsAuthorisedToViewOrganisationCodes;
+            NumResponsesFromOrg = numResponsesFromOrg;
 		}
 
 		public string Title { get; private set; }
@@ -65,5 +66,7 @@ namespace Comments.Models
 
 		private readonly bool CurrentUserIsAuthorisedToViewOrganisationCodes;
 		public bool ShowShareWithOrganisationButton => IsOpen && CurrentUserIsAuthorisedToViewOrganisationCodes;
-	}
+        public int NumResponsesFromOrg { get; set; }
+
+    }
 }

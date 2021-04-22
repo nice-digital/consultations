@@ -166,7 +166,7 @@ namespace Comments.Test.UnitTests
             var questionId = AddQuestion(locationId, questionTypeId, questionText);
 
             var questionType = new QuestionType(description, false, true, null);
-            var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
+            var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null, null);
             var question = new Question(locationId, questionText, questionTypeId, location, questionType, null);
 
             var answer = new Answer(questionId, userId, answerText, false, question, (int)StatusName.Draft, null);

@@ -990,7 +990,7 @@ namespace Comments.Models
 		{
 			collationCode = collationCode.Replace(" ", "");
 
-			var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
+			var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null, null);
 			Location.Add(location);
 			SaveChanges();
 			var organisationAuthorisation = new OrganisationAuthorisation(createdByUserId, createdDate, organisationId, location.LocationId, collationCode);
@@ -1064,6 +1064,51 @@ namespace Comments.Models
 
 		}
 
+
+        public int CountCommentsAndAnswerSubmissionsForThisOrganisation(string sourceURI, int organisationId)
+        {
+            var comments = Comment
+                .Include(c => c.OrganisationUser)
+                    .ThenInclude(ou => ou.OrganisationAuthorisation)
+                .IgnoreQueryFilters()
+                .Where(c => ((c.Location.SourceURI.Contains($"{sourceURI}/") || c.Location.SourceURI.Equals(sourceURI))
+                                && c.StatusId == (int)StatusName.SubmittedToLead)
+                                && c.OrganisationUser.OrganisationAuthorisation != null
+                                && c.OrganisationUser.OrganisationAuthorisation.OrganisationId.Equals(organisationId))
+                .Count();
+
+            var answers = Answer
+                .Include(a => a.OrganisationUser)
+                    .ThenInclude(ou => ou.OrganisationAuthorisation)
+                .IgnoreQueryFilters()
+                .Where(a => ((a.Question.Location.SourceURI.Contains($"{sourceURI}/") || a.Question.Location.SourceURI.Equals(sourceURI))
+                                && a.StatusId == (int)StatusName.SubmittedToLead)
+                                && a.OrganisationUser.OrganisationAuthorisation != null
+                                && a.OrganisationUser.OrganisationAuthorisation.OrganisationId.Equals(organisationId))
+                .Count();
+
+            return comments + answers;
+        }
+
+        public (List<Comment>, List<Answer>) GetCommentsAndAnswersSubmittedToLeadForOrganisation(int organisationId)
+        {
+            var comments = Comment
+               .Include(c => c.OrganisationUser)
+                   .ThenInclude(ou => ou.OrganisationAuthorisation)
+               .IgnoreQueryFilters()
+               .Where(c => c.StatusId == (int)StatusName.SubmittedToLead && c.OrganisationUser.OrganisationAuthorisation.OrganisationId.Equals(organisationId))
+               .ToList();
+
+            var answers = Answer
+                .Include(a => a.OrganisationUser)
+                    .ThenInclude(ou => ou.OrganisationAuthorisation)
+                .IgnoreQueryFilters()
+                .Where(a => a.StatusId == (int)StatusName.SubmittedToLead && a.OrganisationUser.OrganisationAuthorisation.OrganisationId.Equals(organisationId))
+                .ToList();
+
+            return (comments, answers);
+        }
+
         public List<string> GetEmailAddressForCommentsAndAnswers(CommentsAndQuestions commentsAndQuestions)
         {
             var commentIds = commentsAndQuestions.Comments.Select(c => c.CommentId).ToList();
@@ -1078,6 +1123,7 @@ namespace Comments.Models
                                                 .Distinct()
                                                 .ToList();
             return emailAddresses;
+
         }
     }
 }
