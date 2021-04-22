@@ -509,37 +509,37 @@ namespace Comments.Test.UnitTests
 			results.Count().ShouldBe(1);
 		}
 
-		[Fact]
+		//[Fact]
 
-		public void Get_All_Comments_And_Answers_Submitted_To_A_Lead_For_Given_Organisation()
-		{
-			//Arrange
-			var organisationId = 1;
-			var sourceURI = "consultations://./consultation/1";
-			var context = AddCommentsAndAnwersToALead(sourceURI, organisationId);
+		//public void Get_All_Comments_And_Answers_Submitted_To_A_Lead_For_Given_Organisation()
+		//{
+		//	//Arrange
+		//	var organisationId = 1;
+		//	var sourceURI = "consultations://./consultation/1";
+		//	var context = AddCommentsAndAnwersToALead(sourceURI, organisationId);
 
-			//Act
-			var (comment, answer) = context.GetCommentsAndAnswersSubmittedToLeadForOrganisation(organisationId);
+		//	//Act
+		//	var (comment, answer) = context.GetCommentsAndAnswersSubmittedToLeadForOrganisation(organisationId);
 
-			//Assert
-			comment.Count.ShouldBe(2);
-			answer.Count.ShouldBe(2);
-		}
+		//	//Assert
+		//	comment.Count.ShouldBe(2);
+		//	answer.Count.ShouldBe(2);
+		//}
 
-		[Fact]
-		public void Count_Comments_And_Answers_Submitted_To_A_Lead_For_Given_Organisation()
-		{
-			//Arrange
-			var organisationId = 1;
-			var sourceURI = "consultations://./consultation/1";
-			var context = AddCommentsAndAnwersToALead(sourceURI, organisationId);
+		//[Fact]
+		//public void Count_Comments_And_Answers_Submitted_To_A_Lead_For_Given_Organisation()
+		//{
+		//	//Arrange
+		//	var organisationId = 1;
+		//	var sourceURI = "consultations://./consultation/1";
+		//	var context = AddCommentsAndAnwersToALead(sourceURI, organisationId);
 
-			//Act
-			var count = context.CountCommentsAndAnswerSubmissionsForThisOrganisation(sourceURI, organisationId);
+		//	//Act
+		//	var count = context.CountCommentsAndAnswerSubmissionsForThisOrganisation(sourceURI, organisationId);
 
-			//Assert
-			count.ShouldBe(2);
-		}
+		//	//Assert
+		//	count.ShouldBe(2);
+		//}
 
 		#region "Add test data"
 		/// <summary>
