@@ -12,7 +12,7 @@ namespace Comments.Migrations
                         COALESCE(c.OrganisationID, a.OrganisationID) AS OrganisationId,
 						COUNT(DISTINCT(sc.SubmissionID)) AS CommentCount,
 						COUNT(DISTINCT(sa.SubmissionID)) AS AnswerCount,
-						COUNT(DISTINCT(sc.SubmissionID)) + COUNT(DISTINCT(sa.SubmissionID)) AS TotalCount
+					    COUNT(DISTINCT(s.SubmissionID)) AS TotalCount
 				FROM [Location] l
 				LEFT JOIN Comment c ON l.LocationID = c.LocationID AND c.StatusID = 3
 				LEFT JOIN SubmissionComment sc ON c.CommentID = sc.CommentID

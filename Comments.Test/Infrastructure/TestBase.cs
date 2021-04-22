@@ -96,8 +96,8 @@ namespace Comments.Test.Infrastructure
 		}
 
 	    public TestBase(TestUserType testUserType, Feed feed, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null, bool bypassAuthentication = true,
-		    bool addRoleClaim = true, bool enableOrganisationalCommentingFeature = false)
-		    : this(false, testUserType, true, submittedCommentsAndAnswerCounts, bypassAuthentication, addRoleClaim, enableOrganisationalCommentingFeature)
+		    bool addRoleClaim = true, bool enableOrganisationalCommentingFeature = false, SubmittedToLeadCommentsAndAnswerCount submittedToLeadCommentAndAnswerCount = null)
+		    : this(false, testUserType, true, submittedCommentsAndAnswerCounts, bypassAuthentication, addRoleClaim, enableOrganisationalCommentingFeature, submittedToLeadCommentAndAnswerCount: submittedToLeadCommentAndAnswerCount)
 	    {
 			FeedToUse = feed;
 		}
@@ -107,7 +107,7 @@ namespace Comments.Test.Infrastructure
 		/// </summary>
 		public TestBase(bool useRealSubmitService = false, TestUserType testUserType = TestUserType.Authenticated, bool useFakeConsultationService = false, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null,
 			bool bypassAuthentication = true, bool addRoleClaim = true, bool enableOrganisationalCommentingFeature = false, Dictionary<int, Guid> validSessions = null,
-			bool useRealHttpContextAccessor = false, bool useRealUserService = false, int? organisationIdUserIsLeadOf = null)
+			bool useRealHttpContextAccessor = false, bool useRealUserService = false, int? organisationIdUserIsLeadOf = null, SubmittedToLeadCommentsAndAnswerCount submittedToLeadCommentAndAnswerCount = null)
         {
 	        if (testUserType == TestUserType.NotAuthenticated)
 	        {
@@ -140,16 +140,25 @@ namespace Comments.Test.Infrastructure
 					.UseInMemoryDatabase(databaseName)
                     .Options;
 
-	        if (submittedCommentsAndAnswerCounts != null)
+	        if (submittedCommentsAndAnswerCounts != null)  //TODO: NEEDS ADJUSTING
 	        {
-		        _context = new ConsultationListContext(_options, _fakeUserService, _fakeEncryption, submittedCommentsAndAnswerCounts);
+				if (submittedToLeadCommentAndAnswerCount != null)
+				{
+					_context = new ConsultationListContext(_options, _fakeUserService, _fakeEncryption, submittedCommentsAndAnswerCounts, submittedToLeadCommentAndAnswerCount);
+				}
+				else
+				{
+					_context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption);
+				}
 	        }
 	        else
 	        {
 				_context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption);
 			}
 
-            _context.Database.EnsureCreatedAsync();
+			
+
+			_context.Database.EnsureCreatedAsync();
 
             if (validSessions != null)
             {
@@ -567,7 +576,13 @@ namespace Comments.Test.Infrastructure
 					    SourceURI = "consultations://./consultation/1",
 					    TotalCount = totalCount
 				    }
-			    });
+			    },
+				new SubmittedToLeadCommentsAndAnswerCount
+				{
+					SourceURI = "consultations://./consultation/1",
+					OrganisationId = 1,
+					TotalCount = totalCount
+				});
 		    return consultationListContext;
 	    }
 

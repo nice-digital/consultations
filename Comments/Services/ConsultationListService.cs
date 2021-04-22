@@ -106,9 +106,10 @@ namespace Comments.Services
 
 				var responseCount = canSeeSubmissionCountForThisConsultation ? submittedCommentsAndAnswerCounts.FirstOrDefault(s => s.SourceURI.Equals(sourceURI))?.TotalCount ?? 0 : (int?)null;
 
-                var numResponsesFromOrg = _context.GetSubmittedToLeadCommentsAndAnswerCounts(sourceURI, currentUser.OrganisationsAssignedAsLead.First().OrganisationId) ?? 
-                    new SubmittedToLeadCommentsAndAnswerCount() { TotalCount = 0 };
-                
+                var numResponsesFromOrg = new SubmittedToLeadCommentsAndAnswerCount() { TotalCount = 0 };
+                if (isOrganisationalCommentingEnabled && currentUser.OrganisationsAssignedAsLead.FirstOrDefault() != null)
+                    numResponsesFromOrg = _context.GetSubmittedToLeadCommentsAndAnswerCounts(sourceURI, currentUser.OrganisationsAssignedAsLead.First().OrganisationId);
+
                 consultationListRows.Add(
 					new ConsultationListRow(consultation.Title,
 						consultation.StartDate, consultation.EndDate, responseCount, consultation.ConsultationId,
