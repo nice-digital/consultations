@@ -64,14 +64,14 @@ export class FilterGroup extends Component<PropsType, StateType> {
 					className={`filter-group__heading gtm-topic-list-filter-group-${ this.state.isExpanded ? "collapse" : "expand" }`}
 					onClick={this.handleTitleClick}>
 					<div id={`group-title-${this.props.filterGroup.id}`}>
-						{this.props.filterGroup.title}
+						<span className="visually-hidden">Filter by </span>{this.props.filterGroup.title}
 					</div>
 					{numSelected}
 				</button>
 			) : (
 				<h3 className="filter-group__heading">
 					<div id={`group-title-${this.props.filterGroup.id}`}>
-						{this.props.filterGroup.title}
+						<span className="visually-hidden">Filter by </span>{this.props.filterGroup.title}
 					</div>
 					{numSelected}
 				</h3>
