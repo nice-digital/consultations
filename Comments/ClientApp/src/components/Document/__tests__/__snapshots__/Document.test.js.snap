@@ -5,7 +5,7 @@ Array [
   "",
   "",
   <aside
-    className="Tutorial mt--0 pt--d pb--d"
+    className="tutorial mt--0 pt--d pb--d"
   >
     <div
       className="container"
@@ -16,55 +16,50 @@ Array [
       >
         Hide how to comment
       </button>
-      <div>
-        <h1
-          className="pt--c"
-        >
-          How to comment
-        </h1>
+      <div
+        className="grid"
+      >
         <div
-          className="grid"
+          data-g="12 sm:7"
+        >
+          <span
+            className="h1 pt--c"
+          >
+            How to comment
+          </span>
+          <p>
+            Please view our 5-minute video on how to use the online commenting system.
+          </p>
+          <p>
+            See how to:
+          </p>
+          <ul>
+            <li>
+              Create comments and respond to questions
+            </li>
+            <li>
+              Add, edit and delete comments
+            </li>
+            <li>
+              Create comments specific to sections of the document
+            </li>
+            <li>
+              Review all your feedback before submitting your response
+            </li>
+          </ul>
+        </div>
+        <div
+          data-g="12 sm:5"
         >
           <div
-            data-g="12 sm:4"
+            className="tutorial__video"
           >
-            <p
-              className="mt--0"
-            >
-              Use the icon next to chapters, subsections and recommendations to comment on them
-            </p>
-            <img
-              alt="Mouse pointer hovering over commenting icon"
-              className="Tutorial__buttonImage"
-              src="images/tutorial-1.png"
-            />
-          </div>
-          <div
-            data-g="12 sm:4"
-          >
-            <p
-              className="mt--0"
-            >
-              You can also highlight a selection of text using the cursor to make a comment on it
-            </p>
-            <img
-              alt="Animation showing an example of highlighting text and clicking comment"
-              className="Tutorial__buttonImage"
-              src="images/tutorial-2.gif"
-            />
-          </div>
-          <div
-            data-g="12 sm:4"
-          >
-            <p
-              className="mt--0"
-            >
-              Review your comments or answers before submitting your response
-            </p>
-            <img
-              alt="Indication of how to get to the review page"
-              className="Tutorial__buttonImage"
-              src="images/tutorial-3.png"
+            <iframe
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen={true}
+              frameBorder="0"
+              src="https://www.youtube.com/embed/DILcZkxVPCY?rel=0"
+              title="YouTube video player"
             />
           </div>
         </div>

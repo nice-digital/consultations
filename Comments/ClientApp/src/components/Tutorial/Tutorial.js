@@ -49,8 +49,9 @@ export class Tutorial extends Component<PropsType, StateType> {
 
 	render() {
 		const isPanelVisible = this.state.isPanelVisible;
+
 		return (
-			<aside className="Tutorial mt--0 pt--d pb--d">
+			<aside className="tutorial mt--0 pt--d pb--d">
 				<div className="container">
 					<button
 						className="buttonAsLink"
@@ -58,27 +59,24 @@ export class Tutorial extends Component<PropsType, StateType> {
 						{isPanelVisible ? "Hide how to comment" : "Show how to comment"}
 					</button>
 					{isPanelVisible &&
-					<div>
-						<h1 className="pt--c">How to comment</h1>
 						<div className="grid">
-							<div data-g="12 sm:4">
-								<p className="mt--0">Use the icon next to chapters, subsections and recommendations to comment on
-									them</p>
-								<img className="Tutorial__buttonImage" src="images/tutorial-1.png"
-										 alt="Mouse pointer hovering over commenting icon"/>
+							<div data-g="12 sm:7">
+								<span className="h1 pt--c">How to comment</span>
+								<p>Please view our 5-minute video on how to use the online commenting system.</p>
+								<p>See how to:</p>
+								<ul>
+									<li>Create comments and respond to questions</li>
+									<li>Add, edit and delete comments</li>
+									<li>Create comments specific to sections of the document</li>
+									<li>Review all your feedback before submitting your response</li>
+								</ul>
 							</div>
-							<div data-g="12 sm:4">
-								<p className="mt--0">You can also highlight a selection of text using the cursor to make a comment on it</p>
-								<img className="Tutorial__buttonImage" src="images/tutorial-2.gif"
-										 alt="Animation showing an example of highlighting text and clicking comment"/>
-							</div>
-							<div data-g="12 sm:4">
-								<p className="mt--0">Review your comments or answers before submitting your response</p>
-								<img className="Tutorial__buttonImage" src="images/tutorial-3.png"
-										 alt="Indication of how to get to the review page"/>
+							<div data-g="12 sm:5">
+								<div className="tutorial__video">
+									<iframe src="https://www.youtube.com/embed/DILcZkxVPCY?rel=0" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+								</div>
 							</div>
 						</div>
-					</div>
 					}
 				</div>
 			</aside>
