@@ -446,7 +446,8 @@ export class Document extends Component<PropsType, StateType> {
 						: /* if contextValue.isAuthorised... */ null}
 				</UserContext.Consumer>
 				{ this.state.allowComments &&
-					<Tutorial/> }
+					<Tutorial/>
+				}
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">
