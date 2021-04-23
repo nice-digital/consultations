@@ -18,7 +18,7 @@ namespace Comments.Test.Infrastructure
 	{
 		public static int AddLocation(ConsultationsContext passedInContext, string sourceURI, string order = "0")
 		{
-			var location = new Location(sourceURI, null, null, null, null, null, null, order, null, null, null);
+			var location = new Location(sourceURI, null, null, null, null, null, null, order, null, null, null, null);
 			passedInContext.Location.Add(location);
 			passedInContext.SaveChanges();
 			return location.LocationId;

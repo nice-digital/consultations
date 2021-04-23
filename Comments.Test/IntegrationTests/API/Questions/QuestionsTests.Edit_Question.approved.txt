@@ -27,5 +27,6 @@
     "documentId":1,
     "show":true,
     "order":"0",
-    "section":null
+    "sectionHeader":null,
+    "sectionNumber":null
 }
