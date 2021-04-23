@@ -18,7 +18,6 @@ import { Selection } from "../Selection/Selection";
 import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
 import { Header } from "../Header/Header";
 import { Tutorial } from "../Tutorial/Tutorial";
-import { canUseDOM } from "../../helpers/utils";
 import { Alert } from "@nice-digital/nds-alert";
 
 type PropsType = {
@@ -447,7 +446,8 @@ export class Document extends Component<PropsType, StateType> {
 						: /* if contextValue.isAuthorised... */ null}
 				</UserContext.Consumer>
 				{ this.state.allowComments &&
-					<Tutorial/> }
+					<Tutorial/>
+				}
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">

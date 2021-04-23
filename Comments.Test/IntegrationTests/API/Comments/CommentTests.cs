@@ -41,7 +41,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
         public async Task Create_Comment(int locationId, string sourceURI)
         {
             //Arrange
-            var comment = new ViewModels.Comment(locationId, sourceURI, null, null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty.ToString(), "comment text", 1, show: true, section: null);
+            var comment = new ViewModels.Comment(locationId, sourceURI, null, null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty.ToString(), "comment text", 1, show: true, sectionHeader: null, sectionNumber: null);
             var content = new StringContent(JsonConvert.SerializeObject(comment), Encoding.UTF8, "application/json");
 
             // Act
@@ -61,7 +61,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
         public async Task Comment_ViewModel_Fails_To_Serialise_With_Invalid_SourceURI(int locationId, string sourceURI)
         {
             //Arrange
-            var comment = new ViewModels.Comment(locationId, sourceURI, null, null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty.ToString(), "comment text", 1, show: true, section: null);
+            var comment = new ViewModels.Comment(locationId, sourceURI, null, null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty.ToString(), "comment text", 1, show: true, sectionHeader: null, sectionNumber: null);
             Exception _ex = null;
 
             // Act
