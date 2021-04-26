@@ -1,4 +1,5 @@
 @import "../../../node_modules/@nice-digital/design-system/src/stylesheets/nice-design-system";
+@import "../../styles/accessibility.scss";
 
 .Drawer {
   height: 100vh;
@@ -70,4 +71,10 @@
     width: calc(100% - 40px);
   }
 }
-
+.drawer-screenreader-button{
+  @extend .screenreader-button;
+  position: relative;
+  &:focus, &:active{
+    position: relative;
+  }
+}
