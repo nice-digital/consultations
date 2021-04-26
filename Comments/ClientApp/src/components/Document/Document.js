@@ -472,7 +472,7 @@ export class Document extends Component<PropsType, StateType> {
 														allowRegisterOrganisationLeadLink={contextValue.organisationalCommentingFeature}/>
 														{this.state.consultationData.consultationState.submittedDate &&
 															<Alert type="info" role="alert">
-																<p>You submitted your response to this consultation on <Moment format="D MMMM YYYY" date={this.state.consultationData.consultationState.submittedDate}/> you cannot add, edit or provide additional information.</p>
+																<p>You submitted your response to this consultation on <Moment format="D MMMM YYYY" date={this.state.consultationData.consultationState.submittedDate}/>, you cannot add, edit or provide additional information.</p>
 															</Alert>
 														}
 													{contextValue.isOrganisationCommenter && !contextValue.isLead && !this.state.consultationData.consultationState.submittedDate &&
