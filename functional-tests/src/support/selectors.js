@@ -39,6 +39,7 @@ export default {
 		deletebutton: toDataQASelAttr("delete-comment-button"),
 		responseSubmittedHeader: toDataQASelAttr("changeable-page-header"),
 		submitResponseFeedback: toDataQASelAttr("Submit-response-feedback"),
+		YessubmitResponseButton: toDataQASelAttr("submit-comment-button"),
 	},
 	adminDownloadPage: {
 		filterByGID: toDataQASelAttr("FilerByTitleOrGID"),
