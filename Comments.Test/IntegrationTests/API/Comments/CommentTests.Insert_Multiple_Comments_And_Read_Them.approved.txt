@@ -24,7 +24,8 @@
             "documentId":1,
             "show":true,
             "order":"0",
-            "section":null
+            "sectionHeader":null,
+            "sectionNumber":null
         },
         {
             "commentId":"scrubbed by ScrubCommentId",
@@ -50,7 +51,8 @@
             "documentId":1,
             "show":true,
             "order":"0",
-            "section":null
+            "sectionHeader":null,
+            "sectionNumber":null
         },
         {
             "commentId":"scrubbed by ScrubCommentId",
@@ -76,7 +78,8 @@
             "documentId":1,
             "show":true,
             "order":"0",
-            "section":null
+            "sectionHeader":null,
+            "sectionNumber":null
         }
     ],
     "questions":[

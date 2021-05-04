@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Comments.Common;
@@ -9,7 +9,7 @@ namespace Comments.ViewModels
     {
         public Location() { } //only here for model binding. don't use it in code.
 
-        public Location(int locationId, string sourceUri, string htmlElementId, string rangeStart, int? rangeStartOffset, string rangeEnd, int? rangeEndOffset, string quote, string order, bool show, string section)
+        public Location(int locationId, string sourceUri, string htmlElementId, string rangeStart, int? rangeStartOffset, string rangeEnd, int? rangeEndOffset, string quote, string order, bool show, string sectionHeader, string sectionNumber)
         {
             LocationId = locationId;
             SourceURI = sourceUri;
@@ -21,7 +21,8 @@ namespace Comments.ViewModels
             Quote = quote;
 	        Order = order;
 	        Show = show;
-	        Section = section;
+	        SectionHeader = sectionHeader;
+            SectionNumber = sectionNumber;
         }
         public int LocationId { get; set; }
 
@@ -118,6 +119,14 @@ namespace Comments.ViewModels
 	    /// <summary>
 	    /// Nearest section that this comment/question belongs to. might well be null. it might also start with a dotted decimal number or not.
 	    /// </summary>
-	    public string Section { get; set; }
+	    public string SectionHeader { get; set; }
+
+        /// <summary>
+        /// This is the closest number that the comment refers to. In a lot of cases it will be null when it doesn't find a number.
+        /// The number is derived by looking at the current element, then walking the previous siblings looking for one.
+        /// then it walks the parent elements, looking for a numbered button on each element.
+        /// so if something in the current chapter has a number, this will be set to the latest one.
+        /// </summary>
+        public string SectionNumber { get; set; }
 	}
 }

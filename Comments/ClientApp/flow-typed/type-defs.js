@@ -72,7 +72,8 @@ declare type CommentType = {
 	show: boolean,
 	status: StatusType,
 	order: string,
-	section: string,
+	sectionHeader: string,
+	sectionNumber: string
 };
 
 type StatusType = {
