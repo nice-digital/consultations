@@ -580,6 +580,12 @@ Array [
                 </section>
               </li>
             </ul>
+            <button
+              className="drawer-screenreader-button"
+              onClick={[Function]}
+            >
+              Close the commenting panel
+            </button>
           </div>
           <div
             className="hide"
@@ -600,6 +606,12 @@ Array [
             <ul
               className="CommentList list--unstyled mt--0"
             />
+            <button
+              className="drawer-screenreader-button"
+              onClick={[Function]}
+            >
+              Close the questions panel
+            </button>
           </div>
         </div>
       </div>

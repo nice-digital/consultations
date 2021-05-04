@@ -2,11 +2,13 @@ import React, { Component } from "react";
 import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
 import { SubmitResponseFeedback } from "../SubmitResponseFeedback/SubmitResponseFeedback";
 import { Input } from "@nice-digital/nds-input";
+import { Alert } from "@nice-digital/nds-alert";
 
 export class SubmitResponseDialog extends Component {
 
 	state = {
 		feedbackVisible: false,
+		showSubmitWarning: false,
 	};
 
 	emailRef = React.createRef();
@@ -32,16 +34,22 @@ export class SubmitResponseDialog extends Component {
 	};
 
 	submitConsultation = () => {
-		const tooManyAnswersFilter = (question) => question.answers.length > 1;
-		const tooManyAnswersToAQuestion = this.props.questions.some(tooManyAnswersFilter);
-		if (this.props.validToSubmit && this.mandatoryQuestionsAreValid() && this.props.unsavedIds.length === 0 && !tooManyAnswersToAQuestion) {
-			this.props.submitConsultation();
-		}
-		else {
+		if (this.state.showSubmitWarning) {
+			const tooManyAnswersFilter = (question) => question.answers.length > 1;
+			const tooManyAnswersToAQuestion = this.props.questions.some(tooManyAnswersFilter);
+			if (this.props.validToSubmit && this.mandatoryQuestionsAreValid() && this.props.unsavedIds.length === 0 && !tooManyAnswersToAQuestion) {
+				this.props.submitConsultation();
+			}
+			else {
+				this.setState({
+					feedbackVisible: true,
+				});
+				pullFocusByQuerySelector("#SubmitResponseFeedback");
+			}
+		} else {
 			this.setState({
-				feedbackVisible: true,
+				showSubmitWarning: true,
 			});
-			pullFocusByQuerySelector("#SubmitResponseFeedback");
 		}
 	};
 
@@ -280,6 +288,11 @@ export class SubmitResponseDialog extends Component {
 						<>
 							<p><strong>Now submit your response to NICE.</strong></p>
 							<p>After submission you won't be able to edit your comments further or add any extra comments.</p>
+							{this.state.showSubmitWarning &&
+								<Alert type="caution" role="alert" data-qa-sel="submission-alert">
+									<p>I understand that once I have submitted my response, I will not be able to edit my comments or provide additional information.</p>
+								</Alert>
+							}
 							{this.state.feedbackVisible &&
 							<SubmitResponseFeedback
 								{...this.props}
@@ -288,10 +301,22 @@ export class SubmitResponseDialog extends Component {
 							}
 							<button
 								className="btn btn--cta"
+								id="submitButton"
 								data-qa-sel="submit-comment-button"
 								onClick={this.submitConsultation}>
-								{submittedDate ? "Responses submitted" : "Submit my response"}
+								{submittedDate ? "Responses submitted" : this.state.showSubmitWarning ? "Yes submit my response" : "Submit my response"}
 							</button>
+							{this.state.showSubmitWarning &&
+								<button
+									className="btn btn--secondary"
+									data-qa-sel="cancel-comment-button"
+									onClick={() => {
+										this.setState({ showSubmitWarning: false, })
+									}}
+								>
+									Cancel
+								</button>
+							}
 						</>
 						}
 
