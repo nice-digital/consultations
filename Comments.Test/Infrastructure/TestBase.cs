@@ -140,23 +140,15 @@ namespace Comments.Test.Infrastructure
 					.UseInMemoryDatabase(databaseName)
                     .Options;
 
-	        if (submittedCommentsAndAnswerCounts != null)  //TODO: NEEDS ADJUSTING
-	        {
-				if (submittedToLeadCommentAndAnswerCount != null)
-				{
+	        if (submittedCommentsAndAnswerCounts != null || submittedToLeadCommentAndAnswerCount != null)
+			{
 					_context = new ConsultationListContext(_options, _fakeUserService, _fakeEncryption, submittedCommentsAndAnswerCounts, submittedToLeadCommentAndAnswerCount);
-				}
-				else
-				{
-					_context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption);
-				}
+
 	        }
 	        else
 	        {
 				_context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption);
 			}
-
-			
 
 			_context.Database.EnsureCreatedAsync();
 
