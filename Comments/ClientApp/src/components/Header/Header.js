@@ -3,6 +3,7 @@
 import React, { Fragment, PureComponent } from "react";
 import Moment from "react-moment";
 import { Link } from "react-router-dom";
+import { Alert } from "@nice-digital/nds-alert";
 
 type PropsType = {
 	title: string,
@@ -73,7 +74,11 @@ export class Header extends PureComponent<PropsType> {
 				</div>
 				}
 				{subtitle1 && <p>{subtitle1}</p>}
-				{subtitle2 && <p>{subtitle2}</p>}
+				{subtitle2 &&
+					<Alert type="caution" role="alert">
+						<p>{subtitle2}</p>
+					</Alert>
+				}	
 			</ Fragment>
 		);
 	}

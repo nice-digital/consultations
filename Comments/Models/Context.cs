@@ -997,7 +997,7 @@ namespace Comments.Models
 		{
 			collationCode = collationCode.Replace(" ", "");
 
-			var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
+			var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null, null);
 			Location.Add(location);
 			SaveChanges();
 			var organisationAuthorisation = new OrganisationAuthorisation(createdByUserId, createdDate, organisationId, location.LocationId, collationCode);

@@ -22,6 +22,7 @@ import submitResponse, {
 	completeResponseMandatoryQuestions,
 	clickSubmitResponseButton,
 	responseMandatoryQuestions_answerYestoOrg,
+	clickYesSubmitResponseButton
 } from "../support/action/submitResponse";
 import { reviewResponse } from "../support/action/reviewResponse";
 import { Login } from "../support/action/Login";
@@ -119,3 +120,5 @@ When(
 );
 
 When(/^I scroll the delete button into view$/, scrollDeleteButtonIntoView);
+
+When(/^I click yes submit my response button$/, clickYesSubmitResponseButton);

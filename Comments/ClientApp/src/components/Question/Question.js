@@ -36,7 +36,7 @@ export class Question extends Component<PropsType> {
 				questionId={question.questionId}
 				readOnly={readOnly}
 				key={answer.answerId}
-				unique={`Answer${answer.answerId}`}
+				unique={`Question${question.questionId}-Answer${answer.answerId}`}
 				answer={answer}
 				saveAnswerHandler={saveAnswerHandler}
 				deleteAnswerHandler={deleteAnswerHandler}

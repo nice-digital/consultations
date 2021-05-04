@@ -4,6 +4,7 @@ import React, { Component, Fragment } from "react";
 import { Helmet } from "react-helmet";
 import { withRouter } from "react-router";
 import objectHash from "object-hash";
+import Moment from "react-moment";
 
 import preload from "../../data/pre-loader";
 import { load } from "./../../data/loader";
@@ -18,7 +19,6 @@ import { Selection } from "../Selection/Selection";
 import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
 import { Header } from "../Header/Header";
 import { Tutorial } from "../Tutorial/Tutorial";
-import { canUseDOM } from "../../helpers/utils";
 import { Alert } from "@nice-digital/nds-alert";
 
 type PropsType = {
@@ -114,7 +114,8 @@ export class Document extends Component<PropsType, StateType> {
 				}
 				const allowComments = preloadedConsultation.consultationState.hasAnyDocumentsSupportingComments &&
 					preloadedConsultation.consultationState.consultationIsOpen &&
-					!preloadedConsultation.consultationState.userHasSubmitted;
+					!preloadedConsultation.consultationState.userHasSubmitted && 
+					!preloadedConsultation.consultationState.submittedDate;
 
 				if (preloadedChapter) {
 					preloadedChapter = this.addChapterDetailsToSections(preloadedChapter);
@@ -203,7 +204,8 @@ export class Document extends Component<PropsType, StateType> {
 					const allowComments =
 						data.consultationData.consultationState.hasAnyDocumentsSupportingComments &&
 						data.consultationData.consultationState.consultationIsOpen &&
-						!data.consultationData.consultationState.userHasSubmitted;
+						!data.consultationData.consultationState.userHasSubmitted &&
+						!data.consultationData.consultationState.submittedDate;
 					this.addChapterDetailsToSections(data.chapterData);
 					this.setState({
 						...data,
@@ -447,7 +449,8 @@ export class Document extends Component<PropsType, StateType> {
 						: /* if contextValue.isAuthorised... */ null}
 				</UserContext.Consumer>
 				{ this.state.allowComments &&
-					<Tutorial/> }
+					<Tutorial/>
+				}
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">
@@ -468,8 +471,12 @@ export class Document extends Component<PropsType, StateType> {
 														reference={reference}
 														consultationState={this.state.consultationData.consultationState}
 														allowRegisterOrganisationLeadLink={contextValue.organisationalCommentingFeature}/>
-
-													{contextValue.isOrganisationCommenter && !contextValue.isLead &&
+														{this.state.consultationData.consultationState.submittedDate &&
+															<Alert type="info" role="alert">
+																<p>You submitted your response to this consultation on <Moment format="D MMMM YYYY" date={this.state.consultationData.consultationState.submittedDate}/>, you cannot add, edit or provide additional information.</p>
+															</Alert>
+														}
+													{contextValue.isOrganisationCommenter && !contextValue.isLead && !this.state.consultationData.consultationState.submittedDate &&
 														<Alert type="info" role="alert">
 															<p>You are commenting on behalf of {contextValue.organisationName}.</p>
 															<p>When you submit your response it will be submitted to the organisational lead at {contextValue.organisationName}. <strong>On submission your email address and responses will be visible to other members or associates of your organisation who are using the same commenting code.</strong></p>

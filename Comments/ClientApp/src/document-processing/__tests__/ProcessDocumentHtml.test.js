@@ -55,7 +55,7 @@ describe("[ClientApp]", () => {
 
 			const instance = setupHtml(true,
 				"<h2 class=\"title\">\n" +
-				"    <a id=\"recommendations\" style=\"position:relative\" class=\"annotator-chapter\" data-heading-type=\"chapter\" title=\"Comment on chapter\" xmlns=\"\">Recommendations<span class=\"annotator-adder\" /></a>\n" +
+				"    <a id=\"recommendations\" style=\"position:relative\" class=\"annotator-chapter\" data-heading-type=\"chapter\" title=\"Comment on chapter\" xmlns=\"\">1.1 Recommendations<span class=\"annotator-adder\" /></a>\n" +
 				"  </h2>",
 			);
 			instance.wrapper.find("button").simulate("click");
@@ -64,7 +64,8 @@ describe("[ClientApp]", () => {
 				commentText: "",
 				commentOn: "chapter",
 				htmlElementID: "",
-				quote: "Recommendations",
+				sectionNumber: "1.1",
+				quote: "1.1 Recommendations",
 			});
 		});
 
@@ -77,6 +78,7 @@ describe("[ClientApp]", () => {
 				commentText: "",
 				commentOn: "section",
 				htmlElementID: "bar",
+				sectionNumber: undefined,
 				quote: "Foo",
 			});
 		});
@@ -89,6 +91,7 @@ describe("[ClientApp]", () => {
 				commentText: "",
 				commentOn: "subsection",
 				htmlElementID: "np-1-3-1",
+				sectionNumber: "1.3.1",
 				quote: "1.3.1 ",
 			});
 		});
@@ -106,5 +109,6 @@ describe("[ClientApp]", () => {
 			);
 			expect(instance.wrapper.find("button").length).toEqual(0);
 		});
+		
 	});
 });

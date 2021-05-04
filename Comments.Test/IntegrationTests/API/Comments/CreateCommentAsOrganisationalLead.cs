@@ -37,7 +37,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
 				var (_server, _client) = InitialiseServerAndClient(context, fakeUserService);
 
 				var comment = new ViewModels.Comment(1, sourceURI, null, null, null, null, null, null, null, 0,
-					DateTime.Now, Guid.Empty.ToString(), "comment text", 1, show: true, section: null);
+					DateTime.Now, Guid.Empty.ToString(), "comment text", 1, show: true, sectionHeader: null, sectionNumber: null);
 
 				var builder = _server.CreateRequest($"/consultations/api/Comment");
 				builder.And(request =>
@@ -85,7 +85,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
 				var (_server, _client) = InitialiseServerAndClient(context, fakeUserService);
 
 				var comment = new ViewModels.Comment(1, sourceURI, null, null, null, null, null, null, null, 0,
-					DateTime.Now, Guid.Empty.ToString(), "comment text", 1, show: true, section: null);
+					DateTime.Now, Guid.Empty.ToString(), "comment text", 1, show: true, sectionHeader: null, sectionNumber: null);
 
 				var builder = _server.CreateRequest($"/consultations/api/Comment");
 				builder.AddHeader(HeaderNames.Cookie, $"{Constants.SessionCookieName}{ConsultationId}={_sessionId}");

@@ -41,7 +41,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
 			(_server, _client) = InitialiseServerAndClient(context);
 
 			comment = new ViewModels.Comment(1, sourceURI, null, null, null, null, null, null, null, 0,
-					DateTime.Now, Guid.Empty.ToString(), "comment text", 1, show: true, section: null)
+					DateTime.Now, Guid.Empty.ToString(), "comment text", 1, show: true, sectionHeader: null, sectionNumber: null)
 				{ CommentId = commentId };
 
 		}

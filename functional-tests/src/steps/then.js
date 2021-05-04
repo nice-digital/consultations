@@ -26,6 +26,7 @@ import clickPaginationOption, {
 	clickPreviousPagination,
 } from "../support/action/clickPaginationOption";
 import validateResponsesFilterChecked from "../support/check/validateResponsesFilterChecked";
+import validateAlertCautionText from "../support/check/validateAlertCautionText";
 // import validateCommentSaved from "../support/check/validateCommentSaved";
 
 /*Then(
@@ -102,3 +103,4 @@ Then(
 	/^I expect the your responses filter to be selected by default$/,
 	validateResponsesFilterChecked
 );
+Then(/^I expect the alert caution to contain "([^"]*)"$/, validateAlertCautionText);
