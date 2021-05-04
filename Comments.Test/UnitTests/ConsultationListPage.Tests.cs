@@ -550,7 +550,6 @@ namespace Comments.Test.UnitTests
 			viewModel.Consultations.Count().ShouldBe(3);
 			viewModel.Consultations.Count(c => c.Show).ShouldBe(3);
 		}
-
 	}
 
 	public class ConsultationListOrganisationCodeTests : TestBase
@@ -599,6 +598,36 @@ namespace Comments.Test.UnitTests
 				organisationCode.CollationCode.ShouldBe(collationCode);
 				serialisedViewModel.ShouldMatchApproved(new Func<string, string>[] { Scrubbers.ScrubStartDate, Scrubbers.ScrubEndDate, Scrubbers.ScrubUserId });
 			}
+		}
+
+		[Fact]
+		public async Task ConsultationListPageModel_HasCorrectlySetSubmissionToLeadCount()
+		{
+			//Arrange
+			ResetDatabase();
+			_context.Database.EnsureCreated();
+
+			const string sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+			var userId = Guid.NewGuid().ToString();
+			const int organisationId = 1;
+			const string organisationName = "Sherman Oaks";
+
+			var fakeOrganisationService = new FakeOrganisationService(new Dictionary<int, string> { { organisationId, organisationName } });
+			var fakeUserService = FakeUserService.Get(true, "Benjamin Button", userId, TestUserType.Authenticated, true, null, organisationId);
+
+			var context = CreateContext(fakeUserService, 2);
+			AddSubmittedCommentsAndAnswers(sourceURI, "Comment Label", "Question Label", "Answer Label", userId, context, (int)StatusName.SubmittedToLead);
+			AddSubmittedCommentsAndAnswers(sourceURI, "Second Comment Label", "Second Question Label", " Second Answer Label", userId, context, (int)StatusName.SubmittedToLead);
+
+			var consultationList = new List<ConsultationList>();
+			consultationList.Add(new ConsultationList { ConsultationId = 1 });
+			var consultationListService = new ConsultationListService(context, new FakeFeedService(consultationList), fakeUserService, _fakeFeatureManager, fakeOrganisationService);
+
+			//Act
+			var viewModel = await consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null) { Status = new List<ConsultationStatus>() });
+
+			//Assert
+			viewModel.consultationListViewModel.Consultations.First().NumResponsesFromOrg.ShouldBe(2);
 		}
 	}
 

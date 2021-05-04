@@ -417,13 +417,13 @@ namespace Comments.Test.Infrastructure
 			}
 		}
 
-	    protected void AddSubmittedCommentsAndAnswers(string sourceURI, string commentText, string questionText, string answerText, string createdByUserId, ConsultationsContext passedInContext = null)
+	    protected void AddSubmittedCommentsAndAnswers(string sourceURI, string commentText, string questionText, string answerText, string createdByUserId, ConsultationsContext passedInContext = null, int status = (int)StatusName.Submitted)
 	    {
 		    var locationId = AddLocation(sourceURI, passedInContext);
-		    var commentId = AddComment(locationId, commentText, createdByUserId: createdByUserId, status: (int)StatusName.Submitted, passedInContext: passedInContext);
+		    var commentId = AddComment(locationId, commentText, createdByUserId: createdByUserId, status: status, passedInContext: passedInContext);
 			var questionTypeId = 99;
 		    var questionId = AddQuestion(locationId, questionTypeId, questionText, passedInContext);
-		    var answerId = AddAnswer(questionId, createdByUserId, answerText, (int)StatusName.Submitted, passedInContext);
+		    var answerId = AddAnswer(questionId, createdByUserId, answerText, status, passedInContext);
 			var submissionId = AddSubmission(createdByUserId, passedInContext);
 		    AddSubmissionComments(submissionId, commentId, passedInContext);
 		    AddSubmissionAnswers(submissionId, answerId, passedInContext);
