@@ -284,8 +284,8 @@ export class CommentList extends Component<PropsType, StateType> {
 
 	drawerClassnames = () => {
 		const open = this.state.drawerOpen ? "Drawer--open" : "";
-		const mobile = this.state.drawerMobile ? "Drawer--mobile" : "";
-		return `Drawer ${open} ${mobile}`;
+		//const mobile = this.state.drawerMobile ? "Drawer--mobile" : "";
+		return `Drawer ${open}`;
 	};
 
 	handleClick = (event: string) => {
@@ -365,56 +365,47 @@ export class CommentList extends Component<PropsType, StateType> {
 					message={`You have ${this.state.unsavedIds.length} unsaved ${this.state.unsavedIds.length === 1 ? "change" : "changes"}. Continue without saving?`}
 				/>
 				<LiveMessage message={a11yMessage()} aria-live="assertive"/>
-				<section aria-label="Commenting panel"
-								 className={this.drawerClassnames()}>
+				<section aria-label="Commenting panel" className={this.drawerClassnames()}>
 					<div className="Drawer__controls">
 						{this.state.shouldShowCommentsTab &&
-						<button
-							data-qa-sel="open-commenting-panel"
-							id="js-drawer-toggleopen-comments"
-							className={`Drawer__control Drawer__control--comments ${(this.state.viewComments ? "active" : "active")}`}
-							onClick={() => this.handleClick("toggleOpenComments")}
-							aria-controls="comments-panel"
-							aria-haspopup="true"
-							aria-label={this.state.drawerOpen ? "Close the commenting panel" : "Open the commenting panel"}
-							tabIndex="0">
-							{!this.state.drawerMobile ?
-								<span>{(this.state.drawerOpen && this.state.viewComments ? "Close comments" : "Open comments")}</span>
-								:
+							<button
+								data-qa-sel="open-commenting-panel"
+								id="js-drawer-toggleopen-comments"
+								className={`Drawer__control Drawer__control--comments ${(this.state.viewComments ? "active" : "active")}`}
+								onClick={() => this.handleClick("toggleOpenComments")}
+								aria-controls="comments-panel"
+								aria-haspopup="true"
+								aria-label={this.state.drawerOpen ? "Close the commenting panel" : "Open the commenting panel"}
+								tabIndex="0">
 								<span
-									className={`icon ${
-										this.state.drawerOpen
-											? "icon--chevron-right"
-											: "icon--chevron-left"}`}
+									className="Drawer__control-text"
 									aria-hidden="true"
 									data-qa-sel="close-commenting-panel"
-								/>
-							}
-						</button>
+								>
+									Comments
+								</span>
+								{(this.state.drawerOpen && this.state.viewComments ? "Close comments" : "Open comments")}
+							</button>
 						}
 						{this.state.shouldShowQuestionsTab &&
-						<button
-							data-qa-sel="open-questions-panel"
-							id="js-drawer-toggleopen-questions"
-							className={`Drawer__control Drawer__control--questions ${(this.state.viewComments ? "active" : "active")}`}
-							onClick={() => this.handleClick("toggleOpenQuestions")}
-							aria-controls="questions-panel"
-							aria-haspopup="true"
-							aria-label={this.state.drawerOpen ? "Close the questions panel" : "Open the questions panel"}
-							tabIndex="0">
-							{!this.state.drawerMobile ?
-								<span>{(this.state.drawerOpen && !this.state.viewComments ? "Close questions" : "Open questions")}</span>
-								:
+							<button
+								data-qa-sel="open-questions-panel"
+								id="js-drawer-toggleopen-questions"
+								className={`Drawer__control Drawer__control--questions ${(this.state.viewComments ? "active" : "active")}`}
+								onClick={() => this.handleClick("toggleOpenQuestions")}
+								aria-controls="questions-panel"
+								aria-haspopup="true"
+								aria-label={this.state.drawerOpen ? "Close the questions panel" : "Open the questions panel"}
+								tabIndex="0">
 								<span
-									className={`icon ${
-										this.state.drawerOpen
-											? "icon--chevron-right"
-											: "icon--chevron-left"}`}
+									className="Drawer__control-text"
 									aria-hidden="true"
 									data-qa-sel="close-questions-panel"
-								/>
-							}
-						</button>
+								>
+									Questions
+								</span>
+								{(this.state.drawerOpen && !this.state.viewComments ? "Close questions" : "Open questions")}
+							</button>
 						}
 					</div>
 					<div
