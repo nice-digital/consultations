@@ -93,7 +93,9 @@ namespace Comments.Services
 			else
 				allOrganisationCodes = consultationsFromIndev.ToDictionary(key => key.ConsultationId, val => new List<OrganisationCode>(0));
 
-			var consultationListRows = new List<ConsultationListRow>();
+            var submittedToLeadCommentsAndAnswerCounts = isOrganisationalCommentingEnabled ? _context.GetSubmittedToLeadCommentsAndAnswerCounts() : null;
+
+            var consultationListRows = new List<ConsultationListRow>();
 
             foreach (var consultation in consultationsFromIndev)
 			{
@@ -106,16 +108,14 @@ namespace Comments.Services
 
 				var responseCount = canSeeSubmissionCountForThisConsultation ? submittedCommentsAndAnswerCounts.FirstOrDefault(s => s.SourceURI.Equals(sourceURI))?.TotalCount ?? 0 : (int?)null;
 
-                var numResponsesFromOrg = new SubmittedToLeadCommentsAndAnswerCount() { TotalCount = 0 };
-                if (isOrganisationalCommentingEnabled && currentUser.OrganisationsAssignedAsLead.FirstOrDefault() != null)
-                    numResponsesFromOrg = _context.GetSubmittedToLeadCommentsAndAnswerCounts(sourceURI, currentUser.OrganisationsAssignedAsLead.First().OrganisationId);
+                var responseToLeadCount = submittedToLeadCommentsAndAnswerCounts != null ? submittedToLeadCommentsAndAnswerCounts.FirstOrDefault(s => s.SourceURI.Equals(sourceURI) && s.OrganisationId.Equals(currentUser.OrganisationsAssignedAsLead.First()?.OrganisationId))?.TotalCount ?? 0 : (int?)null;
 
                 consultationListRows.Add(
 					new ConsultationListRow(consultation.Title,
 						consultation.StartDate, consultation.EndDate, responseCount, consultation.ConsultationId,
 						consultation.FirstConvertedDocumentId, consultation.FirstChapterSlugOfFirstConvertedDocument, consultation.Reference,
 						consultation.ProductTypeName, hasCurrentUserEnteredCommentsOrAnsweredQuestions, hasCurrentUserSubmittedCommentsOrAnswers, consultation.AllowedRole,
-						allOrganisationCodes[consultation.ConsultationId], currentUserIsAuthorisedToViewOrganisationCodes, numResponsesFromOrg.TotalCount));
+						allOrganisationCodes[consultation.ConsultationId], currentUserIsAuthorisedToViewOrganisationCodes, responseToLeadCount));
 			}
 
 			model.OptionFilters = GetOptionFilterGroups(model.Status?.ToList(), consultationListRows, hasAccessToViewUpcomingConsultations);

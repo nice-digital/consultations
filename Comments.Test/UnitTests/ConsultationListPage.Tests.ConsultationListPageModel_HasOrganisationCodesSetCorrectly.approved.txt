@@ -22,7 +22,7 @@
                 
             ],
             "ShowShareWithOrganisationButton":false,
-            "NumResponsesFromOrg":0
+            "SubmissionToLeadCount":0
         },
         {
             "Title":"Consultation title 1",
@@ -51,7 +51,7 @@
                 }
             ],
             "ShowShareWithOrganisationButton":true,
-            "NumResponsesFromOrg":0
+            "SubmissionToLeadCount":0
         },
         {
             "Title":"Consultation Title 1",
@@ -74,7 +74,7 @@
                 
             ],
             "ShowShareWithOrganisationButton":false,
-            "NumResponsesFromOrg":0
+            "SubmissionToLeadCount":0
         }
     ],
     "OptionFilters":[

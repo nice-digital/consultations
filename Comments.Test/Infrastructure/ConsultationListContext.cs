@@ -8,12 +8,12 @@ namespace Comments.Test.Infrastructure
 	public class ConsultationListContext : ConsultationsContext
 	{
 		private readonly IList<SubmittedCommentsAndAnswerCount> _commentsAndAnswerCounts;
-		private readonly SubmittedToLeadCommentsAndAnswerCount _toLeadCommentsAndAnswerCount;
+		private readonly IList<SubmittedToLeadCommentsAndAnswerCount> _toLeadCommentsAndAnswerCount;
 
 		public ConsultationListContext(DbContextOptions options, IUserService userService, IEncryption encryption) : base(options, userService, encryption)
 		{}
 
-		public ConsultationListContext(DbContextOptions options, IUserService userService, IEncryption encryption, IList<SubmittedCommentsAndAnswerCount> commentsAndAnswerCounts, SubmittedToLeadCommentsAndAnswerCount toLeadCommentsAndAnswerCount) : base(options, userService, encryption)
+		public ConsultationListContext(DbContextOptions options, IUserService userService, IEncryption encryption, IList<SubmittedCommentsAndAnswerCount> commentsAndAnswerCounts, IList<SubmittedToLeadCommentsAndAnswerCount> toLeadCommentsAndAnswerCount) : base(options, userService, encryption)
 		{
 			_commentsAndAnswerCounts = commentsAndAnswerCounts;
 			_toLeadCommentsAndAnswerCount = toLeadCommentsAndAnswerCount;
@@ -24,9 +24,9 @@ namespace Comments.Test.Infrastructure
 			return _commentsAndAnswerCounts ?? new List<SubmittedCommentsAndAnswerCount>();
 		}
 
-		public override SubmittedToLeadCommentsAndAnswerCount GetSubmittedToLeadCommentsAndAnswerCounts(string sourceURI, int organisationId)
+		public override IList<SubmittedToLeadCommentsAndAnswerCount> GetSubmittedToLeadCommentsAndAnswerCounts()
 		{
-			return _toLeadCommentsAndAnswerCount ?? new SubmittedToLeadCommentsAndAnswerCount();
+			return _toLeadCommentsAndAnswerCount ?? new List<SubmittedToLeadCommentsAndAnswerCount>();
 		}
 	}
 }

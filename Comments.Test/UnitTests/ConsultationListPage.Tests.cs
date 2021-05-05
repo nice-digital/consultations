@@ -627,7 +627,7 @@ namespace Comments.Test.UnitTests
 			var viewModel = await consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null) { Status = new List<ConsultationStatus>() });
 
 			//Assert
-			viewModel.consultationListViewModel.Consultations.First().NumResponsesFromOrg.ShouldBe(2);
+			viewModel.consultationListViewModel.Consultations.First().SubmissionToLeadCount.ShouldBe(2);
 		}
 	}
 

@@ -200,11 +200,9 @@ namespace Comments.Models
 		    return SubmittedCommentsAndAnswerCounts.ToList();
 	    }
 
-        public virtual SubmittedToLeadCommentsAndAnswerCount GetSubmittedToLeadCommentsAndAnswerCounts(string sourceURI, int organisationId)
+        public virtual IList<SubmittedToLeadCommentsAndAnswerCount> GetSubmittedToLeadCommentsAndAnswerCounts()
         {
-            return SubmittedToLeadCommentsAndAnswerCounts
-                .Where(s => s.SourceURI.Equals(sourceURI) && s.OrganisationId.Equals(organisationId))
-                .FirstOrDefault();
+            return SubmittedToLeadCommentsAndAnswerCounts.ToList();
         }
 
         public List<Comment> GetAllSubmittedCommentsForURI(string sourceURI)
