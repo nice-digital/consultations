@@ -107,8 +107,8 @@ namespace Comments.Services
 				var canSeeSubmissionCountForThisConsultation = (isAdminUser || (isTeamUser && teamRoles.Contains(consultation.AllowedRole)));
 
 				var responseCount = canSeeSubmissionCountForThisConsultation ? submittedCommentsAndAnswerCounts.FirstOrDefault(s => s.SourceURI.Equals(sourceURI))?.TotalCount ?? 0 : (int?)null;
-
-                var responseToLeadCount = submittedToLeadCommentsAndAnswerCounts != null ? submittedToLeadCommentsAndAnswerCounts.FirstOrDefault(s => s.SourceURI.Equals(sourceURI) && s.OrganisationId.Equals(currentUser.OrganisationsAssignedAsLead.First()?.OrganisationId))?.TotalCount ?? 0 : (int?)null;
+               
+                var responseToLeadCount = submittedToLeadCommentsAndAnswerCounts != null ? submittedToLeadCommentsAndAnswerCounts.FirstOrDefault(s => s.SourceURI.Equals(sourceURI) && s.OrganisationId.Equals(currentUser.OrganisationsAssignedAsLead.FirstOrDefault()?.OrganisationId))?.TotalCount ?? 0 : (int?)null;
 
                 consultationListRows.Add(
 					new ConsultationListRow(consultation.Title,
