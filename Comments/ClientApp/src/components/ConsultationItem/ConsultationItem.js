@@ -93,7 +93,7 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 								</dd>
 							</div>
 						)}
-						{showShareWithOrganisationButton && allowGenerateOrganisationCode &&
+						{showShareWithOrganisationButton && allowGenerateOrganisationCode && submissionToLeadCount !== null &&
 							<div className="card__metadatum">
 								{submissionToLeadCount} {submissionToLeadCount == 1 ? "response" : "responses"} from your organisation
 							</div>
