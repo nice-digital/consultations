@@ -60,15 +60,16 @@ Array [
             href="/1/review"
             onClick={[Function]}
           >
-            Review and submit your response   
+            Review your response before submitting   
             <span
               aria-hidden="true"
               className="icon icon--chevron-right"
             />
           </a>
           <div
+            aria-live="polite"
             className="alert alert--info"
-            role="alert"
+            role="status"
           >
             <p>
               You are commenting on behalf of 
