@@ -72,7 +72,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			allowComments: true,
 			error: "",
 			initialDataLoaded: false,
-			drawerOpen: true,
+			drawerOpen: false,
 			drawerMobile: false,
 			viewComments: true,
 			shouldShowCommentsTab: false,
@@ -124,7 +124,7 @@ export class CommentList extends Component<PropsType, StateType> {
 				viewComments: shouldShowCommentsTabOverride,
 				shouldShowCommentsTab: shouldShowCommentsTabOverride,
 				shouldShowQuestionsTab,
-				drawerOpen: true,
+				drawerOpen: false,
 				drawerMobile: false,
 				unsavedIds: [],
 				endDate,
@@ -200,18 +200,17 @@ export class CommentList extends Component<PropsType, StateType> {
 	};
 
 	componentDidMount() {
-		const isAuthorised = this.context.isAuthorised;
-
 		if (!this.state.initialDataLoaded) {
 			this.loadCommentsForCurrentUser();
 		}
 
-		// We can't prerender whether we're on mobile cos SSR doesn't have a window
-		// sets isAuthorised from context
 		this.setState({
-			drawerMobile: this.isMobile(),
-			isAuthorised,
+			isAuthorised: this.context.isAuthorised,
+			drawerOpen: true,
 		});
+
+		window.addEventListener("resize", this.setUsingMobile);
+		this.setUsingMobile();
 	}
 
 	componentDidUpdate(prevProps: PropsType) {
@@ -226,6 +225,10 @@ export class CommentList extends Component<PropsType, StateType> {
 			});
 			this.loadCommentsForCurrentUser();
 		}
+	}
+
+	componentWillUnmount() {
+		window.removeEventListener("resize", this.setUsingMobile);
 	}
 
 	issueA11yMessage = (message: string) => {
@@ -288,15 +291,18 @@ export class CommentList extends Component<PropsType, StateType> {
 		updateUnsavedIds(commentId, dirty, this);
 	};
 
-	//old drawer code:
-	isMobile = () => {
-		if (typeof document !== "undefined") {
-			return (
-				document.getElementsByTagName("body")[0].offsetWidth <= mobileWidth
-			);
+	setUsingMobile = () => {
+		const usingMobile = typeof document !== "undefined" ?
+			document.getElementsByTagName("body")[0].offsetWidth <= mobileWidth :
+			false;
+
+		if (this.state.drawerMobile !== usingMobile) {
+			this.setState({
+				drawerOpen: !usingMobile,
+				drawerMobile: usingMobile,
+			});
 		}
-		return false;
-	};
+	}
 
 	drawerClassnames = () => {
 		const open = this.state.drawerOpen ? "Drawer--open" : "";
