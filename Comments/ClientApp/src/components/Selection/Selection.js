@@ -42,7 +42,7 @@ export class Selection extends Component<PropsType, StateType> {
 
 	findClosest(element, selector){				
 		while (element.parentElement){
-			const result = element.querySelector(selector)
+			const result = element.querySelector(selector);
 			if (result != null){
 				return result;
 			}

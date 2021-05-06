@@ -433,7 +433,7 @@ export class CommentList extends Component<PropsType, StateType> {
 													to={`/${this.props.match.params.consultationId}/review`}
 													data-qa-sel="review-all-comments"
 													className="btn btn--cta mt--c">
-													Review and submit your response &nbsp;&nbsp;
+													Review your response before submitting &nbsp;&nbsp;
 													<span className="icon icon--chevron-right" aria-hidden="true" />
 												</Link>
 										}

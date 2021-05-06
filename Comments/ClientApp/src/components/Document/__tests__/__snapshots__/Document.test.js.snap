@@ -689,6 +689,7 @@ Array [
               data-g="12 md:6 md:pull:3"
             >
               <div
+                aria-live="polite"
                 className="document-comment-container "
                 id="content-start"
               >
