@@ -21,7 +21,12 @@ import navigateToReviewPage, {
 import submitResponse, {
 	completeResponseMandatoryQuestions,
 	clickSubmitResponseButton,
+<<<<<<< HEAD
 	responseMandatoryQuestions_answerYestoOrg, clickSendYourResponseToYourOrganisationButton,
+=======
+	responseMandatoryQuestions_answerYestoOrg,
+	clickYesSubmitResponseButton
+>>>>>>> master
 } from "../support/action/submitResponse";
 import { reviewResponse } from "../support/action/reviewResponse";
 import { Login } from "../support/action/Login";
@@ -121,6 +126,10 @@ When(
 
 When(/^I scroll the delete button into view$/, scrollDeleteButtonIntoView);
 
+<<<<<<< HEAD
 When(/^I log into consultation with copied organisation code$/, CodeLogin);
 
 When(/^I click send your response to your organisation button$/, clickSendYourResponseToYourOrganisationButton);
+=======
+When(/^I click yes submit my response button$/, clickYesSubmitResponseButton);
+>>>>>>> master

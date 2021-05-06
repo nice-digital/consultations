@@ -93,7 +93,7 @@ export class Question extends Component<PropsType> {
 				</div>
 
 				{this.props.isUnsaved &&
-					<p className="CommentBox__validationMessage">You have unsaved changes</p>
+					<p className="CommentBox__validationMessage" role="alert">You have unsaved changes</p>
 				}
 				<UserContext.Consumer>
 					{(contextValue: ContextType) => {

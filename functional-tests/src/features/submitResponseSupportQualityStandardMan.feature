@@ -16,6 +16,8 @@ Feature: User unable to submit when they have not completed mandatory questions 
 		When I navigate to the Review Page
 		And I answer Yes to Organisation question and complete the organisation name
 		And I click submit my response button
+		Then I expect the alert caution to contain "I understand that once I have submitted my response, I will not be able to edit my comments or provide additional information."
+		And I click yes submit my response button
 		Then I expect the feedback message "You have not disclosed whether your organisation would like to express an interest in formally supporting this quality standard" to be displayed
 		When I scroll the delete button into view
 		Given I delete all comments on the page

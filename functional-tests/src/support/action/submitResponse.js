@@ -11,6 +11,9 @@ export const submitResponse = () => {
 	clickElement("click", "element", selectors.reviewPage.answerNoTobacLink);
 	clickElement("click", "element", selectors.reviewPage.submitResponseButton);
 	browser.pause(2000);
+	waitForVisible(selectors.reviewPage.YessubmitResponseButton);
+	clickElement("click", "element", selectors.reviewPage.YessubmitResponseButton);
+	browser.pause(2000);
 	waitForVisible(selectors.reviewPage.reviewSubmittedCommentsButton);
 	checkContainsText("element", selectors.reviewPage.responseSubmittedHeader, "Response submitted");
 };
@@ -38,9 +41,15 @@ export const clickSubmitResponseButton = () => {
 	clickElement("click", "element", selectors.reviewPage.submitResponseButton);
 };
 
+<<<<<<< HEAD
 export const clickSendYourResponseToYourOrganisationButton = () => {
 	waitForVisible(selectors.reviewPage.SendYourResponseToYourOrganisationButton);
 	clickElement("click", "element", selectors.reviewPage.SendYourResponseToYourOrganisationButton);
+=======
+export const clickYesSubmitResponseButton = () => {
+	waitForVisible(selectors.reviewPage.YessubmitResponseButton);
+	clickElement("click", "element", selectors.reviewPage.YessubmitResponseButton);
+>>>>>>> master
 };
 
 export default submitResponse;
