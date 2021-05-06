@@ -7,7 +7,7 @@ exports.config = {
 	services: ["selenium-standalone"],
 	seleniumLogs: "./logs",
 
-	specs: ["./src/features/**/*.feature"],
+	specs: ["./src/features/**/unsavedCommentReviewPage.feature"],
 	exclude: [
 		// "./src/features/**/unsavedCommentReviewPage.feature",
 		// "./src/features/**/answerQuestion.feature",
@@ -47,7 +47,7 @@ exports.config = {
 			"./src/steps/then.js",
 		],
 		tagExpression: "not @pending", // See https://docs.cucumber.io/tag-expressions/
-		timeout: 60000,
+		timeout: 600000,
 	},
 
 	// Set up global asssertion libraries
