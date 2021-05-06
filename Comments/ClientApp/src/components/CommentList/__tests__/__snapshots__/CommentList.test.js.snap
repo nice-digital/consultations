@@ -67,8 +67,9 @@ Array [
             />
           </a>
           <div
+            aria-live="polite"
             className="alert alert--info"
-            role="alert"
+            role="status"
           >
             <p>
               You are commenting on behalf of 
