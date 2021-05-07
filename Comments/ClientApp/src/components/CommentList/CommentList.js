@@ -60,6 +60,7 @@ type StateType = {
 	isAuthorised: boolean,
 	otherUsersComments: Array<CommentType>,
 	otherUsersQuestions: Array<QuestionType>,
+	signOutUrl: string,
 };
 
 export class CommentList extends Component<PropsType, StateType> {
@@ -83,6 +84,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			isAuthorised: false,
 			otherUsersComments: [],
 			otherUsersQuestions: [],
+			signOutUrl: "",
 		};
 
 		let preloadedData = {};
@@ -92,6 +94,8 @@ export class CommentList extends Component<PropsType, StateType> {
 		}
 
 		const enableOrganisationalCommentingFeature = ((preloadedData && preloadedData.organisationalCommentingFeature) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["organisationalCommentingFeature"]));
+
+		const signOutUrl = ((preloadedData && preloadedData.signOutURL) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["signOutURL"]));
 
 		const preloadedCommentsForCurrentUser = preload(
 			this.props.staticContext,
@@ -132,6 +136,7 @@ export class CommentList extends Component<PropsType, StateType> {
 				allowOrganisationCodeLogin: consultationIsOpen,
 				otherUsersComments: [],
 				otherUsersQuestions: [],
+				signOutUrl,
 			};
 		}
 
@@ -454,6 +459,16 @@ export class CommentList extends Component<PropsType, StateType> {
 												Review and submit your response &nbsp;&nbsp;
 												<span className="icon icon--chevron-right" aria-hidden="true" />
 											</Link>
+										}
+
+										{!contextValue.isOrganisationCommenter && !contextValue.isLead &&
+											/*
+												TODO: needs to be dismissable - add something into state and markup/styles
+												for dismiss button as it's not in design system
+											*/
+											<Alert type="info" role="alert">
+												<p>If you wish to comment as part of your organisation using a code from your organisation's commenting lead, please <a href={this.state.signOutUrl}>Sign out</a> and access the consultation using only the code.</p>
+											</Alert>
 										}
 
 										{contextValue.isOrganisationCommenter && !contextValue.isLead &&
