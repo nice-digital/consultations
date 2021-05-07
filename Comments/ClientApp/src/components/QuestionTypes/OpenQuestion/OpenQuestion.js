@@ -86,7 +86,7 @@ export class OpenQuestion extends Component<PropsType, StateType> {
 						<div className="form__group form__group--textarea mb--b">
 							<label className="form__label visually-hidden" htmlFor={question.questionId}>Set question</label>
 							{unsavedChanges &&
-							<p className="CommentBox__validationMessage mt--0">You have unsaved changes</p>
+							<p className="CommentBox__validationMessage mt--0" role="alert">You have unsaved changes</p>
 							}
 							<textarea
 								disabled={readOnly}
