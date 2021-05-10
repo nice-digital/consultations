@@ -41,15 +41,12 @@ export const clickSubmitResponseButton = () => {
 	clickElement("click", "element", selectors.reviewPage.submitResponseButton);
 };
 
-<<<<<<< HEAD
 export const clickSendYourResponseToYourOrganisationButton = () => {
 	waitForVisible(selectors.reviewPage.SendYourResponseToYourOrganisationButton);
 	clickElement("click", "element", selectors.reviewPage.SendYourResponseToYourOrganisationButton);
-=======
 export const clickYesSubmitResponseButton = () => {
 	waitForVisible(selectors.reviewPage.YessubmitResponseButton);
 	clickElement("click", "element", selectors.reviewPage.YessubmitResponseButton);
->>>>>>> master
 };
 
 export default submitResponse;
