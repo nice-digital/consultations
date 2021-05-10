@@ -251,7 +251,7 @@ namespace Comments.Services
 			    commentsAndQuestions.Comments.ForEach(c => c.Show = (!c.Show || !c.DocumentId.HasValue) ? false : documentIds.Contains(c.DocumentId.Value));
 			}
 
-			var commenters = commentersToFilter?.ToList() ?? new List<string>(); ;
+			var commenters = commentersToFilter?.ToList() ?? new List<string>();
 			if (commenters.Any())
 			{
 				commentsAndQuestions.Comments.ForEach(c => c.Show = (!c.Show || (c.CommenterEmail != null && c.CommenterEmail.Length == 0)) ? false : commenters.Contains(c.CommenterEmail, StringComparer.OrdinalIgnoreCase));

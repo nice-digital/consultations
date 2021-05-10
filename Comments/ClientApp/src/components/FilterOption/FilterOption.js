@@ -45,11 +45,11 @@ export class FilterOption extends Component<PropsType, StateType> {
 	}
 
 	getHref() {
-		let path = removeQueryParameter(this.props.path, this.props.groupId, this.props.option.id);
+		let path = removeQueryParameter(this.props.path, this.props.groupId, encodeURIComponent(this.props.option.id));
 		path = removeQueryParameter(path, "page");
 
 		return this.state.isSelected
-			? appendQueryParameter(path, this.props.groupId, this.props.option.id)
+			? appendQueryParameter(path, this.props.groupId, encodeURIComponent(this.props.option.id))
 			: path;
 	}
 
