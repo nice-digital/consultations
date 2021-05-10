@@ -21,8 +21,8 @@ import navigateToReviewPage, {
 import submitResponse, {
 	completeResponseMandatoryQuestions,
 	clickSubmitResponseButton,
-	responseMandatoryQuestions_answerYestoOrg, clickSendYourResponseToYourOrganisationButton,
 	responseMandatoryQuestions_answerYestoOrg,
+	clickSendYourResponseToYourOrganisationButton,
 	clickYesSubmitResponseButton
 } from "../support/action/submitResponse";
 import { reviewResponse } from "../support/action/reviewResponse";
