@@ -187,9 +187,10 @@ export class LoginBanner extends Component<PropsType, StateType> {
 		const codeLoginOnly = this.props.codeLoginOnly ?? false;
 		const title = this.props.title ?? "";
 		const isInCommentsPanel = this.props.isInCommentsPanel ?? false;
+		const organisationalCommentingFeature = this.context.organisationalCommentingFeature;
 
 		return (
-			<div className={`${!isInCommentsPanel  && "panel panel-white"} mt--0 mb--0 sign-in-banner`} id="loginBanner" data-qa-sel="sign-in-banner">
+			<div className={`${!isInCommentsPanel || !organisationalCommentingFeature ? "panel panel-white" : ""} mt--0 mb--0 sign-in-banner`} id="loginBanner" data-qa-sel="sign-in-banner">
 				<div className="container">
 					<div className="LoginBanner" role="form">
 						{title !== "" &&
@@ -246,7 +247,7 @@ export class LoginBanner extends Component<PropsType, StateType> {
 						}
 						{!this.props.allowOrganisationCodeLogin &&
 							<>
-								<a href={this.props.signInURL} title="Sign in to your NICE account">Sign in to your NICE account</a> {this.props.signInText ?? "to comment on this consultation"}.{" "}
+								<p className={`${!isInCommentsPanel ? "display--inline" : ""} ${!organisationalCommentingFeature ? "no-margin" : ""}`}><a href={this.props.signInURL} title="Sign in to your NICE account">Sign in to your NICE account</a> {this.props.signInText ?? "to comment on this consultation"}.{" "}</p>
 								{this.props.signInButton &&
 									<p>
 										<a className="btn" href={this.props.signInURL} title="Sign in to your NICE account">Sign in</a>
@@ -255,12 +256,23 @@ export class LoginBanner extends Component<PropsType, StateType> {
 							</>
 						}
 						{!codeLoginOnly &&
-							<p className={`${!isInCommentsPanel && "display--inline"}`}>
+							<p className={`${!isInCommentsPanel ? "display--inline" : ""} ${!organisationalCommentingFeature ? "no-margin" : ""}`}>
+								{!organisationalCommentingFeature &&
+									<>
+										Don't have an account?
+										{" "}
+									</>
+
+								}
 								<a href={this.props.registerURL} title="Register for a NICE account">
 									Register
 								</a>
 								{" "}
-								for a NICE account if you don't already have one.
+								{organisationalCommentingFeature &&
+									<>
+										for a NICE account if you don't already have one.
+									</>
+								}
 							</p>
 						}
 					</div>
@@ -271,3 +283,4 @@ export class LoginBanner extends Component<PropsType, StateType> {
 }
 
 export default withRouter(LoginBanner);
+LoginBanner.contextType = UserContext;

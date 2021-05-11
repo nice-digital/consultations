@@ -6,7 +6,6 @@ import { UserContext } from "../../context/UserContext";
 import  LoginBannerWithRouter from "../LoginBanner/LoginBanner";
 
 type PropsType = {
-	organisationalCommentingFeature: boolean,
 	questionsTabIsOpen: boolean,
 }
 
@@ -54,7 +53,8 @@ export class LoginPanel extends Component<PropsType, StateType> {
 
 	render() {
 		const { respondingAsOrg, respondingAsOrgType } = this.state;
-		const { organisationalCommentingFeature, questionsTabIsOpen } = this.props;
+		const questionsTabIsOpen = this.props.questionsTabIsOpen;
+		const organisationalCommentingFeature = this.context.organisationalCommentingFeature;
 
 		const showFirstScreen = (respondingAsOrg === null);
 		const showSecondScreen = (respondingAsOrg === true && (respondingAsOrgType === null || respondingAsOrgType === "code"));
@@ -85,6 +85,7 @@ export class LoginPanel extends Component<PropsType, StateType> {
 		if (!organisationalCommentingFeature) {
 			loginBannerProps.title = null;
 			loginBannerProps.signInText = null;
+			loginBannerProps.signInButton = true;
 		}
 
 		return (

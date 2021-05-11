@@ -61,6 +61,7 @@ type StateType = {
 	otherUsersComments: Array<CommentType>,
 	otherUsersQuestions: Array<QuestionType>,
 	signOutUrl: string,
+	showUseCodeInstead: boolean,
 };
 
 export class CommentList extends Component<PropsType, StateType> {
@@ -85,6 +86,7 @@ export class CommentList extends Component<PropsType, StateType> {
 			otherUsersComments: [],
 			otherUsersQuestions: [],
 			signOutUrl: "",
+			showUseCodeInstead: false,
 		};
 
 		let preloadedData = {};
@@ -205,13 +207,18 @@ export class CommentList extends Component<PropsType, StateType> {
 	};
 
 	componentDidMount() {
-		if (!this.state.initialDataLoaded) {
+		const { isAuthorised, isOrganisationCommenter, isLead, organisationalCommentingFeature: drawerOpen } = this.context;
+		const { allowOrganisationCodeLogin: consultationIsOpen, initialDataLoaded } = this.state;
+		const showUseCodeInstead = !isOrganisationCommenter && !isLead && isAuthorised && consultationIsOpen;
+
+		if (!initialDataLoaded) {
 			this.loadCommentsForCurrentUser();
 		}
 
 		this.setState({
-			isAuthorised: this.context.isAuthorised,
-			drawerOpen: true,
+			isAuthorised,
+			drawerOpen,
+			showUseCodeInstead,
 		});
 
 		window.addEventListener("resize", this.setUsingMobile);
@@ -275,7 +282,6 @@ export class CommentList extends Component<PropsType, StateType> {
 		}, 0);
 	};
 
-	//these handlers have moved to the helpers/editing-and-deleting.js utility file as they're also used in ReviewList.js
 	saveCommentHandler = (e: Event, comment: CommentType) => {
 		saveCommentHandler(e, comment, this);
 	};
@@ -462,17 +468,14 @@ export class CommentList extends Component<PropsType, StateType> {
 												</Link>
 										}
 
-										{!contextValue.isOrganisationCommenter && !contextValue.isLead &&
-											/*
-												TODO: needs to be dismissable - add something into state and markup/styles
-												for dismiss button as it's not in design system
-											*/
-											<Alert type="info" role="alert">
-												<p>If you wish to comment as part of your organisation using a code from your organisation's commenting lead, please <a href={this.state.signOutUrl}>Sign out</a> and access the consultation using only the code.</p>
+										{(this.state.showUseCodeInstead && contextValue.organisationalCommentingFeature) &&
+											<Alert type="info" role="status" aria-live="polite">
+												<p>If you have been sent a code from your organisation's commenting lead, please <a href={this.state.signOutUrl}>sign out</a> and access the consultation using the code.</p>
+												<button className="btn btn--primary" onClick={() => this.setState({ showUseCodeInstead: false })}>Dismiss</button>
 											</Alert>
 										}
 
-										{contextValue.isOrganisationCommenter && !contextValue.isLead &&
+										{(contextValue.isOrganisationCommenter && !contextValue.isLead) &&
 											<Alert type="info" role="status" aria-live="polite">
 												<p>You are commenting on behalf of {contextValue.organisationName}.</p>
 												<p>When you submit your response it will be submitted to the organisational lead at {contextValue.organisationName}. <strong>On submission your email address and responses will be visible to other members or associates of your organisation who are using the same commenting code.</strong></p>
@@ -530,10 +533,7 @@ export class CommentList extends Component<PropsType, StateType> {
 														</button>
 													</div>
 												) : (
-													<LoginPanelWithRouter
-														organisationalCommentingFeature={contextValue.organisationalCommentingFeature}
-														questionsTabIsOpen={this.state.drawerOpen && !this.state.viewComments}
-													/>
+													<LoginPanelWithRouter questionsTabIsOpen={this.state.drawerOpen && !this.state.viewComments} />
 												)}
 
 												<div className={`${this.state.viewComments ? "hide" : "show"}`}>
