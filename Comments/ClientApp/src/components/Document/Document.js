@@ -472,12 +472,12 @@ export class Document extends Component<PropsType, StateType> {
 														consultationState={this.state.consultationData.consultationState}
 														allowRegisterOrganisationLeadLink={contextValue.organisationalCommentingFeature}/>
 														{this.state.consultationData.consultationState.submittedDate &&
-															<Alert type="info" role="alert">
+															<Alert type="info" role="status" aria-live="polite">
 																<p>You submitted your response to this consultation on <Moment format="D MMMM YYYY" date={this.state.consultationData.consultationState.submittedDate}/>, you cannot add, edit or provide additional information.</p>
 															</Alert>
-														}
+													}
 													{contextValue.isOrganisationCommenter && !contextValue.isLead && !this.state.consultationData.consultationState.submittedDate &&
-														<Alert type="info" role="alert">
+														<Alert type="info" role="status" aria-live="polite">
 															<p>You are commenting on behalf of {contextValue.organisationName}.</p>
 															<p>When you submit your response it will be submitted to the organisational lead at {contextValue.organisationName}. <strong>On submission your email address and responses will be visible to other members or associates of your organisation who are using the same commenting code.</strong></p>
 														</Alert>
@@ -583,6 +583,7 @@ export class Document extends Component<PropsType, StateType> {
 									{/* document column */}
 									<div data-g="12 md:6 md:pull:3" className="documentColumn">
 										<div id="content-start"
+											aria-live="polite"
 											className={`document-comment-container ${
 												this.state.loading ? "loading" : ""}`}>
 											<Selection newCommentFunc={this.props.onNewCommentClick}

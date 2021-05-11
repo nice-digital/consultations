@@ -1098,6 +1098,7 @@ namespace Comments.Models
             var emailAddresses = OrganisationUser.Where(o => comments.Select(c => c.OrganisationUserId).Contains(o.OrganisationUserId)
                                                 || answers.Select(a => a.OrganisationUserId).Contains(o.OrganisationUserId))
                                                 .Select(o => o.EmailAddress)
+                                                .Where(o => o != null)
                                                 .Distinct()
                                                 .ToList();
             return emailAddresses;
