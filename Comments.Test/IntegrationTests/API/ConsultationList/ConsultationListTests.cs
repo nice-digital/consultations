@@ -25,9 +25,9 @@ namespace Comments.Test.IntegrationTests.API.ConsultationList
 				    TotalCount = 1
 			    }
 			},
-			submittedToLeadCommentAndAnswerCount: new List<SubmittedToLeadCommentsAndAnswerCount>
+			submittedToLeadCommentAndAnswerCount: new List<SubmittedCommentsAndAnswerCount>
 			{
-				new SubmittedToLeadCommentsAndAnswerCount
+				new SubmittedCommentsAndAnswerCount
 				{
 					SourceURI = "consultations://./consultation/1",
 					OrganisationId = 1,

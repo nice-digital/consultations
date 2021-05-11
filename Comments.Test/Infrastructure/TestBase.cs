@@ -96,7 +96,7 @@ namespace Comments.Test.Infrastructure
 		}
 
 	    public TestBase(TestUserType testUserType, Feed feed, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null, bool bypassAuthentication = true,
-		    bool addRoleClaim = true, bool enableOrganisationalCommentingFeature = false, IList<SubmittedToLeadCommentsAndAnswerCount> submittedToLeadCommentAndAnswerCount = null)
+		    bool addRoleClaim = true, bool enableOrganisationalCommentingFeature = false, IList<SubmittedCommentsAndAnswerCount> submittedToLeadCommentAndAnswerCount = null)
 		    : this(false, testUserType, true, submittedCommentsAndAnswerCounts, bypassAuthentication, addRoleClaim, enableOrganisationalCommentingFeature, submittedToLeadCommentAndAnswerCount: submittedToLeadCommentAndAnswerCount)
 	    {
 			FeedToUse = feed;
@@ -107,7 +107,7 @@ namespace Comments.Test.Infrastructure
 		/// </summary>
 		public TestBase(bool useRealSubmitService = false, TestUserType testUserType = TestUserType.Authenticated, bool useFakeConsultationService = false, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null,
 			bool bypassAuthentication = true, bool addRoleClaim = true, bool enableOrganisationalCommentingFeature = false, Dictionary<int, Guid> validSessions = null,
-			bool useRealHttpContextAccessor = false, bool useRealUserService = false, int? organisationIdUserIsLeadOf = null, IList<SubmittedToLeadCommentsAndAnswerCount> submittedToLeadCommentAndAnswerCount = null)
+			bool useRealHttpContextAccessor = false, bool useRealUserService = false, int? organisationIdUserIsLeadOf = null, IList<SubmittedCommentsAndAnswerCount> submittedToLeadCommentAndAnswerCount = null)
         {
 	        if (testUserType == TestUserType.NotAuthenticated)
 	        {
@@ -569,9 +569,9 @@ namespace Comments.Test.Infrastructure
 					    TotalCount = totalCount
 				    }
 			    },
-				new List<SubmittedToLeadCommentsAndAnswerCount>
+				new List<SubmittedCommentsAndAnswerCount>
 				{
-					new SubmittedToLeadCommentsAndAnswerCount
+					new SubmittedCommentsAndAnswerCount
 					{
 						SourceURI = "consultations://./consultation/1",
 						OrganisationId = 1,

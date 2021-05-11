@@ -195,15 +195,33 @@ namespace Comments.Models
 		}
 
 
-	    public virtual IList<SubmittedCommentsAndAnswerCount> GetSubmittedCommentsAndAnswerCounts()
+	    public virtual IList<SubmittedCommentsAndAnswerCount> GetSubmittedCommentsAndAnswerCounts(bool SubmittedToLead = false)
 	    {
-		    return SubmittedCommentsAndAnswerCounts.ToList();
+		    var count = SubmittedCommentsAndAnswerCounts.ToList();
+
+            List<SubmittedCommentsAndAnswerCount> countList = new List<SubmittedCommentsAndAnswerCount>();
+
+            if (SubmittedToLead)
+            {
+                countList = count.Where(o => o.RespondingAsOrganisation == true && o.StatusId == 3)
+                .ToList();
+            }
+            else
+            {
+                countList =  count.Where(o => o.StatusId == 2)
+               .ToList();
+            }
+           
+            return countList;
 	    }
 
-        public virtual IList<SubmittedToLeadCommentsAndAnswerCount> GetSubmittedToLeadCommentsAndAnswerCounts()
-        {
-            return SubmittedToLeadCommentsAndAnswerCounts.ToList();
-        }
+        //public virtual IList<SubmittedCommentsAndAnswerCount> GetSubmittedToLeadCommentsAndAnswerCounts()
+        //{
+        //    var count = SubmittedCommentsAndAnswerCounts
+        //        .Where(o => o.RespondingAsOrganisation == true && o.StatusId == 3)
+        //        .ToList();
+        //    return count;
+        //}
 
         public List<Comment> GetAllSubmittedCommentsForURI(string sourceURI)
 	    {

@@ -28,7 +28,6 @@ namespace Comments.Models
 		/// Query type - see here for more info https://docs.microsoft.com/en-us/ef/core/modeling/query-types
 		/// </summary>
 		public virtual DbQuery<SubmittedCommentsAndAnswerCount> SubmittedCommentsAndAnswerCounts { get; set; }
-        public virtual DbQuery<SubmittedToLeadCommentsAndAnswerCount> SubmittedToLeadCommentsAndAnswerCounts { get; set; }
 
         private string _createdByUserID;
 		private IEnumerable<int> _organisationUserIDs;
@@ -354,10 +353,6 @@ namespace Comments.Models
 			modelBuilder
 				.Query<SubmittedCommentsAndAnswerCount>()
 				.ToView(MigrationConstants.Views.SubmittedCommentAndAnswerCount);
-
-            modelBuilder
-                .Query<SubmittedToLeadCommentsAndAnswerCount>()
-                .ToView(MigrationConstants.Views.SubmittedToLeadCommentAndAnswerCount);
         }
 	}
 }

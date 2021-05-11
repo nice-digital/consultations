@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Comments.Migrations
 {
     [DbContext(typeof(ConsultationsContext))]
-    [Migration("20210421145620_SubmittedToLeadCountsView")]
-    partial class SubmittedToLeadCountsView
+    [Migration("20210511143736_UpdateSubmittedCountsView")]
+    partial class UpdateSubmittedCountsView
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -152,7 +152,9 @@ namespace Comments.Migrations
 
                     b.Property<int?>("RangeStartOffset");
 
-                    b.Property<string>("Section");
+                    b.Property<string>("SectionHeader");
+
+                    b.Property<string>("SectionNumber");
 
                     b.Property<string>("SourceURI")
                         .HasColumnName("SourceURI");
