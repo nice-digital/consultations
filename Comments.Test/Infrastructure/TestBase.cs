@@ -566,7 +566,9 @@ namespace Comments.Test.Infrastructure
 				    new SubmittedCommentsAndAnswerCount
 				    {
 					    SourceURI = "consultations://./consultation/1",
-					    TotalCount = totalCount
+					    TotalCount = totalCount,
+						StatusId = 2
+						
 				    }
 			    },
 				new List<SubmittedCommentsAndAnswerCount>
@@ -575,7 +577,9 @@ namespace Comments.Test.Infrastructure
 					{
 						SourceURI = "consultations://./consultation/1",
 						OrganisationId = 1,
-						TotalCount = totalCount
+						TotalCount = totalCount,
+						StatusId = 3,
+						RespondingAsOrganisation = true
 					}
 				});
 		    return consultationListContext;

@@ -21,7 +21,10 @@ namespace Comments.Test.Infrastructure
 
 		public override IList<SubmittedCommentsAndAnswerCount> GetSubmittedCommentsAndAnswerCounts(bool SubmittedToLead = false)
 		{
-			return _commentsAndAnswerCounts ?? new List<SubmittedCommentsAndAnswerCount>();
+			if (SubmittedToLead)
+				return _toLeadCommentsAndAnswerCount ?? new List<SubmittedCommentsAndAnswerCount>();
+			else
+				return _commentsAndAnswerCounts ?? new List<SubmittedCommentsAndAnswerCount>();
 		}
 	}
 }
