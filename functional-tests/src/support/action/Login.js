@@ -6,8 +6,8 @@ import selectors from "../selectors";
 export const Login = (username, password) => {
 	browser.refresh();
 	browser.pause(2000);
-	waitForVisible("[data-qa-sel='open-commenting-panel']");
-	browser.click("[data-qa-sel='open-commenting-panel']");
+	// waitForVisible("[data-qa-sel='open-commenting-panel']");
+	// browser.click("[data-qa-sel='open-commenting-panel']");
 	idamGlobalnavLogin(username, password);
 	browser.pause(2000);
 	browser.refresh();
