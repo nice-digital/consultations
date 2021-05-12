@@ -106,8 +106,13 @@ namespace Comments.Services
 
 				var canSeeSubmissionCountForThisConsultation = (isAdminUser || (isTeamUser && teamRoles.Contains(consultation.AllowedRole)));
 
-				var responseCount = canSeeSubmissionCountForThisConsultation ? submittedCommentsAndAnswerCounts.FirstOrDefault(s => s.SourceURI.Equals(sourceURI))?.TotalCount ?? 0 : (int?)null;
-               
+                int? responseCount = null;
+                if (canSeeSubmissionCountForThisConsultation && submittedCommentsAndAnswerCounts != null)
+                {
+                    responseCount = submittedCommentsAndAnswerCounts.Where(s => s.SourceURI.Equals(sourceURI))
+                                                                    .Sum(o => o.TotalCount);
+                }
+
                 int? responseToLeadCount = null;
                 if (submittedToLeadCommentsAndAnswerCounts != null && currentUser.OrganisationsAssignedAsLead.FirstOrDefault() != null)
                     responseToLeadCount = submittedToLeadCommentsAndAnswerCounts
