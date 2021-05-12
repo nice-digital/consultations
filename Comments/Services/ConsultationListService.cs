@@ -108,10 +108,8 @@ namespace Comments.Services
 
                 int? responseCount = null;
                 if (canSeeSubmissionCountForThisConsultation && submittedCommentsAndAnswerCounts != null)
-                {
                     responseCount = submittedCommentsAndAnswerCounts.Where(s => s.SourceURI.Equals(sourceURI))
-                                                                    .Sum(o => o.TotalCount);
-                }
+                                                                    .Sum(s => s.TotalCount);
 
                 int? responseToLeadCount = null;
                 if (submittedToLeadCommentsAndAnswerCounts != null && currentUser.OrganisationsAssignedAsLead.FirstOrDefault() != null)
