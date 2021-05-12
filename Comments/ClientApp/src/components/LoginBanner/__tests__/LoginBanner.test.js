@@ -1,4 +1,4 @@
-/* global jest */
+/* eslint-env jest */
 
 import React from "react";
 import { mount } from "enzyme";
@@ -12,18 +12,6 @@ import { UserContext } from "../../../context/UserContext";
 import { LoginBanner } from "../LoginBanner";
 
 const mock = new MockAdapter(axios);
-
-// jest.mock("../../../context/UserContext", () => {
-// 	return {
-// 		UserContext: {
-// 			Consumer: (props) => {
-// 				return props.children({
-// 					isAuthorised: true,
-// 				});
-// 			},
-// 		},
-// 	};
-// });
 
 describe("[ClientApp] ", () => {
 	describe("LoginBanner Component", () => {
@@ -49,12 +37,6 @@ describe("[ClientApp] ", () => {
 			signInButton: true,
 			signInText: "signin text",
 		};
-
-	// allowOrganisationCodeLogin: boolean,
-	// codeLoginOnly: boolean,
-
-		// check fake props
-		// aftereach and beforeeach
 
 		let contextWrapper = null;
 
@@ -108,7 +90,7 @@ describe("[ClientApp] ", () => {
 			wrapper.unmount();
 		});
 
-		it ("should match snapshot for code login only", async () => {
+		it("should match snapshot for code login only", async () => {
 			fakeProps.allowOrganisationCodeLogin = true;
 			fakeProps.codeLoginOnly = true;
 			fakeProps.title = null;
