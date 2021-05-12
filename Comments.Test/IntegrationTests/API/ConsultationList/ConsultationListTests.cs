@@ -24,7 +24,16 @@ namespace Comments.Test.IntegrationTests.API.ConsultationList
 				    SourceURI = "consultations://./consultation/1",
 				    TotalCount = 1
 			    }
-		    })
+			},
+			submittedToLeadCommentAndAnswerCount: new List<SubmittedCommentsAndAnswerCount>
+			{
+				new SubmittedCommentsAndAnswerCount
+				{
+					SourceURI = "consultations://./consultation/1",
+					OrganisationId = 1,
+					TotalCount = 1
+				}
+			})
 	    {
 			AppSettings.ConsultationListConfig = TestAppSettings.GetConsultationListConfig();
 		    AppSettings.Feed = TestAppSettings.GetFeedConfig();
