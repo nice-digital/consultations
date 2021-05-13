@@ -93,10 +93,9 @@ namespace Comments.Services
 			else
 				allOrganisationCodes = consultationsFromIndev.ToDictionary(key => key.ConsultationId, val => new List<OrganisationCode>(0));
 
-			var consultationListRows = new List<ConsultationListRow>();
+            var submittedToLeadCommentsAndAnswerCounts = isOrganisationalCommentingEnabled ? _context.GetSubmittedCommentsAndAnswerCounts(true) : null;
 
-            var (commentsSubmittedToLead, answersSubmittedToLead) = currentUser.OrganisationsAssignedAsLead.Any() ?
-                _context.GetCommentsAndAnswersSubmittedToLeadForOrganisation(currentUser.OrganisationsAssignedAsLead.First().OrganisationId) : (null, null);
+            var consultationListRows = new List<ConsultationListRow>();
 
             foreach (var consultation in consultationsFromIndev)
 			{
@@ -107,17 +106,23 @@ namespace Comments.Services
 
 				var canSeeSubmissionCountForThisConsultation = (isAdminUser || (isTeamUser && teamRoles.Contains(consultation.AllowedRole)));
 
-				var responseCount = canSeeSubmissionCountForThisConsultation ? submittedCommentsAndAnswerCounts.FirstOrDefault(s => s.SourceURI.Equals(sourceURI))?.TotalCount ?? 0 : (int?)null;
+                int? responseCount = null;
+                if (canSeeSubmissionCountForThisConsultation && submittedCommentsAndAnswerCounts != null)
+                    responseCount = submittedCommentsAndAnswerCounts.Where(s => s.SourceURI.Equals(sourceURI))
+                                                                    .Sum(s => s.TotalCount);
 
-                var numResponsesFromOrg = (commentsSubmittedToLead != null && commentsSubmittedToLead.Any()) || (answersSubmittedToLead != null && answersSubmittedToLead.Any()) 
-                    ? CountCommentsAndAnswerSubmissionsForThisOrganisation(sourceURI, (commentsSubmittedToLead, answersSubmittedToLead)) : 0;
-                
+                int? responseToLeadCount = null;
+                if (submittedToLeadCommentsAndAnswerCounts != null && currentUser.OrganisationsAssignedAsLead.FirstOrDefault() != null)
+                    responseToLeadCount = submittedToLeadCommentsAndAnswerCounts
+                           .FirstOrDefault(s => s.SourceURI.Equals(sourceURI) && 
+                                                s.OrganisationId.Equals(currentUser.OrganisationsAssignedAsLead.FirstOrDefault()?.OrganisationId))?.TotalCount ?? 0;
+
                 consultationListRows.Add(
 					new ConsultationListRow(consultation.Title,
 						consultation.StartDate, consultation.EndDate, responseCount, consultation.ConsultationId,
 						consultation.FirstConvertedDocumentId, consultation.FirstChapterSlugOfFirstConvertedDocument, consultation.Reference,
 						consultation.ProductTypeName, hasCurrentUserEnteredCommentsOrAnsweredQuestions, hasCurrentUserSubmittedCommentsOrAnswers, consultation.AllowedRole,
-						allOrganisationCodes[consultation.ConsultationId], currentUserIsAuthorisedToViewOrganisationCodes, numResponsesFromOrg));
+						allOrganisationCodes[consultation.ConsultationId], currentUserIsAuthorisedToViewOrganisationCodes, responseToLeadCount));
 			}
 
 			model.OptionFilters = GetOptionFilterGroups(model.Status?.ToList(), consultationListRows, hasAccessToViewUpcomingConsultations);
@@ -129,18 +134,6 @@ namespace Comments.Services
 
 			return (model, new Validate(valid: true));
 		}
-
-        private int CountCommentsAndAnswerSubmissionsForThisOrganisation(string sourceURI, (List<Models.Comment> comments, List<Models.Answer> answers) getAllCommentsAndAnswersSubmittedToLeadForOrganisation)
-        {
-       
-            var commentsCount =  getAllCommentsAndAnswersSubmittedToLeadForOrganisation.comments
-                .Count(c => c.Location.SourceURI.Contains($"{sourceURI}/") || c.Location.SourceURI.Equals(sourceURI));
-
-            var answersCount = getAllCommentsAndAnswersSubmittedToLeadForOrganisation.answers
-                .Count(a => a.Question.Location.SourceURI.Contains($"{sourceURI}/") || a.Question.Location.SourceURI.Equals(sourceURI));
-
-            return commentsCount + answersCount;
-        }
 
         private (bool hasEnteredCommentsOrAnsweredQuestions, bool hasSubmittedCommentsOrAnswers)
 			GetFlagsForWhetherTheCurrentUserHasCommentedOrAnsweredThisConsultation(IEnumerable<KeyValuePair<string, Models.Status>> sourceURIsCommentedOrAnswered, string consultationSourceURI)
@@ -158,7 +151,6 @@ namespace Comments.Services
 
 			return (hasEnteredCommentsOrAnsweredQuestions: true, hasSubmittedCommentsOrAnswers: false);
 		}
-
 
 		private static IEnumerable<OptionFilterGroup> GetOptionFilterGroups(IList<ConsultationStatus> status, IList<ConsultationListRow> consultationListRows, bool hasAccessToViewUpcomingConsultations)
 		{

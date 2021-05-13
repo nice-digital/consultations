@@ -311,7 +311,7 @@ export class SubmitResponseDialog extends Component {
 									className="btn btn--secondary"
 									data-qa-sel="cancel-comment-button"
 									onClick={() => {
-										this.setState({ showSubmitWarning: false, })
+										this.setState({ showSubmitWarning: false });
 									}}
 								>
 									Cancel

@@ -424,13 +424,13 @@ export class CommentList extends Component<PropsType, StateType> {
 													to={`/${this.props.match.params.consultationId}/review`}
 													data-qa-sel="review-all-comments"
 													className="btn btn--cta mt--c">
-													Review and submit your response &nbsp;&nbsp;
+													Review your response before submitting &nbsp;&nbsp;
 													<span className="icon icon--chevron-right" aria-hidden="true" />
 												</Link>
 										}
 
 										{contextValue.isOrganisationCommenter && !contextValue.isLead &&
-											<Alert type="info" role="alert">
+											<Alert type="info" role="status" aria-live="polite">
 												<p>You are commenting on behalf of {contextValue.organisationName}.</p>
 												<p>When you submit your response it will be submitted to the organisational lead at {contextValue.organisationName}. <strong>On submission your email address and responses will be visible to other members or associates of your organisation who are using the same commenting code.</strong></p>
 											</Alert>

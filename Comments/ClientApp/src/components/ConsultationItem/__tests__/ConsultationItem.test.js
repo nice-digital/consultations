@@ -24,7 +24,7 @@ describe("[ClientApp] ", () => {
 			basename: "fdfd",
 			showShareWithOrganisationButton: true,
 			allowGenerateOrganisationCode: true,
-			numResponsesFromOrg: 15,
+			submissionToLeadCount: 15,
 		};
 
 		it("does not render link if document id or chapter slug is null", () => {
