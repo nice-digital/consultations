@@ -23,7 +23,7 @@
                     
                 ],
                 "ShowShareWithOrganisationButton":false,
-                "NumResponsesFromOrg":0
+                "SubmissionToLeadCount":null
             },
             {
                 "Title":null,
@@ -46,7 +46,7 @@
                     
                 ],
                 "ShowShareWithOrganisationButton":false,
-                "NumResponsesFromOrg":0
+                "SubmissionToLeadCount":null
             }
         ],
         "OptionFilters":[

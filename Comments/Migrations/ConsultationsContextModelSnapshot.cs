@@ -150,7 +150,7 @@ namespace Comments.Migrations
 
                     b.Property<int?>("RangeStartOffset");
 
-                    b.Property<string>("Section");
+                    b.Property<string>("SectionHeader");
 
                     b.Property<string>("SectionNumber");
 

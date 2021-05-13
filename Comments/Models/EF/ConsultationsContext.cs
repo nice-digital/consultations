@@ -1,4 +1,4 @@
-using Comments.Configuration;
+﻿using Comments.Configuration;
 using Comments.Migrations;
 using Comments.Services;
 using Comments.ViewModels;
@@ -29,7 +29,7 @@ namespace Comments.Models
 		/// </summary>
 		public virtual DbQuery<SubmittedCommentsAndAnswerCount> SubmittedCommentsAndAnswerCounts { get; set; }
 
-		private string _createdByUserID;
+        private string _createdByUserID;
 		private IEnumerable<int> _organisationUserIDs;
 		private int? _organisationalLeadOrganisationID;
 		private IEnumerable<int> _organisationIDs;
@@ -353,6 +353,6 @@ namespace Comments.Models
 			modelBuilder
 				.Query<SubmittedCommentsAndAnswerCount>()
 				.ToView(MigrationConstants.Views.SubmittedCommentAndAnswerCount);
-		}
+        }
 	}
 }
