@@ -471,7 +471,7 @@ export class Document extends Component<PropsType, StateType> {
 														reference={reference}
 														consultationState={this.state.consultationData.consultationState}
 														allowRegisterOrganisationLeadLink={contextValue.organisationalCommentingFeature}/>
-														{this.state.consultationData.consultationState.submittedDate &&
+													{this.state.consultationData.consultationState.submittedDate &&
 															<Alert type="info" role="status" aria-live="polite">
 																<p>You submitted your response to this consultation on <Moment format="D MMMM YYYY" date={this.state.consultationData.consultationState.submittedDate}/>, you cannot add, edit or provide additional information.</p>
 															</Alert>

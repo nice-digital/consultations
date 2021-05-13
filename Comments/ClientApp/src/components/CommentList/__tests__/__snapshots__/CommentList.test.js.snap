@@ -7,7 +7,7 @@ Array [
     "",
     <section
       aria-label="Commenting panel"
-      className="Drawer  Drawer--mobile"
+      className="Drawer "
     >
       <div
         className="Drawer__controls"
@@ -24,9 +24,12 @@ Array [
         >
           <span
             aria-hidden="true"
-            className="icon icon--chevron-left"
+            className="Drawer__control-text"
             data-qa-sel="close-commenting-panel"
-          />
+          >
+            Comments
+          </span>
+          Open comments
         </button>
         <button
           aria-controls="questions-panel"
@@ -40,9 +43,12 @@ Array [
         >
           <span
             aria-hidden="true"
-            className="icon icon--chevron-left"
+            className="Drawer__control-text"
             data-qa-sel="close-questions-panel"
-          />
+          >
+            Questions
+          </span>
+          Open questions
         </button>
       </div>
       <div
