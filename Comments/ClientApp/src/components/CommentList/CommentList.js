@@ -284,7 +284,6 @@ export class CommentList extends Component<PropsType, StateType> {
 
 	drawerClassnames = () => {
 		const open = this.state.drawerOpen ? "Drawer--open" : "";
-		//const mobile = this.state.drawerMobile ? "Drawer--mobile" : "";
 		return `Drawer ${open}`;
 	};
 
