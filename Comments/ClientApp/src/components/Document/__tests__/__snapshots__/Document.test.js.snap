@@ -3,7 +3,6 @@
 exports[`[ClientApp]  Document Component should match snapshot with supplied data 1`] = `
 Array [
   "",
-  "",
   <aside
     className="tutorial mt--0 pt--d pb--d"
   >

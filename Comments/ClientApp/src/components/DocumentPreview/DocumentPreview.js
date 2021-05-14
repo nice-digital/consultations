@@ -311,13 +311,14 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 				<UserContext.Consumer>
 					{(contextValue: any) => !contextValue.isAuthorised ?
 						<LoginBannerWithRouter signInButton={false}
-									 currentURL={this.props.match.url}
-									 signInURL={contextValue.signInURL}
-									 registerURL={contextValue.registerURL}
-									 signInText="to view the document preview"
-									 allowOrganisationCodeLogin={false}
-									 orgFieldName="documentpreview" />
-						: 
+							currentURL={this.props.match.url}
+							signInURL={contextValue.signInURL}
+							registerURL={contextValue.registerURL}
+							signInText="to view the document preview"
+							allowOrganisationCodeLogin={false}
+							orgFieldName="documentpreview"
+						/>
+						:
 						<div className="container">
 							<div className="grid">
 								<div data-g="12">
@@ -352,10 +353,10 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 									</main>
 								</div>
 							</div>
-						</div>						
+						</div>
 					}
 				</UserContext.Consumer>
-				
+
 			</Fragment>
 		);
 	}

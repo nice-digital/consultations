@@ -73,23 +73,6 @@ Array [
             />
           </a>
           <div
-            aria-live="polite"
-            className="alert alert--info"
-            role="status"
-          >
-            <p>
-              You are commenting on behalf of 
-              .
-            </p>
-            <p>
-              When you submit your response it will be submitted to the organisational lead at 
-              . 
-              <strong>
-                On submission your email address and responses will be visible to other members or associates of your organisation who are using the same commenting code.
-              </strong>
-            </p>
-          </div>
-          <div
             className="show"
           >
             <ul

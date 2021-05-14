@@ -132,7 +132,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 
 	getFeatureFlags = async () => {
 		load("getfeatureflags", undefined, [], {})
-			.then(response => 
+			.then(response =>
 				this.setState({
 					organisationalCommentingFeature: response.data.OrganisationalCommenting,
 				}))

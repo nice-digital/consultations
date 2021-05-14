@@ -4,7 +4,7 @@ $nice-font-base-path: "/consultations/fonts/";
 @import "nice-design-system";
 @import "nice-icons";
 
- // Design System Overrides
+// Design System Overrides
 @import "./components/StackedNav/StackedNav";
 
 // Project variables
@@ -32,8 +32,8 @@ $nice-font-base-path: "/consultations/fonts/";
 @import "./components/LoginBanner/LoginBanner";
 @import "./components/Pagination/Pagination";
 @import "./components/GenerateCode/GenerateCode";
+@import "./components/LoginPanel/LoginPanel";
 @import "./components/FilterPanel/FilterPanel";
 
 // Document transform styling (comments buttons etc)
 @import "./document-processing/transforms/comment";
-
