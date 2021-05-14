@@ -11,7 +11,7 @@ Feature: Users can page through the list of consultations
 		Given I expect the result list count contains "Showing 1 to 25"
 		Then I expect the first pagination option is "1"
 		When I click the second pagination option
-		Then I expect the first pagination option is "previous"
+		Then I expect the first pagination option is "Previous"
 		When I click the next pagination option
 		And I click the previous pagination option
 		And I click the previous pagination option
