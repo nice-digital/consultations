@@ -9,7 +9,7 @@ namespace Comments.Models
 	{
 		public ConsultationListRow(string title, DateTime startDate, DateTime endDate, int? responses, int consultationId, int? documentId, string chapterSlug, string gidReference,
 			string productTypeName, bool hasCurrentUserEnteredCommentsOrAnsweredQuestions, bool hasCurrentUserSubmittedCommentsOrAnswers, string allowedRole,
-			IList<OrganisationCode> organisationCodes, bool currentUserIsAuthorisedToViewOrganisationCodes, int numResponsesFromOrg)
+			IList<OrganisationCode> organisationCodes, bool currentUserIsAuthorisedToViewOrganisationCodes, int? responsesFromOrg)
 		{
 			Title = title;
 			StartDate = startDate;
@@ -25,7 +25,7 @@ namespace Comments.Models
 			AllowedRole = allowedRole;
 			OrganisationCodes = organisationCodes;
 			CurrentUserIsAuthorisedToViewOrganisationCodes = currentUserIsAuthorisedToViewOrganisationCodes;
-            NumResponsesFromOrg = numResponsesFromOrg;
+            SubmissionToLeadCount = responsesFromOrg;
 		}
 
 		public string Title { get; private set; }
@@ -66,7 +66,7 @@ namespace Comments.Models
 
 		private readonly bool CurrentUserIsAuthorisedToViewOrganisationCodes;
 		public bool ShowShareWithOrganisationButton => IsOpen && CurrentUserIsAuthorisedToViewOrganisationCodes;
-        public int NumResponsesFromOrg { get; set; }
+        public int? SubmissionToLeadCount { get; set; }
 
     }
 }
