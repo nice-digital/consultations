@@ -1,10 +1,11 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using Comments.Common;
 using Comments.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NICE.Identity.Authentication.Sdk.Domain;
 
@@ -17,9 +18,9 @@ namespace Comments.Controllers.Api
 	{
 		private readonly ISubmitService _submitService;
 	    private readonly ILogger<SubmitController> _logger;
-		private readonly IHostingEnvironment _hostingEnvironment;
+		private readonly IWebHostEnvironment _hostingEnvironment;
 
-		public SubmitController(ISubmitService submitService, ICommentService commentService, ILogger<SubmitController> logger, IHostingEnvironment hostingEnvironment)
+		public SubmitController(ISubmitService submitService, ICommentService commentService, ILogger<SubmitController> logger, IWebHostEnvironment hostingEnvironment)
 	    {
 		    _submitService = submitService;
 		    _logger = logger;

@@ -3,7 +3,6 @@ using Comments.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.Http.Internal;
 using Moq;
 using Newtonsoft.Json;
 using NICE.Identity.Authentication.Sdk.Domain;
@@ -125,8 +124,11 @@ namespace Comments.Test.Infrastructure
             context.Setup(r => r.Features)
 	            .Returns(() => new FeatureCollection());
 
+            var defaultHttpRequest = new DefaultHttpContext().Request;
+            defaultHttpRequest.Host = new HostString(roleIssuer);
+
             context.Setup(r => r.Request)
-	            .Returns(new DefaultHttpRequest(new DefaultHttpContext()) { Host = new HostString(roleIssuer) });
+	            .Returns(defaultHttpRequest);
 
 
 			var contextAccessor = new Mock<IHttpContextAccessor>();

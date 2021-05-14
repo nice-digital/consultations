@@ -1,7 +1,12 @@
-﻿using Comments.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using Comments.Common;
 using Comments.Configuration;
 using Comments.Export;
 using Comments.Services;
+using Comments.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -18,27 +23,22 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement;
 using NICE.Feeds;
+using NICE.Feeds.Indev;
 using NICE.Identity.Authentication.Sdk.Domain;
 using NICE.Identity.Authentication.Sdk.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using Comments.ViewModels;
-using NICE.Feeds.Configuration;
-using NICE.Feeds.Indev;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
 
 namespace Comments
 {
-	public class Startup
+    public class Startup
     {
         ILogger _logger;
 
-        public Startup(IConfiguration configuration, IHostingEnvironment env, ILogger<Startup> logger)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env, ILogger<Startup> logger)
         {
             Configuration = configuration;
             Environment = env;
@@ -47,7 +47,7 @@ namespace Comments
         
         public IConfiguration Configuration { get; }
 
-        public IHostingEnvironment Environment { get; }
+        public IWebHostEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -63,7 +63,7 @@ namespace Comments
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
-			services.TryAddSingleton<ISeriLogger, SeriLogger>();
+			//services.TryAddSingleton<ISeriLogger, SeriLogger>();
 			services.AddHttpClient();
 
 			services.TryAddTransient<IUserService, UserService>();
@@ -107,7 +107,8 @@ namespace Comments
 			services.AddMvc(options =>
             {
                 options.Filters.Add(new ResponseCacheAttribute() { NoStore = true, Location = ResponseCacheLocation.None });
-            }); //.SetCompatibilityVersion(CompatibilityVersion.Version_2_2); 
+                options.EnableEndpointRouting = false;
+            }).AddNewtonsoftJson(); //.SetCompatibilityVersion(CompatibilityVersion.Version_3_0); 
 
             // In production, static files are served from the pre-built files, rather than proxied via react dev server
             services.AddSpaStaticFiles(configuration =>
@@ -152,11 +153,11 @@ namespace Comments
 			services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
-                    builder => builder.AllowAnyOrigin()
+                    builder => builder.WithOrigins("https://niceorg") //TODO!!
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials());
-            }); //adding CORS for Warren. todo: maybe move this into the isDevelopment block..
+            });
             
             services.AddOptions();
 
@@ -164,19 +165,20 @@ namespace Comments
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ISeriLogger seriLogger, IApplicationLifetime appLifetime, IUrlHelperFactory urlHelperFactory, IFeatureManager featureManager)
+        [Obsolete] //the reason for the obselete flag here is UseSpaPrerendering has been marked as obselete in 3.1 and dropped in 5.x
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, IHostApplicationLifetime appLifetime, IUrlHelperFactory urlHelperFactory, IFeatureManager featureManager)
         {           
-            seriLogger.Configure(loggerFactory, Configuration, appLifetime, env);
-            var startupLogger = loggerFactory.CreateLogger<Startup>();
-            startupLogger.LogWarning("Consultations starting up");
+            //seriLogger.Configure(loggerFactory, Configuration, appLifetime, env);
+            //var startupLogger = loggerFactory.CreateLogger<Startup>();
+            //startupLogger.LogWarning("Consultations starting up");
 
 
 			if (env.IsDevelopment())
             {
 	            app.UseDeveloperExceptionPage();
 				app.UseExceptionHandler(Constants.ErrorPath);
-				loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-                loggerFactory.AddDebug();
+				//loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+    //            loggerFactory.AddDebug();
 
 				app.UseStaticFiles(); //uses the wwwroot folder, only for dev. on other service the root is varnish
 			}

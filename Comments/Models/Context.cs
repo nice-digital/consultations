@@ -1,17 +1,16 @@
-﻿using Comments.Services;
-using Comments.ViewModels;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
-using Comments.Common;
+using Comments.Services;
+using Comments.ViewModels;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Z.EntityFramework.Plus;
 
 namespace Comments.Models
 {
-	public partial class ConsultationsContext : DbContext
+    public partial class ConsultationsContext : DbContext
     {
 	    private readonly IEncryption _encryption;
 
@@ -126,30 +125,42 @@ namespace Comments.Models
 		{
             var commentsAndAnswers = Location.IgnoreQueryFilters()
                 .IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead
-                                                         && _organisationIDs.Any(o => o.Equals(c.OrganisationId))
+                                                         && (c.OrganisationId.HasValue && _organisationIDs.Contains(c.OrganisationId.Value))
+                                                         //&& _organisationIDs.Any(o => o.Equals(c.OrganisationId))
                                                          && !_organisationUserIDs.Contains(c.OrganisationUserId.Value)))
-                .IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead 
-                                                         && _organisationIDs.Any(o => o.Equals(c.OrganisationId)) 
+                .IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead
+                                                         && (c.OrganisationId.HasValue && _organisationIDs.Contains(c.OrganisationId.Value))
+                                                         //&& _organisationIDs.Any(o => o.Equals(c.OrganisationId)) 
                                                          && !_organisationUserIDs.Contains(c.OrganisationUserId.Value))
                     .Select(c=> c.Status))
                 .IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead
-                                                         && _organisationIDs.Any(o => o.Equals(c.OrganisationId))
+                                                         && (c.OrganisationId.HasValue && _organisationIDs.Contains(c.OrganisationId.Value))
+                                                         //&& _organisationIDs.Any(o => o.Equals(c.OrganisationId))
                                                          && !_organisationUserIDs.Contains(c.OrganisationUserId.Value))
                     .Select(c=> c.OrganisationUser))
 
                 .IncludeFilter(l => l.Question)
                 .IncludeFilter(l => l.Question
                     .Select(q => q.QuestionType))
+
+
                 .IncludeFilter(l => l.Question
-                    .Select(q => q.Answer.Where(a => a.StatusId == (int)StatusName.SubmittedToLead
-                                                     && _organisationIDs.Contains(a.OrganisationId.Value) 
-                                                     && !_organisationUserIDs.Contains(a.OrganisationUserId.Value))
-                        .OrderByDescending(a=> a.LastModifiedDate).Select(a => a.LastModifiedDate).FirstOrDefault()))
-                .IncludeFilter(l=> l.Question
                     .Select(q => q.Answer.Where(a => a.StatusId == (int)StatusName.SubmittedToLead
                                                      && _organisationIDs.Contains(a.OrganisationId.Value)
                                                      && !_organisationUserIDs.Contains(a.OrganisationUserId.Value))
-                    .Select(a => a.OrganisationUser)))
+                        .OrderByDescending(a => a.LastModifiedDate)
+                        .Select(a => a.LastModifiedDate)
+                        .FirstOrDefault()))
+
+                //TODO: figure out if this is needed.
+                //.IncludeFilter(l=> l.Question 
+                //    .Select(q => q.Answer.Where(a => a.StatusId == (int)StatusName.SubmittedToLead
+                //                                     && _organisationIDs.Contains(a.OrganisationId.Value)
+                //                                     && !_organisationUserIDs.Contains(a.OrganisationUserId.Value)
+                //                                     && a.OrganisationUser != null
+                //                                     )
+                //        .Select(a => a.OrganisationUser)))
+
                 .OrderBy(l => l.Order)
                 .ToList();
 
@@ -544,7 +555,7 @@ namespace Comments.Models
 		/// <returns></returns>
 		public int InsertQuestionsWithScriptForDocument1And2InConsultation(int consultationId)
 	    {
-		    return Database.ExecuteSqlCommand(@"
+		    return Database.ExecuteSqlRaw(@"
 				--DECLARE @consultationId AS int --UNCOMMENT OUT THESE 2 LINES TO USE IN SQL MANAGEMENT STUDIO
 				--SET @consultationId = 11
 
@@ -622,7 +633,7 @@ namespace Comments.Models
 		/// <returns></returns>
 		public int InsertQuestionsWithScriptForConsultation(int consultationId)
 		{
-			return Database.ExecuteSqlCommand(@"
+			return Database.ExecuteSqlRaw(@"
 				--DECLARE @consultationId AS int --UNCOMMENT OUT THESE 2 LINES TO USE IN SQL MANAGEMENT STUDIO
 				--SET @consultationId = 210
 
@@ -698,7 +709,7 @@ namespace Comments.Models
 		/// <returns></returns>
 		public int DeleteEverything()
 		{
-			return Database.ExecuteSqlCommand(@"
+			return Database.ExecuteSqlRaw(@"
 				DELETE FROM SubmissionComment;
 				DELETE FROM SubmissionAnswer;
 				DELETE FROM Submission;
@@ -767,7 +778,7 @@ namespace Comments.Models
 		/// <returns></returns>
 		public int InsertQuestionsWithScriptForCfGConsultation(int consultationId)
 		{
-			return Database.ExecuteSqlCommand(@"
+			return Database.ExecuteSqlRaw(@"
 				--DECLARE @consultationId AS int --UNCOMMENT OUT THESE 2 LINES TO USE IN SQL MANAGEMENT STUDIO
 				--SET @consultationId = 210
 
@@ -844,7 +855,7 @@ namespace Comments.Models
 		/// <returns></returns>
 		public int InsertQuestionsWithScriptForQSConsultation(int consultationId)
 		{
-			return Database.ExecuteSqlCommand(@"
+			return Database.ExecuteSqlRaw(@"
 				--DECLARE @consultationId AS int --UNCOMMENT OUT THESE 2 LINES TO USE IN SQL MANAGEMENT STUDIO
 				--SET @consultationId = 210
 

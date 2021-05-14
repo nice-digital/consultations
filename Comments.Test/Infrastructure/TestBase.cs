@@ -163,7 +163,7 @@ namespace Comments.Test.Infrastructure
                     services.AddEntityFrameworkSqlite();
 
 					services.TryAddSingleton<ConsultationsContext>(_context);
-                    services.TryAddSingleton<ISeriLogger, FakeSerilogger>();
+                    //services.TryAddSingleton<ISeriLogger, FakeSerilogger>();
                     if (!useRealHttpContextAccessor)
                     {
 	                    services.TryAddSingleton<IHttpContextAccessor>(provider => _fakeHttpContextAccessor);
@@ -582,12 +582,5 @@ namespace Comments.Test.Infrastructure
         }
 
         #endregion Helpers
-    }
-
-    internal class FakeSerilogger : ISeriLogger
-    {
-        public void Configure(ILoggerFactory loggerFactory, IConfiguration configuration, IApplicationLifetime appLifetime,
-            IHostingEnvironment env)
-        {}
     }
 }
