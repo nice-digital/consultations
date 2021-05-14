@@ -461,6 +461,13 @@ export class Document extends Component<PropsType, StateType> {
 														consultationState={this.state.consultationData.consultationState}
 														allowRegisterOrganisationLeadLink={contextValue.organisationalCommentingFeature}/>
 
+													{(this.state.consultationData.consultationState.consultationIsOpen && !this.state.consultationData.consultationState.submittedDate) &&
+														<Alert type="info" role="status" aria-live="polite">
+															<p>We have updated this service so that members of the same organisation can now collaborate on a joint online response.</p>
+															<p>Read our <a href="https://www.nice.org.uk/news/blog/groups-and-organisations-can-work-together-on-public-consultations-response">blog</a> to learn more.</p>
+														</Alert>
+													}
+
 													{this.state.consultationData.consultationState.submittedDate &&
 														<Alert type="info" role="status" aria-live="polite">
 															<p>You submitted your response to this consultation on <Moment format="D MMMM YYYY" date={this.state.consultationData.consultationState.submittedDate}/>, you cannot add, edit or provide additional information.</p>
@@ -478,29 +485,29 @@ export class Document extends Component<PropsType, StateType> {
 									</UserContext.Consumer>
 
 									{this.state.allowComments &&
-									<button
-										data-gtm="comment-on-document-button"
-										data-qa-sel="comment-on-consultation-document"
-										className="btn btn--cta"
-										onClick={e => {
-											e.preventDefault();
-											this.props.onNewCommentClick(e, {
-												sourceURI: this.props.match.url,
-												commentText: "",
-												commentOn: "Document",
-												quote: currentDocumentTitle,
-												order: 0,
-												section: null,
-											});
-											tagManager({
-												event: "generic",
-												category: "Consultation comments page",
-												action: "Clicked",
-												label: "Comment on document",
-											});
-										}}>
-										Comment on this document
-									</button>
+										<button
+											data-gtm="comment-on-document-button"
+											data-qa-sel="comment-on-consultation-document"
+											className="btn btn--cta"
+											onClick={e => {
+												e.preventDefault();
+												this.props.onNewCommentClick(e, {
+													sourceURI: this.props.match.url,
+													commentText: "",
+													commentOn: "Document",
+													quote: currentDocumentTitle,
+													order: 0,
+													section: null,
+												});
+												tagManager({
+													event: "generic",
+													category: "Consultation comments page",
+													action: "Clicked",
+													label: "Comment on document",
+												});
+											}}>
+											Comment on this document
+										</button>
 									}
 								</div>
 
