@@ -1,9 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`[ClientApp]  LoginBanner Component should match snapshot. no querystring 1`] = `
+exports[`[ClientApp]  LoginBanner Component should match snapshot for code login only 1`] = `
 <div
-  className="panel panel-white mt--0 mb--0 sign-in-banner"
+  className=" mt--0 mb--0 sign-in-banner"
   data-qa-sel="sign-in-banner"
+  id="loginBanner"
 >
   <div
     className="container"
@@ -12,16 +13,110 @@ exports[`[ClientApp]  LoginBanner Component should match snapshot. no querystrin
       className="LoginBanner"
       role="form"
     >
-      <a
-        href="/signin-url"
-        title="Sign in to your NICE account"
+      <div
+        className="input"
       >
-        Sign in to your NICE account
-      </a>
-       
-      signin text
-      .
-       
+        <div
+          className="input"
+        >
+          <label
+            className="input__label"
+            htmlFor="orgCode-undefined"
+          >
+            Enter your organisation code
+          </label>
+          <input
+            className="limitWidth input__input"
+            data-qa-sel="OrganisationCodeLogin"
+            id="orgCode-undefined"
+            name="orgCode-undefined"
+            onBlur={[Function]}
+            onChange={[Function]}
+            onKeyDown={[Function]}
+            type="text"
+            value=""
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`[ClientApp]  LoginBanner Component should match snapshot for idam login and in comments panel 1`] = `
+<div
+  className=" mt--0 mb--0 sign-in-banner"
+  data-qa-sel="sign-in-banner"
+  id="loginBanner"
+>
+  <div
+    className="container"
+  >
+    <div
+      className="LoginBanner"
+      role="form"
+    >
+      <h3>
+        Some title
+      </h3>
+      <p
+        className=" "
+      >
+        <a
+          href="/signin-url"
+          title="Sign in to your NICE account"
+        >
+          Sign in to your NICE account
+        </a>
+         
+        to comment on this consultation
+        .
+         
+      </p>
+      <p
+        className=" "
+      >
+        <a
+          href="/register-url"
+          title="Register for a NICE account"
+        >
+          Register
+        </a>
+         
+        for a NICE account if you don't already have one.
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`[ClientApp]  LoginBanner Component should match snapshot for idam login and not in comments panel 1`] = `
+<div
+  className="panel panel-white mt--0 mb--0 sign-in-banner"
+  data-qa-sel="sign-in-banner"
+  id="loginBanner"
+>
+  <div
+    className="container"
+  >
+    <div
+      className="LoginBanner"
+      role="form"
+    >
+      <p
+        className="display--inline "
+      >
+        <a
+          href="/signin-url"
+          title="Sign in to your NICE account"
+        >
+          Sign in to your NICE account
+        </a>
+         
+        signin text
+        .
+         
+      </p>
       <p>
         <a
           className="btn"
@@ -31,14 +126,18 @@ exports[`[ClientApp]  LoginBanner Component should match snapshot. no querystrin
           Sign in
         </a>
       </p>
-      Don't have an account?
-       
-      <a
-        href="/register-url"
-        title="Register for a NICE account"
+      <p
+        className="display--inline "
       >
-        Register
-      </a>
+        <a
+          href="/register-url"
+          title="Register for a NICE account"
+        >
+          Register
+        </a>
+         
+        for a NICE account if you don't already have one.
+      </p>
     </div>
   </div>
 </div>
