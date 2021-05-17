@@ -11,6 +11,6 @@ export const Login = (username, password) => {
 	idamGlobalnavLogin(username, password);
 	browser.pause(2000);
 	browser.refresh();
-	waitForVisible("[data-qa-sel='changeable-page-header']");
-	browser.pause(2000);
+	// waitForVisible("[data-qa-sel='changeable-page-header']");
+	// browser.pause(2000);
 };
