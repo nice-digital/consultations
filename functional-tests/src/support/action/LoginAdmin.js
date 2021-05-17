@@ -4,7 +4,8 @@ import waitFor from "@nice-digital/wdio-cucumber-steps/lib/support/action/waitFo
 import selectors from "../selectors";
 
 export const LoginAdmin = (username, password) => {
-	// browser.refresh();
+	browser.refresh();
+	browser.pause(2000);
 	idamGlobalnavLogin(username, password);
 	browser.pause(2000);
 	browser.refresh();
