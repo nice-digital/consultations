@@ -8,6 +8,7 @@ Feature: Comment Ordering on the Review Page
 		Given I open the url "1/1/introduction"
 		And I refresh
 		When I log into accounts with username "IDAM_EMAIL1" and password "IDAM_PASSWORD"
+		Given I open the url "1/1/introduction"
 		Given I delete all comments on the page
 
 	Scenario: User makes multiple comments and views them on the Review page
