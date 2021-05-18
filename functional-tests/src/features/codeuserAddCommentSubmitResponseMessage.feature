@@ -8,6 +8,7 @@ Feature: Code user unable to submit when they have not completed mandatory quest
 		Given I open the url "admin"
 		And I refresh
 		When I log into the admin page with username "IDAM_EMAIL6" and password "IDAM_PASSWORD"
+		Given I open the url "admin"
 
 	Scenario: User is unable to Submit when they have not answered the default response questions
 		Given I expect the result list count contains "Showing 1 to 25"
