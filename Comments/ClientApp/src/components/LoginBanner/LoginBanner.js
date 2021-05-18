@@ -1,5 +1,5 @@
 // @flow
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { DebounceInput } from "react-debounce-input";
 import queryString from "query-string";
@@ -17,6 +17,9 @@ type PropsType = {
 	location: PropTypes.object.isRequired,
 	allowOrganisationCodeLogin: boolean,
 	orgFieldName: string, //the organisation text input needs a unique name, however the login banner will be on the page twice. so passing in a unique name
+	codeLoginOnly: boolean,
+	title: string,
+	isInCommentsPanel: boolean,
 }
 
 type OrganisationCode = {
@@ -181,13 +184,20 @@ export class LoginBanner extends Component<PropsType, StateType> {
 	render(){
 		const limitWidthOfButton = !this.props.signInButton; //the sign-in button isn't shown when we're trying to save space.
 
+		const codeLoginOnly = this.props.codeLoginOnly ?? false;
+		const title = this.props.title ?? "";
+		const isInCommentsPanel = this.props.isInCommentsPanel ?? false;
+		const organisationalCommentingFeature = this.context.organisationalCommentingFeature;
+
 		return (
-			<div className="panel panel-white mt--0 mb--0 sign-in-banner" data-qa-sel="sign-in-banner">
+			<div className={`${!isInCommentsPanel || !organisationalCommentingFeature ? "panel panel-white" : ""} mt--0 mb--0 sign-in-banner`} id="loginBanner" data-qa-sel="sign-in-banner">
 				<div className="container">
 					<div className="LoginBanner" role="form">
+						{title !== "" &&
+							<h3>{title}</h3>
+						}
 						{this.props.allowOrganisationCodeLogin &&
-							<Fragment>
-								<p>To comment as part of an organisation, please enter your organisation code:</p>
+							<>
 								<div className={this.state.hasError ? "input input--error" : "input"}>
 									<DebounceInput
 										minLength={5}
@@ -200,12 +210,12 @@ export class LoginBanner extends Component<PropsType, StateType> {
 										element={Input}
 										error={this.state.hasError}
 										errorMessage={this.state.errorMessage}
-										label="Organisation code"
+										label="Enter your organisation code"
 										name={"orgCode-" + this.props.orgFieldName}
 									/>
 								</div>
 								{this.state.showAuthorisationOrganisation &&
-									<Fragment>
+									<>
 										<p>Confirm organisation name</p>
 										<p><strong>{this.state.authorisationOrganisationFound.organisationName}</strong></p>
 										<UserContext.Consumer>
@@ -216,35 +226,55 @@ export class LoginBanner extends Component<PropsType, StateType> {
 												</div>
 											)}
 										</UserContext.Consumer>
-									</Fragment>
+									</>
 								}
-							</Fragment>
+							</>
 						}
-						{this.props.allowOrganisationCodeLogin && this.props.signInButton &&
-							<Fragment>
-								<p>If you don't have an organisation code, sign in to your NICE account.</p>
-								<p>
-									<a className="btn" href={this.props.signInURL} title="Sign in to your NICE account">Sign in</a>
-								</p>
-							</Fragment>
-						}
-						{this.props.allowOrganisationCodeLogin && !this.props.signInButton &&
-							<Fragment>If you don't have an organisation code, <a href={this.props.signInURL} title="Sign in to your NICE account">sign in to your NICE account.</a>&nbsp;&nbsp;</Fragment>
+						{!codeLoginOnly &&
+							<>
+								{this.props.allowOrganisationCodeLogin && this.props.signInButton &&
+									<>
+										<p>If you don't have an organisation code, sign in to your NICE account.</p>
+										<p>
+											<a className="btn" href={this.props.signInURL} title="Sign in to your NICE account">Sign in</a>
+										</p>
+									</>
+								}
+								{this.props.allowOrganisationCodeLogin && !this.props.signInButton &&
+									<>If you don't have an organisation code, <a href={this.props.signInURL} title="Sign in to your NICE account">sign in to your NICE account.</a>&nbsp;&nbsp;</>
+								}
+							</>
 						}
 						{!this.props.allowOrganisationCodeLogin &&
-							<Fragment>
-								<a href={this.props.signInURL} title="Sign in to your NICE account">Sign in to your NICE account</a> {this.props.signInText || "to comment on this consultation"}.{" "}
+							<>
+								<p className={`${!isInCommentsPanel ? "display--inline" : ""} ${!organisationalCommentingFeature ? "no-margin" : ""}`}><a href={this.props.signInURL} title="Sign in to your NICE account">Sign in to your NICE account</a> {this.props.signInText ?? "to comment on this consultation"}.{" "}</p>
 								{this.props.signInButton &&
 									<p>
 										<a className="btn" href={this.props.signInURL} title="Sign in to your NICE account">Sign in</a>
 									</p>
 								}
-							</Fragment>
+							</>
 						}
-						Don't have an account?{" "}
-						<a href={this.props.registerURL} title="Register for a NICE account">
-							Register
-						</a>
+						{!codeLoginOnly &&
+							<p className={`${!isInCommentsPanel ? "display--inline" : ""} ${!organisationalCommentingFeature ? "no-margin" : ""}`}>
+								{!organisationalCommentingFeature &&
+									<>
+										Don't have an account?
+										{" "}
+									</>
+
+								}
+								<a href={this.props.registerURL} title="Register for a NICE account">
+									Register
+								</a>
+								{" "}
+								{organisationalCommentingFeature &&
+									<>
+										for a NICE account if you don't already have one.
+									</>
+								}
+							</p>
+						}
 					</div>
 				</div>
 			</div>
@@ -253,3 +283,4 @@ export class LoginBanner extends Component<PropsType, StateType> {
 }
 
 export default withRouter(LoginBanner);
+LoginBanner.contextType = UserContext;
