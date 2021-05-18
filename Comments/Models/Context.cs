@@ -926,14 +926,17 @@ namespace Comments.Models
 		}
 
 		public IEnumerable<Question> GetAllPreviousUniqueQuestions()
-		{
-			return Question
-				.Include(q => q.Location)
-				.Include(q => q.QuestionType)
-				.GroupBy(q => q.QuestionText)
-				.Select(q => q.OrderByDescending(x => x.CreatedDate).First())
-				.OrderByDescending(q => q.CreatedDate);
-		}
+        {
+            var questions = Question
+                .Include(q => q.Location)
+                .Include(q => q.QuestionType)
+                .ToList();
+
+            return questions
+                .GroupBy(q => q.QuestionText)
+                .Select(q => q.OrderByDescending(x => x.CreatedDate).First())
+                .OrderByDescending(q => q.CreatedDate);
+        }
 
 		public IEnumerable<string> GetUniqueUsers()
 		{

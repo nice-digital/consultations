@@ -340,9 +340,10 @@ namespace Comments.Test.Infrastructure
 
             return questionType.QuestionTypeId;
         }
-        protected int AddQuestion(int locationId, int questionTypeId, string questionText, ConsultationsContext passedInContext = null, string createdByUserId = null)
+        protected int AddQuestion(int locationId, int questionTypeId, string questionText, ConsultationsContext passedInContext = null, string createdByUserId = null, bool isDeleted = false)
         {
             var question = new Question(locationId, questionText, questionTypeId, null, null, null);
+            question.IsDeleted = isDeleted;
             question.CreatedByUserId = createdByUserId ?? Guid.Empty.ToString();
 			question.LastModifiedByUserId = createdByUserId ?? Guid.Empty.ToString();
 			if (passedInContext != null)
