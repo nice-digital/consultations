@@ -317,8 +317,7 @@ export class CommentList extends Component<PropsType, StateType> {
 
 	drawerClassnames = () => {
 		const open = this.state.drawerOpen ? "Drawer--open" : "";
-		const mobile = this.state.drawerMobile ? "Drawer--mobile" : "";
-		return `Drawer ${open} ${mobile}`;
+		return `Drawer ${open}`;
 	};
 
 	handleClick = (event: string) => {
@@ -394,8 +393,7 @@ export class CommentList extends Component<PropsType, StateType> {
 					message={`You have ${this.state.unsavedIds.length} unsaved ${this.state.unsavedIds.length === 1 ? "change" : "changes"}. Continue without saving?`}
 				/>
 				<LiveMessage message={a11yMessage()} aria-live="assertive"/>
-				<section aria-label="Commenting panel"
-								 className={this.drawerClassnames()}>
+				<section aria-label="Commenting panel" className={this.drawerClassnames()}>
 					<div className="Drawer__controls">
 						{this.state.shouldShowCommentsTab &&
 							<button
@@ -407,18 +405,14 @@ export class CommentList extends Component<PropsType, StateType> {
 								aria-haspopup="true"
 								aria-label={this.state.drawerOpen ? "Close the commenting panel" : "Open the commenting panel"}
 								tabIndex="0">
-								{!this.state.drawerMobile ?
-									<span>{(this.state.drawerOpen && this.state.viewComments ? "Close comments" : "Open comments")}</span>
-									:
-									<span
-										className={`icon ${
-											this.state.drawerOpen
-												? "icon--chevron-right"
-												: "icon--chevron-left"}`}
-										aria-hidden="true"
-										data-qa-sel="close-commenting-panel"
-									/>
-								}
+								<span
+									className="Drawer__control-text"
+									aria-hidden="true"
+									data-qa-sel="close-commenting-panel"
+								>
+									Comments
+								</span>
+								{(this.state.drawerOpen && this.state.viewComments ? "Close comments" : "Open comments")}
 							</button>
 						}
 						{this.state.shouldShowQuestionsTab &&
@@ -431,18 +425,14 @@ export class CommentList extends Component<PropsType, StateType> {
 								aria-haspopup="true"
 								aria-label={this.state.drawerOpen ? "Close the questions panel" : "Open the questions panel"}
 								tabIndex="0">
-								{!this.state.drawerMobile ?
-									<span>{(this.state.drawerOpen && !this.state.viewComments ? "Close questions" : "Open questions")}</span>
-									:
-									<span
-										className={`icon ${
-											this.state.drawerOpen
-												? "icon--chevron-right"
-												: "icon--chevron-left"}`}
-										aria-hidden="true"
-										data-qa-sel="close-questions-panel"
-									/>
-								}
+								<span
+									className="Drawer__control-text"
+									aria-hidden="true"
+									data-qa-sel="close-questions-panel"
+								>
+									Questions
+								</span>
+								{(this.state.drawerOpen && !this.state.viewComments ? "Close questions" : "Open questions")}
 							</button>
 						}
 					</div>
