@@ -8,6 +8,7 @@ Feature: Comment on a Section
 		And I refresh
 		When I log into accounts with username "IDAM_EMAIL2" and password "IDAM_PASSWORD"
 		Given I open the url "158/3/introduction"
+		And I refresh
 		Given I delete all comments on the page
 
 	Scenario: User makes a comment at section level

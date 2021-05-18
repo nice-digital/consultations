@@ -8,6 +8,7 @@ Feature: Submit Comments on a Consultation
 		And I refresh
 		When I log into accounts with username "IDAM_EMAIL3" and password "IDAM_PASSWORD"
 		Given I open the url "1/1/introduction"
+		And I refresh
 
 	Scenario: User makes a multiple comments and submits
 		Given I comment on a Document
