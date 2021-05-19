@@ -209,7 +209,8 @@ const LoginSelectionRadio = (props) => {
 					/>
 					<label
 						className="form__label form__label--radio"
-						htmlFor={`${name}--${radio.variant}`}>
+						htmlFor={`${name}--${radio.variant}`}
+						data-qa-sel={`loginpanel-label-${radio.variant}`}>
 						{radio.label}
 					</label>
 				</div>
