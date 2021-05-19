@@ -4,9 +4,7 @@ Feature: The list of consultations is reduced when user searches by title
 
 	Background:
 		Given I open the url "admin"
-		And I refresh
 		When I log into the admin page with username "IDAM_EMAIL1" and password "IDAM_PASSWORD"
-		Given I open the url "admin"
 
 	Scenario: User can search for a consultation by its title
 		Given I expect the result list count contains "Showing 1 to 25"

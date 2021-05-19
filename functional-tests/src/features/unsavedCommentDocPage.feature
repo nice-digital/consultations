@@ -6,9 +6,7 @@ Feature: User is alerted when there are unsaved comments on Document page
 
 	Background:
 		Given I open the url "233/1/recommendations"
-		And I refresh
 		When I log into accounts with username "IDAM_EMAIL2" and password "IDAM_PASSWORD"
-		Given I open the url "233/1/recommendations"
 
 	Scenario: User is prompted to Save unsaved Comments
 		Given I comment on a Document

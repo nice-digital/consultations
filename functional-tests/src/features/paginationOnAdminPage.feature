@@ -4,9 +4,7 @@ Feature: Users can page through the list of consultations
 
 	Background:
 		Given I open the url "admin"
-		And I refresh
 		When I log into the admin page with username "IDAM_EMAIL1" and password "IDAM_PASSWORD"
-		Given I open the url "admin"
 
 	Scenario: User can page through the list of consultations
 		Given I expect the result list count contains "Showing 1 to 25"

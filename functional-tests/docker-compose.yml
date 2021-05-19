@@ -55,10 +55,12 @@ services:
       - IDAM_EMAIL3
       - IDAM_EMAIL4
       - IDAM_EMAIL5
+      - IDAM_EMAIL6
       - IDAM_PASSWORD
       - BROWSERSTACK_ACCESS_KEY
       - BROWSERSTACK_USERNAME
       - BUILD_NUMBER
+      - CODE_EMAIL1
 
   # Comment Collection dotnet core web app
   comments:
@@ -108,6 +110,7 @@ services:
       - TEAMROLES2
       - TEAMROLES3
       - ORG_COMMENTING
+      - CODE_EMAIL1
       - REDIS_CONNECTION_STRING
       - INDEV_IDAM_CONFIG_APIIDENTIFIER
       - INDEV_IDAM_CONFIG_CLIENTID

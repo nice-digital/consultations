@@ -26,6 +26,9 @@ import clickPaginationOption, {
 	clickPreviousPagination,
 } from "../support/action/clickPaginationOption";
 import validateResponsesFilterChecked from "../support/check/validateResponsesFilterChecked";
+import { enterEmailaddress } from "../support/action/enterEmailaddress";
+import { generateOrganisationCode } from "../support/action/generateOrganisationCode";
+
 import validateAlertCautionText from "../support/check/validateAlertCautionText";
 // import validateCommentSaved from "../support/check/validateCommentSaved";
 
@@ -103,4 +106,7 @@ Then(
 	/^I expect the your responses filter to be selected by default$/,
 	validateResponsesFilterChecked
 );
+Then(/^I enter code user emailaddress "([A-Z0-9_]+)"$/, enterEmailaddress);
+
+Then(/^I click on consultation to generate and copy the organisation code$/, generateOrganisationCode);
 Then(/^I expect the alert caution to contain "([^"]*)"$/, validateAlertCautionText);
