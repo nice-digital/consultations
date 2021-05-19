@@ -20,7 +20,7 @@ describe("LoginPanel", () => {
 		contextWrapper = {
 			wrappingComponent: UserContext.Provider,
 			wrappingComponentProps: {
-				value: { organisationalCommentingFeature: true },
+				value: {},
 			},
 		};
 	});

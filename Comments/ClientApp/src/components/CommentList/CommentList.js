@@ -95,8 +95,6 @@ export class CommentList extends Component<PropsType, StateType> {
 			preloadedData = this.props.staticContext.preload.data; //this is data from Configure => SupplyData in Startup.cs. the main thing it contains for this call is the cookie for the current user.
 		}
 
-		const enableOrganisationalCommentingFeature = ((preloadedData && preloadedData.organisationalCommentingFeature) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["organisationalCommentingFeature"]));
-
 		const signOutUrl = ((preloadedData && preloadedData.signOutURL) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["signOutURL"]));
 
 		const preloadedCommentsForCurrentUser = preload(
@@ -134,7 +132,6 @@ export class CommentList extends Component<PropsType, StateType> {
 				drawerMobile: false,
 				unsavedIds: [],
 				endDate,
-				enableOrganisationalCommentingFeature,
 				allowOrganisationCodeLogin: consultationIsOpen,
 				otherUsersComments: [],
 				otherUsersQuestions: [],
@@ -207,7 +204,7 @@ export class CommentList extends Component<PropsType, StateType> {
 	};
 
 	componentDidMount() {
-		const { isAuthorised, isOrganisationCommenter, isLead, organisationalCommentingFeature: drawerOpen } = this.context;
+		const { isAuthorised, isOrganisationCommenter, isLead } = this.context;
 		const { allowOrganisationCodeLogin: consultationIsOpen, initialDataLoaded } = this.state;
 		const showUseCodeInstead = !isOrganisationCommenter && !isLead && isAuthorised && consultationIsOpen;
 
@@ -217,7 +214,7 @@ export class CommentList extends Component<PropsType, StateType> {
 
 		this.setState({
 			isAuthorised,
-			drawerOpen,
+			drawerOpen: true,
 			showUseCodeInstead,
 		});
 
@@ -458,7 +455,7 @@ export class CommentList extends Component<PropsType, StateType> {
 												</Link>
 										}
 
-										{(this.state.showUseCodeInstead && contextValue.organisationalCommentingFeature) &&
+										{this.state.showUseCodeInstead &&
 											<Alert type="info" role="status" aria-live="polite">
 												<p>If you have been sent a code from your organisation's commenting lead, please <a href={this.state.signOutUrl}>sign out</a> and access the consultation using the code.</p>
 												<button className="btn btn--primary" onClick={() => this.setState({ showUseCodeInstead: false })}>Dismiss</button>

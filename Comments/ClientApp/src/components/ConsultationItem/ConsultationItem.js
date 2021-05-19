@@ -27,7 +27,6 @@ type PropsType = {
 	showShareWithOrganisationButton: boolean,
 	show: boolean,
 	basename: string,
-	allowGenerateOrganisationCode: boolean,
 	submissionToLeadCount: number
 }
 
@@ -52,7 +51,6 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 			isUpcoming,
 			organisationCodes,
 			showShareWithOrganisationButton,
-			allowGenerateOrganisationCode,
 			submissionToLeadCount,
 		} = this.props;
 
@@ -93,9 +91,9 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 								</dd>
 							</div>
 						)}
-						{showShareWithOrganisationButton && allowGenerateOrganisationCode && submissionToLeadCount !== null &&
+						{showShareWithOrganisationButton && submissionToLeadCount !== null &&
 							<div className="card__metadatum">
-								{submissionToLeadCount} {submissionToLeadCount == 1 ? "response" : "responses"} from your organisation
+								{submissionToLeadCount} {submissionToLeadCount === 1 ? "response" : "responses"} from your organisation
 							</div>
 						}
 						<div>
@@ -141,7 +139,7 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 							}
 						</div>
 					</dl>
-					{showShareWithOrganisationButton && allowGenerateOrganisationCode &&
+					{showShareWithOrganisationButton &&
 						<GenerateCode organisationCodes={organisationCodes} consultationId={consultationId} />
 					}
 				</article>

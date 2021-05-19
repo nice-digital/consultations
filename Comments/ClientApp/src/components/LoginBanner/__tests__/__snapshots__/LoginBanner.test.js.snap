@@ -60,7 +60,7 @@ exports[`[ClientApp]  LoginBanner Component should match snapshot for idam login
         Some title
       </h3>
       <p
-        className=" "
+        className=""
       >
         <a
           href="/signin-url"
@@ -74,7 +74,7 @@ exports[`[ClientApp]  LoginBanner Component should match snapshot for idam login
          
       </p>
       <p
-        className=" "
+        className=""
       >
         <a
           href="/register-url"
@@ -104,7 +104,7 @@ exports[`[ClientApp]  LoginBanner Component should match snapshot for idam login
       role="form"
     >
       <p
-        className="display--inline "
+        className="display--inline"
       >
         <a
           href="/signin-url"
@@ -127,7 +127,7 @@ exports[`[ClientApp]  LoginBanner Component should match snapshot for idam login
         </a>
       </p>
       <p
-        className="display--inline "
+        className="display--inline"
       >
         <a
           href="/register-url"
