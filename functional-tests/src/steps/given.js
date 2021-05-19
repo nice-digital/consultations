@@ -9,7 +9,6 @@ import { validateStatusFilterChecked } from "../support/check/validateStatusFilt
 Given(/^I delete all comments on the page$/, deleteComments);
 
 Given(/^I comment on a Document$/, () => {
-	browser.refresh();
 	browser.pause(1000);
 	browser.waitForVisible("[data-qa-sel='comment-on-consultation-document']");
 	browser.click("[data-qa-sel='comment-on-consultation-document']");
@@ -18,7 +17,6 @@ Given(/^I comment on a Document$/, () => {
 });
 
 Given(/^I comment on a Document again$/, () => {
-	browser.refresh();
 	browser.pause(1000);
 	browser.waitForVisible("[data-qa-sel='comment-on-consultation-document']");
 	browser.click("[data-qa-sel='comment-on-consultation-document']");
@@ -27,7 +25,6 @@ Given(/^I comment on a Document again$/, () => {
 });
 
 Given(/^I comment on a Chapter$/, () => {
-	browser.refresh();
 	browser.pause(1000);
 	browser.waitForVisible(".document-comment-container");
 	browser.pause(1000);
@@ -37,7 +34,6 @@ Given(/^I comment on a Chapter$/, () => {
 });
 
 Given(/^I comment on a Section$/, () => {
-	browser.refresh();
 	browser.pause(1000);
 	browser.click("[data-qa-sel='nav-list-item']:nth-of-type(4)");
 	browser.waitForVisible(".document-comment-container");
@@ -54,7 +50,6 @@ Given(/^I comment on a Section$/, () => {
 });
 
 Given(/^I comment on a Sub-section$/, () => {
-	browser.refresh();
 	browser.pause(1000);
 	browser.waitForVisible(
 		".section:first-of-type > [data-qa-sel='in-text-comment-button']"
