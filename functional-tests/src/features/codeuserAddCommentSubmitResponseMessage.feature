@@ -6,7 +6,6 @@ Feature: Code user unable to submit when they have not completed mandatory quest
 
 	Background:
 		Given I open the url "admin"
-		And I refresh
 		When I log into the admin page with username "IDAM_EMAIL6" and password "IDAM_PASSWORD"
 		Given I open the url "admin"
 

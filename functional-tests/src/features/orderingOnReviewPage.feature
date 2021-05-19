@@ -6,7 +6,6 @@ Feature: Comment Ordering on the Review Page
 
 	Background:
 		Given I open the url "1/1/introduction"
-		And I refresh
 		When I log into accounts with username "IDAM_EMAIL1" and password "IDAM_PASSWORD"
 		Given I open the url "1/1/introduction"
 		And I refresh

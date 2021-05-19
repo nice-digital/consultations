@@ -4,7 +4,6 @@ Feature: The list of consultations is reduced when user searches by title
 
 	Background:
 		Given I open the url "admin"
-		And I refresh
 		When I log into the admin page with username "IDAM_EMAIL1" and password "IDAM_PASSWORD"
 		Given I open the url "admin"
 		And I refresh

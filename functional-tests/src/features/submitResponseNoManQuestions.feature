@@ -6,7 +6,6 @@ Feature: User unable to submit when they have not completed mandatory questions 
 
 	Background:
 		Given I open the url "234/1/recommendations"
-		And I refresh
 		When I log into accounts with username "IDAM_EMAIL1" and password "IDAM_PASSWORD"
 		Given I open the url "234/1/recommendations"
 		And I refresh
