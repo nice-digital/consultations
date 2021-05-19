@@ -6,8 +6,6 @@ Feature: Answer Question on a Consultation
 	Background:
 		Given I open the url "154/1/overview"
 		When I log into accounts with username "IDAM_EMAIL1" and password "IDAM_PASSWORD"
-		Given I open the url "154/1/overview"
-		And I refresh
 		Given I add questions to Consultation "154"
 
 	Scenario: I answer a Consultation and Document level question

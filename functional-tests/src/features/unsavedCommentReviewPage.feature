@@ -7,8 +7,6 @@ Feature: User unable to submit when they have unsaved comments on Review page
 	Background:
 		Given I open the url "234/1/recommendations"
 		When I log into accounts with username "IDAM_EMAIL2" and password "IDAM_PASSWORD"
-		Given I open the url "234/1/recommendations"
-		And I refresh
 
 	Scenario: User is unable to Submit when there are unsaved comments
 		Given I comment on a Document
