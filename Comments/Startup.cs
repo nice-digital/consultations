@@ -174,7 +174,7 @@ namespace Comments
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         [Obsolete] //the reason for the obselete flag here is UseSpaPrerendering has been marked as obselete in 3.1 and dropped in 5.x
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, IHostApplicationLifetime appLifetime, IUrlHelperFactory urlHelperFactory, IFeatureManager featureManager)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, IHostApplicationLifetime appLifetime, IUrlHelperFactory urlHelperFactory, IFeatureManager featureManager, LinkGenerator linkGenerator)
         {           
             //seriLogger.Configure(loggerFactory, Configuration, appLifetime, env);
             //var startupLogger = loggerFactory.CreateLogger<Startup>();
@@ -208,19 +208,19 @@ namespace Comments
                     var reqPath = context.Request.Path;
                     if (reqPath.HasValue && reqPath.Value.Contains("."))
                     {
-						// Map static files paths to the root, for use within the 
-						//if (reqPath.Value.Contains("/consultations"))
-						//{
-						//	context.Request.Path = reqPath.Value.Replace("/consultations", "");
-						//}
-						//else if (reqPath.Value.IndexOf("favicon.ico", StringComparison.OrdinalIgnoreCase) == -1 && reqPath.Value.IndexOf("hot-update", StringComparison.OrdinalIgnoreCase) == -1)
-						//{
-						//	context.Response.StatusCode = 404;
-						//	throw new FileNotFoundException($"Path {reqPath.Value} could not be found. Did you mean to load '/consultations{context.Request.Path.Value  }' instead?");
-						//}
-					}
+                        // Map static files paths to the root, for use within the 
+                        //if (reqPath.Value.Contains("/consultations"))
+                        //{
+                        //	context.Request.Path = reqPath.Value.Replace("/consultations", "");
+                        //}
+                        //else if (reqPath.Value.IndexOf("favicon.ico", StringComparison.OrdinalIgnoreCase) == -1 && reqPath.Value.IndexOf("hot-update", StringComparison.OrdinalIgnoreCase) == -1)
+                        //{
+                        //	context.Response.StatusCode = 404;
+                        //	throw new FileNotFoundException($"Path {reqPath.Value} could not be found. Did you mean to load '/consultations{context.Request.Path.Value  }' instead?");
+                        //}
+                    }
 
-					return next();
+                    return next();
                 });
             }
 
@@ -228,34 +228,35 @@ namespace Comments
 
 	        app.UseForwardedHeaders();
             app.UseAuthentication();
+            app.UseAuthorization();
 
-            app.Use(async (context, next) => 
+            app.Use(async (context, next) =>
             {
-				//this middleware is here because we have some controller api's that don't have the authorise attribute set. e.g. CommentsController. that controller still needs to work.
-				//without authentication. for authenticated users, the default scheme is used. however, we now have 2 schemes which can be used together (idam and organisation cookie).
-				//so this middleware combines the multiple authentication schemes we have, setting a single user.
-				//it then update the context user values in the DbContext so that the global query filters work.
-				var principal = new ClaimsPrincipal();
+                //this middleware is here because we have some controller api's that don't have the authorise attribute set. e.g. CommentsController. that controller still needs to work.
+                //without authentication. for authenticated users, the default scheme is used. however, we now have 2 schemes which can be used together (idam and organisation cookie).
+                //so this middleware combines the multiple authentication schemes we have, setting a single user.
+                //it then update the context user values in the DbContext so that the global query filters work.
+                var principal = new ClaimsPrincipal();
 
-	            var cookieAuthResult = await context.AuthenticateAsync(OrganisationCookieAuthenticationOptions.DefaultScheme);
-	            if (cookieAuthResult?.Principal != null)
-	            {
-		            principal.AddIdentities(cookieAuthResult.Principal.Identities);
-	            }
-	            var accountsAuthResult = await context.AuthenticateAsync(AuthenticationConstants.AuthenticationScheme);
-	            if (accountsAuthResult?.Principal != null)
-	            {
-		            principal.AddIdentities(accountsAuthResult.Principal.Identities);
-	            }
-	            context.User = principal;
+                var cookieAuthResult = await context.AuthenticateAsync(OrganisationCookieAuthenticationOptions.DefaultScheme);
+                if (cookieAuthResult?.Principal != null)
+                {
+                    principal.AddIdentities(cookieAuthResult.Principal.Identities);
+                }
+                var accountsAuthResult = await context.AuthenticateAsync(AuthenticationConstants.AuthenticationScheme);
+                if (accountsAuthResult?.Principal != null)
+                {
+                    principal.AddIdentities(accountsAuthResult.Principal.Identities);
+                }
+                context.User = principal;
 
-	            var consultationsContext = context.RequestServices.GetService<ConsultationsContext>();
-	            consultationsContext.ConfigureContext();
+                var consultationsContext = context.RequestServices.GetService<ConsultationsContext>();
+                consultationsContext.ConfigureContext();
 
-				await next();
+                await next();
             });
 
-			app.UseSpaStaticFiles(new StaticFileOptions { RequestPath = "/consultations" });
+            app.UseSpaStaticFiles(new StaticFileOptions { RequestPath = "/consultations" });
 
 		    if (!env.IsDevelopment() && !env.IsIntegrationTest())
 		    {
@@ -266,11 +267,9 @@ namespace Comments
 
             app.UseEndpoints(endpoints =>
             {
-                var def = endpoints.MapControllerRoute(name: "PublishedRedirectWithoutDocument", 
+               endpoints.MapControllerRoute(name: "PublishedRedirectWithoutDocument", 
                                              pattern: "consultations/{consultationId:int}",
                                              defaults: new { controller = "Redirect", action = "PublishedRedirectWithoutDocument" });
-
-                
                 
                 endpoints.MapControllerRoute(name: "PublishedRedirect",
                                              pattern: "consultations/{consultationId:int}/{documentId:int}",
@@ -354,16 +353,10 @@ namespace Comments
 						data["isAdminUser"] = isAdminUser;
 						data["isTeamUser"] = isTeamUser;
 
-						var actionContext = new ActionContext {
-							HttpContext = httpContext,
-							RouteData = new RouteData(), // { Routers = { defaultRoute.Build() } }, //TODO: find out if this works!
-							ActionDescriptor = new ActionDescriptor(),
-						};
-						var urlHelper = urlHelperFactory.GetUrlHelper(actionContext);
-
-						data["signInURL"] = urlHelper.Action(Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnUrl = httpContext.Request.Path });
-						data["signOutURL"] = urlHelper.Action(Constants.Auth.LogoutAction, Constants.Auth.ControllerName); //auth0 needs logout urls configured. it won't let you redirect dynamically.
-						data["registerURL"] = urlHelper.Action(Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnUrl = httpContext.Request.Path, goToRegisterPage = true });
+                        
+                        data["signInURL"] = linkGenerator.GetPathByAction(httpContext, Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnUrl = httpContext.Request.Path });
+						data["signOutURL"] = linkGenerator.GetPathByAction(httpContext, Constants.Auth.LogoutAction, Constants.Auth.ControllerName); //auth0 needs logout urls configured. it won't let you redirect dynamically.
+						data["registerURL"] = linkGenerator.GetPathByAction(httpContext, Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnUrl = httpContext.Request.Path, goToRegisterPage = true });
 						data["requestURL"] = httpContext.Request.Path;
 	                    data["accountsEnvironment"] = AppSettings.Environment.AccountsEnvironment;
 

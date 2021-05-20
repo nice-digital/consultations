@@ -56,8 +56,10 @@ namespace Comments.Models
 		/// <param name="partialMatchSourceURI">True if data is being retrieved for the review page</param>
 		/// <returns></returns>
 		public IEnumerable<Location> GetAllCommentsAndQuestionsForDocument(IList<string> sourceURIs, bool partialMatchSourceURI)
-		{
-			string partialSourceURIToUse = null, partialMatchExactSourceURIToUse = null;
+        {
+            sourceURIs = sourceURIs.Select(s => s.ToLower()).ToList();
+
+            string partialSourceURIToUse = null, partialMatchExactSourceURIToUse = null;
 		    if (partialMatchSourceURI)
 		    {
 			    partialMatchExactSourceURIToUse = sourceURIs.SingleOrDefault();
@@ -71,14 +73,14 @@ namespace Comments.Models
 				.Include(c => c.Location)
 				.Where(c => (partialMatchSourceURI
 					? (c.Location.SourceURI.Equals(partialMatchExactSourceURIToUse) || c.Location.SourceURI.Contains(partialSourceURIToUse))
-					: sourceURIs.Contains(c.Location.SourceURI, StringComparer.OrdinalIgnoreCase)))
+					: sourceURIs.Contains(c.Location.SourceURI.ToLower())))
 				.ToList();
 
 			var data = Location.Where(l => (l.Order != null) &&
 
 			                               (partialMatchSourceURI
 				                               		? (l.SourceURI.Equals(partialMatchExactSourceURIToUse) || l.SourceURI.Contains(partialSourceURIToUse))
-				                               		: sourceURIs.Contains(l.SourceURI, StringComparer.OrdinalIgnoreCase)))
+				                               		: sourceURIs.Contains(l.SourceURI.ToLower())))
 				//(allAuthorisedLocations.Contains(l.LocationId)))
 
 				.Include(l => l.Comment)
@@ -122,7 +124,8 @@ namespace Comments.Models
 		/// <param name="sourceURIs"></param>
         /// <returns></returns>
 		public IEnumerable<Location> GetOtherOrganisationUsersCommentsAndQuestionsForDocument(IList<string> sourceURIs)
-		{
+        {
+            sourceURIs = sourceURIs.Select(s => s.ToLower()).ToList();
             var commentsAndAnswers = Location.IgnoreQueryFilters()
                 .IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead
                                                          && (c.OrganisationId.HasValue && _organisationIDs.Contains(c.OrganisationId.Value))
@@ -153,19 +156,21 @@ namespace Comments.Models
                         .FirstOrDefault()))
 
                 //TODO: figure out if this is needed.
-                //.IncludeFilter(l=> l.Question 
+                //.IncludeFilter(l => l.Question
                 //    .Select(q => q.Answer.Where(a => a.StatusId == (int)StatusName.SubmittedToLead
                 //                                     && _organisationIDs.Contains(a.OrganisationId.Value)
                 //                                     && !_organisationUserIDs.Contains(a.OrganisationUserId.Value)
                 //                                     && a.OrganisationUser != null
                 //                                     )
-                //        .Select(a => a.OrganisationUser)))
+                //        .Select(a => a.OrganisationUser)
+                //        .FirstOrDefault()
+                //    ))
 
                 .OrderBy(l => l.Order)
                 .ToList();
 
             var filteredLocations = commentsAndAnswers.Where(l =>
-                (l.Order != null) && sourceURIs.Contains(l.SourceURI, StringComparer.OrdinalIgnoreCase));
+                (l.Order != null) && sourceURIs.Contains(l.SourceURI.ToLower()));
 
             var sortedData = filteredLocations.Where(l => l.Comment.Count > 0 || l.Question.Count > 0)
                 .OrderBy(l => l.Order)
@@ -177,7 +182,8 @@ namespace Comments.Models
 		}
 
 		public IEnumerable<Location> GetQuestionsForDocument(IList<string> sourceURIs, bool partialMatchSourceURI)
-		{
+        {
+            sourceURIs = sourceURIs.Select(s => s.ToLower()).ToList();
 			string partialSourceURIToUse = null, partialMatchExactSourceURIToUse = null;
 			if (partialMatchSourceURI)
 			{
@@ -190,7 +196,7 @@ namespace Comments.Models
 
 			var data = Location.Where(l => partialMatchSourceURI
 					? (l.SourceURI.Equals(partialMatchExactSourceURIToUse) || l.SourceURI.Contains(partialSourceURIToUse))
-					: sourceURIs.Contains(l.SourceURI, StringComparer.OrdinalIgnoreCase))
+					: sourceURIs.Contains(l.SourceURI.ToLower()))
 
 				.Include(l => l.Question)
 					.ThenInclude(q => q.QuestionType)
@@ -373,7 +379,7 @@ namespace Comments.Models
 	    public Status GetStatus(StatusName statusName)
 	    {
 		    return Status
-			    .Single(s => s.Name.Equals(statusName.ToString(), StringComparison.OrdinalIgnoreCase));
+			    .Single(s => EF.Functions.Like(s.Name, statusName.ToString()));
 	    }
 
 	    public void UpdateCommentStatus(IEnumerable<int> commentIds, Status status)
@@ -979,10 +985,12 @@ namespace Comments.Models
 		}
 
 		public IEnumerable<OrganisationAuthorisation> GetOrganisationAuthorisations(IList<string> consultationSourceURIs)
-		{
+        {
+            consultationSourceURIs = consultationSourceURIs.Select(s=> s.ToLower()).ToList();
+
 			var organisationAuthorisations = OrganisationAuthorisation
 				.Include(oa => oa.Location)
-				.Where(oa => consultationSourceURIs.Contains(oa.Location.SourceURI, StringComparer.OrdinalIgnoreCase))
+                .Where(oa => consultationSourceURIs.Contains(oa.Location.SourceURI.ToLower()))
 				.ToList();
 
 			return organisationAuthorisations;
