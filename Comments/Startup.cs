@@ -36,13 +36,11 @@ namespace Comments
 {
     public class Startup
     {
-        ILogger _logger;
 
-        public Startup(IConfiguration configuration, IWebHostEnvironment env, ILogger<Startup> logger)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
             Environment = env;
-            _logger = logger;
         }
         
         public IConfiguration Configuration { get; }
@@ -104,11 +102,21 @@ namespace Comments
 
 			services.AddRouting(options => options.LowercaseUrls = true);
 
-			services.AddMvc(options =>
-            {
-                options.Filters.Add(new ResponseCacheAttribute() { NoStore = true, Location = ResponseCacheLocation.None });
-                options.EnableEndpointRouting = false;
-            }).AddNewtonsoftJson(); //.SetCompatibilityVersion(CompatibilityVersion.Version_3_0); 
+            //services.AddMvc(options =>
+            //{
+            //    options.Filters.Add(
+            //        new ResponseCacheAttribute() {NoStore = true, Location = ResponseCacheLocation.None});
+            //    options.EnableEndpointRouting = false;
+            //});
+            
+             //.SetCompatibilityVersion(CompatibilityVersion.Version_3_0); 
+
+            services.AddControllersWithViews(options =>
+                {
+                    options.Filters.Add(new ResponseCacheAttribute() { NoStore = true, Location = ResponseCacheLocation.None });
+                    options.EnableEndpointRouting = false;
+                })
+                .AddNewtonsoftJson();
 
             // In production, static files are served from the pre-built files, rather than proxied via react dev server
             services.AddSpaStaticFiles(configuration =>
@@ -216,6 +224,8 @@ namespace Comments
                 });
             }
 
+            app.UseRouting();
+
 	        app.UseForwardedHeaders();
             app.UseAuthentication();
 
@@ -253,28 +263,31 @@ namespace Comments
 		    }
 
 		    IRouteBuilder defaultRoute = null;
-			app.UseMvc(routes =>
+
+            app.UseEndpoints(endpoints =>
             {
-                defaultRoute = routes.MapRoute(
-                    name: "default",
-                    template: "{controller}/{action=Index}/{id?}");
+                var def = endpoints.MapControllerRoute(name: "PublishedRedirectWithoutDocument", 
+                                             pattern: "consultations/{consultationId:int}",
+                                             defaults: new { controller = "Redirect", action = "PublishedRedirectWithoutDocument" });
 
-	            routes.MapRoute(
-		            name: "PublishedRedirectWithoutDocument",
-		            template: "consultations/{consultationId:int}",
-		            defaults: new { controller = "Redirect", action = "PublishedRedirectWithoutDocument" });
+                
+                
+                endpoints.MapControllerRoute(name: "PublishedRedirect",
+                                             pattern: "consultations/{consultationId:int}/{documentId:int}",
+                                             defaults: new { controller = "Redirect", action = "PublishedDocumentWithoutChapter" });
 
-				routes.MapRoute(
-		            name: "PublishedRedirect",
-		            template: "consultations/{consultationId:int}/{documentId:int}",
-		            defaults: new {controller = "Redirect", action = "PublishedDocumentWithoutChapter"});
+                endpoints.MapControllerRoute(name: "PreviewRedirect",
+                                             pattern: "consultations/preview/{reference}/consultation/{consultationId:int}/document/{documentId:int}",
+                                             defaults: new { controller = "Redirect", action = "PreviewDocumentWithoutChapter" });
 
-	            routes.MapRoute(
-		            name: "PreviewRedirect",
-		            template: "consultations/preview/{reference}/consultation/{consultationId:int}/document/{documentId:int}",
-		            defaults: new { controller = "Redirect", action = "PreviewDocumentWithoutChapter" });
+                endpoints.MapControllerRoute(name: "default",
+                                             pattern: "{controller}/{action=Index}/{id?}");
+                
+                // endpoints.MapHealthChecks("/health"); //TODO: validate this.
+                
 
-			});
+            });
+
 
             //// here you can see we make sure it doesn't start with /api, if it does, it'll 404 within .NET if it can't be found
             //app.MapWhen(x => !x.Request.Path.Value.StartsWith("/consultations/api", StringComparison.OrdinalIgnoreCase), builder =>
@@ -343,7 +356,7 @@ namespace Comments
 
 						var actionContext = new ActionContext {
 							HttpContext = httpContext,
-							RouteData = new RouteData { Routers = { defaultRoute.Build() } },
+							RouteData = new RouteData(), // { Routers = { defaultRoute.Build() } }, //TODO: find out if this works!
 							ActionDescriptor = new ActionDescriptor(),
 						};
 						var urlHelper = urlHelperFactory.GetUrlHelper(actionContext);
