@@ -6,15 +6,15 @@ describe("[ClientApp] ", () => {
 			it("should take an object and create a query string", () => {
 				expect(objectToQueryString({
 					value1: "aValue",
-					value2: "anotherValue"
+					value2: "anotherValue",
 				})).toEqual("?value1=aValue&value2=anotherValue");
 				expect(objectToQueryString({
-					value1: "aValue"
+					value1: "aValue",
 				})).toEqual("?value1=aValue");
 				expect(objectToQueryString()).toEqual("");
 				expect(objectToQueryString({
 					value1: ["first item in array", "second item in array"],
-					value2: "anotherValue"
+					value2: "anotherValue",
 				})).toEqual("?value1=first%20item%20in%20array&value1=second%20item%20in%20array&value2=anotherValue");
 			});
 		});

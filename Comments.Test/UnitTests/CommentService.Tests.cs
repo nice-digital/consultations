@@ -5,6 +5,7 @@ using Comments.Test.Infrastructure;
 using Xunit;
 using Shouldly;
 using System.Linq;
+using System.Threading.Tasks;
 using Comments.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Comment = Comments.Models.Comment;
@@ -26,7 +27,7 @@ namespace Comments.Test.UnitTests
 
 
             var locationId = AddLocation(sourceURI);
-            var commentId = AddComment(locationId, commentText, isDeleted: false, createdByUserId: userId);
+            var commentId = AddComment(locationId, commentText, createdByUserId: userId);
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 	        var context = new ConsultationsContext(_options, userService, _fakeEncryption);
@@ -72,7 +73,7 @@ namespace Comments.Test.UnitTests
             var userId = Guid.Empty.ToString();
 
             var locationId = AddLocation(sourceURI);
-            var commentId = AddComment(locationId, commentText, isDeleted: false, createdByUserId: userId);
+            var commentId = AddComment(locationId, commentText, createdByUserId: userId);
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 	        var context = new ConsultationsContext(_options, userService, _fakeEncryption);
@@ -103,7 +104,7 @@ namespace Comments.Test.UnitTests
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 
             var locationId = AddLocation(sourceURI);
-            var commentId = AddComment(locationId, commentText, isDeleted: false, createdByUserId: userId);
+            var commentId = AddComment(locationId, commentText, createdByUserId: userId);
 
 	        var context = new ConsultationsContext(_options, userService, _fakeEncryption);
 	        //var submitService = new SubmitService(context, userService, _consultationService);
@@ -119,7 +120,7 @@ namespace Comments.Test.UnitTests
         }
 
         [Fact]
-        public void Comments_CanBeCreated()
+        public async Task Comments_CanBeCreated()
         {
             //Arrange
             ResetDatabase();
@@ -129,7 +130,7 @@ namespace Comments.Test.UnitTests
             var locationId = AddLocation(sourceURI);
             var userId = Guid.Empty.ToString();
             var commentText = Guid.NewGuid().ToString();
-            var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
+            var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null, null);
             var comment = new Comment(locationId, userId, commentText, userId, location, 1, null);
             var viewModel = new ViewModels.Comment(location, comment);
             
@@ -139,14 +140,14 @@ namespace Comments.Test.UnitTests
 			var commentService = new CommentService(context, userService, _consultationService, _fakeHttpContextAccessor);
 
             //Act
-            var result = commentService.CreateComment(viewModel);
+            var result = await commentService.CreateComment(viewModel);
 
             //Assert
             result.comment.CommentText.ShouldBe(commentText);
         }
 
         [Fact]
-        public void No_Comments_returned_when_not_logged_in()
+        public async Task No_Comments_returned_when_not_logged_in()
         {
             // Arrange
             ResetDatabase();
@@ -155,7 +156,7 @@ namespace Comments.Test.UnitTests
 			var commentService = new CommentService(new ConsultationsContext(_options, _fakeUserService, _fakeEncryption), FakeUserService.Get(isAuthenticated: false), _consultationService, _fakeHttpContextAccessor);
 
             // Act
-            var viewModel = commentService.GetCommentsAndQuestions("consultations://./consultation/1/document/1/chapter/introduction", _urlHelper);
+            var viewModel = await commentService.GetCommentsAndQuestions("consultations://./consultation/1/document/1/chapter/introduction", _urlHelper);
 
             //Assert
             viewModel.IsAuthorised.ShouldBeFalse();
@@ -164,7 +165,7 @@ namespace Comments.Test.UnitTests
         }
 
         [Fact]
-        public void Only_own_Comments_returned_when_logged_in()
+        public async Task Only_own_Comments_returned_when_logged_in()
         {
             // Arrange
             ResetDatabase();
@@ -178,19 +179,18 @@ namespace Comments.Test.UnitTests
 			var commentService = new CommentService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService, _fakeHttpContextAccessor);
             var locationId = AddLocation(sourceURI);
 
-            var expectedCommentId = AddComment(locationId, "current user's comment", isDeleted: false, createdByUserId: userId);
-            AddComment(locationId, "another user's comment", isDeleted: false, createdByUserId: Guid.NewGuid().ToString());
-            AddComment(locationId, "current user's deleted comment", isDeleted: true, createdByUserId: userId);
+            var expectedCommentId = AddComment(locationId, "current user's comment", createdByUserId: userId);
+            AddComment(locationId, "another user's comment", createdByUserId: Guid.NewGuid().ToString());
 
             // Act
-            var viewModel = commentService.GetCommentsAndQuestions("consultations://./consultation/1/document/1/chapter/introduction", _urlHelper);
+            var viewModel = await commentService.GetCommentsAndQuestions("consultations://./consultation/1/document/1/chapter/introduction", _urlHelper);
 
             //Assert
             viewModel.Comments.Single().CommentId.ShouldBe(expectedCommentId);
         }
 
         [Fact]
-        public void CommentsQuestionsAndAnswers_OnlyReturnOwnComments()
+        public async Task CommentsQuestionsAndAnswers_OnlyReturnOwnComments()
         {
             // Arrange
             ResetDatabase();
@@ -211,7 +211,7 @@ namespace Comments.Test.UnitTests
 			var commentService = new CommentService(context, _fakeUserService, _consultationService, _fakeHttpContextAccessor);
 
             // Act    
-            var viewModel = commentService.GetCommentsAndQuestions(URI, _urlHelper);
+            var viewModel = await commentService.GetCommentsAndQuestions(URI, _urlHelper);
 
 			//Assert
 			//commentService.GetComment(1).comment.CommentText.ShouldBe("My Comment");
@@ -220,7 +220,7 @@ namespace Comments.Test.UnitTests
         }
 
         [Fact]
-        public void CommentsQuestionsAndAnswers_ReturnAllOwnCommentsForReviewingConsultation()
+        public async Task CommentsQuestionsAndAnswers_ReturnAllOwnCommentsForReviewingConsultation()
         {
             // Arrange
             ResetDatabase();
@@ -253,12 +253,12 @@ namespace Comments.Test.UnitTests
             AddCommentsAndQuestionsAndAnswers(ConsultationTwoURI, commentText, questionText, answerText, createdByUserId, (int)StatusName.Draft, _context);
             AddCommentsAndQuestionsAndAnswers(ChaperOverviewURI, "Another Users Comment", questionText, answerText, anotherUserId, (int)StatusName.Draft, _context);
 
-	        var context = new ConsultationsContext(_options, userService, _fakeEncryption);
+            var context = new ConsultationsContext(_options, userService, _fakeEncryption);
 	        //var submitService = new SubmitService(context, _fakeUserService, _consultationService);
 			var commentService = new CommentService(context, _fakeUserService, _consultationService, _fakeHttpContextAccessor);
 
             // Act    
-            var viewModel = commentService.GetCommentsAndQuestions("/1/review", _urlHelper);
+            var viewModel = await commentService.GetCommentsAndQuestions("/1/review", _urlHelper);
 
             //Assert
             //commentService.GetComment(6).comment.ShouldNotBeNull();
@@ -268,31 +268,64 @@ namespace Comments.Test.UnitTests
 
 
 
-		//[Fact]
-		//   public void CommentsAndAnswers_ReturnAllOwnCommentsAndAnswersForConsultation()
-		//   {
-		//    //Arrange
-		//    ResetDatabase();
-		//    var userId = Guid.NewGuid().ToString();
-		//    var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
-		//    var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
-		//    var authenticateService = new FakeAuthenticateService(authenticated: true);
-		//    var consultationId = 1;
-		//    var consultationContext = new ConsultationsContext(_options, userService);
+        [Fact]
+        public async Task Only_own_Comments_returned_for_comment_list_when_has_organisation_session_cookie_exists()
+        {
+	        // Arrange
+	        ResetDatabase();
+	        _context.Database.EnsureCreated();
 
-		//	var commentService = new CommentService(new ConsultationsContext(_options, userService), userService, authenticateService);
+	        var sessionId = Guid.NewGuid();
+	        var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+	        const int organisationUserId = 1;
 
-		//    AddCommentsAndQuestionsAndAnswers(sourceURI, "Comment Label 1", "Question Label 1", "Answer Label 1", userId, StatusName.Draft, consultationContext);
-		//    AddCommentsAndQuestionsAndAnswers(sourceURI, "Comment Label 2", "Question Label 2", "Answer Label 2", userId, StatusName.Draft, consultationContext);
-		//    AddCommentsAndQuestionsAndAnswers(sourceURI, "Someone elses Comment Label", "Question Label 2", "Someone elese Answer Label ", Guid.NewGuid().ToString(), StatusName.Draft, consultationContext);
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: null, organisationUserId: organisationUserId);
+	        var context = new ConsultationsContext(_options, userService, _fakeEncryption);
+	        var commentService = new CommentService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService, _fakeHttpContextAccessor);
+	        var locationId = AddLocation(sourceURI);
 
-		//	//Act
-		//	var result = commentService.GetCommentsAndAnswers(sourceURI , true);
+	        var expectedCommentId = AddComment(locationId, "current user's comment", createdByUserId: null, organisationUserId: organisationUserId);
+	        AddComment(locationId, "another user's comment logged in using auth", createdByUserId: Guid.NewGuid().ToString());
+	        AddComment(locationId, "another user's comment logged in with cookie", createdByUserId: null, organisationUserId: 9999);
 
-		//	//Assert
-		//	result.Answers.Count().ShouldBe(2);
-		//	result.Comments.Count().ShouldBe(2);
-		//   }
+			// Act
+			var viewModel = await commentService.GetCommentsAndQuestions("/1/1/introduction", _urlHelper);
+
+	        //Assert
+	        viewModel.Comments.Single().CommentId.ShouldBe(expectedCommentId);
+        }
+
+        [Fact] public void Only_return_comments_from_my_organisation_which_have_been_submitted_to_lead()
+        {
+	        // Arrange
+	        ResetDatabase();
+	        _context.Database.EnsureCreated();
+
+	        var sessionId = Guid.NewGuid();
+	        var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+	        const int organisationUserId = 1;
+			const int organisationId = 1;
+
+	        var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: null, organisationUserId: organisationUserId);
+	        var context = new ConsultationsContext(_options, userService, _fakeEncryption);
+	        var commentService = new CommentService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService, _fakeHttpContextAccessor);
+	        var locationId = AddLocation(sourceURI);
+
+	        AddComment(locationId, "current user's comment", createdByUserId: null, organisationUserId: organisationUserId, organisationId: organisationId);
+	        AddComment(locationId, "another user from my organisations comment not submitted", null, status: (int)StatusName.Draft, organisationUserId: 9999, organisationId: organisationId);
+			AddComment(locationId, "another user from my organisations comment submitted to lead", null, status: (int)StatusName.SubmittedToLead, organisationUserId: 8888, organisationId: organisationId);
+			AddComment(locationId, "another user from a different organisation comment", createdByUserId: null, status: (int)StatusName.SubmittedToLead, organisationUserId: 7777, organisationId: 2);
+			AddComment(locationId, "an individual users comment", createdByUserId: "1", status: (int)StatusName.Submitted);
+
+			// Act
+			var viewModel = commentService.GetCommentsAndQuestionsFromOtherOrganisationCommenters("/1/1/introduction", _urlHelper);
+
+	        //Assert
+	        viewModel.Comments.Count.Equals(1);
+			viewModel.Comments.Single().CommentText.ShouldBe("another user from my organisations comment submitted to lead");
+        }
+		
 	}
 }
+
 

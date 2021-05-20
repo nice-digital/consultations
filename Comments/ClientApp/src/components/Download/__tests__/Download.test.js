@@ -1,11 +1,8 @@
-/* global jest */
-
 import React from "react";
 import { mount } from "enzyme";
 import { MemoryRouter } from "react-router";
 import toJson from "enzyme-to-json";
-
-import Download from "../Download";
+import DownloadWithRouter from "../Download";
 
 describe("[ClientApp] ", () => {
 	describe("Download Component", () => {
@@ -33,15 +30,15 @@ describe("[ClientApp] ", () => {
 			window.__PRELOADED__ = { isAuthorised: true};
 			const wrapper = mount(
 				<MemoryRouter>
-					<Download {...fakeProps} />
-				</MemoryRouter>
+					<DownloadWithRouter {...fakeProps} />
+				</MemoryRouter>,
 			);
-			
+
 			expect(
 				toJson(wrapper, {
 					noKey: true,
 					mode: "deep",
-				})
+				}),
 			).toMatchSnapshot();
 
 			wrapper.unmount();

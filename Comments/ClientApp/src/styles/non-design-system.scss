@@ -3,7 +3,7 @@
 }
 
 .tag--open {
-  background: $colour-success !important;
+  background: $colour-guidance-consultation !important;
 }
 
 .flex {
@@ -16,4 +16,8 @@
 
 .bold {
   font-weight: bold;
+}
+
+.limitWidth{
+  max-width: 17rem;
 }

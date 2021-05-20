@@ -11,6 +11,7 @@
                     "name":"Draft"
                 },
                 "statusId":1,
+                "commenterEmail":null,
                 "commentId":"scrubbed by ScrubLocationId",
                 "sourceURI":"consultations://./consultation/1/document/1/chapter/introduction",
                 "htmlElementID":null,
@@ -24,7 +25,8 @@
                 "documentId":1,
                 "show":true,
                 "order":"0",
-                "section":null
+                "sectionHeader":null,
+                "sectionNumber":null
             },
             {
                 "commentId":"scrubbed by ScrubCommentId",
@@ -36,6 +38,7 @@
                     "name":"Draft"
                 },
                 "statusId":1,
+                "commenterEmail":null,
                 "commentId":"scrubbed by ScrubLocationId",
                 "sourceURI":"consultations://./consultation/1/document/1/chapter/introduction",
                 "htmlElementID":null,
@@ -49,13 +52,14 @@
                 "documentId":1,
                 "show":true,
                 "order":"0",
-                "section":null
+                "sectionHeader":null,
+                "sectionNumber":null
             }
         ],
         "questions":[
             {
                 "questionId":"scrubbed by ScrubQuestionId",
-                "questionText":"00000000-0000-0000-0000-000000000000",
+                "questionText":"question 2",
                 "questionTypeId":"scrubbed by ScrubQuestionTypeId",
                 "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
                 "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
@@ -69,7 +73,7 @@
                 "answers":[
                     {
                         "answerId":"scrubbed by ScrubAnswerId",
-                        "answerText":"00000000-0000-0000-0000-000000000000",
+                        "answerText":"answer 2",
                         "answerBoolean":null,
                         "questionId":"scrubbed by ScrubQuestionId",
                         "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
@@ -79,7 +83,9 @@
                             "statusId":1,
                             "name":"Draft"
                         },
-                        "sourceURI":"consultations://./consultation/1/document/1/chapter/introduction"
+                        "sourceURI":"consultations://./consultation/1/document/1/chapter/introduction",
+                        "commenterEmail":null,
+                        "showWhenFiltered":true
                     }
                 ],
                 "commentId":"scrubbed by ScrubLocationId",
@@ -95,11 +101,12 @@
                 "documentId":1,
                 "show":true,
                 "order":"0",
-                "section":null
+                "sectionHeader":null,
+                "sectionNumber":null
             },
             {
                 "questionId":"scrubbed by ScrubQuestionId",
-                "questionText":"00000000-0000-0000-0000-000000000000",
+                "questionText":"question 1",
                 "questionTypeId":"scrubbed by ScrubQuestionTypeId",
                 "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
                 "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
@@ -113,7 +120,7 @@
                 "answers":[
                     {
                         "answerId":"scrubbed by ScrubAnswerId",
-                        "answerText":"00000000-0000-0000-0000-000000000000",
+                        "answerText":"answer 1",
                         "answerBoolean":null,
                         "questionId":"scrubbed by ScrubQuestionId",
                         "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
@@ -123,7 +130,9 @@
                             "statusId":1,
                             "name":"Draft"
                         },
-                        "sourceURI":"consultations://./consultation/1/document/1/chapter/introduction"
+                        "sourceURI":"consultations://./consultation/1/document/1/chapter/introduction",
+                        "commenterEmail":null,
+                        "showWhenFiltered":true
                     }
                 ],
                 "commentId":"scrubbed by ScrubLocationId",
@@ -139,11 +148,12 @@
                 "documentId":1,
                 "show":true,
                 "order":"0",
-                "section":null
+                "sectionHeader":null,
+                "sectionNumber":null
             },
             {
                 "questionId":"scrubbed by ScrubQuestionId",
-                "questionText":"00000000-0000-0000-0000-000000000000",
+                "questionText":"question 3",
                 "questionTypeId":"scrubbed by ScrubQuestionTypeId",
                 "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
                 "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
@@ -170,7 +180,8 @@
                 "documentId":1,
                 "show":true,
                 "order":"0",
-                "section":null
+                "sectionHeader":null,
+                "sectionNumber":null
             }
         ],
         "isAuthorised":true,
@@ -181,6 +192,7 @@
             "hasQuestions":true,
             "hasUserSuppliedAnswers":true,
             "hasUserSuppliedComments":true,
+            "leadHasBeenSentResponse":false,
             "submittedDate":null,
             "documentIdsWhichSupportComments":[
                 2,
@@ -192,7 +204,6 @@
             "consultationHasEnded":false,
             "supportsSubmission":true,
             "supportsDownload":true,
-            "shouldShowDrawer":true,
             "shouldShowCommentsTab":true,
             "shouldShowQuestionsTab":true
         }
@@ -220,6 +231,13 @@
         },
         {
             "options":[
+                
+            ],
+            "id":"Commenter",
+            "title":"Commenters"
+        },
+        {
+            "options":[
                 {
                     "id":"2",
                     "label":"Unstable angina and NSTEMI",
@@ -240,7 +258,9 @@
         }
     ],
     "organisationName":null,
+    "isLead":false,
     "type":null,
     "document":null,
+    "commenter":null,
     "sort":"DocumentAsc"
 }

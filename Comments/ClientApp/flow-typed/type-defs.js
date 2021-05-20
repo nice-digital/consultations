@@ -41,12 +41,12 @@ declare type ConsultationStateType = {
 	hasUserSuppliedComments: boolean,
 	hasAnyDocumentsSupportingComments: boolean,
 	documentIdsWhichSupportComments: Array<number>,
-	shouldShowDrawer: boolean,
 	shouldShowCommentsTab: boolean,
 	shouldShowQuestionsTab: boolean,
 	supportsDownload: boolean,
 	reference?: string,	
 	submittedDate: Date,
+	leadHasBeenSentResponse: boolean,
 };
 
 declare type ConsultationDataType = {
@@ -72,7 +72,8 @@ declare type CommentType = {
 	show: boolean,
 	status: StatusType,
 	order: string,
-	section: string,
+	sectionHeader: string,
+	sectionNumber: string
 };
 
 type StatusType = {

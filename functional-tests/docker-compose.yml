@@ -55,10 +55,12 @@ services:
       - IDAM_EMAIL3
       - IDAM_EMAIL4
       - IDAM_EMAIL5
+      - IDAM_EMAIL6
       - IDAM_PASSWORD
       - BROWSERSTACK_ACCESS_KEY
       - BROWSERSTACK_USERNAME
       - BUILD_NUMBER
+      - CODE_EMAIL1
 
   # Comment Collection dotnet core web app
   comments:
@@ -66,6 +68,7 @@ services:
     build: ./../Comments/
     links:
       - database
+      - redis
     # Enable browsing from the host machine on http://localhost:8080/consultations
     ports:
       - 8080:8080
@@ -106,6 +109,13 @@ services:
       - TEAMROLES1
       - TEAMROLES2
       - TEAMROLES3
+      - ORG_COMMENTING
+      - CODE_EMAIL1
+      - REDIS_CONNECTION_STRING
+      - INDEV_IDAM_CONFIG_APIIDENTIFIER
+      - INDEV_IDAM_CONFIG_CLIENTID
+      - INDEV_IDAM_CONFIG_CLIENTSECRET
+      - INDEV_IDAM_CONFIG_DOMAIN
 
   # MS SQL Server database
   database:
@@ -133,3 +143,12 @@ services:
       default:
         aliases:
           - niceorg
+
+  redis:
+    container_name: functional-tests_redis_1
+    image: "redis:alpine"
+    #command: redis-server --requirepass sOmE_sEcUrE_pAsS
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    #command: ["redis-server", "--bind", "redis", "--port", "6379"]

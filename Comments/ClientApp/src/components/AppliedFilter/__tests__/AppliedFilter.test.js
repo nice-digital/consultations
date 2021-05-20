@@ -11,7 +11,7 @@ describe("[Consultations]", () => {
 			groupTitle: "Group title",
 			optionLabel: "Option label",
 			groupId: "gId",
-			optionId: "oId"
+			optionId: "oId",
 		};
 
 		it("renders a tag with remove anchor wrapped in a list item", () => {

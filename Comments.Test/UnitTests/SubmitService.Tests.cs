@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Comments.Common;
 using Comments.Models;
 using Comments.Services;
@@ -9,13 +10,14 @@ using Comments.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Shouldly;
 using Xunit;
+using Comment = Comments.Models.Comment;
 
 namespace Comments.Test.UnitTests
 {
     public class SubmitServiceTests : Infrastructure.TestBase
 	{
 		[Fact]
-		public void Update_Comment_When_Submitted()
+		public async Task Update_Comment_When_Submitted()
 		{
 			//Arrange
 			ResetDatabase();
@@ -30,11 +32,11 @@ namespace Comments.Test.UnitTests
 			var commentService = new CommentService(consultationContext, userService, _consultationService, _fakeHttpContextAccessor);
 
 			var locationId = AddLocation(sourceURI, _context);
-			var commentId = AddComment(locationId, "Comment text", false, userId, (int)StatusName.Draft, _context);
+			var commentId = AddComment(locationId, "Comment text", userId, (int)StatusName.Draft, _context);
 
 			//Act
-			var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
-			var result = submitService.Submit(new ViewModels.Submission(commentsAndQuestions.Comments, new List<ViewModels.Answer>()));
+			var commentsAndQuestions = await commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
+			var result = await submitService.Submit(new ViewModels.Submission(commentsAndQuestions.Comments, new List<ViewModels.Answer>()));
 
 			var comment = commentService.GetComment(commentId);
 
@@ -50,7 +52,7 @@ namespace Comments.Test.UnitTests
 		}
 
 		[Fact]
-		public void Update_Answer_When_Submitted()
+		public async Task Update_Answer_When_Submitted()
 		{
 			//Arrange
 			ResetDatabase();
@@ -71,8 +73,8 @@ namespace Comments.Test.UnitTests
 			var answerId = AddAnswer(questionId, userId, "Answer Label");
 
 			//Act
-			var commentsAndQuestions = commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
-			var result = submitService.Submit(new ViewModels.Submission(new List<ViewModels.Comment>(), commentsAndQuestions.Questions.First().Answers));
+			var commentsAndQuestions = await commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
+			var result = await submitService.Submit(new ViewModels.Submission(new List<ViewModels.Comment>(), commentsAndQuestions.Questions.First().Answers));
 
 			var answer = answerService.GetAnswer(answerId);
 
@@ -250,6 +252,94 @@ namespace Comments.Test.UnitTests
 
 			//Assert
 			actualResult.ShouldBe(expectedResult);
+		}
+
+		[Fact]
+		public async Task SubmitToLead_CommentShouldBeDuplicatedAndStatusSetOnParentRecord()
+		{
+			//Arrange
+			ResetDatabase();
+			_context.Database.EnsureCreated();
+
+			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+			var consultationId = 1;
+			var organisationId = 1;
+			var authorisationSession = Guid.NewGuid();
+			var commentText = "Comment text";
+
+			var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, _context);
+			var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(_context, organisationAuthorisationId, authorisationSession, null);
+
+			var userService = FakeUserService.Get(true, "Benjamin Button", null, TestUserType.NotAuthenticated, false, organisationUserId);
+			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
+			var submitService = new SubmitService(consultationContext, userService, _consultationService);
+			var commentService = new CommentService(consultationContext, userService, _consultationService, _fakeHttpContextAccessor);
+
+			var locationId = AddLocation(sourceURI, _context);
+			var commentId = AddComment(locationId, commentText, null, (int)StatusName.Draft, _context, organisationUserId, null, organisationId);
+
+			//Act
+			var commentsAndQuestions = await commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
+			var result = await submitService.SubmitToLead(new ViewModels.SubmissionToLead(commentsAndQuestions.Comments, new List<ViewModels.Answer>(), "testemail@nice.org.uk", true, "Organisation"));
+
+			//Assert
+			result.rowsUpdated.ShouldBe(3);
+			result.context.Comment.First().StatusId.ShouldBe((int)StatusName.SubmittedToLead);
+			result.context.Comment.First().OrganisationId.ShouldBe(organisationId);
+			result.context.Comment.First().ParentCommentId.ShouldBe(null);
+			result.context.Comment.First().OrganisationUserId.ShouldBe(organisationUserId);
+			result.context.Comment.First().CreatedByUserId.ShouldBe(null);
+			result.context.Comment.First().ChildComments.First().StatusId.ShouldBe((int)StatusName.Draft);
+			result.context.Comment.First().ChildComments.First().OrganisationId.ShouldBe(organisationId);
+			result.context.Comment.First().ChildComments.First().ParentCommentId.ShouldBe(commentId);
+			result.context.Comment.First().ChildComments.First().CommentText.ShouldBe(commentText);
+			result.context.Comment.First().ChildComments.First().OrganisationUserId.ShouldBe(organisationUserId);
+			result.context.Comment.First().ChildComments.First().CreatedByUserId.ShouldBe(null);
+		}
+
+		[Fact]
+		public async Task SubmitToLead_AnswerShouldBeDuplicatedAndStatusSetOnParentRecord()
+		{
+			//Arrange
+			ResetDatabase();
+			_context.Database.EnsureCreated();
+
+			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+			var questionTypeId = 99;
+			var consultationId = 1;
+			var organisationId = 1;
+			var authorisationSession = Guid.NewGuid();
+			var answerText = "Answer Label";
+
+			var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, _context);
+			var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(_context, organisationAuthorisationId, authorisationSession, null);
+
+			var userService = FakeUserService.Get(true, "Benjamin Button", null, TestUserType.NotAuthenticated, false, organisationUserId);
+			var consultationContext = new ConsultationsContext(_options, userService, _fakeEncryption);
+			var submitService = new SubmitService(consultationContext, userService, _consultationService);
+			var commentService = new CommentService(consultationContext, userService, _consultationService, _fakeHttpContextAccessor);
+
+			var locationId = AddLocation(sourceURI, _context);
+			var questionId = AddQuestion(locationId, questionTypeId, "Question Label");
+			var answerId = AddAnswer(questionId, null, answerText, (int)StatusName.Draft, _context, organisationUserId, null, organisationId);
+
+			//Act
+			var commentsAndQuestions = await commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
+			var result = await submitService.SubmitToLead(new ViewModels.SubmissionToLead(new List<ViewModels.Comment>(), commentsAndQuestions.Questions.First().Answers, "testemail@nice.org.uk", true, "Organisation"));
+
+			//Assert
+			result.rowsUpdated.ShouldBe(3);
+			result.context.Answer.First().StatusId.ShouldBe((int)StatusName.SubmittedToLead);
+			result.context.Answer.First().OrganisationId.ShouldBe(organisationId);
+			result.context.Answer.First().ParentAnswerId.ShouldBe(null);
+			result.context.Answer.First().OrganisationUserId.ShouldBe(organisationUserId);
+			result.context.Answer.First().CreatedByUserId.ShouldBe(null);
+			result.context.Answer.First().ChildAnswers.First().StatusId.ShouldBe((int)StatusName.Draft);
+			result.context.Answer.First().ChildAnswers.First().OrganisationId.ShouldBe(organisationId);
+			result.context.Answer.First().ChildAnswers.First().ParentAnswerId.ShouldBe(answerId);
+			result.context.Answer.First().ChildAnswers.First().AnswerText.ShouldBe(answerText);
+			result.context.Answer.First().ChildAnswers.First().OrganisationUserId.ShouldBe(organisationUserId);
+			result.context.Answer.First().ChildAnswers.First().CreatedByUserId.ShouldBe(null);
 		}
 	}
 }

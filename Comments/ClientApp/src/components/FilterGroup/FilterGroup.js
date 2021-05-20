@@ -2,7 +2,7 @@
 
 import React, { Component } from "react";
 
-import FilterOption from "../FilterOption/FilterOption";
+import FilterOptionWithHistory from "../FilterOption/FilterOption";
 
 type PropsType = {
 	path: string,
@@ -21,7 +21,7 @@ export class FilterGroup extends Component<PropsType, StateType> {
 
 		this.state = {
 			isExpanded: true,
-			canUseDOM: false
+			canUseDOM: false,
 		};
 
 		this.handleTitleClick = this.handleTitleClick.bind(this);
@@ -36,7 +36,7 @@ export class FilterGroup extends Component<PropsType, StateType> {
 
 	handleTitleClick() {
 		this.setState(prevState => ({
-			isExpanded: !prevState.isExpanded
+			isExpanded: !prevState.isExpanded,
 		  }));
 	}
 
@@ -64,14 +64,14 @@ export class FilterGroup extends Component<PropsType, StateType> {
 					className={`filter-group__heading gtm-topic-list-filter-group-${ this.state.isExpanded ? "collapse" : "expand" }`}
 					onClick={this.handleTitleClick}>
 					<div id={`group-title-${this.props.filterGroup.id}`}>
-						{this.props.filterGroup.title}
+						<span className="visually-hidden">Filter by </span>{this.props.filterGroup.title}
 					</div>
 					{numSelected}
 				</button>
 			) : (
 				<h3 className="filter-group__heading">
 					<div id={`group-title-${this.props.filterGroup.id}`}>
-						{this.props.filterGroup.title}
+						<span className="visually-hidden">Filter by </span>{this.props.filterGroup.title}
 					</div>
 					{numSelected}
 				</h3>
@@ -83,11 +83,11 @@ export class FilterGroup extends Component<PropsType, StateType> {
 				aria-labelledby={`group-title-${this.props.filterGroup.id}`}
 				className="filter-group__options">
 				{this.getOptionsToRender().map(opt =>
-					<FilterOption key={opt.id}
+					<FilterOptionWithHistory key={opt.id}
 						groupId={this.props.filterGroup.id}
 						groupName={this.props.filterGroup.title}
 						path={this.props.path}
-						option={opt} />
+						option={opt} />,
 				)}
 			</div>
 		</div>;

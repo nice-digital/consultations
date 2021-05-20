@@ -7,10 +7,11 @@ namespace Comments.Models
     {
 	    private Answer() //just for EF
 		{
+			ChildAnswers = new HashSet<Answer>();
 			SubmissionAnswer = new HashSet<SubmissionAnswer>();
-		} 
+		}
 
-        public Answer(int questionId, string createdByUserId, string answerText, bool? answerBoolean, Question question, int statusId, Status status)
+		public Answer(int questionId, string createdByUserId, string answerText, bool? answerBoolean, Question question, int statusId, Status status, int? organisationUserId = null, int? parentAnswerId = null, int? organisationId = null)
         {
 	        if (answerText == null && question.QuestionType.TextIsMandatory)
 	        {
@@ -27,7 +28,10 @@ namespace Comments.Models
 	        StatusId = statusId;
 	        Status = status;
 	        SubmissionAnswer = new HashSet<SubmissionAnswer>();
-		}
+	        OrganisationUserId = organisationUserId;
+	        ParentAnswerId = parentAnswerId;
+	        OrganisationId = organisationId;
+        }
 
         public void UpdateFromViewModel(ViewModels.Answer answer)
         {
@@ -43,5 +47,21 @@ namespace Comments.Models
 	        StatusId = answer.StatusId;
 			//Status.UpdateFromViewModel(answer.Status);
         }
-    }
+
+        public UserType AnswerByUserType
+        {
+	        get
+	        {
+		        if (OrganisationUserId.HasValue && !ParentAnswerId.HasValue)
+		        {
+			        return UserType.OrganisationalCommenter;
+		        }
+		        if (ParentAnswerId.HasValue || (!string.IsNullOrEmpty(CreatedByUserId) && OrganisationId.HasValue))
+		        {
+			        return UserType.OrganisationLead;
+		        }
+		        return UserType.IndividualCommenter;
+	        }
+        }
+	}
 }

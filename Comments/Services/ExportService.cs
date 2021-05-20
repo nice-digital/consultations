@@ -1,24 +1,25 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Authentication;
-using System.Security.Claims;
-using Comments.Common;
+﻿using Comments.Common;
 using Comments.Configuration;
 using Comments.Models;
 using Comments.ViewModels;
-using Microsoft.AspNetCore.Http;
-using NICE.Feeds;
+using NICE.Feeds.Indev;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Authentication;
+using System.Threading.Tasks;
 using Location = Comments.Models.Location;
 
 namespace Comments.Services
 {
 	public interface IExportService
 	{
-		(IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetAllDataForConsulation(int consultationId);
+		Task<(IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid)> GetAllDataForConsultation(int consultationId);
 
-		(IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetAllDataForConsulationForCurrentUser(int consultationId);
-		(string ConsultationName, string DocumentName, string ChapterName) GetLocationData(Comments.Models.Location location);
-		string GetConsultationName(Location location);
+		(IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetAllDataForConsultationForCurrentUser(int consultationId);
+		(IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetDataSubmittedToLeadForConsultation(int consultationId);
+		Task<(string ConsultationName, string DocumentName, string ChapterName)> GetLocationData(Comments.Models.Location location);
+		Task<string> GetConsultationName(Location location);
+		IEnumerable<OrganisationUser> GetOrganisationUsersByOrganisationUserIds(IEnumerable<int> organisationUserIds);
 	}
 
     public class ExportService : IExportService
@@ -26,20 +27,14 @@ namespace Comments.Services
 	    private readonly ConsultationsContext _context;
 	    private readonly IUserService _userService;
 	    private readonly IConsultationService _consultationService;
-	    private readonly IFeedService _feedService;
-	    private readonly ClaimsPrincipal _niceUser;
+	    private readonly IIndevFeedService _feedService;
 
-		public ExportService(ConsultationsContext consultationsContext, IUserService userService, IConsultationService consultationService, IHttpContextAccessor httpContextAccessor, IFeedService feedService)
+		public ExportService(ConsultationsContext consultationsContext, IUserService userService, IConsultationService consultationService, IIndevFeedService feedService)
 	    {
 		    var user = userService.GetCurrentUser();
-		    if (!user.IsAuthorised)
+		    if (!user.IsAuthenticatedByAnyMechanism)
 		    {
-			    throw new AuthenticationException("GetCurrentUser returned null");
-		    }
-		    _niceUser = httpContextAccessor.HttpContext.User;
-		    if (!_niceUser.Identity.IsAuthenticated)
-		    {
-			    throw new AuthenticationException("NICE user is not authenticated");
+			    throw new AuthenticationException("User not authenticated");
 		    }
 
 			_context = consultationsContext;
@@ -48,14 +43,14 @@ namespace Comments.Services
 		    _feedService = feedService;
 	    }
 
-	    public (IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetAllDataForConsulation(int consultationId)
+	    public async Task<(IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid)> GetAllDataForConsultation(int consultationId)
 	    {
 		    var userRoles = _userService.GetUserRoles().ToList();
 		    var isAdminUser = userRoles.Any(role => AppSettings.ConsultationListConfig.DownloadRoles.AdminRoles.Contains(role));
-			var consultation = _feedService.GetConsultationList().Single(c => c.ConsultationId.Equals(consultationId));
+			var consultation = (await _feedService.GetConsultationList()).Single(c => c.ConsultationId.Equals(consultationId));
 		    if (!isAdminUser && !userRoles.Contains(consultation.AllowedRole))
 		    {
-				return (null, null, null, new Validate(valid: false, unauthorised: true, message: $"User does not have access to download this type of consultation."));
+				return (null, null, null, new Validate(valid: false, unauthenticated: true, message: $"User does not have access to download this type of consultation."));
 			}
 
 			var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
@@ -69,7 +64,26 @@ namespace Comments.Services
 			return (commentsInDB, answersInDB, questionsInDB, new Validate(true));
 	    }
 
-	    public (IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetAllDataForConsulationForCurrentUser(int consultationId)
+	    public (IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetDataSubmittedToLeadForConsultation(int consultationId)
+	    {
+		    var user = _userService.GetCurrentUser();
+		    var isLead = user.OrganisationsAssignedAsLead.Any();
+		    if (!isLead)
+		    {
+			    return (null, null, null, new Validate(valid: false, unauthenticated: true, message: $"User does not have access to download responses submitted to organisation leads."));
+			}
+
+		    var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
+            var commentsAndAnswers = _context.GetCommentsAndAnswersSubmittedToALeadForURI(sourceURI);
+		    var questionsInDb = new List<Models.Question>();
+
+		    if (commentsAndAnswers.comments == null && commentsAndAnswers.answers == null)
+			    return (null, null, null, new Validate(valid: false, notFound: true, message: $"Consultation id:{consultationId} not found trying to get all data for consultation"));
+
+		    return (commentsAndAnswers.comments, commentsAndAnswers.answers, questionsInDb, new Validate(true));
+	    }
+
+		public (IEnumerable<Models.Comment> comment, IEnumerable<Models.Answer> answer, IEnumerable<Models.Question> question, Validate valid) GetAllDataForConsultationForCurrentUser(int consultationId)
 	    {
 
 		    var sourceURI = ConsultationsUri.CreateConsultationURI(consultationId);
@@ -83,13 +97,13 @@ namespace Comments.Services
 		    return (commentsInDB, answersInDB, questionsInDB, new Validate(true));
 	    }
 
-		public (string ConsultationName, string DocumentName, string ChapterName) GetLocationData(Location location)
+		public async Task<(string ConsultationName, string DocumentName, string ChapterName)> GetLocationData(Location location)
 	    {
 		    var sourceURI = location.SourceURI;
 		    ConsultationsUriElements URIElements = ConsultationsUri.ParseConsultationsUri(sourceURI);
 
-		    var consultationDetails = _consultationService.GetConsultation(URIElements.ConsultationId, BreadcrumbType.None, useFilters:false);
-		    var documents = _consultationService.GetDocuments(URIElements.ConsultationId).documents;
+		    var consultationDetails = await _consultationService.GetConsultation(URIElements.ConsultationId, BreadcrumbType.None, useFilters:false);
+		    var documents = (await _consultationService.GetDocuments(URIElements.ConsultationId)).documents;
 		    var documentDetail = documents.FirstOrDefault(x => x.DocumentId == URIElements.DocumentId);
 
 		    Chapter chapterDetail = null;
@@ -99,13 +113,18 @@ namespace Comments.Services
 		    return (consultationDetails.ConsultationName, documentDetail?.Title, chapterDetail?.Slug);
 	    }
 
-	    public string GetConsultationName(Location location)
+	    public async Task<string> GetConsultationName(Location location)
 	    {
 		    var sourceURI = location.SourceURI;
 		    ConsultationsUriElements URIElements = ConsultationsUri.ParseConsultationsUri(sourceURI);
 
-		    var consultationDetails = _consultationService.GetConsultation(URIElements.ConsultationId,  BreadcrumbType.None, useFilters:false);
+		    var consultationDetails = await _consultationService.GetConsultation(URIElements.ConsultationId,  BreadcrumbType.None, useFilters:false);
 		    return consultationDetails.ConsultationName;
+	    }
+
+	    public IEnumerable<OrganisationUser> GetOrganisationUsersByOrganisationUserIds(IEnumerable<int> organisationUserIds)
+	    {
+		    return _context.GetOrganisationUsersByOrganisationUserIds(organisationUserIds);
 	    }
 	}
 }

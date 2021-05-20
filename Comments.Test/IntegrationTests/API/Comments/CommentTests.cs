@@ -5,14 +5,17 @@ using System.Net.Http;
 using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
+using Comments.Common;
 using Comments.Models;
 using Comments.Services;
 using Comments.Test.Infrastructure;
 using Comments.ViewModels;
+using Microsoft.AspNetCore.TestHost;
 using Newtonsoft.Json;
 using Shouldly;
 using Xunit;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Net.Http.Headers;
 
 namespace Comments.Test.IntegrationTests.API.Comments
 {
@@ -38,7 +41,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
         public async Task Create_Comment(int locationId, string sourceURI)
         {
             //Arrange
-            var comment = new ViewModels.Comment(locationId, sourceURI, null, null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty.ToString(), "comment text", 1, show: true, section: null);
+            var comment = new ViewModels.Comment(locationId, sourceURI, null, null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty.ToString(), "comment text", 1, show: true, sectionHeader: null, sectionNumber: null);
             var content = new StringContent(JsonConvert.SerializeObject(comment), Encoding.UTF8, "application/json");
 
             // Act
@@ -58,7 +61,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
         public async Task Comment_ViewModel_Fails_To_Serialise_With_Invalid_SourceURI(int locationId, string sourceURI)
         {
             //Arrange
-            var comment = new ViewModels.Comment(locationId, sourceURI, null, null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty.ToString(), "comment text", 1, show: true, section: null);
+            var comment = new ViewModels.Comment(locationId, sourceURI, null, null, null, null, null, null, null, 0, DateTime.Now, Guid.Empty.ToString(), "comment text", 1, show: true, sectionHeader: null, sectionNumber: null);
             Exception _ex = null;
 
             // Act
@@ -86,17 +89,17 @@ namespace Comments.Test.IntegrationTests.API.Comments
 			string sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 
             var locationId = AddLocation(sourceURI);
-            AddComment(locationId, "comment text", false, Guid.Empty.ToString());
-            AddComment(locationId, "comment text", false, Guid.Empty.ToString()); //duplicate comment. totally valid.
+            AddComment(locationId, "comment text", Guid.Empty.ToString());
+            AddComment(locationId, "comment text", Guid.Empty.ToString()); //duplicate comment. totally valid.
 
             locationId = AddLocation(sourceURI);
-            AddComment(locationId, "comment text", false, Guid.Empty.ToString()); //different location id, same sourceURI, this should be in the result set
+            AddComment(locationId, "comment text", Guid.Empty.ToString()); //different location id, same sourceURI, this should be in the result set
             
             locationId = AddLocation("/2/1/introduction");
-            AddComment(locationId, "comment text", false, Guid.Empty.ToString()); //different consultation id, this shouldn't be in the result set
+            AddComment(locationId, "comment text", Guid.Empty.ToString()); //different consultation id, this shouldn't be in the result set
             
             locationId = AddLocation("/1/2/introduction");
-            AddComment(locationId, "comment text", false, Guid.Empty.ToString()); //different document id, this shouldn't be in the result set
+            AddComment(locationId, "comment text", Guid.Empty.ToString()); //different document id, this shouldn't be in the result set
             
             // Act
             var response = await _client.GetAsync($"/consultations/api/Comments?sourceURI={WebUtility.UrlEncode(sourceURI)}");
@@ -147,18 +150,18 @@ namespace Comments.Test.IntegrationTests.API.Comments
             var commentText = Guid.NewGuid().ToString();
             var userId = Guid.Empty.ToString();
             var locationId = AddLocation(sourceURI);
-            var commentId = AddComment(locationId, commentText, false, userId);
+            var commentId = AddComment(locationId, commentText, userId);
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 	        var context = new ConsultationsContext(_options, userService, _fakeEncryption);
 			//var submitService = new SubmitService(context, userService, _consultationService);
             var commentService = new CommentService(context, userService, _consultationService, _fakeHttpContextAccessor);
 
-            //Act
-            var response = await _client.DeleteAsync($"consultations/api/Comment/{commentId}");
-            response.EnsureSuccessStatusCode();
+			//Act
+			var response = await _client.DeleteAsync($"consultations/api/Comment/{commentId}");
+			response.EnsureSuccessStatusCode();
 
-            var result = commentService.GetComment(commentId);
+			var result = commentService.GetComment(commentId);
 
             //Assert
             result.validate.NotFound.ShouldBeTrue();
@@ -175,7 +178,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
             var commentText = Guid.NewGuid().ToString();
             var userId = Guid.Empty.ToString();
             var locationId = AddLocation(sourceURI, _context);
-            var commentId = AddComment(locationId, commentText, false, userId, (int)StatusName.Draft, _context);
+            var commentId = AddComment(locationId, commentText, userId, (int)StatusName.Draft, _context);
 
             var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId);
 	       // var submitService = new SubmitService(_context, userService, _consultationService);
@@ -191,13 +194,10 @@ namespace Comments.Test.IntegrationTests.API.Comments
             //Act
             var response = await _client.PutAsync($"consultations/api/Comment/{commentId}", content);
             response.EnsureSuccessStatusCode();
-            var responseString = await response.Content.ReadAsStringAsync();
             var result = commentService.GetComment(commentId);
 
             //Assert
             result.comment.CommentText.ShouldBe(updatedCommentText);
         }
-
-	    
-	}
+    }
 }

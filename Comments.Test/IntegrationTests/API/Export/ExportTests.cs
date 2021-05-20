@@ -1,18 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using Comments.Common;
 using Comments.Configuration;
 using Comments.Models;
 using Comments.Test.Infrastructure;
 using Comments.ViewModels;
 using ExcelDataReader;
-using NICE.Feeds;
+using NICE.Feeds.Indev;
 using NICE.Feeds.Tests.Infrastructure;
 using Shouldly;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using Xunit;
 using TestBase = Comments.Test.Infrastructure.TestBase;
 
@@ -20,12 +19,12 @@ namespace Comments.Test.IntegrationTests.API.Export
 {
 	public class ExportBase : TestBase
 	{
-		protected readonly IFeedService FeedService;
+		protected readonly IIndevFeedService FeedService;
 		public ExportBase(TestUserType testUserType) : base(testUserType, Feed.ConsultationCommentsListMultiple)
 		{
-			var consultationList = new List<NICE.Feeds.Models.Indev.List.ConsultationList>
+			var consultationList = new List<NICE.Feeds.Indev.Models.List.ConsultationList>
 			{
-				new NICE.Feeds.Models.Indev.List.ConsultationList { ConsultationId = 1, AllowedRole = testUserType.ToString() }
+				new NICE.Feeds.Indev.Models.List.ConsultationList { ConsultationId = 1, AllowedRole = testUserType.ToString() }
 			};
 			FeedService = new FakeFeedService(consultationList);
 		}
@@ -35,6 +34,7 @@ namespace Comments.Test.IntegrationTests.API.Export
 	{
 		public ExportTests() : base(TestUserType.CustomFictionalRole)
 		{
+			AppSettings.ConsultationListConfig = TestAppSettings.GetConsultationListConfig();
 		}
 
 		[Fact]
@@ -47,7 +47,7 @@ namespace Comments.Test.IntegrationTests.API.Export
 			var userId = Guid.NewGuid().ToString();
 
 			var locationId = AddLocation("consultations://./consultation/1", _context, "001.000.000.000");
-			var commentId = AddComment(locationId, "Submitted comment", false, userId, (int) StatusName.Submitted,
+			var commentId = AddComment(locationId, "Submitted comment", userId, (int) StatusName.Submitted,
 				_context);
 			var submissionId = AddSubmission(userId, _context);
 			AddSubmissionComments(submissionId, commentId, _context);
@@ -68,6 +68,7 @@ namespace Comments.Test.IntegrationTests.API.Export
 			: base(useRealSubmitService, testUserType, useFakeConsultationService, submittedCommentsAndAnswerCounts)
 		{
 			System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+			AppSettings.ConsultationListConfig = TestAppSettings.GetConsultationListConfig();
 		}
 
 		[Fact]
@@ -80,7 +81,7 @@ namespace Comments.Test.IntegrationTests.API.Export
 			const int consultationId = 1;
 
 			var locationId = AddLocation($"consultations://./consultation/{consultationId}", _context, "001.000.000.000");
-			var commentId = AddComment(locationId, commentText, false, _userId, (int)StatusName.Submitted);
+			var commentId = AddComment(locationId, commentText, _userId, (int)StatusName.Submitted);
 			var submissionId = AddSubmission(_userId);
 			AddSubmissionComments(submissionId, commentId);
 
@@ -100,11 +101,11 @@ namespace Comments.Test.IntegrationTests.API.Export
 				rows.Count.ShouldBe(4);
 
 				var headerRow = rows[2].ItemArray;
-				headerRow.Length.ShouldBe(15);
+				headerRow.Length.ShouldBe(16);
 				headerRow.Any(header => header.ToString().Equals(Constants.Export.ExpressionOfInterestColumnDescription, StringComparison.OrdinalIgnoreCase)).ShouldBeFalse();
 
 				var commentRow = rows[3].ItemArray;
-				commentRow[7].ShouldBe(commentText);
+				commentRow[8].ShouldBe(commentText);
 			}
 		}
 
@@ -118,7 +119,7 @@ namespace Comments.Test.IntegrationTests.API.Export
 			const int consultationId = 1;
 
 			var locationId = AddLocation($"consultations://./consultation/{consultationId}", _context, "001.000.000.000");
-			var commentId = AddComment(locationId, commentText, false, _userId, (int)StatusName.Submitted);
+			var commentId = AddComment(locationId, commentText, _userId, (int)StatusName.Submitted);
 			var submissionId = AddSubmission(_userId, null, organisationExpressionOfInterest: true);
 			AddSubmissionComments(submissionId, commentId);
 
@@ -138,13 +139,13 @@ namespace Comments.Test.IntegrationTests.API.Export
 				rows.Count.ShouldBe(4);
 
 				var headerRow = rows[2].ItemArray;
-				headerRow.Length.ShouldBe(16);
+				headerRow.Length.ShouldBe(17);
 
-				headerRow[15].ToString().ShouldBe(Constants.Export.ExpressionOfInterestColumnDescription);
+				headerRow[16].ToString().ShouldBe(Constants.Export.ExpressionOfInterestColumnDescription);
 
 				var commentRow = rows[3].ItemArray;
-				commentRow[7].ShouldBe(commentText);
-				commentRow[15].ShouldBe(Constants.Export.Yes);
+				commentRow[8].ShouldBe(commentText);
+				commentRow[16].ShouldBe(Constants.Export.Yes);
 			}
 		}
 
@@ -158,7 +159,7 @@ namespace Comments.Test.IntegrationTests.API.Export
 			const int consultationId = 1;
 
 			var locationId = AddLocation($"consultations://./consultation/{consultationId}", _context, "001.000.000.000");
-			var commentId = AddComment(locationId, commentText, false, _userId, (int)StatusName.Submitted);
+			var commentId = AddComment(locationId, commentText, _userId, (int)StatusName.Submitted);
 			var submissionId = AddSubmission(_userId, null, organisationExpressionOfInterest: false);
 			AddSubmissionComments(submissionId, commentId);
 
@@ -178,13 +179,13 @@ namespace Comments.Test.IntegrationTests.API.Export
 				rows.Count.ShouldBe(4);
 
 				var headerRow = rows[2].ItemArray;
-				headerRow.Length.ShouldBe(16);
+				headerRow.Length.ShouldBe(17);
 
-				headerRow[15].ToString().ShouldBe(Constants.Export.ExpressionOfInterestColumnDescription);
+				headerRow[16].ToString().ShouldBe(Constants.Export.ExpressionOfInterestColumnDescription);
 
 				var commentRow = rows[3].ItemArray;
-				commentRow[7].ShouldBe(commentText);
-				commentRow[15].ShouldBe(Constants.Export.No);
+				commentRow[8].ShouldBe(commentText);
+				commentRow[16].ShouldBe(Constants.Export.No);
 			}
 		}
 	}
@@ -207,7 +208,7 @@ namespace Comments.Test.IntegrationTests.API.Export
 			var userId = Guid.NewGuid().ToString();
 
 			var locationId = AddLocation("consultations://./consultation/1", _context, "001.000.000.000");
-			var commentId = AddComment(locationId, "Submitted comment", false, userId, (int)StatusName.Submitted, _context);
+			var commentId = AddComment(locationId, "Submitted comment", userId, (int)StatusName.Submitted, _context);
 			var submissionId = AddSubmission(userId, _context);
 			AddSubmissionComments(submissionId, commentId, _context);
 

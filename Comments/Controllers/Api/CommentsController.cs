@@ -1,9 +1,9 @@
-using Comments.Services;
+﻿using Comments.Services;
 using Comments.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Threading.Tasks;
 
 namespace Comments.Controllers.Api
 {
@@ -19,19 +19,19 @@ namespace Comments.Controllers.Api
             _logger = logger;
         }
 
-		/// <summary>
-		/// GET: eg. consultations/api/Comments?sourceURI=%2Fconsultations%2F1%2F1%2Fchapter-slug
-		/// </summary>
-		/// <param name="sourceURI">this is really the relativeURL eg "/1/1/introduction" on document page</param>
-		/// <returns></returns>
-		[Route("consultations/api/[controller]")]
+        /// <summary>
+        /// GET: eg. consultations/api/Comments?sourceURI=%2Fconsultations%2F1%2F1%2Fchapter-slug
+        /// </summary>
+        /// <param name="relativeURL">this is the relativeURL eg "/1/1/introduction" on document page</param>
+        /// <returns></returns>
+        [Route("consultations/api/[controller]")]
 		[HttpGet]
-        public CommentsAndQuestions Get(string sourceURI)
+        public async Task<CommentsAndQuestions> Get(string sourceURI)
         {
             if (string.IsNullOrWhiteSpace(sourceURI))
                 throw new ArgumentNullException(nameof(sourceURI));
 
-            return _commentService.GetCommentsAndQuestions(relativeURL: sourceURI, urlHelper: Url);
+            return await _commentService.GetCommentsAndQuestions(relativeURL: sourceURI, urlHelper: Url);
         }
 
 		/// <summary>
@@ -42,12 +42,27 @@ namespace Comments.Controllers.Api
 		/// <returns></returns>
 		[Route("consultations/api/[controller]ForReview")]
 	    [HttpGet]
-	    public ReviewPageViewModel Get(string relativeURL, ReviewPageViewModel reviewPageViewModel)
+	    public async Task<ReviewPageViewModel> Get(string relativeURL, ReviewPageViewModel reviewPageViewModel)
 	    {
 			if (string.IsNullOrWhiteSpace(relativeURL))
 				throw new ArgumentNullException(nameof(relativeURL));
 
-			return _commentService.GetCommentsAndQuestionsForReview(relativeURL, urlHelper: Url, reviewPageViewModel);
+			return await _commentService.GetCommentsAndQuestionsForReview(relativeURL, urlHelper: Url, reviewPageViewModel);
 	    }
+
+        /// <summary>
+        /// GET: eg. consultations/api/CommentsForOtherOrganisationCommenters?sourceURI=%2Fconsultations%2F1%2F1%2Fchapter-slug
+        /// </summary>
+        /// <param name="relativeURL">this is the relativeURL eg "/1/1/introduction" on document page</param>
+        /// <returns></returns>
+        [Route("consultations/api/[controller]ForOtherOrganisationCommenters")]
+		[HttpGet]
+		public OrganisationCommentsAndQuestions GetCommentsAndQuestionsFromOtherOrganisationCommenters(string sourceURI)
+		{
+			if (string.IsNullOrWhiteSpace(sourceURI))
+				throw new ArgumentNullException(nameof(sourceURI));
+
+			return _commentService.GetCommentsAndQuestionsFromOtherOrganisationCommenters(relativeURL: sourceURI, urlHelper: Url);
+		}
 	}
 }

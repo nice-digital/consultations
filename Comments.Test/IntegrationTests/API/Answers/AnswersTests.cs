@@ -19,9 +19,10 @@ namespace Comments.Test.IntegrationTests.API.Answers
         [Fact]
         public async Task Create_Answer()
         {
-            // Arrange
-            SetupTestDataInDB();
-            var answer = new ViewModels.Answer(0, "answer text", false, DateTime.Now, Guid.Empty.ToString(), 1, (int)StatusName.Draft);
+			// Arrange
+			ResetDatabase();
+			var questionId = SetupTestDataInDB();
+            var answer = new ViewModels.Answer(0, "answer text", false, DateTime.Now, Guid.Empty.ToString(), questionId, (int)StatusName.Draft);
             var content = new StringContent(JsonConvert.SerializeObject(answer), Encoding.UTF8, "application/json");
 
             // Act

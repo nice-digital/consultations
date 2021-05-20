@@ -9,7 +9,6 @@ describe("[ClientApp] ", () => {
 	describe("Question Component", () => {
 		const fakePropsWithAnswer = {
 			readOnly: false,
-			isVisible: true,
 			key: 1,
 			unique: "unique",
 			question: questionWithAnswer,
@@ -18,7 +17,6 @@ describe("[ClientApp] ", () => {
 
 		const fakePropsWithoutAnswer = {
 			readOnly: false,
-			isVisible: true,
 			key: 1,
 			unique: "unique",
 			question: questionWithoutAnswer,
@@ -27,24 +25,24 @@ describe("[ClientApp] ", () => {
 
 		it("should match snapshot with answer", () => {
 			const wrapper = mount(
-				<Question {...fakePropsWithAnswer} />					
+				<Question {...fakePropsWithAnswer} />,
 			);
 
 			expect(toJson(wrapper, {
 				noKey: true,
-				mode: "deep"
-			})).toMatchSnapshot();			
+				mode: "deep",
+			})).toMatchSnapshot();
 		});
 
 		it("should match snapshot without answer", () => {
 			const wrapper = mount(
-				<Question {...fakePropsWithoutAnswer} />					
+				<Question {...fakePropsWithoutAnswer} />,
 			);
 
 			expect(toJson(wrapper, {
 				noKey: true,
-				mode: "deep"
-			})).toMatchSnapshot();			
+				mode: "deep",
+			})).toMatchSnapshot();
 		});
 	});
 });

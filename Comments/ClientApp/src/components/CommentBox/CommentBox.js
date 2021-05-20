@@ -73,6 +73,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 			commentOn,
 			quote,
 			commentId,
+			commenterEmail,
 		} = this.state.comment;
 		const { documentTitle } = this.props;
 		const unsavedChanges = this.state.unsavedChanges;
@@ -108,8 +109,11 @@ export class CommentBox extends Component<PropsType, StateType> {
 								htmlFor={this.props.unique}>
 								Comment on {commentOn}, {quote}
 							</label>
+							{commenterEmail &&
+							<p className="CommentBox__commentBy mb--0">Comment by: {commenterEmail}</p>
+							}
 							{unsavedChanges &&
-							<p className="CommentBox__validationMessage">You have unsaved changes</p>
+							<p className="CommentBox__validationMessage" role="alert">You have unsaved changes</p>
 							}
 							<textarea
 								data-hj-whitelist

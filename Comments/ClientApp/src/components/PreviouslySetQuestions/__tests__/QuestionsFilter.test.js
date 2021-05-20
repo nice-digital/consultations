@@ -30,7 +30,7 @@ describe("[ClientApp] ", () => {
 				toJson(wrapper, {
 					noKey: true,
 					mode: "deep",
-				})
+				}),
 			).toMatchSnapshot();
 		});
 
@@ -42,7 +42,7 @@ describe("[ClientApp] ", () => {
 				toJson(wrapper, {
 					noKey: true,
 					mode: "deep",
-				})
+				}),
 			).toMatchSnapshot();
 		});
 

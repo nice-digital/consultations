@@ -9,10 +9,10 @@ namespace Comments.Models
 		public DateTime SubmissionDateTime { get; set; }
 		public string SubmissionByUserId { get; set; }
 
-	    public bool RespondingAsOrganisation { get; set; }
+	    public bool? RespondingAsOrganisation { get; set; }
 		public string OrganisationName { get; set; }
 
-		public bool HasTobaccoLinks { get; set; }
+		public bool? HasTobaccoLinks { get; set; }
 		public string TobaccoDisclosure { get; set; }
 
 		public bool? OrganisationExpressionOfInterest { get; set; }

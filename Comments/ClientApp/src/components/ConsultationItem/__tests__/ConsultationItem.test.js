@@ -1,5 +1,3 @@
-/* global jest */
-
 import React from "react";
 import { mount } from "enzyme";
 import { MemoryRouter } from "react-router";
@@ -24,6 +22,9 @@ describe("[ClientApp] ", () => {
 			isUpcoming: false,
 			show: true,
 			basename: "fdfd",
+			showShareWithOrganisationButton: true,
+			allowGenerateOrganisationCode: true,
+			submissionToLeadCount: 15,
 		};
 
 		it("does not render link if document id or chapter slug is null", () => {
@@ -31,9 +32,9 @@ describe("[ClientApp] ", () => {
 			const wrapper = mount(
 				<MemoryRouter>
 					<ConsultationItem {...fakeProps} chapterSlug={null} documentId={null} />
-				</MemoryRouter>
+				</MemoryRouter>,
 			);
-			
+
 			expect(wrapper.find(".card__heading a").length).toEqual(0);
 		});
 
@@ -42,14 +43,14 @@ describe("[ClientApp] ", () => {
 			const wrapper = mount(
 				<MemoryRouter>
 					<ConsultationItem {...fakeProps} />
-				</MemoryRouter>
+				</MemoryRouter>,
 			);
 			
 			expect(
 				toJson(wrapper, {
 					noKey: true,
 					mode: "deep",
-				})
+				}),
 			).toMatchSnapshot();
 		});
 

@@ -3,11 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Text.RegularExpressions;
 using Comments.Configuration;
+using Comments.Models;
+using Comments.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
+using NICE.Identity.Authentication.Sdk.Extensions;
 
 namespace Comments.Common
 {
@@ -115,5 +120,55 @@ namespace Comments.Common
 
 		    return roleList.Where(role => AppSettings.ConsultationListConfig.DownloadRoles.AllRoles.Contains(role));
 	    }
-	}
+		
+	    public static long ToJavaScriptTicksSinceEpoch(this DateTime datetime)
+	    {
+			var javascriptEpochTicks = (new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).Ticks; //c#'s date epoch is MinDate, whereas js is 1-1-1970
+		    return (datetime.ToUniversalTime().Ticks - javascriptEpochTicks) / 10000;
+	    }
+
+	    public static IDictionary<TKey, TValue> Merge<TKey, TValue>(this IDictionary<TKey, TValue> dictA, IDictionary<TKey, TValue> dictB) where TValue : class
+	    {
+		    return dictA.Keys.Union(dictB.Keys).ToDictionary(k => k, k => dictA.ContainsKey(k) ? dictA[k] : dictB[k]);
+	    }
+
+	    public static Dictionary<int, Guid> GetSessionCookies(this IRequestCookieCollection requestCookies)
+	    {
+		    var sessions = new Dictionary<int, Guid>();
+			if (requestCookies != null && requestCookies.Count > 0)
+		    {
+			    var cookies = requestCookies.Where(cookie => cookie.Key.StartsWith(Constants.SessionCookieName)).ToList();
+
+			    if (cookies.Any())
+			    {
+				    foreach (var (cookieKey, cookieValue) in cookies)
+				    {
+					    if (int.TryParse(cookieKey.Substring(Constants.SessionCookieName.Length), out var consultationId)
+					        && Guid.TryParse(cookieValue, out var sessionId)
+					        && !sessions.ContainsKey(consultationId))
+					    {
+						    sessions.Add(consultationId, sessionId);
+					    }
+				    }
+			    }
+		    }
+			return sessions;
+	    }
+
+	    public static IList<ValidatedSession> ValidatedSessions(this ClaimsPrincipal claimsPrincipal)
+	    {
+		    var serialisedSessions = claimsPrincipal.Claims.FirstOrDefault(claim => claim.Type.Equals(Constants.OrgansationAuthentication.ValidatedSessionsClaim) && claim.Issuer.Equals(Constants.OrgansationAuthentication.Issuer))?.Value;
+		    if (string.IsNullOrEmpty(serialisedSessions))
+		    {
+			    return new List<ValidatedSession>();
+		    }
+
+		    return JsonConvert.DeserializeObject<IList<ValidatedSession>>(serialisedSessions);
+	    }
+
+	    public static string StripConsultationsFromPath(this string path)
+	    {
+		    return path.StartsWith(Constants.ConsultationsBasePath) ? path.Substring(Constants.ConsultationsBasePath.Length) : path;
+	    }
+    }
 }

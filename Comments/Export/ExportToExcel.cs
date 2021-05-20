@@ -1,10 +1,11 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Packaging;
 using System.Linq;
 using System.Threading.Tasks;
 using Comments.Common;
+using Comments.Configuration;
 using Comments.Models;
 using Comments.Services;
 using Comments.ViewModels;
@@ -12,6 +13,8 @@ using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.Extensions.Logging;
+using Answer = Comments.Models.Answer;
+using Comment = Comments.Models.Comment;
 using Question = Comments.Models.Question;
 
 namespace Comments.Export
@@ -86,14 +89,21 @@ namespace Comments.Export
 					Width = 25,
 					CustomWidth = true
 				},
-				new Column // Section
+				new Column // SectionHeader
 				{
 					Min = 6,
 					Max = 6,
 					Width = 25,
 					CustomWidth = true
 				},
-				new Column // Selected text
+                new Column // SectionNumber
+                {
+                    Min = 6,
+                    Max = 6,
+                    Width = 25,
+                    CustomWidth = true
+                },
+                new Column // Selected text
 				{
 					Min = 7,
 					Max = 7,
@@ -205,11 +215,17 @@ namespace Comments.Export
 
 			cell = new Cell();
 			cell.DataType = CellValues.String;
-			cell.CellValue = new CellValue("Section");
+			cell.CellValue = new CellValue("Section Header");
 			cell.StyleIndex = 2;
 			headerRow.AppendChild(cell);
 
-			cell = new Cell();
+            cell = new Cell();
+            cell.DataType = CellValues.String;
+            cell.CellValue = new CellValue("Section Number");
+            cell.StyleIndex = 2;
+            headerRow.AppendChild(cell);
+
+            cell = new Cell();
 			cell.DataType = CellValues.String;
 			cell.CellValue = new CellValue("Selected Text");
 			cell.StyleIndex = 2;
@@ -315,11 +331,17 @@ namespace Comments.Export
 
 				cell = new Cell();
 				cell.DataType = CellValues.String;
-				cell.CellValue = new CellValue(row.Section);
+				cell.CellValue = new CellValue(row.SectionHeader);
 				cell.StyleIndex = 1;
 				dataRow.AppendChild(cell);
 
-				cell = new Cell();
+                cell = new Cell();
+                cell.DataType = CellValues.String;
+                cell.CellValue = new CellValue(row.SectionNumber);
+                cell.StyleIndex = 1;
+                dataRow.AppendChild(cell);
+
+                cell = new Cell();
 				cell.DataType = CellValues.String;
 				cell.CellValue = new CellValue(row.Quote);
 				cell.StyleIndex = 1;
@@ -385,40 +407,34 @@ namespace Comments.Export
 				sheet.AppendChild(dataRow);
 			}
 		}
-
+        
 		private async Task<(List<Excel> collatedData, bool showOrganisationExpressionOfInterest)> CollateData(IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers, IEnumerable<Models.Question> questions)
 		{
-			List<Excel> excel = new List<Excel>();
+            var details = await GetUserDetailsAndEmails(comments, answers);
 
-			var userIds = comments.Select(comment => comment.CreatedByUserId).Concat(answers.Select(answer => answer.CreatedByUserId)).Distinct();
-			var currentUserDetails = _userService.GetCurrentUserDetails();
+            List<Excel> excel = new List<Excel>();
+            var excelCellLimit = 32767;
 
-			Dictionary<string, (string displayName, string emailAddress)> userDetailsForUserIds;
-			if (userIds.Count() == 1 && userIds.Single().Equals(currentUserDetails.userId, StringComparison.OrdinalIgnoreCase))
+            foreach (var comment in comments)
 			{
-				userDetailsForUserIds = new Dictionary<string, (string displayName, string emailAddress)>() { {currentUserDetails.userId, (currentUserDetails.displayName, currentUserDetails.emailAddress) }};
-			}
-			else
-			{
-				userDetailsForUserIds = await _userService.GetUserDetailsForUserIds(userIds);
-			}
-
-			foreach (var comment in comments)
-			{
-				var locationDetails = _exportService.GetLocationData(comment.Location);
+				var locationDetails = await _exportService.GetLocationData(comment.Location);
 				var commentOn = CommentOnHelpers.GetCommentOn(comment.Location.SourceURI, comment.Location.RangeStart, comment.Location.HtmlElementID);
-				
-				var excelrow = new Excel()
+                var email = GetEmailForComment(comment, details.userDetailsForUserIds, details.emailAddressesForOrganisationIds);
+                var order = comment.Location.Order;
+                var userName = GetUserNameForComment(comment, details.userDetailsForUserIds);
+                
+                var excelrow = new Excel()
 				{
 					ConsultationName = locationDetails.ConsultationName,
 					DocumentName = locationDetails.DocumentName,
 					ChapterTitle = locationDetails.ChapterName,
-					Section = commentOn == CommentOn.Section || commentOn == CommentOn.SubSection || commentOn == CommentOn.Selection ? comment.Location.Section : null,
+					SectionHeader = commentOn == CommentOn.Section || commentOn == CommentOn.SubSection || commentOn == CommentOn.Selection ? comment.Location.SectionHeader : null,
+                    SectionNumber = comment.Location.SectionNumber,
 					Quote = commentOn  == CommentOn.Selection ? comment.Location.Quote : null,
-					UserName = userDetailsForUserIds.ContainsKey(comment.CreatedByUserId) ? userDetailsForUserIds[comment.CreatedByUserId].displayName : "Not found",
-					Email = userDetailsForUserIds.ContainsKey(comment.CreatedByUserId) ? userDetailsForUserIds[comment.CreatedByUserId].emailAddress : "Not found",
+					UserName = userName,
+					Email = email,
 					CommentId = comment.CommentId,
-					Comment =  comment.CommentText,
+					Comment =  comment.CommentText.Length > 32767 ? SplitLongComment(comment.CommentText, excel, email, userName, order, locationDetails, comment, commentOn, excelCellLimit): comment.CommentText,
 					QuestionId = null,
 					Question = null,
 					AnswerId = null,
@@ -429,31 +445,36 @@ namespace Comments.Export
 					HasTobaccoLinks =  comment.SubmissionComment.Count> 0 ? comment.SubmissionComment?.First().Submission.HasTobaccoLinks : null,
 					TobaccoIndustryDetails = comment.SubmissionComment.Count > 0? comment.SubmissionComment?.First().Submission.TobaccoDisclosure : null,
 					OrganisationExpressionOfInterest = comment.SubmissionComment.Count > 0 ? comment.SubmissionComment?.First().Submission.OrganisationExpressionOfInterest : null,
-					Order = comment.Location.Order,
+					Order = order,
 			};
 				excel.Add(excelrow);
 			}
 
 			foreach (var answer in answers)
 			{
-				var locationDetails = _exportService.GetLocationData(answer.Question.Location);
-				var excelrow = new Excel()
+				var locationDetails = await _exportService.GetLocationData(answer.Question.Location);
+                var email = GetEmailForAnswer(answer, details.userDetailsForUserIds, details.emailAddressesForOrganisationIds);
+                var order = answer.Question.Location.Order;
+                var userName = GetUserNameForAnswer(answer, details.userDetailsForUserIds);
+
+                var excelrow = new Excel()
 				{
 					ConsultationName = locationDetails.ConsultationName,
 					DocumentName = locationDetails.DocumentName,
 					ChapterTitle = locationDetails.ChapterName,
-					Section = answer.Question.Location.Section,
-					Quote = answer.Question.Location.Quote,
-					UserName = userDetailsForUserIds.ContainsKey(answer.CreatedByUserId) ? userDetailsForUserIds[answer.CreatedByUserId].displayName : "Not found",
-					Email = userDetailsForUserIds.ContainsKey(answer.CreatedByUserId) ? userDetailsForUserIds[answer.CreatedByUserId].emailAddress : "Not found",
+					SectionHeader = answer.Question.Location.SectionHeader,
+                    SectionNumber = answer.Question.Location.SectionNumber,
+                    Quote = answer.Question.Location.Quote,
+					UserName = userName,
+					Email = email,
 					CommentId = null,
 					Comment = null,
 					QuestionId = answer.Question.QuestionId,
 					Question = answer.Question.QuestionText,
 					AnswerId = answer.AnswerId,
 					AnswerBoolean = answer.AnswerBoolean,
-					Answer = answer.AnswerText,
-					OrganisationName = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.OrganisationName : null,
+					Answer = answer.AnswerText.Length > 32767 ? SplitLongAnswer(answer.AnswerText, excel, email, userName, order, locationDetails, answer, excelCellLimit) : answer.AnswerText,
+                    OrganisationName = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.OrganisationName : null,
 					RepresentsOrganisation = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.RespondingAsOrganisation : null,
 					HasTobaccoLinks = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.HasTobaccoLinks : null,
 					TobaccoIndustryDetails = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.TobaccoDisclosure : null,
@@ -465,14 +486,15 @@ namespace Comments.Export
 
 			foreach (var question in questions)
 			{
-				var locationDetails = _exportService.GetLocationData(question.Location);
+				var locationDetails = await _exportService.GetLocationData(question.Location);
 				var excelrow = new Excel()
 				{
 					ConsultationName = locationDetails.ConsultationName,
 					DocumentName = locationDetails.DocumentName,
 					ChapterTitle = locationDetails.ChapterName,
-					Section = question.Location.Section,
-					Quote = question.Location.Quote,
+					SectionHeader = question.Location.SectionHeader,
+                    SectionNumber = question.Location.SectionNumber,
+                    Quote = question.Location.Quote,
 					UserName = null,
 					Email = null,
 					CommentId = null,
@@ -492,11 +514,202 @@ namespace Comments.Export
 				excel.Add(excelrow);
 			}
 
-			var orderedData = excel.OrderBy(o => o.UserName).ThenBy(o => o.Order).ToList();
+			var orderedData = excel.OrderBy(o => o.Email).ThenBy(o => o.Order).ToList();
 
 			var showOrganisationExpressionOfInterest = orderedData.Any(data => data.OrganisationExpressionOfInterest.HasValue);
 
 			return (orderedData, showOrganisationExpressionOfInterest);
+		}
+
+        private string SplitLongComment(string text, List<Excel> excel, string email, string userName, string order, (string ConsultationName, string DocumentName, string ChapterName) locationDetails, Comment comment, CommentOn commentOn, int excelCellLimit)
+        {
+            if (text.Length > excelCellLimit)
+            {
+                var remainingText = "Comment continued... " + text.Substring(excelCellLimit, text.Length - excelCellLimit);
+                var incrementedOrder = order + ".1";
+
+                var excelrow = new Excel()
+                {
+                    ConsultationName = locationDetails.ConsultationName,
+                    DocumentName = locationDetails.DocumentName,
+                    ChapterTitle = locationDetails.ChapterName,
+                    SectionHeader = commentOn == CommentOn.Section || commentOn == CommentOn.SubSection || commentOn == CommentOn.Selection ? comment.Location.SectionHeader : null,
+                    SectionNumber = comment.Location.SectionNumber,
+                    Quote = commentOn == CommentOn.Selection ? comment.Location.Quote : null,
+                    UserName = userName,
+                    Email = email,
+                    CommentId = comment.CommentId,
+                    Comment = remainingText.Length > excelCellLimit ? SplitLongComment(remainingText, excel, email, userName, incrementedOrder, locationDetails, comment, commentOn, excelCellLimit) : remainingText,
+                    QuestionId = null,
+                    Question = null,
+                    AnswerId = null,
+                    AnswerBoolean = null,
+                    Answer = null,
+                    RepresentsOrganisation = comment.SubmissionComment.Count > 0 ? comment.SubmissionComment?.First().Submission.RespondingAsOrganisation : null,
+                    OrganisationName = comment.SubmissionComment.Count > 0 ? comment.SubmissionComment?.First().Submission.OrganisationName : null,
+                    HasTobaccoLinks = comment.SubmissionComment.Count > 0 ? comment.SubmissionComment?.First().Submission.HasTobaccoLinks : null,
+                    TobaccoIndustryDetails = comment.SubmissionComment.Count > 0 ? comment.SubmissionComment?.First().Submission.TobaccoDisclosure : null,
+                    OrganisationExpressionOfInterest = comment.SubmissionComment.Count > 0 ? comment.SubmissionComment?.First().Submission.OrganisationExpressionOfInterest : null,
+                    Order = incrementedOrder,
+                };
+                excel.Add(excelrow);
+            }
+
+            return text.Substring(0, excelCellLimit);
+        }
+
+        private string SplitLongAnswer(string text, List<Excel> excel, string email, string userName, string order, (string ConsultationName, string DocumentName, string ChapterName) locationDetails, Answer answer, int excelCellLimit)
+        {
+            if (text.Length > excelCellLimit)
+            {
+                var remainingText = "Answer continued... " + text.Substring(excelCellLimit, text.Length - excelCellLimit);
+
+                var excelrow = new Excel()
+                {
+                    ConsultationName = locationDetails.ConsultationName,
+                    DocumentName = locationDetails.DocumentName,
+                    ChapterTitle = locationDetails.ChapterName,
+                    SectionHeader = answer.Question.Location.SectionHeader,
+                    Quote = answer.Question.Location.Quote,
+                    UserName = userName,
+                    Email = email,
+                    CommentId = null,
+                    Comment = null,
+                    QuestionId = answer.Question.QuestionId,
+                    Question = answer.Question.QuestionText,
+                    AnswerId = answer.AnswerId,
+                    AnswerBoolean = answer.AnswerBoolean,
+                    Answer = remainingText.Length > excelCellLimit ? SplitLongAnswer(remainingText, excel, email, userName, order, locationDetails, answer, excelCellLimit) : remainingText,
+                    OrganisationName = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.OrganisationName : null,
+                    RepresentsOrganisation = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.RespondingAsOrganisation : null,
+                    HasTobaccoLinks = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.HasTobaccoLinks : null,
+                    TobaccoIndustryDetails = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.TobaccoDisclosure : null,
+                    OrganisationExpressionOfInterest = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.OrganisationExpressionOfInterest : null,
+                    Order = order + ".1",
+                };
+                excel.Add(excelrow);
+            }
+
+            return text.Substring(0, excelCellLimit);
+        }
+
+        private async Task<(Dictionary<string, (string displayName, string emailAddress)> userDetailsForUserIds, Dictionary<int, string> emailAddressesForOrganisationIds)> GetUserDetailsAndEmails(IEnumerable<Models.Comment> comments, IEnumerable<Models.Answer> answers)
+        {
+            var userDetailsForUserIds = new Dictionary<string, (string displayName, string emailAddress)>();
+            var emailAddressesForOrganisationIds = new Dictionary<int, string>();
+
+            var organisationUserIds = comments.Where(comment => comment.OrganisationUserId.HasValue).Select(comment => comment.OrganisationUserId.Value)
+                .Concat(answers.Where(answer => answer.OrganisationUserId.HasValue).Select(answer => answer.OrganisationUserId.Value)).Distinct();
+
+            var currentUser = _userService.GetCurrentUser();
+            var currentUserDetails = _userService.GetCurrentUserDetails();
+            var userDetailsForOrganisationUser = _exportService.GetOrganisationUsersByOrganisationUserIds(organisationUserIds);
+
+            var userRoles = _userService.GetUserRoles().ToList();
+            var isAdminUser = userRoles.Any(role => AppSettings.ConsultationListConfig.DownloadRoles.AdminRoles.Contains(role));
+            var hasTeamRole = userRoles.Any(role => AppSettings.ConsultationListConfig.DownloadRoles.TeamRoles.Contains(role));
+
+            if (organisationUserIds.Count() != 0 && !isAdminUser && !hasTeamRole)
+            {
+            	var commentsSubmittedToLead = comments.Any(c => c.StatusId == (int)StatusName.SubmittedToLead);
+                var answersSubmittedToLead = answers.Any(a => a.StatusId == (int)StatusName.SubmittedToLead);
+                
+                 // When the lead downloads the responses they have sent to NICE, the responses should have the Name and Email Address of that lead against them
+                if (currentUser.IsAuthenticatedByAccounts && !commentsSubmittedToLead && !answersSubmittedToLead)
+				{
+
+                    var userIds = comments.Select(c => c.SubmissionComment.First().Submission.SubmissionByUserId)
+                        .Concat(answers.Select(a => a.SubmissionAnswer.First().Submission.SubmissionByUserId)).Where(user => !string.IsNullOrEmpty(user)).Distinct();
+
+                    // If it is the same lead as submitted to NICE, we can just use their details
+                    if (userIds.Count() == 1 && userIds.Single().Equals(currentUserDetails.userId, StringComparison.OrdinalIgnoreCase))
+                    {
+                        userDetailsForUserIds.Add(currentUserDetails.userId, (currentUserDetails.displayName, currentUserDetails.emailAddress));
+                    }
+                    else
+                    {
+                        // If the lead that is downloading isn't the lead that submitted to NICE, we need to get the submitters details
+                        // We can't get them the same way as we do for internal staff as external users can't get user details from IdAM, so we add a placeholder name
+                        foreach (var userId in userIds)
+                        {
+                            userDetailsForUserIds.Add(userId, ("Organisation lead", ""));
+                        }
+                    }
+                }
+                else
+                {
+                    // When an organisation code user downloads their own responses, or a lead downloads the original responses that were sent to them, they should see the details of the organisational commenter against each response
+                    foreach (var user in userDetailsForOrganisationUser)
+                    {
+                        emailAddressesForOrganisationIds.Add(user.OrganisationUserId, user.EmailAddress);
+                    }
+                }
+            }
+            else
+            {
+                var userIds = comments.Select(comment => comment.CreatedByUserId).Concat(answers.Select(answer => answer.CreatedByUserId)).Where(user => !string.IsNullOrEmpty(user)).Distinct();
+
+                // When a normal user downloads their own comments, we can get their details without going to IdaM
+                if (userIds.Count() == 1 && userIds.Single().Equals(currentUserDetails.userId, StringComparison.OrdinalIgnoreCase))
+                {
+                    userDetailsForUserIds.Add(currentUserDetails.userId, (currentUserDetails.displayName, currentUserDetails.emailAddress));
+                }
+                else
+                {
+                    // When the NICE internal users download responses, they are from multiple users and we need to go to IdAM to get the details for each of the comments
+                    userDetailsForUserIds = await _userService.GetUserDetailsForUserIds(userIds);
+                }
+            }
+
+            return (userDetailsForUserIds, emailAddressesForOrganisationIds);
+        }
+
+        private string GetUserNameForComment(Models.Comment comment, Dictionary<string, (string displayName, string emailAddress)> userDetailsForUserIds)
+		{
+			if (comment.CommentByUserType == UserType.OrganisationalCommenter)
+				return null;
+
+			return userDetailsForUserIds.ContainsKey(comment.SubmissionComment?.First().Submission.SubmissionByUserId)
+				? userDetailsForUserIds[comment.SubmissionComment?.First().Submission.SubmissionByUserId].displayName
+				: "Not found";
+		}
+
+		private string GetEmailForComment(Models.Comment comment, Dictionary<string, (string displayName, string emailAddress)> userDetailsForUserIds, Dictionary<int, string> emailAddressesForOrganisationIds)
+		{
+			if (comment.CommentByUserType == UserType.OrganisationalCommenter)
+			{
+				return emailAddressesForOrganisationIds.ContainsKey(comment.OrganisationUserId.Value)
+					? emailAddressesForOrganisationIds[comment.OrganisationUserId.Value]
+					: "Not found";
+			}
+
+			return userDetailsForUserIds.ContainsKey(comment.SubmissionComment?.First().Submission.SubmissionByUserId)
+				? userDetailsForUserIds[comment.SubmissionComment?.First().Submission.SubmissionByUserId].emailAddress
+				: "Not found";
+		}
+
+		private string GetUserNameForAnswer(Models.Answer answer, Dictionary<string, (string displayName, string emailAddress)> userDetailsForUserIds)
+		{
+			if (answer.AnswerByUserType == UserType.OrganisationalCommenter)
+				return null;
+			
+			return userDetailsForUserIds.ContainsKey(answer.SubmissionAnswer?.First().Submission.SubmissionByUserId)
+				? userDetailsForUserIds[answer.SubmissionAnswer?.First().Submission.SubmissionByUserId].displayName
+				: "Not found";
+		}
+
+		private string GetEmailForAnswer(Models.Answer answer, Dictionary<string, (string displayName, string emailAddress)> userDetailsForUserIds, Dictionary<int, string> emailAddressesForOrganisationIds)
+		{
+			if (answer.AnswerByUserType == UserType.OrganisationalCommenter)
+			{
+				return emailAddressesForOrganisationIds.ContainsKey(answer.OrganisationUserId.Value)
+					? emailAddressesForOrganisationIds[answer.OrganisationUserId.Value]
+					: "Not found";
+			}
+
+			return userDetailsForUserIds.ContainsKey(answer.SubmissionAnswer?.First().Submission.SubmissionByUserId)
+				? userDetailsForUserIds[answer.SubmissionAnswer?.First().Submission.SubmissionByUserId].emailAddress
+				: "Not found";
 		}
 
 		private Stylesheet CreateStyleSheet()
@@ -592,7 +805,7 @@ namespace Comments.Export
 			// Add data to the worksheet
 			SheetData sheetData = worksheetPart.Worksheet.AppendChild(new SheetData());
 
-			var ConsultationTitle = GetConsultationTitle(comments, questions);
+			var ConsultationTitle = await GetConsultationTitle(comments, questions);
 			AppendTitleRow(sheetData, ConsultationTitle);
 
 			var collatedDataAndExpressionOfInterestFlag = await CollateData(comments, answers, questions);
@@ -611,13 +824,13 @@ namespace Comments.Export
 			spreadsheetDocument.Close();
 		}
 
-		private string GetConsultationTitle(IEnumerable<Models.Comment> comments, IEnumerable<Question> questions)
+		private async Task<string> GetConsultationTitle(IEnumerable<Models.Comment> comments, IEnumerable<Question> questions)
 		{
 			if (comments.Count() > 0)
-				return _exportService.GetConsultationName(comments.First().Location);
+				return await _exportService.GetConsultationName(comments.First().Location);
 				
 			if (questions.Count() > 0)
-				return _exportService.GetConsultationName(questions.First().Location);
+				return await _exportService.GetConsultationName(questions.First().Location);
 
 			return "";
 		}

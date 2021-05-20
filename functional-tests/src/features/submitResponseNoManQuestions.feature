@@ -14,6 +14,8 @@ Feature: User unable to submit when they have not completed mandatory questions 
 		When I add the comment "This comment" and submit
 		When I navigate to the Review Page
 		And I click submit my response button
+		Then I expect the alert caution to contain "I understand that once I have submitted my response, I will not be able to edit my comments or provide additional information."
+		And I click yes submit my response button
 		Then I expect the feedback message "You have not stated whether you are submitting the response on behalf of an organisation" to be displayed
 		And I expect the feedback message "You have not disclosed whether you or the organisation you represent have links to the tobacco industry" to be displayed
 		When I scroll the delete button into view

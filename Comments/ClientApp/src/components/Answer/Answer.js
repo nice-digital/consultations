@@ -6,7 +6,6 @@ import { YesNoAnswer } from "./../AnswerTypes/YesNoAnswer/YesNoAnswer";
 
 type PropsType = {
 	staticContext?: any,
-	isVisible: boolean,
 	answer: AnswerType,
 	readOnly: boolean,
 	saveAnswerHandler: Function,
@@ -77,6 +76,7 @@ export class Answer extends Component<PropsType, StateType> {
 			answerText,
 			answerId,
 			questionId,
+			commenterEmail,
 		} = this.state.answer;
 		const unsavedChanges = this.state.unsavedChanges;
 		const answer = this.state.answer;
@@ -87,7 +87,11 @@ export class Answer extends Component<PropsType, StateType> {
 
 			<Fragment>
 				<section role="form">
-					<form onSubmit={e => this.props.saveAnswerHandler(e, answer, this.props.questionId)} className="mb--0">
+					<form onSubmit={e => this.props.saveAnswerHandler(e, answer, this.props.questionId)} className="mb--0 mt--e">
+
+						{commenterEmail &&
+							<p className="CommentBox__commentBy mb--0">Answer by: {commenterEmail}</p>
+						}
 
 						{this.props.questionType.type === "YesNo" &&
 						<YesNoAnswer

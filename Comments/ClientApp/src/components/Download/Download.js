@@ -1,14 +1,14 @@
 // @flow
 
 import React, { Component, Fragment } from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import Helmet from "react-helmet";
 import Cookies from "js-cookie";
 //import stringifyObject from "stringify-object";
 
 import { appendQueryParameter, removeQueryParameter, stripMultipleQueries, queryStringToObject, objectToQueryString, canUseDOM } from "../../helpers/utils";
 import { UserContext } from "../../context/UserContext";
-import { LoginBanner } from "../LoginBanner/LoginBanner";
+import LoginBannerWithRouter from "../LoginBanner/LoginBanner";
 import { Header } from "../Header/Header";
 import { Breadcrumbs } from "../Breadcrumbs/Breadcrumbs";
 import { ConsultationItem } from "../ConsultationItem/ConsultationItem";
@@ -43,7 +43,7 @@ type StateType = {
 	search: string,
 	keywordToFilterBy: string,
 	pageNumber: number,
-	itemsPerPage: number
+	itemsPerPage: number,
 }
 
 type PropsType = {
@@ -116,7 +116,7 @@ export class Download extends Component<PropsType, StateType> {
 				"consultationList",
 				[],
 				Object.assign({ relativeURL: this.props.match.url }, querystringObject, {initialPageView: !this.state.hasInitialData}),
-				preloadedData
+				preloadedData,
 			);
 
 			if (preloadedConsultations) {
@@ -412,12 +412,14 @@ export class Download extends Component<PropsType, StateType> {
 		return (
 			<UserContext.Consumer>
 				{(contextValue: any) => !contextValue.isAuthorised ?
-					<LoginBanner
+					<LoginBannerWithRouter
 						signInButton={false}
 						currentURL={this.props.match.url}
 						signInURL={contextValue.signInURL}
 						registerURL={contextValue.registerURL}
-						signInText="to administer a consultation"
+						signInText="to view a list of consultations"
+						allowOrganisationCodeLogin={false}
+						orgFieldName="download"
 					/>
 					:
 					<Fragment>
@@ -428,57 +430,70 @@ export class Download extends Component<PropsType, StateType> {
 							<div className="grid">
 								<div data-g="12">
 									<Breadcrumbs links={breadcrumbLinkParams} />
-									<Header title="Consultation responses" />
-									<p className="lead">Only online consultations responses appear in the results below.</p>
-									<div className="grid mt--d">
-										<div data-g="12 md:3">
-											<h2 className="h5 mt--0">Filter</h2>
-											{textFilter &&
-												<TextFilterWithHistory
-													onKeywordUpdated={this.keywordToFilterByUpdated}
-													keyword={this.state.keywordToFilterBy}
-													search={this.state.search}
+									<main>
+										<Header title="Consultation responses" />
+										<p className="container container-full ml--0">
+											<span className="lead">
+												Only online consultations responses appear in the results below.
+											</span>
+											&nbsp;&nbsp;
+											{contextValue.organisationalCommentingFeature &&
+												<Link to={"/leadinformation"}>
+													Request commenting lead permission
+												</Link>
+											}
+										</p>
+										<div className="grid mt--d">
+											<div data-g="12 md:3">
+												<h2 className="h5 mt--0">Filter</h2>
+												{textFilter &&
+													<TextFilterWithHistory
+														onKeywordUpdated={this.keywordToFilterByUpdated}
+														keyword={this.state.keywordToFilterBy}
+														search={this.state.search}
+														path={this.state.path}
+														{...textFilter}
+													/>
+												}
+												{!isAdminUser &&
+													<FilterPanel filters={contributionFilter} path={path} />
+												}
+												{teamFilter &&
+													<FilterPanel filters={teamFilter} path={path} />
+												}
+												<FilterPanel filters={optionFilters} path={path} />
+											</div>
+											<div data-g="12 md:9">
+												<DownloadResultsInfo
+													consultationCount={consultationsToShow.length}
+													paginationPositions={paginationPositions}
+													appliedFilters={this.getAppliedFilters()}
 													path={this.state.path}
-													{...textFilter}
+													isLoading={this.state.loading}
+													onRemoveFilter={this.removeFilter}
 												/>
-											}
-											{!isAdminUser &&
-												<FilterPanel filters={contributionFilter} path={path} />
-											}
-											{teamFilter &&
-												<FilterPanel filters={teamFilter} path={path} />
-											}
-											<FilterPanel filters={optionFilters} path={path} />
-										</div>
-										<div data-g="12 md:9">
-											<DownloadResultsInfo
-												consultationCount={consultationsToShow.length}
-												paginationPositions={paginationPositions}
-												appliedFilters={this.getAppliedFilters()}
-												path={this.state.path}
-												isLoading={this.state.loading}
-												onRemoveFilter={this.removeFilter}
-											/>
 
-											{consultationsToShow.length > 0 ? (
-												<ul className="list--unstyled">
-													{consultationsPaginated.map((item, idx) =>
-														<ConsultationItem key={idx}
-															basename={this.props.basename}
-															{...item}
-														/>
-													)}
-												</ul>
-											) : (<p>No consultations found matching supplied filters.</p>)}
-											<Pagination
-												onChangePage={this.changePage}
-												onChangeAmount={this.changeAmount}
-												itemsPerPage={itemsPerPage}
-												consultationCount={consultationsToShow.length}
-												currentPage={pageNumber}
-											/>
+												{consultationsToShow.length > 0 ? (
+													<ul className="list--unstyled">
+														{consultationsPaginated.map((item, idx) =>
+															<ConsultationItem key={idx}
+																basename={this.props.basename}
+																allowGenerateOrganisationCode={contextValue.organisationalCommentingFeature}
+																{...item}
+															/>,
+														)}
+													</ul>
+												) : (<p>No consultations found matching supplied filters.</p>)}
+												<Pagination
+													onChangePage={this.changePage}
+													onChangeAmount={this.changeAmount}
+													itemsPerPage={itemsPerPage}
+													consultationCount={consultationsToShow.length}
+													currentPage={pageNumber}
+												/>
+											</div>
 										</div>
-									</div>
+									</main>
 								</div>
 							</div>
 						</div>

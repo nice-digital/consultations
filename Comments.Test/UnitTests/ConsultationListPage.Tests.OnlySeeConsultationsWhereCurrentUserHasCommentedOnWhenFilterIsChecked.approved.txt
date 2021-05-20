@@ -18,7 +18,12 @@
                 "IsOpen":false,
                 "IsClosed":true,
                 "IsUpcoming":false,
-                "Show":true
+                "Show":true,
+                "OrganisationCodes":[
+                    
+                ],
+                "ShowShareWithOrganisationButton":false,
+                "SubmissionToLeadCount":null
             },
             {
                 "Title":null,
@@ -36,7 +41,12 @@
                 "IsOpen":false,
                 "IsClosed":true,
                 "IsUpcoming":false,
-                "Show":false
+                "Show":false,
+                "OrganisationCodes":[
+                    
+                ],
+                "ShowShareWithOrganisationButton":false,
+                "SubmissionToLeadCount":null
             }
         ],
         "OptionFilters":[
@@ -91,10 +101,25 @@
             "TeamNames":[
                 
             ],
-            "IsAuthorised":true,
+            "AuthenticatedBy":1,
+            "AuthenticationType":"Auth0",
+            "IsAuthenticatedByAnyMechanism":true,
             "DisplayName":"Benjamin Button",
             "UserId":"00000000-0000-0000-0000-000000000000",
-            "OrganisationName":null
+            "OrganisationsAssignedAsLead":[
+                
+            ],
+            "ValidatedSessions":[
+                
+            ],
+            "ValidatedOrganisationUserIds":[
+                
+            ],
+            "ValidatedOrganisationIds":[
+                
+            ],
+            "IsAuthenticatedByAccounts":true,
+            "IsAuthenticatedByOrganisationCookie":false
         },
         "InitialPageView":false,
         "Status":[
@@ -108,8 +133,9 @@
     },
     "Item2":{
         "Valid":true,
-        "Unauthorised":false,
+        "Unauthenticated":false,
         "NotFound":false,
-        "Message":null
+        "Message":null,
+        "Unauthorised":false
     }
 }

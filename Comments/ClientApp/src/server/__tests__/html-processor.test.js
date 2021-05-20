@@ -93,13 +93,13 @@ describe("HTML processor", () => {
 		it("replaces supplied environment variable", () => {
 			let result = replaceAccountsEnvironment(`<script data-environment="Beta"
 			data-search="/search?q=%term" data-typeaheadtype="remote" </script>`, "Live");
-			expect(result).toContain(`data-environment="Live"`);
+			expect(result).toContain("data-environment=\"Live\"");
 		});
 
 		it("replaces supplied environment variable", () => {
 			let result = replaceAccountsEnvironment(`<script data-environment=""
 			data-search="/search?q=%term" data-typeaheadtype="remote" </script>`, "Live");
-			expect(result).toContain(`data-environment="Live"`);
+			expect(result).toContain("data-environment=\"Live\"");
 		});
 	});
 });

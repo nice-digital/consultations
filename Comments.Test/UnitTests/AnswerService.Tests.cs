@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Comments.Models;
 using Comments.Services;
 using Comments.Test.Infrastructure;
@@ -70,7 +71,7 @@ namespace Comments.Test.UnitTests
             var viewModel = new AnswerService(new ConsultationsContext(_options, userService, _fakeEncryption), userService).GetAnswer(1);
 
             //Assert
-            viewModel.validate.Unauthorised.ShouldBeTrue();
+            viewModel.validate.Unauthenticated.ShouldBeTrue();
         }
 
         [Fact]
@@ -165,7 +166,7 @@ namespace Comments.Test.UnitTests
             var questionId = AddQuestion(locationId, questionTypeId, questionText);
 
             var questionType = new QuestionType(description, false, true, null);
-            var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null);
+            var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null, null);
             var question = new Question(locationId, questionText, questionTypeId, location, questionType, null);
 
             var answer = new Answer(questionId, userId, answerText, false, question, (int)StatusName.Draft, null);
@@ -201,12 +202,12 @@ namespace Comments.Test.UnitTests
             var viewModel = new AnswerService(new ConsultationsContext(_options, _fakeUserService, _fakeEncryption), FakeUserService.Get(isAuthenticated: false)).GetAnswer(1);
 
             //Assert
-            viewModel.validate.Unauthorised.ShouldBeTrue();
+            viewModel.validate.Unauthenticated.ShouldBeTrue();
             viewModel.answer.ShouldBeNull();
         }
 
         [Fact]
-        public void Only_own_Answers_returned_when_logged_in()
+        public async Task Only_own_Answers_returned_when_logged_in()
         {
             //Arrange
             ResetDatabase();
@@ -228,7 +229,7 @@ namespace Comments.Test.UnitTests
 			var commentService = new CommentService(context, userService, _consultationService, _fakeHttpContextAccessor);
 
             // Act
-            var viewModel = commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
+            var viewModel = await commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
             var questionViewModel = viewModel.Questions.SingleOrDefault(q => q.QuestionId.Equals(questionId));
 
             //Assert

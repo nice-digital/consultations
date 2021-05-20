@@ -37,14 +37,13 @@ namespace Comments.Services
         public User GetCurrentUser()
         {
             var contextUser = _httpContextAccessor.HttpContext?.User;
-
-            return new User(contextUser?.Identity.IsAuthenticated ?? false, contextUser?.DisplayName(), contextUser?.NameIdentifier());
+            return new User(contextUser);
         }
 
         public (string userId, string displayName, string emailAddress) GetCurrentUserDetails()
         {
 	        var contextUser = _httpContextAccessor.HttpContext?.User;
-	        if (contextUser != null && contextUser.Identity.IsAuthenticated)
+	        if (contextUser != null && contextUser.Identity != null && contextUser.Identity.IsAuthenticated)
 	        {
 		        return (contextUser.NameIdentifier(), contextUser.DisplayName(), contextUser.EmailAddress());
 	        }
@@ -53,12 +52,12 @@ namespace Comments.Services
 
 		public SignInDetails GetCurrentUserSignInDetails(string returnURL, IUrlHelper urlHelper)
 	    {
-			var user = GetCurrentUser();
+		    var currentUser = GetCurrentUser();
 
-		    var signInURL = urlHelper.Action(Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnURL = returnURL.ToConsultationsRelativeUrl() });
+			var signInURL = urlHelper.Action(Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnURL = returnURL.ToConsultationsRelativeUrl() });
 		    var registerURL = urlHelper.Action(Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnURL = returnURL.ToConsultationsRelativeUrl(), goToRegisterPage = true });
-
-			return new SignInDetails(user, signInURL, registerURL);
+			
+			return new SignInDetails(currentUser, signInURL, registerURL);
 		}
 
 	    public async Task<Dictionary<string, (string displayName, string emailAddress)>> GetUserDetailsForUserIds(IEnumerable<string> userIds)
@@ -94,12 +93,12 @@ namespace Comments.Services
 		    }
 
 		    var currentUser = user ?? GetCurrentUser();
-		    if (!currentUser.IsAuthorised)
+		    if (!currentUser.IsAuthenticatedByAccounts)
 		    {
 			    return new Validate(false, true, false, "User is not authorised");
 		    }
 		    var niceUser = _httpContextAccessor.HttpContext.User;
-		    if (!niceUser.Identity.IsAuthenticated)
+		    if (niceUser.Identity == null || !niceUser.Identity.IsAuthenticated)
 		    {
 			    return new Validate(false, false, false, "Not authenticated");
 		    }

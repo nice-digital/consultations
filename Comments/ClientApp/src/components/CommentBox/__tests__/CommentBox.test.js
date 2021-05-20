@@ -1,13 +1,9 @@
+/* global jest */
+
 import React from "react";
 import { shallow, mount } from "enzyme";
-// import {MemoryRouter} from "react-router";
 import { CommentBox } from "../CommentBox";
-import sampleComment from "./sample";
-import axios from "axios";
-import MockAdapter from "axios-mock-adapter";
-import { nextTick } from "../../../helpers/utils";
-
-const mock = new MockAdapter(axios);
+import sampleComment from "./sample.json";
 
 describe("[ClientApp] ", () => {
 	describe("CommentBox Component", () => {

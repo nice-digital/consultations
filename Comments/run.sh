@@ -20,6 +20,10 @@ jq \
     --arg indevDraftPreviewDetailFeedPath "$INDEV_DRAFT_PREVIEW_DETAIL" \
     --arg indevPublishedPreviewDetailFeedPath "$INDEV_PUBLISHED_PREVIEW_DETAIL" \
     --arg indevListFeedPath "$INDEV_LIST" \
+    --arg indevIdamApiIdentifier "$INDEV_IDAM_CONFIG_APIIDENTIFIER" \
+    --arg indevIdamClientId "$INDEV_IDAM_CONFIG_CLIENTID" \
+    --arg indevIdamClientSecret "$INDEV_IDAM_CONFIG_CLIENTSECRET" \
+    --arg indevIdamDomain "$INDEV_IDAM_CONFIG_DOMAIN" \
     --arg gilliamClientCertificateBase64 "$GILLIAM_CLIENT_CERTIFICATE_BASE64" \
     --arg gilliamBasePath "$GILLIAM_BASE_PATH" \
     --arg gilliamGetClaimsUrl "$GILLIAM_GET_CLAIMS_URL" \
@@ -36,6 +40,8 @@ jq \
     --arg teamRoles1 "$TEAMROLES1" \
     --arg teamRoles2 "$TEAMROLES2" \
     --arg teamRoles3 "$TEAMROLES3" \
+    --arg OrgCommenting "$ORG_COMMENTING" \
+    --arg RedisConnectionString "$REDIS_CONNECTION_STRING" \
     '
     .ConnectionStrings.DefaultConnection = $defaultConnection |
     .Logging.LogFilePath = $loggingLogFilePath |
@@ -43,7 +49,7 @@ jq \
     .AppSettings.Environment.SecureSite = $appSettingsEnvironmentSecureSite |
     .AppSettings.Environment.Realm = $appSettingsEnvironmentRealm |
     .AppSettings.Environment.AccountsEnvironment = $appSettingsEnvironmentAccountsEnv |
-    .Feeds.IndevApiKey = $indevApiKey |
+    .Feeds.ApiKey = $indevApiKey |
     .Feeds.IndevBasePath = $indevBasePath |
     .Feeds.IndevPublishedChapterFeedPath = $indevPublishedChapterFeedPath |
     .Feeds.IndevDraftPreviewChapterFeedPath = $indevDraftPreviewChapterFeedPath |
@@ -51,6 +57,10 @@ jq \
     .Feeds.IndevDraftPreviewDetailFeedPath = $indevDraftPreviewDetailFeedPath |
     .Feeds.IndevPublishedPreviewDetailFeedPath = $indevPublishedPreviewDetailFeedPath |
     .Feeds.IndevListFeedPath = $indevListFeedPath |
+    .Feeds.IndevIDAMConfig.APIIdentifier = $indevIdamApiIdentifier |
+    .Feeds.IndevIDAMConfig.ClientId = $indevIdamClientId |
+    .Feeds.IndevIDAMConfig.ClientSecret = $indevIdamClientSecret |
+    .Feeds.IndevIDAMConfig.Domain = $indevIdamDomain |
     .Gilliam.GilliamBasePath = $gilliamBasePath |
     .Gilliam.GetClaimsUrl = $gilliamGetClaimsUrl |
     .Gilliam.Realm = $gilliamRealm |
@@ -63,10 +73,14 @@ jq \
     .WebAppConfiguration.GoogleTrackingId = $googleTrackingId |
     .Encryption.Key = $encryptionKey |
     .Encryption.IV = $encryptionIV |
+    .FeatureManagement.OrganisationalCommenting = true |
+    .FeatureManagement.IndevUsingIDAMAuth = true |
     .ConsultationList.DownloadRoles.AdminRoles |= .+ [$adminRole] |
     .ConsultationList.DownloadRoles.TeamRoles |= .+ [$teamRoles1] |
     .ConsultationList.DownloadRoles.TeamRoles |= .+ [$teamRoles2] |
-    .ConsultationList.DownloadRoles.TeamRoles |= .+ [$teamRoles3]
+    .ConsultationList.DownloadRoles.TeamRoles |= .+ [$teamRoles3] |
+    .WebAppConfiguration.RedisServiceConfiguration.ConnectionString = $RedisConnectionString |
+    .WebAppConfiguration.RedisServiceConfiguration.Enabled = true
     '\
     appsettings.json > _appsettings.json \
     && mv _appsettings.json appsettings.json

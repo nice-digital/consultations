@@ -24,7 +24,7 @@ namespace Comments.Test.IntegrationTests.API.Documents
 
 	        //Assert
 	        response.StatusCode.ShouldBe(HttpStatusCode.InternalServerError);
-	        responseString.ShouldMatchApproved(new Func<string, string>[] { Scrubbers.ScrubErrorMessage });
+	        responseString.ShouldMatchApproved(new Func<string, string>[] { Scrubbers.ScrubErrorMessage, Scrubbers.ScrubStackTraceString });
 		}
 
         [Fact]

@@ -4,6 +4,7 @@ import React, { Component, Fragment } from "react";
 import { Helmet } from "react-helmet";
 import { withRouter } from "react-router";
 import objectHash from "object-hash";
+import Moment from "react-moment";
 
 import preload from "../../data/pre-loader";
 import { load } from "./../../data/loader";
@@ -12,12 +13,12 @@ import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
 import { tagManager } from "../../helpers/tag-manager";
 import { ProcessDocumentHtml } from "../../document-processing/ProcessDocumentHtml";
-import { LoginBanner } from "./../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
 import { Selection } from "../Selection/Selection";
 import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
 import { Header } from "../Header/Header";
 import { Tutorial } from "../Tutorial/Tutorial";
+import { Alert } from "@nice-digital/nds-alert";
 
 type PropsType = {
 	staticContext: {
@@ -44,6 +45,7 @@ type StateType = {
 	},
 	allowComments: boolean,
 	error: ErrorType,
+	allowOrganisationCodeLogin: boolean,
 };
 
 type DocumentsType = Array<Object>;
@@ -66,6 +68,7 @@ export class Document extends Component<PropsType, StateType> {
 				hasError: false,
 				message: null,
 			},
+			allowOrganisationCodeLogin: false,
 		};
 
 		if (this.props) {
@@ -110,8 +113,8 @@ export class Document extends Component<PropsType, StateType> {
 				}
 				const allowComments = preloadedConsultation.consultationState.hasAnyDocumentsSupportingComments &&
 					preloadedConsultation.consultationState.consultationIsOpen &&
-					!preloadedConsultation.consultationState.userHasSubmitted;
-
+					!preloadedConsultation.consultationState.userHasSubmitted &&
+					!preloadedConsultation.consultationState.submittedDate;
 
 				if (preloadedChapter) {
 					preloadedChapter = this.addChapterDetailsToSections(preloadedChapter);
@@ -129,9 +132,14 @@ export class Document extends Component<PropsType, StateType> {
 						hasError: false,
 						message: null,
 					},
+					allowOrganisationCodeLogin: preloadedConsultation.consultationState.consultationIsOpen,
 				};
 			}
 		}
+	}
+
+	getDocumentTitle = () => {
+		return this.state.consultationData.title;
 	}
 
 	getChapterData = (params: Object) => {
@@ -153,7 +161,7 @@ export class Document extends Component<PropsType, StateType> {
 						message: "chapterData " + err,
 					},
 				});
-			}
+			},
 			);
 
 		documentsData = load("documents", undefined, [], {consultationId})
@@ -191,17 +199,19 @@ export class Document extends Component<PropsType, StateType> {
 	componentDidMount() {
 		if (!this.state.hasInitialData) {
 			this.gatherData()
-				.then(data => {
+				.then(function(data) {
 					const allowComments =
 						data.consultationData.consultationState.hasAnyDocumentsSupportingComments &&
 						data.consultationData.consultationState.consultationIsOpen &&
-						!data.consultationData.consultationState.userHasSubmitted;
+						!data.consultationData.consultationState.userHasSubmitted &&
+						!data.consultationData.consultationState.submittedDate;
 					this.addChapterDetailsToSections(data.chapterData);
 					this.setState({
 						...data,
 						loading: false,
 						hasInitialData: true,
 						allowComments: allowComments,
+						allowOrganisationCodeLogin: data.consultationData.consultationState.consultationIsOpen,
 					}, () => {
 						tagManager({
 							event: "pageview",
@@ -211,7 +221,7 @@ export class Document extends Component<PropsType, StateType> {
 						});
 					});
 					pullFocusByQuerySelector("#root");
-				})
+				}.bind(this))
 				.catch(err => {
 					this.setState({
 						error: {
@@ -284,7 +294,7 @@ export class Document extends Component<PropsType, StateType> {
 		chapterSlug: string,
 		consultationId: number,
 		documents: any,
-		title: string
+		title: string,
 	) => {
 		if (!documentId) return null;
 		const isCurrentDocument = d => d.documentId === parseInt(documentId, 0);
@@ -310,7 +320,7 @@ export class Document extends Component<PropsType, StateType> {
 		title: string,
 		documents: DocumentsType,
 		currentDocumentFromRoute: number,
-		currentConsultationFromRoute: number
+		currentConsultationFromRoute: number,
 	) => {
 		if (!documents) return null;
 
@@ -419,7 +429,7 @@ export class Document extends Component<PropsType, StateType> {
 			"Supporting documents",
 			documentsData,
 			documentId,
-			consultationId
+			consultationId,
 		);
 
 		return (
@@ -427,16 +437,9 @@ export class Document extends Component<PropsType, StateType> {
 				<Helmet>
 					<title>{this.getPageTitle()}</title>
 				</Helmet>
-				<UserContext.Consumer>
-					{(contextValue: any) => !contextValue.isAuthorised ?
-						<LoginBanner signInButton={false}
-												 currentURL={this.props.match.url}
-												 signInURL={contextValue.signInURL}
-												 registerURL={contextValue.registerURL}/>
-						: /* if contextValue.isAuthorised... */ null}
-				</UserContext.Consumer>
-				{ this.state.allowComments &&
-					<Tutorial/> }
+				{this.state.allowComments &&
+					<Tutorial/>
+				}
 				<div className="container">
 					<div className="grid">
 						<div data-g="12">
@@ -446,39 +449,67 @@ export class Document extends Component<PropsType, StateType> {
 									<strong>The content on this page is not current guidance and is only for the purposes of the consultation process.</strong>
 								</div>
 							}
-							<main role="main">
+							<main>
 								<div className="page-header">
-									<Header
-										title={currentDocumentTitle}
-										reference={reference}
-										consultationState={this.state.consultationData.consultationState}/>
+									<UserContext.Consumer>
+										{(contextValue: ContextType) => {
+											return (
+												<>
+													<Header
+														title={currentDocumentTitle}
+														reference={reference}
+														consultationState={this.state.consultationData.consultationState}
+														allowRegisterOrganisationLeadLink={contextValue.organisationalCommentingFeature}/>
+
+													{(this.state.consultationData.consultationState.consultationIsOpen && !this.state.consultationData.consultationState.submittedDate) &&
+														<Alert type="info" role="status" aria-live="polite">
+															<p>We have updated this service so that members of the same organisation can now collaborate on a joint online response.</p>
+															<p>Read our <a href="https://www.nice.org.uk/news/blog/groups-and-organisations-can-work-together-on-public-consultations-response">blog</a> to learn more.</p>
+														</Alert>
+													}
+
+													{this.state.consultationData.consultationState.submittedDate &&
+														<Alert type="info" role="status" aria-live="polite">
+															<p>You submitted your response to this consultation on <Moment format="D MMMM YYYY" date={this.state.consultationData.consultationState.submittedDate}/>, you cannot add, edit or provide additional information.</p>
+														</Alert>
+													}
+
+													{contextValue.isOrganisationCommenter && !contextValue.isLead && !this.state.consultationData.consultationState.submittedDate &&
+														<Alert type="info" role="status" aria-live="polite">
+															<p>You are commenting on behalf of {contextValue.organisationName}.</p>
+															<p>When you submit your response it will be submitted to the organisational lead at {contextValue.organisationName}. <strong>On submission your email address and responses will be visible to other members or associates of your organisation who are using the same commenting code.</strong></p>
+														</Alert>
+													}
+												</>
+											);}}
+									</UserContext.Consumer>
+
 									{this.state.allowComments &&
-									<button
-										data-gtm="comment-on-document-button"
-										data-qa-sel="comment-on-consultation-document"
-										className="btn btn--cta"
-										onClick={e => {
-											e.preventDefault();
-											this.props.onNewCommentClick(e, {
-												sourceURI: this.props.match.url,
-												commentText: "",
-												commentOn: "Document",
-												quote: currentDocumentTitle,
-												order: 0,
-												section: null,
-											});
-											tagManager({
-												event: "generic",
-												category: "Consultation comments page",
-												action: "Clicked",
-												label: "Comment on document",
-											});
-										}}>
-										Comment on this document
-									</button>
+										<button
+											data-gtm="comment-on-document-button"
+											data-qa-sel="comment-on-consultation-document"
+											className="btn btn--cta"
+											onClick={e => {
+												e.preventDefault();
+												this.props.onNewCommentClick(e, {
+													sourceURI: this.props.match.url,
+													commentText: "",
+													commentOn: "Document",
+													quote: currentDocumentTitle,
+													order: 0,
+													section: null,
+												});
+												tagManager({
+													event: "generic",
+													category: "Consultation comments page",
+													action: "Clicked",
+													label: "Comment on document",
+												});
+											}}>
+											Comment on this document
+										</button>
 									}
 								</div>
-
 
 								<button
 									className="screenreader-button"
@@ -498,7 +529,7 @@ export class Document extends Component<PropsType, StateType> {
 												this.props.match.params.chapterSlug,
 												consultationId,
 												documentsData,
-												"Chapters in this document"
+												"Chapters in this document",
 											)}/>
 										<StackedNav
 											links={this.getDocumentLinks(
@@ -506,7 +537,7 @@ export class Document extends Component<PropsType, StateType> {
 												"Other consultation documents you can comment on",
 												documentsData,
 												documentId,
-												consultationId
+												consultationId,
 											)}/>
 										{supportingDocs && supportingDocs.links && supportingDocs.links.length !== 0 ?
 											<StackedNav links={supportingDocs}/>
@@ -550,6 +581,7 @@ export class Document extends Component<PropsType, StateType> {
 									{/* document column */}
 									<div data-g="12 md:6 md:pull:3" className="documentColumn">
 										<div id="content-start"
+											aria-live="polite"
 											className={`document-comment-container ${
 												this.state.loading ? "loading" : ""}`}>
 											<Selection newCommentFunc={this.props.onNewCommentClick}
@@ -571,3 +603,4 @@ export class Document extends Component<PropsType, StateType> {
 }
 
 export default withRouter(Document);
+Document.contextType = UserContext;

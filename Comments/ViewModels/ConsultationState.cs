@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,7 +7,7 @@ namespace Comments.ViewModels
 	public class ConsultationState
 	{
 		public ConsultationState(DateTime startDate, DateTime endDate, bool hasQuestions, bool hasUserSuppliedAnswers, bool hasUserSuppliedComments,
-			 DateTime? submittedDate, IEnumerable<int> documentIdsWhichSupportComments)
+			 DateTime? submittedDate, IEnumerable<int> documentIdsWhichSupportComments, bool leadHasBeenSentResponse)
 		{
 			StartDate = startDate;
 			EndDate = endDate;
@@ -18,6 +18,7 @@ namespace Comments.ViewModels
 			//ConsultationSupportsQuestions = consultationSupportsQuestions;
 			//_documentIdsWhichSupportQuestions = documentIdsWhichSupportQuestions;
 			_documentIdsWhichSupportComments = documentIdsWhichSupportComments;
+			LeadHasBeenSentResponse = leadHasBeenSentResponse;
 		}
 
 		public DateTime StartDate { get; private set; }
@@ -26,6 +27,7 @@ namespace Comments.ViewModels
 		public bool HasQuestions { get; private set; }
 		public bool HasUserSuppliedAnswers { get; private set; }
 		public bool HasUserSuppliedComments { get; private set; }
+		public bool LeadHasBeenSentResponse { get; set; }
 		public DateTime? SubmittedDate { get; private set; }
 
 		private readonly IEnumerable<int> _documentIdsWhichSupportComments;
@@ -38,9 +40,6 @@ namespace Comments.ViewModels
 		public bool ConsultationHasEnded => DateTime.Now > EndDate;
 		public bool SupportsSubmission => ConsultationIsOpen && SubmittedDate==null && (HasUserSuppliedAnswers || HasUserSuppliedComments);
 		public bool SupportsDownload => (HasUserSuppliedAnswers || HasUserSuppliedComments);
-
-		public bool ShouldShowDrawer => HasQuestions || DocumentIdsWhichSupportComments.Any() || 
-		                                HasUserSuppliedAnswers || HasUserSuppliedComments;
 
 		public bool ShouldShowCommentsTab => DocumentIdsWhichSupportComments.Any() ||
 		                                     HasUserSuppliedComments;

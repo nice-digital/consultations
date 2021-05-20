@@ -1,16 +1,14 @@
 /* global jest */
 import React from "react";
-import { shallow, mount } from "enzyme";
+import { mount } from "enzyme";
 import { Answer } from "../Answer";
 import answerWithAnswer from "./answerWithAnswer.json";
 import answerWithoutAnswer from "./answerWithoutAnswer.json";
 import toJson from "enzyme-to-json";
-import { nextTick } from "../../../helpers/utils";
 
 describe("[ClientApp] ", () => {
 	describe("Answer Component", () => {
 		const answerPropsWithAnswer = {
-			isVisible: true,
 			answer: answerWithAnswer,
 			readOnly: false,
 			saveHandler: jest.fn(),
@@ -19,11 +17,10 @@ describe("[ClientApp] ", () => {
 			updateUnsavedIds: jest.fn(),
 			questionType: {
 				type: "Text",
-			}
+			},
 		};
 
 		const answerPropsWithoutAnswer = {
-			isVisible: true,
 			answer: answerWithoutAnswer,
 			readOnly: false,
 			saveHandler: jest.fn(),
@@ -32,14 +29,14 @@ describe("[ClientApp] ", () => {
 			updateUnsavedIds: jest.fn(),
 			questionType: {
 				type: "Text",
-			}
+			},
 		};
 
 		it("sets text area with comment text correctly", async () => {
 			const wrapper = mount(<Answer {...answerPropsWithAnswer} />);
 			expect(wrapper.find("textarea").length).toEqual(1);
 			expect(wrapper.find("textarea").props().defaultValue).toEqual(
-				"some answer text"
+				"some answer text",
 			);
 		});
 
@@ -49,13 +46,13 @@ describe("[ClientApp] ", () => {
 			const textArea = wrapper.find("textarea");
 			textArea.simulate("input", {
 				target: {
-					value: "an updated answer"
-				}
+					value: "an updated answer",
+				},
 			});
 			expect(wrapper.state().answer.answerText).toEqual("an updated answer");
 			expect(answerPropsWithAnswer.updateUnsavedIds).toHaveBeenCalledWith(
 				"22q",
-				true
+				true,
 			);
 		});
 
@@ -66,8 +63,8 @@ describe("[ClientApp] ", () => {
 				answer: {
 					answerId: answerWithoutAnswer.answerId,
 					answerText: "an updated answer",
-					lastModifiedDate: new Date("02/04/2018").toISOString()
-				}
+					lastModifiedDate: new Date("02/04/2018").toISOString(),
+				},
 			};
 			wrapper.setProps(updatedProps);
 			expect(wrapper.state().unsavedChanges).toEqual(false);
@@ -85,8 +82,8 @@ describe("[ClientApp] ", () => {
 			const updatedProps = {
 				answer: {
 					answerId: answerWithoutAnswer.answerId,
-					answerText: "an updated answer"
-				}
+					answerText: "an updated answer",
+				},
 			};
 			wrapper.setProps(updatedProps);
 			expect(wrapper.state().answer.answerText).toEqual("an updated answer");
@@ -97,8 +94,8 @@ describe("[ClientApp] ", () => {
 			expect(
 				toJson(wrapper, {
 					noKey: true,
-					mode: "deep"
-				})
+					mode: "deep",
+				}),
 			).toMatchSnapshot();
 		});
 
@@ -107,8 +104,8 @@ describe("[ClientApp] ", () => {
 			expect(
 				toJson(wrapper, {
 					noKey: true,
-					mode: "deep"
-				})
+					mode: "deep",
+				}),
 			).toMatchSnapshot();
 		});
 	});

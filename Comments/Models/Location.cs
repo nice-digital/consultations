@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Comments.Common;
 using Comments.ViewModels;
@@ -7,10 +7,16 @@ namespace Comments.Models
 {
     public partial class Location
     {
-        public Location(string sourceUri, string htmlElementId, string rangeStart, int? rangeStartOffset, string rangeEnd, int? rangeEndOffset, string quote, string order, string section, ICollection<Comment> comment, ICollection<Question> question)
+		private Location() //Just for EF
+		{
+			Comment = new HashSet<Comment>();
+			OrganisationAuthorisation = new HashSet<OrganisationAuthorisation>();
+			Question = new HashSet<Question>();
+		}
+		public Location(string sourceUri, string htmlElementId, string rangeStart, int? rangeStartOffset, string rangeEnd, int? rangeEndOffset, string quote, string order, string sectionHeader, string sectionNumber, ICollection<Comment> comment, ICollection<Question> question)
         {
             SourceURI = sourceUri;
-            HtmlElementID = htmlElementId;
+			HtmlElementID = htmlElementId;
             RangeStart = rangeStart;
             RangeStartOffset = rangeStartOffset;
             RangeEnd = rangeEnd;
@@ -19,11 +25,12 @@ namespace Comments.Models
 	        Order = order;
 			Comment = comment;
             Question = question;
-	        Section = section;
+	        SectionHeader = sectionHeader;
+            SectionNumber = sectionNumber;
         }
 
         public Location(ViewModels.Location location) : this(location.SourceURI, location.HtmlElementID, 
-            location.RangeStart, location.RangeStartOffset, location.RangeEnd, location.RangeEndOffset, location.Quote, location.Order, location.Section, null, null)
+            location.RangeStart, location.RangeStartOffset, location.RangeEnd, location.RangeEndOffset, location.Quote, location.Order, location.SectionHeader, location.SectionNumber, null, null)
         {
 		}
 
@@ -37,7 +44,8 @@ namespace Comments.Models
             RangeEndOffset = location.RangeEndOffset;
             Quote = location.Quote;
 	        Order = location.Order;
-	        Section = location.Section;
+	        SectionHeader = location.SectionHeader;
+            SectionNumber = location.SectionNumber;
         }
     }
 }

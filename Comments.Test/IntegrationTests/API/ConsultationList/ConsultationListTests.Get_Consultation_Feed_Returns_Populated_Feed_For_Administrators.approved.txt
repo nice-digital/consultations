@@ -17,7 +17,12 @@
             "isOpen":true,
             "isClosed":false,
             "isUpcoming":false,
-            "show":true
+            "show":true,
+            "organisationCodes":[
+                
+            ],
+            "showShareWithOrganisationButton":true,
+            "submissionToLeadCount":null
         },
         {
             "title":"Transcutaneous microwave ablation for severe primary axillary hyperhidrosis ",
@@ -35,7 +40,12 @@
             "isOpen":true,
             "isClosed":false,
             "isUpcoming":false,
-            "show":true
+            "show":true,
+            "organisationCodes":[
+                
+            ],
+            "showShareWithOrganisationButton":true,
+            "submissionToLeadCount":null
         }
     ],
     "optionFilters":[
@@ -97,10 +107,25 @@
         "teamNames":[
             
         ],
-        "isAuthorised":true,
+        "authenticatedBy":1,
+        "authenticationType":"Auth0",
+        "isAuthenticatedByAnyMechanism":true,
         "displayName":"Benjamin Button",
         "userId":"00000000-0000-0000-0000-000000000000",
-        "organisationName":null
+        "organisationsAssignedAsLead":[
+            
+        ],
+        "validatedSessions":[
+            
+        ],
+        "validatedOrganisationUserIds":[
+            
+        ],
+        "validatedOrganisationIds":[
+            
+        ],
+        "isAuthenticatedByAccounts":true,
+        "isAuthenticatedByOrganisationCookie":false
     },
     "initialPageView":false,
     "status":[

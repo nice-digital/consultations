@@ -1,16 +1,16 @@
 // @flow
 
-import React, { Fragment, Component } from "react";
-import { Link, withRouter } from "react-router-dom";
+import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 import { tagManager } from "../../helpers/tag-manager";
 import Helmet from "react-helmet";
 import BreadCrumbsWithRouter from "../Breadcrumbs/Breadcrumbs";
 import { Header } from "../Header/Header";
 import { UserContext } from "../../context/UserContext";
-import { LoginBanner } from "../LoginBanner/LoginBanner";
+import LoginBannerWithRouter from "../LoginBanner/LoginBanner";
 import preload from "../../data/pre-loader";
 import { load } from "../../data/loader";
-import Moment from "react-moment";
+import { SubmittedContent } from "../SubmittedContent/SubmittedContent";
 
 type PropsType = any;
 
@@ -22,7 +22,7 @@ type StateType = {
 		hasError: boolean,
 		message: string,
 	},
-	
+
 }
 
 export class Submitted extends Component<PropsType, StateType> {
@@ -37,7 +37,7 @@ export class Submitted extends Component<PropsType, StateType> {
 			error: {
 				hasError: false,
 				message: "",
-			},			
+			},
 		};
 
 		if (this.props) {
@@ -129,7 +129,7 @@ export class Submitted extends Component<PropsType, StateType> {
 	render() {
 		if (!this.state.hasInitialData) return <h1>Loading...</h1>;
 		return (
-			<Fragment>
+			<>
 				<Helmet>
 					<title>{this.getPageTitle()}</title>
 				</Helmet>
@@ -137,7 +137,7 @@ export class Submitted extends Component<PropsType, StateType> {
 					<div className="grid">
 						<div data-g="12">
 							<BreadCrumbsWithRouter links={this.state.consultationData.breadcrumbs}/>
-							<main role="main">
+							<main>
 								<div className="page-header">
 									<Header
 										title="Response submitted"
@@ -147,50 +147,38 @@ export class Submitted extends Component<PropsType, StateType> {
 										{(contextValue: ContextType) => {
 											return (
 												!contextValue.isAuthorised ?
-													<LoginBanner
+													<LoginBannerWithRouter
 														signInButton={true}
 														currentURL={this.props.match.url}
 														signInURL={contextValue.signInURL}
 														registerURL={contextValue.registerURL}
+														allowOrganisationCodeLogin={false}
+														orgFieldName="submitted"
 													/> :
-													<Fragment>
-														<Link
-															to={`/${this.props.match.params.consultationId}/review`}
-															data-qa-sel="review-submitted-comments"
-															className="btn btn--cta">
-															Review your response
-														</Link>
-														{this.state.consultationData.consultationState.supportsDownload &&
-														<a
-															onClick={() => {
-																tagManager({
-																	event: "generic",
-																	category: "Consultation comments page",
-																	action: "Clicked",
-																	label: "Download your response button",
-																});
-															}}
-															className="btn btn--secondary"
-															href={`${this.props.basename}/api/exportexternal/${this.props.match.params.consultationId}`}>Download
-															your response</a>
-														}
-														<p>Your response was submitted on <Moment format="D MMMM YYYY" date={this.state.consultationData.consultationState.submittedDate}/>.</p>
-														<h2>What happens next?</h2>
-														<p>We will review all the submissions received for this consultation. Our response
-															will
-															be published on the website around the time the final guidance is published.</p>
+													<>
+														<SubmittedContent
+															organisationName={contextValue.organisationName}
+															isOrganisationCommenter={contextValue.isOrganisationCommenter}
+															isLead={contextValue.isLead}
+															consultationState={this.state.consultationData.consultationState}
+															consultationId={this.props.match.params.consultationId}
+															basename={this.props.basename}
+															isSubmitted={true}
+															linkToReviewPage={true}
+														/>
+
 														<h2>Help us improve our online commenting service</h2>
 														<p>This is the first time we have used our new online commenting software. We'd really like to hear your feedback so that we can keep improving
 															it.</p>
 														<p>Answer our short, anonymous survey (4 questions, 2 minutes).</p>
 														<p>
 															<a className="btn btn--cta"
-																 href="https://in.hotjar.com/s?siteId=119167&surveyId=109567" target="_blank"
-																 rel="noopener noreferrer">
+																href={contextValue.organisationalCommentingFeature ? "https://surveys.hotjar.com/62df646f-8edb-4c03-8275-3ec8a75d0214" : "https://in.hotjar.com/s?siteId=119167&surveyId=109567"} target="_blank"
+																rel="noopener noreferrer">
 																Answer the survey
 															</a>
 														</p>
-													</Fragment>
+													</>
 											);
 										}}
 									</UserContext.Consumer>
@@ -199,7 +187,7 @@ export class Submitted extends Component<PropsType, StateType> {
 						</div>
 					</div>
 				</div>
-			</Fragment>
+			</>
 
 		);
 	}

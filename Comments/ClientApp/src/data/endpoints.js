@@ -12,6 +12,7 @@ export const Endpoints = {
 	previewchapter: "/api/PreviewChapter", // chapter content for a document in preview mode
 	comments: "/api/Comments", // list of comments for a given URI, restricted by current user
 	commentsreview: "/api/CommentsForReview", // list of comments for a given URI, restricted by current user
+	commentsForOtherOrgCommenters: "/api/CommentsForOtherOrganisationCommenters", // list of comments or a given URI, from other org commenters
 	editcomment: "/api/Comment/{0}", // edits an existing comment. id must be positive int, restricted by current user
 	newcomment: "/api/Comment", // creates a new comment. body of message contains comment in json, restricted by current user
 	editanswer: "/api/Answer/{0}", // edits an existing answer. id must be positive int, restricted by current user
@@ -19,9 +20,14 @@ export const Endpoints = {
 	review: "/api/Review/{0}", //list of all comments for a consultation (inc Consultation, Document, Chapter and Section levels) given a URI, restricted by current user
 	user: "/api/User", // get details of currently logged in user
 	submit: "/api/Submit", // submit on the review page.
+	submitToLead: "/api/SubmitToLead", // submit to lead on the review page
 	exportExternal: "/api/ExportExternal/{0}", //Creates an excel spread sheet for external users of the system that contains only their responses
 	logging: "/api/Logging", // sends a message to the server for logging. expects the body to be the message and the loglevel to be in the querystring eg ?logLevel=Error
 	questions: "/api/Questions", // get complete page structure for the admin of questions for a given consultation. /api/Questions?consultationId=22
 	question: "/api/Question/{0}", // GET PUT for individual questions
-	newquestion: "/api/Question" // POST for new questions
+	newquestion: "/api/Question", // POST for new questions
+	organisation: "/api/Organisation", //GET checks for valid collation code and consultation id in querystring. returns OrganisationCode object
+	organisationsession: "/api/Organisation/CreateOrganisationUserSession", //POST. checks for valid collation code and organisation authorisation id in querystring. returns a guid if successful. error otherwise.
+	checkorganisationusersession: "/api/Organisation/CheckOrganisationUserSession", //GET. checks for valid session id for a given consultation id. returns a boolean for valid or not.
+	exportLead: "/api/ExportLead/{0}", //Creates an excel spread sheet for organisation leads that contains the responses that have been submitted to them (ie not the copied ones they can work on). So they can keep an audit record.
 };

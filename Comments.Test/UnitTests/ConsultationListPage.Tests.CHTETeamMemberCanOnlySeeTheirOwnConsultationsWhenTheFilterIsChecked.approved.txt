@@ -17,7 +17,12 @@
             "IsOpen":false,
             "IsClosed":false,
             "IsUpcoming":true,
-            "Show":false
+            "Show":false,
+            "OrganisationCodes":[
+                
+            ],
+            "ShowShareWithOrganisationButton":false,
+            "SubmissionToLeadCount":null
         },
         {
             "Title":"Consultation title 1",
@@ -35,7 +40,12 @@
             "IsOpen":true,
             "IsClosed":false,
             "IsUpcoming":false,
-            "Show":true
+            "Show":true,
+            "OrganisationCodes":[
+                
+            ],
+            "ShowShareWithOrganisationButton":false,
+            "SubmissionToLeadCount":null
         },
         {
             "Title":"Consultation Title 1",
@@ -53,7 +63,12 @@
             "IsOpen":false,
             "IsClosed":true,
             "IsUpcoming":false,
-            "Show":true
+            "Show":true,
+            "OrganisationCodes":[
+                
+            ],
+            "ShowShareWithOrganisationButton":false,
+            "SubmissionToLeadCount":null
         }
     ],
     "OptionFilters":[
@@ -129,10 +144,25 @@
         "TeamNames":[
             "ConsultationListTestRole"
         ],
-        "IsAuthorised":true,
+        "AuthenticatedBy":1,
+        "AuthenticationType":"Auth0",
+        "IsAuthenticatedByAnyMechanism":true,
         "DisplayName":"Jeffrey Goines",
         "UserId":"00000000-0000-0000-0000-000000000000",
-        "OrganisationName":null
+        "OrganisationsAssignedAsLead":[
+            
+        ],
+        "ValidatedSessions":[
+            
+        ],
+        "ValidatedOrganisationUserIds":[
+            
+        ],
+        "ValidatedOrganisationIds":[
+            
+        ],
+        "IsAuthenticatedByAccounts":true,
+        "IsAuthenticatedByOrganisationCookie":false
     },
     "InitialPageView":false,
     "Status":[

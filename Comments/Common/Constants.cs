@@ -1,12 +1,15 @@
-namespace Comments.Common
+﻿namespace Comments.Common
 {
-    public static class Constants
+	public static class Constants
     {
         public const string ConsultationsBasePath = "/consultations";
-	    public const string ConsultationsReplaceableRelativeUrl = ConsultationsBasePath + "/{0}/{1}/{2}";
+        public const string ConsultationAPIBasePath = ConsultationsBasePath + "/api/";
+        public const string ConsultationsReplaceableRelativeUrl = ConsultationsBasePath + "/{0}/{1}/{2}";
 	    public const string ConsultationsPreviewReplaceableRelativeUrl = ConsultationsBasePath + "/preview/{0}/consultation/{1}/document/{2}/chapter/{3}";
 		public const string ErrorPath = "/error";
 	    public const string StatusAPIKeyName = "ECStatusApiKey";
+	    public const string SessionCookieName = "ConsultationSession-";
+
 		/// <summary>
 		/// This document number is here to pass to indev to call the "Draft preview detail" feed. The preview feed cannot be called without a document id, and if you do pass one
 		/// all it sets is the SelectedDocumentId and the DocumentId properties on the returned json.
@@ -32,5 +35,39 @@ namespace Comments.Common
 		    public const string LoginAction = "Login";
 		    public const string LogoutAction = "Logout";
 	    }
-	}
+
+	    public static class CollationCode
+	    {
+			/// <summary>
+			/// we show to the user chunked with space
+			/// </summary>
+			public const string RegExChunkedWithSpaces = @"\d{4}\s\d{4}\s\d{4}";
+
+			/// <summary>
+			/// after they enter the code, we remove spaces.
+			/// </summary>
+			public const string RegExSpacesRemoved = @"\d{12}";
+	    }
+		
+	    public static class OrgansationAuthentication
+	    {
+		    public const string Issuer = "ConsultationsIssuer";
+		    public const string ValidatedSessionsClaim = "http://www.nice.org.uk/consultations/claims/validated-sessions";
+		}
+
+	    /// <summary>
+	    /// The values of the string must match the name of the features in the FeatureManagement section of appsettings.json / secrets.json.
+	    /// </summary>
+		public static class Features
+	    {
+            // This constant is for testing the getFeatureFlags feature
+            public const string TestFeatureFlag = "TestFeatureFlag";
+
+		    public const string OrganisationalCommenting = "OrganisationalCommenting";
+
+		    public const string IndevUsingIDAMAuth = "IndevUsingIDAMAuth";
+	    }
+
+
+    }
 }

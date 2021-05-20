@@ -6,20 +6,24 @@ export const idamGlobalNavLogin = (username, password) => {
 		return;
 	}
 
-	browser.waitForExist(
+	var headerMenuExists = browser.waitForExist(
 		"body #header-menu a[href*='/consultations/account/login?returnURL=']",
-		10000
+		2000
 	);
-	var headerMenuShown = browser.isVisible("body #header-menu-button");
-	if (headerMenuShown) {
-		browser.click("body #header-menu-button");
-		browser.click(
-			"body #header-menu a[href*='/consultations/account/login?returnURL=']"
-		);
+	if (headerMenuExists !== true) {
+		browser.refresh();
 	} else {
-		browser.click(
-			"body #header-menu-button+* a[href*='/consultations/account/login?returnURL=']"
-		);
+		var headerMenuShown = browser.isVisible("body #header-menu-button");
+		if (headerMenuShown) {
+			browser.click("body #header-menu-button");
+			browser.click(
+				"body #header-menu a[href*='/consultations/account/login?returnURL=']"
+			);
+		} else {
+			browser.click(
+				"body #header-menu-button+* a[href*='/consultations/account/login?returnURL=']"
+			);
+		}
 	}
 	idamLogin(username, password);
 };

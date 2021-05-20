@@ -1,15 +1,15 @@
 Feature: Comment Ordering on the Review Page
-  As a user of consultations
-  We want to be able to login to make a comment
+	As a user of consultations
+	We want to be able to login to make a comment
 	We want to be able to comment at multiple levels
 	We want them to be ordered and displayed on the review page
 
-Background:
-  	Given I open the url "1/1/introduction"
+	Background:
+		Given I open the url "1/1/introduction"
 		When I log into accounts with username "IDAM_EMAIL1" and password "IDAM_PASSWORD"
 		Given I delete all comments on the page
 
-Scenario: User makes multiple comments and views them on the Review page
+	Scenario: User makes multiple comments and views them on the Review page
 		Given I comment on a Document
 		When I add the comment "1" to the first in the list and submit
 		Then I expect the comment save button displays "Saved"

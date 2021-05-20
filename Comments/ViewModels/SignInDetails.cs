@@ -1,11 +1,8 @@
-using System;
-
 namespace Comments.ViewModels
 {
-    public class SignInDetails : User
+	public class SignInDetails : User
     {
-	    public SignInDetails(User user, string signInURL, string registerURL)
-		    : base(user.IsAuthorised, user.DisplayName, user.UserId, user.OrganisationName)
+	    public SignInDetails(User user, string signInURL, string registerURL) : base(user.AuthenticatedBy, user.AuthenticationType, user.DisplayName, user.UserId, user.OrganisationsAssignedAsLead, user.ValidatedSessions)
 	    {
 		    SignInURL = signInURL;
 		    RegisterURL = registerURL;

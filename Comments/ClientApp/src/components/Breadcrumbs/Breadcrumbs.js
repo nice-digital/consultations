@@ -45,6 +45,7 @@ export class Breadcrumbs extends PureComponent<PropsType> {
 								itemScope
 								itemType="http://schema.org/ListItem"
 								onClick={()=>this.trackBreadcrumb(segment)}
+								role="presentation"
 							>
 								{(isHttpLink(url) || (url.indexOf("/") === 0 && !localRoute)) ?
 									<a href={url} itemProp="item">

@@ -1,4 +1,5 @@
-using NICE.Feeds.Models.Indev.Detail;
+
+using NICE.Feeds.Indev.Models.Detail;
 
 namespace Comments.Common
 {

@@ -1,7 +1,7 @@
 /* global jest */
 
 import React from "react";
-import { mount, shallow } from "enzyme";
+import { mount } from "enzyme";
 import { Submitted } from "../Submitted";
 import MockAdapter from "axios-mock-adapter";
 import axios from "axios";
@@ -40,7 +40,7 @@ describe("[ClientApp] ", () => {
 			const wrapper = mount(
 				<MemoryRouter>
 					<Submitted {...fakeProps} />
-				</MemoryRouter>
+				</MemoryRouter>,
 			);
 
 			let consultationPromise = new Promise(resolve => {
@@ -61,7 +61,7 @@ describe("[ClientApp] ", () => {
 				expect(
 					toJson(wrapper, {
 						noKey: true,
-						mode: "shallow",
+						mode: "deep",
 					})).toMatchSnapshot();
 			});
 		});

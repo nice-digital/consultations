@@ -17,81 +17,32 @@ namespace Comments.Test.UnitTests
     public class ConsultationContext : TestBase
     {
         [Fact]
-        public void Comments_IsDeleted_Flag_is_not_Filtering_in_the_context()
-        {
-            // Arrange
-            ResetDatabase();
-            var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
-            var commentText = Guid.NewGuid().ToString();
-            var createdByUserId = Guid.NewGuid().ToString();
-
-            var locationId = AddLocation(sourceURI);
-            AddComment(locationId, commentText, true, createdByUserId);
-
-            // Act
-            using (var consultationsContext = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
-            {
-                var unfilteredLocations = consultationsContext.Location.Where(l =>
-                        l.SourceURI.Equals(sourceURI))
-                    .Include(l => l.Comment)
-                    .IgnoreQueryFilters()
-                    .ToList();
-
-                //Assert
-                unfilteredLocations.First().Comment.Count.ShouldBe(1);
-            }
-        }
-
-        [Fact]
-        public void Comments_IsDeleted_Flag_is_Filtering_in_the_context()
-        {
-            // Arrange
-            ResetDatabase();
-            var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
-            var commentText = Guid.NewGuid().ToString();
-            var createdByUserId = Guid.NewGuid().ToString();
-
-            var locationId = AddLocation(sourceURI);
-            AddComment(locationId, commentText, true, createdByUserId);
-
-            // Act
-            using (var consultationsContext = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption))
-            {
-                var filteredLocations = consultationsContext.Location.Where(l => l.SourceURI.Equals(sourceURI))
-                    .Include(l => l.Comment)
-                    .ToList();
-
-                //Assert
-                //removed while filtering is commented out.
-                filteredLocations.Single().Comment.Count.ShouldBe(0);
-            }
-        }
-
-	    [Fact]
 	    public void Get_All_Consultation_Comments_When_IsReview_Is_True()
 	    {
 		    // Arrange
 		    ResetDatabase();
 		    var commentText = Guid.NewGuid().ToString();
-		    var createdByUserId = Guid.NewGuid().ToString();
-
+		    
 		    var locationId = AddLocation("consultations://./consultation/1/document/1/chapter/introduction");
-		    AddComment(locationId, commentText, true, createdByUserId);
+		    AddComment(locationId, commentText, _userId);
 
 		    locationId = AddLocation("consultations://./consultation/1/document/1");
-		    AddComment(locationId, commentText, true, createdByUserId);
+		    AddComment(locationId, commentText, _userId);
 
 		    locationId = AddLocation("consultations://./consultation/1/document/2");
-		    AddComment(locationId, commentText, true, createdByUserId);
+		    AddComment(locationId, commentText, _userId);
 
 			locationId = AddLocation("consultations://./consultation/1");
-		    AddComment(locationId, commentText, true, createdByUserId);
+		    AddComment(locationId, commentText, _userId);
 
 		    locationId = AddLocation("consultations://./consultation/2");
-		    AddComment(locationId, commentText, true, createdByUserId);
+		    AddComment(locationId, commentText, _userId);
+
+		    locationId = AddLocation("consultations://./consultation/2");
+		    AddComment(locationId, commentText, "Different user id");
 
 
-			var sourceURIs = new List<string>
+		    var sourceURIs = new List<string>
 		    {
 			    ConsultationsUri.ConvertToConsultationsUri("/1/Review", CommentOn.Consultation)
 		    };
@@ -110,25 +61,24 @@ namespace Comments.Test.UnitTests
 		    // Arrange
 		    ResetDatabase();
 		    var commentText = Guid.NewGuid().ToString();
-		    var createdByUserId = Guid.NewGuid().ToString();
 
 		    var locationId = AddLocation("consultations://./consultation/1/document/1/chapter/introduction");
-		    AddComment(locationId, commentText, true, createdByUserId);
+		    AddComment(locationId, commentText, _userId);
 
 		    locationId = AddLocation("consultations://./consultation/1/document/1/chapter/overview");
-		    AddComment(locationId, commentText, true, createdByUserId);
+		    AddComment(locationId, commentText, _userId);
 
 			locationId = AddLocation("consultations://./consultation/1/document/1");
-		    AddComment(locationId, commentText, true, createdByUserId);
+		    AddComment(locationId, commentText, _userId);
 
 		    locationId = AddLocation("consultations://./consultation/1/document/2");
-		    AddComment(locationId, commentText, true, createdByUserId);
+		    AddComment(locationId, commentText, _userId);
 
 		    locationId = AddLocation("consultations://./consultation/1");
-		    AddComment(locationId, commentText, true, createdByUserId);
+		    AddComment(locationId, commentText, _userId);
 
 		    locationId = AddLocation("consultations://./consultation/2");
-		    AddComment(locationId, commentText, true, createdByUserId);
+		    AddComment(locationId, commentText, _userId);
 
 
 		    var sourceURIs = new List<string>
@@ -379,8 +329,8 @@ namespace Comments.Test.UnitTests
 		    // Arrange
 		    ResetDatabase();
 
-		    var textQuestionTypeId = AddQuestionType("Text", hasBooleanAnswer: false, hasTextAnswer: true);
-		    var booleanQuestionTypeId = AddQuestionType("Boolean", hasBooleanAnswer: true, hasTextAnswer: false);
+		    var textQuestionTypeId = AddQuestionType("Text", hasBooleanAnswer: false, hasTextAnswer: true, questionTypeId: 1);
+		    var booleanQuestionTypeId = AddQuestionType("Boolean", hasBooleanAnswer: true, hasTextAnswer: false, questionTypeId: 2);
 
 			// Act
 			var consultationsContext = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption);
@@ -466,19 +416,19 @@ namespace Comments.Test.UnitTests
 
 			///source uri's that should be in the resultset:
 			var chapterLocationId = AddLocation(chapterLevelSourceURI, _context);
-			AddComment(chapterLocationId, "", false, createdByUserId);
+			AddComment(chapterLocationId, "", createdByUserId);
 			var questionId = AddQuestion(chapterLocationId, 99, "", _context);
 			AddAnswer(questionId, createdByUserId, "", 1, _context);
 
 			var anotherChapterLevelSourceURILocationId = AddLocation(anotherChapterLevelSourceURI, _context);
-			AddComment(anotherChapterLevelSourceURILocationId, "", false, createdByUserId);
+			AddComment(anotherChapterLevelSourceURILocationId, "", createdByUserId);
 
 			var anotherConsultationSourceURILocationId = AddLocation(anotherConsultationSourceURI, _context);
-			AddComment(anotherConsultationSourceURILocationId, "", false, createdByUserId, (int)StatusName.Submitted);
+			AddComment(anotherConsultationSourceURILocationId, "", createdByUserId, (int)StatusName.Submitted);
 
 			//source uri that shouldn't be in the resultset.
 			var sourceURINotUsedByCurrentUserLocationId = AddLocation(sourceURINotUsedByCurrentUser, _context);
-			AddComment(sourceURINotUsedByCurrentUserLocationId, "", false, Guid.NewGuid().ToString()); //note the user is random.
+			AddComment(sourceURINotUsedByCurrentUserLocationId, "", Guid.NewGuid().ToString()); //note the user is random.
 			
 			var context = new ConsultationsContext(_options, userService, _fakeEncryption);
 
@@ -498,5 +448,65 @@ namespace Comments.Test.UnitTests
 			data.Count(x => x.Key.Equals(sourceURINotUsedByCurrentUser)).ShouldBe(0);
 		}
 
+
+		[Fact]
+		public void UpdateEmailAddressForOrganisationUser()
+		{
+			//Arrange
+			var consultationId = 1;
+			var organisationId = 1;
+			var authorisationSession = Guid.NewGuid();
+			var emailAddress = "email@test.com";
+
+			var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, _context);
+			var organisationUserId = TestBaseDBHelpers.AddOrganisationUser(_context, organisationAuthorisationId, authorisationSession, null);
+
+			var userService = FakeUserService.Get(true, "Benjamin Button", null, TestUserType.NotAuthenticated, false, organisationUserId, null);
+			var context = new ConsultationsContext(_options, userService, _fakeEncryption);
+
+			//Act
+			var OrgUser = context.UpdateEmailAddressForOrganisationUser(emailAddress, organisationUserId);
+
+			//Assert
+			OrgUser.EmailAddress.ShouldBe(emailAddress);
+		}
+    
+    		public void Get_Other_Org_Users_Comments()
+		{
+			// Arrange
+			ResetDatabase();
+			var commentText = Guid.NewGuid().ToString();
+			var myOrganisationId = 1;
+			var anotherOrganisationId = 2;
+			var myOrganisationUserId = 1;
+			var anotherOrganisationUserId = 2;
+			var sourceURI = "consultations://./consultation/1";
+
+			// My comment
+			var locationId = AddLocation(sourceURI);
+			AddComment(locationId, commentText, null, status: (int)StatusName.SubmittedToLead, organisationUserId: myOrganisationUserId, organisationId: myOrganisationId);
+
+			// Another user in my organisation's submitted comment
+			AddComment(locationId, commentText, null, status: (int)StatusName.SubmittedToLead, organisationUserId: anotherOrganisationUserId, organisationId: myOrganisationId);
+
+			// Another user in my organisation's draft comment
+			AddComment(locationId, commentText, null, status: (int)StatusName.Draft, organisationUserId: anotherOrganisationUserId, organisationId: myOrganisationId);
+
+			// A user from a different organisation's comment
+			AddComment(locationId, commentText, null, status: (int)StatusName.SubmittedToLead, organisationUserId: anotherOrganisationUserId, organisationId: anotherOrganisationId);
+
+			var sourceURIs = new List<string>
+			{
+				ConsultationsUri.ConvertToConsultationsUri(sourceURI, CommentOn.Consultation)
+			};
+
+			// Act
+			var userService = FakeUserService.Get(isAuthenticated: false, organisationUserId: myOrganisationUserId);
+			var consultationsContext = new ConsultationsContext(_options, userService, _fakeEncryption);
+			var results = consultationsContext.GetOtherOrganisationUsersCommentsAndQuestionsForDocument(sourceURIs);
+
+			//Assert
+			results.Count().ShouldBe(1);
+		}
 	}
 }

@@ -4,6 +4,8 @@ import React, { Component, Fragment } from "react";
 import Moment from "react-moment";
 import { Link } from "react-router-dom";
 
+import { GenerateCode } from "../GenerateCode/GenerateCode";
+
 type StateType = {}
 
 type PropsType = {
@@ -21,8 +23,12 @@ type PropsType = {
 	isOpen: boolean,
 	isClosed: boolean,
 	isUpcoming: boolean,
+	organisationCodes: Array,
+	showShareWithOrganisationButton: boolean,
 	show: boolean,
 	basename: string,
+	allowGenerateOrganisationCode: boolean,
+	submissionToLeadCount: number
 }
 
 export class ConsultationItem extends Component<PropsType, StateType> {
@@ -44,6 +50,10 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 			isOpen,
 			isClosed,
 			isUpcoming,
+			organisationCodes,
+			showShareWithOrganisationButton,
+			allowGenerateOrganisationCode,
+			submissionToLeadCount,
 		} = this.props;
 
 		const status = (isOpen, isClosed, isUpcoming) => {
@@ -83,47 +93,57 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 								</dd>
 							</div>
 						)}
-						<div className="card__metadatum">
-							<dt className="visually-hidden">Project ID</dt>
-							<dd title={`Consultation ID ${consultationId}`}>
-								{gidReference}
-							</dd>
-						</div>
-						<div className="card__metadatum">
-							<dt className="visually-hidden">Product type name</dt>
-							<dd>
-								{productTypeName}
-							</dd>
-						</div>
-						<div className="card__metadatum">
-							<dd>
-								{consultationStatus === "Upcoming" ?
-									<Fragment>
-										Starts on{" "}
-										<strong><Moment format="D MMMM YYYY" date={startDate}/></strong>
-									</Fragment>
-									:
-									<Fragment>
-										Closes on{" "}
-										<strong><Moment format="D MMMM YYYY" date={endDate}/></strong>
-									</Fragment>
-								}
-							</dd>
-						</div>
-						{((consultationStatus !== "Upcoming") && (submissionCount !== null)) &&
+						{showShareWithOrganisationButton && allowGenerateOrganisationCode && submissionToLeadCount !== null &&
+							<div className="card__metadatum">
+								{submissionToLeadCount} {submissionToLeadCount == 1 ? "response" : "responses"} from your organisation
+							</div>
+						}
+						<div>
+							<div className="card__metadatum">
+								<dt className="visually-hidden">Project ID</dt>
+								<dd title={`Consultation ID ${consultationId}`}>
+									{gidReference}
+								</dd>
+							</div>
+							<div className="card__metadatum">
+								<dt className="visually-hidden">Product type name</dt>
+								<dd>
+									{productTypeName}
+								</dd>
+							</div>
 							<div className="card__metadatum">
 								<dd>
-									{submissionCount > 0 ?
-										<a href={`${this.props.basename}/api/Export/${this.props.consultationId}`} target="_blank" rel="noopener noreferrer">
-											Download <strong>{submissionCount}</strong> response{submissionCount > 1 ? "s" : ""}
-										</a>
+									{consultationStatus === "Upcoming" ?
+										<Fragment>
+											Starts on{" "}
+											<strong><Moment format="D MMMM YYYY" date={startDate}/></strong>
+										</Fragment>
 										:
-										<span>No responses</span>
+										<Fragment>
+											Closes on{" "}
+											<strong><Moment format="D MMMM YYYY" date={endDate}/></strong>
+										</Fragment>
 									}
 								</dd>
 							</div>
-						}
+							{((consultationStatus !== "Upcoming") && (submissionCount !== null)) &&
+								<div className="card__metadatum">
+									<dd>
+										{submissionCount > 0 ?
+											<a href={`${this.props.basename}/api/Export/${this.props.consultationId}`} target="_blank" rel="noopener noreferrer">
+												Download <strong>{submissionCount}</strong> response{submissionCount > 1 ? "s" : ""}
+											</a>
+											:
+											<span>No responses</span>
+										}
+									</dd>
+								</div>
+							}
+						</div>
 					</dl>
+					{showShareWithOrganisationButton && allowGenerateOrganisationCode &&
+						<GenerateCode organisationCodes={organisationCodes} consultationId={consultationId} />
+					}
 				</article>
 			</li>
 		);

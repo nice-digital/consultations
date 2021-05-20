@@ -33,6 +33,8 @@ namespace Comments.ViewModels
 		/// </summary>
 	    public string OrganisationName { get; set; }
 
+		public bool? IsLead { get; set; }
+
 		#region Filter options from the check boxes
 
 		
@@ -44,6 +46,8 @@ namespace Comments.ViewModels
 	    }
 
 	    public IEnumerable<int> Document { get; set; }
+
+		public IEnumerable<string> Commenter { get; set; }
 
 	    [JsonConverter(typeof(StringEnumConverter))]
 	    public ReviewSortOrder Sort { get; set; } = ReviewSortOrder.DocumentAsc;

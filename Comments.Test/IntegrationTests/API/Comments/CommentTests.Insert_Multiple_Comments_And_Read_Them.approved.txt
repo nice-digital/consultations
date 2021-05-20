@@ -10,6 +10,7 @@
                 "name":"Draft"
             },
             "statusId":1,
+            "commenterEmail":null,
             "commentId":"scrubbed by ScrubLocationId",
             "sourceURI":"consultations://./consultation/1/document/1/chapter/introduction",
             "htmlElementID":null,
@@ -23,7 +24,8 @@
             "documentId":1,
             "show":true,
             "order":"0",
-            "section":null
+            "sectionHeader":null,
+            "sectionNumber":null
         },
         {
             "commentId":"scrubbed by ScrubCommentId",
@@ -35,6 +37,7 @@
                 "name":"Draft"
             },
             "statusId":1,
+            "commenterEmail":null,
             "commentId":"scrubbed by ScrubLocationId",
             "sourceURI":"consultations://./consultation/1/document/1/chapter/introduction",
             "htmlElementID":null,
@@ -48,7 +51,8 @@
             "documentId":1,
             "show":true,
             "order":"0",
-            "section":null
+            "sectionHeader":null,
+            "sectionNumber":null
         },
         {
             "commentId":"scrubbed by ScrubCommentId",
@@ -60,6 +64,7 @@
                 "name":"Draft"
             },
             "statusId":1,
+            "commenterEmail":null,
             "commentId":"scrubbed by ScrubLocationId",
             "sourceURI":"consultations://./consultation/1/document/1/chapter/introduction",
             "htmlElementID":null,
@@ -73,7 +78,8 @@
             "documentId":1,
             "show":true,
             "order":"0",
-            "section":null
+            "sectionHeader":null,
+            "sectionNumber":null
         }
     ],
     "questions":[
@@ -87,6 +93,7 @@
         "hasQuestions":false,
         "hasUserSuppliedAnswers":false,
         "hasUserSuppliedComments":true,
+        "leadHasBeenSentResponse":false,
         "submittedDate":null,
         "documentIdsWhichSupportComments":[
             2,
@@ -98,7 +105,6 @@
         "consultationHasEnded":false,
         "supportsSubmission":true,
         "supportsDownload":true,
-        "shouldShowDrawer":true,
         "shouldShowCommentsTab":true,
         "shouldShowQuestionsTab":false
     }

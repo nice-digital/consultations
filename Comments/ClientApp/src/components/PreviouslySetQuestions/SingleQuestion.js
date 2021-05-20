@@ -64,4 +64,3 @@ export const SingleQuestion = (props) => {
 	);
 };
 
-

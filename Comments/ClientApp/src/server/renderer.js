@@ -72,10 +72,12 @@ export const serverRenderer = (params): Promise => {
 					isAdminUser: params.data.isAdminUser,
 					isTeamUser: params.data.isTeamUser,
 					displayName: params.data.displayName,
+					isLead: params.data.isLead,
 					signInURL: params.data.signInURL,
 					signOutURL: params.data.signOutURL,
 					registerURL: params.data.registerURL,
 					requestURL: params.data.requestURL,
+					organisationalCommentingFeature: params.data.organisationalCommentingFeature,
 				}, // Key value pairs of preloaded data sets
 				loaders: [], // List of promises where we track preloading data
 			},
@@ -88,7 +90,7 @@ export const serverRenderer = (params): Promise => {
 			displayName: staticContext.preload.data.displayName,
 			signInURL: staticContext.preload.data.signInURL,
 			signOutURL: staticContext.preload.data.signOutURL,
-		}
+		};
 
 		//a quick way to disable server side rendering for dev purposes is to just remove the App component from the inside the StaticRouter component
 		//the static router will still be there but won't try to render anything.

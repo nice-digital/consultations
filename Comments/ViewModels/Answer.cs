@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace Comments.ViewModels
 {
@@ -28,13 +25,16 @@ namespace Comments.ViewModels
 			LastModifiedDate = answer.LastModifiedDate;
 			LastModifiedByUserId = answer.LastModifiedByUserId;
 			StatusId = answer.StatusId;
-			if (!(answer.Status is null))
+			if (answer.Status != null)
 				Status = new Status(answer.Status);
 
 			if (question != null)
 				SourceURI = question.Location.SourceURI;
 			else if (answer.Question?.Location != null)
 				SourceURI = answer.Question.Location.SourceURI;
+
+			if (answer.OrganisationUser != null)
+				CommenterEmail = answer.OrganisationUser.EmailAddress;
 		}
 
 		public int AnswerId { get; set; }
@@ -42,7 +42,6 @@ namespace Comments.ViewModels
 		public bool? AnswerBoolean { get; set; }
 
 		public int QuestionId { get; set; }
-		//public ViewModels.Question Question { get; set; }
 
 		public DateTime LastModifiedDate { get; set; }
 		public string LastModifiedByUserId { get; set; }
@@ -54,6 +53,10 @@ namespace Comments.ViewModels
 		/// This property doesn't match the database. it's only in a denormalised capacity to make things easier for the front-end.
 		/// </summary>
 		public string SourceURI { get; set; }
+
+		public string CommenterEmail { get; set; }
+
+        public bool showWhenFiltered { get; set; } = true;
 
 		public void UpdateStatusFromDBModel(Models.Status status)
 		{

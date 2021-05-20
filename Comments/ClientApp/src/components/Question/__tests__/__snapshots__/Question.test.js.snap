@@ -24,22 +24,9 @@ exports[`[ClientApp]  Question Component should match snapshot with answer 1`] =
     role="form"
   >
     <form
-      className="mb--0"
+      className="mb--0 mt--e"
       onSubmit={[Function]}
-    >
-      <span
-        className="ml--0 mb--0 CommentBox__savedIndicator"
-      >
-        Saved
-      </span>
-      <button
-        className="btn mr--0 mb--0 right"
-        data-qa-sel="delete-comment-button"
-        onClick={[Function]}
-      >
-        Delete
-      </button>
-    </form>
+    />
   </section>
 </li>
 `;

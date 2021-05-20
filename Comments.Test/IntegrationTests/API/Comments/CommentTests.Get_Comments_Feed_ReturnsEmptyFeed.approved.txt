@@ -13,6 +13,7 @@
         "hasQuestions":false,
         "hasUserSuppliedAnswers":false,
         "hasUserSuppliedComments":false,
+        "leadHasBeenSentResponse":false,
         "submittedDate":null,
         "documentIdsWhichSupportComments":[
             2,
@@ -24,7 +25,6 @@
         "consultationHasEnded":false,
         "supportsSubmission":false,
         "supportsDownload":false,
-        "shouldShowDrawer":true,
         "shouldShowCommentsTab":true,
         "shouldShowQuestionsTab":false
     }

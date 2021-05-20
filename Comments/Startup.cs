@@ -1,13 +1,17 @@
-using Comments.Common;
+﻿using Comments.Common;
 using Comments.Configuration;
 using Comments.Export;
 using Comments.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -15,17 +19,18 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using Microsoft.FeatureManagement;
 using NICE.Feeds;
 using NICE.Identity.Authentication.Sdk.Domain;
 using NICE.Identity.Authentication.Sdk.Extensions;
 using System;
-using System.IO;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc.Abstractions;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.Mvc.Routing;
-using ConsultationsContext = Comments.Models.ConsultationsContext;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using Comments.ViewModels;
+using NICE.Feeds.Configuration;
+using NICE.Feeds.Indev;
+using ConsultationsContext = Comments.Models.ConsultationsContext;
 
 namespace Comments
 {
@@ -59,8 +64,9 @@ namespace Comments
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
 			services.TryAddSingleton<ISeriLogger, SeriLogger>();
-            //services.TryAddSingleton<IAuthenticateService, AuthService>();
-            services.TryAddTransient<IUserService, UserService>();
+			services.AddHttpClient();
+
+			services.TryAddTransient<IUserService, UserService>();
 
 			var contextOptionsBuilder = new DbContextOptionsBuilder<ConsultationsContext>();
             services.TryAddSingleton<IDbContextOptionsBuilderInfrastructure>(contextOptionsBuilder);
@@ -70,10 +76,22 @@ namespace Comments
 
             services.TryAddTransient<ICommentService, CommentService>();
             services.TryAddTransient<IConsultationService, ConsultationService>();
-            
-            services.TryAddTransient<IFeedReaderService>(provider => new FeedReaderService(new RemoteSystemReader(null), AppSettings.Feed));
-            services.TryAddTransient<IFeedService, FeedService>();
-            services.TryAddTransient<IAnswerService, AnswerService>();
+
+            // Add authentication before adding the FeedReaderService
+            var authConfiguration = AppSettings.AuthenticationConfig.GetAuthConfiguration();
+            services.AddAuthentication(authConfiguration, allowNonSecureCookie: Environment.IsDevelopment())
+	            .AddScheme<OrganisationCookieAuthenticationOptions, OrganisationCookieAuthenticationHandler>(OrganisationCookieAuthenticationOptions.DefaultScheme, options => { });
+            services.AddAuthorisation(authConfiguration);
+
+            services.AddFeatureManagement();
+
+			services.TryAddSingleton<IIndevFeedConfig>(provider => AppSettings.Feed);
+			services.TryAddTransient<ICacheService, MemoryCacheService>();
+			services.TryAddTransient<IIndevFeedReaderService, IndevFeedReaderService>();
+			services.TryAddTransient<IRemoteSystemReader, RemoteSystemReader>();
+			services.TryAddTransient<IIndevFeedService, IndevFeedService>();
+
+			services.TryAddTransient<IAnswerService, AnswerService>();
             services.TryAddTransient<IQuestionService, QuestionService>();
 	        services.TryAddTransient<ISubmitService, SubmitService>();
 			services.TryAddTransient<IAdminService, AdminService>();
@@ -82,13 +100,9 @@ namespace Comments
 	        services.TryAddTransient<IExportToExcel, ExportToExcel>();
 	        services.TryAddTransient<IStatusService, StatusService>();
 			services.TryAddTransient<IConsultationListService, ConsultationListService>();
+			services.TryAddTransient<IOrganisationService, OrganisationService>();
 
 			services.AddRouting(options => options.LowercaseUrls = true);
-
-			// Add authentication
-			var authConfiguration = AppSettings.AuthenticationConfig.GetAuthConfiguration();
-			services.AddAuthentication(authConfiguration, allowNonSecureCookie: Environment.IsDevelopment());
-			services.AddAuthorisation(authConfiguration);
 
 			services.AddMvc(options =>
             {
@@ -145,10 +159,12 @@ namespace Comments
             }); //adding CORS for Warren. todo: maybe move this into the isDevelopment block..
             
             services.AddOptions();
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ISeriLogger seriLogger, IApplicationLifetime appLifetime, IUrlHelperFactory urlHelperFactory, IActionContextAccessor actionContextAccessor)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ISeriLogger seriLogger, IApplicationLifetime appLifetime, IUrlHelperFactory urlHelperFactory, IFeatureManager featureManager)
         {           
             seriLogger.Configure(loggerFactory, Configuration, appLifetime, env);
             var startupLogger = loggerFactory.CreateLogger<Startup>();
@@ -157,9 +173,9 @@ namespace Comments
 
 			if (env.IsDevelopment())
             {
-	            app.UseExceptionHandler(Constants.ErrorPath);
-				app.UseDeveloperExceptionPage();
-                loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+	            app.UseDeveloperExceptionPage();
+				app.UseExceptionHandler(Constants.ErrorPath);
+				loggerFactory.AddConsole(Configuration.GetSection("Logging"));
                 loggerFactory.AddDebug();
 
 				app.UseStaticFiles(); //uses the wwwroot folder, only for dev. on other service the root is varnish
@@ -200,7 +216,34 @@ namespace Comments
 
 	        app.UseForwardedHeaders();
             app.UseAuthentication();
-            app.UseSpaStaticFiles(new StaticFileOptions { RequestPath = "/consultations" });
+
+            app.Use(async (context, next) => 
+            {
+				//this middleware is here because we have some controller api's that don't have the authorise attribute set. e.g. CommentsController. that controller still needs to work.
+				//without authentication. for authenticated users, the default scheme is used. however, we now have 2 schemes which can be used together (idam and organisation cookie).
+				//so this middleware combines the multiple authentication schemes we have, setting a single user.
+				//it then update the context user values in the DbContext so that the global query filters work.
+				var principal = new ClaimsPrincipal();
+
+	            var cookieAuthResult = await context.AuthenticateAsync(OrganisationCookieAuthenticationOptions.DefaultScheme);
+	            if (cookieAuthResult?.Principal != null)
+	            {
+		            principal.AddIdentities(cookieAuthResult.Principal.Identities);
+	            }
+	            var accountsAuthResult = await context.AuthenticateAsync(AuthenticationConstants.AuthenticationScheme);
+	            if (accountsAuthResult?.Principal != null)
+	            {
+		            principal.AddIdentities(accountsAuthResult.Principal.Identities);
+	            }
+	            context.User = principal;
+
+	            var consultationsContext = context.RequestServices.GetService<ConsultationsContext>();
+	            consultationsContext.ConfigureContext();
+
+				await next();
+            });
+
+			app.UseSpaStaticFiles(new StaticFileOptions { RequestPath = "/consultations" });
 
 		    if (!env.IsDevelopment() && !env.IsIntegrationTest())
 		    {
@@ -264,20 +307,31 @@ namespace Comments
                     options.ExcludeUrls = new[] { "/sockjs-node" };
                     // Pass data in from .NET into the SSR. These come through as `params` within `createServerRenderer` within the server side JS code.
                     // See https://docs.microsoft.com/en-us/aspnet/core/spa/angular?tabs=visual-studio#pass-data-from-net-code-into-typescript-code
-                    options.SupplyData = (httpContext, data) =>
+                    options.SupplyData = async (httpContext, data) =>
                     {
                         data["isHttpsRequest"] = httpContext.Request.IsHttps;
-                        var cookiesForSSR = httpContext.Request.Cookies.Where(cookie => cookie.Key.StartsWith(AuthenticationConstants.CookieName)).ToList();
+                        var cookiesForSSR = httpContext.Request.Cookies.Where(cookie => cookie.Key.StartsWith(AuthenticationConstants.CookieName) || cookie.Key.StartsWith(Constants.SessionCookieName)).ToList();
                         if (cookiesForSSR.Any())
                         {
                             data["cookies"] = $"{string.Join("; ", cookiesForSSR.Select(cookie => $"{cookie.Key}={cookie.Value}"))};";
                         }
-						var user = httpContext.User;
-						data["isAuthorised"] = user.Identity.IsAuthenticated;
-	                    data["displayName"] = user.DisplayName();
+						var user = new User(httpContext.User);
+						var isAuthorised = user.IsAuthenticatedByAccounts;
+						if (!isAuthorised)
+						{
+							var pathNoQuery = httpContext.Request.GetUri().AbsolutePath.StripConsultationsFromPath();
+							if (ConsultationsUri.IsDocumentPageRelativeUrl(pathNoQuery) || ConsultationsUri.IsReviewPageRelativeUrl(pathNoQuery))
+							{
+								var consultationUriParts = ConsultationsUri.ParseRelativeUrl(pathNoQuery);
+								isAuthorised = user.IsAuthorisedByConsultationId(consultationUriParts.ConsultationId);
+							}
+						}
+						data["isAuthorised"] = isAuthorised;
+						data["displayName"] = user.DisplayName;
+						data["isLead"] = user.OrganisationsAssignedAsLead?.Any();
 
 						var host = httpContext.Request.Host.Host;
-						var userRoles = user?.Roles(host).ToList() ?? new List<string>();
+						var userRoles = httpContext.User?.Roles(host).ToList() ?? new List<string>();
 
 						var isAdminUser = userRoles.Any(role => AppSettings.ConsultationListConfig.DownloadRoles.AdminRoles.Contains(role));
 						var teamRoles = userRoles.Where(role => AppSettings.ConsultationListConfig.DownloadRoles.TeamRoles.Contains(role)).Select(role => role).ToList();
@@ -297,9 +351,12 @@ namespace Comments
 						data["registerURL"] = urlHelper.Action(Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnUrl = httpContext.Request.Path, goToRegisterPage = true });
 						data["requestURL"] = httpContext.Request.Path;
 	                    data["accountsEnvironment"] = AppSettings.Environment.AccountsEnvironment;
-	                    //data["user"] = context.User; - possible security implications here, surfacing claims to the front end. might be ok, if just server-side.
-	                    // Pass further data in e.g. user/authentication data
-                    };
+
+						data["OrganisationalCommentingFeature"] = await featureManager.IsEnabledAsync(Constants.Features.OrganisationalCommenting);
+
+						//data["user"] = context.User; - possible security implications here, surfacing claims to the front end. might be ok, if just server-side.
+						// Pass further data in e.g. user/authentication data
+					};
                     options.BootModulePath = $"{spa.Options.SourcePath}/src/server/index.js";
                 });
 

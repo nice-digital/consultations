@@ -1,20 +1,19 @@
-using Comments.Services;
+﻿using Comments.Services;
 using Comments.ViewModels;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using DocumentFormat.OpenXml.Drawing.Diagrams;
-using Microsoft.EntityFrameworkCore.Storage;
+using Comments.Common;
+using Microsoft.EntityFrameworkCore.Internal;
+using Z.EntityFramework.Plus;
 
 namespace Comments.Models
 {
 	public partial class ConsultationsContext : DbContext
     {
 	    private readonly IEncryption _encryption;
-	    private readonly IConfiguration _configuration;
 
 		//these commented out constructors are just here for use when creating scaffolding with EF core. without them it won't work.
 		//don't leave them in uncommented though. and don't set that connection string to a valid value and commit it.
@@ -33,11 +32,21 @@ namespace Comments.Models
 		//}
 
 		public ConsultationsContext(DbContextOptions options, IUserService userService, IEncryption encryption) : base(options)
-        {
-	        _encryption = encryption;
-	        _userService = userService;
-            _createdByUserID = _userService.GetCurrentUser().UserId;
-        }
+		{
+			_encryption = encryption;
+			_userService = userService;
+			ConfigureContext();
+		}
+
+		public void ConfigureContext()
+		{
+			var currentUserInThisScope = _userService.GetCurrentUser(); //this dbcontext's service lifetime is scoped, i.e. new for every request.
+			_createdByUserID = currentUserInThisScope.UserId;
+			_organisationUserIDs = currentUserInThisScope.ValidatedOrganisationUserIds;
+			_organisationIDs = currentUserInThisScope.ValidatedOrganisationIds;
+			var currentUsersOrganisationTheyAreLeadOf = currentUserInThisScope.OrganisationsAssignedAsLead?.FirstOrDefault(); //the new plan is to only support being lead of 1 organisation.
+			_organisationalLeadOrganisationID = currentUsersOrganisationTheyAreLeadOf != null ? (int?)currentUsersOrganisationTheyAreLeadOf.OrganisationId : null;
+		}
 
 		/// <summary>
 		/// It's not obvious from this code, but this it actually filtering on more than it looks like. There's global filters defined in the context, specifically
@@ -58,32 +67,102 @@ namespace Comments.Models
 
 			    partialSourceURIToUse = $"{partialMatchExactSourceURIToUse}/";
 		    }
-			
-			var data = Location.Where(l => partialMatchSourceURI
-					? (l.SourceURI.Equals(partialMatchExactSourceURIToUse) || l.SourceURI.Contains(partialSourceURIToUse))
-					: sourceURIs.Contains(l.SourceURI, StringComparer.OrdinalIgnoreCase))
+
+			var authorisedComments = Comment
+				.Include(c => c.Location)
+				.Where(c => (partialMatchSourceURI
+					? (c.Location.SourceURI.Equals(partialMatchExactSourceURIToUse) || c.Location.SourceURI.Contains(partialSourceURIToUse))
+					: sourceURIs.Contains(c.Location.SourceURI, StringComparer.OrdinalIgnoreCase)))
+				.ToList();
+
+			var data = Location.Where(l => (l.Order != null) &&
+
+			                               (partialMatchSourceURI
+				                               		? (l.SourceURI.Equals(partialMatchExactSourceURIToUse) || l.SourceURI.Contains(partialSourceURIToUse))
+				                               		: sourceURIs.Contains(l.SourceURI, StringComparer.OrdinalIgnoreCase)))
+				//(allAuthorisedLocations.Contains(l.LocationId)))
+
 				.Include(l => l.Comment)
 					.ThenInclude(s => s.SubmissionComment)
-					.ThenInclude(s => s.Submission)
+						.ThenInclude(s => s.Submission)
 
 				.Include(l => l.Comment)
 					.ThenInclude(s => s.Status)
+
+				.Include(l => l.Comment)
+					.ThenInclude(o => o.OrganisationUser)
 
 				.Include(l => l.Question)
 					.ThenInclude(q => q.QuestionType)
 
 				.Include(l => l.Question)
 					.ThenInclude(q => q.Answer)
-					.ThenInclude(s => s.SubmissionAnswer)
+						.ThenInclude(s => s.SubmissionAnswer)
 
-					.OrderBy(l => l.Order)
+				.Include(l => l.Question)
+					.ThenInclude(q => q.Answer)
+						.ThenInclude(o => o.OrganisationUser)
 
-				.ThenByDescending(l =>
-					l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault())
+				.OrderBy(l => l.Order)
+					//.ThenByDescending(l => l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault())
 
 				.ToList();
 
-			return data;
+
+			//EF can't translate the thenbydescending properly, so moving it out and doing it in memory.
+			var sortedData = data.Where(l => l.Comment.Count > 0 || l.Question.Count > 0)
+				.OrderBy(l => l.Order).ThenByDescending(l =>
+					l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate).FirstOrDefault());
+
+			return sortedData;
+		}
+
+		/// <summary>
+		/// Organisation users view each others submitted responses to inform their own, but can't interact with or submit them.
+		/// </summary>
+		/// <param name="sourceURIs"></param>
+        /// <returns></returns>
+		public IEnumerable<Location> GetOtherOrganisationUsersCommentsAndQuestionsForDocument(IList<string> sourceURIs)
+		{
+            var commentsAndAnswers = Location.IgnoreQueryFilters()
+                .IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead
+                                                         && _organisationIDs.Any(o => o.Equals(c.OrganisationId))
+                                                         && !_organisationUserIDs.Contains(c.OrganisationUserId.Value)))
+                .IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead 
+                                                         && _organisationIDs.Any(o => o.Equals(c.OrganisationId)) 
+                                                         && !_organisationUserIDs.Contains(c.OrganisationUserId.Value))
+                    .Select(c=> c.Status))
+                .IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead
+                                                         && _organisationIDs.Any(o => o.Equals(c.OrganisationId))
+                                                         && !_organisationUserIDs.Contains(c.OrganisationUserId.Value))
+                    .Select(c=> c.OrganisationUser))
+
+                .IncludeFilter(l => l.Question)
+                .IncludeFilter(l => l.Question
+                    .Select(q => q.QuestionType))
+                .IncludeFilter(l => l.Question
+                    .Select(q => q.Answer.Where(a => a.StatusId == (int)StatusName.SubmittedToLead
+                                                     && _organisationIDs.Contains(a.OrganisationId.Value) 
+                                                     && !_organisationUserIDs.Contains(a.OrganisationUserId.Value))
+                        .OrderByDescending(a=> a.LastModifiedDate).Select(a => a.LastModifiedDate).FirstOrDefault()))
+                .IncludeFilter(l=> l.Question
+                    .Select(q => q.Answer.Where(a => a.StatusId == (int)StatusName.SubmittedToLead
+                                                     && _organisationIDs.Contains(a.OrganisationId.Value)
+                                                     && !_organisationUserIDs.Contains(a.OrganisationUserId.Value))
+                    .Select(a => a.OrganisationUser)))
+                .OrderBy(l => l.Order)
+                .ToList();
+
+            var filteredLocations = commentsAndAnswers.Where(l =>
+                (l.Order != null) && sourceURIs.Contains(l.SourceURI, StringComparer.OrdinalIgnoreCase));
+
+            var sortedData = filteredLocations.Where(l => l.Comment.Count > 0 || l.Question.Count > 0)
+                .OrderBy(l => l.Order)
+                .ThenByDescending(l =>
+                    l.Comment.OrderByDescending(c => c.LastModifiedDate).Select(c => c.LastModifiedDate)
+                        .FirstOrDefault());
+
+            return sortedData;
 		}
 
 		public IEnumerable<Location> GetQuestionsForDocument(IList<string> sourceURIs, bool partialMatchSourceURI)
@@ -115,16 +194,18 @@ namespace Comments.Models
 			return data;
 		}
 
-
-	    public virtual IList<SubmittedCommentsAndAnswerCount> GetSubmittedCommentsAndAnswerCounts()
+	    public virtual IList<SubmittedCommentsAndAnswerCount> GetSubmittedCommentsAndAnswerCounts(bool SubmittedToLead = false)
 	    {
-		    return SubmittedCommentsAndAnswerCounts.ToList();
+            if (SubmittedToLead)
+                return SubmittedCommentsAndAnswerCounts.Where(o => o.RespondingAsOrganisation == true && o.StatusId == 3).ToList();
+            else
+                return SubmittedCommentsAndAnswerCounts.Where(o => o.StatusId == 2).ToList();
 	    }
 
-		public List<Comment> GetAllSubmittedCommentsForURI(string sourceURI)
+        public List<Comment> GetAllSubmittedCommentsForURI(string sourceURI)
 	    {
 			var comment = Comment.Where(c =>
-					c.StatusId == (int) StatusName.Submitted && (c.Location.SourceURI.Contains($"{sourceURI}/") || c.Location.SourceURI.Equals(sourceURI)) && c.IsDeleted == false)
+					c.StatusId == (int)StatusName.Submitted && (c.Location.SourceURI.Contains($"{sourceURI}/") || c.Location.SourceURI.Equals(sourceURI)))
 				.Include(l => l.Location)
 				.Include(s => s.Status)
 				.Include(sc => sc.SubmissionComment)
@@ -135,7 +216,53 @@ namespace Comments.Models
 			return comment;
 	    }
 
-	    public List<Comment> GetUsersCommentsForURI(string sourceURI)
+		public (List<Comment> comments, List<Answer> answers) GetCommentsAndAnswersSubmittedToALeadForURI(string sourceURI)
+		{
+			var comments = Comment.Where(c =>
+					c.StatusId == (int)StatusName.SubmittedToLead &&
+					(c.Location.SourceURI.Contains($"{sourceURI}/") || c.Location.SourceURI.Equals(sourceURI)) &&
+					c.OrganisationId.Equals(_organisationalLeadOrganisationID))
+				.Include(l => l.Location)
+				.Include(s => s.Status)
+				.Include(sc => sc.SubmissionComment)
+				.ThenInclude(s => s.Submission)
+				.IgnoreQueryFilters()
+				.ToList();
+
+            var answers = Answer.Where(a =>
+                    a.StatusId == (int)StatusName.SubmittedToLead &&
+                    (a.Question.Location.SourceURI.Contains($"{sourceURI}/") ||
+                     a.Question.Location.SourceURI.Equals(sourceURI)) &&
+                    a.OrganisationId.Equals(_organisationalLeadOrganisationID))
+                .Include(q => q.Question)
+                .ThenInclude(l => l.Location)
+                .Include(sc => sc.SubmissionAnswer)
+                .ThenInclude(s => s.Submission)
+                .IgnoreQueryFilters()
+                .ToList();
+
+            return (comments, answers);
+		}
+
+        public bool GetLeadHasBeenSentResponse(string sourceURI)
+        {
+            var leadHasBeenSentComment = Comment.Where(c =>
+                c.StatusId == (int)StatusName.SubmittedToLead &&
+                (c.Location.SourceURI.Contains($"{sourceURI}/") || c.Location.SourceURI.Equals(sourceURI)) &&
+                c.OrganisationId.Equals(_organisationalLeadOrganisationID)).IgnoreQueryFilters().Any();
+
+            var leadHasBeenSentAnswer = Answer.Where(a =>
+                a.StatusId == (int)StatusName.SubmittedToLead &&
+                (a.Question.Location.SourceURI.Contains($"{sourceURI}/") ||
+                 a.Question.Location.SourceURI.Equals(sourceURI)) &&
+                a.OrganisationId.Equals(_organisationalLeadOrganisationID)).IgnoreQueryFilters().Any();
+
+            var leadHasBeenSentResponse = leadHasBeenSentComment || leadHasBeenSentAnswer;
+
+            return leadHasBeenSentResponse;
+        }
+
+		public List<Comment> GetUsersCommentsForURI(string sourceURI)
 	    {
 		   var comment = Comment.Where(c => (c.Location.SourceURI.Contains($"{sourceURI}/") || c.Location.SourceURI.Equals(sourceURI)))
 				.Include(l => l.Location)
@@ -150,8 +277,7 @@ namespace Comments.Models
 		public List<Answer> GetAllSubmittedAnswersForURI(string sourceURI)
 	    {
 			var answer = Answer.Where(a =>
-					a.StatusId == (int) StatusName.Submitted && (a.Question.Location.SourceURI.Contains($"{sourceURI}/") || a.Question.Location.SourceURI.Equals(sourceURI)) &&
-					a.IsDeleted == false)
+					a.StatusId == (int)StatusName.Submitted && (a.Question.Location.SourceURI.Contains($"{sourceURI}/") || a.Question.Location.SourceURI.Equals(sourceURI)))
 				.Include(q => q.Question)
 				.ThenInclude(l => l.Location)
 				.Include(sc => sc.SubmissionAnswer)
@@ -162,7 +288,7 @@ namespace Comments.Models
 			return answer;
 	    }
 
-	    public List<Answer> GetUsersAnswersForURI(string sourceURI)
+        public List<Answer> GetUsersAnswersForURI(string sourceURI)
 	    {
 			var answer = Answer.Where(a => (a.Question.Location.SourceURI.Contains($"{sourceURI}/") || a.Question.Location.SourceURI.Equals(sourceURI)))
 				.Include(q => q.Question)
@@ -204,7 +330,7 @@ namespace Comments.Models
 			return question;
 	    }
 
-		public Comment GetComment(int commentId)
+	    public Comment GetComment(int commentId)
         {
             var comment = Comment.Where(c => c.CommentId.Equals(commentId))
                             .Include(c => c.Location)
@@ -220,6 +346,8 @@ namespace Comments.Models
 		        .Include(s => s.Status)
 		        .Include(q => q.Question)
 					.ThenInclude(qt => qt.QuestionType)
+		        .Include(q => q.Question)
+					.ThenInclude(l => l.Location)
 		        .FirstOrDefault();
 
 	        return answer;
@@ -243,13 +371,54 @@ namespace Comments.Models
 	    {
 		    var commentsToUpdate = Comment.Where(c => commentIds.Contains(c.CommentId)).ToList();
 
-		    if (commentsToUpdate.Any(c => c.CreatedByUserId != _createdByUserID))
-			    throw new Exception("Attempt to update status of a comment which doesn't belong to the current user");
+			// Comments created by individual commenters can only be submitted by that user, updating the status of those comments
+			if(commentsToUpdate.Any(c=>c.CommentByUserType == UserType.IndividualCommenter && c.CreatedByUserId != _createdByUserID))
+				throw new Exception("Attempt to update status of a comment which doesn't belong to the current user");
 
-		    commentsToUpdate.ForEach(c => c.StatusId = status.StatusId);
+			// Comments created by organisational commenters are submitted to their organisation lead only by that organisational commenter, updating the status of those comments
+			if(commentsToUpdate.Any(c => c.CommentByUserType == UserType.OrganisationalCommenter &&  !_organisationUserIDs.Any(o=> o.Equals(c.OrganisationUserId))))
+				throw new Exception("Attempt to update status of a comment which doesn't belong to the current organisation code user");
+
+			// Comments that have been submitted to organisational leads, or created by those leads, can be submitted by any lead in that organisation, updating the status of those comments
+			if (commentsToUpdate.Any(c => c.CommentByUserType == UserType.OrganisationLead && c.OrganisationId != _organisationalLeadOrganisationID))
+				throw new Exception("Attempt to update status of a comment which doesn't belong to the current organisation lead users organisation");
+
+			commentsToUpdate.ForEach(c => c.StatusId = status.StatusId);
 		}
 
-	    public void AddSubmissionComments(IEnumerable<int> commentIds, int submissionId)
+	    public void DuplicateComment(IEnumerable<int> commentIds)
+	    {
+		    var commentsToDuplicate = Comment.Where(c => commentIds.Contains(c.CommentId)).ToList();
+
+		    var status = GetStatus(StatusName.SubmittedToLead);
+			commentsToDuplicate.ForEach(c => c.StatusId = status.StatusId);
+
+			status = GetStatus(StatusName.Draft);
+
+		    foreach (var comment in commentsToDuplicate)
+			{
+				var commentToSave = new Models.Comment(comment.LocationId, null, comment.CommentText, comment.LastModifiedByUserId, comment.Location,status.StatusId, status, comment.OrganisationUserId, comment.CommentId, comment.OrganisationId);
+				Comment.Add(commentToSave);
+			}
+	    }
+
+		public void DuplicateAnswer(IEnumerable<int> answerIds)
+		{
+			var answersToDuplicate = Answer.Where(c => answerIds.Contains(c.AnswerId)).ToList();
+
+			var status = GetStatus(StatusName.SubmittedToLead);
+			answersToDuplicate.ForEach(c => c.StatusId = status.StatusId);
+
+			status = GetStatus(StatusName.Draft);
+
+			foreach (var answer in answersToDuplicate)
+			{
+				var answerToSave = new Models.Answer(answer.QuestionId, null, answer.AnswerText, answer.AnswerBoolean, answer.Question, status.StatusId, status, answer.OrganisationUserId, answer.AnswerId, answer.OrganisationId);
+				Answer.Add(answerToSave);
+			}
+		}
+
+		public void AddSubmissionComments(IEnumerable<int> commentIds, int submissionId)
 	    {
 			//the extra DB hit here is to ensure that duplicate rows aren't inserted. currently, you should only be able to submit a comment once. in the future though that might change as resubmitting is on the cards, and the DB supports that now.
 		    var existingSubmissionCommentIdsForPassedInComments = SubmissionComment.Where(sc => commentIds.Contains(sc.CommentId)).Select(sc => sc.CommentId).ToList();
@@ -264,10 +433,19 @@ namespace Comments.Models
 		{
 			var answersToUpdate = Answer.Where(a => answerIds.Contains(a.AnswerId)).ToList();
 
-			if (answersToUpdate.Any(a => a.CreatedByUserId != _createdByUserID))
+			// Answers created by individual commenters can only be submitted by that user, updating the status of those answers
+			if (answersToUpdate.Any(a => a.AnswerByUserType == UserType.IndividualCommenter && a.CreatedByUserId != _createdByUserID))
 				throw new Exception("Attempt to update status of an answer which doesn't belong to the current user");
 
-			answersToUpdate.ForEach(c => c.StatusId = status.StatusId);
+			// Answers created by organisational commenters are submitted to their organisation lead only by that organisational commenter, updating the status of those answers
+			if (answersToUpdate.Any(a => a.AnswerByUserType == UserType.OrganisationalCommenter && !_organisationUserIDs.Any(o => o.Equals(a.OrganisationUserId))))
+				throw new Exception("Attempt to update status of an answer which doesn't belong to the current organisation code user");
+
+			// Answers that have been submitted to organisational leads, or created by those leads, can be submitted by any lead in that organisation, updating the status of those answers
+			if (answersToUpdate.Any(a => a.AnswerByUserType == UserType.OrganisationLead && a.OrganisationId != _organisationalLeadOrganisationID))
+				throw new Exception("Attempt to update status of an answer which doesn't belong to the current organisation lead users organisation");
+
+			answersToUpdate.ForEach(a => a.StatusId = status.StatusId);
 		}
 
 	    public void AddSubmissionAnswers(IEnumerable<int> answerIds, int submissionId)
@@ -282,7 +460,7 @@ namespace Comments.Models
 		    SubmissionAnswer.AddRange(submissionAnswersToInsert);
 	    }
 
-	    public Submission InsertSubmission(string currentUser, bool respondingAsOrganisation, string organisationName, bool hasTobaccoLinks, string tobaccoDisclosure, bool? organisationExpressionOfInterest)
+	    public Submission InsertSubmission(string currentUser, bool? respondingAsOrganisation, string organisationName, bool? hasTobaccoLinks, string tobaccoDisclosure, bool? organisationExpressionOfInterest)
 	    {
 		    var submission = new Models.Submission(currentUser, DateTime.UtcNow, respondingAsOrganisation, organisationName, hasTobaccoLinks, tobaccoDisclosure, organisationExpressionOfInterest);
 		    Submission.Add(submission);
@@ -574,8 +752,8 @@ namespace Comments.Models
 
 	    public (int totalComments, int totalAnswers, int totalSubmissions) GetStatusData()
 	    {
-		    return (totalComments: Comment.IgnoreQueryFilters().Count(c => c.IsDeleted == false),
-			    totalAnswers: Answer.IgnoreQueryFilters().Count(a => a.IsDeleted == false),
+		    return (totalComments: Comment.IgnoreQueryFilters().Count(),
+			    totalAnswers: Answer.IgnoreQueryFilters().Count(),
 			    totalSubmissions: Submission.IgnoreQueryFilters().Count());
 	    }
 
@@ -772,12 +950,12 @@ namespace Comments.Models
 		/// <returns></returns>
 		public IEnumerable<KeyValuePair<string, Status>> GetAllSourceURIsTheCurrentUserHasCommentedOrAnsweredAQuestion()
 		{
-			var comments = Comment 
+			var comments = Comment
 				.Include(l => l.Location)
 				.Include(s => s.Status)
 				.ToList();
 
-			var answers = Answer 
+			var answers = Answer
 				.Include(q => q.Question)
 				.ThenInclude(l => l.Location)
 				.Include(s => s.Status)
@@ -787,5 +965,123 @@ namespace Comments.Models
 			var answerSourceURIsAndStatus = answers.Select(answer => new KeyValuePair<string, Status>(answer.Question.Location.SourceURI, answer.Status));
 			return commentSourceURIsAndStatus.Concat(answerSourceURIsAndStatus);
 		}
-	}
+
+		public IEnumerable<OrganisationAuthorisation> GetOrganisationAuthorisations(IList<string> consultationSourceURIs)
+		{
+			var organisationAuthorisations = OrganisationAuthorisation
+				.Include(oa => oa.Location)
+				.Where(oa => consultationSourceURIs.Contains(oa.Location.SourceURI, StringComparer.OrdinalIgnoreCase))
+				.ToList();
+
+			return organisationAuthorisations;
+		}
+
+		public OrganisationAuthorisation GetOrganisationAuthorisationByCollationCode(string collationCode)
+		{
+			collationCode = collationCode.Replace(" ", "");
+
+			var organisationAuthorisations = OrganisationAuthorisation
+				.Include(oa => oa.Location)
+				.Where(oa => oa.CollationCode.Equals(collationCode))
+				.ToList();
+
+			return organisationAuthorisations.FirstOrDefault(); //there should only be 1 with a given collation code.
+		}
+
+		public OrganisationAuthorisation SaveCollationCode(string sourceURI, string createdByUserId, DateTime createdDate, int organisationId, string collationCode)
+		{
+			collationCode = collationCode.Replace(" ", "");
+
+			var location = new Location(sourceURI, null, null, null, null, null, null, null, null, null, null, null);
+			Location.Add(location);
+			SaveChanges();
+			var organisationAuthorisation = new OrganisationAuthorisation(createdByUserId, createdDate, organisationId, location.LocationId, collationCode);
+			OrganisationAuthorisation.Add(organisationAuthorisation);
+			SaveChanges();
+			return organisationAuthorisation;
+		}
+
+		public OrganisationUser CreateOrganisationUser(int organisationAuthorisationID, Guid authorisationSession, DateTime expirationDate)
+		{
+			var organisationUser = new OrganisationUser(organisationAuthorisationID, authorisationSession, expirationDate);
+			OrganisationUser.Add(organisationUser);
+			SaveChanges();
+			return organisationUser;
+		}
+
+		public OrganisationUser UpdateEmailAddressForOrganisationUser(string emailAddress, int organisationUserId)
+		{
+			var organisationUser = OrganisationUser
+				.Where(ou => ou.OrganisationUserId.Equals(organisationUserId))
+				.Single();
+
+			organisationUser.EmailAddress = emailAddress;
+
+			SaveChanges();
+			return organisationUser;
+		}
+
+		public OrganisationUser GetOrganisationUser(Guid sessionId)
+		{
+			return GetOrganisationUsers(new List<Guid> {sessionId}).FirstOrDefault();
+		}
+
+		public IEnumerable<OrganisationUser> GetOrganisationUsers(IEnumerable<Guid> sessionIds)
+		{
+			return
+				OrganisationUser
+					.Include(ou => ou.OrganisationAuthorisation).
+					ThenInclude(a => a.Location)
+					.Where(ou => sessionIds.Contains(ou.AuthorisationSession));
+		}
+
+		public IEnumerable<OrganisationUser> GetOrganisationUsersByOrganisationUserIds(IEnumerable<int> organisationUserIds)
+		{
+			return OrganisationUser.Where(ou => organisationUserIds.Contains(ou.OrganisationUserId));
+		}
+
+
+		public bool AreCommentsForThisOrganisation(IEnumerable<int> commentIds, int organisationId)
+		{
+			var comments = Comment
+				.Include(c => c.OrganisationUser)
+					.ThenInclude(ou => ou.OrganisationAuthorisation)
+				.IgnoreQueryFilters()
+				.Where(c => commentIds.Contains(c.CommentId)).ToList();
+
+			return comments.Where(c => c.OrganisationUser?.OrganisationAuthorisation != null)
+				.Any(c => c.OrganisationUser.OrganisationAuthorisation.OrganisationId.Equals(organisationId));
+		}
+
+		public bool AreAnswersForThisOrganisation(List<int> answerIds, int organisationId)
+		{
+			var answers = Answer
+				.Include(a => a.OrganisationUser)
+					.ThenInclude(ou => ou.OrganisationAuthorisation)
+				.IgnoreQueryFilters()
+				.Where(a => answerIds.Contains(a.AnswerId)).ToList();
+
+			return answers.Where(c => c.OrganisationUser?.OrganisationAuthorisation != null)
+				.Any(c => c.OrganisationUser.OrganisationAuthorisation.OrganisationId.Equals(organisationId));
+
+		}
+
+        public List<string> GetEmailAddressForCommentsAndAnswers(CommentsAndQuestions commentsAndQuestions)
+        {
+            var commentIds = commentsAndQuestions.Comments.Select(c => c.CommentId).ToList();
+            var answerIds = commentsAndQuestions.Questions.SelectMany(q => q.Answers).Select(a => a.AnswerId).ToList();
+
+            var comments = Comment.Where(c => commentIds.Contains(c.CommentId)).ToList();
+            var answers = Answer.Where(a => answerIds.Contains(a.AnswerId)).ToList();
+
+            var emailAddresses = OrganisationUser.Where(o => comments.Select(c => c.OrganisationUserId).Contains(o.OrganisationUserId)
+                                                || answers.Select(a => a.OrganisationUserId).Contains(o.OrganisationUserId))
+                                                .Select(o => o.EmailAddress)
+                                                .Where(o => o != null)
+                                                .Distinct()
+                                                .ToList();
+            return emailAddresses;
+
+        }
+    }
 }

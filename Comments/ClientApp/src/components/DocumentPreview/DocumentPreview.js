@@ -9,7 +9,7 @@ import { load } from "./../../data/loader";
 import BreadCrumbsWithRouter from "./../Breadcrumbs/Breadcrumbs";
 import { StackedNav } from "./../StackedNav/StackedNav";
 import { processPreviewHtml } from "../../document-processing/process-preview-html";
-import { LoginBanner } from "./../LoginBanner/LoginBanner";
+import LoginBannerWithRouter from "./../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
 import { DocumentPreviewErrorOverview } from "./DocumentPreviewErrorOverview";
 import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
@@ -240,27 +240,27 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 			loading: true,
 		});
 		if (this.state.isAuthorised){
-		this.gatherData()
-			.then(data => {
+			this.gatherData()
+				.then(data => {
 
-				this.setState({
-					...data,
-					loading: false,
+					this.setState({
+						...data,
+						loading: false,
+					});
+					this.addChapterDetailsToSections(this.state.chapterData);
+					// once we've loaded, pull focus to the document container
+					pullFocusByQuerySelector(".document-comment-container");
+				})
+				.catch(err => {
+					console.log("cdu error was: " + JSON.stringify(err));
+					//throw new Error("gatherData in componentDidUpdate failed " + err);
+					this.setState({
+						error: {
+							hasError: true,
+							message: "gatherData in componentDidUpdate failed  " + err,
+						},
+					});
 				});
-				this.addChapterDetailsToSections(this.state.chapterData);
-				// once we've loaded, pull focus to the document container
-				pullFocusByQuerySelector(".document-comment-container");
-			})
-			.catch(err => {
-				console.log("cdu error was: " + JSON.stringify(err));
-				//throw new Error("gatherData in componentDidUpdate failed " + err);
-				this.setState({
-					error: {
-						hasError: true,
-						message: "gatherData in componentDidUpdate failed  " + err,
-					},
-				});
-			});
 		}
 	}
 
@@ -310,12 +310,15 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 				</Helmet>
 				<UserContext.Consumer>
 					{(contextValue: any) => !contextValue.isAuthorised ?
-						<LoginBanner signInButton={false}
-									 currentURL={this.props.match.url}
-									 signInURL={contextValue.signInURL}
-									 registerURL={contextValue.registerURL}
-									 signInText="to view the document preview" />
-						: 
+						<LoginBannerWithRouter signInButton={false}
+							currentURL={this.props.match.url}
+							signInURL={contextValue.signInURL}
+							registerURL={contextValue.registerURL}
+							signInText="to view the document preview"
+							allowOrganisationCodeLogin={false}
+							orgFieldName="documentpreview"
+						/>
+						:
 						<div className="container">
 							<div className="grid">
 								<div data-g="12">
@@ -350,10 +353,10 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 									</main>
 								</div>
 							</div>
-						</div>						
+						</div>
 					}
 				</UserContext.Consumer>
-				
+
 			</Fragment>
 		);
 	}

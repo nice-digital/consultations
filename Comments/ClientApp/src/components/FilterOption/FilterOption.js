@@ -24,7 +24,7 @@ export class FilterOption extends Component<PropsType, StateType> {
 		super(props);
 
 		this.state = {
-			isSelected: this.props.option.isSelected
+			isSelected: this.props.option.isSelected,
 		};
 
 		this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
@@ -32,31 +32,31 @@ export class FilterOption extends Component<PropsType, StateType> {
 
 	UNSAFE_componentWillReceiveProps(nextProps: PropsType) {
 		this.setState({
-			isSelected: nextProps.option.isSelected
+			isSelected: nextProps.option.isSelected,
 		});
 	}
 
 	handleCheckboxChange() {
 		this.setState(prevState => ({
-			isSelected: !prevState.isSelected
+			isSelected: !prevState.isSelected,
 		  }), () => {
 			this.props.history.push(this.getHref());
 		  });
 	}
 
 	getHref() {
-		let path = removeQueryParameter(this.props.path, this.props.groupId, this.props.option.id);
+		let path = removeQueryParameter(this.props.path, this.props.groupId, encodeURIComponent(this.props.option.id));
 		path = removeQueryParameter(path, "page");
 
 		return this.state.isSelected
-			? appendQueryParameter(path, this.props.groupId, this.props.option.id)
+			? appendQueryParameter(path, this.props.groupId, encodeURIComponent(this.props.option.id))
 			: path;
 	}
 
 	render() {
 		return (
 			<label htmlFor={`filter_${this.props.groupId}_${this.props.option.id}`}
-				className="filter-group__option">
+				className="filter-group__option break-word">
 
 				<input id={`filter_${this.props.groupId}_${this.props.option.id}`}
 					type="checkbox"

@@ -3,9 +3,8 @@
 exports[`[ClientApp]  Document Component should match snapshot with supplied data 1`] = `
 Array [
   "",
-  "",
   <aside
-    className="Tutorial mt--0 pt--d pb--d"
+    className="tutorial mt--0 pt--d pb--d"
   >
     <div
       className="container"
@@ -16,55 +15,50 @@ Array [
       >
         Hide how to comment
       </button>
-      <div>
-        <h1
-          className="pt--c"
-        >
-          How to comment
-        </h1>
+      <div
+        className="grid"
+      >
         <div
-          className="grid"
+          data-g="12 sm:7"
+        >
+          <span
+            className="h1 pt--c"
+          >
+            How to comment
+          </span>
+          <p>
+            Please view our 5-minute video on how to use the online commenting system.
+          </p>
+          <p>
+            See how to:
+          </p>
+          <ul>
+            <li>
+              Create comments and respond to questions
+            </li>
+            <li>
+              Add, edit and delete comments
+            </li>
+            <li>
+              Create comments specific to sections of the document
+            </li>
+            <li>
+              Review all your feedback before submitting your response
+            </li>
+          </ul>
+        </div>
+        <div
+          data-g="12 sm:5"
         >
           <div
-            data-g="12 sm:4"
+            className="tutorial__video"
           >
-            <p
-              className="mt--0"
-            >
-              Use the icon next to chapters, subsections and recommendations to comment on them
-            </p>
-            <img
-              alt="Mouse pointer hovering over commenting icon"
-              className="Tutorial__buttonImage"
-              src="images/tutorial-1.png"
-            />
-          </div>
-          <div
-            data-g="12 sm:4"
-          >
-            <p
-              className="mt--0"
-            >
-              You can also highlight a selection of text using the cursor to make a comment on it
-            </p>
-            <img
-              alt="Animation showing an example of highlighting text and clicking comment"
-              className="Tutorial__buttonImage"
-              src="images/tutorial-2.gif"
-            />
-          </div>
-          <div
-            data-g="12 sm:4"
-          >
-            <p
-              className="mt--0"
-            >
-              Review your comments or answers before submitting your response
-            </p>
-            <img
-              alt="Indication of how to get to the review page"
-              className="Tutorial__buttonImage"
-              src="images/tutorial-3.png"
+            <iframe
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen={true}
+              frameBorder="0"
+              src="https://www.youtube.com/embed/DILcZkxVPCY?rel=0"
+              title="YouTube video player"
             />
           </div>
         </div>
@@ -99,6 +93,7 @@ Array [
               itemScope={true}
               itemType="http://schema.org/ListItem"
               onClick={[Function]}
+              role="presentation"
             >
               <a
                 href="/"
@@ -121,6 +116,7 @@ Array [
               itemScope={true}
               itemType="http://schema.org/ListItem"
               onClick={[Function]}
+              role="presentation"
             >
               <a
                 href="/guidance/indevelopment/gid-ta10232/consultation/"
@@ -139,35 +135,58 @@ Array [
             </li>
           </ol>
         </nav>
-        <main
-          role="main"
-        >
+        <main>
           <div
             className="page-header"
           >
             Array [
-              <h1
-                className="page-header__heading mt--0"
-                data-qa-sel="changeable-page-header"
-              >
-                Unstable angina and NSTEMI
-              </h1>,
+              Array [
+                <h1
+                  className="page-header__heading mt--0"
+                  data-qa-sel="changeable-page-header"
+                >
+                  Unstable angina and NSTEMI
+                </h1>,
+                <div
+                  className="mb--d"
+                >
+                  <p
+                    className="container container-full ml--0"
+                  >
+                    <span>
+                      <span
+                        className="tag tag--open"
+                      >
+                        Open for comments
+                      </span>
+                       Open until
+                       
+                      <time
+                        dateTime={"2029-05-31T16:00:00.000Z"}
+                      >
+                        31 May 2029
+                      </time>
+                    </span>
+                      
+                  </p>
+                </div>,
+              ],
               <div
-                className="mb--d"
+                aria-live="polite"
+                className="alert alert--info"
+                role="status"
               >
                 <p>
-                  <span
-                    className="tag tag--open"
+                  We have updated this service so that members of the same organisation can now collaborate on a joint online response.
+                </p>
+                <p>
+                  Read our 
+                  <a
+                    href="https://www.nice.org.uk/news/blog/groups-and-organisations-can-work-together-on-public-consultations-response"
                   >
-                    Open for comments
-                  </span>
-                   Open until
-                   
-                  <time
-                    dateTime={"2029-05-31T16:00:00.000Z"}
-                  >
-                    31 May 2029
-                  </time>
+                    blog
+                  </a>
+                   to learn more.
                 </p>
               </div>,
             ]
@@ -689,11 +708,13 @@ Array [
               data-g="12 md:6 md:pull:3"
             >
               <div
+                aria-live="polite"
                 className="document-comment-container "
                 id="content-start"
               >
                 <div
                   onMouseUp={[Function]}
+                  role="presentation"
                 >
                   <div
                     className="selection-container unselectable"
@@ -731,6 +752,7 @@ Array [
                         data-gtm-category="Consultation comments page"
                         data-gtm-label="Comment on chapter"
                         data-qa-sel="in-text-comment-button"
+                        data-sectionnumber={null}
                         onClick={[Function]}
                         tabIndex={0}
                         title="Comment on chapter"

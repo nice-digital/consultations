@@ -8,6 +8,7 @@ using Comments.Common;
 using Comments.Configuration;
 using Microsoft.AspNetCore.Http;
 using NICE.Feeds;
+using NICE.Feeds.Indev.Models;
 using NICE.Identity.Authentication.Sdk.API;
 using Constants = Comments.Common.Constants;
 using Location = Comments.Models.Location;
@@ -58,8 +59,8 @@ namespace Comments.Services
 
         public (int rowsUpdated, Validate validate) EditQuestion(int questionId, ViewModels.Question question)
         {
-            if (!_currentUser.IsAuthorised)
-                return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"Not logged in editing question id:{questionId}"));
+            if (!_currentUser.IsAuthenticatedByAccounts) //should never be true, since this is behind a controller with authorise attribute specifying admin roles.
+                return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"Not logged in editing question id:{questionId}"));
 
             var questionInDatabase = _context.GetQuestion(questionId);
 
@@ -74,8 +75,8 @@ namespace Comments.Services
 
         public (int rowsUpdated, Validate validate) DeleteQuestion(int questionId)
         {
-            if (!_currentUser.IsAuthorised)
-                return (rowsUpdated: 0, validate: new Validate(valid: false, unauthorised: true, message: $"Not logged in deleting question id:{questionId}"));
+            if (!_currentUser.IsAuthenticatedByAccounts) //should never be true, since this is behind a controller with authorise attribute specifying admin roles.
+				return (rowsUpdated: 0, validate: new Validate(valid: false, unauthenticated: true, message: $"Not logged in deleting question id:{questionId}"));
 
             var questionInDatabase = _context.GetQuestion(questionId);
 
@@ -88,12 +89,12 @@ namespace Comments.Services
 
         public (ViewModels.Question question, Validate validate) CreateQuestion(ViewModels.Question question)
         {
-            if (!_currentUser.IsAuthorised)
-                return (question: null, validate: new Validate(valid: false, unauthorised: true, message: "Not logged in creating question"));
+            if (!_currentUser.IsAuthenticatedByAccounts) //should never be true, since this is behind a controller with authorise attribute specifying admin roles.
+				return (question: null, validate: new Validate(valid: false, unauthenticated: true, message: "Not logged in creating question"));
 
 	        var questionType = _context.GetQuestionTypes().SingleOrDefault(qt => qt.QuestionTypeId.Equals(question.QuestionTypeId));
 			if (questionType == null)
-				return (question: null, validate: new Validate(valid: false, unauthorised: false, message: "Question type not found"));
+				return (question: null, validate: new Validate(valid: false, unauthenticated: false, message: "Question type not found"));
 
 			var locationToSave = new Models.Location(question as ViewModels.Location);
             var questionToSave = new Models.Question(question.LocationId, question.QuestionText, question.QuestionTypeId, locationToSave, questionType, answer: null);
@@ -130,7 +131,7 @@ namespace Comments.Services
 			    allTheQuestions.AddRange(location.Question.Select(question => new Question(location, question)));
 		    }
 
-		    var documentsAndConsultationTitle = _consultationService.GetDocuments(consultationId, reference, draft);
+		    var documentsAndConsultationTitle = await _consultationService.GetDocuments(consultationId, reference, draft);
 		    var questionAdminDocuments = new List<QuestionAdminDocument>();
 			foreach (var document in documentsAndConsultationTitle.documents)
 			{
@@ -159,7 +160,7 @@ namespace Comments.Services
 
 		    var previewState = draft ? PreviewState.Preview : PreviewState.NonPreview;
 		    var documentId = draft ? Constants.DummyDocumentNumberForPreviewProject : (int?)null;
-			var consultationState = _consultationService.GetConsultationState(consultationId, documentId, reference, previewState);
+			var consultationState = await _consultationService.GetConsultationState(consultationId, documentId, reference, previewState);
 
 			var previousQuestions = _context.GetAllPreviousUniqueQuestions();
 
