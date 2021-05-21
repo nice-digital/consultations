@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Comments.Models;
 using Comments.ViewModels;
 using System.Collections.Generic;
@@ -114,7 +114,7 @@ namespace Comments.Services
 			{
 				commentInViewModel.UpdateStatusFromDBModel(status);
 			}
-			_context.AddSubmissionComments(commentIds, submission.SubmissionId);
+			_context.AddSubmissionComments(commentIds, submission);
 		}
 
 		private void UpdateAnswersModel(IList<ViewModels.Answer> answers, Models.Submission submission, Models.Status status)
@@ -126,7 +126,7 @@ namespace Comments.Services
 			{
 				answerInViewModel.UpdateStatusFromDBModel(status);
 			}
-			_context.AddSubmissionAnswers(answerIds, submission.SubmissionId);
+			_context.AddSubmissionAnswers(answerIds, submission);
 		}
 
 		private double GetDuration(Models.Submission submissionToSave)

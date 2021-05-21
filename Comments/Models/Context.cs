@@ -433,14 +433,14 @@ namespace Comments.Models
 			}
 		}
 
-		public void AddSubmissionComments(IEnumerable<int> commentIds, int submissionId)
+		public void AddSubmissionComments(IEnumerable<int> commentIds, Models.Submission submission)
 	    {
 			//the extra DB hit here is to ensure that duplicate rows aren't inserted. currently, you should only be able to submit a comment once. in the future though that might change as resubmitting is on the cards, and the DB supports that now.
 		    var existingSubmissionCommentIdsForPassedInComments = SubmissionComment.Where(sc => commentIds.Contains(sc.CommentId)).Select(sc => sc.CommentId).ToList();
 
 		    var submissionCommentsToInsert = commentIds.Where(commentId =>
 				    !existingSubmissionCommentIdsForPassedInComments.Contains(commentId))
-			    .Select(commentId => new Models.SubmissionComment(submissionId, commentId)).ToList();
+			    .Select(commentId => new Models.SubmissionComment(submission.SubmissionId, commentId) {Submission = submission}).ToList();
 
 			SubmissionComment.AddRange(submissionCommentsToInsert);
 		}
@@ -463,14 +463,13 @@ namespace Comments.Models
 			answersToUpdate.ForEach(a => a.StatusId = status.StatusId);
 		}
 
-	    public void AddSubmissionAnswers(IEnumerable<int> answerIds, int submissionId)
+	    public void AddSubmissionAnswers(IEnumerable<int> answerIds, Models.Submission submission)
 	    {
 		    //the extra DB hit here is to ensure that duplicate rows aren't inserted. currently, you should only be able to submit a comment once. in the future though that might change as resubmitting is on the cards, and the DB supports that now.
 		    var existingSubmissionAnswerIdsForPassedInAnswers = SubmissionAnswer.Where(sa => answerIds.Contains(sa.AnswerId)).Select(sa => sa.AnswerId).ToList();
 
-		    var submissionAnswersToInsert = answerIds.Where(commentId =>
-				    !existingSubmissionAnswerIdsForPassedInAnswers.Contains(commentId))
-			    .Select(commentId => new Models.SubmissionAnswer(submissionId, commentId)).ToList();
+		    var submissionAnswersToInsert = answerIds.Where(answerId => !existingSubmissionAnswerIdsForPassedInAnswers.Contains(answerId))
+			    .Select(answerId => new Models.SubmissionAnswer(submission.SubmissionId, answerId) {Submission = submission}).ToList();
 
 		    SubmissionAnswer.AddRange(submissionAnswersToInsert);
 	    }
