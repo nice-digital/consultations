@@ -23,6 +23,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Authorization;
 using NICE.Feeds.Indev;
 using NICE.Feeds.Indev.Models.List;
 using Answer = Comments.Models.Answer;
@@ -189,8 +191,20 @@ namespace Comments.Test.Infrastructure
 
 	                if (bypassAuthentication)
 	                {
-		                services.AddMvc(opt => opt.Filters.Add(new AllowAnonymousFilter())); //bypass authentication
-	                }
+		                services.AddControllersWithViews(opt =>
+		                {
+			                opt.Filters.Add(new AllowAnonymousFilter());
+		                });
+
+		                services.AddSingleton<IAuthorizationHandler, AllowAnonymous>();
+
+						//services.AddMvc(opt =>
+						//{
+						// opt.Filters.Add(new AllowAnonymousFilter());
+						// opt.Filters.Add(new FakeUserFilter());
+						//});
+						// .AddApplicationPart(typeof(Startup).Assembly); //bypass authentication
+					}
 
 					services.TryAddSingleton<IApiTokenStore, FakeApiTokenStore>();
                 })

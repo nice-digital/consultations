@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using System.Net.Http;
+using Microsoft.AspNetCore.Authorization;
 using NICE.Identity.Authentication.Sdk.TokenStore;
 
 namespace Comments.Test.Infrastructure
@@ -45,7 +46,8 @@ namespace Comments.Test.Infrastructure
 						services.TryAddTransient<IConsultationService>(provider => fakeConsultationService);
 					}
 
-					services.AddMvc(opt => opt.Filters.Add(new AllowAnonymousFilter()));
+					services.AddControllersWithViews(opt => opt.Filters.Add(new AllowAnonymousFilter()));
+					services.TryAddSingleton<IAuthorizationHandler, AllowAnonymous>();
 				})
 				.Configure(app =>
 				{
