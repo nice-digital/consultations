@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace Comments.Configuration
 {
@@ -8,8 +8,12 @@ namespace Comments.Configuration
 
         public string Name { get; set; }
 
+        public string CorsOrigin { get; set; }
+
         //public bool IsLocal => string.Equals(Name, LocalEnvironmentName, StringComparison.OrdinalIgnoreCase);
 
-	    public string AccountsEnvironment { get; set; } = "Live";
+        public string AccountsEnvironment { get; set; } = "Live";
+
+
     }
 }

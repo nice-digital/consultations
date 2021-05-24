@@ -322,10 +322,8 @@ namespace Comments.Test.UnitTests
 
 	        //Assert
 	        viewModel.Comments.Count.Equals(1);
-			viewModel.Comments.Single().CommentText.ShouldBe("another user from my organisations comment submitted to lead");
+	        var comment = viewModel.Comments.Single();
+			comment.CommentText.ShouldBe("another user from my organisations comment submitted to lead");
         }
-		
-	}
+    }
 }
-
-

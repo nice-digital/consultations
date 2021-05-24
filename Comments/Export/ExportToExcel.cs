@@ -434,7 +434,7 @@ namespace Comments.Export
 					UserName = userName,
 					Email = email,
 					CommentId = comment.CommentId,
-					Comment =  comment.CommentText.Length > 32767 ? SplitLongComment(comment.CommentText, excel, email, userName, order, locationDetails, comment, commentOn, excelCellLimit): comment.CommentText,
+					Comment = comment.CommentText != null && comment.CommentText.Length > 32767 ? SplitLongComment(comment.CommentText, excel, email, userName, order, locationDetails, comment, commentOn, excelCellLimit): comment.CommentText,
 					QuestionId = null,
 					Question = null,
 					AnswerId = null,
@@ -473,7 +473,7 @@ namespace Comments.Export
 					Question = answer.Question.QuestionText,
 					AnswerId = answer.AnswerId,
 					AnswerBoolean = answer.AnswerBoolean,
-					Answer = answer.AnswerText.Length > 32767 ? SplitLongAnswer(answer.AnswerText, excel, email, userName, order, locationDetails, answer, excelCellLimit) : answer.AnswerText,
+					Answer = answer.AnswerText != null && answer.AnswerText.Length > 32767 ? SplitLongAnswer(answer.AnswerText, excel, email, userName, order, locationDetails, answer, excelCellLimit) : answer.AnswerText,
                     OrganisationName = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.OrganisationName : null,
 					RepresentsOrganisation = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.RespondingAsOrganisation : null,
 					HasTobaccoLinks = answer.SubmissionAnswer.Count > 0 ? answer.SubmissionAnswer?.First().Submission.HasTobaccoLinks : null,
@@ -669,7 +669,7 @@ namespace Comments.Export
 			if (comment.CommentByUserType == UserType.OrganisationalCommenter)
 				return null;
 
-			return userDetailsForUserIds.ContainsKey(comment.SubmissionComment?.First().Submission.SubmissionByUserId)
+            return comment.SubmissionComment != null && comment.SubmissionComment.Count > 0 && userDetailsForUserIds.ContainsKey(comment.SubmissionComment?.First().Submission.SubmissionByUserId)
 				? userDetailsForUserIds[comment.SubmissionComment?.First().Submission.SubmissionByUserId].displayName
 				: "Not found";
 		}
@@ -678,12 +678,12 @@ namespace Comments.Export
 		{
 			if (comment.CommentByUserType == UserType.OrganisationalCommenter)
 			{
-				return emailAddressesForOrganisationIds.ContainsKey(comment.OrganisationUserId.Value)
+                return comment.OrganisationUserId.HasValue && emailAddressesForOrganisationIds.ContainsKey(comment.OrganisationUserId.Value)
 					? emailAddressesForOrganisationIds[comment.OrganisationUserId.Value]
 					: "Not found";
 			}
 
-			return userDetailsForUserIds.ContainsKey(comment.SubmissionComment?.First().Submission.SubmissionByUserId)
+			return comment.SubmissionComment != null && comment.SubmissionComment.Count > 0 && userDetailsForUserIds.ContainsKey(comment.SubmissionComment?.First().Submission.SubmissionByUserId)
 				? userDetailsForUserIds[comment.SubmissionComment?.First().Submission.SubmissionByUserId].emailAddress
 				: "Not found";
 		}
@@ -693,7 +693,7 @@ namespace Comments.Export
 			if (answer.AnswerByUserType == UserType.OrganisationalCommenter)
 				return null;
 			
-			return userDetailsForUserIds.ContainsKey(answer.SubmissionAnswer?.First().Submission.SubmissionByUserId)
+			return answer.SubmissionAnswer != null && answer.SubmissionAnswer.Count > 0 && userDetailsForUserIds.ContainsKey(answer.SubmissionAnswer?.First().Submission.SubmissionByUserId)
 				? userDetailsForUserIds[answer.SubmissionAnswer?.First().Submission.SubmissionByUserId].displayName
 				: "Not found";
 		}
@@ -702,12 +702,12 @@ namespace Comments.Export
 		{
 			if (answer.AnswerByUserType == UserType.OrganisationalCommenter)
 			{
-				return emailAddressesForOrganisationIds.ContainsKey(answer.OrganisationUserId.Value)
+				return answer.OrganisationUserId.HasValue && emailAddressesForOrganisationIds.ContainsKey(answer.OrganisationUserId.Value)
 					? emailAddressesForOrganisationIds[answer.OrganisationUserId.Value]
 					: "Not found";
 			}
 
-			return userDetailsForUserIds.ContainsKey(answer.SubmissionAnswer?.First().Submission.SubmissionByUserId)
+			return answer.SubmissionAnswer != null && answer.SubmissionAnswer.Count > 0 && userDetailsForUserIds.ContainsKey(answer.SubmissionAnswer?.First().Submission.SubmissionByUserId)
 				? userDetailsForUserIds[answer.SubmissionAnswer?.First().Submission.SubmissionByUserId].emailAddress
 				: "Not found";
 		}

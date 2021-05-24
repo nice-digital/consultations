@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
@@ -36,6 +35,7 @@ namespace Comments
 {
     public class Startup
     {
+        private string _corsPolicyName = "CorsPolicy";
 
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
@@ -61,7 +61,6 @@ namespace Comments
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
-			//services.TryAddSingleton<ISeriLogger, SeriLogger>();
 			services.AddHttpClient();
 
 			services.TryAddTransient<IUserService, UserService>();
@@ -101,15 +100,6 @@ namespace Comments
 			services.TryAddTransient<IOrganisationService, OrganisationService>();
 
 			services.AddRouting(options => options.LowercaseUrls = true);
-
-            //services.AddMvc(options =>
-            //{
-            //    options.Filters.Add(
-            //        new ResponseCacheAttribute() {NoStore = true, Location = ResponseCacheLocation.None});
-            //    options.EnableEndpointRouting = false;
-            //});
-            
-             //.SetCompatibilityVersion(CompatibilityVersion.Version_3_0); 
 
             services.AddControllersWithViews(options =>
                 {
@@ -158,15 +148,15 @@ namespace Comments
 				options.KnownProxies.Clear();
 			});
 
-			services.AddCors(options =>
+            services.AddCors(options =>
             {
-                options.AddPolicy("CorsPolicy",
-                    builder => builder.WithOrigins("https://niceorg") //TODO!!
+                options.AddPolicy(_corsPolicyName,
+                    builder => builder.WithOrigins(AppSettings.Environment.CorsOrigin) 
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials());
             });
-            
+
             services.AddOptions();
 
             
@@ -176,19 +166,13 @@ namespace Comments
         [Obsolete] //the reason for the obselete flag here is UseSpaPrerendering has been marked as obselete in 3.1 and dropped in 5.x
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, IHostApplicationLifetime appLifetime, IUrlHelperFactory urlHelperFactory, IFeatureManager featureManager, LinkGenerator linkGenerator)
         {           
-            //seriLogger.Configure(loggerFactory, Configuration, appLifetime, env);
-            //var startupLogger = loggerFactory.CreateLogger<Startup>();
-            //startupLogger.LogWarning("Consultations starting up");
-
 
 			if (env.IsDevelopment())
             {
 	            app.UseDeveloperExceptionPage();
 				app.UseExceptionHandler(Constants.ErrorPath);
-				//loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-    //            loggerFactory.AddDebug();
 
-				app.UseStaticFiles(); //uses the wwwroot folder, only for dev. on other service the root is varnish
+                app.UseStaticFiles(); //uses the wwwroot folder, only for dev. on other service the root is varnish
 			}
             else
             {
@@ -197,7 +181,7 @@ namespace Comments
 	            app.UseStatusCodePagesWithReExecute(Constants.ErrorPath + "/{0}");
 			}
 
-			app.UseCors("CorsPolicy");
+	        app.UseCors(_corsPolicyName);
 
             // Because in dev mode we proxy to a react dev server (which has to run in the root e.g. http://localhost:3000)
             // we re-write paths for static files to map them to the root
@@ -282,7 +266,7 @@ namespace Comments
                 endpoints.MapControllerRoute(name: "default",
                                              pattern: "{controller}/{action=Index}/{id?}");
                 
-                // endpoints.MapHealthChecks("/health"); //TODO: validate this.
+                // endpoints.MapHealthChecks("/health"); //TODO: replace the custom health check controller with this package, which is now supported since the upgrade.
                 
 
             });

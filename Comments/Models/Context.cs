@@ -136,11 +136,12 @@ namespace Comments.Models
                                                          //&& _organisationIDs.Any(o => o.Equals(c.OrganisationId)) 
                                                          && !_organisationUserIDs.Contains(c.OrganisationUserId.Value))
                     .Select(c=> c.Status))
-                .IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead
-                                                         && (c.OrganisationId.HasValue && _organisationIDs.Contains(c.OrganisationId.Value))
-                                                         //&& _organisationIDs.Any(o => o.Equals(c.OrganisationId))
-                                                         && !_organisationUserIDs.Contains(c.OrganisationUserId.Value))
-                    .Select(c=> c.OrganisationUser))
+                //removing this filter as the Models.Comment is converted to ViewModels.Comment, which doesn't actually have the OrganisationUser in it, so we don't need this join.
+                //.IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead
+                //                                         && (c.OrganisationId.HasValue && _organisationIDs.Contains(c.OrganisationId.Value))
+                //                                         //&& _organisationIDs.Any(o => o.Equals(c.OrganisationId))
+                //                                         && !_organisationUserIDs.Contains(c.OrganisationUserId.Value))
+                //    .Select(c=> c.OrganisationUser))
 
                 .IncludeFilter(l => l.Question)
                 .IncludeFilter(l => l.Question
@@ -155,7 +156,7 @@ namespace Comments.Models
                         .Select(a => a.LastModifiedDate)
                         .FirstOrDefault()))
 
-                //TODO: figure out if this is needed.
+                //removing this filter as the Models.Question is converted to ViewModels.Question, which doesn't actually have the OrganisationUser in it, so we don't need this join.
                 //.IncludeFilter(l => l.Question
                 //    .Select(q => q.Answer.Where(a => a.StatusId == (int)StatusName.SubmittedToLead
                 //                                     && _organisationIDs.Contains(a.OrganisationId.Value)
