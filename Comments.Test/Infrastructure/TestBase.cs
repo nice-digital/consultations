@@ -164,8 +164,7 @@ namespace Comments.Test.Infrastructure
                 {
                     services.AddEntityFrameworkSqlite();
 
-					services.TryAddSingleton<ConsultationsContext>(_context);
-                    //services.TryAddSingleton<ISeriLogger, FakeSerilogger>();
+					services.AddSingleton<ConsultationsContext>(_context);
                     if (!useRealHttpContextAccessor)
                     {
 	                    services.TryAddSingleton<IHttpContextAccessor>(provider => _fakeHttpContextAccessor);
@@ -197,14 +196,7 @@ namespace Comments.Test.Infrastructure
 		                });
 
 		                services.AddSingleton<IAuthorizationHandler, AllowAnonymous>();
-
-						//services.AddMvc(opt =>
-						//{
-						// opt.Filters.Add(new AllowAnonymousFilter());
-						// opt.Filters.Add(new FakeUserFilter());
-						//});
-						// .AddApplicationPart(typeof(Startup).Assembly); //bypass authentication
-					}
+	                }
 
 					services.TryAddSingleton<IApiTokenStore, FakeApiTokenStore>();
                 })

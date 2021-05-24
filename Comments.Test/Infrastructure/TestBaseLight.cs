@@ -47,7 +47,7 @@ namespace Comments.Test.Infrastructure
 					}
 
 					services.AddControllersWithViews(opt => opt.Filters.Add(new AllowAnonymousFilter()));
-					services.TryAddSingleton<IAuthorizationHandler, AllowAnonymous>();
+					services.AddSingleton<IAuthorizationHandler, AllowAnonymous>();
 				})
 				.Configure(app =>
 				{
