@@ -8,7 +8,7 @@ namespace Comments.Configuration
 
         public string Name { get; set; }
 
-        public string CorsOrigin { get; set; }
+        public string CorsOrigin { get; set; } = "https://www.nice.org.uk";
 
         //public bool IsLocal => string.Equals(Name, LocalEnvironmentName, StringComparison.OrdinalIgnoreCase);
 
