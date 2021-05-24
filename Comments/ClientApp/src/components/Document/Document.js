@@ -13,7 +13,6 @@ import { StackedNav } from "./../StackedNav/StackedNav";
 import { HashLinkTop } from "../../helpers/component-helpers";
 import { tagManager } from "../../helpers/tag-manager";
 import { ProcessDocumentHtml } from "../../document-processing/ProcessDocumentHtml";
-import LoginBannerWithRouter from "./../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
 import { Selection } from "../Selection/Selection";
 import { pullFocusByQuerySelector } from "../../helpers/accessibility-helpers";
@@ -114,7 +113,7 @@ export class Document extends Component<PropsType, StateType> {
 				}
 				const allowComments = preloadedConsultation.consultationState.hasAnyDocumentsSupportingComments &&
 					preloadedConsultation.consultationState.consultationIsOpen &&
-					!preloadedConsultation.consultationState.userHasSubmitted && 
+					!preloadedConsultation.consultationState.userHasSubmitted &&
 					!preloadedConsultation.consultationState.submittedDate;
 
 				if (preloadedChapter) {
@@ -438,17 +437,7 @@ export class Document extends Component<PropsType, StateType> {
 				<Helmet>
 					<title>{this.getPageTitle()}</title>
 				</Helmet>
-				<UserContext.Consumer>
-					{(contextValue: any) => !contextValue.isAuthorised ?
-						<LoginBannerWithRouter signInButton={false}
-												 currentURL={this.props.match.url}
-												 signInURL={contextValue.signInURL}
-												 registerURL={contextValue.registerURL}
-												 allowOrganisationCodeLogin={(this.state.allowOrganisationCodeLogin && contextValue.organisationalCommentingFeature)}
-												 orgFieldName="document"/>
-						: /* if contextValue.isAuthorised... */ null}
-				</UserContext.Consumer>
-				{ this.state.allowComments &&
+				{this.state.allowComments &&
 					<Tutorial/>
 				}
 				<div className="container">
@@ -471,11 +460,20 @@ export class Document extends Component<PropsType, StateType> {
 														reference={reference}
 														consultationState={this.state.consultationData.consultationState}
 														allowRegisterOrganisationLeadLink={contextValue.organisationalCommentingFeature}/>
-														{this.state.consultationData.consultationState.submittedDate &&
-															<Alert type="info" role="status" aria-live="polite">
-																<p>You submitted your response to this consultation on <Moment format="D MMMM YYYY" date={this.state.consultationData.consultationState.submittedDate}/>, you cannot add, edit or provide additional information.</p>
-															</Alert>
+
+													{(this.state.consultationData.consultationState.consultationIsOpen && !this.state.consultationData.consultationState.submittedDate) &&
+														<Alert type="info" role="status" aria-live="polite">
+															<p>We have updated this service so that members of the same organisation can now collaborate on a joint online response.</p>
+															<p>Read our <a href="https://www.nice.org.uk/news/blog/groups-and-organisations-can-work-together-on-public-consultations-response">blog</a> to learn more.</p>
+														</Alert>
 													}
+
+													{this.state.consultationData.consultationState.submittedDate &&
+														<Alert type="info" role="status" aria-live="polite">
+															<p>You submitted your response to this consultation on <Moment format="D MMMM YYYY" date={this.state.consultationData.consultationState.submittedDate}/>, you cannot add, edit or provide additional information.</p>
+														</Alert>
+													}
+
 													{contextValue.isOrganisationCommenter && !contextValue.isLead && !this.state.consultationData.consultationState.submittedDate &&
 														<Alert type="info" role="status" aria-live="polite">
 															<p>You are commenting on behalf of {contextValue.organisationName}.</p>
@@ -487,29 +485,29 @@ export class Document extends Component<PropsType, StateType> {
 									</UserContext.Consumer>
 
 									{this.state.allowComments &&
-									<button
-										data-gtm="comment-on-document-button"
-										data-qa-sel="comment-on-consultation-document"
-										className="btn btn--cta"
-										onClick={e => {
-											e.preventDefault();
-											this.props.onNewCommentClick(e, {
-												sourceURI: this.props.match.url,
-												commentText: "",
-												commentOn: "Document",
-												quote: currentDocumentTitle,
-												order: 0,
-												section: null,
-											});
-											tagManager({
-												event: "generic",
-												category: "Consultation comments page",
-												action: "Clicked",
-												label: "Comment on document",
-											});
-										}}>
-										Comment on this document
-									</button>
+										<button
+											data-gtm="comment-on-document-button"
+											data-qa-sel="comment-on-consultation-document"
+											className="btn btn--cta"
+											onClick={e => {
+												e.preventDefault();
+												this.props.onNewCommentClick(e, {
+													sourceURI: this.props.match.url,
+													commentText: "",
+													commentOn: "Document",
+													quote: currentDocumentTitle,
+													order: 0,
+													section: null,
+												});
+												tagManager({
+													event: "generic",
+													category: "Consultation comments page",
+													action: "Clicked",
+													label: "Comment on document",
+												});
+											}}>
+											Comment on this document
+										</button>
 									}
 								</div>
 

@@ -3,7 +3,6 @@
 exports[`[ClientApp]  Document Component should match snapshot with supplied data 1`] = `
 Array [
   "",
-  "",
   <aside
     className="tutorial mt--0 pt--d pb--d"
   >
@@ -141,33 +140,53 @@ Array [
             className="page-header"
           >
             Array [
-              <h1
-                className="page-header__heading mt--0"
-                data-qa-sel="changeable-page-header"
-              >
-                Unstable angina and NSTEMI
-              </h1>,
-              <div
-                className="mb--d"
-              >
-                <p
-                  className="container container-full ml--0"
+              Array [
+                <h1
+                  className="page-header__heading mt--0"
+                  data-qa-sel="changeable-page-header"
                 >
-                  <span>
-                    <span
-                      className="tag tag--open"
-                    >
-                      Open for comments
+                  Unstable angina and NSTEMI
+                </h1>,
+                <div
+                  className="mb--d"
+                >
+                  <p
+                    className="container container-full ml--0"
+                  >
+                    <span>
+                      <span
+                        className="tag tag--open"
+                      >
+                        Open for comments
+                      </span>
+                       Open until
+                       
+                      <time
+                        dateTime={"2029-05-31T16:00:00.000Z"}
+                      >
+                        31 May 2029
+                      </time>
                     </span>
-                     Open until
-                     
-                    <time
-                      dateTime={"2029-05-31T16:00:00.000Z"}
-                    >
-                      31 May 2029
-                    </time>
-                  </span>
-                    
+                      
+                  </p>
+                </div>,
+              ],
+              <div
+                aria-live="polite"
+                className="alert alert--info"
+                role="status"
+              >
+                <p>
+                  We have updated this service so that members of the same organisation can now collaborate on a joint online response.
+                </p>
+                <p>
+                  Read our 
+                  <a
+                    href="https://www.nice.org.uk/news/blog/groups-and-organisations-can-work-together-on-public-consultations-response"
+                  >
+                    blog
+                  </a>
+                   to learn more.
                 </p>
               </div>,
             ]

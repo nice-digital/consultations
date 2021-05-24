@@ -98,8 +98,8 @@ namespace Comments.Test.Infrastructure
 		}
 
 	    public TestBase(TestUserType testUserType, Feed feed, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null, bool bypassAuthentication = true,
-		    bool addRoleClaim = true, bool enableOrganisationalCommentingFeature = false)
-		    : this(false, testUserType, true, submittedCommentsAndAnswerCounts, bypassAuthentication, addRoleClaim, enableOrganisationalCommentingFeature)
+		    bool addRoleClaim = true, bool enableOrganisationalCommentingFeature = false, IList<SubmittedCommentsAndAnswerCount> submittedToLeadCommentAndAnswerCount = null)
+		    : this(false, testUserType, true, submittedCommentsAndAnswerCounts, bypassAuthentication, addRoleClaim, enableOrganisationalCommentingFeature, submittedToLeadCommentAndAnswerCount: submittedToLeadCommentAndAnswerCount)
 	    {
 			FeedToUse = feed;
 		}
@@ -109,7 +109,7 @@ namespace Comments.Test.Infrastructure
 		/// </summary>
 		public TestBase(bool useRealSubmitService = false, TestUserType testUserType = TestUserType.Authenticated, bool useFakeConsultationService = false, IList<SubmittedCommentsAndAnswerCount> submittedCommentsAndAnswerCounts = null,
 			bool bypassAuthentication = true, bool addRoleClaim = true, bool enableOrganisationalCommentingFeature = false, Dictionary<int, Guid> validSessions = null,
-			bool useRealHttpContextAccessor = false, bool useRealUserService = false, int? organisationIdUserIsLeadOf = null)
+			bool useRealHttpContextAccessor = false, bool useRealUserService = false, int? organisationIdUserIsLeadOf = null, IList<SubmittedCommentsAndAnswerCount> submittedToLeadCommentAndAnswerCount = null)
         {
 	        if (testUserType == TestUserType.NotAuthenticated)
 	        {
@@ -142,16 +142,17 @@ namespace Comments.Test.Infrastructure
 					.UseInMemoryDatabase(databaseName)
                     .Options;
 
-	        if (submittedCommentsAndAnswerCounts != null)
-	        {
-		        _context = new ConsultationListContext(_options, _fakeUserService, _fakeEncryption, submittedCommentsAndAnswerCounts);
+	        if (submittedCommentsAndAnswerCounts != null || submittedToLeadCommentAndAnswerCount != null)
+			{
+					_context = new ConsultationListContext(_options, _fakeUserService, _fakeEncryption, submittedCommentsAndAnswerCounts, submittedToLeadCommentAndAnswerCount);
+
 	        }
 	        else
 	        {
 				_context = new ConsultationsContext(_options, _fakeUserService, _fakeEncryption);
 			}
 
-            _context.Database.EnsureCreatedAsync();
+			_context.Database.EnsureCreatedAsync();
 
             if (validSessions != null)
             {
@@ -423,13 +424,13 @@ namespace Comments.Test.Infrastructure
 			}
 		}
 
-	    protected void AddSubmittedCommentsAndAnswers(string sourceURI, string commentText, string questionText, string answerText, string createdByUserId, ConsultationsContext passedInContext = null)
+	    protected void AddSubmittedCommentsAndAnswers(string sourceURI, string commentText, string questionText, string answerText, string createdByUserId, ConsultationsContext passedInContext = null, int status = (int)StatusName.Submitted)
 	    {
 		    var locationId = AddLocation(sourceURI, passedInContext);
-		    var commentId = AddComment(locationId, commentText, createdByUserId: createdByUserId, status: (int)StatusName.Submitted, passedInContext: passedInContext);
+		    var commentId = AddComment(locationId, commentText, createdByUserId: createdByUserId, status: status, passedInContext: passedInContext);
 			var questionTypeId = 99;
 		    var questionId = AddQuestion(locationId, questionTypeId, questionText, passedInContext);
-		    var answerId = AddAnswer(questionId, createdByUserId, answerText, (int)StatusName.Submitted, passedInContext);
+		    var answerId = AddAnswer(questionId, createdByUserId, answerText, status, passedInContext);
 			var submissionId = AddSubmission(createdByUserId, passedInContext);
 		    AddSubmissionComments(submissionId, commentId, passedInContext);
 		    AddSubmissionAnswers(submissionId, answerId, passedInContext);
@@ -572,9 +573,22 @@ namespace Comments.Test.Infrastructure
 				    new SubmittedCommentsAndAnswerCount
 				    {
 					    SourceURI = "consultations://./consultation/1",
-					    TotalCount = totalCount
+					    TotalCount = totalCount,
+						StatusId = 2
+						
 				    }
-			    });
+			    },
+				new List<SubmittedCommentsAndAnswerCount>
+				{
+					new SubmittedCommentsAndAnswerCount
+					{
+						SourceURI = "consultations://./consultation/1",
+						OrganisationId = 1,
+						TotalCount = totalCount,
+						StatusId = 3,
+						RespondingAsOrganisation = true
+					}
+				});
 		    return consultationListContext;
 	    }
 

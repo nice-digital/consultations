@@ -73,7 +73,7 @@ jq \
     .WebAppConfiguration.GoogleTrackingId = $googleTrackingId |
     .Encryption.Key = $encryptionKey |
     .Encryption.IV = $encryptionIV |
-    .FeatureManagement.OrganisationalCommenting = false |
+    .FeatureManagement.OrganisationalCommenting = true |
     .FeatureManagement.IndevUsingIDAMAuth = true |
     .ConsultationList.DownloadRoles.AdminRoles |= .+ [$adminRole] |
     .ConsultationList.DownloadRoles.TeamRoles |= .+ [$teamRoles1] |

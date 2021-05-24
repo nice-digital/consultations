@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -40,9 +40,6 @@ namespace Comments.ViewModels
 		public bool ConsultationHasEnded => DateTime.Now > EndDate;
 		public bool SupportsSubmission => ConsultationIsOpen && SubmittedDate==null && (HasUserSuppliedAnswers || HasUserSuppliedComments);
 		public bool SupportsDownload => (HasUserSuppliedAnswers || HasUserSuppliedComments);
-
-		public bool ShouldShowDrawer => HasQuestions || DocumentIdsWhichSupportComments.Any() || 
-		                                HasUserSuppliedAnswers || HasUserSuppliedComments;
 
 		public bool ShouldShowCommentsTab => DocumentIdsWhichSupportComments.Any() ||
 		                                     HasUserSuppliedComments;

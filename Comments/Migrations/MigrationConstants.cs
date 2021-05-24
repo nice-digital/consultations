@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -116,7 +116,8 @@ namespace Comments.Migrations
 	    public static class Views
 	    {
 		    public const string SubmittedCommentAndAnswerCount = "View_SubmittedCommentAndAnswerCount";
-	    }
+            public const string SubmittedToLeadCommentAndAnswerCount = "View_SubmittedToLeadCommentAndAnswerCount";
+        }
 
 		/// <summary>
 		/// Annotations are here to support targetting different DB providers.

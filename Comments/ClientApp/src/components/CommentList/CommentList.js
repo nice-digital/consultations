@@ -21,8 +21,8 @@ import { tagManager } from "../../helpers/tag-manager";
 
 import { CommentBox } from "../CommentBox/CommentBox";
 import { Question } from "../Question/Question";
-import LoginBannerWithRouter from "../LoginBanner/LoginBanner";
 import { UserContext } from "../../context/UserContext";
+import LoginPanelWithRouter from "../LoginPanel/LoginPanel";
 
 import { createQuestionPdf } from "../QuestionView/QuestionViewDocument";
 
@@ -51,16 +51,17 @@ type StateType = {
 	drawerOpen: boolean,
 	drawerMobile: boolean,
 	viewComments: boolean,
-	shouldShowDrawer: boolean,
 	shouldShowCommentsTab: boolean,
 	shouldShowQuestionsTab: boolean,
 	error: string,
 	unsavedIds: Array<number>,
 	endDate: string,
-	allowOrganisationCodeLogin: Boolean,
+	allowOrganisationCodeLogin: boolean,
 	isAuthorised: boolean,
 	otherUsersComments: Array<CommentType>,
 	otherUsersQuestions: Array<QuestionType>,
+	signOutUrl: string,
+	showUseCodeInstead: boolean,
 };
 
 export class CommentList extends Component<PropsType, StateType> {
@@ -76,7 +77,6 @@ export class CommentList extends Component<PropsType, StateType> {
 			drawerOpen: false,
 			drawerMobile: false,
 			viewComments: true,
-			shouldShowDrawer: false,
 			shouldShowCommentsTab: false,
 			shouldShowQuestionsTab: false,
 			unsavedIds: [],
@@ -85,6 +85,8 @@ export class CommentList extends Component<PropsType, StateType> {
 			isAuthorised: false,
 			otherUsersComments: [],
 			otherUsersQuestions: [],
+			signOutUrl: "",
+			showUseCodeInstead: false,
 		};
 
 		let preloadedData = {};
@@ -95,6 +97,8 @@ export class CommentList extends Component<PropsType, StateType> {
 
 		const enableOrganisationalCommentingFeature = ((preloadedData && preloadedData.organisationalCommentingFeature) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["organisationalCommentingFeature"]));
 
+		const signOutUrl = ((preloadedData && preloadedData.signOutURL) || (canUseDOM() && window.__PRELOADED__ && window.__PRELOADED__["signOutURL"]));
+
 		const preloadedCommentsForCurrentUser = preload(
 			this.props.staticContext,
 			"comments",
@@ -104,27 +108,37 @@ export class CommentList extends Component<PropsType, StateType> {
 		);
 
 		if (preloadedCommentsForCurrentUser) {
-			let allowComments = preloadedCommentsForCurrentUser.consultationState.consultationIsOpen && !preloadedCommentsForCurrentUser.consultationState.submittedDate;
+			const { comments, questions, consultationState } = preloadedCommentsForCurrentUser;
+			const {
+				consultationIsOpen,
+				submittedDate,
+				shouldShowCommentsTab,
+				shouldShowQuestionsTab,
+				endDate,
+			} = consultationState;
+
+			const allowComments = consultationIsOpen && !submittedDate;
+			const shouldShowCommentsTabOverride = !shouldShowCommentsTab && !shouldShowQuestionsTab ? true : shouldShowCommentsTab;
 
 			this.state = {
-				comments: preloadedCommentsForCurrentUser.comments,
-				questions: preloadedCommentsForCurrentUser.questions,
+				comments,
+				questions,
 				loading: false,
-				allowComments: allowComments,
+				allowComments,
 				error: "",
 				initialDataLoaded: true,
-				viewComments: preloadedCommentsForCurrentUser.consultationState.shouldShowCommentsTab,
-				shouldShowDrawer: preloadedCommentsForCurrentUser.consultationState.shouldShowDrawer,
-				shouldShowCommentsTab: preloadedCommentsForCurrentUser.consultationState.shouldShowCommentsTab,
-				shouldShowQuestionsTab: preloadedCommentsForCurrentUser.consultationState.shouldShowQuestionsTab,
+				viewComments: shouldShowCommentsTabOverride,
+				shouldShowCommentsTab: shouldShowCommentsTabOverride,
+				shouldShowQuestionsTab,
 				drawerOpen: false,
 				drawerMobile: false,
 				unsavedIds: [],
-				endDate: preloadedCommentsForCurrentUser.consultationState.endDate,
+				endDate,
 				enableOrganisationalCommentingFeature,
-				allowOrganisationCodeLogin: preloadedCommentsForCurrentUser.consultationState.consultationIsOpen,
+				allowOrganisationCodeLogin: consultationIsOpen,
 				otherUsersComments: [],
 				otherUsersQuestions: [],
+				signOutUrl,
 			};
 		}
 
@@ -162,18 +176,27 @@ export class CommentList extends Component<PropsType, StateType> {
 
 		load("comments", undefined, [], {sourceURI: this.props.match.url}).then(
 			function(response) {
-				let allowComments = response.data.consultationState.consultationIsOpen && !response.data.consultationState.submittedDate;
+				const { comments, questions, consultationState } = response.data;
+				const {
+					consultationIsOpen,
+					submittedDate,
+					shouldShowCommentsTab,
+					shouldShowQuestionsTab,
+					endDate,
+				} = consultationState;
+
+				const allowComments = consultationIsOpen && !submittedDate;
+				const shouldShowCommentsTabOverride = !shouldShowCommentsTab && !shouldShowQuestionsTab ? true : shouldShowCommentsTab;
 
 				this.setState({
-					comments: response.data.comments,
-					questions: response.data.questions,
+					comments,
+					questions,
 					loading: (isOrganisationCommenter ? true : false),
-					allowComments: allowComments,
-					shouldShowDrawer: response.data.consultationState.shouldShowDrawer,
-					shouldShowCommentsTab: response.data.consultationState.shouldShowCommentsTab,
-					shouldShowQuestionsTab: response.data.consultationState.shouldShowQuestionsTab,
-					endDate: response.data.consultationState.endDate,
-					allowOrganisationCodeLogin: response.data.consultationState.consultationIsOpen,
+					allowComments,
+					shouldShowCommentsTab: shouldShowCommentsTabOverride,
+					shouldShowQuestionsTab,
+					endDate,
+					allowOrganisationCodeLogin: consultationIsOpen,
 				});
 
 				if (isOrganisationCommenter) {
@@ -184,18 +207,22 @@ export class CommentList extends Component<PropsType, StateType> {
 	};
 
 	componentDidMount() {
-		const isAuthorised = this.context.isAuthorised;
+		const { isAuthorised, isOrganisationCommenter, isLead, organisationalCommentingFeature: drawerOpen } = this.context;
+		const { allowOrganisationCodeLogin: consultationIsOpen, initialDataLoaded } = this.state;
+		const showUseCodeInstead = !isOrganisationCommenter && !isLead && isAuthorised && consultationIsOpen;
 
-		if (!this.state.initialDataLoaded) {
+		if (!initialDataLoaded) {
 			this.loadCommentsForCurrentUser();
 		}
 
-		// We can't prerender whether we're on mobile cos SSR doesn't have a window
-		// sets isAuthorised from context
 		this.setState({
-			drawerMobile: this.isMobile(),
 			isAuthorised,
+			drawerOpen,
+			showUseCodeInstead,
 		});
+
+		window.addEventListener("resize", this.setUsingMobile);
+		this.setUsingMobile();
 	}
 
 	componentDidUpdate(prevProps: PropsType) {
@@ -210,6 +237,10 @@ export class CommentList extends Component<PropsType, StateType> {
 			});
 			this.loadCommentsForCurrentUser();
 		}
+	}
+
+	componentWillUnmount() {
+		window.removeEventListener("resize", this.setUsingMobile);
 	}
 
 	issueA11yMessage = (message: string) => {
@@ -251,7 +282,6 @@ export class CommentList extends Component<PropsType, StateType> {
 		}, 0);
 	};
 
-	//these handlers have moved to the helpers/editing-and-deleting.js utility file as they're also used in ReviewList.js
 	saveCommentHandler = (e: Event, comment: CommentType) => {
 		saveCommentHandler(e, comment, this);
 	};
@@ -272,20 +302,22 @@ export class CommentList extends Component<PropsType, StateType> {
 		updateUnsavedIds(commentId, dirty, this);
 	};
 
-	//old drawer code:
-	isMobile = () => {
-		if (typeof document !== "undefined") {
-			return (
-				document.getElementsByTagName("body")[0].offsetWidth <= mobileWidth
-			);
+	setUsingMobile = () => {
+		const usingMobile = typeof document !== "undefined" ?
+			document.getElementsByTagName("body")[0].offsetWidth <= mobileWidth :
+			false;
+
+		if (this.state.drawerMobile !== usingMobile) {
+			this.setState({
+				drawerOpen: !usingMobile,
+				drawerMobile: usingMobile,
+			});
 		}
-		return false;
-	};
+	}
 
 	drawerClassnames = () => {
 		const open = this.state.drawerOpen ? "Drawer--open" : "";
-		const mobile = this.state.drawerMobile ? "Drawer--mobile" : "";
-		return `Drawer ${open} ${mobile}`;
+		return `Drawer ${open}`;
 	};
 
 	handleClick = (event: string) => {
@@ -342,10 +374,6 @@ export class CommentList extends Component<PropsType, StateType> {
 	};
 
 	render() {
-		if (!this.state.shouldShowDrawer) {
-			return null;
-		}
-
 		const a11yMessage = () => {
 			if (!this.state.drawerOpen) {
 				return "Comments and questions panel closed";
@@ -365,56 +393,47 @@ export class CommentList extends Component<PropsType, StateType> {
 					message={`You have ${this.state.unsavedIds.length} unsaved ${this.state.unsavedIds.length === 1 ? "change" : "changes"}. Continue without saving?`}
 				/>
 				<LiveMessage message={a11yMessage()} aria-live="assertive"/>
-				<section aria-label="Commenting panel"
-								 className={this.drawerClassnames()}>
+				<section aria-label="Commenting panel" className={this.drawerClassnames()}>
 					<div className="Drawer__controls">
 						{this.state.shouldShowCommentsTab &&
-						<button
-							data-qa-sel="open-commenting-panel"
-							id="js-drawer-toggleopen-comments"
-							className={`Drawer__control Drawer__control--comments ${(this.state.viewComments ? "active" : "active")}`}
-							onClick={() => this.handleClick("toggleOpenComments")}
-							aria-controls="comments-panel"
-							aria-haspopup="true"
-							aria-label={this.state.drawerOpen ? "Close the commenting panel" : "Open the commenting panel"}
-							tabIndex="0">
-							{!this.state.drawerMobile ?
-								<span>{(this.state.drawerOpen && this.state.viewComments ? "Close comments" : "Open comments")}</span>
-								:
+							<button
+								data-qa-sel="open-commenting-panel"
+								id="js-drawer-toggleopen-comments"
+								className="Drawer__control Drawer__control--comments active"
+								onClick={() => this.handleClick("toggleOpenComments")}
+								aria-controls="comments-panel"
+								aria-haspopup="true"
+								aria-label={this.state.drawerOpen ? "Close the commenting panel" : "Open the commenting panel"}
+								tabIndex="0">
 								<span
-									className={`icon ${
-										this.state.drawerOpen
-											? "icon--chevron-right"
-											: "icon--chevron-left"}`}
+									className="Drawer__control-text"
 									aria-hidden="true"
 									data-qa-sel="close-commenting-panel"
-								/>
-							}
-						</button>
+								>
+									Comments
+								</span>
+								{(this.state.drawerOpen && this.state.viewComments ? "Close comments" : "Open comments")}
+							</button>
 						}
 						{this.state.shouldShowQuestionsTab &&
-						<button
-							data-qa-sel="open-questions-panel"
-							id="js-drawer-toggleopen-questions"
-							className={`Drawer__control Drawer__control--questions ${(this.state.viewComments ? "active" : "active")}`}
-							onClick={() => this.handleClick("toggleOpenQuestions")}
-							aria-controls="questions-panel"
-							aria-haspopup="true"
-							aria-label={this.state.drawerOpen ? "Close the questions panel" : "Open the questions panel"}
-							tabIndex="0">
-							{!this.state.drawerMobile ?
-								<span>{(this.state.drawerOpen && !this.state.viewComments ? "Close questions" : "Open questions")}</span>
-								:
+							<button
+								data-qa-sel="open-questions-panel"
+								id="js-drawer-toggleopen-questions"
+								className="Drawer__control Drawer__control--questions active"
+								onClick={() => this.handleClick("toggleOpenQuestions")}
+								aria-controls="questions-panel"
+								aria-haspopup="true"
+								aria-label={this.state.drawerOpen ? "Close the questions panel" : "Open the questions panel"}
+								tabIndex="0">
 								<span
-									className={`icon ${
-										this.state.drawerOpen
-											? "icon--chevron-right"
-											: "icon--chevron-left"}`}
+									className="Drawer__control-text"
 									aria-hidden="true"
 									data-qa-sel="close-questions-panel"
-								/>
-							}
-						</button>
+								>
+									Questions
+								</span>
+								{(this.state.drawerOpen && !this.state.viewComments ? "Close questions" : "Open questions")}
+							</button>
 						}
 					</div>
 					<div
@@ -429,6 +448,7 @@ export class CommentList extends Component<PropsType, StateType> {
 									<div data-qa-sel="comment-list-wrapper">
 
 										{contextValue.isAuthorised &&
+
 												<Link
 													to={`/${this.props.match.params.consultationId}/review`}
 													data-qa-sel="review-all-comments"
@@ -438,10 +458,10 @@ export class CommentList extends Component<PropsType, StateType> {
 												</Link>
 										}
 
-										{contextValue.isOrganisationCommenter && !contextValue.isLead &&
+										{(this.state.showUseCodeInstead && contextValue.organisationalCommentingFeature) &&
 											<Alert type="info" role="status" aria-live="polite">
-												<p>You are commenting on behalf of {contextValue.organisationName}.</p>
-												<p>When you submit your response it will be submitted to the organisational lead at {contextValue.organisationName}. <strong>On submission your email address and responses will be visible to other members or associates of your organisation who are using the same commenting code.</strong></p>
+												<p>If you have been sent a code from your organisation's commenting lead, please <a href={this.state.signOutUrl}>sign out</a> and access the consultation using the code.</p>
+												<button className="btn btn--primary" onClick={() => this.setState({ showUseCodeInstead: false })}>Dismiss</button>
 											</Alert>
 										}
 
@@ -496,13 +516,7 @@ export class CommentList extends Component<PropsType, StateType> {
 														</button>
 													</div>
 												) : (
-													<LoginBannerWithRouter
-														signInButton={true}
-														currentURL={this.props.match.url}
-														signInURL={contextValue.signInURL}
-														registerURL={contextValue.registerURL}
-														allowOrganisationCodeLogin={(this.state.allowOrganisationCodeLogin && contextValue.organisationalCommentingFeature)}
-													/>
+													<LoginPanelWithRouter questionsTabIsOpen={this.state.drawerOpen && !this.state.viewComments} />
 												)}
 
 												<div className={`${this.state.viewComments ? "hide" : "show"}`}>
