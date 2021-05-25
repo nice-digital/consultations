@@ -4,7 +4,7 @@ namespace Comments.Configuration
 {
     public class EnvironmentConfig
     {
-        private const string LocalEnvironmentName = "local";
+        //private const string LocalEnvironmentName = "local";
 
         public string Name { get; set; }
 

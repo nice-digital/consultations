@@ -129,7 +129,7 @@ namespace Comments.Services
 			_context.AddSubmissionAnswers(answerIds, submission);
 		}
 
-		private double GetDuration(Models.Submission submissionToSave)
+		private static double GetDuration(Models.Submission submissionToSave)
 		{
 			//now for analytics calculate the number of seconds between the user's first comment or answer and the submission date
 			var earliestDate = submissionToSave.SubmissionComment.Any() ? submissionToSave.SubmissionComment.Min(sc => sc.Comment.CreatedDate) : DateTime.MaxValue;

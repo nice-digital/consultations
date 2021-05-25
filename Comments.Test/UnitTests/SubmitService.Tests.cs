@@ -36,17 +36,17 @@ namespace Comments.Test.UnitTests
 
 			//Act
 			var commentsAndQuestions = await commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
-			var result = await submitService.Submit(new ViewModels.Submission(commentsAndQuestions.Comments, new List<ViewModels.Answer>()));
+			var (rowsUpdated, _) = await submitService.Submit(new ViewModels.Submission(commentsAndQuestions.Comments, new List<ViewModels.Answer>()));
 
-			var comment = commentService.GetComment(commentId);
+			var (comment, _) = commentService.GetComment(commentId);
 
 			var commentsSubmissionData = _context.SubmissionComment.Where(s => s.CommentId == commentId)
 				.Include(s => s.Submission).First();
 
 			//Assert
-			result.rowsUpdated.ShouldBe(3);
-			comment.comment.StatusId.ShouldBe((int)StatusName.Submitted);
-			comment.comment.Status.StatusId.ShouldBe((int)StatusName.Submitted);
+			rowsUpdated.ShouldBe(3);
+			comment.StatusId.ShouldBe((int)StatusName.Submitted);
+			comment.Status.StatusId.ShouldBe((int)StatusName.Submitted);
 			commentsSubmissionData.CommentId.ShouldBe(commentId);
 			commentsSubmissionData.Submission.SubmissionByUserId.ShouldBe(userId);
 		}
@@ -74,17 +74,17 @@ namespace Comments.Test.UnitTests
 
 			//Act
 			var commentsAndQuestions = await commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
-			var result = await submitService.Submit(new ViewModels.Submission(new List<ViewModels.Comment>(), commentsAndQuestions.Questions.First().Answers));
+			var (rowsUpdated, _) = await submitService.Submit(new ViewModels.Submission(new List<ViewModels.Comment>(), commentsAndQuestions.Questions.First().Answers));
 
-			var answer = answerService.GetAnswer(answerId);
+			var (answer, _) = answerService.GetAnswer(answerId);
 
 			var answerSubmissionData = _context.SubmissionAnswer.Where(s => s.AnswerId == answerId)
 				.Include(s => s.Submission).First();
 
 			//Assert
-			result.rowsUpdated.ShouldBe(3);
-			answer.answer.StatusId.ShouldBe((int)StatusName.Submitted);
-			answer.answer.Status.StatusId.ShouldBe((int)StatusName.Submitted);
+			rowsUpdated.ShouldBe(3);
+			answer.StatusId.ShouldBe((int)StatusName.Submitted);
+			answer.Status.StatusId.ShouldBe((int)StatusName.Submitted);
 			answerSubmissionData.AnswerId.ShouldBe(answerId);
 			answerSubmissionData.Submission.SubmissionByUserId.ShouldBe(userId);
 		}
@@ -280,21 +280,21 @@ namespace Comments.Test.UnitTests
 
 			//Act
 			var commentsAndQuestions = await commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
-			var result = await submitService.SubmitToLead(new ViewModels.SubmissionToLead(commentsAndQuestions.Comments, new List<ViewModels.Answer>(), "testemail@nice.org.uk", true, "Organisation"));
+			var (rowsUpdated, _, context) = await submitService.SubmitToLead(new ViewModels.SubmissionToLead(commentsAndQuestions.Comments, new List<ViewModels.Answer>(), "testemail@nice.org.uk", true, "Organisation"));
 
 			//Assert
-			result.rowsUpdated.ShouldBe(3);
-			result.context.Comment.First().StatusId.ShouldBe((int)StatusName.SubmittedToLead);
-			result.context.Comment.First().OrganisationId.ShouldBe(organisationId);
-			result.context.Comment.First().ParentCommentId.ShouldBe(null);
-			result.context.Comment.First().OrganisationUserId.ShouldBe(organisationUserId);
-			result.context.Comment.First().CreatedByUserId.ShouldBe(null);
-			result.context.Comment.First().ChildComments.First().StatusId.ShouldBe((int)StatusName.Draft);
-			result.context.Comment.First().ChildComments.First().OrganisationId.ShouldBe(organisationId);
-			result.context.Comment.First().ChildComments.First().ParentCommentId.ShouldBe(commentId);
-			result.context.Comment.First().ChildComments.First().CommentText.ShouldBe(commentText);
-			result.context.Comment.First().ChildComments.First().OrganisationUserId.ShouldBe(organisationUserId);
-			result.context.Comment.First().ChildComments.First().CreatedByUserId.ShouldBe(null);
+			rowsUpdated.ShouldBe(3);
+			context.Comment.First().StatusId.ShouldBe((int)StatusName.SubmittedToLead);
+			context.Comment.First().OrganisationId.ShouldBe(organisationId);
+			context.Comment.First().ParentCommentId.ShouldBe(null);
+			context.Comment.First().OrganisationUserId.ShouldBe(organisationUserId);
+			context.Comment.First().CreatedByUserId.ShouldBe(null);
+			context.Comment.First().ChildComments.First().StatusId.ShouldBe((int)StatusName.Draft);
+			context.Comment.First().ChildComments.First().OrganisationId.ShouldBe(organisationId);
+			context.Comment.First().ChildComments.First().ParentCommentId.ShouldBe(commentId);
+			context.Comment.First().ChildComments.First().CommentText.ShouldBe(commentText);
+			context.Comment.First().ChildComments.First().OrganisationUserId.ShouldBe(organisationUserId);
+			context.Comment.First().ChildComments.First().CreatedByUserId.ShouldBe(null);
 		}
 
 		[Fact]
@@ -325,21 +325,21 @@ namespace Comments.Test.UnitTests
 
 			//Act
 			var commentsAndQuestions = await commentService.GetCommentsAndQuestions(sourceURI, _urlHelper);
-			var result = await submitService.SubmitToLead(new ViewModels.SubmissionToLead(new List<ViewModels.Comment>(), commentsAndQuestions.Questions.First().Answers, "testemail@nice.org.uk", true, "Organisation"));
+			var (rowsUpdated, _, context) = await submitService.SubmitToLead(new ViewModels.SubmissionToLead(new List<ViewModels.Comment>(), commentsAndQuestions.Questions.First().Answers, "testemail@nice.org.uk", true, "Organisation"));
 
 			//Assert
-			result.rowsUpdated.ShouldBe(3);
-			result.context.Answer.First().StatusId.ShouldBe((int)StatusName.SubmittedToLead);
-			result.context.Answer.First().OrganisationId.ShouldBe(organisationId);
-			result.context.Answer.First().ParentAnswerId.ShouldBe(null);
-			result.context.Answer.First().OrganisationUserId.ShouldBe(organisationUserId);
-			result.context.Answer.First().CreatedByUserId.ShouldBe(null);
-			result.context.Answer.First().ChildAnswers.First().StatusId.ShouldBe((int)StatusName.Draft);
-			result.context.Answer.First().ChildAnswers.First().OrganisationId.ShouldBe(organisationId);
-			result.context.Answer.First().ChildAnswers.First().ParentAnswerId.ShouldBe(answerId);
-			result.context.Answer.First().ChildAnswers.First().AnswerText.ShouldBe(answerText);
-			result.context.Answer.First().ChildAnswers.First().OrganisationUserId.ShouldBe(organisationUserId);
-			result.context.Answer.First().ChildAnswers.First().CreatedByUserId.ShouldBe(null);
+			rowsUpdated.ShouldBe(3);
+			context.Answer.First().StatusId.ShouldBe((int)StatusName.SubmittedToLead);
+			context.Answer.First().OrganisationId.ShouldBe(organisationId);
+			context.Answer.First().ParentAnswerId.ShouldBe(null);
+			context.Answer.First().OrganisationUserId.ShouldBe(organisationUserId);
+			context.Answer.First().CreatedByUserId.ShouldBe(null);
+			context.Answer.First().ChildAnswers.First().StatusId.ShouldBe((int)StatusName.Draft);
+			context.Answer.First().ChildAnswers.First().OrganisationId.ShouldBe(organisationId);
+			context.Answer.First().ChildAnswers.First().ParentAnswerId.ShouldBe(answerId);
+			context.Answer.First().ChildAnswers.First().AnswerText.ShouldBe(answerText);
+			context.Answer.First().ChildAnswers.First().OrganisationUserId.ShouldBe(organisationUserId);
+			context.Answer.First().ChildAnswers.First().CreatedByUserId.ShouldBe(null);
 		}
 	}
 }

@@ -129,11 +129,9 @@ namespace Comments.Models
             var commentsAndAnswers = Location.IgnoreQueryFilters()
                 .IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead
                                                          && (c.OrganisationId.HasValue && _organisationIDs.Contains(c.OrganisationId.Value))
-                                                         //&& _organisationIDs.Any(o => o.Equals(c.OrganisationId))
                                                          && !_organisationUserIDs.Contains(c.OrganisationUserId.Value)))
                 .IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead
                                                          && (c.OrganisationId.HasValue && _organisationIDs.Contains(c.OrganisationId.Value))
-                                                         //&& _organisationIDs.Any(o => o.Equals(c.OrganisationId)) 
                                                          && !_organisationUserIDs.Contains(c.OrganisationUserId.Value))
                     .Select(c=> c.Status))
                 //removing this filter as the Models.Comment is converted to ViewModels.Comment, which doesn't actually have the OrganisationUser in it, so we don't need this join.
@@ -735,37 +733,26 @@ namespace Comments.Models
 		/// <param name="typeName"></param>
 		/// <returns></returns>
 		public IList<object> GetAllOfATable(string typeName)
-	    {
-			//the below works and is kinda nice, but the big switch is probably safer.
+        {
+            //the below works and is kinda nice, but the big switch is probably safer.
 			//var method = typeof(DbContext).GetMethod("Set").MakeGenericMethod(Type.GetType("Comments.Models." + typeName));
 			//var query = method.Invoke(this, null) as IQueryable;
 			//return (query ?? throw new InvalidOperationException()).OfType<object>().ToList();
 
-		    switch (typeName.ToLower())
-		    {
-				case "submissioncomment":
-					return SubmissionComment.IgnoreQueryFilters().Select(x => (object)x).ToList();
-			    case "submissionanswer":
-				    return SubmissionAnswer.IgnoreQueryFilters().Select(x => (object)x).ToList();
-			    case "submission":
-				    return Submission.IgnoreQueryFilters().Select(x => (object)x).ToList();
-			    case "answer":
-				    return Answer.IgnoreQueryFilters().Select(x => (object)x).ToList();
-			    case "question":
-				    return Question.IgnoreQueryFilters().Select(x => (object)x).ToList();
-			    case "comment":
-				    return Comment.IgnoreQueryFilters().Select(x => (object)x).ToList();
-			    case "location":
-				    return Location.IgnoreQueryFilters().Select(x => (object)x).ToList();
-			    case "questiontype":
-				    return QuestionType.IgnoreQueryFilters().Select(x => (object)x).ToList();
-			    case "status":
-				    return Status.IgnoreQueryFilters().Select(x => (object)x).ToList();
-
-				default:
-					throw new Exception("Unknown table name");
-		    }
-	    }
+            return typeName.ToLower() switch
+            {
+                "submissioncomment" => SubmissionComment.IgnoreQueryFilters().Select(x => (object)x).ToList(),
+                "submissionanswer" => SubmissionAnswer.IgnoreQueryFilters().Select(x => (object)x).ToList(),
+                "submission" => Submission.IgnoreQueryFilters().Select(x => (object)x).ToList(),
+                "answer" => Answer.IgnoreQueryFilters().Select(x => (object)x).ToList(),
+                "question" => Question.IgnoreQueryFilters().Select(x => (object)x).ToList(),
+                "comment" => Comment.IgnoreQueryFilters().Select(x => (object)x).ToList(),
+                "location" => Location.IgnoreQueryFilters().Select(x => (object)x).ToList(),
+                "questiontype" => QuestionType.IgnoreQueryFilters().Select(x => (object)x).ToList(),
+                "status" => Status.IgnoreQueryFilters().Select(x => (object)x).ToList(),
+                _ => throw new Exception("Unknown table name")
+            };
+        }
 
 	    public (int totalComments, int totalAnswers, int totalSubmissions) GetStatusData()
 	    {

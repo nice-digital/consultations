@@ -29,7 +29,7 @@ namespace Comments.Models
         ///
         /// 3.1 upgrade changed this to DbSet - see mitigations section here: https://docs.microsoft.com/en-us/ef/core/what-is-new/ef-core-3.x/breaking-changes#query-types-are-consolidated-with-entity-types
         /// </summary>
-        public virtual DbQuery<SubmittedCommentsAndAnswerCount> SubmittedCommentsAndAnswerCounts { get; set; }
+        public virtual DbSet<SubmittedCommentsAndAnswerCount> SubmittedCommentsAndAnswerCounts { get; set; }
 
         private string _createdByUserID;
 		private IEnumerable<int> _organisationUserIDs;
@@ -353,7 +353,7 @@ namespace Comments.Models
 			});
 
 			modelBuilder
-				.Query<SubmittedCommentsAndAnswerCount>()
+				.Entity<SubmittedCommentsAndAnswerCount>().HasNoKey()
 				.ToView(MigrationConstants.Views.SubmittedCommentAndAnswerCount);
         }
 	}

@@ -35,7 +35,7 @@ namespace Comments
 {
     public class Startup
     {
-        private string _corsPolicyName = "CorsPolicy";
+        private const string CorsPolicyName = "CorsPolicy";
 
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
@@ -150,7 +150,7 @@ namespace Comments
 
             services.AddCors(options =>
             {
-                options.AddPolicy(_corsPolicyName,
+                options.AddPolicy(CorsPolicyName,
                     builder => builder.WithOrigins(AppSettings.Environment.CorsOrigin) 
                         .AllowAnyMethod()
                         .AllowAnyHeader()
@@ -163,7 +163,7 @@ namespace Comments
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        [Obsolete] //the reason for the obselete flag here is UseSpaPrerendering has been marked as obselete in 3.1 and dropped in 5.x
+        [Obsolete("the reason for the obselete flag here is UseSpaPrerendering has been marked as obselete in 3.1 and dropped in 5.x")]
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, IHostApplicationLifetime appLifetime, IUrlHelperFactory urlHelperFactory, IFeatureManager featureManager, LinkGenerator linkGenerator)
         {           
 
@@ -181,7 +181,7 @@ namespace Comments
 	            app.UseStatusCodePagesWithReExecute(Constants.ErrorPath + "/{0}");
 			}
 
-	        app.UseCors(_corsPolicyName);
+	        app.UseCors(CorsPolicyName);
 
             // Because in dev mode we proxy to a react dev server (which has to run in the root e.g. http://localhost:3000)
             // we re-write paths for static files to map them to the root
@@ -246,8 +246,6 @@ namespace Comments
 		    {
 			    app.UseHttpsRedirection();
 		    }
-
-		    IRouteBuilder defaultRoute = null;
 
             app.UseEndpoints(endpoints =>
             {
