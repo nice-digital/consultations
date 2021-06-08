@@ -5,7 +5,7 @@ Feature: User unable to submit when they have unsaved comments on Review page
 	We want to be warned if I attempt to navigate away while having unsaved Comments
 
 	Background:
-		Given I open the url "234/1/recommendations"
+		Given I open the url "412/1/recommendations"
 		When I log into accounts with username "IDAM_EMAIL2" and password "IDAM_PASSWORD"
 
 	Scenario: User is unable to Submit when there are unsaved comments

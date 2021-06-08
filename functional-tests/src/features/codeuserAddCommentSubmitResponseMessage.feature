@@ -11,9 +11,9 @@ Feature: Code user unable to submit when they have not completed mandatory quest
 
 	Scenario: User is unable to Submit when they have not answered the default response questions
 		Given I expect the result list count contains "Showing 1 to 25"
-		When I add the indev GID "GID-NG10361" to the filter
+		When I add the indev GID "GID-NG10186" to the filter
 		Then I click on consultation to generate and copy the organisation code
-		Given I open the url "595/1/introduction"
+		Given I open the url "254/1/overview"
 		When I log into consultation with copied organisation code
 		Given I comment on a Document
 		When I add the comment "Test" and submit

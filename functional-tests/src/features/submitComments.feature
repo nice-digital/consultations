@@ -4,7 +4,7 @@ Feature: Submit Comments on a Consultation
 	We want to be able to submit my comments for review by NICE
 
 	Background:
-		Given I open the url "1/1/introduction"
+		Given I open the url "409/1/recommendations"
 		When I log into accounts with username "IDAM_EMAIL3" and password "IDAM_PASSWORD"
 
 	Scenario: User makes a multiple comments and submits
@@ -21,6 +21,6 @@ Feature: Submit Comments on a Consultation
 		And I submit my response
 		And I review my response
 		Then I expect all comment boxes are inactive
-		Given I delete submissions for userid "auth0|5e3983aacb0dc60d9317d1d5"
+		Given I delete submissions for userid "auth0|60b8d9bb9d409a0069a4be29"
 		And I delete all comments on the page
 

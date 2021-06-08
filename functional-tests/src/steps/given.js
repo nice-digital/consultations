@@ -35,7 +35,7 @@ Given(/^I comment on a Chapter$/, () => {
 
 Given(/^I comment on a Section$/, () => {
 	browser.pause(1000);
-	browser.click("[data-qa-sel='nav-list-item']:nth-of-type(4)");
+	browser.click("[data-qa-sel='nav-list-item']:nth-of-type(2)");
 	browser.waitForVisible(".document-comment-container");
 	browser.pause(1000);
 	browser.waitForVisible(
@@ -52,11 +52,9 @@ Given(/^I comment on a Section$/, () => {
 Given(/^I comment on a Sub-section$/, () => {
 	browser.pause(1000);
 	browser.waitForVisible(
-		".section:first-of-type > [data-qa-sel='in-text-comment-button']"
+		"[data-qa-sel='in-text-comment-button']:nth-of-type(2)"
 	);
-	browser.click(
-		".section:first-of-type > [data-qa-sel='in-text-comment-button']"
-	);
+	browser.click("[data-qa-sel='in-text-comment-button']:nth-of-type(2)");
 	browser.waitForVisible(".document-comment-container");
 	browser.pause(1000);
 	browser.waitForVisible("body [data-qa-sel='comment-box-title']");
