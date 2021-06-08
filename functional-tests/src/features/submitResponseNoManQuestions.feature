@@ -5,7 +5,7 @@ Feature: User unable to submit when they have not completed mandatory questions 
 	We want to be warned if I attempt to submit response without answering mandatory questions
 
 	Background:
-		Given I open the url "234/1/recommendations"
+		Given I open the url "410/1/recommendations"
 		When I log into accounts with username "IDAM_EMAIL1" and password "IDAM_PASSWORD"
 
 	Scenario: User is unable to Submit when they have not answered the default response questions
