@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using Comments.Common;
 using Comments.Configuration;
 using Comments.Export;
@@ -165,9 +166,19 @@ namespace Comments
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         [Obsolete("the reason for the obselete flag here is UseSpaPrerendering has been marked as obselete in 3.1 and dropped in 5.x")]
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, IHostApplicationLifetime appLifetime, IUrlHelperFactory urlHelperFactory, IFeatureManager featureManager, LinkGenerator linkGenerator)
-        {           
+        {
+            app.Use(async (context, next) =>
+                {
+                    context.Response.OnStarting(() =>
+                    {
+                        context.Response.Headers.Add("Permissions-Policy", "interest-cohort=()");
+                        return Task.FromResult(0);
+                    });
+                    await next();
+                }
+            );
 
-			if (env.IsDevelopment())
+            if (env.IsDevelopment())
             {
 	            app.UseDeveloperExceptionPage();
 				app.UseExceptionHandler(Constants.ErrorPath);
