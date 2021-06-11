@@ -4,9 +4,8 @@ Feature: Admin users can search by using the InDev GID ID
 
 	Background:
 		Given I open the url "admin"
-		And I refresh
 		When I log into the admin page with username "IDAM_EMAIL1" and password "IDAM_PASSWORD"
-		Given I open the url "admin"
+
 
 	Scenario: User can search for a consultation by using its InDev GID ID
 		Given I expect the result list count contains "Showing 1 to 25"

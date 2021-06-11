@@ -5,10 +5,8 @@ Feature: External User can access download page and only the consultations comme
 	We want to be able to see the consultations I have commented on on the download page
 
 	Background:
-		Given I open the url "472/1/quality-statements"
-		And I refresh
+		Given I open the url "408/1/recommendations"
 		When I log into accounts with username "IDAM_EMAIL5" and password "IDAM_PASSWORD"
-		Given I open the url "472/1/quality-statements"
 
 	Scenario: User makes a comment and submits it to NICE and when they view the download page it shows they have commented
 		Given I comment on a Document

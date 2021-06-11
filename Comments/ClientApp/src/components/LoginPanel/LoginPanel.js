@@ -3,6 +3,8 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 
 import { UserContext } from "../../context/UserContext";
+import { tagManager } from "../../helpers/tag-manager";
+
 import  LoginBannerWithRouter from "../LoginBanner/LoginBanner";
 
 type PropsType = {
@@ -28,13 +30,33 @@ export class LoginPanel extends Component<PropsType, StateType> {
 	componentDidMount() {}
 
 	fieldsChangeHandler = (e) => {
+		const fieldName = e.target.name;
 		let fieldValue = e.target.value;
+
+		const tagManagerLabel = {
+			sole: "organisation login sole representative",
+			lead: "organisation login as lead",
+			code: "organisation login with code",
+			false: "individual login",
+			true: null,
+		}[fieldValue];
 
 		if (fieldValue === "true" || fieldValue === "false") {
 			fieldValue = (fieldValue === "true");
 		}
 
-		this.setState({	[e.target.name]: fieldValue });
+		this.setState(() => {
+			if (tagManagerLabel) {
+				tagManager({
+					event: "generic",
+					category: "Consultation comments page",
+					action: "Clicked",
+					label: tagManagerLabel,
+				});
+			}
+
+			return { [fieldName]: fieldValue };
+		});
 	};
 
 	goBack = () => {
@@ -198,7 +220,8 @@ const LoginSelectionRadio = (props) => {
 					/>
 					<label
 						className="form__label form__label--radio"
-						htmlFor={`${name}--${radio.variant}`}>
+						htmlFor={`${name}--${radio.variant}`}
+						data-qa-sel={`loginpanel-label-${radio.variant}`}>
 						{radio.label}
 					</label>
 				</div>

@@ -4,10 +4,8 @@ Feature: Comment on a Chapter
 	We want to be able to comment at the Chapter level
 
 	Background:
-		Given I open the url "158/3/introduction"
-		And I refresh
+		Given I open the url "404/1/recommendations"
 		When I log into accounts with username "IDAM_EMAIL2" and password "IDAM_PASSWORD"
-		Given I open the url "158/3/introduction"
 		Given I delete all comments on the page
 
 	Scenario: User makes a comment at chapter level

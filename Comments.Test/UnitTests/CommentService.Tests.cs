@@ -35,10 +35,10 @@ namespace Comments.Test.UnitTests
 			var commentService = new CommentService(context, userService, _consultationService, _fakeHttpContextAccessor);
 
             // Act
-            var viewModel = commentService.GetComment(commentId);
+            var (comment, _) = commentService.GetComment(commentId);
 
             //Assert
-            viewModel.comment.CommentText.ShouldBe(commentText);
+            comment.CommentText.ShouldBe(commentText);
         }
 
         [Fact]
@@ -235,8 +235,6 @@ namespace Comments.Test.UnitTests
             var ConsultationOneURI = "consultations://./consultation/1";
             var ConsultationTwoURI = "consultations://./consultation/2/document/1/chapter/ERROR";
 
-            var ConsultationUserError = "consultations://./consultation/1/document/1/chapter/USERERROR";
-
             var commentText = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
             var answerText = Guid.NewGuid().ToString();
@@ -322,10 +320,8 @@ namespace Comments.Test.UnitTests
 
 	        //Assert
 	        viewModel.Comments.Count.Equals(1);
-			viewModel.Comments.Single().CommentText.ShouldBe("another user from my organisations comment submitted to lead");
+	        var comment = viewModel.Comments.Single();
+			comment.CommentText.ShouldBe("another user from my organisations comment submitted to lead");
         }
-		
-	}
+    }
 }
-
-

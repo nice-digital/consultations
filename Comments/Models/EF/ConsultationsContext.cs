@@ -24,10 +24,12 @@ namespace Comments.Models
         public virtual DbSet<SubmissionAnswer> SubmissionAnswer { get; set; }
         public virtual DbSet<SubmissionComment> SubmissionComment { get; set; }
 
-		/// <summary>
-		/// Query type - see here for more info https://docs.microsoft.com/en-us/ef/core/modeling/query-types
-		/// </summary>
-		public virtual DbQuery<SubmittedCommentsAndAnswerCount> SubmittedCommentsAndAnswerCounts { get; set; }
+        /// <summary>
+        /// Query type - see here for more info https://docs.microsoft.com/en-us/ef/core/modeling/query-types
+        ///
+        /// 3.1 upgrade changed this to DbSet - see mitigations section here: https://docs.microsoft.com/en-us/ef/core/what-is-new/ef-core-3.x/breaking-changes#query-types-are-consolidated-with-entity-types
+        /// </summary>
+        public virtual DbSet<SubmittedCommentsAndAnswerCount> SubmittedCommentsAndAnswerCounts { get; set; }
 
         private string _createdByUserID;
 		private IEnumerable<int> _organisationUserIDs;
@@ -97,7 +99,7 @@ namespace Comments.Models
 	                //this condition is filter is here for organisation commenters (not leads). if they have a cookie, then the _orgnanisationUserIDs property will have a value and needs to match the record.
 	                //the reason for the !c.ParentCommentId.HasValue, is so that when comments are copied to org leads, the organisationUserId value is left. however we don't want the commenter to be able to view the org leads copied answer
 	                //so that filters them out.
-	                || (!c.ParentAnswerId.HasValue && _organisationUserIDs != null && c.OrganisationUserId.HasValue && _organisationUserIDs.Any(organisationUserID => organisationUserID.Equals(c.OrganisationUserId)))
+	                || (!c.ParentAnswerId.HasValue && _organisationUserIDs != null && c.OrganisationUserId.HasValue && _organisationUserIDs.Contains(c.OrganisationUserId.Value))
 
 	                //this condition is for org leads. the c.ParentCommentId.HasValue, is so they can see answers submitted by organisation commenters as that gets set when the answer is copied.
 					//the c.CreatedByUserId != null is so they can see brand new answers for the organisation, made by another org lead for the same organisation.
@@ -165,7 +167,7 @@ namespace Comments.Models
 						//this condition is filter is here for organisation commenters (not leads). if they have a cookie, then the _orgnanisationUserIDs property will have a value and needs to match the record.
 						//the reason for the !c.ParentCommentId.HasValue, is so that when comments are copied to org leads, the organisationUserId value is left. however we don't want the commenter to be able to view the org leads copied comment
 						//so that filters them out.
-						|| (!c.ParentCommentId.HasValue && _organisationUserIDs != null && c.OrganisationUserId.HasValue && _organisationUserIDs.Any(organisationUserID => organisationUserID.Equals(c.OrganisationUserId)))
+						|| (!c.ParentCommentId.HasValue && _organisationUserIDs != null && c.OrganisationUserId.HasValue && _organisationUserIDs.Contains(c.OrganisationUserId.Value))
 
 						//this condition is for org leads. the c.ParentCommentId.HasValue, is so they can see comments submitted by organisation commenters as that gets set when the comment is copied.
 						//the c.CreatedByUserId != null is so they can see brand new comments for the organisation, made by another org lead for the same organisation.
@@ -351,7 +353,7 @@ namespace Comments.Models
 			});
 
 			modelBuilder
-				.Query<SubmittedCommentsAndAnswerCount>()
+				.Entity<SubmittedCommentsAndAnswerCount>().HasNoKey()
 				.ToView(MigrationConstants.Views.SubmittedCommentAndAnswerCount);
         }
 	}

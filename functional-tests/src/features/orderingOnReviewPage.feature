@@ -5,10 +5,8 @@ Feature: Comment Ordering on the Review Page
 	We want them to be ordered and displayed on the review page
 
 	Background:
-		Given I open the url "1/1/introduction"
-		And I refresh
+		Given I open the url "409/1/recommendations"
 		When I log into accounts with username "IDAM_EMAIL1" and password "IDAM_PASSWORD"
-		Given I open the url "1/1/introduction"
 		Given I delete all comments on the page
 
 	Scenario: User makes multiple comments and views them on the Review page

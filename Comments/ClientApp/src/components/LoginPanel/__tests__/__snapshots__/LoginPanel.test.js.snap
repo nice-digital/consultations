@@ -28,6 +28,7 @@ exports[`LoginPanel should match the snapshot after first loading up 1`] = `
       />
       <label
         className="form__label form__label--radio"
+        data-qa-sel="loginpanel-label-organisation"
         htmlFor="respondingAsOrg--organisation"
       >
         As part of an organisation
@@ -47,6 +48,7 @@ exports[`LoginPanel should match the snapshot after first loading up 1`] = `
       />
       <label
         className="form__label form__label--radio"
+        data-qa-sel="loginpanel-label-individual"
         htmlFor="respondingAsOrg--individual"
       >
         As an individual

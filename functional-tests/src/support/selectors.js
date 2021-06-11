@@ -39,6 +39,7 @@ export default {
 		deletebutton: toDataQASelAttr("delete-comment-button"),
 		responseSubmittedHeader: toDataQASelAttr("changeable-page-header"),
 		submitResponseFeedback: toDataQASelAttr("Submit-response-feedback"),
+		SendYourResponseToYourOrganisationButton: ("//BUTTON[@class='btn btn--cta']"),
 		YessubmitResponseButton: toDataQASelAttr("submit-comment-button"),
 	},
 	adminDownloadPage: {
