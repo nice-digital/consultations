@@ -1,4 +1,4 @@
-using Comments.Common;
+﻿using Comments.Common;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -44,8 +44,7 @@ namespace Comments.Configuration
 
 			var idamOptions = new ApiConfig();
 			configuration.GetSection("Feeds:IndevIDAMConfig").Bind(idamOptions);
-			Feed.UseIDAM = configuration.GetValue<bool>("FeatureManagement:" + Constants.Features.IndevUsingIDAMAuth);
-			Feed.ApiConfig = idamOptions;
+            Feed.ApiConfig = idamOptions;
 		}
     }
 }

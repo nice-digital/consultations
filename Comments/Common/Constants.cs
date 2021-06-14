@@ -64,9 +64,7 @@
             public const string TestFeatureFlag = "TestFeatureFlag";
 
 		    public const string OrganisationalCommenting = "OrganisationalCommenting";
-
-		    public const string IndevUsingIDAMAuth = "IndevUsingIDAMAuth";
-	    }
+        }
 
 
     }
