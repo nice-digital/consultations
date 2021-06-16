@@ -1,10 +1,13 @@
-using System;
+﻿using System;
 using Comments.Models;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Serilog;
+
 
 namespace Comments
 {
@@ -12,7 +15,8 @@ namespace Comments
     {
         public static void Main(string[] args)
         {
-			var host = BuildWebHost(args);
+            Log.Logger = SeriLogger.GetLoggerConfiguration().CreateLogger();
+            var host = CreateHostBuilder(args).Build();
 
 
 			using (var scope = host.Services.CreateScope())
@@ -33,9 +37,12 @@ namespace Comments
 	        host.Run();
 		}
 
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .Build();
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .UseSerilog()
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
     }
 }

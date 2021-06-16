@@ -4,7 +4,7 @@ Feature: Comment on a Section, Sub-section
 	We want to be able to comment at the Section and Sub-section level
 
 	Background:
-		Given I open the url "158/3/guidance"
+		Given I open the url "407/1/recommendations"
 		When I log into accounts with username "IDAM_EMAIL2" and password "IDAM_PASSWORD"
 		Given I delete all comments on the page
 

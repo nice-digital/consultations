@@ -13,7 +13,7 @@ config.capabilities = [
 		browserName: "chrome",
 		"goog:chromeOptions": {
 			w3c: false,
-			args: ["--headless", "--window-size=1366,768"],
+			args: ["--headless", "--window-size=1366,768", "--disable-dev-shm-usage"],
 		},
 	}, //,
 	// {

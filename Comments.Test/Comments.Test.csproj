@@ -1,25 +1,27 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
 
     <IsPackable>false</IsPackable>
     <PreserveCompilationContext>true</PreserveCompilationContext>
+	
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="ExcelDataReader" Version="3.6.0" />
     <PackageReference Include="ExcelDataReader.DataSet" Version="3.6.0" />
     <PackageReference Include="FluentAssertions" Version="5.1.2" />
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.1.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.1.14" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.14" />
-    <PackageReference Include="Microsoft.FeatureManagement.AspNetCore" Version="2.2.0" />
+
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="3.1.15" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.15" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.15" />
+    <PackageReference Include="Microsoft.FeatureManagement.AspNetCore" Version="2.3.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
     <PackageReference Include="Moq" Version="4.8.1" />
     <PackageReference Include="NICE.Feeds" Version="1.0.147" />
     <PackageReference Include="NICE.Feeds.Tests" Version="1.0.147" />
-    <PackageReference Include="NICE.Identity.Authentication.Sdk" Version="1.0.501" />
+    <PackageReference Include="NICE.Identity.Authentication.Sdk" Version="1.0.10514" />
     <PackageReference Include="Shouldly" Version="3.0.0" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="4.5.1" />
     <PackageReference Include="xunit" Version="2.4.0" />
@@ -66,7 +68,7 @@
     <Copy SourceFiles="%(DiffAssertionsFilePath.FullPath)" DestinationFolder="$(OutputPath)" Condition="Exists('%(DiffAssertionsFilePath.FullPath)')" />
   </Target>
 
-  <Target Name="AddAssemblyAliasToReactiveAsync" AfterTargets="ResolveAssemblyReferences" Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
+  <Target Name="AddAssemblyAliasToReactiveAsync" AfterTargets="ResolveAssemblyReferences" Condition="'$(TargetFramework)' == 'netcoreapp2.2'">
 	  <ItemGroup>
 		  <ReferencePath Condition=" '%(FileName)' == 'System.Interactive.Async' ">
 			  <Aliases>reactive</Aliases>

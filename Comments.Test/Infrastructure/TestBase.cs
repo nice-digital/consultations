@@ -23,6 +23,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Authorization;
 using NICE.Feeds.Indev;
 using NICE.Feeds.Indev.Models.List;
 using Answer = Comments.Models.Answer;
@@ -163,8 +165,7 @@ namespace Comments.Test.Infrastructure
                 {
                     services.AddEntityFrameworkSqlite();
 
-					services.TryAddSingleton<ConsultationsContext>(_context);
-                    services.TryAddSingleton<ISeriLogger, FakeSerilogger>();
+					services.AddSingleton<ConsultationsContext>(_context);
                     if (!useRealHttpContextAccessor)
                     {
 	                    services.TryAddSingleton<IHttpContextAccessor>(provider => _fakeHttpContextAccessor);
@@ -190,7 +191,12 @@ namespace Comments.Test.Infrastructure
 
 	                if (bypassAuthentication)
 	                {
-		                services.AddMvc(opt => opt.Filters.Add(new AllowAnonymousFilter())); //bypass authentication
+		                services.AddControllersWithViews(opt =>
+		                {
+			                opt.Filters.Add(new AllowAnonymousFilter());
+		                });
+
+		                services.AddSingleton<IAuthorizationHandler, AllowAnonymous>();
 	                }
 
 					services.TryAddSingleton<IApiTokenStore, FakeApiTokenStore>();
@@ -341,9 +347,10 @@ namespace Comments.Test.Infrastructure
 
             return questionType.QuestionTypeId;
         }
-        protected int AddQuestion(int locationId, int questionTypeId, string questionText, ConsultationsContext passedInContext = null, string createdByUserId = null)
+        protected int AddQuestion(int locationId, int questionTypeId, string questionText, ConsultationsContext passedInContext = null, string createdByUserId = null, bool isDeleted = false)
         {
             var question = new Question(locationId, questionText, questionTypeId, null, null, null);
+            question.IsDeleted = isDeleted;
             question.CreatedByUserId = createdByUserId ?? Guid.Empty.ToString();
 			question.LastModifiedByUserId = createdByUserId ?? Guid.Empty.ToString();
 			if (passedInContext != null)
@@ -596,12 +603,5 @@ namespace Comments.Test.Infrastructure
         }
 
         #endregion Helpers
-    }
-
-    internal class FakeSerilogger : ISeriLogger
-    {
-        public void Configure(ILoggerFactory loggerFactory, IConfiguration configuration, IApplicationLifetime appLifetime,
-            IHostingEnvironment env)
-        {}
     }
 }

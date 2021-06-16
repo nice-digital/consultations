@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -104,7 +104,7 @@ namespace Comments.Common
 		    return new Uri(builder.ToString());
 	    }
 
-	    public static bool IsIntegrationTest(this IHostingEnvironment hostingEnvironment)
+	    public static bool IsIntegrationTest(this IWebHostEnvironment hostingEnvironment)
 	    {
 		    return hostingEnvironment.ContentRootPath.IndexOf(".Test", StringComparison.OrdinalIgnoreCase) != -1;
 	    }

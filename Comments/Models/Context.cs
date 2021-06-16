@@ -1,17 +1,16 @@
-﻿using Comments.Services;
-using Comments.ViewModels;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
-using Comments.Common;
+using Comments.Services;
+using Comments.ViewModels;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Z.EntityFramework.Plus;
 
 namespace Comments.Models
 {
-	public partial class ConsultationsContext : DbContext
+    public partial class ConsultationsContext : DbContext
     {
 	    private readonly IEncryption _encryption;
 
@@ -57,8 +56,10 @@ namespace Comments.Models
 		/// <param name="partialMatchSourceURI">True if data is being retrieved for the review page</param>
 		/// <returns></returns>
 		public IEnumerable<Location> GetAllCommentsAndQuestionsForDocument(IList<string> sourceURIs, bool partialMatchSourceURI)
-		{
-			string partialSourceURIToUse = null, partialMatchExactSourceURIToUse = null;
+        {
+            sourceURIs = sourceURIs.Select(s => s.ToLower()).ToList();
+
+            string partialSourceURIToUse = null, partialMatchExactSourceURIToUse = null;
 		    if (partialMatchSourceURI)
 		    {
 			    partialMatchExactSourceURIToUse = sourceURIs.SingleOrDefault();
@@ -72,14 +73,14 @@ namespace Comments.Models
 				.Include(c => c.Location)
 				.Where(c => (partialMatchSourceURI
 					? (c.Location.SourceURI.Equals(partialMatchExactSourceURIToUse) || c.Location.SourceURI.Contains(partialSourceURIToUse))
-					: sourceURIs.Contains(c.Location.SourceURI, StringComparer.OrdinalIgnoreCase)))
+					: sourceURIs.Contains(c.Location.SourceURI.ToLower())))
 				.ToList();
 
 			var data = Location.Where(l => (l.Order != null) &&
 
 			                               (partialMatchSourceURI
 				                               		? (l.SourceURI.Equals(partialMatchExactSourceURIToUse) || l.SourceURI.Contains(partialSourceURIToUse))
-				                               		: sourceURIs.Contains(l.SourceURI, StringComparer.OrdinalIgnoreCase)))
+				                               		: sourceURIs.Contains(l.SourceURI.ToLower())))
 				//(allAuthorisedLocations.Contains(l.LocationId)))
 
 				.Include(l => l.Comment)
@@ -123,38 +124,52 @@ namespace Comments.Models
 		/// <param name="sourceURIs"></param>
         /// <returns></returns>
 		public IEnumerable<Location> GetOtherOrganisationUsersCommentsAndQuestionsForDocument(IList<string> sourceURIs)
-		{
+        {
+            sourceURIs = sourceURIs.Select(s => s.ToLower()).ToList();
             var commentsAndAnswers = Location.IgnoreQueryFilters()
                 .IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead
-                                                         && _organisationIDs.Any(o => o.Equals(c.OrganisationId))
+                                                         && (c.OrganisationId.HasValue && _organisationIDs.Contains(c.OrganisationId.Value))
                                                          && !_organisationUserIDs.Contains(c.OrganisationUserId.Value)))
-                .IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead 
-                                                         && _organisationIDs.Any(o => o.Equals(c.OrganisationId)) 
+                .IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead
+                                                         && (c.OrganisationId.HasValue && _organisationIDs.Contains(c.OrganisationId.Value))
                                                          && !_organisationUserIDs.Contains(c.OrganisationUserId.Value))
                     .Select(c=> c.Status))
-                .IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead
-                                                         && _organisationIDs.Any(o => o.Equals(c.OrganisationId))
-                                                         && !_organisationUserIDs.Contains(c.OrganisationUserId.Value))
-                    .Select(c=> c.OrganisationUser))
+                //removing this filter as the Models.Comment is converted to ViewModels.Comment, which doesn't actually have the OrganisationUser in it, so we don't need this join.
+                //.IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead
+                //                                         && (c.OrganisationId.HasValue && _organisationIDs.Contains(c.OrganisationId.Value))
+                //                                         //&& _organisationIDs.Any(o => o.Equals(c.OrganisationId))
+                //                                         && !_organisationUserIDs.Contains(c.OrganisationUserId.Value))
+                //    .Select(c=> c.OrganisationUser))
 
                 .IncludeFilter(l => l.Question)
                 .IncludeFilter(l => l.Question
                     .Select(q => q.QuestionType))
+
+
                 .IncludeFilter(l => l.Question
-                    .Select(q => q.Answer.Where(a => a.StatusId == (int)StatusName.SubmittedToLead
-                                                     && _organisationIDs.Contains(a.OrganisationId.Value) 
-                                                     && !_organisationUserIDs.Contains(a.OrganisationUserId.Value))
-                        .OrderByDescending(a=> a.LastModifiedDate).Select(a => a.LastModifiedDate).FirstOrDefault()))
-                .IncludeFilter(l=> l.Question
                     .Select(q => q.Answer.Where(a => a.StatusId == (int)StatusName.SubmittedToLead
                                                      && _organisationIDs.Contains(a.OrganisationId.Value)
                                                      && !_organisationUserIDs.Contains(a.OrganisationUserId.Value))
-                    .Select(a => a.OrganisationUser)))
+                        .OrderByDescending(a => a.LastModifiedDate)
+                        .Select(a => a.LastModifiedDate)
+                        .FirstOrDefault()))
+
+                //removing this filter as the Models.Question is converted to ViewModels.Question, which doesn't actually have the OrganisationUser in it, so we don't need this join.
+                //.IncludeFilter(l => l.Question
+                //    .Select(q => q.Answer.Where(a => a.StatusId == (int)StatusName.SubmittedToLead
+                //                                     && _organisationIDs.Contains(a.OrganisationId.Value)
+                //                                     && !_organisationUserIDs.Contains(a.OrganisationUserId.Value)
+                //                                     && a.OrganisationUser != null
+                //                                     )
+                //        .Select(a => a.OrganisationUser)
+                //        .FirstOrDefault()
+                //    ))
+
                 .OrderBy(l => l.Order)
                 .ToList();
 
             var filteredLocations = commentsAndAnswers.Where(l =>
-                (l.Order != null) && sourceURIs.Contains(l.SourceURI, StringComparer.OrdinalIgnoreCase));
+                (l.Order != null) && sourceURIs.Contains(l.SourceURI.ToLower()));
 
             var sortedData = filteredLocations.Where(l => l.Comment.Count > 0 || l.Question.Count > 0)
                 .OrderBy(l => l.Order)
@@ -166,7 +181,8 @@ namespace Comments.Models
 		}
 
 		public IEnumerable<Location> GetQuestionsForDocument(IList<string> sourceURIs, bool partialMatchSourceURI)
-		{
+        {
+            sourceURIs = sourceURIs.Select(s => s.ToLower()).ToList();
 			string partialSourceURIToUse = null, partialMatchExactSourceURIToUse = null;
 			if (partialMatchSourceURI)
 			{
@@ -179,7 +195,7 @@ namespace Comments.Models
 
 			var data = Location.Where(l => partialMatchSourceURI
 					? (l.SourceURI.Equals(partialMatchExactSourceURIToUse) || l.SourceURI.Contains(partialSourceURIToUse))
-					: sourceURIs.Contains(l.SourceURI, StringComparer.OrdinalIgnoreCase))
+					: sourceURIs.Contains(l.SourceURI.ToLower()))
 
 				.Include(l => l.Question)
 					.ThenInclude(q => q.QuestionType)
@@ -364,7 +380,7 @@ namespace Comments.Models
 	    public Status GetStatus(StatusName statusName)
 	    {
 		    return Status
-			    .Single(s => s.Name.Equals(statusName.ToString(), StringComparison.OrdinalIgnoreCase));
+			    .Single(s => EF.Functions.Like(s.Name, statusName.ToString()));
 	    }
 
 	    public void UpdateCommentStatus(IEnumerable<int> commentIds, Status status)
@@ -418,14 +434,14 @@ namespace Comments.Models
 			}
 		}
 
-		public void AddSubmissionComments(IEnumerable<int> commentIds, int submissionId)
+		public void AddSubmissionComments(IEnumerable<int> commentIds, Models.Submission submission)
 	    {
 			//the extra DB hit here is to ensure that duplicate rows aren't inserted. currently, you should only be able to submit a comment once. in the future though that might change as resubmitting is on the cards, and the DB supports that now.
 		    var existingSubmissionCommentIdsForPassedInComments = SubmissionComment.Where(sc => commentIds.Contains(sc.CommentId)).Select(sc => sc.CommentId).ToList();
 
 		    var submissionCommentsToInsert = commentIds.Where(commentId =>
 				    !existingSubmissionCommentIdsForPassedInComments.Contains(commentId))
-			    .Select(commentId => new Models.SubmissionComment(submissionId, commentId)).ToList();
+			    .Select(commentId => new Models.SubmissionComment(submission.SubmissionId, commentId) {Submission = submission}).ToList();
 
 			SubmissionComment.AddRange(submissionCommentsToInsert);
 		}
@@ -448,14 +464,13 @@ namespace Comments.Models
 			answersToUpdate.ForEach(a => a.StatusId = status.StatusId);
 		}
 
-	    public void AddSubmissionAnswers(IEnumerable<int> answerIds, int submissionId)
+	    public void AddSubmissionAnswers(IEnumerable<int> answerIds, Models.Submission submission)
 	    {
 		    //the extra DB hit here is to ensure that duplicate rows aren't inserted. currently, you should only be able to submit a comment once. in the future though that might change as resubmitting is on the cards, and the DB supports that now.
 		    var existingSubmissionAnswerIdsForPassedInAnswers = SubmissionAnswer.Where(sa => answerIds.Contains(sa.AnswerId)).Select(sa => sa.AnswerId).ToList();
 
-		    var submissionAnswersToInsert = answerIds.Where(commentId =>
-				    !existingSubmissionAnswerIdsForPassedInAnswers.Contains(commentId))
-			    .Select(commentId => new Models.SubmissionAnswer(submissionId, commentId)).ToList();
+		    var submissionAnswersToInsert = answerIds.Where(answerId => !existingSubmissionAnswerIdsForPassedInAnswers.Contains(answerId))
+			    .Select(answerId => new Models.SubmissionAnswer(submission.SubmissionId, answerId) {Submission = submission}).ToList();
 
 		    SubmissionAnswer.AddRange(submissionAnswersToInsert);
 	    }
@@ -546,7 +561,7 @@ namespace Comments.Models
 		/// <returns></returns>
 		public int InsertQuestionsWithScriptForDocument1And2InConsultation(int consultationId)
 	    {
-		    return Database.ExecuteSqlCommand(@"
+		    return Database.ExecuteSqlRaw(@"
 				--DECLARE @consultationId AS int --UNCOMMENT OUT THESE 2 LINES TO USE IN SQL MANAGEMENT STUDIO
 				--SET @consultationId = 11
 
@@ -624,7 +639,7 @@ namespace Comments.Models
 		/// <returns></returns>
 		public int InsertQuestionsWithScriptForConsultation(int consultationId)
 		{
-			return Database.ExecuteSqlCommand(@"
+			return Database.ExecuteSqlRaw(@"
 				--DECLARE @consultationId AS int --UNCOMMENT OUT THESE 2 LINES TO USE IN SQL MANAGEMENT STUDIO
 				--SET @consultationId = 210
 
@@ -700,7 +715,7 @@ namespace Comments.Models
 		/// <returns></returns>
 		public int DeleteEverything()
 		{
-			return Database.ExecuteSqlCommand(@"
+			return Database.ExecuteSqlRaw(@"
 				DELETE FROM SubmissionComment;
 				DELETE FROM SubmissionAnswer;
 				DELETE FROM Submission;
@@ -718,37 +733,26 @@ namespace Comments.Models
 		/// <param name="typeName"></param>
 		/// <returns></returns>
 		public IList<object> GetAllOfATable(string typeName)
-	    {
-			//the below works and is kinda nice, but the big switch is probably safer.
+        {
+            //the below works and is kinda nice, but the big switch is probably safer.
 			//var method = typeof(DbContext).GetMethod("Set").MakeGenericMethod(Type.GetType("Comments.Models." + typeName));
 			//var query = method.Invoke(this, null) as IQueryable;
 			//return (query ?? throw new InvalidOperationException()).OfType<object>().ToList();
 
-		    switch (typeName.ToLower())
-		    {
-				case "submissioncomment":
-					return SubmissionComment.IgnoreQueryFilters().Select(x => (object)x).ToList();
-			    case "submissionanswer":
-				    return SubmissionAnswer.IgnoreQueryFilters().Select(x => (object)x).ToList();
-			    case "submission":
-				    return Submission.IgnoreQueryFilters().Select(x => (object)x).ToList();
-			    case "answer":
-				    return Answer.IgnoreQueryFilters().Select(x => (object)x).ToList();
-			    case "question":
-				    return Question.IgnoreQueryFilters().Select(x => (object)x).ToList();
-			    case "comment":
-				    return Comment.IgnoreQueryFilters().Select(x => (object)x).ToList();
-			    case "location":
-				    return Location.IgnoreQueryFilters().Select(x => (object)x).ToList();
-			    case "questiontype":
-				    return QuestionType.IgnoreQueryFilters().Select(x => (object)x).ToList();
-			    case "status":
-				    return Status.IgnoreQueryFilters().Select(x => (object)x).ToList();
-
-				default:
-					throw new Exception("Unknown table name");
-		    }
-	    }
+            return typeName.ToLower() switch
+            {
+                "submissioncomment" => SubmissionComment.IgnoreQueryFilters().Select(x => (object)x).ToList(),
+                "submissionanswer" => SubmissionAnswer.IgnoreQueryFilters().Select(x => (object)x).ToList(),
+                "submission" => Submission.IgnoreQueryFilters().Select(x => (object)x).ToList(),
+                "answer" => Answer.IgnoreQueryFilters().Select(x => (object)x).ToList(),
+                "question" => Question.IgnoreQueryFilters().Select(x => (object)x).ToList(),
+                "comment" => Comment.IgnoreQueryFilters().Select(x => (object)x).ToList(),
+                "location" => Location.IgnoreQueryFilters().Select(x => (object)x).ToList(),
+                "questiontype" => QuestionType.IgnoreQueryFilters().Select(x => (object)x).ToList(),
+                "status" => Status.IgnoreQueryFilters().Select(x => (object)x).ToList(),
+                _ => throw new Exception("Unknown table name")
+            };
+        }
 
 	    public (int totalComments, int totalAnswers, int totalSubmissions) GetStatusData()
 	    {
@@ -769,7 +773,7 @@ namespace Comments.Models
 		/// <returns></returns>
 		public int InsertQuestionsWithScriptForCfGConsultation(int consultationId)
 		{
-			return Database.ExecuteSqlCommand(@"
+			return Database.ExecuteSqlRaw(@"
 				--DECLARE @consultationId AS int --UNCOMMENT OUT THESE 2 LINES TO USE IN SQL MANAGEMENT STUDIO
 				--SET @consultationId = 210
 
@@ -846,7 +850,7 @@ namespace Comments.Models
 		/// <returns></returns>
 		public int InsertQuestionsWithScriptForQSConsultation(int consultationId)
 		{
-			return Database.ExecuteSqlCommand(@"
+			return Database.ExecuteSqlRaw(@"
 				--DECLARE @consultationId AS int --UNCOMMENT OUT THESE 2 LINES TO USE IN SQL MANAGEMENT STUDIO
 				--SET @consultationId = 210
 
@@ -917,14 +921,17 @@ namespace Comments.Models
 		}
 
 		public IEnumerable<Question> GetAllPreviousUniqueQuestions()
-		{
-			return Question
-				.Include(q => q.Location)
-				.Include(q => q.QuestionType)
-				.GroupBy(q => q.QuestionText)
-				.Select(q => q.OrderByDescending(x => x.CreatedDate).First())
-				.OrderByDescending(q => q.CreatedDate);
-		}
+        {
+            var questions = Question
+                .Include(q => q.Location)
+                .Include(q => q.QuestionType)
+                .ToList();
+
+            return questions
+                .GroupBy(q => q.QuestionText)
+                .Select(q => q.OrderByDescending(x => x.CreatedDate).First())
+                .OrderByDescending(q => q.CreatedDate);
+        }
 
 		public IEnumerable<string> GetUniqueUsers()
 		{
@@ -967,10 +974,12 @@ namespace Comments.Models
 		}
 
 		public IEnumerable<OrganisationAuthorisation> GetOrganisationAuthorisations(IList<string> consultationSourceURIs)
-		{
+        {
+            consultationSourceURIs = consultationSourceURIs.Select(s=> s.ToLower()).ToList();
+
 			var organisationAuthorisations = OrganisationAuthorisation
 				.Include(oa => oa.Location)
-				.Where(oa => consultationSourceURIs.Contains(oa.Location.SourceURI, StringComparer.OrdinalIgnoreCase))
+                .Where(oa => consultationSourceURIs.Contains(oa.Location.SourceURI.ToLower()))
 				.ToList();
 
 			return organisationAuthorisations;

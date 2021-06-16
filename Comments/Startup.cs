@@ -1,7 +1,13 @@
-﻿using Comments.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Comments.Common;
 using Comments.Configuration;
 using Comments.Export;
 using Comments.Services;
+using Comments.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,7 +15,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
@@ -18,36 +23,30 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement;
 using NICE.Feeds;
+using NICE.Feeds.Indev;
 using NICE.Identity.Authentication.Sdk.Domain;
 using NICE.Identity.Authentication.Sdk.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using Comments.ViewModels;
-using NICE.Feeds.Configuration;
-using NICE.Feeds.Indev;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
 
 namespace Comments
 {
-	public class Startup
+    public class Startup
     {
-        ILogger _logger;
+        private const string CorsPolicyName = "CorsPolicy";
 
-        public Startup(IConfiguration configuration, IHostingEnvironment env, ILogger<Startup> logger)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
             Environment = env;
-            _logger = logger;
         }
         
         public IConfiguration Configuration { get; }
 
-        public IHostingEnvironment Environment { get; }
+        public IWebHostEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -63,7 +62,6 @@ namespace Comments
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
-			services.TryAddSingleton<ISeriLogger, SeriLogger>();
 			services.AddHttpClient();
 
 			services.TryAddTransient<IUserService, UserService>();
@@ -104,10 +102,12 @@ namespace Comments
 
 			services.AddRouting(options => options.LowercaseUrls = true);
 
-			services.AddMvc(options =>
-            {
-                options.Filters.Add(new ResponseCacheAttribute() { NoStore = true, Location = ResponseCacheLocation.None });
-            }); //.SetCompatibilityVersion(CompatibilityVersion.Version_2_2); 
+            services.AddControllersWithViews(options =>
+                {
+                    options.Filters.Add(new ResponseCacheAttribute() { NoStore = true, Location = ResponseCacheLocation.None });
+                    options.EnableEndpointRouting = false;
+                })
+                .AddNewtonsoftJson();
 
             // In production, static files are served from the pre-built files, rather than proxied via react dev server
             services.AddSpaStaticFiles(configuration =>
@@ -149,36 +149,41 @@ namespace Comments
 				options.KnownProxies.Clear();
 			});
 
-			services.AddCors(options =>
+            services.AddCors(options =>
             {
-                options.AddPolicy("CorsPolicy",
-                    builder => builder.AllowAnyOrigin()
+                options.AddPolicy(CorsPolicyName,
+                    builder => builder.WithOrigins(AppSettings.Environment.CorsOrigin) 
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials());
-            }); //adding CORS for Warren. todo: maybe move this into the isDevelopment block..
-            
+            });
+
             services.AddOptions();
 
             
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ISeriLogger seriLogger, IApplicationLifetime appLifetime, IUrlHelperFactory urlHelperFactory, IFeatureManager featureManager)
-        {           
-            seriLogger.Configure(loggerFactory, Configuration, appLifetime, env);
-            var startupLogger = loggerFactory.CreateLogger<Startup>();
-            startupLogger.LogWarning("Consultations starting up");
+        [Obsolete("the reason for the obselete flag here is UseSpaPrerendering has been marked as obselete in 3.1 and dropped in 5.x")]
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, IHostApplicationLifetime appLifetime, IUrlHelperFactory urlHelperFactory, IFeatureManager featureManager, LinkGenerator linkGenerator)
+        {
+            app.Use(async (context, next) =>
+                {
+                    context.Response.OnStarting(() =>
+                    {
+                        context.Response.Headers.Add("Permissions-Policy", "interest-cohort=()");
+                        return Task.FromResult(0);
+                    });
+                    await next();
+                }
+            );
 
-
-			if (env.IsDevelopment())
+            if (env.IsDevelopment())
             {
 	            app.UseDeveloperExceptionPage();
 				app.UseExceptionHandler(Constants.ErrorPath);
-				loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-                loggerFactory.AddDebug();
 
-				app.UseStaticFiles(); //uses the wwwroot folder, only for dev. on other service the root is varnish
+                app.UseStaticFiles(); //uses the wwwroot folder, only for dev. on other service the root is varnish
 			}
             else
             {
@@ -187,7 +192,7 @@ namespace Comments
 	            app.UseStatusCodePagesWithReExecute(Constants.ErrorPath + "/{0}");
 			}
 
-			app.UseCors("CorsPolicy");
+	        app.UseCors(CorsPolicyName);
 
             // Because in dev mode we proxy to a react dev server (which has to run in the root e.g. http://localhost:3000)
             // we re-write paths for static files to map them to the root
@@ -198,81 +203,83 @@ namespace Comments
                     var reqPath = context.Request.Path;
                     if (reqPath.HasValue && reqPath.Value.Contains("."))
                     {
-						// Map static files paths to the root, for use within the 
-						//if (reqPath.Value.Contains("/consultations"))
-						//{
-						//	context.Request.Path = reqPath.Value.Replace("/consultations", "");
-						//}
-						//else if (reqPath.Value.IndexOf("favicon.ico", StringComparison.OrdinalIgnoreCase) == -1 && reqPath.Value.IndexOf("hot-update", StringComparison.OrdinalIgnoreCase) == -1)
-						//{
-						//	context.Response.StatusCode = 404;
-						//	throw new FileNotFoundException($"Path {reqPath.Value} could not be found. Did you mean to load '/consultations{context.Request.Path.Value  }' instead?");
-						//}
-					}
+                        // Map static files paths to the root, for use within the 
+                        //if (reqPath.Value.Contains("/consultations"))
+                        //{
+                        //	context.Request.Path = reqPath.Value.Replace("/consultations", "");
+                        //}
+                        //else if (reqPath.Value.IndexOf("favicon.ico", StringComparison.OrdinalIgnoreCase) == -1 && reqPath.Value.IndexOf("hot-update", StringComparison.OrdinalIgnoreCase) == -1)
+                        //{
+                        //	context.Response.StatusCode = 404;
+                        //	throw new FileNotFoundException($"Path {reqPath.Value} could not be found. Did you mean to load '/consultations{context.Request.Path.Value  }' instead?");
+                        //}
+                    }
 
-					return next();
+                    return next();
                 });
             }
 
+            app.UseRouting();
+
 	        app.UseForwardedHeaders();
             app.UseAuthentication();
+            app.UseAuthorization();
 
-            app.Use(async (context, next) => 
+            app.Use(async (context, next) =>
             {
-				//this middleware is here because we have some controller api's that don't have the authorise attribute set. e.g. CommentsController. that controller still needs to work.
-				//without authentication. for authenticated users, the default scheme is used. however, we now have 2 schemes which can be used together (idam and organisation cookie).
-				//so this middleware combines the multiple authentication schemes we have, setting a single user.
-				//it then update the context user values in the DbContext so that the global query filters work.
-				var principal = new ClaimsPrincipal();
+                //this middleware is here because we have some controller api's that don't have the authorise attribute set. e.g. CommentsController. that controller still needs to work.
+                //without authentication. for authenticated users, the default scheme is used. however, we now have 2 schemes which can be used together (idam and organisation cookie).
+                //so this middleware combines the multiple authentication schemes we have, setting a single user.
+                //it then update the context user values in the DbContext so that the global query filters work.
+                var principal = new ClaimsPrincipal();
 
-	            var cookieAuthResult = await context.AuthenticateAsync(OrganisationCookieAuthenticationOptions.DefaultScheme);
-	            if (cookieAuthResult?.Principal != null)
-	            {
-		            principal.AddIdentities(cookieAuthResult.Principal.Identities);
-	            }
-	            var accountsAuthResult = await context.AuthenticateAsync(AuthenticationConstants.AuthenticationScheme);
-	            if (accountsAuthResult?.Principal != null)
-	            {
-		            principal.AddIdentities(accountsAuthResult.Principal.Identities);
-	            }
-	            context.User = principal;
+                var cookieAuthResult = await context.AuthenticateAsync(OrganisationCookieAuthenticationOptions.DefaultScheme);
+                if (cookieAuthResult?.Principal != null)
+                {
+                    principal.AddIdentities(cookieAuthResult.Principal.Identities);
+                }
+                var accountsAuthResult = await context.AuthenticateAsync(AuthenticationConstants.AuthenticationScheme);
+                if (accountsAuthResult?.Principal != null)
+                {
+                    principal.AddIdentities(accountsAuthResult.Principal.Identities);
+                }
+                context.User = principal;
 
-	            var consultationsContext = context.RequestServices.GetService<ConsultationsContext>();
-	            consultationsContext.ConfigureContext();
+                var consultationsContext = context.RequestServices.GetService<ConsultationsContext>();
+                consultationsContext.ConfigureContext();
 
-				await next();
+                await next();
             });
 
-			app.UseSpaStaticFiles(new StaticFileOptions { RequestPath = "/consultations" });
+            app.UseSpaStaticFiles(new StaticFileOptions { RequestPath = "/consultations" });
 
 		    if (!env.IsDevelopment() && !env.IsIntegrationTest())
 		    {
 			    app.UseHttpsRedirection();
 		    }
 
-		    IRouteBuilder defaultRoute = null;
-			app.UseMvc(routes =>
+            app.UseEndpoints(endpoints =>
             {
-                defaultRoute = routes.MapRoute(
-                    name: "default",
-                    template: "{controller}/{action=Index}/{id?}");
+               endpoints.MapControllerRoute(name: "PublishedRedirectWithoutDocument", 
+                                             pattern: "consultations/{consultationId:int}",
+                                             defaults: new { controller = "Redirect", action = "PublishedRedirectWithoutDocument" });
+                
+                endpoints.MapControllerRoute(name: "PublishedRedirect",
+                                             pattern: "consultations/{consultationId:int}/{documentId:int}",
+                                             defaults: new { controller = "Redirect", action = "PublishedDocumentWithoutChapter" });
 
-	            routes.MapRoute(
-		            name: "PublishedRedirectWithoutDocument",
-		            template: "consultations/{consultationId:int}",
-		            defaults: new { controller = "Redirect", action = "PublishedRedirectWithoutDocument" });
+                endpoints.MapControllerRoute(name: "PreviewRedirect",
+                                             pattern: "consultations/preview/{reference}/consultation/{consultationId:int}/document/{documentId:int}",
+                                             defaults: new { controller = "Redirect", action = "PreviewDocumentWithoutChapter" });
 
-				routes.MapRoute(
-		            name: "PublishedRedirect",
-		            template: "consultations/{consultationId:int}/{documentId:int}",
-		            defaults: new {controller = "Redirect", action = "PublishedDocumentWithoutChapter"});
+                endpoints.MapControllerRoute(name: "default",
+                                             pattern: "{controller}/{action=Index}/{id?}");
+                
+                // endpoints.MapHealthChecks("/health"); //TODO: replace the custom health check controller with this package, which is now supported since the upgrade.
+                
 
-	            routes.MapRoute(
-		            name: "PreviewRedirect",
-		            template: "consultations/preview/{reference}/consultation/{consultationId:int}/document/{documentId:int}",
-		            defaults: new { controller = "Redirect", action = "PreviewDocumentWithoutChapter" });
+            });
 
-			});
 
             //// here you can see we make sure it doesn't start with /api, if it does, it'll 404 within .NET if it can't be found
             //app.MapWhen(x => !x.Request.Path.Value.StartsWith("/consultations/api", StringComparison.OrdinalIgnoreCase), builder =>
@@ -339,16 +346,10 @@ namespace Comments
 						data["isAdminUser"] = isAdminUser;
 						data["isTeamUser"] = isTeamUser;
 
-						var actionContext = new ActionContext {
-							HttpContext = httpContext,
-							RouteData = new RouteData { Routers = { defaultRoute.Build() } },
-							ActionDescriptor = new ActionDescriptor(),
-						};
-						var urlHelper = urlHelperFactory.GetUrlHelper(actionContext);
-
-						data["signInURL"] = urlHelper.Action(Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnUrl = httpContext.Request.Path });
-						data["signOutURL"] = urlHelper.Action(Constants.Auth.LogoutAction, Constants.Auth.ControllerName); //auth0 needs logout urls configured. it won't let you redirect dynamically.
-						data["registerURL"] = urlHelper.Action(Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnUrl = httpContext.Request.Path, goToRegisterPage = true });
+                        
+                        data["signInURL"] = linkGenerator.GetPathByAction(httpContext, Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnUrl = httpContext.Request.Path });
+						data["signOutURL"] = linkGenerator.GetPathByAction(httpContext, Constants.Auth.LogoutAction, Constants.Auth.ControllerName); //auth0 needs logout urls configured. it won't let you redirect dynamically.
+						data["registerURL"] = linkGenerator.GetPathByAction(httpContext, Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnUrl = httpContext.Request.Path, goToRegisterPage = true });
 						data["requestURL"] = httpContext.Request.Path;
 	                    data["accountsEnvironment"] = AppSettings.Environment.AccountsEnvironment;
 
