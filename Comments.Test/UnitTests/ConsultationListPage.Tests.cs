@@ -487,8 +487,12 @@ namespace Comments.Test.UnitTests
 		
 		private ConsultationListService GetConsultationListService()
 		{
+			const int organisationId = 1;
+			const string organisationName = "Sherman Oaks";
+			var fakeOrganisationService = new FakeOrganisationService(new Dictionary<int, string> { { organisationId, organisationName } });
+
 			var consultationList = AddConsultationsToList();
-			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), GetFakeUserService(), _fakeFeatureManager, null);
+			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), GetFakeUserService(), _fakeFeatureManager, fakeOrganisationService);
 			return consultationListService;
 		}
 
@@ -725,7 +729,11 @@ namespace Comments.Test.UnitTests
 
 			var context = new ConsultationsContext(_options, userService, _fakeEncryption);
 
-			var consultationListService = new ConsultationListService(context, new FakeFeedService(consultationList), userService, _fakeFeatureManager, null);
+			const int organisationId = 1;
+			const string organisationName = "Sherman Oaks";
+			var fakeOrganisationService = new FakeOrganisationService(new Dictionary<int, string> { { organisationId, organisationName } });
+
+			var consultationListService = new ConsultationListService(context, new FakeFeedService(consultationList), userService, _fakeFeatureManager, fakeOrganisationService);
 
 			//Act
 			var viewModel = (await consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null)

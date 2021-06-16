@@ -27,6 +27,7 @@ using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Authorization;
 using NICE.Feeds.Indev;
 using NICE.Feeds.Indev.Models.List;
+using NICE.Identity.Authentication.Sdk.Authorisation;
 using Answer = Comments.Models.Answer;
 using Comment = Comments.Models.Comment;
 using Location = Comments.Models.Location;
@@ -115,7 +116,7 @@ namespace Comments.Test.Infrastructure
 	        {
 		        _authenticated = false;
 	        }
-			AppSettings.AuthenticationConfig = new AuthenticationConfig{ ClientId = "test client id", AuthorisationServiceUri = "http://www.example.com"};
+			AppSettings.AuthenticationConfig = new AuthenticationConfig{ ClientId = "test client id", AuthorisationServiceUri = "http://www.example.com", Domain = "niceorg"};
 			AppSettings.GlobalNavConfig = new GlobalNavConfig {CookieBannerScript = "//a-fake-cookiebannerscript-url"};
 			// Arrange
 			_urlHelper = new FakeUrlHelper();
@@ -132,7 +133,7 @@ namespace Comments.Test.Infrastructure
 			_consultationService = new FakeConsultationService();
 	        _useRealSubmitService = useRealSubmitService;
 	        _fakeEncryption = new FakeEncryption();
-			var featureDictionary = new Dictionary<string, bool> { { Constants.Features.OrganisationalCommenting, enableOrganisationalCommentingFeature } };
+			var featureDictionary = new Dictionary<string, bool> { { "SampleFeature (use a constant)", enableOrganisationalCommentingFeature } };
 			_fakeFeatureManager = new FakeFeatureManager(featureDictionary);
 	        _fakeSessionManager = new FakeSessionManager(featureDictionary);
 
@@ -179,6 +180,8 @@ namespace Comments.Test.Infrastructure
 					
 					services.AddSingleton<IFeatureManager>(provider => _fakeFeatureManager);
 					services.AddSingleton<ISessionManager>(provider => _fakeSessionManager);
+
+					
 					
 					if (!_useRealSubmitService)
 	                {
@@ -200,7 +203,8 @@ namespace Comments.Test.Infrastructure
 	                }
 
 					services.TryAddSingleton<IApiTokenStore, FakeApiTokenStore>();
-                })
+					services.TryAddSingleton<IApiTokenClient, FakeAPITokenClient>(); //(prov => new FakeAPITokenClient());
+				})
                 .Configure(app =>
                 {
                     app.UseStaticFiles();
