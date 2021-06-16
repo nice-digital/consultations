@@ -73,6 +73,7 @@ namespace Comments.Test.Infrastructure
 	    protected IEncryption _fakeEncryption;
 
 	    protected IUrlHelper _urlHelper;
+	    protected readonly IOrganisationService _fakeOrganisationService;
 
 		public TestBase(Feed feed) : this()
         {
@@ -130,6 +131,9 @@ namespace Comments.Test.Infrastructure
 			{
 				_fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId, testUserType, addRoleClaim, organisationIdUserIsLeadOf: organisationIdUserIsLeadOf);
 			}
+			const int organisationId = 1;
+			const string organisationName = "Sherman Oaks";
+			_fakeOrganisationService = new FakeOrganisationService(new Dictionary<int, string> { { organisationId, organisationName } });
 			_consultationService = new FakeConsultationService();
 	        _useRealSubmitService = useRealSubmitService;
 	        _fakeEncryption = new FakeEncryption();
@@ -159,6 +163,8 @@ namespace Comments.Test.Infrastructure
             {
 	            AddSessions(ref _context, validSessions);
             }
+
+            var fakeAPITokenClient = new FakeAPITokenClient();
 
 			var builder = new WebHostBuilder()
                 .UseContentRoot("../../../../Comments")
@@ -203,7 +209,8 @@ namespace Comments.Test.Infrastructure
 	                }
 
 					services.TryAddSingleton<IApiTokenStore, FakeApiTokenStore>();
-					services.TryAddSingleton<IApiTokenClient, FakeAPITokenClient>(); //(prov => new FakeAPITokenClient());
+
+					services.TryAddSingleton<IApiTokenClient>(provider => fakeAPITokenClient); //(prov => new FakeAPITokenClient());
 				})
                 .Configure(app =>
                 {

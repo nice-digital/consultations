@@ -97,7 +97,7 @@ namespace Comments
 	        services.TryAddTransient<IExportToExcel, ExportToExcel>();
 	        services.TryAddTransient<IStatusService, StatusService>();
 			services.TryAddTransient<IConsultationListService, ConsultationListService>();
-			services.AddTransient<IOrganisationService, OrganisationService>();
+			services.TryAddTransient<IOrganisationService, OrganisationService>();
 
 			services.AddRouting(options => options.LowercaseUrls = true);
 
