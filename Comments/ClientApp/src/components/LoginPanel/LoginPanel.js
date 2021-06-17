@@ -76,11 +76,10 @@ export class LoginPanel extends Component<PropsType, StateType> {
 	render() {
 		const { respondingAsOrg, respondingAsOrgType } = this.state;
 		const questionsTabIsOpen = this.props.questionsTabIsOpen;
-		const organisationalCommentingFeature = this.context.organisationalCommentingFeature;
 
 		const showFirstScreen = (respondingAsOrg === null);
 		const showSecondScreen = (respondingAsOrg === true && (respondingAsOrgType === null || respondingAsOrgType === "code"));
-		const showLogin = (respondingAsOrg === false || respondingAsOrgType !== null || !organisationalCommentingFeature);
+		const showLogin = (respondingAsOrg === false || respondingAsOrgType !== null);
 		const showBackLink = (!showFirstScreen);
 
 		const loginBannerProps = {
@@ -104,30 +103,20 @@ export class LoginPanel extends Component<PropsType, StateType> {
 			loginBannerProps.title = null;
 		}
 
-		if (!organisationalCommentingFeature) {
-			loginBannerProps.title = null;
-			loginBannerProps.signInText = null;
-			loginBannerProps.signInButton = true;
-		}
-
 		return (
 			<>
-				{organisationalCommentingFeature &&
-					<>
-						{showFirstScreen &&
-							<LoginSelectionOrg
-								currentlySelected={respondingAsOrg}
-								onChangeOption={this.fieldsChangeHandler}
-							/>
-						}
+				{showFirstScreen &&
+					<LoginSelectionOrg
+						currentlySelected={respondingAsOrg}
+						onChangeOption={this.fieldsChangeHandler}
+					/>
+				}
 
-						{showSecondScreen &&
-							<LoginSelectionCode
-								currentlySelected={respondingAsOrgType}
-								onChangeOption={this.fieldsChangeHandler}
-							/>
-						}
-					</>
+				{showSecondScreen &&
+					<LoginSelectionCode
+						currentlySelected={respondingAsOrgType}
+						onChangeOption={this.fieldsChangeHandler}
+					/>
 				}
 
 				{showLogin &&

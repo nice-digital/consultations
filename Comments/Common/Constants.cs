@@ -63,9 +63,7 @@
             // This constant is for testing the getFeatureFlags feature
             public const string TestFeatureFlag = "TestFeatureFlag";
 
-		    public const string OrganisationalCommenting = "OrganisationalCommenting";
-
-		    public const string IndevUsingIDAMAuth = "IndevUsingIDAMAuth";
+            public const string IndevUsingIDAMAuth = "IndevUsingIDAMAuth";
 	    }
 
 

@@ -352,9 +352,7 @@ namespace Comments
 						data["registerURL"] = linkGenerator.GetPathByAction(httpContext, Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnUrl = httpContext.Request.Path, goToRegisterPage = true });
 						data["requestURL"] = httpContext.Request.Path;
 	                    data["accountsEnvironment"] = AppSettings.Environment.AccountsEnvironment;
-
-						data["OrganisationalCommentingFeature"] = await featureManager.IsEnabledAsync(Constants.Features.OrganisationalCommenting);
-
+                        
 						//data["user"] = context.User; - possible security implications here, surfacing claims to the front end. might be ok, if just server-side.
 						// Pass further data in e.g. user/authentication data
 					};

@@ -437,11 +437,9 @@ export class Download extends Component<PropsType, StateType> {
 												Only online consultations responses appear in the results below.
 											</span>
 											&nbsp;&nbsp;
-											{contextValue.organisationalCommentingFeature &&
-												<Link to={"/leadinformation"}>
-													Request commenting lead permission
-												</Link>
-											}
+											<Link to={"/leadinformation"}>
+												Request commenting lead permission
+											</Link>
 										</p>
 										<div className="grid mt--d">
 											<div data-g="12 md:3">
@@ -478,7 +476,6 @@ export class Download extends Component<PropsType, StateType> {
 														{consultationsPaginated.map((item, idx) =>
 															<ConsultationItem key={idx}
 																basename={this.props.basename}
-																allowGenerateOrganisationCode={contextValue.organisationalCommentingFeature}
 																{...item}
 															/>,
 														)}
