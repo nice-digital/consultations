@@ -458,8 +458,7 @@ export class Document extends Component<PropsType, StateType> {
 													<Header
 														title={currentDocumentTitle}
 														reference={reference}
-														consultationState={this.state.consultationData.consultationState}
-														allowRegisterOrganisationLeadLink={contextValue.organisationalCommentingFeature}/>
+														consultationState={this.state.consultationData.consultationState}/>
 
 													{(this.state.consultationData.consultationState.consultationIsOpen && !this.state.consultationData.consultationState.submittedDate) &&
 														<Alert type="info" role="status" aria-live="polite">

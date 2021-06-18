@@ -63,8 +63,7 @@
             // This constant is for testing the getFeatureFlags feature
             public const string TestFeatureFlag = "TestFeatureFlag";
 
-		    public const string OrganisationalCommenting = "OrganisationalCommenting";
-        }
+	    }
 
 
     }

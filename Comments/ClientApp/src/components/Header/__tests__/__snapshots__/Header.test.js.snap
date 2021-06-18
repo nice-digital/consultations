@@ -60,6 +60,12 @@ exports[`[ClientApp]  Header  should display correctly when consulation has ende
         />
       </span>
         
+      <Link
+        replace={false}
+        to="/leadinformation"
+      >
+        Request commenting lead permission
+      </Link>
     </p>
   </div>
   <p>
@@ -128,6 +134,12 @@ exports[`[ClientApp]  Header  should display correctly when consulation hasn't s
         />
       </span>
         
+      <Link
+        replace={false}
+        to="/leadinformation"
+      >
+        Request commenting lead permission
+      </Link>
     </p>
   </div>
   <p>
@@ -184,6 +196,12 @@ exports[`[ClientApp]  Header  should display correctly when consulation is in pr
         />
       </span>
         
+      <Link
+        replace={false}
+        to="/leadinformation"
+      >
+        Request commenting lead permission
+      </Link>
     </p>
   </div>
   <p>

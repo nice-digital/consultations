@@ -32,7 +32,7 @@
 	<PackageReference Include="Microsoft.FeatureManagement.AspNetCore" Version="2.3.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
     <PackageReference Include="NICE.Feeds" Version="1.0.147" />
-    <PackageReference Include="NICE.Identity.Authentication.Sdk" Version="1.0.501" />
+    <PackageReference Include="NICE.Identity.Authentication.Sdk" Version="1.0.10516" />
     <PackageReference Include="NICE.Logging" Version="6.0.26" />
     <PackageReference Include="Serilog.Extensions.Hosting" Version="3.0.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />

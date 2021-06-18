@@ -173,7 +173,8 @@ export class Submitted extends Component<PropsType, StateType> {
 														<p>Answer our short, anonymous survey (4 questions, 2 minutes).</p>
 														<p>
 															<a className="btn btn--cta"
-																href={contextValue.organisationalCommentingFeature ? "https://surveys.hotjar.com/62df646f-8edb-4c03-8275-3ec8a75d0214" : "https://in.hotjar.com/s?siteId=119167&surveyId=109567"} target="_blank"
+																href="https://surveys.hotjar.com/62df646f-8edb-4c03-8275-3ec8a75d0214"
+																target="_blank"
 																rel="noopener noreferrer">
 																Answer the survey
 															</a>
