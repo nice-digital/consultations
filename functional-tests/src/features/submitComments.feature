@@ -14,6 +14,9 @@ Feature: Submit Comments on a Consultation
 		Given I comment on a Document
 		When I add the comment "2" to the first in the list and submit
 		Then I expect the comment save button displays "Saved"
+		Given I comment on a Document
+		When I add the comment "3" to the first in the list and submit
+		Then I expect the comment save button displays "Saved"
 		When I navigate to the Review Page
 		And I submit my response
 		And I review my response
