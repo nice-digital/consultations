@@ -27,7 +27,6 @@ type StateType = {
 	registerURL: string,
 	organisationName: string,
 	initialDataLoaded: boolean,
-	organisationalCommentingFeature: boolean,
 };
 
 export class UserProvider extends React.Component<PropsType, StateType> {
@@ -44,7 +43,6 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 			updateContext: this.updateContext,
 			organisationName: null,
 			initialDataLoaded: false,
-			organisationalCommentingFeature: false,
 		};
 
 		const isServerSideRender = (this.props.staticContext && this.props.staticContext.preload);
@@ -85,7 +83,6 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 				updateContext: this.updateContext,
 				organisationName: organisationName,
 				initialDataLoaded: true,
-				organisationalCommentingFeature: preloadSource.organisationalCommentingFeature,
 			};
 			if (this.props.staticContext) {
 				this.props.staticContext.analyticsGlobals.isSignedIn = preloadSource.isAuthorised;

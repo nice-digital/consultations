@@ -225,7 +225,7 @@ describe("[ClientApp] ", () => {
 		});
 
 		describe("Authorisation", () => {
-			it("should show login banner and not render any comment boxes without authorisation", async () => {
+			it("should show login panel and not render any comment boxes without authorisation", async () => {
 				mock.onGet()
 					.reply(200, sampleComments);
 
@@ -243,7 +243,7 @@ describe("[ClientApp] ", () => {
 				await nextTick();
 				wrapper.update();
 
-				expect(wrapper.find("LoginBanner").length).toEqual(1);
+				expect(wrapper.find("LoginPanel").length).toEqual(1);
 				expect(wrapper.find("CommentBox").length).toEqual(0);
 			});
 

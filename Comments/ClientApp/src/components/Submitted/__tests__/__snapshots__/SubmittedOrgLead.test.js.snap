@@ -128,6 +128,12 @@ Array [
                     </time>
                   </span>
                     
+                  <a
+                    href="/leadinformation"
+                    onClick={[Function]}
+                  >
+                    Request commenting lead permission
+                  </a>
                 </p>
               </div>,
             ]
@@ -192,7 +198,7 @@ Array [
               <p>
                 <a
                   className="btn btn--cta"
-                  href="https://in.hotjar.com/s?siteId=119167&surveyId=109567"
+                  href="https://surveys.hotjar.com/62df646f-8edb-4c03-8275-3ec8a75d0214"
                   rel="noopener noreferrer"
                   target="_blank"
                 >

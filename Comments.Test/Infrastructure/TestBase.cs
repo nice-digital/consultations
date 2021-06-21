@@ -27,6 +27,7 @@ using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Authorization;
 using NICE.Feeds.Indev;
 using NICE.Feeds.Indev.Models.List;
+using NICE.Identity.Authentication.Sdk.Authorisation;
 using Answer = Comments.Models.Answer;
 using Comment = Comments.Models.Comment;
 using Location = Comments.Models.Location;
@@ -72,6 +73,7 @@ namespace Comments.Test.Infrastructure
 	    protected IEncryption _fakeEncryption;
 
 	    protected IUrlHelper _urlHelper;
+	    protected readonly IOrganisationService _fakeOrganisationService;
 
 		public TestBase(Feed feed) : this()
         {
@@ -115,7 +117,7 @@ namespace Comments.Test.Infrastructure
 	        {
 		        _authenticated = false;
 	        }
-			AppSettings.AuthenticationConfig = new AuthenticationConfig{ ClientId = "test client id", AuthorisationServiceUri = "http://www.example.com"};
+			AppSettings.AuthenticationConfig = new AuthenticationConfig{ ClientId = "test client id", AuthorisationServiceUri = "http://www.example.com", Domain = "niceorg"};
 			AppSettings.GlobalNavConfig = new GlobalNavConfig {CookieBannerScript = "//a-fake-cookiebannerscript-url"};
 			// Arrange
 			_urlHelper = new FakeUrlHelper();
@@ -129,10 +131,13 @@ namespace Comments.Test.Infrastructure
 			{
 				_fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId, testUserType, addRoleClaim, organisationIdUserIsLeadOf: organisationIdUserIsLeadOf);
 			}
+			const int organisationId = 1;
+			const string organisationName = "Sherman Oaks";
+			_fakeOrganisationService = new FakeOrganisationService(new Dictionary<int, string> { { organisationId, organisationName } });
 			_consultationService = new FakeConsultationService();
 	        _useRealSubmitService = useRealSubmitService;
 	        _fakeEncryption = new FakeEncryption();
-			var featureDictionary = new Dictionary<string, bool> { { Constants.Features.OrganisationalCommenting, enableOrganisationalCommentingFeature } };
+			var featureDictionary = new Dictionary<string, bool> { { "SampleFeature (use a constant)", enableOrganisationalCommentingFeature } };
 			_fakeFeatureManager = new FakeFeatureManager(featureDictionary);
 	        _fakeSessionManager = new FakeSessionManager(featureDictionary);
 
@@ -159,6 +164,8 @@ namespace Comments.Test.Infrastructure
 	            AddSessions(ref _context, validSessions);
             }
 
+            var fakeAPITokenClient = new FakeAPITokenClient();
+
 			var builder = new WebHostBuilder()
                 .UseContentRoot("../../../../Comments")
                 .ConfigureServices(services =>
@@ -179,6 +186,8 @@ namespace Comments.Test.Infrastructure
 					
 					services.AddSingleton<IFeatureManager>(provider => _fakeFeatureManager);
 					services.AddSingleton<ISessionManager>(provider => _fakeSessionManager);
+
+					
 					
 					if (!_useRealSubmitService)
 	                {
@@ -200,7 +209,9 @@ namespace Comments.Test.Infrastructure
 	                }
 
 					services.TryAddSingleton<IApiTokenStore, FakeApiTokenStore>();
-                })
+
+					services.TryAddSingleton<IApiTokenClient>(provider => fakeAPITokenClient); //(prov => new FakeAPITokenClient());
+				})
                 .Configure(app =>
                 {
                     app.UseStaticFiles();
