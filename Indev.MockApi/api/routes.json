@@ -1,5 +1,0 @@
-{
-  "/consultation-comments-list": "/consultation-comments-list" ,
-	"/consultation-comments/:consultationId" : "/comments/:consultationId",
-	"/consultation-comments/:consultationId/document/:documentId/chapter-slug/:slug" : "/chapters?ConsultationId=:consultationId&ConsultationDocumentId=:documentId&Slug=:slug"
-}
