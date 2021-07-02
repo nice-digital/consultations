@@ -303,7 +303,9 @@ namespace Comments.Test.UnitTests
 	        const int organisationUserId = 1;
 	        const int organisationId = 1;
 			const int otherUsersorganisationUserId = 2;
-	        var organisationUser = new OrganisationUser() { EmailAddress = "theotherusersemail@organisation.com", OrganisationUserId = otherUsersorganisationUserId };
+			const string commentTextThatShouldBeReturned = "another user from my organisations comment submitted to lead";
+			const string emailAddress = "theotherusersemail@organisation.com";
+			var organisationUser = new OrganisationUser() { EmailAddress = emailAddress, OrganisationUserId = otherUsersorganisationUserId };
 
 			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: null, organisationUserId: organisationUserId);
 	        var context = new ConsultationsContext(_options, userService, _fakeEncryption);
@@ -312,7 +314,7 @@ namespace Comments.Test.UnitTests
 
 	        AddComment(locationId, "current user's comment", createdByUserId: null, organisationUserId: organisationUserId, organisationId: organisationId);
 	        AddComment(locationId, "another user from my organisations comment not submitted", createdByUserId: null, status: (int)StatusName.Draft, organisationUserId: 9999, organisationId: organisationId);
-			AddComment(locationId, "another user from my organisations comment submitted to lead", createdByUserId: null, status: (int)StatusName.SubmittedToLead, organisationUserId: otherUsersorganisationUserId, organisationId: organisationId, organisationUser: organisationUser);
+			AddComment(locationId, commentTextThatShouldBeReturned, createdByUserId: null, status: (int)StatusName.SubmittedToLead, organisationUserId: otherUsersorganisationUserId, organisationId: organisationId, organisationUser: organisationUser);
 			AddComment(locationId, "another user from a different organisation comment", createdByUserId: null, status: (int)StatusName.SubmittedToLead, organisationUserId: 7777, organisationId: 2);
 			AddComment(locationId, "an individual users comment", createdByUserId: "1", status: (int)StatusName.Submitted);
 
@@ -322,8 +324,61 @@ namespace Comments.Test.UnitTests
 	        //Assert
 	        viewModel.Comments.Count.Equals(1);
 	        var comment = viewModel.Comments.Single();
-			comment.CommentText.ShouldBe("another user from my organisations comment submitted to lead");
-			comment.CommenterEmail.ShouldBe("theotherusersemail@organisation.com");
+			comment.CommentText.ShouldBe(commentTextThatShouldBeReturned);
+			comment.CommenterEmail.ShouldBe(emailAddress);
 		}
-    }
+
+		[Fact]
+		public void Only_return_comments_and_questions_from_my_organisation_which_have_been_submitted_to_lead()
+		{
+			// Arrange
+			ResetDatabase();
+			_context.Database.EnsureCreated();
+
+			var sessionId = Guid.NewGuid();
+			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+			const int organisationUserId = 1;
+			const int organisationId = 1;
+			const int otherUsersorganisationUserId = 2;
+			const int questionTypeId = 50;
+			const string commentTextThatShouldBeReturned = "another user from my organisations comment submitted to lead";
+			const string answerTextThatShouldBeReturned = "another user from my organisations answer submitted to lead";
+			const string emailAddress = "theotherusersemail@organisation.com";
+			var organisationUser = new OrganisationUser() { EmailAddress = emailAddress, OrganisationUserId = otherUsersorganisationUserId };
+
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: null, organisationUserId: organisationUserId);
+			var context = new ConsultationsContext(_options, userService, _fakeEncryption);
+			var commentService = new CommentService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService, _fakeHttpContextAccessor);
+			var locationId = AddLocation(sourceURI);
+
+			AddComment(locationId, "current user's comment", createdByUserId: null, organisationUserId: organisationUserId, organisationId: organisationId);
+			AddComment(locationId, "another user from my organisations comment not submitted", createdByUserId: null, status: (int)StatusName.Draft, organisationUserId: 9999, organisationId: organisationId);
+			AddComment(locationId, commentTextThatShouldBeReturned, createdByUserId: null, status: (int)StatusName.SubmittedToLead, organisationUserId: otherUsersorganisationUserId, organisationId: organisationId, organisationUser: organisationUser);
+			AddComment(locationId, "another user from a different organisation comment", createdByUserId: null, status: (int)StatusName.SubmittedToLead, organisationUserId: 7777, organisationId: 2);
+			AddComment(locationId, "an individual users comment", createdByUserId: "1", status: (int)StatusName.Submitted);
+
+			AddQuestionType("Text question", hasBooleanAnswer: false, hasTextAnswer: true, questionTypeId: questionTypeId);
+			var questionId = AddQuestion(locationId, questionTypeId, "Some question text");
+
+			AddAnswer(questionId, userId: null, "current user's answer", organisationUserId: organisationUserId, organisationId: organisationId);
+			AddAnswer(questionId, userId: null, "another user from my organisations answer not submitted", organisationUserId: 9999, organisationId: organisationId, status: (int)StatusName.Draft);
+			AddAnswer(questionId, userId: null, answerTextThatShouldBeReturned, organisationUserId: otherUsersorganisationUserId, organisationId: organisationId, status: (int)StatusName.SubmittedToLead); //, organisationUser: organisationUser);
+			AddAnswer(questionId, userId: null, "another user from a different organisation answer", status: (int)StatusName.SubmittedToLead, organisationUserId: organisationUserId, organisationId: 2);
+			AddAnswer(questionId, userId: "1", "an individual users answer", status: (int)StatusName.SubmittedToLead);
+
+			// Act
+			var viewModel = commentService.GetCommentsAndQuestionsFromOtherOrganisationCommenters("/1/1/introduction", _urlHelper);
+
+			//Assert
+			viewModel.Comments.Count.ShouldBe(1);
+			var comment = viewModel.Comments.Single();
+			comment.CommentText.ShouldBe(commentTextThatShouldBeReturned);
+			comment.CommenterEmail.ShouldBe(emailAddress);
+
+			var answers = viewModel.Questions.Single().Answers;
+			answers.Count.ShouldBe(1);
+			answers.Single().AnswerText.ShouldBe(answerTextThatShouldBeReturned);
+			answers.Single().CommenterEmail.ShouldBe(emailAddress);
+		}
+	}
 }

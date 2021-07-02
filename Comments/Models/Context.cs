@@ -125,6 +125,7 @@ namespace Comments.Models
 		public IEnumerable<Location> GetOtherOrganisationUsersCommentsAndQuestionsForDocument(IList<string> sourceURIs)
         {
             sourceURIs = sourceURIs.Select(s => s.ToLower()).ToList();
+
             var commentsAndAnswers = Location.IgnoreQueryFilters()
                 .IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead
                                                          && (c.OrganisationId.HasValue && _organisationIDs.Contains(c.OrganisationId.Value))
@@ -137,33 +138,23 @@ namespace Comments.Models
                                                          && (c.OrganisationId.HasValue && _organisationIDs.Contains(c.OrganisationId.Value))
                                                          && !_organisationUserIDs.Contains(c.OrganisationUserId.Value))
                     .Select(c => c.OrganisationUser))
-
-                .IncludeFilter(l => l.Question)
-                .IncludeFilter(l => l.Question
-                    .Select(q => q.QuestionType))
-
+           
 
                 .IncludeFilter(l => l.Question
-                    .Select(q => q.Answer.Where(a => a.StatusId == (int)StatusName.SubmittedToLead
-                                                     && _organisationIDs.Contains(a.OrganisationId.Value)
-                                                     && !_organisationUserIDs.Contains(a.OrganisationUserId.Value))
-                        .OrderByDescending(a => a.LastModifiedDate)
-                        .Select(a => a.LastModifiedDate)
-                        .FirstOrDefault()))
-
-                .IncludeFilter(l => l.Question
-                    .SelectMany(q => q.Answer.Where(a => a.StatusId == (int)StatusName.SubmittedToLead
+                    
+                        .SelectMany(q => q.Answer.Where(a => a.StatusId == (int)StatusName.SubmittedToLead
                                                          && (a.OrganisationId.HasValue && _organisationIDs.Contains(a.OrganisationId.Value))
                                                          && !_organisationUserIDs.Contains(a.OrganisationUserId.Value)
                                                          && a.OrganisationUser != null
-                        )
+                        ).Select(a => a.Question.QuestionType)
+
                     ))
 
                 .OrderBy(l => l.Order)
                 .ToList();
 
-            var filteredLocations = commentsAndAnswers.Where(l =>
-                (l.Order != null) && sourceURIs.Contains(l.SourceURI.ToLower()));
+
+            var filteredLocations = commentsAndAnswers.Where(l => (l.Order != null) && sourceURIs.Contains(l.SourceURI.ToLower()));
 
             var sortedData = filteredLocations.Where(l => l.Comment.Count > 0 || l.Question.Count > 0)
                 .OrderBy(l => l.Order)
