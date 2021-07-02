@@ -135,7 +135,6 @@ namespace Comments.Models
                     .Select(c=> c.Status))
                 .IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead
                                                          && (c.OrganisationId.HasValue && _organisationIDs.Contains(c.OrganisationId.Value))
-                                                         //&& _organisationIDs.Any(o => o.Equals(c.OrganisationId))
                                                          && !_organisationUserIDs.Contains(c.OrganisationUserId.Value))
                     .Select(c => c.OrganisationUser))
 
@@ -152,13 +151,13 @@ namespace Comments.Models
                         .Select(a => a.LastModifiedDate)
                         .FirstOrDefault()))
 
-                //removing this filter as the Models.Question is converted to ViewModels.Question, which doesn't actually have the OrganisationUser in it, so we don't need this join.
-                //.IncludeFilter(l => l.Question
-                //    .Select(q => q.Answer.Where(a => a.StatusId == (int)StatusName.SubmittedToLead
-                //                                     && _organisationIDs.Contains(a.OrganisationId.Value)
-                //                                     && !_organisationUserIDs.Contains(a.OrganisationUserId.Value))
-                //        .Select(a => a.OrganisationUser)
-                //    ))
+                .IncludeFilter(l => l.Question
+                    .SelectMany(q => q.Answer.Where(a => a.StatusId == (int)StatusName.SubmittedToLead
+                                                         && (a.OrganisationId.HasValue && _organisationIDs.Contains(a.OrganisationId.Value))
+                                                         && !_organisationUserIDs.Contains(a.OrganisationUserId.Value)
+                                                         && a.OrganisationUser != null
+                        )
+                    ))
 
                 .OrderBy(l => l.Order)
                 .ToList();
