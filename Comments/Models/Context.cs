@@ -138,16 +138,18 @@ namespace Comments.Models
                                                          && (c.OrganisationId.HasValue && _organisationIDs.Contains(c.OrganisationId.Value))
                                                          && !_organisationUserIDs.Contains(c.OrganisationUserId.Value))
                     .Select(c => c.OrganisationUser))
-           
+
+                .IncludeFilter(l => l.Question)
+                .IncludeFilter(l => l.Question
+                    .Select(q => q.QuestionType))
 
                 .IncludeFilter(l => l.Question
-                    
-                        .SelectMany(q => q.Answer.Where(a => a.StatusId == (int)StatusName.SubmittedToLead
+                    .SelectMany(q => q.Answer.Where(a => a.StatusId == (int)StatusName.SubmittedToLead
                                                          && (a.OrganisationId.HasValue && _organisationIDs.Contains(a.OrganisationId.Value))
                                                          && !_organisationUserIDs.Contains(a.OrganisationUserId.Value)
-                                                         && a.OrganisationUser != null
-                        ).Select(a => a.Question.QuestionType)
-
+                                                         && a.OrganisationUser != null)
+                            .OrderByDescending(a => a.LastModifiedDate)
+                            .Select(a => a.OrganisationUser)
                     ))
 
                 .OrderBy(l => l.Order)
