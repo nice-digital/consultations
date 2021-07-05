@@ -129,17 +129,9 @@ namespace Comments.Models
             var commentsAndAnswers = Location.IgnoreQueryFilters()
                 .IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead
                                                          && (c.OrganisationId.HasValue && _organisationIDs.Contains(c.OrganisationId.Value))
-                                                         && !_organisationUserIDs.Contains(c.OrganisationUserId.Value)))
-                .IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead
-                                                         && (c.OrganisationId.HasValue && _organisationIDs.Contains(c.OrganisationId.Value))
-                                                         && !_organisationUserIDs.Contains(c.OrganisationUserId.Value))
-                    .Select(c=> c.Status))
-                .IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead
-                                                         && (c.OrganisationId.HasValue && _organisationIDs.Contains(c.OrganisationId.Value))
                                                          && !_organisationUserIDs.Contains(c.OrganisationUserId.Value))
                     .Select(c => c.OrganisationUser))
 
-                .IncludeFilter(l => l.Question)
                 .IncludeFilter(l => l.Question
                     .Select(q => q.QuestionType))
 

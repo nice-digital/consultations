@@ -324,7 +324,7 @@ namespace Comments.Test.UnitTests
 	        //Assert
 	        viewModel.Comments.Count.Equals(1);
 	        var comment = viewModel.Comments.Single();
-			comment.CommentText.ShouldBe(commentTextThatShouldBeReturned);
+	        comment.CommentText.ShouldBe(commentTextThatShouldBeReturned);
 			comment.CommenterEmail.ShouldBe(emailAddress);
 		}
 
