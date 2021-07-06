@@ -5,7 +5,6 @@ using Comments.Services;
 using Comments.ViewModels;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Z.EntityFramework.Plus;
 
 namespace Comments.Models
@@ -126,50 +125,30 @@ namespace Comments.Models
 		public IEnumerable<Location> GetOtherOrganisationUsersCommentsAndQuestionsForDocument(IList<string> sourceURIs)
         {
             sourceURIs = sourceURIs.Select(s => s.ToLower()).ToList();
+
             var commentsAndAnswers = Location.IgnoreQueryFilters()
                 .IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead
                                                          && (c.OrganisationId.HasValue && _organisationIDs.Contains(c.OrganisationId.Value))
-                                                         && !_organisationUserIDs.Contains(c.OrganisationUserId.Value)))
-                .IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead
-                                                         && (c.OrganisationId.HasValue && _organisationIDs.Contains(c.OrganisationId.Value))
                                                          && !_organisationUserIDs.Contains(c.OrganisationUserId.Value))
-                    .Select(c=> c.Status))
-                //removing this filter as the Models.Comment is converted to ViewModels.Comment, which doesn't actually have the OrganisationUser in it, so we don't need this join.
-                //.IncludeFilter(l => l.Comment.Where(c => c.StatusId == (int)StatusName.SubmittedToLead
-                //                                         && (c.OrganisationId.HasValue && _organisationIDs.Contains(c.OrganisationId.Value))
-                //                                         //&& _organisationIDs.Any(o => o.Equals(c.OrganisationId))
-                //                                         && !_organisationUserIDs.Contains(c.OrganisationUserId.Value))
-                //    .Select(c=> c.OrganisationUser))
+                    .Select(c => c.OrganisationUser))
 
-                .IncludeFilter(l => l.Question)
                 .IncludeFilter(l => l.Question
                     .Select(q => q.QuestionType))
 
-
                 .IncludeFilter(l => l.Question
-                    .Select(q => q.Answer.Where(a => a.StatusId == (int)StatusName.SubmittedToLead
-                                                     && _organisationIDs.Contains(a.OrganisationId.Value)
-                                                     && !_organisationUserIDs.Contains(a.OrganisationUserId.Value))
-                        .OrderByDescending(a => a.LastModifiedDate)
-                        .Select(a => a.LastModifiedDate)
-                        .FirstOrDefault()))
-
-                //removing this filter as the Models.Question is converted to ViewModels.Question, which doesn't actually have the OrganisationUser in it, so we don't need this join.
-                //.IncludeFilter(l => l.Question
-                //    .Select(q => q.Answer.Where(a => a.StatusId == (int)StatusName.SubmittedToLead
-                //                                     && _organisationIDs.Contains(a.OrganisationId.Value)
-                //                                     && !_organisationUserIDs.Contains(a.OrganisationUserId.Value)
-                //                                     && a.OrganisationUser != null
-                //                                     )
-                //        .Select(a => a.OrganisationUser)
-                //        .FirstOrDefault()
-                //    ))
+                    .SelectMany(q => q.Answer.Where(a => a.StatusId == (int)StatusName.SubmittedToLead
+                                                         && (a.OrganisationId.HasValue && _organisationIDs.Contains(a.OrganisationId.Value))
+                                                         && !_organisationUserIDs.Contains(a.OrganisationUserId.Value)
+                                                         && a.OrganisationUser != null)
+                            .OrderByDescending(a => a.LastModifiedDate)
+                            .Select(a => a.OrganisationUser)
+                    ))
 
                 .OrderBy(l => l.Order)
                 .ToList();
 
-            var filteredLocations = commentsAndAnswers.Where(l =>
-                (l.Order != null) && sourceURIs.Contains(l.SourceURI.ToLower()));
+
+            var filteredLocations = commentsAndAnswers.Where(l => (l.Order != null) && sourceURIs.Contains(l.SourceURI.ToLower()));
 
             var sortedData = filteredLocations.Where(l => l.Comment.Count > 0 || l.Question.Count > 0)
                 .OrderBy(l => l.Order)
