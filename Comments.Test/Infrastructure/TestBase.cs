@@ -320,10 +320,15 @@ namespace Comments.Test.Infrastructure
 
 		    return statusModel.StatusId;
 	    }
-		protected int AddComment(int locationId, string commentText, string createdByUserId, int status = (int)StatusName.Draft, ConsultationsContext passedInContext = null, int? organisationUserId = null, int? parentCommentId = null, int? organisationId = null)
+		protected int AddComment(int locationId, string commentText, string createdByUserId, int status = (int)StatusName.Draft, ConsultationsContext passedInContext = null, int? organisationUserId = null, int? parentCommentId = null, int? organisationId = null, OrganisationUser organisationUser = null)
         {
             var comment = new Comment(locationId, createdByUserId, commentText, Guid.Empty.ToString(), location: null, statusId: status, status: null, organisationUserId, parentCommentId, organisationId);
-            if (passedInContext != null)
+           
+            if (organisationUser != null)
+            {
+	            comment.OrganisationUser = organisationUser;
+            }
+	        if (passedInContext != null)
             {
                 passedInContext.Comment.Add(comment);
                 passedInContext.SaveChanges();
@@ -380,11 +385,15 @@ namespace Comments.Test.Infrastructure
 
             return question.QuestionId;
         }
-        protected int AddAnswer(int questionId, string userId, string answerText, int status = (int)StatusName.Draft, ConsultationsContext passedInContext = null, int? organisationUserId = null, int? parentAnswerId = null, int? organisationId = null)
+        protected int AddAnswer(int questionId, string userId, string answerText, int status = (int)StatusName.Draft, ConsultationsContext passedInContext = null, int? organisationUserId = null, int? parentAnswerId = null, int? organisationId = null, OrganisationUser organisationUser = null, DateTime? lastModifiedDate = null)
         {
             var answer = new Answer(questionId, userId, answerText, null, null, status, null, organisationUserId, parentAnswerId, organisationId);
-            answer.LastModifiedDate = DateTime.Now;
-            if (passedInContext != null)
+            answer.LastModifiedDate = lastModifiedDate ?? DateTime.Now;
+            if (organisationUser != null)
+            {
+	            answer.OrganisationUser = organisationUser;
+            }
+			if (passedInContext != null)
             {
                 passedInContext.Answer.Add(answer);
                 passedInContext.SaveChanges();
