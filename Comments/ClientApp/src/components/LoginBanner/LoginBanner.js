@@ -221,7 +221,7 @@ export class LoginBanner extends Component<PropsType, StateType> {
 											{/* eslint-disable-next-line*/}
 											{({ contextValue: ContextType, updateContext }) => (
 												<div>
-													<button className="btn btn--cta" onClick={() => this.handleConfirmClick(updateContext)}  title={"Confirm your organisation is " + this.state.authorisationOrganisationFound.organisationName}>Confirm</button>
+													<button className="btn btn--cta" data-qa-sel="ConfirmOrgNameButton" onClick={() => this.handleConfirmClick(updateContext)}  title={"Confirm your organisation is " + this.state.authorisationOrganisationFound.organisationName}>Confirm</button>
 												</div>
 											)}
 										</UserContext.Consumer>

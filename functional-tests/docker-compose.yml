@@ -69,6 +69,7 @@ services:
     links:
       - database
       - redis
+      - api
     # Enable browsing from the host machine on http://localhost:8080/consultations
     ports:
       - 8080:8080
@@ -154,3 +155,21 @@ services:
       - "6379:6379"
     command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
     #command: ["redis-server", "--bind", "redis", "--port", "6379"]
+
+
+  #JSON Server for Indev Api
+  api:
+    container_name: functional-tests_api_1
+    build: ./../Indev.MockApi/
+    ports:
+      - 8090:8090
+    environment:
+      - HTTP_PORT
+    volumes:
+      - ./../Indev.MockApi:/data
+      - /data/node_modules
+    command: npm start
+    networks:
+      default:
+        aliases:
+          - api

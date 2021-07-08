@@ -8,7 +8,7 @@ export const enterComment = (commentText) => {
 
 export const enterGIDToFilter = (gID) => {
 	setInputField("set", gID, selectors.adminDownloadPage.filterByGID);
-	browser.pause(2000);
+	browser.pause(5000);
 };
 
 export const enterCommentAndSubmit = (commentText) => {
