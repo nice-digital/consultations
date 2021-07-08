@@ -8,8 +8,9 @@ export const CodeLogin = () => {
 	browser.click("[data-qa-sel='loginpanel-label-code']");
 	waitForVisible("[data-qa-sel='OrganisationCodeLogin']");
 	setInputField("setValue",  ['Control', 'V'], "[data-qa-sel='OrganisationCodeLogin']");
-  pause(2000);
-	browser.click(".btn--cta");
+  	pause(5000);
+	waitForVisible("[data-qa-sel='ConfirmOrgNameButton']");
+	browser.click("[data-qa-sel='ConfirmOrgNameButton']");
 	browser.click("[data-qa-sel='open-commenting-panel']");
 };
 export default CodeLogin;

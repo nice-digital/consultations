@@ -10,7 +10,7 @@ export const validateDownloadPageResultCount = (countText) => {
 		selectors.adminDownloadPage.pageResultCount,
 		countText
 	);
-	pause(1000);
+	pause(5000);
 };
 
 export const validateDownloadPageAllResults = () => {
