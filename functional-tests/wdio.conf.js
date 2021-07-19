@@ -14,13 +14,9 @@ exports.config = {
 		// "./src/features/**/unsavedCommentDocPage.feature",
 		// "./src/features/**/submitComments.feature",
 		// "./src/features/**/orderingOnReviewPage.feature",
-		 "./src/features/**/commentOnSubSection.feature",
-		 "./src/features/**/filterAdminPageByGID.feature",
-		 "./src/features/**/filterNumberOfResultsOnAdminPage.feature",
-		 "./src/features/**/filterYourStatusOnAdminPage.feature",
+		//"./src/features/**/commentOnSubSection.feature",
 		// "./src/features/**/commentOnDocument.feature",
-		 "./src/features/**/commentOnChapter.feature",
-		 "./src/features/**/filterAdminPageByTitle.feature",
+		// "./src/features/**/commentOnChapter.feature",
 		// "./src/features/**/commentOnSection.feature"
 	],
 
