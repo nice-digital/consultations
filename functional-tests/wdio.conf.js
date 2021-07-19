@@ -38,7 +38,7 @@ exports.config = {
 	// Change this to verbose if you want more detailed logging in the terminal
 	coloredLogs: true,
 	screenshotPath: "./errorShots/",
-	baseUrl: "https://alpha.nice.org.uk/consultations/",
+	baseUrl: "https://test.nice.org.uk/consultations/",
 	reporters: ["spec"],
 
 	// Use BDD with Cucumber
