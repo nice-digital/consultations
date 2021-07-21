@@ -1,8 +1,7 @@
 Feature: Comment on a Section
 	As a user of consultations
 	We want to be able to login to make a comment
-	We want to be able to comment at the Section level
-
+	We want to be able to comment at the Section
 	Background:
 		Given I open the url "406/1/recommendations"
 		When I log into accounts with username "IDAM_EMAIL2" and password "IDAM_PASSWORD"

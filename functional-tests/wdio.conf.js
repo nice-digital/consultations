@@ -14,7 +14,7 @@ exports.config = {
 		// "./src/features/**/unsavedCommentDocPage.feature",
 		// "./src/features/**/submitComments.feature",
 		// "./src/features/**/orderingOnReviewPage.feature",
-		// "./src/features/**/commentOnSubSection.feature",
+		//"./src/features/**/commentOnSubSection.feature",
 		// "./src/features/**/commentOnDocument.feature",
 		// "./src/features/**/commentOnChapter.feature",
 		// "./src/features/**/commentOnSection.feature"
