@@ -44,19 +44,23 @@ export class StackedNav extends PureComponent<PropsType> {
 									to={item.url}
 									aria-current={item.current ? "page" : null}
 								>
-									<span data-g="10" className="pl--0">{item.label}</span>
-									{item.marker &&
-										<span className="text-right" data-g="2">({item.marker})</span>
-									}
+									<span className="grid">
+										<span data-g="10" className="pl--c">{item.label}</span>
+										{item.marker &&
+											<span className="text-right" data-g="2">({item.marker})</span>
+										}
+									</span>
 								</Link>
 								:
 								// if !item.isReactRoute
 								<a href={item.url}
-									 target="_blank"
-									 onClick={this.trackClick}
-									 rel="noopener noreferrer">
-									<span data-g="10" className="pl--0">
-										{item.label}
+									target="_blank"
+									onClick={this.trackClick}
+									rel="noopener noreferrer">
+									<span className="grid">
+										<span data-g="10" className="pl--c">
+											{item.label}
+										</span>
 									</span>
 								</a>
 							}
