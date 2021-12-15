@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 
 namespace Comments.ViewModels
 {
@@ -19,7 +20,7 @@ namespace Comments.ViewModels
 		public Answer(Models.Answer answer, Models.Question question = null)
 		{
 			AnswerId = answer.AnswerId;
-			AnswerText = answer.AnswerText;
+			AnswerText = HttpUtility.JavaScriptStringEncode(answer.AnswerText);
 			AnswerBoolean = answer.AnswerBoolean;
 			QuestionId = answer.QuestionId;
 			LastModifiedDate = answer.LastModifiedDate;
