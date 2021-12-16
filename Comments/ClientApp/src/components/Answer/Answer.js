@@ -71,18 +71,22 @@ export class Answer extends Component<PropsType, StateType> {
 
 	render() {
 		if (!this.state.answer) return null;
+		const answer = this.state.answer;
+		if(answer.answerText != undefined)
+			answer.answerText = decodeURIComponent(answer.answerText);
+
 		const {
 			answerBoolean,
 			answerText,
 			answerId,
 			questionId,
 			commenterEmail,
-		} = this.state.answer;
+		} = answer;
 		const unsavedChanges = this.state.unsavedChanges;
-		const answer = this.state.answer;
 		const readOnly = this.props.readOnly;
 		const questionText = this.props.questionText;
 		const unique = this.props.unique;
+
 		return (
 
 			<Fragment>
@@ -100,7 +104,7 @@ export class Answer extends Component<PropsType, StateType> {
 							readOnly={readOnly}
 							textareaChangeHandler={this.textareaChangeHandler}
 							yesNoChangeHandler={this.yesNoChangeHandler}
-							answerText={answerText ? decodeURIComponent(answerText) : null}
+							answerText={answerText}
 							answerBoolean={answerBoolean}
 						/>
 						}
@@ -111,7 +115,7 @@ export class Answer extends Component<PropsType, StateType> {
 							questionText={questionText}
 							readOnly={readOnly}
 							textareaChangeHandler={this.textareaChangeHandler}
-							answerText={answerText ? decodeURIComponent(answerText) : null}
+							answerText={answerText}
 						/>
 						}
 
