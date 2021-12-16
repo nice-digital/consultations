@@ -100,7 +100,7 @@ export class Answer extends Component<PropsType, StateType> {
 							readOnly={readOnly}
 							textareaChangeHandler={this.textareaChangeHandler}
 							yesNoChangeHandler={this.yesNoChangeHandler}
-							answerText={answerText && decodeURIComponent(answerText)}
+							answerText={answerText ? decodeURIComponent(answerText) : null}
 							answerBoolean={answerBoolean}
 						/>
 						}
@@ -111,7 +111,7 @@ export class Answer extends Component<PropsType, StateType> {
 							questionText={questionText}
 							readOnly={readOnly}
 							textareaChangeHandler={this.textareaChangeHandler}
-							answerText={answerText && decodeURIComponent(answerText)}
+							answerText={answerText ? decodeURIComponent(answerText) : null}
 						/>
 						}
 
