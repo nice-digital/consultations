@@ -123,7 +123,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 								className="form__input form__input--textarea"
 								onInput={this.textareaChangeHandler}
 								tabIndex={0}
-								defaultValue={commentText}/>
+								defaultValue={commentText && decodeURIComponent(commentText)}/>
 						</div>
 						{!readOnly && commentText && commentText.length > 0 ?
 							unsavedChanges ?

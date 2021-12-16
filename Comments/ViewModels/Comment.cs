@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Web;
 
 namespace Comments.ViewModels
 {
@@ -22,7 +21,7 @@ namespace Comments.ViewModels
             CommentId = comment.CommentId;
             LastModifiedDate = comment.LastModifiedDate;
             LastModifiedByUserId = comment.LastModifiedByUserId;
-            CommentText = HttpUtility.JavaScriptStringEncode(comment.CommentText);
+            CommentText = Uri.EscapeDataString(comment.CommentText);
 	        if (comment.Status != null)
 		        Status = new Status(comment.Status);
 	        StatusId = comment.StatusId;
