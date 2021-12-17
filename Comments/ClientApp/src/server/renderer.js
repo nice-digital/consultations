@@ -12,12 +12,13 @@ import { Helmet } from "react-helmet";
 import { processHtml } from "./html-processor";
 import App from "./../components/App/App";
 import { Error } from "./../components/Error/Error";
+import serialize from "serialize-javascript";
 
 const BaseUrlRelative: string = "/consultations";
 
 // Returns a script tag with the stringified data for loading on the client
 const getPreloadedDataHtml = (data): string => {
-	let scriptTag: string = `<script>window.__PRELOADED__=${JSON.stringify(data)};</script>`;
+	let scriptTag: string = `<script>window.__PRELOADED__= ${serialize(data, { isJSON: true })};</script>`;
 
 	// Wrap new lines in dev mode so it's easier to scan over html source for debugging purposes
 	if (process.env.NODE_ENV === "development") {

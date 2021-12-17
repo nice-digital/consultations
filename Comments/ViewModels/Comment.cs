@@ -21,7 +21,7 @@ namespace Comments.ViewModels
             CommentId = comment.CommentId;
             LastModifiedDate = comment.LastModifiedDate;
             LastModifiedByUserId = comment.LastModifiedByUserId;
-            CommentText = Uri.EscapeDataString(comment.CommentText);
+            CommentText = comment.CommentText;
 	        if (comment.Status != null)
 		        Status = new Status(comment.Status);
 	        StatusId = comment.StatusId;

@@ -4,7 +4,7 @@
             "commentId":"scrubbed by ScrubCommentId",
             "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
             "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
-            "commentText":"comment%20text",
+            "commentText":"comment text",
             "status":{
                 "statusId":1,
                 "name":"Draft"
@@ -31,7 +31,7 @@
             "commentId":"scrubbed by ScrubCommentId",
             "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
             "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
-            "commentText":"comment%20text",
+            "commentText":"comment text",
             "status":{
                 "statusId":1,
                 "name":"Draft"
@@ -58,7 +58,7 @@
             "commentId":"scrubbed by ScrubCommentId",
             "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
             "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
-            "commentText":"comment%20text",
+            "commentText":"comment text",
             "status":{
                 "statusId":1,
                 "name":"Draft"

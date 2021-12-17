@@ -71,22 +71,18 @@ export class Answer extends Component<PropsType, StateType> {
 
 	render() {
 		if (!this.state.answer) return null;
-		const answer = this.state.answer;
-		if(answer.answerText != undefined)
-			answer.answerText = decodeURIComponent(answer.answerText);
-
 		const {
 			answerBoolean,
 			answerText,
 			answerId,
 			questionId,
 			commenterEmail,
-		} = answer;
+		} = this.state.answer;
 		const unsavedChanges = this.state.unsavedChanges;
+		const answer = this.state.answer;
 		const readOnly = this.props.readOnly;
 		const questionText = this.props.questionText;
 		const unique = this.props.unique;
-
 		return (
 
 			<Fragment>

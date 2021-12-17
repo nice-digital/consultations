@@ -63,6 +63,7 @@
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "react-router-hash-link": "^1.2.0",
+    "serialize-javascript": "^6.0.0",
     "stringify-object": "^3.2.2"
   },
   "devDependencies": {

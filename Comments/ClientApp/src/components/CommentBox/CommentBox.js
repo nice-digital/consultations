@@ -68,9 +68,6 @@ export class CommentBox extends Component<PropsType, StateType> {
 
 	render() {
 		if (!this.state.comment) return null;
-		const comment = this.state.comment;
-		if(comment.commentText != undefined)
-			comment.commentText = decodeURIComponent(comment.commentText);
 		const {
 			commentText,
 			commentOn,
@@ -78,9 +75,9 @@ export class CommentBox extends Component<PropsType, StateType> {
 			commentId,
 			commenterEmail,
 		} = this.state.comment;
-
 		const { documentTitle } = this.props;
 		const unsavedChanges = this.state.unsavedChanges;
+		const comment = this.state.comment;
 		const readOnly = this.props.readOnly;
 		return (
 			<li className={unsavedChanges ? "CommentBox CommentBox--unsavedChanges" : "CommentBox"}>
@@ -126,7 +123,7 @@ export class CommentBox extends Component<PropsType, StateType> {
 								className="form__input form__input--textarea"
 								onInput={this.textareaChangeHandler}
 								tabIndex={0}
-								defaultValue={commentText} />
+								defaultValue={commentText}/>
 						</div>
 						{!readOnly && commentText && commentText.length > 0 ?
 							unsavedChanges ?

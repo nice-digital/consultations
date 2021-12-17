@@ -19,7 +19,7 @@ namespace Comments.ViewModels
 		public Answer(Models.Answer answer, Models.Question question = null)
 		{
 			AnswerId = answer.AnswerId;
-			AnswerText = Uri.EscapeDataString(answer.AnswerText);
+			AnswerText = answer.AnswerText;
 			AnswerBoolean = answer.AnswerBoolean;
 			QuestionId = answer.QuestionId;
 			LastModifiedDate = answer.LastModifiedDate;
