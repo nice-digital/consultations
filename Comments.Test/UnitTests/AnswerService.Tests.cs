@@ -276,7 +276,7 @@ namespace Comments.Test.UnitTests
 			//Assert
 			var answers = viewModel.Questions.Single().Answers;
 			answers.Count.ShouldBe(2);
-			answers.First().AnswerText.ShouldBe(answerTextThatShouldBeReturned);
+			answers.First().AnswerText.ShouldBe(Uri.EscapeDataString(answerTextThatShouldBeReturned));
 			answers.First().CommenterEmail.ShouldBe(emailAddress);
 		}
 	}

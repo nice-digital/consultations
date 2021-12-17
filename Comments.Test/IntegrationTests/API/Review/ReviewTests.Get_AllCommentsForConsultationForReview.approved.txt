@@ -5,7 +5,7 @@
                 "commentId":"scrubbed by ScrubCommentId",
                 "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
                 "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
-                "commentText":"My Second Comment",
+                "commentText":"My%20Second%20Comment",
                 "status":{
                     "statusId":1,
                     "name":"Draft"
@@ -32,7 +32,7 @@
                 "commentId":"scrubbed by ScrubCommentId",
                 "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
                 "lastModifiedByUserId":"00000000-0000-0000-0000-000000000000",
-                "commentText":"My Comment",
+                "commentText":"My%20Comment",
                 "status":{
                     "statusId":1,
                     "name":"Draft"
@@ -73,7 +73,7 @@
                 "answers":[
                     {
                         "answerId":"scrubbed by ScrubAnswerId",
-                        "answerText":"answer 2",
+                        "answerText":"answer%202",
                         "answerBoolean":null,
                         "questionId":"scrubbed by ScrubQuestionId",
                         "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
@@ -120,7 +120,7 @@
                 "answers":[
                     {
                         "answerId":"scrubbed by ScrubAnswerId",
-                        "answerText":"answer 1",
+                        "answerText":"answer%201",
                         "answerBoolean":null,
                         "questionId":"scrubbed by ScrubQuestionId",
                         "lastModifiedDate":"scrubbed by ScrubLastModifiedDate",
