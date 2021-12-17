@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Comments.ViewModels
 {
@@ -45,7 +42,6 @@ namespace Comments.ViewModels
         public bool? AnswerBoolean { get; set; }
 
         public int QuestionId { get; set; }
-        //public ViewModels.Question Question { get; set; }
 
         public DateTime LastModifiedDate { get; set; }
         public string LastModifiedByUserId { get; set; }
@@ -59,6 +55,8 @@ namespace Comments.ViewModels
         public string SourceURI { get; set; }
 
         public string CommenterEmail { get; set; }
+
+        public bool showWhenFiltered { get; set; } = true;
 
         public void UpdateStatusFromDBModel(Models.Status status)
         {
