@@ -46,18 +46,22 @@ Array [
                     onClick={[Function]}
                   >
                     <span
-                      className="pl--0"
-                      data-g="10"
+                      className="grid"
                     >
-                      Our test consultation title
-                    </span>
-                    <span
-                      className="text-right"
-                      data-g="2"
-                    >
-                      (
-                      1
-                      )
+                      <span
+                        className="pl--c"
+                        data-g="10"
+                      >
+                        Our test consultation title
+                      </span>
+                      <span
+                        className="text-right"
+                        data-g="2"
+                      >
+                        (
+                        1
+                        )
+                      </span>
                     </span>
                   </a>
                 </li>
@@ -85,18 +89,22 @@ Array [
                     onClick={[Function]}
                   >
                     <span
-                      className="pl--0"
-                      data-g="10"
+                      className="grid"
                     >
-                      Unstable angina and NSTEMI
-                    </span>
-                    <span
-                      className="text-right"
-                      data-g="2"
-                    >
-                      (
-                      1
-                      )
+                      <span
+                        className="pl--c"
+                        data-g="10"
+                      >
+                        Unstable angina and NSTEMI
+                      </span>
+                      <span
+                        className="text-right"
+                        data-g="2"
+                      >
+                        (
+                        1
+                        )
+                      </span>
                     </span>
                   </a>
                 </li>
@@ -110,18 +118,22 @@ Array [
                     onClick={[Function]}
                   >
                     <span
-                      className="pl--0"
-                      data-g="10"
+                      className="grid"
                     >
-                      Glaucoma: diagnosis and management – Full Guideline
-                    </span>
-                    <span
-                      className="text-right"
-                      data-g="2"
-                    >
-                      (
-                      2
-                      )
+                      <span
+                        className="pl--c"
+                        data-g="10"
+                      >
+                        Glaucoma: diagnosis and management – Full Guideline
+                      </span>
+                      <span
+                        className="text-right"
+                        data-g="2"
+                      >
+                        (
+                        2
+                        )
+                      </span>
                     </span>
                   </a>
                 </li>
@@ -135,18 +147,22 @@ Array [
                     onClick={[Function]}
                   >
                     <span
-                      className="pl--0"
-                      data-g="10"
+                      className="grid"
                     >
-                      Emergency and acute medical care in over 16s: service delivery and organisation
-                    </span>
-                    <span
-                      className="text-right"
-                      data-g="2"
-                    >
-                      (
-                      1
-                      )
+                      <span
+                        className="pl--c"
+                        data-g="10"
+                      >
+                        Emergency and acute medical care in over 16s: service delivery and organisation
+                      </span>
+                      <span
+                        className="text-right"
+                        data-g="2"
+                      >
+                        (
+                        1
+                        )
+                      </span>
                     </span>
                   </a>
                 </li>
@@ -160,18 +176,22 @@ Array [
                     onClick={[Function]}
                   >
                     <span
-                      className="pl--0"
-                      data-g="10"
+                      className="grid"
                     >
-                      Nivolumab for adjuvant treatment of completely resected melanoma with lymph node involvement or metastatic disease
-                    </span>
-                    <span
-                      className="text-right"
-                      data-g="2"
-                    >
-                      (
-                      3
-                      )
+                      <span
+                        className="pl--c"
+                        data-g="10"
+                      >
+                        Nivolumab for adjuvant treatment of completely resected melanoma with lymph node involvement or metastatic disease
+                      </span>
+                      <span
+                        className="text-right"
+                        data-g="2"
+                      >
+                        (
+                        3
+                        )
+                      </span>
                     </span>
                   </a>
                 </li>
