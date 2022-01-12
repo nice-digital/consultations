@@ -1,5 +1,5 @@
 # See https://github.com/SeleniumHQ/docker-selenium#via-docker-compose
-version: "2"
+version: "3.8"
 services:
   firefox:
     container_name: functional-tests_firefox_1
@@ -14,7 +14,8 @@ services:
 
   chrome:
     container_name: functional-tests_chrome_1
-    image: selenium/node-chrome:3.141.59
+    image: selenium/node-chrome:3.141.59-20210713
+    shm_size: '1gb'
     volumes:
       - /dev/shm:/dev/shm
     depends_on:
@@ -25,7 +26,7 @@ services:
 
   # Selenium Grid/Hub
   hub:
-    image: selenium/hub:3.11.0-dysprosium
+    image: selenium/hub:3.141.59-20210713
     container_name: selenium_hub
     environment:
       GRID_DEBUG: "true"
@@ -45,6 +46,7 @@ services:
       - nginx
       - comments
     environment:
+      - TEAMCITY_VERSION
       - ACCOUNTS_EMAIL
       - ACCOUNTS_EMAIL2
       - ACCOUNTS_EMAIL3

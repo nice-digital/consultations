@@ -1,17 +1,21 @@
-FROM node:10
+FROM node:12
+
+ENV IN_DOCKER=true
 
 # Install Java (for Allure) see https://stackoverflow.com/a/44154721/486434
-RUN apt-get update && \
-	DEBIAN_FRONTEND=noninteractive \
-	#apt-get install -y software-properties-common && \
-	apt-get install -y default-jre-headless
+RUN apk add openjdk8
+
+# Curl isn't in Alpine and needed to install allure
+RUN apk add curl
 
 # Install Allure for generating a report
-RUN curl -o allure-2.13.2.tgz -Ls https://repo1.maven.org/maven2/io/qameta/allure/allure-commandline/2.13.2/allure-commandline-2.13.2.tgz \
-	&& tar -zxf allure-2.13.2.tgz -C /usr/local --strip-components=1 \
-	&& rm allure-2.13.2.tgz
+RUN curl -o allure-2.14.0.tgz -Ls https://repo1.maven.org/maven2/io/qameta/allure/allure-commandline/2.14.0/allure-commandline-2.14.0.tgz \
+	&& tar -zxf allure-2.14.0.tgz -C /usr/local --strip-components=1 \
+	&& rm allure-2.14.0.tgz
 
 RUN mkdir -p /tests
+
+RUN echo "{}" > /tests/tsconfig.json
 
 # Download wait-for-it as binary waitforit, see  https://github.com/vishnubob/wait-for-it
 ENV WAITFORIT_VERSION db04971
@@ -31,7 +35,7 @@ WORKDIR /tests
 COPY package.json /tests
 COPY package-lock.json /tests
 
-RUN npm i
+RUN npm ci --no-audit --quiet
 
 COPY . /tests
 
