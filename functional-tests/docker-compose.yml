@@ -21,8 +21,8 @@ services:
     depends_on:
       - hub
     environment:
-      HUB_HOST: hub
-      #NODE_MAX_INSTANCES: 2
+      - HUB_HOST=hub
+      - HUB_PORT=4444
 
   # Selenium Grid/Hub
   hub:
@@ -30,9 +30,9 @@ services:
     container_name: selenium_hub
     environment:
       GRID_DEBUG: "true"
-      #GRID_MAX_SESSION: 2
-  #    ports:
-  #      - 4444:4444
+      GRID_MAX_SESSION: 2
+    ports:
+       - 4444:4444
 
   # The tests themselves
   tests:

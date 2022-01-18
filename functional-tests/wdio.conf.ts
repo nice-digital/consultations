@@ -10,20 +10,29 @@ export const config: WebdriverIO.Config = {
 	maxInstances: isInDocker ? 5 : 1,
 	path: "/wd/hub",
 
-	specs: ["./features/**/*.feature"],
+	specs: ["./src/features/**/unsavedCommentReviewPage.feature"],
 
 	capabilities: [
 		{
-			browserName: "chrome",
+		acceptInsecureCerts: true, // Because of self-signed cert inside Docker
+		acceptSslCerts: true,
+		maxInstances: 1,
+		browserName: "chrome",
 			"goog:chromeOptions": {
-				args: ["--window-size=1366,768"].concat(isInDocker ? "--headless" : []),
+				args: ["--window-size=1366,768",
+			// '--headless',
+      '--no-sandbox',
+      '--disable-gpu',
+      '--disable-setuid-sandbox',
+			'--ignore-certificate-errors',
+      '--disable-dev-shm-usage'].concat(isInDocker ? "--headless" : []),
 			},
 		},
 	],
 
-	logLevel: "error",
+	logLevel: "debug",
 
-	baseUrl: "http://localhost:3000/",
+	baseUrl: "https://niceorg/consultations/",
 	reporters: [
 		"spec",
 		isTeamCity && "teamcity",
@@ -40,11 +49,11 @@ export const config: WebdriverIO.Config = {
 	framework: "cucumber",
 	cucumberOpts: {
 		require: [
-			"./steps/**/*.ts",
+			"./src/steps/**/*.ts",
 			"./node_modules/@nice-digital/wdio-cucumber-steps/lib",
 		],
 		tagExpression: "not @pending", // See https://docs.cucumber.io/tag-expressions/
-		timeout: 15000,
+		timeout: 1500000,
 	},
 
 	afterStep: async function (_test, _scenario, { error }) {

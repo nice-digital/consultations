@@ -1,4 +1,4 @@
-import setInputField from "@nice-digital/wdio-cucumber-steps/lib/support/action/setInputField";
+import {setInputField} from "@nice-digital/wdio-cucumber-steps/lib/support/action/setInputField";
 import selectors from "../selectors";
 
 export const enterComment = (commentText) => {
@@ -15,7 +15,7 @@ export const enterCommentAndSubmit = (commentText) => {
 	browser.pause(2000);
 	enterComment(commentText);
 	browser.pause(2000);
-	browser.click(selectors.documentPage.submitButton);
+	$(selectors.documentPage.submitButton).click();
 	browser.pause(2000);
 };
 
@@ -26,7 +26,7 @@ export const enterCommentToFirstInListAndSubmit = (commentText) => {
 		selectors.documentPage.firstCommentTextArea
 	);
 	browser.pause(2000);
-	browser.click(selectors.documentPage.submitButton);
+	$(selectors.documentPage.submitButton).click();
 	browser.pause(2000);
 };
 

@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
-    "target": "es2019",
+    "target": "ESNext",
     "module": "commonjs",
+    "allowJs": true,
     "sourceMap": true,
     "composite": true,
     "noEmit": false,

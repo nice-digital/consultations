@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # Replace values in appsettings.json from envirionent variables
 # And run .NET webapp
 
