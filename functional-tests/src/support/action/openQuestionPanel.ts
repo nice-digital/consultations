@@ -3,11 +3,11 @@ import {waitForDisplayed} from "@nice-digital/wdio-cucumber-steps/lib/support/ac
 import {checkWithinViewport} from "@nice-digital/wdio-cucumber-steps/lib/support/check/checkWithinViewport";
 import selectors from "../selectors";
 
-export const openQuestionPanel = () => {
-	waitForDisplayed(selectors.documentPage.openQuestionPanel, "false");
-	clickElement("click", "element", selectors.documentPage.openQuestionPanel);
-	checkWithinViewport(selectors.documentPage.commentPanel, "false");
-	waitForDisplayed(selectors.documentPage.commentTextArea, "false");
+export async function openQuestionPanel(): Promise<void> {
+	await waitForDisplayed(selectors.documentPage.openQuestionPanel, "");
+	await clickElement("click", "element", selectors.documentPage.openQuestionPanel);
+	await checkWithinViewport(selectors.documentPage.commentPanel, "false");
+	await waitForDisplayed(selectors.documentPage.commentTextArea, "");
 };
 
 export default openQuestionPanel;

@@ -7,17 +7,17 @@ import {refresh} from "@nice-digital/wdio-cucumber-steps/lib/support/action/refr
 import {pause} from "@nice-digital/wdio-cucumber-steps/lib/support/action/pause";
 import selectors from "../selectors";
 
-export const sidebarLogin = (username, password) => {
-	refresh();
-	clickElement("click", "selector", "[data-qa-sel='open-commenting-panel']");
-	waitForDisplayed(".LoginBanner", "false");
-	clickElement("click", "selector", "a[href*='/consultations/account/login?returnURL=']");
-	waitForDisplayed("[data-qa-sel='login-email']", "false");
-	setInputField("set", process.env[username], "[data-qa-sel='login-email']");
-	setInputField("set", process.env[password], "[data-qa-sel='login-password']");
-	clickElement("click", "selector", "[data-qa-sel='login-button']");
-	pause("2000");
-	waitForDisplayed("[data-qa-sel='open-commenting-panel']", "false");
-	pause("2000");
+export async function sidebarLogin(username: string, password: string): Promise<void> {
+	await refresh();
+	await clickElement("click", "selector", "[data-qa-sel='open-commenting-panel']");
+	await waitForDisplayed(".LoginBanner", "");
+	await clickElement("click", "selector", "a[href*='/consultations/account/login?returnURL=']");
+	await waitForDisplayed("[data-qa-sel='login-email']", "");
+	await setInputField("set", process.env[username], "[data-qa-sel='login-email']");
+	await setInputField("set", process.env[password], "[data-qa-sel='login-password']");
+	await clickElement("click", "selector", "[data-qa-sel='login-button']");
+	await pause("2000");
+	await waitForDisplayed("[data-qa-sel='open-commenting-panel']", "");
+	await pause("2000");
 }
 

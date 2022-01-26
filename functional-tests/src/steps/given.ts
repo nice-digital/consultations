@@ -22,10 +22,12 @@ Given(/^I comment on a Document$/, async () => {
 
 Given(/^I comment on a Document again$/, async () => {
 	await pause("1000");
-	await waitForDisplayed("[data-qa-sel='comment-on-consultation-document']", "false");
+	await waitForDisplayed("[data-qa-sel='comment-on-consultation-document']", "");
+	await pause("1000");
 	await clickElement("click", "selector", "[data-qa-sel='comment-on-consultation-document']");
 	await pause("1000");
-	await waitForDisplayed("body [data-qa-sel='comment-box-title']", "false");
+	await waitForDisplayed("body [data-qa-sel='comment-box-title']", "");
+	await pause("1000");
 });
 
 Given(/^I comment on a Chapter$/, async () => {

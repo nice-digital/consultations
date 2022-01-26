@@ -7,9 +7,9 @@ export async function enterComment(commentText: string): Promise<void> {
 	await browser.pause(2000);
 };
 
-export const enterGIDToFilter = (gID) => {
-	setInputField("set", gID, selectors.adminDownloadPage.filterByGID);
-	browser.pause(5000);
+export async function enterGIDToFilter(gID: string): Promise<void> {
+	await setInputField("set", gID, selectors.adminDownloadPage.filterByGID);
+	await browser.pause(5000);
 };
 
 export async function enterCommentAndSubmit(commentText: string): Promise<void> {
@@ -20,28 +20,28 @@ export async function enterCommentAndSubmit(commentText: string): Promise<void> 
 	await browser.pause(2000);
 };
 
-export const enterCommentToFirstInListAndSubmit = (commentText) => {
+export async function enterCommentToFirstInListAndSubmit(commentText: string): Promise<void> {
+	await setInputField(
+		"set",
+		commentText,
+		selectors.documentPage.firstCommentTextArea
+	);
+	await browser.pause(2000);
+	await $(selectors.documentPage.submitButton).click();
+	await browser.pause(2000);
+};
+
+export async function enterCommentToFirstInList(commentText: string): Promise<void> {
+	await browser.pause(2000);
 	setInputField(
 		"set",
 		commentText,
 		selectors.documentPage.firstCommentTextArea
 	);
-	browser.pause(2000);
-	$(selectors.documentPage.submitButton).click();
-	browser.pause(2000);
+	await browser.pause(2000);
 };
 
-export const enterCommentToFirstInList = (commentText) => {
-	browser.pause(2000);
-	setInputField(
-		"set",
-		commentText,
-		selectors.documentPage.firstCommentTextArea
-	);
-	browser.pause(2000);
-};
-
-export async function enterCommentToFirstInListReviewPage(commentText): Promise<void> {
+export async function enterCommentToFirstInListReviewPage(commentText: string): Promise<void> {
 	await browser.pause(2000);
 	await setInputField("add", commentText, selectors.reviewPage.firstCommentTextArea);
 	await browser.pause(2000);

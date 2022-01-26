@@ -15,9 +15,9 @@ export async function navigateToReviewPage(): Promise<void> {
 	await pause("2000");
 };
 
-export const clickReviewPageLink = () => {
-	clickElement("click", "button", selectors.documentPage.reviewAllButton);
-	pause("2000");
+export async function clickReviewPageLink(): Promise<void> {
+	await clickElement("click", "button", selectors.documentPage.reviewAllButton);
+	await pause("2000");
 };
 
 export default navigateToReviewPage;

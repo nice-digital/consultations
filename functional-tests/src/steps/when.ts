@@ -35,35 +35,35 @@ import { selectValueFromDropdown } from "../support/action/selectFromDropdownByI
 import { CodeLogin } from "../support/action/CodeLogin";
 
 // E.g. When I click on text "Title here" in ".ancestor"
-When(/^I add the comment "([^"]*)"$/, async () => { await enterComment});
+When(/^I add the comment "([^"]*)"$/, enterComment);
 
-When(/^I add the indev GID "([^"]*)" to the filter$/, async () => { await enterGIDToFilter});
+When(/^I add the indev GID "([^"]*)" to the filter$/, enterGIDToFilter);
 
-When(/^I change the number of results on the page by selecting index "([^"]*)"$/, async () => { await selectValueFromDropdown});
+When(/^I change the number of results on the page by selecting index "([^"]*)"$/, selectValueFromDropdown);
 
-When(/^I add the question answer "([^"]*)"$/, async () => { await enterQuestionAnswer});
+When(/^I add the question answer "([^"]*)"$/, enterQuestionAnswer);
 
 When(/^I add the comment "([^"]*)" and submit$/, enterCommentAndSubmit);
 
-When(/^I add the question answer "([^"]*)" and submit$/, async () => { await enterQuestionAnswerAndSubmit});
+When(/^I add the question answer "([^"]*)" and submit$/, enterQuestionAnswerAndSubmit);
 
-When(/^I add the comment "([^"]*)" to the first in the list and submit$/,	async () => { await enterCommentToFirstInListAndSubmit});
+When(/^I add the comment "([^"]*)" to the first in the list and submit$/,	enterCommentToFirstInListAndSubmit);
 
-When(/^I add the question answer "([^"]*)" to the first in the list and submit$/,	async () => { await enterQuestionAnswerToFirstInListAndSubmit});
+When(/^I add the question answer "([^"]*)" to the first in the list and submit$/,	enterQuestionAnswerToFirstInListAndSubmit);
 
-When(/^I add the question answer "([^"]*)" to the second in the list and submit$/,	async () => { await enterQuestionAnswerToSecondInListAndSubmit});
+When(/^I add the question answer "([^"]*)" to the second in the list and submit$/,	enterQuestionAnswerToSecondInListAndSubmit);
 
-When(/^I add the comment "([^"]*)" to the first in the list$/,	async () => { await enterCommentToFirstInList});
+When(/^I add the comment "([^"]*)" to the first in the list$/,	enterCommentToFirstInList);
 
-When(/^I add the question answer "([^"]*)" to the first in the list$/,	async () => { await enterQuestionAnswerToFirstInList});
+When(/^I add the question answer "([^"]*)" to the first in the list$/,	enterQuestionAnswerToFirstInList);
 
 When(/^I add the comment "([^"]*)" to the first in the list on the review page$/,	enterCommentToFirstInListReviewPage);
 
 When(/^I navigate to the Review Page$/, navigateToReviewPage);
 
-When(/^I click on the Review Page link$/, async () => { await clickReviewPageLink});
+When(/^I click on the Review Page link$/, clickReviewPageLink);
 
-When(/^I submit my response$/, async () => { await submitResponse});
+When(/^I submit my response$/, submitResponse);
 
 When(/^I click submit my response button$/, clickSubmitResponseButton);
 
@@ -75,18 +75,18 @@ When(/^I log into accounts with username "([A-Z0-9_]+)" and password "([A-Z0-9_]
 	Login
 );
 
-When(/^I log into the admin page with username "([A-Z0-9_]+)" and password "([A-Z0-9_]+)"$/,	async () => { await LoginAdmin});
+When(/^I log into the admin page with username "([A-Z0-9_]+)" and password "([A-Z0-9_]+)"$/,	LoginAdmin);
 
-When(/^I log in using sidebar with username "([A-Z0-9_]+)" and password "([A-Z0-9_]+)"$/,	async () => { await sidebarLogin});
+When(/^I log in using sidebar with username "([A-Z0-9_]+)" and password "([A-Z0-9_]+)"$/,	sidebarLogin);
 
-When(/^I open question panel$/, async () => { await openQuestionPanel});
+When(/^I open question panel$/, openQuestionPanel);
 
-When(/^I answer Yes to Organisation question and complete the organisation name$/,	async () => { await responseMandatoryQuestions_answerYestoOrg});
+When(/^I answer Yes to Organisation question and complete the organisation name$/,	responseMandatoryQuestions_answerYestoOrg);
 
-When(/^I scroll the delete button into view$/, async () => { await scrollDeleteButtonIntoView});
+When(/^I scroll the delete button into view$/, scrollDeleteButtonIntoView);
 
-When(/^I log into consultation with copied organisation code$/, async () => { await CodeLogin});
+When(/^I log into consultation with copied organisation code$/, CodeLogin);
 
-When(/^I click send your response to your organisation button$/,	async () => { await clickSendYourResponseToYourOrganisationButton});
+When(/^I click send your response to your organisation button$/,	clickSendYourResponseToYourOrganisationButton);
 
 When(/^I click yes submit my response button$/, clickYesSubmitResponseButton);

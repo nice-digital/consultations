@@ -5,11 +5,11 @@ import {refresh} from "@nice-digital/wdio-cucumber-steps/lib/support/action/refr
 import {pause} from "@nice-digital/wdio-cucumber-steps/lib/support/action/pause";
 import selectors from "../selectors";
 
-export const LoginAdmin = (username, password) => {
-	pause("2000");
-	idamGlobalnavLoginAdmin(username, password);
-	pause("2000");
-	refresh();
-	waitForDisplayed("[data-qa-sel='changeable-page-header']", "false");
-	pause("2000");
+export async function LoginAdmin(username: string, password: string): Promise<void> {
+	await pause("2000");
+	await idamGlobalnavLoginAdmin(username, password);
+	await pause("2000");
+	// await refresh();
+	await waitForDisplayed("[data-qa-sel='changeable-page-header']", "");
+	await pause("2000");
 };
