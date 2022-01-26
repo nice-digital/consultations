@@ -32,42 +32,42 @@ Given(/^I comment on a Document again$/, async () => {
 
 Given(/^I comment on a Chapter$/, async () => {
 	await pause("1000");
-	await waitForDisplayed(".document-comment-container", "false");
+	await waitForDisplayed(".document-comment-container", "");
 	await pause("1000");
 	await clickElement("click", "selector", ".chapter > .title [data-qa-sel='in-text-comment-button']");
 	await pause("1000");
-	await waitForDisplayed("body [data-qa-sel='comment-box-title']", "false");
+	await waitForDisplayed("body [data-qa-sel='comment-box-title']", "");
 });
 
 Given(/^I comment on a Section$/, async () => {
 	await pause("1000");
 	await clickElement("click", "selector", "[data-qa-sel='nav-list-item']:nth-of-type(2)");
-	await waitForDisplayed(".document-comment-container", "false");
+	await waitForDisplayed(".document-comment-container", "");
 	await pause("1000");
 	await waitForDisplayed(
-		".section:first-of-type > .title [data-qa-sel='in-text-comment-button']", "false"
+		".section:first-of-type > .title [data-qa-sel='in-text-comment-button']", ""
 	);
 	await pause("1000");
 	await clickElement("click", "selector", ".section:first-of-type > .title [data-qa-sel='in-text-comment-button']");
 	await pause("1000");
-	await waitForDisplayed("body [data-qa-sel='comment-box-title']", "false");
+	await waitForDisplayed("body [data-qa-sel='comment-box-title']", "");
 });
 
 Given(/^I comment on a Sub-section$/, async () => {
 	await pause("1000");
 	await waitForDisplayed(
-		"[data-qa-sel='in-text-comment-button']:nth-of-type(2)", "false"
+		"[data-qa-sel='in-text-comment-button']:nth-of-type(2)", ""
 	);
 	await clickElement("click", "selector", "[data-qa-sel='in-text-comment-button']:nth-of-type(2)");
-	await waitForDisplayed(".document-comment-container", "false");
+	await waitForDisplayed(".document-comment-container", "");
 	await pause("1000");
-	await waitForDisplayed("body [data-qa-sel='comment-box-title']", "false");
+	await waitForDisplayed("body [data-qa-sel='comment-box-title']", "");
 	await pause("1000");
 });
 
-Given(/^I delete submissions for userid "([^"]*)?"$/, async () => { await deleteSubmissionUser});
+Given(/^I delete submissions for userid "([^"]*)?"$/, deleteSubmissionUser);
 
 Given(
-	/^I add questions to Consultation "([^"]*)?"$/, async () => { await addQuestionsToConsultation});
+	/^I add questions to Consultation "([^"]*)?"$/, addQuestionsToConsultation);
 
-Given(/^I select open and closed status filter$/, async () => { await  validateStatusFilterChecked});
+Given(/^I select open and closed status filter$/,  validateStatusFilterChecked);
