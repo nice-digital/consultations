@@ -23,9 +23,10 @@ export const validateThirdCommentBox = (commentText) => {
 	pause("1000");
 };
 
-export const validateCommentBoxTitle = (titleText) => {
-	checkContainsText("element", selectors.documentPage.commentBoxTitle, "false", titleText);
-	pause("1000");
+export async function validateCommentBoxTitle(titleText: string): Promise<void> {
+	await pause("1000");
+	await checkContainsText("element", selectors.documentPage.commentBoxTitle, "false", titleText);
+	await pause("1000");
 };
 
 export const validateCommentSaved = (commentText) => {

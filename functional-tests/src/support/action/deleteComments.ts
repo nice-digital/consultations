@@ -1,30 +1,34 @@
-/*! https://github.com/webdriverio/cucumber-boilerplate/blob/master/src/support/action/clearInputField.js */
-/**
- * Clear a given input field (placeholder for WDIO's clearElement)
- * @param  {String}   element Element selector
- */
-export const deleteComments = () => {
+import {clickAllDeleteButtons} from "./findAndClickDeleteButtons";
 
-	if (!$("[data-qa-sel='delete-comment-button']").isExisting()) return;
+export async function deleteCommentsOnReviewPage(): Promise<void> {
 
-	if ($("[data-qa-sel='comment-list-wrapper']").isDisplayedInViewport()) {
-		clickAllDeleteButtons();
-	} else if (
-		!$("[data-qa-sel='delete-comment-button']").isDisplayedInViewport()
-	) {
-		$("[data-qa-sel='delete-comment-button']").scrollIntoView();
-		clickAllDeleteButtons();
-	} else {
-		$("[data-qa-sel='open-commenting-panel']").click();
-		browser.pause(1000);
-		$("[data-qa-sel='comment-list-wrapper']").waitForExist();
-		clickAllDeleteButtons();
-	}
+	await $("[data-qa-sel='delete-comment-button']").scrollIntoView();
+	// await $("[data-qa-sel='delete-comment-button']").click()
+	await clickAllDeleteButtons();
 
-	async function clickAllDeleteButtons() {
-		const deleteButtons = await $$("[data-qa-sel='delete-comment-button']");
-		await deleteButtons.forEach(element => {
-			element.click();
-		});
-	}
-};
+	// async function clickAllDeleteButtons() {
+	// 	let deleteButtons = await $$("[data-qa-sel='delete-comment-button']");
+	// 	deleteButtons.forEach(element => {
+	// 		element.click();
+	// 	});
+	// }
+	};
+
+	// let sidePanelvisible = await $("[data-qa-sel='comment-list-wrapper']").isDisplayedInViewport()
+	// if (sidePanelvisible = true) {
+	// 	await clickAllDeleteButtons();
+	// } else if (
+	// 	await !$("[data-qa-sel='delete-comment-button']").isDisplayedInViewport()
+	// ) {
+	// 	await $("[data-qa-sel='delete-comment-button']").scrollIntoView();
+	// 	await clickAllDeleteButtons();
+	// } else {
+
+	// async function clickAllDeleteButtons() {
+	// 	const deleteButtons = await $$("[data-qa-sel='delete-comment-button']");
+	// 	deleteButtons.forEach(element => {
+	// 		element.click();
+	// 	});
+	// };
+
+	export default deleteCommentsOnReviewPage

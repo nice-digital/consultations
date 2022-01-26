@@ -39,7 +39,7 @@ Then(/^I expect the second comment box contains "([^"]*)"$/,	async () => { await
 
 Then(/^I expect the third comment box contains "([^"]*)"$/,	async () => { await validateThirdCommentBox});
 
-Then(/^I expect the comment box title contains "([^"]*)"$/,	async () => { await validateCommentBoxTitle});
+Then(/^I expect the comment box title contains "([^"]*)"$/,	validateCommentBoxTitle);
 
 Then(/^I expect the comment save button displays "([^"]*)"$/,	async () => { await validateCommentSaved});
 
@@ -49,7 +49,7 @@ Then(/^I expect all comment boxes are inactive$/,	async () => { await validateAl
 
 Then(/^I expect the Submit Response button is inactive$/,	async () => { await validateSubmitResponseButtonInactive});
 
-Then(/^I expect the feedback message "([^"]*)" to be displayed$/,	async () => { await validateSubmitResponseValidationMessage});
+Then(/^I expect the feedback message "([^"]*)" to be displayed$/,	validateSubmitResponseValidationMessage);
 
 Then(/^I click delete comment$/, async () => { await deleteOneComment});
 
@@ -73,4 +73,4 @@ Then(/^I enter code user emailaddress "([A-Z0-9_]+)"$/, async () => { await ente
 
 Then(/^I click on consultation to generate and copy the organisation code$/,	async () => { await generateOrganisationCode});
 
-Then(/^I expect the alert caution to contain "([^"]*)"$/,	async () => { await validateAlertCautionText});
+Then(/^I expect the alert caution to contain "([^"]*)"$/,	validateAlertCautionText);

@@ -7,13 +7,13 @@ import {pause} from "@nice-digital/wdio-cucumber-steps/lib/support/action/pause"
 import selectors from "../selectors";
 
 export async function Login(username: string, password: string): Promise<void> {
-	await refresh();
+	// await refresh();
 	await pause("2000");
-	await waitForDisplayed("[data-qa-sel='open-commenting-panel']", "false");
-	await clickElement("click", "selector","[data-qa-sel='open-commenting-panel']");
+	await $("[data-qa-sel='open-commenting-panel']").waitForDisplayed();
+	await $("[data-qa-sel='open-commenting-panel']").click();
 	await idamGlobalnavLogin(username, password);
-	await pause("2000");
-	await refresh();
-	await waitForDisplayed("[data-qa-sel='changeable-page-header']", "false");
-	await pause("2000");
+	// await pause("2000");
+	// await refresh();
+	// await waitForDisplayed("[data-qa-sel='changeable-page-header']", "false");
+	// await pause("2000");
 };

@@ -15,7 +15,7 @@ export const config: WebdriverIO.Config = {
 	capabilities: [
 		{
 		acceptInsecureCerts: true, // Because of self-signed cert inside Docker
-		acceptSslCerts: true,
+		// acceptSslCerts: true,
 		maxInstances: 1,
 		browserName: "chrome",
 			"goog:chromeOptions": {

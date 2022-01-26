@@ -4,14 +4,15 @@ import {pause} from "@nice-digital/wdio-cucumber-steps/lib/support/action/pause"
 import {refresh} from "@nice-digital/wdio-cucumber-steps/lib/support/action/refresh";
 import selectors from "../selectors";
 
-export const navigateToReviewPage = () => {
-	clickElement("click", "button", selectors.documentPage.reviewAllButton);
-	pause("2000");
-	refresh();
-	pause("2000");
-	waitForDisplayed(selectors.reviewPage.commentTextArea, "flase");
-	waitForDisplayed(selectors.reviewPage.answerNoRepresentOrg, "flase");
-	waitForDisplayed(selectors.reviewPage.answerNoTobacLink, "flase");
+export async function navigateToReviewPage(): Promise<void> {
+	await clickElement("click", "button", selectors.documentPage.reviewAllButton);
+	await pause("2000");
+	await waitForDisplayed(selectors.reviewPage.commentTextArea, "");
+	await pause("2000");
+	await waitForDisplayed(selectors.reviewPage.answerNoRepresentOrg, "");
+	await pause("2000");
+	await waitForDisplayed(selectors.reviewPage.answerNoTobacLink, "");
+	await pause("2000");
 };
 
 export const clickReviewPageLink = () => {

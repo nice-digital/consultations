@@ -20,12 +20,15 @@ export async function idamGlobalNavLogin(username: string, password: string): Pr
 		);
 		await accountsLink.click();
 	} else {
-		const accountsLink = await $(
+		await $(
 			"body #header-menu-button+* a[href*='/consultations/account/login?returnURL=']"
 		);
-		await accountsLink.click();
+		await $("body #header-menu-button+* a[href*='/consultations/account/login?returnURL=']").isClickable();
+		await browser.pause(2000)
+		await $("body #header-menu-button+* a[href*='/consultations/account/login?returnURL=']").click();
+		await browser.pause(2000);
 	}
-	idamLogin(username, password);
+	await idamLogin(username, password);
 };
 
 export default idamGlobalNavLogin;

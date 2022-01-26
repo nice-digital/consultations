@@ -43,7 +43,7 @@ When(/^I change the number of results on the page by selecting index "([^"]*)"$/
 
 When(/^I add the question answer "([^"]*)"$/, async () => { await enterQuestionAnswer});
 
-When(/^I add the comment "([^"]*)" and submit$/, async () => { await enterCommentAndSubmit});
+When(/^I add the comment "([^"]*)" and submit$/, enterCommentAndSubmit);
 
 When(/^I add the question answer "([^"]*)" and submit$/, async () => { await enterQuestionAnswerAndSubmit});
 
@@ -57,23 +57,22 @@ When(/^I add the comment "([^"]*)" to the first in the list$/,	async () => { awa
 
 When(/^I add the question answer "([^"]*)" to the first in the list$/,	async () => { await enterQuestionAnswerToFirstInList});
 
-When(/^I add the comment "([^"]*)" to the first in the list on the review page$/,	async () => { await enterCommentToFirstInListReviewPage});
+When(/^I add the comment "([^"]*)" to the first in the list on the review page$/,	enterCommentToFirstInListReviewPage);
 
-When(/^I navigate to the Review Page$/, async () => { await navigateToReviewPage});
+When(/^I navigate to the Review Page$/, navigateToReviewPage);
 
 When(/^I click on the Review Page link$/, async () => { await clickReviewPageLink});
 
 When(/^I submit my response$/, async () => { await submitResponse});
 
-When(/^I click submit my response button$/, async () => { await clickSubmitResponseButton});
+When(/^I click submit my response button$/, clickSubmitResponseButton);
 
-When(/^I complete the mandatory response submission questions$/,	async () => { await completeResponseMandatoryQuestions});
+When(/^I complete the mandatory response submission questions$/, completeResponseMandatoryQuestions);
 
-When(/^I review my response$/, async () => { await reviewResponse});
+When(/^I review my response$/, reviewResponse);
 
 When(/^I log into accounts with username "([A-Z0-9_]+)" and password "([A-Z0-9_]+)"$/,
-	{ wrapperOptions: { retry: 2 } },
-	async (username, password) => { await Login }
+	Login
 );
 
 When(/^I log into the admin page with username "([A-Z0-9_]+)" and password "([A-Z0-9_]+)"$/,	async () => { await LoginAdmin});
@@ -90,4 +89,4 @@ When(/^I log into consultation with copied organisation code$/, async () => { aw
 
 When(/^I click send your response to your organisation button$/,	async () => { await clickSendYourResponseToYourOrganisationButton});
 
-When(/^I click yes submit my response button$/, async () => { await clickYesSubmitResponseButton});
+When(/^I click yes submit my response button$/, clickYesSubmitResponseButton);
