@@ -3,31 +3,31 @@ import {waitForDisplayed} from "@nice-digital/wdio-cucumber-steps/lib/support/ac
 import {pause} from "@nice-digital/wdio-cucumber-steps/lib/support/action/pause";
 import selectors from "../selectors";
 
-export const validateDownloadPageResultCount = (countText) => {
-	waitForDisplayed(selectors.adminDownloadPage.pageResultCount, "false");
-	checkContainsText(
+export async function validateDownloadPageResultCount(countText): Promise<void> {
+	await waitForDisplayed(selectors.adminDownloadPage.pageResultCount, "");
+	await checkContainsText(
 		"element",
 		selectors.adminDownloadPage.pageResultCount,
 		"false",
 		countText
 	);
-	pause("5000");
+	await pause("5000");
 };
 
-export const validateDownloadPageAllResults = () => {
-	waitForDisplayed(selectors.adminDownloadPage.paginationSection, "true");
-	pause("1000");
+export async function validateDownloadPageAllResults(): Promise<void> {
+	await waitForDisplayed(selectors.adminDownloadPage.paginationSection, "true");
+	await pause("1000");
 };
 
-export const validateFirstLinkInPagination = (linkText) => {
-	waitForDisplayed(selectors.adminDownloadPage.firstPager, "false");
-	checkContainsText(
+export async function validateFirstLinkInPagination(linkText): Promise<void> {
+	await waitForDisplayed(selectors.adminDownloadPage.firstPager, "");
+	await checkContainsText(
 		"element",
 		selectors.adminDownloadPage.firstPager,
 		"false",
 		linkText
 	);
-	pause("1000");
+	await pause("1000");
 };
 
 export default validateDownloadPageResultCount;

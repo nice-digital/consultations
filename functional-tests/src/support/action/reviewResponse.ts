@@ -4,5 +4,5 @@ import selectors from "../selectors";
 
 export async function reviewResponse(): Promise<void> {
 await clickElement("click", "element", selectors.reviewPage.reviewSubmittedCommentsButton);
-await waitForDisplayed(selectors.reviewPage.commentTextArea, "false");
+await waitForDisplayed(selectors.reviewPage.commentTextArea, "");
 }

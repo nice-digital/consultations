@@ -1,11 +1,14 @@
 import {clickAllDeleteButtons} from "./findAndClickDeleteButtons";
+import { waitForDisplayed } from "@nice-digital/wdio-cucumber-steps/lib/support/action/waitForDisplayed";
 
 export async function deleteCommentsOnReviewPage(): Promise<void> {
-
+	// let commentsNotDisplayed = !!$("[data-qa-sel='comment-box-title']").waitForDisplayed();
+	// if (commentsNotDisplayed = true){
+	// 	return;
+	// } else {
 	await $("[data-qa-sel='delete-comment-button']").scrollIntoView();
 	// await $("[data-qa-sel='delete-comment-button']").click()
 	await clickAllDeleteButtons();
-
 	// async function clickAllDeleteButtons() {
 	// 	let deleteButtons = await $$("[data-qa-sel='delete-comment-button']");
 	// 	deleteButtons.forEach(element => {

@@ -17,15 +17,19 @@ export async function idamGlobalnavLoginAdmin(
 	if (await mobileMenuButton.isDisplayed()) {
 		// This means we're on a smaller screen size
 		await mobileMenuButton.click();
+
 		const accountsLink = await $(
-			"body .gn_qKxI2"
+			"body #header-menu a[href*='/consultations/account/login?returnURL=']"
 		);
 		await accountsLink.click();
 	} else {
-		const accountsLink = await $(
-			"body .gn_qKxI2"
+		await $(
+			"body #header-menu-button+* a[href*='/consultations/account/login?returnURL=']"
 		);
-		await accountsLink.click();
+		await $("body #header-menu-button+* a[href*='/consultations/account/login?returnURL=']").isClickable();
+		await browser.pause(2000)
+		await $("body #header-menu-button+* a[href*='/consultations/account/login?returnURL=']").click();
+		await browser.pause(2000);
 	}
 	idamLogin(username, password);
 };
