@@ -9,8 +9,9 @@ export async function addQuestionsToConsultation(consultationId: string): Promis
 			consultationId
 	);
 	await openWebsite("url", "" + consultationId);
-	await waitFor(".page-header", "3000", "false", "exist");
 	await browser.pause(2000);
+	// await waitFor("body pre:nth-child(1)", "3000", "", "exist");
+	// await browser.pause(2000);
 };
 
 export default addQuestionsToConsultation;
