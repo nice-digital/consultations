@@ -71,9 +71,7 @@ When(/^I complete the mandatory response submission questions$/, completeRespons
 
 When(/^I review my response$/, reviewResponse);
 
-When(/^I log into accounts with username "([A-Z0-9_]+)" and password "([A-Z0-9_]+)"$/,
-	Login
-);
+When(/^I log into accounts with username "([A-Z0-9_]+)" and password "([A-Z0-9_]+)"$/, { wrapperOptions: { retry: 2 } }, Login);
 
 When(/^I log into the admin page with username "([A-Z0-9_]+)" and password "([A-Z0-9_]+)"$/,	LoginAdmin);
 

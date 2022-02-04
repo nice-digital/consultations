@@ -6,7 +6,7 @@ import {pressButton} from "@nice-digital/wdio-cucumber-steps/lib/support/action/
 export async function generateOrganisationCode(): Promise<void> {
 
 	await clickElement("click", "selector", "[data-qa-sel='share-with-org-button']");
-	// await clickElement("click", "selector", "[data-qa-sel='generate-code-button']");
+	await clickElement("click", "selector", "[data-qa-sel='generate-code-button']");
 	await waitForDisplayed("[data-qa-sel='copy-code-button']", "");
 	await clickElement("click", "selector", "[data-qa-sel='copy-code-button']");
 	await pressButton("['CTRL', 'C']");

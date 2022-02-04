@@ -20,7 +20,9 @@ export async function validateDownloadPageAllResults(): Promise<void> {
 };
 
 export async function validateFirstLinkInPagination(linkText): Promise<void> {
+	await pause("2000")
 	await waitForDisplayed(selectors.adminDownloadPage.firstPager, "");
+	await pause("2000")
 	await checkContainsText(
 		"element",
 		selectors.adminDownloadPage.firstPager,

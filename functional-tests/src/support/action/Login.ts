@@ -7,7 +7,7 @@ import {pause} from "@nice-digital/wdio-cucumber-steps/lib/support/action/pause"
 import selectors from "../selectors";
 
 export async function Login(username: string, password: string): Promise<void> {
-	// await refresh();
+	await refresh();
 	await pause("2000");
 	await $("[data-qa-sel='open-commenting-panel']").waitForDisplayed();
 	await $("[data-qa-sel='open-commenting-panel']").click();

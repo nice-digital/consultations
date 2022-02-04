@@ -65,7 +65,7 @@ Given(/^I comment on a Sub-section$/, async () => {
 	await pause("1000");
 });
 
-Given(/^I delete submissions for userid "([^"]*)?"$/, deleteSubmissionUser);
+Given(/^I delete submissions for userid "([^"]*)?" and navigate to review page "([^"]*)?"$/, deleteSubmissionUser);
 
 Given(
 	/^I add questions to Consultation "([^"]*)?"$/, addQuestionsToConsultation);
