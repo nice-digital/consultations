@@ -63,6 +63,7 @@ services:
       - BROWSERSTACK_USERNAME
       - BUILD_NUMBER
       - CODE_EMAIL1
+      - AUTH_ADMIN_ID
 
   # Comment Collection dotnet core web app
   comments:
@@ -119,6 +120,7 @@ services:
       - INDEV_IDAM_CONFIG_CLIENTID
       - INDEV_IDAM_CONFIG_CLIENTSECRET
       - INDEV_IDAM_CONFIG_DOMAIN
+      - AUTH_ADMIN_ID
 
   # MS SQL Server database
   database:

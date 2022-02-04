@@ -21,6 +21,6 @@ Feature: Submit Comments on a Consultation
 		And I submit my response
 		And I review my response
 		Then I expect all comment boxes are inactive
-		Given I delete submissions for userid "auth0|60b8d9bb9d409a0069a4be29" and navigate to review page "409/review"
+		Given I delete submissions for userid "AUTH_ADMIN_ID" and navigate to review page "409/review"
 		And I delete all comments on the page
 
