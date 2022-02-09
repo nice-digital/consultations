@@ -9,7 +9,7 @@ export const generateOrganisationCode = () => {
 	browser.click("[data-qa-sel='copy-code-button']");
 	browser.keys(['CTRL', 'C'])
 	pause(2000);
-	browser.click(".gn_CfIYr");
-	browser.click(".gn_Xb5EH");
-	browser.click(".gn_Xb5EH a[href='/consultations/account/logout']", 2000);
+	browser.click(".gn_2hlYN");
+	browser.click(".gn_2nlnx");
+	browser.click(".gn_2nlnx a[href='/consultations/account/logout']", 2000);
 };
