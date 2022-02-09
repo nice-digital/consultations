@@ -52,7 +52,7 @@
 	<link rel="apple-touch-icon-precomposed" sizes="152x152" href="//cdn.nice.org.uk/V3/Content/nice/favicon-152.png">
 	<link rel="apple-touch-icon" sizes="152x152" href="//cdn.nice.org.uk/V3/Content/nice/favicon-152.png">
 	<link href="//fonts.googleapis.com/css?family=Lato:400,700,900" rel="stylesheet" type="text/css" />
-	
+
 	<!--[if lt IE 9]>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-shim.min.js"></script>
@@ -76,7 +76,7 @@
 <!--! scripts -->
 
 <!-- Global nav - this block must be below the "loud" scripts comment above, as it relies on window.__AUTH__ which is set in that block. -->
-<script>	
+<script>
 	//var global_nav_config_
 	var global_nav_config = {
 		service: "guidance",
@@ -87,7 +87,7 @@
 			auth: {
 				provider: "idam",
 				environment: "%REACT_APP_ACCOUNTS_ENVIRONMENT%",
-				links: window.__AUTH__.isAuthorised ? [{ text: "Sign out", url: window.__AUTH__.signOutURL }] : [{ text: "Sign in", url: window.__AUTH__.signInURL }],
+				links: window.__AUTH__.isAuthorised ? [{ text:  window.__AUTH__.displayName, url: "#" }, { text: "Sign out", url: window.__AUTH__.signOutURL }] : [{ text: "Sign in", url: window.__AUTH__.signInURL }],
 				displayName: window.__AUTH__.displayName
 			},
 			cookie: false
@@ -96,9 +96,9 @@
 	};
 </script>
 <!-- Content of src in script tags below are replaced by parameters in the .env file for local development only.
-	
+
 	On all other servers, the .env.production file is used. During the build, the src attributes will get the substitution variable strings
-	in the .env.production file i.e. "#{GlobalNav:Script}". Then when the release is deployed to the servers, this substitution string is 
+	in the .env.production file i.e. "#{GlobalNav:Script}". Then when the release is deployed to the servers, this substitution string is
 	replaced by the variable from Octopus Deploy, which is the actual URL to use.
 
 	note: custom environment variables in .env files must have have the prefix of "REACT_APP_".
