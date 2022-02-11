@@ -7,10 +7,10 @@ export const config: WebdriverIO.Config = {
 	// We need to use webdriver protocol in Docker because we use the selenium grid.
 	automationProtocol: isInDocker ? "webdriver" : "devtools",
 
-	maxInstances: isInDocker ? 5 : 1,
+	maxInstances: 1,
 	path: "/wd/hub",
 
-	specs: ["./src/features/**/unsavedCommentReviewPage.feature"],
+	specs: ["./src/features/**/*.feature"],
 
 	capabilities: [
 		{
@@ -30,7 +30,7 @@ export const config: WebdriverIO.Config = {
 		},
 	],
 
-	logLevel: "debug",
+	logLevel: "warn",
 
 	baseUrl: "https://niceorg/consultations/",
 	reporters: [
