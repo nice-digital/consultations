@@ -7,7 +7,7 @@ Feature: Comment Ordering on the Review Page
 	Background:
 		Given I open the url "409/1/recommendations"
 		When I log into accounts with username "IDAM_EMAIL1" and password "IDAM_PASSWORD"
-		Given I delete all comments on the page
+	# Given I delete all comments on the page
 
 	Scenario: User makes multiple comments and views them on the Review page
 		Given I comment on a Document

@@ -63,4 +63,5 @@ COPY ./published-app ./
 EXPOSE 8080
 
 # Wait for SQL Server to be available before running the dotnet app
+# ENTRYPOINT ["--", "./run.sh"]
 ENTRYPOINT ["waitforit", "-t", "60", "--strict", "database:1433", "--", "./run.sh"]

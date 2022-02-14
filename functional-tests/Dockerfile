@@ -1,4 +1,6 @@
-FROM node:10
+FROM node:14
+
+ENV IN_DOCKER=true
 
 # Install Java (for Allure) see https://stackoverflow.com/a/44154721/486434
 RUN apt-get update && \
@@ -12,6 +14,8 @@ RUN curl -o allure-2.13.2.tgz -Ls https://repo1.maven.org/maven2/io/qameta/allur
 	&& rm allure-2.13.2.tgz
 
 RUN mkdir -p /tests
+
+RUN echo "{}" > /tests/tsconfig.json
 
 # Download wait-for-it as binary waitforit, see  https://github.com/vishnubob/wait-for-it
 ENV WAITFORIT_VERSION db04971
@@ -31,7 +35,7 @@ WORKDIR /tests
 COPY package.json /tests
 COPY package-lock.json /tests
 
-RUN npm i
+RUN npm ci --no-audit --quiet
 
 COPY . /tests
 

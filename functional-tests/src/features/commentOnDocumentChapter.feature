@@ -6,7 +6,7 @@ Feature: Comment on a Document, Chapter
 	Background:
 		Given I open the url "405/1/recommendations"
 		When I log into accounts with username "IDAM_EMAIL2" and password "IDAM_PASSWORD"
-		Given I delete all comments on the page
+	# Given I delete all comments on the page
 
 	Scenario: User makes a comment at document and chapter level
 		Given I comment on a Document

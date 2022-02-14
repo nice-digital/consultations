@@ -5,7 +5,7 @@ Feature: Comment on a Section
 	Background:
 		Given I open the url "406/1/recommendations"
 		When I log into accounts with username "IDAM_EMAIL2" and password "IDAM_PASSWORD"
-		Given I delete all comments on the page
+	# Given I delete all comments on the page
 
 	Scenario: User makes a comment at section level
 		Given I comment on a Section
