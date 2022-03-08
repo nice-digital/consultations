@@ -60,29 +60,29 @@ namespace Comments.Services
 			var teamRoles = userRoles.Where(role => AppSettings.ConsultationListConfig.DownloadRoles.TeamRoles.Contains(role)).Select(role => role).ToList();
 			var isTeamUser = !isAdminUser && teamRoles.Any(); //an admin with team roles is still just considered an admin.
 			var hasAccessToViewUpcomingConsultations = isAdminUser || isTeamUser;
-            var hasAccessToViewHiddenConsultations = hasAccessToViewUpcomingConsultations;
-            var currentUserIsAuthorisedToViewOrganisationCodes = isAdminUser || currentUser.OrganisationsAssignedAsLead.Any();
+			var hasAccessToViewHiddenConsultations = hasAccessToViewUpcomingConsultations;
+			var currentUserIsAuthorisedToViewOrganisationCodes = isAdminUser || currentUser.OrganisationsAssignedAsLead.Any();
 
-            var canSeeAnySubmissionCounts = isAdminUser || isTeamUser;
+			var canSeeAnySubmissionCounts = isAdminUser || isTeamUser;
 
 			var consultationsFromIndev = (await _feedService.GetConsultationList()).ToList();
 
-            //START: to be removed once indev feed has been updated
-            var mockedFeed = new List<ConsultationList>();
-            foreach (var consultation in consultationsFromIndev)
-            {
-                if(consultation.Title != null)
-                {
-                    if (consultation.Title.Contains("Dec"))
-                        consultation.Hidden = true;
-                    mockedFeed.Add(consultation);
-                }
-            }
-            if(mockedFeed.Count > 0)
-                consultationsFromIndev = mockedFeed;
-            //END
+			//START: to be removed once indev feed has been updated
+			var mockedFeed = new List<ConsultationList>();
+			foreach (var consultation in consultationsFromIndev)
+			{
+				if(consultation.Title != null)
+				{
+					if (consultation.Title.Contains("Dec"))
+						consultation.Hidden = true;
+					mockedFeed.Add(consultation);
+				}
+			}
+			if(mockedFeed.Count > 0)
+				consultationsFromIndev = mockedFeed;
+			//END
 
-            var submittedCommentsAndAnswerCounts = canSeeAnySubmissionCounts ? _context.GetSubmittedCommentsAndAnswerCounts() : null;
+			var submittedCommentsAndAnswerCounts = canSeeAnySubmissionCounts ? _context.GetSubmittedCommentsAndAnswerCounts() : null;
 			var sourceURIsCommentedOrAnswered = _context.GetAllSourceURIsTheCurrentUserHasCommentedOrAnsweredAQuestion();
 
             if (model.InitialPageView) //set defaults here for the filters - this code might be called by the SSR or by the client-side.
