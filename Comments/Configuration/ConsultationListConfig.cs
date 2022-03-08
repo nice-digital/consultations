@@ -17,7 +17,7 @@ namespace Comments.Configuration
 
 		public IEnumerable<OptionFilterGroup> TeamFilter { get; set; }
 
-        public IEnumerable<OptionFilterGroup> HiddenConsultationsFilter { get; set; }
+		public IEnumerable<OptionFilterGroup> HiddenConsultationsFilter { get; set; }
 
     }
 
