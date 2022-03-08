@@ -27,7 +27,8 @@ type PropsType = {
 	showShareWithOrganisationButton: boolean,
 	show: boolean,
 	basename: string,
-	submissionToLeadCount: number
+	submissionToLeadCount: number,
+	hidden: boolean
 }
 
 export class ConsultationItem extends Component<PropsType, StateType> {
@@ -52,6 +53,7 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 			organisationCodes,
 			showShareWithOrganisationButton,
 			submissionToLeadCount,
+			hidden,
 		} = this.props;
 
 		const status = (isOpen, isClosed, isUpcoming) => {
@@ -83,6 +85,14 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 								<span className={`tag tag--${consultationStatus.toLowerCase()}`}>{consultationStatus}</span>
 							</dd>
 						</div>
+						{Boolean(hidden) && (
+							<div className="card__metadatum">
+								<dt className="visually-hidden">Consultation state</dt>
+								<dd>
+									<span className={"tag tag--hidden" }>Hidden</span>
+								</dd>
+							</div>
+						)}
 						{Boolean(userHasRespondedButNotSubmitted) && (
 							<div className="card__metadatum">
 								<dt className="visually-hidden">Unsubmitted questions or answers</dt>

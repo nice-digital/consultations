@@ -9,6 +9,11 @@
     @extend .tag--alpha;
   }
 
+  .tag--hidden {
+    background-color: #666666;
+    color: #FFFFFF;
+  }
+
   .card {
     overflow: visible;
 

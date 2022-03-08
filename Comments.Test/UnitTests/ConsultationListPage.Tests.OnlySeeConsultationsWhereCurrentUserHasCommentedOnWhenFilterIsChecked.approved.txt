@@ -23,7 +23,8 @@
                     
                 ],
                 "ShowShareWithOrganisationButton":false,
-                "SubmissionToLeadCount":null
+                "SubmissionToLeadCount":null,
+                "Hidden":false
             },
             {
                 "Title":null,
@@ -46,7 +47,8 @@
                     
                 ],
                 "ShowShareWithOrganisationButton":false,
-                "SubmissionToLeadCount":null
+                "SubmissionToLeadCount":null,
+                "Hidden":false
             }
         ],
         "OptionFilters":[
@@ -95,6 +97,7 @@
             }
         ],
         "TeamFilter":null,
+        "HiddenConsultationsFilter":null,
         "User":{
             "IsAdminUser":false,
             "IsTeamUser":false,
@@ -129,7 +132,8 @@
         "Contribution":[
             "HasContributed"
         ],
-        "Team":null
+        "Team":null,
+        "HiddenConsultations":null
     },
     "Item2":{
         "Valid":true,

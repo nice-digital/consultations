@@ -22,7 +22,8 @@
                 
             ],
             "ShowShareWithOrganisationButton":false,
-            "SubmissionToLeadCount":null
+            "SubmissionToLeadCount":null,
+            "Hidden":false
         },
         {
             "Title":"Consultation title 1",
@@ -45,7 +46,8 @@
                 
             ],
             "ShowShareWithOrganisationButton":false,
-            "SubmissionToLeadCount":null
+            "SubmissionToLeadCount":null,
+            "Hidden":false
         },
         {
             "Title":"Consultation Title 1",
@@ -68,7 +70,8 @@
                 
             ],
             "ShowShareWithOrganisationButton":false,
-            "SubmissionToLeadCount":null
+            "SubmissionToLeadCount":null,
+            "Hidden":false
         }
     ],
     "OptionFilters":[
@@ -138,6 +141,21 @@
             "Title":"Team filter"
         }
     ],
+    "HiddenConsultationsFilter":[
+        {
+            "Options":[
+                {
+                    "Id":"ShowHiddenConsultations",
+                    "Label":"Show hidden consultations only",
+                    "IsSelected":false,
+                    "FilteredResultCount":0,
+                    "UnfilteredResultCount":3
+                }
+            ],
+            "Id":"HiddenConsultations",
+            "Title":"Hidden Consultations"
+        }
+    ],
     "User":{
         "IsAdminUser":false,
         "IsTeamUser":true,
@@ -172,5 +190,6 @@
     "Contribution":null,
     "Team":[
         "MyTeam"
-    ]
+    ],
+    "HiddenConsultations":null
 }

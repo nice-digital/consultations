@@ -22,7 +22,8 @@
                 
             ],
             "showShareWithOrganisationButton":false,
-            "submissionToLeadCount":null
+            "submissionToLeadCount":null,
+            "hidden":false
         },
         {
             "title":"Transcutaneous microwave ablation for severe primary axillary hyperhidrosis ",
@@ -45,7 +46,8 @@
                 
             ],
             "showShareWithOrganisationButton":false,
-            "submissionToLeadCount":null
+            "submissionToLeadCount":null,
+            "hidden":false
         }
     ],
     "optionFilters":[
@@ -94,6 +96,7 @@
         }
     ],
     "teamFilter":null,
+    "hiddenConsultationsFilter":null,
     "user":{
         "isAdminUser":false,
         "isTeamUser":false,
@@ -126,5 +129,6 @@
     ],
     "keyword":null,
     "contribution":null,
-    "team":null
+    "team":null,
+    "hiddenConsultations":null
 }

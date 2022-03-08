@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Comments.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +17,9 @@ namespace Comments.Configuration
 
 		public IEnumerable<OptionFilterGroup> TeamFilter { get; set; }
 
-	}
+        public IEnumerable<OptionFilterGroup> HiddenConsultationsFilter { get; set; }
+
+    }
 
 	public class RoleTypes
 	{
