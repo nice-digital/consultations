@@ -467,8 +467,10 @@ export class Download extends Component<PropsType, StateType> {
 												{teamFilter &&
 													<FilterPanel filters={teamFilter} path={path} />
 												}
+												{isAdminUser || teamFilter &&
+													<FilterPanel filters={hiddenConsultationsFilter} path={path} />
+												}
 												<FilterPanel filters={optionFilters} path={path} />
-												<FilterPanel filters={hiddenConsultationsFilter} path={path} />
 											</div>
 											<div data-g="12 md:9">
 												<DownloadResultsInfo
