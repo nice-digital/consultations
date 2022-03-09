@@ -53,7 +53,7 @@
             ],
             "ShowShareWithOrganisationButton":true,
             "SubmissionToLeadCount":null,
-            "Hidden":false
+            "Hidden":true
         },
         {
             "Title":"Consultation Title 1",
@@ -140,7 +140,7 @@
                     "Id":"ShowHiddenConsultations",
                     "Label":"Show hidden consultations only",
                     "IsSelected":false,
-                    "FilteredResultCount":0,
+                    "FilteredResultCount":1,
                     "UnfilteredResultCount":3
                 }
             ],

@@ -12,8 +12,8 @@
                 "ChapterSlug":null,
                 "GidReference":null,
                 "ProductTypeName":null,
-                "HasCurrentUserEnteredCommentsOrAnsweredQuestions":true,
-                "HasCurrentUserSubmittedCommentsOrAnswers":true,
+                "HasCurrentUserEnteredCommentsOrAnsweredQuestions":false,
+                "HasCurrentUserSubmittedCommentsOrAnswers":false,
                 "AllowedRole":null,
                 "IsOpen":false,
                 "IsClosed":true,
@@ -24,7 +24,7 @@
                 ],
                 "ShowShareWithOrganisationButton":false,
                 "SubmissionToLeadCount":null,
-                "Hidden":false
+                "Hidden":true
             },
             {
                 "Title":null,
@@ -42,7 +42,7 @@
                 "IsOpen":false,
                 "IsClosed":true,
                 "IsUpcoming":false,
-                "Show":false,
+                "Show":true,
                 "OrganisationCodes":[
                     
                 ],
@@ -67,6 +67,13 @@
                         "IsSelected":false,
                         "FilteredResultCount":2,
                         "UnfilteredResultCount":2
+                    },
+                    {
+                        "Id":"Upcoming",
+                        "Label":"Upcoming",
+                        "IsSelected":false,
+                        "FilteredResultCount":0,
+                        "UnfilteredResultCount":2
                     }
                 ],
                 "Id":"Status",
@@ -87,8 +94,8 @@
                     {
                         "Id":"HasContributed",
                         "Label":"Your responses",
-                        "IsSelected":true,
-                        "FilteredResultCount":1,
+                        "IsSelected":false,
+                        "FilteredResultCount":0,
                         "UnfilteredResultCount":2
                     }
                 ],
@@ -96,7 +103,21 @@
                 "Title":"Contribution filter group"
             }
         ],
-        "TeamFilter":null,
+        "TeamFilter":[
+            {
+                "Options":[
+                    {
+                        "Id":"MyTeam",
+                        "Label":"My team's consultations",
+                        "IsSelected":false,
+                        "FilteredResultCount":0,
+                        "UnfilteredResultCount":2
+                    }
+                ],
+                "Id":"Team",
+                "Title":"Team filter"
+            }
+        ],
         "HiddenConsultationsFilter":[
             {
                 "Options":[
@@ -104,7 +125,7 @@
                         "Id":"ShowHiddenConsultations",
                         "Label":"Show hidden consultations only",
                         "IsSelected":false,
-                        "FilteredResultCount":0,
+                        "FilteredResultCount":1,
                         "UnfilteredResultCount":2
                     }
                 ],
@@ -114,9 +135,9 @@
         ],
         "User":{
             "IsAdminUser":false,
-            "IsTeamUser":false,
+            "IsTeamUser":true,
             "TeamNames":[
-                
+                "ConsultationListTestRole"
             ],
             "AuthenticatedBy":1,
             "AuthenticationType":"Auth0",
@@ -143,9 +164,7 @@
             
         ],
         "Keyword":null,
-        "Contribution":[
-            "HasContributed"
-        ],
+        "Contribution":null,
         "Team":null,
         "HiddenConsultations":null
     },

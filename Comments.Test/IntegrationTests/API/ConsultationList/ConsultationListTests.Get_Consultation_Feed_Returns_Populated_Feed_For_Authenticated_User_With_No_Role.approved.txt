@@ -96,21 +96,7 @@
         }
     ],
     "teamFilter":null,
-    "hiddenConsultationsFilter":[
-        {
-            "options":[
-                {
-                    "id":"ShowHiddenConsultations",
-                    "label":"Show hidden consultations only",
-                    "isSelected":false,
-                    "filteredResultCount":0,
-                    "unfilteredResultCount":2
-                }
-            ],
-            "id":"HiddenConsultations",
-            "title":"Hidden Consultations"
-        }
-    ],
+    "hiddenConsultationsFilter":null,
     "user":{
         "isAdminUser":false,
         "isTeamUser":false,

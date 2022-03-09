@@ -554,6 +554,65 @@ namespace Comments.Test.UnitTests
 			viewModel.Consultations.Count().ShouldBe(3);
 			viewModel.Consultations.Count(c => c.Show).ShouldBe(3);
 		}
+
+		[Fact]
+		public async Task AuthenticatedUserWithNoRoleShouldNotSeeHiddenConsultations()
+		{
+			//Arrange
+			var consultationList = AddConsultationsToList();
+			var userService = FakeUserService.Get(true, "Jeffrey Goines", Guid.NewGuid().ToString(), TestUserType.Authenticated, addRoleClaim: false);
+			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), userService, _fakeFeatureManager, _fakeOrganisationService);
+
+			//Act
+			ConsultationListViewModel viewModel = (await consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null))).consultationListViewModel;
+
+			//Assert
+			viewModel.Consultations.Where(c => c.Hidden == true).Count().ShouldBe(0);
+		}
+		[Fact]
+		public async Task AdminRolesShouldSeeHiddenConsultationsWhenTheFilterIsChecked()
+		{
+			//Arrange
+			var consultationList = AddConsultationsToList();
+			var userService = FakeUserService.Get(true, "Jeffrey Goines", Guid.NewGuid().ToString(), TestUserType.Administrator, addRoleClaim: false);
+			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), userService, _fakeFeatureManager, _fakeOrganisationService);
+
+			//Act
+			ConsultationListViewModel viewModel = (await consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null) { HiddenConsultations = new List<HiddenConsultationStatus>() { HiddenConsultationStatus.ShowHiddenConsultations } })).consultationListViewModel;
+
+			//Assert
+			viewModel.Consultations.Where(c => c.Hidden == true && c.Show == true).Count().ShouldBe(1);
+		}
+
+		[Fact]
+		public async Task TeamRolesShouldSeeHiddenConsultationsWhenTheFilterIsChecked()
+		{
+			//Arrange
+			var consultationList = AddConsultationsToList();
+			var userService = FakeUserService.Get(true, "Jeffrey Goines", Guid.NewGuid().ToString(), TestUserType.ConsultationListTestRole);
+			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), userService, _fakeFeatureManager, _fakeOrganisationService);
+
+			//Act
+			ConsultationListViewModel viewModel = (await consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null) { HiddenConsultations = new List<HiddenConsultationStatus>() { HiddenConsultationStatus.ShowHiddenConsultations } })).consultationListViewModel;
+
+			//Assert
+			viewModel.Consultations.Where(c=> c.Hidden == true && c.Show == true).Count().ShouldBe(1);
+		}
+
+		[Fact]
+		public async Task InDevUserShouldSeeHiddenConsultationsWhenTheFilterIsChecked()
+		{
+			//Arrange
+			var consultationList = AddConsultationsToList();
+			var userService = FakeUserService.Get(true, "Jeffrey Goines", Guid.NewGuid().ToString(), TestUserType.IndevUser);
+			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), userService, _fakeFeatureManager, _fakeOrganisationService);
+
+			//Act
+			ConsultationListViewModel viewModel = (await consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null) { HiddenConsultations = new List<HiddenConsultationStatus>() { HiddenConsultationStatus.ShowHiddenConsultations } })).consultationListViewModel;
+
+			//Assert
+			viewModel.Consultations.Where(c => c.Hidden == true && c.Show == true).Count().ShouldBe(1);
+		}
 	}
 
 	public class ConsultationListOrganisationCodeTests : TestBase
@@ -747,6 +806,79 @@ namespace Comments.Test.UnitTests
 			//Assert
 			viewModel.consultationListViewModel.Consultations.Count().ShouldBe(2);
 			viewModel.consultationListViewModel.Consultations.Count(c => c.Show).ShouldBe(1);
+			serialisedViewModel.ShouldMatchApproved();
+		}
+
+		[Fact]
+		public async Task TeamRoleShouldSeeHiddenConsultationsIncludingTheFilter()
+		{
+			//Arrange
+			ResetDatabase();
+			_context.Database.EnsureCreated();
+
+
+			var userId = Guid.Empty.ToString();
+
+			var consultationList = new List<ConsultationList>();
+			consultationList.Add(new ConsultationList { ConsultationId = 1, Hidden = true });
+			consultationList.Add(new ConsultationList { ConsultationId = 2 });
+
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: userId, TestUserType.ConsultationListTestRole);
+
+			var context = new ConsultationsContext(_options, userService, _fakeEncryption);
+
+			const int organisationId = 1;
+			const string organisationName = "Sherman Oaks";
+			var fakeOrganisationService = new FakeOrganisationService(new Dictionary<int, string> { { organisationId, organisationName } });
+
+			var consultationListService = new ConsultationListService(context, new FakeFeedService(consultationList), userService, _fakeFeatureManager, fakeOrganisationService);
+
+			//Act
+			var viewModel = (await consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null)
+			{
+				Status = new List<ConsultationStatus>(),
+			}));
+			var serialisedViewModel = JsonConvert.SerializeObject(viewModel); //saves checking all the properties
+
+
+			//Assert
+			viewModel.consultationListViewModel.Consultations.Count().ShouldBe(2);
+			viewModel.consultationListViewModel.Consultations.Count(c => c.Show).ShouldBe(2);
+			serialisedViewModel.ShouldMatchApproved();
+		}
+
+		[Fact]
+		public async Task AuthenticatedUserWithNoRoleShouldNotSeeHiddenConsultationsIncludingTheFilter()
+		{
+			//Arrange
+			ResetDatabase();
+			_context.Database.EnsureCreated();
+
+			var userId = Guid.Empty.ToString();
+
+			var consultationList = new List<ConsultationList>();
+			consultationList.Add(new ConsultationList { ConsultationId = 1, Hidden = true });
+			consultationList.Add(new ConsultationList { ConsultationId = 2 });
+
+			var userService = FakeUserService.Get(true, "Jeffrey Goines", userId, TestUserType.Authenticated, addRoleClaim: false);
+
+			var context = new ConsultationsContext(_options, userService, _fakeEncryption);
+
+			const int organisationId = 1;
+			const string organisationName = "Sherman Oaks";
+			var fakeOrganisationService = new FakeOrganisationService(new Dictionary<int, string> { { organisationId, organisationName } });
+
+			var consultationListService = new ConsultationListService(context, new FakeFeedService(consultationList), userService, _fakeFeatureManager, fakeOrganisationService);
+
+			//Act
+			var viewModel = (await consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null)
+			{
+				Status = new List<ConsultationStatus>(),
+			}));
+			var serialisedViewModel = JsonConvert.SerializeObject(viewModel); //saves checking all the properties
+
+			//Assert
+			viewModel.consultationListViewModel.Consultations.Count().ShouldBe(1);
 			serialisedViewModel.ShouldMatchApproved();
 		}
 	}

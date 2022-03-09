@@ -132,7 +132,7 @@ namespace Comments.Test.IntegrationTests.API.ConsultationList
 		}
 
 		[Fact]
-		public async Task Get_Consultation_Feed_Returns_Populated_Feed_For_Authenticated_User()
+		public async Task Get_Consultation_Feed_Returns_Populated_Feed_For_Authenticated_User_With_No_Role()
 		{
 			//Arrange
 

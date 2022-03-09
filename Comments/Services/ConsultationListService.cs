@@ -60,7 +60,7 @@ namespace Comments.Services
 			var teamRoles = userRoles.Where(role => AppSettings.ConsultationListConfig.DownloadRoles.TeamRoles.Contains(role)).Select(role => role).ToList();
 			var isTeamUser = !isAdminUser && teamRoles.Any(); //an admin with team roles is still just considered an admin.
 			var hasAccessToViewUpcomingConsultations = isAdminUser || isTeamUser;
-			var hasAccessToViewHiddenConsultations = hasAccessToViewUpcomingConsultations;
+			var hasAccessToViewHiddenConsultations = hasAccessToViewUpcomingConsultations || userRoles.Where(r => r == "IndevUser").Count()  > 0;
 			var currentUserIsAuthorisedToViewOrganisationCodes = isAdminUser || currentUser.OrganisationsAssignedAsLead.Any();
 
 			var canSeeAnySubmissionCounts = isAdminUser || isTeamUser;
@@ -68,7 +68,7 @@ namespace Comments.Services
 			var consultationsFromIndev = (await _feedService.GetConsultationList()).ToList();
 
 			//START: to be removed once indev feed has been updated
-			var mockedFeed = new List<ConsultationList>();
+			/*var mockedFeed = new List<ConsultationList>();
 			foreach (var consultation in consultationsFromIndev)
 			{
 				if(consultation.Title != null)
@@ -79,7 +79,7 @@ namespace Comments.Services
 				}
 			}
 			if(mockedFeed.Count > 0)
-				consultationsFromIndev = mockedFeed;
+				consultationsFromIndev = mockedFeed;*/
 			//END
 
 			var submittedCommentsAndAnswerCounts = canSeeAnySubmissionCounts ? _context.GetSubmittedCommentsAndAnswerCounts() : null;
@@ -287,8 +287,7 @@ namespace Comments.Services
                 hiddenConsultations = hiddenConsultations?.ToList() ?? new List<HiddenConsultationStatus>();
                 if (hiddenConsultations.Any())
                 {
-                    consultationListRows.ForEach(clr => clr.Show = (clr.Hidden && hiddenConsultations.Contains(HiddenConsultationStatus.ShowHiddenConsultations)
-                    && hasAccessToViewUpcomingConsultations));
+                    consultationListRows.ForEach(clr => clr.Show = clr.Hidden && hiddenConsultations.Contains(HiddenConsultationStatus.ShowHiddenConsultations));
                 }
             }
 
