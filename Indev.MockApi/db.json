@@ -31,7 +31,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": true
       },
       {
         "_links": {
@@ -63,7 +64,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -95,7 +97,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": true
       },
       {
         "_links": {
@@ -127,7 +130,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "introduction",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -159,7 +163,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -191,7 +196,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "introduction",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -223,7 +229,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -255,7 +262,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "introduction",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -287,7 +295,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "introduction",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -319,7 +328,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -351,7 +361,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "01-overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -383,7 +394,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "01-overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -415,7 +427,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "01-overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -447,7 +460,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -479,7 +493,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -511,7 +526,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -543,7 +559,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -575,7 +592,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -607,7 +625,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -639,7 +658,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -671,7 +691,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -703,7 +724,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -735,7 +757,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -767,7 +790,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -799,7 +823,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -831,7 +856,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -863,7 +889,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -895,7 +922,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -927,7 +955,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -959,7 +988,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -991,7 +1021,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -1023,7 +1054,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -1055,7 +1087,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "introduction",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -1087,7 +1120,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -1119,7 +1153,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -1151,7 +1186,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -1183,7 +1219,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -1215,7 +1252,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -1247,7 +1285,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -1279,7 +1318,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -1311,7 +1351,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -1343,7 +1384,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "introduction",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -1375,7 +1417,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -1407,7 +1450,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -1439,7 +1483,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -1471,7 +1516,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -1503,7 +1549,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -1535,7 +1582,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -1567,7 +1615,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -1599,7 +1648,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -1631,7 +1681,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "introduction",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -1663,7 +1714,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -1695,7 +1747,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "01-overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -1727,7 +1780,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -1759,7 +1813,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -1791,7 +1846,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -1823,7 +1879,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -1855,7 +1912,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "quality-statements",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -1887,7 +1945,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -1919,7 +1978,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -1951,7 +2011,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -1983,7 +2044,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -2015,7 +2077,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -2047,7 +2110,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -2079,7 +2143,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "quality-statements",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -2111,7 +2176,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -2143,7 +2209,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -2175,7 +2242,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -2207,7 +2275,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -2239,7 +2308,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -2271,7 +2341,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -2303,7 +2374,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -2335,7 +2407,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -2367,7 +2440,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -2399,7 +2473,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -2431,7 +2506,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "introduction",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -2463,7 +2539,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -2495,7 +2572,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -2527,7 +2605,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -2559,7 +2638,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -2591,7 +2671,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -2623,7 +2704,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -2655,7 +2737,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -2687,7 +2770,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -2719,7 +2803,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "guidance",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -2751,7 +2836,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -2783,7 +2869,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -2815,7 +2902,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -2847,7 +2935,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "just-a-test-doc-with-test-and-images",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -2879,7 +2968,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "just-a-test-doc-with-test-and-images",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -2911,7 +3001,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "draft-recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -2943,7 +3034,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -2975,7 +3067,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "section-1",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -3007,7 +3100,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -3039,7 +3133,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "national-institute-for-health-and-care-excellence",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -3071,7 +3166,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "section-1",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -3103,7 +3199,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -3135,7 +3232,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "section-1",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -3167,7 +3265,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -3199,7 +3298,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -3231,7 +3331,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -3263,7 +3364,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -3295,7 +3397,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "surveillance-proposal",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -3327,7 +3430,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "surveillance-proposal",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -3359,7 +3463,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "surveillance-proposal",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -3391,7 +3496,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "document-2b---metastatic-spinal-cord-compression-draft-scope-cleandocx",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -3423,7 +3529,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "why-the-update-is-needed",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -3455,7 +3562,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "surveillance-proposal",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -3487,7 +3595,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "why-the-update-is-needed",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -3519,7 +3628,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -3551,7 +3661,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "draft-recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -3583,7 +3694,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "section-1",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -3615,7 +3727,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "section-1",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -3647,7 +3760,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "section-1",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -3679,7 +3793,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "section-1",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -3711,7 +3826,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "section-1",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -3743,7 +3859,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -3775,7 +3892,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "section-1",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -3807,7 +3925,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "just-a-test-doc-with-test-and-images",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -3839,7 +3958,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "national-institute-for-health-and-care-excellence",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -3871,7 +3991,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -3903,7 +4024,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -3935,7 +4057,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -3967,7 +4090,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -3999,7 +4123,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -4031,7 +4156,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -4063,7 +4189,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -4095,7 +4222,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "national-institute-for-health-and-care-excellence",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -4127,7 +4255,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -4159,7 +4288,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -4191,7 +4321,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -4223,7 +4354,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -4255,7 +4387,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -4287,7 +4420,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -4319,7 +4453,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -4351,7 +4486,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "equality-impact-assessment",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -4383,7 +4519,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -4415,7 +4552,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -4447,7 +4585,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -4479,7 +4618,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -4511,7 +4651,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "section-1",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -4543,7 +4684,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -4575,7 +4717,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -4607,7 +4750,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -4639,7 +4783,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -4671,7 +4816,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -4703,7 +4849,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -4735,7 +4882,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -4767,7 +4915,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "section-1",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -4799,7 +4948,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -4831,7 +4981,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -4863,7 +5014,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -4895,7 +5047,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -4927,7 +5080,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -4959,7 +5113,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "section-1",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -4991,7 +5146,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "section-1",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -5023,7 +5179,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "section-1",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -5055,7 +5212,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -5087,7 +5245,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "section-1",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -5119,7 +5278,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -5151,7 +5311,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "section-1",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -5183,7 +5344,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "section-1",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -5215,7 +5377,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -5247,7 +5410,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -5279,7 +5443,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -5311,7 +5476,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -5343,7 +5509,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "introduction",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -5375,7 +5542,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -5407,7 +5575,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -5439,7 +5608,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "dap48-cardiac-imaging-dcdv07-for-web-upload-no-aicdocx",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -5471,7 +5641,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -5503,7 +5674,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -5535,7 +5707,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -5567,7 +5740,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -5599,7 +5773,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -5631,7 +5806,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -5663,7 +5839,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -5695,7 +5872,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -5727,7 +5905,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -5759,7 +5938,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -5791,7 +5971,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -5823,7 +6004,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -5855,7 +6037,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -5887,7 +6070,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -5919,7 +6103,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -5951,7 +6136,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -5983,7 +6169,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -6015,7 +6202,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "quality-statements",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -6047,7 +6235,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -6079,7 +6268,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "quality-statements",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -6111,7 +6301,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -6143,7 +6334,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -6175,7 +6367,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "introduction",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -6207,7 +6400,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -6239,7 +6433,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "comments-form-1docx",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -6271,7 +6466,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -6303,7 +6499,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "surveillance-decision",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -6335,7 +6532,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -6367,7 +6565,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "quality-statements",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -6399,7 +6598,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -6431,7 +6631,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -6463,7 +6664,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -6495,7 +6697,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -6527,7 +6730,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "quality-statements",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -6559,7 +6763,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "quality-statements",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -6591,7 +6796,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -6623,7 +6829,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "ultrasound-guided-high-intensity-transcutaneous-focused-ultrasound-for-symptomatic-uterine-fibroids",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -6655,7 +6862,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "surveillance-proposal",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -6687,7 +6895,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "introduction",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -6719,7 +6928,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "surveillance-proposal",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -6751,7 +6961,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "basic-docdocx",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -6783,7 +6994,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "surveillance-proposal",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -6815,7 +7027,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "quality-statements",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -6847,7 +7060,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "surveillance-proposal",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -6879,7 +7093,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "quality-statements",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -6911,7 +7126,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -6943,7 +7159,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "quality-statements",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -6975,7 +7192,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "quality-statements",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -7007,7 +7225,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "quality-statements",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -7039,7 +7258,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "quality-statements",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -7071,7 +7291,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -7103,7 +7324,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -7135,7 +7357,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -7167,7 +7390,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -7199,7 +7423,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -7231,7 +7456,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -7263,7 +7489,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "quality-statements",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -7295,7 +7522,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "surveillance-proposal",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -7327,7 +7555,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "bronchoscopic-thermal-vapour-ablation-for-upper-lobe-emphysema",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -7359,7 +7588,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -7391,7 +7621,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -7423,7 +7654,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -7455,7 +7687,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -7487,7 +7720,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "surveillance-proposal",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -7519,7 +7753,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "surveillance-proposal",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -7551,7 +7786,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -7583,7 +7819,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -7615,7 +7852,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -7647,7 +7885,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -7679,7 +7918,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "quality-statements",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -7711,7 +7951,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "quality-statements",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -7743,7 +7984,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "surveillance-proposal",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -7775,7 +8017,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -7807,7 +8050,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "surveillance-proposal",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -7839,7 +8083,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "surveillance-proposal",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -7871,7 +8116,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "quality-statements",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -7903,7 +8149,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -7935,7 +8182,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -7967,7 +8215,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "surveillance-proposal",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -7999,7 +8248,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "surveillance-proposal",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -8031,7 +8281,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "surveillance-proposal",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -8063,7 +8314,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "quality-statements",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -8095,7 +8347,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "glaucoma-diagnosis-and-management-full-guideline",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -8127,7 +8380,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -8159,7 +8413,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "surveillance-proposal",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -8191,7 +8446,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -8223,7 +8479,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -8255,7 +8512,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "introduction",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -8287,7 +8545,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -8319,7 +8578,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -8351,7 +8611,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": null,
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -8383,7 +8644,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -8415,7 +8677,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "quality-statements",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -8447,7 +8710,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -8479,7 +8743,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "introduction",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -8511,7 +8776,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -8543,7 +8809,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -8575,7 +8842,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "key-points",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -8607,7 +8875,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -8639,7 +8908,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "introduction",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -8671,7 +8941,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "draftappendicesa-tcleandocx",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -8703,7 +8974,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "consultation-questions",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -8735,7 +9007,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -8767,7 +9040,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "draftappendicesa-tcleandocx",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -8799,7 +9073,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -8831,7 +9106,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       },
       {
         "_links": {
@@ -8863,7 +9139,8 @@
         "FirstChapterSlugOfFirstConvertedDocument": "overview",
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
-        "AreasOfInterestList": []
+        "AreasOfInterestList": [],
+        "Hidden": false
       }
     ]
   },
@@ -9550,7 +9827,8 @@
       "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
       "PartiallyUpdatedProjectReference": null,
       "OrigProjectReference": null,
-      "AreasOfInterestList": []
+      "AreasOfInterestList": [],
+      "Hidden": false
     },
     {
       "_links": {
@@ -9816,7 +10094,8 @@
       "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
       "PartiallyUpdatedProjectReference": null,
       "OrigProjectReference": null,
-      "AreasOfInterestList": []
+      "AreasOfInterestList": [],
+      "Hidden": true
     },
     {
       "_links": {
@@ -10082,7 +10361,8 @@
       "FirstChapterSlugOfFirstConvertedDocument": "overview",
       "PartiallyUpdatedProjectReference": null,
       "OrigProjectReference": null,
-      "AreasOfInterestList": []
+      "AreasOfInterestList": [],
+      "Hidden": true
     },
     {
       "_links": {
@@ -10410,7 +10690,8 @@
       "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
       "PartiallyUpdatedProjectReference": null,
       "OrigProjectReference": null,
-      "AreasOfInterestList": []
+      "AreasOfInterestList": [],
+      "Hidden": false
     },
     {
       "_links": {
@@ -10738,7 +11019,8 @@
       "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
       "PartiallyUpdatedProjectReference": null,
       "OrigProjectReference": null,
-      "AreasOfInterestList": []
+      "AreasOfInterestList": [],
+      "Hidden": false
     },
     {
       "_links": {
@@ -11066,7 +11348,8 @@
       "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
       "PartiallyUpdatedProjectReference": null,
       "OrigProjectReference": null,
-      "AreasOfInterestList": []
+      "AreasOfInterestList": [],
+      "Hidden": false
     },
     {
       "_links": {
@@ -11394,7 +11677,8 @@
       "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
       "PartiallyUpdatedProjectReference": null,
       "OrigProjectReference": null,
-      "AreasOfInterestList": []
+      "AreasOfInterestList": [],
+      "Hidden": false
     },
     {
       "_links": {
@@ -11722,7 +12006,8 @@
       "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
       "PartiallyUpdatedProjectReference": null,
       "OrigProjectReference": null,
-      "AreasOfInterestList": []
+      "AreasOfInterestList": [],
+      "Hidden": false
     },
     {
       "_links": {
@@ -12050,7 +12335,8 @@
       "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
       "PartiallyUpdatedProjectReference": null,
       "OrigProjectReference": null,
-      "AreasOfInterestList": []
+      "AreasOfInterestList": [],
+      "Hidden": false
     },
     {
       "_links": {
@@ -12378,7 +12664,8 @@
       "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
       "PartiallyUpdatedProjectReference": null,
       "OrigProjectReference": null,
-      "AreasOfInterestList": []
+      "AreasOfInterestList": [],
+      "Hidden": false
     },
     {
       "_links": {
@@ -12706,7 +12993,8 @@
       "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
       "PartiallyUpdatedProjectReference": null,
       "OrigProjectReference": null,
-      "AreasOfInterestList": []
+      "AreasOfInterestList": [],
+      "Hidden": false
     },
     {
       "_links": {
@@ -13034,7 +13322,8 @@
       "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
       "PartiallyUpdatedProjectReference": null,
       "OrigProjectReference": null,
-      "AreasOfInterestList": []
+      "AreasOfInterestList": [],
+      "Hidden": false
     },
     {
       "_links": {
@@ -13362,7 +13651,8 @@
       "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
       "PartiallyUpdatedProjectReference": null,
       "OrigProjectReference": null,
-      "AreasOfInterestList": []
+      "AreasOfInterestList": [],
+      "Hidden": false
     }
   ],
   "chapters": [

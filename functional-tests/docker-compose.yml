@@ -58,6 +58,7 @@ services:
       - IDAM_EMAIL4
       - IDAM_EMAIL5
       - IDAM_EMAIL6
+      - IDAM_EMAIL7
       - IDAM_PASSWORD
       - BROWSERSTACK_ACCESS_KEY
       - BROWSERSTACK_USERNAME
@@ -140,7 +141,7 @@ services:
     volumes:
       - ./docker_ssl_proxy:/etc/nginx
     ports:
-      - 80:80
+      - 81:81
       - 443:443
     links:
       - comments
