@@ -65,7 +65,7 @@
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
         "AreasOfInterestList": [],
-        "Hidden": false
+        "Hidden": true
       },
       {
         "_links": {
@@ -98,7 +98,7 @@
         "PartiallyUpdatedProjectReference": null,
         "OrigProjectReference": null,
         "AreasOfInterestList": [],
-        "Hidden": true
+        "Hidden": false
       },
       {
         "_links": {
@@ -10362,7 +10362,7 @@
       "PartiallyUpdatedProjectReference": null,
       "OrigProjectReference": null,
       "AreasOfInterestList": [],
-      "Hidden": true
+      "Hidden": false
     },
     {
       "_links": {

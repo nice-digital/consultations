@@ -14,7 +14,7 @@ Feature: External User unable to view hidden consultation.
 		Then I expect the result list count contains "Showing 0 consultations"
 		When I click on the cancel filter
 		Then I expect the result list count contains "Showing 1 to 25"
-        When I add the indev GID "GID-NG10186" to the filter
+        When I add the indev GID "GID-MT530" to the filter
 		Then I expect the result list count contains "Showing 0 consultations"
 		When I click on the cancel filter
 		Then I expect the result list count contains "Showing 1 to 25"
