@@ -68,7 +68,7 @@ namespace Comments.Services
 			var consultationsFromIndev = (await _feedService.GetConsultationList()).ToList();
 
 			//START: to be removed once indev feed has been updated
-			/*var mockedFeed = new List<ConsultationList>();
+			var mockedFeed = new List<ConsultationList>();
 			foreach (var consultation in consultationsFromIndev)
 			{
 				if(consultation.Title != null)
@@ -79,7 +79,7 @@ namespace Comments.Services
 				}
 			}
 			if(mockedFeed.Count > 0)
-				consultationsFromIndev = mockedFeed;*/
+				consultationsFromIndev = mockedFeed;
 			//END
 
 			var submittedCommentsAndAnswerCounts = canSeeAnySubmissionCounts ? _context.GetSubmittedCommentsAndAnswerCounts() : null;
@@ -282,12 +282,13 @@ namespace Comments.Services
             if(!hasAccessToViewHiddenConsultations)
                 consultationListRows.RemoveAll(clr => clr.Hidden);
 
+            hiddenConsultations = hiddenConsultations?.ToList() ?? new List<HiddenConsultationStatus>();
             if (hasAccessToViewHiddenConsultations)
             {
-                hiddenConsultations = hiddenConsultations?.ToList() ?? new List<HiddenConsultationStatus>();
                 if (hiddenConsultations.Any())
                 {
-                    consultationListRows.ForEach(clr => clr.Show = clr.Hidden && hiddenConsultations.Contains(HiddenConsultationStatus.ShowHiddenConsultations));
+                    consultationListRows.RemoveAll(clr => !clr.Hidden);
+                    consultationListRows.ForEach(clr => clr.Show = clr.Hidden);
                 }
             }
 
