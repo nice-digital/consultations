@@ -586,6 +586,7 @@ namespace Comments.Test.UnitTests
 			ConsultationListViewModel viewModel = (await consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null))).consultationListViewModel;
 
 			//Assert
+			viewModel.HiddenConsultationsFilter.ShouldBeNull();
 			viewModel.Consultations.Where(c => c.Hidden == true).Count().ShouldBe(0);
 		}
 		[Fact]
@@ -600,6 +601,7 @@ namespace Comments.Test.UnitTests
 			ConsultationListViewModel viewModel = (await consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null) { HiddenConsultations = new List<HiddenConsultationStatus>() { HiddenConsultationStatus.ShowHiddenConsultations } })).consultationListViewModel;
 
 			//Assert
+			viewModel.HiddenConsultationsFilter.First().Options.First(f => f.Id == "ShowHiddenConsultations").IsSelected.ShouldBeTrue();
 			viewModel.Consultations.Where(c => c.Hidden == true && c.Show == true).Count().ShouldBe(1);
 		}
 
@@ -615,6 +617,7 @@ namespace Comments.Test.UnitTests
 			ConsultationListViewModel viewModel = (await consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null) { HiddenConsultations = new List<HiddenConsultationStatus>() { HiddenConsultationStatus.ShowHiddenConsultations } })).consultationListViewModel;
 
 			//Assert
+			viewModel.HiddenConsultationsFilter.First().Options.First(f => f.Id == "ShowHiddenConsultations").IsSelected.ShouldBeTrue();
 			viewModel.Consultations.Where(c=> c.Hidden == true && c.Show == true).Count().ShouldBe(1);
 		}
 
@@ -630,6 +633,7 @@ namespace Comments.Test.UnitTests
 			ConsultationListViewModel viewModel = (await consultationListService.GetConsultationListViewModel(new ConsultationListViewModel(null, null, null, null, null) { HiddenConsultations = new List<HiddenConsultationStatus>() { HiddenConsultationStatus.ShowHiddenConsultations } })).consultationListViewModel;
 
 			//Assert
+			viewModel.HiddenConsultationsFilter.First().Options.First(f => f.Id == "ShowHiddenConsultations").IsSelected.ShouldBeTrue();
 			viewModel.Consultations.Where(c => c.Hidden == true && c.Show == true).Count().ShouldBe(1);
 		}
 	}
