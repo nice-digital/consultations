@@ -484,7 +484,26 @@ namespace Comments.Test.UnitTests
 			//Assert
 			updatedViewModel.consultationListViewModel.Consultations.Count(c => c.Show).ShouldBe(1);
 		}
-		
+
+		[Fact]
+		public async Task ConsultationListPageModel_HasFilterOptionOpenAndHiddenSetToSelected()
+		{
+			//Arrange
+			var consultationList = AddConsultationsToList();
+			var consultationListService = new ConsultationListService(_consultationListContext, new FakeFeedService(consultationList), GetFakeUserService(), _fakeFeatureManager, _fakeOrganisationService);
+			var viewModel = new ConsultationListViewModel(null, null, null, null, null);
+			viewModel.Status = new List<ConsultationStatus>() { ConsultationStatus.Open };
+			viewModel.HiddenConsultations = new List<HiddenConsultationStatus>() { HiddenConsultationStatus.ShowHiddenConsultations };
+
+			//Act
+			var updatedViewModel = (await consultationListService.GetConsultationListViewModel(viewModel)).consultationListViewModel;
+
+			//Assert
+			updatedViewModel.OptionFilters.First().Options.First(f => f.Id == "Open").IsSelected.ShouldBeTrue();
+			updatedViewModel.HiddenConsultationsFilter.First().Options.First(f => f.Id == "ShowHiddenConsultations").IsSelected.ShouldBeTrue();
+			updatedViewModel.Consultations.Where(c => c.IsOpen != true && c.Hidden != true).Count().ShouldBe(0);
+		}
+
 		private ConsultationListService GetConsultationListService()
 		{
 			const int organisationId = 1;
