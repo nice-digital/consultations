@@ -67,21 +67,6 @@ namespace Comments.Services
 
 			var consultationsFromIndev = (await _feedService.GetConsultationList()).ToList();
 
-			//START: to be removed once indev feed has been updated
-			var mockedFeed = new List<ConsultationList>();
-			foreach (var consultation in consultationsFromIndev)
-			{
-				if(consultation.Title != null)
-				{
-					if (consultation.Title.Contains("Dec"))
-						consultation.Hidden = true;
-					mockedFeed.Add(consultation);
-				}
-			}
-			if(mockedFeed.Count > 0)
-				consultationsFromIndev = mockedFeed;
-			//END
-
 			var submittedCommentsAndAnswerCounts = canSeeAnySubmissionCounts ? _context.GetSubmittedCommentsAndAnswerCounts() : null;
 			var sourceURIsCommentedOrAnswered = _context.GetAllSourceURIsTheCurrentUserHasCommentedOrAnsweredAQuestion();
 
