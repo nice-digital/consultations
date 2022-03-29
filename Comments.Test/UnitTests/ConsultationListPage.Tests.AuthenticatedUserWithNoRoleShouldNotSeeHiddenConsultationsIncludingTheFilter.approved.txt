@@ -7,30 +7,6 @@
                 "StartDate":"0001-01-01T00:00:00",
                 "EndDate":"0001-01-01T00:00:00",
                 "SubmissionCount":null,
-                "ConsultationId":1,
-                "DocumentId":null,
-                "ChapterSlug":null,
-                "GidReference":null,
-                "ProductTypeName":null,
-                "HasCurrentUserEnteredCommentsOrAnsweredQuestions":true,
-                "HasCurrentUserSubmittedCommentsOrAnswers":true,
-                "AllowedRole":null,
-                "IsOpen":false,
-                "IsClosed":true,
-                "IsUpcoming":false,
-                "Show":true,
-                "OrganisationCodes":[
-                    
-                ],
-                "ShowShareWithOrganisationButton":false,
-                "SubmissionToLeadCount":null,
-                "Hidden":false
-            },
-            {
-                "Title":null,
-                "StartDate":"0001-01-01T00:00:00",
-                "EndDate":"0001-01-01T00:00:00",
-                "SubmissionCount":null,
                 "ConsultationId":2,
                 "DocumentId":null,
                 "ChapterSlug":null,
@@ -42,7 +18,7 @@
                 "IsOpen":false,
                 "IsClosed":true,
                 "IsUpcoming":false,
-                "Show":false,
+                "Show":true,
                 "OrganisationCodes":[
                     
                 ],
@@ -87,8 +63,8 @@
                     {
                         "Id":"HasContributed",
                         "Label":"Your responses",
-                        "IsSelected":true,
-                        "FilteredResultCount":1,
+                        "IsSelected":false,
+                        "FilteredResultCount":0,
                         "UnfilteredResultCount":2
                     }
                 ],
@@ -97,21 +73,7 @@
             }
         ],
         "TeamFilter":null,
-        "HiddenConsultationsFilter":[
-            {
-                "Options":[
-                    {
-                        "Id":"ShowHiddenConsultations",
-                        "Label":"Show hidden consultations only",
-                        "IsSelected":false,
-                        "FilteredResultCount":0,
-                        "UnfilteredResultCount":2
-                    }
-                ],
-                "Id":"HiddenConsultations",
-                "Title":"Hidden Consultations"
-            }
-        ],
+        "HiddenConsultationsFilter":null,
         "User":{
             "IsAdminUser":false,
             "IsTeamUser":false,
@@ -121,7 +83,7 @@
             "AuthenticatedBy":1,
             "AuthenticationType":"Auth0",
             "IsAuthenticatedByAnyMechanism":true,
-            "DisplayName":"Benjamin Button",
+            "DisplayName":"Jeffrey Goines",
             "UserId":"00000000-0000-0000-0000-000000000000",
             "OrganisationsAssignedAsLead":[
                 
@@ -143,9 +105,7 @@
             
         ],
         "Keyword":null,
-        "Contribution":[
-            "HasContributed"
-        ],
+        "Contribution":null,
         "Team":null,
         "HiddenConsultations":null
     },

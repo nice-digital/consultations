@@ -549,7 +549,8 @@ namespace Comments.Test.Infrastructure
 			    Title = "Consultation title 1",
 			    AllowedRole = "ConsultationListTestRole",
 			    FirstConvertedDocumentId = null,
-			    FirstChapterSlugOfFirstConvertedDocument = null
+			    FirstChapterSlugOfFirstConvertedDocument = null,
+			    Hidden = true
 		    });
 		    consultationList.Add(new ConsultationList()
 		    {

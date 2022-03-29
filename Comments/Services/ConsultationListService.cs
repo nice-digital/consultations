@@ -4,6 +4,7 @@ using Comments.Models;
 using Comments.ViewModels;
 using Microsoft.FeatureManagement;
 using NICE.Feeds.Indev;
+using NICE.Feeds.Indev.Models.List;
 using NICE.Identity.Authentication.Sdk.Domain;
 using System;
 using System.Collections.Generic;
@@ -59,11 +60,13 @@ namespace Comments.Services
 			var teamRoles = userRoles.Where(role => AppSettings.ConsultationListConfig.DownloadRoles.TeamRoles.Contains(role)).Select(role => role).ToList();
 			var isTeamUser = !isAdminUser && teamRoles.Any(); //an admin with team roles is still just considered an admin.
 			var hasAccessToViewUpcomingConsultations = isAdminUser || isTeamUser;
+			var hasAccessToViewHiddenConsultations = hasAccessToViewUpcomingConsultations || userRoles.Where(r => r == "IndevUser").Count()  > 0;
 			var currentUserIsAuthorisedToViewOrganisationCodes = isAdminUser || currentUser.OrganisationsAssignedAsLead.Any();
 
 			var canSeeAnySubmissionCounts = isAdminUser || isTeamUser;
 
 			var consultationsFromIndev = (await _feedService.GetConsultationList()).ToList();
+
 			var submittedCommentsAndAnswerCounts = canSeeAnySubmissionCounts ? _context.GetSubmittedCommentsAndAnswerCounts() : null;
 			var sourceURIsCommentedOrAnswered = _context.GetAllSourceURIsTheCurrentUserHasCommentedOrAnsweredAQuestion();
 
@@ -117,14 +120,15 @@ namespace Comments.Services
 						consultation.StartDate, consultation.EndDate, responseCount, consultation.ConsultationId,
 						consultation.FirstConvertedDocumentId, consultation.FirstChapterSlugOfFirstConvertedDocument, consultation.Reference,
 						consultation.ProductTypeName, hasCurrentUserEnteredCommentsOrAnsweredQuestions, hasCurrentUserSubmittedCommentsOrAnswers, consultation.AllowedRole,
-						allOrganisationCodes[consultation.ConsultationId], currentUserIsAuthorisedToViewOrganisationCodes, responseToLeadCount));
+						allOrganisationCodes[consultation.ConsultationId], currentUserIsAuthorisedToViewOrganisationCodes, responseToLeadCount, consultation.Hidden));
 			}
 
 			model.OptionFilters = GetOptionFilterGroups(model.Status?.ToList(), consultationListRows, hasAccessToViewUpcomingConsultations);
 			model.TextFilter = GetTextFilterGroups(model.Keyword, consultationListRows);
 			model.ContributionFilter = GetContributionFilter(model.Contribution?.ToList(), consultationListRows);
 			model.TeamFilter = isTeamUser ? GetTeamFilter(model.Team?.ToList(), consultationListRows, teamRoles) : null;
-			model.Consultations = FilterAndOrderConsultationList(consultationListRows, model.Status, model.Keyword, model.Contribution, model.Team, (isTeamUser ? teamRoles : null), hasAccessToViewUpcomingConsultations);
+            model.HiddenConsultationsFilter = GetHiddenConsultationsFilter(model.HiddenConsultations?.ToList(), consultationListRows, hasAccessToViewHiddenConsultations);
+            model.Consultations = FilterAndOrderConsultationList(consultationListRows, model.Status, model.Keyword, model.Contribution, model.Team, model.HiddenConsultations, (isTeamUser ? teamRoles : null), hasAccessToViewUpcomingConsultations, hasAccessToViewHiddenConsultations);
 			model.User = new DownloadUser(isAdminUser, isTeamUser, currentUser, teamRoles);
 
 			return (model, new Validate(valid: true));
@@ -223,7 +227,28 @@ namespace Comments.Services
 			return teamFilters;
 		}
 
-		private static TextFilterGroup GetTextFilterGroups(string keyword, IList<ConsultationListRow> consultationListRows)
+        private IEnumerable<OptionFilterGroup> GetHiddenConsultationsFilter(List<HiddenConsultationStatus> hiddenConsultation, List<ConsultationListRow> consultationListRows, bool hasAccessToViewHiddenConsultations)
+        {
+            if (hasAccessToViewHiddenConsultations)
+            {
+                var hiddenConsultationsFilter = AppSettings.ConsultationListConfig.HiddenConsultationsFilter.ToList();
+
+                var ShowHiddenConsultationsOption = hiddenConsultationsFilter
+                    .Single(option => option.Id.Equals("HiddenConsultations", StringComparison.OrdinalIgnoreCase))
+                    .Options
+                    .Single(option => option.Id.Equals("ShowHiddenConsultations", StringComparison.OrdinalIgnoreCase));
+
+                ShowHiddenConsultationsOption.IsSelected = hiddenConsultation != null && hiddenConsultation.Contains(HiddenConsultationStatus.ShowHiddenConsultations);
+                ShowHiddenConsultationsOption.UnfilteredResultCount = consultationListRows.Count;
+                ShowHiddenConsultationsOption.FilteredResultCount = consultationListRows.Count(c => c.Hidden);
+
+                return hiddenConsultationsFilter;
+            }
+
+            return null;
+        }
+
+        private static TextFilterGroup GetTextFilterGroups(string keyword, IList<ConsultationListRow> consultationListRows)
 		{
 			var textFilter = AppSettings.ConsultationListConfig.TextFilters;
 			textFilter.IsSelected = !string.IsNullOrWhiteSpace(keyword);
@@ -234,14 +259,25 @@ namespace Comments.Services
 		}
 
 		private static IEnumerable<ConsultationListRow> FilterAndOrderConsultationList(List<ConsultationListRow> consultationListRows, IEnumerable<ConsultationStatus> status, string keyword,
-			IEnumerable<ContributionStatus> contribution, IEnumerable<TeamStatus> team, List<string> currentUsersTeamRoles, bool hasAccessToViewUpcomingConsultations)
+			IEnumerable<ContributionStatus> contribution, IEnumerable<TeamStatus> team, IEnumerable<HiddenConsultationStatus> hiddenConsultations, List<string> currentUsersTeamRoles, bool hasAccessToViewUpcomingConsultations, bool hasAccessToViewHiddenConsultations)
 		{
 			if (!hasAccessToViewUpcomingConsultations)
-			{
 				consultationListRows.RemoveAll(clr => clr.IsUpcoming);
-			}
 
-			var statuses = status?.ToList() ?? new List<ConsultationStatus>();
+            if(!hasAccessToViewHiddenConsultations)
+                consultationListRows.RemoveAll(clr => clr.Hidden);
+
+            hiddenConsultations = hiddenConsultations?.ToList() ?? new List<HiddenConsultationStatus>();
+            if (hasAccessToViewHiddenConsultations)
+            {
+                if (hiddenConsultations.Any())
+                {
+                    consultationListRows.RemoveAll(clr => !clr.Hidden);
+                    consultationListRows.ForEach(clr => clr.Show = clr.Hidden);
+                }
+            }
+
+            var statuses = status?.ToList() ?? new List<ConsultationStatus>();
 			if (statuses.Any())
 			{
 				consultationListRows.ForEach(clr => clr.Show = (clr.IsOpen && statuses.Contains(ConsultationStatus.Open)) ||
@@ -270,7 +306,8 @@ namespace Comments.Services
 				}
 			}
 
-			return consultationListRows.OrderByDescending(c => c.EndDate).ToList();
+
+            return consultationListRows.OrderByDescending(c => c.EndDate).ToList();
 		}
 
 		private async Task<Dictionary<int, List<OrganisationCode>>> GetConsultationCodesForAllConsultations(IList<int> consultationIds, bool isAdminUser, IList<Organisation> organisationsAssignedAsLead)
@@ -285,7 +322,6 @@ namespace Comments.Services
 			var lookedUpOrganisations = await _organisationService.GetOrganisationNames(organisationsThatNeedLookingUp);
 
 			var allOrganisationsThatMightBeShown = organsationsFromClaims.Merge(lookedUpOrganisations);
-
 
 			var codesPerConsultation = new Dictionary<int, List<OrganisationCode>>();
 			foreach (var consultationId in consultationIds)

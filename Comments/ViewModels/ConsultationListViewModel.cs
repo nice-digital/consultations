@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
@@ -28,7 +28,13 @@ namespace Comments.ViewModels
 		MyTeam = 1
 	}
 
-	public class ConsultationListViewModel
+    [Flags]
+    public enum HiddenConsultationStatus
+    {
+        ShowHiddenConsultations = 1
+    }
+
+    public class ConsultationListViewModel
 	{
 		//default constructor needed for model binding.
 		public ConsultationListViewModel() {}
@@ -57,7 +63,9 @@ namespace Comments.ViewModels
 
 		public IEnumerable<OptionFilterGroup> TeamFilter { get; set; }
 
-		public ViewModels.DownloadUser User { get; set; }
+        public IEnumerable<OptionFilterGroup> HiddenConsultationsFilter { get; set; }
+
+        public ViewModels.DownloadUser User { get; set; }
 
 		/// <summary>
 		/// This boolean is true when the page is first loaded (1st SSR and 1st client-side hit). it's here in order for the backend to control
@@ -91,6 +99,14 @@ namespace Comments.ViewModels
 			set;
 		}
 
-		#endregion Filter options
-	}
+
+        [JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
+        public IEnumerable<HiddenConsultationStatus> HiddenConsultations
+        {
+            get;
+            set;
+        }
+        
+        #endregion Filter options
+    }
 }

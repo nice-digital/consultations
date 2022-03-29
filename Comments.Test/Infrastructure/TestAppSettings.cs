@@ -45,6 +45,16 @@ namespace Comments.Test.Infrastructure
 							new FilterOption("MyTeam", "My team's consultations")
 						}
 					}
+				},
+				HiddenConsultationsFilter = new List<OptionFilterGroup>()
+				{
+					new OptionFilterGroup()
+					{
+						Id = "HiddenConsultations", Title = "Hidden Consultations", Options = new List<FilterOption>()
+						{
+							new FilterOption("ShowHiddenConsultations", "Show hidden consultations only")
+						}
+					}
 				}
 			};
 		}
