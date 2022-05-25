@@ -130,7 +130,7 @@ services:
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_PID=Express
-      - MSSQL_SA_PASSWORD
+      - SA_PASSWORD
       - COMPOSE_HTTP_TIMEOUT=200
     ports:
       - 1434:1433
@@ -152,7 +152,7 @@ services:
 
   redis:
     container_name: functional-tests_redis_1
-    image: "redis:alpine"
+    image: "redis:alpine3.15"
     volumes:
       - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
     #command: redis-server --requirepass sOmE_sEcUrE_pAsS
