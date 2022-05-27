@@ -11,7 +11,7 @@ export COMPOSE_CONVERT_WINDOWS_PATHS=1
   docker exec functional-tests_database_1 kill 1 || :
   docker-compose down --remove-orphans && docker-compose rm -vf
 
-  docker-compose build && docker-compose up -d
+  docker-compose build --no-cache && docker-compose up -d
 
   # Wait for the web app to be up before running the tests
   docker-compose run -T tests npm run wait-then-test

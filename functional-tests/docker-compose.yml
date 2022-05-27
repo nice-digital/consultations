@@ -126,11 +126,12 @@ services:
   # MS SQL Server database
   database:
     container_name: functional-tests_database_1
-    image: mcr.microsoft.com/mssql/server:2017-latest
+    image: mcr.microsoft.com/mssql/server:2019-latest
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_PID=Express
-      - MSSQL_SA_PASSWORD
+      - SA_PASSWORD=ABcd1234#
+      - SA_USERNAME=sa
       - COMPOSE_HTTP_TIMEOUT=200
     ports:
       - 1434:1433
@@ -152,7 +153,7 @@ services:
 
   redis:
     container_name: functional-tests_redis_1
-    image: "redis:alpine"
+    image: "redis:alpine3.15"
     volumes:
       - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
     #command: redis-server --requirepass sOmE_sEcUrE_pAsS
