@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # Replace values in appsettings.json from envirionent variables
 # And run .NET webapp
 
@@ -74,7 +73,6 @@ jq \
     .Encryption.Key = $encryptionKey |
     .Encryption.IV = $encryptionIV |
     .FeatureManagement.OrganisationalCommenting = true |
-    .FeatureManagement.IndevUsingIDAMAuth = true |
     .ConsultationList.DownloadRoles.AdminRoles |= .+ [$adminRole] |
     .ConsultationList.DownloadRoles.TeamRoles |= .+ [$teamRoles1] |
     .ConsultationList.DownloadRoles.TeamRoles |= .+ [$teamRoles2] |

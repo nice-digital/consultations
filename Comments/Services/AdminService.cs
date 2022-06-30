@@ -1,4 +1,4 @@
-using Comments.Models;
+﻿using Comments.Models;
 using Microsoft.AspNetCore.Hosting;
 using System;
 using System.Collections.Generic;
@@ -25,10 +25,10 @@ namespace Comments.Services
     public class AdminService : IAdminService
     {
 	    private readonly ConsultationsContext _dbContext;
-	    private readonly IHostingEnvironment _hostingEnvironment;
+	    private readonly IWebHostEnvironment _hostingEnvironment;
 	    private readonly IUserService _userService;
 
-	    public AdminService(ConsultationsContext dbContext, IHostingEnvironment hostingEnvironment, IUserService userService)
+	    public AdminService(ConsultationsContext dbContext, IWebHostEnvironment hostingEnvironment, IUserService userService)
 	    {
 		    _userService = userService;
 			if (!_userService.IsAllowedAccess(new List<string> {"Administrator"}).Valid)

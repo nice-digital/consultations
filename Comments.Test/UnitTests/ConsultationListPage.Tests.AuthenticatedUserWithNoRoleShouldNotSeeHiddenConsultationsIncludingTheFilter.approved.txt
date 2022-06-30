@@ -1,0 +1,119 @@
+﻿{
+    "Item1":{
+        "IndevBasePath":"http://www.nice.org.uk",
+        "Consultations":[
+            {
+                "Title":null,
+                "StartDate":"0001-01-01T00:00:00",
+                "EndDate":"0001-01-01T00:00:00",
+                "SubmissionCount":null,
+                "ConsultationId":2,
+                "DocumentId":null,
+                "ChapterSlug":null,
+                "GidReference":null,
+                "ProductTypeName":null,
+                "HasCurrentUserEnteredCommentsOrAnsweredQuestions":false,
+                "HasCurrentUserSubmittedCommentsOrAnswers":false,
+                "AllowedRole":null,
+                "IsOpen":false,
+                "IsClosed":true,
+                "IsUpcoming":false,
+                "Show":true,
+                "OrganisationCodes":[
+                    
+                ],
+                "ShowShareWithOrganisationButton":false,
+                "SubmissionToLeadCount":null,
+                "Hidden":false
+            }
+        ],
+        "OptionFilters":[
+            {
+                "Options":[
+                    {
+                        "Id":"Open",
+                        "Label":"Open",
+                        "IsSelected":false,
+                        "FilteredResultCount":0,
+                        "UnfilteredResultCount":2
+                    },
+                    {
+                        "Id":"Closed",
+                        "Label":"Closed",
+                        "IsSelected":false,
+                        "FilteredResultCount":2,
+                        "UnfilteredResultCount":2
+                    }
+                ],
+                "Id":"Status",
+                "Title":"Status"
+            }
+        ],
+        "TextFilter":{
+            "FilterText":null,
+            "IsSelected":false,
+            "FilteredResultCount":2,
+            "UnfilteredResultCount":2,
+            "Id":"Keyword",
+            "Title":"Keyword"
+        },
+        "ContributionFilter":[
+            {
+                "Options":[
+                    {
+                        "Id":"HasContributed",
+                        "Label":"Your responses",
+                        "IsSelected":false,
+                        "FilteredResultCount":0,
+                        "UnfilteredResultCount":2
+                    }
+                ],
+                "Id":"Contribution",
+                "Title":"Contribution filter group"
+            }
+        ],
+        "TeamFilter":null,
+        "HiddenConsultationsFilter":null,
+        "User":{
+            "IsAdminUser":false,
+            "IsTeamUser":false,
+            "TeamNames":[
+                
+            ],
+            "AuthenticatedBy":1,
+            "AuthenticationType":"Auth0",
+            "IsAuthenticatedByAnyMechanism":true,
+            "DisplayName":"Jeffrey Goines",
+            "UserId":"00000000-0000-0000-0000-000000000000",
+            "OrganisationsAssignedAsLead":[
+                
+            ],
+            "ValidatedSessions":[
+                
+            ],
+            "ValidatedOrganisationUserIds":[
+                
+            ],
+            "ValidatedOrganisationIds":[
+                
+            ],
+            "IsAuthenticatedByAccounts":true,
+            "IsAuthenticatedByOrganisationCookie":false
+        },
+        "InitialPageView":false,
+        "Status":[
+            
+        ],
+        "Keyword":null,
+        "Contribution":null,
+        "Team":null,
+        "HiddenConsultations":null
+    },
+    "Item2":{
+        "Valid":true,
+        "Unauthenticated":false,
+        "NotFound":false,
+        "Message":null,
+        "Unauthorised":false
+    }
+}

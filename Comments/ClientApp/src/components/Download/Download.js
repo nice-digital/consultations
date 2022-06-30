@@ -29,6 +29,7 @@ type StateType = {
 		textFilter: TextFilterGroup,
 		contributionFilter: Array,
 		teamFilter: Array,
+		hiddenConsultationsFilter: Array,
 		indevBasePath: string,
 	};
 	hasInitialData: boolean,
@@ -91,6 +92,7 @@ export class Download extends Component<PropsType, StateType> {
 				textFilter: {},
 				contributionFilter: [],
 				teamFilter: null,
+				hiddenConsultationsFilter: [],
 				indevBasePath: "",
 			},
 			hasInitialData: false,
@@ -271,6 +273,7 @@ export class Download extends Component<PropsType, StateType> {
 		} = this.state.consultationListData;
 
 		let teamFilter = [];
+		let hiddenConsultationsFilter = [];
 
 		const mapOptions =
 			(group: ReviewFilterGroupType) => group.options
@@ -286,7 +289,11 @@ export class Download extends Component<PropsType, StateType> {
 			teamFilter = this.state.consultationListData.teamFilter;
 		}
 
-		let filters = contributionFilter.concat(teamFilter, optionFilters);
+		if (this.state.consultationListData.hiddenConsultationsFilter) {
+			hiddenConsultationsFilter = this.state.consultationListData.hiddenConsultationsFilter;
+		}
+
+		let filters = contributionFilter.concat(teamFilter, optionFilters, hiddenConsultationsFilter);
 
 		filters = this.generateFilters(filters, mapOptions);
 
@@ -397,6 +404,7 @@ export class Download extends Component<PropsType, StateType> {
 			textFilter,
 			contributionFilter,
 			teamFilter,
+			hiddenConsultationsFilter,
 		} = consultationListData;
 
 		const consultationsToShow = this.state.consultationListData.consultations.filter(consultation => consultation.show);
@@ -437,11 +445,9 @@ export class Download extends Component<PropsType, StateType> {
 												Only online consultations responses appear in the results below.
 											</span>
 											&nbsp;&nbsp;
-											{contextValue.organisationalCommentingFeature &&
-												<Link to={"/leadinformation"}>
-													Request commenting lead permission
-												</Link>
-											}
+											<Link to={"/leadinformation"}>
+												Request commenting lead permission
+											</Link>
 										</p>
 										<div className="grid mt--d">
 											<div data-g="12 md:3">
@@ -461,6 +467,9 @@ export class Download extends Component<PropsType, StateType> {
 												{teamFilter &&
 													<FilterPanel filters={teamFilter} path={path} />
 												}
+												{hiddenConsultationsFilter &&
+													<FilterPanel filters={hiddenConsultationsFilter} path={path} />
+												}
 												<FilterPanel filters={optionFilters} path={path} />
 											</div>
 											<div data-g="12 md:9">
@@ -478,7 +487,6 @@ export class Download extends Component<PropsType, StateType> {
 														{consultationsPaginated.map((item, idx) =>
 															<ConsultationItem key={idx}
 																basename={this.props.basename}
-																allowGenerateOrganisationCode={contextValue.organisationalCommentingFeature}
 																{...item}
 															/>,
 														)}

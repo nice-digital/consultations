@@ -13,7 +13,6 @@ namespace Comments.Controllers.Api
 {
 	[Produces("application/json")]
     [Route("consultations/api/[controller]")]
-	[FeatureGate(Constants.Features.OrganisationalCommenting)]
 	public class OrganisationController : ControllerBase
     {
 	    private readonly IOrganisationService _organisationService;

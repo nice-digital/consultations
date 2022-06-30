@@ -235,5 +235,49 @@ namespace Comments.Test.UnitTests
             //Assert
             questionViewModel.Answers.Single().AnswerId.ShouldBe(expectedAnswerId);
         }
-    }
+
+		[Fact]
+		public void Only_return_answers_from_my_organisation_which_have_been_submitted_to_lead_in_correct_order()
+		{
+			// Arrange
+			ResetDatabase();
+			_context.Database.EnsureCreated();
+
+			var sessionId = Guid.NewGuid();
+			var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
+			const int organisationUserId = 1;
+			const int organisationId = 1;
+			const int otherUsersorganisationUserId = 2;
+			const int differentUsersOrganisationUserID = 3;
+			const int questionTypeId = 50;
+			const string answerTextThatShouldBeReturned = "another user from my organisations answer submitted to lead";
+			const string emailAddress = "theotherusersemail@organisation.com";
+			var organisationUser = new OrganisationUser() { EmailAddress = emailAddress, OrganisationUserId = otherUsersorganisationUserId };
+			var differentOrganisationUser = new OrganisationUser() { EmailAddress = "email@organisation.com", OrganisationUserId = differentUsersOrganisationUserID };
+
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: null, organisationUserId: organisationUserId);
+			var context = new ConsultationsContext(_options, userService, _fakeEncryption);
+			var commentService = new CommentService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService, _fakeHttpContextAccessor);
+			var locationId = AddLocation(sourceURI);
+
+			AddQuestionType("Text question", hasBooleanAnswer: false, hasTextAnswer: true, questionTypeId: questionTypeId);
+			var questionId = AddQuestion(locationId, questionTypeId, "Some question text");
+
+			AddAnswer(questionId, userId: null, "current user's answer", organisationUserId: organisationUserId, organisationId: organisationId);
+			AddAnswer(questionId, userId: null, "another user from my organisations answer not submitted", organisationUserId: 9999, organisationId: organisationId, status: (int)StatusName.Draft);
+			AddAnswer(questionId, userId: null, "first answer submitted", organisationUserId: differentUsersOrganisationUserID, organisationId: organisationId, status: (int)StatusName.SubmittedToLead, organisationUser: differentOrganisationUser, lastModifiedDate: DateTime.MinValue);
+			AddAnswer(questionId, userId: null, answerTextThatShouldBeReturned, organisationUserId: otherUsersorganisationUserId, organisationId: organisationId, status: (int)StatusName.SubmittedToLead, organisationUser: organisationUser);
+			AddAnswer(questionId, userId: null, "another user from a different organisation answer", status: (int)StatusName.SubmittedToLead, organisationUserId: organisationUserId, organisationId: 2);
+			AddAnswer(questionId, userId: "1", "an individual users answer", status: (int)StatusName.SubmittedToLead);
+
+			// Act
+			var viewModel = commentService.GetCommentsAndQuestionsFromOtherOrganisationCommenters("/1/1/introduction", _urlHelper);
+
+			//Assert
+			var answers = viewModel.Questions.Single().Answers;
+			answers.Count.ShouldBe(2);
+			answers.First().AnswerText.ShouldBe(answerTextThatShouldBeReturned);
+			answers.First().CommenterEmail.ShouldBe(emailAddress);
+		}
+	}
 }

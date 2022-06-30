@@ -7,7 +7,6 @@ using Shouldly;
 using System.Linq;
 using System.Threading.Tasks;
 using Comments.ViewModels;
-using Microsoft.EntityFrameworkCore;
 using Comment = Comments.Models.Comment;
 using Location = Comments.Models.Location;
 
@@ -35,10 +34,10 @@ namespace Comments.Test.UnitTests
 			var commentService = new CommentService(context, userService, _consultationService, _fakeHttpContextAccessor);
 
             // Act
-            var viewModel = commentService.GetComment(commentId);
+            var (comment, _) = commentService.GetComment(commentId);
 
             //Assert
-            viewModel.comment.CommentText.ShouldBe(commentText);
+            comment.CommentText.ShouldBe(commentText);
         }
 
         [Fact]
@@ -235,8 +234,6 @@ namespace Comments.Test.UnitTests
             var ConsultationOneURI = "consultations://./consultation/1";
             var ConsultationTwoURI = "consultations://./consultation/2/document/1/chapter/ERROR";
 
-            var ConsultationUserError = "consultations://./consultation/1/document/1/chapter/USERERROR";
-
             var commentText = Guid.NewGuid().ToString();
             var questionText = Guid.NewGuid().ToString();
             var answerText = Guid.NewGuid().ToString();
@@ -304,16 +301,20 @@ namespace Comments.Test.UnitTests
 	        var sessionId = Guid.NewGuid();
 	        var sourceURI = "consultations://./consultation/1/document/1/chapter/introduction";
 	        const int organisationUserId = 1;
-			const int organisationId = 1;
+	        const int organisationId = 1;
+			const int otherUsersorganisationUserId = 2;
+			const string commentTextThatShouldBeReturned = "another user from my organisations comment submitted to lead";
+			const string emailAddress = "theotherusersemail@organisation.com";
+			var organisationUser = new OrganisationUser() { EmailAddress = emailAddress, OrganisationUserId = otherUsersorganisationUserId };
 
-	        var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: null, organisationUserId: organisationUserId);
+			var userService = FakeUserService.Get(isAuthenticated: true, displayName: "Benjamin Button", userId: null, organisationUserId: organisationUserId);
 	        var context = new ConsultationsContext(_options, userService, _fakeEncryption);
 	        var commentService = new CommentService(new ConsultationsContext(_options, userService, _fakeEncryption), userService, _consultationService, _fakeHttpContextAccessor);
 	        var locationId = AddLocation(sourceURI);
 
 	        AddComment(locationId, "current user's comment", createdByUserId: null, organisationUserId: organisationUserId, organisationId: organisationId);
-	        AddComment(locationId, "another user from my organisations comment not submitted", null, status: (int)StatusName.Draft, organisationUserId: 9999, organisationId: organisationId);
-			AddComment(locationId, "another user from my organisations comment submitted to lead", null, status: (int)StatusName.SubmittedToLead, organisationUserId: 8888, organisationId: organisationId);
+	        AddComment(locationId, "another user from my organisations comment not submitted", createdByUserId: null, status: (int)StatusName.Draft, organisationUserId: 9999, organisationId: organisationId);
+			AddComment(locationId, commentTextThatShouldBeReturned, createdByUserId: null, status: (int)StatusName.SubmittedToLead, organisationUserId: otherUsersorganisationUserId, organisationId: organisationId, organisationUser: organisationUser);
 			AddComment(locationId, "another user from a different organisation comment", createdByUserId: null, status: (int)StatusName.SubmittedToLead, organisationUserId: 7777, organisationId: 2);
 			AddComment(locationId, "an individual users comment", createdByUserId: "1", status: (int)StatusName.Submitted);
 
@@ -322,10 +323,10 @@ namespace Comments.Test.UnitTests
 
 	        //Assert
 	        viewModel.Comments.Count.Equals(1);
-			viewModel.Comments.Single().CommentText.ShouldBe("another user from my organisations comment submitted to lead");
-        }
-		
+	        var comment = viewModel.Comments.Single();
+	        comment.CommentText.ShouldBe(commentTextThatShouldBeReturned);
+			comment.CommenterEmail.ShouldBe(emailAddress);
+		}
+
 	}
 }
-
-

@@ -7,3 +7,8 @@
 	position: relative;
 	z-index: 0;
 }
+
+/* override to push card meta data below expanded mega nav */
+#root .card__metadata {
+	z-index:0 !important;
+}

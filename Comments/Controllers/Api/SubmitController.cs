@@ -1,10 +1,11 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using Comments.Common;
 using Comments.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NICE.Identity.Authentication.Sdk.Domain;
 
@@ -17,9 +18,9 @@ namespace Comments.Controllers.Api
 	{
 		private readonly ISubmitService _submitService;
 	    private readonly ILogger<SubmitController> _logger;
-		private readonly IHostingEnvironment _hostingEnvironment;
+		private readonly IWebHostEnvironment _hostingEnvironment;
 
-		public SubmitController(ISubmitService submitService, ICommentService commentService, ILogger<SubmitController> logger, IHostingEnvironment hostingEnvironment)
+		public SubmitController(ISubmitService submitService, ILogger<SubmitController> logger, IWebHostEnvironment hostingEnvironment)
 	    {
 		    _submitService = submitService;
 		    _logger = logger;
@@ -40,8 +41,8 @@ namespace Comments.Controllers.Api
 				throw new ArgumentException(nameof(submission.TobaccoDisclosure));
 		    }
 
-			var result = await _submitService.Submit(submission);
-			var invalidResult = Validate(result.validate, _logger);
+			var (_, validate) = await _submitService.Submit(submission);
+			var invalidResult = Validate(validate, _logger);
 
 			//just some temporary debug here:
 			_logger.LogWarning($"submitted using environment: {_hostingEnvironment.EnvironmentName}");
@@ -62,8 +63,8 @@ namespace Comments.Controllers.Api
 		    if (!ModelState.IsValid)
 			    return BadRequest(ModelState);
 		   
-		    var result = await _submitService.SubmitToLead(submissionToLead);
-		    var invalidResult = Validate(result.validate, _logger);
+		    var (_, validate, _) = await _submitService.SubmitToLead(submissionToLead);
+		    var invalidResult = Validate(validate, _logger);
 
 		    return invalidResult ?? Ok(submissionToLead);
 	    }

@@ -1,5 +1,5 @@
 # See https://github.com/SeleniumHQ/docker-selenium#via-docker-compose
-version: "2"
+version: "3.8"
 services:
   firefox:
     container_name: functional-tests_firefox_1
@@ -14,24 +14,25 @@ services:
 
   chrome:
     container_name: functional-tests_chrome_1
-    image: selenium/node-chrome:3.141.59
+    image: selenium/node-chrome:3.141.59-20210713
+    shm_size: '1gb'
     volumes:
       - /dev/shm:/dev/shm
     depends_on:
       - hub
     environment:
-      HUB_HOST: hub
-      #NODE_MAX_INSTANCES: 2
+      - HUB_HOST=hub
+      - HUB_PORT=4444
 
   # Selenium Grid/Hub
   hub:
-    image: selenium/hub:3.11.0-dysprosium
+    image: selenium/hub:3.141.59-20210713
     container_name: selenium_hub
     environment:
       GRID_DEBUG: "true"
-      #GRID_MAX_SESSION: 2
-  #    ports:
-  #      - 4444:4444
+      GRID_MAX_SESSION: 2
+    ports:
+       - 4444:4444
 
   # The tests themselves
   tests:
@@ -45,6 +46,7 @@ services:
       - nginx
       - comments
     environment:
+      - TEAMCITY_VERSION
       - ACCOUNTS_EMAIL
       - ACCOUNTS_EMAIL2
       - ACCOUNTS_EMAIL3
@@ -56,11 +58,13 @@ services:
       - IDAM_EMAIL4
       - IDAM_EMAIL5
       - IDAM_EMAIL6
+      - IDAM_EMAIL7
       - IDAM_PASSWORD
       - BROWSERSTACK_ACCESS_KEY
       - BROWSERSTACK_USERNAME
       - BUILD_NUMBER
       - CODE_EMAIL1
+      - AUTH_ADMIN_ID
 
   # Comment Collection dotnet core web app
   comments:
@@ -69,6 +73,7 @@ services:
     links:
       - database
       - redis
+      - api
     # Enable browsing from the host machine on http://localhost:8080/consultations
     ports:
       - 8080:8080
@@ -116,15 +121,17 @@ services:
       - INDEV_IDAM_CONFIG_CLIENTID
       - INDEV_IDAM_CONFIG_CLIENTSECRET
       - INDEV_IDAM_CONFIG_DOMAIN
+      - AUTH_ADMIN_ID
 
   # MS SQL Server database
   database:
     container_name: functional-tests_database_1
-    image: microsoft/mssql-server-linux:2017-latest
+    image: mcr.microsoft.com/mssql/server:2019-latest
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_PID=Express
-      - MSSQL_SA_PASSWORD
+      - SA_PASSWORD=ABcd1234#
+      - SA_USERNAME=sa
       - COMPOSE_HTTP_TIMEOUT=200
     ports:
       - 1434:1433
@@ -146,9 +153,29 @@ services:
 
   redis:
     container_name: functional-tests_redis_1
-    image: "redis:alpine"
+    image: "redis:alpine3.15"
+    volumes:
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
     #command: redis-server --requirepass sOmE_sEcUrE_pAsS
     ports:
       - "6379:6379"
-    command: ["redis-server", "--appendonly", "yes"]
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
     #command: ["redis-server", "--bind", "redis", "--port", "6379"]
+
+
+  #JSON Server for Indev Api
+  api:
+    container_name: functional-tests_api_1
+    build: ./../Indev.MockApi/
+    ports:
+      - 8090:8090
+    environment:
+      - HTTP_PORT
+    volumes:
+      - ./../Indev.MockApi:/data
+      - /data/node_modules
+    command: npm start
+    networks:
+      default:
+        aliases:
+          - api

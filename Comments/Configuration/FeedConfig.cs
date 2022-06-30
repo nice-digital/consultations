@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Comments.Common;
 using NICE.Feeds.Configuration;
 using NICE.Feeds.Indev;
@@ -9,7 +9,7 @@ namespace Comments.Configuration
 	{
 		public string ApiKey { get; set; }
 		public ApiConfig ApiConfig { get; set; }
-		public bool UseIDAM { get; set; }
+        public bool UseIDAM { get; set; } = true;
 
 		public Uri IndevBasePath { get; set; }
 		

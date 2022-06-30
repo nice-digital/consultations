@@ -104,6 +104,12 @@ Array [
                   </time>
                 </span>
                   
+                <a
+                  href="/leadinformation"
+                  onClick={[Function]}
+                >
+                  Request commenting lead permission
+                </a>
               </p>
             </div>,
           ]
@@ -135,10 +141,14 @@ Array [
                       onClick={[Function]}
                     >
                       <span
-                        className="pl--0"
-                        data-g="10"
+                        className="grid"
                       >
-                        DRAFT_Appendices_A-T_CLEAN.docx
+                        <span
+                          className="pl--c"
+                          data-g="10"
+                        >
+                          DRAFT_Appendices_A-T_CLEAN.docx
+                        </span>
                       </span>
                     </a>
                   </li>
@@ -152,10 +162,14 @@ Array [
                       onClick={[Function]}
                     >
                       <span
-                        className="pl--0"
-                        data-g="10"
+                        className="grid"
                       >
-                        Appendices
+                        <span
+                          className="pl--c"
+                          data-g="10"
+                        >
+                          Appendices
+                        </span>
                       </span>
                     </a>
                   </li>
@@ -169,10 +183,14 @@ Array [
                       onClick={[Function]}
                     >
                       <span
-                        className="pl--0"
-                        data-g="10"
+                        className="grid"
                       >
-                        1 Scope
+                        <span
+                          className="pl--c"
+                          data-g="10"
+                        >
+                          1 Scope
+                        </span>
                       </span>
                     </a>
                   </li>

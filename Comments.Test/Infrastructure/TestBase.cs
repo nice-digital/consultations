@@ -23,8 +23,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Authorization;
 using NICE.Feeds.Indev;
 using NICE.Feeds.Indev.Models.List;
+using NICE.Identity.Authentication.Sdk.Authorisation;
 using Answer = Comments.Models.Answer;
 using Comment = Comments.Models.Comment;
 using Location = Comments.Models.Location;
@@ -70,6 +73,7 @@ namespace Comments.Test.Infrastructure
 	    protected IEncryption _fakeEncryption;
 
 	    protected IUrlHelper _urlHelper;
+	    protected readonly IOrganisationService _fakeOrganisationService;
 
 		public TestBase(Feed feed) : this()
         {
@@ -113,7 +117,7 @@ namespace Comments.Test.Infrastructure
 	        {
 		        _authenticated = false;
 	        }
-			AppSettings.AuthenticationConfig = new AuthenticationConfig{ ClientId = "test client id", AuthorisationServiceUri = "http://www.example.com"};
+			AppSettings.AuthenticationConfig = new AuthenticationConfig{ ClientId = "test client id", AuthorisationServiceUri = "http://www.example.com", Domain = "niceorg"};
 			AppSettings.GlobalNavConfig = new GlobalNavConfig {CookieBannerScript = "//a-fake-cookiebannerscript-url"};
 			// Arrange
 			_urlHelper = new FakeUrlHelper();
@@ -127,10 +131,13 @@ namespace Comments.Test.Infrastructure
 			{
 				_fakeUserService = FakeUserService.Get(_authenticated, _displayName, _userId, testUserType, addRoleClaim, organisationIdUserIsLeadOf: organisationIdUserIsLeadOf);
 			}
+			const int organisationId = 1;
+			const string organisationName = "Sherman Oaks";
+			_fakeOrganisationService = new FakeOrganisationService(new Dictionary<int, string> { { organisationId, organisationName } });
 			_consultationService = new FakeConsultationService();
 	        _useRealSubmitService = useRealSubmitService;
 	        _fakeEncryption = new FakeEncryption();
-			var featureDictionary = new Dictionary<string, bool> { { Constants.Features.OrganisationalCommenting, enableOrganisationalCommentingFeature } };
+			var featureDictionary = new Dictionary<string, bool> { { "SampleFeature (use a constant)", enableOrganisationalCommentingFeature } };
 			_fakeFeatureManager = new FakeFeatureManager(featureDictionary);
 	        _fakeSessionManager = new FakeSessionManager(featureDictionary);
 
@@ -157,14 +164,15 @@ namespace Comments.Test.Infrastructure
 	            AddSessions(ref _context, validSessions);
             }
 
+            var fakeAPITokenClient = new FakeAPITokenClient();
+
 			var builder = new WebHostBuilder()
                 .UseContentRoot("../../../../Comments")
                 .ConfigureServices(services =>
                 {
                     services.AddEntityFrameworkSqlite();
 
-					services.TryAddSingleton<ConsultationsContext>(_context);
-                    services.TryAddSingleton<ISeriLogger, FakeSerilogger>();
+					services.AddSingleton<ConsultationsContext>(_context);
                     if (!useRealHttpContextAccessor)
                     {
 	                    services.TryAddSingleton<IHttpContextAccessor>(provider => _fakeHttpContextAccessor);
@@ -178,6 +186,8 @@ namespace Comments.Test.Infrastructure
 					
 					services.AddSingleton<IFeatureManager>(provider => _fakeFeatureManager);
 					services.AddSingleton<ISessionManager>(provider => _fakeSessionManager);
+
+					
 					
 					if (!_useRealSubmitService)
 	                {
@@ -190,11 +200,18 @@ namespace Comments.Test.Infrastructure
 
 	                if (bypassAuthentication)
 	                {
-		                services.AddMvc(opt => opt.Filters.Add(new AllowAnonymousFilter())); //bypass authentication
+		                services.AddControllersWithViews(opt =>
+		                {
+			                opt.Filters.Add(new AllowAnonymousFilter());
+		                });
+
+		                services.AddSingleton<IAuthorizationHandler, AllowAnonymous>();
 	                }
 
 					services.TryAddSingleton<IApiTokenStore, FakeApiTokenStore>();
-                })
+
+					services.TryAddSingleton<IApiTokenClient>(provider => fakeAPITokenClient); //(prov => new FakeAPITokenClient());
+				})
                 .Configure(app =>
                 {
                     app.UseStaticFiles();
@@ -303,10 +320,15 @@ namespace Comments.Test.Infrastructure
 
 		    return statusModel.StatusId;
 	    }
-		protected int AddComment(int locationId, string commentText, string createdByUserId, int status = (int)StatusName.Draft, ConsultationsContext passedInContext = null, int? organisationUserId = null, int? parentCommentId = null, int? organisationId = null)
+		protected int AddComment(int locationId, string commentText, string createdByUserId, int status = (int)StatusName.Draft, ConsultationsContext passedInContext = null, int? organisationUserId = null, int? parentCommentId = null, int? organisationId = null, OrganisationUser organisationUser = null)
         {
             var comment = new Comment(locationId, createdByUserId, commentText, Guid.Empty.ToString(), location: null, statusId: status, status: null, organisationUserId, parentCommentId, organisationId);
-            if (passedInContext != null)
+           
+            if (organisationUser != null)
+            {
+	            comment.OrganisationUser = organisationUser;
+            }
+	        if (passedInContext != null)
             {
                 passedInContext.Comment.Add(comment);
                 passedInContext.SaveChanges();
@@ -341,9 +363,10 @@ namespace Comments.Test.Infrastructure
 
             return questionType.QuestionTypeId;
         }
-        protected int AddQuestion(int locationId, int questionTypeId, string questionText, ConsultationsContext passedInContext = null, string createdByUserId = null)
+        protected int AddQuestion(int locationId, int questionTypeId, string questionText, ConsultationsContext passedInContext = null, string createdByUserId = null, bool isDeleted = false)
         {
             var question = new Question(locationId, questionText, questionTypeId, null, null, null);
+            question.IsDeleted = isDeleted;
             question.CreatedByUserId = createdByUserId ?? Guid.Empty.ToString();
 			question.LastModifiedByUserId = createdByUserId ?? Guid.Empty.ToString();
 			if (passedInContext != null)
@@ -362,11 +385,15 @@ namespace Comments.Test.Infrastructure
 
             return question.QuestionId;
         }
-        protected int AddAnswer(int questionId, string userId, string answerText, int status = (int)StatusName.Draft, ConsultationsContext passedInContext = null, int? organisationUserId = null, int? parentAnswerId = null, int? organisationId = null)
+        protected int AddAnswer(int questionId, string userId, string answerText, int status = (int)StatusName.Draft, ConsultationsContext passedInContext = null, int? organisationUserId = null, int? parentAnswerId = null, int? organisationId = null, OrganisationUser organisationUser = null, DateTime? lastModifiedDate = null)
         {
             var answer = new Answer(questionId, userId, answerText, null, null, status, null, organisationUserId, parentAnswerId, organisationId);
-            answer.LastModifiedDate = DateTime.Now;
-            if (passedInContext != null)
+            answer.LastModifiedDate = lastModifiedDate ?? DateTime.Now;
+            if (organisationUser != null)
+            {
+	            answer.OrganisationUser = organisationUser;
+            }
+			if (passedInContext != null)
             {
                 passedInContext.Answer.Add(answer);
                 passedInContext.SaveChanges();
@@ -522,7 +549,8 @@ namespace Comments.Test.Infrastructure
 			    Title = "Consultation title 1",
 			    AllowedRole = "ConsultationListTestRole",
 			    FirstConvertedDocumentId = null,
-			    FirstChapterSlugOfFirstConvertedDocument = null
+			    FirstChapterSlugOfFirstConvertedDocument = null,
+			    Hidden = true
 		    });
 		    consultationList.Add(new ConsultationList()
 		    {
@@ -596,12 +624,5 @@ namespace Comments.Test.Infrastructure
         }
 
         #endregion Helpers
-    }
-
-    internal class FakeSerilogger : ISeriLogger
-    {
-        public void Configure(ILoggerFactory loggerFactory, IConfiguration configuration, IApplicationLifetime appLifetime,
-            IHostingEnvironment env)
-        {}
     }
 }

@@ -8,7 +8,7 @@ import { Header } from "../Header/Header";
 export const LeadInfo = () => {
 	const emailAddress = "DITApplicationSupport@nice.org.uk";
 	const emailSubject = encodeURIComponent("New commenting lead request");
-	const emailBody = encodeURIComponent("Dear Application Support\r\rMy name is:\rI want to be a commenting lead for the following organisation:\r\rKind regards");
+	const emailBody = encodeURIComponent("Dear Application Support\r\rMy name is:\rI want to be a commenting lead for the following organisation:\rCurrent consultation/topic of interest (choose 1 or more current topics; however, your lead role will also apply to other future topics):\r\rKind regards");
 
 	return (
 		<Fragment>
@@ -46,6 +46,7 @@ export const LeadInfo = () => {
 										<ul>
 											<li>your name</li>
 											<li>your organisation's name</li>
+											<li>area of interest, <a href="https://www.nice.org.uk/guidance/inconsultation" target="_blank" rel="noopener noreferrer">view in consultation guidance list</a></li>
 										</ul>
 									</div>
 								</div>

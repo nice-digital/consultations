@@ -386,10 +386,7 @@ namespace Comments.Test.UnitTests
 			var locationId = AddLocation("consultations://./consultation/1", context);
 
 			var questionId1 = AddQuestion(locationId, questionTypeId, "question 1", context);
-			var questionId2 = AddQuestion(locationId, questionTypeId, "question 2", context);
-
-			var question2 = context.GetQuestion(questionId2);
-			question2.IsDeleted = true;
+			var questionId2 = AddQuestion(locationId, questionTypeId, "question 2", context, null, isDeleted: true);
 
 			// Act
 			var results = context.GetAllPreviousUniqueQuestions().ToList();

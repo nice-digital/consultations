@@ -27,8 +27,8 @@ type PropsType = {
 	showShareWithOrganisationButton: boolean,
 	show: boolean,
 	basename: string,
-	allowGenerateOrganisationCode: boolean,
-	submissionToLeadCount: number
+	submissionToLeadCount: number,
+	hidden: boolean
 }
 
 export class ConsultationItem extends Component<PropsType, StateType> {
@@ -52,8 +52,8 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 			isUpcoming,
 			organisationCodes,
 			showShareWithOrganisationButton,
-			allowGenerateOrganisationCode,
 			submissionToLeadCount,
+			hidden,
 		} = this.props;
 
 		const status = (isOpen, isClosed, isUpcoming) => {
@@ -85,6 +85,14 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 								<span className={`tag tag--${consultationStatus.toLowerCase()}`}>{consultationStatus}</span>
 							</dd>
 						</div>
+						{Boolean(hidden) && (
+							<div className="card__metadatum">
+								<dt className="visually-hidden">Consultation state</dt>
+								<dd>
+									<span className={"tag tag--hidden" }>Hidden</span>
+								</dd>
+							</div>
+						)}
 						{Boolean(userHasRespondedButNotSubmitted) && (
 							<div className="card__metadatum">
 								<dt className="visually-hidden">Unsubmitted questions or answers</dt>
@@ -93,9 +101,9 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 								</dd>
 							</div>
 						)}
-						{showShareWithOrganisationButton && allowGenerateOrganisationCode && submissionToLeadCount !== null &&
+						{showShareWithOrganisationButton && submissionToLeadCount !== null &&
 							<div className="card__metadatum">
-								{submissionToLeadCount} {submissionToLeadCount == 1 ? "response" : "responses"} from your organisation
+								{submissionToLeadCount} {submissionToLeadCount === 1 ? "response" : "responses"} from your organisation
 							</div>
 						}
 						<div>
@@ -141,7 +149,7 @@ export class ConsultationItem extends Component<PropsType, StateType> {
 							}
 						</div>
 					</dl>
-					{showShareWithOrganisationButton && allowGenerateOrganisationCode &&
+					{showShareWithOrganisationButton &&
 						<GenerateCode organisationCodes={organisationCodes} consultationId={consultationId} />
 					}
 				</article>

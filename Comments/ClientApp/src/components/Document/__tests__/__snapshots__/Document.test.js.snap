@@ -168,6 +168,12 @@ Array [
                       </time>
                     </span>
                       
+                    <a
+                      href="/leadinformation"
+                      onClick={[Function]}
+                    >
+                      Request commenting lead permission
+                    </a>
                   </p>
                 </div>,
               ],
@@ -234,10 +240,14 @@ Array [
                       onClick={[Function]}
                     >
                       <span
-                        className="pl--0"
-                        data-g="10"
+                        className="grid"
                       >
-                        Introduction
+                        <span
+                          className="pl--c"
+                          data-g="10"
+                        >
+                          Introduction
+                        </span>
                       </span>
                     </a>
                   </li>
@@ -251,10 +261,14 @@ Array [
                       onClick={[Function]}
                     >
                       <span
-                        className="pl--0"
-                        data-g="10"
+                        className="grid"
                       >
-                        Patient-centred care
+                        <span
+                          className="pl--c"
+                          data-g="10"
+                        >
+                          Patient-centred care
+                        </span>
                       </span>
                     </a>
                   </li>
@@ -268,10 +282,14 @@ Array [
                       onClick={[Function]}
                     >
                       <span
-                        className="pl--0"
-                        data-g="10"
+                        className="grid"
                       >
-                        Key priorities for implementation
+                        <span
+                          className="pl--c"
+                          data-g="10"
+                        >
+                          Key priorities for implementation
+                        </span>
                       </span>
                     </a>
                   </li>
@@ -285,10 +303,14 @@ Array [
                       onClick={[Function]}
                     >
                       <span
-                        className="pl--0"
-                        data-g="10"
+                        className="grid"
                       >
-                        1 Guidance
+                        <span
+                          className="pl--c"
+                          data-g="10"
+                        >
+                          1 Guidance
+                        </span>
                       </span>
                     </a>
                   </li>
@@ -302,10 +324,14 @@ Array [
                       onClick={[Function]}
                     >
                       <span
-                        className="pl--0"
-                        data-g="10"
+                        className="grid"
                       >
-                        2 Notes on the scope of the guidance
+                        <span
+                          className="pl--c"
+                          data-g="10"
+                        >
+                          2 Notes on the scope of the guidance
+                        </span>
                       </span>
                     </a>
                   </li>
@@ -319,10 +345,14 @@ Array [
                       onClick={[Function]}
                     >
                       <span
-                        className="pl--0"
-                        data-g="10"
+                        className="grid"
                       >
-                        3 Implementation
+                        <span
+                          className="pl--c"
+                          data-g="10"
+                        >
+                          3 Implementation
+                        </span>
                       </span>
                     </a>
                   </li>
@@ -336,10 +366,14 @@ Array [
                       onClick={[Function]}
                     >
                       <span
-                        className="pl--0"
-                        data-g="10"
+                        className="grid"
                       >
-                        4 Research recommendations
+                        <span
+                          className="pl--c"
+                          data-g="10"
+                        >
+                          4 Research recommendations
+                        </span>
                       </span>
                     </a>
                   </li>
@@ -353,10 +387,14 @@ Array [
                       onClick={[Function]}
                     >
                       <span
-                        className="pl--0"
-                        data-g="10"
+                        className="grid"
                       >
-                        5 Other versions of this guideline
+                        <span
+                          className="pl--c"
+                          data-g="10"
+                        >
+                          5 Other versions of this guideline
+                        </span>
                       </span>
                     </a>
                   </li>
@@ -370,10 +408,14 @@ Array [
                       onClick={[Function]}
                     >
                       <span
-                        className="pl--0"
-                        data-g="10"
+                        className="grid"
                       >
-                        6 Related NICE guidance
+                        <span
+                          className="pl--c"
+                          data-g="10"
+                        >
+                          6 Related NICE guidance
+                        </span>
                       </span>
                     </a>
                   </li>
@@ -387,10 +429,14 @@ Array [
                       onClick={[Function]}
                     >
                       <span
-                        className="pl--0"
-                        data-g="10"
+                        className="grid"
                       >
-                        7 Updating the guideline
+                        <span
+                          className="pl--c"
+                          data-g="10"
+                        >
+                          7 Updating the guideline
+                        </span>
                       </span>
                     </a>
                   </li>
@@ -404,10 +450,14 @@ Array [
                       onClick={[Function]}
                     >
                       <span
-                        className="pl--0"
-                        data-g="10"
+                        className="grid"
                       >
-                        Appendix A: The Guideline Development Group and NICE project team
+                        <span
+                          className="pl--c"
+                          data-g="10"
+                        >
+                          Appendix A: The Guideline Development Group and NICE project team
+                        </span>
                       </span>
                     </a>
                   </li>
@@ -421,10 +471,14 @@ Array [
                       onClick={[Function]}
                     >
                       <span
-                        className="pl--0"
-                        data-g="10"
+                        className="grid"
                       >
-                        Appendix B: The Guideline Review Panel
+                        <span
+                          className="pl--c"
+                          data-g="10"
+                        >
+                          Appendix B: The Guideline Review Panel
+                        </span>
                       </span>
                     </a>
                   </li>
@@ -438,10 +492,14 @@ Array [
                       onClick={[Function]}
                     >
                       <span
-                        className="pl--0"
-                        data-g="10"
+                        className="grid"
                       >
-                        Appendix C: The algorithm
+                        <span
+                          className="pl--c"
+                          data-g="10"
+                        >
+                          Appendix C: The algorithm
+                        </span>
                       </span>
                     </a>
                   </li>
@@ -455,10 +513,14 @@ Array [
                       onClick={[Function]}
                     >
                       <span
-                        className="pl--0"
-                        data-g="10"
+                        className="grid"
                       >
-                        Changes after publication
+                        <span
+                          className="pl--c"
+                          data-g="10"
+                        >
+                          Changes after publication
+                        </span>
                       </span>
                     </a>
                   </li>
@@ -472,10 +534,14 @@ Array [
                       onClick={[Function]}
                     >
                       <span
-                        className="pl--0"
-                        data-g="10"
+                        className="grid"
                       >
-                        About this guideline
+                        <span
+                          className="pl--c"
+                          data-g="10"
+                        >
+                          About this guideline
+                        </span>
                       </span>
                     </a>
                   </li>
@@ -503,10 +569,14 @@ Array [
                       onClick={[Function]}
                     >
                       <span
-                        className="pl--0"
-                        data-g="10"
+                        className="grid"
                       >
-                        Sinusitis (acute): antimicrobial prescribing
+                        <span
+                          className="pl--c"
+                          data-g="10"
+                        >
+                          Sinusitis (acute): antimicrobial prescribing
+                        </span>
                       </span>
                     </a>
                   </li>
@@ -520,10 +590,14 @@ Array [
                       onClick={[Function]}
                     >
                       <span
-                        className="pl--0"
-                        data-g="10"
+                        className="grid"
                       >
-                        Download Document
+                        <span
+                          className="pl--c"
+                          data-g="10"
+                        >
+                          Download Document
+                        </span>
                       </span>
                     </a>
                   </li>
@@ -537,10 +611,14 @@ Array [
                       onClick={[Function]}
                     >
                       <span
-                        className="pl--0"
-                        data-g="10"
+                        className="grid"
                       >
-                        Download Document
+                        <span
+                          className="pl--c"
+                          data-g="10"
+                        >
+                          Download Document
+                        </span>
                       </span>
                     </a>
                   </li>
@@ -554,10 +632,14 @@ Array [
                       onClick={[Function]}
                     >
                       <span
-                        className="pl--0"
-                        data-g="10"
+                        className="grid"
                       >
-                        Unstable angina and NSTEMI
+                        <span
+                          className="pl--c"
+                          data-g="10"
+                        >
+                          Unstable angina and NSTEMI
+                        </span>
                       </span>
                     </a>
                   </li>
@@ -571,10 +653,14 @@ Array [
                       onClick={[Function]}
                     >
                       <span
-                        className="pl--0"
-                        data-g="10"
+                        className="grid"
                       >
-                        Download Document
+                        <span
+                          className="pl--c"
+                          data-g="10"
+                        >
+                          Download Document
+                        </span>
                       </span>
                     </a>
                   </li>
@@ -588,10 +674,14 @@ Array [
                       onClick={[Function]}
                     >
                       <span
-                        className="pl--0"
-                        data-g="10"
+                        className="grid"
                       >
-                        Download Document
+                        <span
+                          className="pl--c"
+                          data-g="10"
+                        >
+                          Download Document
+                        </span>
                       </span>
                     </a>
                   </li>
