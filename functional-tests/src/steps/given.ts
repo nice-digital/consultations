@@ -7,6 +7,7 @@ import { addQuestionsToConsultation } from "../support/action/addQuestionsToCons
 import { validateStatusFilterChecked } from "../support/check/validateStatusFilterChecked";
 import { clickElement } from "@nice-digital/wdio-cucumber-steps/lib/support/action/clickElement";
 import { pause } from "@nice-digital/wdio-cucumber-steps/lib/support/action/pause";
+import { clickLeadInfoLink } from "../support/action/clickLeadInfoLink";
 
 Given(/^I delete all comments on the page$/, deleteCommentsOnReviewPage);
 
@@ -71,3 +72,5 @@ Given(
 	/^I add questions to Consultation "([^"]*)?"$/, addQuestionsToConsultation);
 
 Given(/^I select open and closed status filter$/,  validateStatusFilterChecked);
+
+Given(/^I click on the request commenting lead permision link$/,  clickLeadInfoLink);

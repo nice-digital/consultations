@@ -5,9 +5,12 @@
   "main": "wdio.conf.js",
   "scripts": {
     "test": "wdio run wdio.conf.ts",
+    "test:accessibility": "wdio run wdio.accessibility.conf.ts",
     "test:docker": "npm test -- --hostname hub --baseUrl https://niceorg/consultations/",
+    "test:accessibility-docker": "npm run test:accessibility -- --hostname hub --baseUrl https://niceorg/consultations/",
     "wait:docker": "waitforit -t 120 --strict comments:8080",
     "wait-then-test": "npm run wait:docker && npm run test:docker",
+    "wait-then-accessibility-test": "npm run wait:docker && npm run test:accessibility-docker",
     "test2": "node node_modules/webdriverio/bin/wdio",
     "test:teamcity": "wdio run wdio.teamcity.conf.js",
     "test:browserstack:edge": "node node_modules/webdriverio/bin/wdio wdio.browserstack_edge.conf.js",
@@ -22,7 +25,7 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "@nice-digital/wdio-cucumber-steps": "^2.0.1",
+    "@nice-digital/wdio-cucumber-steps": "^2.0.3",
     "@wdio/allure-reporter": "^7.9.0",
     "@wdio/cli": "^7.9.0",
     "@wdio/cucumber-framework": "^7.9.0",
