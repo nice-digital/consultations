@@ -5,6 +5,9 @@
   "browserslist": [
     "extends @nice-digital/browserslist-config"
   ],
+  "volta": {
+    "node": "10.22.0"
+  },
   "engines": {
     "node": ">=8.11.1",
     "npm": ">=5.7.1"
