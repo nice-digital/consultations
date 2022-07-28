@@ -1,12 +1,15 @@
+@use "@nice-digital/nds-core/scss/colours";
+@use "../../styles/variables" as *;
+
 .ConsultationItem {
   .tag--open {
-    @extend .tag--live;
+    background-color: $ec-green;
   }
   .tag--upcoming {
-    @extend .tag--beta;
+    background-color: $ec-orange;
   }
   .tag--unsubmitted {
-    @extend .tag--alpha;
+    background-color: $ec-pink;
   }
 
   .tag--hidden {

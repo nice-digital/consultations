@@ -1,3 +1,5 @@
+@use "@nice-digital/nds-core/scss/typography";
+
 .login-panel {
   &__back {
     border: none;
@@ -5,6 +7,6 @@
     display: inline;
     padding: 0;
 
-    @extend a;
+    @include typography.links-default;
   }
 }

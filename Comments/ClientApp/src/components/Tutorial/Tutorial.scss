@@ -1,12 +1,17 @@
+@use "@nice-digital/nds-core/scss/colours";
+@use "@nice-digital/nds-core/scss/utils";
+@use "@nice-digital/nds-core/scss/media-queries";
+@use "../../styles/variables" as *;
+
 .tutorial {
-  background-color: $colour-panel-default;
+  background-color: $ec-light-grey;
 
   &__button-image {
     display: block;
     width: 75%;
-    margin: 0 auto rem(20px);
+    margin: 0 auto utils.rem(20px);
 
-    @include mq($from: sm) {
+    @include media-queries.mq($from: sm) {
       width: 80%;
       margin: 0;
     }

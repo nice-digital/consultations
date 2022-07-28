@@ -1,3 +1,9 @@
+@use "@nice-digital/nds-core/scss/colours";
+@use "@nice-digital/nds-core/scss/layout";
+@use "@nice-digital/nds-core/scss/spacing";
+@use "@nice-digital/nds-core/scss/typography";
+@use "../../styles/variables" as *;
+
 .CommentBox {
   &__validationMessage {
     clear: left;
@@ -12,18 +18,18 @@
       top: 0.5rem
     }
   }
-  @include clearfix;
-  margin-bottom: rem($spacing-small);
-  padding: rem($spacing-small);
-  border: rem($spacing-xx-small) solid $colour-border;
+  @include layout.clearfix;
+  margin-bottom: rem(spacing.$small);
+  padding: rem(spacing.$small);
+  border: rem(spacing.$xx-small) solid colours.$border;
   &__title{
-    @include font-size(0);
+    @include typography.font-size(0);
     &--legend {
       // the magic numbers here pull the title in line with the border to make it look a bit like a legend
       position: relative;
       margin-bottom: -0.5rem;
       top: -1.3rem;
-      background: $colour-body;
+      background: colours.$fill-page-background;
       float: left;
       padding-left: 0.5rem;
       padding-right: 0.5rem;
@@ -35,11 +41,11 @@
   }
   &__savedIndicator {
     display: inline-block;
-    margin: rem(0 $spacing-small $spacing-small 0);
-    padding: rem($spacing-small $spacing-medium);
-    background-color: $colour-btn-secondary;
-    color: $colour-nice-white;
-    border: 1px solid $colour-nice-white; // todo: find border width!
+    margin: rem(0 spacing.$small spacing.$small 0);
+    padding: rem(spacing.$small spacing.$medium);
+    background-color: colours.$btn-secondary;
+    color: $ec-white;
+    border: 1px solid $ec-white; // todo: find border width!
   }
   &__commentBy{
     position: relative;

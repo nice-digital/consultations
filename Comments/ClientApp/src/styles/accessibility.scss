@@ -1,3 +1,7 @@
+@use "@nice-digital/nds-core/scss/colours";
+@use "@nice-digital/nds-core/scss/spacing";
+@use "variables" as *;
+
 .screenreader-button {
   position: absolute;
   left: -9999em;
@@ -5,8 +9,8 @@
   height: 1px;
   overflow: hidden;
   z-index: -1;
-  padding: rem($spacing-small) rem($spacing-medium);
-  background-color: $colour-panel-default;
+  padding: rem(spacing.$small) rem(spacing.$medium);
+  background-color: $ec-light-grey;
   border: none;
   &:focus, &:active {
     position: absolute;
@@ -15,7 +19,7 @@
     height: auto;
     overflow: auto;
     z-index: 1;
-    outline: 0.1875rem solid $colour-focus;
+    outline: 0.1875rem solid colours.$focus;
   }
 }
 

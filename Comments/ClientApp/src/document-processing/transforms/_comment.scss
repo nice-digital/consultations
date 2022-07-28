@@ -1,11 +1,15 @@
+@use "@nice-digital/nds-core/scss/typography";
+@use "@nice-digital/nds-core/scss/colours";
+@use "../../styles/variables" as *;
+
 .ConversionError {
   z-index: 1;
   position: absolute;
   right: 0;
-  @include font-size(0);
+  @include typography.font-size(0);
   &__Button {
     z-index: 2;
-    @extend .font-weight-bold;
+    font-weight: bold;
     border: rem(3px) solid;
     border-radius: 50%;
     width: rem(50px);
@@ -16,16 +20,16 @@
       cursor: pointer;
     }
     &--E { // Error
-      color: $colour-error;
-      background-color: $colour-error-background;
+      color: $ec-error;
+      background-color: $ec-bg-error;
     }
     &--W { // Warning
-      color: $colour-caution;
-      background-color: $colour-caution-background;
+      color: $ec-caution;
+      background-color: $ec-bg-caution;
     }
     &--I { // Information
-      color: $colour-info;
-      background-color: $colour-info-background;
+      color: $ec-info;
+      background-color: $ec-bg-info;
     }
   }
   &__details {
@@ -40,18 +44,18 @@
     @extend %all-drop-shadow;
     padding: 1rem;
     margin: rem(25px) rem(25px) 0 0;
-    @extend .font-weight-normal;
+    font-weight: normal;
     &--E { // Error
-      color: $colour-error;
-      background-color: $colour-error-background;
+      color: $ec-error;
+      background-color: $ec-bg-error;
     }
     &--W { // Warning
-      color: $colour-caution;
-      background-color: $colour-caution-background;
+      color: $ec-caution;
+      background-color: $ec-bg-caution;
     }
     &--I { // Information
-      color: $colour-info;
-      background-color: $colour-info-background;
+      color: $ec-info;
+      background-color: $ec-bg-info;
     }
   }
 }

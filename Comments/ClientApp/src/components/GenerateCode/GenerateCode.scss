@@ -1,8 +1,11 @@
+@use "@nice-digital/nds-core/scss/spacing";
+@use "@nice-digital/nds-core/scss/utils";
+
 .organisation-codes {
   &__row {
     display: flex;
     align-items: center;
-    padding: (1rem * ($spacing-small / 16));
+    padding: utils.rem(spacing.$small);
   }
 
   &__name, &__generate {
@@ -21,7 +24,7 @@
   &.btn--copied {
     background-color: #e6faff;
     color: #000;
-    padding: 0 (1rem * ($spacing-medium / 16));
+    padding: 0 utils.rem(spacing.$medium);
     margin-bottom: 0;
     border: none;
 

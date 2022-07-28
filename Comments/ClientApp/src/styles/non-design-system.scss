@@ -1,9 +1,12 @@
+@use "@nice-digital/nds-core/scss/colours";
+@use "variables" as *;
+
 .text-muted {
   color: #666666;
 }
 
 .tag--open {
-  background: $colour-guidance-consultation !important;
+  background: $ec-green !important;
 }
 
 .flex {
