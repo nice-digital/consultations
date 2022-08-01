@@ -5,20 +5,24 @@ exports[`[ClientApp]  Submitted page should match snapshot for individual commen
   <h2>
     Your response was submitted 
      on 
-    <t
+    <n
       ago={false}
       calendar={false}
       decimal={false}
-      element="time"
+      element={null}
       filter={[Function]}
       format="D MMMM YYYY"
       fromNow={false}
       interval={60000}
+      local={false}
       onChange={[Function]}
+      titleFormat=""
       toNow={false}
+      trim={false}
       unit={null}
       unix={false}
       utc={false}
+      withTitle={false}
     />
     .
   </h2>
@@ -49,20 +53,24 @@ exports[`[ClientApp]  Submitted page should match snapshot for individual commen
   <h2>
     Your response was submitted 
      on 
-    <t
+    <n
       ago={false}
       calendar={false}
       decimal={false}
-      element="time"
+      element={null}
       filter={[Function]}
       format="D MMMM YYYY"
       fromNow={false}
       interval={60000}
+      local={false}
       onChange={[Function]}
+      titleFormat=""
       toNow={false}
+      trim={false}
       unit={null}
       unix={false}
       utc={false}
+      withTitle={false}
     />
     .
   </h2>
@@ -72,7 +80,6 @@ exports[`[ClientApp]  Submitted page should match snapshot for individual commen
     <li>
       <Link
         data-qa-sel="review-submitted-comments"
-        replace={false}
         to="/1/review"
       >
         Review your response
@@ -103,20 +110,24 @@ exports[`[ClientApp]  Submitted page should match snapshot for organisation comm
     Your response was submitted 
     to My Org
      on 
-    <t
+    <n
       ago={false}
       calendar={false}
       decimal={false}
-      element="time"
+      element={null}
       filter={[Function]}
       format="D MMMM YYYY"
       fromNow={false}
       interval={60000}
+      local={false}
       onChange={[Function]}
+      titleFormat=""
       toNow={false}
+      trim={false}
       unit={null}
       unix={false}
       utc={false}
+      withTitle={false}
     />
     .
   </h2>
@@ -152,20 +163,24 @@ exports[`[ClientApp]  Submitted page should match snapshot for organisation comm
     Your response was submitted 
     to My Org
      on 
-    <t
+    <n
       ago={false}
       calendar={false}
       decimal={false}
-      element="time"
+      element={null}
       filter={[Function]}
       format="D MMMM YYYY"
       fromNow={false}
       interval={60000}
+      local={false}
       onChange={[Function]}
+      titleFormat=""
       toNow={false}
+      trim={false}
       unit={null}
       unix={false}
       utc={false}
+      withTitle={false}
     />
     .
   </h2>
@@ -175,7 +190,6 @@ exports[`[ClientApp]  Submitted page should match snapshot for organisation comm
     <li>
       <Link
         data-qa-sel="review-submitted-comments"
-        replace={false}
         to="/1/review"
       >
         Review your response
@@ -209,20 +223,24 @@ exports[`[ClientApp]  Submitted page should match snapshot for organisation lead
   <h2>
     Your response was submitted 
      on 
-    <t
+    <n
       ago={false}
       calendar={false}
       decimal={false}
-      element="time"
+      element={null}
       filter={[Function]}
       format="D MMMM YYYY"
       fromNow={false}
       interval={60000}
+      local={false}
       onChange={[Function]}
+      titleFormat=""
       toNow={false}
+      trim={false}
       unit={null}
       unix={false}
       utc={false}
+      withTitle={false}
     />
     .
   </h2>
@@ -261,20 +279,24 @@ exports[`[ClientApp]  Submitted page should match snapshot for organisation lead
   <h2>
     Your response was submitted 
      on 
-    <t
+    <n
       ago={false}
       calendar={false}
       decimal={false}
-      element="time"
+      element={null}
       filter={[Function]}
       format="D MMMM YYYY"
       fromNow={false}
       interval={60000}
+      local={false}
       onChange={[Function]}
+      titleFormat=""
       toNow={false}
+      trim={false}
       unit={null}
       unix={false}
       utc={false}
+      withTitle={false}
     />
     .
   </h2>
@@ -305,20 +327,24 @@ exports[`[ClientApp]  Submitted page should match snapshot for organisation lead
   <h2>
     Your response was submitted 
      on 
-    <t
+    <n
       ago={false}
       calendar={false}
       decimal={false}
-      element="time"
+      element={null}
       filter={[Function]}
       format="D MMMM YYYY"
       fromNow={false}
       interval={60000}
+      local={false}
       onChange={[Function]}
+      titleFormat=""
       toNow={false}
+      trim={false}
       unit={null}
       unix={false}
       utc={false}
+      withTitle={false}
     />
     .
   </h2>
@@ -328,7 +354,6 @@ exports[`[ClientApp]  Submitted page should match snapshot for organisation lead
     <li>
       <Link
         data-qa-sel="review-submitted-comments"
-        replace={false}
         to="/1/review"
       >
         Review your response

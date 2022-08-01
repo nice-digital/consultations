@@ -31,7 +31,7 @@ jest.mock("../../../context/UserContext", () => {
 });
 
 function mockReact() {
-	const original = require.requireActual("react");
+	const original = jest.requireActual("react");
 	return {
 		...original,
 		// Mock react's create context because Enzyme doesn't support context in mount
@@ -81,14 +81,6 @@ describe("[ClientApp] ", () => {
 		it("should match snapshot when viewing as an organisation commenter (pre-submission)", () => {
 			const mock = new MockAdapter(axios);
 
-			const wrapper = mount(
-				<MemoryRouter>
-					<LiveAnnouncer>
-						<Review {...fakeProps} />
-					</LiveAnnouncer>
-				</MemoryRouter>,
-			);
-
 			let commentsReviewPromise = new Promise(resolve => {
 				mock
 					.onGet("/consultations/api/CommentsForReview?relativeURL=%2F1%2Freview")
@@ -106,6 +98,14 @@ describe("[ClientApp] ", () => {
 						return [200, ConsultationData];
 					});
 			});
+
+			const wrapper = mount(
+				<MemoryRouter>
+					<LiveAnnouncer>
+						<Review {...fakeProps} />
+					</LiveAnnouncer>
+				</MemoryRouter>,
+			);
 
 			return Promise.all([
 				commentsReviewPromise,
@@ -129,14 +129,6 @@ describe("[ClientApp] ", () => {
 
 			localConsultationData.consultationState.submittedDate = "2019-07-23T13:50:40.7043147";
 
-			const wrapper = mount(
-				<MemoryRouter>
-					<LiveAnnouncer>
-						<Review {...fakeProps} />
-					</LiveAnnouncer>
-				</MemoryRouter>,
-			);
-
 			let commentsReviewPromise = new Promise(resolve => {
 				mock
 					.onGet("/consultations/api/CommentsForReview?relativeURL=%2F1%2Freview")
@@ -154,6 +146,14 @@ describe("[ClientApp] ", () => {
 						return [200, localConsultationData];
 					});
 			});
+
+			const wrapper = mount(
+				<MemoryRouter>
+					<LiveAnnouncer>
+						<Review {...fakeProps} />
+					</LiveAnnouncer>
+				</MemoryRouter>,
+			);
 
 			return Promise.all([
 				commentsReviewPromise,

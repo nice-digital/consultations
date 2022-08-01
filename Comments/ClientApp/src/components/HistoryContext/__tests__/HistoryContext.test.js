@@ -7,7 +7,7 @@ import browserHistory from "../../../helpers/history";
 import { HistoryContext, Provider, Consumer, withHistory } from "../HistoryContext";
 
 function mockReact() {
-	const original = require.requireActual("react");
+	const original = jest.requireActual("react");
 	return {
 		...original,
 		// Mock react's create context because Enzyme doesn't support context in mount

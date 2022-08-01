@@ -602,4 +602,3 @@ export class Document extends Component<PropsType, StateType> {
 }
 
 export default withRouter(Document);
-Document.contextType = UserContext;

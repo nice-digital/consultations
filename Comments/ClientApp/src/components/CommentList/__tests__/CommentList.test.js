@@ -59,7 +59,7 @@ describe("[ClientApp] ", () => {
 		});
 
 		describe("Handlers", () => {
-			it("save handler put's to the api with updated comment", async done => {
+			it("save handler put's to the api with updated comment", async () => {
 				const commentToUpdate = sampleComments.comments[0];
 
 				mock.onGet(generateUrl("comments", undefined, [], { sourceURI: fakeProps.match.url }))
@@ -68,7 +68,6 @@ describe("[ClientApp] ", () => {
 				mock.onPut("/consultations/api/Comment/" + commentToUpdate.commentId)
 					.reply(config => {
 						expect(JSON.parse(config.data)).toEqual(commentToUpdate);
-						done();
 						return [200, commentToUpdate];
 					});
 
@@ -100,9 +99,7 @@ describe("[ClientApp] ", () => {
 
 			it("new comment should add an entry in the array with negative id", () => {
 				mock.onGet()
-					.reply(() => {
-						return [200, { comments: [] }];
-					});
+					.reply(200, emptyCommentsResponse);
 
 				const wrapper = shallow(<CommentList {...fakeProps} />);
 
@@ -116,9 +113,7 @@ describe("[ClientApp] ", () => {
 
 			it("2 new comments should decrement the negative commentId without conflicting", () => {
 				mock.onGet()
-					.reply(() => {
-						return [200, { comments: [] }];
-					});
+					.reply(200, emptyCommentsResponse);
 
 				const wrapper = shallow(<CommentList {...fakeProps} />);
 
@@ -148,7 +143,7 @@ describe("[ClientApp] ", () => {
 				expect(wrapper.state().comments[1].commentId).toEqual(-1);
 			});
 
-			it("save handler posts to the api with new comment with correct path from generateUrl", async done => {
+			it("save handler posts to the api with new comment with correct path from generateUrl", async () => {
 				const commentToInsert = {
 					commentId: -1,
 					commentText: "a newly created comment",
@@ -161,7 +156,6 @@ describe("[ClientApp] ", () => {
 					.reply(config => {
 						expect(JSON.parse(config.data)).toEqual(commentToInsert);
 						expect(config.url).toEqual("/consultations/api/Comment");
-						done();
 						return [200, commentToInsert];
 					});
 
@@ -353,13 +347,12 @@ describe("[ClientApp] ", () => {
 		});
 
 		describe("API", () => {
-			it("should make get api call for comments with correct path and update state with empty array", async done => {
+			it("should make get api call for comments with correct path and update state with empty array", async () => {
 				mock.onGet(generateUrl("comments", undefined, [], {	sourceURI: fakeProps.match.url }))
 					.reply(config => {
 						expect(config.url).toEqual(
 							"/consultations/api/Comments?sourceURI=%2F1%2F1%2Fintroduction",
 						);
-						done();
 						return [200, emptyCommentsResponse];
 					});
 

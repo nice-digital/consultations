@@ -3,7 +3,7 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { tagManager } from "../../helpers/tag-manager";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet";
 import BreadCrumbsWithRouter from "../Breadcrumbs/Breadcrumbs";
 import { Header } from "../Header/Header";
 import { UserContext } from "../../context/UserContext";

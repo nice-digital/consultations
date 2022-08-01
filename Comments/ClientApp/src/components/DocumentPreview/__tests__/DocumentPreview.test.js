@@ -56,12 +56,6 @@ describe("[ClientApp] ", () => {
 		it("should match snapshot with supplied data", () => {
 			const mock = new MockAdapter(axios);
 
-			const wrapper = mount(
-				<MemoryRouter>
-					<DocumentPreview {...fakeProps} />
-				</MemoryRouter>,
-			);
-
 			let documentsPromise = new Promise(resolve => {
 				mock
 					.onGet("consultations/api/PreviewDraftDocuments?consultationId=113&documentId=1&reference=GID-NG10186")
@@ -90,6 +84,12 @@ describe("[ClientApp] ", () => {
 						return [200, PreviewChapterData];
 					});
 			});
+
+			const wrapper = mount(
+				<MemoryRouter>
+					<DocumentPreview {...fakeProps} />
+				</MemoryRouter>,
+			);
 
 			return Promise.all([
 				documentsPromise,

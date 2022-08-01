@@ -15,6 +15,12 @@ describe("[ClientApp]", () => {
 			};
 		}
 
+		const consoleErrorReset = console.error;
+
+		beforeEach(() => {
+			console.error = consoleErrorReset;
+		});
+
 		it("doesn't render a comment button if there's no comment in the markup", () => {
 			const instance = setupHtml(
 				"<p><a href='#'>Hey!</a> Ain't no comment anywhere <span>here</span></p>",
@@ -23,6 +29,7 @@ describe("[ClientApp]", () => {
 		});
 
 		it("renders a comment box if the markup contains a preview error comment", () => {
+			console.error = jest.fn();
 			const instance = setupHtml(
 				"<div><p>Here is a paragraph <!--[I] - Information: Soft return used in paragraph--></p></div>",
 			);

@@ -17,7 +17,7 @@ exports[`[ClientApp]  LoginBanner Component should match snapshot for code login
         className="input"
       >
         <div
-          className="input"
+          className="input limitWidth input__input"
         >
           <label
             className="input__label"
@@ -26,7 +26,7 @@ exports[`[ClientApp]  LoginBanner Component should match snapshot for code login
             Enter your organisation code
           </label>
           <input
-            className="limitWidth input__input"
+            className="input__input"
             data-qa-sel="OrganisationCodeLogin"
             id="orgCode-undefined"
             name="orgCode-undefined"

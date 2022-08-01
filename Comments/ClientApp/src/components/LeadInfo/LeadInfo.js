@@ -1,6 +1,6 @@
 ﻿import React, { Fragment } from "react";
 import { withRouter } from "react-router-dom";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet";
 import { withHistory } from "../HistoryContext/HistoryContext";
 import { Breadcrumbs } from "../Breadcrumbs/Breadcrumbs";
 import { Header } from "../Header/Header";

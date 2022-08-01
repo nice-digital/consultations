@@ -2,7 +2,7 @@
 
 import React, { Component } from "react";
 import { withRouter, Prompt, Redirect } from "react-router-dom";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet";
 
 import preload from "../../data/pre-loader";
 import { load } from "../../data/loader";

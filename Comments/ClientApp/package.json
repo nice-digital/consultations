@@ -16,7 +16,7 @@
     "start": "rimraf ./build && npm run modernizr && npm-run-all -p sass:watch start-js",
     "start-js": "react-scripts start",
     "build": "npm run modernizr && npm run sass:build && npm run bless && react-scripts build",
-    "test": "react-scripts test --env=node",
+    "test": "react-scripts test",
     "eslint": "eslint src/ --fix",
     "esw": "node node_modules/eslint-watch/bin/esw 'src/' --watch",
     "test:ci": "cross-env CI=true react-scripts test --env=jsdom --testResultsProcessor=jest-teamcity-reporter",
@@ -57,12 +57,12 @@
     "react-copy-to-clipboard": "^5.0.2",
     "react-debounce-input": "^3.2.0",
     "react-dom": "^16.13.1",
-    "react-helmet": "^5.2.0",
+    "react-helmet": "^6.1.0",
     "react-html-parser": "^2.0.2",
     "react-markdown": "^4.1.0",
-    "react-moment": "^0.7.0",
-    "react-router": "^4.3.1",
-    "react-router-dom": "^4.3.1",
+    "react-moment": "^1.1.2",
+    "react-router": "^5.0.1",
+    "react-router-dom": "^5.0.1",
     "react-router-hash-link": "^1.2.0",
     "serialize-javascript": "^6.0.0",
     "stringify-object": "^3.2.2"
@@ -91,6 +91,9 @@
     "rimraf": "^2.6.2",
     "sass": "^1.53.0",
     "why-did-you-update": "^0.1.1"
+  },
+  "jest": {
+    "resetMocks": false
   },
   "proxy": "http://niceorg",
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).",
