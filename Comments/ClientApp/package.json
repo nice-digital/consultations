@@ -15,7 +15,7 @@
   "scripts": {
     "start": "rimraf ./build && npm run modernizr && npm-run-all -p sass:watch start-js",
     "start-js": "react-scripts start",
-    "build": "npm run modernizr && npm run sass:build && npm run bless && react-scripts build",
+    "build": "npm run modernizr && npm run sass:build && react-scripts build",
     "test": "react-scripts test",
     "eslint": "eslint src/ --fix",
     "esw": "node node_modules/eslint-watch/bin/esw 'src/' --watch",
