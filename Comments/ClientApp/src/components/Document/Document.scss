@@ -51,7 +51,7 @@
 
 .caution {
   background-color: $colour-caution-our-version;
-  border: em(spacing.$xx-small) solid black;
+  border: utils.em(spacing.$xx-small) solid black;
   display: inline-block;
   padding: 	utils.rem(spacing.$small);
 }
