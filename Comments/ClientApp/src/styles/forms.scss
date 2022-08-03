@@ -9,6 +9,7 @@
 @use "@nice-digital/nds-core/scss/spacing";
 @use "@nice-digital/nds-core/scss/typography";
 @use "@nice-digital/nds-core/scss/layout";
+@use "@nice-digital/nds-core/scss/utils";
 @use "variables" as *;
 
 $radio-base-size: 32px;
@@ -16,19 +17,19 @@ $colour-border-focus: colours.$focus;
 
 .form {
   &__fieldset {
-    border: rem(spacing.$xx-small) solid colours.$border;
-    margin-bottom: rem(spacing.$medium);
-    padding: rem(spacing.$small);
+    border: utils.rem(spacing.$xx-small) solid colours.$border;
+    margin-bottom: utils.rem(spacing.$medium);
+    padding: utils.rem(spacing.$small);
   }
 
   &__legend {
     @include typography.font-size(h3);
     font-weight: bold;
-    margin-bottom: rem(spacing.$small);
+    margin-bottom: utils.rem(spacing.$small);
   }
 
   &__group {
-    margin-bottom: rem(spacing.$medium);
+    margin-bottom: utils.rem(spacing.$medium);
 
     &--error {
       .form__input,
@@ -36,7 +37,7 @@ $colour-border-focus: colours.$focus;
       .form__checkbox {
         background-color: colours.$error-background;
         border-color: $ec-white;
-        outline: colours.$error rem(spacing.$x-small) solid;
+        outline: colours.$error utils.rem(spacing.$x-small) solid;
       }
 
       .form__label {
@@ -59,29 +60,29 @@ $colour-border-focus: colours.$focus;
 
     &--inline {
       display: inline-block;
-      margin-right: rem(spacing.$medium);
+      margin-right: utils.rem(spacing.$medium);
 
       input {
-        margin-right: rem(spacing.$x-small);
+        margin-right: utils.rem(spacing.$x-small);
       }
     }
 
     &--stacked {
-      margin-bottom: rem(spacing.$small);
+      margin-bottom: utils.rem(spacing.$small);
     }
   }
 
   &__input {
-    border: rem(spacing.$xx-small) solid colours.$border;
-    padding: rem(spacing.$small);
+    border: utils.rem(spacing.$xx-small) solid colours.$border;
+    padding: utils.rem(spacing.$small);
     width: 100%;
 
     &:focus {
-      outline: $colour-border-focus rem(spacing.$x-small) solid;
+      outline: $colour-border-focus utils.rem(spacing.$x-small) solid;
     }
 
     //@include mq($from: sm) {
-    //  width: rem($nice-breakpoint-xs);
+    //  width: utils.rem($nice-breakpoint-xs);
     //}
 
     &--file,
@@ -121,7 +122,7 @@ $colour-border-focus: colours.$focus;
   &__label {
     @include typography.font-size(p);
     display: block;
-    margin-bottom: rem(spacing.$x-small);
+    margin-bottom: utils.rem(spacing.$x-small);
 
     &--radio {
       cursor: pointer;
@@ -165,7 +166,7 @@ $colour-border-focus: colours.$focus;
 
   &__hint {
     color: $ec-dark-grey;
-    margin-top: rem(spacing.$x-small);
+    margin-top: utils.rem(spacing.$x-small);
     &--inverse {
       color: $ec-white;
     }
@@ -180,23 +181,23 @@ $checkbox-size: 32px;
   display: block;
   position: relative;
   min-height: $checkbox-size;
-  margin-bottom: rem(spacing.$medium);
+  margin-bottom: utils.rem(spacing.$medium);
   padding-left: $checkbox-size * 1.4;
 
   &--error .checkbox__label,
   &--error .checkbox__label {
     color: colours.$error;
     &:before {
-      outline: colours.$error rem(spacing.$x-small) solid;
+      outline: colours.$error utils.rem(spacing.$x-small) solid;
     }
   }
 
   &--inline {
     display: inline-block;
-    margin-right: rem(spacing.$medium);
+    margin-right: utils.rem(spacing.$medium);
 
     input {
-      margin-right: rem(spacing.$x-small);
+      margin-right: utils.rem(spacing.$x-small);
     }
   }
 
@@ -240,7 +241,7 @@ $checkbox-size: 32px;
     line-height: 1.5rem;
     font-weight: bold;
     display: block;
-    margin-bottom: rem(spacing.$x-small);
+    margin-bottom: utils.rem(spacing.$x-small);
     cursor: pointer;
     padding: math.div($checkbox-size, 8) 0;
 

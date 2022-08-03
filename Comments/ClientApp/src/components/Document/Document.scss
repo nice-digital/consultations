@@ -1,5 +1,5 @@
-//@use "@nice-digital/nds-alert/scss/alert.scss";
 @use "@nice-digital/nds-core/scss/spacing";
+@use "@nice-digital/nds-core/scss/utils";
 @use "../../styles/variables" as *;
 
 .document-comment-container {
@@ -7,7 +7,7 @@
     outline: none;
   }
   &__commentButton {
-    margin-left: rem(-40px);
+    margin-left: utils.rem(-40px);
     position: absolute;
     @extend %unstyled-button;
     &:hover {
@@ -15,7 +15,7 @@
     }
     outline: -webkit-focus-ring-color red 5px
   }
-  padding-left: rem(spacing.$large);
+  padding-left: utils.rem(spacing.$large);
   &.loading {
     opacity: 0.3;
     transition: opacity 0.1s;
@@ -34,18 +34,18 @@
   }
   .itemizedlist.indented,
   .numbered-paragraph {
-    margin-left: rem(spacing.$xx-large);
+    margin-left: utils.rem(spacing.$xx-large);
   }
   .itemizedlist.indented .paragraph-number,
   .numbered-paragraph .paragraph-number {
     float: left;
-    margin-left: rem(spacing.$xx-large);
+    margin-left: utils.rem(-(spacing.$xx-large));
   }
   table {
     td {
-      padding: rem(spacing.$small);
+      padding: utils.rem(spacing.$small);
     }
-    margin-bottom: rem(spacing.$medium);
+    margin-bottom: utils.rem(spacing.$medium);
   }
 }
 
@@ -53,7 +53,7 @@
   background-color: $colour-caution-our-version;
   border: em(spacing.$xx-small) solid black;
   display: inline-block;
-  padding: 	rem(spacing.$small);
+  padding: 	utils.rem(spacing.$small);
 }
 
 .visuallyhidden {

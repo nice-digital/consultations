@@ -1,8 +1,9 @@
 @use "@nice-digital/nds-core/scss/colours";
 @use "@nice-digital/nds-core/scss/spacing";
+@use "@nice-digital/nds-core/scss/utils";
 
 .SubmitResponseFeedback {
-  padding: 0 rem(spacing.$medium);
+  padding: 0 utils.rem(spacing.$medium);
   border: 3px solid colours.$error;
   background-color: colours.$error-background;
   &__title {

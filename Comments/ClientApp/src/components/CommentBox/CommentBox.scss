@@ -2,6 +2,7 @@
 @use "@nice-digital/nds-core/scss/layout";
 @use "@nice-digital/nds-core/scss/spacing";
 @use "@nice-digital/nds-core/scss/typography";
+@use "@nice-digital/nds-core/scss/utils";
 @use "../../styles/variables" as *;
 
 .CommentBox {
@@ -19,9 +20,9 @@
     }
   }
   @include layout.clearfix;
-  margin-bottom: rem(spacing.$small);
-  padding: rem(spacing.$small);
-  border: rem(spacing.$xx-small) solid colours.$border;
+  margin-bottom: utils.rem(spacing.$small);
+  padding: utils.rem(spacing.$small);
+  border: utils.rem(spacing.$xx-small) solid colours.$border;
   &__title{
     @include typography.font-size(0);
     &--legend {
@@ -41,8 +42,8 @@
   }
   &__savedIndicator {
     display: inline-block;
-    margin: rem(0 spacing.$small spacing.$small 0);
-    padding: rem(spacing.$small spacing.$medium);
+    margin: utils.rem(0 spacing.$small spacing.$small 0);
+    padding: utils.rem(spacing.$small spacing.$medium);
     background-color: colours.$btn-secondary;
     color: $ec-white;
     border: 1px solid $ec-white; // todo: find border width!

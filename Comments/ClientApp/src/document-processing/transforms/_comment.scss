@@ -1,5 +1,6 @@
 @use "@nice-digital/nds-core/scss/typography";
 @use "@nice-digital/nds-core/scss/colours";
+@use "@nice-digital/nds-core/scss/utils";
 @use "../../styles/variables" as *;
 
 .ConversionError {
@@ -10,10 +11,10 @@
   &__Button {
     z-index: 2;
     font-weight: bold;
-    border: rem(3px) solid;
+    border: utils.rem(3px) solid;
     border-radius: 50%;
-    width: rem(50px);
-    height: rem(50px);
+    width: utils.rem(50px);
+    height: utils.rem(50px);
     text-align: center;
     float: right;
     &:hover {
@@ -33,7 +34,7 @@
     }
   }
   &__details {
-    border-top: rem(3px) solid;
+    border-top: utils.rem(3px) solid;
     display: none;
     &:hover {
       cursor: pointer;
@@ -43,7 +44,7 @@
     }
     @extend %all-drop-shadow;
     padding: 1rem;
-    margin: rem(25px) rem(25px) 0 0;
+    margin: utils.rem(25px) utils.rem(25px) 0 0;
     font-weight: normal;
     &--E { // Error
       color: $ec-error;

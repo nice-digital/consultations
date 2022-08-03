@@ -1,8 +1,9 @@
 @use "@nice-digital/nds-core/scss/spacing";
+@use "@nice-digital/nds-core/scss/utils";
 
 .markdown {
   ul {
-    margin: rem(spacing.$small) 0 rem(spacing.$small) rem(spacing.$small);
+    margin: utils.rem(spacing.$small) 0 utils.rem(spacing.$small) utils.rem(spacing.$small);
     list-style-position: inside;
     li {
       list-style-type: disc;

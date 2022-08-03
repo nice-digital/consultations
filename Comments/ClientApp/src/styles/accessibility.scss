@@ -1,5 +1,6 @@
 @use "@nice-digital/nds-core/scss/colours";
 @use "@nice-digital/nds-core/scss/spacing";
+@use "@nice-digital/nds-core/scss/utils";
 @use "variables" as *;
 
 .screenreader-button {
@@ -9,7 +10,7 @@
   height: 1px;
   overflow: hidden;
   z-index: -1;
-  padding: rem(spacing.$small) rem(spacing.$medium);
+  padding: utils.rem(spacing.$small) utils.rem(spacing.$medium);
   background-color: $ec-light-grey;
   border: none;
   &:focus, &:active {
