@@ -48,7 +48,7 @@ const GetShowingText = (props: PropsType) => {
 
 export const ReviewResultsInfo = (props: PropsType) => (
 	<div className="results-info">
-		<h2 className="results-info__count" id="results-info-count">
+		<h2 className="results-info__count h5" id="results-info-count">
 			{(props.showCommentsCount || props.showQuestionsCount) &&
 				props.isLoading ? (
 					<span aria-busy="true">Loading…</span>
