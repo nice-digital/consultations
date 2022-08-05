@@ -24,14 +24,14 @@
 .btn {
   &.btn--copied {
     background-color: #e6faff;
-    color: #000;
+    color: #000 !important;
     padding: 0 utils.rem(spacing.$medium);
     margin-bottom: 0;
     border: none;
 
     &:focus, &:hover {
       background-color: #e6faff;
-      color: #000;
+      color: #000 !important;
     }
   }
 }

@@ -16,7 +16,7 @@ export class PhaseBanner extends PureComponent<PropsType> {
 					<div data-g="12">
 						<aside className="phase-banner mt--b">
 							<span className="phase-banner__tag">
-								<span className="tag tag--impact tag--agile">{phase}</span>
+								<span className="tag tag--impact tag--beta">{phase}</span>
 							</span>
 							<span className="phase-banner__label">
 								{name} is in development, which means that some features may not work fully.{" "}
