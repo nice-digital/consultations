@@ -53,7 +53,6 @@ export class AppliedFilter extends Component<PropsType> {
 						onClick={this.handleRemoveFilterLinkClick}
 						data-option-id={this.props.appliedFilter.optionId}
 					>
-						<span className="icon icon--remove" aria-hidden="true" />
 						<span className="visually-hidden">
 							Remove ‘{filterTitle}’ filter
 						</span>
