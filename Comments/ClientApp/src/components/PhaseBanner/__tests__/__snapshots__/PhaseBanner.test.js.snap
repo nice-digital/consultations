@@ -17,7 +17,7 @@ exports[`[ClientApp]  PhaseBanner  Matches snapshot 1`] = `
           className="phase-banner__tag"
         >
           <span
-            className="tag tag--impact tag--agile"
+            className="tag tag--impact tag--beta"
           >
             delta
           </span>
