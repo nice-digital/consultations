@@ -1,5 +1,6 @@
 @use "@nice-digital/nds-core/scss/spacing";
 @use "@nice-digital/nds-core/scss/utils";
+@use '@nice-digital/icons/scss/nice-icons';
 
 .organisation-codes {
   &__row {
@@ -37,16 +38,14 @@
 
 .arrow-icon {
   &:after {
-    display: inline-block;
-    font-family: 'NICE Icons';
-    content: '\e03c';
+    @include nice-icons.nice-icon(chevron-down);
     font-size: 0.875rem;
     line-height: 1.25rem;
   }
 
   [aria-expanded='true'] & {
     &:after {
-      content: '\e039';
+      @include nice-icons.nice-icon(chevron-up);
     }
   }
 }

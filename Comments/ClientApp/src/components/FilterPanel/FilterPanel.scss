@@ -1,3 +1,20 @@
+@use '@nice-digital/icons/scss/nice-icons';
+
 .break-word {
 	word-break: break-word;
+}
+
+.filter-group__heading {
+  &:after {
+    @include nice-icons.nice-icon(chevron-down);
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+
+  &[aria-expanded='true'] {
+    &:after {
+      @include nice-icons.nice-icon(chevron-up);
+    }
+  }
 }
