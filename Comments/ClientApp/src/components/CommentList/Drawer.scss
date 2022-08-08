@@ -1,4 +1,3 @@
-//@import "../../../node_modules/@nice-digital/design-system/src/stylesheets/nice-design-system";
 @use "@nice-digital/nds-core/scss/spacing";
 @use "@nice-digital/nds-core/scss/colours";
 @use "@nice-digital/nds-core/scss/utils";
@@ -45,7 +44,6 @@
     }
     &--comments,
     &--questions {
-      //color: $ec-white;
       box-shadow: inset -5px 0 10px rgba(0, 0, 0, 0.2);
     }
     &--comments.active,
@@ -63,7 +61,6 @@
     padding-left: utils.rem(spacing.$small);
     padding-right: utils.rem(spacing.$small);
     overflow-y: scroll;
-    // overflow-scrolling: touch;
     -webkit-overflow-scrolling: touch;
     background-color: $ec-white;
     @include visibleToggleOut(

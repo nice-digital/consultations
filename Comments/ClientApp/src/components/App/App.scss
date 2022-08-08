@@ -3,8 +3,7 @@
 
 // Any styling that's in here should probably be promoted to the design system
 
-// Darkened var to meet AA contrast requirement
-//$color-agile-phase: #007AB8;
+// Darkened var to meet AA contrast requirement - $color-agile-phase: #007AB8;
 
 .buttonAsLink {
   @extend %unstyled-button;
