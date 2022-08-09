@@ -36,7 +36,7 @@
     "@babel/preset-flow": "^7.10.4",
     "@babel/preset-react": "^7.10.4",
     "@babel/register": "^7.10.4",
-    "@nice-digital/design-system": "^3.0.11-alpha.0",
+    "@nice-digital/design-system": "^3.0.13-alpha.0",
     "@nice-digital/global-nav": "^5.0.877-GN-187-Rebrand",
     "aspnet-prerendering": "^3.0.1",
     "axios": "^0.27.2",
