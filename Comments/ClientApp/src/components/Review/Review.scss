@@ -1,5 +1,7 @@
+@use "@nice-digital/nds-core/scss/colours";
+
 .sticky {
   position: sticky;
   top: 20px;
-  background-color: $colour-body;
+  background-color: colours.$fill-page-background;
 }

@@ -40,12 +40,6 @@ describe("[ClientApp] ", () => {
 		it("should match snapshot with supplied data", () => {
 			const mock = new MockAdapter(axios);
 
-			const wrapper = mount(
-				<MemoryRouter>
-					<Submitted {...fakeProps} />
-				</MemoryRouter>,
-			);
-
 			let consultationPromise = new Promise(resolve => {
 				mock
 					.onAny()
@@ -54,6 +48,12 @@ describe("[ClientApp] ", () => {
 						return [200, ConsultationData];
 					});
 			});
+
+			const wrapper = mount(
+				<MemoryRouter>
+					<Submitted {...fakeProps} />
+				</MemoryRouter>,
+			);
 
 			return Promise.all([
 				consultationPromise,

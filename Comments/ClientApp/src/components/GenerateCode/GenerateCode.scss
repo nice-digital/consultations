@@ -1,8 +1,12 @@
+@use "@nice-digital/nds-core/scss/spacing";
+@use "@nice-digital/nds-core/scss/utils";
+@use '@nice-digital/icons/scss/nice-icons';
+
 .organisation-codes {
   &__row {
     display: flex;
     align-items: center;
-    padding: (1rem * ($spacing-small / 16));
+    padding: utils.rem(spacing.$small);
   }
 
   &__name, &__generate {
@@ -20,30 +24,28 @@
 .btn {
   &.btn--copied {
     background-color: #e6faff;
-    color: #000;
-    padding: 0 (1rem * ($spacing-medium / 16));
+    color: #000 !important;
+    padding: 0 utils.rem(spacing.$medium);
     margin-bottom: 0;
     border: none;
 
     &:focus, &:hover {
       background-color: #e6faff;
-      color: #000;
+      color: #000 !important;
     }
   }
 }
 
 .arrow-icon {
   &:after {
-    display: inline-block;
-    font-family: 'NICE Icons';
-    content: '\e03c';
+    @include nice-icons.nice-icon(chevron-down);
     font-size: 0.875rem;
     line-height: 1.25rem;
   }
 
   [aria-expanded='true'] & {
     &:after {
-      content: '\e039';
+      @include nice-icons.nice-icon(chevron-up);
     }
   }
 }

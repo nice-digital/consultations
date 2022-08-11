@@ -4,46 +4,54 @@
 
 // sass-lint:disable class-name-format
 
+@use 'sass:math';
+@use "@nice-digital/nds-core/scss/colours";
+@use "@nice-digital/nds-core/scss/spacing";
+@use "@nice-digital/nds-core/scss/typography";
+@use "@nice-digital/nds-core/scss/layout";
+@use "@nice-digital/nds-core/scss/utils";
+@use "variables" as *;
+
 $radio-base-size: 32px;
-$colour-border-focus: $colour-nice-blue-3;
+$colour-border-focus: colours.$focus;
 
 .form {
   &__fieldset {
-    border: rem($spacing-xx-small) solid $colour-border;
-    margin-bottom: rem($spacing-medium);
-    padding: rem($spacing-small);
+    border: utils.rem(spacing.$xx-small) solid colours.$border;
+    margin-bottom: utils.rem(spacing.$medium);
+    padding: utils.rem(spacing.$small);
   }
 
   &__legend {
-    @include font-size(h3);
+    @include typography.font-size(h3);
     font-weight: bold;
-    margin-bottom: rem($spacing-small);
+    margin-bottom: utils.rem(spacing.$small);
   }
 
   &__group {
-    margin-bottom: rem($spacing-medium);
+    margin-bottom: utils.rem(spacing.$medium);
 
     &--error {
       .form__input,
       .form__radio,
       .form__checkbox {
-        background-color: $colour-error-background;
-        border-color: $colour-nice-white;
-        outline: $colour-error rem($spacing-x-small) solid;
+        background-color: colours.$error-background;
+        border-color: $ec-white;
+        outline: colours.$error utils.rem(spacing.$x-small) solid;
       }
 
       .form__label {
-        color: $colour-error;
+        color: colours.$error;
         font-weight: bold;
       }
 
       .form__hint {
-        color: $colour-error;
+        color: colours.$error;
       }
     }
 
     &--radio {
-      @include clearfix;
+      @include layout.clearfix;
       clear: left;
       display: block;
       padding-left: $radio-base-size * 1.4;
@@ -52,29 +60,29 @@ $colour-border-focus: $colour-nice-blue-3;
 
     &--inline {
       display: inline-block;
-      margin-right: rem($spacing-medium);
+      margin-right: utils.rem(spacing.$medium);
 
       input {
-        margin-right: rem($spacing-x-small);
+        margin-right: utils.rem(spacing.$x-small);
       }
     }
 
     &--stacked {
-      margin-bottom: rem($spacing-small);
+      margin-bottom: utils.rem(spacing.$small);
     }
   }
 
   &__input {
-    border: rem($spacing-xx-small) solid $colour-border;
-    padding: rem($spacing-small);
+    border: utils.rem(spacing.$xx-small) solid colours.$border;
+    padding: utils.rem(spacing.$small);
     width: 100%;
 
     &:focus {
-      outline: $colour-border-focus rem($spacing-x-small) solid;
+      outline: $colour-border-focus utils.rem(spacing.$x-small) solid;
     }
 
     //@include mq($from: sm) {
-    //  width: rem($nice-breakpoint-xs);
+    //  width: utils.rem($nice-breakpoint-xs);
     //}
 
     &--file,
@@ -105,24 +113,24 @@ $colour-border-focus: $colour-nice-blue-3;
 
     &:focus {
       & + label:before { // sass-lint:disable-line force-pseudo-nesting pseudo-element
-        box-shadow: 0 0 0 ($radio-base-size / 16) $colour-border-focus;
+        box-shadow: 0 0 0 math.div($radio-base-size, 16) $colour-border-focus;
       }
 
     }
   }
 
   &__label {
-    @include font-size(p);
+    @include typography.font-size(p);
     display: block;
-    margin-bottom: rem($spacing-x-small);
+    margin-bottom: utils.rem(spacing.$x-small);
 
     &--radio {
       cursor: pointer;
-      padding: ($radio-base-size / 8) 0;
+      padding: math.div($radio-base-size, 8) 0;
 
       // radio - outside circle
       &::before {
-        border: ($radio-base-size / 16) solid $colour-nice-black;
+        border: math.div($radio-base-size, 16) solid $ec-black;
         border-radius: 50%;
         content: '';
         height: $radio-base-size;
@@ -134,33 +142,33 @@ $colour-border-focus: $colour-nice-blue-3;
 
       // radio - center dot
       &::after {
-        background: $colour-nice-black;
+        background: $ec-black;
         border-radius: 50%;
         content: '';
-        height: ($radio-base-size / 2);
-        left: ($radio-base-size / 4);
+        height: math.div($radio-base-size, 2);
+        left: math.div($radio-base-size, 4);
         opacity: 0;
         position: absolute;
-        top: ($radio-base-size / 4);
-        width: ($radio-base-size / 2);
+        top: math.div($radio-base-size, 4);
+        width: math.div($radio-base-size, 2);
       }
 
       &--inverted {
         &::before {
-          border: ($radio-base-size / 16) solid $colour-nice-white;
+          border: math.div($radio-base-size, 16) solid $ec-white;
         }
         &::after {
-          background: $colour-nice-white;
+          background: $ec-white;
         }
       }
     }
   }
 
   &__hint {
-    color: $colour-nice-dark-grey;
-    margin-top: rem($spacing-x-small);
+    color: $ec-dark-grey;
+    margin-top: utils.rem(spacing.$x-small);
     &--inverse {
-      color: $colour-nice-white;
+      color: $ec-white;
     }
   }
 
@@ -169,27 +177,27 @@ $colour-border-focus: $colour-nice-blue-3;
 $checkbox-size: 32px;
 
 .checkbox {
-  @include font-size(p);
+  @include typography.font-size(p);
   display: block;
   position: relative;
   min-height: $checkbox-size;
-  margin-bottom: rem($spacing-medium);
+  margin-bottom: utils.rem(spacing.$medium);
   padding-left: $checkbox-size * 1.4;
 
   &--error .checkbox__label,
   &--error .checkbox__label {
-    color: $colour-error;
+    color: colours.$error;
     &:before {
-      outline: $colour-error rem($spacing-x-small) solid;
+      outline: colours.$error utils.rem(spacing.$x-small) solid;
     }
   }
 
   &--inline {
     display: inline-block;
-    margin-right: rem($spacing-medium);
+    margin-right: utils.rem(spacing.$medium);
 
     input {
-      margin-right: rem($spacing-x-small);
+      margin-right: utils.rem(spacing.$x-small);
     }
   }
 
@@ -233,9 +241,9 @@ $checkbox-size: 32px;
     line-height: 1.5rem;
     font-weight: bold;
     display: block;
-    margin-bottom: rem($spacing-x-small);
+    margin-bottom: utils.rem(spacing.$x-small);
     cursor: pointer;
-    padding: ($checkbox-size / 8) 0;
+    padding: math.div($checkbox-size, 8) 0;
 
     &:before { // stylelint-disable-line
       content: "";
@@ -245,17 +253,17 @@ $checkbox-size: 32px;
       left: 0;
       width: $checkbox-size;
       height: $checkbox-size;
-      border: 2px solid $colour-nice-black;
+      border: 2px solid $ec-black;
       background: transparent;
     }
 
     &:after { // stylelint-disable-line
       content: "";
       position: absolute;
-      top: $checkbox-size / 3.2;
-      left: $checkbox-size / 4;
-      width: $checkbox-size / 2;
-      height: $checkbox-size / 3.2;
+      top: math.div($checkbox-size, 3.2);
+      left: math.div($checkbox-size, 4);
+      width: math.div($checkbox-size, 2);
+      height: math.div($checkbox-size, 3.2);
       transform: rotate(-45deg);
       border: solid;
       border-width: 0 0 4px 4px;

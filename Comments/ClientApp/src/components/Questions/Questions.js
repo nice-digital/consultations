@@ -2,7 +2,7 @@
 
 import React, { Component, Fragment } from "react";
 import { Prompt, withRouter } from "react-router-dom";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet";
 import LoginBannerWithRouter from "../LoginBanner/LoginBanner";
 import { StackedNav } from "../StackedNav/StackedNav";
 import { UserContext } from "../../context/UserContext";
@@ -48,7 +48,7 @@ export class Questions extends Component<PropsType, StateType> {
 		};
 
 		if (this.props) {
-			
+
 			let preloadedQuestionsData;
 			let preloadedData = {};
 			if (this.props.staticContext && this.props.staticContext.preload) {

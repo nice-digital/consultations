@@ -1,9 +1,9 @@
-@import "../../../node_modules/@nice-digital/design-system/src/stylesheets/nice-design-system";
+@use "@nice-digital/nds-core/scss/colours";
 
 $arrow-size: 10px;
 
 .selection-container {
-  position: absolute; 
+  position: absolute;
   z-index: 99999;
 
   button::after{
@@ -17,10 +17,10 @@ $arrow-size: 10px;
     margin-left: -$arrow-size;
     border: $arrow-size solid transparent;
     border-top: none;
-    border-bottom-color: $colour-btn-primary;
+    border-bottom-color: colours.$btn-primary;
   }
   button:hover::after{
-    border-bottom-color: $colour-btn-primary-hover;
+    border-bottom-color: colours.$btn-primary-hover;
   }
 
 }

@@ -51,7 +51,7 @@ export class DownloadResultsInfo extends Component<PropsType, StateType> {
 		return (
 			<div className="results-info">
 				<h2
-					className="results-info__count"
+					className="results-info__count h5"
 					id="results-info-count"
 					data-qa-sel="admin-download-page-count"
 				>

@@ -1,3 +1,6 @@
+@use '@nice-digital/nds-core/scss/colours/tokens/global';
+@use "@nice-digital/nds-core/scss/utils";
+
 // Project Variables
 // Depending on their specificity to this project they may be moved into the design system
 
@@ -6,7 +9,7 @@
 }
 
 %all-drop-shadow {
-  box-shadow: 0 0 rem(10px) rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 utils.rem(10px) rgba(0, 0, 0, 0.1);
 }
 
 %transition-default {
@@ -14,8 +17,29 @@
   transition-property: transform;
 }
 
-$colour-agile-phase: #007AB8;
+%unstyled-button {
+  border: none;
+  background: transparent;
+  font-size: inherit;
+  padding: 0;
+}
+
+//$colour-agile-phase: #007AB8;
 
 $colour-caution-our-version: #FFBF47;
 
+$ec-white: global.$white;
+$ec-black: global.$black;
 
+$ec-light-grey: global.$custom-grey-4;
+$ec-dark-grey: global.$black-tint-1;
+$ec-green: #557021; //global.$custom-green-1
+$ec-orange: #bd5826; //global.$custom-orange-1
+$ec-pink: #d5367f;
+
+$ec-caution: global.$custom-orange-1;
+$ec-bg-caution: global.$custom-orange-1-tint;
+$ec-error: global.$custom-red-1;
+$ec-bg-error: global.$custom-red-1-tint;
+$ec-info: global.$custom-blue-3;
+$ec-bg-info: global.$custom-blue-3-tint;

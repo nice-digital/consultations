@@ -1,5 +1,9 @@
-@import "../../../node_modules/@nice-digital/design-system/src/stylesheets/nice-design-system";
-@import "../../styles/accessibility.scss";
+@use "@nice-digital/nds-core/scss/spacing";
+@use "@nice-digital/nds-core/scss/colours";
+@use "@nice-digital/nds-core/scss/utils";
+@use "@nice-digital/nds-button/scss/button";
+@use "../../styles/variables" as *;
+@use "../../styles/accessibility.scss" as *;
 
 .Drawer {
   height: 100vh;
@@ -24,43 +28,41 @@
 
   &__control {
     font-size: 0;
-    border-radius: rem(10px) 0 0 rem(10px);
+    border-radius: utils.rem(10px) 0 0 utils.rem(10px);
     line-height: 1.3;
-    padding: $spacing-small 0.3rem;
+    padding: spacing.$small 0.3rem;
     text-align: left;
     border: none;
     width: 100%;
-    margin-bottom: rem($spacing-x-small);
+    margin-bottom: utils.rem(spacing.$x-small);
     &:focus {
-      @extend .btn--cta:focus;
-      background-color: $colour-btn-cta-hover;
+      @extend .btn--cta, :focus;
+      background-color: colours.$btn-cta-hover;
     }
     &:hover {
       cursor: pointer;
     }
     &--comments,
     &--questions {
-      color: $colour-nice-white;
-      box-shadow: inset -10px 0 10px rgba(0, 0, 0, 0.3);
+      box-shadow: inset -5px 0 10px rgba(0, 0, 0, 0.2);
     }
     &--comments.active,
     &--questions.active {
-      background: $colour-btn-cta;
+      background: colours.$btn-cta;
     }
     &-text {
       font-size: 0.9rem;
     }
-    @extend .font-weight-bold;
+    font-weight: bold;
   }
 
   &__main {
     height: 100vh;
-    padding-left: rem($spacing-small);
-    padding-right: rem($spacing-small);
+    padding-left: utils.rem(spacing.$small);
+    padding-right: utils.rem(spacing.$small);
     overflow-y: scroll;
-    overflow-scrolling: touch;
     -webkit-overflow-scrolling: touch;
-    background-color: $colour-nice-white;
+    background-color: $ec-white;
     @include visibleToggleOut(
       0.4s
     ); // slightly longer than the duration of the transition
@@ -83,7 +85,7 @@
     }
 
     &__control {
-      padding: rem($spacing-medium);
+      padding: utils.rem(spacing.$medium);
       font-size: 1rem;
 
       &-text {

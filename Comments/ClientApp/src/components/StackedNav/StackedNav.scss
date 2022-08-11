@@ -1,6 +1,8 @@
+@use "@nice-digital/nds-core/scss/colours";
+
 .stacked-nav {
   &__root {
-    color: $colour-text;
+    color: colours.$text;
     display: block;
     padding: 0.5em;
     position: relative;

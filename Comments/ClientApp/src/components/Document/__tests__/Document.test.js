@@ -49,12 +49,6 @@ describe("[ClientApp] ", () => {
 		it("should match snapshot with supplied data", () => {
 			const mock = new MockAdapter(axios);
 
-			const wrapper = mount(
-				<MemoryRouter>
-					<Document {...fakeProps} />
-				</MemoryRouter>,
-			);
-
 			let documentsPromise = new Promise(resolve => {
 				mock
 					.onGet("/consultations/api/Documents?consultationId=1")
@@ -84,6 +78,12 @@ describe("[ClientApp] ", () => {
 					});
 			});
 
+			const wrapper = mount(
+				<MemoryRouter>
+					<Document {...fakeProps} />
+				</MemoryRouter>,
+			);
+
 			return Promise.all([
 				documentsPromise,
 				consulatationPromise,
@@ -103,12 +103,6 @@ describe("[ClientApp] ", () => {
 
 		it("should not contain tutorial if the consultation does not support comments", () => {
 			const mock = new MockAdapter(axios);
-
-			const wrapper = mount(
-				<MemoryRouter>
-					<Document {...fakeProps} />
-				</MemoryRouter>,
-			);
 
 			let documentsPromise = new Promise(resolve => {
 				mock
@@ -138,6 +132,12 @@ describe("[ClientApp] ", () => {
 						return [200, ChapterData];
 					});
 			});
+
+			const wrapper = mount(
+				<MemoryRouter>
+					<Document {...fakeProps} />
+				</MemoryRouter>,
+			);
 
 			return Promise.all([
 				documentsPromise,
@@ -234,12 +234,6 @@ describe("[ClientApp] ", () => {
 			it("should not caution that guidance is draft if the consultation is open", () => {
 				const mock = new MockAdapter(axios);
 
-				const wrapper = mount(
-					<MemoryRouter>
-						<Document {...fakeProps} />
-					</MemoryRouter>,
-				);
-
 				let documentsPromise = new Promise(resolve => {
 					mock
 						.onGet("/consultations/api/Documents?consultationId=1")
@@ -268,6 +262,12 @@ describe("[ClientApp] ", () => {
 							return [200, ChapterData];
 						});
 				});
+
+				const wrapper = mount(
+					<MemoryRouter>
+						<Document {...fakeProps} />
+					</MemoryRouter>,
+				);
 
 				return Promise.all([
 					documentsPromise,

@@ -1,39 +1,34 @@
-// Node imports
-$nice-font-base-path: "/consultations/fonts/";
-
-@import "nice-design-system";
-@import "nice-icons";
+@use "@nice-digital/design-system/scss/nice-design-system" with (
+  $nice-icons-base-path: "/consultations/fonts/"
+);
 
 // Design System Overrides
-@import "./components/StackedNav/StackedNav";
-
-// Project variables
-@import "styles/variables";
+@use "./components/StackedNav/StackedNav";
 
 // Global Styles
-@import "styles/forms";
-@import "styles/accessibility";
-@import "styles/non-design-system";
-@import "styles/global-nav";
-@import "styles/markdown";
+@use "styles/forms";
+@use "styles/accessibility";
+@use "styles/non-design-system";
+@use "styles/global-nav";
+@use "styles/markdown";
 
-// Component folder structure imports here
-@import "./components/App/App";
-@import "./components/Document/Document";
-@import "./components/CommentList/Drawer";
-@import "./components/CommentList/CommentList";
-@import "./components/CommentBox/CommentBox";
-@import "./components/PhaseBanner/PhaseBanner";
-@import "./components/Selection/Selection";
-@import "./components/Review/Review";
-@import "./components/Tutorial/Tutorial";
-@import "./components/ConsultationItem/ConsultationItem";
-@import "./components/SubmitResponseFeedback/SubmitResponseFeedback";
-@import "./components/LoginBanner/LoginBanner";
-@import "./components/Pagination/Pagination";
-@import "./components/GenerateCode/GenerateCode";
-@import "./components/LoginPanel/LoginPanel";
-@import "./components/FilterPanel/FilterPanel";
+// // Component folder structure imports here
+@use "./components/App/App";
+@use "./components/Document/Document";
+@use "./components/CommentList/Drawer";
+@use "./components/CommentList/CommentList"; // nothing in here
+@use "./components/CommentBox/CommentBox";
+@use "./components/PhaseBanner/PhaseBanner";
+@use "./components/Selection/Selection";
+@use "./components/Review/Review";
+@use "./components/Tutorial/Tutorial";
+@use "./components/ConsultationItem/ConsultationItem";
+@use "./components/SubmitResponseFeedback/SubmitResponseFeedback";
+@use "./components/LoginBanner/LoginBanner";
+@use "./components/Pagination/Pagination";
+@use "./components/GenerateCode/GenerateCode";
+@use "./components/LoginPanel/LoginPanel";
+@use "./components/FilterPanel/FilterPanel";
 
-// Document transform styling (comments buttons etc)
-@import "./document-processing/transforms/comment";
+// // Document transform styling (comments buttons etc)
+@use "./document-processing/transforms/comment";

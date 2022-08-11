@@ -24,44 +24,51 @@ exports[`[ClientApp]  Header  should display correctly when consulation has ende
         This consultation 
         ended
          on 
-        <t
+        <n
           ago={false}
           calendar={false}
           date="1994-11-05T08:15:30-05:00"
           decimal={false}
-          element="time"
+          element={null}
           filter={[Function]}
           format="D MMMM YYYY"
           fromNow={false}
           interval={60000}
+          local={false}
           onChange={[Function]}
+          titleFormat=""
           toNow={false}
+          trim={false}
           unit={null}
           unix={false}
           utc={false}
+          withTitle={false}
         />
          at
          
-        <t
+        <n
           ago={false}
           calendar={false}
           date="1994-11-05T08:15:30-05:00"
           decimal={false}
-          element="time"
+          element={null}
           filter={[Function]}
           format="HH:mm"
           fromNow={false}
           interval={60000}
+          local={false}
           onChange={[Function]}
+          titleFormat=""
           toNow={false}
+          trim={false}
           unit={null}
           unix={false}
           utc={false}
+          withTitle={false}
         />
       </span>
         
       <Link
-        replace={false}
         to="/leadinformation"
       >
         Request commenting lead permission
@@ -98,44 +105,51 @@ exports[`[ClientApp]  Header  should display correctly when consulation hasn't s
         This consultation 
         starts
          on 
-        <t
+        <n
           ago={false}
           calendar={false}
           date=""
           decimal={false}
-          element="time"
+          element={null}
           filter={[Function]}
           format="D MMMM YYYY"
           fromNow={false}
           interval={60000}
+          local={false}
           onChange={[Function]}
+          titleFormat=""
           toNow={false}
+          trim={false}
           unit={null}
           unix={false}
           utc={false}
+          withTitle={false}
         />
          at
          
-        <t
+        <n
           ago={false}
           calendar={false}
           date=""
           decimal={false}
-          element="time"
+          element={null}
           filter={[Function]}
           format="HH:mm"
           fromNow={false}
           interval={60000}
+          local={false}
           onChange={[Function]}
+          titleFormat=""
           toNow={false}
+          trim={false}
           unit={null}
           unix={false}
           utc={false}
+          withTitle={false}
         />
       </span>
         
       <Link
-        replace={false}
         to="/leadinformation"
       >
         Request commenting lead permission
@@ -178,26 +192,29 @@ exports[`[ClientApp]  Header  should display correctly when consulation is in pr
         </span>
          Open until
          
-        <t
+        <n
           ago={false}
           calendar={false}
           date="1994-11-05T08:15:30-05:00"
           decimal={false}
-          element="time"
+          element={null}
           filter={[Function]}
           format="D MMMM YYYY"
           fromNow={false}
           interval={60000}
+          local={false}
           onChange={[Function]}
+          titleFormat=""
           toNow={false}
+          trim={false}
           unit={null}
           unix={false}
           utc={false}
+          withTitle={false}
         />
       </span>
         
       <Link
-        replace={false}
         to="/leadinformation"
       >
         Request commenting lead permission
