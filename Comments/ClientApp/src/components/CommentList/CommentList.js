@@ -2,7 +2,6 @@
 
 import React, { Component} from "react";
 import { withRouter, Link, Prompt } from "react-router-dom";
-//import stringifyObject from "stringify-object";
 import { LiveMessage } from "react-aria-live";
 
 import preload from "../../data/pre-loader";

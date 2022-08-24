@@ -1,5 +1,4 @@
 import { load } from "./loader";
-//import stringifyObject from "stringify-object";
 
 // Returns data if it's available or a promise that resolves with the data
 // when it's loaded async.

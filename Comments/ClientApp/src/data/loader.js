@@ -3,7 +3,6 @@ import axios from "axios";
 import https from "https";
 
 import {objectToQueryString, replaceFormat} from "../helpers/utils";
-//import stringifyObject from "stringify-object";
 
 /**
  * Load data using Axios

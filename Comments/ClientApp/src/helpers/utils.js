@@ -1,7 +1,6 @@
 // @flow
 
 import queryString from "query-string";
-//import stringifyObject from "stringify-object";
 
 /**
  * Create a query string out of an object
