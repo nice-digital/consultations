@@ -16,7 +16,7 @@ export const processChapterSectionSubsection = (node, onNewCommentClick, sourceU
 
 	const htmlElementID = (commentOn === "section" || commentOn === "subsection") ? node.attribs.id : "";
 
-	if (typeof(node.attribs) !== undefined){ //this gets rid of the tooltip added to the anchor in indev. it's just not really needed on text.
+	if (typeof(node.attribs) !== "undefined"){ //this gets rid of the tooltip added to the anchor in indev. it's just not really needed on text.
 		node.attribs.title = "";
 	}
 
@@ -73,7 +73,7 @@ export const getSectionNumberFromAnchor = (node) => {
 		const regex = /^([\d.]*)/;
 		const matches = chapterOrSectionText.match(regex);
 		if (matches !== null && matches[0] !== ""){
-			return matches[0];	
+			return matches[0];
 		}
 	}
 	return null;
@@ -88,6 +88,6 @@ export const getSectionNumberFromParagraph = (node) => {
 	const paragraphNode = node.children.filter(nodeIsParagraphNumber);
 	if (paragraphNode !== null && paragraphNode[0].children != null){
 		return paragraphNode[0].children[0].data.trim();
-	}	
-	return null;	
+	}
+	return null;
 };

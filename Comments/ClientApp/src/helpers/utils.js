@@ -50,11 +50,11 @@ export const nextTick = async () => {
  * @returns {String}
  */
 export function replaceFormat(stringToReplace, args) {
-	if (typeof (stringToReplace) === undefined || stringToReplace === null)
+	if (typeof (stringToReplace) === "undefined" || stringToReplace === null)
 		return stringToReplace;
 
 	return stringToReplace.replace(/{(\d+)}/g, function (match, number) {
-		return typeof args[number] !== undefined
+		return typeof args[number] !== "undefined"
 			? args[number]
 			: match
 		;

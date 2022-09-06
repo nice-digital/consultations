@@ -319,7 +319,6 @@ export class Questions extends Component<PropsType, StateType> {
 															counter: index + 1,
 															readOnly: !this.state.editingAllowed,
 															updateUnsavedIds: this.updateUnsavedIds,
-															key: question.questionId,
 															question: question,
 															saveQuestion: this.saveQuestion,
 															deleteQuestion: this.deleteQuestion,
@@ -328,12 +327,12 @@ export class Questions extends Component<PropsType, StateType> {
 														};
 														if (question.questionType.type === "YesNo") {
 															return (
-																<YNQuestion {...questionProps}/>
+																<YNQuestion key={question.questionId} {...questionProps}/>
 															);
 														}
 														if (question.questionType.type === "Text") {
 															return (
-																<OpenQuestion {...questionProps}/>
+																<OpenQuestion key={question.questionId} {...questionProps}/>
 															);
 														}
 														return null;

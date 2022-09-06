@@ -40,7 +40,7 @@ export class Selection extends Component<PropsType, StateType> {
 		return segs(element).join("/");
 	}
 
-	findClosest(element, selector){				
+	findClosest(element, selector){
 		while (element.parentElement){
 			const result = element.querySelector(selector);
 			if (result != null){
@@ -84,7 +84,7 @@ export class Selection extends Component<PropsType, StateType> {
 			console.error("getCommentForRange", error);
 		}
 		return(comment);
-	}
+	};
 
 	onMouseUp = (event: Event) => {
 		if (window && window.getSelection) {
@@ -111,7 +111,7 @@ export class Selection extends Component<PropsType, StateType> {
 		} else{
 			this.setState({ toolTipVisible: false });
 		}
-	}
+	};
 
 	onButtonClick = () => {
 		this.props.newCommentFunc(null, this.state.comment); //can't pass the event here, as it's the button click event, not the start of the text selection.
@@ -122,7 +122,7 @@ export class Selection extends Component<PropsType, StateType> {
 			action: "Clicked",
 			label: "Comment on text selection",
 		});
-	}
+	};
 
 	// trim strips whitespace from either end of a string.
 	//
@@ -133,7 +133,7 @@ export class Selection extends Component<PropsType, StateType> {
 		} else {
 			return s.replace(/^[\s\xA0]+|[\s\xA0]+$/g, "");
 		}
-	}
+	};
 
 	componentDidUpdate(prevProps: PropsType){
 		// if we're on a different page from when the selection was made, reinitialise the selection

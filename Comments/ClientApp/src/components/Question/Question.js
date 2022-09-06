@@ -44,7 +44,7 @@ export class Question extends Component<PropsType> {
 		));
 
 		return answerComponents;
-	}
+	};
 
 	render() {
 		if (!this.props.question) return null;
