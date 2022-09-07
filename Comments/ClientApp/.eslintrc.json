@@ -7,6 +7,9 @@
 		"jasmine": true
 	},
   "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "requireConfigFile": false
+  },
 	"extends": [
 		"@nice-digital/eslint-config/es6-flow",
 		"plugin:react/recommended",
