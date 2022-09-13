@@ -215,7 +215,7 @@ export class Download extends Component<PropsType, StateType> {
 		}
 
 		return querystringObject;
-	}
+	};
 
 	unlisten = () => { };
 
@@ -252,19 +252,19 @@ export class Download extends Component<PropsType, StateType> {
 
 	keywordToFilterByUpdated = (keywordToFilterBy) => {
 		this.setState({ keywordToFilterBy });
-	}
+	};
 
 	removeFilter = (optionId) => {
 		if (optionId === "Keyword") {
 			this.setState({ keywordToFilterBy: "" });
 		}
-	}
+	};
 
 	generateFilters = (filters, mapOptions) => {
 		return filters
 			.map(mapOptions)
 			.reduce((arr, group) => arr.concat(group), []);
-	}
+	};
 
 	getAppliedFilters(): AppliedFilterType[] {
 		const {
@@ -324,7 +324,7 @@ export class Download extends Component<PropsType, StateType> {
 		}
 
 		return paginationPositions;
-	}
+	};
 
 	changeAmount = (e) => {
 		let itemsPerPage = e.target.value,
@@ -347,7 +347,7 @@ export class Download extends Component<PropsType, StateType> {
 		this.setState({ itemsPerPage, path, pageNumber }, () => {
 			this.props.history.push(path);
 		});
-	}
+	};
 
 	changePage = (e) => {
 		e.preventDefault();
@@ -368,7 +368,7 @@ export class Download extends Component<PropsType, StateType> {
 		this.setState({ pageNumber, path }, () => {
 			this.props.history.push(path);
 		});
-	}
+	};
 
 	render() {
 		let breadcrumbLinkParams = [

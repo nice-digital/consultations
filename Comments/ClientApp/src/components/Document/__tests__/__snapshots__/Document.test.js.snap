@@ -712,10 +712,12 @@ Array [
                     role="presentation"
                   >
                     <a
-                      aria-current={null}
+                      aria-current="page"
+                      className="active"
                       href="/#introduction"
                       onClick={[Function]}
                       role="menuitem"
+                      style={Object {}}
                     >
                       Introduction
                     </a>
@@ -726,10 +728,12 @@ Array [
                     role="presentation"
                   >
                     <a
-                      aria-current={null}
+                      aria-current="page"
+                      className="active"
                       href="/#provision-of-information"
                       onClick={[Function]}
                       role="menuitem"
+                      style={Object {}}
                     >
                       1.1 Provision of information
                     </a>
@@ -740,10 +744,12 @@ Array [
                     role="presentation"
                   >
                     <a
-                      aria-current={null}
+                      aria-current="page"
+                      className="active"
                       href="/#assessment-of-a-patients-risk-of-future-adverse-cardiovascular-events"
                       onClick={[Function]}
                       role="menuitem"
+                      style={Object {}}
                     >
                       1.2 Assessment of a patient's risk of future adverse cardiovascular events
                     </a>
@@ -754,10 +760,12 @@ Array [
                     role="presentation"
                   >
                     <a
-                      aria-current={null}
+                      aria-current="page"
+                      className="active"
                       href="/#antiplatelet-therapy"
                       onClick={[Function]}
                       role="menuitem"
+                      style={Object {}}
                     >
                       1.3 Antiplatelet therapy
                     </a>
@@ -768,10 +776,12 @@ Array [
                     role="presentation"
                   >
                     <a
-                      aria-current={null}
+                      aria-current="page"
+                      className="active"
                       href="/#antithrombin-therapy"
                       onClick={[Function]}
                       role="menuitem"
+                      style={Object {}}
                     >
                       1.4 Antithrombin therapy
                     </a>
@@ -782,10 +792,12 @@ Array [
                     role="presentation"
                   >
                     <a
-                      aria-current={null}
+                      aria-current="page"
+                      className="active"
                       href="/#management-strategies"
                       onClick={[Function]}
                       role="menuitem"
+                      style={Object {}}
                     >
                       1.5 Management strategies
                     </a>
@@ -947,14 +959,15 @@ Array [
                       <sup>
                         [
                         <a
-                          aria-current={null}
-                          className="footnote"
+                          aria-current="page"
+                          className="footnote active"
                           data-identified-as="internal-link"
                           href="/#ftn.footnote_1"
                           id="footnote_1"
                           name="footnote_1"
                           onClick={[Function]}
                           rel="internal"
+                          style={Object {}}
                           tabIndex="0"
                         >
                           1
@@ -1009,14 +1022,15 @@ Array [
                           <sup>
                             [
                             <a
-                              aria-current={null}
-                              className="para"
+                              aria-current="page"
+                              className="para active"
                               data-identified-as="internal-link"
                               href="/#footnote_1"
                               id="ftn.footnote_1"
                               name="ftn.footnote_1"
                               onClick={[Function]}
                               rel="internal"
+                              style={Object {}}
                               tabIndex="0"
                             >
                               1

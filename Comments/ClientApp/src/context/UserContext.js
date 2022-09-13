@@ -96,7 +96,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 			isOrganisationCommenter: true,
 			organisationName,
 		});
-	}
+	};
 
 	loadUser = (returnURL) => {
 		load("user", undefined, [], { returnURL, cachebust: new Date().getTime() })
@@ -125,7 +125,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 						}
 					}),
 			);
-	}
+	};
 
 	getFeatureFlags = async () => {
 		load("getfeatureflags", undefined, [], {})
@@ -136,7 +136,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 			.catch(err => {
 				console.log(JSON.stringify(err));
 			});
-	}
+	};
 
 	//unfortunately the context is above the routes, so this.props.match is always null, so we can't pull the consultation id out of there. hence we're falling back to regex.
 	getConsultationId = () =>{
@@ -151,7 +151,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 			return;
 
 		return matches[1];
-	}
+	};
 
 	checkSessionId = async () => {
 		const userSessionParameters = this.getUserSessionParameters(window.__PRELOADED__);
@@ -178,7 +178,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 			validityAndOrganisationName: await validityAndOrganisationName,
 			userSessionParameters: userSessionParameters,
 		};
-	}
+	};
 
 	getUserSessionParameters = (preloadSource) => {
 		const consultationId = this.getConsultationId();
@@ -186,7 +186,7 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 		const cookieString = preloadSource?.cookies || "";
 		const sessionCookieExistsForThisConsultation =  (Cookies.get(cookieName) || cookieString.indexOf(cookieName) !== -1);
 		return {consultationId, sessionCookieExistsForThisConsultation};
-	}
+	};
 
 	//a child component can call this method to update the context in case a session cookie has been set.
 	updateContext = () => {
@@ -196,11 +196,11 @@ export class UserProvider extends React.Component<PropsType, StateType> {
 					this.setStateForValidSessionCookie(data.validityAndOrganisationName.organisationName);
 				}
 			});
-	}
+	};
 
 	loadContext = () => {
 		this.loadUser(this.props.location.pathname);
-	}
+	};
 
 	componentDidMount() {
 		this.loadContext(); //this is needed here as the sign in url isn't right on SSR. TODO: fix SSR.

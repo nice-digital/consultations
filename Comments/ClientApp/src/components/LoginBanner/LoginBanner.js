@@ -97,7 +97,7 @@ export class LoginBanner extends Component<PropsType, StateType> {
 		return {
 			organisationCode: await organisationCode,
 		};
-	}
+	};
 
 	checkOrganisationCode = () => {
 		this.gatherDataForCheckOrganisationCode()
@@ -114,7 +114,7 @@ export class LoginBanner extends Component<PropsType, StateType> {
 			.catch(err => {
 				throw new Error("checkOrganisationCode failed " + err);
 			});
-	}
+	};
 
 	gatherDataForCreateOrganisationUserSession = async () => {
 		const session = load(
@@ -137,7 +137,7 @@ export class LoginBanner extends Component<PropsType, StateType> {
 		return {
 			session: await session,
 		};
-	}
+	};
 
 	createOrganisationUserSession = async () => {
 		const session = this.gatherDataForCreateOrganisationUserSession()
@@ -156,7 +156,7 @@ export class LoginBanner extends Component<PropsType, StateType> {
 		return {
 			session: await session,
 		};
-	}
+	};
 
 	handleConfirmClick = (updateContextFunction) => {
 		const consultationId = this.props.match.params.consultationId;
@@ -179,7 +179,7 @@ export class LoginBanner extends Component<PropsType, StateType> {
 					errorMessage: "Unable to confirm",
 				});
 			});
-	}
+	};
 
 	render(){
 		const limitWidthOfButton = !this.props.signInButton; //the sign-in button isn't shown when we're trying to save space.

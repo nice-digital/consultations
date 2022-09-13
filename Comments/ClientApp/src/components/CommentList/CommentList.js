@@ -310,7 +310,7 @@ export class CommentList extends Component<PropsType, StateType> {
 				drawerMobile: usingMobile,
 			});
 		}
-	}
+	};
 
 	drawerClassnames = () => {
 		const open = this.state.drawerOpen ? "Drawer--open" : "";

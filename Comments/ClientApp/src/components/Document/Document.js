@@ -140,7 +140,7 @@ export class Document extends Component<PropsType, StateType> {
 
 	getDocumentTitle = () => {
 		return this.state.consultationData.title;
-	}
+	};
 
 	getChapterData = (params: Object) => {
 		return load("chapter", undefined, [], {...params});
