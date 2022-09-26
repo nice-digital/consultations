@@ -1,15 +1,10 @@
-/* global jest */
-
 import React from "react";
-import { mount } from "enzyme";
-import { Submitted } from "../Submitted";
+import { render, waitForElementToBeRemoved, screen } from "@testing-library/react";
 import MockAdapter from "axios-mock-adapter";
 import axios from "axios";
 import { MemoryRouter } from "react-router";
-// import { LiveAnnouncer } from "react-aria-live";
+import { Submitted } from "../Submitted";
 import ConsultationData from "./Consultation.json";
-import { nextTick } from "../../../helpers/utils";
-import toJson from "enzyme-to-json";
 
 jest.mock("../../../context/UserContext", () => {
 	return {
@@ -26,48 +21,26 @@ jest.mock("../../../context/UserContext", () => {
 	};
 });
 
-describe("[ClientApp] ", () => {
-	describe("Submitted page", () => {
-
-		const fakeProps = {
-			match: {
-				params: {
-					consultationId: 1,
-				},
+test("should match snapshot with supplied data", () => {
+	const mock = new MockAdapter(axios);
+	let consultationPromise = new Promise(resolve => {
+		mock
+			.onAny()
+			.reply(() => {
+				resolve();
+				return [200, ConsultationData];
+			});
+	});
+	const fakeProps = {
+		match: {
+			params: {
+				consultationId: 1,
 			},
-		};
-
-		it("should match snapshot with supplied data", () => {
-			const mock = new MockAdapter(axios);
-
-			let consultationPromise = new Promise(resolve => {
-				mock
-					.onAny()
-					.reply(() => {
-						resolve();
-						return [200, ConsultationData];
-					});
-			});
-
-			const wrapper = mount(
-				<MemoryRouter>
-					<Submitted {...fakeProps} />
-				</MemoryRouter>,
-			);
-
-			return Promise.all([
-				consultationPromise,
-			]).then(async () => {
-				await nextTick();
-				wrapper.update();
-
-				expect(
-					toJson(wrapper, {
-						noKey: true,
-						mode: "deep",
-					})).toMatchSnapshot();
-			});
-		});
-
+		},
+	};
+	const {container} = render(<Submitted {...fakeProps} />, {wrapper: MemoryRouter});
+	return Promise.all([consultationPromise]).then(async () => {
+		await waitForElementToBeRemoved(() => screen.getByText("Loading...", { selector: "h1" }));
+		expect(container).toMatchSnapshot();
 	});
 });
